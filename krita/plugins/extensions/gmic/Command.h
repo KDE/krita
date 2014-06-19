@@ -45,6 +45,7 @@ public:
     virtual void add(Component* c);
     virtual Component* child(int index);
     virtual Component* parent();
+    void setParent(Component * parent) { m_parent = parent; }
     virtual int row() const;
     virtual int childCount() const;
     virtual int columnCount() const;

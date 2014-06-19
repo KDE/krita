@@ -77,7 +77,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
                 }
             }
             else {
-                kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName();
+                kWarning() << "While parsing section encountered an unknown element: " << elemThis.tagName();
             }
         }
     }
@@ -122,11 +122,7 @@ QString KRSectionData::name() const
 
 QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 {
-#ifdef __GNUC__
-#warning use QMap
-#else
-#pragma WARNING( use QMap )
-#endif
+//! @todo use QMap
     QString sectiontype;
     switch (s) {
     case KRSectionData::PageHeaderAny:
@@ -183,14 +179,9 @@ QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 
 KRSectionData::Section KRSectionData::sectionTypeFromString(const QString& s)
 {
-#ifdef __GNUC__
-#warning use QMap
-#else
-#pragma WARNING( use QMap )
-#endif
+//! @todo use QMap
     KRSectionData::Section sec;
-    kDebug() << "Determining section type for " << s;
-
+    //kDebug() << "Determining section type for " << s;
     if (s == "header-page-any")
         sec = KRSectionData::PageHeaderAny;
     else if (s == "header-page-even")

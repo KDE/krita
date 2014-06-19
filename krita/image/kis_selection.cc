@@ -165,7 +165,7 @@ void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
     m_d->shapeSelection = shapeSelection;
 }
 
-KisPaintDeviceSP KisSelection::projection() const
+KisPixelSelectionSP KisSelection::projection() const
 {
     return m_d->pixelSelection;
 }
@@ -189,7 +189,13 @@ void KisSelection::updateProjection()
 
 void KisSelection::setVisible(bool visible)
 {
+    bool needsNotification = visible != m_d->isVisible;
+
     m_d->isVisible = visible;
+
+    if (needsNotification) {
+        notifySelectionChanged();
+    }
 }
 
 bool KisSelection::isVisible()

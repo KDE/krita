@@ -48,11 +48,26 @@ class KisGmicParser
 
 public:
     /**
-     * @param filePath path where is your gmic_def.gmic
+     * @param filePath path where your *.gmic files are
      * */
-    KisGmicParser(const QString& filePath);
+    KisGmicParser(const QStringList& filePaths);
     ~KisGmicParser();
+    /**
+     * Creates tree of filters provided by filePaths
+     */
     Component * createFilterTree();
+
+    /**
+     * Extracts gmic command definitions from .gmic file to be passed to gmic interpreter
+     *
+     * Gmic definition file mixes gmic commands and UI definitions for filters
+     * For executing commands we have to pass to gmic gmic command definition and we don't need
+     * to pass UI definitions which are ignored (gmic comments).
+     *
+     * This function strips all gmic comments: Each line starting with '#' is a comment line.
+     */
+    static QByteArray extractGmicCommandsOnly(const QString& filePath);
+
 
 private:
     bool isCategory(const QString &line);
@@ -61,11 +76,10 @@ private:
     bool isParameter(const QString &line);
     bool matchesRegExp(const QRegExp &regExp, const QString& line);
     QString parseCategoryName(const QString &line);
-
     QString fetchLine(QTextStream &input, int &lineCounter);
 
 private:
-    QString m_fileName;
+    QStringList m_filePaths;
 };
 
 #endif

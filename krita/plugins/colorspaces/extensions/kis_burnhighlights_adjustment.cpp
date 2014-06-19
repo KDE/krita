@@ -95,7 +95,7 @@ private:
  };
 
  KisBurnHighlightsAdjustmentFactory::KisBurnHighlightsAdjustmentFactory()
-    : KoColorTransformationFactory("BurnHighlights", i18n("BurnHighlights Adjustment"))
+    : KoColorTransformationFactory("BurnHighlights")
 {
 }
 

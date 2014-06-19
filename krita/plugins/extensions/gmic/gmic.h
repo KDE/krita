@@ -46,7 +46,7 @@
 */
 #include <locale>
 #ifndef gmic_version
-#define gmic_version 1582
+#define gmic_version 1590
 
 // Define environment variables.
 #ifndef gmic_split_compilation
@@ -70,8 +70,23 @@
 #include cimg_include_file
 #if cimg_OS==2
 #include <process.h>
+#ifdef _MSC_VER
+#pragma comment(linker,"/STACK:16777216")
+#endif
 #elif cimg_OS==1
 #include <cerrno>
+#include <sys/resource.h>
+static struct gmic_increase_stack {
+  gmic_increase_stack() {
+    const rlim_t requested_stack_size = 16777216;
+    struct rlimit rl;
+    const int result = getrlimit(RLIMIT_STACK,&rl);
+    if (!result && rl.rlim_cur<requested_stack_size) {
+      rl.rlim_cur = requested_stack_size;
+      setrlimit(RLIMIT_STACK,&rl);
+    }
+  }
+} _gmic_increase_stack;
 #endif // #if cimg_OS==2
 
 // Define some special character codes used for replacement in double quoted strings.
@@ -169,6 +184,9 @@ struct gmic {
   // Constructors - Destructors.
   // Use the methods below to create and run the G'MIC interpreter from your C++ source.
 
+#define gmic_new_attr commands(new CImgList<char>[256]), commands_names(new CImgList<char>[256]), commands_has_arguments(new CImgList<char>[256]), \
+    _variables(new CImgList<char>[256]), _variables_names(new CImgList<char>[256]), variables(new CImgList<char>*[256]), variables_names(new CImgList<char>*[256])
+
   // Destructor.
   ~gmic();
 
@@ -206,19 +224,19 @@ struct gmic {
              float *const p_progress, int *const p_cancel);
 
   gmic& add_commands(const char *const data_commands,
-                     gmic_list<char> (&commands_names)[256],
-                     gmic_list<char> (&commands)[256],
-                     gmic_list<char> (&commands_has_arguments)[256],
+                     gmic_list<char> commands_names[256],
+                     gmic_list<char> commands[256],
+                     gmic_list<char> commands_has_arguments[256],
                      const char *const commands_file=0);
   gmic& add_commands(std::FILE *const file,
                      const char *const filename,
-                     gmic_list<char> (&commands_names)[256],
-                     gmic_list<char> (&commands)[256],
-                     gmic_list<char> (&commands_has_arguments)[256],
+                     gmic_list<char> commands_names[256],
+                     gmic_list<char> commands[256],
+                     gmic_list<char> commands_has_arguments[256],
                      const bool add_debug_infos=false);
-  gmic_image<char> scope2string(const bool is_last_slash=true) const;
-  gmic_image<char> scope2string(const gmic_image<unsigned int>& scope_selection,
-                                const bool is_last_slash=true) const;
+  gmic_image<char> scope2string() const;
+  gmic_image<char> scope2string(const gmic_image<unsigned int>& scope_selection) const;
+  gmic_image<char> scope2string(const gmic_image<unsigned int>* scope_selection) const;
 
   gmic_image<unsigned int> selection2cimg(const char *const string, const unsigned int indice_max,
                                           const gmic_list<char>& names,
@@ -234,35 +252,24 @@ struct gmic {
   template<typename T>
   gmic_image<char> substitute_item(const char *const source,
                                    gmic_list<T>& images, gmic_list<char>& images_names,
-				   unsigned int (&variables_sizes)[256]);
+				   unsigned int variables_sizes[256]);
 
   gmic& print(const char *format, ...);
+  gmic& error(const char *format, ...);
+  gmic& debug(const char *format, ...);
+
   template<typename T>
-  gmic& print(const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& print(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
+  gmic& print(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
 	      const char *format, ...);
 
-  gmic& warn(const char *format, ...);
   template<typename T>
-  gmic& warn(const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& warn(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
+  gmic& warn(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
              const char *format, ...);
 
-  gmic& error(const char *format, ...);
   template<typename T>
-  gmic& error(const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& error(const char *const command, const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& error(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
-	      const char *format, ...);
-  template<typename T>
-  gmic& _arg_error(const gmic_list<T>& list, const char *const command,
-		   const char *const argument);
+  gmic& error(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
+	      const char *const command, const char *format, ...);
 
-  gmic& debug(const char *format, ...);
   template<typename T>
   gmic& debug(const gmic_list<T>& list, const char *format, ...);
 
@@ -321,41 +328,41 @@ struct gmic {
   template<typename T>
   gmic& _parse(const gmic_list<char>& commands_line, unsigned int& position,
                gmic_list<T> &images, gmic_list<char> &images_names,
-               unsigned int (&variables_sizes)[256]);
+               unsigned int variables_sizes[256]);
   gmic& _parse_bool(const gmic_list<char>& commands_line, unsigned int& position,
                     gmic_list<bool>& images, gmic_list<char> &images_names,
-                    unsigned int (&variables_sizes)[256]);
+                    unsigned int variables_sizes[256]);
   gmic& _parse_uchar(const gmic_list<char>& commands_line, unsigned int& position,
                      gmic_list<unsigned char>& images, gmic_list<char> &images_names,
-                     unsigned int (&variables_sizes)[256]);
+                     unsigned int variables_sizes[256]);
   gmic& _parse_char(const gmic_list<char>& commands_line, unsigned int& position,
                     gmic_list<char>& images, gmic_list<char> &images_names,
-                    unsigned int (&variables_sizes)[256]);
+                    unsigned int variables_sizes[256]);
   gmic& _parse_ushort(const gmic_list<char>& commands_line, unsigned int& position,
                       gmic_list<unsigned short>& images, gmic_list<char> &images_names,
-                      unsigned int (&variables_sizes)[256]);
+                      unsigned int variables_sizes[256]);
   gmic& _parse_short(const gmic_list<char>& commands_line, unsigned int& position,
                      gmic_list<short>& images, gmic_list<char> &images_names,
-                     unsigned int (&variables_sizes)[256]);
+                     unsigned int variables_sizes[256]);
   gmic& _parse_uint(const gmic_list<char>& commands_line, unsigned int& position,
                     gmic_list<unsigned int>& images, gmic_list<char> &images_names,
-                    unsigned int (&variables_sizes)[256]);
+                    unsigned int variables_sizes[256]);
   gmic& _parse_int(const gmic_list<char>& commands_line, unsigned int& position,
                    gmic_list<int>& images, gmic_list<char> &images_names,
-                   unsigned int (&variables_sizes)[256]);
+                   unsigned int variables_sizes[256]);
   gmic& _parse_float(const gmic_list<char>& commands_line, unsigned int& position,
                      gmic_list<float>& images, gmic_list<char> &images_names,
-                     unsigned int (&variables_sizes)[256]);
+                     unsigned int variables_sizes[256]);
   gmic& _parse_double(const gmic_list<char>& commands_line, unsigned int& position,
                       gmic_list<double>& images, gmic_list<char> &images_names,
-                      unsigned int (&variables_sizes)[256]);
+                      unsigned int variables_sizes[256]);
 
   // Internal environment variables.
 #if cimg_display!=0
   gmic_display instant_window[10];
 #endif // #if cimg_display!=0
-  gmic_list<char> commands[256], commands_names[256], commands_has_arguments[256],
-    _variables[256], _variables_names[256], *variables[256], *variables_names[256],
+  gmic_list<char> *const commands, *const commands_names, *const commands_has_arguments,
+    *const _variables, *const _variables_names, **const variables, **const variables_names,
     commands_files, scope;
   gmic_list<unsigned int> dowhiles, repeatdones;
   gmic_image<unsigned char> background3d, light3d;

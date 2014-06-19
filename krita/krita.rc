@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="50">
+<kpartgui name="Krita" version="52">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -53,7 +53,7 @@
   <Action name="fit_to_canvas"/>
   <Separator/>
   <Action name="view_ruler"/>
-  <!--Action name="view_guidelines"/-->
+  <Action name="view_guidelines"/>
   <Separator/>
   <Action name="view_grid"/>
   <Action name="view_snap_to_grid"/>
@@ -121,6 +121,7 @@
   <Action name="rasterize_layer"/>
   <Action name="merge_all_shape_layers"/>
   <Action name="flatten_image"/>
+  <Action name="merge_selected_layers"/>
 </Menu>
 
 <Menu name="Select"><text>&amp;Select</text>
@@ -134,6 +135,7 @@
     <Action name="similar"/>
    <Separator/>
    <Action name="toggle_display_selection"/>
+   <Action name="show-global-selection-mask"/>
 </Menu>
 
 <Menu name="Filter"><text>Filte&amp;r</text>

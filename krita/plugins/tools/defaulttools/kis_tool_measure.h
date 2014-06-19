@@ -93,7 +93,7 @@ private:
     }
 
 private:
-    KisToolMeasureOptionsWidget *m_optWidget;
+    KisToolMeasureOptionsWidget *m_optionsWidget;
 
     QPointF m_startPos;
     QPointF m_endPos;
@@ -111,7 +111,7 @@ public:
         setToolTip(i18n("Measure the distance between two points"));
         setIconName(koIconNameCStr("krita_tool_measure"));
         setPriority(16);
-        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
     virtual ~KisToolMeasureFactory() {}

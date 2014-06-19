@@ -25,4 +25,9 @@ KritaSketchBase {
     onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     window: mainWindow;
+
+    Component.onCompleted: {
+        Constants.setGridWidth( width / Constants.GridColumns );
+        Constants.setGridHeight( height / Constants.GridRows );
+    }
 }

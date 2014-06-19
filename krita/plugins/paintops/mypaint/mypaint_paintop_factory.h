@@ -52,7 +52,7 @@ public:
     }
 
     virtual QString name() const {
-        return i18n("MyPaint brush");
+        return i18n("MyPaint");
     }
 
     virtual QString pixmap() {
@@ -60,10 +60,10 @@ public:
     }
     
     virtual QString category() const{
-        return KisPaintOpFactory::categoryExperimental();
+        return KisPaintOpFactory::categoryStable();
     }
 
-    virtual KisPaintOpSettingsSP settings(KisImageWSP image);
+    virtual KisPaintOpSettingsSP settings();
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 
     QList<MyPaintBrushResource*> brushes() const;

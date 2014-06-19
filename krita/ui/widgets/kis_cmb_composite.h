@@ -26,6 +26,7 @@
 #include <krita_export.h>
 #include "kis_categorized_list_view.h"
 
+class KAction;
 class KoID;
 class KoColorSpace;
 class KisSortedCompositeOpListModel;
@@ -57,14 +58,47 @@ public:
     void selectCompositeOp(const KoID &op);
     KoID selectedCompositeOp() const;
 
+    QList<KAction*> blendmodeActions();
+
 private slots:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);
     void slotEntryChecked(const QModelIndex& index);
+
+    void slotNextBlendingMode();
+    void slotPreviousBlendingMode();
+    void slotNormal();
+    void slotDissolve();
+    void slotBehind();
+    void slotClear();
+    void slotDarken();
+    void slotMultiply();
+    void slotColorBurn();
+    void slotLinearBurn();
+    void slotLighten();
+    void slotScreen();
+    void slotColorDodge();
+    void slotLinearDodge();
+    void slotOverlay();
+    void slotSoftLight();
+    void slotHardLight();
+    void slotVividLight();
+    void slotLinearLight();
+    void slotPinLight();
+    void slotHardMix();
+    void slotDifference();
+    void slotExclusion();
+    void slotHue();
+    void slotSaturation();
+    void slotColor();
+    void slotLuminosity();
+
+
 
 private:
     KisSortedCompositeOpListModel *m_model;
     KisCategorizedListView *m_view;
     bool m_allowToHidePopup;
+    QList<KAction*> m_actions;
 };
 
 #endif // KIS_COMPOSITEOP_WIDGETS_H_

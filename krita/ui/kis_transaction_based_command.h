@@ -25,7 +25,7 @@
 class KRITAUI_EXPORT KisTransactionBasedCommand : public KUndo2Command
 {
 public:
-    KisTransactionBasedCommand(const QString &text = QString(), KUndo2Command *parent = 0);
+    KisTransactionBasedCommand(const KUndo2MagicString &text = KUndo2MagicString(), KUndo2Command *parent = 0);
 
     ~KisTransactionBasedCommand();
 
@@ -35,7 +35,6 @@ public:
 protected:
     virtual KUndo2Command* paint() = 0;
 private:
-    bool m_firstRedo;
     KUndo2Command *m_transactionData;
 };
 #endif // KIS_TRANSACTION_BASED_COMMAND_H

@@ -43,22 +43,20 @@ Item {
             width: label.width + Constants.GridHeight / 2;
             Rectangle {
                 anchors.fill: parent;
-                color: "gray";
+                color: Settings.theme.color("components/messageStack/background");
                 border {
                     width: 2;
-                    color: "silver";
+                    color: Settings.theme.color("components/messageStack/border");
                 }
                 radius: height / 2;
                 opacity: 0.5;
             }
-            Text {
+            Label {
                 id: label;
                 x: Constants.GridHeight / 4;
                 anchors.verticalCenter: parent.verticalCenter;
-                font.family: "Source Sans Pro"
-                color: "white";
-                font.bold: true;
-                font.pixelSize: Constants.LargeFontSize;
+                color: Settings.theme.color("components/messageStack/text");
+                font: Settings.theme.font("title");
             }
             Rectangle {
                 id: button;
@@ -71,10 +69,10 @@ Item {
                 }
                 height: parent.height;
                 width: height;
-                color: "gray";
+                color: Settings.theme.color("components/messageStack/button/fill");
                 border {
                     width: 2;
-                    color: "silver";
+                    color: Settings.theme.color("components/messageStack/button/border");
                 }
                 radius: height / 2;
                 opacity: 0.5;
@@ -84,7 +82,7 @@ Item {
                 visible: button.visible;
                 text: "";
                 color: "transparent";
-                image: "../images/svg/icon-web.svg";
+                image: Settings.theme.icon("web");
                 onClicked: Qt.openUrlExternally(button.url);
             }
         }

@@ -36,9 +36,15 @@
 #include "kis_play_info.h"
 
 struct KisRecordedFilterAction::Private {
-    Private() : kconfig(0) {}
+    Private()
+        : kconfig(0)
+    {
+
+    }
+
     const KisFilter* filter;
     QRect rect;
+
     KisFilterConfiguration* configuration() {
         if (!kconfig) {
             kconfig = filter->defaultConfiguration(0);
@@ -48,19 +54,23 @@ struct KisRecordedFilterAction::Private {
         }
         return kconfig;
     }
+
     void setConfiguration(KisFilterConfiguration* conf) {
         delete kconfig;
         kconfig = conf;
         configstr = conf->toXML();
     }
+
     void setConfig(const QString& cfg) {
         delete kconfig;
         kconfig = 0;
         configstr = cfg;
     }
+
     const QString& config() {
         return configstr;
     }
+
 private:
     QString configstr;
     KisFilterConfiguration* kconfig;
@@ -81,6 +91,7 @@ KisRecordedFilterAction::KisRecordedFilterAction(const KisRecordedFilterAction& 
 
 KisRecordedFilterAction::~KisRecordedFilterAction()
 {
+    delete d;
 }
 
 void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoUpdater* _updater) const
@@ -89,7 +100,7 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoU
     KisPaintDeviceSP dev = node->paintDevice();
     KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
     QRect r1 = dev->extent();
-    KisTransaction transaction(d->filter->name(), dev);
+    KisTransaction transaction(kundo2_i18n("Filter: \"%1\"", d->filter->name()), dev);
 
     KisImageWSP image = _info.image();
     r1 = r1.intersected(image->bounds());

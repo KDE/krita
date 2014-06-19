@@ -393,10 +393,19 @@ void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
     emit sizeEnabledChanged();
 }
 
-void CompositeOpModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
+void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
 {
     if (d->view)
     {
+        if(key == KisCanvasResourceProvider::MirrorHorizontal) {
+            emit mirrorHorizontallyChanged();
+            return;
+        }
+        else if(key == KisCanvasResourceProvider::MirrorVertical) {
+            emit mirrorVerticallyChanged();
+            return;
+        }
+
         KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if (preset && d->currentPreset.data() != preset.data())
         {

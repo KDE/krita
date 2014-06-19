@@ -34,7 +34,7 @@ public:
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
-    QString modelName() const{
+    QString modelName() const {
         return "airbrush";
     }
 

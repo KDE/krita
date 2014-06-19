@@ -120,9 +120,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     gc.bitBlt(rect.topLeft(), original, rect);
 
     if (hasTemporaryTarget()) {
-        gc.setOpacity(temporaryOpacity());
-        gc.setCompositeOp(temporaryCompositeOp());
-        gc.setChannelFlags(temporaryChannelFlags());
+        setupTemporaryPainter(&gc);
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
 

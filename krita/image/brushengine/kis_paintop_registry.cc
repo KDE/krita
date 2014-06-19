@@ -57,13 +57,11 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     if (!s_instance.exists()) {
         KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 28)");
 
-
-        KisImageSP img = new KisImage(0, 0, 0, 0, 0, KoColorSpaceRegistry::instance()->alpha8());
         QStringList toBeRemoved;
 
         foreach(const QString &id, s_instance->keys()) {
             KisPaintOpFactory *factory = s_instance->get(id);
-            if (!factory->settings(img)) {
+            if (!factory->settings()) {
                 toBeRemoved << id;
             }
             else {
@@ -76,6 +74,16 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     }
     return s_instance;
 }
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+void KisPaintOpRegistry::preinitializePaintOpIfNeeded(const KisPaintOpPresetSP preset)
+{
+    if (!preset) return;
+
+    KisPaintOpFactory *f = value(preset->paintOp().id());
+    f->preinitializePaintOpIfNeeded(preset->settings());
+}
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) const
 {
@@ -107,24 +115,24 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
     return paintOp(preset->paintOp().id(), preset->settings(), painter, image);
 }
 
-KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, KisImageWSP image) const
+KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id) const
 {
     KisPaintOpFactory *f = value(id.id());
     Q_ASSERT(f);
     if (f) {
-        KisPaintOpSettingsSP settings = f->settings(image);
+        KisPaintOpSettingsSP settings = f->settings();
         settings->setProperty("paintop", id.id());
         return settings;
     }
     return 0;
 }
 
-KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, KisImageWSP image) const
+KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id) const
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setName(i18n("default"));
 
-    KisPaintOpSettingsSP s = settings(id, image);
+    KisPaintOpSettingsSP s = settings(id);
 
     if (s.isNull()) {
         return 0;

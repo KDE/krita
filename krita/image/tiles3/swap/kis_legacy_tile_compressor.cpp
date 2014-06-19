@@ -48,7 +48,7 @@ void KisLegacyTileCompressor::writeTile(KisTileSP tile, KisPaintDeviceWriter &st
     delete[] headerBuffer;
 }
 
-void KisLegacyTileCompressor::readTile(QIODevice *stream, KisTiledDataManager *dm)
+bool KisLegacyTileCompressor::readTile(QIODevice *stream, KisTiledDataManager *dm)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(pixelSize(dm));
 
@@ -69,6 +69,8 @@ void KisLegacyTileCompressor::readTile(QIODevice *stream, KisTiledDataManager *d
     tile->lockForWrite();
     stream->read((char *)tile->data(), tileDataSize);
     tile->unlock();
+
+    return true;
 }
 
 void KisLegacyTileCompressor::compressTileData(KisTileData *tileData,
@@ -87,19 +89,16 @@ void KisLegacyTileCompressor::compressTileData(KisTileData *tileData,
     bytesWritten += tileDataSize;
 }
 
-void KisLegacyTileCompressor::decompressTileData(quint8 *buffer,
+bool KisLegacyTileCompressor::decompressTileData(quint8 *buffer,
                                                  qint32 bufferSize,
                                                  KisTileData *tileData)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(tileData->pixelSize());
-#ifdef NDEBUG
-    Q_UNUSED(bufferSize);
-#else
-    Q_ASSERT(bufferSize >= tileDataSize);
-#endif
-
-
-    memcpy(tileData->data(), buffer, tileDataSize);
+    if (bufferSize >= tileDataSize) {
+        memcpy(tileData->data(), buffer, tileDataSize);
+        return true;
+    }
+    return false;
 }
 
 qint32 KisLegacyTileCompressor::tileDataBufferSize(KisTileData *tileData)

@@ -17,165 +17,152 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 
-PageStack {
+ListView {
     id: base;
-    initialPage: createNewListPage;
     clip: true;
 
-    signal clicked();
+    signal clicked(variant options);
 
-    Component { id: createNewListPage; Page {
-        ListView {
-            anchors.fill: parent;
-
-            delegate: ListItem {
-                width: ListView.view.width;
-
-                title: model.name;
-                image: model.image;
-                imageShadow: false;
-
-                gradient: Gradient {
-                    GradientStop { position: 0; color: "#FBFBFB"; }
-                    GradientStop { position: 0.4; color: "#F0F0F0"; }
+    delegate: Item {
+        height: header.height + listItem.height;
+        width: base.width;
+        Rectangle {
+            id: header;
+            width: base.width;
+            height: index > 0 && (base.model.groupNameOf(index - 1) != model.groupName) ? Constants.GridHeight : 0;
+            visible: height > 0;gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: Settings.theme.color("pages/welcome/create/header/start");
                 }
 
-                onClicked: {
-                    switch(model.bnrole) {
-                        case "a5p": {
-                            base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(600, 875, 150);
-                            Settings.temporaryFile = true;
-                        }
-                        case "a5l": {
-                            base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(875, 600, 150);
-                            Settings.temporaryFile = true;
-                        }
-                        case "a4p": {
-                            base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(1200, 1750, 150);
-                            Settings.temporaryFile = true;
-                        }
-                        case "a4l": {
-                            base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(1750, 1200, 150);
-                            Settings.temporaryFile = true;
-                        }
-                        case "screen": {
-                            base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(Krita.Window.width, Krita.Window.height, 72);
-                            Settings.temporaryFile = true;
-                        }
-                        case "custom": {
-                            pageStack.push( createNewPage );
-                        }
-                        case "clip": {
-                            base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createImageFromClipboard();
-                            Settings.temporaryFile = true;
-                        }
-                        case "webcam": {
-                            base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createImageFromWebcam();
-                            Settings.temporaryFile = true;
-                        }
-                    }
+
+                GradientStop {
+                    position: 1
+                    color: Settings.theme.color("pages/welcome/create/header/stop");
                 }
             }
-
-            model: ListModel {
-                ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "../images/svg/icon-A4portrait-black.svg" }
-                ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "../images/svg/icon-A4landscape-black.svg" }
-//                 ListElement { bnrole: "a5p";    name: "Blank Image (A5 Portrait)"; image: "../images/svg/icon-A4portrait-black.svg" }
-//                 ListElement { bnrole: "a5l";    name: "Blank Image (A5 Landscape)"; image: "../images/svg/icon-A4landscape-black.svg" }
-                ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "../images/svg/icon-filenew-black.svg" }
-                ListElement { bnrole: "custom"; name: "Custom Size"; image: "../images/svg/icon-filenew-black.svg" }
-                ListElement { bnrole: "clip";   name: "From Clipboard"; image: "../images/svg/icon-fileclip-black.svg" }
-//                 ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-black.svg" }
+            Label {
+                anchors {
+                    left: parent.left;
+                    leftMargin: Constants.DefaultMargin;
+                    verticalCenter: parent.verticalCenter;
+                }
+                text: model.groupName;
+                font: Settings.theme.font("title");
+                color: Settings.theme.color("pages/welcome/create/header/text");
+            }
+            Image {
+                anchors {
+                    right: parent.right;
+                    rightMargin: Constants.DefaultMargin * 3;
+                    verticalCenter: parent.verticalCenter;
+                }
+                height: parent.height / 2;
+                width: height;
+                smooth: true;
+                source: Settings.theme.icon("expansionmarker");
+                rotation: model.groupFolded ? 90 : 0;
+                Behavior on rotation { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            }
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: base.model.toggleGroup(model.groupName);
             }
 
-            ScrollDecorator { }
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom; }
         }
-    } }
+        ListItem {
+            id: listItem;
+            anchors.top: header.bottom;
+            anchors.topMargin: header.visible ? Constants.DefaultMargin : 0;
+            width: base.width;
+            opacity: model.groupFolded ? 0 : 1;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            height: model.groupFolded ? 0 : Constants.GridHeight * 1.75
+            Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration; } }
 
-    Component { id: createNewPage; Page {
-        Column {
-            anchors {
-                fill: parent;
-                topMargin: Constants.GridHeight * 0.35;
-                leftMargin: Constants.GridWidth * 0.25;
-                rightMargin: Constants.GridWidth * 0.25;
-            }
-            spacing: Constants.GridHeight * 0.75;
-            Item {
-                width: parent.width;
-                height: Constants.GridHeight;
-                Image {
-                    id: titleImage;
-                    anchors.left: parent.left;
-                    anchors.verticalCenter: parent.verticalCenter;
-                    source: "../images/svg/icon-filenew-black.svg"
-                }
-                Label {
-                    anchors.left: titleImage.right;
-                    anchors.leftMargin: Constants.DefaultMargin;
-                    anchors.verticalCenter: parent.verticalCenter;
-                    text: "Custom Size";
-                    font.pixelSize: Constants.LargeFontSize;
-                }
-            }
-            TextField {
-                id: width;
-                height: Constants.GridHeight;
-                placeholder: "Width";
-                validator: IntValidator{bottom: 0; top: 10000;}
-                numeric: true;
-                nextFocus: height;
+            title: model.name;
+            image.source: Krita.fileExists(model.icon) ? model.icon : Settings.theme.icon(model.icon);
+            image.asynchronous: false;
+            imageShadow: false;
 
-                Component.onCompleted: text = Krita.Window.width;
+            gradient: Gradient {
+                GradientStop { position: 0; color: Settings.theme.color("components/newImageList/start") }
+                GradientStop { position: 0.4; color: Settings.theme.color("components/newImageList/stop"); }
             }
-            TextField {
-                id: height;
-                height: Constants.GridHeight;
-                placeholder: "Height"
-                validator: IntValidator{bottom: 0; top: 10000;}
-                numeric: true;
-                nextFocus: resolution;
 
-                Component.onCompleted: text = Krita.Window.height;
-            }
-            TextField {
-                id: resolution;
-                height: Constants.GridHeight;
-                placeholder: "Resolution"
-                text: "72";
-                validator: IntValidator{bottom: 0; top: 600;}
-                numeric: true;
-            }
-            //Item { width: parent.width; height: Constants.GridHeight; }
-            Row {
-                width: parent.width;
-                Button {
-                    width: parent.width / 2;
-                    color: "transparent";
-                    image: "../images/svg/icon-cancel-black.svg";
-                    onClicked: pageStack.pop();
-                }
-                Button {
-                    width: parent.width / 2;
-                    color: "transparent";
-                    image: "../images/svg/icon-apply-black.svg";
-                    onClicked: {
-                        if (width.acceptableInput && height.acceptableInput && resolution.acceptableInput) {
-                            base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(parseInt(width.text), parseInt(height.text), parseInt(resolution.text));
-                            Settings.temporaryFile = true;
+            onClicked: {
+                switch(model.file) {
+                    case "a5p": {
+                        base.clicked({
+                            width: 600,
+                            height: 875,
+                            resolution: 150,
+                        });
+                    }
+                    case "a5l": {
+                        base.clicked({
+                            width: 875,
+                            height: 600,
+                            resolution: 150,
+                        });
+                    }
+                    case "a4p": {
+                        base.clicked({
+                            width: 1200,
+                            height: 1750,
+                            resolution: 150,
+                        });
+                    }
+                    case "a4l": {
+                        base.clicked({
+                            width: 1750,
+                            height: 1200,
+                            resolution: 150,
+                        });
+                    }
+                    case "screen": {
+                        base.clicked({
+                            width: Krita.Window.width,
+                            height: Krita.Window.height,
+                            resolution: 72.0
+                        });
+                    }
+                    case "custom": {
+                        base.clicked(null);
+                    }
+                    case "clip": {
+                        base.clicked({ source: "clipboard" });
+                    }
+                    case "webcam": {
+                        base.clicked({ source: "webcam" });
+                    }
+                    default: {
+                        console.debug(model.file);
+                        if(model.file.indexOf("template://") === 0) {
+                            base.clicked({ template: model.file });
                         }
                     }
                 }
             }
         }
-    } }
+    }
+
+    model: TemplatesModel {}
+//     model: ListModel {
+//         ListElement { bnrole: "custom"; name: "Custom Image"; image: "filenew-black" }
+//         ListElement { bnrole: "clip";   name: "From Clipboard"; image: "fileclip-black" }
+// 
+//         ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "A4portrait-black" }
+//         ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "A4landscape-black" }
+//         ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "filenew-black" }
+// //                 ListElement { bnrole: "a5p";    name: "Blank Image (A5 Portrait)"; image: "../images/svg/icon-A4portrait-black.svg" }
+// //                 ListElement { bnrole: "a5l";    name: "Blank Image (A5 Landscape)"; image: "../images/svg/icon-A4landscape-black.svg" }
+// //                 ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-black.svg" }
+//     }
+
+    ScrollDecorator { }
 }

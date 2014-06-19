@@ -49,6 +49,7 @@ protected:
 public:
 
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
+                          const KUndo2MagicString &transactionText = KUndo2MagicString(),
                           KisRecordingAdapter *recordingAdapter = 0);
     ~KisToolFreehandHelper();
 
@@ -106,10 +107,16 @@ private:
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
                                                    QPointF tangent1, QPointF tangent2);
 
+    void stabilizerStart(KisPaintInformation firstPaintInfo);
+    void stabilizerEnd();
+    void stabilizerPoll();
+    void stabilizerPaint();
+
 private slots:
 
     void finishStroke();
     void doAirbrushing();
+    void stabilizerPollAndPaint();
 
 private:
     struct Private;

@@ -38,6 +38,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="value">
+      <double>1.000000000000000</double>
+     </property>
     </widget>
    </item>
    <item row="0" column="2" rowspan="4">
@@ -82,6 +85,9 @@
      </property>
      <property name="singleStep">
       <double>0.100000000000000</double>
+     </property>
+     <property name="value">
+      <double>25.000000000000000</double>
      </property>
     </widget>
    </item>

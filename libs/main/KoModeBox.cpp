@@ -149,14 +149,14 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->layout->setContentsMargins(0,0,0,0);
     setLayout(d->layout);
 
-    foreach(const KoToolButton &button, KoToolManager::instance()->createToolList(canvas->canvas())) {
+    foreach(const KoToolButton &button, KoToolManager::instance()->createToolList()) {
         addButton(button);
     }
 
     qSort(d->buttons.begin(), d->buttons.end(), compareButton);
 
     // Update visibility of buttons
-    updateShownTools(canvas, QList<QString>());
+    updateShownTools(QList<QString>());
 
     d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(toolSelected(int)));
@@ -167,8 +167,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
             this, SLOT(setActiveTool(KoCanvasController *, int)));
     connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController *,const KoShapeLayer*)),
             this, SLOT(setCurrentLayer(const KoCanvasController *,const KoShapeLayer *)));
-    connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(const KoCanvasController*, QList<QString>)),
-            this, SLOT(updateShownTools(const KoCanvasController *, QList<QString>)));
+    connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(updateShownTools(QList<QString>)));
     connect(KoToolManager::instance(),
             SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
             this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
@@ -384,16 +383,13 @@ void KoModeBox::addItem(const KoToolButton button)
     sa->setContentsMargins(0,0,0,0);
     sa->setWidget(widget);
     sa->setFrameShape(QFrame::NoFrame);
+    sa->setFocusPolicy(Qt::NoFocus);
     d->stack->addWidget(sa);
     d->addedButtons.append(button);
 }
 
-void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<QString> &codes)
+void KoModeBox::updateShownTools(const QList<QString> &codes)
 {
-    if (canvas->canvas() != d->canvas) {
-        return;
-    }
-
     if (d->iconTextFitted) {
         d->fittingIterations = 0;
     }
@@ -448,7 +444,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     d->tabBar->blockSignals(false);
 
     if (!d->iconTextFitted &&  d->fittingIterations++ < 8) {
-        updateShownTools(canvas, codes);
+        updateShownTools(codes);
     }
     d->iconTextFitted = true;
 }
@@ -587,7 +583,7 @@ void KoModeBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas
 
         qStableSort(d->buttons.begin(), d->buttons.end(), compareButton);
 
-        updateShownTools(canvas, QList<QString>());
+        updateShownTools(QList<QString>());
     }
 }
 
@@ -636,7 +632,7 @@ void KoModeBox::switchIconMode(int mode)
     } else {
         d->tabBar->setIconSize(QSize(22,22));
     }
-    updateShownTools(d->canvas->canvasController(), QList<QString>());
+    updateShownTools(QList<QString>());
 
     KConfigGroup cfg = KGlobal::config()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
@@ -674,5 +670,5 @@ void KoModeBox::switchTabsSide(int side)
         KConfigGroup cfg = KGlobal::config()->group("calligra");
         cfg.writeEntry("ModeBoxHorizontalTabsSide", (int)d->horizontalTabsSide);
     }
-    updateShownTools(d->canvas->canvasController(), QList<QString>());
+    updateShownTools(QList<QString>());
 }

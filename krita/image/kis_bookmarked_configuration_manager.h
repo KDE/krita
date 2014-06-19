@@ -32,8 +32,8 @@ class KLocalizedString;
 class KRITAIMAGE_EXPORT KisBookmarkedConfigurationManager
 {
 public:
-    static const KoID ConfigDefault;
-    static const KoID ConfigLastUsed;
+    static const char* ConfigDefault;
+    static const char* ConfigLastUsed;
 public:
     /**
      * @param configEntryGroup name of the configuration entry with the
@@ -74,6 +74,9 @@ public:
      *      and be inexistant in the lists of configuration
      */
     QString uniqueName(const KLocalizedString & base);
+
+
+
 private:
     QString configEntryGroup() const;
 private:

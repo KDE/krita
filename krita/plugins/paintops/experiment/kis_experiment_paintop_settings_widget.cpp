@@ -30,7 +30,7 @@
 #include <kis_compositeop_option.h>
 
 KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget* parent)
-        : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpOptionsWidget(parent)
 {
     addPaintOpOption(new KisExperimentOpOption());
     addPaintOpOption(new KisCompositeOpOption(true));

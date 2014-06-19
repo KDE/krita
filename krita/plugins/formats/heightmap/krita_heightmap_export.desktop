@@ -1,0 +1,10 @@
+[Desktop Entry]
+Icon=
+Name=Krita HeightMap Export Filter
+X-KDE-ServiceTypes=Calligra/Filter
+Type=Service
+X-KDE-Export=image/x-r16,image/x-r8
+X-KDE-Import=application/x-krita
+X-KDE-Library=kritaheightmapexport
+X-KDE-Weight=1
+NoDisplay=true

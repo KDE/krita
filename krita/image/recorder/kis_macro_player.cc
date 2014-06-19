@@ -30,6 +30,8 @@
 #include "kis_play_info.h"
 #include "kis_recorded_action.h"
 #include "kis_undo_adapter.h"
+#include "kundo2magicstring.h"
+
 
 struct KisMacroPlayer::Private
 {
@@ -72,7 +74,7 @@ void KisMacroPlayer::run()
 
     dbgImage << "Start playing macro with " << actions.size() << " actions";
     if (d->info.undoAdapter()) {
-        d->info.undoAdapter()->beginMacro(i18n("Play macro"));
+        d->info.undoAdapter()->beginMacro(kundo2_i18n("Play macro"));
     }
 
     KoProgressUpdater* progressUpdater = 0;

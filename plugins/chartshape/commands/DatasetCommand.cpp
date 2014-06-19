@@ -110,7 +110,7 @@ void DatasetCommand::setDataSetChartType(ChartType type, ChartSubtype subtype)
     m_newType    = type;
     m_newSubtype = subtype;
 
-    setText(i18nc("(qtundo-format)", "Dataset Chart Type"));
+    setText(kundo2_i18n("Set Dataset Chart Type"));
 }
 
 void DatasetCommand::setDataSetShowCategory(bool show)
@@ -118,9 +118,9 @@ void DatasetCommand::setDataSetShowCategory(bool show)
     m_newShowCategory = show;
 
     if (show) {
-        setText(i18nc("(qtundo-format)", "Show Dataset Category"));
+        setText(kundo2_i18n("Show Dataset Category"));
     } else {
-        setText(i18nc("(qtundo-format)", "Hide Dataset Category"));
+        setText(kundo2_i18n("Hide Dataset Category"));
     }
 }
 
@@ -129,9 +129,9 @@ void DatasetCommand::setDataSetShowNumber(bool show)
     m_newShowNumber = show;
 
     if (show) {
-        setText(i18nc("(qtundo-format)", "Show Dataset Number"));
+        setText(kundo2_i18n("Show Dataset Number"));
     } else {
-        setText(i18nc("(qtundo-format)", "Hide Dataset Number"));
+        setText(kundo2_i18n("Hide Dataset Number"));
     }
 }
 
@@ -140,9 +140,9 @@ void DatasetCommand::setDataSetShowPercent(bool show)
     m_newShowPercent = show;
 
     if (show) {
-        setText(i18nc("(qtundo-format)", "Show Dataset Percent"));
+        setText(kundo2_i18n("Show Dataset Percent"));
     } else {
-        setText(i18nc("(qtundo-format)", "Hide Dataset Percent"));
+        setText(kundo2_i18n("Hide Dataset Percent"));
     }
 }
 
@@ -151,9 +151,9 @@ void DatasetCommand::setDataSetShowSymbol(bool show)
     m_newShowSymbol = show;
 
     if (show) {
-        setText(i18nc("(qtundo-format)", "Show Dataset Symbol"));
+        setText(kundo2_i18n("Show Dataset Symbol"));
     } else {
-        setText(i18nc("(qtundo-format)", "Hide Dataset Symbol"));
+        setText(kundo2_i18n("Hide Dataset Symbol"));
     }
 }
 
@@ -161,26 +161,26 @@ void DatasetCommand::setDataSetBrush(const QColor &color)
 {
     m_newBrushColor = color;
 
-    setText(i18nc("(qtundo-format)", "Dataset Brush color"));
+    setText(kundo2_i18n("Set Dataset Brush Color"));
 }
 
 void DatasetCommand::setDataSetPen(const QColor &color)
 {
     m_newPenColor = color;
 
-    setText(i18nc("(qtundo-format)", "Dataset Pen color"));
+    setText(kundo2_i18n("Set Dataset Pen Color"));
 }
 
 void DatasetCommand::setDataSetMarker(OdfMarkerStyle style)
 {
     m_newMarkerStyle = style;
 
-    setText(i18nc("(qtundo-format)", "Dataset Marker style"));
+    setText(kundo2_i18n("Set Dataset Marker Style"));
 }
 
 void DatasetCommand::setDataSetAxis(Axis *axis)
 {
     m_newAxis = axis;
 
-    setText(i18nc("(qtundo-format)", "Dataset Axis"));
+    setText(kundo2_i18n("Set Dataset Axis"));
 }

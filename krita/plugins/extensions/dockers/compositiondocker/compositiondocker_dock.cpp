@@ -26,7 +26,7 @@
 #include <QThread>
 #include <QAction>
 #include <QDesktopServices>
-#include <QFileDialog>
+#include <QMenu>
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -34,6 +34,7 @@
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
+#include <KoFileDialog.h>
 
 #include <kis_view2.h>
 #include <kis_canvas2.h>
@@ -41,6 +42,8 @@
 #include <kis_group_layer.h>
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
+#include <kis_action.h>
+#include <kis_action_manager.h>
 
 #include "compositionmodel.h"
 
@@ -63,8 +66,12 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
 
     setWidget(widget);
 
-    connect( compositionView, SIGNAL(clicked( const QModelIndex & ) ),
+    connect( compositionView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(activated ( const QModelIndex & ) ) );
+
+    compositionView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect( compositionView, SIGNAL(customContextMenuRequested(QPoint)),
+             this, SLOT(customContextMenuRequested(QPoint)));
 
     connect( deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteClicked()));
     connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
@@ -72,6 +79,15 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
 #if QT_VERSION >= 0x040700
     saveNameEdit->setPlaceholderText(i18n("Insert Name"));
 #endif
+
+    updateAction  = new KisAction(i18n("Update Composition"), this);
+    updateAction->setObjectName("update_composition");
+    connect(updateAction, SIGNAL(triggered()), this, SLOT(updateComposition()));
+
+    renameAction  = new KisAction(i18n("Rename Composition..."), this);
+    renameAction->setObjectName("rename_composition");
+    connect(renameAction, SIGNAL(triggered()), this, SLOT(renameComposition()));
+    m_actions.append(renameAction);
 }
 
 CompositionDockerDock::~CompositionDockerDock()
@@ -82,11 +98,21 @@ CompositionDockerDock::~CompositionDockerDock()
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    KActionCollection *actionCollection = m_canvas->view()->actionCollection();
+    foreach(KisAction *action, m_actions) {
+       m_canvas->view()->actionManager()->addAction(action->objectName(), action, actionCollection);
+    }
     updateModel();
 }
 
 void CompositionDockerDock::unsetCanvas()
 {
+    if (m_canvas) {
+        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
+        foreach(KisAction *action, m_actions) {
+            m_canvas->view()->actionManager()->takeAction(action, actionCollection);
+        }
+    }
     m_canvas = 0;
     m_model->setCompositions(QList<KisLayerComposition*>());
 }
@@ -132,6 +158,8 @@ void CompositionDockerDock::saveClicked()
     image->addComposition(composition);
     saveNameEdit->clear();
     updateModel();
+    compositionView->setCurrentIndex(m_model->index(image->compositions().count()-1, 0));
+    image->setModified();
 }
 
 void CompositionDockerDock::updateModel()
@@ -142,27 +170,31 @@ void CompositionDockerDock::updateModel()
 void CompositionDockerDock::exportClicked()
 {
 	QString path;
-#ifdef Q_OS_WIN
-	path = QFileDialog::getExistingDirectory(this,
-										     i18n("Select a Directory"),
-											 QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-	if (!path.endsWith('/')) {
+
+    KoFileDialog dialog(0, KoFileDialog::OpenDirectory, "krita/compositiondockerdock");
+    dialog.setCaption(i18n("Select a Directory"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    path = dialog.url();
+
+
+    if (path.isNull()) return;
+
+    if (!path.endsWith('/')) {
 		path.append('/');
 	}
-#else
-    KDirSelectDialog dialog(KUrl(), true);
-    if(dialog.exec() != KDialog::Accepted) {
-        return;
-    }
-    path = dialog.url().path(KUrl::AddTrailingSlash);
-#endif
+
     KisImageWSP image = m_canvas->view()->image();
     QString filename = m_canvas->view()->document()->localFilePath();
     if (!filename.isEmpty()) {
         QFileInfo info(filename);
         path += info.baseName() + '_';
     }
+
     foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
+        if (!composition->isExportEnabled()) {
+            continue;
+        }
+
         composition->apply();
         image->refreshGraph();
         image->lock();
@@ -217,6 +249,40 @@ void CompositionDockerDock::activateCurrentIndex()
     }
 }
 
+void CompositionDockerDock::customContextMenuRequested(QPoint pos)
+{
+    QMenu menu;
+    menu.addAction(updateAction);
+    menu.addAction(renameAction);
+    menu.exec(compositionView->mapToGlobal(pos));
+}
+
+void CompositionDockerDock::updateComposition()
+{
+    QModelIndex index = compositionView->currentIndex();
+    if (index.isValid()) {
+        KisLayerComposition* composition = m_model->compositionFromIndex(index);
+        composition->store();
+        m_canvas->image()->setModified();
+    }
+}
+
+void CompositionDockerDock::renameComposition()
+{
+    kDebug() << "rename";
+    QModelIndex index = compositionView->currentIndex();
+    if (index.isValid()) {
+        KisLayerComposition* composition = m_model->compositionFromIndex(index);
+        bool ok;
+        QString name = QInputDialog::getText(this, i18n("Rename Composition"),
+                                             i18n("New Name:"), QLineEdit::Normal,
+                                             composition->name(), &ok);
+        if (ok && !name.isEmpty()) {
+            composition->setName(name);
+            m_canvas->image()->setModified();
+        }
+    }
+}
 
 
 #include "compositiondocker_dock.moc"

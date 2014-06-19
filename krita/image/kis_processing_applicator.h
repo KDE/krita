@@ -24,6 +24,7 @@
 
 #include "kis_stroke_job_strategy.h"
 #include "kis_image_signal_router.h"
+#include "kundo2magicstring.h"
 
 
 class KRITAIMAGE_EXPORT KisProcessingApplicator
@@ -32,7 +33,8 @@ public:
     enum ProcessingFlag {
         NONE = 0x0,
         RECURSIVE = 0x1,
-        NO_UI_UPDATES = 0x2
+        NO_UI_UPDATES = 0x2,
+        SUPPORTS_WRAPAROUND_MODE = 0x4
     };
 
     Q_DECLARE_FLAGS(ProcessingFlags, ProcessingFlag)
@@ -42,7 +44,7 @@ public:
                             KisNodeSP node,
                             ProcessingFlags flags = NONE,
                             KisImageSignalVector emitSignals = KisImageSignalVector(),
-                            const QString &name = QString());
+                            const KUndo2MagicString &name = KUndo2MagicString());
 
     ~KisProcessingApplicator();
 

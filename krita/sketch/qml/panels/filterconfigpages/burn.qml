@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import "../../components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base
@@ -53,6 +53,7 @@ Item {
         Label {
             anchors.leftMargin: Constants.DefaultMargin;
             text: "Mode:"
+            font: Settings.theme.font("panelSection");
         }
         ExpandingListView {
             id: modeChoice

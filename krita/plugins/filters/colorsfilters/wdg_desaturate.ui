@@ -6,32 +6,87 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
+    <width>241</width>
     <height>194</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <layout class="QGridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>6</number>
+   </property>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>Desaturation method:</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="5" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>4</number>
+      </property>
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="radioLightness">
+        <property name="text">
+         <string>&amp;Lightness</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioLuminosityBT709">
+        <property name="text">
+         <string>Luminosity (ITU-R BT.&amp;709)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioLuminosityBT601">
+        <property name="text">
+         <string>Luminosity (ITU-R BT.&amp;601)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioAverage">
+        <property name="text">
+         <string>&amp;Average</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QRadioButton" name="radioMin">
         <property name="text">
          <string>&amp;Min</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
+      <item>
        <widget class="QRadioButton" name="radioMax">
         <property name="text">
          <string>&amp;Max</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="0">
+      <item>
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -43,37 +98,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item row="4" column="0">
-       <widget class="QRadioButton" name="radioAverage">
-        <property name="text">
-         <string>&amp;Average</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="radioLightness">
-        <property name="text">
-         <string>&amp;Lightness</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QRadioButton" name="radioLuminosityBT709">
-        <property name="text">
-         <string>Luminosity (ITU-R BT.&amp;709)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QRadioButton" name="radioLuminosityBT601">
-        <property name="text">
-         <string>Luminosity (ITU-R BT.&amp;601)</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>

@@ -29,7 +29,7 @@ class QStringListModel;
 class QListView;
 class QLabel;
 class QPushButton;
-class KoFavoriteResourceManager;
+class KisFavoriteResourceManager;
 class KisPaintopBox;
 class KisPresetChooser;
 
@@ -38,7 +38,7 @@ class KisPaletteManager : public KDialog
     Q_OBJECT
 
 public:
-    KisPaletteManager(KoFavoriteResourceManager*, KisPaintopBox*);
+    KisPaletteManager(KisFavoriteResourceManager*, QWidget *parent = 0);
     ~KisPaletteManager();
 
     virtual void showEvent(QShowEvent* );
@@ -56,7 +56,7 @@ private slots:
 private:
     QPushButton *m_saveButton;
     QPushButton *m_removeButton;
-    KoFavoriteResourceManager *m_resourceManager;
+    KisFavoriteResourceManager *m_resourceManager;
     KisPresetChooser* m_allPresetsView;
     KisPresetChooser* m_palettePresetsView;
 };

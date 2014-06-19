@@ -233,7 +233,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         color_type = PHOTOMETRIC_MINISWHITE;
     }
 
-    uint8 dstDepth;
+    uint8 dstDepth = 0;
     QPair<QString, QString> colorSpaceId = getColorSpaceForColorType(sampletype, color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
     if (colorSpaceId.first.isEmpty()) {
         dbgFile << "Image has an unsupported colorspace :" << color_type << " for this depth :" << depth;
@@ -342,7 +342,6 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         }
     }
     KisPaintLayer* layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX);
-    KisTransaction("", layer -> paintDevice());
     tdata_t buf = 0;
     tdata_t* ps_buf = 0; // used only for planar configuration separated
     KisBufferStreamBase* tiffstream;

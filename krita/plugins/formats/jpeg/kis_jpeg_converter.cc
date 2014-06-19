@@ -244,7 +244,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Create layer
     KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX));
-    KisTransaction("", layer->paintDevice());
 
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
@@ -473,6 +472,14 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
         color_type = JCS_RGB;
     }
 
+    if (options.forceSRGB) {
+        const KoColorSpace* dst = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), layer->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
+        KUndo2Command *tmp = layer->paintDevice()->convertTo(dst);
+        delete tmp;
+        color_type = JCS_RGB;
+    }
+
+
     // Open file for writing
     QFile file(uri.toLocalFile());
     if (!file.open(QIODevice::WriteOnly)) {
@@ -489,8 +496,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     cinfo.err = jpeg_std_error(&jerr);
     // Initialize output stream
     KisJPEGDestination::setDestination(&cinfo, &file);
-
-
 
     cinfo.image_width = width;  // image width and height, in pixels
     cinfo.image_height = height;

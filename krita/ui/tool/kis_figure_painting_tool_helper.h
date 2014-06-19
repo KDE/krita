@@ -34,7 +34,7 @@ protected:
     typedef FreehandStrokeStrategy::PainterInfo PainterInfo;
 
 public:
-    KisFigurePaintingToolHelper(const QString &name,
+    KisFigurePaintingToolHelper(const KUndo2MagicString &name,
                                 KisImageWSP image,
                                 KoCanvasResourceManager *resourceManager,
                                 KisPainter::StrokeStyle strokeStyle,

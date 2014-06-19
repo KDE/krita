@@ -96,7 +96,7 @@ private:
  };
 
  KisDodgeHighlightsAdjustmentFactory::KisDodgeHighlightsAdjustmentFactory()
-    : KoColorTransformationFactory("DodgeHighlights", i18n("DODGE Adjustment"))
+    : KoColorTransformationFactory("DodgeHighlights")
 {
 }
 

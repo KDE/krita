@@ -101,9 +101,9 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
 
-    KisRectConstIteratorSP refIt = ref->createRectConstIteratorNG(importedImage->bounds());
+    KisSequentialConstIterator refIt(ref, importedImage->bounds());
     do {
-        const quint16* data = reinterpret_cast<const quint16*>(refIt->oldRawData());
+        const quint16* data = reinterpret_cast<const quint16*>(refIt.oldRawData());
 
         quint32 L = data[0];
         quint32 A = data[1];
@@ -117,7 +117,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
         sigmaA_ref += A * A;
         sigmaB_ref += B * B;
 
-    } while (refIt->nextPixel());
+    } while (refIt.nextPixel());
 
     double totalSize = 1. / (importedImage->width() * importedImage->height());
 

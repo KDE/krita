@@ -57,17 +57,14 @@ public:
     KisPaintOpSettingsSP settings() const;
 
     bool load();
+    bool loadFromDevice(QIODevice *dev);
 
     bool save();
-    
+    bool saveToDevice(QIODevice* dev) const;
+
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
     void fromXML(const QDomElement& elt);
-
-
-    QImage image() const;
-
-    void setImage(QImage image);
     
     bool removable() const {
         return true;
@@ -76,6 +73,10 @@ public:
     QString defaultFileExtension() const {
         return ".kpp";
     }
+
+protected:
+
+    virtual QByteArray generateMD5() const;
 
 private:
 

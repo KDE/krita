@@ -141,6 +141,11 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
     }
 
+    // then paint the guides
+    m_d->canvas->view()->document()->guidesData().paintGuides(gc,
+                                                              *m_d->viewConverter,
+                                                              updateWidgetRect);
+
     gc.restore();
 }
 
@@ -220,7 +225,7 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy() const
     return m_d->toolProxy;
 }
 
-void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilter */*displayFilter*/)
+void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilterSP /*displayFilter*/)
 {
 }
 

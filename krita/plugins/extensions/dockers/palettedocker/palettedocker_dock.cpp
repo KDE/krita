@@ -23,6 +23,7 @@
 #include <QGridLayout>
 #include <QTableView>
 #include <QHeaderView>
+#include <QWheelEvent>
 #include <klocale.h>
 #include <kcolordialog.h>
 
@@ -39,6 +40,7 @@
 #include <kis_config.h>
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_display_color_converter.h>
 
 #include "palettemodel.h"
 #include "colorsetchooser.h"
@@ -85,6 +87,31 @@ void PaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & opt
     painter->restore();
 }
 
+bool PaletteDockerDock::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == m_wdgPaletteDock->paletteView->viewport() && event->type() == QEvent::Wheel) {
+        QWheelEvent* qwheel = dynamic_cast<QWheelEvent* >(event);
+        if (qwheel->modifiers() & Qt::ControlModifier) {
+
+            int numDegrees = qwheel->delta() / 8;
+            int numSteps = numDegrees / 7;
+            int curSize = m_wdgPaletteDock->paletteView->horizontalHeader()->sectionSize(0);
+            int setSize = numSteps + curSize;
+
+            if ( setSize >= 12 ) {
+                m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(setSize);
+                m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(setSize);
+                KisConfig cfg;
+                cfg.setPaletteDockerPaletteViewSectionSize(setSize);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return QWidget::eventFilter(object, event);
+    }
+}
 
 PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     , m_canvas(0)
@@ -113,8 +140,6 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->paletteView->horizontalHeader()->setVisible(false);
     m_wdgPaletteDock->paletteView->verticalHeader()->setVisible(false);
     m_wdgPaletteDock->paletteView->setItemDelegate(new PaletteDelegate());
-    m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(12);
-    m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(12);
 
     QPalette pal(palette());
     pal.setColor(QPalette::Base, pal.dark().color());
@@ -122,9 +147,10 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->paletteView->setPalette(pal);
  
     connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
+    m_wdgPaletteDock->paletteView->viewport()->installEventFilter(this);
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-    m_serverAdapter = new KoResourceServerAdapter<KoColorSet>(rServer, this);
+    m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
     m_serverAdapter->connectToResourceServer();
 
     m_colorSetChooser = new ColorSetChooser();
@@ -135,6 +161,11 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
 
     KisConfig cfg;
+
+    int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
+    m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
+    m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(defaultSectionSize);
+
     QString defaultPalette = cfg.defaultPalette();
     KoColorSet* defaultColorSet = rServer->resourceByName(defaultPalette);
     if (defaultColorSet) {
@@ -159,6 +190,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
     KisView2* view = m_canvas->view();
     connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    m_model->setDisplayRenderer(m_canvas->displayColorConverter()->displayRendererInterface());
 }
 
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
@@ -186,11 +218,16 @@ void PaletteDockerDock::addColorForeground()
 void PaletteDockerDock::addColor()
 {
     if (m_currentColorSet) {
+        const KoColorDisplayRendererInterface *displayRenderer =
+            m_canvas->displayColorConverter()->displayRendererInterface();
+
+        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
         QColor color;
-        int result = KColorDialog::getColor(color, m_canvas->resourceManager()->foregroundColor().toQColor());
+
+        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
         if (result == KColorDialog::Accepted) {
             KoColorSetEntry newEntry;
-            newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());
+            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
             m_currentColorSet->add(newEntry);
             m_currentColorSet->save();
             setColorSet(m_currentColorSet); // update model

@@ -37,6 +37,7 @@
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
+#include "FontFamilyAction.h"
 
 #include <KoOdf.h>
 #include <KoCanvasBase.h>
@@ -72,7 +73,6 @@
 #include <krun.h>
 #include <kstandardshortcut.h>
 #include <kfontchooser.h>
-#include <kfontaction.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
@@ -322,7 +322,7 @@ void TextTool::createActions()
     addAction("fontsizedown", action);
     connect(action, SIGNAL(triggered()), this, SLOT(decreaseFontSize()));
 
-    m_actionFormatFontFamily = new KFontAction(KFontChooser::SmoothScalableFonts, this);
+    m_actionFormatFontFamily = new KoFontFamilyAction(this);
     m_actionFormatFontFamily->setText(i18n("Font Family"));
     addAction("format_fontfamily", m_actionFormatFontFamily);
     connect(m_actionFormatFontFamily, SIGNAL(triggered(const QString &)),
@@ -922,7 +922,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 
             event->ignore();
         } else if (m_tablePenMode) {
-            m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Change Border Formatting"));
+            m_textEditor.data()->beginEditBlock(kundo2_i18n("Change Border Formatting"));
             if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
                 if (pointedAt.tableColumnDivider < pointedAt.table->columns()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
@@ -1115,7 +1115,7 @@ void TextTool::cut()
 {
     if (m_textEditor.data()->hasSelection()) {
         copy();
-        KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Cut"));
+        KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(kundo2_i18n("Cut"));
         m_textEditor.data()->deleteChar(false, topCmd);
         m_textEditor.data()->endEditBlock();
     }
@@ -1375,7 +1375,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
             if(m_tableDraggedOnce) {
                 canvas()->shapeController()->resourceManager()->undoStack()->undo();
             }
-            KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Column Width"));
+            KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(kundo2_i18n("Adjust Column Width"));
             m_dx = m_draggingOrigin.x() - event->point.x();
             if (m_tableDragInfo.tableColumnDivider < m_tableDragInfo.table->columns()
                     && m_tableDragInfo.tableTrailSize + m_dx < 0) {
@@ -1418,7 +1418,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                 canvas()->shapeController()->resourceManager()->undoStack()->undo();
             }
             if (m_tableDragInfo.tableRowDivider > 0) {
-                KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Row Height"));
+                KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(kundo2_i18n("Adjust Row Height"));
                 m_dy = m_draggingOrigin.y() - event->point.y();
 
                 if (m_tableDragInfo.tableLeadSize - m_dy < 0) {
@@ -2505,7 +2505,7 @@ void TextTool::startMacro(const QString &title)
     class MacroCommand : public KUndo2Command
     {
     public:
-        MacroCommand(const QString &title) : KUndo2Command(title), m_first(true) {}
+        MacroCommand(const KUndo2MagicString &title) : KUndo2Command(title), m_first(true) {}
         virtual void redo() {
             if (! m_first)
                 KUndo2Command::redo();
@@ -2517,7 +2517,16 @@ void TextTool::startMacro(const QString &title)
         bool m_first;
     };
 
-    m_currentCommand = new MacroCommand(title);
+    /**
+     * FIXME: The messages genearted by the Text Tool might not be
+     *        properly translated, since we don't control it in
+     *        type-safe way.
+     *
+     *        The title is already translated string, we just don't
+     *        have any type control over it.
+     */
+    KUndo2MagicString title_workaround = kundo2_noi18n(title);
+    m_currentCommand = new MacroCommand(title_workaround);
     m_currentCommandHasChildren = false;
 }
 

@@ -29,6 +29,7 @@
 
 
 KisChangePrimarySettingAction::KisChangePrimarySettingAction()
+    : KisAbstractInputAction("Change Primary Setting")
 {
     setName(i18n("Change Primary Setting"));
     setDescription(i18n("The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting\", for example the brush size for the brush tool."));

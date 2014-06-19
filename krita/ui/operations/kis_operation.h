@@ -20,6 +20,7 @@
 #define __KIS_OPERATION_H
 
 #include <QString>
+#include <kundo2magicstring.h>
 #include <krita_export.h>
 #include "kis_properties_configuration.h"
 #include "operations/kis_operation_configuration.h"
@@ -38,7 +39,7 @@ public:
     virtual void runFromXML(KisView2 *view, const KisOperationConfiguration &config);
 
 protected:
-    KisProcessingApplicator* beginAction(KisView2 *view, const QString &actionName);
+    KisProcessingApplicator* beginAction(KisView2 *view, const KUndo2MagicString &actionName);
     void endAction(KisProcessingApplicator *applicator, const QString &xmlData);
 private:
     const QString m_id;

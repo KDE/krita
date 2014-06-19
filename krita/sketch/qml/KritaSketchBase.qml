@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base;
@@ -39,13 +39,15 @@ Item {
         contentHeight: base.height;
 
         PageStack {
+            id: mainPageStack;
+
             width: base.width;
             height: base.height;
 
             onCurrentPageChanged: window.currentSketchPage = (currentPage.pageName !== undefined) ? currentPage.pageName : currentPage.toString();
             initialPage: welcomePage;
 
-            transitionDuration: 500;
+            transitionDuration: Constants.AnimationDuration;
 
             Component { id: welcomePage; WelcomePage { } }
 
@@ -93,5 +95,13 @@ Item {
         target: Settings;
 
         onFocusItemChanged: if (keyboard.keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
+    }
+
+    function openFile(file)
+    {
+        if(mainPageStack.currentPage.pageName == "WelcomePage") {
+            baseLoadingDialog.visible = true;
+            Settings.currentFile = file;
+        }
     }
 }

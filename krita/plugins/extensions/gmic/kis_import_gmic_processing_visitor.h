@@ -34,7 +34,10 @@ class KisImportGmicProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
     KisImportGmicProcessingVisitor(const KisNodeListSP nodes,
-                                   QSharedPointer<gmic_list<float> > images);
+                                   QSharedPointer<gmic_list<float> > images,
+                                   const QRect &dstRect,
+                                   const KisSelectionSP selection
+                                  );
 
 protected:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
@@ -43,6 +46,8 @@ protected:
 private:
     const KisNodeListSP m_nodes;
     QSharedPointer<gmic_list<float> > m_images;
+    QRect m_dstRect;
+    const KisSelectionSP m_selection;
 };
 
 #endif /* __KIS_IMPORT_GMIC_PROCESSING_VISITOR_H */

@@ -64,7 +64,7 @@ public:
     };
 
 public:
-    KisStrokeStrategyUndoCommandBased(const QString &name,
+    KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
                                       bool undo,
                                       KisPostExecutionUndoAdapter *undoAdapter,
                                       KUndo2CommandSP initCommand = KUndo2CommandSP(0),
@@ -76,6 +76,15 @@ public:
     void finishStrokeCallback();
     void cancelStrokeCallback();
     void doStrokeCallback(KisStrokeJobData *data);
+
+    /**
+     * The undo-command-based is a low-level strategy, so it allows
+     * changing its wraparound mode status.
+     *
+     * WARNING: the switch must be called *before* the stroke has been
+     * started! Otherwise the mode will not be activated.
+     */
+    using KisStrokeStrategy::setSupportsWrapAroundMode;
 
 protected:
     void runAndSaveCommand(KUndo2CommandSP command,

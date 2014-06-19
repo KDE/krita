@@ -44,14 +44,27 @@ class KRITAUI_EXPORT KisFloatingMessage : public QWidget
     Q_OBJECT
 
 public:
+    enum Priority {
+        High = 0,
+        Medium,
+        Low
+    };
 
-    explicit KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent = false);
+    explicit KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent, int timeout,
+                                Priority priority, int alignment = Qt::AlignCenter | Qt::TextWordWrap);
     void showMessage();
 
     /// Show message above parent widget instead of screen
     void setShowOverParent(bool show);
 
     void setIcon(const QIcon& icon);
+
+    void tryOverrideMessage(const QString message,
+                            const QIcon& icon,
+                            int timeout,
+                            KisFloatingMessage::Priority priority,
+                            int alignment = Qt::AlignCenter | Qt::TextWordWrap);
+
 protected:
 
     void paintEvent(QPaintEvent *e);
@@ -72,6 +85,9 @@ private:
     int m_m;
     QTimeLine m_fadeTimeLine;
     bool m_showOverParent;
+    int m_timeout;
+    Priority m_priority;
+    int m_alignment;
 };
 
 #endif // KIS_FLOATING_MESSAGE_H

@@ -103,7 +103,7 @@ private:
  };
 
  KisBurnShadowsAdjustmentFactory::KisBurnShadowsAdjustmentFactory()
-    : KoColorTransformationFactory("BurnShadows", i18n("BurnShadows Adjustment"))
+    : KoColorTransformationFactory("BurnShadows")
 {
 }
 

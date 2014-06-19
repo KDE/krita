@@ -54,6 +54,14 @@ public:
     bool needsIndirectPainting() const;
     QString indirectPaintingCompositeOp() const;
 
+    /**
+     * \return currently active selection. Note that it will return
+     *         null if current node *is* the current selection. This
+     *         is done to avoid recursive selection application when
+     *         painting on selectgion masks.
+     */
+    KisSelectionSP activeSelection() const;
+
     bool needsAirbrushing() const;
     int airbrushingRate() const;
 
@@ -68,6 +76,8 @@ public:
 
     /// @return the channel lock flags of the current node with the global override applied
     QBitArray channelLockFlags() const;
+
+    qreal effectiveZoom() const;
 
 private:
     struct Private;

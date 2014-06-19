@@ -139,10 +139,10 @@ public:
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
      */
-    virtual void move(qint32 x, qint32 y);
+    void move(qint32 x, qint32 y);
 
     /**
-     * Convenience method for the above
+     * Convenience method for the above. Can be overridden in subclasses.
      */
     virtual void move(const QPoint& pt);
 
@@ -159,12 +159,12 @@ public:
     /**
      * set the X offset of the paint device
      */
-    virtual void setX(qint32 x);
+    void setX(qint32 x);
 
     /**
      * set the Y offset of the paint device
      */
-    virtual void setY(qint32 y);
+    void setY(qint32 y);
 
     /**
      * Retrieve the bounds of the paint device. The size is not exact,
@@ -668,9 +668,6 @@ public:
 
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
-
-    KisRectIteratorSP createRectIteratorNG(const QRect &rc);
-    KisRectConstIteratorSP createRectConstIteratorNG(const QRect &rc) const;
 
     KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
     KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;

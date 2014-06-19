@@ -21,6 +21,8 @@
 #define CALLIGRADB_TESTCONNECTION_H
 
 #include <QtCore/QObject>
+#include <db/connection.h>
+#include <db/drivermanager.h>
 
 class TestConnection : public QObject
 {
@@ -28,7 +30,13 @@ class TestConnection : public QObject
 private Q_SLOTS:
     void initTestCase();
     void testCreateDb();
+    void testQueries();
     void cleanupTestCase();
+    
+private:
+      QString db_name;
+      KexiDB::DriverManager manager;
+      KexiDB::ConnectionData cdata;
 };
 
 #endif

@@ -17,23 +17,19 @@
  */
 
 import QtQuick 1.1
-import "../components"
+import org.krita.sketch.components 1.0
 
 Panel {
     id: base;
     name: "Select";
-    panelColor: "#000000";
+    colorSet: "selection";
 
     actions: [
         Button {
             id: deselectButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-select-deselect.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("select-deselect");
             enabled: sketchView.selectionManager ? sketchView.selectionManager.havePixelsSelected : false;
             onClicked: if (sketchView.selectionManager) sketchView.selectionManager.deselect();
         },
@@ -41,11 +37,7 @@ Panel {
             id: reselectButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-select-reselect.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("select-reselect");
             onClicked: sketchView.selectionManager.reselect();
         },
         Item {
@@ -57,11 +49,7 @@ Panel {
             property bool showSelection: sketchView.selectionManager ? sketchView.selectionManager.displaySelection : false;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: showSelection ? "../images/svg/icon-select-show.svg" : "../images/svg/icon-select-hide.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: showSelection ? Settings.theme.icon("select-show") : Settings.theme.icon("select-hide");
             onClicked: sketchView.selectionManager.toggleDisplaySelection();
         }
     ]
@@ -80,13 +68,9 @@ Panel {
             Button {
                 id: selectRectangle;
                 anchors.verticalCenter: parent.verticalCenter;
-                image: "../images/svg/icon-select-rectangle.svg"
+                image: Settings.theme.icon("select-rectangle");
                 width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
-                color: "transparent";
-                textColor: "white";
-                shadow: false;
-                highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectRectangular");
                 checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectRectangular" : false;
             }
@@ -94,13 +78,9 @@ Panel {
                 id: selectPolygon;
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectRectangle.right;
-                image: "../images/svg/icon-select-polygon.svg"
+                image: Settings.theme.icon("select-polygon");
                 width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
-                color: "transparent";
-                textColor: "white";
-                shadow: false;
-                highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectPolygonal");
                 checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectPolygonal" : false;
             }
@@ -108,13 +88,9 @@ Panel {
                 id: selectArea;
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectPolygon.right;
-                image: "../images/svg/icon-select-area.svg"
+                image: Settings.theme.icon("select-area");
                 width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
-                color: "transparent";
-                textColor: "white";
-                shadow: false;
-                highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectContiguous");
                 checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectContiguous" : false;
             }
@@ -122,13 +98,9 @@ Panel {
                 id: selectColor;
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectArea.right;
-                image: "../images/svg/icon-select-color.svg"
+                image: Settings.theme.icon("select-color");
                 width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
-                color: "transparent";
-                textColor: "white";
-                shadow: false;
-                highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectSimilar");
                 checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectSimilar" : false;
             }
@@ -139,48 +111,36 @@ Panel {
             anchors.centerIn: parent;
             Button {
                 id: selectReplace;
-                image: "../images/svg/icon-select-replace.svg"
-                width: Constants.GridWidth * 2 / 5;
+                image: Settings.theme.icon("select-replace");
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
-                color: "transparent";
-                shadow: false;
-                highlight: false;
                 checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 0) ? true : false;
                 onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 0;
             }
             Button {
                 id: selectIntersect;
                 anchors.left: selectReplace.right;
-                image: "../images/svg/icon-select-intersect.svg"
+                image: Settings.theme.icon("select-intersect");
                 width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
-                color: "transparent";
-                shadow: false;
-                highlight: false;
                 checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 3) ? true : false;
                 onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 3;
             }
             Button {
                 id: selectAdd;
                 anchors.left: selectIntersect.right;
-                image: "../images/svg/icon-select-add.svg"
+                image: Settings.theme.icon("select-add");
                 width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
-                color: "transparent";
-                shadow: false;
-                highlight: false;
                 checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 1) ? true : false;
                 onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 1;
             }
             Button {
                 id: selectSub;
                 anchors.left: selectAdd.right;
-                image: "../images/svg/icon-select-sub.svg"
+                image: Settings.theme.icon("select-sub");
                 width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
-                color: "transparent";
-                shadow: false;
-                highlight: false;
                 checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 2) ? true : false;
                 onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 2;
             }
@@ -197,10 +157,10 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.margins: Constants.DefaultMargin;
                 text: "All";
-                textColor: "black";
-                color: "#63ffffff";
+                textColor: Settings.theme.color("panels/selection/buttons/text");
+                color: Settings.theme.color("panels/selection/buttons/color");
                 border.width: 1;
-                border.color: "silver";
+                border.color: Settings.theme.color("panels/selection/buttons/border");
                 radius: Constants.DefaultMargin;
                 width: Constants.IsLandscape ? Constants.GridWidth : (Constants.GridWidth * 2 / 3);// - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2;
@@ -212,10 +172,10 @@ Panel {
                 anchors.left: selectAll.right;
                 anchors.margins: Constants.DefaultMargin;
                 text: "Invert";
-                textColor: "black";
-                color: "#63ffffff";
+                textColor: Settings.theme.color("panels/selection/buttons/text");
+                color: Settings.theme.color("panels/selection/buttons/color");
                 border.width: 1;
-                border.color: "silver";
+                border.color: Settings.theme.color("panels/selection/buttons/border");
                 radius: Constants.DefaultMargin;
                 width: Constants.IsLandscape ? Constants.GridWidth : (Constants.GridWidth * 2 / 3);// - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2
@@ -260,13 +220,9 @@ Panel {
                     Button {
                         id: selectRectangleFull;
                         anchors.verticalCenter: parent.verticalCenter;
-                        image: "../images/svg/icon-select-rectangle.svg"
+                        image: Settings.theme.icon("select-rectangle");
                         width: Constants.ToolbarButtonSize * 0.8;
                         height: width;
-                        color: "transparent";
-                        textColor: "white";
-                        shadow: false;
-                        highlight: false;
                         onClicked: toolManager.requestToolChange("KisToolSelectRectangular");
                         checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectRectangular" : false;
                     }
@@ -274,13 +230,9 @@ Panel {
                         id: selectPolygonFull;
                         anchors.verticalCenter: parent.verticalCenter;
                         anchors.left: selectRectangleFull.right;
-                        image: "../images/svg/icon-select-polygon.svg"
+                        image: Settings.theme.icon("select-polygon")
                         width: Constants.ToolbarButtonSize * 0.8;
                         height: width;
-                        color: "transparent";
-                        textColor: "white";
-                        shadow: false;
-                        highlight: false;
                         onClicked: toolManager.requestToolChange("KisToolSelectPolygonal");
                         checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectPolygonal" : false;
                     }
@@ -288,13 +240,9 @@ Panel {
                         id: selectAreaFull;
                         anchors.verticalCenter: parent.verticalCenter;
                         anchors.left: selectPolygonFull.right;
-                        image: "../images/svg/icon-select-area.svg"
+                        image: Settings.theme.icon("select-area")
                         width: Constants.ToolbarButtonSize * 0.8;
                         height: width;
-                        color: "transparent";
-                        textColor: "white";
-                        shadow: false;
-                        highlight: false;
                         onClicked: toolManager.requestToolChange("KisToolSelectContiguous");
                         checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectContiguous" : false;
                     }
@@ -302,13 +250,9 @@ Panel {
                         id: selectColorFull;
                         anchors.verticalCenter: parent.verticalCenter;
                         anchors.left: selectAreaFull.right;
-                        image: "../images/svg/icon-select-color.svg"
+                        image: Settings.theme.icon("select-color")
                         width: Constants.ToolbarButtonSize * 0.8;
                         height: width;
-                        color: "transparent";
-                        textColor: "white";
-                        shadow: false;
-                        highlight: false;
                         onClicked: toolManager.requestToolChange("KisToolSelectSimilar");
                         checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectSimilar" : false;
                     }
@@ -320,11 +264,9 @@ Panel {
                         leftMargin: Constants.DefaultMargin;
                         top: fullTopRow.bottom;
                     }
-                    horizontalAlignment: Text.AlignLeft;
-                    font.pixelSize: Constants.LargeFontSize;
-                    font.bold: true;
                     height: Constants.GridHeight / 2;
                     text: "Mode:";
+                    font: Settings.theme.font("panelSection");
                 }
                 Item {
                     id: fullModeRow;
@@ -334,48 +276,36 @@ Panel {
                     anchors.top: modeLabel.bottom;
                     Button {
                         id: selectReplaceFull;
-                        image: "../images/svg/icon-select-replace.svg"
+                        image: Settings.theme.icon("select-replace")
                         width: Constants.ToolbarButtonSize * 0.8;
                         height: width;
-                        color: "transparent";
-                        shadow: false;
-                        highlight: false;
                         checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 0) ? true : false;
                         onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 0;
                     }
                     Button {
                         id: selectIntersectFull;
                         anchors.left: selectReplaceFull.right;
-                        image: "../images/svg/icon-select-intersect.svg"
+                        image: Settings.theme.icon("select-intersect")
                         width: Constants.ToolbarButtonSize * 0.8;
                         height: width;
-                        color: "transparent";
-                        shadow: false;
-                        highlight: false;
                         checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 3) ? true : false;
                         onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 3;
                     }
                     Button {
                         id: selectAddFull;
                         anchors.left: selectIntersectFull.right;
-                        image: "../images/svg/icon-select-add.svg"
+                        image: Settings.theme.icon("select-add")
                         width: Constants.ToolbarButtonSize * 0.8;
                         height: width;
-                        color: "transparent";
-                        shadow: false;
-                        highlight: false;
                         checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 1) ? true : false;
                         onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 1;
                     }
                     Button {
                         id: selectSubFull;
                         anchors.left: selectAddFull.right;
-                        image: "../images/svg/icon-select-sub.svg"
+                        image: Settings.theme.icon("select-sub")
                         width: Constants.ToolbarButtonSize * 0.8;
                         height: width;
-                        color: "transparent";
-                        shadow: false;
-                        highlight: false;
                         checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 2) ? true : false;
                         onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 2;
                     }
@@ -387,10 +317,9 @@ Panel {
                         leftMargin: Constants.DefaultMargin;
                         top: fullModeRow.bottom;
                     }
-                    font.pixelSize: Constants.LargeFontSize;
-                    font.bold: true;
                     height: Constants.GridHeight / 2;
                     text: "Select:";
+                    font: Settings.theme.font("panelSection");
                 }
                 Item {
                     id: fullSelectCommands;
@@ -405,10 +334,10 @@ Panel {
                         anchors.verticalCenter: parent.verticalCenter;
                         anchors.margins: Constants.DefaultMargin;
                         text: "All";
-                        textColor: "black";
-                        color: "#63ffffff";
+                        textColor: Settings.theme.color("panels/selection/buttons/text");
+                        color: Settings.theme.color("panels/selection/buttons/color");
                         border.width: 1;
-                        border.color: "silver";
+                        border.color: Settings.theme.color("panels/selection/buttons/border");
                         radius: Constants.DefaultMargin;
                         width: Constants.IsLandscape ? Constants.GridWidth : (Constants.GridWidth * 2 / 3);// - Constants.DefaultMargin;
                         height: textSize + Constants.DefaultMargin * 2
@@ -420,10 +349,10 @@ Panel {
                         anchors.left: selectAllFull.right;
                         anchors.margins: Constants.DefaultMargin;
                         text: "Invert";
-                        textColor: "black";
-                        color: "#63ffffff";
+                        textColor: Settings.theme.color("panels/selection/buttons/text");
+                        color: Settings.theme.color("panels/selection/buttons/color");
                         border.width: 1;
-                        border.color: "silver";
+                        border.color: Settings.theme.color("panels/selection/buttons/border");
                         radius: Constants.DefaultMargin;
                         width: Constants.IsLandscape ? Constants.GridWidth : (Constants.GridWidth * 2 / 3);// - Constants.DefaultMargin;
                         height: textSize + Constants.DefaultMargin * 2
@@ -451,10 +380,9 @@ Panel {
                         leftMargin: Constants.DefaultMargin;
                         top: fullSelectCommands.bottom;
                     }
-                    font.pixelSize: Constants.LargeFontSize;
-                    font.bold: true;
                     height: Constants.GridHeight / 2;
                     text: "Edit:";
+                    font: Settings.theme.font("panelSection");
                 }
                 Column {
                     anchors {
@@ -485,11 +413,11 @@ Panel {
                             }
                             height: parent.height - (Constants.DefaultMargin * 6);
                             width: height;
-                            source: "../images/svg/icon-select-apply.svg";
+                            source: Settings.theme.icon("select-apply");
                             smooth: true;
                             MouseArea {
                                 anchors.fill: parent;
-                                onClicked: sketchView.selectionManager().feather(featherTxt.value);
+                                onClicked: sketchView.selectionExtras.feather(featherTxt.value);
                             }
                         }
                     }
@@ -515,11 +443,11 @@ Panel {
                             }
                             height: parent.height - (Constants.DefaultMargin * 6);
                             width: height;
-                            source: "../images/svg/icon-select-apply.svg";
+                            source: Settings.theme.icon("select-apply");
                             smooth: true;
                             MouseArea {
                                 anchors.fill: parent;
-                                onClicked: sketchView.selectionExtras().grow(growTxt.value, growTxt.value);
+                                onClicked: sketchView.selectionExtras.grow(growTxt.value, growTxt.value);
                             }
                         }
                     }
@@ -545,11 +473,11 @@ Panel {
                             }
                             height: parent.height - (Constants.DefaultMargin * 6);
                             width: height;
-                            source: "../images/svg/icon-select-apply.svg";
+                            source: Settings.theme.icon("select-apply");
                             smooth: true;
                             MouseArea {
                                 anchors.fill: parent;
-                                onClicked: sketchView.selectionManager().border(borderTxt.value, borderTxt.value);
+                                onClicked: sketchView.selectionExtras.border(borderTxt.value, borderTxt.value);
                             }
                         }
                     }
@@ -575,11 +503,11 @@ Panel {
                             }
                             height: parent.height - (Constants.DefaultMargin * 6);
                             width: height;
-                            source: "../images/svg/icon-select-apply.svg";
+                            source: Settings.theme.icon("select-apply");
                             smooth: true;
                             MouseArea {
                                 anchors.fill: parent;
-                                onClicked: sketchView.selectionManager().shrink(shrinkTxt.value, shrinkTxt.value, false);
+                                onClicked: sketchView.selectionExtras.shrink(shrinkTxt.value, shrinkTxt.value, false);
                             }
                         }
                     }

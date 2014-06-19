@@ -54,28 +54,29 @@ private:
 
 };
 
-class ExperimentOption{
+class ExperimentOption
+{
 
-    public:
-        bool isDisplacementEnabled;
-        qreal displacement;
-        bool isSpeedEnabled;
-        qreal speed;
-        bool isSmoothingEnabled;
-        qreal smoothing;
-        bool windingFill;
-        bool hardEdge;
+public:
+    bool isDisplacementEnabled;
+    qreal displacement;
+    bool isSpeedEnabled;
+    qreal speed;
+    bool isSmoothingEnabled;
+    qreal smoothing;
+    bool windingFill;
+    bool hardEdge;
 
-        void readOptionSetting(const KisPropertiesConfiguration* setting){
-            isDisplacementEnabled = setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED);
-            displacement = setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE, 50.0);
-            isSpeedEnabled = setting->getBool(EXPERIMENT_SPEED_ENABLED);
-            speed = setting->getDouble(EXPERIMENT_SPEED_VALUE, 50.0);
-            isSmoothingEnabled = setting->getBool(EXPERIMENT_SMOOTHING_ENABLED);
-            smoothing = setting->getDouble(EXPERIMENT_SMOOTHING_VALUE, 20.0);
-            windingFill = setting->getBool(EXPERIMENT_WINDING_FILL);
-            hardEdge = setting->getBool(EXPERIMENT_HARD_EDGE);
-        }
+    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+        isDisplacementEnabled = setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED);
+        displacement = setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE, 50.0);
+        isSpeedEnabled = setting->getBool(EXPERIMENT_SPEED_ENABLED);
+        speed = setting->getDouble(EXPERIMENT_SPEED_VALUE, 50.0);
+        isSmoothingEnabled = setting->getBool(EXPERIMENT_SMOOTHING_ENABLED);
+        smoothing = setting->getDouble(EXPERIMENT_SMOOTHING_VALUE, 20.0);
+        windingFill = setting->getBool(EXPERIMENT_WINDING_FILL);
+        hardEdge = setting->getBool(EXPERIMENT_HARD_EDGE);
+    }
 };
 
 #endif

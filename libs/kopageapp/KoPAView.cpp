@@ -324,7 +324,7 @@ void KoPAView::initGUI(KoPAFlags flags)
         }
     } else {
         if (mw) {
-            KoToolBoxFactory toolBoxFactory(d->canvasController);
+            KoToolBoxFactory toolBoxFactory;
             mw->createDockWidget( &toolBoxFactory );
             connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
             mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
@@ -647,7 +647,7 @@ void KoPAView::formatPageLayout()
     KoPAPageLayoutDialog dialog( d->doc, pageLayout, d->canvas );
 
     if ( dialog.exec() == QDialog::Accepted ) {
-        KUndo2Command *command = new KUndo2Command( i18nc( "(qtundo-format)", "Change page layout" ) );
+        KUndo2Command *command = new KUndo2Command( kundo2_i18n( "Change page layout" ) );
         viewMode()->changePageLayout( dialog.pageLayout(), dialog.applyToDocument(), command );
 
         d->canvas->addCommand( command );

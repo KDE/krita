@@ -20,6 +20,7 @@
 #define IMAGEBUILDER_H
 
 #include <QObject>
+#include <QVariantMap>
 
 class KisDoc2;
 class ImageBuilder : public QObject
@@ -30,8 +31,10 @@ public:
     virtual ~ImageBuilder();
 
     Q_INVOKABLE QString createBlankImage(int width, int height, int resolution);
+    Q_INVOKABLE QString createBlankImage(const QVariantMap& options);
     Q_INVOKABLE QString createImageFromClipboard();
     Q_INVOKABLE QString createImageFromWebcam(int width, int height, int resolution);
+    Q_INVOKABLE QString createImageFromTemplate(const QVariantMap& options);
 
 private Q_SLOTS:
     void createImageFromClipboardDelayed();

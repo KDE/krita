@@ -24,20 +24,20 @@ class KisExperimentOpOptionsWidget: public QWidget, public Ui::WdgExperimentOpti
 {
 public:
     KisExperimentOpOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
 
-        speed->setRange(0.0,100.0,0);
+        speed->setRange(0.0, 100.0, 0);
         speed->setSuffix(QChar(Qt::Key_Percent));
         speed->setValue(42.0);
         speed->setSingleStep(1.0);
 
-        smoothThreshold->setRange(0.0,100.0,0);
+        smoothThreshold->setRange(0.0, 100.0, 0);
         smoothThreshold->setSuffix(i18n("px"));
         smoothThreshold->setValue(20.0);
         smoothThreshold->setSingleStep(1.0);
 
-        displaceStrength->setRange(0.0,100.0,0);
+        displaceStrength->setRange(0.0, 100.0, 0);
         displaceStrength->setSuffix(QChar(Qt::Key_Percent));
         displaceStrength->setValue(42.0);
         displaceStrength->setSingleStep(1.0);
@@ -45,7 +45,7 @@ public:
 };
 
 KisExperimentOpOption::KisExperimentOpOption()
-        : KisPaintOpOption(i18n("Experiment option"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Experiment option"), KisPaintOpOption::generalCategory(), false)
 {
     m_checkable = false;
     m_options = new KisExperimentOpOptionsWidget();

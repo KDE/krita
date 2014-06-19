@@ -55,6 +55,9 @@ private slots:
     void showFilterDialog(const QString &filterId);
     void reapplyLastFilter();
 
+    void slotStrokeEndRequested();
+    void slotStrokeCancelRequested();
+
 private:
     struct Private;
     Private * const d;

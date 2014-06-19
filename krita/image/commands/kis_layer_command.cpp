@@ -21,7 +21,7 @@
 #include "kis_layer.h"
 #include "commands/kis_layer_commands.h"
 
-KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
+KisLayerCommand::KisLayerCommand(const KUndo2MagicString& name, KisLayerSP layer) :
         KUndo2Command(name), m_layer(layer)
 {
 }

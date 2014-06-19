@@ -32,12 +32,12 @@ class PAINTOP_EXPORT KisColorSourceOption
 {
 public:
     enum Type {
-      PLAIN,
-      GRADIENT,
-      UNIFORM_RANDOM,
-      TOTAL_RANDOM,
-      PATTERN,
-      PATTERN_LOCKED
+        PLAIN,
+        GRADIENT,
+        UNIFORM_RANDOM,
+        TOTAL_RANDOM,
+        PATTERN,
+        PATTERN_LOCKED
     };
 public:
     KisColorSourceOption();
@@ -50,7 +50,7 @@ public:
     void setColorSourceType(Type _type);
     void setColorSourceType(const QString& _type);
     static QList<KoID> sourceIds();
-    
+
 private:
     struct Private;
     Private* const d;

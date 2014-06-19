@@ -19,15 +19,16 @@
 #include "kis_image_manager.h"
 
 #include <QString>
+#include <QDesktopServices>
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kfiledialog.h>
 #include <kurl.h>
 #include <kactioncollection.h>
 
 #include <KoIcon.h>
 #include <KoFilterManager.h>
+#include <KoFileDialog.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
@@ -73,8 +74,15 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, bool importAsLayer)
     qint32 rc = 0;
 
     if (urlArg.isEmpty()) {
-        QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");
-        urls = KFileDialog::getOpenUrls(KUrl(QString()), mimelist, 0, i18n("Import Image"));
+        KoFileDialog dialog(m_view, KoFileDialog::OpenFiles, "OpenDocument");
+        dialog.setCaption(i18n("Import Image"));
+        dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+        dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+        QStringList fileNames = dialog.urls();
+        foreach(const QString &fileName, fileNames) {
+            urls << KUrl::fromLocalFile(fileName);
+        }
+
     } else {
         urls.push_back(urlArg);
     }

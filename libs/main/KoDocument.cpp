@@ -30,7 +30,7 @@
 #include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
-#include "KoFileDialogHelper.h"
+#include "KoFileDialog.h"
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
 #include "KoView.h"
@@ -453,6 +453,8 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
     Q_ASSERT(parent);
 
     d->isEmpty = true;
+    d->filterManager = new KoFilterManager(this, d->progressUpdater);
+
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
 
@@ -584,9 +586,6 @@ bool KoDocument::saveFile()
     if (!isNativeFormat(outputMimeType)) {
         kDebug(30003) << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
-        if (!d->filterManager)
-            d->filterManager = new KoFilterManager(this, d->progressUpdater);
-
         KoFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KoFilter::OK;
         suppressErrorDialog = (status == KoFilter::UserCancelled || status == KoFilter::BadConversionGraph);
@@ -688,17 +687,11 @@ void KoDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
 
 bool KoDocument::saveInBatchMode() const
 {
-    if (d->filterManager) {
-        return d->filterManager->getBatchMode();
-    }
-    return true;
+    return d->filterManager->getBatchMode();
 }
 
 void KoDocument::setSaveInBatchMode(const bool batchMode)
 {
-    if (!d->filterManager) {
-        d->filterManager = new KoFilterManager(this, d->progressUpdater);
-    }
     d->filterManager->setBatchMode(batchMode);
 }
 
@@ -1023,6 +1016,7 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
     if (!url.isLocalFile()) return mimeType;
 
     if (url.toLocalFile().endsWith(".flipbook")) return "application/x-krita-flipbook";
+    if (url.toLocalFile().endsWith(".kpp")) return "image/png";
 
     QStringList imageMimeTypes;
     imageMimeTypes << "image/jpeg"
@@ -1487,8 +1481,6 @@ bool KoDocument::openFile()
     setupOpenFileSubProgress();
 
     if (!isNativeFormat(typeName.toLatin1())) {
-        if (!d->filterManager)
-            d->filterManager = new KoFilterManager(this, d->progressUpdater);
         KoFilter::ConversionStatus status;
         importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
         if (status != KoFilter::OK) {
@@ -1559,14 +1551,8 @@ bool KoDocument::openFile()
             }
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
-#ifndef Q_OS_WIN
-                QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
+                QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
                 KMessageBox::error(0, errorMsg);
-#else
-                QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
-                KMessageBox::error(0, errorMsg);
-#endif
-
             }
 
             d->isLoading = false;
@@ -2363,7 +2349,7 @@ void KoDocument::addCommand(KUndo2Command *command)
         d->undoStack->push(command);
 }
 
-void KoDocument::beginMacro(const QString & text)
+void KoDocument::beginMacro(const KUndo2MagicString & text)
 {
     d->undoStack->beginMacro(text);
 }
@@ -2607,7 +2593,8 @@ bool KoDocument::queryClose()
                 if (d->parentPart->mainWindows().count() > 0) {
                     mainWindow = d->parentPart->mainWindows()[0];
                 }
-                KUrl url(KoFileDialogHelper::getSaveFileName(mainWindow));
+                KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile, "SaveDocument");
+                KUrl url = dialog.url();
                 if (url.isEmpty())
                     return false;
 

@@ -29,7 +29,7 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
                                                  KisNodeSP aboveThis,
                                                  bool doRedoUpdates,
                                                  bool doUndoUpdates)
-        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image),
+        : KisImageCommand(kundo2_i18n("Add Layer"), image),
           m_index(-1),
           m_doRedoUpdates(doRedoUpdates),
           m_doUndoUpdates(doUndoUpdates)
@@ -45,7 +45,7 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
                                                  quint32 index,
                                                  bool doRedoUpdates,
                                                  bool doUndoUpdates)
-        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image),
+        : KisImageCommand(kundo2_i18n("Add Layer"), image),
           m_index(index),
           m_doRedoUpdates(doRedoUpdates),
           m_doUndoUpdates(doUndoUpdates)

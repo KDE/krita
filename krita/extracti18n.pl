@@ -22,10 +22,10 @@
 use strict;
 use warnings;
 
-sub printi18n {
+sub printi18n($$) {
   if ($_[0] ne "") 
     {
-          print "i18n(\"".$_[0]."\");\n";
+          print "i18nc(\"".$_[1]."\",\"".$_[0]."\");\n";
     }
 }
 
@@ -49,13 +49,13 @@ foreach my $filename (@filenames)
       my @splited = split(/: /, $lines[1]);
       my $name = $splited[1];
       chomp($name);
-      printi18n $name;
+      printi18n($name, $filename);
     }
     else
     {
       my $name = $lines[0];
       chomp($name);
-      printi18n $name;
+      printi18n($name, $filename);
     }
   }
   else
@@ -70,13 +70,13 @@ foreach my $filename (@filenames)
       {
         read(FILE, $bytes, 12);
         read(FILE, my $name, $size - 21);
-        printi18n $name;
+        printi18n($name, $filename);
       }
       else
       {
         read(FILE, $bytes, 20);
         read(FILE, my $name, $size - 29);
-        printi18n $name;
+        printi18n($name, $filename);
       }
     }
     else
@@ -85,7 +85,7 @@ foreach my $filename (@filenames)
       my $size = unpack("N", $bytes);
       read(FILE, $bytes, 20);
       read(FILE, my $name, $size - 25);
-      printi18n $name;
+      printi18n($name, $filename);
     }
   }
 }

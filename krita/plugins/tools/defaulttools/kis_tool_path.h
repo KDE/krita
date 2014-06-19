@@ -34,6 +34,7 @@ class KisToolPath;
 class __KisToolPathLocalTool : public KoCreatePathTool {
 public:
     __KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool);
+
     virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
     virtual void addPathShape(KoPathShape* pathShape);
 
@@ -56,6 +57,8 @@ public:
     KisToolPath(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent *event);
 
+    virtual QList< QWidget* > createOptionWidgets();
+
 protected:
     void requestStrokeCancellation();
     void requestStrokeEnd();
@@ -70,7 +73,7 @@ class KisToolPathFactory : public KoToolFactoryBase
 public:
     KisToolPathFactory(const QStringList&)
             : KoToolFactoryBase("KisToolPath") {
-        setToolTip(i18n("Draw a path. Shift-mouseclick ends the path."));
+        setToolTip(i18n("Bezier Curve Tool. Shift-mouseclick ends the curve."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_draw_path"));

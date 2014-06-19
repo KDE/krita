@@ -95,13 +95,6 @@ public:
         return "scRGB (linear)";
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const {
-        const IccColorProfile* p = dynamic_cast<const IccColorProfile*>(profile);
-        if (!p) return false;
-        // We only support these two generated profiles for now.
-        return (p->name() == "sRGB built-in" || p->name() == "scRGB (linear)");
-    }
-
     virtual bool isHdr() const
     {
         return true;

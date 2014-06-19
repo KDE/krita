@@ -1,17 +1,23 @@
 [Desktop Entry]
 Name=Sheets Pivot Plugin
+Name[bs]=Dodatak za pivot funkcije u program u Sheets
 Name[ca]=Connector «Pivot» del Sheets
 Name[ca@valencia]=Connector «Pivot» del Sheets
+Name[da]=Pivot-plugin til Sheets
 Name[de]=Sheets-Pivotmodul
+Name[el]=Πρόσθετο Pivot του Sheets
 Name[es]=Complemento de tabla dinámica de Sheets
+Name[et]=Sheetsi risttabeliplugin
+Name[fr]=Module externe pour Sheets de pivot
 Name[hu]=Sheets pivot bővítmény
 Name[it]=Estensione pivot di Sheets
+Name[ja]=Sheets ピボットプラグイン
 Name[kk]=Sheets құрама кесте плагині
 Name[nb]=Sheets pivot-tillegg
 Name[nl]=Plug-in voor Pivot van Sheet
 Name[pl]=Wtyczka przestawiania dla Arkuszy 
 Name[pt]='Plugin' de Pivot do Sheets
-Name[pt_BR]=Plugin de Pivot do Sheets
+Name[pt_BR]=Plugin Tabela Dinâmica do Sheets
 Name[sk]=Plugin stredu Sheets
 Name[sv]=Sheets pivåinsticksprogram
 Name[uk]=Додаток зведених таблиць для Sheets

@@ -29,15 +29,18 @@
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"
 
-class KoResourceModel;
+#include "kowidgets_export.h"
+
+class KoResourceModelBase;
 class KoResource;
 
-class KoResourceTaggingManager : public QObject
+class KOWIDGETS_EXPORT KoResourceTaggingManager : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit KoResourceTaggingManager(KoResourceModel*, QWidget* parent);
+    explicit KoResourceTaggingManager(KoResourceModelBase*, QWidget* parent);
+    ~KoResourceTaggingManager();
     void showTaggingBar(bool showSearchBar, bool showOpBar);
     QStringList availableTags() const;
     QString currentTag();

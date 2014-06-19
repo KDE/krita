@@ -106,7 +106,7 @@ Methods:
 **/
 
 import QtQuick 1.1
-import "." 0.1
+import "."
 import "PageStack.js" as Engine
 
 Item {
@@ -120,7 +120,7 @@ Item {
     property Item toolBar
     property variant initialPage
 
-    property int transitionDuration: 250
+    property int transitionDuration: Constants.AnimationDuration
 
     // Indicates whether there is an ongoing page transition.
     property bool busy: internal.ongoingTransitionCount > 0

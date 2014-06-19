@@ -18,7 +18,10 @@
 
 #include "kis_node_manager.h"
 
+#include <QDesktopServices>
+
 #include <kactioncollection.h>
+#include <kmimetype.h>
 
 #include <KoIcon.h>
 #include <KoSelection.h>
@@ -26,6 +29,7 @@
 #include <KoShape.h>
 #include <KoShapeLayer.h>
 #include <KoFilterManager.h>
+#include <KoFileDialog.h>
 
 #include <kis_types.h>
 #include <kis_node.h>
@@ -67,6 +71,9 @@ struct KisNodeManager::Private {
     KisNodeSP activeNode;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
+    KAction *mergeSelectedLayers;
+
+    QList<KisNodeSP> selectedNodes;
 
     bool activateNodeImpl(KisNodeSP node);
 
@@ -125,7 +132,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 }
 
 KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
-        : m_d(new Private())
+    : m_d(new Private())
 {
     m_d->view = view;
     m_d->doc = doc;
@@ -141,6 +148,10 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
 
     connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
     connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
+
+    m_d->mergeSelectedLayers = new KAction(i18n("&Merge Selected Layers"), this);
+    view->actionCollection()->addAction("merge_selected_layers", m_d->mergeSelectedLayers);
+    connect(m_d->mergeSelectedLayers, SIGNAL(triggered()), this, SLOT(mergeLayerDown()));
 
 }
 
@@ -239,10 +250,10 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     NEW_LAYER_ACTION("add_new_adjustment_layer", i18n("&Filter Layer..."),
                      "KisAdjustmentLayer", koIcon("view-filter"));
 
-    NEW_LAYER_ACTION("add_new_generator_layer", i18n("&Generated Layer..."),
-                     "KisGeneratorLayer", koIcon("view-filter"));
+    NEW_LAYER_ACTION("add_new_fill_layer", i18n("&Fill Layer..."),
+                     "KisGeneratorLayer", koIcon("krita_tool_color_fill"));
 
-    NEW_LAYER_ACTION("add_new_file_layer", i18n("&File Layer"),
+    NEW_LAYER_ACTION("add_new_file_layer", i18n("&File Layer..."),
                      "KisFileLayer", koIcon("document-open"));
 
     NEW_MASK_ACTION("add_new_transparency_mask", i18n("&Transparency Mask"),
@@ -263,7 +274,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     CONVERT_NODE_ACTION("convert_to_selection_mask", i18n("to &Selection Mask"),
                         "KisSelectionMask", koIcon("edit-paste"));
 
-    CONVERT_NODE_ACTION("convert_to_filter_mask", i18n("to &Filter Mask"),
+    CONVERT_NODE_ACTION("convert_to_filter_mask", i18n("to &Filter Mask..."),
                         "KisFilterMask", koIcon("bookmarks"));
 
     CONVERT_NODE_ACTION("convert_to_transparency_mask", i18n("to &Transparency Mask"),
@@ -345,13 +356,26 @@ void KisNodeManager::moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP 
     m_d->commandsAdapter->moveNode(node, parent, aboveThis);
 }
 
+void KisNodeManager::toggleIsolateActiveNode()
+{
+    KisImageWSP image = m_d->view->image();
+    KisNodeSP activeNode = this->activeNode();
+    KIS_ASSERT_RECOVER_RETURN(activeNode);
+
+    if (activeNode == image->isolatedModeRoot()) {
+        toggleIsolateMode(false);
+    } else {
+        toggleIsolateMode(true);
+    }
+}
+
 void KisNodeManager::toggleIsolateMode(bool checked)
 {
     KisImageWSP image = m_d->view->image();
 
     if (checked) {
         KisNodeSP activeNode = this->activeNode();
-        Q_ASSERT(activeNode);
+        KIS_ASSERT_RECOVER_RETURN(activeNode);
 
         image->startIsolatedMode(activeNode);
     } else {
@@ -444,7 +468,7 @@ void KisNodeManager::convertNode(const QString &nodeType)
         KisPaintDeviceSP copyFrom = activeNode->paintDevice() ?
             activeNode->paintDevice() : activeNode->original();
 
-        m_d->commandsAdapter->beginMacro(i18n("Convert to a Selection Mask"));
+        m_d->commandsAdapter->beginMacro(kundo2_i18n("Convert to a Selection Mask"));
 
         if (nodeType == "KisSelectionMask") {
             m_d->maskManager->createSelectionMask(activeNode, copyFrom);
@@ -541,6 +565,11 @@ void KisNodeManager::setNodeCompositeOp(KisNodeSP node,
     m_d->commandsAdapter->setCompositeOp(node, compositeOp);
 }
 
+void KisNodeManager::setSelectedNodes(QList<KisNodeSP> nodes)
+{
+    m_d->selectedNodes = nodes;
+}
+
 void KisNodeManager::nodeOpacityChanged(qreal opacity, bool finalChange)
 {
     KisNodeSP node = activeNode();
@@ -634,23 +663,63 @@ bool scanForLastLayer(KisImageWSP image, KisNodeSP nodeToRemove)
     return lastLayer;
 }
 
-void KisNodeManager::removeNode()
+/// Scan whether the node has a parent in the list of nodes
+bool scanForParent(QList<KisNodeSP> nodeList, KisNodeSP node)
 {
-    //do not delete root layer
+    KisNodeSP parent = node->parent();
 
-    KisNodeSP node = activeNode();
+    while (parent) {
+        if (nodeList.contains(parent)) {
+            return true;
+        }
+        parent = parent->parent();
+    }
+    return false;
+}
 
-    if(node->parent()==0)
+void KisNodeManager::removeSingleNode(KisNodeSP node)
+{
+    if (!node->parent()) {
         return;
+    }
 
     if (scanForLastLayer(m_d->view->image(), node)) {
-        m_d->commandsAdapter->beginMacro(i18n("Remove Last Layer"));
+        m_d->commandsAdapter->beginMacro(kundo2_i18n("Remove Last Layer"));
         m_d->commandsAdapter->removeNode(node);
+        // An oddity, but this is required as for some reason, we can end up in a situation
+        // where our active node is still set to one of the layers removed above.
+        m_d->activeNode.clear();
         createNode("KisPaintLayer");
         m_d->commandsAdapter->endMacro();
     } else {
         m_d->commandsAdapter->removeNode(node);
     }
+}
+
+void KisNodeManager::removeSelectedNodes(QList<KisNodeSP> selectedNodes, bool removeActive)
+{
+    m_d->commandsAdapter->beginMacro(kundo2_i18n("Remove Multple Layers and Masks"));
+    foreach(KisNodeSP node, selectedNodes) {
+        if (!scanForParent(selectedNodes, node) && node != activeNode()) {
+            removeSingleNode(node);
+        }
+    }
+    if (removeActive) {
+        removeSingleNode(activeNode());
+    }
+    m_d->commandsAdapter->endMacro();
+}
+
+void KisNodeManager::removeNode()
+{
+    //do not delete root layer
+    if (m_d->selectedNodes.count() > 1) {
+        removeSelectedNodes(m_d->selectedNodes);
+    }
+    else {
+        removeSingleNode(activeNode());
+    }
+
 
 }
 
@@ -658,11 +727,11 @@ void KisNodeManager::mirrorNodeX()
 {
     KisNodeSP node = activeNode();
 
-    QString commandName;
+    KUndo2MagicString commandName;
     if (node->inherits("KisLayer")) {
-        commandName = i18n("Mirror Layer X");
+        commandName = kundo2_i18n("Mirror Layer X");
     } else if (node->inherits("KisMask")) {
-        commandName = i18n("Mirror Mask X");
+        commandName = kundo2_i18n("Mirror Mask X");
     }
     mirrorNode(node, commandName, Qt::Horizontal);
 }
@@ -671,11 +740,11 @@ void KisNodeManager::mirrorNodeY()
 {
     KisNodeSP node = activeNode();
 
-    QString commandName;
+    KUndo2MagicString commandName;
     if (node->inherits("KisLayer")) {
-        commandName = i18n("Mirror Layer Y");
+        commandName = kundo2_i18n("Mirror Layer Y");
     } else if (node->inherits("KisMask")) {
-        commandName = i18n("Mirror Mask Y");
+        commandName = kundo2_i18n("Mirror Mask Y");
     }
     mirrorNode(node, commandName, Qt::Vertical);
 }
@@ -724,9 +793,81 @@ void KisNodeManager::activatePreviousNode()
     }
 }
 
+QList<KisNodeSP> hideLayers(KisNodeSP root, QList<KisNodeSP> selectedNodes)
+{
+    QList<KisNodeSP> alreadyHidden;
+
+    foreach(KisNodeSP node, root->childNodes(QStringList(), KoProperties())) {
+        if (!selectedNodes.contains(node)) {
+            if (node->visible()) {
+                node->setVisible(false);
+            }
+            else {
+                alreadyHidden << node;
+            }
+        }
+        if (node->childCount() > 0) {
+            hideLayers(node, selectedNodes);
+        }
+    }
+
+    return alreadyHidden;
+}
+
+void showNodes(KisNodeSP root, QList<KisNodeSP> keepHiddenNodes)
+{
+    foreach(KisNodeSP node, root->childNodes(QStringList(), KoProperties())) {
+        if (!keepHiddenNodes.contains(node)) {
+            node->setVisible(true);
+        }
+        if (node->childCount() > 0) {
+            showNodes(node, keepHiddenNodes);
+        }
+    }
+}
+
 void KisNodeManager::mergeLayerDown()
 {
-    m_d->layerManager->mergeLayer();
+    if (m_d->selectedNodes.size() > 1) {
+
+        QList<KisNodeSP> selectedNodes = m_d->selectedNodes;
+        KisLayerSP l = activeLayer();
+
+        // hide every layer that's not in the list of selected nodes
+        QList<KisNodeSP> alreadyHiddenNodes = hideLayers(m_d->doc->image()->root(), selectedNodes);
+
+        // render and copy the projection
+        m_d->doc->image()->refreshGraph();
+        m_d->doc->image()->waitForDone();
+
+        // Copy the projections
+        KisPaintDeviceSP dev = new KisPaintDevice(*m_d->doc->image()->projection().data());
+        // place the projection in a layer
+        KisPaintLayerSP flattenLayer = new KisPaintLayer(m_d->doc->image(), i18n("Merged"), OPACITY_OPAQUE_U8, dev);
+
+        // start a big macro
+        m_d->commandsAdapter->beginMacro(kundo2_i18n("Merge Selected Nodes"));
+
+        // Add the new merged node on top of the active node
+        m_d->commandsAdapter->addNode(flattenLayer, l->parent(), l);
+
+        // remove all nodes in the selection but the active node
+        removeSelectedNodes(selectedNodes, false);
+
+        m_d->commandsAdapter->endMacro();
+
+        // And unhide
+        showNodes(m_d->doc->image()->root(), alreadyHiddenNodes);
+
+        m_d->doc->image()->refreshGraph();
+        m_d->doc->image()->waitForDone();
+        m_d->doc->image()->notifyLayersChanged();
+        m_d->doc->image()->setModified();
+
+    }
+    else {
+        m_d->layerManager->mergeLayer();
+    }
 }
 
 void KisNodeManager::rotate(double radians)
@@ -768,7 +909,7 @@ void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrate
     nodesUpdated();
 }
 
-void KisNodeManager::mirrorNode(KisNodeSP node, const QString& actionName, Qt::Orientation orientation)
+void KisNodeManager::mirrorNode(KisNodeSP node, const KUndo2MagicString& actionName, Qt::Orientation orientation)
 {
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
@@ -795,27 +936,20 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
-    QString mimelist = listMimeFilter.join(" ");
+    KoFileDialog dialog(m_d->view, KoFileDialog::SaveFile, "krita/savenodeasimage");
+    dialog.setCaption(i18n("Export \"%1\"", node->name()));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+    QString filename = dialog.url();
 
-    KFileDialog fd(KUrl(QString()), mimelist, m_d->view);
-    fd.setObjectName("Export Node");
-    fd.setCaption(i18n("Export Node"));
-    fd.setMimeFilter(listMimeFilter);
-    fd.setOperationMode(KFileDialog::Saving);
+    if (filename.isEmpty()) return;
 
-    if (!fd.exec()) return;
+    KUrl url = KUrl::fromLocalFile(filename);
 
-    KUrl url = fd.selectedUrl();
-    QString mimefilter = fd.currentMimeFilter();
+    if (url.isEmpty()) return;
 
-    if (mimefilter.isNull()) {
-        KMimeType::Ptr mime = KMimeType::findByUrl(url);
-        mimefilter = mime->name();
-    }
-
-    if (url.isEmpty())
-        return;
+    KMimeType::Ptr mime = KMimeType::findByUrl(url);
+    QString mimefilter = mime->name();
 
     KisImageWSP image = m_d->view->image();
 

@@ -21,15 +21,16 @@
 
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QDesktopServices>
 
 #include <klineedit.h>
 #include <klocale.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kfiledialog.h>
 #include <kurl.h>
 
+#include <KoFileDialog.h>
 #include <KoApplication.h>
 #include <KoFilterManager.h>
 
@@ -91,16 +92,11 @@ QString KisDlgFileLayer::fileName() const
 
 void KisDlgFileLayer::slotSelectFile()
 {
-    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
-
-    KUrl startUrl("kfiledialog:///OpenDialog");
-    if (!m_basePath.isEmpty()) {
-        startUrl.setPath(m_basePath);
-    }
-    QString url = KFileDialog::getOpenFileName(startUrl,
-                                               mimeFilter.join(" "),
-                                               this,
-                                               i18n("Select file to use as dynamic file layer."));
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Select file to use as dynamic file layer."));
+    dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+    QString url = dialog.url();
     if (m_basePath.isEmpty()) {
         dlgWidget.txtFileName->setText(url);
     }

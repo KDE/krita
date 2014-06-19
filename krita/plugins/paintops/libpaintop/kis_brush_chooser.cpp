@@ -121,13 +121,13 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbName = new QLabel(this);
 
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    KoResourceServerAdapter<KisBrush>* adapter = new KoResourceServerAdapter<KisBrush>(rServer);
+    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
+    QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     QString knsrcFile = "kritabrushes.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
-    m_itemChooser->showTaggingBar(true,true);
+    m_itemChooser->showTaggingBar(true, true);
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
@@ -153,7 +153,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     spacingLayout->addWidget(m_slSpacing, 3, 1);
     spacingLayout->setColumnStretch(1, 3);
 
-    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Brush"), this);
+    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Predefined Tip"), this);
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 
@@ -243,9 +243,9 @@ void KisBrushChooser::update(KoResource * resource)
     if (brush) {
         blockSignals(true);
         QString text = QString("%1 (%2 x %3)")
-                .arg(i18n(brush->name().toUtf8().data()))
-                .arg(brush->width())
-                .arg(brush->height());
+                       .arg(i18n(brush->name().toUtf8().data()))
+                       .arg(brush->width())
+                       .arg(brush->height());
 
         m_lbName->setText(text);
         m_slSpacing->blockSignals(true);

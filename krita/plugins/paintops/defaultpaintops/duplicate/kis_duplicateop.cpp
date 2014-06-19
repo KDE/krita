@@ -65,9 +65,10 @@
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
 
-KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
-        : KisBrushBasedPaintOp(settings, painter)
-        , settings(settings)
+KisDuplicateOp::KisDuplicateOp(KisImageWSP image, const KisDuplicateOpSettings *settings, KisPainter *painter)
+    : KisBrushBasedPaintOp(settings, painter)
+    , m_image(image)
+    , m_settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -75,6 +76,7 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     m_healing = settings->getBool(DUPLICATE_HEALING);
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
     m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
+    m_cloneFromProjection = settings->getBool(DUPLICATE_CLONE_FROM_PROJECTION);
 
     m_srcdev = source()->createCompositionSourceDevice();
 }
@@ -87,23 +89,23 @@ qreal KisDuplicateOp::minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
 {
     int rowstride = 3 * w;
     qreal err = 0;
-    memcpy(sol, m, 3* sizeof(qreal) * w);
+    memcpy(sol, m, 3 * sizeof(qreal) * w);
     m += rowstride;
     sol += rowstride;
     for (int i = 1; i < h - 1; i++) {
-        memcpy(sol, m, 3* sizeof(qreal));
+        memcpy(sol, m, 3 * sizeof(qreal));
         m += 3; sol += 3;
         for (int j = 3; j < rowstride - 3; j++) {
             qreal tmp = *sol;
-            *sol = ((*(m - 3) + *(m + 3) + *(m - rowstride) + *(m + rowstride)) + 2 * *m) / 6;
+            *sol = ((*(m - 3) + * (m + 3) + * (m - rowstride) + * (m + rowstride)) + 2 * *m) / 6;
             qreal diff = *sol - tmp;
             err += diff * diff;
             m ++; sol ++;
         }
-        memcpy(sol, m, 3* sizeof(qreal));
+        memcpy(sol, m, 3 * sizeof(qreal));
         m += 3; sol += 3;
     }
-    memcpy(sol, m, 3* sizeof(qreal) * w);
+    memcpy(sol, m, 3 * sizeof(qreal) * w);
     return err;
 }
 
@@ -126,7 +128,14 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         m_duplicateStart = info.pos();
     }
 
-    KisPaintDeviceSP realSourceDevice = settings->node()->paintDevice();
+    KisPaintDeviceSP realSourceDevice;
+
+    if (m_cloneFromProjection) {
+        realSourceDevice = m_image->projection();
+    }
+    else {
+        realSourceDevice = m_settings->node()->paintDevice();
+    }
 
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
@@ -148,11 +157,12 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     QPoint srcPoint;
 
-    if(m_moveSourcePoint) {
-        srcPoint = (dstRect.topLeft() - settings->offset()).toPoint();
-    } else {
+    if (m_moveSourcePoint) {
+        srcPoint = (dstRect.topLeft() - m_settings->offset()).toPoint();
+    }
+    else {
         QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
-        srcPoint = (settings->position() - hotSpot).toPoint();
+        srcPoint = (m_settings->position() - hotSpot).toPoint();
     }
 
     qint32 sw = dstRect.width();
@@ -167,14 +177,15 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     }
 
     // Perspective correction ?
-    KisImageWSP image = settings->m_image;
-    if (m_perspectiveCorrection && image && image->perspectiveGrid()->countSubGrids() == 1) {
+
+
+    if (m_perspectiveCorrection && m_image && m_image->perspectiveGrid()->countSubGrids() == 1) {
         Matrix3qreal startM = Matrix3qreal::Identity();
         Matrix3qreal endM = Matrix3qreal::Identity();
 
         // First look for the grid corresponding to the start point
-        KisSubPerspectiveGrid* subGridStart = *image->perspectiveGrid()->begin();
-        QRect r = QRect(0, 0, image->width(), image->height());
+        KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
+        QRect r = QRect(0, 0, m_image->width(), m_image->height());
 
 #if 1
         if (subGridStart) {
@@ -183,7 +194,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 #endif
 #if 1
         // Second look for the grid corresponding to the end point
-        KisSubPerspectiveGrid* subGridEnd = *image->perspectiveGrid()->begin();
+        KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
         if (subGridEnd) {
             endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
         }
@@ -191,20 +202,21 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
         // Compute the translation in the perspective transformation space:
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart));
-        QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(settings->offset()));
+        QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(m_settings->offset()));
         QPointF translat = duplicateStartPositionT - positionStartPaintingT;
 
-        KisRectIteratorSP dstIt = m_srcdev->createRectIteratorNG(QRect(0, 0, sw, sh));
+        KisSequentialIterator dstIt(m_srcdev, QRect(0, 0, sw, sh));
         KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
         //Action
         do {
-            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt->x() + dstRect.x(), dstIt->y() + dstRect.y())) + translat);
+            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + dstRect.x(), dstIt.y() + dstRect.y())) + translat);
             srcAcc->moveTo(p);
-            srcAcc->sampledOldRawData(dstIt->rawData());
-        } while (dstIt->nextPixel());
+            srcAcc->sampledOldRawData(dstIt.rawData());
+        } while (dstIt.nextPixel());
 
 
-    } else {
+    }
+    else {
         KisPainter copyPainter(m_srcdev);
         copyPainter.setCompositeOp(COMPOSITE_COPY);
         copyPainter.bitBltOldData(0, 0, realSourceDevice, srcPoint.x(), srcPoint.y(), sw, sh);

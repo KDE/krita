@@ -34,7 +34,7 @@ public:
     };
 
 public:
-    KisSimpleStrokeStrategy(QString id = QString(), QString name = QString());
+    KisSimpleStrokeStrategy(QString id = QString(), const KUndo2MagicString &name = KUndo2MagicString());
 
     KisStrokeJobStrategy* createInitStrategy();
     KisStrokeJobStrategy* createFinishStrategy();

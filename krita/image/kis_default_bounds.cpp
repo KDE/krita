@@ -92,7 +92,8 @@ QRect KisSelectionDefaultBounds::bounds() const
 /*                   KisSelectionEmptyBounds                      */
 /******************************************************************/
 
-KisSelectionEmptyBounds::KisSelectionEmptyBounds()
+KisSelectionEmptyBounds::KisSelectionEmptyBounds(KisImageWSP image)
+    : KisDefaultBounds(image)
 {
 }
 

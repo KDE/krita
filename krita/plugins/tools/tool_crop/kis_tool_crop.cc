@@ -51,6 +51,8 @@
 #include <kis_view2.h>
 #include <kis_floating_message.h>
 #include <kis_group_layer.h>
+#include <kis_resources_snapshot.h>
+
 
 struct DecorationLine
 {
@@ -134,7 +136,10 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 {
     KisTool::activate(toolActivation, shapes);
 
-    KisSelectionSP sel = currentSelection();
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+
+    KisSelectionSP sel = resources->activeSelection();
     if (sel) {
         sel->updateProjection();
         m_rectCrop = sel->selectedExactRect();
@@ -145,7 +150,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     updateCanvasPixelRect(image()->bounds());
 
     //pixel layer
-    if(currentNode() && currentNode()->paintDevice()) {
+    if(resources->currentNode() && resources->currentNode()->paintDevice()) {
         setCropTypeSelectable(true);
     }
     //vector layer
@@ -931,29 +936,34 @@ bool KisToolCrop::forceRatio() const
 
 QWidget* KisToolCrop::createOptionWidget()
 {
-    KisToolCropConfigWidget* optWidget = new KisToolCropConfigWidget(0, this);
+    KisToolCropConfigWidget* optionsWidget = new KisToolCropConfigWidget(0, this);
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    optionsWidget->layout()->addWidget(specialSpacer);
 
-    Q_CHECK_PTR(optWidget);
-    optWidget->setObjectName(toolId() + " option widget");
+    Q_CHECK_PTR(optionsWidget);
+    optionsWidget->setObjectName(toolId() + " option widget");
 
-    connect(optWidget->bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
+    connect(optionsWidget->bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
-    connect(optWidget, SIGNAL(cropTypeChanged(int)), this, SLOT(setCropTypeLegacy(int)));
-    connect(optWidget, SIGNAL(cropXChanged(int)), this, SLOT(setCropX(int)));
-    connect(optWidget, SIGNAL(cropYChanged(int)), this, SLOT(setCropY(int)));
-    connect(optWidget, SIGNAL(cropHeightChanged(int)), this, SLOT(setCropHeight(int)));
-    connect(optWidget, SIGNAL(forceHeightChanged(bool)), this, SLOT(setForceHeight(bool)));
-    connect(optWidget, SIGNAL(cropWidthChanged(int)), this, SLOT(setCropWidth(int)));
-    connect(optWidget, SIGNAL(forceWidthChanged(bool)), this, SLOT(setForceWidth(bool)));
-    connect(optWidget, SIGNAL(ratioChanged(double)), this, SLOT(setRatio(double)));
-    connect(optWidget, SIGNAL(forceRatioChanged(bool)), this, SLOT(setForceRatio(bool)));
-    connect(optWidget, SIGNAL(decorationChanged(int)), this, SLOT(setDecoration(int)));
-    connect(optWidget, SIGNAL(allowGrowChanged(bool)), this, SLOT(setAllowGrow(bool)));
-    connect(optWidget, SIGNAL(growCenterChanged(bool)), this, SLOT(setGrowCenter(bool)));
+    connect(optionsWidget, SIGNAL(cropTypeChanged(int)), this, SLOT(setCropTypeLegacy(int)));
+    connect(optionsWidget, SIGNAL(cropXChanged(int)), this, SLOT(setCropX(int)));
+    connect(optionsWidget, SIGNAL(cropYChanged(int)), this, SLOT(setCropY(int)));
+    connect(optionsWidget, SIGNAL(cropHeightChanged(int)), this, SLOT(setCropHeight(int)));
+    connect(optionsWidget, SIGNAL(forceHeightChanged(bool)), this, SLOT(setForceHeight(bool)));
+    connect(optionsWidget, SIGNAL(cropWidthChanged(int)), this, SLOT(setCropWidth(int)));
+    connect(optionsWidget, SIGNAL(forceWidthChanged(bool)), this, SLOT(setForceWidth(bool)));
+    connect(optionsWidget, SIGNAL(ratioChanged(double)), this, SLOT(setRatio(double)));
+    connect(optionsWidget, SIGNAL(forceRatioChanged(bool)), this, SLOT(setForceRatio(bool)));
+    connect(optionsWidget, SIGNAL(decorationChanged(int)), this, SLOT(setDecoration(int)));
+    connect(optionsWidget, SIGNAL(allowGrowChanged(bool)), this, SLOT(setAllowGrow(bool)));
+    connect(optionsWidget, SIGNAL(growCenterChanged(bool)), this, SLOT(setGrowCenter(bool)));
 
-    optWidget->setFixedHeight(optWidget->sizeHint().height());
+    optionsWidget->setFixedHeight(optionsWidget->sizeHint().height());
 
-    return optWidget;
+    return optionsWidget;
 }
 
 QRectF KisToolCrop::lowerRightHandleRect(QRectF cropBorderRect)

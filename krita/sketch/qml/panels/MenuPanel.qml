@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base;
@@ -33,8 +33,41 @@ Item {
     height: Constants.GridHeight;
 
     Rectangle {
+        anchors.bottom: parent.top;
+        anchors.bottomMargin: -8;
+        anchors.horizontalCenter: parent.horizontalCenter;
+
+        width: Constants.GridWidth * 1.5;
+        height: Constants.GridHeight / 2 + 8;
+
+        color: Settings.theme.color("panels/menu/base");
+        radius: 8;
+
+        Label {
+            text: "Menu";
+
+            anchors.centerIn: parent;
+            anchors.verticalCenterOffset: -4;
+
+            font: Settings.theme.font("panelHandle");
+            color: Settings.theme.color("panels/menu/text");
+        }
+
+        MouseArea {
+            id: mousearea1
+            anchors.fill: parent;
+            onClicked: base.collapsed = !base.collapsed;
+        }
+
+        SimpleTouchArea {
+            anchors.fill: parent;
+            onTouched: base.collapsed = !base.collapsed;
+        }
+    }
+
+    Rectangle {
         id: background;
-        color: "#000000"
+        color: Settings.theme.color("panels/menu/base");
         anchors.fill: parent;
 
         MouseArea {
@@ -53,42 +86,30 @@ Item {
         Row {
             Button {
                 id: newButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-filenew.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("filenew")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                tooltip: "New Image"
                 onClicked: base.buttonClicked( "new" );
             }
             Button {
                 id: openButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-fileopen.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("fileopen")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                tooltip: "Open Image"
                 onClicked: base.buttonClicked( "open" );
             }
             Button {
                 id: saveButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-filesave.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("filesave")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                tooltip: "Save Image"
                 onClicked: base.buttonClicked( "save" );
             }
             Button {
                 id: saveAsButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-filesaveas.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("filesaveas")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                tooltip: "Save Image As..."
                 onClicked: base.buttonClicked( "saveAs" );
             }
         }
@@ -98,44 +119,32 @@ Item {
 
             Button {
                 id: undoButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-undo.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("undo")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 enabled: sketchView.canUndo;
+                tooltip: "Undo"
                 onClicked: base.buttonClicked( "undo" );
             }
             Button {
                 id: redoButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-redo.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("redo")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 enabled: sketchView.canRedo;
+                tooltip: "Redo"
                 onClicked: base.buttonClicked( "redo" );
             }
             Button {
                 id: zoomOutButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-delete.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("delete")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                tooltip: "Zoom Out"
                 onClicked: base.buttonClicked( "zoomOut" );
             }
             Button {
                 id: zoomInButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-add.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("add")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                tooltip: "Zoom In"
                 onClicked: base.buttonClicked( "zoomIn" );
             }
             Item {
@@ -145,33 +154,31 @@ Item {
             Button {
                 id: switchButton;
                 width: visible ? Constants.GridWidth : 0;
-                height: Constants.GridHeight;
                 visible: (typeof switchToDesktopAction !== "undefined");
-                color: "#000000"
-                shadow: false
                 enabled: (typeof switchToDesktopAction === "undefined") ? false : switchToDesktopAction.enabled;
-                image: "../images/svg/icon-switch.svg"
-                highlightColor: Constants.Theme.HighlightColor;
-                onClicked: base.buttonClicked( "switchToDesktop" );
+                image: Settings.theme.icon("switch")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                tooltip: "Switch to Desktop Mode"
+                onClicked: {
+                    base.buttonClicked( "switchToDesktop" );
+                    base.collapsed = !base.collapsed;
+                }
             }
             Button {
                 id: minimizeButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-minimize.svg"
-                highlightColor: Constants.Theme.HighlightColor;
-                onClicked: base.buttonClicked( "minimize" );
+                image: Settings.theme.icon("minimize")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                tooltip: "Minimize"
+                onClicked: {
+                    base.buttonClicked( "minimize" );
+                    base.collapsed = !base.collapsed;
+                }
             }
             Button {
                 id: closeButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-close.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("close")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                tooltip: "Close"
                 onClicked: base.buttonClicked( "close" );
             }
             /*Item {
@@ -184,7 +191,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#000000"
                 shadow: false
-                image: "../images/svg/icon-help.svg"
+                image: Settings.theme.icon("help")
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "help" );
             }
@@ -194,44 +201,10 @@ Item {
                 height: Constants.GridHeight;
                 color: "#000000"
                 shadow: false
-                image: "../images/svg/icon-settings.svg"
+                image: Settings.theme.icon("settings")
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "settings" );
             }*/
-        }
-    }
-
-    Rectangle {
-        anchors.bottom: parent.top;
-        anchors.bottomMargin: -8;
-        anchors.horizontalCenter: parent.horizontalCenter;
-
-        width: Constants.GridWidth * 1.5;
-        height: Constants.GridHeight / 2 + 8;
-
-        color: "#000000"
-        radius: 8;
-
-        Label {
-            text: "Menu";
-
-            anchors.centerIn: parent;
-            anchors.verticalCenterOffset: -4;
-
-            font.bold: true
-            font.pixelSize: Constants.DefaultFontSize
-            color: "white";
-        }
-
-        MouseArea {
-            id: mousearea1
-            anchors.fill: parent;
-            onClicked: base.collapsed = !base.collapsed;
-        }
-
-        SimpleTouchArea {
-            anchors.fill: parent;
-            onTouched: base.collapsed = !base.collapsed;
         }
     }
 
@@ -243,6 +216,6 @@ Item {
     }
 
     transitions: Transition {
-        NumberAnimation { duration: 200; properties: "height,opacity"; easing.type: Easing.InOutQuad }
+        NumberAnimation { duration: Constants.AnimationDuration; properties: "height,opacity"; easing.type: Easing.InOutQuad }
     }
 }

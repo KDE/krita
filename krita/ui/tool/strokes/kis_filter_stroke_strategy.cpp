@@ -32,6 +32,7 @@ struct KisFilterStrokeStrategy::Private {
 
     bool cancelSilently;
     KisPaintDeviceSP filterDevice;
+    QRect filterDeviceBounds;
     KisTransaction *secondaryTransaction;
 };
 
@@ -39,7 +40,9 @@ struct KisFilterStrokeStrategy::Private {
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
                                                  KisSafeFilterConfigurationSP filterConfig,
                                                  KisResourcesSnapshotSP resources)
-    : KisPainterBasedStrokeStrategy("FILTER_STROKE", filter->name(), resources,
+    : KisPainterBasedStrokeStrategy("FILTER_STROKE",
+                                    kundo2_i18n("Filter \"%1\"", filter->name()),
+                                    resources,
                                     QVector<PainterInfo*>()),
       m_d(new Private())
 {
@@ -64,13 +67,19 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     KisPainterBasedStrokeStrategy::initStrokeCallback();
 
     KisPaintDeviceSP dev = targetDevice();
+    m_d->filterDeviceBounds = dev->extent();
+
 
     if (activeSelection() ||
         (dev->colorSpace() != dev->compositionSourceColorSpace() &&
          !(dev->colorSpace() == dev->compositionSourceColorSpace()))) {
 
         m_d->filterDevice = dev->createCompositionSourceDevice(dev);
-        m_d->secondaryTransaction = new KisTransaction("", m_d->filterDevice);
+        m_d->secondaryTransaction = new KisTransaction(m_d->filterDevice);
+
+        if (activeSelection()) {
+            m_d->filterDeviceBounds &= activeSelection()->selectedRect();
+        }
     } else {
         m_d->filterDevice = dev;
     }
@@ -84,6 +93,12 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
     if (d) {
         QRect rc = d->processRect;
+
+        if (!m_d->filterDeviceBounds.intersects(
+                m_d->filter->neededRect(rc, m_d->filterConfig.data()))) {
+
+            return;
+        }
 
         KisProcessingVisitor::ProgressHelper helper(m_d->node);
 

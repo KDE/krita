@@ -79,7 +79,7 @@ ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode,
     m_mode(mode),
     m_removedElements()
 {
-      setText(i18nc("(qtundo-format)", "Delete"));
+      setText(kundo2_i18n("Delete"));
       m_rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
 }
 
@@ -330,7 +330,7 @@ bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
     {
     public:
         UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
-            : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
+            : KUndo2Command(kundo2_i18n("Text"), parent),
               m_document(document)
         {}
 

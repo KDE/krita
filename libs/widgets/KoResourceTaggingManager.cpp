@@ -32,7 +32,7 @@
 #include <klocale.h>
 
 #include "KoResourceTaggingManager.h"
-#include "KoResourceModel.h"
+#include "KoResourceModelBase.h"
 #include "KoResource.h"
 #include "KoResourceItemChooserContextMenu.h"
 
@@ -64,7 +64,7 @@ public:
 
     QCompleter* tagCompleter;
 
-    KoResourceModel* model;
+    KoResourceModelBase* model;
 };
 
 void KoResourceTaggingManager::showTaggingBar(bool showSearchBar, bool showOpBar)
@@ -244,16 +244,18 @@ QString KoResourceTaggingManager::currentTag()
 
 void KoResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)
 {
-    d->model->searchTextChanged(lineEditText);
-    d->model->updateServer();
-    ///FIXME: fix completer
-    //     d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
-    //    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
     if (d->tagChooser->selectedTagIsReadOnly()) {
         d->model->enableResourceFiltering(!lineEditText.isEmpty());
     } else {
         d->model->enableResourceFiltering(true);
     }
+
+    d->model->searchTextChanged(lineEditText);
+    d->model->updateServer();
+
+    ///FIXME: fix completer
+    //     d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
+    //    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 }
 
 void KoResourceTaggingManager::tagSaveButtonPressed()
@@ -313,10 +315,9 @@ KoTagFilterWidget* KoResourceTaggingManager::tagFilterWidget()
     return d->tagFilter;
 }
 
-KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel* model, QWidget* parent)
+KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModelBase* model, QWidget* parent)
     : d(new Private())
 {
-
     d->model = model;
     d->unfilteredView = i18n("All Presets");
 
@@ -352,5 +353,11 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel* model, QWidg
     /// FIXME: fix tag completer
     /// d->tagCompleter = new QCompleter(this);
     ///  d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+
+}
+
+KoResourceTaggingManager::~KoResourceTaggingManager()
+{
+    delete d;
 
 }

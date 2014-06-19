@@ -209,24 +209,13 @@ void KisColorSelectorNgDockerWidget::updateLayout()
 
 void KisColorSelectorNgDockerWidget::reactOnLayerChange()
 {
-    // this will trigger settings update and therefore an update of the color space setting and therefore it will change
-    // the color space to the current layer
+    /**
+     * Trigger the update for the case if some legacy code needs it.
+     * Now the node's color space is managed by the
+     * KisDisplayColorConverter and KisColorSelectorBase objects, so
+     * technically this call is not needed anymore. Please remove it
+     * when you are totally sure this will not break something.
+     */
+
     emit settingsChanged();
-    if (m_canvas) {
-        KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
-        if (node && node->paintDevice()) {
-            KisPaintDeviceSP device = node->paintDevice();
-            connect(device.data(), SIGNAL(profileChanged(const KoColorProfile*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
-            connect(device.data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
-            
-            if (device) {
-                m_colorHistoryAction->setEnabled(true);
-                m_commonColorsAction->setEnabled(true);
-            }
-            else {
-                m_colorHistoryAction->setEnabled(false);
-                m_commonColorsAction->setEnabled(false);
-            }
-        }
-    }
 }

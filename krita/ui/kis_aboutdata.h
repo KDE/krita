@@ -27,7 +27,7 @@
 #include <calligragitversion.h>
 #include <KoIcon.h>
 
-KAboutData * newKritaAboutData()
+KAboutData *newKritaAboutData()
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
@@ -45,7 +45,7 @@ KAboutData * newKritaAboutData()
                                             version.toLatin1(),
                                             ki18n("Digital Painting for Artists"),
                                             KAboutData::License_GPL,
-                                            ki18n("(c) 1999-2013 The Krita team.\n"),
+                                            ki18n("© 1999-%1, The Krita Team").subs(CALLIGRA_YEAR),
                                             KLocalizedString(),
                                             "http://www.krita.org",
                                             "submit@bugs.kde.org");
@@ -84,6 +84,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Øyvind Kolås"), ki18n("Wiseguy"), "pippin@gimp.org", "http://codecave.org/");
     aboutData->addAuthor(ki18n("Patrick Julien"), KLocalizedString(), "freak@codepimps.org");
     aboutData->addAuthor(ki18n("Peter Sikking"), ki18n("Vision master"), "");
+    aboutData->addAuthor(ki18n("Ramon Miranda"), ki18n("Artist, Muses author, brush and preset creator"), "http://www.ramonmiranda.com");
     aboutData->addAuthor(ki18n("Roger Larsson"), KLocalizedString(), "roger.larsson@norran.net");
     aboutData->addAuthor(ki18n("Samy Lange"), KLocalizedString(), "enkithan@free.fr");
     aboutData->addAuthor(ki18n("Silvio Heinrich"), KLocalizedString(), "plassy@web.de");

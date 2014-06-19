@@ -34,19 +34,20 @@ struct KisAlternateInvocationAction::Private
 };
 
 KisAlternateInvocationAction::KisAlternateInvocationAction()
-    : m_d(new Private)
+    : KisAbstractInputAction("Alternate Invocation")
+    , m_d(new Private)
 {
     setName(i18n("Alternate Invocation"));
     setDescription(i18n("The <i>Alternate Invocation</i> action performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));
     QHash<QString, int> shortcuts;
-    shortcuts.insert(i18n("Toggle Primary Mode"), PrimaryAlternateToggleShortcut);
-    shortcuts.insert(i18n("Toggle Secondary Mode"), SecondaryAlternateToggleShortcut);
+    shortcuts.insert(i18n("Primary Mode"), PrimaryAlternateModeShortcut);
+    shortcuts.insert(i18n("Secondary Mode"), SecondaryAlternateModeShortcut);
 
-    shortcuts.insert(i18n("Pick Foreground Color from Current Node"), PickColorFgNodeToggleShortcut);
-    shortcuts.insert(i18n("Pick Background Color from Current Node"), PickColorBgNodeToggleShortcut);
+    shortcuts.insert(i18n("Pick Foreground Color from Current Layer"), PickColorFgLayerModeShortcut);
+    shortcuts.insert(i18n("Pick Background Color from Current Layer"), PickColorBgLayerModeShortcut);
 
-    shortcuts.insert(i18n("Pick Foreground Color from Merged Image"), PickColorFgImageToggleShortcut);
-    shortcuts.insert(i18n("Pick Background Color from Merged Image"), PickColorBgImageToggleShortcut);
+    shortcuts.insert(i18n("Pick Foreground Color from Merged Image"), PickColorFgImageModeShortcut);
+    shortcuts.insert(i18n("Pick Background Color from Merged Image"), PickColorBgImageModeShortcut);
 
     setShortcutIndexes(shortcuts);
 }
@@ -57,25 +58,25 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 
 KisTool::ToolAction KisAlternateInvocationAction::shortcutToToolAction(int shortcut)
 {
-    KisTool::ToolAction action;
+    KisTool::ToolAction action = KisTool::Alternate_NONE;
 
     switch ((Shortcut)shortcut) {
-    case PickColorFgNodeToggleShortcut:
+    case PickColorFgLayerModeShortcut:
         action = KisTool::AlternatePickFgNode;
         break;
-    case PickColorBgNodeToggleShortcut:
+    case PickColorBgLayerModeShortcut:
         action = KisTool::AlternatePickBgNode;
         break;
-    case PickColorFgImageToggleShortcut:
+    case PickColorFgImageModeShortcut:
         action = KisTool::AlternatePickFgImage;
         break;
-    case PickColorBgImageToggleShortcut:
+    case PickColorBgImageModeShortcut:
         action = KisTool::AlternatePickBgImage;
         break;
-    case PrimaryAlternateToggleShortcut:
+    case PrimaryAlternateModeShortcut:
         action = KisTool::AlternateSecondary;
         break;
-    case SecondaryAlternateToggleShortcut:
+    case SecondaryAlternateModeShortcut:
         action = KisTool::AlternateThird;
         break;
     }

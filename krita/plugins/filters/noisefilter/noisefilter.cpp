@@ -51,6 +51,7 @@
 #include "ui_wdgnoiseoptions.h"
 #include <kis_iterator_ng.h>
 
+
 K_PLUGIN_FACTORY(KritaNoiseFilterFactory, registerPlugin<KritaNoiseFilter>();)
 K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
 
@@ -108,7 +109,7 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
     int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
 
-    KisRectIteratorSP srcIt = device->createRectIteratorNG(applyRect);
+    KisSequentialIterator it(device, applyRect);
 
     quint8* interm = new quint8[cs->pixelSize()];
     double threshold = (100.0 - level) * 0.01;
@@ -138,20 +139,18 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
     KisRandomGenerator randg(seedGreen);
     KisRandomGenerator randb(seedBlue);
 
-    for (int row = 0; row < applyRect.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
-        do {
-            if (randt.doubleRandomAt(srcIt->x(), srcIt->y()) > threshold) {
-                // XXX: Added static_cast to get rid of warnings
-                QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(srcIt->x(), srcIt->y()) * 255),
-                                static_cast<int>((double)randg.doubleRandomAt(srcIt->x(), srcIt->y()) * 255),
-                                static_cast<int>((double)randb.doubleRandomAt(srcIt->x(), srcIt->y()) * 255));
-                cs->fromQColor(c, interm, 0);
-                pixels[1] = srcIt->oldRawData();
-                mixOp->mixColors(pixels, weights, 2, srcIt->rawData());
-            }
-            if (progressUpdater) progressUpdater->setValue(++count);
-        } while (srcIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
-    }
+    do {
+        if (randt.doubleRandomAt(it.x(), it.y()) > threshold) {
+            // XXX: Added static_cast to get rid of warnings
+            QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(it.x(), it.y()) * 255),
+                            static_cast<int>((double)randg.doubleRandomAt(it.x(), it.y()) * 255),
+                            static_cast<int>((double)randb.doubleRandomAt(it.x(), it.y()) * 255));
+            cs->fromQColor(c, interm, 0);
+            pixels[1] = it.oldRawData();
+            mixOp->mixColors(pixels, weights, 2, it.rawData());
+        }
+        if (progressUpdater) progressUpdater->setValue(++count);
+    } while (it.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
 
     delete [] interm;
 }

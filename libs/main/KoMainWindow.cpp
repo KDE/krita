@@ -22,7 +22,7 @@
 
 #include "KoMainWindow.h"
 
-#ifdef __APPLE__
+#if defined (Q_OS_MAC) && QT_VERSION < 0x050000
 #include "MacSupport.h"
 #endif
 
@@ -31,7 +31,7 @@
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-#include "KoFileDialogHelper.h"
+#include "KoFileDialog.h"
 #include "KoVersionDialog.h"
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
@@ -93,6 +93,8 @@
 #include <QCloseEvent>
 #include <QPointer>
 #include <QByteArray>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include "thememanager.h"
 
@@ -119,7 +121,6 @@ public:
         saveActionAs = 0;
         printAction = 0;
         printActionPreview = 0;
-        statusBarLabel = 0;
         sendFileAction = 0;
         exportPdf = 0;
         closeFile = 0;
@@ -197,8 +198,8 @@ public:
     KoView *activeView;
     QWidget *m_activeWidget;
 
-    QLabel * statusBarLabel;
-    QProgressBar *progress;
+    QPointer<QProgressBar> progress;
+    QMutex progressMutex;
 
     QList<QAction *> toolbarList;
 
@@ -259,9 +260,13 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     : KXmlGuiWindow()
     , d(new KoMainWindowPrivate(nativeMimeType, this))
 {
-#ifdef __APPLE__
-    //setUnifiedTitleAndToolBarOnMac(true);
+#ifdef Q_OS_MAC
+    #if QT_VERSION < 0x050000
     MacSupport::addFullscreen(this);
+    #endif
+    #if QT_VERSION >= 0x050201
+    setUnifiedTitleAndToolBarOnMac(true);
+    #endif
 #endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
@@ -367,6 +372,7 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->themeManager->registerThemeActions(actionCollection());
     d->themeManager->setCurrentTheme(group.readEntry("Theme",
                                                      d->themeManager->defaultThemeName()));
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SIGNAL(themeChanged()));
 
     KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
@@ -590,6 +596,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
         statusBar()->setVisible(false);
     }
     else {
+#ifdef Q_OS_MAC
+        statusBar()->setMaximumHeight(28);
+#endif
         connect(d->rootDocument, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
 }
@@ -983,12 +992,12 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KUrl newURL(KoFileDialogHelper::getSaveFileName(
-                        this,
-                        i18n("untitled"),
-                        (isExporting() && !d->lastExportUrl.isEmpty()) ?
-                            d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile(),
-                        mimeFilter));
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
+        dialog.setCaption(i18n("untitled"));
+        dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
+                                d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
+        dialog.setMimeTypeFilters(mimeFilter);
+        KUrl newURL = dialog.url();
 
         QByteArray outputFormat = _native_format;
         if (!specialOutputFlag) {
@@ -1191,6 +1200,7 @@ void KoMainWindow::saveWindowSettings()
             if (i.value()->widget()) {
                 KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
                 dockGroup.writeEntry("Collapsed", i.value()->widget()->isHidden());
+                dockGroup.writeEntry("Locked", i.value()->property("Locked").toBool());
                 dockGroup.writeEntry("DockArea", (int) dockWidgetArea(i.value()));
             }
         }
@@ -1294,34 +1304,31 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-
-    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
-    //KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-    //                                       KoFilterManager::Import,
-    //                                       KoServiceProvider::readExtraNativeMimeTypes());
-
-    KConfigGroup group = KGlobal::config()->group("File Dialogs");
-    QString defaultDir = group.readEntry("OpenDialog");
-    if (defaultDir.isEmpty())
-        defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
-    QString url;
+    KUrl url;
     if (!isImporting()) {
-        url = KoFileDialogHelper::getOpenFileName(this,
-                                                  i18n("Open Document"),
-                                                  defaultDir,
-                                                  mimeFilter);
+        KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+        dialog.setCaption(i18n("Open Document"));
+        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
+                               ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                               : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+        dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+        dialog.setHideNameFilterDetailsOption();
+        url = dialog.url();
     } else {
-        url = KoFileDialogHelper::getImportFileName(this,
-                                                    i18n("Import Document"),
-                                                    defaultDir,
-                                                    mimeFilter);
+        KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
+        dialog.setCaption(i18n("Import Document"));
+        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
+                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+        dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+        dialog.setHideNameFilterDetailsOption();
+        url = dialog.url();
     }
 
     if (url.isEmpty())
         return;
-    group.writeEntry("OpenDialog", url);
 
-    (void) openDocument(KUrl(url));
+    (void) openDocument(url);
 }
 
 void KoMainWindow::slotFileOpenRecent(const KUrl & url)
@@ -1471,11 +1478,11 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
         pageLayout = layoutDlg->pageLayout();
         delete layoutDlg;
 
-        KUrl url(KoFileDialogHelper::getSaveFileName(
-                     this,
-                     i18n("Export as PDF"),
-                     startUrl.toLocalFile(),
-                     QStringList() << "application/pdf"));
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
+        dialog.setCaption(i18n("Export as PDF"));
+        dialog.setDefaultDir(startUrl.toLocalFile());
+        dialog.setMimeTypeFilters(QStringList() << "application/pdf");
+        KUrl url = dialog.url();
 
         pdfFileName = url.toLocalFile();
         if (pdfFileName.isEmpty())
@@ -1621,6 +1628,7 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 
 void KoMainWindow::slotProgress(int value)
 {
+    QMutexLocker(&d->progressMutex);
     kDebug(30003) << "KoMainWindow::slotProgress" << value;
     if (value <= -1 || value >= 100) {
         if (d->progress) {
@@ -1653,17 +1661,10 @@ void KoMainWindow::slotProgress(int value)
         d->progress->show();
         d->firstTime = false;
     }
-    d->progress->setValue(value);
-    qApp->processEvents();
-}
-
-QLabel * KoMainWindow::statusBarLabel()
-{
-    if (!d->statusBarLabel) {
-        d->statusBarLabel = new QLabel(statusBar());
-        statusBar()->addPermanentWidget(d->statusBarLabel, 1);
+    if (!d->progress.isNull()) {
+        d->progress->setValue(value);
     }
-    return d->statusBarLabel;
+    qApp->processEvents();
 }
 
 void KoMainWindow::setMaxRecentItems(uint _number)
@@ -1752,6 +1753,7 @@ void KoMainWindow::slotReloadFile()
 
     KUrl url = pDoc->url();
     if (!pDoc->isEmpty()) {
+        saveWindowSettings();
         setRootDocument(0);   // don't delete this main window when deleting the document
         if(d->rootDocument)
             d->rootDocument->clearUndoHistory();
@@ -1856,12 +1858,17 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         }
 
         bool collapsed = factory->defaultCollapsed();
+        bool locked = false;
         if (rootDocument()) {
             KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
             collapsed = group.readEntry("Collapsed", collapsed);
+            locked = group.readEntry("Locked", locked);
         }
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
+        if (titleBar && locked)
+            titleBar->setLocked(true);
+
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
         dockWidget = d->dockWidgetsMap[ factory->id()];
@@ -1872,7 +1879,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
     dockWidgetFont.setPointSizeF(pointSize);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
     dockWidget->setFont(dockWidgetFont);
@@ -1954,11 +1961,6 @@ KoView* KoMainWindow::currentView() const
         return d->rootViews.first();
     }
     return 0;
-}
-
-void KoMainWindow::slotSetStatusBarText( const QString & text )
-{
-    statusBar()->showMessage( text );
 }
 
 void KoMainWindow::newView()
@@ -2063,6 +2065,7 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
 
     if (newPart && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {
         d->activeView = qobject_cast<KoView *>(d->m_activeWidget);
+        d->activeView->actionCollection()->addAction("view_newview", actionCollection()->action("view_newview"));
         d->activePart = newPart;
         //kDebug(30003) <<"new active part is" << d->activePart;
 

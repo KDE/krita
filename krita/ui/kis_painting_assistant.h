@@ -25,13 +25,11 @@
 #include <QFile>
 #include <QObject>
 #include <QMessageBox>
-#include <QFileDialog>
 
 #include <kis_doc2.h>
 #include <krita_export.h>
 #include <kis_shared.h>
 #include <kio/job.h>
-#include <kfiledialog.h>
 #include <KoStore.h>
 #include <kis_canvas2.h>
 

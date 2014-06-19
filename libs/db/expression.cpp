@@ -450,6 +450,7 @@ QString BinaryExpr::tokenToString()
     case LESS_OR_EQUAL: return "<=";
     case GREATER_OR_EQUAL: return ">=";
     case LIKE: return "LIKE";
+    case NOT_LIKE: return "NOT LIKE";
     case SQL_IN: return "IN";
         // other logical operations: OR (or ||) AND (or &&) XOR
     case SIMILAR_TO: return "SIMILAR TO";
@@ -707,15 +708,12 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
     /* taken from parser's addColumn(): */
     KexiDBDbg << "checking variable name: " << name;
-    int dotPos = name.indexOf('.');
     QString tableName, fieldName;
-//TODO: shall we also support db name?
-    if (dotPos > 0) {
-        tableName = name.left(dotPos);
-        fieldName = name.mid(dotPos + 1);
+    if (!KexiDB::splitToTableAndFieldParts(name, tableName, fieldName, KexiDB::SetFieldNameIfNoTableName)) {
+        return false;
     }
+//! @todo shall we also support db name?
     if (tableName.isEmpty()) {//fieldname only
-        fieldName = name;
         if (fieldName == "*") {
 //   querySchema->addAsterisk( new QueryAsterisk(querySchema) );
             return true;
@@ -751,8 +749,8 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
     }
 
     //table.fieldname or tableAlias.fieldname
-    tableName = tableName;
     TableSchema *ts = parseInfo.querySchema->table(tableName);
+    int tablePosition = -1;
     if (ts) {//table.fieldname
         //check if "table" is covered by an alias
         const QList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
@@ -772,10 +770,11 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
                                       "you can write \"%3\"", tableName, tableName + "." + fieldName, tableAlias + "." + QString(fieldName));
             return false;
         }
+        if (!tPositions.isEmpty()) {
+            tablePosition = tPositions.first();
+        }
     }
-
-    int tablePosition = -1;
-    if (!ts) {//try to find tableAlias
+    else {//try to find tableAlias
         tablePosition = parseInfo.querySchema->tablePositionForAlias(tableName.toLatin1());
         if (tablePosition >= 0) {
             ts = parseInfo.querySchema->tables()->at(tablePosition);
@@ -819,17 +818,11 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
     // check if table or alias is used twice and both have the same column
     // (so the column is ambiguous)
-    int numberOfTheSameFields = 0;
-    foreach(int position, positionsList) {
-        TableSchema *otherTS = parseInfo.querySchema->tables()->at(position);
-        if (otherTS->field(fieldName))
-            numberOfTheSameFields++;
-        if (numberOfTheSameFields > 1) {
-            parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression", tableName, fieldName);
-            parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field",
-                                      tableName, fieldName);
-            return false;
-        }
+    if (positionsList.count() > 1) {
+        parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression", tableName, fieldName);
+        parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field",
+                                  tableName, fieldName);
+        return false;
     }
     field = realField; //store
     tablePositionForField = tablePosition;

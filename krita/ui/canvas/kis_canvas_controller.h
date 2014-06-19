@@ -35,6 +35,8 @@ public:
     ~KisCanvasController();
 
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void changeCanvasWidget(QWidget *widget);
+    virtual void keyPressEvent(QKeyEvent *event);
     virtual bool eventFilter(QObject *watched, QEvent *event);
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
 
@@ -46,7 +48,7 @@ public slots:
     void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
-    void resetCanvasTransformations();
+    void resetCanvasRotation();
     void slotToggleWrapAroundMode(bool value);
 
 signals:

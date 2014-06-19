@@ -39,7 +39,7 @@ class KRITAUI_EXPORT KisPaintOpOption : public QObject
 {
     Q_OBJECT
 public:
-    static QString brushCategory();
+    static QString generalCategory();
     static QString colorCategory();
     static QString textureCategory();
 
@@ -66,7 +66,7 @@ public slots:
     virtual void setChecked(bool checked);
 
     void setConfigurationPage(QWidget * page);
-    QWidget * configurationPage() const;
+    QWidget* configurationPage() const;
 
     /**
      * Re-implement this to save the configuration to the paint configuration.
@@ -96,7 +96,7 @@ protected:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private* const m_d;
 };
 
 #endif

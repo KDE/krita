@@ -23,6 +23,7 @@
 #include <OpenColorIO/OpenColorTransforms.h>
 #include <QVector>
 #include <opengl/kis_opengl.h>
+#include "kis_exposure_gamma_correction_interface.h"
 
 namespace OCIO = OCIO_NAMESPACE;
 
@@ -35,13 +36,23 @@ enum OCIO_CHANNEL_SWIZZLE {
     A
 };
 
+class OcioDisplayFilter;
+typedef QSharedPointer<OcioDisplayFilter> OcioDisplayFilterSP;
+
+
 class OcioDisplayFilter : public KisDisplayFilter
 {
     Q_OBJECT
 public:
-    explicit OcioDisplayFilter(QObject *parent = 0);
+    explicit OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent = 0);
+    ~OcioDisplayFilter();
 
-    void filter(quint8 *src, quint8 *dst, quint32 numPixels);
+    void filter(quint8 *pixels, quint32 numPixels);
+    void approximateInverseTransformation(quint8 *pixels, quint32 numPixels);
+    void approximateForwardTransformation(quint8 *pixels, quint32 numPixels);
+    bool useInternalColorManagement() const;
+
+    KisExposureGammaCorrectionInterface *correctionInterface() const;
 
 #ifdef HAVE_OPENGL
     virtual QString program() const;
@@ -56,10 +67,18 @@ public:
     const char *displayDevice;
     const char *view;
     OCIO_CHANNEL_SWIZZLE swizzle;
+    float exposure;
+    float gamma;
+    bool forceInternalColorManagement;
 
 private:
 
     OCIO::ConstProcessorRcPtr m_processor;
+    OCIO::ConstProcessorRcPtr m_revereseApproximationProcessor;
+    OCIO::ConstProcessorRcPtr m_forwardApproximationProcessor;
+
+    KisExposureGammaCorrectionInterface *m_interface;
+
 #ifdef HAVE_OPENGL
     QString m_program;
     GLuint m_lut3dTexID;

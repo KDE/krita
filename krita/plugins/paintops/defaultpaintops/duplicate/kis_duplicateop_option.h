@@ -24,6 +24,7 @@
 const QString DUPLICATE_HEALING = "Duplicateop/Healing";
 const QString DUPLICATE_CORRECT_PERSPECTIVE = "Duplicateop/CorrectPerspective";
 const QString DUPLICATE_MOVE_SOURCE_POINT = "Duplicateop/MoveSourcePoint";
+const QString DUPLICATE_CLONE_FROM_PROJECTION = "Duplicateop/CloneFromProjection";
 
 class KisDuplicateOpOptionsWidget;
 
@@ -39,9 +40,12 @@ public:
 
     bool correctPerspective() const;
     void setPerspective(bool perspective);
-    
+
     bool moveSourcePoint() const;
     void setMoveSourcePoint(bool move);
+
+    bool cloneFromProjection() const;
+    void setCloneFromProjection(bool cloneFromProjection);
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 

@@ -77,6 +77,8 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     d->uiFilterSelector.setupUi(this);
 
     d->widgetLayout = new QGridLayout(d->uiFilterSelector.centralWidgetHolder);
+    d->widgetLayout->setContentsMargins(0,0,0,0);
+    d->widgetLayout->setHorizontalSpacing(0);
 
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
@@ -87,8 +89,9 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 1, 0, 0, 2);
-    d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 1, 2, 1);
+    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 0, 0, 1, 2);
+    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 2, 1);
+
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -134,9 +137,9 @@ bool KisFilterSelectorWidget::isFilterGalleryVisible() const
     return d->uiFilterSelector.splitter->sizes()[0] > 0;
 }
 
-const QString KisFilterSelectorWidget::currentFilterName() const
+KisFilterSP KisFilterSelectorWidget::currentFilter() const
 {
-    return d->currentFilter->name();
+    return d->currentFilter;
 }
 
 void KisFilterSelectorWidget::setFilter(KisFilterSP f)
@@ -167,7 +170,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget->setView(d->view);
         d->currentFilterConfigurationWidget->blockSignals(true);
         d->currentFilterConfigurationWidget->setConfiguration(
-            d->currentFilter->defaultConfiguration(d->paintDevice));
+        d->currentFilter->defaultConfiguration(d->paintDevice));
         d->currentFilterConfigurationWidget->blockSignals(false);
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(configurationChanged()));
     }

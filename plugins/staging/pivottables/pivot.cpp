@@ -45,7 +45,6 @@ Pivot::Pivot(QWidget* parent,Selection* selection):
 {
     setCaption(i18n("Select Source"));
     
-  
     QWidget* widget = new QWidget(this);
     d->mainWidget.setupUi(widget);
     setButtons(Ok|Cancel);   

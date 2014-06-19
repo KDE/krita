@@ -27,6 +27,8 @@
 class QBitArray;
 class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
+class KisPainter;
+class KUndo2MagicString;
 
 /**
  * For classes that support indirect painting.
@@ -49,13 +51,22 @@ public:
     void setTemporaryCompositeOp(const KoCompositeOp* c);
     void setTemporaryOpacity(quint8 o);
     void setTemporaryChannelFlags(const QBitArray& channelFlags);
+    void setTemporarySelection(KisSelectionSP selection);
+
+    /**
+     * Configures the painter to conform the painting parameters
+     * stored for th temporary target, such as compositeOp, opacity,
+     * channel flags and selection. Please do not setup them manually,
+     * but use this function instead.
+     */
+    void setupTemporaryPainter(KisPainter *painter) const;
 
     /**
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.
      */
-    void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText);
-    void mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText);
+    void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText);
+    void mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText);
 
 
     /**
@@ -75,16 +86,24 @@ public:
 
     KisPaintDeviceSP temporaryTarget();
     const KisPaintDeviceSP temporaryTarget() const;
-    const KoCompositeOp* temporaryCompositeOp() const;
-    quint8 temporaryOpacity() const;
-    const QBitArray& temporaryChannelFlags() const;
+
+private:
+    friend class KisPainterBasedStrokeStrategy;
+
+    /**
+     * Only for debugging purposes. Please use setupTemporaryPainer()
+     * instead.
+     */
+    KisSelectionSP temporarySelection() const;
 
 private:
 
     template<class UndoAdapter>
         void mergeToLayerImpl(KisLayerSP layer,
                               UndoAdapter *undoAdapter,
-                              const QString &transactionText);
+                              const KUndo2MagicString &transactionText);
+    void releaseResources();
+
 private:
     struct Private;
     Private* const d;

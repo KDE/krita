@@ -22,9 +22,11 @@
 #include <krita_export.h>
 #include "kis_types.h"
 
+class KUndo2MagicString;
 class KisUndoStore;
 class KisSavedMacroCommand;
 class KisStrokesFacade;
+
 
 /**
  * KisPostExecutionUndoAdapter -- used by the strokes. It doesn't
@@ -41,7 +43,7 @@ public:
 
     void addCommand(KUndo2CommandSP command);
 
-    KisSavedMacroCommand* createMacro(const QString& macroName);
+    KisSavedMacroCommand* createMacro(const KUndo2MagicString& macroName);
     void addMacro(KisSavedMacroCommand *macro);
 
     inline void setUndoStore(KisUndoStore *undoStore) {

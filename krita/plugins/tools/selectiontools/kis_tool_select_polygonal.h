@@ -59,7 +59,7 @@ class KisToolSelectPolygonalFactory : public KoToolFactoryBase
 public:
     KisToolSelectPolygonalFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectPolygonal") {
-        setToolTip(i18n("Select a polygonal region"));
+        setToolTip(i18n("Polygonal Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setIconName(koIconNameCStr("tool_polygonal_selection"));
         setPriority(54);

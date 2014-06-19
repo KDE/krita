@@ -29,7 +29,7 @@
 #include <math.h>
 #define Q_PI M_PI
 
-//#define DEBUG_WINTAB_TABLET
+#include <input/kis_tablet_debugger.h>
 
 /**
  * A set of definitions to form a structure of a WinTab packet.  This
@@ -53,11 +53,13 @@
  */
 typedef UINT (API *PtrWTInfo)(UINT, UINT, LPVOID);
 typedef int  (API *PtrWTPacketsGet)(HCTX, int, LPVOID);
+typedef int  (API *PtrWTPacketsPeek)(HCTX, int, LPVOID);
 typedef BOOL (API *PtrWTGet)(HCTX, LPLOGCONTEXT);
 typedef BOOL (API *PtrWTOverlap)(HCTX, BOOL);
 
 static PtrWTInfo ptrWTInfo = 0;
 static PtrWTPacketsGet ptrWTPacketsGet = 0;
+static PtrWTPacketsPeek ptrWTPacketsPeek = 0;
 static PtrWTGet ptrWTGet = 0;
 static PtrWTOverlap ptrWTOverlap = 0;
 
@@ -111,7 +113,24 @@ struct DefaultButtonsConverter : public KisTabletSupportWin::ButtonsConverter
             int btn = 0x1 << i;
 
             if (btn & btnNew) {
-                *buttons |= buttonValueToEnum(btn);
+                Qt::MouseButton convertedButton =
+                    buttonValueToEnum(btn);
+
+                *buttons |= convertedButton;
+
+                /**
+                 * If a button that is present in hardware input is
+                 * mapped to a Qt::NoButton, it means that it is going
+                 * to be eaten by the driver, for example by its
+                 * "Pan/Scroll" feature. Therefore we shouldn't handle
+                 * any of the events associated to it. So just return
+                 * Qt::NoButton here.
+                 */
+                if (convertedButton == Qt::NoButton) {
+                    *button = Qt::NoButton;
+                    *buttons = Qt::NoButton;
+                    break;
+                }
             }
         }
     }
@@ -147,10 +166,10 @@ static void initWinTabFunctions()
     ptrWTInfo = (PtrWTInfo)library.resolve("WTInfoW");
     ptrWTGet = (PtrWTGet)library.resolve("WTGetW");
     ptrWTPacketsGet = (PtrWTPacketsGet)library.resolve("WTPacketsGet");
+    ptrWTPacketsPeek = (PtrWTPacketsGet)library.resolve("WTPacketsPeek");
     ptrWTOverlap = (PtrWTOverlap)library.resolve("WTOverlap");
 }
 
-#ifdef DEBUG_WINTAB_TABLET
 void printContext(const LOGCONTEXT &lc)
 {
     qDebug() << "Context data:";
@@ -169,7 +188,6 @@ void printContext(const LOGCONTEXT &lc)
     qDebug() << ppVar(lc.lcSysExtX);
     qDebug() << ppVar(lc.lcSysExtY);
 }
-#endif /* DEBUG_WINTAB_TABLET */
 
 /**
  * Initializes the QTabletDeviceData structure for \p uniqueId cursor
@@ -189,10 +207,10 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     /* get the current context for its device variable. */
     ptrWTGet(hTab, &lc);
 
-#ifdef DEBUG_WINTAB_TABLET
-    qDebug() << "Getting current context:";
-    printContext(lc);
-#endif /* DEBUG_WINTAB_TABLET */
+    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+        qDebug() << "# Getting current context:";
+        printContext(lc);
+    }
 
     /* get the size of the pressure axis. */
     QTabletDeviceData tdd;
@@ -223,18 +241,31 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     tdd.minZ = int(lc.lcOutOrgZ);
     tdd.maxZ = int(qAbs(lc.lcOutExtZ)) + int(lc.lcOutOrgZ);
 
-#ifdef DEBUG_WINTAB_TABLET
-    LOGCONTEXT lcMine;
+    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+        qDebug() << "# Axes configuration";
+        qDebug() << ppVar(tdd.minPressure) << ppVar(tdd.maxPressure);
+        qDebug() << ppVar(tdd.minTanPressure) << ppVar(tdd.maxTanPressure);
+        qDebug() << ppVar(qt_tablet_tilt_support);
+        qDebug() << ppVar(tdd.minX) << ppVar(tdd.maxX);
+        qDebug() << ppVar(tdd.minY) << ppVar(tdd.maxY);
+        qDebug() << ppVar(tdd.minZ) << ppVar(tdd.maxZ);
+        qDebug().nospace() << "# csr type: 0x" << hex << csr_type;
+    }
 
-    /* get default region */
-    ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
+    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+        LOGCONTEXT lcMine;
 
-    qDebug() << "Getting default context:";
-    printContext(lcMine);
-#endif /* DEBUG_WINTAB_TABLET */
+        /* get default region */
+        ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
+
+        qDebug() << "# Getting default context:";
+        printContext(lcMine);
+    }
 
     const uint cursorTypeBitMask = 0x0F06; // bitmask to find the specific cursor type (see Wacom FAQ)
     if (((csr_type & 0x0006) == 0x0002) && ((csr_type & cursorTypeBitMask) != 0x0902)) {
+        tdd.currentDevice = QTabletEvent::Stylus;
+    } else if (csr_type == 0x4020) { // Surface Pro 2 tablet device
         tdd.currentDevice = QTabletEvent::Stylus;
     } else {
         switch (csr_type & cursorTypeBitMask) {
@@ -279,6 +310,29 @@ static void tabletUpdateCursor(QTabletDeviceData &tdd, const UINT currentCursor)
         tdd.currentPointerType = QTabletEvent::UnknownPointer;
     }
 }
+
+class EventEater : public QObject {
+public:
+    EventEater(QObject *p) : QObject(p), m_eventType(QEvent::None) {}
+
+    bool eventFilter(QObject* object, QEvent* event ) {
+        if (event->type() == m_eventType) {
+            m_eventType = QEvent::None;
+            return true;
+        }
+
+        return QObject::eventFilter(object, event);
+    }
+
+    void pleaseEatNextEvent(QEvent::Type eventType) {
+        m_eventType = eventType;
+    }
+
+private:
+    QEvent::Type m_eventType;
+};
+
+static EventEater *globalEventEater = 0;
 
 bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                                       int numPackets)
@@ -325,17 +379,24 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                                                               desktopArea.width(), desktopArea.top(),
                                                               desktopArea.height());
 
-#ifdef DEBUG_WINTAB_TABLET
-        qDebug() << "WinTab:"
-                 << "Dsk:" << desktopArea
-                 << "Raw:" << ptNew.x << ptNew.y
-                 << "Scaled:" << hiResGlobal;
-#endif
+
+        if (KisTabletDebugger::instance()->debugRawTabletValues()) {
+            qDebug() << "WinTab (RC):"
+                     << "Dsk:" << desktopArea
+                     << "Raw:" << ptNew.x << ptNew.y
+                     << "Scaled:" << hiResGlobal;
+        }
+
+
+        Qt::MouseButton button = Qt::NoButton;
+        Qt::MouseButtons buttons;
+
+        globalButtonsConverter->convert(btnOld, btnNew, &button, &buttons);
 
         t = KisTabletEvent::TabletMoveEx;
-        if (buttonPressed) {
+        if (buttonPressed && button != Qt::NoButton) {
             t = KisTabletEvent::TabletPressEx;
-        } else if (buttonReleased) {
+        } else if (buttonReleased && button != Qt::NoButton) {
             t = KisTabletEvent::TabletReleaseEx;
         }
 
@@ -411,23 +472,46 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
             double degY = atan(cos(radAzim) / tanAlt);
             tiltX = int(degX * (180 / Q_PI));
             tiltY = int(-degY * (180 / Q_PI));
-            rotation = ort.orTwist;
+
+            // Rotation is measured in degrees. Axis inverted to fit
+            // the coordinate system of the Linux driver.
+            rotation = (360 - 1) - ort.orTwist / 10;
         }
 
-        Qt::MouseButton button = Qt::NoButton;
-        Qt::MouseButtons buttons;
+        if (KisTabletDebugger::instance()->debugRawTabletValues()) {
+            ort = localPacketBuf[i].pkOrientation;
 
-        globalButtonsConverter->convert(btnOld, btnNew, &button, &buttons);
+            qDebug() << "WinTab (RS):"
+                     << "NP:" << localPacketBuf[i].pkNormalPressure
+                     << "TP:" << localPacketBuf[i].pkTangentPressure
+                     << "Az:" << ort.orAzimuth
+                     << "Alt:" << ort.orAltitude
+                     << "Twist:" << ort.orTwist;
+        }
 
         KisTabletEvent e(t, localPos, globalPos, hiResGlobal, currentTabletPointer.currentDevice,
                          currentTabletPointer.currentPointerType, prsNew, tiltX, tiltY,
                          tangentialPressure, rotation, z, modifiers, currentTabletPointer.llId,
                          button, buttons);
 
-        e.ignore();
-        sendEvent = qApp->sendEvent(w, &e);
+        if (button == Qt::NoButton &&
+            (t == KisTabletEvent::TabletPressEx ||
+             t == KisTabletEvent::TabletReleaseEx)) {
 
-        if (!e.isAccepted()) {
+            /**
+             * Eat events which do not correcpond to any mouse
+             * button. This can happen when the user assinged a stylus
+             * key to e.g. some keyboard key
+             */
+            e.accept();
+        } else {
+            e.ignore();
+            sendEvent = qApp->sendEvent(w, &e);
+        }
+
+        if (e.isAccepted()) {
+            globalEventEater->pleaseEatNextEvent(e.getMouseEventType());
+        } else {
             QTabletEvent t = e.toQTabletEvent();
             qApp->sendEvent(w,  &t);
         }
@@ -437,6 +521,9 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
 
 void KisTabletSupportWin::init()
 {
+    globalEventEater = new EventEater(qApp);
+    qApp->installEventFilter(globalEventEater);
+
     initWinTabFunctions();
 }
 
@@ -489,10 +576,10 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
         }
         break;
     case WT_PROXIMITY:
-            if (ptrWTPacketsGet && ptrWTInfo) {
+            if (ptrWTPacketsPeek && ptrWTInfo) {
                 const bool enteredProximity = LOWORD(msg->lParam) != 0;
                 PACKET proximityBuffer[1]; // we are only interested in the first packet in this case
-                const int totalPacks = ptrWTPacketsGet(qt_tablet_context, 1, proximityBuffer);
+                const int totalPacks = ptrWTPacketsPeek(qt_tablet_context, 1, proximityBuffer);
                 if (totalPacks > 0) {
                     const UINT currentCursor = proximityBuffer[0].pkCursor;
 

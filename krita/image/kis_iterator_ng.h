@@ -42,13 +42,13 @@ public:
     virtual qint32 nConseqPixels() const = 0;
 };
 
-class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG, public virtual KisBaseAccessor
-{
-    Q_DISABLE_COPY(KisBaseIteratorNG)
-public:
-    KisBaseIteratorNG() {}
-    virtual ~KisBaseIteratorNG();
-};
+//class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG, public virtual KisBaseAccessor
+//{
+//    Q_DISABLE_COPY(KisBaseIteratorNG)
+//public:
+//    KisBaseIteratorNG() {}
+//    virtual ~KisBaseIteratorNG();
+//};
 
 /**
  * Iterates over the line of a paint device.
@@ -71,7 +71,7 @@ public:
 /**
  * Also support writing.
  */
-class KRITAIMAGE_EXPORT KisHLineIteratorNG : public KisHLineConstIteratorNG, public KisBaseIteratorNG
+class KRITAIMAGE_EXPORT KisHLineIteratorNG : public KisHLineConstIteratorNG, public KisBaseAccessor
 {
     Q_DISABLE_COPY(KisHLineIteratorNG)
 public:
@@ -100,7 +100,7 @@ public:
 /**
  * Also support writing.
  */
-class KRITAIMAGE_EXPORT KisVLineIteratorNG : public KisVLineConstIteratorNG, public KisBaseIteratorNG
+class KRITAIMAGE_EXPORT KisVLineIteratorNG : public KisVLineConstIteratorNG, public KisBaseAccessor
 {
     Q_DISABLE_COPY(KisVLineIteratorNG)
 public:
@@ -108,28 +108,6 @@ public:
     virtual ~KisVLineIteratorNG();
 };
 
-/**
- * Create an iterator over a rectangle section of a paint device, the path followed by
- * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
- * use this type of iterator if you are combining two differents layers.
- */
-class KRITAIMAGE_EXPORT KisRectConstIteratorNG : public virtual KisBaseConstIteratorNG
-{
-    Q_DISABLE_COPY(KisRectConstIteratorNG)
-public:
-    KisRectConstIteratorNG() {}
-    virtual ~KisRectConstIteratorNG();
-};
-
-/**
- * Also support writing.
- */
-class KRITAIMAGE_EXPORT KisRectIteratorNG : public KisRectConstIteratorNG, public KisBaseIteratorNG
-{
-    Q_DISABLE_COPY(KisRectIteratorNG)
-public:
-    KisRectIteratorNG() {}
-    virtual ~KisRectIteratorNG();
-};
+#include "kis_sequential_iterator.h"
 
 #endif

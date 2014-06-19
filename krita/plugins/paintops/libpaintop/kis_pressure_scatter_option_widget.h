@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -29,16 +29,16 @@ class QCheckBox;
 class PAINTOP_EXPORT KisPressureScatterOptionWidget: public KisCurveOptionWidget
 {
     Q_OBJECT
-    
+
 public:
     KisPressureScatterOptionWidget();
 
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
 private slots:
     void xAxisEnabled(bool enable);
     void yAxisEnabled(bool enable);
-    
+
 private:
     QCheckBox* m_axisX;
     QCheckBox* m_axisY;

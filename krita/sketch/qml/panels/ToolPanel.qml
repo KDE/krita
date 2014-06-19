@@ -18,12 +18,12 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../components"
+import org.krita.sketch.components 1.0
 
 Panel {
     id: base;
     name: "Tool";
-    panelColor: "#000000";
+    colorSet: "tool";
 
     CompositeOpModel {
         id: compositeOpModel;
@@ -100,11 +100,7 @@ Panel {
             onToolNameChanged: changeTool(toolName);
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-" + toolName + ".svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon(toolName);
             onClicked: {
                 fullContentsItem.state = "";
                 changeTool(toolName);
@@ -116,11 +112,7 @@ Panel {
             onToolNameChanged: changeTool(toolName);
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-" + toolName + ".svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon(toolName);
             onClicked: {
                 fullContentsItem.state = "secondTool";
                 changeTool(toolName);
@@ -134,11 +126,7 @@ Panel {
             id: eraserButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-erase.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("erase");
             checked: compositeOpModel.eraserMode;
             onClicked: compositeOpModel.eraserMode = !compositeOpModel.eraserMode;
         },
@@ -146,11 +134,7 @@ Panel {
             id: topApplyButton;
             width: height;
             height: Constants.ToolbarButtonSize;
-            color: "transparent";
-            image: "../images/svg/icon-apply.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("apply");
             visible: false;
             onClicked: state === "peek" ? toolOptionsPeek.item.apply() : toolOptionsFull.item.apply();
         }
@@ -196,13 +180,14 @@ Panel {
                 right: parent.right;
             }
             height: childrenRect.height;
+            z: 2;
             Item {
                 id: firstToolSelector;
                 width: parent.width;
                 height: Constants.ToolbarButtonSize;
                 Rectangle {
                     anchors.fill: parent;
-                    opacity: 0.5;
+                    color: Settings.theme.color("panels/tool/subheader");
                 }
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -213,11 +198,7 @@ Panel {
                         delegate: Button {
                             width: height;
                             height: Constants.ToolbarButtonSize
-                            color: "transparent";
-                            image: "../images/svg/icon-" + model.name + "-black.svg"
-                            textColor: "white";
-                            shadow: false;
-                            highlight: false;
+                            image: Settings.theme.icon(model.name + "-black");
                             checked: toolManager.currentTool !== null ? (toolManager.currentTool.toolId() === toolNameToID(model.name)) : false;
                             onClicked: {
                                 firstTool.toolName = model.name;
@@ -234,7 +215,7 @@ Panel {
                 visible: false;
                 Rectangle {
                     anchors.fill: parent;
-                    opacity: 0.5;
+                    color: Settings.theme.color("panels/tool/subheader");
                 }
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -245,11 +226,7 @@ Panel {
                         delegate: Button {
                             width: height;
                             height: Constants.ToolbarButtonSize
-                            color: "transparent";
-                            image: "../images/svg/icon-" + model.name + "-black.svg"
-                            textColor: "white";
-                            shadow: false;
-                            highlight: false;
+                            image: Settings.theme.icon(model.name + "-black");
                             checked: toolManager.currentTool !== null ? (toolManager.currentTool.toolId() === toolNameToID(model.name)) : false;
                             onClicked: {
                                 secondTool.toolName = model.name;
@@ -263,18 +240,22 @@ Panel {
         Flickable {
             id: toolOptionsFullFlickable;
             contentHeight: toolOptionsFull.height;
-            clip: true;
+            boundsBehavior: Flickable.StopAtBounds;
             anchors {
                 top: toolSelectorContainer.bottom;
                 left: parent.left;
+                leftMargin: Constants.DefaultMargin;
                 right: parent.right;
+                rightMargin: Constants.DefaultMargin * 2;
                 bottom: parent.bottom;
             }
+
             MouseArea {
                 anchors.fill: parent;
                 hoverEnabled: true;
                 onContainsMouseChanged: toolOptionsFull.focus = containsMouse;
             }
+
             Loader {
                 id: toolOptionsFull;
                 width: parent.width;
@@ -282,6 +263,6 @@ Panel {
                 source: "toolconfigpages/paint.qml";
             }
         }
-        ScrollDecorator { flickableItem: toolOptionsFullFlickable; }
+        ScrollDecorator { anchors.topMargin: toolSelectorContainer.height; flickableItem: toolOptionsFullFlickable; }
     }
 }

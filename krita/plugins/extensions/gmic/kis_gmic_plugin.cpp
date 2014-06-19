@@ -20,6 +20,8 @@
 
 #include "kis_gmic_plugin.h"
 
+#include <QApplication>
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -44,7 +46,6 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
-
 #include "gmic.h"
 #include "kis_gmic_parser.h"
 #include "Component.h"
@@ -56,9 +57,10 @@
 #include "kis_gmic_simple_convertor.h"
 #include "kis_gmic_applicator.h"
 
-
 K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
 K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
+
+const QString STANDARD_GMIC_DEFINITION = "gmic_def.gmic";
 
 KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/gmic.rc"),m_gmicWidget(0)
@@ -68,9 +70,8 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("gmic", action);
 
-    QString standardSettings("gmic_def.gmic");
     KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
-    m_gmicDefinitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", standardSettings);
+    m_blacklistPath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
 
     connect(action, SIGNAL(triggered()), this, SLOT(slotGmic()));
 }
@@ -79,6 +80,31 @@ KisGmicPlugin::~KisGmicPlugin()
 {
     delete m_gmicWidget;
 }
+
+void KisGmicPlugin::setupDefinitionPaths()
+{
+    m_definitionFilePaths = KGlobal::dirs()->findAllResources("gmic_definitions", "*.gmic");
+    QMutableStringListIterator it(m_definitionFilePaths);
+    // remove all instances of gmic_def.gmic
+    while (it.hasNext())
+    {
+        if ( it.next().endsWith(STANDARD_GMIC_DEFINITION) )
+        {
+            it.remove();
+        }
+    }
+
+    // if we don't have update, prepend gmic_def.gmic
+    int gmicVersion = gmic_version;
+    QString updateFileName = "update" + QString::number(gmicVersion) + ".gmic";
+    QString updatedGmicDefinitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", updateFileName);
+    if (updatedGmicDefinitionFilePath.isEmpty())
+    {
+        QString standardGmicDefinitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION);
+        m_definitionFilePaths.prepend(standardGmicDefinitionFilePath);
+    }
+}
+
 
 void KisGmicPlugin::slotGmic()
 {
@@ -94,15 +120,24 @@ void KisGmicPlugin::slotGmic()
         slotClose();
     }
 
-    KisGmicParser parser(m_gmicDefinitionFilePath);
+    setupDefinitionPaths();
+    parseGmicCommandDefinitions(m_definitionFilePaths);
+
+    KisGmicParser parser(m_definitionFilePaths);
     Component * root = parser.createFilterTree();
     KisGmicFilterModel * model = new KisGmicFilterModel(root); // filter mode takes owner ship
 
-    KisGmicBlacklister * blacklister = new KisGmicBlacklister(m_gmicDefinitionFilePath + ".blacklist");
+    KisGmicBlacklister * blacklister = new KisGmicBlacklister(m_blacklistPath);
     model->setBlacklister(blacklister);
 
-    m_gmicWidget = new KisGmicWidget(model);
+    QString updateUrl = "http://gmic.sourceforge.net/" + QString("update") + QString::number(gmic_version) + ".gmic";
+    m_gmicWidget = new KisGmicWidget(model, updateUrl);
+
     m_gmicApplicator = new KisGmicApplicator();
+#ifdef Q_WS_WIN
+    // On windows, gmic needs a humongous stack for its parser
+    m_gmicApplicator->setStackSize(20 * 1024 * 1024);
+#endif
 
     // apply
     connect(m_gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
@@ -115,7 +150,7 @@ void KisGmicPlugin::slotGmic()
 
 void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 {
-    QString actionName;
+    KUndo2MagicString actionName;
     KisNodeSP node;
 
     if (setting->isBlacklisted())
@@ -127,27 +162,28 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
     KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
     KisNodeListSP kritaNodes = mapper.inputNodes(setting->inputLayerMode());
 
-    if (kritaNodes->isEmpty())
-    {
+    if (kritaNodes->isEmpty()) {
         KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this input mode is not implemented"), i18n("Krita"));
         return;
     }
-    else
-    {
-        actionName = i18n("Gmic filter");
-        node = m_view->image()->root();
-    }
 
-    if (setting->outputMode() != IN_PLACE)
-    {
+    actionName = kundo2_i18n("Gmic filter");
+    node = m_view->image()->root();
+
+    if (setting->outputMode() != IN_PLACE) {
         KMessageBox::sorry(m_gmicWidget,QString("Sorry, this output mode is not implemented"),"Krita");
         return;
     }
 
     QTime myTimer;
     myTimer.start();
-    m_gmicApplicator->apply(m_view->image(), node, actionName, kritaNodes, setting->gmicCommand());
+    qApp->setOverrideCursor(Qt::WaitCursor);
+
+    m_gmicApplicator->setProperties(m_view->image(), node, actionName, kritaNodes, setting->gmicCommand(), m_gmicCustomCommands);
+    m_gmicApplicator->start();
+    m_gmicApplicator->wait();
     m_view->image()->waitForDone();
+    qApp->restoreOverrideCursor();
 
     double seconds = myTimer.elapsed() * 0.001;
     // temporary feedback
@@ -167,6 +203,16 @@ void KisGmicPlugin::slotClose()
         m_gmicWidget = 0;
         delete m_gmicApplicator;
         m_gmicApplicator = 0;
+    }
+}
+
+
+void KisGmicPlugin::parseGmicCommandDefinitions(const QStringList& gmicDefinitionFilePaths)
+{
+    foreach (const QString filePath, gmicDefinitionFilePaths)
+    {
+        QByteArray gmicCommands = KisGmicParser::extractGmicCommandsOnly(filePath);
+        m_gmicCustomCommands.append(gmicCommands);
     }
 }
 

@@ -168,13 +168,6 @@ public:
     virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos) const = 0;
 
     /**
-     * Convert the value of the channel at the specified position into
-     * a 16-bit value. This may be upscaling or downscaling, depending
-     * on the defined value of the channel
-     */
-    virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos) const = 0;
-
-    /**
      * Set dstPixel to the pixel containing only the given channel of srcPixel. The remaining channels
      * should be set to whatever makes sense for 'empty' channels of this color space,
      * with the intent being that the pixel should look like it only has the given channel.

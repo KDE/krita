@@ -224,7 +224,7 @@ public:
     @brief Return the property set for the curently selected item
     */
     KoProperty::Set* itemPropertySet() const {
-        kDebug(); return m_itmset;
+        return m_itmset;
     }
 
     /**

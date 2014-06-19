@@ -22,8 +22,7 @@
 #include <QtTest>
 
 #include "kis_paint_information.h"
-
-class KisDynamicSensor;
+#include "kis_dynamic_sensor.h"
 
 class KisSensorsTest : public QObject
 {
@@ -34,7 +33,7 @@ private slots:
 
     void testDrawingAngle();
 private:
-    void testBound(KisDynamicSensor* sensor);
+    void testBound(KisDynamicSensorSP sensor);
 private:
     QList<KisPaintInformation> paintInformations;
 };

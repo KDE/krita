@@ -145,7 +145,7 @@ public:
     // this font stretch is needed if we want to have exact line height as in ms-word and oo
     //
     // font_size * font_stretch = windows_font_height
-    qreal calculateFontYStretch(QString fontFamily);
+    qreal calculateFontYStretch(const QString &fontFamily);
 
 
     StylePrivate hardCodedDefaultStyle;
@@ -210,7 +210,7 @@ void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
     }
 }
 
-qreal KoCharacterStyle::Private::calculateFontYStretch(QString /*fontFamily*/)
+qreal KoCharacterStyle::Private::calculateFontYStretch(const QString &fontFamily)
 {
     qreal stretch = 1;
 #ifdef SHOULD_BUILD_FONT_CONVERSION
@@ -336,6 +336,8 @@ qreal KoCharacterStyle::Private::calculateFontYStretch(QString /*fontFamily*/)
     FcPatternDestroy (matched);
 
     textScaleMap.insert(fontFamily, stretch);
+#else
+    Q_UNUSED(fontFamily);
 #endif //SHOULD_BUILD_FONT_CONVERSION
 
     return stretch;

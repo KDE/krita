@@ -21,13 +21,12 @@
 
 struct KoColorTransformationFactory::Private {
     QString id;
-    QString name;
 };
 
-KoColorTransformationFactory::KoColorTransformationFactory(const QString &id, const QString &name) : d(new Private)
+KoColorTransformationFactory::KoColorTransformationFactory(const QString &id)
+    : d(new Private)
 {
     d->id = id;
-    d->name = name;
 }
 
 KoColorTransformationFactory::~KoColorTransformationFactory()
@@ -38,9 +37,4 @@ KoColorTransformationFactory::~KoColorTransformationFactory()
 QString KoColorTransformationFactory::id() const
 {
     return d->id;
-}
-
-QString KoColorTransformationFactory::name() const
-{
-    return d->name;
 }

@@ -20,12 +20,12 @@
 
 #include <QObject>
 
-#include "image/krita_export.h"
+#include "krita_sketch_export.h"
 
 /**
  * @brief The RecentFileManager class keeps track of recent files
  */
-class KRITASKETCH_EXPORT RecentFileManager : public QObject
+class KRITA_SKETCH_EXPORT RecentFileManager : public QObject
 {
     Q_OBJECT
 public:

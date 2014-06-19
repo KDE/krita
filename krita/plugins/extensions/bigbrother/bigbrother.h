@@ -36,7 +36,6 @@ public:
 
 private slots:
 
-    void slotSave();
     void slotOpenPlay();
     void slotOpenEdit();
     void slotStartRecordingMacro();

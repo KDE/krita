@@ -53,10 +53,6 @@ class PropertyPrivate;
 class ComposedPropertyInterface;
 class Set;
 
-///*! Helper function to create a value list from two string lists. */
-//KOPROPERTY_EXPORT QMap<QString, QVariant> createValueListFromStringLists(
-// const QStringList &keys, const QStringList &values);
-
 /*! PropertyType.
 Integers that represent the type of the property. Plugin defined properties
 should have a type number >= UserDefined .*/
@@ -212,7 +208,7 @@ public:
 
 //unused for now   /*! True (the default), if the list has fixed number of possible
 //unused for now    items (keys). If this is false, user can add or enter own values. */
-//unused for now   bool fixed : 1;
+//unused for now   bool fixed;
     };
 
     /*! Constructs a null property. */

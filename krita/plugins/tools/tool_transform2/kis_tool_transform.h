@@ -75,6 +75,8 @@ class KisToolTransform : public KisTool
 
     Q_OBJECT
 
+    Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
+
     Q_PROPERTY(TransformToolMode transformMode READ transformMode WRITE setTransformMode NOTIFY transformModeChanged)
 
     Q_PROPERTY(double translateX READ translateX WRITE setTranslateX NOTIFY freeTransformChanged)
@@ -124,6 +126,7 @@ public:
 
     void paint(QPainter& gc, const KoViewConverter &converter);
 
+    bool isActive() const;
     TransformToolMode transformMode() const;
 
     double translateX() const;
@@ -172,10 +175,11 @@ public slots:
 
 Q_SIGNALS:
     void transformModeChanged();
+    void isActiveChanged();
     void freeTransformChanged();
     void warpTransformChanged();
 
-protected:
+public Q_SLOTS:
     void requestUndoDuringStroke();
     void requestStrokeEnd();
     void requestStrokeCancellation();
@@ -378,6 +382,8 @@ private:
     ToolTransformArgs m_clickArgs;
     int m_handleRadius;
     int m_rotationCenterRadius;
+    int m_handleVisualRadius;
+    int m_rotationCenterVisualRadius;
     int m_maxRadius;
 
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
@@ -419,7 +425,7 @@ private:
 
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
-    KisToolTransformConfigWidget *m_optWidget;
+    KisToolTransformConfigWidget *m_optionsWidget;
     KisPaintDeviceSP m_target;
     // we don't need this origDevice for now
     // but I keep it here because I might use it when adding one of enkithan's suggestion (cut the seleted pixels instead of keeping them darkened)

@@ -832,7 +832,7 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
     QTextBlockFormat format = block.blockFormat();
     QVariant listv;
     listv = format.property(KoParagraphStyle::SectionEndings);
-    QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
+    QList<QVariant> sectionEndings = listv.value<QList<QVariant> >();
     sectionEndings.append(v);
     listv.setValue<QList<QVariant> >(sectionEndings);
     format.setProperty(KoParagraphStyle::SectionEndings, listv);

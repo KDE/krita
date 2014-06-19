@@ -142,8 +142,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 {
-    if (m_d->settingsWidget)
-    {
+    if (m_d->settingsWidget) {
         m_d->layout->removeWidget(m_d->settingsWidget);
         m_d->settingsWidget->hide();
         m_d->settingsWidget->setParent(0);
@@ -154,7 +153,7 @@ KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 
 void KisPaintOpPresetsPopup::slotCheckPresetValidity()
 {
-    if (m_d->settingsWidget){
+    if (m_d->settingsWidget) {
         m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled( m_d->settingsWidget->presetIsValid() );
         m_d->uiWdgPaintOpPresetSettings.txtPreset->setEnabled( m_d->settingsWidget->presetIsValid() );
     }
@@ -174,9 +173,10 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     if (m_d->settingsWidget){
         connect(m_d->settingsWidget,SIGNAL(sigConfigurationItemChanged()),this,SLOT(slotCheckPresetValidity()));
         slotCheckPresetValidity();
-        if (m_d->settingsWidget->supportScratchBox()){
+        if (m_d->settingsWidget->supportScratchBox()) {
             showScratchPad();
-        }else{
+        }
+        else {
             hideScratchPad();
         }
     }

@@ -52,7 +52,7 @@ KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
                 m_lineStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing check element encountered unknow element: " << n;
+            kWarning() << "while parsing check element encountered unknow element: " << n;
         }
     }
 
@@ -127,8 +127,7 @@ int KoReportItemCheck::renderSimpleData(OROPage *page, OROSection *section, cons
     bool v = false;
     QString cs = itemDataSource();
 
-    kDebug() << "ControlSource:" << cs;
-
+    //kDebug() << "ControlSource:" << cs;
     if (!cs.isEmpty()) {
         if (cs.left(1) == "=" && script) {
             str = script->evaluate(cs.mid(1)).toString();
@@ -138,7 +137,7 @@ int KoReportItemCheck::renderSimpleData(OROPage *page, OROSection *section, cons
 
         str = str.toLower();
 
-        kDebug() << "Check Value:" << str;
+        //kDebug() << "Check Value:" << str;
         if (str == "t" || str == "true" || str == "1")
             v = true;
 

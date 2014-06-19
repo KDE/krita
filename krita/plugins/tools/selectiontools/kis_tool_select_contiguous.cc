@@ -86,13 +86,14 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     fillpainter.setHeight(rc.height());
     fillpainter.setWidth(rc.width());
     fillpainter.setFillThreshold(m_fuzziness);
-    fillpainter.setSampleMerged(!m_limitToCurrentLayer);
 
     KisImageWSP image = currentImage();
+    KisPaintDeviceSP sourceDevice = m_limitToCurrentLayer ? dev : image->projection();
+
     image->lock();
     fillpainter.setFeather(m_feather);
     fillpainter.setSizemod(m_sizemod);
-    KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), image->projection());
+    KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), sourceDevice);
     image->unlock();
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -102,7 +103,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     }
 
     selection->pixelSelection()->invalidateOutlineCache();
-    KisSelectionToolHelper helper(kisCanvas, i18n("Contiguous Area Selection"));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Contiguous Area"));
     helper.selectPixelSelection(selection->pixelSelection(), selectionAction());
 
     QApplication::restoreOverrideCursor();

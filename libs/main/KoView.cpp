@@ -194,8 +194,15 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
     }
 
     actionCollection()->addAssociatedWidget(this);
-    foreach(QAction* action, actionCollection()->actions())
+
+    /**
+     * WARNING: This code changes the context of global shortcuts
+     *          only. All actions added later will have the default
+     *          context, which is Qt::WindowShortcut!
+     */
+    foreach(QAction* action, actionCollection()->actions()) {
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    }
 }
 
 KoView::~KoView()
@@ -275,39 +282,6 @@ KoDocument *KoView::koDocument() const
 void KoView::setDocumentDeleted()
 {
     d->documentDeleted = true;
-}
-
-
-QAction *KoView::action(const QDomElement &element) const
-{
-    static const QString &attrName = KGlobal::staticQString("name");
-    QString name = element.attribute(attrName);
-
-    QAction *act = KXMLGUIClient::action(name.toUtf8());
-
-    // last resort, try to get action from the main window if there is one
-    if (!act && mainWindow())
-        act = mainWindow()->actionCollection()->action(name);
-
-    return act;
-}
-
-QAction *KoView::action(const char* name) const
-{
-    QAction *act = KXMLGUIClient::action(name);
-
-    // last resort, try to get action from the main window if there is one
-    if (!act && mainWindow())
-        act = mainWindow()->actionCollection()->action(name);
-
-    return act;
-}
-
-QWidget *KoView::canvas() const
-{
-    //dfaure: since the view plays two roles in this method (the const means "you can modify the canvas
-    // but not the view", it's just coincidence that the view is the canvas by default ;)
-    return const_cast<KoView *>(this);
 }
 
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
@@ -440,9 +414,9 @@ void KoView::slotUpdateAuthorProfileActions()
     }
 }
 
-QList<QAction*> KoView::createChangeUnitActions()
+QList<QAction*> KoView::createChangeUnitActions(bool addPixelUnit)
 {
-    UnitActionGroup* unitActions = new UnitActionGroup(d->document, this);
+    UnitActionGroup* unitActions = new UnitActionGroup(d->document, addPixelUnit, this);
     return unitActions->actions();
 }
 

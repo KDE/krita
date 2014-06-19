@@ -55,7 +55,7 @@ KoPathCombineCommand::KoPathCombineCommand(KoShapeBasedDocumentBase *controller,
 : KUndo2Command(parent)
 , d(new Private(controller, paths))
 {
-    setText(i18nc("(qtundo-format)", "Combine paths"));
+    setText(kundo2_i18n("Combine paths"));
 
     d->combinedPath = new KoPathShape();
     d->combinedPath->setStroke(d->paths.first()->stroke());

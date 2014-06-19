@@ -95,7 +95,7 @@ private:
  };
 
  KisBurnMidtonesAdjustmentFactory::KisBurnMidtonesAdjustmentFactory()
-    : KoColorTransformationFactory("BurnMidtones", i18n("BurnMidtones Adjustment"))
+    : KoColorTransformationFactory("BurnMidtones")
 {
 }
 

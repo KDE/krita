@@ -20,6 +20,15 @@
 #include "Settings.h"
 #include <QApplication>
 
+#include <kglobal.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+#include <kstandarddirs.h>
+
+#include "Theme.h"
+#include "PropertyContainer.h"
+#include <kis_config.h>
+
 class Settings::Private
 {
 public:
@@ -28,11 +37,15 @@ public:
     QString currentFile;
     bool temporaryFile;
     QDeclarativeItem *focusItem;
+    Theme* theme;
 };
 
 Settings::Settings( QObject* parent )
     : QObject( parent ), d( new Private )
 {
+    QString theme = KGlobal::config()->group("General").readEntry<QString>("theme", "default");
+    d->theme = Theme::load(theme, this);
+    connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
 }
 
 Settings::~Settings()
@@ -79,6 +92,53 @@ void Settings::setFocusItem(QDeclarativeItem* item)
         d->focusItem = item;
         emit focusItemChanged();
     }
+}
+
+QObject* Settings::theme() const
+{
+    return d->theme;
+}
+
+QString Settings::themeID() const
+{
+    if(d->theme)
+        return d->theme->id();
+
+    return QString();
+}
+
+void Settings::setThemeID(const QString& id)
+{
+    if(!d->theme || id != d->theme->id()) {
+        if(d->theme) {
+            delete d->theme;
+            d->theme = 0;
+        }
+
+        d->theme = Theme::load(id, this);
+        KGlobal::config()->group("General").writeEntry<QString>("theme", id);
+
+        emit themeChanged();
+    }
+}
+
+QObject* Settings::customImageSettings() const
+{
+    QObject* settings = new PropertyContainer("customImageSettings", qApp);
+    KisConfig cfg;
+    settings->setProperty("Width", cfg.defImageWidth());
+    settings->setProperty("Height", cfg.defImageHeight());
+    settings->setProperty("Resolution", qRound(cfg.defImageResolution() * 72)); // otherwise we end up with silly floating point numbers
+    settings->setProperty("ColorModel", cfg.defColorModel());
+    settings->setProperty("ColorDepth", cfg.defaultColorDepth());
+    settings->setProperty("ColorProfile", cfg.defColorProfile());
+    return settings;
+}
+
+QString Settings::lastPreset() const
+{
+    KisConfig cfg;
+    return cfg.readEntry("LastPreset", QString("Basic_tip_default"));
 }
 
 #include "Settings.moc"

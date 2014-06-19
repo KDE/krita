@@ -21,7 +21,6 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_hline_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_vline_iterator.cpp
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_rect_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_random_accessor.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_abstract_compression.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_lzf_compression.cpp
@@ -90,12 +89,15 @@ set(kritaimage_LIB_SRCS
    commands/kis_set_global_selection_command.cpp
    commands_new/kis_saved_commands.cpp
    commands_new/kis_processing_command.cpp
-   commands_new/kis_node_move_command2.cpp
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
+   commands_new/kis_node_move_command2.cpp
+   commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
+   processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
+   processing/kis_crop_selections_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
    processing/kis_mirror_processing_visitor.cpp
    filter/kis_filter.cc
@@ -105,6 +107,8 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator.cpp
    generator/kis_generator_layer.cpp
    generator/kis_generator_registry.cpp
+   floodfill/kis_fill_interval_map.cpp
+   floodfill/kis_scanline_fill.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
@@ -153,6 +157,8 @@ set(kritaimage_LIB_SRCS
    kis_image_signal_router.cpp
    kis_image_config.cpp
    kis_signal_compressor.cpp
+   kis_signal_compressor_with_param.cpp
+   kis_thread_safe_signal_compressor.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_mask.cc

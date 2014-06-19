@@ -25,6 +25,8 @@
 #include <QColor>
 #include <QFile>
 #include <QDomDocument>
+#include <QBuffer>
+#include <QCryptographicHash>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -36,7 +38,7 @@
 #include <KoColorModelStandardIds.h>
 
 KoStopGradient::KoStopGradient(const QString& filename)
-        : KoAbstractGradient(filename)
+    : KoAbstractGradient(filename)
 {
 }
 
@@ -46,25 +48,40 @@ KoStopGradient::~KoStopGradient()
 
 bool KoStopGradient::load()
 {
+    QFile f(filename());
+    if (!f.open(QIODevice::ReadOnly)) {
+        kWarning() << "Can't open file " << filename();
+        return false;
+    }
+    bool res = loadFromDevice(&f);
+    f.close();
+    return res;
+}
+
+bool KoStopGradient::loadFromDevice(QIODevice *dev)
+{
     QString strExt;
     const int result = filename().lastIndexOf('.');
     if (result >= 0) {
         strExt = filename().mid(result).toLower();
     }
-    QFile f(filename());
+    QByteArray ba = dev->readAll();
 
-    if (f.open(QIODevice::ReadOnly)) {
-        if (strExt == ".kgr") {
-            loadKarbonGradient(&f);
-        } else if (strExt == ".svg") {
-            loadSvgGradient(&f);
-        }
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+    setMD5(md5.result());
+
+    QBuffer buf(&ba);
+    if (strExt == ".kgr") {
+        loadKarbonGradient(&buf);
     }
-    if (m_stops.count() >= 2)
+    else if (strExt == ".svg") {
+        loadSvgGradient(&buf);
+    }
+    if (m_stops.count() >= 2) {
         setValid(true);
-
+    }
     updatePreview();
-
     return true;
 }
 
@@ -74,42 +91,10 @@ bool KoStopGradient::save()
     if (! fileOut.open(QIODevice::WriteOnly))
         return false;
 
-    QTextStream stream(&fileOut);
-
-    const QString spreadMethod[3] = {
-        QString("spreadMethod=\"pad\" "),
-        QString("spreadMethod=\"reflect\" "),
-        QString("spreadMethod=\"repeat\" ")
-    };
-
-    const QString indent = "    ";
-
-    stream << "<svg>" << endl;
-
-    stream << indent;
-    stream << "<linearGradient id=\"" << name() << "\" ";
-    stream << "gradientUnits=\"objectBoundingBox\" ";
-    stream << spreadMethod[spread()];
-    stream << ">" << endl;
-
-    QColor color;
-
-    // color stops
-    foreach(const KoGradientStop & stop, m_stops) {
-        stop.second.toQColor(&color);
-        stream << indent << indent;
-        stream << "<stop stop-color=\"";
-        stream << color.name();
-        stream << "\" offset=\"" << QString().setNum(stop.first);
-        stream << "\" stop-opacity=\"" << static_cast<float>(color.alpha()) / 255.0f << "\"" << " />" << endl;
-    }
-    stream << indent;
-    stream << "</linearGradient>" << endl;
-    stream << "</svg>" << endl;
-
+    bool retval = saveToDevice(&fileOut);
     fileOut.close();
 
-    return true;
+    return retval;
 }
 
 QGradient* KoStopGradient::toQGradient() const
@@ -255,7 +240,7 @@ void KoStopGradient::setStops(QList< KoGradientStop > stops)
     updatePreview();
 }
 
-void KoStopGradient::loadKarbonGradient(QFile* file)
+void KoStopGradient::loadKarbonGradient(QIODevice *file)
 {
     QDomDocument doc;
 
@@ -270,12 +255,13 @@ void KoStopGradient::loadKarbonGradient(QFile* file)
 
     if (!n.isNull()) {
         e = n.toElement();
-        if (!e.isNull() && e.tagName() == "GRADIENT")
+        if (!e.isNull() && e.tagName() == "GRADIENT") {
             parseKarbonGradient(e);
+        }
     }
 }
 
-void KoStopGradient::loadSvgGradient(QFile* file)
+void KoStopGradient::loadSvgGradient(QIODevice *file)
 {
     QDomDocument doc;
 
@@ -623,4 +609,59 @@ void KoStopGradient::parseSvgColor(QColor &color, const QString &s)
 QString KoStopGradient::defaultFileExtension() const
 {
     return QString(".svg");
+}
+
+bool KoStopGradient::saveToDevice(QIODevice *dev) const
+{
+    QTextStream stream(dev);
+
+    const QString spreadMethod[3] = {
+        QString("spreadMethod=\"pad\" "),
+        QString("spreadMethod=\"reflect\" "),
+        QString("spreadMethod=\"repeat\" ")
+    };
+
+    const QString indent = "    ";
+
+    stream << "<svg>" << endl;
+
+    stream << indent;
+    stream << "<linearGradient id=\"" << name() << "\" ";
+    stream << "gradientUnits=\"objectBoundingBox\" ";
+    stream << spreadMethod[spread()];
+    stream << ">" << endl;
+
+    QColor color;
+
+    // color stops
+    foreach(const KoGradientStop & stop, m_stops) {
+        stop.second.toQColor(&color);
+        stream << indent << indent;
+        stream << "<stop stop-color=\"";
+        stream << color.name();
+        stream << "\" offset=\"" << QString().setNum(stop.first);
+        stream << "\" stop-opacity=\"" << static_cast<float>(color.alpha()) / 255.0f << "\"" << " />" << endl;
+    }
+    stream << indent;
+    stream << "</linearGradient>" << endl;
+    stream << "</svg>" << endl;
+
+    return true;
+}
+
+QByteArray KoStopGradient::generateMD5() const
+{
+    QByteArray ba;
+    QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
+    saveToDevice(&buf);
+    buf.close();
+
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
+
+    return ba;
 }

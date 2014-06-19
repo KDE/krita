@@ -25,47 +25,46 @@ class KisColorOptionsWidget: public QWidget, public Ui::WdgColorOptions
 {
 public:
     KisColorOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+        : QWidget(parent) {
         setupUi(this);
-        
-        hueSlider->setRange(-180,180);
+
+        hueSlider->setRange(-180, 180);
         hueSlider->setValue(0);
-        
-        saturationSlider->setRange(-100,100);
+
+        saturationSlider->setRange(-100, 100);
         saturationSlider->setValue(0);
 
-        valueSlider->setRange(-100,100);
+        valueSlider->setRange(-100, 100);
         valueSlider->setValue(0);
 
     }
 };
 
 KisColorOption::KisColorOption()
-        : KisPaintOpOption(i18n("Color options"), KisPaintOpOption::colorCategory(), false)
+    : KisPaintOpOption(i18n("Color options"), KisPaintOpOption::colorCategory(), false)
 {
     m_checkable = false;
     m_options = new KisColorOptionsWidget();
 
     // ui
-    connect(m_options->randomHSVCHBox,SIGNAL(toggled(bool)),m_options->hsvWidget,SLOT(setEnabled(bool)));    
+    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), m_options->hsvWidget, SLOT(setEnabled(bool)));
     // settings
-    connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->hueSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
-    connect(m_options->saturationSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
-    connect(m_options->valueSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
-    connect(m_options->sampleInputCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->colorPerParticleCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->fillBackgroundCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->mixBgColorCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    
+    connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->hueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->saturationSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->valueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->sampleInputCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->colorPerParticleCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->fillBackgroundCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->mixBgColorCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 
 KisColorOption::~KisColorOption()
 {
-    // delete m_options; 
+    // delete m_options;
 }
 
 void KisColorOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
@@ -73,14 +72,14 @@ void KisColorOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     setting->setProperty(COLOROP_HUE, hue());
     setting->setProperty(COLOROP_SATURATION, saturation());
     setting->setProperty(COLOROP_VALUE, value());
-    
-    setting->setProperty(COLOROP_USE_RANDOM_HSV,useRandomHSV());
-    setting->setProperty(COLOROP_USE_RANDOM_OPACITY,useRandomOpacity());
-    setting->setProperty(COLOROP_SAMPLE_COLOR,sampleInputColor());
-    
-    setting->setProperty(COLOROP_FILL_BG,fillBackground());
+
+    setting->setProperty(COLOROP_USE_RANDOM_HSV, useRandomHSV());
+    setting->setProperty(COLOROP_USE_RANDOM_OPACITY, useRandomOpacity());
+    setting->setProperty(COLOROP_SAMPLE_COLOR, sampleInputColor());
+
+    setting->setProperty(COLOROP_FILL_BG, fillBackground());
     setting->setProperty(COLOROP_COLOR_PER_PARTICLE, colorPerParticle());
-    setting->setProperty(COLOROP_MIX_BG_COLOR,mixBgColor());
+    setting->setProperty(COLOROP_MIX_BG_COLOR, mixBgColor());
 }
 
 void KisColorOption::readOptionSetting(const KisPropertiesConfiguration* setting)

@@ -25,20 +25,26 @@
 
 
 KisModelIndexConverter::KisModelIndexConverter(KisDummiesFacadeBase *dummiesFacade,
-                                               KisNodeModel *model)
+                                               KisNodeModel *model,
+                                               bool showGlobalSelection)
     : m_dummiesFacade(dummiesFacade),
-      m_model(model)
+      m_model(model),
+      m_showGlobalSelection(showGlobalSelection)
 {
 }
 
 inline bool KisModelIndexConverter::checkDummyType(KisNodeDummy *dummy)
 {
+    if (m_showGlobalSelection) return true;
+
     KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(dummy->node().data());
     return !mask;
 }
 
 inline bool KisModelIndexConverter::checkDummyMetaObjectType(const QString &type)
 {
+    if (m_showGlobalSelection) return true;
+
     QString blacklistedType = KisSelectionMask::staticMetaObject.className();
     return type != blacklistedType;
 }

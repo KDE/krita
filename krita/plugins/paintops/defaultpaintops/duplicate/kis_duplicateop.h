@@ -45,7 +45,7 @@ class KisDuplicateOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter * painter);
+    KisDuplicateOp(KisImageWSP image, const KisDuplicateOpSettings *m_settings, KisPainter * painter);
     ~KisDuplicateOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
@@ -56,7 +56,8 @@ private:
 
 private:
 
-    const KisDuplicateOpSettings * settings;
+    KisImageWSP m_image;
+    const KisDuplicateOpSettings * m_settings;
     KisPaintDeviceSP m_srcdev;
     KisPaintDeviceSP m_target;
     QPointF m_duplicateStart;
@@ -65,6 +66,7 @@ private:
     bool m_healing;
     bool m_perspectiveCorrection;
     bool m_moveSourcePoint;
+    bool m_cloneFromProjection;
 };
 
 #endif // KIS_DUPLICATEOP_H_

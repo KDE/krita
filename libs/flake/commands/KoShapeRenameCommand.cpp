@@ -38,10 +38,9 @@ public:
 };
 
 KoShapeRenameCommand::KoShapeRenameCommand(KoShape *shape, const QString &newName, KUndo2Command *parent)
-: KUndo2Command(parent)
+    : KUndo2Command(kundo2_i18n("Rename Shape"), parent)
 , d(new Private(shape, newName))
 {
-    setText(i18n("Rename Shape"));
 }
 
 KoShapeRenameCommand::~KoShapeRenameCommand()

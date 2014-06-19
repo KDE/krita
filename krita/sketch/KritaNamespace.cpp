@@ -23,6 +23,7 @@
 #include "VirtualKeyboardController.h"
 #include "DocumentManager.h"
 #include "ProgressProxy.h"
+#include <QDir>
 
 class KritaNamespace::Private
 {
@@ -42,7 +43,7 @@ KritaNamespace::KritaNamespace(QObject* parent)
 
 KritaNamespace::~KritaNamespace()
 {
-
+    delete d;
 }
 
 QObject* KritaNamespace::imageBuilder() const
@@ -74,4 +75,9 @@ QObject* KritaNamespace::virtualKeyboardController() const
 QObject* KritaNamespace::progressProxy() const
 {
     return DocumentManager::instance()->progressProxy();
+}
+
+bool KritaNamespace::fileExists(const QString& filename) const
+{
+    return QDir().exists(filename);
 }

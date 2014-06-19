@@ -55,10 +55,10 @@ void KoPAPageMoveCommand::init( const QList<KoPAPageBase *> &pages )
     }
 
     if ( pages.at(0)->pageType() == KoPageApp::Slide ) {
-        setText( i18ncp( "(qtundo-format)", "Move slide", "Move slides", pages.size() ) );
+        setText( kundo2_i18np( "Move slide", "Move slides", pages.size() ) );
     }
     else {
-        setText( i18ncp( "(qtundo-format)", "Move page", "Move pages", pages.size() ) );
+        setText( kundo2_i18np( "Move page", "Move pages", pages.size() ) );
     }
 }
 

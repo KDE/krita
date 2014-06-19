@@ -32,7 +32,7 @@
      <item>
       <widget class="QPushButton" name="bnZoomAdjust">
        <property name="text">
-        <string>Adjust</string>
+        <string comment="Zoom mode to fit by only one dimension - width or height">Adjust</string>
        </property>
        <property name="checkable">
         <bool>false</bool>

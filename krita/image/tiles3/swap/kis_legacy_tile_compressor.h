@@ -29,12 +29,12 @@ public:
     virtual ~KisLegacyTileCompressor();
 
     void writeTile(KisTileSP tile, KisPaintDeviceWriter &store);
-    void readTile(QIODevice *stream, KisTiledDataManager *dm);
+    bool readTile(QIODevice *stream, KisTiledDataManager *dm);
 
 
     void compressTileData(KisTileData *tileData,quint8 *buffer,
                           qint32 bufferSize, qint32 &bytesWritten);
-    void decompressTileData(quint8 *buffer, qint32 bufferSize, KisTileData *tileData);
+    bool decompressTileData(quint8 *buffer, qint32 bufferSize, KisTileData *tileData);
     qint32 tileDataBufferSize(KisTileData *tileData);
 
 private:

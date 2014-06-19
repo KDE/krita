@@ -83,7 +83,7 @@ void LegendCommand::setLegendTitle(const QString &title)
 {
     m_newTitle = title;
 
-    setText(i18nc("(qtundo-format)", "Legend Title"));
+    setText(kundo2_i18n("Set Legend Title"));
 }
 
 void LegendCommand::setLegendFont(const QFont &font)
@@ -91,21 +91,21 @@ void LegendCommand::setLegendFont(const QFont &font)
     m_newFont = font;
     m_newFontSize = font.pointSize();
 
-    setText(i18nc("(qtundo-format)", "Legend Font"));
+    setText(kundo2_i18n("Set Legend Font"));
 }
 
 void LegendCommand::setLegendFontSize(int size)
 {
     m_newFontSize = size;
 
-    setText(i18nc("(qtundo-format)", "Legend Font size"));
+    setText(kundo2_i18n("Set Legend Font size"));
 }
 
 void LegendCommand::setLegendExpansion(LegendExpansion expansion)
 {
     m_newExpansion = expansion;
 
-    setText(i18nc("(qtundo-format)", "Legend Orientation"));
+    setText(kundo2_i18n("Set Legend Orientation"));
 }
 
 void LegendCommand::setLegendShowFrame(bool show)
@@ -113,8 +113,8 @@ void LegendCommand::setLegendShowFrame(bool show)
     m_newShowFrame = show;
 
     if (show) {
-        setText(i18nc("(qtundo-format)", "Show Legend Frame"));
+        setText(kundo2_i18n("Show Legend Frame"));
     } else {
-        setText(i18nc("(qtundo-format)", "Hide Legend Frame"));
+        setText(kundo2_i18n("Hide Legend Frame"));
     }
 }

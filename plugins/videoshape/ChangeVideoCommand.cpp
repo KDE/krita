@@ -31,7 +31,7 @@ ChangeVideoCommand::ChangeVideoCommand(VideoShape *videoShape, VideoData *newVid
       m_newVideoData(newVideoData),
       m_shape(videoShape)
 {
-    setText(i18nc("(qtundo-format)", "Change video"));
+    setText(kundo2_i18n("Change video"));
 
     m_oldVideoData = m_shape->videoData() ? new VideoData(*(m_shape->videoData())) : 0;
 }

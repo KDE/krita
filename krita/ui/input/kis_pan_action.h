@@ -33,7 +33,7 @@ public:
      * The different behaviours for this action.
      */
     enum Shortcut {
-        PanToggleShortcut, ///< Toggle the pan mode.
+        PanModeShortcut, ///< Toggle the pan mode.
         PanLeftShortcut, ///< Pan left by a fixed amount.
         PanRightShortcut, ///< Pan right by a fixed amount.
         PanUpShortcut, ///< Pan up by a fixed amount.
@@ -52,6 +52,8 @@ public:
 
     virtual void inputEvent(QEvent* event);
     void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+
+    virtual bool isShortcutRequired(int shortcut) const;
 
 private:
     class Private;

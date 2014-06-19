@@ -21,9 +21,9 @@
 
 #include <klocale.h>
 
-QString KisPaintOpOption::brushCategory()
+QString KisPaintOpOption::generalCategory()
 {
-    return i18n("Brush");
+    return i18n("General");
 }
 
 QString KisPaintOpOption::colorCategory()
@@ -92,7 +92,7 @@ void KisPaintOpOption::setConfigurationPage(QWidget * page)
     m_d->configurationPage = page;
 }
 
-QWidget * KisPaintOpOption::configurationPage() const
+QWidget* KisPaintOpOption::configurationPage() const
 {
     return m_d->configurationPage;
 }

@@ -41,6 +41,7 @@ class KisToolBrush : public KisToolFreehand
     Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetTailAgressiveness NOTIFY smoothnessFactorChanged)
     Q_PROPERTY(bool smoothPressure READ smoothPressure WRITE setSmoothPressure NOTIFY smoothPressureChanged)
     Q_PROPERTY(int smoothingType READ smoothingType WRITE slotSetSmoothingType NOTIFY smoothingTypeChanged)
+    Q_PROPERTY(bool useScalableDistance READ useScalableDistance WRITE setUseScalableDistance NOTIFY useScalableDistanceChanged)
 
 public:
     KisToolBrush(KoCanvasBase * canvas);
@@ -52,6 +53,10 @@ public:
     qreal smoothnessFactor() const;
     bool smoothPressure() const;
     int smoothingType() const;
+    bool useScalableDistance() const;
+
+protected slots:
+    virtual void resetCursorStyle();
 
 public slots:
     void slotSetSmoothnessDistance(qreal distance);
@@ -59,12 +64,14 @@ public slots:
     void slotSetSmoothingType(int index);
     void slotSetTailAgressiveness(qreal argh_rhhrr);
     void setSmoothPressure(bool value);
+    void setUseScalableDistance(bool value);
 
 Q_SIGNALS:
     void smoothnessQualityChanged();
     void smoothnessFactorChanged();
     void smoothPressureChanged();
     void smoothingTypeChanged();
+    void useScalableDistanceChanged();
 
 private:
     QGridLayout *m_optionLayout;
@@ -75,6 +82,7 @@ private:
     KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
     QCheckBox *m_chkSmoothPressure;
+    QCheckBox *m_chkUseScalableDistance;
 };
 
 
@@ -85,7 +93,7 @@ public:
     KisToolBrushFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolBrush") {
 
-        setToolTip(i18n("Paint with brushes"));
+        setToolTip(i18n("Freehand Brush Tool"));
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);

@@ -69,7 +69,7 @@ KoReportItemField::KoReportItemField(QDomNode & element)
                 m_lineStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing field element encountered unknow element: " << n;
+            kWarning() << "while parsing field element encountered unknow element: " << n;
         }
     }
 }
@@ -186,8 +186,7 @@ void KoReportItemField::setItemDataSource(const QString& t)
     if (m_controlSource->value() != t) {
         m_controlSource->setValue(t);
     }
-
-    kDebug() << "Field: " << entityName() << "is" << itemDataSource();
+    //kDebug() << "Field: " << entityName() << "is" << itemDataSource();
 }
 
 KRLineStyleData KoReportItemField::lineStyle()

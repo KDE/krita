@@ -24,6 +24,7 @@ kis_color_selector_triangle.cpp
 kis_color_selector_simple.cpp
 kis_color_selector_wheel.cpp
 kis_color_selector_combo_box.cpp
+kis_color_selector_base_proxy.cpp
 )
 
 kde4_add_ui_files(KRITA_COLORSELECTORNG_PART_SRCS

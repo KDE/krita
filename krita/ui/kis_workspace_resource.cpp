@@ -22,6 +22,8 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QTextStream>
+#include <QCryptographicHash>
+
 
 #define WORKSPACE_VERSION 1
 
@@ -40,7 +42,13 @@ bool KisWorkspaceResource::save()
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
- 
+    bool res = saveToDevice(&file);
+    file.close();
+    return res;
+}
+
+bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
+{
     QDomDocument doc;
     QDomElement root = doc.createElement("Workspace");
     root.setAttribute("name", name() );
@@ -54,12 +62,12 @@ bool KisWorkspaceResource::save()
     KisPropertiesConfiguration::toXML(doc, settings);
     root.appendChild(settings);
     doc.appendChild(root);
-     
-    QTextStream textStream(&file);
+
+    QTextStream textStream(dev);
     doc.save(textStream, 4);
-    file.close();
 
     return true;
+
 }
 
 bool KisWorkspaceResource::load()
@@ -69,28 +77,34 @@ bool KisWorkspaceResource::load()
  
     QFile file(filename());
     if (file.size() == 0) return false;
-
-    QDomDocument doc;
-    if (!file.open(QIODevice::ReadOnly))
-        return false;
-    if (!doc.setContent(&file)) {
-        file.close();
+    if (!file.open(QIODevice::ReadOnly)) {
+        warnKrita << "Can't open file " << filename();
         return false;
     }
+
+    bool res = loadFromDevice(&file);
     file.close();
+    return res;
+}
+
+bool KisWorkspaceResource::loadFromDevice(QIODevice *dev)
+{
+    QDomDocument doc;
+    if (!doc.setContent(dev)) {
+        return false;
+    }
 
     QDomElement element = doc.documentElement();
     setName(element.attribute("name"));
-     
-        
+
     QDomElement state = element.firstChildElement("state");
-    
-    if(!state.isNull()) {
+
+    if (!state.isNull()) {
         m_dockerState = QByteArray::fromBase64(state.text().toLatin1());
     }
 
     QDomElement settings = element.firstChildElement("settings");
-    if(!settings.isNull()) {
+    if (!settings.isNull()) {
         KisPropertiesConfiguration::fromXML(settings);
     }
 
@@ -110,5 +124,16 @@ void KisWorkspaceResource::setDockerState(const QByteArray& state)
 
 QByteArray KisWorkspaceResource::dockerState()
 {
+    return m_dockerState;
+}
+
+QByteArray KisWorkspaceResource::generateMD5() const
+{
+    if (!m_dockerState.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(m_dockerState);
+        return md5.result();
+    }
+
     return m_dockerState;
 }

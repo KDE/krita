@@ -40,14 +40,12 @@ public:
 public:
 
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
-
-    virtual QImage image() const;
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     qint32 width() const;
     qint32 height() const;
-
-    void setImage(const QImage& image);
 
     QString defaultFileExtension() const;
 
@@ -55,13 +53,23 @@ public:
 
     KoPattern* clone() const;
 
-    QByteArray md5() const;
+    /**
+     * @brief pattern the actual pattern image
+     * @return a valid QImage. There are no guarantees to the image format.
+     */
+    QImage pattern() const;
+
+protected:
+
+    virtual QByteArray generateMD5() const;
 
 private:
+
     bool init(QByteArray& data);
+    void setPatternImage(const QImage& image);
 
 private:
-    QImage m_image;
+    QImage m_pattern;
     mutable QByteArray m_md5;
 };
 

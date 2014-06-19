@@ -234,7 +234,7 @@
         </layout>
        </item>
        <item>
-        <widget class="KisImageView" name="imgView">
+        <widget class="ImageView" name="imgView">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -254,9 +254,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisImageView</class>
+   <class>ImageView</class>
    <extends>QFrame</extends>
-   <header>kis_image_view.h</header>
+   <header>image_view.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -26,6 +26,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <KoIcon.h>
+#include <kundo2magicstring.h>
 #include <kis_image.h>
 #include <kis_types.h>
 #include <kis_view2.h>
@@ -133,14 +134,14 @@ void RotateImage::slotMirrorImageVertical()
 {
     KisImageWSP image = m_view->image();
     if (!image) return;
-    m_view->nodeManager()->mirrorNode(image->rootLayer(), i18n("Mirror Image Vertically"), Qt::Vertical);
+    m_view->nodeManager()->mirrorNode(image->rootLayer(), kundo2_i18n("Mirror Image Vertically"), Qt::Vertical);
 }
 
 void RotateImage::slotMirrorImageHorizontal()
 {
     KisImageWSP image = m_view->image();
     if (!image) return;
-    m_view->nodeManager()->mirrorNode(image->rootLayer(), i18n("Mirror Image Horizontally"), Qt::Horizontal);
+    m_view->nodeManager()->mirrorNode(image->rootLayer(), kundo2_i18n("Mirror Image Horizontally"), Qt::Horizontal);
 }
 
 void RotateImage::slotRotateLayer()

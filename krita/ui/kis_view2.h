@@ -27,6 +27,7 @@
 #include <KoToolManager.h>
 #include <krita_export.h>
 #include <kis_types.h>
+#include "kis_floating_message.h"
 
 class KisAction;
 class QDragEnterEvent;
@@ -45,14 +46,13 @@ class KisGridManager;
 class KisImage;
 class KisImageManager;
 class KisNodeManager;
-class KisPaintingAssistantsManager;
+class KisPaintingAssistantsDecoration;
 class KisPaintopBox;
 class KisPerspectiveGridManager;
 class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KoFavoriteResourceManager;
 class KisPaintopBox;
 class KisCanvasController;
 class KisFlipbook;
@@ -176,14 +176,17 @@ public:
 
     KisGridManager * gridManager();
     KisPerspectiveGridManager* perspectiveGridManager();
-    KisPaintingAssistantsManager* paintingAssistantManager();
+    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
 
     /// disable and enable toolbar controls. used for disabling them during painting.
     void enableControls();
     void disableControls();
 
+
     /// shows a floating message in the top right corner of the canvas
-    void showFloatingMessage(const QString message, const QIcon& icon);
+    void showFloatingMessage(const QString message, const QIcon& icon, int timeout = 4500,
+                             KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
+                             int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
     /// The QMainWindow associated with this view. This is most likely going to be shell(), but
     /// when running as Gemini or Sketch, this will be set to the applications' own QMainWindow.
@@ -196,10 +199,14 @@ public:
 public slots:
 
     void slotLoadingFinished();
+    void slotSavingFinished();
+    void showJustTheCanvas(bool toggled);
+    void setShowFloatingMessage(bool show);
 
 signals:
 
     void sigLoadingFinished();
+    void sigSavingFinished();
     void floatingMessageRequested(QString message, QString iconName);
 
 private slots:
@@ -209,15 +216,15 @@ private slots:
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void slotImageResolutionChanged();
     void slotNodeChanged();
-    void slotTotalRefresh();
     void slotCreateTemplate();
     void slotDocumentSaved();
     void slotSaveIncremental();
     void slotSaveIncrementalBackup();
     void showStatusBar(bool toggled);
-    void showJustTheCanvas(bool toggled);
+    void showHideScrollbars();
     void toggleTabletLogger();
     void openResourcesDirectory();
+    void updateIcons();
 
 private:
     void createActions();

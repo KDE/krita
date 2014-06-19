@@ -51,8 +51,6 @@ void KoSimpleOdsSheet::saveSheet(KoXmlWriter *writer)
     for (long r = 0; r < m_model.rowCount(); ++r) {
         writer->startElement("table:table-row");
         for (long c = 0; c < m_model.columnCount(); ++c) {
-            kDebug() << ".";
-            
             KoSimpleOdsCell *cell = dynamic_cast<KoSimpleOdsCell*>(m_model.item(r,c));
             if (cell) {
                 cell->writeCellData(writer);

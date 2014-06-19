@@ -19,14 +19,14 @@
 import QtQuick 1.1
 import org.krita.sketch 1.0
 import org.krita.draganddrop 1.0 as DnD
-import "../components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base;
 
     property bool roundTop: false;
-    property color panelColor: Constants.Theme.MainColor;
-    property color textColor: "white";
+
+    property string colorSet: "base";
     property string name;
 
     property alias actions: actionsLayout.children;
@@ -51,6 +51,7 @@ Item {
 
         width: parent.width;
         height: parent.height;
+        z: 2;
 
         Rectangle {
             id: rectangle3
@@ -81,13 +82,14 @@ Item {
                     topMargin: Constants.DefaultMargin;
                     bottomMargin: Constants.DefaultMargin;
                 }
-                color: base.panelColor;
-                Rectangle {
-                    id: rectangle4
-                    anchors.fill: parent;
-                    color: "#ffffff"
-                    opacity: 0.630
-                }
+                color: Settings.theme.color("panels/" + base.colorSet + "/base");
+//                 Rectangle {
+//                     id: rectangle4
+//                     anchors.fill: parent;
+//                     color: "#ffffff"
+//                     opacity: 0.630
+//                     color: Settings.theme.color(base.colorSet + "/subheader")
+//                 }
             }
 
             Item {
@@ -118,7 +120,7 @@ Item {
                 Rectangle {
                     id: rectangle1
                     anchors.fill: parent;
-                    color: base.panelColor;
+                    color: Settings.theme.color("panels/" + base.colorSet + "/header");
                     radius: Constants.DefaultMargin;
                 }
 
@@ -128,7 +130,7 @@ Item {
                     anchors.left: parent.left;
                     anchors.right: parent.right;
                     height: Constants.DefaultMargin;
-                    color: base.panelColor;
+                    color: Settings.theme.color("panels/" + base.colorSet + "/header");
                 }
 
                 DnD.DragArea {
@@ -164,13 +166,7 @@ Item {
                 }
             }
 
-            Image {
-                anchors.top: header.bottom;
-                anchors.left: header.left;
-                anchors.right: header.right;
-
-                source: "../images/shadow-smooth.png";
-            }
+            Shadow { anchors { top: header.bottom; left: header.left; right: header.right; } }
 
             Item {
                 id: footer;
@@ -182,7 +178,7 @@ Item {
 
                 Rectangle {
                     id: rectanglefoot
-                    color: base.panelColor;
+                    color: Settings.theme.color("panels/" + base.colorSet + "/header");
                     width: parent.width;
                     height: parent.height + Constants.DefaultMargin;
                     y: -Constants.DefaultMargin;
@@ -200,7 +196,8 @@ Item {
                         anchors.baselineOffset: -16;
 
                         text: base.name;
-                        color: base.textColor;
+                        color: Settings.theme.color("panels/" + base.colorSet + "/headerText");
+                        font: Settings.theme.font("panelHeader");
                     }
                 }
 
@@ -226,31 +223,18 @@ Item {
                 }
             }
 
-            Image {
-                anchors.bottom: footer.top;
-                anchors.left: footer.left;
-                anchors.right: footer.right;
-
-                rotation: 180;
-
-                source: "../images/shadow-smooth.png";
-            }
+            Shadow { anchors { bottom: footer.top; left: footer.left; right: footer.right; } rotation: 180; }
         }
     }
 
     Item {
         id: handle;
 
-        anchors.top: fill.bottom;
-        anchors.topMargin: Constants.GridHeight / 4;
-        anchors.left: fill.left;
-        anchors.leftMargin: Constants.GridWidth / 2;
-
         Behavior on y { id: yHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
         Behavior on x { id: xHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
 
-        width: 0;
-        height: 0;
+        width: Constants.GridWidth;
+        height: Constants.GridHeight / 2;
         opacity: 0;
 
         property bool dragging: false;
@@ -260,18 +244,15 @@ Item {
                 xHandleAnim.enabled = false;
                 yHandleAnim.enabled = false;
                 handle.parent = base;
-                handle.anchors.top = fill.bottom;
-                handle.anchors.left = fill.left;
+                handle.x = 0;
+                handle.y = 0;
             }
         }
 
         function dragStarted() {
             base.dragStarted();
-
-            handle.anchors.top = undefined;
-            handle.anchors.left = undefined;
             handle.parent = base.page;
-            Krita.MouseTracker.addItem(handle);
+            Krita.MouseTracker.addItem(handle, Qt.point(-handle.width / 2, -handle.height / 2));
             handle.dragging = true;
         }
 
@@ -285,36 +266,30 @@ Item {
             dragging = false;
 
             var handlePos = base.mapToItem(base.page, 0, 0);
-            handle.x = handlePos.x + Constants.GridWidth / 2;
-            handle.y = handlePos.y + Constants.GridHeight / 4;
+            handle.x = handlePos.x;
+            handle.y = handlePos.y;
         }
 
         Rectangle {
             visible: (base.state === "collapsed") ? !base.roundTop : true;
             anchors {
-                bottom: parent.top;
-                left: handleBackground.left;//parent.horizontalCenter;
-                //leftMargin: -handle.anchors.leftMargin;
+                top: parent.top;
+                left: handleBackground.left;
+                right: handleBackground.right;
             }
-            color: base.panelColor;
+            color: Settings.theme.color("panels/" + base.colorSet + "/header");
             radius: 0
 
-            width: handleBackground.width //handle.anchors.leftMargin * 2;
-            height: handle.anchors.topMargin + 1
+            height: (base.state === "peek") ? Constants.GridHeight / 2 : Constants.GridHeight / 4 + 1
         }
 
         Rectangle {
             id: handleBackground
-            anchors {
-                top: parent.top;
-                topMargin: -handle.anchors.topMargin;
-                left: parent.horizontalCenter;
-                leftMargin: -handle.anchors.leftMargin;
-            }
 
-            width: handle.anchors.leftMargin * 2
-            height: handle.anchors.topMargin * 2
-            color: base.panelColor
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+
+            color: Settings.theme.color("panels/" + base.colorSet + "/header");
             radius: 8
 
             Label {
@@ -323,20 +298,15 @@ Item {
                 anchors.centerIn: parent;
 
                 text: base.name;
-                color: base.textColor;
-
-                font.pixelSize: Constants.DefaultFontSize;
+                color: Settings.theme.color("panels/" + base.colorSet + "/headerText");
+                font: Settings.theme.font("panelHandle");
             }
         }
 
         DnD.DragArea {
             id: handleDragArea;
-            anchors.horizontalCenter: parent.horizontalCenter;
-            anchors.top: parent.top;
-            anchors.topMargin: -Constants.GridHeight * 0.25;
 
-            width: Constants.GridWidth - 8;
-            height: Constants.GridHeight * 0.75;
+            anchors.fill: parent;
 
             source: base;
 
@@ -372,19 +342,21 @@ Item {
             name: "peek";
 
             PropertyChanges { target: base; width: Constants.IsLandscape ? Constants.GridWidth * 4 : Constants.GridWidth * 2; }
-            PropertyChanges { target: fill; height: Constants.GridHeight * 3.75; }
-            PropertyChanges { target: handle; opacity: 1; anchors.leftMargin: Constants.GridWidth / 2 - 4; }
+            PropertyChanges { target: fill; height: Constants.GridHeight * 3.75; y: handle.height; }
+            PropertyChanges { target: handle; opacity: 1; }
             PropertyChanges { target: peek; opacity: 1; }
             PropertyChanges { target: full; opacity: 0; }
             AnchorChanges { target: header; anchors.bottom: rectangle3.bottom }
             PropertyChanges { target: footer; opacity: 0; }
             PropertyChanges { target: background; anchors.topMargin: 0; }
-            PropertyChanges { target: headerCornerFill; height: Constants.GridHeight; }
+            PropertyChanges { target: headerCornerFill; height: Constants.DefaultMargin; }
+            AnchorChanges { target: headerCornerFill; anchors.bottom: undefined; anchors.top: header.top; }
         },
         State {
             name: "full";
             PropertyChanges { target: peek; opacity: 0; }
             PropertyChanges { target: full; opacity: 1; }
+            PropertyChanges { target: handle; height: 0; }
         },
         State {
             name: "edit";
@@ -404,7 +376,8 @@ Item {
                 AnchorAnimation { targets: [ header ] ; duration: 0; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
                 PropertyAction { targets: [ base ]; properties: "width"; }
-                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: 150; }
+                PropertyAction { targets: [ fill ]; properties: "y"; }
+                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: Constants.AnimationDuration; }
             }
         },
         Transition {
@@ -412,8 +385,9 @@ Item {
             to: "collapsed";
 
             SequentialAnimation {
-                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: 150; }
+                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: Constants.AnimationDuration; }
                 AnchorAnimation { targets: [ header ] ; duration: 0; }
+                PropertyAction { targets: [ fill ]; properties: "y"; }
                 PropertyAction { targets: [ base ]; properties: "width"; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
                 ScriptAction { script: base.collapsed(); }
@@ -446,7 +420,7 @@ Item {
             to: "edit"
             reversible: true;
 
-            NumberAnimation { properties: "width"; duration: 250; }
+            NumberAnimation { properties: "width"; duration: Constants.AnimationDuration; }
         }
     ]
 }

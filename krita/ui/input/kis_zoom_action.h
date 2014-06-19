@@ -33,8 +33,8 @@ public:
      * The different behaviours for this action.
      */
     enum Shortcuts {
-        ZoomToggleShortcut, ///< Toggle zoom mode.
-        DiscreteZoomToggleShortcut, ///< Toggle discrete zoom mode
+        ZoomModeShortcut, ///< Toggle zoom mode.
+        DiscreteZoomModeShortcut, ///< Toggle discrete zoom mode
         ZoomInShortcut, ///< Zoom in by a fixed amount.
         ZoomOutShortcut, ///< Zoom out by a fixed amount.
         ZoomResetShortcut, ///< Reset zoom to 100%.
@@ -52,6 +52,8 @@ public:
     void begin(int shortcut, QEvent *event = 0);
     void inputEvent(QEvent* event);
     void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+
+    virtual bool isShortcutRequired(int shortcut) const;
 
 private:
     class Private;

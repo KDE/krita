@@ -38,7 +38,6 @@ class QString;
 class QHBoxLayout;
 
 class KoColorSpace;
-class KoResourceSelector;
 class KoResource;
 class KoCanvasController;
 
@@ -51,8 +50,7 @@ class KisPaintOpSettingsWidget;
 class KisPaintOpListWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
-
-
+class KisFavoriteResourceManager;
 /**
  * This widget presents all paintops that a user can paint with.
  * Paintops represent real-world tools or the well-known Shoup
@@ -86,8 +84,6 @@ public:
 
     KisPaintopBox(KisView2* view, QWidget* parent, const char* name);
     ~KisPaintopBox();
-
-private:
 
 public slots:
 
@@ -152,9 +148,8 @@ private:
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
+    KisFavoriteResourceManager*          m_favoriteResourceManager;
 
-//    KisPaintOpPresetSP  m_activePreset;
-//    KisPaintOpPresetSP  m_previousPreset;
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeSP           m_previousNode;
@@ -194,6 +189,8 @@ private:
     TabletToolID     m_currTabletToolID;
     bool             m_presetsEnabled;
     bool             m_blockUpdate;
+
+
 };
 
 #endif //KIS_PAINTOP_BOX_H_

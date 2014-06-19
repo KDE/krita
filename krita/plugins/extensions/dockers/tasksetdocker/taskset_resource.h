@@ -30,15 +30,19 @@ public:
     TasksetResource(const QString& filename);
     virtual ~TasksetResource();
     
-    virtual bool save();
     virtual bool load();
-    virtual QImage image() const;
+    virtual bool loadFromDevice(QIODevice *dev);
+    virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
+
     virtual QString defaultFileExtension() const;
     
     void setActionList(const QStringList actions);
     QStringList actionList();
-
+protected:
+    virtual QByteArray generateMD5() const;
 private:
+
     QStringList m_actions;
 };
 

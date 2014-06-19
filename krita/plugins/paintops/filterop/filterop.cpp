@@ -35,14 +35,14 @@ K_PLUGIN_FACTORY(FilterOpFactory, registerPlugin<FilterOp>();)
 K_EXPORT_PLUGIN(FilterOpFactory("krita"))
 
 FilterOp::FilterOp(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     QStringList whiteList;
     whiteList << COMPOSITE_COPY;
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisFilterOp, KisFilterOpSettings, KisFilterOpSettingsWidget>("filter", i18n("Filter Brush"), KisPaintOpFactory::categoryStable(), "krita-filterop.png", QString(), whiteList));
+    r->add(new KisSimplePaintOpFactory<KisFilterOp, KisFilterOpSettings, KisFilterOpSettingsWidget>("filter", i18n("Filter"), KisPaintOpFactory::categoryStable(), "krita-filterop.png", QString(), whiteList, 17));
 
 }
 

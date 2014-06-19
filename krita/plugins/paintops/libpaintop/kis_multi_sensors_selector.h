@@ -20,27 +20,38 @@
 
 class KisCubicCurve;
 class QModelIndex;
-class KisDynamicSensor;
+class KisCurveOption;
+
+#include <kis_dynamic_sensor.h>
 
 class KisMultiSensorsSelector : public QWidget
 {
     Q_OBJECT
 public:
+
     KisMultiSensorsSelector(QWidget* parent);
     ~KisMultiSensorsSelector();
-    void setCurrent(KisDynamicSensor* _sensor);
-    KisDynamicSensor* current();
-    KisDynamicSensor* currentHighlighted();
+
+    void setCurveOption(KisCurveOption *curveOption);
+    void setCurrent(KisDynamicSensorSP _sensor);
+    KisDynamicSensorSP currentHighlighted();
     void setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve);
+    void reload();
+
 private slots:
+
     void sensorActivated(const QModelIndex& index);
+
 signals:
-    void sensorChanged(KisDynamicSensor* sensor);
+
+    void sensorChanged(KisDynamicSensorSP sensor);
+
     /**
      * This signal is emitted when the parameters of sensor are changed.
      */
     void parametersChanged();
-    void highlightedSensorChanged(KisDynamicSensor* sensor);
+
+    void highlightedSensorChanged(KisDynamicSensorSP sensor);
 private:
     struct Private;
     Private* const d;

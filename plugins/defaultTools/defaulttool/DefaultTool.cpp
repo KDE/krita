@@ -986,7 +986,7 @@ void DefaultTool::selectionGroup()
     }
     KoShapeGroup *group = new KoShapeGroup();
     // TODO what if only one shape is left?
-    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Group shapes"));
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
     canvas()->shapeController()->addShapeDirect(group, cmd);
     KoShapeGroupCommand::createCommand(group, groupedShapes, cmd);
     canvas()->addCommand(cmd);
@@ -1018,7 +1018,7 @@ void DefaultTool::selectionUngroup()
     foreach(KoShape* shape, containerSet) {
         KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
         if (group) {
-            cmd = cmd ? cmd : new KUndo2Command(i18nc("(qtundo-format)", "Ungroup shapes"));
+            cmd = cmd ? cmd : new KUndo2Command(kundo2_i18n("Ungroup shapes"));
             new KoShapeUngroupCommand(group, group->shapes(),
                                       group->parent()? QList<KoShape*>(): canvas()->shapeManager()->topLevelShapes(),
                                       cmd);

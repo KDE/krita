@@ -35,10 +35,10 @@ K_EXPORT_PLUGIN(SprayPaintOpPluginFactory("krita"))
 
 
 SprayPaintOpPlugin::SprayPaintOpPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisSprayPaintOp, KisSprayPaintOpSettings, KisSprayPaintOpSettingsWidget>("spraybrush", i18n("Spray brush"), KisPaintOpFactory::categoryExperimental() , "krita-spray.png"));
+    r->add(new KisSimplePaintOpFactory<KisSprayPaintOp, KisSprayPaintOpSettings, KisSprayPaintOpSettingsWidget>("spraybrush", i18n("Spray"), KisPaintOpFactory::categoryStable() , "krita-spray.png", QString(), QStringList(), 6));
 
 }
 

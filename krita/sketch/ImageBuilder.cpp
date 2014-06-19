@@ -48,6 +48,12 @@ QString ImageBuilder::createBlankImage(int width, int height, int resolution)
     return QString("temp://%1x%2").arg(width).arg(height);
 }
 
+QString ImageBuilder::createBlankImage(const QVariantMap& options)
+{
+    DocumentManager::instance()->newDocument(options);
+    return QString("temp://custom");
+}
+
 QString ImageBuilder::createImageFromClipboard()
 {
     QSize sz = KisClipboard::instance()->clipSize();
@@ -92,4 +98,10 @@ QString ImageBuilder::createImageFromWebcam(int width, int height, int resolutio
 {
     Q_UNUSED(width); Q_UNUSED(height); Q_UNUSED(resolution);
     return QString();
+}
+
+QString ImageBuilder::createImageFromTemplate(const QVariantMap& options)
+{
+    DocumentManager::instance()->newDocument(options);
+    return QString("temp://%1").arg(options.value("template").toString());
 }

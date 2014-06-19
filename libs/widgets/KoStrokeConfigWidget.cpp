@@ -332,6 +332,20 @@ Qt::PenJoinStyle KoStrokeConfigWidget::joinStyle() const
     return static_cast<Qt::PenJoinStyle>(d->capNJoinMenu->joinGroup->checkedId());
 }
 
+KoShapeStroke* KoStrokeConfigWidget::createShapeStroke() const
+{
+    KoShapeStroke *stroke = new KoShapeStroke();
+
+    stroke->setColor(color());
+    stroke->setLineWidth(lineWidth());
+    stroke->setCapStyle(capStyle());
+    stroke->setJoinStyle(joinStyle());
+    stroke->setMiterLimit(miterLimit());
+    stroke->setLineStyle(lineStyle(), lineDashes());
+
+    return stroke;
+}
+
 // ----------------------------------------------------------------
 //                         Other public functions
 

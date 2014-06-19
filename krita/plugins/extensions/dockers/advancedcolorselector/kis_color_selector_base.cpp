@@ -37,13 +37,15 @@
 #include "kis_node.h"
 #include "kis_view2.h"
 #include "kis_image.h"
+#include "kis_display_color_converter.h"
+
 
 class KisColorPreviewPopup : public QWidget {
 public:
     KisColorPreviewPopup(KisColorSelectorBase* parent) : QWidget(), m_parent(parent)
     {
         setWindowFlags(Qt::ToolTip);
-        setColor(QColor(0,0,0));
+        setQColor(QColor(0,0,0));
         setMouseTracking(true);
     }
 
@@ -70,7 +72,7 @@ public:
         setGeometry(targetPos.x(), targetPos.y(), 100, 100);
     }
 
-    void setColor(const QColor& color)
+    void setQColor(const QColor& color)
     {
         m_color = color;
         update();
@@ -94,6 +96,7 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popup(0),
     m_parent(0),
     m_colorUpdateAllowed(true),
+    m_colorUpdateSelf(false),
     m_hideTimer(new QTimer(this)),
     m_popupOnMouseOver(false),
     m_popupOnMouseClick(true),
@@ -137,13 +140,18 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
     m_canvas = canvas;
     if (m_canvas) {
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            this, SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+                SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+
+        connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
+                SLOT(reset()));
+
+        setColor(Acs::currentColor(m_canvas->view()->resourceProvider(), Acs::Foreground));
     }
     if (m_popup) {
         m_popup->setCanvas(canvas);
     }
 
-    update();
+    reset();
 }
 
 void KisColorSelectorBase::unsetCanvas()
@@ -154,9 +162,16 @@ void KisColorSelectorBase::unsetCanvas()
     m_canvas = 0;
 }
 
+
+
 void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 {
     event->accept();
+
+
+//this boolean here is to check if the colour selector is updating the resource, so it won't update itself when the resource is updated//
+   if (m_colorUpdateSelf==false)
+   {m_colorUpdateSelf=true;}
 
     if(!m_isPopup && m_popupOnMouseClick &&
        event->button() == Qt::MidButton) {
@@ -187,16 +202,15 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
     } else if (m_isPopup && event->button() == Qt::MidButton) {
         hide();
     } else {
-        if(m_colorPreviewPopup->isHidden()) {
-            m_colorPreviewPopup->show();
-        }
+        showColorPreview();
         event->ignore();
     }
 }
 
 void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
-    Q_UNUSED(e);
-
+    
+   Q_UNUSED(e);
+   
     if (e->button() == Qt::MidButton) {
         e->accept();
     }
@@ -257,6 +271,7 @@ void KisColorSelectorBase::leaveEvent(QEvent *e)
     Q_UNUSED(e);
 
     if (m_colorPreviewPopup->isVisible()) {
+        m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside colour-change events.
         m_colorPreviewPopup->hide();
     }
 
@@ -271,62 +286,9 @@ void KisColorSelectorBase::leaveEvent(QEvent *e)
 
 void KisColorSelectorBase::keyPressEvent(QKeyEvent *)
 {
-    hidePopup();
-}
-
-qreal distance(const QColor& c1, const QColor& c2)
-{
-    qreal dr = c1.redF()-c2.redF();
-    qreal dg = c1.greenF()-c2.greenF();
-    qreal db = c1.blueF()-c2.blueF();
-
-    return sqrt(dr*dr+dg*dg+db*db);
-}
-
-inline bool inRange(qreal m) {
-    if(m>=0. && m<=1.) return true;
-    else return false;
-}
-
-inline bool modify(QColor* estimate, const QColor& target, const QColor& result)
-{
-    qreal r = estimate->redF() - (result.redF() - target.redF());
-    qreal g = estimate->greenF() - (result.greenF() - target.greenF());
-    qreal b = estimate->blueF() - (result.blueF() - target.blueF());
-
-    if(inRange(r) && inRange(g) && inRange(b)) {
-        estimate->setRgbF(r, g, b);
-        return true;
+    if (m_isPopup) {
+        hidePopup();
     }
-    else {
-        return false;
-    }
-}
-
-QColor KisColorSelectorBase::findGeneratingColor(const KoColor& ref) const
-{
-    KoColor converter(colorSpace());
-    QColor currentEstimate;
-    ref.toQColor(&currentEstimate);
-
-    QColor currentResult;
-    converter.fromQColor(currentEstimate);
-    converter.toQColor(&currentResult);
-
-    QColor target;
-    ref.toQColor(&target);
-
-    bool estimateValid=true;
-    int iterationCounter=0;
-
-    while(distance(target, currentResult)>0.001 && estimateValid && iterationCounter<100) {
-        estimateValid = modify(&currentEstimate, target, currentResult);
-        converter.fromQColor(currentEstimate);
-        converter.toQColor(&currentResult);
-        iterationCounter++;
-    }
-
-    return currentEstimate;
 }
 
 void KisColorSelectorBase::dragEnterEvent(QDragEnterEvent *e)
@@ -350,12 +312,19 @@ void KisColorSelectorBase::dropEvent(QDropEvent *e)
     }
 
     KoColor kocolor(color , KoColorSpaceRegistry::instance()->rgb8());
-    color = findGeneratingColor(kocolor);
-    setColor(color);
-    commitColor(kocolor, Foreground);
+    updateColor(kocolor, Acs::Foreground, true);
 }
 
-void KisColorSelectorBase::setColor(const QColor& color)
+void KisColorSelectorBase::updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset)
+{
+    commitColor(color, role);
+
+    if (needsExplicitColorReset) {
+        setColor(color);
+    }
+}
+
+void KisColorSelectorBase::setColor(const KoColor& color)
 {
     Q_UNUSED(color);
 }
@@ -366,7 +335,6 @@ void KisColorSelectorBase::setHidingTime(int time)
 
     m_hideTimer->setInterval(time);
 }
-
 
 void KisColorSelectorBase::lazyCreatePopup()
 {
@@ -409,14 +377,14 @@ void KisColorSelectorBase::hidePopup()
     hide();
 }
 
-void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
+void KisColorSelectorBase::commitColor(const KoColor& color, Acs::ColorRole role)
 {
     if (!m_canvas)
         return;
 
     m_colorUpdateAllowed=false;
 
-    if (role == Foreground)
+    if (role == Acs::Foreground)
         m_canvas->resourceManager()->setForegroundColor(color);
     else
         m_canvas->resourceManager()->setBackgroundColor(color);
@@ -424,46 +392,39 @@ void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
     m_colorUpdateAllowed=true;
 }
 
-void KisColorSelectorBase::updateColorPreview(const QColor& color)
+void KisColorSelectorBase::showColorPreview()
 {
-    m_colorPreviewPopup->setColor(color);
+    if(m_colorPreviewPopup->isHidden()) {
+        m_colorPreviewPopup->show();
+    }
+}
+
+void KisColorSelectorBase::updateColorPreview(const KoColor &color)
+{
+    m_colorPreviewPopup->setQColor(converter()->toQColor(color));
 }
 
 void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
 {
     if (key == KoCanvasResourceManager::ForegroundColor || key == KoCanvasResourceManager::BackgroundColor) {
-        QColor c = findGeneratingColor(v.value<KoColor>());
-        updateColorPreview(c);
-        if (m_colorUpdateAllowed) {
-            setColor(c);
+        KoColor realColor(v.value<KoColor>());
+        updateColorPreview(realColor);
+        if (m_colorUpdateAllowed && !m_colorUpdateSelf) {
+            setColor(realColor);
         }
     }
 }
 
 const KoColorSpace* KisColorSelectorBase::colorSpace() const
 {
-    if (m_colorSpace != 0) {
-        return m_colorSpace;
-    }
-    else if (m_canvas && m_canvas->resourceManager()) {
-        KisNodeSP currentNode = m_canvas->resourceManager()->
-                                resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-        if (currentNode) {
-            m_colorSpace = currentNode->paintDevice() ?
-                currentNode->paintDevice()->compositionSourceColorSpace() :
-                currentNode->colorSpace();
-        } else {
-            m_colorSpace=m_canvas->view()->image()->colorSpace();
-        }
-        return m_colorSpace;
-    }
-    return KoColorSpaceRegistry::instance()->rgb8(0);
+    return converter()->paintingColorSpace();
 }
 
 void KisColorSelectorBase::updateSettings()
 {
-    if(m_popup!=0)
+    if(m_popup) {
         m_popup->updateSettings();
+    }
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
@@ -471,18 +432,21 @@ void KisColorSelectorBase::updateSettings()
     bool onMouseClick = cfg.readEntry("popupOnMouseClick", true);
     setPopupBehaviour(onMouseOver, onMouseClick);
 
-    if(cfg.readEntry("useCustomColorSpace", true)) {
-        KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
-        m_colorSpace = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
-                                                         cfg.readEntry("customColorSpaceDepthID", "U8"),
-                                                         cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
-    }
-    else {
-        m_colorSpace=0;
-        // the colorspace will be retrieved next time by calling colorSpace()
-    }
     if(m_isPopup) {
         resize(cfg.readEntry("zoomSize", 280), cfg.readEntry("zoomSize", 280));
     }
+
+    reset();
 }
 
+void KisColorSelectorBase::reset()
+{
+    update();
+}
+
+KisDisplayColorConverter* KisColorSelectorBase::converter() const
+{
+    return m_canvas ?
+        m_canvas->displayColorConverter() :
+        KisDisplayColorConverter::dumbConverterInstance();
+}

@@ -103,9 +103,9 @@ void AxisCommand::setAxisShowTitle(bool show)
     m_newShowTitle = show;
 
     if (show) {
-        setText(i18nc("(qtundo-format)", "Show Axis Title"));
+        setText(kundo2_i18n("Show Axis Title"));
     } else {
-        setText(i18nc("(qtundo-format)", "Hide Axis Title"));
+        setText(kundo2_i18n("Hide Axis Title"));
     }
 }
 
@@ -113,7 +113,7 @@ void AxisCommand::setAxisTitle(const QString &title)
 {
     m_newTitleText = title;
 
-    setText(i18nc("(qtundo-format)", "Axis Title"));
+    setText(kundo2_i18n("Set Axis Title"));
 }
 
 void AxisCommand::setAxisShowGridLines(bool show)
@@ -121,9 +121,9 @@ void AxisCommand::setAxisShowGridLines(bool show)
     m_newShowGridLines = show;
 
     if (show) {
-        setText(i18nc("(qtundo-format)", "Show Axis Gridlines"));
+        setText(kundo2_i18n("Show Axis Gridlines"));
     } else {
-        setText(i18nc("(qtundo-format)", "Hide Axis Gridlines"));
+        setText(kundo2_i18n("Hide Axis Gridlines"));
     }
 }
 
@@ -132,9 +132,9 @@ void AxisCommand::setAxisUseLogarithmicScaling(bool b)
     m_newUseLogarithmicScaling = b;
 
     if (b) {
-        setText(i18nc("(qtundo-format)", "Logarithmic Scaling"));
+        setText(kundo2_i18n("Logarithmic Scaling"));
     } else {
-        setText(i18nc("(qtundo-format)", "Linear Scaling"));
+        setText(kundo2_i18n("Linear Scaling"));
     }
 }
 
@@ -142,14 +142,14 @@ void AxisCommand::setAxisStepWidth(qreal width)
 {
     m_newStepWidth = width;
 
-    setText(i18nc("(qtundo-format)", "Axis step width"));
+    setText(kundo2_i18n("Set Axis Step Width"));
 }
 
 void AxisCommand::setAxisSubStepWidth(qreal width)
 {
     m_newSubStepWidth = width;
 
-    setText(i18nc("(qtundo-format)", "Axis substep width"));
+    setText(kundo2_i18n("Set Axis Substep Width"));
 }
 
 void AxisCommand::setAxisUseAutomaticStepWidth(bool automatic)
@@ -157,9 +157,9 @@ void AxisCommand::setAxisUseAutomaticStepWidth(bool automatic)
     m_newShowGridLines = automatic;
 
     if (automatic) {
-        setText(i18nc("(qtundo-format)", "Automatic step width"));
+        setText(kundo2_i18n("Set Automatic Step Width"));
     } else {
-        setText(i18nc("(qtundo-format)", "Manual step width"));
+        setText(kundo2_i18n("Set Manual Step Width"));
     }
 }
 
@@ -168,9 +168,9 @@ void AxisCommand::setAxisUseAutomaticSubStepWidth(bool automatic)
     m_newShowGridLines = automatic;
 
     if (automatic) {
-        setText(i18nc("(qtundo-format)", "Automatic substep width"));
+        setText(kundo2_i18n("Automatic Substep Width"));
     } else {
-        setText(i18nc("(qtundo-format)", "Manual substep width"));
+        setText(kundo2_i18n("Manual Substep Width"));
     }
 }
 
@@ -178,5 +178,5 @@ void AxisCommand::setAxisLabelsFont(const QFont &font)
 {
     m_newLabelsFont = font;
 
-    setText(i18nc("(qtundo-format)", "Axis Label Font"));
+    setText(kundo2_i18n("Set Axis Label Font"));
 }

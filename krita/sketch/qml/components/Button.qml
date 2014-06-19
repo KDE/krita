@@ -24,25 +24,28 @@ Item {
 
     signal clicked();
 
-    property bool checkable: false;
-    property bool checked: false;
-
     property alias image: icon.source;
-    property alias color: fill.color;
+    property color color: Settings.theme.color("components/button/base");
     property alias border: fill.border;
     property alias radius: fill.radius;
     property alias text: label.text;
-    property alias textColor: label.color;
+    property color textColor: Settings.theme.color("components/button/text");
     property alias textSize: label.font.pixelSize;
     property alias bold: label.font.bold;
-    property bool shadow: true;
+    property bool shadow: false;
     property bool enabled: true; // XXX: visualize disabledness
     property alias asynchronous: icon.asynchronous;
 
     property bool highlight: false;
-    property color highlightColor: "transparent";
+    property color highlightColor: Settings.theme.color("components/button/highlight");
+
+    property bool checkable: false;
+    property bool checked: false;
+    property color checkedColor: Settings.theme.color("components/button/checked");
 
     property bool hasFocus: false;
+
+    property string tooltip: "";
 
     width: Constants.GridWidth;
     height: Constants.GridHeight;
@@ -51,7 +54,7 @@ Item {
         id: fill;
         anchors.fill: parent;
         anchors.margins: 0;
-        color: base.highlight && mouse.pressed && base.enabled ? base.highlightColor : "transparent";
+        color: base.highlight && mouse.pressed && base.enabled ? base.highlightColor : base.color;
         visible: true
 
         Rectangle {
@@ -70,11 +73,11 @@ Item {
 
         Rectangle {
             id: checkedVisualiser;
-            opacity: base.checked ? 0.7 : 0;
-            Behavior on opacity { NumberAnimation { duration: 150; } }
+            opacity: base.checked ? 1 : 0;
+            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
             anchors.fill: parent;
             anchors.margins: 2;
-            color: "white";
+            color: base.checkedColor;
             radius: base.height === base.width ? base.height / 2 - 1 : base.radius;
         }
 
@@ -85,7 +88,7 @@ Item {
             fillMode: Image.PreserveAspectFit;
             smooth: true;
             opacity: base.enabled ? 1 : 0.7;
-            Behavior on opacity { NumberAnimation { duration: 150; } }
+            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
 
             sourceSize.width: width > height ? height : width;
             sourceSize.height: width > height ? height : width;
@@ -99,6 +102,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter;
             elide: Text.ElideRight;
             opacity: base.enabled ? 1 : 0.7;
+            color: base.textColor;
         }
 //         Rectangle {
 //             id: enabledVisualiser;
@@ -122,14 +126,42 @@ Item {
     MouseArea {
         id: mouse;
         anchors.fill: parent;
+        hoverEnabled: true;
+        acceptedButtons: Qt.LeftButton | Qt.RightButton;
+        
         onClicked: {
-            if (base.enabled) {
+            if(mouse.button == Qt.LeftButton && base.enabled) {
                 base.clicked();
                 if ( base.checkable ) {
                     base.checked = !base.checked;
                 }
+            } else if(mouse.button == Qt.RightButton && base.tooltip != "") {
+                tooltip.show(base.width / 2, 0);
             }
         }
+        onEntered: {
+            hoverDelayTimer.start();
+        }
+        onPositionChanged: {
+            if(hoverDelayTimer.running) {
+                hoverDelayTimer.restart();
+            }
+        }
+        onExited: {
+            hoverDelayTimer.stop();
+            tooltip.hide();
+        }
+    }
+
+    Timer {
+        id: hoverDelayTimer;
+        interval: 1000;
+        onTriggered: { if(base.tooltip != "") tooltip.show(base.width / 2, 0) }
+    }
+
+    Tooltip {
+        id: tooltip;
+        text: base.tooltip;
     }
 
     states: State {

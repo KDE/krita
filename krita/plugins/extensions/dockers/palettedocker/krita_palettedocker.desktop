@@ -1,13 +1,20 @@
 [Desktop Entry]
 Name=Palette Docker
+Name[bs]=Doker za palete
 Name[ca]=Acoblador de paletes
 Name[ca@valencia]=Acoblador de paletes
 Name[cs]=Dok palet
+Name[da]=Palette-dokker
 Name[de]=Paletten-Docker
+Name[el]=Εργαλείο προσάρτησης μοτίβων
 Name[es]=Acoplable de paleta
+Name[et]=Paletidokk
+Name[fr]=Panneau de palette
 Name[hu]=Paletta dokkoló
 Name[it]=Area di aggancio della tavolozza
+Name[ja]=パレットのドッキングパネル
 Name[kk]=Палитра докері
+Name[ko]=팔레트 도킹 패널
 Name[nb]=Palettdokker
 Name[nl]=Vastzetter van palet
 Name[pl]=Dokowanie palety

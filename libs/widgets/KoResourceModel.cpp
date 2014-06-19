@@ -25,23 +25,29 @@
 #include <KoResourceServerAdapter.h>
 #include <math.h>
 
-KoResourceModel::KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent )
-    : QAbstractTableModel( parent ), m_resourceAdapter(resourceAdapter), m_columnCount(4)
+KoResourceModel::KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent)
+    : KoResourceModelBase(parent)
+    , m_resourceAdapter(resourceAdapter)
+    , m_columnCount(4)
 {
-    Q_ASSERT( m_resourceAdapter );
+    Q_ASSERT(m_resourceAdapter);
     m_resourceAdapter->connectToResourceServer();
-    connect(m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
+    connect(m_resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
             this, SLOT(resourceAdded(KoResource*)));
-    connect(m_resourceAdapter, SIGNAL(removingResource(KoResource*)),
+    connect(m_resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
             this, SLOT(resourceRemoved(KoResource*)));
-    connect(m_resourceAdapter, SIGNAL(resourceChanged(KoResource*)),
+    connect(m_resourceAdapter.data(), SIGNAL(resourceChanged(KoResource*)),
             this, SLOT(resourceChanged(KoResource*)));
-    connect(m_resourceAdapter, SIGNAL(tagsWereChanged()),
+    connect(m_resourceAdapter.data(), SIGNAL(tagsWereChanged()),
             this, SLOT(tagBoxEntryWasModified()));
-    connect(m_resourceAdapter, SIGNAL(tagCategoryWasAdded(QString)),
+    connect(m_resourceAdapter.data(), SIGNAL(tagCategoryWasAdded(QString)),
             this, SLOT(tagBoxEntryWasAdded(QString)));
-    connect(m_resourceAdapter, SIGNAL(tagCategoryWasRemoved(QString)),
+    connect(m_resourceAdapter.data(), SIGNAL(tagCategoryWasRemoved(QString)),
             this, SLOT(tagBoxEntryWasRemoved(QString)));
+}
+
+KoResourceModel::~KoResourceModel()
+{
 }
 
 int KoResourceModel::rowCount( const QModelIndex &/*parent*/ ) const
@@ -279,6 +285,11 @@ void KoResourceModel::tagCategoryAdded(const QString& tag)
 void KoResourceModel::tagCategoryRemoved(const QString& tag)
 {
     m_resourceAdapter->tagCategoryRemoved(tag);
+}
+
+QString KoResourceModel::serverType() const
+{
+    return m_resourceAdapter->serverType();
 }
 
 QList< KoResource* > KoResourceModel::serverResources() const

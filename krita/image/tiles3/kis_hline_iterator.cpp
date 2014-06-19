@@ -20,10 +20,12 @@
 
 
 KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable)
-    : KisBaseIterator(dataManager, writable)
+    : KisBaseIterator(dataManager, writable),
+      m_offsetX(offsetX),
+      m_offsetY(offsetY)
 {
-    x -= offsetX;
-    y -= offsetY;
+    x -= m_offsetX;
+    y -= m_offsetY;
     Q_ASSERT(dataManager != 0);
 
     Q_ASSERT(w > 0); // for us, to warn us when abusing the iterators
@@ -94,7 +96,7 @@ bool KisHLineIterator2::nextPixel()
     } else {
         ++m_x;
         m_data += m_pixelSize;
-        if (m_data < m_dataRight)
+        if (m_x <= m_rightmostInTile)
             m_oldData += m_pixelSize;
         else {
             // Switching to the beginning of the next tile
@@ -128,7 +130,7 @@ void KisHLineIterator2::nextRow()
 
 qint32 KisHLineIterator2::nConseqPixels() const
 {
-    return (m_dataRight - m_data) / m_pixelSize;
+    return qMin(m_rightmostInTile, m_right) - m_x + 1;
 }
 
 
@@ -192,7 +194,7 @@ void KisHLineIterator2::switchToTile(qint32 xInTile)
 
     int offset_row = m_pixelSize * (m_yInTile * KisTileData::WIDTH);
     m_data += offset_row;
-    m_dataRight = m_data + m_tileWidth;
+    m_rightmostInTile = (m_leftCol + m_index + 1) * KisTileData::WIDTH - 1;
     int offset_col = m_pixelSize * xInTile;
     m_data  += offset_col;
     m_oldData += offset_row + offset_col;
@@ -222,10 +224,10 @@ void KisHLineIterator2::preallocateTiles()
 
 qint32 KisHLineIterator2::x() const
 {
-    return m_x;
+    return m_x + m_offsetX;
 }
 
 qint32 KisHLineIterator2::y() const
 {
-    return m_y;
+    return m_y + m_offsetY;
 }

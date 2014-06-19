@@ -37,7 +37,6 @@
 
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
-#include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
@@ -139,7 +138,7 @@ void KisImageFromClipboard::createClipboardPreview()
         doubleHeight->setValue(clipboardImage->height());
     } else {
         createButton->setEnabled(false);
-        clipPreview->setScene(new QGraphicsScene());
+        clipPreview->setScene(new QGraphicsScene(this));
     }
     
     

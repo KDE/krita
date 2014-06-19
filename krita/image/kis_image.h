@@ -430,6 +430,17 @@ public:
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
 
+    /**
+     * Sets the default color of the root layer projection. All the layers
+     * will be merged on top of this very color
+     */
+    void setDefaultProjectionColor(KoColor color);
+
+    /**
+     * \see setDefaultProjectionColor()
+     */
+    KoColor defaultProjectionColor() const;
+
     void setRootLayer(KisGroupLayerSP rootLayer);
 
     /**
@@ -509,6 +520,11 @@ public:
      *         supports it
      */
     bool wrapAroundModeActive() const;
+
+    /**
+     * Notifies that the node collapsed state has changed
+     */
+    void notifyNodeCollpasedChanged();
 
 public:
     void startIsolatedMode(KisNodeSP node);
@@ -643,6 +659,12 @@ signals:
      */
     void sigIsolatedModeChanged();
 
+    /**
+     * Emitted when one or more nodes changed the collapsed state
+     *
+     */
+    void sigNodeCollapsedChanged();
+
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();
 
@@ -743,13 +765,13 @@ private:
 
     KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace);
+
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
-    void rotateImpl(const QString &actionName, KisNodeSP rootNode,
+    void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
                     bool resizeImage, double radians);
-    void shearImpl(const QString &actionName, KisNodeSP rootNode,
+    void shearImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
                    bool resizeImage, double angleX, double angleY,
                    const QPointF &origin);
 

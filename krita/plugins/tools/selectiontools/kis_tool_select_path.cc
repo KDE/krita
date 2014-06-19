@@ -94,7 +94,7 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
     KisImageWSP image = kisCanvas->image();
 
-    KisSelectionToolHelper helper(kisCanvas, i18n("Path Selection"));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Bezier Curve"));
 
     if (m_selectionTool->selectionMode() == PIXEL_SELECTION) {
 

@@ -19,6 +19,7 @@
 
 #include "parser_p.h"
 #include "sqlparser.h"
+#include "db/utils.h"
 
 #include <QRegExp>
 #include <QMutableListIterator>
@@ -425,7 +426,7 @@ QuerySchema* buildSelectQuery(
                 t_e = e->toVariable();
             }
             assert(t_e);
-            QString tname = t_e->name.toLatin1();
+            QString tname = t_e->name;
             TableSchema *s = parser->db()->tableSchema(tname);
             if (!s) {
                 setError(//i18n("Field List Error"),
@@ -434,12 +435,9 @@ QuerySchema* buildSelectQuery(
                 CLEANUP;
                 return 0;
             }
-            QString tableOrAliasName;
+            QString tableOrAliasName = KexiDB::iifNotEmpty(aliasString, tname);
             if (!aliasString.isEmpty()) {
-                tableOrAliasName = aliasString;
 //    KexiDBDbg << "- add alias for table: " << aliasString;
-            } else {
-                tableOrAliasName = tname;
             }
             // 1. collect information about first repeated table name or alias
             //    (potential ambiguity)

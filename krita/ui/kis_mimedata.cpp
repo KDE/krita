@@ -34,6 +34,7 @@
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <QApplication>
 #include <QImage>
 #include <QByteArray>
 #include <QBuffer>
@@ -58,58 +59,82 @@ QStringList KisMimeData::formats () const
 {
     QStringList f = QMimeData::formats();
     if (m_node) {
-#if QT_VERSION  < 0x040800
         f << "application/x-krita-node"
-          << "application/x-qt-image";
-#else
-        f << "application/x-krita-node";
-#endif
+          << "application/x-krita-node-url"
+          << "application/x-qt-image"
+          << "application/zip"
+          << "application/x-krita-node-internal-pointer";
     }
     return f;
+}
+
+QByteArray serializeToByteArray(KisNodeSP node)
+{
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+
+    KoStore *store = KoStore::createStore(&buffer, KoStore::Write);
+    Q_ASSERT(!store->bad());
+    store->disallowNameExpansion();
+
+    KisDoc2 doc;
+
+    QRect rc = node->exactBounds();
+
+    KisImageSP image = new KisImage(0, rc.width(), rc.height(), node->colorSpace(), node->name(), false);
+    image->addNode(node->clone());
+    doc.setCurrentImage(image);
+
+    doc.saveNativeFormatCalligra(store);
+
+    return byteArray;
 }
 
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const
 {
     Q_ASSERT(m_node);
+
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg;
         return m_node->projection()->convertToQImage(cfg.displayProfile(),
                                                      KoColorConversionTransformation::InternalRenderingIntent,
                                                      KoColorConversionTransformation::InternalConversionFlags);
     }
-    else if (mimetype == "application/x-krita-node"
-             || mimetype == "application/zip") {
+    else if (mimetype == "application/x-krita-node" ||
+             mimetype == "application/zip") {
 
-        KisNode *node = const_cast<KisNode*>(m_node.constData());
-
-        QByteArray ba;
-        QBuffer buf(&ba);
-        KoStore *store = KoStore::createStore(&buf, KoStore::Write);
-        Q_ASSERT(!store->bad());
-        store->disallowNameExpansion();
-
-        KisDoc2 doc;
-
-        QRect rc = node->exactBounds();
-
-        KisImageSP image = new KisImage(0, rc.width(), rc.height(), node->colorSpace(), node->name(), false);
-        image->addNode(node->clone());
-        doc.setCurrentImage(image);
-
-        doc.saveNativeFormatCalligra(store);
-
-#if 0
-        QFile f("./KRITA_DROP_FILE.kra");
-        f.open(QFile::WriteOnly);
-        f.write(ba);
-        f.flush();
-        f.close();
-#endif
-
+        QByteArray ba = serializeToByteArray(m_node);
         return ba;
 
-    }
-    else {
+    } else if (mimetype == "application/x-krita-node-url") {
+
+        QByteArray ba = serializeToByteArray(m_node);
+
+        QString temporaryPath =
+            QDir::tempPath() + QDir::separator() +
+            QString("krita_tmp_dnd_layer_%1_%2.kra")
+            .arg(QApplication::applicationPid())
+            .arg(qrand());
+
+
+        QFile file(temporaryPath);
+        file.open(QFile::WriteOnly);
+        file.write(ba);
+        file.flush();
+        file.close();
+
+        return QUrl(temporaryPath).toEncoded();
+    } else if (mimetype == "application/x-krita-node-internal-pointer") {
+
+        QDomDocument doc("krita_internal_node_pointer");
+        QDomElement element = doc.createElement("pointer");
+        element.setAttribute("application_pid", (qint64)QApplication::applicationPid());
+        element.setAttribute("pointer_value", (qint64)m_node.data());
+        doc.appendChild(element);
+
+        return doc.toByteArray();
+
+    } else {
         return QMimeData::retrieveData(mimetype, preferredType);
     }
 }
@@ -143,8 +168,27 @@ KisNodeSP KisMimeData::tryLoadInternalNode(const QMimeData *data,
                                            KisShapeController *shapeController,
                                            bool /* IN-OUT */ &copyNode)
 {
+    // Qt 4.7 way
     const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
     KisNodeSP node = mimedata ? mimedata->node() : 0;
+
+    // Qt 4.8 way
+    if (!node && data->hasFormat("application/x-krita-node-internal-pointer")) {
+        QByteArray nodeXml = data->data("application/x-krita-node-internal-pointer");
+
+        QDomDocument doc;
+        doc.setContent(nodeXml);
+
+        QDomElement element = doc.documentElement();
+        qint64 pid = element.attribute("application_pid").toLongLong();
+        qint64 pointerValue = element.attribute("pointer_value").toLongLong();
+
+        if (pid == QApplication::applicationPid() &&
+            pointerValue) {
+
+            node = reinterpret_cast<KisNode*>(pointerValue);
+        }
+    }
 
     if (node && (copyNode || node->graphListener() != image.data())) {
         node = node->clone();
@@ -168,15 +212,36 @@ KisNodeSP KisMimeData::loadNode(const QMimeData *data,
         QByteArray ba = data->data("application/x-krita-node");
 
         KisDoc2 tempDoc;
-        tempDoc.loadNativeFormatFromStore(ba);
+        bool result = tempDoc.loadNativeFormatFromStore(ba);
 
-        KisImageWSP tempImage = tempDoc.image();
-        node = tempImage->root()->firstChild();
-        tempImage->removeNode(node);
+        if (result) {
+            KisImageWSP tempImage = tempDoc.image();
+            node = tempImage->root()->firstChild();
+            tempImage->removeNode(node);
 
-        initializeExternalNode(node, image, shapeController);
+            initializeExternalNode(node, image, shapeController);
+        }
     }
-    else if (data->hasImage()) {
+
+    if (!node && data->hasFormat("application/x-krita-node-url")) {
+        QByteArray ba = data->data("application/x-krita-node-url");
+        QString localFile = QUrl::fromEncoded(ba).toLocalFile();
+
+        KisDoc2 tempDoc;
+        bool result = tempDoc.loadNativeFormat(localFile);
+
+        if (result) {
+            KisImageWSP tempImage = tempDoc.image();
+            node = tempImage->root()->firstChild();
+            tempImage->removeNode(node);
+
+            initializeExternalNode(node, image, shapeController);
+        }
+
+        QFile::remove(localFile);
+    }
+
+    if (!node && data->hasImage()) {
         QImage qimage = qvariant_cast<QImage>(data->imageData());
 
         KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());

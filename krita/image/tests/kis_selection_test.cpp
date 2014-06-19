@@ -253,7 +253,7 @@ void KisSelectionTest::testCopy()
 void KisSelectionTest::testSelectionExactBounds()
 {
     QRect referenceImageRect(0,0,1000,1000);
-    QRect referenceDeviceRect(10,10,1000,1000);
+    QRect referenceDeviceRect(100,100,1040,1040);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -269,9 +269,11 @@ void KisSelectionTest::testSelectionExactBounds()
     KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device, image));
 
     quint8 defaultPixel = MAX_SELECTED;
-    selection->projection()->setDefaultPixel(&defaultPixel);
+    selection->pixelSelection()->setDefaultPixel(&defaultPixel);
 
-    QCOMPARE(selection->selectedExactRect(), referenceImageRect | referenceDeviceRect);
+    // the selection uses device's extent only for performance reasons
+    // \see bug 320213
+    QCOMPARE(selection->selectedExactRect(), device->extent() | referenceImageRect);
 }
 
 void KisSelectionTest::testSetParentNodeAfterCreation()

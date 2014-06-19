@@ -32,33 +32,61 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QGLWidget>
+#include <QTimer>
 
 #include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
+#include <KoZoomController.h>
 
+#include "kis_view2.h"
+#include <kis_canvas_controller.h>
 #include "kis_config.h"
+#include <kis_doc2.h>
 
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
 #include "DocumentManager.h"
+#include "QmlGlobalEngine.h"
+#include "Settings.h"
 
 class MainWindow::Private
 {
 public:
-    Private() : allowClose(true) { }
+    Private(MainWindow* qq)
+        : q(qq)
+        , allowClose(true)
+        , sketchKisView(0)
+	{
+        centerer = new QTimer(q);
+        centerer->setInterval(10);
+        centerer->setSingleShot(true);
+        connect(centerer, SIGNAL(timeout()), q, SLOT(adjustZoomOnDocumentChangedAndStuff()));
+	}
+	MainWindow* q;
     bool allowClose;
+    KisView2* sketchKisView;
     QString currentSketchPage;
+	QTimer *centerer;
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
-    : QMainWindow( parent, flags ), d( new Private )
+    : QMainWindow( parent, flags ), d( new Private(this) )
 {
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Sketch"));
+    setWindowIcon(KIcon("kritasketch"));
+
+    // Load filters and other plugins in the gui thread
+    Q_UNUSED(KisFilterRegistry::instance());
+    Q_UNUSED(KisPaintOpRegistry::instance());
 
     KisConfig cfg;
     cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
@@ -67,13 +95,24 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     foreach(QString fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent(fileName);
     }
-
+    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
+    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
 
     QDeclarativeView* view = new SketchDeclarativeView();
+    QmlGlobalEngine::instance()->setEngine(view->engine());
     view->engine()->rootContext()->setContextProperty("mainWindow", this);
 
 #ifdef Q_OS_WIN
     QDir appdir(qApp->applicationDirPath());
+
+    // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+    wchar_t buffer[1024];
+    QString absolute = appdir.absolutePath();
+    DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+    rv = ::GetLongPathName(buffer, buffer, 1024);
+    QString correctedPath((QChar *)buffer);
+    appdir.setPath(correctedPath);
+
     // for now, the app in bin/ and we still use the env.bat script
     appdir.cdUp();
 
@@ -82,7 +121,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
 #else
     view->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
-    QString mainqml = KGlobal::dirs()->findResource("appdata", "kritasketch.qml");
+    QString mainqml = KGlobal::dirs()->findResource("pics", "kritasketch.qml");
 #endif
 
     Q_ASSERT(QFile::exists(mainqml));
@@ -101,6 +140,15 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     }
 
     setCentralWidget(view);
+}
+
+void MainWindow::resetWindowTitle()
+{
+    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QString fileName = url.fileName();
+    if(url.protocol() == "temp")
+        fileName = i18n("Untitled");
+    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Sketch")));
 }
 
 bool MainWindow::allowClose() const
@@ -122,6 +170,35 @@ void MainWindow::setCurrentSketchPage(QString newPage)
 {
     d->currentSketchPage = newPage;
     emit currentSketchPageChanged();
+}
+void MainWindow::adjustZoomOnDocumentChangedAndStuff()
+{
+	if (d->sketchKisView) {
+        qApp->processEvents();
+        d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        qApp->processEvents();
+        QPoint center = d->sketchKisView->rect().center();
+        d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        qApp->processEvents();
+    }
+}
+
+QObject* MainWindow::sketchKisView() const
+{
+    return d->sketchKisView;
+}
+
+void MainWindow::setSketchKisView(QObject* newView)
+{
+    if (d->sketchKisView)
+        d->sketchKisView->disconnect(this);
+    if (d->sketchKisView != newView)
+    {
+        d->sketchKisView = qobject_cast<KisView2*>(newView);
+        connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+        d->centerer->start();
+        emit sketchKisViewChanged();
+    }
 }
 
 void MainWindow::minimize()

@@ -103,15 +103,15 @@ void KisToolText::finishRect(const QRectF &rect)
         return;
 
     QRectF r = convertToPt(rect);
-    QString shapeString = (m_optionWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
+    QString shapeString = (m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
     KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value(shapeString);
     if (textFactory) {
         KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
         shape->setPosition(r.topLeft());
         // If the shape is an artistic shape we keep the aspect ratio so the text isn't stretched
         if (shapeString == "ArtisticText") {
-            qreal ratio = rect.height()/shape->size().height();
-            r.setWidth(shape->size().width()*ratio);
+            qreal ratio = shape->size().width() / shape->size().height();
+            r.setWidth(convertToPt(rect).height() * ratio);
         }
         shape->setSize(r.size());
         addShape(shape);
@@ -128,17 +128,23 @@ void KisToolText::finishRect(const QRectF &rect)
 
 QList< QWidget* > KisToolText::createOptionWidgets()
 {
-    m_optionWidget = new KisTextToolOptionWidget();
+    m_optionsWidget = new KisTextToolOptionWidget();
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
+
     QList< QWidget* > widgets;
-    widgets.append(m_optionWidget);
+    widgets.append(m_optionsWidget);
     return widgets;
 }
 
 KisPainter::FillStyle KisToolText::fillStyle()
 {
-    if(m_optionWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
+    if(m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
         return KisPainter::FillStyleNone;
-    return m_optionWidget->style();
+    return m_optionsWidget->style();
 }
 
 void KisToolText::slotActivateTextTool()

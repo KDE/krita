@@ -51,6 +51,8 @@ struct KisNodeModel::Private
 {
 public:
     Private() : shapeController(0),
+                showRootLayer(false),
+                showGlobalSelection(false),
                 indexConverter(0),
                 dummiesFacade(0),
                 needFinishRemoveRows(false),
@@ -59,6 +61,7 @@ public:
     KisImageWSP image;
     KisShapeController *shapeController;
     bool showRootLayer;
+    bool showGlobalSelection;
     QList<KisNodeDummy*> updateQueue;
     QTimer* updateTimer;
 
@@ -133,7 +136,7 @@ void KisNodeModel::resetIndexConverter()
         }
         else {
             m_d->indexConverter =
-                new KisModelIndexConverter(m_d->dummiesFacade, this);
+                new KisModelIndexConverter(m_d->dummiesFacade, this, m_d->showGlobalSelection);
         }
     }
 }
@@ -155,10 +158,24 @@ void KisNodeModel::slotIsolatedModeChanged()
     regenerateItems(m_d->dummiesFacade->rootDummy());
 }
 
+bool KisNodeModel::showGlobalSelection() const
+{
+    KisConfig cfg;
+    return cfg.showGlobalSelection();
+}
+
+void KisNodeModel::setShowGlobalSelection(bool value)
+{
+    KisConfig cfg;
+    cfg.setShowGlobalSelection(value);
+    updateSettings();
+}
+
 void KisNodeModel::updateSettings()
 {
     KisConfig cfg;
     m_d->showRootLayer = cfg.showRootLayer();
+    m_d->showGlobalSelection = cfg.showGlobalSelection();
     resetIndexConverter();
     reset();
 }
@@ -393,10 +410,15 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(role == ActiveRole) {
+    if(role == ActiveRole || role == AlternateActiveRole) {
         KisNodeSP activatedNode =
             index.isValid() && value.toBool() ? nodeFromIndex(index) : 0;
         emit nodeActivated(activatedNode);
+
+        if (role == AlternateActiveRole) {
+            emit toggleIsolateActiveNode();
+        }
+
         emit dataChanged(index, index);
         return true;
     }
@@ -441,6 +463,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
                 m_d->image->undoAdapter()->addCommand(cmd);
             }
             else {
+                m_d->image->setModified();
                 cmd->redo();
                 delete cmd;
             }

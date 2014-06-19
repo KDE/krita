@@ -29,43 +29,64 @@
 
 #ifdef HAVE_OPENGL
 #include <opengl/kis_opengl.h>
+#include <QGLContext>
+#endif
+
 
 static const int LUT3D_EDGE_SIZE = 32;
 
-const char * m_fragShaderText = ""
-        "\n"
-        "uniform sampler2D texture0;\n"
-        "uniform sampler3D texture1;\n"
-        "varying mediump vec4 v_textureCoordinate;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "    vec4 col = texture2D(texture0, v_textureCoordinate.st);\n"
-        "    gl_FragColor = OCIODisplay(col, texture1);\n"
-        "}\n";
-
-#endif
-
-OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
+OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
     : KisDisplayFilter(parent)
     , inputColorSpaceName(0)
     , displayDevice(0)
     , view(0)
     , swizzle(RGBA)
+    , m_interface(interface)
 #ifdef HAVE_OPENGL
     , m_lut3dTexID(0)
 #endif
 {
 }
 
+OcioDisplayFilter::~OcioDisplayFilter()
+{
+}
 
-void OcioDisplayFilter::filter(quint8 *src, quint8 */*dst*/, quint32 numPixels)
+KisExposureGammaCorrectionInterface* OcioDisplayFilter::correctionInterface() const
+{
+    return m_interface;
+}
+
+void OcioDisplayFilter::filter(quint8 *pixels, quint32 numPixels)
 {
     // processes that data _in_ place
     if (m_processor) {
-        OCIO::PackedImageDesc img(reinterpret_cast<float*>(src), numPixels, 1, 4);
+        OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
         m_processor->apply(img);
     }
+}
+
+void OcioDisplayFilter::approximateInverseTransformation(quint8 *pixels, quint32 numPixels)
+{
+    // processes that data _in_ place
+    if (m_revereseApproximationProcessor) {
+        OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
+        m_revereseApproximationProcessor->apply(img);
+    }
+}
+
+void OcioDisplayFilter::approximateForwardTransformation(quint8 *pixels, quint32 numPixels)
+{
+    // processes that data _in_ place
+    if (m_forwardApproximationProcessor) {
+        OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
+        m_forwardApproximationProcessor->apply(img);
+    }
+}
+
+bool OcioDisplayFilter::useInternalColorManagement() const
+{
+    return forceInternalColorManagement;
 }
 
 #ifdef HAVE_OPENGL
@@ -104,6 +125,8 @@ void OcioDisplayFilter::updateProcessor()
     transform->setDisplay(displayDevice);
     transform->setView(view);
 
+    OCIO::GroupTransformRcPtr approximateTransform = OCIO::GroupTransform::Create();
+
     // fstop exposure control -- not sure how that translates to our exposure
     {
         float gain = powf(2.0f, exposure);
@@ -114,6 +137,9 @@ void OcioDisplayFilter::updateProcessor()
         OCIO::MatrixTransformRcPtr mtx =  OCIO::MatrixTransform::Create();
         mtx->setValue(m44, offset4);
         transform->setLinearCC(mtx);
+
+        // approximation (no color correction);
+        approximateTransform->push_back(mtx);
     }
 
     // channel swizzle
@@ -175,9 +201,21 @@ void OcioDisplayFilter::updateProcessor()
         OCIO::ExponentTransformRcPtr expTransform =  OCIO::ExponentTransform::Create();
         expTransform->setValue(exponent4f);
         transform->setDisplayCC(expTransform);
+
+        // approximation (no color correction);
+        approximateTransform->push_back(expTransform);
     }
 
     m_processor = config->getProcessor(transform);
+
+    m_forwardApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_FORWARD);
+
+    try {
+        m_revereseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);
+    } catch (...) {
+        qWarning() << "OCIO inverted matrix does not exist!";
+        //m_revereseApproximationProcessor;
+    }
 
 #ifdef HAVE_OPENGL
 
@@ -185,6 +223,15 @@ void OcioDisplayFilter::updateProcessor()
     // work for everyone these days
     KisConfig cfg;
     if (!cfg.useOpenGL()) return;
+
+    if (!QGLContext::currentContext()) {
+        /**
+         * Force initialization of GL context when the filter is
+         * created before the openGL canvas. This might happen when
+         * switching from QPainter to openGL canvas for the first time.
+         */
+        KisOpenGL::initialMakeContextCurrent();
+    }
 
     if (m_lut3d.size() == 0) {
         //qDebug() << "generating lut";
@@ -208,7 +255,12 @@ void OcioDisplayFilter::updateProcessor()
 
     // Step 1: Create a GPU Shader Description
     OCIO::GpuShaderDesc shaderDesc;
-    shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_0);
+
+    if (KisOpenGL::supportsGLSL13()) {
+        shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_3);
+    } else {
+        shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_0);
+    }
     shaderDesc.setFunctionName("OCIODisplay");
     shaderDesc.setLut3DEdgeLen(LUT3D_EDGE_SIZE);
 
@@ -232,13 +284,12 @@ void OcioDisplayFilter::updateProcessor()
     // Step 3: Generate the shader text
     QString shaderCacheID = QString::fromLatin1(m_processor->getGpuShaderTextCacheID(shaderDesc));
     if (m_program.isEmpty() || shaderCacheID != m_shadercacheid) {
-        qDebug() << "Computing Shader " << m_shadercacheid;
+        //qDebug() << "Computing Shader " << m_shadercacheid;
 
         m_shadercacheid = shaderCacheID;
 
         std::ostringstream os;
         os << m_processor->getGpuShaderText(shaderDesc) << "\n";
-        os << m_fragShaderText;
 
         m_program = QString::fromLatin1(os.str().c_str());
     }

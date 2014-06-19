@@ -29,7 +29,7 @@ Item {
         id: topButton
         border {
             width: 1;
-            color: "white";
+            color: Settings.theme.color("components/expandingListView/selection/border");
         }
         radius: (Constants.GridHeight / 4) - 2;
         anchors {
@@ -41,7 +41,7 @@ Item {
         }
         width: (Constants.GridWidth * 2) - 8 ;
         height: Constants.GridHeight / 2;
-        color: "#63ffffff"
+        color: Settings.theme.color("components/expandingListView/selection/fill");
         z: 10;
 
 
@@ -54,7 +54,7 @@ Item {
             }
             height: parent.height;
             width: height;
-            source: "../images/svg/combo-arrows-white.svg"
+            source: Settings.theme.icon("combo-arrows-white");
             smooth: true
         }
 
@@ -67,8 +67,7 @@ Item {
                 right: arrowsList.left;
             }
             text: listView.currentItem ? listView.currentItem.text : "(tap to select)";
-            color: "#96000000"
-            font.pixelSize: Constants.DefaultFontSize;
+            color: Settings.theme.color("components/expandingListView/selection/text");
         }
 
         MouseArea {
@@ -96,7 +95,7 @@ Item {
         }
         clip: true;
         opacity: 0;
-        color: "#63ffffff";
+        color: Settings.theme.color("components/expandingListView/list/background");
         ListView {
             id: listView;
             anchors.fill: parent;
@@ -111,17 +110,16 @@ Item {
                     anchors.fill: parent;
                     radius: height / 2;
                     border.width: 1;
-                    border.color: "silver";
-                    color: "white";
+                    border.color: Settings.theme.color("components/expandingListView/list/itemBorder");
+                    color: Settings.theme.color("components/expandingListView/list/item");
                     opacity: model.isCategory ? 0.3 : 0;
                 }
-                Image {
+                Shadow {
                     anchors {
                         bottom: delegateLabel.bottom;
                         left: delegateLabel.left;
                         right: delegateLabel.right;
                     }
-                    source: "../images/shadow-smooth.png";
                     visible: listView.currentIndex === index;
                 }
                 Label {
@@ -129,7 +127,7 @@ Item {
                     anchors.fill: parent
                     anchors.leftMargin: model.isCategory ? Constants.DefaultFontSize / 2 : 0;
                     text: model.text ? model.text : index + " (no text field in model)";
-                    color: "#96000000"
+                    color: Settings.theme.color("components/expandingListView/list/itemText");
                 }
                 MouseArea {
                     anchors.fill: parent;
@@ -169,7 +167,7 @@ Item {
             from: ""
             to: "expanded"
             reversible: true;
-            PropertyAnimation { properties: "height,opacity"; duration: 200; easing.type: Easing.InOutCubic }
+            PropertyAnimation { properties: "height,opacity"; duration: Constants.AnimationDuration; easing.type: Easing.InOutCubic }
         }
     ]
 }

@@ -8,7 +8,6 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QTextEdit>
-#include <QFileDialog>
 
 #include <kis_gmic_settings_widget.h>
 #include <kis_debug.h>
@@ -23,9 +22,10 @@
 #include <kurlrequester.h>
 #include <kdeversion.h>
 #include <kcolorbutton.h>
-#include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
+
+#include <kfiledialog.h> // For kurlrequester...
 
 KisGmicSettingsWidget::KisGmicSettingsWidget(Command * command):
     m_commandDefinition(command)
@@ -453,6 +453,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
     {
         setLayout(gridLayout);
     }
+    setMinimumSize(sizeHint());
 }
 
 Command* KisGmicSettingsWidget::currentCommandSettings()

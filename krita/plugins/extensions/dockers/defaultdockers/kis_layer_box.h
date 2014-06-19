@@ -103,11 +103,17 @@ private slots:
     void slotExpanded(const QModelIndex &index);
 
     void slotSelectOpaque();
+    void slotNodeCollapsedChanged();
+
+    void slotEditGlobalSelection(bool showSelections);
+
+    void selectionChanged(const QModelIndexList selection);
 
 private:
     inline void connectActionToButton(QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
 
+    KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:
 
     KisCanvas2* m_canvas;

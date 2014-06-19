@@ -21,10 +21,14 @@
 #include <kis_debug.h>
 
 #include <QString>
+#include <QFile>
+#include <QTimer>
+#include <QTime>
 
-KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images):
+KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, const char * customCommands):
     m_gmicCommandString(gmicCommandString),
     m_images(images),
+    m_customCommands(customCommands),
     m_firstRedo(true)
 {
 }
@@ -63,7 +67,8 @@ void KisGmicCommand::redo()
             QString gmicCmd = "-* 255 ";
             gmicCmd.append(m_gmicCommandString);
             dbgPlugins << m_gmicCommandString;
-            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names);
+            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands, true);
+
         }
         // Catch exception, if an error occured in the interpreter.
         catch (gmic_exception &e)
@@ -87,33 +92,3 @@ void KisGmicCommand::redo()
     }
 }
 
-/*
-
-KisProcessingApplicator applicator(this, m_d->rootLayer,
-                                   KisProcessingApplicator::RECURSIVE,
-                                   emitSignals, actionName);
-
-nodes.append(..);
-nodes.append(..);
-nodes.append(..);
-
-QSharedPointer<gmic_list<float> > m_images(new ...);
-
-KisProcessingVisitorSP visitor;
-
-visitor = new KisExportGmicProcessingVisitor(nodes, images);
-applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
-
-applicator.applyCommand(new KisGmicCommand(images));
-
-visitor = new KisImportGmicProcessingVisitor(nodes, images);
-applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT); // undo information is stored in this visitor
-
-applicator.applyCommand(new CleanTheData(images));
-
-CleanTheData::redo() {
-    m_images->clear();
-}
-
-
-*/

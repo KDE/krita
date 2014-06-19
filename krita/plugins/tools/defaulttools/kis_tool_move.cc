@@ -34,6 +34,8 @@
 #include "strokes/move_stroke_strategy.h"
 #include "kis_tool_movetooloptionswidget.h"
 #include "strokes/move_selection_stroke_strategy.h"
+#include "kis_resources_snapshot.h"
+
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
@@ -41,6 +43,7 @@ KisToolMove::KisToolMove(KoCanvasBase * canvas)
     setObjectName("tool_move");
     m_optionsWidget = 0;
     m_moveToolMode = MoveSelectedLayer;
+    m_moveInProgress = false;
 }
 
 KisToolMove::~KisToolMove()
@@ -127,18 +130,22 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
     QPoint pos = convertToPixelCoord(event).toPoint();
     m_dragStart = pos;
     m_lastDragPos = m_dragStart;
+    m_moveInProgress = true;
+    emit moveInProgressChanged();
 
     KisNodeSP node;
     KisImageSP image = this->image();
 
-    KisSelectionSP selection = currentSelection();
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image, 0, this->canvas()->resourceManager());
+    KisSelectionSP selection = resources->activeSelection();
 
     if (mode != MoveSelectedLayer) {
         bool wholeGroup = !selection &&  mode == MoveGroup;
         node = KisToolUtils::findNode(image->root(), pos, wholeGroup);
     }
 
-    if ((!node && !(node = currentNode())) || !node->isEditable()) {
+    if ((!node && !(node = resources->currentNode())) || !node->isEditable()) {
         event->ignore();
         return;
     }
@@ -221,6 +228,8 @@ void KisToolMove::endStroke()
     image->endStroke(m_strokeId);
     m_strokeId.clear();
     m_currentlyProcessingNode.clear();
+    m_moveInProgress = false;
+    emit moveInProgressChanged();
 }
 
 void KisToolMove::cancelStroke()
@@ -231,11 +240,19 @@ void KisToolMove::cancelStroke()
     image->cancelStroke(m_strokeId);
     m_strokeId.clear();
     m_currentlyProcessingNode.clear();
+    m_moveInProgress = false;
+    emit moveInProgressChanged();
 }
 
 QWidget* KisToolMove::createOptionWidget()
 {
     m_optionsWidget = new MoveToolOptionsWidget(0);
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
+
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 
     connect(m_optionsWidget->radioSelectedLayer, SIGNAL(toggled(bool)),
@@ -258,6 +275,11 @@ void KisToolMove::setMoveToolMode(KisToolMove::MoveToolMode newMode)
 KisToolMove::MoveToolMode KisToolMove::moveToolMode() const
 {
     return m_moveToolMode;
+}
+
+bool KisToolMove::moveInProgress() const
+{
+    return m_moveInProgress;
 }
 
 void KisToolMove::slotWidgetRadioToggled(bool checked)

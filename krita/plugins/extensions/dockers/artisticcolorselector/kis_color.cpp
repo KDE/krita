@@ -127,7 +127,7 @@ void KisColor::initRGB(Type type, float r, float g, float b, float a)
 	// an offset that is added to the m_coreData buffer to make sure
 	// the struct created with the placement new operator is aligned at 16 bytes
 	// this is required by Eigen for vectorization
-	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16));
+	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16)) % 16;
 	
     switch(type)
     {
@@ -146,7 +146,7 @@ void KisColor::initHSX(Type type, float h, float s, float x, float a)
 	// an offset that is added to the m_coreData buffer to make sure
 	// the struct created with the placement new operator is aligned at 16 bytes
 	// this is required by Eigen for vectorization
-	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16));
+	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16)) % 16;
 	
     switch(type)
     {

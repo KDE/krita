@@ -69,7 +69,7 @@ KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape*> &shapes, KoShap
         d->addNewStroke(stroke);
     }
 
-    setText(i18nc("(qtundo-format)", "Set stroke"));
+    setText(kundo2_i18n("Set stroke"));
 }
 
 KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape*> &shapes,
@@ -88,7 +88,7 @@ KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape*> &shapes,
     foreach (KoShapeStrokeModel * stroke, strokes)
         d->addNewStroke(stroke);
 
-    setText(i18nc("(qtundo-format)", "Set stroke"));
+    setText(kundo2_i18n("Set stroke"));
 }
 
 KoShapeStrokeCommand::KoShapeStrokeCommand(KoShape* shape, KoShapeStrokeModel *stroke, KUndo2Command *parent)
@@ -99,7 +99,7 @@ KoShapeStrokeCommand::KoShapeStrokeCommand(KoShape* shape, KoShapeStrokeModel *s
     d->addNewStroke(stroke);
     d->addOldStroke(shape->stroke());
 
-    setText(i18nc("(qtundo-format)", "Set stroke"));
+    setText(kundo2_i18n("Set stroke"));
 }
 
 KoShapeStrokeCommand::~KoShapeStrokeCommand()

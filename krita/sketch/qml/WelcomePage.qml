@@ -17,11 +17,17 @@
  */
 
 import QtQuick 1.1
-import "components"
+import org.krita.sketch.components 1.0
 import "panels"
 
 Page {
     property string pageName: "WelcomePage"
+
+    Rectangle {
+        anchors.fill: parent;
+        color: Settings.theme.color("pages/welcome/background");
+    }
+
     Header {
         id: header;
 
@@ -36,7 +42,7 @@ Page {
         leftArea: Image {
             width: Constants.GridWidth * 0.5;
             height: parent.height;
-            source: "images/kritasketch.png";
+            source: Settings.theme.image("kritasketch.png");
             fillMode: Image.PreserveAspectFit;
 
             sourceSize.width: width;
@@ -50,8 +56,9 @@ Page {
                 width: Constants.GridWidth * 0.75;
                 height: Constants.GridHeight * 0.75;
 
-                image: "images/svg/icon-minimize.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                tooltip: "Minimize";
+
+                image: Settings.theme.icon("minimize");
                 onClicked: Krita.Window.minimize();
             },
             Button {
@@ -61,15 +68,16 @@ Page {
                 width: Constants.GridWidth * 0.75;
                 height: Constants.GridHeight * 0.75;
 
-                image: "images/svg/icon-close.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                tooltip: "Close";
+
+                image: Settings.theme.icon("close");
                 onClicked: Krita.Window.close();
             }
         ]
 
         Image {
             anchors.fill: parent;
-            source: "images/header_krita_sketch_light.png";
+            source: Settings.theme.image("header_krita_sketch_light.png");
         }
     }
 
@@ -85,13 +93,13 @@ Page {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#707070"
+                    color: Settings.theme.color("pages/welcome/open/header/start");
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#565656"
+                    color: Settings.theme.color("pages/welcome/open/header/stop");
                 }
             }
 
@@ -103,12 +111,11 @@ Page {
                     verticalCenter: parent.verticalCenter;
                 }
                 text: "Recent Images";
-                font.pixelSize: Constants.LargeFontSize;
-                color: "white";
+                font: Settings.theme.font("title");
+                color: Settings.theme.color("pages/welcome/open/header/text");
             }
 
-            Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom; }
         }
 
         Rectangle {
@@ -118,13 +125,13 @@ Page {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#565656"
+                    color: Settings.theme.color("pages/welcome/create/header/start");
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#707070"
+                    color: Settings.theme.color("pages/welcome/create/header/stop");
                 }
             }
 
@@ -135,12 +142,11 @@ Page {
                     verticalCenter: parent.verticalCenter;
                 }
                 text: "Create New";
-                font.pixelSize: Constants.LargeFontSize;
-                color: "white";
+                font: Settings.theme.font("title");
+                color: Settings.theme.color("pages/welcome/create/header/text");
             }
 
-            Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom; }
         }
 
         Rectangle {
@@ -150,13 +156,13 @@ Page {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#707070"
+                    color: Settings.theme.color("pages/welcome/news/header/start");
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#565656"
+                    color: Settings.theme.color("pages/welcome/news/header/stop");
                 }
             }
 
@@ -167,12 +173,11 @@ Page {
                     verticalCenter: parent.verticalCenter;
                 }
                 text: "Community News";
-                font.pixelSize: Constants.LargeFontSize;
-                color: "white";
+                font: Settings.theme.font("title");
+                color: Settings.theme.color("pages/welcome/news/header/text");
             }
 
-            Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom; }
         }
     }
 
@@ -185,8 +190,7 @@ Page {
             width: parent.width / 3 - 4;
             height: Constants.GridHeight * (Constants.GridRows - 3);
 
-            onOpenClicked: pageStack.push( openImage );
-            onItemClicked: baseLoadingDialog.visible = true;
+            onClicked: d.openImage(file);
         }
 
         Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
@@ -194,7 +198,7 @@ Page {
         NewImageList {
             width: parent.width / 3 - 8;
             height: Constants.GridHeight * (Constants.GridRows - 3);
-            onClicked: baseLoadingDialog.visible = true;
+            onClicked: d.createNewImage(options);
         }
 
         Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
@@ -209,6 +213,40 @@ Page {
         id: d;
 
         property bool mainPageActive: false;
+
+        function createNewImage(options) {
+            if(options !== undefined) {
+                baseLoadingDialog.visible = true;
+                if(options.template !== undefined) {
+                    Settings.currentFile = Krita.ImageBuilder.createImageFromTemplate(options);
+                    settings.temporaryFile = true;
+                } else if(options.source === undefined) {
+                    Settings.currentFile = Krita.ImageBuilder.createBlankImage(options);
+                    Settings.temporaryFile = true;
+                } else if(options.source == "clipboard") {
+                    Settings.currentFile = Krita.ImageBuilder.createImageFromClipboard();
+                    Settings.temporaryFile = true;
+                }
+            } else {
+                pageStack.push(customImagePage);
+            }
+        }
+
+        function openImage(file) {
+            if(file !== "") {
+                baseLoadingDialog.visible = true;
+                Settings.currentFile = file;
+            } else {
+                if(Krita.Window.slateMode) {
+                    pageStack.push(openImagePage);
+                } else {
+                    var path = Krita.Window.openImage();
+                    if(path !== "") {
+                        openImage(path);
+                    }
+                }
+            }
+        }
     }
 
     Connections {
@@ -223,5 +261,6 @@ Page {
 
     Component { id: main; MainPage { } }
     Component { id: help; HelpPage { } }
-    Component { id: openImage; OpenImagePage { onItemClicked: baseLoadingDialog.visible = true; } }
+    Component { id: openImagePage; OpenImagePage { onFinished: { pageStack.pop(); d.openImage(file); } } }
+    Component { id: customImagePage; CustomImagePage { onFinished: d.createNewImage(options); } }
 }

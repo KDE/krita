@@ -147,7 +147,7 @@ bool testFilter(KisFilterSP f)
     }
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimage, 0, 0, 0);
-    KisTransaction * cmd = new KisTransaction(f->name(), dev);
+    KisTransaction * cmd = new KisTransaction(kundo2_noi18n(f->name()), dev);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);

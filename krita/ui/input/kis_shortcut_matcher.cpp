@@ -43,6 +43,7 @@ public:
         , readyShortcut(0)
         , touchShortcut(0)
         , suppressAllActions(false)
+        , cursorEntered(false)
         , usingTouch(false)
     {}
 
@@ -60,7 +61,12 @@ public:
     KisTouchShortcut *touchShortcut;
 
     bool suppressAllActions;
+    bool cursorEntered;
     bool usingTouch;
+
+    inline bool actionsSuppressed() const {
+        return suppressAllActions || !cursorEntered;
+    }
 };
 
 KisShortcutMatcher::KisShortcutMatcher()
@@ -216,6 +222,26 @@ bool KisShortcutMatcher::mouseMoved(QMouseEvent *event)
     return true;
 }
 
+void KisShortcutMatcher::enterEvent()
+{
+    m_d->cursorEntered = true;
+
+    if (!m_d->runningShortcut) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
+}
+
+void KisShortcutMatcher::leaveEvent()
+{
+    m_d->cursorEntered = false;
+
+    if (!m_d->runningShortcut) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
+}
+
 bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 {
     Q_UNUSED(event)
@@ -313,7 +339,7 @@ bool KisShortcutMatcher::tryRunKeyShortcut(Qt::Key key, QKeyEvent *event)
 template<typename T, typename U>
 bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QList<Qt::Key> &keysState)
 {
-    if (m_d->suppressAllActions) return false;
+    if (m_d->actionsSuppressed()) return false;
 
     KisSingleActionShortcut *goodCandidate = 0;
 
@@ -336,7 +362,7 @@ bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const
 void KisShortcutMatcher::prepareReadyShortcuts()
 {
     m_d->readyShortcuts.clear();
-    if (m_d->suppressAllActions) return;
+    if (m_d->actionsSuppressed()) return;
 
     foreach(KisStrokeShortcut *s, m_d->strokeShortcuts) {
         if (s->matchReady(m_d->keys, m_d->buttons)) {
@@ -424,7 +450,7 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
 {
     KisTouchShortcut *goodCandidate = 0;
 
-    if (m_d->suppressAllActions)
+    if (m_d->actionsSuppressed())
         return false;
 
     foreach(KisTouchShortcut* shortcut, m_d->touchShortcuts) {

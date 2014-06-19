@@ -23,9 +23,11 @@
 #include <QWidget>
 #include <QQueue>
 #include <KoTriangleColorSelector.h>
+#include <KoColorDisplayRendererInterface.h>
+
 
 class KisFavoriteBrushData;
-class KoFavoriteResourceManager;
+class KisFavoriteResourceManager;
 class QWidget;
 class KisTriangleColorSelector;
 class KoColor;
@@ -33,43 +35,45 @@ class KoColor;
 class KisPopupPalette : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY (int hoveredPreset READ hoveredPreset WRITE setHoveredPreset)
-    Q_PROPERTY (int hoveredColor READ hoveredColor WRITE setHoveredColor)
-    Q_PROPERTY (int selectedColor READ selectedColor WRITE setSelectedColor)
+
+    Q_PROPERTY(int hoveredPreset READ hoveredPreset WRITE setHoveredPreset)
+    Q_PROPERTY(int hoveredColor READ hoveredColor WRITE setHoveredColor)
+    Q_PROPERTY(int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KoFavoriteResourceManager* , QWidget *parent=0);
+    KisPopupPalette(KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), QWidget *parent = 0);
     ~KisPopupPalette();
     QSize sizeHint() const;
 
-    void showPopupPalette (const QPoint&);
-    void showPopupPalette (bool b);
+    void showPopupPalette(const QPoint&);
+    void showPopupPalette(bool b);
 
     //functions to set up selectedBrush
-    void setSelectedBrush( int x );
+    void setSelectedBrush(int x);
     int selectedBrush() const;
     //functions to set up selectedColor
-    void setSelectedColor( int x );
+    void setSelectedColor(int x);
     int selectedColor() const;
 
 protected:
-    void paintEvent (QPaintEvent*);
-    void resizeEvent (QResizeEvent*);
-    void mouseReleaseEvent (QMouseEvent*);
-    void mouseMoveEvent (QMouseEvent*);
-    void mousePressEvent (QMouseEvent*);
-    
+
+    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void mousePressEvent(QMouseEvent*);
+
     //functions to calculate index of favorite brush or recent color in array
     //n is the total number of favorite brushes or recent colors
     int calculateIndex(QPointF, int n);
-    
+
     int calculatePresetIndex(QPointF, int n);
 
     //functions to set up hoveredBrush
-    void setHoveredPreset( int x );
+    void setHoveredPreset(int x);
     int hoveredPreset() const;
     //functions to set up hoveredColor
-    void setHoveredColor( int x );
+    void setHoveredColor(int x);
     int hoveredColor() const;
 
 
@@ -83,14 +87,16 @@ private:
     QPainterPath pathFromPresetIndex(int index);
 
 private:
+
     int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
-    KoFavoriteResourceManager* m_resourceManager;
+    KisFavoriteResourceManager* m_resourceManager;
     KoTriangleColorSelector* m_triangleColorSelector;
 
     QTimer* m_timer;
     QTimer* m_colorChangeTimer;
+    const KoColorDisplayRendererInterface *m_displayRenderer;
 
 signals:
     void sigChangeActivePaintop(int);
@@ -106,11 +112,14 @@ signals:
     void sigTriggerTimer();
 
 private slots:
-    void slotChangefGColor(const QColor& newColor);
+
+    void slotChangefGColor(const KoColor& newColor);
     void slotColorChangeTimeout();
-    
+    void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
     void slotTriggerTimer();
     void slotEnableChangeFGColor();
+    void slotUpdate() { update(); }
+    void slotHide() { showPopupPalette(false); }
 };
 
 #endif // KIS_POPUP_PALETTE_H

@@ -90,13 +90,13 @@ void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
     case BarChartType:
         switch(subtype) {
         case NormalChartSubtype:
-            setText(i18nc("(qtundo-format)", "Normal Bar Chart"));
+            setText(kundo2_i18n("Normal Bar Chart"));
             break;
         case StackedChartSubtype:
-            setText(i18nc("(qtundo-format)", "Stacked Bar Chart"));
+            setText(kundo2_i18n("Stacked Bar Chart"));
             break;
         case PercentChartSubtype:
-            setText(i18nc("(qtundo-format)", "Percent Bar Chart"));
+            setText(kundo2_i18n("Percent Bar Chart"));
             break;
         default:
             Q_ASSERT("Invalid bar chart subtype!");
@@ -105,13 +105,13 @@ void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
     case LineChartType:
         switch(subtype) {
         case NormalChartSubtype:
-            setText(i18nc("(qtundo-format)", "Normal Line Chart"));
+            setText(kundo2_i18n("Normal Line Chart"));
             break;
         case StackedChartSubtype:
-            setText(i18nc("(qtundo-format)", "Stacked Line Chart"));
+            setText(kundo2_i18n("Stacked Line Chart"));
             break;
         case PercentChartSubtype:
-            setText(i18nc("(qtundo-format)", "Percent Line Chart"));
+            setText(kundo2_i18n("Percent Line Chart"));
             break;
         default:
             Q_ASSERT("Invalid line chart subtype!");
@@ -120,44 +120,44 @@ void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
     case AreaChartType:
         switch(subtype) {
         case NormalChartSubtype:
-            setText(i18nc("(qtundo-format)", "Normal Area Chart"));
+            setText(kundo2_i18n("Normal Area Chart"));
             break;
         case StackedChartSubtype:
-            setText(i18nc("(qtundo-format)", "Stacked Area Chart"));
+            setText(kundo2_i18n("Stacked Area Chart"));
             break;
         case PercentChartSubtype:
-            setText(i18nc("(qtundo-format)", "Percent Area Chart"));
+            setText(kundo2_i18n("Percent Area Chart"));
             break;
         default:
             Q_ASSERT("Invalid area chart subtype!");
         }
         break;
     case CircleChartType:
-        setText(i18nc("(qtundo-format)", "Circle Chart"));
+        setText(kundo2_i18n("Circle Chart"));
         break;
     case RingChartType:
-        setText(i18nc("(qtundo-format)", "Ring Chart"));
+        setText(kundo2_i18n("Ring Chart"));
         break;
     case ScatterChartType:
-        setText(i18nc("(qtundo-format)", "Scatter Chart"));
+        setText(kundo2_i18n("Scatter Chart"));
         break;
     case RadarChartType:
-        setText(i18nc("(qtundo-format)", "Radar Chart"));
+        setText(kundo2_i18n("Radar Chart"));
         break;
     case FilledRadarChartType:
-        setText(i18nc("(qtundo-format)", "Filled Radar Chart"));
+        setText(kundo2_i18n("Filled Radar Chart"));
         break;
     case StockChartType:
-        setText(i18nc("(qtundo-format)", "Stock Chart"));
+        setText(kundo2_i18n("Stock Chart"));
         break;
     case BubbleChartType:
-        setText(i18nc("(qtundo-format)", "Bubble Chart"));
+        setText(kundo2_i18n("Bubble Chart"));
         break;
     case SurfaceChartType:
-        setText(i18nc("(qtundo-format)", "Surface Chart"));
+        setText(kundo2_i18n("Surface Chart"));
         break;
     case GanttChartType:
-        setText(i18nc("(qtundo-format)", "Gantt Chart"));
+        setText(kundo2_i18n("Gantt Chart"));
         break;
     case LastChartType:
     default:

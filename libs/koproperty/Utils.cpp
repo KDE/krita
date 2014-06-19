@@ -46,8 +46,6 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
 {
     const int marg = (height - 2 - BRANCHBOX_SIZE) / 2;
     int xmarg = marg;
-//  if (dynamic_cast<EditorGroupItem*>(item))
-//    xmarg = xmarg * 10 / 14 -1;
 #if 0
 //! @todo disabled: kstyles do not paint background yet... reenable in the future...
     KStyle* kstyle = dynamic_cast<KStyle*>(widget->style());
@@ -63,16 +61,13 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
         p->setPen(EditorView::defaultGridLineColor());
         p->drawRect(xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE);
         p->fillRect(xmarg + 1, marg + 1, BRANCHBOX_SIZE - 2, BRANCHBOX_SIZE - 2,
-//   item->listView()->paletteBackgroundColor());
                     palette.brush(QPalette::Base));
-//  p->setPen( item->listView()->paletteForegroundColor() );
         p->setPen(palette.color(QPalette::Foreground));
         p->drawLine(xmarg + 2, marg + BRANCHBOX_SIZE / 2, xmarg + BRANCHBOX_SIZE - 3, marg + BRANCHBOX_SIZE / 2);
         if (!isOpen) {
             p->drawLine(xmarg + BRANCHBOX_SIZE / 2, marg + 2,
                         xmarg + BRANCHBOX_SIZE / 2, marg + BRANCHBOX_SIZE - 3);
         }
-// }
     }
 
 //! @internal
@@ -126,7 +121,7 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
                 p.drawPixmap(24, (r.height() - m_miniicon.height()) / 2, m_miniicon);
             }
 
-            if (!m_titleStr.isNull()) {
+            if (!m_titleStr.isEmpty()) {
                 int indent = 16 + (m_miniicon.isNull() ? 0 : (m_miniicon.width() + 4));
                 p.setPen(palette().color(QPalette::Text));
                 QFont f = p.font();
@@ -136,8 +131,6 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
                            height(), Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
                            m_titleStr);
             }
-//   p.setPen(palette().active().mid());
-//   p.drawLine(0, 0, r.right(), 0);
         }
 
         virtual bool event(QEvent * e) {

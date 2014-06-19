@@ -227,11 +227,16 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             delete[] data;
         }
 
+        m_pickedColor.convertTo(dev->compositionSourceColorSpace());
         if (m_config.updateColor) {
-            if (m_config.toForegroundColor)
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, m_pickedColor);
-            else
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, m_pickedColor);
+            KoColor publicColor = m_pickedColor;
+            publicColor.setOpacity(OPACITY_OPAQUE_U8);
+
+            if (m_config.toForegroundColor) {
+                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, publicColor);
+            } else {
+                canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
+            }
         }
 
         if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
@@ -324,6 +329,12 @@ QWidget* KisToolColorPicker::createOptionWidget()
     m_optionsWidget = new ColorPickerOptionsWidget(0);
     m_optionsWidget->setObjectName(toolId() + " option widget");
     m_optionsWidget->listViewChannels->setSortingEnabled(false);
+
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
 
     updateOptionWidget();
 

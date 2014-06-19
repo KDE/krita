@@ -111,7 +111,7 @@ KoReportPluginManagerPrivate::KoReportPluginManagerPrivate()
 
 void KoReportPluginManagerPrivate::loadPlugins()
 {
-    kDebug() << "Load all plugins";
+    //kDebug() << "Load all plugins";
     KService::List offers = KServiceTypeTrader::self()->query("KoReport/ItemPlugin");
 
     KService::List::const_iterator iter;
@@ -124,19 +124,18 @@ void KoReportPluginManagerPrivate::loadPlugins()
 
         if (!factory)
         {
-            kDebug() << "KPluginFactory could not load the plugin:" << service->library();
+            kWarning() << "KPluginFactory could not load the plugin:" << service->library();
             continue;
         }
 
        KoReportPluginInterface *plugin = factory->create<KoReportPluginInterface>(this);
 
        if (plugin) {
-           kDebug() << "Load plugin:" << service->name();
-
+           //kDebug() << "Load plugin:" << service->name();
            plugin->info()->setPriority(plugin->info()->priority() + 10); //Ensure plugins always have a higher prioroty than built-in types
            m_plugins.insert(plugin->info()->className(), plugin);
        } else {
-           kDebug() << error;
+           kWarning() << error;
        }
     }
 

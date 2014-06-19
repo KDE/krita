@@ -41,14 +41,14 @@
 * or for a protocol (e.g. http) be careful that it is appropriate.
 * (Fictional) example: "2.8 Pre-Alpha"
 */
-#cmakedefine CALLIGRA_VERSION_STRING "@CALLIGRA_VERSION_STRING@"
+#define CALLIGRA_VERSION_STRING "@CALLIGRA_VERSION_STRING@"
 
 /**
  * @def CALLIGRA_VERSION_MAJOR
  * @ingroup CalligraMacros
  * @brief Major version of Calligra, at compile time
 */
-#cmakedefine CALLIGRA_VERSION_MAJOR @CALLIGRA_VERSION_MAJOR@
+#define CALLIGRA_VERSION_MAJOR @CALLIGRA_VERSION_MAJOR@
 
 /**
  * @def CALLIGRA_STABLE_VERSION_MINOR
@@ -57,7 +57,7 @@
  * CALLIGRA_VERSION_MINOR is computed based on this value.
  * Unstable versions subtract 1 from this value, e.g. 2.5 Alpha has minor 4.
 */
-#cmakedefine CALLIGRA_STABLE_VERSION_MINOR @CALLIGRA_STABLE_VERSION_MINOR@
+#define CALLIGRA_STABLE_VERSION_MINOR @CALLIGRA_STABLE_VERSION_MINOR@
 
 /**
  * @def CALLIGRA_VERSION_RELEASE
@@ -65,7 +65,7 @@
  * @brief Release version of Calligra, at compile time.
  * 89 for Alpha.
  */
-#cmakedefine CALLIGRA_VERSION_RELEASE @CALLIGRA_VERSION_RELEASE@
+#define CALLIGRA_VERSION_RELEASE @CALLIGRA_VERSION_RELEASE@
 
 /**
  * @def CALLIGRA_ALPHA
@@ -148,6 +148,15 @@
  * but with the actual version number at a time a needed feature was introduced, e.g. 4.3.2.
  */
 #define CALLIGRA_IS_VERSION(a,b,c) ( CALLIGRA_VERSION >= CALLIGRA_MAKE_VERSION(a,b,c) )
+
+/**
+ * @def CALLIGRA_YEAR
+ * @ingroup CalligraMacros
+ * @brief Year of the Calligra release, set at compile time
+ *
+ * This macro is used in "About application" dialog for strings such as "© 2012-..., The Author Team".
+*/
+#define CALLIGRA_YEAR "@CALLIGRA_YEAR@"
 
 /**
  * Namespace for general Calligra functions.

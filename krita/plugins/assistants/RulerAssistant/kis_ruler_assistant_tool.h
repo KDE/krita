@@ -54,21 +54,21 @@ public:
     void mouseMoveEvent(KoPointerEvent *event);
 
     virtual QWidget *createOptionWidget();
+
 private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistant *assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
+
 private slots:
     void removeAllAssistants();
     void saveAssistants();
     void loadAssistants();
-
-    void saveFinish(KJob* job);
-    void openFinish(KJob* job);
 
 protected:
 

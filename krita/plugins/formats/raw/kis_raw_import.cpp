@@ -69,7 +69,7 @@ inline quint16 correctIndian(quint16 v)
 
 KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile << from << " " << to;
+    dbgFile << from << " " << to << "";
     if (/*from != "image/x-raw" || */to != "application/x-krita") { // too many from to check, and I don't think it can happen an unsupported from
         return KoFilter::NotImplemented;
     }
@@ -122,7 +122,6 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         if (image.isNull()) return KoFilter::CreationError;
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
-        KisTransaction("", layer -> paintDevice());
 
         image->addNode(layer, image->rootLayer());
         if (layer.isNull()) return KoFilter::CreationError;

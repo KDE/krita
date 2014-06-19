@@ -36,7 +36,6 @@ public:
                      const QRect& applyRect,
                      const KisFilterConfiguration* config,
                      KoUpdater* progressUpdater) const;
-    virtual int overlapMarginNeeded(const KisFilterConfiguration* c) const;
 protected:
     void setIgnoreAlpha(bool v);
 

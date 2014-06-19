@@ -50,7 +50,7 @@ void KisTransactionTest::testUndo()
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
 
-    KisTransaction transaction("mirror", dev, 0);
+    KisTransaction transaction(kundo2_noi18n("mirror"), dev, 0);
     KisTransformWorker::mirrorX(dev);
     transaction.commit(&undoAdapter);
 
@@ -91,7 +91,7 @@ void KisTransactionTest::testRedo()
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
 
-    KisTransaction transaction("mirror", dev, 0);
+    KisTransaction transaction(kundo2_noi18n("mirror"), dev, 0);
     KisTransformWorker::mirrorX(dev);
     transaction.commit(&undoAdapter);
 
@@ -129,14 +129,14 @@ void KisTransactionTest::testDeviceMove()
     QCOMPARE(dev->x(), 0);
     QCOMPARE(dev->y(), 0);
 
-    KisTransaction t1("move1", dev, 0);
+    KisTransaction t1(kundo2_noi18n("move1"), dev, 0);
     dev->move(10,20);
     t1.commit(&undoAdapter);
 
     QCOMPARE(dev->x(), 10);
     QCOMPARE(dev->y(), 20);
 
-    KisTransaction t2("move2", dev, 0);
+    KisTransaction t2(kundo2_noi18n("move2"), dev, 0);
     dev->move(7,11);
     t2.commit(&undoAdapter);
 

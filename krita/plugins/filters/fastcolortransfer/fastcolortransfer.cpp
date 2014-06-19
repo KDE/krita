@@ -112,11 +112,11 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
     dbgPlugins << "Compute the means and sigmas of src";
     double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
     double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
-    
-    KisRectConstIteratorSP srcLABIt = srcLAB->createRectConstIteratorNG(applyRect);
-    
+
+    KisSequentialConstIterator srcIt(srcLAB, applyRect);
+
     do {
-        const quint16* data = reinterpret_cast<const quint16*>(srcLABIt->oldRawData());
+        const quint16* data = reinterpret_cast<const quint16*>(srcIt.oldRawData());
         quint32 L = data[0];
         quint32 A = data[1];
         quint32 B = data[2];
@@ -127,7 +127,7 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
         sigmaA_src += A * A;
         sigmaB_src += B * B;
         if (progressUpdater) progressUpdater->setValue(++count);
-    } while (srcLABIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
+    } while (srcIt.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
     
     double totalSize = 1. / (applyRect.width() * applyRect.height());
     meanL_src *= totalSize;

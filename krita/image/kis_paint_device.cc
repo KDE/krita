@@ -51,7 +51,6 @@
 
 #include "tiles3/kis_hline_iterator.h"
 #include "tiles3/kis_vline_iterator.h"
-#include "tiles3/kis_rect_iterator.h"
 #include "tiles3/kis_random_accessor.h"
 
 #include "kis_default_bounds.h"
@@ -182,8 +181,7 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
 {
 }
 
-KisPaintDevice::Private::KisPaintDeviceStrategy*
-KisPaintDevice::Private::currentStrategy()
+KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::currentStrategy()
 {
     if (!defaultBounds->wrapAroundMode()) {
         return basicStrategy.data();
@@ -600,7 +598,6 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
         memset(defPixel, 0, pixelSize());
         m_d->colorSpace->convertPixelsTo(defaultPixel(), defPixel, dstColorSpace, 1, renderingIntent, conversionFlags);
         setDefaultPixel(defPixel);
-        delete defPixel;
     }
     else {
         KisRandomConstAccessorSP srcIt = createRandomConstAccessorNG(x, y);
@@ -827,17 +824,6 @@ KisVLineIteratorSP KisPaintDevice::createVLineIteratorNG(qint32 x, qint32 y, qin
 KisVLineConstIteratorSP KisPaintDevice::createVLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const
 {
     return m_d->currentStrategy()->createVLineConstIteratorNG(x, y, w);
-}
-
-KisRectIteratorSP KisPaintDevice::createRectIteratorNG(const QRect &rc)
-{
-    m_d->cache.invalidate();
-    return m_d->currentStrategy()->createRectIteratorNG(rc);
-}
-
-KisRectConstIteratorSP KisPaintDevice::createRectConstIteratorNG(const QRect &rc) const
-{
-    return m_d->currentStrategy()->createRectConstIteratorNG(rc);
 }
 
 KisRepeatHLineConstIteratorSP KisPaintDevice::createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth) const

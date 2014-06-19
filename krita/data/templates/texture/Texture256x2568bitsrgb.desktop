@@ -1,0 +1,15 @@
+[Desktop Entry]
+Icon=template_texture
+Name=Texture 256x256 8bit srgb
+Name[ca]=Textura 256x256 8bit SRGB
+Name[nl]=Textuur 256x256 8bit srgb
+Name[pl]=Tekstura 256x256 8bit srgb
+Name[pt]=Textura 256x256 8-bits sRGB
+Name[pt_BR]=Textura 256x256 8bits sRGB
+Name[sk]=Textúra 256x256 8bit srgb
+Name[sv]=Struktur 256 x 256 8-bitar SRGB
+Name[uk]=Текстура 256⨯256, 8-бітова, srgb
+Name[x-test]=xxTexture 256x256 8bit srgbxx
+Type=Link
+URL[$e]=.source/Texture256x2568bitsrgb.kra
+X-KDE-Hidden=false

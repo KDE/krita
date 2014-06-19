@@ -20,6 +20,8 @@
 #include "KoChangeTrackerElement.h"
 
 #include <kdebug.h>
+#include <kundo2magicstring.h>
+
 
 class KoChangeTrackerElement::Private
 {
@@ -27,7 +29,7 @@ public:
     Private() {}
     ~Private() {}
 
-    QString title;
+    KUndo2MagicString title;
     KoGenChange::Type type;
     QTextFormat changeFormat;
     QTextFormat prevFormat;
@@ -43,7 +45,7 @@ public:
     bool valid;
 };
 
-KoChangeTrackerElement::KoChangeTrackerElement(const QString& title, KoGenChange::Type type)
+KoChangeTrackerElement::KoChangeTrackerElement(const KUndo2MagicString& title, KoGenChange::Type type)
     :d(new Private())
 {
     d->title = title;
@@ -118,12 +120,12 @@ KoGenChange::Type KoChangeTrackerElement::getChangeType() const
     return d->type;
 }
 
-void KoChangeTrackerElement::setChangeTitle(const QString& title)
+void KoChangeTrackerElement::setChangeTitle(const KUndo2MagicString& title)
 {
     d->title = title;
 }
 
-QString KoChangeTrackerElement::getChangeTitle() const
+KUndo2MagicString KoChangeTrackerElement::getChangeTitle() const
 {
     return d->title;
 }

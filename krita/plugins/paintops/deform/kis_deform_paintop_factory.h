@@ -42,16 +42,16 @@ public:
         return "deformbrush";
     }
     virtual QString name() const {
-        return i18n("Deform brush");
+        return i18n("Deform");
     }
     virtual QString pixmap() {
         return "krita-deform.png";
     }
-    virtual QString category() const{
-        return KisPaintOpFactory::categoryExperimental();
+    virtual QString category() const {
+        return KisPaintOpFactory::categoryStable();
     }
 
-    virtual KisPaintOpSettingsSP settings(KisImageWSP image);
+    virtual KisPaintOpSettingsSP settings();
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 
 };

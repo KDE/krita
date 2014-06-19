@@ -211,11 +211,6 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void KisAbstractSliderSpinBox::mouseDoubleClickEvent(QMouseEvent* e)
-{
-    Q_UNUSED(e);
-}
-
 void KisAbstractSliderSpinBox::keyPressEvent(QKeyEvent* e)
 {
     Q_D(KisAbstractSliderSpinBox);

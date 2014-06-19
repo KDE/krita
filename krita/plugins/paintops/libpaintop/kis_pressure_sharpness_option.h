@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ public:
     * First part of the sharpness is the coordinates: in pen mode they are integers without fractions
     */
     void apply(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction) const;
-    
+
     /**
     * Apply threshold specified by user
     */
@@ -49,13 +49,21 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
-    /// threshold has 100 levels (like opacity)
-    void setThreshold(qint32 threshold){ m_threshold = qBound<qint32>(0,threshold,100); }
-    qint32 threshold(){ return m_threshold; }
 
-    void setSharpnessFactor(qreal factor){ KisCurveOption::setValue(factor); }
-    qreal sharpnessFactor() { return KisCurveOption::value(); }
+    /// threshold has 100 levels (like opacity)
+    void setThreshold(qint32 threshold) {
+        m_threshold = qBound<qint32>(0, threshold, 100);
+    }
+    qint32 threshold() {
+        return m_threshold;
+    }
+
+    void setSharpnessFactor(qreal factor) {
+        KisCurveOption::setValue(factor);
+    }
+    qreal sharpnessFactor() {
+        return KisCurveOption::value();
+    }
 
 private:
     qint32 m_threshold;

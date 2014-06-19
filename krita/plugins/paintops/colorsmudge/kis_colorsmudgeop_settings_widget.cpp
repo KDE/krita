@@ -21,6 +21,7 @@
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option_widget.h"
 #include "kis_smudge_option_widget.h"
+#include "kis_smudge_radius_option_widget.h"
 
 #include <kis_properties_configuration.h>
 #include <kis_paintop_options_widget.h>
@@ -49,6 +50,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addMirrorOption();
 
     addPaintOpOption(new KisSmudgeOptionWidget(i18n("Smudge Length"), i18n("Length: "), "SmudgeRate", true));
+    addPaintOpOption(new KisSmudgeRadiusOptionWidget(i18n("Smudge Radius"), i18n("Radius: "), "SmudgeRadius", true));
     addPaintOpOption(new KisRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPressureScatterOptionWidget());

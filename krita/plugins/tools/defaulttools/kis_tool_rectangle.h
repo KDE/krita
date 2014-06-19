@@ -58,7 +58,7 @@ class KisToolRectangleFactory : public KoToolFactoryBase
 public:
     KisToolRectangleFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolRectangle") {
-        setToolTip(i18n("Draw a rectangle"));
+        setToolTip(i18n("Rectangle Tool"));
 
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

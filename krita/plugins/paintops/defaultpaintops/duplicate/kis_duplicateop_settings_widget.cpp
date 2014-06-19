@@ -34,7 +34,7 @@
 
 
 KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
-        : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
@@ -55,7 +55,7 @@ KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()
 
 KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
 {
-    KisDuplicateOpSettings *config = new KisDuplicateOpSettings(0);
+    KisDuplicateOpSettings *config = new KisDuplicateOpSettings();
     config->setOptionsWidget(const_cast<KisDuplicateOpSettingsWidget*>(this));
     config->setProperty("paintop", "duplicate"); // XXX: make this a const id string
     writeConfiguration(config);

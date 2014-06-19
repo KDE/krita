@@ -82,7 +82,7 @@ void KisHistogram::updateHistogram()
         return;
     }
 
-    KisRectConstIteratorSP srcIt = m_paintDevice->createRectConstIteratorNG(m_bounds);
+    KisSequentialConstIterator srcIt(m_paintDevice, m_bounds);
     const KoColorSpace* cs = m_paintDevice->colorSpace();
 
     // Let the producer do it's work
@@ -95,9 +95,9 @@ void KisHistogram::updateHistogram()
     //      paint devices didn't know about their selections anymore.
     //      updateHistogram should get a selection parameter.
     do {
-        i = srcIt->nConseqPixels();
-        m_producer->addRegionToBin(srcIt->oldRawData(), 0, i, cs);
-    } while (srcIt->nextPixels(i));
+        i = srcIt.nConseqPixels();
+        m_producer->addRegionToBin(srcIt.oldRawData(), 0, i, cs);
+    } while (srcIt.nextPixels(i));
 
     computeHistogram();
 }

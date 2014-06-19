@@ -24,7 +24,7 @@
 
 
 KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP node)
-    : KisImageCommand(i18nc("(qtundo-format)", "Remove Layer"), image),
+    : KisImageCommand(kundo2_i18n("Remove Layer"), image),
       m_node(node)
 {
     addSubtree(image, node);

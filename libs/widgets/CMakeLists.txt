@@ -29,6 +29,7 @@ set(kowidgets_LIB_SRCS
     KoZoomMode.cpp
     KoDpi.cpp
 
+    KoFileDialog.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp
@@ -46,6 +47,7 @@ set(kowidgets_LIB_SRCS
     KoShadowConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
+    KoResourceItemChooserSync.cpp
     KoResourceSelector.cpp
     KoResourceModel.cpp
     KoResourceItemDelegate.cpp
@@ -67,6 +69,7 @@ set(kowidgets_LIB_SRCS
     KoContextBarButton.cpp
     KoResourceFiltering.cpp
 
+    KoResourceModelBase.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -109,6 +112,7 @@ install( FILES
     KoZoomHandler.h
     KoZoomMode.h
 
+    KoFileDialog.h
     KoColorPatch.h
     KoStrokeConfigWidget.h
     KoFillConfigWidget.h
@@ -134,6 +138,19 @@ install( FILES
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h
 
+    KoResourceModelBase.h
+
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)
+
+set(filedialogtester_SRCS
+    KoFileDialogTester.cpp
+    main.cpp
+)
+kde4_add_ui_files(filedialogtester_SRCS
+    KoFileDialogTester.ui
+)
+
+kde4_add_executable(filedialogtester ${filedialogtester_SRCS})
+target_link_libraries(filedialogtester kowidgets)

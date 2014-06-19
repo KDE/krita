@@ -30,7 +30,7 @@ class KisStrokesFacade;
 class KisSavedCommandBase : public KUndo2Command
 {
 public:
-    KisSavedCommandBase(const QString &name, KisStrokesFacade *strokesFacade);
+    KisSavedCommandBase(const KUndo2MagicString &name, KisStrokesFacade *strokesFacade);
     virtual ~KisSavedCommandBase();
 
     void undo();
@@ -63,7 +63,7 @@ private:
 class KisSavedMacroCommand : public KisSavedCommandBase
 {
 public:
-    KisSavedMacroCommand(const QString &name, KisStrokesFacade *strokesFacade);
+    KisSavedMacroCommand(const KUndo2MagicString &name, KisStrokesFacade *strokesFacade);
     ~KisSavedMacroCommand();
 
     void addCommand(KUndo2CommandSP command,

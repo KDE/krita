@@ -71,7 +71,7 @@ Properties:
 
 import QtQuick 1.1
 
-import "." 0.1
+import "."
 
 Item {
     id: root

@@ -32,6 +32,7 @@
 KisDeformPaintOpFactory::KisDeformPaintOpFactory()
     : KisPaintOpFactory(QStringList(COMPOSITE_COPY))
 {
+    setPriority(16);
 }
 
 KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0)
@@ -43,9 +44,8 @@ KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settin
     return op;
 }
 
-KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(KisImageWSP image)
+KisPaintOpSettingsSP KisDeformPaintOpFactory::settings()
 {
-    Q_UNUSED(image);
     return new KisDeformPaintOpSettings();
 }
 

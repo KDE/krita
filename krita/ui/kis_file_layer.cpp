@@ -34,6 +34,13 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
     , m_filename(filename)
     , m_scalingMethod(scaleToImageResolution)
 {
+    /**
+     * Set default paint device for a layer. It will be used is case
+     * the file does not exist anymore. Or course, this can happen only
+     * in the failing execution path.
+     */
+    m_image = new KisPaintDevice(image->colorSpace());
+
     connect(&m_loader, SIGNAL(loadingFinished()), SLOT(slotLoadingFinished()));
     m_loader.setPath(path());
     m_loader.reloadImage();
@@ -157,13 +164,13 @@ void KisFileLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAda
     return visitor.visit(this, undoAdapter);
 }
 
-KUndo2Command* KisFileLayer::crop(const QRect & rect)
+KUndo2Command* KisFileLayer::crop(const QRect & /*rect*/)
 {
     qWarning() << "WARNING: File Layer does not support cropping!" << name();
     return 0;
 }
 
-KUndo2Command* KisFileLayer::transform(const QTransform &transform)
+KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)
 {
     qWarning() << "WARNING: File Layer does not support transformations!" << name();
     return 0;

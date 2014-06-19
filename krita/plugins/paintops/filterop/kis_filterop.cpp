@@ -45,11 +45,12 @@
 #include <kis_filterop_settings.h>
 #include <kis_iterator_ng.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_transaction.h>
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter)
-        , settings(settings)
-        , m_filterConfiguration(0)
+    : KisBrushBasedPaintOp(settings, painter)
+    , settings(settings)
+    , m_filterConfiguration(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -57,8 +58,8 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     m_tmpDevice = source()->createCompositionSourceDevice();
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
-    m_sizeOption.sensor()->reset();
-    m_rotationOption.sensor()->reset();
+    m_sizeOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
     m_filterConfiguration = settings->filterConfig();
     m_smudgeMode = settings->getBool(FILTER_SMUDGE_MODE);
@@ -123,15 +124,21 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
         p.setCompositeOp(COMPOSITE_COPY);
     }
     p.bitBltOldData(neededRect.topLeft() - dstRect.topLeft(), source(), neededRect);
+
+    KisTransaction transaction(m_tmpDevice);
     m_filter->process(m_tmpDevice, dabRect, m_filterConfiguration, 0);
+    transaction.end();
 
 
     painter()->
-        bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
-                                 m_tmpDevice, dab,
-                                 0,0,
-                                 dabRect.x(), dabRect.y(),
-                                 dabRect.width(), dabRect.height());
+    bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
+                             m_tmpDevice, dab,
+                             0, 0,
+                             dabRect.x(), dabRect.y(),
+                             dabRect.width(), dabRect.height());
+
+    painter()->renderMirrorMaskSafe(dstRect, m_tmpDevice, 0, 0, dab,
+                                    !m_dabCache->needSeparateOriginal());
 
     return effectiveSpacing(dabRect.width(), dabRect.height());
 }

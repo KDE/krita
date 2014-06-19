@@ -82,7 +82,7 @@ public:
 
     KisToolLineFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolLine") {
-        setToolTip(i18n("Draw a straight line with the current brush"));
+        setToolTip(i18n("Line Tool"));
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

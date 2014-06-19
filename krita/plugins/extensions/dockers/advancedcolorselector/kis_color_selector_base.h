@@ -22,6 +22,7 @@
 #include <QRgb>
 #include <QPointer>
 #include <kis_canvas2.h>
+#include "kis_acs_types.h"
 
 class QColor;
 class KoColor;
@@ -29,6 +30,8 @@ class QTimer;
 class KoColorSpace;
 class KisCanvas2;
 class KisColorPreviewPopup;
+class KisDisplayColorConverter;
+
 
 /// Base class for all color selectors, that should support color management and zooming.
 class KisColorSelectorBase : public QWidget
@@ -44,25 +47,32 @@ public:
     virtual void setCanvas(KisCanvas2* canvas);
     virtual void unsetCanvas();
     const KoColorSpace* colorSpace() const;
-    enum ColorRole {Foreground, Background};
 
-public slots:
-    virtual void updateSettings();
-    virtual void setColor(const QColor& color);
-    virtual void showPopup(Move move=MoveToMousePosition);
-    /// commits a color to the resource manager
-    void commitColor(const KoColor& koColor, ColorRole role);
-    void updateColorPreview(const QColor& color);
+    KisDisplayColorConverter* converter() const;
 
 public:
-    /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
-    QColor findGeneratingColor(const KoColor& ref) const;
+    void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);
+    void updateColorPreview(const KoColor &color);
+    void showColorPreview();
 
+    virtual void setColor(const KoColor& color);
+
+public slots:
+    /**
+     * Flushes caches and redraws the selectors
+     */
+    virtual void reset();
+
+    virtual void updateSettings();
+    virtual void showPopup(Move move=MoveToMousePosition);
+
+public:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
 
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
+
 protected:
     void keyPressEvent(QKeyEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
@@ -70,6 +80,10 @@ protected:
     void dropEvent(QDropEvent *);
     void setHidingTime(int time);
     bool isPopup() const { return m_isPopup; }
+
+private:
+    void commitColor(const KoColor& koColor, Acs::ColorRole role);
+
 
 protected slots:
     void hidePopup();
@@ -85,6 +99,7 @@ protected:
     KisColorSelectorBase* m_popup;
     QWidget* m_parent;
     bool m_colorUpdateAllowed;
+    bool m_colorUpdateSelf;
 
 private:
     QTimer* m_hideTimer;

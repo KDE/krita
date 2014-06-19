@@ -22,10 +22,12 @@
  */
 
 #include "kis_channel_separator.h"
-#include <limits.h>
 
+#include <limits.h>
 #include <stdlib.h>
 #include <vector>
+
+#include <QDesktopServices>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -33,11 +35,12 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <knuminput.h>
-#include <kfiledialog.h>
+#include <kmimetype.h>
 
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include <KoFileDialog.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -208,7 +211,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
         KisUndoAdapter * undo = image->undoAdapter();
         if (outputOps == TO_LAYERS) {
-            undo->beginMacro(i18n("Separate Image"));
+            undo->beginMacro(kundo2_i18n("Separate Image"));
         }
 
         // Flatten the image if required
@@ -233,27 +236,20 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             if (outputOps == TO_LAYERS) {
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 adapter.addNode(l.data(), image->rootLayer(), 0);
-            } else {
-                QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
-                QString mimelist = listMimeFilter.join(" ");
-
-                KFileDialog fd(QString(), mimelist, m_view);
-                fd.setObjectName("Export Layer");
-                fd.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
-                fd.setMimeFilter(listMimeFilter);
-                fd.setOperationMode(KFileDialog::Saving);
-                fd.setUrl(KUrl(ch->name()));
-                if (!fd.exec()) return;
-
-                KUrl url = fd.selectedUrl();
-                QString mimefilter = fd.currentMimeFilter();
+            }
+            else {
+                KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "OpenDocument");
+                dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
+                dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+                dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+                KUrl url = dialog.url();
 
                 if (url.isEmpty())
                     return;
-                if (mimefilter.isNull()) {
-                    KMimeType::Ptr mime = KMimeType::findByUrl(url);
-                    mimefilter = mime->name();
-                }
+
+
+                KMimeType::Ptr mime = KMimeType::findByUrl(url);
+                QString mimefilter = mime->name();
 
 
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));

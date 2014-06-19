@@ -72,8 +72,7 @@ KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
     if (hasProperty(FILTER_ID)) {
         KisFilterSP filter = KisFilterRegistry::instance()->get(getString(FILTER_ID));
-        Q_ASSERT(filter);
-        if(filter) {
+        if (filter) {
             KisFilterConfiguration* configuration = filter->factoryConfiguration(0);
             configuration->fromXML(getString(FILTER_CONFIGURATION));
             return configuration;
@@ -100,8 +99,7 @@ void KisFilterOpSettings::fromXML(const QDomElement& e)
     QDomElement element = e.firstChildElement("filterconfig");
     if (hasProperty(FILTER_ID)) {
         KisFilterSP filter = KisFilterRegistry::instance()->get(getString(FILTER_ID));
-        Q_ASSERT(filter);
-        if(filter) {
+        if (filter) {
             KisFilterConfiguration* configuration = filter->factoryConfiguration(0);
             configuration->fromXML(element);
             setProperty(FILTER_CONFIGURATION, configuration->toXML());

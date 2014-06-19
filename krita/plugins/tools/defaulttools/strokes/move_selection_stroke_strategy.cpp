@@ -25,14 +25,14 @@
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
 #include "kis_transaction.h"
-#include <commands/kis_deselect_global_selection_command.h>
+#include <commands_new/kis_selection_move_command2.h>
 
 
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
                                                          KisSelectionSP selection,
                                                          KisUpdatesFacade *updatesFacade,
                                                          KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(i18n("Move Selection Stroke"), false, undoAdapter),
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move Selection"), false, undoAdapter),
       m_paintLayer(paintLayer),
       m_selection(selection),
       m_updatesFacade(updatesFacade),
@@ -70,12 +70,7 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
     indirect->setTemporaryCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER));
     indirect->setTemporaryOpacity(OPACITY_OPAQUE_U8);
 
-    m_updatesFacade->blockUpdates();
-    runAndSaveCommand(
-        KUndo2CommandSP(new KisDeselectGlobalSelectionCommand(m_paintLayer->image())),
-        KisStrokeJobData::SEQUENTIAL,
-        KisStrokeJobData::EXCLUSIVE);
-    m_updatesFacade->unblockUpdates();
+    m_selection->setVisible(false);
 }
 
 void MoveSelectionStrokeStrategy::finishStrokeCallback()
@@ -84,12 +79,23 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
         static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
 
     KisTransaction transaction(name(), m_paintLayer->paintDevice());
-    indirect->mergeToLayer(m_paintLayer, (KisUndoAdapter*)0, "");
+    indirect->mergeToLayer(m_paintLayer, (KisUndoAdapter*)0, KUndo2MagicString());
     runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
                       KisStrokeJobData::SEQUENTIAL,
                       KisStrokeJobData::NORMAL);
 
     indirect->setTemporaryTarget(0);
+
+    QPoint selectionOffset(m_selection->x(), m_selection->y());
+
+    m_updatesFacade->blockUpdates();
+    runAndSaveCommand(
+    KUndo2CommandSP(new KisSelectionMoveCommand2(m_selection, selectionOffset, selectionOffset + m_finalOffset)),
+        KisStrokeJobData::SEQUENTIAL,
+        KisStrokeJobData::EXCLUSIVE);
+    m_updatesFacade->unblockUpdates();
+
+    m_selection->setVisible(true);
 
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
 }
@@ -102,6 +108,8 @@ void MoveSelectionStrokeStrategy::cancelStrokeCallback()
     QRegion dirtyRegion = indirect->temporaryTarget()->region();
 
     indirect->setTemporaryTarget(0);
+
+    m_selection->setVisible(true);
 
     m_paintLayer->setDirty(dirtyRegion);
 
@@ -125,6 +133,7 @@ void MoveSelectionStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         movedDevice->setX(movedDevice->x() + d->offset.x());
         movedDevice->setY(movedDevice->y() + d->offset.y());
+        m_finalOffset += d->offset;
 
         m_paintLayer->setDirty(dirtyRegion);
     } else {

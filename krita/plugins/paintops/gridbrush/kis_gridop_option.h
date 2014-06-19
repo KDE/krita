@@ -42,24 +42,24 @@ public:
 
     int gridWidth() const;
     void setWidth(int width) const;
-   
+
     int gridHeight() const;
     void setHeight(int height) const;
-    
+
     int divisionLevel() const;
     bool pressureDivision() const;
     qreal scale() const;
-    
-    
+
+
     qreal vertBorder() const;
     qreal horizBorder() const;
     bool randomBorder() const;
-    
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
-   KisGridOpOptionsWidget * m_options;
+    KisGridOpOptionsWidget * m_options;
 
 };
 

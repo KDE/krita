@@ -1,0 +1,292 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2014 Arjen Hiemstra <ahiemstra@heimr.nl>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+var values = {
+    base: {
+        base: "#a0a0a0",
+        text: "#ffffff",
+        header: "#000000",
+        headerText: "#ffffff",
+    },
+
+    components: {
+        button: {
+            base: "transparent",
+            text: "#ffffff",
+            highlight: "transparent",
+            checked: Qt.rgba(1.0, 1.0, 1.0, 0.7),
+        },
+        colorSwatch: {
+            border: "silver",
+        },
+        dialog: {
+            modalOverlay: Qt.rgba(0.0, 0.0, 0.0, 0.5),
+            background: {
+                start: "#F7F8FC",
+                stop: "#F0F0FA",
+            },
+            header: "#9AA1B2",
+            headerText: "#ffffff",
+            progress: {
+                background: "#ffffff",
+                border: "silver",
+                bar: "gray",
+            },
+            button: "#9AA1B2",
+            buttonText: "#ffffff",
+        },
+        expandingListView: {
+            selection: {
+                border: "#ffffff",
+                fill: Qt.rgba(1.0, 1.0, 1.0, 0.4),
+                text: Qt.rgba(0.0, 0.0, 0.0, 0.65),
+            },
+            list: {
+                background: Qt.rgba(1.0, 1.0, 1.0, 0.4),
+                item: "#ffffff",
+                itemBorder: "silver",
+                itemText: Qt.rgba(0.0, 0.0, 0.0, 0.65),
+            },
+        },
+        header: "#ffffff",
+        label: "#323232",
+        listItem: {
+            background: {
+                start: "#FBFBFB",
+                stop: "#F0F0F0",
+            },
+            title: "#000000",
+            description: "#333333",
+        },
+        messageStack: {
+            background: "gray",
+            border: "silver",
+            text: "white",
+            button: {
+                fill: "gray",
+                border: "silver",
+            },
+        },
+        newImageList: {
+            start: "#FBFBFB",
+            stop: "#F0F0F0",
+        },
+        newsList: {
+            listItem: {
+                start: "#FBFBFB",
+                stop: "#F0F0F0",
+                moreLink: "#999999",
+            },
+            title: "#000000",
+            date: "#666666",
+            description: "#000000",
+            backLink: "#999999",
+        },
+        panelTextField: {
+            border: "silver",
+            background: Qt.rgba(1.0, 1.0, 1.0, 0.4),
+            enabled: Qt.rgba(0.0, 0.0, 0.0, 0.0),
+            disabled: Qt.rgba(0.0, 0.0, 0.0, 0.7),
+        },
+        rangeInput: {
+
+        },
+        recentFilesList: {
+            start: "#FBFBFB",
+            stop: "#F0F0F0",
+        },
+        scrollDecorator: {
+            base: "silver",
+            border: "transparent"
+        },
+        slider: {
+            background: {
+                fill: Qt.rgba(1.0, 1.0, 1.0, 0.75),
+                border: "silver",
+            },
+            handle: {
+                fill: "silver",
+                border: "transparent",
+            },
+        },
+        textField: {
+            background: Qt.rgba(1.0, 1.0, 1.0, 0.75),
+            border: {
+                normal: "silver",
+                error: "red",
+                focus: "gray",
+            },
+            placeholder: "#5a5a5a",
+        },
+        textFieldMultiline: {
+            background: Qt.rgba(1.0, 1.0, 1.0, 0.75),
+            border: "silver",
+        },
+    },
+
+    panels: {
+        dropArea: {
+            fill: Qt.rgba(1.0, 1.0, 1.0, 0.25),
+            border: "#ffffff",
+        },
+
+        base: {
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
+        },
+
+        presets: {
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
+
+            preset: {
+                active: "#D7D7D7",
+                inactive: "transparent",
+            }
+        },
+
+        layers: {
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
+            subheader: "#cfcfcf",
+            editorButtons: {
+                active: "#EAEAEA",
+                inactive: "transparent",
+                text: "gray",
+                border: "silver",
+            },
+            layer: {
+                active: Qt.rgba(1.0, 1.0, 1.0, 0.5),
+                inactive: Qt.rgba(1.0, 1.0, 1.0, 0.2),
+                background: "#d7d7d7",
+                text: "#000000",
+                visible: "#ffffff",
+                locked: "#ffffff",
+            },
+        },
+
+        selection: {
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
+
+            buttons: {
+                color: Qt.rgba(1.0, 1.0, 1.0, 0.4),
+                text: "black",
+                border: "silver"
+            }
+        },
+
+        filter: {
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
+        },
+
+        color: {
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
+        },
+
+        tool: {
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
+            subheader: "#cfcfcf",
+        },
+
+        menu: {
+            base: "#00000",
+            text: "#ffffff",
+            buttonHighlight: "#dcdcdc",
+        },
+
+        newImage: {
+            background: "#ffffff",
+            header: {
+                start: "#707070",
+                stop: "#565656",
+                text: "#ffffff",
+            }
+        },
+
+        openImage: {
+            background: "#ffffff",
+            header: {
+                start: "#707070",
+                stop: "#565656",
+                text: "#ffffff",
+            }
+        },
+    },
+
+    pages: {
+        welcome: {
+            background: "#ffffff",
+            open:{
+                header: {
+                    start: "#707070",
+                    stop: "#565656",
+                    text: "#ffffff",
+                },
+            },
+            create: {
+                header: {
+                    start: "#565656",
+                    stop: "#707070",
+                    text: "#ffffff",
+                },
+            },
+            news: {
+                header: {
+                    start: "#707070",
+                    stop: "#565656",
+                    text: "#ffffff",
+                },
+            },
+        },
+        open: {
+            background: "#ffffff",
+            location: "#ffffff",
+        },
+        save: {
+            background: "#ffffff",
+            location: "#ffffff",
+            footer: "#000000",
+        },
+        customImagePage: {
+            background: "#ffffff",
+            groupBox: "lightGray",
+            controls: {
+                background: Qt.rgba(1.0, 1.0, 1.0, 0.4),
+                border: "white",
+            },
+        }
+    },
+}

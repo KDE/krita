@@ -56,34 +56,34 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
 
     int count = cs->channelCount();
     QRect srcRect(sx, sy, sw, sh);
-    KisRectIteratorSP cit = canvas->createRectIteratorNG(srcRect);
-    KisRectIteratorSP dit = dab->createRectIteratorNG(srcRect);
+    KisSequentialConstIterator cit(canvas, srcRect);
+    KisSequentialIterator dit(dab, srcRect);
     QVector<float> cc(count), dc(count);
     do {
-        if (cs->opacityU8(dit->rawData()) > 10 && cs->opacityU8(cit->rawData()) > 10) {
+        if (cs->opacityU8(dit.rawData()) > 10 && cs->opacityU8(cit.rawDataConst()) > 10) {
 
-            cs->normalisedChannelsValue(cit->rawData(), cc);
-            cs->normalisedChannelsValue(dit->rawData(), dc);
+            cs->normalisedChannelsValue(cit.rawDataConst(), cc);
+            cs->normalisedChannelsValue(dit.rawData(), dc);
 
             for (int i = 0; i < count; i++) {
                 dc[i] = (1.0 - 0.4 * pressure) * cc[i] + 0.4 * pressure * dc[i];
             }
 
-            cs->fromNormalisedChannelsValue(dit->rawData(), dc);
+            cs->fromNormalisedChannelsValue(dit.rawData(), dc);
 
-            if (dit->x() == (int)(sw / 2) && dit->y() == (int)(sh / 2)) {
-                painter->setPaintColor(KoColor(dit->rawData(), cs));
+            if (dit.x() == (int)(sw / 2) && dit.y() == (int)(sh / 2)) {
+                painter->setPaintColor(KoColor(dit.rawData(), cs));
             }
         }
-        dit->nextPixel();
-    } while(cit->nextPixel());
+        dit.nextPixel();
+    } while(cit.nextPixel());
 }
 
 void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect)
 {
     Q_UNUSED(sx);
     Q_UNUSED(sy);
-    
+
     if (!m_mixingEnabled) return;
 
     KisFixedPaintDevice canvas(device->colorSpace());

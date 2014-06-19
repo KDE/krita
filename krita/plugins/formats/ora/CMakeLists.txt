@@ -36,9 +36,9 @@ install(TARGETS kritaoraexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  krita_ora_import.desktop krita_ora_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS  krita_ora.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
-if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  krita_ora_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
+endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 
 install(FILES krita_ora.xml DESTINATION ${XDG_MIME_INSTALL_DIR})

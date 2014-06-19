@@ -33,6 +33,7 @@
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
+#include "kis_smudge_radius_option.h"
 
 class QPointF;
 class KoAbstractGradient;
@@ -64,6 +65,7 @@ private:
     KisPressureSpacingOption  m_spacingOption;
     KisSmudgeOption           m_smudgeRateOption;
     KisRateOption             m_colorRateOption;
+    KisSmudgeRadiusOption     m_smudgeRadiusOption;
     KisOverlayModeOption      m_overlayModeOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption  m_scatterOption;

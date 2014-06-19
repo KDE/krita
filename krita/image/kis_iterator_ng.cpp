@@ -22,9 +22,9 @@ KisBaseConstIteratorNG::~KisBaseConstIteratorNG()
 {
 }
 
-KisBaseIteratorNG::~KisBaseIteratorNG()
-{
-}
+//KisBaseIteratorNG::~KisBaseIteratorNG()
+//{
+//}
 
 KisHLineConstIteratorNG::~KisHLineConstIteratorNG()
 {
@@ -39,13 +39,5 @@ KisVLineConstIteratorNG::~KisVLineConstIteratorNG()
 }
 
 KisVLineIteratorNG::~KisVLineIteratorNG()
-{
-}
-
-KisRectConstIteratorNG::~KisRectConstIteratorNG()
-{
-}
-
-KisRectIteratorNG::~KisRectIteratorNG()
 {
 }

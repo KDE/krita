@@ -41,7 +41,7 @@
 KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), categoryColors(), i18n("&Color to Alpha..."))
 {
     setSupportsPainting(true);
-    setSupportsAdjustmentLayers(false);
+    setSupportsAdjustmentLayers(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
@@ -73,7 +73,7 @@ inline void inverseOver(const int numChannels, const int *channelIndex,
 
 template<typename channel_type, typename composite_type>
 void applyToIterator(const int numChannels, const int *channelIndex,
-                     KisRectIteratorSP it, KoColor baseColor,
+                     KisSequentialIterator &it, KoColor baseColor,
                      int threshold, const KoColorSpace *cs,
                      KisProgressUpdateHelper &progressHelper)
 {
@@ -82,8 +82,8 @@ void applyToIterator(const int numChannels, const int *channelIndex,
     channel_type *baseColorData = reinterpret_cast<channel_type*>(baseColorData_uint8);
 
     do {
-        channel_type *dst = reinterpret_cast<channel_type*>(it->rawData());
-        quint8 *dst_uint8 = it->rawData();
+        channel_type *dst = reinterpret_cast<channel_type*>(it.rawData());
+        quint8 *dst_uint8 = it.rawData();
 
         quint8 diff = cs->difference(baseColorData_uint8, dst_uint8);
 
@@ -98,7 +98,7 @@ void applyToIterator(const int numChannels, const int *channelIndex,
                                                     newOpacity);
 
         progressHelper.step();
-    } while(it->nextPixel());
+    } while(it.nextPixel());
 }
 
 void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
@@ -118,7 +118,7 @@ void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
     const KoColorSpace * cs = device->colorSpace();
 
     KisProgressUpdateHelper progressHelper(progressUpdater, 100, rect.width() * rect.height());
-    KisRectIteratorSP it = device->createRectIteratorNG(rect);
+    KisSequentialIterator it(device, rect);
     KoColor baseColor(cTA, cs);
 
     QVector<int> channelIndex;

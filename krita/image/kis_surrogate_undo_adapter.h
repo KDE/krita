@@ -22,6 +22,7 @@
 #include "kis_undo_adapter.h"
 
 class KisSurrogateUndoStore;
+class KUndo2MagicString;
 
 
 class KRITAIMAGE_EXPORT KisSurrogateUndoAdapter : public KisUndoAdapter
@@ -33,7 +34,7 @@ public:
     const KUndo2Command* presentCommand();
     void undoLastCommand();
     void addCommand(KUndo2Command *command);
-    void beginMacro(const QString& macroName);
+    void beginMacro(const KUndo2MagicString& macroName);
     void endMacro();
 
     void undo();

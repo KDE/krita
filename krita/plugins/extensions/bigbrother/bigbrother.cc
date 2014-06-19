@@ -28,29 +28,33 @@
 
 #include <KoIcon.h>
 #include <KoUpdater.h>
+#include <KoResourceServerProvider.h>
+#include <KoFileDialog.h>
 
-#include <recorder/kis_action_recorder.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
 #include <kis_debug.h>
 #include <kis_global.h>
 #include <kis_image.h>
-#include <KoPattern.h>
-#include <recorder/kis_play_info.h>
-#include <recorder/kis_recorded_action.h>
-#include <recorder/kis_recorded_action_factory_registry.h>
-#include <recorder/kis_recorded_action_load_context.h>
-#include <recorder/kis_recorded_action_save_context.h>
+#include <kis_resource_server_provider.h>
 #include <kis_types.h>
 #include <kis_view2.h>
+#include <KoPattern.h>
+#include <recorder/kis_action_recorder.h>
+#include <recorder/kis_macro.h>
+#include <recorder/kis_macro_player.h>
+#include <recorder/kis_play_info.h>
+#include <recorder/kis_recorded_action_factory_registry.h>
+#include <recorder/kis_recorded_action.h>
+#include <recorder/kis_recorded_action_load_context.h>
+#include <recorder/kis_recorded_action_save_context.h>
 
 #include "actionseditor/kis_actions_editor.h"
 #include "actionseditor/kis_actions_editor_dialog.h"
-#include <kis_resource_server_provider.h>
-#include <KoResourceServerProvider.h>
-#include <recorder/kis_macro_player.h>
+
+#include <QDesktopServices>
 #include <QApplication>
-#include <QFileDialog>
+
 
 K_PLUGIN_FACTORY(BigBrotherPluginFactory, registerPlugin<BigBrotherPlugin>();)
 K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
@@ -91,11 +95,6 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
         addAction("Macro_Open_Edit", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenEdit()));
 
-        // Save recorded action
-        action  = new KisAction(i18n("Save all actions"), this);
-        addAction("Recording_Global_Save", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotSave()));
-
         // Start recording action
         m_startRecordingMacroAction = new KisAction(koIcon("media-record"), i18n("Start recording macro"), this);
         addAction("Recording_Start_Recording_Macro", m_startRecordingMacroAction);
@@ -115,14 +114,10 @@ BigBrotherPlugin::~BigBrotherPlugin()
     delete m_recorder;
 }
 
-void BigBrotherPlugin::slotSave()
-{
-    saveMacro(m_view->image()->actionRecorder(), KUrl());
-}
-
 void BigBrotherPlugin::slotOpenPlay()
 {
     KisMacro* m = openMacro();
+    qDebug() << m;
     if (!m) return;
     dbgPlugins << "Play the macro";
     KoProgressUpdater* updater = m_view->createProgressUpdater();
@@ -186,12 +181,16 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 {
 
     Q_UNUSED(url);
+    QStringList mimeFilter;
+    mimeFilter << "*.krarec|Recorded actions (*.krarec)";
 
-    //QString filename = QFileDialog::getOpenFileName(m_view, i18n("Open Macro"), "*.krarec|Recorded actions (*.krarec)");
-    QString filename;
-    QFileDialog* dia = new QFileDialog();
-    dia->open();
+    KoFileDialog dialog(m_view, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Macro"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
+    QString filename = dialog.url();
     RecordedActionLoadContext loadContext;
+
     if (!filename.isNull()) {
         QDomDocument doc;
         QFile f(filename);
@@ -224,7 +223,13 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 
 void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
 {
-    QString filename = QFileDialog::getSaveFileName(m_view, i18n("Save Macro"), url.url(), "*.krarec|Recorded actions (*.krarec)");
+    KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "krita/bigbrother");
+    dialog.setCaption(i18n("Save Macro"));
+    dialog.setOverrideDir(url.url());
+    dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
+
+    QString filename = dialog.url();
+
     if (!filename.isNull()) {
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");

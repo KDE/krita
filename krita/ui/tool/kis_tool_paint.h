@@ -19,6 +19,8 @@
 #ifndef KIS_TOOL_PAINT_H_
 #define KIS_TOOL_PAINT_H_
 
+#include <vector>
+
 #include <QCursor>
 #include <QLayout>
 #include <QLabel>
@@ -174,7 +176,7 @@ private:
 private:
 
     bool m_specialHoverModifier;
-    QGridLayout *m_optionWidgetLayout;
+    QGridLayout *m_optionsWidgetLayout;
 
     bool m_supportOutline;
 
@@ -185,9 +187,9 @@ private:
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
     bool m_isOutlineEnabled;
+    std::vector<int> m_standardBrushSizes;
 
 signals:
-    void sigFavoritePaletteCalled(const QPoint&);
     void sigPaintingFinished();
 };
 

@@ -156,7 +156,6 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
 
         KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
-        KisTransaction("", layer -> paintDevice());
 
         PSDImageData imageData(&header);
         imageData.read(&f, layer->paintDevice());
@@ -167,6 +166,15 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     }
     else {
 
+        enum SectionType {
+            OTHER = 0,
+            OPEN_FOLDER,
+            CLOSED_FOLDER,
+            BOUNDING_DIVIDER
+        };
+
+        QStack<KisGroupLayerSP> groupStack;
+        groupStack.push(m_image->rootLayer());
         // read the channels for the various layers
         for(int i = 0; i < layerSection.nLayers; ++i) {
 
@@ -175,15 +183,41 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             PSDLayerRecord* layerRecord = layerSection.layers.at(i);
             dbgFile << "Going to read channels for layer" << i << layerRecord->layerName;
 
-            KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
-            layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
-            if (!layerRecord->readPixelData(&f, layer->paintDevice())) {
-                dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
-                return KisImageBuilder_RESULT_FAILURE;
-            }
+            QStringList infoBlocks = layerRecord->infoBlocks.keys();
+            if (infoBlocks.contains("lsct")) {
+                QBuffer buffer;
+                buffer.setBuffer(&layerRecord->infoBlocks["lsct"]->data);
+                buffer.open(QBuffer::ReadOnly);
 
-            m_image->addNode(layer, m_image->rootLayer());
-            layer->setVisible(layerRecord->visible);
+                quint32 type;
+                if (!psdread(&buffer, &type)) {
+                    return KisImageBuilder_RESULT_FAILURE;
+                }
+                if (type == BOUNDING_DIVIDER && !groupStack.isEmpty()) {
+                    KisGroupLayerSP groupLayer = new KisGroupLayer(m_image, "temp", OPACITY_OPAQUE_U8);
+                    m_image->addNode(groupLayer, groupStack.top());
+                    groupStack.push(groupLayer);
+                } else if ((type == OPEN_FOLDER || type == CLOSED_FOLDER) && !groupStack.isEmpty()) {
+                    KisGroupLayerSP groupLayer = groupStack.pop();
+                    groupLayer->setName(layerRecord->layerName);
+                    groupLayer->setVisible(layerRecord->visible);
+                }
+            } else {
+                KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
+                layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
+                if (!layerRecord->readPixelData(&f, layer->paintDevice())) {
+                    dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
+                    return KisImageBuilder_RESULT_FAILURE;
+                }
+                if (!groupStack.isEmpty()) {
+                    m_image->addNode(layer, groupStack.top());
+                }
+                else {
+                    m_image->addNode(layer, m_image->root());
+                }
+                layer->setVisible(layerRecord->visible);
+
+            }
         }
     }
 

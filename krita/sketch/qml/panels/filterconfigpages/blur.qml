@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../../components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base
@@ -105,6 +105,7 @@ Item {
         Label {
             anchors.leftMargin: Constants.DefaultMargin;
             text: "Shape:"
+            font: Settings.theme.font("panelSection");
         }
         ExpandingListView {
             id: blurShape

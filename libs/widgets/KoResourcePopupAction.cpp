@@ -51,7 +51,7 @@ public:
     KoCheckerBoardPainter checkerPainter;
 };
 
-KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *resourceAdapter, QObject *parent)
+KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter, QObject *parent)
 :  KAction(parent)
 , d(new Private())
 {
@@ -83,7 +83,7 @@ KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *re
     } else if (pattern) {
         KoImageCollection *collection = new KoImageCollection();
         d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground(collection));
-        static_cast<KoPatternBackground*>(d->background.data())->setPattern(pattern->image());
+        static_cast<KoPatternBackground*>(d->background.data())->setPattern(pattern->pattern());
     }
 
     QHBoxLayout *layout = new QHBoxLayout(widget);
@@ -139,7 +139,7 @@ void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
         } else if (pattern) {
             KoImageCollection *collection = new KoImageCollection();
             d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground(collection));
-            qSharedPointerDynamicCast<KoPatternBackground>(d->background)->setPattern(pattern->image());
+            qSharedPointerDynamicCast<KoPatternBackground>(d->background)->setPattern(pattern->pattern());
         }
 
         emit resourceSelected(d->background);

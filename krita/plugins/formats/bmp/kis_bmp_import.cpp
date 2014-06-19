@@ -57,9 +57,6 @@ KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const Q
 {
     dbgFile << "BMP import! From:" << from << ", To:" << to << 0;
 
-    if (!(from == "image/bmp" || from == "image/x-xpixmap" || from == "image/gif" || from == "image/x-xbitmap"))
-        return KoFilter::NotImplemented;
-
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;
 
@@ -90,7 +87,6 @@ KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const Q
         KisImageSP image = new KisImage(doc->createUndoStore(), img.width(), img.height(), colorSpace, "imported from bmp");
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
-        KisTransaction(0, layer->paintDevice());
         layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
         image->addNode(layer.data(), image->rootLayer().data());
 

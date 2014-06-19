@@ -137,7 +137,6 @@ public:
     /** Resets part of the meta data */
     void resetMetaData();
 
-public slots:
     /** Takes care of updating the document info from configuration correctly */
     void updateParameters();
 

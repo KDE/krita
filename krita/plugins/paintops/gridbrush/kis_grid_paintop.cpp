@@ -41,7 +41,7 @@
 #include <kis_color_option.h>
 
 #ifdef BENCHMARK
-    #include <QTime>
+#include <QTime>
 #endif
 
 #ifdef Q_OS_WIN
@@ -52,9 +52,9 @@
 #endif
 
 KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-    : KisPaintOp( painter )
-    , m_settings( settings )
-    , m_image ( image )
+    : KisPaintOp(painter)
+    , m_settings(settings)
+    , m_image(image)
 {
 
     m_properties.fillProperties(settings);
@@ -66,7 +66,7 @@ KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainte
 
     m_dab = source()->createCompositionSourceDevice();
     m_painter = new KisPainter(m_dab);
-    m_painter->setPaintColor( painter->paintColor() );
+    m_painter->setPaintColor(painter->paintColor());
     m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
 #ifdef BENCHMARK
     m_count = m_total = 0;
@@ -93,17 +93,18 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     int gridHeight = m_properties.gridHeight * m_properties.scale;
 
     int divide;
-    if (m_properties.pressureDivision){
+    if (m_properties.pressureDivision) {
         divide = m_properties.divisionLevel * info.pressure();
-    }else{
+    }
+    else {
         divide = m_properties.divisionLevel;
     }
     divide = qRound(m_properties.scale * divide);
 
-    int posX = qRound( info.pos().x() );
-    int posY = qRound( info.pos().y() );
+    int posX = qRound(info.pos().x());
+    int posY = qRound(info.pos().y());
 
-    QPoint dabPosition( posX - posX % gridWidth, posY - posY % gridHeight );
+    QPoint dabPosition(posX - posX % gridWidth, posY - posY % gridHeight);
     QPoint dabRightBottom(dabPosition.x() + gridWidth, dabPosition.y() + gridHeight);
 
     divide = qMax(1, divide);
@@ -111,15 +112,16 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     qreal xStep = gridWidth / (qreal)divide;
 
     QRectF tile;
-    KoColor color( painter()->paintColor() );
+    KoColor color(painter()->paintColor());
     KisCrossDeviceColorPicker colorPicker(m_settings->node()->paintDevice(), color);
 
     qreal vertBorder = m_properties.vertBorder;
     qreal horzBorder = m_properties.horizBorder;
-    if (m_properties.randomBorder){
-        if (vertBorder == horzBorder){
+    if (m_properties.randomBorder) {
+        if (vertBorder == horzBorder) {
             vertBorder = horzBorder = vertBorder * drand48();
-        }else{
+        }
+        else {
             vertBorder *= drand48();
             horzBorder *= drand48();
         }
@@ -127,26 +129,25 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
     bool shouldColor = true;
     // fill the tile
-    if (m_colorProperties.fillBackground){
+    if (m_colorProperties.fillBackground) {
         m_dab->fill(dabPosition.x(), dabPosition.y(), gridWidth, gridHeight, painter()->backgroundColor().data());
     }
 
-    for (int y = 0; y < divide; y++){
-        for (int x = 0; x < divide; x++){
+    for (int y = 0; y < divide; y++) {
+        for (int x = 0; x < divide; x++) {
             // determine the tile size
-            tile = QRectF(dabPosition.x() + x*xStep,dabPosition.y() + y*yStep, xStep, yStep);
-            tile.adjust(vertBorder,horzBorder,-vertBorder,-horzBorder);
+            tile = QRectF(dabPosition.x() + x * xStep, dabPosition.y() + y * yStep, xStep, yStep);
+            tile.adjust(vertBorder, horzBorder, -vertBorder, -horzBorder);
             tile = tile.normalized();
 
             // do color transformation
-            if (shouldColor){
-                if (m_colorProperties.sampleInputColor){
+            if (shouldColor) {
+                if (m_colorProperties.sampleInputColor) {
                     colorPicker.pickOldColor(tile.center().x(), tile.center().y(), color.data());
                 }
 
                 // mix the color with background color
-                if (m_colorProperties.mixBgColor)
-                {
+                if (m_colorProperties.mixBgColor) {
                     KoMixColorsOp * mixOp = source()->colorSpace()->mixColorsOp();
 
                     const quint8 *colors[2];
@@ -157,12 +158,12 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                     int MAX_16BIT = 255;
                     qreal blend = info.pressure();
 
-                    colorWeights[0] = static_cast<quint16>( blend * MAX_16BIT);
-                    colorWeights[1] = static_cast<quint16>( (1.0 - blend) * MAX_16BIT);
-                    mixOp->mixColors(colors, colorWeights, 2, color.data() );
+                    colorWeights[0] = static_cast<quint16>(blend * MAX_16BIT);
+                    colorWeights[1] = static_cast<quint16>((1.0 - blend) * MAX_16BIT);
+                    mixOp->mixColors(colors, colorWeights, 2, color.data());
                 }
 
-                if (m_colorProperties.useRandomHSV){
+                if (m_colorProperties.useRandomHSV) {
                     QHash<QString, QVariant> params;
                     params["h"] = (m_colorProperties.hue / 180.0) * drand48();
                     params["s"] = (m_colorProperties.saturation / 100.0) * drand48();
@@ -173,13 +174,13 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                     transfo->transform(color.data(), color.data() , 1);
                 }
 
-                if (m_colorProperties.useRandomOpacity){
+                if (m_colorProperties.useRandomOpacity) {
                     qreal alpha = drand48();
-                    color.setOpacity( alpha );
-                    m_painter->setOpacity( qRound(alpha * OPACITY_OPAQUE_U8) );
+                    color.setOpacity(alpha);
+                    m_painter->setOpacity(qRound(alpha * OPACITY_OPAQUE_U8));
                 }
 
-                if ( !m_colorProperties.colorPerParticle ){
+                if (!m_colorProperties.colorPerParticle) {
                     shouldColor = false;
                 }
 
@@ -187,45 +188,39 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
             }
 
             // paint some element
-            switch (m_properties.shape){
-                case 0:
-                {
-                            m_painter->paintEllipse( tile );
-                            break;
-                }
-                case 1:
-                {
-                            // anti-aliased version
-                            //m_painter->paintRect(tile);
-                            m_dab->fill(tile.topLeft().x(), tile.topLeft().y(), tile.width(), tile.height(), color.data());
-                            break;
-                }
-                case 2:
-                {
-                            m_painter->drawDDALine(tile.topRight(), tile.bottomLeft());
-                            break;
-                }
-                case 3:
-                {
-                            m_painter->drawLine( tile.topRight(), tile.bottomLeft() );
-                            break;
-                }
-                case 4:
-                {
-                            m_painter->drawThickLine(tile.topRight(), tile.bottomLeft() , 1,10);
-                            break;
-                }
-                default:
-                {
-                            break;
-                }
+            switch (m_properties.shape) {
+            case 0: {
+                m_painter->paintEllipse(tile);
+                break;
+            }
+            case 1: {
+                // anti-aliased version
+                //m_painter->paintRect(tile);
+                m_dab->fill(tile.topLeft().x(), tile.topLeft().y(), tile.width(), tile.height(), color.data());
+                break;
+            }
+            case 2: {
+                m_painter->drawDDALine(tile.topRight(), tile.bottomLeft());
+                break;
+            }
+            case 3: {
+                m_painter->drawLine(tile.topRight(), tile.bottomLeft());
+                break;
+            }
+            case 4: {
+                m_painter->drawThickLine(tile.topRight(), tile.bottomLeft() , 1, 10);
+                break;
+            }
+            default: {
+                break;
+            }
             }
         }
     }
 
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    painter()->renderMirrorMask(rc,m_dab);
+    painter()->renderMirrorMask(rc, m_dab);
 
 
 #ifdef BENCHMARK

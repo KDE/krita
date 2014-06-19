@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import "../components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base;
@@ -25,11 +25,13 @@ Item {
 
     enabled: !collapsed;
 
+    signal clicked(variant options);
+
     Rectangle {
         id: panel;
         width: parent.width;
         height: parent.height;
-        color: "white";
+        color: Settings.theme.color("panels/newImage/background");
         clip: true;
         radius: Constants.DefaultMargin;
 
@@ -43,13 +45,13 @@ Item {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#707070"
+                    color: Settings.theme.color("panels/newImage/header/start");
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#565656"
+                    color: Settings.theme.color("panels/newImage/header/stop");
                 }
             }
 
@@ -60,11 +62,11 @@ Item {
                     right: parent.right;
                 }
                 height: Constants.DefaultMargin;
-                color: "#000000";
+                color: Settings.theme.color("panels/newImage/header/stop");
             }
 
 
-            Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
 
             Label {
                 anchors {
@@ -73,8 +75,8 @@ Item {
                     verticalCenter: parent.verticalCenter;
                 }
                 text: "Create New";
-                font.pixelSize: Constants.LargeFontSize;
-                color: "white";
+                font: Settings.theme.font("panelHeader");
+                color: Settings.theme.color("panels/newImage/header/text");
             }
         }
 
@@ -82,6 +84,8 @@ Item {
             anchors.top: header.bottom;
             width: parent.width;
             height: Constants.GridHeight * 9;
+
+            onClicked: base.clicked(options);
         }
     }
 

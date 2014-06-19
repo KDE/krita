@@ -39,6 +39,11 @@ public:
     ~KisLayerComposition();
 
    /**
+    * Sets name of the composition
+    */
+    void setName(const QString& name);
+
+   /**
     * Name of the composition as show in the docker
     * \return name of the composition
     */
@@ -54,7 +59,20 @@ public:
     */
     void apply();
 
+   /**
+    * Set the export enabled flag, if false the compositions will not be exported
+    */
+    void setExportEnabled(bool enabled);
+
+   /**
+    * Export enabled flag, if false the compositions will not be exported
+    * \return name of the composition
+    */
+    bool isExportEnabled();
+
     void setVisible(QUuid id, bool visible);
+
+    void setCollapsed(QUuid id, bool collapsed);
 
     void save(QDomDocument& doc, QDomElement& element);
 
@@ -62,6 +80,8 @@ private:
     KisImageWSP m_image;
     QString m_name;
     QMap<QUuid, bool> m_visibilityMap;
+    QMap<QUuid, bool> m_collapsedMap;
+    bool m_exportEnabled;
     
     friend class KisCompositionVisitor;
 };

@@ -25,7 +25,8 @@
 #include <QPointF>
 
 
-class KisParticleBrushProperties {
+class KisParticleBrushProperties
+{
 public:
     quint16 particleCount;
     quint16 iterations;
@@ -38,18 +39,21 @@ class KisRandomAccessor;
 class KoColorSpace;
 class KoColor;
 
-class ParticleBrush{
+class ParticleBrush
+{
 
 public:
 
     ParticleBrush();
     ~ParticleBrush();
     void initParticles();
-    void draw(KisPaintDeviceSP dab,const KoColor& color,QPointF pos);
+    void draw(KisPaintDeviceSP dab, const KoColor& color, QPointF pos);
 
     void setInitialPosition(QPointF pos);
-    void setProperties(KisParticleBrushProperties * properties){        m_properties = properties;    }
-    
+    void setProperties(KisParticleBrushProperties * properties) {
+        m_properties = properties;
+    }
+
 private:
     /// paints wu particle, similar to spray version but you can turn on respecting opacity of the tool and add weight to opacity
     /// also the particle respects opacity in the destination pixel buffer
@@ -58,7 +62,7 @@ private:
     QVector<QPointF> m_particlePos;
     QVector<QPointF> m_particleNextPos;
     QVector<qreal> m_accelaration;
-    
+
     KisParticleBrushProperties * m_properties;
 };
 

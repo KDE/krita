@@ -9,7 +9,7 @@
 
 // Check GCC
 #if __GNUC__
-  #if __x86_64__ || __ppc64__
+  #if defined (__x86_64__) || defined (__ppc64__)
     #define ENV64BIT
   #else
     #define ENV32BIT
@@ -30,6 +30,9 @@
 
 /* Defines if you Get Hot New Stuff support */
 #cmakedefine GHNS 1
+
+/* Defines if the krita crash handler is built */
+#cmakedefine USE_BREAKPAD 1
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64

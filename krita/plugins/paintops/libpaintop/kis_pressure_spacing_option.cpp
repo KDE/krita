@@ -24,7 +24,7 @@
 const QString ISOTROPIC_SPACING = "Spacing/Isotropic";
 
 KisPressureSpacingOption::KisPressureSpacingOption()
-    : KisCurveOption(i18n("Spacing"), "Spacing", KisPaintOpOption::brushCategory(), false),
+    : KisCurveOption(i18n("Spacing"), "Spacing", KisPaintOpOption::generalCategory(), false),
       m_isotropicSpacing(false)
 {
     setMinimumLabel(i18n("0%"));
@@ -34,9 +34,9 @@ KisPressureSpacingOption::KisPressureSpacingOption()
 
 double KisPressureSpacingOption::apply(const KisPaintInformation & info) const
 {
-    if(!isChecked())
+    if (!isChecked())
         return 1.0;
-    
+
     return computeValue(info);
 }
 

@@ -129,8 +129,8 @@ void KoPathSegmentTypeCommand::initialize(const QList<KoPathPointData> & pointDa
     }
 
     if (m_segmentType == Curve) {
-        setText(i18nc("(qtundo-format)", "Change segments to curves"));
+        setText(kundo2_i18n("Change segments to curves"));
     } else {
-        setText(i18nc("(qtundo-format)", "Change segments to lines"));
+        setText(kundo2_i18n("Change segments to lines"));
     }
 }

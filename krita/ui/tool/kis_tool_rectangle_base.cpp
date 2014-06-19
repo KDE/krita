@@ -18,6 +18,9 @@
  */
 
 #include "kis_tool_rectangle_base.h"
+
+#include <QtCore/qmath.h>
+
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -35,7 +38,7 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
 void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
 {
     if(mode() == KisTool::PAINT_MODE) {
-        paintRectangle(gc, pixelToView(QRectF(m_dragStart, m_dragEnd)).toRect());
+        paintRectangle(gc, createRect(m_dragStart, m_dragEnd));
     }
 
     KisToolPaint::paint(gc, converter);
@@ -105,13 +108,40 @@ void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 
     updateArea();
 
-    finishRect(QRectF(m_dragStart, m_dragEnd).normalized());
+    finishRect(createRect(m_dragStart, m_dragEnd));
     event->accept();
 }
 
-void KisToolRectangleBase::paintRectangle(QPainter &gc, const QRect &viewRect)
+QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end)
+{
+    /**
+     * To make the dragging user-friendly it should work in a bit
+     * non-obvious way: the start-drag point must be handled with
+     * "ceil"/"floor" (depending on the direction of the drag) and the
+     * end-drag point should follow usual "round" semantics.
+     */
+
+    qreal x0 = start.x();
+    qreal y0 = start.y();
+    qreal x1 = end.x();
+    qreal y1 = end.y();
+
+    int newX0 = x1 - x0 > 0 ? qCeil(x0) : qFloor(x0);
+    int newY0 = y1 - y0 > 0 ? qCeil(y0) : qFloor(y0);
+
+    int newX1 = qRound(x1);
+    int newY1 = qRound(y1);
+
+    QRectF result;
+    result.setCoords(newX0, newY0, newX1, newY1);
+    return result.normalized();
+}
+
+void KisToolRectangleBase::paintRectangle(QPainter &gc, const QRectF &imageRect)
 {
     KIS_ASSERT_RECOVER_RETURN(canvas());
+
+    QRect viewRect = pixelToView(imageRect).toAlignedRect();
 
     QPainterPath path;
     path.addRect(viewRect);

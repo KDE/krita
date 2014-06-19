@@ -59,6 +59,11 @@ SvgStyleParser::SvgStyleParser(SvgLoadingContext &context)
 
 }
 
+SvgStyleParser::~SvgStyleParser()
+{
+    delete d;
+}
+
 void SvgStyleParser::parseStyle(const SvgStyles &styles)
 {
     SvgGraphicsContext *gc = d->context.currentGC();

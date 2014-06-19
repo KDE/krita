@@ -28,21 +28,25 @@ class KisColorSelectorRing : public KisColorSelectorComponent
 public:
     explicit KisColorSelectorRing(KisColorSelector *parent);
     int innerRadius() const;
-    QColor selectColor(int x, int y);
-    void setColor(const QColor &color);
+    void setColor(const KoColor &color);
+    void setInnerRingRadiusFraction(qreal newFraction);
+
 protected:
     void paint(QPainter*);
+    KoColor selectColor(int x, int y);
     bool containsPointInComponentCoords(int x, int y) const;
+
 private:
     void paintCache();
     void colorCache();
     int outerRadius() const;
-    
+
     QImage m_pixelCache;
     const KoColorSpace* m_cachedColorSpace;
     int m_cachedSize;
     qreal m_lastHue;
     QList<QRgb> m_cachedColors;
+    qreal m_innerRingRadiusFraction;
 };
 
 #endif // KIS_COLOR_SELECTOR_RING_H

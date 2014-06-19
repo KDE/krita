@@ -26,6 +26,7 @@
 #include <QImageReader>
 #include <QDomDocument>
 #include <QBuffer>
+#include <QCryptographicHash>
 
 #include <KoInputDevice.h>
 
@@ -43,19 +44,18 @@ struct KisPaintOpPreset::Private {
     {}
 
     KisPaintOpSettingsSP settings;
-    QImage image;
 };
 
 
 KisPaintOpPreset::KisPaintOpPreset()
-        : KoResource(QString())
-        , m_d(new Private)
+    : KoResource(QString())
+    , m_d(new Private)
 {
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
-        : KoResource(fileName)
-        , m_d(new Private)
+    : KoResource(fileName)
+    , m_d(new Private)
 {
 }
 
@@ -123,9 +123,21 @@ bool KisPaintOpPreset::load()
     }
 
     QFile file(filename());
-    if (file.size() == 0) return false;
 
-    QImageReader reader(filename(), "PNG");
+    if (file.size() == 0) return false;
+    if (!file.open(QIODevice::ReadOnly)) {
+        warnKrita << "Can't open file " << filename();
+        return false;
+    }
+
+    bool res = loadFromDevice(&file);
+
+    return res;
+}
+
+bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
+{
+    QImageReader reader(dev, "PNG");
 
     QString version = reader.text("version");
     QString preset = reader.text("preset");
@@ -136,8 +148,8 @@ bool KisPaintOpPreset::load()
         return false;
     }
 
-    if (!reader.read(&m_d->image))
-    {
+    QImage img;
+    if (!reader.read(&img)) {
         dbgImage << "Fail to decode PNG";
         return false;
     }
@@ -151,11 +163,16 @@ bool KisPaintOpPreset::load()
     if (!doc.setContent(preset)) {
         return false;
     }
+
     fromXML(doc.documentElement());
+
     if (!m_d->settings) {
         return false;
     }
+
     setValid(true);
+    setImage(img);
+
     return true;
 }
 
@@ -166,29 +183,14 @@ bool KisPaintOpPreset::save()
         return false;
 
     QString paintopid = m_d->settings->getString("paintop", "");
+
     if (paintopid.isEmpty())
         return false;
 
-    QImageWriter writer(filename(), "PNG");
+    QFile f(filename());
+    f.open(QFile::WriteOnly);
 
-    QDomDocument doc;
-    QDomElement root = doc.createElement("Preset");
-    toXML(doc, root);
-    doc.appendChild(root);
-
-    writer.setText("version", "2.2");
-    writer.setText("preset", doc.toString());
-
-    QImage img;
-
-    if(m_d->image.isNull())
-    {
-        img = QImage(1,1, QImage::Format_RGB32);
-    } else {
-        img = m_d->image;
-    }
-
-    return writer.write(img);
+    return saveToDevice(&f);
 }
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
@@ -206,15 +208,13 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     setName(presetElt.attribute("name"));
     QString paintopid = presetElt.attribute("paintopid");
 
-    if (paintopid.isEmpty())
-    {
+    if (paintopid.isEmpty()) {
         dbgImage << "No paintopid attribute";
         setValid(false);
         return;
     }
 
-    if (KisPaintOpRegistry::instance()->get(paintopid) == 0)
-    {
+    if (KisPaintOpRegistry::instance()->get(paintopid) == 0) {
         dbgImage << "No paintop " << paintopid;
         setValid(false);
         return;
@@ -222,9 +222,8 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
 
     KoID id(paintopid, "");
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
-    if (!settings)
-    {
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id);
+    if (!settings) {
         setValid(false);
         qWarning() << "Could not load settings for preset" << paintopid;
         return;
@@ -233,13 +232,45 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     setSettings(settings);
 }
 
-QImage KisPaintOpPreset::image() const
+QByteArray KisPaintOpPreset::generateMD5() const
 {
-    return m_d->image;
+    QByteArray ba;
+    QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
+    saveToDevice(&buf);
+    buf.close();
+
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
+
+    return ba;
 }
 
-void KisPaintOpPreset::setImage(QImage image)
+bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 {
-    m_d->image = image;
+    QImageWriter writer(dev, "PNG");
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("Preset");
+    toXML(doc, root);
+    doc.appendChild(root);
+
+    writer.setText("version", "2.2");
+    writer.setText("preset", doc.toString());
+
+    QImage img;
+
+    if (image().isNull()) {
+        img = QImage(1,1, QImage::Format_RGB32);
+    }
+    else {
+        img = image();
+    }
+
+    return writer.write(img);
+
 }
 

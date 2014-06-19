@@ -80,19 +80,19 @@ Matrix<qreal, 3, 3> initSymmFilter(qreal &offset, qreal &factor)
 Matrix<qreal, 3, 3> initAsymmFilter(qreal &offset, qreal &factor)
 {
     Matrix<qreal, 3, 3> filter;
-    filter(0,0) = -1.0;
-    filter(1,0) = -2.0;
-    filter(2,0) = -1.0;
+    filter(0,0) = 1.0;
+    filter(1,0) = 2.0;
+    filter(2,0) = 1.0;
 
-    filter(0,1) = 0;
-    filter(1,1) = 0;
-    filter(2,1) = 0;
+    filter(0,1) = 0.0;
+    filter(1,1) = 1.0;
+    filter(2,1) = 0.0;
 
-    filter(0,2) = 1.0;
-    filter(1,2) = 2.0;
-    filter(2,2) = 1.0;
+    filter(0,2) =-1.0;
+    filter(1,2) =-2.0;
+    filter(2,2) =-1.0;
 
-    offset = 0.5;
+    offset = 0.0;
     factor = 1.0;
 
     return filter;
@@ -127,14 +127,14 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     kernel->data()[7] = 0;
     kernel->data()[8] = 0;
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction(0);
+    gc.beginTransaction();
     gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
     gc.deleteTransaction();
 
     QImage resultImage = dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height());
 
     QPoint errpoint;
-    if (TestUtil::compareQImages(errpoint, qimage, resultImage)) {
+    if (!TestUtil::compareQImages(errpoint, qimage, resultImage)) {
         resultImage.save("identity_convolution.png");
         QFAIL(QString("Identity kernel did change image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
@@ -155,9 +155,11 @@ void KisConvolutionPainterTest::testSymmConvolution()
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction(0);
-    gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
-                   imageRect.size());
+    gc.beginTransaction();
+
+    QRect filterRect = imageRect.adjusted(1,1,-1,-1);
+    gc.applyMatrix(kernel, dev, filterRect.topLeft(), filterRect.topLeft(),
+                   filterRect.size());
     gc.deleteTransaction();
 
     QByteArray resultData(initialData.size(), 0);
@@ -180,10 +182,12 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction(0);
+    gc.beginTransaction();
     gc.setChannelFlags(channelFlags);
-    gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
-                   imageRect.size());
+
+    QRect filterRect = imageRect.adjusted(1,1,-1,-1);
+    gc.applyMatrix(kernel, dev, filterRect.topLeft(), filterRect.topLeft(),
+                   filterRect.size());
     gc.deleteTransaction();
 
 
@@ -191,7 +195,6 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
     dev->readBytes((quint8*)resultData.data(), imageRect);
 
     QRect filteredRect = imageRect.adjusted(1, 1, -1, -1);
-    KoColor filteredPixel(QColor(120,120,120,128), dev->colorSpace());
 
     quint8 *srcPtr = (quint8*) initialData.data();
     quint8 *resPtr = (quint8*) resultData.data();
@@ -201,15 +204,18 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
 
             bool isFiltered = filteredRect.contains(col, row);
 
-            KoColor referencePixel(dev->colorSpace());
+            int pixelValue = 8 + row * imageRect.width() + col;
+            KoColor filteredPixel(QColor(pixelValue, pixelValue, pixelValue, 255), dev->colorSpace());
+
+            KoColor resultPixel(dev->colorSpace());
             for(int j = 0; j < pixelSize; j++) {
-                referencePixel.data()[j] = isFiltered && channelFlags[j] ?
+                resultPixel.data()[j] = isFiltered && channelFlags[j] ?
                     filteredPixel.data()[j] : srcPtr[j];
             }
 
-            if(memcmp(resPtr, referencePixel.data(), pixelSize)) {
+            if(memcmp(resPtr, resultPixel.data(), pixelSize)) {
                 printPixel("Actual:  ", pixelSize, resPtr);
-                printPixel("Expected:", pixelSize, referencePixel.data());
+                printPixel("Expected:", pixelSize, resultPixel.data());
                 QFAIL("Failed to filter area");
             }
 
@@ -289,7 +295,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
         // CALLGRIND_START_INSTRUMENTATION;
 
-        gc.beginTransaction(0);
+        gc.beginTransaction();
         gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                        imageRect.size());
         gc.deleteTransaction();
@@ -321,7 +327,7 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
        QTime timer;
        timer.start();
 
-       gc.beginTransaction("");
+       gc.beginTransaction();
 
        if (( horizontalRadius > 0 ) && ( verticalRadius > 0 )) {
            KisPaintDeviceSP interm = new KisPaintDevice(dev->colorSpace());

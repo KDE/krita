@@ -54,7 +54,8 @@ private:
 
 };
 
-class KisSprayProperties {
+class KisSprayProperties
+{
 public:
     quint16 diameter;
     quint16 radius;
@@ -70,7 +71,7 @@ public:
     bool gaussian;
 
 public:
-    void loadSettings(const KisPropertiesConfiguration* settings){
+    void loadSettings(const KisPropertiesConfiguration* settings) {
         diameter = settings->getInt(SPRAY_DIAMETER);
         radius =  qRound(0.5 * diameter);
         aspect = settings->getDouble(SPRAY_ASPECT);

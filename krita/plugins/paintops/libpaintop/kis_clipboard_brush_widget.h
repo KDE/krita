@@ -39,11 +39,12 @@ class KisGbrBrush;
 class KisClipboard;
 class KoResource;
 
-class KisWdgClipboardBrush : public QWidget, public Ui::KisWdgClipboardBrush{
+class KisWdgClipboardBrush : public QWidget, public Ui::KisWdgClipboardBrush
+{
     Q_OBJECT
 
 public:
-    KisWdgClipboardBrush(QWidget* parent) : QWidget(parent){
+    KisWdgClipboardBrush(QWidget* parent) : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -74,7 +75,7 @@ private:
     KisImageWSP m_image;
     KisBrushSP m_brush;
     bool m_brushCreated;
-    KoResourceServerAdapter<KisBrush>* m_rServerAdapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
 };
 
 #endif // KIS_CLIPBOARD_BRUSH_WIDGET_H

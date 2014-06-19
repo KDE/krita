@@ -210,7 +210,7 @@ void KisPixelSelectionTest::testUndo()
     KisPixelSelectionSP psel = new KisPixelSelection();
 
     {
-        KisTransaction transaction("", psel);
+        KisTransaction transaction(psel);
         psel->select(QRect(50, 50, 100, 100));
         transaction.end();
     }
@@ -218,7 +218,7 @@ void KisPixelSelectionTest::testUndo()
     QCOMPARE(psel->selectedExactRect(), QRect(50, 50, 100, 100));
 
     {
-        KisTransaction transaction("", psel);
+        KisTransaction transaction(psel);
         psel->select(QRect(150, 50, 100, 100));
         transaction.end();
     }
@@ -226,7 +226,7 @@ void KisPixelSelectionTest::testUndo()
     QCOMPARE(psel->selectedExactRect(), QRect(50, 50, 200, 100));
 
     {
-        KisTransaction transaction("", psel);
+        KisTransaction transaction(psel);
         psel->crop(QRect(75, 75, 10, 10));
         transaction.revert();
     }
@@ -328,7 +328,7 @@ void KisPixelSelectionTest::testOutlineCacheTransactions()
     QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
 
     {
-        KisTransaction t("", psel1);
+        KisTransaction t(psel1);
         t.end();
         QVERIFY(!psel1->outlineCacheValid());
     }
@@ -339,7 +339,7 @@ void KisPixelSelectionTest::testOutlineCacheTransactions()
     QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
 
     {
-        KisTransaction t("", psel1);
+        KisTransaction t(psel1);
         t.revert();
         QVERIFY(psel1->outlineCacheValid());
         QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
@@ -351,7 +351,7 @@ void KisPixelSelectionTest::testOutlineCacheTransactions()
     QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
 
     {
-        KisSelectionTransaction t("", psel1);
+        KisSelectionTransaction t(psel1);
 
         QVERIFY(psel1->outlineCacheValid());
         QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));

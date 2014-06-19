@@ -146,7 +146,7 @@ public:
      */
     void add(KoTableCellStyle *style);
     /**
-     * Add a new sewction style, automatically giving it a new styleId.
+     * Add a new section style, automatically giving it a new styleId.
      */
     void add(KoSectionStyle *style);
 

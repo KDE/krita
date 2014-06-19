@@ -16,8 +16,7 @@ include_directories(
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
-    ${KOMAIN_INCLUDES}
-    ${KDE4_INCLUDE_DIR}/threadweaver/)
+    ${KOMAIN_INCLUDES})
 
 ########### Flake Plugin library ###############
 
@@ -39,6 +38,7 @@ SET ( textshape_SRCS
     TextChanges.cpp
     TextChange.cpp
     FontSizeAction.cpp
+    FontFamilyAction.cpp
 
     ReferencesTool.cpp
     ReferencesToolFactory.cpp
@@ -171,9 +171,9 @@ kde4_add_ui_files(textshape_SRCS
 kde4_add_plugin(calligra_shape_text ${textshape_SRCS})
 
 target_link_libraries(calligra_shape_text kotext kotextlayout komain ${EXTRA_LIBS})
-if( SHOULD_BUILD_RDF )
+if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
-endif( SHOULD_BUILD_RDF )
+endif( SHOULD_BUILD_FEATURE_RDF )
 
 
 install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -104,7 +104,7 @@ struct KisPainter::Private {
     KisPaintDeviceSP            polygon;
     qint32                      maskImageWidth;
     qint32                      maskImageHeight;
-    QPointF                     axisCenter;
+    QPointF                     axesCenter;
     bool                        mirrorHorizontaly;
     bool                        mirrorVerticaly;
     KoCompositeOp::ParameterInfo paramInfo;
@@ -205,7 +205,7 @@ void KisPainter::end()
                "Please use end/deleteTransaction() instead");
 }
 
-void KisPainter::beginTransaction(const QString& transactionName)
+void KisPainter::beginTransaction(const KUndo2MagicString& transactionName)
 {
     Q_ASSERT_X(!d->transaction, "KisPainter::beginTransaction()",
                "You asked for a new transaction while still having "
@@ -214,14 +214,6 @@ void KisPainter::beginTransaction(const QString& transactionName)
 
     d->transaction = new KisTransaction(transactionName, d->device);
     Q_CHECK_PTR(d->transaction);
-}
-
-QString KisPainter::transactionText()
-{
-    Q_ASSERT_X(d->transaction, "KisPainter::transactionText()",
-               "No transaction is in progress");
-
-    return d->transaction->text();
 }
 
 void KisPainter::revertTransaction()
@@ -538,7 +530,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
             qint32 columnsRemaining = srcWidth;
             qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY_);
             qint32 numContiguousSrcRows = srcIt->numContiguousRows(srcY_);
-            qint32 numContiguousSelRows = maskIt->numContiguousRows(srcY_);
+            qint32 numContiguousSelRows = maskIt->numContiguousRows(dstY_);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, numContiguousSelRows);
@@ -548,7 +540,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
 
                 qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX_);
                 qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(srcX_);
-                qint32 numContiguousSelColumns = maskIt->numContiguousColumns(srcX_);
+                qint32 numContiguousSelColumns = maskIt->numContiguousColumns(dstX_);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, numContiguousSelColumns);
@@ -2482,16 +2474,16 @@ KisPaintOp* KisPainter::paintOp() const
     return d->paintOp;
 }
 
-void KisPainter::setMirrorInformation(const QPointF& axisCenter, bool mirrorHorizontaly, bool mirrorVerticaly)
+void KisPainter::setMirrorInformation(const QPointF& axesCenter, bool mirrorHorizontaly, bool mirrorVerticaly)
 {
-    d->axisCenter = axisCenter;
+    d->axesCenter = axesCenter;
     d->mirrorHorizontaly = mirrorHorizontaly;
     d->mirrorVerticaly = mirrorVerticaly;
 }
 
 void KisPainter::copyMirrorInformation(KisPainter* painter)
 {
-    painter->setMirrorInformation(d->axisCenter, d->mirrorHorizontaly, d->mirrorVerticaly);
+    painter->setMirrorInformation(d->axesCenter, d->mirrorHorizontaly, d->mirrorVerticaly);
 }
 
 bool KisPainter::hasMirroring() const
@@ -2570,8 +2562,8 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
     int x = rc.topLeft().x();
     int y = rc.topLeft().y();
 
-    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
+    int mirrorX = -((x+rc.width()) - d->axesCenter.x()) + d->axesCenter.x();
+    int mirrorY = -((y+rc.height()) - d->axesCenter.y()) + d->axesCenter.y();
 
     if (d->mirrorHorizontaly && d->mirrorVerticaly){
         dab->mirror(true, false);
@@ -2596,8 +2588,8 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedP
     int x = rc.topLeft().x();
     int y = rc.topLeft().y();
 
-    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
+    int mirrorX = -((x+rc.width()) - d->axesCenter.x()) + d->axesCenter.x();
+    int mirrorY = -((y+rc.height()) - d->axesCenter.y()) + d->axesCenter.y();
 
     if (d->mirrorHorizontaly && d->mirrorVerticaly){
         dab->mirror(true, false);
@@ -2657,8 +2649,8 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
 
     int x = rc.topLeft().x();
     int y = rc.topLeft().y();
-    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
+    int mirrorX = -((x+rc.width()) - d->axesCenter.x()) + d->axesCenter.x();
+    int mirrorY = -((y+rc.height()) - d->axesCenter.y()) + d->axesCenter.y();
 
     rects << rc;
 

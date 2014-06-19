@@ -32,7 +32,6 @@
 #include <klocale.h>
 #include <kstandardaction.h>
 #include <kmessagebox.h>
-#include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kfilewidget.h>
 #include <kurl.h>
@@ -237,7 +236,6 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
     , m_imageFlatten(0)
     , m_imageMergeLayer(0)
     , m_groupLayersSave(0)
-    , m_actLayerVis(false)
     , m_imageResizeToLayer(0)
     , m_flattenLayer(0)
     , m_rasterizeLayer(0)
@@ -291,6 +289,12 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
+    KisAction * action = new KisAction(i18n("Rename current layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionCollection->addAction("RenameCurrentLayer", action);
+    action->setShortcut(KShortcut(Qt::Key_F2));
+    connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
+
     m_rasterizeLayer  = new KisAction(i18n("Rasterize Layer"), this);
     m_rasterizeLayer->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
     m_rasterizeLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
@@ -337,11 +341,6 @@ void KisLayerManager::imageResizeToActiveLayer()
     if (image && (layer = activeLayer())) {
         image->cropImage(layer->exactBounds());
     }
-}
-
-void KisLayerManager::actLayerVisChanged(int show)
-{
-    m_actLayerVis = (show != 0);
 }
 
 void KisLayerManager::layerProperties()
@@ -401,7 +400,7 @@ void KisLayerManager::layerProperties()
     else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
 
         KisDlgGeneratorLayer dlg(alayer->name(), m_view);
-        dlg.setCaption(i18n("Generator Layer Properties"));
+        dlg.setCaption(i18n("Fill Layer Properties"));
 
         KisSafeFilterConfigurationSP configBefore(alayer->filter());
         Q_ASSERT(configBefore);
@@ -482,7 +481,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         parent = above ? above->parent() : 0;
     }
 
-    m_commandsAdapter->beginMacro(i18n("Convert to a Paint Layer"));
+    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));
     m_commandsAdapter->addNode(layer, parent, above);
     m_commandsAdapter->removeNode(source);
     m_commandsAdapter->endMacro();
@@ -743,8 +742,6 @@ void KisLayerManager::mergeLayer()
         image->mergeDown(layer, strategy);
 
     }
-
-
     m_view->updateGUI();
 }
 
@@ -776,7 +773,7 @@ void KisLayerManager::rasterizeLayer()
     QRect rc = layer->projection()->exactBounds();
     gc.bitBlt(rc.topLeft(), layer->projection(), rc);
 
-    m_commandsAdapter->beginMacro(i18n("Rasterize Layer"));
+    m_commandsAdapter->beginMacro(kundo2_i18n("Rasterize Layer"));
     m_commandsAdapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
 
     int childCount = layer->childCount();
@@ -859,7 +856,6 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
     QString basePath;
     KUrl url = m_view->document()->url();
-    qDebug() << "url" << url << url.isEmpty();
     if (url.isLocalFile()) {
         basePath = QFileInfo(url.toLocalFile()).absolutePath();
     }

@@ -18,33 +18,26 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../../components"
+import org.krita.sketch.components 1.0
 
-Item {
+Column {
     id: base
     property bool fullView: true;
+    height: childrenRect.height;
+    spacing: Constants.DefaultMargin;
+
     Label {
         id: compositeModeListLabel
         visible: fullView;
-        height: fullView ? Constants.DefaultFontSize : 0;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-            margins: Constants.DefaultMargin;
-        }
         text: "Blending mode:"
+        font: Settings.theme.font("panelSection");
     }
     ExpandingListView {
         id: compositeModeList
         visible: fullView;
         expandedHeight: Constants.GridHeight * 6;
-        anchors {
-            top: compositeModeListLabel.bottom;
-            left: parent.left;
-            right: parent.right;
-            margins: Constants.DefaultMargin;
-        }
+        width: parent.width;
+
         property bool firstSet: false;
         onCurrentIndexChanged: {
             if (firstSet) { model.activateItem(currentIndex); }
@@ -52,6 +45,44 @@ Item {
         }
         model: compositeOpModel;
     }
+
+    RangeInput {
+        id: opacityInput;
+        width: parent.width;
+        placeholder: "Opacity";
+        min: 0; max: 1; decimals: 2;
+        value: compositeOpModel.opacity;
+        onValueChanged: compositeOpModel.changePaintopValue("opacity", value);
+        enabled: compositeOpModel.opacityEnabled;
+    }
+
+    RangeInput {
+        id: thresholdInput;
+        width: parent.width;
+        placeholder: "Threshold";
+        min: 0; max: 255; decimals: 0;
+        value: 255;
+        onValueChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetThreshold(value);
+    }
+
+    CheckBox {
+        id: fillSelectionCheck;
+        visible: fullView;
+        width: parent.width;
+        text: "Fill Selection";
+        checked: false;
+        onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetFillSelection(checked);
+    }
+
+    CheckBox {
+        id: limitToLayerCheck;
+        visible: fullView;
+        width: parent.width;
+        text: "Limit to Layer";
+        checked: false;
+        onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetSampleMerged(checked);
+    }
+
     Component.onCompleted: compositeModeList.currentIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
     Connections {
         target: compositeOpModel;
@@ -62,77 +93,5 @@ Item {
                 compositeModeList.currentIndex = newIndex;
             }
         }
-    }
-    Column {
-        anchors {
-            top: fullView ? compositeModeList.bottom : compositeModeList.top;
-            left: parent.left;
-            leftMargin: Constants.DefaultMargin;
-            right: parent.right;
-            rightMargin: Constants.DefaultMargin;
-        }
-        height: childrenRect.height;
-
-        RangeInput {
-            id: opacityInput;
-            width: parent.width;
-            placeholder: "Opacity";
-            min: 0; max: 1; decimals: 2;
-            value: compositeOpModel.opacity;
-            onValueChanged: compositeOpModel.changePaintopValue("opacity", value);
-            enabled: compositeOpModel.opacityEnabled;
-        }
-
-        Item {
-            width: parent.width;
-            height: Constants.DefaultMargin;
-            visible: fullView;
-        }
-
-        RangeInput {
-            id: thresholdInput;
-            width: parent.width;
-            placeholder: "Threshold";
-            min: 0; max: 255; decimals: 0;
-            value: 255;
-            onValueChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetThreshold(value);
-        }
-
-        CheckBox {
-            id: fillSelectionCheck;
-            visible: fullView;
-            anchors {
-                left: parent.left;
-                right: parent.right;
-                margins: Constants.DefaultMargin;
-            }
-            text: "Fill Selection";
-            checked: false;
-            onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetFillSelection(checked);
-        }
-        CheckBox {
-            id: limitToLayerCheck;
-            visible: fullView;
-            anchors {
-                left: parent.left;
-                right: parent.right;
-                margins: Constants.DefaultMargin;
-            }
-            text: "Limit to Layer";
-            checked: false;
-            onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetSampleMerged(checked);
-        }
-        /*CheckBox {
-            id: usePatternCheck;
-            visible: fullView;
-            anchors {
-                left: parent.left;
-                right: parent.right;
-                margins: Constants.DefaultMargin;
-            }
-            text: "Use Pattern";
-            checked: false;
-            onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetUsePattern(checked);
-        }*/
     }
 }

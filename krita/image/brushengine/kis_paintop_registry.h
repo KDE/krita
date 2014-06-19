@@ -28,6 +28,7 @@
 #include "kis_types.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
+#include <kis_threaded_text_rendering_workaround.h>
 
 #include <krita_export.h>
 
@@ -49,6 +50,10 @@ class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericReg
 public:
     virtual ~KisPaintOpRegistry();
 
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    void preinitializePaintOpIfNeeded(const KisPaintOpPresetSP preset);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
     /**
      * Create and return a paintop based on the given preset. A preset defines
      * a paintop, a settings object and possible a brush tip.
@@ -61,12 +66,12 @@ public:
      * with the specified parent as widget parent. Returns 0 if there
      * are no settings available for the given device.
      */
-    KisPaintOpSettingsSP settings(const KoID& id, KisImageWSP image = 0) const;
+    KisPaintOpSettingsSP settings(const KoID& id) const;
 
     /**
      * @return a default preset for the given paintop.
      */
-    KisPaintOpPresetSP defaultPreset(const KoID& id, KisImageWSP image = 0) const;
+    KisPaintOpPresetSP defaultPreset(const KoID& id) const;
 
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KoID & id, const KoColorSpace* cs) const;

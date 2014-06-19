@@ -47,24 +47,30 @@ public:
 };
 
 
-class DeformBase{
-    public:
-        DeformBase(){}
-        virtual ~DeformBase(){}
-        virtual void transform(qreal * x, qreal * y, qreal distance){
-            Q_UNUSED(x);
-            Q_UNUSED(y);
-            Q_UNUSED(distance);
-        }
+class DeformBase
+{
+public:
+    DeformBase() {}
+    virtual ~DeformBase() {}
+    virtual void transform(qreal * x, qreal * y, qreal distance) {
+        Q_UNUSED(x);
+        Q_UNUSED(y);
+        Q_UNUSED(distance);
+    }
 };
 
 /// Inverse weighted inverse scaling - grow&shrink
-class DeformScale : public DeformBase {
+class DeformScale : public DeformBase
+{
 
 public:
-    void setFactor(qreal factor){ m_factor = factor; }
-    qreal factor(){ return m_factor; }
-    virtual void transform(qreal* x, qreal* y, qreal distance){
+    void setFactor(qreal factor) {
+        m_factor = factor;
+    }
+    qreal factor() {
+        return m_factor;
+    }
+    virtual void transform(qreal* x, qreal* y, qreal distance) {
         qreal scaleFactor = (1.0 - distance) * m_factor + distance;
         *x = *x / scaleFactor;
         *y = *y / scaleFactor;
@@ -75,17 +81,20 @@ private:
 };
 
 /// Inverse weighted rotation - swirlCW&&swirlCWW
-class DeformRotation : public DeformBase {
+class DeformRotation : public DeformBase
+{
 
 public:
-    void setAlpha(qreal alpha){ m_alpha = alpha; }
-    virtual void transform(qreal* maskX, qreal* maskY, qreal distance){
-            distance = 1.0 - distance;
-            qreal rotX = cos(-m_alpha * distance) * (*maskX) - sin(-m_alpha * distance) * (*maskY);
-            qreal rotY = sin(-m_alpha * distance) * (*maskX) + cos(-m_alpha * distance) * (*maskY);
+    void setAlpha(qreal alpha) {
+        m_alpha = alpha;
+    }
+    virtual void transform(qreal* maskX, qreal* maskY, qreal distance) {
+        distance = 1.0 - distance;
+        qreal rotX = cos(-m_alpha * distance) * (*maskX) - sin(-m_alpha * distance) * (*maskY);
+        qreal rotY = sin(-m_alpha * distance) * (*maskX) + cos(-m_alpha * distance) * (*maskY);
 
-            *maskX = rotX;
-            *maskY = rotY;
+        *maskX = rotX;
+        *maskY = rotY;
     }
 
 private:
@@ -93,13 +102,19 @@ private:
 };
 
 /// Inverse move
-class DeformMove : public DeformBase {
+class DeformMove : public DeformBase
+{
 public:
-    void setFactor(qreal factor){ m_factor = factor; }
-    void setDistance(qreal dx, qreal dy){ m_dx = dx; m_dy = dy; }
-    virtual void transform(qreal* maskX, qreal* maskY, qreal distance){
-            *maskX -= m_dx * m_factor * (1.0 - distance);
-            *maskY -= m_dy * m_factor * (1.0 - distance);
+    void setFactor(qreal factor) {
+        m_factor = factor;
+    }
+    void setDistance(qreal dx, qreal dy) {
+        m_dx = dx;
+        m_dy = dy;
+    }
+    virtual void transform(qreal* maskX, qreal* maskY, qreal distance) {
+        *maskX -= m_dx * m_factor * (1.0 - distance);
+        *maskY -= m_dy * m_factor * (1.0 - distance);
     }
 
 private:
@@ -109,46 +124,61 @@ private:
 };
 
 /// Inverse lens distortion
-class DeformLens : public DeformBase {
+class DeformLens : public DeformBase
+{
 public:
-    void setLensFactor(qreal k1, qreal k2){ m_k1 = k1; m_k2 = k2; }
-    void setMaxDistance(qreal maxX, qreal maxY){ m_maxX = maxX; m_maxY = maxY;}
-    void setMode(bool out){ m_out = out; }
+    void setLensFactor(qreal k1, qreal k2) {
+        m_k1 = k1;
+        m_k2 = k2;
+    }
+    void setMaxDistance(qreal maxX, qreal maxY) {
+        m_maxX = maxX;
+        m_maxY = maxY;
+    }
+    void setMode(bool out) {
+        m_out = out;
+    }
 
-    virtual void transform(qreal* maskX, qreal* maskY, qreal distance){
-            Q_UNUSED(distance);
-            //normalize
-            qreal normX = *maskX / m_maxX;
-            qreal normY = *maskY / m_maxY;
+    virtual void transform(qreal* maskX, qreal* maskY, qreal distance) {
+        Q_UNUSED(distance);
+        //normalize
+        qreal normX = *maskX / m_maxX;
+        qreal normY = *maskY / m_maxY;
 
-            qreal radius_2 = normX * normX  + normY * normY;
-            qreal radius_4 = radius_2 * radius_2;
+        qreal radius_2 = normX * normX  + normY * normY;
+        qreal radius_4 = radius_2 * radius_2;
 
-            if (m_out) {
-                *maskX = normX * (1.0 + m_k1 * radius_2 + m_k2 * radius_4);
-                *maskY = normY * (1.0 + m_k1 * radius_2 + m_k2 * radius_4);
-            } else {
-                *maskX = normX / (1.0 + m_k1 * radius_2 + m_k2 * radius_4);
-                *maskY = normY / (1.0 + m_k1 * radius_2 + m_k2 * radius_4);
-            }
+        if (m_out) {
+            *maskX = normX * (1.0 + m_k1 * radius_2 + m_k2 * radius_4);
+            *maskY = normY * (1.0 + m_k1 * radius_2 + m_k2 * radius_4);
+        }
+        else {
+            *maskX = normX / (1.0 + m_k1 * radius_2 + m_k2 * radius_4);
+            *maskY = normY / (1.0 + m_k1 * radius_2 + m_k2 * radius_4);
+        }
 
-            *maskX = m_maxX * (*maskX);
-            *maskY = m_maxY * (*maskY);
+        *maskX = m_maxX * (*maskX);
+        *maskY = m_maxY * (*maskY);
     }
 
 private:
-    qreal m_k1,m_k2;
+    qreal m_k1, m_k2;
     qreal m_maxX, m_maxY;
     bool m_out;
 };
 
 /// Randomly disturb the pixels
-class DeformColor : public DeformBase {
+class DeformColor : public DeformBase
+{
 public:
-    DeformColor(){ srand48(time(0)); }
+    DeformColor() {
+        srand48(time(0));
+    }
 
-    void setFactor(qreal factor){ m_factor = factor; }
-    virtual void transform(qreal* x, qreal* y, qreal distance){
+    void setFactor(qreal factor) {
+        m_factor = factor;
+    }
+    virtual void transform(qreal* x, qreal* y, qreal distance) {
         Q_UNUSED(distance);
         qreal randomX = m_factor * ((drand48() * 2.0) - 1.0);
         qreal randomY = m_factor * ((drand48() * 2.0) - 1.0);
@@ -172,29 +202,33 @@ public:
     ~DeformBrush();
 
     KisFixedPaintDeviceSP paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer,
-                   qreal scale,qreal rotation,QPointF pos,
-                   qreal subPixelX,qreal subPixelY, int dabX, int dabY);
+                                    qreal scale, qreal rotation, QPointF pos,
+                                    qreal subPixelX, qreal subPixelY, int dabX, int dabY);
 
-    void setSizeProperties(KisBrushSizeProperties * properties){ m_sizeProperties = properties; }
-    void setProperties(DeformProperties * properties){ m_properties = properties; }
+    void setSizeProperties(KisBrushSizeProperties * properties) {
+        m_sizeProperties = properties;
+    }
+    void setProperties(DeformProperties * properties) {
+        m_properties = properties;
+    }
     void initDeformAction();
     QPointF hotSpot(qreal scale, qreal rotation);
 
 private:
     // return true if can paint
-    bool setupAction(DeformModes mode,const QPointF &pos);
+    bool setupAction(DeformModes mode, const QPointF &pos);
     void debugColor(const quint8* data, KoColorSpace * cs);
 
-    qreal maskWidth(qreal scale){
+    qreal maskWidth(qreal scale) {
         return m_sizeProperties->diameter * scale;
     }
 
-    qreal maskHeight(qreal scale){
+    qreal maskHeight(qreal scale) {
         return m_sizeProperties->diameter * m_sizeProperties->aspect  * scale;
     }
 
-    inline qreal norme(qreal x,qreal y){
-        return x*x + y*y;
+    inline qreal norme(qreal x, qreal y) {
+        return x * x + y * y;
     }
 
 

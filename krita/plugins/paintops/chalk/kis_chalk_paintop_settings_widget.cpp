@@ -29,7 +29,7 @@
 #include <kis_airbrush_option.h>
 
 KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
-        : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpOptionsWidget(parent)
 {
     m_chalkOption =  new KisChalkOpOption();
 
@@ -55,8 +55,8 @@ KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() cons
 void KisChalkPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     // if the movement is more left<->right then up<->down
-    if (qAbs(x) > qAbs(y)){
-        m_chalkOption->setRadius( m_chalkOption->radius() + qRound(x) );
+    if (qAbs(x) > qAbs(y)) {
+        m_chalkOption->setRadius(m_chalkOption->radius() + qRound(x));
     }
 }
 

@@ -16,8 +16,8 @@
  */
 
 #include "imagedocker_dock.h"
-#include "kis_image_strip_scene.h"
-#include "kis_image_view.h"
+#include "image_strip_scene.h"
+#include "image_view.h"
 
 #include <klocale.h>
 #include <KoCanvasResourceManager.h>
@@ -53,8 +53,21 @@ class ImageFilter: public QSortFilterProxyModel
         if(model->isDir(index))
             return true;
 
-        m_reader.setFileName(model->filePath(index));
-        return m_reader.canRead();
+        QString ext = model->fileInfo(index).suffix().toLower();
+
+        if(s_supportedImageFormats.isEmpty()) {
+            s_supportedImageFormats = QImageReader::supportedImageFormats();
+        }
+
+        //QImageReader::supportedImageFormats return a list with mixed-case ByteArrays so
+        //iterate over it manually to make it possible to do toLower().
+        foreach(const QByteArray& format, s_supportedImageFormats) {
+            if(format.toLower() == ext.toUtf8()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     virtual bool filterAcceptsColumn(int source_column, const QModelIndex& source_parent) const {
@@ -62,9 +75,10 @@ class ImageFilter: public QSortFilterProxyModel
         return source_column == 0;
     }
 
-    mutable QImageReader m_reader;
+    static QList<QByteArray> s_supportedImageFormats;
 };
 
+QList<QByteArray> ImageFilter::s_supportedImageFormats;
 
 ///////////////////////////////////////////////////////////////////////////////
 // --------- ImageListModel ------------------------------------------------ //
@@ -168,7 +182,7 @@ ImageDockerDock::ImageDockerDock():
     m_popupUi      = new PopupWidgetUI();
     m_zoomButtons  = new QButtonGroup();
     m_imgListModel = new ImageListModel();
-    m_thumbModel   = new KisImageStripScene();
+    m_thumbModel   = new ImageStripScene();
     m_model        = new QFileSystemModel();
     m_proxyModel   = new ImageFilter();
     m_proxyModel->setSourceModel(m_model);
@@ -185,17 +199,17 @@ ImageDockerDock::ImageDockerDock():
     m_ui->cmbImg->setModel(m_imgListModel);
     m_ui->bnPopup->setIcon(koIcon("zoom-original"));
     m_ui->bnPopup->setPopupWidget(m_popupUi);
-    
+
     m_popupUi->zoomSlider->setRange(5, 500);
     m_popupUi->zoomSlider->setValue(100);
 
-    m_zoomButtons->addButton(m_popupUi->bnZoomFit   , KisImageView::VIEW_MODE_FIT);
-    m_zoomButtons->addButton(m_popupUi->bnZoomAdjust, KisImageView::VIEW_MODE_ADJUST);
+    m_zoomButtons->addButton(m_popupUi->bnZoomFit   , ImageView::VIEW_MODE_FIT);
+    m_zoomButtons->addButton(m_popupUi->bnZoomAdjust, ImageView::VIEW_MODE_ADJUST);
     m_zoomButtons->addButton(m_popupUi->bnZoom25    , 25);
     m_zoomButtons->addButton(m_popupUi->bnZoom50    , 50);
     m_zoomButtons->addButton(m_popupUi->bnZoom75    , 75);
     m_zoomButtons->addButton(m_popupUi->bnZoom100   , 100);
-    
+
     installEventFilter(this);
 
     m_ui->cmbPath->addItem(koIcon("folder-image"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
@@ -413,7 +427,7 @@ void ImageDockerDock::slotOpenImage(const QString& path)
         imgInfo.id        = generateImageID();
         imgInfo.name      = fileInfo.fileName();
         imgInfo.path      = fileInfo.absoluteFilePath();
-        imgInfo.viewMode  = KisImageView::VIEW_MODE_FIT;
+        imgInfo.viewMode  = ImageView::VIEW_MODE_FIT;
         imgInfo.scale     = 1.0f;
         imgInfo.pixmap    = pixmap;
         imgInfo.scrollPos = QPoint(0, 0);
@@ -481,13 +495,13 @@ void ImageDockerDock::slotZoomChanged(int zoom)
 
         switch(zoom)
         {
-        case KisImageView::VIEW_MODE_FIT:
-        case KisImageView::VIEW_MODE_ADJUST:
+        case ImageView::VIEW_MODE_FIT:
+        case ImageView::VIEW_MODE_ADJUST:
             info->viewMode = zoom;
             break;
 
         default:
-            info->viewMode = KisImageView::VIEW_MODE_FREE;
+            info->viewMode = ImageView::VIEW_MODE_FREE;
             info->scale    = float(zoom) / 100.0f;
             break;
         }
@@ -532,7 +546,7 @@ void ImageDockerDock::slotChangeRoot(const QString &path)
 bool ImageDockerDock::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
-    
+
     if (event->type() == QEvent::Resize)
     {
         m_ui->treeView->setColumnWidth(0, width());

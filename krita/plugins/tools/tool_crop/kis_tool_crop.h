@@ -32,7 +32,7 @@
 #include "ui_wdg_tool_crop.h"
 
 class QRect;
-class DecorationLine;
+struct DecorationLine;
 
 
 /**

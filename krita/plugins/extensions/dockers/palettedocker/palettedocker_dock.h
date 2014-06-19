@@ -49,11 +49,14 @@ private slots:
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
+
+    virtual bool eventFilter(QObject*, QEvent*);
+
 private:    
     KisCanvas2 *m_canvas;
     Ui_WdgPaletteDock* m_wdgPaletteDock;
     PaletteModel *m_model;
-    KoResourceServerAdapter<KoColorSet>* m_serverAdapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_serverAdapter;
     KoColorSet* m_currentColorSet;
     ColorSetChooser* m_colorSetChooser;
 };

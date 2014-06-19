@@ -25,7 +25,7 @@
 
 KisImageResizeCommand::KisImageResizeCommand(KisImageWSP image,
                                              const QSize& newSize)
-    : KUndo2Command(i18nc("(qtundo-format)", "Resize Image")),
+    : KUndo2Command(kundo2_i18n("Resize Image")),
       m_image(image)
 {
     // do we really need a translatable name for the command?

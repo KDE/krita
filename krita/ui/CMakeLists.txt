@@ -29,7 +29,10 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
+    canvas/kis_paintop_transformation_connector.cpp
+    canvas/kis_display_color_converter.cpp
     canvas/kis_display_filter.cpp
+    canvas/kis_exposure_gamma_correction_interface.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp
@@ -66,7 +69,6 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
     kis_autogradient.cc
-    kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
@@ -77,7 +79,6 @@ set(kritaui_LIB_SRCS
     kis_clipboard.cc
     kis_config.cc
     kis_config_notifier.cpp
-    kis_color_data_list.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
@@ -106,7 +107,7 @@ set(kritaui_LIB_SRCS
     kis_model_index_converter.cpp
     kis_model_index_converter_show_all.cpp
     kis_painting_assistant.cc
-    kis_painting_assistants_manager.cc
+    kis_painting_assistants_decoration.cpp
     kis_paintop_box.cc
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
@@ -122,12 +123,13 @@ set(kritaui_LIB_SRCS
     kis_statusbar.cc
     kis_view2.cpp
     kis_zoom_manager.cc
-    ko_favorite_resource_manager.cpp
+    kis_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kis_action.cpp
     kis_action_manager.cpp
     kis_view_plugin.cpp
     kis_canvas_controls_manager.cpp
+    kis_tooltip_manager.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -225,6 +227,7 @@ set(kritaui_LIB_SRCS
     input/kis_alternate_invocation_action.cpp
     input/kis_rotate_canvas_action.cpp
     input/kis_zoom_action.cpp
+    input/kis_gamma_exposure_action.cpp
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
     input/kis_abstract_shortcut.cpp
@@ -242,6 +245,9 @@ set(kritaui_LIB_SRCS
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
+    kis_gui_context_command.cpp
+    kis_gui_context_command_p.cpp
+    input/kis_tablet_debugger.cpp
     input/kis_input_profile_manager.cpp
     input/kis_input_profile.cpp
     input/kis_shortcut_configuration.cpp
@@ -258,6 +264,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
+    kis_mirror_axis.cpp
 )
 
 if(WIN32)
@@ -339,9 +346,9 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
 target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
@@ -359,7 +366,7 @@ if(HAVE_OPENGL)
 
 endif(HAVE_OPENGL)
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush komain ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

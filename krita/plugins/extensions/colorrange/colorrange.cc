@@ -74,13 +74,13 @@ void ColorRange::slotActivated()
 void ColorRange::selectOpaque()
 {
     KisCanvas2 *canvas = m_view->canvasBase();
-    KisPaintDeviceSP device = m_view->activeDevice();
+    KisPaintDeviceSP device = m_view->activeNode()->projection();
     KIS_ASSERT_RECOVER_RETURN(canvas && device);
 
     QRect rc = device->exactBounds();
     if (rc.isEmpty()) return;
 
-    KisSelectionToolHelper helper(canvas, i18n("Select Opaque"));
+    KisSelectionToolHelper helper(canvas, kundo2_i18n("Select Opaque"));
 
     qint32 x, y, w, h;
     rc.getRect(&x, &y, &w, &h);

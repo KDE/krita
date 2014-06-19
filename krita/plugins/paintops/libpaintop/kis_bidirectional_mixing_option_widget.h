@@ -45,7 +45,7 @@ public:
 
     ///Reimplemented
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    
+
     ///Reimplemented
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

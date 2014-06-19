@@ -35,8 +35,8 @@ AddPartCommand::AddPartCommand(MusicShape* shape)
     : m_sheet(shape->sheet()),
     m_shape(shape)
 {
-    setText(i18nc("(qtundo-format)", "Add part"));
-    m_part = new Part(m_sheet, QString("Part %1").arg(m_sheet->partCount() + 1));
+    setText(kundo2_i18n("Add part"));
+    m_part = new Part(m_sheet, i18n("Part %1").arg(m_sheet->partCount() + 1));
     Staff* s = m_part->addStaff();
     m_part->sheet()->bar(0)->addStaffElement(new Clef(s, 0, Clef::GClef, 2));
     // figure out time signature

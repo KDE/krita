@@ -29,6 +29,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorConversionTransformation.h>
 
+#include "kundo2command.h"
 #include "kis_distance_information.h"
 #include "kis_global.h"
 #include "kis_types.h"
@@ -108,10 +109,7 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const QString& transactionName = QString());
-
-    /// Return the transaction's text message
-    QString transactionText();
+    void beginTransaction(const KUndo2MagicString& transactionName = KUndo2MagicString());
 
     /// Cancel all the changes made by the painter
     void revertTransaction();
@@ -357,7 +355,7 @@ public:
     /**
      * First you need to setup the painter with setMirrorInformation,
      * then these set of methods provide way to render the devices mirrored
-     * according the axisCenter vertically or horizontally or both.
+     * according the axesCenter vertically or horizontally or both.
      *
      * @param rc rectangle area covered by dab
      * @param dab this device will be mirrored in-place, it means that it will be changed
@@ -582,7 +580,7 @@ public:
      * Set the paintop preset to use. If @param image is given,
      * the paintop will be created using this image as parameter.
      * Some paintops really want to know about the image they work
-     * for, e.g. the duplicate paintop.
+     * for, e.g. the clone paintop.
      */
     void setPaintOpPreset(KisPaintOpPresetSP preset, KisImageWSP image);
 
@@ -595,7 +593,7 @@ public:
      */
     KisPaintOp* paintOp() const;
 
-    void setMirrorInformation(const QPointF &axisCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
+    void setMirrorInformation(const QPointF &axesCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
 
     /**
      * copy the mirror information to other painter

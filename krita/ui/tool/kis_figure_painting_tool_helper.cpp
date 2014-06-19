@@ -26,7 +26,7 @@
 #include "kis_painter.h"
 
 
-KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const QString &name,
+KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString &name,
                                                          KisImageWSP image,
                                                          KoCanvasResourceManager *resourceManager,
                                                          KisPainter::StrokeStyle strokeStyle,

@@ -20,7 +20,7 @@ install(TARGETS kritatooltext  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-# install( FILES  tool_crop_cursor.png tool_crop.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  dark_draw-text.png light_draw-text.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 install( FILES  kritatooltext.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

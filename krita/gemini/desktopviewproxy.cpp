@@ -22,24 +22,29 @@
 
 #include "desktopviewproxy.h"
 
-#include "MainWindow.h"
-#include <sketch/DocumentManager.h>
-
-#include <KoMainWindow.h>
-#include <KoFilterManager.h>
-#include <KoDocumentEntry.h>
-
-#include <kactioncollection.h>
-
 #include <QProcess>
 #include <QDir>
 #include <QApplication>
-#include <KFileDialog>
-#include <KLocalizedString>
+#include <QDesktopServices>
+
+#include <klocalizedstring.h>
 #include <krecentfilesaction.h>
+#include <kactioncollection.h>
+
 #include <boost/config/posix_features.hpp>
 
+#include <KoMainWindow.h>
+#include <KoFilterManager.h>
+#include <KoFileDialog.h>
+#include <KoDocumentEntry.h>
+
+#include "MainWindow.h"
+#include <sketch/DocumentManager.h>
+#include <sketch/RecentFileManager.h>
+#include <sketch/Settings.h>
+#include <kis_config.h>
 #include <kis_doc2.h>
+#include <kis_view2.h>
 
 class DesktopViewProxy::Private
 {
@@ -81,8 +86,10 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     reloadAction->disconnect(d->desktopView);
     connect(reloadAction, SIGNAL(triggered(bool)), this, SLOT(reload()));
     QAction* loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
-    loadExistingAsNewAction->disconnect(d->desktopView);
-    connect(loadExistingAsNewAction, SIGNAL(triggered(bool)), this, SLOT(loadExistingAsNew()));
+    //Hide the "Load existing as new" action. It serves little purpose and currently
+    //does the same as open. We cannot just remove it from the action collection though
+    //since that causes a crash in KoMainWindow.
+    loadExistingAsNewAction->setVisible(false);
 
     // Recent files need a touch more work, as they aren't simply an action.
     KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopView->actionCollection()->action("file_open_recent"));
@@ -90,6 +97,8 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     connect(recent, SIGNAL(urlSelected(KUrl)), this, SLOT(slotFileOpenRecent(KUrl)));
     recent->clear();
     recent->loadEntries(KGlobal::config()->group("RecentFiles"));
+
+    connect(d->desktopView, SIGNAL(documentSaved()), this, SIGNAL(documentSaved()));
 }
 
 DesktopViewProxy::~DesktopViewProxy()
@@ -104,45 +113,52 @@ void DesktopViewProxy::fileNew()
 
 void DesktopViewProxy::fileOpen()
 {
-#ifdef Q_WS_WIN
-    // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
-    // TODO provide support for "last visited" directory
-    KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), d->desktopView);
-#else
-    KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), d->desktopView);
-#endif
-    dialog->setObjectName("file dialog");
-    dialog->setMode(KFile::File);
-    dialog->setCaption(i18n("Open Document"));
-
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(KIS_MIME_TYPE);
     KService::Ptr service = entry.service();
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KIS_MIME_TYPE,
                                                                KoFilterManager::Import,
                                                                service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
 
-    dialog->setMimeFilter(mimeFilter);
-    if (dialog->exec() != QDialog::Accepted) {
-        delete dialog;
-        return;
-    }
-    KUrl url(dialog->selectedUrl());
-    delete dialog;
 
-    if (url.isEmpty())
-        return;
+    KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Document"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(mimeFilter);
+    QString filename = dialog.url();
+    if (filename.isEmpty()) return;
 
-    DocumentManager::instance()->openDocument(url.toLocalFile(), d->isImporting);
+    DocumentManager::instance()->recentFileManager()->addRecent(filename);
+
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << filename, QDir::currentPath());
 }
 
 void DesktopViewProxy::fileSave()
 {
-    DocumentManager::instance()->save();
+    if(DocumentManager::instance()->isTemporaryFile()) {
+        if(d->desktopView->saveDocument(true)) {
+            DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
+            DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
+            DocumentManager::instance()->setTemporaryFile(false);
+            emit documentSaved();
+        }
+    } else {
+        DocumentManager::instance()->save();
+        emit documentSaved();
+    }
 }
 
 bool DesktopViewProxy::fileSaveAs()
 {
-    return d->desktopView->saveDocument(true);
+    if(d->desktopView->saveDocument(true)) {
+        DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
+        DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
+        DocumentManager::instance()->setTemporaryFile(false);
+        emit documentSaved();
+        return true;
+    }
+
+    DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
+    return false;
 }
 
 void DesktopViewProxy::reload()
@@ -159,7 +175,50 @@ void DesktopViewProxy::loadExistingAsNew()
 
 void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
 {
-    DocumentManager::instance()->openDocument(url.toLocalFile());
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile(), QDir::currentPath());
+}
+
+/**
+ * @brief Override to allow for full-screen support with Canvas-mode
+ *
+ * The basic behaviour of the KisView2 is to check the KoConfig and
+ * to adjust the main window appropriately. If "hideTitlebar" is set
+ * true, then it switches the window between windowed and full-screen.
+ * To prevent it leaving the full-screen mode, we set the mode to false
+ *
+ * @param toggled
+ */
+void DesktopViewProxy::toggleShowJustTheCanvas(bool toggled)
+{
+    KisView2* kisView = qobject_cast<KisView2*>(d->desktopView->rootView());
+    if(toggled) {
+        kisView->showJustTheCanvas(toggled);
+    }
+    else {
+        KisConfig cfg;
+        bool fullScreen = d->mainWindow->forceFullScreen();
+        bool hideTitlebar = cfg.hideTitlebarFullscreen();
+		
+        if (fullScreen) {
+            cfg.setHideTitlebarFullscreen(false);
+        }
+
+        kisView->showJustTheCanvas(toggled);
+
+        if (fullScreen) {
+            cfg.setHideTitlebarFullscreen(hideTitlebar);
+        }
+    }
+}
+
+void DesktopViewProxy::documentChanged()
+{
+    // Remove existing linking for toggling canvas, in order
+    // to over-ride the window state behaviour
+    KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+    QAction* toggleJustTheCanvasAction = view->actionCollection()->action("view_show_just_the_canvas");
+    toggleJustTheCanvasAction->disconnect(view);
+    connect(toggleJustTheCanvasAction, SIGNAL(toggled(bool)), this, SLOT(toggleShowJustTheCanvas(bool)));
 }
 
 #include "desktopviewproxy.moc"

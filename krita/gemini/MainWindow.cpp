@@ -30,12 +30,14 @@
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
+#include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
 #include <QMessageBox>
 #include <QToolButton>
 #include <QFileInfo>
 #include <QGLWidget>
+#include <QDesktopServices>
 
 #include <kcmdlineargs.h>
 #include <kurl.h>
@@ -45,6 +47,7 @@
 #include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
+#include <kxmlguifactory.h>
 
 #include <KoCanvasBase.h>
 #include <KoMainWindow.h>
@@ -52,6 +55,14 @@
 #include <KoDocumentInfo.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
+#include <KoFileDialog.h>
+#include <KoDocumentEntry.h>
+#include <KoFilterManager.h>
+
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
 
 #include <kis_paintop_preset.h>
 #include <KoPattern.h>
@@ -66,6 +77,8 @@
 #include "sketch/RecentFileManager.h"
 #include "sketch/DocumentManager.h"
 #include "sketch/KisSketchPart.h"
+#include "sketch/QmlGlobalEngine.h"
+#include "sketch/Settings.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -87,10 +100,11 @@ public:
         , slateMode(false)
         , docked(false)
         , sketchKisView(0)
+        , desktopKisView(0)
         , desktopViewProxy(0)
+        , forceFullScreen(false)
         , forceDesktop(false)
         , forceSketch(false)
-        , wasMaximized(true)
         , temporaryFile(false)
         , syncObject(0)
         , toDesktop(0)
@@ -98,8 +112,8 @@ public:
         , switcher(0)
     {
 #ifdef Q_OS_WIN
-        slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
-        docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+//         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+//         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
         centerer = new QTimer(q);
         centerer->setInterval(10);
@@ -117,11 +131,12 @@ public:
     bool docked;
     QString currentSketchPage;
     KisView2* sketchKisView;
+    KisView2* desktopKisView;
     DesktopViewProxy* desktopViewProxy;
 
+    bool forceFullScreen;
     bool forceDesktop;
     bool forceSketch;
-    bool wasMaximized;
     bool temporaryFile;
     ViewModeSynchronisationObject* syncObject;
     QTimer* centerer;
@@ -133,10 +148,20 @@ public:
     void initSketchView(QObject* parent)
     {
         sketchView = new SketchDeclarativeView();
+        QmlGlobalEngine::instance()->setEngine(sketchView->engine());
         sketchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
 #ifdef Q_OS_WIN
         QDir appdir(qApp->applicationDirPath());
+
+        // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+        wchar_t buffer[1024];
+        QString absolute = appdir.absolutePath();
+        DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+        rv = ::GetLongPathName(buffer, buffer, 1024);
+        QString correctedPath((QChar *)buffer);
+        appdir.setPath(correctedPath);
+
         // for now, the app in bin/ and we still use the env.bat script
         appdir.cdUp();
 
@@ -175,12 +200,13 @@ public:
         // Initialize all Calligra directories etc.
         KoGlobal::initialize();
 
-        desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
-        if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
-            // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
+        // The default theme is not what we want for Gemini
+        KConfigGroup group(KGlobal::config(), "theme");
+        if(group.readEntry("Theme", "no-theme-is-set") == QLatin1String("no-theme-is-set")) {
+            group.writeEntry("Theme", "Krita-dark");
         }
+
+        desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);
@@ -202,6 +228,8 @@ public:
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
+        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SIGNAL(documentSaved()));
+        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(resetWindowTitle()));
     }
 
     void notifySlateModeChange();
@@ -215,6 +243,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Gemini"));
+    setWindowIcon(KIcon("kritagemini"));
+
+	// Load filters and other plugins in the gui thread
+	Q_UNUSED(KisFilterRegistry::instance());
+	Q_UNUSED(KisPaintOpRegistry::instance());
 
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable
@@ -225,17 +258,33 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {
-        DocumentManager::instance()->recentFileManager()->addRecent(fileName);
+        DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
     }
 
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
+    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
+    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
 
     d->initSketchView(this);
 
     // Set the initial view to sketch... because reasons.
     // Really, this allows us to show the pleasant welcome screen from Sketch
     switchToSketch();
-    d->wasMaximized = true;
+
+    if(!fileNames.isEmpty()) {
+        //It feels a little hacky, but call a QML function to open files.
+        //This saves a lot of hassle required to change state for loading dialogs etc.
+        QMetaObject::invokeMethod(d->sketchView->rootObject(), "openFile", Q_ARG(QVariant, fileNames.at(0)));
+    }
+}
+
+void MainWindow::resetWindowTitle()
+{
+    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QString fileName = url.fileName();
+    if(url.protocol() == "temp")
+        fileName = i18n("Untitled");
+    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Gemini")));
 }
 
 void MainWindow::switchDesktopForced()
@@ -254,9 +303,6 @@ void MainWindow::switchSketchForced()
 
 void MainWindow::switchToSketch()
 {
-    QTime timer;
-    timer.start();
-
     if (d->toSketch)
     {
         d->toSketch->setEnabled(false);
@@ -277,21 +323,22 @@ void MainWindow::switchToSketch()
         QApplication::sendEvent(view, &aboutToSwitchEvent);
 
         d->desktopView->setParent(0);
-        d->wasMaximized = isMaximized();
     }
 
     setCentralWidget(d->sketchView);
     emit switchedToSketch();
 
     if (d->slateMode) {
-        showFullScreen();
+        setWindowState(windowState() | Qt::WindowFullScreen);
         if (d->syncObject->initialized)
             QTimer::singleShot(50, this, SLOT(sketchChange()));
     }
     else
         QTimer::singleShot(50, this, SLOT(sketchChange()));
 
-    //qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
+    if (view && view->document()) {
+        view->document()->setSaveInBatchMode(true);
+    }
 }
 
 void MainWindow::sketchChange()
@@ -326,9 +373,6 @@ void MainWindow::sketchChange()
 
 void MainWindow::switchToDesktop(bool justLoaded)
 {
-    QTime timer;
-    timer.start();
-
     if (d->toDesktop)
         d->toDesktop->setEnabled(false);
 
@@ -351,10 +395,9 @@ void MainWindow::switchToDesktop(bool justLoaded)
         setCentralWidget(d->desktopView);
     }
 
-    if (d->wasMaximized)
-        showMaximized();
-    else
-        showNormal();
+    if (!d->forceFullScreen) {
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
+    }
 
     if (view) {
         //Notify the new view that we just switched to it, passing our synchronisation object
@@ -372,22 +415,22 @@ void MainWindow::switchToDesktop(bool justLoaded)
         d->switcher->setEnabled(true);
     }
 
-    //qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
+    if (view && view->document()) {
+        view->document()->setSaveInBatchMode(false);
+    }
 }
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
     if (d->desktopView && centralWidget() == d->desktopView) {
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
-        qApp->processEvents();
-        view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
-        qApp->processEvents();
+        // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
+        // canvas should be handled.
+        view->canvasControllerWidget()->setFocus();
+        view->setFocus();
         QPoint center = view->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
-        // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
-        // canvas should be handled.
-        d->desktopView->rootView()->setFocus();
         d->toSketch->setEnabled(true);
         d->switcher->setEnabled(true);
     }
@@ -400,6 +443,10 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         d->toDesktop->setEnabled(true);
     }
+    // Ensure that we do, in fact, have the brush tool selected on the currently active canvas
+    KoToolManager::instance()->switchToolRequested( "InteractionTool" );
+    qApp->processEvents();
+    KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 }
 
 void MainWindow::documentChanged()
@@ -412,9 +459,20 @@ void MainWindow::documentChanged()
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
-    KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
-    view->setQtMainWindow(d->desktopView);
-    connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+    d->desktopKisView = qobject_cast<KisView2*>(d->desktopView->rootView());
+    d->desktopKisView->setQtMainWindow(d->desktopView);
+
+    // Define new actions here
+
+    KXMLGUIFactory* factory = d->desktopKisView->factory();
+    factory->removeClient(d->desktopKisView);
+    factory->addClient(d->desktopKisView);
+
+    d->desktopViewProxy->documentChanged();
+    connect(d->desktopKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+    connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
+    connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                this, SLOT(resourceChanged(int, const QVariant&)));
     if (d->sketchKisView)
         d->sketchKisView->setQtMainWindow(this);
     if (!d->forceSketch && !d->slateMode)
@@ -470,6 +528,44 @@ void MainWindow::setTemporaryFile(bool newValue)
     emit temporaryFileChanged();
 }
 
+QString MainWindow::openImage()
+{
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Document"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType("application/x-krita");
+    KService::Ptr service = entry.service();
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
+
+    dialog.setHideNameFilterDetailsOption();
+    return dialog.url();
+}
+
+void MainWindow::resourceChanged(int key, const QVariant& v)
+{
+    if(centralWidget() == d->sketchView)
+        return;
+    KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
+    if(preset && d->sketchKisView != 0) {
+        KisPaintOpPresetSP clone = preset->clone();
+        clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
+        d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
+    }
+}
+
+void MainWindow::resourceChangedSketch(int key, const QVariant& v)
+{
+    if(centralWidget() == d->desktopView)
+        return;
+    KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
+    if(preset && d->desktopKisView != 0) {
+        KisPaintOpPresetSP clone = preset->clone();
+        clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
+        d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);
+    }
+}
+
 QObject* MainWindow::sketchKisView() const
 {
     return d->sketchKisView;
@@ -477,13 +573,19 @@ QObject* MainWindow::sketchKisView() const
 
 void MainWindow::setSketchKisView(QObject* newView)
 {
-    if (d->sketchKisView)
+    if (d->sketchKisView) {
         d->sketchKisView->disconnect(this);
+        d->sketchKisView->canvasBase()->resourceManager()->disconnect(this);
+    }
     if (d->sketchKisView != newView)
     {
         d->sketchKisView = qobject_cast<KisView2*>(newView);
-        connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
-        d->centerer->start();
+        if(d->sketchKisView) {
+            connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+            connect(d->sketchKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                this, SLOT(resourceChangedSketch(int, const QVariant&)));
+            d->centerer->start();
+        }
         emit sketchKisViewChanged();
     }
 }
@@ -530,7 +632,7 @@ bool MainWindow::Private::queryClose()
 
         switch (res) {
         case KMessageBox::Yes : {
-            if (temporaryFile && !desktopViewProxy->fileSaveAs())
+            if (DocumentManager::instance()->isTemporaryFile() && !desktopViewProxy->fileSaveAs())
                 return false;
             if (!DocumentManager::instance()->save())
                 return false;
@@ -544,7 +646,6 @@ bool MainWindow::Private::queryClose()
             return false;
         }
     }
-
     return true;
 }
 
@@ -648,6 +749,15 @@ void MainWindow::cloneResources(KisCanvasResourceProvider *from, KisCanvasResour
     to->setOpacity(from->opacity());
     to->setGlobalAlphaLock(from->globalAlphaLock());
 
+}
+
+bool MainWindow::forceFullScreen() {
+    return d->forceFullScreen;
+}
+
+void MainWindow::forceFullScreen(bool newValue)
+{
+    d->forceFullScreen = newValue;
 }
 
 #include "MainWindow.moc"

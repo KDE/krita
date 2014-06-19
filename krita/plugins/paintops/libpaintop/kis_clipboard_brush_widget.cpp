@@ -46,8 +46,8 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     spacingSlider->setRange(0.0, 1.0, 2);
     spacingSlider->setValue(0.25);
 
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
+    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
+    m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
 
     m_brush = 0;
     m_brushCreated = false;
@@ -60,15 +60,17 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     connect(saveBrush, SIGNAL(clicked()), this, SLOT(slotSaveBrush()));
 }
 
-KisClipboardBrushWidget::~KisClipboardBrushWidget(){
-    delete m_rServerAdapter;
+KisClipboardBrushWidget::~KisClipboardBrushWidget()
+{
 }
 
-KisBrushSP KisClipboardBrushWidget::brush(){
+KisBrushSP KisClipboardBrushWidget::brush()
+{
     return m_brush;
 }
 
-void KisClipboardBrushWidget::slotUseBrushClicked(){
+void KisClipboardBrushWidget::slotUseBrushClicked()
+{
 
     if (m_clipboard->hasClip()) {
 
@@ -80,7 +82,7 @@ void KisClipboardBrushWidget::slotUseBrushClicked(){
             }
         }
 
-        pd = m_clipboard->clip(QRect(0,0,0,0), false);        //Weird! Don't know how this works!
+        pd = m_clipboard->clip(QRect(0, 0, 0, 0), false);     //Weird! Don't know how this works!
         if (pd) {
             QRect rc = pd->exactBounds();
 
@@ -103,22 +105,25 @@ void KisClipboardBrushWidget::slotUseBrushClicked(){
     }
 }
 
-void KisClipboardBrushWidget::slotUpdateSpacing(qreal val){
-    if(m_brush){
+void KisClipboardBrushWidget::slotUpdateSpacing(qreal val)
+{
+    if (m_brush) {
         m_brush->setSpacing(val);
     }
     emit sigBrushChanged();
 }
 
-void KisClipboardBrushWidget::showEvent(QShowEvent *){
-    if(!m_brushCreated){
+void KisClipboardBrushWidget::showEvent(QShowEvent *)
+{
+    if (!m_brushCreated) {
         this->slotUseBrushClicked();
         m_brushCreated = true;
     }
 }
 
-void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask){
-    if(m_brush){
+void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
+{
+    if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
         preview->setPixmap(QPixmap::fromImage(m_brush->image()));
     }
@@ -126,7 +131,8 @@ void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask){
     emit sigBrushChanged();
 }
 
-void KisClipboardBrushWidget::slotSaveBrush(){
+void KisClipboardBrushWidget::slotSaveBrush()
+{
     QString dir = KGlobal::dirs()->saveLocation("data", "krita/brushes");
     QString extension = ".gbr";
     QString name = nameEdit->text();
@@ -136,24 +142,24 @@ void KisClipboardBrushWidget::slotSaveBrush(){
     fileInfo.setFile(dir + name + extension);
 
     int i = 1;
-    while(fileInfo.exists()){
+    while (fileInfo.exists()) {
         fileInfo.setFile(dir + name + QString("%1").arg(i) + extension);
         i++;
     }
     tempFileName = fileInfo.filePath();
 
-    if(m_rServerAdapter){
+    if (m_rServerAdapter) {
         KisGbrBrush* resource = static_cast<KisGbrBrush*>(m_brush.data())->clone();
         resource->setFilename(tempFileName);
 
-        if(nameEdit->text().isEmpty()){
+        if (nameEdit->text().isEmpty()) {
             resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
         }
-        else{
+        else {
             resource->setName(name);
         }
 
-        if(colorAsmask->isChecked()){
+        if (colorAsmask->isChecked()) {
             resource->makeMaskImage();
         }
         m_rServerAdapter->addResource(resource);

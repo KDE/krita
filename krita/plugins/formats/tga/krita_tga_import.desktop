@@ -1,0 +1,23 @@
+[Desktop Entry]
+Name=Krita TGA Import Filter
+Name[ca]=Filtre d'importació TGA per al Krita
+Name[cs]=Importní filtr formátu TGA pro Kritu
+Name[de]=Krita TGA-Importfilter
+Name[es]=Filtro de Krita de importación de TGA
+Name[it]=Filtro di importazione TGA per Krita
+Name[ja]=Krita TGA インポートフィルタ
+Name[nl]=TGA-importfilter voor Krita
+Name[pl]=Filtr importu TGA do Krita
+Name[pt]=Filtro de Importação de TGA para o Krita
+Name[pt_BR]=Filtro de importação de TGA para Krita
+Name[sk]=Importný filter Krita TGA
+Name[sv]=Krita TGA-importfilter
+Name[uk]=Фільтр імпортування даних TGA для Krita
+Name[x-test]=xxKrita TGA Import Filterxx
+X-KDE-Export=application/x-krita
+X-KDE-ServiceTypes=Calligra/Filter
+Type=Service
+X-KDE-Import=image/x-tga
+X-KDE-Weight=1
+X-KDE-Library=kritatgaimport
+NoDisplay=true

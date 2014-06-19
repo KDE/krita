@@ -60,6 +60,13 @@ public:
     Qt::PenCapStyle capStyle() const;
     Qt::PenJoinStyle joinStyle() const;
 
+    /**
+     * Creates KoShapeStroke object filled with the options
+     * configured by the widget. The caller is in charge of
+     * deletion of the returned object
+     */
+    KoShapeStroke* createShapeStroke() const;
+
     void setCanvas(KoCanvasBase *canvas);
     void setActive(bool active);
 

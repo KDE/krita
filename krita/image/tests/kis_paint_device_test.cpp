@@ -601,7 +601,7 @@ void KisPaintDeviceTest::testDeviceDuplication()
     referenceImage = device->convertToQImage(0);
 
 
-    KisTransaction transaction1(0, device);
+    KisTransaction transaction1(device);
 //    qDebug()<<"CLEARING";
     device->clear(clearRect);
 
@@ -612,7 +612,7 @@ void KisPaintDeviceTest::testDeviceDuplication()
 
     KisPaintDeviceSP clone =  new KisPaintDevice(*device);
 
-    KisTransaction transaction(0, clone);
+    KisTransaction transaction(clone);
 //    qDebug()<<"CLEARING";
     clone->clear(clearRect);
 
@@ -1013,13 +1013,6 @@ static bool nextRowGeneral(KisVLineIteratorSP it, int y, const QRect &rc) {
     return y < rc.width();
 }
 
-static bool nextRowGeneral(KisRectIteratorSP it, int y, const QRect &rc) {
-    Q_UNUSED(it);
-    Q_UNUSED(y);
-    Q_UNUSED(rc);
-    return false;
-}
-
 template <class T>
 bool checkXY(const QPoint &pt, const QPoint &realPt) {
     Q_UNUSED(pt);
@@ -1036,22 +1029,29 @@ template <>
 bool checkXY<KisVLineIteratorSP>(const QPoint &pt, const QPoint &realPt) {
     return pt.x() == realPt.y() && pt.y() == realPt.x();
 }
-
+#include <kis_wrapped_rect.h>
 template <class T>
-bool checkConseqPixels(int value, const QPoint &pt, const QRect &rect) {
+bool checkConseqPixels(int value, const QPoint &pt, const KisWrappedRect &wrappedRect) {
     Q_UNUSED(value);
     Q_UNUSED(pt);
-    Q_UNUSED(rect);
+    Q_UNUSED(wrappedRect);
     return false;
 }
 
 template <>
-bool checkConseqPixels<KisHLineIteratorSP>(int value, const QPoint &pt, const QRect &rect) {
-    return value == rect.x() + rect.width() - pt.x();
+bool checkConseqPixels<KisHLineIteratorSP>(int value, const QPoint &pt, const KisWrappedRect &wrappedRect) {
+    int x = KisWrappedRect::xToWrappedX(pt.x(), wrappedRect.wrapRect());
+    int borderX = wrappedRect.originalRect().x() + wrappedRect.wrapRect().width();
+    int conseq = x >= borderX ? wrappedRect.wrapRect().right() - x + 1 : borderX - x;
+    conseq = qMin(conseq, wrappedRect.originalRect().right() - pt.x() + 1);
+
+    return value == conseq;
 }
 
 template <>
-bool checkConseqPixels<KisVLineIteratorSP>(int value, const QPoint &pt, const QRect &rect) {
+bool checkConseqPixels<KisVLineIteratorSP>(int value, const QPoint &pt, const KisWrappedRect &wrappedRect) {
+    Q_UNUSED(pt);
+    Q_UNUSED(wrappedRect);
     return value == 1;
 }
 
@@ -1072,12 +1072,6 @@ template <>
 KisVLineIteratorSP createIterator(KisPaintDeviceSP dev,
                                   const QRect &rc) {
     return dev->createVLineIteratorNG(rc.x(), rc.y(), rc.height());
-}
-
-template <>
-KisRectIteratorSP createIterator(KisPaintDeviceSP dev,
-                                 const QRect &rc) {
-    return dev->createRectIteratorNG(rc);
 }
 
 template <class IteratorSP>
@@ -1137,11 +1131,6 @@ void KisPaintDeviceTest::testWrappedVLineIterator()
     testWrappedLineIterator<KisVLineIteratorSP>("vline_iterator");
 }
 
-void KisPaintDeviceTest::testWrappedRectIterator()
-{
-    testWrappedLineIterator<KisRectIteratorSP>("rect_iterator");
-}
-
 template <class IteratorSP>
 void testWrappedLineIteratorReadMoreThanBounds(QString testName)
 {
@@ -1167,7 +1156,7 @@ void testWrappedLineIteratorReadMoreThanBounds(QString testName)
         for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
             quint8 *data = it->rawData();
 
-            QVERIFY(checkConseqPixels<IteratorSP>(it->nConseqPixels(), QPoint(x, y), rect));
+            QVERIFY(checkConseqPixels<IteratorSP>(it->nConseqPixels(), QPoint(x, y), KisWrappedRect(rect, bounds)));
 
             dstIt->moveTo(x, y);
             memcpy(dstIt->rawData(), data, cs->pixelSize());
@@ -1202,12 +1191,6 @@ void KisPaintDeviceTest::testWrappedHLineIteratorReadMoreThanBounds()
 void KisPaintDeviceTest::testWrappedVLineIteratorReadMoreThanBounds()
 {
     testWrappedLineIteratorReadMoreThanBounds<KisVLineIteratorSP>("vline_iterator");
-}
-
-void KisPaintDeviceTest::testWrappedRectIteratorReadMoreThanBounds()
-{
-    // FIXME: Huge rect support is not implemented for the rect iterator
-    //testWrappedLineIteratorReadMoreThanBounds<KisRectIteratorSP>("rect_iterator");
 }
 
 void KisPaintDeviceTest::testMoveWrapAround()

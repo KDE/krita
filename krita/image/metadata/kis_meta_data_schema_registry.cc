@@ -47,7 +47,8 @@ SchemaRegistry* SchemaRegistry::instance()
     return SchemaRegistry::Private::singleton;
 }
 
-SchemaRegistry::SchemaRegistry() : d(new Private)
+SchemaRegistry::SchemaRegistry()
+    : d(new Private)
 {
 
     KGlobal::mainComponent().dirs()->addResourceType("metadata_schema", "data", "krita/metadata/schemas/");
@@ -72,6 +73,11 @@ SchemaRegistry::SchemaRegistry() : d(new Private)
     create(Schema::MakerNoteSchemaUri, "mkn");
     create(Schema::IPTCSchemaUri, "Iptc4xmpCore");
     create(Schema::PhotoshopSchemaUri, "photoshop");
+}
+
+SchemaRegistry::~SchemaRegistry()
+{
+    delete d;
 }
 
 

@@ -39,7 +39,7 @@ KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, const QLis
     Q_ASSERT(d->shapes.count() == d->previousSizes.count());
     Q_ASSERT(d->shapes.count() == d->newSizes.count());
 
-    setText(i18nc("(qtundo-format)", "Resize shapes"));
+    setText(kundo2_i18n("Resize shapes"));
 }
 
 KoShapeSizeCommand::~KoShapeSizeCommand()

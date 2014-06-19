@@ -27,6 +27,7 @@
 
 #include "kis_doc2.h"
 #include "kis_image.h"
+#include "testutil.h"
 
 void KisKraLoaderTest::testLoading()
 {
@@ -53,6 +54,29 @@ void KisKraLoaderTest::testLoading()
     QCOMPARE((int) node->childCount(), 2);
 
 }
+
+
+
+void KisKraLoaderTest::testObligeSingleChild()
+{
+    QString fileName = TestUtil::fetchDataFileLazy("single_layer_no_channel_flags.kra");
+
+    KisDoc2 doc;
+    doc.loadNativeFormat(fileName);
+    KisImageWSP image = doc.image();
+
+    QVERIFY(image);
+    QCOMPARE(image->nlayers(), 2);
+
+    KisNodeSP root = image->root();
+    KisNodeSP child = root->firstChild();
+
+    QVERIFY(child);
+
+    QCOMPARE(root->original(), root->projection());
+    QCOMPARE(root->original(), child->projection());
+}
+
 
 QTEST_KDEMAIN(KisKraLoaderTest, GUI)
 #include "kis_kra_loader_test.moc"

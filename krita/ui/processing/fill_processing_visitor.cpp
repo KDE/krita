@@ -26,6 +26,7 @@
 FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
                                KisSelectionSP selection,
                                KisResourcesSnapshotSP resources,
+                               bool useFastMode,
                                bool usePattern,
                                bool selectionOnly,
                                int feather,
@@ -35,6 +36,7 @@ FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
                                bool useBgColor)
     : m_startPoint(startPoint),
       m_selection(selection),
+      m_useFastMode(useFastMode),
       m_selectionOnly(selectionOnly),
       m_usePattern(usePattern),
       m_resources(resources),
@@ -80,7 +82,7 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
         QVector<QRect> dirtyRect = fillPainter.takeDirtyRegion();
 
         KisPainter *painter = new KisPainter(device, m_selection);
-        painter->beginTransaction("");
+        painter->beginTransaction();
 
         m_resources->setupPainter(painter);
 
@@ -93,7 +95,7 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
     } else {
 
         KisFillPainter fillPainter(device, m_selection);
-        fillPainter.beginTransaction("");
+        fillPainter.beginTransaction();
 
         m_resources->setupPainter(&fillPainter);
 
@@ -101,15 +103,17 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
         fillPainter.setSizemod(m_sizemod);
         fillPainter.setFeather(m_feather);
         fillPainter.setFillThreshold(m_fillThreshold);
-        fillPainter.setSampleMerged(!m_unmerged);
         fillPainter.setCareForSelection(true);
         fillPainter.setWidth(fillRect.width());
         fillPainter.setHeight(fillRect.height());
+        fillPainter.setUseCompositioning(!m_useFastMode);
+
+        KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_resources->image()->projection();
 
         if (m_usePattern) {
-            fillPainter.fillPattern(m_startPoint.x(), m_startPoint.y(), m_resources->image()->projection());
+            fillPainter.fillPattern(m_startPoint.x(), m_startPoint.y(), sourceDevice);
         } else {
-            fillPainter.fillColor(m_startPoint.x(), m_startPoint.y(), m_resources->image()->projection());
+            fillPainter.fillColor(m_startPoint.x(), m_startPoint.y(), sourceDevice);
         }
 
         fillPainter.endTransaction(undoAdapter);

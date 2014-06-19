@@ -100,7 +100,7 @@ private:
  };
 
  KisDodgeShadowsAdjustmentFactory::KisDodgeShadowsAdjustmentFactory()
-    : KoColorTransformationFactory("DodgeShadows", i18n("DodgeShadows Adjustment"))
+    : KoColorTransformationFactory("DodgeShadows")
 {
 }
 

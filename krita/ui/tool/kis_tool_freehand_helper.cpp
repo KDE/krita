@@ -19,6 +19,7 @@
 #include "kis_tool_freehand_helper.h"
 
 #include <QTimer>
+#include <QQueue>
 
 #include <klocale.h>
 
@@ -86,6 +87,8 @@ struct KisToolFreehandHelper::Private
     KisRecordingAdapter *recordingAdapter;
     KisStrokesFacade *strokesFacade;
 
+    KUndo2MagicString transactionText;
+
     bool haveTangent;
     QPointF previousTangent;
 
@@ -109,20 +112,30 @@ struct KisToolFreehandHelper::Private
     QList<qreal> distanceHistory;
 
     PositionHistory lastOutlinePos;
+
+    // Stabilizer data
+    QQueue<KisPaintInformation> stabilizerDeque;
+    KisPaintInformation stabilizerLastPaintInfo;
+    QTimer stabilizerPollTimer;
 };
 
 
 KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
+                                             const KUndo2MagicString &transactionText,
                                              KisRecordingAdapter *recordingAdapter)
     : m_d(new Private)
 {
     m_d->infoBuilder = infoBuilder;
     m_d->recordingAdapter = recordingAdapter;
 
+    m_d->transactionText = transactionText;
+
     m_d->strokeTimeoutTimer.setSingleShot(true);
     connect(&m_d->strokeTimeoutTimer, SIGNAL(timeout()), SLOT(finishStroke()));
 
     connect(&m_d->airbrushingTimer, SIGNAL(timeout()), SLOT(doAirbrushing()));
+
+    connect(&m_d->stabilizerPollTimer, SIGNAL(timeout()), SLOT(stabilizerPollAndPaint()));
 }
 
 KisToolFreehandHelper::~KisToolFreehandHelper()
@@ -198,7 +211,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(m_d->resources->needsIndirectPainting(),
                                    m_d->resources->indirectPaintingCompositeOp(),
-                                   m_d->resources, m_d->painterInfos, i18n("Freehand Stroke"));
+                                   m_d->resources, m_d->painterInfos, m_d->transactionText);
 
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
 
@@ -208,6 +221,10 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     if(m_d->resources->needsAirbrushing()) {
         m_d->airbrushingTimer.setInterval(m_d->resources->airbrushingRate());
         m_d->airbrushingTimer.start();
+    }
+
+    if (m_d->smoothingOptions.smoothingType() == KisSmoothingOptions::STABILIZER) {
+        stabilizerStart(m_d->previousPaintInformation);
     }
 }
 
@@ -327,8 +344,8 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
      * 4) The formila is a little bit different: 'Distance' parameter
      *    stands for $3 \Sigma$
      */
-    if (m_d->smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING
-        && m_d->smoothingOptions.smoothnessDistance > 0.0) {
+    if (m_d->smoothingOptions.smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING
+        && m_d->smoothingOptions.smoothnessDistance() > 0.0) {
 
         { // initialize current distance
             QPointF prevPos;
@@ -350,7 +367,13 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         qreal y = 0.0;
 
         if (m_d->history.size() > 3) {
-            const qreal sigma = m_d->smoothingOptions.smoothnessDistance / 3.0; // '3.0' for (3 * sigma) range
+            const qreal effectiveSmoothnessDistance =
+                !m_d->smoothingOptions.useScalableDistance() ?
+                m_d->smoothingOptions.smoothnessDistance() :
+                m_d->smoothingOptions.smoothnessDistance() /
+                m_d->resources->effectiveZoom();
+
+            const qreal sigma = effectiveSmoothnessDistance / 3.0; // '3.0' for (3 * sigma) range
 
             qreal gaussianWeight = 1 / (sqrt(2 * M_PI) * sigma);
             qreal gaussianWeight2 = sigma * sigma;
@@ -372,7 +395,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                 if (i < m_d->history.size() - 1) {
                     pressureGrad = nextInfo.pressure() - m_d->history.at(i + 1).pressure();
 
-                    const qreal tailAgressiveness = 40.0 * m_d->smoothingOptions.tailAggressiveness;
+                    const qreal tailAgressiveness = 40.0 * m_d->smoothingOptions.tailAggressiveness();
 
                     if (pressureGrad > 0.0 ) {
                         pressureGrad *= tailAgressiveness * (1.0 - nextInfo.pressure());
@@ -395,7 +418,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                 x += rate * nextInfo.pos().x();
                 y += rate * nextInfo.pos().y();
 
-                if (m_d->smoothingOptions.smoothPressure) {
+                if (m_d->smoothingOptions.smoothPressure()) {
                     pressure += rate * nextInfo.pressure();
                 }
             }
@@ -404,14 +427,14 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                 x /= scaleSum;
                 y /= scaleSum;
 
-                if (m_d->smoothingOptions.smoothPressure) {
+                if (m_d->smoothingOptions.smoothPressure()) {
                     pressure /= scaleSum;
                 }
             }
 
             if ((x != 0.0 && y != 0.0) || (x == info.pos().x() && y == info.pos().y())) {
                 info.setPos(QPointF(x, y));
-                if (m_d->smoothingOptions.smoothPressure) {
+                if (m_d->smoothingOptions.smoothPressure()) {
                     info.setPressure(pressure);
                 }
                 m_d->history.last() = info;
@@ -419,8 +442,8 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         }
     }
 
-    if (m_d->smoothingOptions.smoothingType == KisSmoothingOptions::SIMPLE_SMOOTHING
-        || m_d->smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING)
+    if (m_d->smoothingOptions.smoothingType() == KisSmoothingOptions::SIMPLE_SMOOTHING
+        || m_d->smoothingOptions.smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING)
     {
         // Now paint between the coordinates, using the bezier curve interpolation
         if (!m_d->haveTangent) {
@@ -440,11 +463,15 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         m_d->olderPaintInformation = m_d->previousPaintInformation;
         m_d->strokeTimeoutTimer.start(100);
     }
-    else {
+    else if (m_d->smoothingOptions.smoothingType() == KisSmoothingOptions::NO_SMOOTHING){
         paintLine(m_d->painterInfos, m_d->previousPaintInformation, info);
     }
 
-    m_d->previousPaintInformation = info;
+    if (m_d->smoothingOptions.smoothingType() == KisSmoothingOptions::STABILIZER) {
+        m_d->stabilizerLastPaintInfo = info;
+    } else {
+        m_d->previousPaintInformation = info;
+    }
 
     if(m_d->airbrushingTimer.isActive()) {
         m_d->airbrushingTimer.start();
@@ -455,13 +482,17 @@ void KisToolFreehandHelper::endPaint()
 {
     if (!m_d->hasPaintAtLeastOnce) {
         paintAt(m_d->painterInfos, m_d->previousPaintInformation);
-    } else if (m_d->smoothingOptions.smoothingType != KisSmoothingOptions::NO_SMOOTHING) {
+    } else if (m_d->smoothingOptions.smoothingType() != KisSmoothingOptions::NO_SMOOTHING) {
         finishStroke();
     }
     m_d->strokeTimeoutTimer.stop();
 
     if(m_d->airbrushingTimer.isActive()) {
         m_d->airbrushingTimer.stop();
+    }
+
+    if (m_d->smoothingOptions.smoothingType() == KisSmoothingOptions::STABILIZER) {
+        stabilizerEnd();
     }
 
     /**
@@ -476,6 +507,91 @@ void KisToolFreehandHelper::endPaint()
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->endStroke();
+    }
+}
+
+void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
+{
+    // FIXME: Ugly hack, this is no a "distance" in any way
+    int sampleSize = m_d->smoothingOptions.smoothnessDistance();
+    assert(sampleSize > 0);
+
+    // Fill the deque with the current value repeated until filling the sample
+    m_d->stabilizerDeque.clear();
+    for (int i = sampleSize; i > 0; i--) {
+        m_d->stabilizerDeque.enqueue(firstPaintInfo);
+    }
+    m_d->stabilizerLastPaintInfo = firstPaintInfo;
+
+    // Poll and draw each millisecond
+    m_d->stabilizerPollTimer.setInterval(1);
+    m_d->stabilizerPollTimer.start();
+}
+
+void KisToolFreehandHelper::stabilizerPoll()
+{
+    // Remove the oldest entry
+    m_d->stabilizerDeque.dequeue();
+
+    // Add a new entry with the last paint info (position and pressure)
+    m_d->stabilizerDeque.enqueue(m_d->stabilizerLastPaintInfo);
+}
+
+void KisToolFreehandHelper::stabilizerPaint()
+{
+    // Get the average position and pressure in the deque
+    qreal x = 0.0,
+          y = 0.0,
+          pressure = 0.0,
+          xTilt = 0.0,
+          yTilt = 0.0;
+
+    foreach (KisPaintInformation info, m_d->stabilizerDeque) {
+        x += info.pos().x();
+        y += info.pos().y();
+        pressure += info.pressure();
+        xTilt += info.xTilt();
+        yTilt += info.yTilt();
+    }
+
+    x /= m_d->stabilizerDeque.size();
+    y /= m_d->stabilizerDeque.size();
+    pressure /= m_d->stabilizerDeque.size();
+    xTilt /= m_d->stabilizerDeque.size();
+    yTilt /= m_d->stabilizerDeque.size();
+
+    // Draw with these params
+    KisPaintInformation newInfo = m_d->stabilizerLastPaintInfo;
+    newInfo.setPos(QPointF(x, y));
+    newInfo.setPressure(pressure);
+    paintLine(m_d->painterInfos, m_d->previousPaintInformation, newInfo);
+
+    m_d->previousPaintInformation = newInfo;
+}
+
+void KisToolFreehandHelper::stabilizerPollAndPaint()
+{
+    // Update the deque and draw a line to the new average
+    stabilizerPoll();
+    stabilizerPaint();
+}
+
+void KisToolFreehandHelper::stabilizerEnd()
+{
+    // FIXME: Ugly hack, this is no a "distance" in any way
+    int sampleSize = m_d->smoothingOptions.smoothnessDistance();
+    assert(sampleSize > 0);
+
+    // Stop the timer
+    m_d->stabilizerPollTimer.stop();
+
+    // Finish the line
+    for (int i = sampleSize; i > 0; i--) {
+        // In each iteration we add the latest paint info and delete the oldest
+        // After `sampleSize` iterations the deque will be filled with the latest
+        // value and we will have reached the end point.
+        stabilizerPoll();
+        stabilizerPaint();
     }
 }
 

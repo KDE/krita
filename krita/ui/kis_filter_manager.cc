@@ -165,6 +165,17 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
         d->filterDialog->setFilter(filter);
         return;
     }
+
+    connect(d->view->image(),
+            SIGNAL(sigStrokeCancellationRequested()),
+            SLOT(slotStrokeCancelRequested()),
+            Qt::UniqueConnection);
+
+    connect(d->view->image(),
+            SIGNAL(sigStrokeEndRequested()),
+            SLOT(slotStrokeEndRequested()),
+            Qt::UniqueConnection);
+
     /**
      * The UI should show only after every running stroke is finished,
      * so the barrier is added here.
@@ -222,6 +233,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
     if (d->currentStrokeId) {
         image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::CancelSilentlyMarker);
         image->cancelStroke(d->currentStrokeId);
+        d->currentStrokeId.clear();
     }
 
     KisPostExecutionUndoAdapter *undoAdapter =
@@ -263,7 +275,7 @@ void KisFilterManager::finish()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value(d->currentlyAppliedConfiguration->name());
     if (filter->bookmarkManager()) {
-        filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(),
+        filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed,
                                        d->currentlyAppliedConfiguration.data());
     }
 
@@ -288,4 +300,18 @@ void KisFilterManager::cancel()
 bool KisFilterManager::isStrokeRunning() const
 {
     return d->currentStrokeId;
+}
+
+void KisFilterManager::slotStrokeEndRequested()
+{
+    if (d->currentStrokeId && d->filterDialog) {
+        d->filterDialog->accept();
+    }
+}
+
+void KisFilterManager::slotStrokeCancelRequested()
+{
+    if (d->currentStrokeId && d->filterDialog) {
+        d->filterDialog->reject();
+    }
 }

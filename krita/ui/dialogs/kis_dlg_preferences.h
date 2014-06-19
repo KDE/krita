@@ -97,8 +97,9 @@ private slots:
 
     void refillMonitorProfiles(const KoID & s);
     void refillPrintProfiles(const KoID & s);
-    void selectOcioConfigPath();
-    void enableOcioConfigPath(bool);
+    void installProfile();
+    void toggleAllowMonitorProfileSelection(bool useSystemProfile);
+
 public:
     void setDefault();
     WdgColorSettings  *m_page;

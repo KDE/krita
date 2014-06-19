@@ -22,8 +22,11 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
-#include <KoColorConversions.h>
 #include <QTimer>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorConversions.h>
+#include <KoColorDisplayRendererInterface.h>
+
 
 enum CurrentHandle {
     NoHandle,
@@ -31,6 +34,21 @@ enum CurrentHandle {
     ValueSaturationHandle };
 
 struct KoTriangleColorSelector::Private {
+    Private(KoTriangleColorSelector *_q, const KoColorDisplayRendererInterface *_displayRenderer)
+        : q(_q),
+          displayRenderer(_displayRenderer),
+          hue(0),
+          saturation(0),
+          value(0),
+          updateAllowed(true),
+          invalidTriangle(true),
+          lastX(-1),
+          lastY(-1)
+    {
+    }
+
+    KoTriangleColorSelector *q;
+    const KoColorDisplayRendererInterface *displayRenderer;
     QPixmap wheelPixmap;
     QPixmap trianglePixmap;
     int hue;
@@ -56,24 +74,33 @@ struct KoTriangleColorSelector::Private {
     bool invalidTriangle;
     int lastX, lastY;
     QTimer updateTimer;
+
+    void init();
 };
 
-KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
+void KoTriangleColorSelector::Private::init()
 {
-    setMinimumHeight( 100 );
-    setMinimumWidth( 100 );
-    d->hue = 0;
-    d->saturation = 0;
-    d->value = 0;
-    d->updateAllowed = true;
-    setMouseTracking( true );
-    updateTriangleCircleParameters();
-    d->invalidTriangle = true;
-    d->lastX = -1;
-    d->lastY = -1;
-    d->updateTimer.setInterval(1);
-    d->updateTimer.setSingleShot(true);
-    connect(&(d->updateTimer), SIGNAL(timeout()), this, SLOT(update()));
+    q->setMinimumHeight( 100 );
+    q->setMinimumWidth( 100 );
+    q->setMouseTracking( true );
+    q->updateTriangleCircleParameters();
+    updateTimer.setInterval(1);
+    updateTimer.setSingleShot(true);
+    q->connect(&updateTimer, SIGNAL(timeout()), q, SLOT(update()));
+}
+
+KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent)
+    : QWidget(parent),
+      d(new Private(this, KoDumbColorDisplayRenderer::instance()))
+{
+    d->init();
+}
+
+KoTriangleColorSelector::KoTriangleColorSelector(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
+    : QWidget(parent),
+      d(new Private(this, displayRenderer))
+{
+    d->init();
 }
 
 KoTriangleColorSelector::~KoTriangleColorSelector()
@@ -85,7 +112,7 @@ void KoTriangleColorSelector::updateTriangleCircleParameters()
 {
     d->sizeColorSelector = qMin(width(), height());
     d->centerColorSelector = 0.5 * d->sizeColorSelector;
-    d->wheelWidthProportion = 0.3;
+    d->wheelWidthProportion = 0.25;
     d->wheelWidth = d->centerColorSelector * d->wheelWidthProportion;
     d->wheelNormExt = qAbs( d->centerColorSelector );
     d->wheelNormInt = qAbs( d->centerColorSelector * (1.0 - d->wheelWidthProportion));
@@ -127,7 +154,10 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
         // Draw it
         p.save();
         p.setPen( QPen( Qt::white, 1.0) );
-        p.setBrush( color() );
+
+        QColor currentColor = d->displayRenderer->toQColor(realColor());
+
+        p.setBrush(currentColor);
         p.rotate( hue() + 150 );
         p.drawEllipse( QRectF( -d->triangleHandleSize*0.5 + vs_selector_xpos_,
                                -d->triangleHandleSize*0.5 - (d->centerColorSelector - d->triangleTop) + vs_selector_ypos_ * d->triangleHeight,
@@ -153,7 +183,7 @@ int KoTriangleColorSelector::hue() const
 
 void KoTriangleColorSelector::setHue(int h)
 {
-    h = qBound(0, h, 360);
+    h = qBound(0, h, 359);
     d->hue = h;
     tellColorChanged();
     d->invalidTriangle = true;
@@ -201,24 +231,29 @@ void KoTriangleColorSelector::setHSV(int h, int s, int v)
     d->updateTimer.start();
 }
 
+KoColor KoTriangleColorSelector::realColor() const
+{
+    return d->displayRenderer->fromHsv(d->hue, d->saturation, d->value);
+}
+
+void KoTriangleColorSelector::setRealColor(const KoColor & color)
+{
+    if(d->updateAllowed) {
+        d->displayRenderer->getHsv(color, &d->hue, &d->saturation, &d->value);
+        d->invalidTriangle = true;
+        d->updateTimer.start();
+    }
+}
+
 QColor KoTriangleColorSelector::color() const
 {
-    int r,g,b;
-    hsv_to_rgb( d->hue, d->saturation, d->value, &r, &g, &b);
-    return QColor(r,g,b);
+    return realColor().toQColor();
 }
 
 void KoTriangleColorSelector::setQColor(const QColor& c)
 {
-    if(d->updateAllowed)
-    {
-        int hue;
-        rgb_to_hsv( c.red(), c.green(), c.blue(), &hue, &d->saturation, &d->value);
-        if( hue >= 0 && hue <= 360)
-            d->hue = hue;
-        d->invalidTriangle = true;
-        d->updateTimer.start();
-    }
+    KoColor color(c, KoColorSpaceRegistry::instance()->rgb8());
+    setRealColor(color);
 }
 
 void KoTriangleColorSelector::resizeEvent( QResizeEvent * event )
@@ -237,13 +272,14 @@ inline qreal pow2(qreal v)
 void KoTriangleColorSelector::tellColorChanged()
 {
     d->updateAllowed = false;
-    emit(colorChanged(color()));
+    emit(realColorChanged(realColor()));
+    emit(colorChanged(realColor().toQColor()));
     d->updateAllowed = true;
 }
 
 void KoTriangleColorSelector::generateTriangle()
 {
-    QImage image(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
+    QImage image(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32);
     // Length of triangle
     int hue_ = hue();
     
@@ -266,15 +302,12 @@ void KoTriangleColorSelector::generateTriangle()
                 else if( v > 255.0 ) { va = 256.0 - v; v = 255; }
                 if( s < 0.0) { sa = 1.0 + s; s = 0; }
                 else if( s > 255.0 ) { sa = 256.0 - s; s = 255; }
-                int r,g,b;
-                hsv_to_rgb(hue_, (int)s, (int)v, &r, &g, &b);
-                qreal coef = va * sa;
-                if( coef < 0.999)
-                {
-                    *data = qRgba( (int)(r * coef), (int)(g * coef), (int)(b * coef), (int)(255 * coef));
-                } else {
-                    *data = qRgba(r, g, b, 255 );
-                }
+                qreal coeff = va * sa;
+
+                KoColor color = d->displayRenderer->fromHsv(hue_, s, v, int(coeff * 255.0));
+                QColor qcolor = d->displayRenderer->toQColor(color);
+
+                *data = qcolor.rgba();
             }
         }
     }
@@ -285,7 +318,7 @@ void KoTriangleColorSelector::generateTriangle()
 
 void KoTriangleColorSelector::generateWheel()
 {
-    QImage image(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
+    QImage image(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32);
     for(int y = 0; y < d->sizeColorSelector; y++)
     {
         qreal yc = y - d->centerColorSelector;
@@ -300,15 +333,12 @@ void KoTriangleColorSelector::generateWheel()
                 if(norm > d->wheelNormExt ) acoef = (1.0 + d->wheelNormExt - norm);
                 else if(norm < d->wheelNormInt ) acoef = (1.0 - d->wheelNormInt + norm);
                 qreal angle = atan2(yc, xc);
-                int h = (int)((180 * angle / M_PI) + 180);
-                int r,g,b;
-                hsv_to_rgb(h, 255, 255, &r, &g, &b);
-                if( acoef < 0.999)
-                {
-                    image.setPixel(x,y, qRgba( (int)(r * acoef), (int)(g * acoef), (int)(b * acoef), (int)(255 * acoef)));
-                } else {
-                    image.setPixel(x,y, qRgba(r, g, b, 255 ));
-                }
+                int h = (int)((180 * angle / M_PI) + 180) % 360;
+
+                KoColor color = d->displayRenderer->fromHsv(h, 255, 255, int(acoef * 255.0));
+                QColor qcolor = d->displayRenderer->toQColor(color);
+
+                image.setPixel(x,y, qcolor.rgba());
             } else {
                 image.setPixel(x,y, qRgba(0,0,0,0));
             }

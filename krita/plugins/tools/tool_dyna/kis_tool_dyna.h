@@ -152,7 +152,7 @@ public:
     KisToolDynaFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolDyna") {
 
-        setToolTip(i18n("Paint with brushes using dynamic movements"));
+        setToolTip(i18n("Dynamic Brush Tool"));
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);

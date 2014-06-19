@@ -48,7 +48,9 @@ MyPaintFactory::MyPaintFactory()
     KGlobal::mainComponent().dirs()->addResourceDir("mypaint_brushes", "/usr/share/mypaint/brushes/");
 
     m_d->brushServer = new KoResourceServer<MyPaintBrushResource>("mypaint_brushes", "*.myb");
-
+    if (!QFileInfo(m_d->brushServer->saveLocation()).exists()) {
+        QDir().mkpath(m_d->brushServer->saveLocation());
+    }
     QStringList extensionList = m_d->brushServer->extensions().split(':');
     QStringList fileNames;
 
@@ -83,9 +85,8 @@ KisPaintOp * MyPaintFactory::createOp(const KisPaintOpSettingsSP settings, KisPa
     return op;
 }
 
-KisPaintOpSettingsSP MyPaintFactory::settings(KisImageWSP image)
+KisPaintOpSettingsSP MyPaintFactory::settings()
 {
-    Q_UNUSED(image);
     return new MyPaintSettings();
 }
 
@@ -121,7 +122,7 @@ void MyPaintFactory::processAfterLoading()
         if (blackList.contains(i.key())) continue;
 
         //Create a preset for every loaded brush
-        KisPaintOpSettingsSP s = settings(0);
+        KisPaintOpSettingsSP s = settings();
         s->setProperty("paintop", id());
         s->setProperty("filename", i.key());
 

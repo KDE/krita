@@ -34,9 +34,9 @@
 #include <QGraphicsScene>
 #include <QSpacerItem>
 
+#include <kmessagebox.h>
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
-#include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
@@ -59,6 +59,7 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
+#include <kis_config.h>
 
 #include "kis_clipboard.h"
 #include "kis_doc2.h"
@@ -127,6 +128,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
 
     connect(bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()));
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
+
+    KisConfig cfg;
+    intNumLayers->setValue(cfg.numDefaultLayers());
 
     fillPredefined();
     switchPortraitLandscape();
@@ -204,14 +208,43 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
-    createNewImage();
-
-    emit documentSelected();
+    if (createNewImage()) {
+        emit documentSelected();
+    }
 }
 
-void KisCustomImageWidget::createNewImage()
+bool KisCustomImageWidget::createNewImage()
 {
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
+
+    if (cs->colorModelId() == RGBAColorModelID &&
+        cs->colorDepthId() == Integer8BitsColorDepthID) {
+
+        const KoColorProfile *profile = cs->profile();
+
+        if (profile->name().contains("linear") ||
+            profile->name().contains("scRGB") ||
+            profile->info().contains("linear") ||
+            profile->info().contains("scRGB")) {
+
+            int result =
+                KMessageBox::warningContinueCancel(this,
+                                                   "Linear gamma RGB color spaces are not supposed to be used "
+                                                   "in 8-bit integer modes. It is suggested to use 16-bit integer "
+                                                   "or any floating point colorspace for linear profiles.\n\n"
+                                                   "Press \"Continue\" to create a 8-bit integer linear RGB color space "
+                                                   "or \"Cancel\" to return to the settings dialog.",
+                                                   "Linear RGB + 8bit integer");
+
+            if (result == KMessageBox::Cancel) {
+                qDebug() << "Model RGB8" << "NOT SUPPORTED";
+                qDebug() << ppVar(cs->name());
+                qDebug() << ppVar(cs->profile()->name());
+                qDebug() << ppVar(cs->profile()->info());
+                return false;
+            }
+        }
+    }
 
     QColor qc = cmbColor->color();
 
@@ -241,7 +274,17 @@ void KisCustomImageWidget::createNewImage()
         }
        
         layer->setDirty(QRect(0, 0, width, height));
+        for(int i = 1; i < intNumLayers->value(); ++i) {
+            KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+            image->addNode(layer, image->root(), i);
+            layer->setDirty(QRect(0, 0, width, height));
+        }
     }
+
+    KisConfig cfg;
+    cfg.setNumDefaultLayers(intNumLayers->value());
+
+    return true;
 }
 
 quint8 KisCustomImageWidget::backgroundOpacity() const
@@ -280,6 +323,7 @@ void KisCustomImageWidget::fillPredefined()
 
     QString appName = KGlobal::mainComponent().componentName();
     QStringList definitions = KGlobal::dirs()->findAllResources("data", appName + "/predefined_image_sizes/*", KStandardDirs::Recursive);
+    definitions.sort();
 
     if (!definitions.empty()) {
 
@@ -373,8 +417,24 @@ void KisCustomImageWidget::saveAsPredefined()
 void KisCustomImageWidget::switchWidthHeight()
 {
     double width = doubleWidth->value();
-    doubleWidth->setValue(doubleHeight->value());
+    double height = doubleHeight->value();
+    KoUnit widthUnit = m_widthUnit;
+    KoUnit heightUnit = m_heightUnit;
+
+    doubleHeight->blockSignals(true);
+    doubleWidth->blockSignals(true);
+    cmbWidthUnit->blockSignals(true);
+    cmbHeightUnit->blockSignals(true);
+
+    doubleWidth->setValue(height);
     doubleHeight->setValue(width);
+    cmbWidthUnit->setCurrentIndex(m_heightUnit.indexInListForUi(KoUnit::ListAll));
+    cmbHeightUnit->setCurrentIndex(m_widthUnit.indexInListForUi(KoUnit::ListAll));
+
+    doubleHeight->blockSignals(false);
+    doubleWidth->blockSignals(false);
+    cmbWidthUnit->blockSignals(false);
+    cmbHeightUnit->blockSignals(false);
 }
 
 void KisCustomImageWidget::switchPortraitLandscape()

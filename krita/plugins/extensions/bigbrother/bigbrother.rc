@@ -3,8 +3,6 @@
 <MenuBar>
     <Menu name="Tools">
         <Menu name="Recording"><text>Recording</text>
-            <Action name="Recording_Global_Save"/>
-            <Separator/>
             <Action name="Recording_Start_Recording_Macro"/>
             <Action name="Recording_Stop_Recording_Macro"/>
         </Menu>

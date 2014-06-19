@@ -137,7 +137,7 @@ void KoChangeTracker::setSaveFormat(ChangeSaveFormat saveFormat)
     d->changeSaveFormat = saveFormat;
 }
 
-int KoChangeTracker::getFormatChangeId(const QString &title, const QTextFormat &format, const QTextFormat &prevFormat, int existingChangeId)
+int KoChangeTracker::getFormatChangeId(const KUndo2MagicString &title, const QTextFormat &format, const QTextFormat &prevFormat, int existingChangeId)
 {
     if ( existingChangeId ) {
         d->children.insert(existingChangeId, d->changeId);
@@ -159,7 +159,7 @@ int KoChangeTracker::getFormatChangeId(const QString &title, const QTextFormat &
     return d->changeId++;
 }
 
-int KoChangeTracker::getInsertChangeId(const QString &title, int existingChangeId)
+int KoChangeTracker::getInsertChangeId(const KUndo2MagicString &title, int existingChangeId)
 {
     if ( existingChangeId ) {
         d->children.insert(existingChangeId, d->changeId);
@@ -179,7 +179,7 @@ int KoChangeTracker::getInsertChangeId(const QString &title, int existingChangeI
     return d->changeId++;
 }
 
-int KoChangeTracker::getDeleteChangeId(const QString &title, const QTextDocumentFragment &selection, int existingChangeId)
+int KoChangeTracker::getDeleteChangeId(const KUndo2MagicString &title, const QTextDocumentFragment &selection, int existingChangeId)
 {
     if ( existingChangeId ) {
         d->children.insert(existingChangeId, d->changeId);
@@ -224,7 +224,7 @@ bool KoChangeTracker::containsInlineChanges(const QTextFormat &format) const
     return false;
 }
 
-int KoChangeTracker::mergeableId(KoGenChange::Type type, const QString &title, int existingId) const
+int KoChangeTracker::mergeableId(KoGenChange::Type type, const KUndo2MagicString &title, int existingId) const
 {
     if (!existingId || !d->changes.value(existingId))
         return 0;
@@ -388,11 +388,11 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
                     forEachElement(region, tag) {
                         if (!region.isNull()) {
                             if (region.localName() == "insertion") {
-                                changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::InsertChange);
+                                changeElement = new KoChangeTrackerElement(kundo2_noi18n(tag.attributeNS(KoXmlNS::text,"id")),KoGenChange::InsertChange);
                             } else if (region.localName() == "format-change") {
-                                changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::FormatChange);
+                                changeElement = new KoChangeTrackerElement(kundo2_noi18n(tag.attributeNS(KoXmlNS::text,"id")),KoGenChange::FormatChange);
                             } else if (region.localName() == "deletion") {
-                                changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::DeleteChange);
+                                changeElement = new KoChangeTrackerElement(kundo2_noi18n(tag.attributeNS(KoXmlNS::text,"id")),KoGenChange::DeleteChange);
                             }
                             KoXmlElement metadata = region.namedItemNS(KoXmlNS::office,"change-info").toElement();
                             if (!metadata.isNull()) {
@@ -429,7 +429,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
                     KoChangeTrackerElement *changeElement = 0;
                     //Set the change element as an insertion element for now
                     //Will be changed to the correct type when actual changes referencing this change-id are encountered
-                    changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::delta,"change-id"),KoGenChange::InsertChange);
+                    changeElement = new KoChangeTrackerElement(kundo2_noi18n(tag.attributeNS(KoXmlNS::delta,"change-id")),KoGenChange::InsertChange);
                     KoXmlElement metadata = tag.namedItemNS(KoXmlNS::delta,"change-info").toElement();
                     if (!metadata.isNull()) {
                            KoXmlElement date = metadata.namedItem("dc:date").toElement();

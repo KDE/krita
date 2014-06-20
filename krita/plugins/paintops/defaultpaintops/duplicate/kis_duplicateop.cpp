@@ -134,7 +134,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         realSourceDevice = m_image->projection();
     }
     else {
-        realSourceDevice = m_settings->node()->paintDevice();
+        realSourceDevice = m_settings->node()->projection();
     }
 
     qreal scale = m_sizeOption.apply(info);

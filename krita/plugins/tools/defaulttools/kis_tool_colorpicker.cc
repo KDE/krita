@@ -166,9 +166,8 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             return;
         }
 
-        KisPaintDeviceSP dev = currentNode()->paintDevice();
-        if (!dev) return;
-
+        KisPaintDeviceSP dev = currentNode()->projection();
+        KIS_ASSERT_RECOVER_RETURN(dev);
 
 
         if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {

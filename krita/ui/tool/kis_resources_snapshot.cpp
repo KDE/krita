@@ -225,7 +225,11 @@ QString KisResourcesSnapshot::indirectPaintingCompositeOp() const
 
 KisSelectionSP KisResourcesSnapshot::activeSelection() const
 {
-    KisSelectionSP selection = m_d->image->globalSelection();
+    /**
+     * It is possible to have/use the snapshot without the image. Such
+     * usecase is present for example in the scratchpad.
+     */
+    KisSelectionSP selection = m_d->image ? m_d->image->globalSelection() : 0;
 
     KisLayerSP layer = dynamic_cast<KisLayer*>(m_d->currentNode.data());
     KisSelectionMaskSP mask;

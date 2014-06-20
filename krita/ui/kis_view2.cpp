@@ -530,19 +530,21 @@ void KisView2::dropEvent(QDropEvent *event)
         KisShapeController *kritaShapeController =
             dynamic_cast<KisShapeController*>(m_d->doc->shapeController());
 
-        KisNodeSP node =
-            KisMimeData::loadNode(event->mimeData(), imageBounds,
+        QList<KisNodeSP> nodes =
+            KisMimeData::loadNodes(event->mimeData(), imageBounds,
                                   pasteCenter, forceRecenter,
                                   kisimage, kritaShapeController);
 
-        if (node) {
-            KisNodeCommandsAdapter adapter(this);
-            if (!m_d->nodeManager->activeLayer()) {
-                adapter.addNode(node, kisimage->rootLayer() , 0);
-            } else {
-                adapter.addNode(node,
-                                m_d->nodeManager->activeLayer()->parent(),
-                                m_d->nodeManager->activeLayer());
+        foreach(KisNodeSP node, nodes) {
+            if (node) {
+                KisNodeCommandsAdapter adapter(this);
+                if (!m_d->nodeManager->activeLayer()) {
+                    adapter.addNode(node, kisimage->rootLayer() , 0);
+                } else {
+                    adapter.addNode(node,
+                                    m_d->nodeManager->activeLayer()->parent(),
+                                    m_d->nodeManager->activeLayer());
+                }
             }
         }
 

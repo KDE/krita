@@ -570,6 +570,11 @@ void KisNodeManager::setSelectedNodes(QList<KisNodeSP> nodes)
     m_d->selectedNodes = nodes;
 }
 
+QList<KisNodeSP> KisNodeManager::selectedNodes()
+{
+    return m_d->selectedNodes;
+}
+
 void KisNodeManager::nodeOpacityChanged(qreal opacity, bool finalChange)
 {
     KisNodeSP node = activeNode();

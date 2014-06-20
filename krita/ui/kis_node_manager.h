@@ -103,6 +103,7 @@ public:
      * @param nodes the selected nodes
      */
     void setSelectedNodes(QList<KisNodeSP> nodes);
+    QList<KisNodeSP> selectedNodes();
 
 public slots:
 

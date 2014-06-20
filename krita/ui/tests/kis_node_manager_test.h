@@ -35,6 +35,11 @@ private slots:
     void testShearShapeNode();
     void testScaleShapeNode();
     void testMirrorShapeNode();
+
+    void testConvertCloneToPaintLayer();
+    void testConvertCloneToSelectionMask();
+
+    void testConvertBlurToSelectionMask();
 };
 
 #endif /* __KIS_NODE_MANAGER_TEST_H */

@@ -447,7 +447,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     if (!image) return;
 
     KisPaintDeviceSP srcDevice =
-        source->paintDevice() ? source->paintDevice() : source->original();
+        source->paintDevice() ? source->paintDevice() : source->projection();
 
     if (!srcDevice) return;
 
@@ -468,7 +468,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     }
 
     KisLayerSP layer = new KisPaintLayer(image,
-                                         image->nextLayerName(),
+                                         source->name(),
                                          source->opacity(),
                                          clone);
     layer->setCompositeOp(source->compositeOpId());

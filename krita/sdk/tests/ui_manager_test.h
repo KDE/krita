@@ -33,7 +33,7 @@
 #include <KoPart.h>
 #include <kis_action_manager.h>
 #include "KoMainWindow.h"
-
+#include "kis_selection_mask.h"
 
 namespace TestUtil
 {
@@ -141,12 +141,12 @@ public:
     }
 
     bool checkSelectionOnly(const QString &name) {
-        KisNodeSP mask = findNode(image->root(), "selection");
+        KisNodeSP mask = dynamic_cast<const KisLayer*>(image->root().data())->selectionMask();
         return checkOneLayer(image, mask, name);
     }
 
     bool checkNoSelection() {
-        KisNodeSP mask = findNode(image->root(), "selection");
+        KisNodeSP mask = dynamic_cast<const KisLayer*>(image->root().data())->selectionMask();
         return !mask && !image->globalSelection();
     }
 

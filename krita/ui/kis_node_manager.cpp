@@ -466,7 +466,7 @@ void KisNodeManager::convertNode(const QString &nodeType)
                nodeType == "KisTransparencyMask") {
 
         KisPaintDeviceSP copyFrom = activeNode->paintDevice() ?
-            activeNode->paintDevice() : activeNode->original();
+            activeNode->paintDevice() : activeNode->projection();
 
         m_d->commandsAdapter->beginMacro(kundo2_i18n("Convert to a Selection Mask"));
 

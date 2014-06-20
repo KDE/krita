@@ -736,10 +736,18 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
 
 void KisLayerBox::selectionChanged(const QModelIndexList selection)
 {
+    if (selection.isEmpty()) {
+        m_wdgLayerBox->listLayers->setCurrentIndex(m_nodeModel->indexFromNode(m_nodeManager->activeNode()));
+        return;
+    }
+
+
     QList<KisNodeSP> selectedNodes;
     foreach(const QModelIndex &idx, selection) {
         selectedNodes << m_nodeModel->nodeFromIndex(idx);
     }
+
+
     m_nodeManager->setSelectedNodes(selectedNodes);
     bool enableButtons = selectedNodes.size() == 1;
 

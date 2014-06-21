@@ -30,6 +30,8 @@
 #include <kis_animation_player.h>
 #include <QList>
 #include <QHash>
+#include <QThread>
+#include <kis_onion_skin_loader.h>
 
 #define APP_MIMETYPE "application/x-krita-animation"
 
@@ -182,6 +184,15 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
             }
         }
     }
+
+    QThread* thread = new QThread(this);
+    KisOnionSkinLoader* loader = new KisOnionSkinLoader(this);
+
+    connect(thread, SIGNAL(started()), loader, SLOT(loadOnionSkins()));
+    connect(thread, SIGNAL(finished()), loader, SLOT(deleteLater()));
+    loader->moveToThread(thread);
+
+    thread->start();
 
     this->updateActiveFrame();
     setCurrentImage(d->image);
@@ -485,6 +496,20 @@ QString KisAnimationDoc::getFrameFile(int frame, int layer)
     return location;
 }
 
+QString KisAnimationDoc::getPreviousKeyFrameFile(int frame, int layer)
+{
+    QRect prevKeyFramePos = this->getPreviousKeyFramePosition(frame, layer);
+    QString location = "frame" + QString::number(prevKeyFramePos.x()) + "layer" + QString::number(prevKeyFramePos.y());
+    return location;
+}
+
+QString KisAnimationDoc::getNextKeyFrameFile(int frame, int layer)
+{
+    QRect nextKeyFramePos = this->getNextKeyFramePosition(frame, layer);
+    QString location = "frame" + QString::number(nextKeyFramePos.x()) + "layer" + QString::number(nextKeyFramePos.y());
+    return location;
+}
+
 void KisAnimationDoc::updateXML()
 {
     QDomElement frameElement = d->doc.createElement("frame");
@@ -548,6 +573,26 @@ void KisAnimationDoc::setImageModified()
 {
     setModified(true);
     emit sigFrameModified();
+}
+
+QRect KisAnimationDoc::currentFramePosition()
+{
+    return d->currentFramePosition;
+}
+
+KisLayerSP KisAnimationDoc::currentFrame()
+{
+    return d->currentFrame;
+}
+
+int KisAnimationDoc::numberOfLayers()
+{
+    return d->noLayers;
+}
+
+KisKranimLoader* KisAnimationDoc::kranimLoader()
+{
+    return d->kranimLoader;
 }
 
 void KisAnimationDoc::updateActiveFrame()

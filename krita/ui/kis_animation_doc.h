@@ -26,6 +26,8 @@
 #include <./kranimstore/kis_animation_store.h>
 #include <QHash>
 
+class KisKranimLoader;
+
 #define KIS_ANIM_MIME_TYPE "application/x-krita-animation"
 
 class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
@@ -50,6 +52,16 @@ public:
 
     QRect getPreviousKeyFramePosition(int frame, int layer);
     QRect getNextKeyFramePosition(int frame, int layer);
+
+    QString getPreviousKeyFrameFile(int frame, int layer);
+    QString getNextKeyFrameFile(int frame, int layer);
+
+    QRect currentFramePosition();
+    KisLayerSP currentFrame();
+
+    int numberOfLayers();
+
+    KisKranimLoader* kranimLoader();
 
 public slots:
     void play();

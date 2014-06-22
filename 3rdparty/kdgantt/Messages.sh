@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT_QT *.cpp *.h -o $podir/kdgantt.pot
+source ../../calligra_xgettext.sh
+
+XGETTEXT=${XGETTEXT_QT} calligra_xgettext *.cpp *.h > $podir/kdgantt.pot

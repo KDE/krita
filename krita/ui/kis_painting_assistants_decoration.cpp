@@ -38,7 +38,7 @@ struct KisPaintingAssistantsDecoration::Private {
 };
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(KisView2* parent) :
-        KisCanvasDecoration("paintingAssistantsDecoration", i18n("Painting assistants"), parent),
+        KisCanvasDecoration("paintingAssistantsDecoration", parent),
         d(new Private)
 {
 }

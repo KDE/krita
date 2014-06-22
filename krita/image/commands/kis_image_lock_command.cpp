@@ -24,7 +24,7 @@
 
 
 KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
-        : KisImageCommand("lock image", image)  // Not for translation, this is only ever used inside a macro command.
+    : KisImageCommand(kundo2_noi18n("lock image"), image)
 {
     Q_UNUSED(lockImage)
 }

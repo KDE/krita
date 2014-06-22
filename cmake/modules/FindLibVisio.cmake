@@ -12,16 +12,16 @@
 include(LibFindMacros)
 libfind_package(LIBWPD LibWpd)
 libfind_package(LIBWPG LibWpg)
-libfind_pkg_check_modules(LIBVISIO_PKGCONF libvisio-0.0)
+libfind_pkg_check_modules(LIBVISIO_PKGCONF libvisio-0.1)
 
 find_path(LIBVISIO_INCLUDE_DIR
     NAMES libvisio/libvisio.h
     HINTS ${LIBVISIO_PKGCONF_INCLUDE_DIRS} ${LIBVISIO_PKGCONF_INCLUDEDIR}
-    PATH_SUFFIXES libvisio-0.0
+    PATH_SUFFIXES libvisio-0.1
 )
 
 find_library(LIBVISIO_LIBRARY
-    NAMES visio visio-0.0
+    NAMES visio visio-0.1
     HINTS ${LIBVISIO_PKGCONF_LIBRARY_DIRS} ${LIBVISIO_PKGCONF_LIBDIR}
 )
 

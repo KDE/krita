@@ -1,4 +1,6 @@
 #! /bin/sh
-$EXTRACTRC *.ui  >> rc.cpp
-$XGETTEXT *.cpp *.h elements/*.cpp elements/*.h -o $podir/FormulaShape.pot
+source ../../calligra_xgettext.sh
+
+$EXTRACTRC *.ui >> rc.cpp
+calligra_xgettext *.cpp *.h elements/*.cpp elements/*.h > $podir/FormulaShape.pot
 rm -f rc.cpp

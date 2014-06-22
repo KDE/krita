@@ -1,3 +1,5 @@
 #! /bin/sh
+source ../../calligra_xgettext.sh
+
 $EXTRACTRC *.ui >> rc.cpp
-$XGETTEXT *.cpp *.h -o $podir/ArtisticTextShape.pot
+calligra_xgettext *.cpp *.h > $podir/ArtisticTextShape.pot

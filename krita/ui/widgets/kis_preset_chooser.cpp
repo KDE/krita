@@ -173,6 +173,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->setRowHeight(50);
     m_delegate = new KisPresetDelegate(this);
     m_chooser->setItemDelegate(m_delegate);
+    m_chooser->setSynced(true);
     layout->addWidget(m_chooser);
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
@@ -215,25 +216,12 @@ void KisPresetChooser::resizeEvent(QResizeEvent* event)
 void KisPresetChooser::updateViewSettings()
 {
     if (m_mode == THUMBNAIL) {
-        int resourceCount = m_adapter->resources().count();
-        int width = m_chooser->viewSize().width();
-        int maxColums = width/50;
-        int cols = width/100 + 1;
-        while(cols <= maxColums) {
-            int size = width/cols;
-            int rows = ceil(resourceCount/(double)cols);
-            if(rows*size < (m_chooser->viewSize().height()-5)) {
-                break;
-            }
-            cols++;
-        }
-        m_chooser->setRowHeight(floor((double)width/cols));
-        m_chooser->setColumnCount(cols);
         m_delegate->setShowText(false);
     } else if (m_mode == DETAIL) {
         m_chooser->setColumnCount(1);
         m_delegate->setShowText(true);
     } else if (m_mode == STRIP) {
+        m_chooser->setSynced(false);
         m_chooser->setRowCount(1);
         // An offset of 7 keeps the cell exactly square, TODO: use constants, not hardcoded numbers
         m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);

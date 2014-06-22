@@ -111,7 +111,7 @@
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(const QString &text, KUndo2Command *parent):
+KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent):
     m_hasParent(parent != 0)
 {
     d = new KUndo2CommandPrivate;
@@ -256,7 +256,7 @@ QString KUndo2Command::actionText() const
     \sa setText(), KUndo2QStack::createUndoAction(), KUndo2QStack::createRedoAction()
 */
 
-QString KUndo2Command::text() const
+KUndo2MagicString KUndo2Command::text() const
 {
     return d->text;
 }
@@ -270,19 +270,10 @@ QString KUndo2Command::text() const
     \sa text() KUndo2QStack::createUndoAction() KUndo2QStack::createRedoAction()
 */
 
-void KUndo2Command::setText(const QString &text)
+void KUndo2Command::setText(const KUndo2MagicString &undoText)
 {
-    int cdpos = text.indexOf(QLatin1Char('\n'));
-    if (cdpos > 0)
-    {
-        d->text = text.left(cdpos);
-        d->actionText = text.mid(cdpos + 1);
-    }
-    else
-    {
-        d->text = text;
-        d->actionText = text;
-    }
+    d->text = undoText;
+    d->actionText = undoText.toSecondaryString();
 }
 
 /*!
@@ -915,7 +906,7 @@ QAction *KUndo2QStack::createRedoAction(QObject *parent) const
     \sa endMacro()
 */
 
-void KUndo2QStack::beginMacro(const QString &text)
+void KUndo2QStack::beginMacro(const KUndo2MagicString &text)
 {
     KUndo2Command *cmd = new KUndo2Command();
     cmd->setText(text);
@@ -992,7 +983,7 @@ QString KUndo2QStack::text(int idx) const
 {
     if (idx < 0 || idx >= m_command_list.size())
         return QString();
-    return m_command_list.at(idx)->text();
+    return m_command_list.at(idx)->text().toString();
 }
 
 /*!

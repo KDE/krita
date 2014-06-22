@@ -37,7 +37,7 @@ DeleteTableColumnCommand::DeleteTableColumnCommand(KoTextEditor *te, QTextTable 
     ,m_table(t)
     ,m_changeId(changeId)
 {
-    setText(i18nc("(qtundo-format)", "Delete Column"));
+    setText(kundo2_i18n("Delete Column"));
 }
 
 void DeleteTableColumnCommand::undo()

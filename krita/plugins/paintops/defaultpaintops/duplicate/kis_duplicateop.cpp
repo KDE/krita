@@ -134,7 +134,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         realSourceDevice = m_image->projection();
     }
     else {
-        realSourceDevice = m_settings->node()->paintDevice();
+        realSourceDevice = m_settings->node()->projection();
     }
 
     qreal scale = m_sizeOption.apply(info);
@@ -167,14 +167,6 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
-
-    if (!realSourceDevice->defaultBounds()->wrapAroundMode()) {
-        if (srcPoint.x() < 0)
-            srcPoint.setX(0);
-
-        if (srcPoint.y() < 0)
-            srcPoint.setY(0);
-    }
 
     // Perspective correction ?
 

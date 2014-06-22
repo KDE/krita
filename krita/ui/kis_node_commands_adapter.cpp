@@ -42,7 +42,7 @@ KisNodeCommandsAdapter::~KisNodeCommandsAdapter()
 {
 }
 
-void KisNodeCommandsAdapter::beginMacro(const QString& macroName)
+void KisNodeCommandsAdapter::beginMacro(const KUndo2MagicString& macroName)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
     m_view->image()->undoAdapter()->beginMacro(macroName);

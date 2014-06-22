@@ -24,7 +24,7 @@
 #include "kis_layer.h"
 
 
-KisImageCommand::KisImageCommand(const QString& name, KisImageWSP image, KUndo2Command *parent)
+KisImageCommand::KisImageCommand(const KUndo2MagicString& name, KisImageWSP image, KUndo2Command *parent)
     : KUndo2Command(name, parent)
     , m_image(image)
 {

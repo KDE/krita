@@ -28,7 +28,7 @@
 class KisShapeController;
 
 /**
- * KisMimeData implements delayed retrieval of node for d&d and copy/paste.
+ * KisMimeData implements delayed retrieval of nodes for d&d and copy/paste.
  *
  * TODO: implement support for the ora format.
  */
@@ -36,10 +36,10 @@ class KRITAUI_EXPORT KisMimeData : public QMimeData
 {
     Q_OBJECT
 public:
-    KisMimeData(KisNodeSP node);
+    KisMimeData(QList<KisNodeSP> nodes);
 
     /// return the node set on this mimedata object -- for internal use
-    KisNodeSP node() const;
+    QList<KisNodeSP> nodes() const;
 
     /**
      * KisMimeData provides the following formats if a node has been set:
@@ -50,40 +50,40 @@ public:
      * <li>application/zip: allows drop targets that can handle zip files to open the data
      * </ul>
      */
-    QStringList formats () const;
+    QStringList formats() const;
 
     /**
      * Try load the node, which belongs to the same Krita instance,
      * that is can be fetched without serialization
      */
-    static KisNodeSP tryLoadInternalNode(const QMimeData *data,
-                                         KisImageWSP image,
-                                         KisShapeController *shapeController,
-                                         bool /* IN-OUT */ &copyNode);
+    static QList<KisNodeSP> tryLoadInternalNodes(const QMimeData *data,
+                                                 KisImageWSP image,
+                                                 KisShapeController *shapeController,
+                                                 bool /* IN-OUT */ &copyNode);
 
     /**
      * Loads a node from a mime container
      * Supports application/x-krita-node and image types.
      */
-    static KisNodeSP loadNode(const QMimeData *data,
-                              const QRect &imageBounds,
-                              const QPoint &preferredCenter,
-                              bool forceRecenter,
-                              KisImageWSP image,
-                              KisShapeController *shapeController);
+    static QList<KisNodeSP> loadNodes(const QMimeData *data,
+                                      const QRect &imageBounds,
+                                      const QPoint &preferredCenter,
+                                      bool forceRecenter,
+                                      KisImageWSP image,
+                                      KisShapeController *shapeController);
 
 protected:
 
     QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
 
 private:
-    static void initializeExternalNode(KisNodeSP &node,
+    static void initializeExternalNode(KisNodeSP &nodes,
                                        KisImageWSP image,
                                        KisShapeController *shapeController);
 
 private:
 
-    KisNodeSP m_node;
+    QList<KisNodeSP> m_nodes;
 
 };
 

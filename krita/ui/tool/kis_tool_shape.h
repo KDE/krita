@@ -64,7 +64,7 @@ protected:
 
     void addShape(KoShape* shape);
 
-    void addPathShape(KoPathShape* pathShape, const QString& name);
+    void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);
 
 private:
     WdgGeometryOptions *m_shapeOptionsWidget;

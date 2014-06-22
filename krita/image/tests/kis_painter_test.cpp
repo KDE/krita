@@ -467,7 +467,7 @@ void KisPainterTest::testBitBltOldData()
     src->fill(fillRect, color1);
 
     KisPainter srcGc(src);
-    srcGc.beginTransaction("");
+    srcGc.beginTransaction();
     src->fill(fillRect, color2);
 
     KisPainter dstGc(dst);

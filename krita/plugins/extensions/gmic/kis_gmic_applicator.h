@@ -19,21 +19,24 @@
 #ifndef _KIS_GMIC_APPLICATOR
 #define _KIS_GMIC_APPLICATOR
 
+#include <kundo2magicstring.h>
+
 #include <kis_types.h>
 #include <QThread>
+
 
 class KisGmicApplicator : public QThread
 {
 public:
     KisGmicApplicator();
     ~KisGmicApplicator();
-    void setProperties(KisImageWSP image, KisNodeSP node, const QString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands = QByteArray());
+    void setProperties(KisImageWSP image, KisNodeSP node, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands = QByteArray());
 protected:
     virtual void run();
 private:
     KisImageWSP m_image;
     KisNodeSP m_node;
-    QString m_actionName;
+    KUndo2MagicString m_actionName;
     KisNodeListSP m_kritaNodes;
     QString m_gmicCommand;
     QByteArray m_customCommands;

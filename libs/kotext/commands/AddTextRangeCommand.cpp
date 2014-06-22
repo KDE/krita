@@ -30,10 +30,9 @@
 #include <KoTextRange.h>
 
 AddTextRangeCommand::AddTextRangeCommand(KoTextRange * range, KUndo2Command *parent)
-    : KUndo2Command(parent)
+    : KUndo2Command(kundo2_noi18n("internal step"), parent)
     , m_range(range)
 {
-    setText("internal step");
 }
 
 void AddTextRangeCommand::undo()

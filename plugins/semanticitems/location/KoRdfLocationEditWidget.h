@@ -20,7 +20,6 @@
 #ifndef __rdf_KoRdfLocationEditWidget_h__
 #define __rdf_KoRdfLocationEditWidget_h__
 
-#include <QObject>
 #include <QWidget>
 
 class KoRdfLocationEditWidgetPrivate;
@@ -50,10 +49,10 @@ public:
 
 #ifdef CAN_USE_MARBLE
    void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
-#endif
 
-public slots:
-    void mouseMoveGeoPosition(const QString&);
+private slots:
+    void mouseMoveGeoPosition();
+#endif
 
 };
 

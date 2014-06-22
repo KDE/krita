@@ -82,7 +82,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="KisDropButton" name="bnAdd">
+      <widget class="KisToolButton" name="bnAdd">
        <property name="minimumSize">
         <size>
          <width>37</width>
@@ -343,9 +343,9 @@
    <header location="global">KoDocumentSectionView.h</header>
   </customwidget>
   <customwidget>
-   <class>KisDropButton</class>
+   <class>KisToolButton</class>
    <extends>QToolButton</extends>
-   <header>kis_drop_button.h</header>
+   <header>kis_tool_button.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

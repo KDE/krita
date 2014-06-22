@@ -174,7 +174,7 @@ void KisTransformWorkerTest::testMirrorTransactionX()
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     dev2->convertFromQImage(image, 0);
 
-    KisTransaction t("mirror", dev2);
+    KisTransaction t(kundo2_noi18n("mirror"), dev2);
     KisTransformWorker::mirrorX(dev2);
     t.end();
 
@@ -198,7 +198,7 @@ void KisTransformWorkerTest::testMirrorTransactionY()
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     dev2->convertFromQImage(image, 0);
 
-    KisTransaction t("mirror", dev2);
+    KisTransaction t(kundo2_noi18n("mirror"), dev2);
     KisTransformWorker::mirrorY(dev2);
     t.end();
 
@@ -227,7 +227,7 @@ void KisTransformWorkerTest::testScaleUp()
     dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 2.4, 2.4,
                           0.0, 0.0,
                           0.0, 0.0,
@@ -264,7 +264,7 @@ void KisTransformWorkerTest::testXScaleUp()
     dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 2.0, 1.0,
                           0.0, 0.0,
                           0.0, 0.0,
@@ -301,7 +301,7 @@ void KisTransformWorkerTest::testYScaleUp()
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 2.0,
                           0.0, 0.0,
                           0.0, 0.0,
@@ -337,7 +337,7 @@ void KisTransformWorkerTest::testIdentity()
     dev->convertFromQImage(image, 0);
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           0.0, 0.0,
                           0.0, 0.0,
@@ -372,7 +372,7 @@ void KisTransformWorkerTest::testScaleDown()
     dev->convertFromQImage(image, 0);
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 0.123, 0.123,
                           0.0, 0.0,
                           0.0, 0.0,
@@ -420,7 +420,7 @@ void KisTransformWorkerTest::testXScaleDown()
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 0.123, 1.0,
                           0.0, 0.0,
                           0.0, 0.0,
@@ -456,7 +456,7 @@ void KisTransformWorkerTest::testYScaleDown()
     dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 0.123,
                           0.0, 0.0,
                           0.0, 0.0,
@@ -493,7 +493,7 @@ void KisTransformWorkerTest::testXShear()
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           1.0, 0.0,
                           300., 200.,
@@ -541,7 +541,7 @@ void KisTransformWorkerTest::testYShear()
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           0.0, 1.0,
                           300., 200.,
@@ -616,7 +616,7 @@ void KisTransformWorkerTest::testMatrices()
     qreal angle = M_PI/6;
     qreal transX = 77, transY = 33;
 
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, scaleX, scaleY,
                           shearX, shearY,
                           shearOrigX, shearOrigY,
@@ -647,7 +647,7 @@ void testRotationImpl(qreal angle, QString filePrefix)
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           0.0, 0.0,
                           0.0, 0.0,
@@ -704,7 +704,7 @@ void KisTransformWorkerTest::testRotationSpecialCases()
     qreal angle = M_PI;
     qreal transX = 300, transY = 150;
 
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
     KisTransformWorker tw(dev, scaleX, scaleY,
                           shearX, shearY,
                           shearOrigX, shearOrigY,
@@ -744,7 +744,7 @@ void KisTransformWorkerTest::testScaleUp5times()
     dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBicubicFilterStrategy();
-    KisTransaction t("test", dev);
+    KisTransaction t(dev);
 
     qreal SCALE = 5.0;
 
@@ -778,7 +778,7 @@ void KisTransformWorkerTest::rotate90Left()
 
     QRect boundRect = dev2->exactBounds();
 
-    KisTransaction t("rotate left 90", dev2);
+    KisTransaction t(kundo2_noi18n("rotate left 90"), dev2);
     QRect rc = KisTransformWorker::rotateLeft90(dev2, boundRect, 0, 0);
     t.end();
 
@@ -805,7 +805,7 @@ void KisTransformWorkerTest::rotate90Right()
 
     QRect boundRect = dev2->exactBounds();
 
-    KisTransaction t("rotate right 90", dev2);
+    KisTransaction t(kundo2_noi18n("rotate right 90"), dev2);
     QRect rc = KisTransformWorker::rotateRight90(dev2, boundRect, 0, 0);
     t.end();
 
@@ -833,7 +833,7 @@ void KisTransformWorkerTest::rotate180()
 
     QRect boundRect = dev2->exactBounds();
 
-    KisTransaction t("rotate 180", dev2);
+    KisTransaction t(kundo2_noi18n("rotate 180"), dev2);
     QRect rc = KisTransformWorker::rotate180(dev2, boundRect, 0, 0);
     t.end();
 

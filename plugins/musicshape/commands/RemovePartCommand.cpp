@@ -31,7 +31,7 @@ RemovePartCommand::RemovePartCommand(MusicShape* shape, Part* part)
     m_shape(shape),
     m_partIndex(m_sheet->partIndex(part))
 {
-    setText(i18nc("(qtundo-format)", "Remove part"));
+    setText(kundo2_i18n("Remove part"));
 }
 
 void RemovePartCommand::redo()

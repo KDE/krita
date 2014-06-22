@@ -116,7 +116,7 @@ public:
 
         chkInvert = new QCheckBox(this);
         chkInvert->setChecked(false);
-        formLayout->addRow(i18n("Invert Texture:"), chkInvert);
+        formLayout->addRow(i18n("Invert Pattern:"), chkInvert);
 
         setLayout(formLayout);
     }

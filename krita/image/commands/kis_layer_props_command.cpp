@@ -39,7 +39,7 @@ KisLayerPropsCommand::KisLayerPropsCommand(KisLayerSP layer,
                                            const QString& oldName, const QString& newName,
                                            const QBitArray oldChannelFlags, const QBitArray newChannelFlags,
                                            bool undoChannelFlags)
-    : KisLayerCommand(i18nc("(qtundo-format)", "Property Changes"), layer)
+    : KisLayerCommand(kundo2_i18n("Property Changes"), layer)
     , m_oldName(oldName)
     , m_newName(newName)
     , m_oldOpacity(oldOpacity)

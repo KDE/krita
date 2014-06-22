@@ -24,7 +24,7 @@
 ReplaceTextRangeCommand::ReplaceTextRangeCommand(ArtisticTextShape *shape, const QString &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent)
     : KUndo2Command(parent), m_tool(tool), m_shape(shape), m_from(from), m_count(count)
 {
-    setText( i18nc("(qtundo-format)", "Replace text range") );
+    setText( kundo2_i18n("Replace text range") );
     m_newFormattedText.append(ArtisticTextRange(text, shape->fontAt(m_from)));
     m_oldFormattedText = shape->text();
 }
@@ -32,7 +32,7 @@ ReplaceTextRangeCommand::ReplaceTextRangeCommand(ArtisticTextShape *shape, const
 ReplaceTextRangeCommand::ReplaceTextRangeCommand(ArtisticTextShape *shape, const ArtisticTextRange &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent)
     : KUndo2Command(parent), m_tool(tool), m_shape(shape), m_from(from), m_count(count)
 {
-    setText( i18nc("(qtundo-format)", "Replace text range") );
+    setText( kundo2_i18n("Replace text range") );
     m_newFormattedText.append(text);
     m_oldFormattedText = shape->text();
 }
@@ -40,7 +40,7 @@ ReplaceTextRangeCommand::ReplaceTextRangeCommand(ArtisticTextShape *shape, const
 ReplaceTextRangeCommand::ReplaceTextRangeCommand(ArtisticTextShape *shape, const QList<ArtisticTextRange> &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent)
     : KUndo2Command(parent), m_tool(tool), m_shape(shape), m_from(from), m_count(count)
 {
-    setText( i18nc("(qtundo-format)", "Replace text range") );
+    setText( kundo2_i18n("Replace text range") );
     m_newFormattedText = text;
     m_oldFormattedText = shape->text();
 }

@@ -33,7 +33,7 @@ KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QLis
     Q_ASSERT(m_shapes.count() == m_oldLock.count());
     Q_ASSERT(m_shapes.count() == m_newLock.count());
 
-    setText(i18nc("(qtundo-format)", "Lock shapes"));
+    setText(kundo2_i18n("Lock shapes"));
 }
 
 KoShapeLockCommand::~KoShapeLockCommand()

@@ -205,7 +205,7 @@ void KisPainter::end()
                "Please use end/deleteTransaction() instead");
 }
 
-void KisPainter::beginTransaction(const QString& transactionName)
+void KisPainter::beginTransaction(const KUndo2MagicString& transactionName)
 {
     Q_ASSERT_X(!d->transaction, "KisPainter::beginTransaction()",
                "You asked for a new transaction while still having "
@@ -214,14 +214,6 @@ void KisPainter::beginTransaction(const QString& transactionName)
 
     d->transaction = new KisTransaction(transactionName, d->device);
     Q_CHECK_PTR(d->transaction);
-}
-
-QString KisPainter::transactionText()
-{
-    Q_ASSERT_X(d->transaction, "KisPainter::transactionText()",
-               "No transaction is in progress");
-
-    return d->transaction->text();
 }
 
 void KisPainter::revertTransaction()

@@ -1,3 +1,5 @@
 #! /bin/sh
+source ../../../calligra_xgettext.sh
+
 $EXTRACTRC --tag=string *.ui >> rc.cpp
-$XGETTEXT *.cpp -o $podir/SpellCheckPlugin.pot
+calligra_xgettext *.cpp > $podir/SpellCheckPlugin.pot

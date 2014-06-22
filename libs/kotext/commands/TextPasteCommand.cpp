@@ -65,9 +65,9 @@ TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
     m_rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
 
     if (m_pasteAsText)
-        setText(i18nc("(qtundo-format)", "Paste As Text"));
+        setText(kundo2_i18n("Paste As Text"));
     else
-        setText(i18nc("(qtundo-format)", "Paste"));
+        setText(kundo2_i18n("Paste"));
 }
 
 void TextPasteCommand::undo()

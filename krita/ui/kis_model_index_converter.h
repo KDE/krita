@@ -35,7 +35,8 @@ class KRITAUI_EXPORT KisModelIndexConverter : public KisModelIndexConverterBase
 {
 public:
     KisModelIndexConverter(KisDummiesFacadeBase *dummiesFacade,
-                           KisNodeModel *model);
+                           KisNodeModel *model,
+                           bool showGlobalSelection);
 
     KisNodeDummy* dummyFromRow(int row, QModelIndex parent);
     KisNodeDummy* dummyFromIndex(QModelIndex index);
@@ -48,12 +49,13 @@ public:
     int rowCount(QModelIndex parent);
 
 private:
-    static inline bool checkDummyType(KisNodeDummy *dummy);
-    static inline bool checkDummyMetaObjectType(const QString &type);
+    inline bool checkDummyType(KisNodeDummy *dummy);
+    inline bool checkDummyMetaObjectType(const QString &type);
 
 private:
     KisDummiesFacadeBase *m_dummiesFacade;
     KisNodeModel *m_model;
+    bool m_showGlobalSelection;
 };
 
 #endif /* __KIS_MODEL_INDEX_CONVERTER_H */

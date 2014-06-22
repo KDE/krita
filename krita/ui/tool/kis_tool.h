@@ -257,9 +257,6 @@ protected:
     KisImageWSP image() const;
     QCursor cursor() const;
 
-    /// @return the currently active selection
-    KisSelectionSP currentSelection() const;
-
     /// Call this to set the document modified
     void notifyModified() const;
 

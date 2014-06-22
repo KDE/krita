@@ -125,7 +125,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
     }
     d->command = new KoShapeMoveCommand(sortedPos.values(), previousPositions, newPositions);
 
-    setText(i18nc("(qtundo-format)", "Distribute shapes"));
+    setText(kundo2_i18n("Distribute shapes"));
 }
 
 KoShapeDistributeCommand::~KoShapeDistributeCommand()

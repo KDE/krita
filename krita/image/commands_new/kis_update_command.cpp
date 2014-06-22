@@ -25,7 +25,7 @@
 KisUpdateCommand::KisUpdateCommand(KisNodeSP node, QRect dirtyRect,
                                    KisUpdatesFacade *updatesFacade,
                                    bool needsFullRefresh)
-    : KUndo2Command("UPDATE_COMMAND"),
+    : KUndo2Command(kundo2_noi18n("UPDATE_COMMAND")),
       m_node(node),
       m_dirtyRect(dirtyRect),
       m_updatesFacade(updatesFacade),

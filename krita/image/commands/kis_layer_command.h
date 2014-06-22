@@ -35,7 +35,7 @@ public:
      * @param name The name that will be shown in the ui
      * @param layer The layer the command will be working on.
      */
-    KisLayerCommand(const QString& name, KisLayerSP layer);
+    KisLayerCommand(const KUndo2MagicString& name, KisLayerSP layer);
     virtual ~KisLayerCommand();
 
 protected:

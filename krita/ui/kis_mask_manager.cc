@@ -143,7 +143,7 @@ void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bo
     }
 }
 
-void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const QString &macroName, const QString &nodeType, const QString &nodeName)
+void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName)
 {
     m_commandsAdapter->beginMacro(macroName);
 
@@ -174,20 +174,20 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
 void KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom)
 {
     KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
-    createMaskCommon(mask, activeNode, copyFrom, i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"));
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"));
     mask->setActive(true);
 }
 
 void KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom)
 {
     KisMaskSP mask = new KisTransparencyMask();
-    createMaskCommon(mask, activeNode, copyFrom, i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"));
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"));
 }
 
 void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet)
 {
     KisFilterMaskSP mask = new KisFilterMask();
-    createMaskCommon(mask, activeNode, copyFrom, i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"));
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"));
 
     /**
      * FIXME: We'll use layer's original for creation of a thumbnail.

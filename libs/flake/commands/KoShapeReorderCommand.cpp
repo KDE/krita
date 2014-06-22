@@ -49,7 +49,7 @@ KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QLis
     foreach (KoShape *shape, shapes)
         d->previousIndexes.append(shape->zIndex());
 
-    setText(i18nc("(qtundo-format)", "Reorder shapes"));
+    setText(kundo2_i18n("Reorder shapes"));
 }
 
 KoShapeReorderCommand::~KoShapeReorderCommand()

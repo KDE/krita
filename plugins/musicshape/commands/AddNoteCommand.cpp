@@ -39,9 +39,9 @@ AddNoteCommand::AddNoteCommand(MusicShape* shape, Chord* chord, Staff* staff, Du
         }
     }
     if (exists) {
-        setText(i18nc("(qtundo-format)", "Set chord duration"));
+        setText(kundo2_i18n("Set chord duration"));
     } else {
-        setText(i18nc("(qtundo-format)", "Add note"));
+        setText(kundo2_i18n("Add note"));
         m_note = new Note(m_chord, staff, pitch, accidentals);
     }
 }

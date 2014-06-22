@@ -33,7 +33,7 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImag
     m_oldColorMode(shape->colorMode()),
     m_newColorMode(shape->colorMode())
 {
-    setText(i18nc("(qtundo-format)", "Change image"));
+    setText(kundo2_i18n("Change image"));
 
     // we need new here as setUserData deletes the old data
     m_oldImageData = m_shape->imageData() ? new KoImageData(*m_shape->imageData()): 0;
@@ -50,7 +50,7 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, const QRectF &croppi
     m_oldColorMode(shape->colorMode()),
     m_newColorMode(shape->colorMode())
 {
-    setText(i18nc("(qtundo-format)", "Crop image"));
+    setText(kundo2_i18n("Crop image"));
 }
 
 ChangeImageCommand::ChangeImageCommand(PictureShape *shape, PictureShape::ColorMode colorMode, KUndo2Command *parent):
@@ -64,7 +64,7 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, PictureShape::ColorM
     m_oldColorMode(shape->colorMode()),
     m_newColorMode(colorMode)
 {
-    setText(i18nc("(qtundo-format)", "Change image color mode"));
+    setText(kundo2_i18n("Change image color mode"));
 }
 
 ChangeImageCommand::~ChangeImageCommand()

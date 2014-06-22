@@ -67,7 +67,7 @@ FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int p
     m_length = length;
     m_removedGlyphs=m_ownerElement->glyphList(position,length);
     m_removed=m_ownerElement->text().mid(position,length);
-    setText( i18nc( "(qtundo-format)", "Add text to formula" ) );
+    setText( kundo2_i18n( "Add text to formula" ) );
     setUndoCursorPosition(FormulaCursor(m_ownerElement, m_position+m_removed.length()));
     setRedoCursorPosition(FormulaCursor(m_ownerElement, m_position+m_added.length()));
 }
@@ -223,7 +223,7 @@ FormulaCommandReplaceRow::FormulaCommandReplaceRow ( FormulaData* data, FormulaC
         m_newRows<<tmpRow;
     }
     m_oldRows=table->childElements().mid(number, oldlength);
-    setText( i18nc( "(qtundo-format)", "Change rows" ) );
+    setText( kundo2_i18n( "Change rows" ) );
     if (newlength==0 && oldlength>=table->childElements().count()) {
         m_empty=new TableRowElement();
         m_empty->insertChild(0, new TableDataElement());
@@ -421,7 +421,7 @@ void FormulaCommandReplaceColumn::undo()
 //             m_attributes.insert( i.key(), i.value() );
 //     }
 // 
-//     setText( i18nc( "(qtundo-format)", "Attribute Changed" ) );
+//     setText( kundo2_i18n( "Attribute Changed" ) );
 // }
 // 
 // void FormulaCommandAttribute::redo()

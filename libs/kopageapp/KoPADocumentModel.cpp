@@ -266,14 +266,14 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
             KUndo2Command * cmd = new KoShapeRenameCommand( shape, value.toString() );
             if (dynamic_cast<KoPAPageBase *>(shape)) {
                 if (m_document->pageType() == KoPageApp::Slide) {
-                    cmd->setText(i18n("Rename Slide"));
+                    cmd->setText(kundo2_i18n("Rename Slide"));
                 }
                 else {
-                    cmd->setText(i18n("Rename Page"));
+                    cmd->setText(kundo2_i18n("Rename Page"));
                 }
             }
             else if (dynamic_cast<KoShapeLayer *>(shape)) {
-                cmd->setText(i18n("Rename Layer"));
+                cmd->setText(kundo2_i18n("Rename Layer"));
             }
             m_document->addCommand( cmd );
         }   break;
@@ -520,7 +520,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             beginInsertRows( parent, group->shapeCount(), group->shapeCount()+toplevelShapes.count() );
 
             KUndo2Command * cmd = new KUndo2Command();
-            cmd->setText( i18nc("(qtundo-format)", "Reparent shapes") );
+            cmd->setText( kundo2_i18n("Reparent shapes") );
 
             foreach( KoShape * shape, toplevelShapes )
                 new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd );
@@ -541,7 +541,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
                 beginInsertRows( parent, container->shapeCount(), container->shapeCount()+toplevelShapes.count() );
 
                 KUndo2Command * cmd = new KUndo2Command();
-                cmd->setText( i18nc("(qtundo-format)", "Reparent shapes") );
+                cmd->setText( kundo2_i18n("Reparent shapes") );
 
                 QList<bool> clipped;
                 QList<bool> inheritsTransform;

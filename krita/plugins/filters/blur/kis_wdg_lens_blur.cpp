@@ -32,6 +32,8 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 
+#include "kis_lens_blur_filter.h"
+
 #include "ui_wdg_lens_blur.h"
 
 KisWdgLensBlur::KisWdgLensBlur(QWidget * parent) : KisConfigWidget(parent)
@@ -55,6 +57,11 @@ KisPropertiesConfiguration* KisWdgLensBlur::configuration() const
     config->setProperty("irisShape", m_widget->irisShapeCombo->currentText());
     config->setProperty("irisRadius", m_widget->irisRadiusSlider->value());
     config->setProperty("irisRotation", m_widget->irisRotationSlider->value());
+
+    QSize halfSize = KisLensBlurFilter::getKernelHalfSize(config);
+    config->setProperty("halfWidth", halfSize.width());
+    config->setProperty("halfHeight", halfSize.height());
+
     return config;
 }
 

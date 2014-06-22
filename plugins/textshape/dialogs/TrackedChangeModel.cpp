@@ -303,7 +303,7 @@ void TrackedChangeModel::setupModelData(QTextDocument* document, ModelItem* pare
                     item = new ModelItem(itemStack.top());
                     item->setChangeId(changeId);
                     item->setChangeType(m_changeTracker->elementById(changeId)->getChangeType());
-                    item->setChangeTitle(m_changeTracker->elementById(changeId)->getChangeTitle());
+                    item->setChangeTitle(m_changeTracker->elementById(changeId)->getChangeTitle().toString());
                     item->setChangeAuthor(m_changeTracker->elementById(changeId)->getCreator());
                     itemStack.top()->appendChild(item);
                     m_changeItems.insert(changeId, item);

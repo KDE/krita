@@ -106,7 +106,7 @@ void KisOffsetProcessingVisitor::visit(KisSelectionMask *mask, KisUndoAdapter *u
 void KisOffsetProcessingVisitor::offsetNode(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     KisPaintDeviceSP device = node->paintDevice();
-    KisTransaction transaction(i18n("Offset"), device);
+    KisTransaction transaction(device);
     KisTransformWorker::offset(device, m_offset, m_wrapRect);
     transaction.commit(undoAdapter);
 }

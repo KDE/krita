@@ -81,7 +81,7 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
     }
     d->command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 
-    setText(i18nc("(qtundo-format)", "Align shapes"));
+    setText(kundo2_i18n("Align shapes"));
 }
 
 KoShapeAlignCommand::~KoShapeAlignCommand()

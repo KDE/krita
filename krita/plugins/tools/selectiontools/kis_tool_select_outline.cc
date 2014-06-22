@@ -102,7 +102,7 @@ void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
     if (m_points.count() > 2) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-        KisSelectionToolHelper helper(kisCanvas, i18n("Outline Selection"));
+        KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Outline"));
 
         if (selectionMode() == PIXEL_SELECTION) {
 

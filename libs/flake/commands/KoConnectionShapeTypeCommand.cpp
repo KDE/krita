@@ -28,7 +28,7 @@ KoConnectionShapeTypeCommand::KoConnectionShapeTypeCommand(
 {
     Q_ASSERT(m_connection);
 
-    setText(i18nc("(qtundo-format)", "Change Connection"));
+    setText(kundo2_i18n("Change Connection"));
 
     m_oldType = m_connection->type();
 }

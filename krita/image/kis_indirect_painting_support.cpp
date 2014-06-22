@@ -117,12 +117,12 @@ void KisIndirectPaintingSupport::setupTemporaryPainter(KisPainter *painter) cons
     painter->setSelection(d->selection);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText)
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText)
 {
     mergeToLayerImpl(layer, undoAdapter, transactionText);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText)
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText)
 {
     mergeToLayerImpl(layer, undoAdapter, transactionText);
 }
@@ -130,7 +130,7 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisPostExecution
 template<class UndoAdapter>
 void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
                                                   UndoAdapter *undoAdapter,
-                                                  const QString &transactionText)
+                                                  const KUndo2MagicString &transactionText)
 {
     /**
      * We do not apply selection here, because it has already

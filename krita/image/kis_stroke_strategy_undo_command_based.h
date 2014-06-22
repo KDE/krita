@@ -64,7 +64,7 @@ public:
     };
 
 public:
-    KisStrokeStrategyUndoCommandBased(const QString &name,
+    KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
                                       bool undo,
                                       KisPostExecutionUndoAdapter *undoAdapter,
                                       KUndo2CommandSP initCommand = KUndo2CommandSP(0),

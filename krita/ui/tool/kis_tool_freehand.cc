@@ -60,7 +60,7 @@
 #include "strokes/freehand_stroke.h"
 
 
-KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & /*transactionText*/)
+KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText)
     : KisToolPaint(canvas, cursor)
 {
     m_assistant = false;
@@ -70,7 +70,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     m_infoBuilder = new KisToolPaintingInformationBuilder(this);
     m_recordingAdapter = new KisRecordingAdapter();
-    m_helper = new KisToolFreehandHelper(m_infoBuilder, m_recordingAdapter);
+    m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText, m_recordingAdapter);
 }
 
 KisToolFreehand::~KisToolFreehand()

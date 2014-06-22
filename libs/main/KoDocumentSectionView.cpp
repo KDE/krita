@@ -234,6 +234,13 @@ void KoDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModel
     }
 }
 
+void KoDocumentSectionView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    QTreeView::selectionChanged(selected, deselected);
+    emit selectionChanged(selectedIndexes());
+
+}
+
 void KoDocumentSectionView::slotActionToggled(bool on, const QPersistentModelIndex &index, int num)
 {
     Model::PropertyList list = index.data(Model::PropertiesRole).value<Model::PropertyList>();

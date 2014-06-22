@@ -43,7 +43,7 @@ KoPathPointTypeCommand::KoPathPointTypeCommand(
             m_shapes.insert(it->pathShape);
         }
     }
-    setText(i18nc("(qtundo-format)", "Set point type"));
+    setText(kundo2_i18n("Set point type"));
 }
 
 KoPathPointTypeCommand::~KoPathPointTypeCommand()

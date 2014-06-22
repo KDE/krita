@@ -28,7 +28,7 @@
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
                                        KisUpdatesFacade *updatesFacade,
                                        KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(i18n("Move Stroke"), false, undoAdapter),
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move"), false, undoAdapter),
       m_node(node),
       m_updatesFacade(updatesFacade)
 {
@@ -103,6 +103,7 @@ QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 
     node->setX(node->x() + offset.x());
     node->setY(node->y() + offset.y());
+    KisNodeMoveCommand2::tryNotifySelection(node);
 
     KisNodeSP child = node->firstChild();
     while(child) {

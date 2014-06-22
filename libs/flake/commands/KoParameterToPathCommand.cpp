@@ -40,7 +40,7 @@ KoParameterToPathCommand::KoParameterToPathCommand(KoParameterShape *shape, KUnd
 {
     d->shapes.append(shape);
     d->initialize();
-    setText(i18nc("(qtundo-format)", "Convert to Path"));
+    setText(kundo2_i18n("Convert to Path"));
 }
 
 KoParameterToPathCommand::KoParameterToPathCommand(const QList<KoParameterShape*> &shapes, KUndo2Command *parent)
@@ -49,7 +49,7 @@ KoParameterToPathCommand::KoParameterToPathCommand(const QList<KoParameterShape*
 {
     d->shapes = shapes;
     d->initialize();
-    setText(i18nc("(qtundo-format)", "Convert to Path"));
+    setText(kundo2_i18n("Convert to Path"));
 }
 
 KoParameterToPathCommand::~KoParameterToPathCommand()

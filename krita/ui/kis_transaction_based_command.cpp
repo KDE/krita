@@ -18,7 +18,7 @@
 
 #include "kis_transaction_based_command.h"
 
-KisTransactionBasedCommand::KisTransactionBasedCommand(const QString& text, KUndo2Command* parent)
+KisTransactionBasedCommand::KisTransactionBasedCommand(const KUndo2MagicString &text, KUndo2Command* parent)
     : KUndo2Command(text, parent), m_transactionData(0)
 {
 }

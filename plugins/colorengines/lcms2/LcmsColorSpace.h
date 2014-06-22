@@ -105,13 +105,16 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
 
         virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
             cmsDoTransform(cmstransform, const_cast<quint8 *>(src), dst, nPixels);
-            qreal *alpha = new qreal[nPixels]; 
-            qreal *dstalpha = new qreal[nPixels];
+
+
             qint32 numPixels = nPixels;
             qint32 pixelSize = m_colorSpace->pixelSize();
             int index = 0;
             
-            if(cmsAlphaTransform) {
+            if (cmsAlphaTransform) {
+                qreal *alpha = new qreal[nPixels];
+                qreal *dstalpha = new qreal[nPixels];
+
                 while (index < nPixels) {
                     alpha[index] = m_colorSpace->opacityF(src);
                     src += pixelSize;

@@ -48,7 +48,7 @@ class KisToolPolygonFactory : public KoToolFactoryBase
 public:
     KisToolPolygonFactory(const QStringList&)
             : KoToolFactoryBase("KisToolPolygon") {
-        setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
+        setToolTip(i18n("Polygon Tool. Shift-mouseclick ends the polygon."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_polygon"));

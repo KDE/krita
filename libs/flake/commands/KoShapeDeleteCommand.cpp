@@ -53,7 +53,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller,
     d->shapes.append(shape);
     d->oldParents.append(shape->parent());
 
-    setText(i18nc("(qtundo-format)", "Delete shape"));
+    setText(kundo2_i18n("Delete shape"));
 }
 
 KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes,
@@ -66,7 +66,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller,
         d->oldParents.append(shape->parent());
     }
 
-    setText(i18ncp("(qtundo-format)", "Delete shape", "Delete shapes", shapes.count()));
+    setText(kundo2_i18np("Delete shape", "Delete shapes", shapes.count()));
 }
 
 KoShapeDeleteCommand::~KoShapeDeleteCommand()

@@ -26,7 +26,7 @@
 #include <KoColor.h>
 
 KisPressureRotationOption::KisPressureRotationOption()
-        : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::commonCategory(), false),
+        : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::generalCategory(), false),
           m_defaultAngle(0.0),
           m_canvasAxisXMirrored(false),
           m_canvasAxisYMirrored(false)

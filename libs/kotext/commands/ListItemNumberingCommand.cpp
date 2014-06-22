@@ -32,7 +32,7 @@ ListItemNumberingCommand::ListItemNumberingCommand(const QTextBlock &block, bool
       m_first(true)
 {
     m_wasNumbered = !block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem);
-    setText(i18nc("(qtundo-format)", "Change List Numbering"));
+    setText(kundo2_i18n("Change List Numbering"));
 }
 
 ListItemNumberingCommand::~ListItemNumberingCommand()

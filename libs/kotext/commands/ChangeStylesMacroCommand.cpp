@@ -34,7 +34,7 @@
 
 ChangeStylesMacroCommand::ChangeStylesMacroCommand(const QList<ChangeFollower *> &changeFollowers
         , KoStyleManager *styleManager)
-    : KUndo2Command(i18nc("(qtundo-format)", "Change Styles"))
+    : KUndo2Command(kundo2_i18n("Change Styles"))
     , m_changeFollowers(changeFollowers)
     , m_styleManager(styleManager)
     , m_first(true)

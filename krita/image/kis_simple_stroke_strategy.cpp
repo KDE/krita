@@ -63,7 +63,7 @@ private:
 /*                 KisSimpleStrokeStrategy                     */
 /***************************************************************/
 
-KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(QString id, QString name)
+KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(QString id, const KUndo2MagicString &name)
     : KisStrokeStrategy(id, name),
       m_jobEnabled(4, false)
 {

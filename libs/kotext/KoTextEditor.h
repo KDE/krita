@@ -24,6 +24,7 @@
 
 #include "kotext_export.h"
 
+#include <kundo2magicstring.h>
 #include <KoGenChange.h>
 #include "KoText.h"
 #include "styles/KoListStyle.h"
@@ -181,7 +182,7 @@ public slots:
     /// caller, or the caller can choose to quickly undo and then delete the \ref command.
     void instantlyExecuteCommand(KUndo2Command *command);
 
-    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
+    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const KUndo2MagicString &title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 
     void bold(bool bold);
 
@@ -324,7 +325,7 @@ public slots:
     QTextDocument *document() const;
 
     /// Same as Qt, only to be used inside KUndo2Commands
-    KUndo2Command *beginEditBlock(const QString &title = QString());
+    KUndo2Command *beginEditBlock(const KUndo2MagicString &title = KUndo2MagicString());
     void endEditBlock();
 
     /**

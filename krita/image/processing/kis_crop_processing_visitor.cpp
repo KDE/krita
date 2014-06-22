@@ -51,7 +51,7 @@ void KisCropProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAd
      */
 
     if (m_cropLayers) {
-        KisTransaction transaction(i18n("Crop"), node->paintDevice());
+        KisTransaction transaction(kundo2_noi18n("crop"), node->paintDevice());
         node->paintDevice()->crop(m_rect);
         transaction.commit(undoAdapter);
     }

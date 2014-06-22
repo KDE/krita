@@ -41,7 +41,7 @@ ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, Change
       m_coefficient(coef),
       m_first(true)
 {
-    setText(i18nc("(qtundo-format)", "Change List Level"));
+    setText(kundo2_i18n("Change List Level"));
 
     int selectionStart = qMin(cursor.anchor(), cursor.position());
     int selectionEnd = qMax(cursor.anchor(), cursor.position());

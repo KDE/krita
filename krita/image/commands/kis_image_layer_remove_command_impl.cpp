@@ -44,7 +44,7 @@ struct KisImageLayerRemoveCommandImpl::Private {
 };
 
 KisImageLayerRemoveCommandImpl::KisImageLayerRemoveCommandImpl(KisImageWSP image, KisNodeSP node, KUndo2Command *parent)
-    : KisImageCommand(i18nc("(qtundo-format)", "Remove Layer"), image, parent),
+    : KisImageCommand(kundo2_i18n("Remove Layer"), image, parent),
       m_d(new Private(this))
 {
     m_d->node = node;

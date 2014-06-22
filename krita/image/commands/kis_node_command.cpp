@@ -21,7 +21,7 @@
 
 #include "kis_node.h"
 
-KisNodeCommand::KisNodeCommand(const QString& name, KisNodeSP node)
+KisNodeCommand::KisNodeCommand(const KUndo2MagicString& name, KisNodeSP node)
     : KUndo2Command(name), m_node(node)
 {
 }

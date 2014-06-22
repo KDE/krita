@@ -30,7 +30,7 @@ KoPAChangePageLayoutCommand::KoPAChangePageLayoutCommand( KoPADocument *document
 , m_document( document )
 , m_newPageLayout( newPageLayout )
 {
-    setText( i18nc( "(qtundo-format)", "Set Page Layout" ) );
+    setText( kundo2_i18n( "Set Page Layout" ) );
 
     if ( !applyToDocument ) {
         m_oldLayouts.insert( masterPage, masterPage->pageLayout() );

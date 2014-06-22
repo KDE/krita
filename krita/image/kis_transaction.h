@@ -34,7 +34,11 @@
 class KisTransaction
 {
 public:
-    KisTransaction(const QString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0) {
+    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0) {
+        m_transactionData = new KisTransactionData(KUndo2MagicString(), device, true, parent);
+    }
+
+    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0) {
         m_transactionData = new KisTransactionData(name, device, true, parent);
     }
 
@@ -102,8 +106,8 @@ public:
         m_transactionData = 0;
     }
 
-    QString text() const {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::name()",
+    KUndo2MagicString text() const {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::text()",
                    "the name has been requested after the transaction"
                    "has already been ended");
         return m_transactionData->text();
@@ -117,7 +121,12 @@ protected:
 class KisSelectionTransaction : public KisTransaction
 {
 public:
-    KisSelectionTransaction(const QString& name, KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
+    KisSelectionTransaction(KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
+    {
+        m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, parent);
+    }
+
+    KisSelectionTransaction(const KUndo2MagicString& name, KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
         m_transactionData = new KisTransactionData(name, pixelSelection, false, parent);
     }

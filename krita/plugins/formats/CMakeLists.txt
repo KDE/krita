@@ -59,6 +59,7 @@ add_subdirectory(odg)
 add_subdirectory(flipbook)
 add_subdirectory(qml)
 add_subdirectory(tga)
+add_subdirectory(heightmap)
 
 #if(OIIO_FOUND)
 #    add_subdirectory(oiio)

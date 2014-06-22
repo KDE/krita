@@ -331,8 +331,11 @@ namespace Sync {
 #endif
         }
 #elif defined Q_OS_LINUX
+#ifdef HAVE_GLEW
         if ((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) || GLEW_ARB_sync) {
-
+#else
+        if ((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2)) {
+#endif
             k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSync");
             k_glGetSynciv = (kis_glGetSynciv)VSyncWorkaround::qglx_getProcAddress("glGetSynciv");
             k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSync");

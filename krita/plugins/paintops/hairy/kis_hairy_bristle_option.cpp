@@ -43,7 +43,7 @@ public:
 };
 
 KisHairyBristleOption::KisHairyBristleOption()
-    : KisPaintOpOption(i18n("Bristle options"), KisPaintOpOption::commonCategory(), false)
+    : KisPaintOpOption(i18n("Bristle options"), KisPaintOpOption::generalCategory(), false)
 {
     m_checkable = false;
     m_options = new KisBristleOptionsWidget();

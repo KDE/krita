@@ -299,10 +299,10 @@ macro_optional_find_package(KdepimLibs 4.6.0)
 macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by Plan and the KDE address book integration (available as a module in KDE)")
 
 ##
-## Test for eigen2
+## Test for eigen3
 ##
-macro_optional_find_package(Eigen2)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Calligra Sheets and Krita")
+macro_optional_find_package(Eigen3)
+macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Calligra Sheets and Krita")
 
 ##
 ## Test for QCA2
@@ -801,13 +801,13 @@ if(NOT Soprano_FOUND)
     calligra_disable_product(FEATURE_RDF "Soprano not found")
 endif(NOT Soprano_FOUND)
 
-if(NOT EIGEN2_FOUND)
+if(NOT EIGEN3_FOUND)
     calligra_disable_product(PART_SHEETS "Eigen devel not found")
-endif(NOT EIGEN2_FOUND)
+endif(NOT EIGEN3_FOUND)
 
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
-    calligra_disable_product(APP_KRITA "SharedMimeInfo|libeigen2|libexiv2|lcms devel not found ")
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+if(NOT EIGEN3_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+    calligra_disable_product(APP_KRITA "SharedMimeInfo|libeigen3|libexiv2|lcms devel not found ")
+endif(NOT EIGEN3_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
 if(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
     calligra_disable_product(APP_KRITA "Xinput devel not found ")

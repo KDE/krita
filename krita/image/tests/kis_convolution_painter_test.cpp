@@ -117,15 +117,15 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(3, 3, 0, 0);
-    kernel->data()[0] = 0;
-    kernel->data()[1] = 0;
-    kernel->data()[2] = 0;
-    kernel->data()[3] = 0;
-    kernel->data()[4] = 1;
-    kernel->data()[5] = 0;
-    kernel->data()[6] = 0;
-    kernel->data()[7] = 0;
-    kernel->data()[8] = 0;
+    kernel->data()(0) = 0;
+    kernel->data()(1) = 0;
+    kernel->data()(2) = 0;
+    kernel->data()(3) = 0;
+    kernel->data()(4) = 1;
+    kernel->data()(5) = 0;
+    kernel->data()(6) = 0;
+    kernel->data()(7) = 0;
+    kernel->data()(8) = 0;
     KisConvolutionPainter gc(dev);
     gc.beginTransaction();
     gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));

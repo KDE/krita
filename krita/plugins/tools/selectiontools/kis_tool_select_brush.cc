@@ -35,7 +35,7 @@
 #include <KoCompositeOp.h>
 
 #include <Eigen/Core>
-USING_PART_OF_NAMESPACE_EIGEN
+using namespace Eigen;
 
 #include "kis_cursor.h"
 #include "kis_canvas2.h"

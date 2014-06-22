@@ -42,6 +42,7 @@ public:
     bool showFormattingCharacters;
     bool showTextShapeOutlines;
     bool showTableBorders;
+    bool showSectionsBounds;
     bool showSpellChecking;
     bool showSelections;
     bool showInlineObjectVisualization;

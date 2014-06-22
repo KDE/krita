@@ -370,8 +370,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             layout->draw(painter, QPointF(0, 0), selections);
 
-            //FIXME: Surround this with if to make section viewing optional.
-            decorateParagraphSections(painter, block, sectionLevel);
+            if (context.showSectionsBounds) {
+                decorateParagraphSections(painter, block, sectionLevel);
+            }
             decorateParagraph(painter, block, context.showFormattingCharacters, context.showSpellChecking);
 
             var = block.blockFormat().property(KoParagraphStyle::SectionEndings);
@@ -598,17 +599,6 @@ static void drawDecorationText(QPainter *painter, const QTextLine &line, const Q
         painter->drawText(QRectF(QPointF(x1, y), QPointF(x2, y + line.height())), Qt::AlignLeft | Qt::AlignVCenter, decorText, &br);
         x1 = br.right();
     } while (x1 <= x2);
-    painter->setPen(oldPen);
-}
-
-static void drawDecorationTextOnce(QPainter *painter, const QTextLine &line, const QColor &color, const QString& decorText, qreal x1, qreal x2)
-{
-    qreal y = line.position().y();
-    QPen oldPen = painter->pen();
-    painter->setPen(QPen(color));
-    QRectF br;
-    painter->drawText(QRectF(QPointF(x1, y), QPointF(x2, y + line.height())), Qt::AlignLeft | Qt::AlignVCenter, decorText, &br);
-    x1 = br.right();
     painter->setPen(oldPen);
 }
 

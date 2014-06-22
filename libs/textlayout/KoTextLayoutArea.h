@@ -226,7 +226,7 @@ private:
 
     void handleBordersAndSpacing(KoTextBlockData &blockData, QTextBlock *block);
 
-    void decorateParagraphSections( QPainter* painter, QTextBlock& block, int section_level );
+    void decorateParagraphSections(QPainter* painter, QTextBlock& block, int section_level);
 
 private:
     class Private;

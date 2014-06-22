@@ -70,6 +70,7 @@ public:
             : viewConverter(0)
             , imageCollection(0)
             , showFormattingCharacters(false)
+            , showSectionsBounds(false)
             , showSpellChecking(false)
             , showSelections(true)
             , background(Qt::white)
@@ -84,6 +85,7 @@ public:
         KoImageCollection *imageCollection;
         bool showFormattingCharacters;
         bool showTableBorders;
+        bool showSectionsBounds;
         bool showSpellChecking;
         bool showSelections;
         QColor background;

@@ -63,6 +63,8 @@ public:
 
     KisKranimLoader* kranimLoader();
 
+    KisImageWSP currentImage();
+
 public slots:
     void play();
     void pause();

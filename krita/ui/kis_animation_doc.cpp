@@ -186,6 +186,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     }
 
     this->loadOnionSkins();
+
     this->updateActiveFrame();
     setCurrentImage(d->image);
 }
@@ -391,14 +392,17 @@ void KisAnimationDoc::loadOnionSkins()
     KisAnimation* animation = this->getAnimation();
 
     if(animation->onionSkinningEnabled()) {
-        QThread* thread = new QThread(this);
+
+        //QThread* thread = new QThread(this);
         KisOnionSkinLoader* loader = new KisOnionSkinLoader(this);
 
-        connect(thread, SIGNAL(started()), loader, SLOT(loadOnionSkins()));
-        connect(thread, SIGNAL(finished()), loader, SLOT(deleteLater()));
-        loader->moveToThread(thread);
+        loader->loadOnionSkins();
 
-        thread->start();
+        //connect(thread, SIGNAL(started()), loader, SLOT(loadOnionSkins()));
+        //connect(thread, SIGNAL(finished()), loader, SLOT(deleteLater()));
+        //loader->moveToThread(thread);
+
+        //thread->start();
     }
 }
 
@@ -591,6 +595,11 @@ QRect KisAnimationDoc::currentFramePosition()
 KisLayerSP KisAnimationDoc::currentFrame()
 {
     return d->currentFrame;
+}
+
+KisImageWSP KisAnimationDoc::currentImage()
+{
+    return d->image;
 }
 
 int KisAnimationDoc::numberOfLayers()

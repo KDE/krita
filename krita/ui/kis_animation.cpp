@@ -30,6 +30,7 @@ KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
 {
     KisConfig cfg;
     m_frameBreakingEnabled = cfg.defAutoFrameBreakEnabled();
+    m_onionSkinningEnabled = cfg.defOnionSkinningEnabled();
 }
 
 void KisAnimation::setName(const QString &name)

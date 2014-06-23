@@ -33,19 +33,24 @@ KisOnionSkinLoader::KisOnionSkinLoader(KisAnimationDoc *doc, QObject *parent) :
 
 void KisOnionSkinLoader::loadOnionSkins()
 {
+    KisImageWSP image = m_doc->currentImage();
+
     QRect frame = m_doc->currentFramePosition();
     KisAnimation* animation = m_doc->getAnimation();
+
     QString location = "";
     bool hasFile = false;
 
-    for(int i = 0 ; i < m_doc->numberOfLayers() ; i++) {
+    for(int i = 1 ; i < m_doc->numberOfLayers() ; i++) {
         location = m_doc->getPreviousKeyFrameFile(frame.x(), i * 20);
         hasFile = m_doc->getStore()->hasFile(location);
 
+        kWarning() << location;
+
         if(hasFile) {
-            KisLayerSP newLayer = new KisPaintLayer(m_doc->image().data(), m_doc->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Onion Skin " + QString::number(i + 1));
-            m_doc->image()->addNode(newLayer.data(), m_doc->image()->rootLayer().data());
+            image->addNode(newLayer.data(), image->rootLayer().data());
             m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
         }
 
@@ -53,9 +58,9 @@ void KisOnionSkinLoader::loadOnionSkins()
         hasFile = m_doc->getStore()->hasFile(location);
 
         if(hasFile) {
-            KisLayerSP newLayer = new KisPaintLayer(m_doc->image().data(), m_doc->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Onion Skin " + QString::number(i + 1));
-            m_doc->image()->addNode(newLayer.data(), m_doc->image()->rootLayer().data());
+            image->addNode(newLayer.data(), image->rootLayer().data());
             m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
         }
     }

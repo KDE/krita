@@ -21,6 +21,8 @@
 
 #include <QObject>
 #include <kis_animation_doc.h>
+#include <kis_types.h>
+
 class KisKranimLoader;
 
 class KisOnionSkinLoader : public QObject

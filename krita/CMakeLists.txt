@@ -109,7 +109,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
 
-    ${EIGEN2_INCLUDE_DIR}
+    ${EIGEN3_INCLUDE_DIR}
     ${Vc_INCLUDE_DIR}
 
     # 'Export' this for use by filters

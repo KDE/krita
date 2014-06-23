@@ -125,7 +125,7 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     }
     p.bitBltOldData(neededRect.topLeft() - dstRect.topLeft(), source(), neededRect);
 
-    KisTransaction transaction("", m_tmpDevice);
+    KisTransaction transaction(m_tmpDevice);
     m_filter->process(m_tmpDevice, dabRect, m_filterConfiguration, 0);
     transaction.end();
 

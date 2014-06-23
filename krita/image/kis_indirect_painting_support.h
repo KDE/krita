@@ -28,6 +28,7 @@ class QBitArray;
 class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 class KisPainter;
+class KUndo2MagicString;
 
 /**
  * For classes that support indirect painting.
@@ -64,8 +65,8 @@ public:
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.
      */
-    void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText);
-    void mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText);
+    void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText);
+    void mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText);
 
 
     /**
@@ -100,7 +101,7 @@ private:
     template<class UndoAdapter>
         void mergeToLayerImpl(KisLayerSP layer,
                               UndoAdapter *undoAdapter,
-                              const QString &transactionText);
+                              const KUndo2MagicString &transactionText);
     void releaseResources();
 
 private:

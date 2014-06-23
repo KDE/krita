@@ -72,6 +72,7 @@
 #include <kis_selection_manager.h>
 #include <kis_system_locker.h>
 #include <krita_utils.h>
+#include <kis_resources_snapshot.h>
 
 #include <KoShapeTransformCommand.h>
 
@@ -2182,8 +2183,11 @@ void KisToolTransform::updateSelectionPath()
 {
     m_selectionPath = QPainterPath();
 
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+
     QPainterPath selectionOutline;
-    KisSelectionSP selection = currentSelection();
+    KisSelectionSP selection = resources->activeSelection();
 
     if (selection && selection->outlineCacheValid()) {
         selectionOutline = selection->outlineCache();
@@ -2280,7 +2284,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
 
     KisPaintDeviceSP dev;
 
-    KisNodeSP currentNode = this->currentNode();
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+
+    KisNodeSP currentNode = resources->currentNode();
 
     if (!currentNode || !currentNode->isEditable()) {
         return;
@@ -2306,10 +2313,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
             !currentNode->paintDevice();
     }
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, currentSelection(), image()->postExecutionUndoAdapter());
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, resources->activeSelection(), image()->postExecutionUndoAdapter());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
-    KisSelectionSP selection = currentSelection();
+    KisSelectionSP selection = resources->activeSelection();
     QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
 
     m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs, currentNode);

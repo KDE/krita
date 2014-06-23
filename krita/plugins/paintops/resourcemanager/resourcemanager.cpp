@@ -213,7 +213,9 @@ void ResourceManager::slotImport()
         foreach(const QString &res, resources) {
             d->bundleServer->importResourceFile(res);
             KoResourceBundle *bundle = d->bundleServer->resourceByFilename(QFileInfo(res).fileName());
-            bundle->install();
+            if (bundle) {
+                bundle->install();
+            }
         }
         break;
     }

@@ -166,9 +166,8 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             return;
         }
 
-        KisPaintDeviceSP dev = currentNode()->paintDevice();
-        if (!dev) return;
-
+        KisPaintDeviceSP dev = currentNode()->projection();
+        KIS_ASSERT_RECOVER_RETURN(dev);
 
 
         if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
@@ -227,12 +226,16 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             delete[] data;
         }
 
-        m_pickedColor.setOpacity(OPACITY_OPAQUE_U8);
+        m_pickedColor.convertTo(dev->compositionSourceColorSpace());
         if (m_config.updateColor) {
-            if (m_config.toForegroundColor)
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, m_pickedColor);
-            else
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, m_pickedColor);
+            KoColor publicColor = m_pickedColor;
+            publicColor.setOpacity(OPACITY_OPAQUE_U8);
+
+            if (m_config.toForegroundColor) {
+                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, publicColor);
+            } else {
+                canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
+            }
         }
 
         if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {

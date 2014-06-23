@@ -54,6 +54,14 @@ public:
     bool needsIndirectPainting() const;
     QString indirectPaintingCompositeOp() const;
 
+    /**
+     * \return currently active selection. Note that it will return
+     *         null if current node *is* the current selection. This
+     *         is done to avoid recursive selection application when
+     *         painting on selectgion masks.
+     */
+    KisSelectionSP activeSelection() const;
+
     bool needsAirbrushing() const;
     int airbrushingRate() const;
 

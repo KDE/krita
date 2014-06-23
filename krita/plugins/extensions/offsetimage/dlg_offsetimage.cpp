@@ -25,7 +25,7 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
         :   KDialog(parent),
             m_offsetSize(imageSize)
 {
-    setCaption(i18n("Offset Image"));
+    setCaption("BUG: No sane caption is set");
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setObjectName(name);

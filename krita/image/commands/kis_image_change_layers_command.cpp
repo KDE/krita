@@ -24,8 +24,8 @@
 #include <klocale.h>
 
 
-KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageWSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer, const QString& name)
-        : KisImageCommand(name, image)
+KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageWSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer)
+    : KisImageCommand(kundo2_noi18n("change-layer-command"), image)
 {
     m_oldRootLayer = oldRootLayer;
     m_newRootLayer = newRootLayer;

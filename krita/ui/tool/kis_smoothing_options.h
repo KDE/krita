@@ -27,7 +27,8 @@ public:
     enum SmoothingType {
         NO_SMOOTHING = 0,
         SIMPLE_SMOOTHING,
-        WEIGHTED_SMOOTHING
+        WEIGHTED_SMOOTHING,
+        STABILIZER
     };
 
 public:

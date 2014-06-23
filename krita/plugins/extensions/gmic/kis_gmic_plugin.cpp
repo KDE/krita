@@ -150,7 +150,7 @@ void KisGmicPlugin::slotGmic()
 
 void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 {
-    QString actionName;
+    KUndo2MagicString actionName;
     KisNodeSP node;
 
     if (setting->isBlacklisted())
@@ -162,19 +162,15 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
     KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
     KisNodeListSP kritaNodes = mapper.inputNodes(setting->inputLayerMode());
 
-    if (kritaNodes->isEmpty())
-    {
+    if (kritaNodes->isEmpty()) {
         KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this input mode is not implemented"), i18n("Krita"));
         return;
     }
-    else
-    {
-        actionName = i18n("Gmic filter");
-        node = m_view->image()->root();
-    }
 
-    if (setting->outputMode() != IN_PLACE)
-    {
+    actionName = kundo2_i18n("Gmic filter");
+    node = m_view->image()->root();
+
+    if (setting->outputMode() != IN_PLACE) {
         KMessageBox::sorry(m_gmicWidget,QString("Sorry, this output mode is not implemented"),"Krita");
         return;
     }

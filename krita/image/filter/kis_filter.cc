@@ -121,7 +121,7 @@ void KisFilter::process(const KisPaintDeviceSP src,
     }
     else {
         temporary = dst->createCompositionSourceDevice(src, needRect);
-        transaction = new KisTransaction("", temporary);
+        transaction = new KisTransaction(temporary);
     }
 
     try {

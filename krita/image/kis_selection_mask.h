@@ -66,13 +66,20 @@ public:
     bool active() const;
     void setActive(bool active);
 
+    /**
+     * This method works like the one in KisSelection, but it
+     * compressed the incoming events instead of processing each of
+     * them separately.
+     */
+    void notifySelectionChangedCompressed();
+
 private:
+    Q_PRIVATE_SLOT(m_d, void slotSelectionChangedCompressed());
 
     KisImageWSP image() const;
 
     struct Private;
     Private * const m_d;
-
 };
 
 #endif //_KIS_SELECTION_MASK_

@@ -91,6 +91,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_processing_command.cpp
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
+   commands_new/kis_node_move_command2.cpp
    commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
    processing/kis_do_nothing_processing_visitor.cpp
@@ -157,6 +158,7 @@ set(kritaimage_LIB_SRCS
    kis_image_config.cpp
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp
+   kis_thread_safe_signal_compressor.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_mask.cc

@@ -37,12 +37,12 @@ public:
      * The different behaviours for this action.
      */
     enum Shortcut {
-        PrimaryAlternateToggleShortcut, ///< Toggle Primary mode.
-        SecondaryAlternateToggleShortcut, ///< Toggle Secondary mode.
-        PickColorFgNodeToggleShortcut,
-        PickColorBgNodeToggleShortcut,
-        PickColorFgImageToggleShortcut,
-        PickColorBgImageToggleShortcut,
+        PrimaryAlternateModeShortcut, ///< Toggle Primary mode.
+        SecondaryAlternateModeShortcut, ///< Toggle Secondary mode.
+        PickColorFgLayerModeShortcut,
+        PickColorBgLayerModeShortcut,
+        PickColorFgImageModeShortcut,
+        PickColorBgImageModeShortcut,
     };
 
     explicit KisAlternateInvocationAction();

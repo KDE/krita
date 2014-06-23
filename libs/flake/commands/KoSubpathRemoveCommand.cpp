@@ -27,7 +27,7 @@ KoSubpathRemoveCommand::KoSubpathRemoveCommand(KoPathShape *pathShape, int subpa
         , m_subpathIndex(subpathIndex)
         , m_subpath(0)
 {
-    setText(i18nc("(qtundo-format)", "Remove subpath"));
+    setText(kundo2_i18n("Remove subpath"));
 }
 
 KoSubpathRemoveCommand::~KoSubpathRemoveCommand()

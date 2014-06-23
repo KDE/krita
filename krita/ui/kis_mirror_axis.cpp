@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 <copyright holder> <email>
+ * Copyright (c) 2014 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ public:
 };
 
 KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisView2* parent)
-    : KisCanvasDecoration("mirror_axis", i18n("Mirror Axis"), parent), d(new Private(this))
+    : KisCanvasDecoration("mirror_axis", parent), d(new Private(this))
 {
     d->resourceProvider = provider;
     connect(d->resourceProvider, SIGNAL(mirrorModeChanged()), SLOT(mirrorModeChanged()));

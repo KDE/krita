@@ -34,7 +34,7 @@ void KisSelectionDecorationTest::testConcurrentSelectionFetches()
                                            0 /* we need no automatic updates */,
                                            KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
                                            KisImageSignalVector() << ModifiedSignal,
-                                           "test stroke");
+                                           kundo2_noi18n("test stroke"));
 
 
         applicator.applyCommand(new KisSetEmptyGlobalSelectionCommand(image));

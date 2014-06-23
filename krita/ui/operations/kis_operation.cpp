@@ -43,7 +43,7 @@ void KisOperation::runFromXML(KisView2 *view, const KisOperationConfiguration &c
     qFatal("Not implemented yet");
 }
 
-KisProcessingApplicator* KisOperation::beginAction(KisView2 *view, const QString &actionName) {
+KisProcessingApplicator* KisOperation::beginAction(KisView2 *view, const KUndo2MagicString &actionName) {
     KisImageSP image = view->image();
     Q_ASSERT(image);
 

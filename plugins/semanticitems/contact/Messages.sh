@@ -1,3 +1,5 @@
 #! /bin/sh
+source ../../../calligra_xgettext.sh
+
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp
-$XGETTEXT `find . -name \*.cpp ` -o $podir/calligra_semanticitem_contact.pot
+calligra_xgettext `find . -name \*.cpp` > $podir/calligra_semanticitem_contact.pot

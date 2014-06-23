@@ -41,7 +41,7 @@ KoPathFillRuleCommand::KoPathFillRuleCommand(const QList<KoPathShape*> &shapes, 
     foreach(KoPathShape *shape, d->shapes)
         d->oldFillRules.append(shape->fillRule());
 
-    setText(i18nc("(qtundo-format)", "Set fill rule"));
+    setText(kundo2_i18n("Set fill rule"));
 }
 
 KoPathFillRuleCommand::~KoPathFillRuleCommand()

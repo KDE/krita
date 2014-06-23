@@ -80,7 +80,7 @@ void FontDia::slotApply()
     if (!m_styleChanged)
         return;
 
-    m_editor->beginEditBlock(i18n("Font"));
+    m_editor->beginEditBlock(kundo2_i18n("Font"));
     KoCharacterStyle chosenStyle;
     m_characterGeneral->save(&chosenStyle);
     QTextCharFormat cformat;

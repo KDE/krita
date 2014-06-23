@@ -76,6 +76,8 @@
 #include "kis_doc2.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_shape_controller.h"
+#include "kis_selection_mask.h"
+#include "kis_config.h"
 
 
 #include "ui_wdglayerbox.h"
@@ -130,6 +132,7 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->setupUi(mainWidget);
 
     m_wdgLayerBox->listLayers->setDefaultDropAction(Qt::MoveAction);
+    m_wdgLayerBox->listLayers->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_wdgLayerBox->listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     m_wdgLayerBox->listLayers->setSelectionBehavior(QAbstractItemView::SelectRows);
 
@@ -137,6 +140,7 @@ KisLayerBox::KisLayerBox()
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
     connect(m_wdgLayerBox->listLayers, SIGNAL(collapsed(const QModelIndex&)), SLOT(slotCollapsed(const QModelIndex &)));
     connect(m_wdgLayerBox->listLayers, SIGNAL(expanded(const QModelIndex&)), SLOT(slotExpanded(const QModelIndex &)));
+    connect(m_wdgLayerBox->listLayers, SIGNAL(selectionChanged(const QModelIndexList&)), SLOT(selectionChanged(const QModelIndexList&)));
 
     m_viewModeMenu = new KMenu(this);
     QActionGroup *group = new QActionGroup(this);
@@ -251,6 +255,16 @@ KisLayerBox::KisLayerBox()
     connect(m_nodeModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(updateUI()));
 
+    KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
+    showGlobalSelectionMask->setObjectName("show-global-selection-mask");
+    showGlobalSelectionMask->setToolTip(i18nc("@info:tooltip", "Shows global selection as a usual selection mask in <interface>Layers</interface> docker"));
+    showGlobalSelectionMask->setCheckable(true);
+    connect(showGlobalSelectionMask, SIGNAL(triggered(bool)), SLOT(slotEditGlobalSelection(bool)));
+    m_actions.append(showGlobalSelectionMask);
+
+    KisConfig cfg;
+    showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
+
     m_wdgLayerBox->listLayers->setModel(m_nodeModel);
 }
 
@@ -322,6 +336,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), m_nodeManager, SLOT(slotUiActivatedNode(KisNodeSP)));
         connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(updateUI()));
 
+        // Connection KisLayerBox -> KisNodeManager (isolate layer)
+        connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()), m_nodeManager, SLOT(toggleIsolateActiveNode()));
+
         // Node manipulation methods are forwarded to the node manager
         connect(m_nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, KisNodeSP)),
                 m_nodeManager, SLOT(addNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
@@ -348,7 +365,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         addActionToMenu(m_newLayerMenu, "add_new_clone_layer");
         addActionToMenu(m_newLayerMenu, "add_new_shape_layer");
         addActionToMenu(m_newLayerMenu, "add_new_adjustment_layer");
-        addActionToMenu(m_newLayerMenu, "add_new_generator_layer");
+        addActionToMenu(m_newLayerMenu, "add_new_fill_layer");
         addActionToMenu(m_newLayerMenu, "add_new_file_layer");
         m_newLayerMenu->addSeparator();
         addActionToMenu(m_newLayerMenu, "add_new_transparency_mask");
@@ -412,7 +429,7 @@ void KisLayerBox::updateUI()
             slotSetOpacity(l->opacity() * 100.0 / 255);
 
             const KoCompositeOp* compositeOp = l->compositeOp();
-            if(compositeOp) {
+            if (compositeOp) {
                 slotSetCompositeOp(compositeOp);
             } else {
                 m_wdgLayerBox->cmbComposite->setEnabled(false);
@@ -492,7 +509,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
 
 void KisLayerBox::slotMergeLayer()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
     m_nodeManager->mergeLayerDown();
 }
 
@@ -513,19 +530,19 @@ void KisLayerBox::slotThumbnailView()
 
 void KisLayerBox::slotRmClicked()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
     m_nodeManager->removeNode();
 }
 
 void KisLayerBox::slotRaiseClicked()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
     KisNodeSP node = m_nodeManager->activeNode();
     KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
 
     if (!m_nodeManager->activeNode()->prevSibling()) {
-        if (!grandParent) return;  
+        if (!grandParent) return;
         if (!grandParent->parent() && node->inherits("KisMask")) return;
         m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
     } else {
@@ -535,62 +552,66 @@ void KisLayerBox::slotRaiseClicked()
 
 void KisLayerBox::slotLowerClicked()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
     KisNodeSP node = m_nodeManager->activeNode();
     KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
-    
+
     if (!m_nodeManager->activeNode()->nextSibling()) {
-        if (!grandParent) return;  
+        if (!grandParent) return;
         if (!grandParent->parent() && node->inherits("KisMask")) return;
         m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
-    } else {
+    }
+    else {
         m_nodeManager->lowerNode();
     }
 }
 
 void KisLayerBox::slotLeftClicked()
 {
-    if(!m_canvas) return;
-    KisNodeSP node = m_nodeManager->activeNode();
-    KisNodeSP parent = node->parent();
-    KisNodeSP grandParent = parent->parent();
-    quint16 nodeIndex = parent->index(node);
-    
-    if (!grandParent) return;  
-    if (!grandParent->parent() && node->inherits("KisMask")) return;
+    if (!m_canvas) return;
+    foreach(KisNodeSP node, m_nodeManager->selectedNodes()) {
+        KisNodeSP parent = node->parent();
+        KisNodeSP grandParent = parent->parent();
+        quint16 nodeIndex = parent->index(node);
 
-    if (nodeIndex <= parent->childCount() / 2) {
-        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
-    } else {
-        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+        if (!grandParent) continue;
+        if (!grandParent->parent() && node->inherits("KisMask")) continue;
+
+        if (nodeIndex <= parent->childCount() / 2) {
+            m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
+        }
+        else {
+            m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+        }
     }
 }
 
 void KisLayerBox::slotRightClicked()
 {
-    if(!m_canvas) return;
-    KisNodeSP node = m_nodeManager->activeNode();
-    KisNodeSP parent = m_nodeManager->activeNode()->parent();
-    KisNodeSP newParent;
-    int nodeIndex = parent->index(node);
-    int indexAbove = nodeIndex + 1;
-    int indexBelow = nodeIndex - 1;
+    if (!m_canvas) return;
 
-    if (parent->at(indexBelow) && parent->at(indexBelow)->allowAsChild(node)) {
-        newParent = parent->at(indexBelow);
-        m_nodeManager->moveNodeAt(node, newParent, newParent->childCount());
-    } else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node)) {
-        newParent = parent->at(indexAbove);
-        m_nodeManager->moveNodeAt(node, newParent, 0);
-    } else {
-        return;
+    foreach(KisNodeSP node, m_nodeManager->selectedNodes()) {
+        KisNodeSP parent = m_nodeManager->activeNode()->parent();
+        KisNodeSP newParent;
+        int nodeIndex = parent->index(node);
+        int indexAbove = nodeIndex + 1;
+        int indexBelow = nodeIndex - 1;
+
+        if (parent->at(indexBelow) && parent->at(indexBelow)->allowAsChild(node)) {
+            newParent = parent->at(indexBelow);
+            m_nodeManager->moveNodeAt(node, newParent, newParent->childCount());
+        }
+        else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node)) {
+            newParent = parent->at(indexAbove);
+            m_nodeManager->moveNodeAt(node, newParent, 0);
+        }
     }
 }
 
 void KisLayerBox::slotPropertiesClicked()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
     if (KisNodeSP active = m_nodeManager->activeNode()) {
         m_nodeManager->nodeProperties(active);
     }
@@ -599,7 +620,7 @@ void KisLayerBox::slotPropertiesClicked()
 void KisLayerBox::slotCompositeOpChanged(int index)
 {
     Q_UNUSED(index);
-    if(!m_canvas) return;
+    if (!m_canvas) return;
 
     QString compositeOp = m_wdgLayerBox->cmbComposite->selectedCompositeOp().id();
     m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp));
@@ -607,7 +628,7 @@ void KisLayerBox::slotCompositeOpChanged(int index)
 
 void KisLayerBox::slotOpacityChanged()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
     m_nodeManager->nodeOpacityChanged(m_newOpacity, true);
 }
 
@@ -635,7 +656,7 @@ void KisLayerBox::slotExpanded(const QModelIndex &index)
 
 void KisLayerBox::slotSelectOpaque()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
     QAction *action = m_canvas->view()->actionManager()->actionByName("selectopaque");
     if (action) {
         action->trigger();
@@ -648,5 +669,95 @@ void KisLayerBox::slotNodeCollapsedChanged()
     expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
 }
 
+inline bool isSelectionMask(KisNodeSP node)
+{
+    return dynamic_cast<KisSelectionMask*>(node.data());
+}
+
+KisNodeSP KisLayerBox::findNonHidableNode(KisNodeSP startNode)
+{
+    if (isSelectionMask(startNode) &&
+        startNode->parent() &&
+        !startNode->parent()->parent()) {
+
+
+        KisNodeSP node = startNode->prevSibling();
+        while (node && isSelectionMask(node)) {
+            node = node->prevSibling();
+        }
+
+        if (!node) {
+            node = startNode->nextSibling();
+            while (node && isSelectionMask(node)) {
+                node = node->nextSibling();
+            }
+        }
+
+        if (!node) {
+            node = m_image->root()->lastChild();
+            while (node && isSelectionMask(node)) {
+                node = node->prevSibling();
+            }
+        }
+
+        KIS_ASSERT_RECOVER_NOOP(node && "cannot activate any node!");
+        startNode = node;
+    }
+
+    return startNode;
+}
+
+void KisLayerBox::slotEditGlobalSelection(bool showSelections)
+{
+    KisNodeSP lastActiveNode = m_nodeManager->activeNode();
+    KisNodeSP activateNode = lastActiveNode;
+
+    if (!showSelections) {
+        activateNode = findNonHidableNode(activateNode);
+    }
+
+    m_nodeModel->setShowGlobalSelection(showSelections);
+
+    if (showSelections) {
+        KisNodeSP newMask = m_image->rootLayer()->selectionMask();
+        if (newMask) {
+            activateNode = newMask;
+        }
+    }
+
+    if (activateNode) {
+        if (lastActiveNode != activateNode) {
+            m_nodeManager->slotNonUiActivatedNode(activateNode);
+        } else {
+            setCurrentNode(lastActiveNode);
+        }
+    }
+}
+
+void KisLayerBox::selectionChanged(const QModelIndexList selection)
+{
+    if (selection.isEmpty() && m_nodeManager->activeNode()) {
+        m_wdgLayerBox->listLayers->setCurrentIndex(m_nodeModel->indexFromNode(m_nodeManager->activeNode()));
+        return;
+    }
+
+
+    QList<KisNodeSP> selectedNodes;
+    foreach(const QModelIndex &idx, selection) {
+        selectedNodes << m_nodeModel->nodeFromIndex(idx);
+    }
+
+
+    m_nodeManager->setSelectedNodes(selectedNodes);
+    bool enableButtons = selectedNodes.size() == 1;
+
+    m_wdgLayerBox->bnAdd->setEnabled(enableButtons);
+    m_wdgLayerBox->bnRaise->setEnabled(enableButtons);
+    m_wdgLayerBox->bnLower->setEnabled(enableButtons);
+    m_wdgLayerBox->bnDuplicate->setEnabled(enableButtons);
+    m_wdgLayerBox->bnProperties->setEnabled(enableButtons);
+    m_wdgLayerBox->cmbComposite->setEnabled(enableButtons);
+    m_wdgLayerBox->doubleOpacity->setEnabled(enableButtons);
+}
 
 #include "kis_layer_box.moc"

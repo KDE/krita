@@ -1,3 +1,4 @@
 #! /bin/sh
-$XGETTEXT $(find . -name "*.cpp") -o $podir/calligra-dockers.pot
+source ../../calligra_xgettext.sh
 
+calligra_xgettext `find . -name \*.cpp` > $podir/calligra-dockers.pot

@@ -65,7 +65,7 @@ void KoTextEditor::Private::clearCharFormatProperty(int property)
         int propertyId;
     };
     PropertyWiper wiper(property);
-    CharFormatVisitor::visitSelection(q, wiper,QString(), false);
+    CharFormatVisitor::visitSelection(q, wiper, KUndo2MagicString(), false);
 }
 
 void KoTextEditor::bold(bool bold)
@@ -74,7 +74,7 @@ void KoTextEditor::bold(bool bold)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Bold"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Bold"));
     QTextCharFormat format;
     format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
     mergeAutoStyle(format);
@@ -87,7 +87,7 @@ void KoTextEditor::italic(bool italic)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Italic"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Italic"));
     QTextCharFormat format;
     format.setFontItalic(italic);
     mergeAutoStyle(format);
@@ -100,7 +100,7 @@ void KoTextEditor::underline(bool underline)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Underline"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Underline"));
     QTextCharFormat format;
     if (underline) {
         format.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
@@ -119,7 +119,7 @@ void KoTextEditor::strikeOut(bool strikeout)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Strike Out"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Strike Out"));
     QTextCharFormat format;
     if (strikeout) {
         format.setProperty(KoCharacterStyle::StrikeOutType, KoCharacterStyle::SingleLine);
@@ -152,8 +152,8 @@ void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
     };
 
     Aligner aligner(align);
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Change Alignment"));
-    BlockFormatVisitor::visitSelection(this, aligner, i18nc("(qtundo-format)", "Change Alignment"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Change Alignment"));
+    BlockFormatVisitor::visitSelection(this, aligner, kundo2_i18n("Change Alignment"));
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -170,7 +170,7 @@ void KoTextEditor::setVerticalTextAlignment(Qt::Alignment align)
     else if (align == Qt::AlignBottom)
         charAlign = QTextCharFormat::AlignSubScript;
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Vertical Alignment"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Set Vertical Alignment"));
     QTextCharFormat format;
     format.setVerticalAlignment(charAlign);
     mergeAutoStyle(format);
@@ -204,8 +204,8 @@ void KoTextEditor::decreaseIndent()
     };
 
     Indenter indenter;
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Decrease Indent"));
-    BlockFormatVisitor::visitSelection(this, indenter, i18nc("(qtundo-format)", "Decrease Indent"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Decrease Indent"));
+    BlockFormatVisitor::visitSelection(this, indenter, kundo2_i18n("Decrease Indent"));
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -240,8 +240,8 @@ void KoTextEditor::increaseIndent()
     };
 
     Indenter indenter;
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Increase Indent"));
-    BlockFormatVisitor::visitSelection(this, indenter, i18nc("(qtundo-format)", "Increase Indent"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Increase Indent"));
+    BlockFormatVisitor::visitSelection(this, indenter, kundo2_i18n("Increase Indent"));
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -276,9 +276,9 @@ void KoTextEditor::decreaseFontSize()
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Decrease font size"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Decrease font size"));
     FontResizer sizer(FontResizer::Shrink);
-    CharFormatVisitor::visitSelection(this, sizer, i18nc("(qtundo-format)", "Decrease font size"));
+    CharFormatVisitor::visitSelection(this, sizer, kundo2_i18n("Decrease font size"));
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -289,9 +289,9 @@ void KoTextEditor::increaseFontSize()
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Increase font size"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Increase font size"));
     FontResizer sizer(FontResizer::Grow);
-    CharFormatVisitor::visitSelection(this, sizer, i18nc("(qtundo-format)", "Increase font size"));
+    CharFormatVisitor::visitSelection(this, sizer, kundo2_i18n("Increase font size"));
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -302,7 +302,7 @@ void KoTextEditor::setFontFamily(const QString &font)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Font"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Set Font"));
     QTextCharFormat format;
     format.setFontFamily(font);
     mergeAutoStyle(format);
@@ -315,7 +315,7 @@ void KoTextEditor::setFontSize(qreal size)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Font Size"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Set Font Size"));
     QTextCharFormat format;
     format.setFontPointSize(size);
     mergeAutoStyle(format);
@@ -328,7 +328,7 @@ void KoTextEditor::setTextBackgroundColor(const QColor &color)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Background Color"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Set Background Color"));
     QTextCharFormat format;
     format.setBackground(QBrush(color));
     mergeAutoStyle(format);
@@ -341,7 +341,7 @@ void KoTextEditor::setTextColor(const QColor &color)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Text Color"));
+    d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Set Text Color"));
     QTextCharFormat format;
     format.setForeground(QBrush(color));
     mergeAutoStyle(format);
@@ -369,7 +369,7 @@ public:
         foreach(QTextCursor cursor, m_cursors) {
             QTextFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
-            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Set Character Style"), *it, prevFormat, false);
+            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Set Character Style"), *it, prevFormat, false);
             ++it;
         }
     }
@@ -408,7 +408,7 @@ public:
 void KoTextEditor::setStyle(KoCharacterStyle *style)
 {
     Q_ASSERT(style);
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Set Character Style"));
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Set Character Style"));
 
     int caretAnchor = d->caret.anchor();
     int caretPosition = d->caret.position();
@@ -469,7 +469,7 @@ public:
 
 void KoTextEditor::setStyle(KoParagraphStyle *style)
 {
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Set Paragraph Style"));
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Set Paragraph Style"));
 
     int caretAnchor = d->caret.anchor();
     int caretPosition = d->caret.position();
@@ -511,7 +511,7 @@ public:
         foreach(QTextCursor cursor, m_cursors) {
             QTextFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
-            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Formatting"), *it, prevFormat, false);
+            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Formatting"), *it, prevFormat, false);
             ++it;
         }
     }
@@ -532,7 +532,7 @@ public:
 
 void KoTextEditor::mergeAutoStyle(const QTextCharFormat &deltaCharFormat)
 {
-    d->updateState(KoTextEditor::Private::Custom, "Formatting");
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Formatting"));
 
     int caretAnchor = d->caret.anchor();
     int caretPosition = d->caret.position();

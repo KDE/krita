@@ -41,6 +41,12 @@ private slots:
     void testDummyFromRow();
     void testRowCount();
 
+    void testIndexFromDummyShowGlobalSelection();
+    void testIndexFromAddedAllowedDummyShowGlobalSelection();
+    void testIndexFromAddedDeniedDummyShowGlobalSelection();
+    void testDummyFromRowShowGlobalSelection();
+    void testRowCountShowGlobalSelection();
+
     void testIndexFromDummyShowAll();
     void testIndexFromAddedAllowedDummyShowAll();
     void testIndexFromAddedDeniedDummyShowAll();

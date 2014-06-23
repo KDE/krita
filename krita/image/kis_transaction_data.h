@@ -36,7 +36,7 @@
 class KRITAIMAGE_EXPORT KisTransactionData : public KUndo2Command
 {
 public:
-    KisTransactionData(const QString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent);
+    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent);
     virtual ~KisTransactionData();
 
 public:

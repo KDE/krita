@@ -22,6 +22,7 @@
 #include <QString>
 #include "kis_stroke_job_strategy.h"
 #include "kis_types.h"
+#include "kundo2magicstring.h"
 
 class KisStrokeStrategy;
 
@@ -29,7 +30,7 @@ class KisStrokeStrategy;
 class KRITAIMAGE_EXPORT KisStrokeStrategy
 {
 public:
-    KisStrokeStrategy(QString id = QString(), QString name = QString());
+    KisStrokeStrategy(QString id = QString(), const KUndo2MagicString &name = KUndo2MagicString());
     virtual ~KisStrokeStrategy();
 
     virtual KisStrokeJobStrategy* createInitStrategy();
@@ -47,7 +48,7 @@ public:
     QString indirectPaintingCompositeOp() const;
 
     QString id() const;
-    QString name() const;
+    KUndo2MagicString name() const;
 
     /**
      * Set up by the strokes queue during the stroke initialization
@@ -80,7 +81,7 @@ private:
     QString m_indirectPaintingCompositeOp;
 
     QString m_id;
-    QString m_name;
+    KUndo2MagicString m_name;
 
     KisStrokeId m_cancelStrokeId;
 };

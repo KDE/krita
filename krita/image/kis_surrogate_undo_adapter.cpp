@@ -46,7 +46,7 @@ void KisSurrogateUndoAdapter::addCommand(KUndo2Command *command)
     m_undoStore->addCommand(command);
 }
 
-void KisSurrogateUndoAdapter::beginMacro(const QString& macroName)
+void KisSurrogateUndoAdapter::beginMacro(const KUndo2MagicString& macroName)
 {
     m_undoStore->beginMacro(macroName);
 }

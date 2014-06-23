@@ -32,7 +32,7 @@ MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLa
                                                          KisSelectionSP selection,
                                                          KisUpdatesFacade *updatesFacade,
                                                          KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(i18n("Move Selection Stroke"), false, undoAdapter),
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move Selection"), false, undoAdapter),
       m_paintLayer(paintLayer),
       m_selection(selection),
       m_updatesFacade(updatesFacade),
@@ -79,7 +79,7 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
         static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
 
     KisTransaction transaction(name(), m_paintLayer->paintDevice());
-    indirect->mergeToLayer(m_paintLayer, (KisUndoAdapter*)0, "");
+    indirect->mergeToLayer(m_paintLayer, (KisUndoAdapter*)0, KUndo2MagicString());
     runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
                       KisStrokeJobData::SEQUENTIAL,
                       KisStrokeJobData::NORMAL);

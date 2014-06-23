@@ -29,7 +29,7 @@
 #include <kis_paintop.h>
 
 KisPressureSharpnessOption::KisPressureSharpnessOption()
-    : KisCurveOption(i18n("Sharpness"), "Sharpness", KisPaintOpOption::commonCategory(), false)
+    : KisCurveOption(i18n("Sharpness"), "Sharpness", KisPaintOpOption::generalCategory(), false)
 {
     m_threshold = 40;
 }

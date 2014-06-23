@@ -25,7 +25,7 @@
 ChangeTextOffsetCommand::ChangeTextOffsetCommand( ArtisticTextShape * textShape, qreal oldOffset, qreal newOffset, KUndo2Command * parent )
     : KUndo2Command(parent), m_textShape(textShape), m_oldOffset(oldOffset), m_newOffset(newOffset)
 {
-    setText( i18nc("(qtundo-format)", "Change Text Offset") );
+    setText( kundo2_i18n("Change Text Offset") );
 }
 
 void ChangeTextOffsetCommand::redo()

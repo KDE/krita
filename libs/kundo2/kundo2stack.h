@@ -56,21 +56,25 @@ class KActionCollection;
 
 #ifndef QT_NO_UNDOCOMMAND
 
+#include "kundo2magicstring.h"
+
+
+
 class KUNDO2_EXPORT KUndo2Command
 {
     KUndo2CommandPrivate *d;
 
 public:
     explicit KUndo2Command(KUndo2Command *parent = 0);
-    explicit KUndo2Command(const QString &text, KUndo2Command *parent = 0);
+    explicit KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent = 0);
     virtual ~KUndo2Command();
 
     virtual void undo();
     virtual void redo();
 
     QString actionText() const;
-    QString text() const;
-    void setText(const QString &text);
+    KUndo2MagicString text() const;
+    void setText(const KUndo2MagicString &text);
 
     virtual int id() const;
     virtual bool mergeWith(const KUndo2Command *other);
@@ -124,7 +128,7 @@ public:
     bool isClean() const;
     int cleanIndex() const;
 
-    void beginMacro(const QString &text);
+    void beginMacro(const KUndo2MagicString &text);
     void endMacro();
 
     void setUndoLimit(int limit);

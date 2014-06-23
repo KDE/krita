@@ -1,38 +1,20 @@
-#defines the set of products commonly wanted for classic Desktop environment
+#defines the set of products commonly wanted for classic Desktop environment with OS X
+# TODO: platform specific things should be handled in toplevel CMakeLists.txt
 
-set( CALLIGRA_SHOULD_BUILD_PRODUCTS
-# apps
-    AUTHOR
-    FLOW
-#    KEXI
-    KRITA
-    SHEETS
-    STAGE
-    WORDS
-    BRAINDUMP
-    KARBON
-# plugins
-    PLUGIN_COLORENGINES
-    PLUGIN_MUSICSHAPE
-    PLUGIN_ARTISTICTEXTSHAPE
-    PLUGIN_DOCKERS
-    PLUGIN_TEXTEDITING
-#    PLUGIN_KEXI_SPREADSHEETMIGRATION
-    PLUGIN_DEFAULTTOOLS
-    PLUGIN_PATHSHAPES
-    PLUGIN_VARIABLES
-    PLUGIN_CHARTSHAPE
-    PLUGIN_PICTURESHAPE
-    PLUGIN_TEXTSHAPE
-    PLUGIN_PLUGINSHAPE
-    PLUGIN_FORMULASHAPE
-    PLUGIN_VECTORSHAPE
-#    PLUGIN_REPORTING
-# extras
-    CALLIGRA
-    CONVERTER
-    EXTRA_PROPERTIES
-    EXTRA_THUMBNAIL
-    EXTRA_QUICKPRINT
-    EXTRA_FILEMANAGER_TEMPLATES
+calligra_define_productset(DESKTOP "Calligra for Desktop"
+    OPTIONAL
+        # apps
+        AUTHOR
+        FLOW
+        #    KEXI
+        KRITA
+        SHEETS
+        STAGE
+        WORDS
+        BRAINDUMP
+        KARBON
+        # extras
+        APP_CALLIGRA
+        APP_CONVERTER
+        FILEMANAGER
 )

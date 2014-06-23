@@ -40,7 +40,9 @@ struct KisFilterStrokeStrategy::Private {
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
                                                  KisSafeFilterConfigurationSP filterConfig,
                                                  KisResourcesSnapshotSP resources)
-    : KisPainterBasedStrokeStrategy("FILTER_STROKE", filter->name(), resources,
+    : KisPainterBasedStrokeStrategy("FILTER_STROKE",
+                                    kundo2_i18n("Filter \"%1\"", filter->name()),
+                                    resources,
                                     QVector<PainterInfo*>()),
       m_d(new Private())
 {
@@ -73,7 +75,7 @@ void KisFilterStrokeStrategy::initStrokeCallback()
          !(dev->colorSpace() == dev->compositionSourceColorSpace()))) {
 
         m_d->filterDevice = dev->createCompositionSourceDevice(dev);
-        m_d->secondaryTransaction = new KisTransaction("", m_d->filterDevice);
+        m_d->secondaryTransaction = new KisTransaction(m_d->filterDevice);
 
         if (activeSelection()) {
             m_d->filterDeviceBounds &= activeSelection()->selectedRect();

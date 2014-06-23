@@ -48,9 +48,9 @@ KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, co
             m_reverse |= ReverseFirst;
         if (m_pointData2.pointIndex.second != 0)
             m_reverse |= ReverseSecond;
-        setText(i18nc("(qtundo-format)", "Close subpath"));
+        setText(kundo2_i18n("Close subpath"));
     } else {
-        setText(i18nc("(qtundo-format)", "Join subpaths"));
+        setText(kundo2_i18n("Join subpaths"));
     }
 
     KoPathPoint * point1 = pathShape->pointByIndex(m_pointData1.pointIndex);

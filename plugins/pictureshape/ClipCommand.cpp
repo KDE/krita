@@ -27,9 +27,9 @@ ClipCommand::ClipCommand(PictureShape *shape, bool clip)
     , m_clip(clip)
 {
     if (clip) {
-        setText(i18nc("(qtundo-format)", "Contour image (by image analysis)"));
+        setText(kundo2_i18n("Contour image (by image analysis)"));
     } else {
-        setText(i18nc("(qtundo-format)", "Remove image contour"));
+        setText(kundo2_i18n("Remove image contour"));
     }
 }
 

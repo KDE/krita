@@ -64,7 +64,7 @@ class KisToolPencilFactory : public KoToolFactoryBase
 public:
     KisToolPencilFactory(const QStringList&)
             : KoToolFactoryBase("KisToolPencil") {
-        setToolTip(i18n("Draw a freehand path."));
+        setToolTip(i18n("Freehand Path Tool"));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_tool_freehandvector"));

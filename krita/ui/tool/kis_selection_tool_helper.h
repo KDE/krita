@@ -20,6 +20,7 @@
 
 #include <krita_export.h>
 
+#include "kundo2magicstring.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
 
@@ -34,7 +35,7 @@ class KRITAUI_EXPORT KisSelectionToolHelper
 {
 public:
 
-    KisSelectionToolHelper(KisCanvas2* canvas, const QString& name);
+    KisSelectionToolHelper(KisCanvas2* canvas, const KUndo2MagicString& name);
     virtual ~KisSelectionToolHelper();
 
     void selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action);
@@ -47,7 +48,7 @@ private:
     KisCanvas2* m_canvas;
     KisImageWSP m_image;
     KisLayerSP m_layer;
-    QString m_name;
+    KUndo2MagicString m_name;
 };
 
 

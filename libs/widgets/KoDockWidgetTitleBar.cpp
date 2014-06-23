@@ -302,7 +302,7 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
         floatButton->setEnabled(true);
         collapseButton->setEnabled(true);
     }
-    q->setProperty("object-locked", locked);
+    q->setProperty("Locked", locked);
 
 }
 

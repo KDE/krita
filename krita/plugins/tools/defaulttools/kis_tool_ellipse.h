@@ -53,7 +53,7 @@ class KisToolEllipseFactory : public KoToolFactoryBase
 public:
     KisToolEllipseFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolEllipse") {
-        setToolTip(i18n("Draw an ellipse"));
+        setToolTip(i18n("Ellipse Tool"));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_tool_ellipse"));

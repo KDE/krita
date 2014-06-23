@@ -128,10 +128,10 @@ qint32 KisStrokesQueue::sizeMetric() const
     return m_d->strokesQueue.head()->numJobs() * m_d->strokesQueue.size();
 }
 
-QString KisStrokesQueue::currentStrokeName() const
+KUndo2MagicString KisStrokesQueue::currentStrokeName() const
 {
     QMutexLocker locker(&m_d->mutex);
-    if(m_d->strokesQueue.isEmpty()) return QString();
+    if(m_d->strokesQueue.isEmpty()) return KUndo2MagicString();
 
     return m_d->strokesQueue.head()->name();
 }

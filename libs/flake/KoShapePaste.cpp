@@ -169,7 +169,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
         }
     }
 
-    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Paste Shapes"));
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Paste Shapes"));
     if (!cmd) {
         qDeleteAll(d->pastedShapes);
         d->pastedShapes.clear();

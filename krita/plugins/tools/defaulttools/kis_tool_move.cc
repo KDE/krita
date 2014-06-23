@@ -34,6 +34,8 @@
 #include "strokes/move_stroke_strategy.h"
 #include "kis_tool_movetooloptionswidget.h"
 #include "strokes/move_selection_stroke_strategy.h"
+#include "kis_resources_snapshot.h"
+
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
@@ -134,14 +136,16 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
     KisNodeSP node;
     KisImageSP image = this->image();
 
-    KisSelectionSP selection = currentSelection();
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image, 0, this->canvas()->resourceManager());
+    KisSelectionSP selection = resources->activeSelection();
 
     if (mode != MoveSelectedLayer) {
         bool wholeGroup = !selection &&  mode == MoveGroup;
         node = KisToolUtils::findNode(image->root(), pos, wholeGroup);
     }
 
-    if ((!node && !(node = currentNode())) || !node->isEditable()) {
+    if ((!node && !(node = resources->currentNode())) || !node->isEditable()) {
         event->ignore();
         return;
     }

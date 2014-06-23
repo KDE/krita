@@ -217,6 +217,9 @@ public:
     bool showRootLayer() const;
     void setShowRootLayer(bool showRootLayer) const;
 
+    bool showGlobalSelection() const;
+    void setShowGlobalSelection(bool showGlobalSelection) const;
+
     bool showOutlineWhilePainting() const;
     void setShowOutlineWhilePainting(bool showOutlineWhilePainting) const;
 

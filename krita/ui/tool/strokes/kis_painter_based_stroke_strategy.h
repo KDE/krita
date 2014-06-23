@@ -47,12 +47,12 @@ public:
 
 public:
     KisPainterBasedStrokeStrategy(const QString &id,
-                                  const QString &name,
+                                  const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
                                   QVector<PainterInfo*> painterInfos);
 
     KisPainterBasedStrokeStrategy(const QString &id,
-                                  const QString &name,
+                                  const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
                                   PainterInfo *painterInfo);
 

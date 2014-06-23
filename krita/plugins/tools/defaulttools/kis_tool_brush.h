@@ -55,6 +55,9 @@ public:
     int smoothingType() const;
     bool useScalableDistance() const;
 
+protected slots:
+    virtual void resetCursorStyle();
+
 public slots:
     void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
@@ -72,6 +75,7 @@ Q_SIGNALS:
 
 private:
     QGridLayout *m_optionLayout;
+    QComboBox *m_cmbSmoothingType;
 
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
@@ -79,7 +83,6 @@ private:
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
     QCheckBox *m_chkSmoothPressure;
     QCheckBox *m_chkUseScalableDistance;
-    QButtonGroup * m_buttonGroup;
 };
 
 
@@ -90,7 +93,7 @@ public:
     KisToolBrushFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolBrush") {
 
-        setToolTip(i18n("Paint with brushes"));
+        setToolTip(i18n("Freehand Brush Tool"));
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);

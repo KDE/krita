@@ -69,7 +69,7 @@ KoShapeRunAroundCommand::KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRu
 : KUndo2Command(parent)
 , d(new Private(shape, side, runThrough, distanceLeft, distanceTop, distanceRight, distanceBottom, threshold, contour))
 {
-    setText(i18nc("(qtundo-format)", "Change Shape RunAround"));
+    setText(kundo2_i18n("Change Shape RunAround"));
 }
 
 KoShapeRunAroundCommand::~KoShapeRunAroundCommand()

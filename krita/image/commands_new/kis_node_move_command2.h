@@ -20,6 +20,16 @@
 #define KIS_NODE_MOVE_COMMAND2_H
 
 #include "kis_move_command_common.h"
-typedef KisMoveCommandCommon<KisNodeSP> KisNodeMoveCommand2;
+
+class KRITAIMAGE_EXPORT KisNodeMoveCommand2 : public KisMoveCommandCommon<KisNodeSP>
+{
+public:
+    KisNodeMoveCommand2(KisNodeSP object, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent = 0);
+
+    void undo();
+    void redo();
+
+    static void tryNotifySelection(KisNodeSP node);
+};
 
 #endif

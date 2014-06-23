@@ -5,6 +5,7 @@ set(kundo2_LIB_SRCS
 	kundo2group.cpp
 	kundo2view.cpp
 	kundo2model.cpp
+	kundo2magicstring.cpp
 )
 
 kde4_add_library(kundo2 SHARED ${kundo2_LIB_SRCS})
@@ -24,5 +25,6 @@ install(FILES
     kundo2view.h
     kundo2model.h
     kundo2command.h
+    kundo2magicstring.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )

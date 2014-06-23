@@ -111,6 +111,10 @@ public:
     void setViewModeButtonVisible(bool visible);
     QToolButton *viewModeButton() const;
 
+    void setSynced(bool sync);
+
+    virtual bool eventFilter(QObject* object, QEvent* event);
+
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
@@ -121,11 +125,18 @@ public slots:
 private slots:
     void activated ( const QModelIndex & index );
     void contextMenuRequested(const QPoint &pos);
+    void baseLengthChanged(int length);
+
+protected:
+    virtual void showEvent(QShowEvent* event);
 
 private:
     void updateButtonState();
     void updatePreview(KoResource *resource);
 
+    void updateView();
+
+    virtual void resizeEvent(QResizeEvent* event);
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid

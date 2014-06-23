@@ -47,7 +47,7 @@ KisSelectLayerAction::KisSelectLayerAction()
     setDescription(i18n("Selects a layer under cursor position"));
 
     QHash<QString, int> shortcuts;
-    shortcuts.insert(i18n("Toggle Select Layer Mode"), SelectLayerToggleShortcut);
+    shortcuts.insert(i18n("Select Layer Mode"), SelectLayerModeShortcut);
     setShortcutIndexes(shortcuts);
 }
 
@@ -78,7 +78,7 @@ void KisSelectLayerAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     switch (shortcut) {
-        case SelectLayerToggleShortcut:
+        case SelectLayerModeShortcut:
             inputEvent(event);
             break;
     }

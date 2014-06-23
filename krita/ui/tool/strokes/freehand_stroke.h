@@ -109,13 +109,13 @@ public:
                            const QString &indirectPaintingCompositeOp,
                            KisResourcesSnapshotSP resources,
                            PainterInfo *painterInfo,
-                           const QString &name);
+                           const KUndo2MagicString &name);
 
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            const QString &indirectPaintingCompositeOp,
                            KisResourcesSnapshotSP resources,
                            QVector<PainterInfo*> painterInfos,
-                           const QString &name);
+                           const KUndo2MagicString &name);
 
     void doStrokeCallback(KisStrokeJobData *data);
 

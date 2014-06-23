@@ -100,7 +100,7 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
 
     KisPaintDeviceSP interm = new KisPaintDevice(*device); // TODO no need for a full copy and then a transaction
     KisConvolutionPainter painter(interm);
-    painter.beginTransaction("bouuh");
+    painter.beginTransaction();
     painter.applyMatrix(kernel, interm, srcTopLeft, srcTopLeft, applyRect.size(), BORDER_REPEAT);
     painter.deleteTransaction();
 

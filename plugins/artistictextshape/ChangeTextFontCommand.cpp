@@ -26,7 +26,7 @@ ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape * shape, const QF
     : KUndo2Command(parent), m_shape(shape), m_newFont( font ), m_rangeStart(-1), m_rangeCount(-1)
 {
     Q_ASSERT(m_shape);
-    setText( i18nc("(qtundo-format)", "Change font") );
+    setText( kundo2_i18n("Change font") );
 }
 
 ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font, KUndo2Command *parent)

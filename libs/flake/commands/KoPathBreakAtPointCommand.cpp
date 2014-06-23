@@ -35,7 +35,7 @@ KoPathBreakAtPointCommand::KoPathBreakAtPointCommand(const QList<KoPathPointData
 {
     QList<KoPathPointData> sortedPointDataList(pointDataList);
     qSort(sortedPointDataList);
-    setText(i18nc("(qtundo-format)", "Break subpath at points"));
+    setText(kundo2_i18n("Break subpath at points"));
 
     QList<KoPathPointData>::const_iterator it(sortedPointDataList.constBegin());
     for (; it != sortedPointDataList.constEnd(); ++it) {

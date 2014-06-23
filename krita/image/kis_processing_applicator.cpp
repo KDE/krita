@@ -180,7 +180,7 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
                                                  KisNodeSP node,
                                                  ProcessingFlags flags,
                                                  KisImageSignalVector emitSignals,
-                                                 const QString &name)
+                                                 const KUndo2MagicString &name)
     : m_image(image),
       m_node(node),
       m_flags(flags),

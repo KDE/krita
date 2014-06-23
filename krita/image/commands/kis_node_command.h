@@ -35,7 +35,7 @@ public:
      * @param name The name that will be shown in the ui
      * @param node The node the command will be working on.
      */
-    KisNodeCommand(const QString& name, KisNodeSP node);
+    KisNodeCommand(const KUndo2MagicString& name, KisNodeSP node);
     virtual ~KisNodeCommand();
 
 protected:

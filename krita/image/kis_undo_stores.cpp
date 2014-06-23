@@ -52,7 +52,7 @@ void KisSurrogateUndoStore::addCommand(KUndo2Command *command)
     m_undoStack->push(command);
 }
 
-void KisSurrogateUndoStore::beginMacro(const QString& macroName)
+void KisSurrogateUndoStore::beginMacro(const KUndo2MagicString& macroName)
 {
     m_undoStack->beginMacro(macroName);
 }
@@ -111,7 +111,7 @@ void KisDumbUndoStore::addCommand(KUndo2Command *command)
     delete command;
 }
 
-void KisDumbUndoStore::beginMacro(const QString& macroName)
+void KisDumbUndoStore::beginMacro(const KUndo2MagicString& macroName)
 {
     /**
      * Yes, sir! >:)

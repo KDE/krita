@@ -315,7 +315,7 @@ void DlgColorRange::slotSelectClicked()
     }
 
     selection->pixelSelection()->invalidateOutlineCache();
-    KisSelectionToolHelper helper(m_view->canvasBase(), i18n("Color Range Selection"));
+    KisSelectionToolHelper helper(m_view->canvasBase(), kundo2_i18n("Color Range Selection"));
     helper.selectPixelSelection(selection->pixelSelection(), m_mode);
 
     m_page->bnDeselect->setEnabled(true);

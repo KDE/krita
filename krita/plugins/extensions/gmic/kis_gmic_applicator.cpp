@@ -37,7 +37,7 @@ KisGmicApplicator::~KisGmicApplicator()
 {
 }
 
-void KisGmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const QString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands)
+void KisGmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands)
 {
     m_image = image;
     m_node = node;

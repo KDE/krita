@@ -28,6 +28,7 @@ class KRITAUI_EXPORT KisToolMultihandHelper : public KisToolFreehandHelper
 
 public:
     KisToolMultihandHelper(KisPaintingInformationBuilder *infoBuilder,
+                           const KUndo2MagicString &transactionText,
                            KisRecordingAdapter *recordingAdapter = 0);
     virtual ~KisToolMultihandHelper();
 

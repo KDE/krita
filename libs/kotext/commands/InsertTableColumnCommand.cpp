@@ -39,9 +39,9 @@ InsertTableColumnCommand::InsertTableColumnCommand(KoTextEditor *te, QTextTable 
     ,m_changeId(changeId)
 {
     if(right) {
-        setText(i18nc("(qtundo-format)", "Insert Column Right"));
+        setText(kundo2_i18n("Insert Column Right"));
     } else {
-        setText(i18nc("(qtundo-format)", "Insert Column Left"));
+        setText(kundo2_i18n("Insert Column Left"));
     }
 }
 

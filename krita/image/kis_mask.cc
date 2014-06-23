@@ -166,6 +166,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
         gc.setCompositeOp(COMPOSITE_COPY);
         QRect rc(copyFromDevice->extent());
         gc.bitBlt(rc.topLeft(), copyFromDevice, rc);
+        selection->pixelSelection()->invalidateOutlineCache();
 
     } else {
         selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));

@@ -30,6 +30,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kundo2magicstring.h>
 
 #include <QStack>
 #include <QTextBlock>
@@ -54,7 +55,7 @@ public:
     ~Private() {}
 
     void documentCommandAdded();
-    void updateState(State newState, const QString &title = QString());
+    void updateState(State newState, const KUndo2MagicString &title = KUndo2MagicString());
 
     void newLine(KUndo2Command *parent);
     void clearCharFormatProperty(int propertyId);
@@ -68,7 +69,7 @@ public:
     bool addNewCommand;
     bool dummyMacroAdded;
     int customCommandCount;
-    QString commandTitle;
+    KUndo2MagicString commandTitle;
 
     State editorState;
 
@@ -125,7 +126,7 @@ public:
 
     virtual void visit(QTextBlock &block) const = 0;
 
-    static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, const QString &title = i18n("Format"), bool resetProperties = false, bool registerChange = true) {
+    static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, const KUndo2MagicString &title = kundo2_i18n("Format"), bool resetProperties = false, bool registerChange = true) {
         int start = qMin(editor->position(), editor->anchor());
         int end = qMax(editor->position(), editor->anchor());
 
@@ -161,7 +162,7 @@ public:
 
     virtual void visit(QTextCharFormat &format) const = 0;
 
-    static void visitSelection(KoTextEditor *editor, const CharFormatVisitor &visitor, const QString &title = i18n("Format"), bool registerChange = true) {
+    static void visitSelection(KoTextEditor *editor, const CharFormatVisitor &visitor, const KUndo2MagicString &title = kundo2_i18n("Format"), bool registerChange = true) {
         int start = qMin(editor->position(), editor->anchor());
         int end = qMax(editor->position(), editor->anchor());
         if (start == end) { // just set a new one.

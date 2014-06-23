@@ -21,6 +21,7 @@
 
 class KisView2;
 class KoCompositeOp;
+class KUndo2MagicString;
 
 #include <kis_types.h>
 #include <krita_export.h>
@@ -39,7 +40,7 @@ public:
     KisNodeCommandsAdapter(KisView2 * view);
     virtual ~KisNodeCommandsAdapter();
 public:
-    void beginMacro(const QString& macroName);
+    void beginMacro(const KUndo2MagicString& macroName);
     void endMacro();
     void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void addNode(KisNodeSP node, KisNodeSP parent, quint32 index);

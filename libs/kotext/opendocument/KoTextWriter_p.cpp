@@ -22,6 +22,7 @@
 
 #include <KoElementReference.h>
 #include <KoTextRangeManager.h>
+#include <KoSectionUtils.h>
 
 // A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)
@@ -83,9 +84,9 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
             foreach (const QVariant &sv, closeList) {
                 KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
-                if (!sectionNamesStack.empty() && sectionNamesStack.top() == sec->name) {
+                if (!sectionNamesStack.empty() && sectionNamesStack.top() == sec->name()) {
                     sectionNamesStack.pop();
-                    entireWithinSectionNames.insert(sec->name);
+                    entireWithinSectionNames.insert(sec->name());
                 }
             }
         }
@@ -161,7 +162,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             foreach (QVariant sv, sectionEndings) {
                 KoSectionEnd *sectionEnd = static_cast<KoSectionEnd *>(sv.value<void *>());
                 // We are writing in only sections, that are completely inside selection.
-                if (entireWithinSectionNames.contains(sectionEnd->name)) {
+                if (entireWithinSectionNames.contains(sectionEnd->name())) {
                     sectionEnd->saveOdf(context);
                 }
             }

@@ -1539,7 +1539,7 @@ void KoTextEditor::newSection()
     newLine();
 
     KoSection *start = new KoSection();
-    KoSectionEnd *end = new KoSectionEnd(start->name());
+    KoSectionEnd *end = new KoSectionEnd(start);
 
     QTextBlockFormat fmt = d->caret.blockFormat();
 

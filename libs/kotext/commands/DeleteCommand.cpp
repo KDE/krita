@@ -34,6 +34,7 @@
 #include <KoAnchorTextRange.h>
 #include <KoAnnotation.h>
 #include <KoSection.h>
+#include <KoSectionUtils.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 

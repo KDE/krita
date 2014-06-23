@@ -17,58 +17,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOSECTION_H
-#define KOSECTION_H
+#ifndef KOSECTIONEND_H
+#define KOSECTIONEND_H
 
 #include "kotext_export.h"
 
-#include <KoSectionEnd.h>
-#include <QMetaType>
 #include <QString>
-#include <QTextCursor>
+#include <KoSection.h>
 
 class KoXmlElement;
 class KoShapeSavingContext;
-class KoTextSharedLoadingData;
-class KoSectionEnd;
+class KoSection;
 
 /**
- * Contains the information about the current text:section.
- *
- * The <text:section> element has the following attributes:
- *
- * <ul>
- * <li>text:condition
- * <li>text:display
- * <li>text:name
- * <li>text:protected
- * <li>text:protection-key
- * <li>text:protection-key-digest-algorithm
- * <li>text:style-name
- * <li>xml:id
- * </ul>
- * (odf spec v.12)
+ * Marks the end of the given section
  */
-class KOTEXT_EXPORT KoSection
-{
+class KOTEXT_EXPORT KoSectionEnd {
 public:
-
-    KoSection();
-    ~KoSection();
-    KoSection(const KoSection& other);
+    KoSectionEnd(KoSection* section);
+    void saveOdf(KoShapeSavingContext &context);
 
     QString name() const;
+    KoSection *correspondingSection();
 
-    bool loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml);
-    void saveOdf(KoShapeSavingContext &context);
+    ~KoSectionEnd();
 private:
     class Private;
     Private *const d;
 
-    void setSectionEnd(KoSectionEnd *sectionEnd);
-    friend class KoSectionEnd;
+    friend class KoSection;
 };
 
-Q_DECLARE_METATYPE(KoSection)
-
-#endif // KOSECTION_H
+#endif // KOSECTIONEND_H

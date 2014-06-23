@@ -39,6 +39,8 @@ set(kotext_LIB_SRCS
     KoVariableManager.cpp
     KoNamedVariable.cpp
     KoSection.cpp
+    KoSectionEnd.cpp
+    KoSectionUtils.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
     KoAnchorInlineObject.cpp
@@ -185,6 +187,8 @@ install(
     KoTextMeta.h
     KoTextSoftPageBreak.cpp
     KoSection.h
+    KoSectionEnd.h
+    KoSectionUtils.h
     KoTextCommandBase.h
     KoTextTableTemplate.h
 

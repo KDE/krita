@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -47,6 +48,8 @@ public:
     QString protection_key_digest_algorithm;
     QString style_name;
     KoSectionStyle *sectionStyle;
+
+    KoSectionEnd *sectionEnd; //< pointer to the corresponding section end
 };
 
 KoSection::KoSection()
@@ -116,41 +119,7 @@ void KoSection::saveOdf(KoShapeSavingContext &context)
     if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
 }
 
-KoSectionEnd::KoSectionEnd(QString _name)
-    : name(_name)
+void KoSection::setSectionEnd(KoSectionEnd* _sectionEnd)
 {
-}
-
-void KoSectionEnd::saveOdf(KoShapeSavingContext &context)
-{
-    KoXmlWriter *writer = &context.xmlWriter();
-    Q_ASSERT(writer);
-    writer->endElement();
-}
-
-bool KoSectionUtils::getNextBlock(QTextCursor &cur)
-{
-    QTextCursor next = cur;
-    bool ok = next.movePosition(QTextCursor::NextBlock);
-
-    while (ok && next.currentFrame() != cur.currentFrame()) {
-        ok = next.movePosition(QTextCursor::NextBlock);
-    }
-
-    if (!ok || next.currentFrame() != cur.currentFrame()) {
-        // There is no previous block.
-        return false;
-    }
-    cur = next;
-    return true;
-}
-
-QString KoSectionUtils::sectionStartName(QVariant q)
-{
-    return static_cast<KoSection *>(q.value<void *>())->name();
-}
-
-QString KoSectionUtils::sectionEndName(QVariant q)
-{
-    return static_cast<KoSectionEnd *>(q.value<void *>())->name;
+    d->sectionEnd = _sectionEnd;
 }

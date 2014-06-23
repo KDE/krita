@@ -662,10 +662,12 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
     pen.setColor(Qt::gray);
     painter->setPen(pen);
 
-    qreal xl = layout->lineForTextPosition(0).x();
-    qreal xr = layout->lineForTextPosition(0).x() + width();
-    qreal yu = layout->lineForTextPosition(0).y();
-    qreal yd = layout->lineForTextPosition(0).y() + QFontMetricsF(painter->font()).height();
+    qreal xl = layout->boundingRect().left();
+    qreal xr = qMax(layout->boundingRect().right(), layout->boundingRect().left() + width());
+    qreal yu = layout->boundingRect().top();
+    qreal yd = layout->boundingRect().bottom();
+
+    qreal bracketSize = painter->fontMetrics().height() / 2;
 
     const qreal levelShift = 3;
 
@@ -678,10 +680,10 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
 
         for (int i = 0; i < openList.size(); i++) {
             painter->drawLine(xl + (sectionLevel - 1 - i) * levelShift, yu,
-                              xl + (sectionLevel - 1 - i) * levelShift, (yu + yd) / 2);
+                              xl + (sectionLevel - 1 - i) * levelShift, yu + bracketSize);
 
             painter->drawLine(xr - (sectionLevel - 1 - i) * levelShift, yu,
-                              xr - (sectionLevel - 1 - i) * levelShift, (yu + yd) / 2);
+                              xr - (sectionLevel - 1 - i) * levelShift, yu + bracketSize);
         }
     }
 
@@ -694,10 +696,10 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
 
         for (int i = 0; i < closeList.size(); i++) {
             painter->drawLine(xl + (sectionLevel - closeList.size() + i) * levelShift, yd,
-                              xl + (sectionLevel - closeList.size() + i) * levelShift, (yu + yd) / 2);
+                              xl + (sectionLevel - closeList.size() + i) * levelShift, yd - bracketSize);
 
             painter->drawLine(xr - (sectionLevel - closeList.size() + i) * levelShift, yd,
-                              xr - (sectionLevel - closeList.size() + i) * levelShift, (yu + yd) / 2);
+                              xr - (sectionLevel - closeList.size() + i) * levelShift, yd - bracketSize);
         }
     }
 

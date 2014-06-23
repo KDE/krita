@@ -458,7 +458,7 @@ public:
             if (old)
                 old->unapplyStyle(block);
         }
-        // Above should unaaply the style and it's lists part, but we want to clear everything
+        // The above should unapply the style and it's lists part, but we want to clear everything
         // except section info.
         QTextCursor cursor(block);
         QVariant sectionStartings = cursor.blockFormat().property(KoParagraphStyle::SectionStartings);

@@ -107,7 +107,7 @@ public:
     //   At first, we go though the all section starts and ends
     // that are in selection, and delete all pairs, because
     // they will be deleted.
-    //   Than we have multiple cases: selection start split some block
+    //   Then we have multiple cases: selection start split some block
     // or don't split any block.
     //   In the first case all formatting info will be stored in the
     // splitted block(it has startBlockNum number).

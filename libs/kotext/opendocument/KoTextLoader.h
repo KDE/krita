@@ -98,7 +98,7 @@ public:
     *
     * @param element the element to start loading at
     * @param cursor the text cursor to insert the body after
-    * @param mode does special handling of section needed, in case we are pasting text
+    * @param pasteMode does special handling of section needed, in case we are pasting text
     */
     void loadBody(const KoXmlElement &element, QTextCursor &cursor, LoadBodyMode pasteMode = LoadMode);
 

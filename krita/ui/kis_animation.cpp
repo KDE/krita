@@ -154,6 +154,18 @@ bool KisAnimation::frameBreakingEnabled()
     return m_frameBreakingEnabled;
 }
 
+void KisAnimation::enableOnionSkinning(bool enable)
+{
+    m_onionSkinningEnabled = enable;
+    KisConfig cfg;
+    cfg.defOnionSkinningEnabled(enable);
+}
+
+bool KisAnimation::onionSkinningEnabled()
+{
+    return m_onionSkinningEnabled;
+}
+
 void KisAnimation::load(const QString &url)
 {
 

@@ -43,6 +43,7 @@ public:
     void setBgColor(KoColor bgColor);
     void setLocation(QString location);
     void enableFrameBreaking(bool enable);
+    void enableOnionSkinning(bool enable);
 
     QString name() const;
     QString author() const;
@@ -56,6 +57,7 @@ public:
     KoColor bgColor() const;
     QString location();
     bool frameBreakingEnabled();
+    bool onionSkinningEnabled();
 
     void load(const QString &url);
     void save(const QString &url);
@@ -72,6 +74,7 @@ private:
     KoColor m_bgColor;
     QString m_location;
     bool m_frameBreakingEnabled;
+    bool m_onionSkinningEnabled;
 };
 
 #endif // KIS_ANIMATION_H

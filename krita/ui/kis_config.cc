@@ -187,6 +187,16 @@ void KisConfig::defAutoFrameBreakEnabled(bool state) const
     m_cfg.writeEntry("autoFrameBreakEnabled", state);
 }
 
+bool KisConfig::defOnionSkinningEnabled() const
+{
+    return m_cfg.readEntry("onionSkinningEnabled", false);
+}
+
+void KisConfig::defOnionSkinningEnabled(bool state) const
+{
+    m_cfg.writeEntry("onionSkinningEnabled", state);
+}
+
 enumCursorStyle KisConfig::cursorStyle() const
 {
     return (enumCursorStyle) m_cfg.readEntry("cursorStyleDef", int(DEFAULT_CURSOR_STYLE));

@@ -63,6 +63,9 @@ public:
     bool defAutoFrameBreakEnabled() const;
     void defAutoFrameBreakEnabled(bool state) const;
 
+    bool defOnionSkinningEnabled() const;
+    void defOnionSkinningEnabled(bool state) const;
+
     /**
      * @return the id of the default color model used for creating new images.
      */

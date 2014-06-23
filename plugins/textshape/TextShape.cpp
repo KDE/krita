@@ -162,7 +162,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     pc.imageCollection = m_imageCollection;
     pc.showFormattingCharacters = paintContext.showFormattingCharacters;
     pc.showTableBorders = paintContext.showTableBorders;
-    pc.showSectionsBounds = paintContext.showSectionsBounds;
+    pc.showSectionBounds = paintContext.showSectionBounds;
     pc.showSpellChecking = paintContext.showSpellChecking;
     pc.showSelections = paintContext.showSelections;
 

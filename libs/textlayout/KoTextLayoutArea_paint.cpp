@@ -124,10 +124,12 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             }
         }
 
-        QVariant var = block.blockFormat().property(KoParagraphStyle::SectionStartings);
-        QList<QVariant> openList = var.value< QList<QVariant> >();
+        if (context.showSectionBounds) {
+            QVariant var = block.blockFormat().property(KoParagraphStyle::SectionStartings);
+            QList<QVariant> openList = var.value< QList<QVariant> >();
 
-        sectionLevel += openList.count();
+            sectionLevel += openList.count();
+        }
 
         if (table) {
             if (tableAreaIndex >= d->tableAreas.size()) {
@@ -370,14 +372,14 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             layout->draw(painter, QPointF(0, 0), selections);
 
-            if (context.showSectionsBounds) {
+            if (context.showSectionBounds) {
                 decorateParagraphSections(painter, block, sectionLevel);
+
+                QVariant var = block.blockFormat().property(KoParagraphStyle::SectionEndings);
+                QList<QVariant> close_list = var.value< QList<QVariant> >();
+                sectionLevel -= close_list.count();
             }
             decorateParagraph(painter, block, context.showFormattingCharacters, context.showSpellChecking);
-
-            var = block.blockFormat().property(KoParagraphStyle::SectionEndings);
-            QList<QVariant> close_list = var.value< QList<QVariant> >();
-            sectionLevel -= close_list.count();
 
             painter->restore();
         } else {

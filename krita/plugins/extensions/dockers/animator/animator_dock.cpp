@@ -19,26 +19,12 @@
 #include "animator_dock.h"
 
 #include <kis_view2.h>
-
-#include <QLabel>
-
-#include <klocale.h>
 #include <kis_animation.h>
 #include <kis_canvas2.h>
 #include <kis_animation_doc.h>
 #include <kis_animation_part.h>
-#include <QListView>
-#include <QScrollArea>
-#include <QVBoxLayout>
-#include <QGridLayout>
-#include <QWidget>
-#include <QAction>
-#include <KoIcon.h>
-#include <QActionGroup>
-#include <QPushButton>
 #include "kis_timeline.h"
-#include "kis_animation_layerbox.h"
-#include "kis_frame_box.h"
+#include <klocale.h>
 
 AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_animation(0)
 {

@@ -19,18 +19,6 @@
 #include "kis_timeline.h"
 #include "kis_frame_box.h"
 #include "kis_animation_layerbox.h"
-#include <QToolButton>
-#include <QToolBar>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QGridLayout>
-#include <QCheckBox>
-#include <QSplitter>
-#include <KoIcon.h>
-#include <QScrollArea>
-#include <QMenu>
-#include <QScrollBar>
 #include "kis_animation_frame.h"
 #include "animator_settings_dialog.h"
 #include <kis_canvas2.h>
@@ -45,6 +33,19 @@
 #include <KActionCollection>
 #include <kis_action_manager.h>
 #include <kis_action.h>
+
+#include <QToolButton>
+#include <QToolBar>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QCheckBox>
+#include <QSplitter>
+#include <KoIcon.h>
+#include <QScrollArea>
+#include <QMenu>
+#include <QScrollBar>
 
 KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 {

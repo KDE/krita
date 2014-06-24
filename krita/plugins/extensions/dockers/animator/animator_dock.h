@@ -20,7 +20,6 @@
 #define _ANIMATOR_DOCK_H_
 
 #include <QDockWidget>
-#include <QSpinBox>
 #include <KoCanvasObserverBase.h>
 
 class QLabel;

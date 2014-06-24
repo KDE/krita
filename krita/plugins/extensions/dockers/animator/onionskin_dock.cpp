@@ -17,78 +17,81 @@
  */
 
 #include "onionskin_dock.h"
+
 #include <kis_view2.h>
-#include <QLabel>
-#include <klocale.h>
 #include <kis_animation.h>
 #include <kis_canvas2.h>
 #include <kis_animation_doc.h>
 #include <kis_animation_part.h>
+#include <kis_config.h>
+#include "kis_opacity_selector_view.h"
+
+#include <klocale.h>
+#include <KColorButton>
+
+#include <QLabel>
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
 #include <QColor>
-#include <kis_config.h>
+#include <QCheckBox>
+#include <QSpinBox>
 
 OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m_animation(0)
 {
     this->setMinimumSize(300,160);
 
-    QLabel* m_activeLabel = new QLabel(this);
-    m_activeLabel->setText("Active: ");
+    QLabel* activeLabel = new QLabel(this);
+    activeLabel->setText("Active: ");
+    activeLabel->setGeometry(100,20,50,20);
 
     KisConfig cfg;
-    m_activeCheckBox = new QCheckBox(this);
-    m_activeCheckBox->setChecked(cfg.defOnionSkinningEnabled());
 
-    connect(m_activeCheckBox, SIGNAL(clicked(bool)), this, SLOT(enableOnionSkinning(bool)));
+    QCheckBox* activeCheckBox = new QCheckBox(this);
+    activeCheckBox->setChecked(cfg.defOnionSkinningEnabled());
+    activeCheckBox->setGeometry(150, 20, 20, 20);
 
-    m_activeLabel->setGeometry(100,20,50,20);
-    m_activeCheckBox->setGeometry(150, 20, 20, 20);
+    connect(activeCheckBox, SIGNAL(clicked(bool)), this, SLOT(enableOnionSkinning(bool)));
 
-    QLabel* m_frameLabel = new QLabel(this);
-    m_frameLabel->setText("Frames");
+    QLabel* frameLabel = new QLabel(this);
+    frameLabel->setText("Frames");
+    frameLabel->setGeometry(130, 40, 50, 20);
 
-    m_previousFramesInput = new QSpinBox(this);
-    m_nextFramesInput = new QSpinBox(this);
+    QSpinBox* previousFramesInput = new QSpinBox(this);
+    previousFramesInput->setRange(0, 10);
+    previousFramesInput->setValue(3);
+    previousFramesInput->setGeometry(60,40,50,20);
 
-    m_previousFramesInput->setRange(0, 10);
-    m_nextFramesInput->setRange(0, 10);
+    QSpinBox* nextFramesInput = new QSpinBox(this);
+    nextFramesInput->setRange(0, 10);
+    nextFramesInput->setValue(3);
+    nextFramesInput->setGeometry(200, 40, 50, 20);
 
-    m_previousFramesInput->setValue(3);
-    m_nextFramesInput->setValue(3);
+    QLabel* colorLabel = new QLabel(this);
+    colorLabel->setText("Colors");
+    colorLabel->setGeometry(130, 60, 50, 20);
 
-    m_frameLabel->setGeometry(130, 40, 50, 20);
-    m_nextFramesInput->setGeometry(200, 40, 50, 20);
-    m_previousFramesInput->setGeometry(60,40,50,20);
+    KColorButton* previousFramesColor = new KColorButton(this);
+    previousFramesColor->setColor(QColor(Qt::red));
+    previousFramesColor->setGeometry(60, 60,50, 20);
 
-    QLabel* m_colorLabel = new QLabel(this);
-    m_colorLabel->setText("Colors");
+    KColorButton* nextFramesColor = new KColorButton(this);
+    nextFramesColor->setColor(QColor(Qt::blue));
+    nextFramesColor->setGeometry(200, 60, 50, 20);
 
-    m_previousFramesColor = new KColorButton(this);
-    m_nextFramesColor = new KColorButton(this);
+    QLabel* opacityLabel = new QLabel(this);
+    opacityLabel->setText("Opacity");
+    opacityLabel->setGeometry(130, 80, 50, 20);
 
-    m_previousFramesColor->setColor(QColor(Qt::red));
-    m_nextFramesColor->setColor(QColor(Qt::blue));
+    KisOpacitySelectorView* previousOpacitySelectorView = new KisOpacitySelectorView(this, KisOpacitySelector::PREV_FRAMES_OPACITY_SELECTOR);
+    previousOpacitySelectorView->setNumberOfFrames(previousFramesInput->value());
+    previousOpacitySelectorView->setGeometry(20, 80, 105, 75);
+    connect(previousFramesInput, SIGNAL(valueChanged(int)), previousOpacitySelectorView, SLOT(setNumberOfFrames(int)));
 
-    m_colorLabel->setGeometry(130, 60, 50, 20);
-    m_previousFramesColor->setGeometry(60, 60,50, 20);
-    m_nextFramesColor->setGeometry(200, 60, 50, 20);
-
-    QLabel* m_opacityLabel = new QLabel(this);
-    m_opacityLabel->setText("Opacity");
-    m_opacityLabel->setGeometry(130, 80, 50, 20);
-
-    m_previousOpacitySelectorView = new KisOpacitySelectorView(this, KisOpacitySelector::PREV_FRAMES_OPACITY_SELECTOR);
-    m_previousOpacitySelectorView->setNumberOfFrames(m_previousFramesInput->value());
-    m_previousOpacitySelectorView->setGeometry(20, 80, 105, 75);
-
-    m_nextOpacitySelectorView = new KisOpacitySelectorView(this, KisOpacitySelector::NEXT_FRAMES_OPACITY_SELECTOR);
-    m_nextOpacitySelectorView->setNumberOfFrames(m_nextFramesInput->value());
-    m_nextOpacitySelectorView->setGeometry(180, 80, 105, 75);
-
-    connect(m_previousFramesInput, SIGNAL(valueChanged(int)), m_previousOpacitySelectorView, SLOT(setNumberOfFrames(int)));
-    connect(m_nextFramesInput, SIGNAL(valueChanged(int)), m_nextOpacitySelectorView, SLOT(setNumberOfFrames(int)));
+    KisOpacitySelectorView* nextOpacitySelectorView = new KisOpacitySelectorView(this, KisOpacitySelector::NEXT_FRAMES_OPACITY_SELECTOR);
+    nextOpacitySelectorView->setNumberOfFrames(nextFramesInput->value());
+    nextOpacitySelectorView->setGeometry(180, 80, 105, 75);
+    connect(nextFramesInput, SIGNAL(valueChanged(int)), nextOpacitySelectorView, SLOT(setNumberOfFrames(int)));
 }
 
 void OnionSkinDock::setCanvas(KoCanvasBase *canvas)

@@ -24,6 +24,7 @@
 #include <kis_types.h>
 #include <kis_group_layer.h>
 #include <kranim/kis_kranim_loader.h>
+#include <QBitArray>
 
 KisOnionSkinLoader::KisOnionSkinLoader(KisAnimationDoc *doc, QObject *parent) :
     QObject(parent)
@@ -41,6 +42,9 @@ void KisOnionSkinLoader::loadOnionSkins()
     QString location = "";
     bool hasFile = false;
 
+    QBitArray prevChanFlags = this->prevFramesChannelFlags();
+    QBitArray nextChanFlags = this->nextFramesChannelFlags();
+
     for(int i = 1 ; i < m_doc->numberOfLayers() ; i++) {
         location = m_doc->getPreviousKeyFrameFile(frame.x(), i * 20);
         hasFile = m_doc->getStore()->hasFile(location);
@@ -50,6 +54,10 @@ void KisOnionSkinLoader::loadOnionSkins()
         if(hasFile) {
             KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Onion Skin " + QString::number(i + 1));
+
+            newLayer->setOpacity(127);
+            newLayer->setChannelFlags(prevChanFlags);
+
             image->addNode(newLayer.data(), image->rootLayer().data());
             m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
         }
@@ -60,8 +68,36 @@ void KisOnionSkinLoader::loadOnionSkins()
         if(hasFile) {
             KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Onion Skin " + QString::number(i + 1));
+
+            newLayer->setOpacity(127);
+            newLayer->setChannelFlags(nextChanFlags);
+
             image->addNode(newLayer.data(), image->rootLayer().data());
             m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
         }
     }
+}
+
+QBitArray KisOnionSkinLoader::nextFramesChannelFlags()
+{
+    QBitArray ba(4);
+
+    ba.setBit(0, false);
+    ba.setBit(1, true);
+    ba.setBit(2, true);
+    ba.setBit(3, true);
+
+    return ba;
+}
+
+QBitArray KisOnionSkinLoader::prevFramesChannelFlags()
+{
+    QBitArray ba(4);
+
+    ba.setBit(0, true);
+    ba.setBit(1, true);
+    ba.setBit(2, false);
+    ba.setBit(3, true);
+
+    return ba;
 }

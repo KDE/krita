@@ -35,6 +35,10 @@ public slots:
     void loadOnionSkins();
 
 private:
+    QBitArray prevFramesChannelFlags();
+    QBitArray nextFramesChannelFlags();
+
+private:
     KisAnimationDoc* m_doc;
 };
 

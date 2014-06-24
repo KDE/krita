@@ -42,6 +42,10 @@ KisOpacitySelector::~KisOpacitySelector()
 
 void KisOpacitySelector::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    if(m_frames == 0) {
+        return;
+    }
+
     int step = m_width / m_frames;
     int j = 0;
     int opacityVal = 0;
@@ -50,6 +54,7 @@ void KisOpacitySelector::paint(QPainter *painter, const QStyleOptionGraphicsItem
         painter->setPen(Qt::gray);
         painter->drawLine(i, 0, i, m_height);
         painter->setPen(Qt::green);
+
         //To fix assertion
         if(j < m_opacityValues->length()) {
             opacityVal = m_opacityValues->at(j);

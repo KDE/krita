@@ -29,7 +29,7 @@ class KisOpacitySelectorView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    KisOpacitySelectorView(QWidget* parent);
+    KisOpacitySelectorView(QWidget* parent, int type);
     ~KisOpacitySelectorView();
     QGraphicsScene *m_opacitySelectorScene;
     KisOpacitySelector* m_opacitySelector;
@@ -38,6 +38,7 @@ public:
 
 private:
     int m_numberOfFrames;
+    int m_type;
 
 protected:
     void mousePressEvent(QMouseEvent *event);

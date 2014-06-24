@@ -26,7 +26,7 @@
 class KisOpacitySelector : public QGraphicsItem
 {
 public:
-    KisOpacitySelector(int x, int y, int width, int height, QGraphicsScene* scene = 0, int frames = 0);
+    KisOpacitySelector(int x, int y, int width, int height, int type, QGraphicsScene* scene = 0, int frames = 0);
     ~KisOpacitySelector();
     QRectF boundingRect() const;
     QPainterPath shape() const;
@@ -34,6 +34,11 @@ public:
     void setOpacityValue(QList<int> l);
     QList<int>* getOpacityValues();
     void setOpacityValue(int frame, int val);
+
+public:
+    static const int PREV_FRAMES_OPACITY_SELECTOR = 0;
+    static const int NEXT_FRAMES_OPACITY_SELECTOR = 1;
+
 private:
     int m_width, m_height, m_x, m_y, m_frames;
     QList<int> *m_opacityValues;

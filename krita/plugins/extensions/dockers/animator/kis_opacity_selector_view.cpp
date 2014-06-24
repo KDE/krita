@@ -19,7 +19,7 @@
 #include "kis_opacity_selector_view.h"
 #include <QMouseEvent>
 
-KisOpacitySelectorView::KisOpacitySelectorView(QWidget *parent) : QGraphicsView(parent)
+KisOpacitySelectorView::KisOpacitySelectorView(QWidget *parent, int type) : QGraphicsView(parent)
 {
     setFrameShape(QFrame::Box);
     setFrameShadow(QFrame::Sunken);
@@ -27,6 +27,8 @@ KisOpacitySelectorView::KisOpacitySelectorView(QWidget *parent) : QGraphicsView(
 
     m_opacitySelectorScene = new QGraphicsScene;
     setScene(m_opacitySelectorScene);
+
+    m_type = type;
 }
 
 KisOpacitySelectorView::~KisOpacitySelectorView()
@@ -37,7 +39,7 @@ KisOpacitySelectorView::~KisOpacitySelectorView()
 void KisOpacitySelectorView::init()
 {
     m_opacitySelectorScene->setSceneRect(0, 0, 100, 70);
-    m_opacitySelector = new KisOpacitySelector(0, 0, 100, 70, m_opacitySelectorScene, m_numberOfFrames);
+    m_opacitySelector = new KisOpacitySelector(0, 0, 100, 70, m_type, m_opacitySelectorScene, m_numberOfFrames);
     m_opacitySelectorScene->addItem(m_opacitySelector);
 }
 

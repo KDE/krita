@@ -55,8 +55,8 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
     m_previousFramesInput->setRange(0, 10);
     m_nextFramesInput->setRange(0, 10);
 
-    m_previousFramesInput->setValue(1);
-    m_nextFramesInput->setValue(1);
+    m_previousFramesInput->setValue(3);
+    m_nextFramesInput->setValue(3);
 
     m_frameLabel->setGeometry(130, 40, 50, 20);
     m_nextFramesInput->setGeometry(200, 40, 50, 20);
@@ -79,11 +79,11 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
     m_opacityLabel->setText("Opacity");
     m_opacityLabel->setGeometry(130, 80, 50, 20);
 
-    m_previousOpacitySelectorView = new KisOpacitySelectorView(this);
+    m_previousOpacitySelectorView = new KisOpacitySelectorView(this, KisOpacitySelector::PREV_FRAMES_OPACITY_SELECTOR);
     m_previousOpacitySelectorView->setNumberOfFrames(m_previousFramesInput->value());
     m_previousOpacitySelectorView->setGeometry(20, 80, 105, 75);
 
-    m_nextOpacitySelectorView = new KisOpacitySelectorView(this);
+    m_nextOpacitySelectorView = new KisOpacitySelectorView(this, KisOpacitySelector::NEXT_FRAMES_OPACITY_SELECTOR);
     m_nextOpacitySelectorView->setNumberOfFrames(m_nextFramesInput->value());
     m_nextOpacitySelectorView->setGeometry(180, 80, 105, 75);
 

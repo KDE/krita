@@ -19,19 +19,30 @@
 #include "kis_opacity_selector.h"
 #include <QPainter>
 
-KisOpacitySelector::KisOpacitySelector(int x, int y, int width, int height, QGraphicsScene *scene, int frames)
+KisOpacitySelector::KisOpacitySelector(int x, int y, int width, int height, int type, QGraphicsScene *scene, int frames)
 {
     m_x = x;
     m_y = y;
     m_width = width;
     m_height = height;
     m_frames = frames;
+
     this->setPos(m_x, m_y);
+
     QList<int> l;
-    for(int i = 0; i < frames; i++) {
-        l.append((i * 50) / frames);
+
+    if(type == KisOpacitySelector::NEXT_FRAMES_OPACITY_SELECTOR) {
+        for(int i = frames; i > 0; i--) {
+            l.append((i * 50) / frames);
+        }
+    } else if(type == KisOpacitySelector::PREV_FRAMES_OPACITY_SELECTOR) {
+        for(int i = 1; i <= frames; i++) {
+            l.append((i * 50) / frames);
+        }
     }
+
     this->setOpacityValue(l);
+
     setAcceptHoverEvents(true);
 }
 

@@ -43,7 +43,7 @@ class KisAnimationDoc::KisAnimationDocPrivate
 public:
     KisAnimationDocPrivate()
         :kranimSaver(0),
-          kranimLoader(0)
+         kranimLoader(0)
     {
     }
 
@@ -63,6 +63,7 @@ public:
     KisImageWSP image;
     QDomElement frameElement;
     int noLayers;
+    KisOnionSkinLoader* onionSkinLoader;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -70,10 +71,13 @@ KisAnimationDoc::KisAnimationDoc()
       d(new KisAnimationDocPrivate())
 {
     setMimeType(APP_MIMETYPE);
+
     d->kranimLoader = 0;
     d->saved = false;
-    //d->player = new KisAnimationPlayer(this);
     d->noLayers = 1;
+
+    //d->player = new KisAnimationPlayer(this);
+    d->onionSkinLoader = new KisOnionSkinLoader(this);
 }
 
 KisAnimationDoc::~KisAnimationDoc()
@@ -392,17 +396,7 @@ void KisAnimationDoc::loadOnionSkins()
     KisAnimation* animation = this->getAnimation();
 
     if(animation->onionSkinningEnabled()) {
-
-        //QThread* thread = new QThread(this);
-        KisOnionSkinLoader* loader = new KisOnionSkinLoader(this);
-
-        loader->loadOnionSkins();
-
-        //connect(thread, SIGNAL(started()), loader, SLOT(loadOnionSkins()));
-        //connect(thread, SIGNAL(finished()), loader, SLOT(deleteLater()));
-        //loader->moveToThread(thread);
-
-        //thread->start();
+        d->onionSkinLoader->loadOnionSkins();
     }
 }
 
@@ -643,6 +637,48 @@ void KisAnimationDoc::stop()
 {
     if(d->player->isPlaying()) {
         d->player->stop();
+    }
+}
+
+void KisAnimationDoc::setPrevOnionSkinsNumber()
+{
+    if(this->getAnimation()->onionSkinningEnabled()) {
+        d->onionSkinLoader->setPrevFramesNumber();
+    }
+}
+
+void KisAnimationDoc::setNextOnionSkinsNumber()
+{
+    if(this->getAnimation()->onionSkinningEnabled()) {
+        d->onionSkinLoader->setNextFramesNumber();
+    }
+}
+
+void KisAnimationDoc::setPrevOnionSkinsOpacity()
+{
+    if(this->getAnimation()->onionSkinningEnabled()) {
+        d->onionSkinLoader->setPrevFramesOpacity();
+    }
+}
+
+void KisAnimationDoc::setNextOnionSkinsOpacity()
+{
+    if(this->getAnimation()->onionSkinningEnabled()) {
+        d->onionSkinLoader->setNextFramesOpacity();
+    }
+}
+
+void KisAnimationDoc::setPrevOnionSkinsColor()
+{
+    if(this->getAnimation()->onionSkinningEnabled()) {
+        d->onionSkinLoader->setPrevFramesColor();
+    }
+}
+
+void KisAnimationDoc::setNextOnionSkinsColor()
+{
+    if(this->getAnimation()->onionSkinningEnabled()) {
+        d->onionSkinLoader->setNextFramesColor();
     }
 }
 

@@ -101,3 +101,33 @@ QBitArray KisOnionSkinLoader::prevFramesChannelFlags()
 
     return ba;
 }
+
+void KisOnionSkinLoader::setNextFramesColor()
+{
+    kWarning() << "Setting next onion skin color";
+}
+
+void KisOnionSkinLoader::setPrevFramesColor()
+{
+    kWarning() << "Setting previous onion skin color";
+}
+
+void KisOnionSkinLoader::setNextFramesNumber()
+{
+    kWarning() << "Setting next onion skins number";
+}
+
+void KisOnionSkinLoader::setPrevFramesNumber()
+{
+    kWarning() << "Setting previous onion skins number";
+}
+
+void KisOnionSkinLoader::setNextFramesOpacity()
+{
+    kWarning() << "Setting next onion skin opacity";
+}
+
+void KisOnionSkinLoader::setPrevFramesOpacity()
+{
+    kWarning() << "Setting previous onion skin opacity";
+}

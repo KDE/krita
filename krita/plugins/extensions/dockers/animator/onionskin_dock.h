@@ -21,6 +21,7 @@
 
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+#include "kis_opacity_selector_view.h"
 
 class KisCanvas2;
 class KisAnimation;
@@ -33,12 +34,27 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas(){ m_canvas = 0;}
 
+private:
+    void onCavasSet();
+
 private slots:
     void enableOnionSkinning(bool enable);
+
+    void setNumberOfPrevFrames(int frames);
+    void setNumberOfNextFrames(int frames);
+
+    void setPrevFramesOpacityValues();
+    void setNextFramesOpacityValues();
+
+    void setPrevFramesColor(QColor color);
+    void setNextFramesColor(QColor color);
 
 private:
     KisCanvas2* m_canvas;
     KisAnimation* m_animation;
+    KisOpacitySelectorView* m_previousOpacitySelectorView;
+    KisOpacitySelectorView* m_nextOpacitySelectorView;
+    bool m_initialized;
 };
 
 #endif // ONIONSKIN_DOCK_H

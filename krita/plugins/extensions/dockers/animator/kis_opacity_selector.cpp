@@ -112,7 +112,7 @@ void KisOpacitySelector::setOpacityValue(int frame, int val)
     this->update(m_x, m_y, m_width, m_height);
 }
 
-QList<int>* KisOpacitySelector::getOpacityValues()
+QList<int>* KisOpacitySelector::opacityValues()
 {
     return m_opacityValues;
 }

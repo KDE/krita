@@ -31,12 +31,18 @@ class KisOpacitySelectorView : public QGraphicsView
 public:
     KisOpacitySelectorView(QWidget* parent, int type);
     ~KisOpacitySelectorView();
-    QGraphicsScene *m_opacitySelectorScene;
-    KisOpacitySelector* m_opacitySelector;
+
     QSize sizeHint() const;
+
+    KisOpacitySelector* opacitySelector();
+    int numberOfFrames();
+
+private:
     void init();
 
 private:
+    QGraphicsScene *m_opacitySelectorScene;
+    KisOpacitySelector* m_opacitySelector;
     int m_numberOfFrames;
     int m_type;
 
@@ -46,6 +52,8 @@ protected:
 public slots:
     void setNumberOfFrames(int val);
 
+signals:
+    void opacityValueChanged();
 };
 
 #endif // KIS_OPACITY_SELECTOR_VIEW_H

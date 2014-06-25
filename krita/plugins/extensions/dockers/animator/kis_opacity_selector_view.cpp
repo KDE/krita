@@ -60,6 +60,19 @@ void KisOpacitySelectorView::mousePressEvent(QMouseEvent *event)
     int x = event->x();
     int y = event->y();
     QPointF p = this->mapToScene(x, y);
+
     float frameWidth = (float)100 / (float)m_numberOfFrames;
     m_opacitySelector->setOpacityValue((int)((float)p.x() / (float)frameWidth), 100 - (int)((float)p.y() * (float)100 / (float)70));
+
+    emit opacityValueChanged();
+}
+
+int KisOpacitySelectorView::numberOfFrames()
+{
+    return m_numberOfFrames;
+}
+
+KisOpacitySelector* KisOpacitySelectorView::opacitySelector()
+{
+    return m_opacitySelector;
 }

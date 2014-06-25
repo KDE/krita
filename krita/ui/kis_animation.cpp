@@ -167,6 +167,46 @@ bool KisAnimation::onionSkinningEnabled()
     return m_onionSkinningEnabled;
 }
 
+void KisAnimation::setPrevOnionSkinOpacityValues(QList<int> *values)
+{
+    m_prevOnionSkinOpacityValues = values;
+}
+
+QList<int>* KisAnimation::prevOnionSkinOpacityValues()
+{
+    return m_prevOnionSkinOpacityValues;
+}
+
+void KisAnimation::setNextOnionSkinOpacityValues(QList<int> *values)
+{
+    m_nextOnionSkinOpacityValues = values;
+}
+
+QList<int>* KisAnimation::nextOnionSkinOpacityValues()
+{
+    return m_nextOnionSkinOpacityValues;
+}
+
+void KisAnimation::setPrevOnionSkinColor(QColor color)
+{
+    m_prevOnionSkinColor = color;
+}
+
+QColor KisAnimation::prevOnionSkinColor()
+{
+    return m_prevOnionSkinColor;
+}
+
+void KisAnimation::setNextOnionSkinColor(QColor color)
+{
+    m_nextOnionSkinColor = color;
+}
+
+QColor KisAnimation::nextOnionSkinColor()
+{
+    return m_nextOnionSkinColor;
+}
+
 void KisAnimation::load(const QString &url)
 {
 

@@ -26,6 +26,7 @@
 #include <./kranimstore/kis_animation_store.h>
 #include <QHash>
 
+class KisOnionSkinLoader;
 class KisKranimLoader;
 
 #define KIS_ANIM_MIME_TYPE "application/x-krita-animation"
@@ -65,10 +66,20 @@ public:
 
     KisImageWSP currentImage();
 
-public slots:
     void play();
     void pause();
     void stop();
+
+    void setPrevOnionSkinsNumber();
+    void setNextOnionSkinsNumber();
+
+    void setPrevOnionSkinsOpacity();
+    void setNextOnionSkinsOpacity();
+
+    void setPrevOnionSkinsColor();
+    void setNextOnionSkinsColor();
+
+public slots:
     void setImageModified();
 
 private:

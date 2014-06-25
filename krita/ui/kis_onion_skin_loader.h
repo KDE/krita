@@ -29,10 +29,18 @@ class KisOnionSkinLoader : public QObject
 {
     Q_OBJECT
 public:
-    explicit KisOnionSkinLoader(KisAnimationDoc* doc, QObject *parent = 0);
+    KisOnionSkinLoader(KisAnimationDoc* doc, QObject *parent = 0);
 
-public slots:
     void loadOnionSkins();
+
+    void setNextFramesNumber();
+    void setPrevFramesNumber();
+
+    void setNextFramesOpacity();
+    void setPrevFramesOpacity();
+
+    void setNextFramesColor();
+    void setPrevFramesColor();
 
 private:
     QBitArray prevFramesChannelFlags();

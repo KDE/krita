@@ -18,9 +18,9 @@
 #include "kis_grid_shape_option.h"
 #include <klocale.h>
 
-#include "ui_wdgshapeoptions.h"
+#include "ui_wdggridshapeoptions.h"
 
-class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
+class KisShapeOptionsWidget: public QWidget, public Ui::WdgGridShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)

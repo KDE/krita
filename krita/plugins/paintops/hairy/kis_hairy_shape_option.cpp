@@ -18,9 +18,9 @@
 #include "kis_hairy_shape_option.h"
 #include <klocale.h>
 
-#include "ui_wdgshapeoptions.h"
+#include "ui_wdghairyshapeoptions.h"
 
-class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
+class KisShapeOptionsWidget: public QWidget, public Ui::WdgHairyShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)

@@ -8,7 +8,7 @@ set(kritagridpaintop_PART_SRCS
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritagridpaintop_PART_SRCS wdggridoptions.ui wdggridshapeoptions.ui )
+kde4_add_ui_files(kritagridpaintop_PART_SRCS wdggridoptions.ui wdgshapeoptions.ui )
 
 kde4_add_plugin(kritagridpaintop ${kritagridpaintop_PART_SRCS})
 

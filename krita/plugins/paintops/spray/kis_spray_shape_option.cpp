@@ -20,9 +20,9 @@
 
 #include <QImage>
 
-#include "ui_wdgsprayshapeoptions.h"
+#include "ui_wdgshapeoptions.h"
 
-class KisShapeOptionsWidget: public QWidget, public Ui::WdgSprayShapeOptions
+class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)

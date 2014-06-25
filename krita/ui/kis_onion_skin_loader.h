@@ -46,6 +46,8 @@ private:
     QBitArray prevFramesChannelFlags();
     QBitArray nextFramesChannelFlags();
 
+    int normalizeOpacityValue(int val);
+
 private:
     KisAnimationDoc* m_doc;
 };

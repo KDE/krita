@@ -45,37 +45,67 @@ void KisOnionSkinLoader::loadOnionSkins()
     QBitArray prevChanFlags = this->prevFramesChannelFlags();
     QBitArray nextChanFlags = this->nextFramesChannelFlags();
 
+    QList<int>* prevOnionSkinOpacityVal = animation->prevOnionSkinOpacityValues();
+    QList<int>* nextOnionSkinOpacityVal = animation->nextOnionSkinOpacityValues();
+
+    int currentFrame;
+
     for(int i = 1 ; i < m_doc->numberOfLayers() ; i++) {
-        location = m_doc->getPreviousKeyFrameFile(frame.x(), i * 20);
-        hasFile = m_doc->getStore()->hasFile(location);
 
-        kWarning() << location;
+        currentFrame = frame.x();
 
-        if(hasFile) {
-            KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
-            newLayer->setName("Onion Skin " + QString::number(i + 1));
+        for(int j = 0 ; j < prevOnionSkinOpacityVal->length() ; j++) {
 
-            newLayer->setOpacity(127);
-            newLayer->setChannelFlags(prevChanFlags);
-            newLayer->setUserLocked(true);
+            location = m_doc->getPreviousKeyFrameFile(currentFrame, i * 20);
+            hasFile = m_doc->getStore()->hasFile(location);
 
-            image->addNode(newLayer.data(), image->rootLayer().data());
-            m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
+            if(hasFile) {
+                KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+                newLayer->setName("Onion Skin " + QString::number(i + 1));
+
+                newLayer->setOpacity(127);
+                newLayer->setChannelFlags(prevChanFlags);
+                newLayer->setUserLocked(true);
+
+                image->addNode(newLayer.data(), image->rootLayer().data());
+                m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
+            }
+
+            currentFrame = m_doc->getPreviousKeyFramePosition(currentFrame, i * 20).x();
+
+            // A hack to prevent same onion skin multiple times
+            // when there are no previous onion skins left.
+            if(currentFrame == m_doc->getPreviousKeyFramePosition(currentFrame, i * 20).x()) {
+                break;
+            }
         }
 
-        location = m_doc->getNextKeyFrameFile(frame.x(), i * 20);
-        hasFile = m_doc->getStore()->hasFile(location);
+        currentFrame = frame.x();
 
-        if(hasFile) {
-            KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
-            newLayer->setName("Onion Skin " + QString::number(i + 1));
+        for(int j = 0 ; j < nextOnionSkinOpacityVal->length() ; j++) {
 
-            newLayer->setOpacity(127);
-            newLayer->setChannelFlags(nextChanFlags);
-            newLayer->setUserLocked(true);
+            location = m_doc->getNextKeyFrameFile(currentFrame, i * 20);
+            hasFile = m_doc->getStore()->hasFile(location);
 
-            image->addNode(newLayer.data(), image->rootLayer().data());
-            m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
+            if(hasFile) {
+                KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+                newLayer->setName("Onion Skin " + QString::number(i + 1));
+
+                newLayer->setOpacity(127);
+                newLayer->setChannelFlags(nextChanFlags);
+                newLayer->setUserLocked(true);
+
+                image->addNode(newLayer.data(), image->rootLayer().data());
+                m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
+            }
+
+            currentFrame = m_doc->getNextKeyFramePosition(currentFrame, i * 20).x();
+
+            // A hack to prevent same onion skin multiple times
+            // when there are no next onion skins left.
+            if(currentFrame == m_doc->getNextKeyFramePosition(currentFrame, i * 20).x()) {
+                break;
+            }
         }
     }
 }
@@ -102,6 +132,11 @@ QBitArray KisOnionSkinLoader::prevFramesChannelFlags()
     ba.setBit(3, true);
 
     return ba;
+}
+
+int KisOnionSkinLoader::normalizeOpacityValue(int val)
+{
+    return (val * 255) / 32;
 }
 
 void KisOnionSkinLoader::setNextFramesColor()

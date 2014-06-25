@@ -393,9 +393,7 @@ void KisAnimationDoc::addVectorLayer()
 
 void KisAnimationDoc::loadOnionSkins()
 {
-    KisAnimation* animation = this->getAnimation();
-
-    if(animation->onionSkinningEnabled()) {
+    if(this->getAnimation()->onionSkinningEnabled()) {
         d->onionSkinLoader->loadOnionSkins();
     }
 }

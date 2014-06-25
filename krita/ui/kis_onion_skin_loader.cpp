@@ -57,6 +57,7 @@ void KisOnionSkinLoader::loadOnionSkins()
 
             newLayer->setOpacity(127);
             newLayer->setChannelFlags(prevChanFlags);
+            newLayer->setUserLocked(true);
 
             image->addNode(newLayer.data(), image->rootLayer().data());
             m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
@@ -71,6 +72,7 @@ void KisOnionSkinLoader::loadOnionSkins()
 
             newLayer->setOpacity(127);
             newLayer->setChannelFlags(nextChanFlags);
+            newLayer->setUserLocked(true);
 
             image->addNode(newLayer.data(), image->rootLayer().data());
             m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);

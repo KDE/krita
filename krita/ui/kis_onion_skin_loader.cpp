@@ -49,12 +49,14 @@ void KisOnionSkinLoader::loadOnionSkins()
     QList<int>* nextOnionSkinOpacityVal = animation->nextOnionSkinOpacityValues();
 
     int currentFrame;
+    int numberOfOnionSkins;
 
     for(int i = 1 ; i < m_doc->numberOfLayers() ; i++) {
 
         currentFrame = frame.x();
+        numberOfOnionSkins = prevOnionSkinOpacityVal->length();
 
-        for(int j = 0 ; j < prevOnionSkinOpacityVal->length() ; j++) {
+        for(int j = 0 ; j < numberOfOnionSkins ; j++) {
 
             location = m_doc->getPreviousKeyFrameFile(currentFrame, i * 20);
             hasFile = m_doc->getStore()->hasFile(location);
@@ -63,7 +65,7 @@ void KisOnionSkinLoader::loadOnionSkins()
                 KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
                 newLayer->setName("Onion Skin " + QString::number(i + 1));
 
-                newLayer->setOpacity(127);
+                newLayer->setOpacity(this->normalizeOpacityValue(prevOnionSkinOpacityVal->at(numberOfOnionSkins - j - 1)));
                 newLayer->setChannelFlags(prevChanFlags);
                 newLayer->setUserLocked(true);
 
@@ -81,6 +83,7 @@ void KisOnionSkinLoader::loadOnionSkins()
         }
 
         currentFrame = frame.x();
+        numberOfOnionSkins = nextOnionSkinOpacityVal->length();
 
         for(int j = 0 ; j < nextOnionSkinOpacityVal->length() ; j++) {
 
@@ -91,7 +94,7 @@ void KisOnionSkinLoader::loadOnionSkins()
                 KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
                 newLayer->setName("Onion Skin " + QString::number(i + 1));
 
-                newLayer->setOpacity(127);
+                newLayer->setOpacity(this->normalizeOpacityValue(nextOnionSkinOpacityVal->at(j)));
                 newLayer->setChannelFlags(nextChanFlags);
                 newLayer->setUserLocked(true);
 
@@ -136,7 +139,7 @@ QBitArray KisOnionSkinLoader::prevFramesChannelFlags()
 
 int KisOnionSkinLoader::normalizeOpacityValue(int val)
 {
-    return (val * 255) / 32;
+    return (val * 255) / 100;
 }
 
 void KisOnionSkinLoader::setNextFramesColor()

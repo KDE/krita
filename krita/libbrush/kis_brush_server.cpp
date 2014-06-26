@@ -67,6 +67,7 @@ public:
         else {
             KisBrushResourceServer::importResourceFile(filename, fileCreation);
         }
+        qApp->processEvents(QEventLoop::AllEvents);
     }
 
 private:
@@ -80,6 +81,7 @@ private:
             KisAbrBrushCollection collection(filename);
             collection.load();
             foreach(KisAbrBrush * abrBrush, collection.brushes()) {
+//                abrBrush->setBrushTipImage(QImage());
                 brushes.append(abrBrush);
             }
         }
@@ -126,7 +128,9 @@ KisBrushServer::KisBrushServer()
     m_brushThread->start();
     m_brushThread->barrier();
     foreach(KisBrushSP brush, m_brushServer->resources()) {
-        brush->setBrushTipImage(QImage());
+        if (!dynamic_cast<KisAbrBrush*>(brush.data())) {
+            brush->setBrushTipImage(QImage());
+        }
     }
 }
 

@@ -34,6 +34,7 @@
 #include <QDataStream>
 #include <QMutexLocker>
 #include <QThreadPool>
+#include <QSvgRenderer>
 
 // KDE
 #include <kdebug.h>
@@ -157,6 +158,9 @@ void RenderThread::draw(QPainter &painter)
     case VectorShape::VectorTypeSvm:
         drawSvm(painter);
         break;
+    case VectorShape::VectorTypeSvg:
+        drawSvg(painter);
+        break;
     case VectorShape::VectorTypeNone:
     default:
         drawNull(painter);
@@ -224,6 +228,12 @@ void RenderThread::drawSvm(QPainter &painter) const
     svmParser.parse(m_contents);
 }
 
+void RenderThread::drawSvg(QPainter &painter) const
+{
+    QSvgRenderer renderer(m_contents);
+    renderer.render(&painter, QRectF(0, 0, m_size.width(), m_size.height()));
+}
+
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
 #ifdef VECTORSHAPE_PAINT_UNCACHED
@@ -284,6 +294,8 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
     case VectorTypeSvm:
         mimeType = "image/x-svm"; // mimetype as used inside LO/AOO
         break;
+    case VectorTypeSvg:
+        mimeType = "image/svg+xml";
     default:
         // FIXME: What here?
         mimeType = "application/x-what";
@@ -406,6 +418,8 @@ VectorShape::VectorType VectorShape::vectorType(const QByteArray &newContents)
         vectorType = VectorShape::VectorTypeEmf;
     } else if (isSvm(newContents)) {
         vectorType = VectorShape::VectorTypeSvm;
+    } else if (isSvg(newContents)) {
+        vectorType = VectorShape::VectorTypeSvg;
     } else {
         vectorType = VectorShape::VectorTypeNone;
     }
@@ -483,4 +497,10 @@ bool VectorShape::isSvm(const QByteArray &bytes)
     }
 
     return false;
+}
+
+bool VectorShape::isSvg(const QByteArray &bytes)
+{
+    kDebug(31000) << "Check for SVG";
+    return (bytes.contains("svg"));
 }

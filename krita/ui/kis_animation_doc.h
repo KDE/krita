@@ -73,8 +73,8 @@ public:
     void setPrevOnionSkinsNumber();
     void setNextOnionSkinsNumber();
 
-    void setPrevOnionSkinsOpacity();
-    void setNextOnionSkinsOpacity();
+    void setPrevOnionSkinsOpacity(int changedFrame);
+    void setNextOnionSkinsOpacity(int changedFrame);
 
     void setPrevOnionSkinsColor();
     void setNextOnionSkinsColor();

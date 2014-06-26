@@ -162,12 +162,13 @@ void KisOnionSkinLoader::setPrevFramesNumber()
     kWarning() << "Setting previous onion skins number";
 }
 
-void KisOnionSkinLoader::setNextFramesOpacity()
+void KisOnionSkinLoader::setNextFramesOpacity(int changedFrame)
 {
-    kWarning() << "Setting next onion skin opacity";
+    kWarning() << "Setting next onion skin opacity " << changedFrame;
 }
 
-void KisOnionSkinLoader::setPrevFramesOpacity()
+void KisOnionSkinLoader::setPrevFramesOpacity(int changedFrame)
 {
-    kWarning() << "Setting previous onion skin opacity";
+    int numberOfOnionSkins = m_doc->getAnimation()->prevOnionSkinOpacityValues()->length();
+    kWarning() << "Setting previous onion skin opacity " << numberOfOnionSkins - changedFrame - 1;
 }

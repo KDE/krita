@@ -36,8 +36,8 @@ public:
     void setNextFramesNumber();
     void setPrevFramesNumber();
 
-    void setNextFramesOpacity();
-    void setPrevFramesOpacity();
+    void setNextFramesOpacity(int changedFrame);
+    void setPrevFramesOpacity(int changedFrame);
 
     void setNextFramesColor();
     void setPrevFramesColor();

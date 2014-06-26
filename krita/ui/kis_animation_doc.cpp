@@ -652,17 +652,17 @@ void KisAnimationDoc::setNextOnionSkinsNumber()
     }
 }
 
-void KisAnimationDoc::setPrevOnionSkinsOpacity()
+void KisAnimationDoc::setPrevOnionSkinsOpacity(int changedFrame)
 {
     if(this->getAnimation()->onionSkinningEnabled()) {
-        d->onionSkinLoader->setPrevFramesOpacity();
+        d->onionSkinLoader->setPrevFramesOpacity(changedFrame);
     }
 }
 
-void KisAnimationDoc::setNextOnionSkinsOpacity()
+void KisAnimationDoc::setNextOnionSkinsOpacity(int changedFrame)
 {
     if(this->getAnimation()->onionSkinningEnabled()) {
-        d->onionSkinLoader->setNextFramesOpacity();
+        d->onionSkinLoader->setNextFramesOpacity(changedFrame);
     }
 }
 

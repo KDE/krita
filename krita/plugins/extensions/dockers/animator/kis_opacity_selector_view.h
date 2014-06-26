@@ -53,7 +53,7 @@ public slots:
     void setNumberOfFrames(int val);
 
 signals:
-    void opacityValueChanged();
+    void opacityValueChanged(int);
 };
 
 #endif // KIS_OPACITY_SELECTOR_VIEW_H

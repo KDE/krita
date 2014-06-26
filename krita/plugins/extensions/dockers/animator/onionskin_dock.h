@@ -43,8 +43,8 @@ private slots:
     void setNumberOfPrevFrames(int frames);
     void setNumberOfNextFrames(int frames);
 
-    void setPrevFramesOpacityValues(int changedFrame);
-    void setNextFramesOpacityValues(int changedFrame);
+    void setPrevFramesOpacityValues();
+    void setNextFramesOpacityValues();
 
     void setPrevFramesColor(QColor color);
     void setNextFramesColor(QColor color);

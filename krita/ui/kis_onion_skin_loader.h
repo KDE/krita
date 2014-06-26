@@ -34,14 +34,7 @@ public:
 
     void loadOnionSkins();
 
-    void setNextFramesNumber();
-    void setPrevFramesNumber();
-
-    void setNextFramesOpacity(int changedFrame);
-    void setPrevFramesOpacity(int changedFrame);
-
-    void setNextFramesColor();
-    void setPrevFramesColor();
+    void refreshOnionSkins();
 
 private:
     QBitArray prevFramesChannelFlags();

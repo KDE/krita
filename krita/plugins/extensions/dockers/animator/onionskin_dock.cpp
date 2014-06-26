@@ -98,8 +98,8 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
     connect(nextFramesInput, SIGNAL(valueChanged(int)), this, SLOT(setNumberOfNextFrames(int)));
 
     // Additional signal/slot connections
-    connect(m_previousOpacitySelectorView, SIGNAL(opacityValueChanged(int)), this, SLOT(setPrevFramesOpacityValues(int)));
-    connect(m_nextOpacitySelectorView, SIGNAL(opacityValueChanged(int)), this, SLOT(setNextFramesOpacityValues(int)));
+    connect(m_previousOpacitySelectorView, SIGNAL(opacityValueChanged()), this, SLOT(setPrevFramesOpacityValues()));
+    connect(m_nextOpacitySelectorView, SIGNAL(opacityValueChanged()), this, SLOT(setNextFramesOpacityValues()));
 }
 
 void OnionSkinDock::setCanvas(KoCanvasBase *canvas)
@@ -132,36 +132,36 @@ void OnionSkinDock::setNumberOfPrevFrames(int frames)
 {
     m_previousOpacitySelectorView->setNumberOfFrames(frames);
     m_animation->setPrevOnionSkinOpacityValues(m_previousOpacitySelectorView->opacitySelector()->opacityValues());
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->setPrevOnionSkinsNumber();
+    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->onionSkinStateChanged();
 }
 
 void OnionSkinDock::setNumberOfNextFrames(int frames)
 {
     m_nextOpacitySelectorView->setNumberOfFrames(frames);
     m_animation->setNextOnionSkinOpacityValues(m_nextOpacitySelectorView->opacitySelector()->opacityValues());
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->setNextOnionSkinsNumber();
+    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->onionSkinStateChanged();
 }
 
-void OnionSkinDock::setPrevFramesOpacityValues(int changedFrame)
+void OnionSkinDock::setPrevFramesOpacityValues()
 {
     m_animation->setPrevOnionSkinOpacityValues(m_previousOpacitySelectorView->opacitySelector()->opacityValues());
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->setPrevOnionSkinsOpacity(changedFrame);
+    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->onionSkinStateChanged();
 }
 
-void OnionSkinDock::setNextFramesOpacityValues(int changedFrame)
+void OnionSkinDock::setNextFramesOpacityValues()
 {
     m_animation->setNextOnionSkinOpacityValues(m_nextOpacitySelectorView->opacitySelector()->opacityValues());
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->setNextOnionSkinsOpacity(changedFrame);
+    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->onionSkinStateChanged();
 }
 
 void OnionSkinDock::setPrevFramesColor(QColor color)
 {
     m_animation->setPrevOnionSkinColor(color);
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->setPrevOnionSkinsColor();
+    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->onionSkinStateChanged();
 }
 
 void OnionSkinDock::setNextFramesColor(QColor color)
 {
     m_animation->setNextOnionSkinColor(color);
-    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->setNextOnionSkinsColor();
+    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->onionSkinStateChanged();
 }

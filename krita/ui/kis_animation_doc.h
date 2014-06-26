@@ -70,14 +70,7 @@ public:
     void pause();
     void stop();
 
-    void setPrevOnionSkinsNumber();
-    void setNextOnionSkinsNumber();
-
-    void setPrevOnionSkinsOpacity(int changedFrame);
-    void setNextOnionSkinsOpacity(int changedFrame);
-
-    void setPrevOnionSkinsColor();
-    void setNextOnionSkinsColor();
+    void onionSkinStateChanged();
 
 public slots:
     void setImageModified();

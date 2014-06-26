@@ -141,33 +141,7 @@ QBitArray KisOnionSkinLoader::prevFramesChannelFlags()
     return ba;
 }
 
-void KisOnionSkinLoader::setNextFramesColor()
+void KisOnionSkinLoader::refreshOnionSkins()
 {
-    kWarning() << "Setting next onion skin color";
-}
-
-void KisOnionSkinLoader::setPrevFramesColor()
-{
-    kWarning() << "Setting previous onion skin color";
-}
-
-void KisOnionSkinLoader::setNextFramesNumber()
-{
-    kWarning() << "Setting next onion skins number";
-}
-
-void KisOnionSkinLoader::setPrevFramesNumber()
-{
-    kWarning() << "Setting previous onion skins number";
-}
-
-void KisOnionSkinLoader::setNextFramesOpacity(int changedFrame)
-{
-    kWarning() << "Setting next onion skin opacity " << changedFrame;
-}
-
-void KisOnionSkinLoader::setPrevFramesOpacity(int changedFrame)
-{
-    int numberOfOnionSkins = m_doc->getAnimation()->prevOnionSkinOpacityValues()->length();
-    kWarning() << "Setting previous onion skin opacity " << numberOfOnionSkins - changedFrame - 1;
+    m_doc->frameSelectionChanged(m_doc->currentFramePosition());
 }

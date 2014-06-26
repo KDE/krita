@@ -638,45 +638,10 @@ void KisAnimationDoc::stop()
     }
 }
 
-void KisAnimationDoc::setPrevOnionSkinsNumber()
+void KisAnimationDoc::onionSkinStateChanged()
 {
     if(this->getAnimation()->onionSkinningEnabled()) {
-        d->onionSkinLoader->setPrevFramesNumber();
-    }
-}
-
-void KisAnimationDoc::setNextOnionSkinsNumber()
-{
-    if(this->getAnimation()->onionSkinningEnabled()) {
-        d->onionSkinLoader->setNextFramesNumber();
-    }
-}
-
-void KisAnimationDoc::setPrevOnionSkinsOpacity(int changedFrame)
-{
-    if(this->getAnimation()->onionSkinningEnabled()) {
-        d->onionSkinLoader->setPrevFramesOpacity(changedFrame);
-    }
-}
-
-void KisAnimationDoc::setNextOnionSkinsOpacity(int changedFrame)
-{
-    if(this->getAnimation()->onionSkinningEnabled()) {
-        d->onionSkinLoader->setNextFramesOpacity(changedFrame);
-    }
-}
-
-void KisAnimationDoc::setPrevOnionSkinsColor()
-{
-    if(this->getAnimation()->onionSkinningEnabled()) {
-        d->onionSkinLoader->setPrevFramesColor();
-    }
-}
-
-void KisAnimationDoc::setNextOnionSkinsColor()
-{
-    if(this->getAnimation()->onionSkinningEnabled()) {
-        d->onionSkinLoader->setNextFramesColor();
+        d->onionSkinLoader->refreshOnionSkins();
     }
 }
 

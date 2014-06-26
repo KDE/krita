@@ -70,6 +70,8 @@ void KisOnionSkinLoader::loadOnionSkins()
                 newLayer->setUserLocked(true);
 
                 image->addNode(newLayer.data(), image->rootLayer().data());
+                m_doc->addCurrentLoadedLayer(newLayer);
+
                 m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
             }
 
@@ -99,6 +101,8 @@ void KisOnionSkinLoader::loadOnionSkins()
                 newLayer->setUserLocked(true);
 
                 image->addNode(newLayer.data(), image->rootLayer().data());
+                m_doc->addCurrentLoadedLayer(newLayer);
+
                 m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
             }
 

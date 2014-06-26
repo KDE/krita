@@ -63,7 +63,7 @@ public:
     QDomElement frameElement;
     int noLayers;
     KisOnionSkinLoader* onionSkinLoader;
-    QList<KisLayerSP> currentLayers;
+    QList<KisLayerSP> currentLoadedLayers;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -118,7 +118,7 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
     bool hasFile = false;
     QRect frame = QRect(0, 0, 10, 20);
 
-    d->currentLayers.clear();
+    d->currentLoadedLayers.clear();
 
     for(int i = 0 ; i < d->noLayers ; i++) {
         location = this->getFrameFile(frame.x(), i * 20);
@@ -130,7 +130,7 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
             newLayer->setName("Layer " + QString::number(i + 1));
 
             this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
-            d->currentLayers.append(newLayer);
+            d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
 
@@ -170,7 +170,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     QString location = "";
     bool hasFile = false;
 
-    d->currentLayers.clear();
+    d->currentLoadedLayers.clear();
 
     for(int i = 0 ; i < d->noLayers ; i++) {
         location = this->getFrameFile(frame.x(), i * 20);
@@ -182,7 +182,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
 
             this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
-            d->currentLayers.append(newLayer);
+            d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
 
@@ -221,7 +221,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     QString location = "";
     bool hasFile = false;
 
-    d->currentLayers.clear();
+    d->currentLoadedLayers.clear();
 
     // Load frames from layers below
     for(int i = 0 ; i < y ; i++) {
@@ -233,7 +233,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
 
             this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
-            d->currentLayers.append(newLayer);
+            d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
@@ -248,7 +248,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     }
 
     this->image()->addNode(d->currentFrame.data(), this->image()->rootLayer().data());
-    d->currentLayers.append(d->currentFrame);
+    d->currentLoadedLayers.append(d->currentFrame);
 
     // Load the frames from layers above
     for(int i = y + 1; i < d->noLayers ; i++) {
@@ -260,7 +260,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
 
             this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
-            d->currentLayers.append(newLayer);
+            d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
@@ -268,9 +268,9 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
     this->updateXML();
 
-    this->updateActiveFrame();
-
     this->loadOnionSkins();
+
+    this->updateActiveFrame();
 
     this->image()->refreshGraph();
 }
@@ -295,7 +295,7 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     QString location = "";
     bool hasFile = false;
 
-    d->currentLayers.clear();
+    d->currentLoadedLayers.clear();
 
     // Load the frames from layers below
     for(int i = 0 ; i < y ; i++) {
@@ -307,7 +307,7 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
 
             this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
-            d->currentLayers.append(newLayer);
+            d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
@@ -323,7 +323,7 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     }
 
     this->image()->addNode(d->currentFrame.data(), this->image()->rootLayer().data());
-    d->currentLayers.append(d->currentFrame);
+    d->currentLoadedLayers.append(d->currentFrame);
 
     d->kranimLoader->loadFrame(d->currentFrame, d->store, location);
 
@@ -337,7 +337,7 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
 
             this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
-            d->currentLayers.append(newLayer);
+            d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
@@ -345,9 +345,9 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
 
     this->updateXML();
 
-    this->updateActiveFrame();
-
     this->loadOnionSkins();
+
+    this->updateActiveFrame();
 
     this->image()->refreshGraph();
 }
@@ -385,7 +385,7 @@ void KisAnimationDoc::addPaintLayer()
     int layer = d->currentFramePosition.y() + 20;
     int frame = 0;
 
-    d->currentLayers.clear();
+    d->currentLoadedLayers.clear();
 
     for(int i = 0 ; i < d->noLayers ; i++) {
         location = this->getFrameFile(frame, i * 20);
@@ -397,7 +397,7 @@ void KisAnimationDoc::addPaintLayer()
             newLayer->setName("Layer " + QString::number(i + 1));
 
             this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
-            d->currentLayers.append(newLayer);
+            d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
@@ -410,7 +410,7 @@ void KisAnimationDoc::addPaintLayer()
     d->currentFrame->setName("Layer " + QString::number(d->noLayers));
 
     this->image()->addNode(d->currentFrame.data(), this->image()->rootLayer().data());
-    d->currentLayers.append(d->currentFrame);
+    d->currentLoadedLayers.append(d->currentFrame);
 
     this->updateXML();
 
@@ -608,10 +608,10 @@ void KisAnimationDoc::preSaveAnimation()
 
 void KisAnimationDoc::removePreviousLayers()
 {
-    int length = d->currentLayers.length();
+    int length = d->currentLoadedLayers.length();
 
     for(int i = 0 ; i < length ; i++) {
-        this->image()->removeNode(d->currentLayers.at(i));
+        this->image()->removeNode(d->currentLoadedLayers.at(i));
     }
 }
 
@@ -682,6 +682,11 @@ void KisAnimationDoc::onionSkinStateChanged()
     } else {
         this->frameSelectionChanged(this->currentFramePosition());
     }
+}
+
+void KisAnimationDoc::addCurrentLoadedLayer(KisLayerSP layer)
+{
+    d->currentLoadedLayers.append(layer);
 }
 
 #include "kis_animation_doc.moc"

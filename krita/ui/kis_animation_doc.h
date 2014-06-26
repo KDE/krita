@@ -70,6 +70,8 @@ public:
 
     void onionSkinStateChanged();
 
+    void addCurrentLoadedLayer(KisLayerSP layer);
+
 public slots:
     void setImageModified();
 

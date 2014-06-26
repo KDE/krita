@@ -295,7 +295,7 @@ public:
     void prepareBrushPyramid() const;
     void clearBrushPyramid();
 
-protected:
+//protected:
 
     KisBrush(const KisBrush& rhs);
 

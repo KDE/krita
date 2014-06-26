@@ -256,6 +256,8 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     this->updateXML();
     this->updateActiveFrame();
 
+    this->loadOnionSkins();
+
     setCurrentImage(d->image);
 }
 
@@ -321,6 +323,8 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
 
     this->updateXML();
     this->updateActiveFrame();
+
+    this->loadOnionSkins();
 
     setCurrentImage(d->image);
 }
@@ -642,6 +646,8 @@ void KisAnimationDoc::onionSkinStateChanged()
 {
     if(this->getAnimation()->onionSkinningEnabled()) {
         d->onionSkinLoader->refreshOnionSkins();
+    } else {
+        this->frameSelectionChanged(this->currentFramePosition());
     }
 }
 

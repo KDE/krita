@@ -42,8 +42,6 @@ private:
 
 private:
     KisAnimationDoc* m_doc;
-    QHash<int, QList<KisLayerSP> > m_previousFrames;
-    QHash<int, QList<KisLayerSP> > m_nextFrames;
 };
 
 #endif // KIS_ONION_SKIN_LOADER_H

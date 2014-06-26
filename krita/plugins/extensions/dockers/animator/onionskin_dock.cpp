@@ -126,6 +126,7 @@ void OnionSkinDock::onCavasSet()
 void OnionSkinDock::enableOnionSkinning(bool enable)
 {
     m_animation->enableOnionSkinning(enable);
+    dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->onionSkinStateChanged();
 }
 
 void OnionSkinDock::setNumberOfPrevFrames(int frames)

@@ -89,6 +89,7 @@ KisAnimationDoc::~KisAnimationDoc()
 
 void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationStore *store, QDomDocument doc)
 {
+    d->currentLoadedLayers.append(this->image()->root()->firstChild());
     this->removePreviousLayers();
 
     // Set all the variables

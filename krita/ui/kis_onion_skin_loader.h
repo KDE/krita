@@ -47,8 +47,6 @@ private:
     QBitArray prevFramesChannelFlags();
     QBitArray nextFramesChannelFlags();
 
-    int normalizeOpacityValue(int val);
-
 private:
     KisAnimationDoc* m_doc;
     QHash<int, QList<KisLayerSP> > m_previousFrames;

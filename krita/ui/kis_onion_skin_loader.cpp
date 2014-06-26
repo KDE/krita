@@ -65,7 +65,7 @@ void KisOnionSkinLoader::loadOnionSkins()
                 KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
                 newLayer->setName("Onion Skin " + QString::number(i + 1));
 
-                newLayer->setOpacity(this->normalizeOpacityValue(prevOnionSkinOpacityVal->at(numberOfOnionSkins - j - 1)));
+                newLayer->setPercentOpacity(prevOnionSkinOpacityVal->at(numberOfOnionSkins - j - 1));
                 newLayer->setChannelFlags(prevChanFlags);
                 newLayer->setUserLocked(true);
 
@@ -96,7 +96,7 @@ void KisOnionSkinLoader::loadOnionSkins()
                 KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
                 newLayer->setName("Onion Skin " + QString::number(i + 1));
 
-                newLayer->setOpacity(this->normalizeOpacityValue(nextOnionSkinOpacityVal->at(j)));
+                newLayer->setPercentOpacity(nextOnionSkinOpacityVal->at(j));
                 newLayer->setChannelFlags(nextChanFlags);
                 newLayer->setUserLocked(true);
 
@@ -139,11 +139,6 @@ QBitArray KisOnionSkinLoader::prevFramesChannelFlags()
     ba.setBit(3, true);
 
     return ba;
-}
-
-int KisOnionSkinLoader::normalizeOpacityValue(int val)
-{
-    return (val * 255) / 100;
 }
 
 void KisOnionSkinLoader::setNextFramesColor()

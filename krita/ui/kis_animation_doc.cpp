@@ -32,6 +32,8 @@
 #include <QHash>
 #include <QThread>
 #include <kis_onion_skin_loader.h>
+#include <kis_view2.h>
+#include <kis_node_manager.h>
 
 #define APP_MIMETYPE "application/x-krita-animation"
 
@@ -644,6 +646,7 @@ KisKranimLoader* KisAnimationDoc::kranimLoader()
 void KisAnimationDoc::updateActiveFrame()
 {
     this->setPreActivatedNode(d->currentFrame);
+    dynamic_cast<KisView2*>(this->documentPart()->views().at(0))->nodeManager()->slotNonUiActivatedNode(d->currentFrame);
 }
 
 KisAnimationStore* KisAnimationDoc::getStore()

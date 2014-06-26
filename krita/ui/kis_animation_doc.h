@@ -64,8 +64,6 @@ public:
 
     KisKranimLoader* kranimLoader();
 
-    KisImageWSP currentImage();
-
     void play();
     void pause();
     void stop();
@@ -77,11 +75,17 @@ public slots:
 
 private:
     void preSaveAnimation();
+
     void updateXML();
+
     void updateActiveFrame();
+
     void loadOnionSkins();
+
     QString getFrameFile(int frame, int layer);
     QRect getParentFramePosition(int frame, int layer);
+
+    void removePreviousLayers();
 
 private:
     class KisAnimationDocPrivate;

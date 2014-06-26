@@ -34,7 +34,7 @@ KisOnionSkinLoader::KisOnionSkinLoader(KisAnimationDoc *doc, QObject *parent) :
 
 void KisOnionSkinLoader::loadOnionSkins()
 {
-    KisImageWSP image = m_doc->currentImage();
+    KisImageWSP image = m_doc->image();
 
     QRect frame = m_doc->currentFramePosition();
     KisAnimation* animation = m_doc->getAnimation();

@@ -60,10 +60,10 @@ public:
     bool saved;
     KisAnimationStore* store;
     KisAnimationPlayer* player;
-    KisImageWSP image;
     QDomElement frameElement;
     int noLayers;
     KisOnionSkinLoader* onionSkinLoader;
+    QList<KisLayerSP> currentLayers;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -87,6 +87,8 @@ KisAnimationDoc::~KisAnimationDoc()
 
 void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationStore *store, QDomDocument doc)
 {
+    this->removePreviousLayers();
+
     // Set all the variables
     d->store = store;
     d->doc = doc;
@@ -112,14 +114,11 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
 
     d->noLayers = timelineMap.size();
 
-    // Load the first frame of the animation
-    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-    d->image->setResolution(animation->resolution(), animation->resolution());
-
     QString location = "";
     bool hasFile = false;
     QRect frame = QRect(0, 0, 10, 20);
+
+    d->currentLayers.clear();
 
     for(int i = 0 ; i < d->noLayers ; i++) {
         location = this->getFrameFile(frame.x(), i * 20);
@@ -127,9 +126,12 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
 
         if(hasFile) {
 
-            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            KisLayerSP newLayer = new KisPaintLayer(this->image().data(), this->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+
+            this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
+            d->currentLayers.append(newLayer);
+
             d->kranimLoader->loadFrame(newLayer, d->store, location);
 
             // Current frame
@@ -142,13 +144,15 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
 
     this->updateActiveFrame();
 
-    setCurrentImage(d->image);
+    this->image()->refreshGraph();
 
     emit sigImportFinished(timelineMap);
 }
 
 void KisAnimationDoc::frameSelectionChanged(QRect frame)
 {
+    this->removePreviousLayers();
+
     KisAnimation* animation = this->getAnimation();
 
     if (!d->saved) {
@@ -166,9 +170,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     QString location = "";
     bool hasFile = false;
 
-    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-    d->image->setResolution(animation->resolution(), animation->resolution());
+    d->currentLayers.clear();
 
     for(int i = 0 ; i < d->noLayers ; i++) {
         location = this->getFrameFile(frame.x(), i * 20);
@@ -176,9 +178,12 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
         if(hasFile) {
 
-            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            KisLayerSP newLayer = new KisPaintLayer(this->image().data(), this->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+
+            this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
+            d->currentLayers.append(newLayer);
+
             d->kranimLoader->loadFrame(newLayer, d->store, location);
 
             // Current frame
@@ -192,11 +197,14 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     this->loadOnionSkins();
 
     this->updateActiveFrame();
-    setCurrentImage(d->image);
+
+    this->image()->refreshGraph();
 }
 
 void KisAnimationDoc::addBlankFrame(QRect frame)
 {
+    this->removePreviousLayers();
+
     KisAnimation* animation = this->getAnimation();
 
     if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {
@@ -205,10 +213,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
     d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
 
-    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-    d->image->setResolution(animation->resolution(), animation->resolution());
-
     d->currentFramePosition = frame;
 
     int x = frame.x();
@@ -216,6 +220,8 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
     QString location = "";
     bool hasFile = false;
+
+    d->currentLayers.clear();
 
     // Load frames from layers below
     for(int i = 0 ; i < y ; i++) {
@@ -223,22 +229,26 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
         hasFile = d->store->hasFile(location);
 
         if(hasFile) {
-            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            KisLayerSP newLayer = new KisPaintLayer(this->image().data(), this->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+
+            this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
+            d->currentLayers.append(newLayer);
+
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
     }
 
     // Load the new frame
-    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+    d->currentFrame = new KisPaintLayer(this->image(), this->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number((d->currentFramePosition.y() / 20) + 1));
 
     if(d->currentFramePosition.y() == 0) {
         d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     }
 
-    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+    this->image()->addNode(d->currentFrame.data(), this->image()->rootLayer().data());
+    d->currentLayers.append(d->currentFrame);
 
     // Load the frames from layers above
     for(int i = y + 1; i < d->noLayers ; i++) {
@@ -246,23 +256,29 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
         hasFile = d->store->hasFile(location);
 
         if(hasFile) {
-            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            KisLayerSP newLayer = new KisPaintLayer(this->image().data(), this->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+
+            this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
+            d->currentLayers.append(newLayer);
+
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
     }
 
     this->updateXML();
+
     this->updateActiveFrame();
 
     this->loadOnionSkins();
 
-    setCurrentImage(d->image);
+    this->image()->refreshGraph();
 }
 
 void KisAnimationDoc::addKeyFrame(QRect frame)
 {
+    this->removePreviousLayers();
+
     KisAnimation* animation = this->getAnimation();
 
     if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {
@@ -270,10 +286,6 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     }
 
     d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
-
-    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-    d->image->setResolution(animation->resolution(), animation->resolution());
 
     d->currentFramePosition = frame;
 
@@ -283,29 +295,36 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     QString location = "";
     bool hasFile = false;
 
+    d->currentLayers.clear();
+
     // Load the frames from layers below
     for(int i = 0 ; i < y ; i++) {
         location = this->getFrameFile(x, i * 20);
         hasFile = d->store->hasFile(location);
 
         if(hasFile) {
-            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            KisLayerSP newLayer = new KisPaintLayer(this->image().data(), this->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+
+            this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
+            d->currentLayers.append(newLayer);
+
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
     }
 
     // Load the cloned frame
     location = this->getFrameFile(frame.x(), frame.y());
-    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+    d->currentFrame = new KisPaintLayer(this->image().data(), this->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number((d->currentFramePosition.y() / 20) + 1));
 
     if(d->currentFramePosition.y() == 0) {
         d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     }
 
-    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+    this->image()->addNode(d->currentFrame.data(), this->image()->rootLayer().data());
+    d->currentLayers.append(d->currentFrame);
+
     d->kranimLoader->loadFrame(d->currentFrame, d->store, location);
 
     // Load the frames from layers above
@@ -314,19 +333,23 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
         hasFile = d->store->hasFile(location);
 
         if(hasFile) {
-            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            KisLayerSP newLayer = new KisPaintLayer(this->image().data(), this->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+
+            this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
+            d->currentLayers.append(newLayer);
+
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
     }
 
     this->updateXML();
+
     this->updateActiveFrame();
 
     this->loadOnionSkins();
 
-    setCurrentImage(d->image);
+    this->image()->refreshGraph();
 }
 
 void KisAnimationDoc::breakFrame(QRect frame, bool blank)
@@ -344,6 +367,8 @@ void KisAnimationDoc::breakFrame(QRect frame, bool blank)
 
 void KisAnimationDoc::addPaintLayer()
 {
+    this->removePreviousLayers();
+
     KisAnimation* animation = this->getAnimation();
 
     if(!d->saved) {
@@ -356,12 +381,11 @@ void KisAnimationDoc::addPaintLayer()
     QString location = "";
     bool hasFile = false;
 
-    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-    d->image->setResolution(animation->resolution(), animation->resolution());
 
     int layer = d->currentFramePosition.y() + 20;
     int frame = 0;
+
+    d->currentLayers.clear();
 
     for(int i = 0 ; i < d->noLayers ; i++) {
         location = this->getFrameFile(frame, i * 20);
@@ -369,9 +393,12 @@ void KisAnimationDoc::addPaintLayer()
 
         if(hasFile) {
 
-            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            KisLayerSP newLayer = new KisPaintLayer(this->image().data(), this->image()->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+
+            this->image()->addNode(newLayer.data(), this->image()->rootLayer().data());
+            d->currentLayers.append(newLayer);
+
             d->kranimLoader->loadFrame(newLayer, d->store, location);
         }
     }
@@ -379,15 +406,17 @@ void KisAnimationDoc::addPaintLayer()
     d->noLayers++;
 
     d->currentFramePosition = QRect(frame, layer, 10, 20);
-    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), OPACITY_OPAQUE_U8, animation->colorSpace());
+    d->currentFrame = new KisPaintLayer(this->image().data(), this->image()->nextLayerName(), OPACITY_OPAQUE_U8, animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number(d->noLayers));
 
-    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+    this->image()->addNode(d->currentFrame.data(), this->image()->rootLayer().data());
+    d->currentLayers.append(d->currentFrame);
 
     this->updateXML();
+
     this->updateActiveFrame();
 
-    setCurrentImage(d->image);
+    this->image()->refreshGraph();
 }
 
 void KisAnimationDoc::addVectorLayer()
@@ -577,6 +606,15 @@ void KisAnimationDoc::preSaveAnimation()
     d->saved = true;
 }
 
+void KisAnimationDoc::removePreviousLayers()
+{
+    int length = d->currentLayers.length();
+
+    for(int i = 0 ; i < length ; i++) {
+        this->image()->removeNode(d->currentLayers.at(i));
+    }
+}
+
 void KisAnimationDoc::setImageModified()
 {
     setModified(true);
@@ -591,11 +629,6 @@ QRect KisAnimationDoc::currentFramePosition()
 KisLayerSP KisAnimationDoc::currentFrame()
 {
     return d->currentFrame;
-}
-
-KisImageWSP KisAnimationDoc::currentImage()
-{
-    return d->image;
 }
 
 int KisAnimationDoc::numberOfLayers()

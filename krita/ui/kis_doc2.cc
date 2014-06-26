@@ -559,23 +559,6 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
 {
     //if (!image.isValid()) return;
 
-    ///XXX: causes crash in New image. Move to KisAnimationDoc
-    //qDebug() << "setCurrentImage()" << this->documentPart()->shellCount();
-    //qDebug() << "setCurrentImage()" << this->documentPart()->shells().at(0);
-    QList<KoCanvasObserverBase*> canvasObservers;
-    KoCanvasBase* tmpCanvas = 0;
-
-    if(this->documentPart()->viewCount() > 0) {
-        if(this->documentPart()->views().at(0)->mainWindow()->canvasObservers().count() > 0) {
-            //qDebug() << "Unsetting canvas" << this->documentPart()->shells().at(0)->canvasObservers();
-            canvasObservers = this->documentPart()->views().at(0)->mainWindow()->canvasObservers();
-            tmpCanvas = canvasObservers.at(0)->observedCanvas();
-            foreach(KoCanvasObserverBase* canvasObserver, canvasObservers){
-                canvasObserver->unsetObservedCanvas();
-            }
-        }
-    }
-
     if (m_d->image) {
         // Disconnect existing sig/slot connections
         m_d->image->disconnect(this);
@@ -589,15 +572,6 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
 
     connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
-    if(this->documentPart()->viewCount() > 0) {
-        if(this->documentPart()->views().at(0)->mainWindow()->canvasObservers().count() > 0){
-            //qDebug() << "Setting back" << this->documentPart()->shells().at(0)->canvasObservers();
-            canvasObservers = this->documentPart()->views().at(0)->mainWindow()->canvasObservers();
-            foreach(KoCanvasObserverBase* canvasObserver, canvasObservers){
-                canvasObserver->setObservedCanvas(tmpCanvas);
-            }
-        }
-    }
     emit sigLoadingFinished();
 }
 

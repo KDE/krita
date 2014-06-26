@@ -71,6 +71,8 @@ void KisOnionSkinLoader::loadOnionSkins()
 
                 image->addNode(newLayer.data(), image->rootLayer().data());
                 m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
+
+                m_previousFrames[i].append(newLayer);
             }
 
             currentFrame = m_doc->getPreviousKeyFramePosition(currentFrame, i * 20).x();
@@ -100,6 +102,8 @@ void KisOnionSkinLoader::loadOnionSkins()
 
                 image->addNode(newLayer.data(), image->rootLayer().data());
                 m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
+
+                m_nextFrames[i].append(newLayer);
             }
 
             currentFrame = m_doc->getNextKeyFramePosition(currentFrame, i * 20).x();

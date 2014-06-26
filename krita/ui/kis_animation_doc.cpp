@@ -65,7 +65,7 @@ public:
     QDomElement frameElement;
     int noLayers;
     KisOnionSkinLoader* onionSkinLoader;
-    QList<KisLayerSP> currentLoadedLayers;
+    QList<KisNodeSP> currentLoadedLayers;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -153,8 +153,6 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
 
 void KisAnimationDoc::frameSelectionChanged(QRect frame)
 {
-    this->removePreviousLayers();
-
     KisAnimation* animation = this->getAnimation();
 
     if (!d->saved) {
@@ -172,6 +170,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     QString location = "";
     bool hasFile = false;
 
+    this->removePreviousLayers();
     d->currentLoadedLayers.clear();
 
     for(int i = 0 ; i < d->noLayers ; i++) {
@@ -205,8 +204,6 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
 void KisAnimationDoc::addBlankFrame(QRect frame)
 {
-    this->removePreviousLayers();
-
     KisAnimation* animation = this->getAnimation();
 
     if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {
@@ -223,6 +220,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     QString location = "";
     bool hasFile = false;
 
+    this->removePreviousLayers();
     d->currentLoadedLayers.clear();
 
     // Load frames from layers below
@@ -279,8 +277,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
 void KisAnimationDoc::addKeyFrame(QRect frame)
 {
-    this->removePreviousLayers();
-
     KisAnimation* animation = this->getAnimation();
 
     if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {
@@ -297,6 +293,7 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     QString location = "";
     bool hasFile = false;
 
+    this->removePreviousLayers();
     d->currentLoadedLayers.clear();
 
     // Load the frames from layers below
@@ -369,8 +366,6 @@ void KisAnimationDoc::breakFrame(QRect frame, bool blank)
 
 void KisAnimationDoc::addPaintLayer()
 {
-    this->removePreviousLayers();
-
     KisAnimation* animation = this->getAnimation();
 
     if(!d->saved) {
@@ -387,6 +382,7 @@ void KisAnimationDoc::addPaintLayer()
     int layer = d->currentFramePosition.y() + 20;
     int frame = 0;
 
+    this->removePreviousLayers();
     d->currentLoadedLayers.clear();
 
     for(int i = 0 ; i < d->noLayers ; i++) {
@@ -563,6 +559,8 @@ void KisAnimationDoc::updateXML()
 
 void KisAnimationDoc::preSaveAnimation()
 {
+    d->currentLoadedLayers.append(this->image()->root()->firstChild());
+
     KisAnimation* animation = this->getAnimation();
 
     QString filename = animation->location() + "/" + animation->name() + ".kranim";

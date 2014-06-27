@@ -24,43 +24,118 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_animation_part.h>
-#include <QObject>
+#include <kranim/kis_kranim_loader.h>
 
-struct KisAnimationPlayer::Private
-{
-public:
-    KisAnimationDoc* doc;
-    KisAnimationStore* store;
-    KisAnimation* animation;
-    QList<KisImageWSP>* cache;
-    bool cached;
-    bool playing;
-};
+#include <QObject>
+#include <QTimer>
 
 KisAnimationPlayer::KisAnimationPlayer(KisAnimationDoc *doc)
 {
-    d->doc = doc;
-    d->store = doc->getStore();
-    d->cached = false;
-    d->playing = false;
+    m_doc = doc;
+    m_playing = false;
+    m_currentFrame = 0;
+    m_loop = false;
 }
 
-bool KisAnimationPlayer::isPlaying()
+void KisAnimationPlayer::updateFrame()
 {
-    return d->playing;
+    if(m_currentFrame > 14) {
+        if(m_loop) {
+            this->play(false);
+        } else {
+            this->stop();
+        }
+        return;
+    }
+
+    int numberOfLayers = m_doc->numberOfLayers();
+
+    KisImageWSP image = m_doc->image();
+
+    m_doc->removePreviousLayers();
+
+    for(int layer = 0 ; layer < numberOfLayers ; layer++) {
+        KisLayerSP newLayer = m_cache.at(m_currentFrame).value(layer);
+        image->addNode(newLayer, image->rootLayer().data());
+        m_doc->addCurrentLoadedLayer(newLayer);
+    }
+
+    image->refreshGraph();
+    m_currentFrame++;
 }
 
-void KisAnimationPlayer::play()
+void KisAnimationPlayer::play(bool cache)
 {
-    d->playing = true;
+    qDebug() << "Play";
+    m_playing = true;
+
+    if(cache) {
+        this->cache();
+    }
+
+    m_currentFrame = 0;
+
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+    m_timer->start(100);
 }
 
 void KisAnimationPlayer::pause()
 {
-    d->playing = false;
+    qDebug() << "Pause";
+    m_playing = false;
+    m_timer->stop();
+    m_cache.clear();
 }
 
 void KisAnimationPlayer::stop()
 {
-    d->playing = false;
+    qDebug() << "Stop";
+    m_playing = false;
+    m_timer->stop();
+    m_cache.clear();
+    m_doc->frameSelectionChanged(m_doc->currentFramePosition());
+}
+
+bool KisAnimationPlayer::isPlaying()
+{
+    return m_playing;
+}
+
+void KisAnimationPlayer::cache()
+{
+    QString location = "";
+    bool hasFile = false;
+
+    KisAnimation* animation = m_doc->getAnimation();
+    KisImageWSP image = m_doc->image();
+
+    int numberOfLayers = m_doc->numberOfLayers();
+
+    int currentFrame = 0;
+
+    QHash<int, KisLayerSP> layersMap;
+
+    while(true) {
+
+        if(currentFrame == 15) {
+            break;
+        }
+
+        layersMap.clear();
+
+        for(int layer = 0 ; layer < numberOfLayers ; layer++) {
+            location = m_doc->getFrameFile(currentFrame * 10, layer * 20);
+            hasFile = m_doc->getStore()->hasFile(location);
+
+            if(hasFile) {
+                KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+                m_doc->kranimLoader()->loadFrame(newLayer, m_doc->getStore(), location);
+                layersMap[layer] = newLayer;
+            }
+        }
+
+        m_cache.append(layersMap);
+        currentFrame++;
+    }
 }

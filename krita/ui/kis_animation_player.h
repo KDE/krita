@@ -20,6 +20,9 @@
 
 #include <kis_animation_doc.h>
 #include <QObject>
+#include <QList>
+#include <QHash>
+#include <QTimer>
 
 class KisAnimationPlayer : public QObject
 {
@@ -27,7 +30,7 @@ class KisAnimationPlayer : public QObject
 public:
     KisAnimationPlayer(KisAnimationDoc* doc);
 
-    void play();
+    void play(bool cache=true);
 
     void stop();
 
@@ -35,9 +38,18 @@ public:
 
     bool isPlaying();
 
+    void cache();
+
+private slots:
+    void updateFrame();
+
 private:
-    struct Private;
-    Private* d;
+    KisAnimationDoc* m_doc;
+    bool m_playing;
+    QList<QHash<int, KisLayerSP> > m_cache;
+    int m_currentFrame;
+    QTimer* m_timer;
+    bool m_loop;
 };
 
 #endif // KIS_ANIMATION_PLAYER_H

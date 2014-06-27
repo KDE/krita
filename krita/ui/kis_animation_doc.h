@@ -51,9 +51,11 @@ public:
 
     void loadAnimationFile(KisAnimation* animation, KisAnimationStore* store, QDomDocument doc);
 
+    QRect getParentFramePosition(int frame, int layer);
     QRect getPreviousKeyFramePosition(int frame, int layer);
     QRect getNextKeyFramePosition(int frame, int layer);
 
+    QString getFrameFile(int frame, int layer);
     QString getPreviousKeyFrameFile(int frame, int layer);
     QString getNextKeyFrameFile(int frame, int layer);
 
@@ -72,6 +74,8 @@ public:
 
     void addCurrentLoadedLayer(KisLayerSP layer);
 
+    void removePreviousLayers();
+
 public slots:
     void setImageModified();
 
@@ -83,11 +87,6 @@ private:
     void updateActiveFrame();
 
     void loadOnionSkins();
-
-    QString getFrameFile(int frame, int layer);
-    QRect getParentFramePosition(int frame, int layer);
-
-    void removePreviousLayers();
 
 private:
     class KisAnimationDocPrivate;

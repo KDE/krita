@@ -43,9 +43,7 @@ void KisOnionSkinLoader::loadOnionSkins()
     bool hasFile = false;
 
     QBitArray prevChanFlags = this->prevFramesChannelFlags();
-    QBitArray nextChanFlags = this->nextFramesChannelFlags();
-
-    QList<int>* prevOnionSkinOpacityVal = animation->prevOnionSkinOpacityValues();
+    QBitArray nextChanFlags = this->nextFramesChannelFlags();    QList<int>* prevOnionSkinOpacityVal = animation->prevOnionSkinOpacityValues();
     QList<int>* nextOnionSkinOpacityVal = animation->nextOnionSkinOpacityValues();
 
     int currentFrame;

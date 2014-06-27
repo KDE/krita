@@ -78,7 +78,7 @@ KisAnimationDoc::KisAnimationDoc()
     d->saved = false;
     d->noLayers = 1;
 
-    //d->player = new KisAnimationPlayer(this);
+    d->player = new KisAnimationPlayer(this);
     d->onionSkinLoader = new KisOnionSkinLoader(this);
 }
 
@@ -660,7 +660,9 @@ KisAnimation* KisAnimationDoc::getAnimation()
 
 void KisAnimationDoc::play()
 {
-    d->player->play();
+    if(!d->player->isPlaying()) {
+        d->player->play();
+    }
 }
 
 void KisAnimationDoc::pause()

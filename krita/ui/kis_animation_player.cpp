@@ -34,18 +34,18 @@ KisAnimationPlayer::KisAnimationPlayer(KisAnimationDoc *doc)
     m_doc = doc;
     m_playing = false;
     m_currentFrame = 0;
-    m_loop = false;
+    m_loop = true;
 }
 
 void KisAnimationPlayer::updateFrame()
 {
     if(m_currentFrame > 14) {
         if(m_loop) {
-            this->play(false);
+            m_currentFrame = 0;
         } else {
             this->stop();
+            return;
         }
-        return;
     }
 
     int numberOfLayers = m_doc->numberOfLayers();

@@ -66,6 +66,9 @@ public:
     bool defOnionSkinningEnabled() const;
     void defOnionSkinningEnabled(bool state) const;
 
+    int defFps() const;
+    void defFps(int value) const;
+
     bool defLoopingEnabled() const;
     void defLoopingEnabled(bool state) const;
 

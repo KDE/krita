@@ -197,6 +197,16 @@ void KisConfig::defOnionSkinningEnabled(bool state) const
     m_cfg.writeEntry("onionSkinningEnabled", state);
 }
 
+int KisConfig::defFps() const
+{
+    return m_cfg.readEntry("fps", 12);
+}
+
+void KisConfig::defFps(int value) const
+{
+    m_cfg.writeEntry("fps", value);
+}
+
 bool KisConfig::defLoopingEnabled() const
 {
     return m_cfg.readEntry("loopingEnabled", true);

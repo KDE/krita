@@ -36,8 +36,18 @@ AnimatorPlaybackDialog::AnimatorPlaybackDialog(QWidget *parent)
 
     connect(loopState, SIGNAL(clicked(bool)), this, SLOT(enableLooping(bool)));
 
+    QLabel* fpsLabel = new QLabel("Frame per second:", this);
+
+    QSpinBox* fpsInput = new QSpinBox(this);
+    fpsInput->setRange(1, 30);
+    fpsInput->setValue(cfg.defFps());
+
+    connect(fpsInput, SIGNAL(valueChanged(int)), this, SLOT(setFps(int)));
+
     QGridLayout* mainLayout = new QGridLayout(this);
     mainLayout->addWidget(loopState, 0, 0);
+    mainLayout->addWidget(fpsLabel, 1, 0);
+    mainLayout->addWidget(fpsInput, 1, 1);
 
     this->setLayout(mainLayout);
 }
@@ -45,6 +55,11 @@ AnimatorPlaybackDialog::AnimatorPlaybackDialog(QWidget *parent)
 void AnimatorPlaybackDialog::enableLooping(bool enable)
 {
     m_model->enableLooping(enable);
+}
+
+void AnimatorPlaybackDialog::setFps(int value)
+{
+    m_model->setFps(value);
 }
 
 void AnimatorPlaybackDialog::setModel(KisAnimation *model)

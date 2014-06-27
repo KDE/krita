@@ -68,6 +68,7 @@ void KisAnimationPlayer::play(bool cache)
     qDebug() << "Play";
     m_playing = true;
     m_loop = m_doc->getAnimation()->loopingEnabled();
+    m_fps = m_doc->getAnimation()->fps();
 
     if(cache) {
         this->cache();
@@ -77,7 +78,9 @@ void KisAnimationPlayer::play(bool cache)
 
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-    m_timer->start(100);
+
+    int frameInterval = 1000 / m_fps;
+    m_timer->start(frameInterval);
 }
 
 void KisAnimationPlayer::pause()

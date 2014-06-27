@@ -32,6 +32,7 @@ KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
     m_frameBreakingEnabled = cfg.defAutoFrameBreakEnabled();
     m_onionSkinningEnabled = cfg.defOnionSkinningEnabled();
     m_loopingEnabled = cfg.defLoopingEnabled();
+    m_fps = cfg.defFps();
 }
 
 void KisAnimation::setName(const QString &name)
@@ -67,6 +68,8 @@ QString KisAnimation::description() const
 void KisAnimation::setFps(int fps)
 {
     m_fps = fps;
+    KisConfig cfg;
+    cfg.defFps(fps);
 }
 
 int KisAnimation::fps() const

@@ -68,6 +68,7 @@
 #include "kis_animation.h"
 #include <stdlib.h>
 #include <QDesktopServices>
+#include <kis_config.h>
 
 KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *document, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &animationName)
     : WdgAnimationSelector(parent)
@@ -96,7 +97,9 @@ KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *doc
     inputResolution->setDecimals(0);
 
     txtAuthor->setText(getenv("USER"));
-    inputFps->setValue(12);
+
+    KisConfig cfg;
+    inputFps->setValue(cfg.defFps());
 
     inputTime->setRange(0,999999);
     inputTime->setValue(100);

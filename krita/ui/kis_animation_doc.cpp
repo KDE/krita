@@ -660,7 +660,7 @@ KisAnimation* KisAnimationDoc::getAnimation()
 
 void KisAnimationDoc::play()
 {
-    if(!d->player->isPlaying()) {
+    if(!d->player->isPlaying() && d->saved) {
         d->player->play();
     }
 }

@@ -197,6 +197,16 @@ void KisConfig::defOnionSkinningEnabled(bool state) const
     m_cfg.writeEntry("onionSkinningEnabled", state);
 }
 
+bool KisConfig::defLoopingEnabled() const
+{
+    return m_cfg.readEntry("loopingEnabled", true);
+}
+
+void KisConfig::defLoopingEnabled(bool state) const
+{
+    m_cfg.writeEntry("loopingEnabled", state);
+}
+
 enumCursorStyle KisConfig::cursorStyle() const
 {
     return (enumCursorStyle) m_cfg.readEntry("cursorStyleDef", int(DEFAULT_CURSOR_STYLE));

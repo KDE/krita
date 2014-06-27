@@ -58,6 +58,8 @@ public:
 
     void enableOnionSkinning(bool enable);
 
+    void enableLooping(bool enable);
+
     void setPrevOnionSkinOpacityValues(QList<int>* values);
 
     void setNextOnionSkinOpacityValues(QList<int>* values);
@@ -93,6 +95,8 @@ public:
 
     bool onionSkinningEnabled();
 
+    bool loopingEnabled();
+
     QList<int>* prevOnionSkinOpacityValues();
 
     QList<int>* nextOnionSkinOpacityValues();
@@ -118,6 +122,7 @@ private:
     QString m_location;
     bool m_frameBreakingEnabled;
     bool m_onionSkinningEnabled;
+    bool m_loopingEnabled;
     QList<int>* m_prevOnionSkinOpacityValues;
     QList<int>* m_nextOnionSkinOpacityValues;
     QColor m_prevOnionSkinColor;

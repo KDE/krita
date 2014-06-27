@@ -58,6 +58,7 @@ void KisTimeline::init()
     m_list = new KisAnimationLayerBox(this);
     m_cells = new KisFrameBox(this);
     m_settingsDialog = new AnimatorSettingsDialog();
+    m_playbackDialog = new AnimatorPlaybackDialog();
 
     KActionCollection* actionCollection = m_canvas->view()->actionCollection();
     KisActionManager* actionManager = m_canvas->view()->actionManager();
@@ -182,9 +183,15 @@ void KisTimeline::init()
     actionManager->addAction("stop_animation", stopAction, actionCollection);
     connect(stopAction, SIGNAL(triggered()), this, SLOT(stopAnimation()));
 
+    QToolButton* playbackOptions = new QToolButton(this);
+    playbackOptions->setIcon(koIcon("configure"));
+    playbackOptions->setToolTip(tr("Settings"));
+    connect(playbackOptions, SIGNAL(clicked()), this, SLOT(playbackOptionsPressed()));
+
     playerButtons->addAction(playAction);
     playerButtons->addAction(pauseAction);
     playerButtons->addAction(stopAction);
+    playerButtons->addWidget(playbackOptions);
 
     QToolBar* settingsToolBar = new QToolBar(this);
 
@@ -270,6 +277,7 @@ void KisTimeline::setModel(KisAnimation *animation)
 {
     this->m_animation = animation;
     this->m_settingsDialog->setModel(animation);
+    this->m_playbackDialog->setModel(animation);
 }
 
 KisCanvas2* KisTimeline::getCanvas()
@@ -381,6 +389,11 @@ void KisTimeline::prevKeyFramePressed()
 void KisTimeline::settingsButtonPressed()
 {
     m_settingsDialog->setVisible(true);
+}
+
+void KisTimeline::playbackOptionsPressed()
+{
+    m_playbackDialog->setVisible(true);
 }
 
 void KisTimeline::playAnimation()

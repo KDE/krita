@@ -34,7 +34,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisAnimationDoc *doc)
     m_doc = doc;
     m_playing = false;
     m_currentFrame = 0;
-    m_loop = true;
 }
 
 void KisAnimationPlayer::updateFrame()
@@ -68,6 +67,7 @@ void KisAnimationPlayer::play(bool cache)
 {
     qDebug() << "Play";
     m_playing = true;
+    m_loop = m_doc->getAnimation()->loopingEnabled();
 
     if(cache) {
         this->cache();

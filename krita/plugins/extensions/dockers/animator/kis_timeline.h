@@ -25,6 +25,7 @@
 #include <QHash>
 
 #include "animator_settings_dialog.h"
+#include "animator_playback_dialog.h"
 
 class KisFrameBox;
 class KisAnimationLayerBox;
@@ -36,10 +37,13 @@ class KisTimeline : public QWidget
     Q_OBJECT
 public:
     KisTimeline(QWidget* parent = 0);
+
     void setCanvas(KisCanvas2* canvas);
     KisCanvas2* getCanvas();
+
     KisAnimationLayerBox* getLayerBox();
     KisFrameBox* getFrameBox();
+
     void setModel(KisAnimation* animation);
 
 protected:
@@ -61,6 +65,7 @@ private:
     QRect m_lastBrokenFrame;
     bool m_frameBreakState;
     AnimatorSettingsDialog* m_settingsDialog;
+    AnimatorPlaybackDialog* m_playbackDialog;
     bool m_initialized;
     QWidget* m_parent;
     bool m_imported;
@@ -80,6 +85,7 @@ private slots:
     void nextKeyFramePressed();
     void prevKeyFramePressed();
     void settingsButtonPressed();
+    void playbackOptionsPressed();
     void timelineWidthChanged(int width);
     void paintLayerPressed();
     void vectorLayerPressed();

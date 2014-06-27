@@ -66,6 +66,9 @@ public:
     bool defOnionSkinningEnabled() const;
     void defOnionSkinningEnabled(bool state) const;
 
+    bool defLoopingEnabled() const;
+    void defLoopingEnabled(bool state) const;
+
     /**
      * @return the id of the default color model used for creating new images.
      */

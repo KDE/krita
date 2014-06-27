@@ -31,6 +31,7 @@ KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
     KisConfig cfg;
     m_frameBreakingEnabled = cfg.defAutoFrameBreakEnabled();
     m_onionSkinningEnabled = cfg.defOnionSkinningEnabled();
+    m_loopingEnabled = cfg.defLoopingEnabled();
 }
 
 void KisAnimation::setName(const QString &name)
@@ -165,6 +166,18 @@ void KisAnimation::enableOnionSkinning(bool enable)
 bool KisAnimation::onionSkinningEnabled()
 {
     return m_onionSkinningEnabled;
+}
+
+void KisAnimation::enableLooping(bool enable)
+{
+    m_loopingEnabled = enable;
+    KisConfig cfg;
+    cfg.defLoopingEnabled(enable);
+}
+
+bool KisAnimation::loopingEnabled()
+{
+    return m_loopingEnabled;
 }
 
 void KisAnimation::setPrevOnionSkinOpacityValues(QList<int> *values)

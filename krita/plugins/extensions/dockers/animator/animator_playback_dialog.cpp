@@ -44,10 +44,20 @@ AnimatorPlaybackDialog::AnimatorPlaybackDialog(QWidget *parent)
 
     connect(fpsInput, SIGNAL(valueChanged(int)), this, SLOT(setFps(int)));
 
+    QLabel* localPlaybackRangeLabel = new QLabel("Local playback range:", this);
+
+    QSpinBox* localPlaybackRangeInput = new QSpinBox(this);
+    localPlaybackRangeInput->setRange(1, 10000);
+    localPlaybackRangeInput->setValue(cfg.defLocalPlaybackRange());
+
+    connect(localPlaybackRangeInput, SIGNAL(valueChanged(int)), this, SLOT(setLocalPlaybackRange(int)));
+
     QGridLayout* mainLayout = new QGridLayout(this);
     mainLayout->addWidget(loopState, 0, 0);
     mainLayout->addWidget(fpsLabel, 1, 0);
     mainLayout->addWidget(fpsInput, 1, 1);
+    mainLayout->addWidget(localPlaybackRangeLabel, 2, 0);
+    mainLayout->addWidget(localPlaybackRangeInput, 2, 1);
 
     this->setLayout(mainLayout);
 }
@@ -60,6 +70,11 @@ void AnimatorPlaybackDialog::enableLooping(bool enable)
 void AnimatorPlaybackDialog::setFps(int value)
 {
     m_model->setFps(value);
+}
+
+void AnimatorPlaybackDialog::setLocalPlaybackRange(int value)
+{
+    m_model->setLocalPlaybackRange(value);
 }
 
 void AnimatorPlaybackDialog::setModel(KisAnimation *model)

@@ -33,6 +33,7 @@ KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
     m_onionSkinningEnabled = cfg.defOnionSkinningEnabled();
     m_loopingEnabled = cfg.defLoopingEnabled();
     m_fps = cfg.defFps();
+    m_localPlaybackRange = cfg.defLocalPlaybackRange();
 }
 
 void KisAnimation::setName(const QString &name)
@@ -75,6 +76,18 @@ void KisAnimation::setFps(int fps)
 int KisAnimation::fps() const
 {
     return m_fps;
+}
+
+void KisAnimation::setLocalPlaybackRange(int range)
+{
+    m_localPlaybackRange = range;
+    KisConfig cfg;
+    cfg.defLocalPlaybackRange(range);
+}
+
+int KisAnimation::localPlaybackRange() const
+{
+    return m_localPlaybackRange;
 }
 
 void KisAnimation::setTime(int time)

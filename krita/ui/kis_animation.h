@@ -40,6 +40,8 @@ public:
 
     void setFps(int fps);
 
+    void setLocalPlaybackRange(int range);
+
     void setTime(int time);
 
     void setColorSpace(const KoColorSpace *colorSpace);
@@ -79,6 +81,8 @@ public:
 
     int fps() const;
 
+    int localPlaybackRange() const;
+
     int time() const;
 
     qint32 width() const;
@@ -114,6 +118,7 @@ private:
     QString m_author;
     QString m_description;
     int m_fps;
+    int m_localPlaybackRange;
     int m_time;
     const KoColorSpace* m_colorSpace;
     qint32 m_width, m_height;

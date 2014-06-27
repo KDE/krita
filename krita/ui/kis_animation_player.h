@@ -51,6 +51,7 @@ private:
     QTimer* m_timer;
     bool m_loop;
     int m_fps;
+    int m_localPlaybackRange;
 };
 
 #endif // KIS_ANIMATION_PLAYER_H

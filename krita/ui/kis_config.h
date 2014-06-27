@@ -69,6 +69,9 @@ public:
     int defFps() const;
     void defFps(int value) const;
 
+    int defLocalPlaybackRange() const;
+    void defLocalPlaybackRange(int value) const;
+
     bool defLoopingEnabled() const;
     void defLoopingEnabled(bool state) const;
 

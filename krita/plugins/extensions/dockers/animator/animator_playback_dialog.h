@@ -32,6 +32,7 @@ public:
 private slots:
     void enableLooping(bool enable);
     void setFps(int value);
+    void setLocalPlaybackRange(int value);
 
 private:
     KisAnimation* m_model;

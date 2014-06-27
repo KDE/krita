@@ -207,6 +207,16 @@ void KisConfig::defFps(int value) const
     m_cfg.writeEntry("fps", value);
 }
 
+int KisConfig::defLocalPlaybackRange() const
+{
+    return m_cfg.readEntry("localPlaybackRange", 15);
+}
+
+void KisConfig::defLocalPlaybackRange(int value) const
+{
+    m_cfg.writeEntry("localPlaybackRange", value);
+}
+
 bool KisConfig::defLoopingEnabled() const
 {
     return m_cfg.readEntry("loopingEnabled", true);

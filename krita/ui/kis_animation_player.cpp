@@ -38,7 +38,7 @@ KisAnimationPlayer::KisAnimationPlayer(KisAnimationDoc *doc)
 
 void KisAnimationPlayer::updateFrame()
 {
-    if(m_currentFrame > 14) {
+    if(m_currentFrame > m_localPlaybackRange - 1) {
         if(m_loop) {
             m_currentFrame = 0;
         } else {
@@ -66,9 +66,11 @@ void KisAnimationPlayer::updateFrame()
 void KisAnimationPlayer::play(bool cache)
 {
     qDebug() << "Play";
+
     m_playing = true;
     m_loop = m_doc->getAnimation()->loopingEnabled();
     m_fps = m_doc->getAnimation()->fps();
+    m_localPlaybackRange = m_doc->getAnimation()->localPlaybackRange();
 
     if(cache) {
         this->cache();
@@ -121,7 +123,7 @@ void KisAnimationPlayer::cache()
 
     while(true) {
 
-        if(currentFrame == 15) {
+        if(currentFrame == m_localPlaybackRange) {
             break;
         }
 

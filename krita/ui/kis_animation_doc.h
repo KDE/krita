@@ -79,6 +79,8 @@ public:
 public slots:
     void setImageModified();
 
+    void playbackStateChanged();
+
 private:
     void preSaveAnimation();
 

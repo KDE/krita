@@ -65,11 +65,13 @@ AnimatorPlaybackDialog::AnimatorPlaybackDialog(QWidget *parent)
 void AnimatorPlaybackDialog::enableLooping(bool enable)
 {
     m_model->enableLooping(enable);
+    emit playbackStateChanged();
 }
 
 void AnimatorPlaybackDialog::setFps(int value)
 {
     m_model->setFps(value);
+    emit playbackStateChanged();
 }
 
 void AnimatorPlaybackDialog::setLocalPlaybackRange(int value)

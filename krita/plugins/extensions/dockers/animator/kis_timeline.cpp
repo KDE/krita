@@ -246,6 +246,8 @@ void KisTimeline::init()
     connect(this->m_cells, SIGNAL(frameSelectionChanged(QRect)), this, SLOT(frameSelectionChanged(QRect)));
     connect(this->m_settingsDialog, SIGNAL(sigTimelineWithChanged(int)), this, SLOT(timelineWidthChanged(int)));
 
+    connect(m_playbackDialog, SIGNAL(playbackStateChanged()), dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SLOT(playbackStateChanged()));
+
     m_initialized = true;
     m_imported = false;
 }

@@ -36,6 +36,9 @@ private slots:
 
 private:
     KisAnimation* m_model;
+
+signals:
+    void playbackStateChanged();
 };
 
 #endif // ANIMATOR_PLAYBACK_DIALOG_H

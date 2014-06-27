@@ -688,6 +688,13 @@ void KisAnimationDoc::onionSkinStateChanged()
     }
 }
 
+void KisAnimationDoc::playbackStateChanged()
+{
+    if(d->player->isPlaying()) {
+        d->player->refresh();
+    }
+}
+
 void KisAnimationDoc::addCurrentLoadedLayer(KisLayerSP layer)
 {
     d->currentLoadedLayers.append(layer);

@@ -68,6 +68,7 @@ void KisAnimationPlayer::play(bool cache)
     qDebug() << "Play";
 
     m_playing = true;
+
     m_loop = m_doc->getAnimation()->loopingEnabled();
     m_fps = m_doc->getAnimation()->fps();
     m_localPlaybackRange = m_doc->getAnimation()->localPlaybackRange();
@@ -105,6 +106,14 @@ void KisAnimationPlayer::stop()
 bool KisAnimationPlayer::isPlaying()
 {
     return m_playing;
+}
+
+void KisAnimationPlayer::refresh()
+{
+    // Cannot refresh range of loopback as it violates cache
+    m_loop = m_doc->getAnimation()->loopingEnabled();
+    m_fps = m_doc->getAnimation()->fps();
+    m_timer->setInterval(1000 / m_fps);
 }
 
 void KisAnimationPlayer::cache()

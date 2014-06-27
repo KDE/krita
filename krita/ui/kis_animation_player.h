@@ -40,6 +40,8 @@ public:
 
     void cache();
 
+    void refresh();
+
 private slots:
     void updateFrame();
 

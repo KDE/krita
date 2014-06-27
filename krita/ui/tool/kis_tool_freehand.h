@@ -88,6 +88,7 @@ protected:
 
 protected slots:
 
+    void explicitUpdateOutline();
     virtual void resetCursorStyle();
     void setAssistant(bool assistant);
 
@@ -108,7 +109,7 @@ private:
 
 protected:
 
-    KisSmoothingOptions m_smoothingOptions;
+    KisSmoothingOptionsSP smoothingOptions() const;
     bool m_assistant;
     double m_magnetism;
 

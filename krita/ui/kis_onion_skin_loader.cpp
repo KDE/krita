@@ -58,6 +58,12 @@ void KisOnionSkinLoader::loadOnionSkins()
 
         for(int j = 0 ; j < numberOfOnionSkins ; j++) {
 
+            // A hack to prevent same onion skin multiple times
+            // when there are no previous onion skins left.
+            if(currentFrame == m_doc->getPreviousKeyFramePosition(currentFrame, i * 20).x()) {
+                break;
+            }
+
             location = m_doc->getPreviousKeyFrameFile(currentFrame, i * 20);
             hasFile = m_doc->getStore()->hasFile(location);
 
@@ -77,11 +83,6 @@ void KisOnionSkinLoader::loadOnionSkins()
 
             currentFrame = m_doc->getPreviousKeyFramePosition(currentFrame, i * 20).x();
 
-            // A hack to prevent same onion skin multiple times
-            // when there are no previous onion skins left.
-            if(currentFrame == m_doc->getPreviousKeyFramePosition(currentFrame, i * 20).x()) {
-                break;
-            }
         }
 
         currentFrame = frame.x();
@@ -89,7 +90,14 @@ void KisOnionSkinLoader::loadOnionSkins()
 
         for(int j = 0 ; j < nextOnionSkinOpacityVal->length() ; j++) {
 
+            // A hack to prevent same onion skin multiple times
+            // when there are no next onion skins left.
+            if(currentFrame == m_doc->getNextKeyFramePosition(currentFrame, i * 20).x()) {
+                break;
+            }
+
             location = m_doc->getNextKeyFrameFile(currentFrame, i * 20);
+
             hasFile = m_doc->getStore()->hasFile(location);
 
             if(hasFile) {
@@ -107,12 +115,6 @@ void KisOnionSkinLoader::loadOnionSkins()
             }
 
             currentFrame = m_doc->getNextKeyFramePosition(currentFrame, i * 20).x();
-
-            // A hack to prevent same onion skin multiple times
-            // when there are no next onion skins left.
-            if(currentFrame == m_doc->getNextKeyFramePosition(currentFrame, i * 20).x()) {
-                break;
-            }
         }
     }
 }

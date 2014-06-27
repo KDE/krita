@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -56,7 +57,9 @@ public:
     //! Get table names in source
     virtual bool drv_tableNames(QStringList& tablenames);
 
-    virtual bool drv_copyTable(const QString&, KexiDB::Connection*, KexiDB::TableSchema*){return false;};
+    //! Copy a table from source DB to target DB (driver specific)
+    virtual bool drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
+                               KexiDB::TableSchema* dstTable);
 
     //! Read schema for a given table
     virtual bool drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema);

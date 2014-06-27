@@ -89,9 +89,11 @@ DlgClonesArray::~DlgClonesArray()
 
 void DlgClonesArray::initializeValues()
 {
-    QRect bounds = m_baseLayer->original()->exactBounds();
-    m_page->columnXOffset->setValue(bounds.width());
-    m_page->rowYOffset->setValue(bounds.height());
+    if (m_baseLayer && m_baseLayer->original()) {
+        QRect bounds = m_baseLayer->original()->exactBounds();
+        m_page->columnXOffset->setValue(bounds.width());
+        m_page->rowYOffset->setValue(bounds.height());
+    }
 }
 
 void DlgClonesArray::setDirty()

@@ -27,6 +27,7 @@
 #include <kis_view2.h>
 
 KisFrameBox::KisFrameBox(KisTimeline *parent)
+    : m_selectedFrame(0)
 {
     this->m_dock = parent;
     m_layers = this->m_dock->getLayerBox()->getLayers();

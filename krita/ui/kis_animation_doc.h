@@ -76,6 +76,10 @@ public:
 
     void removePreviousLayers();
 
+    bool storeHasFile(QString location);
+
+    void loadFrame(KisLayerSP layer, QString location);
+
 public slots:
     void setImageModified();
 

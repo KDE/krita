@@ -696,4 +696,14 @@ void KisAnimationDoc::addCurrentLoadedLayer(KisLayerSP layer)
     d->currentLoadedLayers.append(layer);
 }
 
+bool KisAnimationDoc::storeHasFile(QString location)
+{
+    return d->store->hasFile(location);
+}
+
+void KisAnimationDoc::loadFrame(KisLayerSP layer, QString location)
+{
+    d->kranimLoader->loadFrame(layer, d->store, location);
+}
+
 #include "kis_animation_doc.moc"

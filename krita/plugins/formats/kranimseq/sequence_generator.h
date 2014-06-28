@@ -25,11 +25,15 @@ class SequenceGenerator
 {
 public:
     SequenceGenerator(KisAnimationDoc* doc, QString filename);
+
     bool generate(bool keyFramesOnly, int startFrame, int stopFrame);
+
+    void cache(bool keyFramesOnly, int startFrame, int stopFrame);
 
 private:
     KisAnimationDoc* m_doc;
     QString m_dirname;
+    QList<QHash<int, KisLayerSP> > m_cache;
 };
 
 #endif // SEQUENCE_GENERATOR_H

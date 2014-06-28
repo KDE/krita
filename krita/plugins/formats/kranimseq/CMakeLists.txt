@@ -4,7 +4,8 @@ include_directories( ${PNG_INCLUDE_DIR} )
 add_definitions(${PNG_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
 
 set(kranimseq_PART_SRCS
-	kranim_sequence.cpp
+    kranim_sequence.cpp
+    sequence_generator.cpp
 )
 
 kde4_add_ui_files(kranimseq_PART_SRCS kis_wdg_options_kranimseq.ui )

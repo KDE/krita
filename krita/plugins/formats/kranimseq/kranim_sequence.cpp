@@ -17,6 +17,7 @@
  */
 
 #include "kranim_sequence.h"
+#include "sequence_generator.h"
 
 #include <QCheckBox>
 #include <QSlider>
@@ -45,6 +46,8 @@
 #include "kis_png_converter.h"
 #include <kis_iterator_ng.h>
 
+#include <kis_animation_doc.h>
+
 K_PLUGIN_FACTORY(KranimSequenceFactory, registerPlugin<KranimSequence>();)
 K_EXPORT_PLUGIN(KranimSequenceFactory("calligrafilters"))
 
@@ -72,16 +75,27 @@ bool hasVisibleWidgets()
 
 KoFilter::ConversionStatus KranimSequence::convert(const QByteArray &from, const QByteArray &to)
 {
-    qDebug() << "Exporting...";
     KDialog* kdb = new KDialog(0);
     kdb->setCaption(i18n("Animation Sequence export options"));
     kdb->setModal(false);
     kdb->setMinimumWidth(300);
 
-    KisWdgOptionsKranimseq* wdg = new KisWdgOptionsKranimseq(kdb);
-    kdb->setMainWidget(wdg);
+    m_wdg = new KisWdgOptionsKranimseq(kdb);
+    kdb->setMainWidget(m_wdg);
 
-    kdb->show();
+    if(kdb->exec() == QDialog::Accepted) {
+        KisAnimationDoc* doc = dynamic_cast<KisAnimationDoc*>(m_chain->inputDocument());
+        QString filename = m_chain->outputFile();
+        SequenceGenerator* generator = new SequenceGenerator(doc, filename);
 
-    return KoFilter::OK;
+        bool keyFrameOnly = m_wdg->keyFrameOnly->isChecked();
+        int startFrame = m_wdg->startFrameInput->value();
+        int endFrame = m_wdg->stopFrameInput->value();
+
+        if(generator->generate(keyFrameOnly, startFrame, endFrame)) {
+            return KoFilter::OK;
+        }
+    }
+
+    return KoFilter::InternalError;
 }

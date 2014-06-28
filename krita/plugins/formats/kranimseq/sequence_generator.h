@@ -16,38 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KRANIM_SEQUENCE_H_
-#define _KRANIM_SEQUENCE_H_
+#ifndef SEQUENCE_GENERATOR_H
+#define SEQUENCE_GENERATOR_H
 
-#include "ui_kis_wdg_options_kranimseq.h"
+#include <kis_animation_doc.h>
 
-#include <QVariantList>
-#include <KoFilter.h>
-
-class KisWdgOptionsKranimseq : public QWidget, public Ui::KisWdgOptionsKranimseq
+class SequenceGenerator
 {
-    Q_OBJECT
-
 public:
-    KisWdgOptionsKranimseq(QWidget* parent) : QWidget(parent) {
-        setupUi(this);
-    }
-
-};
-
-class KranimSequence : public KoFilter
-{
-    Q_OBJECT
-
-public:
-    KranimSequence(QObject* parent, const QVariantList &);
-    virtual ~KranimSequence();
-
-public:
-    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
+    SequenceGenerator(KisAnimationDoc* doc, QString filename);
+    bool generate(bool keyFramesOnly, int startFrame, int stopFrame);
 
 private:
-    KisWdgOptionsKranimseq* m_wdg;
+    KisAnimationDoc* m_doc;
+    QString m_dirname;
 };
 
-#endif
+#endif // SEQUENCE_GENERATOR_H

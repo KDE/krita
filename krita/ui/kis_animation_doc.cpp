@@ -164,10 +164,6 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     // Dump the content of the current frame
     d->kranimSaver->saveFrame(d->store, d->currentFrame, this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
 
-    if(d->currentFramePosition == this->getParentFramePosition(frame.x(), frame.y())) {
-        return;
-    }
-
     QString location = "";
     bool hasFile = false;
 

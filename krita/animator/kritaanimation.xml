@@ -8,7 +8,7 @@
         <glob pattern="*.kranim"/>
     </mime-type>
     <mime-type type="application/x-kranim-sequence">
-        <comment xml:lang="en">Krita Animation Sequence</comment>
+        <comment xml:lang="en">Animation Sequence</comment>
         <magic priority="50">
             <match type="string" value="kranimseq" offset="40"/>
         </magic>

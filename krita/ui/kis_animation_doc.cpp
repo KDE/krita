@@ -706,4 +706,26 @@ void KisAnimationDoc::loadFrame(KisLayerSP layer, QString location)
     d->kranimLoader->loadFrame(layer, d->store, location);
 }
 
+QList<int> KisAnimationDoc::keyFramePositions()
+{
+    QDomNodeList list = d->frameElement.childNodes();
+
+    QList<int> frameNumbers;
+
+    int frameNo;
+
+    for(unsigned int i = 0 ; i < list.length() ; i++) {
+        QDomNode node = list.at(i);
+        frameNo = node.attributes().namedItem("number").nodeValue().toInt();
+
+        if(!frameNumbers.contains(frameNo)) {
+            frameNumbers.append(frameNo);
+        }
+    }
+
+    qSort(frameNumbers);
+
+    return frameNumbers;
+}
+
 #include "kis_animation_doc.moc"

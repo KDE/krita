@@ -80,6 +80,8 @@ public:
 
     void loadFrame(KisLayerSP layer, QString location);
 
+    QList<int> keyFramePositions();
+
 public slots:
     void setImageModified();
 

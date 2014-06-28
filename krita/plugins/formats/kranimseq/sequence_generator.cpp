@@ -48,7 +48,9 @@ bool SequenceGenerator::generate(bool keyFramesOnly, int startFrame, int stopFra
 
     int numberOfLayers = m_doc->numberOfLayers();
 
-    for(int i = startFrame; i <= stopFrame ; i++) {
+    int length = m_cache.length();
+
+    for(int i = 1; i <= length ; i++) {
 
         KisImageWSP image = m_doc->image();
 
@@ -75,6 +77,8 @@ bool SequenceGenerator::generate(bool keyFramesOnly, int startFrame, int stopFra
 
 void SequenceGenerator::cache(bool keyFramesOnly, int startFrame, int stopFrame)
 {
+    QList<int> keyFrames = m_doc->keyFramePositions();
+
     QString location = "";
     bool hasFile = false;
 
@@ -93,10 +97,17 @@ void SequenceGenerator::cache(bool keyFramesOnly, int startFrame, int stopFrame)
             break;
         }
 
+        if(keyFramesOnly) {
+            if(!keyFrames.contains((currentFrame - 1) * 10)) {
+                currentFrame++;
+                continue;
+            }
+        }
+
         layersMap.clear();
 
         for(int layer = 0 ; layer < numberOfLayers ; layer++) {
-            location = m_doc->getFrameFile(currentFrame * 10, layer * 20);
+            location = m_doc->getFrameFile((currentFrame - 1) * 10, layer * 20);
             hasFile = m_doc->storeHasFile(location);
 
             if(hasFile) {

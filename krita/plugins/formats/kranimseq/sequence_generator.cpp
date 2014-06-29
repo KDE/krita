@@ -77,8 +77,6 @@ bool SequenceGenerator::generate(bool keyFramesOnly, int startFrame, int stopFra
 
 void SequenceGenerator::cache(bool keyFramesOnly, int startFrame, int stopFrame)
 {
-    QList<int> keyFrames = m_doc->keyFramePositions();
-
     QString location = "";
     bool hasFile = false;
 
@@ -91,17 +89,37 @@ void SequenceGenerator::cache(bool keyFramesOnly, int startFrame, int stopFrame)
 
     QHash<int, KisLayerSP> layersMap;
 
+    if(keyFramesOnly) {
+        QList<int> keyFrames = m_doc->keyFramePositions();
+
+        int length = keyFrames.length();
+
+        for(int i = 0 ; i < length ; i++) {
+            layersMap.clear();
+
+            for(int layer = 0 ; layer < numberOfLayers ; layer++) {
+
+                location = m_doc->getFrameFile((keyFrames.at(i)), layer * 20);
+                hasFile = m_doc->storeHasFile(location);
+
+                if(hasFile) {
+                    KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+                    m_doc->loadFrame(newLayer, location);
+                    layersMap[layer] = newLayer;
+                }
+            }
+
+            m_cache.append(layersMap);
+
+        }
+
+        return;
+    }
+
     while(true) {
 
         if(currentFrame == stopFrame + 1) {
             break;
-        }
-
-        if(keyFramesOnly) {
-            if(!keyFrames.contains((currentFrame - 1) * 10)) {
-                currentFrame++;
-                continue;
-            }
         }
 
         layersMap.clear();

@@ -152,7 +152,7 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
     emit sigImportFinished(timelineMap);
 }
 
-void KisAnimationDoc::frameSelectionChanged(QRect frame)
+void KisAnimationDoc::frameSelectionChanged(QRect frame, bool savePreviousFrame)
 {
     KisAnimation* animation = this->getAnimation();
 
@@ -161,8 +161,10 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
         this->preSaveAnimation();
     }
 
-    // Dump the content of the current frame
-    d->kranimSaver->saveFrame(d->store, d->currentFrame, this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
+    if(savePreviousFrame) {
+        // Dump the content of the current frame
+        d->kranimSaver->saveFrame(d->store, d->currentFrame, this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
+    }
 
     QString location = "";
     bool hasFile = false;
@@ -365,7 +367,7 @@ void KisAnimationDoc::removeFrame(QRect frame)
 {
     this->deleteFrameFromXML(frame.x(), frame.y());
     this->saveXMLToDisk();
-    this->frameSelectionChanged(d->currentFramePosition);
+    this->frameSelectionChanged(d->currentFramePosition, false);
 }
 
 void KisAnimationDoc::addPaintLayer()

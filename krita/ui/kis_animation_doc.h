@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 public:
     KisAnimationDoc();
     virtual ~KisAnimationDoc();
-    void frameSelectionChanged(QRect frame);
+    void frameSelectionChanged(QRect frame, bool savePreviousFrame=true);
 
     void addKeyFrame(QRect frame);
     void addBlankFrame(QRect frame);

@@ -48,74 +48,82 @@ KisToolBrush::~KisToolBrush()
 
 int KisToolBrush::smoothingType() const
 {
-    return m_smoothingOptions.smoothingType();
+    return smoothingOptions()->smoothingType();
 }
 
 bool KisToolBrush::smoothPressure() const
 {
-    return m_smoothingOptions.smoothPressure();
+    return smoothingOptions()->smoothPressure();
 }
 
 int KisToolBrush::smoothnessQuality() const
 {
-    return m_smoothingOptions.smoothnessDistance();
+    return smoothingOptions()->smoothnessDistance();
 }
 
 qreal KisToolBrush::smoothnessFactor() const
 {
-    return m_smoothingOptions.tailAggressiveness();
+    return smoothingOptions()->tailAggressiveness();
 }
 
 void KisToolBrush::slotSetSmoothingType(int index)
 {
     switch (index) {
     case 0:
-        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
-        m_sliderSmoothnessDistance->setEnabled(false);
-        m_sliderTailAggressiveness->setEnabled(false);
-        m_chkSmoothPressure->setEnabled(false);
-        m_chkUseScalableDistance->setEnabled(false);
+        smoothingOptions()->setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
+        showControl(m_sliderSmoothnessDistance, false);
+        showControl(m_sliderTailAggressiveness, false);
+        showControl(m_chkSmoothPressure, false);
+        showControl(m_chkUseScalableDistance, false);
+        showControl(m_sliderDelayDistance, false);
+        showControl(m_chkFinishStabilizedCurve, false);
         break;
     case 1:
-        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
-        m_sliderSmoothnessDistance->setEnabled(false);
-        m_sliderTailAggressiveness->setEnabled(false);
-        m_chkSmoothPressure->setEnabled(false);
-        m_chkUseScalableDistance->setEnabled(false);
+        smoothingOptions()->setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
+        showControl(m_sliderSmoothnessDistance, false);
+        showControl(m_sliderTailAggressiveness, false);
+        showControl(m_chkSmoothPressure, false);
+        showControl(m_chkUseScalableDistance, false);
+        showControl(m_sliderDelayDistance, false);
+        showControl(m_chkFinishStabilizedCurve, false);
         break;
     case 2:
-        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
-        m_sliderSmoothnessDistance->setEnabled(true);
-        m_sliderTailAggressiveness->setEnabled(true);
-        m_chkSmoothPressure->setEnabled(true);
-        m_chkUseScalableDistance->setEnabled(true);
+        smoothingOptions()->setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
+        showControl(m_sliderSmoothnessDistance, true);
+        showControl(m_sliderTailAggressiveness, true);
+        showControl(m_chkSmoothPressure, true);
+        showControl(m_chkUseScalableDistance, true);
+        showControl(m_sliderDelayDistance, false);
+        showControl(m_chkFinishStabilizedCurve, false);
         break;
     case 3:
     default:
-        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::STABILIZER);
-        m_sliderSmoothnessDistance->setEnabled(true);
-        m_sliderTailAggressiveness->setEnabled(false);
-        m_chkSmoothPressure->setEnabled(false);
-        m_chkUseScalableDistance->setEnabled(false);
+        smoothingOptions()->setSmoothingType(KisSmoothingOptions::STABILIZER);
+        showControl(m_sliderSmoothnessDistance, true);
+        showControl(m_sliderTailAggressiveness, false);
+        showControl(m_chkSmoothPressure, false);
+        showControl(m_chkUseScalableDistance, false);
+        showControl(m_sliderDelayDistance, true);
+        showControl(m_chkFinishStabilizedCurve, true);
     }
     emit smoothingTypeChanged();
 }
 
 void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
 {
-    m_smoothingOptions.setSmoothnessDistance(distance);
+    smoothingOptions()->setSmoothnessDistance(distance);
     emit smoothnessQualityChanged();
 }
 
 void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
 {
-    m_smoothingOptions.setTailAggressiveness(argh_rhhrr);
+    smoothingOptions()->setTailAggressiveness(argh_rhhrr);
     emit smoothnessFactorChanged();
 }
 
 void KisToolBrush::setSmoothPressure(bool value)
 {
-    m_smoothingOptions.setSmoothPressure(value);
+    smoothingOptions()->setSmoothPressure(value);
 }
 
 void KisToolBrush::slotSetMagnetism(int magnetism)
@@ -125,7 +133,13 @@ void KisToolBrush::slotSetMagnetism(int magnetism)
 
 bool KisToolBrush::useScalableDistance() const
 {
-    return m_smoothingOptions.useScalableDistance();
+    return smoothingOptions()->useScalableDistance();
+}
+
+void KisToolBrush::setUseScalableDistance(bool value)
+{
+    smoothingOptions()->setUseScalableDistance(value);
+    emit useScalableDistanceChanged();
 }
 
 void KisToolBrush::resetCursorStyle()
@@ -136,7 +150,7 @@ void KisToolBrush::resetCursorStyle()
     // When the stabilizer is in use, we avoid using the brush outline cursor,
     // because it would hide the real position of the cursor to the user,
     // yielding unexpected results.
-    if (m_smoothingOptions.smoothingType() == KisSmoothingOptions::STABILIZER
+    if (smoothingOptions()->smoothingType() == KisSmoothingOptions::STABILIZER
         && cursorStyle == CURSOR_STYLE_OUTLINE) {
         useCursor(KisCursor::roundCursor());
     } else {
@@ -144,10 +158,38 @@ void KisToolBrush::resetCursorStyle()
     }
 }
 
-void KisToolBrush::setUseScalableDistance(bool value)
+bool KisToolBrush::useDelayDistance() const
 {
-    m_smoothingOptions.setUseScalableDistance(value);
-    emit useScalableDistanceChanged();
+    return smoothingOptions()->useDelayDistance();
+}
+
+qreal KisToolBrush::delayDistance() const
+{
+    return smoothingOptions()->delayDistance();
+}
+
+void KisToolBrush::setUseDelayDistance(bool value)
+{
+    smoothingOptions()->setUseDelayDistance(value);
+    enableControl(m_chkFinishStabilizedCurve, !value);
+    emit useDelayDistanceChanged();
+}
+
+void KisToolBrush::setDelayDistance(qreal value)
+{
+    smoothingOptions()->setDelayDistance(value);
+    emit delayDistanceChanged();
+}
+
+void KisToolBrush::setFinishStabilizedCurve(bool value)
+{
+    smoothingOptions()->setFinishStabilizedCurve(value);
+    emit finishStabilizedCurveChanged();
+}
+
+bool KisToolBrush::finishStabilizedCurve() const
+{
+    return smoothingOptions()->finishStabilizedCurve();
 }
 
 QWidget * KisToolBrush::createOptionWidget()
@@ -175,28 +217,52 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
     m_sliderSmoothnessDistance->setEnabled(true);
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
-    m_sliderSmoothnessDistance->setValue(m_smoothingOptions.smoothnessDistance());
+    m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
     addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Distance:")));
+
+    // Finish stabilizer curve
+    m_chkFinishStabilizedCurve = new QCheckBox("", optionsWidget);
+    connect(m_chkFinishStabilizedCurve, SIGNAL(toggled(bool)), this, SLOT(setFinishStabilizedCurve(bool)));
+    m_chkFinishStabilizedCurve->setChecked(smoothingOptions()->finishStabilizedCurve());
+
+    // Delay Distance for Stabilizer
+    m_chkDelayDistance = new QCheckBox(i18n("Delay:"), optionsWidget);
+    m_chkDelayDistance->setToolTip(i18n("Delay the brush stroke to make the line smoother"));
+    m_chkDelayDistance->setLayoutDirection(Qt::RightToLeft);
+    connect(m_chkDelayDistance, SIGNAL(toggled(bool)), this, SLOT(setUseDelayDistance(bool)));
+    m_sliderDelayDistance = new KisDoubleSliderSpinBox(optionsWidget);
+    m_sliderDelayDistance->setToolTip(i18n("Radius where the brush is blocked"));
+    m_sliderDelayDistance->setRange(0, 500);
+    m_sliderDelayDistance->setSuffix(i18n(" px"));
+    connect(m_chkDelayDistance, SIGNAL(toggled(bool)), m_sliderDelayDistance, SLOT(setEnabled(bool)));
+    connect(m_sliderDelayDistance, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
+
+    addOptionWidgetOption(m_sliderDelayDistance, m_chkDelayDistance);
+    addOptionWidgetOption(m_chkFinishStabilizedCurve, new QLabel(i18n("Finish line:")));
+
+    m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
+    m_sliderDelayDistance->setValue(smoothingOptions()->delayDistance());
+
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);
     m_sliderTailAggressiveness->setEnabled(true);
     connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
-    m_sliderTailAggressiveness->setValue(m_smoothingOptions.tailAggressiveness());
+    m_sliderTailAggressiveness->setValue(smoothingOptions()->tailAggressiveness());
     addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:")));
 
     m_chkSmoothPressure = new QCheckBox("", optionsWidget);
-    m_chkSmoothPressure->setChecked(m_smoothingOptions.smoothPressure());
+    m_chkSmoothPressure->setChecked(smoothingOptions()->smoothPressure());
     connect(m_chkSmoothPressure, SIGNAL(toggled(bool)), this, SLOT(setSmoothPressure(bool)));
     addOptionWidgetOption(m_chkSmoothPressure, new QLabel(i18n("Smooth Pressure")));
 
     m_chkUseScalableDistance = new QCheckBox("", optionsWidget);
-    m_chkUseScalableDistance->setChecked(m_smoothingOptions.useScalableDistance());
+    m_chkUseScalableDistance->setChecked(smoothingOptions()->useScalableDistance());
     connect(m_chkUseScalableDistance, SIGNAL(toggled(bool)), this, SLOT(setUseScalableDistance(bool)));
     addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(i18n("Scalable Distance")));
 
-    slotSetSmoothingType((int)m_smoothingOptions.smoothingType());
-    m_cmbSmoothingType->setCurrentIndex((int)m_smoothingOptions.smoothingType());
+    slotSetSmoothingType((int)smoothingOptions()->smoothingType());
+    m_cmbSmoothingType->setCurrentIndex((int)smoothingOptions()->smoothingType());
 
     // Drawing assistant configuration
     m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionsWidget);

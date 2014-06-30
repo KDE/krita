@@ -321,6 +321,12 @@ QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
     return dbg.space();
 }
 
+KisPaintInformation KisPaintInformation::mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2)
+{
+    QPointF pt = (1 - t) * pi1.pos() + t * pi2.pos();
+    return mix(pt, t, pi1, pi2);
+}
+
 KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2)
 {
     qreal pressure = (1 - t) * pi1.pressure() + t * pi2.pressure();

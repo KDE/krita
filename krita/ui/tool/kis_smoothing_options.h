@@ -19,7 +19,10 @@
 #define KIS_SMOOTHING_OPTIONS_H
 
 #include <qglobal.h>
+#include <QSharedPointer>
 #include <krita_export.h>
+
+
 
 class KRITAUI_EXPORT KisSmoothingOptions
 {
@@ -50,12 +53,26 @@ public:
     bool useScalableDistance() const;
     void setUseScalableDistance(bool value);
 
+    qreal delayDistance() const;
+    void setDelayDistance(qreal value);
+
+    void setUseDelayDistance(bool value);
+    bool useDelayDistance() const;
+
+    void setFinishStabilizedCurve(bool value);
+    bool finishStabilizedCurve() const;
+
 private:
     SmoothingType m_smoothingType;
     qreal m_smoothnessDistance;
     qreal m_tailAggressiveness;
     bool m_smoothPressure;
     bool m_useScalableDistance;
+    qreal m_delayDistance;
+    bool m_useDelayDistance;
+    bool m_finishStabilizedCurve;
 };
+
+typedef QSharedPointer<KisSmoothingOptions> KisSmoothingOptionsSP;
 
 #endif // KIS_SMOOTHING_OPTIONS_H

@@ -1194,6 +1194,36 @@ void KisConfig::setLineSmoothingScalableDistance(bool value)
     m_cfg.writeEntry("LineSmoothingScalableDistance", value);
 }
 
+qreal KisConfig::lineSmoothingDelayDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingDelayDistance", 50.0);
+}
+
+void KisConfig::setLineSmoothingDelayDistance(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingDelayDistance", value);
+}
+
+bool KisConfig::lineSmoothingUseDelayDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingUseDelayDistance", true);
+}
+
+void KisConfig::setLineSmoothingUseDelayDistance(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingUseDelayDistance", value);
+}
+
+bool KisConfig::lineSmoothingFinishStabilizedCurve() const
+{
+    return m_cfg.readEntry("LineSmoothingFinishStabilizedCurve", true);
+}
+
+void KisConfig::setLineSmoothingFinishStabilizedCurve(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingFinishStabilizedCurve", value);
+}
+
 int KisConfig::paletteDockerPaletteViewSectionSize() const
 {
     return m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);

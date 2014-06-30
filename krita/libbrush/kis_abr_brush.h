@@ -27,7 +27,7 @@
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_paint_information.h"
-
+#include "kis_abr_brush_collection.h"
 #include "krita_export.h"
 
 class KisQImagemask;
@@ -44,7 +44,7 @@ class BRUSH_EXPORT KisAbrBrush : public KisBrush
 public:
 
     /// Construct brush to load filename later as brush
-    KisAbrBrush(const QString& filename, const QByteArray &parentMD5);
+    KisAbrBrush(const QString& filename, const QByteArray &parentMD5, KisAbrBrushCollection *parent);
 
     virtual bool load();
 
@@ -59,18 +59,17 @@ public:
      */
     virtual QString defaultFileExtension() const;
 
-protected:
+    virtual QImage brushTipImage() const;
 
     friend class KisAbrBrushCollection;
 
-    virtual QByteArray generateMD5() const;
     virtual void setBrushTipImage(const QImage& image);
 
     void toXML(QDomDocument& d, QDomElement& e) const;
 
 private:
     QByteArray m_parentMD5;
-
+    KisAbrBrushCollection *m_parent;
 };
 
 #endif // KIS_ABR_BRUSH_

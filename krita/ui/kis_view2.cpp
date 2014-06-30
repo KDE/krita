@@ -72,6 +72,7 @@
 #include <KoDockerManager.h>
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
+#include <KoResourceItemChooserSync.h>
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
@@ -243,6 +244,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     setXMLFile(QString("%1.rc").arg(qAppName()));
     KisConfig cfg;
 
+    KoResourceItemChooserSync::instance()->setBaseLength(cfg.readEntry("baseLength", 50));
     setFocusPolicy(Qt::NoFocus);
 
     if (mainWindow()) {
@@ -474,6 +476,7 @@ KisView2::~KisView2()
 {
     KisConfig cfg;
     cfg.writeEntry("LastPreset", m_d->resourceProvider->currentPreset()->name());
+    cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
     if (m_d->filterManager->isStrokeRunning()) {
         m_d->filterManager->cancel();

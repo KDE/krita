@@ -320,7 +320,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/kis_previewwidgetbase.ui
     forms/kis_matrix_widget.ui
     forms/wdgselectionoptions.ui
-    forms/wdgshapeoptions.ui
+    forms/wdggeometryoptions.ui
     forms/wdgnewimage.ui
     forms/wdgimageproperties.ui
     forms/wdgmaskfromselection.ui

@@ -123,10 +123,10 @@ void KisColorSelector::setConfiguration(Configuration conf)
         Q_ASSERT(false);
     }
 
-    connect(m_mainComponent, SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal)),
-            m_subComponent,  SLOT(setParam(qreal,qreal,qreal,qreal,qreal)), Qt::UniqueConnection);
-    connect(m_subComponent,  SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal)),
-            m_mainComponent, SLOT(setParam(qreal,qreal,qreal,qreal, qreal)), Qt::UniqueConnection);
+    connect(m_mainComponent, SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)),
+            m_subComponent,  SLOT(setParam(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)), Qt::UniqueConnection);
+    connect(m_subComponent,  SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)),
+            m_mainComponent, SLOT(setParam(qreal,qreal,qreal,qreal, qreal, qreal, qreal, qreal, qreal)), Qt::UniqueConnection);
 
     connect(m_mainComponent, SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
     connect(m_subComponent,  SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);

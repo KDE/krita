@@ -74,10 +74,14 @@ public:
     KoColor fromHsv(int h, int s, int v, int a = 255) const;
     KoColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
     KoColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
+	KoColor fromHsiF(qreal h, qreal s, qreal i);
+    KoColor fromHsyF(qreal h, qreal s, qreal y);
 
     void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
     void getHsvF(const KoColor &srcColor, qreal *h, qreal *s, qreal *v, qreal *a = 0);
     void getHslF(const KoColor &srcColor, qreal *h, qreal *s, qreal *l, qreal *a = 0);
+	void getHsiF(const KoColor &srcColor, qreal *h, qreal *s, qreal *i);
+    void getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y);
 
     static KoColorConversionTransformation::Intent renderingIntent();
     static KoColorConversionTransformation::ConversionFlags conversionFlags();

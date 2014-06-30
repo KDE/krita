@@ -207,14 +207,14 @@ BOOL isWow64()
 
 bool KoApplication::start()
 {
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) || defined (Q_OS_MACX)
 #ifdef ENV32BIT
     if (isWow64()) {
-    	KMessageBox::information(0, 
+        KMessageBox::information(0,
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
                                       "Please download and install the x64 build instead."),
-                                 qApp->applicationName(), 
+                                 qApp->applicationName(),
                                  "calligra_32_on_64_warning");
 
     }
@@ -262,9 +262,6 @@ bool KoApplication::start()
         QMessageBox::critical(0, applicationName() + i18n(": Critical Error"), i18n("Essential application components could not be found.\n"
                                                                                     "This might be an installation issue.\n"
                                                                                     "Try restarting, running kbuildsycoca4.exe or reinstalling."));
-#ifdef Q_OS_WIN
-        QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
-#endif
         return false;
     }
 

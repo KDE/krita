@@ -86,7 +86,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             configChanged = true;
         }
         foreach(KSharedPtr<KService> service, offers) {
-            const QString pluginName = service->property(QLatin1String("X-KDE-PluginInfo-Name")).toString();
+            const QString pluginName = service->property(QLatin1String("X-KDE-PluginInfo-Name"), QVariant::String).toString();
             if (pluginName.isEmpty()) {
                 kWarning(30003) << "Loading plugin" << service->name() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
@@ -107,12 +107,12 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     QMap<QString, KSharedPtr<KService> > serviceNames;
     foreach(KSharedPtr<KService> service, plugins) {
         if (serviceNames.contains(service->name())) { // duplicate
-            QVariant pluginVersion2 = service->property("X-Flake-PluginVersion");
+            QVariant pluginVersion2 = service->property("X-Flake-PluginVersion", QVariant::Int);
             if (pluginVersion2.isNull()) { // just take the first one found...
                 continue;
             }
             KSharedPtr<KService> otherService = serviceNames.value(service->name());
-            QVariant pluginVersion = otherService->property("X-Flake-PluginVersion");
+            QVariant pluginVersion = otherService->property("X-Flake-PluginVersion", QVariant::Int);
             if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt())) {
                 continue; // replace the old one with this one, since its newer.
             }
@@ -125,7 +125,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         QString error;
         QObject * plugin = service->createInstance<QObject>(this, QVariantList(), &error);
         if (plugin) {
-            whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name")).toString();
+            whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name"), QVariant::String).toString();
             kDebug(30003) << "Loaded plugin" << service->name();
             delete plugin;
         } else {

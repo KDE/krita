@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QTime>
+#include <QApplication>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -66,7 +67,13 @@ void KoServiceLocator::init()
     t.start();
 
     // services
-    foreach(const QString &dir, KGlobal::dirs()->findDirs("services", "")) {
+    QStringList servicesDirs = KGlobal::dirs()->findDirs("services", "");
+    QDir servicesDir(qApp->applicationDirPath() + "/../share/kde4/services");
+    if (!servicesDirs.contains(servicesDir.absolutePath())) {
+        servicesDirs << servicesDir.absolutePath();
+    }
+
+    foreach(const QString &dir, servicesDirs) {
 
         QDir servicesDir = QDir(dir + "/calligra");
         servicesDir.setNameFilters(QStringList() << "*.desktop");
@@ -86,7 +93,7 @@ void KoServiceLocator::init()
         }
 
         // Now check the services/../../applications/kde4 for Calligra/Application
-        QDir applicationsDir = QDir(dir + "../../applications/kde4/calligra");
+        QDir applicationsDir = QDir(dir + "/../../applications/kde4/calligra");
         applicationsDir.setNameFilters(QStringList() << "*.desktop");
         if (applicationsDir.exists()) {
             foreach(const QString &entry, applicationsDir.entryList(QDir::Files)) {
@@ -95,7 +102,6 @@ void KoServiceLocator::init()
                     if (!service->mimeTypes().contains(t)) {
                         if (!d->typeToService.contains(t)) {
                             d->typeToService[t] = KService::List();
-
                         }
                         d->typeToService[t].append(service);
                     }
@@ -104,5 +110,4 @@ void KoServiceLocator::init()
         }
     }
 
-    qDebug() << "Loading the services took" << t.elapsed();
 }

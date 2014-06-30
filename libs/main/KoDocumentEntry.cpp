@@ -96,10 +96,12 @@ KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
 {
     QList<KoDocumentEntry> vec = query(mimetype);
+
     if (vec.isEmpty()) {
         kWarning(30003) << "Got no results with " << mimetype;
         // Fallback to the old way (which was probably wrong, but better be safe)
         vec = query(mimetype);
+
         if (vec.isEmpty()) {
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
@@ -124,27 +126,26 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
 
 QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
 {
+
     QList<KoDocumentEntry> lst;
 
     // Query the trader
     const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Part");
+
     foreach(KService::Ptr offer, offers) {
 
-        QStringList nativeMimeTypes = offer->property("X-KDE-NativeMimeType").toStringList();
-        QStringList extraNativeMimeTypes = offer->property("X-KDE-ExtraNativeMimeTypes").toStringList();
-        if (!nativeMimeTypes.contains(mimetype) || extraNativeMimeTypes.contains(mimetype)) {
-            continue;
+        QStringList nativeMimeTypes = offer->property("X-KDE-NativeMimeType", QVariant::StringList).toStringList();
+        QStringList extraNativeMimeTypes = offer->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
+        QStringList serviceTypes;// = offer->property("ServiceTypes").toStringList();
+        if (nativeMimeTypes.contains(mimetype) || extraNativeMimeTypes.contains(mimetype) || serviceTypes.contains(mimetype)) {
+
+            if (offer->noDisplay())
+                continue;
+            KoDocumentEntry d(offer);
+            // Append converted offer
+            lst.append(d);
+            // Next service
         }
-
-        //kDebug(30003) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
-        //               << "   library=" << (*it)->library() << endl;
-
-        if (offer->noDisplay())
-            continue;
-        KoDocumentEntry d(offer);
-        // Append converted offer
-        lst.append(d);
-        // Next service
     }
 
     if (lst.count() > 1 && !mimetype.isEmpty())

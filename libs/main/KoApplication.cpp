@@ -247,6 +247,7 @@ bool KoApplication::start()
     if (d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
+        processEvents();
     }
 
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
@@ -609,7 +610,7 @@ QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) cons
     KService::Ptr service = entry.service();
     return KoFilterManager::mimeFilter(d->nativeMimeType,
                                        direction,
-                                       service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+                                       service->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList());
 }
 
 

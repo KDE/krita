@@ -34,11 +34,11 @@ Boston, MA 02110-1301, USA.
 KoFilterEntry::KoFilterEntry(const KService::Ptr& service)
         : m_service(service)
 {
-    import = service->property("X-KDE-Import").toStringList();
-    export_ = service->property("X-KDE-Export").toStringList();
-    int w = service->property("X-KDE-Weight").toInt();
+    import = service->property("X-KDE-Import", QVariant::StringList).toStringList();
+    export_ = service->property("X-KDE-Export", QVariant::StringList).toStringList();
+    int w = service->property("X-KDE-Weight", QVariant::Int).toInt();
     weight = w < 0 ? UINT_MAX : static_cast<unsigned int>(w);
-    available = service->property("X-KDE-Available").toString();
+    available = service->property("X-KDE-Available", QVariant::String).toString();
 }
 
 QList<KoFilterEntry::Ptr> KoFilterEntry::query()

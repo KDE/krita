@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kservicetype.h>
 #include <kdebug.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
 #include <QFile>
 
 #include <limits.h> // UINT_MAX
@@ -45,7 +45,7 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
     QList<KoFilterEntry::Ptr> lst;
 
-    KService::List offers = KServiceTypeTrader::self()->query("Calligra/Filter");
+    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Filter");
 
     KService::List::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();

@@ -25,10 +25,13 @@
 
 #include <kdebug.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+
+#include <KoServiceLocator.h>
+
 
 class KoPluginLoader::Private
 {
@@ -58,14 +61,15 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     if (d->loadedServiceTypes.contains(serviceType)) {
         return;
     }
-    // kDebug( 30003 ) <<"KoPluginLoader::load" << serviceType << kBacktrace();
+    kDebug( 30003 ) <<"KoPluginLoader::load" << serviceType;
     d->loadedServiceTypes << serviceType;
     QString query = QString::fromLatin1("(Type == 'Service')");
     if (!versionString.isEmpty()) {
         query += QString::fromLatin1(" and (%1)").arg(versionString);
     }
 
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+    const KService::List offers = KoServiceLocator::instance()->entries(serviceType);
+
     KService::List plugins;
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards

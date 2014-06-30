@@ -31,7 +31,7 @@
 #include <KoProperties.h>
 
 #include <kservice.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
 
 #include <QMutexLocker>
 #include <QMutex>
@@ -246,8 +246,7 @@ void KoShapeFactoryBase::getDeferredPlugin()
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 
-    const QString serviceType = "Calligra/Deferred";
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, QString());
+    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Deferred");
     Q_ASSERT(offers.size() > 0);
 
     foreach(KSharedPtr<KService> service, offers) {

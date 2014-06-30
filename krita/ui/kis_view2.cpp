@@ -54,7 +54,7 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
 #include <kstandardaction.h>
 #include <kurl.h>
 #include <kxmlguiwindow.h>
@@ -1164,9 +1164,7 @@ void KisView2::slotNodeChanged()
 void KisView2::loadPlugins()
 {
     // Load all plugins
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
-                                                              QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Krita-Version] == 28)"));
+    const KService::List offers = KoServiceLocator::instance()->entries("Krita/ViewPlugin");
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;

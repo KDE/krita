@@ -2,6 +2,7 @@ include_directories( ${KDE4_INCLUDES} )
 
 set(koplugin_LIB_SRCS
 	KoPluginLoader.cpp
+    KoServiceLocator.cpp
 )
 
 kde4_add_library(koplugin SHARED ${koplugin_LIB_SRCS})

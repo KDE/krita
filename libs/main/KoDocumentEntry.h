@@ -85,7 +85,7 @@ public:
      *                 You can use it to set additional restrictions on the available
      *                 components.
      */
-    static QList<KoDocumentEntry> query(const QString &  _constr = QString());
+    static QList<KoDocumentEntry> query(const QString &  mimetype = QString());
 
     /**
      *  This is a convenience function.

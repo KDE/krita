@@ -166,6 +166,20 @@ KisAnimationFrame* KisLayerContents::getPreviousFrameFrom(int index)
     return this->m_frames.value(this->getNextFrameIndexFrom(index));
 }
 
+KisAnimationFrame* KisLayerContents::getFrameAt(int index)
+{
+    QList<int> keys = m_frames.keys();
+    int previous = 0;
+    for(int i = 0; i < keys.length(); i++) {
+        if(keys.at(i) <= index) {
+            if(keys.at(i) > previous) {
+                previous = keys.at(i);
+            }
+        }
+    }
+    return m_frames.value(previous);
+}
+
 KisFrameBox* KisLayerContents::getParent()
 {
     return m_parent;

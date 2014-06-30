@@ -93,7 +93,10 @@ QRect KisAnimationFrame::convertSelectionToFrame()
 
         this->getParent()->mapFrame(this->geometry().x() / 10, this);
 
-        int oldPrevFrameWidth = this->getParent()->getPreviousFrameFrom(this)->getWidth();
+        KisAnimationFrame* oldPrevFrame = this->getParent()->getPreviousFrameFrom(this);
+        oldPrevFrame->hide();
+
+        int oldPrevFrameWidth = oldPrevFrame->getWidth();
         int previousFrameWidth = this->geometry().x()-this->getParent()->getPreviousFrameFrom(this)->geometry().x();
 
         KisAnimationFrame* newPreviousFrame = new KisAnimationFrame(this->getParent(), KisAnimationFrame::FRAME, previousFrameWidth);
@@ -149,4 +152,21 @@ void KisAnimationFrame::expandWidth()
     this->getParent()->getParent()->getSelectedFrame()->hide();
     this->getParent()->unmapFrame(this->geometry().x() / 10);
     this->getParent()->getParent()->setSelectedFrame();
+}
+
+QRect KisAnimationFrame::removeFrame()
+{
+    QRect deletedFrame;
+
+    KisAnimationFrame* previousFrame = this->getParent()->getFrameAt(this->geometry().x() / 10);
+
+    if(previousFrame) {
+        this->getParent()->unmapFrame(previousFrame->geometry().x() / 10);
+        previousFrame->hide();
+
+        deletedFrame.setRect(previousFrame->geometry().x(), this->getParent()->getLayerIndex() * 20, previousFrame->geometry().width(), 20);
+
+        this->getParent()->getParent()->getSelectedFrame()->hide();
+    }
+    return deletedFrame;
 }

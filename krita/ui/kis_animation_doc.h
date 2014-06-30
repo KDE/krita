@@ -43,6 +43,8 @@ public:
     void addBlankFrame(QRect frame);
     void breakFrame(QRect frame, bool blank=false);
 
+    void removeFrame(QRect frame);
+
     void addPaintLayer();
     void addVectorLayer();
 
@@ -90,7 +92,13 @@ public slots:
 private:
     void preSaveAnimation();
 
-    void updateXML();
+    void addFrameToXML();
+
+    void deleteFrameFromXML(int frame, int layer);
+
+    void saveXMLToDisk();
+
+    QDomNode getFrameElementFromXML(int frame, int layer);
 
     void updateActiveFrame();
 

@@ -140,6 +140,7 @@ void KisTimeline::init()
 
     KisAction* removeFrameAction = new KisAction(koIcon("list-remove"), tr("Remove Frame"), this);
     actionManager->addAction("remove_frame", removeFrameAction, actionCollection);
+    connect(removeFrameAction, SIGNAL(triggered()), this, SLOT(removeFramePressed()));
 
     frameButtons->addAction(addFrameAction);
     frameButtons->addAction(addKeyFrameAction);
@@ -338,6 +339,15 @@ void KisTimeline::addframePressed()
     if(m_cells->getSelectedFrame()) {
         this->m_cells->getSelectedFrame()->expandWidth();
         this->m_cells->setSelectedFrame();
+    }
+}
+
+void KisTimeline::removeFramePressed()
+{
+    if(m_cells->getSelectedFrame()) {
+        QRect globalGeometry = this->m_cells->getSelectedFrame()->removeFrame();
+        this->m_cells->setSelectedFrame();
+        dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->removeFrame(globalGeometry);
     }
 }
 

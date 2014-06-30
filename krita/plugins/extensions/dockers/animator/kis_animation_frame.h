@@ -28,13 +28,21 @@ class KisAnimationFrame : public QWidget
 
 public:
     KisAnimationFrame(KisLayerContents* parent = 0, int type = 0, int width = 10);
+
     void setWidth(int width);
     int getWidth();
+
     KisLayerContents* getParent();
+
     QRect convertSelectionToFrame();
+
     int getType();
     void setType(int type);
+
     void expandWidth();
+
+    QRect removeFrame();
+
     int getIndex();
 
 protected:

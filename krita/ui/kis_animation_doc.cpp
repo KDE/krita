@@ -263,7 +263,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
         }
     }
 
-    this->updateXML();
+    this->addFrameToXML();
 
     this->loadOnionSkins();
 
@@ -339,7 +339,7 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
         }
     }
 
-    this->updateXML();
+    this->addFrameToXML();
 
     this->loadOnionSkins();
 
@@ -359,6 +359,13 @@ void KisAnimationDoc::breakFrame(QRect frame, bool blank)
         // Duplicate frame
         this->addKeyFrame(frame);
     }
+}
+
+void KisAnimationDoc::removeFrame(QRect frame)
+{
+    this->deleteFrameFromXML(frame.x(), frame.y());
+    this->saveXMLToDisk();
+    this->frameSelectionChanged(d->currentFramePosition);
 }
 
 void KisAnimationDoc::addPaintLayer()
@@ -407,7 +414,7 @@ void KisAnimationDoc::addPaintLayer()
     this->image()->addNode(d->currentFrame.data(), this->image()->rootLayer().data());
     d->currentLoadedLayers.append(d->currentFrame);
 
-    this->updateXML();
+    this->addFrameToXML();
 
     this->updateActiveFrame();
 
@@ -446,6 +453,10 @@ QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)
                 frameNumbers.append(frameNo);
             }
         }
+    }
+
+    if(frameNumbers.length() == 0) {
+        return QRect();
     }
 
     qSort(frameNumbers);
@@ -524,6 +535,11 @@ QRect KisAnimationDoc::getNextKeyFramePosition(int frame, int layer)
 QString KisAnimationDoc::getFrameFile(int frame, int layer)
 {
     QRect parentPos = this->getParentFramePosition(frame, layer);
+
+    if(parentPos == QRect()) {
+        return "";
+    }
+
     QString location = "frame" + QString::number(parentPos.x()) + "layer" + QString::number(parentPos.y());
     return location;
 }
@@ -542,13 +558,53 @@ QString KisAnimationDoc::getNextKeyFrameFile(int frame, int layer)
     return location;
 }
 
-void KisAnimationDoc::updateXML()
+void KisAnimationDoc::addFrameToXML()
 {
+    int frame = d->currentFramePosition.x();
+    int layer = d->currentFramePosition.y();
+
+    this->deleteFrameFromXML(frame, layer);
+
     QDomElement frameElement = d->doc.createElement("frame");
-    frameElement.setAttribute("number", d->currentFramePosition.x());
-    frameElement.setAttribute("layer", d->currentFramePosition.y());
+    frameElement.setAttribute("number", frame);
+    frameElement.setAttribute("layer", layer);
     d->frameElement.appendChild(frameElement);
 
+    this->saveXMLToDisk();
+}
+
+void KisAnimationDoc::deleteFrameFromXML(int frame, int layer)
+{
+    QDomNode frameToDelete = this->getFrameElementFromXML(frame, layer);
+
+    if(!frameToDelete.isNull()) {
+        d->frameElement.removeChild(frameToDelete);
+    }
+}
+
+QDomNode KisAnimationDoc::getFrameElementFromXML(int frame, int layer)
+{
+    QDomNodeList frames = d->frameElement.childNodes();
+    QDomNode requiredFrame;
+
+    int length = frames.length();
+
+    for(int i = 0 ; i < length ; i++) {
+        QDomNode node = frames.at(i);
+        int frameNumber = node.attributes().namedItem("number").nodeValue().toInt();
+        int layerNumber = node.attributes().namedItem("layer").nodeValue().toInt();
+
+        if(frameNumber == frame && layerNumber == layer) {
+            requiredFrame = node;
+            break;
+        }
+    }
+
+    return requiredFrame;
+}
+
+void KisAnimationDoc::saveXMLToDisk()
+{
     d->store->openFileWriting("maindoc.xml");
     d->store->writeDataToFile(d->doc.toByteArray());
     d->store->closeFile();
@@ -598,7 +654,7 @@ void KisAnimationDoc::preSaveAnimation()
     d->currentFramePosition = initialFramePosition;
     d->currentFrame = this->m_layer;
 
-    this->updateXML();
+    this->addFrameToXML();
 
     d->saved = true;
 }

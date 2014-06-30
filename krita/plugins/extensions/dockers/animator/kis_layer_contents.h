@@ -31,16 +31,21 @@ class KisLayerContents : public QWidget
 
 public:
     KisLayerContents(KisFrameBox* parent = 0);
+
     void mapFrame(int frameNumber, KisAnimationFrame* frame);
     void unmapFrame(int frameNumber);
+
     int getLastFrameIndex();
     int getPreviousFrameIndexFrom(int index);
     int getNextFrameIndexFrom(int index);
     int getIndex(KisAnimationFrame* frame);
+
     KisAnimationFrame* getNextFrameFrom(KisAnimationFrame* frame);
     KisAnimationFrame* getNextFrameFrom(int index);
     KisAnimationFrame* getPreviousFrameFrom(KisAnimationFrame* frame);
-    KisAnimationFrame*getPreviousFrameFrom(int index);
+    KisAnimationFrame* getPreviousFrameFrom(int index);
+    KisAnimationFrame* getFrameAt(int index);
+
     int getContentLength();
     KisFrameBox* getParent();
     int getLayerIndex();

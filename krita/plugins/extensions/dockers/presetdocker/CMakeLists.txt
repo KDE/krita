@@ -10,5 +10,5 @@ install(TARGETS kritapresetdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_presetdocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_presetdocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

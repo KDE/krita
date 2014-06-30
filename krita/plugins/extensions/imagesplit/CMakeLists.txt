@@ -15,4 +15,4 @@ target_link_libraries(kritaimagesplit kritaui)
 install(TARGETS kritaimagesplit  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  imagesplit.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritaimagesplit.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaimagesplit.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

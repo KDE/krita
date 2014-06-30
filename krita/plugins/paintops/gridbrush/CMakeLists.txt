@@ -20,7 +20,7 @@ install(TARGETS kritagridpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritagridpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritagridpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
  install( FILES
     krita-grid.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

@@ -12,5 +12,5 @@ install(TARGETS kritadigitalmixer  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_digitalmixer.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_digitalmixer.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

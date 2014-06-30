@@ -19,4 +19,4 @@ install(TARGETS kritasobelfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritasobelfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritasobelfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

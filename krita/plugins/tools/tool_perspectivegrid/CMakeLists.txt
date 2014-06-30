@@ -20,6 +20,6 @@ install( FILES  tool_perspectivegrid.png
                 dark_tool_perspectivegrid.png
                 light_tool_perspectivegrid.png
                 tool_perspectivegrid_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  kritatoolperspectivegrid.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritatoolperspectivegrid.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

@@ -13,5 +13,5 @@ install(TARGETS kritaembossfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritaembossfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaembossfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

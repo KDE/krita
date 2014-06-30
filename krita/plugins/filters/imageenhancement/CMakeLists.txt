@@ -18,5 +18,5 @@ install(TARGETS kritaimageenhancement  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritaimageenhancement.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaimageenhancement.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

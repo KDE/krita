@@ -24,5 +24,5 @@ target_link_libraries(kritaresourcemanager kowidgets kritaui kritalibpaintop)
 install(TARGETS kritaresourcemanager  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  resourcemanager.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritaresourcemanager.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaresourcemanager.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

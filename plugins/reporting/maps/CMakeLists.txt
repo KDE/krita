@@ -23,5 +23,5 @@ target_link_libraries(${MAPS_PLUG} ${KDE4_KDECORE_LIBS} ${KOREPORT_LIBS} ${KOPRO
 ########### install files ###############
 
 install(TARGETS ${MAPS_PLUG}  DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES  koreport_mapsplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  koreport_mapsplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 kde4_install_icons(${DATA_INSTALL_DIR}/calligra/icons)

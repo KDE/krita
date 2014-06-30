@@ -15,7 +15,7 @@ install(TARGETS kritadodgeburn  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritadodgeburn.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritadodgeburn.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 
 

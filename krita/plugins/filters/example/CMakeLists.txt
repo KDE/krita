@@ -13,6 +13,6 @@ install(TARGETS kritaexample  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritaexample.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaexample.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

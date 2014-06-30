@@ -29,5 +29,5 @@ target_link_libraries(koreport_webplugin
 ########### install files ###############
 
 install(TARGETS koreport_webplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES  koreport_webplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  koreport_webplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 kde4_install_icons(${DATA_INSTALL_DIR}/calligra/icons)

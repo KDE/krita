@@ -13,5 +13,5 @@ install(TARGETS kritaraindropsfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritaraindropsfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaraindropsfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

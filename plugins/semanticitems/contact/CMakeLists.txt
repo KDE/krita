@@ -27,4 +27,4 @@ target_link_libraries(calligra_semanticitem_contact ${KDE4_KDECORE_LIBS}  ${KORD
 
 
 install(TARGETS calligra_semanticitem_contact  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES   calligra_semanticitem_contact.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES   calligra_semanticitem_contact.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

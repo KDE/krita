@@ -23,6 +23,6 @@ install(TARGETS kritahatchingpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritahatchingpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritahatchingpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  krita-hatching.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

@@ -14,5 +14,5 @@ install(TARGETS kritametadataeditor  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES metadataeditor.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins )
-install( FILES kritametadataeditor.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kritametadataeditor.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
 install( FILES editors/dublincore.ui editors/dublincore.rc editors/exif.ui editors/exif.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins/metadataeditor )

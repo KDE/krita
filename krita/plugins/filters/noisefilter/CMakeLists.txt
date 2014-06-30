@@ -21,4 +21,4 @@ install(TARGETS kritanoisefilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritanoisefilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritanoisefilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

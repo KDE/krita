@@ -214,7 +214,7 @@ void TextTool::createActions()
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                              & KoCanvasResourceManager::NoAdvancedText);
 
-    m_actionInsertSection = new KAction(koIcon("format-text-bold"), i18n("Insert new section"), this); //FIXME: Find another icon for this.
+    m_actionInsertSection = new KAction(koIcon("insert-text"), i18n("Insert new section"), this); //FIXME: Find another icon for this.
     addAction("insert_section", m_actionInsertSection);
     connect(m_actionInsertSection, SIGNAL(triggered(bool)), this, SLOT(insertNewSection()));
 

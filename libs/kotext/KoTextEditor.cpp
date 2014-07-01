@@ -1539,7 +1539,7 @@ void KoTextEditor::newSection()
 
     d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("New Section"));
     d->caret.beginEditBlock();
-    newLine();
+    d->newLine(0);
 
     KoSection *start = new KoSection(KoTextDocument(d->caret.document()).sectionManager());
     KoSectionEnd *end = new KoSectionEnd(start);

@@ -92,7 +92,10 @@
 
 #include <kdebug.h>
 #include "KoTextDebug.h"
-#include "KoSection.h"
+
+#include <KoSection.h>
+#include <KoSectionEnd.h>
+#include <KoSectionManager.h>
 
 #include <KoDocumentRdfBase.h>
 
@@ -1538,9 +1541,8 @@ void KoTextEditor::newSection()
     d->caret.beginEditBlock();
     newLine();
 
-    KoSection *start = new KoSection();
+    KoSection *start = new KoSection(KoTextDocument(d->caret.document()).sectionManager());
     KoSectionEnd *end = new KoSectionEnd(start);
-
     QTextBlockFormat fmt = d->caret.blockFormat();
 
     QList< QVariant > sectionStartings;

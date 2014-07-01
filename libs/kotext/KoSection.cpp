@@ -29,16 +29,21 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoSectionStyle.h>
-#include <QTextFrame>
+#include <KoSectionManager.h>
+#include <KoSectionEnd.h>
 
-class KoSection::Private
+class KoSectionPrivate
 {
 public:
-    Private(QString _name = "New section")
-        : name(_name)
+    explicit KoSectionPrivate(KoSectionManager *_manager)
+        : manager(_manager)
         , sectionStyle(0)
     {
+        Q_ASSERT(manager);
+        name = manager->possibleNewName();
     }
+
+    KoSectionManager *manager;
 
     QString condition;
     QString display;
@@ -49,39 +54,58 @@ public:
     QString style_name;
     KoSectionStyle *sectionStyle;
 
-    KoSectionEnd *sectionEnd; //< pointer to the corresponding section end
+    QScopedPointer<KoSectionEnd> sectionEnd; //< pointer to the corresponding section end
+    int level; //< level of the section in document, root sections have 0 level
+    QPair<int, int> bounds; //< start and end position of section in QDocument
 };
 
-KoSection::KoSection()
-    : d(new Private())
+KoSection::KoSection(KoSectionManager *manager)
+    : d_ptr(new KoSectionPrivate(manager))
 {
+    Q_D(KoSection);
+    d->manager->registerSection(this);
 }
 
 KoSection::~KoSection()
 {
-    delete d;
-}
-
-KoSection::KoSection(const KoSection& other)
-    : d(new Private())
-{
-    d->condition = other.d->condition;
-    d->display = other.d->display;
-    d->name = other.d->name;
-    d->text_protected = other.d->text_protected;
-    d->protection_key = other.d->protection_key;
-    d->protection_key_digest_algorithm = other.d->protection_key_digest_algorithm;
-    d->style_name = other.d->style_name;
-    d->sectionStyle = other.d->sectionStyle;
+    Q_D(KoSection);
+    d->manager->unregisterSection(this);
 }
 
 QString KoSection::name() const
 {
+    Q_D(const KoSection);
     return d->name;
+}
+
+QPair<int, int> KoSection::bounds() const
+{
+    Q_D(const KoSection);
+    d->manager->update();
+    return d->bounds;
+}
+
+int KoSection::level() const
+{
+    Q_D(const KoSection);
+    d->manager->update();
+    return d->level;
+}
+
+bool KoSection::setName(QString name)
+{
+    Q_D(KoSection);
+    if (d->manager->isValidNewName(name)) {
+        d->manager->sectionRenamed(d->name, name);
+        d->name = name;
+        return true;
+    }
+    return false;
 }
 
 bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml)
 {
+    Q_D(KoSection);
     // check whether we really are a section
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "section") {
         // get all the attributes
@@ -104,8 +128,9 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
     return false;
 }
 
-void KoSection::saveOdf(KoShapeSavingContext &context)
+void KoSection::saveOdf(KoShapeSavingContext &context) const
 {
+    Q_D(const KoSection);
     KoXmlWriter *writer = &context.xmlWriter();
     Q_ASSERT(writer);
     writer->startElement("text:section", false);
@@ -119,7 +144,26 @@ void KoSection::saveOdf(KoShapeSavingContext &context)
     if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
 }
 
-void KoSection::setSectionEnd(KoSectionEnd* _sectionEnd)
+void KoSection::setSectionEnd(KoSectionEnd* sectionEnd)
 {
-    d->sectionEnd = _sectionEnd;
+    Q_D(KoSection);
+    d->sectionEnd.reset(sectionEnd);
+}
+
+void KoSection::setBeginPos(int pos)
+{
+    Q_D(KoSection);
+    d->bounds.first = pos;
+}
+
+void KoSection::setEndPos(int pos)
+{
+    Q_D(KoSection);
+    d->bounds.second = pos;
+}
+
+void KoSection::setLevel(int level)
+{
+    Q_D(KoSection);
+    d->level = level;
 }

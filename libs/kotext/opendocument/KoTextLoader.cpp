@@ -14,6 +14,7 @@
  * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2009-2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -66,6 +67,7 @@
 #include "KoTableOfContentsGeneratorInfo.h"
 #include "KoBibliographyInfo.h"
 #include "KoSection.h"
+#include "KoSectionEnd.h"
 #include "KoTextSoftPageBreak.h"
 #include "KoDocumentRdfBase.h"
 #include "KoElementReference.h"
@@ -838,7 +840,7 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
 
 void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cursor)
 {
-    KoSection *section = new KoSection();
+    KoSection *section = new KoSection(d->context.sectionManager());
     if (!section->loadOdf(sectionElem, d->textSharedData, d->stylesDotXml)) {
         delete section;
         kWarning(32500) << "Could not load section";

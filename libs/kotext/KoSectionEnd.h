@@ -23,29 +23,32 @@
 #include "kotext_export.h"
 
 #include <QString>
-#include <KoSection.h>
+#include <QScopedPointer>
 
 class KoXmlElement;
 class KoShapeSavingContext;
 class KoSection;
 
+class KoSectionEndPrivate;
 /**
- * Marks the end of the given section
+ * Marks the end of the section
  */
 class KOTEXT_EXPORT KoSectionEnd {
 public:
-    KoSectionEnd(KoSection* section);
-    void saveOdf(KoShapeSavingContext &context);
+    explicit KoSectionEnd(KoSection* section);
+    ~KoSectionEnd(); // this is needed to QScopedPointer to work
+
+    void saveOdf(KoShapeSavingContext &context) const;
 
     QString name() const;
-    KoSection *correspondingSection();
+    KoSection *correspondingSection() const;
 
-    ~KoSectionEnd();
+protected:
+    const QScopedPointer<KoSectionEndPrivate> d_ptr;
+
 private:
-    class Private;
-    Private *const d;
-
-    friend class KoSection;
+    Q_DISABLE_COPY(KoSectionEnd);
+    Q_DECLARE_PRIVATE(KoSectionEnd);
 };
 
 #endif // KOSECTIONEND_H

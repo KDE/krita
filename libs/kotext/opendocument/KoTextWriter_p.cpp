@@ -23,6 +23,7 @@
 #include <KoElementReference.h>
 #include <KoTextRangeManager.h>
 #include <KoSectionUtils.h>
+#include <KoSectionEnd.h>
 
 // A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)

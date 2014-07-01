@@ -57,6 +57,7 @@
 
 #include <kdebug.h>
 #include <KoSection.h>
+#include <KoSectionEnd.h>
 
 #include <QTextTable>
 #include <QTextList>
@@ -106,7 +107,6 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
     }
 
-    int sectionLevel = 0;
     int tableAreaIndex = 0;
     int blockIndex = 0;
     int tocIndex = 0;
@@ -115,20 +115,12 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
         QTextBlockFormat format = block.blockFormat();
-        //qDebug() << it.currentBlock().isValid() << table;
 
         if (!block.isValid()) {
             if (lastBorder) { // draw previous block's border
                 lastBorder->paint(*painter, lastBorderRect);
                 lastBorder = 0;
             }
-        }
-
-        if (context.showSectionBounds) {
-            QVariant var = block.blockFormat().property(KoParagraphStyle::SectionStartings);
-            QList<QVariant> openList = var.value< QList<QVariant> >();
-
-            sectionLevel += openList.count();
         }
 
         if (table) {
@@ -373,11 +365,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             layout->draw(painter, QPointF(0, 0), selections);
 
             if (context.showSectionBounds) {
-                decorateParagraphSections(painter, block, sectionLevel);
-
-                QVariant var = block.blockFormat().property(KoParagraphStyle::SectionEndings);
-                QList<QVariant> close_list = var.value< QList<QVariant> >();
-                sectionLevel -= close_list.count();
+                decorateParagraphSections(painter, block);
             }
             decorateParagraph(painter, block, context.showFormattingCharacters, context.showSpellChecking);
 
@@ -652,7 +640,7 @@ static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, cons
     return 0;
 }
 
-void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &block, int sectionLevel)
+void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &block)
 {
     QTextLayout *layout = block.layout();
     QTextBlockFormat bf = block.blockFormat();
@@ -677,15 +665,17 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
         QVariant var = bf.property(KoParagraphStyle::SectionStartings);
         QList<QVariant> openList = var.value< QList<QVariant> >();
 
-        painter->drawLine(xl + (sectionLevel - openList.size()) * levelShift, yu,
-                          xr - (sectionLevel - openList.size()) * levelShift, yu);
-
         for (int i = 0; i < openList.size(); i++) {
-            painter->drawLine(xl + (sectionLevel - 1 - i) * levelShift, yu,
-                              xl + (sectionLevel - 1 - i) * levelShift, yu + bracketSize);
+            int sectionLevel = static_cast<KoSection *>(openList[i].value<void *>())->level();
+            if (i == 0) {
+                painter->drawLine(xl + sectionLevel * levelShift, yu,
+                                  xr - sectionLevel * levelShift, yu);
+            }
+            painter->drawLine(xl + sectionLevel * levelShift, yu,
+                              xl + sectionLevel * levelShift, yu + bracketSize);
 
-            painter->drawLine(xr - (sectionLevel - 1 - i) * levelShift, yu,
-                              xr - (sectionLevel - 1 - i) * levelShift, yu + bracketSize);
+            painter->drawLine(xr - sectionLevel * levelShift, yu,
+                              xr - sectionLevel * levelShift, yu + bracketSize);
         }
     }
 
@@ -693,15 +683,17 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
         QVariant var = bf.property(KoParagraphStyle::SectionEndings);
         QList<QVariant> closeList = var.value< QList<QVariant> >();
 
-        painter->drawLine(xl + (sectionLevel - closeList.size()) * levelShift, yd,
-                          xr - (sectionLevel - closeList.size()) * levelShift, yd);
-
         for (int i = 0; i < closeList.size(); i++) {
-            painter->drawLine(xl + (sectionLevel - closeList.size() + i) * levelShift, yd,
-                              xl + (sectionLevel - closeList.size() + i) * levelShift, yd - bracketSize);
+            int sectionLevel = static_cast<KoSectionEnd *>(closeList[i].value<void *>())->correspondingSection()->level();
+            if (i == closeList.count() - 1) {
+                painter->drawLine(xl + sectionLevel * levelShift, yd,
+                                  xr - sectionLevel * levelShift, yd);
+            }
+            painter->drawLine(xl + sectionLevel * levelShift, yd,
+                              xl + sectionLevel * levelShift, yd - bracketSize);
 
-            painter->drawLine(xr - (sectionLevel - closeList.size() + i) * levelShift, yd,
-                              xr - (sectionLevel - closeList.size() + i) * levelShift, yd - bracketSize);
+            painter->drawLine(xr - sectionLevel * levelShift, yd,
+                              xr - sectionLevel * levelShift, yd - bracketSize);
         }
     }
 

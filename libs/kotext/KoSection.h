@@ -22,16 +22,17 @@
 
 #include "kotext_export.h"
 
-#include <KoSectionEnd.h>
-#include <QMetaType>
 #include <QString>
-#include <QTextCursor>
+#include <QPair>
+#include <QScopedPointer>
 
 class KoXmlElement;
 class KoShapeSavingContext;
 class KoTextSharedLoadingData;
 class KoSectionEnd;
+class KoSectionManager;
 
+class KoSectionPrivate;
 /**
  * Contains the information about the current text:section.
  *
@@ -52,23 +53,36 @@ class KoSectionEnd;
 class KOTEXT_EXPORT KoSection
 {
 public:
-
-    KoSection();
+    explicit KoSection(KoSectionManager *manager);
     ~KoSection();
-    KoSection(const KoSection& other);
 
+    /// Returns section name
     QString name() const;
+    /// Returns starting and ending position of section in QTextDocument
+    QPair<int, int> bounds() const;
+    /// Returns section level. Root section has @c 0 level.
+    int level() const;
+    /** Tries to set section's name to @p name
+     * @return @c false if there is a section with such name
+     * and new name isn't accepted
+     */
+    bool setName(QString name);
 
     bool loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml);
-    void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoShapeSavingContext &context) const;
+protected:
+    const QScopedPointer<KoSectionPrivate> d_ptr;
+
 private:
-    class Private;
-    Private *const d;
+    Q_DISABLE_COPY(KoSection)
+    Q_DECLARE_PRIVATE(KoSection)
 
     void setSectionEnd(KoSectionEnd *sectionEnd);
+    void setBeginPos(int pos);
+    void setEndPos(int pos);
+    void setLevel(int level);
+    friend class KoSectionManager;
     friend class KoSectionEnd;
 };
-
-Q_DECLARE_METATYPE(KoSection)
 
 #endif // KOSECTION_H

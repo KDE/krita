@@ -3,6 +3,7 @@
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,6 +42,7 @@
 #include "KoOdfLineNumberingConfiguration.h"
 #include "changetracker/KoChangeTracker.h"
 #include <KoShapeController.h>
+#include <KoSectionManager.h>
 
 Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection)
 Q_DECLARE_METATYPE(QTextFrame*)
@@ -64,6 +66,7 @@ const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGenera
 const QUrl KoTextDocument::FrameCharFormatUrl = QUrl("kotext://frameCharFormat");
 const QUrl KoTextDocument::FrameBlockFormatUrl = QUrl("kotext://frameBlockFormat");
 const QUrl KoTextDocument::ShapeControllerUrl = QUrl("kotext://shapeController");
+const QUrl KoTextDocument::SectionManagerUrl = QUrl("ktext://sectionManager");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -396,3 +399,21 @@ void KoTextDocument::setFrameBlockFormat(QTextBlockFormat format)
 {
     m_document->addResource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl, QVariant::fromValue(format));
 }
+
+KoSectionManager* KoTextDocument::sectionManager()
+{
+    QVariant resource = m_document->resource(KoTextDocument::SectionManager, SectionManagerUrl);
+    if (!resource.isValid()) {
+        setSectionManager(new KoSectionManager(document())); //using create on demand strategy
+    }
+
+    return m_document->resource(KoTextDocument::SectionManager, SectionManagerUrl).value<KoSectionManager *>();
+}
+
+void KoTextDocument::setSectionManager(KoSectionManager *manager)
+{
+    QVariant v;
+    v.setValue(manager);
+    m_document->addResource(KoTextDocument::SectionManager, SectionManagerUrl, v);
+}
+

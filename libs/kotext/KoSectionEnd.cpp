@@ -22,12 +22,13 @@
 
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoSection.h>
 
-class KoSectionEnd::Private
+class KoSectionEndPrivate
 {
 public:
-    Private(KoSection *_section)
-    : section(_section)
+    KoSectionEndPrivate(KoSection *_section)
+        : section(_section)
     {
         Q_ASSERT(section);
     }
@@ -35,28 +36,30 @@ public:
     KoSection *section; //< pointer to the corresponding section
 };
 
-KoSectionEnd::KoSectionEnd(KoSection *_section)
-    : d(new Private(_section))
+KoSectionEnd::KoSectionEnd(KoSection* section)
+    : d_ptr(new KoSectionEndPrivate(section))
 {
-    _section->setSectionEnd(this);
+    Q_D(KoSectionEnd);
+    d->section->setSectionEnd(this);
 }
 
 KoSectionEnd::~KoSectionEnd()
 {
-    delete d;
 }
 
 QString KoSectionEnd::name() const
 {
+    Q_D(const KoSectionEnd);
     return d->section->name();
 }
 
-KoSection* KoSectionEnd::correspondingSection()
+KoSection* KoSectionEnd::correspondingSection() const
 {
+    Q_D(const KoSectionEnd);
     return d->section;
 }
 
-void KoSectionEnd::saveOdf(KoShapeSavingContext &context)
+void KoSectionEnd::saveOdf(KoShapeSavingContext &context) const
 {
     KoXmlWriter *writer = &context.xmlWriter();
     Q_ASSERT(writer);

@@ -35,6 +35,7 @@
 #include <KoAnnotation.h>
 #include <KoSection.h>
 #include <KoSectionUtils.h>
+#include <KoSectionManager.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 
@@ -195,6 +196,7 @@ public:
 
     void finalize(QTextCursor *cur)
     {
+        KoTextDocument(cur->document()).sectionManager()->invalidate();
         // It means that selection isn't within one block.
         if (m_hasEntirelyInsideBlock || m_startBlockNum != -1 || m_endBlockNum != -1) {
             QList<QVariant> openList, closeList;

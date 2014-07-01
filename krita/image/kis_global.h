@@ -135,5 +135,9 @@ inline T kisGrowRect(const T &rect, U offset) {
     return rect.adjusted(-offset, -offset, offset, offset);
 }
 
+inline qreal kisDistance(const QPointF &pt1, const QPointF &pt2) {
+    return std::sqrt(pow2(pt1.x() - pt2.x()) + pow2(pt1.y() - pt2.y()));
+}
+
 #endif // KISGLOBAL_H_
 

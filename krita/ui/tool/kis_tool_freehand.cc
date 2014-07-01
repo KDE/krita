@@ -68,7 +68,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     setSupportOutline(true);
 
-    m_infoBuilder = new KisToolPaintingInformationBuilder(this);
+    m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
     m_recordingAdapter = new KisRecordingAdapter();
     m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText, m_recordingAdapter);
 

@@ -93,7 +93,7 @@ protected slots:
     void setAssistant(bool assistant);
 
 private:
-    friend class KisToolPaintingInformationBuilder;
+    friend class KisToolFreehandPaintingInformationBuilder;
 
     /**
      * Adjusts a coordinates according to a KisPaintingAssitant,

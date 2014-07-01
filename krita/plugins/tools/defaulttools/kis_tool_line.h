@@ -25,11 +25,12 @@
 
 #include "kis_tool_paint.h"
 
+#include <QScopedPointer>
 #include "kis_global.h"
 #include "kis_types.h"
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
-#include "kis_paint_information.h"
+#include "kis_signal_compressor.h"
 #include <KoIcon.h>
 
 class KisPainter;
@@ -38,6 +39,9 @@ class KoCanvasBase;
 class KisRecordedPolyLinePaintAction;
 class QCheckBox;
 class QPushButton;
+class KisToolPaintingInformationBuilder;
+class KisToolLineHelper;
+
 
 class KisToolLine : public KisToolPaint
 {
@@ -56,6 +60,9 @@ public:
 
     virtual QString quickHelp() const;
 
+private slots:
+    void updateStroke();
+
 private:
     void paintLine(QPainter& gc, const QRect& rc);
     QPointF straightLine(QPointF point);
@@ -63,15 +70,16 @@ private:
     virtual QWidget* createOptionWidget();
 
 private:
-    KisPaintInformation m_startPos;
-    KisPaintInformation m_endPos;
-    KisPainter*         m_painter;
-    QCheckBox*          m_cbPressure;
-    QCheckBox*          m_cbTilt;
-    QCheckBox*          m_cbRotation;
-    QCheckBox*          m_cbTangPressure;
-    QPushButton*        m_bnVaryingEnds;
-    float               m_maxPressure;
+    QPointF m_startPoint;
+    QPointF m_endPoint;
+    QPointF m_lastUpdatedPoint;
+
+    QCheckBox *m_chkUseSensors;
+
+    QScopedPointer<KisToolPaintingInformationBuilder> m_infoBuilder;
+    QScopedPointer<KisToolLineHelper> m_helper;
+    KisSignalCompressor m_strokeUpdateCompressor;
+    KisSignalCompressor m_longStrokeUpdateCompressor;
 };
 
 

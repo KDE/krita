@@ -83,10 +83,25 @@ signals:
     void requestExplicitUpdateOutline();
 
 protected:
+    void cancelPaint();
+    int elapsedStrokeTime() const;
+
+    void initPaintImpl(const KisPaintInformation &previousPaintInformation,
+                       KoCanvasResourceManager *resourceManager,
+                       KisImageWSP image,
+                       KisStrokesFacade *strokesFacade,
+                       KisPostExecutionUndoAdapter *undoAdapter,
+                       KisNodeSP overrideNode = 0,
+                       KisDefaultBoundsBaseSP bounds = 0);
+
+protected:
 
     virtual void createPainters(QVector<PainterInfo*> &painterInfos,
                                 const QPointF &lastPosition,
                                 int lastTime);
+
+    // to be overridden in derived classes to add painting with
+    // multiple painters
 
     virtual void paintAt(const QVector<PainterInfo*> &painterInfos,
                          const KisPaintInformation &pi);
@@ -101,6 +116,7 @@ protected:
                                   const QPointF &control2,
                                   const KisPaintInformation &pi2);
 
+    // lo-level methods for painting primitives
 
     void paintAt(PainterInfo *painterInfo, const KisPaintInformation &pi);
 
@@ -110,6 +126,18 @@ protected:
 
     void paintBezierCurve(PainterInfo *painterInfo,
                           const KisPaintInformation &pi1,
+                          const QPointF &control1,
+                          const QPointF &control2,
+                          const KisPaintInformation &pi2);
+
+    // hi-level methods for painting primitives
+
+    void paintAt(const KisPaintInformation &pi);
+
+    void paintLine(const KisPaintInformation &pi1,
+                   const KisPaintInformation &pi2);
+
+    void paintBezierCurve(const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
                           const KisPaintInformation &pi2);

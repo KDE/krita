@@ -208,13 +208,17 @@ public slots:
     virtual void canvasResourceChanged(int key, const QVariant & res);
 
 protected:
-    QPointF widgetCenterInWidgetPixels();
-    QPointF convertDocumentToWidget(const QPointF& pt);
+    // conversion methods are also needed by the paint information builder
+    friend class KisToolPaintingInformationBuilder;
 
     /// Convert from native (postscript points) to image pixel
     /// coordinates.
     QPointF convertToPixelCoord(KoPointerEvent *e);
     QPointF convertToPixelCoord(const QPointF& pt);
+
+protected:
+    QPointF widgetCenterInWidgetPixels();
+    QPointF convertDocumentToWidget(const QPointF& pt);
 
     /// Convert from native (postscript points) to integer image pixel
     /// coordinates. This truncates the floating point components and

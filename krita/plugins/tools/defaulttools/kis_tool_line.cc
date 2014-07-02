@@ -50,6 +50,7 @@
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
     : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
+      m_showOutline(false),
       m_infoBuilder(new KisToolPaintingInformationBuilder(this)),
       m_helper(new KisToolLineHelper(m_infoBuilder.data(), kundo2_i18n("Draw Line"))),
       m_strokeUpdateCompressor(500, KisSignalCompressor::FIRST_ACTIVE),
@@ -76,9 +77,14 @@ int KisToolLine::flags() const
 QWidget* KisToolLine::createOptionWidget()
 {
     QWidget* widget = KisToolPaint::createOptionWidget();
+
     m_chkUseSensors = new QCheckBox(i18n("Use sensors"));
     m_chkUseSensors->setChecked(true);
     addOptionWidgetOption(m_chkUseSensors);
+
+    m_chkShowOutline = new QCheckBox(i18n("Preview"));
+    m_chkShowOutline->setChecked(m_showOutline);
+    addOptionWidgetOption(m_chkShowOutline);
 
     return widget;
 }
@@ -103,6 +109,7 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
 
+    m_showOutline = m_chkShowOutline->isChecked() || nodeAbility != PAINT;
     m_helper->setEnabled(nodeAbility == PAINT);
     m_helper->setUseSensors(m_chkUseSensors->isChecked());
     m_helper->start(event);
@@ -132,8 +139,11 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
     if (event->modifiers() == Qt::AltModifier) {
         QPointF trans = pos - m_endPoint;
         m_helper->translatePoints(trans);
+        m_startPoint += trans;
+        m_endPoint += trans;
     } else if (event->modifiers() == Qt::ShiftModifier) {
-        m_helper->addPoint(event, straightLine(pos));
+        pos = straightLine(pos);
+        m_helper->addPoint(event, pos);
     } else {
         m_helper->addPoint(event);
     }
@@ -227,7 +237,7 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
     QPointF viewStartPos = pixelToView(m_startPoint);
     QPointF viewStartEnd = pixelToView(m_endPoint);
 
-    if (canvas()) {
+    if (m_showOutline && canvas()) {
         QPainterPath path;
         path.moveTo(viewStartPos);
         path.lineTo(viewStartEnd);

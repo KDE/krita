@@ -70,11 +70,14 @@ private:
     virtual QWidget* createOptionWidget();
 
 private:
+    bool m_showOutline;
+
     QPointF m_startPoint;
     QPointF m_endPoint;
     QPointF m_lastUpdatedPoint;
 
     QCheckBox *m_chkUseSensors;
+    QCheckBox *m_chkShowOutline;
 
     QScopedPointer<KisToolPaintingInformationBuilder> m_infoBuilder;
     QScopedPointer<KisToolLineHelper> m_helper;

@@ -332,7 +332,6 @@ void MainWindow::switchToSketch()
     }
 
     setCentralWidget(d->sketchView);
-    emit switchedToSketch();
 
     if (d->slateMode) {
         setWindowState(windowState() | Qt::WindowFullScreen);
@@ -369,6 +368,7 @@ void MainWindow::sketchChange()
         qApp->processEvents();
         KisConfig cfg;
         cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+        emit switchedToSketch();
     }
     if (d->toDesktop)
     {

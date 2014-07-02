@@ -183,6 +183,9 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
     connect(m_zoomController, SIGNAL(aspectModeChanged(bool)),
             this, SLOT(changeAspectMode(bool)));
+
+    applyRulersUnit(m_view->document()->unit());
+
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &viewPos)

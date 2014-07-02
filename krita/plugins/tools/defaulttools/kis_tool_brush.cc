@@ -171,6 +171,7 @@ qreal KisToolBrush::delayDistance() const
 void KisToolBrush::setUseDelayDistance(bool value)
 {
     smoothingOptions()->setUseDelayDistance(value);
+    m_sliderDelayDistance->setEnabled(value);
     enableControl(m_chkFinishStabilizedCurve, !value);
     emit useDelayDistanceChanged();
 }
@@ -257,15 +258,15 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderDelayDistance->setToolTip(i18n("Radius where the brush is blocked"));
     m_sliderDelayDistance->setRange(0, 500);
     m_sliderDelayDistance->setSuffix(i18n(" px"));
-    connect(m_chkDelayDistance, SIGNAL(toggled(bool)), m_sliderDelayDistance, SLOT(setEnabled(bool)));
     connect(m_sliderDelayDistance, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
 
     addOptionWidgetOption(m_sliderDelayDistance, m_chkDelayDistance);
     addOptionWidgetOption(m_chkFinishStabilizedCurve, new QLabel(i18n("Finish line:")));
 
-    m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
     m_sliderDelayDistance->setValue(smoothingOptions()->delayDistance());
-
+    m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
+    // if the state is not flipped, then the previous line doesn't generate any signals
+    setUseDelayDistance(m_chkDelayDistance->isChecked());
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);

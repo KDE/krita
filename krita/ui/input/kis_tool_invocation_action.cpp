@@ -33,10 +33,9 @@
 class KisToolInvocationAction::Private
 {
 public:
-    Private() : active(false), havePaintedAtLeastOnce(false) { }
+    Private() : active(false) { }
 
     bool active;
-    bool havePaintedAtLeastOnce;
 };
 
 KisToolInvocationAction::KisToolInvocationAction()
@@ -79,14 +78,7 @@ void KisToolInvocationAction::deactivate(int shortcut)
     inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
 
     if (shortcut == LineToolShortcut) {
-        if (d->havePaintedAtLeastOnce) {
             KoToolManager::instance()->switchBackRequested();
-        } else {
-            KoToolManager::instance()->switchBackRequested();
-            KoToolManager::instance()->switchToolRequested("KritaShape/KisToolLine");
-        }
-    } else {
-        d->havePaintedAtLeastOnce = false;
     }
 }
 
@@ -109,7 +101,6 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
                 KisToolProxy::BEGIN, KisTool::Primary, event, event,
                 inputManager()->lastTabletEvent(),
                 workaround);
-        d->havePaintedAtLeastOnce = true;
     } else if (shortcut == ConfirmShortcut) {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);

@@ -206,6 +206,11 @@ public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
     virtual void canvasResourceChanged(int key, const QVariant & res);
+    // Implement this slot in case there are any widgets or properties which need
+    // to be updated after certain operations, to reflect the inner state correctly.
+    // At the moment this is used for smoothing options in the freehand brush, but
+    // this will likely be expanded.
+    virtual void updateSettingsViews();
 
 protected:
     // conversion methods are also needed by the paint information builder

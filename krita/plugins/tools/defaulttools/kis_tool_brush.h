@@ -82,6 +82,8 @@ public slots:
 
     void setFinishStabilizedCurve(bool value);
 
+    virtual void updateSettingsViews();
+
 Q_SIGNALS:
     void smoothnessQualityChanged();
     void smoothnessFactorChanged();

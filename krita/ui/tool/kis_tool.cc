@@ -242,6 +242,10 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
     };
 }
 
+void KisTool::updateSettingsViews()
+{
+}
+
 QPointF KisTool::widgetCenterInWidgetPixels()
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());

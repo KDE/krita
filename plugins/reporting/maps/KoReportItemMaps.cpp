@@ -33,7 +33,7 @@
 #include <QLabel>
 #include <QStringList>
 
-#define myDebug() kDebug(44021)
+#define myDebug() if (0) kDebug(44021)
 
 KoReportItemMaps::KoReportItemMaps(QDomNode & element)
 {
@@ -61,8 +61,8 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
             kDebug() << "====== while parsing image element encountered unknow element: " << n;
 //         }
     }
-    m_mapImage = new QImage(m_size.toScene().toSize(), QImage::Format_ARGB32);
-    m_mapImage->fill(QColor(200, 150, 5).rgb());
+    m_mapImage = QImage(m_size.toScene().toSize(), QImage::Format_ARGB32);
+    m_mapImage.fill(QColor(200, 150, 5).rgb());
 }
 
 Marble::MarbleWidget* KoReportItemMaps::initMarble()
@@ -83,13 +83,12 @@ Marble::MarbleWidget* KoReportItemMaps::initMarble()
 KoReportItemMaps::~KoReportItemMaps()
 {
     myDebug() << "DIE:" << this << m_marbles.count();
-    delete m_mapImage;
-    delete m_set;
     QMap<QString, Marble::MarbleWidget*>::iterator i = m_marbles.begin();
     while(i != m_marbles.end()){
         delete i.value();
         i++;
     }
+    delete m_set;
 }
 
 // bool KoReportItemMaps::isInline() const
@@ -202,10 +201,10 @@ int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const
         marble = m_marbles[dataKey];
     }
 
-    marble->render(m_mapImage);
+    marble->render(&m_mapImage);
     
     OROImage * id = new OROImage();
-    id->setImage(*m_mapImage);
+    id->setImage(m_mapImage);
     id->setScaled(false);
 
     id->setPosition(m_pos.toScene() + offset);
@@ -238,7 +237,7 @@ int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const
 void KoReportItemMaps::requestRedraw()
 {
     myDebug() << sender();
-    QImage tmpImg(*m_mapImage);
+    QImage tmpImg(m_mapImage);
     Marble::MarbleModel* marbleModel = dynamic_cast<Marble::MarbleModel*>(sender());
     OroIds *oroIds = &m_marbleImgs[marbleModel];
     oroIds->marbleWidget->render(&tmpImg);

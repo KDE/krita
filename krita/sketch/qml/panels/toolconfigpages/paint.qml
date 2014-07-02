@@ -169,7 +169,7 @@ Column {
         width: parent.width;
         placeholder: "Delay Distance"
         useExponentialValue: true;
-        min: 0; max: 1; decimals: 2;
+        min: 0; max: 500; decimals: 0;
         value: toolManager.currentTool.delayDistance;
         onValueChanged: if (toolManager.currentTool && toolManager.currentTool.delayDistance !== undefined && toolManager.currentTool.delayDistance !== value) toolManager.currentTool.delayDistance = value;
     }

@@ -435,7 +435,7 @@ QSize HorizontalPaintingStrategy::sizeHint()
     const int digitsHeight = fm.ascent() + 1; // +1 for baseline
     const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
-    return QSize(minimum, minimum);
+    return QSize(0, minimum);
 }
 
 QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter)
@@ -598,7 +598,7 @@ QSize VerticalPaintingStrategy::sizeHint()
     const int digitsHeight = fm.ascent() + 1; // +1 for baseline
     const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
-    return QSize(minimum, minimum);
+    return QSize(minimum, 0);
 }
 
 

@@ -73,6 +73,7 @@
 #include <kis_qpainter_canvas.h>
 #include <kis_part2.h>
 #include <kis_canvas_decoration.h>
+#include <kis_tool_freehand.h>
 
 #include "KisSketchPart.h"
 #include "KisSelectionExtras.h"
@@ -390,6 +391,9 @@ bool KisSketchView::event( QEvent* event )
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             if (d->view) {
+                d->view->canvasControllerWidget()->setFocus();
+                qApp->processEvents();
+
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
                 syncObject->backgroundColor = provider->bgColor();
                 syncObject->foregroundColor = provider->fgColor();
@@ -415,6 +419,11 @@ bool KisSketchView::event( QEvent* event )
                 syncObject->mirrorVertical = provider->mirrorVertical();
                 syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
 
+                KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(d->view->canvasBase(), syncObject->activeToolId));
+                if(tool) {
+                    syncObject->smoothingOptions = tool->smoothingOptions();
+                }
+
                 syncObject->initialized = true;
             }
 
@@ -427,6 +436,19 @@ bool KisSketchView::event( QEvent* event )
                 d->view->canvasControllerWidget()->setFocus();
                 qApp->processEvents();
 
+                KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(d->view->canvasBase(), syncObject->activeToolId));
+                if(tool && syncObject->smoothingOptions) {
+                    tool->smoothingOptions()->setSmoothingType(syncObject->smoothingOptions->smoothingType());
+                    tool->smoothingOptions()->setSmoothPressure(syncObject->smoothingOptions->smoothPressure());
+                    tool->smoothingOptions()->setTailAggressiveness(syncObject->smoothingOptions->tailAggressiveness());
+                    tool->smoothingOptions()->setUseScalableDistance(syncObject->smoothingOptions->useScalableDistance());
+                    tool->smoothingOptions()->setSmoothnessDistance(syncObject->smoothingOptions->smoothnessDistance());
+                    tool->smoothingOptions()->setUseDelayDistance(syncObject->smoothingOptions->useDelayDistance());
+                    tool->smoothingOptions()->setDelayDistance(syncObject->smoothingOptions->delayDistance());
+                    tool->smoothingOptions()->setFinishStabilizedCurve(syncObject->smoothingOptions->finishStabilizedCurve());
+                    tool->updateSettingsViews();
+                }
+
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
 
                 provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
@@ -436,6 +458,8 @@ bool KisSketchView::event( QEvent* event )
                 provider->setPaintOpPreset(syncObject->paintOp);
                 qApp->processEvents();
 
+                KoToolManager::instance()->switchToolRequested("InteractionTool");
+                qApp->processEvents();
                 KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
                 qApp->processEvents();
 

@@ -108,4 +108,10 @@ struct KRITAUI_EXPORT KisSelectionToVectorActionFactory : public KisNoParameterA
     void run(KisView2 *view);
 };
 
+struct KRITAUI_EXPORT KisShapesToVectorSelectionActionFactory : public KisNoParameterActionFactory {
+    KisShapesToVectorSelectionActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
+    void run(KisView2 *view);
+};
+
+
 #endif /* __KIS_SELECTION_ACTION_FACTORIES_H */

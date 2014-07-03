@@ -77,21 +77,13 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
 
-    if (option.state & QStyle::State_Selected) {
-        painter->setPen(QPen(option.palette.highlightedText(), 2.0));
-        painter->fillRect(option.rect, option.palette.highlight());
-    } else {
-        painter->setPen(QPen(option.palette.text(), 2.0));
-
-    }
-
     QImage preview = preset->image();
 
     if(preview.isNull()) {
         return;
     }
 
-    QRect paintRect = option.rect.adjusted(2, 2, -2, -2);
+    QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
     if (!m_showText) {
         painter->drawImage(paintRect.x(), paintRect.y(),
                            preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -108,7 +100,8 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
     if (option.state & QStyle::State_Selected) {
-        painter->setOpacity(0.25);
+        painter->setCompositionMode(QPainter::CompositionMode_HardLight);
+        painter->setOpacity(0.65);
         painter->fillRect(option.rect, option.palette.highlight());
     }
     painter->restore();

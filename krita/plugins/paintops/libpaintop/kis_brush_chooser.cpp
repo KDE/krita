@@ -83,6 +83,9 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->drawRect(option.rect);
+        painter->setCompositionMode(QPainter::CompositionMode_HardLight);
+        painter->setOpacity(0.65);
+        painter->fillRect(option.rect, option.palette.highlight());
     }
 
     painter->restore();

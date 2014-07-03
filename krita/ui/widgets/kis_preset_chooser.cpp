@@ -37,6 +37,7 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>
+#include <KoResourceItemChooserSync.h>
 
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
@@ -216,9 +217,13 @@ void KisPresetChooser::resizeEvent(QResizeEvent* event)
 void KisPresetChooser::updateViewSettings()
 {
     if (m_mode == THUMBNAIL) {
+        m_chooser->setSynced(true);
         m_delegate->setShowText(false);
     } else if (m_mode == DETAIL) {
+        m_chooser->setSynced(false);
         m_chooser->setColumnCount(1);
+        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+        m_chooser->setRowHeight(chooserSync->baseLength());
         m_delegate->setShowText(true);
     } else if (m_mode == STRIP) {
         m_chooser->setSynced(false);

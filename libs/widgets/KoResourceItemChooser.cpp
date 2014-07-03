@@ -505,6 +505,7 @@ QToolButton* KoResourceItemChooser::viewModeButton() const
 
 void KoResourceItemChooser::setSynced(bool sync)
 {
+    d->synced = sync;
     KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
     if (sync) {
         connect(chooserSync, SIGNAL(baseLenghtChanged(int)), SLOT(baseLengthChanged(int)));
@@ -512,7 +513,6 @@ void KoResourceItemChooser::setSynced(bool sync)
     } else {
         chooserSync->disconnect(this);
     }
-    d->synced = sync;
 }
 
 void KoResourceItemChooser::baseLengthChanged(int length)

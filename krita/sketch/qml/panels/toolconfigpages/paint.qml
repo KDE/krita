@@ -250,6 +250,16 @@ Column {
             smoothFinishStabilizedCurve.checked = toolManager.currentTool.finishStabilizedCurve;
         }
     }
+    Connections {
+        target: toolManager.currentTool;
+        onSmoothnessQualityChanged: smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
+        onSmoothnessFactorChanged: smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
+        onSmoothPressureChanged: smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
+        onUseScalableDistanceChanged: smoothScalableDistance.checked = toolManager.currentTool.useScalableDistance;
+        onUseDelayDistanceChanged: smoothDelayDistance.checked = toolManager.currentTool.useDelayDistance;
+        onDelayDistanceChanged: smoothDelayDistanceSlider.value = toolManager.currentTool.delayDistance;
+        onFinishStabilizedCurveChanged: smoothFinishStabilizedCurve.checked = toolManager.currentTool.finishStabilizedCurve;
+    }
 
     QtObject {
         id: d;

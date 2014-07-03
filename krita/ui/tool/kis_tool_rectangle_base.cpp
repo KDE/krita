@@ -126,8 +126,8 @@ QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end
     qreal x1 = end.x();
     qreal y1 = end.y();
 
-    int newX0 = x1 - x0 > 0 ? qCeil(x0) : qFloor(x0);
-    int newY0 = y1 - y0 > 0 ? qCeil(y0) : qFloor(y0);
+    int newX0 = qRound(x0);
+    int newY0 = qRound(y0);
 
     int newX1 = qRound(x1);
     int newY1 = qRound(y1);

@@ -117,7 +117,6 @@ void KoSectionManager::registerSection(KoSection* section)
     d->sectionCount++;
     d->sectionNames[section->name()] = section;
     invalidate();
-    qDebug() << d->sectionNames;
 }
 
 void KoSectionManager::sectionRenamed(QString oldName, QString name)
@@ -127,8 +126,6 @@ void KoSectionManager::sectionRenamed(QString oldName, QString name)
     KoSection *sec = *it;
     d->sectionNames.erase(it);
     d->sectionNames[name] = sec;
-    qDebug() << d->sectionNames;
-
 }
 
 void KoSectionManager::unregisterSection(KoSection* section)
@@ -138,8 +135,6 @@ void KoSectionManager::unregisterSection(KoSection* section)
     d->sectionCount--;
     d->sectionNames.remove(section->name());
     invalidate();
-    qDebug() << d->sectionNames;
-
 }
 
 void KoSectionManager::update()

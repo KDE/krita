@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010-2011 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +36,7 @@ SimpleInsertWidget::SimpleInsertWidget(TextTool *tool, QWidget *parent)
     widget.insertSpecialChar->setDefaultAction(tool->action("insert_specialchar"));
     widget.quickTable->addAction(tool->action("insert_table"));
     widget.insertSection->setDefaultAction(tool->action("insert_section"));
+    widget.configureSection->setDefaultAction(tool->action("configure_section"));
     widget.insertPageBreak->setDefaultAction(tool->action("insert_framebreak"));
 
     connect(widget.insertVariable, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));

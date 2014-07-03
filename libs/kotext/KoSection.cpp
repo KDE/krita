@@ -95,6 +95,11 @@ int KoSection::level() const
 bool KoSection::setName(QString name)
 {
     Q_D(KoSection);
+
+    if (name == d->name) {
+        return true;
+    }
+
     if (d->manager->isValidNewName(name)) {
         d->manager->sectionRenamed(d->name, name);
         d->name = name;
@@ -111,10 +116,16 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
         // get all the attributes
         d->condition = element.attributeNS(KoXmlNS::text, "condition");
         d->display = element.attributeNS(KoXmlNS::text, "display");
+        
         if (d->display == "condition" && d->condition.isEmpty()) {
             kWarning(32500) << "Section display is set to \"condition\", but condition is empty.";
         }
-        d->name = element.attributeNS(KoXmlNS::text, "name");
+
+        if (!setName(element.attributeNS(KoXmlNS::text, "name"))) {
+            kWarning(32500) << "Sections name \"" << element.attributeNS(KoXmlNS::text, "name")
+                << "\" repeated, but must be unique.";
+        }
+
         d->text_protected = element.attributeNS(KoXmlNS::text, "text-protected");
         d->protection_key = element.attributeNS(KoXmlNS::text, "protection-key");
         d->protection_key_digest_algorithm = element.attributeNS(KoXmlNS::text, "protection-key-algorithm");

@@ -3,6 +3,7 @@
 * Copyright (C) 2009 Thomas Zander <zander@kde.org>
 * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
 * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
+* Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -30,6 +31,7 @@
 #include "styles/KoListStyle.h"
 #include <KoToolSelection.h>
 #include <KoBorder.h>
+#include <KoSection.h>
 
 #include <QClipboard>
 #include <QMetaType>
@@ -139,7 +141,6 @@ private:
     friend class InsertInlineObjectCommand;
     friend class InsertNoteCommand;
     friend class ParagraphFormattingCommand;
-    friend class ExtractToSectionCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -460,6 +461,8 @@ public slots:
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
 
     void newSection();
+
+    void renameSection(KoSection *section, QString newName);
 
     void newLine();
 

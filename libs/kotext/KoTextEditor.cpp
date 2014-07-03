@@ -1569,6 +1569,12 @@ void KoTextEditor::newSection()
     emit cursorPositionChanged();
 }
 
+void KoTextEditor::renameSection(KoSection* section, QString newName)
+{
+    //FIXME: handle this somehow to undo system
+    section->setName(newName);
+}
+
 void KoTextEditor::newLine()
 {
     if (isEditProtected()) {

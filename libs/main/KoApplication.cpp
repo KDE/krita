@@ -207,6 +207,8 @@ BOOL isWow64()
 
 bool KoApplication::start()
 {
+
+
 #if defined(Q_OS_WIN) || defined (Q_OS_MACX)
 #ifdef ENV32BIT
     if (isWow64()) {
@@ -221,6 +223,10 @@ bool KoApplication::start()
 #endif
     QDir appdir(applicationDirPath());
     appdir.cdUp();
+
+    KGlobal::dirs()->addXdgDataPrefix(appdir.absolutePath() + "/share");
+    KGlobal::dirs()->addPrefix(appdir.absolutePath());
+
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     if (!env.contains("KDEHOME")) {
@@ -240,7 +246,8 @@ bool KoApplication::start()
     }
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
                                       + appdir.absolutePath() + "/lib" + ";"
-                                      + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                                      + appdir.absolutePath() + "/lib/kde4" + ";"
+                                      + appdir.absolutePath() + "/Frameworks" + ";"
                                       + appdir.absolutePath()));
 #endif
 
@@ -324,7 +331,9 @@ bool KoApplication::start()
 
         // get all possible autosave files in the home dir, this is for unsaved document autosave files
         // Using the extension allows to avoid relying on the mime magic when opening
-        KMimeType::Ptr mime = KMimeType::mimeType(doc->nativeFormatMimeType());
+        QByteArray ba = doc->nativeFormatMimeType();
+        qDebug() << ba;
+        KMimeType::Ptr mime = KMimeType::mimeType(ba);
         if (!mime) {
             qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
         }

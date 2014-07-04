@@ -84,7 +84,7 @@ void VectorTool::changeUrlPressed()
 {
     if (m_shape == 0)
         return;
-    const KUrl url = KFileDialog::getOpenUrl(KUrl(), QLatin1String("image/x-emf image/x-wmf image/x-svm"));
+    const KUrl url = KFileDialog::getOpenUrl(KUrl(), QLatin1String("image/x-emf image/x-wmf image/x-svm image/svg+xml"));
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);

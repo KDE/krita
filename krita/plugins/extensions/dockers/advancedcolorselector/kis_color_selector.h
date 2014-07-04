@@ -33,7 +33,7 @@ class KisColorSelector : public KisColorSelectorBase
     Q_OBJECT
 public:
     enum Type {Ring, Square, Wheel, Triangle, Slider};
-    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH};
+    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS};
     struct Configuration {
         Type mainType;
         Type subType;
@@ -67,7 +67,7 @@ public:
             int imtp=strili.at(2).toInt();
             int istp=strili.at(3).toInt();
 
-            if(imt>Slider || ist>Slider || imtp>LH || istp>LH)
+            if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)//this was LH before
                 return;
 
             mainType = Type(imt);
@@ -85,8 +85,8 @@ public:
 
 //    enum MainType {Ring, Square, Wheel};
 //    enum SubType {Triangle, Square, Slider};
-//    enum MainTypeParameter {SL, SV, SH, VH, LH, VSV/*experimental*/};
-//    enum SubTypeParameter {H, S, V, L};
+//    enum MainTypeParameter {SL, SV, SH, VH, LH, VSV/*experimental*/, SI, SY, YH, IH};
+//    enum SubTypeParameter {H, S, V, L, I, Y, hsiS, hsyS};
 
     KisColorSelector(Configuration conf, QWidget* parent = 0);
     KisColorSelector(QWidget* parent=0);

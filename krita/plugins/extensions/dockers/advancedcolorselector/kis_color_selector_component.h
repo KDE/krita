@@ -64,12 +64,12 @@ public:
 public slots:
     /// set hue, saturation, value or/and lightness
     /// unused parameters should be set to -1
-    void setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness);
+    void setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma);
 signals:
     /// request for repaint, for instance, if the hue changes.
     void update();
     /// -1, if unaffected
-    void paramChanged(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness);
+    void paramChanged(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma);
 protected:
     const KoColorSpace* colorSpace() const;
     /// returns true, if ether the colour space, the size or the parameters have changed since the last paint event
@@ -95,6 +95,10 @@ protected:
     qreal m_value;
     qreal m_hslSaturation;
     qreal m_lightness;
+    qreal m_hsiSaturation;
+    qreal m_intensity;
+    qreal m_hsySaturation;
+    qreal m_luma;
     Parameter m_parameter;
     Type m_type;
     KisColorSelector* m_parent;

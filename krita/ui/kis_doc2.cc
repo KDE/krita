@@ -155,6 +155,7 @@ KisDoc2::KisDoc2(KisPart2 *part)
     : KoDocument(part, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
+    Q_ASSERT(part);
     qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();

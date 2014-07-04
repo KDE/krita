@@ -40,6 +40,7 @@ public:
 
     void selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action);
     void addSelectionShape(KoShape* shape);
+    void addSelectionShapes(QList<KoShape*> shapes);
 
     void cropRectIfNeeded(QRect *rect);
     void cropPathIfNeeded(QPainterPath *path);

@@ -43,6 +43,7 @@ public:
     void setAllowClose(bool allow);
 
     bool slateMode() const;
+    void setSlateMode(bool newValue);
 
     QString applicationName() const {
         return QLatin1String("KRITA GEMINI");

@@ -119,6 +119,9 @@ protected:
     /// Add a widget and a label to the current option widget layout.
     virtual void addOptionWidgetOption(QWidget *control, QWidget *label = 0);
 
+    void showControl(QWidget *control, bool value);
+    void enableControl(QWidget *control, bool value);
+
     virtual QWidget * createOptionWidget();
 
     /**

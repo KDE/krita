@@ -43,7 +43,7 @@
 #include "kis_select_layer_action.h"
 #include "kis_gamma_exposure_action.h"
 
-#define PROFILE_VERSION 2
+#define PROFILE_VERSION 3
 
 
 class KisInputProfileManager::Private

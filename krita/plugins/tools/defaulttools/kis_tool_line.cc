@@ -42,17 +42,27 @@
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
+#include "kis_painting_information_builder.h"
+#include "kis_tool_line_helper.h"
+
 #define ENABLE_RECORDING
 
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
-        : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6))
+    : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
+      m_showOutline(false),
+      m_infoBuilder(new KisToolPaintingInformationBuilder(this)),
+      m_helper(new KisToolLineHelper(m_infoBuilder.data(), kundo2_i18n("Draw Line"))),
+      m_strokeUpdateCompressor(500, KisSignalCompressor::FIRST_ACTIVE),
+      m_longStrokeUpdateCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
 {
     setObjectName("tool_line");
-    m_painter = 0;
     currentImage() = 0;
 
     setSupportOutline(true);
+
+    connect(&m_strokeUpdateCompressor, SIGNAL(timeout()), SLOT(updateStroke()));
+    connect(&m_longStrokeUpdateCompressor, SIGNAL(timeout()), SLOT(updateStroke()));
 }
 
 KisToolLine::~KisToolLine()
@@ -67,23 +77,15 @@ int KisToolLine::flags() const
 QWidget* KisToolLine::createOptionWidget()
 {
     QWidget* widget = KisToolPaint::createOptionWidget();
-    m_cbPressure     = new QCheckBox(i18n("Pressure"));
-    m_cbTilt         = new QCheckBox(i18n("Tilt"));
-    m_cbRotation     = new QCheckBox(i18n("Rotation"));
-    m_cbTangPressure = new QCheckBox(i18n("Tangential Pressure"));
-    m_bnVaryingEnds  = new QPushButton(i18n("Varying End-Points"));
 
-    m_cbPressure->setChecked(true);
-    m_cbTilt->setChecked(true);
-    m_cbRotation->setChecked(true);
-    m_cbTangPressure->setChecked(true);
-    m_bnVaryingEnds->setCheckable(true);
+    m_chkUseSensors = new QCheckBox(i18n("Use sensors"));
+    m_chkUseSensors->setChecked(true);
+    addOptionWidgetOption(m_chkUseSensors);
 
-    addOptionWidgetOption(m_cbPressure);
-    addOptionWidgetOption(m_cbTilt);
-    addOptionWidgetOption(m_cbRotation);
-    addOptionWidgetOption(m_cbTangPressure);
-    addOptionWidgetOption(m_bnVaryingEnds);
+    m_chkShowOutline = new QCheckBox(i18n("Preview"));
+    m_chkShowOutline->setChecked(m_showOutline);
+    addOptionWidgetOption(m_chkShowOutline);
+
     return widget;
 }
 
@@ -99,24 +101,30 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 {
-    if (nodePaintAbility() == NONE || !nodeEditable()) {
+    NodePaintAbility nodeAbility = nodePaintAbility();
+    if (nodeAbility == NONE || !nodeEditable()) {
         event->ignore();
         return;
     }
 
     setMode(KisTool::PAINT_MODE);
 
-    m_startPos = KisPaintInformation(
-        convertToPixelCoord(event),
-        PRESSURE_DEFAULT,
-        m_cbTilt->isChecked() ? event->xTilt() : 0.0,
-        m_cbTilt->isChecked() ? event->yTilt() : 0.0,
-        m_cbRotation->isChecked() ? event->rotation() : 0.0,
-        m_cbTangPressure->isChecked() ? event->tangentialPressure() : 0.0
-        );
+    m_showOutline = m_chkShowOutline->isChecked() || nodeAbility != PAINT;
+    m_helper->setEnabled(nodeAbility == PAINT);
+    m_helper->setUseSensors(m_chkUseSensors->isChecked());
+    m_helper->start(event);
 
-    m_endPos      = m_startPos;
-    m_maxPressure = 0.0f;
+    m_startPoint = convertToPixelCoord(event);
+    m_endPoint = m_startPoint;
+    m_lastUpdatedPoint = m_startPoint;
+}
+
+void KisToolLine::updateStroke()
+{
+    m_helper->repaintLine(canvas()->resourceManager(),
+                          image(),
+                          image().data(),
+                          image()->postExecutionUndoAdapter());
 }
 
 void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
@@ -129,66 +137,49 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
     QPointF pos = convertToPixelCoord(event);
 
     if (event->modifiers() == Qt::AltModifier) {
-        QPointF trans = pos - m_endPos.pos();
-        m_startPos.setPos(m_startPos.pos() + trans);
-        m_endPos.setPos(m_endPos.pos() + trans);
+        QPointF trans = pos - m_endPoint;
+        m_helper->translatePoints(trans);
+        m_startPoint += trans;
+        m_endPoint += trans;
     } else if (event->modifiers() == Qt::ShiftModifier) {
-        m_endPos.setPos(straightLine(pos));
+        pos = straightLine(pos);
+        m_helper->addPoint(event, pos);
     } else {
-        m_endPos.setPos(pos);
+        m_helper->addPoint(event);
     }
 
-    m_maxPressure = qMax(m_maxPressure, float(pressureToCurve(event->pressure())));
+    if ((pixelToView(m_lastUpdatedPoint) - pixelToView(pos)).manhattanLength() > 10) {
+        m_longStrokeUpdateCompressor.stop();
+        m_strokeUpdateCompressor.start();
+        m_lastUpdatedPoint = pos;
+    } else {
+        m_longStrokeUpdateCompressor.start();
+    }
+    m_endPoint = pos;
+
     updatePreview();
     KisToolPaint::requestUpdateOutline(event->point, event);
 }
 
 void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     updatePreview();
 
-    if(m_bnVaryingEnds->isChecked()) {
-        m_endPos = KisPaintInformation(
-            m_endPos.pos(),
-            PRESSURE_DEFAULT,
-            m_cbTilt->isChecked() ? event->xTilt() : 0.0,
-            m_cbTilt->isChecked() ? event->yTilt() : 0.0,
-            m_cbRotation->isChecked() ? event->rotation() : 0.0,
-            m_cbTangPressure->isChecked() ? event->tangentialPressure() : 0.0
-            );
-    }
-
-    if (m_startPos.pos() == m_endPos.pos())
+    if (m_startPoint == m_endPoint)
         return;
-
-    if(m_cbPressure->isChecked()) {
-        m_startPos.setPressure(m_maxPressure);
-        m_endPos.setPressure(m_maxPressure);
-    }
 
     NodePaintAbility nodeAbility = nodePaintAbility();
     if (nodeAbility == NONE) {
         return;
     }
-#ifdef ENABLE_RECORDING
-    if (image()) {
-        KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
-        setupPaintAction(&linePaintAction);
-        linePaintAction.addLine(m_startPos, m_endPos);
-        image()->actionRecorder()->addAction(linePaintAction);
-    }
-#endif
 
     if (nodeAbility == PAINT) {
-        KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Line"),
-                                           image(),
-                                           canvas()->resourceManager(),
-                                           KisPainter::StrokeStyleBrush,
-                                           KisPainter::FillStyleNone);
-        helper.paintLine(m_startPos, m_endPos);
+        updateStroke();
+        m_helper->end();
     }
     else {
         KoPathShape* path = new KoPathShape();
@@ -196,8 +187,8 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 
         QTransform resolutionMatrix;
         resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
-        path->moveTo(resolutionMatrix.map(m_startPos.pos()));
-        path->lineTo(resolutionMatrix.map(m_endPos.pos()));
+        path->moveTo(resolutionMatrix.map(m_startPoint));
+        path->lineTo(resolutionMatrix.map(m_endPoint));
         path->normalize();
 
         KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
@@ -210,7 +201,7 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 
 QPointF KisToolLine::straightLine(QPointF point)
 {
-    const QPointF lineVector = point - m_startPos.pos();
+    const QPointF lineVector = point - m_startPoint;
     qreal lineAngle = std::atan2(lineVector.y(), lineVector.x());
 
     if (lineAngle < 0) {
@@ -226,7 +217,7 @@ QPointF KisToolLine::straightLine(QPointF point)
 
     const QPointF constrainedLineVector(lineLength * std::cos(constrainedLineAngle), lineLength * std::sin(constrainedLineAngle));
 
-    const QPointF result = m_startPos.pos() + constrainedLineVector;
+    const QPointF result = m_startPoint + constrainedLineVector;
 
     return result;
 }
@@ -235,7 +226,7 @@ QPointF KisToolLine::straightLine(QPointF point)
 void KisToolLine::updatePreview()
 {
     if (canvas()) {
-        QRectF bound(m_startPos.pos(), m_endPos.pos());
+        QRectF bound(m_startPoint, m_endPoint);
         canvas()->updateCanvas(convertToPt(bound.normalized().adjusted(-3, -3, 3, 3)));
     }
 }
@@ -243,10 +234,10 @@ void KisToolLine::updatePreview()
 
 void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
-    QPointF viewStartPos = pixelToView(m_startPos.pos());
-    QPointF viewStartEnd = pixelToView(m_endPos.pos());
+    QPointF viewStartPos = pixelToView(m_startPoint);
+    QPointF viewStartEnd = pixelToView(m_endPoint);
 
-    if (canvas()) {
+    if (m_showOutline && canvas()) {
         QPainterPath path;
         path.moveTo(viewStartPos);
         path.lineTo(viewStartEnd);

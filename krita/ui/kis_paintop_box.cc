@@ -96,6 +96,8 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
+    palette = parent->palette();
+
     m_settingsWidget = new KisPopupButton(this);
     m_settingsWidget->setIcon(koIcon("paintop_settings_02"));
     m_settingsWidget->setToolTip(i18n("Edit brush settings"));
@@ -126,7 +128,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     m_alphaLockButton->setDefaultAction(alphaLockAction);
     m_view->actionCollection()->addAction("preserve_alpha", alphaLockAction);
 
-    QToolButton* hMirrorButton = new QToolButton(this);
+    hMirrorButton = new QToolButton(this);
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
     KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
@@ -135,7 +137,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     hMirrorButton->setDefaultAction(hMirrorAction);
     m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
 
-    QToolButton* vMirrorButton = new QToolButton(this);
+    vMirrorButton = new QToolButton(this);
     vMirrorButton->setFixedSize(32, 32);
     vMirrorButton->setCheckable(true);
     KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
@@ -202,7 +204,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     compositeLayout->addWidget(m_cmbCompositeOp);
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
-    compositeLayout->setContentsMargins(0, 0, 0, 0);
+    compositeLayout->setContentsMargins(8, 0, 0, 0);
 
     KAction* action;
 
@@ -698,6 +700,8 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
         updateCompositeOp(COMPOSITE_ERASE);
     else
         updateCompositeOp(m_prevCompositeOpID);
+
+    toggleHighlightedButton(m_eraseModeButton);
 }
 
 void KisPaintopBox::slotSetCompositeMode(int index)
@@ -726,11 +730,13 @@ void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
 void KisPaintopBox::slotHorizontalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorHorizontal(value);
+    toggleHighlightedButton(hMirrorButton);
 }
 
 void KisPaintopBox::slotVerticalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorVertical(value);
+    toggleHighlightedButton(vMirrorButton);
 }
 
 void KisPaintopBox::sliderChanged(int n)
@@ -884,5 +890,16 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
     else {
         m_alphaLockButton->actions()[0]->setIcon(koIcon("transparency-unlocked"));
     }
+    toggleHighlightedButton(m_alphaLockButton);
     m_resourceProvider->setGlobalAlphaLock(checked);
+}
+
+void KisPaintopBox::toggleHighlightedButton(QToolButton* m_tool)
+{
+    palette_highlight.setColor(QPalette::Button, palette.color(QPalette::Highlight) );
+
+    if (m_tool->isChecked() )
+        m_tool->setPalette(this->palette_highlight);
+    else
+        m_tool->setPalette(this->palette);
 }

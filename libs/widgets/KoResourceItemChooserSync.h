@@ -22,13 +22,14 @@
 #define KORESOURCEITEMCHOOSERSYNC_H
 
 #include <QObject>
+#include "kowidgets_export.h"
 
 /**
  * KoResourceItemChooserSync is a singleton that sync the size of entries in the
  * resource item choosers between differnt choosers
  * To use the syncing it has to be turned on in the KoResourceItemChooser
  */
-class KoResourceItemChooserSync : public QObject
+class KOWIDGETS_EXPORT KoResourceItemChooserSync : public QObject
 {
     Q_OBJECT
 public:

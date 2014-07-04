@@ -27,6 +27,7 @@
 #include "strokes/freehand_stroke.h"
 #include "kis_default_bounds.h"
 #include "kis_paintop_settings.h"
+#include "kis_smoothing_options.h"
 
 class KoPointerEvent;
 class KoCanvasResourceManager;
@@ -36,7 +37,7 @@ class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
 class KisPainter;
-struct KisSmoothingOptions;
+
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 {
@@ -53,7 +54,8 @@ public:
                           KisRecordingAdapter *recordingAdapter = 0);
     ~KisToolFreehandHelper();
 
-    void setSmoothness(const KisSmoothingOptions &smoothingOptions);
+    void setSmoothness(KisSmoothingOptionsSP smoothingOptions);
+    KisSmoothingOptionsSP smoothingOptions() const;
 
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,
@@ -71,11 +73,35 @@ public:
                                 const KisPaintOpSettings *globalSettings,
                                 KisPaintOpSettings::OutlineMode mode) const;
 
+signals:
+    /**
+     * The signal is emitted when the outline should be updated
+     * explicitly by the tool. Used by Stabilizer option, because it
+     * paints on internal timer events instead of the on every paint()
+     * event
+     */
+    void requestExplicitUpdateOutline();
+
+protected:
+    void cancelPaint();
+    int elapsedStrokeTime() const;
+
+    void initPaintImpl(const KisPaintInformation &previousPaintInformation,
+                       KoCanvasResourceManager *resourceManager,
+                       KisImageWSP image,
+                       KisStrokesFacade *strokesFacade,
+                       KisPostExecutionUndoAdapter *undoAdapter,
+                       KisNodeSP overrideNode = 0,
+                       KisDefaultBoundsBaseSP bounds = 0);
+
 protected:
 
     virtual void createPainters(QVector<PainterInfo*> &painterInfos,
                                 const QPointF &lastPosition,
                                 int lastTime);
+
+    // to be overridden in derived classes to add painting with
+    // multiple painters
 
     virtual void paintAt(const QVector<PainterInfo*> &painterInfos,
                          const KisPaintInformation &pi);
@@ -90,6 +116,7 @@ protected:
                                   const QPointF &control2,
                                   const KisPaintInformation &pi2);
 
+    // lo-level methods for painting primitives
 
     void paintAt(PainterInfo *painterInfo, const KisPaintInformation &pi);
 
@@ -103,14 +130,24 @@ protected:
                           const QPointF &control2,
                           const KisPaintInformation &pi2);
 
+    // hi-level methods for painting primitives
+
+    void paintAt(const KisPaintInformation &pi);
+
+    void paintLine(const KisPaintInformation &pi1,
+                   const KisPaintInformation &pi2);
+
+    void paintBezierCurve(const KisPaintInformation &pi1,
+                          const QPointF &control1,
+                          const QPointF &control2,
+                          const KisPaintInformation &pi2);
+
 private:
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
                                                    QPointF tangent1, QPointF tangent2);
 
     void stabilizerStart(KisPaintInformation firstPaintInfo);
     void stabilizerEnd();
-    void stabilizerPoll();
-    void stabilizerPaint();
 
 private slots:
 

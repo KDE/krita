@@ -72,6 +72,7 @@
 #include <KoDockerManager.h>
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
+#include <KoResourceItemChooserSync.h>
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
@@ -131,6 +132,7 @@
 #include "krita/gemini/ViewModeSwitchEvent.h"
 #include "kis_mirror_axis.h"
 #include "kis_tooltip_manager.h"
+#include <kis_tool_freehand.h>
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -243,6 +245,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     setXMLFile(QString("%1.rc").arg(qAppName()));
     KisConfig cfg;
 
+    KoResourceItemChooserSync::instance()->setBaseLength(cfg.readEntry("baseLength", 50));
     setFocusPolicy(Qt::NoFocus);
 
     if (mainWindow()) {
@@ -474,6 +477,7 @@ KisView2::~KisView2()
 {
     KisConfig cfg;
     cfg.writeEntry("LastPreset", m_d->resourceProvider->currentPreset()->name());
+    cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
     if (m_d->filterManager->isStrokeRunning()) {
         m_d->filterManager->cancel();
@@ -622,6 +626,9 @@ bool KisView2::event( QEvent* event )
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
+            canvasControllerWidget()->setFocus();
+            qApp->processEvents();
+
             KisCanvasResourceProvider* provider = resourceProvider();
             syncObject->backgroundColor = provider->bgColor();
             syncObject->foregroundColor = provider->fgColor();
@@ -646,6 +653,11 @@ bool KisView2::event( QEvent* event )
             syncObject->mirrorHorizontal = provider->mirrorHorizontal();
             syncObject->mirrorVertical = provider->mirrorVertical();
             syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+
+            KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
+            if(tool) {
+                syncObject->smoothingOptions = tool->smoothingOptions();
+            }
 
             syncObject->initialized = true;
 
@@ -710,7 +722,6 @@ bool KisView2::event( QEvent* event )
                 document()->gridData().setShowGrid(syncObject->gridData->showGrid());
                 document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
 
-
                 actionCollection()->action("zoom_in")->trigger();
                 qApp->processEvents();
 
@@ -731,6 +742,19 @@ bool KisView2::event( QEvent* event )
                 QPoint newOffset = syncObject->documentOffset + pos();
                 qApp->processEvents();
                 canvasControllerWidget()->setScrollBarValue(newOffset);
+
+                KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
+                if(tool && syncObject->smoothingOptions) {
+                    tool->smoothingOptions()->setSmoothingType(syncObject->smoothingOptions->smoothingType());
+                    tool->smoothingOptions()->setSmoothPressure(syncObject->smoothingOptions->smoothPressure());
+                    tool->smoothingOptions()->setTailAggressiveness(syncObject->smoothingOptions->tailAggressiveness());
+                    tool->smoothingOptions()->setUseScalableDistance(syncObject->smoothingOptions->useScalableDistance());
+                    tool->smoothingOptions()->setSmoothnessDistance(syncObject->smoothingOptions->smoothnessDistance());
+                    tool->smoothingOptions()->setUseDelayDistance(syncObject->smoothingOptions->useDelayDistance());
+                    tool->smoothingOptions()->setDelayDistance(syncObject->smoothingOptions->delayDistance());
+                    tool->smoothingOptions()->setFinishStabilizedCurve(syncObject->smoothingOptions->finishStabilizedCurve());
+                    tool->updateSettingsViews();
+                }
             }
 
             return true;

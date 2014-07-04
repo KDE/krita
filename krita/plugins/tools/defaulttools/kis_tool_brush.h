@@ -43,6 +43,12 @@ class KisToolBrush : public KisToolFreehand
     Q_PROPERTY(int smoothingType READ smoothingType WRITE slotSetSmoothingType NOTIFY smoothingTypeChanged)
     Q_PROPERTY(bool useScalableDistance READ useScalableDistance WRITE setUseScalableDistance NOTIFY useScalableDistanceChanged)
 
+    Q_PROPERTY(bool useDelayDistance READ useDelayDistance WRITE setUseDelayDistance NOTIFY useDelayDistanceChanged)
+    Q_PROPERTY(qreal delayDistance READ delayDistance WRITE setDelayDistance NOTIFY delayDistanceChanged)
+
+    Q_PROPERTY(bool finishStabilizedCurve READ finishStabilizedCurve WRITE setFinishStabilizedCurve NOTIFY finishStabilizedCurveChanged)
+
+
 public:
     KisToolBrush(KoCanvasBase * canvas);
     virtual ~KisToolBrush();
@@ -55,6 +61,11 @@ public:
     int smoothingType() const;
     bool useScalableDistance() const;
 
+    bool useDelayDistance() const;
+    qreal delayDistance() const;
+
+    bool finishStabilizedCurve() const;
+
 protected slots:
     virtual void resetCursorStyle();
 
@@ -66,12 +77,23 @@ public slots:
     void setSmoothPressure(bool value);
     void setUseScalableDistance(bool value);
 
+    void setUseDelayDistance(bool value);
+    void setDelayDistance(qreal value);
+
+    void setFinishStabilizedCurve(bool value);
+
+    virtual void updateSettingsViews();
+
 Q_SIGNALS:
     void smoothnessQualityChanged();
     void smoothnessFactorChanged();
     void smoothPressureChanged();
     void smoothingTypeChanged();
     void useScalableDistanceChanged();
+
+    void useDelayDistanceChanged();
+    void delayDistanceChanged();
+    void finishStabilizedCurveChanged();
 
 private:
     QGridLayout *m_optionLayout;
@@ -83,6 +105,11 @@ private:
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
     QCheckBox *m_chkSmoothPressure;
     QCheckBox *m_chkUseScalableDistance;
+
+    QCheckBox *m_chkDelayDistance;
+    KisDoubleSliderSpinBox *m_sliderDelayDistance;
+
+    QCheckBox *m_chkFinishStabilizedCurve;
 };
 
 

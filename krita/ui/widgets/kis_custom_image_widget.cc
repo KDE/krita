@@ -287,6 +287,11 @@ bool KisCustomImageWidget::createNewImage()
     return true;
 }
 
+void KisCustomImageWidget::setNumberOfLayers(int layers)
+{
+    intNumLayers->setValue(layers);
+}
+
 quint8 KisCustomImageWidget::backgroundOpacity() const
 {
     qint32 opacity = sliderOpacity->value();

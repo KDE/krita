@@ -30,7 +30,7 @@
 VectorToolFactory::VectorToolFactory()
     : KoToolFactoryBase("VectorToolFactoryId")
 {
-    setToolTip(i18n("Vector Image (EMF/WMF/SVM) tool"));
+    setToolTip(i18n("Vector Image (EMF/WMF/SVM/SVG) tool"));
     setIconName(koIconNameCStrNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
     setToolType( dynamicToolType() );
     setPriority( 1 );

@@ -348,6 +348,15 @@ public:
     bool lineSmoothingScalableDistance() const;
     void setLineSmoothingScalableDistance(bool value);
 
+    qreal lineSmoothingDelayDistance() const;
+    void setLineSmoothingDelayDistance(qreal value);
+
+    bool lineSmoothingUseDelayDistance() const;
+    void setLineSmoothingUseDelayDistance(bool value);
+
+    bool lineSmoothingFinishStabilizedCurve() const;
+    void setLineSmoothingFinishStabilizedCurve(bool value);
+
     int paletteDockerPaletteViewSectionSize() const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;
 

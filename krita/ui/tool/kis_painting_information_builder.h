@@ -27,6 +27,7 @@
 #include "kis_paint_information.h"
 
 class KoPointerEvent;
+class KisTool;
 class KisToolFreehand;
 
 
@@ -70,17 +71,30 @@ private:
     QPointF m_startPoint;
 };
 
-
 class KRITAUI_EXPORT KisToolPaintingInformationBuilder : public KisPaintingInformationBuilder
 {
     Q_OBJECT
 
 public:
-    KisToolPaintingInformationBuilder(KisToolFreehand *tool);
+    KisToolPaintingInformationBuilder(KisTool *tool);
+
+protected:
+    virtual QPointF documentToImage(const QPointF &point);
+
+private:
+    KisTool *m_tool;
+};
+
+
+class KRITAUI_EXPORT KisToolFreehandPaintingInformationBuilder : public KisToolPaintingInformationBuilder
+{
+    Q_OBJECT
+
+public:
+    KisToolFreehandPaintingInformationBuilder(KisToolFreehand *tool);
 
 protected:
     virtual QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint);
-    virtual QPointF documentToImage(const QPointF &point);
     virtual qreal calculatePerspective(const QPointF &documentPoint);
 
 private:

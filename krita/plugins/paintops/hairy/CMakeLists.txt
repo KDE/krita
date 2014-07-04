@@ -11,7 +11,7 @@ set(kritahairypaintop_PART_SRCS
     trajectory.cpp
     )
 
-kde4_add_ui_files(kritahairypaintop_PART_SRCS wdgInkOptions.ui  wdgshapeoptions.ui wdgbristleoptions.ui)
+kde4_add_ui_files(kritahairypaintop_PART_SRCS wdgInkOptions.ui  wdghairyshapeoptions.ui wdgbristleoptions.ui)
 
 kde4_add_plugin(kritahairypaintop ${kritahairypaintop_PART_SRCS})
 

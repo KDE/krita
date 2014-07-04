@@ -151,6 +151,17 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("shadeSelectorUpdateOnLeftClick", ui->shadeSelectorUpdateOnLeftClick->isChecked());
     cfg.writeEntry("shadeSelectorUpdateOnBackground", ui->shadeSelectorUpdateOnBackground->isChecked());
 
+	//mypaint model
+	QString shadeMyPaintType("HSV");
+    if(ui->MyPaint_HSL->isChecked())
+        shadeMyPaintType="HSL";
+    if(ui->MyPaint_HSI->isChecked())
+        shadeMyPaintType="HSI";
+	if(ui->MyPaint_HSY->isChecked())
+        shadeMyPaintType="HSY";
+
+	cfg.writeEntry("shadeMyPaintType", shadeMyPaintType);
+
     cfg.writeEntry("minimalShadeSelectorAsGradient", ui->minimalShadeSelectorAsGradient->isChecked());
     cfg.writeEntry("minimalShadeSelectorPatchCount", ui->minimalShadeSelectorPatchesPerLine->value());
     cfg.writeEntry("minimalShadeSelectorLineConfig",  ui->minimalShadeSelectorLineSettings->toString());
@@ -253,6 +264,12 @@ void KisColorSelectorSettings::loadPreferences()
     ui->shadeSelectorUpdateOnForeground->setChecked(cfg.readEntry("shadeSelectorUpdateOnForeground", true));
     ui->shadeSelectorUpdateOnBackground->setChecked(cfg.readEntry("shadeSelectorUpdateOnBackground", true));
 
+	QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
+	ui->MyPaint_HSV->setChecked(shadeMyPaintType=="HSV");
+	ui->MyPaint_HSL->setChecked(shadeMyPaintType=="HSL");
+    ui->MyPaint_HSI->setChecked(shadeMyPaintType=="HSI");
+	ui->MyPaint_HSY->setChecked(shadeMyPaintType=="HSY");	
+
     bool asGradient = cfg.readEntry("minimalShadeSelectorAsGradient", true);
     if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
     else ui->minimalShadeSelectorAsColorPatches->setChecked(true);
@@ -312,6 +329,11 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->shadeSelectorTypeMyPaint->setChecked(true);
     ui->shadeSelectorTypeMinimal->setChecked(false);
     ui->shadeSelectorTypeHidden->setChecked(false);
+
+	ui->MyPaint_HSV->setChecked(true);
+	ui->MyPaint_HSL->setChecked(false);
+	ui->MyPaint_HSI->setChecked(false);
+	ui->MyPaint_HSY->setChecked(false);
 
     ui->shadeSelectorUpdateOnRightClick->setChecked(false);
     ui->shadeSelectorUpdateOnLeftClick->setChecked(false);

@@ -68,7 +68,7 @@ void KisPainterBasedStrokeStrategy::init()
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
-    enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
+    enableJob(KisSimpleStrokeStrategy::JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
 KisPaintDeviceSP KisPainterBasedStrokeStrategy::targetDevice()
@@ -178,15 +178,20 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 
 void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
 {
-    m_transaction->revert();
-    delete m_transaction;
-    deletePainters();
-
     KisNodeSP node = m_resources->currentNode();
     KisIndirectPaintingSupport *indirect =
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
     if(indirect && indirect->hasTemporaryTarget()) {
+        delete m_transaction;
+        deletePainters();
+
+        QRegion region = indirect->temporaryTarget()->region();
         indirect->setTemporaryTarget(0);
+        node->setDirty(region);
+    } else {
+        m_transaction->revert();
+        delete m_transaction;
+        deletePainters();
     }
 }

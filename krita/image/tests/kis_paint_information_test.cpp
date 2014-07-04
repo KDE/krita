@@ -23,7 +23,7 @@
 #include "kis_paint_information.h"
 
 #include <QDomDocument>
-#include <Eigen/Array>
+#include <Eigen/Core>
 
 #include <kdebug.h>
 

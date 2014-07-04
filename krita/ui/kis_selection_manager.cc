@@ -227,6 +227,11 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     actionManager->addAction("convert_to_vector_selection", action, collection);
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
+    action = new KisAction(i18n("Convert Shapes to Vector Selection"), this);
+    action->setActivationFlags(KisAction::SHAPES_SELECTED);
+    actionManager->addAction("convert_shapes_to_vector_selection", action, collection);
+    connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
+
 //     m_load
 //         = new KAction(i18n("Load..."),
 //                   0, 0,
@@ -406,6 +411,14 @@ void KisSelectionManager::reselect()
 void KisSelectionManager::convertToVectorSelection()
 {
     KisSelectionToVectorActionFactory factory;
+    factory.run(m_view);
+}
+
+void KisSelectionManager::convertShapesToVectorSelection()
+{
+                kDebug() << "foo";
+
+    KisShapesToVectorSelectionActionFactory factory;
     factory.run(m_view);
 }
 

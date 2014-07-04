@@ -82,7 +82,7 @@ protected:
         Marble::MarbleWidget* marbleWidget;
     };
     QMap<Marble::MarbleModel*, OroIds> m_marbleImgs;
-    QImage* m_mapImage;
+    QImage m_mapImage;
     
 private:
     virtual void createProperties();

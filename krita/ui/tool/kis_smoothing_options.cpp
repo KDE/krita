@@ -20,11 +20,6 @@
 #include "kis_config.h"
 
 KisSmoothingOptions::KisSmoothingOptions()
-    : m_smoothingType(WEIGHTED_SMOOTHING)
-    , m_smoothnessDistance(55.0)
-    , m_tailAggressiveness(0.15)
-    , m_smoothPressure(false)
-    , m_useScalableDistance(true)
 {
     KisConfig cfg;
     m_smoothingType = (SmoothingType)cfg.lineSmoothingType();
@@ -32,6 +27,9 @@ KisSmoothingOptions::KisSmoothingOptions()
     m_tailAggressiveness = cfg.lineSmoothingTailAggressiveness();
     m_smoothPressure = cfg.lineSmoothingSmoothPressure();
     m_useScalableDistance = cfg.lineSmoothingScalableDistance();
+    m_delayDistance = cfg.lineSmoothingDelayDistance();
+    m_useDelayDistance = cfg.lineSmoothingUseDelayDistance();
+    m_finishStabilizedCurve = cfg.lineSmoothingFinishStabilizedCurve();
 }
 
 KisSmoothingOptions::SmoothingType KisSmoothingOptions::smoothingType() const
@@ -92,4 +90,40 @@ void KisSmoothingOptions::setUseScalableDistance(bool value)
     KisConfig cfg;
     cfg.setLineSmoothingScalableDistance(value);
     m_useScalableDistance = value;
+}
+
+qreal KisSmoothingOptions::delayDistance() const
+{
+    return m_delayDistance;
+}
+
+void KisSmoothingOptions::setDelayDistance(qreal value)
+{
+    KisConfig cfg;
+    cfg.setLineSmoothingDelayDistance(value);
+    m_delayDistance = value;
+}
+
+bool KisSmoothingOptions::useDelayDistance() const
+{
+    return m_useDelayDistance;
+}
+
+void KisSmoothingOptions::setUseDelayDistance(bool value)
+{
+    KisConfig cfg;
+    cfg.setLineSmoothingUseDelayDistance(value);
+    m_useDelayDistance = value;
+}
+
+void KisSmoothingOptions::setFinishStabilizedCurve(bool value)
+{
+    KisConfig cfg;
+    cfg.setLineSmoothingFinishStabilizedCurve(value);
+    m_finishStabilizedCurve = value;
+}
+
+bool KisSmoothingOptions::finishStabilizedCurve() const
+{
+    return m_finishStabilizedCurve;
 }

@@ -122,6 +122,13 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
 void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
 {
+    QList<KoShape*> shapes;
+    shapes.append(shape);
+    addSelectionShapes(shapes);
+}
+
+void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
+{
     KisView2* view = m_canvas->view();
 
     if (view->image()->wrapAroundModePermitted()) {
@@ -175,11 +182,13 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
         }
     };
 
-    applicator.applyCommand(
-        new KisGuiContextCommand(new AddSelectionShape(view, shape), view));
-
+    foreach(KoShape* shape, shapes) {
+        applicator.applyCommand(
+            new KisGuiContextCommand(new AddSelectionShape(view, shape), view));
+    }
     applicator.end();
 }
+
 
 void KisSelectionToolHelper::cropRectIfNeeded(QRect *rect)
 {

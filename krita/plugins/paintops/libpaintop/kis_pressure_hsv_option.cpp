@@ -35,6 +35,9 @@ KisPressureHSVOption* KisPressureHSVOption::createValueOption()
     return new KisPressureHSVOption(i18n("Value"), "v", -1, 1);
 }
 
+
+
+
 struct KisPressureHSVOption::Private {
     QString parameterName;
     int paramId;
@@ -68,6 +71,8 @@ KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& p
         setMaximumLabel(QString(fullPercent + br + i18n("Higher value")));
         setMinimumLabel(QString(zeroPercent + br + i18n("Lower value ") + br + activeColorMsg));
     }
+
+
     else {
         // defaults to unchanged labels
         dbgPlugins << "Unknown parameter for " << name << ", parameterName " << parameterName;
@@ -85,7 +90,11 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
         d->paramId = transfo->parameterId(d->parameterName);
     }
 
+
+
     double v = computeValue(info) * (d->max - d->min) + d->min;
 
     transfo->setParameter(d->paramId, v);
+    transfo->setParameter(3, 1);//sets the type to HSV. For some reason 0 is not an option.
+    transfo->setParameter(4, false);//sets the colorize to false.
 }

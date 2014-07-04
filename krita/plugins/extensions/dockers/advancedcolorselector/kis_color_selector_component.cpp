@@ -31,6 +31,10 @@ KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector* parent) :
     m_value(1),
     m_hslSaturation(1),
     m_lightness(0.5),
+    m_hsiSaturation(1),
+    m_intensity(0.333),
+    m_hsySaturation(1),
+    m_luma(0.299),
     m_parent(parent),
     m_width(0),
     m_height(0),
@@ -104,13 +108,17 @@ KoColor KisColorSelectorComponent::currentColor()
     return selectColor(m_lastX, m_lastY);
 }
 
-void KisColorSelectorComponent::setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness)
+void KisColorSelectorComponent::setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma)
 {
     if(qFuzzyCompare(m_hue, hue) &&
        qFuzzyCompare(m_hsvSaturation, hsvSaturation) &&
        qFuzzyCompare(m_value, value) &&
        qFuzzyCompare(m_hslSaturation, hslSaturation) &&
-       qFuzzyCompare(m_lightness, lightness))
+       qFuzzyCompare(m_lightness, lightness) &&
+       qFuzzyCompare(m_hsiSaturation, hsiSaturation) &&
+       qFuzzyCompare(m_intensity, intensity) &&
+       qFuzzyCompare(m_hsySaturation, hsySaturation) &&
+       qFuzzyCompare(m_luma, luma))
         return;
 
     if(hue>=0. && hue<=1.)
@@ -119,22 +127,58 @@ void KisColorSelectorComponent::setParam(qreal hue, qreal hsvSaturation, qreal v
     if(hsvSaturation>=0. && hsvSaturation<=1.) {
         m_hsvSaturation=hsvSaturation;
         m_hslSaturation=-1;
+	m_hsiSaturation=-1;
+	m_hsySaturation=-1;
     }
 
     if(value>=0. && value<=1.) {
         m_value=value;
-        m_lightness=-1;
+        m_intensity=-1;
+	m_luma=-1;
+	m_lightness=-1;
     }
 
     if(hslSaturation>=0. && hslSaturation<=1.) {
         m_hslSaturation=hslSaturation;
         m_hsvSaturation=-1;
+	m_hsiSaturation=-1;
+	m_hsySaturation=-1;
     }
 
     if(lightness>=0. && lightness<=1.) {
         m_lightness=lightness;
         m_value=-1;
+	m_luma=-1;
+	m_intensity=-1;
     }
+    if(hsiSaturation>=0. && hsiSaturation<=1.) {
+        m_hsiSaturation=hsiSaturation;
+        m_hsvSaturation=-1;
+	m_hslSaturation=-1;
+	m_hsySaturation=-1;
+    }
+
+    if(intensity>=0. && intensity<=1.) {
+        m_intensity=intensity;
+        m_value=-1;
+	m_luma=-1;
+	m_lightness=-1;
+    }
+
+    if(hsySaturation>=0. && hsySaturation<=1.) {
+        m_hsySaturation=hsySaturation;
+        m_hsvSaturation=-1;
+	m_hsiSaturation=-1;
+	m_hslSaturation=-1;
+    }
+
+    if(luma>=0. && luma<=1.) {
+        m_intensity=-1;
+        m_value=-1;
+	m_luma=luma;
+	m_lightness=-1;
+    }
+
 
     m_dirty=true;
     emit update();

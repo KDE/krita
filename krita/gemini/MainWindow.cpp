@@ -182,6 +182,12 @@ public:
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
+        if (sketchView->errors().count() > 0) {
+            foreach(const QDeclarativeError &error, sketchView->errors()) {
+                qDebug() << error.toString();
+            }
+        }
+
         toDesktop = new KAction(q);
         toDesktop->setEnabled(false);
         toDesktop->setText(tr("Switch to Desktop"));
@@ -326,7 +332,6 @@ void MainWindow::switchToSketch()
     }
 
     setCentralWidget(d->sketchView);
-    emit switchedToSketch();
 
     if (d->slateMode) {
         setWindowState(windowState() | Qt::WindowFullScreen);
@@ -363,6 +368,7 @@ void MainWindow::sketchChange()
         qApp->processEvents();
         KisConfig cfg;
         cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+        emit switchedToSketch();
     }
     if (d->toDesktop)
     {
@@ -492,6 +498,11 @@ void MainWindow::setAllowClose(bool allow)
 bool MainWindow::slateMode() const
 {
     return d->slateMode;
+}
+
+void MainWindow::setSlateMode(bool newValue)
+{
+    d->slateMode = newValue;
 }
 
 QString MainWindow::currentSketchPage() const

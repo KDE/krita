@@ -4,8 +4,9 @@ set(kritaheightmapimport_PART_SRCS
     kis_heightmap_import.cpp
     )
 
-kde4_add_plugin(kritaheightmapimport ${kritaheightmapimport_PART_SRCS})
 kde4_add_ui_files(kritaheightmapimport_PART_SRCS kis_wdg_options_heightmap.ui )
+
+kde4_add_plugin(kritaheightmapimport ${kritaheightmapimport_PART_SRCS})
 
 target_link_libraries(kritaheightmapimport kritaui )
 

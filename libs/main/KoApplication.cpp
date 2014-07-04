@@ -332,7 +332,6 @@ bool KoApplication::start()
         // get all possible autosave files in the home dir, this is for unsaved document autosave files
         // Using the extension allows to avoid relying on the mime magic when opening
         QByteArray ba = doc->nativeFormatMimeType();
-        qDebug() << ba;
         KMimeType::Ptr mime = KMimeType::mimeType(ba);
         if (!mime) {
             qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());

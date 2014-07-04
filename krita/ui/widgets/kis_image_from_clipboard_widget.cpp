@@ -81,6 +81,7 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, KisDoc2* doc, qint
     
     disconnect(createButton, SIGNAL(clicked()), 0, 0); //disable normal signal
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
+    setNumberOfLayers(1);
 }
 
 KisImageFromClipboard::~KisImageFromClipboard()
@@ -102,6 +103,7 @@ void KisImageFromClipboard::createImage()
             painter.begin(layer->paintDevice());
             painter.setCompositeOp(COMPOSITE_COPY);
             painter.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
+            layer->setDirty();
         }
 
     }

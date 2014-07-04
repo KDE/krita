@@ -79,6 +79,9 @@ protected:
     
     bool createNewImage();
     
+    /// Set the number of layers that will be created
+    void setNumberOfLayers(int layers);
+
 private:
     
     double m_width, m_height;

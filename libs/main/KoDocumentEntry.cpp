@@ -28,7 +28,6 @@
 #include <kdebug.h>
 #include <KoServiceLocator.h>
 #include <QFile>
-#include <QMessageBox>
 
 #include <limits.h> // UINT_MAX
 
@@ -137,7 +136,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
 
         QStringList nativeMimeTypes = offer->property("X-KDE-NativeMimeType", QVariant::StringList).toStringList();
         QStringList extraNativeMimeTypes = offer->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        QStringList serviceTypes = offer->property("ServiceTypes").toStringList();
+        QStringList serviceTypes = offer->property("ServiceTypes", QVariant::StringList).toStringList();
 
         if (nativeMimeTypes.contains(mimetype) || extraNativeMimeTypes.contains(mimetype) || serviceTypes.contains(mimetype)) {
 

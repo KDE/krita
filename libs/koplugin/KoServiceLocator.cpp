@@ -22,7 +22,6 @@
 #include <QDir>
 #include <QTime>
 #include <QApplication>
-#include <QMessageBox>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

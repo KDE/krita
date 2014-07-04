@@ -25,6 +25,7 @@
 #include <QString>
 #include <QPair>
 #include <QScopedPointer>
+#include <QStandardItem>
 
 class KoXmlElement;
 class KoShapeSavingContext;
@@ -81,6 +82,9 @@ private:
     void setBeginPos(int pos);
     void setEndPos(int pos);
     void setLevel(int level);
+    void setModelItem(QStandardItem *item);
+    QStandardItem *modelItem();
+
     friend class KoSectionManager;
     friend class KoSectionEnd;
 };

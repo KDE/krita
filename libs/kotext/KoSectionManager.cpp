@@ -126,6 +126,10 @@ void KoSectionManager::sectionRenamed(QString oldName, QString name)
     KoSection *sec = *it;
     d->sectionNames.erase(it);
     d->sectionNames[name] = sec;
+
+    if (sec->modelItem()) {
+        sec->modelItem()->setData(name, Qt::DisplayRole);
+    }
 }
 
 void KoSectionManager::unregisterSection(KoSection* section)
@@ -176,6 +180,7 @@ void KoSectionManager::update()
 
                 QStandardItem *item = new QStandardItem(sec->name());
                 item->setData(qVariantFromValue(static_cast<void *>(sec)), Qt::UserRole + 1);
+                sec->setModelItem(item);
 
                 curChain.top()->appendRow(item);
 

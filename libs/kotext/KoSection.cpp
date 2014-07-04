@@ -38,6 +38,7 @@ public:
     explicit KoSectionPrivate(KoSectionManager *_manager)
         : manager(_manager)
         , sectionStyle(0)
+        , modelItem(0)
     {
         Q_ASSERT(manager);
         name = manager->possibleNewName();
@@ -57,6 +58,7 @@ public:
     QScopedPointer<KoSectionEnd> sectionEnd; //< pointer to the corresponding section end
     int level; //< level of the section in document, root sections have 0 level
     QPair<int, int> bounds; //< start and end position of section in QDocument
+    QStandardItem *modelItem;
 };
 
 KoSection::KoSection(KoSectionManager *manager)
@@ -116,7 +118,7 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
         // get all the attributes
         d->condition = element.attributeNS(KoXmlNS::text, "condition");
         d->display = element.attributeNS(KoXmlNS::text, "display");
-        
+
         if (d->display == "condition" && d->condition.isEmpty()) {
             kWarning(32500) << "Section display is set to \"condition\", but condition is empty.";
         }
@@ -177,4 +179,16 @@ void KoSection::setLevel(int level)
 {
     Q_D(KoSection);
     d->level = level;
+}
+
+QStandardItem *KoSection::modelItem()
+{
+    Q_D(KoSection);
+    return d->modelItem;
+}
+
+void KoSection::setModelItem(QStandardItem *item)
+{
+    Q_D(KoSection);
+    d->modelItem = item;
 }

@@ -70,6 +70,7 @@
 #include "commands/InsertNoteCommand.h"
 #include "commands/AddTextRangeCommand.h"
 #include "commands/AddAnnotationCommand.h"
+#include "commands/RenameSectionCommand.h"
 
 #include <KoShapeCreateCommand.h>
 
@@ -1571,8 +1572,12 @@ void KoTextEditor::newSection()
 
 void KoTextEditor::renameSection(KoSection* section, QString newName)
 {
-    //FIXME: handle this somehow to undo system
-    section->setName(newName);
+    if (isEditProtected()) {
+        return;
+    }
+
+    RenameSectionCommand *cmd = new RenameSectionCommand(section, newName);
+    addCommand(cmd);
 }
 
 void KoTextEditor::newLine()

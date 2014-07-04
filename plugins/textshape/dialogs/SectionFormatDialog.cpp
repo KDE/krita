@@ -78,7 +78,6 @@ SectionFormatDialog::SectionFormatDialog(QWidget *parent, KoTextEditor *editor)
 void SectionFormatDialog::sectionNameChanged()
 {
     m_editor->renameSection(sectionFromModel(m_curIdx), m_widget.sectionNameLineEdit->text());
-    m_widget.sectionTree->model()->setData(m_curIdx, m_widget.sectionNameLineEdit->text(), Qt::DisplayRole);
     m_widget.sectionNameLineEdit->setModified(false);
 }
 

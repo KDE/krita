@@ -49,11 +49,8 @@
 #include <QPaintEvent>
 #include <QTabletEvent>
 #include <QKeyEvent>
-#include <QGridLayout>
-#include <QDockWidget>
-#include <QGraphicsObject>
+#include <QVBoxLayout>
 #include <QStringList>
-#include <QAbstractButton>
 #include <QApplication>
 #include <kactioncollection.h>
 #include <kdebug.h>

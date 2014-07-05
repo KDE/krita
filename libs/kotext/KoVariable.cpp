@@ -74,7 +74,11 @@ void KoVariable::setValue(const QString &value)
 void KoVariable::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat & format)
 {
     Q_D(KoVariable);
+    if (d->document) {
+        disconnect(d->document, SIGNAL(destroyed()), this, SLOT(documentDestroyed()));
+    }
     d->document = document;
+    connect(d->document, SIGNAL(destroyed()), this, SLOT(documentDestroyed()));
     d->lastPositionInDocument = posInDocument;
     Q_UNUSED(format);
     // Variables are always 'in place' so the position is 100% defined by the text layout.
@@ -153,4 +157,9 @@ int KoVariable::positionInDocument() const
 {
     Q_D(const KoVariable);
     return d->lastPositionInDocument;
+}
+
+void KoVariable::documentDestroyed()
+{
+    deleteLater();
 }

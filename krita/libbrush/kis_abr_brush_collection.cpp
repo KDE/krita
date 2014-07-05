@@ -87,7 +87,9 @@ static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)
     for (i = 0; i < height; i++) {
         for (j = 0; j < cscanline_len[i];) {
             // char
-            abr.device()->getChar(&ptmp);
+            if (!abr.device()->getChar(&ptmp)) {
+                break;
+            }
             n = ptmp;
 
             j++;
@@ -98,7 +100,9 @@ static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)
                     continue;
                 n = -n + 1;
                 // char
-                abr.device()->getChar(&ch);
+                if (!abr.device()->getChar(&ch)) {
+                    break;
+                }
 
                 j++;
                 for (c = 0; c < n; c++, data++) {
@@ -109,7 +113,9 @@ static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)
                 // read the following n + 1 chars (no compr)
                 for (c = 0; c < n + 1; c++, j++, data++) {
                     // char
-                    abr.device()->getChar(data);
+                    if (!abr.device()->getChar(data))  {
+                        break;
+                    }
                 }
             }
         }
@@ -298,17 +304,20 @@ static QString abr_read_ucs2_text(QDataStream & abr)
 
 quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
 {
+    qDebug() << "abr_brush_load_v6()" << filename;
     Q_UNUSED(image_ID);
-    qint32 brush_size;
-    qint32 brush_end;
-    qint32 next_brush;
+    qint32 brush_size = 0;
+    qint32 brush_end = 0;
+    qint32 next_brush = 0;
 
     qint32 top, left, bottom, right;
+    top = left = bottom = right = 0;
     short depth;
     char compression;
 
-    qint32 width, height;
-    qint32 size;
+    qint32 width = 0;
+    qint32 height = 0;
+    qint32 size = 0;
 
     qint32 layer_ID = -1;
 
@@ -360,15 +369,24 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
         rle_decode(abr, buffer, height);
     }
 
-    // filename - filename of the file , e.g. test.abr
-    // name - test_number_of_the_brush, e.g test_1, test_2
-    KisAbrBrush* abrBrush = new KisAbrBrush(name, md5());
+    if (width < quint16_MAX && height < quint16_MAX) {
+        // filename - filename of the file , e.g. test.abr
+        // name - test_number_of_the_brush, e.g test_1, test_2
+        KisAbrBrush* abrBrush = 0;
+        if (m_abrBrushes.contains(name)) {
+            abrBrush = m_abrBrushes[name];
+        }
+        else {
+            abrBrush = new KisAbrBrush(name, md5(), this);
+        }
 
-    abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
-    // XXX: call extra setters on abrBrush for other options of ABR brushes
-    abrBrush->setValid(true);
-    abrBrush->setName(name);
-    m_abrBrushes.append(abrBrush);
+        abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
+        // XXX: call extra setters on abrBrush for other options of ABR brushes
+        abrBrush->setValid(true);
+        abrBrush->setName(name);
+        m_abrBrushes[name] = abrBrush;
+
+    }
 
     free(buffer);
     abr.device()->seek(next_brush);
@@ -380,6 +398,8 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
 
 qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
 {
+    qDebug() << "abr_brush_load_v12()" << filename;
+
     Q_UNUSED(image_ID);
     short brush_type;
     qint32 brush_size;
@@ -452,12 +472,19 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
                 rle_decode(abr, buffer, height);
             }
 
-            KisAbrBrush* abrBrush = new KisAbrBrush(name, md5());
+            KisAbrBrush* abrBrush = 0;
+            if (m_abrBrushes.contains(name)) {
+                abrBrush = m_abrBrushes[name];
+            }
+            else {
+                abrBrush = new KisAbrBrush(name, md5(), this);
+            }
+
             abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
             // XXX: call extra setters on abrBrush for other options of ABR brushes   free (buffer);
             abrBrush->setValid(true);
             abrBrush->setName(name);
-            m_abrBrushes.append(abrBrush);
+            m_abrBrushes[name] = abrBrush;
             layer_ID = 1;
         }
     }

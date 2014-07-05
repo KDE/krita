@@ -1,3 +1,5 @@
 #! /bin/sh
+source ../../calligra_xgettext.sh
+
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp || exit 11
-$XGETTEXT `find . -name \*.cpp -o -name \*.cc` -o $podir/PathShapes.pot
+calligra_xgettext `find . -name \*.cpp -o -name \*.cc` > $podir/PathShapes.pot

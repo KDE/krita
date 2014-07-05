@@ -37,7 +37,7 @@ KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData & poi
             ++m_startIndex.second;
         }
     }
-    setText(i18nc("(qtundo-format)", "Break subpath"));
+    setText(kundo2_i18n("Break subpath"));
 }
 
 KoPathSegmentBreakCommand::~KoPathSegmentBreakCommand()

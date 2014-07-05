@@ -32,9 +32,9 @@ RemoveStaffElementCommand::RemoveStaffElementCommand(MusicShape* shape, StaffEle
     : m_shape(shape), m_element(se), m_bar(bar), m_index(m_bar->indexOfStaffElement(se))
 {
     if (dynamic_cast<Clef*>(se)) {
-        setText(i18nc("(qtundo-format)", "Remove clef"));
+        setText(kundo2_i18n("Remove clef"));
     } else {
-        setText(i18nc("(qtundo-format)", "Remove staff element"));
+        setText(kundo2_i18n("Remove staff element"));
     }
 }
 

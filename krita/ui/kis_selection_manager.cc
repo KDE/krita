@@ -227,6 +227,11 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     actionManager->addAction("convert_to_vector_selection", action, collection);
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
+    action = new KisAction(i18n("Convert Shapes to Vector Selection"), this);
+    action->setActivationFlags(KisAction::SHAPES_SELECTED);
+    actionManager->addAction("convert_shapes_to_vector_selection", action, collection);
+    connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
+
 //     m_load
 //         = new KAction(i18n("Load..."),
 //                   0, 0,
@@ -409,6 +414,14 @@ void KisSelectionManager::convertToVectorSelection()
     factory.run(m_view);
 }
 
+void KisSelectionManager::convertShapesToVectorSelection()
+{
+                kDebug() << "foo";
+
+    KisShapesToVectorSelectionActionFactory factory;
+    factory.run(m_view);
+}
+
 void KisSelectionManager::clear()
 {
     KisClearActionFactory factory;
@@ -499,16 +512,18 @@ void KisSelectionManager::paintSelectedShapes()
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, i18n("Stroked Shapes"), OPACITY_OPAQUE_U8);
 
-    m_adapter->beginMacro(i18n("Stroke Shapes"));
+    KUndo2MagicString actionName = kundo2_i18n("Stroke Shapes");
+
+    m_adapter->beginMacro(actionName);
     m_adapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
 
-    KisFigurePaintingToolHelper helper(i18n("Stroke Shapes"),
-                                        image,
-                                        m_view->canvasBase()->resourceManager(),
-                                        KisPainter::StrokeStyleBrush,
-                                        KisPainter::FillStyleNone);
+    KisFigurePaintingToolHelper helper(actionName,
+                                       image,
+                                       m_view->canvasBase()->resourceManager(),
+                                       KisPainter::StrokeStyleBrush,
+                                       KisPainter::FillStyleNone);
 
-    foreach(KoShape* shape, shapes) {    
+    foreach(KoShape* shape, shapes) {
         QTransform matrix = shape->absoluteTransformation(0) * QTransform::fromScale(image->xRes(), image->yRes());
         QPainterPath mapedOutline = matrix.map(shape->outline());
         helper.paintPainterPath(mapedOutline);

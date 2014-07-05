@@ -26,6 +26,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QHoverEvent>
 
 #include <kdebug.h>
 #include <kmimetype.h>
@@ -72,6 +73,7 @@
 #include <kis_qpainter_canvas.h>
 #include <kis_part2.h>
 #include <kis_canvas_decoration.h>
+#include <kis_tool_freehand.h>
 
 #include "KisSketchPart.h"
 #include "KisSelectionExtras.h"
@@ -135,6 +137,7 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     setFlag(QGraphicsItem::ItemHasNoContents, true);
     setAcceptTouchEvents(true);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
+    setAcceptHoverEvents(true);
 
     grabGesture(Qt::PanGesture);
     //grabGesture(Qt::PinchGesture);
@@ -329,6 +332,7 @@ void KisSketchView::documentChanged()
 	Q_ASSERT(part);
 	QPointer<KisView2> view = qobject_cast<KisView2*>(part->createView(d->doc, QApplication::activeWindow()));
     d->view = view;
+    d->view->setShowFloatingMessage(false);
 
     connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     
@@ -387,6 +391,9 @@ bool KisSketchView::event( QEvent* event )
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             if (d->view) {
+                d->view->canvasControllerWidget()->setFocus();
+                qApp->processEvents();
+
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
                 syncObject->backgroundColor = provider->bgColor();
                 syncObject->foregroundColor = provider->fgColor();
@@ -412,6 +419,11 @@ bool KisSketchView::event( QEvent* event )
                 syncObject->mirrorVertical = provider->mirrorVertical();
                 syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
 
+                KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(d->view->canvasBase(), syncObject->activeToolId));
+                if(tool) {
+                    syncObject->smoothingOptions = tool->smoothingOptions();
+                }
+
                 syncObject->initialized = true;
             }
 
@@ -424,6 +436,19 @@ bool KisSketchView::event( QEvent* event )
                 d->view->canvasControllerWidget()->setFocus();
                 qApp->processEvents();
 
+                KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(d->view->canvasBase(), syncObject->activeToolId));
+                if(tool && syncObject->smoothingOptions) {
+                    tool->smoothingOptions()->setSmoothingType(syncObject->smoothingOptions->smoothingType());
+                    tool->smoothingOptions()->setSmoothPressure(syncObject->smoothingOptions->smoothPressure());
+                    tool->smoothingOptions()->setTailAggressiveness(syncObject->smoothingOptions->tailAggressiveness());
+                    tool->smoothingOptions()->setUseScalableDistance(syncObject->smoothingOptions->useScalableDistance());
+                    tool->smoothingOptions()->setSmoothnessDistance(syncObject->smoothingOptions->smoothnessDistance());
+                    tool->smoothingOptions()->setUseDelayDistance(syncObject->smoothingOptions->useDelayDistance());
+                    tool->smoothingOptions()->setDelayDistance(syncObject->smoothingOptions->delayDistance());
+                    tool->smoothingOptions()->setFinishStabilizedCurve(syncObject->smoothingOptions->finishStabilizedCurve());
+                    tool->updateSettingsViews();
+                }
+
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
 
                 provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
@@ -433,6 +458,8 @@ bool KisSketchView::event( QEvent* event )
                 provider->setPaintOpPreset(syncObject->paintOp);
                 qApp->processEvents();
 
+                KoToolManager::instance()->switchToolRequested("InteractionTool");
+                qApp->processEvents();
                 KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
                 qApp->processEvents();
 
@@ -517,19 +544,31 @@ bool KisSketchView::sceneEvent(QEvent* event)
             emit interactionStarted();
             return true;
         }
+        case QEvent::GraphicsSceneHoverEnter: {
+            QGraphicsSceneHoverEvent *hevent = static_cast<QGraphicsSceneHoverEvent*>(event);
+            QHoverEvent e(QEvent::Enter, hevent->screenPos(), hevent->lastScreenPos());
+            QApplication::sendEvent(d->canvasWidget, &e);
+            return true;
+        }
+        case QEvent::GraphicsSceneHoverLeave: {
+            QGraphicsSceneHoverEvent *hevent = static_cast<QGraphicsSceneHoverEvent*>(event);
+            QHoverEvent e(QEvent::Leave, hevent->screenPos(), hevent->lastScreenPos());
+            QApplication::sendEvent(d->canvasWidget, &e);
+            return true;
+        }
         case QEvent::TouchBegin: {
             QApplication::sendEvent(d->canvasWidget, event);
             event->accept();
             emit interactionStarted();
             return true;
         }
-		case QEvent::TabletPress:
-		case QEvent::TabletMove:
-		case QEvent::TabletRelease:
-			d->canvas->inputManager()->stopIgnoringEvents();
-			QApplication::sendEvent(d->canvasWidget, event);
-			return true;
-		default:
+        case QEvent::TabletPress:
+        case QEvent::TabletMove:
+        case QEvent::TabletRelease:
+            d->canvas->inputManager()->stopIgnoringEvents();
+            QApplication::sendEvent(d->canvasWidget, event);
+            return true;
+        default:
             if (QApplication::sendEvent(d->canvasWidget, event)) {
                 emit interactionStarted();
                 return true;

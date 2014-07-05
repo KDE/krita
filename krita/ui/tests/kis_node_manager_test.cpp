@@ -37,6 +37,26 @@ public:
         nodeManager->slotNonUiActivatedNode(shape);
     }
 
+    KisNodeSP findCloneLayer() {
+        return findNode(image->root(), "clone1");;
+    }
+
+    void activateCloneLayer() {
+        KisNodeSP node = findCloneLayer();
+        Q_ASSERT(node);
+        nodeManager->slotNonUiActivatedNode(findCloneLayer());
+    }
+
+    KisNodeSP findBlurLayer() {
+        return findNode(image->root(), "blur1");;
+    }
+
+    void activateBlurLayer() {
+        KisNodeSP node = findBlurLayer();
+        Q_ASSERT(node);
+        nodeManager->slotNonUiActivatedNode(findBlurLayer());
+    }
+
     void checkUndoWait() {
         undoStore->undo();
         QTest::qWait(1000);
@@ -195,6 +215,77 @@ void KisNodeManagerTest::testScaleShapeNode()
 void KisNodeManagerTest::testMirrorShapeNode()
 {
     testMirrorNode(true, "shape_mirrorX", true);
+}
+
+void KisNodeManagerTest::testConvertCloneToPaintLayer()
+{
+    NodeManagerTester t;
+    t.activateCloneLayer();
+
+    QVERIFY(t.checkLayersInitial());
+
+    t.nodeManager->convertNode("KisPaintLayer");
+
+    KisNodeSP node = t.findCloneLayer();
+
+    QTest::qWait(1000);
+    t.image->waitForDone();
+
+    QVERIFY(dynamic_cast<KisPaintLayer*>(node.data()));
+
+    // No visible change should happen!
+    QVERIFY(t.checkLayersInitial());
+}
+
+void testConvertToSelectionMask(bool fromClone)
+{
+    NodeManagerTester t;
+
+    if (fromClone) {
+        t.activateCloneLayer();
+    } else {
+        t.activateBlurLayer();
+    }
+
+    QVERIFY(t.checkLayersInitial());
+    QVERIFY(!t.image->globalSelection());
+
+    t.nodeManager->convertNode("KisSelectionMask");
+
+    QTest::qWait(1000);
+    t.image->waitForDone();
+
+    KisNodeSP node;
+
+    if (fromClone) {
+        node = t.findCloneLayer();
+    } else {
+        node = t.findBlurLayer();
+    }
+
+    QVERIFY(!node);
+
+    KisSelectionSP selection = t.image->globalSelection();
+
+    QVERIFY(selection);
+    QVERIFY(!selection->outlineCacheValid() ||
+            !selection->outlineCache().isEmpty());
+
+
+    QString testName = fromClone ?
+        "selection_from_clone_layer" : "selection_from_blur_layer";
+
+    QVERIFY(t.checkSelectionOnly(testName));
+}
+
+void KisNodeManagerTest::testConvertCloneToSelectionMask()
+{
+    testConvertToSelectionMask(true);
+}
+
+void KisNodeManagerTest::testConvertBlurToSelectionMask()
+{
+    testConvertToSelectionMask(false);
 }
 
 QTEST_KDEMAIN(KisNodeManagerTest, GUI)

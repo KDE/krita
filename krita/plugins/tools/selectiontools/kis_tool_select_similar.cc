@@ -76,7 +76,7 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
 KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
     : KisToolSelectBase(canvas,
                         KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
-                        i18n("Similar Selection")),
+                        i18n("Similar Color Selection")),
       m_fuzziness(20)
 {
 }
@@ -117,7 +117,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     selectByColor(dev, tmpSel, c.data(), m_fuzziness, rc);
 
     tmpSel->invalidateOutlineCache();
-    KisSelectionToolHelper helper(kisCanvas, i18n("Similar Selection"));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Similar Color"));
     helper.selectPixelSelection(tmpSel, selectionAction());
 
     QApplication::restoreOverrideCursor();

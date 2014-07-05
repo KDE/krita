@@ -24,7 +24,7 @@
 
 #include "kis_tool_paint.h"
 #include "kis_painter.h"
-#include "ui_wdgshapeoptions.h"
+#include "ui_wdggeometryoptions.h"
 
 class KoCanvasBase;
 class KoPathShape;
@@ -64,7 +64,7 @@ protected:
 
     void addShape(KoShape* shape);
 
-    void addPathShape(KoPathShape* pathShape, const QString& name);
+    void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);
 
 private:
     WdgGeometryOptions *m_shapeOptionsWidget;

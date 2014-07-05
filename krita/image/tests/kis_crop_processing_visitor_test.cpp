@@ -46,7 +46,7 @@ void KisCropProcessingVisitorTest::testUndo()
     painter.fillRect(fillRect, KoColor(Qt::white, cs));
     QImage image1 = device->convertToQImage(0, 0, 0, 300, 300);
 
-    undoAdapter.beginMacro("test");
+    undoAdapter.beginMacro(kundo2_noi18n("test"));
 
     KisCropProcessingVisitor visitor(cropRect, true, true);
     layer->accept(visitor, &undoAdapter);
@@ -81,7 +81,7 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
 
     QCOMPARE(pixelSelection->selectedExactRect(), selectionRect);
 
-    undoAdapter.beginMacro("test");
+    undoAdapter.beginMacro(kundo2_noi18n("test"));
     KisCropProcessingVisitor visitor(cropRect, true, true);
     mask->accept(visitor, &undoAdapter);
     undoAdapter.endMacro();

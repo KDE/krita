@@ -29,7 +29,7 @@ RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape * rectan
 {
     Q_ASSERT(m_rectangle);
 
-    setText(i18nc("(qtundo-format)", "Change rectangle"));
+    setText(kundo2_i18n("Change rectangle"));
 
     m_oldCornerRadiusX = m_rectangle->cornerRadiusX();
     m_oldCornerRadiusY = m_rectangle->cornerRadiusY();

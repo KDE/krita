@@ -67,7 +67,8 @@ void VectorShapeConfigWidget::open(KoShape *shape)
     const QStringList mimetypes = QStringList()
         << QLatin1String("image/x-wmf")
         << QLatin1String("image/x-emf")
-        << QLatin1String("image/x-svm");
+        << QLatin1String("image/x-svm")
+        << QLatin1String("image/svg+xml");
     m_fileWidget->setMimeFilter(mimetypes);
     layout->addWidget(m_fileWidget);
     setLayout(layout);

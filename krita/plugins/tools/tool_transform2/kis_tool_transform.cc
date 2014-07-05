@@ -72,6 +72,7 @@
 #include <kis_selection_manager.h>
 #include <kis_system_locker.h>
 #include <krita_utils.h>
+#include <kis_resources_snapshot.h>
 
 #include <KoShapeTransformCommand.h>
 
@@ -109,8 +110,10 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_imageTooBig = false;
     m_origDevice = 0;
     m_origSelection = 0;
-    m_handleRadius = 12;
-    m_rotationCenterRadius = 12;
+    m_handleVisualRadius = 12; // size for painting on screed
+    m_rotationCenterVisualRadius = 12;
+    m_handleRadius = 2 * m_handleVisualRadius; // the threshold for a mouse drag
+    m_rotationCenterRadius = 2 * m_rotationCenterVisualRadius;
     m_maxRadius = (m_handleRadius > m_rotationCenterRadius) ? m_handleRadius : m_rotationCenterRadius;
 
 
@@ -509,10 +512,10 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
         // Draw Handles
 
-        qreal d = m_handleRadius / scaleFromAffineMatrix(m_handlesTransform);
+        qreal d = m_handleVisualRadius / scaleFromAffineMatrix(m_handlesTransform);
         QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
 
-        qreal r = m_rotationCenterRadius / scaleFromAffineMatrix(m_handlesTransform);
+        qreal r = m_rotationCenterVisualRadius / scaleFromAffineMatrix(m_handlesTransform);
         QRectF rotationCenterRect(-0.5 * r, -0.5 * r, r, r);
 
         QPainterPath handles;
@@ -2180,8 +2183,11 @@ void KisToolTransform::updateSelectionPath()
 {
     m_selectionPath = QPainterPath();
 
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+
     QPainterPath selectionOutline;
-    KisSelectionSP selection = currentSelection();
+    KisSelectionSP selection = resources->activeSelection();
 
     if (selection && selection->outlineCacheValid()) {
         selectionOutline = selection->outlineCache();
@@ -2278,7 +2284,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
 
     KisPaintDeviceSP dev;
 
-    KisNodeSP currentNode = this->currentNode();
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+
+    KisNodeSP currentNode = resources->currentNode();
 
     if (!currentNode || !currentNode->isEditable()) {
         return;
@@ -2304,10 +2313,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
             !currentNode->paintDevice();
     }
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, currentSelection(), image()->postExecutionUndoAdapter());
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, resources->activeSelection(), image()->postExecutionUndoAdapter());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
-    KisSelectionSP selection = currentSelection();
+    KisSelectionSP selection = resources->activeSelection();
     QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
 
     m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs, currentNode);

@@ -116,7 +116,7 @@ void KisUpdateScheduler::progressUpdate()
     if (!m_d->progressUpdater) return;
 
     if(!m_d->strokesQueue->hasOpenedStrokes()) {
-        QString jobName = m_d->strokesQueue->currentStrokeName();
+        QString jobName = m_d->strokesQueue->currentStrokeName().toString();
         if(jobName.isEmpty()) {
             jobName = i18n("Updating...");
         }

@@ -1,0 +1,21 @@
+[Desktop Entry]
+Icon=
+Name=Krita HeightMap Import Filter
+Name[ca]=Filtre d'importació HeightMap per al Krita
+Name[cs]=Importní filtr výškové mapy pro Kritu
+Name[it]=Filtro di importazione HeightMap per Krita
+Name[nl]=HeightMap-importfilter voor Krita
+Name[pl]=Filtr importu MapyWysokości do Krity
+Name[pt]=Filtro de Importação de HeightMap para o Krita
+Name[pt_BR]=Filtro de importação de HeightMap para Krita
+Name[sk]=Importný filter Krita HeightMap
+Name[sv]=Krita importfilter för höjdavbildning
+Name[uk]=Фільтр імпортування даних HeightMap для Krita
+Name[x-test]=xxKrita HeightMap Import Filterxx
+X-KDE-ServiceTypes=Calligra/Filter
+Type=Service
+X-KDE-Export=application/x-krita
+X-KDE-Import=image/x-r16,image/x-r8
+X-KDE-Library=kritaheightmapimport
+X-KDE-Weight=1
+NoDisplay=true

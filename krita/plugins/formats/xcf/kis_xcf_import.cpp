@@ -229,7 +229,6 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
 
         // Create the layer
         KisPaintLayerSP layer = new KisPaintLayer(image, QString::fromUtf8(xcflayer.name), xcflayer.opacity, colorSpace);
-        KisTransaction("", layer -> paintDevice());
 
         // Set some properties
         layer->setCompositeOp(layerModeG2K(xcflayer.mode));

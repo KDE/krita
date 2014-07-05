@@ -100,7 +100,7 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoU
     KisPaintDeviceSP dev = node->paintDevice();
     KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
     QRect r1 = dev->extent();
-    KisTransaction transaction(d->filter->name(), dev);
+    KisTransaction transaction(kundo2_i18n("Filter: \"%1\"", d->filter->name()), dev);
 
     KisImageWSP image = _info.image();
     r1 = r1.intersected(image->bounds());

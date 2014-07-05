@@ -39,9 +39,9 @@ InsertTableRowCommand::InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bo
     ,m_below(below)
 {
     if(below) {
-        setText(i18nc("(qtundo-format)", "Insert Row Below"));
+        setText(kundo2_i18n("Insert Row Below"));
     } else {
-        setText(i18nc("(qtundo-format)", "Insert Row Above"));
+        setText(kundo2_i18n("Insert Row Above"));
     }
 }
 

@@ -53,11 +53,6 @@ KoID KisCompositeOpListWidget::selectedCompositeOp() const {
     return KoCompositeOpRegistry::instance().getDefaultCompositeOp();
 }
 
-bool KisCompositeOpListWidget::hasSelectedCompositeOp() const {
-    KoID op;
-    return m_model->entryAt(op, currentIndex());
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpComboBox -------------------------------------------------------- //
 
@@ -294,10 +289,6 @@ KoID KisCompositeOpComboBox::selectedCompositeOp() const {
     return KoCompositeOpRegistry::instance().getDefaultCompositeOp();
 }
 
-bool KisCompositeOpComboBox::hasSelectedCompositeOp() const {
-    KoID op;
-    return m_model->entryAt(op, m_model->index(currentIndex(), 0));
-}
 
 QList<KAction *> KisCompositeOpComboBox::blendmodeActions()
 {

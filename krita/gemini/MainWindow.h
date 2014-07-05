@@ -43,6 +43,7 @@ public:
     void setAllowClose(bool allow);
 
     bool slateMode() const;
+    void setSlateMode(bool newValue);
 
     QString applicationName() const {
         return QLatin1String("KRITA GEMINI");
@@ -59,6 +60,8 @@ public:
 
     virtual void closeEvent(QCloseEvent* event);
 
+    Q_INVOKABLE QString openImage();
+
     bool forceFullScreen();
     void forceFullScreen(bool newValue);
 public Q_SLOTS:
@@ -71,6 +74,7 @@ public Q_SLOTS:
     void resetWindowTitle();
     void resourceChanged(int key, const QVariant& v);
     void resourceChangedSketch(int key, const QVariant& v);
+
 Q_SIGNALS:
     void closeRequested();
     void switchedToSketch();

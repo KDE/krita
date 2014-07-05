@@ -150,7 +150,6 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
                 i18n("Page %1", *it + 1),
                 quint8_MAX);
 
-        KisTransaction(0, layer->paintDevice());
 
         Poppler::Page* page = pdoc->page(*it);
 

@@ -166,7 +166,7 @@ void KisFilterSelectionsBenchmark::testUsualSelections(int num)
 
     timer.restart();
     for (int i = 0; i < num; i++) {
-        KisTransaction transac(0, projection, 0);
+        KisTransaction transac(projection, 0);
         m_filter->process(m_device, projection, m_selection, filterRect, m_configuration, 0);
     }
     avTime = double(timer.elapsed()) / num;
@@ -189,7 +189,7 @@ void KisFilterSelectionsBenchmark::testNoSelections(int num)
 
     timer.restart();
     for (int i = 0; i < num; i++) {
-        KisTransaction transac(0, projection, 0);
+        KisTransaction transac(projection, 0);
         m_filter->process(m_device, projection, 0, filterRect, m_configuration, 0);
     }
     avTime = double(timer.elapsed()) / num;
@@ -244,11 +244,11 @@ void KisFilterSelectionsBenchmark::testBitBltWOSelections(int num)
     for (int i = 0; i < num; i++) {
         KisPaintDeviceSP cacheDevice = new KisPaintDevice(projection->colorSpace());
 
-        KisTransaction transac(0, cacheDevice, 0);
+        KisTransaction transac(cacheDevice, 0);
         m_filter->process(m_device, projection, 0, filterRect, m_configuration, 0);
 
         KisPainter painter(projection);
-        painter.beginTransaction(0);
+        painter.beginTransaction();
         painter.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         painter.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);
         painter.deleteTransaction();
@@ -275,11 +275,11 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
     for (int i = 0; i < num; i++) {
         KisPaintDeviceSP cacheDevice = new KisPaintDevice(projection->colorSpace());
 
-        KisTransaction transac(0, cacheDevice, 0);
+        KisTransaction transac(cacheDevice, 0);
         m_filter->process(m_device, cacheDevice, 0, filterRect, m_configuration, 0);
 
         KisPainter gc(projection);
-        gc.beginTransaction(0);
+        gc.beginTransaction();
         gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         gc.setSelection(m_selection);
         gc.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);

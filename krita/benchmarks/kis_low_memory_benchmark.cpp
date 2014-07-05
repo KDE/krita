@@ -128,7 +128,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
 
         QLineF line(rect.topLeft(), rect.topLeft() + QPointF(rect.width(), 0));
         if (createTransaction) {
-            painter->beginTransaction("test transaction");
+            painter->beginTransaction();
         }
 
         KisDistanceInformation currentDistance;

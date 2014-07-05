@@ -97,7 +97,7 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
 
     if (hasShapeLayerChild(image->root()) && !m_chain->manager()->getBatchMode()) {
         KMessageBox::information(0,
-                                 i18n("This image contains vector, clone or generated layers..\nThese layers will be saved as raster layers."),
+                                 i18n("This image contains vector, clone or fill layers.\nThese layers will be saved as raster layers."),
                                  i18n("Warning"),
                                  "krita/ora/vector");
     }

@@ -1,3 +1,5 @@
 #! /bin/sh
+source ../../calligra_xgettext.sh
+
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp
-$XGETTEXT `find . -name \*.cpp` -o $podir/ChartShape.pot
+calligra_xgettext `find . -name \*.cpp` > $podir/ChartShape.pot

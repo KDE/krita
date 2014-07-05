@@ -96,7 +96,7 @@ public:
     KisToolMultiBrushFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolMultiBrush") {
 
-        setToolTip(i18n("Paint with multibrushes"));
+        setToolTip(i18n("Multibrush Tool"));
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);

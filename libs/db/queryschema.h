@@ -408,8 +408,8 @@ public:
     TableSchema::List* tables() const;
 
     /*! Adds \a table schema as one of tables used in a query.
-     if \a alias is not empty, it will be assigned to this table
-     using setTableAlias(position, alias)
+     If \a alias is not empty, it will be assigned to this table
+     using setTableAlias(position, alias).
     */
     void addTable(TableSchema *table, const QByteArray& alias = QByteArray());
 
@@ -515,16 +515,15 @@ public:
     */
     int tablePositionForAlias(const QByteArray& name) const;
 
-    /*! \return table position (within FROM section) for \a tableName.
+    /*! \return position (within the FROM section) of table \a tableName.
      -1 is returend if there's no such table declared in the FROM section.
      \sa tablePositions()
     */
     int tablePosition(const QString& tableName) const;
 
-    /*! \return a list of all \a tableName table occurrences (within FROM section).
-     E.g. for "SELECT * FROM table t, table t2" [0, 1] list is returned.
-     Empty list is returned there's no such table declared
-     in the FROM section at all.
+    /*! \return a list of all occurrences of table \a tableName (within the FROM section).
+     E.g. for "SELECT * FROM table t, table t2" tablePositions("table") returns {0, 1} list.
+     Empty list is returned if there's no table \a tableName used in the FROM section at all.
      \sa tablePosition()
     */
     QList<int> tablePositions(const QString& tableName) const;

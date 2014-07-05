@@ -49,16 +49,28 @@ KoColor KisColorSelectorWheel::selectColor(int x, int y)
 
     switch (m_parameter) {
     case KisColorSelector::hsvSH:
-        emit paramChanged(angle, radius, -1, -1, -1);
+        emit paramChanged(angle, radius, -1, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelector::hslSH:
-        emit paramChanged(angle, -1, -1, radius, -1);
+        emit paramChanged(angle, -1, -1, radius, -1, -1, -1, -1, -1);
+        break;
+	case KisColorSelector::hsiSH:
+        emit paramChanged(angle, -1, -1, -1, -1, radius, -1, -1, -1);
+        break;
+    case KisColorSelector::hsySH:
+        emit paramChanged(angle, -1, -1, -1, -1, -1, -1, radius, -1);
         break;
     case KisColorSelector::VH:
-        emit paramChanged(angle, -1, radius, -1, -1);
+        emit paramChanged(angle, -1, radius, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelector::LH:
-        emit paramChanged(angle, -1, -1, -1, radius);
+        emit paramChanged(angle, -1, -1, -1, radius, -1, -1, -1, -1);
+        break;
+	case KisColorSelector::IH:
+        emit paramChanged(angle, -1, -1, -1, -1, -1, radius, -1, -1);
+        break;
+    case KisColorSelector::YH:
+        emit paramChanged(angle, -1, -1, -1, -1, -1, -1, -1, radius);
         break;
     default:
         Q_ASSERT(false);
@@ -80,9 +92,16 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
 {
     qreal hsvH, hsvS, hsvV;
     qreal hslH, hslS, hslL;
+	qreal hsiH, hsiS, hsiI;
+	qreal hsyH, hsyS, hsyY;
     m_parent->converter()->getHsvF(color, &hsvH, &hsvS, &hsvV);
     m_parent->converter()->getHslF(color, &hslH, &hslS, &hslL);
+    m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
+    m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY);
 
+	//workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
+	hsiH=hslH;
+	hsyH=hslH;
 
     qreal angle = 0.0, radius = 0.0;
     angle = hsvH;
@@ -90,20 +109,36 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
     angle -= M_PI;
     switch (m_parameter) {
     case KisColorSelector::LH:
-        emit paramChanged(hslH, -1, -1, -1, hslL);
+        emit paramChanged(hslH, -1, -1, -1, hslL, -1, -1, -1, -1);
         radius = hslL;
         break;
     case KisColorSelector::VH:
-        emit paramChanged(hsvH, -1, hsvV, -1, -1);
+        emit paramChanged(hsvH, -1, hsvV, -1, -1, -1, -1, -1, -1);
         radius = hsvV;
         break;
+	case KisColorSelector::IH:
+        emit paramChanged(hslH, -1, -1, -1, -1, -1, hsiI, -1, -1);
+        radius = hsiI;
+        break;
+    case KisColorSelector::YH:
+        emit paramChanged(hsvH, -1, -1, -1, -1, -1, -1, -1, hsyY);
+        radius = hsyY;
+        break;
     case KisColorSelector::hsvSH:
-        emit paramChanged(hsvH, hsvS, -1, -1, -1);
+        emit paramChanged(hsvH, hsvS, -1, -1, -1, -1, -1, -1, -1);
         radius = hsvS;
         break;
     case KisColorSelector::hslSH:
-        emit paramChanged(hslH, -1, -1, hslS, -1);
+        emit paramChanged(hslH, -1, -1, hslS, -1, -1, -1, -1, -1);
         radius = hslS;
+        break;
+	case KisColorSelector::hsiSH:
+        emit paramChanged(hsiH, -1, -1, -1, -1, hsiS, -1, -1, -1);
+        radius = hsiS;
+        break;
+    case KisColorSelector::hsySH:
+        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, hsyS, -1);
+        radius = hsyS;
         break;
     default:
         Q_ASSERT(false);
@@ -198,11 +233,23 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
     case KisColorSelector::hslSH:
         color = m_parent->converter()->fromHslF(angle, radius, m_lightness);
         break;
+    case KisColorSelector::hsiSH:
+        color = m_parent->converter()->fromHsiF(angle, radius, m_intensity);
+        break;
+    case KisColorSelector::hsySH:
+        color = m_parent->converter()->fromHsyF(angle, radius, m_luma);
+        break;
     case KisColorSelector::VH:
         color = m_parent->converter()->fromHsvF(angle, m_hsvSaturation, radius);
         break;
     case KisColorSelector::LH:
         color = m_parent->converter()->fromHslF(angle, m_hslSaturation, radius);
+        break;
+	case KisColorSelector::IH:
+        color = m_parent->converter()->fromHsiF(angle, m_hsiSaturation, radius);
+        break;
+	case KisColorSelector::YH:
+        color = m_parent->converter()->fromHsyF(angle, m_hsySaturation, radius);
         break;
     default:
         Q_ASSERT(false);

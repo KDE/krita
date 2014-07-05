@@ -613,6 +613,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         d->canvas->canvasWidget()->setFocus();
         stop_ignore_cursor_events();
         touch_stop_block_press_events();
+
+        d->matcher.enterEvent();
         break;
     case QEvent::Leave:
         d->debugEvent<QEvent, false>(event);
@@ -623,6 +625,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
          */
         stop_ignore_cursor_events();
         touch_stop_block_press_events();
+
+        d->matcher.leaveEvent();
         break;
     case QEvent::FocusIn:
         d->debugEvent<QEvent, false>(event);

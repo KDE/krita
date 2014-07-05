@@ -418,7 +418,9 @@ void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
 {
     if (newRect == bounds() && !cropLayers) return;
 
-    QString actionName = cropLayers ? i18n("Crop Image") : i18n("Resize Image");
+    KUndo2MagicString actionName = cropLayers ?
+        kundo2_i18n("Crop Image") :
+        kundo2_i18n("Resize Image");
 
     KisImageSignalVector emitSignals;
     emitSignals << ComplexSizeChangedSignal(newRect, newRect.size());
@@ -451,7 +453,10 @@ void KisImage::cropImage(const QRect& newRect)
 
 void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 {
-    QString actionName = i18n("Crop Node");
+    bool isLayer = dynamic_cast<KisLayer*>(node.data());
+    KUndo2MagicString actionName = isLayer ?
+        kundo2_i18n("Crop Layer") :
+        kundo2_i18n("Crop Mask");
 
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
@@ -478,7 +483,9 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     if (sizeChanged) emitSignals << ComplexSizeChangedSignal(bounds(), size);
     emitSignals << ModifiedSignal;
 
-    QString actionName = sizeChanged ? i18n("Scale Image") : i18n("Change Image Resolution");
+    KUndo2MagicString actionName = sizeChanged ?
+        kundo2_i18n("Scale Image") :
+        kundo2_i18n("Change Image Resolution");
 
     KisProcessingApplicator::ProcessingFlags signalFlags =
         (resolutionChanged || sizeChanged) ?
@@ -525,7 +532,7 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
 
 void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy)
 {
-    QString actionName(i18n("Scale Layer"));
+    KUndo2MagicString actionName(kundo2_i18n("Scale Layer"));
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
@@ -545,7 +552,7 @@ void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *
     applicator.end();
 }
 
-void KisImage::rotateImpl(const QString &actionName,
+void KisImage::rotateImpl(const KUndo2MagicString &actionName,
                           KisNodeSP rootNode,
                           bool resizeImage,
                           double radians)
@@ -613,16 +620,15 @@ void KisImage::rotateImpl(const QString &actionName,
 
 void KisImage::rotateImage(double radians)
 {
-    // XXX i18n("Rotate Image") after 2.4
-    rotateImpl("Rotate Image", root(), true, radians);
+    rotateImpl(kundo2_i18n("Rotate Image"), root(), true, radians);
 }
 
 void KisImage::rotateNode(KisNodeSP node, double radians)
 {
-    rotateImpl(i18n("Rotate Layer"), node, false, radians);
+    rotateImpl(kundo2_i18n("Rotate Layer"), node, false, radians);
 }
 
-void KisImage::shearImpl(const QString &actionName,
+void KisImage::shearImpl(const KUndo2MagicString &actionName,
                          KisNodeSP rootNode,
                          bool resizeImage,
                          double angleX, double angleY,
@@ -686,13 +692,13 @@ void KisImage::shearNode(KisNodeSP node, double angleX, double angleY)
 {
     QPointF shearOrigin = QRectF(bounds()).center();
 
-    shearImpl(i18n("Shear layer"), node, false,
+    shearImpl(kundo2_i18n("Shear layer"), node, false,
               angleX, angleY, shearOrigin);
 }
 
 void KisImage::shear(double angleX, double angleY)
 {
-    shearImpl(i18n("Shear Image"), m_d->rootLayer, true,
+    shearImpl(kundo2_i18n("Shear Image"), m_d->rootLayer, true,
               angleX, angleY, QPointF());
 }
 
@@ -705,7 +711,7 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
 
     const KoColorSpace *srcColorSpace = m_d->colorSpace;
 
-    undoAdapter()->beginMacro(i18n("Convert Image Color Space"));
+    undoAdapter()->beginMacro(kundo2_i18n("Convert Image Color Space"));
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
 
@@ -738,7 +744,7 @@ void KisImage::convertProjectionColorSpace(const KoColorSpace *dstColorSpace)
 {
     if (*m_d->colorSpace == *dstColorSpace) return;
 
-    undoAdapter()->beginMacro(i18n("Convert Projection Color Space"));
+    undoAdapter()->beginMacro(kundo2_i18n("Convert Projection Color Space"));
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
@@ -917,9 +923,9 @@ void KisImage::flatten()
 
     addNode(flattenLayer, newRootLayer, 0);
 
-    undoAdapter()->beginMacro(i18n("Flatten Image"));
+    undoAdapter()->beginMacro(kundo2_i18n("Flatten Image"));
     // NOTE: KisImageChangeLayersCommand performs all the locking for us
-    undoAdapter()->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer, ""));
+    undoAdapter()->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer));
     undoAdapter()->endMacro();
 
     setModified();
@@ -1017,7 +1023,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     dbgImage << ppVar(parent);
 
     // FIXME: "Merge Down"?
-    undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
+    undoAdapter()->beginMacro(kundo2_i18n("Merge with Layer Below"));
 
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, mergedLayer, parent, layer));
     safeRemoveTwoNodes(layer, prevLayer);
@@ -1063,7 +1069,7 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
     newLayer->setCompositeOp(layer->compositeOp()->id());
 
 
-    undoAdapter()->beginMacro(i18n("Flatten Layer"));
+    undoAdapter()->beginMacro(kundo2_i18n("Flatten Layer"));
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer));
     undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
 
@@ -1576,6 +1582,17 @@ void KisImage::notifySelectionChanged()
      * KisImageSignalRouter
      */
     m_d->legacyUndoAdapter->emitSelectionChanged();
+
+    /**
+     * Editing of selection masks doesn't necessary produce a
+     * setDirty() call, so in the end of the stroke we need to request
+     * direct update of the UI's cache.
+     */
+    if (m_d->isolatedRootNode &&
+        dynamic_cast<KisSelectionMask*>(m_d->isolatedRootNode.data())) {
+
+        notifyProjectionUpdated(bounds());
+    }
 }
 
 void KisImage::requestProjectionUpdateImpl(KisNode *node,
@@ -1660,7 +1677,7 @@ void KisImage::setWrapAroundModePermitted(bool value)
         KisProcessingApplicator applicator(this, root(),
                                            KisProcessingApplicator::RECURSIVE,
                                            KisImageSignalVector() << ModifiedSignal,
-                                           i18n("Crop Selections"));
+                                           kundo2_i18n("Crop Selections"));
 
         KisProcessingVisitorSP visitor =
             new KisCropSelectionsProcessingVisitor(bounds());

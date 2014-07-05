@@ -34,7 +34,7 @@ AddAnnotationCommand::AddAnnotationCommand(KoAnnotation *annotation, KUndo2Comma
     , m_annotation(annotation)
     , m_shape(0)
 {
-    setText("internal step");
+    setText(kundo2_noi18n("internal step"));
 }
 
 void AddAnnotationCommand::undo()

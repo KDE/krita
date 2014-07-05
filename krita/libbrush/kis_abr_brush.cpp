@@ -40,9 +40,10 @@
 
 #define DEFAULT_SPACING 0.25
 
-KisAbrBrush::KisAbrBrush(const QString& filename, const QByteArray &parentMD5)
+KisAbrBrush::KisAbrBrush(const QString& filename, const QByteArray &parentMD5, KisAbrBrushCollection *parent)
     : KisBrush(filename)
     , m_parentMD5(parentMD5)
+    , m_parent(parent)
 {
     setBrushType(INVALID);
     setHasColor(false);
@@ -66,7 +67,7 @@ bool KisAbrBrush::save()
     return true;
 }
 
-bool KisAbrBrush::saveToDevice(QIODevice* dev) const
+bool KisAbrBrush::saveToDevice(QIODevice* /*dev*/) const
 {
     return true;
 }
@@ -76,6 +77,18 @@ void KisAbrBrush::setBrushTipImage(const QImage& image)
     setValid(true);
     setBrushType(MASK);
     setHasColor(false);
+
+#if QT_VERSION >= 0x040700
+    QByteArray ba = QByteArray::fromRawData((const char*)image.constBits(), image.byteCount());
+#else
+    QByteArray ba = QByteArray::fromRawData((const char*)image.bits(), image.byteCount());
+#endif
+
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+    md5.addData(m_parentMD5);
+    setMD5(md5.result());
+
     KisBrush::setBrushTipImage(image);
 }
 
@@ -91,21 +104,10 @@ QString KisAbrBrush::defaultFileExtension() const
     return QString();
 }
 
-QByteArray KisAbrBrush::generateMD5() const
+QImage KisAbrBrush::brushTipImage() const
 {
-    if (!brushTipImage().isNull()) {
-#if QT_VERSION >= 0x040700
-        QByteArray ba = QByteArray::fromRawData((const char*)brushTipImage().constBits(), brushTipImage().byteCount());
-#else
-        QByteArray ba = QByteArray::fromRawData((const char*)brushTipImage().bits(), brushTipImage().byteCount());
-#endif
-
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
-        md5.addData(m_parentMD5);
-
-        return md5.result();
+    if (KisBrush::brushTipImage().isNull() && m_parent) {
+        m_parent->load();
     }
-    return QByteArray();
-
+    return KisBrush::brushTipImage();
 }

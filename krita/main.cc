@@ -85,6 +85,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();
     app.setEventFilter(&KisTabletSupportWin::eventFilter);
+    app.setAttribute(Qt::AA_DontShowIconsInMenus);
 #elif defined Q_WS_X11
     KisTabletSupportX11::init();
     app.setEventFilter(&KisTabletSupportX11::eventFilter);

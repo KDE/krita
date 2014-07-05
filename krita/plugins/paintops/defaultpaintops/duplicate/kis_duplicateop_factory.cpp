@@ -49,19 +49,17 @@ KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP settings
         KisPainter * painter,
         KisImageWSP image)
 {
-    Q_UNUSED(image);
-
     const KisDuplicateOpSettings *duplicateopSettings = dynamic_cast<const KisDuplicateOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && duplicateopSettings != 0);
 
-    KisPaintOp * op = new KisDuplicateOp(duplicateopSettings, painter);
+    KisPaintOp * op = new KisDuplicateOp(image, duplicateopSettings, painter);
     Q_CHECK_PTR(op);
     return op;
 }
 
-KisPaintOpSettingsSP KisDuplicateOpFactory::settings(KisImageWSP image)
+KisPaintOpSettingsSP KisDuplicateOpFactory::settings()
 {
-    return new KisDuplicateOpSettings(image);
+    return new KisDuplicateOpSettings();
 }
 
 KisPaintOpSettingsWidget* KisDuplicateOpFactory::createSettingsWidget(QWidget* parent)

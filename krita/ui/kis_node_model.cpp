@@ -24,6 +24,8 @@
 #include <QDataStream>
 #include <QBuffer>
 
+#include <KoColorSpaceConstants.h>
+
 #include <klocale.h>
 
 #include "kis_mimedata.h"
@@ -36,6 +38,7 @@
 #include <kis_undo_adapter.h>
 #include <commands/kis_node_property_list_command.h>
 #include <kis_paint_layer.h>
+#include <kis_group_layer.h>
 
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
@@ -51,6 +54,8 @@ struct KisNodeModel::Private
 {
 public:
     Private() : shapeController(0),
+                showRootLayer(false),
+                showGlobalSelection(false),
                 indexConverter(0),
                 dummiesFacade(0),
                 needFinishRemoveRows(false),
@@ -59,6 +64,7 @@ public:
     KisImageWSP image;
     KisShapeController *shapeController;
     bool showRootLayer;
+    bool showGlobalSelection;
     QList<KisNodeDummy*> updateQueue;
     QTimer* updateTimer;
 
@@ -133,7 +139,7 @@ void KisNodeModel::resetIndexConverter()
         }
         else {
             m_d->indexConverter =
-                new KisModelIndexConverter(m_d->dummiesFacade, this);
+                new KisModelIndexConverter(m_d->dummiesFacade, this, m_d->showGlobalSelection);
         }
     }
 }
@@ -155,10 +161,24 @@ void KisNodeModel::slotIsolatedModeChanged()
     regenerateItems(m_d->dummiesFacade->rootDummy());
 }
 
+bool KisNodeModel::showGlobalSelection() const
+{
+    KisConfig cfg;
+    return cfg.showGlobalSelection();
+}
+
+void KisNodeModel::setShowGlobalSelection(bool value)
+{
+    KisConfig cfg;
+    cfg.setShowGlobalSelection(value);
+    updateSettings();
+}
+
 void KisNodeModel::updateSettings()
 {
     KisConfig cfg;
     m_d->showRootLayer = cfg.showRootLayer();
+    m_d->showGlobalSelection = cfg.showGlobalSelection();
     resetIndexConverter();
     reset();
 }
@@ -393,10 +413,15 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(role == ActiveRole) {
+    if(role == ActiveRole || role == AlternateActiveRole) {
         KisNodeSP activatedNode =
             index.isValid() && value.toBool() ? nodeFromIndex(index) : 0;
         emit nodeActivated(activatedNode);
+
+        if (role == AlternateActiveRole) {
+            emit toggleIsolateActiveNode();
+        }
+
         emit dataChanged(index, index);
         return true;
     }
@@ -477,15 +502,48 @@ QStringList KisNodeModel::mimeTypes() const
     return types;
 }
 
+bool hasParentInList(QList<KisNodeSP> nodeList, KisNodeSP node)
+{
+    KisNodeSP parent = node->parent();
+
+    while (parent) {
+        if (nodeList.contains(parent)) {
+            return true;
+        }
+        parent = parent->parent();
+    }
+    return false;
+}
+
+QList<KisNodeSP> sortNodes(KisNodeSP sourceRoot, QList<KisNodeSP> selectedNodes)
+{
+    QList<KisNodeSP> nodes;
+
+    KisNodeSP child = sourceRoot->lastChild();
+    while (child) {
+        if (selectedNodes.contains(child) && !hasParentInList(selectedNodes, child)) {
+            nodes << child;
+        }
+        if (child->childCount() > 0) {
+            nodes += sortNodes(child, selectedNodes);
+        }
+        child = child->prevSibling();
+    }
+
+    return nodes;
+}
+
 QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
 {
-    Q_ASSERT(indexes.count() == 1); // we only allow one node at a time to be stored as mimedata
-
-    KisNodeSP node = nodeFromIndex(indexes.first());
-    KisMimeData* data = new KisMimeData(node);
-
+    QList<KisNodeSP> nodes;
+    foreach(const QModelIndex &idx, indexes) {
+        nodes << nodeFromIndex(idx);
+    }
+    nodes = sortNodes(m_d->image->rootLayer(), nodes);
+    KisMimeData* data = new KisMimeData(nodes);
     return data;
 }
+
 
 bool KisNodeModel::correctNewNodeLocation(KisNodeSP node,
                                           KisNodeDummy* &parentDummy,
@@ -509,23 +567,24 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 {
     Q_UNUSED(column);
 
-    bool copyNode = action == Qt::CopyAction;
-    KisNodeSP node =
-        KisMimeData::tryLoadInternalNode(data,
-                                         m_d->image,
-                                         m_d->shapeController,
-                                         copyNode /* IN-OUT */);
+    bool copyNode = (action == Qt::CopyAction);
 
-    if (!node) {
+    QList<KisNodeSP> nodes =
+        KisMimeData::tryLoadInternalNodes(data,
+                                          m_d->image,
+                                          m_d->shapeController,
+                                          copyNode /* IN-OUT */);
+
+    if (nodes.isEmpty()) {
         QRect imageBounds = m_d->image->bounds();
-        node = KisMimeData::loadNode(data,
-                                     imageBounds, imageBounds.center(),
-                                     false,
-                                     m_d->image, m_d->shapeController);
+        nodes = KisMimeData::loadNodes(data,
+                                       imageBounds, imageBounds.center(),
+                                       false,
+                                       m_d->image, m_d->shapeController);
         copyNode = true;
     }
 
-    if (!node) return false;
+    if (nodes.isEmpty()) return false;
 
     if (copyNode) {
         /**
@@ -549,25 +608,27 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
         aboveThisDummy = row < m_d->indexConverter->rowCount(parent) ? m_d->indexConverter->dummyFromRow(row, parent) : 0;
     }
 
-    if (!correctNewNodeLocation(node, parentDummy, aboveThisDummy)) {
-        return false;
-    }
-
-    Q_ASSERT(parentDummy);
-    KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
-
-
     bool result = true;
 
-    if (action == Qt::CopyAction) {
-        emit requestAddNode(node, parentDummy->node(), aboveThisNode);
-    }
-    else if (action == Qt::MoveAction) {
-        Q_ASSERT(node->graphListener() == m_d->image.data());
-        emit requestMoveNode(node, parentDummy->node(), aboveThisNode);
-    }
-    else {
-        result = false;
+    foreach(KisNodeSP node, nodes) {
+
+        if (!correctNewNodeLocation(node, parentDummy, aboveThisDummy)) {
+            return false;
+        }
+
+        Q_ASSERT(parentDummy);
+        KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
+
+        if (action == Qt::CopyAction) {
+            emit requestAddNode(node, parentDummy->node(), aboveThisNode);
+        }
+        else if (action == Qt::MoveAction) {
+            Q_ASSERT(node->graphListener() == m_d->image.data());
+            emit requestMoveNode(node, parentDummy->node(), aboveThisNode);
+        }
+        else {
+            result = false;
+        }
     }
 
     return result;

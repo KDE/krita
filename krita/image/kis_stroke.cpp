@@ -74,7 +74,7 @@ KisStrokeJob* KisStroke::popOneJob()
     return job;
 }
 
-QString KisStroke::name() const
+KUndo2MagicString KisStroke::name() const
 {
     return m_strokeStrategy->name();
 }

@@ -60,7 +60,7 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
     }
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisSystemLocker locker(currentNode());
-        KisFigurePaintingToolHelper helper(i18n("Polygon"),
+        KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polygon"),
                                            image(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),

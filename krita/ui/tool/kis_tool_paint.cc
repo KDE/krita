@@ -300,7 +300,7 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
         KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
 
     KisPaintDeviceSP device = fromCurrentNode ?
-        currentNode()->paintDevice() : image()->projection();
+        currentNode()->projection() : image()->projection();
 
     QPoint imagePoint = image()->documentToIntPixel(documentPixel);
 
@@ -371,6 +371,48 @@ QWidget * KisToolPaint::createOptionWidget()
     return optionWidget;
 }
 
+QWidget* findLabelWidget(QGridLayout *layout, QWidget *control)
+{
+    QWidget *result = 0;
+
+    int index = layout->indexOf(control);
+
+    int row, col, rowSpan, colSpan;
+    layout->getItemPosition(index, &row, &col, &rowSpan, &colSpan);
+
+    if (col > 0) {
+        QLayoutItem *item = layout->itemAtPosition(row, col - 1);
+
+        if (item) {
+            result = item->widget();
+        }
+    } else {
+        QLayoutItem *item = layout->itemAtPosition(row, col + 1);
+        if (item) {
+            result = item->widget();
+        }
+    }
+
+    return result;
+}
+
+void KisToolPaint::showControl(QWidget *control, bool value)
+{
+    control->setVisible(value);
+    QWidget *label = findLabelWidget(m_optionsWidgetLayout, control);
+    if (label) {
+        label->setVisible(value);
+    }
+}
+
+void KisToolPaint::enableControl(QWidget *control, bool value)
+{
+    control->setEnabled(value);
+    QWidget *label = findLabelWidget(m_optionsWidgetLayout, control);
+    if (label) {
+        label->setEnabled(value);
+    }
+}
 
 void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {

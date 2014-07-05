@@ -27,7 +27,7 @@
 #include "kis_pixel_selection.h"
 
 KisDeselectGlobalSelectionCommand::KisDeselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent) :
-        KUndo2Command(i18nc("(qtundo-format)", "Deselect"), parent)
+        KUndo2Command(kundo2_i18n("Deselect"), parent)
         , m_image(image)
 {
 }

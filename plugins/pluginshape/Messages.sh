@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/PluginShape.pot
+source ../../calligra_xgettext.sh
+
+calligra_xgettext *.cpp > $podir/PluginShape.pot

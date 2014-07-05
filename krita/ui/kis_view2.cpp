@@ -72,6 +72,7 @@
 #include <KoDockerManager.h>
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
+#include <KoResourceItemChooserSync.h>
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
@@ -131,6 +132,7 @@
 #include "krita/gemini/ViewModeSwitchEvent.h"
 #include "kis_mirror_axis.h"
 #include "kis_tooltip_manager.h"
+#include <kis_tool_freehand.h>
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -172,6 +174,7 @@ public:
         , actionManager(0)
         , mainWindow(0)
         , tooltipManager(0)
+        , showFloatingMessage(true)
     {
     }
 
@@ -228,6 +231,7 @@ public:
     KisMirrorAxis* mirrorAxis;
     KisTooltipManager* tooltipManager;
     QPointer<KisFloatingMessage> savedFloatingMessage;
+    bool showFloatingMessage;
 };
 
 
@@ -241,6 +245,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     setXMLFile(QString("%1.rc").arg(qAppName()));
     KisConfig cfg;
 
+    KoResourceItemChooserSync::instance()->setBaseLength(cfg.readEntry("baseLength", 50));
     setFocusPolicy(Qt::NoFocus);
 
     if (mainWindow()) {
@@ -472,6 +477,7 @@ KisView2::~KisView2()
 {
     KisConfig cfg;
     cfg.writeEntry("LastPreset", m_d->resourceProvider->currentPreset()->name());
+    cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
     if (m_d->filterManager->isStrokeRunning()) {
         m_d->filterManager->cancel();
@@ -528,19 +534,21 @@ void KisView2::dropEvent(QDropEvent *event)
         KisShapeController *kritaShapeController =
             dynamic_cast<KisShapeController*>(m_d->doc->shapeController());
 
-        KisNodeSP node =
-            KisMimeData::loadNode(event->mimeData(), imageBounds,
+        QList<KisNodeSP> nodes =
+            KisMimeData::loadNodes(event->mimeData(), imageBounds,
                                   pasteCenter, forceRecenter,
                                   kisimage, kritaShapeController);
 
-        if (node) {
-            KisNodeCommandsAdapter adapter(this);
-            if (!m_d->nodeManager->activeLayer()) {
-                adapter.addNode(node, kisimage->rootLayer() , 0);
-            } else {
-                adapter.addNode(node,
-                                m_d->nodeManager->activeLayer()->parent(),
-                                m_d->nodeManager->activeLayer());
+        foreach(KisNodeSP node, nodes) {
+            if (node) {
+                KisNodeCommandsAdapter adapter(this);
+                if (!m_d->nodeManager->activeLayer()) {
+                    adapter.addNode(node, kisimage->rootLayer() , 0);
+                } else {
+                    adapter.addNode(node,
+                                    m_d->nodeManager->activeLayer()->parent(),
+                                    m_d->nodeManager->activeLayer());
+                }
             }
         }
 
@@ -618,6 +626,9 @@ bool KisView2::event( QEvent* event )
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
+            canvasControllerWidget()->setFocus();
+            qApp->processEvents();
+
             KisCanvasResourceProvider* provider = resourceProvider();
             syncObject->backgroundColor = provider->bgColor();
             syncObject->foregroundColor = provider->fgColor();
@@ -642,6 +653,11 @@ bool KisView2::event( QEvent* event )
             syncObject->mirrorHorizontal = provider->mirrorHorizontal();
             syncObject->mirrorVertical = provider->mirrorVertical();
             syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+
+            KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
+            if(tool) {
+                syncObject->smoothingOptions = tool->smoothingOptions();
+            }
 
             syncObject->initialized = true;
 
@@ -706,7 +722,6 @@ bool KisView2::event( QEvent* event )
                 document()->gridData().setShowGrid(syncObject->gridData->showGrid());
                 document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
 
-
                 actionCollection()->action("zoom_in")->trigger();
                 qApp->processEvents();
 
@@ -727,6 +742,19 @@ bool KisView2::event( QEvent* event )
                 QPoint newOffset = syncObject->documentOffset + pos();
                 qApp->processEvents();
                 canvasControllerWidget()->setScrollBarValue(newOffset);
+
+                KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
+                if(tool && syncObject->smoothingOptions) {
+                    tool->smoothingOptions()->setSmoothingType(syncObject->smoothingOptions->smoothingType());
+                    tool->smoothingOptions()->setSmoothPressure(syncObject->smoothingOptions->smoothPressure());
+                    tool->smoothingOptions()->setTailAggressiveness(syncObject->smoothingOptions->tailAggressiveness());
+                    tool->smoothingOptions()->setUseScalableDistance(syncObject->smoothingOptions->useScalableDistance());
+                    tool->smoothingOptions()->setSmoothnessDistance(syncObject->smoothingOptions->smoothnessDistance());
+                    tool->smoothingOptions()->setUseDelayDistance(syncObject->smoothingOptions->useDelayDistance());
+                    tool->smoothingOptions()->setDelayDistance(syncObject->smoothingOptions->delayDistance());
+                    tool->smoothingOptions()->setFinishStabilizedCurve(syncObject->smoothingOptions->finishStabilizedCurve());
+                    tool->updateSettingsViews();
+                }
             }
 
             return true;
@@ -1602,14 +1630,13 @@ void KisView2::updateIcons()
 #endif
 }
 
-void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority)
+void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
-    // Yes, the @return is correct. But only for widget based KDE apps, not QML based ones
-    if (mainWindow()) {
+    if(m_d->showFloatingMessage && qtMainWindow()) {
         if (m_d->savedFloatingMessage) {
-            m_d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority);
+            m_d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
         } else {
-            m_d->savedFloatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget(), false, timeout, priority);
+            m_d->savedFloatingMessage = new KisFloatingMessage(message, qtMainWindow()->centralWidget(), false, timeout, priority, alignment);
             m_d->savedFloatingMessage->setShowOverParent(true);
             m_d->savedFloatingMessage->setIcon(icon);
             m_d->savedFloatingMessage->showMessage();
@@ -1632,6 +1659,11 @@ void KisView2::showHideScrollbars()
         dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
+}
+
+void KisView2::setShowFloatingMessage(bool show)
+{
+    m_d->showFloatingMessage = show;
 }
 
 #include "kis_view2.moc"

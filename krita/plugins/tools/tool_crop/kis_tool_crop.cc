@@ -51,6 +51,8 @@
 #include <kis_view2.h>
 #include <kis_floating_message.h>
 #include <kis_group_layer.h>
+#include <kis_resources_snapshot.h>
+
 
 struct DecorationLine
 {
@@ -134,7 +136,10 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 {
     KisTool::activate(toolActivation, shapes);
 
-    KisSelectionSP sel = currentSelection();
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+
+    KisSelectionSP sel = resources->activeSelection();
     if (sel) {
         sel->updateProjection();
         m_rectCrop = sel->selectedExactRect();
@@ -145,7 +150,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     updateCanvasPixelRect(image()->bounds());
 
     //pixel layer
-    if(currentNode() && currentNode()->paintDevice()) {
+    if(resources->currentNode() && resources->currentNode()->paintDevice()) {
         setCropTypeSelectable(true);
     }
     //vector layer

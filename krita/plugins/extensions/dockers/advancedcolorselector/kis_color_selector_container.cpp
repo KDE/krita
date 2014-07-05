@@ -141,6 +141,8 @@ void KisColorSelectorContainer::updateSettings()
     else
         newShadeSelector = 0;
 
+ 
+
     if(m_shadeSelector!=newShadeSelector && m_shadeSelector!=0) {
         m_shadeSelector->hide();
     }

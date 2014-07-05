@@ -79,7 +79,7 @@ class KisToolSelectPathFactory : public KoToolFactoryBase
 public:
     KisToolSelectPathFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectPath") {
-        setToolTip(i18n("Select an area of the image with path."));
+        setToolTip(i18n("Bezier Curve Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_path_selection"));

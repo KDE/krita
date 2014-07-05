@@ -61,9 +61,9 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     connect(m_brushChooser, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18n("Predefined"), m_brushChooser, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
-    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom"), 0);
+    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Stamp"), 0);
     connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Custom"), m_customBrushWidget, CUSTOMBRUSH, KoGroupButton::GroupCenter);
+    addChooser(i18n("Stamp"), m_customBrushWidget, CUSTOMBRUSH, KoGroupButton::GroupCenter);
 
     m_clipboardBrushWidget = new KisClipboardBrushWidget(0, i18n("Clipboard"), 0);
     connect(m_clipboardBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));

@@ -32,10 +32,10 @@ KoPAChangeMasterPageCommand::KoPAChangeMasterPageCommand( KoPADocument *document
 , m_newMasterPage( masterPage )
 {
     if ( m_page->pageType() == KoPageApp::Slide ) {
-        setText( i18nc( "(qtundo-format)", "Change master slide" ) );
+        setText( kundo2_i18n( "Change master slide" ) );
     }
     else {
-        setText( i18nc( "(qtundo-format)", "Change master page" ) );
+        setText( kundo2_i18n( "Change master page" ) );
     }
 }
 

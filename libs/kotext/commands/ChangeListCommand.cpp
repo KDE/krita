@@ -38,7 +38,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
       m_first(true),
       m_alignmentMode(false)
 {
-    setText(i18nc("(qtundo-format)", "Change List"));
+    setText(kundo2_i18n("Change List"));
 
     const bool styleCompletelySetAlready = extractTextBlocks(cursor, levelProperties.level(), levelProperties.style());
     QSet<int> levels = m_levels.values().toSet();
@@ -85,7 +85,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
 
     initList(&listStyle);
 
-    setText(i18nc("(qtundo-format)", "Change List"));
+    setText(kundo2_i18n("Change List"));
 }
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
@@ -98,7 +98,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *sty
     Q_ASSERT(style);
     extractTextBlocks(cursor, level); // don't care about return value
     initList(style);
-    setText(i18nc("(qtundo-format)", "Change List"));
+    setText(kundo2_i18n("Change List"));
 }
 
 ChangeListCommand::~ChangeListCommand()

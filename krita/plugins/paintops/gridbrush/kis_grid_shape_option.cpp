@@ -18,9 +18,9 @@
 #include "kis_grid_shape_option.h"
 #include <klocale.h>
 
-#include "ui_wdgshapeoptions.h"
+#include "ui_wdggridbrushshapeoptions.h"
 
-class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
+class KisShapeOptionsWidget: public QWidget, public Ui::WdgGridBrushShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
@@ -30,7 +30,7 @@ public:
 };
 
 KisGridShapeOption::KisGridShapeOption()
-    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::commonCategory(), false)
+    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::generalCategory(), false)
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();

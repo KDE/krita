@@ -27,7 +27,7 @@
 AddDotCommand::AddDotCommand(MusicShape* shape, MusicCore::Chord* chord)
     : m_shape(shape), m_chord(chord)
 {
-    setText(i18nc("(qtundo-format)", "Add dot"));
+    setText(kundo2_i18n("Add dot"));
 }
 
 void AddDotCommand::redo()

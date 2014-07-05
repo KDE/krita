@@ -24,7 +24,7 @@
 
 
 KisTakeAllShapesCommand::KisTakeAllShapesCommand(KisShapeSelection *shapeSelection, bool takeSilently)
-    : KUndo2Command(i18nc("(qtundo-format)", "Clear Vector Selection")),
+    : KUndo2Command(kundo2_i18n("Clear Vector Selection")),
       m_shapeSelection(shapeSelection),
       m_takeSilently(takeSilently)
 {

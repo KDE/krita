@@ -1,0 +1,9 @@
+<!DOCTYPE params>
+<params>
+ <param type="internal" name="height">1024</param>
+ <param type="string" name="name"><![CDATA[Texture 1024x1024]]></param>
+ <param type="internal" name="resolution">100</param>
+ <param type="internal" name="width">1024</param>
+ <param type="internal" name="x-unit">7</param>
+ <param type="internal" name="y-unit">7</param>
+</params>

@@ -60,7 +60,7 @@
 #include "strokes/freehand_stroke.h"
 
 
-KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & /*transactionText*/)
+KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText)
     : KisToolPaint(canvas, cursor)
 {
     m_assistant = false;
@@ -68,9 +68,12 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     setSupportOutline(true);
 
-    m_infoBuilder = new KisToolPaintingInformationBuilder(this);
+    m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
     m_recordingAdapter = new KisRecordingAdapter();
-    m_helper = new KisToolFreehandHelper(m_infoBuilder, m_recordingAdapter);
+    m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText, m_recordingAdapter);
+
+    connect(m_helper, SIGNAL(requestExplicitUpdateOutline()),
+            SLOT(explicitUpdateOutline()));
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -78,6 +81,11 @@ KisToolFreehand::~KisToolFreehand()
     delete m_helper;
     delete m_recordingAdapter;
     delete m_infoBuilder;
+}
+
+KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
+{
+    return m_helper->smoothingOptions();
 }
 
 void KisToolFreehand::resetCursorStyle()
@@ -155,7 +163,6 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
     setCurrentNodeLocked(true);
 
-    m_helper->setSmoothness(m_smoothingOptions);
     m_helper->initPaint(event, canvas()->resourceManager(),
                         image(),
                         image().data(),
@@ -368,6 +375,11 @@ qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
         }
     }
     return perspective;
+}
+
+void KisToolFreehand::explicitUpdateOutline()
+{
+    requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
 QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,

@@ -41,6 +41,13 @@ class KisToolBrush : public KisToolFreehand
     Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetTailAgressiveness NOTIFY smoothnessFactorChanged)
     Q_PROPERTY(bool smoothPressure READ smoothPressure WRITE setSmoothPressure NOTIFY smoothPressureChanged)
     Q_PROPERTY(int smoothingType READ smoothingType WRITE slotSetSmoothingType NOTIFY smoothingTypeChanged)
+    Q_PROPERTY(bool useScalableDistance READ useScalableDistance WRITE setUseScalableDistance NOTIFY useScalableDistanceChanged)
+
+    Q_PROPERTY(bool useDelayDistance READ useDelayDistance WRITE setUseDelayDistance NOTIFY useDelayDistanceChanged)
+    Q_PROPERTY(qreal delayDistance READ delayDistance WRITE setDelayDistance NOTIFY delayDistanceChanged)
+
+    Q_PROPERTY(bool finishStabilizedCurve READ finishStabilizedCurve WRITE setFinishStabilizedCurve NOTIFY finishStabilizedCurveChanged)
+
 
 public:
     KisToolBrush(KoCanvasBase * canvas);
@@ -52,6 +59,15 @@ public:
     qreal smoothnessFactor() const;
     bool smoothPressure() const;
     int smoothingType() const;
+    bool useScalableDistance() const;
+
+    bool useDelayDistance() const;
+    qreal delayDistance() const;
+
+    bool finishStabilizedCurve() const;
+
+protected slots:
+    virtual void resetCursorStyle();
 
 public slots:
     void slotSetSmoothnessDistance(qreal distance);
@@ -59,22 +75,41 @@ public slots:
     void slotSetSmoothingType(int index);
     void slotSetTailAgressiveness(qreal argh_rhhrr);
     void setSmoothPressure(bool value);
+    void setUseScalableDistance(bool value);
+
+    void setUseDelayDistance(bool value);
+    void setDelayDistance(qreal value);
+
+    void setFinishStabilizedCurve(bool value);
+
+    virtual void updateSettingsViews();
 
 Q_SIGNALS:
     void smoothnessQualityChanged();
     void smoothnessFactorChanged();
     void smoothPressureChanged();
     void smoothingTypeChanged();
+    void useScalableDistanceChanged();
+
+    void useDelayDistanceChanged();
+    void delayDistanceChanged();
+    void finishStabilizedCurveChanged();
 
 private:
     QGridLayout *m_optionLayout;
+    QComboBox *m_cmbSmoothingType;
 
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
     KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
     QCheckBox *m_chkSmoothPressure;
-    QButtonGroup * m_buttonGroup;
+    QCheckBox *m_chkUseScalableDistance;
+
+    QCheckBox *m_chkDelayDistance;
+    KisDoubleSliderSpinBox *m_sliderDelayDistance;
+
+    QCheckBox *m_chkFinishStabilizedCurve;
 };
 
 
@@ -85,7 +120,7 @@ public:
     KisToolBrushFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolBrush") {
 
-        setToolTip(i18n("Paint with brushes"));
+        setToolTip(i18n("Freehand Brush Tool"));
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);

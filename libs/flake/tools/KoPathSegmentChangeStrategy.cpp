@@ -142,7 +142,7 @@ KUndo2Command* KoPathSegmentChangeStrategy::createCommand()
     bool hasControlPoint1 = m_segment.second()->activeControlPoint1();
     bool hasControlPoint2 = m_segment.first()->activeControlPoint2();
 
-    KUndo2Command * cmd = new KUndo2Command(i18nc("(qtundo-format)", "Change Segment"));
+    KUndo2Command * cmd = new KUndo2Command(kundo2_i18n("Change Segment"));
     if (m_originalSegmentDegree == 1) {
         m_segment.first()->removeControlPoint2();
         m_segment.second()->removeControlPoint1();

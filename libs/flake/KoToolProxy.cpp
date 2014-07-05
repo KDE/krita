@@ -589,7 +589,7 @@ bool KoToolProxy::paste()
         QWidget *canvasWidget = canvas->canvasWidget();
         const KoViewConverter *converter = canvas->viewConverter();
         if (imageList.length() > 0 && factory && canvasWidget) {
-            KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Paste Image"));
+            KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Paste Image"));
             foreach(const QImage &image, imageList) {
                 if (!image.isNull()) {
                     QPointF p = converter->viewToDocument(canvasWidget->mapFromGlobal(QCursor::pos()) + canvas->canvasController()->documentOffset()- canvasWidget->pos());

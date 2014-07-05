@@ -121,7 +121,7 @@ void KisRecordedPaintActionEditor::paintOpChanged(int index)
     QString id = m_paintops[index];
     KisPaintOpPresetSP preset = m_paintOpsToPreset[id];
     if (!preset) {
-        preset = KisPaintOpRegistry::instance()->defaultPreset(KoID(id, ""), 0);
+        preset = KisPaintOpRegistry::instance()->defaultPreset(KoID(id, ""));
         m_paintOpsToPreset[id] = preset;
     }
     m_action->setPaintOpPreset(preset);

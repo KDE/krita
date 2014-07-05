@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 <copyright holder> <email>
+ * Copyright (c) 2014 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,6 +57,8 @@ public:
         , verticalHandlePosition(0.f)
         , sideMargin(10.f)
         , minHandlePosition(10.f + 32.f)
+        , horizontalContainsCursor(false)
+        , verticalContainsCursor(false)
     { }
 
     void setAxisPosition(float x, float y);
@@ -81,10 +83,12 @@ public:
     float verticalHandlePosition;
     float sideMargin;
     float minHandlePosition;
+    bool horizontalContainsCursor;
+    bool verticalContainsCursor;
 };
 
 KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisView2* parent)
-    : KisCanvasDecoration("mirror_axis", i18n("Mirror Axis"), parent), d(new Private(this))
+    : KisCanvasDecoration("mirror_axis", parent), d(new Private(this))
 {
     d->resourceProvider = provider;
     connect(d->resourceProvider, SIGNAL(mirrorModeChanged()), SLOT(mirrorModeChanged()));
@@ -213,12 +217,27 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             event->accept();
             return true;
         }
-        if(d->mirrorHorizontal && d->horizontalHandle.contains(me->posF())) {
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-        } else if(d->mirrorVertical && d->verticalHandle.contains(me->posF())) {
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-        } else {
-            QApplication::restoreOverrideCursor();
+        if(d->mirrorHorizontal) {
+            if(d->horizontalHandle.contains(me->posF())) {
+                if(!d->horizontalContainsCursor) {
+                    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+                    d->horizontalContainsCursor = true;
+                }
+            } else if(d->horizontalContainsCursor) {
+                QApplication::restoreOverrideCursor();
+                d->horizontalContainsCursor = false;
+            }
+        }
+        if(d->mirrorVertical) {
+            if(d->verticalHandle.contains(me->posF())) {
+                if(!d->verticalContainsCursor) {
+                    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+                    d->verticalContainsCursor = true;
+                }
+            } else if(d->verticalContainsCursor) {
+                QApplication::restoreOverrideCursor();
+                d->verticalContainsCursor = false;
+            }
         }
     }
     if(event->type() == QEvent::MouseButtonRelease) {

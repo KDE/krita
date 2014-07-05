@@ -184,8 +184,9 @@ public:
     
     /// (1-t) * p1 + t * p2
     static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2);
-    static qreal ascension(const KisPaintInformation& info, bool normalize=true);
-    static qreal declination(const KisPaintInformation& info, qreal maxTiltX=60.0, qreal maxTiltY=60.0, bool normalize=true);
+    static KisPaintInformation mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2);
+    static qreal tiltDirection(const KisPaintInformation& info, bool normalize=true);
+    static qreal tiltElevation(const KisPaintInformation& info, qreal maxTiltX=60.0, qreal maxTiltY=60.0, bool normalize=true);
 
 private:
     struct Private;

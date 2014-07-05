@@ -65,9 +65,10 @@
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
 
-KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
+KisDuplicateOp::KisDuplicateOp(KisImageWSP image, const KisDuplicateOpSettings *settings, KisPainter *painter)
     : KisBrushBasedPaintOp(settings, painter)
-    , settings(settings)
+    , m_image(image)
+    , m_settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -75,6 +76,7 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     m_healing = settings->getBool(DUPLICATE_HEALING);
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
     m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
+    m_cloneFromProjection = settings->getBool(DUPLICATE_CLONE_FROM_PROJECTION);
 
     m_srcdev = source()->createCompositionSourceDevice();
 }
@@ -126,7 +128,14 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         m_duplicateStart = info.pos();
     }
 
-    KisPaintDeviceSP realSourceDevice = settings->node()->paintDevice();
+    KisPaintDeviceSP realSourceDevice;
+
+    if (m_cloneFromProjection) {
+        realSourceDevice = m_image->projection();
+    }
+    else {
+        realSourceDevice = m_settings->node()->projection();
+    }
 
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
@@ -149,32 +158,26 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     QPoint srcPoint;
 
     if (m_moveSourcePoint) {
-        srcPoint = (dstRect.topLeft() - settings->offset()).toPoint();
-    } else {
+        srcPoint = (dstRect.topLeft() - m_settings->offset()).toPoint();
+    }
+    else {
         QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
-        srcPoint = (settings->position() - hotSpot).toPoint();
+        srcPoint = (m_settings->position() - hotSpot).toPoint();
     }
 
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    if (!realSourceDevice->defaultBounds()->wrapAroundMode()) {
-        if (srcPoint.x() < 0)
-            srcPoint.setX(0);
-
-        if (srcPoint.y() < 0)
-            srcPoint.setY(0);
-    }
-
     // Perspective correction ?
-    KisImageWSP image = settings->m_image;
-    if (m_perspectiveCorrection && image && image->perspectiveGrid()->countSubGrids() == 1) {
+
+
+    if (m_perspectiveCorrection && m_image && m_image->perspectiveGrid()->countSubGrids() == 1) {
         Matrix3qreal startM = Matrix3qreal::Identity();
         Matrix3qreal endM = Matrix3qreal::Identity();
 
         // First look for the grid corresponding to the start point
-        KisSubPerspectiveGrid* subGridStart = *image->perspectiveGrid()->begin();
-        QRect r = QRect(0, 0, image->width(), image->height());
+        KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
+        QRect r = QRect(0, 0, m_image->width(), m_image->height());
 
 #if 1
         if (subGridStart) {
@@ -183,7 +186,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 #endif
 #if 1
         // Second look for the grid corresponding to the end point
-        KisSubPerspectiveGrid* subGridEnd = *image->perspectiveGrid()->begin();
+        KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
         if (subGridEnd) {
             endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
         }
@@ -191,7 +194,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
         // Compute the translation in the perspective transformation space:
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart));
-        QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(settings->offset()));
+        QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(m_settings->offset()));
         QPointF translat = duplicateStartPositionT - positionStartPaintingT;
 
         KisSequentialIterator dstIt(m_srcdev, QRect(0, 0, sw, sh));

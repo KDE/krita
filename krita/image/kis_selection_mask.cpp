@@ -31,24 +31,39 @@
 #include "kis_pixel_selection.h"
 #include "kis_undo_adapter.h"
 #include <KoIcon.h>
+#include "kis_thread_safe_signal_compressor.h"
+
 
 struct KisSelectionMask::Private
 {
 public:
+    Private(KisSelectionMask *_q) : q(_q) {}
+
     KisImageWSP image;
+    KisThreadSafeSignalCompressor *updatesCompressor;
+    KisSelectionMask *q;
+
+    void slotSelectionChangedCompressed();
 };
 
 KisSelectionMask::KisSelectionMask(KisImageWSP image)
         : KisMask("selection")
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
     setActive(false);
+
     m_d->image = image;
+
+    m_d->updatesCompressor =
+        new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE/*, this*/);
+
+    connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
+    this->moveToThread(image->thread());
 }
 
 KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
         : KisMask(rhs)
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
     setActive(false);
     m_d->image = rhs.image();
@@ -56,6 +71,7 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
 
 KisSelectionMask::~KisSelectionMask()
 {
+    m_d->updatesCompressor->deleteLater();
     delete m_d;
 }
 
@@ -150,3 +166,17 @@ void KisSelectionMask::setActive(bool active)
     }
 }
 
+void KisSelectionMask::notifySelectionChangedCompressed()
+{
+    m_d->updatesCompressor->start();
+}
+
+void KisSelectionMask::Private::slotSelectionChangedCompressed()
+{
+    KisSelectionSP currentSelection = q->selection();
+    if (!currentSelection) return;
+
+    currentSelection->notifySelectionChanged();
+}
+
+#include "moc_kis_selection_mask.cpp"

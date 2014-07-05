@@ -72,13 +72,13 @@ KisDynamicSensorYTilt::KisDynamicSensorYTilt() : KisDynamicSensor(YTiltId)
     setMaximumLabel(i18n("30°"));
 }
 
-KisDynamicSensorAscension::KisDynamicSensorAscension() : KisDynamicSensor(AscensionId)
+KisDynamicSensorTiltDirection::KisDynamicSensorTiltDirection() : KisDynamicSensor(TiltDirectionId)
 {
     setMinimumLabel(i18n("0°"));
     setMaximumLabel(i18n("360°"));
 }
 
-KisDynamicSensorDeclination::KisDynamicSensorDeclination() : KisDynamicSensor(DeclinationId)
+KisDynamicSensorTiltElevation::KisDynamicSensorTiltElevation() : KisDynamicSensor(TiltElevationId)
 {
     setMinimumLabel(i18n("90°"));
     setMaximumLabel(i18n("0°"));

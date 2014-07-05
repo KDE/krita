@@ -20,9 +20,9 @@
 
 #include <QImage>
 
-#include "ui_wdgshapeoptions.h"
+#include "ui_wdgexperimentshapeoptions.h"
 
-class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
+class KisShapeOptionsWidget: public QWidget, public Ui::WdgExperimentShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
@@ -33,7 +33,7 @@ public:
 };
 
 KisExperimentShapeOption::KisExperimentShapeOption()
-    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::commonCategory(), false)
+    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::generalCategory(), false)
 {
     m_checkable = false;
     // save this to be able to restore it back

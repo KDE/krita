@@ -24,7 +24,7 @@
 DetachTextFromPathCommand::DetachTextFromPathCommand( ArtisticTextShape * textShape, KUndo2Command * parent )
 : KUndo2Command(parent), m_textShape(textShape), m_pathShape(0)
 {
-    setText( i18nc("(qtundo-format)", "Detach Path") );
+    setText( kundo2_i18n("Detach Path") );
     
     Q_ASSERT( m_textShape->layout() != ArtisticTextShape::Straight );
 

@@ -33,7 +33,7 @@ class KisPainter;
 class KisSmudgeOption: public KisRateOption
 {
 public:
-    KisSmudgeOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::commonCategory());
+    KisSmudgeOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::generalCategory());
 
     enum Mode { SMEARING_MODE, DULLING_MODE };
 

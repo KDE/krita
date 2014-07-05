@@ -29,7 +29,7 @@ SpiralShapeConfigCommand::SpiralShapeConfigCommand(SpiralShape * spiral, SpiralS
 {
     Q_ASSERT(m_spiral);
 
-    setText(i18nc("(qtundo-format)", "Change spiral"));
+    setText(kundo2_i18n("Change spiral"));
 
     m_oldType = m_spiral->type();
     m_oldClockWise = m_spiral->clockWise();

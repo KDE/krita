@@ -184,7 +184,9 @@ public:
 
 
     /// shows a floating message in the top right corner of the canvas
-    void showFloatingMessage(const QString message, const QIcon& icon, int timeout = 4500, KisFloatingMessage::Priority priority = KisFloatingMessage::Medium);
+    void showFloatingMessage(const QString message, const QIcon& icon, int timeout = 4500,
+                             KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
+                             int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
     /// The QMainWindow associated with this view. This is most likely going to be shell(), but
     /// when running as Gemini or Sketch, this will be set to the applications' own QMainWindow.
@@ -199,6 +201,7 @@ public slots:
     void slotLoadingFinished();
     void slotSavingFinished();
     void showJustTheCanvas(bool toggled);
+    void setShowFloatingMessage(bool show);
 
 signals:
 

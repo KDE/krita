@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="50">
+<kpartgui name="Krita" version="52">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -121,6 +121,7 @@
   <Action name="rasterize_layer"/>
   <Action name="merge_all_shape_layers"/>
   <Action name="flatten_image"/>
+  <Action name="merge_selected_layers"/>
 </Menu>
 
 <Menu name="Select"><text>&amp;Select</text>
@@ -129,11 +130,13 @@
     <Action name="reselect"/>
     <Action name="invert"/>
     <Action name="convert_to_vector_selection"/>
+    <Action name="convert_shapes_to_vector_selection"/>
     <Separator/>
     <Action name="feather"/>
     <Action name="similar"/>
    <Separator/>
    <Action name="toggle_display_selection"/>
+   <Action name="show-global-selection-mask"/>
 </Menu>
 
 <Menu name="Filter"><text>Filte&amp;r</text>

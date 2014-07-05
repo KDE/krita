@@ -1,4 +1,5 @@
 #! /bin/sh
-$EXTRACTRC `find . -name \*.ui` >> rc.cpp
-$XGETTEXT *.cpp */*.cpp -o $podir/calligra-defaulttools.pot
+source ../../calligra_xgettext.sh
 
+$EXTRACTRC `find . -name \*.ui` >> rc.cpp
+calligra_xgettext *.cpp */*.cpp > $podir/calligra-defaulttools.pot

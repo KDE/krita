@@ -874,6 +874,9 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
             }
             if (item) {
                 item->setVisible(true);
+                item->setSelected(true);
+                KoReportItemBase* baseReportItem = dynamic_cast<KoReportItemBase*>(item);
+                changeSet(baseReportItem->propertySet());
                 if (v && v->designer()) {
                     v->designer()->setModified(true);
                 }

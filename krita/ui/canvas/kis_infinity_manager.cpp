@@ -35,14 +35,15 @@
 
 
 KisInfinityManager::KisInfinityManager(KisView2 *view, KisCanvas2 *canvas)
-    : KisCanvasDecoration(INFINITY_DECORATION_ID, i18n("Expand into Infinity Decoration"), view),
-      m_filterInstalled(false),
-      m_cursorSwitched(false)
+  : KisCanvasDecoration(INFINITY_DECORATION_ID, view, true),
+    m_filteringEnabled(false),
+    m_cursorSwitched(false),
+    m_sideRects(NSides)
 {
     connect(canvas, SIGNAL(documentOffsetUpdateFinished()), SLOT(imagePositionChanged()));
 }
 
-inline void KisInfinityManager::addDecoration(const QRect &areaRect, const QPointF &handlePoint, qreal angle)
+inline void KisInfinityManager::addDecoration(const QRect &areaRect, const QPointF &handlePoint, qreal angle, Side side)
 {
     QTransform t;
     t.rotate(angle);
@@ -50,6 +51,7 @@ inline void KisInfinityManager::addDecoration(const QRect &areaRect, const QPoin
     m_handleTransform << t;
 
     m_decorationPath.addRect(areaRect);
+    m_sideRects[side] = areaRect;
 }
 
 void KisInfinityManager::imagePositionChanged()
@@ -76,44 +78,47 @@ void KisInfinityManager::imagePositionChanged()
 
     m_handleTransform.clear();
 
+    m_sideRects.clear();
+    m_sideRects.resize(NSides);
+
     bool visible = false;
 
     if (imageRect.x() <= -xThreshold) {
         QRect areaRect(widgetRect.adjusted(xCut, 0, 0, 0));
         QPointF pt = areaRect.center() + QPointF(-0.1 * stripeWidth, 0);
-        addDecoration(areaRect, pt, 0);
+        addDecoration(areaRect, pt, 0, Right);
         visible = true;
     }
 
     if (imageRect.y() <= -yThreshold) {
         QRect areaRect(widgetRect.adjusted(0, yCut, 0, 0));
         QPointF pt = areaRect.center() + QPointF(0, -0.1 * stripeWidth);
-        addDecoration(areaRect, pt, 90);
+        addDecoration(areaRect, pt, 90, Bottom);
         visible = true;
     }
 
     if (imageRect.right() > widgetRect.width() + xThreshold) {
         QRect areaRect(widgetRect.adjusted(0, 0, -xCut, 0));
         QPointF pt = areaRect.center() + QPointF(0.1 * stripeWidth, 0);
-        addDecoration(areaRect, pt, 180);
+        addDecoration(areaRect, pt, 180, Left);
         visible = true;
     }
 
     if (imageRect.bottom() > widgetRect.height() + yThreshold) {
         QRect areaRect(widgetRect.adjusted(0, 0, 0, -yCut));
         QPointF pt = areaRect.center() + QPointF(0, 0.1 * stripeWidth);
-        addDecoration(areaRect, pt, 270);
+        addDecoration(areaRect, pt, 270, Top);
         visible = true;
     }
 
-    setVisible(visible);
-
-    if (visible && !m_filterInstalled) {
+    if (visible && !m_filteringEnabled) {
         view()->canvasBase()->inputManager()->attachPriorityEventFilter(this);
+        m_filteringEnabled = true;
     }
 
-    if (!visible && m_filterInstalled) {
+    if (!visible && m_filteringEnabled) {
         view()->canvasBase()->inputManager()->detachPriorityEventFilter(this);
+        m_filteringEnabled = false;
     }
 }
 
@@ -122,6 +127,8 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
     Q_UNUSED(updateArea);
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
+
+    if (!m_filteringEnabled) return;
 
     gc.save();
     gc.setTransform(QTransform(), false);
@@ -148,8 +155,20 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
     gc.restore();
 }
 
+inline int expandLeft(int x0, int x1, int maxExpand)
+{
+    return qMax(x0 - maxExpand, qMin(x0, x1));
+}
+
+inline int expandRight(int x0, int x1, int maxExpand)
+{
+    return qMin(x0 + maxExpand, qMax(x0, x1));
+}
+
 bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
 {
+    KIS_ASSERT_RECOVER_NOOP(m_filteringEnabled);
+
     bool retval = false;
 
     switch (event->type()) {
@@ -186,10 +205,29 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
         retval = mouseEvent->button() == Qt::LeftButton && m_cursorSwitched;
 
         if (retval) {
+            QPoint pos = mouseEvent->pos();
+
             const KisCoordinatesConverter *converter = view()->canvasBase()->coordinatesConverter();
             QRect widgetRect = converter->widgetToImage(view()->canvas()->rect()).toAlignedRect();
             KisImageWSP image = view()->document()->image();
-            QRect cropRect = widgetRect | image->bounds();
+            QRect cropRect = image->bounds();
+
+            const int hLimit = cropRect.width();
+            const int vLimit = cropRect.height();
+
+            if (m_sideRects[Right].contains(pos)) {
+                cropRect.setRight(expandRight(cropRect.right(), widgetRect.right(), hLimit));
+            }
+            if (m_sideRects[Bottom].contains(pos)) {
+                cropRect.setBottom(expandRight(cropRect.bottom(), widgetRect.bottom(), vLimit));
+            }
+            if (m_sideRects[Left].contains(pos)) {
+                cropRect.setLeft(expandLeft(cropRect.left(), widgetRect.left(), hLimit));
+            }
+            if (m_sideRects[Top].contains(pos)) {
+                cropRect.setTop(expandLeft(cropRect.top(), widgetRect.top(), vLimit));
+            }
+
             image->resizeImage(cropRect);
         }
         break;

@@ -41,7 +41,7 @@
 #include "kis_gui_context_command.h"
 
 
-KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, const QString& name)
+KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, const KUndo2MagicString& name)
         : m_canvas(canvas)
         , m_name(name)
 {
@@ -95,7 +95,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
             bool hasSelection = !pixelSelection->isEmpty();
 
-            KisSelectionTransaction transaction("", pixelSelection);
+            KisSelectionTransaction transaction(pixelSelection);
 
             if (!hasSelection && m_action == SELECTION_SUBTRACT) {
                 pixelSelection->invert();
@@ -121,6 +121,13 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 }
 
 void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
+{
+    QList<KoShape*> shapes;
+    shapes.append(shape);
+    addSelectionShapes(shapes);
+}
+
+void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
 {
     KisView2* view = m_canvas->view();
 
@@ -149,7 +156,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
             KisPixelSelectionSP pixelSelection = m_view->selection()->pixelSelection();
             KIS_ASSERT_RECOVER(pixelSelection) { return 0; }
 
-            KisSelectionTransaction transaction("", pixelSelection);
+            KisSelectionTransaction transaction(pixelSelection);
             pixelSelection->clear();
             return transaction.endAndTake();
         }
@@ -175,11 +182,13 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
         }
     };
 
-    applicator.applyCommand(
-        new KisGuiContextCommand(new AddSelectionShape(view, shape), view));
-
+    foreach(KoShape* shape, shapes) {
+        applicator.applyCommand(
+            new KisGuiContextCommand(new AddSelectionShape(view, shape), view));
+    }
     applicator.end();
 }
+
 
 void KisSelectionToolHelper::cropRectIfNeeded(QRect *rect)
 {

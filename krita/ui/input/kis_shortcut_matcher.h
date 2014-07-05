@@ -166,6 +166,18 @@ public:
      */
     bool mouseMoved(QMouseEvent *event);
 
+    /**
+     * Handle cursor's Enter event.
+     * We never eat it because it might be used by someone else
+     */
+    void enterEvent();
+
+    /**
+     * Handle cursor's Leave event.
+     * We never eat it because it might be used by someone else
+     */
+    void leaveEvent();
+
     bool touchBeginEvent(QTouchEvent *event);
     bool touchUpdateEvent(QTouchEvent *event);
     bool touchEndEvent(QTouchEvent *event);

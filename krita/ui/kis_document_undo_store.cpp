@@ -60,7 +60,7 @@ void KisDocumentUndoStore::addCommand(KUndo2Command *command)
     m_doc->addCommand(command);
 }
 
-void KisDocumentUndoStore::beginMacro(const QString& macroName)
+void KisDocumentUndoStore::beginMacro(const KUndo2MagicString& macroName)
 {
     m_doc->beginMacro(macroName);
 }

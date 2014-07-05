@@ -23,7 +23,7 @@
 
 
 KisImageSetResolutionCommand::KisImageSetResolutionCommand(KisImageWSP image, qreal newXRes, qreal newYRes, KUndo2Command *parent)
-    : KUndo2Command(i18nc("(qtundo-format)", "Set Image Resolution"), parent)
+    : KUndo2Command(kundo2_i18n("Set Image Resolution"), parent)
     , m_image(image)
     , m_newXRes(newXRes)
     , m_newYRes(newYRes)
@@ -73,7 +73,7 @@ public:
 
 
 KisResetShapesCommand::KisResetShapesCommand(KisNodeSP rootNode)
-    : KUndo2Command("RESET_SHAPES_COMMAND"),
+    : KUndo2Command(kundo2_noi18n("RESET_SHAPES_COMMAND")),
       m_rootNode(rootNode)
 {
 }

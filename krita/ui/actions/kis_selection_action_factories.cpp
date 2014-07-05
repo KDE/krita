@@ -26,7 +26,15 @@
 #include <KoPart.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
+#include <KoShapeRegistry.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoOdfPaste.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfReadStore.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoDrag.h>
+#include <KoShapeOdfSaveHelper.h>
 
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
@@ -49,6 +57,7 @@
 #include "kis_shape_selection.h"
 
 #include <processing/fill_processing_visitor.h>
+#include <kis_selection_tool_helper.h>
 
 namespace ActionHelper {
 
@@ -99,7 +108,7 @@ namespace ActionHelper {
 
 void KisSelectAllActionFactory::run(KisView2 *view)
 {
-    KisProcessingApplicator *ap = beginAction(view, i18n("Select All"));
+    KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Select All"));
 
     KisImageWSP image = view->image();
     if (!image->globalSelection()) {
@@ -113,7 +122,7 @@ void KisSelectAllActionFactory::run(KisView2 *view)
         KisImageSP m_image;
         KUndo2Command* paint() {
             KisSelectionSP selection = m_image->globalSelection();
-            KisSelectionTransaction transaction(QString(), selection->pixelSelection());
+            KisSelectionTransaction transaction(selection->pixelSelection());
             selection->pixelSelection()->select(m_image->bounds());
             return transaction.endAndTake();
         }
@@ -168,7 +177,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
     KisProcessingApplicator applicator(view->image(), node,
                                        KisProcessingApplicator::NONE,
                                        KisImageSignalVector() << ModifiedSignal,
-                                       i18n("Flood Fill"));
+                                       kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(view->image(), 0, view->resourceProvider()->resourceManager());
@@ -248,7 +257,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
                 KisSelectionSP m_sel;
 
                 KUndo2Command* paint() {
-                    KisTransaction transaction("", m_node->paintDevice());
+                    KisTransaction transaction(m_node->paintDevice());
                     m_node->paintDevice()->clearSelection(m_sel);
                     m_node->setDirty(m_sel->selectedRect());
                     return transaction.endAndTake();
@@ -258,7 +267,9 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
             command = new ClearSelection(node, view->selection());
         }
 
-        QString actionName = willCut ? i18n("Cut") : i18n("Copy");
+        KUndo2MagicString actionName = willCut ?
+            kundo2_i18n("Cut") :
+            kundo2_i18n("Copy");
         KisProcessingApplicator *ap = beginAction(view, actionName);
 
         if (command) {
@@ -282,7 +293,7 @@ void KisCopyMergedActionFactory::run(KisView2 *view)
     ActionHelper::copyFromDevice(view, dev);
     image->unlock();
 
-    KisProcessingApplicator *ap = beginAction(view, i18n("Copy Merged"));
+    KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Copy Merged"));
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
@@ -370,11 +381,59 @@ void KisSelectionToVectorActionFactory::run(KisView2 *view)
         shape->setUserData(new KisShapeSelectionMarker);
     }
 
-    KisProcessingApplicator *ap = beginAction(view, i18n("Convert to Vector Selection"));
+    KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Convert to Vector Selection"));
 
     ap->applyCommand(view->canvasBase()->shapeController()->addShape(shape),
                      KisStrokeJobData::SEQUENTIAL,
                      KisStrokeJobData::EXCLUSIVE);
 
     endAction(ap, KisOperationConfiguration(id()).toXML());
+}
+
+
+class KisShapeSelectionPaste : public KoOdfPaste
+{
+public:
+    KisShapeSelectionPaste(KisView2* view) : m_view(view)
+    {
+    }
+
+    virtual ~KisShapeSelectionPaste() {
+    }
+
+    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) {
+        KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
+        KoShapeLoadingContext context(loadingContext, 0);
+        KoXmlElement child;
+
+        QList<KoShape*> shapes;
+        forEachElement(child, body) {
+            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+            if (shape) {
+	shapes.append(shape);
+            }
+        }
+        if (!shapes.isEmpty()) {
+            KisSelectionToolHelper helper(m_view->canvasBase(), kundo2_i18n("Convert shapes to vector selection"));
+            helper.addSelectionShapes(shapes);
+        }
+        return true;
+    }
+private:
+    KisView2* m_view;
+};
+
+void KisShapesToVectorSelectionActionFactory::run(KisView2* view)
+{
+    QList<KoShape*> shapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
+
+    KoShapeOdfSaveHelper saveHelper(shapes);
+    KoDrag drag;
+    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+    QMimeData* mimeData = drag.mimeData();
+
+    Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
+
+    KisShapeSelectionPaste paste(view);
+    paste.paste(KoOdf::Text, mimeData);
 }

@@ -39,7 +39,7 @@ KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &poi
     : KUndo2Command(parent),
     d(new KoPathPointMoveCommandPrivate())
 {
-    setText(i18nc("(qtundo-format)", "Move points"));
+    setText(kundo2_i18n("Move points"));
 
     foreach (const KoPathPointData &data, pointData) {
         if (!d->points.contains(data)) {
@@ -55,7 +55,7 @@ KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &poi
 {
     Q_ASSERT(pointData.count() == offsets.count());
 
-    setText(i18nc("(qtundo-format)", "Move points"));
+    setText(kundo2_i18n("Move points"));
 
     uint dataCount = pointData.count();
     for (uint i = 0; i < dataCount; ++i) {

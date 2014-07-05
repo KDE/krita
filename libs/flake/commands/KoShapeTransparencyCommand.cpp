@@ -46,7 +46,7 @@ KoShapeTransparencyCommand::KoShapeTransparencyCommand(const QList<KoShape*> &sh
         d->newTransparencies.append(transparency);
     }
 
-    setText(i18nc("(qtundo-format)", "Set opacity"));
+    setText(kundo2_i18n("Set opacity"));
 }
 
 KoShapeTransparencyCommand::KoShapeTransparencyCommand(KoShape * shape, qreal transparency, KUndo2Command *parent)
@@ -57,7 +57,7 @@ KoShapeTransparencyCommand::KoShapeTransparencyCommand(KoShape * shape, qreal tr
     d->oldTransparencies.append(shape->transparency());
     d->newTransparencies.append(transparency);
 
-    setText(i18nc("(qtundo-format)", "Set opacity"));
+    setText(kundo2_i18n("Set opacity"));
 }
 
 KoShapeTransparencyCommand::KoShapeTransparencyCommand(const QList<KoShape*> &shapes, const QList<qreal> &transparencies, KUndo2Command *parent)
@@ -70,7 +70,7 @@ KoShapeTransparencyCommand::KoShapeTransparencyCommand(const QList<KoShape*> &sh
     }
     d->newTransparencies = transparencies;
 
-    setText(i18nc("(qtundo-format)", "Set opacity"));
+    setText(kundo2_i18n("Set opacity"));
 }
 
 KoShapeTransparencyCommand::~KoShapeTransparencyCommand()

@@ -29,9 +29,9 @@ RemoveChordCommand::RemoveChordCommand(MusicShape* shape, Chord* chord)
     : m_chord(chord), m_shape(shape), m_index(m_chord->voiceBar()->indexOfElement(m_chord))
 {
     if (chord->noteCount() == 0) {
-        setText(i18nc("(qtundo-format)", "Remove rest"));
+        setText(kundo2_i18n("Remove rest"));
     } else {
-        setText(i18nc("(qtundo-format)", "Remove chord"));
+        setText(kundo2_i18n("Remove chord"));
     }
 }
 

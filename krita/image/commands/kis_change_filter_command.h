@@ -45,7 +45,7 @@ public:
                        const QString &filterNameAfter,
                        const QString &xmlAfter,
                        bool useGeneratorRegistry)
-            : KUndo2Command(i18nc("(qtundo-format)", "Change Filter")) {
+            : KUndo2Command(kundo2_i18n("Change Filter")) {
         m_node = node;
         m_filterInterface = dynamic_cast<KisNodeFilterInterface*>(node.data());
         Q_ASSERT(m_filterInterface);

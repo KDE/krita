@@ -75,7 +75,6 @@
 #include <klocale.h>
 #include <kundo2stack.h>
 
-#include <QApplication>
 #include <QFontDatabase>
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -190,7 +189,7 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     changeCursor.setPosition(endPosition, QTextCursor::KeepAnchor);
     changeCursor.endEditBlock();
 
-    q->registerTrackedChange(changeCursor, KoGenChange::InsertChange, i18nc("(qtundo-format)", "New Paragraph"), format, format, false);
+    q->registerTrackedChange(changeCursor, KoGenChange::InsertChange, kundo2_i18n("New Paragraph"), format, format, false);
 
     // possibly change the style if requested
     if (nextStyle) {
@@ -257,7 +256,7 @@ const QTextCursor KoTextEditor::constCursor() const
     return QTextCursor(d->caret);
 }
 
-void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
+void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const KUndo2MagicString &title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
 {
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (!changeTracker || !changeTracker->recordChanges()) {
@@ -474,7 +473,7 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
 
 KoBookmark *KoTextEditor::addBookmark(const QString &name)
 {//TODO changeTracking
-    KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Bookmark"));
+    KUndo2Command *topCommand = beginEditBlock(kundo2_i18n("Add Bookmark"));
 
     KoBookmark *bookmark = new KoBookmark(d->caret);
     bookmark->setName(name);
@@ -493,7 +492,7 @@ KoTextRangeManager *KoTextEditor::textRangeManager()
 
 KoAnnotation *KoTextEditor::addAnnotation(KoShape *annotationShape)
 {
-    KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Annotation"));
+    KUndo2Command *topCommand = beginEditBlock(kundo2_i18n("Add Annotation"));
 
     KoAnnotation *annotation = new KoAnnotation(d->caret);
     KoTextRangeManager *textRangeManager = KoTextDocument(d->document).textRangeManager();
@@ -517,7 +516,7 @@ KoInlineObject *KoTextEditor::insertIndexMarker()
         return 0;
     }
 
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Index"));
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Insert Index"));
 
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
         d->newLine(0);
@@ -541,7 +540,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Variable"));
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Insert Variable"));
 
     int startPosition = d->caret.position();
 
@@ -559,7 +558,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);
     d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
-    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
+    registerTrackedChange(d->caret, KoGenChange::InsertChange, kundo2_i18n("Key Press"), format, format, false);
     d->caret.clearSelection();
 
     InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, cmd);
@@ -610,7 +609,7 @@ void KoTextEditor::insertFrameBreak()
         return;
     }
 
-    d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Insert Break"));
+    d->updateState(KoTextEditor::Private::KeyPress, kundo2_i18n("Insert Break"));
     QTextBlock block = d->caret.block();
     if (d->caret.position() == block.position() && block.length() > 0) { // start of parag
         QTextBlockFormat bf = d->caret.blockFormat();
@@ -914,9 +913,9 @@ void KoTextEditor::insertTable(int rows, int columns)
 
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Table"));
+        d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Insert Table"));
     } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Table"));
+        KUndo2Command *topCommand = beginEditBlock(kundo2_i18n("Insert Table"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
     }
@@ -931,7 +930,7 @@ void KoTextEditor::insertTable(int rows, int columns)
     if (changeTracker && changeTracker->recordChanges()) {
         QTextCharFormat charFormat = d->caret.charFormat();
         QTextBlockFormat blockFormat = d->caret.blockFormat();
-        QString title = i18nc("(qtundo-format)", "Insert Table");
+        KUndo2MagicString title = kundo2_i18n("Insert Table");
 
         int changeId;
         if (!d->caret.atBlockStart()) {
@@ -1003,7 +1002,7 @@ void KoTextEditor::insertTableRowAbove()
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18nc("(qtundo-format)", "Insert Row Above"));
+            KUndo2MagicString title(kundo2_i18n("Insert Row Above"));
             changeId = changeTracker->getInsertChangeId(title, 0);
         }
         addCommand(new InsertTableRowCommand(this, table, false, changeId));
@@ -1021,7 +1020,7 @@ void KoTextEditor::insertTableRowBelow()
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18nc("(qtundo-format)", "Insert Row Above"));
+            KUndo2MagicString title(kundo2_i18n("Insert Row Above"));
             changeId = changeTracker->getInsertChangeId(title, 0);
         }
         addCommand(new InsertTableRowCommand(this, table, true, changeId));
@@ -1039,7 +1038,7 @@ void KoTextEditor::insertTableColumnLeft()
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18nc("(qtundo-format)", "Insert Column Left"));
+            KUndo2MagicString title(kundo2_i18n("Insert Column Left"));
             changeId = changeTracker->getInsertChangeId(title, 0);
         }
         addCommand(new InsertTableColumnCommand(this, table, false, changeId));
@@ -1057,7 +1056,7 @@ void KoTextEditor::insertTableColumnRight()
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18nc("(qtundo-format)", "Insert Column Right"));
+            KUndo2MagicString title(kundo2_i18n("Insert Column Right"));
             changeId = changeTracker->getInsertChangeId(title, 0);
         }
         addCommand(new InsertTableColumnCommand(this, table, true, changeId));
@@ -1075,7 +1074,7 @@ void KoTextEditor::deleteTableColumn()
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18nc("(qtundo-format)", "Delete Column"));
+            KUndo2MagicString title(kundo2_i18n("Delete Column"));
             changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
         }
 
@@ -1094,7 +1093,7 @@ void KoTextEditor::deleteTableRow()
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         int changeId = 0;
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18nc("(qtundo-format)", "Delete Row"));
+            KUndo2MagicString title(kundo2_i18n("Delete Row"));
             changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
         }
         addCommand(new DeleteTableRowCommand(this, table, changeId));
@@ -1107,7 +1106,7 @@ void KoTextEditor::mergeTableCells()
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Merge Cells"));
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Merge Cells"));
 
     QTextTable *table = d->caret.currentTable();
 
@@ -1124,7 +1123,7 @@ void KoTextEditor::splitTableCells()
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Split Cells"));
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Split Cells"));
 
     QTextTable *table = d->caret.currentTable();
 
@@ -1153,7 +1152,7 @@ void KoTextEditor::adjustTableRowHeight(QTextTable *table, int column, qreal hei
 
 void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight)
 {
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Adjust Table Width"));
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Adjust Table Width"));
     d->caret.beginEditBlock();
     QTextTableFormat fmt = table->format();
     if (dLeft) {
@@ -1170,7 +1169,7 @@ void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight
 void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
          KoBorder::BorderSide cellSide, const KoBorder::BorderData &data)
 {
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Change Border Formatting"));
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Change Border Formatting"));
     d->caret.beginEditBlock();
     QTextTableCell cell = table->cellAt(row, column);
     QTextCharFormat fmt = cell.format();
@@ -1217,9 +1216,9 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
 
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Table Of Contents"));
+        d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Insert Table Of Contents"));
     } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Table Of Contents"));
+        KUndo2Command *topCommand = beginEditBlock(kundo2_i18n("Insert Table Of Contents"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
     }
@@ -1237,7 +1236,7 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
     if (changeTracker && changeTracker->recordChanges()) {
         QTextCharFormat charFormat = d->caret.charFormat();
         QTextBlockFormat blockFormat = d->caret.blockFormat();
-        QString title = i18nc("(qtundo-format)", "Insert Table Of Contents");
+        KUndo2MagicString title = kundo2_i18n("Insert Table Of Contents");
 
         int changeId;
         if (!d->caret.atBlockStart()) {
@@ -1276,7 +1275,7 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
 
     KoTableOfContentsGeneratorInfo *newToCInfo=info->clone();
 
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Modify Table Of Contents"));
+    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Modify Table Of Contents"));
 
     QTextCursor cursor(block);
     QTextBlockFormat tocBlockFormat=block.blockFormat();
@@ -1293,9 +1292,9 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
 {
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Bibliography"));
+        d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("Insert Bibliography"));
     } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Bibliography"));
+        KUndo2Command *topCommand = beginEditBlock(kundo2_i18n("Insert Bibliography"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
     }
@@ -1314,7 +1313,7 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
     if (changeTracker && changeTracker->recordChanges()) {
         QTextCharFormat charFormat = d->caret.charFormat();
         QTextBlockFormat blockFormat = d->caret.blockFormat();
-        QString title = i18nc("(qtundo-format)", "Insert Bibliography");
+        KUndo2MagicString title = kundo2_i18n("Insert Bibliography");
 
         int changeId;
         if (!d->caret.atBlockStart()) {
@@ -1351,9 +1350,9 @@ KoInlineCite *KoTextEditor::insertCitation()
 {
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Add Citation"));
+        d->updateState(KoTextEditor::Private::KeyPress, kundo2_i18n("Add Citation"));
     } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Citation"));
+        KUndo2Command *topCommand = beginEditBlock(kundo2_i18n("Add Citation"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
     }
@@ -1380,9 +1379,9 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
 
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Typing"));
+        d->updateState(KoTextEditor::Private::KeyPress, kundo2_i18n("Typing"));
     } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Typing"));
+        KUndo2Command *topCommand = beginEditBlock(kundo2_i18n("Typing"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
     }
@@ -1420,7 +1419,7 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
     d->caret.setPosition(startPosition);
     d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
 
-    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18nc("(qtundo-format)", "Typing"), format, format, false);
+    registerTrackedChange(d->caret, KoGenChange::InsertChange, kundo2_i18n("Typing"), format, format, false);
 
     d->caret.clearSelection();
 
@@ -1526,9 +1525,9 @@ void KoTextEditor::newLine()
 
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "New Paragraph"));
+        d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("New Paragraph"));
     } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "New Paragraph"));
+        KUndo2Command *topCommand = beginEditBlock(kundo2_i18n("New Paragraph"));
         deleteChar(false, topCommand);
     }
     d->caret.beginEditBlock();

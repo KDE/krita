@@ -47,8 +47,6 @@
 #include <kdebug.h>
 #include <QDebug>
 #include <QWeakPointer>
-#include <QApplication>
-#include <QClipboard>
 
 //A convenience function to get a ListIdType from a format
 
@@ -79,7 +77,7 @@ ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode,
     m_mode(mode),
     m_removedElements()
 {
-      setText(i18nc("(qtundo-format)", "Delete"));
+      setText(kundo2_i18n("Delete"));
       m_rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
 }
 
@@ -188,7 +186,6 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
     QTextDocumentFragment fragment = editor->selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
     drag.setData("text/plain", fragment.toPlainText().toUtf8());
-    QApplication::clipboard()->setMimeData(drag.mimeData());
 
     // Delete the marked section
     editor->setPosition(editor->anchor() -1);
@@ -198,7 +195,12 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
     QTextCharFormat format = editor->charFormat();
     editor->registerTrackedChange(*editor->cursor(), KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
     //Paste the selected text from the clipboard... (XXX: is this really correct here?)
-    TextPasteCommand *pasteCommand =0;
+    TextPasteCommand *pasteCommand =
+            new TextPasteCommand(drag.mimeData(),
+                                 m_document.data(),
+                                 m_shapeController,
+                                 this);
+
     pasteCommand->redo();
 
     // Convert it into a un-numbered list-item or a paragraph
@@ -330,7 +332,7 @@ bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
     {
     public:
         UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
-            : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
+            : KUndo2Command(kundo2_i18n("Text"), parent),
               m_document(document)
         {}
 

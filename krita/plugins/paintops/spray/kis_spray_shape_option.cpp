@@ -20,9 +20,9 @@
 
 #include <QImage>
 
-#include "ui_wdgshapeoptions.h"
+#include "ui_wdgsprayshapeoptions.h"
 
-class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
+class KisShapeOptionsWidget: public QWidget, public Ui::WdgSprayShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
@@ -33,7 +33,7 @@ public:
 };
 
 KisSprayShapeOption::KisSprayShapeOption()
-    : KisPaintOpOption(i18n("Spray shape"), KisPaintOpOption::commonCategory(), true)
+    : KisPaintOpOption(i18n("Spray shape"), KisPaintOpOption::generalCategory(), true)
 {
     m_checkable = true;
     // save this to be able to restore it back

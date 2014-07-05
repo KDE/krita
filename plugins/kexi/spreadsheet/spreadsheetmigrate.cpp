@@ -1,30 +1,46 @@
 /* This file is part of the KDE project
-Copyright (C) 2009 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2009 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU Library General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Library General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-You should have received a copy of the GNU Library General Public License
-along with this program; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301, USA.
+   You should have received a copy of the GNU Library General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
 */
 
 #include "spreadsheetmigrate.h"
 
-#include <kglobal.h>
+#include <kexiutils/identifier.h>
 
 namespace KexiMigration
 {
 
 K_EXPORT_KEXIMIGRATE_DRIVER(SpreadsheetMigrate, "spreadsheet")
+
+//! a KoPart used to fill required part in spreadsheet Doc object
+class MockPart : public KoPart
+{
+public:
+    MockPart()
+    : KoPart( 0 )
+    {}
+    KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
+    virtual KoMainWindow *createMainWindow() { return 0; }
+protected:
+    virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
+};
+
+// ---
 
 SpreadsheetMigrate::SpreadsheetMigrate(QObject *parent, const QVariantList &args)
         : KexiMigrate(parent, args)
@@ -50,7 +66,7 @@ bool SpreadsheetMigrate::drv_connect()
     return false;
   
   if (!m_KSDoc) {
-      m_KSDoc = new Calligra::Sheets::Doc();
+      m_KSDoc = new Calligra::Sheets::Doc(new MockPart);
   }
   kDebug();
   return m_KSDoc->openUrl(m_FileName);
@@ -79,38 +95,56 @@ bool SpreadsheetMigrate::drv_tableNames(QStringList& tablenames)
   return true;
 }
 
+bool SpreadsheetMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
+                                       KexiDB::TableSchema* dstTable)
+{
+    Q_UNUSED(srcTable);
+    Q_UNUSED(destConn);
+    Q_UNUSED(dstTable);
+    //! @todo implement data copying
+    return true;
+}
+
 bool SpreadsheetMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
   Calligra::Sheets::Sheet *sheet = m_KSDoc->map()->findSheet(originalName);
   
   if (!sheet)
   {
-      kDebug() << "unable to find sheet" << originalName;
+      kWarning() << "unable to find sheet" << originalName;
       return false;
   }
   
   int row=1, col = 1;
-  QString fieldname;
   
   Calligra::Sheets::Cell *cell;
-  KexiDB::Field *fld;
-  tableSchema.setName(QString(originalName).replace(' ', '_').toLower());
-  tableSchema.setCaption(originalName);
   
-  do
-  {
+  forever {
       cell = new Calligra::Sheets::Cell(sheet, col, row);
-
-      fieldname = cell->displayText();
-      col++;
-      if (!cell->isEmpty())
-      {
-          fld = new KexiDB::Field(fieldname.replace(' ', '_'), KexiDB::Field::Text);
-          fld->setCaption(fieldname);
-          tableSchema.addField( fld );
-          kDebug() << fieldname;
+      if (cell->isEmpty()) {
+          break;
       }
-  }while(!cell->isEmpty());
+      QString fieldCaption = cell->displayText();
+      // find unique field name
+      QString fieldBaseName = KexiUtils::stringToIdentifier(fieldCaption).toLower();
+      int fieldNameAdd = 0;
+      QString fieldName;
+      forever {
+          fieldName = fieldBaseName;
+          if (fieldNameAdd > 0) {
+              fieldName.append("_" + QString::number(fieldNameAdd));
+          }
+          if (!tableSchema.field(fieldName)) {
+              break;
+          }
+          fieldNameAdd++;
+      }
+      KexiDB::Field *fld = new KexiDB::Field(fieldName, KexiDB::Field::Text);
+      fld->setCaption(fieldCaption);
+      tableSchema.addField( fld );
+      kDebug() << fieldName;
+      col++;
+  }
   
   return true;
 }

@@ -24,6 +24,7 @@
 
 #include "kis_stroke_job_strategy.h"
 #include "kis_image_signal_router.h"
+#include "kundo2magicstring.h"
 
 
 class KRITAIMAGE_EXPORT KisProcessingApplicator
@@ -43,7 +44,7 @@ public:
                             KisNodeSP node,
                             ProcessingFlags flags = NONE,
                             KisImageSignalVector emitSignals = KisImageSignalVector(),
-                            const QString &name = QString());
+                            const KUndo2MagicString &name = KUndo2MagicString());
 
     ~KisProcessingApplicator();
 

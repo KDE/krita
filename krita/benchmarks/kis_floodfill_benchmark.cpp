@@ -83,7 +83,7 @@ void KisFloodFillBenchmark::benchmarkFlood()
         fillPainter.setPaintColor( fg );
         fillPainter.setBackgroundColor( bg );
 
-        fillPainter.beginTransaction(i18n("Flood Fill"));
+        fillPainter.beginTransaction(kundo2_noi18n("Flood Fill"));
 
         //fillPainter.setProgress(updater->startSubtask());
         fillPainter.setOpacity(OPACITY_OPAQUE_U8);

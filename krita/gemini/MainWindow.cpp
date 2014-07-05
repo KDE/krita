@@ -37,6 +37,7 @@
 #include <QToolButton>
 #include <QFileInfo>
 #include <QGLWidget>
+#include <QDesktopServices>
 
 #include <kcmdlineargs.h>
 #include <kurl.h>
@@ -54,6 +55,9 @@
 #include <KoDocumentInfo.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
+#include <KoFileDialog.h>
+#include <KoDocumentEntry.h>
+#include <KoFilterManager.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -178,6 +182,12 @@ public:
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
+        if (sketchView->errors().count() > 0) {
+            foreach(const QDeclarativeError &error, sketchView->errors()) {
+                qDebug() << error.toString();
+            }
+        }
+
         toDesktop = new KAction(q);
         toDesktop->setEnabled(false);
         toDesktop->setText(tr("Switch to Desktop"));
@@ -299,9 +309,6 @@ void MainWindow::switchSketchForced()
 
 void MainWindow::switchToSketch()
 {
-    QTime timer;
-    timer.start();
-
     if (d->toSketch)
     {
         d->toSketch->setEnabled(false);
@@ -325,7 +332,6 @@ void MainWindow::switchToSketch()
     }
 
     setCentralWidget(d->sketchView);
-    emit switchedToSketch();
 
     if (d->slateMode) {
         setWindowState(windowState() | Qt::WindowFullScreen);
@@ -334,8 +340,6 @@ void MainWindow::switchToSketch()
     }
     else
         QTimer::singleShot(50, this, SLOT(sketchChange()));
-
-    //qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 
     if (view && view->document()) {
         view->document()->setSaveInBatchMode(true);
@@ -364,6 +368,7 @@ void MainWindow::sketchChange()
         qApp->processEvents();
         KisConfig cfg;
         cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+        emit switchedToSketch();
     }
     if (d->toDesktop)
     {
@@ -374,9 +379,6 @@ void MainWindow::sketchChange()
 
 void MainWindow::switchToDesktop(bool justLoaded)
 {
-    QTime timer;
-    timer.start();
-
     if (d->toDesktop)
         d->toDesktop->setEnabled(false);
 
@@ -422,8 +424,6 @@ void MainWindow::switchToDesktop(bool justLoaded)
     if (view && view->document()) {
         view->document()->setSaveInBatchMode(false);
     }
-
-    //qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
@@ -500,6 +500,11 @@ bool MainWindow::slateMode() const
     return d->slateMode;
 }
 
+void MainWindow::setSlateMode(bool newValue)
+{
+    d->slateMode = newValue;
+}
+
 QString MainWindow::currentSketchPage() const
 {
     return d->currentSketchPage;
@@ -532,6 +537,20 @@ void MainWindow::setTemporaryFile(bool newValue)
 {
     d->temporaryFile = newValue;
     emit temporaryFileChanged();
+}
+
+QString MainWindow::openImage()
+{
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Document"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType("application/x-krita");
+    KService::Ptr service = entry.service();
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
+
+    dialog.setHideNameFilterDetailsOption();
+    return dialog.url();
 }
 
 void MainWindow::resourceChanged(int key, const QVariant& v)

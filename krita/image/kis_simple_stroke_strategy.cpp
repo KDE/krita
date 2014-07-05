@@ -63,15 +63,21 @@ private:
 /*                 KisSimpleStrokeStrategy                     */
 /***************************************************************/
 
-KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(QString id, QString name)
+KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(QString id, const KUndo2MagicString &name)
     : KisStrokeStrategy(id, name),
-      m_jobEnabled(4, false)
+      m_jobEnabled(4, false),
+      m_jobSequentiality(4, KisStrokeJobData::SEQUENTIAL),
+      m_jobExclusivity(4, KisStrokeJobData::NORMAL)
 {
 }
 
-void KisSimpleStrokeStrategy::enableJob(JobType type, bool enable)
+void KisSimpleStrokeStrategy::enableJob(JobType type, bool enable,
+                                        KisStrokeJobData::Sequentiality sequentiality,
+                                        KisStrokeJobData::Exclusivity exclusivity)
 {
     m_jobEnabled[(int)type] = enable;
+    m_jobSequentiality[(int)type] = sequentiality;
+    m_jobExclusivity[(int)type] = exclusivity;
 }
 
 KisStrokeJobStrategy*
@@ -106,20 +112,27 @@ KisStrokeJobStrategy* KisSimpleStrokeStrategy::createDabStrategy()
     return createStrategy(JOB_DOSTROKE);
 }
 
+KisStrokeJobData* KisSimpleStrokeStrategy::createData(JobType type)
+{
+    KisStrokeJobData::Sequentiality sequentiality = m_jobSequentiality[(int)type];
+    KisStrokeJobData::Exclusivity exclusivity = m_jobExclusivity[(int)type];
+
+    return new KisStrokeJobData(sequentiality, exclusivity);
+}
 
 KisStrokeJobData* KisSimpleStrokeStrategy::createInitData()
 {
-    return 0;
+    return createData(JOB_INIT);
 }
 
 KisStrokeJobData* KisSimpleStrokeStrategy::createFinishData()
 {
-    return 0;
+    return createData(JOB_FINISH);
 }
 
 KisStrokeJobData* KisSimpleStrokeStrategy::createCancelData()
 {
-    return 0;
+    return createData(JOB_CANCEL);
 }
 
 void KisSimpleStrokeStrategy::initStrokeCallback()

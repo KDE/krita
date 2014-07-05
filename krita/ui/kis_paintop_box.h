@@ -130,6 +130,7 @@ private slots:
     void slotSwitchToPreviousPreset();
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
+    void toggleHighlightedButton(QToolButton* m_tool);
 
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
@@ -142,6 +143,8 @@ private:
     KisCompositeOpComboBox*              m_cmbCompositeOp;
     QToolButton*                         m_eraseModeButton;
     QToolButton*                         m_alphaLockButton;
+    QToolButton*                         hMirrorButton;
+    QToolButton*                         vMirrorButton;
     KisPaintOpPresetsPopup*              m_presetsPopup;
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
     KisView2*                            m_view;
@@ -150,11 +153,12 @@ private:
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*          m_favoriteResourceManager;
 
-//    KisPaintOpPresetSP  m_activePreset;
-//    KisPaintOpPresetSP  m_previousPreset;
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeSP           m_previousNode;
+
+    QPalette palette;
+    QPalette palette_highlight;
 
     struct TabletToolID
     {

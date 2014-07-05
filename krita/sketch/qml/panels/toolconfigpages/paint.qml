@@ -108,6 +108,7 @@ Column {
             ListElement { text: "No smoothing" }
             ListElement { text: "Basic smoothing" }
             ListElement { text: "Weighted smoothing" }
+            ListElement { text: "Stabilizer" }
         }
         currentIndex: (toolManager.currentTool && toolManager.currentTool.smoothingType) ? toolManager.currentTool.smoothingType : 1;
         onCurrentIndexChanged: if (toolManager.currentTool && toolManager.currentTool.smoothingType !== undefined && toolManager.currentTool.smoothingType !== currentIndex) toolManager.currentTool.smoothingType = currentIndex;
@@ -115,7 +116,7 @@ Column {
 
     RangeInput {
         id: smoothnessQualitySlider;
-        visible: d.smoothingVisible && smoothnessTypeList.currentIndex === 2
+        visible: d.smoothingVisible && ( smoothnessTypeList.currentIndex === 2 || smoothnessTypeList.currentIndex === 3 )
         width: parent.width;
         placeholder: "Distance";
         min: 3; max: 1000; decimals: 1;
@@ -142,6 +143,44 @@ Column {
         text: "Smooth Pressure";
         checked: toolManager.currentTool ? toolManager.currentTool.smoothPressure : false;
         onCheckedChanged: if (toolManager.currentTool && toolManager.currentTool.smoothPressure !== undefined && toolManager.currentTool.smoothPressure !== checked) toolManager.currentTool.smoothPressure = checked;
+    }
+
+    CheckBox {
+        id: smoothScalableDistance;
+        visible: d.smoothingVisible && smoothnessTypeList.currentIndex === 2
+        width: parent.width;
+        text: "Use Scalable Distance";
+        checked: toolManager.currentTool ? toolManager.currentTool.useScalableDistance : false;
+        onCheckedChanged: if (toolManager.currentTool && toolManager.currentTool.useScalableDistance !== undefined && toolManager.currentTool.useScalableDistance !== checked) toolManager.currentTool.useScalableDistance = checked;
+    }
+
+    CheckBox {
+        id: smoothDelayDistance;
+        visible: d.smoothingVisible && smoothnessTypeList.currentIndex === 3
+        width: parent.width;
+        text: "Use Delay Distance";
+        checked: toolManager.currentTool ? toolManager.currentTool.useDelayDistance : false;
+        onCheckedChanged: if (toolManager.currentTool && toolManager.currentTool.useDelayDistance !== undefined && toolManager.currentTool.useDelayDistance !== checked) toolManager.currentTool.useDelayDistance = checked;
+    }
+
+    RangeInput {
+        id: smoothDelayDistanceSlider;
+        visible: d.smoothingVisible && smoothnessTypeList.currentIndex === 3 && smoothDelayDistance.checked === true;
+        width: parent.width;
+        placeholder: "Delay Distance"
+        useExponentialValue: true;
+        min: 0; max: 500; decimals: 0;
+        value: toolManager.currentTool.delayDistance;
+        onValueChanged: if (toolManager.currentTool && toolManager.currentTool.delayDistance !== undefined && toolManager.currentTool.delayDistance !== value) toolManager.currentTool.delayDistance = value;
+    }
+
+    CheckBox {
+        id: smoothFinishStabilizedCurve;
+        visible: d.smoothingVisible && smoothnessTypeList.currentIndex === 3
+        width: parent.width;
+        text: "Finish Stabilized Curve";
+        checked: toolManager.currentTool ? toolManager.currentTool.finishStabilizedCurve : false;
+        onCheckedChanged: if (toolManager.currentTool && toolManager.currentTool.finishStabilizedCurve !== undefined && toolManager.currentTool.finishStabilizedCurve !== checked) toolManager.currentTool.finishStabilizedCurve = checked;
     }
 
     // === Mirror ===
@@ -178,6 +217,10 @@ Column {
         smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
         smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
         smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
+        smoothScalableDistance.checked = toolManager.currentTool.useScalableDistance;
+        smoothDelayDistance.checked = toolManager.currentTool.useDelayDistance;
+        smoothDelayDistanceSlider.value = toolManager.currentTool.delayDistance;
+        smoothFinishStabilizedCurve.checked = toolManager.currentTool.finishStabilizedCurve;
     }
 
     Connections {
@@ -201,7 +244,21 @@ Column {
             smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
             smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
             smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
+            smoothScalableDistance.checked = toolManager.currentTool.useScalableDistance;
+            smoothDelayDistance.checked = toolManager.currentTool.useDelayDistance;
+            smoothDelayDistanceSlider.value = toolManager.currentTool.delayDistance;
+            smoothFinishStabilizedCurve.checked = toolManager.currentTool.finishStabilizedCurve;
         }
+    }
+    Connections {
+        target: toolManager.currentTool;
+        onSmoothnessQualityChanged: smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
+        onSmoothnessFactorChanged: smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
+        onSmoothPressureChanged: smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
+        onUseScalableDistanceChanged: smoothScalableDistance.checked = toolManager.currentTool.useScalableDistance;
+        onUseDelayDistanceChanged: smoothDelayDistance.checked = toolManager.currentTool.useDelayDistance;
+        onDelayDistanceChanged: smoothDelayDistanceSlider.value = toolManager.currentTool.delayDistance;
+        onFinishStabilizedCurveChanged: smoothFinishStabilizedCurve.checked = toolManager.currentTool.finishStabilizedCurve;
     }
 
     QtObject {

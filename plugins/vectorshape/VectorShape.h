@@ -52,7 +52,8 @@ public:
         VectorTypeNone,         // Uninitialized
         VectorTypeWmf,          // Windows MetaFile
         VectorTypeEmf,          // Extended MetaFile
-        VectorTypeSvm           // StarView Metafile
+        VectorTypeSvm,          // StarView Metafile
+        VectorTypeSvg           // Scalable Vector Graphics
         // ... more here later
     };
 
@@ -87,6 +88,7 @@ private:
     static bool isWmf(const QByteArray &bytes);
     static bool isEmf(const QByteArray &bytes);
     static bool isSvm(const QByteArray &bytes);
+    static bool isSvg(const QByteArray &bytes);
 
     // Member variables
     mutable VectorType  m_type;
@@ -115,6 +117,7 @@ private:
     void drawWmf(QPainter &painter) const;
     void drawEmf(QPainter &painter) const;
     void drawSvm(QPainter &painter) const;
+    void drawSvg(QPainter &painter) const;
 private:
     const QByteArray m_contents;
     VectorShape::VectorType m_type;

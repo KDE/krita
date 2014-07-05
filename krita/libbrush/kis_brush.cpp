@@ -168,6 +168,9 @@ KisBrush::~KisBrush()
 
 QImage KisBrush::brushTipImage() const
 {
+    if (d->brushTipImage.isNull()) {
+        const_cast<KisBrush*>(this)->load();
+    }
     return d->brushTipImage;
 }
 
@@ -251,13 +254,19 @@ bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 
 void KisBrush::setBrushTipImage(const QImage& image)
 {
-    Q_ASSERT(!image.isNull());
-    KoResource::setImage(image);
+    //Q_ASSERT(!image.isNull());
     d->brushTipImage = image;
 
-    setWidth(image.width());
-    setHeight(image.height());
-
+    if (!image.isNull()) {
+        if (image.width() > 128 && image.width() > 128) {
+            KoResource::setImage(image.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        }
+        else {
+            KoResource::setImage(image);
+        }
+        setWidth(image.width());
+        setHeight(image.height());
+    }
     clearBrushPyramid();
 
 }

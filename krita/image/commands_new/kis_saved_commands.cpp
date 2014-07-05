@@ -24,7 +24,7 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 
 
-KisSavedCommandBase::KisSavedCommandBase(const QString &name,
+KisSavedCommandBase::KisSavedCommandBase(const KUndo2MagicString &name,
                                          KisStrokesFacade *strokesFacade)
     : KUndo2Command(name),
       m_strokesFacade(strokesFacade),
@@ -98,7 +98,7 @@ struct KisSavedMacroCommand::Private
     QVector<SavedCommand> commands;
 };
 
-KisSavedMacroCommand::KisSavedMacroCommand(const QString &name,
+KisSavedMacroCommand::KisSavedMacroCommand(const KUndo2MagicString &name,
                                            KisStrokesFacade *strokesFacade)
     : KisSavedCommandBase(name, strokesFacade),
       m_d(new Private())

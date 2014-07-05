@@ -73,7 +73,7 @@ class KisToolPathFactory : public KoToolFactoryBase
 public:
     KisToolPathFactory(const QStringList&)
             : KoToolFactoryBase("KisToolPath") {
-        setToolTip(i18n("Draw a path. Shift-mouseclick ends the path."));
+        setToolTip(i18n("Bezier Curve Tool. Shift-mouseclick ends the curve."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_draw_path"));

@@ -35,8 +35,8 @@ public:
      * The different behaviours for this action.
      */
     enum Shortcut {
-        RotateToggleShortcut, ///< Toggle Rotate mode.
-        DiscreteRotateToggleShortcut, ///< Toggle Discrete Rotate mode.
+        RotateModeShortcut, ///< Toggle Rotate mode.
+        DiscreteRotateModeShortcut, ///< Toggle Discrete Rotate mode.
         RotateLeftShortcut, ///< Rotate left by a fixed amount.
         RotateRightShortcut, ///< Rotate right by a fixed amount.
         RotateResetShortcut ///< Reset the rotation to 0.

@@ -86,6 +86,7 @@ public slots:
     void fillPattern();
     void reselect();
     void convertToVectorSelection();
+    void convertShapesToVectorSelection();
 
     void copySelectionToNewLayer();
     void toggleDisplaySelection();

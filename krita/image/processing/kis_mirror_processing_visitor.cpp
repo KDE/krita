@@ -34,7 +34,7 @@ KisMirrorProcessingVisitor::KisMirrorProcessingVisitor(const QRect &bounds, Qt::
 void KisMirrorProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     KisPaintDeviceSP dev = node->paintDevice();
-    KisTransaction transaction("", dev);
+    KisTransaction transaction(dev);
 
     qreal axis = m_orientation == Qt::Horizontal ?
         m_bounds.x() + 0.5 * m_bounds.width() :

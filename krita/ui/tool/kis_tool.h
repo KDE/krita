@@ -79,11 +79,8 @@ static const QString TOOL_TYPE_FILL = "3 Krita/Fill";                // Tools th
 static const QString TOOL_TYPE_VIEW = "4 Krita/View";                // Tools that affect the canvas: pan, zoom, etc.
 static const QString TOOL_TYPE_SELECTED = "5 Krita/Select";          // Tools that select pixels
 
-//these activation ids are kind of a workaround untile the toolbox has a better design and should be set in the tool factory
-//activation id for showing tools always, but deactivating if layer is locked
-static const QString KRITA_TOOL_ACTIVATION_ID = "flake/dud";
-//activation id for showing always and not deactivating
-static const QString KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE = "flake/always";
+//activation id for Krita tools, Krita tools are always active and handle locked and invisible layers by themself
+static const QString KRITA_TOOL_ACTIVATION_ID = "flake/always";
 
 class  KRITAUI_EXPORT KisTool
         : public KoToolBase
@@ -209,15 +206,24 @@ public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
     virtual void canvasResourceChanged(int key, const QVariant & res);
+    // Implement this slot in case there are any widgets or properties which need
+    // to be updated after certain operations, to reflect the inner state correctly.
+    // At the moment this is used for smoothing options in the freehand brush, but
+    // this will likely be expanded.
+    virtual void updateSettingsViews();
 
 protected:
-    QPointF widgetCenterInWidgetPixels();
-    QPointF convertDocumentToWidget(const QPointF& pt);
+    // conversion methods are also needed by the paint information builder
+    friend class KisToolPaintingInformationBuilder;
 
     /// Convert from native (postscript points) to image pixel
     /// coordinates.
     QPointF convertToPixelCoord(KoPointerEvent *e);
     QPointF convertToPixelCoord(const QPointF& pt);
+
+protected:
+    QPointF widgetCenterInWidgetPixels();
+    QPointF convertDocumentToWidget(const QPointF& pt);
 
     /// Convert from native (postscript points) to integer image pixel
     /// coordinates. This truncates the floating point components and
@@ -259,9 +265,6 @@ protected:
 protected:
     KisImageWSP image() const;
     QCursor cursor() const;
-
-    /// @return the currently active selection
-    KisSelectionSP currentSelection() const;
 
     /// Call this to set the document modified
     void notifyModified() const;

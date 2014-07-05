@@ -44,6 +44,8 @@ public:
     void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
+    virtual void keyPressEvent(QKeyEvent* event);
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
@@ -72,7 +74,7 @@ public:
         setToolType(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_grid"));
         setPriority(17);
-        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 
 

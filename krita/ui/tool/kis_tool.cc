@@ -70,6 +70,8 @@
 #include "kis_cursor.h"
 #include <recorder/kis_recorded_paint_action.h>
 #include <kis_selection_mask.h>
+#include "kis_resources_snapshot.h"
+
 
 struct KisTool::Private {
     Private()
@@ -240,6 +242,10 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
     };
 }
 
+void KisTool::updateSettingsViews()
+{
+}
+
 QPointF KisTool::widgetCenterInWidgetPixels()
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -368,18 +374,6 @@ KisImageWSP KisTool::image() const
 QCursor KisTool::cursor() const
 {
     return d->cursor;
-}
-
-KisSelectionSP KisTool::currentSelection() const
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (kisCanvas) {
-        KisView2 * view = kisCanvas->view();
-        if (view) return view->selection();
-    }
-
-    return 0;
-
 }
 
 void KisTool::notifyModified() const
@@ -535,14 +529,17 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisTool::deleteSelection()
 {
-    KisSelectionSP selection = currentSelection();
-    KisNodeSP node = currentNode();
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+
+    KisSelectionSP selection = resources->activeSelection();
+    KisNodeSP node = resources->currentNode();
 
     if(node && node->hasEditablePaintDevice()) {
         KisPaintDeviceSP device = node->paintDevice();
 
         image()->barrierLock();
-        KisTransaction transaction(i18n("Clear"), device);
+        KisTransaction transaction(kundo2_i18n("Clear"), device);
 
         QRect dirtyRect;
         if (selection) {

@@ -44,8 +44,8 @@ KisRotateCanvasAction::KisRotateCanvasAction()
     setDescription(i18n("The <i>Rotate Canvas</i> action rotates the canvas."));
 
     QHash<QString, int> shortcuts;
-    shortcuts.insert(i18n("Toggle Rotate Mode"), RotateToggleShortcut);
-    shortcuts.insert(i18n("Toggle Discrete Rotate Mode"), DiscreteRotateToggleShortcut);
+    shortcuts.insert(i18n("Rotate Mode"), RotateModeShortcut);
+    shortcuts.insert(i18n("Discrete Rotate Mode"), DiscreteRotateModeShortcut);
     shortcuts.insert(i18n("Rotate Left"), RotateLeftShortcut);
     shortcuts.insert(i18n("Rotate Right"), RotateRightShortcut);
     shortcuts.insert(i18n("Reset Rotation"), RotateResetShortcut);
@@ -64,9 +64,9 @@ int KisRotateCanvasAction::priority() const
 
 void KisRotateCanvasAction::activate(int shortcut)
 {
-    if (shortcut == DiscreteRotateToggleShortcut) {
+    if (shortcut == DiscreteRotateModeShortcut) {
         QApplication::setOverrideCursor(KisCursor::rotateCanvasDiscreteCursor());
-    } else /* if (shortcut == SmoothRotateToggleShortcut) */ {
+    } else /* if (shortcut == SmoothRotateModeShortcut) */ {
         QApplication::setOverrideCursor(KisCursor::rotateCanvasSmoothCursor());
     }
 }
@@ -85,10 +85,10 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
 
     switch(shortcut) {
-        case RotateToggleShortcut:
+        case RotateModeShortcut:
             d->mode = (Shortcut)shortcut;
             break;
-        case DiscreteRotateToggleShortcut:
+        case DiscreteRotateModeShortcut:
             d->mode = (Shortcut)shortcut;
             d->angleDrift = 0;
             break;
@@ -116,7 +116,7 @@ void KisRotateCanvasAction::mouseMoved(const QPointF &lastPos, const QPointF &po
 
     qreal angle = (180 / M_PI) * (newAngle - oldAngle);
 
-    if (d->mode == DiscreteRotateToggleShortcut) {
+    if (d->mode == DiscreteRotateModeShortcut) {
         const qreal angleStep = 15;
         qreal initialAngle = inputManager()->canvas()->rotationAngle();
         qreal roundedAngle = qRound((initialAngle + angle + d->angleDrift) / angleStep) * angleStep - initialAngle;

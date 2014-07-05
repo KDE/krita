@@ -25,6 +25,7 @@
 #include "kis_stroke_job.h"
 
 class KisStrokeStrategy;
+class KUndo2MagicString;
 
 
 class KRITAIMAGE_EXPORT KisStroke
@@ -35,7 +36,7 @@ public:
 
     void addJob(KisStrokeJobData *data);
 
-    QString name() const;
+    KUndo2MagicString name() const;
     bool hasJobs() const;
     qint32 numJobs() const;
     KisStrokeJob* popOneJob();

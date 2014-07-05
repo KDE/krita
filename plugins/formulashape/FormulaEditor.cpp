@@ -84,7 +84,7 @@ FormulaCommand* FormulaEditor::insertText( const QString& text )
         }
     }
     if (undo) {
-        undo->setText(i18nc("(qtundo-format)", "Add text"));
+        undo->setText(kundo2_i18n("Add text"));
     }
     return undo;
 }
@@ -117,12 +117,12 @@ FormulaCommand* FormulaEditor::changeTable ( bool insert, bool rows )
             if (insert) {
                 undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,rowNumber,0,1);
                 if (undo) {
-                    undo->setText(i18nc("(qtundo-format)", "Insert row"));
+                    undo->setText(kundo2_i18n("Insert row"));
                 }
             } else {
                 undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,rowNumber,1,0);
                 if (undo) {
-                    undo->setText(i18nc("(qtundo-format)", "Remove row"));
+                    undo->setText(kundo2_i18n("Remove row"));
                 }
             }
         } else {
@@ -130,12 +130,12 @@ FormulaCommand* FormulaEditor::changeTable ( bool insert, bool rows )
             if (insert) {
                 undo=new FormulaCommandReplaceColumn(formulaData(),cursor(),table,columnNumber,0,1);
                 if (undo) {
-                    undo->setText(i18nc("(qtundo-format)", "Insert column"));
+                    undo->setText(kundo2_i18n("Insert column"));
                 }
             } else {
                 undo=new FormulaCommandReplaceColumn(formulaData(),cursor(),table,columnNumber,1,0);
                 if (undo) {
-                    undo->setText(i18nc("(qtundo-format)", "Remove column"));
+                    undo->setText(kundo2_i18n("Remove column"));
                 }
             }
         }
@@ -161,7 +161,7 @@ FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
         //TODO: implement the insertion of glyphs
     }
     if (undo) {
-        undo->setText(i18nc("(qtundo-format)", "Insert formula elements."));
+        undo->setText(kundo2_i18n("Insert formula elements."));
         undo->setUndoCursorPosition(cursor());
     }
     return undo;
@@ -194,7 +194,7 @@ FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
         }
     }
     if (undo) {
-        undo->setText(i18nc("(qtundo-format)", "Remove formula elements"));
+        undo->setText(kundo2_i18n("Remove formula elements"));
         undo->setUndoCursorPosition(cursor());
     }
     return undo;

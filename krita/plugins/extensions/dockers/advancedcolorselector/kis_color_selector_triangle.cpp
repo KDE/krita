@@ -130,7 +130,7 @@ void KisColorSelectorTriangle::setColor(const KoColor &color)
     // Workaround for Bug 287001
     setLastMousePosition(tmp.x(), tmp.y());
 
-    emit paramChanged(-1, s, v, -1, -1);
+    emit paramChanged(-1, s, v, -1, -1, -1, -1, -1, -1);
     emit update();
 }
 

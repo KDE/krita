@@ -247,17 +247,8 @@ void KisCanvas2::channelSelectionChanged()
 
 void KisCanvas2::addCommand(KUndo2Command *command)
 {
+    // This method exists to support flake-related operations
     m_d->view->koDocument()->addCommand(command);
-}
-
-void KisCanvas2::startMacro(const QString &title)
-{
-    m_d->view->koDocument()->beginMacro(title);
-}
-
-void KisCanvas2::stopMacro()
-{
-    m_d->view->koDocument()->endMacro();
 }
 
 KoShapeManager* KisCanvas2::shapeManager() const
@@ -838,6 +829,13 @@ bool KisCanvas2::isPopupPaletteVisible()
 
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
+    KisCanvasDecoration *infinityDecoration =
+        m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
+
+    if (infinityDecoration) {
+        infinityDecoration->setVisible(!value);
+    }
+
     m_d->canvasWidget->setWrapAroundViewingMode(value);
 }
 

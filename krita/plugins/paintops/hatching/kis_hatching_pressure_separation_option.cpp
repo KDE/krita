@@ -26,7 +26,7 @@
 
 
 KisHatchingPressureSeparationOption::KisHatchingPressureSeparationOption()
-    : KisCurveOption(i18n("Separation"), "Separation", KisPaintOpOption::commonCategory(), true)
+    : KisCurveOption(i18n("Separation"), "Separation", KisPaintOpOption::generalCategory(), true)
 {
 }
 

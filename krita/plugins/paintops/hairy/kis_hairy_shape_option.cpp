@@ -18,9 +18,9 @@
 #include "kis_hairy_shape_option.h"
 #include <klocale.h>
 
-#include "ui_wdgshapeoptions.h"
+#include "ui_wdghairyshapeoptions.h"
 
-class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
+class KisShapeOptionsWidget: public QWidget, public Ui::WdgHairyShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
@@ -30,7 +30,7 @@ public:
 };
 
 KisHairyShapeOption::KisHairyShapeOption()
-    : KisPaintOpOption(i18n("Brush shape"), KisPaintOpOption::commonCategory(), false)
+    : KisPaintOpOption(i18n("Brush shape"), KisPaintOpOption::generalCategory(), false)
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();

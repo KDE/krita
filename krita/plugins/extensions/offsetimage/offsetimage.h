@@ -24,6 +24,9 @@
 #include <kis_view_plugin.h>
 #include <kis_types.h>
 
+class KUndo2MagicString;
+
+
 class OffsetImage : public KisViewPlugin
 {
     Q_OBJECT
@@ -36,7 +39,7 @@ private slots:
     void slotOffsetImage();
     void slotOffsetLayer();
 
-    void offsetImpl(const QString &actionName,KisNodeSP node, const QPoint &offsetPoint);
+    void offsetImpl(const KUndo2MagicString &actionName, KisNodeSP node, const QPoint &offsetPoint);
 private:
     QRect offsetWrapRect();
 

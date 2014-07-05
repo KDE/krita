@@ -82,7 +82,7 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
         QVector<QRect> dirtyRect = fillPainter.takeDirtyRegion();
 
         KisPainter *painter = new KisPainter(device, m_selection);
-        painter->beginTransaction("");
+        painter->beginTransaction();
 
         m_resources->setupPainter(painter);
 
@@ -95,7 +95,7 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
     } else {
 
         KisFillPainter fillPainter(device, m_selection);
-        fillPainter.beginTransaction("");
+        fillPainter.beginTransaction();
 
         m_resources->setupPainter(&fillPainter);
 

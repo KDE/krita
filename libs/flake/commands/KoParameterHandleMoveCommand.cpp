@@ -31,7 +31,7 @@ KoParameterHandleMoveCommand::KoParameterHandleMoveCommand(KoParameterShape *sha
         , m_endPoint(endPoint)
         , m_keyModifiers(keyModifiers)
 {
-    setText(i18nc("(qtundo-format)", "Change parameter"));
+    setText(kundo2_i18n("Change parameter"));
 }
 
 KoParameterHandleMoveCommand::~KoParameterHandleMoveCommand()

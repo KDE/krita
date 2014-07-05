@@ -117,17 +117,17 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(3, 3, 0, 0);
-    kernel->data()[0] = 0;
-    kernel->data()[1] = 0;
-    kernel->data()[2] = 0;
-    kernel->data()[3] = 0;
-    kernel->data()[4] = 1;
-    kernel->data()[5] = 0;
-    kernel->data()[6] = 0;
-    kernel->data()[7] = 0;
-    kernel->data()[8] = 0;
+    kernel->data()(0) = 0;
+    kernel->data()(1) = 0;
+    kernel->data()(2) = 0;
+    kernel->data()(3) = 0;
+    kernel->data()(4) = 1;
+    kernel->data()(5) = 0;
+    kernel->data()(6) = 0;
+    kernel->data()(7) = 0;
+    kernel->data()(8) = 0;
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction(0);
+    gc.beginTransaction();
     gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
     gc.deleteTransaction();
 
@@ -155,7 +155,7 @@ void KisConvolutionPainterTest::testSymmConvolution()
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction(0);
+    gc.beginTransaction();
 
     QRect filterRect = imageRect.adjusted(1,1,-1,-1);
     gc.applyMatrix(kernel, dev, filterRect.topLeft(), filterRect.topLeft(),
@@ -182,7 +182,7 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction(0);
+    gc.beginTransaction();
     gc.setChannelFlags(channelFlags);
 
     QRect filterRect = imageRect.adjusted(1,1,-1,-1);
@@ -295,7 +295,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
         // CALLGRIND_START_INSTRUMENTATION;
 
-        gc.beginTransaction(0);
+        gc.beginTransaction();
         gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                        imageRect.size());
         gc.deleteTransaction();
@@ -327,7 +327,7 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
        QTime timer;
        timer.start();
 
-       gc.beginTransaction("");
+       gc.beginTransaction();
 
        if (( horizontalRadius > 0 ) && ( verticalRadius > 0 )) {
            KisPaintDeviceSP interm = new KisPaintDevice(dev->colorSpace());

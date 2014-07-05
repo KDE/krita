@@ -110,9 +110,9 @@ void KoPABackgroundToolWidget::setBackgroundImage()
             QImage image( tmpFile );
             if ( !image.isNull() ) {
                 const bool isSlideType = (m_tool->view()->kopaDocument()->pageType() == KoPageApp::Slide);
-                const QString commandTitle = isSlideType ?
-                    i18nc( "(qtundo-format)", "Change slide background image") :
-                    i18nc( "(qtundo-format)", "Change page background image");
+                const KUndo2MagicString commandTitle = isSlideType ?
+                    kundo2_i18n( "Change slide background image") :
+                    kundo2_i18n( "Change page background image");
                 KUndo2Command * cmd = new KUndo2Command(commandTitle);
                 QSharedPointer<KoPatternBackground> bg(new KoPatternBackground( collection ));
                 bg->setPattern( image );

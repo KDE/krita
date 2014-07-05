@@ -75,7 +75,6 @@
 #include <klocale.h>
 #include <kundo2stack.h>
 
-#include <QApplication>
 #include <QFontDatabase>
 #include <QTextBlock>
 #include <QTextBlockFormat>

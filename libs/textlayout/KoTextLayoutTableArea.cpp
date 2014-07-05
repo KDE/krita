@@ -975,24 +975,26 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     }
 
     // Possibly paint the selection of the entire cell
-    foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
-        QTextTableCell startTableCell = d->table->cellAt(selection.cursor.selectionStart());
-        QTextTableCell endTableCell = d->table->cellAt(selection.cursor.selectionEnd());
+    if (context.showSelections) {
+        foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
+            QTextTableCell startTableCell = d->table->cellAt(selection.cursor.selectionStart());
+            QTextTableCell endTableCell = d->table->cellAt(selection.cursor.selectionEnd());
 
-        if (startTableCell.isValid() && startTableCell != endTableCell) {
-            int selectionRow;
-            int selectionColumn;
-            int selectionRowSpan;
-            int selectionColumnSpan;
-            selection.cursor.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
-            if (row >= selectionRow && column>=selectionColumn
-                && row < selectionRow + selectionRowSpan
-                && column < selectionColumn + selectionColumnSpan) {
+            if (startTableCell.isValid() && startTableCell != endTableCell) {
+                int selectionRow;
+                int selectionColumn;
+                int selectionRowSpan;
+                int selectionColumnSpan;
+                selection.cursor.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+                if (row >= selectionRow && column>=selectionColumn
+                    && row < selectionRow + selectionRowSpan
+                    && column < selectionColumn + selectionColumnSpan) {
+                    painter->fillRect(bRect, selection.format.background());
+                }
+            } else if (selection.cursor.selectionStart()  < d->table->firstPosition()
+                && selection.cursor.selectionEnd() > d->table->lastPosition()) {
                 painter->fillRect(bRect, selection.format.background());
             }
-        } else if (selection.cursor.selectionStart()  < d->table->firstPosition()
-            && selection.cursor.selectionEnd() > d->table->lastPosition()) {
-            painter->fillRect(bRect, selection.format.background());
         }
     }
 

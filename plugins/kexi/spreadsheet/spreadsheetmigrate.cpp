@@ -25,7 +25,7 @@
 namespace KexiMigration
 {
 
-K_EXPORT_KEXIMIGRATE_DRIVER(SpreadsheetMigrate, "spreadsheet")
+K_EXPORT_KEXIMIGRATE_DRIVER(SpreadsheetMigrate, spreadsheet)
 
 //! a KoPart used to fill required part in spreadsheet Doc object
 class MockPart : public KoPart

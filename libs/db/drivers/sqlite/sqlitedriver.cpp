@@ -21,6 +21,7 @@
 #include <db/drivermanager.h>
 #include <db/driver_p.h>
 #include <db/utils.h>
+#include <db/pluginloader.h>
 
 #include "sqlite3.h"
 #include "sqlitedriver.h"
@@ -32,7 +33,7 @@
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(SQLiteDriver, "sqlite3")
+K_EXPORT_KEXIDB_DRIVER(SQLiteDriver, sqlite3)
 
 //! driver specific private data
 //! @internal

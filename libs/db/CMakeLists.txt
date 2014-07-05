@@ -16,6 +16,7 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}/libs
     ${CMAKE_CURRENT_SOURCE_DIR}/parser
+    ${KOPLUGIN_INCLUDES}
     ${KDE4_INCLUDES}
 )
 
@@ -55,6 +56,7 @@ set(calligradbparser_STAT_SRCS
 
 set(calligradb_LIB_SRCS
    ${calligradbparser_STAT_SRCS}
+   pluginloader.cpp
    drivermanager.cpp 
    driver.cpp 
    driver_p.cpp 
@@ -89,10 +91,10 @@ set(calligradb_LIB_SRCS
 )
 
 kde4_add_library(calligradb SHARED ${calligradb_LIB_SRCS})
-target_link_libraries(calligradb ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
+target_link_libraries(calligradb koplugin ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                                  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 
-target_link_libraries(calligradb LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
+target_link_libraries(calligradb LINK_INTERFACE_LIBRARIES koplugin ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                                  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 
 set_target_properties(calligradb PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

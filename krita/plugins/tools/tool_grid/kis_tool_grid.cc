@@ -46,9 +46,12 @@ KisToolGrid::~KisToolGrid()
 void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    m_canvas->view()->gridManager()->setVisible(true);
-    m_canvas->view()->gridManager()->checkVisibilityAction(true);
     m_canvas->updateCanvas();
+
+    if (!m_canvas->view()->gridManager()->visible()) {
+        m_canvas->view()->showFloatingMessage( "The grid is not visible. Press Return to show it.",
+                                              KIcon(koIconNameCStr("krita_tool_grid")));
+    }
 }
 
 inline QPointF modPoints(const QPointF &x1, const QPointF &x2) {
@@ -156,6 +159,15 @@ void KisToolGrid::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(gc);
     Q_UNUSED(converter);
+}
+
+void KisToolGrid::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Return) {
+        m_canvas->view()->gridManager()->setVisible(true);
+        m_canvas->view()->gridManager()->checkVisibilityAction(true);
+    }
+    KoToolBase::keyPressEvent(event);
 }
 
 #include "kis_tool_grid.moc"

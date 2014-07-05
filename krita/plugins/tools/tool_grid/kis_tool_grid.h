@@ -44,6 +44,8 @@ public:
     void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
+    virtual void keyPressEvent(QKeyEvent* event);
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 

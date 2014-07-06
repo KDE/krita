@@ -263,13 +263,19 @@ void KisShapeLayer::slotMoveShapes(const QPointF &diff)
     QList<QPointF> prevPos;
     QList<QPointF> newPos;
 
+    QList<KoShape*> shapes;
     foreach (KoShape* shape, shapeManager()->shapes()) {
+        if (!dynamic_cast<KoShapeGroup*>(shape)) {
+            shapes.append(shape);
+        }
+    }
+    foreach (KoShape* shape, shapes) {
         QPointF pos = shape->position();
         prevPos << pos;
         newPos << pos + diff;
     }
 
-    KoShapeMoveCommand cmd(shapeManager()->shapes(), prevPos, newPos);
+    KoShapeMoveCommand cmd(shapes, prevPos, newPos);
     cmd.redo();
 }
 

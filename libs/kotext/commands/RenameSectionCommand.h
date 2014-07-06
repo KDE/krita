@@ -37,10 +37,10 @@ public:
     virtual void redo();
 
 private:
-    KoSection *m_section;
-    QString m_newName;
-    QString m_oldName;
-    bool m_first;
+    KoSection *m_section; // section to rename
+    QString m_newName; // new section name
+    QString m_oldName; // old section name (needed to undo)
+    bool m_first; // checks first call of redo
 };
 
 #endif // RENAMESECTIONCOMMAND_H

@@ -111,7 +111,7 @@ void KoReportDesignerItemLine::paint(QPainter* painter, const QStyleOptionGraphi
 
 void KoReportDesignerItemLine::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("report:line");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

@@ -118,7 +118,7 @@ KoReportDesignerItemChart* KoReportDesignerItemChart::clone()
 
 void KoReportDesignerItemChart::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("report:chart");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

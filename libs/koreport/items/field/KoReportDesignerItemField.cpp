@@ -124,7 +124,7 @@ void KoReportDesignerItemField::paint(QPainter* painter, const QStyleOptionGraph
 
 void KoReportDesignerItemField::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("report:field");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

@@ -129,7 +129,7 @@ void KoReportDesignerItemBarcode::paint(QPainter* painter, const QStyleOptionGra
 void KoReportDesignerItemBarcode::buildXML(QDomDocument & doc, QDomElement & parent)
 {
     //kdDebug() << "ReportEntityField::buildXML()");
-    QDomElement entity = doc.createElement("report:barcode");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

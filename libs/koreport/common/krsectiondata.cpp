@@ -59,27 +59,27 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
     QDomNodeList section = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
         QDomElement elemThis = section.item(nodeCounter).toElement();
-
-        if (elemThis.tagName() == "report:line") {
-            KoReportItemLine * line = new KoReportItemLine(elemThis);
-            m_objects.append(line);
-        } else {
-            
-            KoReportPluginInterface *plugin = manager->plugin(elemThis.tagName());
+        QString n = elemThis.tagName();
+        if (n.startsWith("report:")) {
+            QString reportItemName = n.mid(qstrlen("report:"));
+            if (reportItemName == "line") {
+                KoReportItemLine * line = new KoReportItemLine(elemThis);
+                m_objects.append(line);
+                continue;
+            }
+            KoReportPluginInterface *plugin = manager->plugin(reportItemName);
             if (plugin) {
                 QObject *obj = plugin->createRendererInstance(elemThis);
-                
                 if (obj) {
                     KoReportItemBase *krobj = dynamic_cast<KoReportItemBase*>(obj);
                     if (krobj) {
                         m_objects.append(krobj);
                     }
+                    continue;
                 }
             }
-            else {
-                kWarning() << "While parsing section encountered an unknown element: " << elemThis.tagName();
-            }
         }
+        kWarning() << "While parsing section encountered an unknown element: " << n;
     }
     qSort(m_objects.begin(), m_objects.end(), zLessThan);
     m_valid = true;

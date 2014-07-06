@@ -104,7 +104,7 @@ void KoReportDesignerItemWeb::paint(QPainter* painter, const QStyleOptionGraphic
 void KoReportDesignerItemWeb::buildXML(QDomDocument &doc, QDomElement &parent)
 {
     Q_UNUSED(parent);
-    QDomElement entity = doc.createElement("report:web");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_controlSource);

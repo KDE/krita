@@ -119,7 +119,7 @@ void KoReportDesignerItemImage::paint(QPainter* painter, const QStyleOptionGraph
 
 void KoReportDesignerItemImage::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("report:image");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

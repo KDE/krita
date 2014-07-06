@@ -145,12 +145,23 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
             KoDocumentEntry d(offer);
             // Append converted offer
             lst.append(d);
+
+            // And if it's the part that belongs to the current application it's our own, so break off
+            if (offer->desktopEntryName() == (qAppName().replace("calligra","") + "part")) {
+                lst.clear();
+                lst.append(d);
+                break;
+            }
+
             // Next service
         }
     }
 
     if (lst.count() > 1 && !mimetype.isEmpty()) {
-        kWarning(30003) << "KoDocumentEntry::query " << mimetype << " got " << offers.count() << " offers!";
+        kWarning(30003) << "KoDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
+        foreach(const KoDocumentEntry &entry, lst) {
+            qDebug() << entry.name();
+        }
     }
 
     return lst;

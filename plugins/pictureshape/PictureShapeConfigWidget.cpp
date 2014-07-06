@@ -29,6 +29,7 @@
 #include <KIO/Job>
 
 #include <QGridLayout>
+#include <QImageReader>
 
 void LoadWaiter::setImageData(KJob *job)
 {
@@ -73,7 +74,12 @@ void PictureShapeConfigWidget::open(KoShape *shape)
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
-    m_fileWidget->setFilter("image/png image/jpeg image/gif");
+    QStringList imageFilters;
+    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
+        imageFilters << "image/" + format;
+    }
+    m_fileWidget->setMimeFilter(imageFilters);
+    //m_fileWidget->setFilter("image/png image/jpeg image/gif");
     layout->addWidget(m_fileWidget);
     setLayout(layout);
     connect(m_fileWidget, SIGNAL(accepted()), this, SIGNAL(accept()));

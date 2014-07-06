@@ -936,7 +936,9 @@ void KisView2::slotLoadingFinished()
      * progress updaters. The latter way should be deprecated in favour
      * of displaying the status of the global strokes queue
      */
-    //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
+    image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
+    connect(m_d->statusBar->progress(), SIGNAL(sigCancellationRequested()),
+            image(), SLOT(requestStrokeCancellation()));
 
     m_d->canvas->initializeImage();
 

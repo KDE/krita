@@ -80,7 +80,8 @@ class KisNoopDabStrategy : public KisStrokeJobStrategy
 {
 public:
 KisNoopDabStrategy(QString name)
-        : m_name(name)
+    : m_name(name),
+      m_isMarked(false)
     {}
 
     void run(KisStrokeJobData *data) {
@@ -91,8 +92,17 @@ KisNoopDabStrategy(QString name)
         return m_name;
     }
 
+    void setMarked() {
+        m_isMarked = true;
+    }
+
+    bool isMarked() const {
+        return m_isMarked;
+    }
+
 private:
     QString m_name;
+    bool m_isMarked;
 };
 
 class KisTestingStrokeStrategy : public KisStrokeStrategy
@@ -102,7 +112,8 @@ public:
                              bool exclusive = false,
                              bool inhibitServiceJobs = false)
         : m_prefix(prefix),
-          m_inhibitServiceJobs(inhibitServiceJobs)
+          m_inhibitServiceJobs(inhibitServiceJobs),
+          m_cancelSeqNo(0)
     {
         setExclusive(exclusive);
     }
@@ -126,9 +137,24 @@ public:
         return new KisNoopDabStrategy(m_prefix + "dab");
     }
 
+    class CancelData : public KisStrokeJobData
+    {
+    public:
+        CancelData(int seqNo) : m_seqNo(seqNo) {}
+        int seqNo() const { return m_seqNo; }
+
+    private:
+        int m_seqNo;
+    };
+
+    KisStrokeJobData* createCancelData() {
+        return new CancelData(m_cancelSeqNo++);
+    }
+
 private:
     QString m_prefix;
     bool m_inhibitServiceJobs;
+    int m_cancelSeqNo;
 };
 
 inline QString getJobName(KisStrokeJob *job) {
@@ -137,6 +163,15 @@ inline QString getJobName(KisStrokeJob *job) {
     Q_ASSERT(pointer);
 
     return pointer->name();
+}
+
+inline int cancelSeqNo(KisStrokeJob *job) {
+    KisTestingStrokeStrategy::CancelData *pointer =
+        dynamic_cast<KisTestingStrokeStrategy::CancelData*>
+        (job->testingGetDabData());
+    Q_ASSERT(pointer);
+
+    return pointer->seqNo();
 }
 
 #endif /* __SCHEDULER_UTILS_H */

@@ -93,6 +93,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, K
     setMainWidget(m_page);
 
     m_page->editName->setText(d->deviceName);
+    m_page->editName->setFocus();
     connect(m_page->editName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
     m_page->lblColorSpace->setText(d->colorSpace->name());

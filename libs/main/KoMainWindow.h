@@ -36,7 +36,6 @@ class KoPrintJob;
 class KoDockFactoryBase;
 class KRecentFilesAction;
 class QDockWidget;
-class QLabel;
 
 struct KoPageLayout;
 

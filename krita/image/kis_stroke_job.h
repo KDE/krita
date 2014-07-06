@@ -59,6 +59,7 @@ private:
     // for testing use only, do not use in real code
     friend QString getJobName(KisStrokeJob *job);
     friend QString getCommandName(KisStrokeJob *job);
+    friend int cancelSeqNo(KisStrokeJob *job);
 
     KisStrokeJobStrategy* testingGetDabStrategy() {
         return m_dabStrategy;

@@ -492,6 +492,12 @@ void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
         emit sigUiNeedChangeActiveNode(node);
         emit sigNodeActivated(node);
         nodesUpdated();
+        if (node) {
+            bool toggled =  m_d->view->actionCollection()->action("view_show_just_the_canvas")->isChecked();
+            if (toggled) {
+                m_d->view->showFloatingMessage( activeLayer()->name(), QIcon(), 1600, KisFloatingMessage::Medium, Qt::TextSingleLine);
+            }
+        }
     }
 }
 

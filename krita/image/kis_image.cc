@@ -131,6 +131,8 @@ public:
     KisCompositeProgressProxy *compositeProgressProxy;
 
     bool startProjection;
+
+    bool tryCancelCurrentStrokeAsync();
 };
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
@@ -1468,6 +1470,15 @@ bool KisImage::cancelStroke(KisStrokeId id)
     return result;
 }
 
+bool KisImage::KisImagePrivate::tryCancelCurrentStrokeAsync()
+{
+    bool result = false;
+    if (scheduler) {
+        result = scheduler->tryCancelCurrentStrokeAsync();
+    }
+    return result;
+}
+
 void KisImage::requestUndoDuringStroke()
 {
     emit sigUndoDuringStrokeRequested();
@@ -1475,7 +1486,9 @@ void KisImage::requestUndoDuringStroke()
 
 void KisImage::requestStrokeCancellation()
 {
-    emit sigStrokeCancellationRequested();
+    if (!m_d->tryCancelCurrentStrokeAsync()) {
+        emit sigStrokeCancellationRequested();
+    }
 }
 
 void KisImage::requestStrokeEnd()

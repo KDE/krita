@@ -1628,7 +1628,7 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 
 void KoMainWindow::slotProgress(int value)
 {
-    QMutexLocker(&d->progressMutex);
+    QMutexLocker locker(&d->progressMutex);
     kDebug(30003) << "KoMainWindow::slotProgress" << value;
     if (value <= -1 || value >= 100) {
         if (d->progress) {

@@ -27,7 +27,7 @@
 struct KisQueuesProgressUpdater::Private
 {
     Private()
-        : queuedSizeMetric(0)
+        : queueSizeMetric(0)
         , trackingStarted(false)
         , timerFiredOnce(false)
         , progressProxy(0)
@@ -37,8 +37,8 @@ struct KisQueuesProgressUpdater::Private
     QMutex mutex;
     QTimer timer;
 
-    QAtomicInt doneSizeMetric;
-    int queuedSizeMetric;
+    int queueSizeMetric;
+    int initialQueueSizeMetric;
 
     QString jobName;
 
@@ -66,42 +66,59 @@ KisQueuesProgressUpdater::~KisQueuesProgressUpdater()
     delete m_d;
 }
 
-void KisQueuesProgressUpdater::notifyJobDone(int sizeMetric)
+void KisQueuesProgressUpdater::updateProgress(int queueSizeMetric, const QString &jobName)
 {
-    m_d->doneSizeMetric.fetchAndAddOrdered(sizeMetric);
+    QMutexLocker locker(&m_d->mutex);
+    m_d->queueSizeMetric = queueSizeMetric;
+
+    if (jobName != m_d->jobName ||
+        m_d->queueSizeMetric > m_d->initialQueueSizeMetric) {
+
+        m_d->jobName = jobName;
+        m_d->initialQueueSizeMetric = m_d->queueSizeMetric;
+    }
+
+    if(m_d->queueSizeMetric && !m_d->timer.isActive()) {
+        m_d->trackingStarted = true;
+        m_d->timerFiredOnce = false;
+        m_d->timer.start();
+    }
+    else if(!m_d->queueSizeMetric && !m_d->timerFiredOnce) {
+            m_d->trackingStarted = false;
+            m_d->timer.stop();
+            m_d->initialQueueSizeMetric = 0;
+    }
 }
 
-void KisQueuesProgressUpdater::updateProgress(int /*queueSizeMetric*/, const QString &/*jobName*/)
+void KisQueuesProgressUpdater::hide()
 {
-//    QMutexLocker locker(&m_d->mutex);
-//    m_d->queuedSizeMetric = queueSizeMetric;
-//    m_d->jobName = jobName;
+    {
+        /**
+         * It's not so important to ensure the state of this variable
+         * turns over while the lock is unheld. This is only a
+         * feedback so the next call will hide it.
+         */
 
-//    if(m_d->queuedSizeMetric && !m_d->timer.isActive()) {
-//        m_d->trackingStarted = true;
-//        m_d->timerFiredOnce = false;
-//        m_d->timer.start();
-//    }
-//    else if(!m_d->queuedSizeMetric && !m_d->timerFiredOnce) {
-//            m_d->trackingStarted = false;
-//            m_d->timer.stop();
-//            m_d->doneSizeMetric = 0;
-//    }
+        QMutexLocker locker(&m_d->mutex);
+        if(!m_d->trackingStarted) return;
+    }
+
+    updateProgress(0, "");
 }
 
 void KisQueuesProgressUpdater::updateProxy()
 {
-//    QMutexLocker locker(&m_d->mutex);
+    QMutexLocker locker(&m_d->mutex);
 
-//    if(!m_d->trackingStarted) return;
-//    m_d->timerFiredOnce = true;
+    if(!m_d->trackingStarted) return;
+    m_d->timerFiredOnce = true;
 
-//    m_d->progressProxy->setRange(0, m_d->doneSizeMetric + m_d->queuedSizeMetric);
-//    m_d->progressProxy->setValue(m_d->doneSizeMetric);
-//    m_d->progressProxy->setFormat(m_d->jobName);
+    m_d->progressProxy->setRange(0, m_d->initialQueueSizeMetric);
+    m_d->progressProxy->setValue(m_d->initialQueueSizeMetric - m_d->queueSizeMetric);
+    m_d->progressProxy->setFormat(m_d->jobName);
 
-//    if(!m_d->queuedSizeMetric) {
-//        m_d->timer.stop();
-//        m_d->doneSizeMetric = 0;
-//    }
+    if(!m_d->queueSizeMetric) {
+        m_d->timer.stop();
+        m_d->initialQueueSizeMetric = 0;
+    }
 }

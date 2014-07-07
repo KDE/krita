@@ -1848,10 +1848,14 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
             return false;
         }
 
-    } else if (store->hasFile("root")) {   // Fallback to "old" file format (maindoc.xml)
+    } else if (store->hasFile("root") || store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)
+
+        store->disallowNameExpansion();
+
         oasis = false;
 
         KoXmlDocument doc = KoXmlDocument(true);
+
         bool ok = oldLoadAndParse(store, "root", doc);
         if (ok)
             ok = loadXML(doc, store);

@@ -359,7 +359,7 @@ QStyleOptionProgressBar KisAbstractSliderSpinBox::progressBarOptions() const
 
     qreal dValues = (d->maximum - minDbl);
 
-    progressOpts.progress = dValues * pow((d->value - minDbl) / dValues, 1 / d->exponentRatio) + minDbl;
+    progressOpts.progress = dValues * pow((d->value - minDbl) / dValues, 1.0 / d->exponentRatio) + minDbl;
     progressOpts.text = valueString() + d->suffix;
     progressOpts.textAlignment = Qt::AlignCenter;
     progressOpts.textVisible = !(d->edit->isVisible());

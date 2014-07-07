@@ -311,7 +311,7 @@ void KisShapeLayer::setVisible(bool visible, bool isLoading)
 
 bool KisShapeLayer::saveLayer(KoStore * store) const
 {
-    store->disallowNameExpansion();
+
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;

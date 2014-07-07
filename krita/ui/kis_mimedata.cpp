@@ -94,7 +94,7 @@ QByteArray serializeToByteArray(QList<KisNodeSP> nodes)
 
     KoStore *store = KoStore::createStore(&buffer, KoStore::Write);
     Q_ASSERT(!store->bad());
-    store->disallowNameExpansion();
+    
     KisDoc2 *doc = createDocument(nodes);
     doc->saveNativeFormatCalligra(store);
     delete doc;

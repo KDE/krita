@@ -673,6 +673,17 @@ void KisConfig::setAntialiasCurves(bool v) const
     m_cfg.writeEntry("antialiascurves", v);
 }
 
+QColor KisConfig::selectionOverlayMaskColor() const
+{
+    QColor def(255, 0, 0, 220);
+    return m_cfg.readEntry("selectionOverlayMaskColor", def);
+}
+
+void KisConfig::setSelectionOverlayMaskColor(const QColor &color)
+{
+    m_cfg.writeEntry("selectionOverlayMaskColor", color);
+}
+
 bool KisConfig::antialiasSelectionOutline() const
 {
     return m_cfg.readEntry("AntialiasSelectionOutline", false);

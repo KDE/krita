@@ -62,9 +62,15 @@ KisSelectionDecoration::~KisSelectionDecoration()
 {
 }
 
+KisSelectionDecoration::Mode KisSelectionDecoration::mode() const
+{
+    return m_mode;
+}
+
 void KisSelectionDecoration::setMode(Mode mode)
 {
     m_mode = mode;
+    selectionChanged();
 }
 
 bool KisSelectionDecoration::selectionIsActive()
@@ -82,20 +88,29 @@ void KisSelectionDecoration::selectionChanged()
 {
     KisSelectionSP selection = view()->selection();
 
-    Q_ASSERT_X(m_mode == Ants, "KisSelectionDecoration", "Mask mode is not supported");
-
     if (selection && selectionIsActive()) {
-        if (selection->outlineCacheValid()) {
+        if ((m_mode == Ants && selection->outlineCacheValid()) ||
+            (m_mode == Mask && selection->thumbnailImageValid())) {
+
             m_signalCompressor.stop();
-            m_outlinePath = selection->outlineCache();
+
+            if (m_mode == Ants) {
+                m_outlinePath = selection->outlineCache();
+                m_antsTimer->start();
+            } else {
+                m_thumbnailImage = selection->thumbnailImage();
+                m_thumbnailImageTransform = selection->thumbnailImageTransform();
+            }
             view()->canvasBase()->updateCanvas();
-            m_antsTimer->start();
+
         } else {
             m_signalCompressor.start();
         }
     } else {
         m_signalCompressor.stop();
         m_outlinePath = QPainterPath();
+        m_thumbnailImage = QImage();
+        m_thumbnailImageTransform = QTransform();
         view()->canvasBase()->updateCanvas();
         m_antsTimer->stop();
     }
@@ -106,7 +121,10 @@ void KisSelectionDecoration::slotStartUpdateSelection()
     KisSelectionSP selection = view()->selection();
     if (!selection) return;
 
-    view()->image()->addSpontaneousJob(new KisUpdateOutlineJob(selection));
+    KisConfig cfg;
+    QColor maskColor = cfg.selectionOverlayMaskColor();
+
+    view()->image()->addSpontaneousJob(new KisUpdateOutlineJob(selection, m_mode == Mask, maskColor));
 }
 
 void KisSelectionDecoration::antsAttackEvent()
@@ -125,27 +143,50 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
 {
     Q_UNUSED(updateRect);
     Q_UNUSED(canvas);
-    Q_ASSERT_X(m_mode == Ants, "KisSelectionDecoration.cc", "MASK MODE NOT SUPPORTED YET!");
 
     if (!selectionIsActive()) return;
-    if (m_outlinePath.isEmpty()) return;
-
-    gc.save();
-    gc.setTransform(QTransform(), false);
+    if ((m_mode == Ants && m_outlinePath.isEmpty()) ||
+        (m_mode == Mask && m_thumbnailImage.isNull())) return;
 
     KisConfig cfg;
-    gc.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing, cfg.antialiasSelectionOutline());
-
     QTransform transform = converter->imageToWidgetTransform();
 
-    // render selection outline in white
-    gc.setPen(m_outlinePen);
-    gc.drawPath(transform.map(m_outlinePath));
+    gc.save();
+    gc.setTransform(transform, false);
 
-    // render marching ants in black (above the white outline)
-    gc.setPen(m_antsPen);
-    gc.drawPath(transform.map(m_outlinePath));
+    if (m_mode == Mask) {
+        gc.setRenderHints(QPainter::SmoothPixmapTransform |
+                          QPainter::HighQualityAntialiasing, false);
 
+        gc.setTransform(m_thumbnailImageTransform, true);
+        gc.drawImage(QPoint(), m_thumbnailImage);
+
+        QRect r1 = m_thumbnailImageTransform.inverted().mapRect(view()->image()->bounds());
+        QRect r2 = m_thumbnailImage.rect();
+
+        QPainterPath p1;
+        p1.addRect(r1);
+
+        QPainterPath p2;
+        p2.addRect(r2);
+
+        QColor maskColor = cfg.selectionOverlayMaskColor();
+
+        gc.setBrush(maskColor);
+        gc.setPen(Qt::NoPen);
+        gc.drawPath(p1 - p2);
+
+    } else /* if (m_mode == Ants) */ {
+        gc.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing, cfg.antialiasSelectionOutline());
+
+        // render selection outline in white
+        gc.setPen(m_outlinePen);
+        gc.drawPath(m_outlinePath);
+
+        // render marching ants in black (above the white outline)
+        gc.setPen(m_antsPen);
+        gc.drawPath(m_outlinePath);
+    }
     gc.restore();
 }
 

@@ -205,6 +205,9 @@ public:
     bool antialiasCurves() const;
     void setAntialiasCurves(bool v) const;
 
+    QColor selectionOverlayMaskColor() const;
+    void setSelectionOverlayMaskColor(const QColor &color);
+
     bool antialiasSelectionOutline() const;
     void setAntialiasSelectionOutline(bool v) const;
 

@@ -20,12 +20,18 @@
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 
+#include <boost/pool/singleton_pool.hpp>
+
+// BPP == bytes per pixel
+#define TILE_SIZE_4BPP (4 * __TILE_DATA_WIDTH * __TILE_DATA_HEIGHT)
+#define TILE_SIZE_8BPP (8 * __TILE_DATA_WIDTH * __TILE_DATA_HEIGHT)
+
+typedef boost::singleton_pool<KisTileData, TILE_SIZE_4BPP, boost::default_user_allocator_new_delete, boost::details::pool::default_mutex, 128> BoostPool4BPP;
+typedef boost::singleton_pool<KisTileData, TILE_SIZE_8BPP> BoostPool8BPP;
+
 
 const qint32 KisTileData::WIDTH = __TILE_DATA_WIDTH;
 const qint32 KisTileData::HEIGHT = __TILE_DATA_HEIGHT;
-
-KisTileMemoryPool4BPP KisTileData::m_pool4BPP;
-KisTileMemoryPool8BPP KisTileData::m_pool8BPP;
 
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
@@ -110,26 +116,30 @@ void KisTileData::allocateMemory()
 
 quint8* KisTileData::allocateData(const qint32 pixelSize)
 {
+    quint8 *ptr = 0;
+
     switch(pixelSize) {
     case 4:
-        return (quint8*) m_pool4BPP.pop();
+        ptr = (quint8*)BoostPool4BPP::malloc();
         break;
     case 8:
-        return (quint8*) m_pool8BPP.pop();
+        ptr = (quint8*)BoostPool8BPP::malloc();
         break;
     default:
-        return (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
+        ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
     }
+
+    return ptr;
 }
 
 void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
 {
     switch(pixelSize) {
     case 4:
-        return m_pool4BPP.push(ptr);
+        BoostPool4BPP::free(ptr);
         break;
     case 8:
-        return m_pool8BPP.push(ptr);
+        BoostPool8BPP::free(ptr);
         break;
     default:
         free(ptr);

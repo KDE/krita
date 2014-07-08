@@ -329,11 +329,17 @@ int KisColorPatches::heightForWidth(int width) const
 
 int KisColorPatches::widthForHeight(int height) const
 {
-    if( height == 0 ) {
+    if (height == 0) {
         return 0;
     }
-    int numPatchesInACol = height/m_patchHeight;
-    int numCols = (fieldCount()-1)/numPatchesInACol+1;
+
+    if (m_patchHeight == 0) {
+        return 0;
+    }
+    int numPatchesInACol = height / m_patchHeight;
+
+    int numCols = (fieldCount() - 1) / (numPatchesInACol + 1);
+
     return numCols*m_patchWidth;
 }
 

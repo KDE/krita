@@ -66,6 +66,7 @@ void KoServiceLocator::init()
 {
     // services
     QSet<QString> servicesDirs = KGlobal::dirs()->findDirs("services", "").toSet();
+    QList<QString> services;
 
     QDir servicesDir(qApp->applicationDirPath() + "/../share/kde4/services");
     servicesDirs << servicesDir.absolutePath();
@@ -76,13 +77,15 @@ void KoServiceLocator::init()
         if (servicesDir.exists()) {
             foreach(const QString &entry, servicesDir.entryList(QDir::Files)) {
                 KService::Ptr service = KService::Ptr(new KService(servicesDir.absoluteFilePath(entry)));
-                foreach(const QString &t, service->serviceTypes()) {
-                    if (!service->mimeTypes().contains(t)) {
-                        if (!d->typeToService.contains(t)) {
-                            d->typeToService[t] = KService::List();
-
+                if (!services.contains(service->name())) {
+                    services << service->name();
+                    foreach(const QString &t, service->serviceTypes()) {
+                        if (!service->mimeTypes().contains(t)) {
+                            if (!d->typeToService.contains(t)) {
+                                d->typeToService[t] = KService::List();
+                            }
+                            d->typeToService[t].append(service);
                         }
-                        d->typeToService[t].append(service);
                     }
                 }
             }
@@ -99,12 +102,16 @@ void KoServiceLocator::init()
         if (applicationsDir.exists()) {
             foreach(const QString &entry, applicationsDir.entryList(QDir::Files)) {
                 KService::Ptr service = KService::Ptr(new KService(applicationsDir.absoluteFilePath(entry)));
-                if (service->property("X-KDE-ServiceTypes", QVariant::StringList).toStringList().contains("Calligra/Application")) {
-                    if (!d->typeToService.contains("Calligra/Application")) {
-                        d->typeToService["Calligra/Application"] = KService::List();
-                    }
-                    if (!d->typeToService["Calligra/Application"].contains(service)) {
-                        d->typeToService["Calligra/Application"].append(service);
+                if (!services.contains(service->name())) {
+                    services << service->name();
+
+                    if (service->property("X-KDE-ServiceTypes", QVariant::StringList).toStringList().contains("Calligra/Application")) {
+                        if (!d->typeToService.contains("Calligra/Application")) {
+                            d->typeToService["Calligra/Application"] = KService::List();
+                        }
+                        if (!d->typeToService["Calligra/Application"].contains(service)) {
+                            d->typeToService["Calligra/Application"].append(service);
+                        }
                     }
                 }
             }

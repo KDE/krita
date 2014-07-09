@@ -26,9 +26,8 @@
 #define TILE_SIZE_4BPP (4 * __TILE_DATA_WIDTH * __TILE_DATA_HEIGHT)
 #define TILE_SIZE_8BPP (8 * __TILE_DATA_WIDTH * __TILE_DATA_HEIGHT)
 
-typedef boost::singleton_pool<KisTileData, TILE_SIZE_4BPP, boost::default_user_allocator_new_delete, boost::details::pool::default_mutex, 128> BoostPool4BPP;
-typedef boost::singleton_pool<KisTileData, TILE_SIZE_8BPP> BoostPool8BPP;
-
+typedef boost::singleton_pool<KisTileData, TILE_SIZE_4BPP, boost::default_user_allocator_new_delete, boost::details::pool::default_mutex, 256, 4096> BoostPool4BPP;
+typedef boost::singleton_pool<KisTileData, TILE_SIZE_8BPP, boost::default_user_allocator_new_delete, boost::details::pool::default_mutex, 128, 2048> BoostPool8BPP;
 
 const qint32 KisTileData::WIDTH = __TILE_DATA_WIDTH;
 const qint32 KisTileData::HEIGHT = __TILE_DATA_HEIGHT;

@@ -111,7 +111,7 @@ Panel {
             onCurrentIndexChanged: {
                 if (model.filterRequiresConfiguration(currentIndex)) {
                     configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
-                    if (typeof(configLoader.item.configuration) !== 'undefined') {
+                    if (configLoader.item && typeof(configLoader.item.configuration) !== 'undefined') {
                         configLoader.item.configuration = model.configuration(currentIndex);
                     }
                 }

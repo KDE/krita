@@ -28,7 +28,7 @@ Page {
         width: parent.width;
         height: parent.height;
 
-        file: parent.initialFile;
+        file: Settings.currentFile;
 
         onInteractionStarted: { panelBar.collapse(); Krita.VirtualKeyboardController.requestHideKeyboard(); }
         onLoadingFinished: {

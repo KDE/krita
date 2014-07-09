@@ -19,6 +19,6 @@ install(TARGETS kritachalkpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritachalkpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritachalkpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES
     krita-chalk.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)

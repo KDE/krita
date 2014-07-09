@@ -94,6 +94,7 @@ public:
             else
                 cat = categoryByName(filter->menuCategory().id());
             cat->addFilter(filter);
+            qApp->processEvents();
         }
         qSort(categories.begin(), categories.end(), categoryLessThan);
         q->endResetModel();

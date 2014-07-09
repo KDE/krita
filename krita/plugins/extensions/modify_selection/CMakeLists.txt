@@ -29,5 +29,5 @@ install(TARGETS kritamodifyselection  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  modify_selection.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritamodifyselection.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritamodifyselection.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

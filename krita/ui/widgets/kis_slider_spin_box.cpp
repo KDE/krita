@@ -359,7 +359,7 @@ QStyleOptionProgressBar KisAbstractSliderSpinBox::progressBarOptions() const
 
     qreal dValues = (d->maximum - minDbl);
 
-    progressOpts.progress = dValues * pow((d->value - minDbl) / dValues, 1 / d->exponentRatio) + minDbl;
+    progressOpts.progress = dValues * pow((d->value - minDbl) / dValues, 1.0 / d->exponentRatio) + minDbl;
     progressOpts.text = valueString() + d->suffix;
     progressOpts.textAlignment = Qt::AlignCenter;
     progressOpts.textVisible = !(d->edit->isVisible());
@@ -549,14 +549,14 @@ KisDoubleSliderSpinBox::~KisDoubleSliderSpinBox()
 void KisDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
 {
     Q_D(KisDoubleSliderSpinBox);
-    d->factor = pow((double)10, decimals);
+    d->factor = pow(10.0, decimals);
 
     d->minimum = minimum * d->factor;
     d->maximum = maximum * d->factor;
     //This code auto-compute a new step when pressing control.
     //A flag defaulting to "do not change the fast step" should be added, but it implies changing every call
     if(maximum - minimum >= 2.0 || decimals <= 0) {  //Quick step on integers
-        d->fastSliderStep = int(pow(10,decimals));
+        d->fastSliderStep = int(pow(10.0, decimals));
     } else if(decimals == 1) {
         d->fastSliderStep = (maximum-minimum)*d->factor/10;
     } else {

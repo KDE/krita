@@ -27,4 +27,4 @@ target_link_libraries(calligra_semanticitem_event ${KDE4_KDECORE_LIBS}  ${KORDF_
 
 
 install(TARGETS calligra_semanticitem_event  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES   calligra_semanticitem_event.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES   calligra_semanticitem_event.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

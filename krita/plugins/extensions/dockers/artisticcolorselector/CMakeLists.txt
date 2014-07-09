@@ -12,4 +12,4 @@ kde4_add_plugin(kritaartisticcolorselector ${kritaartisticcolorselector_PART_SRC
 target_link_libraries(kritaartisticcolorselector kritaui)
 
 install(TARGETS kritaartisticcolorselector DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES krita_artisticcolorselector.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES krita_artisticcolorselector.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

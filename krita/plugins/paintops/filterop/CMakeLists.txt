@@ -15,7 +15,7 @@ install(TARGETS kritafilterop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritafilterop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritafilterop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 install( FILES
     krita-filterop.png

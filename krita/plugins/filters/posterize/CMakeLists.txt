@@ -13,6 +13,6 @@ install(TARGETS kritaposterize  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritaposterize.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaposterize.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

@@ -18,6 +18,6 @@ install(TARGETS kritatoolpolyline  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  tool_polyline_cursor.png  	polyline.png dark_polyline.png light_polyline.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  kritatoolpolyline.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritatoolpolyline.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

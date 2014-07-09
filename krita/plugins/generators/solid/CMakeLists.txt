@@ -18,4 +18,4 @@ install(TARGETS kritacolorgenerator  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritacolorgenerator.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritacolorgenerator.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

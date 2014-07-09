@@ -60,7 +60,7 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
         delete store;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    store->disallowNameExpansion();
+    
 
     OraLoadContext olc(store);
     KisOpenRasterStackLoadVisitor orslv(m_doc->createUndoStore(), &olc);
@@ -96,7 +96,7 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-    store->disallowNameExpansion();
+    
     OraSaveContext osc(store);
     KisOpenRasterStackSaveVisitor orssv(&osc, activeNodes);
 

@@ -207,20 +207,26 @@ BOOL isWow64()
 
 bool KoApplication::start()
 {
-#ifdef Q_OS_WIN
+
+
+#if defined(Q_OS_WIN) || defined (Q_OS_MACX)
 #ifdef ENV32BIT
     if (isWow64()) {
-    	KMessageBox::information(0, 
+        KMessageBox::information(0,
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
                                       "Please download and install the x64 build instead."),
-                                 qApp->applicationName(), 
+                                 qApp->applicationName(),
                                  "calligra_32_on_64_warning");
 
     }
 #endif
     QDir appdir(applicationDirPath());
     appdir.cdUp();
+
+    KGlobal::dirs()->addXdgDataPrefix(appdir.absolutePath() + "/share");
+    KGlobal::dirs()->addPrefix(appdir.absolutePath());
+
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     if (!env.contains("KDEHOME")) {
@@ -240,13 +246,15 @@ bool KoApplication::start()
     }
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
                                       + appdir.absolutePath() + "/lib" + ";"
-                                      + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                                      + appdir.absolutePath() + "/lib/kde4" + ";"
+                                      + appdir.absolutePath() + "/Frameworks" + ";"
                                       + appdir.absolutePath()));
 #endif
 
     if (d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
+        processEvents();
     }
 
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
@@ -262,9 +270,6 @@ bool KoApplication::start()
         QMessageBox::critical(0, applicationName() + i18n(": Critical Error"), i18n("Essential application components could not be found.\n"
                                                                                     "This might be an installation issue.\n"
                                                                                     "Try restarting, running kbuildsycoca4.exe or reinstalling."));
-#ifdef Q_OS_WIN
-        QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
-#endif
         return false;
     }
 
@@ -326,7 +331,8 @@ bool KoApplication::start()
 
         // get all possible autosave files in the home dir, this is for unsaved document autosave files
         // Using the extension allows to avoid relying on the mime magic when opening
-        KMimeType::Ptr mime = KMimeType::mimeType(doc->nativeFormatMimeType());
+        QByteArray ba = doc->nativeFormatMimeType();
+        KMimeType::Ptr mime = KMimeType::mimeType(ba);
         if (!mime) {
             qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
         }
@@ -612,7 +618,7 @@ QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) cons
     KService::Ptr service = entry.service();
     return KoFilterManager::mimeFilter(d->nativeMimeType,
                                        direction,
-                                       service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+                                       service->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList());
 }
 
 

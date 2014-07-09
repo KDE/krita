@@ -21,4 +21,4 @@ install(TARGETS kritaunsharpfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritaunsharpfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaunsharpfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

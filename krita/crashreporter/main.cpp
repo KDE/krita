@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmimetype.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
 #include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kdebug.h>

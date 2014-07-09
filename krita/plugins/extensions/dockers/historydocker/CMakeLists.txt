@@ -17,4 +17,4 @@ target_link_libraries(kritahistorydocker komain kritaimage kritaui)
 
 install(TARGETS kritahistorydocker  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES kritahistorydocker.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kritahistorydocker.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

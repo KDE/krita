@@ -25,4 +25,4 @@ install(TARGETS keximigrate_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  keximigrate_spreadsheet.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  keximigrate_spreadsheet.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

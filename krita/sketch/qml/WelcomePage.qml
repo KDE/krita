@@ -219,7 +219,7 @@ Page {
                 baseLoadingDialog.visible = true;
                 if(options.template !== undefined) {
                     Settings.currentFile = Krita.ImageBuilder.createImageFromTemplate(options);
-                    settings.temporaryFile = true;
+                    Settings.temporaryFile = true;
                 } else if(options.source === undefined) {
                     Settings.currentFile = Krita.ImageBuilder.createBlankImage(options);
                     Settings.temporaryFile = true;

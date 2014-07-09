@@ -74,11 +74,15 @@ QVariant ChannelModel::headerData(int section, Qt::Orientation orientation, int 
 
 int ChannelModel::rowCount(const QModelIndex& /*parent*/) const
 {
+    if (!m_currentLayer) return 0;
+
     return m_currentLayer.isValid() ? m_currentLayer->colorSpace()->channelCount() : 0;
 }
 
 int ChannelModel::columnCount(const QModelIndex& /*parent*/) const
 {
+    if (!m_currentLayer) return 0;
+
     return dynamic_cast<const KisPaintLayer*>(m_currentLayer.data()) ? 2 : 1;
 }
 

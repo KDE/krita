@@ -41,9 +41,14 @@ PaletteModel::~PaletteModel()
 void PaletteModel::setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer)
 {
     disconnect(m_displayRenderer, 0, this, 0);
-    m_displayRenderer = displayRenderer;
-    connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
-            SLOT(slotDisplayConfigurationChanged()));
+
+    if (m_displayRenderer) {
+        m_displayRenderer = displayRenderer;
+        connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
+                SLOT(slotDisplayConfigurationChanged()));
+    } else {
+        m_displayRenderer = KoDumbColorDisplayRenderer::instance();
+    }
 }
 
 void PaletteModel::slotDisplayConfigurationChanged()

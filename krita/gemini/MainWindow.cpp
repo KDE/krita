@@ -623,7 +623,7 @@ void MainWindow::closeWindow()
 
 bool MainWindow::Private::queryClose()
 {
-    if (d->desktopView) {
+    if (desktopView) {
         // This situation shouldn't occur, but protecting potentially dangerous call
         desktopView->setNoCleanup(true);
     }

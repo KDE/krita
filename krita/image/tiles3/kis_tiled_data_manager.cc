@@ -785,3 +785,7 @@ qint32 KisTiledDataManager::rowStride(qint32 x, qint32 y) const
     return KisTileData::WIDTH * pixelSize();
 }
 
+void KisTiledDataManager::releaseInternalPools()
+{
+    KisTileData::releaseInternalPools();
+}

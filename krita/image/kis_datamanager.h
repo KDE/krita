@@ -133,6 +133,16 @@ public:
         ACTUAL_DATAMGR::purge(area);
     }
 
+    /**
+     * The tiles may be not allocated directly from the glibc, but
+     * instead can be allocated in bigger blobs. After you freed quite
+     * a lot of data and are sure you won't need it anymore, you can
+     * release these pools to save the memory.
+     */
+    static inline void releaseInternalPools() {
+        ACTUAL_DATAMGR::releaseInternalPools();
+    }
+
 public:
 
     /**

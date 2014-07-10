@@ -151,6 +151,16 @@ public:
      */
     void allocateMemory();
 
+    /**
+     * Releases internal pools, which keep blobs where the tiles are
+     * stored.  The point is that we don't allocate the tiles from
+     * glibc directly, but use pools (implemented via boost) to
+     * allocate bigger chunks. This method should be called when one
+     * knows that we have just free'd quite a lot of memory and we
+     * won't need it anymore. E.g. when a document has been closed.
+     */
+    static void releaseInternalPools();
+
 private:
     void fillWithPixel(const quint8 *defPixel);
 

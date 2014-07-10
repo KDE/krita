@@ -715,6 +715,14 @@ public:
      */
     QRect calculateExactBounds() const;
 
+public:
+    struct MemoryReleaseObject : public QObject
+    {
+        ~MemoryReleaseObject();
+    };
+
+    static MemoryReleaseObject* createMemoryReleaseObject();
+
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);
     void init(KisDataManagerSP explicitDataManager,

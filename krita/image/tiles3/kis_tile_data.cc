@@ -20,6 +20,8 @@
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 
+#include <QDebug>
+
 #include <boost/pool/singleton_pool.hpp>
 
 // BPP == bytes per pixel
@@ -145,4 +147,32 @@ void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
     }
 }
 
+//#define DEBUG_POOL_RELEASE
 
+#ifdef DEBUG_POOL_RELEASE
+#include <unistd.h>
+#endif /* DEBUG_POOL_RELEASE */
+
+void KisTileData::releaseInternalPools()
+{
+    if (!KisTileDataStore::instance()->numTiles() &&
+        !KisTileDataStore::instance()->numTilesInMemory()) {
+
+        BoostPool4BPP::purge_memory();
+        BoostPool8BPP::purge_memory();
+
+#ifdef DEBUG_POOL_RELEASE
+        qDebug() << "After purging unused memory:";
+
+        char command[256];
+        sprintf(command, "cat /proc/%d/status | grep -i vm", (int)getpid());
+        printf("--- %s ---\n", command);
+        (void)system(command);
+#endif /* DEBUG_POOL_RELEASE */
+
+    } else {
+        qWarning() << "WARNING: trying to purge pool memory while there are used tiles present!";
+        qWarning() << "         The memory will *NOT* be returned to the system, though it will";
+        qWarning() << "         be reused by Krita internally. Please report to developers!";
+    }
+}

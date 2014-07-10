@@ -42,7 +42,7 @@ void PaletteModel::setDisplayRenderer(KoColorDisplayRendererInterface *displayRe
 {
     disconnect(m_displayRenderer, 0, this, 0);
 
-    if (m_displayRenderer) {
+    if (displayRenderer) {
         m_displayRenderer = displayRenderer;
         connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
                 SLOT(slotDisplayConfigurationChanged()));

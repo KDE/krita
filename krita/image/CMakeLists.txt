@@ -251,6 +251,11 @@ kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
 
+target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
+message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})
+message("DEBUG_BOOST_SYSTEM_FOUND = " ${Boost_SYSTEM_FOUND})
+message("DEBUG_BOOST_SYSTEM_LIBRARY = " ${Boost_SYSTEM_LIBRARY})
+
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
 endif(OPENEXR_FOUND)

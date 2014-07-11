@@ -321,6 +321,21 @@ QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
     return dbg.space();
 }
 
+KisPaintInformation KisPaintInformation::mixOnlyPosition(qreal t, const KisPaintInformation& mixedPi, const KisPaintInformation& basePi)
+{
+    QPointF pt = (1 - t) * mixedPi.pos() + t * basePi.pos();
+    KisPaintInformation result(pt,
+                               basePi.pressure(),
+                               basePi.xTilt(),
+                               basePi.yTilt(),
+                               basePi.rotation(),
+                               basePi.tangentialPressure(),
+                               basePi.perspective(),
+                               basePi.currentTime());
+
+    return result;
+}
+
 KisPaintInformation KisPaintInformation::mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2)
 {
     QPointF pt = (1 - t) * pi1.pos() + t * pi2.pos();

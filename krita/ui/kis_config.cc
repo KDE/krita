@@ -1186,6 +1186,16 @@ void KisConfig::setLineSmoothingFinishStabilizedCurve(bool value)
     m_cfg.writeEntry("LineSmoothingFinishStabilizedCurve", value);
 }
 
+bool KisConfig::lineSmoothingStabilizeSensors() const
+{
+    return m_cfg.readEntry("LineSmoothingStabilizeSensors", true);
+}
+
+void KisConfig::setLineSmoothingStabilizeSensors(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingStabilizeSensors", value);
+}
+
 int KisConfig::paletteDockerPaletteViewSectionSize() const
 {
     return m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);

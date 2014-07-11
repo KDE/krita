@@ -36,6 +36,8 @@ Item {
     property alias numeric: input.numeric;
     property alias nextFocus: input.nextFocus;
 
+    property alias textInput: input; // To allow KeyNavigation to reference TextInput
+
     signal focusLost();
     signal accepted();
 

@@ -145,7 +145,7 @@ void StoreDropTest::showZipContents(QByteArray data, const char* mimeType, bool 
 	delete store;
         return;
     }
-    store->disallowNameExpansion();
+    
 
     QString txt = QString("Valid ZIP file found for format ") + mimeType + "\n";
 

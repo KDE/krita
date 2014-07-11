@@ -21,7 +21,7 @@ install(TARGETS kopabackgroundtool  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kopabackgroundtool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kopabackgroundtool.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 install(FILES
     KoPABackgroundTool.h

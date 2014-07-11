@@ -68,6 +68,6 @@ install( FILES  tool_path_selection.png
                 light_tool_rect_selection.png
                 light_tool_similar_selection.png
                 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  kritaselectiontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaselectiontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

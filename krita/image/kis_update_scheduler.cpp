@@ -18,6 +18,7 @@
 
 #include "kis_update_scheduler.h"
 
+#include "klocale.h"
 #include "kis_image_config.h"
 #include "kis_merge_walker.h"
 #include "kis_full_refresh_walker.h"
@@ -107,26 +108,30 @@ void KisUpdateScheduler::connectSignals()
 void KisUpdateScheduler::setProgressProxy(KoProgressProxy *progressProxy)
 {
     delete m_d->progressUpdater;
-    m_d->progressUpdater = new KisQueuesProgressUpdater(progressProxy);
+    // FIXME: Disable progress reporting for now since it seems to cause
+    //        speed regressions. 08.07.14, DK.
+    //m_d->progressUpdater = new KisQueuesProgressUpdater(progressProxy);
 }
 
 void KisUpdateScheduler::progressUpdate()
 {
-    if(m_d->progressUpdater) {
+    if (!m_d->progressUpdater) return;
+
+    if(!m_d->strokesQueue->hasOpenedStrokes()) {
         QString jobName = m_d->strokesQueue->currentStrokeName().toString();
         if(jobName.isEmpty()) {
-            jobName = "Update";
+            jobName = i18n("Updating...");
         }
 
-        int sizeMetric = m_d->strokesQueue->sizeMetric() + m_d->updatesQueue->sizeMetric();
+        int sizeMetric = m_d->strokesQueue->sizeMetric();
+        if (!sizeMetric) {
+            sizeMetric = m_d->updatesQueue->sizeMetric();
+        }
+
         m_d->progressUpdater->updateProgress(sizeMetric, jobName);
     }
-}
-
-void KisUpdateScheduler::progressNotifyJobDone()
-{
-    if(m_d->progressUpdater) {
-        m_d->progressUpdater->notifyJobDone(1);
+    else {
+        m_d->progressUpdater->hide();
     }
 }
 
@@ -197,6 +202,11 @@ bool KisUpdateScheduler::cancelStroke(KisStrokeId id)
     bool result = m_d->strokesQueue->cancelStroke(id);
     processQueues();
     return result;
+}
+
+bool KisUpdateScheduler::tryCancelCurrentStrokeAsync()
+{
+    return m_d->strokesQueue->tryCancelCurrentStrokeAsync();
 }
 
 bool KisUpdateScheduler::wrapAroundModeSupported() const
@@ -347,7 +357,6 @@ void KisUpdateScheduler::doSomeUsefulWork()
 
 void KisUpdateScheduler::spareThreadAppeared()
 {
-    progressNotifyJobDone();
     processQueues();
 }
 

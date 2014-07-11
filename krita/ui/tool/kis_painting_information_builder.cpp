@@ -125,16 +125,11 @@ qreal KisPaintingInformationBuilder::pressureToCurve(qreal pressure)
 /*           KisToolPaintingInformationBuilder                        */
 /***********************************************************************/
 
-#include "kis_tool_freehand.h"
+#include "kis_tool.h"
 
-KisToolPaintingInformationBuilder::KisToolPaintingInformationBuilder(KisToolFreehand *tool)
+KisToolPaintingInformationBuilder::KisToolPaintingInformationBuilder(KisTool *tool)
     : m_tool(tool)
 {
-}
-
-QPointF KisToolPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &startPoint)
-{
-    return m_tool->adjustPosition(point, startPoint);
 }
 
 QPointF KisToolPaintingInformationBuilder::documentToImage(const QPointF &point)
@@ -142,7 +137,25 @@ QPointF KisToolPaintingInformationBuilder::documentToImage(const QPointF &point)
     return m_tool->convertToPixelCoord(point);
 }
 
-qreal KisToolPaintingInformationBuilder::calculatePerspective(const QPointF &documentPoint)
+
+/***********************************************************************/
+/*           KisToolFreehandPaintingInformationBuilder                        */
+/***********************************************************************/
+
+#include "kis_tool_freehand.h"
+
+KisToolFreehandPaintingInformationBuilder::KisToolFreehandPaintingInformationBuilder(KisToolFreehand *tool)
+    : KisToolPaintingInformationBuilder(tool),
+      m_tool(tool)
+{
+}
+
+QPointF KisToolFreehandPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &startPoint)
+{
+    return m_tool->adjustPosition(point, startPoint);
+}
+
+qreal KisToolFreehandPaintingInformationBuilder::calculatePerspective(const QPointF &documentPoint)
 {
     return m_tool->calculatePerspective(documentPoint);
 }

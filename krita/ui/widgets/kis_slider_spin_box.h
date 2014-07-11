@@ -72,7 +72,7 @@ protected:
     QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
     QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
 
-    int valueForX(int x) const;
+    int valueForX(int x, Qt::KeyboardModifiers modifiers = Qt::NoModifier) const;
 
     virtual QString valueString() const = 0;
     virtual void setInternalValue(int value) = 0;
@@ -100,6 +100,8 @@ public:
     void setMinimum(int minimum);
     int maximum() const;
     void setMaximum(int maximum);
+    int fastSliderStep() const;
+    void setFastSliderStep(int step);
 
     ///Get the value, don't use value()
     int value();
@@ -126,6 +128,13 @@ public:
     ~KisDoubleSliderSpinBox();
 
     void setRange(qreal minimum, qreal maximum, int decimals = 0);
+
+    qreal minimum() const;
+    void setMinimum(qreal minimum);
+    qreal maximum() const;
+    void setMaximum(qreal maximum);
+    qreal fastSliderStep() const;
+    void setFastSliderStep(qreal step);
 
     qreal value();
     void setValue(qreal value);

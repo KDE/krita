@@ -29,8 +29,8 @@ void KisQueuesProgressUpdaterTest::testSlowProgress()
     TestUtil::TestProgressBar progressProxy;
     KisQueuesProgressUpdater updater(&progressProxy);
 
-    updater.notifyJobDone(100);
     updater.updateProgress(200, "test task");
+    updater.updateProgress(100, "test task");
 
     QTest::qWait(100);
 
@@ -42,18 +42,17 @@ void KisQueuesProgressUpdaterTest::testSlowProgress()
     QTest::qWait(500);
 
     QCOMPARE(progressProxy.min(), 0);
-    QCOMPARE(progressProxy.max(), 300);
+    QCOMPARE(progressProxy.max(), 200);
     QCOMPARE(progressProxy.value(), 100);
     QCOMPARE(progressProxy.format(), QString("test task"));
 
-    updater.notifyJobDone(200);
     updater.updateProgress(0, "test task");
 
     QTest::qWait(500);
 
     QCOMPARE(progressProxy.min(), 0);
-    QCOMPARE(progressProxy.max(), 300);
-    QCOMPARE(progressProxy.value(), 300);
+    QCOMPARE(progressProxy.max(), 200);
+    QCOMPARE(progressProxy.value(), 200);
     QCOMPARE(progressProxy.format(), QString("test task"));
 }
 
@@ -66,8 +65,8 @@ void KisQueuesProgressUpdaterTest::testFastProgress()
     TestUtil::TestProgressBar progressProxy;
     KisQueuesProgressUpdater updater(&progressProxy);
 
-    updater.notifyJobDone(100);
     updater.updateProgress(200, "test task");
+    updater.updateProgress(0, "test task");
 
     QTest::qWait(20);
 
@@ -76,8 +75,8 @@ void KisQueuesProgressUpdaterTest::testFastProgress()
     QCOMPARE(progressProxy.value(), 0);
     QCOMPARE(progressProxy.format(), QString());
 
-    updater.notifyJobDone(100);
     updater.updateProgress(100, "test task");
+    updater.updateProgress(0, "test task");
 
     QTest::qWait(20);
 
@@ -86,7 +85,7 @@ void KisQueuesProgressUpdaterTest::testFastProgress()
     QCOMPARE(progressProxy.value(), 0);
     QCOMPARE(progressProxy.format(), QString());
 
-    updater.notifyJobDone(100);
+    updater.updateProgress(0, "test task");
     updater.updateProgress(0, "test task");
 
     QTest::qWait(20);

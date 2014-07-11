@@ -31,7 +31,6 @@
 #include <kaction.h>
 
 #include <QTextDocument>
-#include <QApplication>
 #include <QMimeData>
 
 #include "ChangeTrackedDeleteCommand.h"

@@ -154,5 +154,41 @@ void KisStrokeTest::testCancelStrokeCase4()
     QCOMPARE(stroke.isEnded(), true);
 }
 
+void KisStrokeTest::testCancelStrokeCase6()
+{
+    KisStroke stroke(new KisTestingStrokeStrategy());
+    QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
+
+    stroke.addJob(0);
+    delete stroke.popOneJob();
+
+    // "initialized, has jobs"
+
+    QCOMPARE(queue.size(), 1);
+    SCOMPARE(getJobName(queue[0]), "dab");
+    QCOMPARE(stroke.isEnded(), false);
+
+    // "cancelled"
+
+    stroke.cancelStroke();
+
+    QCOMPARE(queue.size(), 1);
+    SCOMPARE(getJobName(queue[0]), "cancel");
+    QCOMPARE(stroke.isEnded(), true);
+
+    int seqNo = cancelSeqNo(queue.head());
+
+    // try cancel once more...
+
+    stroke.cancelStroke();
+
+    QCOMPARE(queue.size(), 1);
+    SCOMPARE(getJobName(queue[0]), "cancel");
+    QCOMPARE(stroke.isEnded(), true);
+    QCOMPARE(cancelSeqNo(queue.head()), seqNo);
+
+    stroke.clearQueue();
+}
+
 QTEST_KDEMAIN(KisStrokeTest, NoGUI)
 #include "kis_stroke_test.moc"

@@ -48,6 +48,7 @@ protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
 private:
+    void updateAction();
     struct Private;
     Private* const d;
 };

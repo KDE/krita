@@ -182,6 +182,12 @@ public:
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
+        if (sketchView->errors().count() > 0) {
+            foreach(const QDeclarativeError &error, sketchView->errors()) {
+                qDebug() << error.toString();
+            }
+        }
+
         toDesktop = new KAction(q);
         toDesktop->setEnabled(false);
         toDesktop->setText(tr("Switch to Desktop"));
@@ -326,7 +332,6 @@ void MainWindow::switchToSketch()
     }
 
     setCentralWidget(d->sketchView);
-    emit switchedToSketch();
 
     if (d->slateMode) {
         setWindowState(windowState() | Qt::WindowFullScreen);
@@ -363,6 +368,7 @@ void MainWindow::sketchChange()
         qApp->processEvents();
         KisConfig cfg;
         cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+        emit switchedToSketch();
     }
     if (d->toDesktop)
     {
@@ -494,6 +500,11 @@ bool MainWindow::slateMode() const
     return d->slateMode;
 }
 
+void MainWindow::setSlateMode(bool newValue)
+{
+    d->slateMode = newValue;
+}
+
 QString MainWindow::currentSketchPage() const
 {
     return d->currentSketchPage;
@@ -597,7 +608,11 @@ void MainWindow::minimize()
 
 void MainWindow::closeWindow()
 {
-    d->desktopView->setNoCleanup(true);
+    if (d->desktopView) {
+        // This situation shouldn't occur, but protecting potentially dangerous call
+        d->desktopView->setNoCleanup(true);
+    }
+
     //For some reason, close() does not work even if setAllowClose(true) was called just before this method.
     //So instead just completely quit the application, since we are using a single window anyway.
     DocumentManager::instance()->closeDocument();
@@ -608,7 +623,10 @@ void MainWindow::closeWindow()
 
 bool MainWindow::Private::queryClose()
 {
-    desktopView->setNoCleanup(true);
+    if (desktopView) {
+        // This situation shouldn't occur, but protecting potentially dangerous call
+        desktopView->setNoCleanup(true);
+    }
     if (DocumentManager::instance()->document() == 0)
         return true;
 
@@ -678,6 +696,20 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
 MainWindow::~MainWindow()
 {
+    /*
+    {
+        qDebug() << "Deleting ~MainWindow";
+        KConfigGroup group(KGlobal::config(), "kritagemini/shortcuts");
+        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+            qDebug() << "CatalogName" << collection->componentData().catalogName();
+            qDebug() << "ComponentName" << collection->componentData().componentName();
+
+            collection->setConfigGroup("kritagemini/shortcuts");
+            collection->writeSettings(&group);
+        }
+    }
+    */
+
     delete d;
     KisConfig cfg;
     cfg.setCursorStyle(d->desktopCursorStyle);

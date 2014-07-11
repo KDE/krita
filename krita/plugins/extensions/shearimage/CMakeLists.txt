@@ -16,6 +16,6 @@ install(TARGETS kritashearimage  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  shearimage.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritashearimage.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritashearimage.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

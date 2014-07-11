@@ -22,7 +22,6 @@
 
 #include <QStringList>
 #include <QString>
-#include <QWidget>
 #include <QList>
 
 #include "flake_export.h"

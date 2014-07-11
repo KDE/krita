@@ -130,6 +130,7 @@
     <Action name="reselect"/>
     <Action name="invert"/>
     <Action name="convert_to_vector_selection"/>
+    <Action name="convert_shapes_to_vector_selection"/>
     <Separator/>
     <Action name="feather"/>
     <Action name="similar"/>

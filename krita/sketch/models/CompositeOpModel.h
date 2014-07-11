@@ -84,9 +84,6 @@ public:
     Q_INVOKABLE void changePaintopValue(QString propertyName, QVariant value);
     Q_INVOKABLE int indexOf(QString compositeOpId);
 
-public Q_SLOTS:
-    void setMirrorCenter();
-
 Q_SIGNALS:
     void viewChanged();
     void eraserModeChanged();
@@ -100,7 +97,6 @@ Q_SIGNALS:
 
     void mirrorHorizontallyChanged();
     void mirrorVerticallyChanged();
-    void changeMirrorCenter();
 
     void currentCompositeOpIDChanged();
 

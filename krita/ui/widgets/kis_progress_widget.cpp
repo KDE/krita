@@ -31,32 +31,11 @@
 
 #include <kis_progress_updater.h>
 
-class EscapeButton : public QToolButton
-{
-
-public:
-
-    EscapeButton(QWidget* parent)
-            : QToolButton(parent) {
-    }
-
-    void keyReleaseEvent(QKeyEvent *e) {
-        /**
-         * FIXME: this shotcut doesn't work, because it is
-         * overridden somewhere
-         */
-        if (e->key() == Qt::Key_Escape) {
-            emit clicked();
-        }
-    }
-
-};
-
 KisProgressWidget::KisProgressWidget(QWidget* parent)
         : QWidget(parent)
 {
     QHBoxLayout* layout = new QHBoxLayout(this);
-    m_cancelButton = new EscapeButton(this);
+    m_cancelButton = new QToolButton(this);
     m_cancelButton->setIcon(koIcon("process-stop"));
 
     QSizePolicy sizePolicy = m_cancelButton->sizePolicy();
@@ -80,7 +59,6 @@ KisProgressWidget::KisProgressWidget(QWidget* parent)
 
 KisProgressWidget::~KisProgressWidget()
 {
-    cancel();
 }
 
 KoProgressProxy* KisProgressWidget::progressProxy()
@@ -93,6 +71,7 @@ void KisProgressWidget::cancel()
     foreach(KoProgressUpdater* updater, m_activeUpdaters) {
         updater->cancel();
     }
+    emit sigCancellationRequested();
 }
 
 void KisProgressWidget::correctVisibility(int progressValue)

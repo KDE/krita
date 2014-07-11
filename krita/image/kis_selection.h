@@ -95,6 +95,29 @@ public:
     QPainterPath outlineCache() const;
     void recalculateOutlineCache();
 
+
+    /**
+     * Tells whether the cached thumbnail of the selection is still valid
+     */
+    bool thumbnailImageValid() const;
+
+    /**
+     * Recalculates the thumbnail of the selection
+     */
+    void recalculateThumbnailImage(const QColor &maskColor);
+
+    /**
+     * Returns the thumbnail of the selection.
+     */
+    QImage thumbnailImage() const;
+
+    /**
+     * Returns the transformation which should be applied to the thumbnail before
+     * being painted over the image
+     */
+    QTransform thumbnailImageTransform() const;
+
+
     /**
      * return the pixel selection component of this selection. Pixel
      * selection component is always present in the selection. In case

@@ -117,7 +117,7 @@ KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
 
 bool KisShapeSelection::saveSelection(KoStore * store) const
 {
-    store->disallowNameExpansion();
+    
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;

@@ -16,6 +16,6 @@ install(TARGETS kritacolorrange  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  colorrange.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritacolorrange.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritacolorrange.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

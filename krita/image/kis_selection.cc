@@ -140,6 +140,26 @@ void KisSelection::recalculateOutlineCache()
     }
 }
 
+bool KisSelection::thumbnailImageValid() const
+{
+    return m_d->pixelSelection->thumbnailImageValid();
+}
+
+void KisSelection::recalculateThumbnailImage(const QColor &maskColor)
+{
+    m_d->pixelSelection->recalculateThumbnailImage(maskColor);
+}
+
+QImage KisSelection::thumbnailImage() const
+{
+    return m_d->pixelSelection->thumbnailImage();
+}
+
+QTransform KisSelection::thumbnailImageTransform() const
+{
+    return m_d->pixelSelection->thumbnailImageTransform();
+}
+
 bool KisSelection::hasPixelSelection() const
 {
     return m_d->pixelSelection && !m_d->pixelSelection->isEmpty();

@@ -13,5 +13,5 @@ install(TARGETS kritacompositiondocker  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_compositiondocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_compositiondocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

@@ -19,19 +19,23 @@
 #ifndef __KIS_UPDATE_OUTLINE_JOB_H
 #define __KIS_UPDATE_OUTLINE_JOB_H
 
+#include <QColor>
+
 #include "kis_spontaneous_job.h"
 #include "kis_selection.h"
 
 class KRITAIMAGE_EXPORT KisUpdateOutlineJob : public KisSpontaneousJob
 {
 public:
-    KisUpdateOutlineJob(KisSelectionSP selection);
+    KisUpdateOutlineJob(KisSelectionSP selection, bool updateThumbnail, const QColor &maskColor);
 
     bool overrides(const KisSpontaneousJob *otherJob);
     void run();
 
 private:
     KisSelectionSP m_selection;
+    bool m_updateThumbnail;
+    QColor m_maskColor;
 };
 
 #endif /* __KIS_UPDATE_OUTLINE_JOB_H */

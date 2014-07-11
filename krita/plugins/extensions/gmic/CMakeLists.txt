@@ -107,7 +107,7 @@ install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 # tests, currently broken on OSX due to fftw linking problem
 if(NOT APPLE)

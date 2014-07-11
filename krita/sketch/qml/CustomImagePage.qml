@@ -120,7 +120,7 @@ Page {
                         height: parent.height;
 
                         placeholder: "Width";
-                        validator: IntValidator{bottom: 0; top: 10000;}
+                        validator: IntValidator{bottom: 0; top: 100000000;}
                         numeric: true;
                         nextFocus: heightField;
 
@@ -137,7 +137,7 @@ Page {
                         height: parent.height;
 
                         placeholder: "Height"
-                        validator: IntValidator{bottom: 0; top: 10000;}
+                        validator: IntValidator{bottom: 0; top: 100000000;}
                         numeric: true;
                         nextFocus: resolutionField;
 

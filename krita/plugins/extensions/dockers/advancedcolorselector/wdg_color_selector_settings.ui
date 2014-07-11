@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
-    <height>385</height>
+    <width>650</width>
+    <height>469</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Color Selector Settings</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_5">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout_6">
+   <item>
     <widget class="KTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -301,6 +301,65 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="title">
+          <string>MyPaint Shade Selector</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Color-model type:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="MyPaint_HSV">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue Saturation Value model.(Default)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This model sets all the most saturated colours at the same level as white. Think value as a measure of pixel-brightness.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>HSV</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="MyPaint_HSL">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue, Saturation, Lightness model.&lt;/p&gt;&lt;p&gt;This model sets all the most saturated colors at lightness 0.5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>HSL</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="MyPaint_HSI">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue, Saturation, Intensity model for the MyPaint Shade Selector&lt;/p&gt;&lt;p&gt;Intensity marks itself by measuring the sum of the r, g, b components. As such, yellow(1,1,0) is brighter than blue(0,0,1).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>HSI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="MyPaint_HSY">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Hue, Saturation, Luma model for the MyPaint Shade Selector&lt;/p&gt;&lt;p&gt;Luma is similar to Intensity, except it weighs the red green and blue components before adding them together. As such, Yellow is brighter than Cyan. This model is exactly the same as MyPaint HCY'.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>HSY'</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
           <string>Minimal Shade Selector</string>
@@ -418,8 +477,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>321</width>
-               <height>151</height>
+               <width>364</width>
+               <height>156</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_4">

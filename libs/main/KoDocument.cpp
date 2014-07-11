@@ -850,7 +850,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
 {
     kDebug(30003) << "Saving to OASIS format";
     // Tell KoStore not to touch the file names
-    store->disallowNameExpansion();
+
     KoOdfWriteStore odfStore(store);
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     KoEmbeddedDocumentSaver embeddedSaver;
@@ -1845,7 +1845,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
 
     // OASIS/OOo file format?
     if (store->hasFile("content.xml")) {
-        store->disallowNameExpansion();
+
 
         // We could check the 'mimetype' file, but let's skip that and be tolerant.
 
@@ -1854,10 +1854,14 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
             return false;
         }
 
-    } else if (store->hasFile("root")) {   // Fallback to "old" file format (maindoc.xml)
+    } else if (store->hasFile("root") || store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)
+
+
+
         oasis = false;
 
         KoXmlDocument doc = KoXmlDocument(true);
+
         bool ok = oldLoadAndParse(store, "root", doc);
         if (ok)
             ok = loadXML(doc, store);
@@ -1988,8 +1992,6 @@ bool KoDocument::addVersion(const QString& comment)
     }
 
     kDebug(30003) << "Saving to OASIS format";
-    // Tell KoStore not to touch the file names
-    store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
 
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);

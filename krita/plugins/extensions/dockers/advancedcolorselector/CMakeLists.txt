@@ -45,5 +45,5 @@ install( FILES  kis_colselng_color_patches.png
                 extended_color_selector.png
                 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
-install( FILES  krita_colorselectorng.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_colorselectorng.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

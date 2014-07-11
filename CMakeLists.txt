@@ -592,7 +592,7 @@ macro_log_feature(LIBWPS_FOUND "LibWps"
 macro_optional_find_package(LibVisio)
 macro_log_feature(LIBVISIO_FOUND "LibVisio"
                   "Visio Import Filter Library"
-                  "http://www.freedesktop.org/wiki/Software/libvisio" FALSE ""
+                  "https://wiki.documentfoundation.org/DLP/Libraries/libvisio" FALSE ""
                   "Required by the Flow visio import filter"
 )
 
@@ -602,7 +602,7 @@ macro_log_feature(LIBVISIO_FOUND "LibVisio"
 macro_optional_find_package(LibEtonyek)
 macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
                   "Apple Keynote Document Library"
-                  "http://www.freedesktop.org/wiki/Software/libetonyek/" FALSE ""
+                  "https://wiki.documentfoundation.org/DLP/Libraries/libetonyek" FALSE ""
                   "Required by the Stage keynote import filter"
 )
 

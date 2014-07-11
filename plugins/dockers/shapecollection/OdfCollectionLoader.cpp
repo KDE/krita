@@ -238,7 +238,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
         return;
     }
 
-    store->disallowNameExpansion();
+    
     m_odfStore = new KoOdfReadStore(store); // Owns the store now
     QString errorMessage;
 

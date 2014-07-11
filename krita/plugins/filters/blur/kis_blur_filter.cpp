@@ -74,6 +74,7 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
     uint width = 2 * halfWidth + 1;
     uint halfHeight = (config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
     uint height = 2 * halfHeight + 1;
+    float aspectRatio = (float) width / height;
     int rotate = (config->getProperty("rotate", value)) ? value.toInt() : 0;
     int strength = 100 - (config->getProperty("strength", value) ? value.toUInt() : 0);
 
@@ -84,11 +85,11 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
     dbgKrita << width << "" << height << "" << hFade << "" << vFade;
     switch (shape) {
     case 1:
-        kas = new KisRectangleMaskGenerator(width, width / height , hFade, vFade, 2);
+        kas = new KisRectangleMaskGenerator(width, aspectRatio, hFade, vFade, 2);
         break;
     case 0:
     default:
-        kas = new KisCircleMaskGenerator(width, width / height, hFade, vFade, 2);
+        kas = new KisCircleMaskGenerator(width, aspectRatio, hFade, vFade, 2);
         break;
     }
 

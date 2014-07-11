@@ -130,6 +130,20 @@ public:
     void endStroke(KisStrokeId id);
     bool cancelStroke(KisStrokeId id);
 
+    /**
+     * tryCancelCurrentStrokeAsync() checks whether there is a
+     * *running* stroke (which is being executed at this very moment)
+     * which is not still open by the owner (endStroke() or
+     * cancelStroke() have already been called) and cancels it.
+     *
+     * \return true if some stroke has been found and cancelled
+     *
+     * \note This method is *not* part of KisStrokesFacade! It is too
+     *       low level for KisImage.  In KisImage it is combined with
+     *       more high level requestStrokeCancellation().
+     */
+    bool tryCancelCurrentStrokeAsync();
+
     bool wrapAroundModeSupported() const;
 
 protected:
@@ -150,7 +164,6 @@ private:
     void wakeUpWaitingThreads();
 
     void progressUpdate();
-    void progressNotifyJobDone();
 
 protected:
     struct Private;

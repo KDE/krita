@@ -13,6 +13,6 @@ install(TARGETS kritapixelizefilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritapixelizefilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritapixelizefilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

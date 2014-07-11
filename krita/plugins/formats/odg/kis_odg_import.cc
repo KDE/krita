@@ -71,7 +71,7 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
         delete store;
         return KoFilter::BadConversionGraph;
     }
-    store->disallowNameExpansion();
+    
 
     doc -> prepareForImport();
 

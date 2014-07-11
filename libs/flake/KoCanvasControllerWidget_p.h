@@ -38,7 +38,6 @@
 #include <ksharedconfig.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>
-#include <QApplication>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>

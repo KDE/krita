@@ -23,6 +23,7 @@
 #include <QLabel>
 #include <QFontMetrics>
 #include <QToolButton>
+#include <QAction>
 
 #include <KoProgressBar.h>
 #include <ksqueezedtextlabel.h>
@@ -37,6 +38,7 @@
 #include <kis_image.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
+#include <kis_selection_manager.h>
 
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
@@ -52,10 +54,16 @@ enum {
 KisStatusBar::KisStatusBar(KisView2 * view)
         : m_view(view)
 {
-    m_selectionStatusLabel = new QLabel(view);
-    m_selectionStatusLabel->setPixmap(koIcon("selection-info").pixmap(22));
-    m_selectionStatusLabel->setEnabled(false);
-    view->addStatusBarItem(m_selectionStatusLabel);
+    m_selectionStatus = new QToolButton(view);
+    m_selectionStatus->setIcon(koIcon("selection-info"));
+    m_selectionStatus->setIconSize(QSize(16,16));
+    m_selectionStatus->setAutoRaise(true);
+    m_selectionStatus->setEnabled(false);
+
+    connect(m_selectionStatus, SIGNAL(clicked()), view->selectionManager(), SLOT(slotToggleSelectionDecoration()));
+    connect(view->selectionManager(), SIGNAL(displaySelectionChanged()), SLOT(updateSelectionToolTip()));
+
+    view->addStatusBarItem(m_selectionStatus);
 
     // XXX: Use the KStatusbar fixed size labels!
     m_statusBarStatusLabel = new KSqueezedTextLabel(view);
@@ -85,7 +93,7 @@ KisStatusBar::KisStatusBar(KisView2 * view)
 
 KisStatusBar::~KisStatusBar()
 {
-    m_view->removeStatusBarItem(m_selectionStatusLabel);
+    m_view->removeStatusBarItem(m_selectionStatus);
     m_view->removeStatusBarItem(m_statusBarStatusLabel);
     m_view->removeStatusBarItem(m_statusBarProfileLabel);
     m_view->removeStatusBarItem(m_imageSizeLabel);
@@ -111,20 +119,34 @@ void KisStatusBar::imageSizeChanged()
     m_imageSizeLabel->setText(QString("%1 x %2").arg(w).arg(h));
 }
 
+void KisStatusBar::updateSelectionToolTip()
+{
+    KisSelectionSP selection = m_view->selection();
+    if (selection) {
+        m_selectionStatus->setEnabled(true);
+
+        QRect r = selection->selectedExactRect();
+
+        QString displayMode =
+            !m_view->selectionManager()->displaySelection() ?
+            i18n("Hidden") :
+            (m_view->selectionManager()->showSelectionAsMask() ?
+             i18n("Mask") : i18n("Ants"));
+
+        m_selectionStatus->setToolTip(
+            i18n("Selection: x = %1 y = %2 width = %3 height = %4\n"
+                 "Display Mode: %5",
+                 r.x(), r.y(), r.width(), r.height(), displayMode));
+    } else {
+        m_selectionStatus->setEnabled(false);
+        m_selectionStatus->setToolTip(i18n("No Selection"));
+    }
+}
+
 void KisStatusBar::setSelection(KisImageWSP image)
 {
     Q_UNUSED(image);
-
-    KisSelectionSP selection = m_view->selection();
-    if (selection) {
-        m_selectionStatusLabel->setEnabled(true);
-
-        QRect r = selection->selectedExactRect();
-        m_selectionStatusLabel->setToolTip(i18n("Selection Active: x = %1 y = %2 width = %3 height = %4", r.x(), r.y(), r.width(), r.height()));
-        return;
-    }
-    m_selectionStatusLabel->setEnabled(false);
-    m_selectionStatusLabel->setToolTip(i18n("No Selection"));
+    updateSelectionToolTip();
 }
 
 void KisStatusBar::setProfile(KisImageWSP image)
@@ -158,5 +180,6 @@ KisProgressWidget* KisStatusBar::progress()
 {
     return m_progress;
 }
+
 
 #include "kis_statusbar.moc"

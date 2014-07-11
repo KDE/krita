@@ -24,6 +24,7 @@
 #include <kis_types.h>
 
 class QLabel;
+class QToolButton;
 class KSqueezedTextLabel;
 class KisView2;
 class KisProgressWidget;
@@ -50,12 +51,14 @@ public slots:
     void setHelp(const QString &t);
     void updateStatusBarProfileLabel();
 
+    void updateSelectionToolTip();
+
 private:
 
     KisView2 * m_view;
     KisProgressWidget * m_progress;
 
-    QLabel *m_selectionStatusLabel;
+    QToolButton *m_selectionStatus;
     QLabel *m_statusBarZoomLabel; // Make interactive line edit
     QLabel *m_statusBarPositionLabel;
     QLabel *m_sizeLabel;

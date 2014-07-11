@@ -26,7 +26,15 @@
 #include <KoPart.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
+#include <KoShapeRegistry.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoOdfPaste.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfReadStore.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoDrag.h>
+#include <KoShapeOdfSaveHelper.h>
 
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
@@ -49,6 +57,7 @@
 #include "kis_shape_selection.h"
 
 #include <processing/fill_processing_visitor.h>
+#include <kis_selection_tool_helper.h>
 
 namespace ActionHelper {
 
@@ -379,4 +388,52 @@ void KisSelectionToVectorActionFactory::run(KisView2 *view)
                      KisStrokeJobData::EXCLUSIVE);
 
     endAction(ap, KisOperationConfiguration(id()).toXML());
+}
+
+
+class KisShapeSelectionPaste : public KoOdfPaste
+{
+public:
+    KisShapeSelectionPaste(KisView2* view) : m_view(view)
+    {
+    }
+
+    virtual ~KisShapeSelectionPaste() {
+    }
+
+    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) {
+        KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
+        KoShapeLoadingContext context(loadingContext, 0);
+        KoXmlElement child;
+
+        QList<KoShape*> shapes;
+        forEachElement(child, body) {
+            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+            if (shape) {
+	shapes.append(shape);
+            }
+        }
+        if (!shapes.isEmpty()) {
+            KisSelectionToolHelper helper(m_view->canvasBase(), kundo2_i18n("Convert shapes to vector selection"));
+            helper.addSelectionShapes(shapes);
+        }
+        return true;
+    }
+private:
+    KisView2* m_view;
+};
+
+void KisShapesToVectorSelectionActionFactory::run(KisView2* view)
+{
+    QList<KoShape*> shapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
+
+    KoShapeOdfSaveHelper saveHelper(shapes);
+    KoDrag drag;
+    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+    QMimeData* mimeData = drag.mimeData();
+
+    Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
+
+    KisShapeSelectionPaste paste(view);
+    paste.paste(KoOdf::Text, mimeData);
 }

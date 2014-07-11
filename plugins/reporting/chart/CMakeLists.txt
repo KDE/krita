@@ -21,4 +21,4 @@ install(TARGETS koreport_chartplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  koreport_chartplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  koreport_chartplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

@@ -109,10 +109,15 @@ void KisStroke::endStroke()
  *    the cancel job
  * 4) Initialized, no jobs, finished -- it's too late to cancel
  *    anything
+ * 6) Initialized, has jobs, cancelled -- cancelling twice is a permitted
+ *                                        operation, though it does nothing
  */
 
 void KisStroke::cancelStroke()
 {
+    // case 6
+    if (m_isCancelled) return;
+
     if(!m_strokeInitialized) {
         clearQueue();
     }

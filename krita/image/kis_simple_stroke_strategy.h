@@ -51,13 +51,18 @@ public:
     virtual void doStrokeCallback(KisStrokeJobData *data);
 
 protected:
-    void enableJob(JobType type, bool enable = true);
+    void enableJob(JobType type, bool enable = true,
+                   KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
+                   KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
 
 private:
     KisStrokeJobStrategy* createStrategy(JobType type);
+    KisStrokeJobData* createData(JobType type);
 
 private:
     QVector<bool> m_jobEnabled;
+    QVector<KisStrokeJobData::Sequentiality> m_jobSequentiality;
+    QVector<KisStrokeJobData::Exclusivity> m_jobExclusivity;
 };
 
 #endif /* __KIS_SIMPLE_STROKE_STRATEGY_H */

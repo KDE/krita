@@ -109,6 +109,9 @@ private:
     void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
                const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
+private slots:
+    void documentDestroyed();
+
 private:
     Q_DECLARE_PRIVATE(KoVariable)
 };

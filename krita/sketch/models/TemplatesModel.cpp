@@ -26,6 +26,8 @@
 #include <KoTemplateGroup.h>
 #include <KoTemplate.h>
 #include <kiconloader.h>
+#include <QApplication>
+#include <QTimer>
 
 struct TemplatesModel::ItemData {
 public:
@@ -89,25 +91,7 @@ TemplatesModel::TemplatesModel(QObject* parent)
     a4lItem->icon = "A4landscape-black";
     d->items << a4lItem;
 
-    KoTemplateTree templateTree("krita_template", KisFactory2::componentData(), true);
-    foreach (KoTemplateGroup *group, templateTree.groups()) {
-        if (group->isHidden()) {
-            continue;
-        }
-        foreach (KoTemplate* t, group->templates()) {
-            if (t->isHidden())
-                continue;
-
-            ItemData* item = new ItemData();
-            item->name = t->name();
-            item->description = t->description();
-            item->file = QString("template://").append(t->file());
-            item->icon = KIconLoader::global()->iconPath(t->picture(), KIconLoader::Desktop);
-            item->groupName = group->name();
-            item->groupFolded = true; // default hide groups
-            d->items << item;
-        }
-    }
+    QTimer::singleShot(100, this, SLOT(populate()));
 }
 
 TemplatesModel::~TemplatesModel()
@@ -168,6 +152,30 @@ void TemplatesModel::toggleGroup(const QString& name)
             item->groupFolded = !item->groupFolded;
     }
     dataChanged(index(0), index(d->items.count() - 1));
+}
+
+void TemplatesModel::populate()
+{
+    KoTemplateTree templateTree("krita_template", KisFactory2::componentData(), true);
+    foreach (KoTemplateGroup *group, templateTree.groups()) {
+        if (group->isHidden()) {
+            continue;
+        }
+        foreach (KoTemplate* t, group->templates()) {
+            if (t->isHidden())
+                continue;
+
+            ItemData* item = new ItemData();
+            item->name = t->name();
+            item->description = t->description();
+            item->file = QString("template://").append(t->file());
+            item->icon = KIconLoader::global()->iconPath(t->picture(), KIconLoader::Desktop);
+            item->groupName = group->name();
+            item->groupFolded = true; // default hide groups
+            d->items << item;
+            qApp->processEvents();
+        }
+    }
 }
 
 #include "TemplatesModel.moc"

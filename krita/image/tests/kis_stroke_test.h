@@ -32,6 +32,7 @@ private slots:
     void testCancelStrokeCase2and3();
     void testCancelStrokeCase5();
     void testCancelStrokeCase4();
+    void testCancelStrokeCase6();
 };
 
 #endif /* __KIS_STROKE_TEST_H */

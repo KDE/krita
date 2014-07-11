@@ -6,4 +6,4 @@ kde4_add_plugin(kritaindexcolors ${INDEXCOLORS_SOURCE})
 target_link_libraries(kritaindexcolors kritaui)
 
 install(TARGETS kritaindexcolors          DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES   kritaindexcolors.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES   kritaindexcolors.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

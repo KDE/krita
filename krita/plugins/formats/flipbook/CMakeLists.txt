@@ -11,5 +11,5 @@ target_link_libraries(kritaflipbookimport kritaui)
 
 install(TARGETS kritaflipbookimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES  krita_flipbook_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS  krita_flipbook.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES  krita_flipbook_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( PROGRAMS  krita_flipbook.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)

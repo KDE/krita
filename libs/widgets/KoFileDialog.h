@@ -60,7 +60,7 @@ public:
      */
     KoFileDialog(QWidget *parent,
                  KoFileDialog::DialogType type,
-                 const QString dialogName);
+                 const QString &dialogName);
 
     ~KoFileDialog();
 
@@ -137,7 +137,7 @@ private:
 
     void createFileDialog();
 
-    const QString getUsedDir(const QString &dialogName);
+    QString getUsedDir(const QString &dialogName);
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
     const QStringList getFilterStringListFromMime(const QStringList &mimeList,

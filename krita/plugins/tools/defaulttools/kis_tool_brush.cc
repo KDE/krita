@@ -171,6 +171,7 @@ qreal KisToolBrush::delayDistance() const
 void KisToolBrush::setUseDelayDistance(bool value)
 {
     smoothingOptions()->setUseDelayDistance(value);
+    m_sliderDelayDistance->setEnabled(value);
     enableControl(m_chkFinishStabilizedCurve, !value);
     emit useDelayDistanceChanged();
 }
@@ -190,6 +191,29 @@ void KisToolBrush::setFinishStabilizedCurve(bool value)
 bool KisToolBrush::finishStabilizedCurve() const
 {
     return smoothingOptions()->finishStabilizedCurve();
+}
+
+void KisToolBrush::updateSettingsViews()
+{
+    m_cmbSmoothingType->setCurrentIndex(smoothingOptions()->smoothingType());
+    m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
+    m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
+    m_sliderDelayDistance->setValue(smoothingOptions()->delayDistance());
+    m_sliderTailAggressiveness->setValue(smoothingOptions()->tailAggressiveness());
+    m_chkSmoothPressure->setChecked(smoothingOptions()->smoothPressure());
+    m_chkUseScalableDistance->setChecked(smoothingOptions()->useScalableDistance());
+    m_cmbSmoothingType->setCurrentIndex((int)smoothingOptions()->smoothingType());
+
+    emit smoothnessQualityChanged();
+    emit smoothnessFactorChanged();
+    emit smoothPressureChanged();
+    emit smoothingTypeChanged();
+    emit useScalableDistanceChanged();
+    emit useDelayDistanceChanged();
+    emit delayDistanceChanged();
+    emit finishStabilizedCurveChanged();
+
+    KisTool::updateSettingsViews();
 }
 
 QWidget * KisToolBrush::createOptionWidget()
@@ -234,15 +258,15 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderDelayDistance->setToolTip(i18n("Radius where the brush is blocked"));
     m_sliderDelayDistance->setRange(0, 500);
     m_sliderDelayDistance->setSuffix(i18n(" px"));
-    connect(m_chkDelayDistance, SIGNAL(toggled(bool)), m_sliderDelayDistance, SLOT(setEnabled(bool)));
     connect(m_sliderDelayDistance, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
 
     addOptionWidgetOption(m_sliderDelayDistance, m_chkDelayDistance);
     addOptionWidgetOption(m_chkFinishStabilizedCurve, new QLabel(i18n("Finish line:")));
 
-    m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
     m_sliderDelayDistance->setValue(smoothingOptions()->delayDistance());
-
+    m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
+    // if the state is not flipped, then the previous line doesn't generate any signals
+    setUseDelayDistance(m_chkDelayDistance->isChecked());
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);

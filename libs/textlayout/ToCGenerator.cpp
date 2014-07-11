@@ -111,6 +111,7 @@ bool ToCGenerator::generate()
     QTextCursor cursor = m_ToCDocument->rootFrame()->lastCursorPosition();
     cursor.setPosition(m_ToCDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
+    cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
 
     KoStyleManager *styleManager = KoTextDocument(m_document).styleManager();
 

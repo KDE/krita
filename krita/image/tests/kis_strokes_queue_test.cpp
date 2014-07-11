@@ -317,5 +317,55 @@ void KisStrokesQueueTest::testImmediateCancel()
     queue.processQueue(context, false);
 }
 
+void KisStrokesQueueTest::testOpenedStrokeCounter()
+{
+    KisStrokesQueue queue;
+
+    QVERIFY(!queue.hasOpenedStrokes());
+    KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy("0"));
+    QVERIFY(queue.hasOpenedStrokes());
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("1"));
+    QVERIFY(queue.hasOpenedStrokes());
+    queue.endStroke(id0);
+    QVERIFY(queue.hasOpenedStrokes());
+    queue.endStroke(id1);
+    QVERIFY(!queue.hasOpenedStrokes());
+
+    KisTestableUpdaterContext context(2);
+    queue.processQueue(context, false); context.clear();
+    queue.processQueue(context, false); context.clear();
+    queue.processQueue(context, false); context.clear();
+    queue.processQueue(context, false); context.clear();
+}
+
+void KisStrokesQueueTest::testAsyncCancelWhileOpenedStroke()
+{
+    KisStrokesQueue queue;
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("nor_", false));
+    queue.addJob(id, 0);
+    queue.addJob(id, 0);
+    queue.addJob(id, 0);
+
+    // no async cancelling until the stroke is ended by the owner
+    QVERIFY(!queue.tryCancelCurrentStrokeAsync());
+
+    queue.endStroke(id);
+
+    QVERIFY(queue.tryCancelCurrentStrokeAsync());
+
+    bool externalJobsPending = false;
+
+    KisTestableUpdaterContext context(3);
+    QVector<KisUpdateJobItem*> jobs;
+
+    queue.processQueue(context, externalJobsPending);
+
+    // no? really?
+    jobs = context.getJobs();
+    VERIFY_EMPTY(jobs[0]);
+    VERIFY_EMPTY(jobs[1]);
+    VERIFY_EMPTY(jobs[2]);
+}
+
 QTEST_KDEMAIN(KisStrokesQueueTest, NoGUI)
 #include "kis_strokes_queue_test.moc"

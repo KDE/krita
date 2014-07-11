@@ -93,7 +93,7 @@ protected slots:
     void setAssistant(bool assistant);
 
 private:
-    friend class KisToolPaintingInformationBuilder;
+    friend class KisToolFreehandPaintingInformationBuilder;
 
     /**
      * Adjusts a coordinates according to a KisPaintingAssitant,
@@ -108,7 +108,8 @@ private:
     qreal calculatePerspective(const QPointF &documentPoint);
 
 protected:
-
+    friend class KisView2;
+    friend class KisSketchView;
     KisSmoothingOptionsSP smoothingOptions() const;
     bool m_assistant;
     double m_magnetism;

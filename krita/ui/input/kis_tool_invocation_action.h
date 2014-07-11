@@ -33,7 +33,8 @@ public:
     enum Shortcut {
         ActivateShortcut,
         ConfirmShortcut,
-        CancelShortcut
+        CancelShortcut,
+        LineToolShortcut
     };
     explicit KisToolInvocationAction();
     virtual ~KisToolInvocationAction();

@@ -89,7 +89,7 @@ bool KoResourceBundle::load()
         return false;
 
     } else {
-        resourceStore->disallowNameExpansion();
+
         m_metadata.clear();
 
         if (resourceStore->open("META-INF/manifest.xml")) {
@@ -234,7 +234,7 @@ bool KoResourceBundle::save()
     bundleDir.cdUp();
 
     QScopedPointer<KoStore> store(KoStore::createStore(filename(), KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
-    store->disallowNameExpansion();
+    
     if (!store || store->bad()) return false;
 
     foreach(const QString &resType, m_manifest.types()) {
@@ -358,7 +358,7 @@ void KoResourceBundle::install()
     if (filename().isEmpty()) return;
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
     if (!resourceStore || resourceStore->bad()) return;
-    resourceStore->disallowNameExpansion();
+
     foreach(const QString &resType, m_manifest.types()) {
         if (resType == "ko_gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();

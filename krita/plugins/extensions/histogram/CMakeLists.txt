@@ -16,5 +16,5 @@ install(TARGETS kritahistogram  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  histogram.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritahistogram.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritahistogram.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

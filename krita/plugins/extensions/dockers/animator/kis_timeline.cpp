@@ -320,6 +320,11 @@ void KisTimeline::blankFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
+
+        if(globalGeometry == QRect()) {
+            return;
+        }
+
         m_cells->setSelectedFrame();
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addBlankFrame(globalGeometry);
     }
@@ -329,6 +334,11 @@ void KisTimeline::keyFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
+
+        if(globalGeometry == QRect()) {
+            return;
+        }
+
         m_cells->setSelectedFrame();
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addKeyFrame(globalGeometry);
     }

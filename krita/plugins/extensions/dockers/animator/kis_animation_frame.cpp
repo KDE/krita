@@ -94,6 +94,11 @@ QRect KisAnimationFrame::convertSelectionToFrame()
         this->getParent()->mapFrame(this->geometry().x() / 10, this);
 
         KisAnimationFrame* oldPrevFrame = this->getParent()->getPreviousFrameFrom(this);
+
+        if(!oldPrevFrame) {
+            return QRect();
+        }
+
         oldPrevFrame->hide();
 
         int oldPrevFrameWidth = oldPrevFrame->getWidth();

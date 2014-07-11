@@ -24,5 +24,5 @@ install(TARGETS kritaanimator  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_animator.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_animator.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

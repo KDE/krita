@@ -23,21 +23,17 @@
 #include "DeleteCommand.h"
 
 #include <klocale.h>
-#include <kundo2command.h>
 
 #include <KoList.h>
 #include <KoTextEditor.h>
-#include "KoTextEditor_p.h"
+#include <KoTextEditor_p.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 #include <KoAnchorInlineObject.h>
 #include <KoAnchorTextRange.h>
 #include <KoAnnotation.h>
-#include <KoCanvasBase.h>
 #include <KoShapeController.h>
-
-#include <QWeakPointer>
 
 DeleteCommand::DeleteCommand(DeleteMode mode,
                              QTextDocument *document,

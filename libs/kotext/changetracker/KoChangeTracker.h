@@ -25,6 +25,7 @@
 
 #include <QObject>
 #include <QMetaType>
+#include <QVector>
 
 #include <KoGenChange.h>
 

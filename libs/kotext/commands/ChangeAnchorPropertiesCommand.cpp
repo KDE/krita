@@ -18,7 +18,7 @@
  */
 
 #include "ChangeAnchorPropertiesCommand.h"
-#include "KoShapeAnchor.h"
+
 #include "KoAnchorInlineObject.h"
 #include "KoAnchorTextRange.h"
 
@@ -28,8 +28,6 @@
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
-
-#include <QTextDocument>
 
 ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoShapeAnchor *anchor, const KoShapeAnchor &newAnchorData, KoShapeContainer *newParent, KUndo2Command *parent)
     : KUndo2Command(kundo2_noi18n("Change Anchor Properties"), parent)

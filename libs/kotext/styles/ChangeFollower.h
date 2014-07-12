@@ -24,11 +24,12 @@
 #include "KoStyleManager.h"
 
 #include <QObject>
-#include <QTextDocument>
 #include <QWeakPointer>
 #include <QSet>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
+
+class QTextDocument;
 
 /**
  * This object dies when the parent QTextDocument dies and in the destructor

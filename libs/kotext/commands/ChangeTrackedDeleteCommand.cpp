@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.*/
 
 #include "ChangeTrackedDeleteCommand.h"
+
 #include "TextPasteCommand.h"
 #include "ListItemNumberingCommand.h"
 #include "ChangeListCommand.h"
@@ -29,7 +30,6 @@
 #include <KoChangeTrackerElement.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoList.h>
 #include <KoParagraphStyle.h>
@@ -40,13 +40,10 @@
 
 #include <QTextDocumentFragment>
 
-#include <kundo2command.h>
 #include <klocale.h>
-#include <kaction.h>
 
 #include <kdebug.h>
 #include <QDebug>
-#include <QWeakPointer>
 
 //A convenience function to get a ListIdType from a format
 

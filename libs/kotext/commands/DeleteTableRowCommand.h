@@ -21,7 +21,7 @@
 #ifndef DELETETABLEROWCOMMAND_H
 #define DELETETABLEROWCOMMAND_H
 
-#include <kundo2qstack.h>
+#include <kundo2command.h>
 #include <QList>
 #include <KoTableRowStyle.h>
 

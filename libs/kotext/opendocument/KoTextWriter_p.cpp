@@ -22,8 +22,32 @@
 #include <KoList.h>
 #include <KoElementReference.h>
 #include <KoTextRangeManager.h>
+#include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
+#include <KoListLevelProperties.h>
+#include <KoTableCellStyle.h>
+#include <KoTableStyle.h>
+#include <KoTextBlockData.h>
+#include <KoTextDocument.h>
+#include <KoTextInlineRdf.h>
+#include <KoSection.h>
+#include <KoTextMeta.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+#include <KoGenStyles.h>
+#include <KoXmlNS.h>
+#include <KoTableColumnAndRowStyleManager.h>
+#include <KoTableColumnStyle.h>
+#include <opendocument/KoTextSharedSavingData.h>
+#include <KoTableOfContentsGeneratorInfo.h>
+#include <KoBibliographyInfo.h>
+#include <KoTableRowStyle.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoVariable.h>
 
 #include <kdebug.h>
+
+#include <QTextTable>
 
 // A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)

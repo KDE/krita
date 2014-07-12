@@ -30,7 +30,6 @@
 #include <KoList.h>
 #include <KoListStyle.h>
 #include <KoParagraphStyle.h>
-#include <KoStyleManager.h>
 #include <KoGenChanges.h>
 #include <KoFormatChangeInformation.h>
 #include <kundo2magicstring.h>
@@ -49,7 +48,6 @@
 #include <QMultiHash>
 #include <QTextCursor>
 #include <QTextFormat>
-#include <QTextCharFormat>
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 #include <QTextList>

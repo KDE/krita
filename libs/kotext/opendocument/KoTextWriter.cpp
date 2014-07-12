@@ -26,8 +26,15 @@
 #include "KoTextWriter.h"
 
 #include <KoTextWriter_p.h>
+#include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
+#include <KoTextDocument.h>
+#include <KoShapeSavingContext.h>
+#include <KoGenStyles.h>
+#include <opendocument/KoTextSharedSavingData.h>
 
 #include <QTextList>
+#include <QTextTableCell>
 
 #include <kdebug.h>
 

@@ -20,8 +20,7 @@
 #ifndef RESIZETABLECOMMAND_H
 #define RESIZETABLECOMMAND_H
 
-#include <kundo2qstack.h>
-#include <QList>
+#include <kundo2command.h>
 
 class QTextDocument;
 class QTextTable;

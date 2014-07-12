@@ -21,14 +21,10 @@
 
 #include "KoChangeTrackerElement.h"
 #include <KoTextDocument.h>
-#include <KoCharacterStyle.h>
 #include <KoChangeTracker.h>
-#include <KoTextDocument.h>
 
 #include <QVector>
 #include <QTextDocument>
-#include <QTextCursor>
-#include <QTextCharFormat>
 
 
 InsertDeleteChangesCommand::InsertDeleteChangesCommand(QTextDocument *document, KUndo2Command *parent)

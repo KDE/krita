@@ -22,12 +22,11 @@
 
 #include <QClipboard>
 #include <QWeakPointer>
-#include <kundo2qstack.h>
+#include <kundo2command.h>
 
 class QTextDocument;
 class KoDocumentRdfBase;
 class KoShapeController;
-class KoDocumentResourceManager;
 class QMimeData;
 class KoCanvasBase;
 

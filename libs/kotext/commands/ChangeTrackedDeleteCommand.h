@@ -20,21 +20,15 @@
 #ifndef CHANGETRACKEDDELETECOMMAND_H
 #define CHANGETRACKEDDELETECOMMAND_H
 
-#include <kundo2qstack.h>
 #include "KoTextCommandBase.h"
 #include <KoListStyle.h>
 #include <QList>
-#include <QTextList>
 #include <QWeakPointer>
 
 class QTextDocument;
 class QTextCursor;
-class QTextDocumentFragment;
-class KoChangeTrackerElement;
 class KoShapeController;
 class KoDocumentRdfBase;
-class KoInlineTextObjectManager;
-class KoDocumentResourceManager;
 class KoTextEditor;
 
 class ChangeTrackedDeleteCommand : public KoTextCommandBase

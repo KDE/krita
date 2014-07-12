@@ -24,7 +24,7 @@
 #include <KoTextDocument.h>
 #include <QTextCursor>
 #include <KoParagraphStyle.h>
-#include <KoImageCollection.h>
+#include <KoList.h>
 
 #include <klocale.h>
 #include <kdebug.h>

@@ -23,6 +23,7 @@
 #include "KoTextEditor.h"
 #include "KoTextEditor_p.h"
 
+#include "KoList.h"
 #include "KoBookmark.h"
 #include "KoAnnotation.h"
 #include "KoTextRangeManager.h"

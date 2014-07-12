@@ -22,11 +22,9 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoTableStyle.h"
-#include "KoStyleManager.h"
+
 #include <KoGenStyle.h>
-#include <KoGenStyles.h>
 #include "Styles_p.h"
-#include "KoTextDocument.h"
 
 #include <kdebug.h>
 
@@ -38,7 +36,7 @@
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>
+
 
 class KoTableStyle::Private
 {

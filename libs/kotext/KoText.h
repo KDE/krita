@@ -23,16 +23,14 @@
 
 #include "kotext_export.h"
 
-#include <KoCanvasResourceManager.h>
 #include <KoDocumentResourceManager.h>
-
-#include <QStringList>
-#include <QChar>
-#include <QTextCharFormat>
-#include <QMetaType>
-#include <QTextOption>
 #include <styles/KoCharacterStyle.h>
 
+#include <QChar>
+#include <QMetaType>
+#include <QTextOption>
+
+class QStringList;
 
 /**
  * Generic namespace of the Calligra Text library for helper methods and data.

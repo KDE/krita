@@ -22,6 +22,7 @@
 #include "BibliographyPreview.h"
 #include "BibliographyTemplate.h"
 #include <KoBibliographyInfo.h>
+#include <KoTextEditor.h>
 
 #include <kaction.h>
 #include <kdebug.h>

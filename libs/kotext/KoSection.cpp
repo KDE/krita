@@ -23,7 +23,6 @@
 
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
-#include <KoShapeLoadingContext.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>

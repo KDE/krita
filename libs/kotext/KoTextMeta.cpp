@@ -19,7 +19,6 @@
 
 #include "KoTextMeta.h"
 
-#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -27,9 +26,6 @@
 
 #include <QTextDocument>
 #include <QTextInlineObject>
-#include <QTextList>
-#include <QTextBlock>
-#include <QTextCursor>
 #include <QWeakPointer>
 
 #include <kdebug.h>

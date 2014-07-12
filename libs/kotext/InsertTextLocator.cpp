@@ -19,14 +19,8 @@
 
 #include "InsertTextLocator_p.h"
 #include "KoTextEditor.h"
-#include "KoTextDocument.h"
 
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
-#include <KoSelection.h>
-#include <KoTextShapeDataBase.h>
-#include <klocale.h>
-
 
 
 InsertTextLocator::InsertTextLocator(KoCanvasBase *canvas)

@@ -21,18 +21,14 @@
  */
 
 #include "KoListStyle.h"
+
 #include "KoListLevelProperties.h"
-#include "KoTextBlockData.h"
-#include "KoParagraphStyle.h"
 #include "KoList.h"
 
-#include <KoStyleStack.h>
-#include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <kdebug.h>
-#include <QTextCursor>
 #include <QBuffer>
 
 class KoListStyle::Private

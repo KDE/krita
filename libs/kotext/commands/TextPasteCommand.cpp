@@ -20,11 +20,13 @@
 
 #include "TextPasteCommand.h"
 
+#include <KoText.h>
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
 #include <KoTextPaste.h>
 #include <KoChangeTracker.h>
 #include <KoShapeController.h>
+#include <KoDocumentResourceManager.h>
 
 #include <klocale.h>
 #include <kdebug.h>

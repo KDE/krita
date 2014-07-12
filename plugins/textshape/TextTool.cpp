@@ -23,6 +23,7 @@
  */
 
 #include "TextTool.h"
+
 #include "TextEditingPluginContainer.h"
 #include "dialogs/SimpleCharacterWidget.h"
 #include "dialogs/SimpleParagraphWidget.h"
@@ -43,6 +44,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoCanvasController.h>
+#include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
@@ -50,6 +52,7 @@
 #include <KoColorPopupAction.h>
 #include <KoTextDocumentLayout.h>
 #include <KoParagraphStyle.h>
+#include <KoToolSelection.h>
 #include <KoTextEditingPlugin.h>
 #include <KoTextEditingRegistry.h>
 #include <KoInlineTextObjectManager.h>
@@ -80,6 +83,7 @@
 #include <kstandardaction.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
+#include <QTextList>
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QToolTip>

@@ -56,6 +56,7 @@
 
 #include <kdebug.h>
 
+#include <QPainter>
 #include <QTextTable>
 #include <QTextList>
 #include <QStyle>

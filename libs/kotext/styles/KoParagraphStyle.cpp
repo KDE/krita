@@ -23,7 +23,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoParagraphStyle.h"
-#include "KoCharacterStyle.h"
+
+#include "KoList.h"
 #include "KoListStyle.h"
 #include "KoTextBlockData.h"
 #include "KoStyleManager.h"
@@ -41,7 +42,6 @@
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextCursor>
-#include <QFontMetrics>
 #include <QBuffer>
 
 #include <KoUnit.h>
@@ -50,6 +50,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoBorder.h>
+#include <KoShadowStyle.h>
 
 //already defined in KoRulerController.cpp
 #ifndef KDE_USE_FINAL

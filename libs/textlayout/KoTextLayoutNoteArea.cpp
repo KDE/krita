@@ -22,6 +22,7 @@
 #include "KoStyleManager.h"
 #include "KoParagraphStyle.h"
 #include "KoTextLayoutObstruction.h"
+#include "KoPointedAt.h"
 #include <KoOdfNumberDefinition.h>
 
 #include <QPainter>

@@ -20,12 +20,10 @@
 #ifndef KOTEXTEDITINGFACTORY_H
 #define KOTEXTEDITINGFACTORY_H
 
-#include <QString>
-#include <QObject>
-
 #include "kotext_export.h"
 
 class KoTextEditingPlugin;
+class QString;
 
 /**
  * A factory for text editing plugins. There should be one for each plugin type to
@@ -37,7 +35,6 @@ class KOTEXT_EXPORT KoTextEditingFactory
 public:
     /**
      * Create the new factory
-     * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the variable-type.
      */
     explicit KoTextEditingFactory(const QString &id);

@@ -18,14 +18,12 @@
  */
 
 #include "KoTextLocator.h"
-#include "KoTextBlockData.h"
+
 #include "KoTextReference.h"
 #include "KoTextPage.h"
 #include "styles/KoListStyle.h"
 
 #include <KoShape.h>
-#include <KoShapeLoadingContext.h>
-#include "KoShapeSavingContext.h"
 
 #include <kdebug.h>
 #include <QTextDocument>

@@ -20,15 +20,9 @@
 
 #include "InsertInlineObjectActionBase_p.h"
 #include "KoInlineObject.h"
-#include "KoInlineObjectFactoryBase.h"
 #include "KoTextEditor.h"
 
-#include <KoShapeManager.h>
-#include <KoSelection.h>
-#include <KoTextShapeDataBase.h>
 #include <KoCanvasBase.h>
-#include <KoTextDocument.h>
-#include <KoTextEditor.h>
 
 #include <kdebug.h>
 

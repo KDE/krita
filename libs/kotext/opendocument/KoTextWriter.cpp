@@ -27,6 +27,10 @@
 
 #include <KoTextWriter_p.h>
 
+#include <QTextList>
+
+#include <kdebug.h>
+
 KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData)
     : d(new Private(context))
 {

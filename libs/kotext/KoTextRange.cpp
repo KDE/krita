@@ -18,14 +18,13 @@
  */
 
 #include "KoTextRange.h"
+
 #include "KoTextRangeManager.h"
 #include "KoTextInlineRdf.h"
 
 #include <kdebug.h>
 #include <QDebug>
 #include <QTextCursor>
-
-class KoTextInlineRdf;
 
 class KoTextRangePrivate
 {

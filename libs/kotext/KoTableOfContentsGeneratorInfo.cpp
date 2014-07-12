@@ -21,8 +21,6 @@
 
 #include "KoTableOfContentsGeneratorInfo.h"
 
-#include <QTextCursor>
-
 #include <KoXmlNS.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>

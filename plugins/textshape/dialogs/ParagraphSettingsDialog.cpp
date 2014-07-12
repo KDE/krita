@@ -24,6 +24,7 @@
 
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
+#include <KoList.h>
 #include <KoTextEditor.h>
 #include <KoListLevelProperties.h>
 #include <commands/ParagraphFormattingCommand.h>

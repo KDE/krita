@@ -26,7 +26,6 @@
 
 #include "kotext_export.h"
 #include "KoOdfNotesConfiguration.h"
-#include "KoOdfBibliographyConfiguration.h"
 
 #include <QObject>
 #include <QMetaType>
@@ -41,13 +40,13 @@ class KoTableColumnStyle;
 class KoTableRowStyle;
 class KoTableCellStyle;
 class KoSectionStyle;
-class KoXmlWriter;
 class ChangeFollower;
 class KoShapeSavingContext;
 class KoTextShapeData;
 class KUndo2Stack;
 class ChangeStylesMacroCommand;
 class KoTextTableTemplate;
+class KoOdfBibliographyConfiguration;
 
 /**
  * Manages all character, paragraph, table and table cell styles for any number

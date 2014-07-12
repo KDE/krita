@@ -18,13 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoTextRangeManager.h"
-#include "KoTextDocument.h"
-#include "KoBookmark.h"
-#include "KoBookmarkManager.h"
-#include "KoAnnotation.h"
-#include "KoAnnotationManager.h"
 
-#include <QTextCursor>
+#include "KoAnnotation.h"
+#include "KoBookmark.h"
+
 #include <kdebug.h>
 
 KoTextRangeManager::KoTextRangeManager(QObject *parent)

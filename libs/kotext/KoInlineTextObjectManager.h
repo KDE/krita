@@ -23,17 +23,16 @@
 #include "KoVariableManager.h"
 #include "kotext_export.h"
 
-#include <KoOdfBibliographyConfiguration.h>
-
 // Qt + kde
 #include <QHash>
-#include <QTextCharFormat>
 #include <QTextBlock>
 
 class KoCanvasBase;
 class KoTextLocator;
 class KoInlineNote;
 class KoInlineCite;
+
+class QTextCharFormat;
 class QAction;
 
 /**

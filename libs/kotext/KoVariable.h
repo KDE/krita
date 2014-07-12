@@ -24,15 +24,6 @@
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
-// Qt + kde
-#include <QHash>
-#include <QString>
-
-class QTextInlineObject;
-class QTextDocument;
-#include "KoXmlReaderForward.h"
-class KoShape;
-class KoShapeLoadingContext;
 class KoProperties;
 class QWidget;
 class KoVariableManager;

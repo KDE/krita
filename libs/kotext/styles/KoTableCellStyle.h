@@ -25,14 +25,13 @@
 #include "KoText.h"
 #include "kotext_export.h"
 
+#include <KoXmlReaderForward.h>
+
 #include <KoBorder.h>
 #include <KoShadowStyle.h>
 #include <QColor>
 
 #include <QObject>
-#include <QVector>
-#include <QString>
-#include <QVariant>
 
 struct Property;
 class QTextTableCell;
@@ -41,10 +40,11 @@ class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
 class KoParagraphStyle;
-#include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoTableCellStylePrivate;
+class QString;
+class QVariant;
 
 /**
  * A container for all properties for the table cell style.

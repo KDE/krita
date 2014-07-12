@@ -22,14 +22,7 @@
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
-#include "KoXmlReaderForward.h"
-
-class KoShapeLoadingContext;
-class KoChangeTracker;
-class KoStyleManager;
-
 class QTextFrame;
-class InsertNodeCommand;
 
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.

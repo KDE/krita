@@ -22,6 +22,7 @@
 #include "KoAnchorInlineObject.h"
 #include "KoAnchorTextRange.h"
 
+#include <KoTextEditor.h>
 #include <KoShapeContainer.h>
 #include <KoTextShapeDataBase.h>
 #include <KoTextDocument.h>

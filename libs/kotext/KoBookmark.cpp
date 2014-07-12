@@ -22,7 +22,6 @@
 #include "KoBookmark.h"
 
 #include <KoShapeSavingContext.h>
-#include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoTextInlineRdf.h>
@@ -30,10 +29,7 @@
 #include <KoXmlNS.h>
 
 #include <QTextDocument>
-#include <QTextList>
-#include <QTextBlock>
 #include <QTextCursor>
-#include <QWeakPointer>
 #include <kdebug.h>
 
 class KoBookmark::Private

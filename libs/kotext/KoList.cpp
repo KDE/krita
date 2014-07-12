@@ -19,20 +19,16 @@
  */
 
 #include "KoList.h"
+#include "KoList_p.h"
+
 #include "KoTextDocument.h"
 #include "styles/KoListLevelProperties.h"
-#include "KoTextBlockData.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
 
 #include <kdebug.h>
 
 #include <QTextCursor>
-#include <QWeakPointer>
-#include <QBitArray>
-
-#include "KoList_p.h"
-
 
 KoList::KoList(const QTextDocument *document, KoListStyle *style, KoList::Type type)
     : QObject(const_cast<QTextDocument *>(document)), d(new KoListPrivate(this, document))

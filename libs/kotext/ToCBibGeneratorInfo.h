@@ -20,12 +20,11 @@
 #ifndef TOCBIBGENERATORINFO_H
 #define TOCBIBGENERATORINFO_H
 
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
 #include <KoText.h>
 
 const int INVALID_OUTLINE_LEVEL = 0;
 
+class KoXmlWriter;
 class BibliographyGenerator;
 class ToCGenerator;
 class KoBibliographyInfo;

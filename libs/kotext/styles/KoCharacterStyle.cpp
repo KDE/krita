@@ -22,16 +22,11 @@
  */
 #include "KoCharacterStyle.h"
 
-#include "KoTableCellStyle.h"
-
 #include "Styles_p.h"
 
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QFontMetricsF>
 #include <QFontDatabase>
-#include <QTextTableCell>
-#include <QTextTable>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -44,8 +39,6 @@
 #include <KoShadowStyle.h>
 #include <KoShapeLoadingContext.h>
 #include <KoStyleStack.h>
-#include "KoTextSharedLoadingData.h"
-#include "KoInlineTextObjectManager.h"
 #include "KoTextDocument.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION

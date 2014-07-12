@@ -19,9 +19,11 @@
 
 #include "KoTextWriter_p.h"
 
-
+#include <KoList.h>
 #include <KoElementReference.h>
 #include <KoTextRangeManager.h>
+
+#include <kdebug.h>
 
 // A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)

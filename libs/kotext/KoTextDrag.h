@@ -22,7 +22,6 @@
 
 #include "kotext_export.h"
 
-
 class QMimeData;
 class QString;
 class QByteArray;

@@ -22,26 +22,19 @@
 
 #include "kotextlayout_export.h"
 
-#include "KoPointedAt.h"
-
 #include <KoText.h>
 #include <KoTextDocumentLayout.h>
 #include <KoInsets.h>
 
-#include <QRectF>
-#include <QList>
-
-class KoStyleManager;
-class KoTextDocumentLayout;
 class KoTextBlockData;
 class KoInlineNote;
 class KoPointedAt;
-class QTextList;
-class KoTextBlockBorderData;
-class KoTextLayoutEndNotesArea;
-class KoTextLayoutTableArea;
-class KoTextLayoutNoteArea;
+class KoParagraphStyle;
+
 class FrameIterator;
+
+class QTextList;
+class QRectF;
 
 /**
  * When layouting text the text is chopped up into physical area of space.

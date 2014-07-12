@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kundo2command.h>
 
+#include <KoList.h>
 #include <KoTextEditor.h>
 #include "KoTextEditor_p.h"
 #include <KoTextDocument.h>

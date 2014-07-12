@@ -23,13 +23,12 @@
 #include <QSharedDataPointer>
 #include <QSharedData>
 #include <QUuid>
-#include <QWeakPointer>
-#include <QMap>
-#include <QSet>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
+
+#include "KoXmlReaderForward.h"
 
 #include "koodf_export.h"
+
+class KoXmlWriter;
 
 class KoElementReferenceData : public QSharedData
 {

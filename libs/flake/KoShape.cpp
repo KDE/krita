@@ -61,6 +61,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfLoadingContext.h>
+#include <KoStyleStack.h>
 #include <KoBorder.h>
 
 #include <QPainter>

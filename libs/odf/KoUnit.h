@@ -27,7 +27,6 @@
 // Calligra
 #include "koodf_export.h"
 // Qt
-#include <QFlags>
 #include <QString>
 #include <QDebug>
 #include <QMetaType>

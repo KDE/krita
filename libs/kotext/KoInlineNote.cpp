@@ -23,6 +23,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
+#include <KoOdfNumberDefinition.h>
 #include <KoTextLoader.h>
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>

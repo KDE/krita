@@ -26,7 +26,6 @@
 
 #include "koodf_export.h"
 
-#include <QColor>
 #include <QPen>
 #include <QSharedData>
 #include <QMetaType>
@@ -38,6 +37,7 @@ class QPainter;
 class KoStyleStack;
 class KoBorderPrivate;
 
+class QColor;
 
 /**
  * A container for all properties of a generic border as defined by ODF.

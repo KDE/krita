@@ -21,17 +21,15 @@
 #ifndef KOODFLOADINGCONTEXT_H
 #define KOODFLOADINGCONTEXT_H
 
-#include <QString>
-
 #include <kcomponentdata.h>
 
 #include "koodf_export.h"
-#include "KoStyleStack.h"
 #include "KoOdfStylesReader.h"
 
 
 class KoStore;
 class KoOdfManifestEntry;
+class KoStyleStack;
 
 
 /**

@@ -29,8 +29,9 @@
 #include "koodf_export.h"
 #include "KoOdfNumberStyles.h"
 #include "KoOdfNotesConfiguration.h"
-#include "KoOdfLineNumberingConfiguration.h"
-#include "KoOdfBibliographyConfiguration.h"
+
+class KoOdfLineNumberingConfiguration;
+class KoOdfBibliographyConfiguration;
 
 /**
  * Repository of styles used during loading of OASIS/OOo file

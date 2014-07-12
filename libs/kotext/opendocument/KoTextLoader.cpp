@@ -44,6 +44,7 @@
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoOdfLineNumberingConfiguration.h>
 #include <KoProperties.h>
 #include <KoShapeContainer.h>
 #include <KoShapeFactoryBase.h>

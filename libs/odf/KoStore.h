@@ -21,16 +21,12 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <QString>
-#include <QStringList>
-#include <QIODevice>
-#include <QStack>
 #include <QByteArray>
+#include <QIODevice>
 #include "koodf_export.h"
 
-#include <kurl.h>
-
 class QWidget;
+class KUrl;
 class KoStorePrivate;
 
 /**

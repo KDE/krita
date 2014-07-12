@@ -28,7 +28,6 @@
 
 #include <kdebug.h>
 
-#include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -37,7 +36,6 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include "KoOdfLoadingContext.h"
 #include "KoOdfStylesReader.h"
 
 void KoOdfGraphicStyles::saveOdfFillStyle(KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush)

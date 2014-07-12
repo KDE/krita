@@ -40,6 +40,8 @@
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextSharedSavingData.h>
+#include <KoXmlWriter.h>
+#include <KoOdfNumberDefinition.h>
 
 #include <kundo2stack.h>
 

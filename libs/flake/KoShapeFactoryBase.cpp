@@ -29,6 +29,7 @@
 
 #include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
+#include <KoStyleStack.h>
 
 #include <kservice.h>
 #include <KoServiceLocator.h>

@@ -54,6 +54,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoStyleStack.h>
 
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>

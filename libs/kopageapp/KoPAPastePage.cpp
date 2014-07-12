@@ -21,6 +21,7 @@
 
 #include <QBuffer>
 #include <QString>
+#include <KoGenStyles.h>
 #include <KoOdfReadStore.h>
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>

@@ -43,6 +43,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoDocumentRdfBase.h>
+#include <KoStyleStack.h>
 
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>

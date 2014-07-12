@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <QIODevice>
 #include <QByteArray>
+#include <QStack>
 #include <float.h>
 
 static const int s_indentBufferLength = 100;

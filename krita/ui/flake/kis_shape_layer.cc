@@ -44,7 +44,7 @@
 #include <KoDataCenterBase.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include <KoImageCollection.h>
 #include <KoOdf.h>
 #include <KoOdfReadStore.h>

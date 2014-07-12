@@ -24,6 +24,7 @@
 
 #include <KoShapePainter.h>
 #include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>

@@ -43,6 +43,7 @@
 #include <KoGenStyle.h>
 #include <KoShadowStyle.h>
 #include <KoShapeLoadingContext.h>
+#include <KoStyleStack.h>
 #include "KoTextSharedLoadingData.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoTextDocument.h"

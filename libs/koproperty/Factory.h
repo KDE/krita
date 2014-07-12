@@ -31,7 +31,6 @@
 
 class QStyleOptionViewItem;
 class QModelIndex;
-class QPainter;
 
 namespace KoProperty
 {

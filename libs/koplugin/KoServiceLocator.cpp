@@ -20,13 +20,11 @@
 
 #include <QDebug>
 #include <QDir>
-#include <QTime>
 #include <QApplication>
 #include <QSet>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kservice.h>
 
 
 struct KoServiceLocator::Private {

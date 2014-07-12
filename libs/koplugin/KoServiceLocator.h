@@ -19,8 +19,6 @@
 #ifndef KOSERVICELOCATOR_H
 #define KOSERVICELOCATOR_H
 
-#include <QObject>
-
 #include <kservice.h>
 
 #include "koplugin_export.h"

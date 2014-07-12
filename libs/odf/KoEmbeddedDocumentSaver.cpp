@@ -25,6 +25,7 @@
 #include <QList>
 
 #include <kdebug.h>
+#include <kurl.h>
 
 #include <KoStore.h>
 #include <KoXmlWriter.h>

@@ -21,7 +21,6 @@
 #include "KoXmlWriter.h"
 
 #include <kdebug.h>
-#include <QIODevice>
 #include <QByteArray>
 #include <QStack>
 #include <float.h>

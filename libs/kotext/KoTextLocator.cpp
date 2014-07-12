@@ -32,6 +32,10 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
+// Include Q_UNSUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+
 class KoTextLocator::Private
 {
 public:

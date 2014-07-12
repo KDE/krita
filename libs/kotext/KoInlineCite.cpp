@@ -32,6 +32,9 @@
 #include <QFontMetricsF>
 #include <QTextOption>
 
+// Include Q_UNSUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
+
 class KoInlineCite::Private
 {
 public:

@@ -26,6 +26,9 @@
 #include <QTextInlineObject>
 #include <QPainter>
 
+// Include Q_UNSUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
+
 KoTextSoftPageBreak::KoTextSoftPageBreak()
 {
 }

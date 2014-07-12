@@ -32,6 +32,9 @@
 #include <QTextCursor>
 #include <kdebug.h>
 
+// Include Q_UNSUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
+
 class KoBookmark::Private
 {
 public:

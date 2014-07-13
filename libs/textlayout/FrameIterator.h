@@ -20,13 +20,12 @@
 #define FRAMEITERATOR_H
 
 #include <QTextFrame>
-#include <QTextLine>
-#include <QTextTableCell>
 
 class TableIterator;
-class QTextTable;
 class KoTextLayoutRootArea;
 class KoTextLayoutTableArea;
+class QTextTableCell;
+class QTextTable;
 
 class FrameIterator
 {

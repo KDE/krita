@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "RunAroundHelper.h"
+
 #include "KoTextLayoutObstruction.h"
 
 #include "KoTextLayoutArea.h"

@@ -24,10 +24,10 @@
 
 #include <KoListStyle.h>
 
-#include <QFont>
 #include <QFontMetricsF>
 
 class QTextList;
+class QFont;
 
 namespace Lists
 {

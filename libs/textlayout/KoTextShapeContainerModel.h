@@ -20,11 +20,11 @@
 #define KOTEXTSHAPECONTAINERMODEL_H
 
 #include <KoShapeContainerModel.h>
-#include <KoShapeContainer.h>
 
 #include "kotextlayout_export.h"
 
 class KoShapeAnchor;
+class KoShapeContainer;
 
 /**
  *  A model to position children of the text shape.

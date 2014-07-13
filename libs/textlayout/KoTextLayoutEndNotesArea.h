@@ -24,7 +24,7 @@
 
 #include "KoTextLayoutArea.h"
 
-#include <QRectF>
+class QRectF;
 
 
 /**

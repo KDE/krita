@@ -22,13 +22,12 @@
 
 #include "kotextlayout_export.h"
 
-#include <QSizeF>
-#include <QRectF>
 #include <QList>
 
 class KoTextLayoutRootArea;
 class KoTextDocumentLayout;
 class KoTextLayoutObstruction;
+class QRectF;
 
 /**
  * When laying out text we need an area where upon the text will be placed.

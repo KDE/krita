@@ -24,7 +24,6 @@
 
 #include <KoText.h>
 #include <KoTextDocumentLayout.h>
-#include <KoInsets.h>
 
 class KoTextBlockData;
 class KoInlineNote;

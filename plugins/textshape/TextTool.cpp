@@ -83,6 +83,7 @@
 #include <kstandardaction.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
+#include <QTextTable>
 #include <QTextList>
 #include <QTabWidget>
 #include <QTextDocumentFragment>

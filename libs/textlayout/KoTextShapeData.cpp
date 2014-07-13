@@ -21,6 +21,7 @@
  */
 
 #include "KoTextShapeData.h"
+
 #include <KoTextShapeDataBase.h>
 #include <KoTextShapeDataBase_p.h>
 #include "KoTextDocument.h"
@@ -31,21 +32,18 @@
 #include <KoTextLayoutRootArea.h>
 
 #include <kdebug.h>
-#include <QUrl>
 #include <QTextDocument>
 #include <QTextBlock>
-#include <QMetaObject>
 #include <QTextCursor>
 
 #include <KoGenStyle.h>
-#include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoDocumentRdfBase.h>
 #include <KoStyleStack.h>
+#include <KoShape.h>
 
-#include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 
 #include "KoTextPage.h"
@@ -53,12 +51,6 @@
 #include "opendocument/KoTextLoader.h"
 #include "opendocument/KoTextWriter.h"
 
-#include <KoChangeTracker.h>
-#include <KoChangeTrackerElement.h>
-#include <KoShapeController.h>
-#include <KoShapeContainer.h>
-#include <kundo2stack.h>
-#include <kundo2command.h>
 
 class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
 {

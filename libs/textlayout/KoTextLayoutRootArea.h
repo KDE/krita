@@ -24,8 +24,6 @@
 
 #include "KoTextLayoutArea.h"
 
-#include <QRectF>
-
 class KoShape;
 class KoTextPage;
 

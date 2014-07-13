@@ -22,8 +22,6 @@
 #ifndef TOCGENERATOR_H
 #define TOCGENERATOR_H
 
-
-#include <QList>
 #include <QTextBlock>
 #include <QObject>
 

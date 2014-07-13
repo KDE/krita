@@ -92,6 +92,7 @@
 #include <KoColorBackground.h>
 #include <KoShapeStroke.h>
 #include <KoOdfWorkaround.h>
+#include <KoTextDocument.h>
 
 // KChart
 #include "Axis.h"

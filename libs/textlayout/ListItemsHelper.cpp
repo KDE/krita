@@ -21,7 +21,6 @@
 #include "ListItemsHelper.h"
 
 #include <KoTextBlockData.h>
-#include <KoListStyle.h>
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
 #include <KoList.h>
@@ -29,8 +28,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <QTextList>
-#include <QTextDocument>
-#include <QAbstractTextDocumentLayout>
+
 using namespace Lists;
 
 QString Lists::intToRoman(int n)

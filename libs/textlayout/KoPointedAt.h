@@ -28,7 +28,7 @@
 
 class KoBookmark;
 class QTextDocument;
-class QTexttable;
+class QTextTable;
 class KoInlineTextObjectManager;
 class KoTextRangeManager;
 class KoInlineNote;

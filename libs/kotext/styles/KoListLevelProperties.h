@@ -23,17 +23,15 @@
 
 #include "KoListStyle.h"
 
-#include <QString>
-#include <QChar>
-
 #include <KoXmlReader.h>
 
 class KoCharacterStyle;
-class KoListStyle;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoXmlWriter;
 class KoImageData;
+
+class QTextList;
 
 /**
  * Properties per list level.

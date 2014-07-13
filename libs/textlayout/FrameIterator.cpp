@@ -18,15 +18,11 @@
  */
 
 #include "FrameIterator.h"
-#include "TableIterator.h"
-#include "KoTextLayoutRootArea.h"
 
-#include <KoParagraphStyle.h>
-#include <KoTextPage.h>
+#include "TableIterator.h"
 
 #include <QTextFrame>
 #include <QTextTableCell>
-#include <QTextLine>
 
 FrameIterator::FrameIterator(QTextFrame *frame)
 {

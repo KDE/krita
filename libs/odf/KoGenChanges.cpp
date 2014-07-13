@@ -24,8 +24,6 @@
 
 #include <QList>
 #include <QMap>
-#include <QMultiMap>
-#include <QSet>
 #include <QString>
 
 #include <kdebug.h>

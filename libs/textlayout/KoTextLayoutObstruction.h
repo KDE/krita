@@ -23,11 +23,14 @@
 
 #include "kotextlayout_export.h"
 
-#include <QTransform>
 #include <QMultiMap>
-#include <QPainterPath>
+#include <QPolygonF>
+#include <QRectF>
+#include <QLineF>
 
 class KoShape;
+class QTransform;
+class QPainterPath;
 
 ///  Class that allows us with the runaround of QPainterPaths
 class KOTEXTLAYOUT_EXPORT KoTextLayoutObstruction

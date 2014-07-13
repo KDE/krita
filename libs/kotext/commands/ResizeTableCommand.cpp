@@ -23,7 +23,6 @@
 #include "KoTableColumnStyle.h"
 #include "KoTableRowStyle.h"
 
-#include <QTextTableCell>
 #include <QTextTable>
 #include <QTextCursor>
 #include <QTextDocument>

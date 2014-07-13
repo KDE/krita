@@ -20,6 +20,8 @@
 
 #include "KoTextBlockBorderData.h"
 
+#include <QPainter>
+
 #include <kdebug.h>
 
 struct Edge {

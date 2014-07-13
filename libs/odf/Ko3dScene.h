@@ -24,8 +24,6 @@
 // Qt
 #include <QColor>
 #include <QVector3D>
-#include <QString>
-#include <QList>
 
 class KoXmlWriter;
 class KoXmlElement;

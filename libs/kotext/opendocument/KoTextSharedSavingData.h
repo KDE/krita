@@ -36,6 +36,9 @@ namespace Soprano
 class Model;
 }
 
+class QString;
+
+
 class KOTEXT_EXPORT KoTextSharedSavingData : public KoSharedSavingData
 {
 public:

@@ -20,13 +20,11 @@
 #ifndef KOODFMANIFEST_H
 #define KOODFMANIFEST_H
 
-
-#include <QString>
-
 #include "koodf_export.h"
 
 
 class KoStore;
+class QString;
 
 
 // A class that holds a manifest:file-entry.

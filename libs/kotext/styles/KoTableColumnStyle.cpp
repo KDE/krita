@@ -22,7 +22,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoTableColumnStyle.h"
-#include "KoStyleManager.h"
+
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include "Styles_p.h"

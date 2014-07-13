@@ -33,6 +33,7 @@
 #include <KoStoreDevice.h>
 #include <KoXmlNS.h>
 #include <KoOdfManifestEntry.h>
+#include "KoStyleStack.h"
 
 
 

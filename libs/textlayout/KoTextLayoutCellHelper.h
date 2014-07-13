@@ -28,10 +28,10 @@
 #include "kotextlayout_export.h"
 
 #include <KoBorder.h>
-#include <KoTableCellStyle.h>
 
 #include <QObject>
 
+class KoTableCellStyle;
 class QPainter;
 
 class KOTEXTLAYOUT_EXPORT KoTextLayoutCellHelper : public QObject

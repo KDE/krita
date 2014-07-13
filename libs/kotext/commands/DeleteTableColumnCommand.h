@@ -21,7 +21,7 @@
 #ifndef DELETETABLECOLUMNCOMMAND_H
 #define DELETETABLECOLUMNCOMMAND_H
 
-#include <kundo2qstack.h>
+#include <kundo2command.h>
 #include <QList>
 #include <KoTableColumnStyle.h>
 

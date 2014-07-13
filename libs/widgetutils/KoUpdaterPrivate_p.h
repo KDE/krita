@@ -24,8 +24,6 @@
 #include "KoProgressUpdater.h"
 #include "KoProgressProxy.h"
 
-#include <QMutex>
-#include <QPointer>
 #include <QTime>
 
 /**

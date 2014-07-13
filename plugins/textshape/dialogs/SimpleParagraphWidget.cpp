@@ -32,6 +32,7 @@
 #include "ListLevelChooser.h"
 #include "commands/ChangeListLevelCommand.h"
 
+#include <KoTextEditor.h>
 #include <KoTextBlockData.h>
 #include <KoParagraphStyle.h>
 #include <KoInlineTextObjectManager.h>

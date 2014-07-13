@@ -134,6 +134,7 @@ Panel {
                 }
                 source: model.image
                 fillMode: Image.PreserveAspectFit;
+                asynchronous: true;
             }
             Label {
                     id: peekLabel
@@ -197,6 +198,7 @@ Panel {
                         width: parent.width * 0.8;
                         height: parent.height * 0.8;
                         fillMode: Image.PreserveAspectFit;
+                        asynchronous: true;
                     }
                 }
                 Label {

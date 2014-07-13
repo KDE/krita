@@ -22,9 +22,6 @@
 
 #include "InsertInlineObjectActionBase_p.h"
 
-#include <QString>
-
-class KoCanvasBase;
 class KoInlineTextObjectManager;
 
 /**

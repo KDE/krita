@@ -19,6 +19,7 @@
  */
 
 #include "KoTextDrag.h"
+
 #include <QBuffer>
 #include <QByteArray>
 #include <QMimeData>

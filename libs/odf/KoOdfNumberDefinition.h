@@ -20,11 +20,10 @@
 #ifndef KOODFNUMBERDEFINITION_H
 #define KOODFNUMBERDEFINITION_H
 
-#include <QString>
-
 #include "KoXmlReader.h"
-#include "KoXmlWriter.h"
 #include "koodf_export.h"
+
+class KoXmlWriter;
 
 /**
  * Load and save the ODF numbering scheme according to section 12.

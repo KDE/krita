@@ -22,9 +22,6 @@
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
-#include <QString>
-
-class KoTextBlockData;
 class KoTextReference;
 
 /**

@@ -25,7 +25,6 @@
 
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
-#include <KoTextBlockData.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoAnchorTextRange.h>
 

@@ -23,12 +23,13 @@
 #include "kotextlayout_export.h"
 
 #include "KoTextLayoutArea.h"
-#include "KoPointedAt.h"
 
 #include <QVector>
-#include <QLineF>
 
+class KoPointedAt;
 class TableIterator;
+class QTextTableCell;
+class QLineF;
 
 /**
  * This class represent a (full width) piece of a table
@@ -58,8 +59,8 @@ private:
     bool layoutRow(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth);
     bool layoutMergedCellsNotEnding(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth, qreal rowBottom);
     QRectF cellBoundingRect(const QTextTableCell &cell) const;
-    void paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, KoTextLayoutArea *frameArea);
-    void paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, int maxRow, QVector<QLineF> *accuBlankBorders);
+    void paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, const QTextTableCell &tableCell, KoTextLayoutArea *frameArea);
+    void paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, const QTextTableCell &tableCell, bool topRow, int maxRow, QVector<QLineF> *accuBlankBorders);
 
     class Private;
     Private * const d;

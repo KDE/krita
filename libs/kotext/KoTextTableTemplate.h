@@ -23,7 +23,8 @@
 
 #include <QObject>
 
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
+
 class KoXmlWriter;
 class KoShapeLoadingContext;
 class KoTextSharedSavingData;

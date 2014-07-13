@@ -29,7 +29,6 @@
 
 #include <klocale.h>
 
-#include <QString>
 #include <QTextDocument>
 #include <QWeakPointer>
 

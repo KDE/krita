@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
+#include <kurl.h>
 
 #include <KoStore.h>
 #include <KoOdfReadStore.h>

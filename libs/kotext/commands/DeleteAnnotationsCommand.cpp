@@ -19,10 +19,8 @@
 
 #include "DeleteAnnotationsCommand.h"
 
-#include <QTextCursor>
 #include "KoAnnotation.h"
 #include "KoTextDocument.h"
-#include <KoShape.h>
 #include "KoTextRangeManager.h"
 
 #include <kdebug.h>

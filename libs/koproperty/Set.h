@@ -29,7 +29,6 @@
 namespace KoProperty
 {
 
-class Property;
 class SetPrivate;
 
 /*! \brief Set of properties

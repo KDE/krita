@@ -18,14 +18,13 @@
  */
 
 #include "KoBibliographyInfo.h"
+
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
 #include <KoOdfBibliographyConfiguration.h>
-
-#include <QTextCursor>
 
 int KoBibliographyInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
 {

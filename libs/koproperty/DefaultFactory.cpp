@@ -44,7 +44,6 @@
 #include "editors/timeedit.h"
 // #include "urledit.h"
 #include <kdebug.h>
-#include <kglobal.h>
 
 using namespace KoProperty;
 

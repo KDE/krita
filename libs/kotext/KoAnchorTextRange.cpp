@@ -21,21 +21,13 @@
  */
 
 #include "KoAnchorTextRange.h"
-#include "KoStyleStack.h"
-#include "KoOdfLoadingContext.h"
 #include "KoShapeAnchor.h"
 
-#include <KoShapeContainer.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoUnit.h>
+#include <KoShape.h>
 
 #include <kdebug.h>
 
-#include "KoTextDocument.h"
 
 class KoAnchorTextRangePrivate
 {

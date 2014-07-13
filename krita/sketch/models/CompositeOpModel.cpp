@@ -194,8 +194,6 @@ void CompositeOpModel::setView(QObject* newView)
         connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
                 this, SLOT(currentNodeChanged(KisLayerSP)));
         slotToolChanged(0, 0);
-        connect(this, SIGNAL(changeMirrorCenter()),
-                d->view->canvasBase()->inputManager(), SLOT(setMirrorAxis()));
     }
     emit viewChanged();
 }
@@ -336,11 +334,6 @@ void CompositeOpModel::setMirrorVertically(bool newMirrorVertically)
         d->view->resourceProvider()->setMirrorVertical(newMirrorVertically);
         emit mirrorVerticallyChanged();
     }
-}
-
-void CompositeOpModel::setMirrorCenter()
-{
-    emit changeMirrorCenter();
 }
 
 void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)

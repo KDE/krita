@@ -22,9 +22,10 @@
 #define KOGENCHANGES_H
 
 #include "koodf_export.h"
-#include "KoGenStyle.h"
 
 #include <KoGenChange.h>
+
+class KoXmlWriter;
 
 /**
  * @brief Repository of changes used during saving of OASIS/OOo file.

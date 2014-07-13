@@ -21,8 +21,6 @@
 #ifndef DELETECOMMAND_H
 #define DELETECOMMAND_H
 
-#include <kundo2qstack.h>
-
 #include "KoTextCommandBase.h"
 
 #include <QTextCharFormat>
@@ -33,13 +31,9 @@
 class QTextDocument;
 class KoShapeController;
 class KoInlineObject;
-class KoShape;
-
-class QTextCursor;
 
 class DeleteVisitor;
 class KoTextRange;
-class KoTextEditor;
 
 class DeleteCommand : public KoTextCommandBase
 {

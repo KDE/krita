@@ -28,11 +28,11 @@
 #include <kreplacedialog.h>
 #include <kfind.h>
 #include <klocale.h>
-#include <kaction.h>
 
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QTimer>
+#include <QAction>
 #include <kdebug.h>
 
 #include "KoFind.h"

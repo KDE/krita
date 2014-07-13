@@ -123,6 +123,7 @@ Panel {
                         anchors.centerIn: parent;
                         cache: false;
                         source: model.icon;
+                        asynchronous: true;
                         smooth: true;
                         width: parent.width * 0.8;
                         height: parent.height * 0.8;
@@ -278,6 +279,7 @@ Panel {
                                 cache: false;
                                 source: model.icon;
                                 smooth: true;
+                                asynchronous: true;
                                 width: parent.width * 0.8;
                                 height: parent.height * 0.8;
                                 fillMode: Image.PreserveAspectFit;

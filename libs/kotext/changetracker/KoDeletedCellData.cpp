@@ -17,10 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QTextTableCellFormat>
-#include <QTextDocumentFragment>
-
 #include "KoDeletedCellData.h"
+
 
 KoDeletedCellData::KoDeletedCellData(int rowNumber, int columnNumber)
 {

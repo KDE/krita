@@ -23,20 +23,13 @@
 #define KOTEXTDOCUMENT_H
 
 #include <QTextDocument>
-#include <QTextCharFormat>
 #include <QWeakPointer>
 #include <QAbstractTextDocumentLayout>
 #include <QUrl>
 
-#include "KoList.h"
-#include <KoShapeManager.h>
-#include <KoSelection.h>
-#include <KoTextShapeDataBase.h>
-#include <KoCanvasBase.h>
-#include <KoTextEditor.h>
-#include "KoOdfNotesConfiguration.h"
-#include "KoOdfBibliographyConfiguration.h"
+#include "KoListStyle.h"
 
+class KoList;
 class KoStyleManager;
 class KoInlineTextObjectManager;
 class KoTextRangeManager;
@@ -45,6 +38,8 @@ class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
 class KoChangeTracker;
 class KoShapeController;
+
+class QTextCharFormat;
 
 /**
  * KoTextDocument provides an easy mechanism to set and access the

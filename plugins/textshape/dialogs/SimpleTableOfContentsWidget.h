@@ -21,8 +21,6 @@
 #define SIMPLETABLEOFCONTENTSWIDGET_H
 
 #include <ui_SimpleTableOfContentsWidget.h>
-#include <KoListStyle.h>
-#include "FormattingButton.h"
 
 #include <QWidget>
 #include <QTextBlock>
@@ -30,7 +28,6 @@
 
 class ReferencesTool;
 class KoStyleManager;
-class QMenu;
 class KoTableOfContentsGeneratorInfo;
 class TableOfContentsPreview;
 class QSignalMapper;

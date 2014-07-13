@@ -20,17 +20,12 @@
 
 #include "KoPluginLoader.h"
 
-#include <QString>
-#include <QStringList>
-
 #include <kdebug.h>
 #include <kservice.h>
 #include <KoServiceLocator.h>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
-#include <KoServiceLocator.h>
 
 
 class KoPluginLoader::Private

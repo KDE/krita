@@ -24,16 +24,12 @@
 #include "kotextlayout_export.h"
 
 #include <KoTextShapeDataBase.h>
-#include <KoInsets.h>
 #include <KoXmlReaderForward.h>
 
 class QTextDocument;
-class QTextCursor;
-class KoXmlWriter;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoTextShapeDataPrivate;
-class KoTextPage;
 class KoDocumentRdfBase;
 class KoTextLayoutRootArea;
 

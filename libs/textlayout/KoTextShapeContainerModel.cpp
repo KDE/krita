@@ -19,9 +19,10 @@
  */
 
 #include "KoTextShapeContainerModel.h"
+
 #include "KoAnchorInlineObject.h"
 #include "KoTextShapeData.h"
-#include "KoTextDocumentLayout.h"
+#include "KoShapeContainer.h"
 
 #include <QTextBlock>
 #include <QTextLayout>

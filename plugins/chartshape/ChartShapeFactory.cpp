@@ -37,6 +37,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoDocumentResourceManager.h>
+#include <KoStyleStack.h>
 
 // Chart shape
 #include "ChartToolFactory.h"

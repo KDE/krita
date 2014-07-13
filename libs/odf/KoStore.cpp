@@ -32,7 +32,6 @@
 #include <QBuffer>
 #include <QFileInfo>
 #include <QFile>
-#include <QDir>
 
 #include <kurl.h>
 #include <kdebug.h>

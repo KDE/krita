@@ -22,7 +22,6 @@
 
 #include <QAbstractItemModel>
 #include <QModelIndex>
-#include <QVariant>
 
 #include "Set.h"
 

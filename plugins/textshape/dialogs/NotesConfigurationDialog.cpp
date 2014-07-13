@@ -20,6 +20,8 @@
 #include "KoTextDocument.h"
 #include "KoStyleManager.h"
 
+#include <KoOdfNumberDefinition.h>
+
 #include <kaction.h>
 #include <klocale.h>
 

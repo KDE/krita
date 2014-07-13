@@ -27,7 +27,6 @@
 #include <KoXmlReader.h>
 
 #include "KoOdfStylesReader.h"
-#include "KoXmlNS.h"
 
 #include <QXmlStreamReader>
 

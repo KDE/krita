@@ -23,6 +23,8 @@
  */
 
 #include "KoTextLayoutCellHelper.h"
+
+#include <KoTableCellStyle.h>
 #include <QPainter>
 
 KoTextLayoutCellHelper::KoTextLayoutCellHelper(const KoTableCellStyle &cellStyle, QObject *parent)

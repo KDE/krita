@@ -87,6 +87,7 @@ Item {
             anchors.margins: 8;
             fillMode: Image.PreserveAspectFit;
             smooth: true;
+            asynchronous: true;
             opacity: base.enabled ? 1 : 0.7;
             Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
 

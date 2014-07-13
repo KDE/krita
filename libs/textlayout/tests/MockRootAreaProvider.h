@@ -22,6 +22,8 @@
 
 #include "KoTextLayoutRootAreaProvider.h"
 
+#include <QRectF>
+
 class MockRootAreaProvider : public KoTextLayoutRootAreaProvider
 {
 public:

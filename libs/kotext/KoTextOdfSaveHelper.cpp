@@ -23,11 +23,8 @@
 #include <KoXmlWriter.h>
 #include <KoOdf.h>
 #include "KoTextWriter.h"
-#include <KoGenChanges.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextDocument.h>
-
-#include <opendocument/KoTextSharedSavingData.h>
 
 #include <QTextDocument>
 

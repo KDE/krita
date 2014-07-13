@@ -18,6 +18,7 @@
  */
 
 #include "KoDeletedRowColumnDataStore.h"
+
 #include "KoDeletedRowData.h"
 #include "KoDeletedColumnData.h"
 

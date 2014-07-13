@@ -19,18 +19,15 @@
  */
 #include "KoInlineNote.h"
 
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
+#include <KoOdfNumberDefinition.h>
 #include <KoTextLoader.h>
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
 #include <KoText.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoGenStyles.h>
 #include <KoStyleManager.h>
-#include <KoElementReference.h>
 #include <kdebug.h>
 #include <writeodf/writeodftext.h>
 #include <writeodf/writeodfoffice.h>
@@ -39,12 +36,10 @@
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextCursor>
-#include <QString>
 #include <QTextInlineObject>
 #include <QFontMetricsF>
 #include <QTextOption>
 #include <QDateTime>
-#include <QWeakPointer>
 
 using namespace writeodf;
 

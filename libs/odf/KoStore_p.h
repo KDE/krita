@@ -23,7 +23,8 @@
 
 #include "KoStore.h"
 
-#include <QString>
+#include <QStringList>
+#include <QStack>
 
 #include <kurl.h>
 

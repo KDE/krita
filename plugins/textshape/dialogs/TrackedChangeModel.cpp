@@ -27,6 +27,8 @@
 #include <changetracker/KoChangeTrackerElement.h>
 #include <styles/KoCharacterStyle.h>
 
+#include <kundo2magicstring.h>
+
 #include <QHash>
 #include <QModelIndex>
 #include <QStack>

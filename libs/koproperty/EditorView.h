@@ -22,11 +22,7 @@
 
 #include "koproperty_export.h"
 
-#include <QItemEditorFactory>
 #include <QTreeView>
-#include <QLabel>
-
-#include <klineedit.h>
 
 namespace KoProperty
 {

@@ -26,12 +26,7 @@
 #include "kotext_export.h"
 
 class KoShape;
-class QTextDocument;
-class KoShapeSavingContext;
-class KoShapeLoadingContext;
 class KoAnnotationManager;
-class QTextFrame;
-class KoShape;
 
 /**
  * An annotation is a note made by the user regarding a part of the

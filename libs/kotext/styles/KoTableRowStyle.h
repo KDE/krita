@@ -26,18 +26,15 @@
 #include "KoText.h"
 #include "kotext_export.h"
 
-#include <QObject>
-#include <QVector>
-#include <QString>
-#include <QVariant>
+#include <KoXmlReaderForward.h>
 
-struct Property;
-class QTextTable;
+#include <QTextTableFormat>
+
 class KoStyleStack;
 class KoGenStyle;
-class KoGenStyles;
-#include "KoXmlReaderForward.h"
 class KoOdfLoadingContext;
+class QString;
+class QVariant;
 
 /**
  * A container for all properties for the table row style.

@@ -27,15 +27,11 @@
 #include <QDebug>
 #include <QList>
 #include <QString>
-#include <QVariant>
-#include <QTextDocument>
 
-#include <KoXmlReader.h>
-#include "KoText.h"
-#include <KoXmlWriter.h>
 #include "ToCBibGeneratorInfo.h"
 
 class KoTextSharedLoadingData;
+class KoXmlWriter;
 
 class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
 {

@@ -22,29 +22,15 @@
 
 #include "KoAnchorInlineObject.h"
 #include "KoInlineObject_p.h"
-#include "KoStyleStack.h"
-#include "KoOdfLoadingContext.h"
 #include "KoShapeAnchor.h"
 
-#include <KoShapeContainer.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoUnit.h>
+#include <KoShape.h>
 
 #include <QTextInlineObject>
 #include <QFontMetricsF>
-#include <QPainter>
-#include <QRectF>
 #include <kdebug.h>
-
-#include "changetracker/KoChangeTracker.h"
-#include "changetracker/KoChangeTrackerElement.h"
-#include "styles/KoCharacterStyle.h"
-#include "KoTextDocument.h"
-#include <KoGenChanges.h>
 
 // #define DEBUG_PAINTING
 

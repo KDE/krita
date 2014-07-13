@@ -23,12 +23,13 @@
 #define KOTEXTSHAREDLOADINGDATA_H
 
 #include <KoSharedLoadingData.h>
-
-#include <QList>
-#include "styles/KoListLevelProperties.h"
+#include <KoXmlReaderForward.h>
 #include "kotext_export.h"
 
-class QString;
+#include <QList>
+#include <QPair>
+#include <QString>
+
 class KoOdfLoadingContext;
 class KoParagraphStyle;
 class KoCharacterStyle;
@@ -43,7 +44,6 @@ class KoShape;
 class KoShapeLoadingContext;
 class KoOdfNotesConfiguration;
 class KoOdfBibliographyConfiguration;
-class KoShapeAnchor;
 class KoTextTableTemplate;
 
 #define KOTEXT_SHARED_LOADING_ID "KoTextSharedLoadingId"

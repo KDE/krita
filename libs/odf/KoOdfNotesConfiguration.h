@@ -19,15 +19,15 @@
 #ifndef KOODFNOTESCONFIGURATION_H
 #define KOODFNOTESCONFIGURATION_H
 
-#include <QString>
-#include <QPair>
 #include <QMetaType>
 #include <QObject>
 
 #include "KoXmlReader.h"
-#include "KoXmlWriter.h"
-#include "KoOdfNumberDefinition.h"
 #include "koodf_export.h"
+
+class KoXmlWriter;
+class KoOdfNumberDefinition;
+
 /**
  * load and save the notes-configuration element from the text: namespace.
  *

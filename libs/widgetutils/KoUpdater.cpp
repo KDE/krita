@@ -21,8 +21,6 @@
 
 #include "KoUpdater.h"
 
-#include <QApplication>
-
 #include "KoProgressUpdater.h"
 #include "KoUpdaterPrivate_p.h"
 

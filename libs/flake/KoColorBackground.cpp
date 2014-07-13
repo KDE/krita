@@ -23,6 +23,7 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
+#include <KoStyleStack.h>
 
 #include <QColor>
 #include <QPainter>

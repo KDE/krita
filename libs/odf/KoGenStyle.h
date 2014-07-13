@@ -28,7 +28,6 @@
 #include <QList>
 #include <QMap>
 #include <QString>
-#include <iostream>
 #include "koodf_export.h"
 
 class QTextLength;

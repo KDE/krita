@@ -26,7 +26,6 @@
 
 class QTextDocument;
 class KoAnnotation;
-class KoShape;
 
 class DeleteAnnotationsCommand : public KUndo2Command
 {

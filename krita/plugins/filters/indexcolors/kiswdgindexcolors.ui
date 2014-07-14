@@ -102,7 +102,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Inbetween ramps</string>
+         <string>In-between ramps</string>
         </property>
        </widget>
       </item>

@@ -446,6 +446,7 @@ bool KisSketchView::event( QEvent* event )
                     tool->smoothingOptions()->setUseDelayDistance(syncObject->smoothingOptions->useDelayDistance());
                     tool->smoothingOptions()->setDelayDistance(syncObject->smoothingOptions->delayDistance());
                     tool->smoothingOptions()->setFinishStabilizedCurve(syncObject->smoothingOptions->finishStabilizedCurve());
+                    tool->smoothingOptions()->setStabilizeSensors(syncObject->smoothingOptions->stabilizeSensors());
                     tool->updateSettingsViews();
                 }
 

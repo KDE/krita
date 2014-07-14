@@ -56,7 +56,7 @@ KisRecordedAction* KisRecordedFilterActionCreator::createAction() const
 }
 
 
-KisRecordedFilterActionCreatorFactory::KisRecordedFilterActionCreatorFactory() : KisRecordedActionCreatorFactory("filter", i18n("Filter"))
+KisRecordedFilterActionCreatorFactory::KisRecordedFilterActionCreatorFactory() : KisRecordedActionCreatorFactory("filter", i18nc("recorded filter action", "Apply Filter"))
 {
 }
 

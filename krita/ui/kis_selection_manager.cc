@@ -205,7 +205,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     actionManager->addAction("fill_selection_pattern", m_fillPattern, collection);
     connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
 
-    m_strokeShapes  = new KisAction(i18n("Stroke selected shapes"), this);
+    m_strokeShapes  = new KisAction(i18nc("@action:inmenu", "Stro&ke selected shapes"), this);
     m_strokeShapes->setActivationFlags(KisAction::SHAPES_SELECTED);
     actionManager->addAction("stroke_shapes", m_strokeShapes, collection);
     connect(m_strokeShapes, SIGNAL(triggered()), this, SLOT(paintSelectedShapes()));
@@ -222,17 +222,17 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     actionManager->addAction("resizeimagetoselection", m_imageResizeToSelection, collection);
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
 
-    KisAction *action = new KisAction(i18n("Convert to Vector Selection"), this);
+    KisAction *action = new KisAction(i18nc("@action:inmenu", "&Convert to Vector Selection"), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     actionManager->addAction("convert_to_vector_selection", action, collection);
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
-    action = new KisAction(i18n("Convert Shapes to Vector Selection"), this);
+    action = new KisAction(i18nc("@action:inmenu", "Convert &Shapes to Vector Selection"), this);
     action->setActivationFlags(KisAction::SHAPES_SELECTED);
     actionManager->addAction("convert_shapes_to_vector_selection", action, collection);
     connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
 
-    m_toggleSelectionOverlayMode  = new KisAction(i18n("Toggle Selection Display Mode"), this);
+    m_toggleSelectionOverlayMode  = new KisAction(i18nc("@action:inmenu", "&Toggle Selection Display Mode"), this);
     actionManager->addAction("toggle-selection-overlay-mode", m_toggleSelectionOverlayMode, collection);
     connect(m_toggleSelectionOverlayMode, SIGNAL(triggered()), SLOT(slotToggleSelectionDecoration()));
 

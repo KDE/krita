@@ -389,22 +389,24 @@ void KisToolTransform::recalcOutline()
         if (m_imageTooBig) return;
 
 
-        QTransform TS = QTransform::fromTranslate(m_transaction.originalCenter().x(), m_transaction.originalCenter().y());
+        QTransform TS = QTransform::fromTranslate(-m_transaction.originalCenter().x(), -m_transaction.originalCenter().y());
         QTransform S; S.shear(0, m_currentArgs.shearY()); S.shear(m_currentArgs.shearX(), 0);
         QTransform SC = QTransform::fromScale(m_currentArgs.scaleX(), m_currentArgs.scaleY());
-        //QTransform base = TS.inverted() * S * TS * SC;
-        QTransform base = SC * TS.inverted() * S * TS;
-
-        QPointF intermCenter = base.map(m_transaction.originalCenter());
-        QTransform TR = QTransform::fromTranslate(intermCenter.x(), intermCenter.y());
+        QTransform base = TS * SC * S;
 
         QMatrix4x4 m;
         m.rotate(180. * m_currentArgs.aX() / M_PI, QVector3D(1, 0, 0));
         m.rotate(180. * m_currentArgs.aY() / M_PI, QVector3D(0, 1, 0));
         m.rotate(180. * m_currentArgs.aZ() / M_PI, QVector3D(0, 0, 1));
-        QTransform result = base * TR.inverted() * m.toTransform(m_currentArgs.cameraPos().z()) * TR;
+        QTransform result = base * m.toTransform(m_currentArgs.cameraPos().z());
 
-        QPointF translation = m_currentArgs.transformedCenter() - result.map(m_transaction.originalCenter());
+        /**
+         * The center of the original image should still
+         * stay the the origin of CS
+         */
+        KIS_ASSERT_RECOVER_NOOP(result.map(m_transaction.originalCenter()).manhattanLength() < 1e-4);
+
+        QPointF translation = m_currentArgs.transformedCenter();
         QTransform T = QTransform::fromTranslate(translation.x(), translation.y());
         m_transform = result * T;
 

@@ -339,7 +339,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     KAction *resetCanvasRotation = new KAction(i18n("Reset Canvas Rotation"), this);
     actionCollection()->addAction("reset_canvas_rotation", resetCanvasRotation);
-    resetCanvasRotation->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasRotation, SIGNAL(triggered()),m_d->canvasController, SLOT(resetCanvasRotation()));
 
     KToggleAction *wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);

@@ -443,7 +443,7 @@ bool MyPaintBrushResource::save()
       return false;
 }
 
-bool MyPaintBrushResource::saveToDevice(QIODevice *dev) const
+bool MyPaintBrushResource::saveToDevice(QIODevice */*dev*/) const
 {
     return false;
 }

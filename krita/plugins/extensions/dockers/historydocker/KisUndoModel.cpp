@@ -92,7 +92,7 @@ void KisUndoModel::setStack(KUndo2QStack *stack)
     }
 
     m_stack = stack;
-    
+
     if (m_stack != 0) {
         connect(m_stack, SIGNAL(cleanChanged(bool)), this, SLOT(stackChanged()));
         connect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(stackChanged()));
@@ -197,7 +197,7 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
             return m_empty_label;
         return m_stack->text(index.row() - 1);
     } else if (role == Qt::DecorationRole) {
-        if(!index.row() == 0) {
+        if (!index.row()) {
             const KUndo2Command* currentCommand = m_stack->command(index.row() - 1);
             return imageMap[currentCommand];
         }

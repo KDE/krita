@@ -101,7 +101,6 @@ public:
     virtual void selectColor(double mix);
 private:
     const KoAbstractGradient* m_gradient;
-    const KoColorSpace* m_colorSpace;
 };
 
 class PAINTOP_EXPORT KisUniformRandomColorSource : public KisUniformColorSource

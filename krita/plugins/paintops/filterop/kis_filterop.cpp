@@ -49,7 +49,6 @@
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisImageWSP image)
     : KisBrushBasedPaintOp(settings, painter)
-    , settings(settings)
     , m_filterConfiguration(0)
 {
     Q_UNUSED(image);

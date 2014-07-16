@@ -102,7 +102,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
     }
     KActionCollection* actionCollection = canvas->view()->actionCollection();
 
-    if (!m_colorSelAction != 0) {
+    if (!m_colorSelAction) {
         m_colorSelAction = new KAction("Show color selector", this);
         m_colorSelAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_I));
         connect(m_colorSelAction, SIGNAL(triggered()), m_colorSelector, SLOT(showPopup()), Qt::UniqueConnection);
@@ -141,7 +141,7 @@ void KisColorSelectorContainer::updateSettings()
     else
         newShadeSelector = 0;
 
- 
+
 
     if(m_shadeSelector!=newShadeSelector && m_shadeSelector!=0) {
         m_shadeSelector->hide();

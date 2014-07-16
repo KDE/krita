@@ -22,6 +22,8 @@
 
 #include <config-vc.h>
 #ifdef HAVE_VC
+#pragma GCC diagnostic ignored "-Wundef"
+#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
 #include <Vc/Vc>
 #include <Vc/IO>
 #endif

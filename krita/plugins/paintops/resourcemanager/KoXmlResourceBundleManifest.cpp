@@ -220,7 +220,7 @@ void KoXmlResourceBundleManifest::removeFile(QString fileName)
     }
 }
 
-QList<QString> KoXmlResourceBundleManifest::getFileList(QString kritaPath, bool firstBuild)
+QList<QString> KoXmlResourceBundleManifest::getFileList(QString /*kritaPath*/, bool /*firstBuild*/)
 {
     QList<QString> result;
 //    QDomNodeList fileList = m_xmlDocument.elementsByTagName("file");
@@ -383,7 +383,7 @@ void KoXmlResourceBundleManifest::install()
 //    }
 }
 
-void KoXmlResourceBundleManifest::updateFilePaths(QString kritaPath, QString bundleName)
+void KoXmlResourceBundleManifest::updateFilePaths(QString /*kritaPath*/, QString /*bundleName*/)
 {
 //    bundleName = bundleName.section('/', bundleName.count('/')).section('.', 0, 0);
 

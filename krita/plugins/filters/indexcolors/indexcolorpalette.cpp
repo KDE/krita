@@ -185,7 +185,7 @@ void IndexColorPalette::mergeMostReduantColors()
     for(int i = 0; i < numColors(); ++i)
         if(colorHood[i].similarity > colorHood[mostSimilarColor].similarity)
             mostSimilarColor = i;
-        
+
     int darkerIndex = colorHood[mostSimilarColor].neighbours.first;
     int brighterIndex = colorHood[mostSimilarColor].neighbours.second;
     if(darkerIndex   != -1 &&
@@ -193,7 +193,6 @@ void IndexColorPalette::mergeMostReduantColors()
     {
         LabColor clrA = colors[darkerIndex];
         LabColor clrB = colors[mostSimilarColor];
-        LabColor clrC = colors[brighterIndex];
         // Remove two, add one = 1 color less
         colors.remove(darkerIndex);
         colors.remove(mostSimilarColor);

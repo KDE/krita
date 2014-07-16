@@ -30,10 +30,6 @@ public:
     RulerAssistantToolPlugin(QObject *parent, const QVariantList &);
     virtual ~RulerAssistantToolPlugin();
 
-private:
-
-    KisView * m_view;
-
 };
 
 #endif

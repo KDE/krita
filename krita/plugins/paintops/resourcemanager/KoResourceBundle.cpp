@@ -234,7 +234,7 @@ bool KoResourceBundle::save()
     bundleDir.cdUp();
 
     QScopedPointer<KoStore> store(KoStore::createStore(filename(), KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
-    
+
     if (!store || store->bad()) return false;
 
     foreach(const QString &resType, m_manifest.types()) {
@@ -294,7 +294,7 @@ bool KoResourceBundle::save()
         QBuffer buffer(&byteArray);
         m_thumbnail.save(&buffer, "PNG");
         if (!store->open("preview.png")) qWarning() << "Could not open preview.png";
-        if (!store->write(byteArray) == buffer.size()) qWarning() << "Could not write preview.png";
+        if (store->write(byteArray) != buffer.size()) qWarning() << "Could not write preview.png";
         store->close();
     }
 

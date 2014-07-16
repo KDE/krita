@@ -19,7 +19,6 @@
 
 #include "kis_statusbar.h"
 
-
 #include <QLabel>
 #include <QFontMetrics>
 #include <QToolButton>

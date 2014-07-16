@@ -46,7 +46,6 @@ public:
 
 
 private:
-    bool m_useMovementPaint;
 
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;

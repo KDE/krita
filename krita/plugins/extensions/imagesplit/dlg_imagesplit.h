@@ -52,7 +52,6 @@ private slots:
     void lineEditEnable();
     void setMimeType(int index);
 private:
-    KisView2* m_view;
     WdgImagesplit* m_page;
 };
 

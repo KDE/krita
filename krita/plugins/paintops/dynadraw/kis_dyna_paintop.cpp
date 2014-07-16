@@ -42,7 +42,6 @@
 
 KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
 {
     if (image) {
         m_dynaBrush.setCanvasSize(image->width(), image->height());

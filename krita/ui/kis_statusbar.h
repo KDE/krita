@@ -59,9 +59,6 @@ private:
     KisProgressWidget * m_progress;
 
     QToolButton *m_selectionStatus;
-    QLabel *m_statusBarZoomLabel; // Make interactive line edit
-    QLabel *m_statusBarPositionLabel;
-    QLabel *m_sizeLabel;
     QLabel *m_imageSizeLabel;
     QLabel *m_pointerPositionLabel;
 

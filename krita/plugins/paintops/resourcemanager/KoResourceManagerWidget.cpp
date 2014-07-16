@@ -492,7 +492,7 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
 
     m_ui->listTags->clear();
     m_ui->listTags->addItems(m_control->getModel(m_ui->tabResourceBundles->currentIndex())->assignedTagsList(currentResource));
-    m_ui->bnRemoveTag->setEnabled(!m_ui->listTags->count() == 0);
+    m_ui->bnRemoveTag->setEnabled(m_ui->listTags->count());
 
     //Overview
 

@@ -41,7 +41,6 @@ private slots:
     void finishedDownload(QNetworkReply *);
     void reportProgress(qint64 arrived,qint64 total);
     void slotError(QNetworkReply::NetworkError error);
-    void slotSslErrors(QList<QSslError> error);
 
 private:
     QNetworkAccessManager m_manager;

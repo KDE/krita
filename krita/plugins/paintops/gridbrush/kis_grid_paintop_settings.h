@@ -38,9 +38,6 @@ public:
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
     bool paintIncremental();
 
-private:
-    KisGridPaintOpSettingsWidget* m_options;
-
 };
 
 #endif

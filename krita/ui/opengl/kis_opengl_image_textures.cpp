@@ -217,7 +217,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
 
     QBitArray channelFlags; // empty by default
 
-    if (!m_channelFlags.size() == m_image->projection()->colorSpace()->channels().size()) {
+    if (m_channelFlags.size() != m_image->projection()->colorSpace()->channels().size()) {
         setChannelFlags(QBitArray());
     }
     if (!m_useOcio) { // Ocio does its own channel flipping

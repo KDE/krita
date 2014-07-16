@@ -35,8 +35,7 @@ MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLa
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move Selection"), false, undoAdapter),
       m_paintLayer(paintLayer),
       m_selection(selection),
-      m_updatesFacade(updatesFacade),
-      m_undoAdapter(undoAdapter)
+      m_updatesFacade(updatesFacade)
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);

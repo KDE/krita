@@ -101,7 +101,6 @@ Q_SIGNALS:
     void stabilizeSensorsChanged();
 
 private:
-    QGridLayout *m_optionLayout;
     QComboBox *m_cmbSmoothingType;
 
     QCheckBox *m_chkAssistant;

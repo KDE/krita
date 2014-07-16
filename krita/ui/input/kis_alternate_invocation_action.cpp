@@ -133,6 +133,8 @@ void KisAlternateInvocationAction::end(QEvent *event)
     case KisTool::AlternateThird:
         targetEvent = QMouseEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier | Qt::AltModifier);
         break;
+    default:
+        ;
     }
 
     inputManager()->toolProxy()->forwardEvent(
@@ -157,6 +159,8 @@ void KisAlternateInvocationAction::inputEvent(QEvent* event)
         case KisTool::AlternateThird:
             targetEvent = QMouseEvent(QEvent::MouseMove, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier | Qt::AltModifier);
             break;
+        default:
+            ;
         }
 
         inputManager()->toolProxy()->forwardEvent(

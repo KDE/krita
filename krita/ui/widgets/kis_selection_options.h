@@ -62,7 +62,6 @@ signals:
 
 private:
     WdgSelectionOptions * m_page;
-    KisCanvas2* m_canvas;
     QButtonGroup* m_mode;
     QButtonGroup* m_action;
 };

@@ -18,6 +18,7 @@
  */
 
 #include "KoInlineObjectFactoryBase.h"
+#include <KoProperties.h>
 
 #include <QStringList>
 

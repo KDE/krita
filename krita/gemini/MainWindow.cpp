@@ -479,8 +479,6 @@ void MainWindow::documentChanged()
     connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
     connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
-    if (d->sketchKisView)
-        d->sketchKisView->setQtMainWindow(this);
     if (!d->forceSketch && !d->slateMode)
         switchToDesktop(true);
 }
@@ -592,6 +590,7 @@ void MainWindow::setSketchKisView(QObject* newView)
     {
         d->sketchKisView = qobject_cast<KisView2*>(newView);
         if(d->sketchKisView) {
+            d->sketchKisView->setQtMainWindow(this);
             connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
             connect(d->sketchKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChangedSketch(int, const QVariant&)));
@@ -696,20 +695,6 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
 MainWindow::~MainWindow()
 {
-    /*
-    {
-        qDebug() << "Deleting ~MainWindow";
-        KConfigGroup group(KGlobal::config(), "kritagemini/shortcuts");
-        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
-            qDebug() << "CatalogName" << collection->componentData().catalogName();
-            qDebug() << "ComponentName" << collection->componentData().componentName();
-
-            collection->setConfigGroup("kritagemini/shortcuts");
-            collection->writeSettings(&group);
-        }
-    }
-    */
-
     delete d;
     KisConfig cfg;
     cfg.setCursorStyle(d->desktopCursorStyle);

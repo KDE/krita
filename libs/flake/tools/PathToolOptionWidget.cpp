@@ -22,7 +22,7 @@
 #include <kaction.h>
 
 PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
-        : QWidget(parent), m_tool(tool)
+    : QWidget(parent)
 {
     widget.setupUi(this);
     widget.corner->setDefaultAction(tool->action("pathpoint-corner"));

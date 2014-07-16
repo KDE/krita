@@ -227,6 +227,8 @@ if (APPLE)
     # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
     include_directories(${PNG_INCLUDE_DIR})
 endif(APPLE)
+
+add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
 if (NOT Boost_FOUND)
     MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")

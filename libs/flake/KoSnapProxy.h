@@ -17,7 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #ifndef KOSNAPPROXY_H
-#define KOSNAPPROXY_h
+#define KOSNAPPROXY_H
+
 
 class KoSnapGuide;
 class KoShape;

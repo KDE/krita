@@ -374,15 +374,22 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         z = UINT(localPacketBuf[i].pkZ);
 
         prsNew = 0.0;
-        QRect desktopArea = QApplication::desktop()->geometry();
+        QDesktopWidget *dw = QApplication::desktop();
+        QRect desktopArea = dw->screenGeometry(qApp->focusWidget());
+
         QPointF hiResGlobal = currentTabletPointer.scaleCoord(ptNew.x, ptNew.y, desktopArea.left(),
                                                               desktopArea.width(), desktopArea.top(),
                                                               desktopArea.height());
 
-
         if (KisTabletDebugger::instance()->debugRawTabletValues()) {
+            qDebug() << "Number of screens" << dw->screenCount() << "Total desktop size" << dw->geometry();
+            for (int i = 0; i < dw->screenCount(); ++i) {
+                qDebug() << "\tScreen" << i << dw->screenGeometry(i);
+            }
+            qDebug() << "Active screen" << dw->screenNumber(qApp->focusWidget()) << "With geometry" << desktopArea;
+
             qDebug() << "WinTab (RC):"
-                     << "Dsk:" << desktopArea
+                     << "Dsk:"  << desktopArea
                      << "Raw:" << ptNew.x << ptNew.y
                      << "Scaled:" << hiResGlobal;
         }

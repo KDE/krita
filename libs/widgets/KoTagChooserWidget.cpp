@@ -199,3 +199,8 @@ void KoTagChooserWidget::tagOptionsContextMenuAboutToShow()
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
     emit popupMenuAboutToShow();
 }
+
+void KoTagChooserWidget::showTagToolButton(bool show)
+{
+    d->tagToolButton->setVisible(show);
+}

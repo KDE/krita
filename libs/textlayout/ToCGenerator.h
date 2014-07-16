@@ -51,7 +51,6 @@ private:
     QTextBlock m_block;
     QTextDocument *m_document;
     KoTextDocumentLayout *m_documentLayout;
-    qreal m_maxTabPosition;
     bool m_success;
     bool m_preservePagebreak;
 

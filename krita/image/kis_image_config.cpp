@@ -167,6 +167,9 @@ QString KisImageConfig::swapDir()
 #include <sys/sysctl.h>
 #elif defined Q_OS_WIN
 #include <windows.h>
+#elif defined Q_OS_MAC64
+#include <sys/types.h>
+#include <sys/sysctl.h>
 #endif
 
 #include <kdebug.h>
@@ -198,16 +201,23 @@ int KisImageConfig::totalRAM()
     status.dwLength = sizeof(status);
     error  = !GlobalMemoryStatusEx(&status);
 
-    if (!error)
-    {
+    if (!error) {
         totalMemory = status.ullTotalPhys >> 20;
     }
 
-	// For 32 bit windows, the total memory available is at max the 2GB per process memory limit.
-#if defined ENV32BIT
-	totalMemory = qMin(totalMemory, 2000);
-#endif 
+    // For 32 bit windows, the total memory available is at max the 2GB per process memory limit.
+#   if defined ENV32BIT
+    totalMemory = qMin(totalMemory, 2000);
+#   endif
+#elif defined Q_OS_MAC64
+    int mib[2] = { CTL_HW, HW_MEMSIZE };
+    u_int namelen = sizeof(mib) / sizeof(mib[0]);
+    uint64_t size;
+    size_t len = sizeof(size);
 
+    if (sysctl(mib, namelen, &size, &len, NULL, 0) > 0) {
+        totalMemory = size;
+    }
 #endif
 
     if(error) {

@@ -72,7 +72,6 @@ KoTextWriter::Private::Private(KoShapeSavingContext &context)
     , document(0)
     , writer(0)
     , context(context)
-    , splitEndBlockNumber(-1)
 {
     currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     writer = &context.xmlWriter();
@@ -226,10 +225,10 @@ void KoTextWriter::Private::openTagRegion(ElementType elementType, TagInformatio
 {
     //kDebug(30015) << "tag:" << tagInformation.name() << openedTagStack.size();
     if (tagInformation.name()) {
-	writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
-	foreach (const Attribute &attribute, tagInformation.attributes()) {
-	    writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
-	}
+    writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
+    foreach (const Attribute &attribute, tagInformation.attributes()) {
+        writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
+    }
     }
     openedTagStack.push(tagInformation.name());
     //kDebug(30015) << "stack" << openedTagStack.size();
@@ -536,17 +535,17 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
                 }
 
-		// get all text ranges which start before this inline object
-		// or end directly after it (+1 to last position for that)
+        // get all text ranges which start before this inline object
+        // or end directly after it (+1 to last position for that)
                 const QHash<int, KoTextRange *> textRanges = textRangeManager ?
                         textRangeManager->textRangesChangingWithin(block.document(), currentFragment.position(), currentFragment.position()+1,
                         globalFrom, (globalTo==-1)?-1:globalTo+1) : QHash<int, KoTextRange *>();
-		// get all text ranges which start before this
-		const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
-		// write tags for ranges which start before this content or at positioned at it
-		foreach (const KoTextRange *range, textRangesBefore) {
-		    range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
-		}
+        // get all text ranges which start before this
+        const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
+        // write tags for ranges which start before this content or at positioned at it
+        foreach (const KoTextRange *range, textRangesBefore) {
+            range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
+        }
 
                 bool saveSpan = dynamic_cast<KoVariable*>(inlineObject) != 0;
 

@@ -37,7 +37,7 @@ public:
     TextPasteCommand(const QMimeData *mimeData,
                      QTextDocument *document,
                      KoShapeController *shapeController,
-                     KoCanvasBase *canvas, KUndo2Command *parent = 0, 
+                     KoCanvasBase *canvas, KUndo2Command *parent = 0,
                      bool pasteAsText = false);
 
     virtual void undo();
@@ -52,7 +52,6 @@ private:
     KoCanvasBase *m_canvas;
     bool m_pasteAsText;
     bool m_first;
-    QClipboard::Mode m_mode;
 };
 
 #endif // TEXTPASTECOMMAND_H

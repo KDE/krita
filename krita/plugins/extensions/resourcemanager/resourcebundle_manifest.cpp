@@ -156,7 +156,7 @@ bool ResourceBundleManifest::save(QIODevice *device)
            foreach(const ResourceReference &resource, m_resources[resourceType].values()) {
                manifestWriter.startElement("manifest:file-entry");
                manifestWriter.addAttribute("manifest:media-type", resourceTypeToManifestType(resourceType));
-               manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + QFileInfo(resource.resourcePath).completeBaseName());
+               manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + QFileInfo(resource.resourcePath).fileName());
                manifestWriter.addAttribute("manifest:md5sum", QString(resource.md5sum.toHex()));
                if (!resource.tagList.isEmpty()) {
                    manifestWriter.startElement("manifest:tags");
@@ -400,7 +400,7 @@ void ResourceBundleManifest::updateFilePaths(QString /*kritaPath*/, QString /*bu
 //    }
 }
 
-void ResourceBundleManifest::rename(QString newName)
+void ResourceBundleManifest::rename(QString /*newName*/)
 {
 //    QDomNodeList fileList = m_xmlDocument.elementsByTagName("file");
 //    for (int i = 0; i < fileList.size(); i++) {

@@ -102,7 +102,7 @@ public:
     KoResourceServer<ResourceBundle> *bundleServer;
     KoResourceServer<KoPattern>* patternServer;
     KoResourceServer<KoColorSet>* paletteServer;
-    KoResourceServer< KisWorkspaceResource >* workspaceServer;
+    KoResourceServer<KisWorkspaceResource>* workspaceServer;
 
 };
 

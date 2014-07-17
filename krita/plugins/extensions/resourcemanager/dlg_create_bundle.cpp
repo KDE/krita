@@ -271,7 +271,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
-            if (m_selectedBrushes.contains(res->shortFilename())) {
+            if (m_selectedPresets.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {
@@ -285,7 +285,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
-            if (m_selectedBrushes.contains(res->shortFilename())) {
+            if (m_selectedGradients.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {
@@ -299,7 +299,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
-            if (m_selectedBrushes.contains(res->shortFilename())) {
+            if (m_selectedPatterns.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {
@@ -313,7 +313,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
-            if (m_selectedBrushes.contains(res->shortFilename())) {
+            if (m_selectedPalettes.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {
@@ -322,12 +322,12 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         }
     }
     else if (resourceType == "workspaces") {
-        KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
+        KoResourceServer<KisWorkspaceResource>* server = KisResourceServerProvider::instance()->workspaceServer();
         foreach(KoResource *res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
-            if (m_selectedBrushes.contains(res->shortFilename())) {
+            if (m_selectedWorkspaces.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {

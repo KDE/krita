@@ -60,7 +60,9 @@ ResourceBundleServerProvider::ResourceBundleServerProvider()
     loader.start();
     loader.barrier();
     foreach(ResourceBundle *bundle, m_resourceBundleServer->resources()) {
-        bundle->install();
+        if (!bundle->install()) {
+            qWarning() << "Could not install resources for bundle" << bundle->name();
+        }
     }
 }
 
@@ -166,7 +168,7 @@ void ResourceManager::slotImport()
     QStringList resources = dlg.urls();
     QString resourceType = dlg.selectedNameFilter();
     if (!filterToTypeMap.contains(resourceType)) {
-        QMessageBox::warning(0, i18n("Importing Resources"), i18n("The selected resource type is unknown."));
+        QMessageBox::warning(0, "Krita", i18n("The selected resource type is unknown."));
         return;
     }
 
@@ -192,7 +194,9 @@ void ResourceManager::slotImport()
             d->bundleServer->importResourceFile(res);
             ResourceBundle *bundle = d->bundleServer->resourceByFilename(QFileInfo(res).fileName());
             if (bundle) {
-                bundle->install();
+                if (!bundle->install()) {
+                    QMessageBox::warning(0, "Krita", i18n("Could not install the resources for bundle %1.").arg(res));
+                }
             }
         }
     }

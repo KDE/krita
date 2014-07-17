@@ -41,9 +41,10 @@
 #include <QPainter>
 
 #include <kis_resource_server_provider.h>
-#include "kis_workspace_resource.h"
-#include "kis_paintop_preset.h"
-#include "kis_brush_server.h"
+#include <kis_workspace_resource.h>
+#include <kis_paintop_preset.h>
+#include <kis_brush_server.h>
+#include <kis_debug.h>
 
 #include <calligraversion.h>
 #include <calligragitversion.h>
@@ -52,7 +53,7 @@
 
 
 ResourceBundle::ResourceBundle(QString const& fileName)
-    : KoResource(fileName)\
+    : KoResource(fileName)
 {
     setName(QFileInfo(fileName).baseName());
 
@@ -426,16 +427,23 @@ bool ResourceBundle::saveToDevice(QIODevice */*dev*/) const
     return false;
 }
 
-void ResourceBundle::install()
+bool ResourceBundle::install()
 {
-    if (filename().isEmpty()) return;
+    if (filename().isEmpty())  {
+        qWarning() << "Cannot install bundle: no file name" << this;
+        return false;
+    }
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
-    if (!resourceStore || resourceStore->bad()) return;
-
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Cannot open the resource bundle: invalid zip file?";
+        return;
+    }
     foreach(const QString &resType, m_manifest.types()) {
+        dbgResources << "Installing resource type" << resType;
         if (resType == "ko_gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                dbgResources() << "\tInstalling" << ref.resourcePath << ref.md5sum;
                 KoAbstractGradient *res = gradientServer->createResource(ref.resourcePath);
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
@@ -443,6 +451,7 @@ void ResourceBundle::install()
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 gradientServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     gradientServer->addTag(res, tag);
@@ -453,6 +462,7 @@ void ResourceBundle::install()
         else if (resType  == "ko_patterns") {
             KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                dbgResources() << "\tInstalling" << ref.resourcePath << ref.md5sum;
                 KoPattern *res = patternServer->createResource(ref.resourcePath);
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
@@ -470,6 +480,7 @@ void ResourceBundle::install()
         else if (resType  == "kis_brushes") {
             KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                dbgResources() << "\tInstalling" << ref.resourcePath << ref.md5sum;
                 KisBrushSP res = brushServer->createResource(ref.resourcePath);
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
@@ -477,6 +488,7 @@ void ResourceBundle::install()
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 brushServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     brushServer->addTag(res.data(), tag);
@@ -487,6 +499,7 @@ void ResourceBundle::install()
         else if (resType  == "ko_palettes") {
             KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                dbgResources() << "\tInstalling" << ref.resourcePath << ref.md5sum;
                 KoColorSet *res = paletteServer->createResource(ref.resourcePath);
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
@@ -494,6 +507,7 @@ void ResourceBundle::install()
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 paletteServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     paletteServer->addTag(res, tag);
@@ -504,6 +518,7 @@ void ResourceBundle::install()
         else if (resType  == "kis_workspaces") {
             KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                dbgResources() << "\tInstalling" << ref.resourcePath << ref.md5sum;
                 KisWorkspaceResource *res = workspaceServer->createResource(ref.resourcePath);
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
@@ -511,6 +526,7 @@ void ResourceBundle::install()
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 workspaceServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     workspaceServer->addTag(res, tag);
@@ -521,6 +537,7 @@ void ResourceBundle::install()
         else if (resType  == "kis_paintoppresets") {
             KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                dbgResources() << "\tInstalling" << ref.resourcePath << ref.md5sum;
                 KisPaintOpPreset *res = paintoppresetServer->createResource(ref.resourcePath);
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
@@ -528,6 +545,7 @@ void ResourceBundle::install()
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 paintoppresetServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     paintoppresetServer->addTag(res, tag);
@@ -537,9 +555,10 @@ void ResourceBundle::install()
         }
     }
     m_installed = true;
+    return true;
 }
 
-void ResourceBundle::uninstall()
+bool ResourceBundle::uninstall()
 {
 //    if (!m_installed)
 //        return;
@@ -559,6 +578,7 @@ void ResourceBundle::uninstall()
 //    m_installed = false;
 //    m_manifest.uninstall();
 //    save();
+    return false;
 }
 
 void ResourceBundle::addMeta(const QString &type, const QString &value)

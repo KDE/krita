@@ -67,14 +67,14 @@ public:
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
-     * @brief install : Install the resource bundle.
+     * @brief install : Install the contents of the resource bundle.
      */
-    void install();
+    bool install();
 
     /**
      * @brief uninstall : Uninstall the resource bundle.
      */
-    void uninstall();
+    bool uninstall();
 
     /**
      * @brief addMeta : Add a Metadata to the resource

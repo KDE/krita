@@ -44,7 +44,6 @@
 #include <kis_paintop_preset.h>
 #include <kis_brush_server.h>
 
-#include "KoResourceManagerWidget.h"
 #include "dlg_bundle_manager.h"
 #include "KoDlgCreateBundle.h"
 
@@ -116,11 +115,7 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
 {
     Q_UNUSED(ResourceBundleServerProvider::instance()); // load the bundles
 
-    KisAction *action = new KisAction(i18n("Resource Manager..."), this);
-    addAction("resourcemanager", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotResourceManager()));
-
-    action = new KisAction(i18n("Import Resources or Bundles..."), this);
+    KisAction *action = new KisAction(i18n("Import Resources or Bundles..."), this);
     addAction("import", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImport()));
 
@@ -135,15 +130,6 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
 
 ResourceManager::~ResourceManager()
 {
-}
-
-void ResourceManager::slotResourceManager()
-{
-    KoResourceManagerWidget * resourceManager = new KoResourceManagerWidget();
-    Q_CHECK_PTR(resourceManager);
-    resourceManager->setObjectName("ResourceManager");
-    resourceManager->exec();
-    delete resourceManager;
 }
 
 void ResourceManager::slotImport()

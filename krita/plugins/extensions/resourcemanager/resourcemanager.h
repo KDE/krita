@@ -50,7 +50,6 @@ public:
     virtual ~ResourceManager();
 
 private slots:
-    void slotResourceManager();
     void slotImport();
     void slotCreateBundle();
     void slotManageBundles();

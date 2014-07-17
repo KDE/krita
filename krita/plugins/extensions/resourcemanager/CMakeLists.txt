@@ -4,7 +4,6 @@ set(kritaresourcemanager_PART_SRCS
     resourcemanager.cpp
 	KoXmlResourceBundleManifest.cpp
     KoResourceBundle.cpp
-    KoResourceManagerControl.cpp
     KoResourceTableModel.cpp
     KoDlgCreateBundle.cpp
     dlg_bundle_manager.cpp

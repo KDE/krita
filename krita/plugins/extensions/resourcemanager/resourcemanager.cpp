@@ -191,7 +191,7 @@ void ResourceManager::slotImport()
     }
     else if (resourceType == "bundles") {
         foreach(const QString &res, resources) {
-            ResourceBundle *bundle = new ResourceBundle(res);
+            ResourceBundle *bundle = d->bundleServer->createResource(res);
             bundle->load();
             if (bundle->valid()) {
                 if (!bundle->install()) {
@@ -202,9 +202,17 @@ void ResourceManager::slotImport()
                 QMessageBox::warning(0, "Krita", i18n("Could not load bundle %1.").arg(res));
             }
 
-            delete bundle;
+            QFileInfo fi(res);
+            QString newFilename = d->bundleServer->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
+            QFileInfo fileInfo(newFilename);
 
-            //d->bundleServer->importResourceFile(res);
+            int i = 1;
+            while (fileInfo.exists()) {
+                fileInfo.setFile(d->bundleServer->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
+                i++;
+            }
+            bundle->setFilename(fileInfo.filePath());
+            QFile::copy(res, newFilename);
         }
     }
     else if (resourceType == "patterns") {

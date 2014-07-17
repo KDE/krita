@@ -16,9 +16,9 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "KoDlgCreateBundle.h"
+#include "dlg_create_bundle.h"
 
-#include "ui_wdg_dlgcreatebundle.h"
+#include "ui_wdgdlgcreatebundle.h"
 
 #include <QProcessEnvironment>
 #include <QFileInfo>
@@ -45,7 +45,7 @@
 
 #define ICON_SIZE 48
 
-KoDlgCreateBundle::KoDlgCreateBundle(QWidget *parent)
+DlgCreateBundle::DlgCreateBundle(QWidget *parent)
     : KDialog(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
 {
@@ -95,52 +95,52 @@ KoDlgCreateBundle::KoDlgCreateBundle(QWidget *parent)
     resourceTypeSelected(0);
 }
 
-KoDlgCreateBundle::~KoDlgCreateBundle()
+DlgCreateBundle::~DlgCreateBundle()
 {
     delete m_ui;
 }
 
-QString KoDlgCreateBundle::bundleName() const
+QString DlgCreateBundle::bundleName() const
 {
     return m_ui->editBundleName->text().replace(" ", "_");
 }
 
-QString KoDlgCreateBundle::authorName() const
+QString DlgCreateBundle::authorName() const
 {
     return m_ui->editAuthor->text();
 }
 
-QString KoDlgCreateBundle::email() const
+QString DlgCreateBundle::email() const
 {
     return m_ui->editEmail->text();
 }
 
-QString KoDlgCreateBundle::website() const
+QString DlgCreateBundle::website() const
 {
     return m_ui->editWebsite->text();
 }
 
-QString KoDlgCreateBundle::license() const
+QString DlgCreateBundle::license() const
 {
     return m_ui->editLicense->text();
 }
 
-QString KoDlgCreateBundle::description() const
+QString DlgCreateBundle::description() const
 {
     return m_ui->editDescription->document()->toPlainText();
 }
 
-QString KoDlgCreateBundle::saveLocation() const
+QString DlgCreateBundle::saveLocation() const
 {
     return m_ui->lblSaveLocation->text();
 }
 
-QString KoDlgCreateBundle::previewImage() const
+QString DlgCreateBundle::previewImage() const
 {
     return m_previewImage;
 }
 
-void KoDlgCreateBundle::accept()
+void DlgCreateBundle::accept()
 {
     QString name = m_ui->editBundleName->text().remove(" ");
 
@@ -169,7 +169,7 @@ void KoDlgCreateBundle::accept()
     }
 }
 
-void KoDlgCreateBundle::selectSaveLocation()
+void DlgCreateBundle::selectSaveLocation()
 {
     KoFileDialog dlg(this, KoFileDialog::OpenDirectory, "resourcebundlesavelocation");
     dlg.setDefaultDir(m_ui->lblSaveLocation->text());
@@ -178,7 +178,7 @@ void KoDlgCreateBundle::selectSaveLocation()
     m_ui->lblSaveLocation->setText(location);
 }
 
-void KoDlgCreateBundle::addSelected()
+void DlgCreateBundle::addSelected()
 {
     foreach(QListWidgetItem *item, m_ui->tableAvailable->selectedItems()) {
         m_ui->tableSelected->addItem(m_ui->tableAvailable->takeItem(m_ui->tableAvailable->row(item)));
@@ -205,7 +205,7 @@ void KoDlgCreateBundle::addSelected()
     }
 }
 
-void KoDlgCreateBundle::removeSelected()
+void DlgCreateBundle::removeSelected()
 {
     foreach(QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
         m_ui->tableAvailable->addItem(m_ui->tableSelected->takeItem(m_ui->tableSelected->row(item)));
@@ -244,7 +244,7 @@ QPixmap imageToIcon(const QImage &img) {
     return pixmap;
 }
 
-void KoDlgCreateBundle::resourceTypeSelected(int idx)
+void DlgCreateBundle::resourceTypeSelected(int idx)
 {
     QString resourceType = m_ui->cmbResourceTypes->itemData(idx).toString();
 
@@ -337,7 +337,7 @@ void KoDlgCreateBundle::resourceTypeSelected(int idx)
     }
 }
 
-void KoDlgCreateBundle::getPreviewImage()
+void DlgCreateBundle::getPreviewImage()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BundlePreviewImage");
     dialog.setCaption(i18n("Select file to use as dynamic file layer."));

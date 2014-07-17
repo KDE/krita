@@ -10,15 +10,6 @@ include_directories(${KOMAIN_INCLUDES}
 
 macro_add_unittest_definitions()
 
-#set(KoResourceBundleManager_test_SRCS KoResourceBundleManager_test.cpp )
-#kde4_add_unit_test(KoResourceBundleManagerTest ${KoResourceBundleManager_test_SRCS})
-#target_link_libraries(KoResourceBundleManagerTest koplugin kritaresourcemanager kritaui kritalibpaintop ${QT_QTTEST_LIBRARY})
-
-#set(KoXmlResourceBundleManifestTest_SRCS KoXmlResourceBundleManifestTest.cpp )
-#kde4_add_unit_test(KoXmlResourceBundleManifestTest ${KoXmlResourceBundleManifestTest_SRCS})
-#target_link_libraries(KoXmlResourceBundleManifestTest koplugin kritaresourcemanager kritaui kritalibpaintop ${QT_QTTEST_LIBRARY})
-
-set(KoResourceBundleTest_SRCS KoResourceBundleTest.cpp ../KoResourceBundle.cpp ../KoXmlResourceBundleManifest.cpp)
-kde4_add_unit_test(KoResourceBundleTest ${KoResourceBundleTest_SRCS})
-target_link_libraries(KoResourceBundleTest kritaui kritalibbrush kritalibpaintop ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
-########### end ###############
+set(ResourceBundleTest_SRCS ResourceBundleTest.cpp ../resourcebundle.cpp ../resourcebundle_manifest.cpp)
+kde4_add_unit_test(ResourceBundleTest ${ResourceBundleTest_SRCS})
+target_link_libraries(ResourceBundleTest kritaui kritalibbrush kritalibpaintop ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})

@@ -23,7 +23,7 @@
 
 #include <kdialog.h>
 
-class KoResourceBundle;
+class ResourceBundle;
 class QListWidget;
 
 namespace Ui
@@ -47,10 +47,10 @@ private:
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
 
-    void fillListWidget(QList<KoResourceBundle*> bundles, QListWidget *w);
+    void fillListWidget(QList<ResourceBundle*> bundles, QListWidget *w);
 
-    QMap<QString, KoResourceBundle*> m_blacklistedBundles;
-    QMap<QString, KoResourceBundle*> m_activeBundles;
+    QMap<QString, ResourceBundle*> m_blacklistedBundles;
+    QMap<QString, ResourceBundle*> m_activeBundles;
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

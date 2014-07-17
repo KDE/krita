@@ -48,11 +48,11 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     m_ui->bnRemove->setIcon(koIcon("arrow-left"));
     connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
-    KoResourceServer<KoResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
+    KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
 
 
     foreach(const QString &f, bundleServer->blackListedFiles()) {
-        KoResourceBundle *bundle = new KoResourceBundle(f);
+        ResourceBundle *bundle = new ResourceBundle(f);
         bundle->load();
         if (bundle->valid()) {
             m_blacklistedBundles[f] = bundle;
@@ -60,7 +60,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     }
     fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
 
-    foreach(KoResourceBundle *bundle, bundleServer->resources()) {
+    foreach(ResourceBundle *bundle, bundleServer->resources()) {
         qDebug() << "\tbunde" << bundle->name() << bundle->valid();
         if (bundle->valid()) {
             m_activeBundles[bundle->filename()] = bundle;
@@ -79,12 +79,12 @@ void DlgBundleManager::removeSelected()
 
 }
 
-void DlgBundleManager::fillListWidget(QList<KoResourceBundle *> bundles, QListWidget *w)
+void DlgBundleManager::fillListWidget(QList<ResourceBundle *> bundles, QListWidget *w)
 {
     w->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     w->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    foreach(KoResourceBundle *bundle, bundles) {
+    foreach(ResourceBundle *bundle, bundles) {
         QPixmap pixmap(ICON_SIZE, ICON_SIZE);
         if (!bundle->image().isNull()) {
             QImage scaled = bundle->image().scaled(ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);

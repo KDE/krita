@@ -29,15 +29,15 @@
 #include "kis_paintop_preset.h"
 #include "kis_brush_server.h"
 
-#include "KoResourceBundleTest.h"
-#include "KoResourceBundle.h"
+#include "ResourceBundleTest.h"
+#include "resourcebundle.h"
 
 #include <qtest_kde.h>
 
-void KoResourceBundleTest::testCreateBundle()
+void ResourceBundleTest::testCreateBundle()
 {
     QString testbundle = QString(FILES_DATA_DIR) + "/" + "testcreatebundle.bundle";
-    KoResourceBundle bundle(testbundle);
+    ResourceBundle bundle(testbundle);
     QVERIFY(!bundle.isInstalled());
     QVERIFY(!bundle.valid());
     QVERIFY(bundle.getTagsList().isEmpty());
@@ -71,9 +71,9 @@ void KoResourceBundleTest::testCreateBundle()
 }
 
 
-void KoResourceBundleTest::testLoadSave()
+void ResourceBundleTest::testLoadSave()
 {
-    KoResourceBundle bundle(QString(FILES_OUTPUT_DIR) + "/" + "testloadsavebundle.bundle");
+    ResourceBundle bundle(QString(FILES_OUTPUT_DIR) + "/" + "testloadsavebundle.bundle");
     bundle.addMeta("author", "TestAuthor");
     bundle.addMeta("email", "TestEmail");
     bundle.addMeta("license", "TestLicense");
@@ -143,7 +143,7 @@ void KoResourceBundleTest::testLoadSave()
     QCOMPARE(bundle.getMeta("updated"), QDate::currentDate().toString("dd/MM/yyyy"));
     QVERIFY(res);
 
-    KoResourceBundle bundle2(QString(FILES_OUTPUT_DIR) + "/" + "testloadsavebundle.bundle");
+    ResourceBundle bundle2(QString(FILES_OUTPUT_DIR) + "/" + "testloadsavebundle.bundle");
     res = bundle2.load();
 
     QVERIFY(res);
@@ -169,11 +169,11 @@ void KoResourceBundleTest::testLoadSave()
     QCOMPARE(img, thumb);
 }
 
-void KoResourceBundleTest::testInstallUninstall()
+void ResourceBundleTest::testInstallUninstall()
 {
 
 }
 
 
-QTEST_KDEMAIN(KoResourceBundleTest, GUI)
+QTEST_KDEMAIN(ResourceBundleTest, GUI)
 

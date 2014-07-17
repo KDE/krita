@@ -45,21 +45,21 @@
 #include <kis_brush_server.h>
 
 #include "dlg_bundle_manager.h"
-#include "KoDlgCreateBundle.h"
+#include "dlg_create_bundle.h"
 
 ResourceBundleServerProvider::ResourceBundleServerProvider()
 {
     // user-local
     KGlobal::mainComponent().dirs()->addResourceType("kis_resourcebundles", "data", "krita/bundles/");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
-    m_resourceBundleServer = new KoResourceServer<KoResourceBundle>("kis_resourcebundles", "*.bundle");
+    m_resourceBundleServer = new KoResourceServer<ResourceBundle>("kis_resourcebundles", "*.bundle");
     if (!QFileInfo(m_resourceBundleServer->saveLocation()).exists()) {
         QDir().mkpath(m_resourceBundleServer->saveLocation());
     }
     KoResourceLoaderThread loader(m_resourceBundleServer);
     loader.start();
     loader.barrier();
-    foreach(KoResourceBundle *bundle, m_resourceBundleServer->resources()) {
+    foreach(ResourceBundle *bundle, m_resourceBundleServer->resources()) {
         bundle->install();
     }
 }
@@ -76,7 +76,7 @@ ResourceBundleServerProvider::~ResourceBundleServerProvider()
     delete m_resourceBundleServer;
 }
 
-KoResourceServer<KoResourceBundle> *ResourceBundleServerProvider::resourceBundleServer()
+KoResourceServer<ResourceBundle> *ResourceBundleServerProvider::resourceBundleServer()
 {
     return m_resourceBundleServer;
 }
@@ -99,7 +99,7 @@ public:
     KisBrushResourceServer* brushServer;
     KoResourceServer<KisPaintOpPreset>* paintopServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
-    KoResourceServer<KoResourceBundle> *bundleServer;
+    KoResourceServer<ResourceBundle> *bundleServer;
     KoResourceServer<KoPattern>* patternServer;
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer< KisWorkspaceResource >* workspaceServer;
@@ -198,7 +198,7 @@ void ResourceManager::slotImport()
     {
         foreach(const QString &res, resources) {
             d->bundleServer->importResourceFile(res);
-            KoResourceBundle *bundle = d->bundleServer->resourceByFilename(QFileInfo(res).fileName());
+            ResourceBundle *bundle = d->bundleServer->resourceByFilename(QFileInfo(res).fileName());
             if (bundle) {
                 bundle->install();
             }
@@ -233,13 +233,13 @@ void ResourceManager::slotImport()
 
 void ResourceManager::slotCreateBundle()
 {
-    KoDlgCreateBundle dlgCreateBundle;
+    DlgCreateBundle dlgCreateBundle;
     if (dlgCreateBundle.exec() != QDialog::Accepted) {
         return;
     }
 
     QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
-    KoResourceBundle* newBundle = new KoResourceBundle(bundlePath);
+    ResourceBundle* newBundle = new ResourceBundle(bundlePath);
 
     newBundle->addMeta("name", dlgCreateBundle.bundleName());
     newBundle->addMeta("author", dlgCreateBundle.authorName());

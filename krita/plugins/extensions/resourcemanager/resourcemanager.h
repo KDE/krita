@@ -22,7 +22,7 @@
 
 #include <QVariant>
 #include <KoResourceServer.h>
-#include <KoResourceBundle.h>
+#include <resourcebundle.h>
 
 #include <kis_view_plugin.h>
 
@@ -31,12 +31,12 @@ public:
     static ResourceBundleServerProvider *instance();
     ~ResourceBundleServerProvider();
 
-    KoResourceServer<KoResourceBundle> *resourceBundleServer();
+    KoResourceServer<ResourceBundle> *resourceBundleServer();
 
 private:
     ResourceBundleServerProvider();
 
-    KoResourceServer<KoResourceBundle> *m_resourceBundleServer;
+    KoResourceServer<ResourceBundle> *m_resourceBundleServer;
 
     Q_DISABLE_COPY(ResourceBundleServerProvider)
 

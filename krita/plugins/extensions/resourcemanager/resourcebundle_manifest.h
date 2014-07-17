@@ -25,7 +25,7 @@
 
 class KoResource;
 
-class  KoXmlResourceBundleManifest
+class  ResourceBundleManifest
 {
 public:
 
@@ -43,24 +43,24 @@ public:
     };
 
     /**
-     * @brief KoXmlResourceBundleManifest : Ctor
+     * @brief ResourceBundleManifest : Ctor
      * @param xmlName the name of the XML file to be created
      */
-    KoXmlResourceBundleManifest();
+    ResourceBundleManifest();
 
     /**
-     * @brief ~KoXmlResourceBundleManifest : Dtor
+     * @brief ~ResourceBundleManifest : Dtor
      */
-    virtual ~KoXmlResourceBundleManifest();
+    virtual ~ResourceBundleManifest();
 
 
     /**
-     * @brief load the KoXmlResourceBundleManifest from the given device
+     * @brief load the ResourceBundleManifest from the given device
      */
     bool load(QIODevice *device);
 
     /**
-     * @brief save the KoXmlResourceBundleManifest to the given device
+     * @brief save the ResourceBundleManifest to the given device
      */
     bool save(QIODevice *device);
 

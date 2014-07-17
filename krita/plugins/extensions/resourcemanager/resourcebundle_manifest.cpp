@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Lesser General Public
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "KoXmlResourceBundleManifest.h"
+#include "resourcebundle_manifest.h"
 
 #include <QList>
 #include <QString>
@@ -56,15 +56,15 @@ QString manifestTypeToResourceType(const QString &type) {
     }
 }
 
-KoXmlResourceBundleManifest::KoXmlResourceBundleManifest()
+ResourceBundleManifest::ResourceBundleManifest()
 {
 }
 
-KoXmlResourceBundleManifest::~KoXmlResourceBundleManifest()
+ResourceBundleManifest::~ResourceBundleManifest()
 {
 }
 
-bool KoXmlResourceBundleManifest::load(QIODevice *device)
+bool ResourceBundleManifest::load(QIODevice *device)
 {
     m_resources.clear();
     if (!device->isOpen()) {
@@ -138,7 +138,7 @@ bool KoXmlResourceBundleManifest::load(QIODevice *device)
     return true;
 }
 
-bool KoXmlResourceBundleManifest::save(QIODevice *device)
+bool ResourceBundleManifest::save(QIODevice *device)
 {
        if (!device->isOpen()) {
            if (!device->open(QIODevice::WriteOnly)) {
@@ -177,7 +177,7 @@ bool KoXmlResourceBundleManifest::save(QIODevice *device)
        return true;
 }
 
-void KoXmlResourceBundleManifest::addResource(const QString &fileTypeName, const QString &fileName, const QStringList &fileTagList, const QByteArray &md5)
+void ResourceBundleManifest::addResource(const QString &fileTypeName, const QString &fileName, const QStringList &fileTagList, const QByteArray &md5)
 {
     ResourceReference ref(fileName, fileTagList, md5);
     if (!m_resources.contains(fileTypeName)) {
@@ -186,12 +186,12 @@ void KoXmlResourceBundleManifest::addResource(const QString &fileTypeName, const
     m_resources[fileTypeName].insert(fileName, ref);
 }
 
-QStringList KoXmlResourceBundleManifest::types() const
+QStringList ResourceBundleManifest::types() const
 {
     return m_resources.keys();
 }
 
-QStringList KoXmlResourceBundleManifest::tags() const
+QStringList ResourceBundleManifest::tags() const
 {
     QSet<QString> tags;
     foreach(const QString &type, m_resources.keys()) {
@@ -202,15 +202,15 @@ QStringList KoXmlResourceBundleManifest::tags() const
     return QStringList::fromSet(tags);
 }
 
-QList<KoXmlResourceBundleManifest::ResourceReference> KoXmlResourceBundleManifest::files(const QString &type) const
+QList<ResourceBundleManifest::ResourceReference> ResourceBundleManifest::files(const QString &type) const
 {
     if (!m_resources.contains(type)) {
-        return QList<KoXmlResourceBundleManifest::ResourceReference>();
+        return QList<ResourceBundleManifest::ResourceReference>();
     }
     return m_resources[type].values();
 }
 
-void KoXmlResourceBundleManifest::removeFile(QString fileName)
+void ResourceBundleManifest::removeFile(QString fileName)
 {
     QList<QString> tags;
     foreach(const QString &type, m_resources.keys()) {
@@ -220,7 +220,7 @@ void KoXmlResourceBundleManifest::removeFile(QString fileName)
     }
 }
 
-QList<QString> KoXmlResourceBundleManifest::getFileList(QString /*kritaPath*/, bool /*firstBuild*/)
+QList<QString> ResourceBundleManifest::getFileList(QString /*kritaPath*/, bool /*firstBuild*/)
 {
     QList<QString> result;
 //    QDomNodeList fileList = m_xmlDocument.elementsByTagName("file");
@@ -246,7 +246,7 @@ QList<QString> KoXmlResourceBundleManifest::getFileList(QString /*kritaPath*/, b
     return result;
 }
 
-QMap<QString, QString> KoXmlResourceBundleManifest::getFilesToExtract()
+QMap<QString, QString> ResourceBundleManifest::getFilesToExtract()
 {
     QString currentFileName;
     QString srcFileName;
@@ -267,7 +267,7 @@ QMap<QString, QString> KoXmlResourceBundleManifest::getFilesToExtract()
     return result;
 }
 
-QList<QString> KoXmlResourceBundleManifest::getDirList()
+QList<QString> ResourceBundleManifest::getDirList()
 {
     QList<QString> result;
 //    QDomElement currentElement = m_root.firstChildElement();
@@ -282,7 +282,7 @@ QList<QString> KoXmlResourceBundleManifest::getDirList()
 }
 
 
-void KoXmlResourceBundleManifest::exportTags()
+void ResourceBundleManifest::exportTags()
 {
 //    QString tagName;
 //    QString fileName;
@@ -376,14 +376,14 @@ void KoXmlResourceBundleManifest::exportTags()
 }
 
 
-void KoXmlResourceBundleManifest::install()
+void ResourceBundleManifest::install()
 {
 //    if (m_xmlDocument.elementsByTagName("installed").isEmpty()) {
 //        m_root.appendChild(m_xmlDocument.createElement("installed"));
 //    }
 }
 
-void KoXmlResourceBundleManifest::updateFilePaths(QString /*kritaPath*/, QString /*bundleName*/)
+void ResourceBundleManifest::updateFilePaths(QString /*kritaPath*/, QString /*bundleName*/)
 {
 //    bundleName = bundleName.section('/', bundleName.count('/')).section('.', 0, 0);
 
@@ -400,7 +400,7 @@ void KoXmlResourceBundleManifest::updateFilePaths(QString /*kritaPath*/, QString
 //    }
 }
 
-void KoXmlResourceBundleManifest::rename(QString newName)
+void ResourceBundleManifest::rename(QString newName)
 {
 //    QDomNodeList fileList = m_xmlDocument.elementsByTagName("file");
 //    for (int i = 0; i < fileList.size(); i++) {
@@ -413,7 +413,7 @@ void KoXmlResourceBundleManifest::rename(QString newName)
 }
 
 
-void KoXmlResourceBundleManifest::uninstall()
+void ResourceBundleManifest::uninstall()
 {
 //    QDomNodeList instList = m_xmlDocument.elementsByTagName("installed");
 
@@ -424,7 +424,7 @@ void KoXmlResourceBundleManifest::uninstall()
 //    }
 }
 
-bool KoXmlResourceBundleManifest::isInstalled()
+bool ResourceBundleManifest::isInstalled()
 {
     return false;
 }

@@ -26,13 +26,13 @@ namespace Ui
 class WdgDlgCreateBundle;
 }
 
-class KoDlgCreateBundle : public KDialog
+class DlgCreateBundle : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit KoDlgCreateBundle(QWidget *parent = 0);
-    ~KoDlgCreateBundle();
+    explicit DlgCreateBundle(QWidget *parent = 0);
+    ~DlgCreateBundle();
 
     QString bundleName() const;
     QString authorName() const;

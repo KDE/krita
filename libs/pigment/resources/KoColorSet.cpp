@@ -201,6 +201,10 @@ bool KoColorSet::init()
     }
     setValid(res);
 
+    if (m_columns == 0) {
+        m_columns = 10;
+    }
+
     QImage img(m_columns * 4, (m_colors.size() / m_columns) * 4, QImage::Format_ARGB32);
     QPainter gc(&img);
     gc.fillRect(img.rect(), Qt::darkGray);
@@ -268,7 +272,7 @@ bool KoColorSet::loadGpl()
         return false;
     }
 
-      quint32 index = 0;
+    quint32 index = 0;
 
     QStringList lines = s.split('\n', QString::SkipEmptyParts);
 

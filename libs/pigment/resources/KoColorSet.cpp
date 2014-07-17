@@ -44,8 +44,6 @@ KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &
 
     QFileInfo fi(fileName);
 
-    if (!fi.exists()) return KoColorSet::UNKNOWN;
-
     // .pal
     if (ba.startsWith("RIFF") && ba.indexOf("PAL data", 8)) {
         return KoColorSet::RIFF_PAL;
@@ -61,7 +59,7 @@ KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &
     else if (fi.suffix().toLower() == "aco") {
         return KoColorSet::ACO;
     }
-    else if (fi.size() == 768 && fi.suffix().toLower() == "act") {
+    else if (fi.suffix().toLower() == "act") {
         return KoColorSet::ACT;
     }
 
@@ -114,7 +112,11 @@ bool KoColorSet::load()
 
 bool KoColorSet::loadFromDevice(QIODevice *dev)
 {
+    if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
+
     m_data = dev->readAll();
+
+    Q_ASSERT(m_data.size() != 0);
 
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(m_data);
@@ -170,17 +172,24 @@ bool KoColorSet::init()
 {
     m_colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
 
-    if (filename().isNull()) return false;
+    if (filename().isNull()) {
+        qWarning() << "Cannot load palette" << name() << "there is no filename set";
+        return false;
+    }
     if (m_data.isNull()) {
         QFile file(filename());
-        if (file.size() == 0) return false;
+        if (file.size() == 0) {
+            qWarning() << "Cannot load palette" << name() << "there is no data available";
+            return false;
+        }
         file.open(QIODevice::ReadOnly);
         m_data = file.readAll();
         file.close();
     }
 
     bool res = false;
-    switch(detectFormat(filename(), m_data)) {
+    PaletteType paletteType = detectFormat(filename(), m_data);
+    switch(paletteType) {
     case GPL:
         res = loadGpl();
         break;

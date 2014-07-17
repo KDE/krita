@@ -30,6 +30,7 @@
 #include <QCryptographicHash>
 #include <QBuffer>
 #include <QByteArray>
+#include <QPainter>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -199,6 +200,24 @@ bool KoColorSet::init()
         res = false;
     }
     setValid(res);
+
+    QImage img(m_columns * 4, (m_colors.size() / m_columns) * 4, QImage::Format_ARGB32);
+    QPainter gc(&img);
+    gc.fillRect(img.rect(), Qt::darkGray);
+    int counter = 0;
+    for(int i = 0; i < m_columns; ++i) {
+        for (int j = 0; j < (m_colors.size() / m_columns); ++j) {
+            if (counter < m_colors.size()) {
+                QColor c = m_colors.at(counter).color.toQColor();
+                gc.fillRect(i * 4, j * 4, 4, 4, c);
+                counter++;
+            }
+            else {
+                break;
+            }
+        }
+    }
+    setImage(img);
 
     // save some memory
     m_data.clear();

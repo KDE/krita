@@ -84,7 +84,8 @@ bool ResourceBundle::load()
     if (filename().isEmpty()) return false;
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
 
-    if (resourceStore->bad()) {
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Could not open store on bundle" << filename();
         m_installed = false;
         setValid(false);
         return false;
@@ -95,6 +96,7 @@ bool ResourceBundle::load()
 
         if (resourceStore->open("META-INF/manifest.xml")) {
             if (!m_manifest.load(resourceStore->device())) {
+                qWarning() << "Could not open manifest for bundle" << filename();
                 return false;
             }
             resourceStore->close();
@@ -107,12 +109,14 @@ bool ResourceBundle::load()
                 resourceStore->close();
             }
         } else {
+            qWarning() << "Could not load META-INF/manifest.xml";
             return false;
         }
 
         if (resourceStore->open("meta.xml")) {
             KoXmlDocument doc;
             if (!doc.setContent(resourceStore->device())) {
+                qWarning() << "Could not parse meta.xml for" << filename();
                 return false;
             }
             // First find the manifest:manifest node.
@@ -127,6 +131,7 @@ bool ResourceBundle::load()
             }
 
             if (n.isNull()) {
+                qWarning() << "Could not find manifest node for bundle" << filename();
                 return false;
             }
 
@@ -171,12 +176,16 @@ bool ResourceBundle::load()
             resourceStore->close();
         }
         else {
+            qWarning() << "Could not load meta.xml";
             return false;
         }
 
         if (resourceStore->open("preview.png")) {
             m_thumbnail.load(resourceStore->device(), "PNG");
             resourceStore->close();
+        }
+        else {
+            qWarning() << "Could not open preview.png";
         }
 
         m_installed = m_manifest.isInstalled();
@@ -434,15 +443,20 @@ bool ResourceBundle::install()
         return false;
     }
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+
     if (!resourceStore || resourceStore->bad()) {
         qWarning() << "Cannot open the resource bundle: invalid zip file?";
         return false;
     }
+
     foreach(const QString &resType, m_manifest.types()) {
         dbgResources << "Installing resource type" << resType;
         if (resType == "gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KoAbstractGradient *res = gradientServer->createResource(ref.resourcePath);
                 if (!res) {
@@ -468,6 +482,9 @@ bool ResourceBundle::install()
         else if (resType  == "patterns") {
             KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KoPattern *res = patternServer->createResource(ref.resourcePath);
                 if (!res) {
@@ -492,6 +509,9 @@ bool ResourceBundle::install()
         else if (resType  == "brushes") {
             KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KisBrushSP res = brushServer->createResource(ref.resourcePath);
                 if (!res) {
@@ -517,8 +537,12 @@ bool ResourceBundle::install()
         else if (resType  == "palettes") {
             KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KoColorSet *res = paletteServer->createResource(ref.resourcePath);
+
                 if (!res) {
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -542,6 +566,9 @@ bool ResourceBundle::install()
         else if (resType  == "workspaces") {
             KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KisWorkspaceResource *res = workspaceServer->createResource(ref.resourcePath);
                 if (!res) {
@@ -567,6 +594,9 @@ bool ResourceBundle::install()
         else if (resType  == "paintoppresets") {
             KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
                 dbgResources << "\tInstalling" << ref.resourcePath;
                 KisPaintOpPreset *res = paintoppresetServer->createResource(ref.resourcePath);
                 if (!res) {

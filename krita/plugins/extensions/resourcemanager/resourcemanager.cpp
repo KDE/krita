@@ -266,7 +266,7 @@ void ResourceManager::slotCreateBundle()
     res = dlgCreateBundle.selectedPatterns();
     foreach(const QString &r, res) {
         KoResource *res = d->patternServer->resourceByFilename(r);
-        newBundle->addResource("kis_patterns", res->filename(), d->patternServer->tagObject()->assignedTagsList(res), res->md5());
+        newBundle->addResource("ko_patterns", res->filename(), d->patternServer->tagObject()->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPresets();

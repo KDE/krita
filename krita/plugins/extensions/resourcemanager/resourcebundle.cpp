@@ -279,6 +279,7 @@ bool ResourceBundle::save()
     if (!store || store->bad()) return false;
 
     foreach(const QString &resType, m_manifest.types()) {
+
         if (resType == "ko_gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {

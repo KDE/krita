@@ -193,32 +193,63 @@ bool ResourceBundle::loadFromDevice(QIODevice *)
 
 bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &resType)
 {
-    if (!resource) return false;
-    if (!store || store->bad()) return false;
+    if (!resource) {
+        qWarning() << "No Resource";
+        return false;
+    }
+
+    if (!resource->valid()) {
+        qWarning() << "Resource is not valid";
+        return false;
+    }
+    if (!store || store->bad()) {
+        qWarning() << "No Store or Store is Bad";
+        return false;
+    }
 
     QByteArray ba;
     QBuffer buf;
 
+    QFileInfo fi(resource->filename());
+    if (fi.exists() && fi.isReadable() && !fi.isWritable()) {
 
-    if (QFileInfo(resource->filename()).exists()) {
-        resource->save();
         QFile f(resource->filename());
-        if (!f.open(QFile::ReadOnly)) return false;
+        if (!f.open(QFile::ReadOnly)) {
+            qWarning() << "Could not open resource" << resource->filename();
+            return false;
+        }
         ba = f.readAll();
-        if (ba.size() == 0) return false;
+        if (ba.size() == 0) {
+            qWarning() << "Resource is empty" << resource->filename();
+            return false;
+        }
         f.close();
         buf.setBuffer(&ba);
     }
     else {
-        if (!buf.open(QBuffer::WriteOnly)) return false;
-        if (!resource->saveToDevice(&buf)) return false;
+
+        if (!buf.open(QBuffer::WriteOnly)) {
+            qWarning() << "Could not open buffer";
+            return false;
+        }
+        if (!resource->saveToDevice(&buf)) {
+            qWarning() << "Could not save resource to buffer";
+            return false;
+        }
         buf.close();
     }
-    if (!buf.open(QBuffer::ReadOnly)) return false;
-    Q_ASSERT(!store->hasFile(resType + "/" + resource->shortFilename()));
-    if (!store->open(resType + "/" + resource->shortFilename())) return false;
 
-    bool res = (store->write(buf.data()) != buf.size());
+    if (!buf.open(QBuffer::ReadOnly)) {
+        qWarning() << "Could not open buffer";
+        return false;
+    }
+    Q_ASSERT(!store->hasFile(resType + "/" + resource->shortFilename()));
+    if (!store->open(resType + "/" + resource->shortFilename())) {
+        qWarning() << "Could not open file in store for resource";
+        return false;
+    }
+
+    bool res = (store->write(buf.data()) == buf.size());
     store->close();
     return res;
 
@@ -243,7 +274,14 @@ bool ResourceBundle::save()
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = gradientServer->resourceByMD5(ref.md5sum);
                 if (!res) res = gradientServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "gradients");
+                if (!saveResourceToStore(res, store.data(), "gradients")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << ref.md5sum << QFileInfo(ref.resourcePath).completeBaseName();
+                    }
+                }
             }
         }
         else if (resType  == "ko_patterns") {
@@ -251,7 +289,14 @@ bool ResourceBundle::save()
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = patternServer->resourceByMD5(ref.md5sum);
                 if (!res) res = patternServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "patterns");
+                if (!saveResourceToStore(res, store.data(), "patterns")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << ref.md5sum << QFileInfo(ref.resourcePath).completeBaseName();
+                    }
+                }
             }
         }
         else if (resType  == "kis_brushes") {
@@ -260,7 +305,14 @@ bool ResourceBundle::save()
                 KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
                 if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
                 KoResource *res = brush.data();
-                saveResourceToStore(res, store.data(), "brushes");
+                if (!saveResourceToStore(res, store.data(), "brushes")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << ref.md5sum << QFileInfo(ref.resourcePath).completeBaseName();
+                    }
+                }
             }
         }
         else if (resType  == "ko_palettes") {
@@ -268,7 +320,14 @@ bool ResourceBundle::save()
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = paletteServer->resourceByMD5(ref.md5sum);
                 if (!res) res = paletteServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "palettes");
+                if (!saveResourceToStore(res, store.data(), "palettes")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << ref.md5sum << QFileInfo(ref.resourcePath).completeBaseName();
+                    }
+                }
             }
         }
         else if (resType  == "kis_workspaces") {
@@ -276,7 +335,14 @@ bool ResourceBundle::save()
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = workspaceServer->resourceByMD5(ref.md5sum);
                 if (!res) res = workspaceServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "workspaces");
+                if (!saveResourceToStore(res, store.data(), "workspaces")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << ref.md5sum << QFileInfo(ref.resourcePath).completeBaseName();
+                    }
+                }
             }
         }
         else if (resType  == "kis_paintoppresets") {
@@ -284,7 +350,14 @@ bool ResourceBundle::save()
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = paintoppresetServer->resourceByMD5(ref.md5sum);
                 if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "paintoppresets");
+                if (!saveResourceToStore(res, store.data(), "paintoppresets")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << ref.md5sum << QFileInfo(ref.resourcePath).completeBaseName();
+                    }
+                }
             }
         }
     }

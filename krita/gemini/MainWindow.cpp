@@ -590,6 +590,7 @@ void MainWindow::setSketchKisView(QObject* newView)
     {
         d->sketchKisView = qobject_cast<KisView2*>(newView);
         if(d->sketchKisView) {
+            d->sketchView->addActions(d->sketchKisView->actions());
             d->sketchKisView->setQtMainWindow(this);
             connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
             connect(d->sketchKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),

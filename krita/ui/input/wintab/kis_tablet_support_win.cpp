@@ -187,6 +187,8 @@ void printContext(const LOGCONTEXT &lc)
     qDebug() << ppVar(lc.lcSysOrgY);
     qDebug() << ppVar(lc.lcSysExtX);
     qDebug() << ppVar(lc.lcSysExtY);
+
+    qDebug() << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
 }
 
 /**
@@ -240,6 +242,11 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
 
     tdd.minZ = int(lc.lcOutOrgZ);
     tdd.maxZ = int(qAbs(lc.lcOutExtZ)) + int(lc.lcOutOrgZ);
+
+    tdd.sysOrgX = int(lc.lcSysOrgX);
+    tdd.sysOrgY = int(lc.lcSysOrgY);
+    tdd.sysExtX = int(lc.lcSysExtX);
+    tdd.sysExtY = int(lc.lcSysExtY);
 
     if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
         qDebug() << "# Axes configuration";
@@ -374,22 +381,15 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         z = UINT(localPacketBuf[i].pkZ);
 
         prsNew = 0.0;
-        QDesktopWidget *dw = QApplication::desktop();
-        QRect desktopArea = dw->screenGeometry(qApp->focusWidget());
 
-        QPointF hiResGlobal = currentTabletPointer.scaleCoord(ptNew.x, ptNew.y, desktopArea.left(),
-                                                              desktopArea.width(), desktopArea.top(),
-                                                              desktopArea.height());
+        QPointF hiResGlobal = currentTabletPointer.scaleCoord(ptNew.x, ptNew.y,
+                                                              currentTabletPointer.sysOrgX, currentTabletPointer.sysExtX,
+                                                              currentTabletPointer.sysOrgY, currentTabletPointer.sysExtY);
+
 
         if (KisTabletDebugger::instance()->debugRawTabletValues()) {
-            qDebug() << "Number of screens" << dw->screenCount() << "Total desktop size" << dw->geometry();
-            for (int i = 0; i < dw->screenCount(); ++i) {
-                qDebug() << "\tScreen" << i << dw->screenGeometry(i);
-            }
-            qDebug() << "Active screen" << dw->screenNumber(qApp->focusWidget()) << "With geometry" << desktopArea;
-
             qDebug() << "WinTab (RC):"
-                     << "Dsk:"  << desktopArea
+                     << "Dsk:"  << QRect(currentTabletPointer.sysOrgX, currentTabletPointer.sysOrgY, currentTabletPointer.sysExtX,  currentTabletPointer.sysExtY)
                      << "Raw:" << ptNew.x << ptNew.y
                      << "Scaled:" << hiResGlobal;
         }
@@ -639,3 +639,4 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
 
     return false;
 }
+

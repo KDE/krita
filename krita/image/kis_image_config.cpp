@@ -217,6 +217,7 @@ int KisImageConfig::totalRAM()
 
     if (sysctl(mib, namelen, &size, &len, NULL, 0) > 0) {
         totalMemory = size;
+        error = 0;
     }
 #endif
 

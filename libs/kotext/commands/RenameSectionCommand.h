@@ -36,6 +36,9 @@ public:
     virtual void undo();
     virtual void redo();
 
+    virtual bool mergeWith(const KUndo2Command *other);
+    virtual int id() const;
+
 private:
     KoSection *m_section; // section to rename
     QString m_newName; // new section name

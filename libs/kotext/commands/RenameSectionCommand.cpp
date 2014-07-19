@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include <kundo2command.h>
 
-RenameSectionCommand::RenameSectionCommand(KoSection* section, QString newName)
+RenameSectionCommand::RenameSectionCommand(KoSection *section, QString newName)
     : KUndo2Command()
     , m_section(section)
     , m_newName(newName)
@@ -50,4 +50,29 @@ void RenameSectionCommand::redo()
     m_oldName = m_section->name();
     m_section->setName(m_newName);
     m_first = false;
+}
+
+int RenameSectionCommand::id() const
+{
+    return 34537684;
+}
+
+bool RenameSectionCommand::mergeWith(const KUndo2Command *other)
+{
+    if (other->id() != id()) {
+        return false;
+    }
+
+    const RenameSectionCommand *command = static_cast<const RenameSectionCommand *>(other);
+
+    if (command->m_section != m_section) {
+        return false;
+    }
+
+    if (m_newName != command->m_oldName) {
+        return false;
+    }
+
+    m_newName = command->m_oldName;
+    return true;
 }

@@ -142,6 +142,7 @@ private:
     friend class InsertNoteCommand;
     friend class ParagraphFormattingCommand;
     friend class RenameSectionCommand;
+    friend class NewSectionCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;

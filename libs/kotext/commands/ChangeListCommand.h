@@ -38,6 +38,7 @@ class ChangeListCommand : public KoTextCommandBase
 {
 public:
 
+    //FIXME: following comments seems to describe another function
     /**
      * Change the list property of 'block'.
      * @param block the paragraph to change the list property of

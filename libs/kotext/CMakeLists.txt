@@ -118,6 +118,7 @@ set(kotext_LIB_SRCS
     commands/AddAnnotationCommand.cpp
     commands/ParagraphFormattingCommand.cpp
     commands/RenameSectionCommand.cpp
+    commands/NewSectionCommand.cpp
 
     KoTextDrag.cpp
     KoTextCommandBase.cpp

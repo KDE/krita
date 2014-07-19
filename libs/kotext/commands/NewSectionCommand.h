@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE project
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014 Denis Kuplaykov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,37 +17,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.*/
 
-#include "RenameSectionCommand.h"
-#include <KoSection.h>
+#ifndef NEWSECTIONCOMMAND_H
+#define NEWSECTIONCOMMAND_H
 
-#include <klocale.h>
+#include <KoSection.h>
+#include <QTextDocument>
+
 #include <kundo2command.h>
 
-RenameSectionCommand::RenameSectionCommand(KoSection* section, QString newName)
-    : KUndo2Command()
-    , m_section(section)
-    , m_newName(newName)
-    , m_first(true)
+class NewSectionCommand : public KUndo2Command
 {
-    setText(kundo2_i18n("Rename Section"));
-}
+public:
 
-RenameSectionCommand::~RenameSectionCommand()
-{
-}
+    NewSectionCommand(QTextDocument *document);
+    virtual ~NewSectionCommand();
 
-void RenameSectionCommand::undo()
-{
-    KUndo2Command::undo();
-    m_section->setName(m_oldName);
-}
+    virtual void undo();
+    virtual void redo();
 
-void RenameSectionCommand::redo()
-{
-    if (!m_first) {
-        KUndo2Command::redo();
-    }
-    m_oldName = m_section->name();
-    m_section->setName(m_newName);
-    m_first = false;
-}
+private:
+    bool m_first; // checks first call of redo
+    QTextDocument *m_document; // section manager of the document
+};
+
+#endif // NEWSECTIONCOMMAND_H

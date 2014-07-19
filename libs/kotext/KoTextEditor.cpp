@@ -71,6 +71,7 @@
 #include "commands/AddTextRangeCommand.h"
 #include "commands/AddAnnotationCommand.h"
 #include "commands/RenameSectionCommand.h"
+#include "commands/NewSectionCommand.h"
 
 #include <KoShapeCreateCommand.h>
 
@@ -92,10 +93,6 @@
 
 #include <kdebug.h>
 #include "KoTextDebug.h"
-
-#include <KoSection.h>
-#include <KoSectionEnd.h>
-#include <KoSectionManager.h>
 
 #include <KoDocumentRdfBase.h>
 
@@ -1537,35 +1534,8 @@ void KoTextEditor::newSection()
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Custom, kundo2_i18n("New Section"));
-    d->caret.beginEditBlock();
-    d->newLine(0);
-
-    KoSection *start = new KoSection(KoTextDocument(d->caret.document()).sectionManager());
-    KoSectionEnd *end = new KoSectionEnd(start);
-    QTextBlockFormat fmt = d->caret.blockFormat();
-
-    QList< QVariant > sectionStartings;
-    if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
-        sectionStartings = fmt.property(KoParagraphStyle::SectionStartings)
-            .value< QList<QVariant> >();
-    }
-    QList< QVariant > sectionEndings;
-    if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
-        sectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
-            .value< QList<QVariant> >();
-    }
-
-    sectionStartings.append(qVariantFromValue<void *>(static_cast<void *>(start)));
-    sectionEndings.prepend(qVariantFromValue<void *>(static_cast<void *>(end)));
-
-    fmt.setProperty(KoParagraphStyle::SectionStartings, sectionStartings);
-    fmt.setProperty(KoParagraphStyle::SectionEndings, sectionEndings);
-
-    d->caret.setBlockFormat(fmt);
-
-    d->caret.endEditBlock();
-    d->updateState(KoTextEditor::Private::NoOp);
+    NewSectionCommand *cmd = new NewSectionCommand(d->document);
+    addCommand(cmd);
     emit cursorPositionChanged();
 }
 

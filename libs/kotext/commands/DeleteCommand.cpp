@@ -38,6 +38,7 @@
 #include <KoSectionManager.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
+#include <KoDocument.h>
 
 #include <QWeakPointer>
 
@@ -61,6 +62,7 @@ void DeleteCommand::undo()
     UndoRedoFinalizer finalizer(this);
     updateListChanges();
     m_undone = true;
+    KoTextDocument(m_document).sectionManager()->invalidate();
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
     foreach (KoTextRange *range, m_rangesToRemove) {
         rangeManager->insert(range);

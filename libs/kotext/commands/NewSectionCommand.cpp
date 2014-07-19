@@ -32,7 +32,6 @@ NewSectionCommand::NewSectionCommand(QTextDocument *document)
     , m_first(true)
     , m_document(document)
 {
-    Q_ASSERT(m_document);
     setText(kundo2_i18n("New Section"));
 }
 
@@ -43,7 +42,6 @@ NewSectionCommand::~NewSectionCommand()
 void NewSectionCommand::undo()
 {
     KUndo2Command::undo();
-
     KoTextDocument(m_document).sectionManager()->invalidate();
 }
 
@@ -53,34 +51,34 @@ void NewSectionCommand::redo()
 
     if (!m_first) {
         KUndo2Command::redo();
+    } else {
+        m_first = false;
+
+        KoTextEditor *editor = KoTextDocument(m_document).textEditor();
+
+        editor->newLine();
+
+        KoSection *start = new KoSection(KoTextDocument(m_document).sectionManager());
+        KoSectionEnd *end = new KoSectionEnd(start);
+        QTextBlockFormat fmt = editor->blockFormat();
+
+        QList< QVariant > sectionStartings;
+        if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
+            sectionStartings = fmt.property(KoParagraphStyle::SectionStartings)
+                .value< QList<QVariant> >();
+        }
+        QList< QVariant > sectionEndings;
+        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+            sectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
+                .value< QList<QVariant> >();
+        }
+
+        sectionStartings.append(qVariantFromValue<void *>(static_cast<void *>(start)));
+        sectionEndings.prepend(qVariantFromValue<void *>(static_cast<void *>(end)));
+
+        fmt.setProperty(KoParagraphStyle::SectionStartings, sectionStartings);
+        fmt.setProperty(KoParagraphStyle::SectionEndings, sectionEndings);
+
+        editor->setBlockFormat(fmt);
     }
-    m_first = false;
-
-    KoTextEditor *editor = KoTextDocument(m_document).textEditor();
-    Q_ASSERT(editor);
-
-    editor->newLine();
-
-    KoSection *start = new KoSection(KoTextDocument(m_document).sectionManager());
-    KoSectionEnd *end = new KoSectionEnd(start);
-    QTextBlockFormat fmt = editor->blockFormat();
-
-    QList< QVariant > sectionStartings;
-    if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
-        sectionStartings = fmt.property(KoParagraphStyle::SectionStartings)
-            .value< QList<QVariant> >();
-    }
-    QList< QVariant > sectionEndings;
-    if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
-        sectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
-            .value< QList<QVariant> >();
-    }
-
-    sectionStartings.append(qVariantFromValue<void *>(static_cast<void *>(start)));
-    sectionEndings.prepend(qVariantFromValue<void *>(static_cast<void *>(end)));
-
-    fmt.setProperty(KoParagraphStyle::SectionStartings, sectionStartings);
-    fmt.setProperty(KoParagraphStyle::SectionEndings, sectionEndings);
-
-    editor->setBlockFormat(fmt);
 }

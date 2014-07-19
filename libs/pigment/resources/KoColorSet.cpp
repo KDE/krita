@@ -488,7 +488,7 @@ bool KoColorSet::loadAco()
             reinterpret_cast<quint16*>(e.color.data())[0] = quint16_MAX - ch1;
             reinterpret_cast<quint16*>(e.color.data())[1] = quint16_MAX - ch2;
             reinterpret_cast<quint16*>(e.color.data())[2] = quint16_MAX - ch3;
-            reinterpret_cast<quint16*>(e.color.data())[4] = quint16_MAX - ch4;
+            reinterpret_cast<quint16*>(e.color.data())[3] = quint16_MAX - ch4;
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else if (colorSpace == 7) { // LAB

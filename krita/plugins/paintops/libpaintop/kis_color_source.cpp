@@ -127,7 +127,8 @@ void KisPlainColorSource::selectColor(double mix)
 //--------------- KisGradientColorSource -------------//
 //-------------------------------------------------//
 
-KisGradientColorSource::KisGradientColorSource(const KoAbstractGradient* gradient, const KoColorSpace* workingCS) : m_gradient(gradient), m_colorSpace(workingCS)
+KisGradientColorSource::KisGradientColorSource(const KoAbstractGradient* gradient, const KoColorSpace* workingCS)
+    : m_gradient(gradient)
 {
     m_color = new KoColor(workingCS);
     Q_ASSERT(gradient);

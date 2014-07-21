@@ -26,6 +26,8 @@
 #include <KoAlwaysInline.h>
 
 
+#pragma GCC diagnostic ignored "-Wcast-align"
+
 template<Vc::Implementation _impl>
 struct KoStreamedMath {
 

@@ -25,6 +25,7 @@
 #include <QList>
 
 #include <kdebug.h>
+#include <kurl.h>
 
 #include <KoStore.h>
 #include <KoXmlWriter.h>
@@ -213,7 +214,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext
             }
 
             Q_ASSERT(doc->url().protocol() == INTERNAL_PROTOCOL);
-            path = store->currentDirectory();
+            path = store->currentPath();
             if (!path.isEmpty()) {
                 path += '/';
             }

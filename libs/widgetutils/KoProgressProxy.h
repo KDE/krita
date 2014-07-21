@@ -21,7 +21,8 @@
 #define KO_PROGRESS_PROXY
 
 #include "kowidgetutils_export.h"
-#include <QString>
+
+class QString;
 
 /**
  * A proxy interface for a real progress status reporting thing, either

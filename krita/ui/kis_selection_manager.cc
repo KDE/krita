@@ -116,10 +116,10 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
     Q_ASSERT(selection);
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
-    KisSelectionDecoration* decoration = new KisSelectionDecoration(m_view);
-    connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
-    decoration->setVisible(true);
-    m_view->canvasBase()->addDecoration(decoration);
+    m_selectionDecoration = new KisSelectionDecoration(m_view);
+    connect(this, SIGNAL(currentSelectionChanged()), m_selectionDecoration, SLOT(selectionChanged()));
+    m_selectionDecoration->setVisible(true);
+    m_view->canvasBase()->addDecoration(m_selectionDecoration);
 }
 
 KisSelectionManager::~KisSelectionManager()
@@ -205,7 +205,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     actionManager->addAction("fill_selection_pattern", m_fillPattern, collection);
     connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
 
-    m_strokeShapes  = new KisAction(i18n("Stroke selected shapes"), this);
+    m_strokeShapes  = new KisAction(i18nc("@action:inmenu", "Stro&ke selected shapes"), this);
     m_strokeShapes->setActivationFlags(KisAction::SHAPES_SELECTED);
     actionManager->addAction("stroke_shapes", m_strokeShapes, collection);
     connect(m_strokeShapes, SIGNAL(triggered()), this, SLOT(paintSelectedShapes()));
@@ -222,15 +222,19 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     actionManager->addAction("resizeimagetoselection", m_imageResizeToSelection, collection);
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
 
-    KisAction *action = new KisAction(i18n("Convert to Vector Selection"), this);
+    KisAction *action = new KisAction(i18nc("@action:inmenu", "&Convert to Vector Selection"), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     actionManager->addAction("convert_to_vector_selection", action, collection);
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
-    action = new KisAction(i18n("Convert Shapes to Vector Selection"), this);
+    action = new KisAction(i18nc("@action:inmenu", "Convert &Shapes to Vector Selection"), this);
     action->setActivationFlags(KisAction::SHAPES_SELECTED);
     actionManager->addAction("convert_shapes_to_vector_selection", action, collection);
     connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
+
+    m_toggleSelectionOverlayMode  = new KisAction(i18nc("@action:inmenu", "&Toggle Selection Display Mode"), this);
+    actionManager->addAction("toggle-selection-overlay-mode", m_toggleSelectionOverlayMode, collection);
+    connect(m_toggleSelectionOverlayMode, SIGNAL(triggered()), SLOT(slotToggleSelectionDecoration()));
 
 //     m_load
 //         = new KAction(i18n("Load..."),
@@ -460,13 +464,13 @@ void KisSelectionManager::cutToNewLayer()
 
 void KisSelectionManager::toggleDisplaySelection()
 {
-    KisCanvasDecoration* decoration = m_view->canvasBase()->decoration("selection");
-    if (decoration) {
-        decoration->toggleVisibility();
-        m_toggleDisplaySelection->blockSignals(true);
-        m_toggleDisplaySelection->setChecked(decoration->visible());
-        m_toggleDisplaySelection->blockSignals(false);
-    }
+    KIS_ASSERT_RECOVER_RETURN(m_selectionDecoration);
+
+    m_selectionDecoration->toggleVisibility();
+    m_toggleDisplaySelection->blockSignals(true);
+    m_toggleDisplaySelection->setChecked(m_selectionDecoration->visible());
+    m_toggleDisplaySelection->blockSignals(false);
+
     emit displaySelectionChanged();
 }
 
@@ -531,5 +535,21 @@ void KisSelectionManager::paintSelectedShapes()
     m_adapter->endMacro();
 }
 
+void KisSelectionManager::slotToggleSelectionDecoration()
+{
+    KIS_ASSERT_RECOVER_RETURN(m_selectionDecoration);
+
+    KisSelectionDecoration::Mode mode =
+        m_selectionDecoration->mode() ?
+        KisSelectionDecoration::Ants : KisSelectionDecoration::Mask;
+
+    m_selectionDecoration->setMode(mode);
+    emit displaySelectionChanged();
+}
+
+bool KisSelectionManager::showSelectionAsMask() const
+{
+    return m_selectionDecoration->mode() == KisSelectionDecoration::Mask;
+}
 
 #include "kis_selection_manager.moc"

@@ -20,7 +20,7 @@
 #ifndef ADDTEXTRANGECOMMAND_H
 #define ADDTEXTRANGECOMMAND_H
 
-#include <kundo2qstack.h>
+#include <kundo2command.h>
 
 class KoTextRange;
 

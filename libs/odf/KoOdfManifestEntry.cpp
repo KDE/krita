@@ -21,6 +21,7 @@
 // Own
 #include "KoOdfManifestEntry.h"
 
+#include <QString>
 
 class KoOdfManifestEntry::Private
 {

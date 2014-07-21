@@ -18,4 +18,4 @@ install(TARGETS kritapatterngenerator  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritapatterngenerator.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritapatterngenerator.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

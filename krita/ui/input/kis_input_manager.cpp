@@ -145,26 +145,6 @@ void KisInputManager::Private::debugEvent(QEvent *event)
 #define touch_stop_block_press_events() d->touchHasBlockedPressEvents = false
 #define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
 
-
-static inline QList<Qt::Key> KEYS() {
-    return QList<Qt::Key>();
-}
-static inline QList<Qt::Key> KEYS(Qt::Key key) {
-    return QList<Qt::Key>() << key;
-}
-static inline QList<Qt::Key> KEYS(Qt::Key key1, Qt::Key key2) {
-    return QList<Qt::Key>() << key1 << key2;
-}
-static inline QList<Qt::Key> KEYS(Qt::Key key1, Qt::Key key2, Qt::Key key3) {
-    return QList<Qt::Key>() << key1 << key2 << key3;
-}
-static inline QList<Qt::MouseButton> BUTTONS(Qt::MouseButton button) {
-    return QList<Qt::MouseButton>() << button;
-}
-static inline QList<Qt::MouseButton> BUTTONS(Qt::MouseButton button1, Qt::MouseButton button2) {
-    return QList<Qt::MouseButton>() << button1 << button2;
-}
-
 class KisInputManager::Private::ProximityNotifier : public QObject {
 public:
     ProximityNotifier(Private *_d, QObject *p) : QObject(p), d(_d) {}
@@ -472,7 +452,7 @@ void KisInputManager::setupAsEventFilter(QObject *receiver)
 
 void KisInputManager::stopIgnoringEvents()
 {
-	stop_ignore_cursor_events();
+    stop_ignore_cursor_events();
 }
 
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
@@ -500,6 +480,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     // tool is in text editing, preventing shortcut triggering
     d->toolProxy->processEvent(event);
 
+    // because we have fake enums in here...
+#pragma GCC diagnostic ignored "-Wswitch"
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {

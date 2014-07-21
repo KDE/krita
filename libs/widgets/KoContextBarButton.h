@@ -55,7 +55,6 @@ private:
     /** Stops button fading animation */
     void stopFading();
     bool m_isHovered;
-    bool m_leftMouseButtonPressed;
     int m_fadingValue;
     QTimeLine *m_fadingTimeLine;
 };

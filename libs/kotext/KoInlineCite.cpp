@@ -17,32 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoInlineCite.h"
-#include "KoInlineTextObjectManager.h"
 
-#include <KoXmlReader.h>
+#include "KoInlineTextObjectManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoTextLoader.h>
-#include <KoTextWriter.h>
 #include <KoTextDocument.h>
-#include <KoText.h>
 #include <KoOdfBibliographyConfiguration.h>
-#include <KoGenStyles.h>
 #include <KoStyleManager.h>
 #include <kdebug.h>
 
 #include <QTextDocument>
-#include <QTextFrame>
-#include <QTextCursor>
-#include <QString>
 #include <QTextInlineObject>
 #include <QFontMetricsF>
 #include <QTextOption>
-#include <QBuffer>
-#include <QMap>
-//#include <QMessageBox>
+
+// Include Q_UNSUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
 
 class KoInlineCite::Private
 {

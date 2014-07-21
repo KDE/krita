@@ -21,8 +21,7 @@
 #ifndef INSERTTABLECOLUMNCOMMAND_H
 #define INSERTTABLECOLUMNCOMMAND_H
 
-#include <kundo2qstack.h>
-#include <QList>
+#include <kundo2command.h>
 #include <KoTableColumnStyle.h>
 
 class KoTextEditor;

@@ -21,8 +21,6 @@
 
 #include <QTextDocument>
 #include <QVector>
-#include <QTextCursor>
-#include <QTextCharFormat>
 
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>

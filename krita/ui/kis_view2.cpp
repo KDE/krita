@@ -54,7 +54,7 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
 #include <kstandardaction.h>
 #include <kurl.h>
 #include <kxmlguiwindow.h>
@@ -199,10 +199,15 @@ public:
         delete actionManager;
         delete canvasControlsManager;
         delete tooltipManager;
+
+        /**
+         * Push a timebomb, which will try to release the memory after
+         * the document has been deleted
+         */
+        KisPaintDevice::createMemoryReleaseObject()->deleteLater();
     }
 
 public:
-
     KisCanvas2 *canvas;
     KisDoc2 *doc;
     KisCoordinatesConverter *viewConverter;
@@ -334,7 +339,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     KAction *resetCanvasRotation = new KAction(i18n("Reset Canvas Rotation"), this);
     actionCollection()->addAction("reset_canvas_rotation", resetCanvasRotation);
-    resetCanvasRotation->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasRotation, SIGNAL(triggered()),m_d->canvasController, SLOT(resetCanvasRotation()));
 
     KToggleAction *wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
@@ -483,7 +487,21 @@ KisView2::~KisView2()
         m_d->filterManager->cancel();
     }
 
-    {
+    // The reason for this is to ensure the shortcuts are saved at the right time,
+    // and only the right shortcuts. Gemini has two views at all times, and shortcuts
+    // must be handled by the desktopview, but if we use the logic as below, we
+    // overwrite the desktop view's settings with the sketch view's
+    if(qApp->applicationName() == QLatin1String("kritagemini")) {
+        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
+        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+            const QObject* obj = dynamic_cast<const QObject*>(collection->parentGUIClient());
+            if(obj && qobject_cast<const KisView2*>(obj) && !obj->objectName().startsWith("view_0"))
+                break;
+            collection->setConfigGroup("krita/shortcuts");
+            collection->writeSettings(&group);
+        }
+    }
+    else {
         KConfigGroup group(KGlobal::config(), "krita/shortcuts");
         foreach(KActionCollection *collection, KActionCollection::allCollections()) {
             collection->setConfigGroup("krita/shortcuts");
@@ -753,6 +771,7 @@ bool KisView2::event( QEvent* event )
                     tool->smoothingOptions()->setUseDelayDistance(syncObject->smoothingOptions->useDelayDistance());
                     tool->smoothingOptions()->setDelayDistance(syncObject->smoothingOptions->delayDistance());
                     tool->smoothingOptions()->setFinishStabilizedCurve(syncObject->smoothingOptions->finishStabilizedCurve());
+                    tool->smoothingOptions()->setStabilizeSensors(syncObject->smoothingOptions->stabilizeSensors());
                     tool->updateSettingsViews();
                 }
             }
@@ -1164,9 +1183,7 @@ void KisView2::slotNodeChanged()
 void KisView2::loadPlugins()
 {
     // Load all plugins
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
-                                                              QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Krita-Version] == 28)"));
+    const KService::List offers = KoServiceLocator::instance()->entries("Krita/ViewPlugin");
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;

@@ -21,7 +21,6 @@
 #include "KoProperties.h"
 
 #include <QDomDocument>
-#include <QString>
 
 class KoProperties::Private
 {

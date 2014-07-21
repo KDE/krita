@@ -46,7 +46,6 @@ const int CONTEXTBAR_RADIUS = 50;
 KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
 : QToolButton(parent)
 , m_isHovered(false)
-, m_leftMouseButtonPressed(false)
 , m_fadingValue(0)
 , m_fadingTimeLine(0)
 {

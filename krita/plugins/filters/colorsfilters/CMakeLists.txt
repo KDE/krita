@@ -28,4 +28,4 @@ install(TARGETS kritacolorsfilters  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritacolorsfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritacolorsfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

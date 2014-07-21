@@ -1,31 +1,31 @@
 [ColorEffects:Disabled]
 Color=0,0,0
-ColorAmount=0.2
+ColorAmount=0.15
 ColorEffect=0
-ContrastAmount=0.5
+ContrastAmount=0.250
 ContrastEffect=1
-IntensityAmount=0.05
-IntensityEffect=2
+IntensityAmount=0.04
+IntensityEffect=1
 
 [ColorEffects:Inactive]
-ChangeSelectionColor=true
-Color=187,200,213
-ColorAmount=0.05
-ColorEffect=2
-ContrastAmount=0.25
+ChangeSelectionColor=false
+Color=40,40,40
+ColorAmount=0.25
+ColorEffect=0
+ContrastAmount=0.15
 ContrastEffect=1
-Enable=true
-IntensityAmount=0.05
-IntensityEffect=0
+Enable=false
+IntensityAmount=0.20
+IntensityEffect=2
 
 [Colors:Button]
-BackgroundAlternate=222,223,224
-BackgroundNormal=80,80,80
+BackgroundAlternate=80,80,80
+BackgroundNormal=70,70,70
 DecorationFocus=96,128,160
 DecorationHover=144,168,192
 ForegroundActive=148,190,201
 ForegroundInactive=116,136,174
-ForegroundLink=0,87,174
+ForegroundLink=9,51,117
 ForegroundNegative=191,8,11
 ForegroundNeutral=192,144,0
 ForegroundNormal=240,240,240
@@ -33,18 +33,18 @@ ForegroundPositive=0,137,43
 ForegroundVisited=100,74,155
 
 [Colors:Selection]
-BackgroundAlternate=138,161,184
+BackgroundAlternate=196,98,12
 BackgroundNormal=89,131,197
-DecorationFocus=96,128,160
-DecorationHover=144,168,192
+DecorationFocus=140,140,140
+DecorationHover=140,140,140
 ForegroundActive=255,160,200
 ForegroundInactive=129,129,129
-ForegroundLink=0,69,138
-ForegroundNegative=226,7,0
-ForegroundNeutral=255,221,0
+ForegroundLink=9,51,117
+ForegroundNegative=140,140,140
+ForegroundNeutral=140,140,140
 ForegroundNormal=255,255,255
-ForegroundPositive=96,240,96
-ForegroundVisited=82,70,96
+ForegroundPositive=140,140,140
+ForegroundVisited=140,140,140
 
 [Colors:Tooltip]
 BackgroundAlternate=186,200,216
@@ -53,7 +53,7 @@ DecorationFocus=96,128,160
 DecorationHover=144,168,192
 ForegroundActive=148,190,201
 ForegroundInactive=116,136,174
-ForegroundLink=0,87,174
+ForegroundLink=9,51,117
 ForegroundNegative=191,3,3
 ForegroundNeutral=192,144,0
 ForegroundNormal=52,56,61
@@ -61,27 +61,27 @@ ForegroundPositive=0,137,43
 ForegroundVisited=100,74,155
 
 [Colors:View]
-BackgroundAlternate=150,150,150
-BackgroundNormal=180,180,180
-DecorationFocus=96,128,160
+BackgroundAlternate=70,70,70
+BackgroundNormal=64,64,64
+DecorationFocus=140,140,140
 DecorationHover=81,81,81
-ForegroundActive=148,190,201
-ForegroundInactive=116,136,174
-ForegroundLink=59,130,178
-ForegroundNegative=9,124,191
-ForegroundNeutral=192,144,0
-ForegroundNormal=0,0,0
+ForegroundActive=140,140,140
+ForegroundInactive=140,140,140
+ForegroundLink=9,51,117
+ForegroundNegative=140,140,140
+ForegroundNeutral=140,140,140
+ForegroundNormal=220,220,220
 ForegroundPositive=0,137,43
 ForegroundVisited=100,74,155
 
 [Colors:Window]
-BackgroundAlternate=215,215,216
-BackgroundNormal=114,114,114
+BackgroundAlternate=114,114,114
+BackgroundNormal=107,107,107
 DecorationFocus=96,128,160
 DecorationHover=144,168,192
 ForegroundActive=148,190,201
 ForegroundInactive=116,136,174
-ForegroundLink=0,87,174
+ForegroundLink=9,51,117
 ForegroundNegative=191,3,3
 ForegroundNeutral=192,144,0
 ForegroundNormal=0,0,0
@@ -89,12 +89,12 @@ ForegroundPositive=0,137,43
 ForegroundVisited=100,74,155
 
 [General]
-ColorScheme=Krita-blender
-Name=Krita-blender
+ColorScheme=Krita blender
+Name=Krita blender
 shadeSortColumn=true
 
 [KDE]
-contrast=7
+contrast=4
 
 [WM]
 activeBackground=144,168,192

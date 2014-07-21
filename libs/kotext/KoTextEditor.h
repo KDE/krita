@@ -27,18 +27,14 @@
 
 #include <kundo2magicstring.h>
 #include <KoGenChange.h>
-#include "KoText.h"
-#include "styles/KoListStyle.h"
-#include <KoToolSelection.h>
 #include <KoBorder.h>
 #include <KoSection.h>
 
-#include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>
 #include <QTextFrame>
 
-class KoDocumentRdfBase;
+class KoListLevelProperties;
 class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
@@ -47,11 +43,14 @@ class KoInlineCite;
 class KoBibliographyInfo;
 class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
-class KoShapeController;
 class KoShapeAnchor;
+class KoShape;
 class KoBookmark;
 class KoAnnotation;
 class KoTextRangeManager;
+class KoTextVisitor;
+
+class KUndo2Command;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -59,9 +58,8 @@ class QTextBlockFormat;
 class QTextDocument;
 class QTextDocumentFragment;
 class QString;
-class KUndo2Command;
+class QMimeData;
 
-class KoTextVisitor;
 
 /**
  * KoTextEditor is a wrapper around QTextCursor. It handles undo/redo and change

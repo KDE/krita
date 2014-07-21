@@ -19,8 +19,6 @@
 
 #include "KoInlineObject.h"
 #include "KoInlineObject_p.h"
-#include "KoShapeSavingContext.h"
-#include "KoShapeLoadingContext.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoTextInlineRdf.h"
 

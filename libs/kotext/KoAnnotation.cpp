@@ -22,25 +22,19 @@
 #include "KoAnnotation.h"
 
 #include <KoShapeSavingContext.h>
-#include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoTextInlineRdf.h>
 #include <KoTextRangeManager.h>
-#include <KoTextLoader.h>
 #include <KoXmlNS.h>
-#include <KoTextWriter.h>
 #include <KoShape.h>
 
-#include "KoTextDocument.h"
-
 #include <QTextDocument>
-#include <QTextFrameFormat>
-#include <QTextList>
-#include <QTextBlock>
 #include <QTextCursor>
-#include <QWeakPointer>
 #include <kdebug.h>
+
+// Include Q_UNSUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
 
 class KoAnnotation::Private
 {

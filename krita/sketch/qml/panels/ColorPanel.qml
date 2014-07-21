@@ -218,6 +218,7 @@ Panel {
                     margins: Constants.DefaultMargin;
                 }
                 source: model.image;
+                asynchronous: true;
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: {

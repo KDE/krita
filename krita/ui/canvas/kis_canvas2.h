@@ -44,7 +44,7 @@ class KisFavoriteResourceManager;
 class KisDisplayFilter;
 class KisInputManager;
 class KisDisplayColorConverter;
-class KisExposureGammaCorrectionInterface;
+struct KisExposureGammaCorrectionInterface;
 
 enum KisCanvasType {
     QPAINTER,

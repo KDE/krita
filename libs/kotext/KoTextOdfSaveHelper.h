@@ -27,7 +27,6 @@
 #include "kotext_export.h"
 
 class QTextDocument;
-class KoXmlWriter;
 class KoStyleManager;
 
 class KOTEXT_EXPORT KoTextOdfSaveHelper : public KoDragOdfSaveHelper

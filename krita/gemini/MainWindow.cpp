@@ -479,8 +479,6 @@ void MainWindow::documentChanged()
     connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
     connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
-    if (d->sketchKisView)
-        d->sketchKisView->setQtMainWindow(this);
     if (!d->forceSketch && !d->slateMode)
         switchToDesktop(true);
 }
@@ -592,6 +590,8 @@ void MainWindow::setSketchKisView(QObject* newView)
     {
         d->sketchKisView = qobject_cast<KisView2*>(newView);
         if(d->sketchKisView) {
+            d->sketchView->addActions(d->sketchKisView->actions());
+            d->sketchKisView->setQtMainWindow(this);
             connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
             connect(d->sketchKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChangedSketch(int, const QVariant&)));
@@ -608,7 +608,11 @@ void MainWindow::minimize()
 
 void MainWindow::closeWindow()
 {
-    d->desktopView->setNoCleanup(true);
+    if (d->desktopView) {
+        // This situation shouldn't occur, but protecting potentially dangerous call
+        d->desktopView->setNoCleanup(true);
+    }
+
     //For some reason, close() does not work even if setAllowClose(true) was called just before this method.
     //So instead just completely quit the application, since we are using a single window anyway.
     DocumentManager::instance()->closeDocument();
@@ -619,7 +623,10 @@ void MainWindow::closeWindow()
 
 bool MainWindow::Private::queryClose()
 {
-    desktopView->setNoCleanup(true);
+    if (desktopView) {
+        // This situation shouldn't occur, but protecting potentially dangerous call
+        desktopView->setNoCleanup(true);
+    }
     if (DocumentManager::instance()->document() == 0)
         return true;
 

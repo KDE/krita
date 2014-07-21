@@ -40,6 +40,7 @@ class KisClipboard;
 class KisNodeCommandsAdapter;
 
 class KisSelectionFilter;
+class KisSelectionDecoration;
 
 /**
  * The selection manager is responsible selections
@@ -63,6 +64,8 @@ public:
      * This function return if the selection should be displayed
      */
     bool displaySelection();
+
+    bool showSelectionAsMask() const;
 
 public slots:
 
@@ -94,6 +97,8 @@ public slots:
     void shapeSelectionChanged();
     void imageResizeToSelection();
     void paintSelectedShapes();
+
+    void slotToggleSelectionDecoration();
 
 signals:
     void currentSelectionChanged();
@@ -156,7 +161,10 @@ private:
     KisAction *m_strokeShapes;
     KToggleAction *m_toggleDisplaySelection;
 
+    KisAction *m_toggleSelectionOverlayMode;
+
     QList<QAction*> m_pluginActions;
+    KisSelectionDecoration *m_selectionDecoration;
 
 };
 

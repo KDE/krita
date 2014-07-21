@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
  * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
  *
@@ -21,6 +22,7 @@
 
 #include <BibliographyGenerator.h>
 #include <KoBibliographyInfo.h>
+#include <KoOdfBibliographyConfiguration.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <klocale.h>

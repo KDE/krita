@@ -248,7 +248,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     }
     else {
         QList<KoChannelInfo*> channelInfo = projectionCs->channels();
-        if (!m_channelFlags.size() == channelInfo.size()) {
+        if (m_channelFlags.size() != channelInfo.size()) {
             setChannelFlags(QBitArray());
         }
         if (!m_channelFlags.isEmpty() && !m_allChannelsSelected) {

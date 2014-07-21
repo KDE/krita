@@ -40,6 +40,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOasisSettings.h>
 #include <KoStoreDevice.h>
+#include <KoGenStyles.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>

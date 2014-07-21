@@ -22,7 +22,7 @@ install(TARGETS kritaspraypaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritaspraypaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaspraypaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES
     krita-spray.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

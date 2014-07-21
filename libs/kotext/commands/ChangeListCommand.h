@@ -24,12 +24,13 @@
 #include "KoTextCommandBase.h"
 #include "KoListStyle.h"
 #include "KoTextEditor.h"
-#include "KoList.h"
 #include "KoListLevelProperties.h"
 
 #include <QTextBlock>
 #include <QList>
 #include <QHash>
+
+class KoList;
 
 /**
  * This command is useful to alter the list-association of a single textBlock.

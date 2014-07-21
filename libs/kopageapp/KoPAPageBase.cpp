@@ -27,6 +27,7 @@
 
 #include <KoXmlNS.h>
 #include <KoPageLayout.h>
+#include <KoStyleStack.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoOdfStylesReader.h>

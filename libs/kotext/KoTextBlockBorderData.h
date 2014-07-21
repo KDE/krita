@@ -20,12 +20,11 @@
 #define KOTEXTBLOCKBORDERDATA_H
 
 #include "styles/KoParagraphStyle.h"
-#include <KoInsets.h>
 
-#include <QPen>
-#include <QRectF>
-#include <QPainter>
 #include "kotext_export.h"
+
+class QRectF;
+class QPainter;
 
 /**
  * This class holds data for paragraph-borders.

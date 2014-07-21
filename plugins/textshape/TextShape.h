@@ -40,6 +40,7 @@ class KoImageCollection;
 class KoTextDocument;
 class TextShape;
 class KoTextDocumentLayout;
+class KoParagraphStyle;
 
 /**
  * A text shape.

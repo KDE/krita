@@ -34,7 +34,6 @@ class KoCharacterStyle;
 class KoParagraphStyle;
 
 class QImage;
-class QTextDocument;
 
 /**
  * Helper class to create (and cache) thumbnails of styles

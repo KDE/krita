@@ -22,11 +22,11 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoTableCellStyle.h"
-#include "KoStyleManager.h"
+
+#include <KoXmlReaderForward.h>
+
 #include <KoGenStyle.h>
-#include <KoGenStyles.h>
 #include "Styles_p.h"
-#include "KoTextDocument.h"
 #include "KoTableCellStyle_p.h"
 #include <KoShapeLoadingContext.h>
 #include <KoOdfGraphicStyles.h>
@@ -35,14 +35,13 @@
 #include <kdebug.h>
 #include <KoTextDebug.h>
 
-#include <QTextTable>
 #include <QTextTableFormat>
+#include <QTextTableCell>
 
 #include <KoUnit.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 
 #include <cfloat>
 

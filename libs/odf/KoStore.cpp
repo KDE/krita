@@ -32,7 +32,6 @@
 #include <QBuffer>
 #include <QFileInfo>
 #include <QFile>
-#include <QDir>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -204,9 +203,6 @@ bool KoStore::init(Mode mode)
     d->mode = mode;
     d->stream = 0;
     d->finalized = false;
-
-    // Assume new style names.
-    d->namingVersion = KoStorePrivate::NamingVersion22;
     return true;
 }
 
@@ -402,13 +398,7 @@ bool KoStore::leaveDirectory()
 
     d->currentPath.pop_back();
 
-    return enterAbsoluteDirectory(d->expandEncodedDirectory(currentPath()));
-}
-
-QString KoStore::currentDirectory() const
-{
-    Q_D(const KoStore);
-    return d->expandEncodedDirectory(currentPath());
+    return enterAbsoluteDirectory(currentPath());
 }
 
 QString KoStore::currentPath() const
@@ -565,7 +555,7 @@ bool KoStore::atEnd() const
 QString KoStorePrivate::toExternalNaming(const QString & _internalNaming) const
 {
     if (_internalNaming == ROOTPART)
-        return expandEncodedDirectory(q->currentPath()) + MAINNAME;
+        return q->currentPath() + MAINNAME;
 
     QString intern;
     if (_internalNaming.startsWith("tar:/"))     // absolute reference
@@ -573,78 +563,17 @@ QString KoStorePrivate::toExternalNaming(const QString & _internalNaming) const
     else
         intern = q->currentPath() + _internalNaming;
 
-    return expandEncodedPath(intern);
+    return intern;
 }
 
-QString KoStorePrivate::expandEncodedPath(const QString& _intern) const
-{
-    QString intern = _intern;
-
-    if (namingVersion == KoStorePrivate::NamingVersionRaw)
-        return intern;
-
-    QString result;
-    int pos;
-
-    if ((pos = intern.lastIndexOf('/', -1)) != -1) {
-        result = expandEncodedDirectory(intern.left(pos)) + '/';
-        intern = intern.mid(pos + 1);
-    }
-
-    // Now process the filename. If the first character is numeric, we have
-    // a main document.
-    if (QChar(intern.at(0)).isDigit()) {
-        // If this is the first part name, check if we have a store with
-        // old-style names.
-        if (namingVersion == KoStorePrivate::NamingVersion22
-                && mode == KoStore::Read && q->fileExists(result + "part" + intern + ".xml"))
-            namingVersion = KoStorePrivate::NamingVersion21;
-
-        if (namingVersion == KoStorePrivate::NamingVersion21)
-            result = result + "part" + intern + ".xml";
-        else
-            result = result + "part" + intern + '/' + MAINNAME;
-    } else {
-        result += intern;
-    }
-    return result;
-}
-
-QString KoStorePrivate::expandEncodedDirectory(const QString& _intern) const
-{
-    QString intern = _intern;
-
-    if (namingVersion == KoStorePrivate::NamingVersionRaw)
-        return intern;
-
-    QString result;
-    int pos;
-    while ((pos = intern.indexOf('/')) != -1) {
-        if (QChar(intern.at(0)).isDigit())
-            result += "part";
-        result += intern.left(pos + 1);   // copy numbers (or "pictures") + "/"
-        intern = intern.mid(pos + 1);   // remove the dir we just processed
-    }
-
-    if (!intern.isEmpty() && QChar(intern.at(0)).isDigit())
-        result += "part";
-    result += intern;
-    return result;
-}
 
 bool KoStorePrivate::enterDirectoryInternal(const QString &directory)
 {
-    if (q->enterRelativeDirectory(expandEncodedDirectory(directory))) {
+    if (q->enterRelativeDirectory(directory)) {
         currentPath.append(directory);
         return true;
     }
     return false;
-}
-
-void KoStore::disallowNameExpansion()
-{
-    Q_D(KoStore);
-    d->namingVersion = KoStorePrivate::NamingVersionRaw;
 }
 
 bool KoStore::hasFile(const QString& fileName) const

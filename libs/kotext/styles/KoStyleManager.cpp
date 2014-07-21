@@ -22,6 +22,7 @@
  */
 
 #include "KoStyleManager.h"
+
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
@@ -36,20 +37,17 @@
 #include "KoTextDocument.h"
 #include "KoTextTableTemplate.h"
 
+#include <KoOdfBibliographyConfiguration.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextSharedSavingData.h>
+#include <KoXmlWriter.h>
+#include <KoOdfNumberDefinition.h>
 
 #include <kundo2stack.h>
 
-#include <QTimer>
 #include <QUrl>
-#include <QTextLayout>
-#include <QTextBlock>
-#include <QTextCursor>
-#include <QPixmap>
-#include <QMap>
 #include <QBuffer>
 #include <kdebug.h>
 #include <klocale.h>

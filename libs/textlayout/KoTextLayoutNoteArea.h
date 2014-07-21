@@ -23,7 +23,8 @@
 #include "KoTextLayoutArea.h"
 
 #include <KoTextDocumentLayout.h>
-#include <KoInlineNote.h>
+
+class KoInlineNote;
 
 class KOTEXTLAYOUT_EXPORT KoTextLayoutNoteArea : public KoTextLayoutArea
 {

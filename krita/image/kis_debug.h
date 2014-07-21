@@ -20,6 +20,7 @@
 
 #include <kdebug.h>
 
+#define dbgResources kDebug(30009)
 #define dbgKrita kDebug(41000) // For temporary debug lines, where you'd have used kDebug() before.
 #define dbgImage kDebug(41001)
 #define dbgRegistry kDebug(41002)

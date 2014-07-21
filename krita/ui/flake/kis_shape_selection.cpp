@@ -34,7 +34,7 @@
 #include <KoShapeManager.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
@@ -117,7 +117,7 @@ KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
 
 bool KisShapeSelection::saveSelection(KoStore * store) const
 {
-    store->disallowNameExpansion();
+    
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;

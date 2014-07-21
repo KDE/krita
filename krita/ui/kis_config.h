@@ -205,6 +205,9 @@ public:
     bool antialiasCurves() const;
     void setAntialiasCurves(bool v) const;
 
+    QColor selectionOverlayMaskColor() const;
+    void setSelectionOverlayMaskColor(const QColor &color);
+
     bool antialiasSelectionOutline() const;
     void setAntialiasSelectionOutline(bool v) const;
 
@@ -356,6 +359,9 @@ public:
 
     bool lineSmoothingFinishStabilizedCurve() const;
     void setLineSmoothingFinishStabilizedCurve(bool value);
+
+    bool lineSmoothingStabilizeSensors() const;
+    void setLineSmoothingStabilizeSensors(bool value);
 
     int paletteDockerPaletteViewSectionSize() const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;

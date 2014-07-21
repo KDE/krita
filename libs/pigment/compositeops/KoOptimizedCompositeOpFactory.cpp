@@ -18,6 +18,8 @@
 
 #include "KoOptimizedCompositeOpFactory.h"
 
+#pragma GCC diagnostic ignored "-Wundef"
+
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
 
 static struct ArchReporter {

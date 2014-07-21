@@ -19,6 +19,8 @@
 
 #include "KoTextEditingFactory.h"
 
+#include <QString>
+
 class KoTextEditingFactory::Private
 {
 public:

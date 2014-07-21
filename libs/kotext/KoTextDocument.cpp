@@ -21,9 +21,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QTextDocument>
+#include "KoTextDocument.h"
+
 #include <QTextCursor>
-#include <QUrl>
 #include <QVariant>
 #include <QVariantList>
 
@@ -32,12 +32,11 @@
 
 #include <kundo2stack.h>
 
-#include "KoTextDocument.h"
+#include "KoText.h"
 #include "KoTextEditor.h"
 #include "styles/KoStyleManager.h"
 #include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
-#include "styles/KoParagraphStyle.h"
 #include "KoList.h"
 #include "KoOdfLineNumberingConfiguration.h"
 #include "changetracker/KoChangeTracker.h"

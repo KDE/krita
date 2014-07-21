@@ -60,7 +60,6 @@ protected:
 
 private:
     qreal m_brushRadius;
-    bool m_dragging;
     QPainterPath m_selection;
     QPointF m_lastPoint;
     QPoint m_lastMousePosition;

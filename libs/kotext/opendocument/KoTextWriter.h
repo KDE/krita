@@ -23,15 +23,14 @@
 #include "kotext_export.h"
 
 class KoShapeSavingContext;
-class KoXmlWriter;
 class KoStyleManager;
 class QTextDocument;
-class QTextTable;
-
+class QTextBlock;
+class QTextBlockFormat;
+class QTextCharFormat;
 
 class KoDocumentRdfBase;
 
-#include <QTextBlock>
 
 /**
  * KoTextWriter saves the text ODF of a shape

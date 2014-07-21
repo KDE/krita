@@ -24,7 +24,7 @@
 #include "KoTextEditor.h"
 #include "KoTextEditor_p.h"
 
-#include "KoDocumentRdfBase.h"
+#include "KoList.h"
 #include "KoBookmark.h"
 #include "KoAnnotation.h"
 #include "KoTextRangeManager.h"
@@ -32,26 +32,22 @@
 #include "KoInlineNote.h"
 #include "KoInlineCite.h"
 #include "BibliographyGenerator.h"
-#include <KoOdf.h>
-#include <KoTextPaste.h>
+#include <KoTextShapeDataBase.h>
+#include <KoSelection.h>
 #include <KoShapeController.h>
-#include <KoTextOdfSaveHelper.h>
+#include <KoShapeManager.h>
+#include <KoCanvasBase.h>
 #include "KoShapeAnchor.h"
 #include "KoTextDocument.h"
-#include "KoTextDrag.h"
 #include "KoTextLocator.h"
-#include "KoTextOdfSaveHelper.h"
 #include "KoTableOfContentsGeneratorInfo.h"
 #include "KoBibliographyInfo.h"
-#include "KoInlineCite.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoTableCellStyle.h"
-#include "styles/KoTableColumnStyle.h"
-#include "styles/KoTableRowStyle.h"
 #include "styles/KoTableStyle.h"
 #include "KoTableColumnAndRowStyleManager.h"
 #include "commands/DeleteTableRowCommand.h"
@@ -60,7 +56,6 @@
 #include "commands/InsertTableColumnCommand.h"
 #include "commands/ResizeTableCommand.h"
 #include "commands/TextPasteCommand.h"
-#include "commands/ChangeTrackedDeleteCommand.h"
 #include "commands/ListItemNumberingCommand.h"
 #include "commands/ChangeListCommand.h"
 #include "commands/InsertInlineObjectCommand.h"
@@ -73,12 +68,9 @@
 #include "commands/RenameSectionCommand.h"
 #include "commands/NewSectionCommand.h"
 
-#include <KoShapeCreateCommand.h>
-
 #include <klocale.h>
-#include <kundo2stack.h>
 
-#include <QFontDatabase>
+#include <QTextList>
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
@@ -87,14 +79,10 @@
 #include <QTextFormat>
 #include <QTextTable>
 #include <QTextTableCell>
-#include <QTimer>
-#include <QString>
 #include <kundo2command.h>
 
 #include <kdebug.h>
 #include "KoTextDebug.h"
-
-#include <KoDocumentRdfBase.h>
 
 Q_DECLARE_METATYPE(QTextFrame*)
 

@@ -55,10 +55,10 @@ public:
         wheel = new KisColorSelectorWheel(selector);
         main = triangle;
         sub = ring;
-        connect(main, SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal)),
-                sub,  SLOT(setParam(qreal,qreal,qreal,qreal,qreal)), Qt::UniqueConnection);
-        connect(sub,  SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal)),
-                main, SLOT(setParam(qreal,qreal,qreal,qreal, qreal)), Qt::UniqueConnection);
+        connect(main, SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)),
+                sub,  SLOT(setParam(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)), Qt::UniqueConnection);
+        connect(sub,  SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)),
+                main, SLOT(setParam(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)), Qt::UniqueConnection);
 
         main->setConfiguration(selector->configuration().mainTypeParameter, selector->configuration().mainType);
         sub->setConfiguration(selector->configuration().subTypeParameter, selector->configuration().subType);

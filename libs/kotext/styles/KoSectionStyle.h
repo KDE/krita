@@ -27,18 +27,15 @@
 #include "kotext_export.h"
 
 #include <QObject>
-#include <QVector>
-#include <QString>
-#include <QVariant>
 #include <QTextFormat>
 
-struct Property;
 class QTextFrame;
-class KoStyleStack;
+class QTextFrameFormat;
 class KoGenStyle;
-class KoGenStyles;
 class KoOdfLoadingContext;
-class KoXmlElement;
+
+class QString;
+class QVariant;
 
 /**
  * A container for all properties for the section wide style.

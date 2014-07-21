@@ -20,7 +20,6 @@
 #include "kis_slider_spin_box.h"
 
 #include <math.h>
-#include <kdebug.h>
 
 #include <QPainter>
 #include <QStyle>
@@ -40,6 +39,8 @@ public:
     bool upButtonDown;
     bool downButtonDown;
     int factor;
+    int fastSliderStep;
+    int slowSliderStep;
     QString suffix;
     qreal exponentRatio;
     int value;
@@ -78,6 +79,8 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->maximum = 100;
     d->factor = 1.0;
     d->singleStep = 1;
+    d->fastSliderStep = 5;
+    d->slowSliderStep = 1.0;
 
     setExponentRatio(1.0);
 
@@ -191,7 +194,7 @@ void KisAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
                !(d->edit->isVisible()) &&
                !(d->upButtonDown || d->downButtonDown)) {
         //Snap to percentage for progress area
-        setInternalValue(valueForX(e->pos().x()));
+        setInternalValue(valueForX(e->pos().x(),e->modifiers()));
     }
 
     d->upButtonDown = false;
@@ -206,7 +209,7 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
     //Respect emulated mouse grab.
     if (e->buttons() & Qt::LeftButton &&
             !(d->downButtonDown || d->upButtonDown)) {
-        setInternalValue(valueForX(e->pos().x()));
+        setInternalValue(valueForX(e->pos().x(),e->modifiers()));
         update();
     }
 }
@@ -226,6 +229,12 @@ void KisAbstractSliderSpinBox::keyPressEvent(QKeyEvent* e)
     case Qt::Key_Enter: //Line edit isn't "accepting" key strokes..
     case Qt::Key_Return:
     case Qt::Key_Escape:
+    case Qt::Key_Control:
+    case Qt::Key_Shift:
+    case Qt::Key_Alt:
+    case Qt::Key_AltGr:
+    case Qt::Key_Super_L:
+    case Qt::Key_Super_R:
         break;
     default:
         showEdit();
@@ -350,7 +359,7 @@ QStyleOptionProgressBar KisAbstractSliderSpinBox::progressBarOptions() const
 
     qreal dValues = (d->maximum - minDbl);
 
-    progressOpts.progress = dValues * pow((d->value - minDbl) / dValues, 1 / d->exponentRatio) + minDbl;
+    progressOpts.progress = dValues * pow((d->value - minDbl) / dValues, 1.0 / d->exponentRatio) + minDbl;
     progressOpts.text = valueString() + d->suffix;
     progressOpts.textAlignment = Qt::AlignCenter;
     progressOpts.textVisible = !(d->edit->isVisible());
@@ -379,7 +388,7 @@ QRect KisAbstractSliderSpinBox::downButtonRect(const QStyleOptionSpinBox& spinBo
                                    QStyle::SC_SpinBoxDown);
 }
 
-int KisAbstractSliderSpinBox::valueForX(int x) const
+int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) const
 {
     const Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
@@ -396,7 +405,13 @@ int KisAbstractSliderSpinBox::valueForX(int x) const
     qreal dValues = (maxDbl - minDbl);
     qreal percent = (xDbl / (rightDbl - leftDbl));
 
-    return ((dValues * pow(percent, d->exponentRatio)) + minDbl);
+    qreal realvalue = ((dValues * pow(percent, d->exponentRatio)) + minDbl);
+
+    if( modifiers & Qt::ControlModifier ) {
+        realvalue = floor( (realvalue+d->fastSliderStep/2) / d->fastSliderStep ) * d->fastSliderStep;
+    }
+
+    return int(realvalue);
 }
 
 void KisAbstractSliderSpinBox::setSuffix(const QString& suffix)
@@ -443,6 +458,7 @@ void KisSliderSpinBox::setRange(int minimum, int maximum)
     Q_D(KisSliderSpinBox);
     d->minimum = minimum;
     d->maximum = maximum;
+    d->fastSliderStep = (maximum-minimum+1)/20;
     d->validator->setRange(minimum, maximum, 0);
     update();
 }
@@ -469,6 +485,18 @@ void KisSliderSpinBox::setMaximum(int maximum)
 {
     Q_D(KisSliderSpinBox);
     setRange(d->minimum, maximum);
+}
+
+int KisSliderSpinBox::fastSliderStep() const
+{
+    const Q_D(KisSliderSpinBox);
+    return d->fastSliderStep;
+}
+
+void KisSliderSpinBox::setFastSliderStep(int step)
+{
+    Q_D(KisSliderSpinBox);
+    d->fastSliderStep = step;
 }
 
 int KisSliderSpinBox::value()
@@ -521,13 +549,57 @@ KisDoubleSliderSpinBox::~KisDoubleSliderSpinBox()
 void KisDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
 {
     Q_D(KisDoubleSliderSpinBox);
-    d->factor = pow((double)10, decimals);
+    d->factor = pow(10.0, decimals);
 
     d->minimum = minimum * d->factor;
     d->maximum = maximum * d->factor;
+    //This code auto-compute a new step when pressing control.
+    //A flag defaulting to "do not change the fast step" should be added, but it implies changing every call
+    if(maximum - minimum >= 2.0 || decimals <= 0) {  //Quick step on integers
+        d->fastSliderStep = int(pow(10.0, decimals));
+    } else if(decimals == 1) {
+        d->fastSliderStep = (maximum-minimum)*d->factor/10;
+    } else {
+        d->fastSliderStep = (maximum-minimum)*d->factor/20;
+    }
     d->validator->setRange(minimum, maximum, decimals);
     update();
     setValue(value());
+}
+
+qreal KisDoubleSliderSpinBox::minimum() const
+{
+    const Q_D(KisAbstractSliderSpinBox);
+    return d->minimum / d->factor;
+}
+
+void KisDoubleSliderSpinBox::setMinimum(qreal minimum)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    setRange(minimum, d->maximum);
+}
+
+qreal KisDoubleSliderSpinBox::maximum() const
+{
+    const Q_D(KisAbstractSliderSpinBox);
+    return d->maximum / d->factor;
+}
+
+void KisDoubleSliderSpinBox::setMaximum(qreal maximum)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    setRange(d->minimum, maximum);
+}
+
+qreal KisDoubleSliderSpinBox::fastSliderStep() const
+{
+    const Q_D(KisAbstractSliderSpinBox);
+    return d->fastSliderStep;
+}
+void KisDoubleSliderSpinBox::setFastSliderStep(qreal step)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    d->fastSliderStep = step;
 }
 
 qreal KisDoubleSliderSpinBox::value()

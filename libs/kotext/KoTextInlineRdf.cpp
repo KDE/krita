@@ -37,6 +37,7 @@
 // Qt
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QTextTableCell>
 
 
 #ifdef SHOULD_BUILD_RDF

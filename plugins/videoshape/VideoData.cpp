@@ -38,6 +38,7 @@
 #include <QPainter>
 #include <QAtomicInt>
 #include <QFile>
+#include <QUrl>
 
 class VideoDataPrivate
 {

@@ -25,7 +25,6 @@
 #include "styles/KoTableStyle.h"
 
 #include <QVector>
-#include <QSet>
 #include <QVariant>
 #include <QTextTable>
 

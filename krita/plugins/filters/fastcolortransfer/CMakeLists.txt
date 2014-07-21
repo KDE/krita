@@ -21,4 +21,4 @@ install(TARGETS kritafastcolortransferfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritafastcolortransfer.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritafastcolortransfer.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

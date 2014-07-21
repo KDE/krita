@@ -119,6 +119,12 @@ public:
     void setOutlineCache(const QPainterPath &cache);
     void invalidateOutlineCache();
 
+    bool thumbnailImageValid() const;
+    QImage thumbnailImage() const;
+    QTransform thumbnailImageTransform() const;
+    void recalculateThumbnailImage(const QColor &maskColor);
+
+
     void setParentSelection(KisSelectionWSP selection);
     KisSelectionWSP parentSelection() const;
 

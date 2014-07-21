@@ -50,7 +50,6 @@ private:
 
     QString m_filename;
     KisDoc2 *m_document;
-    KisPart2 *m_part;
     QImage m_icon;
     QSize m_imageSize;
 };

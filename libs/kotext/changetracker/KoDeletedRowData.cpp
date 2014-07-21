@@ -17,12 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QTextTableCellFormat>
-#include <QTextDocumentFragment>
+#include "KoDeletedRowData.h"
+
 #include <QTextCursor>
 #include <QTextTable>
 
-#include "KoDeletedRowData.h"
 #include "KoDeletedCellData.h"
 
 #include <styles/KoTableRowStyle.h>

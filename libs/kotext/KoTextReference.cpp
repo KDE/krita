@@ -19,11 +19,12 @@
 
 #include "KoTextReference.h"
 
-#include "KoShapeLoadingContext.h"
-#include "KoShapeSavingContext.h"
 #include "KoTextLocator.h"
 #include "KoInlineTextObjectManager.h"
 
+// Include Q_UNSUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 
 KoTextReference::KoTextReference(int indexId)

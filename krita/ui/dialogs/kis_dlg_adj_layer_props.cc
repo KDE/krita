@@ -53,7 +53,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     , m_currentConfigWidget(0)
     , m_currentFilter(0)
     , m_currentConfiguration(0)
-    , m_layer(0)
     , m_nodeFilterInterface(nfi)
 {
     setButtons(Ok | Cancel);

@@ -24,29 +24,19 @@
 #include "KoTextEditor.h"
 #include "KoTextEditor_p.h"
 
-#include "changetracker/KoChangeTracker.h"
-#include "changetracker/KoChangeTrackerElement.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
-#include "commands/TextPasteCommand.h"
 #include "commands/ParagraphFormattingCommand.h"
 
 #include <klocale.h>
-#include <kundo2stack.h>
 
 #include <QFontDatabase>
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
-#include <QTextDocument>
-#include <QTextDocumentFragment>
 #include <QTextFormat>
-#include <QTextTable>
-#include <QTextTableCell>
-#include <QTimer>
-#include <QString>
-#include <kundo2command.h>
+#include <QTextList>
 
 #include <kdebug.h>
 #include "KoTextDebug.h"

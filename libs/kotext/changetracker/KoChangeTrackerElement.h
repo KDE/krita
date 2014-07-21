@@ -19,17 +19,14 @@
 #ifndef KOCHANGETRACKERELEMENT_H
 #define KOCHANGETRACKERELEMENT_H
 
-#include <QObject>
-#include <QMetaType>
-#include <QTextFormat>
-#include <QString>
-#include <QTextDocumentFragment>
-
 #include <KoGenChange.h>
 
 #include "kotext_export.h"
 
 class KUndo2MagicString;
+class QString;
+class QTextFormat;
+class QTextDocumentFragment;
 
 
 class KOTEXT_EXPORT KoChangeTrackerElement

@@ -241,6 +241,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
         return 0;
     }
 #else
+    Q_UNUSED(screen)
     return 0;
 
 #endif
@@ -671,6 +672,17 @@ bool KisConfig::antialiasCurves() const
 void KisConfig::setAntialiasCurves(bool v) const
 {
     m_cfg.writeEntry("antialiascurves", v);
+}
+
+QColor KisConfig::selectionOverlayMaskColor() const
+{
+    QColor def(255, 0, 0, 220);
+    return m_cfg.readEntry("selectionOverlayMaskColor", def);
+}
+
+void KisConfig::setSelectionOverlayMaskColor(const QColor &color)
+{
+    m_cfg.writeEntry("selectionOverlayMaskColor", color);
 }
 
 bool KisConfig::antialiasSelectionOutline() const
@@ -1173,6 +1185,16 @@ bool KisConfig::lineSmoothingFinishStabilizedCurve() const
 void KisConfig::setLineSmoothingFinishStabilizedCurve(bool value)
 {
     m_cfg.writeEntry("LineSmoothingFinishStabilizedCurve", value);
+}
+
+bool KisConfig::lineSmoothingStabilizeSensors() const
+{
+    return m_cfg.readEntry("LineSmoothingStabilizeSensors", true);
+}
+
+void KisConfig::setLineSmoothingStabilizeSensors(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingStabilizeSensors", value);
 }
 
 int KisConfig::paletteDockerPaletteViewSectionSize() const

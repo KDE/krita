@@ -21,55 +21,27 @@
 #define KOTEXTWRITER_P_H
 
 #include <QMap>
-#include <QTextDocument>
-#include <QTextTable>
-#include <QTextCursor>
 #include <QStack>
-#include <QTextTableCellFormat>
-#include <QBuffer>
-#include <QUuid>
-#include <QXmlStreamReader>
+#include <QPair>
 
-#include "KoInlineObject.h"
-#include "KoAnchorInlineObject.h"
-#include "KoShape.h"
-#include "KoVariable.h"
-#include "KoInlineTextObjectManager.h"
-#include "styles/KoStyleManager.h"
-#include "styles/KoCharacterStyle.h"
-#include "styles/KoParagraphStyle.h"
-#include "styles/KoListStyle.h"
-#include "styles/KoListLevelProperties.h"
-#include "styles/KoTableCellStyle.h"
-#include "styles/KoTableStyle.h"
-#include "KoTextBlockData.h"
-#include "KoTextDocument.h"
-#include "KoTextInlineRdf.h"
-#include "KoSection.h"
-
-#include "KoTextMeta.h"
-
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoGenStyle.h>
-#include <KoGenStyles.h>
-#include <KoXmlNS.h>
-#include <KoTableColumnAndRowStyleManager.h>
-#include <KoTableColumnStyle.h>
-
-#include <opendocument/KoTextSharedSavingData.h>
-
-#include <KoXmlWriter.h>
-#include <KoTableOfContentsGeneratorInfo.h>
-#include <KoBibliographyInfo.h>
 #include <KoTextWriter.h>
-#include <KoTableRowStyle.h>
+#include <KoXmlReaderForward.h>
 
-#ifdef SHOULD_BUILD_RDF
-#include <Soprano/Soprano>
-#endif
+class KoInlineObject;
+class KoTextInlineRdf;
+class KoList;
+class KoShapeSavingContext;
+class KoXmlWriter;
+class KoTableColumnStyle;
+class KoTextSharedSavingData;
+class KoTableRowStyle;
+class KoDocumentRdfBase;
 
-#include "KoDocumentRdfBase.h"
+class QTextDocument;
+class QTextTable;
+class QTextTableCellFormat;
+class QTextList;
+class QTextStream;
 
 /**
  * XXX: Apidox!
@@ -201,8 +173,6 @@ private:
     QMap<KoList *, QString> listXmlIds;
 
     QMap<KoList *, QString> numberedParagraphListIds;
-
-    int splitEndBlockNumber;
 };
 
 #endif // KOTEXTWRITER_P_H

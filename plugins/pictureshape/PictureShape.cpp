@@ -40,6 +40,7 @@
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoGenStyle.h>
+#include <KoStyleStack.h>
 #include <KoFilterEffectStack.h>
 #include <KoClipPath.h>
 #include <SvgSavingContext.h>

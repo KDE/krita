@@ -20,10 +20,37 @@
 
 #include "KoTextWriter_p.h"
 
-#include <KoElementReference.h>
-#include <KoTextRangeManager.h>
 #include <KoSectionUtils.h>
 #include <KoSectionEnd.h>
+#include <KoList.h>
+#include <KoElementReference.h>
+#include <KoTextRangeManager.h>
+#include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
+#include <KoListLevelProperties.h>
+#include <KoTableCellStyle.h>
+#include <KoTableStyle.h>
+#include <KoTextBlockData.h>
+#include <KoTextDocument.h>
+#include <KoTextInlineRdf.h>
+#include <KoSection.h>
+#include <KoTextMeta.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+#include <KoGenStyles.h>
+#include <KoXmlNS.h>
+#include <KoTableColumnAndRowStyleManager.h>
+#include <KoTableColumnStyle.h>
+#include <opendocument/KoTextSharedSavingData.h>
+#include <KoTableOfContentsGeneratorInfo.h>
+#include <KoBibliographyInfo.h>
+#include <KoTableRowStyle.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoVariable.h>
+
+#include <kdebug.h>
+
+#include <QTextTable>
 
 // A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)
@@ -48,7 +75,6 @@ KoTextWriter::Private::Private(KoShapeSavingContext &context)
     , document(0)
     , writer(0)
     , context(context)
-    , splitEndBlockNumber(-1)
 {
     currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     writer = &context.xmlWriter();
@@ -232,10 +258,10 @@ void KoTextWriter::Private::openTagRegion(ElementType elementType, TagInformatio
 {
     //kDebug(30015) << "tag:" << tagInformation.name() << openedTagStack.size();
     if (tagInformation.name()) {
-	writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
-	foreach (const Attribute &attribute, tagInformation.attributes()) {
-	    writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
-	}
+    writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
+    foreach (const Attribute &attribute, tagInformation.attributes()) {
+        writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
+    }
     }
     openedTagStack.push(tagInformation.name());
     //kDebug(30015) << "stack" << openedTagStack.size();
@@ -542,17 +568,17 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
                 }
 
-		// get all text ranges which start before this inline object
-		// or end directly after it (+1 to last position for that)
+        // get all text ranges which start before this inline object
+        // or end directly after it (+1 to last position for that)
                 const QHash<int, KoTextRange *> textRanges = textRangeManager ?
                         textRangeManager->textRangesChangingWithin(block.document(), currentFragment.position(), currentFragment.position()+1,
                         globalFrom, (globalTo==-1)?-1:globalTo+1) : QHash<int, KoTextRange *>();
-		// get all text ranges which start before this
-		const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
-		// write tags for ranges which start before this content or at positioned at it
-		foreach (const KoTextRange *range, textRangesBefore) {
-		    range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
-		}
+        // get all text ranges which start before this
+        const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
+        // write tags for ranges which start before this content or at positioned at it
+        foreach (const KoTextRange *range, textRangesBefore) {
+            range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
+        }
 
                 bool saveSpan = dynamic_cast<KoVariable*>(inlineObject) != 0;
 

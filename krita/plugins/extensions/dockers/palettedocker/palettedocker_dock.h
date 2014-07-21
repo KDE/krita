@@ -38,7 +38,7 @@ public:
     PaletteDockerDock();
     virtual ~PaletteDockerDock();
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas();
 
 private slots:
     void addColorForeground();

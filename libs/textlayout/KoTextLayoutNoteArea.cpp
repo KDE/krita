@@ -18,10 +18,15 @@
  */
 
 #include "KoTextLayoutNoteArea.h"
+
 #include "FrameIterator.h"
 #include "KoStyleManager.h"
 #include "KoParagraphStyle.h"
 #include "KoTextLayoutObstruction.h"
+#include "KoPointedAt.h"
+#include <KoOdfNumberDefinition.h>
+#include <KoInlineNote.h>
+#include <KoTextDocument.h>
 
 #include <QPainter>
 

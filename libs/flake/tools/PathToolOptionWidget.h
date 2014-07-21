@@ -44,7 +44,6 @@ public slots:
 
 private:
     Ui::PathToolOptionWidgetBase widget;
-    KoPathTool *m_tool;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PathToolOptionWidget::Types)

@@ -458,6 +458,7 @@ calligra_define_productset(KRITA "Full Krita"
         PLUGIN_PATHSHAPES
         PLUGIN_PICTURESHAPE
         PLUGIN_TEXTSHAPE
+        PLUGIN_VECTORSHAPE
 )
 calligra_define_productset(PLAN "Full Plan (for Desktop)"
     REQUIRES

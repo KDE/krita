@@ -59,8 +59,6 @@ private:
     QPointF m_dragEnd;
     QPoint m_initialOffset;
     QPoint m_initialSpacing;
-
-    Mode m_currentMode;
 };
 
 

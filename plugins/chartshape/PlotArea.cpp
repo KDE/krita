@@ -37,6 +37,7 @@
 #include <KoXmlWriter.h>
 #include <KoOdfStylesReader.h>
 #include <KoGenStyles.h>
+#include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <Ko3dScene.h>
 #include <KoOdfGraphicStyles.h>

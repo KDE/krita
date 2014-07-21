@@ -188,6 +188,9 @@ signals:
     /// This signal is emitted when the color theme changes
     void themeChanged();
 
+    /// This signal is emitted when the shortcut key configuration has changed
+    void keyBindingsChanged();
+
 public slots:
 
     /**

@@ -33,13 +33,12 @@
 #include <QObject>
 
 #include "kotext_export.h"
-#include "KoXmlReaderForward.h"
+#include <KoXmlReaderForward.h>
 
 class QTextCursor;
 class QTextTable;
 class QRect;
 
-class KoSection;
 class KoShapeLoadingContext;
 class KoShape;
 

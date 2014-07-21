@@ -20,6 +20,7 @@
  */
 
 #include "KoTextBlockData.h"
+
 #include "KoTextBlockBorderData.h"
 #include "KoTextBlockPaintStrategyBase.h"
 

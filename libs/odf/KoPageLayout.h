@@ -23,13 +23,13 @@
 #ifndef KOPAGELAYOUT_H
 #define KOPAGELAYOUT_H
 
-#include "KoColumns.h"
-#include "KoGenStyles.h"
 #include "KoPageFormat.h"
-#include "KoXmlReader.h"
+#include "KoXmlReaderForward.h"
 #include "KoBorder.h"
 
 #include "koodf_export.h"
+
+class KoGenStyle;
 
 /**
  * This structure defines the page layout, including

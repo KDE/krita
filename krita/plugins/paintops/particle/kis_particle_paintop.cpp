@@ -41,7 +41,6 @@
 
 KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
 {
     Q_UNUSED(image);
 

@@ -28,6 +28,7 @@
 #include <KoXmlReader.h>
 #include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
+#include <KoStyleStack.h>
 
 #include <QPainter>
 #include <QColor>

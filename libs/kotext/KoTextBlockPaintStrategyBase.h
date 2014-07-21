@@ -23,9 +23,8 @@
 
 #include "kotext_export.h"
 
-#include <QBrush>
-
 class QPainter;
+class QBrush;
 
 /**
  * This class is used to control aspects of textblock painting

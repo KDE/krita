@@ -22,6 +22,8 @@
 #include <kdebug.h>
 #include <kundo2magicstring.h>
 
+#include <QTextFormat>
+#include <QTextDocumentFragment>
 
 class KoChangeTrackerElement::Private
 {

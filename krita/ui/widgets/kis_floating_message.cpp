@@ -307,7 +307,7 @@ void KisFloatingMessage::startFade()
     m_fadeTimeLine.setDuration(250);
     m_fadeTimeLine.setCurveShape(QTimeLine::EaseInCurve);
     m_fadeTimeLine.setLoopCount(1);
-    m_fadeTimeLine.setFrameRange(OSD_WINDOW_OPACITY, 0);
+    m_fadeTimeLine.setFrameRange(0, 0);
     m_fadeTimeLine.setFrameRange(0, 10);
     connect(&m_fadeTimeLine, SIGNAL(finished()), SLOT(removeMessage()));
     connect(&m_fadeTimeLine, SIGNAL(frameChanged(int)), SLOT(updateOpacity(int)));

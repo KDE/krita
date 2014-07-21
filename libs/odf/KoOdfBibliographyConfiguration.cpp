@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoOdfBibliographyConfiguration.h"
+
 #include <kdebug.h>
-#include <KoXmlNS.h>
-#include "KoUnit.h"
+#include "KoXmlNS.h"
+#include "KoXmlWriter.h"
 
 #include <QList>
-#include <QPair>
 
 const QList<QString> KoOdfBibliographyConfiguration::bibTypes = QList<QString>() << "article" << "book" << "booklet" << "conference"
                                                                      << "email" << "inbook" << "incollection"

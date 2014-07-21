@@ -22,9 +22,10 @@
 
 #include "kotext_export.h"
 
-#include <QString>
 #include <QRectF>
 #include <QMetaType>
+
+class QString;
 
 /**
  * Interface for a single OpenDocumentText page.

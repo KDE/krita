@@ -27,8 +27,6 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 
 #include <QTextDocument>
-#include <QTimer>
-#include <QTextDocument>
 #include <kdebug.h>
 
 IndexGeneratorManager::IndexGeneratorManager(QTextDocument *document)

@@ -41,7 +41,6 @@ public:
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
 
 private:
-    const KisParticlePaintOpSettings* m_settings;
     KisParticleBrushProperties m_properties;
     KisPaintDeviceSP m_dab;
     ParticleBrush m_particleBrush;

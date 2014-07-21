@@ -107,8 +107,6 @@ private:
     KisDoubleSliderSpinBox * m_massSPBox;
     KisDoubleSliderSpinBox * m_dragSPBox;
     KisDoubleSliderSpinBox * m_angleDSSBox;
-    QDoubleSpinBox * m_initWidthSPBox;
-    QDoubleSpinBox * m_widthRangeSPBox;
 
     // dyna algorithm
     QVector<QPointF> m_prevPosition;

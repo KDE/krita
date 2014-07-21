@@ -24,6 +24,8 @@
 #include "KoOdfDocument.h"
 #include "koodf_export.h"
 
+#include <QString>
+
 class KoXmlWriter;
 
 /**

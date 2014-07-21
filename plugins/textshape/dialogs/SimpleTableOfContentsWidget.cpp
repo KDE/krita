@@ -23,6 +23,7 @@
 #include "TableOfContentsTemplate.h"
 #include "TableOfContentsPreview.h"
 
+#include <KoTextEditor.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoIcon.h>
 

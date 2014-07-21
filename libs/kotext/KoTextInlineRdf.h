@@ -25,7 +25,8 @@
 #include <KoXmlReaderForward.h>
 #include <KoElementReference.h>
 // Qt
-#include <QTextTableCell>
+#include <QPair>
+#include <QMetaType>
 
 class KoXmlWriter;
 class KoShapeSavingContext;
@@ -33,6 +34,12 @@ class KoBookmark;
 class KoAnnotation;
 class KoTextMeta;
 class KoTextEditor;
+
+class QTextDocument;
+class QTextCursor;
+class QTextFormat;
+class QTextBlock;
+class QTextTableCell;
 
 /**
  * @short Store information from xhtml:property etc which are for inline Rdf

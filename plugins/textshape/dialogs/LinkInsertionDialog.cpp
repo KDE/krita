@@ -18,6 +18,9 @@
  */
 #include "LinkInsertionDialog.h"
 #include "SimpleTableOfContentsWidget.h"
+
+#include <KoTextEditor.h>
+
 #include <QString>
 #include <QCompleter>
 #include <QComboBox>

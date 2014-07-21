@@ -44,6 +44,9 @@
  #  knowledge of the CeCILL license and that you accept its terms.
  #
 */
+
+#pragma GCC diagnostic ignored "-Wundef"
+
 #include <locale>
 #ifndef gmic_version
 #define gmic_version 1590
@@ -252,7 +255,7 @@ struct gmic {
   template<typename T>
   gmic_image<char> substitute_item(const char *const source,
                                    gmic_list<T>& images, gmic_list<char>& images_names,
-				   unsigned int variables_sizes[256]);
+                   unsigned int variables_sizes[256]);
 
   gmic& print(const char *format, ...);
   gmic& error(const char *format, ...);
@@ -260,7 +263,7 @@ struct gmic {
 
   template<typename T>
   gmic& print(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
-	      const char *format, ...);
+          const char *format, ...);
 
   template<typename T>
   gmic& warn(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
@@ -268,7 +271,7 @@ struct gmic {
 
   template<typename T>
   gmic& error(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
-	      const char *const command, const char *format, ...);
+          const char *const command, const char *format, ...);
 
   template<typename T>
   gmic& debug(const gmic_list<T>& list, const char *format, ...);
@@ -306,7 +309,7 @@ struct gmic {
 
   template<typename T>
   gmic& parse(const gmic_list<char>& commands_line,
-	      gmic_list<T> &images, gmic_list<char> &images_names) {
+          gmic_list<T> &images, gmic_list<char> &images_names) {
     unsigned int variables_sizes[256] = { 0 };
     unsigned int position = 0;
     setlocale(LC_NUMERIC,"C");

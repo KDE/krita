@@ -225,7 +225,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
 {
     QMap<QString, KisMetaData::Value> deviceSettingStructure;
     QByteArray array;
-    
+
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
     if(dvalue)
     {
@@ -242,11 +242,11 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
     deviceSettingStructure["Rows"] = KisMetaData::Value(rows);
     QList<KisMetaData::Value> settings;
     QByteArray null(2, 0);
-    
+
     for (int index = 4; index < array.size(); )
     {
         int lastIndex = array.indexOf(null, index);
-        QString setting = QString::fromUtf16((ushort*)( array.data() + index), lastIndex - index + 2);
+        QString setting = QString::fromUtf16((ushort*)(void*)( array.data() + index), lastIndex - index + 2);
         index = lastIndex + 2;
         dbgFile << "Setting << " << setting;
         settings.append(KisMetaData::Value(setting));
@@ -262,7 +262,7 @@ Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
     quint16 rows = deviceSettingStructure["Rows"].asVariant().toInt(0);
 
     QTextCodec* codec = QTextCodec::codecForName("UTF-16");
-    
+
     QList<KisMetaData::Value> settings = deviceSettingStructure["Settings"].asArray();
     QByteArray array(4, 0);
     (reinterpret_cast<quint16*>(array.data()))[0] = columns;

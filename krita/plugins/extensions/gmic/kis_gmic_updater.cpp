@@ -61,7 +61,6 @@ void KisGmicUpdater::start()
 
     connect(getReply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(reportProgress(qint64,qint64)));
     connect(getReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(slotError(QNetworkReply::NetworkError)));
-    connect(getReply, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(slotSslErrors(QList<QSslError>)));
 }
 
 
@@ -129,11 +128,4 @@ void KisGmicUpdater::slotError(QNetworkReply::NetworkError error)
     dbgPlugins << "NetworkError" << error;
 }
 
-void KisGmicUpdater::slotSslErrors(QList< QSslError > error)
-{
-    dbgPlugins << "SSL Errors";
-    foreach (const QSslError &er, error)
-    {
-        dbgPlugins << er.errorString();
-    }
-}
+

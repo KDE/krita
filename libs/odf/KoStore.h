@@ -21,16 +21,12 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <QString>
-#include <QStringList>
-#include <QIODevice>
-#include <QStack>
 #include <QByteArray>
+#include <QIODevice>
 #include "koodf_export.h"
 
-#include <kurl.h>
-
 class QWidget;
+class KUrl;
 class KoStorePrivate;
 
 /**
@@ -211,12 +207,6 @@ public:
     QString currentPath() const;
 
     /**
-     * Returns the current directory.
-     * Note: Returns a path in "internal name" style
-     */
-    QString currentDirectory() const;
-
-    /**
      * Stacks the current directory. Restore the current path using
      * @ref popDirectory .
      */
@@ -268,13 +258,6 @@ public:
     qint64 pos() const;
     bool atEnd() const;
     //@}
-
-    /**
-     * Do not expand file and directory names
-     * Useful when using KoStore on non-Calligra files.
-     * (This method should be called just after the constructor)
-     */
-    void disallowNameExpansion();
 
     /**
      * Call this before destroying the store, to be able to catch errors

@@ -46,9 +46,7 @@ public:
 
 private:
     KisHairyProperties m_properties;
-    const KisBrushBasedPaintOpSettings* m_settings;
 
-    bool newStrokeFlag;
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
     HairyBrush m_brush;

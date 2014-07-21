@@ -41,6 +41,12 @@
 #define PG_US_EXECUTIVE_WIDTH   191.0
 #define PG_US_EXECUTIVE_HEIGHT  254.0
 
+// To ignore the clang warning we get because we have a
+// for (int i = 0; pageFormatInfo[i].format != -1 ;i++)
+// construct and pageFormatInfo has (KoPageFormat::Format) - 1
+#pragma GCC diagnostic ignored "-Wtautological-constant-out-of-range-compare"
+
+
 struct PageFormatInfo {
     KoPageFormat::Format format;
     QPrinter::PageSize qprinter;

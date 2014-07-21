@@ -20,20 +20,18 @@
 
 #include "TextPasteCommand.h"
 
+#include <KoText.h>
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
 #include <KoTextPaste.h>
-#include <KoChangeTracker.h>
 #include <KoShapeController.h>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kaction.h>
 
 #include <QTextDocument>
 #include <QMimeData>
 
-#include "ChangeTrackedDeleteCommand.h"
 #include "DeleteCommand.h"
 #include "KoDocumentRdfBase.h"
 

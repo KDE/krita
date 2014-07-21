@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
+#include <kurl.h>
 
 #include <KoStore.h>
 #include <KoOdfReadStore.h>
@@ -167,7 +168,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
 
     QString path = tmpURL;
     if ( tmpURL.startsWith( INTERNAL_PROTOCOL ) ) {
-        path = store->currentDirectory();
+        path = store->currentPath();
         if ( !path.isEmpty() && !path.endsWith( '/' ) )
             path += '/';
         QString relPath = KUrl( tmpURL ).path();

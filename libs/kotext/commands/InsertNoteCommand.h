@@ -23,13 +23,11 @@
 
 #include "KoInlineNote.h"
 
-#include <kundo2qstack.h>
+#include <kundo2command.h>
 
 #include <QWeakPointer>
 
 class QTextDocument;
-
-class QTextCursor;
 
 class InsertNoteCommand : public KUndo2Command
 {

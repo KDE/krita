@@ -20,7 +20,6 @@
 
 #include "KoPointedAt.h"
 
-#include <KoBookmark.h>
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>

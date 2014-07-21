@@ -46,8 +46,6 @@ inline double drand48()
 #include <cmath>
 #include <ctime>
 
-const float radToDeg = 57.29578f;
-
 HairyBrush::HairyBrush()
 {
     srand48(time(0));

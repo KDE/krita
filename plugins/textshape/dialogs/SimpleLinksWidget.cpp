@@ -19,8 +19,9 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <QWidget>
+
 #include "SimpleLinksWidget.h"
+
 #include "ReferencesTool.h"
 #include <KAction>
 #include <KoBookmarkManager.h>
@@ -29,6 +30,8 @@
 #include <KoBookmark.h>
 #include <KoTextRangeManager.h>
 #include <KoTextRange.h>
+#include <KoCanvasResourceManager.h>
+#include <KoCanvasBase.h>
 
 SimpleLinksWidget::SimpleLinksWidget(ReferencesTool *tool, QWidget *parent)
     : QWidget(parent)

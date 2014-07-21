@@ -37,6 +37,7 @@ public:
         Mask
     };
 
+    Mode mode() const;
     void setMode(Mode mode);
     void setVisible(bool v);
 
@@ -55,6 +56,8 @@ private:
 private:
     KisSignalCompressor m_signalCompressor;
     QPainterPath m_outlinePath;
+    QImage m_thumbnailImage;
+    QTransform m_thumbnailImageTransform;
     QTimer* m_antsTimer;
     int m_offset;
 

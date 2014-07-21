@@ -166,6 +166,8 @@ public:
         m_mementoManager->purgeHistory(oldestMemento);
     }
 
+    static void releaseInternalPools();
+
 protected:
     /**
      * Reads and writes the tiles 

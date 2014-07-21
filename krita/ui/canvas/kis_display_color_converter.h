@@ -107,7 +107,7 @@ private:
 
 private:
     struct Private;
-    Private * const m_d;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif /* __KIS_DISPLAY_COLOR_CONVERTER_H */

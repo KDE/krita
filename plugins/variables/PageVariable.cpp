@@ -31,6 +31,7 @@
 #include <KoXmlNS.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoTextDocumentLayout.h>
+#include <KoTextDocument.h>
 
 #include <QFontMetricsF>
 #include <QTextDocument>

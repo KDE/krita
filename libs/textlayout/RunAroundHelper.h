@@ -20,13 +20,12 @@
 #ifndef RUNAROUNDHELPER_H
 #define RUNAROUNDHELPER_H
 
-#include "KoTextLayoutObstruction.h"
-
 #include <QList>
 #include <QTextLine>
 #include <QRectF>
 
 class KoTextLayoutArea;
+class KoTextLayoutObstruction;
 
 class RunAroundHelper
 {

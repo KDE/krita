@@ -51,17 +51,14 @@
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
 #include <KoImageData.h>
-#include <KoInlineNote.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoTableOfContentsGeneratorInfo.h>
 
 #include <kdebug.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
 
+#include <QPainter>
 #include <QTextTable>
 #include <QTextList>
-#include <QStyle>
 #include <QFontMetrics>
 #include <QTextFragment>
 #include <QTextLayout>
@@ -69,6 +66,7 @@
 #include <QTime>
 
 extern int qt_defaultDpiY();
+Q_DECLARE_METATYPE(QTextDocument *)
 
 #define DropCapsAdditionalFormattingId 25602902
 

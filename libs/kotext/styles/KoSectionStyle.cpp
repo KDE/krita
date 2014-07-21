@@ -22,17 +22,14 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoSectionStyle.h"
-#include "KoStyleManager.h"
+
 #include <KoGenStyle.h>
-#include <KoGenStyles.h>
 #include "Styles_p.h"
-#include "KoTextDocument.h"
 
 #include <kdebug.h>
 
 #include <QTextFrame>
 #include <QTextFrameFormat>
-#include <QTextCursor>
 #include <QBuffer>
 
 #include <KoColumns.h>
@@ -41,7 +38,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
-#include <KoBorder.h>
+
 
 Q_DECLARE_METATYPE(QList<KoColumns::ColumnDatum>)
 

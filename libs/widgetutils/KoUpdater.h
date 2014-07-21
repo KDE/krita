@@ -22,6 +22,7 @@
 #define KO_UPDATER_H
 
 #include "KoProgressProxy.h"
+#include <QObject>
 #include <QPointer>
 
 class KoProgressUpdater;

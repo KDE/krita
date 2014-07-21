@@ -31,6 +31,8 @@ class SimpleFootEndNotesWidget;
 class SimpleCitationBibliographyWidget;
 class KoInlineNote;
 class KoTextEditor;
+class KoBibliographyInfo;
+class KoTableOfContentsGeneratorInfo;
 class QPainter;
 class SimpleLinksWidget;
 class LabeledWidget;

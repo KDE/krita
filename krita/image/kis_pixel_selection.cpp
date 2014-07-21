@@ -48,6 +48,16 @@ struct KisPixelSelection::Private {
     QPainterPath outlineCache;
     bool outlineCacheValid;
     QMutex outlineCacheMutex;
+
+    bool thumbnailImageValid;
+    QImage thumbnailImage;
+    QTransform thumbnailImageTransform;
+
+    void invalidateThumbnailImage() {
+        thumbnailImageValid = false;
+        thumbnailImage = QImage();
+        thumbnailImageTransform = QTransform();
+    }
 };
 
 KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSelectionWSP parentSelection)
@@ -55,6 +65,8 @@ KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSe
         , m_d(new Private)
 {
     m_d->outlineCacheValid = true;
+    m_d->invalidateThumbnailImage();
+
     m_d->parentSelection = parentSelection;
 }
 
@@ -66,6 +78,10 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
     // parent selection is not supposed to be shared
     m_d->outlineCache = rhs.m_d->outlineCache;
     m_d->outlineCacheValid = rhs.m_d->outlineCacheValid;
+
+    m_d->thumbnailImageValid = rhs.m_d->thumbnailImageValid;
+    m_d->thumbnailImage = rhs.m_d->thumbnailImage;
+    m_d->thumbnailImageTransform = rhs.m_d->thumbnailImageTransform;
 }
 
 KisSelectionComponent* KisPixelSelection::clone(KisSelection*)
@@ -90,6 +106,7 @@ bool KisPixelSelection::read(QIODevice *stream)
 {
     bool retval = KisPaintDevice::read(stream);
     m_d->outlineCacheValid = false;
+    m_d->invalidateThumbnailImage();
     return retval;
 }
 
@@ -112,6 +129,7 @@ void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
             m_d->outlineCache -= path;
         }
     }
+    m_d->invalidateThumbnailImage();
 }
 
 void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionAction action)
@@ -159,6 +177,8 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
     if (m_d->outlineCacheValid) {
         m_d->outlineCache += selection->outlineCache();
     }
+
+    m_d->invalidateThumbnailImage();
 }
 
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
@@ -186,6 +206,8 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
     if (m_d->outlineCacheValid) {
         m_d->outlineCache -= selection->outlineCache();
     }
+
+    m_d->invalidateThumbnailImage();
 }
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
@@ -208,6 +230,8 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
     if (m_d->outlineCacheValid) {
         m_d->outlineCache &= selection->outlineCache();
     }
+
+    m_d->invalidateThumbnailImage();
 }
 
 void KisPixelSelection::clear(const QRect & r)
@@ -226,6 +250,8 @@ void KisPixelSelection::clear(const QRect & r)
 
         m_d->outlineCache -= path;
     }
+
+    m_d->invalidateThumbnailImage();
 }
 
 void KisPixelSelection::clear()
@@ -236,6 +262,10 @@ void KisPixelSelection::clear()
 
     m_d->outlineCacheValid = true;
     m_d->outlineCache = QPainterPath();
+
+    // Empty the thumbnail image. It is a valid state.
+    m_d->invalidateThumbnailImage();
+    m_d->thumbnailImageValid = true;
 }
 
 void KisPixelSelection::invert()
@@ -259,12 +289,22 @@ void KisPixelSelection::invert()
 
         m_d->outlineCache = path - m_d->outlineCache;
     }
+
+    m_d->invalidateThumbnailImage();
 }
 
 void KisPixelSelection::move(const QPoint &pt)
 {
+    QPoint offset = pt - QPoint(x(), y());
+
     if (m_d->outlineCacheValid) {
-        m_d->outlineCache.translate(pt - QPoint(x(), y()));
+        m_d->outlineCache.translate(offset);
+    }
+
+    if (m_d->thumbnailImageValid) {
+        m_d->thumbnailImageTransform =
+            QTransform::fromTranslate(offset.x(), offset.y()) *
+            m_d->thumbnailImageTransform;
     }
 
     KisPaintDevice::move(pt);
@@ -342,6 +382,7 @@ void KisPixelSelection::setOutlineCache(const QPainterPath &cache)
     QMutexLocker locker(&m_d->outlineCacheMutex);
     m_d->outlineCache = cache;
     m_d->outlineCacheValid = true;
+    m_d->thumbnailImageValid = false;
 }
 
 bool KisPixelSelection::outlineCacheValid() const
@@ -354,6 +395,7 @@ void KisPixelSelection::invalidateOutlineCache()
 {
     QMutexLocker locker(&m_d->outlineCacheMutex);
     m_d->outlineCacheValid = false;
+    m_d->thumbnailImageValid = false;
 }
 
 void KisPixelSelection::recalculateOutlineCache()
@@ -378,6 +420,82 @@ void KisPixelSelection::recalculateOutlineCache()
     }
 
     m_d->outlineCacheValid = true;
+}
+
+bool KisPixelSelection::thumbnailImageValid() const
+{
+    return m_d->thumbnailImageValid;
+}
+
+QImage KisPixelSelection::thumbnailImage() const
+{
+    return m_d->thumbnailImage;
+}
+
+QTransform KisPixelSelection::thumbnailImageTransform() const
+{
+    return m_d->thumbnailImageTransform;
+}
+
+QImage deviceToQImage(KisPaintDeviceSP device,
+                      const QRect &rc,
+                      const QColor &maskColor)
+{
+    QImage image(rc.size(), QImage::Format_ARGB32);
+
+    QColor color = maskColor;
+    const qreal alphaScale = maskColor.alphaF();
+
+    KisSequentialIterator it(device, rc);
+    do {
+        quint8 value = (MAX_SELECTED - *(it.rawData())) * alphaScale;
+        color.setAlpha(value);
+
+        QPoint pt(it.x(), it.y());
+        pt -= rc.topLeft();
+
+        image.setPixel(pt.x(), pt.y(), color.rgba());
+    } while (it.nextPixel());
+
+    return image;
+}
+
+void KisPixelSelection::recalculateThumbnailImage(const QColor &maskColor)
+{
+    QRect rc = selectedExactRect();
+    const int maxPreviewSize = 2000;
+
+    if (rc.width() > maxPreviewSize ||
+        rc.height() > maxPreviewSize) {
+
+        qreal factor = 1.0;
+
+        if (rc.width() > rc.height()) {
+            factor = qreal(maxPreviewSize) / rc.width();
+        } else {
+            factor = qreal(maxPreviewSize) / rc.height();
+        }
+
+        int newWidth = qRound(rc.width() * factor);
+        int newHeight = qRound(rc.height() * factor);
+
+        m_d->thumbnailImageTransform =
+            QTransform::fromScale(qreal(rc.width()) / newWidth,
+                                  qreal(rc.height()) / newHeight) *
+            QTransform::fromTranslate(rc.x(), rc.y());
+
+        KisPaintDeviceSP thumbDevice =
+            createThumbnailDevice(newWidth, newHeight, rc);
+
+        QRect thumbRect(0, 0, newWidth, newHeight);
+        m_d->thumbnailImage = deviceToQImage(thumbDevice, thumbRect, maskColor);
+
+    } else {
+        m_d->thumbnailImageTransform = QTransform::fromTranslate(rc.x(), rc.y());
+        m_d->thumbnailImage = deviceToQImage(this, rc, maskColor);
+    }
+
+    m_d->thumbnailImageValid = true;
 }
 
 void KisPixelSelection::setParentSelection(KisSelectionWSP selection)

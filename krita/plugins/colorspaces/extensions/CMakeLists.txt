@@ -19,4 +19,4 @@ install( TARGETS krita_colorspaces_extensions DESTINATION ${PLUGIN_INSTALL_DIR} 
 
 ########### install files ###############
 
-install( FILES krita_colorspaces_extensions_plugin.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES krita_colorspaces_extensions_plugin.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

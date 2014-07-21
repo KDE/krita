@@ -21,7 +21,6 @@
 #define INSERTINLINEOBJECTACTIONBASE_H
 
 #include <kaction.h>
-#include <QString>
 
 class KoCanvasBase;
 class KoInlineObject;

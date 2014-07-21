@@ -21,12 +21,9 @@
  */
 
 #include "KoTextDocumentLayout.h"
-#include "styles/KoParagraphStyle.h"
-#include "styles/KoCharacterStyle.h"
-#include "styles/KoListStyle.h"
+
 #include "styles/KoStyleManager.h"
 #include "KoTextBlockData.h"
-#include "KoTextBlockBorderData.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoTextLayoutRootArea.h"
 #include "KoTextLayoutRootAreaProvider.h"
@@ -42,18 +39,15 @@
 #include <KoAnchorTextRange.h>
 #include <KoTextRangeManager.h>
 #include <KoTextPage.h>
-#include <KoInsets.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoAnnotationLayoutManager.h>
 #include <KoAnnotation.h>
+#include <KoTextDocument.h>
 
 #include <kdebug.h>
 #include <QTextBlock>
-#include <QTextTable>
-#include <QTextTableCell>
-#include <QTextList>
 #include <QTimer>
 #include <QList>
 

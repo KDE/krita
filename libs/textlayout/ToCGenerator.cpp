@@ -22,27 +22,24 @@
  */
 
 #include "ToCGenerator.h"
+
 #include <klocale.h>
 
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"
-#include "KoTextShapeData.h"
 #include "DummyDocumentLayout.h"
 
 #include <KoParagraphStyle.h>
 #include <KoTextPage.h>
-#include <KoShape.h>
 #include <KoTextDocument.h>
 #include <KoTextBlockData.h>
 #include <KoStyleManager.h>
-#include <KoTextEditor.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 
 #include <QTextDocument>
 #include <kdebug.h>
 #include <KoBookmark.h>
 #include <KoTextRangeManager.h>
-//#include <KoInlineTextObjectManager.h>
 
 static const QString INVALID_HREF_TARGET = "INVALID_HREF";
 
@@ -52,7 +49,6 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGenerato
     , m_ToCInfo(tocInfo)
     , m_document(0)
     , m_documentLayout(0)
-    , m_maxTabPosition(0.0)
 {
     Q_ASSERT(tocDocument);
     Q_ASSERT(tocInfo);
@@ -111,6 +107,7 @@ bool ToCGenerator::generate()
     QTextCursor cursor = m_ToCDocument->rootFrame()->lastCursorPosition();
     cursor.setPosition(m_ToCDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
+    cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
 
     KoStyleManager *styleManager = KoTextDocument(m_document).styleManager();
 

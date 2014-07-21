@@ -21,4 +21,4 @@ install(TARGETS kritarandompickfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritarandompickfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritarandompickfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

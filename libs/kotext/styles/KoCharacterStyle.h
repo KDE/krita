@@ -28,20 +28,16 @@
 #include <KoXmlReaderForward.h>
 
 #include <QObject>
-#include <QVector>
-#include <QVariant>
-#include <QString>
-#include <QChar>
 #include <QTextCharFormat>
 #include "kotext_export.h"
 
-
-class StylePrivate;
 class QTextBlock;
-class KoStyleStack;
 class KoShapeLoadingContext;
 class KoShadowStyle;
 class KoGenStyle;
+class QString;
+class QChar;
+class QVariant;
 
 /**
  * A container for all properties for a character style.

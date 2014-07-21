@@ -73,10 +73,7 @@
       <item row="3" column="1">
        <widget class="QSpinBox" name="colorLimit">
         <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="suffix">
-         <string> colors</string>
+         <bool>true</bool>
         </property>
         <property name="minimum">
          <number>3</number>
@@ -85,7 +82,7 @@
          <number>256</number>
         </property>
         <property name="value">
-         <number>32</number>
+         <number>31</number>
         </property>
        </widget>
       </item>
@@ -105,7 +102,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Inbetween ramps</string>
+         <string>In-between ramps</string>
         </property>
        </widget>
       </item>

@@ -20,13 +20,14 @@
 #define KOINLINEOBJECTBASE_H
 
 #include "kotext_export.h"
+#include <KoXmlReaderForward.h>
 
-#include <QVariant>
 #include <QObject>
+#include <QTextInlineObject>
 
+class QVariant;
 class QTextDocument;
 class QTextCharFormat;
-class QTextInlineObject;
 class QPaintDevice;
 class QPainter;
 class QRectF;
@@ -35,7 +36,6 @@ class KoInlineTextObjectManager;
 class KoInlineObjectPrivate;
 class KoShapeSavingContext;
 class KoTextInlineRdf;
-class KoXmlElement;
 class KoShapeLoadingContext;
 
 /**

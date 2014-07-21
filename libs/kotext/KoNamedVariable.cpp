@@ -18,10 +18,12 @@
  */
 
 #include "KoNamedVariable.h"
+
 #include "KoInlineTextObjectManager.h"
-#include "KoShapeLoadingContext.h"
-#include "KoShapeSavingContext.h"
-#include <KoProperties.h>
+
+// Include Q_UNUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 
 KoNamedVariable::KoNamedVariable(Property key, const QString &name)

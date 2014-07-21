@@ -40,10 +40,7 @@
 
 KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
-    , newStrokeFlag(true)
-
-{
+    {
     Q_UNUSED(image)
     Q_ASSERT(settings);
 

@@ -27,6 +27,7 @@
 
 #include "KoXmlNS.h"
 #include "KoUnit.h"
+#include "KoXmlReader.h"
 
 KoGenStyle KoPageLayout::saveOdf() const
 {

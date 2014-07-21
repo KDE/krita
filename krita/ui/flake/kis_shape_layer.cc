@@ -44,7 +44,7 @@
 #include <KoDataCenterBase.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include <KoImageCollection.h>
 #include <KoOdf.h>
 #include <KoOdfReadStore.h>
@@ -263,13 +263,19 @@ void KisShapeLayer::slotMoveShapes(const QPointF &diff)
     QList<QPointF> prevPos;
     QList<QPointF> newPos;
 
+    QList<KoShape*> shapes;
     foreach (KoShape* shape, shapeManager()->shapes()) {
+        if (!dynamic_cast<KoShapeGroup*>(shape)) {
+            shapes.append(shape);
+        }
+    }
+    foreach (KoShape* shape, shapes) {
         QPointF pos = shape->position();
         prevPos << pos;
         newPos << pos + diff;
     }
 
-    KoShapeMoveCommand cmd(shapeManager()->shapes(), prevPos, newPos);
+    KoShapeMoveCommand cmd(shapes, prevPos, newPos);
     cmd.redo();
 }
 
@@ -305,7 +311,7 @@ void KisShapeLayer::setVisible(bool visible, bool isLoading)
 
 bool KisShapeLayer::saveLayer(KoStore * store) const
 {
-    store->disallowNameExpansion();
+
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;

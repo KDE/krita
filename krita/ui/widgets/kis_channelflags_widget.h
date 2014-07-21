@@ -41,7 +41,7 @@ class KRITAUI_EXPORT KisChannelFlagsWidget : public QScrollArea
 
 public:
 
-    KisChannelFlagsWidget(const KoColorSpace * colorSpace, QWidget * parent = 0);
+    KisChannelFlagsWidget(const KoColorSpace *colorSpace, QWidget * parent = 0);
     ~KisChannelFlagsWidget();
 
 public:
@@ -58,7 +58,6 @@ public:
 
 private:
 
-    const KoColorSpace * m_colorSpace;
     QList<QCheckBox*> m_channelChecks;
 
 };

@@ -34,7 +34,6 @@
 #include <ctime>
 #include <KoColorSpaceRegistry.h>
 
-const qreal radToDeg = 57.29578;
 const qreal degToRad = M_PI / 180.0;
 
 

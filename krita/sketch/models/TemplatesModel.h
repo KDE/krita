@@ -44,6 +44,7 @@ public:
     virtual int rowCount(const QModelIndex& parent) const;
     Q_INVOKABLE QString groupNameOf(int index) const;
     Q_INVOKABLE void toggleGroup(const QString& name);
+    Q_SLOT void populate();
 
 private:
     struct ItemData;

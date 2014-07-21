@@ -75,6 +75,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
+#include <KoStyleStack.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 #include <KoTextShapeData.h>
@@ -91,6 +92,7 @@
 #include <KoColorBackground.h>
 #include <KoShapeStroke.h>
 #include <KoOdfWorkaround.h>
+#include <KoTextDocument.h>
 
 // KChart
 #include "Axis.h"
@@ -848,7 +850,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
 
     QString path = tmpURL;
     if (tmpURL.startsWith(INTERNAL_PROTOCOL)) {
-        path = store->currentDirectory();
+        path = store->currentPath();
         if (!path.isEmpty() && !path.endsWith('/'))
             path += '/';
         QString relPath = KUrl(tmpURL).path();

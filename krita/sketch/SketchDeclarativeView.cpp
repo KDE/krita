@@ -147,6 +147,8 @@ bool SketchDeclarativeView::event( QEvent* event )
     switch(static_cast<int>(event->type())) {
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent:
         case ViewModeSwitchEvent::SwitchedToSketchModeEvent:
+        case QEvent::KeyPress:
+        case QEvent::KeyRelease:
         case QEvent::TabletPress:
         case QEvent::TabletMove:
         case QEvent::TabletRelease: {

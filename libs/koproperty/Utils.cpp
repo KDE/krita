@@ -26,10 +26,8 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QStyle>
-#include <QLabel>
 #include <QStyleOption>
 #include <QStyleOptionHeader>
-#include <QApplication>
 #include <QLayout>
 #include <QMouseEvent>
 

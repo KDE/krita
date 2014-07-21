@@ -41,6 +41,10 @@ public:
     virtual KisPropertiesConfiguration* configuration() const;
     virtual void setConfiguration(const KisPropertiesConfiguration* config);
     void setup(QStringList shadesLabels, int ramps);
+
+private slots:
+    void slotColorLimitChanged(int value);
+
 private:
     struct ColorWidgets
     {

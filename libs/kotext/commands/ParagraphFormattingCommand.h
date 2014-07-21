@@ -22,12 +22,9 @@
 
 #include <KoListLevelProperties.h>
 
-#include "kundo2qstack.h"
-
-#include <QTextCursor>
+#include "kundo2command.h"
 
 class KoTextEditor;
-class KoParagraphStyle;
 class QTextCharFormat;
 class QTextBlockFormat;
 

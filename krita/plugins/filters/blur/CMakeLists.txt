@@ -30,4 +30,4 @@ install(TARGETS kritablurfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritablurfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritablurfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

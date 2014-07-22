@@ -22,8 +22,10 @@
 #include "resourcemanager.h"
 
 #include <QListWidget>
+#include <QTreeWidget>
 #include <QListWidgetItem>
 #include <QPainter>
+#include <QPixmap>
 
 #include <KoIcon.h>
 
@@ -41,6 +43,14 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     resize(m_page->sizeHint());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
+
+    m_ui->listActive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    m_ui->listActive->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    connect(m_ui->listActive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
+
+    m_ui->listInactive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    m_ui->listInactive->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    connect(m_ui->listInactive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
 
     m_ui->bnAdd->setIcon(koIcon("arrow-right"));
     connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
@@ -61,7 +71,6 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
 
     foreach(ResourceBundle *bundle, bundleServer->resources()) {
-        qDebug() << "\tbunde" << bundle->name() << bundle->valid();
         if (bundle->valid()) {
             m_activeBundles[bundle->filename()] = bundle;
         }
@@ -76,6 +85,24 @@ void DlgBundleManager::addSelected()
 
 void DlgBundleManager::removeSelected()
 {
+
+}
+
+void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */*previous*/)
+{
+    QByteArray ba = current->data(Qt::UserRole).toByteArray();
+    KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
+    ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
+    m_ui->lblName->setText(bundle->name());
+    m_ui->lblAuthor->setText(bundle->getMeta("author"));
+    m_ui->lblEmail->setText(bundle->getMeta("email"));
+    m_ui->lblLicense->setText(bundle->getMeta("license"));
+    m_ui->lblWebsite->setText(bundle->getMeta("website"));
+    m_ui->lblDescription->setText(bundle->getMeta("description"));
+    m_ui->lblCreated->setText(bundle->getMeta("created"));
+    m_ui->lblUpdated->setText(bundle->getMeta("updated"));
+    m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image()));
+    m_ui->listBundleContents->clear();
 
 }
 
@@ -99,7 +126,7 @@ void DlgBundleManager::fillListWidget(QList<ResourceBundle *> bundles, QListWidg
         }
 
         QListWidgetItem *item = new QListWidgetItem(pixmap, bundle->name());
-        item->setData(Qt::UserRole, bundle->filename());
+        item->setData(Qt::UserRole, bundle->md5());
         w->addItem(item);
     }
 }

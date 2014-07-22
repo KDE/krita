@@ -25,6 +25,7 @@
 
 class ResourceBundle;
 class QListWidget;
+class QListWidgetItem;
 
 namespace Ui
 {
@@ -41,7 +42,7 @@ private slots:
 
     void addSelected();
     void removeSelected();
-
+    void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
 private:
 
     QWidget *m_page;

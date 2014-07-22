@@ -20,16 +20,16 @@
 
 #include "KoTextPaste.h"
 
+#include <KoTextDocument.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeController.h>
 #include <KoShape.h>
 #include <KoCanvasBase.h>
-
-#include "KoTextEditor.h"
-#include "opendocument/KoTextLoader.h"
-#include "KoTextSharedLoadingData.h"
+#include <KoTextEditor.h>
+#include <opendocument/KoTextLoader.h>
+#include <KoTextSharedLoadingData.h>
 
 #include <kdebug.h>
 #ifdef SHOULD_BUILD_RDF

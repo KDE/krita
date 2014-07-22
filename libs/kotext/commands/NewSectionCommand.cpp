@@ -23,6 +23,7 @@
 #include <KoTextDocument.h>
 #include <KoParagraphStyle.h>
 #include <KoSectionManager.h>
+#include <KoTextEditor.h>
 
 #include <klocale.h>
 #include <kundo2command.h>

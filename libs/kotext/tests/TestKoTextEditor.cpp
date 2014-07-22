@@ -26,6 +26,7 @@
 #include <QTextTable>
 #include <QTextCharFormat>
 #include <QList>
+#include <QMetaType>
 
 #include <KoShapeBasedDocumentBase.h>
 #include <KoShape.h>
@@ -39,6 +40,11 @@
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoDocumentRdfBase.h>
+#include <KoParagraphStyle.h>
+#include <KoSection.h>
+#include <KoSectionEnd.h>
+
+Q_DECLARE_METATYPE(QVector< QVector<int> >)
 
 const QString lorem(
     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"

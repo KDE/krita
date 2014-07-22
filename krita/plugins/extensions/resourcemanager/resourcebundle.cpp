@@ -188,7 +188,7 @@ bool ResourceBundle::load()
             qWarning() << "Could not open preview.png";
         }
 
-        m_installed = m_manifest.isInstalled();
+        m_installed = true;
         setValid(true);
         setImage(m_thumbnail);
     }
@@ -680,45 +680,9 @@ void ResourceBundle::removeFile(QString fileName)
     m_manifest.removeFile(fileName);
 }
 
-void ResourceBundle::addResourceDirs()
-{
-    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
-    bundleDir.cdUp();
-    QString localSavePath = bundleDir.absolutePath();
-    foreach(const QString& resourceType,  m_manifest.getDirList())  {
-        KGlobal::mainComponent().dirs()->addResourceDir(resourceType.toLatin1().data(), localSavePath + "/" + resourceType + "/" + this->name());
-    }
-}
-
 bool ResourceBundle::isInstalled()
 {
     return m_installed;
-}
-
-void ResourceBundle::rename(QString filename, QString name)
-{
-    QString oldName = shortFilename();
-    QString shortName = name.section('.', 0, 0);
-
-    addMeta("filename", filename);
-    addMeta("name", shortName);
-    m_manifest.rename(shortName);
-
-    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
-    bundleDir.cdUp();
-    QString localSavePath = bundleDir.absolutePath();
-
-    if (isInstalled()) {
-        QList<QString> directoryList = m_manifest.getDirList();
-        QString dirPath;
-        QDir dir;
-        for (int i = 0; i < directoryList.size(); i++) {
-            dirPath = localSavePath;
-            dirPath.append(directoryList.at(i)).append("/");
-            dir.rename(dirPath + oldName, dirPath + shortName);
-        }
-    }
-    save();
 }
 
 void ResourceBundle::removeTag(QString tagName)

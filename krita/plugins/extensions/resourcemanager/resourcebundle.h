@@ -100,16 +100,6 @@ public:
     void removeFile(QString fileName);
 
     /**
-     * @brief addResourceDirs : Link the directories containing the resources of the bundle to the resource types
-     */
-    void addResourceDirs();
-
-    /**
-     * @brief rename : Rename the bundle
-     */
-    void rename(QString, QString);
-
-    /**
      * @brief isInstalled
      * @return true if the bundle is installed, false otherwise.
      */

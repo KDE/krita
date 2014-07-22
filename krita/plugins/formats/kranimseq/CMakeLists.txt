@@ -13,4 +13,4 @@ kde4_add_plugin(kranimseq ${kranimseq_PART_SRCS})
 
 target_link_libraries(kranimseq kritaui ${PNG_LIBRARIES})
 install(TARGETS kranimseq DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kranimseq_export.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kranimseq_export.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

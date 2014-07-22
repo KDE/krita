@@ -146,37 +146,6 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
-        <widget class="QLabel" name="lblPreview">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>128</width>
-           <height>128</height>
-          </size>
-         </property>
-         <property name="sizeIncrement">
-          <size>
-           <width>128</width>
-           <height>128</height>
-          </size>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Sunken</enum>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
         <widget class="QLabel" name="lblName">
          <property name="text">
@@ -260,14 +229,10 @@
          </property>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
+       <item row="8" column="1">
         <widget class="QLabel" name="lblDescription">
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -277,6 +242,45 @@
          </property>
          <property name="wordWrap">
           <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Description:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="lblPreview">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>128</width>
+           <height>128</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>128</width>
+           <height>128</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>

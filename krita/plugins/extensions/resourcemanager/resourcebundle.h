@@ -110,6 +110,9 @@ public:
     void addTag(const QString &tagName);
     void removeTag(QString tagName);
 
+    QStringList resourceTypes();
+    QList<KoResource*> resources(const QString &resType);
+
 protected:
 
     virtual QByteArray generateMD5() const;

@@ -94,6 +94,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */
     KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
     ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
     m_ui->lblName->setText(bundle->name());
+    m_ui->chkActive->setChecked(bundle->isInstalled());
     m_ui->lblAuthor->setText(bundle->getMeta("author"));
     m_ui->lblEmail->setText(bundle->getMeta("email"));
     m_ui->lblLicense->setText(bundle->getMeta("license"));
@@ -103,6 +104,39 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */
     m_ui->lblUpdated->setText(bundle->getMeta("updated"));
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image()));
     m_ui->listBundleContents->clear();
+    m_ui->listBundleContents->setHeaderLabel(i18n("Resource"));
+
+    foreach(const QString & resType, bundle->resourceTypes()) {
+
+        QTreeWidgetItem *toplevel = new QTreeWidgetItem();
+        if (resType == "gradients") {
+            toplevel->setText(0, i18n("Gradients"));
+        }
+        else if (resType  == "patterns") {
+            toplevel->setText(0, i18n("Patterns"));
+        }
+        else if (resType  == "brushes") {
+            toplevel->setText(0, i18n("Brushes"));
+        }
+        else if (resType  == "palettes") {
+            toplevel->setText(0, i18n("Palettes"));
+        }
+        else if (resType  == "workspaces") {
+            toplevel->setText(0, i18n("Workspaces"));
+        }
+        else if (resType  == "paintoppresets") {
+            toplevel->setText(0, i18n("Brush Presets"));
+        }
+
+        m_ui->listBundleContents->addTopLevelItem(toplevel);
+
+        foreach(const KoResource *res, bundle->resources(resType)) {
+            QTreeWidgetItem *i = new QTreeWidgetItem();
+            i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
+            i->setText(0, res->name());
+            toplevel->addChild(i);
+        }
+    }
 
 }
 

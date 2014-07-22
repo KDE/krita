@@ -86,9 +86,10 @@ DlgCreateBundle::DlgCreateBundle(QWidget *parent)
     connect(m_ui->cmbResourceTypes, SIGNAL(activated(int)), SLOT(resourceTypeSelected(int)));
 
     m_ui->tableAvailable->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->tableAvailable->setSelectionMode(QAbstractItemView::MultiSelection);
+    m_ui->tableAvailable->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
     m_ui->tableSelected->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->tableSelected->setSelectionMode(QAbstractItemView::MultiSelection);
+    m_ui->tableSelected->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     connect(m_ui->bnGetPreview, SIGNAL(clicked()), SLOT(getPreviewImage()));
 

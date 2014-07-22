@@ -26,8 +26,6 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-#include <QRegExp>
-
 // ensure the same order as in KoUnit::Unit
 static const char* const unitNameList[KoUnit::TypeCount] =
 {

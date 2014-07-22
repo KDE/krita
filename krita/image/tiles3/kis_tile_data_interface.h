@@ -35,18 +35,7 @@ class KisTileDataStore;
 #define __TILE_DATA_WIDTH 64
 #define __TILE_DATA_HEIGHT 64
 
-#define TILE_DATA_POOL_SIZE 32
-
-
-// BPP == bytes per pixel
-#define TILE_SIZE_4BPP (4 * __TILE_DATA_WIDTH * __TILE_DATA_HEIGHT)
-#define TILE_SIZE_8BPP (8 * __TILE_DATA_WIDTH * __TILE_DATA_HEIGHT)
-
-
-typedef KisMemoryPool<quint8[TILE_SIZE_4BPP],TILE_DATA_POOL_SIZE> KisTileMemoryPool4BPP;
-typedef KisMemoryPool<quint8[TILE_SIZE_8BPP],TILE_DATA_POOL_SIZE> KisTileMemoryPool8BPP;
 typedef KisLocklessStack<KisTileData*> KisTileDataCache;
-
 
 typedef QLinkedList<KisTileData*> KisTileDataList;
 typedef KisTileDataList::iterator KisTileDataListIterator;
@@ -162,6 +151,16 @@ public:
      */
     void allocateMemory();
 
+    /**
+     * Releases internal pools, which keep blobs where the tiles are
+     * stored.  The point is that we don't allocate the tiles from
+     * glibc directly, but use pools (implemented via boost) to
+     * allocate bigger chunks. This method should be called when one
+     * knows that we have just free'd quite a lot of memory and we
+     * won't need it anymore. E.g. when a document has been closed.
+     */
+    static void releaseInternalPools();
+
 private:
     void fillWithPixel(const quint8 *defPixel);
 
@@ -259,9 +258,6 @@ private:
     //qint32 m_timeStamp;
 
     KisTileDataStore *m_store;
-
-    static KisTileMemoryPool4BPP m_pool4BPP;
-    static KisTileMemoryPool8BPP m_pool8BPP;
 public:
     static const qint32 WIDTH;
     static const qint32 HEIGHT;

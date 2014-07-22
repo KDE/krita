@@ -21,16 +21,17 @@
 #define KOCHANGETRACKER_H
 
 #include "kotext_export.h"
+#include <KoXmlReaderForward.h>
 
 #include <QObject>
 #include <QMetaType>
+#include <QVector>
 
 #include <KoGenChange.h>
-#include <KoGenChanges.h>
 
 class KUndo2MagicString;
 
-class KoXmlElement;
+class KoGenChanges;
 class KoChangeTrackerElement;
 class KoFormatChangeInformation;
 

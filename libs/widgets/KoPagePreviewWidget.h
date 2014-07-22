@@ -23,9 +23,11 @@
 
 #include "kowidgets_export.h"
 
-#include <KoPageLayout.h>
-
 #include <QWidget>
+
+// Needed for building on Windows (cannot use forward declarations)
+#include <KoPageLayout.h>
+#include <KoColumns.h>
 
 /// A widget to preview the KoPageLayout and KoColumns data structures.
 class KOWIDGETS_EXPORT KoPagePreviewWidget : public QWidget {

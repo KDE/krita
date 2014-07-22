@@ -20,14 +20,28 @@
 
 #include <QDebug>
 #include <QDir>
-#include <QTime>
 #include <QApplication>
 #include <QSet>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kservice.h>
+#include <kmimetype.h>
 
+namespace {
+
+    QStringList mimeTypes(KService::Ptr service) {
+
+        QStringList ret;
+
+        QStringList serviceTypes = service->serviceTypes();
+        foreach (const QString &sv, serviceTypes) {
+            if (KMimeType::mimeType(sv)) {
+                ret << sv;
+            }
+        }
+        return ret;
+    }
+}
 
 struct KoServiceLocator::Private {
 
@@ -80,7 +94,7 @@ void KoServiceLocator::init()
                 if (!services.contains(service->name())) {
                     services << service->name();
                     foreach(const QString &t, service->serviceTypes()) {
-                        if (!service->mimeTypes().contains(t)) {
+                        if (!mimeTypes(service).contains(t)) {
                             if (!d->typeToService.contains(t)) {
                                 d->typeToService[t] = KService::List();
                             }

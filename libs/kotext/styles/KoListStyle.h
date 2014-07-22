@@ -26,8 +26,7 @@
 #include "kotext_export.h"
 
 #include <QTextFormat>
-#include <QMap>
-#include <QTextList>
+#include <QTextListFormat>
 
 #include <KoXmlReader.h>
 
@@ -36,6 +35,7 @@ class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoGenStyle;
 
+class QTextBlock;
 
 /**
  * This class groups all styling-options for lists.

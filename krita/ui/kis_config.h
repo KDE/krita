@@ -375,6 +375,9 @@ public:
     bool lineSmoothingFinishStabilizedCurve() const;
     void setLineSmoothingFinishStabilizedCurve(bool value);
 
+    bool lineSmoothingStabilizeSensors() const;
+    void setLineSmoothingStabilizeSensors(bool value);
+
     int paletteDockerPaletteViewSectionSize() const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;
 

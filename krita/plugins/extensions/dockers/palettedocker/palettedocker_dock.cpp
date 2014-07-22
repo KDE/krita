@@ -193,6 +193,12 @@ void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
     m_model->setDisplayRenderer(m_canvas->displayColorConverter()->displayRendererInterface());
 }
 
+void PaletteDockerDock::unsetCanvas()
+{
+    m_model->setDisplayRenderer(0);
+    m_canvas = 0;
+}
+
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
 {
     m_model->setColorSet(colorSet);

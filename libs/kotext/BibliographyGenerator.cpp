@@ -22,14 +22,12 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kdebug.h>
 
+#include <KoOdfBibliographyConfiguration.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
 #include <KoStyleManager.h>
-#include <KoTextEditor.h>
-#include <KoInlineCite.h>
 
 #include <QTextFrame>
 

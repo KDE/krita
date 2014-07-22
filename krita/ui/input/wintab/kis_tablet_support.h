@@ -43,6 +43,7 @@ struct QTabletDeviceData
     int minTanPressure;
     int maxTanPressure;
     int minX, maxX, minY, maxY, minZ, maxZ;
+    int sysOrgX, sysOrgY, sysExtX, sysExtY;
 #ifdef Q_WS_X11 // on windows the scale is fixed (and hardcoded)
     int minRotation;
     int maxRotation;

@@ -19,6 +19,7 @@
 
 #ifndef __FORMAT_CHANGE_INFORMATION_H__
 #define __FORMAT_CHANGE_INFORMATION_H__
+
 #include <QTextCharFormat>
 #include <QTextBlockFormat>
 

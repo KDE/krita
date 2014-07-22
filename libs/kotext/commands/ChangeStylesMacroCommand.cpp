@@ -30,8 +30,6 @@
 
 #include <klocale.h>
 
-#include <QTextDocument>
-
 ChangeStylesMacroCommand::ChangeStylesMacroCommand(const QList<ChangeFollower *> &changeFollowers
         , KoStyleManager *styleManager)
     : KUndo2Command(kundo2_i18n("Change Styles"))

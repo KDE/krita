@@ -27,13 +27,12 @@
 
 #include <QPointer>
 #include <QItemDelegate>
-#include <QStandardItemEditorCreator>
 #include <QPainter>
-#include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QApplication>
 #include <QHeaderView>
+#include <QLineEdit>
 
 #include <klocale.h>
 #include <kiconeffect.h>

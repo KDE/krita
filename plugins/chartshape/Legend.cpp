@@ -40,6 +40,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
+#include <KoStyleStack.h>
 #include <KoUnit.h>
 #include <KoColorBackground.h>
 #include <KoShapeStroke.h>

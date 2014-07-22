@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoVariable.h"
+
 #include "KoInlineObject_p.h"
 
 #include <KoShape.h>
 
-#include <QTextCursor>
 #include <QPainter>
 #include <QFontMetricsF>
 #include <QTextDocument>

@@ -29,6 +29,8 @@ private slots:
     void unlimitedMemoryHistoryNoPool();
     void unlimitedMemoryHistoryPool50();
 
+    void memory2000History100Pool500HugeBrush();
+
 private:
     void benchmarkWideArea(const QString presetFileName,
                            const QRectF &rect, qreal vstep,

@@ -24,7 +24,7 @@
 
 #include <QDomDocument>
 #include "koodf_export.h"
-#include <KoXmlReader.h>
+#include "KoXmlReader.h"
 
 /**
  * @brief Parse settings.xml file.

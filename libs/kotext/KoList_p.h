@@ -29,7 +29,6 @@
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QVector>
-#include <QWeakPointer>
 #include <QVariant>
 #include <QTextList>
 

@@ -29,7 +29,6 @@
 KisFlipbookItem::KisFlipbookItem(const QString &filename)
     : m_filename(filename)
     , m_document(0)
-    , m_part(0)
 {
     if (m_icon.isNull()) {
         m_icon.load(m_filename);

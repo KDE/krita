@@ -19,7 +19,6 @@
 
 #include "KoTextMeta.h"
 
-#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -27,12 +26,12 @@
 
 #include <QTextDocument>
 #include <QTextInlineObject>
-#include <QTextList>
-#include <QTextBlock>
-#include <QTextCursor>
 #include <QWeakPointer>
 
 #include <kdebug.h>
+
+// Include Q_UNSUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
 
 class KoTextMeta::Private
 {

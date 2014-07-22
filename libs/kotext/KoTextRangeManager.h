@@ -20,15 +20,15 @@
 #ifndef KOTEXTRANGEMANAGER_H
 #define KOTEXTRANGEMANAGER_H
 
-#include "KoTextRange.h"
 #include "KoBookmarkManager.h"
 #include "KoAnnotationManager.h"
+#include "KoTextRange.h"
 #include "kotext_export.h"
 
 // Qt + kde
+#include <QMetaType>
 #include <QHash>
 #include <QSet>
-#include <QTextBlock>
 
 
 /**

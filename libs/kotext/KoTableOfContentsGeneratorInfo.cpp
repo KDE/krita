@@ -21,12 +21,11 @@
 
 #include "KoTableOfContentsGeneratorInfo.h"
 
-#include <QTextCursor>
-
 #include <KoXmlNS.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 
 int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
 {

@@ -23,11 +23,11 @@
 #include <KoOdfReadStore.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeController.h>
+#include <KoShape.h>
+#include <KoCanvasBase.h>
 
-#include "KoTextDocument.h"
-#include "KoDocumentRdfBase.h"
+#include "KoTextEditor.h"
 #include "opendocument/KoTextLoader.h"
 #include "KoTextSharedLoadingData.h"
 

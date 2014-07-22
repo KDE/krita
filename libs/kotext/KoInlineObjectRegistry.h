@@ -22,14 +22,12 @@
 
 #include <KoGenericRegistry.h>
 #include <KoInlineObjectFactoryBase.h>
+#include <KoXmlReaderForward.h>
 #include "kotext_export.h"
-#include <QObject>
 #include <QList>
 
-class KoInlineObject;
 class KoCanvasBase;
 class QAction;
-class KoXmlElement;
 class KoShapeLoadingContext;
 
 /**

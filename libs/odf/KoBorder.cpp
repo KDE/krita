@@ -28,7 +28,6 @@
 
 #include <KoUnit.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoStyleStack.h>
 

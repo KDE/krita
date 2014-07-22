@@ -23,12 +23,12 @@
 #ifndef KOODFDOCUMENT_H
 #define KOODFDOCUMENT_H
 
-#include <kurl.h>
-
 class KoStore;
 class KoOdfReadStore;
 class KoOdfWriteStore;
 class KoEmbeddedDocumentSaver;
+
+class KUrl;
 
 #include "koodf_export.h"
 

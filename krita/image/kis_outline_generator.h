@@ -45,7 +45,7 @@ public:
      * @param defaultOpacity opacity of pixels that shouldn't be included in the outline
      **/
     KisOutlineGenerator(const KoColorSpace* cs, quint8 defaultOpacity);
-    
+
     /**
      * Generates the outline.
      * @param buffer buffer with the data for the outline
@@ -97,9 +97,6 @@ private:
     const KoColorSpace* m_cs;
     quint8 m_defaultOpacity;
     bool m_simple;
-
-    qint32 m_xOffset;
-    qint32 m_yOffset;
 
     KisRandomConstAccessorSP m_accessor;
 };

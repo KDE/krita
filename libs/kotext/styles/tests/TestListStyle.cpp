@@ -27,6 +27,8 @@
 
 #include <QTextDocument>
 #include <QTextCursor>
+#include <QTextBlock>
+#include <QTextList>
 
 void TestListStyle::testListStyle()
 {

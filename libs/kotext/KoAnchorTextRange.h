@@ -27,13 +27,7 @@
 
 #include "kotext_export.h"
 
-#include <QPointF>
-
-class KoShape;
 class KoAnchorTextRangePrivate;
-class KoXmlElement;
-class KoShapeLoadingContext;
-class KoShapeContainer;
 class QTextCursor;
 
 /**

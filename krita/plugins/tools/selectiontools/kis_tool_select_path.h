@@ -44,7 +44,6 @@ public:
 
 private:
     KisToolSelectPath* const m_selectionTool;
-    KoShapeStroke* m_borderBackup;
 };
 
 struct __KisToolSelectBaseWrapper : public KisToolSelectBase {

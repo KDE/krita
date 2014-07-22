@@ -20,14 +20,12 @@
 #include "InsertNoteCommand.h"
 
 #include <klocale.h>
-#include <kundo2command.h>
 
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoInlineNote.h>
 
-#include <QWeakPointer>
 
 InsertNoteCommand::InsertNoteCommand(KoInlineNote::Type type, QTextDocument *document)
     : KUndo2Command ()

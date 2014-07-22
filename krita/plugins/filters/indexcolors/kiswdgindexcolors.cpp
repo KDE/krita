@@ -34,12 +34,21 @@ KisWdgIndexColors::KisWdgIndexColors(QWidget* parent, Qt::WFlags f, int delay): 
     connect(ui->diagCheck,  SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->inbetweenSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->alphaStepsSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+
+    connect(ui->colorLimit, SIGNAL(valueChanged(int)), SLOT(slotColorLimitChanged(int)));
     connect(ui->colorLimit, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+
     connect(ui->colorLimitCheck, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
-    
+
     connect(ui->luminanceSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->aSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->bSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+}
+
+void KisWdgIndexColors::slotColorLimitChanged(int value)
+{
+    ui->colorLimit->setSuffix(i18ncp("suffix for a spinbox",
+                                     " color", " colors", value));
 }
 
 void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)

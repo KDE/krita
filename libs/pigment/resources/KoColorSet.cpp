@@ -30,6 +30,7 @@
 #include <QCryptographicHash>
 #include <QBuffer>
 #include <QByteArray>
+#include <QPainter>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -42,8 +43,6 @@
 KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba) {
 
     QFileInfo fi(fileName);
-
-    if (!fi.exists()) return KoColorSet::UNKNOWN;
 
     // .pal
     if (ba.startsWith("RIFF") && ba.indexOf("PAL data", 8)) {
@@ -60,7 +59,7 @@ KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &
     else if (fi.suffix().toLower() == "aco") {
         return KoColorSet::ACO;
     }
-    else if (fi.size() == 768 && fi.suffix().toLower() == "act") {
+    else if (fi.suffix().toLower() == "act") {
         return KoColorSet::ACT;
     }
 
@@ -113,7 +112,11 @@ bool KoColorSet::load()
 
 bool KoColorSet::loadFromDevice(QIODevice *dev)
 {
+    if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
+
     m_data = dev->readAll();
+
+    Q_ASSERT(m_data.size() != 0);
 
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(m_data);
@@ -169,17 +172,24 @@ bool KoColorSet::init()
 {
     m_colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
 
-    if (filename().isNull()) return false;
+    if (filename().isNull()) {
+        qWarning() << "Cannot load palette" << name() << "there is no filename set";
+        return false;
+    }
     if (m_data.isNull()) {
         QFile file(filename());
-        if (file.size() == 0) return false;
+        if (file.size() == 0) {
+            qWarning() << "Cannot load palette" << name() << "there is no data available";
+            return false;
+        }
         file.open(QIODevice::ReadOnly);
         m_data = file.readAll();
         file.close();
     }
 
     bool res = false;
-    switch(detectFormat(filename(), m_data)) {
+    PaletteType paletteType = detectFormat(filename(), m_data);
+    switch(paletteType) {
     case GPL:
         res = loadGpl();
         break;
@@ -199,6 +209,28 @@ bool KoColorSet::init()
         res = false;
     }
     setValid(res);
+
+    if (m_columns == 0) {
+        m_columns = 10;
+    }
+
+    QImage img(m_columns * 4, (m_colors.size() / m_columns) * 4, QImage::Format_ARGB32);
+    QPainter gc(&img);
+    gc.fillRect(img.rect(), Qt::darkGray);
+    int counter = 0;
+    for(int i = 0; i < m_columns; ++i) {
+        for (int j = 0; j < (m_colors.size() / m_columns); ++j) {
+            if (counter < m_colors.size()) {
+                QColor c = m_colors.at(counter).color.toQColor();
+                gc.fillRect(i * 4, j * 4, 4, 4, c);
+                counter++;
+            }
+            else {
+                break;
+            }
+        }
+    }
+    setImage(img);
 
     // save some memory
     m_data.clear();
@@ -249,7 +281,7 @@ bool KoColorSet::loadGpl()
         return false;
     }
 
-      quint32 index = 0;
+    quint32 index = 0;
 
     QStringList lines = s.split('\n', QString::SkipEmptyParts);
 
@@ -456,7 +488,7 @@ bool KoColorSet::loadAco()
             reinterpret_cast<quint16*>(e.color.data())[0] = quint16_MAX - ch1;
             reinterpret_cast<quint16*>(e.color.data())[1] = quint16_MAX - ch2;
             reinterpret_cast<quint16*>(e.color.data())[2] = quint16_MAX - ch3;
-            reinterpret_cast<quint16*>(e.color.data())[4] = quint16_MAX - ch4;
+            reinterpret_cast<quint16*>(e.color.data())[3] = quint16_MAX - ch4;
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else if (colorSpace == 7) { // LAB

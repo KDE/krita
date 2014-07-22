@@ -23,6 +23,7 @@
 
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
+#include <KoCharacterStyle.h>
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextEditor.h>

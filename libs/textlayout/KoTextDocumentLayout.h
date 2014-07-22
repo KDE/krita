@@ -24,19 +24,13 @@
 
 #include "kotextlayout_export.h"
 
-#include "KoTextDocument.h"
 #include <QAbstractTextDocumentLayout>
-#include <QRectF>
-#include <QSizeF>
 #include <QList>
 #include <QTextFrame>
-#include <QTextTableCell>
 
-class KoTextDocumentLayout;
 class KoShape;
 class KoStyleManager;
 class KoChangeTracker;
-class QTextLayout;
 class KoTextRangeManager;
 class KoInlineTextObjectManager;
 class KoViewConverter;
@@ -45,7 +39,9 @@ class KoShapeAnchor;
 class KoTextLayoutRootArea;
 class KoTextLayoutRootAreaProvider;
 class KoTextLayoutObstruction;
-class KoAnchorTextRange;
+
+class QRectF;
+class QSizeF;
 
 class KOTEXTLAYOUT_EXPORT KoInlineObjectExtent
 {

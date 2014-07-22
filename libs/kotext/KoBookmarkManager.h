@@ -25,6 +25,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QString>
 
 class KoBookmark;
 class KoBookmarkManagerPrivate;

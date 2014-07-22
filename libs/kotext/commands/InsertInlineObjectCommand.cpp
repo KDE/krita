@@ -18,6 +18,7 @@
  */
 
 #include "InsertInlineObjectCommand.h"
+
 #include "KoTextEditor.h"
 #include "KoTextDocument.h"
 #include "KoInlineTextObjectManager.h"

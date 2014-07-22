@@ -22,7 +22,6 @@
 
 #include "koproperty_global.h"
 
-#include <QMap>
 #include <QWidget>
 
 namespace KoProperty

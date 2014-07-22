@@ -25,6 +25,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
+#include <KoStyleStack.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>

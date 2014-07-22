@@ -118,7 +118,7 @@ struct KisToolFreehandHelper::Private
     KisPaintInformation stabilizerLastPaintInfo;
     QTimer stabilizerPollTimer;
 
-    static KisPaintInformation
+    KisPaintInformation
     getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
                            const KisPaintInformation &lastPaintInfo);
 };
@@ -615,12 +615,20 @@ KisToolFreehandHelper::Private::getStabilizedPaintInfo(const QQueue<KisPaintInfo
         it++;
         int i = 2;
 
-        while (it != end) {
-            qreal k = qreal(i - 1) / i; // coeff for uniform averaging
-            result = KisPaintInformation::mix(k, *it, result);
-
-            it++;
-            i++;
+        if (smoothingOptions->stabilizeSensors()) {
+            while (it != end) {
+                qreal k = qreal(i - 1) / i; // coeff for uniform averaging
+                result = KisPaintInformation::mix(k, *it, result);
+                it++;
+                i++;
+            }
+        } else{
+            while (it != end) {
+                qreal k = qreal(i - 1) / i; // coeff for uniform averaging
+                result = KisPaintInformation::mixOnlyPosition(k, *it, result);
+                it++;
+                i++;
+            }
         }
     }
 

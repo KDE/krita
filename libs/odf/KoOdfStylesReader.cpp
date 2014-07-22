@@ -20,17 +20,13 @@
 
 #include "KoOdfStylesReader.h"
 
-#include "KoGenStyles.h"
 #include "KoXmlNS.h"
-
-#include <QBuffer>
+#include "KoOdfNotesConfiguration.h"
+#include "KoOdfNumberDefinition.h"
+#include "KoOdfLineNumberingConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 #include <kdebug.h>
-#include <kglobal.h>
-
-#include <KoXmlReader.h>
-#include <KoOdfNotesConfiguration.h>
-#include <KoOdfBibliographyConfiguration.h>
 
 class KoOdfStylesReader::Private
 {

@@ -44,6 +44,7 @@
 #include "KoStore.h"
 #include "KoXmlNS.h"
 #include "KoXmlReader.h"
+#include "KoXmlWriter.h"
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>

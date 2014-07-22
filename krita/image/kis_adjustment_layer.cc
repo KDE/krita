@@ -124,7 +124,7 @@ KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties(
     KisSafeFilterConfigurationSP filterConfig = filter();
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     if (filterConfig)
-        l << KoDocumentSectionModel::Property(i18n("Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
+        l << KoDocumentSectionModel::Property(i18nc("property of a filter layer, noun", "Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
     return l;
 }
 

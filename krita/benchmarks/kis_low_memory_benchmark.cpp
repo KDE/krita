@@ -43,6 +43,8 @@
     if(!preset->load()) { qDebug() << "Preset" << fileName << "was NOT loaded properly. Done."; return; } \
     else qDebug() << "Loaded preset:" << fileName
 
+#define HUGE_IMAGE_SIZE 8000
+
 /**
  * This benchmark runs a series of huge strokes on a canvas with a
  * particular configuration of the swapper/pooler and history
@@ -67,8 +69,13 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
      * Initialize image and painter
      */
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, colorSpace, "stroke sample image", false);
+    KisImageSP image = new KisImage(0, HUGE_IMAGE_SIZE, HUGE_IMAGE_SIZE, colorSpace, "stroke sample image", true);
     KisLayerSP layer = new KisPaintLayer(image, "temporary for stroke sample", OPACITY_OPAQUE_U8, colorSpace);
+    KisLayerSP layerExtra = new KisPaintLayer(image, "temporary for threading", OPACITY_OPAQUE_U8, colorSpace);
+
+    image->addNode(layer, image->root());
+    image->addNode(layerExtra, image->root());
+
     KisPainter *painter = new KisPainter(layer->paintDevice());
 
     painter->setPaintColor(KoColor(Qt::black, colorSpace));
@@ -139,6 +146,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
             KisPaintInformation pi1(line.p1(), 0.0);
             KisPaintInformation pi2(line.p2(), 1.0);
             painter->paintLine(pi1, pi2, &currentDistance);
+            painter->device()->setDirty(painter->takeDirtyRegion());
 
             logStream << "L 1" << i << lineTime.elapsed()
                       << KisTileDataStore::instance()->numTilesInMemory() * 16
@@ -147,12 +155,15 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
 
             line.translate(0, vstep);
         }
+
+        painter->device()->setDirty(painter->takeDirtyRegion());
+
         if (createTransaction) {
             painter->endTransaction(&undoAdapter);
         }
 
-        // uncomment to emulate user waiting after the stroke
-        //QTest::qSleep(500);
+        // comment/uncomment to emulate user waiting after the stroke
+        QTest::qSleep(1000);
 
         logStream << "C 2" << i << cycleTime.elapsed()
                   << KisTileDataStore::instance()->numTilesInMemory() * 16
@@ -204,6 +215,18 @@ void KisLowMemoryBenchmark::unlimitedMemoryHistoryPool50()
 
     benchmarkWideArea(presetFileName, rect, step, numCycles, true,
                       3000, 3000, 50, 0);
+}
+
+void KisLowMemoryBenchmark::memory2000History100Pool500HugeBrush()
+{
+    QString presetFileName = "BIG_TESTING.kpp";
+    // one cycle takes about 316 MiB of memory (total 3+ GiB)
+    QRectF rect(150,150,7850,7850);
+    qreal step = 250;
+    int numCycles = 10;
+
+    benchmarkWideArea(presetFileName, rect, step, numCycles, true,
+                      2000, 600, 500, 0);
 }
 
 QTEST_KDEMAIN(KisLowMemoryBenchmark, GUI)

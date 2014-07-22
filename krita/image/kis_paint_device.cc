@@ -1068,4 +1068,14 @@ QVector<qint32> KisPaintDevice::channelSizes() const
     return sizes;
 }
 
+KisPaintDevice::MemoryReleaseObject::~MemoryReleaseObject()
+{
+    KisDataManager::releaseInternalPools();
+}
+
+KisPaintDevice::MemoryReleaseObject* KisPaintDevice::createMemoryReleaseObject()
+{
+    return new MemoryReleaseObject();
+}
+
 #include "kis_paint_device.moc"

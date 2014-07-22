@@ -35,6 +35,8 @@
 #pragma warning(disable: 4290) // disable "C++ exception specification ignored" warning
 #endif
 
+#pragma GCC diagnostic ignored "-Wcast-align"
+
 typedef double(*PtrToDouble)(const quint8*, int);
 typedef void (*PtrFromDouble)(quint8*, int, double);
 

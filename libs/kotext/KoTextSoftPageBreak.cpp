@@ -19,13 +19,15 @@
 
 #include "KoTextSoftPageBreak.h"
 
-#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
 #include <QTextInlineObject>
 #include <QPainter>
+
+// Include Q_UNSUSED classes, for building on Windows
+#include <KoShapeLoadingContext.h>
 
 KoTextSoftPageBreak::KoTextSoftPageBreak()
 {

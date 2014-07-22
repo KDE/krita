@@ -20,6 +20,8 @@
 
 #include "KoTextBlockPaintStrategyBase.h"
 
+#include <QBrush>
+
 KoTextBlockPaintStrategyBase::KoTextBlockPaintStrategyBase()
 {
 }

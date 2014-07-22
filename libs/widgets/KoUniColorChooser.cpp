@@ -870,9 +870,9 @@ void KoUniColorChooser::updateValues()
 
     tmpColor = m_currentColor;
     tmpColor.convertTo(labColorSpace());
-    m_LIn->setValue(((quint16 *)tmpColor.data())[0]/(256*256/100));
-    m_aIn->setValue(((quint16 *)tmpColor.data())[1]/256);
-    m_bIn->setValue(((quint16 *)tmpColor.data())[2]/256);
+    m_LIn->setValue(((quint16 *)(void*)tmpColor.data())[0]/(256*256/100));
+    m_aIn->setValue(((quint16 *)(void*)tmpColor.data())[1]/256);
+    m_bIn->setValue(((quint16 *)(void*)tmpColor.data())[2]/256);
 
     if ( cmykColorSpace() ) {
         tmpColor = m_currentColor;
@@ -993,19 +993,19 @@ void KoUniColorChooser::HSVtoRGB(int H, int S, int V, quint8 *R, quint8 *G, quin
       {
       case 1:
         *R = static_cast<quint8>(q);
-	*G = static_cast<quint8>(V);
-	*B = static_cast<quint8>(p);
-	break;
+    *G = static_cast<quint8>(V);
+    *B = static_cast<quint8>(p);
+    break;
       case 3:
         *R = static_cast<quint8>(p);
-	*G = static_cast<quint8>(q);
-	*B = static_cast<quint8>(V);
-	break;
+    *G = static_cast<quint8>(q);
+    *B = static_cast<quint8>(V);
+    break;
       case 5:
         *R = static_cast<quint8>(V);
-	*G = static_cast<quint8>(p);
-	*B = static_cast<quint8>(q);
-	break;
+    *G = static_cast<quint8>(p);
+    *B = static_cast<quint8>(q);
+    break;
       }
     }
     else

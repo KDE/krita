@@ -25,6 +25,7 @@
  */
 
 #include "KoListLevelProperties.h"
+
 #include "KoTextSharedLoadingData.h"
 #include "Styles_p.h"
 
@@ -45,6 +46,8 @@
 #include <KoOdfNumberDefinition.h>
 #include <KoGenStyle.h>
 #include <KoTextSharedSavingData.h>
+
+#include <QTextList>
 
 class KoListLevelProperties::Private
 {

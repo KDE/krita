@@ -77,6 +77,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkUseScalableDistance, false);
         showControl(m_sliderDelayDistance, false);
         showControl(m_chkFinishStabilizedCurve, false);
+        showControl(m_chkStabilizeSensors, false);
         break;
     case 1:
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
@@ -86,6 +87,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkUseScalableDistance, false);
         showControl(m_sliderDelayDistance, false);
         showControl(m_chkFinishStabilizedCurve, false);
+        showControl(m_chkStabilizeSensors, false);
         break;
     case 2:
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
@@ -95,6 +97,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkUseScalableDistance, true);
         showControl(m_sliderDelayDistance, false);
         showControl(m_chkFinishStabilizedCurve, false);
+        showControl(m_chkStabilizeSensors, false);
         break;
     case 3:
     default:
@@ -105,6 +108,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkUseScalableDistance, false);
         showControl(m_sliderDelayDistance, true);
         showControl(m_chkFinishStabilizedCurve, true);
+        showControl(m_chkStabilizeSensors, true);
     }
     emit smoothingTypeChanged();
 }
@@ -193,6 +197,17 @@ bool KisToolBrush::finishStabilizedCurve() const
     return smoothingOptions()->finishStabilizedCurve();
 }
 
+void KisToolBrush::setStabilizeSensors(bool value)
+{
+    smoothingOptions()->setStabilizeSensors(value);
+    emit stabilizeSensorsChanged();
+}
+
+bool KisToolBrush::stabilizeSensors() const
+{
+    return smoothingOptions()->stabilizeSensors();
+}
+
 void KisToolBrush::updateSettingsViews()
 {
     m_cmbSmoothingType->setCurrentIndex(smoothingOptions()->smoothingType());
@@ -203,6 +218,7 @@ void KisToolBrush::updateSettingsViews()
     m_chkSmoothPressure->setChecked(smoothingOptions()->smoothPressure());
     m_chkUseScalableDistance->setChecked(smoothingOptions()->useScalableDistance());
     m_cmbSmoothingType->setCurrentIndex((int)smoothingOptions()->smoothingType());
+    m_chkStabilizeSensors->setChecked(smoothingOptions()->stabilizeSensors());
 
     emit smoothnessQualityChanged();
     emit smoothnessFactorChanged();
@@ -212,6 +228,7 @@ void KisToolBrush::updateSettingsViews()
     emit useDelayDistanceChanged();
     emit delayDistanceChanged();
     emit finishStabilizedCurveChanged();
+    emit stabilizeSensorsChanged();
 
     KisTool::updateSettingsViews();
 }
@@ -267,6 +284,13 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
     // if the state is not flipped, then the previous line doesn't generate any signals
     setUseDelayDistance(m_chkDelayDistance->isChecked());
+
+    // Stabilize sensors
+    m_chkStabilizeSensors = new QCheckBox("", optionsWidget);
+    connect(m_chkStabilizeSensors, SIGNAL(toggled(bool)), this, SLOT(setStabilizeSensors(bool)));
+    m_chkStabilizeSensors->setChecked(smoothingOptions()->stabilizeSensors());
+    addOptionWidgetOption(m_chkStabilizeSensors, new QLabel(i18n("Stabilize Sensors:")));
+
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);

@@ -22,7 +22,6 @@
 
 #include "InsertInlineObjectActionBase_p.h"
 
-class KoCanvasBase;
 class KoProperties;
 class KoInlineObjectFactoryBase;
 struct KoInlineObjectTemplate;

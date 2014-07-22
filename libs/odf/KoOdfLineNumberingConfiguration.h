@@ -19,15 +19,14 @@
 #ifndef KOODFLINENUMBERINGCONFIGURATION_H
 #define KOODFLINENUMBERINGCONFIGURATION_H
 
-#include <QString>
-#include <QPair>
 #include <QMetaType>
 #include <QObject>
 
 #include "KoXmlReader.h"
-#include "KoXmlWriter.h"
-#include "KoOdfNumberDefinition.h"
 #include "koodf_export.h"
+
+class KoXmlWriter;
+class KoOdfNumberDefinition;
 
 /**
  * Implement section 14.9.1: Line Numbering Configuration.

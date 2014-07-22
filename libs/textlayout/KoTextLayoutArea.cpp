@@ -37,12 +37,10 @@
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
 #include "KoTextDocumentLayout.h"
-#include "KoTextLayoutObstruction.h"
 #include "FrameIterator.h"
-#include "ToCGenerator.h"
-#include "BibliographyGenerator.h"
 #include "KoPointedAt.h"
 
+#include <KoTextDocument.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 #include <KoListStyle.h>
@@ -50,17 +48,12 @@
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
 #include <KoTextBlockBorderData.h>
-#include <KoTextBlockPaintStrategyBase.h>
 #include <KoText.h>
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
-#include <KoImageData.h>
-#include <KoImageCollection.h>
 #include <KoInlineNote.h>
 #include <KoTextSoftPageBreak.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoTableOfContentsGeneratorInfo.h>
-#include <KoBibliographyInfo.h>
 
 #include <kdebug.h>
 
@@ -72,9 +65,9 @@
 #include <QTextFragment>
 #include <QTextLayout>
 #include <QTextCursor>
-#include <QMessageBox>
 
 extern int qt_defaultDpiY();
+Q_DECLARE_METATYPE(QTextDocument *)
 
 #define DropCapsAdditionalFormattingId 25602902
 #define PresenterFontStretch 1.2

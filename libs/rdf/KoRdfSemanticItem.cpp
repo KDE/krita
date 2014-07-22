@@ -25,9 +25,11 @@
 #include <KoTextRdfCore.h>
 #include <KoCanvasBase.h>
 #include <KoTextDocument.h>
+#include <KoText.h>
 #include <KoTextEditor.h>
 #include <KoTextMeta.h>
 #include <KoTextDocument.h>
+#include <KoCanvasResourceManager.h>
 
 #include <kdebug.h>
 #include <QUuid>

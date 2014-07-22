@@ -1,5 +1,7 @@
 add_library(kexidb_sqlite3_icu SHARED icu.c)
 
+include_directories(${ICU_INCLUDE_DIRS})
+
 target_link_libraries(kexidb_sqlite3_icu
                       ${SQLITE_LIBRARIES}
                       ${ICU_LIBRARIES}

@@ -181,8 +181,9 @@ public:
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);
-    
+
     /// (1-t) * p1 + t * p2
+    static KisPaintInformation mixOnlyPosition(qreal t, const KisPaintInformation& mixedPi, const KisPaintInformation& basePi);
     static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2);
     static KisPaintInformation mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2);
     static qreal tiltDirection(const KisPaintInformation& info, bool normalize=true);

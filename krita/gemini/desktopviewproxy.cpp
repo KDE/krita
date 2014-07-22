@@ -99,6 +99,8 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     recent->loadEntries(KGlobal::config()->group("RecentFiles"));
 
     connect(d->desktopView, SIGNAL(documentSaved()), this, SIGNAL(documentSaved()));
+
+    connect(d->desktopView, SIGNAL(keyBindingsChanged()), this, SLOT(updateKeyBindings()));
 }
 
 DesktopViewProxy::~DesktopViewProxy()
@@ -219,6 +221,21 @@ void DesktopViewProxy::documentChanged()
     QAction* toggleJustTheCanvasAction = view->actionCollection()->action("view_show_just_the_canvas");
     toggleJustTheCanvasAction->disconnect(view);
     connect(toggleJustTheCanvasAction, SIGNAL(toggled(bool)), this, SLOT(toggleShowJustTheCanvas(bool)));
+}
+
+void DesktopViewProxy::updateKeyBindings()
+{
+    KisView2* view = qobject_cast<KisView2*>(d->mainWindow->sketchKisView());
+    foreach(QAction* action, d->desktopView->actions()) {
+        QAction* otherAction = view->action(action->objectName().toLatin1());
+        if(otherAction) {
+            otherAction->setShortcut(action->shortcut());
+        }
+        else {
+            // That's ok - there are some actions that are not truly actions and don't have shortcuts,
+            // so we'll just not bother with those, and we're fine with that :)
+        }
+    }
 }
 
 #include "desktopviewproxy.moc"

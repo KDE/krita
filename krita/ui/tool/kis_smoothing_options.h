@@ -62,6 +62,9 @@ public:
     void setFinishStabilizedCurve(bool value);
     bool finishStabilizedCurve() const;
 
+    void setStabilizeSensors(bool value);
+    bool stabilizeSensors() const;
+
 private:
     SmoothingType m_smoothingType;
     qreal m_smoothnessDistance;
@@ -71,6 +74,7 @@ private:
     qreal m_delayDistance;
     bool m_useDelayDistance;
     bool m_finishStabilizedCurve;
+    bool m_stabilizeSensors;
 };
 
 typedef QSharedPointer<KisSmoothingOptions> KisSmoothingOptionsSP;

@@ -183,6 +183,15 @@ Column {
         onCheckedChanged: if (toolManager.currentTool && toolManager.currentTool.finishStabilizedCurve !== undefined && toolManager.currentTool.finishStabilizedCurve !== checked) toolManager.currentTool.finishStabilizedCurve = checked;
     }
 
+    CheckBox {
+        id: smoothStabilizeSensors;
+        visible: d.smoothingVisible && smoothnessTypeList.currentIndex === 3
+        width: parent.width;
+        text: "Stabilize Sensors";
+        checked: toolManager.currentTool ? toolManager.currentTool.stabilizeSensors : false;
+        onCheckedChanged: if (toolManager.currentTool && toolManager.currentTool.stabilizeSensors !== undefined && toolManager.currentTool.stabilizeSensors !== checked) toolManager.currentTool.stabilizeSensors = checked;
+    }
+
     // === Mirror ===
     Label {
         visible: fullView;
@@ -221,6 +230,7 @@ Column {
         smoothDelayDistance.checked = toolManager.currentTool.useDelayDistance;
         smoothDelayDistanceSlider.value = toolManager.currentTool.delayDistance;
         smoothFinishStabilizedCurve.checked = toolManager.currentTool.finishStabilizedCurve;
+        smoothStabilizeSensors.checked = toolManager.currentTool.stabilizeSensors;
     }
 
     Connections {
@@ -248,6 +258,7 @@ Column {
             smoothDelayDistance.checked = toolManager.currentTool.useDelayDistance;
             smoothDelayDistanceSlider.value = toolManager.currentTool.delayDistance;
             smoothFinishStabilizedCurve.checked = toolManager.currentTool.finishStabilizedCurve;
+            smoothStabilizeSensors.checked = toolManager.currentTool.stabilizeSensors;
         }
     }
     Connections {
@@ -259,6 +270,7 @@ Column {
         onUseDelayDistanceChanged: smoothDelayDistance.checked = toolManager.currentTool.useDelayDistance;
         onDelayDistanceChanged: smoothDelayDistanceSlider.value = toolManager.currentTool.delayDistance;
         onFinishStabilizedCurveChanged: smoothFinishStabilizedCurve.checked = toolManager.currentTool.finishStabilizedCurve;
+        onStabilizeSensorsChanged: smoothStabilizeSensors.checked = toolManager.currentTool.stabilizeSensors;
     }
 
     QtObject {

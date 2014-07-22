@@ -14,4 +14,4 @@ install(TARGETS kimg_kra DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/imageformats/
 install( FILES
   ora.desktop
   kra.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR}/calligra/qimageioplugins/ )
+  DESTINATION ${SERVICES_INSTALL_DIR}/qimageioplugins/ )

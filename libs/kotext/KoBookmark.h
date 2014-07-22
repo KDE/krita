@@ -25,10 +25,6 @@
 #include "KoTextRange.h"
 #include "kotext_export.h"
 
-class KoShape;
-class QTextDocument;
-class KoShapeSavingContext;
-class KoShapeLoadingContext;
 class KoBookmarkManager;
 
 /**

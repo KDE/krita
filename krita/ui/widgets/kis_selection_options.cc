@@ -33,8 +33,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_view2.h"
 
-KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
-        : m_canvas(canvas)
+KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
 {
     m_page = new WdgSelectionOptions(this);
     Q_CHECK_PTR(m_page);

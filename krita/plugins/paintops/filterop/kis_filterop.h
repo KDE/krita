@@ -44,7 +44,6 @@ public:
 
 private:
 
-    const KisFilterOpSettings * settings;
     KisPaintDeviceSP m_tmpDevice;
     KisPressureSizeOption m_sizeOption;
     KisPressureRotationOption m_rotationOption;

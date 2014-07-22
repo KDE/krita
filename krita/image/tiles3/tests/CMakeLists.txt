@@ -47,20 +47,20 @@ target_link_libraries(KisMemoryWindowTest  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRAR
 ########### next target ###############
 set(kis_swapped_data_store_test_SRCS kis_swapped_data_store_test.cpp ../kis_tile_data.cc)
 kde4_add_unit_test(KisSwappedDataStoreTest TESTNAME krita-image-KisSwappedDataStoreTest  ${kis_swapped_data_store_test_SRCS})
-target_link_libraries(KisSwappedDataStoreTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisSwappedDataStoreTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 ########### next target ###############
 set(kis_tile_data_store_test_SRCS kis_tile_data_store_test.cpp ../kis_tile_data.cc)
 kde4_add_unit_test(KisTileDataStoreTest TESTNAME krita-image-KisTileDataStoreTest  ${kis_tile_data_store_test_SRCS})
-target_link_libraries(KisTileDataStoreTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisTileDataStoreTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 ########### next target ###############
 set(kis_store_limits_test_SRCS kis_store_limits_test.cpp ../kis_tile_data.cc )
 kde4_add_unit_test(KisStoreLimitsTest TESTNAME krita-image-KisStoreLimitsTest  ${kis_store_limits_test_SRCS})
-target_link_libraries(KisStoreLimitsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisStoreLimitsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 ########### next target ###############
 set(kis_tile_data_pooler_test_SRCS kis_tile_data_pooler_test.cpp ../kis_tile_data.cc ../kis_tile_data_pooler.cc )
 kde4_add_unit_test(KisTileDataPoolerTest TESTNAME krita-image-KisTileDataPoolerTest  ${kis_tile_data_pooler_test_SRCS})
-target_link_libraries(KisTileDataPoolerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisTileDataPoolerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 

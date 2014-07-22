@@ -30,12 +30,10 @@
 
 #include <KoDataCenterBase.h>
 
-class KoCanvasBase;
 class KoDocumentResourceManager;
 class QTextDocument;
 class KoStore;
 class KoXmlWriter;
-class KoDocument;
 
 
 ///**

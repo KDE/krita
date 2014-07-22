@@ -75,6 +75,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
+#include <KoStyleStack.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 #include <KoTextShapeData.h>
@@ -91,6 +92,7 @@
 #include <KoColorBackground.h>
 #include <KoShapeStroke.h>
 #include <KoOdfWorkaround.h>
+#include <KoTextDocument.h>
 
 // KChart
 #include "Axis.h"

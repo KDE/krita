@@ -40,6 +40,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_projection_backend.h"
 #include "kis_image_pyramid.h"
+#include "kis_display_filter.h"
 
 #define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
 

@@ -64,11 +64,6 @@
 namespace
 {
 
-const quint8 PIXEL_BLUE = 0;
-const quint8 PIXEL_GREEN = 1;
-const quint8 PIXEL_RED = 2;
-const quint8 PIXEL_ALPHA = 3;
-
 
 int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 {

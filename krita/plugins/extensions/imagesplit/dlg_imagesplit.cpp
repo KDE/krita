@@ -30,7 +30,6 @@
 
 DlgImagesplit::DlgImagesplit(KisView2* view,QString suffix,QStringList listMimeFilter)
         : KDialog(view)
-        , m_view(view)
 {
 
     m_page = new WdgImagesplit(this);

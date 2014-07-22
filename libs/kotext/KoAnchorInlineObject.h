@@ -27,11 +27,7 @@
 
 #include "kotext_export.h"
 
-class KoShape;
 class KoAnchorInlineObjectPrivate;
-class KoXmlElement;
-class KoShapeLoadingContext;
-class KoShapeContainer;
 
 /**
  * This class connects KoShapeAnchor to an inline character in the text document.

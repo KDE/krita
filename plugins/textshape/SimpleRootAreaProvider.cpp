@@ -21,6 +21,7 @@
 
 #include "TextShape.h"
 
+#include <KoBorder.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoTextLayoutObstruction.h>
 

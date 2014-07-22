@@ -24,16 +24,9 @@
  */
 
 #include "KoStyleThumbnailer.h"
+
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
-#include "KoListStyle.h"
-#include "KoListLevelProperties.h"
-#include "KoTableStyle.h"
-#include "KoTableColumnStyle.h"
-#include "KoTableRowStyle.h"
-#include "KoTableCellStyle.h"
-#include "KoSectionStyle.h"
-#include "KoTextDocument.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"
 #include "FrameIterator.h"
@@ -45,11 +38,8 @@
 #include <QImage>
 #include <QPainter>
 #include <QRect>
-#include <QTextTable>
-#include <QTextTableFormat>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QTextLayout>
 #include <QTextLength>
 
 #include <kdebug.h>

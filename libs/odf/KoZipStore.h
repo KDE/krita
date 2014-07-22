@@ -21,7 +21,6 @@
 #define koZipStore_h
 
 #include "KoStore.h"
-#include <QByteArray>
 
 class KZip;
 class KArchiveDirectory;

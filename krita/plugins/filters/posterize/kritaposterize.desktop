@@ -2,6 +2,7 @@
 Name=Posterize Filter
 Name[ca]=Filtre de posterització
 Name[de]=Posterisation-Filter
+Name[en_GB]=Posterise Filter
 Name[es]=Filtro posterizar
 Name[it]=Filtro Posterizza
 Name[ja]=ポスタリゼーションフィルタ
@@ -16,6 +17,7 @@ Name[x-test]=xxPosterize Filterxx
 Comment=Reduce the amount of colors in the picture to a fixed interval
 Comment[ca]=Redueix la quantitat de colors en la imatge a un interval fix
 Comment[de]=Reduziert die Anzahl der Farben im Bild auf ein festgelegtes Intervall (Tontrennung)
+Comment[en_GB]=Reduce the amount of colours in the picture to a fixed interval
 Comment[es]=Reduce la cantidad de colores que hay en una imagen a un intervalo fijo
 Comment[it]=Riduci la quantità di colori nell'immagine a un intervallo prefissato
 Comment[ja]=画像の色数を固定間隔で減らします

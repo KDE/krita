@@ -27,8 +27,6 @@
 #include <kdebug.h>
 
 #include <QPointer>
-#include <QByteArray>
-#include <QStringList>
 #include <QSizePolicy>
 
 namespace KoProperty

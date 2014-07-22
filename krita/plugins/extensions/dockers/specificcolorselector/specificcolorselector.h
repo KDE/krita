@@ -32,8 +32,6 @@ class SpecificColorSelectorPlugin : public QObject
 public:
     SpecificColorSelectorPlugin(QObject *parent, const QVariantList &);
     virtual ~SpecificColorSelectorPlugin();
-private:
-    KisView2* m_view;
 };
 
 #endif

@@ -47,6 +47,7 @@ class KisToolBrush : public KisToolFreehand
     Q_PROPERTY(qreal delayDistance READ delayDistance WRITE setDelayDistance NOTIFY delayDistanceChanged)
 
     Q_PROPERTY(bool finishStabilizedCurve READ finishStabilizedCurve WRITE setFinishStabilizedCurve NOTIFY finishStabilizedCurveChanged)
+    Q_PROPERTY(bool stabilizeSensors READ stabilizeSensors WRITE setStabilizeSensors NOTIFY stabilizeSensorsChanged)
 
 
 public:
@@ -65,6 +66,7 @@ public:
     qreal delayDistance() const;
 
     bool finishStabilizedCurve() const;
+    bool stabilizeSensors() const;
 
 protected slots:
     virtual void resetCursorStyle();
@@ -80,6 +82,8 @@ public slots:
     void setUseDelayDistance(bool value);
     void setDelayDistance(qreal value);
 
+    void setStabilizeSensors(bool value);
+
     void setFinishStabilizedCurve(bool value);
 
     virtual void updateSettingsViews();
@@ -94,9 +98,9 @@ Q_SIGNALS:
     void useDelayDistanceChanged();
     void delayDistanceChanged();
     void finishStabilizedCurveChanged();
+    void stabilizeSensorsChanged();
 
 private:
-    QGridLayout *m_optionLayout;
     QComboBox *m_cmbSmoothingType;
 
     QCheckBox *m_chkAssistant;
@@ -106,6 +110,7 @@ private:
     QCheckBox *m_chkSmoothPressure;
     QCheckBox *m_chkUseScalableDistance;
 
+    QCheckBox *m_chkStabilizeSensors;
     QCheckBox *m_chkDelayDistance;
     KisDoubleSliderSpinBox *m_sliderDelayDistance;
 

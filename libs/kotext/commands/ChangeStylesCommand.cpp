@@ -18,13 +18,8 @@
  */
 
 #include "ChangeStylesCommand.h"
-#include "KoStyleManager.h"
+
 #include "ChangeFollower.h"
-
-#include <KoTextDocument.h>
-#include <KoTextEditor.h>
-
-#include <QTextDocument>
 
 ChangeStylesCommand::ChangeStylesCommand(ChangeFollower *changeFollower
         , const QList<KoCharacterStyle *> &origCharacterStyles

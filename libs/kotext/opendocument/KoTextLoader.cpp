@@ -44,6 +44,7 @@
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoOdfLineNumberingConfiguration.h>
 #include <KoProperties.h>
 #include <KoShapeContainer.h>
 #include <KoShapeFactoryBase.h>
@@ -56,6 +57,7 @@
 #include "KoTextDebug.h"
 #include "KoTextDocument.h"
 #include "KoTextSharedLoadingData.h"
+#include <KoOdfBibliographyConfiguration.h>
 #include <KoUnit.h>
 #include <KoVariable.h>
 #include <KoVariableManager.h>

@@ -130,9 +130,6 @@ private:
     int m_counter;
 
     double m_lastAngle;
-    double m_lastSlope;
-
-    double m_angle;
     double m_oldPressure;
     KoColor m_color;
 

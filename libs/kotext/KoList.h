@@ -24,6 +24,8 @@
 
 #include <QMetaType>
 #include <QWeakPointer>
+#include <QVector>
+#include <QTextList>
 
 class KoListPrivate;
 

@@ -47,7 +47,6 @@ private:
     qreal m_measuredDistance;
     int m_length;
     bool m_periodic;
-    bool m_firstPos;
 };
 
 #endif

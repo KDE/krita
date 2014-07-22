@@ -25,8 +25,8 @@
 
 #include <QObject>
 #include <QString>
+#include <KoXmlReaderForward.h>
 
-class KoXmlElement;
 class KoXmlWriter;
 class KoVariable;
 class KoInlineTextObjectManager;

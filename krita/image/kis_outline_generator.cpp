@@ -38,7 +38,6 @@ public:
     LinearStorage(quint8 *buffer, int width, int height, int pixelSize)
         : m_buffer(buffer),
           m_width(width),
-          m_height(height),
           m_pixelSize(pixelSize)
     {
         m_marks.reset(new quint8[width * height]);
@@ -57,7 +56,6 @@ private:
     QScopedArrayPointer<quint8> m_marks;
     quint8 *m_buffer;
     int m_width;
-    int m_height;
     int m_pixelSize;
 };
 
@@ -66,11 +64,8 @@ class PaintDeviceStorage
 public:
     typedef const KisPaintDevice* StorageType;
 public:
-    PaintDeviceStorage(const KisPaintDevice *device, int width, int height, int pixelSize)
-        : m_device(device),
-          m_width(width),
-          m_height(height),
-          m_pixelSize(pixelSize)
+    PaintDeviceStorage(const KisPaintDevice *device, int /*width*/, int /*height*/, int /*pixelSize*/)
+        : m_device(device)
     {
         m_deviceIt = m_device->createRandomConstAccessorNG(0, 0);
 
@@ -94,9 +89,6 @@ private:
     const KisPaintDevice *m_device;
     KisRandomConstAccessorSP m_deviceIt;
     KisRandomAccessorSP m_marksIt;
-    int m_width;
-    int m_height;
-    int m_pixelSize;
 };
 
 

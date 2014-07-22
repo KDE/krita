@@ -20,14 +20,13 @@
 #define KOTEXTEDITINGPLUGIN_H
 
 #include <QObject>
-#include <QString>
 #include <QHash>
 #include "kotext_export.h"
 
 class KAction;
 class QTextDocument;
 class QTextCursor;
-class KUndo2Command;
+class QString;
 
 /**
  * This is a base class for a text editing plugin as used by the text tool.

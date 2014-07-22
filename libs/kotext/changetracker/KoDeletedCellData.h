@@ -20,8 +20,8 @@
 #ifndef __KODELETEDCELLDATA_H__
 #define __KODELETEDCELLDATA_H__
 
-class QTextTableCellFormat;
-class QTextDocumentFragment;
+#include <QTextTableCellFormat>
+#include <QTextDocumentFragment>
 
 class KoDeletedCellData
 {

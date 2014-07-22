@@ -27,6 +27,8 @@
 #include <KoXmlNS.h>
 #include <KoTableCellStyle.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
+
 
 #include "Styles_p.h"
 

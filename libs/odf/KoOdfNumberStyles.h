@@ -22,7 +22,7 @@
 #define KOODFNUMBERSTYLES_H
 
 #include "koodf_export.h"
-#include <KoXmlReader.h>
+#include "KoXmlReaderForward.h"
 
 #include <QPair>
 

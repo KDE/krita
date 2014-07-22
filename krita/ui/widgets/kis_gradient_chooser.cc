@@ -50,7 +50,7 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoSegmentGradient* gradient, QW
     setMainWidget(m_page);
 }
 
-KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name)
+KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
         : QFrame(parent)
 {
     setObjectName(name);

@@ -30,6 +30,7 @@ KisSmoothingOptions::KisSmoothingOptions()
     m_delayDistance = cfg.lineSmoothingDelayDistance();
     m_useDelayDistance = cfg.lineSmoothingUseDelayDistance();
     m_finishStabilizedCurve = cfg.lineSmoothingFinishStabilizedCurve();
+    m_stabilizeSensors = cfg.lineSmoothingStabilizeSensors();
 }
 
 KisSmoothingOptions::SmoothingType KisSmoothingOptions::smoothingType() const
@@ -126,4 +127,16 @@ void KisSmoothingOptions::setFinishStabilizedCurve(bool value)
 bool KisSmoothingOptions::finishStabilizedCurve() const
 {
     return m_finishStabilizedCurve;
+}
+
+void KisSmoothingOptions::setStabilizeSensors(bool value)
+{
+    KisConfig cfg;
+    cfg.setLineSmoothingStabilizeSensors(value);
+    m_stabilizeSensors = value;
+}
+
+bool KisSmoothingOptions::stabilizeSensors() const
+{
+    return m_stabilizeSensors;
 }

@@ -22,12 +22,9 @@
 #ifndef XMLWRITER_H
 #define XMLWRITER_H
 
-#include <QString>
-#include <QStack>
 #include <QMap>
 #include <QIODevice>
 #include "koodf_export.h"
-
 
 /**
  * A class for writing out XML (to any QIODevice), with a special attention on performance.

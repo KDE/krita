@@ -20,14 +20,11 @@
 #define KOBIBLIOGRAPHYINFO_H
 
 #include "kotext_export.h"
-#include "KoText.h"
-#include "KoXmlReaderForward.h"
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
+#include <KoXmlReaderForward.h>
 #include "ToCBibGeneratorInfo.h"
 
 class KoTextSharedLoadingData;
-class BibliographyGenerator;
+class KoXmlWriter;
 
 class KOTEXT_EXPORT BibliographyGeneratorInterface {
 public:

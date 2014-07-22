@@ -19,12 +19,12 @@
 #ifndef TABLEITERATOR_H
 #define TABLEITERATOR_H
 
-
-#include <QTextTable>
 #include <QVector>
+#include <QString>
 
 class FrameIterator;
 class KoTextLayoutArea;
+class QTextTable;
 
 /**
  * Convenience cursor class used during table layout.

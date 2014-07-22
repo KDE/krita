@@ -17,9 +17,11 @@
    Boston, MA 02110-1301, USA.
  */
 #include "KoOdfNotesConfiguration.h"
+
 #include <kdebug.h>
-#include <KoXmlNS.h>
-#include "KoUnit.h"
+#include "KoXmlNS.h"
+#include "KoXmlWriter.h"
+#include "KoOdfNumberDefinition.h"
 
 class KoOdfNotesConfiguration::Private
 {

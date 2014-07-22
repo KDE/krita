@@ -47,7 +47,7 @@ public:
 };
 
 KisFilterOption::KisFilterOption()
-    : KisPaintOpOption(i18n("Filter"), i18n("Filter"), true)
+    : KisPaintOpOption(i18nc("option name", "Filter"), i18nc("option category", "Filter"), true)
 {
     m_checkable = false;
     m_currentFilterConfigWidget = 0;

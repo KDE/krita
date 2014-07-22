@@ -21,9 +21,7 @@
 
 #include "Set.h"
 #include "Property.h"
-#include "Utils.h"
 
-#include <QApplication>
 #include <QByteArray>
 
 #include <kdebug.h>

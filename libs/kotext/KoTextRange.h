@@ -21,21 +21,16 @@
 
 #include "kotext_export.h"
 
-#include <QVariant>
 #include <QObject>
+#include <KoXmlReaderForward.h>
 
 class QTextDocument;
-class QTextCharFormat;
 class QTextCursor;
-class QPaintDevice;
-class QPainter;
-class QRectF;
 
 class KoTextRangeManager;
 class KoTextRangePrivate;
 class KoShapeSavingContext;
 class KoTextInlineRdf;
-class KoXmlElement;
 class KoShapeLoadingContext;
 
 /**

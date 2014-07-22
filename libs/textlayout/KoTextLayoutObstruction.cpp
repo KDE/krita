@@ -19,13 +19,14 @@
  */
 
 #include "KoTextLayoutObstruction.h"
-#include <KoShapeContainer.h>
+
 #include <KoShapeStrokeModel.h>
 #include <KoShapeShadow.h>
 #include <KoShapeGroup.h>
 #include <KoClipPath.h>
 
-#include <qnumeric.h>
+#include <QTransform>
+#include <QPainterPath>
 
 KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix)
     : m_side(None),

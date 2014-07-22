@@ -37,7 +37,5 @@ public:
     bool isAirbrushing() const;
     int rate() const;
 
-private:
-    KisDeformPaintOpSettingsWidget* m_options;
 };
 #endif

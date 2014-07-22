@@ -21,11 +21,9 @@
 #include "AnchorStrategy.h"
 
 #include "KoTextShapeContainerModel.h"
-#include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"
 
 #include <KoShapeContainer.h>
-#include <KoTextShapeData.h>
 
 #include <kdebug.h>
 

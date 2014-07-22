@@ -24,12 +24,10 @@
 #define KOGENSTYLES_H
 
 #include <QList>
-#include <QMap>
 #include <QMultiMap>
-#include <QSet>
 #include <QString>
-#include <QFlags>
-#include <KoGenStyle.h>
+
+#include "KoGenStyle.h"
 
 class KoStore;
 class KoFontFace;

@@ -29,22 +29,15 @@
 
 #include <KoXmlReaderForward.h>
 #include <KoBorder.h>
-#include <KoShadowStyle.h>
 
-#include <QObject>
-#include <QVector>
-#include <QString>
 #include <QVariant>
 #include <QTextFormat>
 
 extern QVariant val;
-struct Property;
-class KoCharacterStyle;
+class KoShadowStyle;
 class KoListStyle;
 class QTextBlock;
-class KoStyleStack;
 class KoGenStyle;
-class KoGenStyles;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoList;

@@ -102,7 +102,7 @@ void KisDlgFilter::setFilter(KisFilterSP f)
 
 void KisDlgFilter::setDialogTitle(KisFilterSP filter)
 {
-    setWindowTitle(filter.isNull() ? i18n("Filter") : i18n("Filter: %1", filter->name()));
+    setWindowTitle(filter.isNull() ? i18nc("@title:window", "Filter") : i18nc("@title:window", "Filter: %1", filter->name()));
 }
 
 void KisDlgFilter::startApplyingFilter(KisSafeFilterConfigurationSP config)

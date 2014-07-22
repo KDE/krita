@@ -22,6 +22,8 @@
 
 #include <KoDpi.h>
 #include <KoUnit.h>
+#include <KoPageLayout.h>
+#include <KoColumns.h>
 
 #include <QPainter>
 #include <kdebug.h>

@@ -59,6 +59,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
     m_ui->listBundleContents->setHeaderLabel(i18n("Resource"));
+    m_ui->listBundleContents->setSelectionMode(QAbstractItemView::NoSelection);
 
     KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
 

@@ -629,6 +629,54 @@ bool ResourceBundle::uninstall()
 {
     m_installed = false;
 
+
+    KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {
+        KoAbstractGradient *res = gradientServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            gradientServer->removeResourceFromServer(res);
+        }
+    }
+
+    KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("patterns")) {
+        KoPattern *res = patternServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            patternServer->removeResourceFromServer(res);
+        }
+    }
+
+    KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("brushes")) {
+        KisBrushSP res = brushServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            brushServer->removeResourceFromServer(res);
+        }
+    }
+
+    KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("palettes")) {
+        KoColorSet *res = paletteServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            paletteServer->removeResourceFromServer(res);
+        }
+    }
+    KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
+        KisWorkspaceResource *res = workspaceServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            workspaceServer->removeResourceFromServer(res);
+        }
+    }
+
+    KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
+        KisPaintOpPreset *res = paintoppresetServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            paintoppresetServer->removeResourceFromServer(res);
+        }
+    }
+
     return true;
 }
 

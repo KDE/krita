@@ -94,7 +94,7 @@ void DlgBundleManager::accept()
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
         ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
 
-        if (!bundle->isInstalled()) {
+        if (bundle && !bundle->isInstalled()) {
             bundle->install();
         }
     }

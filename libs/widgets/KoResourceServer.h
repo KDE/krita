@@ -285,7 +285,7 @@ public:
     }
 
     /// Remove a resource from the resourceserver and blacklist it
-    bool removeResource(PointerType resource) {
+    bool removeResourceAndBlacklist(PointerType resource) {
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }

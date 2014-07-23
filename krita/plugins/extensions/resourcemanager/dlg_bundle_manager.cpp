@@ -100,7 +100,7 @@ void DlgBundleManager::accept()
 
         if (bundle->isInstalled()) {
             bundle->uninstall();
-            bundleServer->removeResource(bundle);
+            bundleServer->removeResourceAndBlacklist(bundle);
         }
     }
 

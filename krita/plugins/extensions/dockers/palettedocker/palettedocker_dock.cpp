@@ -113,7 +113,8 @@ bool PaletteDockerDock::eventFilter(QObject* object, QEvent* event)
     }
 }
 
-PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
+PaletteDockerDock::PaletteDockerDock( )
+    : QDockWidget(i18n("Palette"))
     , m_canvas(0)
     , m_wdgPaletteDock(new Ui_WdgPaletteDock())
     , m_currentColorSet(0)
@@ -152,6 +153,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
     m_serverAdapter->connectToResourceServer();
+    rServer->addObserver(this);
 
     m_colorSetChooser = new ColorSetChooser();
     connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
@@ -199,10 +201,23 @@ void PaletteDockerDock::unsetCanvas()
     m_canvas = 0;
 }
 
+void PaletteDockerDock::removingResource(KoColorSet *resource)
+{
+    if (resource == m_currentColorSet) {
+        setColorSet(0);
+    }
+}
+
+void PaletteDockerDock::resourceChanged(KoColorSet *resource)
+{
+    setColorSet(resource);
+}
+
+
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
 {
     m_model->setColorSet(colorSet);
-    if (colorSet->removable()) {
+    if (colorSet && colorSet->removable()) {
         m_wdgPaletteDock->bnAdd->setEnabled(true);
         m_wdgPaletteDock->bnRemove->setEnabled(false);
     } else {

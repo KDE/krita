@@ -134,7 +134,6 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 {
     if (!current) {
         m_ui->lblName->setText("");
-        m_ui->chkActive->setChecked(false);
         m_ui->lblAuthor->setText("");
         m_ui->lblEmail->setText("");
         m_ui->lblLicense->setText("");
@@ -144,7 +143,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
         m_ui->lblUpdated->setText("");
         m_ui->lblPreview->setPixmap(QPixmap::fromImage(QImage()));
         m_ui->listBundleContents->clear();
-
+        m_ui->bnEditBundle->setEnabled(false);
         m_currentBundle = 0;
     }
     else {
@@ -166,9 +165,9 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
         if (bundle) {
 
             m_currentBundle = bundle;
+            m_ui->bnEditBundle->setEnabled(true);
 
             m_ui->lblName->setText(bundle->name());
-            m_ui->chkActive->setChecked(bundle->isInstalled());
             m_ui->lblAuthor->setText(bundle->getMeta("author"));
             m_ui->lblEmail->setText(bundle->getMeta("email"));
             m_ui->lblLicense->setText(bundle->getMeta("license"));

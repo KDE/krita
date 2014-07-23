@@ -78,6 +78,18 @@ QIODevice* KisAnimationStore::getDevice(QString location)
     return m_currentFile;
 }
 
+void KisAnimationStore::deleteFile(QString location)
+{
+    QFile* file = new QFile(m_dir->absoluteFilePath(location));
+    file->remove();
+}
+
+void KisAnimationStore::renameFile(QString oldName, QString newName)
+{
+    QFile* file = new QFile(m_dir->absoluteFilePath(oldName));
+    file->rename(newName);
+}
+
 bool KisAnimationStore::hasFile(QString location) const
 {
     QFile* file = new QFile(m_dir->absoluteFilePath(location));

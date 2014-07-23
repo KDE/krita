@@ -615,14 +615,15 @@ void KisAnimationDoc::deleteLayerFromXML(int layer)
         currentNode = frames.at(i);
         int layerNumber = currentNode.attributes().namedItem("layer").nodeValue().toInt();
 
-        // Index of layers on top have to be decremented
-        if(layerNumber > layer) {
-            currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layerNumber - 20));
-            continue;
-        }
 
         if(layerNumber == layer) {
             nodesToRemove.append(currentNode);
+            continue;
+        }
+
+        // Index of layers on top have to be decremented
+        if(layerNumber > layer) {
+            currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layerNumber - 20));
         }
     }
 

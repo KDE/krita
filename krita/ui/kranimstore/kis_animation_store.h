@@ -51,6 +51,10 @@ public:
 
     QIODevice* getDevice(QString location);
 
+    void deleteFile(QString location);
+
+    void renameFile(QString oldName, QString newName);
+
 private:
     QFile* m_currentFile;
     QDir* m_dir;

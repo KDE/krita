@@ -40,6 +40,7 @@ public:
 
 private slots:
 
+    void accept();
     void addSelected();
     void removeSelected();
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);

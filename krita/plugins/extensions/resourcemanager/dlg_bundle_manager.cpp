@@ -79,6 +79,35 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     fillListWidget(m_activeBundles.values(), m_ui->listActive);
 }
 
+void DlgBundleManager::accept()
+{
+    KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
+
+    for (int i = 0; i < m_ui->listActive->count(); ++i) {
+        QListWidgetItem *item = m_ui->listActive->item(i);
+        QByteArray ba = item->data(Qt::UserRole).toByteArray();
+        ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
+
+        if (!bundle->isInstalled()) {
+            bundle->install();
+        }
+    }
+
+    for (int i = 0; i < m_ui->listInactive->count(); ++i) {
+        QListWidgetItem *item = m_ui->listInactive->item(i);
+        QByteArray ba = item->data(Qt::UserRole).toByteArray();
+        ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
+
+        if (bundle->isInstalled()) {
+            bundle->uninstall();
+            bundleServer->removeResource(bundle);
+        }
+    }
+
+
+    KDialog::accept();
+}
+
 void DlgBundleManager::addSelected()
 {
 

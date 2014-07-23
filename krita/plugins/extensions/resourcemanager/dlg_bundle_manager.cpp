@@ -166,7 +166,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */
             m_ui->lblDescription->setText(bundle->getMeta("description"));
             m_ui->lblCreated->setText(bundle->getMeta("created"));
             m_ui->lblUpdated->setText(bundle->getMeta("updated"));
-            m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image()));
+            m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
             m_ui->listBundleContents->clear();
 
             foreach(const QString & resType, bundle->resourceTypes()) {

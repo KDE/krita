@@ -44,6 +44,7 @@ private slots:
     void addSelected();
     void removeSelected();
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
+    void itemSelected(QListWidgetItem *current);
 private:
 
     QWidget *m_page;

@@ -47,10 +47,12 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     m_ui->listActive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_ui->listActive->setSelectionMode(QAbstractItemView::ExtendedSelection);
     connect(m_ui->listActive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
+    connect(m_ui->listActive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
 
     m_ui->listInactive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_ui->listInactive->setSelectionMode(QAbstractItemView::ExtendedSelection);
     connect(m_ui->listInactive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
+    connect(m_ui->listInactive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
 
     m_ui->bnAdd->setIcon(koIcon("arrow-right"));
     connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
@@ -125,8 +127,9 @@ void DlgBundleManager::removeSelected()
     }
 }
 
-void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */*previous*/)
+void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 {
+
     if (!current) {
         m_ui->lblName->setText("");
         m_ui->chkActive->setChecked(false);
@@ -204,6 +207,11 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */
             }
         }
     }
+}
+
+void DlgBundleManager::itemSelected(QListWidgetItem *current)
+{
+    itemSelected(current, 0);
 }
 
 void DlgBundleManager::fillListWidget(QList<ResourceBundle *> bundles, QListWidget *w)

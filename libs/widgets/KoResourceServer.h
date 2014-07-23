@@ -278,6 +278,7 @@ public:
         m_resourcesByName.remove(resource->name());
         m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
+        m_tagStore->removeResource(resource);
         notifyRemovingResource(resource);
 
         Policy::deleteResource(resource);
@@ -293,6 +294,7 @@ public:
         m_resourcesByName.remove(resource->name());
         m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
+        m_tagStore->removeResource(resource);
         notifyRemovingResource(resource);
 
         m_blackListFileNames.append(resource->filename());

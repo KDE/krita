@@ -44,6 +44,11 @@ QStringList KoResourceTagStore::assignedTagsList(KoResource* resource) const
     return m_resourceToTag.values(resource);
 }
 
+void KoResourceTagStore::removeResource(const KoResource *resource)
+{
+    m_resourceToTag.remove(resource);
+}
+
 QStringList KoResourceTagStore::tagNamesList() const
 {
     return m_tagList.uniqueKeys();
@@ -92,15 +97,15 @@ QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
         return QStringList();
     }
 
-    QSet<KoResource*> resources;
+    QSet<const KoResource*> resources;
 
     foreach (QString tag, tagsList) {
-        foreach (KoResource *res, m_resourceToTag.keys(tag)) {
+        foreach (const KoResource *res, m_resourceToTag.keys(tag)) {
             resources << res;
         }
     }
     QStringList filenames;
-    foreach (KoResource *res, resources) {
+    foreach (const KoResource *res, resources) {
         filenames << adjustedFileName(res->shortFilename());
     }
 
@@ -129,7 +134,7 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
     doc.appendChild(root);
 
 
-    foreach (KoResource *res, m_resourceToTag.uniqueKeys()) {
+    foreach (const KoResource *res, m_resourceToTag.uniqueKeys()) {
         QDomElement resourceEl = doc.createElement("resource");
         resourceEl.setAttribute("identifier", res->filename().replace(QDir::homePath(), QString("~")));
         resourceEl.setAttribute("md5", QString(res->md5().toBase64()));

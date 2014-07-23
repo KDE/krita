@@ -18,9 +18,10 @@ kde4_add_plugin(kritatooltransform ${kritatooltransform_PART_SRCS})
 
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Transform Tool will not be able to scale the image with handles. Please install GSL library.")
+  target_link_libraries(kritatooltransform kritaui)
+else (NOT GSL_FOUND)
+  target_link_libraries(kritatooltransform kritaui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 endif (NOT GSL_FOUND)
-
-target_link_libraries(kritatooltransform kritaui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 
 install(TARGETS kritatooltransform  DESTINATION ${PLUGIN_INSTALL_DIR})
 

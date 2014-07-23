@@ -726,27 +726,33 @@ QList<KoResource*> ResourceBundle::resources(const QString &resType)
     foreach(const ResourceBundleManifest::ResourceReference &ref, references) {
         if (resType == "gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
-            ret << gradientServer->resourceByMD5(ref.md5sum);
+            KoResource *res =  gradientServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
         }
         else if (resType  == "patterns") {
             KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-            ret << patternServer->resourceByMD5(ref.md5sum);
+            KoResource *res =  patternServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
         }
         else if (resType  == "brushes") {
             KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
-            ret << brushServer->resourceByMD5(ref.md5sum).data();
+            KoResource *res =  brushServer->resourceByMD5(ref.md5sum).data();
+            if (res) ret << res;
         }
         else if (resType  == "palettes") {
             KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-            ret << paletteServer->resourceByMD5(ref.md5sum);
+            KoResource *res =  paletteServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
         }
         else if (resType  == "workspaces") {
             KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
-            ret << workspaceServer->resourceByMD5(ref.md5sum);
+            KoResource *res =  workspaceServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
         }
         else if (resType  == "paintoppresets") {
             KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-            ret << paintoppresetServer->resourceByMD5(ref.md5sum);
+            KoResource *res =  paintoppresetServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
         }
     }
     return ret;

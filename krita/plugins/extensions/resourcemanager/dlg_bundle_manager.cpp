@@ -131,10 +131,12 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */
         m_ui->listBundleContents->addTopLevelItem(toplevel);
 
         foreach(const KoResource *res, bundle->resources(resType)) {
-            QTreeWidgetItem *i = new QTreeWidgetItem();
-            i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
-            i->setText(0, res->name());
-            toplevel->addChild(i);
+            if (res) {
+                QTreeWidgetItem *i = new QTreeWidgetItem();
+                i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
+                i->setText(0, res->name());
+                toplevel->addChild(i);
+            }
         }
     }
 

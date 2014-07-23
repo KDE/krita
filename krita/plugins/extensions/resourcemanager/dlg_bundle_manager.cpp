@@ -145,6 +145,16 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */
         KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
         ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
 
+        if (!bundle) {
+            // Get it from the blacklisted bundles
+            foreach (ResourceBundle *b2, m_blacklistedBundles.values()) {
+                if (b2->md5() == ba) {
+                    bundle = b2;
+                    break;
+                }
+            }
+        }
+
         if (bundle) {
             m_ui->lblName->setText(bundle->name());
             m_ui->chkActive->setChecked(bundle->isInstalled());

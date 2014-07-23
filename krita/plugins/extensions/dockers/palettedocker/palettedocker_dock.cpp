@@ -177,6 +177,9 @@ PaletteDockerDock::PaletteDockerDock( )
 
 PaletteDockerDock::~PaletteDockerDock()
 {
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    rServer->removeObserver(this);
+
     if (m_currentColorSet) {
         KisConfig cfg;
         cfg.setDefaultPalette(m_currentColorSet->name());
@@ -199,6 +202,12 @@ void PaletteDockerDock::unsetCanvas()
 {
     m_model->setDisplayRenderer(0);
     m_canvas = 0;
+}
+
+void PaletteDockerDock::unsetResourceServer()
+{
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    rServer->removeObserver(this);
 }
 
 void PaletteDockerDock::removingResource(KoColorSet *resource)

@@ -43,7 +43,7 @@ public:
 
 public: // KoResourceServerObserver
 
-    virtual void unsetResourceServer() {}
+    virtual void unsetResourceServer();
     virtual void resourceAdded(KoColorSet *) {}
     virtual void removingResource(KoColorSet *resource);
     virtual void resourceChanged(KoColorSet *resource);

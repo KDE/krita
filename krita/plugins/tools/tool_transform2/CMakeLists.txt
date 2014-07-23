@@ -1,11 +1,13 @@
-
-
 set(kritatooltransform_PART_SRCS
     tool_transform.cc
     tool_transform_args.cc
     tool_transform_changes_tracker.cpp
     kis_tool_transform.cc
     kis_tool_transform_config_widget.cpp
+    kis_warp_transform_strategy.cpp
+    kis_free_transform_strategy.cpp
+    kis_free_transform_strategy_gsl_helpers.cpp
+    kis_transform_utils.cpp
     strokes/transform_stroke_strategy.cpp
     )
 
@@ -14,9 +16,11 @@ kde4_add_ui_files(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
 
 kde4_add_plugin(kritatooltransform ${kritatooltransform_PART_SRCS})
 
+if (NOT GSL_FOUND)
+  message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Transform Tool will not be able to scale the image with handles. Please install GSL library.")
+endif (NOT GSL_FOUND)
 
-
-target_link_libraries(kritatooltransform kritaui)
+target_link_libraries(kritatooltransform kritaui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 
 install(TARGETS kritatooltransform  DESTINATION ${PLUGIN_INSTALL_DIR})
 

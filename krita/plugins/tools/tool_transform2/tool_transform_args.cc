@@ -35,7 +35,6 @@ ToolTransformArgs::ToolTransformArgs()
     m_scaleY = 1.0;
     m_shearX = 0.0;
     m_shearY = 0.0;
-    m_pointsPerLine = 0;
     m_origPoints = QVector<QPointF>();
     m_transfPoints = QVector<QPointF>();
     m_warpType = KisWarpTransformWorker::AFFINE_TRANSFORM;
@@ -60,7 +59,6 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_scaleY = args.scaleY();
     m_shearX = args.shearX();
     m_shearY = args.shearY();
-    m_pointsPerLine = args.pointsPerLine();
     m_origPoints = args.origPoints(); //it's a copy
     m_transfPoints = args.transfPoints();
     m_warpType = args.warpType();
@@ -74,7 +72,6 @@ void ToolTransformArgs::clear()
 {
     m_origPoints.clear();
     m_transfPoints.clear();
-    m_pointsPerLine = 0;
 }
 
 ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
@@ -115,7 +112,6 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_scaleY = scaleY;
     m_shearX = shearX;
     m_shearY = shearY;
-    m_pointsPerLine = 0;
     m_origPoints = QVector<QPointF>();
     m_transfPoints = QVector<QPointF>();
 

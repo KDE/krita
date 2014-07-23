@@ -139,5 +139,9 @@ inline qreal kisDistance(const QPointF &pt1, const QPointF &pt2) {
     return std::sqrt(pow2(pt1.x() - pt2.x()) + pow2(pt1.y() - pt2.y()));
 }
 
+inline qreal kisSquareDistance(const QPointF &pt1, const QPointF &pt2) {
+    return pow2(pt1.x() - pt2.x()) + pow2(pt1.y() - pt2.y());
+}
+
 #endif // KISGLOBAL_H_
 

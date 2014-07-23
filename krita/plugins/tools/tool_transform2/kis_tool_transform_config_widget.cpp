@@ -230,7 +230,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         alphaBox->setValue(config.alpha());
 
         if (config.defaultPoints()) {
-            densityBox->setValue(config.pointsPerLine());
+            densityBox->setValue(config.numPoints());
         }
 
         cmbWarpType->setCurrentIndex((int)config.warpType());
@@ -549,7 +549,6 @@ void KisToolTransformConfigWidget::setDefaultWarpPoints(int pointsPerLine)
 
     config->setDefaultPoints(true);
     config->setPoints(origPoints, transfPoints);
-    config->setPointsPerLine(pointsPerLine);
 
     notifyConfigChanged();
 }

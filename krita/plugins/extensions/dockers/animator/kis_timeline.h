@@ -90,6 +90,7 @@ private slots:
     void timelineWidthChanged(int width);
     void paintLayerPressed();
     void vectorLayerPressed();
+    void removeLayerPressed();
     void importUI(QHash<int, QList<QRect> > timelineMap);
 
 signals:

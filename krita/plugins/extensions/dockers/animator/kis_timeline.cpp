@@ -99,6 +99,7 @@ void KisTimeline::init()
 
     KisAction* removeLayerAction = new KisAction(koIcon("list-remove"), tr("Remove Animation Layer"), this);
     actionManager->addAction("remove_animation_layer", removeLayerAction, actionCollection);
+    connect(removeLayerAction, SIGNAL(triggered()), this, SLOT(removeLayerPressed()));
 
     layerButtons->addWidget(addLayerButton);
     layerButtons->addAction(removeLayerAction);
@@ -314,6 +315,16 @@ void KisTimeline::vectorLayerPressed()
 {
     this->addLayerUiUpdate();
     dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->addVectorLayer();
+}
+
+void KisTimeline::removeLayerPressed()
+{
+    if(m_cells->getSelectedFrame()) {
+        int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
+        kWarning() << "Removing layer " << layer;
+        // Refresh timeline
+        dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->removeLayer(layer * 20);
+    }
 }
 
 void KisTimeline::blankFramePressed()

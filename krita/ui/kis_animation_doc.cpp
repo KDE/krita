@@ -370,6 +370,24 @@ void KisAnimationDoc::removeFrame(QRect frame)
     this->frameSelectionChanged(d->currentFramePosition, false);
 }
 
+void KisAnimationDoc::removeLayer(int layer)
+{
+    this->deleteLayerFromXML(layer);
+    this->saveXMLToDisk();
+
+    int layerToLoad = layer;
+    int frame = d->currentFramePosition.x();
+
+    // For topmost most layer
+    if(layer == (this->numberOfLayers() - 1) * 20) {
+        layerToLoad = layer - 20;
+    }
+
+    // Refresh the canvas
+    d->currentFramePosition = QRect(frame, layerToLoad, 10, 20);
+    this->frameSelectionChanged(d->currentFramePosition, false);
+}
+
 void KisAnimationDoc::addPaintLayer()
 {
     KisAnimation* animation = this->getAnimation();
@@ -581,6 +599,36 @@ void KisAnimationDoc::deleteFrameFromXML(int frame, int layer)
 
     if(!frameToDelete.isNull()) {
         d->frameElement.removeChild(frameToDelete);
+    }
+}
+
+void KisAnimationDoc::deleteLayerFromXML(int layer)
+{
+    QDomNodeList frames = d->frameElement.childNodes();
+    QDomNode currentNode;
+
+    QList<QDomNode> nodesToRemove;
+
+    int length = frames.length();
+
+    for(int i = 0 ; i < length ; i++) {
+        currentNode = frames.at(i);
+        int layerNumber = currentNode.attributes().namedItem("layer").nodeValue().toInt();
+
+        // Index of layers on top have to be decremented
+        if(layerNumber > layer) {
+            currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layerNumber - 20));
+            continue;
+        }
+
+        if(layerNumber == layer) {
+            nodesToRemove.append(currentNode);
+        }
+    }
+
+    length = nodesToRemove.length();
+    for(int i = 0 ; i < length ; i++) {
+        d->frameElement.removeChild(nodesToRemove.at(i));
     }
 }
 

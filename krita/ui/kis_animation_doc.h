@@ -44,6 +44,7 @@ public:
     void breakFrame(QRect frame, bool blank=false);
 
     void removeFrame(QRect frame);
+    void removeLayer(int layer);
 
     void addPaintLayer();
     void addVectorLayer();
@@ -95,6 +96,8 @@ private:
     void addFrameToXML();
 
     void deleteFrameFromXML(int frame, int layer);
+
+    void deleteLayerFromXML(int layer);
 
     void saveXMLToDisk();
 

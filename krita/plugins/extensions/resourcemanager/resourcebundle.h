@@ -94,21 +94,12 @@ public:
     QList<QString> getTagsList();
 
     /**
-     * @brief removeFile : Remove a file from the bundle
-     * @param fileName name of the resource file
-     */
-    void removeFile(QString fileName);
-
-    /**
      * @brief isInstalled
      * @return true if the bundle is installed, false otherwise.
      */
     bool isInstalled();
 
     void setThumbnail(QString);
-
-    void addTag(const QString &tagName);
-    void removeTag(QString tagName);
 
     QStringList resourceTypes();
     QList<KoResource*> resources(const QString &resType);

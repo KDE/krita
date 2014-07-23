@@ -628,7 +628,7 @@ bool ResourceBundle::install()
 bool ResourceBundle::uninstall()
 {
     m_installed = false;
-    // Remove all resources from the bundle...
+
     return true;
 }
 
@@ -659,20 +659,11 @@ QList<QString> ResourceBundle::getTagsList()
 }
 
 
-void ResourceBundle::removeFile(QString fileName)
-{
-    m_manifest.removeFile(fileName);
-}
-
 bool ResourceBundle::isInstalled()
 {
     return m_installed;
 }
 
-void ResourceBundle::removeTag(QString tagName)
-{
-    m_bundletags.remove(tagName);
-}
 
 QStringList ResourceBundle::resourceTypes()
 {
@@ -728,10 +719,6 @@ void ResourceBundle::setThumbnail(QString filename)
     }
 }
 
-void ResourceBundle::addTag(const QString &tagName)
-{
-    m_bundletags << tagName;
-}
 
 QByteArray ResourceBundle::generateMD5() const
 {

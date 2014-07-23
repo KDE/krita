@@ -120,8 +120,8 @@ void DlgBundleManager::addSelected()
 void DlgBundleManager::removeSelected()
 {
     foreach(QListWidgetItem *item, m_ui->listInactive->selectedItems()) {
-         m_ui->listActive->addItem(m_ui->listInactive->takeItem(m_ui->listInactive->row(item)));
-     }
+        m_ui->listActive->addItem(m_ui->listInactive->takeItem(m_ui->listInactive->row(item)));
+    }
 }
 
 void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */*previous*/)
@@ -144,48 +144,51 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem */
         QByteArray ba = current->data(Qt::UserRole).toByteArray();
         KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
         ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
-        m_ui->lblName->setText(bundle->name());
-        m_ui->chkActive->setChecked(bundle->isInstalled());
-        m_ui->lblAuthor->setText(bundle->getMeta("author"));
-        m_ui->lblEmail->setText(bundle->getMeta("email"));
-        m_ui->lblLicense->setText(bundle->getMeta("license"));
-        m_ui->lblWebsite->setText(bundle->getMeta("website"));
-        m_ui->lblDescription->setText(bundle->getMeta("description"));
-        m_ui->lblCreated->setText(bundle->getMeta("created"));
-        m_ui->lblUpdated->setText(bundle->getMeta("updated"));
-        m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image()));
-        m_ui->listBundleContents->clear();
 
-        foreach(const QString & resType, bundle->resourceTypes()) {
+        if (bundle) {
+            m_ui->lblName->setText(bundle->name());
+            m_ui->chkActive->setChecked(bundle->isInstalled());
+            m_ui->lblAuthor->setText(bundle->getMeta("author"));
+            m_ui->lblEmail->setText(bundle->getMeta("email"));
+            m_ui->lblLicense->setText(bundle->getMeta("license"));
+            m_ui->lblWebsite->setText(bundle->getMeta("website"));
+            m_ui->lblDescription->setText(bundle->getMeta("description"));
+            m_ui->lblCreated->setText(bundle->getMeta("created"));
+            m_ui->lblUpdated->setText(bundle->getMeta("updated"));
+            m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image()));
+            m_ui->listBundleContents->clear();
 
-            QTreeWidgetItem *toplevel = new QTreeWidgetItem();
-            if (resType == "gradients") {
-                toplevel->setText(0, i18n("Gradients"));
-            }
-            else if (resType  == "patterns") {
-                toplevel->setText(0, i18n("Patterns"));
-            }
-            else if (resType  == "brushes") {
-                toplevel->setText(0, i18n("Brushes"));
-            }
-            else if (resType  == "palettes") {
-                toplevel->setText(0, i18n("Palettes"));
-            }
-            else if (resType  == "workspaces") {
-                toplevel->setText(0, i18n("Workspaces"));
-            }
-            else if (resType  == "paintoppresets") {
-                toplevel->setText(0, i18n("Brush Presets"));
-            }
+            foreach(const QString & resType, bundle->resourceTypes()) {
 
-            m_ui->listBundleContents->addTopLevelItem(toplevel);
+                QTreeWidgetItem *toplevel = new QTreeWidgetItem();
+                if (resType == "gradients") {
+                    toplevel->setText(0, i18n("Gradients"));
+                }
+                else if (resType  == "patterns") {
+                    toplevel->setText(0, i18n("Patterns"));
+                }
+                else if (resType  == "brushes") {
+                    toplevel->setText(0, i18n("Brushes"));
+                }
+                else if (resType  == "palettes") {
+                    toplevel->setText(0, i18n("Palettes"));
+                }
+                else if (resType  == "workspaces") {
+                    toplevel->setText(0, i18n("Workspaces"));
+                }
+                else if (resType  == "paintoppresets") {
+                    toplevel->setText(0, i18n("Brush Presets"));
+                }
 
-            foreach(const KoResource *res, bundle->resources(resType)) {
-                if (res) {
-                    QTreeWidgetItem *i = new QTreeWidgetItem();
-                    i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
-                    i->setText(0, res->name());
-                    toplevel->addChild(i);
+                m_ui->listBundleContents->addTopLevelItem(toplevel);
+
+                foreach(const KoResource *res, bundle->resources(resType)) {
+                    if (res) {
+                        QTreeWidgetItem *i = new QTreeWidgetItem();
+                        i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
+                        i->setText(0, res->name());
+                        toplevel->addChild(i);
+                    }
                 }
             }
         }

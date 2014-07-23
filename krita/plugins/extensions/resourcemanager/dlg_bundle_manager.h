@@ -45,6 +45,8 @@ private slots:
     void removeSelected();
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
     void itemSelected(QListWidgetItem *current);
+    void editBundle();
+
 private:
 
     QWidget *m_page;
@@ -54,6 +56,8 @@ private:
 
     QMap<QString, ResourceBundle*> m_blacklistedBundles;
     QMap<QString, ResourceBundle*> m_activeBundles;
+
+    ResourceBundle *m_currentBundle;
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

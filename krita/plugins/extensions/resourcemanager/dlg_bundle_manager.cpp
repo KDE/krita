@@ -20,6 +20,7 @@
 #include "ui_wdgdlgbundlemanager.h"
 
 #include "resourcemanager.h"
+#include "dlg_create_bundle.h"
 
 #include <QListWidget>
 #include <QTreeWidget>
@@ -35,7 +36,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     : KDialog(parent)
     , m_page(new QWidget())
     , m_ui(new Ui::WdgDlgBundleManager)
-
+    , m_currentBundle(0)
 {
     setCaption(i18n("Manage Resource Bundles"));
     m_ui->setupUi(m_page);
@@ -80,6 +81,8 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
         }
     }
     fillListWidget(m_activeBundles.values(), m_ui->listActive);
+
+    connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
 }
 
 void DlgBundleManager::accept()
@@ -101,7 +104,7 @@ void DlgBundleManager::accept()
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
         ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
 
-        if (bundle->isInstalled()) {
+        if (bundle && bundle->isInstalled()) {
             bundle->uninstall();
             bundleServer->removeResourceAndBlacklist(bundle);
         }
@@ -129,7 +132,6 @@ void DlgBundleManager::removeSelected()
 
 void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 {
-
     if (!current) {
         m_ui->lblName->setText("");
         m_ui->chkActive->setChecked(false);
@@ -142,6 +144,8 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
         m_ui->lblUpdated->setText("");
         m_ui->lblPreview->setPixmap(QPixmap::fromImage(QImage()));
         m_ui->listBundleContents->clear();
+
+        m_currentBundle = 0;
     }
     else {
 
@@ -160,6 +164,9 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
         }
 
         if (bundle) {
+
+            m_currentBundle = bundle;
+
             m_ui->lblName->setText(bundle->name());
             m_ui->chkActive->setChecked(bundle->isInstalled());
             m_ui->lblAuthor->setText(bundle->getMeta("author"));
@@ -206,12 +213,25 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
                 }
             }
         }
+        else {
+            m_currentBundle = 0;
+        }
     }
 }
 
 void DlgBundleManager::itemSelected(QListWidgetItem *current)
 {
     itemSelected(current, 0);
+}
+
+void DlgBundleManager::editBundle()
+{
+    if (m_currentBundle) {
+        DlgCreateBundle dlg(m_currentBundle);
+        if (dlg.exec() != QDialog::Accepted) {
+            return;
+        }
+    }
 }
 
 void DlgBundleManager::fillListWidget(QList<ResourceBundle *> bundles, QListWidget *w)

@@ -21,6 +21,8 @@
 
 #include <kdialog.h>
 
+class ResourceBundle;
+
 namespace Ui
 {
 class WdgDlgCreateBundle;
@@ -31,7 +33,7 @@ class DlgCreateBundle : public KDialog
     Q_OBJECT
 
 public:
-    explicit DlgCreateBundle(QWidget *parent = 0);
+    explicit DlgCreateBundle(ResourceBundle *bundle = 0, QWidget *parent = 0);
     ~DlgCreateBundle();
 
     QString bundleName() const;
@@ -71,6 +73,8 @@ private:
     QStringList m_selectedWorkspaces;
 
     QString m_previewImage;
+
+    ResourceBundle *m_bundle;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

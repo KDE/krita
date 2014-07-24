@@ -44,8 +44,9 @@
 // To ignore the clang warning we get because we have a
 // for (int i = 0; pageFormatInfo[i].format != -1 ;i++)
 // construct and pageFormatInfo has (KoPageFormat::Format) - 1
+#if defined(__clang__)
 #pragma GCC diagnostic ignored "-Wtautological-constant-out-of-range-compare"
-
+#endif
 
 struct PageFormatInfo {
     KoPageFormat::Format format;

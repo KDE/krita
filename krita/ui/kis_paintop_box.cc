@@ -598,7 +598,7 @@ void KisPaintopBox::slotSaveActivePreset()
     KisPaintOpPreset* resource = rServer->resourceByName(name);
     if (resource) {
         tags = rServer->assignedTagsList(resource);
-        rServer->removeResource(resource);
+        rServer->removeResourceAndBlacklist(resource);
     }
 
     newPreset->setImage(m_presetsPopup->cutOutOverlay());

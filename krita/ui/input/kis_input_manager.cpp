@@ -455,6 +455,10 @@ void KisInputManager::stopIgnoringEvents()
     stop_ignore_cursor_events();
 }
 
+#if defined (__clang__)
+#pragma GCC diagnostic ignored "-Wswitch"
+#endif
+
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     bool retval = false;
@@ -481,7 +485,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     d->toolProxy->processEvent(event);
 
     // because we have fake enums in here...
-#pragma GCC diagnostic ignored "-Wswitch"
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {

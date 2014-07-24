@@ -81,53 +81,11 @@ public:
     QList<ResourceReference> files(const QString &type = QString()) const;
 
     /**
-     * @brief getFileList
-     * @return the list of the files enumerated in the XML
-     */
-    QList<QString> getFileList(QString kritaPath, bool firstBuild);
-
-    /**
-     * @brief getFilesToExtract
-     * @return the list of the files to be extracted
-     */
-    QMap<QString, QString> getFilesToExtract();
-
-    /**
-     * @brief getDirList
-     * @return the list of the directories containing the files of the Xml document
-     */
-    QList<QString> getDirList();
-    /**
      * @brief removeFile : remove a file from the manifest
      * @param fileName : the name of the file to be removed
      * @return the list of resource tags to be removed from meta file.
      */
     void removeFile(QString fileName);
-
-    /**
-     * @brief exportTags : export file tags to the right Krita xml files
-     */
-    void exportTags();
-
-    /**
-     * @brief install : add "installed" tag in the XML file if necessary
-     */
-    void install();
-
-    /**
-     * @brief uninstall : remove "installed" tag in the XML file if necessary
-     */
-    void uninstall();
-
-    /**
-     * @brief isInstalled
-     * @return true if the "installed" tag is in the XML file, false otherwise
-     */
-    bool isInstalled();
-
-    void rename(QString newName);
-
-    void updateFilePaths(QString kritaPath, QString bundleName);
 
 private:
     QMap<QString, QMap<QString, ResourceReference> > m_resources;

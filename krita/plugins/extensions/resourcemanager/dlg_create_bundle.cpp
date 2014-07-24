@@ -43,14 +43,15 @@
 
 #include <kis_config.h>
 
+#include "resourcebundle.h"
+
 #define ICON_SIZE 48
 
-DlgCreateBundle::DlgCreateBundle(QWidget *parent)
+DlgCreateBundle::DlgCreateBundle(ResourceBundle *bundle, QWidget *parent)
     : KDialog(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
+    , m_bundle(bundle)
 {
-    setCaption(i18n("Create Resource Bundle"));
-
     m_page = new QWidget();
     m_ui->setupUi(m_page);
     setMainWidget(m_page);
@@ -63,13 +64,31 @@ DlgCreateBundle::DlgCreateBundle(QWidget *parent)
     KoDocumentInfo info;
     info.updateParameters();
 
-    KisConfig cfg;
+    if (bundle) {
 
-    m_ui->editAuthor->setText(cfg.readEntry<QString>("BundleAuthorName", info.authorInfo("creator")));
-    m_ui->editEmail->setText(cfg.readEntry<QString>("BundleAuthorEmail", info.authorInfo("email")));
-    m_ui->editWebsite->setText(cfg.readEntry<QString>("BundleWebsite", "http://"));
-    m_ui->editLicense->setText(cfg.readEntry<QString>("BundleLicense", "CC-BY-SA"));
-    m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)));
+        setCaption(i18n("Edit Resource Bundle"));
+
+        m_ui->lblSaveLocation->setText(QFileInfo(bundle->filename()).absolutePath());
+        m_ui->editBundleName->setText(bundle->name());
+        m_ui->editAuthor->setText(bundle->getMeta("author"));
+        m_ui->editEmail->setText(bundle->getMeta("email"));
+        m_ui->editLicense->setText(bundle->getMeta("license"));
+        m_ui->editWebsite->setText(bundle->getMeta("website"));
+        m_ui->editDescription->document()->setPlainText(bundle->getMeta("description"));
+        m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+    }
+    else {
+
+        setCaption(i18n("Create Resource Bundle"));
+
+        KisConfig cfg;
+
+        m_ui->editAuthor->setText(cfg.readEntry<QString>("BundleAuthorName", info.authorInfo("creator")));
+        m_ui->editEmail->setText(cfg.readEntry<QString>("BundleAuthorEmail", info.authorInfo("email")));
+        m_ui->editWebsite->setText(cfg.readEntry<QString>("BundleWebsite", "http://"));
+        m_ui->editLicense->setText(cfg.readEntry<QString>("BundleLicense", "CC-BY-SA"));
+        m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)));
+    }
 
     m_ui->bnAdd->setIcon(koIcon("arrow-right"));
     connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
@@ -86,9 +105,10 @@ DlgCreateBundle::DlgCreateBundle(QWidget *parent)
     connect(m_ui->cmbResourceTypes, SIGNAL(activated(int)), SLOT(resourceTypeSelected(int)));
 
     m_ui->tableAvailable->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->tableAvailable->setSelectionMode(QAbstractItemView::MultiSelection);
+    m_ui->tableAvailable->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
     m_ui->tableSelected->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->tableSelected->setSelectionMode(QAbstractItemView::MultiSelection);
+    m_ui->tableSelected->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     connect(m_ui->bnGetPreview, SIGNAL(clicked()), SLOT(getPreviewImage()));
 
@@ -158,12 +178,14 @@ void DlgCreateBundle::accept()
             return;
         }
         else {
-            KisConfig cfg;
-            cfg.writeEntry<QString>("BunleExportLocation", m_ui->lblSaveLocation->text());
-            cfg.writeEntry<QString>("BundleAuthorName", m_ui->editAuthor->text());
-            cfg.writeEntry<QString>("BundleAuthorEmail", m_ui->editEmail->text());
-            cfg.writeEntry<QString>("BundleWebsite", m_ui->editWebsite->text());
-            cfg.writeEntry<QString>("BundleLicense", m_ui->editLicense->text());
+            if (!m_bundle) {
+                KisConfig cfg;
+                cfg.writeEntry<QString>("BunleExportLocation", m_ui->lblSaveLocation->text());
+                cfg.writeEntry<QString>("BundleAuthorName", m_ui->editAuthor->text());
+                cfg.writeEntry<QString>("BundleAuthorEmail", m_ui->editEmail->text());
+                cfg.writeEntry<QString>("BundleWebsite", m_ui->editWebsite->text());
+                cfg.writeEntry<QString>("BundleLicense", m_ui->editLicense->text());
+            }
             KDialog::accept();
         }
     }

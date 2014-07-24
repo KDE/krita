@@ -676,7 +676,7 @@ void TestKoTextEditor::testDeleteSectionHandling()
     KoSection *sec[TOTAL_SECTIONS];
     KoSectionEnd *secEnd[TOTAL_SECTIONS];
     for (int i = 0; i < TOTAL_SECTIONS; i++) {
-        sec[i] = new KoSection(textDoc.sectionManager());
+        sec[i] = new KoSection(editor.constCursor());
         secEnd[i] = new KoSectionEnd(sec[i]);
     }
 

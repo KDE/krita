@@ -30,12 +30,13 @@
 #include <KoSectionStyle.h>
 #include <KoSectionManager.h>
 #include <KoSectionEnd.h>
+#include <KoTextDocument.h>
 
 class KoSectionPrivate
 {
 public:
-    explicit KoSectionPrivate(KoSectionManager *_manager)
-        : manager(_manager)
+    explicit KoSectionPrivate(const QTextDocument *_document)
+        : manager(KoTextDocument(_document).sectionManager())
         , sectionStyle(0)
         , modelItem(0)
     {
@@ -54,14 +55,16 @@ public:
     QString style_name;
     KoSectionStyle *sectionStyle;
 
+    KoElementReference ref;
+
     QScopedPointer<KoSectionEnd> sectionEnd; //< pointer to the corresponding section end
     int level; //< level of the section in document, root sections have 0 level
     QPair<int, int> bounds; //< start and end position of section in QDocument
     QStandardItem *modelItem;
 };
 
-KoSection::KoSection(KoSectionManager *manager)
-    : d_ptr(new KoSectionPrivate(manager))
+KoSection::KoSection(const QTextCursor &cursor)
+    : d_ptr(new KoSectionPrivate(cursor.block().document()))
 {
     Q_D(KoSection);
     d->manager->registerSection(this);
@@ -112,6 +115,7 @@ bool KoSection::setName(QString name)
 bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml)
 {
     Q_D(KoSection);
+    d->ref = d->ref.loadOdf(element);
     // check whether we really are a section
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "section") {
         // get all the attributes
@@ -135,6 +139,7 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
         if (!d->style_name.isEmpty()) {
             d->sectionStyle = sharedData->sectionStyle(d->style_name, stylesDotXml);
         }
+
         return true;
     }
     return false;
@@ -154,6 +159,10 @@ void KoSection::saveOdf(KoShapeSavingContext &context) const
     if (!d->protection_key.isEmpty()) writer->addAttribute("text:protection-key", d->protection_key);
     if (!d->protection_key_digest_algorithm.isEmpty()) writer->addAttribute("text:protection-key-digest-algorihtm", d->protection_key_digest_algorithm);
     if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
+
+    if (d->ref.isValid()) {
+        d->ref.saveOdf(writer);
+    }
 }
 
 void KoSection::setSectionEnd(KoSectionEnd* sectionEnd)

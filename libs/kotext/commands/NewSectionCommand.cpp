@@ -59,7 +59,7 @@ void NewSectionCommand::redo()
 
         editor->newLine();
 
-        KoSection *start = new KoSection(KoTextDocument(m_document).sectionManager());
+        KoSection *start = new KoSection(editor->constCursor());
         KoSectionEnd *end = new KoSectionEnd(start);
         QTextBlockFormat fmt = editor->blockFormat();
 

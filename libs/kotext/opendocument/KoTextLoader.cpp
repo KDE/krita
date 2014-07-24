@@ -842,7 +842,7 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
 
 void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cursor)
 {
-    KoSection *section = new KoSection(d->context.sectionManager());
+    KoSection *section = new KoSection(cursor);
     if (!section->loadOdf(sectionElem, d->textSharedData, d->stylesDotXml)) {
         delete section;
         kWarning(32500) << "Could not load section";

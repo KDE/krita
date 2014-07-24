@@ -26,12 +26,12 @@
 #include <QPair>
 #include <QScopedPointer>
 #include <QStandardItem>
+#include <QTextCursor>
 
 class KoXmlElement;
 class KoShapeSavingContext;
 class KoTextSharedLoadingData;
 class KoSectionEnd;
-class KoSectionManager;
 
 class KoSectionPrivate;
 /**
@@ -54,7 +54,7 @@ class KoSectionPrivate;
 class KOTEXT_EXPORT KoSection
 {
 public:
-    explicit KoSection(KoSectionManager *manager);
+    explicit KoSection(const QTextCursor &cursor);
     ~KoSection();
 
     /// Returns section name
@@ -71,6 +71,7 @@ public:
 
     bool loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml);
     void saveOdf(KoShapeSavingContext &context) const;
+
 protected:
     const QScopedPointer<KoSectionPrivate> d_ptr;
 

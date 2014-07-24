@@ -218,6 +218,8 @@ private:
 
     void handleBordersAndSpacing(KoTextBlockData &blockData, QTextBlock *block);
 
+    void decorateParagraphSections(QPainter* painter, QTextBlock& block);
+
 private:
     class Private;
     Private * const d;

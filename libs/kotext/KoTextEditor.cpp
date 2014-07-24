@@ -3,6 +3,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,6 +65,8 @@
 #include "commands/InsertNoteCommand.h"
 #include "commands/AddTextRangeCommand.h"
 #include "commands/AddAnnotationCommand.h"
+#include "commands/RenameSectionCommand.h"
+#include "commands/NewSectionCommand.h"
 
 #include <klocale.h>
 
@@ -160,6 +163,14 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     bf.clearProperty(KoParagraphStyle::MasterPageName);
     bf.clearProperty(KoParagraphStyle::OutlineLevel);
     bf.clearProperty(KoParagraphStyle::HiddenByTable);
+
+    // We should stay in the same section so we can't start new one.
+    bf.clearProperty(KoParagraphStyle::SectionStartings);
+    // But we move all the current endings to the next paragraph.
+    QTextBlockFormat origin = caret.blockFormat();
+    origin.clearProperty(KoParagraphStyle::SectionEndings);
+    caret.setBlockFormat(origin);
+
     // Build the block char format which is just a copy
     QTextCharFormat bcf = caret.blockCharFormat();
 
@@ -1503,6 +1514,27 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
         return b;
     }
     return false;
+}
+
+void KoTextEditor::newSection()
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    NewSectionCommand *cmd = new NewSectionCommand(d->document);
+    addCommand(cmd);
+    emit cursorPositionChanged();
+}
+
+void KoTextEditor::renameSection(KoSection* section, QString newName)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    RenameSectionCommand *cmd = new RenameSectionCommand(section, newName);
+    addCommand(cmd);
 }
 
 void KoTextEditor::newLine()

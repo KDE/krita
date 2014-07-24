@@ -11,7 +11,8 @@
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  * Copyright (C) 2011 Stuart Dickson <stuart@furkinfantasic.net>
-  *
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -52,6 +53,8 @@
 #include <KoImageData.h>
 
 #include <kdebug.h>
+#include <KoSection.h>
+#include <KoSectionEnd.h>
 
 #include <QPainter>
 #include <QTextTable>
@@ -110,7 +113,6 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
         QTextBlockFormat format = block.blockFormat();
-        //qDebug() << it.currentBlock().isValid() << table;
 
         if (!block.isValid()) {
             if (lastBorder) { // draw previous block's border
@@ -147,7 +149,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             tocContext.textContext.selections = QVector<QAbstractTextDocumentLayout::Selection>();
 
             bool pure = true;
-            foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
+            foreach(const QAbstractTextDocumentLayout::Selection &selection, context.textContext.selections) {
                 if (selection.cursor.selectionStart()  <= block.position()
                     && selection.cursor.selectionEnd() >= block.position()) {
                     painter->fillRect(d->generatedDocAreas[tocIndex]->boundingRect(), selection.format.background());
@@ -245,7 +247,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                     selections.append(fr);
                 }
             }
-            // this is a workaround to fix text getting cut of when format ranges are used. There 
+            // this is a workaround to fix text getting cut of when format ranges are used. There
             // is a bug in Qt that can hit when text lines overlap each other. In case a format range
             // is used for formating it can clip the lines above/below as Qt creates a clip rect for
             // the places it already painted for the format range which results in clippling. So use
@@ -296,7 +298,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                         // see http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
                         int luma = ((5036060/2) * backbrush.color().red()
                                     + (9886846/2) * backbrush.color().green()
-                                    + (1920103/2) * backbrush.color().blue()) >> 23; 
+                                    + (1920103/2) * backbrush.color().blue()) >> 23;
                         if (luma > 60) {
                             frontBrush.setColor(QColor(Qt::black));
                         } else {
@@ -360,6 +362,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             layout->draw(painter, QPointF(0, 0), selections);
 
+            if (context.showSectionBounds) {
+                decorateParagraphSections(painter, block);
+            }
             decorateParagraph(painter, block, context.showFormattingCharacters, context.showSpellChecking);
 
             painter->restore();
@@ -631,6 +636,66 @@ static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, cons
     }
     Q_ASSERT(0); // illegal weight passed
     return 0;
+}
+
+void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &block)
+{
+    QTextLayout *layout = block.layout();
+    QTextBlockFormat bf = block.blockFormat();
+
+    QPen penBackup = painter->pen();
+    QPen pen = painter->pen();
+
+    pen.setWidth(1);
+    pen.setColor(Qt::gray);
+    painter->setPen(pen);
+
+    qreal xl = layout->boundingRect().left();
+    qreal xr = qMax(layout->boundingRect().right(), layout->boundingRect().left() + width());
+    qreal yu = layout->boundingRect().top();
+    qreal yd = layout->boundingRect().bottom();
+
+    qreal bracketSize = painter->fontMetrics().height() / 2;
+
+    const qreal levelShift = 3;
+
+    if (bf.hasProperty(KoParagraphStyle::SectionStartings)) {
+        QVariant var = bf.property(KoParagraphStyle::SectionStartings);
+        QList<QVariant> openList = var.value< QList<QVariant> >();
+
+        for (int i = 0; i < openList.size(); i++) {
+            int sectionLevel = static_cast<KoSection *>(openList[i].value<void *>())->level();
+            if (i == 0) {
+                painter->drawLine(xl + sectionLevel * levelShift, yu,
+                                  xr - sectionLevel * levelShift, yu);
+            }
+            painter->drawLine(xl + sectionLevel * levelShift, yu,
+                              xl + sectionLevel * levelShift, yu + bracketSize);
+
+            painter->drawLine(xr - sectionLevel * levelShift, yu,
+                              xr - sectionLevel * levelShift, yu + bracketSize);
+        }
+    }
+
+    if (bf.hasProperty(KoParagraphStyle::SectionEndings)) {
+        QVariant var = bf.property(KoParagraphStyle::SectionEndings);
+        QList<QVariant> closeList = var.value< QList<QVariant> >();
+
+        for (int i = 0; i < closeList.size(); i++) {
+            int sectionLevel = static_cast<KoSectionEnd *>(closeList[i].value<void *>())->correspondingSection()->level();
+            if (i == closeList.count() - 1) {
+                painter->drawLine(xl + sectionLevel * levelShift, yd,
+                                  xr - sectionLevel * levelShift, yd);
+            }
+            painter->drawLine(xl + sectionLevel * levelShift, yd,
+                              xl + sectionLevel * levelShift, yd - bracketSize);
+
+            painter->drawLine(xr - sectionLevel * levelShift, yd,
+                              xr - sectionLevel * levelShift, yd - bracketSize);
+        }
+    }
+
+    painter->setPen(penBackup);
 }
 
 void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, bool showFormattingCharacters, bool showSpellChecking)

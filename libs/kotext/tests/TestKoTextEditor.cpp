@@ -26,6 +26,7 @@
 #include <QTextTable>
 #include <QTextCharFormat>
 #include <QList>
+#include <QMetaType>
 
 #include <KoShapeBasedDocumentBase.h>
 #include <KoShape.h>
@@ -39,6 +40,11 @@
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoDocumentRdfBase.h>
+#include <KoParagraphStyle.h>
+#include <KoSection.h>
+#include <KoSectionEnd.h>
+
+Q_DECLARE_METATYPE(QVector< QVector<int> >)
 
 const QString lorem(
     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
@@ -125,6 +131,605 @@ void TestKoTextEditor::testRemoveSelectedText()
 
     // check whether the bookmark has gone.
     Q_ASSERT(rangeManager.textRanges().length() == 0);
+}
+
+void TestKoTextEditor::pushSectionStart(int num, KoSection *sec, KoTextEditor &editor)
+{
+    editor.insertText(QString("[ %1").arg(num));
+
+    QTextBlockFormat fmt = editor.blockFormat();
+    fmt.clearProperty(KoParagraphStyle::SectionStartings);
+    fmt.clearProperty(KoParagraphStyle::SectionEndings);
+    QList<QVariant> lst;
+    lst.push_back(QVariant::fromValue<void *>(static_cast<void *>(sec)));
+    fmt.setProperty(KoParagraphStyle::SectionStartings, lst);
+    editor.setBlockFormat(fmt);
+
+    editor.insertText("\n");
+    fmt.clearProperty(KoParagraphStyle::SectionEndings);
+    fmt.clearProperty(KoParagraphStyle::SectionStartings);
+    editor.setBlockFormat(fmt);
+}
+
+void TestKoTextEditor::pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEditor &editor)
+{
+    editor.insertText(QString("%1 ]").arg(num));
+
+    QTextBlockFormat fmt = editor.blockFormat();
+    fmt.clearProperty(KoParagraphStyle::SectionStartings);
+    fmt.clearProperty(KoParagraphStyle::SectionEndings);
+    QList<QVariant> lst;
+    lst.push_back(QVariant::fromValue<void *>(static_cast<void *>(secEnd)));
+    fmt.setProperty(KoParagraphStyle::SectionEndings, lst);
+    editor.setBlockFormat(fmt);
+
+    editor.insertText("\n");
+    fmt.clearProperty(KoParagraphStyle::SectionEndings);
+    fmt.clearProperty(KoParagraphStyle::SectionStartings);
+    editor.setBlockFormat(fmt);
+}
+
+bool TestKoTextEditor::checkStartings(const QVector<int> &needStartings, KoSection **sec, KoTextEditor &editor)
+{
+    QTextBlockFormat fmt = editor.blockFormat();
+    QList<QVariant> lst = fmt.property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+
+    if (lst.size() != needStartings.size()) {
+        qDebug() << static_cast<KoSection *>(lst[0].value<void *>())->name();
+
+        qDebug() << QString("Startings list size is wrong. Found %1, Expected %2").arg(lst.size()).arg(needStartings.size());
+        return false;
+    }
+
+    for (int i = 0; i < needStartings.size(); i++) {
+        if (static_cast<KoSection *>(lst[i].value<void *>()) != sec[needStartings[i]]) {
+            qDebug() << QString("Found unexpected section starting. Expected %1 section.").arg(needStartings[i]);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool TestKoTextEditor::checkEndings(const QVector<int> &needEndings, KoSectionEnd **secEnd, KoTextEditor &editor)
+{
+    QTextBlockFormat fmt = editor.blockFormat();
+    QList<QVariant> lst = fmt.property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+
+    if (lst.size() != needEndings.size()) {
+        qDebug() << QString("Endings list size is wrong. Found %1, expected %2").arg(lst.size()).arg(needEndings.size());
+        return false;
+    }
+
+    for (int i = 0; i < needEndings.size(); i++) {
+        if (static_cast<KoSectionEnd *>(lst[i].value<void *>()) != secEnd[needEndings[i]]) {
+            qDebug() << QString("Found unexpected section ending. Expected %1 section.").arg(needEndings[i]);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void TestKoTextEditor::testDeleteSectionHandling_data()
+{
+    QTest::addColumn<int>("selectionStart");
+    QTest::addColumn<int>("selectionEnd");
+    QTest::addColumn<int>("neededBlockCount");
+    QTest::addColumn< QVector< QVector<int> > >("needStartings");
+    QTest::addColumn< QVector< QVector<int> > >("needEndings");
+
+    QTest::newRow("Simple deletion, no effect to sections.") << 1 << 2 << 11
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2)
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting entire 1st section begin.") << 4 << 8 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1 << 2)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2)
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting entire 1st section begin and part of 2nd.") << 4 << 9 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1 << 2)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2)
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting part of 1st section begin.") << 5 << 8 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2)
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting part of 1st section begin and part of 2nd.") << 5 << 9 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2)
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting all sections except 0th one.") << 4 << 36 << 3
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting 3rd and part of 4th.") << 20 << 32 << 8
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting all the sections.") << 0 << 40 << 1
+    << (QVector< QVector<int> >()
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>()));
+    QTest::newRow("Deleting part of 3rd and part of 4th.") << 25 << 29 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2)
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting 2nd end.") << 12 << 16 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2 << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting 2nd end and part of 1st.") << 12 << 17 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2 << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting part of 2nd end.") << 13 << 16 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2 << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Deleting part of 2nd end and part of 1st.") << 13 << 17 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2 << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #0") << 5 << 36 << 3
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>() << 1 << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #1") << 0 << 23 << 6
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0 << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #2") << 7 << 19 << 8
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #3") << 6 << 32 << 4
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #4") << 17 << 23 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #5") << 6 << 27 << 6
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #6") << 6 << 17 << 8
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #7") << 8 << 22 << 8
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #8") << 14 << 19 << 10
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 2)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>() << 2 << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+    QTest::newRow("Random test #9") << 3 << 13 << 8
+    << (QVector< QVector<int> >()
+    << (QVector<int>() << 0)
+    << (QVector<int>() << 1)
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>())
+    << (QVector<int>())
+    << (QVector<int>()))
+    << (QVector< QVector<int> >()
+    << (QVector<int>())
+    << (QVector<int>() << 1)
+    << (QVector<int>())
+    << (QVector<int>() << 3)
+    << (QVector<int>())
+    << (QVector<int>() << 4)
+    << (QVector<int>() << 0)
+    << (QVector<int>()));
+}
+
+void TestKoTextEditor::testDeleteSectionHandling()
+{
+    QObject parent;
+
+    // create a document
+    QTextDocument doc;
+
+    KoTextRangeManager rangeManager(&parent);
+    KoTextDocument textDoc(&doc);
+    textDoc.setTextRangeManager(&rangeManager);
+
+    KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
+
+    const int TOTAL_SECTIONS = 5;
+    KoSection *sec[TOTAL_SECTIONS];
+    KoSectionEnd *secEnd[TOTAL_SECTIONS];
+    for (int i = 0; i < TOTAL_SECTIONS; i++) {
+        sec[i] = new KoSection(textDoc.sectionManager());
+        secEnd[i] = new KoSectionEnd(sec[i]);
+    }
+
+    pushSectionStart(0, sec[0], editor);
+    pushSectionStart(1, sec[1], editor);
+    pushSectionStart(2, sec[2], editor);
+    pushSectionEnd(2, secEnd[2], editor);
+    pushSectionEnd(1, secEnd[1], editor);
+    pushSectionStart(3, sec[3], editor);
+    pushSectionEnd(3, secEnd[3], editor);
+    pushSectionStart(4, sec[4], editor);
+    pushSectionEnd(4, secEnd[4], editor);
+    pushSectionEnd(0, secEnd[0], editor);
+
+    /**         ** offset  ** block num
+     *  [ 0$     0           0
+     *  [ 1$     4           1
+     *  [ 2$     8           2
+     *  2 ]$     12          3
+     *  1 ]$     16          4
+     *  [ 3$     20          5
+     *  3 ]$     24          6
+     *  [ 4$     28          7
+     *  4 ]$     32          8
+     *  0 ]$     36          9
+     * (**empty_block**)     10
+     */
+
+    QFETCH(int, selectionStart);
+    QFETCH(int, selectionEnd);
+    QFETCH(int, neededBlockCount);
+    QFETCH(QVector< QVector<int> >, needStartings);
+    QFETCH(QVector< QVector<int> >, needEndings);
+
+    // placing selection
+    editor.setPosition(selectionStart);
+    editor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, selectionEnd - selectionStart);
+
+    // doing deletion
+    editor.deleteChar();
+
+    // checking
+    editor.movePosition(QTextCursor::Start);
+
+    QCOMPARE(doc.blockCount(), neededBlockCount);
+
+    for (int i = 0; i < doc.blockCount(); i++) {
+        if (!checkStartings(needStartings[i], sec, editor)
+            || !checkEndings(needEndings[i], secEnd, editor)) {
+            QFAIL("Wrong section information.");
+        }
+        editor.movePosition(QTextCursor::NextBlock);
+    }
 }
 
 class TestDocument : public KoShapeBasedDocumentBase

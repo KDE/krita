@@ -3,6 +3,7 @@
 * Copyright (C) 2009 Thomas Zander <zander@kde.org>
 * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
 * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
+* Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #include <kundo2magicstring.h>
 #include <KoGenChange.h>
 #include <KoBorder.h>
+#include <KoSection.h>
 
 #include <QMetaType>
 #include <QTextCursor>
@@ -137,6 +139,8 @@ private:
     friend class InsertInlineObjectCommand;
     friend class InsertNoteCommand;
     friend class ParagraphFormattingCommand;
+    friend class RenameSectionCommand;
+    friend class NewSectionCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -444,7 +448,7 @@ public slots:
      * Inserts the supplied text at the current cursor position. If the second argument is
      * supplied, a link is inserted at the current cursor position with the hRef as given
      * by the user. To test whether the supplied link destination is a web url or a bookmark,
-     * a regular expression ( \\S+://\\S+ ) is used. 
+     * a regular expression ( \\S+://\\S+ ) is used.
      * @param text is the text to be inserted
      * @param hRef if supplied is the Hypertext reference
      */
@@ -455,6 +459,10 @@ public slots:
     void mergeBlockFormat( const QTextBlockFormat &modifier);
 
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
+
+    void newSection();
+
+    void renameSection(KoSection *section, QString newName);
 
     void newLine();
 

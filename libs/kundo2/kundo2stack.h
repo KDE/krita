@@ -58,8 +58,6 @@ class KActionCollection;
 
 #include "kundo2magicstring.h"
 
-
-
 class KUNDO2_EXPORT KUndo2Command
 {
     KUndo2CommandPrivate *d;

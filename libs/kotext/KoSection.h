@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,13 +20,20 @@
 #ifndef KOSECTION_H
 #define KOSECTION_H
 
-#include <QMetaType>
+#include "kotext_export.h"
+
 #include <QString>
+#include <QPair>
+#include <QScopedPointer>
+#include <QStandardItem>
+#include <QTextCursor>
 
 class KoXmlElement;
 class KoShapeSavingContext;
 class KoTextSharedLoadingData;
+class KoSectionEnd;
 
+class KoSectionPrivate;
 /**
  * Contains the information about the current text:section.
  *
@@ -43,33 +51,43 @@ class KoTextSharedLoadingData;
  * </ul>
  * (odf spec v.12)
  */
-class KoSection
+class KOTEXT_EXPORT KoSection
 {
 public:
-
-    KoSection();
+    explicit KoSection(const QTextCursor &cursor);
     ~KoSection();
-    KoSection(const KoSection& other);
 
+    /// Returns section name
     QString name() const;
+    /// Returns starting and ending position of section in QTextDocument
+    QPair<int, int> bounds() const;
+    /// Returns section level. Root section has @c 0 level.
+    int level() const;
+    /** Tries to set section's name to @p name
+     * @return @c false if there is a section with such name
+     * and new name isn't accepted
+     */
+    bool setName(QString name);
 
     bool loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml);
-    void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoShapeSavingContext &context) const;
+
+protected:
+    const QScopedPointer<KoSectionPrivate> d_ptr;
+
 private:
-    class Private;
-    Private * const d;
+    Q_DISABLE_COPY(KoSection)
+    Q_DECLARE_PRIVATE(KoSection)
 
+    void setSectionEnd(KoSectionEnd *sectionEnd);
+    void setBeginPos(int pos);
+    void setEndPos(int pos);
+    void setLevel(int level);
+    void setModelItem(QStandardItem *item);
+    QStandardItem *modelItem();
+
+    friend class KoSectionManager;
+    friend class KoSectionEnd;
 };
-
-/**
- * Marks the end of the given section
- */
-struct KoSectionEnd {
-    QString name; //< the name of the section we are closing
-
-    void saveOdf(KoShapeSavingContext &context);
-};
-
-Q_DECLARE_METATYPE(KoSection)
 
 #endif // KOSECTION_H

@@ -67,8 +67,12 @@ public:
     };
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                   const QByteArray &fillData, FilterMode mode);
+                   const QByteArray &fillData, FilterMode mode, bool useBuffer);
     ~KisTextureTile();
+
+    void setUseBuffer(bool useBuffer) {
+        m_useBuffer = useBuffer;
+    }
 
     void update(const KisTextureTileUpdateInfo &updateInfo);
 
@@ -106,6 +110,7 @@ private:
     FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
     bool m_needsMipmapRegeneration;
+    bool m_useBuffer;
 
     Q_DISABLE_COPY(KisTextureTile)
 };

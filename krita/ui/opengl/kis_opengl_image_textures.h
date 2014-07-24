@@ -92,6 +92,8 @@ public:
     void generateCheckerTexture(const QImage & checkImage);
     GLuint checkerTexture() const;
 
+    void setUseOpenGLBuffer(bool useBuffer);
+
 public:
     inline QRect storedImageBounds() {
         return m_storedImageBounds;

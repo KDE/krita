@@ -148,6 +148,8 @@ QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
 
 void KisOpenGLImageTextures::createImageTextureTiles()
 {
+    KisConfig cfg;
+
     KisOpenGL::makeContextCurrent();
 
     destroyImageTextureTiles();
@@ -173,7 +175,8 @@ void KisOpenGLImageTextures::createImageTextureTiles()
             KisTextureTile *tile = new KisTextureTile(tileRect,
                                                       &m_texturesInfo,
                                                       emptyTileData,
-                                                      mode);
+                                                      mode,
+                                                      cfg.useOpenGLTextureBuffer());
             m_textureTiles.append(tile);
         }
     }
@@ -306,6 +309,13 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 GLuint KisOpenGLImageTextures::checkerTexture() const
 {
     return m_checkerTexture;
+}
+
+void KisOpenGLImageTextures::setUseOpenGLBuffer(bool useBuffer)
+{
+    foreach(KisTextureTile *tile, m_textureTiles) {
+        tile->setUseBuffer(useBuffer);
+    }
 }
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)

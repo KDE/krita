@@ -463,7 +463,6 @@ void KisOpenGLCanvas2::drawImage() const
             d->displayShader->setUniformValue(d->displayUniformLocationTexture0, 0);
 
             if (d->firstDrawImage || !qFuzzyCompare(scaleX,d->scaleX) || !qFuzzyCompare(scaleY,d->scaleY)) {
-                qDebug() << "XXXXX";
                 d->firstDrawImage = false;
                 d->scaleX = scaleX;
                 d->scaleY = scaleY;
@@ -623,6 +622,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
 {
     KisConfig cfg;
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+    d->openGLImageTextures->setUseOpenGLBuffer(cfg.useOpenGLTextureBuffer());
     d->filterMode = (KisTextureTile::FilterMode) cfg.openGLFilteringMode();
 
     notifyConfigChanged();

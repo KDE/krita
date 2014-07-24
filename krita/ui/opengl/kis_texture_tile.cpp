@@ -21,8 +21,6 @@
 
 #ifdef HAVE_OPENGL
 
-#include <kis_config.h>
-
 #ifndef GL_BGRA
 #define GL_BGRA 0x814F
 #endif
@@ -54,7 +52,7 @@ void setTextureParameters()
 }
 
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                               const QByteArray &fillData, FilterMode filter)
+                               const QByteArray &fillData, FilterMode filter, bool useBuffer)
 
     : m_textureId(0)
 #ifdef USE_PIXEL_BUFFERS
@@ -64,6 +62,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     , m_filter(filter)
     , m_texturesInfo(texturesInfo)
     , m_needsMipmapRegeneration(false)
+    , m_useBuffer(useBuffer)
 {
     const GLvoid *fd = fillData.constData();
 
@@ -93,8 +92,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
                  m_texturesInfo->type, fd);
 
 #ifdef USE_PIXEL_BUFFERS
-    KisConfig cfg;
-    if (cfg.useOpenGLTextureBuffer()) {
+    if (m_useBuffer) {
         m_glBuffer->release();
     }
 #endif
@@ -105,8 +103,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
 KisTextureTile::~KisTextureTile()
 {
 #ifdef USE_PIXEL_BUFFERS
-    KisConfig cfg;
-    if (cfg.useOpenGLTextureBuffer()) {
+    if (m_useBuffer) {
         delete m_glBuffer;
     }
 #endif
@@ -140,7 +137,6 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 
     const GLvoid *fd = updateInfo.data();
 #ifdef USE_PIXEL_BUFFERS
-    KisConfig cfg;
     if (!m_glBuffer) {
         createTextureBuffer((const char*)updateInfo.data(), updateInfo.patchPixelsLength());
     }
@@ -149,8 +145,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     if (updateInfo.isEntireTileUpdated()) {
 
 #ifdef USE_PIXEL_BUFFERS
-
-        if (cfg.useOpenGLTextureBuffer()) {
+        if (m_useBuffer) {
 
             m_glBuffer->bind();
             m_glBuffer->allocate(updateInfo.patchPixelsLength());
@@ -173,7 +168,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                      fd);
 
 #ifdef USE_PIXEL_BUFFERS
-        if (cfg.useOpenGLTextureBuffer()) {
+        if (m_useBuffer) {
             m_glBuffer->release();
         }
 #endif
@@ -184,7 +179,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         QSize patchSize = updateInfo.patchSize();
 
 #ifdef USE_PIXEL_BUFFERS
-        if (cfg.useOpenGLTextureBuffer()) {
+        if (m_useBuffer) {
             m_glBuffer->bind();
             quint32 size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
             m_glBuffer->allocate(size);
@@ -206,7 +201,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                         fd);
 
 #ifdef USE_PIXEL_BUFFERS
-        if (cfg.useOpenGLTextureBuffer()) {
+        if (m_useBuffer) {
             m_glBuffer->release();
         }
 #endif
@@ -319,8 +314,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 #ifdef USE_PIXEL_BUFFERS
 void KisTextureTile::createTextureBuffer(const char *data, int size)
 {
-    KisConfig cfg;
-    if (cfg.useOpenGLTextureBuffer()) {
+    if (m_useBuffer) {
         m_glBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
         m_glBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
         m_glBuffer->create();

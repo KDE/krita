@@ -275,7 +275,6 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
         KIS_ASSERT_RECOVER_RETURN(tile);
 
         tile->update(*tileInfo);
-        tileInfo->destroy();
 
         KIS_OPENGL_PRINT_ERROR();
     }

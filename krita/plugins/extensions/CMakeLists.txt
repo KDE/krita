@@ -14,7 +14,11 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( dockers )
 add_subdirectory( layergroupswitcher )
-add_subdirectory( resourcemanager )
+
+option(WITH_RESOURCE_MANAGER "Build the experimental resource manager" OFF)
+if (WITH_RESOURCE_MANAGER)
+    add_subdirectory( resourcemanager )
+endif()
 
 # Allow to skip building GMIC plugin
 option(WITH_GMIC "Build the G'Mic plugin" ON)

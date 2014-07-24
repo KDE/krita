@@ -388,6 +388,16 @@ void KisAnimationDoc::removeLayer(int layer)
     this->frameSelectionChanged(d->currentFramePosition, false);
 }
 
+void KisAnimationDoc::moveLayerUp(int layer)
+{
+    kWarning() << "Moving layer up" << layer;
+}
+
+void KisAnimationDoc::moveLayerDown(int layer)
+{
+    kWarning() << "Moving layer down" << layer;
+}
+
 void KisAnimationDoc::addPaintLayer()
 {
     KisAnimation* animation = this->getAnimation();

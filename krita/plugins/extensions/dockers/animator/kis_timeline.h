@@ -75,22 +75,32 @@ private slots:
     void keyFramePressed();
     void addframePressed();
     void removeFramePressed();
+
     void frameSelectionChanged(QRect frame);
+
     void playAnimation();
     void pauseAnimation();
     void stopAnimation();
+
     void breakFrame(QRect position);
     void frameBreakStateChanged(bool state);
+
     void nextFramePressed();
     void prevFramePressed();
     void nextKeyFramePressed();
     void prevKeyFramePressed();
+
     void settingsButtonPressed();
     void playbackOptionsPressed();
+
     void timelineWidthChanged(int width);
+
     void paintLayerPressed();
     void vectorLayerPressed();
     void removeLayerPressed();
+    void layerUpPressed();
+    void layerDownPressed();
+
     void importUI(QHash<int, QList<QRect> > timelineMap);
 
 signals:

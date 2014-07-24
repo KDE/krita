@@ -46,6 +46,9 @@ public:
     void removeFrame(QRect frame);
     void removeLayer(int layer);
 
+    void moveLayerUp(int layer);
+    void moveLayerDown(int layer);
+
     void addPaintLayer();
     void addVectorLayer();
 

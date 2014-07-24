@@ -101,8 +101,18 @@ void KisTimeline::init()
     actionManager->addAction("remove_animation_layer", removeLayerAction, actionCollection);
     connect(removeLayerAction, SIGNAL(triggered()), this, SLOT(removeLayerPressed()));
 
+    KisAction* layerUpAction = new KisAction(koIcon("arrow-up"), tr("Move animation layer up"), this);
+    actionManager->addAction("move_animation_layer_up", layerUpAction, actionCollection);
+    connect(layerUpAction, SIGNAL(triggered()), this, SLOT(layerUpPressed()));
+
+    KisAction* layerDownAction = new KisAction(koIcon("arrow-down"), tr("Move animation layer down"), this);
+    actionManager->addAction("move_animation_layer_down", layerDownAction, actionCollection);
+    connect(layerDownAction, SIGNAL(triggered()), this, SLOT(layerDownPressed()));
+
     layerButtons->addWidget(addLayerButton);
     layerButtons->addAction(removeLayerAction);
+    layerButtons->addAction(layerUpAction);
+    layerButtons->addAction(layerDownAction);
 
     QHBoxLayout* leftToolBarLayout = new QHBoxLayout();
     leftToolBarLayout->setAlignment(Qt::AlignLeft);
@@ -321,9 +331,34 @@ void KisTimeline::removeLayerPressed()
 {
     if(m_cells->getSelectedFrame()) {
         int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
-        kWarning() << "Removing layer " << layer;
+
         // Refresh timeline
+
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->removeLayer(layer * 20);
+    }
+}
+
+void KisTimeline::layerDownPressed()
+{
+    if(m_cells->getSelectedFrame()) {
+        int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
+
+        // Refresh the timeline
+
+        dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->moveLayerDown(layer * 20);
+    }
+}
+
+void KisTimeline::layerUpPressed()
+{
+    kWarning() << "Layer up pressed";
+
+    if(m_cells->getSelectedFrame()) {
+        int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
+
+        // Refresh the timeline
+
+        dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->moveLayerUp(layer * 20);
     }
 }
 

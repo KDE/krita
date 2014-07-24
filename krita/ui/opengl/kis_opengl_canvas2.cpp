@@ -87,6 +87,9 @@ public:
         , checkerShader(0)
         , glSyncObject(0)
         , wrapAroundMode(false)
+        , firstDrawImage(true)
+        , scaleX(0.0)
+        , scaleY(0.0)
     {
         vertices = new QVector3D[6];
         texCoords = new QVector2D[6];
@@ -104,7 +107,8 @@ public:
 
     QVector3D *vertices;
     QVector2D *texCoords;
-
+    bool firstDrawImage;
+    qreal scaleX, scaleY;
 
     KisOpenGLImageTexturesSP openGLImageTextures;
 
@@ -457,7 +461,14 @@ void KisOpenGLCanvas2::drawImage() const
             glActiveTexture(GL_TEXTURE0);
             tile->bindToActiveTexture();
             d->displayShader->setUniformValue(d->displayUniformLocationTexture0, 0);
-            d->activateFilteringMode(scaleX, scaleY);
+
+            if (d->firstDrawImage || !qFuzzyCompare(scaleX,d->scaleX) || !qFuzzyCompare(scaleY,d->scaleY)) {
+                qDebug() << "XXXXX";
+                d->firstDrawImage = false;
+                d->scaleX = scaleX;
+                d->scaleY = scaleY;
+                d->activateFilteringMode(scaleX, scaleY);
+            }
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }

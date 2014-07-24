@@ -80,7 +80,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     setTextureParameters();
 
 #ifdef USE_PIXEL_BUFFERS
-    createTextureBuffer(fillData);
+    createTextureBuffer(fillData.constData(), fillData.size());
     // we set fill data to 0 so the next glTexImage2D call uses our buffer
     fd = 0;
 #endif
@@ -142,9 +142,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 #ifdef USE_PIXEL_BUFFERS
     KisConfig cfg;
     if (!m_glBuffer) {
-        QByteArray ba;
-        ba.fromRawData((const char*)updateInfo.data(), updateInfo.patchPixelsLength());
-        createTextureBuffer(ba);
+        createTextureBuffer((const char*)updateInfo.data(), updateInfo.patchPixelsLength());
     }
 #endif
 
@@ -319,7 +317,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 }
 
 #ifdef USE_PIXEL_BUFFERS
-void KisTextureTile::createTextureBuffer(const QByteArray &fillData)
+void KisTextureTile::createTextureBuffer(const char *data, int size)
 {
     KisConfig cfg;
     if (cfg.useOpenGLTextureBuffer()) {
@@ -329,10 +327,10 @@ void KisTextureTile::createTextureBuffer(const QByteArray &fillData)
 
         m_glBuffer->bind();
 
-        m_glBuffer->allocate(fillData.size());
+        m_glBuffer->allocate(size);
 
         void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
-        memcpy(vid, fillData.constData(), fillData.size());
+        memcpy(vid, data, size);
         m_glBuffer->unmap();
 
     }

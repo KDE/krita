@@ -71,6 +71,18 @@ void KisFrameBox::addLayerUiUpdate()
     newSelection->show();
 }
 
+void KisFrameBox::removeLayerUiUpdate(int layer)
+{
+    m_layerContents.at(layer)->hide();
+
+    for(int i = 0 ; i < layer ; i++) {
+        KisLayerContents* l = m_layerContents.at(i);
+        l->setGeometry(QRect(0, l->y() - 20, 100000, 20));
+    }
+
+    m_layerContents.removeAt(layer);
+}
+
 void KisFrameBox::setSelectedFrame(int x, KisLayerContents* parent, int width)
 {
     if(x < 0) {

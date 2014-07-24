@@ -63,7 +63,6 @@ void KisTimeline::init()
     KActionCollection* actionCollection = m_canvas->view()->actionCollection();
     KisActionManager* actionManager = m_canvas->view()->actionManager();
 
-    this->m_numberOfLayers = 0;
     this->m_lastBrokenFrame = QRect();
 
     this->m_frameBreakState = false;
@@ -315,6 +314,12 @@ void KisTimeline::addLayerUiUpdate()
     m_cells->addLayerUiUpdate();
 }
 
+void KisTimeline::removeLayerUiUpdate(int layer)
+{
+    m_list->removeLayerUiUpdate(layer);
+    m_cells->removeLayerUiUpdate(layer);
+}
+
 void KisTimeline::paintLayerPressed()
 {
     this->addLayerUiUpdate();
@@ -329,10 +334,15 @@ void KisTimeline::vectorLayerPressed()
 
 void KisTimeline::removeLayerPressed()
 {
+    if(m_list->numberOfLayers() == 1) {
+        return;
+    }
+
     if(m_cells->getSelectedFrame()) {
         int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
 
         // Refresh timeline
+        this->removeLayerUiUpdate(layer);
 
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->removeLayer(layer * 20);
     }
@@ -351,8 +361,6 @@ void KisTimeline::layerDownPressed()
 
 void KisTimeline::layerUpPressed()
 {
-    kWarning() << "Layer up pressed";
-
     if(m_cells->getSelectedFrame()) {
         int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
 
@@ -537,4 +545,9 @@ void KisTimeline::importUI(QHash<int, QList<QRect> > timelineMap)
     }
 
     m_imported = true;
+}
+
+int KisTimeline::numberOfLayers()
+{
+    return m_list->numberOfLayers();
 }

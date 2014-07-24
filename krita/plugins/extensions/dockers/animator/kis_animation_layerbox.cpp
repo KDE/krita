@@ -55,13 +55,25 @@ void KisAnimationLayerBox::addLayerUiUpdate()
     int y;
     int noLayers = m_layers.length();
 
-    for(int i = 0; i < noLayers-1; i++) {
+    for(int i = 0 ; i < noLayers - 1 ; i++) {
         y = m_layers.at(i)->geometry().y();
-        m_layers.at(i)->setGeometry(QRect(0, y+20, width(), 20));
+        m_layers.at(i)->setGeometry(QRect(0, y + 20, width(), 20));
     }
 
     newLayer->setGeometry(QRect(0, 20, width(), 20));
     newLayer->show();
+}
+
+void KisAnimationLayerBox::removeLayerUiUpdate(int layer)
+{
+    m_layers.at(layer)->hide();
+
+    for(int i = 0 ; i < layer ; i++) {
+        KisAnimationLayer* l = m_layers.at(i);
+        l->setGeometry(QRect(0, l->y() - 20, width(), 20));
+    }
+
+    m_layers.removeAt(layer);
 }
 
 void KisAnimationLayerBox::resizeEvent(QResizeEvent *event)
@@ -74,4 +86,9 @@ void KisAnimationLayerBox::resizeEvent(QResizeEvent *event)
 QList<KisAnimationLayer*> KisAnimationLayerBox::getLayers()
 {
     return this->m_layers;
+}
+
+int KisAnimationLayerBox::numberOfLayers()
+{
+    return m_layers.length();
 }

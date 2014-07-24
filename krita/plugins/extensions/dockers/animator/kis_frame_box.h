@@ -32,11 +32,16 @@ class KisFrameBox : public QListWidget
     Q_OBJECT
 public:
     KisFrameBox(KisTimeline* parent = 0);
+
     void setSelectedFrame(int x=-1, KisLayerContents* parent=0, int width=10);
+
     KisAnimationFrame* getSelectedFrame();
     KisLayerContents* getFirstLayer();
     QList<KisLayerContents*> getLayerContents();
+
     void addLayerUiUpdate();
+    void removeLayerUiUpdate(int layer);
+
     KisAnimationFrame* m_selectedFrame;
 
 private:

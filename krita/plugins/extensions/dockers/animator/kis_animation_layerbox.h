@@ -36,8 +36,13 @@ class KisAnimationLayerBox : public QListWidget
     Q_OBJECT
 public:
     KisAnimationLayerBox(KisTimeline* parent = 0);
+
     QList<KisAnimationLayer*> getLayers();
+
     void addLayerUiUpdate();
+    void removeLayerUiUpdate(int layer);
+
+    int numberOfLayers();
 
 protected:
     void resizeEvent(QResizeEvent *event);

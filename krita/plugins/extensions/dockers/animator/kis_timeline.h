@@ -46,11 +46,15 @@ public:
 
     void setModel(KisAnimation* animation);
 
+    int numberOfLayers();
+
 protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
     void addLayerUiUpdate();
+    void removeLayerUiUpdate(int layer);
+
     void init();
 
 public slots:
@@ -58,7 +62,6 @@ public slots:
 
 private:
     KisFrameBox* m_cells;
-    int m_numberOfLayers;
     KisCanvas2* m_canvas;
     KisAnimationLayerBox *m_list;
     KisAnimation* m_animation;

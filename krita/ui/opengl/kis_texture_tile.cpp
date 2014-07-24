@@ -304,13 +304,13 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 void KisTextureTile::createTextureBuffer(const char *data, int size)
 {
     if (m_useBuffer) {
-        m_glBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
-        m_glBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
-        m_glBuffer->create();
-
-        m_glBuffer->bind();
-
-        m_glBuffer->allocate(size);
+        if (!m_glBuffer) {
+            m_glBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
+            m_glBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
+            m_glBuffer->create();
+            m_glBuffer->bind();
+            m_glBuffer->allocate(size);
+        }
 
         void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
         memcpy(vid, data, size);

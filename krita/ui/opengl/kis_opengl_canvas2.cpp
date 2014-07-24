@@ -86,10 +86,11 @@ public:
         : displayShader(0)
         , checkerShader(0)
         , glSyncObject(0)
-        , wrapAroundMode(false)
         , firstDrawImage(true)
         , scaleX(0.0)
         , scaleY(0.0)
+        , wrapAroundMode(false)
+
     {
         vertices = new QVector3D[6];
         texCoords = new QVector2D[6];
@@ -107,8 +108,6 @@ public:
 
     QVector3D *vertices;
     QVector2D *texCoords;
-    bool firstDrawImage;
-    qreal scaleX, scaleY;
 
     KisOpenGLImageTexturesSP openGLImageTextures;
 
@@ -128,6 +127,9 @@ public:
     KisTextureTile::FilterMode filterMode;
 
     GLsync glSyncObject;
+
+    bool firstDrawImage;
+    qreal scaleX, scaleY;
 
     bool wrapAroundMode;
 
@@ -622,7 +624,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
 {
     KisConfig cfg;
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
-    d->openGLImageTextures->setUseOpenGLBuffer(cfg.useOpenGLTextureBuffer());
+    d->openGLImageTextures->updateConfig(cfg.useOpenGLTextureBuffer(), cfg.numMipmapLevels());
     d->filterMode = (KisTextureTile::FilterMode) cfg.openGLFilteringMode();
 
     notifyConfigChanged();

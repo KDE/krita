@@ -176,7 +176,8 @@ void KisOpenGLImageTextures::createImageTextureTiles()
                                                       &m_texturesInfo,
                                                       emptyTileData,
                                                       mode,
-                                                      cfg.useOpenGLTextureBuffer());
+                                                      cfg.useOpenGLTextureBuffer(),
+                                                      cfg.numMipmapLevels());
             m_textureTiles.append(tile);
         }
     }
@@ -311,10 +312,11 @@ GLuint KisOpenGLImageTextures::checkerTexture() const
     return m_checkerTexture;
 }
 
-void KisOpenGLImageTextures::setUseOpenGLBuffer(bool useBuffer)
+void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 {
     foreach(KisTextureTile *tile, m_textureTiles) {
         tile->setUseBuffer(useBuffer);
+        tile->setNumMipmapLevels(NumMipmapLevels);
     }
 }
 

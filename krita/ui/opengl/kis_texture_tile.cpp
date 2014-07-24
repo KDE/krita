@@ -37,22 +37,10 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
     return QRectF(x, y, w, h);
 }
 
-void setTextureParameters()
-{
-    const int numMipmapLevels = KisConfig().numMipmapLevels();
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, numMipmapLevels);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, numMipmapLevels);
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-}
 
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                               const QByteArray &fillData, FilterMode filter, bool useBuffer)
+                               const QByteArray &fillData, FilterMode filter,
+                               bool useBuffer, int numMipmapLevels)
 
     : m_textureId(0)
 #ifdef USE_PIXEL_BUFFERS
@@ -63,6 +51,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     , m_texturesInfo(texturesInfo)
     , m_needsMipmapRegeneration(false)
     , m_useBuffer(useBuffer)
+    , m_numMipmapLevels(numMipmapLevels)
 {
     const GLvoid *fd = fillData.constData();
 

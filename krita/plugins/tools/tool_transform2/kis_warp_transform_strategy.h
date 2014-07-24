@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QScopedPointer>
 
+#include "kis_transform_strategy_base.h"
+
 class QPointF;
 class QPainter;
 class KisCoordinatesConverter;
@@ -31,7 +33,8 @@ class TransformTransactionProperties;
 class QCursor;
 class QImage;
 
-class KisWarpTransformStrategy : public QObject
+
+class KisWarpTransformStrategy : public KisTransformStrategyBase
 {
     Q_OBJECT
 public:
@@ -40,19 +43,14 @@ public:
                              TransformTransactionProperties &transaction);
     ~KisWarpTransformStrategy();
 
-    void setTransformFunction(const QPointF &mousePos);
+    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);
     void paint(QPainter &gc);
     QCursor getCurrentCursor() const;
 
-    void setThumbnailImage(const QImage &image, QTransform thumbToImageTransform);
-
     void externalConfigChanged();
     bool beginPrimaryAction(const QPointF &pt);
-    void continuePrimaryAction(const QPointF &pt);
+    void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     bool endPrimaryAction();
-
-
-    void recalculateTransformationsWORKAROUND();
 
 signals:
     void requestCanvasUpdate();

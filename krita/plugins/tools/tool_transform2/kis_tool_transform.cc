@@ -99,6 +99,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         new KisFreeTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
             m_currentArgs, m_transaction, m_transform))
+    , m_currentStrategy(0)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
@@ -111,6 +112,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     connect(m_freeStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestResetRotationCenterButtons()), SLOT(resetRotationCenterButtonsRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
+    m_currentStrategy = m_freeStrategy.data();
 
     connect(&m_changesTracker, SIGNAL(sigConfigChanged()),
             this, SLOT(slotTrackerChangedConfig()));
@@ -144,6 +146,15 @@ void KisToolTransform::imageTooBigRequested(bool value)
     m_optionsWidget->setTooBigLabelVisible(value);
 }
 
+void KisToolTransform::strategyTypeSanityCheck()
+{
+    if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+        KIS_ASSERT_RECOVER_NOOP(m_currentStrategy == m_freeStrategy.data());
+    } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
+        KIS_ASSERT_RECOVER_NOOP(m_currentStrategy == m_warpStrategy.data());
+    }
+}
+
 void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
@@ -157,22 +168,17 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     }
     gc.restore();
 
-    if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-        m_freeStrategy->paint(gc);
-    } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-        m_warpStrategy->paint(gc);
-    }
+    strategyTypeSanityCheck();
+    m_currentStrategy->paint(gc);
 }
 
 void KisToolTransform::setFunctionalCursor()
 {
     if (!m_strokeData.strokeId()) {
         useCursor(KisCursor::pointingHandCursor());
-    } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-        useCursor(m_warpStrategy->getCurrentCursor());
-    }
-    else {
-        useCursor(m_freeStrategy->getCurrentCursor());
+    } else {
+        strategyTypeSanityCheck();
+        useCursor(m_currentStrategy->getCurrentCursor());
     }
 }
 
@@ -195,12 +201,9 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
         if (!m_strokeData.strokeId()) {
             startStroke(m_currentArgs.mode());
             setMode(KisTool::HOVER_MODE);
-        } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-            if (!m_warpStrategy->beginPrimaryAction(mousePos)) {
-                setMode(KisTool::HOVER_MODE);
-            }
-        } else if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-            if (!m_freeStrategy->beginPrimaryAction(mousePos)) {
+        } else {
+            strategyTypeSanityCheck();
+            if (!m_currentStrategy->beginPrimaryAction(mousePos)) {
                 setMode(KisTool::HOVER_MODE);
             }
         }
@@ -420,9 +423,10 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 {
     QPointF mousePos = m_canvas->coordinatesConverter()->documentToImage(event->point);
 
+    strategyTypeSanityCheck();
+
     if (!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        m_warpStrategy->setTransformFunction(mousePos);
-        m_freeStrategy->setTransformFunction(mousePos, event->modifiers() & Qt::ControlModifier);
+        m_currentStrategy->setTransformFunction(mousePos, event->modifiers() & Qt::ControlModifier);
         setFunctionalCursor();
         KisTool::mouseMoveEvent(event);
         return;
@@ -430,14 +434,8 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
     m_actuallyMoveWhileSelected = true;
 
-    if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-        m_warpStrategy->continuePrimaryAction(mousePos);
-    }
-    else {
-        m_freeStrategy->continuePrimaryAction(mousePos, event->modifiers() & Qt::ShiftModifier);
-        updateOptionWidget();
-    }
-
+    m_currentStrategy->continuePrimaryAction(mousePos, event->modifiers() & Qt::ShiftModifier);
+    updateOptionWidget();
     outlineChanged();
 }
 
@@ -451,17 +449,12 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
 
     if (m_actuallyMoveWhileSelected) {
-        if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-            if (m_warpStrategy->endPrimaryAction()) {
-                commitChanges();
-            }
-        }
-        else {
-            if (m_freeStrategy->endPrimaryAction()) {
-                commitChanges();
-            } else {
-                outlineChanged();
-            }
+        strategyTypeSanityCheck();
+
+        if (m_currentStrategy->endPrimaryAction()) {
+            commitChanges();
+        } else {
+            outlineChanged();
         }
     }
     updateApplyResetAvailability();
@@ -475,14 +468,15 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
     QString filterId = m_currentArgs.filterId();
 
     if (mode == ToolTransformArgs::FREE_TRANSFORM) {
+        m_currentStrategy = m_freeStrategy.data();
         m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_transaction.originalCenter(), m_transaction.originalCenter(), QPointF(),0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true, filterId);
-        m_freeStrategy->externalConfigChanged();
     } else /* if (mode == ToolTransformArgs::WARP) */ {
+        m_currentStrategy = m_warpStrategy.data();
         m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_transaction.originalCenter(), m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true, filterId);
         m_optionsWidget->setDefaultWarpPoints();
-        m_warpStrategy->externalConfigChanged();
     }
 
+    m_currentStrategy->externalConfigChanged();
     outlineChanged();
     updateOptionWidget();
     updateApplyResetAvailability();
@@ -545,8 +539,10 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
         thumbToImageTransform = QTransform();
     }
 
-    m_warpStrategy->setThumbnailImage(origImg, thumbToImageTransform);
+    // init both strokes since the thumbnail is initialized only once
+    // during the stroke
     m_freeStrategy->setThumbnailImage(origImg, thumbToImageTransform);
+    m_warpStrategy->setThumbnailImage(origImg, thumbToImageTransform);
 }
 
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -788,8 +784,8 @@ void KisToolTransform::slotUiChangedConfig()
 {
     if (mode() == KisTool::PAINT_MODE) return;
 
-    m_warpStrategy->externalConfigChanged();
-    m_freeStrategy->externalConfigChanged();
+    strategyTypeSanityCheck();
+    m_currentStrategy->externalConfigChanged();
 
     outlineChanged();
     updateApplyResetAvailability();

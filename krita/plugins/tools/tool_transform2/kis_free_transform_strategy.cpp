@@ -32,6 +32,26 @@
 #include "kis_transform_utils.h"
 #include "kis_free_transform_strategy_gsl_helpers.h"
 
+
+enum StrokeFunction {
+    ROTATE = 0,
+    MOVE,
+    RIGHTSCALE,
+    TOPRIGHTSCALE,
+    TOPSCALE,
+    TOPLEFTSCALE,
+    LEFTSCALE,
+    BOTTOMLEFTSCALE,
+    BOTTOMSCALE,
+    BOTTOMRIGHTSCALE,
+    BOTTOMSHEAR,
+    RIGHTSHEAR,
+    TOPSHEAR,
+    LEFTSHEAR,
+    MOVECENTER,
+    PERSPECTIVE
+};
+
 struct KisFreeTransformStrategy::Private
 {
     Private(KisFreeTransformStrategy *_q,
@@ -61,6 +81,7 @@ struct KisFreeTransformStrategy::Private
 
     KisFreeTransformStrategy *q;
 
+    /// standard members ///
 
     const KisCoordinatesConverter *converter;
 
@@ -76,14 +97,9 @@ struct KisFreeTransformStrategy::Private
     QTransform paintingTransform;
     QPointF paintingOffset;
 
-    QImage transformedImage;
-
     QTransform handlesTransform;
 
-    void recalculateTransformations();
-    inline QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
-
-    /// standard ended ///
+    /// custom members ///
 
     StrokeFunction function;
 
@@ -114,6 +130,7 @@ struct KisFreeTransformStrategy::Private
 
     QCursor getScaleCursor(const QPointF &handlePt);
     QCursor getShearCursor(const QPointF &start, const QPointF &end);
+    void recalculateTransformations();
     void recalculateTransformedHandles();
 };
 
@@ -144,9 +161,9 @@ void KisFreeTransformStrategy::Private::recalculateTransformedHandles()
     transformedHandles.bottomRight = transform.map(transaction.originalBottomRight());
 }
 
-void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, bool usePerspective)
+void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
 {
-    if (usePerspective) {
+    if (perspectiveModifierActive) {
         m_d->function = PERSPECTIVE;
         return;
     }
@@ -196,11 +213,6 @@ void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
                 m_d->function = RIGHTSHEAR;
         }
     }
-}
-
-KisFreeTransformStrategy::StrokeFunction KisFreeTransformStrategy::functionWORKAROUND() const
-{
-    return m_d->function;
 }
 
 QCursor KisFreeTransformStrategy::Private::getScaleCursor(const QPointF &handlePt)
@@ -291,7 +303,7 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
 
     gc.setOpacity(0.9);
     gc.setTransform(m_d->paintingTransform, true);
-    gc.drawImage(m_d->paintingOffset, m_d->originalImage);
+    gc.drawImage(m_d->paintingOffset, originalImage());
 
     gc.restore();
 
@@ -614,22 +626,6 @@ bool KisFreeTransformStrategy::endPrimaryAction()
     return !m_d->imageTooBig;
 }
 
-void KisFreeTransformStrategy::setThumbnailImage(const QImage &image, QTransform thumbToImageTransform)
-{
-    m_d->originalImage = image;
-    m_d->thumbToImageTransform = thumbToImageTransform;
-}
-
-inline QPointF KisFreeTransformStrategy::Private::imageToThumb(const QPointF &pt, bool useFlakeOptimization)
-{
-    return useFlakeOptimization ? converter->imageToDocument(converter->documentToFlake((pt))) : thumbToImageTransform.inverted().map(pt);
-}
-
-void KisFreeTransformStrategy::recalculateTransformationsWORKAROUND()
-{
-    m_d->recalculateTransformations();
-}
-
 void KisFreeTransformStrategy::Private::recalculateTransformations()
 {
     KisTransformUtils::MatricesPack m(currentArgs);
@@ -647,7 +643,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
     handlesTransform = transform * viewScaleTransform;
 
     QTransform tl = QTransform::fromTranslate(transaction.originalTopLeft().x(), transaction.originalTopLeft().y());
-    paintingTransform = tl.inverted() * thumbToImageTransform * tl * transform * viewScaleTransform;
+    paintingTransform = tl.inverted() * q->thumbToImageTransform() * tl * transform * viewScaleTransform;
     paintingOffset = transaction.originalTopLeft();
 
     // check whether image is too big to be displayed or not

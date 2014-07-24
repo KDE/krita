@@ -57,6 +57,7 @@ class KisCanvas2;
 class QTouchEvent;
 class KisWarpTransformStrategy;
 class KisFreeTransformStrategy;
+class KisTransformStrategyBase;
 
 /**
  * Transform tool
@@ -254,6 +255,9 @@ private:
 
     QScopedPointer<KisWarpTransformStrategy> m_warpStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
+    KisTransformStrategyBase *m_currentStrategy;
+
+    void strategyTypeSanityCheck();
 
 private slots:
     void slotTrackerChangedConfig();

@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QScopedPointer>
 
+#include "kis_transform_strategy_base.h"
+
 class QPointF;
 class QPainter;
 class KisCoordinatesConverter;
@@ -31,7 +33,7 @@ class TransformTransactionProperties;
 class QCursor;
 class QImage;
 
-class KisFreeTransformStrategy : public QObject
+class KisFreeTransformStrategy : public KisTransformStrategyBase
 {
     Q_OBJECT
 public:
@@ -41,40 +43,14 @@ public:
                              QTransform &transform);
     ~KisFreeTransformStrategy();
 
-    void setTransformFunction(const QPointF &mousePos, bool usePerspective);
+    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);
     void paint(QPainter &gc);
     QCursor getCurrentCursor() const;
-
-    void setThumbnailImage(const QImage &image, QTransform thumbToImageTransform);
 
     void externalConfigChanged();
     bool beginPrimaryAction(const QPointF &pt);
     void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     bool endPrimaryAction();
-
-
-    void recalculateTransformationsWORKAROUND();
-
-    enum StrokeFunction {
-        ROTATE = 0,
-        MOVE,
-        RIGHTSCALE,
-        TOPRIGHTSCALE,
-        TOPSCALE,
-        TOPLEFTSCALE,
-        LEFTSCALE,
-        BOTTOMLEFTSCALE,
-        BOTTOMSCALE,
-        BOTTOMRIGHTSCALE,
-        BOTTOMSHEAR,
-        RIGHTSHEAR,
-        TOPSHEAR,
-        LEFTSHEAR,
-        MOVECENTER,
-        PERSPECTIVE
-    };
-
-    StrokeFunction functionWORKAROUND() const;
 
 signals:
     void requestCanvasUpdate();

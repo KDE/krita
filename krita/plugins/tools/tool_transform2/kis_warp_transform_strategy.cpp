@@ -31,39 +31,39 @@
 
 struct KisWarpTransformStrategy::Private
 {
-    Private(const KisCoordinatesConverter *_converter,
+    Private(KisWarpTransformStrategy *_q,
+            const KisCoordinatesConverter *_converter,
             ToolTransformArgs &_currentArgs,
             TransformTransactionProperties &_transaction)
-        : converter(_converter),
+        : q(_q),
+          converter(_converter),
           currentArgs(_currentArgs),
           transaction(_transaction)
     {
     }
 
-    const KisCoordinatesConverter *converter;
+    KisWarpTransformStrategy * const q;
 
-    bool cursorOverPoint;
-    int pointIndexUnderCursor;
+    /// standard members ///
+
+    const KisCoordinatesConverter *converter;
 
     //////
     ToolTransformArgs &currentArgs;
     //////
     TransformTransactionProperties &transaction;
 
-
-    QTransform thumbToImageTransform;
-    QImage originalImage;
-
     QTransform paintingTransform;
     QPointF paintingOffset;
 
-    QImage transformedImage;
-
     QTransform handlesTransform;
 
-    static const int rotationCenterVisualRadius = 12;
-    static const int handleVisualRadius = 12;
-    static const int handleRadius = 24;
+    /// custom members ///
+
+    QImage transformedImage;
+
+    bool cursorOverPoint;
+    int pointIndexUnderCursor;
 
     void recalculateTransformations();
     inline QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
@@ -73,7 +73,7 @@ struct KisWarpTransformStrategy::Private
 KisWarpTransformStrategy::KisWarpTransformStrategy(const KisCoordinatesConverter *converter,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : m_d(new Private(converter, currentArgs, transaction))
+    : m_d(new Private(this, converter, currentArgs, transaction))
 {
 }
 
@@ -81,8 +81,10 @@ KisWarpTransformStrategy::~KisWarpTransformStrategy()
 {
 }
 
-void KisWarpTransformStrategy::setTransformFunction(const QPointF &mousePos)
+void KisWarpTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
 {
+    Q_UNUSED(perspectiveModifierActive);
+
     double handleRadiusSq = pow2(KisTransformUtils::effectiveHandleGrabRadius(m_d->converter));
 
     m_d->cursorOverPoint = false;
@@ -212,15 +214,16 @@ bool KisWarpTransformStrategy::beginPrimaryAction(const QPointF &pt)
         m_d->pointIndexUnderCursor = m_d->currentArgs.origPoints().size() - 1;
 
         m_d->recalculateTransformations();
-        setTransformFunction(pt);
         emit requestCanvasUpdate();
     }
 
     return hasSomethingToDrag;
 }
 
-void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt)
+void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool specialModifierActve)
 {
+    Q_UNUSED(specialModifierActve);
+
     // toplevel code switches to HOVER mode if nothing is selected
     KIS_ASSERT_RECOVER_RETURN(m_d->pointIndexUnderCursor >= 0);
 
@@ -243,27 +246,16 @@ bool KisWarpTransformStrategy::endPrimaryAction()
     return m_d->currentArgs.defaultPoints() || !m_d->transaction.editWarpPoints();
 }
 
-void KisWarpTransformStrategy::setThumbnailImage(const QImage &image, QTransform thumbToImageTransform)
-{
-    m_d->originalImage = image;
-    m_d->thumbToImageTransform = thumbToImageTransform;
-}
-
 inline QPointF KisWarpTransformStrategy::Private::imageToThumb(const QPointF &pt, bool useFlakeOptimization)
 {
-    return useFlakeOptimization ? converter->imageToDocument(converter->documentToFlake((pt))) : thumbToImageTransform.inverted().map(pt);
-}
-
-void KisWarpTransformStrategy::recalculateTransformationsWORKAROUND()
-{
-    m_d->recalculateTransformations();
+    return useFlakeOptimization ? converter->imageToDocument(converter->documentToFlake((pt))) : q->thumbToImageTransform().inverted().map(pt);
 }
 
 void KisWarpTransformStrategy::Private::recalculateTransformations()
 {
     QTransform scaleTransform = KisTransformUtils::imageToFlakeTransform(converter);
 
-    QTransform resultTransform = thumbToImageTransform * scaleTransform;
+    QTransform resultTransform = q->thumbToImageTransform() * scaleTransform;
     qreal scale = KisTransformUtils::scaleFromAffineMatrix(resultTransform);
     bool useFlakeOptimization = scale < 1.0;
 
@@ -277,23 +269,23 @@ void KisWarpTransformStrategy::Private::recalculateTransformations()
 
     paintingOffset = transaction.originalTopLeft();
 
-    if (!originalImage.isNull() && !transaction.editWarpPoints()) {
+    if (!q->originalImage().isNull() && !transaction.editWarpPoints()) {
         QPointF origTLInFlake = imageToThumb(transaction.originalTopLeft(), useFlakeOptimization);
 
         if (useFlakeOptimization) {
-            transformedImage = originalImage.transformed(thumbToImageTransform * scaleTransform);
+            transformedImage = q->originalImage().transformed(q->thumbToImageTransform() * scaleTransform);
             paintingTransform = QTransform();
         } else {
-            transformedImage = originalImage;
-            paintingTransform = thumbToImageTransform * scaleTransform;
+            transformedImage = q->originalImage();
+            paintingTransform = q->thumbToImageTransform() * scaleTransform;
 
         }
 
         transformedImage = KisWarpTransformWorker::transformation(currentArgs.warpType(), &transformedImage, thumbOrigPoints, thumbTransfPoints, currentArgs.alpha(), origTLInFlake, &paintingOffset);
     } else {
-        transformedImage = originalImage;
+        transformedImage = q->originalImage();
         paintingOffset = imageToThumb(transaction.originalTopLeft(), false);
-        paintingTransform = thumbToImageTransform * scaleTransform;
+        paintingTransform = q->thumbToImageTransform() * scaleTransform;
     }
 
     handlesTransform = scaleTransform;

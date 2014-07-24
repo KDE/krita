@@ -4,6 +4,7 @@ set(kritatooltransform_PART_SRCS
     tool_transform_changes_tracker.cpp
     kis_tool_transform.cc
     kis_tool_transform_config_widget.cpp
+    kis_transform_strategy_base.cpp
     kis_warp_transform_strategy.cpp
     kis_free_transform_strategy.cpp
     kis_free_transform_strategy_gsl_helpers.cpp

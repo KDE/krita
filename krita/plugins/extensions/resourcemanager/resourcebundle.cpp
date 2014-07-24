@@ -49,7 +49,7 @@
 #include <calligraversion.h>
 #include <calligragitversion.h>
 
-#include <resourcemanager.h>
+#include "resourcemanager.h"
 
 
 ResourceBundle::ResourceBundle(QString const& fileName)

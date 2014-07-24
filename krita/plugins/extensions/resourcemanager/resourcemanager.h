@@ -22,9 +22,10 @@
 
 #include <QVariant>
 #include <KoResourceServer.h>
-#include <resourcebundle.h>
 
 #include <kis_view_plugin.h>
+
+#include "resourcebundle.h"
 
 class ResourceBundleServerProvider {
 public:

@@ -326,11 +326,13 @@ bool KisLayer::hasEffectMasks() const
 {
     if (childCount() == 0) return false;
 
-    KoProperties properties;
-    properties.setProperty("visible", true);
-
-    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), properties);
-    if (!masks.isEmpty()) return true;
+    KisNodeSP node = firstChild();
+    while (node) {
+        if (node->inherits("KisEffectMask") && node->visible()) {
+            return true;
+        }
+        node = node->nextSibling();
+    }
 
     return false;
 }

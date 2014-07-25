@@ -48,12 +48,12 @@ public:
     }
 
     ///Reimplemented
-    virtual void importResourceFile(const QString& filename, bool fileCreation = true) {
+    virtual bool importResourceFile(const QString& filename, bool fileCreation = true) {
         QFileInfo fi(filename);
         if (fi.exists() == false)
-            return;
+            return false;
 
-        if (fi.size() == 0) return;
+        if (fi.size() == 0) return false;
 
         if (fi.suffix().toLower() == "abr") {
             if (fileCreation) {
@@ -65,9 +65,10 @@ public:
             }
         }
         else {
-            KisBrushResourceServer::importResourceFile(filename, fileCreation);
+            return KisBrushResourceServer::importResourceFile(filename, fileCreation);
         }
         qApp->processEvents(QEventLoop::AllEvents);
+        return true;
     }
 
 private:

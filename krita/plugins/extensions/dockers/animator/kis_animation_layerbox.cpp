@@ -76,6 +76,28 @@ void KisAnimationLayerBox::removeLayerUiUpdate(int layer)
     m_layers.removeAt(layer);
 }
 
+void KisAnimationLayerBox::moveLayerDownUiUpdate(int layer)
+{
+    KisAnimationLayer* l = m_layers.at(layer);
+    KisAnimationLayer* l_below = m_layers.at(layer - 1);
+
+    l->setGeometry(QRect(0, l->y() + 20, width(), 20));
+    l_below->setGeometry(QRect(0, l->y() - 20, width(), 20));
+
+    m_layers.swap(layer, layer - 1);
+}
+
+void KisAnimationLayerBox::moveLayerUpUiUpdate(int layer)
+{
+    KisAnimationLayer* l = m_layers.at(layer);
+    KisAnimationLayer* l_above = m_layers.at(layer + 1);
+
+    l->setGeometry(QRect(0, l->y() - 20, width(), 20));
+    l_above->setGeometry(QRect(0, l->y() + 20, width(), 20));
+
+    m_layers.swap(layer, layer + 1);
+}
+
 void KisAnimationLayerBox::resizeEvent(QResizeEvent *event)
 {
     for(int i = 0; i < m_layers.length(); i++) {

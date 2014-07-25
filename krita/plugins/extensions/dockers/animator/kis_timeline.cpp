@@ -320,6 +320,18 @@ void KisTimeline::removeLayerUiUpdate(int layer)
     m_cells->removeLayerUiUpdate(layer);
 }
 
+void KisTimeline::moveLayerDownUiUpdate(int layer)
+{
+    m_list->moveLayerDownUiUpdate(layer);
+    m_cells->moveLayerDownUiUpdate(layer);
+}
+
+void KisTimeline::moveLayerUpUiUpdate(int layer)
+{
+    m_list->moveLayerUpUiUpdate(layer);
+    m_cells->moveLayerUpUiUpdate(layer);
+}
+
 void KisTimeline::paintLayerPressed()
 {
     this->addLayerUiUpdate();
@@ -353,7 +365,13 @@ void KisTimeline::layerDownPressed()
     if(m_cells->getSelectedFrame()) {
         int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
 
+        // If it is the bottom most layer
+        if(layer == 0) {
+            return;
+        }
+
         // Refresh the timeline
+        this->moveLayerDownUiUpdate(layer);
 
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->moveLayerDown(layer * 20);
     }
@@ -364,7 +382,13 @@ void KisTimeline::layerUpPressed()
     if(m_cells->getSelectedFrame()) {
         int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
 
+        // If it is the top most layer
+        if(layer == this->numberOfLayers() - 1) {
+            return;
+        }
+
         // Refresh the timeline
+        this->moveLayerUpUiUpdate(layer);
 
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->moveLayerUp(layer * 20);
     }

@@ -83,6 +83,28 @@ void KisFrameBox::removeLayerUiUpdate(int layer)
     m_layerContents.removeAt(layer);
 }
 
+void KisFrameBox::moveLayerDownUiUpdate(int layer)
+{
+    KisLayerContents* l = m_layerContents.at(layer);
+    KisLayerContents* l_below = m_layerContents.at(layer - 1);
+
+    l->setGeometry(QRect(0, l->y() + 20, width(), 20));
+    l_below->setGeometry(QRect(0, l->y() - 20, width(), 20));
+
+    m_layerContents.swap(layer, layer - 1);
+}
+
+void KisFrameBox::moveLayerUpUiUpdate(int layer)
+{
+    KisLayerContents* l = m_layerContents.at(layer);
+    KisLayerContents* l_above = m_layerContents.at(layer + 1);
+
+    l->setGeometry(QRect(0, l->y() - 20, width(), 20));
+    l_above->setGeometry(QRect(0, l->y() + 20, width(), 20));
+
+    m_layerContents.swap(layer, layer + 1);
+}
+
 void KisFrameBox::setSelectedFrame(int x, KisLayerContents* parent, int width)
 {
     if(x < 0) {

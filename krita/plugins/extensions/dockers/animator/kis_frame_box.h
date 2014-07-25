@@ -42,6 +42,9 @@ public:
     void addLayerUiUpdate();
     void removeLayerUiUpdate(int layer);
 
+    void moveLayerUpUiUpdate(int layer);
+    void moveLayerDownUiUpdate(int layer);
+
     KisAnimationFrame* m_selectedFrame;
 
 private:

@@ -21,7 +21,7 @@
 #include <QLineEdit>
 #include <QHBoxLayout>
 
-KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent)
+KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent, int index)
 {
     this->setParent(parent);
     this->m_layerBox = parent;
@@ -30,7 +30,7 @@ KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent)
     m_inputLayerName->setFixedHeight(20);
 
     m_lblLayerName = new QLabel(this);
-    m_lblLayerName->setText("Layer");
+    m_lblLayerName->setText("Layer " + QString::number(index));
     m_lblLayerName->setFixedHeight(20);
 
     lay = new QHBoxLayout();

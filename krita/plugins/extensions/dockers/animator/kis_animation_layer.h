@@ -30,7 +30,7 @@ class KisAnimationLayer : public QWidget
     Q_OBJECT
 
 public:
-    KisAnimationLayer(KisAnimationLayerBox* parent = 0);
+    KisAnimationLayer(KisAnimationLayerBox* parent = 0, int index = 1);
 
 protected:
     void paintEvent(QPaintEvent *event);

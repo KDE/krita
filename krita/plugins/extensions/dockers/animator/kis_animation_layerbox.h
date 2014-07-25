@@ -55,6 +55,7 @@ private:
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;
     QList<KisAnimationLayer*> m_layers;
+    int m_layerIndex;
 
 };
 

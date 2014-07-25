@@ -35,22 +35,26 @@
 KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
 {
     this->m_dock = parent;
+
+    m_layerIndex = 1;
     m_nodeModel = new KisNodeModel(this);
 
     QLabel *lbl_Layers = new QLabel(this);
     lbl_Layers->setText("Animation Layers");
     lbl_Layers->setGeometry(QRect(0, 0, width(), 20));
 
-    KisAnimationLayer* firstLayer = new KisAnimationLayer(this);
+    KisAnimationLayer* firstLayer = new KisAnimationLayer(this, m_layerIndex);
     m_layers << firstLayer;
     firstLayer->setGeometry(QRect(0,this->m_layers.length()*20, width(), 20));
 }
 
 void KisAnimationLayerBox::addLayerUiUpdate()
 {
+    m_layerIndex++;
+
     this->setFixedHeight(this->height()+20);
 
-    KisAnimationLayer* newLayer = new KisAnimationLayer(this);
+    KisAnimationLayer* newLayer = new KisAnimationLayer(this, m_layerIndex);
     m_layers << newLayer;
     int y;
     int noLayers = m_layers.length();

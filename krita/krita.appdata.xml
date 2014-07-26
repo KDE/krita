@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>krita.desktop</id>
-  <id xml:lang="et">krita.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <summary>Digital Painting, Creative Freedom</summary>
   <summary xml:lang="ca">Dibuix digital, Llibertat creativa</summary>
@@ -81,24 +80,19 @@
     <p xml:lang="x-test">xxHave fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.xx</p>
   </description>
   <url type="homepage">http://www.krita.org/</url>
-  <url type="homepage" xml:lang="et">http://www.krita.org/</url>
   <url type="faq">http://krita.org/faq</url>
   <url type="donation">http://krita.org/support-krita</url>
   <url type="help">http://krita.org/resources</url>
   <screenshots>
     <screenshot type="default">
       <image>http://heap.kogmbh.net/downloads/krita_appdata_1.png</image>
-      <image xml:lang="et">http://heap.kogmbh.net/downloads/krita_appdata_1.png</image>
     </screenshot>
     <screenshot>
       <image>http://heap.kogmbh.net/downloads/krita_appdata_2.png</image>
-      <image xml:lang="et">http://heap.kogmbh.net/downloads/krita_appdata_2.png</image>
     </screenshot>
   </screenshots>
   <x-updatecontact>foundation@krita.org</x-updatecontact>
-  <x-updatecontact xml:lang="et">foundation@krita.org</x-updatecontact>
   <project_group>KDE</project_group>
-  <project_group xml:lang="et">KDE</project_group>
   <provides>
     <binary>krita</binary>
   </provides>

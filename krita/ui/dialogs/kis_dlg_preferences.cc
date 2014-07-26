@@ -741,11 +741,13 @@ bool KisDlgPreferences::editPreferences()
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if (app) {
             foreach(KoPart* part, app->partList()) {
-                KoDocument *doc = part->document();
-                if (doc) {
-                    doc->setAutoSave(dialog->m_general->autoSaveInterval());
-                    doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-                    doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+                if (part) {
+                    KoDocument *doc = part->document();
+                    if (doc) {
+                        doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                        doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+                        doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+                    }
                 }
             }
         }

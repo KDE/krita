@@ -24,6 +24,11 @@
 #include <QComboBox>
 
 #include <klocale.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 
 #include "kis_cursor.h"
 #include "kis_config.h"
@@ -33,6 +38,24 @@
 #define MAXIMUM_MAGNETISM 1000
 
 
+void KisToolBrush::addSmoothingAction(int enumId, const QString &id, const QString &name, KActionCollection *globalCollection)
+{
+    /**
+     * KisToolBrush is the base of several tools, but the actions
+     * should be unique, so let's be careful with them
+     */
+    if (!globalCollection->action(id)) {
+        KAction *action = new KAction(name, globalCollection);
+        globalCollection->addAction(id, action);
+    }
+
+    KAction *action = dynamic_cast<KAction*>(globalCollection->action(id));
+    addAction(id, action);
+
+    connect(action, SIGNAL(triggered()), &m_signalMapper, SLOT(map()));
+    m_signalMapper.setMapping(action, enumId);
+}
+
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
     : KisToolFreehand(canvas,
                       KisCursor::load("tool_freehand_cursor.png", 5, 5),
@@ -40,10 +63,29 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
 {
     setObjectName("tool_brush");
     connect(this, SIGNAL(smoothingTypeChanged()), this, SLOT(resetCursorStyle()));
+
+    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
+
+    addSmoothingAction(KisSmoothingOptions::NO_SMOOTHING, "set_no_brush_smoothing", i18nc("@action", "Brush Smoothing: Disabled"), collection);
+    addSmoothingAction(KisSmoothingOptions::SIMPLE_SMOOTHING, "set_simple_brush_smoothing", i18nc("@action", "Brush Smoothing: Basic"), collection);
+    addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing", i18nc("@action", "Brush Smoothing: Weighted"), collection);
+    addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing", i18nc("@action", "Brush Smoothing: Stabilizer"), collection);
 }
 
 KisToolBrush::~KisToolBrush()
 {
+}
+
+void KisToolBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+{
+    KisToolFreehand::activate(activation, shapes);
+    connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
+}
+
+void KisToolBrush::deactivate()
+{
+    disconnect(&m_signalMapper, 0, this, 0);
+    KisToolFreehand::deactivate();
 }
 
 int KisToolBrush::smoothingType() const
@@ -68,6 +110,14 @@ qreal KisToolBrush::smoothnessFactor() const
 
 void KisToolBrush::slotSetSmoothingType(int index)
 {
+    /**
+     * The slot can also be called from smoothing-type-switching
+     * action that would mean the combo box will not be synchronized
+     */
+    if (m_cmbSmoothingType->currentIndex() != index) {
+        m_cmbSmoothingType->setCurrentIndex(index);
+    }
+
     switch (index) {
     case 0:
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);

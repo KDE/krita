@@ -265,9 +265,7 @@ private:
     QScopedPointer<KisWarpTransformStrategy> m_warpStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
     QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
-    KisTransformStrategyBase *m_currentStrategy;
-
-    void strategyTypeSanityCheck();
+    KisTransformStrategyBase* currentStrategy() const;
 
 private slots:
     void slotTrackerChangedConfig();

@@ -102,7 +102,6 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         new KisPerspectiveTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
             m_currentArgs, m_transaction))
-    , m_currentStrategy(0)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
@@ -116,7 +115,6 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     connect(m_freeStrategy.data(), SIGNAL(requestResetRotationCenterButtons()), SLOT(resetRotationCenterButtonsRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
     connect(m_perspectiveStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
-    m_currentStrategy = m_perspectiveStrategy.data();
 
     connect(&m_changesTracker, SIGNAL(sigConfigChanged()),
             this, SLOT(slotTrackerChangedConfig()));
@@ -150,14 +148,14 @@ void KisToolTransform::imageTooBigRequested(bool value)
     m_optionsWidget->setTooBigLabelVisible(value);
 }
 
-void KisToolTransform::strategyTypeSanityCheck()
+KisTransformStrategyBase* KisToolTransform::currentStrategy() const
 {
     if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-        KIS_ASSERT_RECOVER_NOOP(m_currentStrategy == m_freeStrategy.data());
+        return m_freeStrategy.data();
     } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-        KIS_ASSERT_RECOVER_NOOP(m_currentStrategy == m_warpStrategy.data());
-    } else if (m_currentArgs.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
-        KIS_ASSERT_RECOVER_NOOP(m_currentStrategy == m_perspectiveStrategy.data());
+        return m_warpStrategy.data();
+    } else /* if (m_currentArgs.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) */ {
+        return m_perspectiveStrategy.data();
     }
 }
 
@@ -170,7 +168,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     QRectF newRefRect = KisTransformUtils::imageToFlake(m_canvas->coordinatesConverter(), QRectF(0.0,0.0,1.0,1.0));
     if (m_refRect != newRefRect) {
         m_refRect = newRefRect;
-        m_currentStrategy->externalConfigChanged();
+        currentStrategy()->externalConfigChanged();
     }
 
     gc.save();
@@ -180,8 +178,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     }
     gc.restore();
 
-    strategyTypeSanityCheck();
-    m_currentStrategy->paint(gc);
+    currentStrategy()->paint(gc);
 }
 
 void KisToolTransform::setFunctionalCursor()
@@ -189,8 +186,7 @@ void KisToolTransform::setFunctionalCursor()
     if (!m_strokeData.strokeId()) {
         useCursor(KisCursor::pointingHandCursor());
     } else {
-        strategyTypeSanityCheck();
-        useCursor(m_currentStrategy->getCurrentCursor());
+        useCursor(currentStrategy()->getCurrentCursor());
     }
 }
 
@@ -214,8 +210,7 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
             startStroke(m_currentArgs.mode());
             setMode(KisTool::HOVER_MODE);
         } else {
-            strategyTypeSanityCheck();
-            if (!m_currentStrategy->beginPrimaryAction(mousePos)) {
+            if (!currentStrategy()->beginPrimaryAction(mousePos)) {
                 setMode(KisTool::HOVER_MODE);
             }
         }
@@ -469,10 +464,8 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 {
     QPointF mousePos = m_canvas->coordinatesConverter()->documentToImage(event->point);
 
-    strategyTypeSanityCheck();
-
     if (!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        m_currentStrategy->setTransformFunction(mousePos, event->modifiers() & Qt::ControlModifier);
+        currentStrategy()->setTransformFunction(mousePos, event->modifiers() & Qt::ControlModifier);
         setFunctionalCursor();
         KisTool::mouseMoveEvent(event);
         return;
@@ -480,7 +473,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
     m_actuallyMoveWhileSelected = true;
 
-    m_currentStrategy->continuePrimaryAction(mousePos, event->modifiers() & Qt::ShiftModifier);
+    currentStrategy()->continuePrimaryAction(mousePos, event->modifiers() & Qt::ShiftModifier);
     updateOptionWidget();
     outlineChanged();
 }
@@ -495,9 +488,7 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
 
     if (m_actuallyMoveWhileSelected) {
-        strategyTypeSanityCheck();
-
-        if (m_currentStrategy->endPrimaryAction()) {
+        if (currentStrategy()->endPrimaryAction()) {
             commitChanges();
         } else {
             outlineChanged();
@@ -518,18 +509,15 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
     m_currentArgs.setTransformedCenter(m_transaction.originalCenter());
 
     if (mode == ToolTransformArgs::FREE_TRANSFORM) {
-        m_currentStrategy = m_freeStrategy.data();
         m_currentArgs.setMode(ToolTransformArgs::FREE_TRANSFORM);
     } else if (mode == ToolTransformArgs::WARP) {
-        m_currentStrategy = m_warpStrategy.data();
         m_currentArgs.setMode(ToolTransformArgs::WARP);
         m_optionsWidget->setDefaultWarpPoints();
     } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
-        m_currentStrategy = m_perspectiveStrategy.data();
         m_currentArgs.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
     }
 
-    m_currentStrategy->externalConfigChanged();
+    currentStrategy()->externalConfigChanged();
     outlineChanged();
     updateOptionWidget();
     updateApplyResetAvailability();
@@ -837,8 +825,7 @@ void KisToolTransform::slotUiChangedConfig()
 {
     if (mode() == KisTool::PAINT_MODE) return;
 
-    strategyTypeSanityCheck();
-    m_currentStrategy->externalConfigChanged();
+    currentStrategy()->externalConfigChanged();
 
     outlineChanged();
     updateApplyResetAvailability();

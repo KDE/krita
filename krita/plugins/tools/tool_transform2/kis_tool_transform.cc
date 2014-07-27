@@ -78,11 +78,10 @@
 
 #include "widgets/kis_progress_widget.h"
 
+#include "kis_transform_utils.h"
 #include "kis_warp_transform_strategy.h"
 #include "kis_free_transform_strategy.h"
-
-#include <Eigen/Geometry>
-using namespace Eigen;
+#include "kis_perspective_transform_strategy.h"
 
 #include "strokes/transform_stroke_strategy.h"
 
@@ -98,7 +97,11 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     , m_freeStrategy(
         new KisFreeTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
-            m_currentArgs, m_transaction, m_transform))
+            m_currentArgs, m_transaction))
+    , m_perspectiveStrategy(
+        new KisPerspectiveTransformStrategy(
+            dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            m_currentArgs, m_transaction))
     , m_currentStrategy(0)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -112,7 +115,8 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     connect(m_freeStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestResetRotationCenterButtons()), SLOT(resetRotationCenterButtonsRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
-    m_currentStrategy = m_freeStrategy.data();
+    connect(m_perspectiveStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
+    m_currentStrategy = m_perspectiveStrategy.data();
 
     connect(&m_changesTracker, SIGNAL(sigConfigChanged()),
             this, SLOT(slotTrackerChangedConfig()));
@@ -152,6 +156,8 @@ void KisToolTransform::strategyTypeSanityCheck()
         KIS_ASSERT_RECOVER_NOOP(m_currentStrategy == m_freeStrategy.data());
     } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         KIS_ASSERT_RECOVER_NOOP(m_currentStrategy == m_warpStrategy.data());
+    } else if (m_currentArgs.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+        KIS_ASSERT_RECOVER_NOOP(m_currentStrategy == m_perspectiveStrategy.data());
     }
 }
 
@@ -160,6 +166,12 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     Q_UNUSED(converter);
 
     if (!m_strokeData.strokeId()) return;
+
+    QRectF newRefRect = KisTransformUtils::imageToFlake(m_canvas->coordinatesConverter(), QRectF(0.0,0.0,1.0,1.0));
+    if (m_refRect != newRefRect) {
+        m_refRect = newRefRect;
+        m_currentStrategy->externalConfigChanged();
+    }
 
     gc.save();
     if (m_optionsWidget && m_optionsWidget->showDecorations()) {
@@ -292,7 +304,24 @@ bool KisToolTransform::isActive() const
 
 KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
 {
-    return m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM ? FreeTransformMode : WarpTransformMode;
+    TransformToolMode mode = FreeTransformMode;
+
+    switch (m_currentArgs.mode())
+    {
+    case ToolTransformArgs::FREE_TRANSFORM:
+        mode = FreeTransformMode;
+        break;
+    case ToolTransformArgs::WARP:
+        mode = WarpTransformMode;
+        break;
+    case ToolTransformArgs::PERSPECTIVE_4POINT:
+        mode = PerspectiveTransformMode;
+        break;
+    default:
+        KIS_ASSERT_RECOVER_NOOP(0 && "unexpected transform mode");
+    }
+
+    return mode;
 }
 
 double KisToolTransform::translateX() const
@@ -366,12 +395,29 @@ int KisToolTransform::warpPointDensity() const
 
 void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newMode)
 {
-    ToolTransformArgs::TransformMode mode = newMode == FreeTransformMode ? ToolTransformArgs::FREE_TRANSFORM : ToolTransformArgs::WARP;
+    ToolTransformArgs::TransformMode mode = ToolTransformArgs::FREE_TRANSFORM;
+
+    switch (newMode) {
+    case FreeTransformMode:
+        mode = ToolTransformArgs::FREE_TRANSFORM;
+        break;
+    case WarpTransformMode:
+        mode = ToolTransformArgs::WARP;
+        break;
+    case PerspectiveTransformMode:
+        mode = ToolTransformArgs::PERSPECTIVE_4POINT;
+        break;
+    default:
+        KIS_ASSERT_RECOVER_NOOP(0 && "unexpected transform mode");
+    }
+
     if( mode != m_currentArgs.mode() ) {
         if( newMode == FreeTransformMode ) {
             m_optionsWidget->slotSetFreeTransformModeButtonClicked( true );
-        } else {
+        } else if( newMode == WarpTransformMode ) {
             m_optionsWidget->slotSetWrapModeButtonClicked( true );
+        } else if( newMode == PerspectiveTransformMode ) {
+            m_optionsWidget->slotSetPerspectiveModeButtonClicked( true );
         }
         emit transformModeChanged();
     }
@@ -467,13 +513,20 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
     //       levels.
     QString filterId = m_currentArgs.filterId();
 
+    m_currentArgs = ToolTransformArgs();
+    m_currentArgs.setOriginalCenter(m_transaction.originalCenter());
+    m_currentArgs.setTransformedCenter(m_transaction.originalCenter());
+
     if (mode == ToolTransformArgs::FREE_TRANSFORM) {
         m_currentStrategy = m_freeStrategy.data();
-        m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_transaction.originalCenter(), m_transaction.originalCenter(), QPointF(),0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true, filterId);
-    } else /* if (mode == ToolTransformArgs::WARP) */ {
+        m_currentArgs.setMode(ToolTransformArgs::FREE_TRANSFORM);
+    } else if (mode == ToolTransformArgs::WARP) {
         m_currentStrategy = m_warpStrategy.data();
-        m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_transaction.originalCenter(), m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true, filterId);
+        m_currentArgs.setMode(ToolTransformArgs::WARP);
         m_optionsWidget->setDefaultWarpPoints();
+    } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
+        m_currentStrategy = m_perspectiveStrategy.data();
+        m_currentArgs.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
     }
 
     m_currentStrategy->externalConfigChanged();
@@ -506,7 +559,6 @@ void KisToolTransform::updateSelectionPath()
 
 void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
 {
-    m_transform = QTransform();
     QImage origImg;
     m_selectedPortionCache = previewDevice;
 
@@ -542,6 +594,7 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
     // init both strokes since the thumbnail is initialized only once
     // during the stroke
     m_freeStrategy->setThumbnailImage(origImg, thumbToImageTransform);
+    m_perspectiveStrategy->setThumbnailImage(origImg, thumbToImageTransform);
     m_warpStrategy->setThumbnailImage(origImg, thumbToImageTransform);
 }
 

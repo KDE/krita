@@ -159,6 +159,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Mode switch buttons
     connect(freeTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetFreeTransformModeButtonClicked(bool)));
     connect(warpButton, SIGNAL(clicked(bool)), this, SLOT(slotSetWrapModeButtonClicked(bool)));
+    connect(perspectiveTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetPerspectiveModeButtonClicked(bool)));
 
     // Connect Decorations switcher
     connect(showDecorationsBox, SIGNAL(toggled(bool)), canvas, SLOT(updateCanvas()));
@@ -195,10 +196,24 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 {
     blockUiSlots();
 
-    if (config.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+    if (config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
+        config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+
         stackedWidget->setCurrentIndex(0);
-        freeTransformButton->setChecked(true);
+
+        bool freeTransformIsActive = config.mode() == ToolTransformArgs::FREE_TRANSFORM;
+
+        freeTransformButton->setChecked(freeTransformIsActive);
+        perspectiveTransformButton->setChecked(!freeTransformIsActive);
         warpButton->setChecked(false);
+
+        aXBox->setEnabled(freeTransformIsActive);
+        aYBox->setEnabled(freeTransformIsActive);
+        aZBox->setEnabled(freeTransformIsActive);
+        foreach (QAbstractButton *button, m_rotationCenterButtons->buttons()) {
+            button->setEnabled(freeTransformIsActive);
+        }
+
         scaleXBox->setValue(config.scaleX() * 100.);
         scaleYBox->setValue(config.scaleY() * 100.);
         shearXBox->setValue(config.shearX());
@@ -351,6 +366,13 @@ void KisToolTransformConfigWidget::slotSetWrapModeButtonClicked(bool)
 {
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::WARP);
+    emit sigResetTransform();
+}
+
+void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool)
+{
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
     emit sigResetTransform();
 }
 

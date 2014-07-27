@@ -55,9 +55,11 @@ class KisFilterStrategy;
 class KisCanvas2;
 
 class QTouchEvent;
+class KisTransformStrategyBase;
 class KisWarpTransformStrategy;
 class KisFreeTransformStrategy;
-class KisTransformStrategyBase;
+class KisPerspectiveTransformStrategy;
+
 
 /**
  * Transform tool
@@ -104,7 +106,8 @@ class KisToolTransform : public KisTool
 public:
     enum TransformToolMode {
         FreeTransformMode,
-        WarpTransformMode
+        WarpTransformMode,
+        PerspectiveTransformMode
     };
     Q_ENUMS(TransformToolMode)
 
@@ -219,7 +222,6 @@ private:
 
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
 
-    QTransform m_transform; // transformation to apply on origImg
     KisPaintDeviceSP m_selectedPortionCache;
 
     struct StrokeData {
@@ -253,8 +255,16 @@ private:
     TransformTransactionProperties m_transaction;
     TransformChangesTracker m_changesTracker;
 
+    /**
+     * This artificial rect is used to store the image to flake
+     * transformation. We check against this rect to get to know
+     * whether zoom has changed.
+     */
+    QRectF m_refRect;
+
     QScopedPointer<KisWarpTransformStrategy> m_warpStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
+    QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
     KisTransformStrategyBase *m_currentStrategy;
 
     void strategyTypeSanityCheck();

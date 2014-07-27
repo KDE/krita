@@ -42,6 +42,11 @@ public:
         return converter->documentToImage(converter->flakeToDocument(object));
     }
 
+    template <class T>
+    static T imageToFlake(const KisCoordinatesConverter *converter, T object) {
+        return converter->documentToFlake(converter->imageToDocument(object));
+    }
+
     static QTransform imageToFlakeTransform(const KisCoordinatesConverter *converter);
     static qreal effectiveHandleGrabRadius(const KisCoordinatesConverter *converter);
 

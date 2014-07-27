@@ -8,6 +8,7 @@ set(kritatooltransform_PART_SRCS
     kis_warp_transform_strategy.cpp
     kis_free_transform_strategy.cpp
     kis_free_transform_strategy_gsl_helpers.cpp
+    kis_perspective_transform_strategy.cpp
     kis_transform_utils.cpp
     strokes/transform_stroke_strategy.cpp
     )

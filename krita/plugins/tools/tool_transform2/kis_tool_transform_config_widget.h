@@ -81,6 +81,7 @@ public slots:
 
     void slotSetFreeTransformModeButtonClicked(bool);
     void slotSetWrapModeButtonClicked(bool);
+    void slotSetPerspectiveModeButtonClicked(bool);
     void slotButtonBoxClicked(QAbstractButton *button);
 
     void notifyEditingFinished();

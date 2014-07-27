@@ -37,7 +37,7 @@ ToolTransformArgs::ToolTransformArgs()
     m_shearY = 0.0;
     m_origPoints = QVector<QPointF>();
     m_transfPoints = QVector<QPointF>();
-    m_warpType = KisWarpTransformWorker::AFFINE_TRANSFORM;
+    m_warpType = KisWarpTransformWorker::RIGID_TRANSFORM;
     m_alpha = 1.0;
     m_keepAspectRatio = false;
 
@@ -66,6 +66,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_defaultPoints = args.defaultPoints();
     m_keepAspectRatio = args.keepAspectRatio();
     m_filter = args.m_filter;
+    m_flattenedPerspectiveTransform = args.m_flattenedPerspectiveTransform;
 }
 
 void ToolTransformArgs::clear()
@@ -134,11 +135,18 @@ bool ToolTransformArgs::isIdentity() const
         return (m_transformedCenter == m_originalCenter && m_scaleX == 1
                 && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
                 && m_aX == 0 && m_aY == 0 && m_aZ == 0);
-    } else {
+    } else if (m_mode == PERSPECTIVE_4POINT) {
+            return (m_transformedCenter == m_originalCenter && m_scaleX == 1
+                    && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
+                    && m_flattenedPerspectiveTransform.isIdentity());
+    } else if(m_mode == WARP) {
         for (int i = 0; i < m_origPoints.size(); ++i)
             if (m_origPoints[i] != m_transfPoints[i])
                 return false;
 
+        return true;
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
         return true;
     }
 }

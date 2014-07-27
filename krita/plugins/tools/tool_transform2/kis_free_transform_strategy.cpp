@@ -57,13 +57,11 @@ struct KisFreeTransformStrategy::Private
     Private(KisFreeTransformStrategy *_q,
             const KisCoordinatesConverter *_converter,
             ToolTransformArgs &_currentArgs,
-            TransformTransactionProperties &_transaction,
-            QTransform &_transform)
+            TransformTransactionProperties &_transaction)
         : q(_q),
           converter(_converter),
           currentArgs(_currentArgs),
           transaction(_transaction),
-          transform(_transform),
           imageTooBig(false)
     {
         scaleCursors[0] = KisCursor::sizeHorCursor();
@@ -118,7 +116,7 @@ struct KisFreeTransformStrategy::Private
     };
     HandlePoints transformedHandles;
 
-    QTransform &transform;
+    QTransform transform;
 
     QCursor scaleCursors[8]; // cursors for the 8 directions
     QPixmap shearCursorPixmap;
@@ -136,9 +134,8 @@ struct KisFreeTransformStrategy::Private
 
 KisFreeTransformStrategy::KisFreeTransformStrategy(const KisCoordinatesConverter *converter,
                                                    ToolTransformArgs &currentArgs,
-                                                   TransformTransactionProperties &transaction,
-                                                   QTransform &transform)
-    : m_d(new Private(this, converter, currentArgs, transaction, transform))
+                                                   TransformTransactionProperties &transaction)
+    : m_d(new Private(this, converter, currentArgs, transaction))
 {
 }
 

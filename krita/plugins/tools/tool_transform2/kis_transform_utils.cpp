@@ -103,10 +103,15 @@ KisTransformUtils::MatricesPack::MatricesPack(const ToolTransformArgs &args)
     SC = QTransform::fromScale(args.scaleX(), args.scaleY());
     S.shear(0, args.shearY()); S.shear(args.shearX(), 0);
 
-    P.rotate(180. * args.aX() / M_PI, QVector3D(1, 0, 0));
-    P.rotate(180. * args.aY() / M_PI, QVector3D(0, 1, 0));
-    P.rotate(180. * args.aZ() / M_PI, QVector3D(0, 0, 1));
-    projectedP = P.toTransform(args.cameraPos().z());
+    if (args.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+        P.rotate(180. * args.aX() / M_PI, QVector3D(1, 0, 0));
+        P.rotate(180. * args.aY() / M_PI, QVector3D(0, 1, 0));
+        P.rotate(180. * args.aZ() / M_PI, QVector3D(0, 0, 1));
+        projectedP = P.toTransform(args.cameraPos().z());
+    } else if (args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+        projectedP = args.flattenedPerspectiveTransform();
+        P = QMatrix4x4(projectedP);
+    }
 
     QPointF translation = args.transformedCenter();
     T = QTransform::fromTranslate(translation.x(), translation.y());

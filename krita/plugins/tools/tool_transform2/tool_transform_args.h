@@ -37,7 +37,8 @@ class ToolTransformArgs
 {
 public:
     enum TransformMode {FREE_TRANSFORM = 0,
-                        WARP};
+                        WARP,
+                        PERSPECTIVE_4POINT};
 
     /**
      * Initializes the parameters for an identity transformation,
@@ -221,6 +222,14 @@ public:
 
     bool isIdentity() const;
 
+    inline QTransform flattenedPerspectiveTransform() const {
+        return m_flattenedPerspectiveTransform;
+    }
+
+    inline void setFlattenedPerspectiveTransform(const QTransform &value) {
+        m_flattenedPerspectiveTransform = value;
+    }
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -252,6 +261,8 @@ private:
     double m_shearX;
     double m_shearY;
     bool m_keepAspectRatio;
+
+    QTransform m_flattenedPerspectiveTransform;
 
     KisFilterStrategy *m_filter;
 };

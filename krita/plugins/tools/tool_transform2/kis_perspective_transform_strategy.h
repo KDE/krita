@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_FREE_TRANSFORM_STRATEGY_H
-#define __KIS_FREE_TRANSFORM_STRATEGY_H
+#ifndef __KIS_PERSPECTIVE_TRANSFORM_STRATEGY_H
+#define __KIS_PERSPECTIVE_TRANSFORM_STRATEGY_H
 
 #include <QObject>
 #include <QScopedPointer>
@@ -33,14 +33,14 @@ class TransformTransactionProperties;
 class QCursor;
 class QImage;
 
-class KisFreeTransformStrategy : public KisTransformStrategyBase
+class KisPerspectiveTransformStrategy : public KisTransformStrategyBase
 {
     Q_OBJECT
 public:
-    KisFreeTransformStrategy(const KisCoordinatesConverter *converter,
-                             ToolTransformArgs &currentArgs,
-                             TransformTransactionProperties &transaction);
-    ~KisFreeTransformStrategy();
+    KisPerspectiveTransformStrategy(const KisCoordinatesConverter *converter,
+                                    ToolTransformArgs &currentArgs,
+                                    TransformTransactionProperties &transaction);
+    ~KisPerspectiveTransformStrategy();
 
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);
     void paint(QPainter &gc);
@@ -61,4 +61,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_FREE_TRANSFORM_STRATEGY_H */
+#endif /* __KIS_PERSPECTIVE_TRANSFORM_STRATEGY_H */

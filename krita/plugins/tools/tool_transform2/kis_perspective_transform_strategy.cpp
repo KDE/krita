@@ -1,0 +1,466 @@
+/*
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "kis_perspective_transform_strategy.h"
+
+#include <QPointF>
+#include <QPainter>
+#include <QMatrix4x4>
+#include <QVector2D>
+
+#include <kstandarddirs.h>
+
+#include <Eigen/Dense>
+
+#include "kis_coordinates_converter.h"
+#include "tool_transform_args.h"
+#include "transform_transaction_properties.h"
+#include "krita_utils.h"
+#include "kis_cursor.h"
+#include "kis_transform_utils.h"
+#include "kis_free_transform_strategy_gsl_helpers.h"
+
+
+enum StrokeFunction {
+    DRAG_HANDLE = 0,
+    DRAG_X_VANISHING_POINT,
+    DRAG_Y_VANISHING_POINT,
+    MOVE,
+    NONE
+};
+
+struct KisPerspectiveTransformStrategy::Private
+{
+    Private(KisPerspectiveTransformStrategy *_q,
+            const KisCoordinatesConverter *_converter,
+            ToolTransformArgs &_currentArgs,
+            TransformTransactionProperties &_transaction)
+        : q(_q),
+          converter(_converter),
+          currentArgs(_currentArgs),
+          transaction(_transaction),
+          imageTooBig(false)
+    {
+    }
+
+    KisPerspectiveTransformStrategy *q;
+
+    /// standard members ///
+
+    const KisCoordinatesConverter *converter;
+
+    //////
+    ToolTransformArgs &currentArgs;
+    //////
+    TransformTransactionProperties &transaction;
+
+
+    QTransform thumbToImageTransform;
+    QImage originalImage;
+
+    QTransform paintingTransform;
+    QPointF paintingOffset;
+
+    QTransform handlesTransform;
+
+    /// custom members ///
+
+    StrokeFunction function;
+
+    struct HandlePoints {
+        bool xVanishingExists;
+        bool yVanishingExists;
+
+        QPointF xVanishing;
+        QPointF yVanishing;
+    };
+    HandlePoints transformedHandles;
+
+    QTransform transform;
+
+    QVector<QPointF> srcCornerPoints;
+    QVector<QPointF> dstCornerPoints;
+    int currentDraggingCornerPoint;
+
+    bool imageTooBig;
+
+    QPointF clickPos;
+    ToolTransformArgs clickArgs;
+
+    QCursor getScaleCursor(const QPointF &handlePt);
+    QCursor getShearCursor(const QPointF &start, const QPointF &end);
+    void recalculateTransformations();
+    void recalculateTransformedHandles();
+
+    void transformIntoArgs(const Eigen::Matrix3f &t);
+    QTransform transformFromArgs();
+};
+
+KisPerspectiveTransformStrategy::KisPerspectiveTransformStrategy(const KisCoordinatesConverter *converter,
+                                                   ToolTransformArgs &currentArgs,
+                                                   TransformTransactionProperties &transaction)
+    : m_d(new Private(this, converter, currentArgs, transaction))
+{
+}
+
+KisPerspectiveTransformStrategy::~KisPerspectiveTransformStrategy()
+{
+}
+
+void KisPerspectiveTransformStrategy::Private::recalculateTransformedHandles()
+{
+    srcCornerPoints.clear();
+    srcCornerPoints << transaction.originalTopLeft();
+    srcCornerPoints << transaction.originalTopRight();
+    srcCornerPoints << transaction.originalBottomLeft();
+    srcCornerPoints << transaction.originalBottomRight();
+
+    dstCornerPoints.clear();
+    foreach (const QPointF &pt, srcCornerPoints) {
+        dstCornerPoints << transform.map(pt);
+    }
+
+    QMatrix4x4 realMatrix(transform);
+    QVector4D v;
+
+    v = QVector4D(1, 0, 0, 0);
+    v = realMatrix * v;
+    transformedHandles.xVanishingExists = !qFuzzyCompare(v.w(), 0);
+    transformedHandles.xVanishing = v.toVector2DAffine().toPointF();
+
+    v = QVector4D(0, 1, 0, 0);
+    v = realMatrix * v;
+    transformedHandles.yVanishingExists = !qFuzzyCompare(v.w(), 0);
+    transformedHandles.yVanishing = v.toVector2DAffine().toPointF();
+}
+
+void KisPerspectiveTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
+{
+    Q_UNUSED(perspectiveModifierActive);
+
+    QPolygonF transformedPolygon = m_d->transform.map(QPolygonF(m_d->transaction.originalRect()));
+    m_d->function =
+        transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : NONE;
+
+    qreal handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
+    qreal handleRadiusSq = pow2(handleRadius);
+
+    if (!m_d->transformedHandles.xVanishing.isNull() &&
+        kisSquareDistance(mousePos, m_d->transformedHandles.xVanishing) <= handleRadiusSq) {
+
+        m_d->function = DRAG_X_VANISHING_POINT;
+    }
+
+    if (!m_d->transformedHandles.yVanishing.isNull() &&
+        kisSquareDistance(mousePos, m_d->transformedHandles.yVanishing) <= handleRadiusSq) {
+        m_d->function = DRAG_Y_VANISHING_POINT;
+    }
+
+    m_d->currentDraggingCornerPoint = -1;
+    for (int i = 0; i < m_d->dstCornerPoints.size(); i++) {
+        if (kisSquareDistance(mousePos, m_d->dstCornerPoints[i]) <= handleRadiusSq) {
+            m_d->currentDraggingCornerPoint = i;
+            m_d->function = DRAG_HANDLE;
+        }
+    }
+}
+
+QCursor KisPerspectiveTransformStrategy::getCurrentCursor() const
+{
+    QCursor cursor;
+
+    switch (m_d->function) {
+    case NONE:
+        cursor = KisCursor::arrowCursor();
+        break;
+    case MOVE:
+        cursor = KisCursor::moveCursor();
+        break;
+    case DRAG_HANDLE:
+    case DRAG_X_VANISHING_POINT:
+    case DRAG_Y_VANISHING_POINT:
+        cursor = KisCursor::pointingHandCursor();
+        break;
+    }
+
+    return cursor;
+}
+
+void KisPerspectiveTransformStrategy::paint(QPainter &gc)
+{
+    gc.save();
+
+    gc.setOpacity(0.9);
+    gc.setTransform(m_d->paintingTransform, true);
+    gc.drawImage(m_d->paintingOffset, originalImage());
+
+    gc.restore();
+
+    // Draw Handles
+
+    qreal handlesExtraScale = KisTransformUtils::scaleFromAffineMatrix(m_d->handlesTransform);
+
+    qreal d = KisTransformUtils::handleVisualRadius / handlesExtraScale;
+    QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
+
+    QPainterPath handles;
+
+    handles.moveTo(m_d->transaction.originalTopLeft());
+    handles.lineTo(m_d->transaction.originalTopRight());
+    handles.lineTo(m_d->transaction.originalBottomRight());
+    handles.lineTo(m_d->transaction.originalBottomLeft());
+    handles.lineTo(m_d->transaction.originalTopLeft());
+
+    handles.addRect(handleRect.translated(m_d->transaction.originalTopLeft()));
+    handles.addRect(handleRect.translated(m_d->transaction.originalTopRight()));
+    handles.addRect(handleRect.translated(m_d->transaction.originalBottomLeft()));
+    handles.addRect(handleRect.translated(m_d->transaction.originalBottomRight()));
+
+    gc.save();
+    gc.setTransform(m_d->handlesTransform, true);
+
+    QPen pen[2];
+
+    //pen[0].setCosmetic(true);
+    pen[0].setWidth(1);
+
+    //pen[1].setCosmetic(true);
+    pen[1].setWidth(2);
+    pen[1].setColor(Qt::lightGray);
+
+    for (int i = 1; i >= 0; --i) {
+        gc.setPen(pen[i]);
+        gc.drawPath(handles);
+    }
+
+    gc.restore();
+
+    { // painting perspective handles
+        QPainterPath perspectiveHandles;
+
+        if (m_d->transformedHandles.xVanishingExists) {
+            perspectiveHandles.addRect(handleRect.translated(m_d->transformedHandles.xVanishing));
+        }
+
+        if (m_d->transformedHandles.yVanishingExists) {
+            perspectiveHandles.addRect(handleRect.translated(m_d->transformedHandles.yVanishing));
+        }
+
+        if (!perspectiveHandles.isEmpty()) {
+            gc.save();
+            gc.setTransform(m_d->converter->imageToWidgetTransform());
+
+            for (int i = 1; i >= 0; --i) {
+                gc.setPen(pen[i]);
+                gc.drawPath(perspectiveHandles);
+            }
+
+            gc.restore();
+        }
+    }
+}
+
+void KisPerspectiveTransformStrategy::externalConfigChanged()
+{
+    m_d->recalculateTransformations();
+}
+
+bool KisPerspectiveTransformStrategy::beginPrimaryAction(const QPointF &pt)
+{
+    Q_UNUSED(pt);
+
+    if (m_d->function == NONE) return false;
+
+    m_d->clickPos = pt;
+    m_d->clickArgs = m_d->currentArgs;
+
+    return true;
+}
+
+Eigen::Matrix3f getTransitionMatrix(const QVector<QPointF> &sp)
+{
+    Eigen::Matrix3f A;
+    Eigen::Vector3f v3;
+
+    A << sp[0].x() , sp[1].x() , sp[2].x()
+        ,sp[0].y() , sp[1].y() , sp[2].y()
+        ,      1   ,       1   ,       1;
+
+    v3 << sp[3].x() , sp[3].y() , 1;
+
+    Eigen::Vector3f coeffs = A.colPivHouseholderQr().solve(v3);
+
+    A.col(0) *= coeffs(0);
+    A.col(1) *= coeffs(1);
+    A.col(2) *= coeffs(2);
+
+    return A;
+}
+
+QTransform toQTransform(const Eigen::Matrix3f &m)
+{
+    return QTransform(m(0,0), m(1,0), m(2,0),
+                      m(0,1), m(1,1), m(2,1),
+                      m(0,2), m(1,2), m(2,2));
+}
+
+Eigen::Matrix3f fromQTransform(const QTransform &t)
+{
+    Eigen::Matrix3f m;
+
+    m << t.m11() , t.m21() , t.m31()
+        ,t.m12() , t.m22() , t.m32()
+        ,t.m13() , t.m23() , t.m33();
+
+    return m;
+}
+
+Eigen::Matrix3f fromTranslate(const QPointF &pt)
+{
+    Eigen::Matrix3f m;
+
+    m << 1 , 0 , pt.x()
+        ,0 , 1 , pt.y()
+        ,0 , 0 , 1;
+
+    return m;
+}
+
+Eigen::Matrix3f fromScale(qreal sx, qreal sy)
+{
+    Eigen::Matrix3f m;
+
+    m << sx , 0 , 0
+        ,0 , sy , 0
+        ,0 , 0 , 1;
+
+    return m;
+}
+
+Eigen::Matrix3f fromShear(qreal sx, qreal sy)
+{
+    Eigen::Matrix3f m;
+
+    m << 1 , sx , 0
+        ,sy , sx*sy + 1, 0
+        ,0 , 0 , 1;
+
+    return m;
+}
+
+void KisPerspectiveTransformStrategy::Private::transformIntoArgs(const Eigen::Matrix3f &t)
+{
+    Eigen::Matrix3f TS = fromTranslate(-currentArgs.originalCenter());
+
+    Eigen::Matrix3f m = t * TS.inverse();
+
+    qreal tX = m(0,2) / m(2,2);
+    qreal tY = m(1,2) / m(2,2);
+
+    Eigen::Matrix3f T = fromTranslate(QPointF(tX, tY));
+
+    m = T.inverse() * m;
+
+    const qreal factor = (m(1,1) / m(0,1) - m(1,0) / m(0,0));
+
+    qreal scaleX = m(0,0) / m(2,2);
+    qreal scaleY = m(0,1) / m(2,2) * factor;
+
+    Eigen::Matrix3f SC = fromScale(scaleX, scaleY);
+
+    qreal shearX = 1.0 / factor;
+    qreal shearY = m(1,0) / m(0,0);
+
+    Eigen::Matrix3f S = fromShear(shearX, shearY);
+
+    currentArgs.setScaleX(scaleX);
+    currentArgs.setScaleY(scaleY);
+
+    currentArgs.setShearX(shearX);
+    currentArgs.setShearY(shearY);
+
+    currentArgs.setTransformedCenter(QPointF(tX, tY));
+
+    m = m * SC.inverse();
+    m = m * S.inverse();
+    m /= m(2,2);
+    currentArgs.setFlattenedPerspectiveTransform(toQTransform(m));
+}
+
+QTransform KisPerspectiveTransformStrategy::Private::transformFromArgs()
+{
+    KisTransformUtils::MatricesPack m(currentArgs);
+    return m.finalTransform();
+}
+
+void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool specialModifierActve)
+{
+    Q_UNUSED(specialModifierActve);
+
+    switch (m_d->function) {
+    case NONE:
+        break;
+    case MOVE: {
+        QPointF diff = mousePos - m_d->clickPos;
+        m_d->currentArgs.setTransformedCenter(
+            m_d->clickArgs.transformedCenter() + diff);
+        break;
+    }
+    case DRAG_HANDLE: {
+        KIS_ASSERT_RECOVER_RETURN(m_d->currentDraggingCornerPoint >=0);
+        m_d->dstCornerPoints[m_d->currentDraggingCornerPoint] = mousePos;
+
+        Eigen::Matrix3f A = getTransitionMatrix(m_d->srcCornerPoints);
+        Eigen::Matrix3f B = getTransitionMatrix(m_d->dstCornerPoints);
+        Eigen::Matrix3f result = B * A.inverse();
+
+        m_d->transformIntoArgs(result);
+
+        break;
+    }
+    case DRAG_X_VANISHING_POINT:
+        break;
+    case DRAG_Y_VANISHING_POINT:
+        break;
+    }
+
+    m_d->recalculateTransformations();
+}
+
+bool KisPerspectiveTransformStrategy::endPrimaryAction()
+{
+    m_d->recalculateTransformations();
+    return true;
+}
+
+void KisPerspectiveTransformStrategy::Private::recalculateTransformations()
+{
+    transform = transformFromArgs();
+
+    QTransform viewScaleTransform = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
+    handlesTransform = transform * viewScaleTransform;
+
+    QTransform tl = QTransform::fromTranslate(transaction.originalTopLeft().x(), transaction.originalTopLeft().y());
+    paintingTransform = tl.inverted() * q->thumbToImageTransform() * tl * transform * viewScaleTransform;
+    paintingOffset = transaction.originalTopLeft();
+
+    // recalculate cached handles position
+    recalculateTransformedHandles();
+
+    emit q->requestShowImageTooBig(imageTooBig);
+}

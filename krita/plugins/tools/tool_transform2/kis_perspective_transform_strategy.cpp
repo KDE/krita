@@ -408,6 +408,14 @@ QTransform KisPerspectiveTransformStrategy::Private::transformFromArgs()
     return m.finalTransform();
 }
 
+QVector4D fromQPointF(const QPointF &pt) {
+    return QVector4D(pt.x(), pt.y(), 0, 1.0);
+}
+
+QPointF toQPointF(const QVector4D &v) {
+    return v.toVector2DAffine().toPointF();
+}
+
 void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool specialModifierActve)
 {
     Q_UNUSED(specialModifierActve);
@@ -434,9 +442,123 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
         break;
     }
     case DRAG_X_VANISHING_POINT:
+    case DRAG_Y_VANISHING_POINT: {
+
+        QMatrix4x4 m(m_d->transform);
+
+        QPointF tl = m_d->transaction.originalTopLeft();
+        QPointF tr = m_d->transaction.originalTopRight();
+        QPointF bl = m_d->transaction.originalBottomLeft();
+        QPointF br = m_d->transaction.originalBottomRight();
+
+        QVector4D v(1,0,0,0);
+        QVector4D otherV(0,1,0,0);
+
+        if (m_d->function == DRAG_X_VANISHING_POINT) {
+            v = QVector4D(1,0,0,0);
+            otherV = QVector4D(0,1,0,0);
+        } else {
+            v = QVector4D(0,1,0,0);
+            otherV = QVector4D(1,0,0,0);
+        }
+
+        QPointF tl_dst = toQPointF(m * fromQPointF(tl));
+        QPointF tr_dst = toQPointF(m * fromQPointF(tr));
+        QPointF bl_dst = toQPointF(m * fromQPointF(bl));
+        QPointF br_dst = toQPointF(m * fromQPointF(br));
+        QPointF v_dst = toQPointF(m * v);
+        QPointF otherV_dst = toQPointF(m * otherV);
+
+        QVector<QPointF> srcPoints;
+        QVector<QPointF> dstPoints;
+
+        QPointF far1_src;
+        QPointF far2_src;
+        QPointF near1_src;
+        QPointF near2_src;
+
+        QPointF far1_dst;
+        QPointF far2_dst;
+        QPointF near1_dst;
+        QPointF near2_dst;
+
+        if (m_d->function == DRAG_X_VANISHING_POINT) {
+
+            // topLeft (far) --- topRight (near) --- vanishing
+            if (kisSquareDistance(v_dst, tl_dst) > kisSquareDistance(v_dst, tr_dst)) {
+                far1_src = tl;
+                far2_src = bl;
+                near1_src = tr;
+                near2_src = br;
+
+                far1_dst = tl_dst;
+                far2_dst = bl_dst;
+                near1_dst = tr_dst;
+                near2_dst = br_dst;
+
+                // topRight (far) --- topLeft (near) --- vanishing
+            } else {
+                far1_src = tr;
+                far2_src = br;
+                near1_src = tl;
+                near2_src = bl;
+
+                far1_dst = tr_dst;
+                far2_dst = br_dst;
+                near1_dst = tl_dst;
+                near2_dst = bl_dst;
+            }
+
+        } else /* if (m_d->function == DRAG_Y_VANISHING_POINT) */{
+            // topLeft (far) --- bottomLeft (near) --- vanishing
+            if (kisSquareDistance(v_dst, tl_dst) > kisSquareDistance(v_dst, bl_dst)) {
+                far1_src = tl;
+                far2_src = tr;
+                near1_src = bl;
+                near2_src = br;
+
+                far1_dst = tl_dst;
+                far2_dst = tr_dst;
+                near1_dst = bl_dst;
+                near2_dst = br_dst;
+
+                // bottomLeft (far) --- topLeft (near) --- vanishing
+            } else {
+                far1_src = bl;
+                far2_src = br;
+                near1_src = tl;
+                near2_src = tr;
+
+                far1_dst = bl_dst;
+                far2_dst = br_dst;
+                near1_dst = tl_dst;
+                near2_dst = tr_dst;
+            }
+        }
+
+        QLineF l0(far1_dst, mousePos);
+        QLineF l1(far2_dst, mousePos);
+        QLineF l2(otherV_dst, near1_dst);
+        l0.intersect(l2, &near1_dst);
+        l1.intersect(l2, &near2_dst);
+
+        srcPoints << far1_src;
+        srcPoints << far2_src;
+        srcPoints << near1_src;
+        srcPoints << near2_src;
+
+        dstPoints << far1_dst;
+        dstPoints << far2_dst;
+        dstPoints << near1_dst;
+        dstPoints << near2_dst;
+
+        Eigen::Matrix3f A = getTransitionMatrix(srcPoints);
+        Eigen::Matrix3f B = getTransitionMatrix(dstPoints);
+        Eigen::Matrix3f result = B * A.inverse();
+
+        m_d->transformIntoArgs(result);
         break;
-    case DRAG_Y_VANISHING_POINT:
-        break;
+    }
     }
 
     m_d->recalculateTransformations();

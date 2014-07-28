@@ -2,8 +2,10 @@
 Name=Grid Brush
 Name[en_GB]=Grid Brush
 Name[nl]=Rasterpenseel
+Name[pl]=Pędzel siatki
 Name[pt]=Pincel em Grelha
 Name[pt_BR]=Pincel em grade
+Name[sk]=Štetec mriežky
 Name[sv]=Rutnätspensel
 Name[x-test]=xxGrid Brushxx
 X-KDE-ServiceTypes=Krita/Paintop

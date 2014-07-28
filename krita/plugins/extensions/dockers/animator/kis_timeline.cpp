@@ -123,7 +123,7 @@ void KisTimeline::init()
     leftScrollArea->setBackgroundRole(QPalette::Dark);
     leftScrollArea->setWidget(m_list);
     m_list->setFixedHeight(45);
-    m_list->setFixedWidth(2000);
+    m_list->setFixedWidth(200);
     leftScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     leftScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -245,7 +245,7 @@ void KisTimeline::init()
     QSplitter* splitter = new QSplitter(m_parent);
     splitter->addWidget(leftWidget);
     splitter->addWidget(rightWidget);
-    splitter->setSizes(QList<int>() << 100 << 600);
+    splitter->setSizes(QList<int>() << 140 << 600);
 
     QGridLayout* lay = new QGridLayout();
 

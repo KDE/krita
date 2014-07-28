@@ -24,6 +24,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QCheckBox>
 
 class KisAnimationLayer : public QWidget
 {
@@ -43,7 +44,9 @@ private:
     KisAnimationLayerBox *m_layerBox;
     QLabel* m_lblLayerName;
     QLineEdit* m_inputLayerName;
-    QHBoxLayout* lay;
+    QCheckBox* m_onionSkinToggle;
+    QCheckBox* m_lockToggle;
+    QCheckBox* m_visibilityToggle;
 };
 
 #endif // KIS_ANIMATION_LAYER_H

@@ -84,16 +84,22 @@ public:
     */
     ~KoTextLoader();
 
+    enum LoadBodyMode
+    {
+        LoadMode,
+        PasteMode
+    };
     /**
     * Load the body from the \p element into the \p cursor .
     *
     * This method got called e.g. at the \a KoTextShapeData::loadOdf() method if a TextShape
     * instance likes to load an ODF element.
     *
-    * @param element the element to start loadingat
-    * @param cursor the text cursor to insert the body after    *
+    * @param element the element to start loading at
+    * @param cursor the text cursor to insert the body after
+    * @param pasteMode does special handling of section needed, in case we are pasting text
     */
-    void loadBody(const KoXmlElement &element, QTextCursor &cursor);
+    void loadBody(const KoXmlElement &element, QTextCursor &cursor, LoadBodyMode pasteMode = LoadMode);
 
 signals:
 

@@ -2,6 +2,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,6 +39,7 @@ class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
 class KoChangeTracker;
 class KoShapeController;
+class KoSectionManager;
 
 class QTextCharFormat;
 
@@ -139,6 +141,16 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
+    /**
+     * @return section manager for the document
+     */
+    KoSectionManager *sectionManager();
+
+    /**
+     * sets the section manager for the document
+     */
+    void setSectionManager(KoSectionManager *manager);
+
     /// Returns the KoTextRangeManager
     KoTextRangeManager *textRangeManager() const;
 
@@ -228,7 +240,8 @@ public:
         IndexGeneratorManager,
         FrameCharFormat,
         FrameBlockFormat,
-        ShapeController
+        ShapeController,
+        SectionManager
     };
 
     static const QUrl StyleManagerURL;
@@ -249,6 +262,7 @@ public:
     static const QUrl FrameCharFormatUrl;
     static const QUrl FrameBlockFormatUrl;
     static const QUrl ShapeControllerUrl;
+    static const QUrl SectionManagerUrl;
 
 private:
     QTextDocument *m_document;

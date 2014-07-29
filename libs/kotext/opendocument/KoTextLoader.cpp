@@ -14,6 +14,7 @@
  * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2009-2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -68,6 +69,7 @@
 #include "KoTableOfContentsGeneratorInfo.h"
 #include "KoBibliographyInfo.h"
 #include "KoSection.h"
+#include "KoSectionEnd.h"
 #include "KoTextSoftPageBreak.h"
 #include "KoDocumentRdfBase.h"
 #include "KoElementReference.h"
@@ -286,7 +288,7 @@ KoTextLoader::~KoTextLoader()
     delete d;
 }
 
-void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
+void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, LoadBodyMode mode)
 {
     const QTextDocument *document = cursor.block().document();
 
@@ -309,9 +311,21 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
     cursor.beginEditBlock();
 
+    // If we are pasting text, we should handle sections correctly
+    // we are saving which sections end in current block
+    // and put their ends after the inserted text.
+    QList<QVariant> oldSectionEndings;
+    if (mode == PasteMode) {
+        QTextBlockFormat fmt = cursor.blockFormat();
+        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+            oldSectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
+                .value< QList<QVariant> >();
+        }
+        fmt.clearProperty(KoParagraphStyle::SectionEndings);
+        cursor.setBlockFormat(fmt);
+    }
 
-
-    if (! d->openingSections.isEmpty()) {
+    if (!d->openingSections.isEmpty()) {
         QTextBlock block = cursor.block();
         QTextBlockFormat format = block.blockFormat();
         QVariant v;
@@ -373,13 +387,13 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
                     usedParagraph = true;
 
-		    if (localName == "p") {    // text paragraph
-			loadParagraph(tag, cursor);
-                    } else if (localName == "h") {  // heading
-			loadHeading(tag, cursor);
+                    if (localName == "p") { // text paragraph
+                        loadParagraph(tag, cursor);
+                    } else if (localName == "h") { // heading
+                        loadHeading(tag, cursor);
                     } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
-                               || localName == "list" || localName == "numbered-paragraph") {  // OASIS
-			loadList(tag, cursor);
+                            || localName == "list" || localName == "numbered-paragraph") {  // OASIS
+                        loadList(tag, cursor);
                     } else if (localName == "section") {
                         loadSection(tag, cursor);
                     } else if (localName == "table-of-content") {
@@ -420,6 +434,22 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     }
 
     rootCallChecker--;
+
+    // Here we put old endings after text insertion.
+    if (mode == PasteMode) {
+        QTextBlockFormat fmt = cursor.blockFormat();
+        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+            oldSectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
+                .value< QList<QVariant> >() << oldSectionEndings;
+        }
+
+
+        if (!oldSectionEndings.empty()) {
+            fmt.setProperty(KoParagraphStyle::SectionEndings, oldSectionEndings);
+        }
+        cursor.setBlockFormat(fmt);
+    }
+
     cursor.endEditBlock();
 
     KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
@@ -812,7 +842,7 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
 
 void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cursor)
 {
-    KoSection *section = new KoSection();
+    KoSection *section = new KoSection(cursor);
     if (!section->loadOdf(sectionElem, d->textSharedData, d->stylesDotXml)) {
         delete section;
         kWarning(32500) << "Could not load section";
@@ -826,8 +856,7 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
     loadBody(sectionElem, cursor);
 
     // Close the section on the last block of text we have loaded just now.
-    KoSectionEnd *sectionEnd = new KoSectionEnd();
-    sectionEnd->name = section->name();
+    KoSectionEnd *sectionEnd = new KoSectionEnd(section);
     v.setValue<void *>(sectionEnd);
 
     QTextBlock block = cursor.block();

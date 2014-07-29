@@ -105,7 +105,7 @@ void KisUpdateScheduler::connectSignals()
             SLOT(spareThreadAppeared()), Qt::DirectConnection);
 }
 
-void KisUpdateScheduler::setProgressProxy(KoProgressProxy *progressProxy)
+void KisUpdateScheduler::setProgressProxy(KoProgressProxy */*progressProxy*/)
 {
     delete m_d->progressUpdater;
     // FIXME: Disable progress reporting for now since it seems to cause

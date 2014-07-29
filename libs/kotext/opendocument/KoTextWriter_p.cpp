@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +20,8 @@
 
 #include "KoTextWriter_p.h"
 
+#include <KoSectionUtils.h>
+#include <KoSectionEnd.h>
 #include <KoList.h>
 #include <KoElementReference.h>
 #include <KoTextRangeManager.h>
@@ -72,19 +75,53 @@ KoTextWriter::Private::Private(KoShapeSavingContext &context)
     , document(0)
     , writer(0)
     , context(context)
-    , splitEndBlockNumber(-1)
 {
     currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     writer = &context.xmlWriter();
 }
-
 
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextList *currentList)
 {
     pairedInlineObjectsStackStack.push(currentPairedInlineObjectsStack);
     currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     QTextBlock block = document->findBlock(from);
-    int sectionLevel = 0;
+
+    // Here we are going to detect all sections that
+    // are positioned entirely inside selection.
+    // They will stay untouched, and others will be omitted.
+
+    // So we are using stack to detect them, by going though
+    // the selection and finding open/close pairs.
+    QSet<QString> entireWithinSectionNames;
+    QStack<QString> sectionNamesStack;
+    QTextCursor cur(document);
+    cur.setPosition(from);
+    while (to == -1 || cur.position() <= to) {
+        if (cur.block().position() >= from) { // Begin of the block is inside selection.
+            QList<QVariant> openList = cur.blockFormat()
+                .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, openList) {
+                KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
+                sectionNamesStack.push_back(sec->name());
+            }
+        }
+
+        if (to == -1 || cur.block().position() + cur.block().length() <= to) { // End of the block is inside selection.
+            QList<QVariant> closeList = cur.blockFormat()
+                .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, closeList) {
+                KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
+                if (!sectionNamesStack.empty() && sectionNamesStack.top() == sec->name()) {
+                    sectionNamesStack.pop();
+                    entireWithinSectionNames.insert(sec->name());
+                }
+            }
+        }
+
+        if (!KoSectionUtils::getNextBlock(cur)) {
+            break;
+        }
+    }
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
@@ -103,9 +140,10 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             QList<QVariant> sectionStarts = v.value<QList<QVariant> >();
 
             foreach (const QVariant &sv, sectionStarts) {
-                KoSection* section = (KoSection*)(sv.value<void*>());
-                if (section) {
-                    ++sectionLevel;
+                KoSection* section = static_cast<KoSection *>(sv.value<void*>());
+
+                // We are writing in only sections, that are completely inside selection.
+                if (entireWithinSectionNames.contains(section->name())) {
                     section->saveOdf(context);
                 }
             }
@@ -147,24 +185,18 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         if (format.hasProperty(KoParagraphStyle::SectionEndings)) {
             QVariant v = format.property(KoParagraphStyle::SectionEndings);
             QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
-            KoSectionEnd sectionEnd;
+
             foreach (QVariant sv, sectionEndings) {
-                if (sectionLevel >= 1) {
-                    --sectionLevel;
-                    sectionEnd.saveOdf(context);
+                KoSectionEnd *sectionEnd = static_cast<KoSectionEnd *>(sv.value<void *>());
+                // We are writing in only sections, that are completely inside selection.
+                if (entireWithinSectionNames.contains(sectionEnd->name())) {
+                    sectionEnd->saveOdf(context);
                 }
             }
         }
 
-
         block = block.next();
     } // while
-
-    while (sectionLevel >= 1) {
-        --sectionLevel;
-        KoSectionEnd sectionEnd;
-        sectionEnd.saveOdf(context);
-    }
 
     Q_ASSERT(!pairedInlineObjectsStackStack.isEmpty());
     delete currentPairedInlineObjectsStack;
@@ -226,10 +258,10 @@ void KoTextWriter::Private::openTagRegion(ElementType elementType, TagInformatio
 {
     //kDebug(30015) << "tag:" << tagInformation.name() << openedTagStack.size();
     if (tagInformation.name()) {
-	writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
-	foreach (const Attribute &attribute, tagInformation.attributes()) {
-	    writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
-	}
+    writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
+    foreach (const Attribute &attribute, tagInformation.attributes()) {
+        writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
+    }
     }
     openedTagStack.push(tagInformation.name());
     //kDebug(30015) << "stack" << openedTagStack.size();
@@ -536,17 +568,17 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
                 }
 
-		// get all text ranges which start before this inline object
-		// or end directly after it (+1 to last position for that)
+        // get all text ranges which start before this inline object
+        // or end directly after it (+1 to last position for that)
                 const QHash<int, KoTextRange *> textRanges = textRangeManager ?
                         textRangeManager->textRangesChangingWithin(block.document(), currentFragment.position(), currentFragment.position()+1,
                         globalFrom, (globalTo==-1)?-1:globalTo+1) : QHash<int, KoTextRange *>();
-		// get all text ranges which start before this
-		const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
-		// write tags for ranges which start before this content or at positioned at it
-		foreach (const KoTextRange *range, textRangesBefore) {
-		    range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
-		}
+        // get all text ranges which start before this
+        const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
+        // write tags for ranges which start before this content or at positioned at it
+        foreach (const KoTextRange *range, textRangesBefore) {
+            range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
+        }
 
                 bool saveSpan = dynamic_cast<KoVariable*>(inlineObject) != 0;
 

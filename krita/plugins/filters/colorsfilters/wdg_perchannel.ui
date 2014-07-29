@@ -14,14 +14,23 @@
    <string>BrightnessCon</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <property name="horizontalSpacing">
     <number>0</number>
    </property>
    <property name="verticalSpacing">
     <number>6</number>
-   </property>
-   <property name="margin">
-    <number>0</number>
    </property>
    <item row="3" column="1" colspan="2">
     <spacer name="verticalSpacer">
@@ -40,12 +49,9 @@
     </spacer>
    </item>
    <item row="1" column="1" colspan="2">
-    <layout class="QGridLayout">
+    <layout class="QGridLayout" name="grid2">
      <property name="sizeConstraint">
       <enum>QLayout::SetDefaultConstraint</enum>
-     </property>
-     <property name="margin">
-      <number>0</number>
      </property>
      <property name="spacing">
       <number>0</number>
@@ -80,7 +86,16 @@
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -174,9 +189,6 @@
    </item>
    <item row="0" column="1" colspan="2">
     <layout class="QHBoxLayout">
-     <property name="margin">
-      <number>0</number>
-     </property>
      <item>
       <widget class="QLabel" name="textLabel1">
        <property name="sizePolicy">

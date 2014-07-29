@@ -41,7 +41,7 @@
  * nominative</a>) and the message in undo/redo actions (which is
  * usually a <a href="http://en.wikipedia.org/wiki/Accusative_case">noun
  * in accusative</a>). When the translator needs it he, splits two
- * translations with '\n' symbol and the magig string will recognize
+ * translations with '\n' symbol and the magic string will recognize
  * it.
  *
  * \note KUndo2MagicString will never support concatenation operators,

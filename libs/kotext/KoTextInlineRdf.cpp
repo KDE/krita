@@ -20,13 +20,13 @@
 
 #include "KoTextInlineRdf.h"
 // lib
-#include "opendocument/KoTextSharedSavingData.h"
-#include "styles/KoCharacterStyle.h"
-#include "KoBookmark.h"
-#include "KoAnnotation.h"
-#include "KoTextMeta.h"
-#include "KoTextEditor.h"
-#include "KoTextDocument.h"
+#include <opendocument/KoTextSharedSavingData.h>
+#include <styles/KoCharacterStyle.h>
+#include <KoBookmark.h>
+#include <KoAnnotation.h>
+#include <KoTextMeta.h>
+#include <KoTextEditor.h>
+#include <KoTextDocument.h>
 // komain
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
@@ -61,40 +61,40 @@ class KoTextInlineRdf::Private
 {
 public:
     Private(const QTextDocument *doc, const QTextBlock &b)
-            : block(b),
-            document(doc)
+            : block(b)
+            , document(doc)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;
     }
 
     Private(const QTextDocument *doc, KoBookmark *b)
-            : document(doc),
-            bookmark(b)
+            : document(doc)
+            , bookmark(b)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;
     }
 
     Private(const QTextDocument *doc, KoAnnotation *b)
-            : document(doc),
-            annotation(b)
+            : document(doc)
+            , annotation(b)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;
     }
 
     Private(const QTextDocument *doc, KoTextMeta *b)
-            : document(doc),
-            kotextmeta(b)
+            : document(doc)
+            , kotextmeta(b)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;
     }
 
     Private(const QTextDocument *doc, const QTextTableCell &c)
-            : document(doc),
-            cell(c)
+            : document(doc)
+            , cell(c)
     {
         isObjectAttributeUsed = false;
         sopranoObjectType = LiteralNode;

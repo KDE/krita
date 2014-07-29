@@ -49,7 +49,6 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGenerato
     , m_ToCInfo(tocInfo)
     , m_document(0)
     , m_documentLayout(0)
-    , m_maxTabPosition(0.0)
 {
     Q_ASSERT(tocDocument);
     Q_ASSERT(tocInfo);

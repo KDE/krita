@@ -1545,6 +1545,8 @@ void KoMainWindow::slotConfigureKeys()
         undoAction->setText(oldUndoText);
         redoAction->setText(oldRedoText);
     }
+
+    emit keyBindingsChanged();
 }
 
 void KoMainWindow::slotConfigureToolbars()

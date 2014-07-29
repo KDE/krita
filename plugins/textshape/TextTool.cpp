@@ -5,6 +5,7 @@
  * Copyright (C) 2008, 2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,6 +35,7 @@
 #include "dialogs/InsertCharacter.h"
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
+#include "dialogs/SectionFormatDialog.h"
 #include "dialogs/SimpleTableWidget.h"
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
@@ -218,6 +220,14 @@ void TextTool::createActions()
 {
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                              & KoCanvasResourceManager::NoAdvancedText);
+
+    m_actionConfigureSection = new KAction(koIcon("configure"), i18n("Configure current section"), this); //FIXME: Find another icon for this.
+    addAction("configure_section", m_actionConfigureSection);
+    connect(m_actionConfigureSection, SIGNAL(triggered(bool)), this, SLOT(configureSection()));
+
+    m_actionInsertSection = new KAction(koIcon("insert-text"), i18n("Insert new section"), this); //FIXME: Find another icon for this.
+    addAction("insert_section", m_actionInsertSection);
+    connect(m_actionInsertSection, SIGNAL(triggered(bool)), this, SLOT(insertNewSection()));
 
     m_actionPasteAsText  = new KAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
@@ -507,6 +517,7 @@ void TextTool::createActions()
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
 #include <kundo2stack.h>
+#include <braindump/src/Section.h>
 
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),
@@ -2193,6 +2204,27 @@ void TextTool::stopEditing()
 {
     m_currentCommand = 0;
     m_currentCommandHasChildren = false;
+}
+
+void TextTool::insertNewSection()
+{
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (!textEditor) return;
+
+    textEditor->newSection();
+}
+
+void TextTool::configureSection()
+{
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (!textEditor) return;
+
+    SectionFormatDialog *dia = new SectionFormatDialog(0, m_textEditor.data());
+    dia->exec();
+    delete dia;
+
+    returnFocusToCanvas();
+    updateActions();
 }
 
 void TextTool::pasteAsText()

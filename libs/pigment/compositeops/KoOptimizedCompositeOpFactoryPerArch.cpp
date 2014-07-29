@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#pragma GCC diagnostic ignored "-Wundef"
+
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
 
 #include "DebugPigment.h"
@@ -23,6 +25,10 @@
 #include "KoOptimizedCompositeOpOver32.h"
 
 #include <KoCompositeOpRegistry.h>
+
+#if defined(__clang__)
+#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
+#endif
 
 template<>
 template<>

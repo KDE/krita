@@ -102,7 +102,7 @@ private:
     qreal getNextPointPositionAnisotropic(const QPointF &start,
                                           const QPointF &end);
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

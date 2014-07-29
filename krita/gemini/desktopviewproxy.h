@@ -48,6 +48,8 @@ public Q_SLOTS:
 
     void toggleShowJustTheCanvas(bool toggled);
 
+    void updateKeyBindings();
+
 Q_SIGNALS:
     void documentSaved();
 

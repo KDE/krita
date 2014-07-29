@@ -72,7 +72,6 @@ private:
     KisConfigWidget *m_currentConfigWidget;
     KisFilter *m_currentFilter;
     KisFilterConfiguration *m_currentConfiguration;
-    KisAdjustmentLayer *m_layer;
     KLineEdit *m_layerName;
     KisNodeFilterInterface *m_nodeFilterInterface;
 };

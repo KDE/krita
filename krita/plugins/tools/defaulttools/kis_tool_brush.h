@@ -21,6 +21,8 @@
 
 #include "kis_tool_freehand.h"
 
+#include <QSignalMapper>
+
 #include "KoToolFactoryBase.h"
 
 #include <flake/kis_node_shape.h>
@@ -55,6 +57,9 @@ public:
     virtual ~KisToolBrush();
 
     QWidget * createOptionWidget();
+
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
+    void deactivate();
 
     int smoothnessQuality() const;
     qreal smoothnessFactor() const;
@@ -101,7 +106,9 @@ Q_SIGNALS:
     void stabilizeSensorsChanged();
 
 private:
-    QGridLayout *m_optionLayout;
+    void addSmoothingAction(int enumId, const QString &id, const QString &name, KActionCollection *globalCollection);
+
+private:
     QComboBox *m_cmbSmoothingType;
 
     QCheckBox *m_chkAssistant;
@@ -116,6 +123,7 @@ private:
     KisDoubleSliderSpinBox *m_sliderDelayDistance;
 
     QCheckBox *m_chkFinishStabilizedCurve;
+    QSignalMapper m_signalMapper;
 };
 
 

@@ -186,7 +186,7 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientTab->setFont(m_font);
     l2->addWidget(m_gradientTab);
 
-    m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup);
+    m_gradientChooser = new KisGradientChooser(m_gradientChooserPopup);
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
 

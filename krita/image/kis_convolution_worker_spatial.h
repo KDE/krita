@@ -48,7 +48,7 @@ public:
             m_toDoubleFuncPtr[m_alphaCachePos](data, m_alphaRealPos) : 1.0;
 
         for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
-            if (k != m_alphaCachePos) {
+            if (k != (quint32)m_alphaCachePos) {
                 const quint32 channelPos = m_convChannelList[k]->pos();
                 cache[index][k] = m_toDoubleFuncPtr[k](data, channelPos) * alphaValue;
             } else {
@@ -290,12 +290,12 @@ public:
                 qreal alphaValueInv = 1.0 / alphaValue;
 
                 for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
-                    if (k == m_alphaCachePos) continue;
+                    if (k == (quint32)m_alphaCachePos) continue;
                     convolveOneChannelFromCache<true>(dstPtr, k, alphaValueInv);
                 }
             } else {
                 for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
-                    if (k == m_alphaCachePos) continue;
+                    if (k == (quint32)m_alphaCachePos) continue;
 
                     const qreal zeroValue = 0.0;
                     const quint32 channelPos = m_convChannelList[k]->pos();

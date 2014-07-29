@@ -30,14 +30,6 @@
 #include "KoIntegerMaths.h"
 #include "KoChannelInfo.h"
 
-// TODO: get ride of this
-const quint8 quint8_MAX = UCHAR_MAX;
-const quint16 quint16_MAX = 65535;
-
-const qint32 qint32_MAX = (2147483647);
-const qint32 qint32_MIN = (-2147483647 - 1);
-
-
 static const KoColorSpace* m_labCs = 0;
 
 

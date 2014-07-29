@@ -123,21 +123,28 @@ void KisToolPerspectiveGrid::beginPrimaryAction(KoPointerEvent *event)
         if (m_points.isEmpty()) {
             m_points.append(m_currentPt);
             m_isFirstPoint = true;
-        } else {
+        }
+        else {
             m_isFirstPoint = false;
         }
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-    } else if (m_internalMode == MODE_EDITING) {
+    }
+    else if (m_internalMode == MODE_EDITING) {
         // Look for the handle which was pressed
         QPointF mousep = m_canvas->viewConverter()->documentToView(event->point);
+
         for (QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it) {
             KisSubPerspectiveGrid* grid = *it;
             QPointF gridCenter = grid->center();
             dbgKrita << "click at " << event->point << " top left at " << *grid->topLeft();
-            if (m_selectedNode1 = nodeNearPoint(grid, mousep)) {
+
+            m_selectedNode1 = nodeNearPoint(grid, mousep);
+
+            if (m_selectedNode1 != 0) {
                 m_internalMode = MODE_DRAGGING_NODE;
                 break;
-            } else if (mouseNear(mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->bottomLeft()))*0.5))) {
+            }
+            else if (mouseNear(mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->bottomLeft()))*0.5))) {
                 dbgPlugins << " PRESS LEFT HANDLE";
                 m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                 m_selectedNode1 = new KisPerspectiveGridNode(*grid->topLeft());
@@ -147,7 +154,8 @@ void KisToolPerspectiveGrid::beginPrimaryAction(KoPointerEvent *event)
                 pGrid->addNewSubGrid(newsubgrid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
-            } else if (mouseNear(mousep, ((pixelToView(*grid->topRight()) + pixelToView(*grid->bottomRight()))*0.5))) {
+            }
+            else if (mouseNear(mousep, ((pixelToView(*grid->topRight()) + pixelToView(*grid->bottomRight()))*0.5))) {
                 dbgPlugins << " PRESS RIGHT HANDLE";
                 m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                 m_selectedNode1 = new KisPerspectiveGridNode(*grid->topRight());
@@ -157,7 +165,8 @@ void KisToolPerspectiveGrid::beginPrimaryAction(KoPointerEvent *event)
                 pGrid->addNewSubGrid(newsubgrid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
-            } else if (mouseNear(mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->topRight()))*0.5))) {
+            }
+            else if (mouseNear(mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->topRight()))*0.5))) {
                 dbgPlugins << " PRESS TOP HANDLE";
                 m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                 m_selectedNode1 = new KisPerspectiveGridNode(*grid->topLeft());
@@ -167,7 +176,8 @@ void KisToolPerspectiveGrid::beginPrimaryAction(KoPointerEvent *event)
                 pGrid->addNewSubGrid(newsubgrid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
-            } else if (mouseNear(mousep, ((pixelToView(*grid->bottomLeft()) + pixelToView(*grid->bottomRight()))*0.5))) {
+            }
+            else if (mouseNear(mousep, ((pixelToView(*grid->bottomLeft()) + pixelToView(*grid->bottomRight()))*0.5))) {
                 dbgPlugins << " PRESS BOTTOM HANDLE";
                 m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                 m_selectedNode1 = new KisPerspectiveGridNode(*grid->bottomLeft());
@@ -177,7 +187,8 @@ void KisToolPerspectiveGrid::beginPrimaryAction(KoPointerEvent *event)
                 pGrid->addNewSubGrid(newsubgrid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
-            } else if (pixelToView(QRectF((gridCenter.x() - 16), (gridCenter.y() - 16), 32, 32)).contains(mousep)) {
+            }
+            else if (pixelToView(QRectF((gridCenter.x() - 16), (gridCenter.y() - 16), 32, 32)).contains(mousep)) {
                 dbgPlugins << " PRESS DELETE ICON";
                 pGrid->deleteSubGrid(grid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas

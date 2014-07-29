@@ -28,7 +28,6 @@
 
 #include "kis_curve_line_option.h"
 
-const int STEPS = 200;
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand

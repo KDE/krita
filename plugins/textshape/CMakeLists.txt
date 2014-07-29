@@ -108,6 +108,7 @@ SET ( textshape_SRCS
     dialogs/ListLevelChooser.cpp
     dialogs/SimpleAnnotationWidget.cpp
     dialogs/ManageBookmarkDialog.cpp
+    dialogs/SectionFormatDialog.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/ShowChangesCommand.cpp
@@ -165,6 +166,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TrackedChangeManager.ui
     dialogs/LinkInsertionDialog.ui
     dialogs/ManageBookmark.ui
+    dialogs/SectionFormatDialog.ui
 
 )
 

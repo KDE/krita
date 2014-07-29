@@ -4,6 +4,7 @@
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  * Copyright (C) 2008, 2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -175,6 +176,10 @@ signals:
     void blockChanged(const QTextBlock &block);
 
 private slots:
+    /// inserts new paragraph and includes it into the new section
+    void insertNewSection();
+    /// configures params of the current section
+    void configureSection();
     /// paste text from the clipboard without formatting
     void pasteAsText();
     /// make the selected text bold or not
@@ -361,6 +366,8 @@ private:
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
     KAction *m_actionChangeDirection;
+    KAction *m_actionInsertSection;
+    KAction *m_actionConfigureSection;
     KActionMenu *m_variableMenu;
 
     FontSizeAction *m_actionFormatFontSize;

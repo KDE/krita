@@ -23,6 +23,7 @@
 
 #include <QWidget>
 
+class QSpinBox;
 class KoColorSet;
 class KLineEdit;
 class KoResourceItemChooser;
@@ -41,9 +42,12 @@ signals:
 
 private slots:
     void resourceSelected(KoResource* resource);
-    
+    void slotSave();
+
 private:
     KoResourceItemChooser * m_itemChooser;
+    KLineEdit* m_nameEdit;
+    QSpinBox* m_columnEdit;
 };
 
 #endif // COLORSET_CHOOSER_H

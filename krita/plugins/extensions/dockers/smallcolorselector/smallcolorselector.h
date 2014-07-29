@@ -32,8 +32,6 @@ class SmallColorSelectorPlugin : public QObject
 public:
     SmallColorSelectorPlugin(QObject *parent, const QVariantList &);
     virtual ~SmallColorSelectorPlugin();
-private:
-    KisView2* m_view;
 };
 
 #endif

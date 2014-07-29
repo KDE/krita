@@ -78,7 +78,6 @@ private:
     int m_leftmost;
     int m_rightmost;
     eCursor m_grabCursor;
-    unsigned int m_grabIndex;
     double m_scalingFactor;
 
     int m_blackCursor;

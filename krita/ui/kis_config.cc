@@ -241,6 +241,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
         return 0;
     }
 #else
+    Q_UNUSED(screen)
     return 0;
 
 #endif

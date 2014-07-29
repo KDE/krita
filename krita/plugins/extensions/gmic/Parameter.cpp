@@ -382,10 +382,7 @@ void BoolParameter::parseValues(const QString& typeDefinition)
 
 QString BoolParameter::toString()
 {
-    QString result;
-    result.append(m_name+";");
-    result.append(m_value+";");
-    return result;
+    return QString("%1;%2;").arg(m_name).arg(m_value);
 }
 
 QString BoolParameter::value() const
@@ -571,11 +568,7 @@ QString TextParameter::value() const
 
 QString TextParameter::toString()
 {
-    QString result;
-    result.append(m_name+";");
-    result.append(m_value + ";");
-    result.append(m_multiline + ";");
-    return result;
+    return QString("%1;%2;%3;").arg(m_name).arg(m_value).arg(m_multiline);
 }
 
 void TextParameter::reset()

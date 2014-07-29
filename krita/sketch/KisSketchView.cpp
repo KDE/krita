@@ -506,6 +506,11 @@ bool KisSketchView::event( QEvent* event )
 #endif
                 d->canvas->inputManager()->eventFilter(this, event);
             return true;
+        case QEvent::KeyPress:
+        case QEvent::KeyRelease:
+            emit interactionStarted();
+            QApplication::sendEvent(d->view, event);
+            break;
         default:
             break;
     }

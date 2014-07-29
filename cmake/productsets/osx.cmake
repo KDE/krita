@@ -1,17 +1,14 @@
 #defines the set of products commonly wanted for classic Desktop environment with OS X
 # TODO: platform specific things should be handled in toplevel CMakeLists.txt
 
-calligra_define_productset(DESKTOP "Calligra for Desktop"
+calligra_define_productset(OSX "Calligra for OSX"
     OPTIONAL
         # apps
-        AUTHOR
         FLOW
-        #    KEXI
         KRITA
-        SHEETS
+        #SHEETS
         STAGE
         WORDS
-        BRAINDUMP
         KARBON
         # extras
         APP_CALLIGRA

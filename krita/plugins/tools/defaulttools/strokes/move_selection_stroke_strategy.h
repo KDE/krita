@@ -43,7 +43,6 @@ private:
     KisPaintLayerSP m_paintLayer;
     KisSelectionSP m_selection;
     KisUpdatesFacade *m_updatesFacade;
-    KisPostExecutionUndoAdapter *m_undoAdapter;
     QPoint m_finalOffset;
 };
 

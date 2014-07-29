@@ -452,11 +452,11 @@ set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 ##
 ## Test for Xinput
 ##
-if(NOT WIN32)
+if(NOT WIN32 AND NOT APPLE)
   set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
-else(NOT WIN32)
+else(NOT WIN32 AND NOT APPLE)
   set(REQUIRED_Xinput_FOUND TRUE)
-endif(NOT WIN32)
+endif(NOT WIN32 AND NOT APPLE)
 
 ##
 ## Test for KActivities
@@ -494,19 +494,19 @@ endif(WIN32)
 ## Test for Fontconfig
 ##
 ## Only test if on non-Windows system
-if(NOT WIN32)
+if(NOT WIN32 AND NOT APPLE)
     macro_optional_find_package(Fontconfig)
     macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
-endif(NOT WIN32)
+endif()
 
 ##
 ## Test for Freetype
 ##
 ## Only test if on non-Windows system
-if(NOT WIN32)
+if(NOT WIN32 AND NOT APPLE)
     macro_optional_find_package(Freetype)
     macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
-endif(NOT WIN32)
+endif()
 
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     set(FONTCONFIG_INCLUDE_DIR "")
@@ -798,104 +798,124 @@ set(KOODFREADER_INCLUDES
 ####################################################
 ###################################################
 
-#
-# WARNING: when adding a dependency for product x if there is already a line
-# containing calligra_disable_product(product_x, don't add a new one, just add
-# the test to the if construct and the reasoning
-#
+if (NOT WIN32)
+    set(NOT_WIN TRUE)
+endif()
+if (NOT QT_MAC_USE_COCOA)
+    set(NOT_COCOA TRUE)
+endif()
+if (${QTVERSION} VERSION_GREATER 4.7.0)
+    set(QT_GREATER_470 TRUE)
+endif()
 
-if(NOT SHARED_MIME_INFO_FOUND)
-    calligra_disable_product(LIB_KOMSOOXML "SharedMimeInfo not found (needed to install mimetypes)")
-endif(NOT SHARED_MIME_INFO_FOUND)
+calligra_drop_product_on_bad_condition( LIB_KOMSOOXML
+    SHARED_MIME_INFO_FOUND "SharedMimeInfo not found (needed to install mimetypes)"
+)
 
-if(NOT Soprano_FOUND)
-    calligra_disable_product(FEATURE_RDF "Soprano not found")
-endif(NOT Soprano_FOUND)
+calligra_drop_product_on_bad_condition( FEATURE_RDF
+    Soprano_FOUND "Soprano not found"
+)
 
-if(NOT EIGEN3_FOUND)
-    calligra_disable_product(PART_SHEETS "Eigen devel not found")
-endif(NOT EIGEN3_FOUND)
+calligra_drop_product_on_bad_condition( PART_SHEETS
+    EIGEN3_FOUND "Eigen devel not found"
+)
 
-if(NOT EIGEN3_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT Boost_SYSTEM_FOUND)
-    calligra_disable_product(APP_KRITA "SharedMimeInfo|libeigen3|libexiv2|lcms|boost-system devel not found ")
-endif(NOT EIGEN3_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT Boost_SYSTEM_FOUND)
+calligra_drop_product_on_bad_condition( APP_KRITA
+    EIGEN3_FOUND "Eigen devel not found"
+    EXIV2_FOUND "libexiv2 devel not found"
+    HAVE_REQUIRED_LCMS_VERSION "lcms devel not found"
+    SHARED_MIME_INFO_FOUND "SharedMimeInfo not found"
+    Boost_SYSTEM_FOUND "boost-system devel not found"
+    REQUIRED_Xinput_FOUND "Xinput devel not found "
+)
 
-if(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
-    calligra_disable_product(APP_KRITA "Xinput devel not found ")
-endif(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
-
-if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
-    calligra_disable_product(APP_ACTIVE "Qt version <= 4.7.0")
-endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
-
-if (NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
-    calligra_disable_product(APP_ACTIVE "QtDeclarative|KDeclarative not found")
-endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
+calligra_drop_product_on_bad_condition( APP_ACTIVE
+    QT_GREATER_470 "Qt version <= 4.7.0"
+    QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
+    KDECLARATIVE_FOUND "KDeclarative not found"
+)
 
 # TODO: remove when Predicate lib arrives
-if (NOT HAVE_ICU OR NOT HAVE_SQLITE)
-    calligra_disable_product(LIB_CALLIGRADB "ICU|sqlite devel not found")
-endif (NOT HAVE_ICU OR NOT HAVE_SQLITE)
+calligra_drop_product_on_bad_condition( LIB_CALLIGRADB
+    HAVE_ICU "ICU devel not found"
+    HAVE_SQLITE "sqlite devel not found"
+)
 
-if (NOT QT3SUPPORT)
-    calligra_disable_product(APP_KEXI "Qt3Support not found")
-endif (NOT QT3SUPPORT)
+calligra_drop_product_on_bad_condition( APP_KEXI
+    QT3SUPPORT "Qt3Support not found"
+)
 
-if(NOT OKULAR_FOUND)
-    calligra_disable_product(OKULAR_GENERATOR_ODP "Okular devel not found")
-endif(NOT OKULAR_FOUND)
+calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
+    OKULAR_FOUND "Okular devel not found"
+)
 
-if(NOT OKULAR_FOUND)
-    calligra_disable_product(OKULAR_GENERATOR_ODT "Okular devel not found")
-endif(NOT OKULAR_FOUND)
+calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
+    OKULAR_FOUND "Okular devel not found"
+)
 
-if (NOT LIBODFGEN_FOUND OR NOT LIBETONYEK_FOUND OR NOT LIBREVENGE_FOUND)
-    calligra_disable_product(FILTER_KEY_TO_ODP "libodfgen|libetonyek|librevenge devel not found")
-endif (NOT LIBODFGEN_FOUND OR NOT LIBETONYEK_FOUND OR NOT LIBREVENGE_FOUND)
+calligra_drop_product_on_bad_condition( FILTER_KEY_TO_ODP
+    LIBODFGEN_FOUND "libodfgen devel not found"
+    LIBETONYEK_FOUND "libetonyek devel not found"
+    LIBREVENGE_FOUND "librevenge devel not found"
+)
 
-if (NOT LIBODFGEN_FOUND OR NOT LIBVISIO_FOUND OR NOT LIBREVENGE_FOUND)
-    calligra_disable_product(FILTER_VISIO_TO_ODG "libodfgen|libvisio|librevenge devel not found")
-endif (NOT LIBODFGEN_FOUND OR NOT LIBVISIO_FOUND OR NOT LIBREVENGE_FOUND)
+calligra_drop_product_on_bad_condition( FILTER_VISIO_TO_ODG
+    LIBODFGEN_FOUND "libodfgen devel not found"
+    LIBVISIO_FOUND "libvisio devel not found"
+    LIBREVENGE_FOUND "librevenge devel not found"
+)
 
-if(NOT LIBODFGEN_FOUND OR NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBREVENGE_FOUND)
-    calligra_disable_product(FILTER_WORDPERFECT_TO_ODT "libodfgen|libwpd|libwpg|librevenge devel not found")
-endif(NOT LIBODFGEN_FOUND OR NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBREVENGE_FOUND)
+calligra_drop_product_on_bad_condition( FILTER_WORDPERFECT_TO_ODT
+    LIBODFGEN_FOUND "libodfgen devel not found"
+    LIBWPD_FOUND "libwpd devel not found"
+    LIBWPG_FOUND "libwpg devel not found"
+    LIBREVENGE_FOUND "librevenge devel not found"
+)
 
-if(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND OR NOT LIBREVENGE_FOUND)
-    calligra_disable_product(FILTER_WORKS_TO_ODT "libodfgen|libwps|librevenge devel not found")
-endif(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND OR NOT LIBREVENGE_FOUND)
+calligra_drop_product_on_bad_condition( FILTER_WORKS_TO_ODT
+    LIBODFGEN_FOUND "libodfgen devel not found"
+    LIBWPS_FOUND "libwps devel not found"
+    LIBREVENGE_FOUND "librevenge devel not found"
+)
 
-if (NOT LIBWPG_FOUND OR NOT LIBREVENGE_FOUND)
-    calligra_disable_product(FILTER_WPG_TO_SVG "libwpg|librevenge devel not found")
-endif (NOT LIBWPG_FOUND OR NOT LIBREVENGE_FOUND)
+calligra_drop_product_on_bad_condition( FILTER_WPG_TO_SVG
+    LIBWPG_FOUND "libwpg devel not found"
+    LIBREVENGE_FOUND "librevenge devel not found"
+)
 
-if (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND OR NOT LIBREVENGE_FOUND)
-    calligra_disable_product(FILTER_WPG_TO_ODG "libodfgen|libwpg|librevenge devel not found")
-endif (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND OR NOT LIBREVENGE_FOUND)
+calligra_drop_product_on_bad_condition( FILTER_WPG_TO_ODG
+    LIBODFGEN_FOUND "libodfgen devel not found"
+    LIBWPG_FOUND "libwpg devel not found"
+    LIBREVENGE_FOUND "librevenge devel not found"
+)
 
-if (WIN32 OR NOT POPPLER_XPDF_HEADERS_FOUND)
-    calligra_disable_product(FILTER_PDF_TO_SVG "poppler xpdf headers not found or on win")
-endif (WIN32 OR NOT POPPLER_XPDF_HEADERS_FOUND)
+calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
+    NOT_WIN "not supported on Windows"
+    POPPLER_XPDF_HEADERS_FOUND "poppler xpdf headers not found"
+)
 
-if(WIN32 OR QT_MAC_USE_COCOA)
-    calligra_disable_product(FILTER_HTML_TO_ODS "not supported on platform")
-endif(WIN32 OR QT_MAC_USE_COCOA)
+calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS
+    NOT_WIN "not supported on Windows"
+    NOT_COCOA "not supported with Qt Cocoa"
+)
 
-if(WIN32 OR QT_MAC_USE_COCOA)
-    calligra_disable_product(FILTER_SHEETS_TO_HTML "not supported on platform")
-endif(WIN32 OR QT_MAC_USE_COCOA)
+calligra_drop_product_on_bad_condition( FILTER_SHEETS_TO_HTML
+    NOT_WIN "not supported on Windows"
+    NOT_COCOA "not supported with Qt Cocoa"
+)
 
-if(WIN32 OR QT_MAC_USE_COCOA)
-    calligra_disable_product(FILTER_KSPREAD_TO_LATEX "not supported on platform")
-endif(WIN32 OR QT_MAC_USE_COCOA)
+calligra_drop_product_on_bad_condition( FILTER_KSPREAD_TO_LATEX
+    NOT_WIN "not supported on Windows"
+    NOT_COCOA "not supported with Qt Cocoa"
+)
 
-if(NOT SHARED_MIME_INFO_FOUND)
-    calligra_disable_product(FILTER_MPXJ_IMPORT "SharedMimeInfo not found (needed to install mimetypes)")
-endif(NOT SHARED_MIME_INFO_FOUND)
+calligra_drop_product_on_bad_condition( FILTER_MPXJ_IMPORT
+    SHARED_MIME_INFO_FOUND  "SharedMimeInfo not found (needed to install mimetypes)"
+)
 
-if(WIN32)
-    calligra_disable_product(APP_BRAINDUMP "unmaintained on Windows")
-endif()
+calligra_drop_product_on_bad_condition( APP_BRAINDUMP
+    NOT_WIN "unmaintained on Windows"
+)
 
 #############################################
 ####  Backward compatibility BUILD_x=off ####

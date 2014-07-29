@@ -173,8 +173,6 @@ private:
     QMap<KoList *, QString> listXmlIds;
 
     QMap<KoList *, QString> numberedParagraphListIds;
-
-    int splitEndBlockNumber;
 };
 
 #endif // KOTEXTWRITER_P_H

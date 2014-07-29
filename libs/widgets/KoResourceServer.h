@@ -278,6 +278,7 @@ public:
         m_resourcesByName.remove(resource->name());
         m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
+        m_tagStore->removeResource(resource);
         notifyRemovingResource(resource);
 
         Policy::deleteResource(resource);
@@ -285,7 +286,7 @@ public:
     }
 
     /// Remove a resource from the resourceserver and blacklist it
-    bool removeResource(PointerType resource) {
+    bool removeResourceAndBlacklist(PointerType resource) {
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
@@ -293,6 +294,7 @@ public:
         m_resourcesByName.remove(resource->name());
         m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
+        m_tagStore->removeResource(resource);
         notifyRemovingResource(resource);
 
         m_blackListFileNames.append(resource->filename());
@@ -322,22 +324,23 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    virtual void importResourceFile(const QString & filename , bool fileCreation=true) {
-        QFileInfo fi( filename );
-        if( fi.exists() == false )
-            return;
+    virtual bool importResourceFile(const QString & filename , bool fileCreation=true) {
+
+        QFileInfo fi(filename);
+        if (!fi.exists())
+            return false;
         if ( fi.size() == 0)
-            return;
+            return false;
 
         PointerType resource = createResource( filename );
         resource->load();
-        if(!resource->valid()){
+        if (!resource->valid()) {
             kWarning(30009) << "Import failed! Resource is not valid";
             Policy::deleteResource(resource);
-            return;
+            return false;
         }
 
-        if(fileCreation) {
+        if (fileCreation) {
             Q_ASSERT(!resource->defaultFileExtension().isEmpty());
             Q_ASSERT(!saveLocation().isEmpty());
 
@@ -352,9 +355,11 @@ public:
             resource->setFilename(fileInfo.filePath());
         }
 
-        if(!addResource(resource)) {
+        if (!addResource(resource)) {
             Policy::deleteResource(resource);
         }
+
+        return true;
     }
 
     /// Removes the resource file from the resource server

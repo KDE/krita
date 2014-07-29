@@ -3,6 +3,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -446,9 +447,15 @@ public:
             if (old)
                 old->unapplyStyle(block);
         }
-        // above should unaaply the style and it's lists part, but we want to clear everything
+        // The above should unapply the style and it's lists part, but we want to clear everything
+        // except section info.
         QTextCursor cursor(block);
-        cursor.setBlockFormat(QTextBlockFormat());
+        QVariant sectionStartings = cursor.blockFormat().property(KoParagraphStyle::SectionStartings);
+        QVariant sectionEndings = cursor.blockFormat().property(KoParagraphStyle::SectionEndings);
+        QTextBlockFormat fmt;
+        fmt.setProperty(KoParagraphStyle::SectionStartings, sectionStartings);
+        fmt.setProperty(KoParagraphStyle::SectionEndings, sectionEndings);
+        cursor.setBlockFormat(fmt);
         m_style->applyStyle(block);
     }
 

@@ -50,12 +50,7 @@ void KisNodeFacade::setRoot(KisNodeSP root)
 
 const KisNodeSP KisNodeFacade::root() const
 {
-    if(m_d->root.isNull()){
-        return 0;
-    }
-    else{
-        return m_d->root;
-    }
+    return m_d->root;
 }
 
 bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)

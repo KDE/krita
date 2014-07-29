@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/PythonPlugin
+X-KDE-Derived=
+Comment=Krita Python Plugin
+
+[PropertyDef::X-Python-2-Compatible]
+Type=bool
+
+[PropertyDef::X-Python-3-Compatible]
+Type=bool

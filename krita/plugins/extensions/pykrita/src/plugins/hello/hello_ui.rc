@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="hello" version="7">
+<MenuBar>
+    <Menu name="Scripts"><text>Scripts</text>
+	<Action name="hello"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

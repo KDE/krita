@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Python Plugin Manager
+X-KDE-ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritapykrita
+X-Krita-Version=28
+

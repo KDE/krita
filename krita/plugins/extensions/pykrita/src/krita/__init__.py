@@ -1,4 +1,7 @@
 import pykrita
+import os
+import sys
+
 
 def pykritaEventHandler(event):
     def _decorator(func):
@@ -6,6 +9,13 @@ def pykritaEventHandler(event):
         del func
     return _decorator
 
+def kDebug(text):
+    '''Use KDE way to show debug info
+
+        TODO Add a way to control debug output from partucular plugins (?)
+    '''
+    plugin = sys._getframe(1).f_globals['__name__']
+    pykrita.kDebug('{}: {}'.format(plugin, text))
 
 
 @pykritaEventHandler('_pluginLoaded')

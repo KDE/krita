@@ -60,7 +60,7 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     {
         dbgKrita << "Loaded pykrita, now load plugins";
         m_engine.tryLoadEnabledPlugins();
-        py.functionCall("_pykritaLoaded", "krita");
+        py.functionCall("_pykritaLoaded", PyKrita::Python::PYKRITA_ENGINE);
     }
     else
     {

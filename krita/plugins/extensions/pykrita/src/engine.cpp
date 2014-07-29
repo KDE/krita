@@ -755,7 +755,7 @@ void PyKrita::Engine::loadModule(const int idx)
         if (ins_result == 0) {
             // Initialize the module from Python's side
             PyObject* const args = Py_BuildValue("(s)", PQ(module_name));
-            PyObject* result = py.functionCall("_pluginLoaded", "Python::PYKRITA_ENGINE", args);
+            PyObject* result = py.functionCall("_pluginLoaded", Python::PYKRITA_ENGINE, args);
             Py_DECREF(args);
             if (result)
                 return;                                     // Success!

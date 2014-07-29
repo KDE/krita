@@ -1,16 +1,14 @@
-%Module PyKrita4.Module
-
 %Import QtCore/QtCoremod.sip
 %Import QtGui/QtGuimod.sip
 
-class Module : public QObject
+class Krita : public QObject
 {
 %TypeHeaderCode
-#include <module.h>
+#include "krita.h"
 %End
 
 public:
-    Module(QObject *parent /TransferThis/ = 0);
+    Krita(QObject *parent /TransferThis/ = 0);
 
     QList<MainWindow*> mainWindows();
     QList<View*> views();

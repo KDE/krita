@@ -11,7 +11,7 @@ class LIBKIS_EXPORT Document : public QObject
 {
     Q_OBJECT
 public:
-    explicit Document(KisDoc2 *document, QObject *parent = 0);
+    explicit Document(QObject *document, QObject *parent = 0);
 
     Image *image();
 

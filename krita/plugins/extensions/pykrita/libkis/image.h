@@ -9,7 +9,7 @@ class LIBKIS_EXPORT Image : public QObject
 {
     Q_OBJECT
 public:
-    explicit Image(KisImageWSP image, QObject *parent = 0);
+    explicit Image(QObject *image, QObject *parent = 0);
 
 signals:
 

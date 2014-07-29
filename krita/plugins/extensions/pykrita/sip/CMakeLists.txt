@@ -1,5 +1,7 @@
 include(SIPMacros)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libkis)
+
 set(SIP_INCLUDES ${PYQT4_SIP_DIR} ./krita)
 set(SIP_CONCAT_PARTS 1)
 set(SIP_TAGS ALL WS_X11 ${PYQT4_VERSION_TAG})

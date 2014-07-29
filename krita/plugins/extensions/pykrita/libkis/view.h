@@ -11,7 +11,7 @@ class LIBKIS_EXPORT View : public QObject
 {
     Q_OBJECT
 public:
-    explicit View(KisView2 *view, QObject *parent = 0);
+    explicit View(QObject *view, QObject *parent = 0);
 
 signals:
 

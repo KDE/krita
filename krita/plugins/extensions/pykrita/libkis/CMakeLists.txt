@@ -6,7 +6,7 @@ set(kritalibkis_LIB_SRCS
     document.cpp
     image.cpp
     mainwindow.cpp
-    module.cpp
+    krita.cpp
     node.cpp
     view.cpp
 )

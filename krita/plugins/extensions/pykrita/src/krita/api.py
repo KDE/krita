@@ -26,6 +26,8 @@ import contextlib
 import os
 import sys
 
+from PyKrita4.krita import *
+
 import pykrita
 
 def objectIsAlive(obj):
@@ -45,5 +47,5 @@ def kDebug(text):
         TODO Add a way to control debug output from partucular plugins (?)
     '''
     plugin = sys._getframe(1).f_globals['__name__']
-    pate.kDebug('{}: {}'.format(plugin, text))
+    pykrita.kDebug('{}: {}'.format(plugin, text))
 

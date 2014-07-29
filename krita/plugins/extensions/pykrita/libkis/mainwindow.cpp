@@ -5,9 +5,9 @@
 
 #include "view.h"
 
-MainWindow::MainWindow(KoMainWindow *mainWin, QObject *parent)
+MainWindow::MainWindow(QObject *mainWin, QObject *parent)
     : QObject(parent)
-    , m_mainWindow(mainWin)
+    , m_mainWindow(qobject_cast<KoMainWindow*>(mainWin))
 {
 }
 

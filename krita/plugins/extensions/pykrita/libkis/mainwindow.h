@@ -11,7 +11,7 @@ class LIBKIS_EXPORT MainWindow : public QObject
 {
     Q_OBJECT
 public:
-    explicit MainWindow(KoMainWindow *mainWin, QObject *parent = 0);
+    explicit MainWindow(QObject *mainWin, QObject *parent = 0);
 
     QList<View*> views();
 signals:

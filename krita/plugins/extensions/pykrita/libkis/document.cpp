@@ -3,13 +3,13 @@
 
 #include <kis_doc2.h>
 
-Document::Document(KisDoc2 *document, QObject *parent)
+Document::Document(QObject *document, QObject *parent)
     : QObject(parent)
-    , m_document(document)
+    , m_document(qobject_cast<KisDoc2*>(document))
 {
 }
 
 Image *Document::image()
 {
-    return new Image(m_document->image(), this);
+    return new Image(m_document->image().data(), this);
 }

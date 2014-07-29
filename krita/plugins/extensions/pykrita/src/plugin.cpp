@@ -35,8 +35,6 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     , m_engineFailureReason(m_engine.tryInitializeGetFailureReason())
     , m_autoReload(false)
 {
-    qDebug() << ">>>>>>>>>>>>>>>" << m_engineFailureReason;
-
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
 
     PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(&m_engine);

@@ -1,5 +1,5 @@
-#ifndef LIBKIS_MODULE_H
-#define LIBKIS_MODULE_H
+#ifndef LIBKIS_KRITA_H
+#define LIBKIS_KRITA_H
 
 #include <QObject>
 #include <QPointer>
@@ -12,11 +12,11 @@
 
 #include <krita_export.h>
 
-class LIBKIS_EXPORT Module : public QObject
+class LIBKIS_EXPORT Krita : public QObject
 {
     Q_OBJECT
 public:
-    explicit Module(QObject *parent = 0);
+    explicit Krita(QObject *parent = 0);
 
     QList<MainWindow*> mainWindows();
     QList<View*> views();
@@ -30,4 +30,4 @@ public slots:
 private:
 };
 
-#endif // LIBKIS_MODULE_H
+#endif // LIBKIS_KRITA_H

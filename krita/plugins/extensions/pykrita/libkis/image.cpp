@@ -1,7 +1,7 @@
 #include "image.h"
 
-Image::Image(KisImageWSP image, QObject *parent)
+Image::Image(QObject *image, QObject *parent)
     : QObject(parent)
-    , m_image(image)
+    , m_image(qobject_cast<KisImage*>(image))
 {
 }

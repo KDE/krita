@@ -15,6 +15,6 @@
 %Include document.sip
 %Include image.sip
 %Include mainwindow.sip
-%Include module.sip
+%Include krita.sip
 %Include node.sip
 %Include view.sip

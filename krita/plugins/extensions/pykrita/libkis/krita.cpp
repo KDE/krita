@@ -1,4 +1,4 @@
-#include "module.h"
+#include "krita.h"
 
 #include <KoApplication.h>
 #include <KoPart.h>
@@ -8,12 +8,12 @@
 #include "kis_doc2.h"
 #include "kis_image.h"
 
-Module::Module(QObject *parent) :
+Krita::Krita(QObject *parent) :
     QObject(parent)
 {
 }
 
-QList<MainWindow *> Module::mainWindows()
+QList<MainWindow *> Krita::mainWindows()
 {
     QList<MainWindow *> ret;
     foreach(KoPart *part, koApp->partList()) {
@@ -26,7 +26,7 @@ QList<MainWindow *> Module::mainWindows()
     return ret;
 }
 
-QList<View *> Module::views()
+QList<View *> Krita::views()
 {
     QList<View *> ret;
     foreach(MainWindow *mainWin, mainWindows()) {
@@ -35,7 +35,7 @@ QList<View *> Module::views()
     return ret;
 }
 
-QList<Document *> Module::documents()
+QList<Document *> Krita::documents()
 {
     QList<Document *> ret;
     foreach(KoPart *part, koApp->partList()) {
@@ -50,7 +50,7 @@ QList<Document *> Module::documents()
 
 }
 
-QList<Image *> Module::images()
+QList<Image *> Krita::images()
 {
     QList<Image *> ret;
     foreach(Document *doc, documents()) {

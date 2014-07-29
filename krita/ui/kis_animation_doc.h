@@ -20,10 +20,11 @@
 #ifndef KIS_ANIMATION_DOC_H
 #define KIS_ANIMATION_DOC_H
 
-#include <krita_export.h>
 #include "kis_doc2.h"
 #include "kis_animation_part.h"
-#include <./kranimstore/kis_animation_store.h>
+#include "kranimstore/kis_animation_store.h"
+#include "kis_animation.h"
+
 #include <QHash>
 
 class KisOnionSkinLoader;

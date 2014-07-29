@@ -2,12 +2,9 @@ import pykrita
 import os
 import sys
 
-
-def pykritaEventHandler(event):
-    def _decorator(func):
-        setattr(pykrita, event, func)
-        del func
-    return _decorator
+from .api import *
+from .configuration import *
+from .decorators import *
 
 def kDebug(text):
     '''Use KDE way to show debug info

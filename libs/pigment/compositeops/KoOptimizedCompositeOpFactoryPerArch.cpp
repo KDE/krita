@@ -26,7 +26,9 @@
 
 #include <KoCompositeOpRegistry.h>
 
+#if defined(__clang__)
 #pragma GCC diagnostic ignored "-Wlocal-type-template-args"
+#endif
 
 template<>
 template<>

@@ -23,6 +23,7 @@
 #include <QAbstractItemDelegate>
 #include <QPainter>
 #include <QPushButton>
+#include <QSpinBox>
 
 #include <klocale.h>
 
@@ -35,9 +36,10 @@
 
 #include "KoPattern.h"
 #include "kis_resource_server_provider.h"
-#include "kis_workspace_resource.h"
 #include "kis_view2.h"
 #include <QGridLayout>
+#include <QLabel>
+#include <QSpinBox>
 #include <klineedit.h>
 #include <kis_canvas_resource_provider.h>
 
@@ -93,8 +95,25 @@ ColorSetChooser::ColorSetChooser(QWidget* parent): QWidget(parent)
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
     
+    QPushButton* saveButton = new QPushButton(i18n("Save"));
+    connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));
+
+    m_nameEdit = new KLineEdit(this);
+    m_nameEdit->setClickMessage(i18n("Insert name"));
+    m_nameEdit->setClearButtonShown(true);
+
+    m_columnEdit = new QSpinBox(this);
+    m_columnEdit->setRange(1, 30);
+    m_columnEdit->setValue(10);
+
     QGridLayout* layout = new QGridLayout(this);
-    layout->addWidget(m_itemChooser, 0, 0, 1, 2);
+    layout->addWidget(m_itemChooser, 0, 0, 1, 3);
+    layout->addWidget(new QLabel(i18n("Name:"), this), 1, 0, 1, 1);
+    layout->addWidget(m_nameEdit, 1, 1, 1, 2);
+    layout->addWidget(new QLabel(i18n("Columns:"), this), 2, 0, 1, 1);
+    layout->addWidget(m_columnEdit, 2, 1, 1, 1);
+    layout->addWidget(saveButton, 2, 2, 1, 1);
+    layout->setColumnStretch(1, 1);
 }
 
 ColorSetChooser::~ColorSetChooser()
@@ -104,4 +123,36 @@ ColorSetChooser::~ColorSetChooser()
 void ColorSetChooser::resourceSelected(KoResource* resource)
 {
     emit paletteSelected(static_cast<KoColorSet*>(resource));
+}
+
+void ColorSetChooser::slotSave()
+{
+    KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer();
+
+    KoColorSet* colorset = new KoColorSet();
+    colorset->setValid(true);
+
+    QString saveLocation = rserver->saveLocation();
+    QString name = m_nameEdit->text();
+    int columns = m_columnEdit->value();
+
+    bool newName = false;
+    if(name.isEmpty()) {
+        newName = true;
+        name = i18n("Palette");
+    }
+    QFileInfo fileInfo(saveLocation + name + colorset->defaultFileExtension());
+
+    int i = 1;
+    while (fileInfo.exists()) {
+        fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + colorset->defaultFileExtension());
+        i++;
+    }
+    colorset->setFilename(fileInfo.filePath());
+    if(newName) {
+        name = i18n("Palette %1", i);
+    }
+    colorset->setName(name);
+    colorset->setColumnCount(columns);
+    rserver->addResource(colorset);
 }

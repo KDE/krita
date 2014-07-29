@@ -30,7 +30,7 @@
 #include "kis_brush_server.h"
 
 #include "ResourceBundleTest.h"
-#include "resourcebundle.h"
+#include "../resourcebundle.h"
 
 #include <qtest_kde.h>
 

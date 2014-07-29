@@ -20,16 +20,16 @@
 
 #include "KoTextPaste.h"
 
+#include <KoTextDocument.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeController.h>
 #include <KoShape.h>
 #include <KoCanvasBase.h>
-
-#include "KoTextEditor.h"
-#include "opendocument/KoTextLoader.h"
-#include "KoTextSharedLoadingData.h"
+#include <KoTextEditor.h>
+#include <opendocument/KoTextLoader.h>
+#include <KoTextSharedLoadingData.h>
 
 #include <kdebug.h>
 #ifdef SHOULD_BUILD_RDF
@@ -75,12 +75,13 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     bool ok = true;
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, d->resourceManager);
+    context.setSectionManager(KoTextDocument(d->editor->document()).sectionManager());
 
     KoTextLoader loader(context);
 
     kDebug(30015) << "text paste";
     // load the paste directly into the editor's cursor -- which breaks encapsulation
-    loader.loadBody(body, *d->editor->cursor());   // now let's load the body from the ODF KoXmlElement.
+    loader.loadBody(body, *d->editor->cursor(), KoTextLoader::PasteMode);   // now let's load the body from the ODF KoXmlElement.
 
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "text paste, rdf handling" << d->rdfModel;

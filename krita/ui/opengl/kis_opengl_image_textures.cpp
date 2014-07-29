@@ -148,6 +148,8 @@ QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
 
 void KisOpenGLImageTextures::createImageTextureTiles()
 {
+    KisConfig cfg;
+
     KisOpenGL::makeContextCurrent();
 
     destroyImageTextureTiles();
@@ -173,7 +175,9 @@ void KisOpenGLImageTextures::createImageTextureTiles()
             KisTextureTile *tile = new KisTextureTile(tileRect,
                                                       &m_texturesInfo,
                                                       emptyTileData,
-                                                      mode);
+                                                      mode,
+                                                      cfg.useOpenGLTextureBuffer(),
+                                                      cfg.numMipmapLevels());
             m_textureTiles.append(tile);
         }
     }
@@ -271,7 +275,6 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
         KIS_ASSERT_RECOVER_RETURN(tile);
 
         tile->update(*tileInfo);
-        tileInfo->destroy();
 
         KIS_OPENGL_PRINT_ERROR();
     }
@@ -306,6 +309,14 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 GLuint KisOpenGLImageTextures::checkerTexture() const
 {
     return m_checkerTexture;
+}
+
+void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
+{
+    foreach(KisTextureTile *tile, m_textureTiles) {
+        tile->setUseBuffer(useBuffer);
+        tile->setNumMipmapLevels(NumMipmapLevels);
+    }
 }
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)

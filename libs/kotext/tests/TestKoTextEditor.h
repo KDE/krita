@@ -17,9 +17,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-
-
 #ifndef TEST_KO_TEXT_EDITOR_H
 #define TEST_KO_TEXT_EDITOR_H
 
@@ -27,6 +24,8 @@
 
 class QTextDocument;
 class KoTextEditor;
+class KoSection;
+class KoSectionEnd;
 class KoDocumentRdf;
 class QString;
 
@@ -38,6 +37,15 @@ private slots:
 
     void testInsertInlineObject();
     void testRemoveSelectedText();
+
+    bool checkEndings(const QVector<int> &needEndings, KoSectionEnd **secEnd, KoTextEditor &editor);
+    bool checkStartings(const QVector<int> &needStartings, KoSection **sec, KoTextEditor &editor);
+
+    void pushSectionStart(int num, KoSection *sec, KoTextEditor &editor);
+    void pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEditor &editor);
+
+    void testDeleteSectionHandling_data();
+    void testDeleteSectionHandling();
 };
 
 #endif // TEST_KO_TEXT_EDITOR_H

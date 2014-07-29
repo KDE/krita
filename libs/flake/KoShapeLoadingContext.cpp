@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2007-2009, 2011 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,27 +42,31 @@ class KoShapeLoadingContext::Private
 {
 public:
     Private(KoOdfLoadingContext &c, KoDocumentResourceManager *resourceManager)
-            : context(c),
-            zIndex(0),
-            documentResources(resourceManager),
-            documentRdf(0)
+            : context(c)
+            , zIndex(0)
+            , documentResources(resourceManager)
+            , documentRdf(0)
+            , sectionManager(0)
     {
     }
+
     ~Private() {
         foreach(KoSharedLoadingData * data, sharedData) {
             delete data;
         }
     }
+
     KoOdfLoadingContext &context;
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
     QMap<QString, QPair<KoShape *, QVariant> > subIds;
-    QMap<QString, KoSharedLoadingData*> sharedData;
+    QMap<QString, KoSharedLoadingData *> sharedData; //FIXME: use QScopedPointer here to auto delete in destructor
     int zIndex;
     QMap<QString, KoLoadingShapeUpdater*> updaterById;
     QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
     KoDocumentResourceManager *documentResources;
     QObject *documentRdf;
+    KoSectionManager *sectionManager;
 };
 
 KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoDocumentResourceManager *documentResources)
@@ -203,4 +208,14 @@ QObject *KoShapeLoadingContext::documentRdf() const
 void KoShapeLoadingContext::setDocumentRdf(QObject *documentRdf)
 {
     d->documentRdf = documentRdf;
+}
+
+KoSectionManager* KoShapeLoadingContext::sectionManager()
+{
+    return d->sectionManager;
+}
+
+void KoShapeLoadingContext::setSectionManager(KoSectionManager *sectionManager)
+{
+    d->sectionManager = sectionManager;
 }

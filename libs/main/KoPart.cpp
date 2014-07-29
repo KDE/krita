@@ -122,12 +122,10 @@ void KoPart::setDocument(KoDocument *document)
 {
     Q_ASSERT(document);
     d->document = document;
-
 }
 
 KoDocument *KoPart::document() const
 {
-    Q_ASSERT(d->document);
     return d->document;
 }
 

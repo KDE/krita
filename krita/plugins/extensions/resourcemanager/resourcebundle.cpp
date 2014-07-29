@@ -49,7 +49,7 @@
 #include <calligraversion.h>
 #include <calligragitversion.h>
 
-#include <resourcemanager.h>
+#include "resourcemanager.h"
 
 
 ResourceBundle::ResourceBundle(QString const& fileName)
@@ -188,7 +188,7 @@ bool ResourceBundle::load()
             qWarning() << "Could not open preview.png";
         }
 
-        m_installed = m_manifest.isInstalled();
+        m_installed = true;
         setValid(true);
         setImage(m_thumbnail);
     }
@@ -627,25 +627,57 @@ bool ResourceBundle::install()
 
 bool ResourceBundle::uninstall()
 {
-//    if (!m_installed)
-//        return;
+    m_installed = false;
 
-//    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
-//    bundleDir.cdUp();
-//    QString dirPath = bundleDir.absolutePath();
-//    QList<QString> directoryList = m_manifest.getDirList();
-//    QString shortPackName = shortFilename();
 
-//    for (int i = 0; i < directoryList.size(); i++) {
-//        if (!removeDir(dirPath + directoryList.at(i) + QString("/") + shortPackName)) {
-//            qWarning() << "Error : Couldn't delete folder : " << dirPath;
-//        }
-//    }
+    KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {
+        KoAbstractGradient *res = gradientServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            gradientServer->removeResourceFromServer(res);
+        }
+    }
 
-//    m_installed = false;
-//    m_manifest.uninstall();
-//    save();
-    return false;
+    KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("patterns")) {
+        KoPattern *res = patternServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            patternServer->removeResourceFromServer(res);
+        }
+    }
+
+    KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("brushes")) {
+        KisBrushSP res = brushServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            brushServer->removeResourceFromServer(res);
+        }
+    }
+
+    KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("palettes")) {
+        KoColorSet *res = paletteServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            paletteServer->removeResourceFromServer(res);
+        }
+    }
+    KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
+        KisWorkspaceResource *res = workspaceServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            workspaceServer->removeResourceFromServer(res);
+        }
+    }
+
+    KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
+        KisPaintOpPreset *res = paintoppresetServer->resourceByMD5(ref.md5sum);
+        if (res) {
+            paintoppresetServer->removeResourceFromServer(res);
+        }
+    }
+
+    return true;
 }
 
 void ResourceBundle::addMeta(const QString &type, const QString &value)
@@ -675,55 +707,55 @@ QList<QString> ResourceBundle::getTagsList()
 }
 
 
-void ResourceBundle::removeFile(QString fileName)
-{
-    m_manifest.removeFile(fileName);
-}
-
-void ResourceBundle::addResourceDirs()
-{
-    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
-    bundleDir.cdUp();
-    QString localSavePath = bundleDir.absolutePath();
-    foreach(const QString& resourceType,  m_manifest.getDirList())  {
-        KGlobal::mainComponent().dirs()->addResourceDir(resourceType.toLatin1().data(), localSavePath + "/" + resourceType + "/" + this->name());
-    }
-}
-
 bool ResourceBundle::isInstalled()
 {
     return m_installed;
 }
 
-void ResourceBundle::rename(QString filename, QString name)
+
+QStringList ResourceBundle::resourceTypes()
 {
-    QString oldName = shortFilename();
-    QString shortName = name.section('.', 0, 0);
-
-    addMeta("filename", filename);
-    addMeta("name", shortName);
-    m_manifest.rename(shortName);
-
-    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
-    bundleDir.cdUp();
-    QString localSavePath = bundleDir.absolutePath();
-
-    if (isInstalled()) {
-        QList<QString> directoryList = m_manifest.getDirList();
-        QString dirPath;
-        QDir dir;
-        for (int i = 0; i < directoryList.size(); i++) {
-            dirPath = localSavePath;
-            dirPath.append(directoryList.at(i)).append("/");
-            dir.rename(dirPath + oldName, dirPath + shortName);
-        }
-    }
-    save();
+    return m_manifest.types();
 }
 
-void ResourceBundle::removeTag(QString tagName)
+QList<KoResource*> ResourceBundle::resources(const QString &resType)
 {
-    m_bundletags.remove(tagName);
+    QList<ResourceBundleManifest::ResourceReference> references = m_manifest.files(resType);
+
+    QList<KoResource*> ret;
+    foreach(const ResourceBundleManifest::ResourceReference &ref, references) {
+        if (resType == "gradients") {
+            KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
+            KoResource *res =  gradientServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
+        }
+        else if (resType  == "patterns") {
+            KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
+            KoResource *res =  patternServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
+        }
+        else if (resType  == "brushes") {
+            KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
+            KoResource *res =  brushServer->resourceByMD5(ref.md5sum).data();
+            if (res) ret << res;
+        }
+        else if (resType  == "palettes") {
+            KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
+            KoResource *res =  paletteServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
+        }
+        else if (resType  == "workspaces") {
+            KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+            KoResource *res =  workspaceServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
+        }
+        else if (resType  == "paintoppresets") {
+            KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            KoResource *res =  paintoppresetServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
+        }
+    }
+    return ret;
 }
 
 void ResourceBundle::setThumbnail(QString filename)
@@ -741,10 +773,6 @@ void ResourceBundle::setThumbnail(QString filename)
     }
 }
 
-void ResourceBundle::addTag(const QString &tagName)
-{
-    m_bundletags << tagName;
-}
 
 QByteArray ResourceBundle::generateMD5() const
 {

@@ -37,7 +37,6 @@ class KoResourceServerBase;
  */
 class KOWIDGETS_EXPORT KoResourceTagStore
 {
-
 public:
 
     /**
@@ -48,6 +47,9 @@ public:
     ~KoResourceTagStore();
 
     QStringList assignedTagsList(KoResource* resource) const;
+
+    /// remote the given resource from the tagstore
+    void removeResource(const KoResource *resource);
 
     /// Add the given tag to the tag store. The resource can be empty, in which case
     /// the tag is added bug unused
@@ -82,7 +84,7 @@ private:
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
-    QMultiHash<KoResource*, QString> m_resourceToTag;
+    QMultiHash<const KoResource*, QString> m_resourceToTag;
     QHash<QString, int> m_tagList;
 
     QString m_tagsXMLFile;

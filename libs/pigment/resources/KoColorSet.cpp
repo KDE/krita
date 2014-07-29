@@ -261,6 +261,11 @@ KoColorSetEntry KoColorSet::getColor(quint32 index)
     return m_colors[index];
 }
 
+void KoColorSet::setColumnCount(int columns)
+{
+    m_columns = columns;
+}
+
 int KoColorSet::columnCount()
 {
     return m_columns;

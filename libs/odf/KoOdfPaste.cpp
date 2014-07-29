@@ -52,8 +52,10 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QByteArray &bytes
 
     QBuffer buffer;
     buffer.setData(bytes);
-    KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
-    
+    KoStore *store = KoStore::createStore(&buffer, KoStore::Read);
+    //FIXME: Use shared_ptr or smth like these to auto delete store on return
+    // and delete all next "delete store;".
+
     KoOdfReadStore odfStore(store); // KoOdfReadStore does not delete the store on destruction
 
     QString errorMessage;

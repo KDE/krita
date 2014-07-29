@@ -235,12 +235,8 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     gc.setTransform(m_d->handlesTransform, true);
 
     QPen pen[2];
-
-    //pen[0].setCosmetic(true);
-    pen[0].setWidth(1);
-
-    //pen[1].setCosmetic(true);
-    pen[1].setWidth(2);
+    pen[0].setWidth(1 / handlesExtraScale);
+    pen[1].setWidth(2 / handlesExtraScale);
     pen[1].setColor(Qt::lightGray);
 
     for (int i = 1; i >= 0; --i) {
@@ -254,16 +250,20 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
         QPainterPath perspectiveHandles;
 
         if (m_d->transformedHandles.xVanishingExists) {
-            perspectiveHandles.addRect(handleRect.translated(m_d->transformedHandles.xVanishing));
+            QRectF rc = handleRect.translated(m_d->transformedHandles.xVanishing);
+            perspectiveHandles.addEllipse(rc);
         }
 
         if (m_d->transformedHandles.yVanishingExists) {
-            perspectiveHandles.addRect(handleRect.translated(m_d->transformedHandles.yVanishing));
+            QRectF rc = handleRect.translated(m_d->transformedHandles.yVanishing);
+            perspectiveHandles.addEllipse(rc);
         }
 
         if (!perspectiveHandles.isEmpty()) {
             gc.save();
             gc.setTransform(m_d->converter->imageToWidgetTransform());
+
+            gc.setBrush(Qt::red);
 
             for (int i = 1; i >= 0; --i) {
                 gc.setPen(pen[i]);
@@ -566,8 +566,14 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
 
 bool KisPerspectiveTransformStrategy::endPrimaryAction()
 {
-    m_d->recalculateTransformations();
-    return true;
+    bool shouldSave = !m_d->imageTooBig;
+
+    if (m_d->imageTooBig) {
+        m_d->currentArgs = m_d->clickArgs;
+        m_d->recalculateTransformations();
+    }
+
+    return shouldSave;
 }
 
 void KisPerspectiveTransformStrategy::Private::recalculateTransformations()
@@ -580,6 +586,57 @@ void KisPerspectiveTransformStrategy::Private::recalculateTransformations()
     QTransform tl = QTransform::fromTranslate(transaction.originalTopLeft().x(), transaction.originalTopLeft().y());
     paintingTransform = tl.inverted() * q->thumbToImageTransform() * tl * transform * viewScaleTransform;
     paintingOffset = transaction.originalTopLeft();
+
+    // check whether image is too big to be displayed or not
+    const qreal maxScale = 20.0;
+
+    imageTooBig = false;
+
+    if (qAbs(currentArgs.scaleX()) > maxScale ||
+        qAbs(currentArgs.scaleY()) > maxScale) {
+
+        imageTooBig = true;
+
+    } else {
+        QVector<QPointF> points;
+        points << transaction.originalRect().topLeft();
+        points << transaction.originalRect().topRight();
+        points << transaction.originalRect().bottomRight();
+        points << transaction.originalRect().bottomLeft();
+
+        for (int i = 0; i < points.size(); i++) {
+            points[i] = transform.map(points[i]);
+        }
+
+        for (int i = 0; i < points.size(); i++) {
+            const QPointF &pt = points[i];
+            const QPointF &prev = points[(i - 1 + 4) % 4];
+            const QPointF &next = points[(i + 1) % 4];
+            const QPointF &other = points[(i + 2) % 4];
+
+            QLineF l1(pt, other);
+            QLineF l2(prev, next);
+
+            QPointF intersection;
+            l1.intersect(l2, &intersection);
+
+            qreal maxDistance = kisSquareDistance(pt, other);
+
+            if (kisSquareDistance(pt, intersection) > maxDistance ||
+                kisSquareDistance(other, intersection) > maxDistance) {
+
+                imageTooBig = true;
+                break;
+            }
+
+            const qreal thresholdDistance = 0.02 * l2.length();
+
+            if (kisDistanceToLine(pt, l2) < thresholdDistance) {
+                imageTooBig = true;
+                break;
+            }
+        }
+    }
 
     // recalculate cached handles position
     recalculateTransformedHandles();

@@ -344,12 +344,8 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
     gc.setTransform(m_d->handlesTransform, true);
 
     QPen pen[2];
-
-    //pen[0].setCosmetic(true);
-    pen[0].setWidth(1);
-
-    //pen[1].setCosmetic(true);
-    pen[1].setWidth(2);
+    pen[0].setWidth(1 / handlesExtraScale);
+    pen[1].setWidth(2 / handlesExtraScale);
     pen[1].setColor(Qt::lightGray);
 
     for (int i = 1; i >= 0; --i) {
@@ -614,13 +610,14 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
 
 bool KisFreeTransformStrategy::endPrimaryAction()
 {
-    m_d->recalculateTransformations();
+    bool shouldSave = !m_d->imageTooBig;
 
     if (m_d->imageTooBig) {
         m_d->currentArgs = m_d->clickArgs;
+        m_d->recalculateTransformations();
     }
 
-    return !m_d->imageTooBig;
+    return shouldSave;
 }
 
 void KisFreeTransformStrategy::Private::recalculateTransformations()
@@ -644,26 +641,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
     paintingOffset = transaction.originalTopLeft();
 
     // check whether image is too big to be displayed or not
-
-    QMatrix4x4 unprojectedMatrix = QMatrix4x4(m.T) * m.P * QMatrix4x4(m.TS * m.SC * m.S);
-    QVector<QPointF> points;
-    points << transaction.originalTopLeft();
-    points << transaction.originalTopRight();
-    points << transaction.originalBottomRight();
-    points << transaction.originalBottomLeft();
-
-    foreach (const QPointF &pt, points) {
-        QVector4D v(pt.x(), pt.y(), 0, 1);
-
-        v = unprojectedMatrix * v;
-        qreal z = v.z() / v.w();
-
-        imageTooBig = z > 1.0 * currentArgs.cameraPos().z();
-
-        if (imageTooBig) {
-            break;
-        }
-    }
+    imageTooBig = KisTransformUtils::checkImageTooBig(transaction.originalRect(), m);
 
     // recalculate cached handles position
     recalculateTransformedHandles();

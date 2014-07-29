@@ -53,7 +53,6 @@ public:
 
 signals:
     void requestCanvasUpdate();
-    void requestResetRotationCenterButtons();
     void requestShowImageTooBig(bool value);
 
 private:

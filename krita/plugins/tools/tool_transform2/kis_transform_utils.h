@@ -71,6 +71,8 @@ public:
         // transform = TS * SC * S * projectedP * T
         QTransform finalTransform() const;
     };
+
+    static bool checkImageTooBig(const QRectF &bounds, const MatricesPack &m);
 };
 
 #endif /* __KIS_TRANSFORM_UTILS_H */

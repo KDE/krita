@@ -121,3 +121,30 @@ QTransform KisTransformUtils::MatricesPack::finalTransform() const
 {
     return TS * SC * S * projectedP * T;
 }
+
+bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPack &m)
+{
+    bool imageTooBig = false;
+
+    QMatrix4x4 unprojectedMatrix = QMatrix4x4(m.T) * m.P * QMatrix4x4(m.TS * m.SC * m.S);
+    QVector<QPointF> points;
+    points << bounds.topLeft();
+    points << bounds.topRight();
+    points << bounds.bottomRight();
+    points << bounds.bottomLeft();
+
+    foreach (const QPointF &pt, points) {
+        QVector4D v(pt.x(), pt.y(), 0, 1);
+
+        v = unprojectedMatrix * v;
+        qreal z = v.z() / v.w();
+
+        imageTooBig = z > 1024.0;
+
+        if (imageTooBig) {
+            break;
+        }
+    }
+
+    return imageTooBig;
+}

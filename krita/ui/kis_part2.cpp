@@ -28,8 +28,6 @@
 #include "kis_shape_controller.h"
 #include "KisFlipbookSelector.h"
 #include "kis_flipbook.h"
-#include "kis_animation_selector.h"
-#include "kis_animation.h"
 #include "kis_resource_server_provider.h"
 
 #include <KoColorSpaceEngine.h>
@@ -162,7 +160,6 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         widgetList << item;
     }
 #endif
-
     return widgetList;
 }
 

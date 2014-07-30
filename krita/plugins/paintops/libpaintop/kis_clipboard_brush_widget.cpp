@@ -43,7 +43,8 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     setWindowTitle(caption);
     preview->setScaledContents(true);
     preview->setFixedSize(preview->size());
-    spacingSlider->setRange(0.0, 1.0, 2);
+    spacingSlider->setRange(0.0, 10.0, 2);
+    spacingSlider->setExponentRatio(3.0);
     spacingSlider->setValue(0.25);
 
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();

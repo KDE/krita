@@ -115,6 +115,22 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QToolButton" name="perspectiveTransformButton">
+          <property name="text">
+           <string>Perspective</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
@@ -974,7 +990,7 @@ big!</string>
              <bool>true</bool>
             </property>
             <attribute name="buttonGroup">
-             <string notr="true">buttonGroup</string>
+             <string>buttonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1040,7 +1056,7 @@ big!</string>
              <bool>true</bool>
             </property>
             <attribute name="buttonGroup">
-             <string notr="true">buttonGroup</string>
+             <string>buttonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1095,7 +1111,7 @@ big!</string>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <property name="spacing">
+     <property name="spacing">
       <number>6</number>
      </property>
      <property name="topMargin">

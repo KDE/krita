@@ -50,8 +50,10 @@ public slots:
     void setProfile(KisImageWSP image);
     void setHelp(const QString &t);
     void updateStatusBarProfileLabel();
-
     void updateSelectionToolTip();
+
+private slots:
+    void updateSelectionIcon();
 
 private:
 

@@ -293,6 +293,14 @@ if (USEOPENGL)
     macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 endif(USEOPENGL)
 
+##
+## Test for GNU Scientific Library
+##
+macro_optional_find_package(GSL)
+macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl"
+                  FALSE "1.7" "Required by Krita's Transform tool and Sheets' solver plugin")
+macro_bool_to_01(GSL_FOUND HAVE_GSL)
+configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
 ##
 ## Test for kdepimlibs

@@ -37,7 +37,8 @@ class ToolTransformArgs
 {
 public:
     enum TransformMode {FREE_TRANSFORM = 0,
-                        WARP};
+                        WARP,
+                        PERSPECTIVE_4POINT};
 
     /**
      * Initializes the parameters for an identity transformation,
@@ -76,8 +77,9 @@ public:
     }
 
     //warp-related
-    inline int pointsPerLine() const {
-        return m_pointsPerLine;
+    inline int numPoints() const {
+        KIS_ASSERT_RECOVER_NOOP(m_origPoints.size() == m_transfPoints.size());
+        return m_origPoints.size();
     }
     inline QPointF &origPoint(int i) {
         return m_origPoints[i];
@@ -91,6 +93,14 @@ public:
     inline const QVector<QPointF> &transfPoints() const {
         return m_transfPoints;
     }
+
+    inline QVector<QPointF> &refOriginalPoints() {
+        return m_origPoints;
+    }
+    inline QVector<QPointF> &refTransformedPoints() {
+        return m_transfPoints;
+    }
+
     inline KisWarpTransformWorker::WarpType warpType() const {
         return m_warpType;
     }
@@ -100,13 +110,9 @@ public:
     inline bool defaultPoints() const {
         return m_defaultPoints;
     }
-    inline void setPointsPerLine(int pointsPerLine) {
-        m_pointsPerLine = pointsPerLine;
-    }
     inline void setPoints(QVector<QPointF> origPoints, QVector<QPointF> transfPoints) {
         m_origPoints = QVector<QPointF>(origPoints);
         m_transfPoints = QVector<QPointF>(transfPoints);
-        m_pointsPerLine = m_origPoints.size();
     }
     inline void setWarpType(KisWarpTransformWorker::WarpType warpType) {
         m_warpType = warpType;
@@ -169,12 +175,15 @@ public:
         m_rotationCenterOffset = rotationCenterOffset;
     }
     inline void setAX(double aX) {
+        KIS_ASSERT_RECOVER_NOOP(aX == normalizeAngle(aX));
         m_aX = aX;
     }
     inline void setAY(double aY) {
+        KIS_ASSERT_RECOVER_NOOP(aY == normalizeAngle(aY));
         m_aY = aY;
     }
     inline void setAZ(double aZ) {
+        KIS_ASSERT_RECOVER_NOOP(aZ == normalizeAngle(aZ));
         m_aZ = aZ;
     }
     inline void setCameraPos(const QVector3D &pos) {
@@ -213,6 +222,14 @@ public:
 
     bool isIdentity() const;
 
+    inline QTransform flattenedPerspectiveTransform() const {
+        return m_flattenedPerspectiveTransform;
+    }
+
+    inline void setFlattenedPerspectiveTransform(const QTransform &value) {
+        m_flattenedPerspectiveTransform = value;
+    }
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -221,8 +238,7 @@ private:
     // warp-related arguments
     // these are basically the arguments taken by the warp transform worker
     bool m_defaultPoints; // true : the original points are set to make a grid
-                          // which density is given by pointsPerLine
-    int m_pointsPerLine; // density of the grid when defaultPoints is true
+                          // which density is given by numPoints()
     QVector<QPointF> m_origPoints;
     QVector<QPointF> m_transfPoints;
     KisWarpTransformWorker::WarpType m_warpType;
@@ -245,6 +261,8 @@ private:
     double m_shearX;
     double m_shearY;
     bool m_keepAspectRatio;
+
+    QTransform m_flattenedPerspectiveTransform;
 
     KisFilterStrategy *m_filter;
 };

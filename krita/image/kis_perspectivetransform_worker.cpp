@@ -51,14 +51,26 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
 
     QTransform forwardTransform = t.inverted() * project * t;
 
-    QPolygon bounds(dev->exactBounds());
-    QPolygon newBounds = forwardTransform.map(bounds);
+    init(forwardTransform);
+}
 
-    m_isIdentity = forwardTransform.isIdentity();
+KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QTransform &transform, KoUpdaterPtr progress)
+    : m_dev(dev), m_progressUpdater(progress)
+{
+    init(transform);
+}
 
-    if (!m_isIdentity && forwardTransform.isInvertible()) {
-        m_newTransform = forwardTransform.inverted();
-        m_srcRect = dev->exactBounds();
+void KisPerspectiveTransformWorker::init(const QTransform &transform)
+{
+    QPolygon bounds(m_dev->exactBounds());
+    QPolygon newBounds = transform.map(bounds);
+
+    m_isIdentity = transform.isIdentity();
+
+    if (!m_isIdentity && transform.isInvertible()) {
+        m_newTransform = transform.inverted();
+        m_srcRect = m_dev->exactBounds();
+        newBounds = newBounds.intersected(m_dev->defaultBounds()->bounds());
 
         QPainterPath path;
         path.addPolygon(newBounds);

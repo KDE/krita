@@ -20,7 +20,16 @@
    <property name="spacing">
     <number>6</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -68,7 +77,16 @@
       </size>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <property name="spacing">
@@ -103,6 +121,13 @@
          </spacer>
         </item>
         <item>
+         <widget class="QLabel" name="pickerLabel">
+          <property name="text">
+           <string>Picker</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="KColorButton" name="btnCustomColor">
           <property name="maximumSize">
            <size>
@@ -128,10 +153,10 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="verticalSpacing">
+     <property name="topMargin">
       <number>0</number>
      </property>
-     <property name="topMargin">
+     <property name="verticalSpacing">
       <number>0</number>
      </property>
      <item row="1" column="0">

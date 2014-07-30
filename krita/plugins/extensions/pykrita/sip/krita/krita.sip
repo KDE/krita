@@ -15,5 +15,6 @@ public:
     QList<Document*> documents();
     QList<Image*> images();
 
+    QAction *createAction(const QString &text);
 };
 

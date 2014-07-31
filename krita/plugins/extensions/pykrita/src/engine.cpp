@@ -757,8 +757,10 @@ void PyKrita::Engine::loadModule(const int idx)
             PyObject* const args = Py_BuildValue("(s)", PQ(module_name));
             PyObject* result = py.functionCall("_pluginLoaded", Python::PYKRITA_ENGINE, args);
             Py_DECREF(args);
-            if (result)
-                return;                                     // Success!
+            if (result) {
+                return;
+                // Success!
+            }
         }
         plugin.m_errorReason = i18nc("@info:tooltip", "Internal engine failure");
     } else {
@@ -769,6 +771,7 @@ void PyKrita::Engine::loadModule(const int idx)
                                );
     }
     plugin.m_broken = true;
+    warnScript << "Error loading plugin" << module_name << ":" << plugin.m_errorReason;
 }
 
 void PyKrita::Engine::unloadModule(int idx)

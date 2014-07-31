@@ -3,7 +3,6 @@ import os
 import sys
 
 from .api import *
-from .configuration import *
 from .decorators import *
 
 def kDebug(text):

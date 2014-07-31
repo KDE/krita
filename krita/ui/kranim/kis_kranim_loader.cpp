@@ -41,12 +41,11 @@ KisKranimLoader::~KisKranimLoader()
 
 void KisKranimLoader::loadBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external)
 {
-    kWarning() << "Load binary data";
+
 }
 
 KisImageWSP KisKranimLoader::loadXML(const KoXmlElement &elem)
 {
-    kWarning() << "Load XML";
     KisImageWSP image = 0;
     return image;
 }

@@ -533,8 +533,6 @@ void KisTimeline::importUI(QHash<int, QList<QRect> > timelineMap)
         return;
     }
 
-    kWarning() << timelineMap.size();
-
     QList<int> layers = timelineMap.keys();
 
     qSort(layers);
@@ -543,8 +541,6 @@ void KisTimeline::importUI(QHash<int, QList<QRect> > timelineMap)
 
     for(int i = 0 ; i < layers.size() ; i++) {
         int layer = layers.at(i);
-
-        kWarning() << "Importing layer "  << layer;
 
         // No layer update UI since for layer 0, UI is already present
         if(layer != 0) {

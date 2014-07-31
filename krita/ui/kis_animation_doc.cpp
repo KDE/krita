@@ -390,12 +390,12 @@ void KisAnimationDoc::removeLayer(int layer)
 
 void KisAnimationDoc::moveLayerUp(int layer)
 {
-    kWarning() << "Moving layer up" << layer;
+
 }
 
 void KisAnimationDoc::moveLayerDown(int layer)
 {
-    kWarning() << "Moving layer down" << layer;
+
 }
 
 void KisAnimationDoc::addPaintLayer()

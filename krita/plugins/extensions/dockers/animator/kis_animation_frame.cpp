@@ -147,7 +147,6 @@ void KisAnimationFrame::expandWidth()
 
     if(previousFrame->geometry().x() + previousFrame->getWidth() - 10 < this->geometry().x()) {
         int newWidth = this->geometry().x() - previousFrame->geometry().x() + 10;
-        kWarning() << newWidth;
         KisAnimationFrame* newPreviousFrame = new KisAnimationFrame(previousFrame->getParent(), previousFrame->getType(), newWidth);
         newPreviousFrame->setGeometry(previousFrame->x(), 0, newWidth, 20);
         newPreviousFrame->show();

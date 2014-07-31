@@ -20,7 +20,7 @@ if (WITH_RESOURCE_MANAGER)
 endif()
 
 # Allow to skip building GMIC plugin
-#option(WITH_GMIC "Build the G'Mic plugin" ON)
-#if(WITH_GMIC)
-#    add_subdirectory( gmic )
-#endif()
+option(WITH_GMIC "Build the G'Mic plugin" ON)
+if(WITH_GMIC)
+    add_subdirectory( gmic )
+endif()

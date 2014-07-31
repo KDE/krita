@@ -29,6 +29,7 @@ KisAnimationStore::KisAnimationStore(QString filename)
 KisAnimationStore::~KisAnimationStore()
 {
     delete m_dir;
+    delete m_currentFile;
 }
 
 void KisAnimationStore::enterDirectory(QString directory)
@@ -80,14 +81,14 @@ QIODevice* KisAnimationStore::getDevice(QString location)
 
 void KisAnimationStore::deleteFile(QString location)
 {
-    QFile* file = new QFile(m_dir->absoluteFilePath(location));
-    file->remove();
+    m_currentFile = new QFile(m_dir->absoluteFilePath(location));
+    m_currentFile->remove();
 }
 
 void KisAnimationStore::renameFile(QString oldName, QString newName)
 {
-    QFile* file = new QFile(m_dir->absoluteFilePath(oldName));
-    file->rename(newName);
+    m_currentFile = new QFile(m_dir->absoluteFilePath(oldName));
+    m_currentFile->rename(newName);
 }
 
 bool KisAnimationStore::hasFile(QString location) const

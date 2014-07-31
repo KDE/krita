@@ -717,9 +717,11 @@ void PyKrita::Engine::setEnabledPlugins(const QStringList& enabled_plugins)
 
 void PyKrita::Engine::tryLoadEnabledPlugins()
 {
-    for (int i = 0; i < m_plugins.size(); ++i)
-        if (m_plugins[i].isEnabled() && ! m_plugins[i].isBroken())
+    for (int i = 0; i < m_plugins.size(); ++i) {
+        if (m_plugins[i].isEnabled() && ! m_plugins[i].isBroken()) {
             loadModule(i);
+        }
+    }
 }
 
 void PyKrita::Engine::loadModule(const int idx)

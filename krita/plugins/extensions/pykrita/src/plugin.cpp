@@ -54,14 +54,13 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     PyKrita::Python py = PyKrita::Python();
     PyObject* pykritaPackage = py.moduleImport("pykrita");
     pykritaPackage = py.moduleImport("krita");
-    if (pykritaPackage)
-    {
-        dbgKrita << "Loaded pykrita, now load plugins";
+
+    if (pykritaPackage)  {
+        dbgScript << "Loaded pykrita, now load plugins";
         m_engine.tryLoadEnabledPlugins();
         py.functionCall("_pykritaLoaded", PyKrita::Python::PYKRITA_ENGINE);
     }
-    else
-    {
+    else  {
         dbgScript << "Cannot load pykrita module";
         m_engine.setBroken();
     }

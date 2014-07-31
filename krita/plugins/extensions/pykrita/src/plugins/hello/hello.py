@@ -1,9 +1,10 @@
 from PyQt4.QtGui import *
 from PyKrita4.krita import *
-from krita import *
+
+import krita
 
 def hello():
     QMessageBox.information(QWidget(), "Test", "Hello World")
 
-QAction ac = Krita.createAction("Hello")
-ac.triggered.conect(hello)
+ac = Krita().createAction("Hello")
+ac.triggered.connect(hello)

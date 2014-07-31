@@ -391,8 +391,9 @@ QStringList PyKrita::Engine::enabledPlugins() const
     /// filtered and transformed view from boost
     QStringList result;
     Q_FOREACH(const PluginState & plugin, m_plugins)
-    if (plugin.isEnabled())
+    if (plugin.isEnabled()) {
         result.append(plugin.m_service->name());
+    }
     return result;
 }
 
@@ -711,14 +712,19 @@ void PyKrita::Engine::scanPlugins()
 
 void PyKrita::Engine::setEnabledPlugins(const QStringList& enabled_plugins)
 {
-    for (int i = 0; i < m_plugins.size(); ++i)
+    for (int i = 0; i < m_plugins.size(); ++i) {
         m_plugins[i].m_enabled = enabled_plugins.indexOf(m_plugins[i].m_service->name()) != -1;
+    }
 }
 
 void PyKrita::Engine::tryLoadEnabledPlugins()
 {
     for (int i = 0; i < m_plugins.size(); ++i) {
-        if (m_plugins[i].isEnabled() && ! m_plugins[i].isBroken()) {
+        dbgScript << "Trying to load plugin" << m_plugins[i].pythonModuleName()
+                  << ". Enabled:" << m_plugins[i].isEnabled()
+                  << ". Broken: " << m_plugins[i].isBroken();
+        if (!m_plugins[i].isBroken()) {
+            m_plugins[i].m_enabled = true;
             loadModule(i);
         }
     }
@@ -760,8 +766,8 @@ void PyKrita::Engine::loadModule(const int idx)
             PyObject* result = py.functionCall("_pluginLoaded", Python::PYKRITA_ENGINE, args);
             Py_DECREF(args);
             if (result) {
+                dbgScript << "\t" << "success!";
                 return;
-                // Success!
             }
         }
         plugin.m_errorReason = i18nc("@info:tooltip", "Internal engine failure");

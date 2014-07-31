@@ -4,7 +4,7 @@
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License, or(at you option)
- *  any later version..
+ *  any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,7 +40,7 @@ void KisAnimationFrame::paintEvent(QPaintEvent *event)
         painter.drawEllipse(QPointF(5, 10), 3, 3);
 
         if(this->m_width > 10) {
-            painter.drawRect(this->m_width-8, 3, 6, 14);
+            painter.drawRect(this->m_width - 8, 3, 6, 14);
         }
     }
 
@@ -48,7 +48,7 @@ void KisAnimationFrame::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::blue);
         painter.setBrush(Qt::blue);
         painter.setOpacity(0.5);
-        painter.drawRect(0, 0, this->m_width-1, 19);
+        painter.drawRect(0, 0, this->m_width - 1, 19);
     }
 }
 
@@ -115,7 +115,7 @@ QRect KisAnimationFrame::convertSelectionToFrame()
         int newFrameWidth;
 
         int nextFrameIndex = this->getParent()->getNextFrameIndexFrom(this->getParent()->getIndex(this));
-        newFrameWidth = nextFrameIndex*10 - this->geometry().x();
+        newFrameWidth = nextFrameIndex * 10 - this->geometry().x();
 
         if(newFrameWidth == 0) {
             if(this->geometry().x() < this->getParent()->getPreviousFrameFrom(this)->geometry().x()+oldPrevFrameWidth){

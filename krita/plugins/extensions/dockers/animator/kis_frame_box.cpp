@@ -4,7 +4,7 @@
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License, or(at you option)
- *  any later version..
+ *  any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -37,14 +37,14 @@ KisFrameBox::KisFrameBox(KisTimeline *parent)
 
     KisLayerContents* firstContents = new KisLayerContents(this);
     m_layerContents << firstContents;
-    firstContents->setGeometry(QRect(0, m_layerContents.length()*20, 100000, 20));
+    firstContents->setGeometry(QRect(0, m_layerContents.length() * 20, 100000, 20));
 
     this->setSelectedFrame(0, firstContents);
 }
 
 void KisFrameBox::addLayerUiUpdate()
 {   
-    this->setFixedHeight(this->height()+20);
+    this->setFixedHeight(this->height() + 20);
 
     KisLayerContents* newContents = new KisLayerContents(this);
     m_layerContents << newContents;

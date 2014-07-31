@@ -4,7 +4,7 @@
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License, or(at you option)
- *  any later version..
+ *  any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -79,7 +79,7 @@ void KisKranimSaver::saveFrame(KisAnimationStore *store, KisLayerSP frame, QRect
 
 void KisKranimSaver::saveFrame(KisAnimationStore *store, KisPaintDeviceSP device, QRect framePosition)
 {
-    QString location = "frame" + QString::number(framePosition.x()) +"layer" + QString::number(framePosition.y());
+    QString location = "frame" + QString::number(framePosition.x()) + "layer" + QString::number(framePosition.y());
 
     store->openFileWriting(location);
     m_writer = new KisAnimationStoreWriter(store);

@@ -4,7 +4,7 @@
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License, or(at you option)
- *  any later version..
+ *  any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -69,8 +69,8 @@ public:
 };
 
 KisAnimationDoc::KisAnimationDoc()
-    : KisDoc2(new KisAnimationPart),
-      d(new KisAnimationDocPrivate())
+    : KisDoc2(new KisAnimationPart)
+    , d(new KisAnimationDocPrivate())
 {
     setMimeType(APP_MIMETYPE);
 

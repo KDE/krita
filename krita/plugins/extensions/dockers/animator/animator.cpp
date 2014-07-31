@@ -52,7 +52,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "Animator" );
+        return QString("Animator");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const

@@ -4,7 +4,7 @@
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License, or(at you option)
- *  any later version..
+ *  any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -39,15 +39,15 @@ KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
     m_layerIndex = 1;
     m_nodeModel = new KisNodeModel(this);
 
-    QLabel *lbl_Layers = new QLabel(this);
+    QLabel* lbl_Layers = new QLabel(this);
     lbl_Layers->setText(i18n("Animation Layers"));
     lbl_Layers->setGeometry(QRect(10, 0, 100, 20));
 
-    QLabel *lblVisiblity = new QLabel(this);
+    QLabel* lblVisiblity = new QLabel(this);
     lblVisiblity->setText("V");
     lblVisiblity->setGeometry(QRect(120, 0, 20, 20));
 
-    QLabel *lblLock = new QLabel(this);
+    QLabel* lblLock = new QLabel(this);
     lblLock->setText("L");
     lblLock->setGeometry(QRect(140, 0, 20, 20));
 
@@ -57,7 +57,7 @@ KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
 
     KisAnimationLayer* firstLayer = new KisAnimationLayer(this, m_layerIndex);
     m_layers << firstLayer;
-    firstLayer->setGeometry(QRect(0,this->m_layers.length()*20, 200, 20));
+    firstLayer->setGeometry(QRect(0,this->m_layers.length() * 20, 200, 20));
 }
 
 void KisAnimationLayerBox::addLayerUiUpdate()

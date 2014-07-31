@@ -44,7 +44,7 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
     this->setMinimumSize(300,160);
 
     QLabel* activeLabel = new QLabel(this);
-    activeLabel->setText("Active: ");
+    activeLabel->setText(i18n("Active: "));
     activeLabel->setGeometry(100,20,50,20);
 
     KisConfig cfg;
@@ -56,7 +56,7 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
     connect(activeCheckBox, SIGNAL(clicked(bool)), this, SLOT(enableOnionSkinning(bool)));
 
     QLabel* frameLabel = new QLabel(this);
-    frameLabel->setText("Frames");
+    frameLabel->setText(i18n("Frames"));
     frameLabel->setGeometry(130, 40, 50, 20);
 
     QSpinBox* previousFramesInput = new QSpinBox(this);
@@ -70,7 +70,7 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
     nextFramesInput->setGeometry(200, 40, 50, 20);
 
     QLabel* colorLabel = new QLabel(this);
-    colorLabel->setText("Colors");
+    colorLabel->setText(i18n("Colors"));
     colorLabel->setGeometry(130, 60, 50, 20);
 
     KColorButton* previousFramesColor = new KColorButton(this);
@@ -84,7 +84,7 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
     connect(nextFramesColor, SIGNAL(changed(QColor)), this, SLOT(setNextFramesColor(QColor)));
 
     QLabel* opacityLabel = new QLabel(this);
-    opacityLabel->setText("Opacity");
+    opacityLabel->setText(i18n("Opacity"));
     opacityLabel->setGeometry(130, 80, 50, 20);
 
     m_previousOpacitySelectorView = new KisOpacitySelectorView(this, KisOpacitySelector::PREV_FRAMES_OPACITY_SELECTOR);

@@ -26,17 +26,17 @@
 AnimatorPlaybackDialog::AnimatorPlaybackDialog(QWidget *parent)
     : QDialog(parent)
 {
-    this->setWindowTitle("Playback options");
+    this->setWindowTitle(i18n("Playback options"));
     this->setMaximumSize(300, 200);
 
     KisConfig cfg;
     QCheckBox* loopState = new QCheckBox(this);
-    loopState->setText("Enable Looping");
+    loopState->setText(i18n("Enable Looping"));
     loopState->setChecked(cfg.defLoopingEnabled());
 
     connect(loopState, SIGNAL(clicked(bool)), this, SLOT(enableLooping(bool)));
 
-    QLabel* fpsLabel = new QLabel("Frame per second:", this);
+    QLabel* fpsLabel = new QLabel(i18n("Frame per second:"), this);
 
     QSpinBox* fpsInput = new QSpinBox(this);
     fpsInput->setRange(1, 30);
@@ -44,7 +44,7 @@ AnimatorPlaybackDialog::AnimatorPlaybackDialog(QWidget *parent)
 
     connect(fpsInput, SIGNAL(valueChanged(int)), this, SLOT(setFps(int)));
 
-    QLabel* localPlaybackRangeLabel = new QLabel("Local playback range:", this);
+    QLabel* localPlaybackRangeLabel = new QLabel(i18n("Local playback range:"), this);
 
     QSpinBox* localPlaybackRangeInput = new QSpinBox(this);
     localPlaybackRangeInput->setRange(1, 10000);

@@ -40,7 +40,7 @@ KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
     m_nodeModel = new KisNodeModel(this);
 
     QLabel *lbl_Layers = new QLabel(this);
-    lbl_Layers->setText("Animation Layers");
+    lbl_Layers->setText(i18n("Animation Layers"));
     lbl_Layers->setGeometry(QRect(10, 0, 100, 20));
 
     QLabel *lblVisiblity = new QLabel(this);

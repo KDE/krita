@@ -26,15 +26,15 @@
 AnimatorSettingsDialog::AnimatorSettingsDialog(QWidget *parent) :
     QDialog(parent)
 {
-    this->setWindowTitle("Animator Settings");
+    this->setWindowTitle(i18n("Animator Settings"));
     this->setMaximumSize(300, 200);
 
     KisConfig cfg;
     QCheckBox* autoFrameBreak = new QCheckBox(this);
-    autoFrameBreak->setText("Enable auto frame break");
+    autoFrameBreak->setText(i18n("Enable auto frame break"));
     autoFrameBreak->setChecked(cfg.defAutoFrameBreakEnabled());
 
-    QLabel* timelineWidthLbl = new QLabel("Timeline width:", this);
+    QLabel* timelineWidthLbl = new QLabel(i18n("Timeline width:"), this);
 
     QSpinBox* timelineWidth = new QSpinBox(this);
     timelineWidth->setMinimum(1);

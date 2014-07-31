@@ -167,5 +167,14 @@ inline qreal kisDistanceToLine(const QPointF &m, const QLineF &line)
     return distance;
 }
 
+inline QPointF kisProjectOnVector(const QPointF &base, const QPointF &v)
+{
+    const qreal prod = base.x() * v.x() + base.y() * v.y();
+    const qreal lengthSq = pow2(base.x()) + pow2(base.y());
+    qreal coeff = prod / lengthSq;
+
+    return coeff * base;
+}
+
 #endif // KISGLOBAL_H_
 

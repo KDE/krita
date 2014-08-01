@@ -17,9 +17,9 @@
  */
 
 #include "kis_kranim_loader.h"
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_types.h>
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_types.h"
 
 struct KisKranimLoader::Private
 {

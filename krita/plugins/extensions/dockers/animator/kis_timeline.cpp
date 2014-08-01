@@ -20,19 +20,20 @@
 #include "kis_frame_box.h"
 #include "kis_animation_layerbox.h"
 #include "kis_animation_frame.h"
+#include "kis_canvas2.h"
+#include "kis_view2.h"
+#include "kis_doc2.h"
+#include "kis_animation_doc.h"
+#include "kis_image.h"
+#include "kis_debug.h"
+#include "kis_animation.h"
+#include "KFileDialog"
+#include "KActionCollection"
+#include "kis_action_manager.h"
+#include "kis_action.h"
 #include "animator_settings_dialog.h"
-#include <kis_canvas2.h>
-#include <kis_view2.h>
-#include <kis_doc2.h>
-#include <kis_animation_doc.h>
-#include <kis_image.h>
-#include <kis_debug.h>
+
 #include <KoPart.h>
-#include <kis_animation.h>
-#include <KFileDialog>
-#include <KActionCollection>
-#include <kis_action_manager.h>
-#include <kis_action.h>
 
 #include <QToolButton>
 #include <QToolBar>

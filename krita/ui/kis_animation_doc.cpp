@@ -20,20 +20,23 @@
 #include "kis_animation_doc.h"
 #include "kis_animation_part.h"
 #include "kis_animation.h"
-#include <kis_paint_layer.h>
-#include <kis_image.h>
-#include <kis_group_layer.h>
-#include <kranim/kis_kranim_saver.h>
-#include <kranim/kis_kranim_loader.h>
+#include "kis_paint_layer.h"
+#include "kis_image.h"
+#include "kis_group_layer.h"
+#include "kis_animation_player.h"
+#include "kis_onion_skin_loader.h"
+#include "kis_view2.h"
+#include "kis_node_manager.h"
+#include "kranim/kis_kranim_saver.h"
+#include "kranim/kis_kranim_loader.h"
+#include "kranimstore/kis_animation_store.h"
+
 #include <KoFilterManager.h>
-#include <kranimstore/kis_animation_store.h>
-#include <kis_animation_player.h>
+
 #include <QList>
 #include <QHash>
 #include <QThread>
-#include <kis_onion_skin_loader.h>
-#include <kis_view2.h>
-#include <kis_node_manager.h>
+
 
 #define APP_MIMETYPE "application/x-krita-animation"
 

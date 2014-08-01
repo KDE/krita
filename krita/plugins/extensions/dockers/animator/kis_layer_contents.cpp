@@ -17,11 +17,12 @@
  */
 
 #include "kis_layer_contents.h"
-#include <QPainter>
 #include "kis_animation_frame.h"
-#include <QMouseEvent>
-#include <kis_debug.h>
+#include "kis_debug.h"
+
 #include <QMenu>
+#include <QMouseEvent>
+#include <QPainter>
 
 KisLayerContents::KisLayerContents(KisFrameBox *parent)
 {

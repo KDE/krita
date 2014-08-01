@@ -20,6 +20,7 @@
 #define KIS_ANIMATION_LAYER_H
 
 #include "kis_animation_layerbox.h"
+
 #include <QWidget>
 #include <QLineEdit>
 #include <QLabel>

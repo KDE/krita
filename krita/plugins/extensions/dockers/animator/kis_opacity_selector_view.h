@@ -18,7 +18,9 @@
 
 #ifndef KIS_OPACITY_SELECTOR_VIEW_H
 #define KIS_OPACITY_SELECTOR_VIEW_H
+
 #include "kis_opacity_selector.h"
+
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsItem>

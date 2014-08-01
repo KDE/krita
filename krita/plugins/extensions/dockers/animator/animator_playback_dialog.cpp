@@ -17,11 +17,13 @@
  */
 
 #include "animator_playback_dialog.h"
+
 #include <QCheckBox>
 #include <QSpinBox>
 #include <QLabel>
 #include <QGridLayout>
-#include <kis_config.h>
+
+#include "kis_config.h"
 
 AnimatorPlaybackDialog::AnimatorPlaybackDialog(QWidget *parent)
     : QDialog(parent)

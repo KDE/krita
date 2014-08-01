@@ -17,20 +17,22 @@
  */
 
 #include "kis_animation_layerbox.h"
+
 #include <QPainter>
 #include <QModelIndex>
 #include <QList>
-#include <kis_node_model.h>
-#include <kis_node_manager.h>
-#include "kis_timeline.h"
-#include <kis_canvas2.h>
-#include <kis_view2.h>
-#include <kis_action_manager.h>
-#include <kis_action.h>
-#include "kis_animation_layer.h"
-#include <kis_debug.h>
 #include <QLabel>
-#include <kis_animation_doc.h>
+
+#include "kis_node_model.h"
+#include "kis_node_manager.h"
+#include "kis_timeline.h"
+#include "kis_canvas2.h"
+#include "kis_view2.h"
+#include "kis_action_manager.h"
+#include "kis_action.h"
+#include "kis_animation_layer.h"
+#include "kis_debug.h"
+#include "kis_animation_doc.h"
 
 KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
 {

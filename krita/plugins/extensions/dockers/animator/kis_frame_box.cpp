@@ -17,14 +17,15 @@
  */
 
 #include "kis_frame_box.h"
-#include <QPainter>
 #include "kis_animation_layerbox.h"
 #include "kis_layer_contents.h"
-#include <kis_debug.h>
+#include "kis_debug.h"
 #include "kis_timeline_header.h"
 #include "kis_animation_frame.h"
-#include <kis_animation_doc.h>
-#include <kis_view2.h>
+#include "kis_animation_doc.h"
+#include "kis_view2.h"
+
+#include <QPainter>
 
 KisFrameBox::KisFrameBox(KisTimeline *parent)
     : m_selectedFrame(0)

@@ -16,16 +16,16 @@
  */
 
 #include "kis_animation_player.h"
-#include <./kranimstore/kis_animation_store.h>
-#include <QTimer>
-#include <kis_animation.h>
-#include <kis_types.h>
-#include <kis_image.h>
-#include <kis_paint_layer.h>
-#include <kis_group_layer.h>
-#include <kis_animation_part.h>
-#include <kranim/kis_kranim_loader.h>
+#include "kis_animation.h"
+#include "kis_types.h"
+#include "kis_image.h"
+#include "kis_paint_layer.h"
+#include "kis_group_layer.h"
+#include "kis_animation_part.h"
+#include "kranim/kis_kranim_loader.h"
+#include "kranimstore/kis_animation_store.h"
 
+#include <QTimer>
 #include <QObject>
 #include <QTimer>
 

@@ -23,9 +23,9 @@
 class QString;
 class KoStore;
 
-#include <kis_animation_doc.h>
-#include <kis_types.h>
-#include <../kranimstore/kis_animation_store.h>
+#include "kis_animation_doc.h"
+#include "kis_types.h"
+#include "kranimstore/kis_animation_store.h"
 
 class KisKranimLoader
 {

@@ -18,12 +18,12 @@
 
 #include "onionskin_dock.h"
 
-#include <kis_view2.h>
-#include <kis_animation.h>
-#include <kis_canvas2.h>
-#include <kis_animation_doc.h>
-#include <kis_animation_part.h>
-#include <kis_config.h>
+#include "kis_view2.h"
+#include "kis_animation.h"
+#include "kis_canvas2.h"
+#include "kis_animation_doc.h"
+#include "kis_animation_part.h"
+#include "kis_config.h"
 #include "kis_opacity_selector_view.h"
 
 #include <klocale.h>

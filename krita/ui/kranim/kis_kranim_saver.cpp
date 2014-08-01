@@ -18,12 +18,13 @@
 
 #include "kis_kranim_saver.h"
 #include "kis_kranim_tags.h"
-#include <kis_animation_doc.h>
-#include <kis_animation_part.h>
-#include <kis_animation.h>
+#include "kis_animation_doc.h"
+#include "kis_animation_part.h"
+#include "kis_animation.h"
+#include "kis_layer.h"
+#include "kis_store_paintdevice_writer.h"
+
 #include <KoStore.h>
-#include <kis_layer.h>
-#include <kis_store_paintdevice_writer.h>
 
 using namespace KRANIM;
 

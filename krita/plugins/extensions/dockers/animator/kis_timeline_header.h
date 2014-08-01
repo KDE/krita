@@ -20,7 +20,8 @@
 #define KIS_TIMELINE_HEADER_H
 
 #include <QWidget>
-#include <kis_frame_box.h>
+
+#include "kis_frame_box.h"
 
 class KisTimelineHeader : public QWidget
 {

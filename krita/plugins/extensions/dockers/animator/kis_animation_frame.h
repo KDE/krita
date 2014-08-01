@@ -20,7 +20,8 @@
 #define KIS_ANIMATION_FRAME_H
 
 #include <QWidget>
-#include <kis_layer_contents.h>
+
+#include "kis_layer_contents.h"
 
 class KisAnimationFrame : public QWidget
 {

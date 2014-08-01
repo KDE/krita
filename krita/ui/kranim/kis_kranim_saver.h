@@ -19,9 +19,9 @@
 #ifndef KIS_KRANIM_SAVER_H
 #define KIS_KRANIM_SAVER_H
 
-#include <kis_types.h>
-#include <../kranimstore/kis_animation_store.h>
-#include <../kranimstore/kis_animation_store_writer.h>
+#include "kis_types.h"
+#include "kranimstore/kis_animation_store.h"
+#include "kranimstore/kis_animation_store_writer.h"
 
 class KisAnimationDoc;
 class QDomElement;

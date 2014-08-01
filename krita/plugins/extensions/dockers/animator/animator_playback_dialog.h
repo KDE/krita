@@ -20,7 +20,8 @@
 #define ANIMATOR_PLAYBACK_DIALOG_H
 
 #include <QDialog>
-#include <kis_animation.h>
+
+#include "kis_animation.h"
 
 class AnimatorPlaybackDialog : public QDialog
 {

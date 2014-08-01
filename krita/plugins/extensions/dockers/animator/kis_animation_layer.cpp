@@ -17,6 +17,7 @@
  */
 
 #include "kis_animation_layer.h"
+
 #include <QPainter>
 #include <QLineEdit>
 #include <QHBoxLayout>

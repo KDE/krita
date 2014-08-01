@@ -18,13 +18,14 @@
 
 #include "animator_dock.h"
 
-#include <kis_view2.h>
-#include <kis_animation.h>
-#include <kis_canvas2.h>
-#include <kis_animation_doc.h>
-#include <kis_animation_part.h>
-#include "kis_timeline.h"
 #include <klocale.h>
+
+#include "kis_view2.h"
+#include "kis_animation.h"
+#include "kis_canvas2.h"
+#include "kis_animation_doc.h"
+#include "kis_animation_part.h"
+#include "kis_timeline.h"
 
 AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_animation(0)
 {

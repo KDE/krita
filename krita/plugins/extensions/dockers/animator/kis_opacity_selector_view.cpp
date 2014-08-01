@@ -17,6 +17,7 @@
  */
 
 #include "kis_opacity_selector_view.h"
+
 #include <QMouseEvent>
 
 KisOpacitySelectorView::KisOpacitySelectorView(QWidget *parent, int type) : QGraphicsView(parent)

@@ -18,7 +18,8 @@
 #ifndef KIS_ANIMATION_PLAYER_H
 #define KIS_ANIMATION_PLAYER_H
 
-#include <kis_animation_doc.h>
+#include "kis_animation_doc.h"
+
 #include <QObject>
 #include <QList>
 #include <QHash>

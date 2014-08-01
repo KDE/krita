@@ -17,6 +17,7 @@
  */
 
 #include "kis_opacity_selector.h"
+
 #include <QPainter>
 
 KisOpacitySelector::KisOpacitySelector(int x, int y, int width, int height, int type, QGraphicsScene *scene, int frames)

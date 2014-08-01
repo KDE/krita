@@ -19,9 +19,10 @@
 #ifndef KIS_ANIMATION_LAYERBOX_H
 #define KIS_ANIMATION_LAYERBOX_H
 
+#include "kis_types.h"
+
 #include <QWidget>
 #include <QPointer>
-#include <kis_types.h>
 #include <QToolButton>
 #include <QList>
 #include <QListWidget>

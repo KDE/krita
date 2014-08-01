@@ -17,14 +17,16 @@
  */
 
 #include "kis_animation.h"
-#include <krita_export.h>
+#include "krita_export.h"
+#include "kis_config.h"
+
 #include <KoApplication.h>
 #include <KoPart.h>
+
 #include <QFile>
 #include <QDomDocument>
 #include <QByteArray>
 #include <QString>
-#include <kis_config.h>
 
 KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
 {

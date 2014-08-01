@@ -19,7 +19,9 @@
 #define KIS_ANIMATION_H
 
 #include <QStandardItemModel>
-#include <krita_export.h>
+
+#include "krita_export.h"
+
 #include <KoColorSpace.h>
 #include <KoColor.h>
 

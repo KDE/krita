@@ -21,7 +21,8 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QGridLayout>
-#include <kis_config.h>
+
+#include "kis_config.h"
 
 AnimatorSettingsDialog::AnimatorSettingsDialog(QWidget *parent) :
     QDialog(parent)

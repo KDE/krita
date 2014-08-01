@@ -30,6 +30,7 @@
 #include <kstandarddirs.h>
 
 #include <KoDockFactoryBase.h>
+#include <KoDockRegistry.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -39,7 +40,6 @@
 
 #include "animator_dock.h"
 #include "onionskin_dock.h"
-#include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(AnimatorPluginFactory, registerPlugin<AnimatorPlugin>();)
 K_EXPORT_PLUGIN(AnimatorPluginFactory("krita"))

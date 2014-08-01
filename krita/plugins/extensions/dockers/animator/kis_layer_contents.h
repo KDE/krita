@@ -19,8 +19,9 @@
 #ifndef KIS_LAYER_CONTENTS_H
 #define KIS_LAYER_CONTENTS_H
 
+#include "kis_frame_box.h"
+
 #include <QWidget>
-#include <kis_frame_box.h>
 #include <QHash>
 
 class KisAnimationFrame;

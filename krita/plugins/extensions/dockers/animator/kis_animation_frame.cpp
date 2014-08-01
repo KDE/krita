@@ -17,8 +17,9 @@
  */
 
 #include "kis_animation_frame.h"
+#include "kis_debug.h"
+
 #include <QPainter>
-#include <kis_debug.h>
 
 KisAnimationFrame::KisAnimationFrame(KisLayerContents *parent, int type, int width)
 {

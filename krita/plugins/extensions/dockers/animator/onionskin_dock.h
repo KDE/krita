@@ -20,7 +20,9 @@
 #define ONIONSKIN_DOCK_H
 
 #include <QDockWidget>
+
 #include <KoCanvasObserverBase.h>
+
 #include "kis_opacity_selector_view.h"
 
 class KisCanvas2;

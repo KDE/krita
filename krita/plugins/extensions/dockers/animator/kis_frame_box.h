@@ -20,9 +20,11 @@
 #define KIS_FRAME_BOX_H
 
 #include <QListWidget>
-#include "kis_timeline.h"
 #include <QList>
+
+#include "kis_timeline.h"
 #include "kis_animation_layer.h"
+
 class KisLayerContents;
 class KisAnimationFrame;
 class KisTimelineHeader;

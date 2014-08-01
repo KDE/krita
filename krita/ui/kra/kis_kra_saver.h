@@ -38,7 +38,7 @@ public:
 
     QDomElement saveXML(QDomDocument& doc,  KisImageWSP image);
 
-    bool saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
+    bool saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external, bool includeMerge);
 
     /// @return a list with everthing that went wrong while saving
     QStringList errorMessages() const;

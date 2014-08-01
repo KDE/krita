@@ -21,6 +21,8 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QGridLayout>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 #include "kis_config.h"
 
@@ -31,36 +33,47 @@ AnimatorSettingsDialog::AnimatorSettingsDialog(QWidget *parent) :
     this->setMaximumSize(300, 200);
 
     KisConfig cfg;
-    QCheckBox* autoFrameBreak = new QCheckBox(this);
-    autoFrameBreak->setText(i18n("Enable auto frame break"));
-    autoFrameBreak->setChecked(cfg.defAutoFrameBreakEnabled());
+    m_autoFrameBreak = new QCheckBox(this);
+    m_autoFrameBreak->setText(i18n("Enable auto frame break"));
+    m_autoFrameBreak->setChecked(cfg.defAutoFrameBreakEnabled());
 
     QLabel* timelineWidthLbl = new QLabel(i18n("Timeline width:"), this);
 
-    QSpinBox* timelineWidth = new QSpinBox(this);
-    timelineWidth->setMinimum(1);
-    timelineWidth->setMaximum(10000);
-    timelineWidth->setValue(400);
+    m_timelineWidth = new QSpinBox(this);
+    m_timelineWidth->setMinimum(1);
+    m_timelineWidth->setMaximum(10000);
+    m_timelineWidth->setValue(400);
 
-    connect(autoFrameBreak, SIGNAL(clicked(bool)), this, SLOT(enableAutoFrameBreak(bool)));
-    connect(timelineWidth, SIGNAL(valueChanged(int)), this, SLOT(timelineWidthChanged(int)));
+    QDialogButtonBox* buttonBox = new QDialogButtonBox();
+
+    buttonBox->addButton(QDialogButtonBox::Ok);
+    QPushButton* okButton = buttonBox->button(QDialogButtonBox::Ok);
+    connect(okButton, SIGNAL(clicked()), this, SLOT(okClicked()));
+
+    buttonBox->addButton(QDialogButtonBox::Cancel);
+    QPushButton* cancelButton = buttonBox->button(QDialogButtonBox::Cancel);
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancelClicked()));
 
     QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(autoFrameBreak, 0, 0);
+    mainLayout->addWidget(m_autoFrameBreak, 0, 0);
     mainLayout->addWidget(timelineWidthLbl, 1, 0);
-    mainLayout->addWidget(timelineWidth, 1, 1);
+    mainLayout->addWidget(m_timelineWidth, 1, 1);
+    mainLayout->addWidget(buttonBox, 2, 1);
 
     this->setLayout(mainLayout);
 }
 
-void AnimatorSettingsDialog::enableAutoFrameBreak(bool enable)
+void AnimatorSettingsDialog::okClicked()
 {
-    m_model->enableFrameBreaking(enable);
+    m_model->enableFrameBreaking(m_autoFrameBreak->isChecked());
+    emit sigTimelineWithChanged(m_timelineWidth->value());
+
+    this->close();
 }
 
-void AnimatorSettingsDialog::timelineWidthChanged(int width)
+void AnimatorSettingsDialog::cancelClicked()
 {
-    emit sigTimelineWithChanged(width);
+    this->close();
 }
 
 void AnimatorSettingsDialog::setModel(KisAnimation *model)

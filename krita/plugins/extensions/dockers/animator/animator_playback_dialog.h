@@ -20,6 +20,8 @@
 #define ANIMATOR_PLAYBACK_DIALOG_H
 
 #include <QDialog>
+#include <QSpinBox>
+#include <QCheckBox>
 
 #include "kis_animation.h"
 
@@ -34,12 +36,14 @@ public:
     void setModel(KisAnimation* model);
 
 private slots:
-    void enableLooping(bool enable);
-    void setFps(int value);
-    void setLocalPlaybackRange(int value);
+    void okClicked();
+    void cancelClicked();
 
 private:
     KisAnimation* m_model;
+    QSpinBox* m_fpsInput;
+    QSpinBox* m_localPlaybackRangeInput;
+    QCheckBox* m_loopState;
 
 signals:
     void playbackStateChanged();

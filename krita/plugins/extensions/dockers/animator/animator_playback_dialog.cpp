@@ -22,6 +22,8 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QGridLayout>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 #include "kis_config.h"
 
@@ -32,56 +34,60 @@ AnimatorPlaybackDialog::AnimatorPlaybackDialog(QWidget *parent)
     this->setMaximumSize(300, 200);
 
     KisConfig cfg;
-    QCheckBox* loopState = new QCheckBox(this);
-    loopState->setText(i18n("Enable Looping"));
-    loopState->setChecked(cfg.defLoopingEnabled());
-
-    connect(loopState, SIGNAL(clicked(bool)), this, SLOT(enableLooping(bool)));
+    m_loopState = new QCheckBox(this);
+    m_loopState->setText(i18n("Enable Looping"));
+    m_loopState->setChecked(cfg.defLoopingEnabled());
 
     QLabel* fpsLabel = new QLabel(i18n("Frame per second:"), this);
 
-    QSpinBox* fpsInput = new QSpinBox(this);
-    fpsInput->setRange(1, 30);
-    fpsInput->setValue(cfg.defFps());
-
-    connect(fpsInput, SIGNAL(valueChanged(int)), this, SLOT(setFps(int)));
+    m_fpsInput = new QSpinBox(this);
+    m_fpsInput->setRange(1, 30);
+    m_fpsInput->setValue(cfg.defFps());
 
     QLabel* localPlaybackRangeLabel = new QLabel(i18n("Local playback range:"), this);
 
-    QSpinBox* localPlaybackRangeInput = new QSpinBox(this);
-    localPlaybackRangeInput->setRange(1, 10000);
-    localPlaybackRangeInput->setValue(cfg.defLocalPlaybackRange());
+    m_localPlaybackRangeInput = new QSpinBox(this);
+    m_localPlaybackRangeInput->setRange(1, 10000);
+    m_localPlaybackRangeInput->setValue(cfg.defLocalPlaybackRange());
 
-    connect(localPlaybackRangeInput, SIGNAL(valueChanged(int)), this, SLOT(setLocalPlaybackRange(int)));
+    QDialogButtonBox* buttonBox = new QDialogButtonBox();
+
+    buttonBox->addButton(QDialogButtonBox::Ok);
+    QPushButton* okButton = buttonBox->button(QDialogButtonBox::Ok);
+    connect(okButton, SIGNAL(clicked()), this, SLOT(okClicked()));
+
+    buttonBox->addButton(QDialogButtonBox::Cancel);
+    QPushButton* cancelButton = buttonBox->button(QDialogButtonBox::Cancel);
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancelClicked()));
 
     QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(loopState, 0, 0);
+    mainLayout->addWidget(m_loopState, 0, 0);
     mainLayout->addWidget(fpsLabel, 1, 0);
-    mainLayout->addWidget(fpsInput, 1, 1);
+    mainLayout->addWidget(m_fpsInput, 1, 1);
     mainLayout->addWidget(localPlaybackRangeLabel, 2, 0);
-    mainLayout->addWidget(localPlaybackRangeInput, 2, 1);
+    mainLayout->addWidget(m_localPlaybackRangeInput, 2, 1);
+    mainLayout->addWidget(buttonBox, 3, 1);
 
     this->setLayout(mainLayout);
-}
-
-void AnimatorPlaybackDialog::enableLooping(bool enable)
-{
-    m_model->enableLooping(enable);
-    emit playbackStateChanged();
-}
-
-void AnimatorPlaybackDialog::setFps(int value)
-{
-    m_model->setFps(value);
-    emit playbackStateChanged();
-}
-
-void AnimatorPlaybackDialog::setLocalPlaybackRange(int value)
-{
-    m_model->setLocalPlaybackRange(value);
 }
 
 void AnimatorPlaybackDialog::setModel(KisAnimation *model)
 {
     m_model = model;
+}
+
+void AnimatorPlaybackDialog::okClicked()
+{
+    m_model->enableLooping(m_loopState->isChecked());
+    m_model->setFps(m_fpsInput->value());
+    emit playbackStateChanged();
+
+    m_model->setLocalPlaybackRange(m_localPlaybackRangeInput->value());
+
+    this->close();
+}
+
+void AnimatorPlaybackDialog::cancelClicked()
+{
+    this->close();
 }

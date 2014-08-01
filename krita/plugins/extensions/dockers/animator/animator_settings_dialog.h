@@ -20,6 +20,8 @@
 #define ANIMATORSETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QCheckBox>
+#include <QSpinBox>
 
 #include "kis_animation.h"
 
@@ -34,11 +36,13 @@ public:
     void setModel(KisAnimation* model);
 
 private slots:
-    void enableAutoFrameBreak(bool enable);
-    void timelineWidthChanged(int width);
+    void okClicked();
+    void cancelClicked();
 
 private:
     KisAnimation* m_model;
+    QCheckBox* m_autoFrameBreak;
+    QSpinBox* m_timelineWidth;
 
 signals:
     void sigTimelineWithChanged(int);

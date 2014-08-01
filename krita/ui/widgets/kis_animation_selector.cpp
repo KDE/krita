@@ -233,7 +233,15 @@ void KisAnimationSelector::createAnimation()
     animation->setHeight(height);
     animation->setResolution(resolution);
     animation->setBgColor(bgColor);
-    animation->setLocation(txtLocation->text());
+
+    QString animationLocation = txtLocation->text();
+    QDir* directory = new QDir(animationLocation);
+
+    if(!directory->exists()) {
+        directory->mkdir(animationLocation);
+    }
+
+    animation->setLocation(animationLocation);
 
     static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation); 
 

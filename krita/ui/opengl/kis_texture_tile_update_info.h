@@ -23,6 +23,7 @@
 #ifdef HAVE_OPENGL
 
 #include <QMessageBox>
+#include <QScopedArrayPointer>
 
 #include <KoColorSpace.h>
 #include "kis_image.h"
@@ -42,18 +43,12 @@ public:
     KisTextureTileUpdateInfo()
         : m_patchPixels(0)
         , m_patchPixelsLength(0)
-        , m_conversionCache(0)
-        , m_conversionCacheLength(0)
-        , m_channelProjectionCache(0)
     {
     }
 
     KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect)
         : m_patchPixels(0)
         , m_patchPixelsLength(0)
-        , m_conversionCache(0)
-        , m_conversionCacheLength(0)
-        , m_channelProjectionCache(0)
 
     {
         m_tileCol = col;
@@ -65,36 +60,21 @@ public:
     }
 
     ~KisTextureTileUpdateInfo() {
-        delete[] m_patchPixels;
-        delete[] m_conversionCache;
-        delete[] m_channelProjectionCache;
-
-        m_patchPixels = 0;
-        m_conversionCache = 0;
-        m_channelProjectionCache = 0;
-
-
-        KIS_ASSERT_RECOVER_NOOP(!m_patchPixels);
-        KIS_ASSERT_RECOVER_NOOP(!m_conversionCache);
-        KIS_ASSERT_RECOVER_NOOP(!m_channelProjectionCache);
     }
 
     void retrieveData(KisImageWSP image, QBitArray m_channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
     {
         m_patchColorSpace = image->projection()->colorSpace();
 
-        if (!m_patchPixels) {
-            try {
-                m_patchPixels = new quint8[m_patchColorSpace->pixelSize() * m_patchRect.width() * m_patchRect.height()];
-            }
-            catch (std::bad_alloc) {
-                QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
-                qFatal("KisTextureTileUpdate::retrieveData: Could not allocate enough memory (1).");
-            }
-
+        try {
+            m_patchPixels.reset(new quint8[m_patchColorSpace->pixelSize() * m_patchRect.width() * m_patchRect.height()]);
+        }
+        catch (std::bad_alloc) {
+            QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
+            qFatal("KisTextureTileUpdate::retrieveData: Could not allocate enough memory (1).");
         }
 
-        image->projection()->readBytes(m_patchPixels,
+        image->projection()->readBytes(m_patchPixels.data(),
                                        m_patchRect.x(), m_patchRect.y(),
                                        m_patchRect.width(), m_patchRect.height());
 
@@ -104,14 +84,13 @@ public:
 
             quint32 numPixels = m_patchRect.width() * m_patchRect.height();
 
-            if (!m_channelProjectionCache) {
-                try {
-                    m_channelProjectionCache = new quint8[m_patchColorSpace->pixelSize() * numPixels];
-                }
-                catch (std::bad_alloc) {
-                    QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
-                    qFatal("KisTextureTileUpdate::retrieveData: Could not allocate enough memory (1).");
-                }
+            QScopedArrayPointer<quint8> channelProjectionCache;
+            try {
+                channelProjectionCache.reset(new quint8[m_patchColorSpace->pixelSize() * numPixels]);
+            }
+            catch (std::bad_alloc) {
+                QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
+                qFatal("KisTextureTileUpdate::retrieveData: Could not allocate enough memory (1).");
             }
 
             QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
@@ -126,13 +105,13 @@ public:
                     for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
 
                         if (channelInfo[channelIndex]->channelType() == KoChannelInfo::COLOR) {
-                            memcpy(m_channelProjectionCache + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   m_patchPixels + (pixelIndex * pixelSize) + selectedChannelPos,
+                            memcpy(channelProjectionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   m_patchPixels.data() + (pixelIndex * pixelSize) + selectedChannelPos,
                                    channelSize);
                         }
                         else if (channelInfo[channelIndex]->channelType() == KoChannelInfo::ALPHA) {
-                            memcpy(m_channelProjectionCache + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   m_patchPixels + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                            memcpy(channelProjectionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   m_patchPixels.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
                                    channelSize);
                         }
                     }
@@ -142,19 +121,19 @@ public:
                 for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
                     for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
                         if (m_channelFlags.testBit(channelIndex)) {
-                            memcpy(m_channelProjectionCache + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   m_patchPixels  + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                            memcpy(channelProjectionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   m_patchPixels.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
                                    channelSize);
                         }
                         else {
-                            memset(m_channelProjectionCache + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
+                            memset(channelProjectionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
                         }
                     }
                 }
 
             }
 
-            qSwap(m_patchPixels, m_channelProjectionCache);
+            m_patchPixels.swap(channelProjectionCache);
 
         }
 
@@ -172,29 +151,25 @@ public:
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
             const quint32 conversionCacheLength = numPixels * dstCS->pixelSize();
 
-            if (!m_conversionCache || conversionCacheLength != m_patchPixelsLength) {
-                try {
-                    delete m_conversionCache;
-                    m_conversionCache = new quint8[conversionCacheLength];
-                }
-                catch (std::bad_alloc) {
-                    QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
-                    qFatal("KisTextureTileUpdate::convertTo. Could not allocate enough memory.");
-                }
+            QScopedArrayPointer<quint8> conversionCache;
+            try {
+                conversionCache.reset(new quint8[conversionCacheLength]);
+            }
+            catch (std::bad_alloc) {
+                QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
+                qFatal("KisTextureTileUpdate::convertTo. Could not allocate enough memory.");
             }
 
-            // FIXME: rendering intent
-            Q_ASSERT(m_conversionCache && m_patchPixels);
-            m_patchColorSpace->convertPixelsTo(m_patchPixels, m_conversionCache, dstCS, numPixels, renderingIntent, conversionFlags);
+            m_patchColorSpace->convertPixelsTo(m_patchPixels.data(), conversionCache.data(), dstCS, numPixels, renderingIntent, conversionFlags);
 
             m_patchColorSpace = dstCS;
-            qSwap(m_patchPixels, m_conversionCache);
+            m_patchPixels.swap(conversionCache);
             m_patchPixelsLength = conversionCacheLength;
         }
     }
 
     inline quint8* data() const {
-        return m_patchPixels;
+        return m_patchPixels.data();
     }
 
     inline bool isEntireTileUpdated() const {
@@ -248,13 +223,8 @@ private:
     QRect m_tileRect;
     QRect m_patchRect;
     const KoColorSpace* m_patchColorSpace;
-    quint8 *m_patchPixels;
+    QScopedArrayPointer<quint8> m_patchPixels;
     quint32 m_patchPixelsLength;
-
-    quint8 *m_conversionCache;
-    quint32 m_conversionCacheLength;
-
-    quint8 *m_channelProjectionCache;
 
     quint32 m_numPixels;
 };

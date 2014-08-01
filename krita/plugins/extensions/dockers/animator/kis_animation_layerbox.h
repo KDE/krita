@@ -32,6 +32,10 @@ class KisNodeManager;
 class KisTimeline;
 class KisAnimationLayer;
 
+/**
+ * This class represents the widget containing
+ * all the animation layer widgets.
+ */
 class KisAnimationLayerBox : public QListWidget
 {
     Q_OBJECT

@@ -27,6 +27,10 @@
 #include <QHBoxLayout>
 #include <QCheckBox>
 
+/**
+ * This class represents the animation layer
+ * widget element in the timeline
+ */
 class KisAnimationLayer : public QWidget
 {
     Q_OBJECT

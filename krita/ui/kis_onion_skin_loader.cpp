@@ -18,12 +18,13 @@
 
 #include "kis_onion_skin_loader.h"
 
-#include <kis_animation.h>
-#include <kis_paint_layer.h>
-#include <kis_image.h>
-#include <kis_types.h>
-#include <kis_group_layer.h>
-#include <kranim/kis_kranim_loader.h>
+#include "kis_animation.h"
+#include "kis_paint_layer.h"
+#include "kis_image.h"
+#include "kis_types.h"
+#include "kis_group_layer.h"
+#include "kranim/kis_kranim_loader.h"
+
 #include <QBitArray>
 
 KisOnionSkinLoader::KisOnionSkinLoader(KisAnimationDoc *doc, QObject *parent) :

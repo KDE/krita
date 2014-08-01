@@ -27,6 +27,10 @@ class KoStore;
 #include "kis_types.h"
 #include "kranimstore/kis_animation_store.h"
 
+/**
+ * This is a helper class for loading
+ * the animation frames from disk
+ */
 class KisKranimLoader
 {
 public:

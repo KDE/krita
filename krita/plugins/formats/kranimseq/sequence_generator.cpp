@@ -18,14 +18,14 @@
 
 #include "sequence_generator.h"
 
-#include <kis_node.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_paint_layer.h>
-#include <kis_group_layer.h>
-#include <kis_paint_device.h>
-#include <kis_types.h>
-#include <kis_animation.h>
+#include "kis_node.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_paint_layer.h"
+#include "kis_group_layer.h"
+#include "kis_paint_device.h"
+#include "kis_types.h"
+#include "kis_animation.h"
 
 #include <QImage>
 #include <QRect>

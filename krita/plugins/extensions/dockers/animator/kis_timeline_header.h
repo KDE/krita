@@ -23,6 +23,10 @@
 
 #include "kis_frame_box.h"
 
+/**
+ * The widget class for the timeline header
+ * displaying the frame numbers.
+ */
 class KisTimelineHeader : public QWidget
 {
     Q_OBJECT

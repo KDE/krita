@@ -22,6 +22,10 @@
 #include <QDir>
 #include <QFile>
 
+/**
+ * This class manages the animation store,
+ * the file format for storing of animation.
+ */
 class KisAnimationStore
 {
 public:

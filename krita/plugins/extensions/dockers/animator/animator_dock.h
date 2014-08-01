@@ -28,6 +28,9 @@ class KisCanvas2;
 class KisAnimation;
 class KisTimeline;
 
+/**
+ * The animator docker class
+ */
 class AnimatorDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:

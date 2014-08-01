@@ -19,8 +19,12 @@
 #ifndef SEQUENCE_GENERATOR_H
 #define SEQUENCE_GENERATOR_H
 
-#include <kis_animation_doc.h>
+#include "kis_animation_doc.h"
 
+/**
+ * This is a helper class to generate
+ * a PNG sequence of the animation
+ */
 class SequenceGenerator
 {
 public:

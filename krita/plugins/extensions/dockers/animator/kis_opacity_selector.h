@@ -23,6 +23,11 @@
 #include <QGraphicsScene>
 #include <QList>
 
+/**
+ * The widget for seleting the opacity
+ * values of the neighbouring frames for
+ * onion skinning.
+ */
 class KisOpacitySelector : public QGraphicsItem
 {
 public:

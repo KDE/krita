@@ -28,6 +28,9 @@
 class KisCanvas2;
 class KisAnimation;
 
+/**
+ * The onion skin docker class
+ */
 class OnionSkinDock : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT

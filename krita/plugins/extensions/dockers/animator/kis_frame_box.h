@@ -29,6 +29,10 @@ class KisLayerContents;
 class KisAnimationFrame;
 class KisTimelineHeader;
 
+/**
+ * This class represents the widget containing
+ * all the animation frame widgets in the timeline.
+ */
 class KisFrameBox : public QListWidget
 {
     Q_OBJECT

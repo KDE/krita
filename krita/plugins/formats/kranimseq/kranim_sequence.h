@@ -24,6 +24,9 @@
 #include <QVariantList>
 #include <KoFilter.h>
 
+/**
+ * Exports the animation as a PNG sequence.
+ */
 class KisWdgOptionsKranimseq : public QWidget, public Ui::KisWdgOptionsKranimseq
 {
     Q_OBJECT

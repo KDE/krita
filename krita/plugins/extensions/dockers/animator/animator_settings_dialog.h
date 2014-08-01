@@ -23,6 +23,9 @@
 
 #include "kis_animation.h"
 
+/**
+ * The animator settings dialog
+ */
 class AnimatorSettingsDialog : public QDialog
 {
     Q_OBJECT

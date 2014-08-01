@@ -26,6 +26,10 @@
 
 class KisAnimationFrame;
 
+/**
+ * This is a widget class representing
+ * the contents of an animation layer.
+ */
 class KisLayerContents : public QWidget
 {
     Q_OBJECT

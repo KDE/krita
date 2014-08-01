@@ -25,6 +25,10 @@
 #include <QHash>
 #include <QTimer>
 
+/**
+ * This class manages all the animation player events,
+ * settings, the state of the player, caching of frames.
+ */
 class KisAnimationPlayer : public QObject
 {
     Q_OBJECT

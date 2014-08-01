@@ -32,6 +32,15 @@ class KisKranimLoader;
 
 #define KIS_ANIM_MIME_TYPE "application/x-krita-animation"
 
+/**
+ * This class represents te animation document.
+ *
+ * It handles all the frame and layer events from
+ * coming from the timeline and onion skin dockers.
+ *
+ * It also manages a state of the animation and the
+ * animation file on disk
+ */
 class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 {
     Q_OBJECT

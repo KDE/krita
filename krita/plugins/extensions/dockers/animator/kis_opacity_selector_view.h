@@ -27,6 +27,9 @@
 #include <QSize>
 #include <QList>
 
+/**
+ * This class is the container of the opacity selector.
+ */
 class KisOpacitySelectorView : public QGraphicsView
 {
     Q_OBJECT

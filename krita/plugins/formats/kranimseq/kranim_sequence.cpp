@@ -33,20 +33,19 @@
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
-#include <kis_paint_device.h>
-#include <kis_doc2.h>
-#include <kis_image.h>
-#include <kis_paint_layer.h>
-#include <kis_group_layer.h>
-#include <kis_config.h>
-#include <kis_properties_configuration.h>
-#include <kis_meta_data_store.h>
-#include <kis_meta_data_filter_registry_model.h>
-#include <kis_exif_info_visitor.h>
+#include "kis_paint_device.h"
+#include "kis_doc2.h"
+#include "kis_image.h"
+#include "kis_paint_layer.h"
+#include "kis_group_layer.h"
+#include "kis_config.h"
+#include "kis_properties_configuration.h"
+#include "kis_meta_data_store.h"
+#include "kis_meta_data_filter_registry_model.h"
+#include "kis_exif_info_visitor.h"
 #include "kis_png_converter.h"
-#include <kis_iterator_ng.h>
-
-#include <kis_animation_doc.h>
+#include "kis_iterator_ng.h"
+#include "kis_animation_doc.h"
 
 K_PLUGIN_FACTORY(KranimSequenceFactory, registerPlugin<KranimSequence>();)
 K_EXPORT_PLUGIN(KranimSequenceFactory("calligrafilters"))

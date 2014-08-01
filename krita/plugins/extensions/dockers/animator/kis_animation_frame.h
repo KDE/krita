@@ -23,6 +23,10 @@
 
 #include "kis_layer_contents.h"
 
+/**
+ * This class represents the animation frame
+ * widget element in the timeline.
+ */
 class KisAnimationFrame : public QWidget
 {
     Q_OBJECT

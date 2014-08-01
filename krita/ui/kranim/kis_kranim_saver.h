@@ -30,6 +30,10 @@ class QDomDocument;
 class KoStore;
 class QString;
 
+/**
+ * This is a helper class to save/dump
+ * the animation frames to disk.
+ */
 class KisKranimSaver
 {
 public:

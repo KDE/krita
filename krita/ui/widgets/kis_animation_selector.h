@@ -38,6 +38,9 @@ public:
     }
 };
 
+/**
+ * The animation selector widget.
+ */
 class KisAnimationSelector : public WdgAnimationSelector
 {
     Q_OBJECT

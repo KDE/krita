@@ -20,12 +20,17 @@
 #define KIS_ONION_SKIN_LOADER_H
 
 #include <QObject>
-#include <kis_animation_doc.h>
-#include <kis_types.h>
 #include <QHash>
+
+#include "kis_animation_doc.h"
+#include "kis_types.h"
 
 class KisKranimLoader;
 
+/**
+ * This class handles all the onion skin rendering
+ * and various events thrown by the onion skin docker
+ */
 class KisOnionSkinLoader : public QObject
 {
     Q_OBJECT

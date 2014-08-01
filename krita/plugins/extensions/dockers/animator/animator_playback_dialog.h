@@ -23,6 +23,9 @@
 
 #include "kis_animation.h"
 
+/**
+ * The animator playback options dialog
+ */
 class AnimatorPlaybackDialog : public QDialog
 {
     Q_OBJECT

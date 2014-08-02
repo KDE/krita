@@ -451,8 +451,6 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
             }
             // as a last resort just set a blank one
             canvasData = 0;
-            // and stop the event filter
-            QApplication::instance()->removeEventFilter(q);
         }
     }
 
@@ -482,9 +480,6 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
     Q_ASSERT(controller);
     CanvasData *cd = createCanvasData(controller, KoInputDevice::mouse());
     // switch to new canvas as the active one.
-    if (canvasData == 0) {
-        QApplication::instance()->installEventFilter(q);
-    }
     canvasData = cd;
     inputDevice = cd->inputDevice;
     QList<CanvasData*> canvasses_;
@@ -902,32 +897,6 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
         }
     }
     return toolType;
-}
-
-bool KoToolManager::eventFilter(QObject *object, QEvent *event)
-{
-    switch (event->type()) {
-    case QEvent::TabletMove:
-    case QEvent::TabletPress:
-    case QEvent::TabletRelease:
-    case QEvent::TabletEnterProximity:
-    case QEvent::TabletLeaveProximity: {
-        QTabletEvent *tabletEvent = static_cast<QTabletEvent *>(event);
-
-        KoInputDevice id(tabletEvent->device(), tabletEvent->pointerType(), tabletEvent->uniqueId());
-        d->switchInputDevice(id);
-        break;
-    }
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseMove:
-    case QEvent::MouseButtonRelease:
-        d->switchInputDevice(KoInputDevice::mouse());
-        break;
-    default:
-        break;
-    }
-
-    return QObject::eventFilter(object, event);
 }
 
 void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)

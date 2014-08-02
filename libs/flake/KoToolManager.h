@@ -199,9 +199,6 @@ public:
      */
     KoToolManager::Private *priv();
 
-    /// reimplemented from QObject
-    virtual bool eventFilter(QObject *object, QEvent *event);
-
 public slots:
     /**
      * Request switching tool

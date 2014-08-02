@@ -104,7 +104,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     return imageElement;
 }
 
-bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external)
+bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external, bool autosave)
 {
     QString location;
 
@@ -160,14 +160,16 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
         }
     }
 
-     if (store->open("mergedimage.png")) {
-        QImage mergedimage = image->projection()->convertToQImage(0);
-        KoStoreDevice io(store);
-        if (io.open(QIODevice::WriteOnly)) {
-            mergedimage.save(&io, "PNG");
+    if (!autosave) {
+        if (store->open("mergedimage.png")) {
+            QImage mergedimage = image->projection()->convertToQImage(0);
+            KoStoreDevice io(store);
+            if (io.open(QIODevice::WriteOnly)) {
+                mergedimage.save(&io, "PNG");
+            }
+            io.close();
+            store->close();
         }
-        io.close();
-        store->close();
     }
 
     saveAssistants(store, uri,external);

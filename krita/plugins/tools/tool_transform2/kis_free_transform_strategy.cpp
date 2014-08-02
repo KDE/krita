@@ -369,13 +369,13 @@ bool KisFreeTransformStrategy::beginPrimaryAction(const QPointF &pt)
     return true;
 }
 
-void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool specialModifierActve)
+void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool specialModifierActive)
 {
     switch (m_d->function) {
     case MOVE: {
         QPointF diff = mousePos - m_d->clickPos;
 
-        if (specialModifierActve) {
+        if (specialModifierActive) {
 
             KisTransformUtils::MatricesPack m(m_d->clickArgs);
             QTransform t = m.S * m.projectedP;
@@ -473,6 +473,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
                                  movingPoint,
                                  dist);
 
+        if (specialModifierActive) {
+            qreal aspectRatio = m_d->clickArgs.scaleX() / m_d->clickArgs.scaleY();
+            m_d->currentArgs.setScaleX(aspectRatio * result.scale);
+        }
+
         m_d->currentArgs.setScaleY(result.scale);
         m_d->currentArgs.setTransformedCenter(result.transformedCenter);
         break;
@@ -511,6 +516,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
                                  movingPoint,
                                  dist);
 
+        if (specialModifierActive) {
+            qreal aspectRatio = m_d->clickArgs.scaleY() / m_d->clickArgs.scaleX();
+            m_d->currentArgs.setScaleY(aspectRatio * result.scale);
+        }
+
         m_d->currentArgs.setScaleX(result.scale);
         m_d->currentArgs.setTransformedCenter(result.transformedCenter);
         break;
@@ -537,13 +547,25 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
         }
 
         QPointF staticPointInView = m_d->transform.map(staticPoint);
+        QPointF movingPointInView = mousePos;
+
+        if (specialModifierActive) {
+            KisTransformUtils::MatricesPack m(m_d->clickArgs);
+            QTransform t = m.finalTransform();
+
+            QPointF refDiff = t.map(movingPoint) - staticPointInView;
+            QPointF realDiff = mousePos - staticPointInView;
+            realDiff = kisProjectOnVector(refDiff, realDiff);
+
+            movingPointInView = staticPointInView + realDiff;
+        }
 
         GSL::ScaleResult2D result =
             GSL::calculateScale2D(m_d->currentArgs,
                                   staticPoint,
                                   staticPointInView,
                                   movingPoint,
-                                  mousePos);
+                                  movingPointInView);
 
         m_d->currentArgs.setScaleX(result.scaleX);
         m_d->currentArgs.setScaleY(result.scaleY);
@@ -556,7 +578,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
 
         QPointF newRotationCenterOffset = pt - m_d->transaction.originalCenter();
 
-        if (specialModifierActve) {
+        if (specialModifierActive) {
             if (qAbs(newRotationCenterOffset.x()) > qAbs(newRotationCenterOffset.y())) {
                 newRotationCenterOffset.ry() = 0;
             } else {

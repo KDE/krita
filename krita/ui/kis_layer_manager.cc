@@ -349,8 +349,6 @@ void KisLayerManager::layerProperties()
 
     if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()))) {
         KisPaintDeviceSP dev = alayer->projection();
-        KisLayerSP prev = dynamic_cast<KisLayer*>(alayer->prevSibling().data());
-        if (prev) dev = prev->projection();
 
         KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, m_view, alayer->filter().data(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
         dlg.resize(dlg.minimumSizeHint());

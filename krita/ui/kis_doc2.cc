@@ -343,7 +343,8 @@ bool KisDoc2::completeSaving(KoStore *store)
 {
     QString uri = url().url();
 
-    m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern());
+    m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern(), isAutosaving());
+
     if (!m_d->kraSaver->errorMessages().isEmpty()) {
         setErrorMessage(m_d->kraSaver->errorMessages().join(".\n"));
         return false;

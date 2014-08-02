@@ -43,7 +43,8 @@ class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
 public:
     KisWdgCustomBrush(QWidget *parent) : QWidget(parent) {
         setupUi(this);
-        spacingSlider->setRange(0.0, 1.0, 2);
+        spacingSlider->setRange(0.0, 10.0, 2);
+        spacingSlider->setExponentRatio(3.0);
         spacingSlider->setValue(DEFAULT_SPACING);
     }
 };

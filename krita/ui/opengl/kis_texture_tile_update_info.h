@@ -41,13 +41,13 @@ class KisTextureTileUpdateInfo
 {
 public:
     KisTextureTileUpdateInfo()
-        : m_patchPixels(0)
+        : m_patchPixels()
         , m_patchPixelsLength(0)
     {
     }
 
     KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect)
-        : m_patchPixels(0)
+        : m_patchPixels()
         , m_patchPixelsLength(0)
 
     {

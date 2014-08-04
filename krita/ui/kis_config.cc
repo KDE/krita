@@ -1019,6 +1019,16 @@ void KisConfig::setOcioLutPath(const QString &path) const
     m_cfg.writeEntry("Krita/Ocio/OcioLutPath", path);
 }
 
+int KisConfig::ocioLutEdgeSize() const
+{
+    return m_cfg.readEntry("Krita/Ocio/LutEdgeSize", 64);
+}
+
+void KisConfig::setOcioLutEdgeSize(int value)
+{
+    m_cfg.writeEntry("Krita/Ocio/LutEdgeSize", value);
+}
+
 QString KisConfig::defaultPalette() const
 {
     return m_cfg.readEntry("defaultPalette", QString());

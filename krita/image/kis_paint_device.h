@@ -723,6 +723,9 @@ public:
 
     static MemoryReleaseObject* createMemoryReleaseObject();
 
+public:
+    void syncLodCache();
+
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);
     void init(KisDataManagerSP explicitDataManager,

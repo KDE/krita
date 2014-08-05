@@ -39,6 +39,7 @@ public:
 
     QRect bounds() const;
     bool wrapAroundMode() const;
+    int currentLevelOfDetail() const;
 
 protected:
     static const QRect infiniteRect;

@@ -67,6 +67,13 @@ public:
     {
     }
 
+    PaintDeviceCache(const PaintDeviceCache &rhs)
+        : m_paintDevice(rhs.m_paintDevice),
+          m_exactBoundsCache(rhs.m_paintDevice),
+          m_regionCache(rhs.m_paintDevice)
+    {
+    }
+
     void setupCache() {
         invalidate();
     }
@@ -164,48 +171,82 @@ struct KisPaintDevice::Private
 
     KisPaintDeviceStrategy* currentStrategy();
 
-    const KoColorSpace* colorSpace() const { return currentData()->colorSpace; }
-    void setColorSpace(const KoColorSpace *cs) { currentData()->colorSpace = cs; }
+    inline const KoColorSpace* colorSpace() const { return currentData()->colorSpace; }
+    inline void setColorSpace(const KoColorSpace *cs) { currentData()->colorSpace = cs; }
 
-    KisDataManagerSP dataManager() const { return currentData()->dataManager; }
-    void setDataManager(KisDataManagerSP dm) { currentData()->dataManager = dm;  }
+    inline KisDataManagerSP dataManager() const { return currentData()->dataManager; }
+    inline void setDataManager(KisDataManagerSP dm) { currentData()->dataManager = dm;  }
 
-    qint32 x() const { return currentData()->x; }
-    qint32 y() const { return currentData()->x; }
-    void setX(qint32 x) { currentData()->x = x; }
-    void setY(qint32 y) { currentData()->y = y; }
+    inline qint32 x() const { return currentData()->x; }
+    inline qint32 y() const { return currentData()->y; }
+    inline void setX(qint32 x) { currentData()->x = x; }
+    inline void setY(qint32 y) { currentData()->y = y; }
 
-    PaintDeviceCache* cache() { return &currentData()->cache; }
+    inline PaintDeviceCache* cache() { return &currentData()->cache; }
+
+    void syncLodData(int newLod);
 
 private:
+    void syncWholeDevice();
+
     struct Data {
-        Data(KisPaintDevice *paintDevice) : cache(paintDevice), x(0), y(0) {}
+        Data(KisPaintDevice *paintDevice)
+            : cache(paintDevice),
+              x(0), y(0),
+              colorSpace(0),
+              levelOfDetail(0)
+        {
+        }
+
+        Data(const Data &rhs)
+            : dataManager(new KisDataManager(rhs.dataManager->pixelSize(), rhs.dataManager->defaultPixel())),
+              cache(rhs.cache),
+              x(rhs.x),
+              y(rhs.y),
+              colorSpace(rhs.colorSpace),
+              levelOfDetail(rhs.levelOfDetail)
+        {
+            cache.setupCache();
+        }
+
         KisDataManagerSP dataManager;
         PaintDeviceCache cache;
         qint32 x;
         qint32 y;
         const KoColorSpace* colorSpace;
+        qint32 levelOfDetail;
     };
 
 private:
     inline Data* currentData() {
+        if (defaultBounds->currentLevelOfDetail()) {
+            KIS_ASSERT_RECOVER(m_lodData) { return &m_data; }
+            return m_lodData.data();
+        }
+
         return &m_data;
     }
 
     inline const Data* currentData() const {
+        if (defaultBounds->currentLevelOfDetail()) {
+            KIS_ASSERT_RECOVER(m_lodData) { return &m_data; }
+            return m_lodData.data();
+        }
+
         return &m_data;
     }
 
 private:
     Data m_data;
+    QScopedPointer<Data> m_lodData;
 };
 
 #include "kis_paint_device_strategies.h"
 
 KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
     : q(paintDevice),
-      m_data(paintDevice),
-      basicStrategy(new KisPaintDeviceStrategy(paintDevice, this))
+      basicStrategy(new KisPaintDeviceStrategy(paintDevice, this)),
+      m_data(paintDevice)
 {
 }
 
@@ -221,6 +262,155 @@ KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::curren
     }
 
     return wrappedStrategy.data();
+}
+
+inline int coordToLodCoord(int x, int lod) {
+    return x >> lod;
+}
+
+void KisPaintDevice::Private::syncLodData(int newLod)
+{
+    if (!m_lodData) {
+        m_lodData.reset(new Data(m_data));
+    }
+
+    int expectedX = coordToLodCoord(m_data.x, newLod);
+    int expectedY = coordToLodCoord(m_data.y, newLod);
+
+    /**
+     * We compare color spaces as pure pointers, because they must be
+     * exactly the same, since they come from the common source.
+     */
+    if (m_lodData->levelOfDetail != newLod ||
+        m_lodData->colorSpace != m_data.colorSpace ||
+        m_lodData->x != expectedX ||
+        m_lodData->y != expectedY) {
+
+        if (m_lodData->dataManager->pixelSize() != m_data.dataManager->pixelSize()) {
+            m_lodData->dataManager =
+                new KisDataManager(m_data.dataManager->pixelSize(),
+                                   m_data.dataManager->defaultPixel());
+        }
+
+        m_lodData->levelOfDetail = newLod;
+        m_lodData->colorSpace = m_data.colorSpace;
+
+        m_lodData->x = expectedX;
+        m_lodData->y = expectedY;
+
+        // FIXME: different kind of synchronization
+    }
+
+    syncWholeDevice();
+    m_lodData->cache.invalidate();
+}
+
+/**
+ * Aligns @value to the lowest integer not smaller than @value and
+ * that is, increased by one, a divident of alignment
+ */
+inline void alignByPow2ButOneHi(qint32 &value, qint32 alignment)
+{
+    qint32 mask = alignment - 1;
+    value = value > 0 ? value | mask : -( -value | mask);
+}
+
+/**
+ * Aligns @value to the highest integer not exceeding @value and
+ * that is a divident of @alignment
+ */
+inline void alignByPow2Lo(qint32 &value, qint32 alignment)
+{
+    qint32 mask = alignment - 1;
+    value = value > 0 ? value & ~mask : -( -value & ~mask);
+}
+
+inline QRect alignedRect(const QRect &srcRect, int lod)
+{
+    qint32 alignment = 1 << lod;
+
+    qint32 x1, y1, x2, y2;
+    srcRect.getCoords(&x1, &y1, &x2, &y2);
+
+    alignByPow2Lo(x1, alignment);
+    alignByPow2Lo(y1, alignment);
+
+    /**
+     * Here is a workaround of Qt's QRect::right()/bottom()
+     * "historical reasons". It should be one pixel smaller
+     * than actual right/bottom position
+     */
+    alignByPow2ButOneHi(x2, alignment);
+    alignByPow2ButOneHi(y2, alignment);
+
+    QRect rect;
+    rect.setCoords(x1, y1, x2, y2);
+
+    return rect;
+}
+
+inline int divideSafe(int x, int lod) {
+    return x > 0 ? x >> lod : -( -x >> lod);
+}
+
+inline QRect scaledRect(const QRect &srcRect, int lod) {
+    qint32 x1, y1, x2, y2;
+    srcRect.getCoords(&x1, &y1, &x2, &y2);
+
+    KIS_ASSERT_RECOVER_NOOP(!(x1 & 1));
+    KIS_ASSERT_RECOVER_NOOP(!(y1 & 1));
+    KIS_ASSERT_RECOVER_NOOP(!((x2 + 1) & 1));
+    KIS_ASSERT_RECOVER_NOOP(!((y2 + 1) & 1));
+
+    x1 = divideSafe(x1, lod);
+    y1 = divideSafe(y1, lod);
+    x2 = divideSafe(x2 + 1, lod) - 1;
+    y2 = divideSafe(y2 + 1, lod) - 1;
+
+    QRect rect;
+    rect.setCoords(x1, y1, x2, y2);
+
+    return rect;
+}
+
+void KisPaintDevice::Private::syncWholeDevice()
+{
+    KIS_ASSERT_RECOVER_RETURN(m_lodData);
+
+    m_lodData->dataManager->clear();
+
+    int lod = m_lodData->levelOfDetail;
+    int srcStepSize = 1 << lod;
+
+    // FIXME:
+    QRect rcFIXME= m_data.dataManager->extent().translated(m_data.x, m_data.y);
+    QRect srcRect = alignedRect(rcFIXME, lod);
+    KisHLineConstIteratorSP srcIt = currentStrategy()->createHLineConstIteratorNG(m_data.dataManager.data(), srcRect.x(), srcRect.y(), srcRect.width());
+
+    QRect dstRect = scaledRect(srcRect, lod);
+    KisHLineIteratorSP dstIt = currentStrategy()->createHLineIteratorNG(m_lodData->dataManager.data(), dstRect.x(), dstRect.y(), dstRect.width());
+
+    const int pixelSize = m_data.dataManager->pixelSize();
+
+    int rowsRemaining = srcRect.height();
+    while (rowsRemaining > 0) {
+
+        int colsRemaining = srcRect.width();
+        while (colsRemaining > 0) {
+
+            memcpy(dstIt->rawData(), srcIt->rawDataConst(), pixelSize);
+
+            srcIt->nextPixels(srcStepSize);
+            dstIt->nextPixel();
+            colsRemaining -= srcStepSize;
+        }
+
+        for (int i = 0; i < srcStepSize; i++) {
+            srcIt->nextRow();
+        }
+        dstIt->nextRow();
+        rowsRemaining -= srcStepSize;
+    }
 }
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
@@ -259,6 +449,7 @@ void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
     if (!defaultBounds) {
         defaultBounds = new KisDefaultBounds();
     }
+    m_d->defaultBounds = defaultBounds;
 
     m_d->setColorSpace(colorSpace);
     Q_ASSERT(m_d->colorSpace());
@@ -277,7 +468,6 @@ void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
     }
     m_d->cache()->setupCache();
 
-    setDefaultBounds(defaultBounds);
     setParentNode(parent);
 }
 
@@ -287,6 +477,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
     , m_d(new Private(this))
 {
     if (this != &rhs) {
+        m_d->defaultBounds = rhs.m_d->defaultBounds;
         m_d->setColorSpace(rhs.m_d->colorSpace());
         Q_ASSERT(m_d->colorSpace());
 
@@ -296,7 +487,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         m_d->setDataManager(new KisDataManager(*rhs.m_d->dataManager()));
         m_d->cache()->setupCache();
 
-        setDefaultBounds(rhs.defaultBounds());
         setParentNode(0);
     }
 }
@@ -840,12 +1030,12 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, KoColorConversionTran
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)
 {
     m_d->cache()->invalidate();
-    return m_d->currentStrategy()->createHLineIteratorNG(x, y, w);
+    return m_d->currentStrategy()->createHLineIteratorNG(m_d->dataManager().data(), x, y, w);
 }
 
 KisHLineConstIteratorSP KisPaintDevice::createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const
 {
-    return m_d->currentStrategy()->createHLineConstIteratorNG(x, y, w);
+    return m_d->currentStrategy()->createHLineConstIteratorNG(m_d->dataManager().data(), x, y, w);
 }
 
 KisVLineIteratorSP KisPaintDevice::createVLineIteratorNG(qint32 x, qint32 y, qint32 w)
@@ -1102,6 +1292,15 @@ KisPaintDevice::MemoryReleaseObject::~MemoryReleaseObject()
 KisPaintDevice::MemoryReleaseObject* KisPaintDevice::createMemoryReleaseObject()
 {
     return new MemoryReleaseObject();
+}
+
+void KisPaintDevice::syncLodCache()
+{
+    int lod = m_d->defaultBounds->currentLevelOfDetail();
+
+    if (lod) {
+        m_d->syncLodData(lod);
+    }
 }
 
 #include "kis_paint_device.moc"

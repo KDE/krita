@@ -60,6 +60,8 @@ private slots:
     void testMoveWrapAround();
 
     void testCacheState();
+
+    void testLodDevice();
 };
 
 #endif

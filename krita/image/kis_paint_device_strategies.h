@@ -89,13 +89,12 @@ public:
     }
 
 
-    virtual KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w) {
-        m_d->cache()->invalidate();
-        return new KisHLineIterator2(m_d->dataManager().data(), x, y, w, m_d->x(), m_d->y(), true);
+    virtual KisHLineIteratorSP createHLineIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w) {
+        return new KisHLineIterator2(dataManager, x, y, w, m_d->x(), m_d->y(), true);
     }
 
-    virtual KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const {
-        return new KisHLineIterator2(m_d->dataManager().data(), x, y, w, m_d->x(), m_d->y(), false);
+    virtual KisHLineConstIteratorSP createHLineConstIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w) const {
+        return new KisHLineIterator2(dataManager, x, y, w, m_d->x(), m_d->y(), false);
     }
 
 
@@ -272,22 +271,20 @@ public:
         }
     }
 
-    virtual KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w) {
-        m_d->cache()->invalidate();
-
+    virtual KisHLineIteratorSP createHLineIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w) {
         KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect);
         if (!splitRect.isSplit()) {
-            return KisPaintDeviceStrategy::createHLineIteratorNG(x, y, w);
+            return KisPaintDeviceStrategy::createHLineIteratorNG(dataManager, x, y, w);
         }
-        return new KisWrappedHLineIterator(m_d->dataManager().data(), splitRect, m_d->x(), m_d->y(), true);
+        return new KisWrappedHLineIterator(dataManager, splitRect, m_d->x(), m_d->y(), true);
     }
 
-    virtual KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const {
+    virtual KisHLineConstIteratorSP createHLineConstIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w) const {
         KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect);
         if (!splitRect.isSplit()) {
-            return KisPaintDeviceStrategy::createHLineConstIteratorNG(x, y, w);
+            return KisPaintDeviceStrategy::createHLineConstIteratorNG(dataManager, x, y, w);
         }
-        return new KisWrappedHLineIterator(m_d->dataManager().data(), splitRect, m_d->x(), m_d->y(), false);
+        return new KisWrappedHLineIterator(dataManager, splitRect, m_d->x(), m_d->y(), false);
     }
 
     virtual KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h) {

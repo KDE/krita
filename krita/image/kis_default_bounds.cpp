@@ -60,6 +60,11 @@ bool KisDefaultBounds::wrapAroundMode() const
     return m_d->image ? m_d->image->wrapAroundModeActive() : false;
 }
 
+int KisDefaultBounds::currentLevelOfDetail() const
+{
+    return m_d->image ? m_d->image->currentLevelOfDetail() : 0;
+}
+
 /******************************************************************/
 /*                  KisSelectionDefaultBounds                     */
 /******************************************************************/

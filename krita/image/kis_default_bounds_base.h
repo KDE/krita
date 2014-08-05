@@ -34,6 +34,7 @@ public:
 
     virtual QRect bounds() const = 0;
     virtual bool wrapAroundMode() const = 0;
+    virtual int currentLevelOfDetail() const = 0;
 };
 
 

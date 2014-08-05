@@ -327,6 +327,9 @@ public:
     QString ocioLutPath() const;
     void setOcioLutPath(const QString &path) const;
 
+    int ocioLutEdgeSize() const;
+    void setOcioLutEdgeSize(int value);
+
     bool useSystemMonitorProfile() const;
     void setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const;
 

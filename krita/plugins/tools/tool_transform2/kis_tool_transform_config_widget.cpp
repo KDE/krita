@@ -569,7 +569,7 @@ void KisToolTransformConfigWidget::setDefaultWarpPoints(int pointsPerLine)
 
     ToolTransformArgs *config = m_transaction->currentConfig();
 
-    config->setDefaultPoints(true);
+    config->setDefaultPoints(nbPoints > 0);
     config->setPoints(origPoints, transfPoints);
 
     notifyConfigChanged();

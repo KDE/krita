@@ -52,15 +52,15 @@ class DriverPrivate;
   - driver must be provided within KDE module file named with "kexidb_" prefix
   - following line should be placed in driver's implementation:
     \code
-    K_EXPORT_KEXIDB_DRIVER( class_name, "internal_name" );
+    K_EXPORT_KEXIDB_DRIVER( class_name, internal_name );
     \endcode
     where:
     - class_name is actual driver's class name, e.g. MySqlDriver
-    - "internal_name" is driver name's most significant part (without quotation marks), e.g. "mysql"
+    - internal_name is driver name's most significant part (without quotation marks), e.g. mysql
     Above information uses K_PLUGIN_FACTORY and K_EXPORT_PLUGIN macros and KPluginFactory class.
     For example, this line declares kexidb_mysqldriver.so module's entry point:
     \code
-    K_EXPORT_KEXIDB_DRIVER( MySqlDriver, "mysql" );
+    K_EXPORT_KEXIDB_DRIVER( MySqlDriver, mysql );
     \endcode
 
  \sa SQLiteDriver MySqlDriver, pqxxSqlDriver
@@ -210,13 +210,6 @@ public:
      This method is called automatically on createConnection(),
      and proper error message is set properly on any error. */
     virtual bool isValid();
-
-#if 0 // replaced by KPluginLoader::pluginVersion()
-    /*! Driver's static version information (major part), it is automatically defined
-     in implementation by KEXIDB_DRIVER macro (see driver_p.h)
-     It's usually compared to drivers' and KexiDB library version. */
-    virtual DatabaseVersionInfo version() const = 0;
-#endif
 
     /*! Escapes and converts value \a v (for type \a ftype)
      to string representation required by SQL commands.
@@ -430,14 +423,6 @@ inline QString Driver::dateTimeToSQL(const QDateTime& v) const {
 
 } //namespace KexiDB
 
-/*! Driver's static version information, automatically impemented for KexiDB drivers.
- Put this into driver class declaration just like Q_OBJECT macro. */
-#if 0 // replaced by KPluginLoader::pluginVersion()
-#define KEXIDB_DRIVER \
-    public: \
-    virtual DatabaseVersionInfo version() const;
-#else
-# define KEXIDB_DRIVER
-#endif
+#define KEXIDB_DRIVER
 
 #endif

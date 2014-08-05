@@ -27,7 +27,7 @@
 #include "kis_config.h"
 #include <input/kis_tablet_event.h>
 #include "kis_tablet_support.h"
-#include "wacomcfg.h"
+#include "wacom-properties.h"
 
 #include <input/kis_tablet_debugger.h>
 
@@ -46,23 +46,6 @@ bool kis_tabletChokeMouse = false;
  * the server manually
  */
 bool kis_haveEvdevTablets = false;
-
-// from include/Xwacom.h
-#  define XWACOM_PARAM_TOOLID 322
-#  define XWACOM_PARAM_TOOLSERIAL 323
-
-typedef WACOMCONFIG * (*PtrWacomConfigInit) (Display*, WACOMERRORFUNC);
-typedef WACOMDEVICE * (*PtrWacomConfigOpenDevice) (WACOMCONFIG*, const char*);
-typedef int *(*PtrWacomConfigGetRawParam) (WACOMDEVICE*, int, int*, int, unsigned*);
-typedef int (*PtrWacomConfigCloseDevice) (WACOMDEVICE *);
-typedef void (*PtrWacomConfigTerm) (WACOMCONFIG *);
-
-static PtrWacomConfigInit ptrWacomConfigInit = 0;
-static PtrWacomConfigOpenDevice ptrWacomConfigOpenDevice = 0;
-static PtrWacomConfigGetRawParam ptrWacomConfigGetRawParam = 0;
-static PtrWacomConfigCloseDevice ptrWacomConfigCloseDevice = 0;
-static PtrWacomConfigTerm ptrWacomConfigTerm = 0;
-Q_GLOBAL_STATIC(QByteArray, wacomDeviceName)
 
 // link Xinput statically
 #define XINPUT_LOAD(symbol) symbol
@@ -311,8 +294,6 @@ void kis_x11_init_tablet()
                         kis_haveEvdevTablets = true;
                     }
                     deviceType = QTabletEvent::Stylus;
-                    if (wacomDeviceName()->isEmpty())
-                        wacomDeviceName()->append(devs->name);
                     gotStylus = true;
                 } else if (devs->type == KIS_ATOM(XWacomEraser) || devs->type == KIS_ATOM(XTabletEraser)) {
                     deviceType = QTabletEvent::XFreeEraser;
@@ -471,68 +452,31 @@ void kis_x11_init_tablet()
     }
 }
 
-void fetchWacomToolId(int &deviceType, qint64 &serialId)
+void fetchWacomToolId(qint64 &serialId, QTabletDeviceData *tablet)
 {
-    if (ptrWacomConfigInit == 0) // we actually have the lib
+    XDevice *dev = static_cast<XDevice*>(tablet->device);
+    Atom prop = None, type;
+    int format;
+    unsigned char* data;
+    unsigned long nitems, bytes_after;
+
+    prop = XInternAtom(KIS_X11->display, WACOM_PROP_SERIALIDS, True);
+
+    if (!prop) {
+        // property doesn't exist
         return;
-    WACOMCONFIG *config = ptrWacomConfigInit(KIS_X11->display, 0);
-    if (config == 0)
-        return;
-    WACOMDEVICE *device = ptrWacomConfigOpenDevice (config, wacomDeviceName()->constData());
-    if (device == 0)
-        return;
-    unsigned keys[1];
-    int serialInt;
-    ptrWacomConfigGetRawParam (device, XWACOM_PARAM_TOOLSERIAL, &serialInt, 1, keys);
-    serialId = serialInt;
-    int toolId;
-    ptrWacomConfigGetRawParam (device, XWACOM_PARAM_TOOLID, &toolId, 1, keys);
-    switch(toolId) {
-    case 0x007: /* Mouse 4D and 2D */
-    case 0x017: /* Intuos3 2D Mouse */
-    case 0x094:
-    case 0x09c:
-        deviceType = QTabletEvent::FourDMouse;
-        break;
-    case 0x096: /* Lens cursor */
-    case 0x097: /* Intuos3 Lens cursor */
-        deviceType = QTabletEvent::Puck;
-        break;
-    case 0x0fa:
-    case 0x81b: /* Intuos3 Classic Pen Eraser */
-    case 0x82a: /* Eraser */
-    case 0x82b: /* Intuos3 Grip Pen Eraser */
-    case 0x85a:
-    case 0x91a:
-    case 0x91b: /* Intuos3 Airbrush Eraser */
-    case 0xd1a:
-        deviceType = QTabletEvent::XFreeEraser;
-        break;
-    case 0x112:
-    case 0x912:
-    case 0x913: /* Intuos3 Airbrush */
-    case 0xd12:
-        deviceType = QTabletEvent::Airbrush;
-        break;
-    case 0x012:
-    case 0x022:
-    case 0x032:
-    case 0x801: /* Intuos3 Inking pen */
-    case 0x812: /* Inking pen */
-    case 0x813: /* Intuos3 Classic Pen */
-    case 0x822: /* Pen */
-    case 0x823: /* Intuos3 Grip Pen */
-    case 0x832: /* Stroke pen */
-    case 0x842:
-    case 0x852:
-    case 0x885: /* Intuos3 Marker Pen */
-    default: /* Unknown tool */
-        deviceType = QTabletEvent::Stylus;
     }
 
-    /* Close device and return */
-    ptrWacomConfigCloseDevice (device);
-    ptrWacomConfigTerm(config);
+    XGetDeviceProperty(KIS_X11->display, dev, prop, 0, 1000, False, AnyPropertyType,
+                       &type, &format, &nitems, &bytes_after, &data);
+
+    if (nitems < 5 || format != 32) {
+        // property offset doesn't exist
+        return;
+    }
+
+    long *l = (long*)data;
+    serialId = l[3];
 }
 
 static Qt::MouseButtons translateMouseButtons(int s)
@@ -646,7 +590,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
      */
     if (tablet->isTouchWacomTablet) return false;
 
-    fetchWacomToolId(deviceType, uid);
+    fetchWacomToolId(uid, tablet);
 
     QRect screenArea = qApp->desktop()->rect();
 

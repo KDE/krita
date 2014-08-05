@@ -145,6 +145,7 @@ public:
     bool tryCancelCurrentStrokeAsync();
 
     bool wrapAroundModeSupported() const;
+    bool levelOfDetailSupported() const;
 
 protected:
     // Trivial constructor for testing support

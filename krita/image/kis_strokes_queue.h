@@ -50,6 +50,7 @@ public:
     bool hasOpenedStrokes() const;
 
     bool wrapAroundModeSupported() const;
+    bool levelOfDetailSupported() const;
 
 private:
     bool processOneJob(KisUpdaterContext &updaterContext, bool externalJobsPending);

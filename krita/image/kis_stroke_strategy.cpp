@@ -80,6 +80,11 @@ bool KisStrokeStrategy::supportsWrapAroundMode() const
     return m_supportsWrapAroundMode;
 }
 
+bool KisStrokeStrategy::supportsLevelOfDetail() const
+{
+    return m_supportsLevelOfDetail;
+}
+
 bool KisStrokeStrategy::needsIndirectPainting() const
 {
     return m_needsIndirectPainting;
@@ -108,6 +113,11 @@ void KisStrokeStrategy::setExclusive(bool value)
 void KisStrokeStrategy::setSupportsWrapAroundMode(bool value)
 {
     m_supportsWrapAroundMode = value;
+}
+
+void KisStrokeStrategy::setSupportsLevelOfDetail(bool value)
+{
+    m_supportsLevelOfDetail = value;
 }
 
 void KisStrokeStrategy::setNeedsIndirectPainting(bool value)

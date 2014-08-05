@@ -167,6 +167,11 @@ bool KisStroke::supportsWrapAroundMode() const
     return m_strokeStrategy->supportsWrapAroundMode();
 }
 
+bool KisStroke::supportsLevelOfDetail() const
+{
+    return m_strokeStrategy->supportsLevelOfDetail();
+}
+
 bool KisStroke::prevJobSequential() const
 {
     return m_prevJobSequential;

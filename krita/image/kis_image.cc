@@ -112,6 +112,7 @@ public:
     QList<KisLayerComposition*> compositions;
     KisNodeSP isolatedRootNode;
     bool wrapAroundModePermitted;
+    int currentLevelOfDetail;
 
     KisNameServer *nserver;
 
@@ -152,6 +153,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->perspectiveGrid = 0;
     m_d->scheduler = 0;
     m_d->wrapAroundModePermitted = false;
+    m_d->currentLevelOfDetail = 0;
 
     m_d->signalRouter = new KisImageSignalRouter(this);
 
@@ -1698,9 +1700,15 @@ bool KisImage::wrapAroundModeActive() const
         m_d->scheduler->wrapAroundModeSupported();
 }
 
+void KisImage::requestLevelOfDetail(int lod)
+{
+    m_d->currentLevelOfDetail = lod;
+}
+
 int KisImage::currentLevelOfDetail() const
 {
-    return 0;
+    return m_d->scheduler &&
+        m_d->scheduler->levelOfDetailSupported() ? m_d->currentLevelOfDetail : 0;
 }
 
 void KisImage::notifyNodeCollpasedChanged()

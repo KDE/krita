@@ -529,6 +529,13 @@ public:
     int currentLevelOfDetail() const;
 
     /**
+     * Notify KisImage which level of detail should be used in the
+     * lod-mode. Setting the mode does not guarantee the LOD to be
+     * used. It will be activated only when the stokes supports it.
+     */
+    void requestLevelOfDetail(int lod);
+
+    /**
      * Notifies that the node collapsed state has changed
      */
     void notifyNodeCollpasedChanged();

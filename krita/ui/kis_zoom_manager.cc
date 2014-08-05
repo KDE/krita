@@ -239,6 +239,9 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
     KIS_ASSERT_RECOVER_NOOP(scaleX == scaleY && "Zoom is not isotropic!");
     m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, scaleX);
+
+    int lod = qFloor(log2(1.0 / scaleX));
+    m_view->image()->requestLevelOfDetail(lod);
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

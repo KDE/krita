@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2013 Somsubhra Bairi <somsubhra.bairi@gmail.com>
  *
@@ -375,19 +376,17 @@ void KisAnimationDoc::removeFrame(QRect frame)
 
 void KisAnimationDoc::removeLayer(int layer)
 {
+    d->noLayers--;
+
     this->deleteLayerFromXML(layer);
     this->saveXMLToDisk();
 
-    int layerToLoad = layer;
+    int layerToLoad = 0;
     int frame = d->currentFramePosition.x();
-
-    // For topmost most layer
-    if(layer == (this->numberOfLayers() - 1) * 20) {
-        layerToLoad = layer - 20;
-    }
 
     // Refresh the canvas
     d->currentFramePosition = QRect(frame, layerToLoad, 10, 20);
+
     this->frameSelectionChanged(d->currentFramePosition, false);
 }
 
@@ -621,21 +620,29 @@ void KisAnimationDoc::deleteLayerFromXML(int layer)
     QDomNode currentNode;
 
     QList<QDomNode> nodesToRemove;
+    QHash<int, QList<int> > filesToRename;
 
     int length = frames.length();
 
     for(int i = 0 ; i < length ; i++) {
         currentNode = frames.at(i);
         int layerNumber = currentNode.attributes().namedItem("layer").nodeValue().toInt();
-
+        int frameNumber = currentNode.attributes().namedItem("number").nodeValue().toInt();
 
         if(layerNumber == layer) {
+            // Delete the file from the kranim directory
+            d->kranimSaver->deleteFrame(d->store, frameNumber, layerNumber);
+
             nodesToRemove.append(currentNode);
             continue;
         }
 
         // Index of layers on top have to be decremented
         if(layerNumber > layer) {
+
+            // Can't rename files over here since they might get deleted in next run of loop
+            filesToRename[layerNumber].append(frameNumber);
+
             currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layerNumber - 20));
         }
     }
@@ -643,6 +650,20 @@ void KisAnimationDoc::deleteLayerFromXML(int layer)
     length = nodesToRemove.length();
     for(int i = 0 ; i < length ; i++) {
         d->frameElement.removeChild(nodesToRemove.at(i));
+    }
+
+    QList<int> layers = filesToRename.keys();
+    int _layer = 0;
+    int frame = 0;
+
+    for(int i = 0 ; i < layers.length() ; i++) {
+        _layer = layers.at(i);
+        QList<int> frames = filesToRename.value(_layer);
+
+        for(int j = 0 ; j < frames.length() ; j++) {
+            frame = frames.at(j);
+            d->kranimSaver->renameFrame(d->store, frame, _layer, frame, _layer - 20);
+        }
     }
 }
 

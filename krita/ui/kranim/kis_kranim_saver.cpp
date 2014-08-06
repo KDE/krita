@@ -91,3 +91,20 @@ void KisKranimSaver::saveFrame(KisAnimationStore *store, KisPaintDeviceSP device
     store->writeDataToFile((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
     store->closeFile();
 }
+
+void KisKranimSaver::deleteFrame(KisAnimationStore *store, int frame, int layer)
+{
+    QString location = "frame" + QString::number(frame) + "layer" + QString::number(layer);
+
+    store->deleteFile(location);
+    store->deleteFile(location + ".defaultpixel");
+}
+
+void KisKranimSaver::renameFrame(KisAnimationStore *store, int oldFrame, int oldLayer, int newFrame, int newLayer)
+{
+    QString oldLocation = "frame" + QString::number(oldFrame) + "layer" + QString::number(oldLayer);
+    QString newLocation = "frame" + QString::number(newFrame) + "layer" + QString::number(newLayer);
+
+    store->renameFile(oldLocation, newLocation);
+    store->renameFile(oldLocation + ".defaultpixel" ,newLocation + ".defaultpixel");
+}

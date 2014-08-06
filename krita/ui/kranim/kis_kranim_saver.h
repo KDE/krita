@@ -49,6 +49,10 @@ public:
 
     void saveFrame(KisAnimationStore* store, KisPaintDeviceSP device, QRect framePosition);
 
+    void deleteFrame(KisAnimationStore* store, int frame, int layer);
+
+    void renameFrame(KisAnimationStore* store, int oldFrame, int oldLayer, int newFrame, int newLayer);
+
 private:
     struct Private;
     Private *const m_d;

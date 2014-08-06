@@ -90,7 +90,7 @@ void KisAnimationStore::deleteFile(QString location)
 void KisAnimationStore::renameFile(QString oldName, QString newName)
 {
     m_currentFile = new QFile(m_dir->absoluteFilePath(oldName));
-    m_currentFile->rename(newName);
+    m_currentFile->rename(m_dir->absoluteFilePath(newName));
 }
 
 bool KisAnimationStore::hasFile(QString location) const

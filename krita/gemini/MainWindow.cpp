@@ -650,10 +650,13 @@ bool MainWindow::Private::queryClose()
 
         switch (res) {
         case KMessageBox::Yes : {
-            if (DocumentManager::instance()->isTemporaryFile() && !desktopViewProxy->fileSaveAs())
+            if (DocumentManager::instance()->isTemporaryFile()) {
+                if(!desktopViewProxy->fileSaveAs())
+                    return false;
+            }
+            else if (!DocumentManager::instance()->save()) {
                 return false;
-            if (!DocumentManager::instance()->save())
-                return false;
+            }
             break;
         }
         case KMessageBox::No :

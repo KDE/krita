@@ -67,8 +67,8 @@ calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp")
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
 calligra_define_product(LIB_KOPROPERTY "libkoproperty")
-calligra_define_product(LIB_KOREPORT "libkoreport"  REQUIRES LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb")
+calligra_define_product(LIB_KOREPORT "libkoreport"  REQUIRES LIB_KOPROPERTY LIB_CALLIGRADB)
 
 # calligra libs
 calligra_define_product(LIB_CALLIGRA "Calligra core libs"  REQUIRES BUILDTOOL_RNG2CPP)

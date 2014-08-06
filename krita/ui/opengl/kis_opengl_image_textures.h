@@ -31,7 +31,6 @@
 #include "kis_shared.h"
 
 #include "canvas/kis_update_info.h"
-#include "opengl/kis_texture_tile_update_info.h"
 #include "opengl/kis_texture_tile.h"
 
 class KisOpenGLImageTextures;

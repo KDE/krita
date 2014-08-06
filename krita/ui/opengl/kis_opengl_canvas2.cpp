@@ -86,11 +86,7 @@ public:
         : displayShader(0)
         , checkerShader(0)
         , glSyncObject(0)
-        , firstDrawImage(true)
-        , scaleX(0.0)
-        , scaleY(0.0)
         , wrapAroundMode(false)
-
     {
         vertices = new QVector3D[6];
         texCoords = new QVector2D[6];
@@ -155,7 +151,6 @@ public:
         return rowsPerImage * numWraps + openGLImageTextures->yToRow(remainder);
     }
 
-    void activateFilteringMode(qreal scaleX, qreal scaleY);
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
@@ -462,13 +457,31 @@ void KisOpenGLCanvas2::drawImage() const
 
             glActiveTexture(GL_TEXTURE0);
             tile->bindToActiveTexture();
-            d->displayShader->setUniformValue(d->displayUniformLocationTexture0, 0);
 
-            if (d->firstDrawImage || !qFuzzyCompare(scaleX,d->scaleX) || !qFuzzyCompare(scaleY,d->scaleY)) {
-                d->firstDrawImage = false;
-                d->scaleX = scaleX;
-                d->scaleY = scaleY;
-                d->activateFilteringMode(scaleX, scaleY);
+            if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            } else {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+                switch(d->filterMode) {
+                case KisTextureTile::NearestFilterMode:
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                    break;
+                case KisTextureTile::BilinearFilterMode:
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                    break;
+                case KisTextureTile::TrilinearFilterMode:
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                    break;
+                case KisTextureTile::HighQualityFiltering:
+                    if (SCALE_LESS_THAN(scaleX, scaleY, 0.5)) {
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+                    } else {
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                    }
+                    break;
+                }
             }
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -479,33 +492,7 @@ void KisOpenGLCanvas2::drawImage() const
     d->displayShader->release();
 }
 
-void KisOpenGLCanvas2::Private::activateFilteringMode(qreal scaleX, qreal scaleY)
-{
-    if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    } else {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        switch(filterMode) {
-        case KisTextureTile::NearestFilterMode:
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            break;
-        case KisTextureTile::BilinearFilterMode:
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            break;
-        case KisTextureTile::TrilinearFilterMode:
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            break;
-        case KisTextureTile::HighQualityFiltering:
-            if (SCALE_LESS_THAN(scaleX, scaleY, 0.5)) {
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-            } else {
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            }
-            break;
-        }
-    }
-}
 
 void KisOpenGLCanvas2::initializeCheckerShader()
 {

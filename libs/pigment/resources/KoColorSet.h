@@ -78,6 +78,7 @@ public:
 
     virtual QString defaultFileExtension() const;
 
+    void setColumnCount(int columns);
     int columnCount();
 
 public:

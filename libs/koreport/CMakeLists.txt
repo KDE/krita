@@ -112,7 +112,10 @@ kde4_add_ui_files(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembe
 kde4_add_library(koreport SHARED ${koreport_LIB_SRCS})
 
 target_link_libraries(koreport
-  ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} komain)
+  ${KOPROPERTY_LIBS}
+  ${CALLIGRADB_LIBS}
+  ${KDE4_KROSSCORE_LIBS}
+  komain)
 
 target_link_libraries(koreport LINK_INTERFACE_LIBRARIES
   ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} komain)

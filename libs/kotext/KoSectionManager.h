@@ -27,7 +27,19 @@
 
 class KoSection;
 
-class KoSectionManagerPrivate;
+class KoSectionManagerPrivate
+{
+public:
+    KoSectionManagerPrivate(QTextDocument *_doc);
+    ~KoSectionManagerPrivate();
+
+    QTextDocument *doc;
+    bool valid; //< is current section info is valid
+    QHash<QString, KoSection *> sectionNames; //< stores name -> pointer reference
+    int sectionCount; //< how many sections is registered
+    QScopedPointer<QStandardItemModel> model;
+};
+
 /**
  * Used to handle all the sections in the document
  *

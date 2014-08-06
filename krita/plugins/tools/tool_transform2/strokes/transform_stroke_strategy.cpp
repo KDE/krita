@@ -272,12 +272,23 @@ void TransformStrokeStrategy::transformDevice(const ToolTransformArgs &config,
 
         transformWorker.run();
 
-        KisPerspectiveTransformWorker perspectiveWorker(device,
-                                                        config.transformedCenter(),
-                                                        config.aX(),
-                                                        config.aY(),
-                                                        config.cameraPos().z(),
-                                                        updater2);
-        perspectiveWorker.run();
+        if (config.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+            KisPerspectiveTransformWorker perspectiveWorker(device,
+                                                            config.transformedCenter(),
+                                                            config.aX(),
+                                                            config.aY(),
+                                                            config.cameraPos().z(),
+                                                            updater2);
+            perspectiveWorker.run();
+        } else if (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+            QTransform T =
+                QTransform::fromTranslate(config.transformedCenter().x(),
+                                          config.transformedCenter().y());
+
+            KisPerspectiveTransformWorker perspectiveWorker(device,
+                                                            T.inverted() * config.flattenedPerspectiveTransform() * T,
+                                                            updater2);
+            perspectiveWorker.run();
+        }
     }
 }

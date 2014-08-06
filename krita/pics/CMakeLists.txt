@@ -36,7 +36,6 @@ ratio_icon.png
 removefromfolder.png
 selection_add.png
 selection_exclude.png
-selection-info.png
 selection_intersect.png
 selection_replace.png
 selection_subtract.png
@@ -79,6 +78,9 @@ dark_arrowupblr.png
 dark_addtofolder.png
 dark_removefromfolder.png
 dark_properties.png
+dark_selection-mode_ants.png
+dark_selection-mode_invisible.png
+dark_selection-mode_mask.png
 
 light_select.png
 light_pattern.png
@@ -92,6 +94,9 @@ light_arrowupblr.png
 light_addtofolder.png
 light_removefromfolder.png
 light_properties.png
+light_selection-mode_ants.png
+light_selection-mode_invisible.png
+light_selection-mode_mask.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 add_subdirectory(app)

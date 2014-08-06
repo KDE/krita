@@ -31,33 +31,22 @@
 
 #include <kdebug.h>
 
-class KoSectionManagerPrivate
+KoSectionManagerPrivate::KoSectionManagerPrivate(QTextDocument *_doc)
+    : doc(_doc)
+    , valid(false)
+    , sectionCount(0)
+    , model(new QStandardItemModel())
 {
-public:
-    KoSectionManagerPrivate(QTextDocument *_doc)
-        : doc(_doc)
-        , valid(false)
-        , sectionCount(0)
-        , model(new QStandardItemModel())
-    {
-        Q_ASSERT(_doc);
+    Q_ASSERT(_doc);
+}
+
+KoSectionManagerPrivate::~KoSectionManagerPrivate()
+{
+    QHash<QString, KoSection *>::iterator it = sectionNames.begin();
+    for (; it != sectionNames.end(); it++) {
+        delete it.value(); // KoSectionEnd will be deleted in KoSection
     }
-
-    ~KoSectionManagerPrivate()
-    {
-        QHash<QString, KoSection *>::iterator it = sectionNames.begin();
-        for (; it != sectionNames.end(); it++) {
-            delete it.value(); // KoSectionEnd will be deleted in KoSection
-        }
-    }
-
-    QTextDocument *doc;
-
-    bool valid; //< is current section info is valid
-    QHash<QString, KoSection *> sectionNames; //< stores name -> pointer reference
-    int sectionCount; //< how many sections is registered
-    QScopedPointer<QStandardItemModel> model;
-};
+}
 
 KoSectionManager::KoSectionManager(QTextDocument* doc)
     : d_ptr(new KoSectionManagerPrivate(doc))

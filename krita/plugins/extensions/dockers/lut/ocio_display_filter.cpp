@@ -233,11 +233,13 @@ void OcioDisplayFilter::updateProcessor()
         KisOpenGL::initialMakeContextCurrent();
     }
 
+    const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
+
     if (m_lut3d.size() == 0) {
         //qDebug() << "generating lut";
         glGenTextures(1, &m_lut3dTexID);
 
-        int num3Dentries = 3 * LUT3D_EDGE_SIZE * LUT3D_EDGE_SIZE * LUT3D_EDGE_SIZE;
+        int num3Dentries = 3 * lut3DEdgeSize * lut3DEdgeSize * lut3DEdgeSize;
         m_lut3d.fill(0.0, num3Dentries);
 
         glActiveTexture(GL_TEXTURE1);
@@ -249,7 +251,7 @@ void OcioDisplayFilter::updateProcessor()
         glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
         glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB,
-                     LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE,
+                     lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
                      0, GL_RGB, GL_FLOAT, &m_lut3d.constData()[0]);
     }
 
@@ -262,7 +264,7 @@ void OcioDisplayFilter::updateProcessor()
         shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_0);
     }
     shaderDesc.setFunctionName("OCIODisplay");
-    shaderDesc.setLut3DEdgeLen(LUT3D_EDGE_SIZE);
+    shaderDesc.setLut3DEdgeLen(lut3DEdgeSize);
 
 
     // Step 2: Compute the 3D LUT
@@ -276,7 +278,7 @@ void OcioDisplayFilter::updateProcessor()
         glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
         glTexSubImage3D(GL_TEXTURE_3D, 0,
                         0, 0, 0,
-                        LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE,
+                        lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
                         GL_RGB, GL_FLOAT, &m_lut3d[0]);
     }
 

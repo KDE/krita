@@ -29,7 +29,6 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 
-#include <KoIcon.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 
@@ -39,11 +38,13 @@
 #include <kis_paint_device.h>
 #include <kis_selection_manager.h>
 
+#include "kis_icon.h"
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
 
-#include "KoViewConverter.h"
+#include <KoViewConverter.h>
+#include <KoMainWindow.h>
 
 enum {
     IMAGE_SIZE_ID,
@@ -54,13 +55,14 @@ KisStatusBar::KisStatusBar(KisView2 * view)
         : m_view(view)
 {
     m_selectionStatus = new QToolButton(view);
-    m_selectionStatus->setIcon(koIcon("selection-info"));
     m_selectionStatus->setIconSize(QSize(16,16));
     m_selectionStatus->setAutoRaise(true);
     m_selectionStatus->setEnabled(false);
+    updateSelectionIcon();
 
     connect(m_selectionStatus, SIGNAL(clicked()), view->selectionManager(), SLOT(slotToggleSelectionDecoration()));
     connect(view->selectionManager(), SIGNAL(displaySelectionChanged()), SLOT(updateSelectionToolTip()));
+    connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateSelectionIcon()));
 
     view->addStatusBarItem(m_selectionStatus);
 
@@ -118,8 +120,23 @@ void KisStatusBar::imageSizeChanged()
     m_imageSizeLabel->setText(QString("%1 x %2").arg(w).arg(h));
 }
 
+void KisStatusBar::updateSelectionIcon()
+{
+    KIcon icon;
+    if (!m_view->selectionManager()->displaySelection()) {
+        icon = kisIcon("selection-mode_invisible.png");
+    } else if (m_view->selectionManager()->showSelectionAsMask()) {
+        icon = kisIcon("selection-mode_mask.png");
+    } else /* if (!m_view->selectionManager()->showSelectionAsMask()) */ {
+        icon = kisIcon("selection-mode_ants.png");
+    }
+    m_selectionStatus->setIcon(icon);
+}
+
 void KisStatusBar::updateSelectionToolTip()
 {
+    updateSelectionIcon();
+
     KisSelectionSP selection = m_view->selection();
     if (selection) {
         m_selectionStatus->setEnabled(true);

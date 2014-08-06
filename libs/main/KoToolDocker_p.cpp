@@ -224,7 +224,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     d->tabButton = new QToolButton(this); // parent hack in toggleLock to keep it clickable
     d->tabButton->setIcon(d->tabIcon);
-    d->tabButton->setToolTip(i18n("Toggles organising the options in tabs or not"));
+    d->tabButton->setToolTip(i18n("Toggles organizing the options in tabs or not"));
     d->tabButton->setAutoRaise(true);
     connect(d->tabButton, SIGNAL(clicked()), SLOT(toggleTab()));
     d->tabButton->resize(d->tabButton->sizeHint());

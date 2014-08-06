@@ -213,6 +213,7 @@ void ResourceManager::slotImport()
             }
             bundle->setFilename(fileInfo.filePath());
             QFile::copy(res, newFilename);
+            d->bundleServer->addResource(bundle, false);
         }
     }
     else if (resourceType == "patterns") {

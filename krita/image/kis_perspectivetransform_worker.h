@@ -36,12 +36,16 @@ class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker : public QObject
     Q_OBJECT
 
 public:
-    //KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdaterPtr progress);
     KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress);
+    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QTransform &transform, KoUpdaterPtr progress);
 
     ~KisPerspectiveTransformWorker();
 
     void run();
+
+private:
+    void init(const QTransform &transform);
+
 private:
     KisPaintDeviceSP m_dev;
     KoUpdaterPtr m_progressUpdater;

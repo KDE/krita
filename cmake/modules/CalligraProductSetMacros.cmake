@@ -12,10 +12,42 @@
 
 
 macro(calligra_disable_product _product_id _reason)
+  if (NOT DEFINED SHOULD_BUILD_${_product_id})
+    message(FATAL_ERROR "Unknown product: ${_product_id}")
+  endif (NOT DEFINED SHOULD_BUILD_${_product_id})
+
   set(SHOULD_BUILD_${_product_id} FALSE)
-  if (NOT BUILD_${_product_id}_DISABLE_REASON)
-    set(BUILD_${_product_id}_DISABLE_REASON "${_reason}")
-  endif (NOT BUILD_${_product_id}_DISABLE_REASON)
+  if (DEFINED BUILD_${_product_id}_DISABLE_REASON)
+    set(BUILD_${_product_id}_DISABLE_REASON "${BUILD_${_product_id}_DISABLE_REASON} / ")
+  endif (DEFINED BUILD_${_product_id}_DISABLE_REASON)
+  set(BUILD_${_product_id}_DISABLE_REASON "${BUILD_${_product_id}_DISABLE_REASON}${_reason}")
+endmacro()
+
+# Usage:
+#   calligra_drop_product_on_bad_condition(<product_id>
+#         NAME_OF_BOOL_VAR1 REASON_TEXT_FOR_DROPPING_ON_FALSE1
+#         NAME_OF_BOOL_VAR2 REASON_TEXT_FOR_DROPPING_ON_FALSE2
+#         ...
+#       )
+macro(calligra_drop_product_on_bad_condition _product_id)
+  if (NOT DEFINED SHOULD_BUILD_${_product_id})
+    message(FATAL_ERROR "Unknown product: ${_product_id}")
+  endif (NOT DEFINED SHOULD_BUILD_${_product_id})
+
+  set(_current_flag)
+  foreach(_arg ${ARGN})
+    if(DEFINED _current_flag)
+      if(NOT ${_current_flag})
+        calligra_disable_product(${_product_id} ${_arg})
+      endif()
+      set(_current_flag)
+    else()
+      set(_current_flag ${_arg})
+    endif()
+  endforeach(_arg)
+    if(DEFINED _current_flag)
+    message(FATAL_ERROR "Bad number of arguments for calligra_drop_product_on_bad_condition(${_product_id} ...)")
+  endif()
 endmacro()
 
 macro(calligra_set_shouldbuild_dependentproduct _product_id _dep_product_id)

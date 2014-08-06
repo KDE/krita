@@ -90,10 +90,6 @@ protected:
         KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
         paintLayer1->paintDevice()->convertFromQImage(sourceImage, 0, 0, 0);
 
-        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
-        transparencyMask1->setName("tmask1");
-        transparencyMask1->testingInitSelection(transpRect);
-
         KisCloneLayerSP cloneLayer1 =
             new KisCloneLayer(paintLayer1, image, "clone1", OPACITY_OPAQUE_U8);
         cloneLayer1->setX(cloneShift.x());
@@ -102,6 +98,11 @@ protected:
         image->addNode(cloneLayer1);
         image->addNode(blur1);
         image->addNode(paintLayer1);
+
+        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
+        transparencyMask1->setName("tmask1");
+        transparencyMask1->testingInitSelection(transpRect, paintLayer1);
+
         image->addNode(transparencyMask1, paintLayer1);
 
         return image;

@@ -86,6 +86,15 @@ public:
      */
     using KisStrokeStrategy::setSupportsWrapAroundMode;
 
+    /**
+     * The undo-command-based is a low-level strategy, so it allows
+     * changing its level of detail abilities.
+     *
+     * WARNING: the switch must be called *before* the stroke has been
+     * started! Otherwise the mode will not be activated.
+     */
+    using KisStrokeStrategy::setSupportsLevelOfDetail;
+
 protected:
     void runAndSaveCommand(KUndo2CommandSP command,
                            KisStrokeJobData::Sequentiality sequentiality,

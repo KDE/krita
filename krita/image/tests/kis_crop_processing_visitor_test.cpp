@@ -65,18 +65,11 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 300, 300, cs, "test", false);
-    KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
-    KisPaintDeviceSP device = layer->paintDevice();
 
-    QRect fillRect(50,50,100,100);
     QRect cropRect(25,25,100,100);
-
-    KisFillPainter painter(device);
-    painter.fillRect(fillRect, KoColor(Qt::white, cs));
-
     QRect selectionRect(40,40,100,100);
     KisTransparencyMaskSP mask = new KisTransparencyMask();
-    mask->testingInitSelection(selectionRect);
+    mask->testingInitSelection(selectionRect, 0);
     KisPixelSelectionSP pixelSelection = mask->selection()->pixelSelection();
 
     QCOMPARE(pixelSelection->selectedExactRect(), selectionRect);

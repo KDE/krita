@@ -100,6 +100,7 @@ set(kritaimage_LIB_SRCS
    processing/kis_crop_selections_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
    processing/kis_mirror_processing_visitor.cpp
+   processing/kis_sync_lod_cache_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
    filter/kis_filter_registry.cc

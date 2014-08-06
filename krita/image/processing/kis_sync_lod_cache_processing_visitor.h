@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_MIRROR_PROCESSING_VISITOR_H
-#define __KIS_MIRROR_PROCESSING_VISITOR_H
+#ifndef __KIS_SYNC_LOD_CACHE_PROCESSING_VISITOR_H
+#define __KIS_SYNC_LOD_CACHE_PROCESSING_VISITOR_H
 
 #include "kis_simple_processing_visitor.h"
-#include <QRect>
 
 
-class KRITAIMAGE_EXPORT KisMirrorProcessingVisitor : public KisSimpleProcessingVisitor
+class KRITAIMAGE_EXPORT KisSyncLodCacheProcessingVisitor : public KisSimpleProcessingVisitor
 {
-public:
-    KisMirrorProcessingVisitor(const QRect &bounds, Qt::Orientation orientation);
-
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
-
-    QRect m_bounds;
-    Qt::Orientation m_orientation;
 };
 
-#endif /* __KIS_MIRROR_PROCESSING_VISITOR_H */
+#endif /* __KIS_SYNC_LOD_CACHE_PROCESSING_VISITOR_H */

@@ -724,7 +724,7 @@ public:
     static MemoryReleaseObject* createMemoryReleaseObject();
 
 public:
-    void syncLodCache();
+    QRegion syncLodCache();
 
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);

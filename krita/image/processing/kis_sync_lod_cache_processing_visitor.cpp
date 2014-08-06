@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_MIRROR_PROCESSING_VISITOR_H
-#define __KIS_MIRROR_PROCESSING_VISITOR_H
+#include "kis_sync_lod_cache_processing_visitor.h"
 
-#include "kis_simple_processing_visitor.h"
-#include <QRect>
+#include "kis_paint_device.h"
+#include "kis_node.h"
 
 
-class KRITAIMAGE_EXPORT KisMirrorProcessingVisitor : public KisSimpleProcessingVisitor
+void KisSyncLodCacheProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
-public:
-    KisMirrorProcessingVisitor(const QRect &bounds, Qt::Orientation orientation);
+    Q_UNUSED(undoAdapter);
 
-private:
-    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
-    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+    KisPaintDeviceSP device = node->paintDevice();
+    QRegion dirtyRegion = device->syncLodCache();
 
-    QRect m_bounds;
-    Qt::Orientation m_orientation;
-};
+    node->setDirty(dirtyRegion);
+}
 
-#endif /* __KIS_MIRROR_PROCESSING_VISITOR_H */
+void KisSyncLodCacheProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
+{
+    Q_UNUSED(layer);
+    Q_UNUSED(undoAdapter);
+}

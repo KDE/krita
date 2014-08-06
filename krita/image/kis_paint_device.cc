@@ -184,10 +184,10 @@ struct KisPaintDevice::Private
 
     inline PaintDeviceCache* cache() { return &currentData()->cache; }
 
-    void syncLodData(int newLod);
+    QRegion syncLodData(int newLod);
 
 private:
-    void syncWholeDevice();
+    QRegion syncWholeDevice();
 
     struct Data {
         Data(KisPaintDevice *paintDevice)
@@ -220,7 +220,10 @@ private:
 private:
     inline Data* currentData() {
         if (defaultBounds->currentLevelOfDetail()) {
-            KIS_ASSERT_RECOVER(m_lodData) { return &m_data; }
+            if (!m_lodData) {
+                m_lodData.reset(new Data(m_data));
+            }
+
             return m_lodData.data();
         }
 
@@ -229,7 +232,10 @@ private:
 
     inline const Data* currentData() const {
         if (defaultBounds->currentLevelOfDetail()) {
-            KIS_ASSERT_RECOVER(m_lodData) { return &m_data; }
+            if (!m_lodData) {
+                m_lodData.reset(new Data(m_data));
+            }
+
             return m_lodData.data();
         }
 
@@ -238,7 +244,7 @@ private:
 
 private:
     Data m_data;
-    QScopedPointer<Data> m_lodData;
+    mutable QScopedPointer<Data> m_lodData;
 };
 
 #include "kis_paint_device_strategies.h"
@@ -268,7 +274,7 @@ inline int coordToLodCoord(int x, int lod) {
     return x >> lod;
 }
 
-void KisPaintDevice::Private::syncLodData(int newLod)
+QRegion KisPaintDevice::Private::syncLodData(int newLod)
 {
     if (!m_lodData) {
         m_lodData.reset(new Data(m_data));
@@ -301,8 +307,10 @@ void KisPaintDevice::Private::syncLodData(int newLod)
         // FIXME: different kind of synchronization
     }
 
-    syncWholeDevice();
+    QRegion dirtyRegion = syncWholeDevice();
     m_lodData->cache.invalidate();
+
+    return dirtyRegion;
 }
 
 /**
@@ -373,9 +381,9 @@ inline QRect scaledRect(const QRect &srcRect, int lod) {
     return rect;
 }
 
-void KisPaintDevice::Private::syncWholeDevice()
+QRegion KisPaintDevice::Private::syncWholeDevice()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_lodData);
+    KIS_ASSERT_RECOVER(m_lodData) { return QRegion(); }
 
     m_lodData->dataManager->clear();
 
@@ -411,6 +419,9 @@ void KisPaintDevice::Private::syncWholeDevice()
         dstIt->nextRow();
         rowsRemaining -= srcStepSize;
     }
+
+    QRegion dirtyRegion(dstRect);
+    return dirtyRegion;
 }
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
@@ -1294,13 +1305,16 @@ KisPaintDevice::MemoryReleaseObject* KisPaintDevice::createMemoryReleaseObject()
     return new MemoryReleaseObject();
 }
 
-void KisPaintDevice::syncLodCache()
+QRegion KisPaintDevice::syncLodCache()
 {
+    QRegion dirtyRegion;
     int lod = m_d->defaultBounds->currentLevelOfDetail();
 
     if (lod) {
-        m_d->syncLodData(lod);
+        dirtyRegion = m_d->syncLodData(lod);
     }
+
+    return dirtyRegion;
 }
 
 #include "kis_paint_device.moc"

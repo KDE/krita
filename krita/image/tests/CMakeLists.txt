@@ -546,6 +546,12 @@ endif(LCMS2_FOUND)
 
 ########### next target ###############
 
+set(kis_sync_lod_cache_processing_visitor_test_SRCS kis_sync_lod_cache_processing_visitor_test.cpp )
+kde4_add_unit_test(KisSyncLodCacheProcessingVisitorTest TESTNAME krita-image-KisSyncLodCacheProcessingVisitorTest ${kis_sync_lod_cache_processing_visitor_test_SRCS})
+target_link_libraries(KisSyncLodCacheProcessingVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_fixed_point_maths_test_SRCS kis_fixed_point_maths_test.cpp )
 kde4_add_unit_test(KisFixedPointMathsTest TESTNAME krita-image-KisFixedPointMathsTest ${kis_fixed_point_maths_test_SRCS})
 target_link_libraries(KisFixedPointMathsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

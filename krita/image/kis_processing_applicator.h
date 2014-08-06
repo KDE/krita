@@ -34,7 +34,9 @@ public:
         NONE = 0x0,
         RECURSIVE = 0x1,
         NO_UI_UPDATES = 0x2,
-        SUPPORTS_WRAPAROUND_MODE = 0x4
+        SUPPORTS_WRAPAROUND_MODE = 0x4,
+        SUPPORTS_LOD = 0x8,
+        DISABLE_AUTOMATIC_UPDATES = 0x10
     };
 
     Q_DECLARE_FLAGS(ProcessingFlags, ProcessingFlag)

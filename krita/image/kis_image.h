@@ -535,6 +535,9 @@ public:
      */
     void requestLevelOfDetail(int lod);
 
+    // FIXME: for testing purposes only
+    void testingSetLevelOfDetailsEnabled(bool value);
+
     /**
      * Notifies that the node collapsed state has changed
      */

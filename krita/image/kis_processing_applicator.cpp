@@ -194,6 +194,10 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
         strategy->setSupportsWrapAroundMode(true);
     }
 
+    if (m_flags.testFlag(SUPPORTS_LOD)) {
+        strategy->setSupportsLevelOfDetail(true);
+    }
+
     m_strokeId = m_image->startStroke(strategy);
     if(!m_emitSignals.isEmpty()) {
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, false), KisStrokeJobData::BARRIER);
@@ -203,7 +207,7 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
         applyCommand(new DisableUIUpdatesCommand(m_image, false), KisStrokeJobData::BARRIER);
     }
 
-    if (m_node) {
+    if (m_node && !m_flags.testFlag(DISABLE_AUTOMATIC_UPDATES)) {
         applyCommand(new UpdateCommand(m_image, m_node, m_flags, false));
     }
 }
@@ -257,7 +261,7 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
 
 void KisProcessingApplicator::end()
 {
-    if (m_node) {
+    if (m_node && !m_flags.testFlag(DISABLE_AUTOMATIC_UPDATES)) {
         applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
     }
 

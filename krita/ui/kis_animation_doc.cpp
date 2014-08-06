@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2013 Somsubhra Bairi <somsubhra.bairi@gmail.com>
  *
@@ -16,7 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 
 #include "kis_animation_doc.h"
 #include "kis_animation_part.h"
@@ -392,12 +390,52 @@ void KisAnimationDoc::removeLayer(int layer)
 
 void KisAnimationDoc::moveLayerUp(int layer)
 {
+    QDomNodeList frames = d->frameElement.childNodes();
+    int length = frames.length();
 
+    QDomNode currentNode;
+
+    for(int i = 0 ; i < length ; i++) {
+        currentNode = frames.at(i);
+        int layerNumber = currentNode.attributes().namedItem("layer").nodeValue().toInt();
+
+        if(layerNumber == layer + 20) {
+            currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layer));
+            continue;
+        }
+
+        if(layerNumber == layer) {
+            currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layer + 20));
+            continue;
+        }
+    }
+
+    this->saveXMLToDisk();
 }
 
 void KisAnimationDoc::moveLayerDown(int layer)
 {
+    QDomNodeList frames = d->frameElement.childNodes();
+    int length = frames.length();
 
+    QDomNode currentNode;
+
+    for(int i = 0 ; i < length ; i++) {
+        currentNode = frames.at(i);
+        int layerNumber = currentNode.attributes().namedItem("layer").nodeValue().toInt();
+
+        if(layerNumber == layer - 20) {
+            currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layer));
+            continue;
+        }
+
+        if(layerNumber == layer) {
+            currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layer - 20));
+            continue;
+        }
+    }
+
+    this->saveXMLToDisk();
 }
 
 void KisAnimationDoc::addPaintLayer()

@@ -27,13 +27,14 @@
 #include "kis_image.h"
 #include "kis_debug.h"
 #include "kis_animation.h"
-#include "KFileDialog"
-#include "KActionCollection"
 #include "kis_action_manager.h"
 #include "kis_action.h"
 #include "animator_settings_dialog.h"
 
 #include <KoPart.h>
+
+#include <KFileDialog>
+#include <KActionCollection>
 
 #include <QToolButton>
 #include <QToolBar>

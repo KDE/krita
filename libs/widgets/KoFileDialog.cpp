@@ -22,6 +22,7 @@
 #include <QFileDialog>
 #include <QApplication>
 #include <QImageReader>
+#include <QClipboard>
 
 #include <kconfiggroup.h>
 #include <kmimetype.h>
@@ -62,14 +63,25 @@ public:
         //
         // Only show the GTK dialog in Gnome, where people deserve it
 #ifdef Q_WS_X11
-    if (qgetenv("KDE_FULL_SESSION").size() > 0) {
-        useStaticForNative = true;
-    }
-    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
-        useStaticForNative = true;
-    }
+        if (qgetenv("KDE_FULL_SESSION").size() > 0) {
+            useStaticForNative = true;
+        }
+        if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+            useStaticForNative = true;
+            QClipboard *cb = QApplication::clipboard();
+            cb->blockSignals(true);
+        }
 
 #endif
+    }
+
+    ~Private()
+    {
+        if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+            useStaticForNative = true;
+            QClipboard *cb = QApplication::clipboard();
+            cb->blockSignals(false);
+        }
     }
 
     QWidget *parent;

@@ -395,22 +395,72 @@ void KisAnimationDoc::moveLayerUp(int layer)
 
     QDomNode currentNode;
 
+    QHash<int, QList<int> > filesToRename;
+    QHash<int, QList<int> > topFilesToRename;
+
     for(int i = 0 ; i < length ; i++) {
         currentNode = frames.at(i);
         int layerNumber = currentNode.attributes().namedItem("layer").nodeValue().toInt();
+        int frameNumber = currentNode.attributes().namedItem("number").nodeValue().toInt();
 
         if(layerNumber == layer + 20) {
             currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layer));
+            topFilesToRename[layerNumber].append(frameNumber);
             continue;
         }
 
         if(layerNumber == layer) {
             currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layer + 20));
+            filesToRename[layerNumber].append(frameNumber);
             continue;
         }
     }
 
     this->saveXMLToDisk();
+
+    // Rename the files of the layer above to a temporary name
+    length = topFilesToRename.keys().length();
+
+    for(int i = 0 ; i < length ; i++) {
+        int layerNumber = topFilesToRename.keys().at(i);
+        QList<int> _layer = topFilesToRename.value(layerNumber);
+
+        for(int j = 0 ; j < _layer.length() ; j++) {
+            int frameNumber = _layer.at(j);
+            d->kranimSaver->renameFrame(d->store, frameNumber, layerNumber, frameNumber, -20);
+        }
+    }
+
+    // Rename the files of the layer to the new name
+    length = filesToRename.keys().length();
+
+    for(int i = 0 ; i < length ; i++) {
+        int layerNumber = filesToRename.keys().at(i);
+        QList<int> _layer = filesToRename.value(layerNumber);
+
+        for(int j = 0 ; j < _layer.length() ; j++) {
+            int frameNumber = _layer.at(j);
+            d->kranimSaver->deleteFrame(d->store, frameNumber, layerNumber + 20);
+            d->kranimSaver->renameFrame(d->store, frameNumber, layerNumber, frameNumber, layerNumber + 20);
+        }
+    }
+
+    // Restore the temporary files to the new name
+    length = topFilesToRename.keys().length();
+
+    for(int i = 0 ; i < length ; i++) {
+        int layerNumber = topFilesToRename.keys().at(i);
+        QList<int> _layer = topFilesToRename.value(layerNumber);
+
+        for(int j = 0 ; j < _layer.length() ; j++) {
+            int frameNumber = _layer.at(j);
+            d->kranimSaver->deleteFrame(d->store, frameNumber, layerNumber - 20);
+            d->kranimSaver->renameFrame(d->store, frameNumber, -20, frameNumber, layerNumber - 20);
+        }
+    }
+
+    QRect currPos = d->currentFramePosition;
+    this->frameSelectionChanged(QRect(currPos.x(), currPos.y() + 20, 10, 20), false);
 }
 
 void KisAnimationDoc::moveLayerDown(int layer)
@@ -419,23 +469,72 @@ void KisAnimationDoc::moveLayerDown(int layer)
     int length = frames.length();
 
     QDomNode currentNode;
+    QHash<int, QList<int> > filesToRename;
+    QHash<int, QList<int> > bottomFilesToRename;
 
     for(int i = 0 ; i < length ; i++) {
         currentNode = frames.at(i);
         int layerNumber = currentNode.attributes().namedItem("layer").nodeValue().toInt();
+        int frameNumber = currentNode.attributes().namedItem("number").nodeValue().toInt();
 
         if(layerNumber == layer - 20) {
             currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layer));
+            bottomFilesToRename[layerNumber].append(frameNumber);
             continue;
         }
 
         if(layerNumber == layer) {
             currentNode.attributes().namedItem("layer").setNodeValue(QString::number(layer - 20));
+            filesToRename[layerNumber].append(frameNumber);
             continue;
         }
     }
 
     this->saveXMLToDisk();
+
+    // Rename the files of layer below to a temporary name
+    length = bottomFilesToRename.keys().length();
+
+    for(int i = 0 ; i < length ; i++) {
+        int layerNumber = bottomFilesToRename.keys().at(i);
+        QList<int> _layer = bottomFilesToRename.value(layerNumber);
+
+        for(int j = 0 ; j < _layer.length() ; j++) {
+            int frameNumber = _layer.at(j);
+            d->kranimSaver->renameFrame(d->store, frameNumber, layerNumber, frameNumber, -20);
+        }
+    }
+
+    // Rename the files of the layer to the new name
+    length = filesToRename.keys().length();
+
+    for(int i = 0 ; i < length ; i++) {
+        int layerNumber = filesToRename.keys().at(i);
+        QList<int> _layer = filesToRename.value(layerNumber);
+
+        for(int j = 0 ; j < _layer.length() ; j++) {
+            int frameNumber = _layer.at(j);
+            d->kranimSaver->deleteFrame(d->store, frameNumber, layerNumber - 20);
+            d->kranimSaver->renameFrame(d->store, frameNumber, layerNumber, frameNumber, layerNumber - 20);
+        }
+    }
+
+    // Restore the temporary files to the new name
+    length = bottomFilesToRename.keys().length();
+
+    for(int i = 0 ; i < length ; i++) {
+        int layerNumber = bottomFilesToRename.keys().at(i);
+        QList<int> _layer = bottomFilesToRename.value(layerNumber);
+
+        for(int j = 0 ; j < _layer.length() ; j++) {
+            int frameNumber = _layer.at(j);
+            d->kranimSaver->deleteFrame(d->store, frameNumber, layerNumber + 20);
+            d->kranimSaver->renameFrame(d->store, frameNumber, -20, frameNumber, layerNumber + 20);
+        }
+    }
+
+    QRect currPos = d->currentFramePosition;
+    this->frameSelectionChanged(QRect(currPos.x(), currPos.y() - 20, 10, 20), false);
 }
 
 void KisAnimationDoc::addPaintLayer()

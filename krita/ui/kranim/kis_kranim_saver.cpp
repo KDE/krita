@@ -105,6 +105,8 @@ void KisKranimSaver::renameFrame(KisAnimationStore *store, int oldFrame, int old
     QString oldLocation = "frame" + QString::number(oldFrame) + "layer" + QString::number(oldLayer);
     QString newLocation = "frame" + QString::number(newFrame) + "layer" + QString::number(newLayer);
 
+    qDebug() << oldLocation << "->" << newLocation;
+
     store->renameFile(oldLocation, newLocation);
-    store->renameFile(oldLocation + ".defaultpixel" ,newLocation + ".defaultpixel");
+    store->renameFile(oldLocation + ".defaultpixel", newLocation + ".defaultpixel");
 }

@@ -31,12 +31,29 @@
 class FreehandStrokeTester : public utils::StrokeTester
 {
 public:
-    FreehandStrokeTester(const QString &presetFilename)
-        : StrokeTester("freehand", QSize(500, 500), presetFilename)
+    FreehandStrokeTester(const QString &presetFilename, bool useLod = false)
+        : StrokeTester(useLod ? "freehand-lod" : "freehand", QSize(500, 500), presetFilename),
+          m_useLod(useLod)
     {
     }
 
 protected:
+    void initImage(KisImageWSP image, KisNodeSP activeNode) {
+        Q_UNUSED(activeNode);
+
+        if (m_useLod) {
+            image->requestLevelOfDetail(1);
+        }
+    }
+
+    void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) {
+        Q_UNUSED(activeNode);
+
+        if (m_useLod) {
+            image->testingSetLevelOfDetailsEnabled(true);
+        }
+    }
+
     KisStrokeStrategy* createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
                                     KisPainter *painter,
@@ -47,7 +64,10 @@ protected:
             new FreehandStrokeStrategy::PainterInfo(painter,
                                                     new KisDistanceInformation());
 
-        return new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, kundo2_noi18n("Freehand Stroke"));
+        QScopedPointer<FreehandStrokeStrategy> stroke(
+            new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, kundo2_noi18n("Freehand Stroke")));
+
+        return m_useLod ? stroke->createLodClone(1) : stroke.take();
     }
 
     void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {
@@ -61,13 +81,16 @@ protected:
         pi1 = KisPaintInformation(QPointF(200, 200));
         pi2 = KisPaintInformation(QPointF(300, 300));
 
-        image->addJob(strokeId(),
+        QScopedPointer<KisStrokeJobData> data(
             new FreehandStrokeStrategy::Data(resources->currentNode(),
                                              m_painterInfo, pi1, pi2));
+
+        image->addJob(strokeId(), m_useLod ? data->createLodClone(1) : data.take());
     }
 
 private:
     FreehandStrokeStrategy::PainterInfo *m_painterInfo;
+    bool m_useLod;
 };
 
 void FreehandStrokeTest::testAutobrushStroke()
@@ -97,6 +120,12 @@ void FreehandStrokeTest::testAutoTextured17()
 void FreehandStrokeTest::testAutoTextured38()
 {
     FreehandStrokeTester tester("auto_textured_38.kpp");
+    tester.test();
+}
+
+void FreehandStrokeTest::testAutobrushStrokeLod()
+{
+    FreehandStrokeTester tester("autobrush_300px.kpp", true);
     tester.test();
 }
 

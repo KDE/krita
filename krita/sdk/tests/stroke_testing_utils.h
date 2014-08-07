@@ -52,6 +52,7 @@ namespace utils {
         }
 
         virtual void initImage(KisImageWSP image, KisNodeSP activeNode);
+        virtual void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode);
 
         virtual KisStrokeStrategy* createStroke(bool indirectPainting,
                                                 KisResourcesSnapshotSP resources,

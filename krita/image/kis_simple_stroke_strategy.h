@@ -55,6 +55,9 @@ protected:
                    KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
                    KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
 
+protected:
+    KisSimpleStrokeStrategy(const KisSimpleStrokeStrategy &rhs);
+
 private:
     KisStrokeJobStrategy* createStrategy(JobType type);
     KisStrokeJobData* createData(JobType type);

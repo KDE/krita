@@ -64,6 +64,9 @@ protected:
     KisPaintDeviceSP targetDevice();
     KisSelectionSP activeSelection();
 
+protected:
+    KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs);
+
 private:
     void init();
     void initPainters(KisPaintDeviceSP targetDevice,

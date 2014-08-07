@@ -268,6 +268,8 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 
     image->waitForDone();
 
+    beforeCheckingResult(image, resources->currentNode());
+
     QImage resultImage;
     if(needQImage) {
         KisPaintDeviceSP device = testUpdates ?
@@ -283,6 +285,12 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 }
 
 void utils::StrokeTester::initImage(KisImageWSP image, KisNodeSP activeNode)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(activeNode);
+}
+
+void utils::StrokeTester::beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode)
 {
     Q_UNUSED(image);
     Q_UNUSED(activeNode);

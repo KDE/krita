@@ -47,6 +47,12 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
 
+FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs)
+    : KisPainterBasedStrokeStrategy(rhs)
+{
+    setSupportsLevelOfDetail(true);
+}
+
 void FreehandStrokeStrategy::init(bool needsIndirectPainting,
                                   const QString &indirectPaintingCompositeOp)
 {
@@ -92,4 +98,12 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     };
 
     d->node->setDirty(info->painter->takeDirtyRegion());
+}
+
+KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
+{
+    Q_UNUSED(levelOfDetail);
+
+    KisStrokeStrategy *clone = new FreehandStrokeStrategy(*this);
+    return clone;
 }

@@ -42,6 +42,8 @@ public:
     virtual KisStrokeJobData* createFinishData();
     virtual KisStrokeJobData* createCancelData();
 
+    virtual KisStrokeStrategy* createLodClone(int levelOfDetail);
+
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
     bool supportsLevelOfDetail() const;
@@ -75,6 +77,12 @@ protected:
     void setSupportsLevelOfDetail(bool value);
     void setNeedsIndirectPainting(bool value);
     void setIndirectPaintingCompositeOp(const QString &id);
+
+protected:
+    /**
+     * Protected c-tor, used for cloning of hi-level strategies
+     */
+    KisStrokeStrategy(const KisStrokeStrategy &rhs);
 
 private:
     bool m_exclusive;

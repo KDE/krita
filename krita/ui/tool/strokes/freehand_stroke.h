@@ -25,6 +25,7 @@
 #include "kis_painter_based_stroke_strategy.h"
 #include "kis_distance_information.h"
 #include "kis_paint_information.h"
+#include "kis_lod_transform.h"
 
 class KisPainter;
 
@@ -89,7 +90,50 @@ public:
             type(_type), path(_path)
         {}
 
+        KisStrokeJobData* createLodClone(int levelOfDetail) {
+            return new Data(*this, levelOfDetail);
+        }
 
+    private:
+        Data(const Data &rhs, int levelOfDetail)
+            : KisStrokeJobData(rhs),
+              node(rhs.node),
+              painterInfo(rhs.painterInfo),
+              type(rhs.type)
+        {
+            KisLodTransform t(levelOfDetail);
+
+            switch(type) {
+            case Data::POINT:
+                pi1 = t.map(rhs.pi1);
+                break;
+            case Data::LINE:
+                pi1 = t.map(rhs.pi1);
+                pi2 = t.map(rhs.pi2);
+                break;
+            case Data::CURVE:
+                pi1 = t.map(rhs.pi1);
+                pi2 = t.map(rhs.pi2);
+                control1 = t.map(rhs.control1);
+                control2 = t.map(rhs.control2);
+                break;
+            case Data::POLYLINE:
+                points = t.map(rhs.points);
+                break;
+            case Data::POLYGON:
+                points = t.map(rhs.points);
+                break;
+            case Data::RECT:
+                rect = t.map(rhs.rect);
+                break;
+            case Data::ELLIPSE:
+                rect = t.map(rhs.rect);
+                break;
+            case Data::PAINTER_PATH:
+                path = t.map(rhs.path);
+            };
+        }
+    public:
         KisNodeSP node;
         PainterInfo *painterInfo;
 
@@ -118,6 +162,11 @@ public:
                            const KUndo2MagicString &name);
 
     void doStrokeCallback(KisStrokeJobData *data);
+
+    KisStrokeStrategy* createLodClone(int levelOfDetail);
+
+protected:
+    FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs);
 
 private:
     void init(bool needsIndirectPainting, const QString &indirectPaintingCompositeOp);

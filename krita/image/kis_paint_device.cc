@@ -219,7 +219,7 @@ private:
 
 private:
     inline Data* currentData() {
-        if (defaultBounds->currentLevelOfDetail()) {
+        if (defaultBounds && defaultBounds->currentLevelOfDetail()) {
             if (!m_lodData) {
                 m_lodData.reset(new Data(m_data));
             }
@@ -231,7 +231,7 @@ private:
     }
 
     inline const Data* currentData() const {
-        if (defaultBounds->currentLevelOfDetail()) {
+        if (defaultBounds && defaultBounds->currentLevelOfDetail()) {
             if (!m_lodData) {
                 m_lodData.reset(new Data(m_data));
             }
@@ -460,7 +460,6 @@ void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
     if (!defaultBounds) {
         defaultBounds = new KisDefaultBounds();
     }
-    m_d->defaultBounds = defaultBounds;
 
     m_d->setColorSpace(colorSpace);
     Q_ASSERT(m_d->colorSpace());
@@ -479,6 +478,7 @@ void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
     }
     m_d->cache()->setupCache();
 
+    setDefaultBounds(defaultBounds);
     setParentNode(parent);
 }
 
@@ -488,7 +488,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
     , m_d(new Private(this))
 {
     if (this != &rhs) {
-        m_d->defaultBounds = rhs.m_d->defaultBounds;
         m_d->setColorSpace(rhs.m_d->colorSpace());
         Q_ASSERT(m_d->colorSpace());
 
@@ -498,6 +497,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         m_d->setDataManager(new KisDataManager(*rhs.m_d->dataManager()));
         m_d->cache()->setupCache();
 
+        setDefaultBounds(rhs.m_d->defaultBounds);
         setParentNode(0);
     }
 }

@@ -71,6 +71,14 @@ KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(QString id, const KUndo2MagicSt
 {
 }
 
+KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(const KisSimpleStrokeStrategy &rhs)
+    : KisStrokeStrategy(rhs),
+      m_jobEnabled(rhs.m_jobEnabled),
+      m_jobSequentiality(rhs.m_jobSequentiality),
+      m_jobExclusivity(rhs.m_jobExclusivity)
+{
+}
+
 void KisSimpleStrokeStrategy::enableJob(JobType type, bool enable,
                                         KisStrokeJobData::Sequentiality sequentiality,
                                         KisStrokeJobData::Exclusivity exclusivity)

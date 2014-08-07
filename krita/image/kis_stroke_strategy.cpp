@@ -23,11 +23,25 @@
 KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
     : m_exclusive(false),
       m_supportsWrapAroundMode(false),
+      m_supportsLevelOfDetail(false),
       m_needsIndirectPainting(false),
       m_indirectPaintingCompositeOp(COMPOSITE_ALPHA_DARKEN),
       m_id(id),
       m_name(name)
 {
+}
+
+KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
+    : m_exclusive(rhs.m_exclusive),
+      m_supportsWrapAroundMode(rhs.m_supportsWrapAroundMode),
+      m_supportsLevelOfDetail(rhs.m_supportsLevelOfDetail),
+      m_needsIndirectPainting(rhs.m_needsIndirectPainting),
+      m_indirectPaintingCompositeOp(rhs.m_indirectPaintingCompositeOp),
+      m_id(rhs.m_id),
+      m_name(rhs.m_name)
+{
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_cancelStrokeId &&
+                            "After the stroke has been started, no copying must happen");
 }
 
 KisStrokeStrategy::~KisStrokeStrategy()
@@ -66,6 +80,11 @@ KisStrokeJobData* KisStrokeStrategy::createFinishData()
 }
 
 KisStrokeJobData* KisStrokeStrategy::createCancelData()
+{
+    return 0;
+}
+
+KisStrokeStrategy* KisStrokeStrategy::createLodClone(int levelOfDetail)
 {
     return 0;
 }

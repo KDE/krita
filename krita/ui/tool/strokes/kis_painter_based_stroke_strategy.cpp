@@ -34,6 +34,18 @@ KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(KisPainter *_painter, Ki
 {
 }
 
+KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs)
+    : KisSimpleStrokeStrategy(rhs),
+      m_resources(rhs.m_resources),
+      m_painterInfos(rhs.m_painterInfos)
+{
+    KIS_ASSERT_RECOVER_NOOP(
+        !rhs.m_transaction &&
+        !rhs.m_targetDevice &&
+        !rhs.m_activeSelection &&
+        "After the stroke has been started, no copying must happen");
+}
+
 KisPainterBasedStrokeStrategy::PainterInfo::~PainterInfo()
 {
     delete(painter);

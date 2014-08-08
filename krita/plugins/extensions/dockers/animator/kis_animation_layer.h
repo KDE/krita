@@ -25,7 +25,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QHBoxLayout>
-#include <QCheckBox>
+#include <QPushButton>
 
 /**
  * This class represents the animation layer
@@ -45,13 +45,17 @@ protected:
 private slots:
     void onLayerNameEdited();
 
+    void lockToggleClicked();
+    void onionSkinToggleClicked();
+    void visibilityToggleClicked();
+
 private:
     KisAnimationLayerBox *m_layerBox;
     QLabel* m_lblLayerName;
     QLineEdit* m_inputLayerName;
-    QCheckBox* m_onionSkinToggle;
-    QCheckBox* m_lockToggle;
-    QCheckBox* m_visibilityToggle;
+    QPushButton* m_visibilityToggle;
+    QPushButton* m_onionSkinToggle;
+    QPushButton* m_lockToggle;
 };
 
 #endif // KIS_ANIMATION_LAYER_H

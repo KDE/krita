@@ -132,3 +132,38 @@ int KisAnimationLayerBox::numberOfLayers()
 {
     return m_layers.length();
 }
+
+void KisAnimationLayerBox::setOnionSkinState(int layer, bool state)
+{
+    m_onionSkinStates[layer] = state;
+}
+
+bool KisAnimationLayerBox::onionSkinstate(int layer)
+{
+    return m_onionSkinStates[layer];
+}
+
+void KisAnimationLayerBox::setLockState(int layer, bool state)
+{
+    m_lockStates[layer] = state;
+}
+
+bool KisAnimationLayerBox::lockState(int layer)
+{
+    return m_lockStates[layer];
+}
+
+void KisAnimationLayerBox::setVisibilityState(int layer, bool state)
+{
+    m_visibilityStates[layer] = state;
+}
+
+bool KisAnimationLayerBox::visibilityState(int layer)
+{
+    return m_visibilityStates[layer];
+}
+
+int KisAnimationLayerBox::indexOf(KisAnimationLayer *layer)
+{
+    return m_layers.indexOf(layer);
+}

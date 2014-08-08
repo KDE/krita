@@ -52,6 +52,17 @@ public:
 
     int numberOfLayers();
 
+    void setOnionSkinState(int layer, bool state);
+    bool onionSkinstate(int layer);
+
+    void setVisibilityState(int layer, bool state);
+    bool visibilityState(int layer);
+
+    void setLockState(int layer, bool state);
+    bool lockState(int layer);
+
+    int indexOf(KisAnimationLayer* layer);
+
 protected:
     void resizeEvent(QResizeEvent *event);
 
@@ -62,6 +73,9 @@ private:
     QList<KisAnimationLayer*> m_layers;
     int m_layerIndex;
 
+    QHash<int, bool> m_onionSkinStates;
+    QHash<int, bool> m_visibilityStates;
+    QHash<int, bool> m_lockStates;
 };
 
 #endif // KIS_ANIMATION_LAYERBOX_H

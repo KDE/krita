@@ -18,10 +18,14 @@
 
 #include "kis_animation_layer.h"
 
+#include <KoIcon.h>
+
 #include <QPainter>
 #include <QLineEdit>
 #include <QHBoxLayout>
 #include <QCheckBox>
+#include <QPushButton>
+#include <QButtonGroup>
 
 KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent, int index)
 {
@@ -36,16 +40,20 @@ KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent, int index)
     m_lblLayerName->setText("Layer " + QString::number(index));
     m_lblLayerName->setGeometry(QRect(10, 0, 100, 20));
 
-    m_visibilityToggle = new QCheckBox(this);
+    m_visibilityToggle = new QPushButton(this);
+    m_visibilityToggle->setIcon(koIcon("list-add"));
     m_visibilityToggle->setGeometry(QRect(110, 0, 20, 20));
-    m_visibilityToggle->setChecked(true);
+    connect(m_visibilityToggle, SIGNAL(clicked()), this, SLOT(visibilityToggleClicked()));
 
-    m_lockToggle = new QCheckBox(this);
+    m_lockToggle = new QPushButton(this);
+    m_lockToggle->setIcon(koIcon("list-add"));
     m_lockToggle->setGeometry(QRect(130, 0, 20, 20));
+    connect(m_lockToggle, SIGNAL(clicked()), this, SLOT(lockToggleClicked()));
 
-    m_onionSkinToggle = new QCheckBox(this);
+    m_onionSkinToggle = new QPushButton(this);
+    m_onionSkinToggle->setIcon(koIcon("list-add"));
     m_onionSkinToggle->setGeometry(QRect(150, 0, 20, 20));
-    m_onionSkinToggle->setChecked(true);
+    connect(m_onionSkinToggle, SIGNAL(clicked()), this, SLOT(onionSkinToggleClicked()));
 
     this->setFixedSize(200, 20);
 
@@ -72,4 +80,49 @@ void KisAnimationLayer::onLayerNameEdited()
     m_inputLayerName->hide();
     m_lblLayerName->setText(m_inputLayerName->text());
     m_lblLayerName->show();
+}
+
+void KisAnimationLayer::onionSkinToggleClicked()
+{
+    int layer = m_layerBox->indexOf(this);
+    bool onionSkinState = m_layerBox->onionSkinstate(layer);
+
+    onionSkinState = !onionSkinState;
+    m_layerBox->setOnionSkinState(layer, onionSkinState);
+
+    if(onionSkinState) {
+        m_onionSkinToggle->setIcon(koIcon("list-remove"));
+    } else {
+        m_onionSkinToggle->setIcon(koIcon("list-add"));
+    }
+}
+
+void KisAnimationLayer::lockToggleClicked()
+{
+    int layer = m_layerBox->indexOf(this);
+    bool lockState = m_layerBox->lockState(layer);
+
+    lockState = !lockState;
+    m_layerBox->setLockState(layer, lockState);
+
+    if(lockState) {
+        m_lockToggle->setIcon(koIcon("list-remove"));
+    } else {
+        m_lockToggle->setIcon(koIcon("list-add"));
+    }
+}
+
+void KisAnimationLayer::visibilityToggleClicked()
+{
+    int layer = m_layerBox->indexOf(this);
+    bool visibilityState = m_layerBox->visibilityState(layer);
+
+    visibilityState = !visibilityState;
+    m_layerBox->setVisibilityState(layer, visibilityState);
+
+    if(visibilityState) {
+        m_visibilityToggle->setIcon(koIcon("list-remove"));
+    } else {
+        m_visibilityToggle->setIcon(koIcon("list-add"));
+    }
 }

@@ -143,6 +143,11 @@ bool KisAnimationLayerBox::onionSkinstate(int layer)
     return m_onionSkinStates[layer];
 }
 
+QHash<int, bool> KisAnimationLayerBox::onionSkinStates()
+{
+    return m_onionSkinStates;
+}
+
 void KisAnimationLayerBox::setLockState(int layer, bool state)
 {
     m_lockStates[layer] = state;
@@ -151,6 +156,11 @@ void KisAnimationLayerBox::setLockState(int layer, bool state)
 bool KisAnimationLayerBox::lockState(int layer)
 {
     return m_lockStates[layer];
+}
+
+QHash<int, bool> KisAnimationLayerBox::lockStates()
+{
+    return m_lockStates;
 }
 
 void KisAnimationLayerBox::setVisibilityState(int layer, bool state)
@@ -163,7 +173,17 @@ bool KisAnimationLayerBox::visibilityState(int layer)
     return m_visibilityStates[layer];
 }
 
+QHash<int, bool> KisAnimationLayerBox::visibilityStates()
+{
+    return m_visibilityStates;
+}
+
 int KisAnimationLayerBox::indexOf(KisAnimationLayer *layer)
 {
     return m_layers.indexOf(layer);
+}
+
+KisCanvas2* KisAnimationLayerBox::getCanvas()
+{
+    return m_dock->getCanvas();
 }

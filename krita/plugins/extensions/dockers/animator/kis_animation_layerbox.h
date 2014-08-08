@@ -20,6 +20,7 @@
 #define KIS_ANIMATION_LAYERBOX_H
 
 #include "kis_types.h"
+#include "kis_canvas2.h"
 
 #include <QWidget>
 #include <QPointer>
@@ -54,14 +55,19 @@ public:
 
     void setOnionSkinState(int layer, bool state);
     bool onionSkinstate(int layer);
+    QHash<int, bool> onionSkinStates();
 
     void setVisibilityState(int layer, bool state);
     bool visibilityState(int layer);
+    QHash<int, bool> visibilityStates();
 
     void setLockState(int layer, bool state);
     bool lockState(int layer);
+    QHash<int, bool> lockStates();
 
     int indexOf(KisAnimationLayer* layer);
+
+    KisCanvas2* getCanvas();
 
 protected:
     void resizeEvent(QResizeEvent *event);

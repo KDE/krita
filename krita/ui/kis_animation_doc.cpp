@@ -1006,4 +1006,19 @@ QList<int> KisAnimationDoc::keyFramePositions()
     return frameNumbers;
 }
 
+void KisAnimationDoc::onionSkinStateToggled(QHash<int, bool> states)
+{
+    qDebug() << "onion skin states changed...";
+}
+
+void KisAnimationDoc::visibilityStateToggled(QHash<int, bool> states)
+{
+    qDebug() << "Visibility state changed...";
+}
+
+void KisAnimationDoc::lockStateToggled(QHash<int, bool> states)
+{
+    qDebug() << "Lock state changed...";
+}
+
 #include "kis_animation_doc.moc"

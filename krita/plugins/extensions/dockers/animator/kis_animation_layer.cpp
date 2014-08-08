@@ -17,6 +17,10 @@
  */
 
 #include "kis_animation_layer.h"
+#include "kis_canvas2.h"
+#include "kis_animation_doc.h"
+#include "kis_part2.h"
+#include "kis_view2.h"
 
 #include <KoIcon.h>
 
@@ -95,6 +99,9 @@ void KisAnimationLayer::onionSkinToggleClicked()
     } else {
         m_onionSkinToggle->setIcon(koIcon("list-add"));
     }
+
+    // Make onion skin changes in the canvas
+    dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->view()->document())->onionSkinStateToggled(m_layerBox->onionSkinStates());
 }
 
 void KisAnimationLayer::lockToggleClicked()
@@ -110,6 +117,9 @@ void KisAnimationLayer::lockToggleClicked()
     } else {
         m_lockToggle->setIcon(koIcon("list-add"));
     }
+
+    // Make lock state changes in the canvas
+    dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->view()->document())->lockStateToggled(m_layerBox->lockStates());
 }
 
 void KisAnimationLayer::visibilityToggleClicked()
@@ -125,4 +135,7 @@ void KisAnimationLayer::visibilityToggleClicked()
     } else {
         m_visibilityToggle->setIcon(koIcon("list-add"));
     }
+
+    // Make the visibilty state changes in the canvas
+    dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->view()->document())->visibilityStateToggled(m_layerBox->visibilityStates());
 }

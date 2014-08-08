@@ -98,6 +98,10 @@ public:
 
     QList<int> keyFramePositions();
 
+    void onionSkinStateToggled(QHash<int, bool> states);
+    void visibilityStateToggled(QHash<int, bool> states);
+    void lockStateToggled(QHash<int, bool> states);
+
 public slots:
     void setImageModified();
 

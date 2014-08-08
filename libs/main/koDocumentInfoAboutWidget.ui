@@ -294,7 +294,10 @@
    <item row="5" column="0">
     <widget class="QLabel" name="lbLanguageDesc">
      <property name="text">
-      <string>                Language:</string>
+      <string>Language:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

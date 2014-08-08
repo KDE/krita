@@ -736,6 +736,8 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
 
 void KisLayerBox::selectionChanged(const QModelIndexList selection)
 {
+    if (!m_nodeManager) return;
+
     if (selection.isEmpty() && m_nodeManager->activeNode()) {
         m_wdgLayerBox->listLayers->setCurrentIndex(m_nodeModel->indexFromNode(m_nodeManager->activeNode()));
         return;

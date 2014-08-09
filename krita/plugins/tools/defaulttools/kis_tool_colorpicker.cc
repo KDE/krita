@@ -29,6 +29,7 @@
 #include <QListWidget>
 #include <QList>
 #include <QWidget>
+#include <QVector>
 
 #include <kactioncollection.h>
 #include <kaction.h>
@@ -306,19 +307,35 @@ void KisToolColorPicker::displayPickedColor()
         QList<KoChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
         m_optionsWidget->listViewChannels->clear();
 
+        struct PickedChannel {
+            QString name;
+            QString valueText;
+        };
+
+        QVector<PickedChannel> pickedChannels;
         for (int i = 0; i < channels.count(); ++i) {
-            QString channelValueText;
-            int pos = channels[i]->pos() / channels[i]->size(); // HACK This doesn't work if the channels differ in size
+            pickedChannels.append(PickedChannel());
+        }
+
+        for (int i = 0; i < channels.count(); ++i) {
+
+            PickedChannel pc;
+            pc.name = channels[i]->name();
 
             if (m_config.normaliseValues) {
-                channelValueText = m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), pos);
+                pc.valueText = m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), i);
             } else {
-                channelValueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), pos);
+                pc.valueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), i);
             }
 
+            pickedChannels[channels[i]->displayPosition()] = pc;
+
+        }
+
+        for (int i = 0; i < channels.count(); ++i) {
             QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
-            item->setText(0, channels[i]->name());
-            item->setText(1, channelValueText);
+            item->setText(0, pickedChannels[i].name);
+            item->setText(1, pickedChannels[i].valueText);
         }
     }
 }

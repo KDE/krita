@@ -64,7 +64,11 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, bool hid
     m_curveOptionWidget->slider->setValue(curveOption->value());
 
     if (hideSlider)
-        m_curveOptionWidget->slider->hide();
+    {
+         m_curveOptionWidget->slider->hide();
+         m_curveOptionWidget->strengthLabel->hide();
+    }
+
 
     connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int))  , SLOT(updateValues()));
     connect(m_curveOptionWidget->slider, SIGNAL(valueChanged(qreal)), SLOT(updateValues()));

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>425</width>
-    <height>252</height>
+    <height>265</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -17,7 +17,16 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -42,7 +51,33 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="label_9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Mask Type:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QComboBox" name="comboBoxMaskType"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_10">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Shape:</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QComboBox" name="comboBoxShape">

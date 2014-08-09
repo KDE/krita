@@ -182,10 +182,6 @@ public:
      */
     QList<KisPaintingAssistant *> preLoadedAssistants();
 
-protected:
-
-    KisLayerSP m_layer;
-
 signals:
 
     void sigLoadingFinished();
@@ -203,6 +199,7 @@ private:
     class UndoStack;
     class KisDocPrivate;
     KisDocPrivate * const m_d;
+
 };
 
 #endif // KIS_DOC_H_

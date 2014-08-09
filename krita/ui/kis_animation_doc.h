@@ -76,7 +76,7 @@ public:
     QString getNextKeyFrameFile(int frame, int layer);
 
     QRect currentFramePosition();
-    KisLayerSP currentFrame();
+    KisNodeSP currentFrame();
 
     int numberOfLayers();
 

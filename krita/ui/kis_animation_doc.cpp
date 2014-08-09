@@ -59,7 +59,7 @@ public:
     QDomElement root;
     KisKranimSaver *kranimSaver;
     KisKranimLoader *kranimLoader;
-    KisLayerSP currentFrame;
+    KisNodeSP currentFrame;
     QRect currentFramePosition;
     bool saved;
     KisAnimationStore* store;
@@ -165,7 +165,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame, bool savePreviousFrame)
 
     if(savePreviousFrame) {
         // Dump the content of the current frame
-        d->kranimSaver->saveFrame(d->store, d->currentFrame, this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
+        d->kranimSaver->saveFrame(d->store, d->currentFrame->paintDevice(), this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
     }
 
     QString location = "";
@@ -211,7 +211,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
         d->kranimSaver->saveFrame(d->store, this->image()->projection(), d->currentFramePosition);
     }
 
-    d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
+    d->kranimSaver->saveFrame(d->store, d->currentFrame->paintDevice(), d->currentFramePosition);
 
     d->currentFramePosition = frame;
 
@@ -284,7 +284,7 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
         d->kranimSaver->saveFrame(d->store, this->image()->projection(), d->currentFramePosition);
     }
 
-    d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
+    d->kranimSaver->saveFrame(d->store, d->currentFrame->paintDevice(), d->currentFramePosition);
 
     d->currentFramePosition = frame;
 
@@ -546,7 +546,7 @@ void KisAnimationDoc::addPaintLayer()
         this->preSaveAnimation();
     }
 
-    d->kranimSaver->saveFrame(d->store, d->currentFrame, this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
+    d->kranimSaver->saveFrame(d->store, d->currentFrame->paintDevice(), this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
 
     QString location = "";
     bool hasFile = false;
@@ -874,7 +874,7 @@ void KisAnimationDoc::preSaveAnimation()
 
     QRect initialFramePosition(0, 0, 10, 20);
     d->currentFramePosition = initialFramePosition;
-    d->currentFrame = this->m_layer;
+    d->currentFrame = this->image()->root()->firstChild();
 
     this->addFrameToXML();
 
@@ -901,7 +901,7 @@ QRect KisAnimationDoc::currentFramePosition()
     return d->currentFramePosition;
 }
 
-KisLayerSP KisAnimationDoc::currentFrame()
+KisNodeSP KisAnimationDoc::currentFrame()
 {
     return d->currentFrame;
 }

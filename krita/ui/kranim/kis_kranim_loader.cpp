@@ -50,7 +50,7 @@ KisImageWSP KisKranimLoader::loadXML(const KoXmlElement &elem)
     return image;
 }
 
-void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QString location)
+void KisKranimLoader::loadFrame(KisNodeSP layer, KisAnimationStore *store, QString location)
 {
     KisPaintDeviceSP dev = layer->paintDevice();
 

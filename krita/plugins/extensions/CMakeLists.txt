@@ -14,6 +14,7 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( dockers )
 add_subdirectory( layergroupswitcher )
+
 option(WITH_RESOURCE_MANAGER "Build the experimental resource manager" OFF)
 if (WITH_RESOURCE_MANAGER)
     add_subdirectory( resourcemanager )

@@ -300,17 +300,18 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
     }
 }
 
+
+struct PickedChannel {
+    QString name;
+    QString valueText;
+};
+
 void KisToolColorPicker::displayPickedColor()
 {
     if (m_pickedColor.data() && m_optionsWidget) {
 
         QList<KoChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
         m_optionsWidget->listViewChannels->clear();
-
-        struct PickedChannel {
-            QString name;
-            QString valueText;
-        };
 
         QVector<PickedChannel> pickedChannels;
         for (int i = 0; i < channels.count(); ++i) {
@@ -332,10 +333,10 @@ void KisToolColorPicker::displayPickedColor()
 
         }
 
-        for (int i = 0; i < channels.count(); ++i) {
+        foreach(const PickedChannel &pc, pickedChannels) {
             QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
-            item->setText(0, pickedChannels[i].name);
-            item->setText(1, pickedChannels[i].valueText);
+            item->setText(0, pc.name);
+            item->setText(1, pc.valueText);
         }
     }
 }

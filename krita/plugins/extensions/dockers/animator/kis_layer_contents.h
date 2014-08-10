@@ -55,6 +55,8 @@ public:
     KisFrameBox* getParent();
     int getLayerIndex();
 
+    void mouseReleased(int x);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

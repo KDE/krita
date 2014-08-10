@@ -78,6 +78,12 @@ void KisLayerContents::mouseReleaseEvent(QMouseEvent *event)
     this->m_parent->setSelectedFrame(x, this);
 }
 
+void KisLayerContents::mouseReleased(int x)
+{
+    x = x - (x % 10);
+    m_parent->setSelectedFrame(x, this);
+}
+
 void KisLayerContents::mapFrame(int frameNumber, KisAnimationFrame *frame)
 {
     if(this->m_frames.contains(frameNumber)) {

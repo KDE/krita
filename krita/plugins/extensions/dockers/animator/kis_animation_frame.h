@@ -71,6 +71,7 @@ private:
     int m_mousePressStartPoint;
     int m_mousePressEndPoint;
     int m_startPoint;
+    bool m_dragging;
 };
 
 #endif // KIS_ANIMATION_FRAME_H

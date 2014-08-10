@@ -26,6 +26,7 @@
 #include "kranim/kis_kranim_loader.h"
 
 #include <QBitArray>
+#include <QHash>
 
 KisOnionSkinLoader::KisOnionSkinLoader(KisAnimationDoc *doc, QObject *parent) :
     QObject(parent)
@@ -33,7 +34,7 @@ KisOnionSkinLoader::KisOnionSkinLoader(KisAnimationDoc *doc, QObject *parent) :
     m_doc = doc;
 }
 
-void KisOnionSkinLoader::loadOnionSkins()
+void KisOnionSkinLoader::loadOnionSkins(QHash<int, bool> states)
 {
     KisImageWSP image = m_doc->image();
 
@@ -50,6 +51,17 @@ void KisOnionSkinLoader::loadOnionSkins()
     int numberOfOnionSkins;
 
     for(int i = 1 ; i < m_doc->numberOfLayers() ; i++) {
+
+        // Check if onion skin has to be loaded or not
+        bool state = false;
+
+        if(states.keys().contains(i)) {
+            state = states[i];
+        }
+
+        if(state) {
+            continue;
+        }
 
         currentFrame = frame.x();
         numberOfOnionSkins = animation->prevOnionSkinOpacityValues()->length();

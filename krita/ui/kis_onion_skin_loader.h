@@ -37,7 +37,7 @@ class KisOnionSkinLoader : public QObject
 public:
     KisOnionSkinLoader(KisAnimationDoc* doc, QObject *parent = 0);
 
-    void loadOnionSkins();
+    void loadOnionSkins(QHash<int, bool> states);
 
     void refreshOnionSkins();
 

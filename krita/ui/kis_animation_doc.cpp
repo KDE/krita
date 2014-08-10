@@ -615,7 +615,7 @@ void KisAnimationDoc::addVectorLayer()
 void KisAnimationDoc::loadOnionSkins()
 {
     if(this->getAnimation()->onionSkinningEnabled()) {
-        d->onionSkinLoader->loadOnionSkins();
+        d->onionSkinLoader->loadOnionSkins(d->onionSkinStates);
     }
 }
 
@@ -1026,6 +1026,7 @@ QList<int> KisAnimationDoc::keyFramePositions()
 void KisAnimationDoc::onionSkinStateToggled(QHash<int, bool> states)
 {
     d->onionSkinStates = states;
+    d->onionSkinLoader->refreshOnionSkins();
 }
 
 void KisAnimationDoc::visibilityStateToggled(QHash<int, bool> states)

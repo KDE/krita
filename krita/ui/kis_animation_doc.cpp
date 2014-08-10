@@ -55,17 +55,26 @@ public:
 
     QDomDocument doc;
     QDomElement root;
+    QDomElement frameElement;
+
     KisKranimSaver *kranimSaver;
     KisKranimLoader *kranimLoader;
+
     KisNodeSP currentFrame;
     QRect currentFramePosition;
-    bool saved;
-    KisAnimationStore* store;
-    KisAnimationPlayer* player;
-    QDomElement frameElement;
-    int noLayers;
-    KisOnionSkinLoader* onionSkinLoader;
     QList<KisNodeSP> currentLoadedLayers;
+
+    KisAnimationStore* store;
+
+    KisAnimationPlayer* player;
+    KisOnionSkinLoader* onionSkinLoader;
+
+    int noLayers;
+    bool saved;
+
+    QHash<int, bool> onionSkinStates;
+    QHash<int, bool> lockStates;
+    QHash<int, bool> visibilityStates;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -191,6 +200,8 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame, bool savePreviousFrame)
                 d->currentFramePosition = frame;
                 d->currentFrame = newLayer;
             }
+
+            this->applyLayerStates(i, newLayer);
         }
     }
 
@@ -235,6 +246,8 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
             d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
+
+            this->applyLayerStates(i, newLayer);
         }
     }
 
@@ -262,6 +275,8 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
             d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
+
+            this->applyLayerStates(i, newLayer);
         }
     }
 
@@ -308,6 +323,8 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
             d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
+
+            this->applyLayerStates(i, newLayer);
         }
     }
 
@@ -338,6 +355,8 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
             d->currentLoadedLayers.append(newLayer);
 
             d->kranimLoader->loadFrame(newLayer, d->store, location);
+
+            this->applyLayerStates(i, newLayer);
         }
     }
 
@@ -1006,17 +1025,40 @@ QList<int> KisAnimationDoc::keyFramePositions()
 
 void KisAnimationDoc::onionSkinStateToggled(QHash<int, bool> states)
 {
-    qDebug() << "onion skin states changed...";
+    d->onionSkinStates = states;
 }
 
 void KisAnimationDoc::visibilityStateToggled(QHash<int, bool> states)
 {
-    qDebug() << "Visibility state changed...";
+    d->visibilityStates = states;
+    this->frameSelectionChanged(d->currentFramePosition);
 }
 
 void KisAnimationDoc::lockStateToggled(QHash<int, bool> states)
 {
-    qDebug() << "Lock state changed...";
+    d->lockStates = states;
+    this->frameSelectionChanged(d->currentFramePosition);
+}
+
+void KisAnimationDoc::applyLayerStates(int layerNumber, KisLayerSP layer)
+{
+    // Check visibility
+    bool visibilityState = false;
+
+    if(d->visibilityStates.keys().contains(layerNumber)) {
+        visibilityState = d->visibilityStates[layerNumber];
+    }
+
+    layer->setVisible(!visibilityState);
+
+    // Check layer lock
+    bool layerLock = false;
+
+    if(d->lockStates.keys().contains(layerNumber)) {
+        layerLock = d->lockStates[layerNumber];
+    }
+
+    layer->setUserLocked(layerLock);
 }
 
 #include "kis_animation_doc.moc"

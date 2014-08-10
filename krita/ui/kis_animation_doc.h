@@ -124,6 +124,8 @@ private:
 
     void loadOnionSkins();
 
+    void applyLayerStates(int layerNumber, KisLayerSP layer);
+
 private:
     class KisAnimationDocPrivate;
     KisAnimationDocPrivate* const d;

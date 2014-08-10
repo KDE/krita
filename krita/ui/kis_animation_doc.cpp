@@ -39,8 +39,6 @@
 
 #define APP_MIMETYPE "application/x-krita-animation"
 
-static const char CURRENT_DTD_VERSION[] = "1.0";
-
 
 class KisAnimationDoc::KisAnimationDocPrivate
 {

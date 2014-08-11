@@ -60,6 +60,13 @@ void KisAnimationFrame::mouseMoveEvent(QMouseEvent *event)
 
         m_dragging = true;
 
+        if(this->width() != 10) {
+            if(m_localMousePressStartPoint > this->width() - 10 && m_localMousePressStartPoint < this->width()) {
+                qDebug() << "Entending the frame";
+                return;
+            }
+        }
+
         int x = event->globalX();
 
         int displacement = x - m_mousePressStartPoint;
@@ -70,7 +77,10 @@ void KisAnimationFrame::mouseMoveEvent(QMouseEvent *event)
 void KisAnimationFrame::mousePressEvent(QMouseEvent *event)
 {
     m_mousePressed = true;
+
     m_mousePressStartPoint = event->globalX();
+    m_localMousePressStartPoint = event->x();
+
     m_startPoint = this->geometry().x();
 }
 
@@ -78,11 +88,12 @@ void KisAnimationFrame::mouseReleaseEvent(QMouseEvent *event)
 {
     m_mousePressed = false;
 
+    m_mousePressEndPoint = event->globalX();
+    m_localMousePressEndPoint = event->x();
+
     if(m_dragging) {
 
         m_dragging = false;
-
-        m_mousePressEndPoint = event->globalX();
 
         int x = (this->geometry().x() / 10);
         x *= 10;

@@ -533,7 +533,7 @@ public:
      * lod-mode. Setting the mode does not guarantee the LOD to be
      * used. It will be activated only when the stokes supports it.
      */
-    void requestLevelOfDetail(int lod);
+    void setDesiredLevelOfDetail(int lod);
 
     // FIXME: for testing purposes only
     void testingSetLevelOfDetailsEnabled(bool value);

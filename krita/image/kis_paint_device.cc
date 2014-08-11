@@ -55,6 +55,7 @@
 
 #include "kis_default_bounds.h"
 #include "kis_lock_free_cache.h"
+#include "kis_lod_transform.h"
 
 
 class PaintDeviceCache
@@ -313,74 +314,6 @@ QRegion KisPaintDevice::Private::syncLodData(int newLod)
     return dirtyRegion;
 }
 
-/**
- * Aligns @value to the lowest integer not smaller than @value and
- * that is, increased by one, a divident of alignment
- */
-inline void alignByPow2ButOneHi(qint32 &value, qint32 alignment)
-{
-    qint32 mask = alignment - 1;
-    value = value > 0 ? value | mask : -( -value | mask);
-}
-
-/**
- * Aligns @value to the highest integer not exceeding @value and
- * that is a divident of @alignment
- */
-inline void alignByPow2Lo(qint32 &value, qint32 alignment)
-{
-    qint32 mask = alignment - 1;
-    value = value > 0 ? value & ~mask : -( -value & ~mask);
-}
-
-inline QRect alignedRect(const QRect &srcRect, int lod)
-{
-    qint32 alignment = 1 << lod;
-
-    qint32 x1, y1, x2, y2;
-    srcRect.getCoords(&x1, &y1, &x2, &y2);
-
-    alignByPow2Lo(x1, alignment);
-    alignByPow2Lo(y1, alignment);
-
-    /**
-     * Here is a workaround of Qt's QRect::right()/bottom()
-     * "historical reasons". It should be one pixel smaller
-     * than actual right/bottom position
-     */
-    alignByPow2ButOneHi(x2, alignment);
-    alignByPow2ButOneHi(y2, alignment);
-
-    QRect rect;
-    rect.setCoords(x1, y1, x2, y2);
-
-    return rect;
-}
-
-inline int divideSafe(int x, int lod) {
-    return x > 0 ? x >> lod : -( -x >> lod);
-}
-
-inline QRect scaledRect(const QRect &srcRect, int lod) {
-    qint32 x1, y1, x2, y2;
-    srcRect.getCoords(&x1, &y1, &x2, &y2);
-
-    KIS_ASSERT_RECOVER_NOOP(!(x1 & 1));
-    KIS_ASSERT_RECOVER_NOOP(!(y1 & 1));
-    KIS_ASSERT_RECOVER_NOOP(!((x2 + 1) & 1));
-    KIS_ASSERT_RECOVER_NOOP(!((y2 + 1) & 1));
-
-    x1 = divideSafe(x1, lod);
-    y1 = divideSafe(y1, lod);
-    x2 = divideSafe(x2 + 1, lod) - 1;
-    y2 = divideSafe(y2 + 1, lod) - 1;
-
-    QRect rect;
-    rect.setCoords(x1, y1, x2, y2);
-
-    return rect;
-}
-
 QRegion KisPaintDevice::Private::syncWholeDevice()
 {
     KIS_ASSERT_RECOVER(m_lodData) { return QRegion(); }
@@ -392,10 +325,10 @@ QRegion KisPaintDevice::Private::syncWholeDevice()
 
     // FIXME:
     QRect rcFIXME= m_data.dataManager->extent().translated(m_data.x, m_data.y);
-    QRect srcRect = alignedRect(rcFIXME, lod);
+    QRect srcRect = KisLodTransform::alignedRect(rcFIXME, lod);
     KisHLineConstIteratorSP srcIt = currentStrategy()->createHLineConstIteratorNG(m_data.dataManager.data(), srcRect.x(), srcRect.y(), srcRect.width());
 
-    QRect dstRect = scaledRect(srcRect, lod);
+    QRect dstRect = KisLodTransform::scaledRect(srcRect, lod);
     KisHLineIteratorSP dstIt = currentStrategy()->createHLineIteratorNG(m_lodData->dataManager.data(), dstRect.x(), dstRect.y(), dstRect.width());
 
     const int pixelSize = m_data.dataManager->pixelSize();
@@ -1305,13 +1238,12 @@ KisPaintDevice::MemoryReleaseObject* KisPaintDevice::createMemoryReleaseObject()
     return new MemoryReleaseObject();
 }
 
-QRegion KisPaintDevice::syncLodCache()
+QRegion KisPaintDevice::syncLodCache(int levelOfDetail)
 {
     QRegion dirtyRegion;
-    int lod = m_d->defaultBounds->currentLevelOfDetail();
 
-    if (lod) {
-        dirtyRegion = m_d->syncLodData(lod);
+    if (levelOfDetail) {
+        dirtyRegion = m_d->syncLodData(levelOfDetail);
     }
 
     return dirtyRegion;

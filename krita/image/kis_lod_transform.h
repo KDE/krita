@@ -76,6 +76,89 @@ public:
         return m_transform.map(object);
     }
 
+    static inline QRect alignedRect(const QRect &srcRect, int lod)
+    {
+        qint32 alignment = 1 << lod;
+
+        qint32 x1, y1, x2, y2;
+        srcRect.getCoords(&x1, &y1, &x2, &y2);
+
+        alignByPow2Lo(x1, alignment);
+        alignByPow2Lo(y1, alignment);
+
+        /**
+         * Here is a workaround of Qt's QRect::right()/bottom()
+         * "historical reasons". It should be one pixel smaller
+         * than actual right/bottom position
+         */
+        alignByPow2ButOneHi(x2, alignment);
+        alignByPow2ButOneHi(y2, alignment);
+
+        QRect rect;
+        rect.setCoords(x1, y1, x2, y2);
+
+        return rect;
+    }
+
+    static inline QRect scaledRect(const QRect &srcRect, int lod) {
+        qint32 x1, y1, x2, y2;
+        srcRect.getCoords(&x1, &y1, &x2, &y2);
+
+        KIS_ASSERT_RECOVER_NOOP(!(x1 & 1));
+        KIS_ASSERT_RECOVER_NOOP(!(y1 & 1));
+        KIS_ASSERT_RECOVER_NOOP(!((x2 + 1) & 1));
+        KIS_ASSERT_RECOVER_NOOP(!((y2 + 1) & 1));
+
+        x1 = divideSafe(x1, lod);
+        y1 = divideSafe(y1, lod);
+        x2 = divideSafe(x2 + 1, lod) - 1;
+        y2 = divideSafe(y2 + 1, lod) - 1;
+
+        QRect rect;
+        rect.setCoords(x1, y1, x2, y2);
+
+        return rect;
+    }
+
+    static QRect upscaledRect(const QRect &srcRect, int lod) {
+        qint32 x1, y1, x2, y2;
+        srcRect.getCoords(&x1, &y1, &x2, &y2);
+
+        x1 <<= lod;
+        y1 <<= lod;
+        x2 <<= lod;
+        y2 <<= lod;
+
+        QRect rect;
+        rect.setCoords(x1, y1, x2, y2);
+
+        return rect;
+    }
+private:
+    /**
+     * Aligns @value to the lowest integer not smaller than @value and
+     * that is, increased by one, a divident of alignment
+     */
+    static inline void alignByPow2ButOneHi(qint32 &value, qint32 alignment)
+    {
+        qint32 mask = alignment - 1;
+        value = value > 0 ? value | mask : -( -value | mask);
+    }
+
+    /**
+     * Aligns @value to the highest integer not exceeding @value and
+     * that is a divident of @alignment
+     */
+    static inline void alignByPow2Lo(qint32 &value, qint32 alignment)
+    {
+        qint32 mask = alignment - 1;
+        value = value > 0 ? value & ~mask : -( -value & ~mask);
+    }
+
+    static inline int divideSafe(int x, int lod) {
+        return x > 0 ? x >> lod : -( -x >> lod);
+    }
+
 private:
     QTransform m_transform;
 };

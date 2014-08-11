@@ -42,7 +42,7 @@ protected:
         Q_UNUSED(activeNode);
 
         if (m_useLod) {
-            image->requestLevelOfDetail(1);
+            image->setDesiredLevelOfDetail(1);
         }
     }
 

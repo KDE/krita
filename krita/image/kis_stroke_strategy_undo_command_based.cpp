@@ -42,6 +42,20 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 
+KisStrokeStrategyUndoCommandBased::
+KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs,
+                                  int levelOfDetail)
+  : KisSimpleStrokeStrategy(rhs),
+    m_supportsLevelOfDetail(rhs.m_supportsLevelOfDetail),
+    m_initCommand(rhs.m_initCommand),
+    m_finishCommand(rhs.m_finishCommand),
+    m_undoAdapter(rhs.m_undoAdapter)
+{
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_macroCommand &&
+                            !rhs.m_undo &&
+                            "After the stroke has been started, no copying must happen");
+}
+
 void KisStrokeStrategyUndoCommandBased::executeCommand(KUndo2CommandSP command, bool undo)
 {
     if(!command) return;

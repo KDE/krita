@@ -71,6 +71,9 @@ private slots:
     void applyRulersUnit(const KoUnit &baseUnit);
 
 private:
+    void nofityLevelOfDetailChange(qreal zoom);
+
+private:
 
     KisView2 * m_view;
     KoZoomHandler * m_zoomHandler;

@@ -49,7 +49,7 @@ public:
 
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
-    bool supportsLevelOfDetail() const;
+    int worksOnLevelOfDetail() const;
 
     bool prevJobSequential() const;
     bool nextJobSequential() const;

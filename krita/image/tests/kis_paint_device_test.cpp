@@ -1345,7 +1345,7 @@ void KisPaintDeviceTest::testLodDevice()
                                   "lod", "initial"));
 
     bounds->testingSetLevelOfDetail(1);
-    dev->syncLodCache();
+    dev->syncLodCache(1);
 
     qDebug() << ppVar(dev->exactBounds());
     result = dev->convertToQImage(0,0,0,100,100);
@@ -1359,7 +1359,7 @@ void KisPaintDeviceTest::testLodDevice()
     /*QVERIFY*/(TestUtil::checkQImage(result, "paint_device_test",
                                   "lod", "lod1"));
 
-    dev->syncLodCache();
+    dev->syncLodCache(2);
 
     qDebug() << ppVar(dev->exactBounds());
     result = dev->convertToQImage(0,0,0,100,100);
@@ -1372,7 +1372,7 @@ void KisPaintDeviceTest::testLodDevice()
     dev->setY(14);
 
     bounds->testingSetLevelOfDetail(1);
-    dev->syncLodCache();
+    dev->syncLodCache(1);
 
     qDebug() << ppVar(dev->exactBounds()) << ppVar(dev->x()) << ppVar(dev->y());
     result = dev->convertToQImage(0,0,0,100,100);

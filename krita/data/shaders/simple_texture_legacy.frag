@@ -5,6 +5,18 @@ uniform sampler2D texture0;
 
 varying mediump vec4 v_textureCoordinate;
 
+#ifdef USE_OCIO
+uniform sampler3D texture1;
+#endif /* USE_OCIO */
+
+
 void main() {
-    gl_FragColor = texture2D(texture0, v_textureCoordinate.st);
+    vec4 col = texture2D(texture0, v_textureCoordinate.st);
+
+
+#ifdef USE_OCIO
+    glFragColor = OCIODisplay(col, texture1);
+#else /* USE_OCIO */
+    gl_FragColor = col;
+#endif /* USE_OCIO */
 }

@@ -166,7 +166,7 @@ public:
     KisStrokeStrategy* createLodClone(int levelOfDetail);
 
 protected:
-    FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs);
+    FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail);
 
 private:
     void init(bool needsIndirectPainting, const QString &indirectPaintingCompositeOp);

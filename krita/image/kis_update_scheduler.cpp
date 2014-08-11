@@ -214,9 +214,9 @@ bool KisUpdateScheduler::wrapAroundModeSupported() const
     return m_d->strokesQueue->wrapAroundModeSupported();
 }
 
-bool KisUpdateScheduler::levelOfDetailSupported() const
+bool KisUpdateScheduler::currentLevelOfDetail() const
 {
-    return m_d->strokesQueue->levelOfDetailSupported();
+    return m_d->strokesQueue->currentLevelOfDetail();
 }
 
 void KisUpdateScheduler::updateSettings()

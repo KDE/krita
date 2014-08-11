@@ -24,9 +24,15 @@
 
 class KRITAIMAGE_EXPORT KisSyncLodCacheProcessingVisitor : public KisSimpleProcessingVisitor
 {
+public:
+    KisSyncLodCacheProcessingVisitor(int levelOfDetail);
+
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+
+private:
+    int m_levelOfDetail;
 };
 
 #endif /* __KIS_SYNC_LOD_CACHE_PROCESSING_VISITOR_H */

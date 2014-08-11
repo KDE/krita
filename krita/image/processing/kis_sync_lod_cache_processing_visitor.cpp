@@ -22,12 +22,17 @@
 #include "kis_node.h"
 
 
+KisSyncLodCacheProcessingVisitor::KisSyncLodCacheProcessingVisitor(int levelOfDetail)
+    : m_levelOfDetail(levelOfDetail)
+{
+}
+
 void KisSyncLodCacheProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     Q_UNUSED(undoAdapter);
 
     KisPaintDeviceSP device = node->paintDevice();
-    QRegion dirtyRegion = device->syncLodCache();
+    QRegion dirtyRegion = device->syncLodCache(1);
 
     node->setDirty(dirtyRegion);
 }

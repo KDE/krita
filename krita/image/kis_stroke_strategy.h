@@ -46,7 +46,7 @@ public:
 
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
-    bool supportsLevelOfDetail() const;
+    int worksOnLevelOfDetail() const;
     bool needsIndirectPainting() const;
     QString indirectPaintingCompositeOp() const;
 
@@ -74,7 +74,7 @@ protected:
 
     void setExclusive(bool value);
     void setSupportsWrapAroundMode(bool value);
-    void setSupportsLevelOfDetail(bool value);
+    void setWorksOnLevelOfDetail(int value);
     void setNeedsIndirectPainting(bool value);
     void setIndirectPaintingCompositeOp(const QString &id);
 
@@ -87,7 +87,7 @@ protected:
 private:
     bool m_exclusive;
     bool m_supportsWrapAroundMode;
-    bool m_supportsLevelOfDetail;
+    int m_worksOnLevelOfDetail;
     bool m_needsIndirectPainting;
     QString m_indirectPaintingCompositeOp;
 

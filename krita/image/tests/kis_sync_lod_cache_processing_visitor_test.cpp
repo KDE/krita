@@ -43,13 +43,13 @@ public:
 
         QVERIFY(checkLayersInitial(image));
 
-        image->requestLevelOfDetail(1);
+        image->setDesiredLevelOfDetail(1);
         image->testingSetLevelOfDetailsEnabled(true);
 
         KisProcessingApplicator applicator(image, image->root(),
-                                           KisProcessingApplicator::RECURSIVE |
+                                           KisProcessingApplicator::RECURSIVE/* |
                                            KisProcessingApplicator::SUPPORTS_LOD |
-                                           KisProcessingApplicator::DISABLE_AUTOMATIC_UPDATES);
+                                           KisProcessingApplicator::DISABLE_AUTOMATIC_UPDATES*/);
 
         applicator.applyVisitor(visitor);
         applicator.end();
@@ -66,7 +66,7 @@ public:
 void KisSyncLodCacheProcessingVisitorTest::test()
 {
     KisProcessingVisitorSP visitor =
-        new KisSyncLodCacheProcessingVisitor();
+        new KisSyncLodCacheProcessingVisitor(1);
 
     LodProcessingTest tester;
     tester.test("lod1", visitor);

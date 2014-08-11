@@ -23,7 +23,7 @@
 KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
     : m_exclusive(false),
       m_supportsWrapAroundMode(false),
-      m_supportsLevelOfDetail(false),
+      m_worksOnLevelOfDetail(0),
       m_needsIndirectPainting(false),
       m_indirectPaintingCompositeOp(COMPOSITE_ALPHA_DARKEN),
       m_id(id),
@@ -34,7 +34,7 @@ KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
 KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
     : m_exclusive(rhs.m_exclusive),
       m_supportsWrapAroundMode(rhs.m_supportsWrapAroundMode),
-      m_supportsLevelOfDetail(rhs.m_supportsLevelOfDetail),
+      m_worksOnLevelOfDetail(rhs.m_worksOnLevelOfDetail),
       m_needsIndirectPainting(rhs.m_needsIndirectPainting),
       m_indirectPaintingCompositeOp(rhs.m_indirectPaintingCompositeOp),
       m_id(rhs.m_id),
@@ -99,9 +99,9 @@ bool KisStrokeStrategy::supportsWrapAroundMode() const
     return m_supportsWrapAroundMode;
 }
 
-bool KisStrokeStrategy::supportsLevelOfDetail() const
+int KisStrokeStrategy::worksOnLevelOfDetail() const
 {
-    return m_supportsLevelOfDetail;
+    return m_worksOnLevelOfDetail;
 }
 
 bool KisStrokeStrategy::needsIndirectPainting() const
@@ -134,9 +134,9 @@ void KisStrokeStrategy::setSupportsWrapAroundMode(bool value)
     m_supportsWrapAroundMode = value;
 }
 
-void KisStrokeStrategy::setSupportsLevelOfDetail(bool value)
+void KisStrokeStrategy::setWorksOnLevelOfDetail(int value)
 {
-    m_supportsLevelOfDetail = value;
+    m_worksOnLevelOfDetail = value;
 }
 
 void KisStrokeStrategy::setNeedsIndirectPainting(bool value)

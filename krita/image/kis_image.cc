@@ -78,6 +78,7 @@
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
+#include "kis_lod_transform.h"
 
 
 // #define SANITY_CHECKS
@@ -112,7 +113,7 @@ public:
     QList<KisLayerComposition*> compositions;
     KisNodeSP isolatedRootNode;
     bool wrapAroundModePermitted;
-    int currentLevelOfDetail;
+    int desiredLevelOfDetail;
     bool testingLevelOfDetailsEnabled;
 
     KisNameServer *nserver;
@@ -154,7 +155,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     m_d->perspectiveGrid = 0;
     m_d->scheduler = 0;
     m_d->wrapAroundModePermitted = false;
-    m_d->currentLevelOfDetail = 0;
+    m_d->desiredLevelOfDetail = 0;
     m_d->testingLevelOfDetailsEnabled = false;
 
     m_d->signalRouter = new KisImageSignalRouter(this);
@@ -186,7 +187,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
         m_d->scheduler = new KisUpdateScheduler(this);
         m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
     }
-
+    testingSetLevelOfDetailsEnabled(true);
 }
 
 KisImage::~KisImage()
@@ -1396,7 +1397,7 @@ void KisImage::waitForDone()
         m_d->scheduler->waitForDone();
     }
 }
-
+#include <kis_stroke_strategy.h>
 KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
 {
     /**
@@ -1411,6 +1412,9 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     KisStrokeId id;
 
     if (m_d->scheduler) {
+        QScopedPointer<KisStrokeStrategy> p(strokeStrategy);
+        int lod = currentLevelOfDetail();
+        strokeStrategy = lod ? p->createLodClone(lod) : p.take();
         id = m_d->scheduler->startStroke(strokeStrategy);
     }
 
@@ -1454,6 +1458,9 @@ KisNodeSP KisImage::isolatedModeRoot() const
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
     if (m_d->scheduler) {
+        QScopedPointer<KisStrokeJobData> p(data);
+        int lod = currentLevelOfDetail();
+        data = lod ? p->createLodClone(lod) : p.take();
         m_d->scheduler->addJob(id, data);
     }
 }
@@ -1574,7 +1581,12 @@ void KisImage::enableUIUpdates()
 void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
     if (!m_d->disableUIUpdateSignals) {
-        emit sigImageUpdated(rc);
+        int lod = currentLevelOfDetail();
+        QRect dirtyRect = !lod ? rc : KisLodTransform::upscaledRect(rc, lod);
+
+        if (dirtyRect.isEmpty()) return;
+
+        emit sigImageUpdated(dirtyRect);
     }
 }
 
@@ -1702,19 +1714,18 @@ bool KisImage::wrapAroundModeActive() const
         m_d->scheduler->wrapAroundModeSupported();
 }
 
-void KisImage::requestLevelOfDetail(int lod)
+void KisImage::setDesiredLevelOfDetail(int lod)
 {
-    m_d->currentLevelOfDetail = lod;
+    m_d->desiredLevelOfDetail = lod;
 }
 
 int KisImage::currentLevelOfDetail() const
 {
     if (m_d->testingLevelOfDetailsEnabled) {
-        return m_d->currentLevelOfDetail;
+        return m_d->desiredLevelOfDetail;
     }
 
-    return m_d->scheduler &&
-        m_d->scheduler->levelOfDetailSupported() ? m_d->currentLevelOfDetail : 0;
+    return m_d->scheduler ? m_d->scheduler->currentLevelOfDetail() : 0;
 }
 
 void KisImage::testingSetLevelOfDetailsEnabled(bool value)

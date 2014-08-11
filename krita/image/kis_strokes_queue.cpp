@@ -29,13 +29,13 @@ struct KisStrokesQueue::Private {
         : openedStrokesCounter(0),
           needsExclusiveAccess(false),
           wrapAroundModeSupported(false),
-          levelOfDetailSupported(false) {}
+          currentLevelOfDetail(0) {}
 
     QQueue<KisStrokeSP> strokesQueue;
     int openedStrokesCounter;
     bool needsExclusiveAccess;
     bool wrapAroundModeSupported;
-    bool levelOfDetailSupported;
+    bool currentLevelOfDetail;
     QMutex mutex;
 };
 
@@ -148,9 +148,9 @@ bool KisStrokesQueue::wrapAroundModeSupported() const
     return m_d->wrapAroundModeSupported;
 }
 
-bool KisStrokesQueue::levelOfDetailSupported() const
+int KisStrokesQueue::currentLevelOfDetail() const
 {
-    return m_d->levelOfDetailSupported;
+    return m_d->currentLevelOfDetail;
 }
 
 bool KisStrokesQueue::isEmpty() const
@@ -224,7 +224,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
     if(!stroke->isInitialized() && stroke->hasJobs()) {
         m_d->needsExclusiveAccess = stroke->isExclusive();
         m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
-        m_d->levelOfDetailSupported = stroke->supportsLevelOfDetail();
+        m_d->currentLevelOfDetail = stroke->worksOnLevelOfDetail();
         result = true;
     }
     else if(stroke->hasJobs()){
@@ -234,7 +234,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;
         m_d->wrapAroundModeSupported = false;
-        m_d->levelOfDetailSupported = false;
+        m_d->currentLevelOfDetail = 0;
 
         if(!m_d->strokesQueue.isEmpty()) {
             result = checkStrokeState(false);

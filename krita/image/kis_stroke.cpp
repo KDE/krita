@@ -167,9 +167,9 @@ bool KisStroke::supportsWrapAroundMode() const
     return m_strokeStrategy->supportsWrapAroundMode();
 }
 
-bool KisStroke::supportsLevelOfDetail() const
+int KisStroke::worksOnLevelOfDetail() const
 {
-    return m_strokeStrategy->supportsLevelOfDetail();
+    return m_strokeStrategy->worksOnLevelOfDetail();
 }
 
 bool KisStroke::prevJobSequential() const

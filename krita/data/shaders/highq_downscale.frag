@@ -3,8 +3,6 @@
  */
 uniform sampler2D texture0;
 
-uniform float plexFlex;
-
 #ifdef USE_OCIO
 uniform sampler3D texture1;
 #endif
@@ -114,7 +112,7 @@ void main() {
 #ifdef USE_OCIO
     fragColor = OCIODisplay(col, texture1);
 #else /* USE_OCIO */
-    fragColor = col + plexFlex;
+    fragColor = col;
 #endif /* USE_OCIO */
 
 }

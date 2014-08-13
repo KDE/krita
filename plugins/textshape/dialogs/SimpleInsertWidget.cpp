@@ -43,7 +43,7 @@ SimpleInsertWidget::SimpleInsertWidget(TextTool *tool, QWidget *parent)
     connect(widget.insertSpecialChar, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.insertPageBreak, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.insertSection, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.configureSection, SIGNAL(clicked(bool)), this, SLOT(doneWithFocus()));
+    connect(widget.configureSection, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
     connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(insertTableQuick(int, int)));
     connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(doneWithFocus()));

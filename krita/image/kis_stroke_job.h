@@ -26,9 +26,11 @@ class KisStrokeJob : public KisRunnable
 {
 public:
     KisStrokeJob(KisStrokeJobStrategy *strategy,
-                 KisStrokeJobData *data)
+                 KisStrokeJobData *data,
+                 int levelOfDetail)
         : m_dabStrategy(strategy),
-          m_dabData(data)
+          m_dabData(data),
+          m_levelOfDetail(levelOfDetail)
     {
     }
 
@@ -55,6 +57,10 @@ public:
         return m_dabData ? m_dabData->isExclusive() : false;
     }
 
+    int levelOfDetail() const {
+        return m_levelOfDetail;
+    }
+
 private:
     // for testing use only, do not use in real code
     friend QString getJobName(KisStrokeJob *job);
@@ -75,6 +81,8 @@ private:
 
     // Owned by the job
     KisStrokeJobData *m_dabData;
+
+    int m_levelOfDetail;
 };
 
 #endif /* __KIS_STROKE_JOB_H */

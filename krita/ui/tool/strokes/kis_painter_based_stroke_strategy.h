@@ -38,7 +38,9 @@ public:
      */
     class KRITAUI_EXPORT PainterInfo {
     public:
-        PainterInfo(KisPainter *painter, KisDistanceInformation *dragDistance);
+        PainterInfo();
+        PainterInfo(const QPointF &lastPosition, int lastTime);
+        PainterInfo(const PainterInfo &rhs);
         ~PainterInfo();
 
         KisPainter *painter;
@@ -61,8 +63,9 @@ public:
     void cancelStrokeCallback();
 
 protected:
-    KisPaintDeviceSP targetDevice();
-    KisSelectionSP activeSelection();
+    KisPaintDeviceSP targetDevice() const;
+    KisSelectionSP activeSelection() const;
+    const QVector<PainterInfo*> painterInfos() const;
 
 protected:
     KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs);

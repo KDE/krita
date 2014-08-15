@@ -31,7 +31,7 @@ class KUndo2MagicString;
 class KRITAIMAGE_EXPORT KisStroke
 {
 public:
-    KisStroke(KisStrokeStrategy *strokeStrategy);
+    KisStroke(KisStrokeStrategy *strokeStrategy, int levelOfDetail = 0);
     ~KisStroke();
 
     void addJob(KisStrokeJobData *data);
@@ -55,6 +55,9 @@ public:
     bool nextJobSequential() const;
 
     bool nextJobBarrier() const;
+
+    void setLodBuddy(KisStrokeSP buddy);
+    KisStrokeSP lodBuddy() const;
 
 private:
     void enqueue(KisStrokeJobStrategy *strategy,
@@ -83,6 +86,9 @@ private:
     bool m_strokeEnded;
     bool m_isCancelled; // cancelled strokes are always 'ended' as well
     bool m_prevJobSequential;
+
+    int m_worksOnLevelOfDetail;
+    KisStrokeSP m_lodBuddy;
 };
 
 #endif /* __KIS_STROKE_H */

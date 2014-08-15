@@ -70,6 +70,11 @@ void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
     }
 }
 
+int KisUpdaterContext::currentLevelOfDetail() const
+{
+    return m_lodCounter.readLod();
+}
+
 bool KisUpdaterContext::hasSpareThread()
 {
     bool found = false;
@@ -85,6 +90,9 @@ bool KisUpdaterContext::hasSpareThread()
 
 bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
 {
+    int lod = this->currentLevelOfDetail();
+    if (lod >= 0 && walker->levelOfDetail() != lod) return false;
+
     bool intersects = false;
 
     foreach(const KisUpdateJobItem *item, m_jobs) {
@@ -107,6 +115,7 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
  */
 void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 {
+    m_lodCounter.addLod(walker->levelOfDetail());
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
@@ -119,6 +128,7 @@ void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
  */
 void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 {
+    m_lodCounter.addLod(walker->levelOfDetail());
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
@@ -128,6 +138,7 @@ void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 
 void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
 {
+    m_lodCounter.addLod(strokeJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
@@ -140,6 +151,7 @@ void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
  */
 void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
 {
+    m_lodCounter.addLod(strokeJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
@@ -149,6 +161,7 @@ void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
 
 void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
+    m_lodCounter.addLod(spontaneousJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
@@ -161,6 +174,7 @@ void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
  */
 void KisTestableUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
+    m_lodCounter.addLod(spontaneousJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
@@ -191,6 +205,8 @@ qint32 KisUpdaterContext::findSpareThread()
 
 void KisUpdaterContext::slotJobFinished()
 {
+    m_lodCounter.removeLod();
+
     // Be careful. This slot can be called asynchronously without locks.
     emit sigSpareThreadAppeared();
 }
@@ -224,5 +240,7 @@ void KisTestableUpdaterContext::clear()
     foreach(KisUpdateJobItem *item, m_jobs) {
         item->testingSetDone();
     }
+
+    m_lodCounter.testingClear();
 }
 

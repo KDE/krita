@@ -54,6 +54,7 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     QRect dirtyRect2(0,0,100,100);
     QRect dirtyRect3(50,0,50,100);
     QRect dirtyRect4(150,150,50,50);
+    QRect dirtyRect5(dirtyRect4); // theoretically, should be merged with 4
 
     QVector<KisUpdateJobItem*> jobs;
     KisWalkersList walkersList;
@@ -70,6 +71,11 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     queue.addUpdateJob(paintLayer, dirtyRect3, imageRect);
     queue.addUpdateJob(paintLayer, dirtyRect4, imageRect);
 
+    {
+        TestingLodSetter setter(image, 1);
+        queue.addUpdateJob(paintLayer, dirtyRect5, imageRect);
+    }
+
     queue.processQueue(context);
 
     jobs = context.getJobs();
@@ -78,9 +84,13 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     QVERIFY(checkWalker(jobs[1]->walker(), dirtyRect4));
     QCOMPARE(jobs.size(), 2);
 
+    QCOMPARE(context.currentLevelOfDetail(), 0);
+
+
     walkersList = queue.getWalkersList();
 
-    QCOMPARE(walkersList.size(), 0);
+    QCOMPARE(walkersList.size(), 1);
+    QVERIFY(checkWalker(walkersList[0], dirtyRect5, 1));
 }
 
 void KisSimpleUpdateQueueTest::testSplitUpdate()
@@ -160,20 +170,35 @@ void KisSimpleUpdateQueueTest::testChecksum()
     KisTestableSimpleUpdateQueue queue;
     KisWalkersList& walkersList = queue.getWalkersList();
 
-    queue.addUpdateJob(adjustmentLayer, dirtyRect, imageRect);
-    QCOMPARE(walkersList[0]->checksumValid(), true);
+    {
+        TestingLodSetter setter(image, 1);
+        queue.addUpdateJob(adjustmentLayer, dirtyRect, imageRect);
+        QCOMPARE(walkersList[0]->checksumValid(), true);
+        QCOMPARE(walkersList[0]->levelOfDetail(), 1);
+    }
 
     adjustmentLayer->setFilter(configuration);
-    QCOMPARE(walkersList[0]->checksumValid(), false);
+
+    {
+        TestingLodSetter setter(image, 1);
+        QCOMPARE(walkersList[0]->checksumValid(), false);
+    }
+
 
     QVector<KisUpdateJobItem*> jobs;
     KisTestableUpdaterContext context(2);
 
-    queue.processQueue(context);
+    {
+        TestingLodSetter setter(image, 1);
+        queue.processQueue(context);
+    }
+
     jobs = context.getJobs();
 
-    QCOMPARE(jobs[0]->walker()->checksumValid(), true);
-
+    {
+        TestingLodSetter setter(image, 1);
+        QCOMPARE(jobs[0]->walker()->checksumValid(), true);
+    }
 }
 
 void KisSimpleUpdateQueueTest::testMixingTypes()

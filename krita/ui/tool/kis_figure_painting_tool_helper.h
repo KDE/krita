@@ -52,7 +52,6 @@ public:
 private:
     KisStrokeId m_strokeId;
     KisResourcesSnapshotSP m_resources;
-    PainterInfo *m_painterInfo;
     KisStrokesFacade *m_strokesFacade;
 };
 

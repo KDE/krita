@@ -33,7 +33,7 @@ public:
     KisStrokesQueue();
     ~KisStrokesQueue();
 
-    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy, int desiredLevelOfDetail = 0);
     void addJob(KisStrokeId id, KisStrokeJobData *data);
 
     void endStroke(KisStrokeId id);
@@ -41,7 +41,8 @@ public:
 
     bool tryCancelCurrentStrokeAsync();
 
-    void processQueue(KisUpdaterContext &updaterContext, bool externalJobsPending);
+    void processQueue(KisUpdaterContext &updaterContext,
+                      bool externalJobsPending);
     bool needsExclusiveAccess() const;
     bool isEmpty() const;
 
@@ -50,15 +51,17 @@ public:
     bool hasOpenedStrokes() const;
 
     bool wrapAroundModeSupported() const;
-    int currentLevelOfDetail() const;
 
 private:
-    bool processOneJob(KisUpdaterContext &updaterContext, bool externalJobsPending);
-    bool checkStrokeState(bool hasStrokeJobsRunning);
+    bool processOneJob(KisUpdaterContext &updaterContext,
+                       bool externalJobsPending);
+    bool checkStrokeState(bool hasStrokeJobsRunning,
+                          int runningLevelOfDetail);
     bool checkExclusiveProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
     bool checkSequentialProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
     bool checkBarrierProperty(qint32 numMergeJobs, qint32 numStrokeJobs,
                               bool externalJobsPending);
+    bool checkLevelOfDetailProperty(int runningLevelOfDetail);
 private:
     struct Private;
     Private * const m_d;

@@ -56,12 +56,10 @@ namespace utils {
 
         virtual KisStrokeStrategy* createStroke(bool indirectPainting,
                                                 KisResourcesSnapshotSP resources,
-                                                KisPainter *painter,
                                                 KisImageWSP image) = 0;
 
         virtual void addPaintingJobs(KisImageWSP image,
-                                     KisResourcesSnapshotSP resources,
-                                     KisPainter *painter) = 0;
+                                     KisResourcesSnapshotSP resources) = 0;
 
     private:
         void testOneStroke(bool cancelled, bool indirectPainting,

@@ -42,14 +42,12 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
     m_resources->setStrokeStyle(strokeStyle);
     m_resources->setFillStyle(fillStyle);
 
-    m_painterInfo =
-        new PainterInfo(new KisPainter(),
-                        new KisDistanceInformation());
+    PainterInfo *painterInfo = new PainterInfo();
 
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(m_resources->needsIndirectPainting(),
                                    m_resources->indirectPaintingCompositeOp(),
-                                   m_resources, m_painterInfo, name);
+                                   m_resources, painterInfo, name);
 
     m_strokeId = m_strokesFacade->startStroke(stroke);
 }
@@ -64,7 +62,7 @@ void KisFigurePaintingToolHelper::paintLine(const KisPaintInformation &pi0,
 {
     m_strokesFacade->addJob(m_strokeId,
         new FreehandStrokeStrategy::Data(m_resources->currentNode(),
-                                         m_painterInfo,
+                                         0,
                                          pi0, pi1));
 }
 
@@ -72,7 +70,7 @@ void KisFigurePaintingToolHelper::paintPolyline(const vQPointF &points)
 {
     m_strokesFacade->addJob(m_strokeId,
         new FreehandStrokeStrategy::Data(m_resources->currentNode(),
-                                         m_painterInfo,
+                                         0,
                                          FreehandStrokeStrategy::Data::POLYLINE,
                                          points));
 }
@@ -81,7 +79,7 @@ void KisFigurePaintingToolHelper::paintPolygon(const vQPointF &points)
 {
     m_strokesFacade->addJob(m_strokeId,
         new FreehandStrokeStrategy::Data(m_resources->currentNode(),
-                                         m_painterInfo,
+                                         0,
                                          FreehandStrokeStrategy::Data::POLYGON,
                                          points));
 }
@@ -90,7 +88,7 @@ void KisFigurePaintingToolHelper::paintRect(const QRectF &rect)
 {
     m_strokesFacade->addJob(m_strokeId,
         new FreehandStrokeStrategy::Data(m_resources->currentNode(),
-                                         m_painterInfo,
+                                         0,
                                          FreehandStrokeStrategy::Data::RECT,
                                          rect));
 }
@@ -99,7 +97,7 @@ void KisFigurePaintingToolHelper::paintEllipse(const QRectF &rect)
 {
     m_strokesFacade->addJob(m_strokeId,
         new FreehandStrokeStrategy::Data(m_resources->currentNode(),
-                                         m_painterInfo,
+                                         0,
                                          FreehandStrokeStrategy::Data::ELLIPSE,
                                          rect));
 }
@@ -108,7 +106,7 @@ void KisFigurePaintingToolHelper::paintPainterPath(const QPainterPath &path)
 {
     m_strokesFacade->addJob(m_strokeId,
         new FreehandStrokeStrategy::Data(m_resources->currentNode(),
-                                         m_painterInfo,
+                                         0,
                                          FreehandStrokeStrategy::Data::PAINTER_PATH,
                                          path));
 }

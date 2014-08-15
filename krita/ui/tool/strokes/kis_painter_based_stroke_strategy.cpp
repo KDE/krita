@@ -29,21 +29,22 @@
 #include "kis_distance_information.h"
 
 
-KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(KisPainter *_painter, KisDistanceInformation *_dragDistance)
-    : painter(_painter), dragDistance(_dragDistance)
+KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo()
+    : painter(new KisPainter()),
+      dragDistance(new KisDistanceInformation())
 {
 }
 
-KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs)
-    : KisSimpleStrokeStrategy(rhs),
-      m_resources(rhs.m_resources),
-      m_painterInfos(rhs.m_painterInfos)
+KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(const QPointF &lastPosition, int lastTime)
+    : painter(new KisPainter()),
+      dragDistance(new KisDistanceInformation(lastPosition, lastTime))
 {
-    KIS_ASSERT_RECOVER_NOOP(
-        !rhs.m_transaction &&
-        !rhs.m_targetDevice &&
-        !rhs.m_activeSelection &&
-        "After the stroke has been started, no copying must happen");
+}
+
+KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(const PainterInfo &rhs)
+    : painter(new KisPainter()),
+      dragDistance(new KisDistanceInformation(*rhs.dragDistance))
+{
 }
 
 KisPainterBasedStrokeStrategy::PainterInfo::~PainterInfo()
@@ -83,14 +84,35 @@ void KisPainterBasedStrokeStrategy::init()
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
-KisPaintDeviceSP KisPainterBasedStrokeStrategy::targetDevice()
+KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs)
+    : KisSimpleStrokeStrategy(rhs),
+      m_resources(rhs.m_resources)
+{
+    foreach(PainterInfo *info, rhs.m_painterInfos) {
+        m_painterInfos.append(new PainterInfo(*info));
+    }
+
+    KIS_ASSERT_RECOVER_NOOP(
+        !rhs.m_transaction &&
+        !rhs.m_targetDevice &&
+        !rhs.m_activeSelection &&
+        "After the stroke has been started, no copying must happen");
+}
+
+KisPaintDeviceSP KisPainterBasedStrokeStrategy::targetDevice() const
 {
     return m_targetDevice;
 }
 
-KisSelectionSP KisPainterBasedStrokeStrategy::activeSelection()
+KisSelectionSP KisPainterBasedStrokeStrategy::activeSelection() const
 {
     return m_activeSelection;
+}
+
+const QVector<KisPainterBasedStrokeStrategy::PainterInfo*>
+KisPainterBasedStrokeStrategy::painterInfos() const
+{
+    return m_painterInfos;
 }
 
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,

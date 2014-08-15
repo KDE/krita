@@ -46,47 +46,47 @@ public:
             PAINTER_PATH
         };
 
-        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+        Data(KisNodeSP _node, int _painterInfoId,
              const KisPaintInformation &_pi)
-            : node(_node), painterInfo(_painterInfo),
+            : node(_node), painterInfoId(_painterInfoId),
               type(POINT), pi1(_pi)
         {}
 
-        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+        Data(KisNodeSP _node, int _painterInfoId,
              const KisPaintInformation &_pi1,
              const KisPaintInformation &_pi2)
-            : node(_node), painterInfo(_painterInfo),
+            : node(_node), painterInfoId(_painterInfoId),
               type(LINE), pi1(_pi1), pi2(_pi2)
         {}
 
-        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+        Data(KisNodeSP _node, int _painterInfoId,
              const KisPaintInformation &_pi1,
              const QPointF &_control1,
              const QPointF &_control2,
              const KisPaintInformation &_pi2)
-            : node(_node), painterInfo(_painterInfo),
+            : node(_node), painterInfoId(_painterInfoId),
               type(CURVE), pi1(_pi1), pi2(_pi2),
               control1(_control1), control2(_control2)
         {}
 
-        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+        Data(KisNodeSP _node, int _painterInfoId,
              DabType _type,
              const vQPointF &_points)
-            : node(_node), painterInfo(_painterInfo),
+            : node(_node), painterInfoId(_painterInfoId),
             type(_type), points(_points)
         {}
 
-        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+        Data(KisNodeSP _node, int _painterInfoId,
              DabType _type,
              const QRectF &_rect)
-            : node(_node), painterInfo(_painterInfo),
+            : node(_node), painterInfoId(_painterInfoId),
             type(_type), rect(_rect)
         {}
 
-        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+        Data(KisNodeSP _node, int _painterInfoId,
              DabType _type,
              const QPainterPath &_path)
-            : node(_node), painterInfo(_painterInfo),
+            : node(_node), painterInfoId(_painterInfoId),
             type(_type), path(_path)
         {}
 
@@ -98,7 +98,7 @@ public:
         Data(const Data &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs),
               node(rhs.node),
-              painterInfo(rhs.painterInfo),
+              painterInfoId(rhs.painterInfoId),
               type(rhs.type)
         {
             KisLodTransform t(levelOfDetail);
@@ -135,7 +135,7 @@ public:
         }
     public:
         KisNodeSP node;
-        PainterInfo *painterInfo;
+        int painterInfoId;
 
         DabType type;
         KisPaintInformation pi1;
@@ -161,15 +161,22 @@ public:
                            QVector<PainterInfo*> painterInfos,
                            const KUndo2MagicString &name);
 
+    ~FreehandStrokeStrategy();
+
     void doStrokeCallback(KisStrokeJobData *data);
+    void finishStrokeCallback();
 
     KisStrokeStrategy* createLodClone(int levelOfDetail);
 
 protected:
-    FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail);
+    FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs);
 
 private:
     void init(bool needsIndirectPainting, const QString &indirectPaintingCompositeOp);
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif /* __FREEHAND_STROKE_H */

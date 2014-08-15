@@ -23,7 +23,15 @@
 #include "kis_paintop_settings.h"
 #include "kis_painter.h"
 
+struct FreehandStrokeStrategy::Private
+{
+    Private()
+        : deferUpdatesTillTheEnd(false)
+    {
+    }
 
+    bool deferUpdatesTillTheEnd;
+};
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const QString &indirectPaintingCompositeOp,
@@ -31,7 +39,8 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                PainterInfo *painterInfo,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfo)
+                                    resources, painterInfo),
+      m_d(new Private())
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
@@ -42,15 +51,20 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                QVector<PainterInfo*> painterInfos,
                                                const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfos)
+                                    resources, painterInfos),
+      m_d(new Private())
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
 
-FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs, int levelOfDetail)
-    : KisPainterBasedStrokeStrategy(rhs)
+FreehandStrokeStrategy::FreehandStrokeStrategy(const FreehandStrokeStrategy &rhs)
+    : KisPainterBasedStrokeStrategy(rhs),
+      m_d(new Private())
 {
-    setWorksOnLevelOfDetail(levelOfDetail);
+}
+
+FreehandStrokeStrategy::~FreehandStrokeStrategy()
+{
 }
 
 void FreehandStrokeStrategy::init(bool needsIndirectPainting,
@@ -65,7 +79,7 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
-    PainterInfo *info = d->painterInfo;
+    PainterInfo *info = painterInfos()[d->painterInfoId];
 
     switch(d->type) {
     case Data::POINT:
@@ -97,11 +111,28 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         info->painter->paintPainterPath(d->path);
     };
 
-    d->node->setDirty(info->painter->takeDirtyRegion());
+    if (!m_d->deferUpdatesTillTheEnd) {
+        d->node->setDirty(info->painter->takeDirtyRegion());
+    }
+}
+
+void FreehandStrokeStrategy::finishStrokeCallback()
+{
+    if (m_d->deferUpdatesTillTheEnd) {
+        foreach(PainterInfo *info, painterInfos()) {
+            info->painter->device()->setDirty(info->painter->takeDirtyRegion());
+        }
+    }
+
+    KisPainterBasedStrokeStrategy::finishStrokeCallback();
 }
 
 KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
 {
-    KisStrokeStrategy *clone = new FreehandStrokeStrategy(*this, levelOfDetail);
+    Q_UNUSED(levelOfDetail);
+
+    m_d->deferUpdatesTillTheEnd = true;
+
+    KisStrokeStrategy *clone = new FreehandStrokeStrategy(*this);
     return clone;
 }

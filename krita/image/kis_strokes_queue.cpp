@@ -28,14 +28,12 @@ struct KisStrokesQueue::Private {
     Private()
         : openedStrokesCounter(0),
           needsExclusiveAccess(false),
-          wrapAroundModeSupported(false),
-          currentLevelOfDetail(0) {}
+          wrapAroundModeSupported(false) {}
 
     QQueue<KisStrokeSP> strokesQueue;
     int openedStrokesCounter;
     bool needsExclusiveAccess;
     bool wrapAroundModeSupported;
-    bool currentLevelOfDetail;
     QMutex mutex;
 };
 
@@ -54,11 +52,23 @@ KisStrokesQueue::~KisStrokesQueue()
     delete m_d;
 }
 
-KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
+KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy, int desiredLevelOfDetail)
 {
     QMutexLocker locker(&m_d->mutex);
 
+    KisStrokeStrategy* lodBuddyStrategy =
+        desiredLevelOfDetail ?
+        strokeStrategy->createLodClone(desiredLevelOfDetail) : 0;
+
     KisStrokeSP stroke(new KisStroke(strokeStrategy));
+
+    if (lodBuddyStrategy) {
+        KisStrokeSP buddy(new KisStroke(lodBuddyStrategy, desiredLevelOfDetail));
+        lodBuddyStrategy->setCancelStrokeId(buddy);
+        stroke->setLodBuddy(buddy);
+        m_d->strokesQueue.enqueue(buddy);
+    }
+
     KisStrokeId id(stroke);
     strokeStrategy->setCancelStrokeId(id);
     m_d->strokesQueue.enqueue(stroke);
@@ -73,6 +83,15 @@ void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)
     KisStrokeSP stroke = id.toStrongRef();
     Q_ASSERT(stroke);
     stroke->addJob(data);
+
+    KisStrokeSP buddy = stroke->lodBuddy();
+    if (buddy) {
+        KisStrokeJobData *clonedData =
+            data->createLodClone(buddy->worksOnLevelOfDetail());
+        KIS_ASSERT_RECOVER_RETURN(clonedData);
+
+        buddy->addJob(clonedData);
+    }
 }
 
 void KisStrokesQueue::endStroke(KisStrokeId id)
@@ -83,6 +102,11 @@ void KisStrokesQueue::endStroke(KisStrokeId id)
     Q_ASSERT(stroke);
     stroke->endStroke();
     m_d->openedStrokesCounter--;
+
+    KisStrokeSP buddy = stroke->lodBuddy();
+    if (buddy) {
+        buddy->endStroke();
+    }
 }
 
 bool KisStrokesQueue::cancelStroke(KisStrokeId id)
@@ -93,6 +117,11 @@ bool KisStrokesQueue::cancelStroke(KisStrokeId id)
     if(stroke) {
         stroke->cancelStroke();
         m_d->openedStrokesCounter--;
+
+        KisStrokeSP buddy = stroke->lodBuddy();
+        if (buddy) {
+            buddy->cancelStroke();
+        }
     }
     return stroke;
 }
@@ -114,6 +143,11 @@ bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
         if (currentStroke->isEnded()) {
             currentStroke->cancelStroke();
             anythingCanceled = true;
+
+            KisStrokeSP buddy = currentStroke->lodBuddy();
+            if (buddy) {
+                buddy->endStroke();
+            }
         }
     }
 
@@ -132,7 +166,8 @@ void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext,
     m_d->mutex.lock();
 
     while(updaterContext.hasSpareThread() &&
-          processOneJob(updaterContext, externalJobsPending));
+          processOneJob(updaterContext,
+                        externalJobsPending));
 
     m_d->mutex.unlock();
     updaterContext.unlock();
@@ -146,11 +181,6 @@ bool KisStrokesQueue::needsExclusiveAccess() const
 bool KisStrokesQueue::wrapAroundModeSupported() const
 {
     return m_d->wrapAroundModeSupported;
-}
-
-int KisStrokesQueue::currentLevelOfDetail() const
-{
-    return m_d->currentLevelOfDetail;
 }
 
 bool KisStrokesQueue::isEmpty() const
@@ -192,7 +222,9 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
     qint32 numStrokeJobs;
     updaterContext.getJobsSnapshot(numMergeJobs, numStrokeJobs);
 
-    if(checkStrokeState(numStrokeJobs) &&
+    int levelOfDetail = updaterContext.currentLevelOfDetail();
+
+    if(checkStrokeState(numStrokeJobs, levelOfDetail) &&
        checkExclusiveProperty(numMergeJobs, numStrokeJobs) &&
        checkSequentialProperty(numMergeJobs, numStrokeJobs) &&
        checkBarrierProperty(numMergeJobs, numStrokeJobs,
@@ -206,10 +238,18 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
     return result;
 }
 
-bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
+bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
+                                       int runningLevelOfDetail)
 {
     KisStrokeSP stroke = m_d->strokesQueue.head();
     bool result = false;
+
+    /**
+     * We cannot start/continue a stroke if its LOD differs from
+     * the one that is running on CPU
+     */
+    bool hasLodCompatibility = checkLevelOfDetailProperty(runningLevelOfDetail);
+    bool hasJobs = stroke->hasJobs();
 
     /**
      * The stroke may be cancelled very fast. In this case it will
@@ -220,24 +260,22 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
      * This means that !isInitialised() doesn't imply there are any
      * jobs present.
      */
-
-    if(!stroke->isInitialized() && stroke->hasJobs()) {
+    if(!stroke->isInitialized() && hasJobs && hasLodCompatibility) {
         m_d->needsExclusiveAccess = stroke->isExclusive();
         m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
-        m_d->currentLevelOfDetail = stroke->worksOnLevelOfDetail();
+
         result = true;
     }
-    else if(stroke->hasJobs()){
+    else if(hasJobs && hasLodCompatibility) {
         result = true;
     }
-    else if(stroke->isEnded() && !hasStrokeJobsRunning) {
+    else if(stroke->isEnded() && !hasJobs && !hasStrokeJobsRunning) {
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;
         m_d->wrapAroundModeSupported = false;
-        m_d->currentLevelOfDetail = 0;
 
         if(!m_d->strokesQueue.isEmpty()) {
-            result = checkStrokeState(false);
+            result = checkStrokeState(false, runningLevelOfDetail);
         }
     }
 
@@ -274,4 +312,12 @@ bool KisStrokesQueue::checkBarrierProperty(qint32 numMergeJobs,
     if(!stroke->nextJobBarrier()) return true;
 
     return !numMergeJobs && !numStrokeJobs && !externalJobsPending;
+}
+
+bool KisStrokesQueue::checkLevelOfDetailProperty(int runningLevelOfDetail)
+{
+    KisStrokeSP stroke = m_d->strokesQueue.head();
+
+    return runningLevelOfDetail < 0 ||
+        stroke->worksOnLevelOfDetail() == runningLevelOfDetail;
 }

@@ -56,25 +56,19 @@ protected:
 
     KisStrokeStrategy* createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
-                                    KisPainter *painter,
                                     KisImageWSP image) {
         Q_UNUSED(image);
 
-        m_painterInfo =
-            new FreehandStrokeStrategy::PainterInfo(painter,
-                                                    new KisDistanceInformation());
+        FreehandStrokeStrategy::PainterInfo *painterInfo =
+            new FreehandStrokeStrategy::PainterInfo();
 
         QScopedPointer<FreehandStrokeStrategy> stroke(
-            new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, kundo2_noi18n("Freehand Stroke")));
+            new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, painterInfo, kundo2_noi18n("Freehand Stroke")));
 
         return m_useLod ? stroke->createLodClone(1) : stroke.take();
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {
-
-        Q_ASSERT(painter == m_painterInfo->painter);
-        Q_UNUSED(painter);
-
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources) {
         KisPaintInformation pi1;
         KisPaintInformation pi2;
 
@@ -83,13 +77,12 @@ protected:
 
         QScopedPointer<KisStrokeJobData> data(
             new FreehandStrokeStrategy::Data(resources->currentNode(),
-                                             m_painterInfo, pi1, pi2));
+                                             0, pi1, pi2));
 
         image->addJob(strokeId(), m_useLod ? data->createLodClone(1) : data.take());
     }
 
 private:
-    FreehandStrokeStrategy::PainterInfo *m_painterInfo;
     bool m_useLod;
 };
 

@@ -21,12 +21,13 @@
 #include "kis_stroke_strategy.h"
 
 
-KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
+KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy, int levelOfDetail)
     : m_strokeStrategy(strokeStrategy),
       m_strokeInitialized(false),
       m_strokeEnded(false),
       m_isCancelled(false),
-      m_prevJobSequential(false)
+      m_prevJobSequential(false),
+      m_worksOnLevelOfDetail(levelOfDetail)
 {
     m_initStrategy = m_strokeStrategy->createInitStrategy();
     m_dabStrategy = m_strokeStrategy->createDabStrategy();
@@ -128,7 +129,8 @@ void KisStroke::cancelStroke()
         if(m_cancelStrategy) {
             m_jobsQueue.enqueue(
                 new KisStrokeJob(m_cancelStrategy,
-                                 m_strokeStrategy->createCancelData()));
+                                 m_strokeStrategy->createCancelData(),
+                                 worksOnLevelOfDetail()));
         }
     }
     // else {
@@ -169,7 +171,7 @@ bool KisStroke::supportsWrapAroundMode() const
 
 int KisStroke::worksOnLevelOfDetail() const
 {
-    return m_strokeStrategy->worksOnLevelOfDetail();
+    return m_worksOnLevelOfDetail;
 }
 
 bool KisStroke::prevJobSequential() const
@@ -198,10 +200,20 @@ void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
         return;
     }
 
-    m_jobsQueue.enqueue(new KisStrokeJob(strategy, data));
+    m_jobsQueue.enqueue(new KisStrokeJob(strategy, data, worksOnLevelOfDetail()));
 }
 
 KisStrokeJob* KisStroke::dequeue()
 {
     return !m_jobsQueue.isEmpty() ? m_jobsQueue.dequeue() : 0;
+}
+
+void KisStroke::setLodBuddy(KisStrokeSP buddy)
+{
+    m_lodBuddy = buddy;
+}
+
+KisStrokeSP KisStroke::lodBuddy() const
+{
+    return m_lodBuddy;
 }

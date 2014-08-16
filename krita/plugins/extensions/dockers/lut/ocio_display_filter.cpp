@@ -89,6 +89,16 @@ bool OcioDisplayFilter::useInternalColorManagement() const
     return forceInternalColorManagement;
 }
 
+bool OcioDisplayFilter::lockCurrentColorVisualRepresentation() const
+{
+    return m_lockCurrentColorVisualRepresentation;
+}
+
+void OcioDisplayFilter::setLockCurrentColorVisualRepresentation(bool value)
+{
+    m_lockCurrentColorVisualRepresentation = value;
+}
+
 #ifdef HAVE_OPENGL
 
 QString OcioDisplayFilter::program() const

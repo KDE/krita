@@ -92,6 +92,9 @@ private slots:
     void selectLut();
     void clearLut();
 
+    void slotUpdateIcons();
+    void slotLockCurrentColorVisualRepresentation(bool value);
+
 private:
     void enableControls();
     void refillControls();

@@ -1029,6 +1029,16 @@ void KisConfig::setOcioLutEdgeSize(int value)
     m_cfg.writeEntry("Krita/Ocio/LutEdgeSize", value);
 }
 
+bool KisConfig::ocioLockColorVisualRepresentation() const
+{
+    return m_cfg.readEntry("Krita/Ocio/OcioLockColorVisualRepresentation", false);
+}
+
+void KisConfig::setOcioLockColorVisualRepresentation(bool value)
+{
+    m_cfg.writeEntry("Krita/Ocio/OcioLockColorVisualRepresentation", value);
+}
+
 QString KisConfig::defaultPalette() const
 {
     return m_cfg.readEntry("defaultPalette", QString());

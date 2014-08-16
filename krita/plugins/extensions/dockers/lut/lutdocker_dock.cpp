@@ -34,6 +34,7 @@
 #include <klocale.h>
 #include <kcombobox.h>
 
+#include <KoMainWindow.h>
 #include <KoFileDialog.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -41,6 +42,7 @@
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
+#include "kis_icon.h"
 #include <kis_view2.h>
 #include <kis_doc2.h>
 #include <kis_config.h>
@@ -148,6 +150,8 @@ LutDockerDock::LutDockerDock()
     connect(m_gammaDoubleWidget, SIGNAL(sliderPressed()), SLOT(gammaSliderPressed()));
     connect(m_gammaDoubleWidget, SIGNAL(sliderReleased()), SLOT(gammaSliderReleased()));
 
+    connect(m_btnConvertCurrentColor, SIGNAL(toggled(bool)), SLOT(slotLockCurrentColorVisualRepresentation(bool)));
+    slotUpdateIcons();
 
     connect(m_cmbInputColorSpace, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbDisplayDevice, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
@@ -173,10 +177,24 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         m_canvas = canvas;
         if (m_canvas) {
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
+            connect(m_canvas->view()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()));
             canvas->setDisplayFilter(m_displayFilter);
         }
     }
     resetOcioConfiguration();
+}
+
+void LutDockerDock::slotUpdateIcons()
+{
+    m_btnConvertCurrentColor->setIcon(kisIcon("krita_tool_freehand"));
+}
+
+void LutDockerDock::slotLockCurrentColorVisualRepresentation(bool value)
+{
+    KIS_ASSERT_RECOVER_RETURN(m_displayFilter);
+
+    m_displayFilter->setLockCurrentColorVisualRepresentation(value);
+    writeControls();
 }
 
 bool LutDockerDock::canChangeExposureAndGamma() const
@@ -342,6 +360,7 @@ void LutDockerDock::writeControls()
 
     cfg.setUseOcio(m_chkUseOcio->isChecked());
     cfg.setOcioColorManagementMode((KisConfig::OcioColorManagementMode) m_colorManagement->currentIndex());
+    cfg.setOcioLockColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
 }
 
 void LutDockerDock::slotColorManagementModeChanged()
@@ -453,6 +472,12 @@ void LutDockerDock::refillControls()
         for (int i = 0; i < numDisplays; ++i) {
             m_cmbDisplayDevice->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getDisplay(i)));
         }
+    }
+
+    { // Lock Current Color
+        KisSignalsBlocker locker(m_btnConvertCurrentColor);
+        KisConfig cfg;
+        m_btnConvertCurrentColor->setChecked(cfg.ocioLockColorVisualRepresentation());
     }
 
     refillViewCombobox();

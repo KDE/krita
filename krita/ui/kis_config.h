@@ -315,6 +315,9 @@ public:
     int ocioLutEdgeSize() const;
     void setOcioLutEdgeSize(int value);
 
+    bool ocioLockColorVisualRepresentation() const;
+    void setOcioLockColorVisualRepresentation(bool value);
+
     bool useSystemMonitorProfile() const;
     void setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const;
 

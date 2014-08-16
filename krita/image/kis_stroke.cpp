@@ -217,3 +217,11 @@ KisStrokeSP KisStroke::lodBuddy() const
 {
     return m_lodBuddy;
 }
+
+KisStroke::Type KisStroke::type() const
+{
+    return
+        m_lodBuddy ? LOD0 :
+        m_worksOnLevelOfDetail > 0 ? LODN :
+        LEGACY;
+}

@@ -16,29 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_sync_lod_cache_processing_visitor.h"
+#ifndef __KIS_STROKE_STRATEGY_FACTORY_H
+#define __KIS_STROKE_STRATEGY_FACTORY_H
 
-#include "kis_paint_device.h"
-#include "kis_node.h"
+#include <boost/function.hpp>
+typedef boost::function< KisStrokeStrategy*() > KisStrokeStrategyFactory;
 
-
-KisSyncLodCacheProcessingVisitor::KisSyncLodCacheProcessingVisitor(int levelOfDetail)
-    : m_levelOfDetail(levelOfDetail)
-{
-}
-
-void KisSyncLodCacheProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
-{
-    Q_UNUSED(undoAdapter);
-
-    KisPaintDeviceSP device = node->paintDevice();
-    QRegion dirtyRegion = device->syncLodCache(1);
-
-    node->setDirty(dirtyRegion);
-}
-
-void KisSyncLodCacheProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    Q_UNUSED(layer);
-    Q_UNUSED(undoAdapter);
-}
+#endif /* __KIS_STROKE_STRATEGY_FACTORY_H */

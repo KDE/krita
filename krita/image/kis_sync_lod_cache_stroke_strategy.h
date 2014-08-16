@@ -16,23 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_SYNC_LOD_CACHE_PROCESSING_VISITOR_H
-#define __KIS_SYNC_LOD_CACHE_PROCESSING_VISITOR_H
+#ifndef __KIS_SYNC_LOD_CACHE_STROKE_STRATEGY_H
+#define __KIS_SYNC_LOD_CACHE_STROKE_STRATEGY_H
 
-#include "kis_simple_processing_visitor.h"
+#include <kis_simple_stroke_strategy.h>
 
+#include <QScopedPointer>
 
-class KRITAIMAGE_EXPORT KisSyncLodCacheProcessingVisitor : public KisSimpleProcessingVisitor
+class KisSyncLodCacheStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
-    KisSyncLodCacheProcessingVisitor(int levelOfDetail);
+    KisSyncLodCacheStrokeStrategy(KisImageWSP image);
+    ~KisSyncLodCacheStrokeStrategy();
 
 private:
-    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
-    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+    void initStrokeCallback();
 
 private:
-    int m_levelOfDetail;
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_SYNC_LOD_CACHE_PROCESSING_VISITOR_H */
+#endif /* __KIS_SYNC_LOD_CACHE_STROKE_STRATEGY_H */

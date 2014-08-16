@@ -59,6 +59,14 @@ public:
     void setLodBuddy(KisStrokeSP buddy);
     KisStrokeSP lodBuddy() const;
 
+    enum Type {
+        LEGACY,
+        LOD0,
+        LODN
+    };
+
+    Type type() const;
+
 private:
     void enqueue(KisStrokeJobStrategy *strategy,
                  KisStrokeJobData *data);

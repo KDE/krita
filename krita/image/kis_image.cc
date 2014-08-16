@@ -80,6 +80,10 @@
 #include "kis_wrapped_rect.h"
 #include "kis_lod_transform.h"
 
+#include "kis_sync_lod_cache_stroke_strategy.h"
+#include <boost/functional/factory.hpp>
+#include <boost/bind.hpp>
+
 
 // #define SANITY_CHECKS
 
@@ -186,6 +190,8 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     if (m_d->startProjection) {
         m_d->scheduler = new KisUpdateScheduler(this);
         m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
+        m_d->scheduler->setLod0ToNStrokeStrategyFactory(
+            boost::bind(boost::factory<KisSyncLodCacheStrokeStrategy*>(), KisImageWSP(this)));
     }
 }
 

@@ -372,7 +372,8 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     KisStrokesQueue queue;
 
     // create a stroke with LOD0 + LOD2
-    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("lod_", false, true), 2);
+    queue.setDesiredLevelOfDetail(2);
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("lod_", false, true));
     queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id2);
 

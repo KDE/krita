@@ -100,7 +100,6 @@ set(kritaimage_LIB_SRCS
    processing/kis_crop_selections_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
    processing/kis_mirror_processing_visitor.cpp
-   processing/kis_sync_lod_cache_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
    filter/kis_filter_registry.cc
@@ -149,6 +148,7 @@ set(kritaimage_LIB_SRCS
    kis_update_scheduler.cpp
    kis_queues_progress_updater.cpp
    kis_composite_progress_proxy.cpp
+   kis_sync_lod_cache_stroke_strategy.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc

@@ -23,6 +23,7 @@
 #include "kis_types.h"
 #include "kis_stroke_job_strategy.h"
 #include "kis_stroke_strategy.h"
+#include "kis_stroke_strategy_factory.h"
 
 class KisUpdaterContext;
 class KisStroke;
@@ -33,7 +34,7 @@ public:
     KisStrokesQueue();
     ~KisStrokesQueue();
 
-    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy, int desiredLevelOfDetail = 0);
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
     void addJob(KisStrokeId id, KisStrokeJobData *data);
 
     void endStroke(KisStrokeId id);
@@ -51,6 +52,9 @@ public:
     bool hasOpenedStrokes() const;
 
     bool wrapAroundModeSupported() const;
+
+    void setDesiredLevelOfDetail(int lod);
+    void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
 
 private:
     bool processOneJob(KisUpdaterContext &updaterContext,

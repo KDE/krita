@@ -325,10 +325,14 @@ QRegion KisPaintDevice::Private::syncWholeDevice()
 
     // FIXME:
     QRect rcFIXME= m_data.dataManager->extent().translated(m_data.x, m_data.y);
-    QRect srcRect = KisLodTransform::alignedRect(rcFIXME, lod);
-    KisHLineConstIteratorSP srcIt = currentStrategy()->createHLineConstIteratorNG(m_data.dataManager.data(), srcRect.x(), srcRect.y(), srcRect.width());
+    if (!rcFIXME.isValid()) return QRegion();
 
+    QRect srcRect = KisLodTransform::alignedRect(rcFIXME, lod);
     QRect dstRect = KisLodTransform::scaledRect(srcRect, lod);
+    if (!srcRect.isValid() || !dstRect.isValid()) return QRegion();
+
+
+    KisHLineConstIteratorSP srcIt = currentStrategy()->createHLineConstIteratorNG(m_data.dataManager.data(), srcRect.x(), srcRect.y(), srcRect.width());
     KisHLineIteratorSP dstIt = currentStrategy()->createHLineIteratorNG(m_lodData->dataManager.data(), dstRect.x(), dstRect.y(), dstRect.width());
 
     const int pixelSize = m_data.dataManager->pixelSize();

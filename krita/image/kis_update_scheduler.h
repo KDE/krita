@@ -24,6 +24,7 @@
 #include "kis_types.h"
 
 #include "kis_image_interfaces.h"
+#include "kis_stroke_strategy_factory.h"
 
 class QRect;
 class KoProgressProxy;
@@ -138,6 +139,13 @@ public:
      * currentLevelOfDetail()
      */
     void setDesiredLevelOfDetail(int lod);
+
+    /**
+     * Install a factory of a stroke strategy, that will be strted
+     * every time when the scheduler needs to synchronize LOD caches
+     * of all the paint devices of the image.
+     */
+    void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
 
     /**
      * tryCancelCurrentStrokeAsync() checks whether there is a

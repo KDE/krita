@@ -50,8 +50,7 @@ struct KisUpdateScheduler::Private {
                 updaterContext(0), processingBlocked(false),
                 balancingRatio(1.0),
                 projectionUpdateListener(0),
-                progressUpdater(0),
-                desiredLevelOfDetail(0) {}
+                progressUpdater(0) {}
 
     KisSimpleUpdateQueue *updatesQueue;
     KisStrokesQueue *strokesQueue;
@@ -64,7 +63,6 @@ struct KisUpdateScheduler::Private {
     QAtomicInt updatesLockCounter;
     QReadWriteLock updatesStartLock;
     KisLazyWaitCondition updatesFinishedCondition;
-    int desiredLevelOfDetail;
 };
 
 KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener)
@@ -182,7 +180,7 @@ void KisUpdateScheduler::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 
 KisStrokeId KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
 {
-    KisStrokeId id  = m_d->strokesQueue->startStroke(strokeStrategy, m_d->desiredLevelOfDetail);
+    KisStrokeId id  = m_d->strokesQueue->startStroke(strokeStrategy);
     processQueues();
     return id;
 }
@@ -218,7 +216,7 @@ bool KisUpdateScheduler::wrapAroundModeSupported() const
 
 void KisUpdateScheduler::setDesiredLevelOfDetail(int lod)
 {
-    m_d->desiredLevelOfDetail = lod;
+    m_d->strokesQueue->setDesiredLevelOfDetail(lod);
 }
 
 int KisUpdateScheduler::currentLevelOfDetail() const
@@ -238,6 +236,11 @@ int KisUpdateScheduler::currentLevelOfDetail() const
     }
 
     return levelOfDetail;
+}
+
+void KisUpdateScheduler::setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->strokesQueue->setLod0ToNStrokeStrategyFactory(factory);
 }
 
 void KisUpdateScheduler::updateSettings()

@@ -93,7 +93,6 @@ private slots:
     void clearLut();
 
     void slotUpdateIcons();
-    void slotLockCurrentColorVisualRepresentation(bool value);
 
 private:
     void enableControls();

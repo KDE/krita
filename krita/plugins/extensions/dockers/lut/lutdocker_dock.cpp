@@ -150,7 +150,7 @@ LutDockerDock::LutDockerDock()
     connect(m_gammaDoubleWidget, SIGNAL(sliderPressed()), SLOT(gammaSliderPressed()));
     connect(m_gammaDoubleWidget, SIGNAL(sliderReleased()), SLOT(gammaSliderReleased()));
 
-    connect(m_btnConvertCurrentColor, SIGNAL(toggled(bool)), SLOT(slotLockCurrentColorVisualRepresentation(bool)));
+    connect(m_btnConvertCurrentColor, SIGNAL(toggled(bool)), SLOT(updateDisplaySettings()));
     slotUpdateIcons();
 
     connect(m_cmbInputColorSpace, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
@@ -187,14 +187,6 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 void LutDockerDock::slotUpdateIcons()
 {
     m_btnConvertCurrentColor->setIcon(kisIcon("krita_tool_freehand"));
-}
-
-void LutDockerDock::slotLockCurrentColorVisualRepresentation(bool value)
-{
-    KIS_ASSERT_RECOVER_RETURN(m_displayFilter);
-
-    m_displayFilter->setLockCurrentColorVisualRepresentation(value);
-    writeControls();
 }
 
 bool LutDockerDock::canChangeExposureAndGamma() const
@@ -344,6 +336,8 @@ void LutDockerDock::updateDisplaySettings()
 
         m_displayFilter->forceInternalColorManagement =
             m_colorManagement->currentIndex() == (int)KisConfig::INTERNAL;
+
+        m_displayFilter->setLockCurrentColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
 
         m_displayFilter->updateProcessor();
         m_canvas->setDisplayFilter(m_displayFilter);

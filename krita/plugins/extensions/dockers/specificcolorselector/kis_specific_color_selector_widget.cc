@@ -18,7 +18,6 @@
 #include "kis_specific_color_selector_widget.h"
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QTimer>
 #include <QCheckBox>
 
 #include <klocale.h>
@@ -34,20 +33,19 @@
 #include <KoColorProfile.h>
 #include "kis_debug.h"
 #include "kis_color_space_selector.h"
+#include "kis_signal_compressor.h"
 
 
 KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
     : QWidget(parent)
     , m_colorSpace(0)
+    , m_updateCompressor(new KisSignalCompressor(10, KisSignalCompressor::POSTPONE, this))
     , m_customColorSpaceSelected(false)
     , m_displayRenderer(displayRenderer)
 {
     m_layout = new QVBoxLayout(this);
     m_updateAllowed = true;
-    m_delayTimer = new QTimer(this);
-    m_delayTimer->setInterval(5);
-    connect(m_delayTimer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
-
+    connect(m_updateCompressor, SIGNAL(timeout()), SLOT(updateTimeout()));
 
     m_colorspaceSelector = new KisColorSpaceSelector(this);
     connect(m_colorspaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(setCustomColorSpace(const KoColorSpace*)));
@@ -142,9 +140,10 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 
 void KisSpecificColorSelectorWidget::update()
 {
-    m_delayTimer->start();
+    if (m_updateAllowed) {
+        m_updateCompressor->start();
+    }
 }
-
 void KisSpecificColorSelectorWidget::setColor(const KoColor& c)
 {
     m_updateAllowed = false;
@@ -155,9 +154,7 @@ void KisSpecificColorSelectorWidget::setColor(const KoColor& c)
 
 void KisSpecificColorSelectorWidget::updateTimeout()
 {
-    if (m_updateAllowed)
-        emit(colorChanged(m_color));
-    m_delayTimer->stop();
+    emit(colorChanged(m_color));
 }
 
 void KisSpecificColorSelectorWidget::setCustomColorSpace(const KoColorSpace *colorSpace)

@@ -78,6 +78,8 @@ public slots:
     void update();
 private:
     KDoubleNumInput* m_dblNumInput;
+    qreal m_minValue;
+    qreal m_maxValue;
 };
 
 class KisHexColorInput : public KisColorInput

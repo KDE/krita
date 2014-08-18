@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>282</width>
-    <height>279</height>
+    <height>292</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -287,6 +287,22 @@
           </property>
           <property name="checkable">
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_btmShowBWConfiguration">
+          <property name="maximumSize">
+           <size>
+            <width>32</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Configure black and white points of the view</string>
+          </property>
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </item>

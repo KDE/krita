@@ -139,11 +139,22 @@ void OcioDisplayFilter::updateProcessor()
 
     // fstop exposure control -- not sure how that translates to our exposure
     {
-        float gain = powf(2.0f, exposure);
-        const float slope4f[] = { gain, gain, gain, 1.0f };
+        float exposureGain = powf(2.0f, exposure);
+
+        const qreal minRange = 0.001;
+        if (qAbs(blackPoint - whitePoint) < minRange) {
+            whitePoint = blackPoint + minRange;
+        }
+
+        const float oldMin[] = { blackPoint, blackPoint, blackPoint, 0.0f };
+        const float oldMax[] = { whitePoint, whitePoint, whitePoint, 1.0f };
+
+        const float newMin[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+        const float newMax[] = { exposureGain, exposureGain, exposureGain, 1.0f };
+
         float m44[16];
         float offset4[4];
-        OCIO::MatrixTransform::Scale(m44, offset4, slope4f);
+        OCIO::MatrixTransform::Fit(m44, offset4, oldMin, oldMax, newMin, newMax);
         OCIO::MatrixTransformRcPtr mtx =  OCIO::MatrixTransform::Create();
         mtx->setValue(m44, offset4);
         transform->setLinearCC(mtx);

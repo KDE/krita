@@ -71,6 +71,8 @@ public:
     OCIO_CHANNEL_SWIZZLE swizzle;
     float exposure;
     float gamma;
+    float blackPoint;
+    float whitePoint;
     bool forceInternalColorManagement;
 
 private:

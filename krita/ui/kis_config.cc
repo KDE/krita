@@ -177,6 +177,56 @@ void KisConfig::defImageResolution(double res) const
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }
 
+bool KisConfig::defAutoFrameBreakEnabled() const
+{
+    return m_cfg.readEntry("autoFrameBreakEnabled", false);
+}
+
+void KisConfig::defAutoFrameBreakEnabled(bool state) const
+{
+    m_cfg.writeEntry("autoFrameBreakEnabled", state);
+}
+
+bool KisConfig::defOnionSkinningEnabled() const
+{
+    return m_cfg.readEntry("onionSkinningEnabled", false);
+}
+
+void KisConfig::defOnionSkinningEnabled(bool state) const
+{
+    m_cfg.writeEntry("onionSkinningEnabled", state);
+}
+
+int KisConfig::defFps() const
+{
+    return m_cfg.readEntry("fps", 12);
+}
+
+void KisConfig::defFps(int value) const
+{
+    m_cfg.writeEntry("fps", value);
+}
+
+int KisConfig::defLocalPlaybackRange() const
+{
+    return m_cfg.readEntry("localPlaybackRange", 15);
+}
+
+void KisConfig::defLocalPlaybackRange(int value) const
+{
+    m_cfg.writeEntry("localPlaybackRange", value);
+}
+
+bool KisConfig::defLoopingEnabled() const
+{
+    return m_cfg.readEntry("loopingEnabled", true);
+}
+
+void KisConfig::defLoopingEnabled(bool state) const
+{
+    m_cfg.writeEntry("loopingEnabled", state);
+}
+
 enumCursorStyle KisConfig::cursorStyle() const
 {
     return (enumCursorStyle) m_cfg.readEntry("cursorStyleDef", int(DEFAULT_CURSOR_STYLE));
@@ -378,15 +428,14 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 
 bool KisConfig::useOpenGL() const
 {
-    if (qApp->applicationName() == "krita" ) {
+    if (qApp->applicationName() == "krita" || qApp->applicationName() == "kritaanimation") {
         qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS"));
     }
     else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
         return true; // for sketch and gemini
-    }
-    else {
+    } else {
         return false;
     }
 }

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Krita PNG Sequence Export Filter
+X-KDE-Export=application/x-kranim-sequence
+X-KDE-ServiceTypes=Calligra/Filter
+Type=Service
+X-KDE-Import=application/x-krita
+X-KDE-Weight=1
+X-KDE-Library=kranimseq
+NoDisplay=true

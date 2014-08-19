@@ -184,7 +184,7 @@ KRLineStyleData KoReportItemText::lineStyle()
 // RTTI
 QString KoReportItemText::typeName() const
 {
-    return "report:text";
+    return "text";
 }
 
 int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,

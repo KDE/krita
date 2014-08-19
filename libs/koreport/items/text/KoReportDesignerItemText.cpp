@@ -127,7 +127,7 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
 void KoReportDesignerItemText::buildXML(QDomDocument & doc, QDomElement & parent)
 {
     //kdDebug() << "ReportEntityText::buildXML()");
-    QDomElement entity = doc.createElement("report:text");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

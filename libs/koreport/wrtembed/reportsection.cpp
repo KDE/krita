@@ -179,15 +179,16 @@ void ReportSection::initFromXML(QDomNode & section)
     for (int i = 0; i < nl.count(); ++i) {
         node = nl.item(i);
         n = node.nodeName();
-
-        //Load objects
-        //report:line is a special case as it is not a plugin
-        if (n == "report:line") {
-            (new KoReportDesignerItemLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        }
-        else {
+        if (n.startsWith("report:")) {
+            //Load objects
+            //report:line is a special case as it is not a plugin
+            QString reportItemName = n.mid(qstrlen("report:"));
+            if (reportItemName == "line") {
+                (new KoReportDesignerItemLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
+                continue;
+            }
             KoReportPluginManager* manager = KoReportPluginManager::self();
-            KoReportPluginInterface *plugin = manager->plugin(n);
+            KoReportPluginInterface *plugin = manager->plugin(reportItemName);
             if (plugin) {
                 QObject *obj = plugin->createDesignerInstance(node, m_reportDesigner, m_scene);
                 if (obj) {
@@ -195,12 +196,11 @@ void ReportSection::initFromXML(QDomNode & section)
                     if (entity) {
                         entity->setVisible(true);
                     }
+                    continue;
                 }
             }
-            else {
-                kWarning() << "Encountered unknown node while parsing section: " << n;
-            }
         }
+        kWarning() << "Encountered unknown node while parsing section: " << n;
     }
 }
 

@@ -119,7 +119,7 @@ void KoReportDesignerItemMaps::paint(QPainter* painter, const QStyleOptionGraphi
     //painter->fillRect(rect(),);
     
     painter->setPen(Qt::black);
-    painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "maps"));
+    painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "map"));
     
 
     drawHandles(painter);
@@ -131,7 +131,7 @@ void KoReportDesignerItemMaps::paint(QPainter* painter, const QStyleOptionGraphi
 void KoReportDesignerItemMaps::buildXML(QDomDocument & doc, QDomElement & parent)
 {
     myDebug() << "\e[35m====== BUILDING XML \e[0m";
-    QDomElement entity = doc.createElement("report:maps");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

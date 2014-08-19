@@ -283,7 +283,9 @@ void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorPr
 
 void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilterSP displayFilter)
 {
-    if (m_d->displayFilter && displayFilter) {
+    if (m_d->displayFilter && displayFilter &&
+        displayFilter->lockCurrentColorVisualRepresentation()) {
+
         KoColor color(m_d->intermediateFgColor);
         displayFilter->approximateInverseTransformation(color.data(), 1);
         color.convertTo(m_d->paintingColorSpace);

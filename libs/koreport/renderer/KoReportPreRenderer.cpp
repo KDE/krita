@@ -663,11 +663,11 @@ bool KoReportPreRenderer::setDom(const QDomElement &docReport)
         delete d->m_reportData;
         d->m_valid = false;
 
-	if (docReport.tagName() != "report:content") {
-		kDebug() << "report schema is invalid";
-		return false;
-	}
-	
+        if (docReport.tagName() != "report:content") {
+            kWarning() << "report schema is invalid";
+            return false;
+        }
+
         d->m_reportData = new KoReportReportData(docReport, this);
         d->m_valid = d->m_reportData->isValid();
     }

@@ -16,7 +16,8 @@ include_directories( ${KOTEXT_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
     ${CMAKE_CURRENT_SOURCE_DIR}/ora
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
-    ${EXIV2_INCLUDE_DIR} )
+    ${EXIV2_INCLUDE_DIR}
+    ${OCIO_INCLUDE_DIR})
 
 add_subdirectory( tests )
 

@@ -51,6 +51,8 @@ public:
     void approximateInverseTransformation(quint8 *pixels, quint32 numPixels);
     void approximateForwardTransformation(quint8 *pixels, quint32 numPixels);
     bool useInternalColorManagement() const;
+    bool lockCurrentColorVisualRepresentation() const;
+    void setLockCurrentColorVisualRepresentation(bool value);
 
     KisExposureGammaCorrectionInterface *correctionInterface() const;
 
@@ -69,6 +71,8 @@ public:
     OCIO_CHANNEL_SWIZZLE swizzle;
     float exposure;
     float gamma;
+    float blackPoint;
+    float whitePoint;
     bool forceInternalColorManagement;
 
 private:
@@ -78,6 +82,8 @@ private:
     OCIO::ConstProcessorRcPtr m_forwardApproximationProcessor;
 
     KisExposureGammaCorrectionInterface *m_interface;
+
+    bool m_lockCurrentColorVisualRepresentation;
 
 #ifdef HAVE_OPENGL
     QString m_program;

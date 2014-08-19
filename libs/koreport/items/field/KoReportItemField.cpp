@@ -200,7 +200,7 @@ KRLineStyleData KoReportItemField::lineStyle()
 // RTTI
 QString KoReportItemField::typeName() const
 {
-    return "report:field";
+    return "field";
 }
 
 int KoReportItemField::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,

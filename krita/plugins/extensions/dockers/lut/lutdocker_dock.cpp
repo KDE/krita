@@ -34,6 +34,7 @@
 #include <klocale.h>
 #include <kcombobox.h>
 
+#include <KoMainWindow.h>
 #include <KoFileDialog.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -41,6 +42,7 @@
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
+#include "kis_icon.h"
 #include <kis_view2.h>
 #include <kis_doc2.h>
 #include <kis_config.h>
@@ -54,6 +56,7 @@
 #include "krita_utils.h"
 
 #include "ocio_display_filter.h"
+#include "black_white_point_chooser.h"
 
 
 OCIO::ConstConfigRcPtr defaultRawProfile()
@@ -148,6 +151,14 @@ LutDockerDock::LutDockerDock()
     connect(m_gammaDoubleWidget, SIGNAL(sliderPressed()), SLOT(gammaSliderPressed()));
     connect(m_gammaDoubleWidget, SIGNAL(sliderReleased()), SLOT(gammaSliderReleased()));
 
+    m_bwPointChooser = new BlackWhitePointChooser(this);
+
+    connect(m_bwPointChooser, SIGNAL(sigBlackPointChanged(qreal)), SLOT(updateDisplaySettings()));
+    connect(m_bwPointChooser, SIGNAL(sigWhitePointChanged(qreal)), SLOT(updateDisplaySettings()));
+
+    connect(m_btnConvertCurrentColor, SIGNAL(toggled(bool)), SLOT(updateDisplaySettings()));
+    connect(m_btmShowBWConfiguration, SIGNAL(clicked()), SLOT(slotShowBWConfiguration()));
+    slotUpdateIcons();
 
     connect(m_cmbInputColorSpace, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbDisplayDevice, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
@@ -173,10 +184,22 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         m_canvas = canvas;
         if (m_canvas) {
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
+            connect(m_canvas->view()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()));
             canvas->setDisplayFilter(m_displayFilter);
         }
     }
     resetOcioConfiguration();
+}
+
+void LutDockerDock::slotUpdateIcons()
+{
+    m_btnConvertCurrentColor->setIcon(kisIcon("krita_tool_freehand"));
+    m_btmShowBWConfiguration->setIcon(kisIcon("properties"));
+}
+
+void LutDockerDock::slotShowBWConfiguration()
+{
+    m_bwPointChooser->showPopup(m_btmShowBWConfiguration->mapToGlobal(QPoint()));
 }
 
 bool LutDockerDock::canChangeExposureAndGamma() const
@@ -324,8 +347,13 @@ void LutDockerDock::updateDisplaySettings()
         m_displayFilter->exposure = m_exposureDoubleWidget->value();
         m_displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
 
+        m_displayFilter->blackPoint = m_bwPointChooser->blackPoint();
+        m_displayFilter->whitePoint = m_bwPointChooser->whitePoint();
+
         m_displayFilter->forceInternalColorManagement =
             m_colorManagement->currentIndex() == (int)KisConfig::INTERNAL;
+
+        m_displayFilter->setLockCurrentColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
 
         m_displayFilter->updateProcessor();
         m_canvas->setDisplayFilter(m_displayFilter);
@@ -342,6 +370,7 @@ void LutDockerDock::writeControls()
 
     cfg.setUseOcio(m_chkUseOcio->isChecked());
     cfg.setOcioColorManagementMode((KisConfig::OcioColorManagementMode) m_colorManagement->currentIndex());
+    cfg.setOcioLockColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
 }
 
 void LutDockerDock::slotColorManagementModeChanged()
@@ -453,6 +482,12 @@ void LutDockerDock::refillControls()
         for (int i = 0; i < numDisplays; ++i) {
             m_cmbDisplayDevice->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getDisplay(i)));
         }
+    }
+
+    { // Lock Current Color
+        KisSignalsBlocker locker(m_btnConvertCurrentColor);
+        KisConfig cfg;
+        m_btnConvertCurrentColor->setChecked(cfg.ocioLockColorVisualRepresentation());
     }
 
     refillViewCombobox();

@@ -29,7 +29,7 @@
 KoReportLabelPlugin::KoReportLabelPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent, args)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setClassName("report:label");
+    info->setClassName("label");
     info->setIcon(koIcon("label"));
     info->setName(i18n("Label"));
     info->setPriority(1);

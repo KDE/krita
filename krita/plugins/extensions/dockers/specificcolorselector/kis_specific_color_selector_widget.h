@@ -27,8 +27,8 @@ class KoColorDisplayRendererInterface;
 class QVBoxLayout;
 class KisColorInput;
 class KisColorSpaceSelector;
-class QTimer;
 class QCheckBox;
+class KisSignalCompressor;
 
 class KisSpecificColorSelectorWidget : public QWidget
 {
@@ -54,7 +54,7 @@ private:
     QVBoxLayout *m_layout;
     KoColor m_color;
     bool m_updateAllowed;
-    QTimer* m_delayTimer;
+    KisSignalCompressor *m_updateCompressor;
     KisColorSpaceSelector *m_colorspaceSelector;
     bool m_customColorSpaceSelected;
     QCheckBox *m_chkShowColorSpaceSelector;

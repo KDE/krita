@@ -29,13 +29,25 @@
 #include "kis_base_mask_generator.h"
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_cubic_curve.h"
+#include "kis_antialiasing_fade_maker.h"
 
-struct KisCurveCircleMaskGenerator::Private {
+
+
+struct KisCurveCircleMaskGenerator::Private
+{
+    Private()
+        : fadeMaker(*this)
+    {
+    }
+
     qreal xcoef, ycoef;
     qreal curveResolution;
     QVector<qreal> curveData;
     QList<QPointF> curvePoints;
     bool dirty;
+
+    KisAntialiasingFadeMaker1D<Private> fadeMaker;
+    inline quint8 value(qreal dist) const;
 };
 
 KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
@@ -48,11 +60,26 @@ KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal r
     d->curvePoints = curve.points();
     d->dirty = false;
     setCurveString(curve.toString());
+
+    d->fadeMaker.setSquareNormCoeffs(d->xcoef, d->ycoef);
 }
 
 KisCurveCircleMaskGenerator::~KisCurveCircleMaskGenerator()
 {
     delete d;
+}
+
+inline quint8 KisCurveCircleMaskGenerator::Private::value(qreal dist) const
+{
+    qreal distance = dist * curveResolution;
+
+    quint16 alphaValue = distance;
+    qreal alphaValueF = distance - alphaValue;
+
+    qreal alpha = (
+        (1.0 - alphaValueF) * curveData.at(alphaValue) +
+        alphaValueF * curveData.at(alphaValue+1));
+    return (1.0 - alpha) * 255;
 }
 
 quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
@@ -73,19 +100,13 @@ quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
     }
 
     qreal dist = norme(xr * d->xcoef, yr * d->ycoef);
-    if (dist <= 1.0){
-        qreal distance = dist * d->curveResolution;
-    
-        quint16 alphaValue = distance;
-        qreal alphaValueF = distance - alphaValue;
-        
-        
-        qreal alpha = (
-            (1.0 - alphaValueF) * d->curveData.at(alphaValue) + 
-                    alphaValueF * d->curveData.at(alphaValue+1));
-        return (1.0 - alpha) * 255;
-    }            
-    return 255;
+
+    quint8 value;
+    if (d->fadeMaker.needFade(dist, &value)) {
+        return value;
+    }
+
+    return d->value(dist);
 }
 
 void KisCurveCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const

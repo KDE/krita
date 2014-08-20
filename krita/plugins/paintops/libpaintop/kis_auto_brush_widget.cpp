@@ -83,10 +83,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputAngle->setValue(0);
     connect(inputAngle, SIGNAL(valueChanged(int)), this, SLOT(spinBoxAngleChanged(int)));
 
-    inputSpacing->setRange(0.0, 10.0, 2);
-    inputSpacing->setSingleStep(0.1);
-    inputSpacing->setValue(0.1);
-    connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxSpacingChanged(qreal)));
+    connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
     density->setRange(0, 100, 0);
     density->setSingleStep(1);
@@ -160,7 +157,8 @@ void KisAutoBrushWidget::paramChanged()
     Q_CHECK_PTR(kas);
 
     m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0);
-    m_autoBrush->setSpacing(inputSpacing->value());
+    m_autoBrush->setSpacing(spacingWidget->spacing());
+    m_autoBrush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush = m_autoBrush->image();
 
     QImage pi(m_brush);
@@ -261,19 +259,16 @@ void KisAutoBrushWidget::spinBoxAngleChanged(int a)
     paramChanged();
 }
 
-void KisAutoBrushWidget::spinBoxSpacingChanged(qreal a)
-{
-    inputSpacing->blockSignals(true);
-    inputSpacing->setValue(a);
-    inputSpacing->blockSignals(false);
-    paramChanged();
-}
-
 void KisAutoBrushWidget::spinBoxDensityChanged(qreal a)
 {
     density->blockSignals(true);
     density->setValue(a);
     density->blockSignals(false);
+    paramChanged();
+}
+
+void KisAutoBrushWidget::slotSpacingChanged()
+{
     paramChanged();
 }
 
@@ -321,8 +316,11 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 
     inputAngle->setValue(aBrush->angle() * 180 / M_PI);
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
-    inputSpacing->setValue(aBrush->spacing());
-    inputSpacing->setExponentRatio(3.0);
+
+    spacingWidget->setSpacing(aBrush->autoSpacingActive(),
+                              aBrush->autoSpacingActive() ?
+                              aBrush->autoSpacingCoeff() : aBrush->spacing());
+
     inputRandomness->setValue(aBrush->randomness() * 100);
     density->setValue(aBrush->density() * 100);
 

@@ -291,5 +291,5 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
 
-    return effectiveSpacing(dstRect.width(), dstRect.height());
+    return effectiveSpacing(scale, 0.0);
 }

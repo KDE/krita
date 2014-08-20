@@ -277,6 +277,8 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.appendChild(shapeElt);
     e.setAttribute("type", "auto_brush");
     e.setAttribute("spacing", QString::number(spacing()));
+    e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
+    e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
     e.setAttribute("angle", QString::number(KisBrush::angle()));
     e.setAttribute("randomness", QString::number(d->randomness));
     e.setAttribute("density", QString::number(d->density));

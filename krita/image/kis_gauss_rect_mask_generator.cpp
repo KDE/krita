@@ -30,6 +30,7 @@
 
 #include "kis_base_mask_generator.h"
 #include "kis_gauss_rect_mask_generator.h"
+#include "kis_antialiasing_fade_maker.h"
 
 #define M_SQRT_2 1.41421356237309504880
 
@@ -39,10 +40,20 @@
 #define erf(x) boost::math::erf(x)
 #endif
 
-struct KisGaussRectangleMaskGenerator::Private {
+struct KisGaussRectangleMaskGenerator::Private
+{
+    Private()
+        : fadeMaker(*this)
+    {
+    }
+
     qreal xfade, yfade;
     qreal halfWidth, halfHeight;
     qreal alphafactor;
+
+    KisAntialiasingFadeMaker2D <Private> fadeMaker;
+
+    inline quint8 value(qreal x, qreal y) const;
 };
 
 KisGaussRectangleMaskGenerator::KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes)
@@ -55,11 +66,19 @@ KisGaussRectangleMaskGenerator::KisGaussRectangleMaskGenerator(qreal diameter, q
     d->halfWidth = width() * 0.5 - 2.5 * xfade;
     d->halfHeight = height() * 0.5 - 2.5 * yfade;
     d->alphafactor = 255.0 / (4.0 * erf(d->halfWidth * d->xfade) * erf(d->halfHeight * d->yfade));
+
+    d->fadeMaker.setLimits(0.5 * width(), 0.5 * height());
 }
 
 KisGaussRectangleMaskGenerator::~KisGaussRectangleMaskGenerator()
 {
     delete d;
+}
+
+inline quint8 KisGaussRectangleMaskGenerator::Private::value(qreal xr, qreal yr) const
+{
+    return (quint8) 255 - (quint8) (alphafactor * (erf((halfWidth + xr) * xfade) + erf((halfWidth - xr) * xfade))
+                                    * (erf((halfHeight + yr) * yfade) + erf((halfHeight - yr) * yfade)));
 }
 
 quint8 KisGaussRectangleMaskGenerator::valueAt(qreal x, qreal y) const
@@ -78,8 +97,13 @@ quint8 KisGaussRectangleMaskGenerator::valueAt(qreal x, qreal y) const
             angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
         }
     }
-    return (quint8) 255 - (quint8) (d->alphafactor * (erf((d->halfWidth + xr) * d->xfade) + erf((d->halfWidth - xr) * d->xfade))
-                                                  * (erf((d->halfHeight + yr) * d->yfade) + erf((d->halfHeight - yr) * d->yfade)));
+
+    quint8 value;
+    if (d->fadeMaker.needFade(xr, yr, &value)) {
+        return value;
+    }
+
+    return d->value(xr, yr);
 }
 
 void KisGaussRectangleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const

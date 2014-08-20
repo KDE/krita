@@ -93,36 +93,15 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
         }
     }
 
-    double n = norme(xr * d->xcoef, yr * d->ycoef);
+    qreal n = norme(xr * d->xcoef, yr * d->ycoef);
+    if (n > 1.0) return 255;
 
-    if (n > 1) {
-        return 255;
-    } else {
-        double normeFade = norme(xr * d->transformedFadeX, yr * d->transformedFadeY);
-        if (normeFade > 1) {
-            // xle stands for x-coordinate limit exterior
-            // yle stands for y-coordinate limit exterior
-            // we are computing the coordinate on the external ellipse in order to compute
-            // the fade value
-            // xle = xr / sqrt(norme(xr * d->xcoef, yr * d->ycoef))
-            // yle = yr / sqrt(norme(xr * d->xcoef, yr * d->ycoef))
+    // we add +1.0 to ensure correct antialising on the border
+    qreal nf = norme((qAbs(xr) + 1.0) * d->transformedFadeX,
+                     (qAbs(yr) + 1.0) * d->transformedFadeY);
 
-            // On the internal limit of the fade area, normeFade is equal to 1
-
-            // normeFadeLimitE = norme(xle * transformedFadeX, yle * transformedFadeY)
-            // return (uchar)(255 *(normeFade - 1) / (normeFadeLimitE - 1));
-            return (uchar)(255 * n * (normeFade - 1) / (normeFade - n));
-            // if n == 0, the conversion of NaN to uchar will correctly result in zero
-        } else {
-            n = 1 - n;
-            if( width() < 2 || height() < 2 || n > d->xcoef * 0.5 || n > d->ycoef * 0.5)
-            {
-              return 0;
-            } else {
-              return 255 *  ( 1 - 4 * n * n  / (d->xcoef * d->ycoef) );
-            }
-        }
-    }
+    if (nf < 1.0) return 0;
+    return 255 * n * (nf - 1.0) / (nf - n);
 }
 
 void KisCircleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const

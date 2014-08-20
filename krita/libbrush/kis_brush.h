@@ -159,6 +159,12 @@ public:
      */
     double spacing() const;
 
+    void setAutoSpacing(bool active, qreal coeff);
+
+    bool autoSpacingActive() const;
+    qreal autoSpacingCoeff() const;
+
+
     /**
      * @return the width (for scale == 1.0)
      */

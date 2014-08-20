@@ -157,8 +157,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     painter()->setOpacity(origOpacity);
     painter()->setFlow(origFlow);
 
-    return effectiveSpacing(dab->bounds().width(),
-                            dab->bounds().height(),
+    return effectiveSpacing(scale, rotation,
                             m_spacingOption, info);
 }
 

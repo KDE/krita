@@ -218,6 +218,18 @@ QSize KisQImagePyramid::imageSize(const QSize &originalSize,
     return dstSize;
 }
 
+QSizeF KisQImagePyramid::characteristicSize(const QSize &originalSize,
+                                            qreal scale, qreal rotation)
+{
+    QRectF originalRect(QPointF(), originalSize);
+    QTransform transform = baseBrushTransform(scale, scale,
+                                              rotation,
+                                              0.0, 0.0,
+                                              originalRect);
+
+    return transform.mapRect(originalRect).size();
+}
+
 void KisQImagePyramid::appendPyramidLevel(const QImage &image)
 {
     /**

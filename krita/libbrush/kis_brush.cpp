@@ -107,6 +107,8 @@ struct KisBrush::Private {
         , hasColor(false)
         , brushType(INVALID)
         , brushPyramid(0)
+        , autoSpacingActive(false)
+        , autoSpacingCoeff(1.0)
     {}
 
     ~Private() {
@@ -127,6 +129,9 @@ struct KisBrush::Private {
     mutable KisQImagePyramid *brushPyramid;
 
     QImage brushTipImage;
+
+    bool autoSpacingActive;
+    qreal autoSpacingCoeff;
 };
 
 KisBrush::KisBrush()
@@ -155,6 +160,8 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->hasColor = rhs.d->hasColor;
     d->angle = rhs.d->angle;
     d->scale = rhs.d->scale;
+    d->autoSpacingActive = d->autoSpacingActive;
+    d->autoSpacingCoeff = d->autoSpacingCoeff;
     setFilename(rhs.filename());
     clearBrushPyramid();
     // don't copy the boundary, it will be regenerated -- see bug 291910
@@ -286,6 +293,8 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
     e.setAttribute("type", type);
     e.setAttribute("filename", shortFilename());
     e.setAttribute("spacing", QString::number(spacing()));
+    e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
+    e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
     e.setAttribute("angle", QString::number(angle()));
     e.setAttribute("scale", QString::number(scale()));
 }
@@ -378,6 +387,22 @@ void KisBrush::setSpacing(double s)
 double KisBrush::spacing() const
 {
     return d->spacing;
+}
+
+void KisBrush::setAutoSpacing(bool active, qreal coeff)
+{
+    d->autoSpacingCoeff = coeff;
+    d->autoSpacingActive = active;
+}
+
+bool KisBrush::autoSpacingActive() const
+{
+    return d->autoSpacingActive;
+}
+
+qreal KisBrush::autoSpacingCoeff() const
+{
+    return d->autoSpacingCoeff;
 }
 
 void KisBrush::notifyCachedDabPainted()

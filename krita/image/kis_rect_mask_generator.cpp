@@ -88,8 +88,9 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     xr /= width();
     yr /= height();
 
-    qreal fhTransformed = KisMaskGenerator::d->fh * softness();
-    qreal fvTransformed = KisMaskGenerator::d->fv * softness();
+    // add -1.0 to ensure the last pixel is antialiased
+    qreal fhTransformed = qMax(0.0, KisMaskGenerator::d->fh * softness() - 1.0 / width());
+    qreal fvTransformed = qMax(0.0, KisMaskGenerator::d->fv * softness() - 1.0 / height());
 
     if( xr > fhTransformed )
     {

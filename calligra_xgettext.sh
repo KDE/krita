@@ -53,3 +53,17 @@ function calligra_xgettext() {
 
     rm -f "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}" "${POT_MERGED}"
 }
+
+# Sets EXCLUDE variable to excludes compatible with the find(1) command, e.g. '-path a -o -path b'.
+# To unconditionally exclude dir (with subdirs) just put an empty file .i18n in it.
+# To exclude dir for all translations but one, e.g. foo.pot, put a single "foo" line into the .i18n file.
+function find_exclude() {
+    EXCLUDE=""
+    for f in `find . -name .i18n | sed 's/\/\.i18n$//g' | sort`; do
+        if ! grep -q "^${1}$" "$f/.i18n" ; then
+            if [ -n "$EXCLUDE" ] ; then EXCLUDE="$EXCLUDE -o " ; fi
+            EXCLUDE="$EXCLUDE -path $f"
+        fi
+    done
+    if [ -z "$EXCLUDE" ] ; then EXCLUDE="-path __dummy__" ; fi # needed because -prune in find needs args
+}

@@ -1,5 +1,13 @@
 [Desktop Entry]
 Name=Calligra Animation Editor
+Name[cs]=Editor animací v Calligra
+Name[en_GB]=Calligra Animation Editor
+Name[nl]=Animatiebewerker van Calligra
+Name[pt]=Editor de Animações do Calligra
+Name[sk]=Editor animácií Calligra
+Name[sv]=Calligra-animeringseditor
+Name[uk]=Редактор анімацій Calligra
+Name[x-test]=xxCalligra Animation Editorxx
 X-KDE-Library=kritaanimationpart
 MimeType=application/x-krita-animation;
 Type=Service

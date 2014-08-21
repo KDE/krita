@@ -2,5 +2,13 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/AnimationDock
 Comment=Animation Docker for Krita
+Comment[cs]=Dok animace pro Kritu
+Comment[en_GB]=Animation Docker for Krita
+Comment[nl]=Animatievastzetter voor Krita
+Comment[pt]=Acoplador de Animação para o Krita
+Comment[sk]=Docker animácií pre Krita
+Comment[sv]=Animeringsdockningsfönster för Krita
+Comment[uk]=Бічна панель анімації Krita
+Comment[x-test]=xxAnimation Docker for Kritaxx
 [PropertyDef::X-Krita-Version]
 Type=int

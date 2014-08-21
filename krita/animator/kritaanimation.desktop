@@ -1,5 +1,13 @@
 [Desktop Entry]
 Name=Krita Animation
+Name[cs]=Animace Krita
+Name[en_GB]=Krita Animation
+Name[nl]=Animatie van Krita
+Name[pt]=Krita Animação
+Name[sk]=Krita animácia
+Name[sv]=Krita-animering
+Name[uk]=Krita Animation
+Name[x-test]=xxKrita Animationxx
 Exec=kritaanimation %U
 X-DocPath=http://userbase.kde.org/Special:MyLanguage/Krita
 GenericName=Digital Painting
@@ -30,7 +38,7 @@ GenericName[pt_BR]=Pintura digital
 GenericName[ru]=Цифровая живопись
 GenericName[sk]=Digitálne maľovanie
 GenericName[sl]=Digitalno slikanje
-GenericName[sv]=Digitalt målningsverktyg
+GenericName[sv]=Digital målning
 GenericName[ug]=سىفىرلىق رەسىم سىزغۇ
 GenericName[uk]=Цифрове малювання
 GenericName[x-test]=xxDigital Paintingxx

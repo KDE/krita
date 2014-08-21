@@ -1,6 +1,22 @@
 [Desktop Entry]
 Name=Animator
+Name[cs]=Nástroj pro animace
+Name[en_GB]=Animator
+Name[nl]=Animator
+Name[pt]=Animador
+Name[sk]=Animátor
+Name[sv]=Animeringsverktyg
+Name[uk]=Animator
+Name[x-test]=xxAnimatorxx
 Comment=Animator
+Comment[cs]=Nástroj pro animace
+Comment[en_GB]=Animator
+Comment[nl]=Animator
+Comment[pt]=Animador
+Comment[sk]=Animátor
+Comment[sv]=Animeringsverktyg
+Comment[uk]=Аніматор
+Comment[x-test]=xxAnimatorxx
 X-KDE-ServiceTypes=Krita/AnimationDock
 Type=Service
 X-KDE-Library=kritaanimator

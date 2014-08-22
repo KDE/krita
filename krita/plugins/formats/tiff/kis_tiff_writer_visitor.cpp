@@ -41,7 +41,8 @@ namespace
 {
     bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_type)
     {
-        if (cs->id() == "GRAYA" || cs->id() == "GRAYA16") {
+        qDebug() << cs->id();
+        if (cs->id() == "GRAYA" || cs->id() == "GRAYAU16") {
             color_type = PHOTOMETRIC_MINISBLACK;
             return true;
         }

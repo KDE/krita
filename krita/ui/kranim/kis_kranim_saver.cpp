@@ -71,14 +71,14 @@ QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc, QDomNode root)
     return metaDataElement;
 }
 
-void KisKranimSaver::saveFrame(KisAnimationStore *store, KisLayerSP frame, QRect framePosition)
+void KisKranimSaver::saveFrame(KisAnimationStore *store, KisLayerSP frame, const QRect &framePosition)
 {
     if(frame) {
         this->saveFrame(store, frame->paintDevice(), framePosition);
     }
 }
 
-void KisKranimSaver::saveFrame(KisAnimationStore *store, KisPaintDeviceSP device, QRect framePosition)
+void KisKranimSaver::saveFrame(KisAnimationStore *store, KisPaintDeviceSP device, const QRect &framePosition)
 {
     QString location = "frame" + QString::number(framePosition.x()) + "layer" + QString::number(framePosition.y());
 

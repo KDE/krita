@@ -29,6 +29,7 @@ class QDomNode;
 class QDomDocument;
 class KoStore;
 class QString;
+class QRect;
 
 /**
  * This is a helper class to save/dump
@@ -45,9 +46,9 @@ public:
 
     QDomElement saveMetaData(QDomDocument &doc, QDomNode root);
 
-    void saveFrame(KisAnimationStore* store, KisLayerSP frame, QRect framePosition);
+    void saveFrame(KisAnimationStore* store, KisLayerSP frame, const QRect &framePosition);
 
-    void saveFrame(KisAnimationStore* store, KisPaintDeviceSP device, QRect framePosition);
+    void saveFrame(KisAnimationStore* store, KisPaintDeviceSP device, const QRect &framePosition);
 
     void deleteFrame(KisAnimationStore* store, int frame, int layer);
 

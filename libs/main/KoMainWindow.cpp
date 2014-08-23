@@ -998,13 +998,23 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
         dialog.setMimeTypeFilters(mimeFilter);
         KUrl newURL = dialog.url();
+        if (newURL.isLocalFile()) {
+            QString fn = newURL.fileName();
+            if (QFileInfo(fn).completeSuffix().isEmpty()) {
+                KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
+                fn.append(mime->mainExtension());
+            }
+            newURL = KUrl(fn);
+        }
 
         QByteArray outputFormat = _native_format;
-        if (!specialOutputFlag) {
+
+        if (!specialOutputFlag && mimeFilter.contains(dialog.selectedMimeType())) {
             KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
             QString outputFormatString = mime->name();
             outputFormat = outputFormatString.toLatin1();
         }
+
 
         if (!isExporting())
             justChangingFilterOptions = (newURL == d->rootDocument->url()) &&
@@ -1025,11 +1035,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         if (specialOutputFlag) {
             QString fileName = newURL.fileName();
             if ( specialOutputFlag== KoDocument::SaveAsDirectoryStore) {
-                qDebug() << "save to directory: " << newURL.url();
+                // Do nothing
             }
             else if (specialOutputFlag == KoDocument::SaveEncrypted) {
                 int dot = fileName.lastIndexOf('.');
-                qDebug() << dot;
                 QString ext = mime->mainExtension();
                 if (!ext.isEmpty()) {
                     if (dot < 0) fileName += ext;

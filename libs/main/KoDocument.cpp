@@ -551,8 +551,10 @@ bool KoDocument::saveFile()
 
     // The output format is set by koMainWindow, and by openFile
     QByteArray outputMimeType = d->outputMimeType;
-    if (outputMimeType.isEmpty())
+    if (outputMimeType.isEmpty()) {
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
+        kDebug(30003) << "Empty output mime type, saving to" << outputMimeType;
+    }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -797,7 +799,6 @@ bool KoDocument::isModified() const
 bool KoDocument::saveNativeFormat(const QString & file)
 {
     d->lastErrorMessage.clear();
-    //kDebug(30003) <<"Saving to store";
 
     KoStore::Backend backend = KoStore::Auto;
     if (d->specialOutputFlag == SaveAsDirectoryStore) {
@@ -2488,9 +2489,6 @@ bool KoDocument::saveAs( const KUrl & kurl )
     return result;
 }
 
-
-
-
 bool KoDocument::save()
 {
     d->m_saveOk = false;
@@ -2509,7 +2507,7 @@ bool KoDocument::save()
     d->document->setUrl(url());
 
     // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
-    // reimplement saveFile shold now subclass KoPart.
+    // reimplement saveFile should now subclass KoPart.
     bool ok = d->document->saveFile();
 
     if (progressProxy) {

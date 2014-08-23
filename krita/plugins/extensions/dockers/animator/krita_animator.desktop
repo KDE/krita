@@ -2,6 +2,7 @@
 Name=Animator
 Name[cs]=Nástroj pro animace
 Name[en_GB]=Animator
+Name[es]=Animador
 Name[nl]=Animator
 Name[pt]=Animador
 Name[sk]=Animátor
@@ -11,6 +12,7 @@ Name[x-test]=xxAnimatorxx
 Comment=Animator
 Comment[cs]=Nástroj pro animace
 Comment[en_GB]=Animator
+Comment[es]=Animador
 Comment[nl]=Animator
 Comment[pt]=Animador
 Comment[sk]=Animátor

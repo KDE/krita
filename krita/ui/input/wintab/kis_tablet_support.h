@@ -158,12 +158,11 @@ struct QTabletDeviceData
                 m_axis_data[m_x11_to_local_axis_mapping[dstIt]] = axes[srcIt];
             }
 
-            return firstAxis <= m_lastSaneAxis;
+            return true;
         }
     private:
         int m_axis_data[NAxes];
         QVector<AxesIndexes> m_x11_to_local_axis_mapping;
-        int m_lastSaneAxis;
     };
 
     SavedAxesData savedAxesData;

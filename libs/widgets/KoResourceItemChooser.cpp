@@ -191,8 +191,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 {
     if (button == Button_Import ) {
         QString extensions = d->model->extensions();
-        QString filter = QString("%1 (%2)")
-                .arg(d->model->serverType())
+        QString filter = QString("%1")
                 .arg(extensions.replace(QString(":"), QString(" ")));
 
 

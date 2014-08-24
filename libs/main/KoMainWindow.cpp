@@ -998,18 +998,19 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
         dialog.setMimeTypeFilters(mimeFilter);
         KUrl newURL = dialog.url();
+
         if (newURL.isLocalFile()) {
-            QString fn = newURL.fileName();
+            QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
                 KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
                 fn.append(mime->mainExtension());
+                newURL = KUrl::fromPath(fn);
             }
-            newURL = KUrl(fn);
         }
 
         QByteArray outputFormat = _native_format;
 
-        if (!specialOutputFlag && mimeFilter.contains(dialog.selectedMimeType())) {
+        if (!specialOutputFlag) {
             KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
             QString outputFormatString = mime->name();
             outputFormat = outputFormatString.toLatin1();

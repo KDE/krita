@@ -42,8 +42,8 @@
 
 struct KisGaussRectangleMaskGenerator::Private
 {
-    Private()
-        : fadeMaker(*this)
+    Private(bool enableAntialiasing)
+        : fadeMaker(*this, enableAntialiasing)
     {
     }
 
@@ -56,8 +56,8 @@ struct KisGaussRectangleMaskGenerator::Private
     inline quint8 value(qreal x, qreal y) const;
 };
 
-KisGaussRectangleMaskGenerator::KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, RECTANGLE, GaussId), d(new Private)
+KisGaussRectangleMaskGenerator::KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, GaussId), d(new Private(antialiasEdges))
 {
     qreal xfade = (1.0 - fh) * width() * 0.1;
     qreal yfade = (1.0 - fv) * height() * 0.1;
@@ -104,10 +104,4 @@ quint8 KisGaussRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     }
 
     return d->value(xr, yr);
-}
-
-void KisGaussRectangleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
-{
-    KisMaskGenerator::toXML(doc, e);
-    e.setAttribute("type", "rect");
 }

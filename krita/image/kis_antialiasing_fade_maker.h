@@ -24,11 +24,12 @@ template <class BaseFade>
 class KisAntialiasingFadeMaker1D
 {
 public:
-    KisAntialiasingFadeMaker1D(const BaseFade &baseFade)
+    KisAntialiasingFadeMaker1D(const BaseFade &baseFade, bool enableAntialiasing)
         : m_radius(0.0),
           m_fadeStartValue(0),
           m_antialiasingFadeStart(0),
           m_antialiasingFadeCoeff(0),
+          m_enableAntialiasing(enableAntialiasing),
           m_baseFade(baseFade)
     {
     }
@@ -59,6 +60,10 @@ public:
             return true;
         }
 
+        if (!m_enableAntialiasing) {
+            return false;
+        }
+
         if (dist > m_antialiasingFadeStart) {
             *value = m_fadeStartValue + (dist - m_antialiasingFadeStart) * m_antialiasingFadeCoeff;
             return true;
@@ -72,6 +77,7 @@ private:
     quint8 m_fadeStartValue;
     qreal m_antialiasingFadeStart;
     qreal m_antialiasingFadeCoeff;
+    bool m_enableAntialiasing;
     const BaseFade &m_baseFade;
 };
 
@@ -79,13 +85,14 @@ template <class BaseFade>
 class KisAntialiasingFadeMaker2D
 {
 public:
-    KisAntialiasingFadeMaker2D(const BaseFade &baseFade)
+    KisAntialiasingFadeMaker2D(const BaseFade &baseFade, bool enableAntialiasing)
         : m_xLimit(0),
           m_yLimit(0),
           m_xFadeLimitStart(0),
           m_yFadeLimitStart(0),
           m_xFadeCoeff(0),
           m_yFadeCoeff(0),
+          m_enableAntialiasing(enableAntialiasing),
           m_baseFade(baseFade)
     {
     }
@@ -113,6 +120,10 @@ public:
         if (y > m_yLimit) {
             *value = 255;
             return true;
+        }
+
+        if (!m_enableAntialiasing) {
+            return false;
         }
 
         if (x > m_xFadeLimitStart) {
@@ -149,6 +160,8 @@ private:
 
     qreal m_xFadeCoeff;
     qreal m_yFadeCoeff;
+
+    bool m_enableAntialiasing;
 
     const BaseFade &m_baseFade;
 };

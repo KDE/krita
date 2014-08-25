@@ -39,8 +39,8 @@
 #include "kis_brush_mask_applicator_factories.h"
 
 
-KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, CIRCLE, DefaultId), d(new Private)
+KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, DefaultId), d(new Private)
 {
     d->xcoef = 2.0 / width();
     d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
@@ -48,6 +48,9 @@ KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qrea
     d->yfadecoef = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * KisMaskGenerator::d->ratio * width()));
     d->transformedFadeX = d->xfadecoef * softness();
     d->transformedFadeY = d->yfadecoef * softness();
+
+    // store the variable locally to allow vector implementation read it easily
+    d->copyOfAntialiasEdges = antialiasEdges;
 
     d->applicator = createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this);
 }
@@ -97,17 +100,16 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
     if (n > 1.0) return 255;
 
     // we add +1.0 to ensure correct antialising on the border
-    qreal nf = norme((qAbs(xr) + 1.0) * d->transformedFadeX,
-                     (qAbs(yr) + 1.0) * d->transformedFadeY);
+    if (KisMaskGenerator::d->antialiasEdges) {
+        xr = qAbs(xr) + 1.0;
+        yr = qAbs(yr) + 1.0;
+    }
+
+    qreal nf = norme(xr * d->transformedFadeX,
+                     yr * d->transformedFadeY);
 
     if (nf < 1.0) return 0;
     return 255 * n * (nf - 1.0) / (nf - n);
-}
-
-void KisCircleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
-{
-    KisMaskGenerator::toXML(d, e);
-    e.setAttribute("type", "circle");
 }
 
 void KisCircleMaskGenerator::setSoftness(qreal softness)

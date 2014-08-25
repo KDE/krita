@@ -30,8 +30,8 @@
 
 struct KisCurveRectangleMaskGenerator::Private
 {
-    Private()
-        : fadeMaker(*this)
+    Private(bool enableAntialiasing)
+        : fadeMaker(*this, enableAntialiasing)
     {
     }
 
@@ -48,8 +48,8 @@ struct KisCurveRectangleMaskGenerator::Private
     quint8 value(qreal xr, qreal yr) const;
 };
 
-KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
-        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, RECTANGLE, SoftId), d(new Private)
+KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve, bool antialiasEdges)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, SoftId), d(new Private(antialiasEdges))
 {
     d->curveResolution = qRound( qMax(width(),height()) * OVERSAMPLING);
     d->curveData = curve.floatTransfer( d->curveResolution + 1);
@@ -123,7 +123,6 @@ quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 void KisCurveRectangleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     KisMaskGenerator::toXML(doc, e);
-    e.setAttribute("type", "rect");
     e.setAttribute("softness_curve", curveString());
 }
 

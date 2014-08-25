@@ -62,6 +62,8 @@ template<> void KisCircleMaskGenerator::
 FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY, float invScaleX, float invScaleY)
 {
+    const bool useSmoothing = d->copyOfAntialiasEdges;
+
     float y_ = (y - centerY) * invScaleY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
@@ -94,9 +96,14 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
         Vc::float_v xr = x_ * vCosa - vSinaY_;
         Vc::float_v yr = x_ * vSina + vCosaY_;
 
-        Vc::float_v n = ((xr * vXCoeff) * (xr * vXCoeff)) + ((yr * vYCoeff) * (yr * vYCoeff));
+        Vc::float_v n = pow2(xr * vXCoeff) + pow2(yr * vYCoeff);
 
-        Vc::float_v vNormFade =((xr * vTransformedFadeX) * (xr * vTransformedFadeX)) + ((yr * vTransformedFadeY) * (yr * vTransformedFadeY));
+        if (useSmoothing) {
+            xr = Vc::abs(xr) + vOne;
+            yr = Vc::abs(yr) + vOne;
+        }
+
+        Vc::float_v vNormFade =pow2(xr * vTransformedFadeX) + pow2(yr * vTransformedFadeY);
 
         //255 * n * (normeFade - 1) / (normeFade - n)
         Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);

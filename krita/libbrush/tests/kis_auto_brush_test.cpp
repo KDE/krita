@@ -34,13 +34,13 @@
 
 void KisAutoBrushTest::testCreation()
 {
-    KisCircleMaskGenerator circle(10, 1.0, 1.0, 1.0, 2);
-    KisRectangleMaskGenerator rect(10, 1.0, 1.0, 1.0, 2);
+    KisCircleMaskGenerator circle(10, 1.0, 1.0, 1.0, 2, true);
+    KisRectangleMaskGenerator rect(10, 1.0, 1.0, 1.0, 2, true);
 }
 
 void KisAutoBrushTest::testMaskGeneration()
 {
-    KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 1.0, 1.0, 1.0, 2);
+    KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 1.0, 1.0, 1.0, 2, true);
     KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -93,7 +93,7 @@ void KisAutoBrushTest::testMaskGeneration()
 void KisAutoBrushTest::testSizeRotation()
 {
     {
-        KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.5, 1.0, 1.0, 2);
+        KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.5, 1.0, 1.0, 2, true);
         KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
         QCOMPARE(a->width(), 10);
         QCOMPARE(a->height(), 5);
@@ -139,7 +139,7 @@ void KisAutoBrushTest::testCopyMasking()
     tempDev->convertToQImage(0).save("tempDev.png");
 #endif
 
-    KisCircleMaskGenerator * mask = new KisCircleMaskGenerator(w, 1.0, 0.5, 0.5, 2);
+    KisCircleMaskGenerator * mask = new KisCircleMaskGenerator(w, 1.0, 0.5, 0.5, 2, true);
     KisAutoBrush brush(mask, 0, 0);
 
     KisFixedPaintDeviceSP maskDab = new KisFixedPaintDevice(cs);

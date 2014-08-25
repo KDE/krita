@@ -35,8 +35,8 @@
 
 struct KisCurveCircleMaskGenerator::Private
 {
-    Private()
-        : fadeMaker(*this)
+    Private(bool enableAntialiasing)
+        : fadeMaker(*this, enableAntialiasing)
     {
     }
 
@@ -50,8 +50,8 @@ struct KisCurveCircleMaskGenerator::Private
     inline quint8 value(qreal dist) const;
 };
 
-KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
-        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, CIRCLE, SoftId), d(new Private)
+KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve, bool antialiasEdges)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, SoftId), d(new Private(antialiasEdges))
 {
     d->xcoef = 2.0 / width();
     d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
@@ -112,7 +112,6 @@ quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
 void KisCurveCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     KisMaskGenerator::toXML(doc, e);
-    e.setAttribute("type", "circle");
     e.setAttribute("softness_curve", curveString());
 }
 

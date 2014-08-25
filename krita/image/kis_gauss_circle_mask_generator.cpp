@@ -42,8 +42,8 @@
 
 struct KisGaussCircleMaskGenerator::Private
 {
-    Private()
-        : fadeMaker(*this)
+    Private(bool enableAntialiasing)
+        : fadeMaker(*this, enableAntialiasing)
     {
     }
 
@@ -54,8 +54,8 @@ struct KisGaussCircleMaskGenerator::Private
     inline quint8 value(qreal dist) const;
 };
 
-KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, CIRCLE, GaussId), d(new Private)
+KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, GaussId), d(new Private(antialiasEdges))
 {
     d->ycoef = 1.0 / KisMaskGenerator::d->ratio;
     qreal fade = 1.0 - (fh + fv) / 2.0;
@@ -105,10 +105,4 @@ quint8 KisGaussCircleMaskGenerator::valueAt(qreal x, qreal y) const
     }
 
     return d->value(dist);
-}
-
-void KisGaussCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
-{
-    KisMaskGenerator::toXML(doc, e);
-    e.setAttribute("type", "circle");
 }

@@ -41,7 +41,7 @@ class KRITAIMAGE_EXPORT KisCurveCircleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes,const KisCubicCurve& curve);
+    KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes,const KisCubicCurve& curve, bool antialiasEdges);
     virtual ~KisCurveCircleMaskGenerator();
 
     virtual quint8 valueAt(qreal x, qreal y) const;

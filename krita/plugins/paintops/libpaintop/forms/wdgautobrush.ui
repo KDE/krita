@@ -88,6 +88,26 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Antialiasing:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAntialiasing">
+       <property name="toolTip">
+        <string>The border of the brush will be smoothed to avoid aliasing</string>
+       </property>
+       <property name="text">
+        <string>Smooth Lines</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="spacer4">
        <property name="orientation">
         <enum>Qt::Vertical</enum>

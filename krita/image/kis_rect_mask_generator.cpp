@@ -35,8 +35,8 @@ struct KisRectangleMaskGenerator::Private {
     double m_halfWidth, m_halfHeight;
 };
 
-KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE, DefaultId), d(new Private)
+KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
+    : KisMaskGenerator(radius, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, DefaultId), d(new Private)
 {
     if (KisMaskGenerator::d->fv == 0 && KisMaskGenerator::d->fh == 0) {
         d->m_c = 0;
@@ -88,9 +88,17 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     xr /= width();
     yr /= height();
 
-    // add -1.0 to ensure the last pixel is antialiased
-    qreal fhTransformed = qMax(0.0, KisMaskGenerator::d->fh * softness() - 1.0 / width());
-    qreal fvTransformed = qMax(0.0, KisMaskGenerator::d->fv * softness() - 1.0 / height());
+    qreal fhTransformed;
+    qreal fvTransformed;
+
+    if (KisMaskGenerator::d->antialiasEdges) {
+        // add -1.0 to ensure the last pixel is antialiased
+        fhTransformed = qMax(0.0, KisMaskGenerator::d->fh * softness() - 1.0 / width());
+        fvTransformed = qMax(0.0, KisMaskGenerator::d->fv * softness() - 1.0 / height());
+    } else {
+        fhTransformed = KisMaskGenerator::d->fh * softness() / width();
+        fvTransformed = KisMaskGenerator::d->fv * softness() / height();
+    }
 
     if( xr > fhTransformed )
     {
@@ -110,10 +118,3 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
         return 255;
     }
 }
-
-void KisRectangleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
-{
-    KisMaskGenerator::toXML(d, e);
-    e.setAttribute("type", "rect");
-}
-

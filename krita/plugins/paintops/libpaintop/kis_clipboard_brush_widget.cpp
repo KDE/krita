@@ -58,6 +58,8 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
 
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
+
+    connect(chkSmoothBrush, SIGNAL(toggled(bool)), SLOT(slotUseBrushClicked()));
 }
 
 KisClipboardBrushWidget::~KisClipboardBrushWidget()
@@ -85,6 +87,10 @@ void KisClipboardBrushWidget::slotUseBrushClicked()
         pd = m_clipboard->clip(QRect(0, 0, 0, 0), false);     //Weird! Don't know how this works!
         if (pd) {
             QRect rc = pd->exactBounds();
+
+            if (chkSmoothBrush->isChecked()) {
+                rc = kisGrowRect(rc, 1);
+            }
 
             m_brush = new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
 

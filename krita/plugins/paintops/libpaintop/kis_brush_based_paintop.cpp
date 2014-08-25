@@ -102,6 +102,8 @@ KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
 
 bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
 {
+    scale *= m_brush->scale();
+
     return scale * m_brush->width() < 0.01 ||
            scale * m_brush->height() < 0.01;
 }
@@ -120,7 +122,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
 
     QSizeF metric =
         KisQImagePyramid::characteristicSize(QSize(m_brush->width(), m_brush->height()),
-                                             scale, rotation);
+                                             m_brush->scale() * scale, rotation);
 
     return effectiveSpacing(metric.width(), metric.height(), extraSpacingScale, spacingOption.isotropicSpacing());
 }

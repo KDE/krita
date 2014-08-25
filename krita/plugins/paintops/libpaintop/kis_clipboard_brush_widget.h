@@ -59,7 +59,7 @@ public:
 
 private slots:
     void slotUseBrushClicked();
-    void slotUpdateSpacing(qreal val);
+    void slotSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
     void slotSaveBrush();
 

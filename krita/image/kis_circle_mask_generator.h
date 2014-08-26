@@ -46,6 +46,7 @@ public:
     KisBrushMaskApplicatorBase* applicator();
 
     virtual void setSoftness(qreal softness);
+    virtual void setScale(qreal scaleX, qreal scaleY);
 
 private:
 

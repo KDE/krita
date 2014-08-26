@@ -55,10 +55,18 @@ KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, q
     d->curveData = curve.floatTransfer( d->curveResolution + 1);
     d->curvePoints = curve.points();
     setCurveString(curve.toString());
-    d->dirty = false;
 
-    qreal halfWidth = 0.5 * width();
-    qreal halfHeight = 0.5 * height();
+    setScale(1.0, 1.0);
+}
+
+void KisCurveRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    d->dirty = true;
+
+    qreal halfWidth = 0.5 * effectiveSrcWidth();
+    qreal halfHeight = 0.5 * effectiveSrcHeight();
 
     d->xcoeff = 1.0 / halfWidth;
     d->ycoeff = 1.0 / halfHeight;

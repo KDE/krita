@@ -120,7 +120,7 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
 
     for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
 
-        processor.template process<_impl>(buffer, simdWidth, y, m_d->cosa, m_d->sina, m_d->centerX, m_d->centerY, m_d->invScaleX, m_d->invScaleY);
+        processor.template process<_impl>(buffer, simdWidth, y, m_d->cosa, m_d->sina, m_d->centerX, m_d->centerY);
 
         if (m_d->randomness != 0.0 || m_d->density != 1.0) {
             for (int x = 0; x < width; x++) {
@@ -168,14 +168,14 @@ void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRe
     int offset = (m_d->device->bounds().width() - rect.width()) * m_d->pixelSize;
     int supersample = (m_maskGenerator->shouldSupersample() ? SUPERSAMPLING : 1);
     double invss = 1.0 / supersample;
-    int samplearea = supersample * supersample;
+    int samplearea = pow2(supersample);
     for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
         for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
             int value = 0;
             for (int sy = 0; sy < supersample; sy++) {
                 for (int sx = 0; sx < supersample; sx++) {
-                    double x_ = (x + sx * invss - m_d->centerX) * m_d->invScaleX;
-                    double y_ = (y + sy * invss - m_d->centerY) * m_d->invScaleY;
+                    double x_ = x + sx * invss - m_d->centerX;
+                    double y_ = y + sy * invss - m_d->centerY;
                     double maskX = m_d->cosa * x_ - m_d->sina * y_;
                     double maskY = m_d->sina * x_ + m_d->cosa * y_;
                     value += m_maskGenerator->valueAt(maskX, maskY);

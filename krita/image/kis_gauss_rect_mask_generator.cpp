@@ -59,15 +59,25 @@ struct KisGaussRectangleMaskGenerator::Private
 KisGaussRectangleMaskGenerator::KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, GaussId), d(new Private(antialiasEdges))
 {
-    qreal xfade = (1.0 - fh) * width() * 0.1;
-    qreal yfade = (1.0 - fv) * height() * 0.1;
+    setScale(1.0, 1.0);
+}
+
+void KisGaussRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    qreal width = effectiveSrcWidth();
+    qreal height = effectiveSrcHeight();
+
+    qreal xfade = (1.0 - KisMaskGenerator::d->fh) * width * 0.1;
+    qreal yfade = (1.0 - KisMaskGenerator::d->fv) * height * 0.1;
     d->xfade = 1.0 / (M_SQRT_2 * xfade);
     d->yfade = 1.0 / (M_SQRT_2 * yfade);
-    d->halfWidth = width() * 0.5 - 2.5 * xfade;
-    d->halfHeight = height() * 0.5 - 2.5 * yfade;
+    d->halfWidth = width * 0.5 - 2.5 * xfade;
+    d->halfHeight = height * 0.5 - 2.5 * yfade;
     d->alphafactor = 255.0 / (4.0 * erf(d->halfWidth * d->xfade) * erf(d->halfHeight * d->yfade));
 
-    d->fadeMaker.setLimits(0.5 * width(), 0.5 * height());
+    d->fadeMaker.setLimits(0.5 * width, 0.5 * height);
 }
 
 KisGaussRectangleMaskGenerator::~KisGaussRectangleMaskGenerator()

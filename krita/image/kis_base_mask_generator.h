@@ -105,7 +105,14 @@ public:
     void setCurveString(const QString& curveString);
 
     bool antialiasEdges() const;
+    virtual void setScale(qreal scaleX, qreal scaleY);
+
 protected:
+    qreal effectiveSrcWidth() const;
+    qreal effectiveSrcHeight() const;
+
+protected:
+
     struct Private {
         qreal diameter, ratio;
         qreal softness;
@@ -117,6 +124,8 @@ protected:
         Type type;
         QString curveString;
         bool antialiasEdges;
+        qreal scaleX;
+        qreal scaleY;
         KisBrushMaskApplicatorBase *defaultMaskProcessor;
     };
 

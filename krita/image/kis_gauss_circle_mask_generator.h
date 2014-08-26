@@ -40,6 +40,8 @@ public:
 
     virtual quint8 valueAt(qreal x, qreal y) const;
 
+    void setScale(qreal scaleX, qreal scaleY);
+
 private:
 
     qreal norme(qreal a, qreal b) const {

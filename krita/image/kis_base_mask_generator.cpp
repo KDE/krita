@@ -46,6 +46,8 @@ KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal 
     d->type = type;
     d->defaultMaskProcessor = 0;
     d->antialiasEdges = antialiasEdges;
+    d->scaleX = 1.0;
+    d->scaleY = 1.0;
     init();
 }
 
@@ -176,6 +178,21 @@ qreal KisMaskGenerator::height() const
     return d->diameter;
 }
 
+qreal KisMaskGenerator::effectiveSrcWidth() const
+{
+    return d->diameter * d->scaleX;
+}
+
+qreal KisMaskGenerator::effectiveSrcHeight() const
+{
+    /**
+     * This height is related to the source of the brush mask, so we
+     * don't take spikes into account, they will be generated from
+     * this data.
+     */
+    return d->diameter * d->ratio * d->scaleX;
+}
+
 qreal KisMaskGenerator::diameter() const
 {
     return d->diameter;
@@ -238,4 +255,10 @@ void KisMaskGenerator::setCurveString(const QString& curveString)
 bool KisMaskGenerator::antialiasEdges() const
 {
     return d->antialiasEdges;
+}
+
+void KisMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    d->scaleX = scaleX;
+    d->scaleY = scaleY;
 }

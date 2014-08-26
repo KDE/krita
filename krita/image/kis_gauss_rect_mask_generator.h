@@ -39,6 +39,7 @@ public:
     virtual ~KisGaussRectangleMaskGenerator();
 
     virtual quint8 valueAt(qreal x, qreal y) const;
+    void setScale(qreal scaleX, qreal scaleY);
 
 private:
 

@@ -39,6 +39,8 @@ public:
 
     virtual bool shouldSupersample() const;
     virtual quint8 valueAt(qreal x, qreal y) const;
+    void setScale(qreal scaleX, qreal scaleY);
+    void setSoftness(qreal softness);
 
 private:
     struct Private;

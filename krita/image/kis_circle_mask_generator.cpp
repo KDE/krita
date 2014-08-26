@@ -42,17 +42,24 @@
 KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, DefaultId), d(new Private)
 {
-    d->xcoef = 2.0 / width();
-    d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
-    d->xfadecoef = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * width()));
-    d->yfadecoef = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * KisMaskGenerator::d->ratio * width()));
-    d->transformedFadeX = d->xfadecoef * softness();
-    d->transformedFadeY = d->yfadecoef * softness();
+    setScale(1.0, 1.0);
 
     // store the variable locally to allow vector implementation read it easily
     d->copyOfAntialiasEdges = antialiasEdges;
 
     d->applicator = createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this);
+}
+
+void KisCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    d->xcoef = 2.0 / effectiveSrcWidth();
+    d->ycoef = 2.0 / effectiveSrcHeight();
+    d->xfadecoef = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * effectiveSrcWidth()));
+    d->yfadecoef = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * effectiveSrcHeight()));
+    d->transformedFadeX = d->xfadecoef * softness();
+    d->transformedFadeY = d->yfadecoef * softness();
 }
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()
@@ -63,7 +70,7 @@ KisCircleMaskGenerator::~KisCircleMaskGenerator()
 
 bool KisCircleMaskGenerator::shouldSupersample() const
 {
-    return width() < 10 || KisMaskGenerator::d->ratio * width() < 10;
+    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
 }
 
 bool KisCircleMaskGenerator::shouldVectorize() const
@@ -114,11 +121,8 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 
 void KisCircleMaskGenerator::setSoftness(qreal softness)
 {
-    if (softness == 0){
-        KisMaskGenerator::setSoftness(1.0);
-    }else{
-        KisMaskGenerator::setSoftness(1.0 / softness);
-    }
-    d->transformedFadeX = d->xfadecoef * this->softness();
-    d->transformedFadeY = d->yfadecoef * this->softness();
+    KisMaskGenerator::setSoftness(softness);
+
+    d->transformedFadeX = d->xfadecoef * softness;
+    d->transformedFadeY = d->yfadecoef * softness;
 }

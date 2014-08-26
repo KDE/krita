@@ -53,13 +53,25 @@ struct KisCurveCircleMaskGenerator::Private
 KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, SoftId), d(new Private(antialiasEdges))
 {
-    d->xcoef = 2.0 / width();
-    d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
-    d->curveResolution = qRound( qMax(width(),height()) * OVERSAMPLING);
-    d->curveData = curve.floatTransfer( d->curveResolution + 2);
+    // here we set resolution for the maximum size of the brush!
+    d->curveResolution = qRound(qMax(width(), height()) * OVERSAMPLING);
+    d->curveData = curve.floatTransfer(d->curveResolution + 2);
     d->curvePoints = curve.points();
-    d->dirty = false;
     setCurveString(curve.toString());
+
+    setScale(1.0, 1.0);
+}
+
+void KisCurveCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    qreal width = effectiveSrcWidth();
+    qreal height = effectiveSrcHeight();
+
+    d->xcoef = 2.0 / width;
+    d->ycoef = 2.0 / height;
+    d->dirty = true;
 
     d->fadeMaker.setSquareNormCoeffs(d->xcoef, d->ycoef);
 }
@@ -67,6 +79,11 @@ KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal r
 KisCurveCircleMaskGenerator::~KisCurveCircleMaskGenerator()
 {
     delete d;
+}
+
+bool KisCurveCircleMaskGenerator::shouldSupersample() const
+{
+    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
 }
 
 inline quint8 KisCurveCircleMaskGenerator::Private::value(qreal dist) const

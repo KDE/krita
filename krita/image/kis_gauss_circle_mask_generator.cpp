@@ -48,6 +48,7 @@ struct KisGaussCircleMaskGenerator::Private
     }
 
     qreal ycoef;
+    qreal fade;
     qreal center, distfactor, alphafactor;
     KisAntialiasingFadeMaker1D<Private> fadeMaker;
 
@@ -58,14 +59,19 @@ KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal r
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, GaussId), d(new Private(antialiasEdges))
 {
     d->ycoef = 1.0 / KisMaskGenerator::d->ratio;
-    qreal fade = 1.0 - (fh + fv) / 2.0;
-    if (fade == 0.0) fade = 1e-6;
-    else if (fade == 1.0) fade = 1.0 - 1e-6; // would become undefined for fade == 0 or 1
-    d->center = (2.5 * (6761.0*fade-10000.0))/(M_SQRT_2*6761.0*fade);
+    d->fade = 1.0 - (fh + fv) / 2.0;
+    if (d->fade == 0.0) d->fade = 1e-6;
+    else if (d->fade == 1.0) d->fade = 1.0 - 1e-6; // would become undefined for fade == 0 or 1
+    d->center = (2.5 * (6761.0*d->fade-10000.0))/(M_SQRT_2*6761.0*d->fade);
     d->alphafactor = 255.0 / (2.0 * erf(d->center));
-    d->distfactor = M_SQRT_2 * 12500.0 / (6761.0 * fade * diameter / 2.0);
+}
 
-    d->fadeMaker.setRadius(0.5 * diameter);
+void KisGaussCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    d->distfactor = M_SQRT_2 * 12500.0 / (6761.0 * d->fade * effectiveSrcWidth() / 2.0);
+    d->fadeMaker.setRadius(0.5 * effectiveSrcWidth());
 }
 
 KisGaussCircleMaskGenerator::~KisGaussCircleMaskGenerator()

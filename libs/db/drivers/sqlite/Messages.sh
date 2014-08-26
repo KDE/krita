@@ -1,7 +1,7 @@
 #! /bin/sh
 source ../../../../calligra_xgettext.sh
 
-potfile=kexidb_sqlite3driver
+potfile=kexisqlite3driver
 find_exclude $potfile
 
 LIST="`find . \( $EXCLUDE \) -prune -o \( -name \*.ui \) -type f -print | grep -v -e '/\.'`"

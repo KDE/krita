@@ -238,6 +238,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
         delete drv;
         return 0;
     }
+    KGlobal::locale()->insertCatalog("kexi" + name.toLower() + "driver");
     m_drivers.insert(name.toLower(), drv); //cache it
     return drv;
 }

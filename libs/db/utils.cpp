@@ -404,7 +404,7 @@ ConnectionTestDialog::ConnectionTestDialog(QWidget* parent,
         KexiDB::MessageHandler& msgHandler)
         : KProgressDialog(parent,
                           i18n("Test Connection"),
-                          i18n("<qt>Testing connection to <b>%1</b> database server...</qt>",
+                          i18n("Testing connection to <resource>%1</resource> database server...",
                                data.serverInfoString(true))
                          )
         , m_thread(new ConnectionTestThread(this, data))

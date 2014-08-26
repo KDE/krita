@@ -42,7 +42,7 @@ int main(int argc, char **argv)
         ki18n("Flat display: do not display groups\n"
               "(useful for testing)"));
     options.add("font-size <size>",
-        ki18n("Set font size to <size> (in points)\n"
+        ki18n("Set font size to &lt;size&gt; (in points)\n"
               "(useful for testing whether editors keep the font settings)"));
     options.add("property <name>",
         ki18n("Display only specified property\n"

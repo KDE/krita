@@ -94,17 +94,15 @@ void ConnectionData::setFileName(const QString& fn)
 
 QString ConnectionData::serverInfoString(bool addUser) const
 {
-    const QString& i18nFile = i18n("file");
-
     if (!m_dbFileName.isEmpty())
-        return i18nFile + ": " + (m_dbPath.isEmpty() ? QString() : m_dbPath
-                                  + QDir::separator()) + m_dbFileName;
+        return i18nc("@info", "file: %1", (m_dbPath.isEmpty() ? QString() : m_dbPath
+                                          + QDir::separator()) + m_dbFileName);
 
     DriverManager man;
     if (!driverName.isEmpty()) {
         Driver::Info info = man.driverInfo(driverName);
         if (!info.name.isEmpty() && info.fileBased)
-            return QString("<") + i18nFile + ">";
+            return i18nc("@info", "&lt;file&gt;");
     }
 
     return ((userName.isEmpty() || !addUser) ? QString("") : (userName + "@"))

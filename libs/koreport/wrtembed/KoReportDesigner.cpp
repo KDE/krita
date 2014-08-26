@@ -632,9 +632,9 @@ void KoReportDesigner::createProperties()
 
     m_unit = new KoProperty::Property("page-unit", keys, strings, "cm", i18n("Page Unit"));
 
-    m_showGrid = new KoProperty::Property("grid-visible", true, i18n("Show Grid"), i18n("Show Grid"));
-    m_gridSnap = new KoProperty::Property("grid-snap", true, i18n("Grid Snap"), i18n("Grid Snap"));
-    m_gridDivisions = new KoProperty::Property("grid-divisions", 4, i18n("Grid Divisions"), i18n("Grid Divisions"));
+    m_showGrid = new KoProperty::Property("grid-visible", true, i18n("Show Grid"));
+    m_gridSnap = new KoProperty::Property("grid-snap", true, i18n("Snap to Grid"));
+    m_gridDivisions = new KoProperty::Property("grid-divisions", 4, i18n("Grid Divisions"));
 
     m_leftMargin = new KoProperty::Property("margin-left", KoUnit(KoUnit::Centimeter).fromUserValue(1.0),
         i18n("Left Margin"), i18n("Left Margin"), KoProperty::Double);

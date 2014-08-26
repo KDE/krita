@@ -47,17 +47,17 @@ static QString stateName(int index, const Property* prop)
     if (index == 0) {
         stateNameString = prop->option("yesName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18n("Yes");
+            return i18nc("Property value: Boolean state Yes", "Yes");
     }
     else if (index == 1) {
         stateNameString = prop->option("noName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18n("No");
+            return i18nc("Property value: Boolean state No", "No");
     }
     else {
         stateNameString = prop->option("3rdStateName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18n("None");
+            return i18nc("Property value: Boolean (3rd) undefined state None", "None");
     }
     return stateNameString;
 }

@@ -621,4 +621,10 @@ T iifNotEmpty(const T& string, const QByteArray& stringIfEmpty)
 
 } // namespace KexiDB
 
+//! Macros to use in drivers to avoid redundant translations.
+#define kexidb_i18n i18n
+#define kexidb_i18nc i18nc
+#define kexidb_i18np i18np
+#define kexidb_i18ncp i18ncp
+
 #endif

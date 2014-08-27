@@ -46,7 +46,7 @@ RectComposedProperty::RectComposedProperty(Property *property)
         i18nc("Property: X coordinate", "X Coordinate"), Int, property);
     (void)new Property("y",
         QVariant(), i18nc("Property: Y coordinate", "Y"),
-        i18nc("Property: X coordinate", "Y Coordinate"), Int, property);
+        i18nc("Property: Y coordinate", "Y Coordinate"), Int, property);
     (void)new Property("width",
         QVariant(), i18nc("Property: width of rectangle", "Width"),
         i18nc("Property: width of rectangle", "Width"), UInt, property);

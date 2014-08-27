@@ -69,6 +69,7 @@ public:
         , tiledPreview(false)
         , grayscalePreview(false)
         , synced(false)
+        , updatesBlocked(false)
     {}
     KoResourceModel* model;
     KoResourceTaggingManager* tagManager;
@@ -83,6 +84,7 @@ public:
     bool tiledPreview;
     bool grayscalePreview;
     bool synced;
+    bool updatesBlocked;
 };
 
 KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent )
@@ -336,6 +338,11 @@ KoResource *  KoResourceItemChooser::currentResource() const
 
 void KoResourceItemChooser::setCurrentResource(KoResource* resource)
 {
+    // don't update if the change came from the same chooser
+    if (d->updatesBlocked) {
+        return;
+    }
+
     QModelIndex index = d->model->indexFromResource(resource);
     if( !index.isValid() )
         return;
@@ -386,7 +393,10 @@ void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
 {
     KoResource* resource = currentResource();
     if (resource) {
+        d->updatesBlocked = true;
         emit resourceSelected( resource );
+        d->updatesBlocked = false;
+
         updatePreview(resource);
         updateButtonState();
     }

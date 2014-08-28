@@ -67,6 +67,16 @@ KisStrokeJobStrategy* KisStrokeStrategy::createDabStrategy()
     return 0;
 }
 
+KisStrokeJobStrategy* KisStrokeStrategy::createSuspendStrategy()
+{
+    return 0;
+}
+
+KisStrokeJobStrategy* KisStrokeStrategy::createResumeStrategy()
+{
+    return 0;
+}
+
 KisStrokeJobData* KisStrokeStrategy::createInitData()
 {
     return 0;
@@ -78,6 +88,16 @@ KisStrokeJobData* KisStrokeStrategy::createFinishData()
 }
 
 KisStrokeJobData* KisStrokeStrategy::createCancelData()
+{
+    return 0;
+}
+
+KisStrokeJobData* KisStrokeStrategy::createSuspendData()
+{
+    return 0;
+}
+
+KisStrokeJobData* KisStrokeStrategy::createResumeData()
 {
     return 0;
 }

@@ -37,10 +37,14 @@ public:
     virtual KisStrokeJobStrategy* createFinishStrategy();
     virtual KisStrokeJobStrategy* createCancelStrategy();
     virtual KisStrokeJobStrategy* createDabStrategy();
+    virtual KisStrokeJobStrategy* createSuspendStrategy();
+    virtual KisStrokeJobStrategy* createResumeStrategy();
 
     virtual KisStrokeJobData* createInitData();
     virtual KisStrokeJobData* createFinishData();
     virtual KisStrokeJobData* createCancelData();
+    virtual KisStrokeJobData* createSuspendData();
+    virtual KisStrokeJobData* createResumeData();
 
     virtual KisStrokeStrategy* createLodClone(int levelOfDetail);
 

@@ -89,7 +89,7 @@ void KisStrokeTest::testCancelStrokeCase1()
     QCOMPARE(queue.size(), 0);
     QCOMPARE(stroke.isEnded(), true);
 
-    stroke.clearQueue();
+    stroke.clearQueueOnCancel();
 }
 
 void KisStrokeTest::testCancelStrokeCase2and3()
@@ -112,7 +112,7 @@ void KisStrokeTest::testCancelStrokeCase2and3()
     SCOMPARE(getJobName(queue[0]), "cancel");
     QCOMPARE(stroke.isEnded(), true);
 
-    stroke.clearQueue();
+    stroke.clearQueueOnCancel();
 }
 
 void KisStrokeTest::testCancelStrokeCase5()
@@ -187,7 +187,7 @@ void KisStrokeTest::testCancelStrokeCase6()
     QCOMPARE(stroke.isEnded(), true);
     QCOMPARE(cancelSeqNo(queue.head()), seqNo);
 
-    stroke.clearQueue();
+    stroke.clearQueueOnCancel();
 }
 
 QTEST_KDEMAIN(KisStrokeTest, NoGUI)

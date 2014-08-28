@@ -82,6 +82,9 @@ void KisPainterBasedStrokeStrategy::init()
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+
+    enableJob(KisSimpleStrokeStrategy::JOB_SUSPEND);
+    enableJob(KisSimpleStrokeStrategy::JOB_RESUME);
 }
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs)
@@ -227,5 +230,32 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
         m_transaction->revert();
         delete m_transaction;
         deletePainters();
+    }
+}
+
+void KisPainterBasedStrokeStrategy::suspendStrokeCallback()
+{
+    KisNodeSP node = m_resources->currentNode();
+    KisIndirectPaintingSupport *indirect =
+        dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+
+    if(indirect && indirect->hasTemporaryTarget()) {
+        indirect->setTemporaryTarget(0);
+    }
+}
+
+void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
+{
+    KisNodeSP node = m_resources->currentNode();
+    KisIndirectPaintingSupport *indirect =
+        dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+
+    if(indirect) {
+        if (node->paintDevice() != m_targetDevice) {
+            indirect->setTemporaryTarget(m_targetDevice);
+            indirect->setTemporaryCompositeOp(m_resources->compositeOp());
+            indirect->setTemporaryOpacity(m_resources->opacity());
+            indirect->setTemporarySelection(m_activeSelection);
+        }
     }
 }

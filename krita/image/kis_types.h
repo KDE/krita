@@ -223,6 +223,9 @@ typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
 class KisDisplayFilter;
 typedef QSharedPointer<KisDisplayFilter> KisDisplayFilterSP;
 
+class KisProjectionUpdatesFilter;
+typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
+
 
 #include <QSharedPointer>
 #include <QWeakPointer>

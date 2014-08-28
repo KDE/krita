@@ -80,9 +80,12 @@
 #include "kis_wrapped_rect.h"
 #include "kis_lod_transform.h"
 
+#include "kis_suspend_projection_updates_stroke_strategy.h"
 #include "kis_sync_lod_cache_stroke_strategy.h"
 #include <boost/functional/factory.hpp>
 #include <boost/bind.hpp>
+
+#include "kis_projection_updates_filter.h"
 
 
 // #define SANITY_CHECKS
@@ -131,7 +134,7 @@ public:
     vKisAnnotationSP annotations;
 
     QAtomicInt disableUIUpdateSignals;
-    QAtomicInt disableDirtyRequests;
+    KisProjectionUpdatesFilterSP projectionUpdatesFilter;
     KisImageSignalRouter *signalRouter;
     KisUpdateScheduler *scheduler;
 
@@ -192,6 +195,10 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
         m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
         m_d->scheduler->setLod0ToNStrokeStrategyFactory(
             boost::bind(boost::factory<KisSyncLodCacheStrokeStrategy*>(), KisImageWSP(this)));
+        m_d->scheduler->setSuspendUpdatesStrokeStrategyFactory(
+            boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), true));
+        m_d->scheduler->setResumeUpdatesStrokeStrategyFactory(
+            boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), false));
     }
 }
 
@@ -1557,14 +1564,27 @@ void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     }
 }
 
+void KisImage::setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
+{
+    // udpate filters are *not* recursive!
+    KIS_ASSERT_RECOVER_NOOP(!filter || !m_d->projectionUpdatesFilter);
+
+    m_d->projectionUpdatesFilter = filter;
+}
+
+KisProjectionUpdatesFilterSP KisImage::projectionUpdatesFilter() const
+{
+    return m_d->projectionUpdatesFilter;
+}
+
 void KisImage::disableDirtyRequests()
 {
-    m_d->disableDirtyRequests.ref();
+    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP(new KisDropAllProjectionUpdatesFilter()));
 }
 
 void KisImage::enableDirtyRequests()
 {
-    m_d->disableDirtyRequests.deref();
+    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
 }
 
 void KisImage::disableUIUpdates()
@@ -1623,7 +1643,11 @@ void KisImage::requestProjectionUpdateImpl(KisNode *node,
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
-    if (m_d->disableDirtyRequests) return;
+    if (m_d->projectionUpdatesFilter
+        && m_d->projectionUpdatesFilter->filter(this, node, rect)) {
+
+        return;
+    }
 
     /**
      * Here we use 'permitted' instead of 'active' intentively,

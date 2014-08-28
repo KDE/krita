@@ -62,6 +62,9 @@ public:
     void finishStrokeCallback();
     void cancelStrokeCallback();
 
+    void suspendStrokeCallback();
+    void resumeStrokeCallback();
+
 protected:
     KisPaintDeviceSP targetDevice() const;
     KisSelectionSP activeSelection() const;

@@ -141,11 +141,23 @@ public:
     void setDesiredLevelOfDetail(int lod);
 
     /**
-     * Install a factory of a stroke strategy, that will be strted
+     * Install a factory of a stroke strategy, that will be started
      * every time when the scheduler needs to synchronize LOD caches
      * of all the paint devices of the image.
      */
     void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+
+    /**
+     * Install a factory of a stroke strategy, that will be started
+     * every time when the scheduler needs to postpone all the updates
+     * of the *LOD0* strokes.
+     */
+    void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+
+    /**
+     * \see setSuspendUpdatesStrokeStrategyFactory()
+     */
+    void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
 
     /**
      * tryCancelCurrentStrokeAsync() checks whether there is a

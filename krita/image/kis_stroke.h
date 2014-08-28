@@ -20,6 +20,8 @@
 #define __KIS_STROKE_H
 
 #include <QQueue>
+#include <QScopedPointer>
+
 #include <kis_types.h>
 #include "krita_export.h"
 #include "kis_stroke_job.h"
@@ -31,7 +33,16 @@ class KUndo2MagicString;
 class KRITAIMAGE_EXPORT KisStroke
 {
 public:
-    KisStroke(KisStrokeStrategy *strokeStrategy, int levelOfDetail = 0);
+    enum Type {
+        LEGACY,
+        LOD0,
+        LODN,
+        SUSPEND,
+        RESUME
+    };
+
+public:
+    KisStroke(KisStrokeStrategy *strokeStrategy, Type type = LEGACY, int levelOfDetail = 0);
     ~KisStroke();
 
     void addJob(KisStrokeJobData *data);
@@ -43,6 +54,9 @@ public:
 
     void endStroke();
     void cancelStroke();
+
+    bool supportsSuspension();
+    void suspendStroke(KisStrokeSP recipient);
 
     bool isInitialized() const;
     bool isEnded() const;
@@ -59,19 +73,22 @@ public:
     void setLodBuddy(KisStrokeSP buddy);
     KisStrokeSP lodBuddy() const;
 
-    enum Type {
-        LEGACY,
-        LOD0,
-        LODN
-    };
-
     Type type() const;
 
 private:
     void enqueue(KisStrokeJobStrategy *strategy,
                  KisStrokeJobData *data);
+
+    // for suspend/resume jobs
+    void prepend(KisStrokeJobStrategy *strategy,
+                 KisStrokeJobData *data,
+                 int levelOfDetail,
+                 bool isCancellable);
+
     KisStrokeJob* dequeue();
-    void clearQueue();
+
+    void clearQueueOnCancel();
+    bool sanityCheckAllJobsAreCancellable() const;
 
 private:
     // for testing use only, do not use in real code
@@ -83,19 +100,23 @@ private:
 
 private:
     // the strategies are owned by the stroke
-    KisStrokeStrategy *m_strokeStrategy;
-    KisStrokeJobStrategy *m_initStrategy;
-    KisStrokeJobStrategy *m_dabStrategy;
-    KisStrokeJobStrategy *m_cancelStrategy;
-    KisStrokeJobStrategy *m_finishStrategy;
+    QScopedPointer<KisStrokeStrategy> m_strokeStrategy;
+    QScopedPointer<KisStrokeJobStrategy> m_initStrategy;
+    QScopedPointer<KisStrokeJobStrategy> m_dabStrategy;
+    QScopedPointer<KisStrokeJobStrategy> m_cancelStrategy;
+    QScopedPointer<KisStrokeJobStrategy> m_finishStrategy;
+    QScopedPointer<KisStrokeJobStrategy> m_suspendStrategy;
+    QScopedPointer<KisStrokeJobStrategy> m_resumeStrategy;
 
     QQueue<KisStrokeJob*> m_jobsQueue;
     bool m_strokeInitialized;
     bool m_strokeEnded;
+    bool m_strokeSuspended;
     bool m_isCancelled; // cancelled strokes are always 'ended' as well
     bool m_prevJobSequential;
 
     int m_worksOnLevelOfDetail;
+    Type m_type;
     KisStrokeSP m_lodBuddy;
 };
 

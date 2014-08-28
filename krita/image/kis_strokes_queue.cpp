@@ -24,24 +24,38 @@
 #include "kis_stroke.h"
 #include "kis_updater_context.h"
 
+typedef QQueue<KisStrokeSP> StrokesQueue;
+typedef QQueue<KisStrokeSP>::iterator StrokesQueueIterator;
+
 struct KisStrokesQueue::Private {
     Private()
         : openedStrokesCounter(0),
           needsExclusiveAccess(false),
           wrapAroundModeSupported(false),
           lodNNeedsSynchronization(true),
-          desiredLevelOfDetail(0) {}
+          desiredLevelOfDetail(0),
+          nextDesiredLevelOfDetail(0) {}
 
-    QQueue<KisStrokeSP> strokesQueue;
+    StrokesQueue strokesQueue;
     int openedStrokesCounter;
     bool needsExclusiveAccess;
     bool wrapAroundModeSupported;
     bool lodNNeedsSynchronization;
     int desiredLevelOfDetail;
+    int nextDesiredLevelOfDetail;
     QMutex mutex;
     KisStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
+    KisStrokeStrategyFactory suspendUpdatesStrokeStrategyFactory;
+    KisStrokeStrategyFactory resumeUpdatesStrokeStrategyFactory;
 
     void startLod0ToNStroke(int levelOfDetail);
+
+    bool canUseLodN() const;
+    StrokesQueueIterator findNewLod0Pos();
+    StrokesQueueIterator findNewLodNPos(KisStrokeSP lodN);
+    bool shouldWrapInSuspendStroke() const;
+
+    void switchDesiredLevelOfDetail();
 };
 
 
@@ -62,44 +76,141 @@ KisStrokesQueue::~KisStrokesQueue()
 void KisStrokesQueue::Private::startLod0ToNStroke(int levelOfDetail)
 {
     // precondition: lock held!
+    // precondition: lod > 0
+    KIS_ASSERT_RECOVER_RETURN(levelOfDetail);
+
     if (!this->lod0ToNStrokeStrategyFactory) return;
 
     KisStrokeStrategy *lod0ToN = this->lod0ToNStrokeStrategyFactory();
-    KisStrokeSP sync(new KisStroke(lod0ToN, levelOfDetail));
+    KisStrokeSP sync(new KisStroke(lod0ToN, KisStroke::LODN, levelOfDetail));
     lod0ToN->setCancelStrokeId(sync);
     this->strokesQueue.enqueue(sync);
     sync->endStroke();
     this->lodNNeedsSynchronization = false;
 }
 
+bool KisStrokesQueue::Private::canUseLodN() const
+{
+    foreach (KisStrokeSP stroke, strokesQueue) {
+        if (stroke->type() == KisStroke::LEGACY) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool KisStrokesQueue::Private::shouldWrapInSuspendStroke() const
+{
+    foreach (KisStrokeSP stroke, strokesQueue) {
+        if (stroke->type() == KisStroke::RESUME) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+StrokesQueueIterator KisStrokesQueue::Private::findNewLod0Pos()
+{
+    StrokesQueueIterator it = strokesQueue.begin();
+    StrokesQueueIterator end = strokesQueue.end();
+
+    for (; it != end; ++it) {
+        if ((*it)->type() == KisStroke::RESUME) {
+            return it;
+        }
+    }
+
+    return it;
+}
+
+StrokesQueueIterator KisStrokesQueue::Private::findNewLodNPos(KisStrokeSP lodN)
+{
+    StrokesQueueIterator it = strokesQueue.begin();
+    StrokesQueueIterator end = strokesQueue.end();
+
+    for (; it != end; ++it) {
+        if ((*it)->type() == KisStroke::LOD0 ||
+            (*it)->type() == KisStroke::SUSPEND ||
+            (*it)->type() == KisStroke::RESUME) {
+
+            if (it != end && it == strokesQueue.begin()) {
+                KisStrokeSP head = *it;
+
+                if (head->supportsSuspension()) {
+                    head->suspendStroke(lodN);
+                }
+            }
+
+            return it;
+        }
+    }
+
+    return it;
+}
+
 KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
 {
     QMutexLocker locker(&m_d->mutex);
 
-    KisStrokeStrategy* lodBuddyStrategy =
-        m_d->desiredLevelOfDetail ?
-        strokeStrategy->createLodClone(m_d->desiredLevelOfDetail) : 0;
+    bool useLodN = m_d->canUseLodN();
 
-    KisStrokeSP stroke(new KisStroke(strokeStrategy));
+    KisStrokeSP stroke;
+    KisStrokeStrategy* lodBuddyStrategy;
 
-    if (lodBuddyStrategy) {
+    if (useLodN && m_d->desiredLevelOfDetail &&
+        (lodBuddyStrategy =
+         strokeStrategy->createLodClone(m_d->desiredLevelOfDetail))) {
+
         if (m_d->lodNNeedsSynchronization) {
             m_d->startLod0ToNStroke(m_d->desiredLevelOfDetail);
         }
 
-        KisStrokeSP buddy(new KisStroke(lodBuddyStrategy, m_d->desiredLevelOfDetail));
+        stroke = KisStrokeSP(new KisStroke(strokeStrategy, KisStroke::LOD0, 0));
+
+        KisStrokeSP buddy(new KisStroke(lodBuddyStrategy, KisStroke::LODN, m_d->desiredLevelOfDetail));
         lodBuddyStrategy->setCancelStrokeId(buddy);
         stroke->setLodBuddy(buddy);
-        m_d->strokesQueue.enqueue(buddy);
+        m_d->strokesQueue.insert(m_d->findNewLodNPos(buddy), buddy);
+
+        if (m_d->shouldWrapInSuspendStroke()) {
+            KisStrokeStrategy *strategy;
+
+            strategy = m_d->suspendUpdatesStrokeStrategyFactory();
+            KisStrokeSP suspend(new KisStroke(strategy, KisStroke::SUSPEND, 0));
+            strategy->setCancelStrokeId(suspend);
+
+            strategy = m_d->resumeUpdatesStrokeStrategyFactory();
+            KisStrokeSP resume(new KisStroke(strategy, KisStroke::RESUME, 0));
+            strategy->setCancelStrokeId(resume);
+
+            StrokesQueueIterator it = m_d->findNewLod0Pos();
+
+            it = m_d->strokesQueue.insert(it, resume);
+            resume->endStroke();
+
+            it = m_d->strokesQueue.insert(it, stroke);
+
+            it = m_d->strokesQueue.insert(it, suspend);
+            suspend->endStroke();
+
+        } else {
+            m_d->strokesQueue.insert(m_d->findNewLod0Pos(), stroke);
+        }
+
+    } else {
+        stroke = KisStrokeSP(new KisStroke(strokeStrategy, KisStroke::LEGACY, 0));
+        m_d->strokesQueue.insert(m_d->findNewLod0Pos(), stroke);
     }
 
     KisStrokeId id(stroke);
     strokeStrategy->setCancelStrokeId(id);
-    m_d->strokesQueue.enqueue(stroke);
+
     m_d->openedStrokesCounter++;
 
     if (stroke->type() == KisStroke::LEGACY) {
-        m_d->lodNNeedsSynchronization = false;
+        m_d->lodNNeedsSynchronization = true;
     }
 
     return id;
@@ -227,20 +338,43 @@ qint32 KisStrokesQueue::sizeMetric() const
     return m_d->strokesQueue.head()->numJobs() * m_d->strokesQueue.size();
 }
 
+void KisStrokesQueue::Private::switchDesiredLevelOfDetail()
+{
+    if (nextDesiredLevelOfDetail != desiredLevelOfDetail) {
+        foreach (KisStrokeSP stroke, strokesQueue) {
+            if (stroke->type() != KisStroke::LEGACY)
+                return;
+        }
+
+        desiredLevelOfDetail = nextDesiredLevelOfDetail;
+        lodNNeedsSynchronization = true;
+        startLod0ToNStroke(desiredLevelOfDetail);
+    }
+}
+
 void KisStrokesQueue::setDesiredLevelOfDetail(int lod)
 {
-    bool needsSync = m_d->desiredLevelOfDetail != lod;
-    m_d->desiredLevelOfDetail = lod;
+    QMutexLocker locker(&m_d->mutex);
 
-    if (needsSync) {
-        m_d->lodNNeedsSynchronization = true;
-        m_d->startLod0ToNStroke(m_d->desiredLevelOfDetail);
-    }
+    if (lod == m_d->nextDesiredLevelOfDetail) return;
+
+    m_d->nextDesiredLevelOfDetail = lod;
+    m_d->switchDesiredLevelOfDetail();
 }
 
 void KisStrokesQueue::setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
 {
     m_d->lod0ToNStrokeStrategyFactory = factory;
+}
+
+void KisStrokesQueue::setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->suspendUpdatesStrokeStrategyFactory = factory;
+}
+
+void KisStrokesQueue::setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->resumeUpdatesStrokeStrategyFactory = factory;
 }
 
 KUndo2MagicString KisStrokesQueue::currentStrokeName() const
@@ -318,6 +452,8 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;
         m_d->wrapAroundModeSupported = false;
+
+        m_d->switchDesiredLevelOfDetail();
 
         if(!m_d->strokesQueue.isEmpty()) {
             result = checkStrokeState(false, runningLevelOfDetail);

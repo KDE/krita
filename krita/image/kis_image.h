@@ -721,6 +721,10 @@ public slots:
      * whole subtree of nodes. But while we change any particular
      * node, it can ask for an update itself. This method is a way of
      * blocking such intermediate (and excessive) requests.
+     *
+     * NOTE: this is a convenience function for setProjectionUpdatesFilter()
+     *       that installs a predefined filter that eats everything. Please
+     *       note that these calls are *not* recursive
      */
     void disableDirtyRequests();
 
@@ -728,6 +732,19 @@ public slots:
      * \see disableDirtyRequests()
      */
     void enableDirtyRequests();
+
+    /**
+     * Installs a filter object that will filter all the incoming projection update
+     * requests. If the filter return true, the incoming update is dropped.
+     *
+     * NOTE: you cannot set filters recursively!
+     */
+    void setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter);
+
+    /**
+     * \see setProjectionUpdatesFilter()
+     */
+    KisProjectionUpdatesFilterSP projectionUpdatesFilter() const;
 
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);

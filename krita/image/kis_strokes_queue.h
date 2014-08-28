@@ -55,6 +55,8 @@ public:
 
     void setDesiredLevelOfDetail(int lod);
     void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
 
 private:
     bool processOneJob(KisUpdaterContext &updaterContext,

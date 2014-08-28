@@ -126,7 +126,7 @@ void KisUpdaterContextTest::testSnapshot()
     QScopedPointer<KisStrokeJobStrategy> strategy(
         new KisNoopDabStrategy("test"));
 
-    context.addStrokeJob(new KisStrokeJob(strategy.data(), data, 0));
+    context.addStrokeJob(new KisStrokeJob(strategy.data(), data, 0, true));
     context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
     QCOMPARE(numMergeJobs, 1);
     QCOMPARE(numStrokeJobs, 1);
@@ -154,7 +154,7 @@ void KisUpdaterContextTest::testSnapshot()
             new KisStrokeJobData(KisStrokeJobData::SEQUENTIAL,
                                  KisStrokeJobData::NORMAL);
 
-        context.addStrokeJob(new KisStrokeJob(strategy.data(), data, 2));
+        context.addStrokeJob(new KisStrokeJob(strategy.data(), data, 2, true));
         context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
         QCOMPARE(numMergeJobs, 0);
         QCOMPARE(numStrokeJobs, 1);
@@ -222,7 +222,7 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
             KisStrokeJobStrategy *strategy =
                 new ExclusivenessCheckerStrategy(counter, hadConcurrency);
 
-            context.addStrokeJob(new KisStrokeJob(strategy, data, 0));
+            context.addStrokeJob(new KisStrokeJob(strategy, data, 0, true));
         }
         else {
             QTest::qSleep(CHECK_DELAY);

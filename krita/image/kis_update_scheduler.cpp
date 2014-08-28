@@ -243,6 +243,16 @@ void KisUpdateScheduler::setLod0ToNStrokeStrategyFactory(const KisStrokeStrategy
     m_d->strokesQueue->setLod0ToNStrokeStrategyFactory(factory);
 }
 
+void KisUpdateScheduler::setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->strokesQueue->setSuspendUpdatesStrokeStrategyFactory(factory);
+}
+
+void KisUpdateScheduler::setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+{
+    m_d->strokesQueue->setResumeUpdatesStrokeStrategyFactory(factory);
+}
+
 void KisUpdateScheduler::updateSettings()
 {
     if(m_d->updatesQueue) {

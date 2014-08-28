@@ -58,6 +58,7 @@ KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal r
     d->curveData = curve.floatTransfer(d->curveResolution + 2);
     d->curvePoints = curve.points();
     setCurveString(curve.toString());
+    d->dirty = false;
 
     setScale(1.0, 1.0);
 }
@@ -71,7 +72,6 @@ void KisCurveCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 
     d->xcoef = 2.0 / width;
     d->ycoef = 2.0 / height;
-    d->dirty = true;
 
     d->fadeMaker.setSquareNormCoeffs(d->xcoef, d->ycoef);
 }
@@ -136,17 +136,18 @@ void KisCurveCircleMaskGenerator::setSoftness(qreal softness)
 {
     // performance
     if (!d->dirty && softness == 1.0) return;
+
     d->dirty = true;
     KisMaskGenerator::setSoftness(softness);
     KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, d->curveResolution+2, d->curveData);
+    d->dirty = false;
 }
 
 void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector< qreal >& result)
 {
-    softness *= 2.0;
     QList<QPointF> newList = points;
     newList.detach();
-    
+
     int size = newList.size();
     if (size == 2){
         // make place for new point in the centre

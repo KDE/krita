@@ -55,6 +55,7 @@ KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, q
     d->curveData = curve.floatTransfer( d->curveResolution + 1);
     d->curvePoints = curve.points();
     setCurveString(curve.toString());
+    d->dirty = false;
 
     setScale(1.0, 1.0);
 }
@@ -62,8 +63,6 @@ KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, q
 void KisCurveRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 {
     KisMaskGenerator::setScale(scaleX, scaleY);
-
-    d->dirty = true;
 
     qreal halfWidth = 0.5 * effectiveSrcWidth();
     qreal halfHeight = 0.5 * effectiveSrcHeight();
@@ -141,5 +140,6 @@ void KisCurveRectangleMaskGenerator::setSoftness(qreal softness)
     d->dirty = true;
     KisMaskGenerator::setSoftness(softness);
     KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, d->curveResolution + 1, d->curveData);
+    d->dirty = false;
 }
 

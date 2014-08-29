@@ -14,7 +14,5 @@ LIST=`find . \( $EXCLUDE \) -prune -o \( -name \*.h -o -name \*.cpp -o -name \*.
     if ! grep -q '^#warning noi18n ' $f ; then echo $f; fi \
 done \
 `
-if test -n "$LIST"; then
-    calligra_xgettext $LIST > $podir/$potfile.pot 2> /dev/null
-fi
+calligra_xgettext $potfile.pot $LIST
 rm -f rc.cpp

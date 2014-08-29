@@ -1,9 +1,21 @@
 #
-# Helper function for extracting translatable messages from Calligra source code
-# Usage example:
-#     calligra_xgettext `find . -name \*.cpp -o -name \*.h` > $podir/planlibs.pot
+# Helper function for extracting translatable messages from Calligra source code.
+# Usage: calligra_xgettext <pot-filename-without-path> <source-files-list>
+# If there are no messages or the <source-files-list> is empty, the pot file is deleted.
+#
+# Example usage that creates $podir/myapp.pot file:
+#     calligra_xgettext myapp.pot `find . -name \*.cpp -o -name \*.h`
 #
 function calligra_xgettext() {
+    POTFILE="$podir/$1"
+    shift
+    if test -n "$*"; then
+        calligra_xgettext_internal $* | tee "${POTFILE}" | tail -n1 | grep "^msgstr \"\"\$" > /dev/null \
+            || rm -f "${POTFILE}" 2> /dev/null
+    fi
+}
+
+function calligra_xgettext_internal() {
     SRC_FILES="$*"
     POT_PART_NORMAL="`mktemp $podir/_normal_XXXXXXXX.pot`"
     POT_PART_QUNDOFORMAT="`mktemp $podir/_qundoformat_XXXXXXXX.pot`"

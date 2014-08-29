@@ -358,7 +358,7 @@ KService::Ptr DriverManager::serviceInfo(const QString &name)
     KService::Ptr ptr = d_int->m_services_lcase.value(name.toLower());
     if (ptr)
         return ptr;
-    setError(ERR_DRIVERMANAGER, i18n("Could not find service: \"%1\".", name));
+    setError(ERR_DRIVERMANAGER, i18n("Could not find service <resource>%1</resource>.", name));
     return KService::Ptr();
 }
 

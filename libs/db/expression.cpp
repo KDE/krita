@@ -768,8 +768,11 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
         }
         if (covered) {
             parseInfo.errMsg = i18n("Could not access the table directly using its name");
-            parseInfo.errDescr = i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
-                                      "you can write \"%3\".", tableName, tableName + "." + fieldName, tableAlias + "." + QString(fieldName));
+            parseInfo.errDescr = i18n("Table name <resource>%1</resource> is covered by aliases. "
+                                      "Instead of <resource>%2</resource>, "
+                                      "you can write <resource>%3</resource>.",
+                                      tableName, tableName + "." + fieldName,
+                                      tableAlias + "." + QString(fieldName));
             return false;
         }
         if (!tPositions.isEmpty()) {

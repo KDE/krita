@@ -3178,7 +3178,7 @@ KexiDB::QuerySchema* Connection::setupQuerySchema(const RecordData &data)
         setError(ERR_SQL_PARSE_ERROR,
                  i18nc("@info",
                        "<para>Could not load definition for query \"%1\". "
-                       "SQL statement for this query is invalid:<message>%2</message></para>\n"
+                       "SQL statement for this query is invalid: <message>%2</message></para>\n"
                        "<para>You can open this query in Text View and correct it.</para>",
                        data[2].toString(),
                        d->parser()->statement()));

@@ -304,6 +304,11 @@ void KisGmicTests::testAllFilters()
             GMIC_FILTER_COUNT = 298;
             break;
         }
+        case 1600:
+        {
+            GMIC_FILTER_COUNT = 305;
+            break;
+        }
         default:
         {
             GMIC_FILTER_COUNT = 260;

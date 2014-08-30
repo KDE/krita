@@ -201,7 +201,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
 
     } else {
         stroke = KisStrokeSP(new KisStroke(strokeStrategy, KisStroke::LEGACY, 0));
-        m_d->strokesQueue.insert(m_d->findNewLod0Pos(), stroke);
+        m_d->strokesQueue.enqueue(stroke);
     }
 
     KisStrokeId id(stroke);
@@ -348,7 +348,10 @@ void KisStrokesQueue::Private::switchDesiredLevelOfDetail()
 
         desiredLevelOfDetail = nextDesiredLevelOfDetail;
         lodNNeedsSynchronization = true;
-        startLod0ToNStroke(desiredLevelOfDetail);
+
+        if (desiredLevelOfDetail) {
+            startLod0ToNStroke(desiredLevelOfDetail);
+        }
     }
 }
 

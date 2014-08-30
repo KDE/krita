@@ -58,6 +58,13 @@ public:
     void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
     void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
 
+    /**
+     * Notifies the queue, that someone else (neither strokes nor the
+     * queue itself have changed the image. It means that the caches
+     * should be regenerated
+     */
+    void notifyUFOChangedImage();
+
 private:
     bool processOneJob(KisUpdaterContext &updaterContext,
                        bool externalJobsPending);

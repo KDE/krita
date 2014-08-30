@@ -271,6 +271,12 @@ void KisUpdateScheduler::lock()
 
 void KisUpdateScheduler::unlock()
 {
+    /**
+     * Legacy strokes may have changed the image while we didn't
+     * control it. Notify the queue to take it into account.
+     */
+    m_d->strokesQueue->notifyUFOChangedImage();
+
     m_d->processingBlocked = false;
     processQueues();
 }

@@ -365,6 +365,13 @@ void KisStrokesQueue::setDesiredLevelOfDetail(int lod)
     m_d->switchDesiredLevelOfDetail();
 }
 
+void KisStrokesQueue::notifyUFOChangedImage()
+{
+    QMutexLocker locker(&m_d->mutex);
+
+    m_d->lodNNeedsSynchronization = true;
+}
+
 void KisStrokesQueue::setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
 {
     m_d->lod0ToNStrokeStrategyFactory = factory;

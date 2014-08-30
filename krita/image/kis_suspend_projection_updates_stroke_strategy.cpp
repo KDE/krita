@@ -19,7 +19,16 @@
 #include "kis_suspend_projection_updates_stroke_strategy.h"
 
 #include <kis_image.h>
-#include "kis_projection_updates_filter.h"
+#include <krita_utils.h>
+#include <kis_projection_updates_filter.h>
+
+
+inline uint qHash(const QRect &rc) {
+    return rc.x() +
+        (rc.y() << 16) +
+        (rc.width() << 8) +
+        (rc.height() << 24);
+}
 
 struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 {
@@ -28,6 +37,8 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
     class SuspendLod0Updates : public KisProjectionUpdatesFilter
     {
+
+        typedef QHash<KisNodeSP, QVector<QRect> > RectsHash;
     public:
         struct Request {
             Request() {}
@@ -44,16 +55,56 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             if (image->currentLevelOfDetail() > 0) return false;
 
             QMutexLocker l(&m_mutex);
-            m_requests.append(Request(node, rect));
+            m_requestsHash[KisNodeSP(node)].append(rect);
             return true;
         }
 
-        const QVector<Request>& requests() const {
-            return m_requests;
+        static inline QRect alignRect(const QRect &rc, const int step) {
+            static const int decstep = step - 1;
+            static const int invstep = ~decstep;
+
+            int x0, y0, x1, y1;
+            rc.getCoords(&x0, &y0, &x1, &y1);
+
+            x0 &= invstep;
+            y0 &= invstep;
+            x1 |= decstep;
+            y1 |= decstep;
+
+            QRect result;
+            result.setCoords(x0, y0, x1, y1);
+            return result;
+        }
+
+        void notifyUpdates(KisNodeGraphListener *listener) {
+            RectsHash::const_iterator it = m_requestsHash.constBegin();
+            RectsHash::const_iterator end = m_requestsHash.constEnd();
+
+            const int step = 64;
+
+            for (; it != end; ++it) {
+                KisNodeSP node = it.key();
+                const QVector<QRect> &rects = it.value();
+
+                QVector<QRect>::const_iterator it = rects.constBegin();
+                QVector<QRect>::const_iterator end = rects.constEnd();
+
+                QRegion region;
+
+                for (; it != end; ++it) {
+                    region += alignRect(*it, step);
+                }
+
+                foreach(const QRect &rc, region.rects()) {
+                    // FIXME: constness: port rPU to SP
+                    listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), rc);
+
+                }
+            }
         }
 
     private:
-        QVector<Request> m_requests;
+        RectsHash m_requestsHash;
         QMutex m_mutex;
     };
 };
@@ -92,11 +143,7 @@ void KisSuspendProjectionUpdatesStrokeStrategy::initStrokeCallback()
 
         if (localFilter) {
             m_d->image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
-
-            foreach (const Private::SuspendLod0Updates::Request &req, localFilter->requests()) {
-                // FIXME: constness: port rPU to SP
-                m_d->image->requestProjectionUpdate(const_cast<KisNode*>(req.node.data()), req.rect);
-            }
+            localFilter->notifyUpdates(m_d->image.data());
         }
     }
 }

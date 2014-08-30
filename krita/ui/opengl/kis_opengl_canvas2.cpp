@@ -458,7 +458,7 @@ void KisOpenGLCanvas2::drawImage() const
             }
 
             int currentLodPlane = tile->currentLodPlane();
-            if (d->displayUniformLocationFixedLodLevel >= 0 && currentLodPlane) {
+            if (d->displayUniformLocationFixedLodLevel >= 0) {
                 d->displayShader->setUniformValue(d->displayUniformLocationFixedLodLevel,
                                                   (GLfloat) currentLodPlane);
             }
@@ -466,37 +466,31 @@ void KisOpenGLCanvas2::drawImage() const
             glActiveTexture(GL_TEXTURE0);
             tile->bindToActiveTexture();
 
-            if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
+            if (currentLodPlane) {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+            } else if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             } else {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-                if (currentLodPlane) {
+                switch(d->filterMode) {
+                case KisTextureTile::NearestFilterMode:
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                    break;
+                case KisTextureTile::BilinearFilterMode:
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                    break;
+                case KisTextureTile::TrilinearFilterMode:
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                    break;
+                case KisTextureTile::HighQualityFiltering:
                     if (SCALE_LESS_THAN(scaleX, scaleY, 0.5)) {
-                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
                     } else {
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                     }
-                } else {
-                    switch(d->filterMode) {
-                    case KisTextureTile::NearestFilterMode:
-                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                        break;
-                    case KisTextureTile::BilinearFilterMode:
-                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                        break;
-                    case KisTextureTile::TrilinearFilterMode:
-                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-                        break;
-                    case KisTextureTile::HighQualityFiltering:
-                        if (SCALE_LESS_THAN(scaleX, scaleY, 0.5)) {
-                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-                        } else {
-                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                        }
-                        break;
-                    }
+                    break;
                 }
             }
 

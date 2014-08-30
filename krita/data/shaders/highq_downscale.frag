@@ -106,7 +106,16 @@ void main() {
 #endif /* defined HIGHQ_SCALING || defined DIRECT_LOD_FETCH */
 
     {
-        col = texture2D(texture0, v_textureCoordinate.st);
+#ifdef DIRECT_LOD_FETCH
+
+        if (fixedLodLevel > eps) {
+            col = textureLod(texture0, v_textureCoordinate.st, fixedLodLevel);
+        } else
+
+#endif /* DIRECT_LOD_FETCH */
+        {
+            col = texture2D(texture0, v_textureCoordinate.st);
+        }
     }
 
 #ifdef USE_OCIO

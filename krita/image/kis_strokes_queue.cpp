@@ -56,6 +56,7 @@ struct KisStrokesQueue::Private {
     bool shouldWrapInSuspendStroke() const;
 
     void switchDesiredLevelOfDetail();
+    bool hasUnfinishedStrokes() const;
 };
 
 
@@ -266,28 +267,48 @@ bool KisStrokesQueue::cancelStroke(KisStrokeId id)
     return stroke;
 }
 
+bool KisStrokesQueue::Private::hasUnfinishedStrokes() const
+{
+    foreach (KisStrokeSP stroke, strokesQueue) {
+        if (!stroke->isEnded()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
 {
     bool anythingCanceled = false;
 
     QMutexLocker locker(&m_d->mutex);
 
-    if (!m_d->strokesQueue.isEmpty()) {
-        KisStrokeSP currentStroke = m_d->strokesQueue.head();
+    /**
+     * We cancel only ended strokes. This is done to avoid
+     * handling dangling pointers problem (KisStrokeId). The owner
+     * of a stroke will cancel the stroke itself if needed.
+     */
+    if (!m_d->strokesQueue.isEmpty() &&
+        !m_d->hasUnfinishedStrokes()) {
 
-        /**
-         * We cancel only ended strokes. This is done to avoid
-         * handling dangling pointers problem (KisStrokeId). The owner
-         * of a stroke will cancel the stroke itself if needed.
-         */
-        if (currentStroke->isEnded()) {
+        anythingCanceled = true;
+
+        foreach (KisStrokeSP currentStroke, m_d->strokesQueue) {
+            KIS_ASSERT_RECOVER_NOOP(currentStroke->isEnded());
+
             currentStroke->cancelStroke();
-            anythingCanceled = true;
 
-            KisStrokeSP buddy = currentStroke->lodBuddy();
-            if (buddy) {
-                buddy->endStroke();
+            // we shouldn't cancel buddies...
+            if (currentStroke->type() == KisStroke::LOD0) {
+                /**
+                 * If the buddy has already finished, we cannot undo it because
+                 * it doesn't store any undo data. Therefore we just regenerate
+                 * the LOD caches.
+                 */
+                m_d->lodNNeedsSynchronization = true;
             }
+
         }
     }
 

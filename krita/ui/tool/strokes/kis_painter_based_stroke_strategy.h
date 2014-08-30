@@ -70,6 +70,8 @@ protected:
     KisSelectionSP activeSelection() const;
     const QVector<PainterInfo*> painterInfos() const;
 
+    void setUndoEnabled(bool value);
+
 protected:
     KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs);
 
@@ -88,6 +90,8 @@ private:
 
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
+
+    bool m_undoEnabled;
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

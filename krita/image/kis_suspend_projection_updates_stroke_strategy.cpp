@@ -116,14 +116,15 @@ KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStra
     m_d->suspend = suspend;
 
     // TODO: exclusive
-    enableJob(JOB_INIT, true);
+    enableJob(JOB_FINISH, true);
+    enableJob(JOB_CANCEL, true);
 }
 
 KisSuspendProjectionUpdatesStrokeStrategy::~KisSuspendProjectionUpdatesStrokeStrategy()
 {
 }
 
-void KisSuspendProjectionUpdatesStrokeStrategy::initStrokeCallback()
+void KisSuspendProjectionUpdatesStrokeStrategy::finishStrokeCallback()
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->image);
 
@@ -145,5 +146,15 @@ void KisSuspendProjectionUpdatesStrokeStrategy::initStrokeCallback()
             m_d->image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
             localFilter->notifyUpdates(m_d->image.data());
         }
+    }
+}
+
+void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
+{
+    finishStrokeCallback();
+
+    if (!m_d->suspend) {
+        // FIXME: optimize
+        m_d->image->refreshGraphAsync();
     }
 }

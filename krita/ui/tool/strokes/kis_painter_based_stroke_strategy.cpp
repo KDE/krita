@@ -27,6 +27,7 @@
 #include "kis_transaction.h"
 #include "kis_image.h"
 #include "kis_distance_information.h"
+#include "kis_undo_stores.h"
 
 
 KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo()
@@ -60,7 +61,8 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
     : KisSimpleStrokeStrategy(id, name),
       m_resources(resources),
       m_painterInfos(painterInfos),
-      m_transaction(0)
+      m_transaction(0),
+      m_undoEnabled(true)
 {
     init();
 }
@@ -72,7 +74,8 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
     : KisSimpleStrokeStrategy(id, name),
       m_resources(resources),
       m_painterInfos(QVector<PainterInfo*>() <<  painterInfo),
-      m_transaction(0)
+      m_transaction(0),
+      m_undoEnabled(true)
 {
     init();
 }
@@ -89,7 +92,8 @@ void KisPainterBasedStrokeStrategy::init()
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs)
     : KisSimpleStrokeStrategy(rhs),
-      m_resources(rhs.m_resources)
+      m_resources(rhs.m_resources),
+      m_undoEnabled(true)
 {
     foreach(PainterInfo *info, rhs.m_painterInfos) {
         m_painterInfos.append(new PainterInfo(*info));
@@ -116,6 +120,11 @@ const QVector<KisPainterBasedStrokeStrategy::PainterInfo*>
 KisPainterBasedStrokeStrategy::painterInfos() const
 {
     return m_painterInfos;
+}
+
+void KisPainterBasedStrokeStrategy::setUndoEnabled(bool value)
+{
+    m_undoEnabled = value;
 }
 
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
@@ -198,16 +207,30 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     KisIndirectPaintingSupport *indirect =
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
+    KisPostExecutionUndoAdapter *undoAdapter =
+        m_resources->postExecutionUndoAdapter();
+
+    QScopedPointer<KisPostExecutionUndoAdapter> dumbUndoAdapter;
+    QScopedPointer<KisUndoStore> dumbUndoStore;
+
+
+    if (!m_undoEnabled) {
+        dumbUndoStore.reset(new KisDumbUndoStore());
+        dumbUndoAdapter.reset(new KisPostExecutionUndoAdapter(dumbUndoStore.data(), 0));
+
+        undoAdapter = dumbUndoAdapter.data();
+    }
+
     if(layer && indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();
         m_transaction->end();
 
         indirect->mergeToLayer(layer,
-                               m_resources->postExecutionUndoAdapter(),
+                               undoAdapter,
                                transactionText);
     }
     else {
-        m_transaction->commit(m_resources->postExecutionUndoAdapter());
+        m_transaction->commit(undoAdapter);
     }
     delete m_transaction;
     deletePainters();

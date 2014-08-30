@@ -30,7 +30,8 @@ public:
     ~KisSuspendProjectionUpdatesStrokeStrategy();
 
 private:
-    void initStrokeCallback();
+    void finishStrokeCallback();
+    void cancelStrokeCallback();
 
 private:
     struct Private;

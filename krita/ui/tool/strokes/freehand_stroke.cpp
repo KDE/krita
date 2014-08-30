@@ -25,12 +25,6 @@
 
 struct FreehandStrokeStrategy::Private
 {
-    Private()
-        : deferUpdatesTillTheEnd(false)
-    {
-    }
-
-    bool deferUpdatesTillTheEnd;
 };
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
@@ -111,28 +105,14 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         info->painter->paintPainterPath(d->path);
     };
 
-    if (!m_d->deferUpdatesTillTheEnd) {
-        d->node->setDirty(info->painter->takeDirtyRegion());
-    }
-}
-
-void FreehandStrokeStrategy::finishStrokeCallback()
-{
-    if (m_d->deferUpdatesTillTheEnd) {
-        foreach(PainterInfo *info, painterInfos()) {
-            info->painter->device()->setDirty(info->painter->takeDirtyRegion());
-        }
-    }
-
-    KisPainterBasedStrokeStrategy::finishStrokeCallback();
+    d->node->setDirty(info->painter->takeDirtyRegion());
 }
 
 KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
 {
     Q_UNUSED(levelOfDetail);
 
-    m_d->deferUpdatesTillTheEnd = true;
-
-    KisStrokeStrategy *clone = new FreehandStrokeStrategy(*this);
+    FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this);
+    clone->setUndoEnabled(false);
     return clone;
 }

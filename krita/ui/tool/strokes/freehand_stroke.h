@@ -164,7 +164,6 @@ public:
     ~FreehandStrokeStrategy();
 
     void doStrokeCallback(KisStrokeJobData *data);
-    void finishStrokeCallback();
 
     KisStrokeStrategy* createLodClone(int levelOfDetail);
 

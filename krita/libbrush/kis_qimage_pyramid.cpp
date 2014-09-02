@@ -170,15 +170,6 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                            baseBounds);
 
     QRect expectedDstRect = roundRect(originalTransform.mapRect(originalBounds));
-    QRectF realRect = transform.mapRect(baseBounds);
-
-    scaleX *= qreal(expectedDstRect.width()) / realRect.width();
-    scaleY *= qreal(expectedDstRect.height()) / realRect.height();
-
-    transform = baseBrushTransform(scaleX, scaleY,
-                                   rotation,
-                                   subPixelX, subPixelY,
-                                   baseBounds);
 
     {
         QRect testingRect = roundRect(transform.mapRect(baseBounds));

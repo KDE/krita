@@ -40,8 +40,8 @@ void KoReportDesignerItemField::init(QGraphicsScene * scene)
 
     KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
     
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set,KoProperty::Property)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
 
     setZValue(Z);
 }

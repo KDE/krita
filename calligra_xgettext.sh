@@ -1,16 +1,28 @@
 #
-# Helper function for extracting translatable messages from Calligra source code
-# Usage example:
-#     calligra_xgettext `find . -name \*.cpp -o -name \*.h` > $podir/planlibs.pot
+# Helper function for extracting translatable messages from Calligra source code.
+# Usage: calligra_xgettext <pot-filename-without-path> <source-files-list>
+# If there are no messages or the <source-files-list> is empty, the pot file is deleted.
+#
+# Example usage that creates $podir/myapp.pot file:
+#     calligra_xgettext myapp.pot `find . -name \*.cpp -o -name \*.h`
 #
 function calligra_xgettext() {
+    POTFILE="$podir/$1"
+    shift
+    if test -n "$*"; then
+        calligra_xgettext_internal $* | tee "${POTFILE}" | tail -n1 | grep "^msgstr \"\"\$" > /dev/null \
+            || rm -f "${POTFILE}" 2> /dev/null
+    fi
+}
+
+function calligra_xgettext_internal() {
     SRC_FILES="$*"
     POT_PART_NORMAL="`mktemp $podir/_normal_XXXXXXXX.pot`"
     POT_PART_QUNDOFORMAT="`mktemp $podir/_qundoformat_XXXXXXXX.pot`"
     POT_PART_QUNDOFORMAT2="`mktemp $podir/_qundoformat2_XXXXXXXX.pot`"
     POT_MERGED="`mktemp $podir/_merged_XXXXXXXX.pot`"
 
-    $XGETTEXT ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_NORMAL}"
+    $XGETTEXT ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_NORMAL}" --force-po
     $XGETTEXT_PROGRAM --from-code=UTF-8 -C --kde -kkundo2_i18n:1 -kkundo2_i18np:1,2 -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_QUNDOFORMAT}"
 
     if [ $(cat ${POT_PART_NORMAL} ${POT_PART_QUNDOFORMAT} | grep -c \(qtundo-format\)) != 0 ]; then
@@ -52,4 +64,18 @@ function calligra_xgettext() {
     fi
 
     rm -f "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}" "${POT_MERGED}"
+}
+
+# Sets EXCLUDE variable to excludes compatible with the find(1) command, e.g. '-path a -o -path b'.
+# To unconditionally exclude dir (with subdirs) just put an empty file .i18n in it.
+# To exclude dir for all translations but one, e.g. foo.pot, put a single "foo" line into the .i18n file.
+function find_exclude() {
+    EXCLUDE=""
+    for f in `find . -name .i18n | sed 's/\/\.i18n$//g' | sort`; do
+        if ! grep -q "^${1}$" "$f/.i18n" ; then
+            if [ -n "$EXCLUDE" ] ; then EXCLUDE="$EXCLUDE -o " ; fi
+            EXCLUDE="$EXCLUDE -path $f"
+        fi
+    done
+    if [ -z "$EXCLUDE" ] ; then EXCLUDE="-path __dummy__" ; fi # needed because -prune in find needs args
 }

@@ -484,7 +484,7 @@ bool Connection::databaseExists(const QString &dbName, bool ignoreErrors)
         QFileInfo file(d->conn_data->fileName());
         if (!file.exists() || (!file.isFile() && !file.isSymLink())) {
             if (!ignoreErrors)
-                setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.",
+                setError(ERR_OBJECT_NOT_FOUND, i18n("The database file \"%1\" does not exist.",
                                                     QDir::convertSeparators(d->conn_data->fileName())));
             return false;
         }
@@ -795,7 +795,7 @@ bool Connection::dropDatabase(const QString &dbName)
     if (dbName.isEmpty() && d->usedDatabase.isEmpty()) {
         if (!m_driver->isFileDriver()
                 || (m_driver->isFileDriver() && d->conn_data->fileName().isEmpty())) {
-            setError(ERR_NO_NAME_SPECIFIED, i18n("Cannot drop database - name not specified."));
+            setError(ERR_NO_NAME_SPECIFIED, i18n("Cannot delete database - name not specified."));
             return false;
         }
         //this is a file driver so reuse previously passed filename
@@ -1192,7 +1192,7 @@ bool Connection::executeSQL(const QString& statement)
 {
     m_sql = statement; //remember for error handling
     if (!drv_executeSQL(m_sql)) {
-        m_errMsg.clear(); //clear as this could be most probably jsut "Unknown error" string.
+        m_errMsg.clear(); //clear as this could be most probably just "Unknown error" string.
         m_errorSql = statement;
         setError(this, ERR_SQL_EXECUTION_ERROR, i18n("Error while executing SQL statement."));
         return false;
@@ -1801,7 +1801,7 @@ TableSchema *Connection::copyTable(const TableSchema &tableSchema, const KexiDB:
 {
     clearError();
     if (this->tableSchema(tableSchema.name()) != &tableSchema) {
-        setError(ERR_OBJECT_NOT_FOUND, i18n("Table \"%1\" does not exist in the database.",
+        setError(ERR_OBJECT_NOT_FOUND, i18n("Table \"%1\" does not exist.",
                                             tableSchema.name()));
         return 0;
     }
@@ -1950,7 +1950,7 @@ tristate Connection::alterTable(TableSchema& tableSchema, TableSchema& newTableS
         return res;
 
     if (&tableSchema == &newTableSchema) {
-        setError(ERR_OBJECT_THE_SAME, i18n("Could not alter table \"%1\" using the same table.",
+        setError(ERR_OBJECT_THE_SAME, i18n("Could not alter table \"%1\" using the same table as destination.",
                                            tableSchema.name()));
         return false;
     }
@@ -1972,11 +1972,11 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 {
     clearError();
     if (&tableSchema != this->tableSchema(tableSchema.id())) {
-        setError(ERR_OBJECT_NOT_FOUND, i18n("Unknown table \"%1\"", tableSchema.name()));
+        setError(ERR_OBJECT_NOT_FOUND, i18n("Unknown table \"%1\".", tableSchema.name()));
         return false;
     }
     if (newName.isEmpty() || !KexiDB::isIdentifier(newName)) {
-        setError(ERR_INVALID_IDENTIFIER, i18n("Invalid table name \"%1\"", newName));
+        setError(ERR_INVALID_IDENTIFIER, i18n("Invalid table name \"%1\".", newName));
         return false;
     }
     const QString oldTableName = tableSchema.name();
@@ -2188,7 +2188,7 @@ bool Connection::rollbackAutoCommitTransaction(const Transaction& trans)
 
 #define SET_BEGIN_TR_ERROR \
     { if (!error()) \
-            setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Begin transaction failed")); }
+            setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Begin transaction failed.")); }
 
 Transaction Connection::beginTransaction()
 {
@@ -2259,7 +2259,7 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
     if (!d->dont_remove_transactions) //true=transaction obj will be later removed from list
         d->transactions.removeAt(d->transactions.indexOf(t));
     if (!ret && !error())
-        setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on commit transaction"));
+        setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on commit transaction."));
     return ret;
 }
 
@@ -2294,7 +2294,7 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
     if (!d->dont_remove_transactions) //true=transaction obj will be later removed from list
         d->transactions.removeAt(d->transactions.indexOf(t));
     if (!ret && !error())
-        setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on rollback transaction"));
+        setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on rollback transaction."));
     return ret;
 }
 
@@ -2458,7 +2458,7 @@ bool Connection::setupObjectSchemaData(const RecordData &data, SchemaData &sdata
     }
     sdata.m_name = data[2].toString();
     if (!KexiDB::isIdentifier(sdata.m_name)) {
-        setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"", sdata.m_name));
+        setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\".", sdata.m_name));
         return false;
     }
     sdata.m_caption = data[3].toString();
@@ -2580,7 +2580,7 @@ tristate Connection::querySingleRecord(QuerySchema& query, RecordData &data, boo
 bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
 {
     if (column >= cursor->fieldCount()) {
-        setError(ERR_CURSOR_RECORD_FETCHING, i18n("Column %1 does not exist for the query.", column));
+        setError(ERR_CURSOR_RECORD_FETCHING, i18n("Column <resource>%1</resource> does not exist in the query.", column));
         return false;
     }
     return true;
@@ -2841,14 +2841,14 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 {
 #define loadExtendedTableSchemaData_ERR \
-    { setError(i18n("Error while loading extended table schema information.")); \
+    { setError(i18nc("Extended schema for a table: loading error", "Error while loading extended table schema.")); \
         return false; }
 #define loadExtendedTableSchemaData_ERR2(details) \
-    { setError(i18n("Error while loading extended table schema information."), details); \
+    { setError(i18nc("Extended schema for a table: loading error", "Error while loading extended table schema."), details); \
         return false; }
 #define loadExtendedTableSchemaData_ERR3(data) \
-    { setError(i18n("Error while loading extended table schema information."), \
-                   i18n("Invalid XML data: ") + data.left(1024) ); \
+    { setError(i18nc("Extended schema for a table: loading error", "Error while loading extended table schema."), \
+                   i18n("Invalid XML data: %1", data.left(1024)) ); \
         return false; }
 
     // Load extended schema information, if present (see ExtendedTableSchemaInformation in Kexi Wiki)
@@ -2877,8 +2877,10 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
     QDomDocument doc;
     QString errorMsg;
     int errorLine, errorColumn;
-    if (!doc.setContent(extendedTableSchemaString, &errorMsg, &errorLine, &errorColumn))
-        loadExtendedTableSchemaData_ERR2(i18n("Error in XML data: \"%1\" in line %2, column %3.\nXML data: ", errorMsg, errorLine, errorColumn) + extendedTableSchemaString.left(1024));
+    if (!doc.setContent(extendedTableSchemaString, &errorMsg, &errorLine, &errorColumn)) {
+        loadExtendedTableSchemaData_ERR2(i18n("Error in XML data: \"%1\" in line %2, column %3.\n"
+            "XML data: %4", errorMsg, errorLine, errorColumn, extendedTableSchemaString.left(1024)));
+    }
 
 //! @todo look at the current format version (KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION)
 
@@ -2977,7 +2979,7 @@ KexiDB::Field* Connection::setupField(const RecordData &data)
 
     QString name(data.at(2).toString().toLower());
     if (!KexiDB::isIdentifier(name)) {
-        setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"",
+        setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\".",
                                               data.at(2).toString()));
         ok = false;
         return 0;
@@ -3174,9 +3176,12 @@ KexiDB::QuerySchema* Connection::setupQuerySchema(const RecordData &data)
     //error?
     if (!query) {
         setError(ERR_SQL_PARSE_ERROR,
-                 i18n("<p>Could not load definition for query \"%1\". "
-                      "SQL statement for this query is invalid:<br><tt>%2</tt></p>\n"
-                      "<p>You can open this query in Text View and correct it.</p>", data[2].toString(),    d->parser()->statement()));
+                 i18nc("@info",
+                       "<para>Could not load definition for query \"%1\". "
+                       "SQL statement for this query is invalid: <message>%2</message></para>\n"
+                       "<para>You can open this query in Text View and correct it.</para>",
+                       data[2].toString(),
+                       d->parser()->statement()));
         return 0;
     }
     if (!setupObjectSchemaData(data, *query)) {
@@ -3417,7 +3422,7 @@ bool Connection::updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
         if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
             KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!";
             setError(ERR_UPDATE_NO_ENTIRE_MASTER_TABLES_PKEY,
-                     i18n("Could not update record because it does not contain entire master table's primary key."));
+                     i18n("Could not update record because it does not contain entire primary key of master table."));
             return false;
         }
         if (!pkey->fields()->isEmpty()) {
@@ -3478,7 +3483,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
     if (!mt) {
         KexiDBWarn << " -- NO MASTER TABLE!";
         setError(ERR_INSERT_NO_MASTER_TABLE,
-                 i18n("Could not insert record because there is no master table defined."));
+                 i18n("Could not insert record because there is no master table specified."));
         return false;
     }
     IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
@@ -3515,7 +3520,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
         if (!getROWID && !pkey) {
             KexiDBWarn << "MASTER TABLE's PKEY REQUIRED FOR INSERTING EMPTY RECORDS: INSERT CANCELLED";
             setError(ERR_INSERT_NO_MASTER_TABLES_PKEY,
-                     i18n("Could not insert record because master table has no primary key defined."));
+                     i18n("Could not insert record because master table has no primary key specified."));
             return false;
         }
         if (pkey) {
@@ -3635,7 +3640,7 @@ bool Connection::deleteRow(QuerySchema &query, RecordData& data, bool useROWID)
     if (!mt) {
         KexiDBWarn << " -- NO MASTER TABLE!";
         setError(ERR_DELETE_NO_MASTER_TABLE,
-                 i18n("Could not delete record because there is no master table defined."));
+                 i18n("Could not delete record because there is no master table specified."));
         return false;
     }
     IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
@@ -3644,7 +3649,7 @@ bool Connection::deleteRow(QuerySchema &query, RecordData& data, bool useROWID)
     if (!useROWID && !pkey) {
         KexiDBWarn << " -- WARNING: NO MASTER TABLE's PKEY";
         setError(ERR_DELETE_NO_MASTER_TABLES_PKEY,
-                 i18n("Could not delete record because there is no primary key for master table defined."));
+                 i18n("Could not delete record because there is no primary key for master table specified."));
         return false;
     }
 
@@ -3793,5 +3798,9 @@ void Connection::takeCursor(KexiDB::Cursor& cursor)
 {
     d->cursors.remove(&cursor);
 }
+
+#if 0 // extra messages
+I18N_NOOP("Unknown error.")
+#endif
 
 #include "connection.moc"

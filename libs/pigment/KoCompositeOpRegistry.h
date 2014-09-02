@@ -126,6 +126,9 @@ const QString COMPOSITE_DISSOLVE     = "dissolve";
 const QString COMPOSITE_DISPLACE     = "displace";
 const QString COMPOSITE_NO           = "nocomposition";
 const QString COMPOSITE_PASS_THROUGH = "pass through"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_DARKER_COLOR = "darker color"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_LIGHTER_COLOR = "lighter color"; // XXX: not implemented anywhere yet
+
 const QString COMPOSITE_UNDEF        = "undefined";
 
 

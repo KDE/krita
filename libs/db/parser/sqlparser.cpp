@@ -2470,7 +2470,7 @@ YYACCEPT;
 			Field *f = item->table()->field(item->name());
 			if(!f)
 			{
-				ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'",item->name(),schema->name()), ctoken, current);
+				ParserError err(futureI18n("Field List Error"), futureI18n("Unknown column '%1' in table '%2'.",item->name(),schema->name()), ctoken, current);
 				parser->setError(err);
 				yyerror("fieldlisterror");
 			}	

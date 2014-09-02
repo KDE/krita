@@ -569,7 +569,7 @@ void KisRulerAssistantTool::saveAssistants()
     xml.writeEndElement();
     xml.writeEndDocument();
 
-    KoFileDialog dialog(m_canvas->view(), KoFileDialog::OpenFile, "OpenAssistant");
+    KoFileDialog dialog(m_canvas->view(), KoFileDialog::SaveFile, "OpenAssistant");
     dialog.setCaption(i18n("Save Assistant"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setNameFilter("Krita Assistant (*.krassistant)");

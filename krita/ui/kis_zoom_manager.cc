@@ -237,8 +237,13 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
     qreal scaleX, scaleY;
     m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
-    KIS_ASSERT_RECOVER_NOOP(scaleX == scaleY && "Zoom is not isotropic!");
-    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, scaleX);
+
+    if (scaleX != scaleY) {
+        qWarning() << "WARNING: Zoom is not isotropic!"  << ppVar(scaleX) << ppVar(scaleY) << ppVar(qFuzzyCompare(scaleX, scaleY));
+    }
+
+    qreal effectiveZoom = 0.5 * (scaleX, scaleY);
+    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, effectiveZoom);
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

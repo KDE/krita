@@ -1,4 +1,4 @@
-add_subdirectory( test )
+add_subdirectory( tests )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 

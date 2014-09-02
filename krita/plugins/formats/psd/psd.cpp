@@ -19,7 +19,7 @@
 
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOpRegistry.h>
-
+#include <kis_debug.h>
 
 QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, quint16 channelDepth)
 {
@@ -67,63 +67,129 @@ QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, qu
 
 QString psd_blendmode_to_composite_op(const QString& blendmode)
 {
-    if (blendmode == "norm") return COMPOSITE_OVER;    // normal
-    if (blendmode == "diss") return COMPOSITE_DISSOLVE; //dissolve
-    if (blendmode == "dark") return COMPOSITE_DARKEN;  // darken
-    if (blendmode == "lite") return COMPOSITE_LIGHTEN; // lighten
-    if (blendmode == "hue ") return COMPOSITE_HUE;     // hue
-    if (blendmode == "sat ") return COMPOSITE_SATURATION; // saturation
-    if (blendmode == "colr") return COMPOSITE_COLOR; //color
-    if (blendmode == "lum ") return COMPOSITE_LUMINIZE; //luminosity
-    if (blendmode == "mul ") return COMPOSITE_MULT; //multiply
-    if (blendmode == "scrn") return COMPOSITE_SCREEN; //screen
-    if (blendmode == "over") return COMPOSITE_OVERLAY; //overlay
-    if (blendmode == "hLit") return COMPOSITE_HARD_LIGHT; //hard light
-    if (blendmode == "sLit") return COMPOSITE_SOFT_LIGHT_PHOTOSHOP; //soft light
-    if (blendmode == "diff") return COMPOSITE_DIFF; //difference
-    if (blendmode == "smud") return COMPOSITE_EXCLUSION; //exclusion
-    if (blendmode == "div ") return COMPOSITE_DIVIDE; // color dodge
-    if (blendmode == "idiv") return COMPOSITE_INVERTED_DIVIDE ; //color burn
-    if (blendmode == "lbrn") return COMPOSITE_BURN ; //linear burn
-    if (blendmode == "lddg") return COMPOSITE_DODGE ; //linear dodge
-    if (blendmode == "vLit") return COMPOSITE_VIVID_LIGHT; //vivid light
-    if (blendmode == "lLit") return COMPOSITE_LINEAR_LIGHT; //linear light
-    if (blendmode == "pLit") return COMPOSITE_PIN_LIGHT; //  pin light
-    if (blendmode == "hMix") return COMPOSITE_HARD_MIX; //hard mix
-    if (blendmode == "pass") return COMPOSITE_PASS_THROUGH; //pass through
 
+    // 'pass' = pass through
+    if (blendmode == "pass") return COMPOSITE_PASS_THROUGH;
+    // 'norm' = normal
+    if (blendmode == "norm") return COMPOSITE_OVER;
+    // 'diss' = dissolve
+    if (blendmode == "diss") return COMPOSITE_DISSOLVE;
+    // 'dark' = darken
+    if (blendmode == "dark") return COMPOSITE_DARKEN;
+    // 'mul ' = multiply
+    if (blendmode == "mul ") return COMPOSITE_MULT;
+    // 'idiv' = color burn
+    if (blendmode == "idiv") return COMPOSITE_INVERTED_DIVIDE;
+    // 'lbrn' = linear burn
+    if (blendmode == "lbrn") return COMPOSITE_BURN;
+    // 'dkCl' = darker color
+    if (blendmode == "dkCl") return COMPOSITE_DARKER_COLOR;
+    // 'lite' = lighten
+    if (blendmode == "lite") return COMPOSITE_LIGHTEN;
+    // 'scrn' = screen
+    if (blendmode == "scrn") return COMPOSITE_SCREEN;
+    // 'div ' = color dodge
+    if (blendmode == "div ") return COMPOSITE_DODGE;
+    // 'lddg' = linear dodge
+    if (blendmode == "lddg") return COMPOSITE_LINEAR_DODGE;
+    // 'lgCl' = lighter color
+    if (blendmode == "lgCl") return COMPOSITE_LIGHTER_COLOR;
+    // 'over' = overlay
+    if (blendmode == "over") return COMPOSITE_OVERLAY;
+    // 'sLit' = soft light
+    if (blendmode == "sLit") return COMPOSITE_SOFT_LIGHT_PHOTOSHOP;
+    // 'hLit' = hard light
+    if (blendmode == "hLit") return COMPOSITE_HARD_LIGHT;
+    // 'vLit' = vivid light
+    if (blendmode == "vLit") return COMPOSITE_VIVID_LIGHT;
+    // 'lLit' = linear light
+    if (blendmode == "lLit") return COMPOSITE_LINEAR_LIGHT;
+    // 'pLit' = pin light
+    if (blendmode == "pLit") return COMPOSITE_PIN_LIGHT;
+    // 'hMix' = hard mix
+    if (blendmode == "hMix") return COMPOSITE_HARD_MIX;
+    // 'diff' = difference
+    if (blendmode == "diff") return COMPOSITE_DIFF;
+    // 'smud' = exclusion
+    if (blendmode == "smud") return COMPOSITE_EXCLUSION;
+    // 'fsub' = subtract
+    if (blendmode == "fsub") return COMPOSITE_SUBTRACT;
+    // 'fdiv' = divide
+    if (blendmode == "fdiv") return COMPOSITE_DIVIDE;
+    // 'hue ' = hue
+    if (blendmode == "hue ") return COMPOSITE_HUE;
+    // 'sat ' = saturation
+    if (blendmode == "sat ") return COMPOSITE_SATURATION;
+    // 'colr' = color
+    if (blendmode == "colr") return COMPOSITE_COLOR;
+    // 'lum ' = luminosity
+    if (blendmode == "lum ") return COMPOSITE_LUMINIZE;
+
+    warnFile << "Unknown blendmode:" << blendmode << ". Returning Normal";
     return COMPOSITE_OVER;
 }
 
 QString composite_op_to_psd_blendmode(const QString& compositeop)
 {
+    // 'pass' = pass through
+    if (compositeop == COMPOSITE_PASS_THROUGH) return "pass";
+    // 'norm' = normal
+    if (compositeop == COMPOSITE_OVER) return "norm";
+    // 'diss' = dissolve
+    if (compositeop == COMPOSITE_DISSOLVE) return "diss";
+    // 'dark' = darken
+    if (compositeop == COMPOSITE_DARKEN) return "dark";
+    // 'mul ' = multiply
+    if (compositeop == COMPOSITE_MULT) return "mul ";
+    // 'idiv' = color burn
+    if (compositeop == COMPOSITE_INVERTED_DIVIDE ) return "idiv";
+    // 'lbrn' = linear burn
+    if (compositeop == COMPOSITE_BURN || compositeop == COMPOSITE_LINEAR_BURN) return "lbrn";
+    // 'dkCl' = darker color
+    if (compositeop == COMPOSITE_DARKER_COLOR) return "dkCl";
+    // 'lite' = lighten
+    if (compositeop == COMPOSITE_LIGHTEN) return "lite";
+    // 'scrn' = screen
+    if (compositeop == COMPOSITE_SCREEN) return "scrn";
+    // 'div ' = color dodge
+    if (compositeop == COMPOSITE_DODGE) return "div ";
+    // 'lddg' = linear dodge
+    if (compositeop == COMPOSITE_LINEAR_DODGE ) return "lddg";
+    // 'lgCl' = lighter color
+    if (compositeop == COMPOSITE_LIGHTER_COLOR) return "lgCl";
+    // 'over' = overlay
+    if (compositeop == COMPOSITE_OVERLAY) return "over";
+    // 'sLit' = soft light
+    if (compositeop == COMPOSITE_SOFT_LIGHT_PHOTOSHOP) return "sLit";
+    if (compositeop == COMPOSITE_SOFT_LIGHT_SVG) return "sLit";
+    // 'hLit' = hard light
+    if (compositeop == COMPOSITE_HARD_LIGHT) return "hLit";
+    // 'vLit' = vivid light
+    if (compositeop == COMPOSITE_VIVID_LIGHT) return "vLit";
+    // 'lLit' = linear light
+    if (compositeop == COMPOSITE_LINEAR_LIGHT) return "lLit";
+    // 'pLit' = pin light
+    if (compositeop == COMPOSITE_PIN_LIGHT) return "pLit";
+    // 'hMix' = hard mix
+    if (compositeop == COMPOSITE_HARD_MIX) return "hMix";
+    // 'diff' = difference
+    if (compositeop == COMPOSITE_DIFF) return "diff";
+    // 'smud' = exclusion
+    if (compositeop == COMPOSITE_EXCLUSION) return "smud";
+    // 'fsub' = subtract
+    if (compositeop == COMPOSITE_SUBTRACT) return "fsub";
+    // 'fdiv' = divide
+    if (compositeop == COMPOSITE_DIVIDE) return "fdiv";
+    // 'hue ' = hue
+    if (compositeop == COMPOSITE_HUE) return "hue ";
+    // 'sat ' = saturation
+    if (compositeop == COMPOSITE_SATURATION) return "sat ";
+    // 'colr' = color
+    if (compositeop == COMPOSITE_COLOR) return "colr";
+    // 'lum ' = luminosity
+    if (compositeop == COMPOSITE_LUMINIZE) return "lum ";
 
-    if (compositeop == COMPOSITE_OVER) return "norm";    // normal
-    if (compositeop == COMPOSITE_DISSOLVE) return "diss"; //dissolve
-    if (compositeop == COMPOSITE_DARKEN) return "dark";  // darken
-    if (compositeop == COMPOSITE_LIGHTEN) return "lite"; // lighten
-    if (compositeop == COMPOSITE_HUE) return "hue " ;     // hue
-    if (compositeop == COMPOSITE_SATURATION) return "sat "; // saturation
-    if (compositeop == COMPOSITE_COLOR) return "colr"; //color
-    if (compositeop == COMPOSITE_LUMINIZE) return "lum "; //luminosity
-    if (compositeop == COMPOSITE_MULT) return "mul "; //multiply
-    if (compositeop == COMPOSITE_SCREEN) return "scrn"; //screen
-    if (compositeop == COMPOSITE_OVERLAY) return "over"; //overlay
-    if (compositeop == COMPOSITE_HARD_LIGHT) return "hLit"; //hard light
-    if (compositeop == COMPOSITE_SOFT_LIGHT_PHOTOSHOP) return "sLit"; //soft light
-    if (compositeop == COMPOSITE_SOFT_LIGHT_SVG) return "sLit"; //soft light
-    if (compositeop == COMPOSITE_DIFF) return "diff"; //difference
-    if (compositeop == COMPOSITE_EXCLUSION) return "smud"; //exclusion
-    if (compositeop == COMPOSITE_DIVIDE) return "div "; // color dodge
-    if (compositeop == COMPOSITE_INVERTED_DIVIDE ) return "idiv"; //color burn
-    if (compositeop == COMPOSITE_BURN) return "lbrn"; //linear burn
-    if (compositeop == COMPOSITE_DODGE ) return "lddg"; //linear dodge
-    if (compositeop == COMPOSITE_VIVID_LIGHT) return "vLit"; //vivid light
-    if (compositeop == COMPOSITE_LINEAR_LIGHT) return "lLit"; //linear light
-    if (compositeop == COMPOSITE_PIN_LIGHT) return "pLit"; //  pin light
-    if (compositeop == COMPOSITE_HARD_MIX) return "hMix"; //hard mix
-    if (compositeop == COMPOSITE_PASS_THROUGH) return "pass"; //pass through
-
+    warnFile << "Krita blending mode" << compositeop << "does not exist in Photoshop, returning Normal";
     return "norm";
 
 }

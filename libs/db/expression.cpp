@@ -729,17 +729,19 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
                 } else if (f->table() != firstField->table()) {
                     //ambiguous field name
                     parseInfo.errMsg = i18n("Ambiguous field name");
-                    parseInfo.errDescr = i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
-                                              "Use \"<tableName>.%4\" notation to specify table name.",
-                                              firstField->table()->name(), f->table()->name(),
-                                              fieldName, fieldName);
+                    parseInfo.errDescr = i18nc("@info",
+                        "Both table <resource>%1</resource> and <resource>%2</resource> have "
+                        "defined <resource>%3</resource> field. "
+                        "Use <resource><placeholder>tableName</placeholder>.%4</resource> notation to specify table name.",
+                        firstField->table()->name(), f->table()->name(),
+                        fieldName, fieldName);
                     return false;
                 }
             }
         }
         if (!firstField) {
             parseInfo.errMsg = i18n("Field not found");
-            parseInfo.errDescr = i18n("Table containing \"%1\" field not found", fieldName);
+            parseInfo.errDescr = i18n("Table containing \"%1\" field not found.", fieldName);
             return false;
         }
         //ok
@@ -766,8 +768,11 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
         }
         if (covered) {
             parseInfo.errMsg = i18n("Could not access the table directly using its name");
-            parseInfo.errDescr = i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
-                                      "you can write \"%3\"", tableName, tableName + "." + fieldName, tableAlias + "." + QString(fieldName));
+            parseInfo.errDescr = i18n("Table name <resource>%1</resource> is covered by aliases. "
+                                      "Instead of <resource>%2</resource>, "
+                                      "you can write <resource>%3</resource>.",
+                                      tableName, tableName + "." + fieldName,
+                                      tableAlias + "." + QString(fieldName));
             return false;
         }
         if (!tPositions.isEmpty()) {
@@ -786,7 +791,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
     if (!ts) {
         parseInfo.errMsg = i18n("Table not found");
-        parseInfo.errDescr = i18n("Unknown table \"%1\"", tableName);
+        parseInfo.errDescr = i18n("Unknown table \"%1\".", tableName);
         return false;
     }
 
@@ -800,7 +805,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
     if (fieldName == "*") {
         if (positionsList.count() > 1) {
             parseInfo.errMsg = i18n("Ambiguous \"%1.*\" expression", tableName);
-            parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined", tableName);
+            parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined.", tableName);
             return false;
         }
         tableForQueryAsterisk = ts;
@@ -812,7 +817,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
     Field *realField = ts->field(fieldName);
     if (!realField) {
         parseInfo.errMsg = i18n("Field not found");
-        parseInfo.errDescr = i18n("Table \"%1\" has no \"%2\" field", tableName, fieldName);
+        parseInfo.errDescr = i18n("Table \"%1\" has no \"%2\" field.", tableName, fieldName);
         return false;
     }
 
@@ -820,7 +825,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
     // (so the column is ambiguous)
     if (positionsList.count() > 1) {
         parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression", tableName, fieldName);
-        parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field",
+        parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field.",
                                   tableName, fieldName);
         return false;
     }

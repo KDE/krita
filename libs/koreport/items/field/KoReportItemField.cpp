@@ -113,10 +113,10 @@ void KoReportItemField::createProperties()
     
 #if 0 //Field Totals
     //TODO I do not think we need these
-    m_trackTotal = new KoProperty::Property("TrackTotal", QVariant(false), i18n("Track Total"));
-    m_trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", QVariant(false), i18n("Track Builtin Format"));
-    _useSubTotal = new KoProperty::Property("UseSubTotal", QVariant(false), i18n("Use Sub Total"_);
-    _trackTotalFormat = new KoProperty::Property("TrackTotalFormat", QString(), i18n("Track Total Format"));
+    m_trackTotal = new KoProperty::Property("TrackTotal", QVariant(false), futureI18n("Track Total"));
+    m_trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", QVariant(false), futureI18n("Track Builtin Format"));
+    _useSubTotal = new KoProperty::Property("UseSubTotal", QVariant(false), futureI18n("Use Sub Total"_);
+    _trackTotalFormat = new KoProperty::Property("TrackTotalFormat", QString(), futureI18n("Track Total Format"));
 #endif
 
     addDefaultProperties();

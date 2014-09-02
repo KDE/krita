@@ -26,7 +26,7 @@ install( FILES  kopabackgroundtool.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/
 install(FILES
     KoPABackgroundTool.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
 
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )

@@ -40,6 +40,7 @@ OverviewDockerDock::OverviewDockerDock( )
     m_preview->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     m_preview->setAlignment(Qt::AlignCenter);
     m_preview->setFrameStyle(QFrame::Sunken);
+    m_preview->setMinimumHeight(50);
 
     layout->addWidget(m_preview);
 

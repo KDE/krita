@@ -196,7 +196,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
 
     // Test color space
     if (((rgb && (pd->colorSpace()->id() != "RGBA" && pd->colorSpace()->id() != "RGBA16"))
-            || (!rgb && (pd->colorSpace()->id() != "GRAYA" && pd->colorSpace()->id() != "GRAYA16")))) {
+            || (!rgb && (pd->colorSpace()->id() != "GRAYA" && pd->colorSpace()->id() != "GRAYA16" && pd->colorSpace()->id() != "GRAYAU16")))) {
         if (rgb) {
             pd->convertTo(KoColorSpaceRegistry::instance()->rgb8(0), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
         }
@@ -205,7 +205,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
         }
     }
 
-    bool is16bit = pd->colorSpace()->id() == "RGBA16" || pd->colorSpace()->id() == "GRAYA16";
+    bool is16bit = pd->colorSpace()->id() == "RGBA16" || pd->colorSpace()->id() == "GRAYAU16";
 
     // Open the file for writing
     QFile fp(filename);

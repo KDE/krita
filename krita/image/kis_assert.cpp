@@ -57,6 +57,11 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
     bool disableAssertMsg =
         QProcessEnvironment::systemEnvironment().value("KRITA_NO_ASSERT_MSG", "0").toInt();
 
+    // disable message box if the assert happened in non-gui thread :(
+    if (QThread::currentThread() != QCoreApplication::instance()->thread()) {
+        disableAssertMsg = true;
+    }
+
     QMessageBox::StandardButton button = QMessageBox::Abort;
 
     if (!disableAssertMsg) {

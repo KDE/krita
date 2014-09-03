@@ -221,10 +221,10 @@ void KisBrush::setHotSpot(QPointF pt)
 
 QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const
 {
-    Q_UNUSED(scaleY);
+    QSizeF metric = characteristicSize(scaleX, scaleY, rotation);
 
-    double w = maskWidth(scaleX, rotation, 0.0, 0.0, info);
-    double h = maskHeight(scaleX, rotation, 0.0, 0.0, info);
+    qreal w = metric.width();
+    qreal h = metric.height();
 
     // The smallest brush we can produce is a single pixel.
     if (w < 1) {
@@ -323,6 +323,17 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element)
         brush->setScale(brush->scale() * 2.0);
     }
     return brush;
+}
+
+QSizeF KisBrush::characteristicSize(double scaleX, double scaleY, double rotation) const
+{
+    Q_UNUSED(scaleY);
+
+    qreal angle = normalizeAngle(rotation + d->angle);
+    qreal scale = scaleX * d->scale;
+
+    return KisQImagePyramid::characteristicSize(QSize(width(), height()),
+                                                scale, angle);
 }
 
 qint32 KisBrush::maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const

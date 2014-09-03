@@ -186,6 +186,17 @@ public:
     virtual qint32 maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
 
     /**
+     * @return the logical size of the brush, that is the size measured
+     *         in floating point value.
+     *
+     *         This value should not be used for calculating future dab sizes
+     *         because it doesn't take any rounding into account. The only use
+     *         of this metric is calculation of brush-size derivatives like
+     *         hotspots and spacing.
+     */
+     QSizeF characteristicSize(double scaleX, double scaleY, double rotation) const;
+
+    /**
      * @return the angle of the mask adding the given angle
      */
     double maskAngle(double angle = 0) const;

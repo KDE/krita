@@ -20,7 +20,6 @@
 #include "kis_properties_configuration.h"
 #include "kis_brush_option.h"
 #include <kis_pressure_spacing_option.h>
-#include "kis_qimage_pyramid.h"
 
 #include <QImage>
 #include <QPainter>
@@ -120,10 +119,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
         extraSpacingScale = spacingOption.apply(pi);
     }
 
-    QSizeF metric =
-        KisQImagePyramid::characteristicSize(QSize(m_brush->width(), m_brush->height()),
-                                             m_brush->scale() * scale, rotation);
-
+    QSizeF metric = m_brush->characteristicSize(scale, scale, rotation);
     return effectiveSpacing(metric.width(), metric.height(), extraSpacingScale, spacingOption.isotropicSpacing());
 }
 

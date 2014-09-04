@@ -41,16 +41,20 @@ class KRITAIMAGE_EXPORT KisCurveCircleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes,const KisCubicCurve& curve);
+    KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes,const KisCubicCurve& curve, bool antialiasEdges);
     virtual ~KisCurveCircleMaskGenerator();
 
     virtual quint8 valueAt(qreal x, qreal y) const;
 
+    void setScale(qreal scaleX, qreal scaleY);
+
+    bool shouldSupersample() const;
+
     virtual void toXML(QDomDocument& , QDomElement&) const;
     virtual void setSoftness(qreal softness);
-    
+
     static void transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector<qreal> &result);
-    
+
 private:
 
     qreal norme(qreal a, qreal b) const {

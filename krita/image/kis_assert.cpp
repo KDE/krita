@@ -54,11 +54,23 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
             "Press Abort to see developers information (all unsaved data will be lost)")
         .arg(shortMessage);
 
-    QMessageBox::StandardButton button =
-        QMessageBox::critical(0, i18n("Krita Internal Error"),
-                              longMessage,
-                              QMessageBox::Ignore | QMessageBox::Abort,
-                              QMessageBox::Ignore);
+    bool disableAssertMsg =
+        QProcessEnvironment::systemEnvironment().value("KRITA_NO_ASSERT_MSG", "0").toInt();
+
+    // disable message box if the assert happened in non-gui thread :(
+    if (QThread::currentThread() != QCoreApplication::instance()->thread()) {
+        disableAssertMsg = true;
+    }
+
+    QMessageBox::StandardButton button = QMessageBox::Abort;
+
+    if (!disableAssertMsg) {
+        button =
+            QMessageBox::critical(0, i18n("Krita Internal Error"),
+                                  longMessage,
+                                  QMessageBox::Ignore | QMessageBox::Abort,
+                                  QMessageBox::Ignore);
+    }
 
     if (button == QMessageBox::Abort) {
         qFatal("%s", shortMessage.toLatin1().data());

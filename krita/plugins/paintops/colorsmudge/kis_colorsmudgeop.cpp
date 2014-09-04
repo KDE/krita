@@ -174,7 +174,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     m_lastPaintPos = QRectF(m_dstDabRect).center();
 
     KisSpacingInformation spacingInfo =
-        effectiveSpacing(m_dstDabRect.width(), m_dstDabRect.height(),
+        effectiveSpacing(scale, rotation,
                          m_spacingOption, info);
 
     if (m_firstRun) {

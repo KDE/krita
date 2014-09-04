@@ -217,12 +217,10 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         }
     }
 
-    double invScaleX = 1.0 / scaleX;
-    double invScaleY = 1.0 / scaleY;
-
     double centerX = hotSpot.x() - 0.5 + subPixelX;
     double centerY = hotSpot.y() - 0.5 + subPixelY;
 
+    d->shape->setScale(scaleX, scaleY);
     d->shape->setSoftness(softnessFactor);
 
     if (coloringInformation) {
@@ -246,7 +244,6 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
 
     MaskProcessingData data(dst, cs, d->randomness, d->density,
                             centerX, centerY,
-                            invScaleX, invScaleY,
                             angle);
 
     KisBrushMaskApplicatorBase *applicator = d->shape->applicator();
@@ -277,6 +274,8 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.appendChild(shapeElt);
     e.setAttribute("type", "auto_brush");
     e.setAttribute("spacing", QString::number(spacing()));
+    e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
+    e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
     e.setAttribute("angle", QString::number(KisBrush::angle()));
     e.setAttribute("randomness", QString::number(d->randomness));
     e.setAttribute("density", QString::number(d->density));

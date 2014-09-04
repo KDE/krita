@@ -29,30 +29,74 @@
 #include "kis_base_mask_generator.h"
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_cubic_curve.h"
+#include "kis_antialiasing_fade_maker.h"
 
-struct KisCurveCircleMaskGenerator::Private {
+
+
+struct KisCurveCircleMaskGenerator::Private
+{
+    Private(bool enableAntialiasing)
+        : fadeMaker(*this, enableAntialiasing)
+    {
+    }
+
     qreal xcoef, ycoef;
     qreal curveResolution;
     QVector<qreal> curveData;
     QList<QPointF> curvePoints;
     bool dirty;
+
+    KisAntialiasingFadeMaker1D<Private> fadeMaker;
+    inline quint8 value(qreal dist) const;
 };
 
-KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
-        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, CIRCLE, SoftId), d(new Private)
+KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve, bool antialiasEdges)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, SoftId), d(new Private(antialiasEdges))
 {
-    d->xcoef = 2.0 / width();
-    d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
-    d->curveResolution = qRound( qMax(width(),height()) * OVERSAMPLING);
-    d->curveData = curve.floatTransfer( d->curveResolution + 2);
+    // here we set resolution for the maximum size of the brush!
+    d->curveResolution = qRound(qMax(width(), height()) * OVERSAMPLING);
+    d->curveData = curve.floatTransfer(d->curveResolution + 2);
     d->curvePoints = curve.points();
-    d->dirty = false;
     setCurveString(curve.toString());
+    d->dirty = false;
+
+    setScale(1.0, 1.0);
+}
+
+void KisCurveCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    qreal width = effectiveSrcWidth();
+    qreal height = effectiveSrcHeight();
+
+    d->xcoef = 2.0 / width;
+    d->ycoef = 2.0 / height;
+
+    d->fadeMaker.setSquareNormCoeffs(d->xcoef, d->ycoef);
 }
 
 KisCurveCircleMaskGenerator::~KisCurveCircleMaskGenerator()
 {
     delete d;
+}
+
+bool KisCurveCircleMaskGenerator::shouldSupersample() const
+{
+    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
+}
+
+inline quint8 KisCurveCircleMaskGenerator::Private::value(qreal dist) const
+{
+    qreal distance = dist * curveResolution;
+
+    quint16 alphaValue = distance;
+    qreal alphaValueF = distance - alphaValue;
+
+    qreal alpha = (
+        (1.0 - alphaValueF) * curveData.at(alphaValue) +
+        alphaValueF * curveData.at(alphaValue+1));
+    return (1.0 - alpha) * 255;
 }
 
 quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
@@ -73,25 +117,18 @@ quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
     }
 
     qreal dist = norme(xr * d->xcoef, yr * d->ycoef);
-    if (dist <= 1.0){
-        qreal distance = dist * d->curveResolution;
-    
-        quint16 alphaValue = distance;
-        qreal alphaValueF = distance - alphaValue;
-        
-        
-        qreal alpha = (
-            (1.0 - alphaValueF) * d->curveData.at(alphaValue) + 
-                    alphaValueF * d->curveData.at(alphaValue+1));
-        return (1.0 - alpha) * 255;
-    }            
-    return 255;
+
+    quint8 value;
+    if (d->fadeMaker.needFade(dist, &value)) {
+        return value;
+    }
+
+    return d->value(dist);
 }
 
 void KisCurveCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     KisMaskGenerator::toXML(doc, e);
-    e.setAttribute("type", "circle");
     e.setAttribute("softness_curve", curveString());
 }
 
@@ -99,17 +136,18 @@ void KisCurveCircleMaskGenerator::setSoftness(qreal softness)
 {
     // performance
     if (!d->dirty && softness == 1.0) return;
+
     d->dirty = true;
     KisMaskGenerator::setSoftness(softness);
     KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, d->curveResolution+2, d->curveData);
+    d->dirty = false;
 }
 
 void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector< qreal >& result)
 {
-    softness *= 2.0;
     QList<QPointF> newList = points;
     newList.detach();
-    
+
     int size = newList.size();
     if (size == 2){
         // make place for new point in the centre

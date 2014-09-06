@@ -101,11 +101,10 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     setObjectName(name);
 
     m_lbSize = new QLabel(i18n("Size:"), this);
-    m_slSize = new KisMultipliersDoubleSliderSpinBox(this);
-    m_slSize->setRange(0.0, 10.0, 2);
+    m_slSize = new KisDoubleSliderSpinBox(this);
+    m_slSize->setRange(0.0, 1000.0, 2);
     m_slSize->setValue(5.0);
-    m_slSize->addMultiplier(10);
-    m_slSize->addMultiplier(100);
+    m_slSize->setExponentRatio(3.0);
     QObject::connect(m_slSize, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
 

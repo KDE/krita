@@ -42,8 +42,8 @@ void KoReportDesignerItemBarcode::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set,KoProperty::Property)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setMaxLength(5);
     KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);

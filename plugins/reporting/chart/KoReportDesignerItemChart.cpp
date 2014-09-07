@@ -40,8 +40,8 @@ void KoReportDesignerItemChart::init(QGraphicsScene* scene, KoReportDesigner *de
     if (scene)
         scene->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set,KoProperty::Property)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
     setZValue(Z);

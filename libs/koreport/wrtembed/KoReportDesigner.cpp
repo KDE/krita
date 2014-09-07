@@ -176,8 +176,8 @@ void KoReportDesigner::init()
     connect(d->pageButton, SIGNAL(released()), this, SLOT(slotPageButton_Pressed()));
     emit pagePropertyChanged(*m_set);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set,KoProperty::Property)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     changeSet(m_set);
 
@@ -605,8 +605,8 @@ void KoReportDesigner::createProperties()
     QStringList keys, strings;
     m_set = new KoProperty::Set(0, "Report");
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set,KoProperty::Property)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     m_title = new KoProperty::Property("Title", "Report", i18n("Title"), i18n("Report Title"));
 

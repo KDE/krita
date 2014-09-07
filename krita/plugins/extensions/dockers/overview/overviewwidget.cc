@@ -133,8 +133,6 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
 
 void OverviewWidget::mousePressEvent(QMouseEvent* event)
 {
-    QWidget::mousePressEvent(event);
-    
     if (m_canvas) {
         QPointF previewPos = event->pos() - previewOrigin();
         
@@ -143,13 +141,12 @@ void OverviewWidget::mousePressEvent(QMouseEvent* event)
             m_dragging = true;
         }
     }
+    event->accept();
     update();
 }
 
 void OverviewWidget::mouseMoveEvent(QMouseEvent* event)
 {
-    QWidget::mouseMoveEvent(event);
-
     if (m_dragging) {
         QPointF previewPos = event->pos() - previewOrigin();
 
@@ -167,13 +164,13 @@ void OverviewWidget::mouseMoveEvent(QMouseEvent* event)
         m_canvas->canvasController()->pan(diff.toPoint());
         m_lastPos = previewPos;
     }
+    event->accept();
 }
 
 void OverviewWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-    QWidget::mouseReleaseEvent(event);
-
     m_dragging = false;
+    event->accept();
     update();
 }
 

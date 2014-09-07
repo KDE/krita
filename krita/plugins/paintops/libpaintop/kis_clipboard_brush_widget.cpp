@@ -71,8 +71,8 @@ KisBrushSP KisClipboardBrushWidget::brush()
 
 void KisClipboardBrushWidget::slotUseBrushClicked()
 {
-
-    if (m_clipboard->hasClip()) {
+    // do nothing if it's hidden otherwise it can break the active brush is something is copied
+    if (m_clipboard->hasClip() && !isHidden()) {
 
         if (m_brush) {
             bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(m_brush.data());

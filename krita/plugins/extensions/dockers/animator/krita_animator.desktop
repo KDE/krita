@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Animator
+Name[ca]=Animador
 Name[cs]=Nástroj pro animace
 Name[en_GB]=Animator
 Name[es]=Animador
@@ -14,6 +15,7 @@ Name[sv]=Animeringsverktyg
 Name[uk]=Animator
 Name[x-test]=xxAnimatorxx
 Comment=Animator
+Comment[ca]=Animador
 Comment[cs]=Nástroj pro animace
 Comment[en_GB]=Animator
 Comment[es]=Animador

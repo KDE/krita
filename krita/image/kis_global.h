@@ -116,7 +116,7 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
 }
 
 template<typename T>
-inline T pow2(T x) {
+inline T pow2(const T& x) {
     return x * x;
 }
 

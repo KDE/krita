@@ -33,34 +33,40 @@
 // class ReportEntityField
 //
 
-void KoReportDesignerItemField::init(QGraphicsScene * scene)
+void KoReportDesignerItemField::init(QGraphicsScene * scene, KoReportDesigner * d)
 {
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
     
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
+    m_name->setValue(d->suggestEntityName("field"));
 }
 
 // methods (constructors)
 KoReportDesignerItemField::KoReportDesignerItemField(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
-    setSceneRect(getTextRect());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("field"));
+    init(scene, rw);
 }
 
 KoReportDesignerItemField::KoReportDesignerItemField(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KoReportItemField(element), KoReportDesignerItemRectBase(d)
 {
-    init(s);
+    init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
+}
+
+QSizeF KoReportDesignerItemField::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < getTextRect().width() || designer.countSelectionHeight() < getTextRect().height()) {
+        return QSizeF(getTextRect().width(), getTextRect().height());
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemField* KoReportDesignerItemField::clone()
@@ -77,9 +83,9 @@ KoReportDesignerItemField* KoReportDesignerItemField::clone()
 KoReportDesignerItemField::~KoReportDesignerItemField()
 {}
 
-QRect KoReportDesignerItemField::getTextRect()
+QRect KoReportDesignerItemField::getTextRect() const
 {
-    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "field"));
+    return QFontMetrics(font()).boundingRect(x(), y(), 0, 0, textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "field"));
 }
 
 

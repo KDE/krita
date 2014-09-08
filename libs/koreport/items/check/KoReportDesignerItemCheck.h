@@ -39,8 +39,12 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
     virtual KoReportDesignerItemCheck* clone();
+
+protected:
+    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
+
 private:
-    void init(QGraphicsScene*);
+    void init(QGraphicsScene*, KoReportDesigner*);
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);

@@ -37,7 +37,7 @@
 // class ReportEntityBarcode
 //
 
-void KoReportDesignerItemBarcode::init(QGraphicsScene * scene)
+void KoReportDesignerItemBarcode::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     if (scene)
         scene->addItem(this);
@@ -46,25 +46,30 @@ void KoReportDesignerItemBarcode::init(QGraphicsScene * scene)
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setMaxLength(5);
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
     setZValue(Z);
+    m_name->setValue(d->suggestEntityName("barcode"));
 }
 // methods (constructors)
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
-    m_size.setSceneSize(QSizeF(m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY));
-    setSceneRect(m_pos.toScene(), m_size.toScene());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("barcode"));
+    init(scene, rw);
 }
 
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
         : KoReportItemBarcode(element), KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
+    init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
+}
+
+QSizeF KoReportDesignerItemBarcode::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < m_minWidthTotal*m_dpiX || designer.countSelectionHeight() < m_minHeight*m_dpiY) {
+        return QSizeF(m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY);
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemBarcode* KoReportDesignerItemBarcode::clone()

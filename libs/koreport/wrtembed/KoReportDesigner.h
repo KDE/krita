@@ -62,6 +62,10 @@ class KOREPORT_EXPORT KoReportDesigner : public QWidget
 {
     Q_OBJECT
 public:
+    qreal m_pressX;
+    qreal m_pressY;
+    qreal m_releaseX;
+    qreal m_releaseY;
 
     /**
     @brief Constructor that create a blank designer
@@ -214,6 +218,8 @@ public:
     */
     void sectionMouseReleaseEvent(ReportSceneView *, QMouseEvent * e);
 
+    void sectionMousePressEvent(ReportSceneView *, QMouseEvent * e);
+
     /**
     @brief Sets the property set for the currently selected item
     @param set Property set of item
@@ -250,7 +256,26 @@ public:
     @return list of actions */
     static QList<QAction*> actions(QActionGroup* group);
 
-    
+    /**
+    @return X position of mouse when mouse press occurs
+    */
+    qreal getSelectionPressX() const;
+
+    /**
+    @return Y position of mouse when mouse press occurs
+    */
+    qreal getSelectionPressY() const;
+
+    /**
+    @return difference between X position of mouse release and press
+    */
+    qreal countSelectionWidth() const;
+
+    /**
+    @return difference between Y position of mouse release and press
+    */
+    qreal countSelectionHeight() const;
+
 public slots:
 
     void slotEditDelete();

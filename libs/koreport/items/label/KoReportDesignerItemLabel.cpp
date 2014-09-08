@@ -33,34 +33,40 @@
 // class ReportEntityLabel
 //
 
-void KoReportDesignerItemLabel::init(QGraphicsScene * scene)
+void KoReportDesignerItemLabel::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
     connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
+    m_name->setValue(d->suggestEntityName("label"));
 }
 
 // methods (constructors)
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(d)
 {
-    init(scene);
-    setSceneRect(getTextRect());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("label"));
+    init(scene, d);
 }
 
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KoReportItemLabel(element), KoReportDesignerItemRectBase(d)
 {
-    init(s);
+    init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
+}
+
+QSizeF KoReportDesignerItemLabel::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < getTextRect().width() || designer.countSelectionWidth() < getTextRect().height()) {
+        return QSizeF(getTextRect().width(), getTextRect().height());
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemLabel* KoReportDesignerItemLabel::clone()
@@ -77,7 +83,7 @@ KoReportDesignerItemLabel* KoReportDesignerItemLabel::clone()
 KoReportDesignerItemLabel::~KoReportDesignerItemLabel()
 {}
 
-QRectF KoReportDesignerItemLabel::getTextRect()
+QRectF KoReportDesignerItemLabel::getTextRect() const
 {
     return QFontMetrics(font()).boundingRect(x(), y(), 0, 0, textFlags(), m_text->value().toString());
 }

@@ -40,36 +40,42 @@
 //
 // contructors/deconstructors
 
-void KoReportDesignerItemImage::init(QGraphicsScene * scene)
+void KoReportDesignerItemImage::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     //kDebug();
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 	    
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
+    m_name->setValue(m_reportDesigner->suggestEntityName("image"));
 }
 
 KoReportDesignerItemImage::KoReportDesignerItemImage(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
     //kDebug();
-    init(scene);
-    m_size.setSceneSize(QSizeF(100, 100));
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("image"));
+    init(scene, rw);
 }
 
 KoReportDesignerItemImage::KoReportDesignerItemImage(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
         : KoReportItemImage(element), KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
+    init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
+}
+
+QSizeF KoReportDesignerItemImage::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < 100 || designer.countSelectionHeight() < 100) {
+        return QSizeF(100, 100);
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemImage* KoReportDesignerItemImage::clone()

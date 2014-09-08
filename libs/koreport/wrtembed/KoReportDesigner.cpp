@@ -124,6 +124,10 @@ public:
 KoReportDesigner::KoReportDesigner(QWidget * parent)
         : QWidget(parent), d(new Private())
 {
+    m_pressX = -1;
+    m_pressY = -1;
+    m_releaseX = -1;
+    m_releaseY = -1;
     m_kordata = 0;
     init();
 }
@@ -848,16 +852,37 @@ void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCo
     }
 }
 
+void KoReportDesigner::sectionMousePressEvent(ReportSceneView * v, QMouseEvent * e)
+{
+    m_pressX = e->pos().x();
+    m_pressY = e->pos().y();
+}
+
 void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent * e)
 {
     e->accept();
+
+    m_releaseX = e->pos().x();
+    m_releaseY = e->pos().y();
+
     QGraphicsItem * item = 0;
     if (e->button() == Qt::LeftButton) {
-        QPointF pos(e->x(), e->y());
+        QPointF pos(m_pressX, m_pressY);
+        QPointF end(m_releaseX, m_releaseY);
+        if (m_releaseY >= v->scene()->height()) {
+            m_releaseY = v->scene()->height();
+            end.setY(v->scene()->height());
+        }
+
+        if (m_releaseX >= v->scene()->width()) {
+            m_releaseX = v->scene()->width();
+            end.setX(v->scene()->width());
+        }
 
         if (m_sectionData->mouseAction == ReportWriterSectionData::MA_Insert) {
             if (m_sectionData->insertItem == "report:line") {
-                item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos);
+                item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos, end);
+
             }
             else {
                 KoReportPluginManager* pluginManager = KoReportPluginManager::self();
@@ -1265,4 +1290,30 @@ void KoReportDesigner::unsetSectionCursor()
     
     if (m_detail)
         m_detail->unsetSectionCursor();
+}
+
+qreal KoReportDesigner::countSelectionHeight() const
+{
+    if (m_releaseY == -1 || m_pressY == -1) {
+        return -1;
+    }
+    return m_releaseY - m_pressY;
+}
+
+qreal KoReportDesigner::countSelectionWidth() const
+{
+    if (m_releaseX == -1 || m_pressX == -1) {
+        return -1;
+    }
+    return m_releaseX - m_pressX;
+}
+
+qreal KoReportDesigner::getSelectionPressX() const
+{
+    return m_pressX;
+}
+
+qreal KoReportDesigner::getSelectionPressY() const
+{
+    return m_pressY;
 }

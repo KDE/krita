@@ -32,34 +32,40 @@
 // class ReportEntityCheck
 //
 
-void KoReportDesignerItemCheck::init(QGraphicsScene * scene)
+void KoReportDesignerItemCheck::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
     connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
+    m_name->setValue(d->suggestEntityName("check"));
 }
 
 // methods (constructors)
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(d)
 {
-    init(scene);
-    setSceneRect(QPointF(0, 0), QSizeF(15, 15)); //default size
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("check"));
+    init(scene, d);
+}
 
+QSizeF KoReportDesignerItemCheck::minimumSize(const KoReportDesigner &designer) const
+{
+    designer.getSelectionPressX() + 15;
+    if (designer.countSelectionWidth() < 15 || designer.countSelectionHeight() < 15) {
+        return QSizeF(15, 15);
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KoReportItemCheck(element), KoReportDesignerItemRectBase(d)
 {
-    init(s);
+    init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 

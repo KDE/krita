@@ -42,29 +42,27 @@
 //#define KDE_DEFAULT_DEBUG_AREA 44021
 #define myDebug() kDebug(44021) << "\e[35m=="
 
-void KoReportDesignerItemMaps::init(QGraphicsScene * scene)
+void KoReportDesignerItemMaps::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     myDebug() << "\e[35m======\e[0m";
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 	    
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
+    m_name->setValue(d->suggestEntityName("mapbrowser"));
 }
 
 KoReportDesignerItemMaps::KoReportDesignerItemMaps(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
     myDebug() << "\e[35m======KoReportDesigner\e[0m";
-    init(scene);
-    m_size.setSceneSize(QSizeF(100, 100));
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("mapbrowser"));
+    init(scene, rw);
     //initMarble();
 }
 
@@ -72,8 +70,16 @@ KoReportDesignerItemMaps::KoReportDesignerItemMaps(QDomNode & element, KoReportD
         : KoReportItemMaps(element), KoReportDesignerItemRectBase(rw)
 {
     myDebug() << "\e[35m======QDomNode\e[0m";
-    init(scene);
+    init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
+}
+
+QSizeF KoReportDesignerItemMaps::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < 100 || designer.countSelectionHeight() < 100) {
+        return QSizeF(100, 100);
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemMaps* KoReportDesignerItemMaps::clone()

@@ -60,3 +60,5 @@
  *
  * KoText namespace.
  */
+
+// DOXYGEN_SET_PROJECT_NAME = KoTextLayout

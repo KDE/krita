@@ -1,0 +1,8 @@
+/**
+ * \mainpage
+ *
+ * KoRdf is a library which contains all kind of classes for RDF
+ * (Resource Description Framework) in Calligra.
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = KoRdf

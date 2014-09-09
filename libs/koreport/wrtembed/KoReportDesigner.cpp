@@ -1100,21 +1100,21 @@ QString KoReportDesigner::suggestEntityName(const QString &n) const
         }
     }
 
-    //Count items in the group headers/footers
-    for (int i = 0; i < m_detail->groupSectionCount(); i++) {
-        sec = m_detail->groupSection(i)->groupHeader();
-        if (sec) {
-            const QGraphicsItemList l = sec->items();
-            itemCount += l.count();
-        }
-        sec = m_detail->groupSection(i)->groupFooter();
-        if (sec) {
-            const QGraphicsItemList l = sec->items();
-            itemCount += l.count();
-        }
-    }
-
     if (m_detail) {
+        //Count items in the group headers/footers
+        for (int i = 0; i < m_detail->groupSectionCount(); i++) {
+            sec = m_detail->groupSection(i)->groupHeader();
+            if (sec) {
+                const QGraphicsItemList l = sec->items();
+                itemCount += l.count();
+            }
+            sec = m_detail->groupSection(i)->groupFooter();
+            if (sec) {
+                const QGraphicsItemList l = sec->items();
+                itemCount += l.count();
+            }
+        }
+
         sec = m_detail->detailSection();
         if (sec) {
             const QGraphicsItemList l = sec->items();
@@ -1150,7 +1150,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
     }
 
     //Count items in the group headers/footers
-    if (unique) {
+    if (unique && m_detail) {
         for (int i = 0; i < m_detail->groupSectionCount(); ++i) {
             sec = m_detail->groupSection(i)->groupHeader();
             if (sec) {

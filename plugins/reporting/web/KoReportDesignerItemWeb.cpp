@@ -55,6 +55,7 @@ KoReportDesignerItemWeb::KoReportDesignerItemWeb(KoReportDesigner *rw, QGraphics
                                                  const QPointF &pos)     //done,compared
     : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     init(scene, rw);
 }
 

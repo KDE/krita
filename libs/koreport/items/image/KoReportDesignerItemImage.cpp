@@ -59,6 +59,7 @@ void KoReportDesignerItemImage::init(QGraphicsScene *scene, KoReportDesigner *d)
 KoReportDesignerItemImage::KoReportDesignerItemImage(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     //kDebug();
     init(scene, rw);
 }

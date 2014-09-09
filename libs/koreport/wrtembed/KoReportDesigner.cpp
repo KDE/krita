@@ -854,6 +854,7 @@ void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCo
 
 void KoReportDesigner::sectionMousePressEvent(ReportSceneView * v, QMouseEvent * e)
 {
+    Q_UNUSED(v);
     m_pressX = e->pos().x();
     m_pressY = e->pos().y();
 }

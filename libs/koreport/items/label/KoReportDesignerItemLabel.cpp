@@ -51,6 +51,7 @@ void KoReportDesignerItemLabel::init(QGraphicsScene *scene, KoReportDesigner *d)
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(d)
 {
+    Q_UNUSED(pos);
     init(scene, d);
 }
 

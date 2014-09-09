@@ -55,6 +55,7 @@ void KoReportDesignerItemText::init(QGraphicsScene *scene, KoReportDesigner *d)
 KoReportDesignerItemText::KoReportDesignerItemText(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     init(scene, rw);
 }
 

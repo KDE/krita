@@ -51,6 +51,7 @@ void KoReportDesignerItemField::init(QGraphicsScene * scene, KoReportDesigner * 
 KoReportDesignerItemField::KoReportDesignerItemField(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     init(scene, rw);
 }
 

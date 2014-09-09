@@ -50,6 +50,7 @@ void KoReportDesignerItemCheck::init(QGraphicsScene *scene, KoReportDesigner *d)
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(d)
 {
+    Q_UNUSED(pos);
     init(scene, d);
 }
 

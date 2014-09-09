@@ -54,6 +54,7 @@ void KoReportDesignerItemBarcode::init(QGraphicsScene *scene, KoReportDesigner *
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     init(scene, rw);
 }
 

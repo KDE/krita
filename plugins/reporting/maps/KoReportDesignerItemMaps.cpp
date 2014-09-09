@@ -61,6 +61,7 @@ void KoReportDesignerItemMaps::init(QGraphicsScene *scene, KoReportDesigner *d)
 KoReportDesignerItemMaps::KoReportDesignerItemMaps(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     myDebug() << "\e[35m======KoReportDesigner\e[0m";
     init(scene, rw);
     //initMarble();

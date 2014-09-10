@@ -776,6 +776,8 @@ bool KisDlgPreferences::editPreferences()
 #endif
 
 #ifdef HAVE_OPENGL
+        if (!cfg.useOpenGL() && dialog->m_displaySettings->cbUseOpenGL->isChecked())
+            cfg.setCanvasState("TRY_OPENGL");
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());

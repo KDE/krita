@@ -1471,17 +1471,7 @@ void KisWarpTransformWorker::run()
         m_dev->move(translate.toPoint());
         return;
     } else {
-        transfBRect = QRectF(m_transfPoint[0], m_transfPoint[0]);
-        for (int i = 1; i < nbPoints; ++i) {
-            if ( m_transfPoint[i].x() < transfBRect.left() )
-                transfBRect.setLeft(m_transfPoint[i].x());
-            else if ( m_transfPoint[i].x() > transfBRect.right() )
-                transfBRect.setRight(m_transfPoint[i].x());
-            if ( m_transfPoint[i].y() < transfBRect.top() )
-                transfBRect.setTop(m_transfPoint[i].y());
-            else if ( m_transfPoint[i].y() > transfBRect.bottom() )
-                transfBRect.setBottom(m_transfPoint[i].y());
-        }
+        transfBRect = QPolygonF(m_transfPoint).boundingRect();
     }
 
     m_dev->clear();

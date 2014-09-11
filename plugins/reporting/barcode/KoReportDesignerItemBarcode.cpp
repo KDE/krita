@@ -45,8 +45,8 @@ void KoReportDesignerItemBarcode::init(QGraphicsScene *scene, KoReportDesigner *
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
-    setMaxLength(5);
     KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
+    setMaxLength(5);
     setZValue(Z);
     m_name->setValue(d->suggestEntityName("barcode"));
 }

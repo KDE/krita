@@ -276,6 +276,11 @@ public:
     */
     qreal countSelectionHeight() const;
 
+    /**
+    @return point that contains X,Y coordinates of mouse press
+    */
+    QPointF getPressPoint() const;
+
 public slots:
 
     void slotEditDelete();

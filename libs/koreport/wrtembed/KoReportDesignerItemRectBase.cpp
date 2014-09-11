@@ -51,11 +51,10 @@ KoReportDesignerItemRectBase::KoReportDesignerItemRectBase(KoReportDesigner *r)
 
 void KoReportDesignerItemRectBase::init(KRPos* p, KRSize* s, KoProperty::Set* se, KoReportDesigner *d)
 {
-    QPointF pressPoint(d->getSelectionPressX(), d->getSelectionPressY());
+    Q_UNUSED(d);
     m_ppos = p;
     m_psize = s;
     m_pset = se;
-    setSceneRect(pressPoint, minimumSize(*d));
 }
 
 KoReportDesignerItemRectBase::~KoReportDesignerItemRectBase()

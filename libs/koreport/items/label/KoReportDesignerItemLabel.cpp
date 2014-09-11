@@ -44,7 +44,6 @@ void KoReportDesignerItemLabel::init(QGraphicsScene *scene, KoReportDesigner *d)
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
-    m_name->setValue(d->suggestEntityName("label"));
 }
 
 // methods (constructors)
@@ -53,6 +52,8 @@ KoReportDesignerItemLabel::KoReportDesignerItemLabel(KoReportDesigner* d, QGraph
 {
     Q_UNUSED(pos);
     init(scene, d);
+    setSceneRect(d->getPressPoint(), minimumSize(*d));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)

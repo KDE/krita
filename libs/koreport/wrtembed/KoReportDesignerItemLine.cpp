@@ -58,7 +58,6 @@ void KoReportDesignerItemLine::init(QGraphicsScene* s, KoReportDesigner *r)
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
-    m_name->setValue(r->suggestEntityName("line"));
 }
 
 KoReportDesignerItemLine::KoReportDesignerItemLine(KoReportDesigner * d, QGraphicsScene * scene, const QPointF &pos)
@@ -66,6 +65,7 @@ KoReportDesignerItemLine::KoReportDesignerItemLine(KoReportDesigner * d, QGraphi
 {
     init(scene, d);
     setLineScene(QLineF(pos, QPointF(20,20)+pos));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemLine::KoReportDesignerItemLine(KoReportDesigner * d, QGraphicsScene * scene, const QPointF &startPos, const QPointF &endPos)

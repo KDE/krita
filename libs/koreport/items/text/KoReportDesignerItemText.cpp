@@ -49,7 +49,6 @@ void KoReportDesignerItemText::init(QGraphicsScene *scene, KoReportDesigner *d)
 
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
-    m_name->setValue(d->suggestEntityName("text"));
 }
 
 KoReportDesignerItemText::KoReportDesignerItemText(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
@@ -57,6 +56,8 @@ KoReportDesignerItemText::KoReportDesignerItemText(KoReportDesigner * rw, QGraph
 {
     Q_UNUSED(pos);
     init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemText::KoReportDesignerItemText(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)

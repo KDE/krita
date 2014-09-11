@@ -1028,7 +1028,6 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
 {
     // paste a new item of the copy we have in the specified location
     if (!m_sectionData->copy_list.isEmpty()) {
-        QGraphicsItem * pasted_ent = 0;
         canvas->clearSelection();
         m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
 
@@ -1036,19 +1035,13 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
         //!The setPos calls only work AFTER the name has been set ?!?!?
         
         for (int i = 0; i < m_sectionData->copy_list.count(); i++) {
-            pasted_ent = 0;
-            QString type;
-
             KoReportItemBase *obj = dynamic_cast<KoReportItemBase*>(m_sectionData->copy_list[i]);
-            if (obj) {
-                type = obj->typeName();
-            }
+            const QString type = obj ? obj->typeName() : "object";
             //kDebug() << type;
             KoReportDesignerItemBase *ent = (m_sectionData->copy_list[i])->clone();
             KoReportItemBase *new_obj = dynamic_cast<KoReportItemBase*>(ent);
             new_obj->setEntityName(suggestEntityName(type));    
-            pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
-
+            QGraphicsItem *pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
             if (pasted_ent) {
                 canvas->addItem(pasted_ent);
                 pasted_ent->show();
@@ -1317,4 +1310,9 @@ qreal KoReportDesigner::getSelectionPressX() const
 qreal KoReportDesigner::getSelectionPressY() const
 {
     return m_pressY;
+}
+
+QPointF KoReportDesigner::getPressPoint() const
+{
+    return QPointF(m_pressX, m_pressY);
 }

@@ -44,7 +44,6 @@ void KoReportDesignerItemField::init(QGraphicsScene * scene, KoReportDesigner * 
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
-    m_name->setValue(d->suggestEntityName("field"));
 }
 
 // methods (constructors)
@@ -53,6 +52,8 @@ KoReportDesignerItemField::KoReportDesignerItemField(KoReportDesigner * rw, QGra
 {
     Q_UNUSED(pos);
     init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemField::KoReportDesignerItemField(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)

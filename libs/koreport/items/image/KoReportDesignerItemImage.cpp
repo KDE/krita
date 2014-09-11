@@ -53,7 +53,6 @@ void KoReportDesignerItemImage::init(QGraphicsScene *scene, KoReportDesigner *d)
 	    
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
-    m_name->setValue(m_reportDesigner->suggestEntityName("image"));
 }
 
 KoReportDesignerItemImage::KoReportDesignerItemImage(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
@@ -62,6 +61,8 @@ KoReportDesignerItemImage::KoReportDesignerItemImage(KoReportDesigner * rw, QGra
     Q_UNUSED(pos);
     //kDebug();
     init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemImage::KoReportDesignerItemImage(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)

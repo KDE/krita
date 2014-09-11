@@ -48,7 +48,6 @@ void KoReportDesignerItemWeb::init(QGraphicsScene *scene, KoReportDesigner *d) /
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)), this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
     KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
     setZValue(Z);
-    m_name->setValue(d->suggestEntityName("web"));
 }
 
 KoReportDesignerItemWeb::KoReportDesignerItemWeb(KoReportDesigner *rw, QGraphicsScene *scene,
@@ -57,6 +56,8 @@ KoReportDesignerItemWeb::KoReportDesignerItemWeb(KoReportDesigner *rw, QGraphics
 {
     Q_UNUSED(pos);
     init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemWeb::KoReportDesignerItemWeb(QDomNode &element, KoReportDesigner *rw,

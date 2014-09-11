@@ -56,11 +56,10 @@ KoReportDesignerItemCheck::KoReportDesignerItemCheck(KoReportDesigner* d, QGraph
 
 QSizeF KoReportDesignerItemCheck::minimumSize(const KoReportDesigner &designer) const
 {
-    designer.getSelectionPressX() + 15;
-    if (designer.countSelectionWidth() < 15 || designer.countSelectionHeight() < 15) {
-        return QSizeF(15, 15);
-    }
-    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
+    const qreal width = qMax(designer.countSelectionWidth(), qreal(15));
+    const qreal height = qMax(designer.countSelectionHeight(), qreal(15));
+
+    return QSizeF(width, height);
 }
 
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)

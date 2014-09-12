@@ -248,7 +248,7 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.8.5)
+set(SQLITE_RECOMMENDED_VERSION 3.8.6)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
 macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)

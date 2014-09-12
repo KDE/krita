@@ -84,6 +84,7 @@
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoSectionStyle.h"
+#include <KoSectionUtils.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -326,13 +327,10 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
     }
 
     if (!d->openingSections.isEmpty()) {
-        QTextBlock block = cursor.block();
-        QTextBlockFormat format = block.blockFormat();
-        QVariant v;
-        v = format.property(KoParagraphStyle::SectionStartings);
-        d->openingSections.append(v.value<QList<QVariant> >()); // if we had some already we need to append the new ones
-        v.setValue<QList<QVariant> >(d->openingSections);
-        format.setProperty(KoParagraphStyle::SectionStartings, v);
+        QTextBlockFormat format = cursor.block().blockFormat();
+        QList<QVariant> v = KoSectionUtils::sectionStartings(format);
+        d->openingSections.append(v); // if we had some already we need to append the new ones
+        KoSectionUtils::setSectionStartings(format, d->openingSections);
         cursor.setBlockFormat(format);
         d->openingSections.clear();
     }
@@ -859,14 +857,11 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
     KoSectionEnd *sectionEnd = new KoSectionEnd(section);
     v.setValue<void *>(sectionEnd);
 
-    QTextBlock block = cursor.block();
-    QTextBlockFormat format = block.blockFormat();
-    QVariant listv;
-    listv = format.property(KoParagraphStyle::SectionEndings);
-    QList<QVariant> sectionEndings = listv.value<QList<QVariant> >();
-    sectionEndings.append(v);
-    listv.setValue<QList<QVariant> >(sectionEndings);
-    format.setProperty(KoParagraphStyle::SectionEndings, listv);
+    QTextBlockFormat format = cursor.block().blockFormat();    
+    QList<QVariant> endings = KoSectionUtils::sectionEndings(format);
+    endings.append(v);
+    KoSectionUtils::setSectionEndings(format, endings);
+    
     cursor.setBlockFormat(format);
 }
 

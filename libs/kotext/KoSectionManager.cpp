@@ -23,6 +23,7 @@
 #include "KoSectionEnd.h"
 #include <KLocalizedString>
 #include <KoTextDocument.h>
+#include "KoSectionUtils.h"
 
 #include <QHash>
 #include <QString>
@@ -173,37 +174,31 @@ QStandardItemModel *KoSectionManager::update(bool needModel)
     do {
         QTextBlockFormat fmt = block.blockFormat();
 
-        if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
-            QList<QVariant> starts = fmt.property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, starts) {
-                curLevel++;
-                KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
-                sec->setBeginPos(block.position());
-                sec->setLevel(curLevel);
+        foreach (const QVariant &sv, KoSectionUtils::sectionStartings(fmt)) {
+            curLevel++;
+            KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
+            sec->setBeginPos(block.position());
+            sec->setLevel(curLevel);
 
-                d->sectionNames()[sec->name()] = sec;
+            d->sectionNames()[sec->name()] = sec;
 
-                if (needModel) {
-                    QStandardItem *item = new QStandardItem(sec->name());
-                    item->setData(qVariantFromValue(static_cast<void *>(sec)), Qt::UserRole + 1);
+            if (needModel) {
+                QStandardItem *item = new QStandardItem(sec->name());
+                item->setData(qVariantFromValue(static_cast<void *>(sec)), Qt::UserRole + 1);
 
-                    curChain.top()->appendRow(item);
+                curChain.top()->appendRow(item);
 
-                    curChain.push(item);
-                }
+                curChain.push(item);
             }
         }
 
-        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
-            QList<QVariant> ends = fmt.property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, ends) {
-                curLevel--;
-                KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
-                sec->correspondingSection()->setEndPos(block.position() + block.length());
+        foreach (const QVariant &sv, KoSectionUtils::sectionEndings(fmt)) {
+            curLevel--;
+            KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
+            sec->correspondingSection()->setEndPos(block.position() + block.length());
 
-                if (needModel) {
-                    curChain.pop();
-                }
+            if (needModel) {
+                curChain.pop();
             }
         }
     } while ((block = block.next()).isValid());

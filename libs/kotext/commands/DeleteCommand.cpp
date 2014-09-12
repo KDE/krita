@@ -135,8 +135,7 @@ public:
         bool doesEndInside = false;
         if (block.position() >= caret.selectionStart()) { // Begin of the block is inside selection.
             doesBeginInside = true;
-            QList<QVariant> openList = block.blockFormat()
-            .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+            QList<QVariant> openList = KoSectionUtils::sectionStartings(block.blockFormat());
             foreach (const QVariant &sv, openList) {
                 m_curSectionDelimiters.push_back(SectionHandle(KoSectionUtils::sectionStartName(sv), SectionOpen, sv));
             }

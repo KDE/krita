@@ -66,3 +66,21 @@ void KoSectionUtils::setSectionEndings(QTextBlockFormat &fmt, const QList< QVari
         fmt.setProperty(KoParagraphStyle::SectionEndings, list);
     }
 }
+
+QList<QVariant> KoSectionUtils::sectionStartings(const QTextBlockFormat &fmt)
+{
+    if (!fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
+        return QList<QVariant>();
+    } else {
+        return fmt.property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+    }
+}
+
+QList<QVariant> KoSectionUtils::sectionEndings(const QTextBlockFormat &fmt)
+{
+    if (!fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+        return QList<QVariant>();
+    } else {
+        return fmt.property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+    }
+}

@@ -54,24 +54,38 @@ namespace KoSectionUtils {
     QString sectionEndName(QVariant q);
     
     /**
-     * Convinient function to set a list of startings to text block format.
+     * Convinient function to set a list of startings to QTextBlockFormat.
      * This checks that list is empty.
      * 
-     * @param fmt QTextBlockFormat reference to set startings
+     * @param fmt QTextBlockFormat reference to set startings.
      * @param list QList<QVariant> where QVariant is a link to KoSection.
      *             This is a list to set.
      */
     void setSectionStartings(QTextBlockFormat &fmt, const QList<QVariant> &list);
     
-      /**
-     * Convinient function to set a list of endings to text block format.
+    /**
+     * Convinient function to set a list of endings to QTextBlockFormat.
      * This checks that list is empty.
      * 
-     * @param fmt QTextBlockFormat reference to set endings
+     * @param fmt QTextBlockFormat reference to set endings.
      * @param list QList<QVariant> where QVariant is a link to KoSectionEnd.
      *             This is a list to set.
      */
     void setSectionEndings(QTextBlockFormat &fmt, const QList<QVariant> &list);
+    
+    /**
+     * Convinient function to get section startings from QTextBlockFormat.
+     * @param fmt QTextBlockFormat format to retrieve section startings from.
+     * @return QList<QVariant> of QVariants that contains pointers to KoSection.
+     */
+    QList<QVariant> sectionStartings(const QTextBlockFormat &fmt);
+    
+    /**
+     * Convinient function to get section endings from QTextBlockFormat.
+     * @param fmt QTextBlockFormat format to retrieve section startings from.
+     * @return QList<QVariant> of QVariants that contains pointers to KoSection.
+     */
+    QList<QVariant> sectionEndings(const QTextBlockFormat &fmt);
 }
 
 #endif //KOSECTIONUTILS_H

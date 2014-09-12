@@ -20,6 +20,7 @@
 #include <KoSectionUtils.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
+#include <KoParagraphStyle.h>
 
 bool KoSectionUtils::getNextBlock(QTextCursor &cur)
 {
@@ -46,4 +47,22 @@ QString KoSectionUtils::sectionStartName(QVariant q)
 QString KoSectionUtils::sectionEndName(QVariant q)
 {
     return static_cast<KoSectionEnd *>(q.value<void *>())->name();
+}
+
+void KoSectionUtils::setSectionStartings(QTextBlockFormat &fmt, const QList< QVariant > &list)
+{
+    if (list.empty()) {
+        fmt.clearProperty(KoParagraphStyle::SectionStartings);
+    } else {
+        fmt.setProperty(KoParagraphStyle::SectionStartings, list);
+    }
+}
+
+void KoSectionUtils::setSectionEndings(QTextBlockFormat &fmt, const QList< QVariant > &list)
+{
+    if (list.empty()) {
+        fmt.clearProperty(KoParagraphStyle::SectionEndings);
+    } else {
+        fmt.setProperty(KoParagraphStyle::SectionEndings, list);
+    }
 }

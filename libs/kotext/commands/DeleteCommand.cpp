@@ -215,33 +215,22 @@ public:
                 QTextBlockFormat fmt2 = cur->document()->findBlockByNumber(m_endBlockNum + 1).blockFormat();
                 fmt.clearProperty(KoParagraphStyle::SectionEndings);
 
-                if (m_endBlockNum != -1) {
-                    QList<QVariant> closeListEndBlock = cur->document()->findBlockByNumber(m_endBlockNum)
-                        .blockFormat().property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+                //m_endBlockNum != -1 in this case.
+                QList<QVariant> closeListEndBlock = cur->document()->findBlockByNumber(m_endBlockNum)
+                    .blockFormat().property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
 
-                    while (!openList.empty() && !closeListEndBlock.empty()
-                        && KoSectionUtils::sectionStartName(openList.last())
-                        == KoSectionUtils::sectionEndName(closeListEndBlock.first())) {
-                        openList.pop_back();
-                        closeListEndBlock.pop_front();
-                    }
-                    openList << fmt2.property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
-                    closeList << closeListEndBlock;
-                } else {
-                    Q_ASSERT(false); // FIXME: Remove this before release, if there will be no problems.
+                while (!openList.empty() && !closeListEndBlock.empty()
+                    && KoSectionUtils::sectionStartName(openList.last())
+                    == KoSectionUtils::sectionEndName(closeListEndBlock.first())) {
+                    openList.pop_back();
+                    closeListEndBlock.pop_front();
                 }
+                openList << fmt2.property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+                closeList << closeListEndBlock;
 
                 // We leave open section of start block untouched.
-                if (!openList.empty()) {
-                    fmt2.setProperty(KoParagraphStyle::SectionStartings, openList);
-                } else {
-                    fmt2.clearProperty(KoParagraphStyle::SectionStartings);
-                }
-                if (!closeList.empty()) {
-                    fmt.setProperty(KoParagraphStyle::SectionEndings, closeList);
-                } else {
-                    fmt.clearProperty(KoParagraphStyle::SectionEndings);
-                }
+                KoSectionUtils::setSectionStartings(fmt2, openList);
+                KoSectionUtils::setSectionEndings(fmt, closeList);
 
                 QTextCursor changer = *cur;
                 changer.setPosition(cur->document()->findBlockByNumber(m_startBlockNum).position());
@@ -250,56 +239,18 @@ public:
                     changer.setPosition(cur->document()->findBlockByNumber(m_endBlockNum + 1).position());
                     changer.setBlockFormat(fmt2);
                 }
-            } else if (m_endBlockNum != -1) { // We're pushing all new section info to the end block.
+            } else { // m_endBlockNum != -1 in this case. We're pushing all new section info to the end block.
                 QTextBlockFormat fmt = cur->document()->findBlockByNumber(m_endBlockNum).blockFormat();
                 fmt.clearProperty(KoParagraphStyle::SectionStartings);
 
                 closeList << fmt.property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
 
-                if (!openList.empty()) {
-                    fmt.setProperty(KoParagraphStyle::SectionStartings, openList);
-                } else {
-                    fmt.clearProperty(KoParagraphStyle::SectionStartings);
-                }
-                if (!closeList.empty()) {
-                    fmt.setProperty(KoParagraphStyle::SectionEndings, closeList);
-                } else {
-                    fmt.clearProperty(KoParagraphStyle::SectionEndings);
-                }
+                KoSectionUtils::setSectionStartings(fmt, openList);
+                KoSectionUtils::setSectionEndings(fmt, closeList);
 
                 QTextCursor changer = *cur;
                 changer.setPosition(cur->document()->findBlockByNumber(m_endBlockNum).position());
                 changer.setBlockFormat(fmt);
-            } else {
-                Q_ASSERT(false); //FIXME: Delete this before release, if there will be no problems.
-                //             cur.setPosition(caret->selectionStart());
-                //             if (cur.movePosition(QTextCursor::Left)) {
-                //                 QList<QVariant> closeListHave = cur.blockFormat()
-                //                     .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
-                //                 closeList = (closeListHave << closeList);
-                //
-                //                 QTextBlockFormat fmt = cur.blockFormat();
-                //                 if (closeList.empty()) {
-                //                     fmt.clearProperty(KoParagraphStyle::SectionEndings);
-                //                 } else {
-                //                     fmt.setProperty(KoParagraphStyle::SectionEndings, closeList);
-                //                 }
-                //                 cur.setBlockFormat(fmt);
-                //             }
-                //
-                //             cur.setPosition(caret->selectionEnd());
-                //             {
-                //                 openList << cur.blockFormat()
-                //                     .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
-                //
-                //                 QTextBlockFormat fmt = cur.blockFormat();
-                //                 if (openList.empty()) {
-                //                     fmt.clearProperty(KoParagraphStyle::SectionStartings);
-                //                 } else {
-                //                     fmt.setProperty(KoParagraphStyle::SectionStartings, openList);
-                //                 }
-                //                 cur.setBlockFormat(fmt);
-                //             }
             }
         }
     }

@@ -30,6 +30,7 @@ namespace KoSectionUtils {
      * @return @c false if there is no next block, @c true otherwise
      */
     bool getNextBlock(QTextCursor &cur);
+    
     /**
      * Convinient function to get name of a section from QVariant
      * that is really a KoSection *.
@@ -40,6 +41,7 @@ namespace KoSectionUtils {
      * @return name of a specified section
      */
     QString sectionStartName(QVariant q);
+    
     /**
      * Convinient function to get name of a section from QVariant
      * that is really a KoSectionEnd *.
@@ -50,6 +52,26 @@ namespace KoSectionUtils {
      * @return name of a specified section
      */
     QString sectionEndName(QVariant q);
+    
+    /**
+     * Convinient function to set a list of startings to text block format.
+     * This checks that list is empty.
+     * 
+     * @param fmt QTextBlockFormat reference to set startings
+     * @param list QList<QVariant> where QVariant is a link to KoSection.
+     *             This is a list to set.
+     */
+    void setSectionStartings(QTextBlockFormat &fmt, const QList<QVariant> &list);
+    
+      /**
+     * Convinient function to set a list of endings to text block format.
+     * This checks that list is empty.
+     * 
+     * @param fmt QTextBlockFormat reference to set endings
+     * @param list QList<QVariant> where QVariant is a link to KoSectionEnd.
+     *             This is a list to set.
+     */
+    void setSectionEndings(QTextBlockFormat &fmt, const QList<QVariant> &list);
 }
 
 #endif //KOSECTIONUTILS_H

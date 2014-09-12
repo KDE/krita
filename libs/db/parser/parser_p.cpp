@@ -128,7 +128,7 @@ void yyerror(const char *str)
                 e = errtypestr.mid(47);
                 KexiDBDbg << e;
 //    ,' or ')'
-//  lexerErr i18n("identifier was expected");
+//  lexerErr futureI18n("identifier was expected");
 
             } else
 #endif
@@ -142,11 +142,11 @@ void yyerror(const char *str)
 
             if (KexiDB::isKexiSQLKeyword(ctoken))
                 parser->setError(ParserError(i18n("Syntax Error"),
-                                             i18n("\"%1\" is a reserved keyword", QString(ctoken)) + lexerErr,
+                                             i18n("\"%1\" is a reserved keyword.", QString(ctoken)) + lexerErr,
                                              ctoken, current));
             else
                 parser->setError(ParserError(i18n("Syntax Error"),
-                                             i18n("Syntax Error near \"%1\"", QString(ctoken)) + lexerErr,
+                                             i18n("Syntax Error near \"%1\".", QString(ctoken)) + lexerErr,
                                              ctoken, current));
         }
     }
@@ -176,7 +176,7 @@ bool parseData(Parser *p, const char *data)
 // requiresTable = false;
 
     if (!data) {
-        ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
+        ParserError err(i18n("Error"), i18n("No query statement specified."), ctoken, current);
         parser->setError(err);
         yyerror("");
         parser = 0;
@@ -205,7 +205,7 @@ bool parseData(Parser *p, const char *data)
               {
                 if(tableList.findRef(item->table()) == -1)
                 {
-                  ParserError err(i18n("Field List Error"), i18n("Unknown table '%1' in field list",item->table()->name()), ctoken, current);
+                  ParserError err(futureI18n("Field List Error"), i18n("Unknown table '%1' in field list",item->table()->name()), ctoken, current);
                   parser->setError(err);
 
                   yyerror("fieldlisterror");
@@ -240,7 +240,7 @@ bool addColumn(ParseInfo& parseInfo, BaseExpr* columnExpr)
         //it's a variable:
         if (v_e->name == "*") {//all tables asterisk
             if (parseInfo.querySchema->tables()->isEmpty()) {
-                setError(i18n("\"*\" could not be used if no tables are specified"));
+                setError(i18n("\"*\" could not be used if no tables are specified."));
                 return false;
             }
             parseInfo.querySchema->addAsterisk(new QueryAsterisk(parseInfo.querySchema));
@@ -282,8 +282,8 @@ bool addColumn(ParseInfo& parseInfo, BaseExpr* columnExpr)
                         firstField = f;
                     } else if (f->table() != firstField->table()) {
                         //ambiguous field name
-                        setError(i18n("Ambiguous field name"),
-                                 i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
+                        setError(futureI18n("Ambiguous field name"),
+                                 futureI18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
                                       "Use \"<tableName>.%4\" notation to specify table name."
                                       , firstField->table()->name(), f->table()->name()
                                       , fieldName, fieldName));
@@ -292,8 +292,8 @@ bool addColumn(ParseInfo& parseInfo, BaseExpr* columnExpr)
                 }
             }
             if (!firstField) {
-                setError(i18n("Field not found"),
-                         i18n("Table containing \"%1\" field not found", fieldName));
+                setError(futureI18n("Field not found"),
+                         futureI18n("Table containing \"%1\" field not found", fieldName));
                 return false;
             }
             //ok
@@ -317,8 +317,8 @@ bool addColumn(ParseInfo& parseInfo, BaseExpr* columnExpr)
                 KexiDBDbg << " --" << "covered by " << tableAlias << " alias";
             }
             if (covered) {
-                setError(i18n("Could not access the table directly using its name"),
-                         i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
+                setError(futureI18n("Could not access the table directly using its name"),
+                         futureI18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
                               "you can write \"%3\""
                               , tableName
                               , (tableName + "." + fieldName)
@@ -348,8 +348,8 @@ bool addColumn(ParseInfo& parseInfo, BaseExpr* columnExpr)
 
             if (fieldName == "*") {
                 if (positionsList.count() > 1) {
-                    setError(i18n("Ambiguous \"%1.*\" expression", tableName),
-                             i18n("More than one \"%1\" table or alias defined", tableName));
+                    setError(futureI18n("Ambiguous \"%1.*\" expression", tableName),
+                             futureI18n("More than one \"%1\" table or alias defined.", tableName));
                     return false;
                 }
                 parseInfo.querySchema->addAsterisk(new QueryAsterisk(parseInfo.querySchema, ts));
@@ -365,8 +365,8 @@ bool addColumn(ParseInfo& parseInfo, BaseExpr* columnExpr)
                         if (otherTS->field(fieldName))
                             numberOfTheSameFields++;
                         if (numberOfTheSameFields > 1) {
-                            setError(i18n("Ambiguous \"%1.%2\" expression", tableName, fieldName),
-                                     i18n("More than one \"%1\" table or alias defined containing \"%2\" field"
+                            setError(futureI18n("Ambiguous \"%1.%2\" expression", tableName, fieldName),
+                                     futureI18n("More than one \"%1\" table or alias defined containing \"%2\" field."
                                           , tableName, fieldName));
                             return false;
                         }
@@ -374,7 +374,7 @@ bool addColumn(ParseInfo& parseInfo, BaseExpr* columnExpr)
 
                     parseInfo.querySchema->addField(realField, tablePosition);
                 } else {
-                    setError(i18n("Field not found"), i18n("Table \"%1\" has no \"%2\" field"
+                    setError(futureI18n("Field not found"), futureI18n("Table \"%1\" has no \"%2\" field."
                                                            , tableName, fieldName));
                     return false;
                 }
@@ -429,9 +429,8 @@ QuerySchema* buildSelectQuery(
             QString tname = t_e->name;
             TableSchema *s = parser->db()->tableSchema(tname);
             if (!s) {
-                setError(//i18n("Field List Error"),
-                    i18n("Table \"%1\" does not exist", tname));
-                //   yyerror("fieldlisterror");
+                setError(
+                    i18n("Table \"%1\" does not exist.", tname));
                 CLEANUP;
                 return 0;
             }
@@ -487,7 +486,7 @@ QuerySchema* buildSelectQuery(
                 //   isFieldWithAlias = true;
                 aliasVariable = e->toBinary()->right()->toVariable();
                 if (!aliasVariable) {
-                    setError(i18n("Invalid alias definition for column \"%1\"",
+                    setError(i18n("Invalid alias definition for column \"%1\".",
                                   columnExpr->toString())); //ok?
                     break;
                 }
@@ -514,7 +513,7 @@ QuerySchema* buildSelectQuery(
                 //take first (left) argument of the special binary expr, will be owned, do not destroy
                 e->toBinary()->m_larg = 0;
             } else {
-                setError(i18n("Invalid \"%1\" column definition", e->toString())); //ok?
+                setError(i18n("Invalid \"%1\" column definition.", e->toString())); //ok?
                 break;
             }
 
@@ -534,7 +533,7 @@ QuerySchema* buildSelectQuery(
                   VariableExpr* aliasVariable =
                     dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
                   if (!aliasVariable) {
-                    setError(i18n("Invalid column alias definition")); //ok?
+                    setError(futureI18n("Invalid column alias definition")); //ok?
                     return 0;
                   }
                   kDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column "
@@ -581,7 +580,7 @@ QuerySchema* buildSelectQuery(
                     if ((*it).columnNumber != -1) {
                         if (!orderByColumnList.appendColumn(*querySchema,
                                                             (*it).ascending, (*it).columnNumber - 1)) {
-                            setError(i18n("Could not define sorting - no column at position %1",
+                            setError(i18n("Could not define sorting - no column at position %1.",
                                           (*it).columnNumber));
                             CLEANUP;
                             return 0;
@@ -590,7 +589,7 @@ QuerySchema* buildSelectQuery(
                         Field * f = querySchema->findTableField((*it).aliasOrName);
                         if (!f) {
                             setError(i18n("Could not define sorting - "
-                                          "column name or alias \"%1\" does not exist", (*it).aliasOrName));
+                                          "column name or alias \"%1\" does not exist.", (*it).aliasOrName));
                             CLEANUP;
                             return 0;
                         }

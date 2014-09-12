@@ -238,6 +238,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
         delete drv;
         return 0;
     }
+    KGlobal::locale()->insertCatalog("kexi" + name.toLower() + "driver");
     m_drivers.insert(name.toLower(), drv); //cache it
     return drv;
 }
@@ -357,7 +358,7 @@ KService::Ptr DriverManager::serviceInfo(const QString &name)
     KService::Ptr ptr = d_int->m_services_lcase.value(name.toLower());
     if (ptr)
         return ptr;
-    setError(ERR_DRIVERMANAGER, i18n("No such driver service: \"%1\".", name));
+    setError(ERR_DRIVERMANAGER, i18n("Could not find service <resource>%1</resource>.", name));
     return KService::Ptr();
 }
 

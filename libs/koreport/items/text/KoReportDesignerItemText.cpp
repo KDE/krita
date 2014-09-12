@@ -36,16 +36,16 @@
 //
 // methods (constructors)
 
-void KoReportDesignerItemText::init(QGraphicsScene * scene)
+void KoReportDesignerItemText::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     //setFlags(ItemIsSelectable | ItemIsMovable);
     if (scene)
         scene->addItem(this);
 
-    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
@@ -54,17 +54,25 @@ void KoReportDesignerItemText::init(QGraphicsScene * scene)
 KoReportDesignerItemText::KoReportDesignerItemText(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
-    setSceneRect(getTextRect());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("text"));
+    Q_UNUSED(pos);
+    init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemText::KoReportDesignerItemText(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KoReportItemText(element), KoReportDesignerItemRectBase(d)
 {
-    init(s);
+    init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
+}
+
+QSizeF KoReportDesignerItemText::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < getTextRect().width() || designer.countSelectionHeight() < getTextRect().height()) {
+        return QSizeF(getTextRect().width(), getTextRect().height());
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemText* KoReportDesignerItemText::clone()
@@ -82,7 +90,7 @@ KoReportDesignerItemText::~KoReportDesignerItemText
 ()
 {}
 
-QRect KoReportDesignerItemText::getTextRect()
+QRect KoReportDesignerItemText::getTextRect() const
 {
     return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "textarea"));
 }
@@ -127,7 +135,7 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
 void KoReportDesignerItemText::buildXML(QDomDocument & doc, QDomElement & parent)
 {
     //kdDebug() << "ReportEntityText::buildXML()");
-    QDomElement entity = doc.createElement("report:text");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

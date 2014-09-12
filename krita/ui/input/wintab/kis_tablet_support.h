@@ -116,18 +116,16 @@ struct QTabletDeviceData
         SavedAxesData()
         {
             for (int i = 0; i < NAxes; i++) {
-                m_x11_to_local_axis_mapping[i] = i;
+                m_x11_to_local_axis_mapping.append((AxesIndexes)i);
             }
         }
 
         void tryFetchAxesMapping(XDevice *dev);
 
         void setAxesMap(const QVector<AxesIndexes> &axesMap) {
-            KIS_ASSERT_RECOVER_RETURN(axesMap.size() == NAxes);
+            KIS_ASSERT_RECOVER_RETURN(axesMap.size() >= NAxes);
 
-            for (int i = 0; i < NAxes; i++) {
-                m_x11_to_local_axis_mapping[i] = axesMap[i];
-            }
+            m_x11_to_local_axis_mapping = axesMap;
         }
 
         inline QPointF position(const QTabletDeviceData *tablet, const QRect &screenArea) const {
@@ -152,7 +150,7 @@ struct QTabletDeviceData
             return m_axis_data[Rotation];
         }
 
-        bool updateAxesData(int firstAxis, int axesCount, const int axes[NAxes]) {
+        bool updateAxesData(int firstAxis, int axesCount, const int *axes) {
             for (int srcIt = 0, dstIt = firstAxis;
                  srcIt < axesCount;
                  srcIt++, dstIt++) {
@@ -160,12 +158,11 @@ struct QTabletDeviceData
                 m_axis_data[m_x11_to_local_axis_mapping[dstIt]] = axes[srcIt];
             }
 
-            return firstAxis <= m_lastSaneAxis;
+            return true;
         }
     private:
         int m_axis_data[NAxes];
-        int m_x11_to_local_axis_mapping[NAxes];
-        int m_lastSaneAxis;
+        QVector<AxesIndexes> m_x11_to_local_axis_mapping;
     };
 
     SavedAxesData savedAxesData;

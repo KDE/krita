@@ -555,4 +555,8 @@ void Cursor::setQueryParameters(const QList<QVariant>& params)
         *m_queryParameters = params;
 }
 
+#if 0 // extra messages
+I18N_NOOP("No connection for cursor open operation specified.")
+#endif
+
 #include "cursor.moc"

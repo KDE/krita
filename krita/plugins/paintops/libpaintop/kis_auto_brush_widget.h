@@ -63,9 +63,10 @@ private slots:
     void spinBoxRandomnessChanged(qreal);
     void spinBoxRadiusChanged(qreal);
     void spinBoxSpikesChanged(int);
-    void spinBoxSpacingChanged(qreal);
     void spinBoxAngleChanged(int);
     void spinBoxDensityChanged(qreal);
+
+    void slotSpacingChanged();
 
 signals:
 

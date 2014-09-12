@@ -41,7 +41,6 @@ install( FILES
     krita_tool_line.png
     krita_tool_rectangle.png
     krita_tool_ellipse.png
-    krita_tool_freehand.png
     krita_tool_freehandvector.png
     krita_tool_multihand.png
     krita_tool_measure.png

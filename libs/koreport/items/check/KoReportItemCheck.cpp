@@ -108,7 +108,7 @@ QString KoReportItemCheck::itemDataSource() const
 // RTTI
 QString KoReportItemCheck::typeName() const
 {
-    return "report:check";
+    return "check";
 }
 
 int KoReportItemCheck::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,

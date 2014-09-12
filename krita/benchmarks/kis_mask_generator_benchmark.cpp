@@ -32,7 +32,7 @@
 
 void KisMaskGeneratorBenchmark::benchmarkCircle()
 {
-    KisCircleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 3);
+    KisCircleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 3, true);
     QBENCHMARK{
         for(int i = -600; i < 600; ++i)
         {
@@ -50,7 +50,7 @@ void KisMaskGeneratorBenchmark::benchmarkSIMD()
     int width = 1000;
     float *buffer = Vc::malloc<float, Vc::AlignOnVector>(width);
 
-    KisCircleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 2);
+    KisCircleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 2, true);
     QBENCHMARK{
         for(int y = 0; y < 1000; ++y)
         {
@@ -63,7 +63,7 @@ void KisMaskGeneratorBenchmark::benchmarkSIMD()
 
 void KisMaskGeneratorBenchmark::benchmarkSquare()
 {
-    KisRectangleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 3);
+    KisRectangleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 3, true);
     QBENCHMARK{
         for(int i = -600; i < 600; ++i)
         {

@@ -426,11 +426,11 @@ void KoReportPreRendererPrivate::initEngine()
 {
     m_scriptHandler = new KRScriptHandler(m_kodata, m_reportData);
 
-    connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), m_scriptHandler, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
+    connect(this, SIGNAL(enteredGroup(QString,QVariant)), m_scriptHandler, SLOT(slotEnteredGroup(QString,QVariant)));
 
-    connect(this, SIGNAL(exitedGroup(const QString&, const QVariant&)), m_scriptHandler, SLOT(slotExitedGroup(const QString&, const QVariant&)));
+    connect(this, SIGNAL(exitedGroup(QString,QVariant)), m_scriptHandler, SLOT(slotExitedGroup(QString,QVariant)));
 
-    connect(this, SIGNAL(renderingSection(KRSectionData*, OROPage*, QPointF)), m_scriptHandler, SLOT(slotEnteredSection(KRSectionData*, OROPage*, QPointF)));
+    connect(this, SIGNAL(renderingSection(KRSectionData*,OROPage*,QPointF)), m_scriptHandler, SLOT(slotEnteredSection(KRSectionData*,OROPage*,QPointF)));
 }
 
 void KoReportPreRendererPrivate::asyncItemsFinished()
@@ -542,7 +542,7 @@ ORODocument* KoReportPreRenderer::generate()
 
             //!TODO This is a hack
             if (i.key() == "field")
-                QObject::connect(d->m_scriptHandler, SIGNAL(groupChanged(const QString&)), i.value(), SLOT(setWhere(const QString&)));
+                QObject::connect(d->m_scriptHandler, SIGNAL(groupChanged(QString)), i.value(), SLOT(setWhere(QString)));
         }
     }
 
@@ -663,11 +663,11 @@ bool KoReportPreRenderer::setDom(const QDomElement &docReport)
         delete d->m_reportData;
         d->m_valid = false;
 
-	if (docReport.tagName() != "report:content") {
-		kDebug() << "report schema is invalid";
-		return false;
-	}
-	
+        if (docReport.tagName() != "report:content") {
+            kWarning() << "report schema is invalid";
+            return false;
+        }
+
         d->m_reportData = new KoReportReportData(docReport, this);
         d->m_valid = d->m_reportData->isValid();
     }

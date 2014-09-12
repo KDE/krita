@@ -29,7 +29,7 @@ KoReportTextPlugin::KoReportTextPlugin(QObject *parent, const QVariantList &args
 {
     Q_UNUSED(args)
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setClassName("report:text");
+    info->setClassName("text");
     info->setIcon(koIcon("insert-text"));
     info->setName(i18n("Text"));
     info->setPriority(3);

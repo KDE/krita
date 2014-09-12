@@ -60,6 +60,21 @@ public:
     double defImageResolution() const;
     void defImageResolution(double res) const;
 
+    bool defAutoFrameBreakEnabled() const;
+    void defAutoFrameBreakEnabled(bool state) const;
+
+    bool defOnionSkinningEnabled() const;
+    void defOnionSkinningEnabled(bool state) const;
+
+    int defFps() const;
+    void defFps(int value) const;
+
+    int defLocalPlaybackRange() const;
+    void defLocalPlaybackRange(int value) const;
+
+    bool defLoopingEnabled() const;
+    void defLoopingEnabled(bool state) const;
+
     /**
      * @return the id of the default color model used for creating new images.
      */
@@ -314,6 +329,9 @@ public:
 
     int ocioLutEdgeSize() const;
     void setOcioLutEdgeSize(int value);
+
+    bool ocioLockColorVisualRepresentation() const;
+    void setOcioLockColorVisualRepresentation(bool value);
 
     bool useSystemMonitorProfile() const;
     void setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const;

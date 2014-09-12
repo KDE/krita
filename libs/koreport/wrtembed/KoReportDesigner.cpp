@@ -124,6 +124,10 @@ public:
 KoReportDesigner::KoReportDesigner(QWidget * parent)
         : QWidget(parent), d(new Private())
 {
+    m_pressX = -1;
+    m_pressY = -1;
+    m_releaseX = -1;
+    m_releaseY = -1;
     m_kordata = 0;
     init();
 }
@@ -176,8 +180,8 @@ void KoReportDesigner::init()
     connect(d->pageButton, SIGNAL(released()), this, SLOT(slotPageButton_Pressed()));
     emit pagePropertyChanged(*m_set);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     changeSet(m_set);
 
@@ -605,8 +609,8 @@ void KoReportDesigner::createProperties()
     QStringList keys, strings;
     m_set = new KoProperty::Set(0, "Report");
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     m_title = new KoProperty::Property("Title", "Report", i18n("Title"), i18n("Report Title"));
 
@@ -632,9 +636,9 @@ void KoReportDesigner::createProperties()
 
     m_unit = new KoProperty::Property("page-unit", keys, strings, "cm", i18n("Page Unit"));
 
-    m_showGrid = new KoProperty::Property("grid-visible", true, i18n("Show Grid"), i18n("Show Grid"));
-    m_gridSnap = new KoProperty::Property("grid-snap", true, i18n("Grid Snap"), i18n("Grid Snap"));
-    m_gridDivisions = new KoProperty::Property("grid-divisions", 4, i18n("Grid Divisions"), i18n("Grid Divisions"));
+    m_showGrid = new KoProperty::Property("grid-visible", true, i18n("Show Grid"));
+    m_gridSnap = new KoProperty::Property("grid-snap", true, i18n("Snap to Grid"));
+    m_gridDivisions = new KoProperty::Property("grid-divisions", 4, i18n("Grid Divisions"));
 
     m_leftMargin = new KoProperty::Property("margin-left", KoUnit(KoUnit::Centimeter).fromUserValue(1.0),
         i18n("Left Margin"), i18n("Left Margin"), KoProperty::Double);
@@ -848,16 +852,38 @@ void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCo
     }
 }
 
+void KoReportDesigner::sectionMousePressEvent(ReportSceneView * v, QMouseEvent * e)
+{
+    Q_UNUSED(v);
+    m_pressX = e->pos().x();
+    m_pressY = e->pos().y();
+}
+
 void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent * e)
 {
     e->accept();
+
+    m_releaseX = e->pos().x();
+    m_releaseY = e->pos().y();
+
     QGraphicsItem * item = 0;
     if (e->button() == Qt::LeftButton) {
-        QPointF pos(e->x(), e->y());
+        QPointF pos(m_pressX, m_pressY);
+        QPointF end(m_releaseX, m_releaseY);
+        if (m_releaseY >= v->scene()->height()) {
+            m_releaseY = v->scene()->height();
+            end.setY(v->scene()->height());
+        }
+
+        if (m_releaseX >= v->scene()->width()) {
+            m_releaseX = v->scene()->width();
+            end.setX(v->scene()->width());
+        }
 
         if (m_sectionData->mouseAction == ReportWriterSectionData::MA_Insert) {
             if (m_sectionData->insertItem == "report:line") {
-                item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos);
+                item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos, end);
+
             }
             else {
                 KoReportPluginManager* pluginManager = KoReportPluginManager::self();
@@ -1002,7 +1028,6 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
 {
     // paste a new item of the copy we have in the specified location
     if (!m_sectionData->copy_list.isEmpty()) {
-        QGraphicsItem * pasted_ent = 0;
         canvas->clearSelection();
         m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
 
@@ -1010,19 +1035,13 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
         //!The setPos calls only work AFTER the name has been set ?!?!?
         
         for (int i = 0; i < m_sectionData->copy_list.count(); i++) {
-            pasted_ent = 0;
-            QString type;
-
             KoReportItemBase *obj = dynamic_cast<KoReportItemBase*>(m_sectionData->copy_list[i]);
-            if (obj) {
-                type = obj->typeName();
-            }
+            const QString type = obj ? obj->typeName() : "object";
             //kDebug() << type;
             KoReportDesignerItemBase *ent = (m_sectionData->copy_list[i])->clone();
             KoReportItemBase *new_obj = dynamic_cast<KoReportItemBase*>(ent);
             new_obj->setEntityName(suggestEntityName(type));    
-            pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
-
+            QGraphicsItem *pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
             if (pasted_ent) {
                 canvas->addItem(pasted_ent);
                 pasted_ent->show();
@@ -1075,21 +1094,21 @@ QString KoReportDesigner::suggestEntityName(const QString &n) const
         }
     }
 
-    //Count items in the group headers/footers
-    for (int i = 0; i < m_detail->groupSectionCount(); i++) {
-        sec = m_detail->groupSection(i)->groupHeader();
-        if (sec) {
-            const QGraphicsItemList l = sec->items();
-            itemCount += l.count();
-        }
-        sec = m_detail->groupSection(i)->groupFooter();
-        if (sec) {
-            const QGraphicsItemList l = sec->items();
-            itemCount += l.count();
-        }
-    }
-
     if (m_detail) {
+        //Count items in the group headers/footers
+        for (int i = 0; i < m_detail->groupSectionCount(); i++) {
+            sec = m_detail->groupSection(i)->groupHeader();
+            if (sec) {
+                const QGraphicsItemList l = sec->items();
+                itemCount += l.count();
+            }
+            sec = m_detail->groupSection(i)->groupFooter();
+            if (sec) {
+                const QGraphicsItemList l = sec->items();
+                itemCount += l.count();
+            }
+        }
+
         sec = m_detail->detailSection();
         if (sec) {
             const QGraphicsItemList l = sec->items();
@@ -1125,7 +1144,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
     }
 
     //Count items in the group headers/footers
-    if (unique) {
+    if (unique && m_detail) {
         for (int i = 0; i < m_detail->groupSectionCount(); ++i) {
             sec = m_detail->groupSection(i)->groupHeader();
             if (sec) {
@@ -1265,4 +1284,35 @@ void KoReportDesigner::unsetSectionCursor()
     
     if (m_detail)
         m_detail->unsetSectionCursor();
+}
+
+qreal KoReportDesigner::countSelectionHeight() const
+{
+    if (m_releaseY == -1 || m_pressY == -1) {
+        return -1;
+    }
+    return m_releaseY - m_pressY;
+}
+
+qreal KoReportDesigner::countSelectionWidth() const
+{
+    if (m_releaseX == -1 || m_pressX == -1) {
+        return -1;
+    }
+    return m_releaseX - m_pressX;
+}
+
+qreal KoReportDesigner::getSelectionPressX() const
+{
+    return m_pressX;
+}
+
+qreal KoReportDesigner::getSelectionPressY() const
+{
+    return m_pressY;
+}
+
+QPointF KoReportDesigner::getPressPoint() const
+{
+    return QPointF(m_pressX, m_pressY);
 }

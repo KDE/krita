@@ -23,6 +23,7 @@ struct KisCircleMaskGenerator::Private {
     double xcoef, ycoef;
     double xfadecoef, yfadecoef;
     double transformedFadeX, transformedFadeY;
+    bool copyOfAntialiasEdges;
 
     KisBrushMaskApplicatorBase *applicator;
 };

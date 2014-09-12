@@ -174,7 +174,7 @@ QString KoReportItemMaps::itemDataSource() const
 
 QString KoReportItemMaps::typeName() const
 {
-    return "report:maps";
+    return "maps";
 }
 
 int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,

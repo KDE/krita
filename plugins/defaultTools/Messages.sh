@@ -2,4 +2,5 @@
 source ../../calligra_xgettext.sh
 
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp
-calligra_xgettext *.cpp */*.cpp > $podir/calligra-defaulttools.pot
+calligra_xgettext calligra-defaulttools.pot *.cpp */*.cpp
+rm -f rc.cpp

@@ -2,5 +2,5 @@
 source ../../calligra_xgettext.sh
 
 $EXTRACTRC *.ui >> rc.cpp
-calligra_xgettext *.cpp *.h elements/*.cpp elements/*.h > $podir/FormulaShape.pot
+calligra_xgettext FormulaShape.pot *.cpp *.h elements/*.cpp elements/*.h
 rm -f rc.cpp

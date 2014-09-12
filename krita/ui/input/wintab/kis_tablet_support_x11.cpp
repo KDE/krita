@@ -187,7 +187,7 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
             qDebug() << "# Building tablet axes remapping table:";
         }
 
-        QVector<AxesIndexes> axesMap(NAxes, Unused);
+        QVector<AxesIndexes> axesMap(nitems, Unused);
 
         for (unsigned int axisIndex = 0; axisIndex < nitems; axisIndex++) {
             Atom currentAxisName = ((Atom*)prop)[axisIndex];

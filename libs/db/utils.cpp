@@ -351,8 +351,8 @@ Connection* TableOrQuerySchema::connection() const
 ConnectionTestThread::ConnectionTestThread(ConnectionTestDialog* dlg, const KexiDB::ConnectionData& connData)
         : m_dlg(dlg), m_connData(connData)
 {
-    connect(this, SIGNAL(error(const QString&,const QString&)),
-            dlg, SLOT(error(const QString&,const QString&)), Qt::QueuedConnection);
+    connect(this, SIGNAL(error(QString,QString)),
+            dlg, SLOT(error(QString,QString)), Qt::QueuedConnection);
 
     // try to load driver now because it's not supported in different thread
     KexiDB::DriverManager manager;
@@ -404,7 +404,7 @@ ConnectionTestDialog::ConnectionTestDialog(QWidget* parent,
         KexiDB::MessageHandler& msgHandler)
         : KProgressDialog(parent,
                           i18n("Test Connection"),
-                          i18n("<qt>Testing connection to <b>%1</b> database server...</qt>",
+                          i18n("Testing connection to <resource>%1</resource> database server...",
                                data.serverInfoString(true))
                          )
         , m_thread(new ConnectionTestThread(this, data))

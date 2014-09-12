@@ -55,7 +55,7 @@ public:
      * @param fh horizontal fade (fh \< w / 2 )
      * @param fv vertical fade (fv \< h / 2 )
      */
-    KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, Type type, const KoID& id = DefaultId);
+    KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id = DefaultId);
 
     virtual ~KisMaskGenerator();
 
@@ -103,8 +103,16 @@ public:
     
     QString curveString() const;
     void setCurveString(const QString& curveString);
-    
+
+    bool antialiasEdges() const;
+    virtual void setScale(qreal scaleX, qreal scaleY);
+
 protected:
+    qreal effectiveSrcWidth() const;
+    qreal effectiveSrcHeight() const;
+
+protected:
+
     struct Private {
         qreal diameter, ratio;
         qreal softness;
@@ -115,6 +123,9 @@ protected:
         bool empty;
         Type type;
         QString curveString;
+        bool antialiasEdges;
+        qreal scaleX;
+        qreal scaleY;
         KisBrushMaskApplicatorBase *defaultMaskProcessor;
     };
 

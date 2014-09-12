@@ -206,7 +206,6 @@
   <zorder>bnImportDirectory</zorder>
   <zorder>bnSaveFile</zorder>
   <zorder>groupBox</zorder>
-  <zorder>verticalSpacer</zorder>
   <zorder>lblMime</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

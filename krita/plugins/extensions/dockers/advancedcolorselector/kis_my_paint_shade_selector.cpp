@@ -258,6 +258,7 @@ void KisMyPaintShadeSelector::setColor(const KoColor &color) {
 	if(shadeMyPaintType=="HSI"){this->converter()->getHsiF(color, &m_colorH, &m_colorS, &m_colorV);}	
 	if(shadeMyPaintType=="HSY"){this->converter()->getHsyF(color, &m_colorH, &m_colorS, &m_colorV);}
     m_lastRealColor = color;
+    this->updateColorPreview(color);
 
     m_updateTimer->start();
 }

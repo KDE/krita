@@ -89,16 +89,36 @@ int main() {
 
     // Here you can call any G'MIC command you want !
     // (here, create a deformed average of the input images, and save it as a BMP file).
-    gmic("-+ -n 0,255 -flower 8 -sharpen 100 -o foo.bmp",images,images_names);
+    gmic("-+ -n 0,255 -flower 8 -sharpen 100 -o foo1.bmp",images,images_names);
 
   } catch (gmic_exception &e) { // Catch exception, if an error occured in the interpreter.
     std::fprintf(stderr,"\n- Error encountered when calling G'MIC : '%s'\n",e.what());
     return 0;
   }
 
-  // Third step : get back modified image data.
-  //-------------------------------------------
-  std::fprintf(stderr,"\n- 3st step : Returned %u output images.\n",images._width);
+  // Third step (alternative) : Call G'MIC API to process input images.
+  //---------------------------------------------------------------------
+  std::fprintf(stderr,"\n- 3rd step (alternative) : Call G'MIC interpreter from empty instance.\n");
+
+  gmic gmic_instance;   // Construct first an empty 'gmic' instance.
+
+  try {
+
+    // Here, we use the already constructed 'gmic' instance. The same instance can be used
+    // several times.
+    gmic_instance.run("-blur 5 -sharpen 1000 -n 0,255 -o foo2.bmp",images,images_names);
+    std::fputc('\n',stderr);
+    gmic_instance.run("--resize 50%,50% -to_rgba[-1] -rotate[-1] 30 -drop_shadow[-1] 0,13 "
+                      "-blur_radial[0] 10% -blend alpha -o foo3.bmp",images,images_names);
+
+  } catch (gmic_exception &e) { // Catch exception, if an error occured in the interpreter.
+    std::fprintf(stderr,"\n- Error encountered when calling G'MIC : '%s'\n",e.what());
+    return 0;
+  }
+
+  // Fourth step : get back modified image data.
+  //---------------------------------------------
+  std::fprintf(stderr,"\n- 4th step : Returned %u output images.\n",images._width);
   for (unsigned int i = 0; i<images._width; ++i) {
     std::fprintf(stderr,"   Output image %u = %ux%ux%ux%u, buffer : %p\n",i,
                  images._data[i]._width,
@@ -111,7 +131,6 @@ int main() {
   // Fourth step : Free image resources.
   //-------------------------------------
   images.assign(0);
-
 
   // That's it !
   //-------------

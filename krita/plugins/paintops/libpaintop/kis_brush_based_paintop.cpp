@@ -21,7 +21,6 @@
 #include "kis_brush_option.h"
 #include <kis_pressure_spacing_option.h>
 
-
 #include <QImage>
 #include <QPainter>
 
@@ -102,38 +101,61 @@ KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
 
 bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
 {
+    scale *= m_brush->scale();
+
     return scale * m_brush->width() < 0.01 ||
            scale * m_brush->height() < 0.01;
 }
 
-KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight) const
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation) const
 {
-    return effectiveSpacing(dabWidth, dabHeight, 1.0, false);
+    return effectiveSpacing(scale, rotation, 1.0, false);
 }
 
-KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
 {
     qreal extraSpacingScale = 1.0;
     if (spacingOption.isChecked()) {
         extraSpacingScale = spacingOption.apply(pi);
     }
 
-    return effectiveSpacing(dabWidth, dabHeight, extraSpacingScale, spacingOption.isotropicSpacing());
+    QSizeF metric = m_brush->characteristicSize(scale, scale, rotation);
+    return effectiveSpacing(metric.width(), metric.height(), extraSpacingScale, spacingOption.isotropicSpacing());
 }
 
-KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight, qreal extraScale, bool isotropicSpacing) const
+inline qreal calcAutoSpacing(qreal value, qreal coeff)
+{
+    return coeff * (value < 1.0 ? value : sqrt(value));
+}
+
+inline QPointF calcAutoSpacing(const QPointF &pt, qreal coeff)
+{
+    return QPointF(calcAutoSpacing(pt.x(), coeff), calcAutoSpacing(pt.y(), coeff));
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing) const
 {
     QPointF spacing;
 
     if (!isotropicSpacing) {
-        spacing = QPointF(dabWidth, dabHeight);
+        if (m_brush->autoSpacingActive()) {
+            spacing = calcAutoSpacing(QPointF(dabWidth, dabHeight), m_brush->autoSpacingCoeff());
+        } else {
+            spacing = QPointF(dabWidth, dabHeight);
+            spacing *= m_brush->spacing();
+        }
     }
     else {
         qreal significantDimension = qMax(dabWidth, dabHeight);
+        if (m_brush->autoSpacingActive()) {
+            significantDimension = calcAutoSpacing(significantDimension, m_brush->autoSpacingCoeff());
+        } else {
+            significantDimension *= m_brush->spacing();
+        }
         spacing = QPointF(significantDimension, significantDimension);
     }
 
-    spacing *= extraScale * m_brush->spacing();
+    spacing *= extraScale;
 
     return spacing;
 }

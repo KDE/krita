@@ -35,10 +35,12 @@ class KRITAIMAGE_EXPORT KisCurveRectangleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    KisCurveRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve& curve);
+    KisCurveRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve& curve, bool antialiasEdges);
     virtual ~KisCurveRectangleMaskGenerator();
 
     virtual quint8 valueAt(qreal x, qreal y) const;
+
+    void setScale(qreal scaleX, qreal scaleY);
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
     

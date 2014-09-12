@@ -25,31 +25,74 @@
 #include <kis_fast_math.h>
 #include "kis_curve_rect_mask_generator.h"
 #include "kis_cubic_curve.h"
+#include "kis_antialiasing_fade_maker.h"
 
-struct KisCurveRectangleMaskGenerator::Private {
+
+struct KisCurveRectangleMaskGenerator::Private
+{
+    Private(bool enableAntialiasing)
+        : fadeMaker(*this, enableAntialiasing)
+    {
+    }
+
     QVector<qreal> curveData;
     QList<QPointF> curvePoints;
     int curveResolution;
     bool dirty;
-    qreal m_halfWidth, m_halfHeight;
+
+    qreal xcoeff;
+    qreal ycoeff;
+
+    KisAntialiasingFadeMaker2D<Private> fadeMaker;
+
+    quint8 value(qreal xr, qreal yr) const;
 };
 
-KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
-        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, RECTANGLE, SoftId), d(new Private)
+KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve, bool antialiasEdges)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, SoftId), d(new Private(antialiasEdges))
 {
     d->curveResolution = qRound( qMax(width(),height()) * OVERSAMPLING);
-    d->curveData = curve.floatTransfer( d->curveResolution + 1); 
+    d->curveData = curve.floatTransfer( d->curveResolution + 1);
     d->curvePoints = curve.points();
     setCurveString(curve.toString());
     d->dirty = false;
-    d->m_halfWidth = KisMaskGenerator::d->diameter * 0.5;
-    d->m_halfHeight = d->m_halfWidth * KisMaskGenerator::d->ratio;
 
+    setScale(1.0, 1.0);
+}
+
+void KisCurveRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    qreal halfWidth = 0.5 * effectiveSrcWidth();
+    qreal halfHeight = 0.5 * effectiveSrcHeight();
+
+    d->xcoeff = 1.0 / halfWidth;
+    d->ycoeff = 1.0 / halfHeight;
+
+    d->fadeMaker.setLimits(halfWidth, halfHeight);
 }
 
 KisCurveRectangleMaskGenerator::~KisCurveRectangleMaskGenerator()
 {
     delete d;
+}
+
+quint8 KisCurveRectangleMaskGenerator::Private::value(qreal xr, qreal yr) const
+{
+    xr = qAbs(xr) * xcoeff;
+    yr = qAbs(yr) * ycoeff;
+
+    int sIndex = qRound(xr * (curveResolution));
+    int tIndex = qRound(yr * (curveResolution));
+
+    int sIndexInverted = curveResolution - sIndex;
+    int tIndexInverted = curveResolution - tIndex;
+
+    qreal blend = (curveData.at(sIndex) * (1.0 - curveData.at(sIndexInverted)) *
+                   curveData.at(tIndex) * (1.0 - curveData.at(tIndexInverted)));
+
+    return (1.0 - blend) * 255;
 }
 
 quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
@@ -76,33 +119,17 @@ quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
         }
     }
 
-    if(xr > d->m_halfWidth || xr < -d->m_halfWidth || yr > d->m_halfHeight || yr < -d->m_halfHeight) {
-        return 255;
+    quint8 value;
+    if (d->fadeMaker.needFade(xr, yr, &value)) {
+        return value;
     }
-    
-    xr = qAbs(xr) / width();
-    yr = qAbs(yr) / height();
-    
-    if (xr > 1.0 || yr > 1.0){
-        return 255;
-    }
-    
-    int sIndex = qRound(xr * (d->curveResolution));
-    int tIndex = qRound(yr * (d->curveResolution));
-    
-    int sIndexInverted = d->curveResolution - sIndex;
-    int tIndexInverted = d->curveResolution - tIndex;
-    
-    qreal blend = (d->curveData.at(sIndex) * (1.0 - d->curveData.at(sIndexInverted)) *
-                  d->curveData.at(tIndex) * (1.0 - d->curveData.at(tIndexInverted)));
-    
-    return (1.0 - blend) * 255;
+
+    return d->value(xr, yr);
 }
 
 void KisCurveRectangleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     KisMaskGenerator::toXML(doc, e);
-    e.setAttribute("type", "rect");
     e.setAttribute("softness_curve", curveString());
 }
 
@@ -113,5 +140,6 @@ void KisCurveRectangleMaskGenerator::setSoftness(qreal softness)
     d->dirty = true;
     KisMaskGenerator::setSoftness(softness);
     KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, d->curveResolution + 1, d->curveData);
+    d->dirty = false;
 }
 

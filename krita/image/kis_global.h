@@ -116,7 +116,7 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
 }
 
 template<typename T>
-inline T pow2(T x) {
+inline T pow2(const T& x) {
     return x * x;
 }
 
@@ -174,6 +174,29 @@ inline QPointF kisProjectOnVector(const QPointF &base, const QPointF &v)
     qreal coeff = prod / lengthSq;
 
     return coeff * base;
+}
+
+#include <QRect>
+
+inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
+{
+    if(rc.right() > bounds.right()) {
+        rc.translate(bounds.right() - rc.right(), 0);
+    }
+
+    if(rc.left() < bounds.left()) {
+        rc.translate(bounds.left() - rc.left(), 0);
+    }
+
+    if(rc.bottom() > bounds.bottom()) {
+        rc.translate(0, bounds.bottom() - rc.bottom());
+    }
+
+    if(rc.top() < bounds.top()) {
+        rc.translate(0, bounds.top() - rc.top());
+    }
+
+    return rc;
 }
 
 #endif // KISGLOBAL_H_

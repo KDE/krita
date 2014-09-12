@@ -92,7 +92,7 @@ void
 StringListEdit::showEditor()
 {
     KDialog dialog(this->topLevelWidget());
-    dialog.setWindowTitle(i18n("Edit List of Items"));
+    dialog.setWindowTitle(i18nc("@title:window", "Edit List of Items"));
     dialog.setObjectName("stringlist_dialog");
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
     dialog.setDefaultButton(KDialog::Ok);

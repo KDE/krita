@@ -248,6 +248,12 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
                                            KisStrokeJobData::Sequentiality sequentiality,
                                            KisStrokeJobData::Exclusivity exclusivity)
 {
+    /*
+     * One should not add commands after the final signals have been
+     * emitted, only end or cancel the stroke
+     */
+    KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
+
     m_image->addJob(m_strokeId,
                     new KisStrokeStrategyUndoCommandBased::
                     Data(KUndo2CommandSP(command),
@@ -256,7 +262,7 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
                          exclusivity));
 }
 
-void KisProcessingApplicator::explicitlyEmitFinalSignal()
+void KisProcessingApplicator::explicitlyEmitFinalSignals()
 {
     KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
 
@@ -279,7 +285,7 @@ void KisProcessingApplicator::explicitlyEmitFinalSignal()
 void KisProcessingApplicator::end()
 {
     if (!m_finalSignalsEmitted) {
-        explicitlyEmitFinalSignal();
+        explicitlyEmitFinalSignals();
     }
 
     m_image->endStroke(m_strokeId);

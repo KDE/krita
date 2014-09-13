@@ -56,6 +56,7 @@ public:
                       KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
                       KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
 
+    void explicitlyEmitFinalSignal();
     void end();
     void cancel();
 
@@ -71,6 +72,7 @@ private:
     ProcessingFlags m_flags;
     KisImageSignalVector m_emitSignals;
     KisStrokeId m_strokeId;
+    bool m_finalSignalsEmitted;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisProcessingApplicator::ProcessingFlags)

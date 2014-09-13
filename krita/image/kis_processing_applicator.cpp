@@ -184,7 +184,8 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
     : m_image(image),
       m_node(node),
       m_flags(flags),
-      m_emitSignals(emitSignals)
+      m_emitSignals(emitSignals),
+      m_finalSignalsEmitted(false)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
         new KisStrokeStrategyUndoCommandBased(name, false,
@@ -255,8 +256,10 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
                          exclusivity));
 }
 
-void KisProcessingApplicator::end()
+void KisProcessingApplicator::explicitlyEmitFinalSignal()
 {
+    KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
+
     if (m_node) {
         applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
     }
@@ -268,6 +271,17 @@ void KisProcessingApplicator::end()
     if(!m_emitSignals.isEmpty()) {
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, true), KisStrokeJobData::BARRIER);
     }
+
+    // simple consistency check
+    m_finalSignalsEmitted = true;
+}
+
+void KisProcessingApplicator::end()
+{
+    if (!m_finalSignalsEmitted) {
+        explicitlyEmitFinalSignal();
+    }
+
     m_image->endStroke(m_strokeId);
 }
 

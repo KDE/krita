@@ -360,9 +360,9 @@ void Property::setValue(const QVariant &value, bool rememberOldValue, bool useCo
     }
     else if (t == QVariant::Double) {
         const double factor = 1.0 / option("step", KOPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
-        kDebug()
-            << "double compared:" << currentValue.toDouble() << value.toDouble() 
-            << ":" << static_cast<qlonglong>(currentValue.toDouble() * factor) << static_cast<qlonglong>(value.toDouble() * factor);
+        //kDebug()
+        //    << "double compared:" << currentValue.toDouble() << value.toDouble() 
+        //    << ":" << static_cast<qlonglong>(currentValue.toDouble() * factor) << static_cast<qlonglong>(value.toDouble() * factor);
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
     } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         ch = false;

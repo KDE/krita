@@ -21,6 +21,7 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
+class QVBoxLayout;
 class KisCanvas2;
 class OverviewWidget;
 
@@ -32,6 +33,7 @@ public:
     virtual void unsetCanvas();
 
 private:
+    QVBoxLayout *m_layout;
     OverviewWidget *m_overviewWidget;
     KisCanvas2 *m_canvas;
 };

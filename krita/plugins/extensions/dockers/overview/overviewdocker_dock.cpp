@@ -19,11 +19,14 @@
 #include "overviewwidget.h"
 
 #include <QLabel>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <klocale.h>
+#include <kstatusbar.h>
 
 #include "kis_canvas2.h"
+#include <kis_view2.h>
+#include <kis_zoom_manager.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_signal_compressor.h"
@@ -34,12 +37,12 @@ OverviewDockerDock::OverviewDockerDock( )
     , m_canvas(0)
 {
     QWidget *page = new QWidget(this);
-    QHBoxLayout *layout = new QHBoxLayout(page);
+    m_layout = new QVBoxLayout(page);
 
     m_overviewWidget = new OverviewWidget(this);
     m_overviewWidget->setMinimumHeight(50);
 
-    layout->addWidget(m_overviewWidget);
+    m_layout->addWidget(m_overviewWidget, 1);
 
     setWidget(page);
 }
@@ -55,6 +58,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
     m_overviewWidget->setCanvas(canvas);
+    m_layout->addWidget(m_canvas->view()->zoomController()->zoomAction()->createWidget(m_canvas->view()->KoView::statusBar()));
 }
 
 void OverviewDockerDock::unsetCanvas()

@@ -272,7 +272,7 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     if (!qobject_cast<QStatusBar*>(parent))
         return KSelectAction::createWidget(parent);
 
-    KoZoomWidget* zoomWidget = new KoZoomWidget(d->specialButtons, d->sliderLookup.size() - 1);
+    KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->specialButtons, d->sliderLookup.size() - 1);
     connect(this, SIGNAL(zoomLevelsChanged(QStringList)), zoomWidget, SLOT(setZoomLevels(QStringList)));
     connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));
     connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));

@@ -30,7 +30,7 @@ class KoZoomWidget : public QWidget
     Q_OBJECT
 
 public:
-    KoZoomWidget(KoZoomAction::SpecialButtons specialButtons, int maxZoom);
+    KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons specialButtons, int maxZoom);
     ~KoZoomWidget();
 
 signals:

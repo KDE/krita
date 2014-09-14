@@ -47,7 +47,9 @@ public:
     qreal effectiveZoom;
 };
 
-KoZoomWidget::KoZoomWidget(KoZoomAction::SpecialButtons specialButtons, int maxZoom ) : d(new Private)
+KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons specialButtons, int maxZoom )
+    : QWidget(parent)
+    , d(new Private)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     //layout->setSizeConstraint(QLayout::SetFixedSize);

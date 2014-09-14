@@ -31,7 +31,6 @@
 #include "kis_favorite_resource_manager.h"
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
-#include "kis_palette_manager.h"
 #include "kis_view2.h"
 #include "kis_resource_server_provider.h"
 #include "kis_min_heap.h"

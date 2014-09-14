@@ -387,7 +387,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
         //in favorite brushes area
         int pos = calculatePresetIndex(point, m_resourceManager->numFavoritePresets());
 
-        if (pos >= 0) {
+        if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()) {
             setHoveredPreset(pos);
         }
     } else if (pathColor.contains(point)) {

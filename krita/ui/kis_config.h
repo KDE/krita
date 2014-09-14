@@ -311,6 +311,9 @@ public:
     bool useOcio() const;
     void setUseOcio(bool useOCIO) const;
 
+    int favoritePresets() const;
+    void setFavoritePresets(const int value);
+
 
     enum OcioColorManagementMode {
         INTERNAL = 0,

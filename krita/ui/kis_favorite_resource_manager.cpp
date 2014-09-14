@@ -35,11 +35,8 @@
 #include "kis_view2.h"
 #include "kis_resource_server_provider.h"
 #include "kis_min_heap.h"
-
-#ifndef _MSC_EXTENSIONS
-const int KisFavoriteResourceManager::MAX_FAVORITE_PRESETS;
-//const int KisFavoriteResourceManager::MAX_RECENT_COLORS;
-#endif
+#include "kis_config.h"
+#include "kis_config_notifier.h"
 
 class KisFavoriteResourceManager::ColorDataList
 {
@@ -167,26 +164,29 @@ private:
 
 
 KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox)
-    : m_favoriteBrushManager(0)
-    , m_paintopBox(paintopBox)
+    : m_paintopBox(paintopBox)
     , m_colorList(0)
     , m_blockUpdates(false)
 {
-    //take favorite brushes from a file then append to QList
-    KConfigGroup group(KGlobal::config(), "favoriteList");
-    m_favoritePresetsList = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
-
     m_colorList = new ColorDataList();
 
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->addObserver(this);
+    
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateFavoritePresets()));
+
+    KisConfig cfg;
+    m_currentTag = cfg.readEntry<QString>("favoritePresetsTag", QString());
+    updateFavoritePresets();
 }
 
 KisFavoriteResourceManager::~KisFavoriteResourceManager()
 {
+    KisConfig cfg;
+    cfg.writeEntry<QString>("favoritePresetsTag", m_currentTag);
+    
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->removeObserver(this);
-    delete m_favoriteBrushManager;
     delete m_colorList;
 }
 
@@ -195,7 +195,7 @@ void KisFavoriteResourceManager::unsetResourceServer()
     // ...
 }
 
-QStringList KisFavoriteResourceManager::favoritePresetList()
+QVector<KisPaintOpPreset*>  KisFavoriteResourceManager::favoritePresetList()
 {
     return m_favoritePresetsList;
 }
@@ -203,102 +203,30 @@ QStringList KisFavoriteResourceManager::favoritePresetList()
 QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     QList<QImage> images;
-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    foreach(const QString & name, m_favoritePresetsList) {
-        KoResource* resource = rServer->resourceByName(name);
-        if (!resource) {
-            removeFavoritePreset(name);
-        } else {
-            images.append(resource->image());
-        }
+    foreach(KisPaintOpPreset* preset, m_favoritePresetsList) {
+        images.append(preset->image());
     }
     return images;
+}
+
+void KisFavoriteResourceManager::setCurrentTag(const QString& tagName)
+{
+    m_currentTag = tagName;
+    updateFavoritePresets();
 }
 
 void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
 {
     if (pos < 0 || pos >= m_favoritePresetsList.size()) return;
 
-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KoResource* resource = rServer->resourceByName(m_favoritePresetsList.at(pos));
+    KoResource* resource = m_favoritePresetsList.at(pos);
     m_paintopBox->resourceSelected(resource);
     emit hidePalettes();
-}
-
-
-//Palette Manager
-void KisFavoriteResourceManager::showPaletteManager()
-{
-    if (!m_favoriteBrushManager) {
-        m_favoriteBrushManager = new KisPaletteManager(this);
-    }
-    m_favoriteBrushManager->show();
-
-}
-
-//Favorite Brushes
-int KisFavoriteResourceManager::addFavoritePreset(const QString& name)
-{
-
-    int pos = isFavoriteBrushSaved(name);
-
-    if (pos > -1) { //brush is saved
-        return pos;
-    }
-
-    else { //brush hasn't been saved yet
-
-        if (m_favoritePresetsList.size() == KisFavoriteResourceManager::MAX_FAVORITE_PRESETS)  {
-            return -2; //list is full!
-        } else {
-            m_favoritePresetsList.append(name);
-            saveFavoritePresets();
-            emit updatePalettes();
-            return -1;
-        }
-    }
-}
-
-int KisFavoriteResourceManager::isFavoriteBrushSaved(const QString& name)
-{
-    return m_favoritePresetsList.indexOf(name);
-}
-
-void KisFavoriteResourceManager::removeFavoritePreset(int pos)
-{
-    if (pos < 0 || pos > m_favoritePresetsList.size()) {
-        return;
-    } else {
-        m_favoritePresetsList.removeAt(pos);
-        saveFavoritePresets();
-        emit updatePalettes();
-    }
-}
-
-void KisFavoriteResourceManager::removeFavoritePreset(const QString& name)
-{
-    int pos = isFavoriteBrushSaved(name);
-    if (pos > -1) removeFavoritePreset(pos);
 }
 
 int KisFavoriteResourceManager::numFavoritePresets()
 {
     return m_favoritePresetsList.size();
-}
-
-void KisFavoriteResourceManager::saveFavoritePresets()
-{
-
-    QString favoriteList;
-
-    for (int pos = 0; pos < m_favoritePresetsList.size(); pos++)  {
-        favoriteList.append(m_favoritePresetsList.at(pos));
-        favoriteList.append(",");
-    }
-
-    KConfigGroup group(KGlobal::config(), "favoriteList");
-    group.writeEntry("favoritePresets", favoriteList);
-    group.config()->sync();
 }
 
 //Recent Colors
@@ -330,11 +258,17 @@ void KisFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
     if (m_blockUpdates) {
         return;
     }
-    removeFavoritePreset(resource->name());
+    if (m_favoritePresetsList.contains(resource)) {
+        updateFavoritePresets();
+    }
 }
 
 void KisFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
 {
+    if (m_blockUpdates) {
+        return;
+    }
+    updateFavoritePresets();
 }
 
 void KisFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
@@ -346,7 +280,12 @@ void KisFavoriteResourceManager::setBlockUpdates(bool block)
     m_blockUpdates = block;
 }
 
-void KisFavoriteResourceManager::syncTaggedResourceView() {}
+void KisFavoriteResourceManager::syncTaggedResourceView() {
+    if (m_blockUpdates) {
+        return;
+    }
+    updateFavoritePresets(); 
+}
 
 void KisFavoriteResourceManager::syncTagAddition(const QString& /*tag*/) {}
 
@@ -370,6 +309,20 @@ void KisFavoriteResourceManager::slotSetBGColor(const KoColor c)
 KoColor KisFavoriteResourceManager::bgColor() const
 {
     return m_bgColor;
+}
+
+void KisFavoriteResourceManager::updateFavoritePresets()
+{
+    KisConfig cfg;
+    int maxPresets = cfg.favoritePresets();
+    
+    m_favoritePresetsList.clear();
+    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QStringList presetFilenames = rServer->searchTag(m_currentTag);
+    for(int i = 0; i < qMin(maxPresets, presetFilenames.size()); i++) {
+        m_favoritePresetsList.append(rServer->resourceByFilename(presetFilenames.at(i)));
+    }
+    emit updatePalettes();
 }
 
 #include "kis_favorite_resource_manager.moc"

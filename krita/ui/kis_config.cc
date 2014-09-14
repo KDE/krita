@@ -1037,6 +1037,17 @@ void KisConfig::setUseOcio(bool useOCIO) const
     m_cfg.writeEntry("Krita/Ocio/UseOcio", useOCIO);
 }
 
+int KisConfig::favoritePresets() const
+{
+    return m_cfg.readEntry("favoritePresets", 10);
+}
+
+void KisConfig::setFavoritePresets(const int value)
+{
+    m_cfg.writeEntry("favoritePresets", value);
+}
+
+
 KisConfig::OcioColorManagementMode
 KisConfig::ocioColorManagementMode() const
 {

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2014 Wolthera van Hövell <griffinvalley@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published
@@ -567,7 +568,11 @@ void RGBToHSI(qreal r,qreal g, qreal b, qreal *h, qreal *s, qreal *i)
 
         if(maxval==r)
             {
-                hue = fmod(((g-b)/chroma), 6.0);
+                
+                //hue = fmod(((g-b)/chroma), 6.0);
+                //above doesn't work so let's try this one:
+                if (minval==b) {hue = (g-b)/chroma;}
+                else {hue = (g-b)/chroma + 6.0;}
             }
             else if(maxval==g)
             {
@@ -779,7 +784,10 @@ void RGBToHSY(const qreal r,const qreal g,const qreal b, qreal *h, qreal *s, qre
 
         if(maxval==r)
             {
-                hue = fmod(((g-b)/chroma), 6.0);
+                //hue = fmod(((g-b)/chroma), 6.0);
+                //above doesn't work so let's try this one:
+                if (minval==b) {hue = (g-b)/chroma;}
+                else {hue = (g-b)/chroma + 6.0;}
             }
             else if(maxval==g)
             {

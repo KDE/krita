@@ -126,7 +126,7 @@ void KoReportItemText::createProperties()
     m_lineWeight = new KoProperty::Property("line-weight", 1, i18n("Line Weight"));
     m_lineColor = new KoProperty::Property("line-color", Qt::black, i18n("Line Color"));
     m_lineStyle = new KoProperty::Property("line-style", Qt::NoPen, i18n("Line Style"), i18n("Line Style"), KoProperty::LineStyle);
-    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, i18n("Opacity"));
+    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, i18n("Background Opacity"));
     m_backgroundOpacity->setOption("max", 100);
     m_backgroundOpacity->setOption("min", 0);
     m_backgroundOpacity->setOption("unit", "%");

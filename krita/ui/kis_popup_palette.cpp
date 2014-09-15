@@ -423,6 +423,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
             if (settingCircle.contains(point)) {                
                 KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
                 QStringList tags = rServer->tagNamesList();
+                qSort(tags);
 
                 if (!tags.isEmpty()) {
                     QMenu menu;

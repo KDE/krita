@@ -34,6 +34,7 @@
 
 OverviewDockerDock::OverviewDockerDock( )
     : QDockWidget(i18n("Overview"))
+    , m_zoomSlider(0)
     , m_canvas(0)
 {
     QWidget *page = new QWidget(this);
@@ -53,12 +54,17 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(this);
     }
+    if (m_zoomSlider) {
+        m_layout->removeWidget(m_zoomSlider);
+        delete m_zoomSlider;
+    }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
     m_overviewWidget->setCanvas(canvas);
-    m_layout->addWidget(m_canvas->view()->zoomController()->zoomAction()->createWidget(m_canvas->view()->KoView::statusBar()));
+    m_zoomSlider = m_canvas->view()->zoomController()->zoomAction()->createWidget(m_canvas->view()->KoView::statusBar());
+    m_layout->addWidget(m_zoomSlider);
 }
 
 void OverviewDockerDock::unsetCanvas()

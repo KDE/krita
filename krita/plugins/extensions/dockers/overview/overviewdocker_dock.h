@@ -35,6 +35,7 @@ public:
 private:
     QVBoxLayout *m_layout;
     OverviewWidget *m_overviewWidget;
+    QWidget *m_zoomSlider;
     KisCanvas2 *m_canvas;
 };
 

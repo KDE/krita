@@ -36,6 +36,7 @@ public slots:
     void resizeContents(QSize);
 
 protected:
+    void mousePressEvent(QMouseEvent * e);
     void mouseReleaseEvent(QMouseEvent * e);
 
 private:

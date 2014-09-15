@@ -37,6 +37,7 @@ class KoReportDesignerItemLine : public KoReportItemLine, public QGraphicsLineIt
     Q_OBJECT
 public:
     KoReportDesignerItemLine(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
+    KoReportDesignerItemLine(KoReportDesigner * d, QGraphicsScene * scene, const QPointF &startPos, const QPointF &endPos);
     KoReportDesignerItemLine(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);
 
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
@@ -46,6 +47,7 @@ public:
     void setLineScene(QLineF);
     
     virtual void move(const QPointF&);
+
 private:
     KoReportDesigner* m_rd;
     void init(QGraphicsScene*, KoReportDesigner *);

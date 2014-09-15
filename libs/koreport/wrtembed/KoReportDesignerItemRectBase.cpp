@@ -40,7 +40,6 @@ KoReportDesignerItemRectBase::KoReportDesignerItemRectBase(KoReportDesigner *r)
     m_ppos = 0;
     m_psize = 0;
     m_grabAction = 0;
-
     setAcceptsHoverEvents(true);
 
 #if QT_VERSION >= 0x040600
@@ -50,8 +49,9 @@ KoReportDesignerItemRectBase::KoReportDesignerItemRectBase(KoReportDesigner *r)
 #endif
 }
 
-void KoReportDesignerItemRectBase::init(KRPos* p, KRSize* s, KoProperty::Set* se)
+void KoReportDesignerItemRectBase::init(KRPos* p, KRSize* s, KoProperty::Set* se, KoReportDesigner *d)
 {
+    Q_UNUSED(d);
     m_ppos = p;
     m_psize = s;
     m_pset = se;

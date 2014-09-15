@@ -59,6 +59,12 @@ KoReportDesigner * ReportSceneView::designer()
     return m_reportDesigner;
 }
 
+void ReportSceneView::mousePressEvent(QMouseEvent * e)
+{
+    m_reportDesigner->sectionMousePressEvent(this, e);
+    QGraphicsView::mousePressEvent(e);
+}
+
 void ReportSceneView::mouseReleaseEvent(QMouseEvent * e)
 {
     m_reportDesigner->sectionMouseReleaseEvent(this, e);

@@ -99,7 +99,7 @@ void KoReportItemField::createProperties()
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, i18n("Background Color"));
     m_foregroundColor = new KoProperty::Property("foregroud-color", Qt::black, i18n("Foreground Color"));
 
-    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, i18n("Opacity"));
+    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, i18n("Background Opacity"));
     m_backgroundOpacity->setOption("max", 100);
     m_backgroundOpacity->setOption("min", 0);
     m_backgroundOpacity->setOption("unit", "%");

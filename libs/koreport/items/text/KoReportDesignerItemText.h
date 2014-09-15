@@ -43,11 +43,12 @@ public:
     virtual KoReportDesignerItemText* clone();
 
 protected:
+    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
 private:
-    QRect getTextRect();
-    void init(QGraphicsScene*);
+    QRect getTextRect() const;
+    void init(QGraphicsScene*, KoReportDesigner*);
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);

@@ -70,6 +70,7 @@ public:
     void setDefault();
     int undoStackSize();
     bool showOutlineWhilePainting();
+    int favoritePresets();
 
 };
 

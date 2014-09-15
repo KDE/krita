@@ -91,8 +91,9 @@ void KoServiceLocator::init()
         if (servicesDir.exists()) {
             foreach(const QString &entry, servicesDir.entryList(QDir::Files)) {
                 KService::Ptr service = KService::Ptr(new KService(servicesDir.absoluteFilePath(entry)));
-                if (!services.contains(service->name())) {
-                    services << service->name();
+                const QString key(service->library() + '\n' + service->name());
+                if (!services.contains(key)) {
+                    services << key;
                     foreach(const QString &t, service->serviceTypes()) {
                         if (!mimeTypes(service).contains(t)) {
                             if (!d->typeToService.contains(t)) {

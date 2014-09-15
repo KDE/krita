@@ -69,7 +69,7 @@ public slots:
     void slotSetAY(double value);
     void slotSetAZ(double value);
 
-    void slotSetWrapAlpha(double value);
+    void slotSetWarpAlpha(double value);
     void slotSetWarpDensity(int value);
 
     void slotSetKeepAspectRatio(bool value);
@@ -80,9 +80,12 @@ public slots:
     void slotWarpResetPointsButtonClicked();
 
     void slotSetFreeTransformModeButtonClicked(bool);
-    void slotSetWrapModeButtonClicked(bool);
+    void slotSetWarpModeButtonClicked(bool);
+    void slotSetCageModeButtonClicked(bool);
     void slotSetPerspectiveModeButtonClicked(bool);
     void slotButtonBoxClicked(QAbstractButton *button);
+
+    void slotEditCagePoints(bool value);
 
     void notifyEditingFinished();
 

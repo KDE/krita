@@ -38,6 +38,7 @@ class ToolTransformArgs
 public:
     enum TransformMode {FREE_TRANSFORM = 0,
                         WARP,
+                        CAGE,
                         PERSPECTIVE_4POINT};
 
     /**
@@ -262,6 +263,7 @@ private:
     double m_shearY;
     bool m_keepAspectRatio;
 
+    // perspective trasform related
     QTransform m_flattenedPerspectiveTransform;
 
     KisFilterStrategy *m_filter;

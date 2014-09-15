@@ -139,7 +139,7 @@ bool ToolTransformArgs::isIdentity() const
             return (m_transformedCenter == m_originalCenter && m_scaleX == 1
                     && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
                     && m_flattenedPerspectiveTransform.isIdentity());
-    } else if(m_mode == WARP) {
+    } else if(m_mode == WARP || m_mode == CAGE) {
         for (int i = 0; i < m_origPoints.size(); ++i)
             if (m_origPoints[i] != m_transfPoints[i])
                 return false;

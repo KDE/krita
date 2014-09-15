@@ -117,8 +117,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(aZBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetAZ(double)));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotSetKeepAspectRatio(bool)));
 
-    // Init Wrap Transform Values
-    connect(alphaBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWrapAlpha(double)));
+    // Init Warp Transform Values
+    connect(alphaBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWarpAlpha(double)));
     connect(densityBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetWarpDensity(int)));
 
     connect(defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpDefaultPointsButtonClicked(bool)));
@@ -126,6 +126,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(slotWarpLockPointsButtonClicked()));
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(slotWarpResetPointsButtonClicked()));
 
+    // Init Cage Transform Values
+    connect(chkEditCage, SIGNAL(clicked(bool)), this, SLOT(slotEditCagePoints(bool)));
 
     // Connect all edit boxes to the Editing Finished signal
     connect(scaleXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
@@ -151,6 +153,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(customRadioButton, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
     connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
+    connect(chkEditCage, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
 
 
     // Connect Apply/Reset buttons
@@ -158,7 +161,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     // Mode switch buttons
     connect(freeTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetFreeTransformModeButtonClicked(bool)));
-    connect(warpButton, SIGNAL(clicked(bool)), this, SLOT(slotSetWrapModeButtonClicked(bool)));
+    connect(warpButton, SIGNAL(clicked(bool)), this, SLOT(slotSetWarpModeButtonClicked(bool)));
+    connect(cageButton, SIGNAL(clicked(bool)), this, SLOT(slotSetCageModeButtonClicked(bool)));
     connect(perspectiveTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetPerspectiveModeButtonClicked(bool)));
 
     // Connect Decorations switcher
@@ -203,9 +207,11 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
         bool freeTransformIsActive = config.mode() == ToolTransformArgs::FREE_TRANSFORM;
 
-        freeTransformButton->setChecked(freeTransformIsActive);
-        perspectiveTransformButton->setChecked(!freeTransformIsActive);
-        warpButton->setChecked(false);
+        if (freeTransformIsActive) {
+            freeTransformButton->setChecked(true);
+        } else {
+            perspectiveTransformButton->setChecked(true);
+        }
 
         aXBox->setEnabled(freeTransformIsActive);
         aYBox->setEnabled(freeTransformIsActive);
@@ -238,11 +244,10 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
                 break;
             }
         }
-    } else {
+    } else if (config.mode() == ToolTransformArgs::WARP) {
+
         stackedWidget->setCurrentIndex(1);
-        freeTransformButton->setChecked(false);
         warpButton->setChecked(true);
-        alphaBox->setValue(config.alpha());
 
         if (config.defaultPoints()) {
             densityBox->setValue(config.numPoints());
@@ -255,6 +260,13 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         customWarpWidget->setEnabled(!config.defaultPoints());
 
         updateLockPointsButtonCaption();
+
+    } else if (config.mode() == ToolTransformArgs::CAGE) {
+
+        stackedWidget->setCurrentIndex(2);
+        cageButton->setChecked(true);
+
+        chkEditCage->setChecked(m_transaction->editWarpPoints());
     }
 
     unblockUiSlots();
@@ -362,10 +374,17 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool)
     emit sigResetTransform();
 }
 
-void KisToolTransformConfigWidget::slotSetWrapModeButtonClicked(bool)
+void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool)
 {
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::WARP);
+    emit sigResetTransform();
+}
+
+void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool)
+{
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMode(ToolTransformArgs::CAGE);
     emit sigResetTransform();
 }
 
@@ -521,7 +540,7 @@ void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)
     notifyConfigChanged();
 }
 
-void KisToolTransformConfigWidget::slotSetWrapAlpha(double value)
+void KisToolTransformConfigWidget::slotSetWarpAlpha(double value)
 {
     if (m_uiSlotsBlocked) return;
 
@@ -648,5 +667,16 @@ void KisToolTransformConfigWidget::slotWarpTypeChanged(int index)
         break;
     }
 
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotEditCagePoints(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->refTransformedPoints() = config->origPoints();
+
+    m_transaction->setEditWarpPoints(value);
     notifyConfigChanged();
 }

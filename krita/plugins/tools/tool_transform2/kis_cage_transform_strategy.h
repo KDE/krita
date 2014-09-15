@@ -16,46 +16,42 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_TRANSFORM_STRATEGY_BASE_H
-#define __KIS_TRANSFORM_STRATEGY_BASE_H
+#ifndef __KIS_CAGE_TRANSFORM_STRATEGY_H
+#define __KIS_CAGE_TRANSFORM_STRATEGY_H
 
 #include <QObject>
 #include <QScopedPointer>
 
-class QImage;
+#include "kis_warp_transform_strategy.h"
+
 class QPointF;
-class QTransform;
 class QPainter;
+class KisCoordinatesConverter;
+class ToolTransformArgs;
+class QTransform;
+class TransformTransactionProperties;
 class QCursor;
+class QImage;
 
 
-class KisTransformStrategyBase : public QObject
+class KisCageTransformStrategy : public KisWarpTransformStrategy
 {
+    Q_OBJECT
 public:
-    KisTransformStrategyBase();
-    ~KisTransformStrategyBase();
+    KisCageTransformStrategy(const KisCoordinatesConverter *converter,
+                             ToolTransformArgs &currentArgs,
+                             TransformTransactionProperties &transaction);
+    ~KisCageTransformStrategy();
 
-    QImage originalImage() const;
-    QTransform thumbToImageTransform() const;
-
-    void setThumbnailImage(const QImage &image, QTransform thumbToImageTransform);
-
-public:
-
-    virtual bool acceptsClicks() const;
-
-    virtual void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive) = 0;
-    virtual void paint(QPainter &gc) = 0;
-    virtual QCursor getCurrentCursor() const = 0;
-
-    virtual void externalConfigChanged() = 0;
-    virtual bool beginPrimaryAction(const QPointF &pt) = 0;
-    virtual void continuePrimaryAction(const QPointF &pt, bool specialModifierActve) = 0;
-    virtual bool endPrimaryAction() = 0;
+protected:
+    void drawConnectionLines(QPainter &gc,
+                             const QVector<QPointF> &origPoints,
+                             const QVector<QPointF> &transfPoints,
+                             bool isEditingPoints);
 
 private:
-    struct Private;
+    class Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_TRANSFORM_STRATEGY_BASE_H */
+#endif /* __KIS_CAGE_TRANSFORM_STRATEGY_H */

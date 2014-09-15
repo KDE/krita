@@ -52,9 +52,22 @@ public:
     void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     bool endPrimaryAction();
 
+    bool acceptsClicks() const;
+
 signals:
     void requestCanvasUpdate();
 
+protected:
+    void setCloseOnStartPointClick(bool value);
+
+    void overrideDrawingItems(bool drawConnectionLines,
+                              bool drawOrigPoints,
+                              bool drawTransfPoints);
+
+    virtual void drawConnectionLines(QPainter &gc,
+                                     const QVector<QPointF> &origPoints,
+                                     const QVector<QPointF> &transfPoints,
+                                     bool isEditingPoints);
 private:
     class Private;
     const QScopedPointer<Private> m_d;

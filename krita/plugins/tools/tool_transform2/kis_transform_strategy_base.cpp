@@ -53,3 +53,8 @@ void KisTransformStrategyBase::setThumbnailImage(const QImage &image, QTransform
     m_d->originalImage = image;
     m_d->thumbToImageTransform = thumbToImageTransform;
 }
+
+bool KisTransformStrategyBase::acceptsClicks() const
+{
+    return false;
+}

@@ -38,7 +38,12 @@ struct KisWarpTransformStrategy::Private
         : q(_q),
           converter(_converter),
           currentArgs(_currentArgs),
-          transaction(_transaction)
+          transaction(_transaction),
+          drawConnectionLines(true),
+          drawOrigPoints(true),
+          drawTransfPoints(true),
+          closeOnStartPointClick(false),
+          pointWasDragged(false)
     {
     }
 
@@ -65,10 +70,18 @@ struct KisWarpTransformStrategy::Private
     bool cursorOverPoint;
     int pointIndexUnderCursor;
 
+    bool drawConnectionLines;
+    bool drawOrigPoints;
+    bool drawTransfPoints;
+    bool closeOnStartPointClick;
+    QPointF pointPosOnClick;
+    bool pointWasDragged;
+
     void recalculateTransformations();
     inline QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
-};
 
+    bool shouldCloseTheCage() const;
+};
 
 KisWarpTransformStrategy::KisWarpTransformStrategy(const KisCoordinatesConverter *converter,
                                                    ToolTransformArgs &currentArgs,
@@ -109,11 +122,45 @@ QCursor KisWarpTransformStrategy::getCurrentCursor() const
     }
 }
 
+void KisWarpTransformStrategy::overrideDrawingItems(bool drawConnectionLines,
+                                                    bool drawOrigPoints,
+                                                    bool drawTransfPoints)
+{
+    m_d->drawConnectionLines = drawConnectionLines;
+    m_d->drawOrigPoints = drawOrigPoints;
+    m_d->drawTransfPoints = drawTransfPoints;
+}
+
+void KisWarpTransformStrategy::setCloseOnStartPointClick(bool value)
+{
+    m_d->closeOnStartPointClick = value;
+}
+
+void KisWarpTransformStrategy::drawConnectionLines(QPainter &gc,
+                                                   const QVector<QPointF> &origPoints,
+                                                   const QVector<QPointF> &transfPoints,
+                                                   bool isEditingPoints)
+{
+    Q_UNUSED(isEditingPoints);
+
+    QPen antsPen;
+    QPen outlinePen;
+
+    KritaUtils::initAntsPen(&antsPen, &outlinePen);
+
+    const int numPoints = origPoints.size();
+
+    for (int i = 0; i < numPoints; ++i) {
+        gc.setPen(outlinePen);
+        gc.drawLine(transfPoints[i], origPoints[i]);
+        gc.setPen(antsPen);
+        gc.drawLine(transfPoints[i], origPoints[i]);
+    }
+}
+
 void KisWarpTransformStrategy::paint(QPainter &gc)
 {
-    // Draw handles
-
-    int numPoints = m_d->currentArgs.origPoints().size();
+    // Draw preview image
 
     gc.save();
 
@@ -128,24 +175,19 @@ void KisWarpTransformStrategy::paint(QPainter &gc)
     gc.setTransform(m_d->handlesTransform, true);
 
     // draw connecting lines
-    {
-        QPen antsPen;
-        QPen outlinePen;
-
-        KritaUtils::initAntsPen(&antsPen, &outlinePen);
-
+    if (m_d->drawConnectionLines) {
         gc.setOpacity(0.5);
 
-        for (int i = 0; i < numPoints; ++i) {
-            gc.setPen(outlinePen);
-            gc.drawLine(m_d->currentArgs.transfPoints()[i], m_d->currentArgs.origPoints()[i]);
-            gc.setPen(antsPen);
-            gc.drawLine(m_d->currentArgs.transfPoints()[i], m_d->currentArgs.origPoints()[i]);
-        }
+        drawConnectionLines(gc,
+                            m_d->currentArgs.origPoints(),
+                            m_d->currentArgs.transfPoints(),
+                            m_d->transaction.editWarpPoints());
     }
 
-    // draw handles themselves
+    // draw handles
     {
+        const int numPoints = m_d->currentArgs.origPoints().size();
+
         QPen mainPen(Qt::black);
         QPen outlinePen(Qt::white);
 
@@ -159,35 +201,39 @@ void KisWarpTransformStrategy::paint(QPainter &gc)
         QRectF handleRect1(-0.5 * dstIn, -0.5 * dstIn, dstIn, dstIn);
         QRectF handleRect2(-0.5 * dstOut, -0.5 * dstOut, dstOut, dstOut);
 
-        gc.setOpacity(1.0);
+        if (m_d->drawTransfPoints) {
+            gc.setOpacity(1.0);
 
-        for (int i = 0; i < numPoints; ++i) {
-            gc.setPen(outlinePen);
-            gc.drawEllipse(handleRect2.translated(m_d->currentArgs.transfPoints()[i]));
-            gc.setPen(mainPen);
-            gc.drawEllipse(handleRect1.translated(m_d->currentArgs.transfPoints()[i]));
+            for (int i = 0; i < numPoints; ++i) {
+                gc.setPen(outlinePen);
+                gc.drawEllipse(handleRect2.translated(m_d->currentArgs.transfPoints()[i]));
+                gc.setPen(mainPen);
+                gc.drawEllipse(handleRect1.translated(m_d->currentArgs.transfPoints()[i]));
+            }
         }
 
-        QPainterPath inLine;
-        inLine.moveTo(-0.5 * srcIn,            0);
-        inLine.lineTo( 0.5 * srcIn,            0);
-        inLine.moveTo(           0, -0.5 * srcIn);
-        inLine.lineTo(           0,  0.5 * srcIn);
+        if (m_d->drawOrigPoints) {
+            QPainterPath inLine;
+            inLine.moveTo(-0.5 * srcIn,            0);
+            inLine.lineTo( 0.5 * srcIn,            0);
+            inLine.moveTo(           0, -0.5 * srcIn);
+            inLine.lineTo(           0,  0.5 * srcIn);
 
-        QPainterPath outLine;
-        outLine.moveTo(-0.5 * srcOut, -0.5 * srcOut);
-        outLine.lineTo( 0.5 * srcOut, -0.5 * srcOut);
-        outLine.lineTo( 0.5 * srcOut,  0.5 * srcOut);
-        outLine.lineTo(-0.5 * srcOut,  0.5 * srcOut);
-        outLine.lineTo(-0.5 * srcOut, -0.5 * srcOut);
+            QPainterPath outLine;
+            outLine.moveTo(-0.5 * srcOut, -0.5 * srcOut);
+            outLine.lineTo( 0.5 * srcOut, -0.5 * srcOut);
+            outLine.lineTo( 0.5 * srcOut,  0.5 * srcOut);
+            outLine.lineTo(-0.5 * srcOut,  0.5 * srcOut);
+            outLine.lineTo(-0.5 * srcOut, -0.5 * srcOut);
 
-        gc.setOpacity(0.5);
+            gc.setOpacity(0.5);
 
-        for (int i = 0; i < numPoints; ++i) {
-            gc.setPen(outlinePen);
-            gc.drawPath(outLine.translated(m_d->currentArgs.origPoints()[i]));
-            gc.setPen(mainPen);
-            gc.drawPath(inLine.translated(m_d->currentArgs.origPoints()[i]));
+            for (int i = 0; i < numPoints; ++i) {
+                gc.setPen(outlinePen);
+                gc.drawPath(outLine.translated(m_d->currentArgs.origPoints()[i]));
+                gc.setPen(mainPen);
+                gc.drawPath(inLine.translated(m_d->currentArgs.origPoints()[i]));
+            }
         }
 
     }
@@ -201,11 +247,12 @@ void KisWarpTransformStrategy::externalConfigChanged()
 
 bool KisWarpTransformStrategy::beginPrimaryAction(const QPointF &pt)
 {
-    if (m_d->cursorOverPoint) return true;
+    const bool isEditingPoints = m_d->transaction.editWarpPoints();
+    bool retval = false;
 
-    bool hasSomethingToDrag = m_d->transaction.editWarpPoints();
-
-    if (hasSomethingToDrag) {
+    if (m_d->cursorOverPoint) {
+        retval = true;
+    } else if (isEditingPoints) {
 
         m_d->currentArgs.refOriginalPoints().append(pt);
         m_d->currentArgs.refTransformedPoints().append(pt);
@@ -215,9 +262,17 @@ bool KisWarpTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
         m_d->recalculateTransformations();
         emit requestCanvasUpdate();
+
+        retval = true;
     }
 
-    return hasSomethingToDrag;
+    if (m_d->cursorOverPoint) {
+        m_d->pointPosOnClick =
+            m_d->currentArgs.transfPoints()[m_d->pointIndexUnderCursor];
+        m_d->pointWasDragged = false;
+    }
+
+    return retval;
 }
 
 void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool specialModifierActve)
@@ -229,20 +284,48 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool spe
 
     if (m_d->transaction.editWarpPoints()) {
         QPointF newPos = KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect());
-
         m_d->currentArgs.origPoint(m_d->pointIndexUnderCursor) = newPos;
         m_d->currentArgs.transfPoint(m_d->pointIndexUnderCursor) = newPos;
-    }
-    else {
+    } else {
         m_d->currentArgs.transfPoint(m_d->pointIndexUnderCursor) = pt;
+    }
+
+
+    const qreal handleRadiusSq = pow2(KisTransformUtils::effectiveHandleGrabRadius(m_d->converter));
+    qreal dist =
+        kisSquareDistance(
+            m_d->currentArgs.transfPoint(m_d->pointIndexUnderCursor),
+            m_d->pointPosOnClick);
+
+    if (dist > handleRadiusSq) {
+        m_d->pointWasDragged = true;
     }
 
     m_d->recalculateTransformations();
     emit requestCanvasUpdate();
 }
 
+bool KisWarpTransformStrategy::Private::shouldCloseTheCage() const
+{
+    return transaction.editWarpPoints() &&
+        closeOnStartPointClick &&
+        pointIndexUnderCursor == 0 &&
+        currentArgs.origPoints().size() > 1 &&
+        !pointWasDragged;
+}
+
+bool KisWarpTransformStrategy::acceptsClicks() const
+{
+    return m_d->shouldCloseTheCage();
+}
+
 bool KisWarpTransformStrategy::endPrimaryAction()
 {
+    if (m_d->shouldCloseTheCage()) {
+        m_d->transaction.setEditWarpPoints(false);
+        return false;
+    }
+
     return m_d->currentArgs.defaultPoints() || !m_d->transaction.editWarpPoints();
 }
 

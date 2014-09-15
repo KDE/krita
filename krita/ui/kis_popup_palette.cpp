@@ -435,7 +435,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
                     }
                 } else {
                     QWhatsThis::showText(event->globalPos(), 
-                                         i18n("There are no tags availabe to show in this popup. To add presets, you need to tag them and then select the tag here."));
+                                         i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
                 }
             }
         }

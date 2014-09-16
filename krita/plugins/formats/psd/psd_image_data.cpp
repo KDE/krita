@@ -36,6 +36,10 @@
 #include "kis_iterator_ng.h"
 #include "kis_paint_device.h"
 
+#include <QColor>
+#include <KoColor.h>
+#include <kis_painter.h>
+
 PSDImageData::PSDImageData(PSDHeader *header)
 {
     m_header = header;
@@ -218,14 +222,27 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
     return true;
 }
 
-bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
+bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev, int nLayers)
 {
+    QRect rc(0, 0, m_header->width, m_header->height);
+
+    if (nLayers == 1) {
+        // First fill all transparent pixels with white, instead of black
+        KisPaintDeviceSP tmp = new KisPaintDevice(dev->colorSpace());
+        KoColor c(Qt::white, dev->colorSpace());
+        tmp->fill(rc, c);
+        KisPainter gc(tmp);
+        gc.bitBlt(QPoint(0,0), dev, rc);
+        gc.end();
+        dev = tmp;
+    }
+
     // XXX: make the compression settting configurable. For now, always use RLE.
     psdwrite(io, (quint16)Compression::RLE);
 
     // now write all the channels in display order
     // fill in the channel chooser, in the display order, but store the pixel index as well.
-    QRect rc(0, 0, m_header->width, m_header->height);
+
     QVector<quint8* > tmp = dev->readPlanarBytes(0, 0, rc.width(), rc.height());
     // then reorder the planes to fit the psd model -- alpha first, then display order
     QVector<quint8* > planes;

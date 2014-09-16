@@ -17,6 +17,7 @@
  */
 #include "psd_saver.h"
 
+
 #include <kapplication.h>
 
 #include <kio/netaccess.h>
@@ -206,7 +207,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     // IMAGE DATA
     dbgFile << "Saving composited image" << f.pos();
     PSDImageData imagedata(&header);
-    if (!imagedata.write(&f, m_image->projection())) {
+    if (!imagedata.write(&f, m_image->projection(), m_image->rootLayer()->childCount())) {
         dbgFile << "Failed to write image data. Error:"  << imagedata.error;
         return KisImageBuilder_RESULT_FAILURE;
     }

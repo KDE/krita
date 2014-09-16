@@ -34,6 +34,7 @@
 #include <kdebug.h>
 #ifdef SHOULD_BUILD_RDF
 #include "KoTextRdfCore.h"
+#include "KoSectionManager.h"
 #include <Soprano/Soprano>
 #endif
 
@@ -82,6 +83,8 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     kDebug(30015) << "text paste";
     // load the paste directly into the editor's cursor -- which breaks encapsulation
     loader.loadBody(body, *d->editor->cursor(), KoTextLoader::PasteMode);   // now let's load the body from the ODF KoXmlElement.
+    
+    context.sectionManager()->invalidate();
 
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "text paste, rdf handling" << d->rdfModel;

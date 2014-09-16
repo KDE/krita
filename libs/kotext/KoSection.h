@@ -22,10 +22,11 @@
 
 #include "kotext_export.h"
 
+#include <QMetaType>
+#include <QList>
 #include <QString>
 #include <QPair>
 #include <QScopedPointer>
-#include <QStandardItem>
 #include <QTextCursor>
 
 class KoXmlElement;
@@ -87,5 +88,8 @@ private:
     friend class KoSectionManager;
     friend class KoSectionEnd;
 };
+
+Q_DECLARE_METATYPE(KoSection *)
+Q_DECLARE_METATYPE(QList<KoSection *>)
 
 #endif // KOSECTION_H

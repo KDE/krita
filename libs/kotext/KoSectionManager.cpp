@@ -174,9 +174,8 @@ QStandardItemModel *KoSectionManager::update(bool needModel)
     do {
         QTextBlockFormat fmt = block.blockFormat();
 
-        foreach (const QVariant &sv, KoSectionUtils::sectionStartings(fmt)) {
+        foreach (KoSection *sec, KoSectionUtils::sectionStartings(fmt)) {
             curLevel++;
-            KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
             sec->setBeginPos(block.position());
             sec->setLevel(curLevel);
 
@@ -184,7 +183,7 @@ QStandardItemModel *KoSectionManager::update(bool needModel)
 
             if (needModel) {
                 QStandardItem *item = new QStandardItem(sec->name());
-                item->setData(qVariantFromValue(static_cast<void *>(sec)), Qt::UserRole + 1);
+                item->setData(QVariant::fromValue<KoSection *>(sec), Qt::UserRole + 1);
 
                 curChain.top()->appendRow(item);
 
@@ -192,9 +191,8 @@ QStandardItemModel *KoSectionManager::update(bool needModel)
             }
         }
 
-        foreach (const QVariant &sv, KoSectionUtils::sectionEndings(fmt)) {
+        foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(fmt)) {
             curLevel--;
-            KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
             sec->correspondingSection()->setEndPos(block.position() + block.length());
 
             if (needModel) {

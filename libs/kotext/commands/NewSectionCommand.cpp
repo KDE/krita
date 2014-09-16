@@ -64,14 +64,14 @@ void NewSectionCommand::redo()
         KoSectionEnd *end = new KoSectionEnd(start);
         QTextBlockFormat fmt = editor->blockFormat();
 
-        QList< QVariant > sectionStartings = KoSectionUtils::sectionStartings(fmt);
-        QList< QVariant > sectionEndings = KoSectionUtils::sectionEndings(fmt);
+        QList<KoSection *> sectionStartings = KoSectionUtils::sectionStartings(fmt);
+        QList<KoSectionEnd *> sectionEndings = KoSectionUtils::sectionEndings(fmt);
 
-        sectionStartings.append(qVariantFromValue<void *>(static_cast<void *>(start)));
-        sectionEndings.prepend(qVariantFromValue<void *>(static_cast<void *>(end)));
+        sectionStartings.append(start);
+        sectionEndings.prepend(end);
 
-        fmt.setProperty(KoParagraphStyle::SectionStartings, sectionStartings);
-        fmt.setProperty(KoParagraphStyle::SectionEndings, sectionEndings);
+        KoSectionUtils::setSectionStartings(fmt, sectionStartings);
+        KoSectionUtils::setSectionEndings(fmt, sectionEndings);
 
         editor->setBlockFormat(fmt);
     }

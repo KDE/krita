@@ -55,6 +55,7 @@
 #include <kdebug.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
+#include <KoSectionUtils.h>
 
 #include <QPainter>
 #include <QTextTable>
@@ -659,40 +660,32 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
 
     const qreal levelShift = 3;
 
-    if (bf.hasProperty(KoParagraphStyle::SectionStartings)) {
-        QVariant var = bf.property(KoParagraphStyle::SectionStartings);
-        QList<QVariant> openList = var.value< QList<QVariant> >();
-
-        for (int i = 0; i < openList.size(); i++) {
-            int sectionLevel = static_cast<KoSection *>(openList[i].value<void *>())->level();
-            if (i == 0) {
-                painter->drawLine(xl + sectionLevel * levelShift, yu,
-                                  xr - sectionLevel * levelShift, yu);
-            }
+    QList<KoSection *> openList = KoSectionUtils::sectionStartings(bf);
+    for (int i = 0; i < openList.size(); i++) {
+        int sectionLevel = openList[i]->level();
+        if (i == 0) {
             painter->drawLine(xl + sectionLevel * levelShift, yu,
-                              xl + sectionLevel * levelShift, yu + bracketSize);
-
-            painter->drawLine(xr - sectionLevel * levelShift, yu,
-                              xr - sectionLevel * levelShift, yu + bracketSize);
+                              xr - sectionLevel * levelShift, yu);
         }
+        painter->drawLine(xl + sectionLevel * levelShift, yu,
+                          xl + sectionLevel * levelShift, yu + bracketSize);
+
+        painter->drawLine(xr - sectionLevel * levelShift, yu,
+                          xr - sectionLevel * levelShift, yu + bracketSize);
     }
 
-    if (bf.hasProperty(KoParagraphStyle::SectionEndings)) {
-        QVariant var = bf.property(KoParagraphStyle::SectionEndings);
-        QList<QVariant> closeList = var.value< QList<QVariant> >();
-
-        for (int i = 0; i < closeList.size(); i++) {
-            int sectionLevel = static_cast<KoSectionEnd *>(closeList[i].value<void *>())->correspondingSection()->level();
-            if (i == closeList.count() - 1) {
-                painter->drawLine(xl + sectionLevel * levelShift, yd,
-                                  xr - sectionLevel * levelShift, yd);
-            }
+    QList<KoSectionEnd *> closeList = KoSectionUtils::sectionEndings(bf);
+    for (int i = 0; i < closeList.size(); i++) {
+        int sectionLevel = closeList[i]->correspondingSection()->level();
+        if (i == closeList.count() - 1) {
             painter->drawLine(xl + sectionLevel * levelShift, yd,
-                              xl + sectionLevel * levelShift, yd - bracketSize);
-
-            painter->drawLine(xr - sectionLevel * levelShift, yd,
-                              xr - sectionLevel * levelShift, yd - bracketSize);
+                              xr - sectionLevel * levelShift, yd);
         }
+        painter->drawLine(xl + sectionLevel * levelShift, yd,
+                          xl + sectionLevel * levelShift, yd - bracketSize);
+
+        painter->drawLine(xr - sectionLevel * levelShift, yd,
+                          xr - sectionLevel * levelShift, yd - bracketSize);
     }
 
     painter->setPen(penBackup);

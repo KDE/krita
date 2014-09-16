@@ -36,6 +36,7 @@
 #include <KoSection.h>
 #include <KoSectionUtils.h>
 #include <KoSectionManager.h>
+#include <KoSectionEnd.h>
 #include <KoShapeController.h>
 #include <KoDocument.h>
 
@@ -135,22 +136,20 @@ public:
         bool doesEndInside = false;
         if (block.position() >= caret.selectionStart()) { // Begin of the block is inside selection.
             doesBeginInside = true;
-            QList<QVariant> openList = KoSectionUtils::sectionStartings(block.blockFormat());
-            foreach (const QVariant &sv, openList) {
-                m_curSectionDelimiters.push_back(SectionHandle(KoSectionUtils::sectionStartName(sv), SectionOpen, sv));
+            QList<KoSection *> openList = KoSectionUtils::sectionStartings(block.blockFormat());
+            foreach (KoSection *sec, openList) {
+                m_curSectionDelimiters.push_back(SectionHandle(sec->name(), sec));
             }
         }
 
         if (block.position() + block.length() <= caret.selectionEnd()) { // End of the block is inside selection.
             doesEndInside = true;
-            QList<QVariant> closeList = block.blockFormat()
-            .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, closeList) {
-                QString secName = KoSectionUtils::sectionEndName(sv);
-                if (!m_curSectionDelimiters.empty() && m_curSectionDelimiters.last().name == secName) {
+            QList<KoSectionEnd *> closeList = KoSectionUtils::sectionEndings(block.blockFormat());
+            foreach (KoSectionEnd *se, closeList) {
+                if (!m_curSectionDelimiters.empty() && m_curSectionDelimiters.last().name == se->name()) {
                     m_curSectionDelimiters.pop_back();
                 } else {
-                    m_curSectionDelimiters.push_back(SectionHandle(secName, SectionClose, sv));
+                    m_curSectionDelimiters.push_back(SectionHandle(se->name(), se));
                 }
             }
         }
@@ -197,12 +196,13 @@ public:
         KoTextDocument(cur->document()).sectionManager()->invalidate();
         // It means that selection isn't within one block.
         if (m_hasEntirelyInsideBlock || m_startBlockNum != -1 || m_endBlockNum != -1) {
-            QList<QVariant> openList, closeList;
+            QList<KoSection *> openList;
+            QList<KoSectionEnd *> closeList;
             foreach (const SectionHandle &handle, m_curSectionDelimiters) {
                 if (handle.type == SectionOpen) { // Start of the section.
-                    openList << handle.data;
+                    openList << static_cast<KoSection *>(handle.data);
                 } else { // End of the section.
-                    closeList << handle.data;
+                    closeList << static_cast<KoSectionEnd *>(handle.data);
                 }
             }
 
@@ -215,16 +215,15 @@ public:
                 fmt.clearProperty(KoParagraphStyle::SectionEndings);
 
                 //m_endBlockNum != -1 in this case.
-                QList<QVariant> closeListEndBlock = cur->document()->findBlockByNumber(m_endBlockNum)
-                    .blockFormat().property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+                QList<KoSectionEnd *> closeListEndBlock = KoSectionUtils::sectionEndings(
+                    cur->document()->findBlockByNumber(m_endBlockNum).blockFormat());
 
                 while (!openList.empty() && !closeListEndBlock.empty()
-                    && KoSectionUtils::sectionStartName(openList.last())
-                    == KoSectionUtils::sectionEndName(closeListEndBlock.first())) {
+                    && openList.last()->name() == closeListEndBlock.first()->name()) {
                     openList.pop_back();
                     closeListEndBlock.pop_front();
                 }
-                openList << fmt2.property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+                openList << KoSectionUtils::sectionStartings(fmt2);
                 closeList << closeListEndBlock;
 
                 // We leave open section of start block untouched.
@@ -242,7 +241,7 @@ public:
                 QTextBlockFormat fmt = cur->document()->findBlockByNumber(m_endBlockNum).blockFormat();
                 fmt.clearProperty(KoParagraphStyle::SectionStartings);
 
-                closeList << fmt.property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+                closeList << KoSectionUtils::sectionEndings(fmt);
 
                 KoSectionUtils::setSectionStartings(fmt, openList);
                 KoSectionUtils::setSectionEndings(fmt, closeList);
@@ -264,12 +263,19 @@ public:
     struct SectionHandle {
         QString name; // Name of the section.
         SectionHandleAction type; // Action of a SectionHandle.
-        QVariant data; // QVariant version of pointer to KoSection or KoSectionEnd.
+        void *data; //  Pointer to KoSection or KoSectionEnd.
 
-        SectionHandle(QString _name, SectionHandleAction _type, QVariant _data)
-        : name(_name)
-        , type(_type)
-        , data(_data)
+        SectionHandle(QString _name, KoSection *_data)
+            : name(_name)
+            , type(SectionOpen)
+            , data(static_cast<void *>(_data))
+        {
+        }
+        
+        SectionHandle(QString _name, KoSectionEnd *_data)
+            : name(_name)
+            , type(SectionClose)
+            , data(static_cast<void *>(_data))
         {
         }
     };

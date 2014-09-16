@@ -74,21 +74,21 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
     
     KConfigGroup cfg = KGlobal::config()->group("hsxColorSlider");
 	
-    m_SlidersConfigArray[0] =cfg.readEntry("hsvH", 0);
-    m_SlidersConfigArray[1] =cfg.readEntry("hsvS", 0);
-    m_SlidersConfigArray[2] =cfg.readEntry("hsvV", 0);
+    m_SlidersConfigArray[0] =cfg.readEntry("hsvH", false);
+    m_SlidersConfigArray[1] =cfg.readEntry("hsvS", false);
+    m_SlidersConfigArray[2] =cfg.readEntry("hsvV", false);
     
-    m_SlidersConfigArray[3] =cfg.readEntry("hslH", 1);
-    m_SlidersConfigArray[4] =cfg.readEntry("hslS", 1);
-    m_SlidersConfigArray[5] =cfg.readEntry("hslL", 1);
+    m_SlidersConfigArray[3] =cfg.readEntry("hslH", true);
+    m_SlidersConfigArray[4] =cfg.readEntry("hslS", true);
+    m_SlidersConfigArray[5] =cfg.readEntry("hslL", true);
     
-    m_SlidersConfigArray[6] =cfg.readEntry("hsiH", 0);
-    m_SlidersConfigArray[7] =cfg.readEntry("hsiS", 0);
-    m_SlidersConfigArray[8] =cfg.readEntry("hsiI", 0);
+    m_SlidersConfigArray[6] =cfg.readEntry("hsiH", false);
+    m_SlidersConfigArray[7] =cfg.readEntry("hsiS", false);
+    m_SlidersConfigArray[8] =cfg.readEntry("hsiI", false);
     
-    m_SlidersConfigArray[9] =cfg.readEntry("hsyH", 0);
-    m_SlidersConfigArray[10]=cfg.readEntry("hsyS", 0);
-    m_SlidersConfigArray[11]=cfg.readEntry("hsyY", 0);
+    m_SlidersConfigArray[9] =cfg.readEntry("hsyH", false);
+    m_SlidersConfigArray[10]=cfg.readEntry("hsyS", false);
+    m_SlidersConfigArray[11]=cfg.readEntry("hsyY", false);
     
     
     m_colorSliders = new KisColorSliderWidget(kisCanvas->displayColorConverter()->displayRendererInterface(), this, kisCanvas, m_SlidersConfigArray);

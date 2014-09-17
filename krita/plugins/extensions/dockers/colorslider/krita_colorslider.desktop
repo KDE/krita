@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=ColorSlider
+Name[en_GB]=ColourSlider
+Name[pt]=Barras de Cores
+Name[sv]=Färgskjutreglage
+Name[uk]=ПовзунокКольору
+Name[x-test]=xxColorSliderxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritacolorslider

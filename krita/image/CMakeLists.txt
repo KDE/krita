@@ -202,6 +202,9 @@ set(kritaimage_LIB_SRCS
    bsplines/kis_bspline_2d.cpp
    bsplines/kis_nu_bspline_2d.cpp
    kis_warptransform_worker.cc
+   kis_cage_transform_worker.cpp
+   kis_green_coordinates_math.cpp
+   kis_algebra_2d.cpp
    kis_transparency_mask.cc
    kis_undo_store.cpp
    kis_undo_stores.cpp

@@ -16,23 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_WARP_TRANSFORM_WORKER_TEST_H
-#define __KIS_WARP_TRANSFORM_WORKER_TEST_H
+#ifndef __KIS_CAGE_TRANSFORM_WORKER_H
+#define __KIS_CAGE_TRANSFORM_WORKER_H
 
-#include <QtTest/QtTest>
+#include <QScopedPointer>
+#include <krita_export.h>
+#include <kis_types.h>
 
-class KisWarpTransformWorkerTest : public QObject
+
+
+class KRITAIMAGE_EXPORT KisCageTransformWorker
 {
-    Q_OBJECT
-private slots:
-    void test();
-    void testQImage();
-    void testForwardInterpolator();
-    void testBackwardInterpolatorXShear();
-    void testBackwardInterpolatorYShear();
-    void testBackwardInterpolatorXYShear();
-    void testBackwardInterpolatorRoundTrip();
-    void testGridSize();
+public:
+    KisCageTransformWorker(KisPaintDeviceSP dev,
+                           const QVector<QPointF> &origCage,
+                           KoUpdater *progress,
+                           int pixelPrecision = 8);
+
+    ~KisCageTransformWorker();
+
+    void prepareTransform();
+    void setTransformedCage(const QVector<QPointF> &transformedCage);
+    void run();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_WARP_TRANSFORM_WORKER_TEST_H */
+#endif /* __KIS_CAGE_TRANSFORM_WORKER_H */

@@ -16,23 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_WARP_TRANSFORM_WORKER_TEST_H
-#define __KIS_WARP_TRANSFORM_WORKER_TEST_H
+#ifndef __KIS_CAGE_TRANSFORM_WORKER_TEST_H
+#define __KIS_CAGE_TRANSFORM_WORKER_TEST_H
 
 #include <QtTest/QtTest>
 
-class KisWarpTransformWorkerTest : public QObject
+class KisCageTransformWorkerTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void test();
-    void testQImage();
-    void testForwardInterpolator();
-    void testBackwardInterpolatorXShear();
-    void testBackwardInterpolatorYShear();
-    void testBackwardInterpolatorXYShear();
-    void testBackwardInterpolatorRoundTrip();
-    void testGridSize();
+    void testCageClockwise();
+    void testCageClockwisePrepareOnly();
+    void testCageClockwisePixePrecision4();
+    void testCageCounterclockwise();
+    void testCageClockwiseUnity();
+    void testCageCounterclockwiseUnity();
+
+    void testUnityGreenCoordinates();
 };
 
-#endif /* __KIS_WARP_TRANSFORM_WORKER_TEST_H */
+#endif /* __KIS_CAGE_TRANSFORM_WORKER_TEST_H */

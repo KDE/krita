@@ -22,6 +22,7 @@
 #include <QPolygon>
 #include <QPointF>
 
+#include "kis_global.h"
 
 
 /**
@@ -82,11 +83,25 @@ public:
 
         qreal nu = 0.0;
 
-        if (qFuzzyCompare(m_qA, 0.0)) {
+        if (qAbs(m_qA) < 1e-10) {
             nu = -qC / qB;
         } else {
             qreal D = pow2(qB) - 4 * m_qA * qC;
-            nu = D > 0.0 ? (-qB - std::sqrt(D)) * m_qD_div : 0.0;
+            if (D > 0.0) {
+                qreal sqrtD = std::sqrt(D);
+                nu = (-qB - sqrtD) * m_qD_div;
+                if (nu < 0.0 || nu > 1.0) {
+                    qreal nu2 = (-qB + sqrtD) * m_qD_div;
+
+                    if (nu2 < 0.0 || nu2 > 1.0) {
+                        nu = qBound(0.0, nu, 1.0);
+                    } else {
+                        nu = nu2;
+                    }
+                }
+            } else {
+                nu = 0.0;
+            }
         }
 
         qreal mu = (m_px - nu * m_c.x()) / (m_a.x() + nu * m_d.x());

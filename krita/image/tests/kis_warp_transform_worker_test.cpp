@@ -74,7 +74,7 @@ void KisWarpTransformWorkerTest::test()
 
     QImage result = dev->convertToQImage(0);
 
-    TestUtil::checkQImage(result, "warp_trasnform_test", "simple", "tr");
+    TestUtil::checkQImage(result, "warp_transform_test", "simple", "tr");
 }
 
 void KisWarpTransformWorkerTest::testQImage()
@@ -126,7 +126,7 @@ void KisWarpTransformWorkerTest::testQImage()
 
     qDebug() << ppVar(newOffset);
 
-    TestUtil::checkQImage(result, "warp_trasnform_test", "qimage", "tr");
+    TestUtil::checkQImage(result, "warp_transform_test", "qimage", "tr");
 }
 
 #include "kis_four_point_interpolator_forward.h"
@@ -269,44 +269,20 @@ void KisWarpTransformWorkerTest::testBackwardInterpolatorRoundTrip()
     }
 }
 
-void KisWarpTransformWorkerTest::testIteration()
+#include "kis_grid_interpolation_tools.h"
+
+void KisWarpTransformWorkerTest::testGridSize()
 {
-    const QRect srcBounds(3,3,98,98);
+    QCOMPARE(GridIterationTools::calcGridDimension(1, 7, 4), 3);
+    QCOMPARE(GridIterationTools::calcGridDimension(1, 8, 4), 3);
+    QCOMPARE(GridIterationTools::calcGridDimension(1, 9, 4), 4);
+    QCOMPARE(GridIterationTools::calcGridDimension(0, 7, 4), 3);
+    QCOMPARE(GridIterationTools::calcGridDimension(1, 8, 4), 3);
+    QCOMPARE(GridIterationTools::calcGridDimension(4, 9, 4), 3);
+    QCOMPARE(GridIterationTools::calcGridDimension(0, 9, 4), 4);
+    QCOMPARE(GridIterationTools::calcGridDimension(-1, 9, 4), 5);
 
-    int pixelPrecision = 8;
-    int alignmentMask = ~(pixelPrecision - 1);
-
-    for (int row = srcBounds.top(); row <= srcBounds.bottom();) {
-
-        for (int col = srcBounds.left(); col <= srcBounds.right();) {
-
-            qDebug() << ppVar(col) << ppVar(row);
-
-
-            col += pixelPrecision;
-
-            if (col > srcBounds.right() &&
-                col < srcBounds.right() + pixelPrecision - 1) {
-
-                col = srcBounds.right();
-            } else {
-                col &= alignmentMask;
-            }
-        }
-
-
-        row += pixelPrecision;
-
-        if (row > srcBounds.bottom() &&
-            row < srcBounds.bottom() + pixelPrecision - 1) {
-
-            row = srcBounds.bottom();
-        } else {
-            row &= alignmentMask;
-        }
-    }
-
+    QCOMPARE(GridIterationTools::calcGridDimension(0, 300, 8), 39);
 }
-
 
 QTEST_KDEMAIN(KisWarpTransformWorkerTest, GUI)

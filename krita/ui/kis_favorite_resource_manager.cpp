@@ -171,11 +171,25 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
 
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->addObserver(this);
-    
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateFavoritePresets()));
+
+    KConfigGroup group(KGlobal::config(), "favoriteList");
+    QStringList oldFavoritePresets = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
 
     KisConfig cfg;
     m_currentTag = cfg.readEntry<QString>("favoritePresetsTag", QString());
+
+    if (!oldFavoritePresets.isEmpty() && m_currentTag.isEmpty()) {
+        m_currentTag = i18n("Favorite Presets");
+        foreach( const QString& name, oldFavoritePresets) {
+            KisPaintOpPreset* preset = rServer->resourceByName(name);
+            rServer->addTag(preset, m_currentTag);
+        }
+        rServer->tagCategoryAdded(m_currentTag);
+        cfg.writeEntry<QString>("favoritePresets", QString());
+    }
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateFavoritePresets()));
+
     updateFavoritePresets();
 }
 

@@ -23,7 +23,6 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kglobal.h>
 

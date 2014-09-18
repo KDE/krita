@@ -18,8 +18,6 @@
  */
 #include "KoAspectButton.h"
 
-#include <kicon.h>
-
 #include <QPixmap>
 #include <QPainter>
 #include <QMouseEvent>

@@ -1034,6 +1034,7 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
         if (activeItems.count() == 1) {
             activeItem = activeItems.first();
         }
+        QGraphicsItem * pasted_ent = 0;
         canvas->clearSelection();
         m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
 
@@ -1053,7 +1054,8 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
                 new_obj->position().setScenePos(QPointF(0, 0));
             }
             changeSet(new_obj->propertySet());
-            QGraphicsItem *pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
+            pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
+
             if (pasted_ent) {
                 pasted_ent->setSelected(true);
                 canvas->addItem(pasted_ent);

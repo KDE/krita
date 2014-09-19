@@ -534,6 +534,7 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
     } else if (mode == ToolTransformArgs::WARP) {
         m_currentArgs.setMode(ToolTransformArgs::WARP);
         m_optionsWidget->setDefaultWarpPoints();
+        m_transaction.setEditWarpPoints(false);
     } else if (mode == ToolTransformArgs::CAGE) {
         m_currentArgs.setMode(ToolTransformArgs::CAGE);
         m_transaction.setEditWarpPoints(true);

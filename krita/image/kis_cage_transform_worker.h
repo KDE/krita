@@ -23,7 +23,7 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
-
+class QImage;
 
 class KRITAIMAGE_EXPORT KisCageTransformWorker
 {

@@ -20,6 +20,8 @@
 
 #include <kis_debug.h>
 
+#define SANITY_CHECKS
+
 namespace KisAlgebra2D {
 
 void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPointF *pt)
@@ -44,16 +46,11 @@ void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int poly
             isInRange(pt->y(), p0.y(), p1.y())) {
 
             QPointF salt = 1.0e-3 * inwardUnitNormal(edge, polygonDirection);
+            *pt += salt;
 
-            QPointF t1 = *pt + salt;
-            QPointF t2 = *pt - salt;
-
-            if (poly.contains(t1)) {
-                *pt = t1;
-            } else {
-                KIS_ASSERT_RECOVER_NOOP(poly.containsPoint(t2, Qt::OddEvenFill));
-                *pt = t2;
-            }
+#ifdef SANITY_CHECKS
+            KIS_ASSERT_RECOVER_NOOP(kisDistanceToLine(*pt, QLineF(p0, p1)) > 1e-4);
+#endif /* SANITY_CHECKS */
         }
     }
 }

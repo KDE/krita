@@ -22,6 +22,10 @@
 #include "kis_green_coordinates_math.h"
 #include "kis_algebra_2d.h"
 
+#include "KoColor.h"
+#include "kis_selection.h"
+#include "kis_painter.h"
+
 
 struct KisCageTransformWorker::Private
 {
@@ -170,7 +174,21 @@ void KisCageTransformWorker::run()
     // here the cage is not needed anymore
 
     KisPaintDeviceSP srcDev = new KisPaintDevice(*m_d->dev.data());
-    m_d->dev->clear();
+
+    {
+        KisSelectionSP selection = new KisSelection();
+
+        KisPainter painter(selection->pixelSelection());
+        painter.setPaintColor(KoColor(Qt::black, selection->pixelSelection()->colorSpace()));
+        painter.setAntiAliasPolygonFill(true);
+        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+        painter.paintPolygon(m_d->origCage);
+
+        m_d->dev->clearSelection(selection);
+    }
+
     GridIterationTools::PaintDevicePolygonOp polygonOp(srcDev, m_d->dev);
 
     QVector<int> polygonPoints(4);

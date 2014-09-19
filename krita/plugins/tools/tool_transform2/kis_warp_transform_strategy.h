@@ -58,6 +58,10 @@ signals:
     void requestCanvasUpdate();
 
 protected:
+    // default is true
+    void setClipOriginalPointsPosition(bool value);
+
+    // default is false
     void setCloseOnStartPointClick(bool value);
 
     void overrideDrawingItems(bool drawConnectionLines,

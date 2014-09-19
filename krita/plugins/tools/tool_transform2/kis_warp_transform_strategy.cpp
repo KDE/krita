@@ -43,6 +43,7 @@ struct KisWarpTransformStrategy::Private
           drawOrigPoints(true),
           drawTransfPoints(true),
           closeOnStartPointClick(false),
+          clipOriginalPointsPosition(true),
           pointWasDragged(false)
     {
     }
@@ -74,6 +75,7 @@ struct KisWarpTransformStrategy::Private
     bool drawOrigPoints;
     bool drawTransfPoints;
     bool closeOnStartPointClick;
+    bool clipOriginalPointsPosition;
     QPointF pointPosOnClick;
     bool pointWasDragged;
 
@@ -134,6 +136,11 @@ void KisWarpTransformStrategy::overrideDrawingItems(bool drawConnectionLines,
 void KisWarpTransformStrategy::setCloseOnStartPointClick(bool value)
 {
     m_d->closeOnStartPointClick = value;
+}
+
+void KisWarpTransformStrategy::setClipOriginalPointsPosition(bool value)
+{
+    m_d->clipOriginalPointsPosition = value;
 }
 
 void KisWarpTransformStrategy::drawConnectionLines(QPainter &gc,
@@ -253,9 +260,12 @@ bool KisWarpTransformStrategy::beginPrimaryAction(const QPointF &pt)
     if (m_d->cursorOverPoint) {
         retval = true;
     } else if (isEditingPoints) {
+        QPointF newPos = m_d->clipOriginalPointsPosition ?
+            KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect()) :
+            pt;
 
-        m_d->currentArgs.refOriginalPoints().append(pt);
-        m_d->currentArgs.refTransformedPoints().append(pt);
+        m_d->currentArgs.refOriginalPoints().append(newPos);
+        m_d->currentArgs.refTransformedPoints().append(newPos);
 
         m_d->cursorOverPoint = true;
         m_d->pointIndexUnderCursor = m_d->currentArgs.origPoints().size() - 1;
@@ -283,7 +293,9 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool spe
     KIS_ASSERT_RECOVER_RETURN(m_d->pointIndexUnderCursor >= 0);
 
     if (m_d->transaction.editWarpPoints()) {
-        QPointF newPos = KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect());
+        QPointF newPos = m_d->clipOriginalPointsPosition ?
+            KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect()) :
+            pt;
         m_d->currentArgs.origPoint(m_d->pointIndexUnderCursor) = newPos;
         m_d->currentArgs.transfPoint(m_d->pointIndexUnderCursor) = newPos;
     } else {

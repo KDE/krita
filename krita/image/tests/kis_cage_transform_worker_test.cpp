@@ -27,7 +27,7 @@
 #include <kis_cage_transform_worker.h>
 #include <algorithm>
 
-void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = false, int pixelPrecision = 8)
+void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = false, int pixelPrecision = 8, bool testQImage = false)
 {
     TestUtil::TestProgressBar bar;
     KoProgressUpdater pu(&bar);
@@ -77,23 +77,46 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
                                   updater,
                                   pixelPrecision);
 
-    QBENCHMARK_ONCE {
-        worker.prepareTransform();
+    QImage result;
+    QPointF srcQImageOffset(0, 0);
+    QPointF dstQImageOffset;
 
-        if (!benchmarkPrepareOnly) {
-            worker.setTransformedCage(transfPoints);
-            worker.run();
+    QBENCHMARK_ONCE {
+        if (!testQImage) {
+            worker.prepareTransform();
+            if (!benchmarkPrepareOnly) {
+                worker.setTransformedCage(transfPoints);
+                worker.run();
+
+            }
+        } else {
+            QImage srcImage(image);
+            image = QImage(image.size(), QImage::Format_ARGB32);
+            QPainter gc(&image);
+            gc.drawImage(QPoint(), srcImage);
+
+            image.convertToFormat(QImage::Format_ARGB32);
+
+            KisCageTransformWorker qimageWorker(image,
+                                                srcQImageOffset,
+                                                origPoints,
+                                                updater,
+                                                pixelPrecision);
+            qimageWorker.prepareTransform();
+            qimageWorker.setTransformedCage(transfPoints);
+            result = qimageWorker.runOnQImage(&dstQImageOffset);
         }
     }
 
-    if (!benchmarkPrepareOnly && pixelPrecision == 8) {
+    QString testName = QString("%1_%2")
+        .arg(clockwise ? "clk" : "cclk")
+        .arg(unityTransform ? "unity" : "normal");
 
-        QImage result = dev->convertToQImage(0);
+    if (testQImage) {
+        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage_qimage", testName));
+    } else if (!benchmarkPrepareOnly && pixelPrecision == 8) {
 
-        QString testName = QString("%1_%2")
-            .arg(clockwise ? "clk" : "cclk")
-            .arg(unityTransform ? "unity" : "normal");
-
+        result = dev->convertToQImage(0);
         QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage", testName));
     }
 }
@@ -111,6 +134,11 @@ void KisCageTransformWorkerTest::testCageClockwisePrepareOnly()
 void KisCageTransformWorkerTest::testCageClockwisePixePrecision4()
 {
     testCage(true, false, false, 4);
+}
+
+void KisCageTransformWorkerTest::testCageClockwisePixePrecision8QImage()
+{
+    testCage(true, false, false, 8, true);
 }
 
 void KisCageTransformWorkerTest::testCageCounterclockwise()

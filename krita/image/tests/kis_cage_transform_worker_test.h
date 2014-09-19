@@ -28,6 +28,7 @@ private slots:
     void testCageClockwise();
     void testCageClockwisePrepareOnly();
     void testCageClockwisePixePrecision4();
+    void testCageClockwisePixePrecision8QImage();
     void testCageCounterclockwise();
     void testCageClockwiseUnity();
     void testCageCounterclockwiseUnity();

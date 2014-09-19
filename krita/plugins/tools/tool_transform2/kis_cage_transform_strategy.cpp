@@ -23,6 +23,7 @@
 
 #include "krita_utils.h"
 #include "kis_cursor.h"
+#include <kis_cage_transform_worker.h>
 
 
 struct KisCageTransformStrategy::Private
@@ -75,4 +76,23 @@ void KisCageTransformStrategy::drawConnectionLines(QPainter &gc,
         gc.setPen(antsPen);
         gc.drawLine(transfPoints[prevIdx], transfPoints[idx]);
     }
+}
+
+QImage KisCageTransformStrategy::calculateTransformedImage(ToolTransformArgs &currentArgs,
+                                                           const QImage &srcImage,
+                                                           const QVector<QPointF> &origPoints,
+                                                           const QVector<QPointF> &transfPoints,
+                                                           const QPointF &srcOffset,
+                                                           QPointF *dstOffset)
+{
+    Q_UNUSED(currentArgs);
+
+    KisCageTransformWorker worker(srcImage,
+                                  srcOffset,
+                                  origPoints,
+                                  0,
+                                  16);
+    worker.prepareTransform();
+    worker.setTransformedCage(transfPoints);
+    return worker.runOnQImage(dstOffset);
 }

@@ -19,11 +19,10 @@
 #include "kis_algebra_2d.h"
 
 #include <kis_debug.h>
-#include <QPolygonF>
 
 namespace KisAlgebra2D {
 
-void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QVector<QPointF> &poly, int polygonDirection, QPointF *pt)
+void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPointF *pt)
 {
     const int numPoints = poly.size();
     for (int i = 0; i < numPoints; i++) {
@@ -44,10 +43,17 @@ void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QVector<QPointF> &poly, i
             isInRange(pt->x(), p0.x(), p1.x()) &&
             isInRange(pt->y(), p0.y(), p1.y())) {
 
-            QPointF salt = 1.0e-4 * inwardUnitNormal(edge, polygonDirection);
-            *pt += salt;
+            QPointF salt = 1.0e-3 * inwardUnitNormal(edge, polygonDirection);
 
-            KIS_ASSERT_RECOVER_NOOP(QPolygonF(poly).containsPoint(*pt, Qt::OddEvenFill));
+            QPointF t1 = *pt + salt;
+            QPointF t2 = *pt - salt;
+
+            if (poly.contains(t1)) {
+                *pt = t1;
+            } else {
+                KIS_ASSERT_RECOVER_NOOP(poly.containsPoint(t2, Qt::OddEvenFill));
+                *pt = t2;
+            }
         }
     }
 }

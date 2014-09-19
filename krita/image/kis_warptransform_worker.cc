@@ -303,7 +303,7 @@ QImage KisWarpTransformWorker::transformQImage(WarpType warpType,
 
     FunctionTransformOp functionOp(warpMathFunction, origPoint, transfPoint, alpha);
 
-    const QRect srcBounds = srcImage.rect();
+    const QRectF srcBounds = QRectF(srcQImageOffset, srcImage.size());
     QRectF dstBounds;
 
     {
@@ -332,15 +332,15 @@ QImage KisWarpTransformWorker::transformQImage(WarpType warpType,
     }
 
     QPointF dstQImageOffset = dstBounds.topLeft();
-    *newOffset = srcQImageOffset + dstQImageOffset;
+    *newOffset = dstQImageOffset;
 
     QRect dstBoundsI = dstBounds.toAlignedRect();
     QImage dstImage(dstBoundsI.size(), srcImage.format());
-    dstImage.fill(128);
+    dstImage.fill(0);
 
     const int pixelPrecision = 32;
-    GridIterationTools::QImagePolygonOp polygonOp(srcImage, dstImage, QPointF(), dstQImageOffset);
-    GridIterationTools::processGrid(polygonOp, functionOp, srcBounds, pixelPrecision);
+    GridIterationTools::QImagePolygonOp polygonOp(srcImage, dstImage, srcQImageOffset, dstQImageOffset);
+    GridIterationTools::processGrid(polygonOp, functionOp, srcBounds.toAlignedRect(), pixelPrecision);
 
     return dstImage;
 }

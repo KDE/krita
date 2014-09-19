@@ -49,6 +49,13 @@ protected:
                              const QVector<QPointF> &transfPoints,
                              bool isEditingPoints);
 
+    QImage calculateTransformedImage(ToolTransformArgs &currentArgs,
+                                     const QImage &srcImage,
+                                     const QVector<QPointF> &origPoints,
+                                     const QVector<QPointF> &transfPoints,
+                                     const QPointF &srcOffset,
+                                     QPointF *dstOffset);
+
 private:
     class Private;
     const QScopedPointer<Private> m_d;

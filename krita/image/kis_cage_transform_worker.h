@@ -33,11 +33,19 @@ public:
                            KoUpdater *progress,
                            int pixelPrecision = 8);
 
+    KisCageTransformWorker(const QImage &srcImage,
+                           const QPointF &srcImageOffset,
+                           const QVector<QPointF> &origCage,
+                           KoUpdater *progress,
+                           int pixelPrecision = 8);
+
     ~KisCageTransformWorker();
 
     void prepareTransform();
     void setTransformedCage(const QVector<QPointF> &transformedCage);
     void run();
+
+    QImage runOnQImage(QPointF *newOffset);
 
 private:
     struct Private;

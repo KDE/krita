@@ -22,6 +22,7 @@
 #include <QPoint>
 #include <QPointF>
 #include <QVector>
+#include <QPolygonF>
 #include <cmath>
 #include <kis_global.h>
 
@@ -118,7 +119,7 @@ bool isInRange(T x, T a, T b) {
     return qAbs(x - a) <= length && qAbs(x - b) <= length;
 }
 
-void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QVector<QPointF> &poly, int polygonDirection, QPointF *pt);
+void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPointF *pt);
 
 }
 

@@ -128,7 +128,7 @@ void processGrid(ProcessCell &cellOp,
             colIndex++;
 
             if (col > srcBounds.right() &&
-                col < srcBounds.right() + pixelPrecision - 1) {
+                col <= srcBounds.right() + pixelPrecision - 1) {
 
                 col = srcBounds.right();
             } else {
@@ -144,7 +144,7 @@ void processGrid(ProcessCell &cellOp,
         rowIndex++;
 
         if (row > srcBounds.bottom() &&
-            row < srcBounds.bottom() + pixelPrecision - 1) {
+            row <= srcBounds.bottom() + pixelPrecision - 1) {
 
             row = srcBounds.bottom();
         } else {

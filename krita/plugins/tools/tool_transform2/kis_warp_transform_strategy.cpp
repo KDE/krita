@@ -376,13 +376,12 @@ void KisWarpTransformStrategy::Private::recalculateTransformations()
 
         }
 
-        transformedImage =
-            KisWarpTransformWorker::transformQImage(
-                currentArgs.warpType(),
-                thumbOrigPoints, thumbTransfPoints,
-                currentArgs.alpha(),
-                transformedImage,
-                origTLInFlake, &paintingOffset);
+        transformedImage = q->calculateTransformedImage(currentArgs,
+                                                        transformedImage,
+                                                        thumbOrigPoints,
+                                                        thumbTransfPoints,
+                                                        origTLInFlake,
+                                                        &paintingOffset);
     } else {
         transformedImage = q->originalImage();
         paintingOffset = imageToThumb(transaction.originalTopLeft(), false);
@@ -390,4 +389,19 @@ void KisWarpTransformStrategy::Private::recalculateTransformations()
     }
 
     handlesTransform = scaleTransform;
+}
+
+QImage KisWarpTransformStrategy::calculateTransformedImage(ToolTransformArgs &currentArgs,
+                                                           const QImage &srcImage,
+                                                           const QVector<QPointF> &origPoints,
+                                                           const QVector<QPointF> &transfPoints,
+                                                           const QPointF &srcOffset,
+                                                           QPointF *dstOffset)
+{
+    return KisWarpTransformWorker::transformQImage(
+        currentArgs.warpType(),
+        origPoints, transfPoints,
+        currentArgs.alpha(),
+        srcImage,
+        srcOffset, dstOffset);
 }

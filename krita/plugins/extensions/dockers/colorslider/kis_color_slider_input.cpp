@@ -32,6 +32,9 @@
 #include <QFontMetrics>
  
 #include <klocale.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 #include <QDoubleSpinBox>
 
 
@@ -104,6 +107,10 @@ void KisHSXColorSliderInput::setValue(double v)
 	qreal h=0.0;
 	qreal s=0.0;
 	qreal l=0.0;
+	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+	R = cfg.readEntry("lumaR", 0.2126);
+    G = cfg.readEntry("lumaG", 0.7152);
+    B = cfg.readEntry("lumaB", 0.0722);
 
     switch (m_type) {
     case 0:
@@ -150,7 +157,7 @@ void KisHSXColorSliderInput::setValue(double v)
         h=m_hue/360.0f;
         s=m_sat/100.0f;
         l=m_val/100.0f;
-        *m_color = this->converter()->fromHsyF(h, s, l);
+        *m_color = this->converter()->fromHsyF(h, s, l, R, G, B);
         if (m_hueupdating==false) {
             emit(hueUpdated(static_cast<int>(m_hue)));
         }
@@ -205,14 +212,14 @@ void KisHSXColorSliderInput::setValue(double v)
         h=m_hue/360.0f;
         s=m_sat/100.0f;
         l=m_val/100.0f;
-        *m_color = this->converter()->fromHsyF(h, s, l);
+        *m_color = this->converter()->fromHsyF(h, s, l, R, G, B);
         break;
     case 11:
         m_val = v;
         h=m_hue/360.0f;
         s=m_sat/100.0f;
         l=m_val/100.0f;
-        *m_color = this->converter()->fromHsyF(h, s, l);
+        *m_color = this->converter()->fromHsyF(h, s, l, R, G, B);
         break;
     default:
         Q_ASSERT(false);
@@ -249,7 +256,7 @@ void KisHSXColorSliderInput::update()
     case 9:
     case 10:
     case 11:
-        this->converter()->getHsyF(*m_color, &hue, &sat, &val);
+        this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B);
         }
     //this prevents the hue going to 0 when used with grey//
     if (sat<=0.0) {
@@ -312,7 +319,7 @@ void KisHSXColorSliderInput::update()
     default:
         Q_ASSERT(false);
     }    
-m_hsvSlider->setColors(*m_color,m_type, m_hue);
+m_hsvSlider->setColors(*m_color,m_type, m_hue, R, G, B);
 }
 
 QWidget* KisHSXColorSliderInput::createInput()

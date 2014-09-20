@@ -45,13 +45,31 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     ui->lbl_commonColorsNumCols->hide();
     ui->commonColorsNumCols->hide();
+    
+    if (ui->colorSelectorHSVtype->isChecked()==false){
+    ui->l_HSVtypeInfo->hide();
+    }
+    ui->l_HSLtypeInfo->hide();
+    ui->l_HSItypeInfo->hide();
+    ui->l_HSYtypeInfo->hide();
     resize(minimumSize());
 
     ui->colorSelectorConfiguration->setColorSpace(ui->colorSpace->currentColorSpace());
 
     connect(ui->colorSpace,                 SIGNAL(colorSpaceChanged(const KoColorSpace*)),
             ui->colorSelectorConfiguration, SLOT(setColorSpace(const KoColorSpace*)));
-
+    connect(ui->colorSelectorHSVtype, SIGNAL(toggled(bool)),
+            this, SLOT(hsxchange())); 
+    connect(ui->colorSelectorHSLtype, SIGNAL(toggled(bool)),
+            this, SLOT(hsxchange())); 
+    connect(ui->colorSelectorHSItype, SIGNAL(toggled(bool)),
+            this, SLOT(hsxchange())); 
+    connect(ui->colorSelectorHSYtype, SIGNAL(toggled(bool)),
+            this, SLOT(hsxchange())); 
+            
+    connect(this, SIGNAL(hsxchanged(int)),
+            ui->colorSelectorConfiguration, SLOT(setList(int)));
+            
     connect(ui->minimalShadeSelectorLineCount,      SIGNAL(valueChanged(int)),
             ui->minimalShadeSelectorLineSettings,   SLOT(setLineCount(int)));
 
@@ -172,6 +190,22 @@ void KisColorSelectorSettings::savePreferences() const
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
     
+    QString hsxSettingType("HSV");
+    if(ui->colorSelectorHSLtype->isChecked())
+        hsxSettingType="HSL";
+    if(ui->colorSelectorHSItype->isChecked())
+        hsxSettingType="HSI";
+    if(ui->colorSelectorHSYtype->isChecked())
+        hsxSettingType="HSY";
+    
+    cfg.writeEntry("hsxSettingType", hsxSettingType);
+    
+    //luma//
+    cfg.writeEntry("lumaR", ui->l_lumaR->text());
+    cfg.writeEntry("lumaG", ui->l_lumaG->text());
+    cfg.writeEntry("lumaB", ui->l_lumaB->text());
+    
+    //slider//
     hsxcfg.writeEntry("hsvH", ui->csl_hsvH->isChecked());
     hsxcfg.writeEntry("hsvS", ui->csl_hsvS->isChecked());
     hsxcfg.writeEntry("hsvV", ui->csl_hsvV->isChecked());
@@ -293,9 +327,19 @@ void KisColorSelectorSettings::loadPreferences()
     ui->minimalShadeSelectorLineSettings->fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;"));
     ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 10));
 
+    QString hsxSettingType=cfg.readEntry("hsxSettingType", "HSV");
+    ui->colorSelectorHSVtype->setChecked(hsxSettingType=="HSV");
+    ui->colorSelectorHSLtype->setChecked(hsxSettingType=="HSL");
+    ui->colorSelectorHSItype->setChecked(hsxSettingType=="HSI");
+    ui->colorSelectorHSYtype->setChecked(hsxSettingType=="HSY");
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
+    
+    //luma values//
+    ui->l_lumaR->setText(cfg.readEntry("lumaR", "0.2126"));
+    ui->l_lumaG->setText(cfg.readEntry("lumaG", "0.7152"));
+    ui->l_lumaB->setText(cfg.readEntry("lumaB", "0.0722"));
     
     //color sliders//
     ui->csl_hsvH->setChecked(hsxcfg.readEntry("hsvH", false));
@@ -379,8 +423,18 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->minimalShadeSelectorLineHeight->setValue(10);
 
     //color selector
+    ui->colorSelectorHSVtype->setChecked(true);
+    ui->colorSelectorHSVtype->setChecked(false);
+    ui->colorSelectorHSVtype->setChecked(false);
+    ui->colorSelectorHSVtype->setChecked(false);
+    
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration("3|0|5|0")); // triangle selector
+    
+    //luma//
+    ui->l_lumaR->setText("0.2126");
+    ui->l_lumaG->setText("0.7152");
+    ui->l_lumaB->setText("0.0722");
     
     //color sliders//
     ui->csl_hsvH->setChecked(false);
@@ -395,6 +449,19 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->csl_hsyH->setChecked(false);
     ui->csl_hsyS->setChecked(false);
     ui->csl_hsyY->setChecked(false);
+}
+
+void KisColorSelectorSettings::hsxchange() {
+
+    int hsxSettingType=0;
+    if(ui->colorSelectorHSLtype->isChecked())
+        hsxSettingType=1;
+    if(ui->colorSelectorHSItype->isChecked())
+        hsxSettingType=2;
+    if(ui->colorSelectorHSYtype->isChecked())
+        hsxSettingType=3;
+        
+    emit hsxchanged(hsxSettingType);
 }
 
 KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) :
@@ -417,4 +484,6 @@ KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) 
     connect(buttonBox->button(QDialogButtonBox::RestoreDefaults),
                        SIGNAL(clicked()),  m_widget, SLOT(loadDefaultPreferences()));
 }
+
+
 

@@ -52,7 +52,7 @@ protected:
 
 private:
     qreal m_colorH, m_colorS, m_colorV;
-
+    qreal R, G, B;
     QTimer* m_updateTimer;
     KoColor m_lastRealColor;
     KisPaintDeviceSP m_realPixelCache;

@@ -76,6 +76,7 @@ private:
     qreal m_hue;
     qreal m_sat;
     qreal m_val;
+    qreal R, G, B;
     bool m_hueupdating;
 };
 

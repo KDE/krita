@@ -23,7 +23,6 @@
 
 #include <KoColor.h>
 #include <KoMixColorsOp.h>
-
 #include <QPainter>
 #include <QTimer>
 
@@ -63,12 +62,15 @@ KisHSVSlider::~KisHSVSlider()
 }
 
 
-void KisHSVSlider::setColors(const KoColor& currentc, const int type, qreal hue_backup)
+void KisHSVSlider::setColors(const KoColor& currentc, const int type, qreal hue_backup, qreal l_R, qreal l_G, qreal l_B)
 {
     d->currentColorF = currentc;
     KoColor c = currentc;
     d->HSVtype = type;
     d->hue_b = hue_backup/360.0f;
+    R=l_R;
+    G=l_G;
+    B=l_B;
 
     d->upToDate = false;
 
@@ -193,19 +195,19 @@ KoColor KisHSVSlider::HSXcolor(int type, qreal t) const
             coordinate_color = this->converter()->fromHsiF( hue, sat, (1.0 - t));
             break;//hsi value
         case 9:
-            this->converter()->getHsyF(c, &hue, &sat, &val);
-            coordinate_color = this->converter()->fromHsyF( (1.0 - t) , sat, val);
+            this->converter()->getHsyF(c, &hue, &sat, &val, R, G, B);
+            coordinate_color = this->converter()->fromHsyF( (1.0 - t) , sat, val, R, G, B);
             break;//hsy hue
         case 10:
-            this->converter()->getHsyF(c, &hue, &sat, &val);
+            this->converter()->getHsyF(c, &hue, &sat, &val, R, G, B);
             if (sat==0 && (1.0-t)>0) {
                 hue=hue_backup;
                 }
-            coordinate_color = this->converter()->fromHsyF( hue, (1.0 - t), val);
+            coordinate_color = this->converter()->fromHsyF( hue, (1.0 - t), val, R, G, B);
             break;//hsy sat
         case 11:
-            this->converter()->getHsyF(c, &hue, &sat, &val);
-            coordinate_color = this->converter()->fromHsyF( hue, sat, (1.0 - t));
+            this->converter()->getHsyF(c, &hue, &sat, &val, R, G, B);
+            coordinate_color = this->converter()->fromHsyF( hue, sat, (1.0 - t), R, G, B);
             break;//hsy value
         }
     return coordinate_color;

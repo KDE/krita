@@ -22,6 +22,7 @@
 #include "kis_paintop_box.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_icon.h"
+#include "kis_paintop_preset.h"
 #include "kis_resource_server_provider.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoResource.h"

@@ -67,7 +67,7 @@ void KisGmicCommand::redo()
             QString gmicCmd = "-* 255 ";
             gmicCmd.append(m_gmicCommandString);
             dbgPlugins << m_gmicCommandString;
-            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands, true);
+            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands, true, 0, 0);
 
         }
         // Catch exception, if an error occured in the interpreter.

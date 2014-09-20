@@ -337,7 +337,7 @@ bool KisGmicTests::filterWithGmic(KisGmicFilterSetting* gmicFilterSetting, const
     {
         QString gmicCmd = "-* 255 ";
         gmicCmd.append(gmicFilterSetting->gmicCommand());
-        gmic(gmicCmd.toLocal8Bit().constData(), images, images_names);
+        gmic(gmicCmd.toLocal8Bit().constData(), images, images_names, true, 0, 0);
     }
     // Catch exception, if an error occured in the interpreter.
     catch (gmic_exception &e)

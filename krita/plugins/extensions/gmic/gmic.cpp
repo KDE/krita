@@ -13204,8 +13204,9 @@ int main(int argc, char **argv) {
 // Explicitely instanciate constructor for float-valued images.
 template gmic::gmic(const char *const commands_line,
                     gmic_list<float>& images, gmic_list<char>& images_names,
-                    const char *const custom_commands=0,
-                    const bool include_default_commands=true,
-                    float *const p_progress=0, int *const p_cancel=0);
+                    const char *const custom_commands,
+                    const bool include_default_commands,
+                    float *const p_progress,
+                    int *const p_cancel);
 #endif // #ifdef gmic_main
 #endif // #ifdef cimg_plugin

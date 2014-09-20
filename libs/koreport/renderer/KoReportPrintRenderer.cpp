@@ -99,10 +99,9 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                     //Background
 
                     QColor bg = tb->textStyle().backgroundColor;
-                    bg.setAlpha(tb->textStyle().backgroundOpacity);
+                    bg.setAlphaF(0.01 * tb->textStyle().backgroundOpacity);
 
                     //_painter->setBackgroundMode(Qt::OpaqueMode);
-                    context.painter->setBackground(bg);
                     context.painter->fillRect(rc, bg);
 
                     //Text

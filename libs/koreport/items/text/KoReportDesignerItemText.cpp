@@ -105,14 +105,14 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
     QPen  p = painter->pen();
 
     painter->setFont(font());
+    painter->setBackgroundMode(Qt::TransparentMode);
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+    bg.setAlphaF(m_backgroundOpacity->value().toReal()*0.01);
 
-    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
-    painter->fillRect(rect(),  m_backgroundColor->value().value<QColor>());
+    painter->fillRect(rect(),  bg);
     painter->drawText(rect(), textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "textarea"));
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
@@ -122,7 +122,6 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
     }
     painter->drawRect(rect());
 
-    painter->setBackgroundMode(Qt::TransparentMode);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     drawHandles(painter);

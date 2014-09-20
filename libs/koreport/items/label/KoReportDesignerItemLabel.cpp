@@ -98,13 +98,13 @@ void KoReportDesignerItemLabel::paint(QPainter* painter, const QStyleOptionGraph
     // store any values we plan on changing so we can restore them
     QFont f = painter->font();
     QPen  p = painter->pen();
-
+    
     painter->setFont(font());
+    painter->setBackgroundMode(Qt::TransparentMode);
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+    bg.setAlphaF(m_backgroundOpacity->value().toReal() * 0.01);
 
-    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(QGraphicsRectItem::rect(), bg);
@@ -118,7 +118,7 @@ void KoReportDesignerItemLabel::paint(QPainter* painter, const QStyleOptionGraph
 
     painter->drawRect(QGraphicsRectItem::rect());
 
-    painter->setBackgroundMode(Qt::TransparentMode);
+
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     drawHandles(painter);

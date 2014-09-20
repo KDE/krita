@@ -102,11 +102,11 @@ void KoReportDesignerItemField::paint(QPainter* painter, const QStyleOptionGraph
     QPen  p = painter->pen();
 
     painter->setFont(font());
+    painter->setBackgroundMode(Qt::TransparentMode);
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+    bg.setAlphaF(m_backgroundOpacity->value().toReal() *0.01);
 
-    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(QGraphicsRectItem::rect(), bg);
@@ -121,7 +121,6 @@ void KoReportDesignerItemField::paint(QPainter* painter, const QStyleOptionGraph
 
     painter->drawRect(rect());
 
-    painter->setBackgroundMode(Qt::TransparentMode);
 
     drawHandles(painter);
 

@@ -6,3 +6,4 @@
  */
 
 // DOXYGEN_SET_PROJECT_NAME = KoOdf
+IGNORE_PREFIX = Ko K

@@ -5,3 +5,4 @@
  */
 
 // DOXYGEN_SET_PROJECT_NAME = KoWidgets
+IGNORE_PREFIX = Ko K

@@ -4,3 +4,4 @@
  */
 
 // DOXYGEN_SET_PROJECT_NAME = KoPlugin
+IGNORE_PREFIX = Ko K

@@ -62,3 +62,4 @@
  */
 
 // DOXYGEN_SET_PROJECT_NAME = KoTextLayout
+IGNORE_PREFIX = Ko K

@@ -1,17 +1,3 @@
 /**
  * \mainpage
- * The Calligra libraries are really a set of different libraries; but not all of them
- * have docs so all unmaintained (documentation wise) libs go in this project.
- * Other projects:
- * <ul>
- *  <li><a href="../libs-flake/">Flake</a> The library for graphical content and manipulation</li>
- *  <li><a href="../libs-kotext/">KoText</a> The text API.</li>
- *  <li><a href="../libs-pigment/">Pigment</a> The library for everything to do with colors and color management</li>
- * </ul>
- */
-
-/**
- *
- * \defgroup CalligraMacros Calligra Macros
- *
  */

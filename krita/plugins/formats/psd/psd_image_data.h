@@ -38,7 +38,7 @@ public:
     virtual ~PSDImageData();
 
     bool read(QIODevice *io, KisPaintDeviceSP dev);
-    bool write(QIODevice *io, KisPaintDeviceSP dev, int nLayers);
+    bool write(QIODevice *io, KisPaintDeviceSP dev);
 
 
     QString error;

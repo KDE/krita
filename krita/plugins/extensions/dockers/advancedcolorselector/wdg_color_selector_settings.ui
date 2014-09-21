@@ -451,7 +451,7 @@
              <bool>true</bool>
             </property>
             <property name="text">
-             <string>HSY' is a color model where luma(Y') is weighted by it's coefficients (below).</string>
+             <string>HSY' is a color model where luma(Y') is weighted by its coefficients (below).</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

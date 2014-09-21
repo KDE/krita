@@ -22,7 +22,6 @@
 #define KIS_HSVSLIDER_H
 
 #include <kselector.h>
-#include "kowidgets_export.h"
 #include "KoColorDisplayRendererInterface.h"
 #include "kis_canvas2.h"
 
@@ -30,7 +29,7 @@
 class KoColor;
 class KisDisplayColorConverter;
 
-class KOWIDGETS_EXPORT KisHSVSlider : public KSelector
+class KisHSVSlider : public KSelector
 {
     Q_OBJECT
 public:

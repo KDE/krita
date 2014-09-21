@@ -160,7 +160,7 @@ protected:
             KisColorSelectorComboBox* parent = dynamic_cast<KisColorSelectorComboBox*>(this->parent());
             Q_ASSERT(parent);
             parent->setConfiguration(m_lastActiveConfiguration);
-            setList(parent->m_model);
+            //setList(parent->m_model);
         }
         //qDebug()<<"mousepress";
         hide();
@@ -173,8 +173,7 @@ protected:
 KisColorSelectorComboBox::KisColorSelectorComboBox(QWidget* parent) :
         QComboBox(parent),
         m_private(new KisColorSelectorComboBoxPrivate(this)),
-        m_currentSelector(this),
-        m_model(0)
+        m_currentSelector(this)
 {
     QLayout* layout = new QGridLayout(this);
     layout->addWidget(&m_currentSelector);
@@ -239,6 +238,5 @@ void KisColorSelectorComboBox::setConfiguration(KisColorSelector::Configuration 
 
 void KisColorSelectorComboBox::setList(int model) {
 
-    m_model=model;
-    m_private->setList(m_model);       
+    m_private->setList(model);       
 }

@@ -34,7 +34,7 @@ public:
     void hidePopup();
     void showPopup();
     KisColorSelector::Configuration configuration() const;
-    int m_model;
+    //int m_model;
 protected:
     void paintEvent(QPaintEvent *e);
 public slots:

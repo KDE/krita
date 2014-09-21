@@ -48,14 +48,12 @@ public:
     KisDisplayColorConverter* converter() const;
 protected:
     virtual void drawContents( QPainter* );
-    KoColorDisplayRendererInterface *m_displayRenderer;
-    KisCanvas2* m_canvas;
-
-protected:
     struct Private;
     Private* const d;
 private:
     qreal R, G, B;
+    KoColorDisplayRendererInterface *m_displayRenderer;
+    KisCanvas2* m_canvas;
 };
 
 #endif

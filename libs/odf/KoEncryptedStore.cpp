@@ -64,9 +64,9 @@ struct KoEncryptedStore_EncryptionData {
 // TODO: Discuss autosaving and password/leakage-problem (currently: hardcoded no autosave)
 namespace
 {
-const char* MANIFEST_FILE = "META-INF/manifest.xml";
-const char* META_FILE = "meta.xml";
-const char* THUMBNAIL_FILE = "Thumbnails/thumbnail.png";
+const char MANIFEST_FILE[] = "META-INF/manifest.xml";
+const char META_FILE[] = "meta.xml";
+const char THUMBNAIL_FILE[] = "Thumbnails/thumbnail.png";
 }
 
 KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode,

@@ -32,8 +32,8 @@
 #include "kis_serializable_configuration.h"
 
 
-const char* KisBookmarkedConfigurationManager::ConfigDefault = "Default";
-const char* KisBookmarkedConfigurationManager::ConfigLastUsed = "Last Used";
+const char* const KisBookmarkedConfigurationManager::ConfigDefault = "Default";
+const char* const KisBookmarkedConfigurationManager::ConfigLastUsed = "Last Used";
 
 struct KisBookmarkedConfigurationManager::Private {
 

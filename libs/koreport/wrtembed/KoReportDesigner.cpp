@@ -57,7 +57,7 @@
 #include <kross/core/manager.h>
 
 //! Also add public method for runtime?
-const char* ns = "http://kexi-project.org/report/2.0";
+const char ns[] = "http://kexi-project.org/report/2.0";
 
 static QDomElement propertyToElement(QDomDocument* d, KoProperty::Property* p)
 {

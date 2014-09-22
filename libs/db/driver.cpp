@@ -357,7 +357,7 @@ QByteArray Driver::escapeIdentifier(const QByteArray& str, int options) const
     }
 }
 
-void Driver::initDriverSpecificKeywords(const char** keywords)
+void Driver::initDriverSpecificKeywords(const char* const* keywords)
 {
     d->driverSpecificSQLKeywords.setStrings(keywords);
 }

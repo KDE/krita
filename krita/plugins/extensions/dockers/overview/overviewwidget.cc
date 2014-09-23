@@ -196,7 +196,20 @@ void OverviewWidget::paintEvent(QPaintEvent* event)
         
         p.drawPixmap(0, 0, m_pixmap.width(), m_pixmap.height(), m_pixmap);
 
-        p.setPen(QColor(Qt::red));
+
+        QRect r = rect().translated(-previewOrigin().toPoint());
+        QPolygonF outline;
+        outline << r.topLeft() << r.topRight() << r.bottomRight() << r.bottomLeft();
+
+        QPen pen;
+        pen.setColor(QColor(Qt::red));
+        pen.setStyle(Qt::DashLine);
+
+        p.setPen(pen);
+        p.drawPolygon(outline.intersected(previewPolygon()));
+
+        pen.setStyle(Qt::SolidLine);
+        p.setPen(pen);
         p.drawPolygon(previewPolygon());
     }
 }

@@ -91,6 +91,7 @@ void KisColorSliderInput::init()
     m_input->setMaximumHeight(60);
     m_input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     m_layout->addWidget(m_input, 0, 2, Qt::AlignRight);
+    m_layout->setContentsMargins(0, 0, 0, 0);
 }
 
 KisHSXColorSliderInput::KisHSXColorSliderInput(QWidget* parent, const int type, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas) : KisColorSliderInput(parent, color, type, displayRenderer, canvas),

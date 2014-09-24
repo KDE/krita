@@ -291,6 +291,9 @@ void KisFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
 void KisFavoriteResourceManager::setBlockUpdates(bool block)
 {
     m_blockUpdates = block;
+    if (!block) {
+        updateFavoritePresets();
+    }
 }
 
 void KisFavoriteResourceManager::syncTaggedResourceView() {

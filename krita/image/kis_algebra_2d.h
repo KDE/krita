@@ -121,6 +121,14 @@ bool isInRange(T x, T a, T b) {
 
 void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPointF *pt);
 
+/**
+ * Let \p pt, \p base1 are two vectors. \p base1 is uniformly scaled
+ * and then rotated into \p base2 using transformation matrix S *
+ * R. The function applies the same transformation to \pt and returns
+ * the result.
+ **/
+QPointF transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2);
+
 }
 
 #endif /* __KIS_ALGEBRA_2D_H */

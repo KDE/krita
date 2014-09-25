@@ -55,4 +55,26 @@ void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int poly
     }
 }
 
+QPointF KRITAIMAGE_EXPORT transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2) {
+    qreal len1 = norm(base1);
+    if (len1 < 1e-5) return pt;
+    qreal sin1 = base1.y() / len1;
+    qreal cos1 = base1.x() / len1;
+
+    qreal len2 = norm(base2);
+    if (len2 < 1e-5) return QPointF();
+    qreal sin2 = base2.y() / len2;
+    qreal cos2 = base2.x() / len2;
+
+    qreal sinD = sin2 * cos1 - cos2 * sin1;
+    qreal cosD = cos1 * cos2 + sin1 * sin2;
+    qreal scaleD = len2 / len1;
+
+    QPointF result;
+    result.rx() = scaleD * (pt.x() * cosD - pt.y() * sinD);
+    result.ry() = scaleD * (pt.x() * sinD + pt.y() * cosD);
+
+    return result;
+}
+
 }

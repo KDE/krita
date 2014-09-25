@@ -34,6 +34,8 @@ private slots:
     void testCageCounterclockwiseUnity();
 
     void testUnityGreenCoordinates();
+
+    void testTransformAsBase();
 };
 
 #endif /* __KIS_CAGE_TRANSFORM_WORKER_TEST_H */

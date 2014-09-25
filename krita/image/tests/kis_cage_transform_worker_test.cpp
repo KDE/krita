@@ -203,5 +203,52 @@ void KisCageTransformWorkerTest::testUnityGreenCoordinates()
     }
 }
 
+#include "kis_algebra_2d.h"
+
+void KisCageTransformWorkerTest::testTransformAsBase()
+{
+    QPointF t(1.0, 0.0);
+    QPointF b1(1.0, 0.0);
+    QPointF b2(2.0, 0.0);
+    QPointF result;
+
+
+    t = QPointF(1.0, 0.0);
+    b1 = QPointF(1.0, 0.0);
+    b2 = QPointF(2.0, 0.0);
+    result = KisAlgebra2D::transformAsBase(t, b1, b2);
+    QCOMPARE(result, QPointF(2.0, 0.0));
+
+    t = QPointF(1.0, 0.0);
+    b1 = QPointF(1.0, 0.0);
+    b2 = QPointF(0.0, 1.0);
+    result = KisAlgebra2D::transformAsBase(t, b1, b2);
+    QCOMPARE(result, QPointF(0.0, 1.0));
+
+    t = QPointF(1.0, 0.0);
+    b1 = QPointF(1.0, 0.0);
+    b2 = QPointF(0.0, 2.0);
+    result = KisAlgebra2D::transformAsBase(t, b1, b2);
+    QCOMPARE(result, QPointF(0.0, 2.0));
+
+    t = QPointF(0.0, 1.0);
+    b1 = QPointF(1.0, 0.0);
+    b2 = QPointF(2.0, 0.0);
+    result = KisAlgebra2D::transformAsBase(t, b1, b2);
+    QCOMPARE(result, QPointF(0.0, 2.0));
+
+    t = QPointF(0.0, 1.0);
+    b1 = QPointF(1.0, 0.0);
+    b2 = QPointF(0.0, 1.0);
+    result = KisAlgebra2D::transformAsBase(t, b1, b2);
+    QCOMPARE(result, QPointF(-1.0, 0.0));
+
+    t = QPointF(0.0, 1.0);
+    b1 = QPointF(1.0, 0.0);
+    b2 = QPointF(0.0, 2.0);
+    result = KisAlgebra2D::transformAsBase(t, b1, b2);
+    QCOMPARE(result, QPointF(-2.0, 0.0));
+}
+
 
 QTEST_KDEMAIN(KisCageTransformWorkerTest, GUI)

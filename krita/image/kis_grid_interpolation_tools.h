@@ -28,6 +28,11 @@
 #include "kis_iterator_ng.h"
 #include "kis_random_sub_accessor.h"
 
+//#define DEBUG_PAINTING_POLYGONS
+
+#ifdef DEBUG_PAINTING_POLYGONS
+#include <QPainter>
+#endif /* DEBUG_PAINTING_POLYGONS */
 
 namespace GridIterationTools {
 
@@ -167,7 +172,11 @@ struct PaintDevicePolygonOp
         : m_srcDev(srcDev), m_dstDev(dstDev) {}
 
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon) {
-        QRect boundRect = dstPolygon.boundingRect().toAlignedRect();
+        this->operator() (srcPolygon, dstPolygon, dstPolygon);
+    }
+
+    void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon) {
+        QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
         KisSequentialIterator dstIt(m_dstDev, boundRect);
         KisRandomSubAccessorSP srcAcc = m_srcDev->createRandomSubAccessor();
 
@@ -186,7 +195,7 @@ struct PaintDevicePolygonOp
 
             QPointF srcPoint(dstIt.x(), y);
 
-            if (dstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
+            if (clipDstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
 
                 interp.setX(srcPoint.x());
                 QPointF dstPoint = interp.getValue();
@@ -224,7 +233,11 @@ struct QImagePolygonOp
     }
 
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon) {
-        QRect boundRect = dstPolygon.boundingRect().toAlignedRect();
+        this->operator() (srcPolygon, dstPolygon, dstPolygon);
+    }
+
+    void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon) {
+        QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
         KisFourPointInterpolatorBackward interp(srcPolygon, dstPolygon);
 
         for (int y = boundRect.top(); y <= boundRect.bottom(); y++) {
@@ -232,7 +245,7 @@ struct QImagePolygonOp
             for (int x = boundRect.left(); x <= boundRect.right(); x++) {
 
                 QPointF srcPoint(x, y);
-                if (dstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
+                if (clipDstPolygon.containsPoint(srcPoint, Qt::OddEvenFill)) {
 
                     interp.setX(srcPoint.x());
                     QPointF dstPoint = interp.getValue();
@@ -255,6 +268,20 @@ struct QImagePolygonOp
                 }
             }
         }
+
+#ifdef DEBUG_PAINTING_POLYGONS
+        QPainter gc(&m_dstImage);
+        gc.setPen(Qt::red);
+        gc.setOpacity(0.5);
+
+        gc.setBrush(Qt::green);
+        gc.drawPolygon(clipDstPolygon.translated(-m_dstImageOffset));
+
+        gc.setBrush(Qt::blue);
+        //gc.drawPolygon(dstPolygon.translated(-m_dstImageOffset));
+
+#endif /* DEBUG_PAINTING_POLYGONS */
+
     }
 
     const QImage &m_srcImage;

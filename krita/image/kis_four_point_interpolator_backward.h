@@ -75,15 +75,18 @@ public:
 
         m_qB_varY = y * m_d.x();
         m_qC_varY = y * m_a.x();
+        m_py = y;
     }
 
     inline QPointF getValue() const {
+        static const qreal eps = 1e-10;
+
         qreal qB = m_qB_const + m_qB_varX + m_qB_varY;
         qreal qC = m_qC_varX + m_qC_varY;
 
         qreal nu = 0.0;
 
-        if (qAbs(m_qA) < 1e-10) {
+        if (qAbs(m_qA) < eps) {
             nu = -qC / qB;
         } else {
             qreal D = pow2(qB) - 4 * m_qA * qC;
@@ -104,7 +107,15 @@ public:
             }
         }
 
-        qreal mu = (m_px - nu * m_c.x()) / (m_a.x() + nu * m_d.x());
+        qreal xBasedDenominator = m_a.x() + nu * m_d.x();
+
+        qreal mu;
+
+        if (qAbs(xBasedDenominator) > eps) {
+            mu = (m_px - nu * m_c.x()) / xBasedDenominator;
+        } else {
+            mu = (m_py - nu * m_c.y()) / (m_a.y() + nu * m_d.y());
+        }
 
         return m_srcBase + QPointF(mu * m_xCoeff, nu * m_yCoeff);
     }
@@ -123,6 +134,7 @@ private:
     qreal m_qC_varY; // quadratic equation C coeff, Y-dep part
     qreal m_qD_div; // inverted divisor of the quadratic equation solution
     qreal m_px; // saved relative X coordinate
+    qreal m_py; // saved relative Y coordinate
 
     QPointF m_srcBase;
     QPointF m_dstBase;

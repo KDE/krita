@@ -33,6 +33,7 @@ private slots:
     void testBackwardInterpolatorXYShear();
     void testBackwardInterpolatorRoundTrip();
     void testGridSize();
+    void testBackwardInterpolatorExtrapolation();
 };
 
 #endif /* __KIS_WARP_TRANSFORM_WORKER_TEST_H */

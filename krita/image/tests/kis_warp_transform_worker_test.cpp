@@ -285,4 +285,42 @@ void KisWarpTransformWorkerTest::testGridSize()
     QCOMPARE(GridIterationTools::calcGridDimension(0, 300, 8), 39);
 }
 
+void KisWarpTransformWorkerTest::testBackwardInterpolatorExtrapolation()
+{
+    QPolygonF src;
+
+    src << QPointF(0, 0);
+    src << QPointF(100, 0);
+    src << QPointF(100, 100);
+    src << QPointF(0, 100);
+
+    QPolygonF dst(src);
+    std::rotate(dst.begin(), dst.begin() + 1, dst.end());
+    KisFourPointInterpolatorBackward interp(src, dst);
+
+    // standard checks
+    QCOMPARE(interp.map(QPointF(0,0)), QPointF(0,100));
+    QCOMPARE(interp.map(QPointF(100,0)), QPointF(0,0));
+    QCOMPARE(interp.map(QPointF(100,100)), QPointF(100,0));
+    QCOMPARE(interp.map(QPointF(0,100)), QPointF(100,100));
+
+    // extrapolate!
+    QCOMPARE(interp.map(QPointF(-10,0)), QPointF(0,110));
+    QCOMPARE(interp.map(QPointF(0,-10)), QPointF(-10,100));
+    QCOMPARE(interp.map(QPointF(-10,-10)), QPointF(-10,110));
+
+    QCOMPARE(interp.map(QPointF(110,0)), QPointF(0,-10));
+    QCOMPARE(interp.map(QPointF(100,-10)), QPointF(-10,0));
+    QCOMPARE(interp.map(QPointF(110,-10)), QPointF(-10,-10));
+
+    QCOMPARE(interp.map(QPointF(110,100)), QPointF(100, -10));
+    QCOMPARE(interp.map(QPointF(100,110)), QPointF(110, 0));
+    QCOMPARE(interp.map(QPointF(110,110)), QPointF(110,-10));
+
+    QCOMPARE(interp.map(QPointF(-10,100)), QPointF(100, 110));
+    QCOMPARE(interp.map(QPointF(0,110)), QPointF(110, 100));
+    QCOMPARE(interp.map(QPointF(-10,110)), QPointF(110,110));
+}
+
+
 QTEST_KDEMAIN(KisWarpTransformWorkerTest, GUI)

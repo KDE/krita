@@ -477,6 +477,7 @@ void KisCageTransformWorker::run()
     QVector<QPointF> transformedPoints = m_d->calculateTransformedPoints();
 
     KisPaintDeviceSP srcDev = new KisPaintDevice(*m_d->dev.data());
+    KisPaintDeviceSP tempDevice = new KisPaintDevice(m_d->dev->colorSpace());
 
     {
         KisSelectionSP selection = new KisSelection();
@@ -492,8 +493,12 @@ void KisCageTransformWorker::run()
         m_d->dev->clearSelection(selection);
     }
 
-    GridIterationTools::PaintDevicePolygonOp polygonOp(srcDev, m_d->dev);
+    GridIterationTools::PaintDevicePolygonOp polygonOp(srcDev, tempDevice);
     m_d->iterateThroughGrid(polygonOp, transformedPoints);
+
+    QRect rect = tempDevice->extent();
+    KisPainter gc(m_d->dev);
+    gc.bitBlt(rect.topLeft(), tempDevice, rect);
 }
 
 QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
@@ -529,6 +534,8 @@ QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
     QImage dstImage(dstBoundsI.size(), m_d->srcImage.format());
     dstImage.fill(0);
 
+    QImage tempImage(dstImage);
+
     {
         // we shouldn't create too many painters
         QPainter gc(&dstImage);
@@ -540,8 +547,13 @@ QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
         gc.end();
     }
 
-    GridIterationTools::QImagePolygonOp polygonOp(m_d->srcImage, dstImage, m_d->srcImageOffset, dstQImageOffset);
+    GridIterationTools::QImagePolygonOp polygonOp(m_d->srcImage, tempImage, m_d->srcImageOffset, dstQImageOffset);
     m_d->iterateThroughGrid(polygonOp, transformedPoints);
+
+    {
+        QPainter gc(&dstImage);
+        gc.drawImage(QPoint(), tempImage);
+    }
 
     return dstImage;
 }

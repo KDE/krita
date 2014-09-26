@@ -57,7 +57,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
                            "<body>"
                            "<p align=\"center\"><b>Links</b></p>"
 
-                           "<p><a href=\"http://krita.org/support-krita#general\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Donations</span></a></p>"
+                           "<p><a href=\"https://krita.org/support-us/donations/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Donations</span></a></p>"
                            "<p><a href=\"http://www.zazzle.com/kritashop\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Merchandise</span></a></p>"
 
                            "<p><a href=\"http://krita.org/resources\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Getting Started</span></a></p>"

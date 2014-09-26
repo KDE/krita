@@ -77,4 +77,12 @@ QPointF KRITAIMAGE_EXPORT transformAsBase(const QPointF &pt, const QPointF &base
     return result;
 }
 
+qreal KRITAIMAGE_EXPORT angleBetweenVectors(const QPointF &v1, const QPointF &v2)
+{
+    qreal a1 = std::atan2(v1.y(), v1.x());
+    qreal a2 = std::atan2(v2.y(), v2.x());
+
+    return a2 - a1;
+}
+
 }

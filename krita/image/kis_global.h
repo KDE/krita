@@ -199,25 +199,5 @@ inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
     return rc;
 }
 
-template <class Point, class Rect>
-inline void kisAccumulateBounds(const Point &pt, Rect *bounds)
-{
-    if (pt.x() > bounds->right()) {
-        bounds->setRight(pt.x());
-    }
-
-    if (pt.x() < bounds->left()) {
-        bounds->setLeft(pt.x());
-    }
-
-    if (pt.y() > bounds->bottom()) {
-        bounds->setBottom(pt.y());
-    }
-
-    if (pt.y() < bounds->top()) {
-        bounds->setTop(pt.y());
-    }
-}
-
 #endif // KISGLOBAL_H_
 

@@ -250,5 +250,25 @@ void KisCageTransformWorkerTest::testTransformAsBase()
     QCOMPARE(result, QPointF(-2.0, 0.0));
 }
 
+void KisCageTransformWorkerTest::testAngleBetweenVectors()
+{
+    QPointF b1(1.0, 0.0);
+    QPointF b2(2.0, 0.0);
+    qreal result;
+
+    b1 = QPointF(1.0, 0.0);
+    b2 = QPointF(0.0, 1.0);
+    result = KisAlgebra2D::angleBetweenVectors(b1, b2);
+    QCOMPARE(result, M_PI_2);
+
+    b1 = QPointF(1.0, 0.0);
+    b2 = QPointF(std::sqrt(0.5), std::sqrt(0.5));
+    result = KisAlgebra2D::angleBetweenVectors(b1, b2);
+    QCOMPARE(result, M_PI / 4);
+
+    QTransform t;
+    t.rotateRadians(M_PI / 4);
+    QCOMPARE(t.map(b1), b2);
+}
 
 QTEST_KDEMAIN(KisCageTransformWorkerTest, GUI)

@@ -129,6 +129,43 @@ void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int poly
  **/
 QPointF transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2);
 
+qreal angleBetweenVectors(const QPointF &v1, const QPointF &v2);
+
+namespace Private {
+    inline void resetEmptyRectangle(const QPoint &pt, QRect *rc) {
+        *rc = QRect(pt, QSize(1, 1));
+    }
+
+    inline void resetEmptyRectangle(const QPointF &pt, QRectF *rc) {
+        static qreal eps = 1e-10;
+        *rc = QRectF(pt, QSizeF(eps, eps));
+    }
+}
+
+template <class Point, class Rect>
+inline void accumulateBounds(const Point &pt, Rect *bounds)
+{
+    if (bounds->isEmpty()) {
+        Private::resetEmptyRectangle(pt, bounds);
+    }
+
+    if (pt.x() > bounds->right()) {
+        bounds->setRight(pt.x());
+    }
+
+    if (pt.x() < bounds->left()) {
+        bounds->setLeft(pt.x());
+    }
+
+    if (pt.y() > bounds->bottom()) {
+        bounds->setBottom(pt.y());
+    }
+
+    if (pt.y() < bounds->top()) {
+        bounds->setTop(pt.y());
+    }
+}
+
 }
 
 #endif /* __KIS_ALGEBRA_2D_H */

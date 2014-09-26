@@ -521,7 +521,7 @@ QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
 
     QRectF dstBounds;
     foreach (const QPointF &pt, transformedPoints) {
-        kisAccumulateBounds(pt, &dstBounds);
+        KisAlgebra2D::accumulateBounds(pt, &dstBounds);
     }
 
     const QRectF srcBounds(m_d->srcImageOffset, m_d->srcImage.size());

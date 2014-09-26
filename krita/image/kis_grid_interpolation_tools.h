@@ -43,9 +43,15 @@ inline int calcGridDimension(int start, int end, const int pixelPrecision)
     int alignedStart = (start + pixelPrecision - 1) & alignmentMask;
     int alignedEnd = end & alignmentMask;
 
-    int size = (alignedEnd - alignedStart) / pixelPrecision + 1;
-    size += alignedStart != start;
-    size += alignedEnd != end;
+    int size = 0;
+
+    if (alignedEnd > alignedStart) {
+        size = (alignedEnd - alignedStart) / pixelPrecision + 1;
+        size += alignedStart != start;
+        size += alignedEnd != end;
+    } else {
+        size = 2 + (end - start >= pixelPrecision);
+    }
 
     return size;
 }

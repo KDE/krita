@@ -472,6 +472,7 @@ iterateThroughGrid(PolygonOp polygonOp,
 
 void KisCageTransformWorker::run()
 {
+    KIS_ASSERT_RECOVER_RETURN(m_d->origCage.size() >= 3);
     KIS_ASSERT_RECOVER_RETURN(m_d->origCage.size() == m_d->transfCage.size());
 
     QVector<QPointF> transformedPoints = m_d->calculateTransformedPoints();
@@ -503,7 +504,8 @@ void KisCageTransformWorker::run()
 
 QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
 {
-    KIS_ASSERT_RECOVER(m_d->origCage.size() == m_d->transfCage.size()) {
+    KIS_ASSERT_RECOVER(m_d->origCage.size() >= 3 &&
+                       m_d->origCage.size() == m_d->transfCage.size()) {
         return QImage();
     }
 

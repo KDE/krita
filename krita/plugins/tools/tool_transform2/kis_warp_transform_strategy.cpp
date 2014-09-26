@@ -322,7 +322,7 @@ bool KisWarpTransformStrategy::Private::shouldCloseTheCage() const
     return transaction.editWarpPoints() &&
         closeOnStartPointClick &&
         pointIndexUnderCursor == 0 &&
-        currentArgs.origPoints().size() > 1 &&
+        currentArgs.origPoints().size() > 2 &&
         !pointWasDragged;
 }
 

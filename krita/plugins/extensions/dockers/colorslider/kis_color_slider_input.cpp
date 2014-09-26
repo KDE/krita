@@ -97,7 +97,13 @@ void KisColorSliderInput::init()
 }
 
 KisHSXColorSliderInput::KisHSXColorSliderInput(QWidget* parent, const int type, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas) : KisColorSliderInput(parent, color, type, displayRenderer, canvas),
-m_canvas(canvas)
+m_canvas(canvas),
+m_hue(0),
+m_sat(0),
+m_val(0),
+R(0),
+G(0),
+B(0)
 {
     init();
 }

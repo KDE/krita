@@ -41,7 +41,10 @@ struct KisHSVSlider::Private
 };
 
 KisHSVSlider::KisHSVSlider(QWidget* parent, KoColorDisplayRendererInterface *displayRenderer)
-  : KSelector(parent), d(new Private)
+  : KSelector(parent), d(new Private),
+  R(0),
+  G(0),
+  B(0)
 {
     setMaximum(255);
     d->displayRenderer = displayRenderer;

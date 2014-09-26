@@ -16,13 +16,17 @@
  */
 
 #include "overviewdocker_dock.h"
+#include "overviewwidget.h"
 
 #include <QLabel>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <klocale.h>
+#include <kstatusbar.h>
 
 #include "kis_canvas2.h"
+#include <kis_view2.h>
+#include <kis_zoom_manager.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_signal_compressor.h"
@@ -30,23 +34,18 @@
 
 OverviewDockerDock::OverviewDockerDock( )
     : QDockWidget(i18n("Overview"))
+    , m_zoomSlider(0)
     , m_canvas(0)
-    , m_compressor(new KisSignalCompressor(500, KisSignalCompressor::POSTPONE, this))
 {
     QWidget *page = new QWidget(this);
-    QHBoxLayout *layout = new QHBoxLayout(page);
+    m_layout = new QVBoxLayout(page);
 
-    m_preview = new QLabel(page);
-    m_preview->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    m_preview->setAlignment(Qt::AlignCenter);
-    m_preview->setFrameStyle(QFrame::Sunken);
-    m_preview->setMinimumHeight(50);
+    m_overviewWidget = new OverviewWidget(this);
+    m_overviewWidget->setMinimumHeight(50);
 
-    layout->addWidget(m_preview);
+    m_layout->addWidget(m_overviewWidget, 1);
 
     setWidget(page);
-
-    connect(m_compressor, SIGNAL(timeout()), SLOT(startUpdateCanvasProjection()));
 }
 
 void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -55,58 +54,23 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(this);
     }
+    if (m_zoomSlider) {
+        m_layout->removeWidget(m_zoomSlider);
+        delete m_zoomSlider;
+    }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
-    connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
-    m_compressor->start();
+    m_overviewWidget->setCanvas(canvas);
+    m_zoomSlider = m_canvas->view()->zoomController()->zoomAction()->createWidget(m_canvas->view()->KoView::statusBar());
+    m_layout->addWidget(m_zoomSlider);
 }
 
-QSize OverviewDockerDock::calculatePreviewSize(const QSize &widgetSize)
+void OverviewDockerDock::unsetCanvas()
 {
-    const int previewMargin = 5;
-
-    QSize imageSize(m_canvas->image()->bounds().size());
-    imageSize.scale(widgetSize - QSize(previewMargin, previewMargin),
-                    Qt::KeepAspectRatio);
-
-    return imageSize;
-}
-
-void OverviewDockerDock::startUpdateCanvasProjection()
-{
-    if (!m_canvas) return;
-
-    KisImageSP image = m_canvas->image();
-    QSize previewSize = calculatePreviewSize(m_preview->size());
-
-    if (isVisible() && previewSize.isValid()) {
-        QImage img =
-            image->projection()->
-            createThumbnail(previewSize.width(), previewSize.height(), image->bounds());
-
-        m_originalPixmap = QPixmap::fromImage(img);
-        m_preview->setPixmap(m_originalPixmap);
-    }
-}
-
-void OverviewDockerDock::showEvent(QShowEvent *event)
-{
-    Q_UNUSED(event);
-    m_compressor->start();
-}
-
-void OverviewDockerDock::resizeEvent(QResizeEvent *event)
-{
-    Q_UNUSED(event);
-    if (m_canvas && m_preview->pixmap()) {
-        if (!m_originalPixmap.isNull()) {
-            QSize newSize = calculatePreviewSize(m_preview->size());
-            m_preview->setPixmap(m_originalPixmap.scaled(newSize));
-        }
-        m_compressor->start();
-    }
+    m_canvas = 0;
+    m_overviewWidget->unsetCanvas();
 }
 
 

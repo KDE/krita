@@ -60,3 +60,6 @@
  *
  * KoText namespace.
  */
+
+// DOXYGEN_SET_PROJECT_NAME = KoText
+IGNORE_PREFIX = Ko K

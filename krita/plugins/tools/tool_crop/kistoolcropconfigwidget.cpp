@@ -19,17 +19,18 @@
 
 #include "kistoolcropconfigwidget.h"
 #include "kis_tool_crop.h"
+#include <KoIcon.h>
 
 KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* cropTool)
     : QWidget(parent)
     , m_cropTool(cropTool)
 {
     setupUi(this);
-    boolHeight->setIcon(KIcon("height_icon"));
-    boolWidth->setIcon(KIcon("width_icon"));
-    boolRatio->setIcon(KIcon("ratio_icon"));
-    label_horizPos->setPixmap(KIcon("offset_horizontal").pixmap(16, 16));
-    label_vertiPos->setPixmap(KIcon("offset_vertical").pixmap(16, 16));
+    boolHeight->setIcon(koIcon("height_icon"));
+    boolWidth->setIcon(koIcon("width_icon"));
+    boolRatio->setIcon(koIcon("ratio_icon"));
+    label_horizPos->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
+    label_vertiPos->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
 
 
     intHeight->setValue(m_cropTool->cropHeight());

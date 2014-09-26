@@ -39,15 +39,14 @@
 #include <QPainter>
 #include <kdebug.h>
 
-void KoReportDesignerItemWeb::init(QGraphicsScene *scene) //done,compared,add function if necessary
+void KoReportDesignerItemWeb::init(QGraphicsScene *scene, KoReportDesigner *d) //done,compared,add function if necessary
 {
     kDebug();
     if (scene)
         scene->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set,KoProperty::Property)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)), this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
     setZValue(Z);
 }
 
@@ -55,22 +54,17 @@ KoReportDesignerItemWeb::KoReportDesignerItemWeb(KoReportDesigner *rw, QGraphics
                                                  const QPointF &pos)     //done,compared
     : KoReportDesignerItemRectBase(rw)
 {
-    kDebug();
-    init(scene);
-    m_size.setSceneSize(QSizeF(100, 100));
-    m_pos.setScenePos(pos);
-    
-    setSceneRect(m_pos.toScene(), m_size.toScene());
-    
-    kDebug() << m_size.toScene() << m_pos.toScene();
-    m_name->setValue(m_reportDesigner->suggestEntityName("web"));
+    Q_UNUSED(pos);
+    init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemWeb::KoReportDesignerItemWeb(QDomNode &element, KoReportDesigner *rw,
                                                  QGraphicsScene *scene)      //done,compared
     : KoReportItemWeb(element), KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
+    init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
@@ -87,6 +81,14 @@ KoReportDesignerItemWeb *KoReportDesignerItemWeb::clone() //done,compared
 KoReportDesignerItemWeb::~KoReportDesignerItemWeb() //done,compared
 {
     // do we need to clean anything up?
+}
+
+QSizeF KoReportDesignerItemWeb::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < 100 || designer.countSelectionHeight() < 100) {
+        return QSizeF(100, 100);
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 void KoReportDesignerItemWeb::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

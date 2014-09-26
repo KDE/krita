@@ -24,21 +24,8 @@
 #include "KoStore.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-#include <KoXmlReader.h>
-#include <ktar.h>
-#include <ktemporaryfile.h>
 
-#include <kfilterdev.h>
 #include <kdebug.h>
-
-#include <QBuffer>
-#include <QFile>
-#include <QDir>
-#include <QTextStream>
-
-#include <sys/stat.h>
-#include <unistd.h>
-#include <assert.h>
 
 class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate
 {
@@ -48,8 +35,6 @@ public:
     KUrl m_url;
     KoStore *m_src;
     KoStore *m_dst;
-
-    const KArchiveFile *m_docInfoFile;
 };
 
 KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,

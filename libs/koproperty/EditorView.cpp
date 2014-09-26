@@ -353,10 +353,10 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
     }
     if (d->set && setChanged) {
         //receive property changes
-        connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set,KoProperty::Property)),
-                this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
-        connect(d->set, SIGNAL(propertyReset(KoProperty::Set,KoProperty::Property)),
-                this, SLOT(slotPropertyReset(KoProperty::Set,KoProperty::Property)));
+        connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&,KoProperty::Property&)),
+                this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
+        connect(d->set, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
+                this, SLOT(slotPropertyReset(KoProperty::Set&,KoProperty::Property&)));
         connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
     }

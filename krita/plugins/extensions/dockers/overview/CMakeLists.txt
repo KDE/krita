@@ -1,4 +1,4 @@
-set(KRITA_OVERVIEWDOCKER_PART_SRCS overviewdocker.cpp overviewdocker_dock.cpp )
+set(KRITA_OVERVIEWDOCKER_PART_SRCS overviewdocker.cpp overviewdocker_dock.cpp overviewwidget.cc )
 
 kde4_add_plugin(kritaoverviewdocker ${KRITA_OVERVIEWDOCKER_PART_SRCS})
 

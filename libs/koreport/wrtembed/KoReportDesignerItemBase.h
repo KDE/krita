@@ -78,7 +78,7 @@ public:
 protected:
     KoReportDesignerItemBase(KoReportDesigner*);
     KoReportDesigner* m_reportDesigner;
-    QString dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName);
+    QString dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName) const;
 private:
     static bool m_readDefaultFont;
     static QFont m_defaultFont;

@@ -129,13 +129,20 @@ QString KoReportHTMLCSSRenderer::renderCSS(ORODocument *document)
                 //kDebug() << "Got object type" << prim->type();
                 if (prim->type() == OROTextBox::TextBox) {
                     OROTextBox * tb = (OROTextBox*) prim;
-
+                    
+                    QColor bg = tb->textStyle().backgroundColor;
                     style = "position: absolute; "
-                            "background-color: " + (tb->textStyle().backgroundOpacity == 0 ? "transparent" : tb->textStyle().backgroundColor.name()) + "; "
+                            "background-color: " + QString("rgba(%1,%2,%3,%4)")
+                                                            .arg(bg.red())
+                                                            .arg(bg.green())
+                                                            .arg(bg.blue())
+                                                            .arg(0.01 * tb->textStyle().backgroundOpacity) + "; "
                             "top: " + QString::number(tb->position().y()) + "pt; "
                             "left: " + QString::number(tb->position().x()) + "pt; "
                             "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; "
-                            "color: " + tb->textStyle().foregroundColor.name() + "; ";
+                            "color: " + tb->textStyle().foregroundColor.name() + "; "
+                            "width: " + QString::number(tb->size().width()) + "px;"
+                            "height: " + QString::number(tb->size().height()) + "px;" ;
                     //TODO opaque text + translucent background
                     //it looks a pain to implement
                     //http://developer.mozilla.org/en/docs/Useful_CSS_tips:Color_and_Background

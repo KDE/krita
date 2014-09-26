@@ -35,6 +35,7 @@ class KoID;
 class KisPaintopBox;
 class KisPaletteManager;
 class KisView2;
+class KisPaintOpPreset;
 
 class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
 {
@@ -49,25 +50,13 @@ public:
 
     virtual void unsetResourceServer();
 
-    static const int MAX_FAVORITE_PRESETS = 10;
-
-    void showPaletteManager();
     QList<QImage> favoritePresetImages();
 
-    /**
-     * Checks if newBrush is saved as a favorite brush.
-     * @returns -1 if the newBrush is not yet saved, then newBrush will be appended
-     *         or the position of the brush on the list otherwise
-     */
-    int addFavoritePreset(const QString& name);
-    void removeFavoritePreset(int);
-    void removeFavoritePreset(const QString& name);
+    void setCurrentTag(const QString& tagName);
 
-    /// @return -1 if paintop is not in the list, returns the paintop position otherwise
-    int isFavoriteBrushSaved(const QString& name);
     int numFavoritePresets();
 
-    QStringList favoritePresetList();
+    QVector<KisPaintOpPreset*> favoritePresetList();
 
     int recentColorsTotal();
     const KoColor& recentColorAt(int pos);
@@ -123,12 +112,13 @@ public slots:
 
     void slotSetBGColor(const KoColor c);
 
-private:
+private slots:
+    void updateFavoritePresets();
 
-    KisPaletteManager *m_favoriteBrushManager;
+private:
     KisPaintopBox *m_paintopBox;
 
-    QStringList m_favoritePresetsList;
+    QVector<KisPaintOpPreset*> m_favoritePresetsList;
 
     class ColorDataList;
     ColorDataList *m_colorList;
@@ -138,6 +128,7 @@ private:
     void saveFavoritePresets();
 
     KoColor m_bgColor;
+    QString m_currentTag;
 };
 
 #endif

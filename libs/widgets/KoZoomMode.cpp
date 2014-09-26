@@ -21,7 +21,7 @@
 #include "KoZoomMode.h"
 #include <klocale.h>
 
-const char* KoZoomMode::modes[] =
+const char* const KoZoomMode::modes[] =
 {
     I18N_NOOP("%1%"),
     I18N_NOOP("Fit Page Width"),

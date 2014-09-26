@@ -49,6 +49,9 @@ private:
 private:
     QPointF m_lastClickPos;
     QImage m_pixelCache;
+    qreal R;
+    qreal G;
+    qreal B;
 };
 
 #endif

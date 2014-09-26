@@ -21,6 +21,10 @@
 #include <QPainter>
 #include <QColor>
 #include <cmath>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 #include "kis_display_color_converter.h"
 #include "kis_acs_pixel_cache_renderer.h"
 
@@ -94,10 +98,14 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
     qreal hslH, hslS, hslL;
 	qreal hsiH, hsiS, hsiI;
 	qreal hsyH, hsyS, hsyY;
+	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+	R = cfg.readEntry("lumaR", 0.2126);
+    G = cfg.readEntry("lumaG", 0.7152);
+    B = cfg.readEntry("lumaB", 0.0722);
     m_parent->converter()->getHsvF(color, &hsvH, &hsvS, &hsvV);
     m_parent->converter()->getHslF(color, &hslH, &hslS, &hslL);
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
-    m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY);
+    m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B);
 
 	//workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
 	hsiH=hslH;
@@ -225,7 +233,6 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
     angle += M_PI;
     angle /= 2 * M_PI;
 
-
     switch(m_parameter) {
     case KisColorSelector::hsvSH:
         color = m_parent->converter()->fromHsvF(angle, radius, m_value);
@@ -237,7 +244,7 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
         color = m_parent->converter()->fromHsiF(angle, radius, m_intensity);
         break;
     case KisColorSelector::hsySH:
-        color = m_parent->converter()->fromHsyF(angle, radius, m_luma);
+        color = m_parent->converter()->fromHsyF(angle, radius, m_luma, R, G, B);
         break;
     case KisColorSelector::VH:
         color = m_parent->converter()->fromHsvF(angle, m_hsvSaturation, radius);
@@ -249,7 +256,7 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
         color = m_parent->converter()->fromHsiF(angle, m_hsiSaturation, radius);
         break;
 	case KisColorSelector::YH:
-        color = m_parent->converter()->fromHsyF(angle, m_hsySaturation, radius);
+        color = m_parent->converter()->fromHsyF(angle, m_hsySaturation, radius, R, G, B);
         break;
     default:
         Q_ASSERT(false);

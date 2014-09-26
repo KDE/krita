@@ -32,8 +32,8 @@ class KLocalizedString;
 class KRITAIMAGE_EXPORT KisBookmarkedConfigurationManager
 {
 public:
-    static const char* ConfigDefault;
-    static const char* ConfigLastUsed;
+    static const char* const ConfigDefault;
+    static const char* const ConfigLastUsed;
 public:
     /**
      * @param configEntryGroup name of the configuration entry with the

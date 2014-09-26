@@ -61,14 +61,14 @@ bool KoReportScreenRenderer::render(const KoReportRendererContext& context, OROD
             context.painter->save();
             //Background
 
+            context.painter->setBackgroundMode(Qt::TransparentMode);
+            
             QColor bg = tb->textStyle().backgroundColor;
-            bg.setAlpha((tb->textStyle().backgroundOpacity / 100) * 255);
+            bg.setAlphaF(0.01 * tb->textStyle().backgroundOpacity);
 
-            context.painter->setBackground(bg);
             context.painter->fillRect(rc, bg);
 
             //Text
-            context.painter->setBackgroundMode(Qt::TransparentMode);
             context.painter->setFont(tb->textStyle().font);
             context.painter->setPen(tb->textStyle().foregroundColor);
             context.painter->drawText(rc.adjusted(2, 2, 0, 0), tb->flags(), tb->text());

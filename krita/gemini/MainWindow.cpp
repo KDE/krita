@@ -58,6 +58,7 @@
 #include <KoFileDialog.h>
 #include <KoDocumentEntry.h>
 #include <KoFilterManager.h>
+#include <KoIcon.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -249,7 +250,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Gemini"));
-    setWindowIcon(KIcon("kritagemini"));
+    setWindowIcon(koIcon("kritagemini"));
 
 	// Load filters and other plugins in the gui thread
 	Q_UNUSED(KisFilterRegistry::instance());

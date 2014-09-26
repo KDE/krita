@@ -37,34 +37,41 @@
 // class ReportEntityBarcode
 //
 
-void KoReportDesignerItemBarcode::init(QGraphicsScene * scene)
+void KoReportDesignerItemBarcode::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     if (scene)
         scene->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set,KoProperty::Property)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
     setMaxLength(5);
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 }
 // methods (constructors)
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
-    m_size.setSceneSize(QSizeF(m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY));
-    setSceneRect(m_pos.toScene(), m_size.toScene());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("barcode"));
+    Q_UNUSED(pos);
+    init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
         : KoReportItemBarcode(element), KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
+    init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
+}
+
+QSizeF KoReportDesignerItemBarcode::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < m_minWidthTotal*m_dpiX || designer.countSelectionHeight() < m_minHeight*m_dpiY) {
+        return QSizeF(m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY);
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemBarcode* KoReportDesignerItemBarcode::clone()

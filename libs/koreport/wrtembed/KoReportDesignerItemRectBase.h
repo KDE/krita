@@ -43,14 +43,21 @@ public:
     QRectF pointRect() const;
 
 protected:
-    void init(KRPos*, KRSize*, KoProperty::Set*);
+    void init(KRPos*, KRSize*, KoProperty::Set*, KoReportDesigner *r);
+
     int m_dpiX;
     int m_dpiY;
+    qreal m_userHeight;
+    qreal m_userWidth;
+    qreal m_pressX;
+    qreal m_pressY;
 
     enum UpdatePropertyFlag {
         UpdateProperty,
         DontUpdateProperty
     };
+
+    virtual QSizeF minimumSize(const KoReportDesigner &d) const = 0;
 
     void setSceneRect(const QPointF& topLeft, const QSizeF& size, UpdatePropertyFlag update = UpdateProperty);
     void setSceneRect(const QRectF& rect, UpdatePropertyFlag update = UpdateProperty);

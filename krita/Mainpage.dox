@@ -54,3 +54,6 @@
   consult the plugin writers' manual for more information.
 
  */
+
+// DOXYGEN_SET_PROJECT_NAME = Krita
+IGNORE_PREFIX = Kis Ko K

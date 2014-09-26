@@ -44,6 +44,7 @@
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include <KoZoomController.h>
+#include <KoIcon.h>
 
 #include "kis_view2.h"
 #include <kis_canvas_controller.h>
@@ -82,7 +83,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Sketch"));
-    setWindowIcon(KIcon("kritasketch"));
+    setWindowIcon(koIcon("kritasketch"));
 
     // Load filters and other plugins in the gui thread
     Q_UNUSED(KisFilterRegistry::instance());

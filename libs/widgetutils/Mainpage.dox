@@ -1,0 +1,10 @@
+/**
+ * \mainpage
+ *
+ * KoWidgetUtils is a library which contains utilities for Calligra. It has
+ * light dependencies compared to the KoWidgets library; the only dependency
+ * are QtCore and QtGui (QWidgets).
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = KoWidgetUtils
+IGNORE_PREFIX = Ko K

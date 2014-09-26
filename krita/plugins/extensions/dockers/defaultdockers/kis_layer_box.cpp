@@ -751,15 +751,7 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
 
 
     m_nodeManager->setSelectedNodes(selectedNodes);
-    bool enableButtons = selectedNodes.size() == 1;
-
-    m_wdgLayerBox->bnAdd->setEnabled(enableButtons);
-    m_wdgLayerBox->bnRaise->setEnabled(enableButtons);
-    m_wdgLayerBox->bnLower->setEnabled(enableButtons);
-    m_wdgLayerBox->bnDuplicate->setEnabled(enableButtons);
-    m_wdgLayerBox->bnProperties->setEnabled(enableButtons);
-    m_wdgLayerBox->cmbComposite->setEnabled(enableButtons);
-    m_wdgLayerBox->doubleOpacity->setEnabled(enableButtons);
+    updateUI();
 }
 
 #include "kis_layer_box.moc"

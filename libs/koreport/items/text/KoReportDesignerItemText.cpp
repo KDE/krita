@@ -36,16 +36,16 @@
 //
 // methods (constructors)
 
-void KoReportDesignerItemText::init(QGraphicsScene * scene)
+void KoReportDesignerItemText::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     //setFlags(ItemIsSelectable | ItemIsMovable);
     if (scene)
         scene->addItem(this);
 
-    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set,KoProperty::Property)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
+    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
@@ -54,17 +54,25 @@ void KoReportDesignerItemText::init(QGraphicsScene * scene)
 KoReportDesignerItemText::KoReportDesignerItemText(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
-    setSceneRect(getTextRect());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("text"));
+    Q_UNUSED(pos);
+    init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemText::KoReportDesignerItemText(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KoReportItemText(element), KoReportDesignerItemRectBase(d)
 {
-    init(s);
+    init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
+}
+
+QSizeF KoReportDesignerItemText::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < getTextRect().width() || designer.countSelectionHeight() < getTextRect().height()) {
+        return QSizeF(getTextRect().width(), getTextRect().height());
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemText* KoReportDesignerItemText::clone()
@@ -82,7 +90,7 @@ KoReportDesignerItemText::~KoReportDesignerItemText
 ()
 {}
 
-QRect KoReportDesignerItemText::getTextRect()
+QRect KoReportDesignerItemText::getTextRect() const
 {
     return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "textarea"));
 }
@@ -97,14 +105,14 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
     QPen  p = painter->pen();
 
     painter->setFont(font());
+    painter->setBackgroundMode(Qt::TransparentMode);
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+    bg.setAlphaF(m_backgroundOpacity->value().toReal()*0.01);
 
-    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
-    painter->fillRect(rect(),  m_backgroundColor->value().value<QColor>());
+    painter->fillRect(rect(),  bg);
     painter->drawText(rect(), textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "textarea"));
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
@@ -114,7 +122,6 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
     }
     painter->drawRect(rect());
 
-    painter->setBackgroundMode(Qt::TransparentMode);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     drawHandles(painter);

@@ -49,6 +49,9 @@ private:
     QPointF m_lastClickPos;
     QImage m_pixelCache;
     QPoint m_pixelCacheOffset;
+    qreal R;
+    qreal G;
+    qreal B;
 };
 
 #endif // KIS_COLOR_SELECTOR_WHEEL_H

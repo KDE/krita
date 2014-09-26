@@ -86,6 +86,7 @@ private:
 
     QPainterPath pathFromPresetIndex(int index);
 
+    int numSlots();
 private:
 
     int m_hoveredPreset;

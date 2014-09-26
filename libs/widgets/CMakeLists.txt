@@ -7,7 +7,7 @@ if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
 endif (LIBATTICA_FOUND)
 
-set(kowidgets_LIB_SRCS
+set(kowidgets_LIB_SRCS KoZoomWidget.cpp
     KoTagToolButton.cpp
     KoTagChooserWidget.cpp
     KoTagFilterWidget.cpp

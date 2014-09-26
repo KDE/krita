@@ -80,7 +80,7 @@ protected:
     SQLiteDriverPrivate * const dp;
 
 private:
-    static const char *keywords[];
+    static const char * const keywords[];
 
 };
 

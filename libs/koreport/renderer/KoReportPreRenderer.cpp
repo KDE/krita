@@ -542,8 +542,7 @@ ORODocument* KoReportPreRenderer::generate()
 
             //!TODO This is a hack
             if (i.key() == "field")
-                QObject::connect(d->m_scriptHandler, SIGNAL(groupChanged(QString)),
-                                 i.value(), SLOT(setWhere(QString)));
+                QObject::connect(d->m_scriptHandler, SIGNAL(groupChanged(QString)), i.value(), SLOT(setWhere(QString)));
         }
     }
 

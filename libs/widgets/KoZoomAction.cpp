@@ -20,6 +20,7 @@
 #include "KoZoomAction.h"
 #include "KoZoomMode.h"
 #include "KoZoomInput.h"
+#include "KoZoomWidget.h"
 
 #include <KoIcon.h>
 
@@ -51,17 +52,10 @@ class KoZoomAction::Private
 {
 public:
 
-    Private()
-        : slider(0)
-        , input(0)
-        , aspectButton(0)
-    {}
+    Private() {}
 
     KoZoomMode::Modes zoomModes;
-    QSlider *slider;
     QList<qreal> sliderLookup;
-    KoZoomInput* input;
-    QToolButton* aspectButton;
 
     qreal effectiveZoom;
 
@@ -69,7 +63,6 @@ public:
 
     QList<qreal> generateSliderZoomLevels() const;
     QList<qreal> filterMenuZoomLevels(const QList<qreal> &zoomLevels) const;
-    void syncSliderWithZoom();
 };
 
 QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
@@ -116,27 +109,11 @@ QList<qreal> KoZoomAction::Private::filterMenuZoomLevels(const QList<qreal> &zoo
     return filteredZoomLevels;
 }
 
-void KoZoomAction::Private::syncSliderWithZoom()
-{
-    if (slider) {
-        const qreal eps = 1e-5;
-        int i = sliderLookup.size() - 1;
-        while (effectiveZoom < sliderLookup[i] + eps && i > 0) i--;
-
-        slider->blockSignals(true);
-        slider->setValue(i); // causes sliderValueChanged to be called which does the rest
-        slider->blockSignals(false);
-    }
-}
-
 KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
     : KSelectAction(text, parent)
     , d(new Private)
 {
     d->zoomModes = zoomModes;
-    d->slider = 0;
-    d->input = 0;
-    d->aspectButton = 0;
     d->specialButtons = 0;
     setIcon(koIcon("zoom-original"));
     setEditable( true );
@@ -227,8 +204,7 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
 
     setItems( values );
 
-    if(d->input)
-        d->input->setZoomLevels(values);
+    emit zoomLevelsChanged(values);
 
     if(asCurrent)
     {
@@ -240,8 +216,7 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
 
         setCurrentAction(valueString);
 
-        if(d->input)
-            d->input->setCurrentZoomLevel(valueString);
+        emit currentZoomLevelChanged(valueString);
     }
 }
 
@@ -297,65 +272,19 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     if (!qobject_cast<QStatusBar*>(parent))
         return KSelectAction::createWidget(parent);
 
-    QWidget *group = new QWidget(parent);
-    QHBoxLayout *layout = new QHBoxLayout(group);
-    //layout->setSizeConstraint(QLayout::SetFixedSize);
-    layout->setMargin(0);
-    layout->setSpacing(0);
-
-    // this is wrong; createWidget() implies this is a factory method, so we should be able to be called
-    // multiple times without problems.  The 'new' here means we can't do that.
-    // TODO refactor this method to use connections instead of d-pointer members to communicate so it becomes reentrant.
-    d->input = new KoZoomInput(group);
+    KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->specialButtons, d->sliderLookup.size() - 1);
+    connect(this, SIGNAL(zoomLevelsChanged(QStringList)), zoomWidget, SLOT(setZoomLevels(QStringList)));
+    connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));
+    connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));
+    connect(this, SIGNAL(aspectModeChanged(bool)), zoomWidget, SLOT(setAspectMode(bool)));
+    connect(zoomWidget, SIGNAL(sliderValueChanged(int)), this, SLOT(sliderValueChanged(int)));
+    connect(zoomWidget, SIGNAL(zoomLevelChanged(const QString&)), this, SLOT(triggered(const QString&)));
+    connect(zoomWidget, SIGNAL(aspectModeChanged(bool)), this, SIGNAL(aspectModeChanged(bool)));
+    connect(zoomWidget, SIGNAL(zoomedToSelection()), this, SIGNAL(zoomedToSelection()));
+    connect(zoomWidget, SIGNAL(zoomedToAll()), this, SIGNAL(zoomedToAll()));
     regenerateItems( d->effectiveZoom, true );
-    connect(d->input, SIGNAL(zoomLevelChanged(const QString&)), this, SLOT(triggered(const QString&)));
-    layout->addWidget(d->input);
-
-    d->slider = new QSlider(Qt::Horizontal);
-    d->slider->setToolTip(i18n("Zoom"));
-    d->slider->setMinimum(0);
-    d->slider->setMaximum(d->sliderLookup.size() - 1);
-    d->slider->setValue(0);
-    d->slider->setSingleStep(1);
-    d->slider->setPageStep(1);
-    d->slider->setMinimumWidth(80);
-    d->slider->setMaximumWidth(80);
-    d->syncSliderWithZoom();
-    layout->addWidget(d->slider);
-
-    if (d->specialButtons & AspectMode) {
-        d->aspectButton = new QToolButton(group);
-        d->aspectButton->setIcon(koIcon("zoom-pixels"));
-        d->aspectButton->setIconSize(QSize(16,16));
-        d->aspectButton->setCheckable(true);
-        d->aspectButton->setChecked(true);
-        d->aspectButton->setAutoRaise(true);
-        d->aspectButton->setToolTip(i18n("Use same aspect as pixels"));
-        connect(d->aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
-        layout->addWidget(d->aspectButton);
-    }
-    if (d->specialButtons & ZoomToSelection) {
-        QToolButton * zoomToSelectionButton = new QToolButton(group);
-        zoomToSelectionButton->setIcon(koIcon("zoom-select"));
-        zoomToSelectionButton->setIconSize(QSize(16,16));
-        zoomToSelectionButton->setAutoRaise(true);
-        zoomToSelectionButton->setToolTip(i18n("Zoom to Selection"));
-        connect(zoomToSelectionButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToSelection()));
-        layout->addWidget(zoomToSelectionButton);
-    }
-    if (d->specialButtons & ZoomToAll) {
-        QToolButton * zoomToAllButton = new QToolButton(group);
-        zoomToAllButton->setIcon(koIcon("zoom-draw"));
-        zoomToAllButton->setIconSize(QSize(16,16));
-        zoomToAllButton->setAutoRaise(true);
-        zoomToAllButton->setToolTip(i18n("Zoom to All"));
-        connect(zoomToAllButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToAll()));
-        layout->addWidget(zoomToAllButton);
-    }
-
-    connect(d->slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueChanged(int)));
-
-    return group;
+    syncSliderWithZoom();
+    return zoomWidget;
 }
 
 void KoZoomAction::setEffectiveZoom(qreal zoom)
@@ -365,7 +294,7 @@ void KoZoomAction::setEffectiveZoom(qreal zoom)
 
     zoom = KoZoomMode::clampZoom(zoom);
     d->effectiveZoom = zoom;
-    d->syncSliderWithZoom();
+    syncSliderWithZoom();
 }
 
 void KoZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
@@ -373,8 +302,7 @@ void KoZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
     QString modeString(KoZoomMode::toString(mode));
     setCurrentAction(modeString);
 
-    if (d->input)
-        d->input->setCurrentZoomLevel(modeString);
+    emit currentZoomLevelChanged(modeString);
 }
 
 void KoZoomAction::setSpecialButtons( SpecialButtons buttons )
@@ -384,17 +312,16 @@ void KoZoomAction::setSpecialButtons( SpecialButtons buttons )
 
 void KoZoomAction::setAspectMode(bool status)
 {
-    /**
-     * In the first case, the signal will be emitted
-     * by the button itself, in the second we help it a bit
-     *
-     * It means that the result of this function is
-     * ALWAYS an emitted signal
-     */
-    if(d->aspectButton && d->aspectButton->isChecked() != status)
-        d->aspectButton->setChecked(status);
-    else
-        emit aspectModeChanged(status);
+    emit aspectModeChanged(status);
+}
+
+void KoZoomAction::syncSliderWithZoom()
+{
+    const qreal eps = 1e-5;
+    int i = d->sliderLookup.size() - 1;
+    while (d->effectiveZoom < d->sliderLookup[i] + eps && i > 0) i--;
+    
+    emit sliderChanged(i);
 }
 
 #include <KoZoomAction.moc>

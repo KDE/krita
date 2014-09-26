@@ -1,0 +1,8 @@
+/**
+ * \mainpage
+ *
+ * KoReport is a library for the generation of reports in multiple formats.
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = KoReport
+IGNORE_PREFIX = Ko K

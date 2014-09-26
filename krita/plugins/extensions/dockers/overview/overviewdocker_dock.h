@@ -21,32 +21,22 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
-class QLabel;
+class QVBoxLayout;
 class KisCanvas2;
-class KisSignalCompressor;
+class OverviewWidget;
 
 class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     OverviewDockerDock();
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
-
-public slots:
-    void startUpdateCanvasProjection();
-
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void showEvent(QShowEvent *event);
+    virtual void unsetCanvas();
 
 private:
-    QSize calculatePreviewSize(const QSize &widgetSize);
-
-private:
-    QPixmap m_originalPixmap;
-    QLabel *m_preview;
+    QVBoxLayout *m_layout;
+    OverviewWidget *m_overviewWidget;
+    QWidget *m_zoomSlider;
     KisCanvas2 *m_canvas;
-    KisSignalCompressor *m_compressor;
 };
 
 

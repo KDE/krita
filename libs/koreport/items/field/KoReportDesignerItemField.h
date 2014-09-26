@@ -38,18 +38,18 @@ public:
     //Used when loading from file
     KoReportDesignerItemField(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);
     virtual ~KoReportDesignerItemField();
-
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
     virtual KoReportDesignerItemField* clone();
 
 protected:
+    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
 private:
-    void init(QGraphicsScene*);
-    QRect getTextRect();
+    void init(QGraphicsScene*, KoReportDesigner * d);
+    QRect getTextRect() const;
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);

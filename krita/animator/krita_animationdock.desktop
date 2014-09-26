@@ -2,7 +2,9 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/AnimationDock
 Comment=Animation Docker for Krita
+Comment[ca]=Acoblador d'animació per al Krita
 Comment[cs]=Dok animace pro Kritu
+Comment[de]=Animations-Docker für Krita
 Comment[en_GB]=Animation Docker for Krita
 Comment[es]=Ventana acoplable de animación para Krita
 Comment[it]=Area di aggancio delle animazioni di Krita

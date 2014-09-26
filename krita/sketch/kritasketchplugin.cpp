@@ -117,7 +117,7 @@ void KritaSketchPlugin::initializeEngine(QDeclarativeEngine* engine, const char*
 //    engine->rootContext()->setContextProperty("View", d->view);
 
     Welcome::MultiFeedRssModel *rssModel = new Welcome::MultiFeedRssModel(this);
-    rssModel->addFeed(QLatin1String("https://krita.org/?format=feed"));
+    rssModel->addFeed(QLatin1String("https://krita.org/feed"));
     engine->rootContext()->setContextProperty("aggregatedFeedsModel", rssModel);
 }
 

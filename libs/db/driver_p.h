@@ -220,7 +220,7 @@ public:
     front-end, even if they are not recognised by the backend to provide
     UI consistency and to allow DB migration without changing the queries.
     */
-    static const char* kexiSQLKeywords[];
+    static const char* const kexiSQLKeywords[];
 
 protected:
     /*! Used by driver manager to initialize properties taken using internal

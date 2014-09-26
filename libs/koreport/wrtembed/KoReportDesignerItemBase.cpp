@@ -75,7 +75,7 @@ void KoReportDesignerItemBase::buildXMLLineStyle(QDomDocument & doc, QDomElement
     KRUtils::buildXMLLineStyle(doc, entity, ls);
 }
 
-QString KoReportDesignerItemBase::dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName)
+QString KoReportDesignerItemBase::dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName) const
 {
     return i18nc("<data-source>: <object>", "%1: %2", dataSource, objectTypeName);
 }

@@ -33,15 +33,15 @@
 // class ReportEntityLabel
 //
 
-void KoReportDesignerItemLabel::init(QGraphicsScene * scene)
+void KoReportDesignerItemLabel::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
-    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set,KoProperty::Property)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set,KoProperty::Property)));
+    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
 }
@@ -50,17 +50,25 @@ void KoReportDesignerItemLabel::init(QGraphicsScene * scene)
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(d)
 {
-    init(scene);
-    setSceneRect(getTextRect());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("label"));
+    Q_UNUSED(pos);
+    init(scene, d);
+    setSceneRect(d->getPressPoint(), minimumSize(*d));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KoReportItemLabel(element), KoReportDesignerItemRectBase(d)
 {
-    init(s);
+    init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
+}
+
+QSizeF KoReportDesignerItemLabel::minimumSize(const KoReportDesigner &designer) const
+{
+    if (designer.countSelectionWidth() < getTextRect().width() || designer.countSelectionWidth() < getTextRect().height()) {
+        return QSizeF(getTextRect().width(), getTextRect().height());
+    }
+    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemLabel* KoReportDesignerItemLabel::clone()
@@ -77,7 +85,7 @@ KoReportDesignerItemLabel* KoReportDesignerItemLabel::clone()
 KoReportDesignerItemLabel::~KoReportDesignerItemLabel()
 {}
 
-QRectF KoReportDesignerItemLabel::getTextRect()
+QRectF KoReportDesignerItemLabel::getTextRect() const
 {
     return QFontMetrics(font()).boundingRect(x(), y(), 0, 0, textFlags(), m_text->value().toString());
 }
@@ -90,13 +98,13 @@ void KoReportDesignerItemLabel::paint(QPainter* painter, const QStyleOptionGraph
     // store any values we plan on changing so we can restore them
     QFont f = painter->font();
     QPen  p = painter->pen();
-
+    
     painter->setFont(font());
+    painter->setBackgroundMode(Qt::TransparentMode);
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+    bg.setAlphaF(m_backgroundOpacity->value().toReal() * 0.01);
 
-    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(QGraphicsRectItem::rect(), bg);
@@ -110,7 +118,7 @@ void KoReportDesignerItemLabel::paint(QPainter* painter, const QStyleOptionGraph
 
     painter->drawRect(QGraphicsRectItem::rect());
 
-    painter->setBackgroundMode(Qt::TransparentMode);
+
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     drawHandles(painter);

@@ -1,0 +1,9 @@
+/**
+ * \mainpage
+ *
+ * KoOdf is a library which contains all kind of classes for ODF
+ * (OpenDocument Format) in Calligra.
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = KoOdf
+IGNORE_PREFIX = Ko K

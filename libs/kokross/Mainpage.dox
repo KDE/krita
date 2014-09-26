@@ -1,0 +1,9 @@
+/**
+ * \mainpage
+ *
+ * KoKross is a library to integrate scripting using Kross into Calligra
+ * applications.
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = KoKross
+IGNORE_PREFIX = Ko K

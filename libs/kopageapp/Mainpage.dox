@@ -1,0 +1,10 @@
+/**
+ * \mainpage
+ *
+ * KoPageApp is a library for the handling of documents with the concept of
+ * self-contained pages. Examples of such documents are slides or multiple
+ * drawing sheets.
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = KoPageApp
+IGNORE_PREFIX = KoPA Ko K

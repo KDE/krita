@@ -77,8 +77,9 @@ struct KisWarpTransformStrategy::Private
     enum Mode {
         OVER_POINT = 0,
         MULTIPLE_POINT_SELECTION,
-        INSIDE_POLYGON,
-        OUTSIDE_POLYGON,
+        MOVE_MODE,
+        ROTATE_MODE,
+        SCALE_MODE,
         NOTHING
     };
     Mode mode;
@@ -140,7 +141,9 @@ void KisWarpTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     } else if (!m_d->transaction.editWarpPoints()) {
         QPolygonF polygon(m_d->currentArgs.transfPoints());
         bool insidePolygon = polygon.boundingRect().contains(mousePos);
-        m_d->mode = insidePolygon ? Private::INSIDE_POLYGON : Private::OUTSIDE_POLYGON;
+        m_d->mode = insidePolygon ? Private::MOVE_MODE :
+            !perspectiveModifierActive ? Private::ROTATE_MODE :
+            Private::SCALE_MODE;
     } else {
         m_d->mode = Private::NOTHING;
     }
@@ -157,11 +160,14 @@ QCursor KisWarpTransformStrategy::getCurrentCursor() const
     case Private::MULTIPLE_POINT_SELECTION:
         cursor = KisCursor::crossCursor();
         break;
-    case Private::INSIDE_POLYGON:
+    case Private::MOVE_MODE:
         cursor = KisCursor::moveCursor();
         break;
-    case Private::OUTSIDE_POLYGON:
+    case Private::ROTATE_MODE:
         cursor = KisCursor::rotateCursor();
+        break;
+    case Private::SCALE_MODE:
+        cursor = KisCursor::sizeVerCursor();
         break;
     case Private::NOTHING:
         cursor = KisCursor::arrowCursor();
@@ -323,8 +329,9 @@ bool KisWarpTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
     if (m_d->mode == Private::OVER_POINT ||
         m_d->mode == Private::MULTIPLE_POINT_SELECTION ||
-        m_d->mode == Private::INSIDE_POLYGON ||
-        m_d->mode == Private::OUTSIDE_POLYGON) {
+        m_d->mode == Private::MOVE_MODE ||
+        m_d->mode == Private::ROTATE_MODE ||
+        m_d->mode == Private::SCALE_MODE) {
 
         retval = true;
 
@@ -401,8 +408,9 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool spe
     Q_UNUSED(specialModifierActve);
 
     // toplevel code switches to HOVER mode if nothing is selected
-    KIS_ASSERT_RECOVER_RETURN(m_d->mode == Private::INSIDE_POLYGON ||
-                              m_d->mode == Private::OUTSIDE_POLYGON||
+    KIS_ASSERT_RECOVER_RETURN(m_d->mode == Private::MOVE_MODE ||
+                              m_d->mode == Private::ROTATE_MODE ||
+                              m_d->mode == Private::SCALE_MODE ||
                               (m_d->mode == Private::OVER_POINT &&
                                m_d->pointIndexUnderCursor >= 0 &&
                                m_d->pointsInAction.size() == 1) ||
@@ -431,7 +439,7 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool spe
         if (dist > handleRadiusSq) {
             m_d->pointWasDragged = true;
         }
-    } else if (m_d->mode == Private::INSIDE_POLYGON) {
+    } else if (m_d->mode == Private::MOVE_MODE) {
         QPointF center;
         QVector<QPointF*> selectedPoints = m_d->getSelectedPoints(&center);
 
@@ -442,7 +450,7 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool spe
         for (; it != end; ++it) {
             **it += diff;
         }
-    } else if (m_d->mode == Private::OUTSIDE_POLYGON) {
+    } else if (m_d->mode == Private::ROTATE_MODE) {
         QPointF center;
         QVector<QPointF*> selectedPoints = m_d->getSelectedPoints(&center);
 
@@ -463,8 +471,27 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool spe
         for (; it != end; ++it) {
             **it = t.map(**it);
         }
-    }
+    } else if (m_d->mode == Private::SCALE_MODE) {
+        QPointF center;
+        QVector<QPointF*> selectedPoints = m_d->getSelectedPoints(&center);
 
+        QPolygonF polygon(m_d->currentArgs.origPoints());
+        QSizeF maxSize = polygon.boundingRect().size();
+        qreal maxDimension = qMax(maxSize.width(), maxSize.height());
+
+        qreal scale = 1.0 - (pt - m_d->lastMousePos).y() / maxDimension;
+
+        QTransform t =
+            QTransform::fromTranslate(-center.x(), -center.y()) *
+            QTransform::fromScale(scale, scale) *
+            QTransform::fromTranslate(center.x(), center.y());
+
+        QVector<QPointF*>::iterator it = selectedPoints.begin();
+        QVector<QPointF*>::iterator end = selectedPoints.end();
+        for (; it != end; ++it) {
+            **it = t.map(**it);
+        }
+    }
 
     m_d->lastMousePos = pt;
     m_d->recalculateTransformations();

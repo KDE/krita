@@ -18,6 +18,8 @@
 
 #include "kis_warp_transform_strategy.h"
 
+#include <algorithm>
+
 #include <QPointF>
 #include <QPainter>
 
@@ -352,7 +354,17 @@ bool KisWarpTransformStrategy::beginPrimaryAction(const QPointF &pt)
         m_d->pointsInAction << m_d->pointIndexUnderCursor;
         m_d->lastNumPoints = m_d->currentArgs.transfPoints().size();
     } else if (m_d->mode == Private::MULTIPLE_POINT_SELECTION) {
-        m_d->pointsInAction << m_d->pointIndexUnderCursor;
+        QVector<int>::iterator it =
+            std::find(m_d->pointsInAction.begin(),
+                      m_d->pointsInAction.end(),
+                      m_d->pointIndexUnderCursor);
+
+        if (it != m_d->pointsInAction.end()) {
+            m_d->pointsInAction.erase(it);
+        } else {
+            m_d->pointsInAction << m_d->pointIndexUnderCursor;
+        }
+
         m_d->lastNumPoints = m_d->currentArgs.transfPoints().size();
     }
 

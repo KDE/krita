@@ -28,6 +28,7 @@
 #include <commands/KoShapeTransformCommand.h>
 #include <KoSnapGuide.h>
 #include <KoToolBase.h>
+#include <KoSelection.h>
 
 #include <klocale.h>
 #include <limits>

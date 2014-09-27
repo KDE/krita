@@ -24,7 +24,6 @@
 
 class SvgSavingContext;
 class SvgLoadingContext;
-class KoShape;
 class KoXmlElement;
 
 /// An interface providing svg loading and saving routines

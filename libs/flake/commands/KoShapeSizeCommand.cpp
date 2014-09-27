@@ -20,6 +20,7 @@
 
 #include "KoShapeSizeCommand.h"
 
+#include <KoShape.h>
 #include <klocale.h>
 
 class KoShapeSizeCommand::Private

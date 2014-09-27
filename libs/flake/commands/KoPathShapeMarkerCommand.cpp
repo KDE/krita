@@ -20,8 +20,7 @@
 
 #include "KoPathShapeMarkerCommand.h"
 #include "KoMarker.h"
-
-#include "flake_export.h"
+#include "KoPathShape.h"
 
 #include <klocale.h>
 

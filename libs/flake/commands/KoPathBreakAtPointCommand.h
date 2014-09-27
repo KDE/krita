@@ -23,8 +23,9 @@
 
 #include <kundo2command.h>
 #include <QList>
-#include "KoPathPoint.h"
 #include "KoPathPointData.h"
+
+class KoPathPoint;
 
 /// Command to break a subpath at points.
 class KoPathBreakAtPointCommand : public KUndo2Command

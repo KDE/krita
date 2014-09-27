@@ -19,6 +19,8 @@
  */
 
 #include "KoPathBreakAtPointCommand.h"
+
+#include "KoPathPoint.h"
 #include <klocale.h>
 
 /*

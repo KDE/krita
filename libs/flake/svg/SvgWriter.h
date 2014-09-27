@@ -38,9 +38,7 @@ class KoShapeLayer;
 class KoShapeGroup;
 class KoShape;
 class KoPathShape;
-class QTextStream;
 class QIODevice;
-class QFont;
 class QString;
 
 /// Implements exporting shapes to SVG

@@ -30,13 +30,14 @@
 #define SVGSTYLEWRITER_H
 
 #include "flake_export.h"
-#include <QGradient>
+#include <QGradientStops>
 #include <QSharedPointer>
 
 class SvgSavingContext;
 class KoShape;
 class KoPatternBackground;
 class QTransform;
+class QGradient;
 
 /// Helper class to save svg styles
 class FLAKE_EXPORT SvgStyleWriter

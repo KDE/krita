@@ -23,8 +23,6 @@
 
 #include <kundo2command.h>
 #include <QList>
-#include "KoPathShape.h"
-#include "KoPathPoint.h"
 
 #include "flake_export.h"
 

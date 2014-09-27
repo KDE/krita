@@ -20,8 +20,8 @@
 
 #include "KoPathPointRemoveCommand.h"
 #include "KoSubpathRemoveCommand.h"
-#include "KoShapeBasedDocumentBase.h"
 #include "KoShapeController.h"
+#include "KoPathPoint.h"
 #include <klocale.h>
 
 class KoPathPointRemoveCommandPrivate

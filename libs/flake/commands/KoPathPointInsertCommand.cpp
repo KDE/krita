@@ -20,6 +20,7 @@
 
 #include "KoPathPointInsertCommand.h"
 
+#include "KoPathPoint.h"
 #include <KoPathSegment.h>
 #include <klocale.h>
 

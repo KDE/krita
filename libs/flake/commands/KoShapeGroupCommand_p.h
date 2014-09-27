@@ -20,8 +20,13 @@
 #ifndef KoShapeGroupCommandPrivate_H
 #define KoShapeGroupCommandPrivate_H
 
-#include <QTransform>
 #include <QPair>
+#include <QList>
+
+class KoShape;
+class KoShapeContainer;
+class KUndo2Command;
+class QRectF;
 
 class KoShapeGroupCommandPrivate
 {

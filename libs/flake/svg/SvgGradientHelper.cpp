@@ -20,6 +20,10 @@
 
 #include "SvgGradientHelper.h"
 
+#include <QConicalGradient>
+#include <QLinearGradient>
+#include <QRadialGradient>
+
 #include <cmath>
 #include <KoFlake.h>
 

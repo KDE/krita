@@ -24,10 +24,8 @@
 
 #include <kundo2command.h>
 #include <QList>
-#include <QBrush>
 
 class KoShape;
-class KoShapeBackground;
 
 /// The undo / redo command for setting the shape transparency
 class FLAKE_EXPORT KoShapeTransparencyCommand : public KUndo2Command

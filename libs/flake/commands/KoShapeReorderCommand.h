@@ -20,8 +20,6 @@
 #ifndef KOSHAPEREORDERCOMMAND_H
 #define KOSHAPEREORDERCOMMAND_H
 
-#include "KoSelection.h"
-
 #include "flake_export.h"
 
 #include <kundo2command.h>

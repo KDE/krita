@@ -25,6 +25,8 @@
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
+#include <QSize>
+
 #define CACHE_PAGE_THUMBNAILS
 
 struct KoPageLayout;

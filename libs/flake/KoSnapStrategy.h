@@ -22,13 +22,15 @@
 
 #include "KoSnapGuide.h"
 
-#include <QPointF>
-#include <QPainterPath>
+#include <QLineF>
 
 class TestSnapStrategy;
 class KoPathPoint;
 class KoSnapProxy;
 class KoViewConverter;
+
+class QTransform;
+class QPainterPath;
 
 class FLAKE_TEST_EXPORT KoSnapStrategy
 {

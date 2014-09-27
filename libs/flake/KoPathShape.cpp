@@ -38,6 +38,7 @@
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
 #include "KoShapeStroke.h"
+#include "KoInsets.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>

@@ -28,6 +28,7 @@
 #include <KoCanvasBase.h>
 #include <KoSnapGuide.h>
 #include <KoConnectionShape.h>
+#include <QCursor>
 
 class KAction;
 class QActionGroup;

@@ -32,6 +32,8 @@
 #include <KoSectionEnd.h>
 #include <KoTextDocument.h>
 
+#include <QTextBlock>
+
 class KoSectionPrivate
 {
 public:

@@ -30,6 +30,7 @@
 #include <KoShape.h>
 
 #include <QTextDocument>
+#include <QTextBlock>
 #include <QTextCursor>
 #include <kdebug.h>
 

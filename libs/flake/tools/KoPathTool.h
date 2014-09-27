@@ -27,6 +27,7 @@
 #include "KoToolBase.h"
 #include "KoPathToolSelection.h"
 #include <QList>
+#include <QCursor>
 
 class QButtonGroup;
 class KoCanvasBase;

@@ -26,6 +26,7 @@
 #include "flake_export.h"
 
 #include <QMetaType>
+#include <QTransform>
 
 #include "KoTosContainer.h"
 #include "KoMarkerData.h"

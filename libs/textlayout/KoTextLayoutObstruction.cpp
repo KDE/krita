@@ -24,6 +24,7 @@
 #include <KoShapeShadow.h>
 #include <KoShapeGroup.h>
 #include <KoClipPath.h>
+#include <KoInsets.h>
 
 #include <QTransform>
 #include <QPainterPath>

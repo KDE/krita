@@ -43,6 +43,7 @@
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
 #include <KoSelection.h>
+#include <KoPathSegment.h>
 #include <KoDocumentResourceManager.h>
 #include <KoInteractionStrategy.h>
 #include <KoShapeConfigWidgetBase.h>

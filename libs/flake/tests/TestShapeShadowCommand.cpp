@@ -21,6 +21,7 @@
 #include <MockShapes.h>
 #include "KoShapeShadow.h"
 #include "KoShapeShadowCommand.h"
+#include "KoInsets.h"
 
 void TestShapeShadowCommand::refCounting()
 {

@@ -55,4 +55,4 @@ There are several kinds of plugins for Krita:
     Assistants are plugins that constrain the freehand tool when painting in a 
     certain way
 */
-IGNORE_PREFIX = Kis Ko K
+// DOXYGEN_SET_IGNORE_PREFIX = Kis Ko K

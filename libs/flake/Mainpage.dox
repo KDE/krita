@@ -70,4 +70,4 @@ X-Flake-PluginVersion=27
  */
 
 // DOXYGEN_SET_PROJECT_NAME = Flake
-IGNORE_PREFIX = Ko K
+// DOXYGEN_SET_IGNORE_PREFIX = Ko K

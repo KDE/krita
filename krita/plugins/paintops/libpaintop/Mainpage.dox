@@ -30,4 +30,4 @@ in an option popup) and possible also the code necessary for applying
 the effects of that option to the paint device as part of painting.
 
 */
-IGNORE_PREFIX = Kis Ko K
+// DOXYGEN_SET_IGNORE_PREFIX = Kis Ko K

@@ -25,4 +25,4 @@
  \author Jarosław Staniek <staniek@kde.org>
 */
 // DOXYGEN_SET_PROJECT_NAME = KoProperty
-IGNORE_PREFIX = Ko K
+// DOXYGEN_SET_IGNORE_PREFIX = Ko K

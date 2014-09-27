@@ -208,6 +208,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(10);
         setIconName(koIconNameCStr("tool_crop"));
+        setShortcut(KShortcut("C"));
     }
 
     virtual ~KisToolCropFactory() {}

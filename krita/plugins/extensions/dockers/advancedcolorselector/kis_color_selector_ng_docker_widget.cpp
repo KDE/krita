@@ -130,7 +130,7 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 
     if (!m_commonColorsAction) {
         m_commonColorsAction = new KAction("Show common colors", this);
-        m_commonColorsAction->setShortcut(QKeySequence(tr("C")));
+        m_commonColorsAction->setShortcut(QKeySequence(tr("U")));
         connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()), Qt::UniqueConnection);
     }
     actionCollection->addAction("show_common_colors", m_commonColorsAction);

@@ -29,9 +29,9 @@
 
 // Qt
 #include <QPainterPath>
+#include <QPainter>
 
 // Calligra
-#include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
 

@@ -22,15 +22,13 @@
 #define KOSHAPESHADOW_H
 
 #include "flake_export.h"
-#include <QPointF>
-#include <QColor>
 
 class KoShape;
 class KoGenStyle;
 class KoShapeSavingContext;
 class QPainter;
 class QPointF;
-class QImage;
+class QColor;
 class KoViewConverter;
 struct KoInsets;
 

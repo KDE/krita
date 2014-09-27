@@ -46,6 +46,7 @@ class QColor;
 class QString;
 class QFont;
 
+class KoCanvasBase;
 class KoDocumentResourceManager;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;

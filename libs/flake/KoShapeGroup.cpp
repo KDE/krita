@@ -30,6 +30,7 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeStrokeModel.h"
 #include "KoShapeShadow.h"
+#include "KoInsets.h"
 
 #include <QPainter>
 

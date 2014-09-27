@@ -32,6 +32,7 @@
 
 #include <KoUnit.h>
 
+#include <QPainter>
 #include <QImage>
 
 class SimpleCanvas : public KoCanvasBase

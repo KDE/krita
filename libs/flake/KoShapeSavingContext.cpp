@@ -35,8 +35,8 @@
 
 #include <kmimetype.h>
 #include <kdebug.h>
-#include <QMap>
 #include <QUuid>
+#include <QImage>
 
 class KoShapeSavingContextPrivate {
 public:

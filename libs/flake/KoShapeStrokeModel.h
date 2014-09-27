@@ -23,16 +23,16 @@
 #ifndef KOSHAPESTROKEMODEL_H
 #define KOSHAPESTROKEMODEL_H
 
-#include "KoInsets.h"
-
-#include <QPainter>
-
 #include "flake_export.h"
 
 class KoShape;
 class KoGenStyle;
 class KoShapeSavingContext;
 class KoViewConverter;
+struct KoInsets;
+
+class QColor;
+class QPainter;
 
 /**
  * A model for strokes of KoShapes.

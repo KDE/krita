@@ -23,16 +23,11 @@
 #ifndef KOSHAPE_H
 #define KOSHAPE_H
 
-#include "KoInsets.h"
 #include "KoFlake.h"
 #include "KoConnectionPoint.h"
 
 #include <QSharedPointer>
-#include <QTransform>
-#include <QVector>
 #include <QSet>
-#include <QMap>
-#include <QBrush>
 #include <QMetaType>
 
 #include <KoXmlReaderForward.h>
@@ -45,19 +40,16 @@
 class QPainter;
 class QRectF;
 class QPainterPath;
+class QTransform;
 
 class KoShapeContainer;
 class KoShapeStrokeModel;
-class KoShapeManager;
 class KoShapeUserData;
 class KoViewConverter;
 class KoShapeApplicationData;
 class KoShapeSavingContext;
-class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
-class KoShapeBasedDocumentBase;
-class KoDataCenterBase;
 class KoShapeShadow;
 class KoEventAction;
 class KoShapePrivate;
@@ -67,6 +59,7 @@ class KoClipPath;
 class KoShapePaintingContext;
 class KoShapeAnchor;
 class KoBorder;
+struct KoInsets;
 
 
 /**

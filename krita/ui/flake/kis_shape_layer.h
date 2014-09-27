@@ -33,6 +33,7 @@ class QRect;
 class QDomDocument;
 class QDomElement;
 class QString;
+class KoShapeManager;
 class KoStore;
 class KoViewConverter;
 class KoShapeBasedDocumentBase;

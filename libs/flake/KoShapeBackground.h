@@ -22,9 +22,6 @@
 
 #include "flake_export.h"
 
-#include <QObject>
-#include <QSharedPointer>
-
 class QSizeF;
 class QPainter;
 class QPainterPath;

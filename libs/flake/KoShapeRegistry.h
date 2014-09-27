@@ -21,16 +21,12 @@
 #ifndef KOSHAPEREGISTRY_H
 #define KOSHAPEREGISTRY_H
 
-#include <QObject>
-
 #include <KoGenericRegistry.h>
-#include <KoXmlReader.h>
 #include <KoShapeFactoryBase.h>
 
 #include "flake_export.h"
 
 class KoShape;
-class KoShapeFactoryBase;
 class KoShapeLoadingContext;
 
 

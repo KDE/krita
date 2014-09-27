@@ -25,10 +25,8 @@
 
 #include "flake_export.h"
 
-#include <QImage>
-#include <QTransform>
-#include <QTextBlockUserData>
 #include <KoElementReference.h>
+#include <QMap>
 
 class KoShape;
 class KoXmlWriter;
@@ -41,6 +39,9 @@ class KoShapeLayer;
 class KoStore;
 class KoSharedSavingData;
 class KoShapeSavingContextPrivate;
+
+class QImage;
+class QTransform;
 
 /**
  * The set of data for the ODF file format used during saving of a shape.

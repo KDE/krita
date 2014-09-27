@@ -22,8 +22,6 @@
 
 //Qt includes
 #include <QList>
-#include <QLabel>
-#include <QPainter>
 
 //KDE includes
 #include <klocale.h>

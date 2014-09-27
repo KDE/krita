@@ -20,22 +20,17 @@
  */
 
 #include "KoPADocumentStructureDocker.h"
+
 #include "KoPADocumentModel.h"
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 #include "KoPACanvas.h"
 #include "KoPAView.h"
-#include "KoPAMasterPage.h"
-#include "KoPAPage.h"
-#include "commands/KoPAPageInsertCommand.h"
-#include "commands/KoPAPageDeleteCommand.h"
 
 #include <KoShapeManager.h>
-#include <KoShapeContainer.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeBasedDocumentBase.h>
 #include <KoSelection.h>
 #include <KoShapeOdfSaveHelper.h>
 #include <KoPAOdfPageSaveHelper.h>

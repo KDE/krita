@@ -20,11 +20,10 @@
 #ifndef KOPAUTIL_H
 #define KOPAUTIL_H
 
-#include <QRect>
-
 #include "kopageapp_export.h"
 
 class QSize;
+class QRect;
 struct KoPageLayout;
 class KoZoomHandler;
 

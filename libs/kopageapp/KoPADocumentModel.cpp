@@ -22,14 +22,12 @@
 
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
-#include "KoPAPageProvider.h"
 #include <KoShapePainter.h>
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeBasedDocumentBase.h>
 #include <KoSelection.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
@@ -45,7 +43,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QAbstractItemModel>
 #include <QMimeData>
 #include <QApplication>
 #include <QClipboard>

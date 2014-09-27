@@ -20,7 +20,6 @@
 #include "Plugin.h"
 #include "KoPABackgroundToolFactory.h"
 
-#include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #include <kpluginfactory.h>

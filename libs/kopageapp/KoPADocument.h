@@ -20,22 +20,17 @@
 #ifndef KOPADOCUMENT_H
 #define KOPADOCUMENT_H
 
-#include <QObject>
-
 #include <KoOdf.h>
 #include <KoDocument.h>
 #include <KoShapeBasedDocumentBase.h>
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
-class KoShapeSavingContext;
-class KoPAPart;
 class KoPAPage;
 class KoPAPageBase;
 class KoPAMasterPage;
 class KoPALoadingContext;
 class KoPASavingContext;
-class KoXmlWriter;
 
 class KoInlineTextObjectManager;
 

@@ -25,14 +25,9 @@
 #include <KoText.h>
 
 #include "KoPADocument.h"
-#include "KoPAView.h"
-#include "KoPAViewMode.h"
-#include "KoPAPage.h"
+#include "KoPAViewBase.h"
+#include "KoPAPageBase.h"
 #include "KoPAPageProvider.h"
-
-#include <kaction.h>
-#include <QMenu>
-#include <QMouseEvent>
 
 class KoPACanvasBase::Private
 {

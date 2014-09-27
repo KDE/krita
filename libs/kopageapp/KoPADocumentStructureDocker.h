@@ -33,7 +33,6 @@ class KoPADocument;
 class KoPADocumentModel;
 class KoPAPageBase;
 class KoViewItemContextBar;
-class QModelIndex;
 class QAction;
 class QButtonGroup;
 

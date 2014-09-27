@@ -19,21 +19,15 @@
 
 #include "KoPACanvas.h"
 
-#include <KoShapeManager.h>
 #include <KoToolProxy.h>
-#include <KoUnit.h>
-#include <KoText.h>
 #include <KoCanvasController.h>
+#include <KoZoomHandler.h>
 
 #include "KoPADocument.h"
 #include "KoPAView.h"
-#include "KoPAViewMode.h"
-#include "KoPAPage.h"
-#include "KoPAPageProvider.h"
 
 #include <kxmlguifactory.h>
 
-#include <kaction.h>
 #include <QMenu>
 #include <QMouseEvent>
 

@@ -19,11 +19,10 @@
 
 #include "KoPAViewMode.h"
 
-#include "KoPACanvas.h"
+#include "KoPACanvasBase.h"
+#include "KoPAViewBase.h"
 #include "KoPAPageBase.h"
-#include "KoPAView.h"
 #include <KoCanvasController.h>
-#include <KoPageLayout.h>
 
 #include <QCloseEvent>
 

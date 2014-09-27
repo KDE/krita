@@ -25,8 +25,6 @@
 class KoPADocument;
 class KoShape;
 class KoShapeContainer;
-class QAbstractItemModel;
-class KoViewConverter;
 class KoPAPageBase;
 
 #include "kopageapp_export.h"

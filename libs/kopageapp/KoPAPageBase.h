@@ -20,12 +20,7 @@
 #ifndef KOPAPAGEBASE_H
 #define KOPAPAGEBASE_H
 
-#include <QList>
-#include <QString>
-#include <QPixmap>
-
 #include <KoShapeContainer.h>
-#include <KoXmlReader.h>
 
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
@@ -33,13 +28,14 @@
 #define CACHE_PAGE_THUMBNAILS
 
 struct KoPageLayout;
-class KoOdfLoadingContext;
 class KoGenStyle;
-class KoShape;
 class KoPALoadingContext;
 class KoShapeManagerPaintingStrategy;
 class KoZoomHandler;
 class KoPASavingContext;
+
+class QPixmap;
+class QString;
 
 /**
  * Base class used for KoPAMasterPage and KoPAPage

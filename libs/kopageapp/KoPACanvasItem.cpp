@@ -22,17 +22,12 @@
 
 #include "KoPADocument.h"
 #include "KoPAView.h"
-#include "KoPAViewMode.h"
-#include "KoPAPage.h"
-#include "KoPAPageProvider.h"
+#include "KoPAPageBase.h"
 
-#include <KoShapeManager.h>
+#include <KoZoomHandler.h>
 #include <KoToolProxy.h>
-#include <KoUnit.h>
-#include <KoText.h>
 
 #include <kxmlguifactory.h>
-#include <kaction.h>
 
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneResizeEvent>

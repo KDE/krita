@@ -129,7 +129,7 @@ void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int poly
  **/
 QPointF transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2);
 
-qreal angleBetweenVectors(const QPointF &v1, const QPointF &v2);
+qreal KRITAIMAGE_EXPORT angleBetweenVectors(const QPointF &v1, const QPointF &v2);
 
 namespace Private {
     inline void resetEmptyRectangle(const QPoint &pt, QRect *rc) {

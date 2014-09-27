@@ -22,8 +22,9 @@
 
 #include "flake_export.h"
 
-#include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
+class KoXmlElement;
+class QString;
 
 /**
  * @brief Base class for shapes that are saved as a part of a draw:frame.

@@ -21,6 +21,7 @@
 #include "KoFilterEffect.h"
 #include "KoXmlWriter.h"
 
+#include <QRectF>
 #include <QAtomicInt>
 #include <QSet>
 #include <QDebug>

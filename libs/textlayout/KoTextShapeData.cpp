@@ -43,6 +43,7 @@
 #include <KoDocumentRdfBase.h>
 #include <KoStyleStack.h>
 #include <KoShape.h>
+#include <KoUnit.h>
 
 #include <KoXmlNS.h>
 

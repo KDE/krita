@@ -20,10 +20,11 @@
 #ifndef KOCONNECTIONSHAPECONFIGWIDGET_H
 #define KOCONNECTIONSHAPECONFIGWIDGET_H
 
-#include "KoConnectionShape.h"
 #include "ui_KoConnectionShapeConfigWidget.h"
 
 #include <KoShapeConfigWidgetBase.h>
+
+class KoConnectionShape;
 
 class KoConnectionShapeConfigWidget : public KoShapeConfigWidgetBase
 {

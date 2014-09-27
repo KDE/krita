@@ -45,6 +45,7 @@
 #include <KoAnnotationLayoutManager.h>
 #include <KoAnnotation.h>
 #include <KoTextDocument.h>
+#include <KoUnit.h>
 
 #include <kdebug.h>
 #include <QTextBlock>

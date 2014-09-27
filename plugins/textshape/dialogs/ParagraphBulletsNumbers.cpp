@@ -25,6 +25,7 @@
 #include <KoListLevelProperties.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
+#include <KoUnit.h>
 
 #include <kdebug.h>
 #include <kcharselect.h>

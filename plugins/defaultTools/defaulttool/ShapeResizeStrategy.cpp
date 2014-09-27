@@ -31,6 +31,7 @@
 
 #include <klocale.h>
 #include <limits>
+#include <math.h>
 
 ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
         const QPointF &clicked, KoFlake::SelectionHandle direction )

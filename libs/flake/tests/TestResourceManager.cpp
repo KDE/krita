@@ -21,6 +21,7 @@
 
 #include "KoCanvasResourceManager.h"
 #include "KoPathShape.h"
+#include "KoUnit.h"
 #include <QSignalSpy>
 
 void TestResourceManager::koShapeResource()

@@ -23,10 +23,11 @@
 #include "flake_export.h"
 
 #include <QList>
-#include <QRectF>
 
 class KoFilterEffect;
 class KoXmlWriter;
+
+class QRectF;
 
 /// This class manages a stack of filter effects
 class FLAKE_EXPORT KoFilterEffectStack

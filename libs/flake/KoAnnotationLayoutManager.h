@@ -22,13 +22,12 @@
 #include "flake_export.h"
 
 #include <QObject>
-#include <QPointF>
-#include <KoViewConverter.h>
-#include <KoShapeManager.h>
-#include <KoCanvasBase.h>
-#include <KoCanvasController.h>
+
+class KoShapeManager;
+class KoCanvasBase;
 
 class QPainter;
+class QPointF;
 
 class KoShape;
 
@@ -56,7 +55,7 @@ public:
 
 public slots:
     /// register the position of an annotation shape.
-    void registerAnnotationRefPosition(KoShape *annotationShape, QPointF refPosition);
+    void registerAnnotationRefPosition(KoShape *annotationShape, const QPointF& refPosition);
 
     /// Remove annotation shape.
     void removeAnnotationShape(KoShape *annotationShape);

@@ -20,6 +20,8 @@
 #include "MonoFilterEffect.h"
 #include <KoFilterEffectRenderContext.h>
 
+#include <QImage>
+
 MonoFilterEffect::MonoFilterEffect()
 : KoFilterEffect(MonoFilterEffectId, "Mono Effect")
 {

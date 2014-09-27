@@ -22,20 +22,17 @@
 #define KO_CANVASRESOURCEMANAGER_H
 
 #include <QObject>
-#include <QList>
-#include <QVariant>
-#include <QSizeF>
 
 #include "flake_export.h"
-
-#include <KoColor.h>
-#include <KoUnit.h>
 
 class KoShape;
 class KoShapeStroke;
 class KUndo2Stack;
-class KoImageCollection;
-class KoOdfDocument;
+class KoColor;
+class KoUnit;
+
+class QVariant;
+class QSizeF;
 
 /**
  * The KoCanvasResourceManager contains a set of per-canvas

@@ -32,6 +32,7 @@
 #include "KoShapePaintingContext.h"
 #include "KoStrokeConfigWidget.h"
 #include "KoShapeStroke.h"
+#include <KoColor.h>
 
 #include <knuminput.h>
 #include <klocale.h>

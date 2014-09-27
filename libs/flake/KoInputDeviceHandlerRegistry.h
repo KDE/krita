@@ -20,8 +20,6 @@
 #ifndef KOINPUTDEVICEHANDLERREGISTRY_H
 #define KOINPUTDEVICEHANDLERREGISTRY_H
 
-#include <QObject>
-
 #include "KoGenericRegistry.h"
 #include <KoInputDeviceHandler.h>
 #include "flake_export.h"

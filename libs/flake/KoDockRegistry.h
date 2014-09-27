@@ -24,8 +24,6 @@
 #include "KoDockFactoryBase.h"
 #include "flake_export.h"
 
-#include <QObject>
-
 /**
  * This singleton class keeps a register of all available dockers,
  * or rather, of the factories that can create the QDockWidget instances

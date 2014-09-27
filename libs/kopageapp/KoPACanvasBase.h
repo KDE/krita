@@ -27,6 +27,9 @@
 class KoPAViewBase;
 class KoPADocument;
 
+class QRect;
+class QPainter;
+
 /// Widget that shows a KoPAPage
 class KOPAGEAPP_EXPORT KoPACanvasBase : public KoCanvasBase
 {

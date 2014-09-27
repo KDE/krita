@@ -28,6 +28,7 @@
 #include "KoShapeManager.h"
 #include "kdebug.h"
 #include "KoSnapData.h"
+#include "KoUnit.h"
 
 class MockShape : public KoShape
 {

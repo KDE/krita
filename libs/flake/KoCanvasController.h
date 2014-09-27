@@ -36,7 +36,6 @@ class QSize;
 
 class KoShape;
 class KoCanvasBase;
-class KoView;
 class KoCanvasControllerProxyObject;
 
 /**

@@ -50,6 +50,7 @@
 #include <QGLWidget>
 #endif
 
+#include <math.h>
 
 void KoCanvasControllerWidget::Private::setDocumentOffset()
 {

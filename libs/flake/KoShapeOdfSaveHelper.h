@@ -23,6 +23,8 @@
 #include "KoDragOdfSaveHelper.h"
 #include "flake_export.h"
 
+#include <QList>
+
 class KoShape;
 class KoShapeOdfSaveHelperPrivate;
 

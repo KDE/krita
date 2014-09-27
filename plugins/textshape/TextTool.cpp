@@ -50,6 +50,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoColor.h>
 #include <KoColorBackground.h>
 #include <KoColorPopupAction.h>
 #include <KoTextDocumentLayout.h>

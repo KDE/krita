@@ -18,6 +18,7 @@
 #include <klocale.h>
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
+#include <KoColor.h>
 
 #include <QWidget>
 #include <QMenu>

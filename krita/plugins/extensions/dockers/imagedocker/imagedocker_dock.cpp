@@ -23,6 +23,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColor.h>
 #include <KoIcon.h>
 
 #include <QFileSystemModel>

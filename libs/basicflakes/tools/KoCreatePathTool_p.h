@@ -33,6 +33,8 @@
 #include "KoSnapStrategy.h"
 #include "KoToolBase_p.h"
 
+#include "math.h"
+
 /// Small helper to keep track of a path point and its parent path shape
 struct PathConnectionPoint {
     PathConnectionPoint()

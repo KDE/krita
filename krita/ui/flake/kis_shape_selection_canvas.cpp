@@ -23,6 +23,7 @@
 #include <QPainter>
 
 #include <KoShapeManager.h>
+#include <KoUnit.h>
 
 KisShapeSelectionCanvas::KisShapeSelectionCanvas()
         : KoCanvasBase(0)

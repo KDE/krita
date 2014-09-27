@@ -22,6 +22,7 @@
 #include "GreyscaleFilterEffect.h"
 #include <KoFilterEffectRenderContext.h>
 
+#include <QImage>
 
 GreyscaleFilterEffect::GreyscaleFilterEffect()
 : KoFilterEffect(GreyscaleFilterEffectId, "Grayscale effect")

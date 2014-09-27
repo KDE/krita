@@ -22,20 +22,19 @@
 #define KO_DOCUMENTRESOURCEMANAGER_H
 
 #include <QObject>
-#include <QList>
-#include <QVariant>
-#include <QSizeF>
 
 #include "flake_export.h"
-
-#include <KoColor.h>
-#include <KoUnit.h>
 
 class KoShape;
 class KUndo2Stack;
 class KoImageCollection;
 class KoOdfDocument;
 class KoShapeController;
+class KoColor;
+class KoUnit;
+
+class QVariant;
+class QSizeF;
 
 /**
  * The KoResourceManager contains a set of per-canvas <i>or</i> per-document

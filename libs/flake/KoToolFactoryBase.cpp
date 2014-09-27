@@ -19,6 +19,10 @@
 
 #include "KoToolFactoryBase.h"
 
+#include "KoToolBase.h"
+
+#include <KShortcut>
+
 class KoToolFactoryBase::Private
 {
 public:

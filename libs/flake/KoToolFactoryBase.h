@@ -21,11 +21,13 @@
 #ifndef KO_TOOL_FACTORY_H
 #define KO_TOOL_FACTORY_H
 
-#include "KoToolBase.h"
 #include "flake_export.h"
 
-#include <klocale.h>
-#include <kshortcut.h>
+#include <QString>
+
+class KoCanvasBase;
+class KoToolBase;
+class KShortcut;
 
 /**
  * A factory for KoToolBase objects.

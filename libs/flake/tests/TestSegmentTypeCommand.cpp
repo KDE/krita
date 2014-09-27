@@ -19,6 +19,7 @@
 
 #include "TestSegmentTypeCommand.h"
 #include "KoPathSegmentTypeCommand.h"
+#include <KoPathSegment.h>
 
 void TestSegmentTypeCommand::changeToCurve()
 {

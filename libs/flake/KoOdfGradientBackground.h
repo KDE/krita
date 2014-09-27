@@ -24,12 +24,12 @@
 #include "KoShapeBackground.h"
 #include "flake_export.h"
 
-#include <KoGenStyle.h>
-
 class QImage;
 
 class KoOdfGradientBackgroundPrivate;
 class KoXmlElement;
+class KoGenStyles;
+class KoGenStyle;
 
 /// Gradients from odf that are not native to Qt
 class KoOdfGradientBackground : public KoShapeBackground {

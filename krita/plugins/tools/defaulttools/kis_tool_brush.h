@@ -27,6 +27,7 @@
 
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
+#include <kshortcut.h>
 
 class QCheckBox;
 class QComboBox;

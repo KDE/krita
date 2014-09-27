@@ -25,14 +25,13 @@
 #define KOSELECTION_H
 
 #include <QObject>
-#include <QSet>
 
 #include "KoShape.h"
-#include "KoViewConverter.h"
 #include "KoFlake.h"
 
 #include "flake_export.h"
 
+class KoViewConverter;
 class KoShapeLayer;
 class KoSelectionPrivate;
 

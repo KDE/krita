@@ -22,6 +22,8 @@
 
 #include <klocalizedstring.h>
 
+#include <KoToolManager.h>
+
 #include <kis_tool_proxy.h>
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>

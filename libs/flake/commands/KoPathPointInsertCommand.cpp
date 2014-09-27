@@ -19,6 +19,8 @@
  */
 
 #include "KoPathPointInsertCommand.h"
+
+#include <KoPathSegment.h>
 #include <klocale.h>
 
 class KoPathPointInsertCommandPrivate

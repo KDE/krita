@@ -25,7 +25,6 @@
 #include "flake_export.h"
 
 #include <QObject>
-#include <QCursor>
 #include <QList>
 
 class KoCanvasController;
@@ -41,6 +40,7 @@ class KoInputDeviceHandlerEvent;
 class KoShapeLayer;
 class ToolHelper;
 
+class QCursor;
 
 /// Struct for the createToolList return type.
 struct KoToolButton {

@@ -30,6 +30,7 @@
 
 #include <QMenu>
 #include <QMouseEvent>
+#include <QPainter>
 
 KoPACanvas::KoPACanvas( KoPAViewBase * view, KoPADocument * doc, QWidget *parent ,  Qt::WindowFlags f)
     : QWidget( parent, f )

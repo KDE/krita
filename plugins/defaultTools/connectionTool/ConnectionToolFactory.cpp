@@ -22,6 +22,7 @@
 #include "ConnectionTool.h"
 
 #include <KoIcon.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 ConnectionToolFactory::ConnectionToolFactory()

@@ -19,6 +19,8 @@
 
 #include "KoSnapData.h"
 
+#include <QPointF>
+
 KoSnapData::KoSnapData()
 {
 }

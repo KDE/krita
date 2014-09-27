@@ -21,13 +21,13 @@
 #define KOPATHSEGMENT_H
 
 #include "flake_export.h"
-#include <QPointF>
 #include <QList>
 #include <QPair>
-#include <QRectF>
 
 class KoPathPoint;
 class QTransform;
+class QPointF;
+class QRectF;
 
 /// A KoPathSegment consist of two neighboring KoPathPoints
 class FLAKE_EXPORT KoPathSegment

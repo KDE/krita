@@ -32,6 +32,7 @@
 #include <QButtonGroup>
 
 #include <kstandarddirs.h>
+#include <kshortcut.h>
 
 #include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>

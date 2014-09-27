@@ -22,6 +22,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include "tools/KoCreateShapesToolFactory.h"
 #include "tools/KoCreateShapesTool.h"

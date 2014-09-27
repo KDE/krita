@@ -56,6 +56,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kaction.h>
+#include <klocale.h>
 #include <QStack>
 #include <QLabel>
 

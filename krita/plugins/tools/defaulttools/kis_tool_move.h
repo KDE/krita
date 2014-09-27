@@ -26,6 +26,7 @@
 #include <kis_tool.h>
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
+#include <kshortcut.h>
 #include <QWidget>
 #include <QGroupBox>
 #include <QRadioButton>

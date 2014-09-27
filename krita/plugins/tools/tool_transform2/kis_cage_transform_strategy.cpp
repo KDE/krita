@@ -17,6 +17,7 @@
  */
 
 #include "kis_cage_transform_strategy.h"
+#include "tool_transform_args.h"
 
 #include <QPointF>
 #include <QPainter>

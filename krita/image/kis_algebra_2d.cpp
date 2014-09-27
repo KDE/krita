@@ -24,7 +24,7 @@
 
 namespace KisAlgebra2D {
 
-void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPointF *pt)
+void adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPointF *pt)
 {
     const int numPoints = poly.size();
     for (int i = 0; i < numPoints; i++) {
@@ -55,7 +55,7 @@ void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int poly
     }
 }
 
-QPointF KRITAIMAGE_EXPORT transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2) {
+QPointF transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2) {
     qreal len1 = norm(base1);
     if (len1 < 1e-5) return pt;
     qreal sin1 = base1.y() / len1;
@@ -77,7 +77,7 @@ QPointF KRITAIMAGE_EXPORT transformAsBase(const QPointF &pt, const QPointF &base
     return result;
 }
 
-qreal KRITAIMAGE_EXPORT angleBetweenVectors(const QPointF &v1, const QPointF &v2)
+qreal angleBetweenVectors(const QPointF &v1, const QPointF &v2)
 {
     qreal a1 = std::atan2(v1.y(), v1.x());
     qreal a2 = std::atan2(v2.y(), v2.x());

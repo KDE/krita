@@ -238,7 +238,7 @@ bool DocumentManager::save()
 
 void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 {
-    d->document->setOutputMimeType(mimetype.toAscii());
+    d->document->setOutputMimeType(mimetype.toLatin1());
     d->saveAsFilename = filename;
     // Yes. This is a massive hack. Basically, we need to wait a little while, to ensure
     // the save call happens late enough for a variety of UI things to happen first.

@@ -124,7 +124,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         // Type separators '()' can be replaced by '[]' or '{}' if necessary ...
         QChar delimiter = line.at(index);
         QChar closingdelimiter;
-        switch (delimiter.toAscii())
+        switch (delimiter.toLatin1())
         {
             case '(':
             {

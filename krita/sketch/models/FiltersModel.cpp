@@ -173,7 +173,7 @@ QObject* FiltersModel::configuration(int index)
     QMap<QString, QVariant>::const_iterator i;
     for(i = props.constBegin(); i != props.constEnd(); ++i)
     {
-        config->setProperty(i.key().toAscii(), i.value());
+        config->setProperty(i.key().toLatin1(), i.value());
     }
     config->setCurve(d->configurations[index]->curve());
     config->setCurves(d->configurations[index]->curves());

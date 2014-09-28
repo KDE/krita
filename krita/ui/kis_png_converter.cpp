@@ -967,11 +967,10 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
     if (!sRGB || options.saveSRGBProfile) {
-        QString t ("icc");
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, t.toAscii().data(), PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
-        png_set_iCCP(png_ptr, info_ptr, t.toAscii().data(), PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
 #endif
     }
 

@@ -985,7 +985,7 @@ QObject* LayerModel::activeFilterConfig() const
     PropertyContainer* config = new PropertyContainer(filterId, 0);
     QMap<QString, QVariant>::const_iterator i;
     for(i = props.constBegin(); i != props.constEnd(); ++i) {
-        config->setProperty(i.key().toAscii(), i.value());
+        config->setProperty(i.key().toLatin1(), i.value());
         //qDebug() << "Getting active config..." << i.key() << i.value();
     }
     return config;
@@ -1004,7 +1004,7 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
     QMap<QString, QVariant>::const_iterator i;
     for(i = realConfig->getProperties().constBegin(); i != realConfig->getProperties().constEnd(); ++i)
     {
-        realConfig->setProperty(QString(i.key()), config->property(i.key().toAscii()));
+        realConfig->setProperty(i.key(), config->property(i.key().toLatin1()));
         //qDebug() << "Creating config..." << i.key() << i.value();
     }
 // The following code causes sporadic crashes, and disabling causes leaks. So, leaks it must be, for now.

@@ -131,7 +131,7 @@ bool ResourceBundleManifest::load(QIODevice *device)
         // Only if fullPath is valid, should we store this entry.
         // If not, we don't bother to find out exactly what is wrong, we just skip it.
         if (!fullPath.isNull() && !mediaType.isEmpty() && !md5sum.isEmpty()) {
-            addResource(mediaType, fullPath, tagList, QByteArray::fromHex(md5sum.toAscii()));
+            addResource(mediaType, fullPath, tagList, QByteArray::fromHex(md5sum.toLatin1()));
         }
     }
 

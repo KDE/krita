@@ -837,7 +837,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
 
     QString tmpURL;
     if (url[0] == '#')
-        url = url.mid(1);
+        url.remove(0, 1);
 
     if (KUrl::isRelativeUrl(url)) {
         if (url.startsWith("./"))

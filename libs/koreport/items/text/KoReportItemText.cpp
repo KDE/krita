@@ -240,7 +240,7 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
                 pos = idx + 1;
                 if (separator == '\n') {
                     QString line = qstrValue.left(idx);
-                    qstrValue = qstrValue.mid(idx + 1, qstrValue.length());
+                    qstrValue.remove(idx + 1);
                     pos = 0;
 
                     rect.setTop(intBaseTop + (intLineCounter * intRectHeight));
@@ -274,7 +274,7 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
                 }
             } else {
                 QString line = qstrValue.left(pos - 1);
-                qstrValue = qstrValue.mid(pos, qstrValue.length());
+                qstrValue.remove(0, pos);
                 pos = 0;
 
                 rect.setTop(intBaseTop + (intLineCounter * intRectHeight));

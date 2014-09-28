@@ -99,7 +99,7 @@ QVariant KoSopranoTableModel::data(const QModelIndex &index, int role) const
         kDebug(30015) << "ctx:" << ctx;
 
         if (ctx.startsWith(RdfPathContextPrefix)) {
-            ctx = ctx.mid(RdfPathContextPrefix.size());
+            ctx.remove(0, RdfPathContextPrefix.size());
         }
         if (isInlineRdf(st)) {
             ctx = "inline";

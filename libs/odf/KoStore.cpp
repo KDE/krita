@@ -383,7 +383,7 @@ bool KoStore::enterDirectory(const QString &directory)
 
     while ((pos = tmp.indexOf('/')) != -1 &&
             (success = d->enterDirectoryInternal(tmp.left(pos))))
-        tmp = tmp.mid(pos + 1);
+        tmp.remove(0, pos + 1);
 
     if (success && !tmp.isEmpty())
         return d->enterDirectoryInternal(tmp);

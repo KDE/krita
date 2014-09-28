@@ -267,6 +267,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         cageButton->setChecked(true);
 
         chkEditCage->setChecked(m_transaction->editWarpPoints());
+        chkEditCage->setEnabled(config.origPoints().size() >= 3);
     }
 
     unblockUiSlots();

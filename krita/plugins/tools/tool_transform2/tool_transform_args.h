@@ -231,6 +231,14 @@ public:
         m_flattenedPerspectiveTransform = value;
     }
 
+    bool isEditingTransformPoints() const {
+        return m_editTransformPoints;
+    }
+
+    void setEditingTransformPoints(bool value) {
+        m_editTransformPoints = value;
+    }
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -267,6 +275,7 @@ private:
     QTransform m_flattenedPerspectiveTransform;
 
     KisFilterStrategy *m_filter;
+    bool m_editTransformPoints;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

@@ -42,6 +42,7 @@ ToolTransformArgs::ToolTransformArgs()
     m_keepAspectRatio = false;
 
     setFilterId("Bicubic");
+    m_editTransformPoints = false;
 }
 
 void ToolTransformArgs::init(const ToolTransformArgs& args)
@@ -67,6 +68,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_keepAspectRatio = args.keepAspectRatio();
     m_filter = args.m_filter;
     m_flattenedPerspectiveTransform = args.m_flattenedPerspectiveTransform;
+    m_editTransformPoints = args.m_editTransformPoints;
 }
 
 void ToolTransformArgs::clear()
@@ -121,6 +123,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_defaultPoints = defaultPoints;
     m_keepAspectRatio = false;
     setFilterId(filterId);
+    m_editTransformPoints = false;
 }
 
 

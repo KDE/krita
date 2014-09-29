@@ -30,14 +30,12 @@ class TransformTransactionProperties
 {
 public:
     TransformTransactionProperties()
-        : m_editWarpPoints(false)
     {
     }
 
 TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *currentConfig, KisNodeSP rootNode)
         : m_originalRect(originalRect),
           m_currentConfig(currentConfig),
-          m_editWarpPoints(false),
           m_rootNode(rootNode)
     {
     }
@@ -98,14 +96,6 @@ TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *cu
         return m_originalRect.toAlignedRect().bottomRight();
     }
 
-    bool editWarpPoints() const {
-        return m_editWarpPoints;
-    }
-
-    void setEditWarpPoints(bool value) {
-        m_editWarpPoints = value;
-    }
-
     ToolTransformArgs* currentConfig() const {
         return m_currentConfig;
     }
@@ -121,7 +111,6 @@ private:
      */
     QRectF m_originalRect;
     ToolTransformArgs *m_currentConfig;
-    bool m_editWarpPoints;
     KisNodeSP m_rootNode;
 };
 

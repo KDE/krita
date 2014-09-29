@@ -266,7 +266,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         stackedWidget->setCurrentIndex(2);
         cageButton->setChecked(true);
 
-        chkEditCage->setChecked(m_transaction->editWarpPoints());
+        chkEditCage->setChecked(config.isEditingTransformPoints());
         chkEditCage->setEnabled(config.origPoints().size() >= 3);
     }
 
@@ -275,7 +275,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
 void KisToolTransformConfigWidget::updateLockPointsButtonCaption()
 {
-    if (m_transaction->editWarpPoints()) {
+    ToolTransformArgs *config = m_transaction->currentConfig();
+
+    if (config->isEditingTransformPoints()) {
         lockUnlockPointsButton->setText(i18n("Lock Points"));
     } else {
         lockUnlockPointsButton->setText(i18n("Unlock Points"));
@@ -597,14 +599,16 @@ void KisToolTransformConfigWidget::setDefaultWarpPoints(int pointsPerLine)
 
 void KisToolTransformConfigWidget::activateCustomWarpPoints(bool enabled)
 {
+    ToolTransformArgs *config = m_transaction->currentConfig();
+
     defaultWarpWidget->setEnabled(!enabled);
     customWarpWidget->setEnabled(enabled);
 
     if (!enabled) {
-        m_transaction->setEditWarpPoints(false);
+        config->setEditingTransformPoints(false);
         setDefaultWarpPoints(densityBox->value());
     } else {
-        m_transaction->setEditWarpPoints(true);
+        config->setEditingTransformPoints(true);
         setDefaultWarpPoints(0);
     }
 
@@ -636,9 +640,10 @@ void KisToolTransformConfigWidget::slotWarpLockPointsButtonClicked()
 {
     if (m_uiSlotsBlocked) return;
 
-    m_transaction->setEditWarpPoints(!m_transaction->editWarpPoints());
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setEditingTransformPoints(!config->isEditingTransformPoints());
 
-    if (m_transaction->editWarpPoints()) {
+    if (config->isEditingTransformPoints()) {
         // reinit the transf points to their original value
         ToolTransformArgs *config = m_transaction->currentConfig();
         int nbPoints = config->origPoints().size();
@@ -678,6 +683,6 @@ void KisToolTransformConfigWidget::slotEditCagePoints(bool value)
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->refTransformedPoints() = config->origPoints();
 
-    m_transaction->setEditWarpPoints(value);
+    config->setEditingTransformPoints(value);
     notifyConfigChanged();
 }

@@ -135,10 +135,10 @@ void KisWarpTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
 
     if (cursorOverPoint) {
         m_d->mode = perspectiveModifierActive &&
-            !m_d->transaction.editWarpPoints() ?
+            !m_d->currentArgs.isEditingTransformPoints() ?
             Private::MULTIPLE_POINT_SELECTION : Private::OVER_POINT;
 
-    } else if (!m_d->transaction.editWarpPoints()) {
+    } else if (!m_d->currentArgs.isEditingTransformPoints()) {
         QPolygonF polygon(m_d->currentArgs.transfPoints());
         bool insidePolygon = polygon.boundingRect().contains(mousePos);
         m_d->mode = insidePolygon ? Private::MOVE_MODE :
@@ -241,7 +241,7 @@ void KisWarpTransformStrategy::paint(QPainter &gc)
         drawConnectionLines(gc,
                             m_d->currentArgs.origPoints(),
                             m_d->currentArgs.transfPoints(),
-                            m_d->transaction.editWarpPoints());
+                            m_d->currentArgs.isEditingTransformPoints());
     }
 
     // draw handles
@@ -324,7 +324,7 @@ void KisWarpTransformStrategy::externalConfigChanged()
 
 bool KisWarpTransformStrategy::beginPrimaryAction(const QPointF &pt)
 {
-    const bool isEditingPoints = m_d->transaction.editWarpPoints();
+    const bool isEditingPoints = m_d->currentArgs.isEditingTransformPoints();
     bool retval = false;
 
     if (m_d->mode == Private::OVER_POINT ||
@@ -419,7 +419,7 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool spe
                                m_d->pointsInAction.size() >= 1));
 
     if (m_d->mode == Private::OVER_POINT) {
-        if (m_d->transaction.editWarpPoints()) {
+        if (m_d->currentArgs.isEditingTransformPoints()) {
             QPointF newPos = m_d->clipOriginalPointsPosition ?
                 KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect()) :
                 pt;
@@ -500,7 +500,7 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool spe
 
 bool KisWarpTransformStrategy::Private::shouldCloseTheCage() const
 {
-    return transaction.editWarpPoints() &&
+    return currentArgs.isEditingTransformPoints() &&
         closeOnStartPointClick &&
         pointIndexUnderCursor == 0 &&
         currentArgs.origPoints().size() > 2 &&
@@ -509,17 +509,17 @@ bool KisWarpTransformStrategy::Private::shouldCloseTheCage() const
 
 bool KisWarpTransformStrategy::acceptsClicks() const
 {
-    return m_d->shouldCloseTheCage();
+    return m_d->shouldCloseTheCage() ||
+        m_d->currentArgs.isEditingTransformPoints();
 }
 
 bool KisWarpTransformStrategy::endPrimaryAction()
 {
     if (m_d->shouldCloseTheCage()) {
-        m_d->transaction.setEditWarpPoints(false);
-        return false;
+        m_d->currentArgs.setEditingTransformPoints(false);
     }
 
-    return m_d->currentArgs.defaultPoints() || !m_d->transaction.editWarpPoints();
+    return true;
 }
 
 inline QPointF KisWarpTransformStrategy::Private::imageToThumb(const QPointF &pt, bool useFlakeOptimization)
@@ -545,7 +545,7 @@ void KisWarpTransformStrategy::Private::recalculateTransformations()
 
     paintingOffset = transaction.originalTopLeft();
 
-    if (!q->originalImage().isNull() && !transaction.editWarpPoints()) {
+    if (!q->originalImage().isNull() && !currentArgs.isEditingTransformPoints()) {
         QPointF origTLInFlake = imageToThumb(transaction.originalTopLeft(), useFlakeOptimization);
 
         if (useFlakeOptimization) {

@@ -509,9 +509,9 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
 
         if (currentStrategy()->endPrimaryAction()) {
             commitChanges();
-        } else {
-            outlineChanged();
         }
+
+        outlineChanged();
     }
 
     updateOptionWidget();
@@ -534,10 +534,10 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
     } else if (mode == ToolTransformArgs::WARP) {
         m_currentArgs.setMode(ToolTransformArgs::WARP);
         m_optionsWidget->setDefaultWarpPoints();
-        m_transaction.setEditWarpPoints(false);
+        m_currentArgs.setEditingTransformPoints(false);
     } else if (mode == ToolTransformArgs::CAGE) {
         m_currentArgs.setMode(ToolTransformArgs::CAGE);
-        m_transaction.setEditWarpPoints(true);
+        m_currentArgs.setEditingTransformPoints(true);
     } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
         m_currentArgs.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
     }

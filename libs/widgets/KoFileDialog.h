@@ -131,9 +131,10 @@ private:
      *
      *   The methods takes care of some duplicated extensions, like jpeg and jpg.
      * @param nameFilter the namefilter to be split
+     * @param mimeList a pointer to the list with mimes that shouldn't be added.
      * @return a stringlist of all name filters.
      */
-    QStringList splitNameFilter(const QString &nameFilter);
+    static QStringList splitNameFilter(const QString &nameFilter, QStringList *mimeList);
 
     void createFileDialog();
 

@@ -141,7 +141,9 @@ void KoFileDialog::setNameFilter(const QString &filter)
 {
     d->filterList.clear();
     if (d->type == KoFileDialog::SaveFile) {
-        d->filterList << splitNameFilter(filter);
+        QStringList *mimeList = new QStringList();
+        d->filterList << splitNameFilter(filter, mimeList);
+        delete mimeList;
         d->defaultFilter = d->filterList.first();
     }
     else {
@@ -155,12 +157,16 @@ void KoFileDialog::setNameFilters(const QStringList &filterList,
     d->filterList.clear();
 
     if (d->type == KoFileDialog::SaveFile) {
+        QStringList *mimeList = new QStringList();
         foreach(const QString &filter, filterList) {
-            d->filterList << splitNameFilter(filter);
+            d->filterList << splitNameFilter(filter, mimeList);
         }
+        delete mimeList;
 
         if (!defaultFilter.isEmpty()) {
-            QStringList defaultFilters = splitNameFilter(defaultFilter);
+            QStringList *mimeList = new QStringList();
+            QStringList defaultFilters = splitNameFilter(defaultFilter, mimeList);
+            delete mimeList;
             if (defaultFilters.size() > 0) {
                 defaultFilter = defaultFilters.first();
             }
@@ -389,8 +395,10 @@ void KoFileDialog::filterSelected(const QString &filter)
     d->fileDialog->setDefaultSuffix(extension);
 }
 
-QStringList KoFileDialog::splitNameFilter(const QString &nameFilter)
+QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList *mimeList)
 {
+    Q_ASSERT(mimeList);
+
     QStringList filters;
     QString description;
 
@@ -398,9 +406,7 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter)
         description = nameFilter.left(nameFilter.indexOf("(") -1).trimmed();
     }
 
-
     QStringList entries = nameFilter.mid(nameFilter.indexOf("(") + 1).split(" ",QString::SkipEmptyParts );
-
 
     foreach(QString entry, entries) {
 
@@ -409,10 +415,13 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter)
 
         KMimeType::Ptr mime = KMimeType::findByUrl(KUrl("bla" + entry), 0, true, true);
         if (mime->name() != "application/octet-stream") {
-            filters.append(mime->comment() + "( *" + entry + " )");
+            if (!mimeList->contains(mime->name())) {
+                mimeList->append(mime->name());
+                filters.append(mime->comment() + " ( *" + entry + " )");
+            }
         }
         else {
-            filters.append(entry.remove(".").toUpper() + " " + description + " ( " + entry + " )");
+            filters.append(entry.remove(".").toUpper() + " " + description + " ( *." + entry + " )");
         }
     }
 

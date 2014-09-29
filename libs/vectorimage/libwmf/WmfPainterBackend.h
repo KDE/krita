@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #ifndef _WMFPAINTERBACKEND_H_
-#define _WMFPAINTERPACKEND_H_
+#define _WMFPAINTERBACKEND_H_
 
 #include "kovectorimage_export.h"
 #include "WmfAbstractBackend.h"
@@ -146,7 +146,7 @@ protected:
     bool          mViewportExtIsSet;
     QTransform    mOutputTransform;
     QTransform    mWorldTransform;
-    
+
     int mSaveCount; //number of times Save() was called without Restore()
 };
 

@@ -431,6 +431,8 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
 const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &mimeList,
                                                             bool withAllSupportedEntry)
 {
+    QStringList mimeSeen;
+
     QStringList ret;
     if (withAllSupportedEntry) {
         ret << QString(i18n("All supported formats") + " ( ");
@@ -438,20 +440,23 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
 
     for (QStringList::ConstIterator
          it = mimeList.begin(); it != mimeList.end(); ++it) {
-        KMimeType::Ptr type = KMimeType::mimeType( *it );
-        if(!type)
+        KMimeType::Ptr mimeType = KMimeType::mimeType( *it );
+        if(!mimeType)
             continue;
-        QString oneFilter(type->comment() + " ( ");
-        QStringList patterns = type->patterns();
-        QStringList::ConstIterator jt;
-        for (jt = patterns.begin(); jt != patterns.end(); ++jt) {
-            oneFilter.append(*jt + " ");
-            if (withAllSupportedEntry) {
-                ret[0].append(*jt + " ");
+        if (!mimeSeen.contains(mimeType->name())) {
+            QString oneFilter(mimeType->comment() + " ( ");
+            QStringList patterns = mimeType->patterns();
+            QStringList::ConstIterator jt;
+            for (jt = patterns.begin(); jt != patterns.end(); ++jt) {
+                oneFilter.append(*jt + " ");
+                if (withAllSupportedEntry) {
+                    ret[0].append(*jt + " ");
+                }
             }
+            oneFilter.append(")");
+            ret << oneFilter;
+            mimeSeen << mimeType->name();
         }
-        oneFilter.append(")");
-        ret << oneFilter;
     }
 
     if (withAllSupportedEntry) {

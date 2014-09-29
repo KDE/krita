@@ -56,7 +56,9 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
             << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
             << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
             << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-            << "image/x-wmf" << "application/x-karbon";
+            << "image/x-wmf" << "application/x-karbon"
+            << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
+            ;
 }
 
 KoFileDialogTester::~KoFileDialogTester()

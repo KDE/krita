@@ -953,7 +953,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 
             QByteArray keyData = (*it)->description().toLatin1();
             text[0].key = keyData.data();
-            text[0].text = (*it)->annotation().data();
+            text[0].text = (char*)(*it)->annotation().data();
             text[0].text_length = (*it)->annotation().size();
             text[0].compression = -1;
 

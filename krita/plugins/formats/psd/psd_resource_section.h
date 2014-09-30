@@ -98,30 +98,30 @@ public:
         XMP_DATA          = 1060,         /* 0x0424 - XMP data block */
         CAPTION_DIGEST    = 1061,         /* 0x0425 - (Photoshop 7.0) Caption digest. 16 bytes: RSA Data Security, MD5 message-digest algorithm */
         PRINT_SCALE       = 1062,         /* 0x0426 - (Photoshop 7.0) Print scale. 2 bytes style (0 = centered, 1 = size to fit, 2 = user defined). 4 bytes x location (floating point). 4 bytes y location (floating point). 4 bytes scale (floating point) */
-        PIXEL_ASPECT_RATION = 1064,       /* 0x0428 (Photoshop CS) Pixel Aspect Ratio. 4 bytes (version = 1 or 2), 8 bytes double, x / y of a pixel. Version 2, attempting to correct values for NTSC and PAL, previously off by a factor of approx. 5%. */
-        LAYER_COMPS       = 1065,         /* 0x0429 (Photoshop CS) Layer Comps. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
-        ALTERNATE_DUOTONE = 1066,         /* 0x042A (Photoshop CS) Alternate Duotone Colors. 2 bytes (version = 1), 2 bytes count, following is repeated for each count: [ Color: 2 bytes for space followed by 4 * 2 byte color component ], following this is another 2 byte count, usually 256, followed by Lab colors one byte each for L, a, b. This resource is not read or used by Photoshop. */
-        ALTERNATE_SPOT    = 1067,         /* 0x042B (Photoshop CS)Alternate Spot Colors. 2 bytes (version = 1), 2 bytes channel count, following is repeated for each count: 4 bytes channel ID, Color: 2 bytes for space followed by 4 * 2 byte color component. This resource is not read or used by Photoshop. */
-        LAYER_SELECTION_ID =1069,         /* 0x042D (Photoshop CS2) Layer Selection ID(s). 2 bytes count, following is repeated for each count: 4 bytes layer ID */
+        PIXEL_ASPECT_RATION = 1064,       /* 0x0428 - (Photoshop CS) Pixel Aspect Ratio. 4 bytes (version = 1 or 2), 8 bytes double, x / y of a pixel. Version 2, attempting to correct values for NTSC and PAL, previously off by a factor of approx. 5%. */
+        LAYER_COMPS       = 1065,         /* 0x0429 - (Photoshop CS) Layer Comps. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
+        ALTERNATE_DUOTONE = 1066,         /* 0x042A - (Photoshop CS) Alternate Duotone Colors. 2 bytes (version = 1), 2 bytes count, following is repeated for each count: [ Color: 2 bytes for space followed by 4 * 2 byte color component ], following this is another 2 byte count, usually 256, followed by Lab colors one byte each for L, a, b. This resource is not read or used by Photoshop. */
+        ALTERNATE_SPOT    = 1067,         /* 0x042B - (Photoshop CS)Alternate Spot Colors. 2 bytes (version = 1), 2 bytes channel count, following is repeated for each count: 4 bytes channel ID, Color: 2 bytes for space followed by 4 * 2 byte color component. This resource is not read or used by Photoshop. */
+        LAYER_SELECTION_ID =1069,         /* 0x042D - (Photoshop CS2) Layer Selection ID(s). 2 bytes count, following is repeated for each count: 4 bytes layer ID */
 
-        HDR_TONING        = 1070,         /* 0x042E (Photoshop CS2) HDR Toning information */
-        CS2_PRINT_INFO    = 1071,         /* 0x042F (Photoshop CS2) Print info */
-        LAYER_GROUP_ENABLED_ID = 1072,    /* 0x0430 (Photoshop CS2) Layer Group(s) Enabled ID. 1 byte for each layer in the document, repeated by length of the resource. NOTE: Layer groups have start and end markers */
-        COLOR_SAMPLERS    = 1073,         /* 0x0431 (Photoshop CS3) Color samplers resource. Also see ID 1038 for old format. See See Color samplers resource format. */
-        MEASUREMENT_SCALE = 1074,         /* 0x0432 (Photoshop CS3) Measurement Scale. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
-        TIMELINE_INFO     = 1075,         /* 0x0433 (Photoshop CS3) Timeline Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
-        SHEET_DISCLOSURE  = 1076,         /* 0x0434 (Photoshop CS3) Sheet Disclosure. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
-        CS3_DISPLAY_INFO  = 1077,         /* 0x0435 (Photoshop CS3) DisplayInfo structure to support floating point clors. Also see ID 1007. See Appendix A in Photoshop API Guide.pdf . */
-        ONION_SKINS       = 1078,         /* 0x0436 (Photoshop CS3) Onion Skins. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
+        HDR_TONING        = 1070,         /* 0x042E - (Photoshop CS2) HDR Toning information */
+        CS2_PRINT_INFO    = 1071,         /* 0x042F - (Photoshop CS2) Print info */
+        LAYER_GROUP_ENABLED_ID = 1072,    /* 0x0430 - (Photoshop CS2) Layer Group(s) Enabled ID. 1 byte for each layer in the document, repeated by length of the resource. NOTE: Layer groups have start and end markers */
+        COLOR_SAMPLERS    = 1073,         /* 0x0431 - (Photoshop CS3) Color samplers resource. Also see ID 1038 for old format. See See Color samplers resource format. */
+        MEASUREMENT_SCALE = 1074,         /* 0x0432 - (Photoshop CS3) Measurement Scale. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
+        TIMELINE_INFO     = 1075,         /* 0x0433 - (Photoshop CS3) Timeline Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
+        SHEET_DISCLOSURE  = 1076,         /* 0x0434 - (Photoshop CS3) Sheet Disclosure. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
+        CS3_DISPLAY_INFO  = 1077,         /* 0x0435 - (Photoshop CS3) DisplayInfo structure to support floating point clors. Also see ID 1007. See Appendix A in Photoshop API Guide.pdf . */
+        ONION_SKINS       = 1078,         /* 0x0436 - (Photoshop CS3) Onion Skins. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
 
-        COUNT_INFO        = 1080,         /* 0x0438 (Photoshop CS4) Count Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the count in the document. See the Count Tool. */
-        CS5_PRINT_INFO    = 1082,         /* 0x043A (Photoshop CS5) Print Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print settings in the document. The color management options. */
-        CS5_PRINT_STYLE   = 1083,         /* 0x043B (Photoshop CS5) Print Style. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print style in the document. The printing marks, labels, ornaments, etc. */
-        CS5_NSPrintInfo   = 1084,         /* 0x043C (Photoshop CS5) Macintosh NSPrintInfo. Variable OS specific info for Macintosh. NSPrintInfo. It is recommened that you do not interpret or use this data. */
-        CS5_WIN_DEVMODE   = 1085,         /* 0x043D (Photoshop CS5) Windows DEVMODE. Variable OS specific info for Windows. DEVMODE. It is recommened that you do not interpret or use this data. */
-        CS6_AUTOSAVE_FILE_PATH = 1086,    /* 0x043E (Photoshop CS6) Auto Save File Path. Unicode string. It is recommened that you do not interpret or use this data. */
-        CS6_AUTOSAVE_FORMAT = 1087,       /* 0x043F (Photoshop CS6) Auto Save Format. Unicode string. It is recommened that you do not interpret or use this data. */
-        CC_PATH_SELECTION_SATE = 1088,    /* 0x0440 (Photoshop CC) Path Selection State. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current path selection state. */
+        COUNT_INFO        = 1080,         /* 0x0438 - (Photoshop CS4) Count Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the count in the document. See the Count Tool. */
+        CS5_PRINT_INFO    = 1082,         /* 0x043A - (Photoshop CS5) Print Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print settings in the document. The color management options. */
+        CS5_PRINT_STYLE   = 1083,         /* 0x043B - (Photoshop CS5) Print Style. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print style in the document. The printing marks, labels, ornaments, etc. */
+        CS5_NSPrintInfo   = 1084,         /* 0x043C - (Photoshop CS5) Macintosh NSPrintInfo. Variable OS specific info for Macintosh. NSPrintInfo. It is recommened that you do not interpret or use this data. */
+        CS5_WIN_DEVMODE   = 1085,         /* 0x043D - (Photoshop CS5) Windows DEVMODE. Variable OS specific info for Windows. DEVMODE. It is recommened that you do not interpret or use this data. */
+        CS6_AUTOSAVE_FILE_PATH = 1086,    /* 0x043E - (Photoshop CS6) Auto Save File Path. Unicode string. It is recommened that you do not interpret or use this data. */
+        CS6_AUTOSAVE_FORMAT = 1087,       /* 0x043F - (Photoshop CS6) Auto Save Format. Unicode string. It is recommened that you do not interpret or use this data. */
+        CC_PATH_SELECTION_SATE = 1088,    /* 0x0440 - (Photoshop CC) Path Selection State. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current path selection state. */
 
         PATH_INFO_FIRST   = 2000,         /* 0x07d0 - First path info block */
         PATH_INFO_LAST    = 2998,         /* 0x0bb6 - Last path info block */
@@ -147,6 +147,8 @@ public:
     bool read(QIODevice* io);
     bool write(QIODevice* io);
     bool valid();
+
+    static QString idToString(PSDResourceID id);
 
     QMap<PSDResourceID, PSDResourceBlock*> resources;
 

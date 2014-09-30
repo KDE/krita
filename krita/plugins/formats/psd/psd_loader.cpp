@@ -122,8 +122,8 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                                                                        colorSpaceId.second,
                                                                        iccProfileData->icc);
             dbgFile  << "Loaded ICC profile" << profile->name();
+            delete resourceSection.resources.take(PSDResourceSection::ICC_PROFILE);
         }
-
     }
 
     // Create the colorspace
@@ -143,15 +143,13 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         if (resInfo) {
             m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
             // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
+            delete resourceSection.resources.take(PSDResourceSection::RESN_INFO);
         }
     }
 
-    // Preserve the duotone colormode block for saving back to psd
-    if (header.colormode == DuoTone) {
-        KisAnnotationSP annotation = new KisAnnotation("DuotoneColormodeBlock",
-                                                       i18n("Duotone Colormode Block"),
-                                                       colorModeBlock.data);
-        m_image->addAnnotation(annotation);
+    // Preserve all the annotations
+    foreach(PSDResourceBlock *resourceBlock, resourceSection.resources.values()) {
+        m_image->addAnnotation(resourceBlock);
     }
 
     // read the projection into our single layer

@@ -66,13 +66,15 @@ public:
           m_description(description),
           m_annotation(data) {}
 
+    virtual ~KisAnnotation() {}
+
     /**
-     * gets a non-localized strin identifying the type of the
+     * gets a non-localized string identifying the type of the
      * annotation.
      * @return a non-localized string identifiying the type of the
      * annotation
      */
-    QString & type() {
+    const QString & type() const {
         return m_type;
     }
 
@@ -82,7 +84,7 @@ public:
      * @return a localized string describing the type of the
      * annotations for user interface purposes.
      */
-    QString & description() {
+    const QString & description() const {
         return m_description;
     }
 
@@ -90,11 +92,18 @@ public:
      * gets a binary blob representation of this annotation
      * @return a binary blob representation of this annotation
      */
-    QByteArray & annotation() {
+    const QByteArray & annotation() const {
         return m_annotation;
     }
 
-private:
+    /**
+     * @brief displayText: override this to return an interpreted version of the annotation
+     */
+    virtual QString displayText() const {
+        return QString::fromUtf8(m_annotation);
+    }
+
+protected:
 
     QString m_type;
     QString m_description;

@@ -27,7 +27,8 @@
 #include "psd_resource_section.h"
 
 PSDResourceBlock::PSDResourceBlock()
-    : identifier(PSDResourceSection::UNKNOWN)
+    : KisAnnotation("PSD Resource Block", "", QByteArray())
+    , identifier(PSDResourceSection::UNKNOWN)
     , resource(0)
 {
 }
@@ -55,6 +56,9 @@ bool PSDResourceBlock::read(QIODevice* io)
 
     dbgFile << "\tresource block identifier" << identifier;
 
+    m_type = QString("PSD Resource Block: %1").arg(identifier);
+
+
     if (!psdread_pascalstring(io, name, 2)) {
         error = "Could not read name of resource block";
         return false;
@@ -67,18 +71,21 @@ bool PSDResourceBlock::read(QIODevice* io)
         return false;
     }
 
-
     if ((dataSize & 0x01) != 0) {
         dataSize++;
     }
 
     dbgFile << "\tresource block size" << dataSize;
 
+    m_description = PSDResourceSection::idToString((PSDResourceSection::PSDResourceID)identifier);
+
     data = io->read(dataSize);
     if (!data.size() == dataSize) {
         error = QString("Could not read data for resource block with name %1 of type %2").arg(name).arg(identifier);
         return false;
     }
+
+    m_annotation = data;
 
     switch (identifier) {
     case PSDResourceSection::MAC_PRINT_INFO:

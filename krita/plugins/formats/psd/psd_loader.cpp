@@ -152,6 +152,15 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         m_image->addAnnotation(resourceBlock);
     }
 
+    // Preserve the duotone colormode block for saving back to psd
+    if (header.colormode == DuoTone) {
+        KisAnnotationSP annotation = new KisAnnotation("DuotoneColormodeBlock",
+                                                       i18n("Duotone Colormode Block"),
+                                                       colorModeBlock.data);
+        m_image->addAnnotation(annotation);
+    }
+
+
     // read the projection into our single layer
     if (layerSection.nLayers == 0) {
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";

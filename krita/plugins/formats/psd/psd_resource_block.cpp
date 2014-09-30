@@ -260,17 +260,32 @@ bool PSDResourceBlock::read(QIODevice* io)
 
 bool PSDResourceBlock::write(QIODevice* io)
 {
-    if (!resource->valid()) {
+
+    dbgFile << "Writing Resource Block" << PSDResourceSection::idToString((PSDResourceSection::PSDResourceID)identifier) << identifier;
+
+    if (resource && !resource->valid()) {
         error = QString("Cannot write an invalid Resource Block");
         return false;
     }
 
     QByteArray ba;
-    if (!resource->createBlock(ba)) {
+
+    // createBlock returns true by default but does not change the data.
+    if (resource && !resource->createBlock(ba)) {
         error = resource->error;
         return false;
     }
-
+    else if (!resource) {
+        // reconstruct from the data
+        QBuffer buf(&ba);
+        buf.open(QBuffer::WriteOnly);
+        buf.write("8BIM", 4);
+        psdwrite(&buf, identifier);
+        psdwrite_pascalstring(&buf, name);
+        psdwrite(&buf, dataSize);
+        buf.write(data);
+        buf.close();
+    }
     if (!io->write(ba.constData(), ba.size()) == ba.size()) {
         error = QString("Could not write complete resource");
         return false;

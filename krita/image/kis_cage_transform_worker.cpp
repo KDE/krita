@@ -67,6 +67,11 @@ struct KisCageTransformWorker::Private
 
     QSize gridSize;
 
+    bool isGridEmpty() const {
+        return allSrcPoints.isEmpty();
+    }
+
+
     QVector<QPointF> calculateTransformedPoints();
 
     /**
@@ -183,6 +188,9 @@ void KisCageTransformWorker::prepareTransform()
     QRect srcBounds = m_d->dev ? m_d->dev->region().boundingRect() :
         QRectF(m_d->srcImageOffset, m_d->srcImage.size()).toAlignedRect();
     srcBounds &= srcPolygon.boundingRect().toAlignedRect();
+
+    // no need to process empty devices
+    if (srcBounds.isEmpty()) return;
 
     m_d->gridSize =
         GridIterationTools::calcGridSize(srcBounds, m_d->pixelPrecision);
@@ -472,6 +480,8 @@ iterateThroughGrid(PolygonOp polygonOp,
 
 void KisCageTransformWorker::run()
 {
+    if (m_d->isGridEmpty()) return;
+
     KIS_ASSERT_RECOVER_RETURN(m_d->origCage.size() >= 3);
     KIS_ASSERT_RECOVER_RETURN(m_d->origCage.size() == m_d->transfCage.size());
 
@@ -504,6 +514,8 @@ void KisCageTransformWorker::run()
 
 QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
 {
+    if (m_d->isGridEmpty()) QImage();
+
     KIS_ASSERT_RECOVER(m_d->origCage.size() >= 3 &&
                        m_d->origCage.size() == m_d->transfCage.size()) {
         return QImage();

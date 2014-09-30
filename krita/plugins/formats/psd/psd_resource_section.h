@@ -30,7 +30,7 @@ class PSDResourceBlock;
 class PSDResourceSection
 {
 
-    public:
+public:
 
     enum PSDResourceID {
         UNKNOWN           = 0,
@@ -127,20 +127,18 @@ class PSDResourceSection
         PATH_INFO_LAST    = 2998,         /* 0x0bb6 - Last path info block */
         CLIPPING_PATH     = 2999,         /* 0x0bb7 - Name of clipping path */
 
+        CC_ORIGIN_PATH_INFO = 3000,        /* 0x0BB8 (Photoshop CC) Origin Path Info. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the origin path data. */
 
-       CC_ORIGIN_PATH_INFO = 3000,        /* 0x0BB8 (Photoshop CC) Origin Path Info. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the origin path data. */
+        PLUGIN_RESOURCE_START = 4000,      /* 0x0FA0-0x1387 Plug-In resource(s). Resources added by a plug-in. See the plug-in API found in the SDK documentation  */
+        PLUGIN_RESOURCE_END = 4999,        /* Last plug-in resource */
 
-       PLUGIN_RESOURCE_START = 4000,      /* 0x0FA0-0x1387 Plug-In resource(s). Resources added by a plug-in. See the plug-in API found in the SDK documentation  */
-       PLUGIN_RESOURCE_END = 4999,        /* Last plug-in resource */
+        IMAGE_READY_VARS   = 7000,         /* 0x1B58 Image Ready variables. XML representation of variables definition */
+        IMAGE_READY_DATA_SETS = 7001,      /* 0x1B59 Image Ready data sets */
 
-
-       IMAGE_READY_VARS   = 7000,         /* 0x1B58 Image Ready variables. XML representation of variables definition */
-       IMAGE_READY_DATA_SETS = 7001,      /* 0x1B59 Image Ready data sets */
-
-       LIGHTROOM_WORKFLOW = 8000,        /* 0x1F40 (Photoshop CS3) Lightroom workflow, if present the document is in the middle of a Lightroom workflow. */
+        LIGHTROOM_WORKFLOW = 8000,        /* 0x1F40 (Photoshop CS3) Lightroom workflow, if present the document is in the middle of a Lightroom workflow. */
 
         PRINT_FLAGS_2     = 10000         /* 0x2710 - Print flags */
-     };
+    };
 
 
     PSDResourceSection();

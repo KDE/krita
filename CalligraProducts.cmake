@@ -204,6 +204,7 @@ calligra_define_product(OKULAR_GENERATOR_PPT "Plugin for Okular extended with su
 calligra_define_product(OKULAR_GENERATOR_PPTX "Plugin for Okular extended with support for PPTX"  REQUIRES OKULAR_GENERATOR_ODP FILTER_PPTX_TO_ODP)
 calligra_define_product(OKULAR_GENERATOR_DOC "Plugin for Okular extended with support for DOC" REQUIRES OKULAR_GENERATOR_ODT FILTER_DOC_TO_ODT)
 calligra_define_product(OKULAR_GENERATOR_DOCX "Plugin for Okular extended with support for DOCX" REQUIRES OKULAR_GENERATOR_ODT FILTER_DOCX_TO_ODT)
+calligra_define_product(OKULAR_GENERATOR_WORDPERFECT "Plugin for Okular extended with support for WORDPERFECT" REQUIRES OKULAR_GENERATOR_ODT FILTER_WORDPERFECT_TO_ODT)
 
 # developer utils
 calligra_define_product(APP_DEVTOOLS "Tools for developers")
@@ -547,6 +548,7 @@ calligra_define_productset(OKULAR "Okular generators"
         OKULAR_GENERATOR_ODT
         OKULAR_GENERATOR_DOC
         OKULAR_GENERATOR_DOCX
+        OKULAR_GENERATOR_WORDPERFECT
 )
 
 

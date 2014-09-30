@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=CalligraPageApp/Tool
+Comment=Tool for Calligra Page Applications
+[PropertyDef::X-KoPageApp-Version]
+Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

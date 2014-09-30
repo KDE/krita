@@ -94,6 +94,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "failed reading resource section: " << resourceSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
+    // XXX: add all the image resource blocks as annotations to the image
 
     dbgFile << "Read resource section. pos:" << f.pos();
 
@@ -102,14 +103,15 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "failed reading layer section: " << layerSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    // XXX: add all the image resource blocks as annotations to the image
-
     dbgFile << "Read layer section. " << layerSection.nLayers << "layers. pos:" << f.pos();
 
     // Get the right colorspace
     QPair<QString, QString> colorSpaceId = psd_colormode_to_colormodelid(header.colormode,
                                                                          header.channelDepth);
-    if (colorSpaceId.first.isNull()) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    if (colorSpaceId.first.isNull()) {
+        dbgFile << "Unsupported colorspace" << header.colormode << header.channelDepth;
+        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
 
     // Get the icc profile!
     const KoColorProfile* profile = 0;
@@ -143,6 +145,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
         }
     }
+
     // Preserve the duotone colormode block for saving back to psd
     if (header.colormode == DuoTone) {
         KisAnnotationSP annotation = new KisAnnotation("DuotoneColormodeBlock",

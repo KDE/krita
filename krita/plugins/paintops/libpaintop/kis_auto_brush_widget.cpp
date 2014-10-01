@@ -50,9 +50,11 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
-    inputRadius->setRange(0.0, 1000.0, 2);
+    inputRadius->setRange(0, 1000, 0);
     inputRadius->setExponentRatio(3.0);
-    inputRadius->setValue(5.0);
+    inputRadius->setSingleStep(1);
+    inputRadius->setValue(5);
+    inputRadius->setSuffix(" px");
     connect(inputRadius, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxRadiusChanged(qreal)));
 
     inputRatio->setRange(0.0, 1.0, 2);

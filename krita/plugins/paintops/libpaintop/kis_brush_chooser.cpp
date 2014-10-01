@@ -111,8 +111,9 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbRotation = new QLabel(i18n("Rotation:"), this);
     m_slRotation = new KisDoubleSliderSpinBox(this);
-    m_slRotation->setRange(0.0, 360, 2);
-    m_slRotation->setValue(0.0);
+    m_slRotation->setRange(0, 360, 0);
+    m_slRotation->setValue(0);
+    m_slRotation->setSuffix(QChar(Qt::Key_degree));
     QObject::connect(m_slRotation, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
     m_lbSpacing = new QLabel(i18n("Spacing:"), this);

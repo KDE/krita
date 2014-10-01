@@ -272,6 +272,8 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     // FIXME: let's user tell the last word (in config)
     //p.setRenderHint(QPainter::Antialiasing);
 
+    // fill with color to show widget bounds
+     p.fillRect(rect(), palette().base());
 
     //  draw background
     if (!d->m_pix.isNull()) {
@@ -285,9 +287,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
             d->m_pixmapDirty = false;
         }
         p.drawPixmap(0, 0, *d->m_pixmapCache);
-    } else
-        p.fillRect(rect(), palette().background());
-
+    }
 
     d->drawGrid(p, wWidth, wHeight);
 

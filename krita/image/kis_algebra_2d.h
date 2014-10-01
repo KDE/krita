@@ -167,6 +167,28 @@ inline void accumulateBounds(const Point &pt, Rect *bounds)
     }
 }
 
+template <class Point, class Rect>
+inline Point clampPoint(Point pt, const Rect &bounds)
+{
+    if (pt.x() > bounds.right()) {
+        pt.rx() = bounds.right();
+    }
+
+    if (pt.x() < bounds.left()) {
+        pt.rx() = bounds.left();
+    }
+
+    if (pt.y() > bounds.bottom()) {
+        pt.ry() = bounds.bottom();
+    }
+
+    if (pt.y() < bounds.top()) {
+        pt.ry() = bounds.top();
+    }
+
+    return pt;
+}
+
 }
 
 #endif /* __KIS_ALGEBRA_2D_H */

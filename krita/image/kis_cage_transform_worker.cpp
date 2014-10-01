@@ -20,15 +20,12 @@
 
 #include "kis_grid_interpolation_tools.h"
 #include "kis_green_coordinates_math.h"
-#include "kis_algebra_2d.h"
 
 #include <QPainter>
 
 #include "KoColor.h"
 #include "kis_selection.h"
 #include "kis_painter.h"
-
-#include "kis_four_point_interpolator_forward.h"
 
 
 struct KisCageTransformWorker::Private
@@ -69,31 +66,12 @@ struct KisCageTransformWorker::Private
 
     QVector<QPointF> calculateTransformedPoints();
 
-    /**
-     *    A-----B         The polygons will be in the following order:
-     *    |     |
-     *    |     |         polygon << A << B << D << C;
-     *    C-----D
-     */
-    inline QVector<int> calculateCellIndexes(int col, int row);
-
     inline QVector<int> calculateMappedIndexes(int col, int row,
                                                int *numExistingPoints);
 
-    inline int pointToIndex(const QPoint &cellPt);
-
     int tryGetValidIndex(const QPoint &cellPt);
 
-    bool getOrthogonalPointApproximation(const QPoint &cellPt,
-                                         const QVector<QPointF> &transformedPoints,
-                                         QPointF *srcPoint,
-                                         QPointF *dstPoint);
-
-    inline QPoint pointIndexToColRow(QPoint baseColRow, int index);
-
-    template <class PolygonOp>
-    void iterateThroughGrid(PolygonOp polygonOp,
-                       const QVector<QPointF> &transformedPoints);
+    struct MapIndexesOp;
 };
 
 KisCageTransformWorker::KisCageTransformWorker(KisPaintDeviceSP dev,
@@ -126,12 +104,6 @@ void KisCageTransformWorker::setTransformedCage(const QVector<QPointF> &transfor
 
 struct PointsFetcherOp
 {
-    static const QPointF invalidPoint;
-    static inline bool isPointValid(const QPointF &pt) {
-        return pt.x() > -1e10 && pt.y() > -1e10;
-    }
-
-
     PointsFetcherOp(const QPolygonF &cagePolygon)
         : m_cagePolygon(cagePolygon),
           m_numValidPoints(0)
@@ -171,8 +143,6 @@ struct PointsFetcherOp
     int m_polygonDirection;
     int m_numValidPoints;
 };
-
-const QPointF PointsFetcherOp::invalidPoint(-1e12, -1e12);
 
 void KisCageTransformWorker::prepareTransform()
 {
@@ -233,28 +203,12 @@ QVector<QPointF> KisCageTransformWorker::Private::calculateTransformedPoints()
 }
 
 inline QVector<int> KisCageTransformWorker::Private::
-calculateCellIndexes(int col, int row)
-{
-    const int tl = col + row * gridSize.width();
-    const int tr = tl + 1;
-    const int bl = tl + gridSize.width();
-    const int br = bl + 1;
-
-    QVector<int> cellIndexes;
-    cellIndexes << tl;
-    cellIndexes << tr;
-    cellIndexes << br;
-    cellIndexes << bl;
-
-    return cellIndexes;
-}
-
-inline QVector<int> KisCageTransformWorker::Private::
 calculateMappedIndexes(int col, int row,
                        int *numExistingPoints)
 {
     *numExistingPoints = 0;
-    QVector<int> cellIndexes = calculateCellIndexes(col, row);
+    QVector<int> cellIndexes =
+        GridIterationTools::calculateCellIndexes(col, row, gridSize);
 
     for (int i = 0; i < 4; i++) {
         cellIndexes[i] = allToValidPointsMap[cellIndexes[i]];
@@ -264,12 +218,7 @@ calculateMappedIndexes(int col, int row,
     return cellIndexes;
 }
 
-inline int KisCageTransformWorker::Private::
-pointToIndex(const QPoint &cellPt)
-{
-    return cellPt.x() +
-        cellPt.y() * gridSize.width();
-}
+
 
 int KisCageTransformWorker::Private::
 tryGetValidIndex(const QPoint &cellPt)
@@ -281,194 +230,39 @@ tryGetValidIndex(const QPoint &cellPt)
         cellPt.y() >= 0 &&
         cellPt.x() < gridSize.width() - 1 &&
         cellPt.y() < gridSize.height() - 1 &&
-        (index = allToValidPointsMap[pointToIndex(cellPt)]) >= 0, index;
+        (index = allToValidPointsMap[GridIterationTools::pointToIndex(cellPt, gridSize)]) >= 0, index;
 }
 
-struct PointExtension {
-    int near;
-    int far;
+
+struct KisCageTransformWorker::Private::MapIndexesOp {
+
+    MapIndexesOp(KisCageTransformWorker::Private *d)
+        : m_d(d),
+          m_srcCagePolygon(QPolygonF(m_d->origCage))
+    {
+    }
+
+    inline QVector<int> calculateMappedIndexes(int col, int row,
+                                               int *numExistingPoints) const {
+
+        return m_d->calculateMappedIndexes(col, row, numExistingPoints);
+    }
+
+    inline int tryGetValidIndex(const QPoint &cellPt) const {
+        return m_d->tryGetValidIndex(cellPt);
+    }
+
+    inline QPointF getSrcPointForce(const QPoint &cellPt) const {
+        return m_d->allSrcPoints[GridIterationTools::pointToIndex(cellPt, m_d->gridSize)];
+    }
+
+    inline const QPolygonF srcCropPolygon() const {
+        return m_srcCagePolygon;
+    }
+
+    KisCageTransformWorker::Private *m_d;
+    QPolygonF m_srcCagePolygon;
 };
-
-bool KisCageTransformWorker::Private::
-getOrthogonalPointApproximation(const QPoint &cellPt,
-                                const QVector<QPointF> &transformedPoints,
-                                QPointF *srcPoint,
-                                QPointF *dstPoint)
-{
-    QVector<PointExtension> extensionPoints;
-    PointExtension ext;
-
-    // left
-    if ((ext.near = tryGetValidIndex(cellPt + QPoint(-1, 0))) >= 0 &&
-        (ext.far = tryGetValidIndex(cellPt + QPoint(-2, 0))) >= 0) {
-
-        extensionPoints << ext;
-    }
-    // top
-    if ((ext.near = tryGetValidIndex(cellPt + QPoint(0, -1))) >= 0 &&
-        (ext.far = tryGetValidIndex(cellPt + QPoint(0, -2))) >= 0) {
-
-        extensionPoints << ext;
-    }
-    // right
-    if ((ext.near = tryGetValidIndex(cellPt + QPoint(1, 0))) >= 0 &&
-        (ext.far = tryGetValidIndex(cellPt + QPoint(2, 0))) >= 0) {
-
-        extensionPoints << ext;
-    }
-    // bottom
-    if ((ext.near = tryGetValidIndex(cellPt + QPoint(0, 1))) >= 0 &&
-        (ext.far = tryGetValidIndex(cellPt + QPoint(0, 2))) >= 0) {
-
-        extensionPoints << ext;
-    }
-
-    if (extensionPoints.isEmpty()) {
-        // top-left
-        if ((ext.near = tryGetValidIndex(cellPt + QPoint(-1, -1))) >= 0 &&
-            (ext.far = tryGetValidIndex(cellPt + QPoint(-2, -2))) >= 0) {
-
-            extensionPoints << ext;
-        }
-        // top-right
-        if ((ext.near = tryGetValidIndex(cellPt + QPoint(1, -1))) >= 0 &&
-            (ext.far = tryGetValidIndex(cellPt + QPoint(2, -2))) >= 0) {
-
-            extensionPoints << ext;
-        }
-        // bottom-right
-        if ((ext.near = tryGetValidIndex(cellPt + QPoint(1, 1))) >= 0 &&
-            (ext.far = tryGetValidIndex(cellPt + QPoint(2, 2))) >= 0) {
-
-            extensionPoints << ext;
-        }
-        // bottom-left
-        if ((ext.near = tryGetValidIndex(cellPt + QPoint(-1, 1))) >= 0 &&
-            (ext.far = tryGetValidIndex(cellPt + QPoint(-2, 2))) >= 0) {
-
-            extensionPoints << ext;
-        }
-    }
-
-    if (extensionPoints.isEmpty()) {
-        return false;
-    }
-
-    int numResultPoints = 0;
-    *srcPoint = allSrcPoints[pointToIndex(cellPt)];
-    *dstPoint = QPointF();
-
-    foreach (const PointExtension &ext, extensionPoints) {
-        QPointF near = transformedPoints[ext.near];
-        QPointF far = transformedPoints[ext.far];
-
-        QPointF nearSrc = validPoints[ext.near];
-        QPointF farSrc = validPoints[ext.far];
-
-        QPointF base1 = nearSrc - farSrc;
-        QPointF base2 = near - far;
-
-        QPointF pt = near +
-            KisAlgebra2D::transformAsBase(*srcPoint - nearSrc, base1, base2);
-
-        *dstPoint += pt;
-        numResultPoints++;
-    }
-
-    *dstPoint /= numResultPoints;
-
-    return true;
-}
-
-inline QPoint KisCageTransformWorker::Private::
-pointIndexToColRow(QPoint baseColRow, int index)
-{
-    static QVector<QPoint> pointOffsets;
-    if (pointOffsets.isEmpty()) {
-        pointOffsets << QPoint(0,0);
-        pointOffsets << QPoint(1,0);
-        pointOffsets << QPoint(1,1);
-        pointOffsets << QPoint(0,1);
-    }
-
-    return baseColRow + pointOffsets[index];
-}
-
-template <class PolygonOp>
-void KisCageTransformWorker::Private::
-iterateThroughGrid(PolygonOp polygonOp,
-                   const QVector<QPointF> &transformedPoints)
-{
-    QPolygonF cageDstPolygon(transfCage);
-    QPolygonF cageSrcPolygon(origCage);
-
-    QVector<int> polygonPoints(4);
-
-    for (int row = 0; row < gridSize.height() - 1; row++) {
-        for (int col = 0; col < gridSize.width() - 1; col++) {
-            int numExistingPoints = 0;
-
-            polygonPoints = calculateMappedIndexes(col, row, &numExistingPoints);
-
-            if (numExistingPoints == 0) continue;
-
-            if (numExistingPoints < 4) {
-
-                QPolygonF srcPolygon;
-                QPolygonF dstPolygon;
-
-                for (int i = 0; i < 4; i++) {
-                    const int index = polygonPoints[i];
-
-                    if (index >= 0) {
-                        srcPolygon << validPoints[index];
-                        dstPolygon << transformedPoints[index];
-                    } else {
-                        QPoint cellPt = pointIndexToColRow(QPoint(col, row), i);
-                        QPointF srcPoint;
-                        QPointF dstPoint;
-                        bool result =
-                            getOrthogonalPointApproximation(cellPt,
-                                                            transformedPoints,
-                                                            &srcPoint,
-                                                            &dstPoint);
-
-                        if (!result) {
-                            //qDebug() << "*NOT* found any valid point" << allSrcPoints[pointToIndex(cellPt)] << "->" << ppVar(pt);
-                            break;
-                        } else {
-                            srcPolygon << srcPoint;
-                            dstPolygon << dstPoint;
-                        }
-                    }
-                }
-
-                if (dstPolygon.size() == 4) {
-                    QPolygonF srcClipPolygon(srcPolygon.intersected(cageSrcPolygon));
-
-                    KisFourPointInterpolatorForward forwardTransform(srcPolygon, dstPolygon);
-                    for (int i = 0; i < srcClipPolygon.size(); i++) {
-                        const QPointF newPt = forwardTransform.map(srcClipPolygon[i]);
-                        srcClipPolygon[i] = newPt;
-                    }
-
-                    polygonOp(srcPolygon, dstPolygon, srcClipPolygon);
-                }
-            } else {
-                QPolygonF srcPolygon;
-                QPolygonF dstPolygon;
-
-                for (int i = 0; i < 4; i++) {
-                    const int index = polygonPoints[i];
-                    srcPolygon << validPoints[index];
-                    dstPolygon << transformedPoints[index];
-                }
-
-                polygonOp(srcPolygon, dstPolygon);
-            }
-        }
-    }
-}
 
 void KisCageTransformWorker::run()
 {
@@ -495,7 +289,12 @@ void KisCageTransformWorker::run()
     }
 
     GridIterationTools::PaintDevicePolygonOp polygonOp(srcDev, tempDevice);
-    m_d->iterateThroughGrid(polygonOp, transformedPoints);
+    Private::MapIndexesOp indexesOp(m_d.data());
+    GridIterationTools::iterateThroughGrid
+        <GridIterationTools::IncompletePolygonPolicy>(polygonOp, indexesOp,
+                                                      m_d->gridSize,
+                                                      m_d->validPoints,
+                                                      transformedPoints);
 
     QRect rect = tempDevice->extent();
     KisPainter gc(m_d->dev);
@@ -550,7 +349,12 @@ QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
     }
 
     GridIterationTools::QImagePolygonOp polygonOp(m_d->srcImage, tempImage, m_d->srcImageOffset, dstQImageOffset);
-    m_d->iterateThroughGrid(polygonOp, transformedPoints);
+    Private::MapIndexesOp indexesOp(m_d.data());
+    GridIterationTools::iterateThroughGrid
+        <GridIterationTools::IncompletePolygonPolicy>(polygonOp, indexesOp,
+                                                      m_d->gridSize,
+                                                      m_d->validPoints,
+                                                      transformedPoints);
 
     {
         QPainter gc(&dstImage);

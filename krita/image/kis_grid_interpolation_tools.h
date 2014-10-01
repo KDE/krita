@@ -24,6 +24,8 @@
 
 #include <QImage>
 
+#include "kis_algebra_2d.h"
+#include "kis_four_point_interpolator_forward.h"
 #include "kis_four_point_interpolator_backward.h"
 #include "kis_iterator_ng.h"
 #include "kis_random_sub_accessor.h"
@@ -265,10 +267,8 @@ struct QImagePolygonOp
                     QPoint srcPointI = srcPoint.toPoint();
                     QPoint dstPointI = dstPoint.toPoint();
 
-                    srcPointI.rx() = qBound(m_dstImageRect.x(), srcPointI.x(), m_dstImageRect.right());
-                    srcPointI.ry() = qBound(m_dstImageRect.y(), srcPointI.y(), m_dstImageRect.bottom());
-                    dstPointI.rx() = qBound(m_srcImageRect.x(), dstPointI.x(), m_srcImageRect.right());
-                    dstPointI.ry() = qBound(m_srcImageRect.y(), dstPointI.y(), m_srcImageRect.bottom());
+                    srcPointI = KisAlgebra2D::clampPoint(srcPointI, m_dstImageRect);
+                    dstPointI = KisAlgebra2D::clampPoint(dstPointI, m_srcImageRect);
 
                     m_dstImage.setPixel(srcPointI, m_srcImage.pixel(dstPointI));
                 }
@@ -298,6 +298,277 @@ struct QImagePolygonOp
     QRect m_srcImageRect;
     QRect m_dstImageRect;
 };
+
+/*************************************************************/
+/*      Iteration through precalculated grid                 */
+/*************************************************************/
+
+/**
+ *    A-----B         The polygons will be in the following order:
+ *    |     |
+ *    |     |         polygon << A << B << D << C;
+ *    C-----D
+ */
+inline QVector<int> calculateCellIndexes(int col, int row, const QSize &gridSize)
+{
+    const int tl = col + row * gridSize.width();
+    const int tr = tl + 1;
+    const int bl = tl + gridSize.width();
+    const int br = bl + 1;
+
+    QVector<int> cellIndexes;
+    cellIndexes << tl;
+    cellIndexes << tr;
+    cellIndexes << br;
+    cellIndexes << bl;
+
+    return cellIndexes;
+}
+
+inline int pointToIndex(const QPoint &cellPt, const QSize &gridSize)
+{
+    return cellPt.x() +
+        cellPt.y() * gridSize.width();
+}
+
+namespace Private {
+    inline QPoint pointPolygonIndexToColRow(QPoint baseColRow, int index)
+    {
+        static QVector<QPoint> pointOffsets;
+        if (pointOffsets.isEmpty()) {
+            pointOffsets << QPoint(0,0);
+            pointOffsets << QPoint(1,0);
+            pointOffsets << QPoint(1,1);
+            pointOffsets << QPoint(0,1);
+        }
+
+        return baseColRow + pointOffsets[index];
+    }
+
+    struct PointExtension {
+        int near;
+        int far;
+    };
+}
+
+template <class IndexesOp>
+bool getOrthogonalPointApproximation(const QPoint &cellPt,
+                                const QVector<QPointF> &originalPoints,
+                                const QVector<QPointF> &transformedPoints,
+                                IndexesOp indexesOp,
+                                QPointF *srcPoint,
+                                QPointF *dstPoint)
+{
+    QVector<Private::PointExtension> extensionPoints;
+    Private::PointExtension ext;
+
+    // left
+    if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(-1, 0))) >= 0 &&
+        (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(-2, 0))) >= 0) {
+
+        extensionPoints << ext;
+    }
+    // top
+    if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(0, -1))) >= 0 &&
+        (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(0, -2))) >= 0) {
+
+        extensionPoints << ext;
+    }
+    // right
+    if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(1, 0))) >= 0 &&
+        (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(2, 0))) >= 0) {
+
+        extensionPoints << ext;
+    }
+    // bottom
+    if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(0, 1))) >= 0 &&
+        (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(0, 2))) >= 0) {
+
+        extensionPoints << ext;
+    }
+
+    if (extensionPoints.isEmpty()) {
+        // top-left
+        if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(-1, -1))) >= 0 &&
+            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(-2, -2))) >= 0) {
+
+            extensionPoints << ext;
+        }
+        // top-right
+        if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(1, -1))) >= 0 &&
+            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(2, -2))) >= 0) {
+
+            extensionPoints << ext;
+        }
+        // bottom-right
+        if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(1, 1))) >= 0 &&
+            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(2, 2))) >= 0) {
+
+            extensionPoints << ext;
+        }
+        // bottom-left
+        if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(-1, 1))) >= 0 &&
+            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(-2, 2))) >= 0) {
+
+            extensionPoints << ext;
+        }
+    }
+
+    if (extensionPoints.isEmpty()) {
+        return false;
+    }
+
+    int numResultPoints = 0;
+    *srcPoint = indexesOp.getSrcPointForce(cellPt);
+    *dstPoint = QPointF();
+
+    foreach (const Private::PointExtension &ext, extensionPoints) {
+        QPointF near = transformedPoints[ext.near];
+        QPointF far = transformedPoints[ext.far];
+
+        QPointF nearSrc = originalPoints[ext.near];
+        QPointF farSrc = originalPoints[ext.far];
+
+        QPointF base1 = nearSrc - farSrc;
+        QPointF base2 = near - far;
+
+        QPointF pt = near +
+            KisAlgebra2D::transformAsBase(*srcPoint - nearSrc, base1, base2);
+
+        *dstPoint += pt;
+        numResultPoints++;
+    }
+
+    *dstPoint /= numResultPoints;
+
+    return true;
+}
+
+template <class PolygonOp, class IndexesOp>
+struct IncompletePolygonPolicy {
+
+    static inline bool tryProcessPolygon(int col, int row,
+                                         int numExistingPoints,
+                                         PolygonOp &polygonOp,
+                                         IndexesOp &indexesOp,
+                                         const QVector<int> &polygonPoints,
+                                         const QVector<QPointF> &originalPoints,
+                                         const QVector<QPointF> &transformedPoints)
+    {
+        if (numExistingPoints >= 4) return false;
+        if (numExistingPoints == 0) return true;
+
+        QPolygonF srcPolygon;
+        QPolygonF dstPolygon;
+
+        for (int i = 0; i < 4; i++) {
+            const int index = polygonPoints[i];
+
+            if (index >= 0) {
+                srcPolygon << originalPoints[index];
+                dstPolygon << transformedPoints[index];
+            } else {
+                QPoint cellPt = Private::pointPolygonIndexToColRow(QPoint(col, row), i);
+                QPointF srcPoint;
+                QPointF dstPoint;
+                bool result =
+                    getOrthogonalPointApproximation(cellPt,
+                                                    originalPoints,
+                                                    transformedPoints,
+                                                    indexesOp,
+                                                    &srcPoint,
+                                                    &dstPoint);
+
+                if (!result) {
+                    //qDebug() << "*NOT* found any valid point" << allSrcPoints[pointToIndex(cellPt)] << "->" << ppVar(pt);
+                    break;
+                } else {
+                    srcPolygon << srcPoint;
+                    dstPolygon << dstPoint;
+                }
+            }
+        }
+
+        if (dstPolygon.size() == 4) {
+            QPolygonF srcClipPolygon(srcPolygon.intersected(indexesOp.srcCropPolygon()));
+
+            KisFourPointInterpolatorForward forwardTransform(srcPolygon, dstPolygon);
+            for (int i = 0; i < srcClipPolygon.size(); i++) {
+                const QPointF newPt = forwardTransform.map(srcClipPolygon[i]);
+                srcClipPolygon[i] = newPt;
+            }
+
+            polygonOp(srcPolygon, dstPolygon, srcClipPolygon);
+        }
+
+        return true;
+    }
+};
+
+template <class PolygonOp, class IndexesOp>
+struct AlwaysCompletePolygonPolicy {
+
+    static inline bool tryProcessPolygon(int col, int row,
+                                         int numExistingPoints,
+                                         PolygonOp &polygonOp,
+                                         IndexesOp &indexesOp,
+                                         const QVector<int> &polygonPoints,
+                                         const QVector<QPointF> &originalPoints,
+                                         const QVector<QPointF> &transformedPoints)
+    {
+        Q_UNUSED(col);
+        Q_UNUSED(row);
+        Q_UNUSED(polygonOp);
+        Q_UNUSED(indexesOp);
+        Q_UNUSED(polygonPoints);
+        Q_UNUSED(originalPoints);
+        Q_UNUSED(transformedPoints);
+
+        KIS_ASSERT_RECOVER_NOOP(numExistingPoints == 4);
+        return false;
+    }
+};
+
+template <template <class PolygonOp, class IndexesOp> class IncompletePolygonPolicy,
+          class PolygonOp,
+          class IndexesOp>
+void iterateThroughGrid(PolygonOp &polygonOp,
+                        IndexesOp &indexesOp,
+                        const QSize &gridSize,
+                        const QVector<QPointF> &originalPoints,
+                        const QVector<QPointF> &transformedPoints)
+{
+    QVector<int> polygonPoints(4);
+
+    for (int row = 0; row < gridSize.height() - 1; row++) {
+        for (int col = 0; col < gridSize.width() - 1; col++) {
+            int numExistingPoints = 0;
+
+            polygonPoints = indexesOp.calculateMappedIndexes(col, row, &numExistingPoints);
+
+            if (!IncompletePolygonPolicy<PolygonOp, IndexesOp>::
+                 tryProcessPolygon(col, row,
+                                   numExistingPoints,
+                                   polygonOp,
+                                   indexesOp,
+                                   polygonPoints,
+                                   originalPoints,
+                                   transformedPoints)) {
+
+                QPolygonF srcPolygon;
+                QPolygonF dstPolygon;
+
+                for (int i = 0; i < 4; i++) {
+                    const int index = polygonPoints[i];
+                    srcPolygon << originalPoints[index];
+                    dstPolygon << transformedPoints[index];
+                }
+
+                polygonOp(srcPolygon, dstPolygon);
+            }
+        }
+    }
+}
 
 }
 

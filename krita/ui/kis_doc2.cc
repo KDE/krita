@@ -59,7 +59,6 @@
 #include <KoColorSpaceEngine.h>
 #include <KoID.h>
 #include <KoOdfReadStore.h>
-#include <KoOdfWriteStore.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <KoSelection.h>

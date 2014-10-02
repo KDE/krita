@@ -32,7 +32,6 @@
 #include <KoToolManager.h>
 #include <KoTextDocument.h>
 #include <KoTextRdfCore.h>
-#include "KoOdfWriteStore.h"
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>

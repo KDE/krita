@@ -30,7 +30,7 @@ public:
     KoDirectoryStore(const QString& path, Mode _mode, bool writeMimetype);
     ~KoDirectoryStore();
 protected:
-    virtual bool init(Mode _mode);
+    void init();
     virtual bool openWrite(const QString &name) {
         return openReadOrWrite(name, QIODevice::WriteOnly);
     }

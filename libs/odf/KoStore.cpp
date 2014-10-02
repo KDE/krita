@@ -190,21 +190,9 @@ const char* const ROOTPART = "root";
 const char* const MAINNAME = "maindoc.xml";
 }
 
-KoStore::KoStore(bool writeMimetype)
-    : d_ptr(new KoStorePrivate(this))
-{
-    d_ptr->writeMimetype = writeMimetype;
-}
-
-bool KoStore::init(Mode mode)
-{
-    Q_D(KoStore);
-    d->isOpen = false;
-    d->mode = mode;
-    d->stream = 0;
-    d->finalized = false;
-    return true;
-}
+KoStore::KoStore(Mode mode, bool writeMimetype)
+    : d_ptr(new KoStorePrivate(this, mode, writeMimetype))
+{}
 
 KoStore::~KoStore()
 {

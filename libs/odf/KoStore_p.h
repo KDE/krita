@@ -33,16 +33,17 @@ class QWidget;
 class KoStorePrivate
 {
 public:
-    explicit KoStorePrivate(KoStore *qq)
+    explicit KoStorePrivate(KoStore *qq, KoStore::Mode _mode, bool _writeMimetype)
         : q(qq),
         fileMode(Local),
         window(0),
+        mode(_mode),
         size(0),
         stream(0),
         isOpen(false),
         good(false),
         finalized(false),
-        writeMimetype(true)
+        writeMimetype(_writeMimetype)
     {
     }
 

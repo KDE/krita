@@ -138,6 +138,10 @@ void KisTimeline::init()
 
     QToolBar* frameButtons = new QToolBar(this);
 
+    KisAction* addFrameAction = new KisAction(koIcon("list-add"), i18n("Insert Frame"), this);
+    actionManager->addAction("insert_frame", addFrameAction, actionCollection);
+    connect(addFrameAction, SIGNAL(triggered()), this, SLOT(addframePressed()));
+
     KisAction* addKeyFrameAction = new KisAction(koIcon("list-add"), i18n("Insert Keyframe"), this);
     actionManager->addAction("insert_key_frame", addKeyFrameAction, actionCollection);
     connect(addKeyFrameAction, SIGNAL(triggered()), this, SLOT(keyFramePressed()));
@@ -150,6 +154,7 @@ void KisTimeline::init()
     actionManager->addAction("remove_frame", removeFrameAction, actionCollection);
     connect(removeFrameAction, SIGNAL(triggered()), this, SLOT(removeFramePressed()));
 
+    frameButtons->addAction(addFrameAction);
     frameButtons->addAction(addKeyFrameAction);
     frameButtons->addAction(addBlankFrameAction);
     frameButtons->addAction(removeFrameAction);
@@ -416,6 +421,14 @@ void KisTimeline::keyFramePressed()
 
         m_cells->setSelectedFrame();
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addKeyFrame(globalGeometry);
+    }
+}
+
+void KisTimeline::addframePressed()
+{
+    if(m_cells->getSelectedFrame()) {
+        this->m_cells->getSelectedFrame()->expandWidth();
+        this->m_cells->setSelectedFrame();
     }
 }
 

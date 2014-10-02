@@ -53,40 +53,6 @@ void KisAnimationFrame::paintEvent(QPaintEvent *event)
     }
 }
 
-void KisAnimationFrame::mouseMoveEvent(QMouseEvent *event)
-{
-    if(m_mousePressed) {
-
-        if(this->m_type == KisAnimationFrame::SELECTION) {
-            return;
-        }
-
-        int x = event->globalX();
-
-        int displacement = x - m_mousePressStartPoint;
-        this->setGeometry(m_startPoint + displacement, this->y(), this->width(), this->height());
-    }
-}
-
-void KisAnimationFrame::mousePressEvent(QMouseEvent *event)
-{
-    m_mousePressed = true;
-    m_mousePressStartPoint = event->globalX();
-    m_startPoint = this->geometry().x();
-}
-
-void KisAnimationFrame::mouseReleaseEvent(QMouseEvent *event)
-{
-    m_mousePressed = false;
-    m_mousePressEndPoint = event->globalX();
-
-    int x = (this->geometry().x() / 10);
-    x *= 10;
-
-    m_startPoint = x;
-    this->setGeometry(x, this->y(), this->width(), this->height());
-}
-
 int KisAnimationFrame::getWidth()
 {
     return m_width;

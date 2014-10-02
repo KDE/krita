@@ -44,7 +44,6 @@
 #include <kis_debug.h>
 #include <kglobal.h>
 #include <kmenu.h>
-#include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <klocale.h>
 #include <khbox.h>

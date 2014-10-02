@@ -28,7 +28,6 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kmessagebox.h>
 
 #include "KoColorSpace.h"
 #include "KoStore.h"

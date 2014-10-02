@@ -23,7 +23,6 @@
 #include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
 
 #include <KoFilterChain.h>
 

@@ -44,7 +44,6 @@
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kundo2stack.h>
 #include <kstandarddirs.h>

@@ -33,7 +33,6 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>

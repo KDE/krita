@@ -31,7 +31,6 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
-#include <kmessagebox.h>
 
 #include "kis_doc2.h"
 #include "kis_view2.h"

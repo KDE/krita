@@ -30,7 +30,6 @@
 #include <kdebug.h>
 #include <krun.h>
 #include <ktoolinvocation.h>
-#include <kmessagebox.h>
 #include <kguiitem.h>
 
 #include <calligraversion.h>

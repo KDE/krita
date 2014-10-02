@@ -33,7 +33,6 @@
 #include <KoColorModelStandardIds.h>
 
 #include <kdialog.h>
-#include <kmessagebox.h>
 
 #include <kis_debug.h>
 #include <kis_doc2.h>

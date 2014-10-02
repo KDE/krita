@@ -28,7 +28,6 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
 

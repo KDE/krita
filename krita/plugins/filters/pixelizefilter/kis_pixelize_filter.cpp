@@ -32,7 +32,6 @@
 #include <QVector>
 
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kpluginfactory.h>
 #include <knuminput.h>

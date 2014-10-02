@@ -42,7 +42,6 @@
 #include <knotification.h>
 #include <kdialog.h>
 #include <kdesktopfile.h>
-#include <kmessagebox.h>
 #include <kmimetype.h>
 
 #include <QGraphicsScene>

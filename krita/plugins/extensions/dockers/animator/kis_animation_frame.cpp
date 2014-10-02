@@ -27,7 +27,6 @@ KisAnimationFrame::KisAnimationFrame(KisLayerContents *parent, int type, int wid
     this->m_width = width;
     this->setParent(parent);
     this->m_parent = parent;
-    m_dragging = false;
 }
 
 void KisAnimationFrame::paintEvent(QPaintEvent *event)
@@ -58,7 +57,9 @@ void KisAnimationFrame::mouseMoveEvent(QMouseEvent *event)
 {
     if(m_mousePressed) {
 
-        m_dragging = true;
+        if(this->m_type == KisAnimationFrame::SELECTION) {
+            return;
+        }
 
         int x = event->globalX();
 
@@ -77,21 +78,13 @@ void KisAnimationFrame::mousePressEvent(QMouseEvent *event)
 void KisAnimationFrame::mouseReleaseEvent(QMouseEvent *event)
 {
     m_mousePressed = false;
+    m_mousePressEndPoint = event->globalX();
 
-    if(m_dragging) {
+    int x = (this->geometry().x() / 10);
+    x *= 10;
 
-        m_dragging = false;
-
-        m_mousePressEndPoint = event->globalX();
-
-        int x = (this->geometry().x() / 10);
-        x *= 10;
-
-        m_startPoint = x;
-        this->setGeometry(x, this->y(), this->width(), this->height());
-    }
-
-    m_parent->mouseReleased(this->x() + event->x());
+    m_startPoint = x;
+    this->setGeometry(x, this->y(), this->width(), this->height());
 }
 
 int KisAnimationFrame::getWidth()

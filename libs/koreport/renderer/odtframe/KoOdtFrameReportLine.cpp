@@ -25,8 +25,6 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoUnit.h>
-#include <KoStore.h>
-#include <KoStoreDevice.h>
 
 #include "renderobjects.h"
 

@@ -29,7 +29,6 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfStylesReader.h>
-#include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>

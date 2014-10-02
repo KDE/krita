@@ -29,7 +29,6 @@
 #define _KIS_ANNOTATION_H_
 
 #include <kis_shared.h>
-#include "kis_shared_ptr_vector.h"
 
 #include <QByteArray>
 #include <QString>

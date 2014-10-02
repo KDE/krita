@@ -31,7 +31,6 @@
 #include <KoOdfStylesReader.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
-#include <KoXmlWriter.h>
 
 #include <kdebug.h>
 

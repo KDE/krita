@@ -31,7 +31,6 @@
 #include "Object3D.h"
 
 class KoXmlElement;
-class KoXmlWriter;
 
 
 class Sphere : public Object3D, public KoShape

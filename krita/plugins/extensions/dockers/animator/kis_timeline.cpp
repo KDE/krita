@@ -48,6 +48,7 @@
 #include <QScrollArea>
 #include <QMenu>
 #include <QScrollBar>
+#include <kis_icon.h>
 
 KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 {
@@ -98,15 +99,15 @@ void KisTimeline::init()
     addLayerButton->setMenu(layerMenu);
     addLayerButton->setPopupMode(QToolButton::InstantPopup);
 
-    KisAction* removeLayerAction = new KisAction(koIcon("list-remove"), i18n("Remove Animation Layer"), this);
+    KisAction* removeLayerAction = new KisAction(kisIcon("deletelayer"), i18n("Remove Animation Layer"), this);
     actionManager->addAction("remove_animation_layer", removeLayerAction, actionCollection);
     connect(removeLayerAction, SIGNAL(triggered()), this, SLOT(removeLayerPressed()));
 
-    KisAction* layerUpAction = new KisAction(koIcon("arrow-up"), i18n("Move animation layer up"), this);
+    KisAction* layerUpAction = new KisAction(kisIcon("arrowupblr"), i18n("Move animation layer up"), this);
     actionManager->addAction("move_animation_layer_up", layerUpAction, actionCollection);
     connect(layerUpAction, SIGNAL(triggered()), this, SLOT(layerUpPressed()));
 
-    KisAction* layerDownAction = new KisAction(koIcon("arrow-down"), i18n("Move animation layer down"), this);
+    KisAction* layerDownAction = new KisAction(kisIcon("arrowdown"), i18n("Move animation layer down"), this);
     actionManager->addAction("move_animation_layer_down", layerDownAction, actionCollection);
     connect(layerDownAction, SIGNAL(triggered()), this, SLOT(layerDownPressed()));
 

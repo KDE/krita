@@ -80,7 +80,6 @@
 #include <KoToolRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
-#include <KoOdfReadStore.h>
 #include <KoDocumentEntry.h>
 #include <KoOdfStylesReader.h>
 #include <KoCanvasBase.h>

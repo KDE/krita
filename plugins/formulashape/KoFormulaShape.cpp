@@ -26,7 +26,6 @@
 #include <kurl.h>
 
 #include <KoStore.h>
-#include <KoOdfReadStore.h>
 #include <KoDocumentEntry.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>

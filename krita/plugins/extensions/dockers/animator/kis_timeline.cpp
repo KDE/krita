@@ -82,14 +82,14 @@ void KisTimeline::init()
     QToolBar* layerButtons = new QToolBar(this);
 
     QToolButton* addLayerButton = new QToolButton(this);
-    addLayerButton->setIcon(koIcon("list-add"));
+    addLayerButton->setIcon(kisIcon("addlayer"));
     addLayerButton->setToolTip(i18n("Add Animation Layer"));
 
-    KisAction* addPaintLayerAction = new KisAction(koIcon("list-add"), i18n("Add Animation Paint Layer"), this);
+    KisAction* addPaintLayerAction = new KisAction(koIcon("document-new"), i18n("Add Animation Paint Layer"), this);
     actionManager->addAction("add_animation_paint_layer", addPaintLayerAction, actionCollection);
     connect(addPaintLayerAction, SIGNAL(triggered()), this, SLOT(paintLayerPressed()));
 
-    KisAction* addVectorLayerAction = new KisAction(koIcon("list-add"), i18n("Add Animation Vector Layer"), this);
+    KisAction* addVectorLayerAction = new KisAction(koIcon("bookmark-new"), i18n("Add Animation Vector Layer"), this);
     actionManager->addAction("add_animation_vector_layer", addVectorLayerAction, actionCollection);
     connect(addVectorLayerAction, SIGNAL(triggered()), this, SLOT(vectorLayerPressed()));
 
@@ -138,11 +138,13 @@ void KisTimeline::init()
     leftWidget->setLayout(leftLayout);
 
     QToolBar* frameButtons = new QToolBar(this);
-
+/*
+ * remove redundant button
+ *
     KisAction* addFrameAction = new KisAction(koIcon("list-add"), i18n("Insert Frame"), this);
     actionManager->addAction("insert_frame", addFrameAction, actionCollection);
     connect(addFrameAction, SIGNAL(triggered()), this, SLOT(addframePressed()));
-
+*/
     KisAction* addKeyFrameAction = new KisAction(koIcon("list-add"), i18n("Insert Keyframe"), this);
     actionManager->addAction("insert_key_frame", addKeyFrameAction, actionCollection);
     connect(addKeyFrameAction, SIGNAL(triggered()), this, SLOT(keyFramePressed()));
@@ -155,7 +157,7 @@ void KisTimeline::init()
     actionManager->addAction("remove_frame", removeFrameAction, actionCollection);
     connect(removeFrameAction, SIGNAL(triggered()), this, SLOT(removeFramePressed()));
 
-    frameButtons->addAction(addFrameAction);
+//  frameButtons->addAction(addFrameAction);
     frameButtons->addAction(addKeyFrameAction);
     frameButtons->addAction(addBlankFrameAction);
     frameButtons->addAction(removeFrameAction);
@@ -425,6 +427,7 @@ void KisTimeline::keyFramePressed()
     }
 }
 
+/*
 void KisTimeline::addframePressed()
 {
     if(m_cells->getSelectedFrame()) {
@@ -432,6 +435,7 @@ void KisTimeline::addframePressed()
         this->m_cells->setSelectedFrame();
     }
 }
+*/
 
 void KisTimeline::removeFramePressed()
 {

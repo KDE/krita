@@ -80,6 +80,8 @@ dark_properties.png
 dark_selection-mode_ants.png
 dark_selection-mode_invisible.png
 dark_selection-mode_mask.png
+dark_onionA.png
+dark_onionB.png
 
 light_select.png
 light_pattern.png
@@ -96,6 +98,8 @@ light_properties.png
 light_selection-mode_ants.png
 light_selection-mode_invisible.png
 light_selection-mode_mask.png
+light_onionA.png
+light_onionB.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 add_subdirectory(app)

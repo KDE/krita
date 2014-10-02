@@ -66,18 +66,11 @@ public:
 private:
     int m_type;
     int m_width;
-
     KisLayerContents* m_parent;
-
+    bool m_mousePressed;
     int m_mousePressStartPoint;
     int m_mousePressEndPoint;
-
-    int m_localMousePressStartPoint;
-    int m_localMousePressEndPoint;
-
     int m_startPoint;
-
-    bool m_mousePressed;
     bool m_dragging;
 };
 

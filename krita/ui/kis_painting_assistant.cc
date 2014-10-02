@@ -25,6 +25,8 @@
 #include "kis_debug.h"
 #include <kis_canvas2.h>
 
+#include <KoStore.h>
+
 #include <kglobal.h>
 #include <QPen>
 #include <QPainter>

@@ -26,7 +26,6 @@
 #include <sheets/part/Doc.h>
 #include <sheets/Map.h>
 #include <sheets/Sheet.h>
-#include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocument.h>

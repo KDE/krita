@@ -62,7 +62,6 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 
-#include <KoStore.h>
 #include <KoMainWindow.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>

@@ -68,7 +68,6 @@
 #include <KoShape.h>
 #include <KoToolManager.h>
 #include <KoPart.h>
-#include <KoStore.h>
 
 // Krita Image
 #include <kis_config.h>

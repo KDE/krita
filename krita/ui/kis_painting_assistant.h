@@ -30,12 +30,12 @@
 #include <krita_export.h>
 #include <kis_shared.h>
 #include <kio/job.h>
-#include <KoStore.h>
 #include <kis_canvas2.h>
 
 class QPainter;
 class QRect;
 class QRectF;
+class KoStore;
 class KisCoordinatesConverter;
 class KisDoc2;
 

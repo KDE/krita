@@ -23,7 +23,6 @@
 #include "kis_view2.h"
 
 #include <KoIcon.h>
-#include <kis_icon.h>
 
 #include <QPainter>
 #include <QLineEdit>
@@ -56,7 +55,7 @@ KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent, int index)
     connect(m_lockToggle, SIGNAL(clicked()), this, SLOT(lockToggleClicked()));
 
     m_onionSkinToggle = new QPushButton(this);
-    m_onionSkinToggle->setIcon(kisIcon("onionA"));
+    m_onionSkinToggle->setIcon(koIcon("onionA"));
     m_onionSkinToggle->setGeometry(QRect(150, 0, 20, 20));
     connect(m_onionSkinToggle, SIGNAL(clicked()), this, SLOT(onionSkinToggleClicked()));
 
@@ -96,7 +95,7 @@ void KisAnimationLayer::onionSkinToggleClicked()
     m_layerBox->setOnionSkinState(layer, onionSkinState);
 
     if(onionSkinState) {
-        m_onionSkinToggle->setIcon(kisIcon("onionB"));
+        m_onionSkinToggle->setIcon(koIcon("onionB"));
     } else {
         m_onionSkinToggle->setIcon(koIcon("onionA"));
     }

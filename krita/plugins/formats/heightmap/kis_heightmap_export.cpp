@@ -20,9 +20,9 @@
 
 #include <qendian.h>
 #include <QDataStream>
+#include <QApplication>
 
 #include <kpluginfactory.h>
-#include <kapplication.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
@@ -94,7 +94,7 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
     optionsHeightMap.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     QString filterConfig = KisConfig().exportConfiguration("HeightMap");
     KisPropertiesConfiguration cfg;

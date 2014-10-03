@@ -40,7 +40,6 @@
 #include <KoShapeBasedDocumentBase.h>
 #include <KoResourceServerProvider.h>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 
 #include <QApplication>

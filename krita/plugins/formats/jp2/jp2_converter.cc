@@ -21,8 +21,8 @@
 #include <openjpeg.h>
 
 #include <QFileInfo>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 
 #include <kio/netaccess.h>

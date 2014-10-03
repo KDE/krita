@@ -24,7 +24,6 @@
 
 #include <kio/netaccess.h>
 
-#include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
 

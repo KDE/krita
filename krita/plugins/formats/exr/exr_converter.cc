@@ -30,7 +30,8 @@
 #include <ImfStringAttribute.h>
 #include "exr_extra_tags.h"
 
-#include <kapplication.h>
+#include <QApplication>
+
 #include <kmessagebox.h>
 
 #include <kio/netaccess.h>

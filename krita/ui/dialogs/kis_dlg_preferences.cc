@@ -52,7 +52,6 @@
 #include <KoIcon.h>
 #include <KoConfig.h>
 
-#include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <klineedit.h>

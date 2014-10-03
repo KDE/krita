@@ -31,7 +31,6 @@
 #include <QTimer>
 #include <QRegExp>
 
-#include <kapplication.h>
 #include <kwindowsystem.h>
 
 #include <KoIcon.h>

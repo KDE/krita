@@ -23,7 +23,6 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kmimetype.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kio/job.h>
 

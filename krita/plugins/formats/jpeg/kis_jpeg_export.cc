@@ -24,8 +24,8 @@
 #include <QColor>
 #include <QString>
 #include <QStringList>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kcolorbutton.h>
@@ -115,7 +115,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     frm.setEnabledFilters(cfg.getString("filters").split(','));
 
     kdb->setMainWidget(wdg);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {

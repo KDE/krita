@@ -20,7 +20,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <kapplication.h>
 #include <kurl.h>
 
 #include <kis_image.h>

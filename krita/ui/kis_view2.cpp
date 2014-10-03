@@ -121,7 +121,6 @@
 #include "widgets/kis_floating_message.h"
 
 #include <QPoint>
-#include <kapplication.h>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "kis_favorite_resource_manager.h"

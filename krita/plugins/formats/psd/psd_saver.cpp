@@ -17,8 +17,6 @@
  */
 #include "psd_saver.h"
 
-#include <kapplication.h>
-
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>

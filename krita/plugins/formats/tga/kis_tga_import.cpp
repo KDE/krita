@@ -22,10 +22,10 @@
 #include <QCheckBox>
 #include <QBuffer>
 #include <QSlider>
+#include <QApplication>
 
 #include <kio/netaccess.h>
 
-#include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
 

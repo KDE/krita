@@ -29,8 +29,6 @@
 #include <kapplication.h>
 #include <kpluginfactory.h>
 
-#include <kio/deletejob.h>
-
 #include <KoFilterManager.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFilterChain.h>

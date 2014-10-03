@@ -19,8 +19,6 @@
 
 #include <kapplication.h>
 
-#include <kio/deletejob.h>
-
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>

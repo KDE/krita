@@ -20,7 +20,6 @@
 #include <kapplication.h>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>

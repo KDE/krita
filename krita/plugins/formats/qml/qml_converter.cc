@@ -19,9 +19,9 @@
 
 #include <QFileInfo>
 #include <QDir>
-#include <kapplication.h>
 
-#include <kio/deletejob.h>
+#include <kapplication.h>
+#include <kurl.h>
 
 #include <kis_image.h>
 #include <kis_group_layer.h>

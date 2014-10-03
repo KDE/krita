@@ -31,8 +31,8 @@
 #include <kcombobox.h>
 #include <knuminput.h>
 
-#include <kdialog.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include <QFormLayout>
 #include <QGroupBox>

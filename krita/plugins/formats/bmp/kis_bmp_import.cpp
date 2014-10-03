@@ -25,7 +25,6 @@
 
 #include <kio/netaccess.h>
 
-#include <kdialog.h>
 #include <kpluginfactory.h>
 
 #include <KoColorSpace.h>

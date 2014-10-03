@@ -29,7 +29,6 @@
 #include <kdebug.h>
 
 #include <kcomponentdata.h>
-#include <ksavefile.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kconfiggroup.h>

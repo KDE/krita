@@ -27,7 +27,6 @@
 #include <QToolButton>
 
 #include <kglobalsettings.h>
-#include <kstandarddirs.h>
 #include <klocale.h>
 
 #include <widgets/kis_preset_chooser.h>

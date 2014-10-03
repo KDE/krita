@@ -30,7 +30,6 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kstandarddirs.h>
 #include <klineedit.h>
 
 #include <KoIcon.h>

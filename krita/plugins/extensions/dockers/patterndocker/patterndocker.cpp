@@ -25,7 +25,6 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 #include <KoDockFactoryBase.h>
 

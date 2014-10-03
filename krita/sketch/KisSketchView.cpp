@@ -30,7 +30,6 @@
 
 #include <kdebug.h>
 #include <kmimetype.h>
-#include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 

@@ -27,7 +27,6 @@
 #include <klocale.h>
 
 #include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kurl.h>
 
 #include <KoFileDialog.h>

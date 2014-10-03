@@ -32,7 +32,6 @@
 #include <klocale.h>
 #include <kstandardaction.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kfilewidget.h>
 #include <kurl.h>
 #include <kdiroperator.h>

@@ -26,7 +26,6 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 #include <KoDockFactoryBase.h>
 

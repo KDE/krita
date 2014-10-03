@@ -21,7 +21,6 @@
 
 #include <QApplication>
 #include <KoIcon.h>
-#include <kstandarddirs.h>
 
 inline KIcon kisIcon(const QString &name) {
     KIcon icon;

@@ -29,7 +29,6 @@
 #include <QShowEvent>
 
 #include <kglobal.h>
-#include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 
 #include "kis_doc2.h"

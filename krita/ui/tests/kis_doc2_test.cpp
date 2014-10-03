@@ -20,7 +20,6 @@
 
 #include <kundo2stack.h>
 #include <qtest_kde.h>
-#include <kstandarddirs.h>
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_undo_store.h"

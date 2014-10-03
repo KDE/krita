@@ -27,7 +27,6 @@
 #include <kpluginfactory.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kstandarddirs.h>
 
 #include <KoProgressUpdater.h>
 

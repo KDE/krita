@@ -26,7 +26,6 @@
 
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>

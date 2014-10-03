@@ -55,6 +55,7 @@
 #include <kmenu.h>
 #include <kservice.h>
 #include <KoServiceLocator.h>
+#include <kstandarddirs.h>
 #include <kstandardaction.h>
 #include <kurl.h>
 #include <kxmlguiwindow.h>

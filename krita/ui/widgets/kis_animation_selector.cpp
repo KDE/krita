@@ -35,7 +35,6 @@
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
 #include <kfiledialog.h>
-#include <kstandarddirs.h>
 #include <kglobal.h>
 
 #include <kis_debug.h>

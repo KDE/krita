@@ -24,7 +24,6 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 #include <KoIcon.h>
 #include <KoUpdater.h>

@@ -30,7 +30,6 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kstandarddirs.h>
 #include <kpluginfactory.h>
 
 #include <KoProgressUpdater.h>

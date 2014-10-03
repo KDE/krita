@@ -39,7 +39,6 @@
 #include <kundo2stack.h>
 
 #include <klocale.h>
-#include <kglobal.h>
 
 class KisSketchPart;
 class KUndo2Command;

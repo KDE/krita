@@ -18,6 +18,8 @@
 
 #include "kis_display_color_converter.h"
 
+#include <kglobal.h>
+
 #include <KoColor.h>
 #include <KoColorDisplayRendererInterface.h>
 #include <KoColorSpaceMaths.h>

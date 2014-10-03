@@ -21,6 +21,8 @@
 #include "kis_brush_option.h"
 #include <kis_pressure_spacing_option.h>
 
+#include <kglobal.h>
+
 #include <QImage>
 #include <QPainter>
 

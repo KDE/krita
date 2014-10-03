@@ -27,7 +27,6 @@
 #include <KoFilterManager.h>
 #include <KoFileDialog.h>
 
-#include <kglobal.h>
 #include <kurl.h>
 
 #include <QDesktopServices>

@@ -37,7 +37,6 @@
 
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
-#include <kglobal.h>
 
 #include <kis_debug.h>
 

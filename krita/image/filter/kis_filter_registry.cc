@@ -24,7 +24,6 @@
 #include <QString>
 #include <QApplication>
 
-#include <kglobal.h>
 #include <kaction.h>
 #include <klocale.h>
 

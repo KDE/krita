@@ -39,7 +39,6 @@
 #include "KoDocumentResourceManager.h"
 #include "commands/KoShapeCreateCommand.h"
 
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 

@@ -42,7 +42,6 @@
 #include <QVector>
 
 #include <kis_debug.h>
-#include <kglobal.h>
 #include <kmenu.h>
 #include <kpushbutton.h>
 #include <klocale.h>

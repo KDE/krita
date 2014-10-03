@@ -21,7 +21,6 @@
 
 #include <limits.h>
 
-#include <kglobal.h>
 #include <calligraversion.h>
 
 #include <KoConfig.h>

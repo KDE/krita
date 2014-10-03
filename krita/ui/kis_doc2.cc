@@ -41,7 +41,6 @@
 // KDE
 #include <krun.h>
 #include <kimageio.h>
-#include <kglobal.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kactioncollection.h>

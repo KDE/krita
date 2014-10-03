@@ -26,7 +26,6 @@
 #include <klineedit.h>
 #include <klocale.h>
 
-#include <kglobal.h>
 #include <kurl.h>
 
 #include <KoFileDialog.h>

@@ -26,7 +26,6 @@
 #include <QDir>
 
 #include <kcomponentdata.h>
-#include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>

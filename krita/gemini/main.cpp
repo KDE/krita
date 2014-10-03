@@ -33,7 +33,6 @@
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
-#include <kglobal.h>
 #include <kiconloader.h>
 #include "data/splash/splash_screen.xpm"
 #include "MainWindow.h"

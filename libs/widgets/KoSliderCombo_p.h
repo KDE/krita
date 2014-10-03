@@ -37,7 +37,6 @@
 #include <QDoubleSpinBox>
 #include <QDesktopWidget>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 

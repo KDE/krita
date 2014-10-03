@@ -22,7 +22,6 @@
 #include <kimageio.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include <kglobal.h>
 #include <kmimetype.h>
 #include <kapplication.h>
 #include <kdebug.h>

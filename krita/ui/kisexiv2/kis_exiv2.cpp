@@ -20,8 +20,6 @@
 
 #include <QDateTime>
 
-#include <kglobal.h>
-
 #include "kis_iptc_io.h"
 #include "kis_exif_io.h"
 #include "kis_xmp_io.h"

@@ -29,7 +29,6 @@
 #include <QDesktopServices>
 #include <QDir>
 
-#include <kglobal.h>
 #include <kcmdlineargs.h>
 #include <ksycoca.h>
 #include <kcrash.h>

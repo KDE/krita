@@ -27,7 +27,6 @@
 #include <kis_paintop_preset.h>
 #include <KoID.h>
 #include <kconfig.h>
-#include <kglobalsettings.h>
 #include "kis_favorite_resource_manager.h"
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"

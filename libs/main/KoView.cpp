@@ -43,7 +43,6 @@
 #include <KoIcon.h>
 
 #include <kactioncollection.h>
-#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kdebug.h>

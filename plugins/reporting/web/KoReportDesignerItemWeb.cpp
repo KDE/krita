@@ -26,7 +26,6 @@
 #include <koproperty/Set.h>
 #include <koproperty/EditorView.h>
 
-#include <kcodecs.h>
 #include <klocalizedstring.h>
 
 #include <QWebFrame>

@@ -25,7 +25,6 @@
 class QLabel;
 class QGroupBox;
 class KisConfigWidget;
-class KLineEdit;
 
 #include <kis_file_layer.h>
 

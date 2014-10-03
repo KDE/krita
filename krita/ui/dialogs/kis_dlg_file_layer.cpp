@@ -23,7 +23,6 @@
 #include <QCheckBox>
 #include <QDesktopServices>
 
-#include <klineedit.h>
 #include <klocale.h>
 
 #include <kurl.h>

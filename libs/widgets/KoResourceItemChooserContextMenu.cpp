@@ -23,6 +23,7 @@
 
 #include <KoIcon.h>
 #include <klocale.h>
+#include <klineedit.h>
 
 #include "KoResourceItemChooserContextMenu.h"
 #include "KoResource.h"

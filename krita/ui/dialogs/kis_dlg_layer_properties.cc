@@ -29,7 +29,6 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-#include <klineedit.h>
 #include <klocale.h>
 #include <knuminput.h>
 

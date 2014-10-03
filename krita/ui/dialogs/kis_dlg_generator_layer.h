@@ -28,7 +28,6 @@ class QLabel;
 class KisFilterConfiguration;
 class QGroupBox;
 class KisConfigWidget;
-class KLineEdit;
 class KisView2;
 
 #include "ui_wdgdlggeneratorlayer.h"

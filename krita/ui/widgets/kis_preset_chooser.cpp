@@ -30,7 +30,6 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <klineedit.h>
 
 #include <KoIcon.h>
 #include <KoResourceItemChooser.h>

@@ -27,7 +27,6 @@
 #include <QString>
 #include <QStringList>
 
-#include <kconfig.h>
 #include "komain_export.h"
 #include <KoXmlReader.h>
 

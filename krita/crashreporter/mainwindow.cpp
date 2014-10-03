@@ -25,8 +25,6 @@
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kstandarddirs.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 
 #include <calligraversion.h>
 #include <calligragitversion.h>

@@ -29,7 +29,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kconfiggroup.h>
 
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>

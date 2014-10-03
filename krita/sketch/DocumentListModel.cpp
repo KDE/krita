@@ -25,8 +25,6 @@
 #include <QTimer>
 
 #include <kglobal.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
 #include <kfileitem.h>
 #include <klocale.h>
 

@@ -51,7 +51,6 @@
 #include <KoTextMeta.h>
 #include <KoShapeController.h>
 
-#include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kuser.h>

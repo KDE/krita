@@ -27,7 +27,6 @@
 #include <QDomDocument>
 #include "kowidgets_export.h"
 #include <kconfiggroup.h>
-#include <ksharedconfig.h>
 #include <KoConfig.h>
 
 class KoResourceServerBase;

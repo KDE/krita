@@ -32,7 +32,6 @@
 #include <KoXmlReaderForward.h>
 #include <KoDataCenterBase.h>
 // KDE
-#include <kconfig.h>
 #include <kaction.h>
 #include <kdatetime.h>
 // Soprano

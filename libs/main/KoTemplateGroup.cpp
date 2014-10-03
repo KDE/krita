@@ -25,12 +25,10 @@
 #include <QPrinter>
 
 #include <kdesktopfile.h>
-#include <kconfig.h>
 #include <kdebug.h>
 
 #include <kcomponentdata.h>
 #include <klocale.h>
-#include <kconfiggroup.h>
 #include <stdlib.h>
 
 #include <KoTemplate.h>

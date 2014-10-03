@@ -25,8 +25,6 @@
 #include <QPainterPath>
 #include <QRect>
 
-#include <ksharedconfig.h>
-
 #include <KoProperties.h>
 
 #include "kis_global.h"

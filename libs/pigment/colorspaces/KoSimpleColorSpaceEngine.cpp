@@ -21,12 +21,13 @@
 
 #include "KoColorModelStandardIds.h"
 
-#include <kconfiggroup.h>
 #include <klocale.h>
 
 #include "KoColorSpace.h"
 
 #include "DebugPigment.h"
+
+#include <QColor>
 
 // -- KoSimpleColorConversionTransformation --
 

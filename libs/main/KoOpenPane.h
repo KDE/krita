@@ -23,7 +23,6 @@
 #include <QPixmap>
 #include <QList>
 
-class KConfig;
 class KoOpenPanePrivate;
 class KComponentData;
 class QPixmap;

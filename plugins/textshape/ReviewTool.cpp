@@ -41,8 +41,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kuser.h>
 
 #include <QDate>

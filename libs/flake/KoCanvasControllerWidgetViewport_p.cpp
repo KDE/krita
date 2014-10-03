@@ -37,8 +37,6 @@
 #include <KoProperties.h>
 
 #include <kdebug.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
 
 #include <QPainter>
 #include <QDragEnterEvent>

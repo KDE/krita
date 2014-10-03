@@ -678,9 +678,6 @@ You can uncheck the box if you are not using transparency and you want to make t
   <tabstop>kComboBoxFaxMode</tabstop>
   <tabstop>compressionLevelPixarLog</tabstop>
  </tabstops>
- <includes>
-  <include location="local">kcombobox.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

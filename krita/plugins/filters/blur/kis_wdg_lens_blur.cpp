@@ -23,7 +23,6 @@
 #include <QToolButton>
 #include <QIcon>
 
-#include <kcombobox.h>
 #include <knuminput.h>
 
 #include <filter/kis_filter.h>

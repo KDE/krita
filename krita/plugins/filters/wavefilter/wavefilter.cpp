@@ -24,7 +24,6 @@
 #include <math.h>
 #include <QPoint>
 
-#include <kcombobox.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <kcomponentdata.h>

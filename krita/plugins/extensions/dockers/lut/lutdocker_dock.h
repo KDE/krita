@@ -43,7 +43,6 @@ class KisDoubleWidget;
 class KoZoomAdapter;
 class SqueezedComboBox;
 class QCheckBox;
-class KComboBox;
 class QToolButton;
 class BlackWhitePointChooser;
 

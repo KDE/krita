@@ -32,7 +32,6 @@
 #include <QToolButton>
 
 #include <klocale.h>
-#include <kcombobox.h>
 
 #include <KoMainWindow.h>
 #include <KoFileDialog.h>

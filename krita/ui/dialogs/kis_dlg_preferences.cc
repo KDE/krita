@@ -52,7 +52,6 @@
 #include <KoIcon.h>
 #include <KoConfig.h>
 
-#include <kcombobox.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kurlrequester.h>

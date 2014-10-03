@@ -27,7 +27,6 @@
 #include <QGridLayout>
 
 #include <klocale.h>
-#include <kcombobox.h>
 
 #include <KoIcon.h>
 

@@ -22,7 +22,6 @@
 #include "kis_motion_blur_filter.h"
 #include "kis_wdg_motion_blur.h"
 
-#include <kcombobox.h>
 #include <knuminput.h>
 
 #include <KoCompositeOp.h>

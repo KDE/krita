@@ -22,7 +22,6 @@
 #include "kis_gaussian_blur_filter.h"
 #include "kis_wdg_gaussian_blur.h"
 
-#include <kcombobox.h>
 #include <knuminput.h>
 
 #include <KoCompositeOp.h>

@@ -49,7 +49,6 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
-#include <ktemporaryfile.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>

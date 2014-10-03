@@ -43,7 +43,6 @@
 
 #include <kis_debug.h>
 #include <kmenu.h>
-#include <kpushbutton.h>
 #include <klocale.h>
 #include <khbox.h>
 #include <kaction.h>

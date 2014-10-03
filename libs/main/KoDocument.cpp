@@ -59,10 +59,8 @@
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kfileitem.h>
-#include <kio/netaccess.h>
 #include <kio/job.h>
 #include <kfileitem.h>
-#include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
 

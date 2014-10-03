@@ -29,7 +29,6 @@
 #include <kapplication.h>
 #include <kpluginfactory.h>
 
-#include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
 #include <KoFilterManager.h>

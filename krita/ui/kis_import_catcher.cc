@@ -25,7 +25,6 @@
 #include <kmimetype.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kio/netaccess.h>
 #include <kio/job.h>
 
 #include <KoFilterManager.h>

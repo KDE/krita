@@ -22,7 +22,6 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
 #include <kapplication.h>

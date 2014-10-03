@@ -26,6 +26,8 @@
 #include "palettegeneratorconfig.h"
 #include "ui_kiswdgindexcolors.h"
 
+#include <kcolorbutton.h>
+
 KisWdgIndexColors::KisWdgIndexColors(QWidget* parent, Qt::WFlags f, int delay): KisConfigWidget(parent, f, delay)
 {
     ui = new Ui::KisWdgIndexColors;

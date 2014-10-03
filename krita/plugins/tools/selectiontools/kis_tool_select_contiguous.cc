@@ -32,7 +32,6 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <kcolorbutton.h>
 
 #include "KoPointerEvent.h"
 #include "KoViewConverter.h"

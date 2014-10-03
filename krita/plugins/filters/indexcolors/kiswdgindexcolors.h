@@ -24,10 +24,10 @@
 #define KISWDGINDEXCOLORS_H
 
 #include <kis_config_widget.h>
-#include <kcolorbutton.h>
 #include <QSpinBox>
 
 class QCheckBox;
+class KColorButton;
 namespace Ui
 {
 class KisWdgIndexColors;

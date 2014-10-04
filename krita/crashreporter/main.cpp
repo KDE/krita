@@ -26,7 +26,6 @@
 #include <KoServiceLocator.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kguiitem.h>
 
 #include <calligraversion.h>
 #include <calligragitversion.h>

@@ -54,7 +54,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <kuser.h>
 
 
 #include <QWeakPointer>

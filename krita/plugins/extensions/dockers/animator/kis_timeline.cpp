@@ -33,7 +33,6 @@
 
 #include <KoPart.h>
 
-#include <KFileDialog>
 #include <KActionCollection>
 
 #include <QToolButton>

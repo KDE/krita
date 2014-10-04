@@ -34,7 +34,6 @@
 #include <QFileDialog>
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
-#include <kfiledialog.h>
 
 #include <kis_debug.h>
 

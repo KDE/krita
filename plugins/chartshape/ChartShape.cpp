@@ -37,7 +37,6 @@
 // KDE
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kmimetype.h>
 #include <kurl.h>
 
 // KDChart

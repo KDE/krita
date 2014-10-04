@@ -39,7 +39,6 @@
 #include <QToolButton>
 #include <QWheelEvent>
 
-#include <kmimetype.h>
 #include <klocale.h>
 
 #ifdef GHNS

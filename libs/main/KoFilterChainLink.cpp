@@ -19,7 +19,6 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterChainLink.h"
 #include <QMetaMethod>
 #include <ktemporaryfile.h>
-#include <kmimetype.h>
 #include <kdebug.h>
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"

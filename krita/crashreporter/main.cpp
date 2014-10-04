@@ -23,9 +23,7 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kmimetype.h>
 #include <KoServiceLocator.h>
-#include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kguiitem.h>

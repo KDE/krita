@@ -29,7 +29,6 @@
 #include <QHoverEvent>
 
 #include <kdebug.h>
-#include <kmimetype.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 

@@ -34,7 +34,6 @@
 #include <QPen>
 #include <QImage>
 
-#include <kmimetype.h>
 #include <kdebug.h>
 
 KoOdtFrameReportLine::KoOdtFrameReportLine(OROLine *primitive)

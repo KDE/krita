@@ -28,7 +28,6 @@
 #include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <krun.h>
 #include <kguiitem.h>
 
 #include <calligraversion.h>

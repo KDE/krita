@@ -39,7 +39,6 @@
 #include <QScopedPointer>
 
 // KDE
-#include <krun.h>
 #include <kimageio.h>
 #include <kmimetype.h>
 #include <klocale.h>

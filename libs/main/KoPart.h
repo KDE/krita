@@ -28,7 +28,6 @@
 #include <kservice.h>
 #include <kcomponentdata.h>
 #include <kurl.h>
-#include <kxmlguiclient.h>
 
 #include "komain_export.h"
 

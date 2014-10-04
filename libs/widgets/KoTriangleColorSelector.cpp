@@ -101,6 +101,7 @@ KoTriangleColorSelector::KoTriangleColorSelector(const KoColorDisplayRendererInt
       d(new Private(this, displayRenderer))
 {
     d->init();
+    connect(displayRenderer, SIGNAL(displayConfigurationChanged()), this, SLOT(configurationChanged()));
 }
 
 KoTriangleColorSelector::~KoTriangleColorSelector()
@@ -422,5 +423,13 @@ void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
         d->updateTimer.start();
     }
 }
+
+void KoTriangleColorSelector::configurationChanged()
+{
+    generateWheel();
+    d->invalidTriangle = true;
+    update();
+}
+
 
 #include <KoTriangleColorSelector.moc>

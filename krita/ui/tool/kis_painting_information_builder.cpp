@@ -137,32 +137,19 @@ QPointF KisConverterPaintingInformationBuilder::documentToImage(const QPointF &p
 }
 
 /***********************************************************************/
-/*           KisToolPaintingInformationBuilder                        */
-/***********************************************************************/
-
-#include "kis_tool.h"
-
-KisToolPaintingInformationBuilder::KisToolPaintingInformationBuilder(KisTool *tool)
-    : m_tool(tool)
-{
-}
-
-QPointF KisToolPaintingInformationBuilder::documentToImage(const QPointF &point)
-{
-    return m_tool->convertToPixelCoord(point);
-}
-
-
-/***********************************************************************/
 /*           KisToolFreehandPaintingInformationBuilder                        */
 /***********************************************************************/
 
 #include "kis_tool_freehand.h"
 
 KisToolFreehandPaintingInformationBuilder::KisToolFreehandPaintingInformationBuilder(KisToolFreehand *tool)
-    : KisToolPaintingInformationBuilder(tool),
-      m_tool(tool)
+    : m_tool(tool)
 {
+}
+
+QPointF KisToolFreehandPaintingInformationBuilder::documentToImage(const QPointF &point)
+{
+    return m_tool->convertToPixelCoord(point);
 }
 
 QPointF KisToolFreehandPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &startPoint)

@@ -30,7 +30,6 @@
 #include <QtGlobal>
 #include <qmath.h>
 
-#include <kcursor.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 

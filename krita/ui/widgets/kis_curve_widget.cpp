@@ -44,7 +44,6 @@
 
 #include <kis_debug.h>
 #include <kis_config.h>
-#include <kcursor.h>
 #include <klocale.h>
 
 // Local includes.

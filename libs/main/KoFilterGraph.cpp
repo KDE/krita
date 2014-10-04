@@ -29,7 +29,6 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterVertex.h"
 
 #include <QMetaMethod>
-#include <ktemporaryfile.h>
 #include <kdebug.h>
 
 #include <limits.h> // UINT_MAX

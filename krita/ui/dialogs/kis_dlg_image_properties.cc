@@ -29,7 +29,6 @@
 #include <QTextEdit>
 
 #include <klocale.h>
-#include <kcolorcombo.h>
 
 #include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpace.h>

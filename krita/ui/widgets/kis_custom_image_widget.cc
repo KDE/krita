@@ -35,7 +35,6 @@
 #include <QSpacerItem>
 
 #include <kmessagebox.h>
-#include <kcolorcombo.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>

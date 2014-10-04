@@ -82,6 +82,8 @@ dark_properties.png
 dark_selection-mode_ants.png
 dark_selection-mode_invisible.png
 dark_selection-mode_mask.png
+dark_docker_lock_a.png
+dark_docker_lock_b.png
 
 light_select.png
 light_pattern.png
@@ -98,6 +100,8 @@ light_properties.png
 light_selection-mode_ants.png
 light_selection-mode_invisible.png
 light_selection-mode_mask.png
+light_docker_lock_a.png
+light_docker_lock_b.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 add_subdirectory(app)

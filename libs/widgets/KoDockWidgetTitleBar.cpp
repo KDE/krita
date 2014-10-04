@@ -63,7 +63,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->collapseButton->setVisible(false);
     d->collapseButton->setToolTip(i18nc("@info:tooltip", "Collapse Docker"));
 
-    d->lockIcon = koIcon("object-unlocked");
+    d->lockIcon = themedIcon("docker_lock_b");
     d->lockButton = new KoDockWidgetTitleBarButton(this);
     d->lockButton->setIcon(d->lockIcon);
     connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLocked()));
@@ -278,8 +278,8 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
 
     if (!locked) {
         locked = true;
-        lockIcon = koIcon("object-locked");
-        lockButton->setIcon(koIcon("object-locked"));
+        lockIcon = themedIcon("docker_lock_a");
+        lockButton->setIcon(themedIcon("docker_lock_a"));
         features = q->features();
         q->setFeatures(QDockWidget::NoDockWidgetFeatures);
         closeButton->setEnabled(false);
@@ -288,8 +288,8 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
     }
     else {
         locked = false;
-        lockIcon = koIcon("object-unlocked");
-        lockButton->setIcon(koIcon("object-unlocked"));
+        lockIcon = themedIcon("docker_lock_b");
+        lockButton->setIcon(themedIcon("docker_lock_b"));
         q->setFeatures(features);
         closeButton->setEnabled(true);
         floatButton->setEnabled(true);

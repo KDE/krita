@@ -30,7 +30,6 @@
 #include <QDir>
 
 #include <kcmdlineargs.h>
-#include <ksycoca.h>
 
 #include <KoApplication.h>
 #include <KoConfig.h>

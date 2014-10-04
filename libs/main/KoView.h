@@ -39,7 +39,6 @@ class KXmlGuiWindow;
 class KAction;
 
 // Qt classes
-class QToolBar;
 class QDragEnterEvent;
 class QDropEvent;
 class QPrintDialog;

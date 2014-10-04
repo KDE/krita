@@ -54,7 +54,6 @@
 #include <kdeprintdialog.h>
 
 #include <QDockWidget>
-#include <QToolBar>
 #include <QApplication>
 #include <QList>
 #include <QDropEvent>

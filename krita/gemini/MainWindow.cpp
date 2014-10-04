@@ -44,7 +44,6 @@
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kaboutdata.h>
-#include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>

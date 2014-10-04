@@ -29,7 +29,6 @@
 #include <QStringList>
 #include <QRegExp>
 #include <QList>
-#include <QToolBar>
 #include <QSlider>
 #include <QLineEdit>
 #include <QToolButton>

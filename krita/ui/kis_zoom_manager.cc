@@ -20,7 +20,6 @@
 #include "kis_zoom_manager.h"
 
 
-#include <QToolBar>
 #include <QGridLayout>
 
 #include <kactioncollection.h>

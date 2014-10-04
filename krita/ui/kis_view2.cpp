@@ -34,6 +34,7 @@
 #include <QGridLayout>
 #include <QRect>
 #include <QWidget>
+#include <QToolBar>
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QApplication>
@@ -46,7 +47,6 @@
 
 #include <kio/netaccess.h>
 #include <kmenubar.h>
-#include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>

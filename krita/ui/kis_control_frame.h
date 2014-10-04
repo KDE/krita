@@ -32,8 +32,6 @@ class QTabWidget;
 class QTableWidgetItem;
 class QPushButton;
 
-class KToolBar;
-
 class KoAbstractGradient;
 class KisGradientChooser;
 class KoPatternChooser;

@@ -50,7 +50,6 @@
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>
-#include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kservice.h>

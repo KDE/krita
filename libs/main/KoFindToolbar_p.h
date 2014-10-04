@@ -30,7 +30,6 @@
 #include <QDebug>
 
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
 #include <kaction.h>
 #include <kcolorscheme.h>
@@ -40,6 +39,9 @@
 #include "KoFindBase.h"
 #include "KoFindOptionSet.h"
 #include "KoFindOption.h"
+
+class KSqueezedTextLabel;
+class QLabel;
 
 class KoFindToolbar::Private
 {

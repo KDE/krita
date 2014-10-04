@@ -22,6 +22,7 @@
 #include "FontEditorDialog.h"
 
 #include <klocale.h>
+#include <kfontchooser.h>
 
 using namespace KChart;
 

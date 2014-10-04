@@ -78,7 +78,6 @@
 #include <kdebug.h>
 #include <krun.h>
 #include <kstandardshortcut.h>
-#include <kfontchooser.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kmenu.h>

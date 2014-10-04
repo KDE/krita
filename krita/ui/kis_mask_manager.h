@@ -25,7 +25,6 @@
 class KisView2;
 class KActionCollection;
 class KAction;
-class KToggleAction;
 class KisNodeCommandsAdapter;
 
 #include "kis_mask.h"

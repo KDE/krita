@@ -21,7 +21,6 @@
 
 #include <kstandardaction.h>
 #include <kaction.h>
-#include <ktoggleaction.h>
 #include <kactioncollection.h>
 
 

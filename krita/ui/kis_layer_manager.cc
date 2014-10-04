@@ -28,7 +28,6 @@
 #include <QDesktopServices>
 
 #include <kactioncollection.h>
-#include <ktoggleaction.h>
 #include <klocale.h>
 #include <kstandardaction.h>
 #include <kmessagebox.h>

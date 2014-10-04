@@ -35,7 +35,6 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kacceleratormanager.h>
-#include <kseparator.h>
 
 #include <KoIcon.h>
 #include <KoColorSpace.h>

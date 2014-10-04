@@ -25,7 +25,6 @@
 
 #include <QList>
 
-#include <kservice.h>
 #include <kcomponentdata.h>
 #include <kurl.h>
 

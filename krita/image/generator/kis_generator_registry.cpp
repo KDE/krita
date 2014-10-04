@@ -24,7 +24,6 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kservice.h>
 
 #include <KoPluginLoader.h>
 

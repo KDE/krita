@@ -19,7 +19,6 @@
 #include "kis_import_catcher.h"
 #include <kis_debug.h>
 
-#include <kimageio.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurl.h>

@@ -39,7 +39,6 @@
 #include <QScopedPointer>
 
 // KDE
-#include <kimageio.h>
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kundo2stack.h>

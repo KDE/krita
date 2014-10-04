@@ -23,7 +23,6 @@
 #include <QDir>
 
 #include <kaboutdata.h>
-#include <kimageio.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kio/job.h>

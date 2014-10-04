@@ -19,7 +19,6 @@
 
 #include "KoUniColorChooser.h"
 
-#include <kselector.h>
 #include <QLayout>
 #include <QLabel>
 #include <QSpinBox>

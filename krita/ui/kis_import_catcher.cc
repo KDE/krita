@@ -20,7 +20,6 @@
 #include <kis_debug.h>
 
 #include <kimageio.h>
-#include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kdebug.h>

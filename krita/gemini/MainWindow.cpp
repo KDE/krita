@@ -39,7 +39,6 @@
 #include <QGLWidget>
 #include <QDesktopServices>
 
-#include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>

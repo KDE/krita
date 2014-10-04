@@ -29,7 +29,6 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <krun.h>
-#include <ktoolinvocation.h>
 #include <kguiitem.h>
 
 #include <calligraversion.h>

@@ -22,8 +22,6 @@
 
 #include <QLayout>
 
-#include <kurlrequester.h>
-
 #include <KoFilter.h>
 #include <KoFilterManager.h>
 

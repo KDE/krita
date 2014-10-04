@@ -23,7 +23,6 @@
 #include "KoColorProfile.h"
 
 class LcmsColorProfileContainer;
-struct KoRGBChromaticities;
 
 /**
  * This class contains an ICC color profile.
@@ -68,7 +67,8 @@ public:
         virtual bool isSuitableForDisplay() const = 0;
     };
 public:
-    IccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, const QString &name = QString());
+public:
+
     explicit IccColorProfile(const QString &fileName = QString());
     explicit IccColorProfile(const QByteArray& rawData);
     IccColorProfile(const IccColorProfile& rhs);

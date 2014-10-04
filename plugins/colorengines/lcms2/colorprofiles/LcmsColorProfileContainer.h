@@ -31,8 +31,6 @@
 #include <QString>
 
 
-struct KoRGBChromaticities;
-
 /**
  * This class contains an LCMS color profile. Don't use it outside LcmsColorSpace.
  */
@@ -46,10 +44,7 @@ private:
      * Create a byte array from a lcms profile.
      */
     static QByteArray lcmsProfileToByteArray(const cmsHPROFILE profile);
-    /**
-     * Create a byte array holding an ICC profile generated with the given RGB Chromaticities
-     */
-    static QByteArray createFromChromacities(const KoRGBChromaticities& chromacities, qreal gamma, QString name);
+
 public:
     /**
      * @param profile lcms memory structure with the profile, it is freed after the call
@@ -91,9 +86,6 @@ public:
 
 protected:
     LcmsColorProfileContainer();
-//     void setProfile(const cmsHPROFILE profile);
-private:
-    KoRGBChromaticities* chromaticitiesFromProfile() const;
 
 private:
     bool init();

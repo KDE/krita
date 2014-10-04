@@ -24,7 +24,6 @@
 #include <QPixmap>
 #include <QPrinter>
 
-#include <kdesktopfile.h>
 #include <kdebug.h>
 
 #include <kcomponentdata.h>

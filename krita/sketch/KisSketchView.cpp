@@ -30,7 +30,6 @@
 
 #include <kdebug.h>
 #include <kactioncollection.h>
-#include <kaction.h>
 
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>

@@ -31,7 +31,6 @@
 
 #include <klocalizedstring.h>
 #include <khistorycombobox.h>
-#include <kaction.h>
 #include <kcolorscheme.h>
 
 #include <KoIcon.h>

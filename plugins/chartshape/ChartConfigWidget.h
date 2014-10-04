@@ -35,6 +35,7 @@
 
 
 class KoShape;
+class KAction;
 
 namespace KDChart
 {

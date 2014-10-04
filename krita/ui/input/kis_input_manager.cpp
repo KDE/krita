@@ -21,7 +21,6 @@
 #include <QQueue>
 #include <QMessageBox>
 
-#include <kaction.h>
 #include <klocalizedstring.h>
 #include <QApplication>
 

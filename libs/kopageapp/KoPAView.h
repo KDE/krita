@@ -39,6 +39,7 @@ class KoRuler;
 class KoShapeManager;
 class KoZoomController;
 class KUrl;
+class KAction;
 
 class QTextDocument;
 class QTabBar;

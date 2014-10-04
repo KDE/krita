@@ -23,7 +23,6 @@
 #include <QString>
 #include <QApplication>
 
-#include <kaction.h>
 #include <klocale.h>
 #include <kservice.h>
 

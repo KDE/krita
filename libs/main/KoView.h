@@ -36,7 +36,6 @@ struct KoPageLayout;
 // KDE classes
 class KStatusBar;
 class KXmlGuiWindow;
-class KAction;
 
 // Qt classes
 class QDragEnterEvent;

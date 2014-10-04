@@ -31,7 +31,6 @@
 #include <QWidget>
 #include <QVector>
 
-#include <kaction.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 

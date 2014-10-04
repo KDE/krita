@@ -24,7 +24,6 @@
 #include <QWidget>
 #include <QLayout>
 
-#include <kaction.h>
 #include <kis_debug.h>
 #include <klocale.h>
 

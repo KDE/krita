@@ -45,7 +45,6 @@
 #include <kmenu.h>
 #include <klocale.h>
 #include <khbox.h>
-#include <kaction.h>
 #include <kactioncollection.h>
 
 #include <kis_icon.h>

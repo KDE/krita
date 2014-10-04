@@ -35,7 +35,6 @@
 #include <QtGui/QToolBar>
 
 #include <kdebug.h>
-#include <kfontdialog.h>
 #include <kicon.h>
 #include <klocale.h>
 #include <kfontchooser.h>

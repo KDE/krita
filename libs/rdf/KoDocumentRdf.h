@@ -33,7 +33,6 @@
 #include <KoDataCenterBase.h>
 // KDE
 #include <kaction.h>
-#include <kdatetime.h>
 // Soprano
 #include <Soprano/Soprano>
 // Qt

@@ -31,6 +31,8 @@
 #include <KoTextDocument.h>
 #include <KoCanvasResourceManager.h>
 
+#include <kdatetime.h>
+
 #include <kdebug.h>
 #include <QUuid>
 

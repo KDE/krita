@@ -22,12 +22,13 @@
 
 #include "kowidgets_export.h"
 
-#include <KUrl>
 #include <QFileDialog>
 #include <QString>
 #include <QUrl>
 #include <QStringList>
 #include <QList>
+
+class KUrl;
 
 /**
  * Wrapper around QFileDialog providing native file dialogs

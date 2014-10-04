@@ -23,7 +23,6 @@
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
-#include <kurl.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>

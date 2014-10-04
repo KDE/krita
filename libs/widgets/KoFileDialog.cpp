@@ -27,6 +27,7 @@
 #include <kconfiggroup.h>
 #include <kmimetype.h>
 #include <klocale.h>
+#include <kurl.h>
 
 class KoFileDialog::Private
 {

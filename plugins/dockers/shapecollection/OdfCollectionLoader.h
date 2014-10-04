@@ -19,8 +19,6 @@
 #ifndef KOODFCOLLECTIONLOADER_H
 #define KOODFCOLLECTIONLOADER_H
 
-#include <kurl.h>
-
 #include <KoXmlReader.h>
 
 #include <QObject>
@@ -33,6 +31,8 @@ class KoShapeLoadingContext;
 class QTimer;
 class KoShape;
 class KoFilterManager;
+
+class KUrl;
 
 class OdfCollectionLoader : public QObject
 {

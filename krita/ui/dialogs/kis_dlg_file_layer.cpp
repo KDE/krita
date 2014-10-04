@@ -25,8 +25,6 @@
 
 #include <klocale.h>
 
-#include <kurl.h>
-
 #include <KoFileDialog.h>
 #include <KoApplication.h>
 #include <KoFilterManager.h>

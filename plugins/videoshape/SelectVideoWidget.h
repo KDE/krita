@@ -20,11 +20,10 @@
 #ifndef SELECTVIDEOWIDGET_H
 #define SELECTVIDEOWIDGET_H
 
-#include <kurl.h>
-
 #include <QWidget>
 
 class KFileWidget;
+class KUrl;
 class QCheckBox;
 
 class SelectVideoWidget : public QWidget

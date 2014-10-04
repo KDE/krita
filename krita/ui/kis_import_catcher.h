@@ -21,12 +21,11 @@
 
 #include <QObject>
 
-#include <kurl.h>
-
 #include <kis_types.h>
 
 class KisView2;
 class KisDoc2;
+class KUrl;
 
 /**
  * This small helper class takes an url and an image; tries to import

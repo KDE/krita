@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmimetype.h>
+#include <kurl.h>
 
 #include <QTimer>
 #include <QDir>

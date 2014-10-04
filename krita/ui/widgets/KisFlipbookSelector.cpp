@@ -27,8 +27,6 @@
 #include <KoFilterManager.h>
 #include <KoFileDialog.h>
 
-#include <kurl.h>
-
 #include <QDesktopServices>
 #include <QListWidget>
 #include <QListWidgetItem>

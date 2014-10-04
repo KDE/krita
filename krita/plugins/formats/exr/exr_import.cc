@@ -20,6 +20,7 @@
 #include "exr_import.h"
 
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>

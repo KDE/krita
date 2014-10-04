@@ -25,7 +25,6 @@
 #include <QTimer>
 
 #include <kglobal.h>
-#include <kfileitem.h>
 #include <klocale.h>
 
 class DocumentListModel::Private

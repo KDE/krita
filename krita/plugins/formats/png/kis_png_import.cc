@@ -20,6 +20,7 @@
 #include "kis_png_import.h"
 
 #include <kpluginfactory.h>
+#include <kurl.h>
 
 #include <KoFilterChain.h>
 

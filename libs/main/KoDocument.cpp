@@ -57,9 +57,6 @@
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
-#include <kfileitem.h>
-#include <kio/job.h>
-#include <kfileitem.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
 

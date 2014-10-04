@@ -26,7 +26,6 @@
 #include <QRadioButton>
 #include <QToolTip>
 #include <QGridLayout>
-#include <kcolordialog.h>
 
 #include <kdebug.h>
 #include <klocale.h>

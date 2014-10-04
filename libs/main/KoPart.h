@@ -34,11 +34,6 @@
 
 #include <KoMainWindow.h>
 
-class KJob;
-namespace KIO {
-  class Job;
-}
-
 class KoDocument;
 class KoView;
 class KoView;

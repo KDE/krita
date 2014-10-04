@@ -22,7 +22,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <kio/job.h>
 
 #include <KoFilterManager.h>
 

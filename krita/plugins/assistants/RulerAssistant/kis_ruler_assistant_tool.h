@@ -29,8 +29,6 @@ class RulerDecoration;
 class KisCanvas2;
 class ConstraintSolver;
 
-class KJob;
-
 class KisRulerAssistantTool : public KisTool
 {
     Q_OBJECT

@@ -48,8 +48,6 @@
 #include <KoPathShape.h>
 
 #include <kdebug.h>
-#include <kjob.h>
-#include <KIO/Job>
 
 #include <QPainter>
 #include <QTimer>

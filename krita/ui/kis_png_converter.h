@@ -25,8 +25,6 @@
 #include <QColor>
 #include <QVector>
 
-#include <kio/job.h>
-
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"

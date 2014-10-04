@@ -29,7 +29,6 @@
 #include <kis_doc2.h>
 #include <krita_export.h>
 #include <kis_shared.h>
-#include <kio/job.h>
 #include <kis_canvas2.h>
 
 class QPainter;

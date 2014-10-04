@@ -25,7 +25,6 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kio/job.h>
 
 #include <KoFilterManager.h>
 

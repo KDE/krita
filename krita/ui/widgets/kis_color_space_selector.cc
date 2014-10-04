@@ -40,7 +40,6 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
-#include <kio/copyjob.h>
 
 #include "kis_factory2.h"
 

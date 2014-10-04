@@ -26,7 +26,6 @@
 #include <kconfiggroup.h>
 #include <kiconloader.h>
 #include <ksharedconfig.h>
-#include <ksharedptr.h>
 
 #include <QtDebug>
 #include <QContextMenuEvent>

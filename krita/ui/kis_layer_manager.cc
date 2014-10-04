@@ -29,7 +29,6 @@
 
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kfilewidget.h>
 #include <kurl.h>

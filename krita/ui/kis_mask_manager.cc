@@ -19,7 +19,6 @@
 #include "kis_mask_manager.h"
 
 
-#include <kstandardaction.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 

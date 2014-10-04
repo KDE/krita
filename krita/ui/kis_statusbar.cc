@@ -38,7 +38,7 @@
 #include <kis_paint_device.h>
 #include <kis_selection_manager.h>
 
-#include "kis_icon.h"
+#include "KoIcon.h"
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
@@ -124,11 +124,11 @@ void KisStatusBar::updateSelectionIcon()
 {
     KIcon icon;
     if (!m_view->selectionManager()->displaySelection()) {
-        icon = kisIcon("selection-mode_invisible.png");
+        icon = themedIcon("selection-mode_invisible.png");
     } else if (m_view->selectionManager()->showSelectionAsMask()) {
-        icon = kisIcon("selection-mode_mask.png");
+        icon = themedIcon("selection-mode_mask.png");
     } else /* if (!m_view->selectionManager()->showSelectionAsMask()) */ {
-        icon = kisIcon("selection-mode_ants.png");
+        icon = themedIcon("selection-mode_ants.png");
     }
     m_selectionStatus->setIcon(icon);
 }

@@ -57,7 +57,6 @@
 #include <kstandarddirs.h>
 #include <kstandardaction.h>
 #include <kurl.h>
-#include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>

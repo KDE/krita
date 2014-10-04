@@ -31,7 +31,6 @@
 
 #include <kcmdlineargs.h>
 #include <ksycoca.h>
-#include <kcrash.h>
 
 #include <KoApplication.h>
 #include <KoConfig.h>

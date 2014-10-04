@@ -42,7 +42,6 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
-#include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>

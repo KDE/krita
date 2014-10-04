@@ -21,7 +21,6 @@
 #include "renderobjects.h"
 #include "KoReportData.h"
 
-#include <kdeversion.h>
 #include <QFontMetrics>
 #include <labelsizeinfo.h>
 #include <KoPageFormat.h>

@@ -22,7 +22,6 @@
 #include <krsectiondata.h>
 #include <kross/core/action.h>
 #include "krscriptconstants.h"
-#include <kdeversion.h>
 #include "KoReportData.h"
 
 class KRScriptFunctions;

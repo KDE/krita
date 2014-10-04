@@ -28,14 +28,11 @@ class QImage;
 class KRITAIMAGE_EXPORT KisLiquifyTransformWorker
 {
 public:
-    KisLiquifyTransformWorker(KisPaintDeviceSP dev,
+    KisLiquifyTransformWorker(const QRect &srcBounds,
                               KoUpdater *progress,
                               int pixelPrecision = 8);
 
-    KisLiquifyTransformWorker(const QImage &srcImage,
-                              const QPointF &srcImageOffset,
-                              KoUpdater *progress,
-                              int pixelPrecision = 8);
+    KisLiquifyTransformWorker(const KisLiquifyTransformWorker &rhs);
 
     ~KisLiquifyTransformWorker();
 
@@ -61,8 +58,11 @@ public:
     const QVector<QPointF>& originalPoints() const;
     QVector<QPointF>& transformedPoints();
 
-    void run();
-    QImage runOnQImage(QPointF *newOffset);
+    void run(KisPaintDeviceSP device);
+    QImage runOnQImage(const QImage &srcImage,
+                       const QPointF &srcImageOffset,
+                       const QTransform &imageToThumbTransform,
+                       QPointF *newOffset);
 
 private:
     struct Private;

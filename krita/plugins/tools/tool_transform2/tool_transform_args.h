@@ -26,6 +26,9 @@
 #include <kis_warptransform_worker.h>
 #include <kis_filter_strategy.h>
 
+#include <QScopedPointer>
+class KisLiquifyTransformWorker;
+
 /**
  * Class used to store the parameters of a transformation.
  * Some parameters are specific to free transform mode, and
@@ -39,6 +42,7 @@ public:
     enum TransformMode {FREE_TRANSFORM = 0,
                         WARP,
                         CAGE,
+                        LIQUIFY,
                         PERSPECTIVE_4POINT};
 
     /**
@@ -239,6 +243,101 @@ public:
         m_editTransformPoints = value;
     }
 
+    class LiquifyProperties {
+    public:
+        enum LiquifyMode {
+            MOVE,
+            SCALE,
+            ROTATE,
+            OFFSET,
+            UNDO
+        };
+
+        LiquifyProperties()
+            : m_currentMode(MOVE),
+              m_size(50),
+              m_amount(1.0),
+              m_spacing(0.2),
+              m_sizeHasPressure(false),
+              m_amountHasPressure(false),
+              m_reverseDirection(false)
+        {
+        }
+
+        // rename to just 'mode'
+        LiquifyMode currentMode() const {
+            return m_currentMode;
+        }
+        void setCurrentMode(LiquifyMode value) {
+            m_currentMode = value;
+        }
+
+        qreal size() const {
+            return m_size;
+        }
+        void setSize(qreal value) {
+            m_size = value;
+        }
+
+        qreal amount() const {
+            return m_amount;
+        }
+        void setAmount(qreal value) {
+            m_amount = value;
+        }
+
+        qreal spacing() const {
+            return m_spacing;
+        }
+        void setSpacing(qreal value) {
+            m_spacing = value;
+        }
+
+        bool sizeHasPressure() const {
+            return m_sizeHasPressure;
+        }
+        void setSizeHasPressure(bool value) {
+            m_sizeHasPressure = value;
+        }
+
+        bool amountHasPressure() const {
+            return m_amountHasPressure;
+        }
+        void setAmountHasPressure(bool value) {
+            m_amountHasPressure = value;
+        }
+
+        bool reverseDirection() const {
+            return m_reverseDirection;
+        }
+        void setReverseDirection(bool value) {
+            m_reverseDirection = value;
+        }
+
+    private:
+        LiquifyMode m_currentMode;
+        qreal m_size;
+        qreal m_amount;
+        qreal m_spacing;
+        bool m_sizeHasPressure;
+        bool m_amountHasPressure;
+        bool m_reverseDirection;
+    };
+
+    const LiquifyProperties* liquifyProperties() const {
+        return &m_liquifyProperties;
+    }
+
+    LiquifyProperties* liquifyProperties() {
+        return &m_liquifyProperties;
+    }
+
+    void initLiquifyTransformMode(const QRect &srcRect);
+
+    KisLiquifyTransformWorker* liquifyWorker() const {
+        return m_liquifyWorker.data();
+    }
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -276,6 +375,8 @@ private:
 
     KisFilterStrategy *m_filter;
     bool m_editTransformPoints;
+    LiquifyProperties m_liquifyProperties;
+    QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

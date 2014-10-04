@@ -107,7 +107,8 @@ struct KisWarpTransformStrategy::Private
 KisWarpTransformStrategy::KisWarpTransformStrategy(const KisCoordinatesConverter *converter,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : m_d(new Private(this, converter, currentArgs, transaction))
+    : KisTransformStrategyBase(converter),
+      m_d(new Private(this, converter, currentArgs, transaction))
 {
 }
 
@@ -117,8 +118,6 @@ KisWarpTransformStrategy::~KisWarpTransformStrategy()
 
 void KisWarpTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
 {
-    Q_UNUSED(perspectiveModifierActive);
-
     double handleRadiusSq = pow2(KisTransformUtils::effectiveHandleGrabRadius(m_d->converter));
 
     bool cursorOverPoint = false;

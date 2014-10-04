@@ -20,6 +20,9 @@
 
 #include "tool_transform_args.h"
 
+#include "kis_liquify_transform_worker.h"
+
+
 ToolTransformArgs::ToolTransformArgs()
 {
     m_mode = FREE_TRANSFORM;
@@ -69,6 +72,11 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_filter = args.m_filter;
     m_flattenedPerspectiveTransform = args.m_flattenedPerspectiveTransform;
     m_editTransformPoints = args.m_editTransformPoints;
+    m_liquifyProperties = args.m_liquifyProperties;
+
+    if (args.m_liquifyWorker) {
+        m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
+    }
 }
 
 void ToolTransformArgs::clear()
@@ -117,7 +125,6 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_shearY = shearY;
     m_origPoints = QVector<QPointF>();
     m_transfPoints = QVector<QPointF>();
-
     m_warpType = warpType;
     m_alpha = alpha;
     m_defaultPoints = defaultPoints;
@@ -148,9 +155,17 @@ bool ToolTransformArgs::isIdentity() const
                 return false;
 
         return true;
+    } else if (m_mode == LIQUIFY) {
+        qWarning("Not implemented!");
+        return false;
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
         return true;
     }
+}
+
+void ToolTransformArgs::initLiquifyTransformMode(const QRect &srcRect)
+{
+    m_liquifyWorker.reset(new KisLiquifyTransformWorker(srcRect, 0, 8));
 }
 

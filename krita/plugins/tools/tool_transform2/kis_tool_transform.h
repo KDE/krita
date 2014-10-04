@@ -59,6 +59,7 @@ class QTouchEvent;
 class KisTransformStrategyBase;
 class KisWarpTransformStrategy;
 class KisCageTransformStrategy;
+class KisLiquifyTransformStrategy;
 class KisFreeTransformStrategy;
 class KisPerspectiveTransformStrategy;
 
@@ -110,6 +111,7 @@ public:
         FreeTransformMode,
         WarpTransformMode,
         CageTransformMode,
+        LiquifyTransformMode,
         PerspectiveTransformMode
     };
     Q_ENUMS(TransformToolMode)
@@ -267,6 +269,7 @@ private:
 
     QScopedPointer<KisWarpTransformStrategy> m_warpStrategy;
     QScopedPointer<KisCageTransformStrategy> m_cageStrategy;
+    QScopedPointer<KisLiquifyTransformStrategy> m_liquifyStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
     QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
     KisTransformStrategyBase* currentStrategy() const;

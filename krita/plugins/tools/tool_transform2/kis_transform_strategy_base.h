@@ -27,12 +27,14 @@ class QPointF;
 class QTransform;
 class QPainter;
 class QCursor;
+class KoPointerEvent;
+class KisCoordinatesConverter;
 
 
 class KisTransformStrategyBase : public QObject
 {
 public:
-    KisTransformStrategyBase();
+    KisTransformStrategyBase(const KisCoordinatesConverter *_converter);
     ~KisTransformStrategyBase();
 
     QImage originalImage() const;
@@ -49,9 +51,16 @@ public:
     virtual QCursor getCurrentCursor() const = 0;
 
     virtual void externalConfigChanged() = 0;
-    virtual bool beginPrimaryAction(const QPointF &pt) = 0;
-    virtual void continuePrimaryAction(const QPointF &pt, bool specialModifierActve) = 0;
-    virtual bool endPrimaryAction() = 0;
+
+    virtual bool beginPrimaryAction(KoPointerEvent *event);
+    virtual void continuePrimaryAction(KoPointerEvent *event, bool specialModifierActve);
+    virtual bool endPrimaryAction(KoPointerEvent *event);
+
+protected:
+
+    virtual bool beginPrimaryAction(const QPointF &pt);
+    virtual void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
+    virtual bool endPrimaryAction();
 
 private:
     struct Private;

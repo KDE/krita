@@ -83,9 +83,19 @@ public slots:
     void slotSetWarpModeButtonClicked(bool);
     void slotSetCageModeButtonClicked(bool);
     void slotSetPerspectiveModeButtonClicked(bool);
+    void slotSetLiquifyModeButtonClicked(bool);
     void slotButtonBoxClicked(QAbstractButton *button);
 
     void slotEditCagePoints(bool value);
+
+    void liquifySizeChanged(qreal value);
+    void liquifyAmountChanged(qreal value);
+    void liquifySpacingChanged(qreal value);
+    void liquifySizePressureChanged(bool value);
+    void liquifyAmountPressureChanged(bool value);
+    void liquifyReverseDirectionChanged(bool value);
+
+    void slotLiquifyModeChanged(int value);
 
     void notifyEditingFinished();
 
@@ -105,6 +115,8 @@ private:
     void activateCustomWarpPoints(bool enabled);
 
     void updateLockPointsButtonCaption();
+
+    void updateLiquifyControls();
 
 private:
     static const int DEFAULT_POINTS_PER_LINE;

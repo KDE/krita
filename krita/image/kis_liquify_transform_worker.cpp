@@ -22,19 +22,16 @@
 
 struct KisLiquifyTransformWorker::Private
 {
-    Private(KisPaintDeviceSP _dev,
+    Private(const QRect &_srcBounds,
             KoUpdater *_progress,
             int _pixelPrecision)
-        : dev(_dev),
+        : srcBounds(_srcBounds),
           progress(_progress),
           pixelPrecision(_pixelPrecision)
     {
     }
 
-    KisPaintDeviceSP dev;
-
-    QImage srcImage;
-    QPointF srcImageOffset;
+    const QRect srcBounds;
 
     QVector<QPointF> originalPoints;
     QVector<QPointF> transformedPoints;
@@ -53,23 +50,18 @@ struct KisLiquifyTransformWorker::Private
                                   qreal sigma);
 };
 
-KisLiquifyTransformWorker::KisLiquifyTransformWorker(KisPaintDeviceSP dev,
+KisLiquifyTransformWorker::KisLiquifyTransformWorker(const QRect &srcBounds,
                                                      KoUpdater *progress,
                                                      int pixelPrecision)
-    : m_d(new Private(dev, progress, pixelPrecision))
+    : m_d(new Private(srcBounds, progress, pixelPrecision))
 {
+    // TODO: implement 'progress' stuff
     m_d->preparePoints();
 }
 
-KisLiquifyTransformWorker::KisLiquifyTransformWorker(const QImage &srcImage,
-                                                     const QPointF &srcImageOffset,
-                                                     KoUpdater *progress,
-                                                     int pixelPrecision)
-    : m_d(new Private(0, progress, pixelPrecision))
+KisLiquifyTransformWorker::KisLiquifyTransformWorker(const KisLiquifyTransformWorker &rhs)
+    : m_d(new Private(*rhs.m_d.data()))
 {
-    m_d->srcImage = srcImage;
-    m_d->srcImageOffset = srcImageOffset;
-    m_d->preparePoints();
 }
 
 KisLiquifyTransformWorker::~KisLiquifyTransformWorker()
@@ -122,9 +114,6 @@ struct AllPointsFetcherOp
 
 void KisLiquifyTransformWorker::Private::preparePoints()
 {
-    QRect srcBounds = dev ? dev->region().boundingRect() :
-        QRectF(srcImageOffset, srcImage.size()).toAlignedRect();
-
     gridSize =
         GridIterationTools::calcGridSize(srcBounds, pixelPrecision);
 
@@ -321,14 +310,14 @@ struct KisLiquifyTransformWorker::Private::MapIndexesOp {
 };
 
 
-void KisLiquifyTransformWorker::run()
+void KisLiquifyTransformWorker::run(KisPaintDeviceSP device)
 {
-    KisPaintDeviceSP srcDev = new KisPaintDevice(*m_d->dev.data());
-    m_d->dev->clear();
+    KisPaintDeviceSP srcDev = new KisPaintDevice(*device.data());
+    device->clear();
 
     using namespace GridIterationTools;
 
-    PaintDevicePolygonOp polygonOp(srcDev, m_d->dev);
+    PaintDevicePolygonOp polygonOp(srcDev, device);
     Private::MapIndexesOp indexesOp(m_d.data());
     iterateThroughGrid<AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                     m_d->gridSize,
@@ -336,26 +325,51 @@ void KisLiquifyTransformWorker::run()
                                                     m_d->transformedPoints);
 }
 
-QImage KisLiquifyTransformWorker::runOnQImage(QPointF *newOffset)
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
+#include <QTransform>
+
+typedef boost::function<QPointF (const QPointF&)> PointMapFunction;
+
+PointMapFunction bindPointMapTransform(const QTransform &transform) {
+    typedef QPointF (QTransform::*MapFuncType)(const QPointF&) const;
+    return boost::bind(static_cast<MapFuncType>(&QTransform::map), &transform, _1);
+}
+
+QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,
+                                              const QPointF &srcImageOffset,
+                                              const QTransform &imageToThumbTransform,
+                                              QPointF *newOffset)
 {
     KIS_ASSERT_RECOVER(m_d->originalPoints.size() == m_d->transformedPoints.size()) {
         return QImage();
     }
 
-    KIS_ASSERT_RECOVER(!m_d->srcImage.isNull()) {
+    KIS_ASSERT_RECOVER(!srcImage.isNull()) {
         return QImage();
     }
 
-    KIS_ASSERT_RECOVER(m_d->srcImage.format() == QImage::Format_ARGB32) {
+    KIS_ASSERT_RECOVER(srcImage.format() == QImage::Format_ARGB32) {
         return QImage();
     }
+
+    QVector<QPointF> originalPointsLocal(m_d->originalPoints);
+    QVector<QPointF> transformedPointsLocal(m_d->transformedPoints);
+
+    PointMapFunction mapFunc = bindPointMapTransform(imageToThumbTransform);
+
+    std::transform(originalPointsLocal.begin(), originalPointsLocal.end(),
+                   originalPointsLocal.begin(), mapFunc);
+
+    std::transform(transformedPointsLocal.begin(), transformedPointsLocal.end(),
+                   transformedPointsLocal.begin(), mapFunc);
 
     QRectF dstBounds;
-    foreach (const QPointF &pt, m_d->transformedPoints) {
+    foreach (const QPointF &pt, transformedPointsLocal) {
         KisAlgebra2D::accumulateBounds(pt, &dstBounds);
     }
 
-    const QRectF srcBounds(m_d->srcImageOffset, m_d->srcImage.size());
+    const QRectF srcBounds(srcImageOffset, srcImage.size());
     dstBounds |= srcBounds;
 
     QPointF dstQImageOffset = dstBounds.topLeft();
@@ -363,17 +377,16 @@ QImage KisLiquifyTransformWorker::runOnQImage(QPointF *newOffset)
 
     QRect dstBoundsI = dstBounds.toAlignedRect();
 
-
-    QImage dstImage(dstBoundsI.size(), m_d->srcImage.format());
+    QImage dstImage(dstBoundsI.size(), srcImage.format());
     dstImage.fill(0);
 
-    GridIterationTools::QImagePolygonOp polygonOp(m_d->srcImage, dstImage, m_d->srcImageOffset, dstQImageOffset);
+    GridIterationTools::QImagePolygonOp polygonOp(srcImage, dstImage, srcImageOffset, dstQImageOffset);
     Private::MapIndexesOp indexesOp(m_d.data());
     GridIterationTools::iterateThroughGrid
         <GridIterationTools::AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                           m_d->gridSize,
-                                                          m_d->originalPoints,
-                                                          m_d->transformedPoints);
+                                                          originalPointsLocal,
+                                                          transformedPointsLocal);
     return dstImage;
 }
 

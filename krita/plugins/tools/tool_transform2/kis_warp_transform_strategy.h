@@ -48,6 +48,11 @@ public:
     QCursor getCurrentCursor() const;
 
     void externalConfigChanged();
+
+    using KisTransformStrategyBase::beginPrimaryAction;
+    using KisTransformStrategyBase::continuePrimaryAction;
+    using KisTransformStrategyBase::endPrimaryAction;
+
     bool beginPrimaryAction(const QPointF &pt);
     void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     bool endPrimaryAction();

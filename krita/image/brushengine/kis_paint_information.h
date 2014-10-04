@@ -25,6 +25,7 @@
 #include "kis_global.h"
 #include "kis_vec.h"
 #include "krita_export.h"
+#include "kis_distance_information.h"
 
 class QDomDocument;
 class QDomElement;
@@ -91,7 +92,17 @@ public:
 
     ~KisPaintInformation();
 
-    void paintAt(KisPaintOp *op, KisDistanceInformation *distanceInfo);
+    template <class PaintOp>
+    void paintAt(PaintOp &op, KisDistanceInformation *distanceInfo) {
+        KisSpacingInformation spacingInfo;
+
+        {
+            DistanceInformationRegistrar r = registerDistanceInformation(distanceInfo);
+            spacingInfo = op.paintAt(*this);
+        }
+
+        distanceInfo->registerPaintedDab(*this, spacingInfo);
+    }
 
     const QPointF& pos() const;
     void setPos(const QPointF& p);
@@ -121,6 +132,14 @@ public:
      * that is when the distance information is registered.
      */
     qreal drawingAngle() const;
+
+    /**
+     * Current brush direction vector computed from the cursor movement
+     *
+     * WARNING: this method is available *only* inside paintAt() call,
+     * that is when the distance information is registered.
+     */
+    QPointF drawingDirectionVector() const;
 
     /**
      * Current brush speed computed from the cursor movement

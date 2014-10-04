@@ -267,8 +267,8 @@ struct QImagePolygonOp
                     QPoint srcPointI = srcPoint.toPoint();
                     QPoint dstPointI = dstPoint.toPoint();
 
-                    srcPointI = KisAlgebra2D::clampPoint(srcPointI, m_dstImageRect);
-                    dstPointI = KisAlgebra2D::clampPoint(dstPointI, m_srcImageRect);
+                    if (!m_dstImageRect.contains(srcPointI)) continue;
+                    if (!m_srcImageRect.contains(dstPointI)) continue;
 
                     m_dstImage.setPixel(srcPointI, m_srcImage.pixel(dstPointI));
                 }

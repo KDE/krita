@@ -67,6 +67,13 @@ qreal norm(const T &a)
     return std::sqrt(pow2(a.x()) + pow2(a.y()));
 }
 
+template <class Point>
+Point normalize(const Point &a)
+{
+    const qreal length = norm(a);
+    return (1.0 / length) * a;
+}
+
 template <class T>
 T leftUnitNormal(const T &a)
 {

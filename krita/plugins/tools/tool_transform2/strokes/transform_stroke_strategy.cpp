@@ -32,6 +32,7 @@
 #include <kis_perspectivetransform_worker.h>
 #include <kis_warptransform_worker.h>
 #include <kis_cage_transform_worker.h>
+#include <kis_liquify_transform_worker.h>
 
 
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
@@ -274,6 +275,12 @@ void TransformStrokeStrategy::transformDevice(const ToolTransformArgs &config,
         worker.prepareTransform();
         worker.setTransformedCage(config.transfPoints());
         worker.run();
+    } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
+        KoUpdaterPtr updater = helper->updater();
+        //FIXME:
+        Q_UNUSED(updater);
+
+        config.liquifyWorker()->run(device);
     } else {
         QVector3D transformedCenter;
         KoUpdaterPtr updater1 = helper->updater();

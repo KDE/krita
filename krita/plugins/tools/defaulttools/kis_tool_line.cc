@@ -37,6 +37,8 @@
 #include <kis_cursor.h>
 #include <kis_paintop_registry.h>
 #include "kis_figure_painting_tool_helper.h"
+#include "kis_canvas2.h"
+
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
@@ -47,11 +49,17 @@
 
 #define ENABLE_RECORDING
 
+const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+    return kritaCanvas->coordinatesConverter();
+}
+
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
     : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
       m_showOutline(false),
-      m_infoBuilder(new KisToolPaintingInformationBuilder(this)),
+      m_infoBuilder(new KisConverterPaintingInformationBuilder(getCoordinatesConverter(canvas))),
       m_helper(new KisToolLineHelper(m_infoBuilder.data(), kundo2_i18n("Draw Line"))),
       m_strokeUpdateCompressor(500, KisSignalCompressor::FIRST_ACTIVE),
       m_longStrokeUpdateCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)

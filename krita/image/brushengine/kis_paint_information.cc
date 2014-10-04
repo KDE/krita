@@ -23,6 +23,8 @@
 
 #include "kis_paintop.h"
 #include "kis_distance_information.h"
+#include "kis_algebra_2d.h"
+
 
 
 struct KisPaintInformation::Private {
@@ -182,15 +184,6 @@ KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
                                rotation, tangentialPressure, perspective, time);
 }
 
-void KisPaintInformation::paintAt(KisPaintOp *op, KisDistanceInformation *distanceInfo)
-{
-    d->registerDistanceInfo(distanceInfo);
-    KisSpacingInformation spacingInfo = op->paintAt(*this);
-    d->unregisterDistanceInfo();
-
-    distanceInfo->registerPaintedDab(*this, spacingInfo);
-}
-
 const QPointF& KisPaintInformation::pos() const
 {
     return d->pos;
@@ -251,6 +244,22 @@ qreal KisPaintInformation::drawingAngle() const
 
     QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
     return atan2(diff.y(), diff.x());
+}
+
+QPointF KisPaintInformation::drawingDirectionVector() const
+{
+    if (d->drawingAngleOverride) {
+        qreal angle = *d->drawingAngleOverride;
+        return QPointF(cos(angle), sin(angle));
+    }
+
+    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
+        qWarning() << "KisPaintInformation::drawingDirectionVector()" << "Cannot access Distance Info last dab data";
+        return QPointF(1.0, 0.0);
+    }
+
+    QPointF diff(pos() - d->currentDistanceInfo->lastPosition());
+    return KisAlgebra2D::normalize(diff);
 }
 
 qreal KisPaintInformation::drawingDistance() const

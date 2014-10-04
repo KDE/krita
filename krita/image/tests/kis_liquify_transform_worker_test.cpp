@@ -126,66 +126,6 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
     }
 }
 
-QPointF translatePoint(const QPointF &src,
-                       const QPointF &base,
-                       const QPointF &offset,
-                       qreal sigma)
-{
-    qreal dist = KisAlgebra2D::norm(src - base);
-    if (dist > 3 * sigma) return src;
-    const qreal lambda = exp(-pow2(dist) / 2 / pow2(sigma));
-    return src + lambda * offset;
-}
-
-QPointF scalePoint(const QPointF &src,
-                   const QPointF &base,
-                   qreal scale,
-                   qreal sigma)
-{
-    QPointF diff = src - base;
-    qreal dist = KisAlgebra2D::norm(diff);
-    if (dist > 3 * sigma) return src;
-    const qreal lambda = exp(-pow2(dist) / 2 / pow2(sigma));
-
-    return base + (1.0 + scale * lambda) * diff;
-}
-
-QPointF rotatePoint(const QPointF &src,
-                    const QPointF &base,
-                    qreal angle,
-                    qreal sigma)
-{
-    QPointF diff = src - base;
-    qreal dist = KisAlgebra2D::norm(diff);
-    if (dist > 4 * sigma) return src;
-    const qreal lambda = exp(-pow2(dist) / 2 / pow2(sigma));
-
-    angle *= lambda;
-
-    qreal sinA = std::sin(angle);
-    qreal cosA = std::cos(angle);
-
-    qreal x =  cosA * diff.x() + sinA * diff.y();
-    qreal y = -sinA * diff.x() + cosA * diff.y();
-
-    QPointF result = base + QPointF(x, y);
-
-    return result;
-}
-
-QPointF undoPoint(const QPointF &src,
-                  const QPointF &base,
-                  const QPointF &refPoint,
-                  qreal sigma)
-{
-    QPointF diff = src - base;
-    qreal dist = KisAlgebra2D::norm(diff);
-    if (dist > 3 * sigma) return src;
-    const qreal lambda = exp(-pow2(dist) / 2 / pow2(sigma));
-
-    return refPoint * lambda + src * (1.0 - lambda);
-}
-
 void KisLiquifyTransformWorkerTest::testPoints()
 {
     TestUtil::TestProgressBar bar;
@@ -200,7 +140,7 @@ void KisLiquifyTransformWorkerTest::testPoints()
 
     const int pixelPrecision = 8;
 
-    KisLiquifyTransformWorker worker(dev,
+    KisLiquifyTransformWorker worker(dev->exactBounds(),
                                      updater,
                                      pixelPrecision);
 
@@ -231,10 +171,59 @@ void KisLiquifyTransformWorkerTest::testPoints()
                             50);
     }
 
-    worker.run();
+    worker.run(dev);
 
     QImage result = dev->convertToQImage(0);
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_dev", "unity");
+}
+
+void KisLiquifyTransformWorkerTest::testPointsQImage()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(TestUtil::fetchDataFileLazy("test_transform_quality_second.png"));
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, 0);
+
+    const int pixelPrecision = 8;
+
+    KisLiquifyTransformWorker worker(dev->exactBounds(),
+                                     updater,
+                                     pixelPrecision);
+
+
+    worker.translatePoints(QPointF(100,100),
+                           QPointF(50, 0),
+                           50);
+
+    QRect rc = dev->exactBounds();
+    dev->setX(50);
+    dev->setY(50);
+    worker.run(dev);
+    rc |= dev->exactBounds();
+
+    QImage resultDev = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    TestUtil::checkQImage(resultDev, "liquify_transform_test", "liquify_qimage", "refDevice");
+
+    QTransform imageToThumbTransform =
+        QTransform::fromScale(0.5, 0.5);
+
+    QImage srcImage(image);
+    image = QImage(image.size(), QImage::Format_ARGB32);
+    QPainter gc(&image);
+    gc.setTransform(imageToThumbTransform);
+    gc.drawImage(QPoint(), srcImage);
+
+    QPointF newOffset;
+    QImage result = worker.runOnQImage(image, QPointF(10, 10), imageToThumbTransform, &newOffset);
+    qDebug() << ppVar(newOffset);
+
+
+    TestUtil::checkQImage(result, "liquify_transform_test", "liquify_qimage", "resultImage");
 }
 
 QTEST_KDEMAIN(KisLiquifyTransformWorkerTest, GUI)

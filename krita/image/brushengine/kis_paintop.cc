@@ -42,6 +42,8 @@
 #include "kis_vec.h"
 #include "kis_perspective_math.h"
 #include "kis_fixed_paint_device.h"
+#include "kis_paintop_utils.h"
+
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #include <kis_distance_information.h>
@@ -67,11 +69,6 @@ struct KisPaintOp::Private {
 
     bool fanCornersEnabled;
     qreal fanCornersStep;
-
-
-    bool paintFan(const KisPaintInformation &pi1,
-                  const KisPaintInformation &pi2,
-                  KisDistanceInformation *currentDistance);
 };
 
 
@@ -169,66 +166,17 @@ void KisPaintOp::paintLine(const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2,
                            KisDistanceInformation *currentDistance)
 {
-    QPointF end = pi2.pos();
-
-    KisPaintInformation pi = pi1;
-    QPointF pt = pi1.pos();
-    qreal t = 0.0;
-
-    while ((t = currentDistance->getNextPointPosition(pt, end)) >= 0.0) {
-        pt = pt + t * (end - pt);
-        pi = KisPaintInformation::mix(pt, t, pi, pi2);
-
-        if (d->fanCornersEnabled &&
-            currentDistance->hasLastPaintInformation()) {
-
-            d->paintFan(currentDistance->lastPaintInformation(),
-                        pi,
-                        currentDistance);
-        }
-
-        /**
-         * A bit complicated part to ensure the registration
-         * of the distance information is done in right order
-         */
-        pi.paintAt(this, currentDistance);
-    }
+    KisPaintOpUtils::paintLine(*this, pi1, pi2, currentDistance,
+                               d->fanCornersEnabled,
+                               d->fanCornersStep);
 }
-
-bool KisPaintOp::Private::paintFan(const KisPaintInformation &pi1,
-                                   const KisPaintInformation &pi2,
-                                   KisDistanceInformation *currentDistance)
-{
-    const qreal angleStep = fanCornersStep;
-    const qreal initialAngle = currentDistance->lastDrawingAngle();
-    const qreal finalAngle = pi2.drawingAngleSafe(*currentDistance);
-    const qreal fullDistance = shortestAngularDistance(initialAngle,
-                                                       pi2.drawingAngleSafe(*currentDistance));
-    qreal lastAngle = initialAngle;
-
-    int i = 0;
-
-    while (shortestAngularDistance(lastAngle, finalAngle) > angleStep) {
-        lastAngle = incrementInDirection(lastAngle, angleStep, finalAngle);
-
-        qreal t = angleStep * i++ / fullDistance;
-
-        QPointF pt = pi1.pos() + t * (pi2.pos() - pi1.pos());
-        KisPaintInformation pi = KisPaintInformation::mix(pt, t, pi1, pi2);
-        pi.overrideDrawingAngle(lastAngle);
-        pi.paintAt(q, currentDistance);
-    }
-
-    return i;
-}
-
 
 void KisPaintOp::paintAt(const KisPaintInformation& info, KisDistanceInformation *currentDistance)
 {
     Q_ASSERT(currentDistance);
 
     KisPaintInformation pi(info);
-    pi.paintAt(this, currentDistance);
+    pi.paintAt(*this, currentDistance);
 }
 
 KisPainter* KisPaintOp::painter() const

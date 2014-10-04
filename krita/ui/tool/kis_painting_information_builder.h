@@ -29,6 +29,7 @@
 class KoPointerEvent;
 class KisTool;
 class KisToolFreehand;
+class KisCoordinatesConverter;
 
 
 class KRITAUI_EXPORT KisPaintingInformationBuilder : public QObject
@@ -71,11 +72,25 @@ private:
     QPointF m_startPoint;
 };
 
-class KRITAUI_EXPORT KisToolPaintingInformationBuilder : public KisPaintingInformationBuilder
+class KRITAUI_EXPORT KisConverterPaintingInformationBuilder : public KisPaintingInformationBuilder
 {
     Q_OBJECT
 
 public:
+    KisConverterPaintingInformationBuilder(const KisCoordinatesConverter *converter);
+
+protected:
+    virtual QPointF documentToImage(const QPointF &point);
+
+private:
+    const KisCoordinatesConverter *m_converter;
+};
+
+class KRITAUI_EXPORT KisToolPaintingInformationBuilder : public KisPaintingInformationBuilder
+{
+    Q_OBJECT
+
+protected:
     KisToolPaintingInformationBuilder(KisTool *tool);
 
 protected:

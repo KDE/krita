@@ -81,6 +81,7 @@
 #include "kis_transform_utils.h"
 #include "kis_warp_transform_strategy.h"
 #include "kis_cage_transform_strategy.h"
+#include "kis_liquify_transform_strategy.h"
 #include "kis_free_transform_strategy.h"
 #include "kis_perspective_transform_strategy.h"
 
@@ -97,6 +98,10 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
             m_currentArgs, m_transaction))
     , m_cageStrategy(
         new KisCageTransformStrategy(
+            dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            m_currentArgs, m_transaction))
+    , m_liquifyStrategy(
+        new KisLiquifyTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
             m_currentArgs, m_transaction))
     , m_freeStrategy(
@@ -117,6 +122,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
 
     connect(m_warpStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_cageStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
+    connect(m_liquifyStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestResetRotationCenterButtons()), SLOT(resetRotationCenterButtonsRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
@@ -163,6 +169,8 @@ KisTransformStrategyBase* KisToolTransform::currentStrategy() const
         return m_warpStrategy.data();
     } else if (m_currentArgs.mode() == ToolTransformArgs::CAGE) {
         return m_cageStrategy.data();
+    } else if (m_currentArgs.mode() == ToolTransformArgs::LIQUIFY) {
+        return m_liquifyStrategy.data();
     } else /* if (m_currentArgs.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) */ {
         return m_perspectiveStrategy.data();
     }
@@ -214,12 +222,11 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
     if (kisimage && event->button() == Qt::LeftButton) {
-        QPointF mousePos = m_canvas->coordinatesConverter()->documentToImage(event->point);
         if (!m_strokeData.strokeId()) {
             startStroke(m_currentArgs.mode());
             setMode(KisTool::HOVER_MODE);
         } else {
-            if (!currentStrategy()->beginPrimaryAction(mousePos)) {
+            if (!currentStrategy()->beginPrimaryAction(event)) {
                 setMode(KisTool::HOVER_MODE);
             }
         }
@@ -321,6 +328,9 @@ KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
     case ToolTransformArgs::CAGE:
         mode = CageTransformMode;
         break;
+    case ToolTransformArgs::LIQUIFY:
+        mode = LiquifyTransformMode;
+        break;
     case ToolTransformArgs::PERSPECTIVE_4POINT:
         mode = PerspectiveTransformMode;
         break;
@@ -414,6 +424,9 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
     case CageTransformMode:
         mode = ToolTransformArgs::CAGE;
         break;
+    case LiquifyTransformMode:
+        mode = ToolTransformArgs::LIQUIFY;
+        break;
     case PerspectiveTransformMode:
         mode = ToolTransformArgs::PERSPECTIVE_4POINT;
         break;
@@ -428,6 +441,8 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
             m_optionsWidget->slotSetWarpModeButtonClicked( true );
         } else if( newMode == CageTransformMode ) {
             m_optionsWidget->slotSetCageModeButtonClicked( true );
+        } else if( newMode == LiquifyTransformMode ) {
+            m_optionsWidget->slotSetLiquifyModeButtonClicked( true );
         } else if( newMode == PerspectiveTransformMode ) {
             m_optionsWidget->slotSetPerspectiveModeButtonClicked( true );
         }
@@ -490,7 +505,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
     m_actuallyMoveWhileSelected = true;
 
-    currentStrategy()->continuePrimaryAction(mousePos, event->modifiers() & Qt::ShiftModifier);
+    currentStrategy()->continuePrimaryAction(event, event->modifiers() & Qt::ShiftModifier);
     updateOptionWidget();
     outlineChanged();
 }
@@ -507,7 +522,7 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
     if (m_actuallyMoveWhileSelected ||
         currentStrategy()->acceptsClicks()) {
 
-        if (currentStrategy()->endPrimaryAction()) {
+        if (currentStrategy()->endPrimaryAction(event)) {
             commitChanges();
         }
 
@@ -538,6 +553,9 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
     } else if (mode == ToolTransformArgs::CAGE) {
         m_currentArgs.setMode(ToolTransformArgs::CAGE);
         m_currentArgs.setEditingTransformPoints(true);
+    } else if (mode == ToolTransformArgs::LIQUIFY) {
+        m_currentArgs.setMode(ToolTransformArgs::LIQUIFY);
+        m_currentArgs.initLiquifyTransformMode(m_transaction.originalRect().toAlignedRect());
     } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
         m_currentArgs.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
     }
@@ -610,6 +628,7 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
     m_perspectiveStrategy->setThumbnailImage(origImg, thumbToImageTransform);
     m_warpStrategy->setThumbnailImage(origImg, thumbToImageTransform);
     m_cageStrategy->setThumbnailImage(origImg, thumbToImageTransform);
+    m_liquifyStrategy->setThumbnailImage(origImg, thumbToImageTransform);
 }
 
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_FREE_TRANSFORM_STRATEGY_H
-#define __KIS_FREE_TRANSFORM_STRATEGY_H
+#ifndef __KIS_LIQUIFY_TRANSFORM_STRATEGY_H
+#define __KIS_LIQUIFY_TRANSFORM_STRATEGY_H
 
 #include <QObject>
 #include <QScopedPointer>
@@ -33,14 +33,15 @@ class TransformTransactionProperties;
 class QCursor;
 class QImage;
 
-class KisFreeTransformStrategy : public KisTransformStrategyBase
+
+class KisLiquifyTransformStrategy : public KisTransformStrategyBase
 {
     Q_OBJECT
 public:
-    KisFreeTransformStrategy(const KisCoordinatesConverter *converter,
+    KisLiquifyTransformStrategy(const KisCoordinatesConverter *converter,
                              ToolTransformArgs &currentArgs,
                              TransformTransactionProperties &transaction);
-    ~KisFreeTransformStrategy();
+    ~KisLiquifyTransformStrategy();
 
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);
     void paint(QPainter &gc);
@@ -52,18 +53,18 @@ public:
     using KisTransformStrategyBase::continuePrimaryAction;
     using KisTransformStrategyBase::endPrimaryAction;
 
-    bool beginPrimaryAction(const QPointF &pt);
-    void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
-    bool endPrimaryAction();
+    bool beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event, bool specialModifierActve);
+    bool endPrimaryAction(KoPointerEvent *event);
+
+    bool acceptsClicks() const;
 
 signals:
     void requestCanvasUpdate();
-    void requestResetRotationCenterButtons();
-    void requestShowImageTooBig(bool value);
 
 private:
     class Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_FREE_TRANSFORM_STRATEGY_H */
+#endif /* __KIS_LIQUIFY_TRANSFORM_STRATEGY_H */

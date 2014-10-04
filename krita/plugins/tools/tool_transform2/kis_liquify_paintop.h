@@ -16,17 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LIQUIFY_TRANSFORM_WORKER_TEST_H
-#define __KIS_LIQUIFY_TRANSFORM_WORKER_TEST_H
+#ifndef __KIS_LIQUIFY_PAINTOP_H
+#define __KIS_LIQUIFY_PAINTOP_H
 
-#include <QtTest/QtTest>
+#include <QScopedPointer>
 
-class KisLiquifyTransformWorkerTest : public QObject
+#include "tool_transform_args.h"
+
+class KisLiquifyTransformWorker;
+class KisPaintInformation;
+class KisSpacingInformation;
+
+class KisLiquifyPaintop
 {
-    Q_OBJECT
-private slots:
-    void testPoints();
-    void testPointsQImage();
+public:
+    KisLiquifyPaintop(const ToolTransformArgs::LiquifyProperties &props,
+                      KisLiquifyTransformWorker *worker);
+    ~KisLiquifyPaintop();
+
+    KisSpacingInformation paintAt(const KisPaintInformation &pi);
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_LIQUIFY_TRANSFORM_WORKER_TEST_H */
+#endif /* __KIS_LIQUIFY_PAINTOP_H */

@@ -120,6 +120,21 @@ qreal KisPaintingInformationBuilder::pressureToCurve(qreal pressure)
     return m_pressureSamples.at(qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION));
 }
 
+/***********************************************************************/
+/*           KisConverterPaintingInformationBuilder                        */
+/***********************************************************************/
+
+#include "kis_coordinates_converter.h"
+
+KisConverterPaintingInformationBuilder::KisConverterPaintingInformationBuilder(const KisCoordinatesConverter *converter)
+    : m_converter(converter)
+{
+}
+
+QPointF KisConverterPaintingInformationBuilder::documentToImage(const QPointF &point)
+{
+    return m_converter->documentToImage(point);
+}
 
 /***********************************************************************/
 /*           KisToolPaintingInformationBuilder                        */

@@ -30,7 +30,6 @@
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 #include <QTime>
 
 #include <kis_view2.h>

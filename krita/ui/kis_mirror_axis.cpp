@@ -32,7 +32,6 @@
 #include <QPaintEngine>
 
 #include <kaction.h>
-#include <kactioncollection.h>
 
 #include <KoIcon.h>
 

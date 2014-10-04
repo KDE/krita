@@ -40,7 +40,6 @@
 
 // KDE
 #include <klocale.h>
-#include <kactioncollection.h>
 #include <kundo2stack.h>
 
 // Calligra

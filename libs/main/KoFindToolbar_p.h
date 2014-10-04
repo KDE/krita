@@ -33,7 +33,6 @@
 #include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
 #include <kaction.h>
-#include <kactioncollection.h>
 #include <kcolorscheme.h>
 
 #include <KoIcon.h>

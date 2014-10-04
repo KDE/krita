@@ -23,7 +23,6 @@
 
 #include <kaction.h>
 #include <klocalizedstring.h>
-#include <kactioncollection.h>
 #include <QApplication>
 
 #include "kis_tool_proxy.h"

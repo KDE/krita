@@ -41,7 +41,6 @@
 
 #include <klocale.h>
 #include <knuminput.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 
 #include <math.h>

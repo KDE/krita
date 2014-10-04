@@ -20,7 +20,6 @@
 #include <unistd.h>
 
 #include <kis_action.h>
-#include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>

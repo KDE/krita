@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-#include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>

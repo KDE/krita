@@ -28,7 +28,6 @@
 #include <QThreadPool>
 
 #include <kaction.h>
-#include <kactioncollection.h>
 
 #include <KoIcon.h>
 #include <KoPointerEvent.h>

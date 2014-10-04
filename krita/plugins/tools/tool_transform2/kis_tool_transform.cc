@@ -37,7 +37,6 @@
 #include <QMatrix4x4>
 
 #include <kis_debug.h>
-#include <kactioncollection.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <knuminput.h>

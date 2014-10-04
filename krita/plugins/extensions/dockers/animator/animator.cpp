@@ -22,7 +22,6 @@
 
 #include <QTimer>
 
-#include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>

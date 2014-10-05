@@ -551,6 +551,8 @@ QString MainWindow::openImage()
 
 void MainWindow::resourceChanged(int key, const QVariant& v)
 {
+    Q_UNUSED(key);
+
     if(centralWidget() == d->sketchView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
@@ -563,6 +565,8 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
 
 void MainWindow::resourceChangedSketch(int key, const QVariant& v)
 {
+    Q_UNUSED(key);
+
     if(centralWidget() == d->desktopView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();

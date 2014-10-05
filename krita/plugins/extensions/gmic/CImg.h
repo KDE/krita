@@ -26444,7 +26444,7 @@ namespace cimg_library_suffixed {
       const int hl = n/2, hr = hl - 1 + n%2;
       if (res._depth!=1) { // 3d
         if (threshold>0)
-#if cimg_use_openmp
+#ifdef cimg_use_openmp
 #pragma omp parallel for collapse(3) if (_width>=16 && _height*_depth*_spectrum>=4)
 #endif
           cimg_forXYZC(*this,x,y,z,c) { // With threshold.
@@ -26461,7 +26461,7 @@ namespace cimg_library_suffixed {
             res(x,y,z,c) = values.get_shared_points(0,nb_values-1).median();
           }
         else
-#if cimg_use_openmp
+#ifdef cimg_use_openmp
 #pragma omp parallel for collapse(3) if (_width>=16 && _height*_depth*_spectrum>=4)
 #endif
           cimg_forXYZC(*this,x,y,z,c) { // Without threshold.
@@ -26493,7 +26493,7 @@ namespace cimg_library_suffixed {
             }
           else switch (n) { // Without threshold.
             case 3 : {
-#if cimg_use_openmp
+#ifdef cimg_use_openmp
 #pragma omp parallel for if (_spectrum>=2)
 #endif
               cimg_forC(*this,c) {
@@ -26513,7 +26513,7 @@ namespace cimg_library_suffixed {
               }
             } break;
             case 5 : {
-#if cimg_use_openmp
+#ifdef cimg_use_openmp
 #pragma omp parallel for if (_spectrum>=2)
 #endif
               cimg_forC(*this,c) {

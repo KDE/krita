@@ -12703,7 +12703,7 @@ gmic& gmic::_run(const CImgList<char>& commands_line, unsigned int& position,
           // TIFF file.
           float first_frame = 0, last_frame = 0, step = 1;
           int err = 0;
-#if cimg_use_tiff
+#ifdef cimg_use_tiff
           static const TIFFErrorHandler default_handler = TIFFSetWarningHandler(0);
           if (verbosity>0 || is_debug) TIFFSetWarningHandler(default_handler);
           else TIFFSetWarningHandler(0);

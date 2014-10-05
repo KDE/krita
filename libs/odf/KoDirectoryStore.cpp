@@ -30,7 +30,6 @@ KoDirectoryStore::KoDirectoryStore(const QString& path, Mode mode, bool writeMim
     : KoStore(mode, writeMimetype)
     , m_basePath(path)
 {
-    Q_D(KoStore);
     //kDebug(30002) << "path:" << path
 
 

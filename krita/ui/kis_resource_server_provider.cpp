@@ -57,7 +57,9 @@ KisResourceServerProvider::KisResourceServerProvider()
     }
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     paintOpPresetThread->start();
-    paintOpPresetThread->barrier();
+    if (!qApp->applicationName().toLower().contains("krita")) {
+        paintOpPresetThread->barrier();
+    }
 
     m_workspaceServer = new KoResourceServer<KisWorkspaceResource>("kis_workspaces", "*.kws");
     if (!QFileInfo(m_workspaceServer->saveLocation()).exists()) {

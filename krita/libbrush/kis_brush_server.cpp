@@ -127,7 +127,6 @@ KisBrushServer::KisBrushServer()
     }
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
-    m_brushThread->barrier();
     foreach(KisBrushSP brush, m_brushServer->resources()) {
         if (!dynamic_cast<KisAbrBrush*>(brush.data())) {
             brush->setBrushTipImage(QImage());

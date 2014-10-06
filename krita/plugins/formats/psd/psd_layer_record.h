@@ -32,12 +32,14 @@
 
 #include "compression.h"
 
+#include "psd_additional_layer_info_block.h"
+
 class QIODevice;
 
 struct  ChannelInfo {
 
     ChannelInfo()
-        : channelId(-1)
+        : channelId(0)
         , compressionType(Compression::Unknown)
         , channelDataStart(0)
         , channelDataLength(0)
@@ -67,6 +69,7 @@ public:
 
     bool read(QIODevice* io);
     bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
+    bool readMask(QIODevice* io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
     bool write(QIODevice* io, KisNodeSP node);
     bool writePixelData(QIODevice* io);
@@ -97,10 +100,14 @@ public:
         qint32 left;
         qint32 bottom;
         qint32 right;
-        quint8 defaultColor;
+        quint8 defaultColor; // 0 or 255
         bool positionedRelativeToLayer;
         bool disabled;
         bool invertLayerMaskWhenBlending;
+        quint8 userMaskDensity;
+        double userMaskFeather;
+        quint8 vectorMaskDensity;
+        double vectorMaskFeather;
     };
 
     LayerMaskData layerMask;

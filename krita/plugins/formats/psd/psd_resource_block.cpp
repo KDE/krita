@@ -54,7 +54,7 @@ bool PSDResourceBlock::read(QIODevice* io)
         return false;
     }
 
-    dbgFile << "\tresource block identifier" << identifier;
+    dbgFile << "\tresource block identifier" << PSDResourceSection::idToString((PSDResourceSection::PSDResourceID)identifier) << identifier;
 
     m_type = QString("PSD Resource Block: %1").arg(identifier);
 

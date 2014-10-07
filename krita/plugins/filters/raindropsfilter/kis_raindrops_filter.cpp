@@ -35,7 +35,6 @@
 #include <klocale.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 
 #include "KoIntegerMaths.h"
 #include <KoUpdater.h>

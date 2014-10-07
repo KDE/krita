@@ -33,7 +33,6 @@
 #include <kis_transaction.h>
 #include <kis_debug.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kcombobox.h>
 
 #include <KoPointerEvent.h>

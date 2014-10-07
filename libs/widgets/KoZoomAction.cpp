@@ -40,7 +40,6 @@
 #include <QComboBox>
 
 #include <klocale.h>
-#include <knuminput.h>
 #include <kdebug.h>
 
 #include <math.h>

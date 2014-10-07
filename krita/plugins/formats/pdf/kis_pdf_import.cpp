@@ -34,7 +34,6 @@
 #include <kis_paint_device.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 #include <kpassworddialog.h>
 
 #include <kio/netaccess.h>

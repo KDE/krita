@@ -36,7 +36,6 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <knuminput.h>
 
 #include <KoCanvasBase.h>
 #include <kis_global.h>

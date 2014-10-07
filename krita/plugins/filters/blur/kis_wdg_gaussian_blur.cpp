@@ -23,8 +23,6 @@
 #include <QToolButton>
 #include <QIcon>
 
-#include <knuminput.h>
-
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>

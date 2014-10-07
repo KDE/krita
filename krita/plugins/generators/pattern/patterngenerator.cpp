@@ -25,7 +25,6 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <knuminput.h>
 
 #include <KoColor.h>
 #include <KoProgressUpdater.h>

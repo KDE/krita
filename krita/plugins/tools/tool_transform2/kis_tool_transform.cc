@@ -38,7 +38,6 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <knuminput.h>
 
 #include <KoPointerEvent.h>
 #include <KoID.h>

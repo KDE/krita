@@ -29,7 +29,6 @@
 #include <QColor>
 #include <QRadioButton>
 
-#include <knuminput.h>
 #include <klocale.h>
 #include <kis_debug.h>
 

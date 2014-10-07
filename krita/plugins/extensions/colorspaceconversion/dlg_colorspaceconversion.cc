@@ -27,7 +27,6 @@
 #include <QList>
 
 #include <klocale.h>
-#include <knuminput.h>
 #include <kis_debug.h>
 
 #include "KoColorProfile.h"

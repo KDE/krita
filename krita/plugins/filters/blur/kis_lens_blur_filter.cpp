@@ -22,8 +22,6 @@
 #include "kis_lens_blur_filter.h"
 #include "kis_wdg_lens_blur.h"
 
-#include <knuminput.h>
-
 #include <KoCompositeOp.h>
 
 #include <kis_convolution_kernel.h>

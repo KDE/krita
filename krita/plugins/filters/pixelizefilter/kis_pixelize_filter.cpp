@@ -33,7 +33,6 @@
 
 #include <klocale.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>

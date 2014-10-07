@@ -22,8 +22,6 @@
 #include "kis_motion_blur_filter.h"
 #include "kis_wdg_motion_blur.h"
 
-#include <knuminput.h>
-
 #include <KoCompositeOp.h>
 
 #include <kis_convolution_kernel.h>

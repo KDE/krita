@@ -32,7 +32,6 @@
 #include <klocale.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>

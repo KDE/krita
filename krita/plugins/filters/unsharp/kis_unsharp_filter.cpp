@@ -23,8 +23,6 @@
 
 #include <kundo2command.h>
 
-#include <knuminput.h>
-
 #include <kis_mask_generator.h>
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>

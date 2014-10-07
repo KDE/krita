@@ -30,7 +30,6 @@
 #include <QVBoxLayout>
 
 #include <klocale.h>
-#include <knuminput.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>

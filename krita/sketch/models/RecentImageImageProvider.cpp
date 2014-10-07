@@ -23,7 +23,6 @@
 
 #include <KoStore.h>
 #include <KoDocument.h>
-#include <KMimeTypeTrader>
 #include <KMimeType>
 #include <kio/previewjob.h>
 

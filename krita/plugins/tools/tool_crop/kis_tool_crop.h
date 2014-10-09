@@ -26,6 +26,9 @@
 
 #include <KoIcon.h>
 
+#include <KConfig>
+#include <KConfigGroup>
+
 #include <KoToolFactoryBase.h>
 #include "kis_tool.h"
 #include "flake/kis_node_shape.h"
@@ -176,6 +179,8 @@ private:
     bool m_growCenter;
     bool m_grow;
     int m_decoration;
+
+    KConfigGroup configGroup;
 
     enum handleType {
         None = 0,

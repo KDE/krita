@@ -186,8 +186,8 @@ KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const
 
 namespace
 {
-const char* const ROOTPART = "root";
-const char* const MAINNAME = "maindoc.xml";
+const char ROOTPART[] = "root";
+const char MAINNAME[] = "maindoc.xml";
 }
 
 KoStore::KoStore(Mode mode, bool writeMimetype)

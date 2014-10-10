@@ -401,7 +401,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
     m_texturesInfo.internalFormat = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
     m_texturesInfo.format = GL_BGRA;
-#ifdef HAVE_GLEW
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
     KoID colorDepthId = m_image->colorSpace()->colorDepthId();
@@ -411,6 +410,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     dbgUI << "Choosing texture format:";
 
+#ifdef HAVE_GLEW
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {
 

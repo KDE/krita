@@ -71,6 +71,7 @@
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceItemChooserSync.h>
+#include <KoDockWidgetTitleBar.h>
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
@@ -1617,6 +1618,10 @@ void KisView2::updateIcons()
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         foreach(QDockWidget* dock, dockers) {
             kDebug() << "name " << dock->objectName();
+            KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
+            if (titlebar) {
+                titlebar->updateIcons();
+            }
             if (!whitelist.contains(dock->objectName())) {
                 continue;
             }

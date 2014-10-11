@@ -244,6 +244,11 @@ void KoDockWidgetTitleBar::setTextVisibilityMode(TextVisibilityMode textVisibili
     d->textVisibilityMode = textVisibilityMode;
 }
 
+void KoDockWidgetTitleBar::updateIcons()
+{
+    d->updateIcons();
+}
+
 void KoDockWidgetTitleBar::Private::toggleFloating()
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
@@ -278,8 +283,6 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
 
     if (!locked) {
         locked = true;
-        lockIcon = themedIcon("docker_lock_a");
-        lockButton->setIcon(themedIcon("docker_lock_a"));
         features = q->features();
         q->setFeatures(QDockWidget::NoDockWidgetFeatures);
         closeButton->setEnabled(false);
@@ -288,13 +291,12 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
     }
     else {
         locked = false;
-        lockIcon = themedIcon("docker_lock_b");
-        lockButton->setIcon(themedIcon("docker_lock_b"));
         q->setFeatures(features);
         closeButton->setEnabled(true);
         floatButton->setEnabled(true);
         collapseButton->setEnabled(true);
     }
+    updateIcons();
     q->setProperty("Locked", locked);
 
 }
@@ -308,5 +310,12 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
 
     thePublic->resizeEvent(0);
 }
+
+void KoDockWidgetTitleBar::Private::updateIcons()
+{
+    lockIcon = (!locked) ? themedIcon("docker_lock_a") : themedIcon("docker_lock_b");
+    lockButton->setIcon(lockIcon);
+}
+
 
 #include <KoDockWidgetTitleBar.moc>

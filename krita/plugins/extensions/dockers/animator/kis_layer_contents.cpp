@@ -55,8 +55,9 @@ void KisLayerContents::initialize()
 
 void KisLayerContents::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
 
-   QPainter painter(this);
+    QPainter painter(this);
 
     for(int i = 0; i < 10000; i++) {
         if(i % 10 == 0) {

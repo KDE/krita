@@ -31,6 +31,7 @@ KisAnimationFrame::KisAnimationFrame(KisLayerContents *parent, int type, int wid
 
 void KisAnimationFrame::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
 
     QPainter painter(this);
 

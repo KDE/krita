@@ -66,6 +66,8 @@ KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent, int index)
 
 void KisAnimationLayer::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
     painter.setPen(Qt::darkGray);
     painter.setBrush(Qt::lightGray);
@@ -74,6 +76,8 @@ void KisAnimationLayer::paintEvent(QPaintEvent *event)
 
 void KisAnimationLayer::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event);
+
     m_lblLayerName->hide();
     m_inputLayerName->setText(m_lblLayerName->text());
     m_inputLayerName->show();

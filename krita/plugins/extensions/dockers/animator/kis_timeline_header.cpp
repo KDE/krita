@@ -30,6 +30,8 @@ KisTimelineHeader::KisTimelineHeader(KisFrameBox *parent)
 
 void KisTimelineHeader::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
 
     for(int i = 0; i < 10000; i++) {

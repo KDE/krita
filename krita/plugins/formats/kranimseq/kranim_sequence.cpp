@@ -72,6 +72,9 @@ bool hasVisibleWidgets()
 
 KoFilter::ConversionStatus KranimSequence::convert(const QByteArray &from, const QByteArray &to)
 {
+    Q_UNUSED(from);
+    Q_UNUSED(to);
+
     KDialog* kdb = new KDialog(0);
     kdb->setCaption(i18n("Animation Sequence export options"));
     kdb->setModal(false);

@@ -45,7 +45,7 @@ KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
     connect(optionswdg->kComboBoxCompressionType, SIGNAL(activated(int)), this, SLOT(activated(int)));
     connect(optionswdg->flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled(bool)));
     setMainWidget(wdg);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 
     QString filterConfig = KisConfig().exportConfiguration("TIFF");

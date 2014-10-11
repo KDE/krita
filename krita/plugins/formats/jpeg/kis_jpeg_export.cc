@@ -114,7 +114,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     frm.setEnabledFilters(cfg.getString("filters").split(','));
 
     kdb->setMainWidget(wdg);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {

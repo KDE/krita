@@ -94,7 +94,7 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
     optionsHeightMap.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     QString filterConfig = KisConfig().exportConfiguration("HeightMap");
     KisPropertiesConfiguration cfg;

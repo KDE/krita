@@ -102,7 +102,7 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
         return KoFilter::FileNotFound;
     }
 
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     KDialog* kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("R16 HeightMap Import Options"));

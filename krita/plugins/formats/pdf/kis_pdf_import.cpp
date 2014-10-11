@@ -119,7 +119,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc, kdb);
     kdb->setMainWidget(wdg);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     if (kdb->exec() == QDialog::Rejected) {
         delete pdoc;
         delete kdb;

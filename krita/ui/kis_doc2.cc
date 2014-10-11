@@ -421,7 +421,7 @@ bool KisDoc2::newImage(const QString& name,
 
     if (!cs) return false;
 
-    qApp->setOverrideCursor(Qt::BusyCursor);
+    QApplication::setOverrideCursor(Qt::BusyCursor);
 
     image = new KisImage(createUndoStore(), width, height, cs, name);
     Q_CHECK_PTR(image);
@@ -450,7 +450,7 @@ bool KisDoc2::newImage(const QString& name,
     cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
 
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     return true;
 }
 

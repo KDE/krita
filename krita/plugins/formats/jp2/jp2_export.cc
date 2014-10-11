@@ -88,7 +88,7 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
     
     kdb->setMainWidget(wdg);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {

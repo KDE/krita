@@ -162,7 +162,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     optionsPPM.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     QString filterConfig = KisConfig().exportConfiguration("PPM");
     KisPropertiesConfiguration cfg;

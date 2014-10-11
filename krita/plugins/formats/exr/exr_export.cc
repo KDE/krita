@@ -84,7 +84,7 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     widget.flatten->setChecked(cfg.getBool("flatten", false));
 
     if (!m_chain->manager()->getBatchMode() ) {
-        qApp->restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         if (dialog.exec() == QDialog::Rejected) {
             return KoFilter::UserCancelled;
         }

@@ -102,7 +102,7 @@ struct KisX11Data
 };
 
 /* Warning: if you modify this string, modify the list of atoms in KisX11Data as well! */
-static const char * kis_x11_atomnames = {
+static const char kis_x11_atomnames[] = {
     // Wacom old. (before version 0.10)
     "Wacom Stylus\0"
     "Wacom Cursor\0"

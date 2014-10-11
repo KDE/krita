@@ -1,5 +1,5 @@
 /* XPM */
-static const char * splitv_cursor_xpm[] = {
+static const char * const splitv_cursor_xpm[] = {
 "32 32 2 1",
 " 	c None",
 ".	c #000000",

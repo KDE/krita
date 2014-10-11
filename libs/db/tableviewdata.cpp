@@ -40,7 +40,7 @@
 
 using namespace KexiDB;
 
-unsigned short charTable[] = {
+const unsigned short charTable[] = {
 #include "chartable.txt"
 };
 

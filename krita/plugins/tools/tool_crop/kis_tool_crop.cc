@@ -102,7 +102,7 @@ DecorationLine decors[20] =
 };
 
 #define DECORATION_COUNT 5
-int decorsIndex[DECORATION_COUNT] = {0,4,12,18,20};
+const int decorsIndex[DECORATION_COUNT] = {0,4,12,18,20};
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))

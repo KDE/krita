@@ -24,7 +24,7 @@
 
 namespace {
     /* XPM -- copyright The Gimp */
-    const char *_chain_broken_24[] = {
+    const char * const _chain_broken_24[] = {
         /* columns rows colors chars-per-pixel */
         "9 24 10 1",
         "  c black",
@@ -65,7 +65,7 @@ namespace {
     };
 
     /* XPM  -- copyright The Gimp */
-    const char *_chain_24[] = {
+    const char * const _chain_24[] = {
         /* columns rows colors chars-per-pixel */
         "9 24 10 1",
         "  c black",

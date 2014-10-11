@@ -138,7 +138,7 @@ namespace Private {
     }
 
     inline void resetEmptyRectangle(const QPointF &pt, QRectF *rc) {
-        static qreal eps = 1e-10;
+        static const qreal eps = 1e-10;
         *rc = QRectF(pt, QSizeF(eps, eps));
     }
 }

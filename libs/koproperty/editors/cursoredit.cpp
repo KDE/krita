@@ -142,10 +142,10 @@ private:
         << i18nc("Mouse Cursor Shape", "Closed hand"); //18
         return strings;
     }
-    static const char ** m_xpms[];
+    static const char * const * const m_xpms[];
 };
 
-const char ** CursorListData::m_xpms[] =
+const char * const * const CursorListData::m_xpms[] =
 {
     blank_cursor_xpm,
     arrow_cursor_xpm,

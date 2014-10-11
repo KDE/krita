@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
+    <width>515</width>
     <height>407</height>
    </rect>
   </property>
@@ -22,7 +22,7 @@
      <property name="minimumSize">
       <size>
        <width>180</width>
-       <height>250</height>
+       <height>300</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -178,7 +178,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <zorder>sensorSelector</zorder>
       </widget>
      </item>
      <item row="0" column="0">

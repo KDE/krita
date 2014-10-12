@@ -38,7 +38,6 @@ KisToolText::KisToolText(KoCanvasBase * canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
     setObjectName("tool_text");
-    configGroup = KGlobal::config()->group("textTool"); // save settings to kritarc
 }
 
 KisToolText::~KisToolText()
@@ -138,11 +137,6 @@ QList< QWidget* > KisToolText::createOptionWidgets()
 
     QList< QWidget* > widgets;
     widgets.append(m_optionsWidget);
-
-    // when widget changes properties from UI, make sure we are notified
-    connect(m_optionsWidget->cmbStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(styleIndexChanged(int)));
-    connect(m_optionsWidget->m_buttonGroup, SIGNAL(buttonPressed(int)), this, SLOT(textTypeIndexChanged(int)));
-
     return widgets;
 }
 
@@ -153,27 +147,11 @@ KisPainter::FillStyle KisToolText::fillStyle()
     return m_optionsWidget->style();
 }
 
-void KisToolText::textTypeIndexChanged(int index)
-{
-    configGroup.writeEntry("textType", index);
-}
-
-
-void KisToolText::styleIndexChanged(int index)
-{
-    configGroup.writeEntry("styleType", index);
-}
-
 void KisToolText::slotActivateTextTool()
 {
     KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());
     QString tool = KoToolManager::instance()->preferredToolForSelection(kiscanvas->shapeManager()->selection()->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-
-    //load config settings
-    textTypeIndexChanged(configGroup.readEntry("textType", 0));
-    styleIndexChanged(configGroup.readEntry("styleType", 0));
-
 }
 
 

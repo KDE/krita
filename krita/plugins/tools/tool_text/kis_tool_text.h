@@ -27,9 +27,6 @@
 #include "kis_text_tool_option_widget.h"
 #include <KoIcon.h>
 
-#include <KConfig>
-#include <KConfigGroup>
-
 class KisToolText : public KisToolRectangleBase
 {
     Q_OBJECT
@@ -46,13 +43,8 @@ public:
 
     virtual KisPainter::FillStyle fillStyle();
 
-private:
-    KConfigGroup configGroup;
-
 private slots:
     void slotActivateTextTool();
-    void styleIndexChanged(int index);
-    void textTypeIndexChanged(int index);
 
 protected:
     virtual void finishRect(const QRectF& rect);

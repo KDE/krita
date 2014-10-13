@@ -75,7 +75,6 @@
 #include <KoGenStyles.h>
 #include <KoStyleStack.h>
 #include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoDocumentEntry.h>

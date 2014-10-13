@@ -24,6 +24,10 @@
 #include <kis_types.h>
 
 class QImage;
+class QRect;
+class QSize;
+class QTransform;
+
 
 class KRITAIMAGE_EXPORT KisLiquifyTransformWorker
 {

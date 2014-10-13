@@ -104,6 +104,10 @@ TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *cu
         return m_rootNode;
     }
 
+    qreal basePreviewOpacity() const {
+        return 0.9 * qreal(m_rootNode->opacity()) / 255.0;
+    }
+
 private:
     /**
      * Information about the original selected rect

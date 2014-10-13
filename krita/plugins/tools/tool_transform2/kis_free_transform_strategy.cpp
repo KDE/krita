@@ -299,7 +299,7 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
 {
     gc.save();
 
-    gc.setOpacity(0.9);
+    gc.setOpacity(m_d->transaction.basePreviewOpacity());
     gc.setTransform(m_d->paintingTransform, true);
     gc.drawImage(m_d->paintingOffset, originalImage());
 

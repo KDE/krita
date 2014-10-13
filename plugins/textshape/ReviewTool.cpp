@@ -24,7 +24,6 @@
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-#include <KoShapeRegistry.h>
 #include <KoAnnotation.h>
 #include <KoShapeController.h>
 #include "KoShapeBasedDocumentBase.h"

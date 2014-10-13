@@ -48,7 +48,6 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeContainerDefaultModel.h"
-#include "KoShapeRegistry.h"
 #include "KoShapeBackground.h"
 
 

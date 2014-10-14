@@ -53,6 +53,11 @@ public:
     KisToolShape(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisToolShape();
     virtual int flags() const;
+    WdgGeometryOptions *m_shapeOptionsWidget;
+
+    virtual void createOptionWidgetComplete();
+
+
 
 protected:
     QWidget* createOptionWidget();
@@ -66,8 +71,8 @@ protected:
 
     void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);
 
-private:
-    WdgGeometryOptions *m_shapeOptionsWidget;
+
+
 };
 
 #endif // KIS_TOOL_SHAPE_H_

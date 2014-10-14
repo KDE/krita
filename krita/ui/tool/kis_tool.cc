@@ -179,18 +179,25 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
-    connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()));
-    connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()));
-    connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()));
+    connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
+    connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
+    connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
 }
 
 void KisTool::deactivate()
 {
-    disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()));
-    disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()));
-    disconnect(image().data(), SIGNAL(sigStrokeEndRequested()));
-    disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
-    disconnect(actions().value("reset_fg_bg"), 0, this, 0);
+    bool result = true;
+
+    result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested())/*, this, 0*/);
+    result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);
+    result &= disconnect(image().data(), SIGNAL(sigStrokeEndRequested()), this, 0);
+    result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
+    result &= disconnect(actions().value("reset_fg_bg"), 0, this, 0);
+
+    if (!result) {
+        qWarning() << "WARNING: KisTool::deactivate() failed to disconnect"
+                   << "some signal connections. Your actions might be executed twice!";
+    }
 }
 
 void KisTool::requestUndoDuringStroke()

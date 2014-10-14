@@ -199,12 +199,10 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
 
     if (!m_cursorOutline.isEmpty()) {
-        gc.save();
-        gc.setTransform(QTransform(), false);
-
-        QPainterPath mappedOutline = m_canvas->coordinatesConverter()->imageToWidgetTransform().map(m_cursorOutline);
+        QPainterPath mappedOutline =
+            KisTransformUtils::imageToFlakeTransform(
+                m_canvas->coordinatesConverter()).map(m_cursorOutline);
         paintToolOutline(&gc, mappedOutline);
-        gc.restore();
     }
 }
 

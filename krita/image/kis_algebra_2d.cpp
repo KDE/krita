@@ -18,7 +18,9 @@
 
 #include "kis_algebra_2d.h"
 
+#include <QPainterPath>
 #include <kis_debug.h>
+
 
 #define SANITY_CHECKS
 
@@ -83,6 +85,22 @@ qreal angleBetweenVectors(const QPointF &v1, const QPointF &v2)
     qreal a2 = std::atan2(v2.y(), v2.x());
 
     return a2 - a1;
+}
+
+QPainterPath smallArrow()
+{
+    QPainterPath p;
+
+    p.moveTo(5, 2);
+    p.lineTo(-3, 8);
+    p.lineTo(-5, 5);
+    p.lineTo( 2, 0);
+    p.lineTo(-5,-5);
+    p.lineTo(-3,-8);
+    p.lineTo( 5,-2);
+    p.arcTo(QRectF(3, -2, 4, 4), 90, -180);
+
+    return p;
 }
 
 }

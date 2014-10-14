@@ -27,6 +27,8 @@
 #include <kis_global.h>
 #include <krita_export.h>
 
+class QPainterPath;
+
 namespace KisAlgebra2D {
 
 template <class T>
@@ -195,6 +197,8 @@ inline Point clampPoint(Point pt, const Rect &bounds)
 
     return pt;
 }
+
+QPainterPath KRITAIMAGE_EXPORT smallArrow();
 
 }
 

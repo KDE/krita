@@ -87,6 +87,11 @@ KisLiquifyTransformStrategy::~KisLiquifyTransformStrategy()
 {
 }
 
+QPainterPath KisLiquifyTransformStrategy::getCursorOutline() const
+{
+    return m_d->helper.brushOutline(*m_d->currentArgs.liquifyProperties());
+}
+
 void KisLiquifyTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
 {
     Q_UNUSED(mousePos);
@@ -95,7 +100,7 @@ void KisLiquifyTransformStrategy::setTransformFunction(const QPointF &mousePos, 
 
 QCursor KisLiquifyTransformStrategy::getCurrentCursor() const
 {
-    return KisCursor::arrowCursor();
+    return Qt::BlankCursor;
 }
 
 void KisLiquifyTransformStrategy::paint(QPainter &gc)
@@ -146,6 +151,11 @@ bool KisLiquifyTransformStrategy::endPrimaryAction(KoPointerEvent *event)
     m_d->helper.endPaint(event);
 
     return true;
+}
+
+void KisLiquifyTransformStrategy::hoverPrimaryAction(KoPointerEvent *event)
+{
+    m_d->helper.hoverPaint(event);
 }
 
 inline QPointF KisLiquifyTransformStrategy::Private::imageToThumb(const QPointF &pt, bool useFlakeOptimization)

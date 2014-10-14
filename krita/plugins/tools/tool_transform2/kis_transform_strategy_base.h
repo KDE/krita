@@ -29,6 +29,7 @@ class QPainter;
 class QCursor;
 class KoPointerEvent;
 class KisCoordinatesConverter;
+class QPainterPath;
 
 
 class KisTransformStrategyBase : public QObject
@@ -49,18 +50,21 @@ public:
     virtual void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive) = 0;
     virtual void paint(QPainter &gc) = 0;
     virtual QCursor getCurrentCursor() const = 0;
+    virtual QPainterPath getCursorOutline() const;
 
     virtual void externalConfigChanged() = 0;
 
     virtual bool beginPrimaryAction(KoPointerEvent *event);
     virtual void continuePrimaryAction(KoPointerEvent *event, bool specialModifierActve);
     virtual bool endPrimaryAction(KoPointerEvent *event);
+    virtual void hoverPrimaryAction(KoPointerEvent *event);
 
 protected:
 
     virtual bool beginPrimaryAction(const QPointF &pt);
     virtual void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     virtual bool endPrimaryAction();
+    virtual void hoverPrimaryAction(const QPointF &pt);
 
 private:
     struct Private;

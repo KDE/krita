@@ -44,6 +44,11 @@ KisTransformStrategyBase::~KisTransformStrategyBase()
 {
 }
 
+QPainterPath KisTransformStrategyBase::getCursorOutline() const
+{
+    return QPainterPath();
+}
+
 QImage KisTransformStrategyBase::originalImage() const
 {
     return m_d->originalImage;
@@ -75,6 +80,11 @@ void KisTransformStrategyBase::continuePrimaryAction(KoPointerEvent *event, bool
     continuePrimaryAction(m_d->converter->documentToImage(event->point), specialModifierActve);
 }
 
+void KisTransformStrategyBase::hoverPrimaryAction(KoPointerEvent *event)
+{
+    hoverPrimaryAction(m_d->converter->documentToImage(event->point));
+}
+
 bool KisTransformStrategyBase::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
@@ -99,4 +109,9 @@ bool KisTransformStrategyBase::endPrimaryAction()
 {
     qFatal("Not implemented");
     return false;
+}
+
+void KisTransformStrategyBase::hoverPrimaryAction(const QPointF &pt)
+{
+    Q_UNUSED(pt);
 }

@@ -44,6 +44,8 @@ public:
 
     void hoverPaint(KoPointerEvent *event);
 
+    QPainterPath brushOutline(const ToolTransformArgs::LiquifyProperties &props) const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

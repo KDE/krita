@@ -25,6 +25,7 @@
 #include "kis_paintop_utils.h"
 #include "kis_coordinates_converter.h"
 #include "kis_liquify_paintop.h"
+#include "kis_paintop_utils.h"
 
 
 struct KisLiquifyPaintHelper::Private
@@ -43,6 +44,10 @@ struct KisLiquifyPaintHelper::Private
     QScopedPointer<KisPaintingInformationBuilder> infoBuilder;
 
     QTime strokeTime;
+
+    KisDistanceInformation previousDistanceInfo;
+    KisPaintOpUtils::PositionHistory lastOutlinePos;
+    void updatePreviousPaintInfo(const KisPaintInformation &info);
 };
 
 
@@ -53,6 +58,23 @@ KisLiquifyPaintHelper::KisLiquifyPaintHelper(const KisCoordinatesConverter *conv
 
 KisLiquifyPaintHelper::~KisLiquifyPaintHelper()
 {
+}
+
+void KisLiquifyPaintHelper::Private::updatePreviousPaintInfo(const KisPaintInformation &info)
+{
+    previousDistanceInfo =
+        KisDistanceInformation(
+            lastOutlinePos.pushThroughHistory(info.pos()), 0);
+
+    previousPaintInfo = info;
+}
+
+QPainterPath KisLiquifyPaintHelper::brushOutline(const ToolTransformArgs::LiquifyProperties &props) const
+{
+    KisPaintInformation::DistanceInformationRegistrar registrar =
+        m_d->previousPaintInfo.registerDistanceInformation(&m_d->previousDistanceInfo);
+
+    return KisLiquifyPaintop::brushOutline(props, m_d->previousPaintInfo);
 }
 
 void KisLiquifyPaintHelper::configurePaintOp(const ToolTransformArgs::LiquifyProperties &props,
@@ -69,7 +91,7 @@ void KisLiquifyPaintHelper::startPaint(KoPointerEvent *event)
     KisPaintInformation pi =
         m_d->infoBuilder->startStroke(event, m_d->strokeTime.elapsed());
 
-    m_d->previousPaintInfo = pi;
+    m_d->updatePreviousPaintInfo(pi);
 }
 
 void KisLiquifyPaintHelper::continuePaint(KoPointerEvent *event)
@@ -85,7 +107,7 @@ void KisLiquifyPaintHelper::continuePaint(KoPointerEvent *event)
                                &m_d->currentDistance,
                                false, false);
 
-    m_d->previousPaintInfo = pi;
+    m_d->updatePreviousPaintInfo(pi);
 }
 
 void KisLiquifyPaintHelper::endPaint(KoPointerEvent *event)
@@ -101,5 +123,5 @@ void KisLiquifyPaintHelper::hoverPaint(KoPointerEvent *event)
     QPointF imagePoint = m_d->converter->documentToImage(event->pos());
     KisPaintInformation pi = m_d->infoBuilder->hover(imagePoint, event);
 
-    m_d->previousPaintInfo = pi;
+    m_d->updatePreviousPaintInfo(pi);
 }

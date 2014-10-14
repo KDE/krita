@@ -208,6 +208,7 @@ private:
     void outlineChanged();
     // Sets the cursor according to mouse position (doesn't take shearing into account well yet)
     void setFunctionalCursor();
+    void updateCursorOutline(const QPointF &imagePos);
     // Sets m_function according to mouse position and modifier
     void setTransformFunction(QPointF mousePos, Qt::KeyboardModifiers modifiers);
 
@@ -273,6 +274,8 @@ private:
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
     QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
     KisTransformStrategyBase* currentStrategy() const;
+
+    QPainterPath m_cursorOutline;
 
 private slots:
     void slotTrackerChangedConfig();

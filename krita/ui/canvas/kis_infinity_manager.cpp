@@ -32,6 +32,8 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_canvas_controller.h>
+#include <kis_algebra_2d.h>
+
 
 
 KisInfinityManager::KisInfinityManager(KisView2 *view, KisCanvas2 *canvas)
@@ -137,16 +139,7 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
     QColor color = cfg.canvasBorderColor();
     gc.fillPath(m_decorationPath, color.darker(115));
 
-    QPainterPath p;
-
-    p.moveTo(5, 2);
-    p.lineTo(-3, 8);
-    p.lineTo(-5, 5);
-    p.lineTo( 2, 0);
-    p.lineTo(-5,-5);
-    p.lineTo(-3,-8);
-    p.lineTo( 5,-2);
-    p.arcTo(QRectF(3, -2, 4, 4), 90, -180);
+    QPainterPath p = KisAlgebra2D::smallArrow();
 
     foreach (const QTransform &t, m_handleTransform) {
         gc.fillPath(t.map(p), color);

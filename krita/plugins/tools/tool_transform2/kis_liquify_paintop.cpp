@@ -41,11 +41,70 @@ KisLiquifyPaintop::~KisLiquifyPaintop()
 {
 }
 
+QPainterPath KisLiquifyPaintop::brushOutline(const ToolTransformArgs::LiquifyProperties &props,
+                                             const KisPaintInformation &info)
+{
+    const qreal diameter = props.size();
+    const qreal reverseCoeff = props.reverseDirection() ? -1.0 : 1.0;
+
+    QPainterPath outline;
+    outline.addEllipse(-0.5 * diameter, -0.5 * diameter,
+                       diameter, diameter);
+
+    switch (props.currentMode()) {
+    case ToolTransformArgs::LiquifyProperties::MOVE:
+    case ToolTransformArgs::LiquifyProperties::SCALE:
+        break;
+    case ToolTransformArgs::LiquifyProperties::ROTATE: {
+        QPainterPath p;
+        p.lineTo(-3.0, 4.0);
+        p.moveTo(0.0, 0.0);
+        p.lineTo(-3.0, -4.0);
+
+        QTransform S;
+        if (diameter < 15.0) {
+            const qreal scale = diameter / 15.0;
+            S = QTransform::fromScale(scale, scale);
+        }
+        QTransform R;
+        R.rotateRadians(-reverseCoeff * 0.5 * M_PI);
+        QTransform T = QTransform::fromTranslate(0.5 * diameter, 0.0);
+
+        p = (S * R * T).map(p);
+        outline.addPath(p);
+
+        break;
+    }
+    case ToolTransformArgs::LiquifyProperties::OFFSET: {
+        qreal normalAngle = info.drawingAngle() + reverseCoeff * 0.5 * M_PI;
+
+        QPainterPath p = KisAlgebra2D::smallArrow();
+
+        const qreal offset = qMax(0.8 * diameter, 15.0);
+
+        QTransform R;
+        R.rotateRadians(normalAngle);
+        QTransform T = QTransform::fromTranslate(offset, 0.0);
+        p = (T * R).map(p);
+
+        outline.addPath(p);
+
+        break;
+    }
+    case ToolTransformArgs::LiquifyProperties::UNDO:
+        break;
+    }
+
+    return outline;
+}
+
 KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
 {
-    const qreal size = m_d->props.sizeHasPressure() ?
-        pi.pressure() * m_d->props.size():
-        m_d->props.size();
+    static const qreal sizeToSigmaCoeff = 1.0 / 3.0;
+    const qreal size = sizeToSigmaCoeff *
+        (m_d->props.sizeHasPressure() ?
+         pi.pressure() * m_d->props.size():
+         m_d->props.size());
 
     const qreal spacing = m_d->props.spacing() * size;
 

@@ -36,6 +36,9 @@ public:
 
     KisSpacingInformation paintAt(const KisPaintInformation &pi);
 
+    static QPainterPath brushOutline(const ToolTransformArgs::LiquifyProperties &props,
+                                     const KisPaintInformation &info);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

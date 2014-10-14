@@ -46,16 +46,19 @@ public:
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);
     void paint(QPainter &gc);
     QCursor getCurrentCursor() const;
+    QPainterPath getCursorOutline() const;
 
     void externalConfigChanged();
 
     using KisTransformStrategyBase::beginPrimaryAction;
     using KisTransformStrategyBase::continuePrimaryAction;
     using KisTransformStrategyBase::endPrimaryAction;
+    using KisTransformStrategyBase::hoverPrimaryAction;
 
     bool beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event, bool specialModifierActve);
     bool endPrimaryAction(KoPointerEvent *event);
+    void hoverPrimaryAction(KoPointerEvent *event);
 
     bool acceptsClicks() const;
 

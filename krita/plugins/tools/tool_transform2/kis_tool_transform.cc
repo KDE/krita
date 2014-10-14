@@ -196,6 +196,16 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     gc.restore();
 
     currentStrategy()->paint(gc);
+
+
+    if (!m_cursorOutline.isEmpty()) {
+        gc.save();
+        gc.setTransform(QTransform(), false);
+
+        QPainterPath mappedOutline = m_canvas->coordinatesConverter()->imageToWidgetTransform().map(m_cursorOutline);
+        paintToolOutline(&gc, mappedOutline);
+        gc.restore();
+    }
 }
 
 void KisToolTransform::setFunctionalCursor()
@@ -204,6 +214,31 @@ void KisToolTransform::setFunctionalCursor()
         useCursor(KisCursor::pointingHandCursor());
     } else {
         useCursor(currentStrategy()->getCurrentCursor());
+    }
+}
+
+void KisToolTransform::updateCursorOutline(const QPointF &imagePos)
+{
+    QRect canvasUpdateRect;
+
+    if (!m_cursorOutline.isEmpty()) {
+        canvasUpdateRect = m_canvas->coordinatesConverter()->
+            imageToDocument(m_cursorOutline.boundingRect()).toAlignedRect();
+    }
+
+    m_cursorOutline = currentStrategy()->
+        getCursorOutline().translated(imagePos);
+
+    if (!m_cursorOutline.isEmpty()) {
+        canvasUpdateRect |=
+            m_canvas->coordinatesConverter()->
+            imageToDocument(m_cursorOutline.boundingRect()).toAlignedRect();
+    }
+
+    if (!canvasUpdateRect.isEmpty()) {
+        // grow rect a bit to follow interpolation fuzziness
+        canvasUpdateRect = kisGrowRect(canvasUpdateRect, 2);
+        m_canvas->updateCanvas(canvasUpdateRect);
     }
 }
 
@@ -496,9 +531,12 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 {
     QPointF mousePos = m_canvas->coordinatesConverter()->documentToImage(event->point);
 
+    updateCursorOutline(mousePos);
+
     if (!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         currentStrategy()->setTransformFunction(mousePos, event->modifiers() & Qt::ControlModifier);
         setFunctionalCursor();
+        currentStrategy()->hoverPrimaryAction(event);
         KisTool::mouseMoveEvent(event);
         return;
     }

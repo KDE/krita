@@ -42,12 +42,7 @@ KoToolRegistry::KoToolRegistry()
 void KoToolRegistry::init()
 {
     KoPluginLoader::PluginsConfig config;
-    config.whiteList = "FlakePlugins";
-    config.blacklist = "FlakePluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
-                                     config);
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Tool"),

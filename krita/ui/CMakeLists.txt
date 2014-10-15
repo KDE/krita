@@ -353,8 +353,6 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB}
                               ${X11_Xinput_LIB})
 
-target_link_libraries(kritaui ${GLEW_LIBRARIES})
-
 if(GHNS)
     target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)

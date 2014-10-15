@@ -121,7 +121,7 @@ include_directories(${KRITA_INCLUDES})
 if(HAVE_OPENGL)
     include_directories(${OPENGL_INCLUDE_DIR})
     if(HAVE_GLEW)
-        include_directories(${GLEW_INCLUDE_DIR})
+        include_directories(${GLEW_INCLUDE_DIRS})
     endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
 

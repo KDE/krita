@@ -146,7 +146,6 @@ target_link_libraries(kritasketch
     ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}
     kritaui
-    ${GLEW_LIBRARIES}
     kritasketchlib
 )
 

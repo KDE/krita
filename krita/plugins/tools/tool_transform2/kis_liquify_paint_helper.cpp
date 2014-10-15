@@ -32,7 +32,8 @@ struct KisLiquifyPaintHelper::Private
 {
     Private(const KisCoordinatesConverter *_converter)
         : converter(_converter),
-          infoBuilder(new KisConverterPaintingInformationBuilder(converter))
+          infoBuilder(new KisConverterPaintingInformationBuilder(converter)),
+          hasPaintedAtLeastOnce(false)
     {
     }
 
@@ -44,6 +45,8 @@ struct KisLiquifyPaintHelper::Private
     QScopedPointer<KisPaintingInformationBuilder> infoBuilder;
 
     QTime strokeTime;
+
+    bool hasPaintedAtLeastOnce;
 
     KisDistanceInformation previousDistanceInfo;
     KisPaintOpUtils::PositionHistory lastOutlinePos;
@@ -92,6 +95,7 @@ void KisLiquifyPaintHelper::startPaint(KoPointerEvent *event)
         m_d->infoBuilder->startStroke(event, m_d->strokeTime.elapsed());
 
     m_d->updatePreviousPaintInfo(pi);
+    m_d->hasPaintedAtLeastOnce = false;
 }
 
 void KisLiquifyPaintHelper::continuePaint(KoPointerEvent *event)
@@ -108,14 +112,23 @@ void KisLiquifyPaintHelper::continuePaint(KoPointerEvent *event)
                                false, false);
 
     m_d->updatePreviousPaintInfo(pi);
+    m_d->hasPaintedAtLeastOnce = true;
 }
 
-void KisLiquifyPaintHelper::endPaint(KoPointerEvent *event)
+bool KisLiquifyPaintHelper::endPaint(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(m_d->paintOp);
+    KIS_ASSERT_RECOVER(m_d->paintOp) { return false; }
 
-    continuePaint(event);
+    if (!m_d->hasPaintedAtLeastOnce) {
+        KisPaintInformation pi =
+            m_d->infoBuilder->continueStroke(event, m_d->strokeTime.elapsed());
+
+        pi.paintAt(*m_d->paintOp.data(), &m_d->previousDistanceInfo);
+    }
+
     m_d->paintOp.reset();
+
+    return !m_d->hasPaintedAtLeastOnce;
 }
 
 void KisLiquifyPaintHelper::hoverPaint(KoPointerEvent *event)

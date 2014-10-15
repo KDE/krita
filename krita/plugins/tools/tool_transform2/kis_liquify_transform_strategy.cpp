@@ -148,7 +148,10 @@ void KisLiquifyTransformStrategy::continuePrimaryAction(KoPointerEvent *event, b
 
 bool KisLiquifyTransformStrategy::endPrimaryAction(KoPointerEvent *event)
 {
-    m_d->helper.endPaint(event);
+    if (m_d->helper.endPaint(event)) {
+        m_d->recalculateTransformations();
+        emit requestCanvasUpdate();
+    }
 
     return true;
 }

@@ -40,7 +40,7 @@ public:
 
     void startPaint(KoPointerEvent *event);
     void continuePaint(KoPointerEvent *event);
-    void endPaint(KoPointerEvent *event);
+    bool endPaint(KoPointerEvent *event);
 
     void hoverPaint(KoPointerEvent *event);
 

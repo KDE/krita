@@ -177,6 +177,9 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
     p.end();
 }
 
+
+// make sure to always use get/set functions when managing HSV properties( don't call directly like d->hue)
+// these  settings get updated A LOT when the color picker is being used. You might get unexpected results
 int KoTriangleColorSelector::hue() const
 {
     return d->hue;
@@ -221,26 +224,26 @@ void KoTriangleColorSelector::setSaturation(int s)
 
 void KoTriangleColorSelector::setHSV(int h, int s, int v)
 {
-    h = qBound(0, h, 360);
-    s = qBound(0, s, 255);
-    v = qBound(0, v, 255);
-    d->invalidTriangle = (d->hue != h);
-    d->hue = h;
-    d->value = v;
-    d->saturation = s;
-    tellColorChanged();
-    d->updateTimer.start();
+    d->invalidTriangle = (hue() != h);
+    setHue(h);
+    setValue(v);
+    setSaturation(s);
 }
 
 KoColor KoTriangleColorSelector::realColor() const
 {
-    return d->displayRenderer->fromHsv(d->hue, d->saturation, d->value);
+    return d->displayRenderer->fromHsv(hue(), saturation(), value());
 }
 
 void KoTriangleColorSelector::setRealColor(const KoColor & color)
 {
+   int hueRef = hue();
+   int saturationRef = saturation();
+   int valueRef = saturation();
+
+    //displayrenderer->getHsv is what sets the foreground color in the application
     if(d->updateAllowed) {
-        d->displayRenderer->getHsv(color, &d->hue, &d->saturation, &d->value);
+        d->displayRenderer->getHsv(color, &hueRef, &saturationRef, &valueRef);
         d->invalidTriangle = true;
         d->updateTimer.start();
     }
@@ -417,7 +420,7 @@ void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
             qreal sat = ( x1 / ls_ + 0.5) ;
             if((sat >= 0.0 && sat <= 1.0) || d->handle == ValueSaturationHandle)
             {
-                setHSV( d->hue, sat * 255, ynormalize * 255);
+                setHSV( hue(), sat * 255, ynormalize * 255);
             }
         }
         d->updateTimer.start();

@@ -74,20 +74,46 @@ int KisToolLine::flags() const
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
 }
 
+
+void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+{
+   configGroup = KGlobal::config()->group("lineTool");
+}
+
 QWidget* KisToolLine::createOptionWidget()
 {
     QWidget* widget = KisToolPaint::createOptionWidget();
 
     m_chkUseSensors = new QCheckBox(i18n("Use sensors"));
-    m_chkUseSensors->setChecked(true);
     addOptionWidgetOption(m_chkUseSensors);
 
     m_chkShowOutline = new QCheckBox(i18n("Preview"));
-    m_chkShowOutline->setChecked(m_showOutline);
     addOptionWidgetOption(m_chkShowOutline);
+
+    // hook up connections for value changing
+    connect(m_chkUseSensors, SIGNAL(clicked(bool)), this, SLOT(setUseSensors(bool)) );
+    connect(m_chkShowOutline, SIGNAL(clicked(bool)), this, SLOT(setShowOutline(bool)) );
+
+
+    // read values in from configuration
+    m_chkUseSensors->setChecked(configGroup.readEntry("useSensors", true));
+    m_chkShowOutline->setChecked(configGroup.readEntry("showOutline", false));
 
     return widget;
 }
+
+void KisToolLine::setUseSensors(bool value)
+{
+    configGroup.writeEntry("useSensors", value);
+}
+
+void KisToolLine::setShowOutline(bool value)
+{
+    configGroup.writeEntry("showOutline", value);
+}
+
+
+
 
 void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 {

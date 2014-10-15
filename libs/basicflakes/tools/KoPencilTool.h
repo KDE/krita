@@ -21,7 +21,6 @@
 #define _KOPENCILTOOL_H_
 
 #include <KoToolBase.h>
-#include <QRectF>
 
 class KoPathShape;
 class KoShapeStroke;

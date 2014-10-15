@@ -20,17 +20,13 @@
  */
 
 #include "KoCreatePathTool.h"
+#include "KoCreatePathTool_p.h"
 
-#include "KoShapeController.h"
 #include "KoPointerEvent.h"
 #include "KoPathShape.h"
-#include "KoShapeStroke.h"
 #include "KoSelection.h"
-#include "commands/KoPathPointMergeCommand.h"
-#include "KoCanvasResourceManager.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
-#include "KoStrokeConfigWidget.h"
 #include "KoShapeStroke.h"
 #include <KoColor.h>
 
@@ -41,8 +37,6 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QCheckBox>
-
-#include "KoCreatePathTool_p.h"
 
 
 KoCreatePathTool::KoCreatePathTool(KoCanvasBase *canvas)

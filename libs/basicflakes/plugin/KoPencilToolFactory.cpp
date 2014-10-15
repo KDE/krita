@@ -22,7 +22,6 @@
 
 #include <KoIcon.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 KoPencilToolFactory::KoPencilToolFactory()
         : KoToolFactoryBase("KoPencilTool")

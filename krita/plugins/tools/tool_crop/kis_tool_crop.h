@@ -29,6 +29,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 
+#include <KShortcut>
 #include <KoToolFactoryBase.h>
 #include "kis_tool.h"
 #include "flake/kis_node_shape.h"

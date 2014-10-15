@@ -25,6 +25,8 @@
 #include "kis_paintop_utils.h"
 #include "kis_coordinates_converter.h"
 #include "kis_liquify_paintop.h"
+#include "kis_liquify_properties.h"
+
 #include "kis_paintop_utils.h"
 
 
@@ -72,7 +74,7 @@ void KisLiquifyPaintHelper::Private::updatePreviousPaintInfo(const KisPaintInfor
     previousPaintInfo = info;
 }
 
-QPainterPath KisLiquifyPaintHelper::brushOutline(const ToolTransformArgs::LiquifyProperties &props) const
+QPainterPath KisLiquifyPaintHelper::brushOutline(const KisLiquifyProperties &props) const
 {
     KisPaintInformation::DistanceInformationRegistrar registrar =
         m_d->previousPaintInfo.registerDistanceInformation(&m_d->previousDistanceInfo);
@@ -80,7 +82,7 @@ QPainterPath KisLiquifyPaintHelper::brushOutline(const ToolTransformArgs::Liquif
     return KisLiquifyPaintop::brushOutline(props, m_d->previousPaintInfo);
 }
 
-void KisLiquifyPaintHelper::configurePaintOp(const ToolTransformArgs::LiquifyProperties &props,
+void KisLiquifyPaintHelper::configurePaintOp(const KisLiquifyProperties &props,
                                              KisLiquifyTransformWorker *worker)
 {
     m_d->paintOp.reset(new KisLiquifyPaintop(props, worker));

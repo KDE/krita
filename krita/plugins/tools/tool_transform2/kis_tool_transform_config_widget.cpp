@@ -22,6 +22,7 @@
 #include "rotation_icons.h"
 #include "kis_canvas2.h"
 #include <QSignalMapper>
+#include "kis_liquify_properties.h"
 
 
 template<typename T> inline T sign(T x) {
@@ -167,11 +168,11 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(liquifyRotate, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyOffset, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyUndo, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
-    liquifyModeMapper->setMapping(liquifyMove, (int)ToolTransformArgs::LiquifyProperties::MOVE);
-    liquifyModeMapper->setMapping(liquifyScale, (int)ToolTransformArgs::LiquifyProperties::SCALE);
-    liquifyModeMapper->setMapping(liquifyRotate, (int)ToolTransformArgs::LiquifyProperties::ROTATE);
-    liquifyModeMapper->setMapping(liquifyOffset, (int)ToolTransformArgs::LiquifyProperties::OFFSET);
-    liquifyModeMapper->setMapping(liquifyUndo, (int)ToolTransformArgs::LiquifyProperties::UNDO);
+    liquifyModeMapper->setMapping(liquifyMove, (int)KisLiquifyProperties::MOVE);
+    liquifyModeMapper->setMapping(liquifyScale, (int)KisLiquifyProperties::SCALE);
+    liquifyModeMapper->setMapping(liquifyRotate, (int)KisLiquifyProperties::ROTATE);
+    liquifyModeMapper->setMapping(liquifyOffset, (int)KisLiquifyProperties::OFFSET);
+    liquifyModeMapper->setMapping(liquifyUndo, (int)KisLiquifyProperties::UNDO);
     connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(slotLiquifyModeChanged(int)));
 
     liquifyMove->setToolTip(i18nc("@info:tooltip", "Drag the image along the brush stroke"));
@@ -260,7 +261,7 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
     blockUiSlots();
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    ToolTransformArgs::LiquifyProperties *props =
+    KisLiquifyProperties *props =
         config->liquifyProperties();
 
     liquifySizeSlider->setValue(props->size());
@@ -271,11 +272,11 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
     liquifyReverseDirectionChk->setChecked(props->reverseDirection());
 
 
-    ToolTransformArgs::LiquifyProperties::LiquifyMode mode =
-        static_cast<ToolTransformArgs::LiquifyProperties::LiquifyMode>(props->currentMode());
+    KisLiquifyProperties::LiquifyMode mode =
+        static_cast<KisLiquifyProperties::LiquifyMode>(props->mode());
 
     bool canInverseDirection =
-        mode != ToolTransformArgs::LiquifyProperties::UNDO;
+        mode != KisLiquifyProperties::UNDO;
 
     liquifyReverseDirectionChk->setEnabled(canInverseDirection);
 
@@ -288,15 +289,17 @@ void KisToolTransformConfigWidget::slotLiquifyModeChanged(int value)
 
     ToolTransformArgs *config = m_transaction->currentConfig();
 
-    ToolTransformArgs::LiquifyProperties *props =
+    KisLiquifyProperties *props =
         config->liquifyProperties();
 
-    ToolTransformArgs::LiquifyProperties::LiquifyMode mode =
-        static_cast<ToolTransformArgs::LiquifyProperties::LiquifyMode>(value);
+    KisLiquifyProperties::LiquifyMode mode =
+        static_cast<KisLiquifyProperties::LiquifyMode>(value);
 
-    if (mode == props->currentMode()) return;
+    if (mode == props->mode()) return;
 
-    props->setCurrentMode(mode);
+    props->setMode(mode);
+    props->loadMode();
+
     updateLiquifyControls();
 
     notifyConfigChanged();
@@ -307,7 +310,7 @@ void KisToolTransformConfigWidget::liquifySizeChanged(qreal value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    ToolTransformArgs::LiquifyProperties *props =
+    KisLiquifyProperties *props =
         config->liquifyProperties();
 
     props->setSize(value);
@@ -319,7 +322,7 @@ void KisToolTransformConfigWidget::liquifyAmountChanged(qreal value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    ToolTransformArgs::LiquifyProperties *props =
+    KisLiquifyProperties *props =
         config->liquifyProperties();
 
     props->setAmount(value);
@@ -331,7 +334,7 @@ void KisToolTransformConfigWidget::liquifySpacingChanged(qreal value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    ToolTransformArgs::LiquifyProperties *props =
+    KisLiquifyProperties *props =
         config->liquifyProperties();
 
     props->setSpacing(value);
@@ -343,7 +346,7 @@ void KisToolTransformConfigWidget::liquifySizePressureChanged(bool value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    ToolTransformArgs::LiquifyProperties *props =
+    KisLiquifyProperties *props =
         config->liquifyProperties();
 
     props->setSizeHasPressure(value);
@@ -355,7 +358,7 @@ void KisToolTransformConfigWidget::liquifyAmountPressureChanged(bool value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    ToolTransformArgs::LiquifyProperties *props =
+    KisLiquifyProperties *props =
         config->liquifyProperties();
 
     props->setAmountHasPressure(value);
@@ -367,7 +370,7 @@ void KisToolTransformConfigWidget::liquifyReverseDirectionChanged(bool value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    ToolTransformArgs::LiquifyProperties *props =
+    KisLiquifyProperties *props =
         config->liquifyProperties();
 
     props->setReverseDirection(value);
@@ -451,23 +454,23 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         stackedWidget->setCurrentIndex(3);
         liquifyButton->setChecked(true);
 
-        const ToolTransformArgs::LiquifyProperties *props =
+        const KisLiquifyProperties *props =
             config.liquifyProperties();
 
-        switch (props->currentMode()) {
-        case ToolTransformArgs::LiquifyProperties::MOVE:
+        switch (props->mode()) {
+        case KisLiquifyProperties::MOVE:
             liquifyMove->setChecked(true);
             break;
-        case ToolTransformArgs::LiquifyProperties::SCALE:
+        case KisLiquifyProperties::SCALE:
             liquifyScale->setChecked(true);
             break;
-        case ToolTransformArgs::LiquifyProperties::ROTATE:
+        case KisLiquifyProperties::ROTATE:
             liquifyRotate->setChecked(true);
             break;
-        case ToolTransformArgs::LiquifyProperties::OFFSET:
+        case KisLiquifyProperties::OFFSET:
             liquifyOffset->setChecked(true);
             break;
-        case ToolTransformArgs::LiquifyProperties::UNDO:
+        case KisLiquifyProperties::UNDO:
             liquifyUndo->setChecked(true);
             break;
         }

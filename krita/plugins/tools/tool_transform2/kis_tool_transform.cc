@@ -908,6 +908,10 @@ void KisToolTransform::slotUiChangedConfig()
 
     currentStrategy()->externalConfigChanged();
 
+    if (m_currentArgs.mode() == ToolTransformArgs::LIQUIFY) {
+        m_currentArgs.saveLiquifyTransformMode();
+    }
+
     outlineChanged();
     updateApplyResetAvailability();
 }

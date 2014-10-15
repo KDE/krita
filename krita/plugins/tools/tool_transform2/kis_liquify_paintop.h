@@ -21,22 +21,23 @@
 
 #include <QScopedPointer>
 
-#include "tool_transform_args.h"
-
 class KisLiquifyTransformWorker;
 class KisPaintInformation;
 class KisSpacingInformation;
+class KisLiquifyProperties;
+class QPainterPath;
+
 
 class KisLiquifyPaintop
 {
 public:
-    KisLiquifyPaintop(const ToolTransformArgs::LiquifyProperties &props,
+    KisLiquifyPaintop(const KisLiquifyProperties &props,
                       KisLiquifyTransformWorker *worker);
     ~KisLiquifyPaintop();
 
     KisSpacingInformation paintAt(const KisPaintInformation &pi);
 
-    static QPainterPath brushOutline(const ToolTransformArgs::LiquifyProperties &props,
+    static QPainterPath brushOutline(const KisLiquifyProperties &props,
                                      const KisPaintInformation &info);
 
 private:

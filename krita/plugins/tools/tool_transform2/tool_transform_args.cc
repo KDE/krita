@@ -167,5 +167,11 @@ bool ToolTransformArgs::isIdentity() const
 void ToolTransformArgs::initLiquifyTransformMode(const QRect &srcRect)
 {
     m_liquifyWorker.reset(new KisLiquifyTransformWorker(srcRect, 0, 8));
+    m_liquifyProperties.loadMode();
+}
+
+void ToolTransformArgs::saveLiquifyTransformMode() const
+{
+    m_liquifyProperties.saveMode();
 }
 

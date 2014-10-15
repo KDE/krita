@@ -18,21 +18,26 @@
 
 #include "kis_liquify_paintop.h"
 
+#include <QPainterPath>
+#include <QTransform>
+
+
 #include "kis_paint_information.h"
 #include "kis_liquify_transform_worker.h"
 #include "kis_algebra_2d.h"
+#include "kis_liquify_properties.h"
 
 
 struct KisLiquifyPaintop::Private
 {
-    Private(const ToolTransformArgs::LiquifyProperties &_props, KisLiquifyTransformWorker *_worker)
+    Private(const KisLiquifyProperties &_props, KisLiquifyTransformWorker *_worker)
         : props(_props), worker(_worker) {}
 
-    ToolTransformArgs::LiquifyProperties props;
+    KisLiquifyProperties props;
     KisLiquifyTransformWorker *worker;
 };
 
-KisLiquifyPaintop::KisLiquifyPaintop(const ToolTransformArgs::LiquifyProperties &props, KisLiquifyTransformWorker *worker)
+KisLiquifyPaintop::KisLiquifyPaintop(const KisLiquifyProperties &props, KisLiquifyTransformWorker *worker)
     : m_d(new Private(props, worker))
 {
 }
@@ -41,7 +46,7 @@ KisLiquifyPaintop::~KisLiquifyPaintop()
 {
 }
 
-QPainterPath KisLiquifyPaintop::brushOutline(const ToolTransformArgs::LiquifyProperties &props,
+QPainterPath KisLiquifyPaintop::brushOutline(const KisLiquifyProperties &props,
                                              const KisPaintInformation &info)
 {
     const qreal diameter = props.size();
@@ -51,11 +56,11 @@ QPainterPath KisLiquifyPaintop::brushOutline(const ToolTransformArgs::LiquifyPro
     outline.addEllipse(-0.5 * diameter, -0.5 * diameter,
                        diameter, diameter);
 
-    switch (props.currentMode()) {
-    case ToolTransformArgs::LiquifyProperties::MOVE:
-    case ToolTransformArgs::LiquifyProperties::SCALE:
+    switch (props.mode()) {
+    case KisLiquifyProperties::MOVE:
+    case KisLiquifyProperties::SCALE:
         break;
-    case ToolTransformArgs::LiquifyProperties::ROTATE: {
+    case KisLiquifyProperties::ROTATE: {
         QPainterPath p;
         p.lineTo(-3.0, 4.0);
         p.moveTo(0.0, 0.0);
@@ -75,7 +80,7 @@ QPainterPath KisLiquifyPaintop::brushOutline(const ToolTransformArgs::LiquifyPro
 
         break;
     }
-    case ToolTransformArgs::LiquifyProperties::OFFSET: {
+    case KisLiquifyProperties::OFFSET: {
         qreal normalAngle = info.drawingAngle() + reverseCoeff * 0.5 * M_PI;
 
         QPainterPath p = KisAlgebra2D::smallArrow();
@@ -91,7 +96,7 @@ QPainterPath KisLiquifyPaintop::brushOutline(const ToolTransformArgs::LiquifyPro
 
         break;
     }
-    case ToolTransformArgs::LiquifyProperties::UNDO:
+    case KisLiquifyProperties::UNDO:
         break;
     }
 
@@ -109,8 +114,8 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
     const qreal spacing = m_d->props.spacing() * size;
 
     const qreal reverseCoeff =
-        m_d->props.currentMode() !=
-        ToolTransformArgs::LiquifyProperties::UNDO &&
+        m_d->props.mode() !=
+        KisLiquifyProperties::UNDO &&
         m_d->props.reverseDirection() ? -1.0 : 1.0;
     const qreal amount = m_d->props.amountHasPressure() ?
         pi.pressure() * reverseCoeff * m_d->props.amount():
@@ -118,8 +123,8 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
 
 
 
-    switch (m_d->props.currentMode()) {
-    case ToolTransformArgs::LiquifyProperties::MOVE: {
+    switch (m_d->props.mode()) {
+    case KisLiquifyProperties::MOVE: {
         const qreal offsetLength = size * amount;
         m_d->worker->translatePoints(pi.pos(),
                                      pi.drawingDirectionVector() * offsetLength,
@@ -127,24 +132,24 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
 
         break;
     }
-    case ToolTransformArgs::LiquifyProperties::SCALE:
+    case KisLiquifyProperties::SCALE:
         m_d->worker->scalePoints(pi.pos(),
                                  amount,
                                  size);
         break;
-    case ToolTransformArgs::LiquifyProperties::ROTATE:
+    case KisLiquifyProperties::ROTATE:
         m_d->worker->rotatePoints(pi.pos(),
                                   2.0 * M_PI * amount,
                                   size);
         break;
-    case ToolTransformArgs::LiquifyProperties::OFFSET: {
+    case KisLiquifyProperties::OFFSET: {
         const qreal offsetLength = size * amount;
         m_d->worker->translatePoints(pi.pos(),
                                      KisAlgebra2D::rightUnitNormal(pi.drawingDirectionVector()) * offsetLength,
                                      size);
         break;
     }
-    case ToolTransformArgs::LiquifyProperties::UNDO:
+    case KisLiquifyProperties::UNDO:
         m_d->worker->undoPoints(pi.pos(),
                                 amount,
                                 size);

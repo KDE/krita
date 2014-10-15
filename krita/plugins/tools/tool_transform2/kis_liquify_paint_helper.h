@@ -21,13 +21,13 @@
 
 #include <QScopedPointer>
 
-// FIXME: for liquifyprops only
-#include "tool_transform_args.h"
-
 class KisPaintInformation;
 class KisLiquifyTransformWorker;
 class KisCoordinatesConverter;
 class KoPointerEvent;
+class KisLiquifyProperties;
+class QPainterPath;
+
 
 class KisLiquifyPaintHelper
 {
@@ -35,7 +35,7 @@ public:
     KisLiquifyPaintHelper(const KisCoordinatesConverter *converter);
     ~KisLiquifyPaintHelper();
 
-    void configurePaintOp(const ToolTransformArgs::LiquifyProperties &_props,
+    void configurePaintOp(const KisLiquifyProperties &_props,
                           KisLiquifyTransformWorker *worker);
 
     void startPaint(KoPointerEvent *event);
@@ -44,7 +44,7 @@ public:
 
     void hoverPaint(KoPointerEvent *event);
 
-    QPainterPath brushOutline(const ToolTransformArgs::LiquifyProperties &props) const;
+    QPainterPath brushOutline(const KisLiquifyProperties &props) const;
 
 private:
     struct Private;

@@ -275,10 +275,7 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
         static_cast<ToolTransformArgs::LiquifyProperties::LiquifyMode>(props->currentMode());
 
     bool canInverseDirection =
-        mode == ToolTransformArgs::LiquifyProperties::MOVE ||
-        mode == ToolTransformArgs::LiquifyProperties::SCALE ||
-        mode == ToolTransformArgs::LiquifyProperties::ROTATE ||
-        mode == ToolTransformArgs::LiquifyProperties::OFFSET;
+        mode != ToolTransformArgs::LiquifyProperties::UNDO;
 
     liquifyReverseDirectionChk->setEnabled(canInverseDirection);
 

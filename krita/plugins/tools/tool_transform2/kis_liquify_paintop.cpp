@@ -108,7 +108,10 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
 
     const qreal spacing = m_d->props.spacing() * size;
 
-    const qreal reverseCoeff = m_d->props.reverseDirection() ? -1.0 : 1.0;
+    const qreal reverseCoeff =
+        m_d->props.currentMode() !=
+        ToolTransformArgs::LiquifyProperties::UNDO &&
+        m_d->props.reverseDirection() ? -1.0 : 1.0;
     const qreal amount = m_d->props.amountHasPressure() ?
         pi.pressure() * reverseCoeff * m_d->props.amount():
         reverseCoeff * m_d->props.amount();

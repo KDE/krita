@@ -18,7 +18,6 @@
 
 #include "SplineAssistant.h"
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include <QPainter>
@@ -26,6 +25,7 @@
 #include <QTransform>
 
 #include "kis_coordinates_converter.h"
+#include "kis_debug.h"
 
 #include <math.h>
 #include <limits>
@@ -87,8 +87,53 @@ QPointF SplineAssistant::adjustPosition(const QPointF& pt, const QPointF& /*stro
     return project(pt);
 }
 
-void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)
+void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
+    gc.save();
+    gc.resetTransform();
+    QPoint mousePos;
+    
+    if (canvas){
+        //simplest, cheapest way to get the mouse-position//
+        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+    }
+    else {
+        //...of course, you need to have access to a canvas-widget for that.//
+        mousePos = QCursor::pos();//this'll give an offset//
+        dbgFile<<"canvas does not exist in spline, you may have passed arguments incorrectly:"<<canvas;
+    }
+    
+    if (handles().size() > 1) {
+
+    QTransform initialTransform = converter->documentToWidgetTransform();
+
+    // first we find the path that our point create.
+
+        QPointF pts[4];
+        pts[0] = *handles()[0];
+        pts[1] = *handles()[1];
+        pts[2] = (handles().size() >= 3) ? (*handles()[2]) : (*handles()[0]);
+        pts[3] = (handles().size() >= 4) ? (*handles()[3]) : (handles().size() >= 3) ? (*handles()[2]) : (*handles()[1]);
+        gc.setTransform(initialTransform);
+        // Draw the spline
+        QPainterPath path;
+        path.moveTo(pts[0]);
+        path.cubicTo(pts[2], pts[3], pts[1]);
+        
+        //then we use this path to check the bounding rectangle//
+        if (outline()==true && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible==true){
+            drawPreview(gc, path);//and we draw the preview.
+        }
+    }
+    gc.restore();
+    
+    KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
+
+}
+
+void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
+{
+    if (assistantVisible==false){return;}
     if (handles().size() < 2) return;
 
     QTransform initialTransform = converter->documentToWidgetTransform();
@@ -109,7 +154,7 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
     QPainterPath path;
     path.moveTo(pts[0]);
     path.cubicTo(pts[2], pts[3], pts[1]);
-    drawPath(gc, path);
+    drawPath(gc, path, snapping());
 }
 
 QPointF SplineAssistant::buttonPosition() const

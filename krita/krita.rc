@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="52">
+<kpartgui name="Krita" version="53">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -70,6 +70,7 @@
   <Action name="view_clear_perspective_grid"/>
   <Separator/>
   <Action name="view_toggle_painting_assistants"/>
+  <Action name="view_toggle_assistant_previews"/>
   <Separator/>
   <Action name="view_palette_action_menu"/>
   <Separator/>

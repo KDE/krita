@@ -56,6 +56,10 @@ public:
 private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistant *assistant);
+    void snappingOn(KisPaintingAssistant* assistant);
+    void snappingOff(KisPaintingAssistant* assistant);
+    void outlineOn(KisPaintingAssistant* assistant);
+    void outlineOff(KisPaintingAssistant* assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
 

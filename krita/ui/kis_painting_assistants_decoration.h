@@ -33,6 +33,7 @@ class KActionCollection;
  */
 class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoration
 {
+    Q_OBJECT
 public:
     KisPaintingAssistantsDecoration(KisView2* parent);
     ~KisPaintingAssistantsDecoration();
@@ -44,6 +45,19 @@ public:
     void setup(KActionCollection * collection);
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistant*> assistants();
+    /*sets whether the main assistant is visible*/
+    void setAssistantVisible(bool set);
+    /*sets whether the preview is visible*/
+    void setOutlineVisible(bool set);
+    /*returns assistant visibility*/
+    bool assistantVisibility();
+    /*returns preview visibility*/
+    bool outlineVisibility();
+    /*uncache all assistants*/
+    void uncache();
+public slots:
+    void toggleAssistantVisible();
+    void toggleOutlineVisible();
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 

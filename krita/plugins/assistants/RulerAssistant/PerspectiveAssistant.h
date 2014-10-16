@@ -34,12 +34,12 @@ public:
     virtual void endStroke();
     virtual QPointF buttonPosition() const;
     virtual int numHandles() const { return 4; }
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true,KisCanvas2* canvas=0);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true);
 
     virtual bool contains(const QPointF& point) const;
     virtual qreal distance(const QPointF& point) const;
 protected:
-    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true);
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral

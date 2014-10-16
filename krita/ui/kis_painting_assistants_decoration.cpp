@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
+#include "kis_debug.h"
 
 #include "kis_painting_assistant.h"
 #include <QPainter>
@@ -32,6 +33,9 @@
 struct KisPaintingAssistantsDecoration::Private {
     QList<KisPaintingAssistant*> assistants;
     KToggleAction* toggleAssistant;
+    KToggleAction* togglePreview;
+    bool assistantVisible;
+    bool outlineVisible;
 };
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(KisView2* parent) :
@@ -73,20 +77,25 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
 {
     if (d->assistants.empty()) return point;
     if (d->assistants.count() == 1) {
+        if(d->assistants.first()->snapping()==true){
         QPointF newpoint = d->assistants.first()->adjustPosition(point, strokeBegin);
         // check for NaN
         if (newpoint.x() != newpoint.x()) return point;
         return newpoint;
+        }
     }
     QPointF best = point;
     double distance = DBL_MAX;
+    //the following tries to find the closest point to stroke-begin. It checks all assistants for the closest point//
     foreach(KisPaintingAssistant* assistant, d->assistants) {
-        QPointF pt = assistant->adjustPosition(point, strokeBegin);
-        if (pt.x() != pt.x()) continue;
-        double d = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
-        if (d < distance) {
-            best = pt;
-            distance = d;
+        if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
+            QPointF pt = assistant->adjustPosition(point, strokeBegin);
+            if (pt.x() != pt.x()) continue;
+            double d = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
+            if (d < distance) {
+                best = pt;
+                distance = d;
+            }
         }
     }
     return best;
@@ -101,18 +110,35 @@ void KisPaintingAssistantsDecoration::endStroke()
 
 void KisPaintingAssistantsDecoration::setup(KActionCollection * collection)
 {
+
     d->toggleAssistant = new KToggleAction(i18n("Show Painting Assistants"), this);
+    d->togglePreview = new KToggleAction(i18n("Show Assistant Previews"), this);
     collection->addAction("view_toggle_painting_assistants", d->toggleAssistant);
-    connect(d->toggleAssistant, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
+    collection->addAction("view_toggle_assistant_previews", d->togglePreview);
+    if (QMetaObject::invokeMethod(this, "toggleAssistantVisible")){
+        connect(d->toggleAssistant, SIGNAL(triggered()), this, SLOT(toggleAssistantVisible()));
+        connect(d->togglePreview, SIGNAL(triggered()), this, SLOT(toggleOutlineVisible()));
+    }
+    else {
+        connect(d->toggleAssistant, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
+    }
+    setAssistantVisible(true);
+    setOutlineVisible(true);
     updateAction();
 }
 
 void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
-{
+{   
+    if (!canvas) {
+        dbgFile<<"canvas does not exist in painting assistant decoration, you may have passed arguments incorrectly:"<<canvas;
+    }    
+    
     foreach(KisPaintingAssistant* assistant, d->assistants) {
-        assistant->drawAssistant(gc, updateRect, converter,canvas);
+            assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
     }
+    
 }
+//drawPreview//
 
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 {
@@ -140,5 +166,41 @@ QList<KisPaintingAssistant*> KisPaintingAssistantsDecoration::assistants()
 void KisPaintingAssistantsDecoration::updateAction()
 {
     d->toggleAssistant->setEnabled(!d->assistants.isEmpty());
-    d->toggleAssistant->setChecked(visible());
+    d->togglePreview->setEnabled(!d->assistants.isEmpty());
+    d->toggleAssistant->setChecked(assistantVisibility());
+    d->togglePreview->setChecked(outlineVisibility());
+}
+
+void KisPaintingAssistantsDecoration::setAssistantVisible(bool set)
+{
+    d->assistantVisible=set;
+}
+
+void KisPaintingAssistantsDecoration::setOutlineVisible(bool set)
+{
+    d->outlineVisible=set;
+}
+bool KisPaintingAssistantsDecoration::assistantVisibility()
+{
+    return d->assistantVisible;
+}
+bool KisPaintingAssistantsDecoration::outlineVisibility()
+{
+    return d->outlineVisible;
+}
+
+void KisPaintingAssistantsDecoration::uncache()
+{
+     foreach(KisPaintingAssistant* assistant, d->assistants) {
+            assistant->uncache();
+    }
+}
+void KisPaintingAssistantsDecoration::toggleAssistantVisible()
+{
+    setAssistantVisible(!assistantVisibility());
+    uncache();
+}
+void KisPaintingAssistantsDecoration::toggleOutlineVisible()
+{
+    setOutlineVisible(!outlineVisibility());
 }

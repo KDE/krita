@@ -75,7 +75,9 @@ KisCanvasWidgetBase::~KisCanvasWidgetBase()
 void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const
 {
     gc.save();
-
+    if (!m_d->canvas) {
+        dbgFile<<"canvas doesn't exist, in canvas widget base!";
+        }
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
     gc.setRenderHint(QPainter::Antialiasing);

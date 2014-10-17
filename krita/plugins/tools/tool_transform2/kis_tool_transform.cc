@@ -123,6 +123,8 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     connect(m_warpStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_cageStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_liquifyStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
+    connect(m_liquifyStrategy.data(), SIGNAL(requestCursorOutlineUpdate(const QPointF&)), SLOT(cursorOutlineUpdateRequested(const QPointF&)));
+    connect(m_liquifyStrategy.data(), SIGNAL(requestUpdateOptionWidget()), SLOT(updateOptionWidget()));
     connect(m_freeStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestResetRotationCenterButtons()), SLOT(resetRotationCenterButtonsRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
@@ -215,7 +217,7 @@ void KisToolTransform::setFunctionalCursor()
     }
 }
 
-void KisToolTransform::updateCursorOutline(const QPointF &imagePos)
+void KisToolTransform::cursorOutlineUpdateRequested(const QPointF &imagePos)
 {
     QRect canvasUpdateRect;
 
@@ -240,34 +242,140 @@ void KisToolTransform::updateCursorOutline(const QPointF &imagePos)
     }
 }
 
-void KisToolTransform::mousePressEvent(KoPointerEvent *event)
+void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action)
 {
-    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier)) {
-
-        KisTool::mousePressEvent(event);
+    if (!nodeEditable()) {
+        event->ignore();
         return;
     }
 
-    KisImageWSP kisimage = image();
+    if (!m_strokeData.strokeId()) {
+        startStroke(m_currentArgs.mode());
+    } else {
+        bool result = false;
 
-    if (!currentNode())
-        return;
-
-    setMode(KisTool::PAINT_MODE);
-    if (kisimage && event->button() == Qt::LeftButton) {
-        if (!m_strokeData.strokeId()) {
-            startStroke(m_currentArgs.mode());
-            setMode(KisTool::HOVER_MODE);
+        if (usePrimaryAction) {
+            result = currentStrategy()->beginPrimaryAction(event);
         } else {
-            if (!currentStrategy()->beginPrimaryAction(event)) {
-                setMode(KisTool::HOVER_MODE);
-            }
+            result = currentStrategy()->beginAlternateAction(event, action);
         }
 
-        m_actuallyMoveWhileSelected = false;
+        if (result) {
+            setMode(KisTool::PAINT_MODE);
+        }
     }
 
+    m_actuallyMoveWhileSelected = false;
+
     outlineChanged();
+}
+
+void KisToolTransform::continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action)
+{
+    if (mode() != KisTool::PAINT_MODE) return;
+
+    m_actuallyMoveWhileSelected = true;
+
+    if (usePrimaryAction) {
+        currentStrategy()->continuePrimaryAction(event);
+    } else {
+        currentStrategy()->continueAlternateAction(event, action);
+    }
+
+    updateOptionWidget();
+    outlineChanged();
+}
+
+void KisToolTransform::endActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action)
+{
+    if (mode() != KisTool::PAINT_MODE) return;
+
+    setMode(KisTool::HOVER_MODE);
+
+    if (m_actuallyMoveWhileSelected ||
+        currentStrategy()->acceptsClicks()) {
+
+        bool result = false;
+
+        if (usePrimaryAction) {
+            result = currentStrategy()->endPrimaryAction(event);
+        } else {
+            result = currentStrategy()->endAlternateAction(event, action);
+        }
+
+        if (result) {
+            commitChanges();
+        }
+
+        outlineChanged();
+    }
+
+    updateOptionWidget();
+    updateApplyResetAvailability();
+}
+
+void KisToolTransform::beginPrimaryAction(KoPointerEvent *event)
+{
+    beginActionImpl(event, true, KisTool::NONE);
+}
+
+void KisToolTransform::continuePrimaryAction(KoPointerEvent *event)
+{
+    continueActionImpl(event, true, KisTool::NONE);
+}
+
+void KisToolTransform::endPrimaryAction(KoPointerEvent *event)
+{
+    endActionImpl(event, true, KisTool::NONE);
+}
+
+void KisToolTransform::activateAlternateAction(AlternateAction action)
+{
+    currentStrategy()->activateAlternateAction(action);
+}
+
+void KisToolTransform::deactivateAlternateAction(AlternateAction action)
+{
+    currentStrategy()->deactivateAlternateAction(action);
+}
+
+void KisToolTransform::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    beginActionImpl(event, false, action);
+}
+
+void KisToolTransform::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    continueActionImpl(event, false, action);
+}
+
+void KisToolTransform::endAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    endActionImpl(event, false, action);
+}
+
+void KisToolTransform::mousePressEvent(KoPointerEvent *event)
+{
+    KisTool::mousePressEvent(event);
+}
+
+void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
+{
+    QPointF mousePos = m_canvas->coordinatesConverter()->documentToImage(event->point);
+
+    cursorOutlineUpdateRequested(mousePos);
+
+    if (!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+        currentStrategy()->hoverActionCommon(event);
+        setFunctionalCursor();
+        KisTool::mouseMoveEvent(event);
+        return;
+    }
+}
+
+void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
+{
+    KisTool::mouseReleaseEvent(event);
 }
 
 void KisToolTransform::touchEvent( QTouchEvent* event )
@@ -523,50 +631,6 @@ void KisToolTransform::setWarpFlexibility( double flexibility )
 void KisToolTransform::setWarpPointDensity( int density )
 {
     m_optionsWidget->slotSetWarpDensity(density);
-}
-
-void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
-{
-    QPointF mousePos = m_canvas->coordinatesConverter()->documentToImage(event->point);
-
-    updateCursorOutline(mousePos);
-
-    if (!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        currentStrategy()->setTransformFunction(mousePos, event->modifiers() & Qt::ControlModifier);
-        setFunctionalCursor();
-        currentStrategy()->hoverPrimaryAction(event);
-        KisTool::mouseMoveEvent(event);
-        return;
-    }
-
-    m_actuallyMoveWhileSelected = true;
-
-    currentStrategy()->continuePrimaryAction(event, event->modifiers() & Qt::ShiftModifier);
-    updateOptionWidget();
-    outlineChanged();
-}
-
-void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if (!RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        KisTool::mouseReleaseEvent(event);
-        return;
-    }
-
-    setMode(KisTool::HOVER_MODE);
-
-    if (m_actuallyMoveWhileSelected ||
-        currentStrategy()->acceptsClicks()) {
-
-        if (currentStrategy()->endPrimaryAction(event)) {
-            commitChanges();
-        }
-
-        outlineChanged();
-    }
-
-    updateOptionWidget();
-    updateApplyResetAvailability();
 }
 
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)

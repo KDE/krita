@@ -107,7 +107,7 @@ struct KisWarpTransformStrategy::Private
 KisWarpTransformStrategy::KisWarpTransformStrategy(const KisCoordinatesConverter *converter,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : KisTransformStrategyBase(converter),
+    : KisSimplifiedActionPolicyStrategy(converter),
       m_d(new Private(this, converter, currentArgs, transaction))
 {
 }

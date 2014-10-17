@@ -76,6 +76,15 @@ Point normalize(const Point &a)
     return (1.0 / length) * a;
 }
 
+/**
+ * Usual sign() function with positive zero
+ */
+template <typename T>
+T signPZ(T x) {
+    const T zeroValue(0);
+    return x >= T(0) ? T(1) : T(-1);
+}
+
 template <class T>
 T leftUnitNormal(const T &a)
 {

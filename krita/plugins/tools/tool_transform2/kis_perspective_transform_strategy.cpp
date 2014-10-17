@@ -114,7 +114,7 @@ struct KisPerspectiveTransformStrategy::Private
 KisPerspectiveTransformStrategy::KisPerspectiveTransformStrategy(const KisCoordinatesConverter *converter,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : KisTransformStrategyBase(converter),
+    : KisSimplifiedActionPolicyStrategy(converter),
       m_d(new Private(this, converter, currentArgs, transaction))
 {
 }

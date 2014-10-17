@@ -7,6 +7,7 @@ set(kritatooltransform_PART_SRCS
     kis_transform_strategy_base.cpp
     kis_warp_transform_strategy.cpp
     kis_cage_transform_strategy.cpp
+    kis_simplified_action_policy_strategy.cpp
     kis_liquify_transform_strategy.cpp
     kis_liquify_paint_helper.cpp
     kis_liquify_paintop.cpp

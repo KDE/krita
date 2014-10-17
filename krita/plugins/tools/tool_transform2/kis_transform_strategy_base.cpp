@@ -21,22 +21,17 @@
 #include <QImage>
 #include <QTransform>
 #include "KoPointerEvent.h"
-#include "kis_coordinates_converter.h"
 
 
 struct KisTransformStrategyBase::Private
 {
-    Private(const KisCoordinatesConverter *_converter)
-        : converter(_converter) {}
-
     QTransform thumbToImageTransform;
     QImage originalImage;
-    const KisCoordinatesConverter *converter;
 };
 
 
-KisTransformStrategyBase::KisTransformStrategyBase(const KisCoordinatesConverter *_converter)
-    : m_d(new Private(_converter))
+KisTransformStrategyBase::KisTransformStrategyBase()
+    : m_d(new Private())
 {
 }
 
@@ -70,48 +65,32 @@ bool KisTransformStrategyBase::acceptsClicks() const
     return false;
 }
 
-bool KisTransformStrategyBase::beginPrimaryAction(KoPointerEvent *event)
+void KisTransformStrategyBase::activateAlternateAction(KisTool::AlternateAction action)
 {
-    return beginPrimaryAction(m_d->converter->documentToImage(event->point));
+    Q_UNUSED(action);
 }
 
-void KisTransformStrategyBase::continuePrimaryAction(KoPointerEvent *event, bool specialModifierActve)
+void KisTransformStrategyBase::deactivateAlternateAction(KisTool::AlternateAction action)
 {
-    continuePrimaryAction(m_d->converter->documentToImage(event->point), specialModifierActve);
+    Q_UNUSED(action);
 }
 
-void KisTransformStrategyBase::hoverPrimaryAction(KoPointerEvent *event)
-{
-    hoverPrimaryAction(m_d->converter->documentToImage(event->point));
-}
-
-bool KisTransformStrategyBase::endPrimaryAction(KoPointerEvent *event)
+bool KisTransformStrategyBase::beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
     Q_UNUSED(event);
-    return endPrimaryAction();
-}
-
-bool KisTransformStrategyBase::beginPrimaryAction(const QPointF &pt)
-{
-    Q_UNUSED(pt);
-    qFatal("Not implemented");
+    Q_UNUSED(action);
     return false;
 }
 
-void KisTransformStrategyBase::continuePrimaryAction(const QPointF &pt, bool specialModifierActve)
+void KisTransformStrategyBase::continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
-    Q_UNUSED(pt);
-    Q_UNUSED(specialModifierActve);
-    qFatal("Not implemented");
+    Q_UNUSED(event);
+    Q_UNUSED(action);
 }
 
-bool KisTransformStrategyBase::endPrimaryAction()
+bool KisTransformStrategyBase::endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
-    qFatal("Not implemented");
+    Q_UNUSED(event);
+    Q_UNUSED(action);
     return false;
-}
-
-void KisTransformStrategyBase::hoverPrimaryAction(const QPointF &pt)
-{
-    Q_UNUSED(pt);
 }

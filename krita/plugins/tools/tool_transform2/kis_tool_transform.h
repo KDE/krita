@@ -133,6 +133,20 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void touchEvent(QTouchEvent *event);
 
+    void beginActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
+    void continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
+    void endActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
+
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+    void activateAlternateAction(AlternateAction action);
+    void deactivateAlternateAction(AlternateAction action);
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+
     void paint(QPainter& gc, const KoViewConverter &converter);
 
     bool isActive() const;
@@ -193,6 +207,11 @@ public Q_SLOTS:
     void requestStrokeEnd();
     void requestStrokeCancellation();
     void canvasUpdateRequested();
+    void cursorOutlineUpdateRequested(const QPointF &imagePos);
+
+    // Update the widget according to m_currentArgs
+    void updateOptionWidget();
+
     void resetRotationCenterButtonsRequested();
     void imageTooBigRequested(bool value);
 
@@ -208,14 +227,11 @@ private:
     void outlineChanged();
     // Sets the cursor according to mouse position (doesn't take shearing into account well yet)
     void setFunctionalCursor();
-    void updateCursorOutline(const QPointF &imagePos);
     // Sets m_function according to mouse position and modifier
     void setTransformFunction(QPointF mousePos, Qt::KeyboardModifiers modifiers);
 
     void commitChanges();
 
-    // Updated the widget according to m_currentArgs
-    void updateOptionWidget();
 
     void initTransformMode(ToolTransformArgs::TransformMode mode);
 

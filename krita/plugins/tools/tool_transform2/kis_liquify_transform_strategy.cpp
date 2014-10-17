@@ -23,6 +23,8 @@
 #include <QPointF>
 #include <QPainter>
 
+#include "KoPointerEvent.h"
+
 #include "kis_coordinates_converter.h"
 #include "tool_transform_args.h"
 #include "transform_transaction_properties.h"
@@ -30,6 +32,7 @@
 #include "kis_cursor.h"
 #include "kis_transform_utils.h"
 #include "kis_algebra_2d.h"
+#include "kis_transform_utils.h"
 #include "kis_liquify_paint_helper.h"
 #include "kis_liquify_transform_worker.h"
 
@@ -67,7 +70,12 @@ struct KisLiquifyTransformStrategy::Private
     /// custom members ///
 
     QImage transformedImage;
-    QPointF lastMousePos;
+
+    // size-gesture-related
+    QPointF lastMouseWidgetPos;
+    QPointF startResizeImagePos;
+    QPoint startResizeGlobalCursorPos;
+
     KisLiquifyPaintHelper helper;
 
     void recalculateTransformations();
@@ -78,8 +86,7 @@ KisLiquifyTransformStrategy::KisLiquifyTransformStrategy(const KisCoordinatesCon
                                                          ToolTransformArgs &currentArgs,
                                                          TransformTransactionProperties &transaction)
 
-    : KisTransformStrategyBase(converter),
-      m_d(new Private(this, converter, currentArgs, transaction))
+    : m_d(new Private(this, converter, currentArgs, transaction))
 {
 }
 
@@ -136,10 +143,8 @@ bool KisLiquifyTransformStrategy::beginPrimaryAction(KoPointerEvent *event)
     return true;
 }
 
-void KisLiquifyTransformStrategy::continuePrimaryAction(KoPointerEvent *event, bool specialModifierActve)
+void KisLiquifyTransformStrategy::continuePrimaryAction(KoPointerEvent *event)
 {
-    Q_UNUSED(specialModifierActve);
-
     m_d->helper.continuePaint(event);
 
     m_d->recalculateTransformations();
@@ -156,9 +161,87 @@ bool KisLiquifyTransformStrategy::endPrimaryAction(KoPointerEvent *event)
     return true;
 }
 
-void KisLiquifyTransformStrategy::hoverPrimaryAction(KoPointerEvent *event)
+void KisLiquifyTransformStrategy::hoverActionCommon(KoPointerEvent *event)
 {
     m_d->helper.hoverPaint(event);
+}
+
+void KisLiquifyTransformStrategy::activateAlternateAction(KisTool::AlternateAction action)
+{
+    if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
+        action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+
+        KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
+        props->setReverseDirection(!props->reverseDirection());
+        emit requestUpdateOptionWidget();
+    }
+}
+
+void KisLiquifyTransformStrategy::deactivateAlternateAction(KisTool::AlternateAction action)
+{
+    if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
+        action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+
+        KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
+        props->setReverseDirection(!props->reverseDirection());
+        emit requestUpdateOptionWidget();
+    }
+}
+
+bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
+{
+    if (action == KisTool::ChangeSize) {
+        QPointF widgetPoint = m_d->converter->documentToWidget(event->point);
+        m_d->lastMouseWidgetPos = widgetPoint;
+        m_d->startResizeImagePos = m_d->converter->documentToImage(event->point);
+        m_d->startResizeGlobalCursorPos = QCursor::pos();
+        return true;
+    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
+               action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+
+        return beginPrimaryAction(event);
+    }
+
+
+    return false;
+}
+
+void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
+{
+    if (action == KisTool::ChangeSize) {
+        QPointF widgetPoint = m_d->converter->documentToWidget(event->point);
+
+        QPointF diff = widgetPoint - m_d->lastMouseWidgetPos;
+
+        KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
+        const qreal linearizedOffset = diff.x() / KisTransformUtils::scaleFromAffineMatrix(m_d->converter->imageToWidgetTransform());
+        const qreal newSize = qBound(props->minSize(), props->size() + linearizedOffset, props->maxSize());
+        props->setSize(newSize);
+        m_d->currentArgs.saveLiquifyTransformMode();
+
+        m_d->lastMouseWidgetPos = widgetPoint;
+
+        emit requestCursorOutlineUpdate(m_d->startResizeImagePos);
+    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
+               action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+
+        return continuePrimaryAction(event);
+    }
+}
+
+bool KisLiquifyTransformStrategy::endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
+{
+    Q_UNUSED(event);
+
+    if (action == KisTool::ChangeSize) {
+        QCursor::setPos(m_d->startResizeGlobalCursorPos);
+        return true;
+    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
+               action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+        return endPrimaryAction(event);
+    }
+
+    return false;
 }
 
 inline QPointF KisLiquifyTransformStrategy::Private::imageToThumb(const QPointF &pt, bool useFlakeOptimization)

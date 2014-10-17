@@ -57,6 +57,14 @@ public:
         m_size = value;
     }
 
+    static qreal minSize() {
+        return 5.0;
+    }
+
+    static qreal maxSize() {
+        return 1000.0;
+    }
+
     qreal amount() const {
         return m_amount;
     }

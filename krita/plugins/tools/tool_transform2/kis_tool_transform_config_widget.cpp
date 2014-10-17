@@ -132,7 +132,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(chkEditCage, SIGNAL(clicked(bool)), this, SLOT(slotEditCagePoints(bool)));
 
     // Init Liquify Transform Values
-    liquifySizeSlider->setRange(0.0, 1000.0, 2);
+    liquifySizeSlider->setRange(KisLiquifyProperties::minSize(),
+                                KisLiquifyProperties::maxSize(), 2);
     liquifySizeSlider->setExponentRatio(4);
     liquifySizeSlider->setValue(50.0);
     connect(liquifySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifySizeChanged(qreal)));

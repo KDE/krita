@@ -16,49 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_TRANSFORM_STRATEGY_BASE_H
-#define __KIS_TRANSFORM_STRATEGY_BASE_H
+#ifndef __KIS_SIMPLIFIED_ACTION_POLICY_STRATEGY_H
+#define __KIS_SIMPLIFIED_ACTION_POLICY_STRATEGY_H
 
-#include <QObject>
 #include <QScopedPointer>
 
-#include "kis_tool.h"
+#include "kis_transform_strategy_base.h"
 
 
-class QImage;
-class QPointF;
-class QTransform;
-class QPainter;
-class QCursor;
 class KoPointerEvent;
-class QPainterPath;
+class KisCoordinatesConverter;
 
-
-class KisTransformStrategyBase : public QObject
+class KisSimplifiedActionPolicyStrategy : public KisTransformStrategyBase
 {
 public:
-    KisTransformStrategyBase();
-    ~KisTransformStrategyBase();
+    KisSimplifiedActionPolicyStrategy(const KisCoordinatesConverter *_converter);
+    ~KisSimplifiedActionPolicyStrategy();
 
-    QImage originalImage() const;
-    QTransform thumbToImageTransform() const;
-
-    void setThumbnailImage(const QImage &image, QTransform thumbToImageTransform);
-
-public:
-
-    virtual bool acceptsClicks() const;
-
-    virtual void paint(QPainter &gc) = 0;
-    virtual QCursor getCurrentCursor() const = 0;
-    virtual QPainterPath getCursorOutline() const;
-
-    virtual void externalConfigChanged() = 0;
-
-    virtual bool beginPrimaryAction(KoPointerEvent *event) = 0;
-    virtual void continuePrimaryAction(KoPointerEvent *event) = 0;
-    virtual bool endPrimaryAction(KoPointerEvent *event) = 0;
-    virtual void hoverActionCommon(KoPointerEvent *event) = 0;
+    virtual bool beginPrimaryAction(KoPointerEvent *event);
+    virtual void continuePrimaryAction(KoPointerEvent *event);
+    virtual bool endPrimaryAction(KoPointerEvent *event);
+    virtual void hoverActionCommon(KoPointerEvent *event);
 
     virtual void activateAlternateAction(KisTool::AlternateAction action);
     virtual void deactivateAlternateAction(KisTool::AlternateAction action);
@@ -67,9 +45,18 @@ public:
     virtual void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
     virtual bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
 
+protected:
+
+    virtual void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive) = 0;
+
+    virtual bool beginPrimaryAction(const QPointF &pt) = 0;
+    virtual void continuePrimaryAction(const QPointF &pt, bool specialModifierActve) = 0;
+    virtual bool endPrimaryAction() = 0;
+    virtual void hoverActionCommon(const QPointF &pt);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_TRANSFORM_STRATEGY_BASE_H */
+#endif /* __KIS_SIMPLIFIED_ACTION_POLICY_STRATEGY_H */

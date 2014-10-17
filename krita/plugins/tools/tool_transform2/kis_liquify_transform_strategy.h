@@ -48,22 +48,26 @@ public:
     QCursor getCurrentCursor() const;
     QPainterPath getCursorOutline() const;
 
+    bool acceptsClicks() const;
+
     void externalConfigChanged();
 
-    using KisTransformStrategyBase::beginPrimaryAction;
-    using KisTransformStrategyBase::continuePrimaryAction;
-    using KisTransformStrategyBase::endPrimaryAction;
-    using KisTransformStrategyBase::hoverPrimaryAction;
-
     bool beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event, bool specialModifierActve);
+    void continuePrimaryAction(KoPointerEvent *event);
     bool endPrimaryAction(KoPointerEvent *event);
-    void hoverPrimaryAction(KoPointerEvent *event);
+    void hoverActionCommon(KoPointerEvent *event);
 
-    bool acceptsClicks() const;
+    void activateAlternateAction(KisTool::AlternateAction action);
+    void deactivateAlternateAction(KisTool::AlternateAction action);
+
+    bool beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
+    bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
 
 signals:
     void requestCanvasUpdate();
+    void requestUpdateOptionWidget();
+    void requestCursorOutlineUpdate(const QPointF &imagePoint);
 
 private:
     class Private;

@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "kis_transform_strategy_base.h"
+#include "kis_simplified_action_policy_strategy.h"
 
 class QPointF;
 class QPainter;
@@ -34,7 +34,7 @@ class QCursor;
 class QImage;
 
 
-class KisWarpTransformStrategy : public KisTransformStrategyBase
+class KisWarpTransformStrategy : public KisSimplifiedActionPolicyStrategy
 {
     Q_OBJECT
 public:

@@ -61,6 +61,9 @@ void KisLiquifyProperties::saveMode() const
     cfg.writeEntry("sizeHasPressure", m_sizeHasPressure);
     cfg.writeEntry("amountHasPressure", m_amountHasPressure);
     cfg.writeEntry("reverseDirection", m_reverseDirection);
+    cfg.writeEntry("useWashMode", m_useWashMode);
+    cfg.writeEntry("flow", m_flow);
+
 }
 
 void KisLiquifyProperties::loadMode()
@@ -74,4 +77,6 @@ void KisLiquifyProperties::loadMode()
     m_sizeHasPressure = cfg.readEntry("sizeHasPressure", m_sizeHasPressure);
     m_amountHasPressure = cfg.readEntry("amountHasPressure", m_amountHasPressure);
     m_reverseDirection = cfg.readEntry("reverseDirection", m_reverseDirection);
+    m_useWashMode = cfg.readEntry("useWashMode", m_useWashMode);
+    m_flow = cfg.readEntry("flow", m_flow);
 }

@@ -90,6 +90,8 @@ public slots:
 
     void liquifySizeChanged(qreal value);
     void liquifyAmountChanged(qreal value);
+    void liquifyFlowChanged(qreal value);
+    void liquifyBuildUpChanged(bool value);
     void liquifySpacingChanged(qreal value);
     void liquifySizePressureChanged(bool value);
     void liquifyAmountPressureChanged(bool value);

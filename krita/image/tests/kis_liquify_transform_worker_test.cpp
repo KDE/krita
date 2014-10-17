@@ -148,11 +148,11 @@ void KisLiquifyTransformWorkerTest::testPoints()
     QBENCHMARK_ONCE {
         worker.translatePoints(QPointF(100,100),
                                QPointF(50, 0),
-                               50);
+                               50, false, 0.2);
 
         worker.scalePoints(QPointF(400,100),
                            0.9,
-                           50);
+                           50, false, 0.2);
 
         worker.undoPoints(QPointF(400,100),
                            1.0,
@@ -160,15 +160,15 @@ void KisLiquifyTransformWorkerTest::testPoints()
 
         worker.scalePoints(QPointF(400,300),
                            0.5,
-                           50);
+                           50, false, 0.2);
 
         worker.scalePoints(QPointF(100,300),
                            -0.5,
-                           30);
+                           30, false, 0.2);
 
         worker.rotatePoints(QPointF(100,500),
                             M_PI / 4,
-                            50);
+                            50, false, 0.2);
     }
 
     worker.run(dev);
@@ -198,7 +198,7 @@ void KisLiquifyTransformWorkerTest::testPointsQImage()
 
     worker.translatePoints(QPointF(100,100),
                            QPointF(50, 0),
-                           50);
+                           50, false, 0.2);
 
     QRect rc = dev->exactBounds();
     dev->setX(50);

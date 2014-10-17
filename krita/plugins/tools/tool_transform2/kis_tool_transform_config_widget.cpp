@@ -144,6 +144,15 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(liquifyAmountSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifyAmountChanged(qreal)));
     liquifyAmountSlider->setToolTip(i18nc("@info:tooltip", "Amount of the deformation you get"));
 
+    liquifyFlowSlider->setRange(0.0, 1.0, 2);
+    liquifyFlowSlider->setValue(1.0);
+    connect(liquifyFlowSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifyFlowChanged(qreal)));
+    liquifyFlowSlider->setToolTip(i18nc("@info:tooltip", "When in non-buildup mode, shows how fast the deformation limit is reached."));
+
+    liquifyBuildUpBox->setChecked(true);
+    connect(liquifyBuildUpBox, SIGNAL(toggled(bool)), this, SLOT(liquifyBuildUpChanged(bool)));
+    liquifyBuildUpBox->setToolTip(i18nc("@info:tooltip", "Switch between Build Up and Wash mode of painting. Build Up mode adds deformations one on top of the other without any limits. Wash mode gradually deforms the piece to the selected deformation level."));
+
     liquifySpacingSlider->setRange(0.0, 3.0, 2);
     liquifySizeSlider->setExponentRatio(3);
     liquifySpacingSlider->setSingleStep(0.01);
@@ -265,8 +274,12 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
     KisLiquifyProperties *props =
         config->liquifyProperties();
 
+    const bool useWashMode = props->useWashMode();
+
     liquifySizeSlider->setValue(props->size());
     liquifyAmountSlider->setValue(props->amount());
+    liquifyFlowSlider->setValue(props->flow());
+    liquifyBuildUpBox->setChecked(!useWashMode);
     liquifySpacingSlider->setValue(props->spacing());
     liquifySizePressureBox->setChecked(props->sizeHasPressure());
     liquifyAmountPressureBox->setChecked(props->amountHasPressure());
@@ -279,7 +292,14 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
     bool canInverseDirection =
         mode != KisLiquifyProperties::UNDO;
 
+    bool canUseWashMode = mode != KisLiquifyProperties::UNDO;
+
     liquifyReverseDirectionChk->setEnabled(canInverseDirection);
+    liquifyFlowSlider->setEnabled(canUseWashMode && useWashMode);
+    liquifyBuildUpBox->setEnabled(canUseWashMode);
+
+    const qreal maxAmount = canUseWashMode ? 5.0 : 1.0;
+    liquifyAmountSlider->setRange(0.0, maxAmount, 2);
 
     unblockUiSlots();
 }
@@ -328,6 +348,33 @@ void KisToolTransformConfigWidget::liquifyAmountChanged(qreal value)
 
     props->setAmount(value);
     notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::liquifyFlowChanged(qreal value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setFlow(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::liquifyBuildUpChanged(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setUseWashMode(!value);
+    notifyConfigChanged();
+
+    // we need to enable/disable flow slider
+    updateLiquifyControls();
 }
 
 void KisToolTransformConfigWidget::liquifySpacingChanged(qreal value)

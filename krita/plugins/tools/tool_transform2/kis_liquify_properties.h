@@ -39,7 +39,9 @@ public:
           m_spacing(0.2),
           m_sizeHasPressure(false),
           m_amountHasPressure(false),
-          m_reverseDirection(false)
+          m_reverseDirection(false),
+          m_useWashMode(false),
+          m_flow(0.2)
     {
     }
 
@@ -100,6 +102,20 @@ public:
         m_reverseDirection = value;
     }
 
+    bool useWashMode() const {
+        return m_useWashMode;
+    }
+    void setUseWashMode(bool value) {
+        m_useWashMode = value;
+    }
+
+    qreal flow() const {
+        return m_flow;
+    }
+    void setFlow(qreal value) {
+        m_flow = value;
+    }
+
     void saveMode() const;
     void loadMode();
 
@@ -111,6 +127,9 @@ private:
     bool m_sizeHasPressure;
     bool m_amountHasPressure;
     bool m_reverseDirection;
+
+    bool m_useWashMode;
+    qreal m_flow;
 };
 
 #endif /* __KIS_LIQUIFY_PROPERTIES_H */

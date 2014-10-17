@@ -45,9 +45,22 @@ struct KisLiquifyTransformWorker::Private
     struct MapIndexesOp;
 
     template <class ProcessOp>
+    void processTransformedPixelsBuildUp(ProcessOp op,
+                                         const QPointF &base,
+                                         qreal sigma);
+
+    template <class ProcessOp>
+    void processTransformedPixelsWash(ProcessOp op,
+                                      const QPointF &base,
+                                      qreal sigma,
+                                      qreal flow);
+
+    template <class ProcessOp>
     void processTransformedPixels(ProcessOp op,
                                   const QPointF &base,
-                                  qreal sigma);
+                                  qreal sigma,
+                                  bool useWashMode,
+                                  qreal flow);
 };
 
 KisLiquifyTransformWorker::KisLiquifyTransformWorker(const QRect &srcBounds,
@@ -159,9 +172,9 @@ void KisLiquifyTransformWorker::undoPoints(const QPointF &base,
 
 template <class ProcessOp>
 void KisLiquifyTransformWorker::Private::
-processTransformedPixels(ProcessOp op,
-                         const QPointF &base,
-                         qreal sigma)
+processTransformedPixelsBuildUp(ProcessOp op,
+                                const QPointF &base,
+                                qreal sigma)
 {
     const qreal maxDist = ProcessOp::maxDistCoeff * sigma;
     QRectF clipRect(base.x() - maxDist, base.y() - maxDist,
@@ -179,6 +192,55 @@ processTransformedPixels(ProcessOp op,
 
         const qreal lambda = exp(-0.5 * pow2(dist / sigma));
         *it = op(*it, base, diff, lambda);
+    }
+}
+
+template <class ProcessOp>
+void KisLiquifyTransformWorker::Private::
+processTransformedPixelsWash(ProcessOp op,
+                             const QPointF &base,
+                             qreal sigma,
+                             qreal flow)
+{
+    const qreal maxDist = ProcessOp::maxDistCoeff * sigma;
+    QRectF clipRect(base.x() - maxDist, base.y() - maxDist,
+                    2 * maxDist, 2 * maxDist);
+
+    QVector<QPointF>::iterator it = transformedPoints.begin();
+    QVector<QPointF>::iterator end = transformedPoints.end();
+
+    QVector<QPointF>::iterator refIt = originalPoints.begin();
+    KIS_ASSERT_RECOVER_RETURN(originalPoints.size() ==
+                              transformedPoints.size());
+
+    for (; it != end; ++it, ++refIt) {
+        if (!clipRect.contains(*it)) continue;
+
+        QPointF diff = *refIt - base;
+        qreal dist = KisAlgebra2D::norm(diff);
+        if (dist > maxDist) continue;
+
+        const qreal lambda = exp(-0.5 * pow2(dist / sigma));
+        QPointF dstPt = op(*refIt, base, diff, lambda);
+
+        if (kisDistance(dstPt, *refIt) > kisDistance(*it, *refIt)) {
+            *it = (1.0 - flow) * (*it) + flow * dstPt;
+        }
+    }
+}
+
+template <class ProcessOp>
+void KisLiquifyTransformWorker::Private::
+processTransformedPixels(ProcessOp op,
+                         const QPointF &base,
+                         qreal sigma,
+                         bool useWashMode,
+                         qreal flow)
+{
+    if (useWashMode) {
+        processTransformedPixelsWash(op, base, sigma, flow);
+    } else {
+        processTransformedPixelsBuildUp(op, base, sigma);
     }
 }
 
@@ -248,26 +310,32 @@ struct RotateOp
 
 void KisLiquifyTransformWorker::translatePoints(const QPointF &base,
                                                 const QPointF &offset,
-                                                qreal sigma)
+                                                qreal sigma,
+                                                bool useWashMode,
+                                                qreal flow)
 {
     TranslateOp op(offset);
-    m_d->processTransformedPixels(op, base, sigma);
+    m_d->processTransformedPixels(op, base, sigma, useWashMode, flow);
 }
 
 void KisLiquifyTransformWorker::scalePoints(const QPointF &base,
                                             qreal scale,
-                                            qreal sigma)
+                                            qreal sigma,
+                                            bool useWashMode,
+                                            qreal flow)
 {
     ScaleOp op(scale);
-    m_d->processTransformedPixels(op, base, sigma);
+    m_d->processTransformedPixels(op, base, sigma, useWashMode, flow);
 }
 
 void KisLiquifyTransformWorker::rotatePoints(const QPointF &base,
                                              qreal angle,
-                                             qreal sigma)
+                                             qreal sigma,
+                                             bool useWashMode,
+                                             qreal flow)
 {
     RotateOp op(angle);
-    m_d->processTransformedPixels(op, base, sigma);
+    m_d->processTransformedPixels(op, base, sigma, useWashMode, flow);
 }
 
 struct KisLiquifyTransformWorker::Private::MapIndexesOp {

@@ -1054,7 +1054,7 @@ big!</string>
              <bool>true</bool>
             </property>
             <attribute name="buttonGroup">
-             <string notr="true">buttonGroup</string>
+             <string>buttonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1120,7 +1120,7 @@ big!</string>
              <bool>true</bool>
             </property>
             <attribute name="buttonGroup">
-             <string notr="true">buttonGroup</string>
+             <string>buttonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1373,17 +1373,17 @@ big!</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="3" column="0">
           <widget class="QLabel" name="lblSpacing">
            <property name="text">
             <string>Spacing:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="3" column="1">
           <widget class="KisDoubleSliderSpinBox" name="liquifySpacingSlider" native="true"/>
          </item>
-         <item row="3" column="1">
+         <item row="4" column="1">
           <widget class="QPushButton" name="liquifyReverseDirectionChk">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1396,6 +1396,23 @@ big!</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="lblFlow">
+           <property name="text">
+            <string>Flow:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="KisDoubleSliderSpinBox" name="liquifyFlowSlider" native="true"/>
+         </item>
+         <item row="2" column="2">
+          <widget class="QCheckBox" name="liquifyBuildUpBox">
+           <property name="text">
+            <string>Build Up</string>
            </property>
           </widget>
          </item>

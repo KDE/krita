@@ -45,15 +45,21 @@ public:
 
     void translatePoints(const QPointF &base,
                          const QPointF &offset,
-                         qreal sigma);
+                         qreal sigma,
+                         bool useWashMode,
+                         qreal flow);
 
     void scalePoints(const QPointF &base,
                      qreal scale,
-                     qreal sigma);
+                     qreal sigma,
+                     bool useWashMode,
+                     qreal flow);
 
     void rotatePoints(const QPointF &base,
                       qreal angle,
-                      qreal sigma);
+                      qreal sigma,
+                      bool useWashMode,
+                      qreal flow);
 
     void undoPoints(const QPointF &base,
                     qreal amount,

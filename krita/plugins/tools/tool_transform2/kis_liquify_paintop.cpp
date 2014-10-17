@@ -121,32 +121,33 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
         pi.pressure() * reverseCoeff * m_d->props.amount():
         reverseCoeff * m_d->props.amount();
 
-
+    const bool useWashMode = m_d->props.useWashMode();
+    const qreal flow = m_d->props.flow();
 
     switch (m_d->props.mode()) {
     case KisLiquifyProperties::MOVE: {
         const qreal offsetLength = size * amount;
         m_d->worker->translatePoints(pi.pos(),
                                      pi.drawingDirectionVector() * offsetLength,
-                                     size);
+                                     size, useWashMode, flow);
 
         break;
     }
     case KisLiquifyProperties::SCALE:
         m_d->worker->scalePoints(pi.pos(),
                                  amount,
-                                 size);
+                                 size, useWashMode, flow);
         break;
     case KisLiquifyProperties::ROTATE:
         m_d->worker->rotatePoints(pi.pos(),
                                   2.0 * M_PI * amount,
-                                  size);
+                                  size, useWashMode, flow);
         break;
     case KisLiquifyProperties::OFFSET: {
         const qreal offsetLength = size * amount;
         m_d->worker->translatePoints(pi.pos(),
                                      KisAlgebra2D::rightUnitNormal(pi.drawingDirectionVector()) * offsetLength,
-                                     size);
+                                     size, useWashMode, flow);
         break;
     }
     case KisLiquifyProperties::UNDO:

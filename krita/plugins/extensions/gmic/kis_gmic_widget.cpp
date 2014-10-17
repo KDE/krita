@@ -271,12 +271,12 @@ void KisGmicWidget::startUpdate()
     m_updater = new KisGmicUpdater(m_updateUrl);
     connect(m_updater, SIGNAL(updated()), this, SLOT(finishUpdate()));
     m_updater->start();
-    qApp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 }
 
 void KisGmicWidget::finishUpdate()
 {
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     m_updater->deleteLater();
     QString msg = i18nc("@info",
                         "Update filters done. "

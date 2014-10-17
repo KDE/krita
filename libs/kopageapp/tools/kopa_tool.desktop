@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=CalligraPageApp/Tool
+Comment=Tool for Calligra Page Applications
+Comment[ca]=Eina per les aplicacions de pàgina del Calligra
+Comment[de]=Werkzeug für Calligra-Seitenanwendungen
+Comment[en_GB]=Tool for Calligra Page Applications
+Comment[it]=Strumento per le applicazioni di Calligra Page
+Comment[nl]=Hulpmiddel voor Calligra pagina-applicatie
+Comment[pl]=Narzędzie dla aplikacji Stron Calligry
+Comment[pt]=Ferramenta para as Aplicações de Páginas do Calligra
+Comment[pt_BR]=Ferramenta para os Aplicativos de Páginas do Calligra
+Comment[sk]=Nástroj pre aplikácie Calligra Page
+Comment[sv]=Verktyg för Calligra sidprogram
+Comment[uk]=Інструмент для програм Calligra Page
+Comment[x-test]=xxTool for Calligra Page Applicationsxx
+[PropertyDef::X-KoPageApp-Version]
+Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

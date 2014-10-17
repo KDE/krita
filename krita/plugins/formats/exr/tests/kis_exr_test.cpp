@@ -18,6 +18,7 @@
 
 #include "kis_exr_test.h"
 
+#include <kmimetype.h>
 
 #include <QTest>
 #include <QCoreApplication>

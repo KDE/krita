@@ -23,8 +23,6 @@
 #include <QMatrix4x4>
 #include <QVector2D>
 
-#include <kstandarddirs.h>
-
 #include <Eigen/Dense>
 
 #include "kis_coordinates_converter.h"

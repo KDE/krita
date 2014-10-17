@@ -24,7 +24,6 @@
 #include <QLayout>
 #include <QGridLayout>
 
-#include <klineedit.h>
 #include <klocale.h>
 
 #include <kis_config_widget.h>

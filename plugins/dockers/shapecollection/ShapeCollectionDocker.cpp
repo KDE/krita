@@ -35,7 +35,6 @@
 #include <KoIcon.h>
 
 #include <klocale.h>
-#include <kcombobox.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>

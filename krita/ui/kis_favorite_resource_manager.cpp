@@ -27,7 +27,6 @@
 #include <kis_paintop_preset.h>
 #include <KoID.h>
 #include <kconfig.h>
-#include <kglobalsettings.h>
 #include "kis_favorite_resource_manager.h"
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
@@ -327,6 +326,12 @@ KoColor KisFavoriteResourceManager::bgColor() const
     return m_bgColor;
 }
 
+
+bool sortPresetByName(KisPaintOpPreset* preset1, KisPaintOpPreset* preset2)
+{
+     return preset1->name() < preset2->name();
+}
+
 void KisFavoriteResourceManager::updateFavoritePresets()
 {
     KisConfig cfg;
@@ -337,6 +342,7 @@ void KisFavoriteResourceManager::updateFavoritePresets()
     QStringList presetFilenames = rServer->searchTag(m_currentTag);
     for(int i = 0; i < qMin(maxPresets, presetFilenames.size()); i++) {
         m_favoritePresetsList.append(rServer->resourceByFilename(presetFilenames.at(i)));
+        qSort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
     }
     emit updatePalettes();
 }

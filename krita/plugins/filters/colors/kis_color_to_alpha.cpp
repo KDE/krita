@@ -22,8 +22,6 @@
 #include <QCheckBox>
 #include <QSpinBox>
 
-#include <kcolorbutton.h>
-
 #include <KoColorSpaceMaths.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>

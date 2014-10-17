@@ -21,7 +21,6 @@
 
 #include <QNetworkReply>
 #include <QWidget>
-#include <kaboutdata.h>
 
 #include "ui_wdg_crash_reporter.h"
 

@@ -27,7 +27,6 @@
 #include <QDir>
 
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kglobal.h>

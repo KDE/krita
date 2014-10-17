@@ -20,7 +20,6 @@
 #include "KoMarker.h"
 
 #include <KoXmlReader.h>
-#include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>

@@ -21,8 +21,8 @@
 
 #include <QCheckBox>
 #include <QSlider>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
@@ -170,7 +170,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         wdg->bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
 
         kdb->setMainWidget(wdg);
-        kapp->restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         if (hasVisibleWidgets()) {
             if (!m_chain->manager()->getBatchMode()) {
                 if (kdb->exec() == QDialog::Rejected) {

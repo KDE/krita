@@ -22,7 +22,6 @@
 #define VECTORSHAPECONFIGWIDGET_H
 
 #include <KoShapeConfigWidgetBase.h>
-#include <kurl.h>
 #include <QWidget>
 
 class VectorShape;

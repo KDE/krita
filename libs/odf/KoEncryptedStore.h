@@ -67,9 +67,7 @@ public:
 
 protected:
 
-    using KoStore::init;
-
-    virtual bool init(Mode mode, const QByteArray &appIdentification);
+    void init(const QByteArray &appIdentification);
     virtual bool doFinalize();
     virtual bool openWrite(const QString &name);
     virtual bool openRead(const QString &name);

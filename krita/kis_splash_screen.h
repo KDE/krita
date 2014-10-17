@@ -23,7 +23,6 @@
 #include "ui_wdgsplash.h"
 
 class QPixmap;
-class KUrl;
 
 class KisSplashScreen : public QWidget, public Ui::WdgSplash
 {

@@ -21,8 +21,8 @@
 
 #include <QCheckBox>
 #include <QSlider>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
 
@@ -84,7 +84,7 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     widget.flatten->setChecked(cfg.getBool("flatten", false));
 
     if (!m_chain->manager()->getBatchMode() ) {
-        kapp->restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         if (dialog.exec() == QDialog::Rejected) {
             return KoFilter::UserCancelled;
         }

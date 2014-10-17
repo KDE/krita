@@ -23,15 +23,9 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kmimetype.h>
 #include <KoServiceLocator.h>
-#include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <krun.h>
-#include <ktoolinvocation.h>
-#include <kmessagebox.h>
-#include <kguiitem.h>
 
 #include <calligraversion.h>
 #include <calligragitversion.h>

@@ -18,8 +18,6 @@ Boston, MA 02110-1301, USA.
 */
 #include "KoFilterChainLink.h"
 #include <QMetaMethod>
-#include <ktemporaryfile.h>
-#include <kmimetype.h>
 #include <kdebug.h>
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"
@@ -28,9 +26,9 @@ Boston, MA 02110-1301, USA.
 
 namespace
 {
-    const char *const SIGNAL_PREFIX = "commSignal";
+    const char SIGNAL_PREFIX[] = "commSignal";
     const int SIGNAL_PREFIX_LEN = 10;
-    const char *const SLOT_PREFIX = "commSlot";
+    const char SLOT_PREFIX[] = "commSlot";
     const int SLOT_PREFIX_LEN = 8;
 
     KoUpdater *createUpdater(KoFilterChain *chain)

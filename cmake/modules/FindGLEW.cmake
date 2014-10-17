@@ -17,14 +17,25 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-find_path(GLEW_INCLUDE_DIR GL/glew.h)
-find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64)
+if (GLEW_INCLUDE_DIRS AND GLEW_LIBRARIES)
 
-set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
-set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+    # Already in cache
+    set(GLEW_FOUND TRUE)
 
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(GLEW
-                                  REQUIRED_VARS GLEW_INCLUDE_DIR GLEW_LIBRARY)
+else (GLEW_INCLUDE_DIRS AND GLEW_LIBRARIES)
 
-mark_as_advanced(GLEW_INCLUDE_DIR GLEW_LIBRARY)
+    find_path(GLEW_INCLUDE_DIR GL/glew.h)
+    find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64)
+
+    include(FindPackageHandleStandardArgs)
+    find_package_handle_standard_args(GLEW
+                                    REQUIRED_VARS GLEW_INCLUDE_DIR GLEW_LIBRARY)
+
+    if (GLEW_FOUND)
+        set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+        set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
+    endif()
+
+    mark_as_advanced(GLEW_INCLUDE_DIR GLEW_LIBRARY)
+
+endif (GLEW_INCLUDE_DIRS AND GLEW_LIBRARIES)

@@ -33,7 +33,6 @@
 #include <kis_transaction.h>
 #include <kis_debug.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kcombobox.h>
 
 #include <KoPointerEvent.h>
@@ -149,7 +148,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         new KisResourcesSnapshot(image, 0, this->canvas()->resourceManager());
 
     if (image && (device = resources->currentNode()->paintDevice())) {
-        qApp->setOverrideCursor(Qt::BusyCursor);
+        QApplication::setOverrideCursor(Qt::BusyCursor);
 
         KUndo2MagicString actionName = kundo2_i18n("Gradient");
         KisUndoAdapter *undoAdapter = image->undoAdapter();
@@ -170,7 +169,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         painter.endTransaction(undoAdapter);
         undoAdapter->endMacro();
 
-        qApp->restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         currentNode()->setDirty();
         notifyModified();
         delete updater;

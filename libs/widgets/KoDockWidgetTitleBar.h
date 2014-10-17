@@ -48,6 +48,8 @@ public:
     /// textVisibilityMode is FullTextAlwaysVisible by default
     void setTextVisibilityMode(TextVisibilityMode textVisibilityMode);
 
+    void updateIcons();
+
 protected:
     virtual void paintEvent(QPaintEvent* event); ///< reimplemented from QWidget
     virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget

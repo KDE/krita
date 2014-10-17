@@ -30,7 +30,6 @@
 
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kdirselectdialog.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>

@@ -19,7 +19,6 @@
 
 #include <QString>
 
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
 

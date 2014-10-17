@@ -185,6 +185,8 @@ struct PaintDevicePolygonOp
 
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon) {
         QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
+        if (boundRect.isEmpty()) return;
+
         KisSequentialIterator dstIt(m_dstDev, boundRect);
         KisRandomSubAccessorSP srcAcc = m_srcDev->createRandomSubAccessor();
 

@@ -222,10 +222,6 @@
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
- <includes>
-  <include location="local">kcolorbutton.h</include>
-  <include location="local">kcombobox.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

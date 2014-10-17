@@ -15,6 +15,7 @@ set(LIB_PSD_SRCS
     psd_layer_section.cpp
     psd_layer_record.cpp
     psd_image_data.cpp
+    psd_additional_layer_info_block.cpp
     compression.cpp
 )
 

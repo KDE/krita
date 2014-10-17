@@ -24,7 +24,6 @@
 #include "komain_export.h"
 
 #include <kxmlguiwindow.h>
-#include <kurl.h>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
@@ -41,6 +40,7 @@ struct KoPageLayout;
 
 // Calligra class but not in main module
 class KoDockerManager;
+class KUrl;
 
 /**
  * @brief Main window for a Calligra application

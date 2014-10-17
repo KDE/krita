@@ -39,7 +39,7 @@ struct PrecisionValues {
 };
 
 const qreal eps = 1e-6;
-static PrecisionValues precisionLevels[] = {
+static const PrecisionValues precisionLevels[] = {
     {M_PI / 180, 0.05,   1, 0.01},
     {M_PI / 180, 0.01,   1, 0.01},
     {M_PI / 180,    0,   1, 0.01},
@@ -59,7 +59,7 @@ struct KisDabCache::SavedDabParameters {
     MirrorProperties mirrorProperties;
 
     bool compare(const SavedDabParameters &rhs, int precisionLevel) const {
-        PrecisionValues &prec = precisionLevels[precisionLevel];
+        const PrecisionValues &prec = precisionLevels[precisionLevel];
 
         return color == rhs.color &&
                qAbs(angle - rhs.angle) <= prec.angle &&

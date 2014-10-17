@@ -29,7 +29,6 @@
 
 
 class KoXmlElement;
-class KoXmlWriter;
 
 
 // This is the base class for the 3D objects that are defined in ODF:

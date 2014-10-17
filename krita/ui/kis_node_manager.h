@@ -24,9 +24,7 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class KAction;
 class QAction;
-class KToggleAction;
 class KActionCollection;
 
 class KoCompositeOp;

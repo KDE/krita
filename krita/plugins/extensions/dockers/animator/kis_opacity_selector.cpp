@@ -22,6 +22,8 @@
 
 KisOpacitySelector::KisOpacitySelector(int x, int y, int width, int height, int type, QGraphicsScene *scene, int frames)
 {
+    Q_UNUSED(scene);
+
     m_x = x;
     m_y = y;
     m_width = width;
@@ -54,6 +56,9 @@ KisOpacitySelector::~KisOpacitySelector()
 
 void KisOpacitySelector::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     if(m_frames == 0) {
         return;
     }

@@ -24,10 +24,6 @@
 #include <KoIcon.h>
 #include <klocale.h>
 
-#include <QColor>
-#include <QRectF>
-#include <QPixmap>
-
 KoCreatePathToolFactory::KoCreatePathToolFactory()
         : KoToolFactoryBase(KoCreatePathTool_ID)
 {

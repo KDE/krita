@@ -32,7 +32,6 @@
 #include "recorder/kis_action_recorder.h"
 #include "recorder/kis_macro.h"
 
-#include <ktemporaryfile.h>
 #include <recorder/kis_play_info.h>
 #include <recorder/kis_macro_player.h>
 

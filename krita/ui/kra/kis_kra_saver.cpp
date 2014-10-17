@@ -27,6 +27,8 @@
 #include <QString>
 #include <QStringList>
 
+#include <kurl.h>
+
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>

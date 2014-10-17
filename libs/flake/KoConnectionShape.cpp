@@ -32,7 +32,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <QPainter>
 

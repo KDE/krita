@@ -19,7 +19,6 @@
 #include "kis_ppm_export.h"
 
 #include <kpluginfactory.h>
-#include <kapplication.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
@@ -27,7 +26,6 @@
 #include <KoFilterManager.h>
 
 #include <kdialog.h>
-#include <kmessagebox.h>
 
 #include <kis_debug.h>
 #include <kis_doc2.h>
@@ -42,6 +40,9 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include "kis_iterator_ng.h"
+
+#include <QApplication>
+
 
 K_PLUGIN_FACTORY(KisPPMExportFactory, registerPlugin<KisPPMExport>();)
 K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
@@ -161,7 +162,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     optionsPPM.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     QString filterConfig = KisConfig().exportConfiguration("PPM");
     KisPropertiesConfiguration cfg;

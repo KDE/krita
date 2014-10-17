@@ -29,11 +29,7 @@
 #include <QDesktopServices>
 #include <QDir>
 
-#include <kglobal.h>
 #include <kcmdlineargs.h>
-#include <ksycoca.h>
-#include <kstandarddirs.h>
-#include <kcrash.h>
 
 #include <KoApplication.h>
 #include <KoConfig.h>

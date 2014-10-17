@@ -19,14 +19,12 @@
 
 #include "KoUniColorChooser.h"
 
-#include <kselector.h>
 #include <QLayout>
 #include <QLabel>
 #include <QSpinBox>
 #include <QRadioButton>
 #include <QToolTip>
 #include <QGridLayout>
-#include <kcolordialog.h>
 
 #include <kdebug.h>
 #include <klocale.h>

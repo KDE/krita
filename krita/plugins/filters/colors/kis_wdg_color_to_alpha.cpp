@@ -23,8 +23,6 @@
 #include <QLayout>
 #include <QSpinBox>
 
-#include <kcolorbutton.h>
-
 #include <KoColor.h>
 
 #include <kis_view2.h>

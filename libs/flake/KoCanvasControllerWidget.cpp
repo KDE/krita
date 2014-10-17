@@ -34,9 +34,7 @@
 #include "KoCanvasSupervisor.h"
 #include "KoToolManager_p.h"
 
-#include <ksharedconfig.h>
 #include <kdebug.h>
-#include <kconfiggroup.h>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>

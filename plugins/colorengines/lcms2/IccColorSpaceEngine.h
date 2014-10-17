@@ -22,8 +22,6 @@
 
 #include <KoColorSpaceEngine.h>
 
-class KUrl;
-
 class IccColorSpaceEngine : public KoColorSpaceEngine
 {
 public:

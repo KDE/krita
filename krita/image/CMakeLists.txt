@@ -4,7 +4,7 @@ add_subdirectory( tests )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-# Chose a tiles backend 
+# Chose a tiles backend
 # 1 - image/tiles
 # 3 - image/tiles3
 
@@ -299,12 +299,12 @@ install( FILES
     metadata/schemas/xmp.schema
     metadata/schemas/xmpmm.schema
     metadata/schemas/xmprights.schema
-    
+
     DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
     kis_base_node.h
     kis_base_processor.h
     kis_config_widget.h
@@ -335,7 +335,6 @@ install( FILES
     kis_selection.h
     kis_shared.h
     kis_shared_ptr.h
-    kis_shared_ptr_vector.h
     kis_transaction.h
     kis_types.h
     krita_export.h

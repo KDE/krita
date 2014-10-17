@@ -78,6 +78,8 @@ void KisAnimationStore::closeFile()
 
 QIODevice* KisAnimationStore::getDevice(QString location)
 {
+    Q_UNUSED(location);
+
     return m_currentFile;
 }
 

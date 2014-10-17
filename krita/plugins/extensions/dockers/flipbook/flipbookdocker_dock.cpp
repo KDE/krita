@@ -27,7 +27,6 @@
 
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kurl.h>
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>

@@ -47,7 +47,6 @@
 
 // KDE
 #include <klocale.h>
-#include <kaction.h>
 
 // Calligra
 #include <KoIcon.h>

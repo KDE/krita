@@ -35,9 +35,6 @@
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
 
-class KDoubleNumInput;
-
-
 class QLabel;
 class QPoint;
 class QWidget;

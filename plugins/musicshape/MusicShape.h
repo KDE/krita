@@ -21,7 +21,7 @@
 
 #include <KoShape.h>
 #include <KoFrameShape.h>
-#include <kurl.h>
+
 #define MusicShapeId "MusicShape"
 
 namespace MusicCore {

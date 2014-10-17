@@ -36,7 +36,6 @@ Boston, MA 02110-1301, USA.
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klibloader.h>
-#include <ksqueezedtextlabel.h>
 #include <kmimetype.h>
 #include <kdebug.h>
 

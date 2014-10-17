@@ -23,6 +23,7 @@
 #define KOCREATEPATHTOOL_P_H
 
 #include "KoCreatePathTool.h"
+#include "KoStrokeConfigWidget.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "KoPathPointMergeCommand.h"

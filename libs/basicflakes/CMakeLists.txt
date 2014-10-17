@@ -1,6 +1,6 @@
 add_subdirectory(plugin)
 
-include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES} ${KOMAIN_INCLUDES})
+include_directories(${KOWIDGETS_INCLUDES} ${PIGMENT_INCLUDES} ${KOMAIN_INCLUDES})
 
 set(basicflakes_LIB_SRCS
     tools/KoCreatePathTool.cpp

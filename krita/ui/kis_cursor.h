@@ -82,7 +82,7 @@ public:
     static QCursor rotateCursor();    // Transform tool cursor
 
     // Makes a 32x32 bitmap that is compatible with different platforms
-    static QBitmap bitmapFromData(const QSize& size, unsigned char* data);
+    static QBitmap bitmapFromData(const QSize& size, const unsigned char* data);
 
     // Load a cursor from an image file. The image should have an alpha channel
     // and will be converted to black and white on loading. Any format loadable by

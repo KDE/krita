@@ -41,7 +41,6 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <kglobal.h>
 
 #include <KoColorSpace.h>
 #include <KoColor.h>

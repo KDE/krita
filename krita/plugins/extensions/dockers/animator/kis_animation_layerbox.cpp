@@ -118,6 +118,8 @@ void KisAnimationLayerBox::moveLayerUpUiUpdate(int layer)
 
 void KisAnimationLayerBox::resizeEvent(QResizeEvent *event)
 {
+    Q_UNUSED(event);
+
     for(int i = 0; i < m_layers.length(); i++) {
         m_layers.at(i)->setFixedSize(200, 20);
     }

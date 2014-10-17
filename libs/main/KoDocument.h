@@ -39,14 +39,11 @@
 #include <kundo2stack.h>
 
 #include <klocale.h>
-#include <kglobal.h>
 
 class KisSketchPart;
 class KUndo2Command;
 class KoPart;
 class KoStore;
-class KoOdfReadStore;
-class KoOdfWriteStore;
 class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;

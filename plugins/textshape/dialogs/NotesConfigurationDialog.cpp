@@ -22,7 +22,6 @@
 
 #include <KoOdfNumberDefinition.h>
 
-#include <kaction.h>
 #include <klocale.h>
 
 #include <QWidget>

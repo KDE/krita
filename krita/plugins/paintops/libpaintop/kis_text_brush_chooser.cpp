@@ -27,7 +27,6 @@
 #include <QString>
 
 #include <kfontdialog.h>
-#include <klineedit.h>
 
 #define showSlider(input) input->setRange(input->minimum(), input->maximum())
 

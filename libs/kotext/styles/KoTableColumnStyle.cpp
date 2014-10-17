@@ -37,7 +37,6 @@
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 
 class KoTableColumnStyle::Private : public QSharedData
 {

@@ -33,11 +33,8 @@
 #include <QDateTime>
 
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>

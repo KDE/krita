@@ -25,8 +25,6 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoUnit.h>
-#include <KoStore.h>
-#include <KoStoreDevice.h>
 
 #include "renderobjects.h"
 
@@ -36,7 +34,6 @@
 #include <QPen>
 #include <QImage>
 
-#include <kmimetype.h>
 #include <kdebug.h>
 
 KoOdtFrameReportLine::KoOdtFrameReportLine(OROLine *primitive)

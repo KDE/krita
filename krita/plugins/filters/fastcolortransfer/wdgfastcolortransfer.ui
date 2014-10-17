@@ -81,11 +81,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <includes>
-  <include location="local">kurlrequester.h</include>
-  <include location="local">klineedit.h</include>
-  <include location="local">kpushbutton.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

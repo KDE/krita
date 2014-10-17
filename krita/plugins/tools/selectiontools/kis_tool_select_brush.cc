@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include "knuminput.h"
+#include <knuminput.h>
 
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>

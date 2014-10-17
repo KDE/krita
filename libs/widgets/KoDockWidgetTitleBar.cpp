@@ -63,7 +63,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->collapseButton->setVisible(false);
     d->collapseButton->setToolTip(i18nc("@info:tooltip", "Collapse Docker"));
 
-    d->lockIcon = koIcon("object-unlocked");
+    d->lockIcon = themedIcon("docker_lock_b");
     d->lockButton = new KoDockWidgetTitleBarButton(this);
     d->lockButton->setIcon(d->lockIcon);
     connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLocked()));
@@ -244,6 +244,11 @@ void KoDockWidgetTitleBar::setTextVisibilityMode(TextVisibilityMode textVisibili
     d->textVisibilityMode = textVisibilityMode;
 }
 
+void KoDockWidgetTitleBar::updateIcons()
+{
+    d->updateIcons();
+}
+
 void KoDockWidgetTitleBar::Private::toggleFloating()
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
@@ -278,8 +283,6 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
 
     if (!locked) {
         locked = true;
-        lockIcon = koIcon("object-locked");
-        lockButton->setIcon(koIcon("object-locked"));
         features = q->features();
         q->setFeatures(QDockWidget::NoDockWidgetFeatures);
         closeButton->setEnabled(false);
@@ -288,13 +291,12 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
     }
     else {
         locked = false;
-        lockIcon = koIcon("object-unlocked");
-        lockButton->setIcon(koIcon("object-unlocked"));
         q->setFeatures(features);
         closeButton->setEnabled(true);
         floatButton->setEnabled(true);
         collapseButton->setEnabled(true);
     }
+    updateIcons();
     q->setProperty("Locked", locked);
 
 }
@@ -308,5 +310,12 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
 
     thePublic->resizeEvent(0);
 }
+
+void KoDockWidgetTitleBar::Private::updateIcons()
+{
+    lockIcon = (!locked) ? themedIcon("docker_lock_a") : themedIcon("docker_lock_b");
+    lockButton->setIcon(lockIcon);
+}
+
 
 #include <KoDockWidgetTitleBar.moc>

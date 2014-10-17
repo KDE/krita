@@ -21,12 +21,10 @@
 
 #include <QCheckBox>
 #include <QSlider>
+#include <QApplication>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
-#include <kapplication.h>
-#include <kdialog.h>
 #include <kpluginfactory.h>
 
 #include <KoColorSpace.h>

@@ -27,7 +27,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <ktoolbar.h>
 #include <kglobalsettings.h>
 
 #include "KoToolDocker_p.h"

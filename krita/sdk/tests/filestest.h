@@ -23,15 +23,8 @@
 #include <QDir>
 
 #include <kaboutdata.h>
-#include <kimageio.h>
-#include <kcmdlineargs.h>
 #include <klocale.h>
-#include <kglobal.h>
-#include <kmimetype.h>
-#include <kapplication.h>
 #include <kdebug.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
 
 #include <KoFilterManager.h>
 

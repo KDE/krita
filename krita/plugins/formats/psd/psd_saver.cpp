@@ -17,11 +17,6 @@
  */
 #include "psd_saver.h"
 
-#include <kapplication.h>
-
-#include <kio/netaccess.h>
-#include <kio/deletejob.h>
-
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
@@ -37,6 +32,8 @@
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_debug.h>
+#include <kis_annotation.h>
+#include <kis_types.h>
 
 #include "psd.h"
 #include "psd_header.h"
@@ -147,6 +144,12 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     // COLORMODE BlOCK
     PSDColorModeBlock colorModeBlock(header.colormode);
     // XXX: check for annotations that contain the duotone spec
+
+    KisAnnotationSP annotation = m_image->annotation("DuotoneColormodeBlock");
+    if (annotation) {
+        colorModeBlock.duotoneSpecification = annotation->annotation();
+    }
+
     dbgFile << "colormode block" << f.pos();
     if (!colorModeBlock.write(&f)) {
         dbgFile << "Failed to write colormode block. Error:" << colorModeBlock.error << f.pos();
@@ -156,12 +159,36 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     // IMAGE RESOURCES SECTION
     PSDResourceSection resourceSection;
 
+    vKisAnnotationSP_it it = m_image->beginAnnotations();
+    vKisAnnotationSP_it endIt = m_image->endAnnotations();
+    while (it != endIt) {
+        KisAnnotationSP annotation = (*it);
+        if (!annotation || annotation->type().isEmpty()) {
+            dbgFile << "Warning: empty annotation";
+            it++;
+            continue;
+        }
+
+        dbgFile << "Annotation:" << annotation->type() << annotation->description();
+
+        if (annotation->type().startsWith(QString("PSD Resource Block:"))) { //
+            PSDResourceBlock *resourceBlock = dynamic_cast<PSDResourceBlock*>(annotation.data());
+            if (resourceBlock) {
+                dbgFile << "Adding PSD Resource Block" << resourceBlock->identifier;
+                resourceSection.resources[(PSDResourceSection::PSDResourceID)resourceBlock->identifier] = resourceBlock;
+            }
+        }
+
+        it++;
+    }
+
     // Add resolution block
     {
         RESN_INFO_1005 *resInfo = new RESN_INFO_1005;
         resInfo->hRes = INCH_TO_POINT(m_image->xRes());
         resInfo->vRes = INCH_TO_POINT(m_image->yRes());
         PSDResourceBlock *block = new PSDResourceBlock;
+        block->identifier = PSDResourceSection::RESN_INFO;
         block->resource = resInfo;
         resourceSection.resources[PSDResourceSection::RESN_INFO] = block;
     }
@@ -171,12 +198,12 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
         ICC_PROFILE_1039 *profileInfo = new ICC_PROFILE_1039;
         profileInfo->icc = m_image->profile()->rawData();
         PSDResourceBlock *block = new PSDResourceBlock;
+        block->identifier = PSDResourceSection::ICC_PROFILE;
         block->resource = profileInfo;
         resourceSection.resources[PSDResourceSection::ICC_PROFILE] = block;
 
     }
 
-    // XXX: Add other blocks...
 
     dbgFile << "resource section" << f.pos();
     if (!resourceSection.write(&f)) {

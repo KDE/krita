@@ -36,7 +36,6 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <kimageio.h>
 
 
 KoGlobal* KoGlobal::self()

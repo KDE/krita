@@ -22,7 +22,6 @@
 #include <koproperty/Set.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 #include <renderobjects.h>
 
 KoReportItemLine::KoReportItemLine(QDomNode & element)

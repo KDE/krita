@@ -106,6 +106,7 @@ inline double norm2(const QPointF& p)
 void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
+    bool newAssistantAllowed = true;
 
     if (m_newAssistant) {
         m_internalMode = MODE_CREATION;
@@ -228,6 +229,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantsDecoration()->assistants()) {
         QPointF iconPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
         QRectF deleteRect(iconPosition - QPointF(32, 32), QSizeF(16, 16));
+        QRectF visibleRect(iconPosition + QPointF(16, 16), QSizeF(16, 16));
         QRectF moveRect(iconPosition - QPointF(16, 16), QSizeF(32, 32));
         if (moveRect.contains(mousePos)) {
             m_assistantDrag = assistant;
@@ -245,16 +247,30 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             m_canvas->updateCanvas();
             return;
         }
+        if (visibleRect.contains(mousePos)) {
+            newAssistantAllowed = false;
+            if (assistant->snapping()==true){
+            
+            snappingOff(assistant);
+            outlineOff(assistant);
+            }
+            else{
+            snappingOn(assistant);
+            outlineOn(assistant);
+            }
+            assistant->uncache();//this updates the chache of the assistant, very important.
+        }
     }
-
-    QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-    m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
-    m_internalMode = MODE_CREATION;
-    m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
-    if (m_newAssistant->numHandles() <= 1) {
-        addAssistant();
-    } else {
+    if (newAssistantAllowed==true){//don't make a new assistant when I'm just toogling visiblity//
+        QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
+        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
+        m_internalMode = MODE_CREATION;
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
+        if (m_newAssistant->numHandles() <= 1) {
+            addAssistant();
+        } else {
+            m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
+        }
     }
 
     m_canvas->updateCanvas();
@@ -360,6 +376,26 @@ void KisRulerAssistantTool::removeAssistant(KisPaintingAssistant* assistant)
     m_handles = m_canvas->view()->paintingAssistantsDecoration()->handles();
 }
 
+void KisRulerAssistantTool::snappingOn(KisPaintingAssistant* assistant)
+{
+    assistant->setSnapping(true);
+}
+
+void KisRulerAssistantTool::snappingOff(KisPaintingAssistant* assistant)
+{
+    assistant->setSnapping(false);
+}
+
+void KisRulerAssistantTool::outlineOn(KisPaintingAssistant* assistant)
+{
+    assistant->setOutline(true);
+}
+
+void KisRulerAssistantTool::outlineOff(KisPaintingAssistant* assistant)
+{
+    assistant->setOutline(false);
+}
+
 
 void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
@@ -403,6 +439,8 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     }
     
     QPixmap iconDelete = koIcon("edit-delete").pixmap(16, 16);
+    QPixmap iconSnapOn = koIcon("visible").pixmap(16, 16);
+    QPixmap iconSnapOff = koIcon("novisible").pixmap(16, 16);
     QPixmap iconMove = koIcon("transform-move").pixmap(32, 32);
     foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantsDecoration()->assistants()) {
         if(assistant->id()=="perspective") {
@@ -425,6 +463,13 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantsDecoration()->assistants()) {
         QPointF iconDeletePos = _converter.documentToView(assistant->buttonPosition());
         _gc.drawPixmap(iconDeletePos - QPointF(32, 32), iconDelete);
+        if (assistant->snapping()==true) {
+            _gc.drawPixmap(iconDeletePos + QPointF(16, 16), iconSnapOn);
+            }
+            else
+            {
+            _gc.drawPixmap(iconDeletePos + QPointF(16, 16), iconSnapOff);
+            }
         _gc.drawPixmap(iconDeletePos - QPointF(16, 16), iconMove);
     }
 }
@@ -580,6 +625,7 @@ void KisRulerAssistantTool::saveAssistants()
     file.open(QIODevice::WriteOnly);
     file.write(data);
 }
+
 
 
 QWidget *KisRulerAssistantTool::createOptionWidget()

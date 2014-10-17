@@ -28,7 +28,6 @@
 #include <KoParagraphStyle.h>
 
 #include <kdebug.h>
-#include <kinputdialog.h>
 #include <QHeaderView>
 #include <QFormLayout>
 #include <QRadioButton>

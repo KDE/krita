@@ -20,11 +20,8 @@
 #include "KoPencilToolFactory.h"
 #include "KoPencilTool.h"
 
-#include <KoToolRegistry.h>
-
 #include <KoIcon.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 KoPencilToolFactory::KoPencilToolFactory()
         : KoToolFactoryBase("KoPencilTool")

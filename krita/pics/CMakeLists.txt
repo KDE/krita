@@ -64,6 +64,8 @@ white64-krita.png
 width_icon.png
 width.png
 workspace-chooser.png
+onionA.png
+onionB.png
 
 dark_select.png
 dark_pattern.png

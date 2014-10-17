@@ -28,7 +28,6 @@
 
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 
 namespace Scripting
 {

@@ -35,10 +35,7 @@
 #include <QGraphicsScene>
 
 
-#include <kcolorcombo.h>
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
 
 #include <kis_debug.h>
 

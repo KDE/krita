@@ -21,7 +21,6 @@
 #include "guidestool/GuidesToolFactory.h"
 #include "connectionTool/ConnectionToolFactory.h"
 
-#include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #include <kpluginfactory.h>

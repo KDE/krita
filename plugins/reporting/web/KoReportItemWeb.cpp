@@ -26,8 +26,6 @@
 
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
-#include <kcodecs.h>
 #include <renderobjects.h>
 
 #include <QGraphicsRectItem>

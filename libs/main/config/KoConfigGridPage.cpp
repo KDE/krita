@@ -27,7 +27,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoPart.h>
 
 #include <kcolorbutton.h>
-#include <kdialog.h>
+#include <kconfiggroup.h>
+#include <kdeversion.h>
 
 #include <QCheckBox>
 #include <QGroupBox>

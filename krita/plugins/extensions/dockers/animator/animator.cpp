@@ -22,12 +22,10 @@
 
 #include <QTimer>
 
-#include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>

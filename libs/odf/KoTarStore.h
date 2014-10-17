@@ -43,7 +43,7 @@ public:
                const QByteArray & appIdentification, bool writeMimetype = true);
     ~KoTarStore();
 protected:
-    virtual bool init(Mode _mode);
+    void init(const QByteArray &appIdentification);
     virtual bool doFinalize();
     virtual bool openWrite(const QString& name);
     virtual bool openRead(const QString& name);

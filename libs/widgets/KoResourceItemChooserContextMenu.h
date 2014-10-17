@@ -23,9 +23,10 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <KLineEdit>
 #include <QLabel>
 class KoResource;
+
+class KLineEdit;
 
 class ContextMenuExistingTagAction : public QAction
 {

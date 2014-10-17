@@ -29,13 +29,12 @@
 #include <kis_doc2.h>
 #include <krita_export.h>
 #include <kis_shared.h>
-#include <kio/job.h>
-#include <KoStore.h>
 #include <kis_canvas2.h>
 
 class QPainter;
 class QRect;
 class QRectF;
+class KoStore;
 class KisCoordinatesConverter;
 class KisDoc2;
 
@@ -85,6 +84,10 @@ public:
     virtual ~KisPaintingAssistant();
     const QString& id() const;
     const QString& name() const;
+    bool snapping() const;//this returns whether or not the snapping is/should be active.
+    void setSnapping(bool set);
+    bool outline() const;//this returns whether or not the preview is/should be active.
+    void setOutline(bool set);
     /**
      * Adjust the position given in parameter.
      * @param point the coordinates in point in the document reference
@@ -97,7 +100,7 @@ public:
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle);
     void addSideHandle(KisPaintingAssistantHandleSP handle);
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
@@ -133,15 +136,17 @@ public:
     /**
      * This will paint a path using a white and black colors.
      */
-    static void drawPath(QPainter& painter, const QPainterPath& path);
+    static void drawPath(QPainter& painter, const QPainterPath& path, bool drawActive=true);
+    static void drawPreview(QPainter& painter, const QPainterPath& path);
 protected:
     virtual QRect boundingRect() const;
-    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter) = 0;
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible=true) = 0;
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
     QList<KisPaintingAssistantHandleSP> m_handles;
 private:
     struct Private;
     Private* const d;
+    
 };
 
 /**

@@ -37,8 +37,6 @@ uint qHash(KisWeakSharedPtr<T> ptr) {
     return qHash(ptr.data());
 }
 
-#include "kis_shared_ptr_vector.h"
-
 /**
  * Define lots of shared pointer versions of Krita classes.
  * Shared pointer classes have the advantage of near automatic
@@ -53,9 +51,8 @@ typedef KisWeakSharedPtr<KisImage> KisImageWSP;
 class KisPaintDevice;
 typedef KisSharedPtr<KisPaintDevice> KisPaintDeviceSP;
 typedef KisWeakSharedPtr<KisPaintDevice> KisPaintDeviceWSP;
-typedef KisSharedPtrVector<KisPaintDevice> vKisPaintDeviceSP;
+typedef QVector<KisPaintDeviceSP> vKisPaintDeviceSP;
 typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
-typedef vKisPaintDeviceSP::const_iterator vKisPaintDeviceSP_cit;
 
 class KisFixedPaintDevice;
 typedef KisSharedPtr<KisFixedPaintDevice> KisFixedPaintDeviceSP;
@@ -67,7 +64,7 @@ typedef KisWeakSharedPtr<KisMask> KisMaskWSP;
 class KisNode;
 typedef KisSharedPtr<KisNode> KisNodeSP;
 typedef KisWeakSharedPtr<KisNode> KisNodeWSP;
-typedef KisSharedPtrVector<KisNode> vKisNodeSP;
+typedef QVector<KisNodeSP> vKisNodeSP;
 typedef vKisNodeSP::iterator vKisNodeSP_it;
 typedef vKisNodeSP::const_iterator vKisNodeSP_cit;
 
@@ -143,7 +140,7 @@ typedef KisSharedPtr<KisConvolutionKernel> KisConvolutionKernelSP;
 
 class KisAnnotation;
 typedef KisSharedPtr<KisAnnotation> KisAnnotationSP;
-typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;
+typedef QVector<KisAnnotationSP> vKisAnnotationSP;
 typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
 typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 

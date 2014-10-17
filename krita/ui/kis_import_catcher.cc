@@ -19,15 +19,9 @@
 #include "kis_import_catcher.h"
 #include <kis_debug.h>
 
-#include <kimageio.h>
-#include <kcmdlineargs.h>
 #include <klocale.h>
-#include <kglobal.h>
-#include <kmimetype.h>
-#include <kapplication.h>
 #include <kdebug.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
+#include <kurl.h>
 
 #include <KoFilterManager.h>
 

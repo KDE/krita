@@ -26,11 +26,7 @@
 #include <qendian.h>
 #include <QCursor>
 
-#include <kapplication.h>
 #include <kpluginfactory.h>
-
-#include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoFilterManager.h>
 #include <KoColorSpaceRegistry.h>
@@ -106,7 +102,7 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
         return KoFilter::FileNotFound;
     }
 
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     KDialog* kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("R16 HeightMap Import Options"));

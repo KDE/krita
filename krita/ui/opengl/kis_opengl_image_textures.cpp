@@ -72,6 +72,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
+    , m_tilesDestinationColorSpace(0)
+    , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_allChannelsSelected(true)
     , m_useOcio(false)
@@ -399,7 +401,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
     m_texturesInfo.internalFormat = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
     m_texturesInfo.format = GL_BGRA;
-#ifdef HAVE_GLEW
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
     KoID colorDepthId = m_image->colorSpace()->colorDepthId();
@@ -409,6 +410,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     dbgUI << "Choosing texture format:";
 
+#ifdef HAVE_GLEW
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {
 

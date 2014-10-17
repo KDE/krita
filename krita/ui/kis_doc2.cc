@@ -39,15 +39,8 @@
 #include <QScopedPointer>
 
 // KDE
-#include <krun.h>
-#include <kimageio.h>
-#include <kglobal.h>
-#include <kmimetype.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kactioncollection.h>
 #include <kundo2stack.h>
-#include <kstandarddirs.h>
 
 // Calligra
 #include <KoApplication.h>
@@ -59,16 +52,13 @@
 #include <KoColorSpaceEngine.h>
 #include <KoID.h>
 #include <KoOdfReadStore.h>
-#include <KoOdfWriteStore.h>
 #include <KoStore.h>
-#include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 #include <KoSelection.h>
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
 #include <KoToolManager.h>
 #include <KoPart.h>
-#include <KoStore.h>
 
 // Krita Image
 #include <kis_config.h>
@@ -133,6 +123,7 @@ public:
     QList<KisPaintingAssistant*> assistants;
 
     QString flipbook;
+    QString animation;
 };
 
 
@@ -430,7 +421,7 @@ bool KisDoc2::newImage(const QString& name,
 
     if (!cs) return false;
 
-    qApp->setOverrideCursor(Qt::BusyCursor);
+    QApplication::setOverrideCursor(Qt::BusyCursor);
 
     image = new KisImage(createUndoStore(), width, height, cs, name);
     Q_CHECK_PTR(image);
@@ -459,7 +450,7 @@ bool KisDoc2::newImage(const QString& name,
     cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
 
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     return true;
 }
 

@@ -22,7 +22,6 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>

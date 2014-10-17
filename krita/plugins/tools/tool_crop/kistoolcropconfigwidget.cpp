@@ -32,7 +32,7 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     label_horizPos->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
     label_vertiPos->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
 
-
+    // update the UI based off data from crop tool
     intHeight->setValue(m_cropTool->cropHeight());
     cmbType->setCurrentIndex(m_cropTool->cropType());
     cmbType->setEnabled(m_cropTool->cropTypeSelectable());

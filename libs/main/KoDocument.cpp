@@ -55,15 +55,8 @@
 #include <klocale.h>
 #include <ksavefile.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
-#include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
-#include <kfileitem.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
-#include <kfileitem.h>
-#include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
 
@@ -1279,7 +1272,7 @@ bool KoDocument::openUrl(const KUrl & _url)
 // It seems that people have started to save .docx files as .doc and
 // similar for xls and ppt.  So let's make a small replacement table
 // here and see if we can open the files anyway.
-static struct MimetypeReplacement {
+static const struct MimetypeReplacement {
     const char *typeFromName;         // If the mime type from the name is this...
     const char *typeFromContents;     // ...and findByFileContents() reports this type...
     const char *useThisType;          // ...then use this type for real.
@@ -1425,7 +1418,7 @@ bool KoDocument::openFile()
     // a small hardcoded table for those cases.  Check if this is
     // applicable here.
     for (uint i = 0; i < sizeof(replacementMimetypes) / sizeof(struct MimetypeReplacement); ++i) {
-        struct MimetypeReplacement *replacement = &replacementMimetypes[i];
+        const MimetypeReplacement *replacement = &replacementMimetypes[i];
 
         if (typeName == replacement->typeFromName) {
             //kDebug(30003) << "found potential replacement target:" << typeName;

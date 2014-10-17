@@ -22,10 +22,8 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
 
 #include <KoColorSpace.h>
 #include <KoFilterChain.h>
@@ -74,6 +72,9 @@ bool hasVisibleWidgets()
 
 KoFilter::ConversionStatus KranimSequence::convert(const QByteArray &from, const QByteArray &to)
 {
+    Q_UNUSED(from);
+    Q_UNUSED(to);
+
     KDialog* kdb = new KDialog(0);
     kdb->setCaption(i18n("Animation Sequence export options"));
     kdb->setModal(false);

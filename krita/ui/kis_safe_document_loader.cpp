@@ -22,6 +22,8 @@
 #include <QFileSystemWatcher>
 #include <QApplication>
 
+#include <kurl.h>
+
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_signal_compressor.h"

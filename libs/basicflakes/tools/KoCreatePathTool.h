@@ -28,7 +28,6 @@
 #include <QList>
 
 class KoPathShape;
-class KoPathPoint;
 class KoShapeStroke;
 
 class KoCreatePathToolPrivate;

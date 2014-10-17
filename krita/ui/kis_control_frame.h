@@ -32,8 +32,6 @@ class QTabWidget;
 class QTableWidgetItem;
 class QPushButton;
 
-class KToolBar;
-
 class KoAbstractGradient;
 class KisGradientChooser;
 class KoPatternChooser;
@@ -41,7 +39,6 @@ class KisPaintopBox;
 class KisView2;
 class KisIconWidget;
 class KoPattern;
-class KXmlGuiWindow;
 
 /**
  *   Control Frame - status display with access to

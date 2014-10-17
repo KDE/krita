@@ -31,8 +31,6 @@
 #include <KoTextEditor.h>
 
 #include <klocale.h>
-#include <kvbox.h>
-#include <kfontdialog.h>
 
 #include <QTextBlock>
 #include <QTextFragment>

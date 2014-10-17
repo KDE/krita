@@ -21,7 +21,6 @@
 
 
 #include "kis_shared_ptr.h"
-#include "kis_shared_ptr_vector.h"
 #include "kis_shared.h"
 
 class TestClassWatcher
@@ -53,7 +52,7 @@ public:
 
 typedef KisSharedPtr<TestClass> TestClassSP;
 typedef KisWeakSharedPtr<TestClass> TestClassWSP;
-typedef KisSharedPtrVector<TestClass> vTestClassSP;
+typedef QVector<TestClass> vTestClassSP;
 typedef vTestClassSP::iterator vTestClassSP_it;
 typedef vTestClassSP::const_iterator vTestClassSP_cit;
 

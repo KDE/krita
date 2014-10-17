@@ -30,11 +30,12 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 
-KoZipStore::KoZipStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification,
+KoZipStore::KoZipStore(const QString & _filename, Mode mode, const QByteArray & appIdentification,
                        bool writeMimetype)
+  : KoStore(mode, writeMimetype)
 {
     kDebug(30002) << "KoZipStore Constructor filename =" << _filename
-    << " mode = " << int(_mode)
+    << " mode = " << int(mode)
     << " mimetype = " << appIdentification << endl;
     Q_D(KoStore);
 
@@ -42,43 +43,41 @@ KoZipStore::KoZipStore(const QString & _filename, Mode _mode, const QByteArray &
 
     m_pZip = new KZip(_filename);
 
-    d->writeMimetype = writeMimetype;
-    d->good = init(_mode, appIdentification);   // open the zip file and init some vars
+    init(appIdentification);   // open the zip file and init some vars
 }
 
 KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
                        bool writeMimetype)
+  : KoStore(mode, writeMimetype)
 {
-    Q_D(KoStore);
     m_pZip = new KZip(dev);
-    d->writeMimetype = writeMimetype;
-    d->good = init(mode, appIdentification);
+    init(appIdentification);
 }
 
-KoZipStore::KoZipStore(QWidget* window, const KUrl & _url, const QString & _filename, Mode _mode,
+KoZipStore::KoZipStore(QWidget* window, const KUrl & _url, const QString & _filename, Mode mode,
                        const QByteArray & appIdentification, bool writeMimetype)
+  : KoStore(mode, writeMimetype)
 {
     kDebug(30002) << "KoZipStore Constructor url" << _url.pathOrUrl()
     << " filename = " << _filename
-    << " mode = " << int(_mode)
+    << " mode = " << int(mode)
     << " mimetype = " << appIdentification << endl;
     Q_D(KoStore);
 
     d->url = _url;
     d->window = window;
 
-    if (_mode == KoStore::Read) {
+    if (mode == KoStore::Read) {
         d->fileMode = KoStorePrivate::RemoteRead;
         d->localFileName = _filename;
 
     } else {
         d->fileMode = KoStorePrivate::RemoteWrite;
-        d->localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
+        d->localFileName = QLatin1String("/tmp/kozip"); // ### FIXME with KTempFile
     }
 
     m_pZip = new KZip(d->localFileName);
-    d->writeMimetype = writeMimetype;
-    d->good = init(_mode, appIdentification);   // open the zip file and init some vars
+    init(appIdentification);   // open the zip file and init some vars
 }
 
 KoZipStore::~KoZipStore()
@@ -98,17 +97,17 @@ KoZipStore::~KoZipStore()
     }
 }
 
-bool KoZipStore::init(Mode _mode, const QByteArray& appIdentification)
+void KoZipStore::init(const QByteArray& appIdentification)
 {
     Q_D(KoStore);
 
-    KoStore::init(_mode);
     m_currentDir = 0;
-    bool good = m_pZip->open(_mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly);
+    d->good = m_pZip->open(d->mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly);
 
-    if (good && _mode == Read)
-        good = m_pZip->directory() != 0;
-    else if (good && _mode == Write) {
+    if (!d->good)
+        return;
+
+    if (d->mode == Write) {
         //kDebug(30002) <<"KoZipStore::init writing mimetype" << appIdentification;
 
         m_pZip->setCompression(KZip::NoCompression);
@@ -116,14 +115,15 @@ bool KoZipStore::init(Mode _mode, const QByteArray& appIdentification)
 
         // Write identification
         if (d->writeMimetype) {
-            (void)m_pZip->writeFile("mimetype", "", "",
+            (void)m_pZip->writeFile(QLatin1String("mimetype"), QString(), QString(),
                                     appIdentification.data() , appIdentification.length());
         }
 
         m_pZip->setCompression(KZip::DeflateCompression);
         // We don't need the extra field in Calligra - so we leave it as "no extra field".
+    } else {
+        d->good = m_pZip->directory() != 0;
     }
-    return good;
 }
 
 void KoZipStore::setCompressionEnabled(bool e)

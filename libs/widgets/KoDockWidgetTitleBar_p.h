@@ -71,5 +71,6 @@ public:
     void toggleLocked();
     void topLevelChanged(bool topLevel);
     void featuresChanged(QDockWidget::DockWidgetFeatures features);
+    void updateIcons();
 };
 #endif

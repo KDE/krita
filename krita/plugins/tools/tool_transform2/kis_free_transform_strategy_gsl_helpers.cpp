@@ -18,13 +18,13 @@
 
 #include "kis_free_transform_strategy_gsl_helpers.h"
 
-#include <gsl/gsl_multimin.h>
 #include "tool_transform_args.h"
 #include "kis_transform_utils.h"
 
 #include <config-gsl.h>
 
 #ifdef HAVE_GSL
+#include <gsl/gsl_multimin.h>
 
 namespace GSL
 {

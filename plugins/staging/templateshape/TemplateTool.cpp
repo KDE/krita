@@ -30,7 +30,6 @@
 #include <klocale.h>
 #include <kurl.h>
 #include <kfiledialog.h>
-#include <KIO/Job>
 
 // Calligra
 #include <KoCanvasBase.h>

@@ -32,7 +32,6 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
-#include <kdialog.h>
 #include <klocale.h>
 
 #include "kis_coordinates_converter.h"

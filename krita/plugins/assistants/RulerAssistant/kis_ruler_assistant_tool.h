@@ -29,8 +29,6 @@ class RulerDecoration;
 class KisCanvas2;
 class ConstraintSolver;
 
-class KJob;
-
 class KisRulerAssistantTool : public KisTool
 {
     Q_OBJECT
@@ -58,6 +56,10 @@ public:
 private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistant *assistant);
+    void snappingOn(KisPaintingAssistant* assistant);
+    void snappingOff(KisPaintingAssistant* assistant);
+    void outlineOn(KisPaintingAssistant* assistant);
+    void outlineOff(KisPaintingAssistant* assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
 

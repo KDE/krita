@@ -21,9 +21,6 @@
 #include <ods/KoSimpleOdsDocument.h>
 #include <ods/KoSimpleOdsCell.h>
 #include <ods/KoSimpleOdsSheet.h>
-#include <KoStore.h>
-#include <KoOdfWriteStore.h>
-#include <KoEmbeddedDocumentSaver.h>
 #include "renderobjects.h"
 #include <kdebug.h>
 

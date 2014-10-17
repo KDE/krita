@@ -25,7 +25,6 @@
 
 #include <KoZoomController.h>
 
-#include <kactioncollection.h>
 #include <klocale.h>
 #include <kdebug.h>
 

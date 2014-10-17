@@ -26,8 +26,6 @@
 #include <QGridLayout>
 #include <QTimer>
 
-#include <klineedit.h>
-
 #include "filter/kis_filter.h"
 #include "kis_config_widget.h"
 #include "filter/kis_filter_configuration.h"

@@ -1594,7 +1594,7 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
      *
      * The shorten factor to use results of the 0.3 which means we need to start at 0.7 * height of the marker
      */
-    static qreal shortenFactor = 0.7;
+    static const qreal shortenFactor = 0.7;
 
     KoMarkerData mdStart = markerData(KoMarkerData::MarkerStart);
     KoMarkerData mdEnd = markerData(KoMarkerData::MarkerEnd);

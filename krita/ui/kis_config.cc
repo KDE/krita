@@ -33,7 +33,6 @@
 #include <QThread>
 #include <QStringList>
 
-#include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kconfig.h>
 

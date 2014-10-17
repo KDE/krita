@@ -22,8 +22,6 @@
 #include <QDomNode>
 
 #include <KoColorSpaceRegistry.h>
-#include <KoStore.h>
-#include <KoStoreDevice.h>
 
 // Includes from krita/image
 #include <kis_adjustment_layer.h>

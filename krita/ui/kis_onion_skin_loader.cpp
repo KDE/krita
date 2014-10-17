@@ -47,6 +47,9 @@ void KisOnionSkinLoader::loadOnionSkins(QHash<int, bool> states)
     QBitArray prevChanFlags = this->prevFramesChannelFlags();
     QBitArray nextChanFlags = this->nextFramesChannelFlags();
 
+    QList<int>* prevOnionSkinOpacityVal = animation->prevOnionSkinOpacityValues();
+    QList<int>* nextOnionSkinOpacityVal = animation->nextOnionSkinOpacityValues();
+
     int currentFrame;
     int numberOfOnionSkins;
 
@@ -64,7 +67,7 @@ void KisOnionSkinLoader::loadOnionSkins(QHash<int, bool> states)
         }
 
         currentFrame = frame.x();
-        numberOfOnionSkins = animation->prevOnionSkinOpacityValues()->length();
+        numberOfOnionSkins = prevOnionSkinOpacityVal->length();
 
         for(int j = 0 ; j < numberOfOnionSkins ; j++) {
 
@@ -81,7 +84,7 @@ void KisOnionSkinLoader::loadOnionSkins(QHash<int, bool> states)
                 KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
                 newLayer->setName("Onion Skin " + QString::number(i + 1));
 
-                newLayer->setPercentOpacity(animation->prevOnionSkinOpacityValues()->at(numberOfOnionSkins - j - 1));
+                newLayer->setPercentOpacity(prevOnionSkinOpacityVal->at(numberOfOnionSkins - j - 1));
                 newLayer->setChannelFlags(prevChanFlags);
                 newLayer->setUserLocked(true);
 
@@ -96,9 +99,9 @@ void KisOnionSkinLoader::loadOnionSkins(QHash<int, bool> states)
         }
 
         currentFrame = frame.x();
-        numberOfOnionSkins = animation->nextOnionSkinOpacityValues()->length();
+        numberOfOnionSkins = nextOnionSkinOpacityVal->length();
 
-        for(int j = 0 ; j < numberOfOnionSkins ; j++) {
+        for(int j = 0 ; j < nextOnionSkinOpacityVal->length() ; j++) {
 
             // A hack to prevent same onion skin multiple times
             // when there are no next onion skins left.
@@ -114,7 +117,7 @@ void KisOnionSkinLoader::loadOnionSkins(QHash<int, bool> states)
                 KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
                 newLayer->setName("Onion Skin " + QString::number(i + 1));
 
-                newLayer->setPercentOpacity(animation->nextOnionSkinOpacityValues()->at(j));
+                newLayer->setPercentOpacity(nextOnionSkinOpacityVal->at(j));
                 newLayer->setChannelFlags(nextChanFlags);
                 newLayer->setUserLocked(true);
 

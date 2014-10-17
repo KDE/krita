@@ -34,7 +34,6 @@
 #include <QGLWidget>
 #include <QTimer>
 
-#include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>

@@ -32,7 +32,6 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-#include <kfileitem.h>
 
 #include <kis_factory2.h>
 

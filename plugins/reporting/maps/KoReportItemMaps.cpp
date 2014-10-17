@@ -21,7 +21,6 @@
 #include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 #include <QBuffer>
 #include <kcodecs.h>
 #include <renderobjects.h>

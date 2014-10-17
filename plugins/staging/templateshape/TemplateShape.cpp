@@ -34,7 +34,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoStoreDevice.h>
 #include <KoGenStyle.h>
 
 // This shape

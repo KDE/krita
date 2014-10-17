@@ -31,9 +31,6 @@
 #include <QApplication>
 #include <QPaintEngine>
 
-#include <kaction.h>
-#include <kactioncollection.h>
-
 #include <KoIcon.h>
 
 #include "kis_canvas_resource_provider.h"

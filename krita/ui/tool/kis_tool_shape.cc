@@ -92,8 +92,20 @@ QWidget * KisToolShape::createOptionWidget()
 
     m_shapeOptionsWidget->cmbOutline->setCurrentIndex(KisPainter::StrokeStyleBrush);
 
+    //connect two combo box event. Inherited classes can call the slots to make appropriate changes
+    connect(m_shapeOptionsWidget->cmbOutline, SIGNAL(currentIndexChanged(int)), this, SLOT(outlineSettingChanged(int)));
+    connect(m_shapeOptionsWidget->cmbFill, SIGNAL(currentIndexChanged(int)), this, SLOT(fillSettingChanged(int)));
+
+    createOptionWidgetComplete();
     return optionWidget;
 }
+
+
+void KisToolShape::createOptionWidgetComplete()
+{
+    // inherited class virtual functions will do configuration setup in here
+}
+
 
 KisPainter::FillStyle KisToolShape::fillStyle(void)
 {

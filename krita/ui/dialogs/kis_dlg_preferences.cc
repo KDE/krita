@@ -52,14 +52,7 @@
 #include <KoIcon.h>
 #include <KoConfig.h>
 
-#include <kapplication.h>
-#include <kmessagebox.h>
-#include <kcolorbutton.h>
-#include <kcombobox.h>
-#include <klineedit.h>
 #include <klocale.h>
-#include <kurlrequester.h>
-#include <kpagewidgetmodel.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
 #include <kstandarddirs.h>

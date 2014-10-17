@@ -24,7 +24,6 @@
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
-#include <KoShapeRegistry.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoView.h>

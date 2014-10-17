@@ -144,7 +144,7 @@
    <item row="0" column="1">
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
      <item row="0" column="1" colspan="2">
-      <widget class="KisMultipliersDoubleSliderSpinBox" name="inputRadius" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true">
        <property name="minimumSize">
         <size>
          <width>200</width>

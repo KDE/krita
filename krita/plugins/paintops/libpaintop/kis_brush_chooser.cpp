@@ -101,18 +101,22 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     setObjectName(name);
 
     m_lbSize = new QLabel(i18n("Size:"), this);
-    m_slSize = new KisMultipliersDoubleSliderSpinBox(this);
-    m_slSize->setRange(0.0, 10.0, 2);
-    m_slSize->setValue(5.0);
-    m_slSize->addMultiplier(10);
-    m_slSize->addMultiplier(100);
+    m_slSize = new KisDoubleSliderSpinBox(this);
+    m_slSize->setRange(0, 1000, 0);
+    m_slSize->setValue(5);
+    m_slSize->setExponentRatio(3.0);
+    m_slSize->setSuffix(" px");
+
+
+    m_slSize->setExponentRatio(3.0);
     QObject::connect(m_slSize, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
 
     m_lbRotation = new QLabel(i18n("Rotation:"), this);
     m_slRotation = new KisDoubleSliderSpinBox(this);
-    m_slRotation->setRange(0.0, 360, 2);
-    m_slRotation->setValue(0.0);
+    m_slRotation->setRange(0, 360, 0);
+    m_slRotation->setValue(0);
+    m_slRotation->setSuffix(QChar(Qt::Key_degree));
     QObject::connect(m_slRotation, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
     m_lbSpacing = new QLabel(i18n("Spacing:"), this);

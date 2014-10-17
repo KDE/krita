@@ -21,7 +21,6 @@
 
 #include <KoCreatePathToolFactory.h>
 #include <KoPencilToolFactory.h>
-#include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #include <kpluginfactory.h>

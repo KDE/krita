@@ -83,6 +83,7 @@ private:
 private slots:
     void blankFramePressed();
     void keyFramePressed();
+//  void addframePressed();
     void removeFramePressed();
 
     void frameSelectionChanged(QRect frame);

@@ -20,8 +20,6 @@
 
 #include <QFile>
 #include <QDir>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
 
 #include <KoStore.h>
 #include <KoEncryptionChecker.h>
@@ -70,14 +68,14 @@ void TestStorage::storage_data()
 
 void TestStorage::storage()
 {
-    const char* const test1 = "This test checks whether we're able to write to some arbitrary directory.\n";
-    const char* const testDir = "0";
-    const char* const testDirResult = "0/";
-    const char* const test2 = "This time we try to append the given relative path to the current dir.\n";
-    const char* const test3 = "<xml>Hello World</xml>";
-    const char* const testDir2 = "test2/with/a";
-    const char* const testDir2Result = "0/test2/with/a/";
-    const char* const test4 = "<xml>Heureka, it works</xml>";
+    const char test1[] = "This test checks whether we're able to write to some arbitrary directory.\n";
+    const char testDir[] = "0";
+    const char testDirResult[] = "0/";
+    const char test2[] = "This time we try to append the given relative path to the current dir.\n";
+    const char test3[] = "<xml>Hello World</xml>";
+    const char testDir2[] = "test2/with/a";
+    const char testDir2Result[] = "0/test2/with/a/";
+    const char test4[] = "<xml>Heureka, it works</xml>";
 
     QFETCH(int, type);
     QFETCH(QString, testFile);

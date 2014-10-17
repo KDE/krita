@@ -20,10 +20,8 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
-#include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <kurl.h>
 
 #include <KoFilterChain.h>
 

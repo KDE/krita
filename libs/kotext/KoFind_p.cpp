@@ -25,7 +25,6 @@
 
 #include <KWindowSystem>
 #include <kfinddialog.h>
-#include <kreplacedialog.h>
 #include <kfind.h>
 #include <klocale.h>
 

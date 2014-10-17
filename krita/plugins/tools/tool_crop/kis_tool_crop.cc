@@ -36,7 +36,6 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <knuminput.h>
 
 #include <KoCanvasBase.h>
 #include <kis_global.h>
@@ -103,7 +102,7 @@ DecorationLine decors[20] =
 };
 
 #define DECORATION_COUNT 5
-int decorsIndex[DECORATION_COUNT] = {0,4,12,18,20};
+const int decorsIndex[DECORATION_COUNT] = {0,4,12,18,20};
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
@@ -126,6 +125,8 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     m_growCenter = false;
     m_grow = true;
     m_decoration = 1;
+
+    configGroup = KGlobal::config()->group("cropTool"); // save settings to kritarc
 }
 
 KisToolCrop::~KisToolCrop()
@@ -134,10 +135,23 @@ KisToolCrop::~KisToolCrop()
 
 void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+
     KisTool::activate(toolActivation, shapes);
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+
+
+    // load settings from configuration
+    setGrowCenter(configGroup.readEntry("growCenter", false));
+    setForceRatio(configGroup.readEntry("forceRatio", false));
+    setAllowGrow(configGroup.readEntry("allowGrow", true));
+    setDecoration(configGroup.readEntry("decoration", 0));
+
+    // can't save Enum values, so we ened to convert it to int.
+    setCropType(configGroup.readEntry("cropType") == 0 ? LayerCropType : ImageCropType);
+
+
 
     KisSelectionSP sel = resources->activeSelection();
     if (sel) {
@@ -660,6 +674,10 @@ void KisToolCrop::setCropType(KisToolCrop::CropToolType cropType)
     if(m_cropType == cropType)
         return;
     m_cropType = cropType;
+
+    // can't save LayerCropType, so have to convert it to int for saving
+    configGroup.writeEntry("cropType", cropType == LayerCropType ? 0 : 1);
+
     emit cropTypeChanged();
 }
 
@@ -694,6 +712,8 @@ void KisToolCrop::setDecoration(int i)
     m_decoration = i;
     emit decorationChanged();
     updateCanvasViewRect(boundingRect());
+
+    configGroup.writeEntry("decoration", i);
 }
 
 void KisToolCrop::setCropX(int x)
@@ -859,6 +879,7 @@ bool KisToolCrop::forceHeight() const
 void KisToolCrop::setAllowGrow(bool g)
 {
     m_grow = g;
+    configGroup.writeEntry("allowGrow", g);
 }
 
 bool KisToolCrop::allowGrow() const
@@ -869,6 +890,7 @@ bool KisToolCrop::allowGrow() const
 void KisToolCrop::setGrowCenter(bool g)
 {
     m_growCenter = g;
+    configGroup.writeEntry("growCenter", g);
 }
 
 bool KisToolCrop::growCenter() const
@@ -926,6 +948,8 @@ void KisToolCrop::setForceRatio(bool force)
     if(force == m_forceRatio)
         return;
     m_forceRatio = force;
+    configGroup.writeEntry("forceRatio", force);
+
     emit forceRatioChanged();
 }
 

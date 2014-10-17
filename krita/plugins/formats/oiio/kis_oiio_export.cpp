@@ -22,8 +22,6 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
-#include <kdialog.h>
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>

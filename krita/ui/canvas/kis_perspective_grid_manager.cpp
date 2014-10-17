@@ -24,7 +24,6 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 

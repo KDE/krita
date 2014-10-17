@@ -20,7 +20,6 @@
 
 #include "KoSimpleOdsDocument.h"
 #include <kdebug.h>
-#include <kurl.h>
 #include <QCoreApplication>
 #include <QDir>
 

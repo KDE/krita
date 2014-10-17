@@ -69,8 +69,6 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kurlcombobox.h>
-#include <kdiroperator.h>
 #include <kmenubar.h>
 #include <kmimetype.h>
 

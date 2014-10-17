@@ -21,12 +21,11 @@
 #include <openjpeg.h>
 
 #include <QFileInfo>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>

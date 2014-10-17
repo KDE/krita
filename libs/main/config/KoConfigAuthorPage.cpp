@@ -27,7 +27,6 @@
 #include <KoIcon.h>
 
 #include <klocale.h>
-#include <kglobal.h>
 #include <kuser.h>
 #include <kemailsettings.h>
 

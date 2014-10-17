@@ -52,7 +52,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
-#include <kxmlguiwindow.h>
 #include <ktoolinvocation.h>
 
 // Calligra

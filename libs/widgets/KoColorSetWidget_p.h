@@ -37,8 +37,6 @@
 #include <QPointer>
 #include <QScrollArea>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
 

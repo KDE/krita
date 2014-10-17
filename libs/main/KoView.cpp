@@ -43,20 +43,17 @@
 #include <KoIcon.h>
 
 #include <kactioncollection.h>
-#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
-#include <ktemporaryfile.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
 
 #include <QDockWidget>
-#include <QToolBar>
 #include <QApplication>
 #include <QList>
 #include <QDropEvent>

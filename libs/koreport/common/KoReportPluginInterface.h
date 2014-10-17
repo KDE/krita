@@ -28,7 +28,6 @@
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
-class KService;
 class KoReportPluginInfo;
 
 class KOREPORT_EXPORT KoReportPluginInterface : public QObject

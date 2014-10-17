@@ -225,6 +225,7 @@ private slots:
     void toggleTabletLogger();
     void openResourcesDirectory();
     void updateIcons();
+    void guiUpdateTimeout();
 
 private:
     void createActions();

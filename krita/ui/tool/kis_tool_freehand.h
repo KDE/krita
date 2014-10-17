@@ -29,8 +29,6 @@
 
 #include "krita_export.h"
 
-class KAction;
-
 class KoPointerEvent;
 class KoCanvasBase;
 

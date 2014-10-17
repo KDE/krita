@@ -22,8 +22,8 @@
 #include <stdio.h>
 
 #include <QFile>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <KoDocumentInfo.h>
 
 #include <kio/netaccess.h>

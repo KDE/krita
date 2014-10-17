@@ -53,12 +53,6 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
 
-    void mousePressEvent(QMouseEvent *event);
-
-    void mouseMoveEvent(QMouseEvent *event);
-
-    void mouseReleaseEvent(QMouseEvent *event);
-
 public:
     static const int SELECTION = 0;
     static const int FRAME = 1;
@@ -66,19 +60,7 @@ public:
 private:
     int m_type;
     int m_width;
-
     KisLayerContents* m_parent;
-
-    int m_mousePressStartPoint;
-    int m_mousePressEndPoint;
-
-    int m_localMousePressStartPoint;
-    int m_localMousePressEndPoint;
-
-    int m_startPoint;
-
-    bool m_mousePressed;
-    bool m_dragging;
 };
 
 #endif // KIS_ANIMATION_FRAME_H

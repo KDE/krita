@@ -45,17 +45,17 @@ KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent, int index)
     m_lblLayerName->setGeometry(QRect(10, 0, 100, 20));
 
     m_visibilityToggle = new QPushButton(this);
-    m_visibilityToggle->setIcon(koIcon("list-add"));
+    m_visibilityToggle->setIcon(koIcon("visible"));
     m_visibilityToggle->setGeometry(QRect(110, 0, 20, 20));
     connect(m_visibilityToggle, SIGNAL(clicked()), this, SLOT(visibilityToggleClicked()));
 
     m_lockToggle = new QPushButton(this);
-    m_lockToggle->setIcon(koIcon("list-add"));
+    m_lockToggle->setIcon(koIcon("unlocked"));
     m_lockToggle->setGeometry(QRect(130, 0, 20, 20));
     connect(m_lockToggle, SIGNAL(clicked()), this, SLOT(lockToggleClicked()));
 
     m_onionSkinToggle = new QPushButton(this);
-    m_onionSkinToggle->setIcon(koIcon("list-add"));
+    m_onionSkinToggle->setIcon(koIcon("onionA"));
     m_onionSkinToggle->setGeometry(QRect(150, 0, 20, 20));
     connect(m_onionSkinToggle, SIGNAL(clicked()), this, SLOT(onionSkinToggleClicked()));
 
@@ -66,6 +66,8 @@ KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent, int index)
 
 void KisAnimationLayer::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
     painter.setPen(Qt::darkGray);
     painter.setBrush(Qt::lightGray);
@@ -74,6 +76,8 @@ void KisAnimationLayer::paintEvent(QPaintEvent *event)
 
 void KisAnimationLayer::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event);
+
     m_lblLayerName->hide();
     m_inputLayerName->setText(m_lblLayerName->text());
     m_inputLayerName->show();
@@ -95,9 +99,9 @@ void KisAnimationLayer::onionSkinToggleClicked()
     m_layerBox->setOnionSkinState(layer, onionSkinState);
 
     if(onionSkinState) {
-        m_onionSkinToggle->setIcon(koIcon("list-remove"));
+        m_onionSkinToggle->setIcon(koIcon("onionB"));
     } else {
-        m_onionSkinToggle->setIcon(koIcon("list-add"));
+        m_onionSkinToggle->setIcon(koIcon("onionA"));
     }
 
     // Make onion skin changes in the canvas
@@ -113,9 +117,9 @@ void KisAnimationLayer::lockToggleClicked()
     m_layerBox->setLockState(layer, lockState);
 
     if(lockState) {
-        m_lockToggle->setIcon(koIcon("list-remove"));
+        m_lockToggle->setIcon(koIcon("locked"));
     } else {
-        m_lockToggle->setIcon(koIcon("list-add"));
+        m_lockToggle->setIcon(koIcon("unlocked"));
     }
 
     // Make lock state changes in the canvas
@@ -131,9 +135,9 @@ void KisAnimationLayer::visibilityToggleClicked()
     m_layerBox->setVisibilityState(layer, visibilityState);
 
     if(visibilityState) {
-        m_visibilityToggle->setIcon(koIcon("list-remove"));
+        m_visibilityToggle->setIcon(koIcon("novisible"));
     } else {
-        m_visibilityToggle->setIcon(koIcon("list-add"));
+        m_visibilityToggle->setIcon(koIcon("visible"));
     }
 
     // Make the visibilty state changes in the canvas

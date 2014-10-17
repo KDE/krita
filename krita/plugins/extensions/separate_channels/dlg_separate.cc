@@ -26,7 +26,6 @@
 #include <QComboBox>
 
 #include <klocale.h>
-#include <knuminput.h>
 #include <kis_debug.h>
 DlgSeparate::DlgSeparate(const QString & imageCS,
                          const QString & layerCS,

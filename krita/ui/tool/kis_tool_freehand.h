@@ -52,6 +52,10 @@ public:
     virtual ~KisToolFreehand();
     virtual int flags() const;
 
+public slots:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void deactivate();
+
 protected:
     bool tryPickByPaintOp(KoPointerEvent *event, AlternateAction action);
 
@@ -68,8 +72,7 @@ protected:
     void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
     virtual bool wantsAutoScroll() const;
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
-    void deactivate();
+
 
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);

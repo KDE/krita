@@ -62,9 +62,6 @@ public:
 
     QWidget * createOptionWidget();
 
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
-    void deactivate();
-
     int smoothnessQuality() const;
     qreal smoothnessFactor() const;
     bool smoothPressure() const;
@@ -77,10 +74,15 @@ public:
     bool finishStabilizedCurve() const;
     bool stabilizeSensors() const;
 
+protected:
+    KConfigGroup configGroup;
+
 protected slots:
     virtual void resetCursorStyle();
 
 public slots:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void deactivate();
     void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
@@ -128,8 +130,6 @@ private:
 
     QCheckBox *m_chkFinishStabilizedCurve;
     QSignalMapper m_signalMapper;
-
-    KConfigGroup configGroup;
 };
 
 

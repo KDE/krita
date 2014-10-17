@@ -37,7 +37,6 @@ class KisToolMultihand : public KisToolBrush
 public:
     KisToolMultihand(KoCanvasBase *canvas);
     ~KisToolMultihand();
-
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);

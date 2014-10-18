@@ -155,7 +155,7 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     resetCursorStyle();
 

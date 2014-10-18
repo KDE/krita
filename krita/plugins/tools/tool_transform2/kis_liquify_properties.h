@@ -119,6 +119,8 @@ public:
     void saveMode() const;
     void loadMode();
 
+    void loadAndResetMode();
+
 private:
     LiquifyMode m_mode;
     qreal m_size;

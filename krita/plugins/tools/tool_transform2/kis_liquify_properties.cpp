@@ -64,6 +64,8 @@ void KisLiquifyProperties::saveMode() const
     cfg.writeEntry("useWashMode", m_useWashMode);
     cfg.writeEntry("flow", m_flow);
 
+    KConfigGroup globalCfg = KGlobal::config()->group("LiquifyTool");
+    globalCfg.writeEntry("mode", (int)m_mode);
 }
 
 void KisLiquifyProperties::loadMode()
@@ -79,4 +81,12 @@ void KisLiquifyProperties::loadMode()
     m_reverseDirection = cfg.readEntry("reverseDirection", m_reverseDirection);
     m_useWashMode = cfg.readEntry("useWashMode", m_useWashMode);
     m_flow = cfg.readEntry("flow", m_flow);
+}
+
+void KisLiquifyProperties::loadAndResetMode()
+{
+    loadMode();
+
+    KConfigGroup globalCfg = KGlobal::config()->group("LiquifyTool");
+    m_mode = (LiquifyMode) globalCfg.readEntry("mode", (int)m_mode);
 }

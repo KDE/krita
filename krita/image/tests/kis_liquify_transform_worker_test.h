@@ -27,6 +27,7 @@ class KisLiquifyTransformWorkerTest : public QObject
 private slots:
     void testPoints();
     void testPointsQImage();
+    void testIdentityTransform();
 };
 
 #endif /* __KIS_LIQUIFY_TRANSFORM_WORKER_TEST_H */

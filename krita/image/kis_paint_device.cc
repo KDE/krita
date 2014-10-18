@@ -723,6 +723,16 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, KoColor
     return convertToQImage(dstProfile, x1, y1, w, h, renderingIntent, conversionFlags);
 }
 
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile,
+                                       const QRect &rc,
+                                       KoColorConversionTransformation::Intent renderingIntent,
+                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const
+{
+    return convertToQImage(dstProfile,
+                           rc.x(), rc.y(), rc.width(), rc.height(),
+                           renderingIntent, conversionFlags);
+}
+
 QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
 

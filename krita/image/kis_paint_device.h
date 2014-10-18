@@ -446,6 +446,14 @@ public:
                                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
 
     /**
+     * Overridden method for convenience
+     */
+    QImage convertToQImage(const KoColorProfile *dstProfile,
+                           const QRect &rc,
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
+
+    /**
      * Create an RGBA QImage from a rectangle in the paint device. The
      * rectangle is defined by the parent image's bounds.
      *

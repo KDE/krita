@@ -20,111 +20,13 @@
 
 #include <qtest_kde.h>
 
+#include <KoColor.h>
 #include <KoUpdater.h>
 
 #include "testutil.h"
-
 #include <kis_liquify_transform_worker.h>
-
-#include <kis_cage_transform_worker.h>
-#include <algorithm>
-
 #include <kis_algebra_2d.h>
 
-
-void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = false, int pixelPrecision = 8, bool testQImage = false)
-{
-    TestUtil::TestProgressBar bar;
-    KoProgressUpdater pu(&bar);
-    KoUpdaterPtr updater = pu.startSubtask();
-
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(TestUtil::fetchDataFileLazy("test_cage_transform.png"));
-
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, 0);
-
-    QVector<QPointF> origPoints;
-    QVector<QPointF> transfPoints;
-
-    QRectF bounds(dev->exactBounds());
-
-    origPoints << bounds.topLeft();
-    origPoints << 0.5 * (bounds.topLeft() + bounds.topRight());
-    origPoints << 0.5 * (bounds.topLeft() + bounds.bottomRight());
-    origPoints << 0.5 * (bounds.topRight() + bounds.bottomRight());
-    origPoints << bounds.bottomRight();
-    origPoints << bounds.bottomLeft();
-
-    if (!clockwise) {
-        std::reverse(origPoints.begin(), origPoints.end());
-    }
-
-    if (unityTransform) {
-        transfPoints = origPoints;
-    } else {
-        transfPoints << bounds.topLeft();
-        transfPoints << 0.5 * (bounds.topLeft() + bounds.topRight());
-        transfPoints << 0.5 * (bounds.bottomLeft() + bounds.bottomRight());
-        transfPoints << 0.5 * (bounds.bottomLeft() + bounds.bottomRight()) +
-            (bounds.bottomLeft() - bounds.topLeft());
-        transfPoints << bounds.bottomLeft() +
-            (bounds.bottomLeft() - bounds.topLeft());
-        transfPoints << bounds.bottomLeft();
-
-        if (!clockwise) {
-            std::reverse(transfPoints.begin(), transfPoints.end());
-        }
-    }
-
-    KisCageTransformWorker worker(dev,
-                                  origPoints,
-                                  updater,
-                                  pixelPrecision);
-
-    QImage result;
-    QPointF srcQImageOffset(0, 0);
-    QPointF dstQImageOffset;
-
-    QBENCHMARK_ONCE {
-        if (!testQImage) {
-            worker.prepareTransform();
-            if (!benchmarkPrepareOnly) {
-                worker.setTransformedCage(transfPoints);
-                worker.run();
-
-            }
-        } else {
-            QImage srcImage(image);
-            image = QImage(image.size(), QImage::Format_ARGB32);
-            QPainter gc(&image);
-            gc.drawImage(QPoint(), srcImage);
-
-            image.convertToFormat(QImage::Format_ARGB32);
-
-            KisCageTransformWorker qimageWorker(image,
-                                                srcQImageOffset,
-                                                origPoints,
-                                                updater,
-                                                pixelPrecision);
-            qimageWorker.prepareTransform();
-            qimageWorker.setTransformedCage(transfPoints);
-            result = qimageWorker.runOnQImage(&dstQImageOffset);
-        }
-    }
-
-    QString testName = QString("%1_%2")
-        .arg(clockwise ? "clk" : "cclk")
-        .arg(unityTransform ? "unity" : "normal");
-
-    if (testQImage) {
-        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage_qimage", testName));
-    } else if (!benchmarkPrepareOnly && pixelPrecision == 8) {
-
-        result = dev->convertToQImage(0);
-        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage", testName));
-    }
-}
 
 void KisLiquifyTransformWorkerTest::testPoints()
 {
@@ -224,6 +126,31 @@ void KisLiquifyTransformWorkerTest::testPointsQImage()
 
 
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_qimage", "resultImage");
+}
+
+void KisLiquifyTransformWorkerTest::testIdentityTransform()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    QRect rc(0,0,13,23);
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->fill(rc, KoColor(Qt::blue, cs));
+
+    const int pixelPrecision = 8;
+
+    KisLiquifyTransformWorker worker(dev->exactBounds(),
+                                     updater,
+                                     pixelPrecision);
+
+    worker.run(dev);
+
+    QImage result = dev->convertToQImage(0, rc);
+    TestUtil::checkQImage(result, "liquify_transform_test", "liquify_dev", "identity");
 }
 
 QTEST_KDEMAIN(KisLiquifyTransformWorkerTest, GUI)

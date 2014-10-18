@@ -531,6 +531,26 @@ struct AlwaysCompletePolygonPolicy {
     }
 };
 
+/**
+ * There is a weird problem in fetching correct bounds of the polygon.
+ * If the rightmost (bottommost) point of the polygon is integral, then
+ * QRectF() will end exactly on it, but when converting into QRect the last
+ * point will not be taken into account. It happens due to the difference
+ * between center-point/topleft-point point representation. In many cases
+ * the latter is expected, but we don't work with it in Qt/Krita.
+ */
+inline void adjustAlignedPolygon(QPolygonF &polygon)
+{
+    static const qreal eps = 1e-5;
+    static const  QPointF p1(eps, 0.0);
+    static const  QPointF p2(eps, eps);
+    static const  QPointF p3(0.0, eps);
+
+    polygon[1] += p1;
+    polygon[2] += p2;
+    polygon[3] += p3;
+}
+
 template <template <class PolygonOp, class IndexesOp> class IncompletePolygonPolicy,
           class PolygonOp,
           class IndexesOp>
@@ -565,6 +585,9 @@ void iterateThroughGrid(PolygonOp &polygonOp,
                     srcPolygon << originalPoints[index];
                     dstPolygon << transformedPoints[index];
                 }
+
+                adjustAlignedPolygon(srcPolygon);
+                adjustAlignedPolygon(dstPolygon);
 
                 polygonOp(srcPolygon, dstPolygon);
             }

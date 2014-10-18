@@ -47,7 +47,8 @@ struct KisLiquifyTransformStrategy::Private
           converter(_converter),
           currentArgs(_currentArgs),
           transaction(_transaction),
-          helper(_converter)
+          helper(_converter),
+          recalculateOnNextRedraw(false)
     {
     }
 
@@ -77,6 +78,8 @@ struct KisLiquifyTransformStrategy::Private
     QPoint startResizeGlobalCursorPos;
 
     KisLiquifyPaintHelper helper;
+
+    bool recalculateOnNextRedraw;
 
     void recalculateTransformations();
     inline QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
@@ -114,6 +117,11 @@ void KisLiquifyTransformStrategy::paint(QPainter &gc)
 {
     // Draw preview image
 
+    if (m_d->recalculateOnNextRedraw) {
+        m_d->recalculateTransformations();
+        m_d->recalculateOnNextRedraw = false;
+    }
+
     gc.save();
 
     gc.setOpacity(m_d->transaction.basePreviewOpacity());
@@ -147,7 +155,8 @@ void KisLiquifyTransformStrategy::continuePrimaryAction(KoPointerEvent *event)
 {
     m_d->helper.continuePaint(event);
 
-    m_d->recalculateTransformations();
+    // the updates should be compressed
+    m_d->recalculateOnNextRedraw = true;
     emit requestCanvasUpdate();
 }
 

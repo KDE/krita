@@ -1,4 +1,7 @@
-include_directories( ${PHONON_INCLUDES} )
+include_directories(
+    ${FLAKE_INCLUDES}
+    ${PHONON_INCLUDES}
+)
 
 # The next line is a workaround for a issue wherein FindPhononInternal.cmake would change the value of CMAKE_AUTOMOC
 # and cause build error "CMake Error: Attempt to add a custom rule to output ...."

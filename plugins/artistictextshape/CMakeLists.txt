@@ -1,6 +1,9 @@
 project( artistictextshape )
 
-include_directories( ${FLAKE_INCLUDES} )
+include_directories(
+    ${KOMAIN_INCLUDES}
+)
+
 
 set ( ArtisticTextShape_SRCS
     ArtisticTextShapePlugin.cpp

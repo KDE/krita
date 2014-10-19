@@ -33,6 +33,8 @@ private slots:
     void testCageClockwiseUnity();
     void testCageCounterclockwiseUnity();
 
+    void stressTestRandomCages();
+
     void testUnityGreenCoordinates();
 
     void testTransformAsBase();

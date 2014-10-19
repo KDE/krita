@@ -156,6 +156,61 @@ void KisCageTransformWorkerTest::testCageCounterclockwiseUnity()
     testCage(false, true);
 }
 
+#include <QtGlobal>
+
+
+QPointF generatePoint(const QRectF &rc)
+{
+    qreal cx = qreal(qrand()) / RAND_MAX;
+    qreal cy = qreal(qrand()) / RAND_MAX;
+
+    QPointF diff = rc.bottomRight() - rc.topLeft();
+
+    QPointF pt = rc.topLeft() + QPointF(cx * diff.x(), cy * diff.y());
+    return pt;
+}
+
+void KisCageTransformWorkerTest::stressTestRandomCages()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(TestUtil::fetchDataFileLazy("test_cage_transform.png"));
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, 0);
+
+    const int pixelPrecision = 8;
+    QRectF bounds(dev->exactBounds());
+
+    qsrand(1);
+
+    for (int numPoints = 4; numPoints < 15; numPoints+=5) {
+        for (int j = 0; j < 200; j++) {
+            QVector<QPointF> origPoints;
+            QVector<QPointF> transfPoints;
+
+            qDebug() << ppVar(j);
+
+            for (int i = 0; i < numPoints; i++) {
+                origPoints << generatePoint(bounds);
+                transfPoints << generatePoint(bounds);
+            }
+
+            // no just hope it doesn't crash ;)
+            KisCageTransformWorker worker(dev,
+                                          origPoints,
+                                          updater,
+                                          pixelPrecision);
+            worker.prepareTransform();
+            worker.setTransformedCage(transfPoints);
+            worker.run();
+        }
+    }
+}
+
 #include "kis_green_coordinates_math.h"
 
 void KisCageTransformWorkerTest::testUnityGreenCoordinates()

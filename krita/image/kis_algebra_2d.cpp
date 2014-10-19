@@ -48,11 +48,32 @@ void adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPoi
             isInRange(pt->y(), p0.y(), p1.y())) {
 
             QPointF salt = 1.0e-3 * inwardUnitNormal(edge, polygonDirection);
-            *pt += salt;
+
+            QPointF adjustedPoint = *pt + salt;
+
+            // in case the polygon is self-intersecting, polygon direction
+            // might not help
+            if (kisDistanceToLine(adjustedPoint, QLineF(p0, p1)) < 1e-4) {
+                adjustedPoint = *pt - salt;
 
 #ifdef SANITY_CHECKS
-            KIS_ASSERT_RECOVER_NOOP(kisDistanceToLine(*pt, QLineF(p0, p1)) > 1e-4);
+                if (kisDistanceToLine(adjustedPoint, QLineF(p0, p1)) < 1e-4) {
+                    qDebug() << ppVar(*pt);
+                    qDebug() << ppVar(adjustedPoint);
+                    qDebug() << ppVar(QLineF(p0, p1));
+                    qDebug() << ppVar(salt);
+
+                    qDebug() << ppVar(poly.containsPoint(*pt, Qt::OddEvenFill));
+
+                    qDebug() << ppVar(kisDistanceToLine(*pt, QLineF(p0, p1)));
+                    qDebug() << ppVar(kisDistanceToLine(adjustedPoint, QLineF(p0, p1)));
+                }
+
+                *pt = adjustedPoint;
+
+                KIS_ASSERT_RECOVER_NOOP(kisDistanceToLine(*pt, QLineF(p0, p1)) > 1e-4);
 #endif /* SANITY_CHECKS */
+            }
         }
     }
 }

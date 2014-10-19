@@ -205,6 +205,14 @@ QVector<QPointF> KisCageTransformWorker::Private::calculateTransformedPoints()
 
     for (int i = 0; i < numValidPoints; i++) {
         transformedPoints[i] = cage.transformedPoint(i, transfCage);
+
+        if (std::isnan(transformedPoints[i].x()) ||
+            std::isnan(transformedPoints[i].y())) {
+
+            qWarning() << "WARNING:     One grid point has been removed from a consideration" << validPoints[i];
+            transformedPoints[i] = validPoints[i];
+        }
+
     }
 
     return transformedPoints;

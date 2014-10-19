@@ -264,6 +264,7 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
 {
     Q_UNUSED(updateRect);
     Q_UNUSED(canvas);
+    Q_UNUSED(previewVisible);
     findHandleLocation();
     if (!useCache) {
         gc.save();

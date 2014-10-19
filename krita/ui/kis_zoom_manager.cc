@@ -34,7 +34,6 @@
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
 #include <KoCanvasControllerWidget.h>
-#include <KoGlobal.h>
 #include <KoRulerController.h>
 #include <KoUnit.h>
 #include <KoDpi.h>

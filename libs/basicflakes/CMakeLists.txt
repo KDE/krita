@@ -1,6 +1,10 @@
 add_subdirectory(plugin)
 
-include_directories(${KOWIDGETS_INCLUDES} ${PIGMENT_INCLUDES} ${KOMAIN_INCLUDES})
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${PIGMENT_INCLUDES}
+    ${FLAKE_INCLUDES}
+)
 
 set(basicflakes_LIB_SRCS
     tools/KoCreatePathTool.cpp

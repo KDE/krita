@@ -41,7 +41,7 @@ endif(SHOULD_BUILD_THUMBNAIL)
 kde4_add_ui_files(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
 kde4_add_plugin(calligra_shape_video ${videoshape_LIB_SRCS})
 
-target_link_libraries(calligra_shape_video komain
+target_link_libraries(calligra_shape_video flake
     ${KDE4_KFILE_LIBRARY}
     ${PHONON_LIBS}
 )

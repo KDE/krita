@@ -5,7 +5,7 @@ include_directories(
     ${QT_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
-    ${KOMAIN_INCLUDES} )
+)
 
 set(textvariables_SRCS
     VariablesPlugin.cpp

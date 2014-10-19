@@ -1,9 +1,10 @@
 project( artistictextshape )
 
 include_directories(
-    ${KOMAIN_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${CMAKE_SOURCE_DIR}/libs/main # for KoFontComboBox.h
+    ${FLAKE_INCLUDES}
 )
-
 
 set ( ArtisticTextShape_SRCS
     ArtisticTextShapePlugin.cpp

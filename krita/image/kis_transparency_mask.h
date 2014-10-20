@@ -48,7 +48,6 @@ public:
         return KisNodeSP(new KisTransparencyMask(*this));
     }
 
-    bool allowAsChild(KisNodeSP) const;
     QRect decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst,
                        const QRect & rc) const;
     QIcon icon() const;

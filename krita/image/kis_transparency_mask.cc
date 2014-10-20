@@ -44,12 +44,6 @@ KisTransparencyMask::~KisTransparencyMask()
 {
 }
 
-bool KisTransparencyMask::allowAsChild(KisNodeSP node) const
-{
-    Q_UNUSED(node);
-    return false;
-}
-
 QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
                                         KisPaintDeviceSP &dst,
                                         const QRect & rc) const

@@ -48,12 +48,6 @@ KisFilterMask::~KisFilterMask()
 {
 }
 
-bool KisFilterMask::allowAsChild(KisNodeSP node) const
-{
-    Q_UNUSED(node);
-    return false;
-}
-
 KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
         : KisEffectMask(rhs)
         , KisNodeFilterInterface(rhs)

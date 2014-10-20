@@ -82,6 +82,8 @@ public:
 
     virtual ~KisMask();
 
+    bool allowAsChild(KisNodeSP node) const;
+
     /**
      * @brief initSelection initializes the selection for the mask from
      *   the given selection's projection.

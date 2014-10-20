@@ -106,6 +106,12 @@ KisMask::~KisMask()
     delete m_d;
 }
 
+bool KisMask::allowAsChild(KisNodeSP node) const
+{
+    Q_UNUSED(node);
+    return false;
+}
+
 const KoColorSpace * KisMask::colorSpace() const
 {
     KisNodeSP parentNode = parent();

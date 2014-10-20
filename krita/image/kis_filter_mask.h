@@ -56,8 +56,6 @@ public:
 
     KisFilterMask(const KisFilterMask& rhs);
 
-    bool allowAsChild(KisNodeSP) const;
-
     void setFilter(KisFilterConfiguration *filterConfig);
 
     QRect decorateRect(KisPaintDeviceSP &src,

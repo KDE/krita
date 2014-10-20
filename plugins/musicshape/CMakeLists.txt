@@ -1,9 +1,11 @@
+include_directories(
+    ${FLAKE_INCLUDES}
+)
+
 add_subdirectory( fonts )
 add_subdirectory( pics )
 add_subdirectory( core )
 add_subdirectory( tests)
-
-include_directories(  )
 
 ########### Flake Plugin library ###############
 

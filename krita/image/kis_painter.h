@@ -109,7 +109,7 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const KUndo2MagicString& transactionName = KUndo2MagicString());
+    void beginTransaction(const KUndo2MagicString& transactionName = KUndo2MagicString(),int timedID = -1);
 
     /// Cancel all the changes made by the painter
     void revertTransaction();

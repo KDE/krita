@@ -47,8 +47,7 @@ bool KisPaintOpFactory::userVisible(const KoColorSpace * cs) const
 {
     if (m_visibility == AUTO) {
         return cs && cs->id() != "WET";
-    }
-    else if (m_visibility == NEVER) {
+    } else if (m_visibility == NEVER) {
         return false;
     }
     return true;

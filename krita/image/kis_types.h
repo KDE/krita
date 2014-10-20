@@ -184,6 +184,7 @@ typedef QVector<QPointF> vQPointF;
 
 class KisPaintOpPreset;
 typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
+typedef KisWeakSharedPtr<KisPaintOpPreset> KisPaintOpPresetWSP;
 
 class KisPaintOpSettings;
 typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;

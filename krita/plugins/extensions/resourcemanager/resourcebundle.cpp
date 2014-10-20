@@ -324,6 +324,7 @@ bool ResourceBundle::save()
                         qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
                     }
                 }
+
             }
         }
         else if (resType  == "ko_palettes") {
@@ -357,18 +358,14 @@ bool ResourceBundle::save()
             }
         }
         else if (resType  == "kis_paintoppresets") {
-            KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-                KoResource *res = paintoppresetServer->resourceByMD5(ref.md5sum);
-                if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
-                if (!saveResourceToStore(res, store.data(), "paintoppresets")) {
-                    if (res) {
-                        qWarning() << "Could not save resource" << resType << res->name();
-                    }
-                    else {
-                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
-                    }
-                }
+
+            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                KisPaintOpPresetSP preset = paintoppresetServer->resourceByMD5(ref.md5sum);
+                KoResource *res = preset.data();
+                if (!res) preset = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
+                saveResourceToStore(preset.data(), store.data(), "paintoppresets");
+
             }
         }
     }
@@ -507,6 +504,7 @@ bool ResourceBundle::install()
                 patternServer->addTag(res, name());
             }
         }
+
         else if (resType  == "brushes") {
             KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
@@ -519,6 +517,7 @@ bool ResourceBundle::install()
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
                 }
+
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
@@ -592,8 +591,9 @@ bool ResourceBundle::install()
                 workspaceServer->addTag(res, name());
             }
         }
+
         else if (resType  == "paintoppresets") {
-            KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
 
                 if (resourceStore->isOpen()) resourceStore->close();
@@ -603,21 +603,25 @@ bool ResourceBundle::install()
                 if (!res) {
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
-                }
+
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
-                if (!res->loadFromDevice(resourceStore->device())) {
+                if (!preset->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
+
                 dbgResources << "\t\tresource:" << res->name();
                 paintoppresetServer->addResource(res, false);
+
+                paintoppresetServer->addResource(preset, false);
+
                 foreach(const QString &tag, ref.tagList) {
-                    paintoppresetServer->addTag(res, tag);
+                    paintoppresetServer->addTag(preset.data(), tag);
                 }
-                paintoppresetServer->addTag(res, name());
+                paintoppresetServer->addTag(preset.data(), name());
             }
         }
     }

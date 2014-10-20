@@ -21,6 +21,7 @@
 
 #include <krita_export.h>
 #include <QListView>
+#include <QListWidget>
 
 
 class KRITAUI_EXPORT KisCategorizedListView: public QListView
@@ -31,9 +32,15 @@ public:
     virtual ~KisCategorizedListView();
     virtual void setModel(QAbstractItemModel* model);
 
+
+
+
 signals:
     void sigCategoryToggled(const QModelIndex& index, bool toggled);
     void sigEntryChecked(const QModelIndex& index);
+    void rightClickedMenuDropSettingsTriggered();
+    void rightClickedMenuSaveSettingsTriggered();
+
 
 protected slots:
     void slotIndexChanged(const QModelIndex& index);
@@ -43,11 +50,14 @@ protected slots:
     virtual void mousePressEvent(QMouseEvent* event);
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
+
+
 private:
     void updateRows(int begin, int end);
 
 private:
     bool m_useCheckBoxHack;
+
 };
 
 #endif // KIS_CATEGORIZED_LIST_VIEW_H_

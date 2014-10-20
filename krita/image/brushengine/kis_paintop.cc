@@ -180,7 +180,7 @@ void KisPaintOp::paintLine(const KisPaintInformation &pi1,
         pi = KisPaintInformation::mix(pt, t, pi, pi2);
 
         if (d->fanCornersEnabled &&
-            currentDistance->hasLastPaintInformation()) {
+                currentDistance->hasLastPaintInformation()) {
 
             d->paintFan(currentDistance->lastPaintInformation(),
                         pi,
@@ -203,7 +203,7 @@ bool KisPaintOp::Private::paintFan(const KisPaintInformation &pi1,
     const qreal initialAngle = currentDistance->lastDrawingAngle();
     const qreal finalAngle = pi2.drawingAngleSafe(*currentDistance);
     const qreal fullDistance = shortestAngularDistance(initialAngle,
-                                                       pi2.drawingAngleSafe(*currentDistance));
+                               pi2.drawingAngleSafe(*currentDistance));
     qreal lastAngle = initialAngle;
 
     int i = 0;

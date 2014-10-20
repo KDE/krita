@@ -422,7 +422,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
             QPainterPath settingCircle;
             settingCircle.addEllipse(width() / 2 + side / 2 - 40, height() / 2 + side / 2 - 40, 40, 40);
             if (settingCircle.contains(point)) {                
-                KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+                KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
                 QStringList tags = rServer->tagNamesList();
                 qSort(tags);
 

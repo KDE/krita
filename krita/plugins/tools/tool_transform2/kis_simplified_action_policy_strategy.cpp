@@ -25,7 +25,9 @@
 struct KisSimplifiedActionPolicyStrategy::Private
 {
     Private(const KisCoordinatesConverter *_converter)
-        : converter(_converter) {}
+        : converter(_converter),
+          changeSizeModifierActive(false),
+          anyPickerModifierActive(false) {}
 
     const KisCoordinatesConverter *converter;
 

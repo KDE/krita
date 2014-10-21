@@ -29,7 +29,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorConversionTransformation.h>
 
-#include "kundo2command.h"
+#include "kundo2magicstring.h"
 #include "kis_distance_information.h"
 #include "kis_global.h"
 #include "kis_types.h"

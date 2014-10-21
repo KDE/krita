@@ -34,8 +34,6 @@ set(komain_LIB_SRCS
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
-    KoRulerController.cpp
-    KoRuler.cpp
     KoModeBox.cpp
     KoModeBoxDocker.cpp
     KoModeBoxFactory.cpp

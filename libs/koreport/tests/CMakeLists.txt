@@ -1,12 +1,10 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-include_directories( ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/
-    ${CMAKE_SOURCE_DIR}/libs/koreport
-    ${CMAKE_SOURCE_DIR}/libs/koreport/common
-    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
-    ${CMAKE_SOURCE_DIR}/libs/koproperty
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${FLAKE_INCLUDES}
+    ${KOREPORT_INCLUDES}
+    ${QT_INCLUDES}
 )
 
 

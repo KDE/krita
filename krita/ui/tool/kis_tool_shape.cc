@@ -60,11 +60,10 @@ KisToolShape::~KisToolShape()
     }
 }
 
-// make sure final classes are overriding this so configuration group can be set to the correct tool
 void KisToolShape::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
-    configGroup = KGlobal::config()->group("shapeTools");
+    configGroup = KGlobal::config()->group(toolId());
 }
 
 

@@ -43,9 +43,6 @@ public:
     KisToolEllipse(KoCanvasBase * canvas);
     virtual ~KisToolEllipse();
 
-public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-
 protected:
     virtual void finishRect(const QRectF& rect);
 };

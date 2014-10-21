@@ -188,6 +188,9 @@ private:
     QPalette palette;
     QPalette palette_highlight;
 
+    int normalBrushSize; // when toggling between eraser mode
+    int eraserBrushSize;
+
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {
             uniqueID = dev.uniqueTabletId();

@@ -60,6 +60,14 @@ KisToolShape::~KisToolShape()
     }
 }
 
+// make sure final classes are overriding this so configuration group can be set to the correct tool
+void KisToolShape::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+{
+    KisToolPaint::activate(toolActivation, shapes);
+    configGroup = KGlobal::config()->group("shapeTools");
+}
+
+
 int KisToolShape::flags() const
 {
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
@@ -96,16 +104,28 @@ QWidget * KisToolShape::createOptionWidget()
     connect(m_shapeOptionsWidget->cmbOutline, SIGNAL(currentIndexChanged(int)), this, SLOT(outlineSettingChanged(int)));
     connect(m_shapeOptionsWidget->cmbFill, SIGNAL(currentIndexChanged(int)), this, SLOT(fillSettingChanged(int)));
 
-    createOptionWidgetComplete();
+    m_shapeOptionsWidget->cmbOutline->setCurrentIndex(configGroup.readEntry("outlineType", 0));
+    m_shapeOptionsWidget->cmbFill->setCurrentIndex(configGroup.readEntry("fillType", 0));
+
+    //if both settings are empty, force the outline to brush so the tool will work when first activated
+    if (  m_shapeOptionsWidget->cmbFill->currentIndex() == 0 &&
+          m_shapeOptionsWidget->cmbOutline->currentIndex() == 0)
+    {
+        m_shapeOptionsWidget->cmbOutline->setCurrentIndex(1); // brush
+    }
+
     return optionWidget;
 }
 
-
-void KisToolShape::createOptionWidgetComplete()
+void KisToolShape::outlineSettingChanged(int value)
 {
-    // inherited class virtual functions will do configuration setup in here
+    configGroup.writeEntry("outlineType", value);
 }
 
+void KisToolShape::fillSettingChanged(int value)
+{
+    configGroup.writeEntry("fillType", value);
+}
 
 KisPainter::FillStyle KisToolShape::fillStyle(void)
 {

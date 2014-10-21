@@ -48,6 +48,13 @@ KisToolEllipse::~KisToolEllipse()
 {
 }
 
+void KisToolEllipse::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+{
+    KisToolPaint::activate(toolActivation, shapes); // call base clas
+    configGroup = KGlobal::config()->group("ellipseTool");
+}
+
+
 void KisToolEllipse::finishRect(const QRectF& rect)
 {
     if (rect.isEmpty())

@@ -21,10 +21,14 @@
 
 
 #include <krita_export.h>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include "kis_tool_paint.h"
 #include "kis_painter.h"
 #include "ui_wdggeometryoptions.h"
+
+
 
 class KoCanvasBase;
 class KoPathShape;
@@ -55,9 +59,10 @@ public:
     virtual int flags() const;
     WdgGeometryOptions *m_shapeOptionsWidget;
 
-    virtual void createOptionWidgetComplete();
-
-
+public slots:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void outlineSettingChanged(int value);
+    virtual void fillSettingChanged(int value);
 
 protected:
     QWidget* createOptionWidget();
@@ -71,6 +76,7 @@ protected:
 
     void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);
 
+    KConfigGroup configGroup;
 
 
 };

@@ -32,6 +32,11 @@
 #include <kis_types.h>
 #include <kis_paintop_settings.h>
 
+#include "kis_locked_properties_proxy.h"
+#include "kis_locked_properties_server.h"
+#include "kis_locked_properties.h"
+#include "kis_config.h"
+
 class QToolButton;
 class QPushButton;
 class QString;
@@ -51,12 +56,24 @@ class KisPaintOpListWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
+class KisLockedProperties;
 
 /**
  * This widget presents all paintops that a user can paint with.
  * Paintops represent real-world tools or the well-known Shoup
  * computer equivalents that do nothing but change color.
  *
+ * To incorporate the dirty preset functionality and locked settings
+ * the following slots are added
+ *  void slotReloadPreset();
+    void slotConfigurationItemChanged();
+    void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
+    void slotDropLockedOption(KisPropertiesConfiguration* p);
+    void slotDirtyPresetToggled(bool);
+    Everytime a value is changed in a preset, the preset is made dirty through the onChange() function.
+    For Locked Settings however, a changed Locked Setting will not cause a preset to become dirty. That is
+    becuase it borrows its values from the KisLockedPropertiesServer.
+    Hence the dirty state of the Preset is kept consistent before and after a writeConfiguration operation in  most cases.
  * XXX: When we have a lot of paintops, replace the listbox
  * with a table, and for every category a combobox.
  *
@@ -65,7 +82,7 @@ class KisFavoriteResourceManager;
 class KisPaintopBox : public QWidget
 {
     Q_OBJECT
-    
+
     enum {
         ENABLE_PRESETS      = 0x0001,
         DISABLE_PRESETS     = 0x0002,
@@ -97,7 +114,7 @@ public slots:
 private:
 
     KoID currentPaintop();
-    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset=0);
+    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset = 0);
     QPixmap paintopPixmap(const KoID& paintop);
     KoID defaultPaintOp();
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
@@ -107,7 +124,7 @@ private:
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
-    
+
 private slots:
 
     void slotSaveActivePreset();
@@ -130,7 +147,16 @@ private slots:
     void slotSwitchToPreviousPreset();
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
+
     void toggleHighlightedButton(QToolButton* m_tool);
+
+    void slotReloadPreset();
+    void slotConfigurationItemChanged();
+    void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
+    void slotDropLockedOption(KisPropertiesConfiguration* p);
+    void slotDirtyPresetToggled(bool);
+
+
 
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
@@ -150,8 +176,10 @@ private:
     KisView2*                            m_view;
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
-    QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
+    QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*          m_favoriteResourceManager;
+    QToolButton*                         m_reloadButton;
+
 
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
@@ -160,41 +188,43 @@ private:
     QPalette palette;
     QPalette palette_highlight;
 
-    struct TabletToolID
-    {
+    int normalBrushSize; // when toggling between eraser mode
+    int eraserBrushSize;
+
+    struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {
             uniqueID = dev.uniqueTabletId();
             pointer  = (dev.pointer() == QTabletEvent::UnknownPointer) ? QTabletEvent::Cursor : dev.pointer();
         }
-        
+
         bool operator == (const TabletToolID& id) const {
             return pointer == id.pointer && uniqueID == id.uniqueID;
         }
-        
+
         bool operator < (const TabletToolID& id) const {
-            if(uniqueID == id.uniqueID)
+            if (uniqueID == id.uniqueID)
                 return pointer < id.pointer;
             return uniqueID < id.uniqueID;
         }
-        
+
         QTabletEvent::PointerType  pointer;
         qint64                     uniqueID;
     };
-    
-    struct TabletToolData
-    {
+
+    struct TabletToolData {
         KoID               paintOpID;
         KisPaintOpPresetSP preset;
     };
 
     typedef QMap<TabletToolID, TabletToolData> TabletToolMap;
     typedef QMap<KoID, KisPaintOpPresetSP>     PaintOpPresetMap;
-    
+
     TabletToolMap    m_tabletToolMap;
     PaintOpPresetMap m_paintOpPresetMap;
     TabletToolID     m_currTabletToolID;
     bool             m_presetsEnabled;
     bool             m_blockUpdate;
+    bool             m_dirtyPresetsEnabled;
 
 
 };

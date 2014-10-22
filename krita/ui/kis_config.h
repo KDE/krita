@@ -51,6 +51,19 @@ public:
     int undoStackLimit() const;
     void setUndoStackLimit(int limit) const;
 
+    bool useCumulativeUndoRedo();
+    void setCumulativeUndoRedo(bool value);
+
+    double stackT1();
+    void setStackT1(int T1);
+
+    double stackT2();
+    void setStackT2(int T2);
+
+    int stackN();
+    void setStackN(int N);
+
+
     qint32 defImageWidth() const;
     void defImageWidth(qint32 width) const;
 
@@ -392,6 +405,9 @@ public:
 
     const KoColorSpace* customColorSelectorColorSpace() const;
     void setCustomColorSelectorColorSpace(const KoColorSpace *cs);
+
+    bool useDirtyPresets() const;
+    void setUseDirtyPresets(bool value);
 
 
     template<class T>

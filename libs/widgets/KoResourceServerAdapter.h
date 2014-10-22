@@ -166,7 +166,9 @@ public:
 
         T* res = dynamic_cast<T*>(resource);
         if (res) {
+
             return m_resourceServer->removeResourceAndBlacklist(res);
+
         }
 
         return false;

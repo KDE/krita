@@ -453,8 +453,8 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 #endif
 
     QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPreset *preset = rserver->resourceByName(lastPreset);
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
     if (!preset) {
         preset = rserver->resourceByName("Basic_tip_default");
     }
@@ -466,7 +466,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         preset = rserver->resources().first();
     }
     if (preset) {
-        paintOpBox()->resourceSelected(preset);
+        paintOpBox()->resourceSelected(preset.data());
     }
     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();

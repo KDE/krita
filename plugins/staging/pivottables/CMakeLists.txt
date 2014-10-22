@@ -1,3 +1,6 @@
+include_directories(
+    ${KOMAIN_INCLUDES}
+)
 
 set(pivottables_SRCS
    pivot.cpp

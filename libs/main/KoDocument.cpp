@@ -27,7 +27,6 @@
 
 #include "KoDocument.h"
 #include "KoPart.h"
-#include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
 #include "KoFileDialog.h"

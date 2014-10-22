@@ -37,7 +37,7 @@ class KisPaletteManager;
 class KisView2;
 class KisPaintOpPreset;
 
-class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
+class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> >
 {
     Q_OBJECT
 
@@ -62,9 +62,9 @@ public:
     const KoColor& recentColorAt(int pos);
 
     // Reimplemented from KoResourceServerObserver
-    virtual void removingResource(KisPaintOpPreset* resource);
-    virtual void resourceAdded(KisPaintOpPreset* resource);
-    virtual void resourceChanged(KisPaintOpPreset* resource);
+    virtual void removingResource(PointerType resource);
+    virtual void resourceAdded(PointerType resource);
+    virtual void resourceChanged(PointerType resource);
     virtual void syncTaggedResourceView();
     virtual void syncTagAddition(const QString& tag);
     virtual void syncTagRemoval(const QString& tag);

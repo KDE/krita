@@ -1,6 +1,6 @@
 project( spacenavigator )
 
-include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES}  ${SPNAV_INCLUDE_DIR})
+include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${SPNAV_INCLUDE_DIR})
 
 
 ########### Flake Plugin library ###############

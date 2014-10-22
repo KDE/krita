@@ -130,7 +130,7 @@ void KisRecordedPaintActionEditor::paintOpChanged(int index)
 
 void KisRecordedPaintActionEditor::resourceSelected(KoResource* resource)
 {
-    KisPaintOpPresetSP preset = static_cast<KisPaintOpPreset*>(resource)->clone();
+    KisPaintOpPresetSP preset = static_cast<KisPaintOpPreset*>(resource);
 
     m_paintOpsToPreset[preset->paintOp().id()] = preset;
     m_action->setPaintOpPreset(preset);

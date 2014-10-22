@@ -20,7 +20,7 @@
 #define KORULERCONTROLLER_H
 
 #include <QObject>
-#include "komain_export.h"
+#include "kowidgets_export.h"
 
 class KoRuler;
 class KoCanvasResourceManager;
@@ -32,7 +32,7 @@ class KoCanvasResourceManager;
  * The code to do this is pretty trivial; just instantiate this class and you can
  * forget about it.  It'll do what you want.
  */
-class KOMAIN_EXPORT KoRulerController : public QObject
+class KOWIDGETS_EXPORT KoRulerController : public QObject
 {
     Q_OBJECT
 public:

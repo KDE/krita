@@ -21,8 +21,6 @@
 #include "kis_unsharp_filter.h"
 #include <QBitArray>
 
-#include <kundo2command.h>
-
 #include <kis_mask_generator.h>
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>

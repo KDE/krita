@@ -51,31 +51,6 @@ KisToolRectangle::~KisToolRectangle()
 {
 }
 
-void KisToolRectangle::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
-{
-    KisToolPaint::activate(toolActivation, shapes); // call base clas
-    configGroup = KGlobal::config()->group("rectangleTool");
-}
-
-
-void KisToolRectangle::createOptionWidgetComplete()
-{
-    // widget is created so load configuration data and update tool settings (connections already hooked up for widget)
-    m_shapeOptionsWidget->cmbOutline->setCurrentIndex(configGroup.readEntry("outlineType", 0));
-    m_shapeOptionsWidget->cmbFill->setCurrentIndex(configGroup.readEntry("fillType", 0));
-}
-
-void KisToolRectangle::outlineSettingChanged(int value)
-{
-    configGroup.writeEntry("outlineType", value);
-}
-
-void KisToolRectangle::fillSettingChanged(int value)
-{
-    configGroup.writeEntry("fillType", value);
-}
-
-
 
 void KisToolRectangle::finishRect(const QRectF &rect)
 {

@@ -75,7 +75,7 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
 {
     if (paintOpPreset)
     {
-        d->paintOpPreset = paintOpPreset->clone();
+        d->paintOpPreset = paintOpPreset;
     }
     d->opacity = 1.0;
     d->paintIncremental = true;

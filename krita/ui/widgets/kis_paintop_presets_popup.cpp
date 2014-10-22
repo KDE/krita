@@ -112,8 +112,14 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
 
+    connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
+            this, SIGNAL(reloadPresetClicked()));
+
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox, SIGNAL(toggled(bool)),
+            this, SIGNAL(dirtyPresetToggled(bool)));
                         
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.txtPreset, SLOT(clear()));
@@ -129,6 +135,14 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotDirtyPresetToggled(bool)));
+
+
             
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
@@ -137,6 +151,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(cfg.presetStripVisible());
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
     m_d->detachedGeometry = QRect(100, 100, 0, 0);
+    m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox->setChecked(cfg.useDirtyPresets());
+    slotDirtyPresetToggled(cfg.useDirtyPresets());
+    m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(false);
 }
 
 
@@ -197,24 +214,25 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 
 void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
 {
-    QPalette palette;
+
 
     if (change) {
-        palette.setColor(QPalette::Base, QColor(255,200,200));
-        palette.setColor(QPalette::Text, Qt::black);
         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+
     }
     else {
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(true);
         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+
     }
 }
 
 
 QString KisPaintOpPresetsPopup::getPresetName() const
 {
-    return m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
+
+            return m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
+
 }
 
 QImage KisPaintOpPresetsPopup::cutOutOverlay()
@@ -283,6 +301,22 @@ void KisPaintOpPresetsPopup::showScratchPad()
 
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
+    KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
+    QPalette palette;
+    if(preset->isPresetDirty())
+       {
+        palette.setColor(QPalette::Base, QColor(255,200,200));
+        palette.setColor(QPalette::Text, Qt::black);
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(true);
+        m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(true);
+       }
+    else
+    {
+     m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+     m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(false);
+     m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(false);
+    }
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }
 
@@ -348,6 +382,18 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(visible);
     KisConfig cfg;
     cfg.setScratchpadVisible(visible);
+}
+void KisPaintOpPresetsPopup::setReloadEnabled(bool value)
+{
+    m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(value);
+}
+void KisPaintOpPresetsPopup::updateViewSettings()
+{
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();
+}
+void KisPaintOpPresetsPopup::slotDirtyPresetToggled(bool value)
+{
+    m_d->uiWdgPaintOpPresetSettings.reload->setVisible(value);    
 }
 
 

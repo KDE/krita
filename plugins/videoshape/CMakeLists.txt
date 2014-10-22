@@ -1,4 +1,7 @@
-include_directories( ${PHONON_INCLUDES} )
+include_directories(
+    ${FLAKE_INCLUDES}
+    ${PHONON_INCLUDES}
+)
 
 # The next line is a workaround for a issue wherein FindPhononInternal.cmake would change the value of CMAKE_AUTOMOC
 # and cause build error "CMake Error: Attempt to add a custom rule to output ...."
@@ -38,7 +41,7 @@ endif(SHOULD_BUILD_THUMBNAIL)
 kde4_add_ui_files(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
 kde4_add_plugin(calligra_shape_video ${videoshape_LIB_SRCS})
 
-target_link_libraries(calligra_shape_video komain
+target_link_libraries(calligra_shape_video flake
     ${KDE4_KFILE_LIBRARY}
     ${PHONON_LIBS}
 )

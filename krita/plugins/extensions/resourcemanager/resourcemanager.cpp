@@ -99,7 +99,7 @@ public:
     }
 
     KisBrushResourceServer* brushServer;
-    KoResourceServer<KisPaintOpPreset>* paintopServer;
+    KisPaintOpPresetResourceServer * paintopServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<ResourceBundle> *bundleServer;
     KoResourceServer<KoPattern>* patternServer;
@@ -280,7 +280,8 @@ void ResourceManager::slotCreateBundle()
 
     res = dlgCreateBundle.selectedPresets();
     foreach(const QString &r, res) {
-        KoResource *res = d->paintopServer->resourceByFilename(r);
+        KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
+        KoResource *res = preset.data();
         newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->tagObject()->assignedTagsList(res), res->md5());
     }
 

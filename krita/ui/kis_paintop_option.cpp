@@ -49,11 +49,13 @@ public:
 KisPaintOpOption::KisPaintOpOption(const QString & label, const QString& category, bool checked)
         : m_checkable(true)
         , m_d(new Private())
+
 {
     m_d->checked = checked;
     m_d->label = label;
     m_d->category = category;
     m_d->configurationPage = 0;
+
 }
 
 KisPaintOpOption::~KisPaintOpOption()
@@ -96,6 +98,16 @@ QWidget* KisPaintOpOption::configurationPage() const
 {
     return m_d->configurationPage;
 }
+void KisPaintOpOption::setLocked(bool value)
+{
+    m_locked = value;
+}
+
+bool KisPaintOpOption::isLocked ()const
+{
+    return m_locked;
+}
+
 
 #include "kis_paintop_option.moc"
 

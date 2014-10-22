@@ -124,6 +124,8 @@ public:
     ///Marks a property that should not be saved by toXML
     void setPropertyNotSaved(const QString & name);
 
+    bool removeProperty(const QString & name);
+
 public:
 
     void dump() const;

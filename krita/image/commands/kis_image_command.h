@@ -23,6 +23,7 @@
 #include <krita_export.h>
 
 #include <kundo2command.h>
+
 #include <QSize>
 #include <QRect>
 #include "kis_types.h"

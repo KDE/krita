@@ -16,7 +16,6 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "KoReportItemChart.h"
-#include <KoGlobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>

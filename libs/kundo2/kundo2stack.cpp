@@ -1,3 +1,21 @@
+/*
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 /****************************************************************************
 **
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
@@ -47,6 +65,8 @@
 #include "kundo2stack_p.h"
 #include "kundo2group.h"
 #include <KoIcon.h>
+#include<QtGlobal>
+
 
 #ifndef QT_NO_UNDOCOMMAND
 
@@ -112,13 +132,16 @@
 */
 
 KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent):
-    m_hasParent(parent != 0)
+    m_hasParent(parent != 0),
+    m_timedID(0),
+    m_endOfCommand(QTime::currentTime())
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0) {
         parent->d->child_list.append(this);
     }
     setText(text);
+    setTime();
 }
 
 /*!
@@ -132,11 +155,12 @@ KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *paren
 */
 
 KUndo2Command::KUndo2Command(KUndo2Command *parent):
-    m_hasParent(parent != 0)
+    m_hasParent(parent != 0),m_timedID(0)
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0)
         parent->d->child_list.append(this);
+    setTime();
 }
 
 /*!
@@ -243,7 +267,10 @@ void KUndo2Command::undo()
 
 QString KUndo2Command::actionText() const
 {
-    return d->actionText;
+    if(d->actionText!=NULL)
+        return d->actionText;
+    else
+        return QString();
 }
 
 /*!
@@ -308,6 +335,76 @@ bool KUndo2Command::hasParent()
 {
     return m_hasParent;
 }
+int KUndo2Command::timedId()
+{
+    return m_timedID;
+}
+void KUndo2Command::setTimedID(int value)
+{
+    m_timedID = value;
+}
+
+bool KUndo2Command::timedMergeWith(KUndo2Command *other)
+{
+    if(other->timedId() == this->timedId() && other->timedId()!=-1 )
+        m_mergeCommandsVector.append(other);
+    else
+        return false;
+    return true;
+}
+void KUndo2Command::setTime()
+{
+    m_timeOfCreation = QTime::currentTime();
+}
+QTime KUndo2Command::time()
+{
+    return m_timeOfCreation;
+}
+void KUndo2Command::setEndTime()
+{
+    m_endOfCommand  = QTime::currentTime();
+}
+QTime KUndo2Command::endTime()
+{
+    return m_endOfCommand;
+}
+
+void KUndo2Command::undoMergedCommands()
+{
+
+    undo();
+    if (!mergeCommandsVector().isEmpty()) {
+        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
+        it.toFront();
+        while (it.hasNext()) {
+            KUndo2Command* cmd =  dynamic_cast<KUndo2Command*>(it.next());
+            cmd->undoMergedCommands();
+        }
+    }
+}
+
+void KUndo2Command::redoMergedCommands()
+{
+    if (!mergeCommandsVector().isEmpty()) {
+
+        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
+        it.toBack();
+        while (it.hasPrevious()) {
+            KUndo2Command* cmd = dynamic_cast<KUndo2Command*>(it.previous());
+            cmd->redoMergedCommands();
+        }
+    }
+    redo();
+}
+QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector()
+{
+    return m_mergeCommandsVector;
+}
+bool KUndo2Command::isMerged()
+{
+    return !m_mergeCommandsVector.isEmpty();
+}
+
 
 #endif // QT_NO_UNDOCOMMAND
 
@@ -397,6 +494,7 @@ KUndo2Action::KUndo2Action(const QString &textTemplate, const QString &defaultTe
 {
     m_textTemplate = textTemplate;
     m_defaultText = defaultText;
+
 }
 
 void KUndo2Action::setPrefixedText(const QString &text)
@@ -417,7 +515,17 @@ void KUndo2Action::setPrefixedText(const QString &text)
 void KUndo2QStack::setIndex(int idx, bool clean)
 {
     bool was_clean = m_index == m_clean_index;
+    if (m_lastMergedIndex <= idx) {
+        m_lastMergedSetCount = idx - m_lastMergedIndex;
 
+    } else {
+        m_lastMergedSetCount = 1;
+        m_lastMergedIndex = idx-1;
+    }
+    if(idx == 0){
+        m_lastMergedSetCount = 0;
+        m_lastMergedIndex = 0;
+    }
     if (idx != m_index) {
         m_index = idx;
         emit indexChanged(m_index);
@@ -459,7 +567,6 @@ bool KUndo2QStack::checkUndoLimit()
         else
             m_clean_index -= del_count;
     }
-
     return true;
 }
 
@@ -472,8 +579,11 @@ bool KUndo2QStack::checkUndoLimit()
 */
 
 KUndo2QStack::KUndo2QStack(QObject *parent)
-    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0)
+    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0), m_useCumulativeUndoRedo(false), m_lastMergedSetCount(0), m_lastMergedIndex(0)
 {
+    setTimeT1(5);
+    setTimeT2(1);
+    setStrokesN(2);
 #ifndef QT_NO_UNDOGROUP
     if (KUndo2Group *group = qobject_cast<KUndo2Group*>(parent))
         group->addStack(this);
@@ -484,7 +594,7 @@ KUndo2QStack::KUndo2QStack(QObject *parent)
     Destroys the undo stack, deleting any commands that are on it. If the
     stack is in a KUndo2Group, the stack is automatically removed from the group.
 
-    \sa KUndo2QStack()
+    \sa KUndo2QStack()The number of last strokes which Krita should store separately
 */
 
 KUndo2QStack::~KUndo2QStack()
@@ -498,7 +608,9 @@ KUndo2QStack::~KUndo2QStack()
 
 /*!
     Clears the command stack by deleting all commands on it, and returns the stack
-    to the clean state.
+    to the clean state.{
+
+            }
 
     Commands are not undone or redone; the state of the edited object remains
     unchanged.
@@ -558,7 +670,8 @@ void KUndo2QStack::clear()
 
 void KUndo2QStack::push(KUndo2Command *cmd)
 {
-    cmd->redo();
+    cmd->redoMergedCommands();
+    cmd->setEndTime();
 
     bool macro = !m_macro_stack.isEmpty();
 
@@ -577,10 +690,81 @@ void KUndo2QStack::push(KUndo2Command *cmd)
     }
 
     bool try_merge = cur != 0
-                        && cur->id() != -1
-                        && cur->id() == cmd->id()
-                        && (macro || m_index != m_clean_index);
+                     && cur->id() != -1
+                     && cur->id() == cmd->id()
+                     && (macro || m_index != m_clean_index);
 
+    /*!
+     *Here we are going to try to merge several commands together using the QVector field in the commands using
+     *3 parameters. N : Number of commands that should remain individual at the top of the stack. T1 : Time lapsed between current command and previously merged command -- signal to
+     *merge throughout the stack. T2 : Time lapsed between two commands signalling both commands belong to the same set
+     *Whenever a KUndo2Command is initialized -- it consists of a start-time and when it is pushed --an end time.
+     *Every time a command is pushed -- it checks whether the command pushed was pushed after T1 seconds of the last merged command
+     *Then the merging begins with each group depending on the time in between each command (T2).
+     *
+     *@TODO : Currently it is not able to merge two merged commands together.
+    */
+    if (!macro && m_command_list.size() > 1 && cmd->timedId() != -1 && m_useCumulativeUndoRedo) {
+        KUndo2Command* lastcmd = m_command_list.last();
+        if (qAbs(cmd->time().msecsTo(lastcmd->endTime())) < m_timeT2 * 1000) {
+            m_lastMergedSetCount++;
+        } else {
+            m_lastMergedSetCount = 0;
+            m_lastMergedIndex = m_index-1;
+        }
+        if(lastcmd->timedId()==-1){
+            m_lastMergedSetCount = 0;
+            m_lastMergedIndex = m_index;
+        }
+        if (m_lastMergedSetCount > m_strokesN) { 
+            KUndo2Command* toMerge = m_command_list.at(m_lastMergedIndex);
+            if (toMerge && m_command_list.at(m_lastMergedIndex + 1)) {
+                if(toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex + 1))){
+                    m_command_list.removeAt(m_lastMergedIndex + 1);
+                }
+                m_lastMergedSetCount--;
+                m_lastMergedIndex = m_command_list.indexOf(toMerge);       
+            }
+
+        }
+        m_index = m_command_list.size();
+        if(m_lastMergedIndex<m_index){
+            if (cmd->time().msecsTo(m_command_list.at(m_lastMergedIndex)->endTime()) < -m_timeT1 * 1000) { //T1 time elapsed
+                QListIterator<KUndo2Command*> it(m_command_list);
+                it.toBack();
+                m_lastMergedSetCount = 1;
+
+                while (it.hasPrevious()) {
+                    KUndo2Command* curr = it.previous();
+                    KUndo2Command* lastCmdInCurrent = curr;
+
+                    if (!lastcmd->mergeCommandsVector().isEmpty()) {
+                        if (qAbs(lastcmd->mergeCommandsVector().last()->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent && lastcmd != curr) {
+                            if(lastcmd->timedMergeWith(curr)){
+                                if (m_command_list.contains(curr)) {
+                                    m_command_list.removeOne(curr);
+                                }
+                             }
+                        } else {
+                            lastcmd = curr; //end of a merge set
+                        }
+                    } else {
+                        if (qAbs(lastcmd->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent &&lastcmd!=curr) {
+                            if(lastcmd->timedMergeWith(curr)){
+                                if (m_command_list.contains(curr)){
+                                    m_command_list.removeOne(curr);
+                                }
+                            }
+                        } else {
+                            lastcmd = curr; //end of a merge set
+                        }
+                    }
+                }
+                m_lastMergedIndex = m_command_list.size()-1;
+            }
+        }
+        m_index = m_command_list.size();
+    }   
     if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
         if (!macro) {
@@ -595,7 +779,10 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_macro_stack.last()->d->child_list.append(cmd);
         } else {
             m_command_list.append(cmd);
-            checkUndoLimit();
+            if(checkUndoLimit())
+            {
+                m_lastMergedIndex = m_index - m_strokesN;
+            }
             setIndex(m_index + 1, false);
         }
     }
@@ -672,7 +859,7 @@ void KUndo2QStack::undo()
     }
 
     int idx = m_index - 1;
-    m_command_list.at(idx)->undo();
+    m_command_list.at(idx)->undoMergedCommands();
     setIndex(idx, false);
 }
 
@@ -696,7 +883,7 @@ void KUndo2QStack::redo()
         return;
     }
 
-    m_command_list.at(m_index)->redo();
+    m_command_list.at(m_index)->redoMergedCommands();
     setIndex(m_index + 1, false);
 }
 
@@ -746,10 +933,12 @@ void KUndo2QStack::setIndex(int idx)
         idx = m_command_list.size();
 
     int i = m_index;
-    while (i < idx)
-        m_command_list.at(i++)->redo();
-    while (i > idx)
-        m_command_list.at(--i)->undo();
+    while (i < idx) {
+        m_command_list.at(i++)->redoMergedCommands();
+    }
+    while (i > idx) {
+        m_command_list.at(--i)->undoMergedCommands();
+    }
 
     setIndex(idx, false);
 }
@@ -800,7 +989,8 @@ QString KUndo2QStack::undoText() const
 {
     if (!m_macro_stack.isEmpty())
         return QString();
-    if (m_index > 0)
+    if (m_index > 0 && m_command_list.at(m_index-1)!=NULL)
+
         return m_command_list.at(m_index - 1)->actionText();
     return QString();
 }
@@ -961,7 +1151,7 @@ void KUndo2QStack::endMacro()
 
   This function returns a const pointer, because modifying a command,
   once it has been pushed onto the stack and executed, almost always
-  causes corruption of the state of the document, if the command is 
+  causes corruption of the state of the document, if the command is
   later undone or redone.
 
   \sa KUndo2Command::child()
@@ -1058,12 +1248,50 @@ bool KUndo2QStack::isActive() const
     return m_group == 0 || m_group->activeStack() == this;
 #endif
 }
+void KUndo2QStack::setUseCumulativeUndoRedo(bool value)
+{
+    m_useCumulativeUndoRedo = value;
+}
+
+bool KUndo2QStack::useCumulativeUndoRedo()
+{
+    return m_useCumulativeUndoRedo;
+}
+void KUndo2QStack::setTimeT1(double value)
+{
+    m_timeT1 = value;
+}
+
+double KUndo2QStack::timeT1()
+{
+    return m_timeT1;
+}
+
+void KUndo2QStack::setTimeT2(double value)
+{
+    m_timeT2 = value;
+}
+
+double KUndo2QStack::timeT2()
+{
+    return m_timeT2;
+}
+int KUndo2QStack::strokesN()
+{
+    return m_strokesN;
+}
+void KUndo2QStack::setStrokesN(int value)
+{
+    m_strokesN  = value;
+}
+
+
 
 QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, const QString& actionName)
 {
     QAction* action = KUndo2QStack::createRedoAction(actionCollection);
 
-    if(actionName.isEmpty()) {
+    if (actionName.isEmpty()) {
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
     } else {
         action->setObjectName(actionName);
@@ -1082,7 +1310,7 @@ QAction* KUndo2Stack::createUndoAction(KActionCollection* actionCollection, cons
 {
     QAction* action = KUndo2QStack::createUndoAction(actionCollection);
 
-    if(actionName.isEmpty()) {
+    if (actionName.isEmpty()) {
         action->setObjectName(KStandardAction::name(KStandardAction::Undo));
     } else {
         action->setObjectName(actionName);
@@ -1154,7 +1382,7 @@ QAction* KUndo2Stack::createUndoAction(KActionCollection* actionCollection, cons
 */
 
 KUndo2Stack::KUndo2Stack(QObject *parent):
-	KUndo2QStack(parent)
+    KUndo2QStack(parent)
 {
 }
 

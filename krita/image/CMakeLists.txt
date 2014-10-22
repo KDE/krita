@@ -66,6 +66,9 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_preset.cpp
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
+   brushengine/kis_locked_properties.cc
+   brushengine/kis_locked_properties_proxy.cpp
+   brushengine/kis_locked_properties_server.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_command.cpp
@@ -341,4 +344,7 @@ install( FILES
     filter/kis_filter_configuration.h
     generator/kis_generator.h
     generator/kis_generator_registry.h
+    brushengine/kis_locked_properties.h
+    brushengine/kis_locked_properties_proxy.h
+    brushengine/kis_locked_properties_server.h  
     DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

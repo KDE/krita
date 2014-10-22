@@ -125,8 +125,6 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     m_growCenter = false;
     m_grow = true;
     m_decoration = 1;
-
-    configGroup = KGlobal::config()->group("cropTool"); // save settings to kritarc
 }
 
 KisToolCrop::~KisToolCrop()
@@ -137,6 +135,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 {
 
     KisTool::activate(toolActivation, shapes);
+    configGroup = KGlobal::config()->group(toolId()); // save settings to kritarc
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());

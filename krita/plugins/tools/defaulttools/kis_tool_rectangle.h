@@ -30,10 +30,6 @@
 #include "flake/kis_node_shape.h"
 #include <kis_tool_rectangle_base.h>
 #include <KoIcon.h>
-#include <KConfig>
-#include <KConfigGroup>
-
-
 
 class QPainter;
 class KisPainter;
@@ -50,17 +46,9 @@ class KisToolRectangle : public KisToolRectangleBase
 public:
     KisToolRectangle(KoCanvasBase * canvas);
     virtual ~KisToolRectangle();
-    virtual void createOptionWidgetComplete();
-
-public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void outlineSettingChanged(int value);
-    virtual void fillSettingChanged(int value);
-
 
 protected:
     virtual void finishRect(const QRectF& rect);
-    KConfigGroup configGroup;
 };
 
 class KisToolRectangleFactory : public KoToolFactoryBase

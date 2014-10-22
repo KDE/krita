@@ -1,6 +1,11 @@
 project( defaulttools )
 
-include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories(
+    ${TEXTLAYOUT_INCLUDES} # needed because ConnectionTool.cpp includes TextShape.h to get the id
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${FLAKE_INCLUDES}
+    ${QT_INCLUDES}
+)
 
 add_subdirectory(pics)
 

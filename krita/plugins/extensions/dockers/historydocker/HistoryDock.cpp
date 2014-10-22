@@ -18,9 +18,11 @@
  */
 #include "HistoryDock.h"
 #include <KoDocumentResourceManager.h>
+#include <kis_config.h>
 HistoryDock::HistoryDock() : QDockWidget(), historyCanvas(0) {
     undoView = new KisUndoView(this);
     setWidget(undoView);
+
 
     setWindowTitle(i18n("Undo History"));
 }
@@ -32,6 +34,12 @@ void HistoryDock::setCanvas(KoCanvasBase *canvas) {
     KUndo2Stack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
 
     undoView->setStack(undoStack);
+    KisConfig cfg;
+    undoView->stack()->setUseCumulativeUndoRedo(cfg.useCumulativeUndoRedo());
+    undoView->stack()->setTimeT1(cfg.stackT1());
+    undoView->stack()->setTimeT2(cfg.stackT2());
+    undoView->stack()->setStrokesN(cfg.stackN());
+
     undoView->setCanvas( myCanvas );
 }
 

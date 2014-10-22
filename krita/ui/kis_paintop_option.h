@@ -23,6 +23,7 @@
 #include <kis_types.h>
 #include <krita_export.h>
 #include <kis_properties_configuration.h>
+#include <kis_locked_properties_proxy.h>
 
 class QWidget;
 class QString;
@@ -61,6 +62,8 @@ public:
      */
     virtual void setImage(KisImageWSP image);
 
+
+
 public slots:
 
     virtual void setChecked(bool checked);
@@ -81,6 +84,8 @@ public slots:
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting) {
         Q_UNUSED(setting);
     }
+    void setLocked(bool value);
+    bool isLocked () const;
 
 signals:
 
@@ -92,6 +97,8 @@ signals:
 protected:
 
     bool m_checkable;
+    bool m_locked;
+
 
 private:
 

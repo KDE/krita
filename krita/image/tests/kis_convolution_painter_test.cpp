@@ -278,10 +278,6 @@ void KisConvolutionPainterTest::benchmarkConvolution()
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(referenceImage, 0, 0, 0);
 
-    qreal offset = 0.0;
-    qreal factor = 1.0;
-    Matrix<qreal, 3, 3> filter = initAsymmFilter(offset, factor);
-
     int diameter = 1;
 
     for (int i = 0; i < 10; i++) {

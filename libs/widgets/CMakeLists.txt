@@ -53,6 +53,8 @@ set(kowidgets_LIB_SRCS KoZoomWidget.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
     KoResourceTagStore.cpp
+    KoRuler.cpp
+    KoRulerController.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp

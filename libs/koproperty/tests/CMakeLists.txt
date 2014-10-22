@@ -1,6 +1,6 @@
 if(KDE4_BUILD_TESTS)
 
-  include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty ${KOMAIN_INCLUDES} )
+  include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty ${KOPROPERTY_INCLUDES} )
 
   set(propertytest_SRCS main.cpp test.cpp )
   

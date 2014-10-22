@@ -20,9 +20,9 @@
 #define KIS_TRANSACTION_DATA_H_
 
 #include <kundo2command.h>
-
 #include "kis_types.h"
 #include <krita_export.h>
+
 
 /**
  * A tile based undo command.

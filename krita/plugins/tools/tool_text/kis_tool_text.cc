@@ -37,8 +37,7 @@
 KisToolText::KisToolText(KoCanvasBase * canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
-    setObjectName("tool_text");
-    configGroup = KGlobal::config()->group("textTool"); // save settings to kritarc
+    setObjectName("tool_text");  
 }
 
 KisToolText::~KisToolText()
@@ -142,6 +141,8 @@ QList< QWidget* > KisToolText::createOptionWidgets()
     // when widget changes properties from UI, make sure we are notified
     connect(m_optionsWidget->cmbStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(styleIndexChanged(int)));
     connect(m_optionsWidget->m_buttonGroup, SIGNAL(buttonPressed(int)), this, SLOT(textTypeIndexChanged(int)));
+
+    configGroup = KGlobal::config()->group(toolId());
 
     return widgets;
 }

@@ -54,7 +54,7 @@ KisToolMove::~KisToolMove()
 void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    configGroup = KGlobal::config()->group("moveTool");
+    configGroup = KGlobal::config()->group(toolId());
 }
 
 

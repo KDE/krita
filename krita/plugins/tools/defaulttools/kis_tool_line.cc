@@ -78,7 +78,7 @@ int KisToolLine::flags() const
 void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
    KisToolPaint::activate(activation, shapes);
-   configGroup = KGlobal::config()->group("lineTool");
+   configGroup = KGlobal::config()->group(toolId());
 }
 
 QWidget* KisToolLine::createOptionWidget()

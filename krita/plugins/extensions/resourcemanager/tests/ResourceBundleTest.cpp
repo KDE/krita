@@ -105,7 +105,7 @@ void ResourceBundleTest::testLoadSave()
 
     KisBrushResourceServer* brushServer = KisBrushServer::instance()->brushServer();
 
-    QVERIFY(brushServer->resoureCount() > 0);
+    QVERIFY(brushServer->resourceCount() > 0);
 
     foreach(KisBrushSP brush, brushServer->resources()) {
         brushServer->addTag(brush.data(), QString("testtag: %1").arg(tagCount));

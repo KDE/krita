@@ -24,7 +24,6 @@
 
 #include "KoShapeManager.h"
 #include "KoSelection.h"
-#include "KoToolManager.h"
 #include "KoPointerEvent.h"
 #include "KoShape.h"
 #include "KoShape_p.h"

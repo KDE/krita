@@ -21,7 +21,6 @@
 #include <KoShapeShadow.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
-#include <KoToolManager.h>
 #include <KoCanvasController.h>
 #include <KoShadowConfigWidget.h>
 #include <KoShapeShadowCommand.h>

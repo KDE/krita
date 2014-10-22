@@ -44,7 +44,6 @@
 #include <kstandarddirs.h>
 
 #include "KoToolProxy.h"
-#include "KoToolManager.h"
 
 #include "kis_config.h"
 #include "kis_types.h"

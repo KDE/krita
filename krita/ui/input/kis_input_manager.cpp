@@ -24,6 +24,8 @@
 #include <klocalizedstring.h>
 #include <QApplication>
 
+#include <KoToolManager.h>
+
 #include "kis_tool_proxy.h"
 
 #include <kis_config.h>

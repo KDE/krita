@@ -23,7 +23,6 @@
 #include <QString>
 #include <QColor>
 #include <kis_paintop_registry.h>
-#include <KoToolManager.h>
 #include <kis_paintop_preset.h>
 #include <KoID.h>
 #include <kconfig.h>

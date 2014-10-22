@@ -55,6 +55,7 @@
 #include <KoFileDialog.h>
 #include <KoDocumentEntry.h>
 #include <KoFilterManager.h>
+#include <KoToolManager.h>
 #include <KoIcon.h>
 
 #include "filter/kis_filter.h"

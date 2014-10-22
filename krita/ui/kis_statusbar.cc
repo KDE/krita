@@ -43,6 +43,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
 
+#include <KoToolManager.h>
 #include <KoViewConverter.h>
 #include <KoMainWindow.h>
 

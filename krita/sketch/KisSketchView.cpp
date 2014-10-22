@@ -41,6 +41,7 @@
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
+#include <KoToolManager.h>
 #include <KoGridData.h>
 
 #include <kundo2stack.h>

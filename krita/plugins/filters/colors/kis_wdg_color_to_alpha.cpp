@@ -24,6 +24,7 @@
 #include <QSpinBox>
 
 #include <KoColor.h>
+#include <KoToolManager.h>
 
 #include <kis_view2.h>
 #include <kis_canvas_resource_provider.h>

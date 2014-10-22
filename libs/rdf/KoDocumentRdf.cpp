@@ -29,7 +29,6 @@
 
 #include <KoView.h>
 #include <KoDocument.h>
-#include <KoToolManager.h>
 #include <KoTextDocument.h>
 #include <KoTextRdfCore.h>
 #include <KoXmlReader.h>

@@ -75,7 +75,7 @@ public:
     bool stabilizeSensors() const;
 
 protected:
-    KConfigGroup configGroup;
+    KConfigGroup m_configGroup;
 
 protected slots:
     virtual void resetCursorStyle();

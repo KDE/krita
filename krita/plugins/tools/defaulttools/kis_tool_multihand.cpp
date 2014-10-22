@@ -293,13 +293,13 @@ QWidget* KisToolMultihand::createOptionWidget()
 
 
     // read values from configuration file
-    m_axesChCkBox->setChecked((bool)configGroup.readEntry("multiLineShowAxes", false));
-    m_mirrorHorizontallyChCkBox->setChecked((bool)configGroup.readEntry("multiLineMirrorHorizontally", false));
-    m_mirrorVerticallyChCkBox->setChecked((bool)configGroup.readEntry("multiLineMirrorVertically", false));
-    m_axesAngleSlider->setValue(configGroup.readEntry("multiLineAxesAngle", 0.0));
-    m_transformModesComboBox->setCurrentIndex(configGroup.readEntry("multiLineTransformMode", 0));
-    m_translateRadiusSlider->setValue(configGroup.readEntry("multiLineTranslateRadius", 0));
-    m_handsCountSlider->setValue(configGroup.readEntry("multiLineHandsCount", 4));
+    m_axesChCkBox->setChecked((bool)m_configGroup.readEntry("showAxes", false));
+    m_mirrorHorizontallyChCkBox->setChecked((bool)m_configGroup.readEntry("mirrorHorizontally", false));
+    m_mirrorVerticallyChCkBox->setChecked((bool)m_configGroup.readEntry("mirrorVertically", false));
+    m_axesAngleSlider->setValue(m_configGroup.readEntry("axesAngle", 0.0));
+    m_transformModesComboBox->setCurrentIndex(m_configGroup.readEntry("transformMode", 0));
+    m_translateRadiusSlider->setValue(m_configGroup.readEntry("translateRadius", 0));
+    m_handsCountSlider->setValue(m_configGroup.readEntry("handsCount", 4));
 
     return widget;
 }
@@ -333,7 +333,7 @@ void KisToolMultihand::updateCanvas()
 void KisToolMultihand::slotSetHandsCount(int count)
 {
     m_handsCount = count;
-    configGroup.writeEntry("multiLineHandsCount", count);
+    m_configGroup.writeEntry("handsCount", count);
 }
 
 void KisToolMultihand::slotSetAxesAngle(qreal angle)
@@ -341,7 +341,7 @@ void KisToolMultihand::slotSetAxesAngle(qreal angle)
     //negative so axes rotates counter clockwise
     m_angle = -angle*M_PI/180;
     updateCanvas();
-    configGroup.writeEntry("multiLineAxesAngle", angle);
+    m_configGroup.writeEntry("axesAngle", angle);
 }
 
 void KisToolMultihand::slotSetTransformMode(int index)
@@ -349,32 +349,32 @@ void KisToolMultihand::slotSetTransformMode(int index)
     m_transformMode = enumTransforModes(m_transformModesComboBox->itemData(index).toInt());
     m_modeCustomOption->setCurrentIndex(index);
     m_handsCountSlider->setVisible(m_transformMode != MIRROR);
-    configGroup.writeEntry("multiLineTransformMode", index);
+    m_configGroup.writeEntry("transformMode", index);
 }
 
 void KisToolMultihand::slotSetAxesVisible(bool vis)
 {
     m_showAxes = vis;
     updateCanvas();
-    configGroup.writeEntry("multiLineShowAxes", vis);
+    m_configGroup.writeEntry("showAxes", vis);
 }
 
 
 void KisToolMultihand::slotSetMirrorVertically(bool mirror)
 {
     m_mirrorVertically = mirror;
-    configGroup.writeEntry("multiLineMirrorVertically", mirror);
+    m_configGroup.writeEntry("mirrorVertically", mirror);
 }
 
 void KisToolMultihand::slotSetMirrorHorizontally(bool mirror)
 {
     m_mirrorHorizontally = mirror;
-    configGroup.writeEntry("multiLineMirrorHorizontally", mirror);
+    m_configGroup.writeEntry("mirrorHorizontally", mirror);
 }
 
 void KisToolMultihand::slotSetTranslateRadius(int radius)
 {
     m_translateRadius = radius;
-    configGroup.writeEntry("multiLineTranslateRadius", radius);
+    m_configGroup.writeEntry("translateRadius", radius);
 }
 

@@ -82,7 +82,7 @@ void KisToolBrush::activate(ToolActivation activation, const QSet<KoShape*> &sha
     KisToolFreehand::activate(activation, shapes);
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
-    configGroup = KGlobal::config()->group(toolId());
+    m_configGroup = KGlobal::config()->group(toolId());
 
 
 }
@@ -166,7 +166,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkStabilizeSensors, true);
     }
 
-    configGroup.writeEntry("smoothingType", index );
+    m_configGroup.writeEntry("smoothingType", index );
 
 
     emit smoothingTypeChanged();
@@ -175,7 +175,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
 void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
 {
     smoothingOptions()->setSmoothnessDistance(distance);
-     configGroup.writeEntry("smoothnessDistance", distance);
+     m_configGroup.writeEntry("smoothnessDistance", distance);
     emit smoothnessQualityChanged();
 }
 
@@ -189,7 +189,7 @@ void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
 void KisToolBrush::setSmoothPressure(bool value)
 {
     smoothingOptions()->setSmoothPressure(value);
-    configGroup.writeEntry("weightedSmoothPressure", value);
+    m_configGroup.writeEntry("weightedSmoothPressure", value);
 }
 
 void KisToolBrush::slotSetMagnetism(int magnetism)
@@ -206,7 +206,7 @@ bool KisToolBrush::useScalableDistance() const
 void KisToolBrush::setUseScalableDistance(bool value)
 {
     smoothingOptions()->setUseScalableDistance(value);
-    configGroup.writeEntry("weightedUseScalableDistance", value);
+    m_configGroup.writeEntry("weightedUseScalableDistance", value);
 
     emit useScalableDistanceChanged();
 }
@@ -243,7 +243,7 @@ void KisToolBrush::setUseDelayDistance(bool value)
     smoothingOptions()->setUseDelayDistance(value);
     m_sliderDelayDistance->setEnabled(value);
     enableControl(m_chkFinishStabilizedCurve, !value);
-    configGroup.writeEntry("stabilizerUseDelay", value);
+    m_configGroup.writeEntry("stabilizerUseDelay", value);
 
     emit useDelayDistanceChanged();
 }
@@ -251,7 +251,7 @@ void KisToolBrush::setUseDelayDistance(bool value)
 void KisToolBrush::setDelayDistance(qreal value)
 {
     smoothingOptions()->setDelayDistance(value);
-    configGroup.writeEntry("stabilizerDelayDistance", value);
+    m_configGroup.writeEntry("stabilizerDelayDistance", value);
     emit delayDistanceChanged();
 }
 
@@ -259,7 +259,7 @@ void KisToolBrush::setDelayDistance(qreal value)
 void KisToolBrush::setFinishStabilizedCurve(bool value)
 {
     smoothingOptions()->setFinishStabilizedCurve(value);
-    configGroup.writeEntry("stabilizerSetFinish", value);
+    m_configGroup.writeEntry("stabilizerSetFinish", value);
 
     emit finishStabilizedCurveChanged();
 }
@@ -272,7 +272,7 @@ bool KisToolBrush::finishStabilizedCurve() const
 void KisToolBrush::setStabilizeSensors(bool value)
 {
     smoothingOptions()->setStabilizeSensors(value);
-    configGroup.writeEntry("stabilizerSetSensors", value);
+    m_configGroup.writeEntry("stabilizerSetSensors", value);
 
     emit stabilizeSensorsChanged();
 }
@@ -399,19 +399,19 @@ QWidget * KisToolBrush::createOptionWidget()
 
 
     //load settings from configuration kritarc file
-    slotSetSmoothingType((int)configGroup.readEntry("smoothingType", 0));
-    m_cmbSmoothingType->setCurrentIndex((int)configGroup.readEntry("smoothingType", 0));
+    slotSetSmoothingType((int)m_configGroup.readEntry("smoothingType", 0));
+    m_cmbSmoothingType->setCurrentIndex((int)m_configGroup.readEntry("smoothingType", 0));
 
         // weighted smoothing options
-    setSmoothPressure((bool)configGroup.readEntry("weightedSmoothPressure", 0));
-    setUseScalableDistance((bool)configGroup.readEntry("weightedUseScalableDistance", 5));
+    setSmoothPressure((bool)m_configGroup.readEntry("weightedSmoothPressure", 0));
+    setUseScalableDistance((bool)m_configGroup.readEntry("weightedUseScalableDistance", 5));
 
         // stabilizer smoothing options
-    setFinishStabilizedCurve((bool)configGroup.readEntry("stabilizerSetFinish", false));
-    setStabilizeSensors((bool)configGroup.readEntry("stabilizerSetSensors", false));
-    setUseDelayDistance((bool)configGroup.readEntry("stabilizerUseDelay", false));
-    setDelayDistance(configGroup.readEntry("stabilizerDelayDistance", 3));
-    slotSetSmoothnessDistance(configGroup.readEntry("smoothnessDistance", 170.0));
+    setFinishStabilizedCurve((bool)m_configGroup.readEntry("stabilizerSetFinish", false));
+    setStabilizeSensors((bool)m_configGroup.readEntry("stabilizerSetSensors", false));
+    setUseDelayDistance((bool)m_configGroup.readEntry("stabilizerUseDelay", false));
+    setDelayDistance(m_configGroup.readEntry("stabilizerDelayDistance", 3));
+    slotSetSmoothnessDistance(m_configGroup.readEntry("smoothnessDistance", 170.0));
 
 
     return optionsWidget;

@@ -77,7 +77,8 @@ KisToolFill::~KisToolFill()
 
 void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    configGroup = KGlobal::config()->group("fillTool");
+    KisToolPaint::activate(toolActivation, shapes);
+    m_configGroup = KGlobal::config()->group(toolId());
 }
 
 
@@ -223,14 +224,14 @@ QWidget* KisToolFill::createOptionWidget()
 
 
     // load configuration options
-    m_useFastMode->setChecked(configGroup.readEntry("useFastMode", false));
-    m_slThreshold->setValue(configGroup.readEntry("thresholdAmount", 80));
-    m_sizemodWidget->setValue(configGroup.readEntry("growSelection", 0));
+    m_useFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
+    m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 80));
+    m_sizemodWidget->setValue(m_configGroup.readEntry("growSelection", 0));
 
-    m_featherWidget->setValue(configGroup.readEntry("featherAmount", 0));
-    m_checkUsePattern->setChecked(configGroup.readEntry("usePattern", false));
-    m_checkSampleMerged->setChecked(configGroup.readEntry("sampleMerged", false));
-    m_checkFillSelection->setChecked(configGroup.readEntry("fillSelection", false));
+    m_featherWidget->setValue(m_configGroup.readEntry("featherAmount", 0));
+    m_checkUsePattern->setChecked(m_configGroup.readEntry("usePattern", false));
+    m_checkSampleMerged->setChecked(m_configGroup.readEntry("sampleMerged", false));
+    m_checkFillSelection->setChecked(m_configGroup.readEntry("fillSelection", false));
 
     return widget;
 }
@@ -252,43 +253,43 @@ void KisToolFill::updateGUI()
 void KisToolFill::slotSetUseFastMode(bool value)
 {
     updateGUI();
-    configGroup.writeEntry("useFastMode", value);
+    m_configGroup.writeEntry("useFastMode", value);
 }
 
 void KisToolFill::slotSetThreshold(int threshold)
 {
     m_threshold = threshold;
-    configGroup.writeEntry("thresholdAmount", threshold);
+    m_configGroup.writeEntry("thresholdAmount", threshold);
 }
 
 void KisToolFill::slotSetUsePattern(bool state)
 {
     m_usePattern = state;
-    configGroup.writeEntry("usePattern", state);
+    m_configGroup.writeEntry("usePattern", state);
 }
 
 void KisToolFill::slotSetSampleMerged(bool state)
 {
     m_unmerged = state;
-    configGroup.writeEntry("sampleMerged", state);
+    m_configGroup.writeEntry("sampleMerged", state);
 }
 
 void KisToolFill::slotSetFillSelection(bool state)
 {
     m_fillOnlySelection = state;
-    configGroup.writeEntry("fillSelection", state);
+    m_configGroup.writeEntry("fillSelection", state);
     updateGUI();
 }
 
 void KisToolFill::slotSetSizemod(int sizemod)
 {
     m_sizemod = sizemod;
-    configGroup.writeEntry("growSelection", sizemod);
+    m_configGroup.writeEntry("growSelection", sizemod);
 }
 
 void KisToolFill::slotSetFeather(int feather)
 {
     m_feather = feather;
-    configGroup.writeEntry("featherAmount", feather);
+    m_configGroup.writeEntry("featherAmount", feather);
 }
 #include "kis_tool_fill.moc"

@@ -86,7 +86,7 @@ private:
     QCheckBox *m_checkSampleMerged;
     QCheckBox *m_checkFillSelection;
 
-    KConfigGroup configGroup;
+    KConfigGroup m_configGroup;
 };
 
 

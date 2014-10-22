@@ -27,6 +27,10 @@
 #include "kis_selection.h"
 #include "kis_painter.h"
 
+#ifdef Q_OS_WIN
+#include <float.h>
+#define isnan _isnan
+#endif
 
 struct KisCageTransformWorker::Private
 {
@@ -206,8 +210,13 @@ QVector<QPointF> KisCageTransformWorker::Private::calculateTransformedPoints()
     for (int i = 0; i < numValidPoints; i++) {
         transformedPoints[i] = cage.transformedPoint(i, transfCage);
 
+#ifdef Q_CC_MSVC
+        if (isnan(transformedPoints[i].x()) ||
+            isnan(transformedPoints[i].y())) {
+#else
         if (std::isnan(transformedPoints[i].x()) ||
             std::isnan(transformedPoints[i].y())) {
+#endif
 
             qWarning() << "WARNING:     One grid point has been removed from a consideration" << validPoints[i];
             transformedPoints[i] = validPoints[i];

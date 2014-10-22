@@ -77,6 +77,12 @@ KisToolGradient::~KisToolGradient()
 {
 }
 
+void KisToolGradient::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+{
+    KisToolPaint::activate(toolActivation, shapes);
+    m_configGroup = KGlobal::config()->group(toolId());
+}
+
 void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (mode() == KisTool::PAINT_MODE && m_startPos != m_endPos) {
@@ -211,70 +217,80 @@ QWidget* KisToolGradient::createOptionWidget()
     Q_CHECK_PTR(widget);
     widget->setObjectName(toolId() + " option widget");
 
+
+    // Make sure to create the connections last after everything is set up. The initialized values
+    // won't be loaded from the configuration file if you add the widget before the connection
     m_lbShape = new QLabel(i18n("Shape:"), widget);
-    m_lbRepeat = new QLabel(i18n("Repeat:"), widget);
-
-    m_ckReverse = new QCheckBox(i18nc("the gradient will be drawn with the color order reversed", "Reverse"), widget);
-    m_ckReverse->setObjectName("reverse_check");
-    connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
-
     m_cmbShape = new KComboBox(widget);
     m_cmbShape->setObjectName("shape_combo");
-    connect(m_cmbShape, SIGNAL(activated(int)), this, SLOT(slotSetShape(int)));
     m_cmbShape->addItem(i18nc("the gradient will be drawn linearly", "Linear"));
     m_cmbShape->addItem(i18nc("the gradient will be drawn bilinearly", "Bi-Linear"));
     m_cmbShape->addItem(i18nc("the gradient will be drawn radially", "Radial"));
     m_cmbShape->addItem(i18nc("the gradient will be drawn in a square around a centre", "Square"));
     m_cmbShape->addItem(i18nc("the gradient will be drawn as an assymmetric cone", "Conical"));
     m_cmbShape->addItem(i18nc("the gradient will be drawn as a symmetric cone", "Conical Symmetric"));
+    addOptionWidgetOption(m_cmbShape, m_lbShape);
+    connect(m_cmbShape, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetShape(int)));
 
+
+    m_lbRepeat = new QLabel(i18n("Repeat:"), widget);
     m_cmbRepeat = new KComboBox(widget);
     m_cmbRepeat->setObjectName("repeat_combo");
-    connect(m_cmbRepeat, SIGNAL(activated(int)), this, SLOT(slotSetRepeat(int)));
     m_cmbRepeat->addItem(i18nc("The gradient will not repeat", "None"));
     m_cmbRepeat->addItem(i18nc("The gradient will repeat forwards", "Forwards"));
     m_cmbRepeat->addItem(i18nc("The gradient will repeat alternatingly", "Alternating"));
-
-    addOptionWidgetOption(m_cmbShape, m_lbShape);
-
     addOptionWidgetOption(m_cmbRepeat, m_lbRepeat);
+    connect(m_cmbRepeat, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetRepeat(int)));
 
-    addOptionWidgetOption(m_ckReverse);
 
     m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), widget);
-
     m_slAntiAliasThreshold = new KisDoubleSliderSpinBox(widget);
     m_slAntiAliasThreshold->setObjectName("threshold_slider");
     m_slAntiAliasThreshold->setRange(0, 1, 3);
-    m_slAntiAliasThreshold->setValue(m_antiAliasThreshold);
+    addOptionWidgetOption(m_slAntiAliasThreshold, m_lbAntiAliasThreshold);
     connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAntiAliasThreshold(qreal)));
 
-    addOptionWidgetOption(m_slAntiAliasThreshold, m_lbAntiAliasThreshold);
+    m_ckReverse = new QCheckBox(i18nc("the gradient will be drawn with the color order reversed", "Reverse"), widget);
+    m_ckReverse->setObjectName("reverse_check");
+    connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
+    addOptionWidgetOption(m_ckReverse);
+
 
     widget->setFixedHeight(widget->sizeHint().height());
+
+
+    // load configuration settings into widget (updating UI will update internal variables from signals/slots)
+    m_ckReverse->setChecked((bool)m_configGroup.readEntry("reverse", false));
+    m_cmbShape->setCurrentIndex((int)m_configGroup.readEntry("shape", 0));
+    m_cmbRepeat->setCurrentIndex((int)m_configGroup.readEntry("repeat", 0));
+    m_slAntiAliasThreshold->setValue((qreal)m_configGroup.readEntry("antialiasThreshold", 0.0));
+
     return widget;
 }
 
 void KisToolGradient::slotSetShape(int shape)
 {
     m_shape = static_cast<KisGradientPainter::enumGradientShape>(shape);
+    m_configGroup.writeEntry("shape", shape);
 }
 
 void KisToolGradient::slotSetRepeat(int repeat)
 {
     m_repeat = static_cast<KisGradientPainter::enumGradientRepeat>(repeat);
+    m_configGroup.writeEntry("repeat", repeat);
 }
 
 void KisToolGradient::slotSetReverse(bool state)
 {
     m_reverse = state;
+    m_configGroup.writeEntry("reverse", state);
 }
 
 void KisToolGradient::slotSetAntiAliasThreshold(qreal value)
 {
     m_antiAliasThreshold = value;
+    m_configGroup.writeEntry("antialiasThreshold", value);
 }
-
 
 #include "kis_tool_gradient.moc"
 

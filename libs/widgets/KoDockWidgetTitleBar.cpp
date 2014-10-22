@@ -215,7 +215,11 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     QRect lockRect = QRect(QPoint(fw + 2 + offset, top), size);
     d->lockButton->setGeometry(lockRect);
 
-
+    if (width() < (closeRect.width() + lockRect.width()) + 50) {
+        d->lockButton->setVisible(false);
+    } else {
+        d->lockButton->setVisible(true);
+    }
 }
 
 void KoDockWidgetTitleBar::setCollapsed(bool collapsed)

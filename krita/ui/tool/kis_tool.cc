@@ -38,7 +38,6 @@
 #include <KoColor.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeManager.h>
 #include <KoToolBase.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>

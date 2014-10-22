@@ -23,7 +23,6 @@
 
 #include <KoShapeController.h>
 #include <KoPathShape.h>
-#include <KoShapeManager.h>
 
 #include "kis_pixel_selection.h"
 #include "kis_shape_selection.h"

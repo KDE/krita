@@ -37,7 +37,6 @@
 #include <KoStoreDevice.h>
 #include <KoDocumentResourceManager.h>
 #include <KoTextEditor.h>
-#include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoTextShapeDataBase.h>
 #include <KoCanvasBase.h>

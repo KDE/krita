@@ -45,7 +45,6 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoCompositeOp.h>
-#include <KoShapeManager.h>
 #include <KoProgressUpdater.h>
 
 

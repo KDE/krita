@@ -44,7 +44,6 @@
 
 #include <KoIcon.h>
 #include <KoShape.h>
-#include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColorSpace.h>
 #include <KoPointerEvent.h>

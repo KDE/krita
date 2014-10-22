@@ -24,7 +24,6 @@
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
-#include <KoShapeManager.h>
 
 #include "MusicShape.h"
 

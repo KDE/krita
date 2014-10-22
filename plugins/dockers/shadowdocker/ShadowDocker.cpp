@@ -20,7 +20,6 @@
 #include "ShadowDocker.h"
 #include <KoShapeShadow.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoCanvasController.h>

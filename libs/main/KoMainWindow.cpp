@@ -41,7 +41,6 @@
 #include "KoPart.h"
 #include <KoPageLayoutDialog.h>
 #include "KoApplication.h"
-#include <KoPageLayoutWidget.h>
 #include <KoIcon.h>
 #include <KoConfig.h>
 

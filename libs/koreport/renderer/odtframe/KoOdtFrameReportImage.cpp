@@ -20,7 +20,6 @@
 
 #include "KoOdtFrameReportImage.h"
 #include <KoXmlWriter.h>
-#include <KoDpi.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 

@@ -27,7 +27,6 @@
 #include "KoCanvasControllerWidget.h"
 #include "KoZoomHandler.h"
 #include "KoZoomController.h"
-#include "KoDpi.h"
 #include "KoUnit.h"
 
 #include "zoomcontroller_test.h"

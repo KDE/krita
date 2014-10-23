@@ -265,5 +265,6 @@ void KisUndoModel::addImage(int idx) {
 }
 bool KisUndoModel::checkMergedCommand(int index)
 {
+    Q_UNUSED(index)
     return false;
 }

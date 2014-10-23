@@ -24,7 +24,6 @@
 #include <QToolButton>
 #include <QAction>
 
-#include <KoProgressBar.h>
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
 #include <klocale.h>

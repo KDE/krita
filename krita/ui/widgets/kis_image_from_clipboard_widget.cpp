@@ -40,7 +40,6 @@
 
 #include <KoIcon.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorProfile.h>
 #include <KoID.h>
 #include <KoColor.h>

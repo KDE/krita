@@ -37,7 +37,6 @@
 
 #include <KoIcon.h>
 #include <KoCompositeOp.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>

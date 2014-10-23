@@ -33,7 +33,6 @@
 #include <QRect>
 #include <QColor>
 
-#include <KoUpdater.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoProgressUpdater.h>

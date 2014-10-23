@@ -42,7 +42,6 @@
 #include "widgets/kis_progress_widget.h"
 
 #include <KoProgressUpdater.h>
-#include <KoUpdater.h>
 
 #include "gmic.h"
 #include "kis_gmic_parser.h"

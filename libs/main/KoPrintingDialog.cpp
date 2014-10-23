@@ -25,7 +25,6 @@
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoProgressBar.h>
-#include <KoUpdater.h>
 
 #include <QCoreApplication>
 #include <kdebug.h>

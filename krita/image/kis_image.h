@@ -50,7 +50,6 @@ class KisImageSignalRouter;
 class KisPostExecutionUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
-class KoUpdater;
 class KisPerspectiveGrid;
 class KisLayerComposition;
 class KisSpontaneousJob;

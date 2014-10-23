@@ -67,7 +67,7 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 void KisToolSelectContiguous::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    configGroup = KGlobal::config()->group("contiguousSelectionTool");
+    m_configGroup = KGlobal::config()->group(toolId());
 }
 
 void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
@@ -123,19 +123,19 @@ void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &co
 void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 {
     m_fuzziness = fuzziness;
-    configGroup.writeEntry("fuzziness", fuzziness);
+    m_configGroup.writeEntry("fuzziness", fuzziness);
 }
 
 void KisToolSelectContiguous::slotSetSizemod(int sizemod)
 {
     m_sizemod = sizemod;
-    configGroup.writeEntry("sizemod", sizemod);
+    m_configGroup.writeEntry("sizemod", sizemod);
 }
 
 void KisToolSelectContiguous::slotSetFeather(int feather)
 {
     m_feather = feather;
-     configGroup.writeEntry("feather", feather);
+    m_configGroup.writeEntry("feather", feather);
 }
 
 QWidget* KisToolSelectContiguous::createOptionWidget()
@@ -201,11 +201,10 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
 
         // load configuration settings into tool options
-        configGroup = KGlobal::config()->group("contiguousSelectionTool");
-        input->setValue(configGroup.readEntry("fuzziness", 20)); // fuzziness
-        sizemod->setValue( configGroup.readEntry("sizemod", 0)); //grow/shrink
-        feather->setValue(configGroup.readEntry("feather", 0));
-        limitToCurrentLayer->setChecked(configGroup.readEntry("limitToCurrentLayer", false));
+        input->setValue(m_configGroup.readEntry("fuzziness", 20)); // fuzziness
+        sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
+        feather->setValue(m_configGroup.readEntry("feather", 0));
+        limitToCurrentLayer->setChecked(m_configGroup.readEntry("limitToCurrentLayer", false));
 
 
     }
@@ -217,7 +216,7 @@ void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
     if (state == Qt::PartiallyChecked)
         return;
     m_limitToCurrentLayer = (state == Qt::Checked);
-    configGroup.writeEntry("limitToCurrentLayer", state);
+    m_configGroup.writeEntry("limitToCurrentLayer", state);
 }
 
 #include "kis_tool_select_contiguous.moc"

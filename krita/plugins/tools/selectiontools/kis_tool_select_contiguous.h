@@ -59,7 +59,7 @@ private:
     int  m_sizemod;
     int  m_feather;
     bool m_limitToCurrentLayer;
-    KConfigGroup configGroup;
+    KConfigGroup m_configGroup;
 };
 
 class KisToolSelectContiguousFactory : public KoToolFactoryBase

@@ -41,7 +41,6 @@
 #include <kdebug.h>
 
 #include <KoColorSet.h>
-#include <KoEditColorSetDialog.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 

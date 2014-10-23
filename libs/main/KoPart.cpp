@@ -28,7 +28,6 @@
 #include "KoDocument.h"
 #include "KoView.h"
 #include "KoOpenPane.h"
-#include "KoProgressProxy.h"
 #include "KoFilterManager.h"
 #include <KoDocumentInfoDlg.h>
 

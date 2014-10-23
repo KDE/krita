@@ -35,7 +35,6 @@
 #include <kmimetype.h>
 
 #include <KoFilterManager.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoFileDialog.h>
 

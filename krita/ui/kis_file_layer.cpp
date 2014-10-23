@@ -25,7 +25,6 @@
 #include "kis_node_visitor.h"
 #include "kis_image.h"
 
-#include <KoProgressUpdater.h>
 #include <KoProgressProxy.h>
 
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)

@@ -27,8 +27,6 @@
 #include <kpluginfactory.h>
 #include <klocale.h>
 
-#include <KoProgressUpdater.h>
-
 #include <kis_fill_painter.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>

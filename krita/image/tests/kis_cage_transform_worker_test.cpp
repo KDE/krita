@@ -20,6 +20,7 @@
 
 #include <qtest_kde.h>
 
+#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include "testutil.h"

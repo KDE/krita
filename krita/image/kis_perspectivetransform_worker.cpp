@@ -34,7 +34,6 @@
 #include "krita_utils.h"
 #include "kis_progress_update_helper.h"
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoColor.h>
 

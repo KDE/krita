@@ -28,7 +28,6 @@
 #include <QPainter>
 #include <QVarLengthArray>
 
-#include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
 

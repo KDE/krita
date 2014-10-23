@@ -23,6 +23,8 @@
 
 #include "kis_warptransform_worker.h"
 
+#include <KoProgressUpdater.h>
+
 
 void KisWarpTransformWorkerTest::test()
 {

@@ -45,8 +45,6 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoCompositeOp.h>
-#include <KoProgressUpdater.h>
-
 
 #include <kis_global.h>
 #include <canvas/kis_canvas2.h>

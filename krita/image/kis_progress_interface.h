@@ -20,8 +20,9 @@
 #ifndef KIS_PROGRESS_INTERFACE_H
 #define KIS_PROGRESS_INTERFACE_H
 
-#include <KoProgressUpdater.h>
 #include <krita_export.h>
+
+class KoProgressUpdater;
 
 class KRITAIMAGE_EXPORT KisProgressInterface
 {

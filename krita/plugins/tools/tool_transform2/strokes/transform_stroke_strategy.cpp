@@ -20,7 +20,6 @@
 
 #include <QMutexLocker>
 
-#include <KoProgressUpdater.h>
 #include "kis_node_progress_proxy.h"
 
 #include <klocale.h>

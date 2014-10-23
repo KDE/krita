@@ -20,7 +20,6 @@
 #include "kis_color_transformation_filter.h"
 
 #include <KoColorTransformation.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <kis_processing_information.h>

@@ -35,7 +35,6 @@
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-#include <KoProgressUpdater.h>
 
 #include <kis_layer.h>
 #include <kis_painter.h>

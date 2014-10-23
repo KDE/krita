@@ -24,6 +24,7 @@
 void KisResourceServerProviderTest::testFetchResource()
 {
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    Q_UNUSED(rserver);
     // get a known preset by name
     // modify it
     // get it a second time

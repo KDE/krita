@@ -111,6 +111,8 @@ void KisPaintOpPresetsChooserPopup::showButtons(bool show)
 
 void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource , KisPaintOpPresetSP  preset2  )
 {
+    Q_UNUSED(preset2);
+
     if (resource) {
         blockSignals(true);
         KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();

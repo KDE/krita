@@ -28,8 +28,6 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-#include <KoProperties.h>
-
 #include <kis_debug.h>
 #include "kis_image.h"
 #include "kis_clipboard.h"

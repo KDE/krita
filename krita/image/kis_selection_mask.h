@@ -21,7 +21,6 @@
 #include <QRect>
 
 #include "KoDocumentSectionModel.h"
-#include <KoProperties.h>
 
 #include "kis_types.h"
 #include "kis_mask.h"

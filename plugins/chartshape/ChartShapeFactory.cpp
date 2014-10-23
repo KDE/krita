@@ -31,7 +31,6 @@
 
 // Calligra
 #include <KoIcon.h>
-#include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>

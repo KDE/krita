@@ -25,7 +25,7 @@
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 #include "KoPACanvas.h"
-#include "KoPAView.h"
+#include "KoPAViewBase.h"
 
 #include <KoShapeManager.h>
 #include <KoToolManager.h>

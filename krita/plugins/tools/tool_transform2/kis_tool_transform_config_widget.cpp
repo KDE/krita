@@ -170,7 +170,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     liquifyReverseDirectionChk->setChecked(false);
     connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(liquifyReverseDirectionChanged(bool)));
-    liquifyReverseDirectionChk->setToolTip(i18nc("@info:tooltip", "Reverse diration of the current deformation tool"));
+    liquifyReverseDirectionChk->setToolTip(i18nc("@info:tooltip", "Reverse direction of the current deformation tool"));
 
     QSignalMapper *liquifyModeMapper = new QSignalMapper(this);
     connect(liquifyMove, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));

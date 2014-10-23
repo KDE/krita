@@ -123,7 +123,7 @@ private:
     qreal m_surfaceHeight;
 
     // settings variables
-    KConfigGroup configGroup; // config manager
+    KConfigGroup m_configGroup;
     qreal m_width;
     qreal m_curmass;
     qreal m_curdrag;

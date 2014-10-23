@@ -70,7 +70,7 @@ KisToolDyna::~KisToolDyna()
 void KisToolDyna::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
-    configGroup = KGlobal::config()->group("dynaBrushTool");
+    m_configGroup = KGlobal::config()->group(toolId());
 }
 
 void KisToolDyna::initStroke(KoPointerEvent *event)
@@ -235,28 +235,28 @@ KoPointerEvent KisToolDyna::filterEvent(KoPointerEvent* event)
 void KisToolDyna::slotSetDrag(qreal drag)
 {
     m_curdrag = drag;
-    configGroup.writeEntry("dragAmount", drag);
+    m_configGroup.writeEntry("dragAmount", drag);
 }
 
 
 void KisToolDyna::slotSetMass(qreal mass)
 {
     m_curmass = mass;
-    configGroup.writeEntry("massAmount", mass);
+    m_configGroup.writeEntry("massAmount", mass);
 }
 
 
 void KisToolDyna::slotSetDynaWidth(double width)
 {
     m_width = width;
-    configGroup.writeEntry("initWidth", width);
+    m_configGroup.writeEntry("initWidth", width);
 }
 
 
 void KisToolDyna::slotSetWidthRange(double widthRange)
 {
     m_widthRange = widthRange;
-    configGroup.writeEntry("initWidthRange", widthRange);
+    m_configGroup.writeEntry("initWidthRange", widthRange);
 }
 
 
@@ -264,7 +264,7 @@ void KisToolDyna::slotSetFixedAngle(bool fixedAngle)
 {
     m_mouse.fixedangle = fixedAngle;
     m_angleDSSBox->setEnabled(fixedAngle);
-    configGroup.writeEntry("useFixedAngle", fixedAngle);
+    m_configGroup.writeEntry("useFixedAngle", fixedAngle);
 }
 
 QWidget * KisToolDyna::createOptionWidget()
@@ -307,10 +307,10 @@ QWidget * KisToolDyna::createOptionWidget()
     KisToolFreehand::addOptionWidgetOption(m_angleDSSBox,m_chkFixedAngle);
 
     // read settings in from config
-    m_massSPBox->setValue(configGroup.readEntry("massAmount", 0.01));
-    m_dragSPBox->setValue(configGroup.readEntry("dragAmount", .98));
-    m_chkFixedAngle->setChecked((bool)configGroup.readEntry("useFixedAngle", false));
-    m_angleDSSBox->setValue(configGroup.readEntry("angleAmount", 20));
+    m_massSPBox->setValue(m_configGroup.readEntry("massAmount", 0.01));
+    m_dragSPBox->setValue(m_configGroup.readEntry("dragAmount", .98));
+    m_chkFixedAngle->setChecked((bool)m_configGroup.readEntry("useFixedAngle", false));
+    m_angleDSSBox->setValue(m_configGroup.readEntry("angleAmount", 20));
 
 
 #if 0
@@ -324,8 +324,8 @@ QWidget * KisToolDyna::createOptionWidget()
     connect(m_widthRangeSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWidthRange(double)));
     //KisToolFreehand::addOptionWidgetOption(m_widthRangeSPBox,widthRangeLbl);
 
-    m_initWidthSPBox->setValue(configGroup.readEntry("initWidth", 10));
-    m_widthRangeSPBox->setValue(configGroup.readEntry("initWidthRange", 20));
+    m_initWidthSPBox->setValue(m_configGroup.readEntry("initWidth", 10));
+    m_widthRangeSPBox->setValue(m_configGroup.readEntry("initWidthRange", 20));
 
 
 #endif
@@ -338,7 +338,7 @@ void KisToolDyna::slotSetAngle(qreal angle)
     m_xangle = cos(angle * M_PI/180.0);
     m_yangle = sin(angle * M_PI/180.0);
 
-    configGroup.writeEntry("angleAmount", angle);
+    m_configGroup.writeEntry("angleAmount", angle);
 }
 
 

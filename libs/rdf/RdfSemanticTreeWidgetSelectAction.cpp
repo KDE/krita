@@ -17,8 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoDocumentRdf.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
+
+#include "KoDocumentRdf.h"
 #include "KoRdfSemanticItemViewSite.h"
 
 #include <KoTextEditor.h>

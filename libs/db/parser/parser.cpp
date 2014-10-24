@@ -18,11 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <connection.h>
-#include <tableschema.h>
 #include "parser.h"
 #include "parser_p.h"
 #include "sqlparser.h"
+
+#include <connection.h>
+#include <tableschema.h>
 
 /*moved to Driver
 #include "tokens.cpp"

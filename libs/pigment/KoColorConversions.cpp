@@ -17,11 +17,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KoColorConversions.h"
+
 #include <cmath>
 
 #include <QtGlobal>
-
-#include "KoColorConversions.h"
 
 /**
  * A number of often-used conversions between color models

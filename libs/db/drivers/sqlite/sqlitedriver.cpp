@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "sqlitedriver.h"
+
 #include <db/connection.h>
 #include <db/drivermanager.h>
 #include <db/driver_p.h>
@@ -24,7 +26,6 @@
 #include <db/pluginloader.h>
 
 #include "sqlite3.h"
-#include "sqlitedriver.h"
 #include "sqliteconnection.h"
 #include "sqliteconnection_p.h"
 #include "sqliteadmin.h"

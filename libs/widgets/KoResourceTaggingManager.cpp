@@ -23,6 +23,7 @@
  *    Boston, MA 02110-1301, USA.
  */
 
+#include "KoResourceTaggingManager.h"
 
 #include <QInputDialog>
 #include <QMessageBox>
@@ -31,7 +32,6 @@
 
 #include <klocale.h>
 
-#include "KoResourceTaggingManager.h"
 #include "KoResourceModelBase.h"
 #include "KoResource.h"
 #include "KoResourceItemChooserContextMenu.h"

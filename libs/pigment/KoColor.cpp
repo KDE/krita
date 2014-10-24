@@ -18,13 +18,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
+#include "KoColor.h"
+
 #include <QColor>
 
 #include <QDomDocument>
 
 #include "DebugPigment.h"
-#include "KoColor.h"
-
 
 #include "KoColorModelStandardIds.h"
 #include "KoColorProfile.h"

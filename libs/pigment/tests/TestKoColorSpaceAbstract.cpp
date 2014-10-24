@@ -1,10 +1,10 @@
-
-#include <cfloat>
-
 #include "TestKoColorSpaceAbstract.h"
 
 #include "KoColorSpaceAbstract.h"
 #include "KoColorSpaceTraits.h"
+
+#include <cfloat>
+
 
 template <class T>
 T mixOpExpectedAlpha(T alpha1, T alpha2, const qint16 *weights)

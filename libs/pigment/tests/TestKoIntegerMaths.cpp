@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qtest_kde.h>
-
 #include "TestKoIntegerMaths.h"
 #include "KoIntegerMaths.h"
+
+#include <qtest_kde.h>
 
 void TestKoIntegerMaths::UINT8Tests()
 {

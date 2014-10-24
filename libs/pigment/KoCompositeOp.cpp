@@ -17,11 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoCompositeOp.h"
+
 #include <klocale.h>
 #include <KoID.h>
 #include <QList>
 
-#include "KoCompositeOp.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceMaths.h"
 

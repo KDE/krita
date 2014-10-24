@@ -51,7 +51,6 @@
 // Calligra
 #include <KoIcon.h>
 #include <KoUnit.h>
-#include <KoShapeStroke.h>
 #include <KoLineStyleSelector.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoMarkerSelector.h>

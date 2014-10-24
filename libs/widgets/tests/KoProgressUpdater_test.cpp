@@ -22,7 +22,6 @@
 #include "KoUpdater.h"
 #include <QThread>
 
-#include <QThread>
 #include <threadweaver/ThreadWeaver.h>
 #include <threadweaver/Job.h>
 

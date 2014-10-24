@@ -45,7 +45,6 @@
 #include <QFileInfo>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kmimetype.h>

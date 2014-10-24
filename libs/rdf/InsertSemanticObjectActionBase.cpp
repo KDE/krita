@@ -21,8 +21,6 @@
 #include <KoTextEditor.h>
 #include <KoCanvasBase.h>
 #include <KoTextDocument.h>
-#include <KoTextEditor.h>
-#include <KoCanvasBase.h>
 
 InsertSemanticObjectActionBase::InsertSemanticObjectActionBase(KoCanvasBase *canvas,
         KoDocumentRdf *rdf,

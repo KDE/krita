@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDBUTILSTEST_H
-#define KEXIUTILS_IDENTIFIERTEST_H
+#ifndef KEXI_TESTUTILS_H
+#define KEXI_TESTUTILS_H
 
 #include <QObject>
 

@@ -17,9 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef __REPORTENTITYLINE_H__
-#define __REPORTENTITYLINE_H__
+#ifndef __KOREPORTDESIGNERITEMLINE_H__
+#define __KOREPORTDESIGNERITEMLINE_H__
 
 #include <QGraphicsLineItem>
 #include <koproperty/Property.h>

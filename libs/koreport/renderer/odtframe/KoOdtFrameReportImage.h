@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOODTFRAMESREPORTIMAGE_H
-#define KOODTFRAMESREPORTIMAGE_H
+#ifndef KOODTFRAMEREPORTIMAGE_H
+#define KOODTFRAMEREPORTIMAGE_H
 
 #include "KoOdtFrameReportPrimitive.h"
 
@@ -47,4 +47,4 @@ private:
     QString m_name;
 };
 
-#endif // KOODTFRAMESREPORTIMAGE_H
+#endif // KOODTFRAMEREPORTIMAGE_H

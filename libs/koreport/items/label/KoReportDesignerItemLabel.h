@@ -17,8 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __REPORTENTITYLABEL_H__
-#define __REPORTENTITYLABEL_H__
+#ifndef __KOREPORTDESIGNERITEMLABEL_H__
+#define __KOREPORTDESIGNERITEMLABEL_H__
 
 #include <QGraphicsRectItem>
 #include <koproperty/Property.h>

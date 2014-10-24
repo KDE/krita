@@ -22,8 +22,8 @@
  * derivative of ReportEntity, which in turn is derived from QCanvasItem.
  */
 
-#ifndef __REPORTENTITIES_H__
-#define __REPORTENTITIES_H__
+#ifndef __KOREPORTDESIGNERITEMBASE_H__
+#define __KOREPORTDESIGNERITEMBASE_H__
 
 // qt
 #include <QGraphicsItem>

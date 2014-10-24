@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __REPORTENTITYFIELD_H__
-#define __REPORTENTITYFIELD_H__
+#ifndef __KOREPORTDESIGNERITEMFIELD_H__
+#define __KOREPORTDESIGNERITEMFIELD_H__
 
 #include <QGraphicsRectItem>
 #include <koproperty/Property.h>

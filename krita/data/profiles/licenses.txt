@@ -1,0 +1,5 @@
+cmyk.icm: public domain, created by Greame Gill.
+krita25_lcms-builtin-sRGB_g100-truegamma.icc: GPL, created by Elle Stone 
+scRGB.icm: GPL, created by Cyrille Berger
+sRGB.icm: public domain
+WideGamut.icm: public domain

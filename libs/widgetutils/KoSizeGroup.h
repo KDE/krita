@@ -70,9 +70,9 @@ public:
      * By default, the mode of the size group is KO_SIZE_GROUP_HORIZONTAL and
      * the group will not ignore hidden widgets.
      */
-    KoSizeGroup(QObject* parent = 0,
-                KoSizeGroup::mode mode = KoSizeGroup::KO_SIZE_GROUP_HORIZONTAL,
-                bool ignoreHidden = false);
+    explicit KoSizeGroup(QObject* parent = 0,
+                         KoSizeGroup::mode mode = KoSizeGroup::KO_SIZE_GROUP_HORIZONTAL,
+                         bool ignoreHidden = false);
 
     ~KoSizeGroup();
 

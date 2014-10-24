@@ -30,7 +30,7 @@ class KoSection;
 class KoSectionManagerPrivate
 {
 public:
-    KoSectionManagerPrivate(QTextDocument *_doc);
+    explicit KoSectionManagerPrivate(QTextDocument *_doc);
     ~KoSectionManagerPrivate();
 
     QTextDocument *doc;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>301</width>
-    <height>306</height>
+    <height>329</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -72,7 +72,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_7">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QToolButton" name="freeTransformButton">
             <property name="sizePolicy">
@@ -80,6 +80,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Free Transform</string>
             </property>
             <property name="text">
              <string>Free Transform</string>
@@ -106,6 +109,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>Perspective Transform</string>
+            </property>
             <property name="text">
              <string>Perspective</string>
             </property>
@@ -120,10 +126,6 @@
             </property>
            </widget>
           </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QToolButton" name="warpButton">
             <property name="sizePolicy">
@@ -131,6 +133,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Warp Transform</string>
             </property>
             <property name="text">
              <string>Warp</string>
@@ -157,6 +162,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>Cage Transform</string>
+            </property>
             <property name="text">
              <string>Cage</string>
             </property>
@@ -179,6 +187,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>Liquify Transform</string>
+            </property>
             <property name="text">
              <string>Liquify</string>
             </property>
@@ -194,6 +205,22 @@
            </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblTransformType">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Free Transform</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

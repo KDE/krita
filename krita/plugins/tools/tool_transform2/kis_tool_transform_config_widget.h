@@ -42,6 +42,7 @@ public:
 
 public slots:
     void updateConfig(const ToolTransformArgs &config);
+    void slotUpdateIcons();
 
 signals:
     void sigConfigChanged();

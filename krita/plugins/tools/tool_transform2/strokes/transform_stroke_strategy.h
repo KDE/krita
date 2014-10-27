@@ -106,6 +106,7 @@ private:
     QHash<KisPaintDevice*, KisPaintDeviceSP> m_devicesCacheHash;
 
     KisPaintDeviceSP m_previewDevice;
+    KisTransformMaskSP writeToTransformMask;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

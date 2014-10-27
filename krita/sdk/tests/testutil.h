@@ -402,8 +402,8 @@ namespace TestUtil {
 
 struct MaskParent
 {
-    MaskParent()
-        : imageRect(0,0,512,512) {
+    MaskParent(const QRect &_imageRect = QRect(0,0,512,512))
+        : imageRect(_imageRect) {
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
         layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);

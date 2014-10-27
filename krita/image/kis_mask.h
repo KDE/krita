@@ -178,10 +178,11 @@ protected:
      * Apply the effect the projection using the mask as a selection.
      * Made public in KisEffectMask
      */
-    virtual void apply(KisPaintDeviceSP projection, const QRect & rc) const;
+    void apply(KisPaintDeviceSP projection, const QRect & applyRect, const QRect & needRect, PositionToFilthy parentPos) const;
     virtual QRect decorateRect(KisPaintDeviceSP &src,
                                KisPaintDeviceSP &dst,
-                               const QRect & rc) const;
+                               const QRect & rc,
+                               PositionToFilthy parentPos) const;
 
 private:
 

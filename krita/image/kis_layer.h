@@ -83,7 +83,7 @@ public:
      * Ask the layer to assemble its data & apply all the effect masks
      * to it.
      */
-    virtual QRect updateProjection(const QRect& rect);
+    virtual QRect updateProjection(const QRect& rect, PositionToFilthy pos);
 
     virtual bool needProjection() const;
 
@@ -275,7 +275,8 @@ protected:
 
     QRect applyMasks(const KisPaintDeviceSP source,
                      const KisPaintDeviceSP destination,
-                     const QRect &requestedRect) const;
+                     const QRect &requestedRect,
+                     PositionToFilthy pos) const;
 
 private:
     struct Private;

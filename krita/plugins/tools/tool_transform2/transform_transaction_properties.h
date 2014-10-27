@@ -52,7 +52,7 @@ TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *cu
         return m_originalRect;
     }
 
-    QPointF originalCenter() const {
+    QPointF originalCenterGeometric() const {
         return m_originalRect.center();
     }
 

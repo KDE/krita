@@ -27,6 +27,9 @@ class KisWeakSharedPtr;
 template<class T>
 class KisSharedPtr;
 
+template<class T> class QSharedPointer;
+template<class T> class QWeakPointer;
+
 template <class T>
 uint qHash(KisSharedPtr<T> ptr) {
     return qHash(ptr.data());
@@ -79,6 +82,14 @@ typedef KisWeakSharedPtr<KisEffectMask> KisEffectMaskWSP;
 class KisFilterMask;
 typedef KisSharedPtr<KisFilterMask> KisFilterMaskSP;
 typedef KisWeakSharedPtr<KisFilterMask> KisFilterMaskWSP;
+
+class KisTransformMask;
+typedef KisSharedPtr<KisTransformMask> KisTransformMaskSP;
+typedef KisWeakSharedPtr<KisTransformMask> KisTransformMaskWSP;
+
+class KisTransformMaskParamsInterface;
+typedef QSharedPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceSP;
+typedef QWeakPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceWSP;
 
 class KisTransparencyMask;
 typedef KisSharedPtr<KisTransparencyMask> KisTransparencyMaskSP;
@@ -200,9 +211,6 @@ typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 class KisProcessingVisitor;
 typedef KisSharedPtr<KisProcessingVisitor> KisProcessingVisitorSP;
-
-template<class T> class QSharedPointer;
-template<class T> class QWeakPointer;
 
 class KUndo2Command;
 typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;

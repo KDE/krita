@@ -15,24 +15,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_FILTER_MASK_
-#define _KIS_FILTER_MASK_
+#ifndef _KIS_TRANSFORM_MASK_
+#define _KIS_TRANSFORM_MASK_
+
+#include <QScopedPointer>
 
 #include "kis_types.h"
 #include "kis_effect_mask.h"
 
-#include "kis_node_filter_interface.h"
-
-class KisFilterConfiguration;
-
 /**
-   An filter mask is a single channel mask that applies a particular
-   filter to the layer the mask belongs to. It differs from an
-   adjustment layer in that it only works on its parent layer, while
-   adjustment layers work on all layers below it in its layer group.
+   Transform a layer according to a matrix transform
 */
 
-class KRITAIMAGE_EXPORT KisFilterMask : public KisEffectMask, public KisNodeFilterInterface
+class KRITAIMAGE_EXPORT KisTransformMask : public KisEffectMask
 {
     Q_OBJECT
 
@@ -41,22 +36,22 @@ public:
     /**
      * Create an empty filter mask.
      */
-    KisFilterMask();
+    KisTransformMask();
 
-    virtual ~KisFilterMask();
+    virtual ~KisTransformMask();
 
     QIcon icon() const;
 
     KisNodeSP clone() const {
-        return KisNodeSP(new KisFilterMask(*this));
+        return KisNodeSP(new KisTransformMask(*this));
     }
+
+    KisPaintDeviceSP paintDevice() const;
 
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
-    KisFilterMask(const KisFilterMask& rhs);
-
-    void setFilter(KisFilterConfiguration *filterConfig);
+    KisTransformMask(const KisTransformMask& rhs);
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
@@ -65,6 +60,18 @@ public:
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+
+    void setTransformParams(KisTransformMaskParamsInterfaceSP params);
+    KisTransformMaskParamsInterfaceSP transformParams() const;
+
+    void recaclulateStaticImage();
+
+private slots:
+    void slotDelayedStaticUpdate();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif //_KIS_FILTER_MASK_
+#endif //_KIS_TRANSFORM_MASK_

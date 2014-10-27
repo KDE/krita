@@ -332,7 +332,7 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
     handles.addRect(handleRect.translated(m_d->transaction.originalMiddleTop()));
     handles.addRect(handleRect.translated(m_d->transaction.originalMiddleBottom()));
 
-    QPointF rotationCenter = m_d->transaction.originalCenter() + m_d->currentArgs.rotationCenterOffset();
+    QPointF rotationCenter = m_d->currentArgs.originalCenter() + m_d->currentArgs.rotationCenterOffset();
     QPointF dx(r + 3, 0);
     QPointF dy(0, r + 3);
     handles.addEllipse(rotationCenterRect.translated(rotationCenter));
@@ -577,7 +577,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
         QPointF pt = m_d->transform.inverted().map(mousePos);
         pt = KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect());
 
-        QPointF newRotationCenterOffset = pt - m_d->transaction.originalCenter();
+        QPointF newRotationCenterOffset = pt - m_d->currentArgs.originalCenter();
 
         if (specialModifierActive) {
             if (qAbs(newRotationCenterOffset.x()) > qAbs(newRotationCenterOffset.y())) {
@@ -652,7 +652,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
      * The center of the original image should still
      * stay the the origin of CS
      */
-    KIS_ASSERT_RECOVER_NOOP(sanityCheckMatrix.map(transaction.originalCenter()).manhattanLength() < 1e-4);
+    KIS_ASSERT_RECOVER_NOOP(sanityCheckMatrix.map(currentArgs.originalCenter()).manhattanLength() < 1e-4);
 
     transform = m.finalTransform();
 

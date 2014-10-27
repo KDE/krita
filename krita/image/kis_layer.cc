@@ -389,7 +389,8 @@ QRect KisLayer::masksNeedRect(const QList<KisEffectMaskSP> &masks,
 
 QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                            const KisPaintDeviceSP destination,
-                           const QRect &requestedRect) const
+                           const QRect &requestedRect,
+                           PositionToFilthy pos) const
 {
     Q_ASSERT(source);
     Q_ASSERT(destination);
@@ -434,7 +435,11 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
             }
 
             foreach(const KisEffectMaskSP& mask, masks) {
-                mask->apply(destination, applyRects.pop());
+                const QRect maskApplyRect = applyRects.pop();
+                const QRect maskNeedRect =
+                    applyRects.isEmpty() ? needRect : applyRects.top();
+
+                mask->apply(destination, maskApplyRect, maskNeedRect, pos);
             }
             Q_ASSERT(applyRects.isEmpty());
         } else {
@@ -445,10 +450,19 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
              */
 
             KisPaintDeviceSP tempDevice = new KisPaintDevice(colorSpace());
+            tempDevice->prepareClone(source);
             copyOriginalToProjection(source, tempDevice, needRect);
 
+            QRect maskApplyRect = applyRects.pop();
+            QRect maskNeedRect = needRect;
+
             foreach(const KisEffectMaskSP& mask, masks) {
-                mask->apply(tempDevice, applyRects.pop());
+                mask->apply(tempDevice, maskApplyRect, maskNeedRect, pos);
+
+                if (!applyRects.isEmpty()) {
+                    maskNeedRect = maskApplyRect;
+                    maskApplyRect = applyRects.pop();
+                }
             }
             Q_ASSERT(applyRects.isEmpty());
 
@@ -461,7 +475,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
     return changeRect;
 }
 
-QRect KisLayer::updateProjection(const QRect& rect)
+QRect KisLayer::updateProjection(const QRect& rect, PositionToFilthy pos)
 {
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
@@ -478,7 +492,7 @@ QRect KisLayer::updateProjection(const QRect& rect)
                 m_d->safeProjection.getDeviceLazy(originalDevice);
 
             updatedRect = applyMasks(originalDevice, projection,
-                                     updatedRect);
+                                     updatedRect, pos);
         }
     }
 

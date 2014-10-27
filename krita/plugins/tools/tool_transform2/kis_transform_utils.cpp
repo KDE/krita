@@ -148,3 +148,107 @@ bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPac
 
     return imageTooBig;
 }
+
+#include <kis_transform_worker.h>
+#include <kis_perspectivetransform_worker.h>
+#include <kis_warptransform_worker.h>
+#include <kis_cage_transform_worker.h>
+#include <kis_liquify_transform_worker.h>
+
+KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformArgs &config,
+                                                            KisPaintDeviceSP device,
+                                                            KoUpdaterPtr updater,
+                                                            QVector3D *transformedCenter /* OUT */)
+{
+    {
+        KisTransformWorker t(0,
+                             config.scaleX(), config.scaleY(),
+                             config.shearX(), config.shearY(),
+                             config.originalCenter().x(),
+                             config.originalCenter().y(),
+                             config.aZ(),
+                             0, // set X and Y translation
+                             0, // to null for calculation
+                             0,
+                             config.filter());
+
+        *transformedCenter = QVector3D(t.transform().map(config.originalCenter()));
+    }
+
+    QPointF translation = config.transformedCenter() - (*transformedCenter).toPointF();
+
+    KisTransformWorker transformWorker(device,
+                                       config.scaleX(), config.scaleY(),
+                                       config.shearX(), config.shearY(),
+                                       config.originalCenter().x(),
+                                       config.originalCenter().y(),
+                                       config.aZ(),
+                                       (int)(translation.x()),
+                                       (int)(translation.y()),
+                                       updater,
+                                       config.filter());
+
+    return transformWorker;
+}
+
+void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
+                                        KisPaintDeviceSP device,
+                                        KisProcessingVisitor::ProgressHelper *helper)
+{
+    if (config.mode() == ToolTransformArgs::WARP) {
+        KoUpdaterPtr updater = helper->updater();
+
+        KisWarpTransformWorker worker(config.warpType(),
+                                      device,
+                                      config.origPoints(),
+                                      config.transfPoints(),
+                                      config.alpha(),
+                                      updater);
+        worker.run();
+    } else if (config.mode() == ToolTransformArgs::CAGE) {
+        KoUpdaterPtr updater = helper->updater();
+
+        KisCageTransformWorker worker(device,
+                                      config.origPoints(),
+                                      updater,
+                                      8);
+
+        worker.prepareTransform();
+        worker.setTransformedCage(config.transfPoints());
+        worker.run();
+    } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
+        KoUpdaterPtr updater = helper->updater();
+        //FIXME:
+        Q_UNUSED(updater);
+
+        config.liquifyWorker()->run(device);
+    } else {
+        QVector3D transformedCenter;
+        KoUpdaterPtr updater1 = helper->updater();
+        KoUpdaterPtr updater2 = helper->updater();
+
+        KisTransformWorker transformWorker =
+            createTransformWorker(config, device, updater1, &transformedCenter);
+
+        transformWorker.run();
+
+        if (config.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+            KisPerspectiveTransformWorker perspectiveWorker(device,
+                                                            config.transformedCenter(),
+                                                            config.aX(),
+                                                            config.aY(),
+                                                            config.cameraPos().z(),
+                                                            updater2);
+            perspectiveWorker.run();
+        } else if (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+            QTransform T =
+                QTransform::fromTranslate(config.transformedCenter().x(),
+                                          config.transformedCenter().y());
+
+            KisPerspectiveTransformWorker perspectiveWorker(device,
+                                                            T.inverted() * config.flattenedPerspectiveTransform() * T,
+                                                            updater2);
+            perspectiveWorker.run();
+        }
+    }
+}

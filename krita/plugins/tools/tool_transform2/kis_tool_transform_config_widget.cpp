@@ -844,8 +844,8 @@ void KisToolTransformConfigWidget::setDefaultWarpPoints(int pointsPerLine)
 
     if (nbPoints == 1) {
         //there is actually no grid
-        origPoints[0] = m_transaction->originalCenter();
-        transfPoints[0] = m_transaction->originalCenter();
+        origPoints[0] = m_transaction->originalCenterGeometric();
+        transfPoints[0] = m_transaction->originalCenterGeometric();
     }
     else if (nbPoints > 1) {
         gridSpaceX = m_transaction->originalRect().width() / (pointsPerLine - 1);

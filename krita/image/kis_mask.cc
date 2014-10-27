@@ -38,35 +38,14 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 
-#include "tiles3/kis_lockless_stack.h"
+#include "kis_cached_paint_device.h"
+
 
 struct KisMask::Private {
-    class CachedPaintDevice {
-    public:
-        KisPaintDeviceSP getDevice(KisPaintDeviceSP prototype) {
-            KisPaintDeviceSP device;
-
-            if(!m_stack.pop(device)) {
-                device = new KisPaintDevice(prototype->colorSpace());
-            }
-
-            device->prepareClone(prototype);
-            return device;
-        }
-
-        void putDevice(KisPaintDeviceSP device) {
-            device->clear();
-            m_stack.push(device);
-        }
-
-    private:
-        KisLocklessStack<KisPaintDeviceSP> m_stack;
-    };
-
     Private(KisMask *_q) : q(_q) {}
 
     mutable KisSelectionSP selection;
-    CachedPaintDevice paintDeviceCache;
+    KisCachedPaintDevice paintDeviceCache;
     KisMask *q;
 
     /**
@@ -231,30 +210,32 @@ void KisMask::select(const QRect & rc, quint8 selectedness)
 
 QRect KisMask::decorateRect(KisPaintDeviceSP &src,
                             KisPaintDeviceSP &dst,
-                            const QRect & rc) const
+                            const QRect & rc,
+                            PositionToFilthy parentPos) const
 {
     Q_UNUSED(src);
     Q_UNUSED(dst);
+    Q_UNUSED(parentPos);
     Q_ASSERT_X(0, "KisMask::decorateRect", "Should be overridden by successors");
     return rc;
 }
 
-void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
+void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const QRect &needRect, PositionToFilthy parentPos) const
 {
     if (selection()) {
 
-        m_d->selection->updateProjection(rc);
+        m_d->selection->updateProjection(applyRect);
 
-        if(!extent().intersects(rc))
+        if(!extent().intersects(applyRect))
             return;
 
         KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
 
-        QRect updatedRect = decorateRect(projection, cacheDevice, rc);
+        QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, parentPos);
 
         KisPainter gc(projection);
-        gc.setCompositeOp(compositeOp());
-        gc.setOpacity(opacity());
+        // masks don't have any compositioning
+        gc.setCompositeOp(COMPOSITE_COPY);
         gc.setSelection(m_d->selection);
         gc.bitBlt(updatedRect.topLeft(), cacheDevice, updatedRect);
 
@@ -262,11 +243,11 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 
     } else {
         KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
-        cacheDevice->makeCloneFromRough(projection, rc);
-        projection->clear(rc);
 
-        // FIXME: how about opacity and compositeOp?
-        decorateRect(cacheDevice, projection, rc);
+        cacheDevice->makeCloneFromRough(projection, needRect);
+        projection->clear(needRect);
+
+        decorateRect(cacheDevice, projection, applyRect, parentPos);
 
         m_d->paintDeviceCache.putDevice(cacheDevice);
     }

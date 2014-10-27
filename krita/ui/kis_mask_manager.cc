@@ -33,6 +33,7 @@
 #include <kis_clone_layer.h>
 #include <kis_group_layer.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
 #include <kis_effect_mask.h>
@@ -140,7 +141,7 @@ void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bo
     }
 }
 
-void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName)
+void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection)
 {
     m_commandsAdapter->beginMacro(macroName);
 
@@ -151,10 +152,12 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent.data());
     Q_ASSERT(parentLayer);
 
-    if (copyFrom) {
-        mask->initSelection(copyFrom, parentLayer);
-    } else {
-        mask->initSelection(m_view->selection(), parentLayer);
+    if (!suppressSelection) {
+        if (copyFrom) {
+            mask->initSelection(copyFrom, parentLayer);
+        } else {
+            mask->initSelection(m_view->selection(), parentLayer);
+        }
     }
 
     //counting number of KisSelectionMask
@@ -219,6 +222,12 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     } else {
         m_commandsAdapter->undoLastCommand();
     }
+}
+
+void KisMaskManager::createTransformMask(KisNodeSP activeNode)
+{
+    KisTransformMaskSP mask = new KisTransformMask();
+    createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Transform Mask"), "KisTransformMask", i18n("Transform Mask"), true);
 }
 
 void KisMaskManager::duplicateMask()

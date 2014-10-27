@@ -62,6 +62,8 @@ private slots:
     void benchmarkShear();
     void benchmarkScaleRotateShear();
 
+    void testPartialProcessing();
+
 private:
     void generateTestImages();
 };

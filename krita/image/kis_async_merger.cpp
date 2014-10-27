@@ -208,7 +208,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
                                                      m_currentProjection,
                                                      walker.cropRect());
             currentNode->accept(originalVisitor);
-            currentNode->updateProjection(applyRect);
+            currentNode->updateProjection(applyRect, KisMergeWalker::convertPositionToFilthy(item.m_position));
 
             continue;
         }
@@ -224,18 +224,18 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         if(item.m_position & KisMergeWalker::N_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentNode, applyRect);
             currentNode->accept(originalVisitor);
-            currentNode->updateProjection(applyRect);
+            currentNode->updateProjection(applyRect, KisMergeWalker::convertPositionToFilthy(item.m_position));
         }
         else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentNode, applyRect);
             if(dependOnLowerNodes(currentNode)) {
                 currentNode->accept(originalVisitor);
-                currentNode->updateProjection(applyRect);
+                currentNode->updateProjection(applyRect, KisMergeWalker::convertPositionToFilthy(item.m_position));
             }
         }
         else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentNode, applyRect);
-            currentNode->updateProjection(applyRect);
+            currentNode->updateProjection(applyRect, KisMergeWalker::convertPositionToFilthy(item.m_position));
         }
         else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
             DEBUG_NODE_ACTION("Updating", "N_BELOW_FILTHY", currentNode, applyRect);

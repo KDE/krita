@@ -25,8 +25,10 @@
 
 #include <QTransform>
 #include <QMatrix4x4>
+#include <kis_processing_visitor.h>
 
 class ToolTransformArgs;
+class KisTransformWorker;
 
 class KisTransformUtils
 {
@@ -73,6 +75,15 @@ public:
     };
 
     static bool checkImageTooBig(const QRectF &bounds, const MatricesPack &m);
+
+    static KisTransformWorker createTransformWorker(const ToolTransformArgs &config,
+                                                    KisPaintDeviceSP device,
+                                                    KoUpdaterPtr updater,
+                                                    QVector3D *transformedCenter /* OUT */);
+
+    static void transformDevice(const ToolTransformArgs &config,
+                                KisPaintDeviceSP device,
+                                KisProcessingVisitor::ProgressHelper *helper);
 };
 
 #endif /* __KIS_TRANSFORM_UTILS_H */

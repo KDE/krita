@@ -132,6 +132,9 @@ set(kritaimage_LIB_SRCS
    kis_fill_painter.cc
    kis_filter_mask.cpp
    kis_filter_strategy.cc
+   kis_transform_mask.cpp
+   kis_transform_mask_params_interface.cpp
+   kis_recalculate_transform_mask_job.cpp
    kis_gradient_painter.cc
    kis_iterator_ng.cpp
    kis_async_merger.cpp

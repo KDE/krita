@@ -1,6 +1,7 @@
 set(kritatooltransform_PART_SRCS
     tool_transform.cc
     tool_transform_args.cc
+    kis_transform_mask_adapter.cpp
     tool_transform_changes_tracker.cpp
     kis_tool_transform.cc
     kis_tool_transform_config_widget.cpp

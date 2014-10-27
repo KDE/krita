@@ -951,5 +951,37 @@ void KisTransformWorkerTest::generateTestImages()
     }
 }
 
+#include "kis_perspectivetransform_worker.h"
+
+
+void KisTransformWorkerTest::testPartialProcessing()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(TestUtil::fetchDataFileLazy("test_transform_quality.png"));
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, 0);
+
+    KisTransaction t(dev);
+
+    QTransform transform = QTransform::fromScale(2.0, 1.1);
+    transform.shear(1.1, 0);
+    transform.rotateRadians(M_PI / 18);
+
+    KisPerspectiveTransformWorker tw(0, transform, updater);
+    tw.runPartialDst(dev, dev, QRect(1200, 1200, 150, 150));
+    tw.runPartialDst(dev, dev, QRect(1350, 1200, 150, 150));
+    tw.runPartialDst(dev, dev, QRect(1200, 1350, 150, 150));
+    tw.runPartialDst(dev, dev, QRect(1350, 1350, 150, 150));
+
+    t.end();
+
+    QImage result = dev->convertToQImage(0);
+    TestUtil::checkQImage(result, "transform_test", "partial", "single");
+}
+
 QTEST_KDEMAIN(KisTransformWorkerTest, GUI)
 #include "kis_transform_worker_test.moc"

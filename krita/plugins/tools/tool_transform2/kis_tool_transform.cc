@@ -82,6 +82,9 @@
 #include "kis_free_transform_strategy.h"
 #include "kis_perspective_transform_strategy.h"
 
+#include "kis_transform_mask.h"
+#include "kis_transform_mask_adapter.h"
+
 #include "strokes/transform_stroke_strategy.h"
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
@@ -630,6 +633,29 @@ void KisToolTransform::setWarpPointDensity( int density )
     m_optionsWidget->slotSetWarpDensity(density);
 }
 
+bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
+{
+    bool result = false;
+
+    if (KisTransformMaskSP mask =
+        dynamic_cast<KisTransformMask*>(node.data())) {
+
+        KisTransformMaskParamsInterfaceSP savedParams =
+            mask->transformParams();
+
+        KisTransformMaskAdapter *adapter =
+            dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
+
+        if (adapter) {
+            m_currentArgs = adapter->savedArgs();
+            initGuiAfterTransformMode();
+            result = true;
+        }
+    }
+
+    return result;
+}
+
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
     // NOTE: we are requesting an old value of m_currentArgs variable
@@ -638,8 +664,8 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
     QString filterId = m_currentArgs.filterId();
 
     m_currentArgs = ToolTransformArgs();
-    m_currentArgs.setOriginalCenter(m_transaction.originalCenter());
-    m_currentArgs.setTransformedCenter(m_transaction.originalCenter());
+    m_currentArgs.setOriginalCenter(m_transaction.originalCenterGeometric());
+    m_currentArgs.setTransformedCenter(m_transaction.originalCenterGeometric());
 
     if (mode == ToolTransformArgs::FREE_TRANSFORM) {
         m_currentArgs.setMode(ToolTransformArgs::FREE_TRANSFORM);
@@ -657,6 +683,11 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
         m_currentArgs.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
     }
 
+    initGuiAfterTransformMode();
+}
+
+void KisToolTransform::initGuiAfterTransformMode()
+{
     currentStrategy()->externalConfigChanged();
     outlineChanged();
     updateOptionWidget();
@@ -814,7 +845,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     initThumbnailImage(previewDevice);
     updateSelectionPath();
 
-    initTransformMode(mode);
+    if (!tryInitTransformModeFromNode(currentNode)) {
+        initTransformMode(mode);
+    }
 
     m_strokeData = StrokeData(image()->startStroke(strategy));
     clearDevices(m_transaction.rootNode(), m_workRecursively);

@@ -294,7 +294,7 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
 
     QPointF offset = alignedImageRect.topLeft();
 
-    m_paintLayer->updateProjection(alignedImageRect);
+    m_paintLayer->updateProjection(alignedImageRect, KisNode::N_FILTHY);
     KisPaintDeviceSP projection = m_paintLayer->projection();
 
     QImage image = projection->convertToQImage(m_displayProfile,

@@ -23,16 +23,7 @@
       <property name="spacing">
        <number>6</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
@@ -125,7 +116,6 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <zorder>dirtyPresetCheckBox</zorder>
     </widget>
    </item>
    <item row="0" column="1">
@@ -245,6 +235,9 @@
        </property>
        <property name="text">
         <string>Temporarily Save Tweaks To Presets</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

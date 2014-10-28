@@ -154,7 +154,13 @@ void KisTransformMask::recaclulateStaticImage()
     }
 
     m_d->recalculatingStaticImage = true;
-    parentLayer->updateProjection(parentLayer->exactBounds(), N_FILTHY_PROJECTION);
+    /**
+     * updateProjection() is assuming that the requestedRect takes
+     * into account all the change rects of all the masks. Usually,
+     * this work is done by the walkers.
+     */
+    QRect requestedRect = parentLayer->changeRect(parentLayer->exactBounds());
+    parentLayer->updateProjection(requestedRect, N_FILTHY_PROJECTION);
     m_d->recalculatingStaticImage = false;
 
     m_d->staticCacheValid = true;
@@ -203,6 +209,14 @@ void KisTransformMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
     return visitor.visit(this, undoAdapter);
 }
 
+QRect calculateLimitingRect(const QRect &bounds, qreal coeff)
+{
+    int w = bounds.width() * coeff;
+    int h = bounds.height() * coeff;
+
+    return bounds.adjusted(-w, -h, w, h);
+}
+
 QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
@@ -223,14 +237,22 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
     if ((parentNode = parent()) &&
         (parentOriginal = parentNode->original())) {
 
-        QRect backwardRect = m_d->worker.backwardTransform().mapRect(rect);
-        QRegion backwardRegion(backwardRect);
-        backwardRegion -= parentOriginal->defaultBounds()->bounds();
+        const QRect bounds = parentOriginal->defaultBounds()->bounds();
+        const QRect limitingRect = calculateLimitingRect(bounds, 2);
 
+        changeRect &= limitingRect;
+        QRect backwardRect = limitingRect & m_d->worker.backwardTransform().mapRect(rect);
+
+        QRegion backwardRegion(backwardRect);
+        backwardRegion -= bounds;
         backwardRegion = m_d->worker.forwardTransform().map(backwardRegion);
 
         // FIXME: d-oh... please fix me and use region instead :(
         changeRect |= backwardRegion.boundingRect();
+    } else {
+        qWarning() << "WARNING: a transform mask has no parent, don't know how to limit it";
+        const QRect limitingRect(-1000, -1000, 10000, 10000);
+        changeRect &= limitingRect;
     }
 
     return changeRect;
@@ -247,7 +269,30 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
     if (rect.isEmpty()) return rect;
     if (!m_d->params->isAffine()) return rect;
 
-    return kisGrowRect(m_d->worker.backwardTransform().mapRect(rect), 2);
+    QRect needRect = kisGrowRect(m_d->worker.backwardTransform().mapRect(rect), 2);
+
+    KisNodeSP parentNode;
+
+    if ((parentNode = parent())) {
+        needRect &= parentNode->exactBounds();
+    } else if (needRect.width() > 1e6 || needRect.height() > 1e6) {
+        qWarning() << "WARNING: transform mask returns infinite need rect! Dropping..." << needRect;
+        needRect = rect;
+    }
+
+    return needRect;
+}
+
+QRect KisTransformMask::extent() const
+{
+    QRect rc = KisMask::extent();
+    return rc | changeRect(rc);
+}
+
+QRect KisTransformMask::exactBounds() const
+{
+    QRect rc = KisMask::exactBounds();
+    return rc | changeRect(rc);
 }
 
 #include "kis_transform_mask.moc"

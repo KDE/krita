@@ -55,14 +55,26 @@ public:
          */
 
         m_mask->recaclulateStaticImage();
-        m_mask->setDirty();
+        updateMask();
     }
 
     void undo() {
         m_mask->setTransformParams(m_oldParams);
 
         m_mask->recaclulateStaticImage();
-        m_mask->setDirty();
+        updateMask();
+    }
+
+private:
+    void updateMask() {
+        QRect updateRect = m_mask->extent();
+
+        KisNodeSP parent = m_mask->parent();
+        if (parent && parent->original()) {
+            updateRect |= parent->original()->defaultBounds()->bounds();
+        }
+
+        m_mask->setDirty(updateRect);
     }
 
 private:

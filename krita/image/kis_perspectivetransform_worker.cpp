@@ -124,7 +124,7 @@ void KisPerspectiveTransformWorker::run()
 
     KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, m_dstRegion.rectCount());
 
-    KisRandomSubAccessorSP srcAcc = m_dev->createRandomSubAccessor();
+    KisRandomSubAccessorSP srcAcc = cloneDevice->createRandomSubAccessor();
     KisRandomAccessorSP accessor = m_dev->createRandomAccessorNG(0, 0);
 
     foreach(const QRect &rect, m_dstRegion.rects()) {

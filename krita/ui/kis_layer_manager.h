@@ -113,6 +113,8 @@ private slots:
 
     void addFileLayer(KisNodeSP activeNode);
 
+    void layerStyle();
+
 private:
     void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
     void addLayerCommon(KisNodeSP activeNode, KisLayerSP layer);
@@ -130,6 +132,8 @@ private:
     KisAction *m_rasterizeLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
+
+    KisAction *m_layerStyle;
 };
 
 #endif

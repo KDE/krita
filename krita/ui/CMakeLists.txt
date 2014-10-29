@@ -55,6 +55,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
     dialogs/kis_dlg_blacklist_cleanup.cpp
+    dialogs/kis_dlg_layer_style.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -346,6 +347,23 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     input/config/kis_mouse_input_editor.ui
     input/config/kis_wheel_input_editor.ui
     input/config/kis_key_input_editor.ui
+
+
+    layerstyles/wdgBevelAndEmboss.ui
+    layerstyles/wdgblendingoptions.ui
+    layerstyles/WdgColorOverlay.ui
+    layerstyles/wdgContour.ui
+    layerstyles/wdgdropshadow.ui
+    layerstyles/WdgGradientOverlay.ui
+    layerstyles/wdgInnerGlow.ui
+    layerstyles/wdgInnerShadow.ui
+    layerstyles/wdglayerstyles.ui
+    layerstyles/wdgOuterGlow.ui
+    layerstyles/WdgPatternOverlay.ui
+    layerstyles/WdgSatin.ui
+    layerstyles/WdgStroke.ui
+    layerstyles/wdgstylesselector.ui
+    layerstyles/wdgTexture.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

@@ -71,6 +71,7 @@
 #include "dialogs/kis_dlg_layer_properties.h"
 #include "dialogs/kis_dlg_generator_layer.h"
 #include "dialogs/kis_dlg_file_layer.h"
+#include "dialogs/kis_dlg_layer_style.h"
 #include "kis_doc2.h"
 #include "kis_filter_manager.h"
 #include "kis_node_visitor.h"
@@ -91,6 +92,7 @@
 #include "kis_node_manager.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
+
 
 class KisSaveGroupVisitor : public KisNodeVisitor
 {
@@ -233,6 +235,7 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
     , m_rasterizeLayer(0)
     , m_activeLayer(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
+    , m_layerStyle(0)
 {
 }
 
@@ -301,6 +304,13 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     m_view->actionManager()->addAction("resizeimagetolayer", m_imageResizeToLayer, actionCollection);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
+
+    m_layerStyle  = new KisAction(i18n("Layer Style..."), this);
+    m_layerStyle->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_layerStyle->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    m_view->actionManager()->addAction("layer_style", m_layerStyle, actionCollection);
+    connect(m_layerStyle, SIGNAL(triggered()), this, SLOT(layerStyle()));
+
 }
 
 void KisLayerManager::updateGUI()
@@ -867,6 +877,21 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
         addLayerCommon(activeNode,
                        new KisFileLayer(image, basePath, fileName, scalingMethod, name, OPACITY_OPAQUE_U8));
+    }
+
+}
+
+void KisLayerManager::layerStyle()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
+
+    KisDlgLayerStyle dlg;
+    if (dlg.exec() == QDialog::Accepted) {
+        // Do stuff...
     }
 
 }

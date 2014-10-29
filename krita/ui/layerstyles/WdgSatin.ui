@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgSatin</class>
+ <widget class="QWidget" name="WdgSatin">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>308</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Satin</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="title">
+         <string>Structure</string>
+        </property>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>Ble&amp;nd Mode:</string>
+           </property>
+           <property name="buddy">
+            <cstring>cmbCompositeOp</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="KisCompositeOpComboBox" name="cmbCompositeOp">
+             <property name="toolTip">
+              <string>Set the blend mode for the layer</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KoColorPopupButton" name="toolButton">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>&amp;Opacity</string>
+           </property>
+           <property name="buddy">
+            <cstring>doubleOpacity</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>15</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Set the master opacity for the layer</string>
+           </property>
+           <property name="whatsThis">
+            <string>Adjust the transparency of the layer</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Contour</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QComboBox" name="cmbContour"/>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="chkAntiAliased">
+             <property name="toolTip">
+              <string>Smooth the contour</string>
+             </property>
+             <property name="text">
+              <string>Anti-aliased</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>&amp;Angle</string>
+           </property>
+           <property name="buddy">
+            <cstring>dialAngle</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QDial" name="dialAngle">
+             <property name="toolTip">
+              <string>Set the angle of the light source</string>
+             </property>
+             <property name="minimum">
+              <number>-179</number>
+             </property>
+             <property name="maximum">
+              <number>180</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="intAngle">
+             <property name="minimum">
+              <number>-179</number>
+             </property>
+             <property name="maximum">
+              <number>180</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>&amp;Distance</string>
+           </property>
+           <property name="buddy">
+            <cstring>intDistance</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="KisSliderSpinBox" name="intDistance" native="true"/>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>&amp;Size</string>
+           </property>
+           <property name="buddy">
+            <cstring>intSize</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="KisSliderSpinBox" name="intSize" native="true"/>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Contour</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QComboBox" name="cmbContour_2"/>
+         </item>
+         <item row="7" column="1">
+          <widget class="QCheckBox" name="chkAntiAliased_2">
+           <property name="toolTip">
+            <string>Smooth the contour</string>
+           </property>
+           <property name="text">
+            <string>Anti-aliased</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="1">
+          <widget class="QCheckBox" name="chkInvert">
+           <property name="text">
+            <string>&amp;Invert</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+        <zorder>cmbContour_2</zorder>
+        <zorder>chkAntiAliased_2</zorder>
+        <zorder>doubleOpacity</zorder>
+        <zorder>label_13</zorder>
+        <zorder>label_14</zorder>
+        <zorder>label_5</zorder>
+        <zorder>label_4</zorder>
+        <zorder>intDistance</zorder>
+        <zorder>intSize</zorder>
+        <zorder>label</zorder>
+        <zorder>label_2</zorder>
+        <zorder>label_6</zorder>
+        <zorder>chkInvert</zorder>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisCompositeOpComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">kis_cmb_composite.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoColorPopupButton</class>
+   <extends>QToolButton</extends>
+   <header location="global">KoColorPopupButton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_SIMPLECMDLINEAPP_H
-#define KEXIDB_SIMPLECMDLINEAPP_H
+#ifndef KEXIDB_SIMPLECOMMANDLINEAPP_H
+#define KEXIDB_SIMPLECOMMANDLINEAPP_H
 
 #include "connection.h"
 #include "driver.h"

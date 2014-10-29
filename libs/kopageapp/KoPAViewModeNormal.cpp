@@ -29,7 +29,7 @@
 #include "KoPADocument.h"
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
-#include "KoPAView.h"
+#include "KoPAViewBase.h"
 #include "commands/KoPAChangePageLayoutCommand.h"
 
 KoPAViewModeNormal::KoPAViewModeNormal( KoPAViewBase * view, KoPACanvasBase * canvas )

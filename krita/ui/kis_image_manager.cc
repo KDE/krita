@@ -29,8 +29,6 @@
 #include <KoIcon.h>
 #include <KoFilterManager.h>
 #include <KoFileDialog.h>
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
 
 #include <kis_types.h>
 #include <kis_image.h>

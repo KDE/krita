@@ -24,7 +24,7 @@
 
 #include <KoPageApp.h>
 #include <KoPADocument.h>
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 #include <KoPAViewBase.h>
 #include <KoIcon.h>
 

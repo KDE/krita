@@ -35,7 +35,6 @@
 #include "KoColorTransformation.h"
 #include "KoCompositeOp.h"
 #include "KoID.h"
-#include <KoProgressUpdater.h>
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_config_widget.h"

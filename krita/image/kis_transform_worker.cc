@@ -27,7 +27,6 @@
 
 #include <QTransform>
 
-#include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>

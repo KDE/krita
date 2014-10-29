@@ -17,14 +17,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoSizeGroupPrivate.h"
+
 #include <QEvent>
 #include <QTimer>
 #include <QWidget>
 #include <QLayout>
 #include <QGridLayout>
 #include <QFormLayout>
-
-#include "KoSizeGroupPrivate.h"
 
 KoSizeGroupPrivate::KoSizeGroupPrivate(KoSizeGroup *q_ptr, KoSizeGroup::mode mode, bool ignoreHidden)
     : QObject()

@@ -16,15 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qtest_kde.h>
-
 #include "KoCompositeOpsBenchmark.h"
+
 #include "../compositeops/KoCompositeOpAlphaDarken.h"
 #include "../compositeops/KoCompositeOpOver.h"
 #include <KoOptimizedCompositeOpFactory.h>
 
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
+
+#include <qtest_kde.h>
 
 const int TILE_WIDTH = 64;
 const int TILE_HEIGHT = 64;

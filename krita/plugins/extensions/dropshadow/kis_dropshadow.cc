@@ -44,7 +44,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

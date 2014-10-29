@@ -15,8 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef KROBJECTDATA_H
-#define KROBJECTDATA_H
+
+#ifndef KOREPORTITEMBASE_H
+#define KOREPORTITEMBASE_H
+
 #include <koproperty/Property.h>
 #include <QObject>
 

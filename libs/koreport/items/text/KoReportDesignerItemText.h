@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __REPORTENTITYTEXT_H__
-#define __REPORTENTITYTEXT_H__
+#ifndef __KOREPORTDESIGNERITEMTEXT_H__
+#define __KOREPORTDESIGNERITEMTEXT_H__
 
 #include <KoReportDesignerItemRectBase.h>
 #include <koproperty/Property.h>

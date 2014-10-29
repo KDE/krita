@@ -24,7 +24,6 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <KoIcon.h>
-#include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>

@@ -22,7 +22,6 @@
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <kis_mask_generator.h>

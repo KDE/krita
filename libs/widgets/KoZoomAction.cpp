@@ -19,7 +19,6 @@
 */
 #include "KoZoomAction.h"
 #include "KoZoomMode.h"
-#include "KoZoomInput.h"
 #include "KoZoomWidget.h"
 
 #include <KoIcon.h>

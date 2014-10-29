@@ -29,7 +29,7 @@ class NewSectionCommand : public KUndo2Command
 {
 public:
 
-    NewSectionCommand(QTextDocument *document);
+    explicit NewSectionCommand(QTextDocument *document);
     virtual ~NewSectionCommand();
 
     virtual void undo();

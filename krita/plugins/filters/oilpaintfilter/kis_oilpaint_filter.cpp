@@ -36,7 +36,6 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <kis_doc2.h>

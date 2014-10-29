@@ -20,7 +20,6 @@
 
 #include "KoOdtFrameReportTextBox.h"
 #include <KoXmlWriter.h>
-#include <KoDpi.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>

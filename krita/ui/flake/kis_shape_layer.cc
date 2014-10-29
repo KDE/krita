@@ -51,7 +51,6 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfWriteStore.h>
 #include <KoPageLayout.h>
-#include <KoProperties.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>

@@ -33,7 +33,6 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
-#include <KoProgressUpdater.h>
 
 #include <Eigen/Core>
 

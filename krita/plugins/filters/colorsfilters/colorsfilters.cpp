@@ -50,7 +50,6 @@
 #include <kis_histogram.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_painter.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoColorSpaceConstants.h>
 #include <KoCompositeOp.h>

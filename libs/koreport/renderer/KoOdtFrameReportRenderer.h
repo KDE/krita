@@ -17,8 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KOODTFRAMESREPORTFRAMESRENDERER_H
-#define KOODTFRAMESREPORTFRAMESRENDERER_H
+#ifndef KOODTFRAMEREPORTRENDERER_H
+#define KOODTFRAMEREPORTRENDERER_H
 
 #include <KoReportRendererBase.h>
 
@@ -35,4 +35,4 @@ public:
 
 };
 
-#endif // KOODTFRAMESREPORTFRAMESRENDERER_H
+#endif // KOODTFRAMEREPORTRENDERER_H

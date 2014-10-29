@@ -24,6 +24,9 @@
 #include <QSignalMapper>
 #include "kis_liquify_properties.h"
 
+#include "KoMainWindow.h"
+#include "kis_view2.h"
+
 
 template<typename T> inline T sign(T x) {
     return x > 0 ? 1 : x == (T)0 ? 0 : -1;
@@ -185,11 +188,11 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     liquifyModeMapper->setMapping(liquifyUndo, (int)KisLiquifyProperties::UNDO);
     connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(slotLiquifyModeChanged(int)));
 
-    liquifyMove->setToolTip(i18nc("@info:tooltip", "Drag the image along the brush stroke"));
-    liquifyScale->setToolTip(i18nc("@info:tooltip", "Grow/shrink image under cursor"));
-    liquifyRotate->setToolTip(i18nc("@info:tooltip", "Rotate image under cursor"));
-    liquifyOffset->setToolTip(i18nc("@info:tooltip", "Offset the image to the right of the stroke direction"));
-    liquifyUndo->setToolTip(i18nc("@info:tooltip", "Undo actions of other tools"));
+    liquifyMove->setToolTip(i18nc("@info:tooltip", "Move: drag the image along the brush stroke"));
+    liquifyScale->setToolTip(i18nc("@info:tooltip", "Scale: grow/shrink image under cursor"));
+    liquifyRotate->setToolTip(i18nc("@info:tooltip", "Rotate: twirl image under cursor"));
+    liquifyOffset->setToolTip(i18nc("@info:tooltip", "Offset: shift the image to the right of the stroke direction"));
+    liquifyUndo->setToolTip(i18nc("@info:tooltip", "Undo: erase actions of other tools"));
 
     // Connect all edit boxes to the Editing Finished signal
     connect(scaleXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
@@ -239,6 +242,24 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(showDecorationsBox, SIGNAL(toggled(bool)), canvas, SLOT(updateCanvas()));
 
     tooBigLabelWidget->hide();
+
+    connect(canvas->view()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()));
+    slotUpdateIcons();
+}
+
+void KisToolTransformConfigWidget::slotUpdateIcons()
+{
+    freeTransformButton->setIcon(themedIcon("transform_icons_main"));
+    warpButton->setIcon(themedIcon("transform_icons_warp"));
+    cageButton->setIcon(themedIcon("transform_icons_cage"));
+    perspectiveTransformButton->setIcon(themedIcon("transform_icons_perspective"));
+    liquifyButton->setIcon(themedIcon("transform_icons_liquify_main"));
+
+    liquifyMove->setIcon(themedIcon("transform_icons_liquify_move"));
+    liquifyScale->setIcon(themedIcon("transform_icons_liquify_resize"));
+    liquifyRotate->setIcon(themedIcon("transform_icons_liquify_rotate"));
+    liquifyOffset->setIcon(themedIcon("transform_icons_liquify_offset"));
+    liquifyUndo->setIcon(themedIcon("transform_icons_liquify_erase"));
 }
 
 double KisToolTransformConfigWidget::radianToDegree(double rad)
@@ -630,6 +651,8 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool va
 {
     if (!value) return;
 
+    lblTransformType->setText(freeTransformButton->toolTip());
+
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::FREE_TRANSFORM);
     emit sigResetTransform();
@@ -638,6 +661,8 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool va
 void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 {
     if (!value) return;
+
+    lblTransformType->setText(warpButton->toolTip());
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::WARP);
@@ -648,6 +673,8 @@ void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 {
     if (!value) return;
 
+    lblTransformType->setText(cageButton->toolTip());
+
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::CAGE);
     emit sigResetTransform();
@@ -657,6 +684,8 @@ void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 {
     if (!value) return;
 
+    lblTransformType->setText(liquifyButton->toolTip());
+
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::LIQUIFY);
     emit sigResetTransform();
@@ -665,6 +694,8 @@ void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool value)
 {
     if (!value) return;
+
+    lblTransformType->setText(perspectiveTransformButton->toolTip());
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::PERSPECTIVE_4POINT);

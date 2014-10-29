@@ -67,6 +67,8 @@ private slots:
     void screenSizeClicked();
     void predefinedClicked(int index);
     void saveAsPredefined();
+    void setLandscape();
+    void setPortrait();
     void switchWidthHeight();
     void createImage();
     void switchPortraitLandscape();

@@ -36,7 +36,6 @@
 #include <kpluginfactory.h>
 
 #include "KoIntegerMaths.h"
-#include "KoProgressUpdater.h"
 #include <KoUpdater.h>
 
 #include <kis_random_accessor_ng.h>

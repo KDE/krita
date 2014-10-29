@@ -16,8 +16,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REPORTENTITYCHECK_H
-#define REPORTENTITYCHECK_H
+#ifndef KOREPORTDESIGNERITEMCHECK_H
+#define KOREPORTDESIGNERITEMCHECK_H
 
 #include <KoReportDesignerItemRectBase.h>
 #include <QGraphicsRectItem>
@@ -53,4 +53,4 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 };
 
-#endif // REPORTENTITYCHECK_H
+#endif // KOREPORTDESIGNERITEMCHECK_H

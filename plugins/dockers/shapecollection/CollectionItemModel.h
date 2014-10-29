@@ -19,13 +19,14 @@
 #ifndef KIVIOSHAPETEMPLATEMODEL_H
 #define KIVIOSHAPETEMPLATEMODEL_H
 
-#include <KoProperties.h>
 #include <KoShape.h>
 
 #include <QAbstractItemModel>
 #include <QList>
 #include <QString>
 #include <QIcon>
+
+class KoProperties;
 
 /**
  * Struct containing the information stored in CollectionItemModel item

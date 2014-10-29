@@ -43,7 +43,6 @@
 #include <KoPointerEvent.h>
 #include <KoColorProfile.h>
 #include <KoSelection.h>
-#include <KoProgressUpdater.h>
 #include <KoPart.h>
 
 #include <filter/kis_filter_configuration.h>

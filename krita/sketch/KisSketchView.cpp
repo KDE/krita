@@ -33,7 +33,6 @@
 
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
-#include <KoProgressUpdater.h>
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
 #include <KoFilterManager.h>

@@ -21,6 +21,7 @@
 #include <qtest_kde.h>
 
 #include <KoColor.h>
+#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include "testutil.h"

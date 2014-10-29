@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CALLIGRA_PAGE_LAYOUT_DIALOG
-#define CALLIGRA_PAGE_LAYOUT_DIALOG
+#ifndef KO_PAGE_LAYOUT_DIALOG
+#define KO_PAGE_LAYOUT_DIALOG
 
 #include "kowidgets_export.h"
 

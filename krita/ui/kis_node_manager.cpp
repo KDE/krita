@@ -24,6 +24,7 @@
 #include <kmimetype.h>
 
 #include <KoIcon.h>
+#include <KoProperties.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>

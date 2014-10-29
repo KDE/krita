@@ -26,7 +26,6 @@
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
-#include <KoProperties.h>
 #include <kis_surrogate_undo_adapter.h>
 
 #include <qtest_kde.h>

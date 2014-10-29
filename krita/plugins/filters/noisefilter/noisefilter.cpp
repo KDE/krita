@@ -29,7 +29,6 @@
 #include <kpluginfactory.h>
 #include <klocale.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <KoMixColorsOp.h>

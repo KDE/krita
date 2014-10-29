@@ -34,7 +34,6 @@
 #include <klocale.h>
 #include <kpluginfactory.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <kis_debug.h>

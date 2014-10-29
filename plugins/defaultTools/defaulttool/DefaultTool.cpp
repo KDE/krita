@@ -56,7 +56,6 @@
 #include <KoStrokeConfigWidget.h>
 #include <KoFillConfigWidget.h>
 #include <KoShadowConfigWidget.h>
-#include <KoOpacityConfigWidget.h>
 
 #include <KoIcon.h>
 

@@ -124,7 +124,7 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
     else if (key == "GdFl") {
 
     }
-    else if (key == "vmsk" | key == "vsms") { // If key is 'vsms' then we are writing for (Photoshop CS6) and the document will have a 'vscg' key
+    else if (key == "vmsk" || key == "vsms") { // If key is 'vsms' then we are writing for (Photoshop CS6) and the document will have a 'vscg' key
 
     }
     else if (key == "TySh") {

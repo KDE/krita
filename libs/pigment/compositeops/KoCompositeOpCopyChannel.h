@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KOCOMPOSITEO_COPY_CHANNEL_H_
-#define _KOCOMPOSITEO_COPY_CHANNEL_H_
+#ifndef _KOCOMPOSITEOP_COPY_CHANNEL_H_
+#define _KOCOMPOSITEOP_COPY_CHANNEL_H_
 
 #include "KoCompositeOpBase.h"
 
@@ -63,4 +63,4 @@ public:
     }
 };
 
-#endif // _KOCOMPOSITEO_COPY_CHANNEL_H_
+#endif // _KOCOMPOSITEOP_COPY_CHANNEL_H_

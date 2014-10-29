@@ -35,7 +35,7 @@
 #include "kis_painter.h"
 
 #include <KoUpdater.h>
-
+#include <KoProgressUpdater.h>
 
 KisFilterMask::KisFilterMask()
     : KisEffectMask(),

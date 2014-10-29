@@ -17,8 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REPORTRECTENTITY_H
-#define REPORTRECTENTITY_H
+#ifndef KOREPORTDESIGNERITEMRECTBASE_H
+#define KOREPORTDESIGNERITEMRECTBASE_H
 
 #include <QGraphicsRectItem>
 #include "KoReportDesignerItemBase.h"

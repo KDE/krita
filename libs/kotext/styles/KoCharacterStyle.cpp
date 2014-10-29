@@ -52,7 +52,6 @@
 #include FT_OUTLINE_H
 #include FT_RENDER_H
 #include FT_TRUETYPE_TABLES_H
-#include FT_TRUETYPE_TABLES_H
 #include FT_SFNT_NAMES_H
 #endif
 

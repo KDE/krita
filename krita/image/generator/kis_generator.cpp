@@ -20,8 +20,6 @@
 
 #include <QString>
 
-#include <KoProgressUpdater.h>
-
 #include "kis_bookmarked_configuration_manager.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_processing_information.h"

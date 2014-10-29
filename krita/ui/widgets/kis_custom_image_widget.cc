@@ -42,7 +42,6 @@
 
 #include <KoIcon.h>
 #include <KoCompositeOp.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
@@ -107,8 +106,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     createButton->setDefault(true);
 
     bnPortrait->setIcon(koIcon("portrait"));
-    connect(bnPortrait, SIGNAL(clicked()), SLOT(switchWidthHeight()));
-    connect(bnLandscape, SIGNAL(clicked()), SLOT(switchWidthHeight()));
+    connect(bnPortrait, SIGNAL(clicked()), SLOT(setPortrait()));
+    connect(bnLandscape, SIGNAL(clicked()), SLOT(setLandscape()));
     bnLandscape->setIcon(koIcon("landscape"));
 
     connect(doubleWidth, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
@@ -417,6 +416,20 @@ void KisCustomImageWidget::saveAsPredefined()
 
 }
 
+void KisCustomImageWidget::setLandscape()
+{
+    if (doubleWidth->value() < doubleHeight->value()) {
+        switchWidthHeight();
+    }
+}
+
+void KisCustomImageWidget::setPortrait()
+{
+    if (doubleWidth->value() > doubleHeight->value()) {
+        switchWidthHeight();
+    }
+}
+
 void KisCustomImageWidget::switchWidthHeight()
 {
     double width = doubleWidth->value();
@@ -436,6 +449,7 @@ void KisCustomImageWidget::switchWidthHeight()
     doubleWidth->blockSignals(false);
     cmbWidthUnit->blockSignals(false);
     cmbHeightUnit->blockSignals(false);
+    switchPortraitLandscape();
 }
 
 void KisCustomImageWidget::switchPortraitLandscape()

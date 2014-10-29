@@ -188,7 +188,6 @@ inline int float2int(float val)
 }
 
 #else
-#include <cmath>
 
 inline int float2int(float x)
 {

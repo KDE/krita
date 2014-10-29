@@ -24,6 +24,7 @@
 #include <QTextStream>
 #include <QDir>
 
+#include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 

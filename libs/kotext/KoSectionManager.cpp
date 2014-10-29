@@ -92,12 +92,15 @@ QString KoSectionManager::possibleNewName() const
 {
     Q_D(const KoSectionManager);
 
-    int i = d->sectionCount + 1;
-    while (!isValidNewName(QString(i18n("New section %1")).arg(i))) {
-        i++;
-    }
+    QString newName;
 
-    return QString(i18n("New section %1")).arg(i);
+    int i = d->sectionCount;
+    do {
+        ++i;
+        newName = i18nc("new numbered section name", "New section %1", i);
+    } while (!isValidNewName(newName));
+
+    return newName;
 }
 
 void KoSectionManager::registerSection(KoSection* section)

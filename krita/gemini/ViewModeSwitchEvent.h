@@ -24,7 +24,6 @@
 #include <QPointF>
 #include <KoColor.h>
 #include <KoAbstractGradient.h>
-#include <KoZoomMode.h>
 #include <kis_node.h>
 #include <KoPattern.h>
 #include <KoGridData.h>

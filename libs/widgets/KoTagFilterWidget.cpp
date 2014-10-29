@@ -23,6 +23,8 @@
  *    Boston, MA 02110-1301, USA.
  */
 
+#include "KoTagFilterWidget.h"
+
 #include <QPushButton>
 #include <QAction>
 #include <QGridLayout>
@@ -31,8 +33,6 @@
 #include <klocale.h>
 
 #include <KoIcon.h>
-
-#include "KoTagFilterWidget.h"
 
 class KoTagFilterWidget::Private
 {

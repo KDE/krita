@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>446</height>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -125,7 +125,7 @@
          <item>
           <widget class="QStackedWidget" name="fillStack">
            <property name="currentIndex">
-            <number>2</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="page_3">
             <layout class="QFormLayout" name="formLayout_2">
@@ -338,7 +338,7 @@
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header location="global">kis_slider_spinbox.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -349,7 +349,7 @@
   <customwidget>
    <class>KoPatternChooser</class>
    <extends>QFrame</extends>
-   <header location="global">kis_pattern_chooser.h</header>
+   <header location="global">KoPatternChooser.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

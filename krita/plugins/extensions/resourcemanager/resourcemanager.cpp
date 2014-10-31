@@ -146,7 +146,6 @@ void ResourceManager::slotImport()
     filterToTypeMap[i18n("Photoshop Brushes (*.abr)")] = "brushes";
     filterToTypeMap[i18n("PNG Brushes (*.png)")] = "brushes";
     filterToTypeMap[i18n("SVG Brushes (*.svg)")] = "brushes";
-    filterToTypeMap[i18n("Brush Presets (*.kpp)")] = "brushes";
     filterToTypeMap[i18n("GIMP Gradients (*.ggr)")] = "gradients";
     filterToTypeMap[i18n("SVG Gradients (*.svg)")] = "gradients";
     filterToTypeMap[i18n("Karbon Gradients (*.kgr)")] = "gradients";

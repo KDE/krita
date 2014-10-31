@@ -338,7 +338,7 @@
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spinbox.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -349,7 +349,7 @@
   <customwidget>
    <class>KoPatternChooser</class>
    <extends>QFrame</extends>
-   <header location="global">KoPatternChooser.h</header>
+   <header location="global">kis_pattern_chooser.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -30,12 +30,26 @@
 namespace KisDomUtils {
 
 
+/**
+ * Save a value of type QRect into an XML tree. A child for \p parent
+ * is created and assigned a tag \p tag.  The corresponding value can
+ * be fetched from the XML using loadValue() later.
+ *
+ * \see loadValue()
+ */
 void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const QRect &rc);
 void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const QSize &size);
 void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const QPointF &pt);
 void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const QVector3D &pt);
 void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const QTransform &t);
 
+/**
+ * Save a value of a scalar type into an XML tree. A child for \p parent
+ * is created and assigned a tag \p tag.  The corresponding value can
+ * be fetched from the XML using loadValue() later.
+ *
+ * \see loadValue()
+ */
 template <typename T>
 void saveValue(QDomElement *parent, const QString &tag, T value)
 {
@@ -48,6 +62,14 @@ void saveValue(QDomElement *parent, const QString &tag, T value)
     e.setAttribute("value", value);
 }
 
+/**
+ * Save a vector of values into an XML tree. A child for \p parent is
+ * created and assigned a tag \p tag.  The values in the array should
+ * have a type supported by saveValue() overrides. The corresponding
+ * vector can be fetched from the XML using loadValue() later.
+ *
+ * \see loadValue()
+ */
 template <typename T>
 void saveValue(QDomElement *parent, const QString &tag, const QVector<T> &array)
 {
@@ -63,35 +85,68 @@ void saveValue(QDomElement *parent, const QString &tag, const QVector<T> &array)
     }
 }
 
+/**
+ * Find an element with tag \p tag which is a child of \p parent. The element should
+ * be the only element with the provided tag in this parent.
+ *
+ * \return true is the element with \p tag is found and it is unique
+ */
 bool KRITAIMAGE_EXPORT findOnlyElement(const QDomElement &parent, const QString &tag, QDomElement *el, QStringList *errorMessages = 0);
 
+
+/**
+ * Load an object from an XML element, which is a child of \p parent and has
+ * a tag \p tag.
+ *
+ * \return true if the object is successfully loaded and is unique
+ *
+ * \see saveValue()
+ */
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QSize *size);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QRect *rc);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QPointF *pt);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QVector3D *pt);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QTransform *t);
 
-bool KRITAIMAGE_EXPORT checkType(const QDomElement &e, const QString &expectedType);
+namespace Private {
+    bool KRITAIMAGE_EXPORT checkType(const QDomElement &e, const QString &expectedType);
+}
 
 
+/**
+ * Load a scalar value from an XML element, which is a child of \p parent
+ * and has a tag \p tag.
+ *
+ * \return true if the object is successfully loaded and is unique
+ *
+ * \see saveValue()
+ */
 template <typename T>
 bool loadValue(const QDomElement &parent, const QString &tag, T *value)
 {
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;
-    if (!checkType(e, "value")) return false;
+    if (!Private::checkType(e, "value")) return false;
 
     QVariant v(e.attribute("value", "no-value"));
     *value = v.value<T>();
     return true;
 }
 
+/**
+ * Load an array from an XML element, which is a child of \p parent
+ * and has a tag \p tag.
+ *
+ * \return true if the object is successfully loaded and is unique
+ *
+ * \see saveValue()
+ */
 template <typename T>
 bool loadValue(const QDomElement &parent, const QString &tag, QVector<T> *array)
 {
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;
-    if (!checkType(e, "array")) return false;
+    if (!Private::checkType(e, "array")) return false;
 
     QDomElement child = e.firstChildElement();
     while (!child.isNull()) {

@@ -115,22 +115,24 @@ bool findOnlyElement(const QDomElement &parent, const QString &tag, QDomElement 
     return true;
 }
 
-bool checkType(const QDomElement &e, const QString &expectedType)
-{
-    QString type = e.attribute("type", "unknown-type");
-    if (type != expectedType) {
-        qWarning() << i18n("Error: incorrect type (%2) for value %1. Expected %3", e.tagName(), type, expectedType);
-        return false;
-    }
+namespace Private {
+    bool checkType(const QDomElement &e, const QString &expectedType)
+    {
+        QString type = e.attribute("type", "unknown-type");
+        if (type != expectedType) {
+            qWarning() << i18n("Error: incorrect type (%2) for value %1. Expected %3", e.tagName(), type, expectedType);
+            return false;
+        }
 
-    return true;
+        return true;
+    }
 }
 
 bool loadValue(const QDomElement &parent, const QString &tag, QSize *size)
 {
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;
-    if (!checkType(e, "size")) return false;
+    if (!Private::checkType(e, "size")) return false;
 
     size->setWidth(e.attribute("w", "0").toInt());
     size->setHeight(e.attribute("h", "0").toInt());
@@ -142,7 +144,7 @@ bool loadValue(const QDomElement &parent, const QString &tag, QRect *rc)
 {
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;
-    if (!checkType(e, "rect")) return false;
+    if (!Private::checkType(e, "rect")) return false;
 
     rc->setX(e.attribute("x", "0").toInt());
     rc->setY(e.attribute("y", "0").toInt());
@@ -156,7 +158,7 @@ bool loadValue(const QDomElement &parent, const QString &tag, QPointF *pt)
 {
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;
-    if (!checkType(e, "pointf")) return false;
+    if (!Private::checkType(e, "pointf")) return false;
 
     pt->setX(e.attribute("x", "0").toDouble());
     pt->setY(e.attribute("y", "0").toDouble());
@@ -168,7 +170,7 @@ bool loadValue(const QDomElement &parent, const QString &tag, QVector3D *pt)
 {
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;
-    if (!checkType(e, "vector3d")) return false;
+    if (!Private::checkType(e, "vector3d")) return false;
 
     pt->setX(e.attribute("x", "0").toDouble());
     pt->setY(e.attribute("y", "0").toDouble());
@@ -181,7 +183,7 @@ bool loadValue(const QDomElement &parent, const QString &tag, QTransform *t)
 {
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;
-    if (!checkType(e, "transform")) return false;
+    if (!Private::checkType(e, "transform")) return false;
 
     qreal m11 = e.attribute("m11", "1.0").toDouble();
     qreal m12 = e.attribute("m12", "0.0").toDouble();

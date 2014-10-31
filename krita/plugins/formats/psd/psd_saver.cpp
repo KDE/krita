@@ -157,7 +157,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     }
 
     // IMAGE RESOURCES SECTION
-    PSDResourceSection resourceSection;
+    PSDImageResourceSection resourceSection;
 
     vKisAnnotationSP_it it = m_image->beginAnnotations();
     vKisAnnotationSP_it endIt = m_image->endAnnotations();
@@ -175,7 +175,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
             PSDResourceBlock *resourceBlock = dynamic_cast<PSDResourceBlock*>(annotation.data());
             if (resourceBlock) {
                 dbgFile << "Adding PSD Resource Block" << resourceBlock->identifier;
-                resourceSection.resources[(PSDResourceSection::PSDResourceID)resourceBlock->identifier] = resourceBlock;
+                resourceSection.resources[(PSDImageResourceSection::PSDResourceID)resourceBlock->identifier] = resourceBlock;
             }
         }
 
@@ -188,9 +188,9 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
         resInfo->hRes = INCH_TO_POINT(m_image->xRes());
         resInfo->vRes = INCH_TO_POINT(m_image->yRes());
         PSDResourceBlock *block = new PSDResourceBlock;
-        block->identifier = PSDResourceSection::RESN_INFO;
+        block->identifier = PSDImageResourceSection::RESN_INFO;
         block->resource = resInfo;
-        resourceSection.resources[PSDResourceSection::RESN_INFO] = block;
+        resourceSection.resources[PSDImageResourceSection::RESN_INFO] = block;
     }
 
     // Add icc block
@@ -198,9 +198,9 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
         ICC_PROFILE_1039 *profileInfo = new ICC_PROFILE_1039;
         profileInfo->icc = m_image->profile()->rawData();
         PSDResourceBlock *block = new PSDResourceBlock;
-        block->identifier = PSDResourceSection::ICC_PROFILE;
+        block->identifier = PSDImageResourceSection::ICC_PROFILE;
         block->resource = profileInfo;
-        resourceSection.resources[PSDResourceSection::ICC_PROFILE] = block;
+        resourceSection.resources[PSDImageResourceSection::ICC_PROFILE] = block;
 
     }
 
@@ -216,7 +216,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     dbgFile << "m_image->rootLayer->childCount" << m_image->rootLayer()->childCount() << f.pos();
     if (m_image->rootLayer()->childCount() > 1) {
 
-        PSDLayerSection layerSection(header);
+        PSDLayerMaskSection layerSection(header);
         layerSection.hasTransparency = true;
 
         if (!layerSection.write(&f, m_image->rootLayer())) {

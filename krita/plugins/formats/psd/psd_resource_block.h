@@ -23,11 +23,13 @@ class QIODevice;
 #include <klocale.h>
 #include <QDebug>
 #include <QString>
+#include <QBuffer>
 
 #include <kis_annotation.h>
 #include <kis_debug.h>
 
 #include "psd.h"
+#include "psd_utils.h"
 #include "psd_resource_section.h"
 
 /**
@@ -47,13 +49,20 @@ public:
 
     QString error;
 
+protected:
+    void startBlock(QBuffer &buf, PSDImageResourceSection::PSDResourceID id, quint32 size) {
+        if (!buf.isOpen()) {
+            buf.open(QBuffer::WriteOnly);
+        }
+        buf.write("8BIM", 4);
+        psdwrite(&buf, (quint16)id);
+        psdwrite(&buf, (quint16)0); // We simply never save out the name, for now
+        psdwrite(&buf, (quint32)size);
+    }
 };
 
 /**
  * Contains the unparsed contents of the image resource blocks
- *
- * XXX: make KisAnnotations out of the resource blocks so we can load/save them. Need to
- *      expand KisAnnotation to make that work.
  */
 class PSDResourceBlock : public KisAnnotation
 {
@@ -432,11 +441,36 @@ struct THUMB_RES2_1036 : public PSDInterpretedResource
 /* 0x040d - Global angle */
 struct GLOBAL_ANGLE_1037 : public PSDInterpretedResource
 {
-    bool interpretBlock(QByteArray /*data*/)
+
+    GLOBAL_ANGLE_1037()
+        : angle(30)
+    {}
+
+    bool interpretBlock(QByteArray data)
     {
         dbgFile << "Reading GLOBAL_ANGLE_1037";
+
+        QDataStream ds(data);
+        ds.setByteOrder(QDataStream::BigEndian);
+
+        ds >> angle;
+
         return true;
     }
+
+    virtual bool createBlock(QByteArray & data)
+    {
+        QBuffer buf(&data);
+        startBlock(buf, PSDImageResourceSection::GLOBAL_ANGLE, 4);
+        psdwrite(&buf, (quint32)angle);
+        return true;
+    }
+
+    virtual bool valid() { return true; }
+
+    virtual QString displayText() { return QString("Global Angle: %1").arg(angle); }
+
+    qint32 angle;
 };
 
 
@@ -552,11 +586,31 @@ struct IDX_TRANSPARENT_1047 : public PSDInterpretedResource
 /* 0x0419 - Global altitude */
 struct GLOBAL_ALT_1049 : public PSDInterpretedResource
 {
-    bool interpretBlock(QByteArray /*data*/)
+    GLOBAL_ALT_1049()
+        : altitude(30)
+    {}
+    bool interpretBlock(QByteArray data)
     {
         dbgFile << "Reading GLOBAL_ALT_1049";
+        QDataStream ds(data);
+        ds.setByteOrder(QDataStream::BigEndian);
+        ds >> altitude;
         return true;
     }
+
+    virtual bool createBlock(QByteArray & data)
+    {
+        QBuffer buf(&data);
+        startBlock(buf, PSDImageResourceSection::GLOBAL_ALT, 4);
+        psdwrite(&buf, (quint32)altitude);
+        return true;
+    }
+
+    virtual bool valid() { return true; }
+
+    virtual QString displayText() { return QString("Global Altitude: %1").arg(altitude); }
+
+    qint32 altitude;
 };
 
 

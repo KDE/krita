@@ -27,13 +27,13 @@ class QIODevice;
 #include "psd_header.h"
 #include "psd_layer_record.h"
 
-class PSDLayerSection
+class PSDLayerMaskSection
 {
 
 public:
 
-    PSDLayerSection(const PSDHeader& header);
-    ~PSDLayerSection();
+    PSDLayerMaskSection(const PSDHeader& header);
+    ~PSDLayerMaskSection();
 
     bool read(QIODevice* io);
     bool write(QIODevice* io, KisNodeSP rootLayer);

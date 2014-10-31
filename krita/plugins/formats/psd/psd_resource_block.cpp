@@ -28,7 +28,7 @@
 
 PSDResourceBlock::PSDResourceBlock()
     : KisAnnotation("PSD Resource Block", "", QByteArray())
-    , identifier(PSDResourceSection::UNKNOWN)
+    , identifier(PSDImageResourceSection::UNKNOWN)
     , resource(0)
 {
 }
@@ -54,7 +54,7 @@ bool PSDResourceBlock::read(QIODevice* io)
         return false;
     }
 
-    dbgFile << "\tresource block identifier" << PSDResourceSection::idToString((PSDResourceSection::PSDResourceID)identifier) << identifier;
+    dbgFile << "\tresource block identifier" << PSDImageResourceSection::idToString((PSDImageResourceSection::PSDResourceID)identifier) << identifier;
 
     m_type = QString("PSD Resource Block: %1").arg(identifier);
 
@@ -77,7 +77,7 @@ bool PSDResourceBlock::read(QIODevice* io)
 
     dbgFile << "\tresource block size" << dataSize;
 
-    m_description = PSDResourceSection::idToString((PSDResourceSection::PSDResourceID)identifier);
+    m_description = PSDImageResourceSection::idToString((PSDImageResourceSection::PSDResourceID)identifier);
 
     data = io->read(dataSize);
     if (!data.size() == dataSize) {
@@ -88,163 +88,163 @@ bool PSDResourceBlock::read(QIODevice* io)
     m_annotation = data;
 
     switch (identifier) {
-//    case PSDResourceSection::MAC_PRINT_INFO:
+//    case PSDImageResourceSection::MAC_PRINT_INFO:
 //        resource = new MAC_PRINT_INFO_1001;
 //        break;
-    case PSDResourceSection::RESN_INFO:
+    case PSDImageResourceSection::RESN_INFO:
         resource = new RESN_INFO_1005;
         break;
-//    case PSDResourceSection::ALPHA_NAMES:
+//    case PSDImageResourceSection::ALPHA_NAMES:
 //        resource = new ALPHA_NAMES_1006;
 //        break;
-//    case PSDResourceSection::DISPLAY_INFO:
+//    case PSDImageResourceSection::DISPLAY_INFO:
 //        resource = new DISPLAY_INFO_1007;
 //        break;
-//    case PSDResourceSection::CAPTION:
+//    case PSDImageResourceSection::CAPTION:
 //        resource = new CAPTION_1008;
 //        break;
-//    case PSDResourceSection::BORDER_INFO:
+//    case PSDImageResourceSection::BORDER_INFO:
 //        resource = new BORDER_INFO_1009;
 //        break;
-//    case PSDResourceSection::BACKGROUND_COL:
+//    case PSDImageResourceSection::BACKGROUND_COL:
 //        resource = new BACKGROUND_COL_1010;
 //        break;
-//    case PSDResourceSection::PRINT_FLAGS:
+//    case PSDImageResourceSection::PRINT_FLAGS:
 //        resource = new PRINT_FLAGS_1011;
 //        break;
-//    case PSDResourceSection::GREY_HALFTONE:
+//    case PSDImageResourceSection::GREY_HALFTONE:
 //        resource = new GREY_HALFTONE_1012;
 //        break;
-//    case PSDResourceSection::COLOR_HALFTONE:
+//    case PSDImageResourceSection::COLOR_HALFTONE:
 //        resource = new COLOR_HALFTONE_1013;
 //        break;
-//    case PSDResourceSection::DUOTONE_HALFTONE:
+//    case PSDImageResourceSection::DUOTONE_HALFTONE:
 //        resource = new DUOTONE_HALFTONE_1014;
 //        break;
-//    case PSDResourceSection::GREY_XFER:
+//    case PSDImageResourceSection::GREY_XFER:
 //        resource = new GREY_XFER_1015;
 //        break;
-//    case PSDResourceSection::COLOR_XFER:
+//    case PSDImageResourceSection::COLOR_XFER:
 //        resource = new COLOR_XFER_1016;
 //        break;
-//    case PSDResourceSection::DUOTONE_XFER:
+//    case PSDImageResourceSection::DUOTONE_XFER:
 //        resource = new DUOTONE_XFER_1017;
 //        break;
-//    case PSDResourceSection::DUOTONE_INFO:
+//    case PSDImageResourceSection::DUOTONE_INFO:
 //        resource = new DUOTONE_INFO_1018;
 //        break;
-//    case PSDResourceSection::EFFECTIVE_BW:
+//    case PSDImageResourceSection::EFFECTIVE_BW:
 //        resource = new EFFECTIVE_BW_1019;
 //        break;
-//    case PSDResourceSection::EPS_OPT:
+//    case PSDImageResourceSection::EPS_OPT:
 //        resource = new  EPS_OPT_1021;
 //        break;
-//    case PSDResourceSection::QUICK_MASK:
+//    case PSDImageResourceSection::QUICK_MASK:
 //        resource = new QUICK_MASK_1022;
 //        break;
-//    case PSDResourceSection::LAYER_STATE:
+//    case PSDImageResourceSection::LAYER_STATE:
 //        resource = new  LAYER_STATE_1024;
 //        break;
-//    case PSDResourceSection::WORKING_PATH:
+//    case PSDImageResourceSection::WORKING_PATH:
 //        resource = new WORKING_PATH_1025;
 //        break;
-//    case PSDResourceSection::LAYER_GROUP:
+//    case PSDImageResourceSection::LAYER_GROUP:
 //        resource = new LAYER_GROUP_1026;
 //        break;
-//    case PSDResourceSection::IPTC_NAA_DATA:
+//    case PSDImageResourceSection::IPTC_NAA_DATA:
 //        resource = new IPTC_NAA_DATA_1028;
 //        break;
-//    case PSDResourceSection::IMAGE_MODE_RAW:
+//    case PSDImageResourceSection::IMAGE_MODE_RAW:
 //        resource = new IMAGE_MODE_RAW_1029;
 //        break;
-//    case PSDResourceSection::JPEG_QUAL:
+//    case PSDImageResourceSection::JPEG_QUAL:
 //        resource = new JPEG_QUAL_1030;
 //        break;
-//    case PSDResourceSection::GRID_GUIDE:
+//    case PSDImageResourceSection::GRID_GUIDE:
 //        resource = new GRID_GUIDE_1032;
 //        break;
-//    case PSDResourceSection::THUMB_RES:
+//    case PSDImageResourceSection::THUMB_RES:
 //        resource = new THUMB_RES_1033;
 //        break;
-//    case PSDResourceSection::COPYRIGHT_FLG:
+//    case PSDImageResourceSection::COPYRIGHT_FLG:
 //        resource = new COPYRIGHT_FLG_1034;
 //        break;
-//    case PSDResourceSection::URL:
+//    case PSDImageResourceSection::URL:
 //        resource = new URL_1035;
 //        break;
-//    case PSDResourceSection::THUMB_RES2:
+//    case PSDImageResourceSection::THUMB_RES2:
 //        resource = new THUMB_RES2_1036;
 //        break;
-//    case PSDResourceSection::GLOBAL_ANGLE:
-//        resource = new GLOBAL_ANGLE_1037;
-//        break;
-//    case PSDResourceSection::COLOR_SAMPLER:
+    case PSDImageResourceSection::GLOBAL_ANGLE:
+        resource = new GLOBAL_ANGLE_1037;
+        break;
+//    case PSDImageResourceSection::COLOR_SAMPLER:
 //        resource = new COLOR_SAMPLER_1038;
 //        break;
-    case PSDResourceSection::ICC_PROFILE:
+    case PSDImageResourceSection::ICC_PROFILE:
         resource = new ICC_PROFILE_1039;
         break;
-//    case PSDResourceSection::WATERMARK:
+//    case PSDImageResourceSection::WATERMARK:
 //        resource = new WATERMARK_1040;
 //        break;
-//    case PSDResourceSection::ICC_UNTAGGED:
+//    case PSDImageResourceSection::ICC_UNTAGGED:
 //        resource = new ICC_UNTAGGED_1041;
 //        break;
-//    case PSDResourceSection::EFFECTS_VISIBLE:
+//    case PSDImageResourceSection::EFFECTS_VISIBLE:
 //        resource = new EFFECTS_VISIBLE_1042;
 //        break;
-//    case PSDResourceSection::SPOT_HALFTONE:
+//    case PSDImageResourceSection::SPOT_HALFTONE:
 //        resource = new SPOT_HALFTONE_1043;
 //        break;
-//    case PSDResourceSection::DOC_IDS:
+//    case PSDImageResourceSection::DOC_IDS:
 //        resource = new DOC_IDS_1044;
 //        break;
-//    case PSDResourceSection::ALPHA_NAMES_UNI:
+//    case PSDImageResourceSection::ALPHA_NAMES_UNI:
 //        resource = new ALPHA_NAMES_UNI_1045;
 //        break;
-//    case PSDResourceSection::IDX_COL_TAB_CNT:
+//    case PSDImageResourceSection::IDX_COL_TAB_CNT:
 //        resource = new IDX_COL_TAB_CNT_1046;
 //        break;
-//    case PSDResourceSection::IDX_TRANSPARENT:
+//    case PSDImageResourceSection::IDX_TRANSPARENT:
 //        resource = new IDX_TRANSPARENT_1047;
 //        break;
-//    case PSDResourceSection::GLOBAL_ALT:
-//        resource = new GLOBAL_ALT_1049;
-//        break;
-//    case PSDResourceSection::SLICES:
+    case PSDImageResourceSection::GLOBAL_ALT:
+        resource = new GLOBAL_ALT_1049;
+        break;
+//    case PSDImageResourceSection::SLICES:
 //        resource = new SLICES_1050;
 //        break;
-//    case PSDResourceSection::WORKFLOW_URL_UNI:
+//    case PSDImageResourceSection::WORKFLOW_URL_UNI:
 //        resource = new WORKFLOW_URL_UNI_1051;
 //        break;
-//    case PSDResourceSection::JUMP_TO_XPEP:
+//    case PSDImageResourceSection::JUMP_TO_XPEP:
 //        resource = new JUMP_TO_XPEP_1052;
 //        break;
-//    case PSDResourceSection::ALPHA_ID:
+//    case PSDImageResourceSection::ALPHA_ID:
 //        resource = new ALPHA_ID_1053;
 //        break;
-//    case PSDResourceSection::URL_LIST_UNI:
+//    case PSDImageResourceSection::URL_LIST_UNI:
 //        resource = new URL_LIST_UNI_1054;
 //        break;
-//    case PSDResourceSection::VERSION_INFO:
+//    case PSDImageResourceSection::VERSION_INFO:
 //        resource = new VERSION_INFO_1057;
 //        break;
-//    case PSDResourceSection::EXIF_DATA:
+//    case PSDImageResourceSection::EXIF_DATA:
 //        resource = new EXIF_DATA_1058;
 //        break;
-//    case PSDResourceSection::XMP_DATA:
+//    case PSDImageResourceSection::XMP_DATA:
 //        resource = new XMP_DATA_1060;
 //        break;
-//    case PSDResourceSection::PATH_INFO_FIRST:
+//    case PSDImageResourceSection::PATH_INFO_FIRST:
 //        resource = new PATH_INFO_FIRST_2000;
 //        break;
-//    case PSDResourceSection::PATH_INFO_LAST:
+//    case PSDImageResourceSection::PATH_INFO_LAST:
 //        resource = new PATH_INFO_LAST_2998;
 //        break;
-//    case PSDResourceSection::CLIPPING_PATH:
+//    case PSDImageResourceSection::CLIPPING_PATH:
 //        resource = new CLIPPING_PATH_2999;
 //        break;
-//    case PSDResourceSection::PRINT_FLAGS_2:
+//    case PSDImageResourceSection::PRINT_FLAGS_2:
 //        resource = new PRINT_FLAGS_2_10000;
 //        break;
     default:
@@ -261,7 +261,7 @@ bool PSDResourceBlock::read(QIODevice* io)
 bool PSDResourceBlock::write(QIODevice* io)
 {
 
-    dbgFile << "Writing Resource Block" << PSDResourceSection::idToString((PSDResourceSection::PSDResourceID)identifier) << identifier;
+    dbgFile << "Writing Resource Block" << PSDImageResourceSection::idToString((PSDImageResourceSection::PSDResourceID)identifier) << identifier;
 
     if (resource && !resource->valid()) {
         error = QString("Cannot write an invalid Resource Block");
@@ -296,7 +296,7 @@ bool PSDResourceBlock::write(QIODevice* io)
 
 bool PSDResourceBlock::valid()
 {
-    if (identifier == PSDResourceSection::UNKNOWN) {
+    if (identifier == PSDImageResourceSection::UNKNOWN) {
         error = QString("Unknown ID: %1").arg(identifier);
         return false;
     }
@@ -334,12 +334,8 @@ bool RESN_INFO_1005::createBlock(QByteArray & data)
 {
     dbgFile << "Writing RESN_INFO_1005";
     QBuffer buf(&data);
-    buf.open(QBuffer::WriteOnly);
 
-    buf.write("8BIM", 4);
-    psdwrite(&buf, (quint16)PSDResourceSection::RESN_INFO);
-    psdwrite(&buf, (quint16)0);
-    psdwrite(&buf, (quint32)16);
+    startBlock(buf, PSDImageResourceSection::RESN_INFO, 16);
 
     // Convert to 16.16 fixed point
     Fixed h = hRes * 65536.0 + 0.5;
@@ -378,13 +374,7 @@ bool ICC_PROFILE_1039::createBlock(QByteArray &data)
         return false;
     }
     QBuffer buf(&data);
-    buf.open(QBuffer::WriteOnly);
-
-    buf.write("8BIM", 4);
-    psdwrite(&buf, (quint16)PSDResourceSection::ICC_PROFILE);
-    psdwrite(&buf, (quint16)0);
-    psdwrite(&buf, (quint32)icc.size());
-
+    startBlock(buf, PSDImageResourceSection::ICC_PROFILE, icc.size());
     buf.write(icc.constData(), icc.size());
     buf.close();
 

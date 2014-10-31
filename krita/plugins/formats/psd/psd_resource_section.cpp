@@ -26,16 +26,16 @@
 #include "psd_utils.h"
 #include "psd_resource_block.h"
 
-PSDResourceSection::PSDResourceSection()
+PSDImageResourceSection::PSDImageResourceSection()
 {
 }
 
-PSDResourceSection::~PSDResourceSection()
+PSDImageResourceSection::~PSDImageResourceSection()
 {
     resources.clear();
 }
 
-bool PSDResourceSection::read(QIODevice* io)
+bool PSDImageResourceSection::read(QIODevice* io)
 {
     quint32 resourceSectionLength = 0;
     if (!psdread(io, &resourceSectionLength)) {
@@ -70,12 +70,12 @@ bool PSDResourceSection::read(QIODevice* io)
         resources[(PSDResourceID)block->identifier] = block;
     }
 
-    qDebug() << "Read" << resources.size() << "Image Resource Blocks";
+    dbgFile << "Read" << resources.size() << "Image Resource Blocks";
 
     return valid();
 }
 
-bool PSDResourceSection::write(QIODevice* io)
+bool PSDImageResourceSection::write(QIODevice* io)
 {
     Q_UNUSED(io);
 
@@ -108,12 +108,12 @@ bool PSDResourceSection::write(QIODevice* io)
 
 }
 
-bool PSDResourceSection::valid()
+bool PSDImageResourceSection::valid()
 {
     return true;
 }
 
-QString PSDResourceSection::idToString(PSDResourceSection::PSDResourceID id)
+QString PSDImageResourceSection::idToString(PSDImageResourceSection::PSDResourceID id)
 {
     switch(id) {
     case UNKNOWN: return "Unknown";

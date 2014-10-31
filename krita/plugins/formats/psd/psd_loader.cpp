@@ -89,19 +89,22 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
     dbgFile << "Read color mode block. pos:" << f.pos();
 
-    PSDResourceSection resourceSection;
+    PSDImageResourceSection resourceSection;
     if (!resourceSection.read(&f)) {
-        dbgFile << "failed reading resource section: " << resourceSection.error;
+        dbgFile << "failed image reading resource section: " << resourceSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    dbgFile << "Read resource section. pos:" << f.pos();
+    dbgFile << "Read image resource section. pos:" << f.pos();
 
-    PSDLayerSection layerSection(header);
+    PSDLayerMaskSection layerSection(header);
     if (!layerSection.read(&f)) {
-        dbgFile << "failed reading layer section: " << layerSection.error;
+        dbgFile << "failed reading layer/mask section: " << layerSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    dbgFile << "Read layer section. " << layerSection.nLayers << "layers. pos:" << f.pos();
+    dbgFile << "Read layer/mask section. " << layerSection.nLayers << "layers. pos:" << f.pos();
+
+    // Done reading, except possibly for the image data block, which is only relevant if there
+    // are no layers.
 
     // Get the right colorspace
     QPair<QString, QString> colorSpaceId = psd_colormode_to_colormodelid(header.colormode,
@@ -111,16 +114,16 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
 
-    // Get the icc profile!
+    // Get the icc profile from the image resource section
     const KoColorProfile* profile = 0;
-    if (resourceSection.resources.contains(PSDResourceSection::ICC_PROFILE)) {
-        ICC_PROFILE_1039 *iccProfileData = dynamic_cast<ICC_PROFILE_1039*>(resourceSection.resources[PSDResourceSection::ICC_PROFILE]->resource);
+    if (resourceSection.resources.contains(PSDImageResourceSection::ICC_PROFILE)) {
+        ICC_PROFILE_1039 *iccProfileData = dynamic_cast<ICC_PROFILE_1039*>(resourceSection.resources[PSDImageResourceSection::ICC_PROFILE]->resource);
         if (iccProfileData ) {
             profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first,
-                                                                       colorSpaceId.second,
-                                                                       iccProfileData->icc);
+                                                                           colorSpaceId.second,
+                                                                           iccProfileData->icc);
             dbgFile  << "Loaded ICC profile" << profile->name();
-            delete resourceSection.resources.take(PSDResourceSection::ICC_PROFILE);
+            delete resourceSection.resources.take(PSDImageResourceSection::ICC_PROFILE);
         }
     }
 
@@ -130,18 +133,18 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
 
-    // Creating the KisImageWSP
-    m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, "built image");
+    // Creating the KisImage
+    m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, f.fileName());
     Q_CHECK_PTR(m_image);
     m_image->lock();
 
     // set the correct resolution
-    if (resourceSection.resources.contains(PSDResourceSection::RESN_INFO)) {
-        RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
+    if (resourceSection.resources.contains(PSDImageResourceSection::RESN_INFO)) {
+        RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDImageResourceSection::RESN_INFO]->resource);
         if (resInfo) {
             m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
             // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
-            delete resourceSection.resources.take(PSDResourceSection::RESN_INFO);
+            delete resourceSection.resources.take(PSDImageResourceSection::RESN_INFO);
         }
     }
 
@@ -171,80 +174,85 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         PSDImageData imageData(&header);
         imageData.read(&f, layer->paintDevice());
 
-        // m_image->addNode(layer, m_image->rootLayer());
+        m_image->addNode(layer, m_image->rootLayer());
 
+        // Only one layer, the background layer, so we're done.
+        m_image->unlock();
+        return KisImageBuilder_RESULT_OK;
     }
-    else {
 
-        enum SectionType {
-            OTHER = 0,
-            OPEN_FOLDER,
-            CLOSED_FOLDER,
-            BOUNDING_DIVIDER
-        };
+    // More than one layer, so now construct the Krita image from the info we read.
 
-        QStack<KisGroupLayerSP> groupStack;
-        groupStack.push(m_image->rootLayer());
 
-        // read the channels for the various layers
-        for(int i = 0; i < layerSection.nLayers; ++i) {
+    enum SectionType {
+        OTHER = 0,
+        OPEN_FOLDER,
+        CLOSED_FOLDER,
+        BOUNDING_DIVIDER
+    };
 
-            PSDLayerRecord* layerRecord = layerSection.layers.at(i);
-            dbgFile << "Going to read channels for layer" << i << layerRecord->layerName;
-            KisLayerSP newLayer;
-            QStringList infoBlocks = layerRecord->infoBlocks.keys();
-            if (infoBlocks.contains("lsct")) {
-                QBuffer buffer;
-                buffer.setBuffer(&layerRecord->infoBlocks["lsct"]->data);
-                buffer.open(QBuffer::ReadOnly);
+    QStack<KisGroupLayerSP> groupStack;
+    groupStack.push(m_image->rootLayer());
 
-                quint32 type;
-                if (!psdread(&buffer, &type)) {
-                    return KisImageBuilder_RESULT_FAILURE;
-                }
-                if (type == BOUNDING_DIVIDER && !groupStack.isEmpty()) {
-                    KisGroupLayerSP groupLayer = new KisGroupLayer(m_image, "temp", OPACITY_OPAQUE_U8);
-                    m_image->addNode(groupLayer, groupStack.top());
-                    groupStack.push(groupLayer);
-                    newLayer = groupLayer;
-                }
-                else if ((type == OPEN_FOLDER || type == CLOSED_FOLDER) && !groupStack.isEmpty()) {
-                    KisGroupLayerSP groupLayer = groupStack.pop();
-                    groupLayer->setName(layerRecord->layerName);
-                    groupLayer->setVisible(layerRecord->visible);
-                    newLayer = groupLayer;
-                }
+    // read the channels for the various layers
+    for(int i = 0; i < layerSection.nLayers; ++i) {
+
+        PSDLayerRecord* layerRecord = layerSection.layers.at(i);
+        dbgFile << "Going to read channels for layer" << i << layerRecord->layerName;
+        KisLayerSP newLayer;
+        QStringList infoBlocks = layerRecord->infoBlocks.keys();
+        if (infoBlocks.contains("lsct")) {
+            QBuffer buffer;
+            buffer.setBuffer(&layerRecord->infoBlocks["lsct"]->data);
+            buffer.open(QBuffer::ReadOnly);
+
+            quint32 type;
+            if (!psdread(&buffer, &type)) {
+                return KisImageBuilder_RESULT_FAILURE;
+            }
+            if (type == BOUNDING_DIVIDER && !groupStack.isEmpty()) {
+                KisGroupLayerSP groupLayer = new KisGroupLayer(m_image, "temp", OPACITY_OPAQUE_U8);
+                m_image->addNode(groupLayer, groupStack.top());
+                groupStack.push(groupLayer);
+                newLayer = groupLayer;
+            }
+            else if ((type == OPEN_FOLDER || type == CLOSED_FOLDER) && !groupStack.isEmpty()) {
+                KisGroupLayerSP groupLayer = groupStack.pop();
+                groupLayer->setName(layerRecord->layerName);
+                groupLayer->setVisible(layerRecord->visible);
+                newLayer = groupLayer;
+            }
+        }
+        else {
+            KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
+            layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
+
+            if (!layerRecord->readPixelData(&f, layer->paintDevice())) {
+                dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
+                return KisImageBuilder_RESULT_FAILURE;
+            }
+            if (!groupStack.isEmpty()) {
+                m_image->addNode(layer, groupStack.top());
             }
             else {
-                KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
-                layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
-
-                if (!layerRecord->readPixelData(&f, layer->paintDevice())) {
-                    dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
-                    return KisImageBuilder_RESULT_FAILURE;
-                }
-                if (!groupStack.isEmpty()) {
-                    m_image->addNode(layer, groupStack.top());
-                }
-                else {
-                    m_image->addNode(layer, m_image->root());
-                }
-                layer->setVisible(layerRecord->visible);
-                newLayer = layer;
-
+                m_image->addNode(layer, m_image->root());
             }
-//            foreach(ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
-//                if (channelInfo->channelId < 0) {
-//                    KisTransparencyMaskSP mask = new KisTransparencyMask();
-//                    mask->initSelection(newLayer);
-//                    if (!layerRecord->readMask(&f, mask->paintDevice(), channelInfo)) {
-//                        dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
-//                    }
-//                    m_image->addNode(mask, newLayer);
-//                }
-//            }
+            layer->setVisible(layerRecord->visible);
+            newLayer = layer;
+
         }
+        //            foreach(ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
+        //                if (channelInfo->channelId < 0) {
+        //                    KisTransparencyMaskSP mask = new KisTransparencyMask();
+        //                    mask->initSelection(newLayer);
+        //                    if (!layerRecord->readMask(&f, mask->paintDevice(), channelInfo)) {
+        //                        dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
+        //                    }
+        //                    m_image->addNode(mask, newLayer);
+        //                }
+        //            }
     }
+
 
     m_image->unlock();
     return KisImageBuilder_RESULT_OK;

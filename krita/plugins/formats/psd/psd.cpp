@@ -21,7 +21,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <kis_debug.h>
 
-QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, quint16 channelDepth)
+QPair<QString, QString> psd_colormode_to_colormodelid(psd_color_mode colormode, quint16 channelDepth)
 {
     QPair<QString, QString> colorSpaceId;
     switch(colormode) {

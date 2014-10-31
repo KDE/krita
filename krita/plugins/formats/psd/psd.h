@@ -31,7 +31,7 @@ typedef qint32  Fixed;                  /* Represents a fixed point implied deci
 /**
  * Image color/depth modes
  */
-enum PSDColorMode {
+enum psd_color_mode {
     Bitmap = 0,
     Grayscale=1,
     Indexed=2,
@@ -51,9 +51,9 @@ enum PSDColorMode {
 
 
 /**
- * color samplers, apparently distict from PSDColormode
+ * Color samplers, apparently distict from PSDColormode
  */
-namespace PSDColorSampler {
+namespace psd_color_sampler {
 enum PSDColorSamplers {
     RGB,
     HSB,
@@ -80,7 +80,7 @@ enum PSDColorSamplers {
  *
  * @return a QPair containing ColorModelId and ColorDepthID
  */
-QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, quint16 channelDepth);
+QPair<QString, QString> psd_colormode_to_colormodelid(psd_color_mode colormode, quint16 channelDepth);
 
 
 /**

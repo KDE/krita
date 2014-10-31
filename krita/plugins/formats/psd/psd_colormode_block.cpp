@@ -22,7 +22,7 @@
 #include <QByteArray>
 #include <QColor>
 
-PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)
+PSDColorModeBlock::PSDColorModeBlock(psd_color_mode colormode)
     : blocksize(0)
     , colormode(colormode)
 {

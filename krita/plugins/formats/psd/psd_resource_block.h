@@ -148,6 +148,7 @@ struct ALPHA_NAMES_1006 : public PSDInterpretedResource
     bool interpretBlock(QByteArray /*data*/)
     {
         dbgFile << "Reading ALPHA_NAMES_1006";
+
         return true;
     }
 };
@@ -183,6 +184,7 @@ struct BORDER_INFO_1009 : public PSDInterpretedResource
         dbgFile << "Reading BORDER_INFO_1009";
         return true;
     }
+
 };
 
 

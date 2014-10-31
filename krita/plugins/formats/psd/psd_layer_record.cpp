@@ -38,7 +38,7 @@
 #include <KoColorSpaceTraits.h>
 
 // Just for pretty debug messages
-QString channelIdToChannelType(int channelId, PSDColorMode colormode)
+QString channelIdToChannelType(int channelId, psd_color_mode colormode)
 {
     switch(channelId) {
     case -3:

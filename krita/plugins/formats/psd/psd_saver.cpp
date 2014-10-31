@@ -46,9 +46,9 @@
 
 
 
-QPair<PSDColorMode, quint16> colormodelid_to_psd_colormode(const QString &colorSpaceId, const QString &colorDepthId)
+QPair<psd_color_mode, quint16> colormodelid_to_psd_colormode(const QString &colorSpaceId, const QString &colorDepthId)
 {
-    PSDColorMode colorMode = UNKNOWN;
+    psd_color_mode colorMode = UNKNOWN;
     if (colorSpaceId == RGBAColorModelID.id()) {
         colorMode = RGB;
     }
@@ -77,7 +77,7 @@ QPair<PSDColorMode, quint16> colormodelid_to_psd_colormode(const QString &colorS
         depth = 32;
     }
 
-    return QPair<PSDColorMode, quint16>(colorMode, depth);
+    return QPair<psd_color_mode, quint16>(colorMode, depth);
 }
 
 
@@ -125,7 +125,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     header.width = m_image->width();
     header.height = m_image->height();
 
-    QPair<PSDColorMode, quint16> colordef = colormodelid_to_psd_colormode(m_image->colorSpace()->colorModelId().id(),
+    QPair<psd_color_mode, quint16> colordef = colormodelid_to_psd_colormode(m_image->colorSpace()->colorModelId().id(),
                                                                           m_image->colorSpace()->colorDepthId().id());
 
     if (colordef.first == UNKNOWN || colordef.second == 0 || colordef.second == 32) {

@@ -20,6 +20,8 @@
 #define __KIS_LIQUIFY_TRANSFORM_WORKER_H
 
 #include <QScopedPointer>
+#include <boost/operators.hpp>
+
 #include <krita_export.h>
 #include <kis_types.h>
 
@@ -27,9 +29,10 @@ class QImage;
 class QRect;
 class QSize;
 class QTransform;
+class QDomElement;
 
 
-class KRITAIMAGE_EXPORT KisLiquifyTransformWorker
+class KRITAIMAGE_EXPORT KisLiquifyTransformWorker : boost::equality_comparable<KisLiquifyTransformWorker>
 {
 public:
     KisLiquifyTransformWorker(const QRect &srcBounds,
@@ -39,6 +42,8 @@ public:
     KisLiquifyTransformWorker(const KisLiquifyTransformWorker &rhs);
 
     ~KisLiquifyTransformWorker();
+
+    bool operator==(const KisLiquifyTransformWorker &other) const;
 
     int pointToIndex(const QPoint &cellPt);
     QSize gridSize() const;
@@ -73,6 +78,9 @@ public:
                        const QPointF &srcImageOffset,
                        const QTransform &imageToThumbTransform,
                        QPointF *newOffset);
+
+    void toXML(QDomElement *e) const;
+    static KisLiquifyTransformWorker* fromXML(const QDomElement &e);
 
 private:
     struct Private;

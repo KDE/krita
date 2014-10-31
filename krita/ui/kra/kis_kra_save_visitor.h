@@ -34,7 +34,7 @@ class KoStore;
 class KisKraSaveVisitor : public KisNodeVisitor
 {
 public:
-    KisKraSaveVisitor(KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
+    KisKraSaveVisitor(KoStore *store, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
     virtual ~KisKraSaveVisitor();
     using KisNodeVisitor::visit;
 
@@ -59,6 +59,8 @@ public:
 
     bool visit(KisFilterMask *mask);
 
+    bool visit(KisTransformMask *mask);
+
     bool visit(KisTransparencyMask *mask);
 
     bool visit(KisSelectionMask *mask);
@@ -72,6 +74,7 @@ private:
     bool saveAnnotations(KisLayer* layer);
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* node);
+    void saveTransformMaskParams(KisTransformMask *mask);
     bool saveMetaData(KisNode* node);
     QString getLocation(KisNode* node, const QString& suffix = QString());
 
@@ -80,7 +83,6 @@ private:
     KoStore *m_store;
     bool m_external;
     QString m_uri;
-    quint32 &m_count;
     QString m_name;
     QMap<const KisNode*, QString> m_nodeFileNames;
     KisPaintDeviceWriter *m_writer;

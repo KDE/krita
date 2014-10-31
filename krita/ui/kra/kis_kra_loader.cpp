@@ -44,6 +44,7 @@
 #include <kis_assert.h>
 #include <kis_external_layer_iface.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -486,6 +487,8 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         node = loadCloneLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == FILTER_MASK)
         node = loadFilterMask(element, parent);
+    else if (nodeType == TRANSFORM_MASK)
+        node = loadTransformMask(element, parent);
     else if (nodeType == TRANSPARENCY_MASK)
         node = loadTransparencyMask(element, parent);
     else if (nodeType == SELECTION_MASK)
@@ -783,6 +786,23 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP pa
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();
     mask->setFilter(kfc);
+    Q_CHECK_PTR(mask);
+
+    return mask;
+}
+
+KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element, KisNodeSP parent)
+{
+    Q_UNUSED(parent);
+    QString attr;
+    KisTransformMask* mask;
+    QString filtername;
+
+    /**
+     * We'll load the transform configuration later on a stage
+     * of binary data loading
+     */
+    mask = new KisTransformMask();
     Q_CHECK_PTR(mask);
 
     return mask;

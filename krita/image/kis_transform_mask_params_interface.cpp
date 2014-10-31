@@ -27,6 +27,10 @@ KisTransformMaskParamsInterface::~KisTransformMaskParamsInterface()
 
 ///////////////// KisDumbTransformMaskParams ////////////////////////////
 
+#include <QDomElement>
+#include "kis_dom_utils.h"
+
+
 struct KisDumbTransformMaskParams::Private
 {
     Private() : isHidden(false) {}
@@ -74,3 +78,51 @@ void KisDumbTransformMaskParams::transformDevice(KisNodeSP node, KisPaintDeviceS
     Q_UNUSED(src);
     Q_UNUSED(dst);
 }
+
+QString KisDumbTransformMaskParams::id() const
+{
+    return "dumbparams";
+}
+
+void KisDumbTransformMaskParams::toXML(QDomElement *e) const
+{
+    QDomDocument doc = e->ownerDocument();
+    QDomElement transformEl = doc.createElement("dumb_transform");
+    e->appendChild(transformEl);
+
+    KisDomUtils::saveValue(&transformEl, "transform", m_d->transform);
+}
+
+KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::fromXML(const QDomElement &e)
+{
+    QDomElement transformEl;
+    bool result = false;
+
+    QTransform transform;
+
+    result =
+        KisDomUtils::findOnlyElement(e, "dumb_transform", &transformEl) &&
+        KisDomUtils::loadValue(transformEl, "transform", &transform);
+
+    if (!result) {
+        qWarning() << "WARNING: couldn't load dumb transform. Ignoring...";
+    }
+
+    return KisTransformMaskParamsInterfaceSP(
+        new KisDumbTransformMaskParams(transform));
+}
+
+QTransform KisDumbTransformMaskParams::testingGetTransform() const
+{
+    return m_d->transform;
+}
+
+#include "kis_transform_mask_params_factory_registry.h"
+
+struct DumbParamsRegistrar {
+    DumbParamsRegistrar() {
+        KisTransformMaskParamsFactory f(KisDumbTransformMaskParams::fromXML);
+        KisTransformMaskParamsFactoryRegistry::instance()->addFactory("dumbparams", f);
+    }
+};
+static DumbParamsRegistrar __dumbParamsRegistrar;

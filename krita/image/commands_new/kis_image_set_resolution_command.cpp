@@ -51,6 +51,7 @@ void KisImageSetResolutionCommand::redo()
 #include "kis_external_layer_iface.h"
 #include "kis_transparency_mask.h"
 #include "kis_filter_mask.h"
+#include "kis_transform_mask.h"
 #include "kis_selection_mask.h"
 
 #include "kis_selection.h"
@@ -67,6 +68,7 @@ public:
     void visit(KisGeneratorLayer *layer, KisUndoAdapter*) { layer->internalSelection()->updateProjection(); }
     void visit(KisExternalLayer *layer, KisUndoAdapter*) { layer->resetCache(); }
     void visit(KisFilterMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
+    void visit(KisTransformMask *mask, KisUndoAdapter*) { KIS_ASSERT_RECOVER_NOOP(!mask->selection()); }
     void visit(KisTransparencyMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
     void visit(KisSelectionMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
 };

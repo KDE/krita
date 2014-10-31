@@ -16,13 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_transform_params.h"
+#ifndef __TEST_SAVE_LOAD_TRANSFORM_ARGS_H
+#define __TEST_SAVE_LOAD_TRANSFORM_ARGS_H
 
+#include <QtTest/QtTest>
 
-KisTransformParams::KisTransformParams()
+class TestSaveLoadTransformArgs : public QObject
 {
-}
+    Q_OBJECT
+private slots:
+    void testFreeTransform();
+    void testWarp();
+    void testLiquify();
+};
 
-KisTransformParams::~KisTransformParams()
-{
-}
+#endif /* __TEST_SAVE_LOAD_TRANSFORM_ARGS_H */

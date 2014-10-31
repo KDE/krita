@@ -19,6 +19,8 @@
 #include "kis_liquify_transform_worker.h"
 
 #include "kis_grid_interpolation_tools.h"
+#include "kis_dom_utils.h"
+
 
 struct KisLiquifyTransformWorker::Private
 {
@@ -79,6 +81,16 @@ KisLiquifyTransformWorker::KisLiquifyTransformWorker(const KisLiquifyTransformWo
 
 KisLiquifyTransformWorker::~KisLiquifyTransformWorker()
 {
+}
+
+bool KisLiquifyTransformWorker::operator==(const KisLiquifyTransformWorker &other) const
+{
+    return
+        m_d->srcBounds == other.m_d->srcBounds &&
+        m_d->originalPoints == other.m_d->originalPoints &&
+        m_d->transformedPoints == other.m_d->transformedPoints &&
+        m_d->pixelPrecision == other.m_d->pixelPrecision &&
+        m_d->gridSize == other.m_d->gridSize;
 }
 
 int KisLiquifyTransformWorker::pointToIndex(const QPoint &cellPt)
@@ -458,3 +470,70 @@ QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,
     return dstImage;
 }
 
+void KisLiquifyTransformWorker::toXML(QDomElement *e) const
+{
+    QDomDocument doc = e->ownerDocument();
+    QDomElement liqEl = doc.createElement("liquify_points");
+    e->appendChild(liqEl);
+
+    KisDomUtils::saveValue(&liqEl, "srcBounds", m_d->srcBounds);
+    KisDomUtils::saveValue(&liqEl, "originalPoints", m_d->originalPoints);
+    KisDomUtils::saveValue(&liqEl, "transformedPoints", m_d->transformedPoints);
+    KisDomUtils::saveValue(&liqEl, "pixelPrecision", m_d->pixelPrecision);
+    KisDomUtils::saveValue(&liqEl, "gridSize", m_d->gridSize);
+}
+
+KisLiquifyTransformWorker* KisLiquifyTransformWorker::fromXML(const QDomElement &e)
+{
+    QDomElement liquifyEl;
+
+    QRect srcBounds;
+    QVector<QPointF> originalPoints;
+    QVector<QPointF> transformedPoints;
+    int pixelPrecision;
+    QSize gridSize;
+
+    bool result = false;
+
+
+    result =
+        KisDomUtils::findOnlyElement(e, "liquify_points", &liquifyEl) &&
+
+        KisDomUtils::loadValue(liquifyEl, "srcBounds", &srcBounds) &&
+        KisDomUtils::loadValue(liquifyEl, "originalPoints", &originalPoints) &&
+        KisDomUtils::loadValue(liquifyEl, "transformedPoints", &transformedPoints) &&
+        KisDomUtils::loadValue(liquifyEl, "pixelPrecision", &pixelPrecision) &&
+        KisDomUtils::loadValue(liquifyEl, "gridSize", &gridSize);
+
+    if (!result) {
+        qWarning() << "WARNING: Failed to load liquify worker from XML";
+        return new KisLiquifyTransformWorker(QRect(0,0,1024, 1024), 0, 8);
+    }
+
+    KisLiquifyTransformWorker *worker =
+        new KisLiquifyTransformWorker(srcBounds, 0, pixelPrecision);
+
+    const int numPoints = originalPoints.size();
+
+    if (numPoints != transformedPoints.size() ||
+        numPoints != worker->m_d->originalPoints.size() ||
+        gridSize != worker->m_d->gridSize) {
+        qWarning() << "WARNING: Inconsistent number of points!";
+        qWarning() << ppVar(originalPoints.size());
+        qWarning() << ppVar(transformedPoints.size());
+        qWarning() << ppVar(gridSize);
+        qWarning() << ppVar(worker->m_d->originalPoints.size());
+        qWarning() << ppVar(worker->m_d->transformedPoints.size());
+        qWarning() << ppVar(worker->m_d->gridSize);
+
+        return worker;
+    }
+
+    for (int i = 0; i < numPoints; i++) {
+        worker->m_d->originalPoints[i] = originalPoints[i];
+        worker->m_d->transformedPoints[i] = transformedPoints[i];
+    }
+
+
+    return worker;
+}

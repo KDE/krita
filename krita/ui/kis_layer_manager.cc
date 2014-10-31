@@ -147,11 +147,13 @@ public:
         return true;
     }
 
+    bool visit(KisTransformMask *) {
+        return true;
+    }
 
     bool visit(KisTransparencyMask *) {
         return true;
     }
-
 
     bool visit(KisGeneratorLayer * ) {
         return true;

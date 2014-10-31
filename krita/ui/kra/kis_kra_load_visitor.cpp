@@ -47,9 +47,13 @@
 #include <kis_pixel_selection.h>
 #include <kis_clone_layer.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
+#include "kis_transform_mask_params_factory_registry.h"
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
 #include "kis_shape_selection.h"
+#include "kis_dom_utils.h"
+
 
 
 
@@ -242,6 +246,55 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
     result = loadSelection(getLocation(mask), mask->selection());
     result = loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
     return result;
+}
+
+bool KisKraLoadVisitor::visit(KisTransformMask *mask)
+{
+    QString location = getLocation(mask, DOT_TRANSFORMCONFIG);
+    if (m_store->hasFile(location)) {
+        QByteArray data;
+        m_store->open(location);
+        data = m_store->read(m_store->size());
+        m_store->close();
+        if (!data.isEmpty()) {
+            QDomDocument doc;
+            doc.setContent(data);
+
+            QDomElement rootElement = doc.documentElement();
+
+            QDomElement main;
+
+            if (!KisDomUtils::findOnlyElement(rootElement, "main", &main/*, &m_errorMessages*/)) {
+                return false;
+            }
+
+            QString id = main.attribute("id", "not-valid");
+
+            if (id == "not-valid") {
+                m_errorMessages << i18n("Could not load \"id\" of the transform mask");
+                return false;
+            }
+
+            QDomElement data;
+
+            if (!KisDomUtils::findOnlyElement(rootElement, "data", &data, &m_errorMessages)) {
+                return false;
+            }
+
+            KisTransformMaskParamsInterfaceSP params =
+                KisTransformMaskParamsFactoryRegistry::instance()->createParams(id, data);
+
+            if (!params) {
+                m_errorMessages << i18n("Could not create transform mask params");
+                return false;
+            }
+
+            mask->setTransformParams(params);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)

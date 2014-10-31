@@ -26,6 +26,7 @@
 
 
 class QTransform;
+class QDomElement;
 
 class KRITAIMAGE_EXPORT KisTransformMaskParamsInterface
 {
@@ -37,7 +38,13 @@ public:
     virtual bool isHidden() const = 0;
 
     virtual void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const = 0;
+
+    virtual QString id() const = 0;
+    virtual void toXML(QDomElement *e) const = 0;
 };
+
+
+class QDomElement;
 
 class KRITAIMAGE_EXPORT KisDumbTransformMaskParams : public KisTransformMaskParamsInterface
 {
@@ -50,6 +57,13 @@ public:
     bool isAffine() const;
     bool isHidden() const;
     void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const;
+
+    QString id() const;
+    void toXML(QDomElement *e) const;
+    static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
+
+    // for tesing purposes only
+    QTransform testingGetTransform() const;
 
 private:
     struct Private;

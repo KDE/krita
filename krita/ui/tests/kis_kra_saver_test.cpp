@@ -45,6 +45,10 @@
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "util.h"
+#include "testutil.h"
+
+#include "kis_transform_mask_params_interface.h"
+
 
 void KisKraSaverTest::testRoundTrip()
 {
@@ -66,6 +70,18 @@ void KisKraSaverTest::testRoundTrip()
 
     // check whether the BG color is saved correctly
     QCOMPARE(doc2.image()->defaultProjectionColor(), bgColor);
+
+
+    // test round trip of a transform mask
+    KisNodeSP tnode =
+        TestUtil::findNode(doc2.image()->rootLayer(), "testTransformMask");
+    QVERIFY(tnode);
+    KisTransformMask *tmask = dynamic_cast<KisTransformMask*>(tnode.data());
+    QVERIFY(tmask);
+    KisDumbTransformMaskParams *params = dynamic_cast<KisDumbTransformMaskParams*>(tmask->transformParams().data());
+    QVERIFY(params);
+    QTransform t = params->testingGetTransform();
+    QCOMPARE(t, createTestingTransform());
 }
 
 void KisKraSaverTest::testSaveEmpty()

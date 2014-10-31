@@ -39,6 +39,10 @@ public:
 
     const ToolTransformArgs& savedArgs() const;
 
+    QString id() const;
+    void toXML(QDomElement *e) const;
+    static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

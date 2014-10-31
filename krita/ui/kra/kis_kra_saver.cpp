@@ -111,9 +111,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
     QString location;
 
     // Save the layers data
-    quint32 count = 0;
-
-    KisKraSaveVisitor visitor(store, count, m_d->imageName, m_d->nodeFileNames);
+    KisKraSaveVisitor visitor(store, m_d->imageName, m_d->nodeFileNames);
 
     if (external)
         visitor.setExternalUri(uri);

@@ -16,15 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_TRANSFORM_PARAMS_H
-#define __KIS_TRANSFORM_PARAMS_H
+#include "kis_transform_mask_params_factory_registry.h"
+
+#include <kglobal.h>
 
 
-class KisTransformParams
+KisTransformMaskParamsFactoryRegistry::KisTransformMaskParamsFactoryRegistry()
 {
-public:
-    KisTransformParams();
-    ~KisTransformParams();
-};
+}
 
-#endif /* __KIS_TRANSFORM_PARAMS_H */
+void KisTransformMaskParamsFactoryRegistry::addFactory(const QString &id, const KisTransformMaskParamsFactory &factory)
+{
+    m_map.insert(id, factory);
+}
+
+KisTransformMaskParamsInterfaceSP
+KisTransformMaskParamsFactoryRegistry::createParams(const QString &id, const QDomElement &e)
+{
+    KisTransformMaskParamsFactoryMap::iterator it = m_map.find(id);
+    return it != m_map.end() ? (*it)(e) : KisTransformMaskParamsInterfaceSP(0);
+}
+
+KisTransformMaskParamsFactoryRegistry*
+KisTransformMaskParamsFactoryRegistry::instance()
+{
+    K_GLOBAL_STATIC(KisTransformMaskParamsFactoryRegistry, s_instance);
+    return s_instance;
+}

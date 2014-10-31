@@ -19,6 +19,7 @@
 #include "kis_transform_mask_adapter.h"
 
 #include <QTransform>
+#include <QDomElement>
 
 #include "tool_transform_args.h"
 #include "kis_transform_utils.h"
@@ -69,4 +70,31 @@ const ToolTransformArgs& KisTransformMaskAdapter::savedArgs() const
 {
     return m_d->args;
 }
+
+QString KisTransformMaskAdapter::id() const
+{
+    return "tooltransformparams";
+}
+
+void KisTransformMaskAdapter::toXML(QDomElement *e) const
+{
+    m_d->args.toXML(e);
+}
+
+KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromXML(const QDomElement &e)
+{
+    return KisTransformMaskParamsInterfaceSP(
+        new KisTransformMaskAdapter(ToolTransformArgs::fromXML(e)));
+}
+
+
+#include "kis_transform_mask_params_factory_registry.h"
+
+struct ToolTransformParamsRegistrar {
+    ToolTransformParamsRegistrar() {
+        KisTransformMaskParamsFactory f(KisTransformMaskAdapter::fromXML);
+        KisTransformMaskParamsFactoryRegistry::instance()->addFactory("tooltransformparams", f);
+    }
+};
+static ToolTransformParamsRegistrar __toolTransformParamsRegistrar;
 

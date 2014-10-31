@@ -135,6 +135,7 @@ set(kritaimage_LIB_SRCS
    kis_transform_mask.cpp
    kis_transform_mask_params_interface.cpp
    kis_recalculate_transform_mask_job.cpp
+   kis_transform_mask_params_factory_registry.cpp
    kis_gradient_painter.cc
    kis_iterator_ng.cpp
    kis_async_merger.cpp
@@ -209,6 +210,7 @@ set(kritaimage_LIB_SRCS
    kis_liquify_transform_worker.cpp
    kis_green_coordinates_math.cpp
    kis_algebra_2d.cpp
+   kis_dom_utils.cpp
    kis_transparency_mask.cc
    kis_undo_store.cpp
    kis_undo_stores.cpp

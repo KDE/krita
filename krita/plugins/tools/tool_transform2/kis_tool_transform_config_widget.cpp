@@ -521,6 +521,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         case KisLiquifyProperties::UNDO:
             liquifyUndo->setChecked(true);
             break;
+        case KisLiquifyProperties::N_MODES:
+            qFatal("Unsupported mode");
         }
 
         updateLiquifyControls();

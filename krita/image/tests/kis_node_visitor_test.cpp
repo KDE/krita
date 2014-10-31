@@ -61,6 +61,10 @@ public:
         return true;
     }
 
+    bool visit(KisTransformMask */*mask*/) {
+        return true;
+    }
+
     bool visit(KisTransparencyMask */*mask*/) {
         return true;
     }

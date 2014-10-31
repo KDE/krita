@@ -183,14 +183,6 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
     // More than one layer, so now construct the Krita image from the info we read.
 
-
-    enum SectionType {
-        OTHER = 0,
-        OPEN_FOLDER,
-        CLOSED_FOLDER,
-        BOUNDING_DIVIDER
-    };
-
     QStack<KisGroupLayerSP> groupStack;
     groupStack.push(m_image->rootLayer());
 
@@ -200,23 +192,14 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         PSDLayerRecord* layerRecord = layerSection.layers.at(i);
         dbgFile << "Going to read channels for layer" << i << layerRecord->layerName;
         KisLayerSP newLayer;
-        QStringList infoBlocks = layerRecord->infoBlocks.keys();
-        if (infoBlocks.contains("lsct")) {
-            QBuffer buffer;
-            buffer.setBuffer(&layerRecord->infoBlocks["lsct"]->data);
-            buffer.open(QBuffer::ReadOnly);
-
-            quint32 type;
-            if (!psdread(&buffer, &type)) {
-                return KisImageBuilder_RESULT_FAILURE;
-            }
-            if (type == BOUNDING_DIVIDER && !groupStack.isEmpty()) {
+        if (layerRecord->infoBlocks.keys.contains("lsct")) {
+            if (layerRecord->infoBlocks.sectionDividerType == psd_bounding_divider && !groupStack.isEmpty()) {
                 KisGroupLayerSP groupLayer = new KisGroupLayer(m_image, "temp", OPACITY_OPAQUE_U8);
                 m_image->addNode(groupLayer, groupStack.top());
                 groupStack.push(groupLayer);
                 newLayer = groupLayer;
             }
-            else if ((type == OPEN_FOLDER || type == CLOSED_FOLDER) && !groupStack.isEmpty()) {
+            else if ((layerRecord->infoBlocks.sectionDividerType == psd_open_folder || layerRecord->infoBlocks.sectionDividerType == psd_closed_folder) && !groupStack.isEmpty()) {
                 KisGroupLayerSP groupLayer = groupStack.pop();
                 groupLayer->setName(layerRecord->layerName);
                 groupLayer->setVisible(layerRecord->visible);

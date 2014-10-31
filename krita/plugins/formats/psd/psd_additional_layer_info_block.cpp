@@ -1,4 +1,27 @@
+/*
+ *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #include "psd_additional_layer_info_block.h"
+
+#include <QBuffer>
+
+#include "psd_utils.h"
+
 
 PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock()
 {
@@ -6,218 +29,297 @@ PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock()
 
 bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 {
+    QStringList longBlocks;
+    if (m_header.version > 1) {
+        longBlocks << "LMsk" << "Lr16" << "Layr" << "Mt16" << "Mtrn" << "Alph";
+    }
 
-    if (key == "SoCo") {
+    while (!io->atEnd()) {
 
-    }
-    else if (key == "GdFl") {
+        // read all the additional layer info 8BIM blocks
+        QByteArray b;
+        b = io->peek(4);
+        if (b.size() != 4 || QString(b) != "8BIM") {
+            error = "No 8BIM marker for additional layer info block";
+            return false;
+        }
+        else {
+            io->seek(io->pos() + 4); // skip the 8BIM header we peeked ahead for
+        }
 
-    }
-    else if (key == "PtFl") {
+        QString key(io->read(4));
+        if (key.size() != 4) {
+            error = "Could not read key for additional layer info block";
+            return false;
+        }
+        dbgFile << "found info block with key" << key;
+        if (keys.contains(key)) {
+            error = "Found duplicate entry for key ";
+            continue;
+        }
+        keys << key;
+
+        quint64 size;
+        if (longBlocks.contains(key)) {
+            psdread(io, &size);
+        }
+        else {
+            quint32 _size;
+            psdread(io, &_size);
+            size = _size;
+        }
 
-    }
-    else if (key == "brit") {
+        QByteArray data = io->read(size);
+        if (data.size() != (qint64)size) {
+            error = QString("Could not read full info block for key %1.").arg(key);
+            return false;
+        }
 
-    }
-    else if (key == "levl") {
+        dbgFile << "\tRead layer info block" << key << "for size" << data.size();
+        QBuffer buf(&data);
+        buf.open(QBuffer::ReadOnly);
 
-    }
-    else if (key == "curv") {
+        if (key == "SoCo") {
 
-    }
-    else if (key == "expA") {
+        }
+        else if (key == "GdFl") {
 
-    }
-    else if (key == "vibA") {
+        }
+        else if (key == "PtFl") {
 
-    }
-    else if (key == "hue") {
+        }
+        else if (key == "brit") {
 
-    }
-    else if (key == "hue2") {
+        }
+        else if (key == "levl") {
 
-    }
-    else if (key == "blnc") {
+        }
+        else if (key == "curv") {
 
-    }
-    else if (key == "blwh") {
+        }
+        else if (key == "expA") {
 
-    }
-    else if (key == "phfl") {
+        }
+        else if (key == "vibA") {
 
-    }
-    else if (key == "mixr") {
+        }
+        else if (key == "hue") {
 
-    }
-    else if (key == "clrL") {
+        }
+        else if (key == "hue2") {
 
-    }
-    else if (key == "nvrt") {
+        }
+        else if (key == "blnc") {
 
-    }
-    else if (key == "post") {
+        }
+        else if (key == "blwh") {
 
-    }
-    else if (key == "thrs") {
+        }
+        else if (key == "phfl") {
 
-    }
-    else if (key == "grdm") {
+        }
+        else if (key == "mixr") {
 
-    }
-    else if (key == "selc") {
+        }
+        else if (key == "clrL") {
 
-    }
-    else if (key == "lrFX") {
+        }
+        else if (key == "nvrt") {
 
-    }
-    else if (key == "tySh") {
+        }
+        else if (key == "post") {
 
-    }
-    else if (key == "luni") {
+        }
+        else if (key == "thrs") {
 
-    }
-    else if (key == "lyid") {
+        }
+        else if (key == "grdm") {
 
-    }
-    else if (key == "lfx2") {
+        }
+        else if (key == "selc") {
 
-    }
-    else if (key == "Patt" || key == "Pat2" || key == "Pat3") {
+        }
+        else if (key == "lrFX") {
 
-    }
-    else if (key == "Anno") {
+        }
+        else if (key == "tySh") {
 
-    }
-    else if (key == "clbl") {
+        }
+        else if (key == "luni") {
+            // get the unicode layer name
 
-    }
-    else if (key == "infx") {
+            quint32 stringlen;
+            if (!psdread(&buf, &stringlen)) {
+                error = "Could not read string length for luni block";
+                return false;
+            }
 
-    }
-    else if (key == "knko") {
+            for (uint i = 0; i < stringlen; ++i) {
+                quint16 ch;
+                psdread(&buf, &ch);
+                QChar uch(ch);
+                unicodeLayerName.append(uch);
+            }
 
-    }
-    else if (key == "spf") {
+            dbgFile << "unicodeLayerName" << unicodeLayerName;
+        }
+        else if (key == "lyid") {
 
-    }
-    else if (key == "lclr") {
+        }
+        else if (key == "lfx2") {
 
-    }
-    else if (key == "fxrp") {
+        }
+        else if (key == "Patt" || key == "Pat2" || key == "Pat3") {
 
-    }
-    else if (key == "grdm") {
+        }
+        else if (key == "Anno") {
 
-    }
-    else if (key == "lsct") {
+        }
+        else if (key == "clbl") {
 
-    }
-    else if (key == "brst") {
+        }
+        else if (key == "infx") {
 
-    }
-    else if (key == "SoCo") {
+        }
+        else if (key == "knko") {
 
-    }
-    else if (key == "PtFl") {
+        }
+        else if (key == "spf") {
 
-    }
-    else if (key == "GdFl") {
+        }
+        else if (key == "lclr") {
 
-    }
-    else if (key == "vmsk" || key == "vsms") { // If key is 'vsms' then we are writing for (Photoshop CS6) and the document will have a 'vscg' key
+        }
+        else if (key == "fxrp") {
 
-    }
-    else if (key == "TySh") {
+        }
+        else if (key == "grdm") {
 
-    }
-    else if (key == "ffxi") {
+        }
+        else if (key == "lsct") {
 
-    }
-    else if (key == "lnsr") {
+            quint32 type;
+            if (!psdread(&buf, &type)) {
+                error = "Could not read group type";
+                return false;
+            }
 
-    }
-    else if (key == "shpa") {
+            if (size >= 12) {
+                if (!psd_read_blendmode(io, sectionDividerBlendMode)) {
+                    error = QString("Could not read blend mode key. Got: %1").arg(sectionDividerBlendMode);
+                    return false;
+                }
+            }
 
-    }
-    else if (key == "shmd") {
+            if (size >= 16) {
+                // Don't care: animation scene group
+            }
 
-    }
-    else if (key == "lyvr") {
+        }
+        else if (key == "brst") {
 
-    }
-    else if (key == "tsly") {
+        }
+        else if (key == "SoCo") {
 
-    }
-    else if (key == "lmgm") {
+        }
+        else if (key == "PtFl") {
 
-    }
-    else if (key == "vmgm") {
+        }
+        else if (key == "GdFl") {
 
-    }
-    else if (key == "plLd") { // Replaced by SoLd in CS3
+        }
+        else if (key == "vmsk" || key == "vsms") { // If key is "vsms" then we are writing for (Photoshop CS6) and the document will have a "vscg" key
 
-    }
-    else if (key == "linkD" || key == "lnk2" || key == "lnk3") {
+        }
+        else if (key == "TySh") {
 
-    }
-    else if (key == "phfl") {
+        }
+        else if (key == "ffxi") {
 
-    }
-    else if (key == "blwh") {
+        }
+        else if (key == "lnsr") {
 
-    }
-    else if (key == "CgEd") {
+        }
+        else if (key == "shpa") {
 
-    }
-    else if (key == "Txt2") {
+        }
+        else if (key == "shmd") {
 
-    }
-    else if (key == "vibA") {
+        }
+        else if (key == "lyvr") {
 
-    }
-    else if (key == "pths") {
+        }
+        else if (key == "tsly") {
 
-    }
-    else if (key == "anFX") {
+        }
+        else if (key == "lmgm") {
 
-    }
-    else if (key == "FMsk") {
+        }
+        else if (key == "vmgm") {
 
-    }
-    else if (key == "SoLd") {
+        }
+        else if (key == "plLd") { // Replaced by SoLd in CS3
 
-    }
-    else if (key == "vstk") {
+        }
+        else if (key == "linkD" || key == "lnk2" || key == "lnk3") {
 
-    }
-    else if (key == "vsCg") {
+        }
+        else if (key == "phfl") {
 
-    }
-    else if (key == "sn2P") {
+        }
+        else if (key == "blwh") {
 
-    }
-    else if (key == "vogk") {
+        }
+        else if (key == "CgEd") {
 
-    }
-    else if (key == "Mtrn" || key == "Mt16" || key == "Mt32") { // There is no data associated with these keys.
+        }
+        else if (key == "Txt2") {
 
-    }
-    else if (key == "LMsk") {
+        }
+        else if (key == "vibA") {
 
-    }
-    else if (key == "expA") {
+        }
+        else if (key == "pths") {
 
-    }
-    else if (key == "FXid") {
+        }
+        else if (key == "anFX") {
 
-    }
-    else if (key == "FEid") {
+        }
+        else if (key == "FMsk") {
 
-    }
+        }
+        else if (key == "SoLd") {
+
+        }
+        else if (key == "vstk") {
+
+        }
+        else if (key == "vsCg") {
+
+        }
+        else if (key == "sn2P") {
 
+        }
+        else if (key == "vogk") {
 
+        }
+        else if (key == "Mtrn" || key == "Mt16" || key == "Mt32") { // There is no data associated with these keys.
 
+        }
+        else if (key == "LMsk") {
 
+        }
+        else if (key == "expA") {
+
+        }
+        else if (key == "FXid") {
+
+        }
+        else if (key == "FEid") {
+
+        }
+
+    }
     return true;
 
 

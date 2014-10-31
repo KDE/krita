@@ -225,3 +225,19 @@ bool psdread_pascalstring(QIODevice* io, QString& s, int padding)
     return true;
 }
 
+
+
+bool psd_read_blendmode(QIODevice *io, QString &blendModeKey)
+{
+    QByteArray b;
+    b = io->read(4);
+    if(b.size() != 4 || QString(b) != "8BIM") {
+        return false;
+    }
+    dbgFile << "reading blend mode at pos" << io->pos();
+    blendModeKey = QString(io->read(4));
+    if (blendModeKey.size() != 4) {
+        return false;
+    }
+    return true;
+}

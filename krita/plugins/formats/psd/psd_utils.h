@@ -40,4 +40,7 @@ bool psdread(QIODevice* io, qint32* v);
 bool psdread(QIODevice* io, quint64* v);
 bool psdread_pascalstring(QIODevice* io, QString& s, int padding);
 
+bool psd_read_blendmode(QIODevice* io, QString &blendModeKey);
+
+
 #endif // PSD_UTILS_H

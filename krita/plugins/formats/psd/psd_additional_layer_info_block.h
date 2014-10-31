@@ -81,6 +81,14 @@ enum psd_direction {
     psd_direction_down
 };
 
+enum psd_section_type {
+    psd_other = 0,
+    psd_open_folder,
+    psd_closed_folder,
+    psd_bounding_divider
+};
+
+
 // additional layer information
 
 // LEVELS
@@ -599,6 +607,8 @@ struct psd_layer_type_tool {
     bool anti_alias; // Anti alias on/off
 };
 
+
+
 /**
  * @brief The PsdAdditionalLayerInfoBlock class implements the Additional Layer Information block
  *
@@ -608,16 +618,19 @@ class PsdAdditionalLayerInfoBlock
 {
 public:
     PsdAdditionalLayerInfoBlock();
-
     bool read(QIODevice* io);
     bool write(QIODevice* io, KisNodeSP node);
 
     bool valid();
 
+    PSDHeader m_header;
     QString error;
+    QStringList keys; // List of all the keys that we've seen
 
+    QString unicodeLayerName;
 
-    QString key;
+    psd_section_type sectionDividerType;
+    QString sectionDividerBlendMode;
 
 };
 

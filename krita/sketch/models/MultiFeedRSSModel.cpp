@@ -36,6 +36,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QLocale>
 
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>

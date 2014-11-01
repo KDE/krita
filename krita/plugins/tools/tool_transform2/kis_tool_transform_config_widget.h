@@ -83,6 +83,8 @@ public slots:
     void slotSetFreeTransformModeButtonClicked(bool);
     void slotSetWarpModeButtonClicked(bool);
     void slotSetCageModeButtonClicked(bool);
+    void slotCageOptionsChanged(int);
+
     void slotSetPerspectiveModeButtonClicked(bool);
     void slotSetLiquifyModeButtonClicked(bool);
     void slotButtonBoxClicked(QAbstractButton *button);
@@ -120,6 +122,8 @@ private:
     void updateLockPointsButtonCaption();
 
     void updateLiquifyControls();
+
+    void resetUIOptions();
 
 private:
     static const int DEFAULT_POINTS_PER_LINE;

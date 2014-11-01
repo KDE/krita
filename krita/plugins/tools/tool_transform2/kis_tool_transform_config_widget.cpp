@@ -132,7 +132,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(slotWarpResetPointsButtonClicked()));
 
     // Init Cage Transform Values
-    connect(chkEditCage, SIGNAL(clicked(bool)), this, SLOT(slotEditCagePoints(bool)));
+    cageTransformButtonGroup->setId(cageAddEditRadio, 0); // we need to set manually since Qt Designer generates negative by default
+    cageTransformButtonGroup->setId(cageDeformRadio, 1);
+    connect(cageTransformButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotCageOptionsChanged(int)));
 
     // Init Liquify Transform Values
     liquifySizeSlider->setRange(KisLiquifyProperties::minSize(),
@@ -218,7 +220,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(customRadioButton, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
     connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
-    connect(chkEditCage, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
 
     connect(liquifySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
     connect(liquifyAmountSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
@@ -513,11 +514,24 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
     } else if (config.mode() == ToolTransformArgs::CAGE) {
 
-        stackedWidget->setCurrentIndex(2);
-        cageButton->setChecked(true);
+        // default UI options
+        resetUIOptions();
 
-        chkEditCage->setChecked(config.isEditingTransformPoints());
-        chkEditCage->setEnabled(config.origPoints().size() >= 3);
+        // we need at least 3 point before we can start actively deforming
+        if (config.origPoints().size() >= 3)
+        {
+            cageTransformDirections->setText(i18n("Switch between editing and deforming cage"));
+            cageAddEditRadio->setVisible(true);
+            cageDeformRadio->setVisible(true);
+
+            // update to correct radio button
+            if (config.isEditingTransformPoints())
+                cageAddEditRadio->setChecked(true);
+            else
+                 cageDeformRadio->setChecked(true);
+
+        }
+
     } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
 
         stackedWidget->setCurrentIndex(3);
@@ -634,10 +648,32 @@ void KisToolTransformConfigWidget::notifyEditingFinished()
     m_configChanged = false;
 }
 
+
+void KisToolTransformConfigWidget::resetUIOptions()
+{
+    // reset tool states since we are done (probably can encapsulate this later)
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    if (config->mode() == ToolTransformArgs::CAGE)
+    {
+        cageAddEditRadio->setVisible(false);
+        cageAddEditRadio->setChecked(true);
+        cageDeformRadio->setVisible(false);
+        cageTransformDirections->setText(i18n("Create 3 points on the canvas to begin"));
+
+        // ensure we are on the right options view
+        stackedWidget->setCurrentIndex(2);
+    }
+
+
+
+}
+
 void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
 {
     QAbstractButton *applyButton = buttonBox->button(QDialogButtonBox::Apply);
     QAbstractButton *resetButton = buttonBox->button(QDialogButtonBox::Reset);
+
+    resetUIOptions();
 
     if (button == applyButton) {
         emit sigApplyTransform();
@@ -645,6 +681,7 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
     else if (button == resetButton) {
         emit sigResetTransform();
     }
+
 }
 
 void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool value)
@@ -978,6 +1015,20 @@ void KisToolTransformConfigWidget::slotWarpTypeChanged(int index)
     }
 
     notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotCageOptionsChanged(int value)
+{
+    if ( value == 0)
+    {
+        slotEditCagePoints(true);
+    }
+    else
+    {
+        slotEditCagePoints(false);
+    }
+
+    notifyEditingFinished();
 }
 
 void KisToolTransformConfigWidget::slotEditCagePoints(bool value)

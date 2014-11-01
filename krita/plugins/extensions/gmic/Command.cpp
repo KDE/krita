@@ -106,7 +106,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         QString typeName = line.mid(index, helperIndex - index);
         if (typeName.startsWith(underscore))
         {
-            typeName.remove(1);
+            typeName.remove(0, 1);
         }
 
         const QList<QString> &typeDefs = PARAMETER_NAMES_STRINGS;

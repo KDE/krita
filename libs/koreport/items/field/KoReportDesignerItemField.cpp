@@ -52,7 +52,7 @@ KoReportDesignerItemField::KoReportDesignerItemField(KoReportDesigner * rw, QGra
 {
     Q_UNUSED(pos);
     init(scene, rw);
-    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    setSceneRect(properRect(*rw, getTextRect().width(), getTextRect().height()));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
@@ -61,14 +61,6 @@ KoReportDesignerItemField::KoReportDesignerItemField(QDomNode & element, KoRepor
 {
     init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
-}
-
-QSizeF KoReportDesignerItemField::minimumSize(const KoReportDesigner &designer) const
-{
-    if (designer.countSelectionWidth() < getTextRect().width() || designer.countSelectionHeight() < getTextRect().height()) {
-        return QSizeF(getTextRect().width(), getTextRect().height());
-    }
-    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemField* KoReportDesignerItemField::clone()

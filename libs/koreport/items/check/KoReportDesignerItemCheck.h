@@ -25,6 +25,9 @@
 #include <koproperty/Set.h>
 #include "KoReportItemCheck.h"
 
+const int KOREPORT_ITEM_CHECK_DEFAULT_WIDTH = 15;
+const int KOREPORT_ITEM_CHECK_DEFAULT_HEIGHT = 15;
+
 class KoReportDesignerItemCheck : public KoReportItemCheck, public KoReportDesignerItemRectBase
 {
     Q_OBJECT
@@ -39,9 +42,6 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
     virtual KoReportDesignerItemCheck* clone();
-
-protected:
-    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
 
 private:
     void init(QGraphicsScene*, KoReportDesigner*);

@@ -40,9 +40,6 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual KoReportDesignerItemLabel* clone();
 
-protected:
-    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
-
 private:
     void init(QGraphicsScene*, KoReportDesigner*);
     QRectF getTextRect() const;

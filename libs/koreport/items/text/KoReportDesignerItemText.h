@@ -43,7 +43,6 @@ public:
     virtual KoReportDesignerItemText* clone();
 
 protected:
-    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
 private:

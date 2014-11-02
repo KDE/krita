@@ -643,7 +643,7 @@ QPointF KoShape::absolutePosition(KoFlake::Position anchor) const
     return absoluteTransformation(0).map(point);
 }
 
-void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
+void KoShape::setAbsolutePosition(const QPointF &newPosition, KoFlake::Position anchor)
 {
     Q_D(KoShape);
     QPointF currentAbsPosition = absolutePosition(anchor);
@@ -2296,7 +2296,7 @@ QString KoShape::hyperLink () const
     return d->hyperLink;
 }
 
-void KoShape::setHyperLink (QString & hyperLink)
+void KoShape::setHyperLink(const QString &hyperLink)
 {
     Q_D(KoShape);
     d->hyperLink = hyperLink;

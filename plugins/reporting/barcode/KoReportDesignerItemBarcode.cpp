@@ -55,7 +55,7 @@ KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(KoReportDesigner * rw, 
 {
     Q_UNUSED(pos);
     init(scene, rw);
-    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    setSceneRect(properRect(*rw, m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
@@ -64,14 +64,6 @@ KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(QDomNode & element, KoR
 {
     init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
-}
-
-QSizeF KoReportDesignerItemBarcode::minimumSize(const KoReportDesigner &designer) const
-{
-    if (designer.countSelectionWidth() < m_minWidthTotal*m_dpiX || designer.countSelectionHeight() < m_minHeight*m_dpiY) {
-        return QSizeF(m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY);
-    }
-    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemBarcode* KoReportDesignerItemBarcode::clone()

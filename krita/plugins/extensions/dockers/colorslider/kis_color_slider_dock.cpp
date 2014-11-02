@@ -65,8 +65,7 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
         delete m_colorSliders;
     }
     QWidget *m_sliderdockerwidget = new QWidget;
-    QVBoxLayout *m_layout = new QVBoxLayout(this);
-    m_sliderdockerwidget->setLayout(m_layout);
+    QVBoxLayout *m_layout = new QVBoxLayout(m_sliderdockerwidget);
     setWidget(m_sliderdockerwidget);
     //m_updateAllowed = true;
     

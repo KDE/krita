@@ -805,7 +805,7 @@ public:
      * @param newPosition the new absolute center of the shape.
      * @param anchor The place on the (unaltered) shape that you set the position of.
      */
-    void setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor = KoFlake::CenteredPosition);
+    void setAbsolutePosition(const QPointF &newPosition, KoFlake::Position anchor = KoFlake::CenteredPosition);
 
     /**
      * Set a data object on the shape to be used by an application.
@@ -1086,7 +1086,7 @@ public:
      * Set hyperlink for this shape.
      * @param hyperLink name.
      */
-    void setHyperLink (QString & hyperLink);
+    void setHyperLink(const QString &hyperLink);
 
     /**
      * \internal

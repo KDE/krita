@@ -240,7 +240,7 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
                 pos = idx + 1;
                 if (separator == '\n') {
                     QString line = qstrValue.left(idx);
-                    qstrValue.remove(idx + 1);
+                    qstrValue.remove(0, idx + 1);
                     pos = 0;
 
                     rect.setTop(intBaseTop + (intLineCounter * intRectHeight));

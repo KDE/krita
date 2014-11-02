@@ -33,9 +33,6 @@
  * Whenever the user selects the option of going back to the previous configuration of the preset or "unlocks" an option -- these settings are restored
  * and the settings with the "_previous" suffix are destroyed.
  */
-
-
-
 class KisLockedPropertiesServer;
 
 class KisLockedPropertiesProxy: public KisPropertiesConfiguration
@@ -48,18 +45,9 @@ public:
     QVariant getProperty(const QString &name) const;
     using KisPropertiesConfiguration::setProperty;
     void setProperty(const QString & name, const QVariant & value);
-
-
-
-
-
-
-
 private:
     KisLockedProperties* m_lockedProperties;
     const KisPropertiesConfiguration* m_parent;
-
-
 };
 
 #endif // KIS_LOCKED_PROPERTIES_PROXY_H

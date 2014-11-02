@@ -51,16 +51,8 @@ KoReportDesignerItemCheck::KoReportDesignerItemCheck(KoReportDesigner* d, QGraph
 {
     Q_UNUSED(pos);
     init(scene, d);
-    setSceneRect(d->getPressPoint(), minimumSize(*d));
+    setSceneRect(properRect(*d, KOREPORT_ITEM_CHECK_DEFAULT_WIDTH, KOREPORT_ITEM_CHECK_DEFAULT_HEIGHT));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
-}
-
-QSizeF KoReportDesignerItemCheck::minimumSize(const KoReportDesigner &designer) const
-{
-    const qreal width = qMax(designer.countSelectionWidth(), qreal(15));
-    const qreal height = qMax(designer.countSelectionHeight(), qreal(15));
-
-    return QSizeF(width, height);
 }
 
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)

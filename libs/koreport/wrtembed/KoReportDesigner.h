@@ -281,6 +281,11 @@ public:
     */
     QPointF getPressPoint() const;
 
+    /**
+    @return point that contains X,Y coordinates of mouse press
+    */
+    QPointF getReleasePoint() const;
+
 public slots:
 
     void slotEditDelete();

@@ -52,7 +52,7 @@ KoReportDesignerItemLabel::KoReportDesignerItemLabel(KoReportDesigner* d, QGraph
 {
     Q_UNUSED(pos);
     init(scene, d);
-    setSceneRect(d->getPressPoint(), minimumSize(*d));
+    setSceneRect(properRect(*d, getTextRect().width(), getTextRect().height()));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
@@ -61,14 +61,6 @@ KoReportDesignerItemLabel::KoReportDesignerItemLabel(QDomNode & element, KoRepor
 {
     init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
-}
-
-QSizeF KoReportDesignerItemLabel::minimumSize(const KoReportDesigner &designer) const
-{
-    if (designer.countSelectionWidth() < getTextRect().width() || designer.countSelectionWidth() < getTextRect().height()) {
-        return QSizeF(getTextRect().width(), getTextRect().height());
-    }
-    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemLabel* KoReportDesignerItemLabel::clone()

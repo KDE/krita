@@ -820,17 +820,19 @@ void KisPaintopBox::sliderChanged(int n)
         if (m_resourceProvider->currentPreset()->settings()->hasProperty("FlowValue"))
             m_resourceProvider->currentPreset()->settings()->setProperty("FlowValue", flow);
 
-        KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
-        p->setProperty("OpacityValue", opacity);
-        p->setProperty("FlowValue", flow);
+        KisLockedPropertiesProxy *propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
+        propertiesProxy->setProperty("OpacityValue", opacity);
+        propertiesProxy->setProperty("FlowValue", flow);
+        delete propertiesProxy;
 
         m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
     } else m_resourceProvider->setOpacity(opacity);
     m_optionWidget->blockSignals(false);
     if (m_presetsEnabled) {
         m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
-        KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
-        p->setProperty("OpacityValue", opacity);
+        KisLockedPropertiesProxy *propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
+        propertiesProxy->setProperty("OpacityValue", opacity);
+        delete propertiesProxy;
     }
     if (!m_dirtyPresetsEnabled) {
         m_resourceProvider->currentPreset()->setPresetDirty(false);

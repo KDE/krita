@@ -140,27 +140,50 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 
         }
         else if (key == "lrFX") {
+            if (!psdread(&buf, &layerEffects.version) || layerEffects.version != 0) {
+                dbgFile << "Layer Effect version is not zero" << layerEffects.version;
+                continue;
+            }
+            if (!psdread(&buf, &layerEffects.effects_count)
+                    || layerEffects.effects_count < 6
+                    || layerEffects.effects_count > 7) {
+                dbgFile << "Wrong number of Layer Effects " << layerEffects.effects_count;
+                continue;
+            }
+            for (int i = 0; i < layerEffects.effects_count; ++i) {
+                QByteArray b;
+                b = buf.peek(4);
+                if (b.size() != 4 || QString(b) != "8BIM") {
+                    error = "No 8BIM marker for additional layer info block";
+                    return false;
+                }
+                else {
+                    buf.seek(buf.pos() + 4); // skip the 8BIM header we peeked ahead for
+                }
+                QString tag = QString(io->read(4));
+                if (tag.size() != 4) {
+                    error = "Could not read layer effect type tag";
+                    return false;
+                }
+
+            }
 
         }
         else if (key == "tySh") {
-
         }
         else if (key == "luni") {
             // get the unicode layer name
-
             quint32 stringlen;
             if (!psdread(&buf, &stringlen)) {
                 error = "Could not read string length for luni block";
                 return false;
             }
-
             for (uint i = 0; i < stringlen; ++i) {
                 quint16 ch;
                 psdread(&buf, &ch);
                 QChar uch(ch);
                 unicodeLayerName.append(uch);
             }
-
             dbgFile << "unicodeLayerName" << unicodeLayerName;
         }
         else if (key == "lyid") {
@@ -197,24 +220,20 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 
         }
         else if (key == "lsct") {
-
             quint32 type;
             if (!psdread(&buf, &type)) {
                 error = "Could not read group type";
                 return false;
             }
-
             if (size >= 12) {
                 if (!psd_read_blendmode(io, sectionDividerBlendMode)) {
                     error = QString("Could not read blend mode key. Got: %1").arg(sectionDividerBlendMode);
                     return false;
                 }
             }
-
             if (size >= 16) {
                 // Don't care: animation scene group
             }
-
         }
         else if (key == "brst") {
 

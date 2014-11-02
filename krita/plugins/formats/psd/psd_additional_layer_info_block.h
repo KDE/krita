@@ -509,7 +509,14 @@ struct psd_layer_effects_stroke {
 };
 
 struct psd_layer_effects {
-    qint8 effects_count; // Effects count: may be 6 (for the 6 effects in Photoshop 5 and 6) or 7 (for Photoshop 7.0)
+    psd_layer_effects()
+        : version(-1)
+        , effects_count(0)
+        , visible(false)
+    {}
+
+    quint16 version;
+    quint8 effects_count; // Effects count: may be 6 (for the 6 effects in Photoshop 5 and 6) or 7 (for Photoshop 7.0)
     bool visible; // common state info, visible: always true
     psd_layer_effects_drop_shadow drop_shadow;
     psd_layer_effects_inner_shadow inner_shadow;
@@ -526,7 +533,7 @@ struct psd_layer_effects {
     QVector<bool> valid;
     QVector<QString> blend_mode;
     QVector<quint8> opacity;
-    QVector<QColor> * image_data;
+    QVector<QColor> *image_data;
     QVector<qint32> left;
     QVector<qint32> top;
     QVector<qint32> right;
@@ -631,6 +638,8 @@ public:
 
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;
+
+    psd_layer_effects layerEffects;
 
 };
 

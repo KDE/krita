@@ -73,10 +73,10 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
             this, SLOT(slotFilterChanged(const KoID &)));
 
     // Init Warp Type combo
-    cmbWarpType->insertItem(KisWarpTransformWorker::AFFINE_TRANSFORM,i18n("Affine"));
-    cmbWarpType->insertItem(KisWarpTransformWorker::SIMILITUDE_TRANSFORM,i18n("Similitude"));
-    cmbWarpType->insertItem(KisWarpTransformWorker::RIGID_TRANSFORM,i18n("Rigid"));
-    cmbWarpType->setCurrentIndex(KisWarpTransformWorker::RIGID_TRANSFORM);
+    cmbWarpType->insertItem(KisWarpTransformWorker::AFFINE_TRANSFORM,i18n("Default (Affine)"));
+    cmbWarpType->insertItem(KisWarpTransformWorker::RIGID_TRANSFORM,i18n("Strong (Rigid)"));
+    cmbWarpType->insertItem(KisWarpTransformWorker::SIMILITUDE_TRANSFORM,i18n("Strongest (Similitude)"));
+    cmbWarpType->setCurrentIndex(KisWarpTransformWorker::AFFINE_TRANSFORM);
     connect(cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotWarpTypeChanged(int)));
 
     // Init Rotation Center buttons
@@ -122,8 +122,11 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(aZBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetAZ(double)));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotSetKeepAspectRatio(bool)));
 
-    // Init Warp Transform Values
-    connect(alphaBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWarpAlpha(double)));
+    // Init Warp Transform Values  
+    alphaBox->setMaximum(5.0);
+    alphaBox->setSingleStep(0.1);
+
+    connect(alphaBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetWarpAlpha(qreal)));
     connect(densityBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetWarpDensity(int)));
 
     connect(defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpDefaultPointsButtonClicked(bool)));
@@ -207,9 +210,10 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(translateYBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
     connect(aXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
     connect(aYBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
-    connect(aZBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
-    connect(alphaBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(aZBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));   
     connect(densityBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+
+    connect(alphaBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
 
     // Connect other widget (not having editingFinished signal) to
     // the same slot. From Qt 4.6 onwards the sequence of the signal
@@ -515,7 +519,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         cmbWarpType->setCurrentIndex((int)config.warpType());
         defaultRadioButton->setChecked(config.defaultPoints());
         customRadioButton->setChecked(!config.defaultPoints());
-        defaultWarpWidget->setEnabled(config.defaultPoints());
+        densityBox->setEnabled(config.defaultPoints());
         customWarpWidget->setEnabled(!config.defaultPoints());
 
         updateLockPointsButtonCaption();
@@ -892,12 +896,13 @@ void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)
     notifyConfigChanged();
 }
 
-void KisToolTransformConfigWidget::slotSetWarpAlpha(double value)
+void KisToolTransformConfigWidget::slotSetWarpAlpha(qreal value)
 {
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setAlpha(value);
+
+    config->setAlpha((double)value);
     notifyConfigChanged();
 }
 
@@ -950,7 +955,7 @@ void KisToolTransformConfigWidget::activateCustomWarpPoints(bool enabled)
 {
     ToolTransformArgs *config = m_transaction->currentConfig();
 
-    defaultWarpWidget->setEnabled(!enabled);
+    densityBox->setEnabled(!enabled);
     customWarpWidget->setEnabled(enabled);
 
     if (!enabled) {

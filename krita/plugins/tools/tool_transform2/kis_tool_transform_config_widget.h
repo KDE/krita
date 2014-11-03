@@ -70,7 +70,7 @@ public slots:
     void slotSetAY(double value);
     void slotSetAZ(double value);
 
-    void slotSetWarpAlpha(double value);
+    void slotSetWarpAlpha(qreal value);
     void slotSetWarpDensity(int value);
 
     void slotSetKeepAspectRatio(bool value);

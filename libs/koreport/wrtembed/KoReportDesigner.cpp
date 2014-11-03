@@ -1237,9 +1237,7 @@ QList<QAction*> KoReportDesigner::actions(QActionGroup* group)
             actList.insert(i-1, sep);
             sepInserted = true;
         }
-        else {
-            group->addAction(a);
-        }
+        group->addAction(a);
     }
     
     return actList;

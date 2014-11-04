@@ -554,16 +554,8 @@ void KisToolCrop::validateSelection(bool updateratio)
     }
 }
 
-#define FADE_AREA_OUTSIDE_CROP 1
-
-#if FADE_AREA_OUTSIDE_CROP
 #define BORDER_LINE_WIDTH 0
 #define HALF_BORDER_LINE_WIDTH 0
-#else
-#define BORDER_LINE_WIDTH 1
-#define HALF_BORDER_LINE_WIDTH (BORDER_LINE_WIDTH / 2.0)
-#endif
-
 #define HANDLE_BORDER_LINE_WIDTH 1
 
 QRectF KisToolCrop::borderLineRect()
@@ -583,8 +575,6 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
     if (canvas() && (mode() == KisTool::PAINT_MODE || m_haveCropSelection)) {
         gc.save();
 
-#if FADE_AREA_OUTSIDE_CROP
-
         QRectF wholeImageRect = pixelToView(image()->bounds());
         QRectF borderRect = borderLineRect();
 
@@ -601,7 +591,7 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
         pen.setWidth(HANDLE_BORDER_LINE_WIDTH);
         pen.setColor(Qt::black);
         gc.setPen(pen);
-        gc.setBrush(Qt::yellow);
+        gc.setBrush(QColor(200, 200, 200, OUTSIDE_CROP_ALPHA));
         gc.drawPath(handlesPath());
 
         gc.setClipRect(borderRect, Qt::IntersectClip);
@@ -611,28 +601,6 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
                 drawDecorationLine(&gc, &(decors[i]), borderRect);
             }
         }
-
-#else
-        QPen pen(Qt::SolidLine);
-        pen.setWidth(BORDER_LINE_WIDTH);
-        gc.setPen(pen);
-
-        QRectF borderRect = borderLineRect();
-
-        //  Border
-        gc.setBrush(Qt::NoBrush);
-        gc.drawRect(borderRect);
-
-        // Handles
-        gc.setBrush(Qt::black);
-        gc.drawPath(handlesPath());
-
-        //draw guides
-        gc.drawLine(borderRect.bottomLeft(), QPointF(-canvas()->canvasWidget()->width(), borderRect.bottom()));
-        gc.drawLine(borderRect.bottomLeft(), QPointF(borderRect.left(), canvas()->canvasWidget()->height()));
-        gc.drawLine(borderRect.topRight(), QPointF(canvas()->canvasWidget()->width(), borderRect.top()));
-        gc.drawLine(borderRect.topRight(), QPointF(borderRect.right(), -canvas()->canvasWidget()->height()));
-#endif
         gc.restore();
     }
 }

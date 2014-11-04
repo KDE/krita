@@ -45,23 +45,23 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     setupUi(this);
     showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
     chkWorkRecursively->setIcon(koIcon("krita_tool_transform_recursive.png"));
-    label_shearX->setPixmap(koIcon("shear_horizontal").pixmap(16, 16));
-    label_shearY->setPixmap(koIcon("shear_vertical").pixmap(16, 16));
+    //label_shearX->setPixmap(koIcon("shear_horizontal").pixmap(16, 16));
+    //label_shearY->setPixmap(koIcon("shear_vertical").pixmap(16, 16));
 
-    label_width->setPixmap(koIcon("width_icon").pixmap(16, 16));
-    label_height->setPixmap(koIcon("height_icon").pixmap(16, 16));
+    //label_width->setPixmap(koIcon("width_icon").pixmap(16, 16));
+    //label_height->setPixmap(koIcon("height_icon").pixmap(16, 16));
 
-    label_offsetX->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
-    label_offsetY->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
+    //label_offsetX->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
+    //label_offsetY->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
 
     // Init labels
-    QPixmap rotateX_Pixmap, rotateY_Pixmap, rotateZ_Pixmap;
-    rotateX_Pixmap.loadFromData(rotateX_PNG, rotateX_PNG_len, "png");
-    rotateY_Pixmap.loadFromData(rotateY_PNG, rotateY_PNG_len, "png");
-    rotateZ_Pixmap.loadFromData(rotateZ_PNG, rotateZ_PNG_len, "png");
-    label_rotateX->setPixmap(rotateX_Pixmap);
-    label_rotateY->setPixmap(rotateY_Pixmap);
-    label_rotateZ->setPixmap(rotateZ_Pixmap);
+    //QPixmap rotateX_Pixmap, rotateY_Pixmap, rotateZ_Pixmap;
+    //rotateX_Pixmap.loadFromData(rotateX_PNG, rotateX_PNG_len, "png");
+    //rotateY_Pixmap.loadFromData(rotateY_PNG, rotateY_PNG_len, "png");
+    //rotateZ_Pixmap.loadFromData(rotateZ_PNG, rotateZ_PNG_len, "png");
+    //label_rotateX->setPixmap(rotateX_Pixmap);
+    //label_rotateY->setPixmap(rotateY_Pixmap);
+    //label_rotateZ->setPixmap(rotateZ_Pixmap);
 
     chkWorkRecursively->setChecked(workRecursively);
     connect(chkWorkRecursively, SIGNAL(toggled(bool)), this, SIGNAL(sigRestartTransform()));

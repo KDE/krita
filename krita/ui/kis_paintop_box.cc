@@ -409,7 +409,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         }
 
         m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = m_resourceProvider->currentPreset();
-        m_tabletToolMap[m_currTabletToolID].preset    = m_resourceProvider->currentPreset();
+        m_tabletToolMap[m_currTabletToolID].preset = m_resourceProvider->currentPreset();
         m_tabletToolMap[m_currTabletToolID].paintOpID = m_resourceProvider->currentPreset()->paintOp();
     }
 
@@ -986,7 +986,7 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if (preset) {
         preset->load();
-        preset->settings()->setNode(m_resourceProvider->currentPreset()->settings()->node());
+        preset->settings()->setNode(m_resourceProvider->currentNode());
         preset->settings()->setOptionsWidget(m_optionWidget);
         m_optionWidget->setConfiguration(preset->settings());
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);

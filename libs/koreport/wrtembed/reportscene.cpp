@@ -179,8 +179,8 @@ QPointF ReportScene::gridPoint(const QPointF& p)
 
 void ReportScene::focusOutEvent(QFocusEvent * focusEvent)
 {
-    emit lostFocus();
     QGraphicsScene::focusOutEvent(focusEvent);
+    emit lostFocus();
 }
 
 qreal ReportScene::lowestZValue()

@@ -80,6 +80,7 @@ KisTransformMask::KisTransformMask()
         KisTransformMaskParamsInterfaceSP(
             new KisDumbTransformMaskParams()));
 
+    connect(this, SIGNAL(initiateDelayedStaticUpdate()), &m_d->updateSignalCompressor, SLOT(start()));
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
 }
 
@@ -187,7 +188,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 
     if (parentPos != N_FILTHY_PROJECTION) {
         m_d->staticCacheValid = false;
-        m_d->updateSignalCompressor.start();
+        emit initiateDelayedStaticUpdate();
     }
 
     if (m_d->recalculatingStaticImage) {
@@ -279,7 +280,7 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
     KisNodeSP parentNode;
 
     if ((parentNode = parent())) {
-        needRect &= parentNode->exactBounds();
+        needRect &= parentNode->extent();
     } else if (needRect.width() > 1e6 || needRect.height() > 1e6) {
         qWarning() << "WARNING: transform mask returns infinite need rect! Dropping..." << needRect;
         needRect = rect;

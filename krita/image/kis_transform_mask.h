@@ -72,6 +72,9 @@ public:
 private slots:
     void slotDelayedStaticUpdate();
 
+signals:
+    void initiateDelayedStaticUpdate() const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

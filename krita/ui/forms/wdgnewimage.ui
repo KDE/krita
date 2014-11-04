@@ -63,7 +63,16 @@
          <layout class="QHBoxLayout">
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -96,7 +105,16 @@
           </item>
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -138,7 +156,16 @@
           </item>
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -376,7 +403,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lblColor">
         <property name="text">
-         <string>C&amp;anvas color:</string>
+         <string>&amp;Image Background Color:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -388,14 +415,17 @@
       </item>
       <item row="0" column="1">
        <widget class="KColorButton" name="cmbColor">
-        <property name="color">
+        <property name="toolTip">
+         <string>Reset the image background color in the Image Properties dialog</string>
+        </property>
+        <property name="color" stdset="0">
          <color>
           <red>255</red>
           <green>255</green>
           <blue>255</blue>
          </color>
         </property>
-        <property name="defaultColor">
+        <property name="defaultColor" stdset="0">
          <color>
           <red>255</red>
           <green>255</green>
@@ -412,14 +442,14 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="KIntNumInput" name="intNumLayers">
-        <property name="value">
+       <widget class="KIntNumInput" name="intNumLayers" native="true">
+        <property name="value" stdset="0">
          <number>2</number>
         </property>
-        <property name="minimum">
+        <property name="minimum" stdset="0">
          <number>1</number>
         </property>
-        <property name="maximum">
+        <property name="maximum" stdset="0">
          <number>200</number>
         </property>
        </widget>
@@ -427,7 +457,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="lblOpacity">
         <property name="text">
-         <string>&amp;Opacity:</string>
+         <string>Image Background &amp;Opacity:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -446,7 +476,16 @@
          <enum>QFrame::Plain</enum>
         </property>
         <layout class="QHBoxLayout">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -517,16 +556,22 @@
      <zorder>lblDescription</zorder>
      <zorder>txtDescription</zorder>
      <zorder>cmbColor</zorder>
-     <zorder>textLabel2</zorder>
-     <zorder>sliderOpacity</zorder>
-     <zorder>textLabel1</zorder>
      <zorder>intNumLayers</zorder>
      <zorder>label_4</zorder>
     </widget>
    </item>
    <item>
     <layout class="QHBoxLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>

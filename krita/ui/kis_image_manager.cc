@@ -25,7 +25,9 @@
 #include <klocale.h>
 #include <kurl.h>
 #include <kactioncollection.h>
+#include <kcolordialog.h>
 
+#include <KoColor.h>
 #include <KoIcon.h>
 #include <KoFilterManager.h>
 #include <KoFileDialog.h>
@@ -53,6 +55,12 @@ void KisImageManager::setup(KActionCollection * actionCollection)
     action  = new KAction(koIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
+
+    action = new KAction(koIcon("format-stroke-color"), i18n("Image Background Colorc and Transparency..."), this);
+    action->setToolTip(i18n("Change the background color of the image"));
+    actionCollection->addAction("image_color", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImageColor()));
+
 }
 
 void KisImageManager::slotImportLayerFromFile()
@@ -126,7 +134,6 @@ void KisImageManager::shearCurrentImage(double angleX, double angleY)
 void KisImageManager::slotImageProperties()
 {
     KisImageWSP image = m_view->image();
-
     if (!image) return;
 
     QPointer<KisDlgImageProperties> dlg = new KisDlgImageProperties(image, m_view);
@@ -134,6 +141,26 @@ void KisImageManager::slotImageProperties()
         image->convertProjectionColorSpace(dlg->colorSpace());
     }
     delete dlg;
+}
+
+void KisImageManager::slotImageColor()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KColorDialog dlg;
+    dlg.setAlphaChannelEnabled(true);
+
+    KoColor bg = image->defaultProjectionColor();
+
+    dlg.setColor(bg.toQColor());
+    dlg.setButtons(KColorDialog::Ok | KColorDialog::Cancel);
+    if (dlg.exec() == KColorDialog::Accepted) {
+        QColor c = dlg.color();
+        bg.fromQColor(c);
+        image->setDefaultProjectionColor(bg);
+        image->refreshGraphAsync();
+    }
 }
 
 

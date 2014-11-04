@@ -60,6 +60,7 @@ public slots:
     void rotateCurrentImage(double radians);
     void shearCurrentImage(double angleX, double angleY);
     void slotImageProperties();
+    void slotImageColor();
 
 private:
     KisView2 * m_view;

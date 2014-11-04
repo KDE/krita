@@ -422,6 +422,7 @@ bool KisDoc2::newImage(const QString& name,
     QApplication::setOverrideCursor(Qt::BusyCursor);
 
     image = new KisImage(createUndoStore(), width, height, cs, name);
+    image->setDefaultProjectionColor(bgColor);
     Q_CHECK_PTR(image);
 
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -437,7 +438,6 @@ bool KisDoc2::newImage(const QString& name,
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);
     Q_CHECK_PTR(layer);
 
-    layer->paintDevice()->setDefaultPixel(bgColor.data());
     image->addNode(layer.data(), image->rootLayer().data());
     setCurrentImage(image);
 

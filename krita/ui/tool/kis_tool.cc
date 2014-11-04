@@ -168,12 +168,9 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
                                                   resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
                                                            resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
-
-
     canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
 
-    d->currentNode = canvas()->resourceManager()->
-            resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    d->currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->

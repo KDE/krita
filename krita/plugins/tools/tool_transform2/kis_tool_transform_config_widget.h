@@ -75,6 +75,8 @@ public slots:
 
     void slotSetKeepAspectRatio(bool value);
 
+    void slotTransformAreaVisible(bool value);
+
     void slotWarpDefaultPointsButtonClicked(bool value);
     void slotWarpCustomPointsButtonClicked(bool value);
     void slotWarpLockPointsButtonClicked();

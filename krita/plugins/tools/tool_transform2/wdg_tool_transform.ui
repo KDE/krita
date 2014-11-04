@@ -279,6 +279,9 @@
            <property name="sizeConstraint">
             <enum>QLayout::SetFixedSize</enum>
            </property>
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
            <property name="topMargin">
             <number>10</number>
            </property>
@@ -314,7 +317,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0" columnstretch="0,0,0">
+            <layout class="QGridLayout" name="freeAnchorOriginGroup" rowstretch="0,0,0,0" columnstretch="0,0,0">
              <property name="sizeConstraint">
               <enum>QLayout::SetDefaultConstraint</enum>
              </property>
@@ -510,43 +513,51 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Anchor:</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QCheckBox" name="checkBox_3">
+            <widget class="QRadioButton" name="freeMoveRadioButton">
              <property name="text">
               <string>Move</string>
              </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">freeTransformRadioGroup</string>
+             </attribute>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox">
+            <widget class="QRadioButton" name="freeRotationRadioButton">
              <property name="text">
               <string>Rotation</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">freeTransformRadioGroup</string>
+             </attribute>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_4">
+            <widget class="QRadioButton" name="freeScaleRadioButton">
              <property name="text">
               <string>Scale</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">freeTransformRadioGroup</string>
+             </attribute>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_2">
+            <widget class="QRadioButton" name="freeShearRadioButton">
              <property name="text">
               <string>Shear</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">freeTransformRadioGroup</string>
+             </attribute>
             </widget>
            </item>
           </layout>
@@ -603,15 +614,15 @@ big!</string>
           <bool>true</bool>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
+           <verstretch>5</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>115</height>
+           <height>135</height>
           </size>
          </property>
          <property name="title">
@@ -626,7 +637,22 @@ big!</string>
          <property name="checked">
           <bool>false</bool>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="leftMargin">
+           <number>7</number>
+          </property>
+          <property name="topMargin">
+           <number>7</number>
+          </property>
+          <property name="rightMargin">
+           <number>7</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <layout class="QFormLayout" name="formLayout">
             <property name="fieldGrowthPolicy">
@@ -640,9 +666,15 @@ big!</string>
             </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_rotateX">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
+                <width>0</width>
                 <height>0</height>
                </size>
               </property>
@@ -663,17 +695,45 @@ big!</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_rotateY">
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="aXBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="toolTip">
+               <string>Rotate around X-Axis</string>
+              </property>
+              <property name="wrapping">
+               <bool>true</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="accelerated">
+               <bool>true</bool>
+              </property>
+              <property name="suffix">
+               <string> °</string>
+              </property>
+              <property name="maximum">
+               <double>360.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_rotateY">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
+                <width>0</width>
                 <height>0</height>
                </size>
               </property>
@@ -694,34 +754,25 @@ big!</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_rotateZ">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>40</width>
-                <height>0</height>
-               </size>
-              </property>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="aYBox">
               <property name="toolTip">
-               <string>Rotate around Z-Axis</string>
+               <string>Rotate around Y-Axis</string>
               </property>
-              <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
-              </property>
-              <property name="text">
-               <string>z:</string>
+              <property name="wrapping">
+               <bool>true</bool>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
-              <property name="buddy">
-               <cstring>aZBox</cstring>
+              <property name="accelerated">
+               <bool>true</bool>
+              </property>
+              <property name="suffix">
+               <string> °</string>
+              </property>
+              <property name="maximum">
+               <double>360.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -756,53 +807,34 @@ big!</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="aYBox">
-              <property name="toolTip">
-               <string>Rotate around Y-Axis</string>
-              </property>
-              <property name="wrapping">
-               <bool>true</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="accelerated">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string> °</string>
-              </property>
-              <property name="maximum">
-               <double>360.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="aXBox">
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_rotateZ">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="toolTip">
-               <string>Rotate around X-Axis</string>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
               </property>
-              <property name="wrapping">
-               <bool>true</bool>
+              <property name="toolTip">
+               <string>Rotate around Z-Axis</string>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>z:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
-              <property name="accelerated">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string> °</string>
-              </property>
-              <property name="maximum">
-               <double>360.000000000000000</double>
+              <property name="buddy">
+               <cstring>aZBox</cstring>
               </property>
              </widget>
             </item>
@@ -814,7 +846,7 @@ big!</string>
        <item>
         <widget class="QGroupBox" name="scaleGroup">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -822,7 +854,7 @@ big!</string>
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>100</height>
+           <height>90</height>
           </size>
          </property>
          <property name="title">
@@ -838,15 +870,33 @@ big!</string>
           <bool>false</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>7</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_10">
             <item>
              <layout class="QFormLayout" name="formLayout_6">
+              <property name="verticalSpacing">
+               <number>5</number>
+              </property>
               <item row="0" column="0">
                <widget class="QLabel" name="label_width">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="minimumSize">
                  <size>
-                  <width>40</width>
+                  <width>0</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -867,7 +917,7 @@ big!</string>
               <item row="0" column="1">
                <widget class="QDoubleSpinBox" name="scaleXBox">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -901,7 +951,7 @@ big!</string>
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="scaleYBox">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -934,9 +984,15 @@ big!</string>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="label_height">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="minimumSize">
                  <size>
-                  <width>40</width>
+                  <width>0</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -966,8 +1022,8 @@ big!</string>
               </property>
               <property name="minimumSize">
                <size>
-                <width>30</width>
-                <height>30</height>
+                <width>20</width>
+                <height>25</height>
                </size>
               </property>
              </widget>
@@ -980,7 +1036,7 @@ big!</string>
        <item>
         <widget class="QGroupBox" name="moveGroup">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -988,7 +1044,7 @@ big!</string>
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>100</height>
+           <height>95</height>
           </size>
          </property>
          <property name="title">
@@ -1004,6 +1060,12 @@ big!</string>
           <bool>false</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <layout class="QFormLayout" name="formLayout_3">
             <property name="fieldGrowthPolicy">
@@ -1011,9 +1073,15 @@ big!</string>
             </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_offsetX">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
+                <width>0</width>
                 <height>0</height>
                </size>
               </property>
@@ -1104,9 +1172,15 @@ big!</string>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_offsetY">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
+                <width>0</width>
                 <height>0</height>
                </size>
               </property>
@@ -1156,16 +1230,31 @@ big!</string>
           <bool>false</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_12">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <layout class="QFormLayout" name="formLayout_4">
             <property name="fieldGrowthPolicy">
              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
             </property>
+            <property name="verticalSpacing">
+             <number>8</number>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_shearX">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
+                <width>0</width>
                 <height>0</height>
                </size>
               </property>
@@ -1216,9 +1305,15 @@ big!</string>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_shearY">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
+                <width>0</width>
                 <height>0</height>
                </size>
               </property>
@@ -1271,6 +1366,19 @@ big!</string>
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -2080,6 +2188,7 @@ big!</string>
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="freeTransformRadioGroup"/>
   <buttongroup name="buttonGroup"/>
   <buttongroup name="cageTransformButtonGroup"/>
  </buttongroups>

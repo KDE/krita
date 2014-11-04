@@ -122,6 +122,20 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(aZBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetAZ(double)));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotSetKeepAspectRatio(bool)));
 
+    // toggle visibility of different free buttons
+    connect(freeMoveRadioButton, SIGNAL(clicked(bool)), SLOT(slotTransformAreaVisible(bool)));
+    connect(freeRotationRadioButton, SIGNAL(clicked(bool)), SLOT(slotTransformAreaVisible(bool)));
+    connect(freeScaleRadioButton, SIGNAL(clicked(bool)), SLOT(slotTransformAreaVisible(bool)));
+    connect(freeShearRadioButton, SIGNAL(clicked(bool)), SLOT(slotTransformAreaVisible(bool)));
+
+    // only first group for free transform
+    rotationGroup->hide();
+    //moveGroup->hide();
+    scaleGroup->hide();
+    shearGroup->hide();
+
+
+
     // Init Warp Transform Values  
     alphaBox->setMaximum(5.0);
     alphaBox->setSingleStep(0.1);
@@ -226,6 +240,11 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(customRadioButton, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
     connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
+
+
+
+
+
 
     connect(liquifySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
     connect(liquifyAmountSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
@@ -470,10 +489,16 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
         bool freeTransformIsActive = config.mode() == ToolTransformArgs::FREE_TRANSFORM;
 
-        if (freeTransformIsActive) {
-            freeTransformButton->setChecked(true);
-        } else {
+        if (freeTransformIsActive)
+        {
+            freeTransformButton->setChecked(true);           
+        }
+        else
+        {
+
             perspectiveTransformButton->setChecked(true);
+
+
         }
 
         aXBox->setEnabled(freeTransformIsActive);
@@ -481,6 +506,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         aZBox->setEnabled(freeTransformIsActive);
         foreach (QAbstractButton *button, m_rotationCenterButtons->buttons()) {
             button->setEnabled(freeTransformIsActive);
+            freeRotationRadioButton->setEnabled(freeTransformIsActive);
         }
 
         scaleXBox->setValue(config.scaleX() * 100.);
@@ -872,6 +898,40 @@ void KisToolTransformConfigWidget::slotSetAZ(double value)
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setAZ(degreeToRadian(value));
     notifyConfigChanged();
+}
+
+
+// change free transform setting we want to alter (all radio buttons call this)
+void KisToolTransformConfigWidget::slotTransformAreaVisible(bool value)
+{
+    //QCheckBox sender = (QCheckBox)(*)(QObject::sender());
+    QString senderName = QObject::sender()->objectName();
+
+
+    // only show setting with what we have selected
+    rotationGroup->hide();
+    shearGroup->hide();
+    scaleGroup->hide();
+    moveGroup->hide();
+
+
+    if ("freeMoveRadioButton" == senderName)
+    {
+        moveGroup->show();
+    }
+    else  if ("freeShearRadioButton" == senderName)
+    {
+        shearGroup->show();
+    }
+    else if ("freeScaleRadioButton" == senderName)
+    {
+        scaleGroup->show();
+    }
+    else
+    {
+        rotationGroup->show();
+    }
+
 }
 
 void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)

@@ -110,13 +110,17 @@ bool LcmsColorProfileContainer::init()
         d->deviceClass = cmsGetDeviceClass(d->profile);
         cmsGetProfileInfo(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->name = QString::fromWCharArray(buffer);
-        d->valid = true;
+
         cmsGetProfileInfo(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->productDescription = QString::fromWCharArray(buffer);
 
         cmsGetProfileInfo(d->profile, cmsInfoManufacturer, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->manufacturer = QString::fromWCharArray(buffer);
         
+        cmsProfileClassSignature profile_class;
+        profile_class = cmsGetDeviceClass(d->profile);
+        d->valid = (profile_class != cmsSigNamedColorClass);
+
         // Check if the profile can convert (something->this)
         d->suitableForOutput = cmsIsMatrixShaper(d->profile)
                 || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
@@ -129,7 +133,8 @@ bool LcmsColorProfileContainer::init()
                    << "\n\tValid:" << d->valid
                    << "\n\tName:" << d->name
                    << "\n\tManufacturer:" << d->manufacturer
-                   << "\n\tSuitable for output:" << d->suitableForOutput;
+                   << "\n\tSuitable for output:" << d->suitableForOutput
+                   << "\n\tClass" << QString::number(profile_class, 0, 16);
 
         return true;
     }

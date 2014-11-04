@@ -128,8 +128,13 @@ KisTransformMaskParamsInterfaceSP KisTransformMask::transformParams() const
 
 void KisTransformMask::slotDelayedStaticUpdate()
 {
+    /**
+     * The mask might have been deleted from the layers stack in the
+     * meanwhile. Just ignore the updates in the case.
+     */
+
     KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
-    KIS_ASSERT_RECOVER_RETURN(parentLayer);
+    if (!parentLayer) return;
 
     KisImageSP image = parentLayer->image();
     if (image) {

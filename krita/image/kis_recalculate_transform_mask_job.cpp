@@ -36,6 +36,12 @@ bool KisRecalculateTransformMaskJob::overrides(const KisSpontaneousJob *_otherJo
 
 void KisRecalculateTransformMaskJob::run()
 {
+    /**
+     * The mask might have been deleted from the layers stack. In
+     * such a case, don't try do update it.
+     */
+    if (!m_mask->parent()) return;
+
     m_mask->recaclulateStaticImage();
     m_mask->setDirty();
 }

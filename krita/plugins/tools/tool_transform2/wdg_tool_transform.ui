@@ -250,7 +250,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="freeTransformWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -533,7 +533,7 @@
            <item>
             <widget class="QRadioButton" name="freeRotationRadioButton">
              <property name="text">
-              <string>Rotation</string>
+              <string>Rotate</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">freeTransformRadioGroup</string>
@@ -616,7 +616,7 @@
          <property name="minimumSize">
           <size>
            <width>240</width>
-           <height>135</height>
+           <height>100</height>
           </size>
          </property>
          <property name="title">
@@ -1093,7 +1093,6 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-            
               <property name="toolTip">
                <string>Horizontal Shear</string>
               </property>
@@ -1118,7 +1117,7 @@
               </property>
               <property name="toolTip">
                <string>Vertical Shear</string>
-              </property>             
+              </property>
              </widget>
             </item>
             <item row="1" column="0">
@@ -1194,7 +1193,7 @@
        </property>
        <layout class="QGridLayout" name="gridLayout_4">
         <property name="horizontalSpacing">
-         <number>12</number>
+         <number>10</number>
         </property>
         <property name="verticalSpacing">
          <number>0</number>
@@ -1202,7 +1201,7 @@
         <item row="1" column="1">
          <widget class="KisDoubleSliderSpinBox" name="alphaBox" native="true">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1210,7 +1209,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="flexibilityLabel">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -1237,7 +1236,7 @@
         <item row="1" column="0">
          <widget class="QComboBox" name="cmbWarpType">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1988,8 +1987,8 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="buttonGroup"/>
   <buttongroup name="freeTransformRadioGroup"/>
+  <buttongroup name="cageTransformButtonGroup"/>
  </buttongroups>
 </ui>

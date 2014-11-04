@@ -91,6 +91,46 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     nothingSelected->hide(); // a convenient button for when no button is checked in the group
     m_rotationCenterButtons->addButton(nothingSelected, 9);
 
+
+    // initialize values for free transform sliders
+    shearXBox->setSuffix(" px");
+    shearYBox->setSuffix(" px");
+    shearXBox->setRange(-5.0, 5.0, 2);
+    shearYBox->setRange(-5.0, 5.0, 2);
+    shearXBox->setSingleStep(0.01);
+    shearYBox->setSingleStep(0.01);
+    shearXBox->setValue(0.0);
+    shearYBox->setValue(0.0);
+
+
+    translateXBox->setSuffix(" px");
+    translateYBox->setSuffix(" px");
+    translateXBox->setRange(-3000, 3000.0);
+    translateYBox->setRange(-3000, 3000.0);
+
+    scaleXBox->setSuffix("%");
+    scaleYBox->setSuffix("%");
+    scaleXBox->setRange(0.0, 2000.0);
+    scaleYBox->setRange(0.0, 2000.0);
+    scaleXBox->setExponentRatio(3.0);
+    scaleYBox->setExponentRatio(3.0);
+    scaleXBox->setValue(100.0);
+    scaleYBox->setValue(100.0);
+
+
+    aXBox->setSuffix(QChar(Qt::Key_degree));
+    aYBox->setSuffix(QChar(Qt::Key_degree));
+    aZBox->setSuffix(QChar(Qt::Key_degree));
+    aXBox->setRange(0.0, 360.0, 0);
+    aYBox->setRange(0.0, 360.0, 0);
+    aZBox->setRange(0.0, 360.0, 0);
+    aXBox->setValue(0.0);
+    aYBox->setValue(0.0);
+    aZBox->setValue(0.0);
+
+
+
+
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
 
     // Init Free Transform Values
@@ -120,8 +160,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
 
     // Init Warp Transform Values  
-    alphaBox->setMaximum(5.0);
     alphaBox->setSingleStep(0.1);
+    alphaBox->setRange(0, 10, 1);
 
     connect(alphaBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetWarpAlpha(qreal)));
     connect(densityBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetWarpDensity(int)));
@@ -202,42 +242,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(shearXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
     connect(shearYBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
     connect(densityBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
-
-
-    shearXBox->setSuffix(" px");
-    shearYBox->setSuffix(" px");
-    shearXBox->setRange(-5.0, 5.0, 2);
-    shearYBox->setRange(-5.0, 5.0, 2);
-    shearXBox->setSingleStep(0.01);
-    shearYBox->setSingleStep(0.01);
-    shearXBox->setValue(0.0);
-    shearYBox->setValue(0.0);
-
-
-    translateXBox->setSuffix(" px");
-    translateYBox->setSuffix(" px");
-    translateXBox->setRange(-3000, 3000.0);
-    translateYBox->setRange(-3000, 3000.0);
-
-    scaleXBox->setSuffix("%");
-    scaleYBox->setSuffix("%");
-    scaleXBox->setRange(0.0, 2000.0);
-    scaleYBox->setRange(0.0, 2000.0);
-    scaleXBox->setExponentRatio(3.0);
-    scaleYBox->setExponentRatio(3.0);
-    scaleXBox->setValue(100.0);
-    scaleYBox->setValue(100.0);
-
-
-    aXBox->setSuffix(QChar(Qt::Key_degree));
-    aYBox->setSuffix(QChar(Qt::Key_degree));
-    aZBox->setSuffix(QChar(Qt::Key_degree));
-    aXBox->setRange(0.0, 360.0, 0);
-    aYBox->setRange(0.0, 360.0, 0);
-    aZBox->setRange(0.0, 360.0, 0);
-    aXBox->setValue(0.0);
-    aYBox->setValue(0.0);
-    aZBox->setValue(0.0);
 
 
 

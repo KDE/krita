@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>424</width>
-    <height>645</height>
+    <height>654</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -520,7 +520,7 @@
            <item>
             <widget class="QRadioButton" name="freeMoveRadioButton">
              <property name="text">
-              <string>Move</string>
+              <string>Position</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -583,13 +583,7 @@
             <enum>Qt::LeftToRight</enum>
            </property>
            <property name="text">
-            <string>Image
-is
-too
-big!</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
+            <string>Image is too big!</string>
            </property>
           </widget>
          </item>
@@ -614,14 +608,14 @@ big!</string>
           <bool>true</bool>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
-           <verstretch>5</verstretch>
+           <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>240</width>
            <height>135</height>
           </size>
          </property>
@@ -687,39 +681,15 @@ big!</string>
               <property name="text">
                <string>x:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
               <property name="buddy">
                <cstring>aXBox</cstring>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="aXBox">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="KisDoubleSliderSpinBox" name="aXBox" native="true">
               <property name="toolTip">
                <string>Rotate around X-Axis</string>
-              </property>
-              <property name="wrapping">
-               <bool>true</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="accelerated">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string> °</string>
-              </property>
-              <property name="maximum">
-               <double>360.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -746,64 +716,28 @@ big!</string>
               <property name="text">
                <string>y:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
               <property name="buddy">
                <cstring>aYBox</cstring>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="aYBox">
+             <widget class="KisDoubleSliderSpinBox" name="aYBox" native="true">
               <property name="toolTip">
                <string>Rotate around Y-Axis</string>
-              </property>
-              <property name="wrapping">
-               <bool>true</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="accelerated">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string> °</string>
-              </property>
-              <property name="maximum">
-               <double>360.000000000000000</double>
               </property>
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QDoubleSpinBox" name="aZBox">
+             <widget class="KisDoubleSliderSpinBox" name="aZBox" native="true">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
               <property name="toolTip">
                <string>Rotate around Z-Axis</string>
-              </property>
-              <property name="wrapping">
-               <bool>true</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="accelerated">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string> °</string>
-              </property>
-              <property name="decimals">
-               <number>2</number>
-              </property>
-              <property name="maximum">
-               <double>360.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -846,14 +780,14 @@ big!</string>
        <item>
         <widget class="QGroupBox" name="scaleGroup">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>240</width>
            <height>90</height>
           </size>
          </property>
@@ -915,7 +849,7 @@ big!</string>
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QDoubleSpinBox" name="scaleXBox">
+               <widget class="KisDoubleSliderSpinBox" name="scaleXBox" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -925,31 +859,13 @@ big!</string>
                 <property name="toolTip">
                  <string>Horizontal Scale</string>
                 </property>
-                <property name="wrapping">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-                <property name="accelerated">
-                 <bool>true</bool>
-                </property>
-                <property name="suffix">
+                <property name="suffix" stdset="0">
                  <string> %</string>
-                </property>
-                <property name="decimals">
-                 <number>0</number>
-                </property>
-                <property name="minimum">
-                 <double>-99999.000000000000000</double>
-                </property>
-                <property name="maximum">
-                 <double>99999.000000000000000</double>
                 </property>
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QDoubleSpinBox" name="scaleYBox">
+               <widget class="KisDoubleSliderSpinBox" name="scaleYBox" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -959,26 +875,8 @@ big!</string>
                 <property name="toolTip">
                  <string>Vertical Scale</string>
                 </property>
-                <property name="wrapping">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-                <property name="accelerated">
-                 <bool>true</bool>
-                </property>
-                <property name="suffix">
+                <property name="suffix" stdset="0">
                  <string> %</string>
-                </property>
-                <property name="decimals">
-                 <number>0</number>
-                </property>
-                <property name="minimum">
-                 <double>-99999.000000000000000</double>
-                </property>
-                <property name="maximum">
-                 <double>99999.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -1036,19 +934,19 @@ big!</string>
        <item>
         <widget class="QGroupBox" name="moveGroup">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>240</width>
            <height>95</height>
           </size>
          </property>
          <property name="title">
-          <string>Move</string>
+          <string>Position</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1079,12 +977,6 @@ big!</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
               <property name="toolTip">
                <string>Horizontal Translation</string>
               </property>
@@ -1094,16 +986,13 @@ big!</string>
               <property name="text">
                <string>x:</string>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
               <property name="buddy">
                <cstring>translateXBox</cstring>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="translateXBox">
+             <widget class="KisDoubleSliderSpinBox" name="translateXBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1116,31 +1005,10 @@ big!</string>
               <property name="layoutDirection">
                <enum>Qt::LeftToRight</enum>
               </property>
-              <property name="wrapping">
-               <bool>false</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="accelerated">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string> px</string>
-              </property>
-              <property name="decimals">
-               <number>2</number>
-              </property>
-              <property name="minimum">
-               <double>-99999.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="translateYBox">
+             <widget class="KisDoubleSliderSpinBox" name="translateYBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1149,24 +1017,6 @@ big!</string>
               </property>
               <property name="toolTip">
                <string>Vertical Translation</string>
-              </property>
-              <property name="wrapping">
-               <bool>false</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="accelerated">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string> px</string>
-              </property>
-              <property name="minimum">
-               <double>-99999.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -1178,20 +1028,11 @@ big!</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
               <property name="toolTip">
                <string>Vertical Translation</string>
               </property>
               <property name="text">
                <string>y:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
               <property name="buddy">
                <cstring>translateYBox</cstring>
@@ -1206,14 +1047,14 @@ big!</string>
        <item>
         <widget class="QGroupBox" name="shearGroup">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>240</width>
            <height>80</height>
           </size>
          </property>
@@ -1252,12 +1093,7 @@ big!</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
+            
               <property name="toolTip">
                <string>Horizontal Shear</string>
               </property>
@@ -1273,7 +1109,7 @@ big!</string>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QDoubleSpinBox" name="shearYBox">
+             <widget class="KisDoubleSliderSpinBox" name="shearYBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1282,25 +1118,7 @@ big!</string>
               </property>
               <property name="toolTip">
                <string>Vertical Shear</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="accelerated">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string> px</string>
-              </property>
-              <property name="minimum">
-               <double>-9999.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>9999.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
-              </property>
+              </property>             
              </widget>
             </item>
             <item row="1" column="0">
@@ -1332,7 +1150,7 @@ big!</string>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="shearXBox">
+             <widget class="KisDoubleSliderSpinBox" name="shearXBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1341,24 +1159,6 @@ big!</string>
               </property>
               <property name="toolTip">
                <string>Horizontal Shear</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="accelerated">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string> px</string>
-              </property>
-              <property name="minimum">
-               <double>-9999.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>9999.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -2188,8 +1988,8 @@ big!</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="freeTransformRadioGroup"/>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="cageTransformButtonGroup"/>
+  <buttongroup name="buttonGroup"/>
+  <buttongroup name="freeTransformRadioGroup"/>
  </buttongroups>
 </ui>

@@ -57,18 +57,18 @@ public slots:
     void slotWarpTypeChanged(int index);
     void slotRotationCenterChanged(int index);
 
-    void slotSetScaleX(double value);
-    void slotSetScaleY(double value);
+    void slotSetScaleX(qreal value);
+    void slotSetScaleY(qreal value);
 
-    void slotSetShearX(double value);
-    void slotSetShearY(double value);
+    void slotSetShearX(qreal value);
+    void slotSetShearY(qreal value);
 
-    void slotSetTranslateX(double value);
-    void slotSetTranslateY(double value);
+    void slotSetTranslateX(qreal value);
+    void slotSetTranslateY(qreal value);
 
-    void slotSetAX(double value);
-    void slotSetAY(double value);
-    void slotSetAZ(double value);
+    void slotSetAX(qreal value);
+    void slotSetAY(qreal value);
+    void slotSetAZ(qreal value);
 
     void slotSetWarpAlpha(qreal value);
     void slotSetWarpDensity(int value);

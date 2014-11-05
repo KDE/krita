@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>424</width>
-    <height>654</height>
+    <height>558</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -250,7 +250,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="freeTransformWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -273,6 +273,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <property name="spacing">
           <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>12</number>
          </property>
          <item>
           <layout class="QGridLayout" name="freeMainOptions">
@@ -583,7 +586,7 @@
             <enum>Qt::LeftToRight</enum>
            </property>
            <property name="text">
-            <string>Image is too big!</string>
+            <string>image off canvas</string>
            </property>
           </widget>
          </item>
@@ -636,10 +639,10 @@
            <number>2</number>
           </property>
           <property name="leftMargin">
-           <number>7</number>
+           <number>5</number>
           </property>
           <property name="topMargin">
-           <number>7</number>
+           <number>0</number>
           </property>
           <property name="rightMargin">
            <number>7</number>
@@ -788,7 +791,7 @@
          <property name="minimumSize">
           <size>
            <width>240</width>
-           <height>90</height>
+           <height>70</height>
           </size>
          </property>
          <property name="title">
@@ -807,8 +810,11 @@
           <property name="spacing">
            <number>2</number>
           </property>
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
           <property name="topMargin">
-           <number>7</number>
+           <number>0</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
@@ -942,7 +948,7 @@
          <property name="minimumSize">
           <size>
            <width>240</width>
-           <height>95</height>
+           <height>70</height>
           </size>
          </property>
          <property name="title">
@@ -960,6 +966,12 @@
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <property name="spacing">
            <number>2</number>
+          </property>
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
@@ -1047,7 +1059,7 @@
        <item>
         <widget class="QGroupBox" name="shearGroup">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -1058,8 +1070,14 @@
            <height>80</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="title">
           <string>Shear</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1074,6 +1092,12 @@
           <property name="spacing">
            <number>2</number>
           </property>
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
           <property name="bottomMargin">
            <number>0</number>
           </property>
@@ -1084,6 +1108,9 @@
             </property>
             <property name="verticalSpacing">
              <number>8</number>
+            </property>
+            <property name="leftMargin">
+             <number>20</number>
             </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_shearX">
@@ -1171,10 +1198,13 @@
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>40</height>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -1269,7 +1299,7 @@
         <rect>
          <x>10</x>
          <y>70</y>
-         <width>271</width>
+         <width>260</width>
          <height>111</height>
         </rect>
        </property>

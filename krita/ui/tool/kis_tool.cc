@@ -162,13 +162,21 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
 
     resetCursorStyle();
 
+    if (!canvas()) return;
+    if (!canvas()->resourceManager()) return;
+
+
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     d->currentPattern = static_cast<KoPattern *>(canvas()->resourceManager()->
                                                   resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
                                                            resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
-    canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
+
+    KisPaintOpPresetSP preset = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    if (preset && preset->settings()) {
+        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
+    }
 
     d->currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->

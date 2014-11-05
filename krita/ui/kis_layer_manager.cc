@@ -547,6 +547,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 
     KisSelectionSP selection = m_view->selection();
     KisAdjustmentLayerSP adjl = addAdjustmentLayer(activeNode, QString(), 0, selection);
+    image->refreshGraph();
 
     KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
 

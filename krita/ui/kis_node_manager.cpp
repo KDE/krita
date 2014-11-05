@@ -691,7 +691,7 @@ bool scanForParent(QList<KisNodeSP> nodeList, KisNodeSP node)
 
 void KisNodeManager::removeSingleNode(KisNodeSP node)
 {
-    if (!node->parent()) {
+    if (!node || !node->parent()) {
         return;
     }
 

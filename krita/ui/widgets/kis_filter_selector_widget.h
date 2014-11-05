@@ -69,10 +69,8 @@ public:
 
     KisFilterTree(QWidget *parent) : QTreeView(parent) {}
 
-    void setFilterModel(QAbstractItemModel * model)
-    {
-        m_model = model;
-    }
+    void setFilterModel(QAbstractItemModel * model);
+    void activateFilter(QModelIndex idx);
 
 protected:
 

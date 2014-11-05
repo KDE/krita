@@ -98,7 +98,7 @@ TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
             device = parentNode->paintDevice();
 
             if (!device) {
-                device = parentNode->projection();
+                device = parentNode->original();
             }
 
         } else {

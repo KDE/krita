@@ -40,6 +40,29 @@ class KisExternalLayer;
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<psdExport>();)
 K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
+bool checkHomogenity(KisNodeSP root, const KoColorSpace* cs)
+{
+    bool res = true;
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        if (child->childCount() > 0) {
+            res = checkHomogenity(child, cs);
+            if (res == false) {
+                break;
+            }
+        }
+        KisLayer *layer = dynamic_cast<KisLayer*>(child.data());
+        if (layer) {
+            if (layer->colorSpace() != cs) {
+                res = false;
+                break;
+            }
+        }
+        child = child->nextSibling();
+    }
+    return res;
+}
+
 psdExport::psdExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
@@ -72,6 +95,14 @@ KoFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByt
     }
 
 
+    if (!checkHomogenity(input->image()->rootLayer(), input->image()->colorSpace())) {
+        if (!m_chain->manager()->getBatchMode()) {
+            KMessageBox::error(0, i18n("Unable to save to the Photoshop format.\n"
+                                       "The Photoshop format only supports images where all layers have the same colorspace as the image."),
+                               "Photoshop Export Error");
+        }
+        return KoFilter::InvalidFormat;
+    }
 
     qApp->processEvents(); // For vector layers to be updated
     input->image()->waitForDone();

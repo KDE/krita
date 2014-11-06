@@ -435,9 +435,6 @@ void KisCustomImageWidget::switchWidthHeight()
     double width = doubleWidth->value();
     double height = doubleHeight->value();
 
-    m_width = height;
-    m_height = width;
-
     doubleHeight->blockSignals(true);
     doubleWidth->blockSignals(true);
     cmbWidthUnit->blockSignals(true);

@@ -5,11 +5,11 @@
 #include "sqltypes.h"
 
 bool parseData(KexiDB::Parser *p, const char *data);
-/* A Bison parser, made by GNU Bison 2.7.12-4996.  */
+/* A Bison parser, made by GNU Bison 2.7.  */
 
 /* Bison interface for Yacc-like parsers in C
    
-      Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+      Copyright (C) 1984, 1989-1990, 2000-2012 Free Software Foundation, Inc.
    
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,21 +93,21 @@ extern int yydebug;
      VARCHAR = 295,
      WHERE = 296,
      SCAN_ERROR = 297,
-     NOT_LIKE = 298,
-     __LAST_TOKEN = 299,
-     EXCEPT = 300,
-     UNION = 301,
-     INTERSECT = 302,
-     OR = 303,
-     XOR = 304,
-     AND = 305,
-     NOT = 306,
-     GREATER_OR_EQUAL = 307,
-     NOT_EQUAL2 = 308,
-     NOT_EQUAL = 309,
-     NOT_SIMILAR_TO = 310,
-     SIMILAR_TO = 311,
-     ILIKE = 312,
+     __LAST_TOKEN = 298,
+     EXCEPT = 299,
+     UNION = 300,
+     INTERSECT = 301,
+     OR = 302,
+     XOR = 303,
+     AND = 304,
+     NOT = 305,
+     GREATER_OR_EQUAL = 306,
+     NOT_EQUAL2 = 307,
+     NOT_EQUAL = 308,
+     NOT_SIMILAR_TO = 309,
+     SIMILAR_TO = 310,
+     ILIKE = 311,
+     NOT_LIKE = 312,
      LIKE = 313,
      SQL_IN = 314,
      BETWEEN = 315,
@@ -119,8 +119,8 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
 {
-/* Line 2053 of yacc.c  */
-#line 513 "sqlparser.y"
+/* Line 2058 of yacc.c  */
+#line 498 "sqlparser.y"
 
 	QString* stringValue;
 	qint64 integerValue;
@@ -137,7 +137,7 @@ typedef union YYSTYPE
 	QVariant *variantValue;
 
 
-/* Line 2053 of yacc.c  */
+/* Line 2058 of yacc.c  */
 #line 135 "sqlparser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1

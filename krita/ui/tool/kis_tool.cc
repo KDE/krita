@@ -195,7 +195,7 @@ void KisTool::deactivate()
 {
     bool result = true;
 
-    result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested())/*, this, 0*/);
+    result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeEndRequested()), this, 0);
     result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);

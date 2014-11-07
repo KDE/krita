@@ -239,8 +239,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     liquifyUndo->setToolTip(i18nc("@info:tooltip", "Undo: erase actions of other tools"));
 
     // Connect all edit boxes to the Editing Finished signal
-    connect(shearXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
-    connect(shearYBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
     connect(densityBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
 
 

@@ -197,7 +197,7 @@ void KoTriangleColorSelector::setHue(int h)
         return;
 
 
-    h = qBound(10, h, 359);
+    h = qBound(0, h, 359);
     d->hue = h;
     tellColorChanged();
     d->invalidTriangle = true;

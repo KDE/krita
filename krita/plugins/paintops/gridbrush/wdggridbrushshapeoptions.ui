@@ -26,7 +26,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>20</y>
      <width>121</width>
      <height>25</height>
     </rect>
@@ -56,6 +56,19 @@
      <string>Anti-aliased pixel</string>
     </property>
    </item>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>0</y>
+     <width>58</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Shape:</string>
+   </property>
   </widget>
  </widget>
  <resources/>

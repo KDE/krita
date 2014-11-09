@@ -45,8 +45,6 @@ public:
 
 private:
 
-    void calculateKnowledgePoint(); //calculate minimal text position from which enough information is ready to position the shape
-
     inline bool countHorizontalRel(QRectF &anchorBoundingRect, const QRectF &containerBoundingRect,
                                    QTextBlock &block, QTextLayout *layout);
     inline void countHorizontalPos(QPointF &newPosition, const QRectF &anchorBoundingRect);
@@ -60,10 +58,6 @@ private:
     inline void checkPageBorder(QPointF &newPosition);
     //check stacking and reorder to proper position objects according to there z-index
     inline void checkStacking(QPointF &newPosition);
-
-    // true if shape is inside layouted text area
-    inline bool checkTextIntersection(QPointF &relayoutPos, QRectF shpRect, QRectF contRect,
-                                     KoTextShapeData *data);
 
     void updateObstruction(qreal documentOffset);
 

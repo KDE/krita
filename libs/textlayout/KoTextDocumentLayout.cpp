@@ -182,7 +182,7 @@ bool KoTextDocumentLayout::wordprocessingMode()
 }
 
 
-bool KoTextDocumentLayout::relativeTabs(QTextBlock block) const
+bool KoTextDocumentLayout::relativeTabs(const QTextBlock &block) const
 {
     return KoTextDocument(document()).relativeTabs() 
                 && KoTextDocument(block.document()).relativeTabs();
@@ -946,7 +946,7 @@ QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const
     return QRectF();
 }
 
-void KoTextDocumentLayout::clearInlineObjectRegistry(QTextBlock block)
+void KoTextDocumentLayout::clearInlineObjectRegistry(const QTextBlock &block)
 {
     d->inlineObjectExtents.clear();
     d->inlineObjectOffset = block.position();

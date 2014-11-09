@@ -47,12 +47,12 @@ private:
 
     void calculateKnowledgePoint(); //calculate minimal text position from which enough information is ready to position the shape
 
-    inline bool countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
+    inline bool countHorizontalRel(QRectF &anchorBoundingRect, const QRectF &containerBoundingRect,
                                    QTextBlock &block, QTextLayout *layout);
-    inline void countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect);
-    inline bool countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
+    inline void countHorizontalPos(QPointF &newPosition, const QRectF &anchorBoundingRect);
+    inline bool countVerticalRel(QRectF &anchorBoundingRect, const QRectF &containerBoundingRect,
                                  KoTextShapeData *data, QTextBlock &block, QTextLayout *layout);
-    inline void countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect);
+    inline void countVerticalPos(QPointF &newPosition, const QRectF &anchorBoundingRect);
 
     //check the layout evironment and move the shape back to have it within
     inline void checkLayoutEnvironment(QPointF &newPosition, KoTextShapeData *data);

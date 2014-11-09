@@ -66,7 +66,7 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     }
 }
 
-KoTextLayoutObstruction::KoTextLayoutObstruction(QRectF rect, bool rtl)
+KoTextLayoutObstruction::KoTextLayoutObstruction(const QRectF &rect, bool rtl)
     : m_side(None),
     m_polygon(QPolygonF()),
     m_line(QRectF()),

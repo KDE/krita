@@ -44,7 +44,7 @@ public:
 
 private:
     QString resolvePageNumber(const QTextBlock &headingBlock);
-    void generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlock block, int &blockId);
+    void generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlock &block, int &blockId);
 
     QTextDocument *m_ToCDocument;
     KoTableOfContentsGeneratorInfo *m_ToCInfo;
@@ -55,7 +55,7 @@ private:
     bool m_preservePagebreak;
 
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
-    QString fetchBookmarkRef(QTextBlock block, KoTextRangeManager *textRangeManager);
+    QString fetchBookmarkRef(const QTextBlock &block, KoTextRangeManager *textRangeManager);
 };
 
 #endif

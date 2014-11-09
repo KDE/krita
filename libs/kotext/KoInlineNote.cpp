@@ -265,7 +265,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
     }
 }
 
-int KoInlineNote::getPosInDocument()
+int KoInlineNote::getPosInDocument() const
 {
     return d->posInDocument;
 }

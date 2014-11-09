@@ -484,7 +484,7 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
 
     return bookmark;
 }
-KoTextRangeManager *KoTextEditor::textRangeManager()
+KoTextRangeManager *KoTextEditor::textRangeManager() const
 {
     return KoTextDocument(d->document).textRangeManager();
 }

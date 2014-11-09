@@ -67,7 +67,7 @@ public:
     QTextDocument *document() const;
 
     ///Returns the text editor for that document
-    KoTextEditor *textEditor();
+    KoTextEditor *textEditor() const;
 
     ///Sets the text editor for the document
     void setTextEditor(KoTextEditor *textEditor);

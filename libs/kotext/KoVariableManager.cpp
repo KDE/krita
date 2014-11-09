@@ -87,7 +87,7 @@ QString KoVariableManager::value(const QString &name) const
     return d->inlineObjectManager->stringProperty(static_cast<KoInlineObject::Property>(key));
 }
 
-QString KoVariableManager::userType(const QString &name)
+QString KoVariableManager::userType(const QString &name) const
 {
     int key = d->variableMapping.value(name);
     if (key == 0) {

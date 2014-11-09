@@ -107,7 +107,7 @@ public:
     /**
      * Return the object manager set on this inline object.
      */
-    KoInlineTextObjectManager *manager();
+    KoInlineTextObjectManager *manager() const;
 
     /**
      * Just prior to the first time this object will be shown this method will be called.

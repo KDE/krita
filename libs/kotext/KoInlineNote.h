@@ -91,7 +91,7 @@ public:
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);
 
-    int getPosInDocument();
+    int getPosInDocument() const;
 
 protected:
     /// reimplemented

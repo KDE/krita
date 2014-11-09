@@ -79,7 +79,7 @@ void KoAnnotation::setAnnotationShape(KoShape *shape)
     d->shape = shape;
 }
 
-KoShape *KoAnnotation::annotationShape()
+KoShape *KoAnnotation::annotationShape() const
 {
     return d->shape;
 }

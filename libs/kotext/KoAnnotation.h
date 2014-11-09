@@ -80,7 +80,7 @@ public:
 
     void setAnnotationShape(KoShape *shape);
 
-    KoShape *annotationShape();
+    KoShape *annotationShape() const;
 
 private:
 

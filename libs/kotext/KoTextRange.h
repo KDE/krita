@@ -62,7 +62,7 @@ public:
     /**
      * Return the object manager set on this inline object.
      */
-    KoTextRangeManager *manager();
+    KoTextRangeManager *manager() const;
 
      /**
      * Return the textdocument the range points to.

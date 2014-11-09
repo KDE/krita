@@ -103,7 +103,7 @@ void KoTextDocument::setTextEditor (KoTextEditor* textEditor)
     m_document->addResource(KoTextDocument::TextEditor, TextEditorURL, v);
 }
 
-KoTextEditor* KoTextDocument::textEditor()
+KoTextEditor* KoTextDocument::textEditor() const
 {
     QVariant resource = m_document->resource(KoTextDocument::TextEditor, TextEditorURL);
     return resource.value<KoTextEditor *>();

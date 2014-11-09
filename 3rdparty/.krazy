@@ -1,1 +1,1 @@
-IGNORESUBS google-breakpad
+SKIP /google-breakpad/

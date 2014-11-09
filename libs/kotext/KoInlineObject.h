@@ -149,7 +149,7 @@ public:
      * @param pd the postscript-paintdevice that all text is rendered on. Use this for QFont and related
      *  classes so the inline object can be reused on any paintdevice.
      */
-    virtual void resize(const QTextDocument *document, QTextInlineObject object,
+    virtual void resize(const QTextDocument *document, QTextInlineObject &object,
                         int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) = 0;
 
     /**
@@ -166,7 +166,7 @@ public:
      *    will give varous problems with regards to repainting issues.
      */
     virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) = 0;
+                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) = 0;
 
     /**
      * Overwrite this if you are interrested in propertychanges.

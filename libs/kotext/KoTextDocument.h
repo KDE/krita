@@ -198,7 +198,7 @@ public:
      * @param format the character format for the frame of this document.
      * @see frameCharFormat
      */
-    void setFrameCharFormat(QTextCharFormat format);
+    void setFrameCharFormat(const QTextCharFormat &format);
 
     /**
      * Returns the block format for the frame of this document.
@@ -214,7 +214,7 @@ public:
      * @param format the block format for the frame of this document.
      * @see frameBlockFormat
      */
-    void setFrameBlockFormat(QTextBlockFormat format);
+    void setFrameBlockFormat(const QTextBlockFormat &format);
 
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this

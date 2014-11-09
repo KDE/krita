@@ -1527,7 +1527,7 @@ void KoTextEditor::newSection()
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::renameSection(KoSection* section, QString newName)
+void KoTextEditor::renameSection(KoSection* section, const QString &newName)
 {
     if (isEditProtected()) {
         return;

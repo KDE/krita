@@ -39,7 +39,7 @@ namespace KoSectionUtils {
      * @param q QVariant version of pointer to a KoSection
      * @return name of a specified section
      */
-    QString sectionStartName(QVariant q);
+    QString sectionStartName(const QVariant &q);
     /**
      * Convinient function to get name of a section from QVariant
      * that is really a KoSectionEnd *.
@@ -49,7 +49,7 @@ namespace KoSectionUtils {
      * @param q QVariant version of pointer to a KoSectionEnd
      * @return name of a specified section
      */
-    QString sectionEndName(QVariant q);
+    QString sectionEndName(const QVariant &q);
 }
 
 #endif //KOSECTIONUTILS_H

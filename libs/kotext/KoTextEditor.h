@@ -462,7 +462,7 @@ public slots:
 
     void newSection();
 
-    void renameSection(KoSection *section, QString newName);
+    void renameSection(KoSection *section, const QString &newName);
 
     void newLine();
 

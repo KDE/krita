@@ -49,7 +49,7 @@ public:
 
     KoGenChanges& genChanges();
 
-    void addRdfIdMapping(QString oldid, QString newid);
+    void addRdfIdMapping(const QString &oldid, const QString &newid);
     QMap<QString, QString> getRdfIdMapping();
 
     /**

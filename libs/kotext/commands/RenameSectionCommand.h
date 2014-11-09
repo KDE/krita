@@ -30,7 +30,7 @@ class RenameSectionCommand : public KUndo2Command
 {
 public:
 
-    RenameSectionCommand(KoSection *section, QString newName);
+    RenameSectionCommand(KoSection *section, const QString &newName);
     virtual ~RenameSectionCommand();
 
     virtual void undo();

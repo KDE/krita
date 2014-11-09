@@ -58,7 +58,7 @@ KoGenChanges& KoTextSharedSavingData::genChanges()
     return *(d->changes);
 }
 
-void KoTextSharedSavingData::addRdfIdMapping(QString oldid, QString newid)
+void KoTextSharedSavingData::addRdfIdMapping(const QString &oldid, const QString &newid)
 {
     d->m_rdfIdMapping[ oldid ] = newid;
 }

@@ -61,7 +61,7 @@ public:
     QList<IndexSourceStyles> m_indexSourceStyles;
 
 private:
-    int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
+    int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, const QString &styleName);
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)

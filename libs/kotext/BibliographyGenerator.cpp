@@ -33,7 +33,7 @@
 
 static QList<SortKeyPair> sortKeys;
 
-BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo)
+BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, const QTextBlock &block, KoBibliographyInfo *bibInfo)
     : QObject(bibDocument)
     , m_bibDocument(bibDocument)
     , m_bibInfo(bibInfo)

@@ -30,6 +30,7 @@ Name[x-test]=xxWeb Report Pluginxx
 Name[zh_TW]=網頁報告外掛程式
 Comment=Calligra Reports Web Plugin
 Comment[nl]=Plug-in voor Calligra Reports Web
+Comment[pl]=Wtyczka sprawozdania sieci dla Calligry
 Comment[pt]='Plugin' Web de Relatórios do Calligra
 Comment[pt_BR]=Plugin Web para relatórios do Calligra
 Comment[sk]=Webový plugin Calligra Reports

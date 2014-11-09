@@ -33,7 +33,7 @@ public:
     RunAroundHelper();
     void setLine(KoTextLayoutArea *area, const QTextLine &l);
     void setObstructions(const QList<KoTextLayoutObstruction *> &obstructions);
-    bool stayOnBaseline();
+    bool stayOnBaseline() const;
     void updateObstruction(KoTextLayoutObstruction *obstruction);
     bool fit(bool resetHorizontalPosition, bool isRightToLeft, const QPointF &position);
     QTextLine line;

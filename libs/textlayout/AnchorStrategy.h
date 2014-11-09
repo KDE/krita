@@ -52,14 +52,14 @@ public:
     virtual void updateContainerModel();
 
     /// get page rectangle coordinates to which this text anchor is anchored (needed for HPage)
-    QRectF pageRect();
+    QRectF pageRect() const;
 
     /// set page rectangle coordinates to which this text anchor is anchored (needed for HPage)
     void setPageRect(const QRectF &pageRect);
 
     /// get content rectangle coordinates to which this text anchor is anchored (needed for
     /// HPageContent)
-    QRectF pageContentRect();
+    QRectF pageContentRect() const;
 
     /// set content rectangle coordinates to which this text anchor is anchored (needed for
     /// HPageContent)
@@ -67,7 +67,7 @@ public:
 
     /// get paragraph rectangle coordinates to which this text anchor is anchored (needed for
     /// HParagraphContent, HParagraphStartMargin, HParagraphEndMargin, VParagraph)
-    QRectF paragraphRect();
+    QRectF paragraphRect() const;
 
     /// set paragraph rectangle to which this text anchor is anchored (needed for HParagraphContent,
     /// HParagraphStartMargin, HParagraphEndMargin, VParagraph)
@@ -75,21 +75,21 @@ public:
 
     /// get paragraph rectangle coordinates to which this text anchor is anchored (needed for
     /// HParagraphContent, HParagraphStartMargin, HParagraphEndMargin)
-    QRectF paragraphContentRect();
+    QRectF paragraphContentRect() const;
 
     /// set paragraph rectangle to which this text anchor is anchored (needed for HParagraphContent,
     /// HParagraphStartMargin, HParagraphEndMargin)
     void setParagraphContentRect(const QRectF &paragraphContentRect);
 
     /// get layout environment rectangle @see odf attribute style:flow-with-text
-    QRectF layoutEnvironmentRect();
+    QRectF layoutEnvironmentRect() const;
 
      /// set layout environment rect @see odf attribute style:flow-with-text
     void setLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
 
     /// get number of page to which this text anchor is anchored (needed for HOutside, HInside,
     /// HFromInside)
-    int pageNumber();
+    int pageNumber() const;
 
     /// set number of page to which this text anchor is anchored (needed for HOutside, HInside,
     /// HFromInside)

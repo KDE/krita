@@ -901,7 +901,7 @@ void KoTextDocumentLayout::executeScheduledLayout()
     }
 }
 
-bool KoTextDocumentLayout::continuousLayout()
+bool KoTextDocumentLayout::continuousLayout() const
 {
     return d->continuousLayout;
 }

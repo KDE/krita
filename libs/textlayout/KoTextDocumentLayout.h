@@ -314,7 +314,7 @@ protected:
     virtual void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
     /// should we continue layout when done with current root area
-    bool continuousLayout();
+    bool continuousLayout() const;
 
     void registerInlineObject(const QTextInlineObject &inlineObject);
 

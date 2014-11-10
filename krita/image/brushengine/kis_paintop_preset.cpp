@@ -69,9 +69,9 @@ KisPaintOpPreset::~KisPaintOpPreset()
     delete m_d;
 }
 
-KisPaintOpPreset* KisPaintOpPreset::clone() const
+KisPaintOpPresetSP KisPaintOpPreset::clone() const
 {
-    KisPaintOpPreset * preset = new KisPaintOpPreset();
+    KisPaintOpPresetSP preset = new KisPaintOpPreset();
 
     if (settings()) {
         preset->setSettings(settings()->clone());

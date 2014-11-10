@@ -122,7 +122,7 @@ public:
     virtual QRectF frameBoundingRect(QTextFrame*) const;
 
     /// the default tab size for this document
-    qreal defaultTabSpacing();
+    qreal defaultTabSpacing() const;
 
     /// set default tab size for this document
     void setTabSpacing(qreal spacing);
@@ -131,7 +131,7 @@ public:
     void setWordprocessingMode();
 
     /// is it for a word processor (slight changes in layout may occur)
-    bool wordprocessingMode();
+    bool wordprocessingMode() const;
 
     /// are the tabs relative to indent or not
     bool relativeTabs(const QTextBlock &block) const;

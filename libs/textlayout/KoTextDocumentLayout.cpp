@@ -176,7 +176,7 @@ void KoTextDocumentLayout::setWordprocessingMode()
     d->wordprocessingMode = true;
 }
 
-bool KoTextDocumentLayout::wordprocessingMode()
+bool KoTextDocumentLayout::wordprocessingMode() const
 {
     return d->wordprocessingMode;
 }
@@ -285,7 +285,7 @@ void KoTextDocumentLayout::setTabSpacing(qreal spacing)
     d->defaultTabSizing = spacing;
 }
 
-qreal KoTextDocumentLayout::defaultTabSpacing()
+qreal KoTextDocumentLayout::defaultTabSpacing() const
 {
     return d->defaultTabSizing;
 }

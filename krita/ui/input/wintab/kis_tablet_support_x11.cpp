@@ -95,6 +95,8 @@ struct KisX11Data
 
         WacomTouch,
 
+        AiptekStylus,
+
         NPredefinedAtoms,
         NAtoms = NPredefinedAtoms
     };
@@ -131,6 +133,9 @@ static const char kis_x11_atomnames[] = {
 
     // Touch capabilities reported by Wacom Intuos tablets
     "TOUCH\0"
+
+    // Aiptek drivers (e.g. Hyperpen 12000U) reports non-standard type string
+    "Stylus\0"
 
 };
 
@@ -298,7 +303,9 @@ void kis_x11_init_tablet()
                 } else if (devs->type == KIS_ATOM(XWacomEraser) || devs->type == KIS_ATOM(XTabletEraser)) {
                     deviceType = QTabletEvent::XFreeEraser;
                     gotEraser = true;
-                } else if (devs->type == KIS_ATOM(XInputKeyboard) && QString(devs->name) == "Aiptek") {
+                } else if ((devs->type == KIS_ATOM(XInputKeyboard) ||
+                            devs->type == KIS_ATOM(AiptekStylus))
+                           && QString(devs->name) == "Aiptek") {
                     /**
                      * Some really "nice" tablets (more precisely,
                      * Genius G-Pen 510 (aiptek driver)) report that

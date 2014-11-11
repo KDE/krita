@@ -58,8 +58,8 @@ private:
 private slots:
     void prepareImage();
     void aspectToggled(bool toggled);
-    void updateHeight(int value);
-    void updateWidth(int value);
+    void updateHeight(qreal value);
+    void updateWidth(qreal value);
 
     void changeSizeUI(bool proportionalSize);
 };

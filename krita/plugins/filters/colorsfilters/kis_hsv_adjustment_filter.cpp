@@ -73,10 +73,19 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConf
     m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);
 
+    m_page->hue->setRange(-180, 180, 0);
+    m_page->hue->setValue(0);
+
+    m_page->saturation->setRange(-100, 100, 0);
+    m_page->saturation->setValue(0);
+
+    m_page->value->setRange(-100, 100, 0);
+    m_page->value->setValue(0);
+
     connect(m_page->cmbType, SIGNAL(activated(int)), SLOT(switchType(int)));
-    connect(m_page->hue, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->value, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->saturation, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->hue, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->value, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->saturation, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->chkColorize, SIGNAL(toggled(bool)), SLOT(switchColorize(bool)));
 }
 

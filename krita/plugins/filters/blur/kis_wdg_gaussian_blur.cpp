@@ -41,11 +41,14 @@ KisWdgGaussianBlur::KisWdgGaussianBlur(QWidget * parent) : KisConfigWidget(paren
     m_widget->horizontalRadius->setRange(0.0, 100.0, 2);
     m_widget->horizontalRadius->setSingleStep(0.2);
     m_widget->horizontalRadius->setValue(0.5);
+    m_widget->horizontalRadius->setSuffix(" px");
+
     connect(m_widget->horizontalRadius, SIGNAL(valueChanged(qreal)), this, SLOT(horizontalRadiusChanged(qreal)));
 
     m_widget->verticalRadius->setRange(0.0, 100.0, 2);
     m_widget->verticalRadius->setSingleStep(0.2);
     m_widget->verticalRadius->setValue(0.5);
+    m_widget->verticalRadius->setSuffix(" px");
     connect(m_widget->verticalRadius, SIGNAL(valueChanged(qreal)), this, SLOT(verticalRadiusChanged(qreal)));
 
     connect(m_widget->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectLockChanged(bool)));

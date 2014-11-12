@@ -18,7 +18,7 @@
 
 #include "kis_spacing_selection_widget.h"
 
-#include <QPushButton>
+#include <QCheckBox>
 #include <QHBoxLayout>
 
 #include "klocale.h"
@@ -38,7 +38,7 @@ struct KisSpacingSelectionWidget::Private
     KisSpacingSelectionWidget *q;
 
     KisDoubleSliderSpinBox *slider;
-    QPushButton *autoButton;
+    QCheckBox *autoButton;
 
     qreal oldSliderValue;
 
@@ -57,7 +57,8 @@ KisSpacingSelectionWidget::KisSpacingSelectionWidget(QWidget *parent)
     m_d->slider->setValue(0.1);
     m_d->slider->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed));
 
-    m_d->autoButton = new QPushButton(this);
+
+    m_d->autoButton = new QCheckBox(this);
     m_d->autoButton->setText(i18nc("@action:button", "Auto"));
     m_d->autoButton->setToolTip(i18nc("@info:tooltip", "In auto mode the spacing of the brush will be calculated automatically depending on its size"));
     m_d->autoButton->setCheckable(true);

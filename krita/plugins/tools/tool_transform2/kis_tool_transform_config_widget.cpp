@@ -525,6 +525,11 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         shearXBox->setValue(config.shearX());
         shearYBox->setValue(config.shearY());
 
+        // change slider range depending on current x and y positions. The current slider
+        // position will be right in the middle at the start of the transform
+        translateXBox->setRange(config.transformedCenter().x()-1000, config.transformedCenter().x()+1000, 0);
+        translateYBox->setRange(config.transformedCenter().y()-1000, config.transformedCenter().y()+1000, 0);
+
         translateXBox->setValue(config.transformedCenter().x());
         translateYBox->setValue(config.transformedCenter().y());
 

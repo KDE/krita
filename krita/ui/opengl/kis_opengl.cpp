@@ -25,6 +25,9 @@
 #include <QDir>
 #include <QFile>
 #include <QDesktopServices>
+#include <QMessageBox>
+
+#include <klocale.h>
 
 #include <kis_debug.h>
 #include <kis_config.h>
@@ -84,7 +87,9 @@ void KisOpenGL::createContext()
 
     if (!((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) ||
           (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0))) {
-        qWarning() << "Cannot use OpenGL: we need at least OpenGL 2.0 or ES 2.0.";
+        QMessageBox::warning(0, "Krita", i18n("Cannot use OpenGL: Krita needs at least OpenGL 2.0 or ES 2.0."));
+        KisConfig cfg;
+        cfg.setUseOpenGL(false);
         return;
     }
 

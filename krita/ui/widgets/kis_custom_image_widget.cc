@@ -91,6 +91,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     grpClipboard->hide();
 
+    sliderOpacity->setRange(0, 100, 0);
+    sliderOpacity->setValue(100);
+    sliderOpacity->setSuffix("%");
+
     connect(cmbPredefined, SIGNAL(activated(int)), SLOT(predefinedClicked(int)));
     connect(doubleResolution, SIGNAL(valueChanged(double)),
             this, SLOT(resolutionChanged(double)));

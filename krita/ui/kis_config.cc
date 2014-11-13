@@ -1264,7 +1264,7 @@ void KisConfig::setDefaultBackgroundColor(QColor value)
 
 KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle() const
 {
-  return (KisConfig::BackgroundStyle)m_cfg.readEntry("BackgroundStyleForNewImage", (int)PROJECTION);
+  return (KisConfig::BackgroundStyle)m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER);
 }
 
 void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)

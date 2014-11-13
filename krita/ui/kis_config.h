@@ -380,8 +380,8 @@ public:
     void setDefaultBackgroundColor(QColor value);
 
     enum BackgroundStyle {
-        PROJECTION = 0,
-        LAYER = 1
+        LAYER = 0,
+        PROJECTION = 1
     };
 
     BackgroundStyle defaultBackgroundStyle() const;

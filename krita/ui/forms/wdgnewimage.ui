@@ -541,9 +541,9 @@
       <item row="3" column="1">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QRadioButton" name="radioBackgroundAsProjection">
+         <widget class="QRadioButton" name="radioBackgroundAsLayer">
           <property name="text">
-           <string>As canvas color</string>
+           <string>As first layer</string>
           </property>
           <attribute name="buttonGroup">
            <string notr="true">grpBackgroundStyle</string>
@@ -551,9 +551,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioBackgroundAsLayer">
+         <widget class="QRadioButton" name="radioBackgroundAsProjection">
           <property name="text">
-           <string>As first layer</string>
+           <string>As canvas color</string>
           </property>
           <attribute name="buttonGroup">
            <string notr="true">grpBackgroundStyle</string>
@@ -664,8 +664,8 @@
   <tabstop>clipPreview</tabstop>
   <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>
-  <tabstop>radioBackgroundAsProjection</tabstop>
   <tabstop>radioBackgroundAsLayer</tabstop>
+  <tabstop>radioBackgroundAsProjection</tabstop>
   <tabstop>txtDescription</tabstop>
  </tabstops>
  <resources/>

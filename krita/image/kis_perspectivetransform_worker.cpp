@@ -156,7 +156,7 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
         return;
     }
 
-    QRectF srcClipRect = srcDev->defaultBounds()->bounds();
+    QRectF srcClipRect = srcDev->exactBounds();
 
     KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height());
 

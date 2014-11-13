@@ -117,6 +117,11 @@ QTransform KisDumbTransformMaskParams::testingGetTransform() const
     return m_d->transform;
 }
 
+void KisDumbTransformMaskParams::testingSetTransform(const QTransform &t)
+{
+    m_d->transform = t;
+}
+
 #include "kis_transform_mask_params_factory_registry.h"
 
 struct DumbParamsRegistrar {

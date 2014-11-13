@@ -64,6 +64,7 @@ public:
 
     // for tesing purposes only
     QTransform testingGetTransform() const;
+    void testingSetTransform(const QTransform &t);
 
 private:
     struct Private;

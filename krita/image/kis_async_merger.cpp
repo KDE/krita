@@ -150,6 +150,18 @@ public:
         QRegion prepareRegion(srcRect);
         prepareRegion -= m_cropRect;
 
+        QStack<QRect> applyRects;
+        bool rectVariesFlag;
+
+        /**
+         * If a clone has complicated masks, we should prepare additional
+         * source area to ensure the rect is prepared.
+         */
+        QRect needRectOnSource = layer->needRectOnSourceForMasks(srcRect);
+        if (!needRectOnSource.isEmpty()) {
+            prepareRegion += needRectOnSource;
+        }
+
         foreach(const QRect &rect, prepareRegion.rects()) {
             walker.collectRects(srcLayer, rect);
             merger.startMerge(walker, false);

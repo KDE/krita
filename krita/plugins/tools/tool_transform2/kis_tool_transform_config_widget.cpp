@@ -105,15 +105,14 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     translateXBox->setSuffix(" px");
     translateYBox->setSuffix(" px");
-    translateXBox->setRange(-3000, 3000.0);
-    translateYBox->setRange(-3000, 3000.0);
+    translateXBox->setRange(-10000, 10000);
+    translateYBox->setRange(-10000, 10000);
+
 
     scaleXBox->setSuffix("%");
     scaleYBox->setSuffix("%");
-    scaleXBox->setRange(-100.0, 300.0);
-    scaleYBox->setRange(-100.0, 300.0);
-    scaleXBox->setExponentRatio(1.0);
-    scaleYBox->setExponentRatio(1.0);
+    scaleXBox->setRange(-10000, 10000);
+    scaleYBox->setRange(-10000, 10000);
     scaleXBox->setValue(100.0);
     scaleYBox->setValue(100.0);
 
@@ -134,12 +133,12 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
 
     // Init Free Transform Values
-    connect(scaleXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetScaleX(qreal)));
-    connect(scaleYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetScaleY(qreal)));
+    connect(scaleXBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetScaleX(int)));
+    connect(scaleYBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetScaleY(int)));
     connect(shearXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetShearX(qreal)));
     connect(shearYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetShearY(qreal)));
-    connect(translateXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetTranslateX(qreal)));
-    connect(translateYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetTranslateY(qreal)));
+    connect(translateXBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetTranslateX(int)));
+    connect(translateYBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetTranslateY(int)));
     connect(aXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAX(qreal)));
     connect(aYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAY(qreal)));
     connect(aZBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAZ(qreal)));
@@ -525,13 +524,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         shearXBox->setValue(config.shearX());
         shearYBox->setValue(config.shearY());
 
-        // change slider range depending on current x and y positions. The current slider
-        // position will be right in the middle at the start of the transform
-        translateXBox->setRange(config.transformedCenter().x()-1000, config.transformedCenter().x()+1000, 0);
-        translateYBox->setRange(config.transformedCenter().y()-1000, config.transformedCenter().y()+1000, 0);
-
         translateXBox->setValue(config.transformedCenter().x());
         translateYBox->setValue(config.transformedCenter().y());
+
 
         aXBox->setValue(radianToDegree(config.aX()));
         aYBox->setValue(radianToDegree(config.aY()));
@@ -819,12 +814,14 @@ void KisToolTransformConfigWidget::slotRotationCenterChanged(int index)
     }
 }
 
-void KisToolTransformConfigWidget::slotSetScaleX(qreal value)
+void KisToolTransformConfigWidget::slotSetScaleX(int value)
 {
     if (m_uiSlotsBlocked) return;
 
+    qDebug() << "setting scale x";
+
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setScaleX((double)value / 100.);
+    config->setScaleX(value / 100.);
 
     if (config->keepAspectRatio() &&
         !qFuzzyCompare(config->scaleX(), config->scaleY())) {
@@ -838,12 +835,12 @@ void KisToolTransformConfigWidget::slotSetScaleX(qreal value)
     notifyEditingFinished();
 }
 
-void KisToolTransformConfigWidget::slotSetScaleY(double value)
+void KisToolTransformConfigWidget::slotSetScaleY(int value)
 {
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setScaleY((double)value / 100.);
+    config->setScaleY(value / 100.);
 
     if (config->keepAspectRatio() &&
         !qFuzzyCompare(config->scaleX(), config->scaleY())) {
@@ -877,16 +874,16 @@ void KisToolTransformConfigWidget::slotSetShearY(qreal value)
     notifyEditingFinished();
 }
 
-void KisToolTransformConfigWidget::slotSetTranslateX(qreal value)
+void KisToolTransformConfigWidget::slotSetTranslateX(int value)
 {
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setTransformedCenter(QPointF((double)value, config->transformedCenter().y()));
+    config->setTransformedCenter(QPointF(value, config->transformedCenter().y()));
     notifyConfigChanged();
 }
 
-void KisToolTransformConfigWidget::slotSetTranslateY(double value)
+void KisToolTransformConfigWidget::slotSetTranslateY(int value)
 {
     if (m_uiSlotsBlocked) return;
 

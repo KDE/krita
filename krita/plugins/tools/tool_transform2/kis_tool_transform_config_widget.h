@@ -57,14 +57,14 @@ public slots:
     void slotWarpTypeChanged(int index);
     void slotRotationCenterChanged(int index);
 
-    void slotSetScaleX(qreal value);
-    void slotSetScaleY(qreal value);
+    void slotSetScaleX(int value);
+    void slotSetScaleY(int value);
 
     void slotSetShearX(qreal value);
     void slotSetShearY(qreal value);
 
-    void slotSetTranslateX(qreal value);
-    void slotSetTranslateY(qreal value);
+    void slotSetTranslateX(int value);
+    void slotSetTranslateY(int value);
 
     void slotSetAX(qreal value);
     void slotSetAY(qreal value);

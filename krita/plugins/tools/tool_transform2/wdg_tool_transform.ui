@@ -876,7 +876,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="scaleXBox" native="true">
+               <widget class="QSpinBox" name="scaleXBox" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -892,7 +892,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="scaleYBox" native="true">
+               <widget class="QSpinBox" name="scaleYBox" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -1025,7 +1025,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="translateXBox" native="true">
+             <widget class="QSpinBox" name="translateXBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1041,7 +1041,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="translateYBox" native="true">
+             <widget class="QSpinBox" name="translateYBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>

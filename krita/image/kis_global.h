@@ -152,9 +152,9 @@ inline qreal kisDistanceToLine(const QPointF &m, const QLineF &line)
     qreal distance = 0;
 
     if (qFuzzyCompare(p1.x(), p2.x())) {
-        distance = qAbs(p1.y() - p2.y());
+        distance = qAbs(m.x() - p2.x());
     } else if (qFuzzyCompare(p1.y(), p2.y())) {
-        distance = qAbs(p1.x() - p2.x());
+        distance = qAbs(m.y() - p2.y());
     } else {
         qreal A = 1;
         qreal B = - (p1.x() - p2.x()) / (p1.y() - p2.y());

@@ -409,7 +409,9 @@ public:
     bool useDirtyPresets() const;
     void setUseDirtyPresets(bool value);
 
-
+    bool useEraserBrushSize() const;
+    void setUseEraserBrushSize(bool value);    
+    
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

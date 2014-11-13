@@ -120,7 +120,10 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox, SIGNAL(toggled(bool)),
             this, SIGNAL(dirtyPresetToggled(bool)));
-                        
+
+    connect(m_d->uiWdgPaintOpPresetSettings.eraserBrushSizeCheckBox, SIGNAL(toggled(bool)),
+            this, SIGNAL(eraserBrushSizeToggled(bool)));
+    
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.txtPreset, SLOT(clear()));
 
@@ -154,6 +157,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox->setChecked(cfg.useDirtyPresets());
     slotDirtyPresetToggled(cfg.useDirtyPresets());
     m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(false);
+    m_d->uiWdgPaintOpPresetSettings.eraserBrushSizeCheckBox->setChecked(cfg.useEraserBrushSize());
 }
 
 

@@ -92,7 +92,7 @@ public slots:
     void showScratchPad();
     void resourceSelected(KoResource* resource);
     void slotDirtyPresetToggled(bool value);
-
+    
 signals:
     void savePresetClicked();
     void defaultPresetClicked();
@@ -101,7 +101,8 @@ signals:
     void signalResourceSelected(KoResource* resource);
     void reloadPresetClicked();
     void dirtyPresetToggled(bool value);
-
+    void eraserBrushSizeToggled(bool value);
+    
     void sizeChanged();
 
 private slots:

@@ -300,6 +300,15 @@ void KisConfig::setUseDirtyPresets(bool value)
 {
     m_cfg.writeEntry("useDirtyPresets",value);
 }
+bool KisConfig::useEraserBrushSize() const
+{
+   return m_cfg.readEntry("useEraserBrushSize",false);
+}
+void KisConfig::setUseEraserBrushSize(bool value)
+{
+    m_cfg.writeEntry("useEraserBrushSize",value);
+}
+
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {

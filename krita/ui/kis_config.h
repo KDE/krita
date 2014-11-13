@@ -373,6 +373,20 @@ public:
     int numDefaultLayers() const;
     void setNumDefaultLayers(int num);
 
+    quint8 defaultBackgroundOpacity() const;
+    void setDefaultBackgroundOpacity(quint8 value);
+
+    QColor defaultBackgroundColor() const;
+    void setDefaultBackgroundColor(QColor value);
+
+    enum BackgroundStyle {
+        PROJECTION = 0,
+        LAYER = 1
+    };
+
+    BackgroundStyle defaultBackgroundStyle() const;
+    void setDefaultBackgroundStyle(BackgroundStyle value);
+    
     int lineSmoothingType() const;
     void setLineSmoothingType(int value);
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>682</width>
-    <height>496</height>
+    <height>530</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -440,7 +440,7 @@
         </layout>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="lblDescription">
         <property name="text">
          <string>&amp;Description:</string>
@@ -525,8 +525,42 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
        <widget class="QTextEdit" name="txtDescription"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lblBackgroundStyle">
+        <property name="text">
+         <string>Background:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QRadioButton" name="radioBackgroundAsProjection">
+          <property name="text">
+           <string>As canvas color</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">grpBackgroundStyle</string>
+          </attribute>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioBackgroundAsLayer">
+          <property name="text">
+           <string>As first layer</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">grpBackgroundStyle</string>
+          </attribute>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
      <zorder>lblColor</zorder>
@@ -537,6 +571,8 @@
      <zorder>cmbColor</zorder>
      <zorder>label_4</zorder>
      <zorder>intNumLayers</zorder>
+     <zorder>lblBackgroundStyle</zorder>
+     <zorder>verticalLayoutWidget</zorder>
     </widget>
    </item>
    <item>
@@ -628,8 +664,13 @@
   <tabstop>clipPreview</tabstop>
   <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>
+  <tabstop>radioBackgroundAsProjection</tabstop>
+  <tabstop>radioBackgroundAsLayer</tabstop>
   <tabstop>txtDescription</tabstop>
  </tabstops>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="grpBackgroundStyle"/>
+ </buttongroups>
 </ui>

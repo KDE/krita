@@ -88,7 +88,8 @@ private:
     
     double m_width, m_height;
     quint8 backgroundOpacity() const;
-    
+    void setBackgroundOpacity(quint8 value);
+
     void fillPredefined();
     void showEvent(QShowEvent *);
     

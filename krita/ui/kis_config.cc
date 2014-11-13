@@ -1242,6 +1242,36 @@ void KisConfig::setNumDefaultLayers(int num)
     m_cfg.writeEntry("NumberOfLayersForNewImage", num);
 }
 
+quint8 KisConfig::defaultBackgroundOpacity() const
+{
+  return m_cfg.readEntry("BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8);
+}
+
+void KisConfig::setDefaultBackgroundOpacity(quint8 value)
+{
+  m_cfg.writeEntry("BackgroundOpacityForNewImage", (int)value);
+}
+
+QColor KisConfig::defaultBackgroundColor() const
+{
+  return m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)); 
+}
+
+void KisConfig::setDefaultBackgroundColor(QColor value) 
+{
+  m_cfg.writeEntry("BackgroundColorForNewImage", value);
+}
+
+KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle() const
+{
+  return (KisConfig::BackgroundStyle)m_cfg.readEntry("BackgroundStyleForNewImage", (int)PROJECTION);
+}
+
+void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)
+{
+  m_cfg.writeEntry("BackgroundStyleForNewImage", (int)value);
+}
+
 int KisConfig::lineSmoothingType() const
 {
     return m_cfg.readEntry("LineSmoothingType", 1);

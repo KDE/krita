@@ -403,9 +403,15 @@ KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, 
     return image();
 }
 
+bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution) {
+  return newImage(name, width, height, cs, bgColor, false, 1, imageDescription, imageResolution);
+}
+
 bool KisDoc2::newImage(const QString& name,
                        qint32 width, qint32 height,
-                       const KoColorSpace* cs, const KoColor &bgColor,
+                       const KoColorSpace* cs, 
+                       const KoColor &bgColor, bool backgroundAsLayer,
+                       int numberOfLayers,
                        const QString &description, const double imageResolution)
 {
     Q_ASSERT(cs);
@@ -422,7 +428,7 @@ bool KisDoc2::newImage(const QString& name,
     QApplication::setOverrideCursor(Qt::BusyCursor);
 
     image = new KisImage(createUndoStore(), width, height, cs, name);
-    image->setDefaultProjectionColor(bgColor);
+    
     Q_CHECK_PTR(image);
 
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -434,13 +440,35 @@ bool KisDoc2::newImage(const QString& name,
         setUrl(KUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
     }
     documentInfo()->setAboutInfo("comments", description);
-
-    layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);
+    
+    layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
     Q_CHECK_PTR(layer);
+
+    if (backgroundAsLayer) {
+      image->setDefaultProjectionColor(KoColor(cs));
+      
+      if (bgColor.opacityU8() == OPACITY_OPAQUE_U8) {
+	layer->paintDevice()->setDefaultPixel(bgColor.data());
+      } else {
+	// Hack: with a semi-transparent background color, the projection isn't composited right if we just set the default pixel
+	KisFillPainter painter;
+	painter.begin(layer->paintDevice());
+	painter.fillRect(0, 0, width, height, bgColor, bgColor.opacityU8());
+      }
+    } else {
+      image->setDefaultProjectionColor(bgColor);
+    }
+    layer->setDirty(QRect(0, 0, width, height));
 
     image->addNode(layer.data(), image->rootLayer().data());
     setCurrentImage(image);
-
+    
+    for(int i = 1; i < numberOfLayers; ++i) {
+	KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
+	image->addNode(layer, image->root(), i);
+	layer->setDirty(QRect(0, 0, width, height));
+    }    
+    
     cfg.defImageWidth(width);
     cfg.defImageHeight(height);
     cfg.defImageResolution(imageResolution);

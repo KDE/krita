@@ -85,7 +85,7 @@ public:
                         qreal rotation = 0.0,
                         qreal tangentialPressure = 0.0,
                         qreal perspective = 1.0,
-                        int   time = 0);
+                        qreal time = 0.0);
 
     KisPaintInformation(const KisPaintInformation& rhs);
 
@@ -168,7 +168,7 @@ public:
     qreal perspective() const;
 
     /// Number of ms since the beginning of the stroke
-    int currentTime() const;
+    qreal currentTime() const;
 
     /**
      * The paint information may be generated not only during real

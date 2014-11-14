@@ -67,7 +67,7 @@ struct KisPaintInformation::Private {
     qreal rotation;
     qreal tangentialPressure;
     qreal perspective;
-    int time;
+    qreal time;
     bool isHoveringMode;
 
     QScopedPointer<qreal> drawingAngleOverride;
@@ -101,7 +101,7 @@ KisPaintInformation::KisPaintInformation(const QPointF & pos_,
         qreal rotation_,
         qreal tangentialPressure_,
         qreal perspective_,
-        int time)
+        qreal time)
     : d(new Private)
 {
     d->pos = pos_;
@@ -178,7 +178,7 @@ KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
     qreal perspective = qreal(e.attribute("perspective", "0.0").toDouble());
     qreal xTilt = qreal(e.attribute("xTilt", "0.0").toDouble());
     qreal yTilt = qreal(e.attribute("yTilt", "0.0").toDouble());
-    int time = e.attribute("time", "0").toInt();
+    qreal time = e.attribute("time", "0").toDouble();
 
     return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt,
                                rotation, tangentialPressure, perspective, time);
@@ -280,7 +280,7 @@ qreal KisPaintInformation::drawingSpeed() const
         return 0.5;
     }
 
-    int timeDiff = currentTime() - d->currentDistanceInfo->lastTime();
+    qreal timeDiff = currentTime() - d->currentDistanceInfo->lastTime();
 
     if (timeDiff <= 0) {
         return 0.5;
@@ -305,7 +305,7 @@ qreal KisPaintInformation::perspective() const
     return d->perspective;
 }
 
-int KisPaintInformation::currentTime() const
+qreal KisPaintInformation::currentTime() const
 {
     return d->time;
 }
@@ -369,7 +369,7 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
 
     qreal tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
     qreal perspective = (1 - t) * pi1.perspective() + t * pi2.perspective();
-    int   time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
+    qreal time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
 
     KisPaintInformation result(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time);
     KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());

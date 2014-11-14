@@ -211,11 +211,10 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     gc.restore();
 
     // Draw Handles
-
-    qreal handlesExtraScale = KisTransformUtils::scaleFromAffineMatrix(m_d->handlesTransform);
-
-    qreal d = KisTransformUtils::handleVisualRadius / handlesExtraScale;
-    QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
+    QRectF handleRect =
+        KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
+                                      m_d->handlesTransform,
+                                      m_d->transaction.originalRect());
 
     QPainterPath handles;
 
@@ -248,8 +247,8 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     QPainterPath mappedHandles = m_d->handlesTransform.map(handles);
 
     QPen pen[2];
-    pen[0].setWidth(1 / handlesExtraScale);
-    pen[1].setWidth(2 / handlesExtraScale);
+    pen[0].setWidth(1);
+    pen[1].setWidth(2);
     pen[1].setColor(Qt::lightGray);
 
     for (int i = 1; i >= 0; --i) {

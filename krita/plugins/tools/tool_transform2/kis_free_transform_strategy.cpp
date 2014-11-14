@@ -307,13 +307,19 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
 
     // Draw Handles
 
-    qreal handlesExtraScale = KisTransformUtils::scaleFromAffineMatrix(m_d->handlesTransform);
+    qreal d = 1;
+    QRectF handleRect =
+        KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
+                                      m_d->handlesTransform,
+                                      m_d->transaction.originalRect(),
+                                      &d);
 
-    qreal d = KisTransformUtils::handleVisualRadius / handlesExtraScale;
-    QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
-
-    qreal r = KisTransformUtils::rotationHandleVisualRadius / handlesExtraScale;
-    QRectF rotationCenterRect(-0.5 * r, -0.5 * r, r, r);
+    qreal r = 1;
+    QRectF rotationCenterRect =
+        KisTransformUtils::handleRect(KisTransformUtils::rotationHandleVisualRadius,
+                                      m_d->handlesTransform,
+                                      m_d->transaction.originalRect(),
+                                      &r);
 
     QPainterPath handles;
 
@@ -342,16 +348,18 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
     handles.lineTo(rotationCenter + dy);
 
     gc.save();
-    gc.setTransform(m_d->handlesTransform, true);
+
+    //gc.setTransform(m_d->handlesTransform, true); <-- don't do like this!
+    QPainterPath mappedHandles = m_d->handlesTransform.map(handles);
 
     QPen pen[2];
-    pen[0].setWidth(1 / handlesExtraScale);
-    pen[1].setWidth(2 / handlesExtraScale);
+    pen[0].setWidth(1);
+    pen[1].setWidth(2);
     pen[1].setColor(Qt::lightGray);
 
     for (int i = 1; i >= 0; --i) {
         gc.setPen(pen[i]);
-        gc.drawPath(handles);
+        gc.drawPath(mappedHandles);
     }
 
     gc.restore();

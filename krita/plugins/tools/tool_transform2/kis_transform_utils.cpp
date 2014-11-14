@@ -50,6 +50,33 @@ qreal KisTransformUtils::scaleFromAffineMatrix(const QTransform &t) {
     return std::sqrt(t.m11() * t.m11() + t.m22() * t.m22() + t.m12() * t.m12() + t.m21() * t.m21());
 }
 
+qreal KisTransformUtils::scaleFromPerspectiveMatrix(const QTransform &t, const QPointF &basePt) {
+    const QRectF testRect(basePt, QSizeF(1.0, 1.0));
+    QRectF resultRect = t.mapRect(testRect);
+
+    return 0.5 * (resultRect.width(), resultRect.height());
+}
+
+qreal KisTransformUtils::effectiveSize(const QRectF &rc) {
+    return 0.5 * (rc.width(), rc.height());
+}
+
+QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOut) {
+    qreal handlesExtraScale =
+        scaleFromPerspectiveMatrix(t, limitingRect.center());
+
+    const qreal maxD = 0.2 * effectiveSize(limitingRect);
+    const qreal d = qMin(maxD, radius / handlesExtraScale);
+
+    QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
+
+    if (dOut) {
+        *dOut = d;
+    }
+
+    return handleRect;
+}
+
 QPointF KisTransformUtils::clipInRect(QPointF p, QRectF r)
 {
     QPointF center = r.center();

@@ -167,32 +167,36 @@ void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     }
 
     QPolygonF transformedPolygon = m_d->transform.map(QPolygonF(m_d->transaction.originalRect()));
-    m_d->function =
-        transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : ROTATE;
-
     qreal handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
-    qreal handleRadiusSq = pow2(handleRadius);
+    qreal rotationHandleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 
-    qreal rotationHandleRadiusSq = pow2(KisTransformUtils::effectiveHandleGrabRadius(m_d->converter));
 
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.topMiddle) <= handleRadiusSq)
-        m_d->function = TOPSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.topRight) <= handleRadiusSq)
-        m_d->function = TOPRIGHTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.middleRight) <= handleRadiusSq)
-        m_d->function = RIGHTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.bottomRight) <= handleRadiusSq)
-        m_d->function = BOTTOMRIGHTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.bottomMiddle) <= handleRadiusSq)
-        m_d->function = BOTTOMSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.bottomLeft) <= handleRadiusSq)
-        m_d->function = BOTTOMLEFTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.middleLeft) <= handleRadiusSq)
-        m_d->function = LEFTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.topLeft) <= handleRadiusSq)
-        m_d->function = TOPLEFTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.rotationCenter) <= rotationHandleRadiusSq)
-        m_d->function = MOVECENTER;
+    StrokeFunction defaultFunction =
+        transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : ROTATE;
+    KisTransformUtils::HandleChooser<StrokeFunction>
+        handleChooser(mousePos, defaultFunction);
+
+    handleChooser.addFunction(m_d->transformedHandles.topMiddle,
+                              handleRadius, TOPSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.topRight,
+                              handleRadius, TOPRIGHTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.middleRight,
+                              handleRadius, RIGHTSCALE);
+
+    handleChooser.addFunction(m_d->transformedHandles.bottomRight,
+                              handleRadius, BOTTOMRIGHTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.bottomMiddle,
+                              handleRadius, BOTTOMSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.bottomLeft,
+                              handleRadius, BOTTOMLEFTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.middleLeft,
+                              handleRadius, LEFTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.topLeft,
+                              handleRadius, TOPLEFTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.rotationCenter,
+                              rotationHandleRadius, MOVECENTER);
+
+    m_d->function = handleChooser.function();
 
     if (m_d->function == ROTATE || m_d->function == MOVE) {
         QRectF originalRect = m_d->transaction.originalRect();

@@ -157,26 +157,30 @@ void KisPerspectiveTransformStrategy::setTransformFunction(const QPointF &mouseP
         transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : NONE;
 
     qreal handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
-    qreal handleRadiusSq = pow2(handleRadius);
 
-    if (!m_d->transformedHandles.xVanishing.isNull() &&
-        kisSquareDistance(mousePos, m_d->transformedHandles.xVanishing) <= handleRadiusSq) {
+    KisTransformUtils::HandleChooser<StrokeFunction>
+        handleChooser(mousePos, NONE);
 
-        m_d->function = DRAG_X_VANISHING_POINT;
+    if (!m_d->transformedHandles.xVanishing.isNull()) {
+        handleChooser.addFunction(m_d->transformedHandles.xVanishing,
+                                  handleRadius, DRAG_X_VANISHING_POINT);
     }
 
-    if (!m_d->transformedHandles.yVanishing.isNull() &&
-        kisSquareDistance(mousePos, m_d->transformedHandles.yVanishing) <= handleRadiusSq) {
-        m_d->function = DRAG_Y_VANISHING_POINT;
+    if (!m_d->transformedHandles.yVanishing.isNull()) {
+        handleChooser.addFunction(m_d->transformedHandles.yVanishing,
+                                  handleRadius, DRAG_Y_VANISHING_POINT);
     }
 
     m_d->currentDraggingCornerPoint = -1;
     for (int i = 0; i < m_d->dstCornerPoints.size(); i++) {
-        if (kisSquareDistance(mousePos, m_d->dstCornerPoints[i]) <= handleRadiusSq) {
+        if (handleChooser.addFunction(m_d->dstCornerPoints[i],
+                                      handleRadius, DRAG_HANDLE)) {
+
             m_d->currentDraggingCornerPoint = i;
-            m_d->function = DRAG_HANDLE;
         }
     }
+
+    m_d->function = handleChooser.function();
 }
 
 QCursor KisPerspectiveTransformStrategy::getCurrentCursor() const

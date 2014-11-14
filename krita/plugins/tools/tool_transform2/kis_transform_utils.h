@@ -26,6 +26,10 @@
 #include <QTransform>
 #include <QMatrix4x4>
 #include <kis_processing_visitor.h>
+#include <limits>
+
+// for kisSquareDistance only
+#include "kis_global.h"
 
 class ToolTransformArgs;
 class KisTransformWorker;
@@ -88,6 +92,39 @@ public:
     static void transformDevice(const ToolTransformArgs &config,
                                 KisPaintDeviceSP device,
                                 KisProcessingVisitor::ProgressHelper *helper);
+
+    template<typename Function>
+    class HandleChooser {
+    public:
+        HandleChooser(const QPointF &cursorPos, Function defaultFunction)
+            : m_cursorPos(cursorPos),
+              m_minDistance(std::numeric_limits<qreal>::max()),
+              m_function(defaultFunction)
+        {
+        }
+
+        bool addFunction(const QPointF &pt, qreal radius, Function function) {
+            bool result = false;
+            qreal distance = kisSquareDistance(pt, m_cursorPos);
+
+            if (distance < pow2(radius) && distance < m_minDistance) {
+                m_minDistance = distance;
+                m_function = function;
+                result = true;
+            }
+
+            return result;
+        }
+
+        Function function() const {
+            return m_function;
+        }
+
+    private:
+        QPointF m_cursorPos;
+        qreal m_minDistance;
+        Function m_function;
+    };
 };
 
 #endif /* __KIS_TRANSFORM_UTILS_H */

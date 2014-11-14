@@ -230,8 +230,22 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     handles.addRect(handleRect.translated(m_d->transaction.originalBottomLeft()));
     handles.addRect(handleRect.translated(m_d->transaction.originalBottomRight()));
 
+
     gc.save();
-    gc.setTransform(m_d->handlesTransform, true);
+
+    /**
+     * WARNING: we cannot install a transform to paint the handles here!
+     *
+     * There is a bug in Qt that prevents painting of cosmetic-pen
+     * brushes in openGL mode when a TxProject matrix is active on
+     * a QPainter. So just convert it manually.
+     *
+     * https://bugreports.qt-project.org/browse/QTBUG-42658
+     */
+
+    //gc.setTransform(m_d->handlesTransform, true); <-- don't do like this!
+
+    QPainterPath mappedHandles = m_d->handlesTransform.map(handles);
 
     QPen pen[2];
     pen[0].setWidth(1 / handlesExtraScale);
@@ -240,7 +254,7 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
 
     for (int i = 1; i >= 0; --i) {
         gc.setPen(pen[i]);
-        gc.drawPath(handles);
+        gc.drawPath(mappedHandles);
     }
 
     gc.restore();

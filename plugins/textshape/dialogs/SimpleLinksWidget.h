@@ -33,7 +33,7 @@ class SimpleLinksWidget : public QWidget
 {
     Q_OBJECT
 public:
-    SimpleLinksWidget(ReferencesTool *tool, QWidget *parent = 0);
+    explicit SimpleLinksWidget(ReferencesTool *tool, QWidget *parent = 0);
     virtual ~SimpleLinksWidget();
 
 signals:

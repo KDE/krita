@@ -49,4 +49,5 @@ private:
     Ui::SimpleLinksWidget widget;
     ReferencesTool *m_referenceTool;
 };
+
 #endif

@@ -153,13 +153,11 @@ void KisPerspectiveTransformStrategy::setTransformFunction(const QPointF &mouseP
     Q_UNUSED(perspectiveModifierActive);
 
     QPolygonF transformedPolygon = m_d->transform.map(QPolygonF(m_d->transaction.originalRect()));
-    m_d->function =
-        transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : NONE;
+    StrokeFunction defaultFunction = transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : NONE;
+    KisTransformUtils::HandleChooser<StrokeFunction>
+        handleChooser(mousePos, defaultFunction);
 
     qreal handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
-
-    KisTransformUtils::HandleChooser<StrokeFunction>
-        handleChooser(mousePos, NONE);
 
     if (!m_d->transformedHandles.xVanishing.isNull()) {
         handleChooser.addFunction(m_d->transformedHandles.xVanishing,

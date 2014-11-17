@@ -68,6 +68,7 @@ public:
     KisTransformMaskParamsInterfaceSP transformParams() const;
 
     void recaclulateStaticImage();
+    KisPaintDeviceSP buildPreviewDevice();
 
 private slots:
     void slotDelayedStaticUpdate();

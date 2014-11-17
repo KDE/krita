@@ -85,6 +85,8 @@ public:
      */
     virtual QRect updateProjection(const QRect& rect, PositionToFilthy pos);
 
+    void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect, PositionToFilthy pos);
+
     virtual bool needProjection() const;
 
     virtual void copyOriginalToProjection(const KisPaintDeviceSP original,
@@ -230,7 +232,7 @@ public:
     /**
      * @return the list of effect masks
      */
-    QList<KisEffectMaskSP> effectMasks() const;
+    QList<KisEffectMaskSP> effectMasks(KisNodeSP lastNode = 0) const;
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
@@ -276,7 +278,7 @@ protected:
     QRect applyMasks(const KisPaintDeviceSP source,
                      const KisPaintDeviceSP destination,
                      const QRect &requestedRect,
-                     PositionToFilthy pos) const;
+                     PositionToFilthy pos, KisNodeSP lastNode) const;
 
 private:
     struct Private;

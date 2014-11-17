@@ -304,7 +304,7 @@ KisSelectionSP KisLayer::selection() const
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-QList<KisEffectMaskSP> KisLayer::effectMasks() const
+QList<KisEffectMaskSP> KisLayer::effectMasks(KisNodeSP lastNode) const
 {
     QList<KisEffectMaskSP> masks;
 
@@ -314,6 +314,8 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
         QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
 
         foreach(const KisNodeSP& node,  nodes) {
+            if (node == lastNode) break;
+
             KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
             if (mask)
                 masks.append(mask);
@@ -390,12 +392,13 @@ QRect KisLayer::masksNeedRect(const QList<KisEffectMaskSP> &masks,
 QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                            const KisPaintDeviceSP destination,
                            const QRect &requestedRect,
-                           PositionToFilthy pos) const
+                           PositionToFilthy pos,
+                           KisNodeSP lastNode) const
 {
     Q_ASSERT(source);
     Q_ASSERT(destination);
 
-    QList<KisEffectMaskSP> masks = effectMasks();
+    QList<KisEffectMaskSP> masks = effectMasks(lastNode);
     QRect changeRect;
     QRect needRect;
 
@@ -492,11 +495,27 @@ QRect KisLayer::updateProjection(const QRect& rect, PositionToFilthy pos)
                 m_d->safeProjection.getDeviceLazy(originalDevice);
 
             updatedRect = applyMasks(originalDevice, projection,
-                                     updatedRect, pos);
+                                     updatedRect, pos, 0);
         }
     }
 
     return updatedRect;
+}
+
+void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect, PositionToFilthy pos)
+{
+    bool changeRectVaries = false;
+    QRect changeRect = masksChangeRect(effectMasks(lastNode), rect,
+                                       changeRectVaries);
+
+    KisPaintDeviceSP originalDevice = original();
+
+    KIS_ASSERT_RECOVER_RETURN(needProjection() || hasEffectMasks());
+
+    if (!changeRect.isEmpty()) {
+        applyMasks(originalDevice, projection,
+                   changeRect, pos, lastNode);
+    }
 }
 
 bool KisLayer::needProjection() const

@@ -147,6 +147,26 @@ void KisTransformMask::slotDelayedStaticUpdate()
     }
 }
 
+KisPaintDeviceSP KisTransformMask::buildPreviewDevice()
+{
+    /**
+     * Note: this function must be called from within the scheduler's
+     * context. We are accessing parent's updateProjection(), which
+     * is not entirely safe.
+     */
+
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KIS_ASSERT_RECOVER(parentLayer) { return new KisPaintDevice(colorSpace()); }
+
+    KisPaintDeviceSP device =
+        new KisPaintDevice(parentLayer->original()->colorSpace());
+
+    QRect requestedRect = parentLayer->original()->exactBounds();
+    parentLayer->buildProjectionUpToNode(device, this, requestedRect, N_FILTHY_PROJECTION);
+
+    return device;
+}
+
 void KisTransformMask::recaclulateStaticImage()
 {
     /**
@@ -170,6 +190,13 @@ void KisTransformMask::recaclulateStaticImage()
      * this work is done by the walkers.
      */
     QRect requestedRect = parentLayer->changeRect(parentLayer->original()->exactBounds());
+
+    /**
+     * TODO: If we use buildProjectionUpToNode() here, then the final
+     *       projection of the node will not be ready. But anyway we
+     *       issue setDirty() call after that... So probably
+     *       setDirty() should be avoided somehow?
+     */
     parentLayer->updateProjection(requestedRect, N_FILTHY_PROJECTION);
     m_d->recalculatingStaticImage = false;
 
@@ -191,6 +218,9 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
     if (m_d->params->isHidden()) return rc;
 
     if (parentPos != N_FILTHY_PROJECTION) {
+        // TODO: use special filtering callbacks of KisImage instead
+        //       otherwise it doesn't work with two t-masks
+
         m_d->staticCacheValid = false;
         emit initiateDelayedStaticUpdate();
     }
@@ -289,12 +319,18 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
 
 QRect KisTransformMask::extent() const
 {
+    // TODO: collect extent of all the previous siblings otherwise
+    //       updates of two t-mask will not work correctly
+
     QRect rc = KisMask::extent();
     return rc | changeRect(rc);
 }
 
 QRect KisTransformMask::exactBounds() const
 {
+    // TODO: collect exactBounds of all the previous siblings
+    //       otherwise updates of two t-mask will not work correctly
+
     QRect rc = KisMask::exactBounds();
     return rc | changeRect(rc);
 }

@@ -93,13 +93,10 @@ TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
     if (rootNode->childCount() || !rootNode->paintDevice()) {
         KisPaintDeviceSP device;
 
-        if (dynamic_cast<KisTransformMask*>(rootNode.data())) {
-            KisNodeSP parentNode = rootNode->parent();
-            device = parentNode->paintDevice();
+        if (KisTransformMask* tmask =
+            dynamic_cast<KisTransformMask*>(rootNode.data())) {
 
-            if (!device) {
-                device = parentNode->original();
-            }
+            device = tmask->buildPreviewDevice();
 
         } else {
             device = rootNode->projection();

@@ -153,6 +153,9 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         }
         wdg->interlacing->setChecked(cfg.getBool("interlaced", false));
         wdg->compressionLevel->setValue(cfg.getInt("compression", 9));
+        wdg->compressionLevel->setRange(1, 9 , 0);
+
+
 
         wdg->alpha->setVisible(isThereAlpha);
         wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);
@@ -181,7 +184,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
         bool alpha = wdg->alpha->isChecked();
         bool interlace = wdg->interlacing->isChecked();
-        int compression = wdg->compressionLevel->value();
+        int compression = (int)wdg->compressionLevel->value();
         bool tryToSaveAsIndexed = wdg->tryToSaveAsIndexed->isChecked();
         QColor c = wdg->bnTransparencyFillColor->color();
         bool saveSRGB = wdg->chkSRGB->isChecked();

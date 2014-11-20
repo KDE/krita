@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+/* This file is part of the KDE project
+ * Copyright (C) Timothée Giet <animtim@gmail.com>, (C) 2014
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,31 +17,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H
-#define KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H
+#ifndef KIS_PRESSURE_FLOW_OPTION_H
+#define KIS_PRESSURE_FLOW_OPTION_H
 
-#include "kis_pressure_flow_opacity_option.h"
-#include "kis_curve_option_widget.h"
+#include "kis_curve_option.h"
+#include <kis_paint_information.h>
+#include <krita_export.h>
 
-class KisDoubleSliderSpinBox;
-class KisCurveOptionWidget;
-class QStackedWidget;
-class QButtonGroup;
-
-class PAINTOP_EXPORT KisFlowOpacityOptionWidget: public KisCurveOptionWidget
+/**
+ * The pressure flow option defines a curve that is used to
+ * calculate the effect of pressure on the flow of the dab
+ */
+class PAINTOP_EXPORT KisPressureFlowOption : public KisCurveOption
 {
-    Q_OBJECT
-
 public:
-    KisFlowOpacityOptionWidget();
+    KisPressureFlowOption();
+    double apply(const KisPaintInformation & info) const;
 
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
-    void slotSliderValueChanged();
-
-private:
-    KisDoubleSliderSpinBox* m_opacitySlider;
 };
 
-#endif // KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H
+#endif
+ 

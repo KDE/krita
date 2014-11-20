@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+/* This file is part of the KDE project
+ * Copyright (C) Timothée Giet <animtim@gmail.com>, (C) 2014
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,32 +16,22 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_pressure_flow_option.h"
+#include <klocale.h>
+#include <kis_painter.h>
+#include <KoColor.h>
 
-#ifndef KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H
-#define KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H
-
-#include "kis_pressure_flow_opacity_option.h"
-#include "kis_curve_option_widget.h"
-
-class KisDoubleSliderSpinBox;
-class KisCurveOptionWidget;
-class QStackedWidget;
-class QButtonGroup;
-
-class PAINTOP_EXPORT KisFlowOpacityOptionWidget: public KisCurveOptionWidget
+KisPressureFlowOption::KisPressureFlowOption()
+    : KisCurveOption(i18n("Flow"), "Flow", KisPaintOpOption::generalCategory(), true)
 {
-    Q_OBJECT
+    setMinimumLabel(i18n("0%"));
+    setMaximumLabel(i18n("100%"));
+}
 
-public:
-    KisFlowOpacityOptionWidget();
 
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-
-private slots:
-    void slotSliderValueChanged();
-
-private:
-    KisDoubleSliderSpinBox* m_opacitySlider;
-};
-
-#endif // KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H
+double KisPressureFlowOption::apply(const KisPaintInformation & info) const
+{
+    if (!isChecked()) return 1.0;
+    return computeValue(info);
+}
+ 

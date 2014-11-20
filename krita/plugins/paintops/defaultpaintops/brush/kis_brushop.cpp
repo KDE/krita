@@ -64,6 +64,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     }
 
     m_opacityOption.readOptionSetting(settings);
+    m_flowOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
@@ -74,6 +75,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_scatterOption.readOptionSetting(settings);
 
     m_opacityOption.resetAllSensors();
+    m_flowOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
     m_softnessOption.resetAllSensors();
     m_sharpnessOption.resetAllSensors();

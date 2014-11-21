@@ -46,7 +46,8 @@ public:
         GradientShapeRadial,
         GradientShapeSquare,
         GradientShapeConical,
-        GradientShapeConicalSymetric
+        GradientShapeConicalSymetric,
+        GradientShapePolygonal
     };
 
     enum enumGradientRepeat {

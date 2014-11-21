@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GRADIENT_PAINTER_TEST_H
-#define KIS_GRADIENT_PAINTER_TEST_H
+#ifndef __KIS_GRADIENT_SHAPE_STRATEGY_H
+#define __KIS_GRADIENT_SHAPE_STRATEGY_H
 
-#include <QtTest>
+#include <QPointF>
 
-class KisGradientPainterTest : public QObject
+
+class KisGradientShapeStrategy
 {
-    Q_OBJECT
-private slots:
+public:
+    KisGradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+    virtual ~KisGradientShapeStrategy();
 
-    void testCreation();
-    void testSimplifyPath();
+    virtual double valueAt(double x, double y) const = 0;
 
-    void testShapedGradientPainterRect();
-    void testShapedGradientPainterNonRegular();
+protected:
+    QPointF m_gradientVectorStart;
+    QPointF m_gradientVectorEnd;
 };
 
-#endif
+#endif /* __KIS_GRADIENT_SHAPE_STRATEGY_H */

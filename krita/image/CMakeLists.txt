@@ -138,6 +138,8 @@ set(kritaimage_LIB_SRCS
    kis_transform_mask_params_factory_registry.cpp
    kis_safe_transform.cpp
    kis_gradient_painter.cc
+   kis_gradient_shape_strategy.cpp
+   kis_polygonal_gradient_shape_strategy.cpp
    kis_iterator_ng.cpp
    kis_async_merger.cpp
    kis_merge_walker.cc
@@ -290,6 +292,12 @@ endif(FFTW3_FOUND)
 if(HAVE_VC)
   target_link_libraries(kritaimage  ${Vc_LIBRARIES})
 endif(HAVE_VC)
+
+if (NOT GSL_FOUND)
+  message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Shaped Gradients might be non-normalized! Please install GSL library.")
+else (NOT GSL_FOUND)
+  target_link_libraries(kritaimage ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+endif (NOT GSL_FOUND)
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

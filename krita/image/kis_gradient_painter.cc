@@ -33,6 +33,8 @@
 #include "kis_iterator_ng.h"
 #include "kis_random_accessor_ng.h"
 #include "kis_progress_update_helper.h"
+#include "kis_gradient_shape_strategy.h"
+#include "kis_polygonal_gradient_shape_strategy.h"
 
 
 class CachedGradient : public KoAbstractGradient
@@ -95,26 +97,7 @@ private:
 namespace
 {
 
-class GradientShapeStrategy
-{
-public:
-    GradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
-    virtual ~GradientShapeStrategy() {}
-
-    virtual double valueAt(double x, double y) const = 0;
-
-protected:
-    QPointF m_gradientVectorStart;
-    QPointF m_gradientVectorEnd;
-};
-
-GradientShapeStrategy::GradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : m_gradientVectorStart(gradientVectorStart), m_gradientVectorEnd(gradientVectorEnd)
-{
-}
-
-
-class LinearGradientStrategy : public GradientShapeStrategy
+class LinearGradientStrategy : public KisGradientShapeStrategy
 {
 
 public:
@@ -129,7 +112,7 @@ protected:
 };
 
 LinearGradientStrategy::LinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+        : KisGradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
 {
     double dx = gradientVectorEnd.x() - gradientVectorStart.x();
     double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -191,7 +174,7 @@ double BiLinearGradientStrategy::valueAt(double x, double y) const
 }
 
 
-class RadialGradientStrategy : public GradientShapeStrategy
+class RadialGradientStrategy : public KisGradientShapeStrategy
 {
 
 public:
@@ -204,7 +187,7 @@ protected:
 };
 
 RadialGradientStrategy::RadialGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+        : KisGradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
 {
     double dx = gradientVectorEnd.x() - gradientVectorStart.x();
     double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -231,7 +214,7 @@ double RadialGradientStrategy::valueAt(double x, double y) const
 }
 
 
-class SquareGradientStrategy : public GradientShapeStrategy
+class SquareGradientStrategy : public KisGradientShapeStrategy
 {
 
 public:
@@ -246,7 +229,7 @@ protected:
 };
 
 SquareGradientStrategy::SquareGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+        : KisGradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
 {
     double dx = gradientVectorEnd.x() - gradientVectorStart.x();
     double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -291,7 +274,7 @@ double SquareGradientStrategy::valueAt(double x, double y) const
 }
 
 
-class ConicalGradientStrategy : public GradientShapeStrategy
+class ConicalGradientStrategy : public KisGradientShapeStrategy
 {
 
 public:
@@ -304,7 +287,7 @@ protected:
 };
 
 ConicalGradientStrategy::ConicalGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+        : KisGradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
 {
     double dx = gradientVectorEnd.x() - gradientVectorStart.x();
     double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -332,7 +315,7 @@ double ConicalGradientStrategy::valueAt(double x, double y) const
 }
 
 
-class ConicalSymetricGradientStrategy : public GradientShapeStrategy
+class ConicalSymetricGradientStrategy : public KisGradientShapeStrategy
 {
 public:
     ConicalSymetricGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
@@ -344,7 +327,7 @@ protected:
 };
 
 ConicalSymetricGradientStrategy::ConicalSymetricGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+        : KisGradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
 {
     double dx = gradientVectorEnd.x() - gradientVectorStart.x();
     double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -544,7 +527,9 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     if (!gradient()) return false;
 
-    GradientShapeStrategy *shapeStrategy = 0;
+    QRect requestedRect(startx, starty, width, height);
+
+    KisGradientShapeStrategy *shapeStrategy = 0;
 
     switch (shape) {
     case GradientShapeLinear:
@@ -564,6 +549,29 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         break;
     case GradientShapeConicalSymetric:
         shapeStrategy = new ConicalSymetricGradientStrategy(gradientVectorStart, gradientVectorEnd);
+        break;
+    case GradientShapePolygonal:
+        QPolygonF polygon;
+
+        if (selection()) {
+            if (!selection()->outlineCacheValid()) {
+                selection()->recalculateOutlineCache();
+            }
+
+            KIS_ASSERT_RECOVER(selection()->outlineCacheValid()) { return false; }
+            KIS_ASSERT_RECOVER(!selection()->outlineCache().isEmpty()) { return false; }
+
+            QPainterPath path = selection()->outlineCache();
+            polygon = path.toFillPolygons().first();
+        } else {
+            polygon = QPolygonF(QRectF(requestedRect));
+        }
+
+        // TODO: implement UI for exponent option
+        const qreal exponent = 2.0;
+        shapeStrategy = new KisPolygonalGradientShapeStrategy(gradientVectorStart, gradientVectorEnd, polygon, exponent);
+
+        repeat = GradientRepeatNone;
         break;
     }
     Q_CHECK_PTR(shapeStrategy);
@@ -586,15 +594,15 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     //If the device has a selection only iterate over that selection united with our area of interest
     QRect r;
-    QRect r2(startx, starty, width, height);
+
     if (selection()) {
         r = selection()->selectedExactRect();
-        r2 &= r;
+        requestedRect &= r;
     }
-    startx = r2.x();
-    starty = r2.y();
-    width = r2.width();
-    height = r2.height();
+    startx = requestedRect.x();
+    starty = requestedRect.y();
+    width = requestedRect.width();
+    height = requestedRect.height();
 
     qint32 endx = startx + width - 1;
     qint32 endy = starty + height - 1;
@@ -628,6 +636,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }
 
     bitBlt(startx, starty, dev, startx, starty, width, height);
+
     delete shapeStrategy;
     return true;
 }

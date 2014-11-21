@@ -24,6 +24,7 @@
 KisPressureFlowOption::KisPressureFlowOption()
     : KisCurveOption(i18n("Flow"), "Flow", KisPaintOpOption::generalCategory(), true)
 {
+    m_checkable = false;
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));
 }

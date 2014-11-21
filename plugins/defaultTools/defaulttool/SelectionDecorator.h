@@ -73,6 +73,7 @@ private:
     static KoFlake::Position m_hotPosition;
     KoSelection *m_selection;
     int m_handleRadius;
+    int m_lineWidth;
 };
 
 #endif

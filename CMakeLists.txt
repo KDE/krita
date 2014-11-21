@@ -638,6 +638,12 @@ endif(POPPLER_FOUND)
 
 
 ##
+## Test for libgit2 and Libqgit2
+##
+macro_optional_find_package(Libgit2)
+macro_optional_find_package(Libqgit2)
+
+##
 ## Generate a file for prefix information
 ##
 
@@ -919,6 +925,11 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
 )
 
+calligra_drop_product_on_bad_condition( APP_GEMINI
+    LIBGIT2_FOUND  "libgit2 devel not found"
+    LIBQGIT2_FOUND "libqgit2 devel not found"
+)
+
 #############################################
 ####  Backward compatibility BUILD_x=off ####
 #############################################
@@ -1003,6 +1014,14 @@ endif(SHOULD_BUILD_APP_ACTIVE)
 if(SHOULD_BUILD_DOC)
     add_subdirectory(doc)
 endif(SHOULD_BUILD_DOC)
+
+if(SHOULD_BUILD_PART_QTQUICK)
+    add_subdirectory(qtquick)
+endif(SHOULD_BUILD_PART_QTQUICK)
+
+if(SHOULD_BUILD_GEMINI)
+    add_subdirectory(gemini)
+endif(SHOULD_BUILD_GEMINI)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)

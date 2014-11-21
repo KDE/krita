@@ -135,10 +135,10 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas) = 0;
 
     /**
-     * Return the currently set canvas
+     * Return the currently set canvas. The default implementation will return Null
      * @return the currently set canvas
      */
-    virtual KoCanvasBase *canvas() const = 0;
+    virtual KoCanvasBase *canvas() const;
 
     /**
      * return the amount of pixels vertically visible of the child canvas.

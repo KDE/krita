@@ -1,4 +1,4 @@
 #! /bin/sh
 source ../../../calligra_xgettext.sh
 
-calligra_xgettext ChangecasePlugin.pot *.cpp
+calligra_xgettext calligra_textediting_changecase.pot *.cpp

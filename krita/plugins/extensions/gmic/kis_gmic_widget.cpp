@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (c) 2013-2014 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,47 +38,49 @@
 #include <kis_gmic_filter_proxy_model.h>
 #include "kis_gmic_updater.h"
 
-static const QString maximizeStr = i18n("Maximize");
 
-KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl): QWidget(),m_filterModel(filters),m_updateUrl(updateUrl)
+static const QString maximizeStr = i18n("Maximize");
+static const QString selectFilterStr = i18n("Select a filter...");
+
+KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl): m_filterModel(filters),m_updateUrl(updateUrl)
 {
+    dbgPlugins << "Constructor:" << this;
+
+    setupUi(this);
     createMainLayout();
     setAttribute(Qt::WA_DeleteOnClose, true);
+
+    m_filterApplied = false;
+    m_onCanvasPreviewActivated = false;
+    m_onCanvasPreviewRequested = false;
 }
 
 KisGmicWidget::~KisGmicWidget()
 {
-    dbgPlugins << "I'm dying...";
+    dbgPlugins << "Destructor:" << this;
     delete m_filterModel;
 }
 
 void KisGmicWidget::createMainLayout()
 {
-    m_filterConfigLayout = new QGridLayout;
 
-    int column = 0;
-    int row = 0;
-    m_inputOutputOptions = new KisGmicInputOutputWidget();
-    m_filterConfigLayout->addWidget(m_inputOutputOptions, row, column);
-    column++;
 
-    m_filterTree = new QTreeView();
+    connect(m_inputOutputOptions->previewCheckBox, SIGNAL(toggled(bool)), this, SLOT(slotPreviewChanged(bool)));
+    connect(m_inputOutputOptions->previewSizeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPreviewSizeChanged()));
+    connect(m_inputOutputOptions->previewSizeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(slotConfigurationChanged()));
+
+    connect(m_inputOutputOptions->zoomInButton, SIGNAL(clicked(bool)), this, SLOT(slotNotImplemented()));
+    connect(m_inputOutputOptions->zoomOutButton, SIGNAL(clicked(bool)), this, SLOT(slotNotImplemented()));
 
     KisGmicFilterProxyModel *proxyModel = new KisGmicFilterProxyModel(this);
     proxyModel->setSourceModel(m_filterModel);
     proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
     m_filterTree->setModel(proxyModel);
     m_filterTree->setItemDelegate(new HtmlDelegate());
 
-    QItemSelectionModel *selectionModel= m_filterTree->selectionModel();
-    connect(selectionModel, SIGNAL(selectionChanged (const QItemSelection &, const QItemSelection &)),
-            this, SLOT(selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
+    connect(m_filterTree->selectionModel(), SIGNAL(selectionChanged (const QItemSelection &, const QItemSelection &)),
+            this, SLOT(slotSelectedFilterChanged(const QItemSelection &, const QItemSelection &)));
 
-    m_filterConfigLayout->addWidget(m_filterTree, row, column);
-
-    QPushButton * updateBtn = new QPushButton(this);
-    updateBtn->setText("Update definitions");
     if (!m_updateUrl.isEmpty())
     {
         updateBtn->setToolTip("Fetching definitions from : " + m_updateUrl);
@@ -87,50 +89,28 @@ void KisGmicWidget::createMainLayout()
     {
         updateBtn->setEnabled(false);
     }
+
     connect(updateBtn, SIGNAL(clicked(bool)), this, SLOT(startUpdate()));
-    m_filterConfigLayout->addWidget(updateBtn, row+1, column);
-
-    QLineEdit * searchBox = new QLineEdit(this);
     connect(searchBox, SIGNAL(textChanged(QString)), proxyModel, SLOT(setFilterFixedString(QString)));
-    m_filterConfigLayout->addWidget(searchBox, row+2, column);
 
-    column++;
-
-    m_filterOptions = new QWidget();
-    m_filterConfigLayout->addWidget(m_filterOptions,row, column);
-    m_filterConfigLayout->setColumnStretch(column, 1);
-    m_filterOptionsRow = row;
-    m_filterOptionsColumn = column;
-
-    QDialogButtonBox * controlButtonBox = new QDialogButtonBox;
     QPushButton * maximize = new QPushButton(maximizeStr);
-    connect(maximize, SIGNAL(clicked(bool)), this, SLOT(maximizeSlot()));
+    controlButtonBox->addButton(maximize, QDialogButtonBox::ActionRole);
+    connect(maximize, SIGNAL(clicked(bool)), this, SLOT(slotMaximizeClicked()));
+    connect(controlButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked(bool)), this, SLOT(slotOkClicked()));
+    connect(controlButtonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked(bool)), this, SLOT(slotApplyClicked()));
+    connect(controlButtonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked(bool)), this, SLOT(slotCancelClicked()));
+    connect(controlButtonBox->button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotResetClicked()));
 
-    controlButtonBox->addButton(maximize, QDialogButtonBox::AcceptRole);
-    controlButtonBox->addButton(QDialogButtonBox::Ok);
-    QAbstractButton *okButton = controlButtonBox->button(QDialogButtonBox::Ok);
-    connect(okButton, SIGNAL(clicked(bool)), this, SLOT(okFilterSlot()));
+    int indexOfFilterOptions = m_filterConfigLayout->indexOf(m_filterOptions);
+    Q_ASSERT(indexOfFilterOptions != -1);
+    int rowSpan = 0, colSpan = 0;
+    m_filterConfigLayout->getItemPosition(indexOfFilterOptions, &m_filterOptionsRow, &m_filterOptionsColumn, &rowSpan, &colSpan);
 
-    controlButtonBox->addButton(QDialogButtonBox::Apply);
-    QAbstractButton *applyButton = controlButtonBox->button(QDialogButtonBox::Apply);
-    connect(applyButton, SIGNAL(clicked(bool)), this, SLOT(applyFilterSlot()));
-
-    controlButtonBox->addButton(QDialogButtonBox::Cancel);
-    QAbstractButton *cancelButton = controlButtonBox->button(QDialogButtonBox::Cancel);
-    connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(cancelFilterSlot()));
-
-    controlButtonBox->addButton(QDialogButtonBox::Reset);
-    QAbstractButton *resetButton = controlButtonBox->button(QDialogButtonBox::Reset);
-    connect(resetButton, SIGNAL(clicked(bool)), this, SLOT(resetFilterSlot()));
-
-    m_filterConfigLayout->addWidget(controlButtonBox,row + 1, column, 1, 2);
-    column++;
-
-    setLayout(m_filterConfigLayout);
+    switchOptionsWidgetFor(new QLabel(selectFilterStr));
 }
 
 
-void KisGmicWidget::selectionChangedSlot(const QItemSelection & /*newSelection*/, const QItemSelection & /*oldSelection*/)
+void KisGmicWidget::slotSelectedFilterChanged(const QItemSelection & /*newSelection*/, const QItemSelection & /*oldSelection*/)
  {
      //get the text of the selected item
     const QModelIndex index = m_filterTree->selectionModel()->currentIndex();
@@ -150,78 +130,78 @@ void KisGmicWidget::selectionChangedSlot(const QItemSelection & /*newSelection*/
         gmicCommand = var.value<Command *>();
     }
 
-    m_filterConfigLayout->removeWidget(m_filterOptions);
-    delete m_filterOptions;
 
     if (gmicCommand)
     {
-        m_filterOptions = new KisGmicSettingsWidget(gmicCommand);
+        KisGmicSettingsWidget * filterOptions = new KisGmicSettingsWidget(gmicCommand);
+        QObject::connect(filterOptions, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotConfigurationChanged()));
+        switchOptionsWidgetFor(filterOptions);
     }
     else
     {
-        m_filterOptions = new QLabel("Select a filter...");
+        switchOptionsWidgetFor(new QLabel(selectFilterStr));
+        emit sigPreviewActiveLayer();
     }
 
-    m_filterConfigLayout->addWidget(m_filterOptions,m_filterOptionsRow,m_filterOptionsColumn);
-    m_filterConfigLayout->update();
 
+
+#ifdef DEBUG_MODEL
      //find out the hierarchy level of the selected item
-     int hierarchyLevel=1;
+     int hierarchyLevel = 1;
      QModelIndex seekRoot = index;
      while(seekRoot.parent() != QModelIndex())
      {
          seekRoot = seekRoot.parent();
          hierarchyLevel++;
      }
+
      QString showString = QString("%1, Level %2").arg(selectedText)
                           .arg(hierarchyLevel);
      setWindowTitle(showString);
-
-     resize(sizeHint());
+#endif
  }
 
-void KisGmicWidget::applyFilterSlot()
+
+void KisGmicWidget::slotCancelClicked()
 {
-    const QModelIndex index = m_filterTree->selectionModel()->currentIndex();
-    QVariant settings = index.data(FilterSettingsRole);
-    if (settings.isValid())
+    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
     {
-        KisGmicFilterSetting * filterSettings = settings.value<KisGmicFilterSetting * >();
-        filterSettings->setInputLayerMode(m_inputOutputOptions->inputMode());
-        filterSettings->setOutputMode(m_inputOutputOptions->outputMode());
+        emit sigCancelOnCanvasPreview();
+    }
+
+    close();
+}
 
 
-        dbgPlugins << "Valid settings!";
-        dbgPlugins << "GMIC command : " << filterSettings->gmicCommand();
-
-        emit sigApplyCommand(filterSettings);
+void KisGmicWidget::slotOkClicked()
+{
+    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
+    {
+        emit sigAcceptOnCanvasPreview();
     }
     else
     {
-        dbgPlugins << "Filter is not selected!";
+        if (!m_filterApplied)
+        {
+            KisGmicFilterSetting * filterSettings = currentFilterSettings();
+            if (filterSettings)
+            {
+                emit sigFilterCurrentImage(filterSettings);
+            }
+            m_filterApplied = true;
+        }
     }
 
-}
-
-void KisGmicWidget::cancelFilterSlot()
-{
-    emit sigClose();
-}
-
-
-void KisGmicWidget::okFilterSlot()
-{
-    applyFilterSlot();
-    emit sigClose();
+    close();
 }
 
  void KisGmicWidget::closeEvent(QCloseEvent *event)
  {
-     emit sigClose();
      event->accept();
+     emit sigClose();
  }
 
-void KisGmicWidget::resetFilterSlot()
+void KisGmicWidget::slotResetClicked()
 {
     const QModelIndex index = m_filterTree->selectionModel()->currentIndex();
     QVariant var = index.data(CommandRole);
@@ -243,10 +223,10 @@ void KisGmicWidget::resetFilterSlot()
     {
         currentSettingsWidget->reload();
     }
-    resize(sizeHint());
+
 }
 
-void KisGmicWidget::maximizeSlot()
+void KisGmicWidget::slotMaximizeClicked()
 {
     QPushButton * maximizeButton = qobject_cast<QPushButton *>(sender());
     if (!maximizeButton)
@@ -282,4 +262,154 @@ void KisGmicWidget::finishUpdate()
                         "Update filters done. "
                         "Restart G'MIC dialog to finish updating! ");
     KMessageBox::information(this, msg, i18nc("@title:window", "Updated"));
+}
+
+void KisGmicWidget::slotPreviewChanged(bool enabling)
+{
+    if (enabling)
+    {
+        requestComputePreview();
+    }
+    else
+    {
+        if (m_inputOutputOptions->previewSize() == ON_CANVAS)
+        {
+            emit sigCancelOnCanvasPreview();
+            m_onCanvasPreviewRequested = false; // cancelled
+        }
+        else
+        {
+            emit sigPreviewActiveLayer();
+        }
+    }
+
+}
+
+void KisGmicWidget::slotPreviewSizeChanged()
+{
+    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
+    {
+        m_onCanvasPreviewActivated = true;
+    }
+    else
+    {
+        if (m_onCanvasPreviewActivated)
+        {
+            emit sigCancelOnCanvasPreview();
+            m_onCanvasPreviewActivated = false;
+            m_onCanvasPreviewRequested = false;
+        }
+    }
+}
+
+
+void KisGmicWidget::slotConfigurationChanged()
+{
+    if (m_inputOutputOptions->previewCheckBox->isChecked())
+    {
+        requestComputePreview();
+    }
+    else
+    {
+        emit sigPreviewActiveLayer();
+    }
+
+}
+
+void KisGmicWidget::slotApplyClicked()
+{
+    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
+    {
+        KisGmicFilterSetting * filterSettings = currentFilterSettings();
+        if (!filterSettings)
+        {
+            return;
+        }
+
+        if (m_inputOutputOptions->previewCheckBox->isChecked())
+        {
+            emit sigAcceptOnCanvasPreview();
+            emit sigPreviewFilterCommand(filterSettings);
+        }
+        else
+        {
+            emit sigFilterCurrentImage(filterSettings);
+            m_filterApplied = true;
+        }
+
+
+    }
+    else // Tiny, Small, Medium, Large preview
+    {
+
+            KisGmicFilterSetting * filterSettings = currentFilterSettings();
+            if (filterSettings)
+            {
+                emit sigFilterCurrentImage(filterSettings);
+                m_filterApplied = true;
+                requestComputePreview();
+            }
+    }
+}
+
+KisGmicFilterSetting* KisGmicWidget::currentFilterSettings()
+{
+    KisGmicFilterSetting * filterSettings = 0;
+    QVariant settings = m_filterTree->selectionModel()->currentIndex().data(FilterSettingsRole);
+    if (settings.isValid())
+    {
+        dbgPlugins << "Valid settings!";
+        filterSettings = settings.value<KisGmicFilterSetting * >();
+        filterSettings->setInputLayerMode(m_inputOutputOptions->inputMode());
+        filterSettings->setOutputMode(m_inputOutputOptions->outputMode());
+        filterSettings->setPreviewMode(m_inputOutputOptions->previewMode());
+        filterSettings->setPreviewSize(m_inputOutputOptions->previewSize());
+        dbgPlugins << "GMIC command : " << filterSettings->gmicCommand();
+        dbgPlugins << "GMIC preview command : " << filterSettings->previewGmicCommand();
+    }
+    else
+    {
+        dbgPlugins << "Filter is not selected!";
+    }
+
+    return filterSettings;
+}
+
+void KisGmicWidget::requestComputePreview()
+{
+    KisGmicFilterSetting * filterSettings = currentFilterSettings();
+    if (filterSettings)
+    {
+        emit sigPreviewFilterCommand(filterSettings);
+        if (m_onCanvasPreviewActivated)
+        {
+            m_onCanvasPreviewRequested = true;
+        }
+    }
+    else
+    {
+        emit sigPreviewActiveLayer();
+    }
+}
+
+void KisGmicWidget::switchOptionsWidgetFor(QWidget* widget)
+{
+    m_filterConfigLayout->removeWidget(m_filterOptions);
+    delete m_filterOptions;
+
+    m_filterOptions = widget;
+
+    m_filterConfigLayout->addWidget(m_filterOptions, m_filterOptionsRow, m_filterOptionsColumn);
+    m_filterConfigLayout->update();
+
+}
+
+KisFilterPreviewWidget * KisGmicWidget::previewWidget()
+{
+    return m_inputOutputOptions->previewWidget();
+}
+
+void KisGmicWidget::slotNotImplemented()
+{
+    KMessageBox::sorry(this, i18n("Sorry, support not implemented yet."), i18n("Krita"));
 }

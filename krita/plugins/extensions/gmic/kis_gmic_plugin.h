@@ -25,6 +25,8 @@
 #include "kis_gmic_parser.h"
 #include <kis_types.h>
 
+class QSize;
+class QRect;
 class KisGmicApplicator;
 class KisGmicWidget;
 
@@ -35,9 +37,28 @@ public:
     KisGmicPlugin(QObject *parent, const QVariantList &);
     virtual ~KisGmicPlugin();
 
+private slots:
+    // life cycle: show -> close
+    void slotShowGmicDialog();
+    void slotCloseGmicDialog();
+
+    void slotPreviewGmicCommand(KisGmicFilterSetting* setting);
+    void slotFilterCurrentImage(KisGmicFilterSetting* setting);
+    void slotCancelOnCanvasPreview();
+    void slotAcceptOnCanvasPreview();
+    void slotPreviewActiveLayer();
+
 private:
     void parseGmicCommandDefinitions(const QStringList &gmicDefinitionFilePaths);
     void setupDefinitionPaths();
+    static KisNodeListSP createPreviewThumbnails(KisNodeListSP layers,const QSize &dstSize,const QRect &srcRect);
+    void createViewportPreview(KisNodeListSP layers, KisGmicFilterSetting* setting);
+    // has to be accepted or cancelled!
+    void startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSetting* setting);
+    bool checkSettingsValidity(KisNodeListSP layers, const KisGmicFilterSetting * setting);
+
+    // TODO: refactor into responsible classes
+    void showInPreviewViewport(KisPaintDeviceSP device);
 
 private:
     KisGmicWidget * m_gmicWidget;
@@ -45,11 +66,7 @@ private:
     QStringList m_definitionFilePaths;
     QString m_blacklistPath;
     QByteArray m_gmicCustomCommands;
-
-private slots:
-    void slotGmic();
-    void slotApplyGmicCommand(KisGmicFilterSetting* setting);
-    void slotClose();
+    bool m_previewFilter;
 };
 
 #endif

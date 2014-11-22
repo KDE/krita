@@ -27,8 +27,9 @@
 
 #include <kfiledialog.h> // For kurlrequester...
 
-KisGmicSettingsWidget::KisGmicSettingsWidget(Command * command):
-    m_commandDefinition(command)
+KisGmicSettingsWidget::KisGmicSettingsWidget(Command * command)
+    :   KisConfigWidget(0, 0, 250),
+        m_commandDefinition(command)
 {
     createSettingsWidget(CreateRole);
 }
@@ -453,7 +454,6 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
     {
         setLayout(gridLayout);
     }
-    setMinimumSize(sizeHint());
 }
 
 Command* KisGmicSettingsWidget::currentCommandSettings()

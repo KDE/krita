@@ -27,7 +27,6 @@
 #include <Parameter.h>
 #include <Command.h>
 #include <Category.h>
-#include "kis_gmic_widget.h"
 
 
 KisGmicParser::KisGmicParser(const QStringList& filePaths):m_filePaths(filePaths)

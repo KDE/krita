@@ -52,13 +52,17 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     connect(d->floatButton, SIGNAL(clicked()), SLOT(toggleFloating()));
     d->floatButton->setVisible(true);
     d->floatButton->setToolTip(i18nc("@info:tooltip", "Float Docker"));
+    d->floatButton->setStyleSheet("border: 0");
+
 
     d->removeIcon = themedIcon("docker_close");
     d->closeButton = new KoDockWidgetTitleBarButton(this);
     d->closeButton->setIcon(d->removeIcon);
     connect(d->closeButton, SIGNAL(clicked()), q, SLOT(close()));
     d->closeButton->setVisible(true);
-    d->closeButton->setToolTip(i18nc("@info:tooltip", "Close Docker"));
+    d->closeButton->setToolTip(i18nc("@info:tooltip", "Close Docker"));   
+    d->closeButton->setStyleSheet("border: 0"); // border makes the header busy looking (appears on some OSs)
+
 
 
     d->openIcon = themedIcon("docker_collapse_a");
@@ -68,6 +72,8 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     connect(d->collapseButton, SIGNAL(clicked()), SLOT(toggleCollapsed()));
     d->collapseButton->setVisible(false);
     d->collapseButton->setToolTip(i18nc("@info:tooltip", "Collapse Docker"));
+    d->collapseButton->setStyleSheet("border: 0");
+
 
     d->lockIcon = themedIcon("docker_lock_b");
     d->lockButton = new KoDockWidgetTitleBarButton(this);
@@ -75,6 +81,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLocked()));
     d->lockButton->setVisible(true);
     d->lockButton->setToolTip(i18nc("@info:tooltip", "Lock Docker"));
+    d->lockButton->setStyleSheet("border: 0");
 
     connect(dockWidget, SIGNAL(featuresChanged(QDockWidget::DockWidgetFeatures)), SLOT(featuresChanged(QDockWidget::DockWidgetFeatures)));
     connect(dockWidget, SIGNAL(topLevelChanged(bool)), SLOT(topLevelChanged(bool)));

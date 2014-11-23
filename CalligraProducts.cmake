@@ -24,16 +24,18 @@
 # the needed internal build-time requirements. Any other product or feature
 # listed as requirement must have been defined before.
 
-# A "productset" is a selection of products which should be build together. The
-# products can be either essential or optional to the set. If essential
-# (NEEDED), the whole productset will not be build if a product is missing
-# another internal or external dependency. If optional (WANTED), the rest of the
-# set will still be build in that case.
-# The products to include in a set can be listed directly or indirectly: they
-# can be named themselves, or another productset can be included in a set, whose
-# products will then be part of the first set as well.
-# Products and productsets can be listed as dependencies in multiple product
-# sets. As with dependencies for products, they must have been defined before.
+# A "productset" is a selection of products and features which should be build
+# together. The products and features can be either essential or optional to the
+# set. If essential (REQUIRES), the whole productset will not be build if a
+# product or feature is missing another internal or external dependency. If
+# optional (OPTIONAL), the rest of the set will still be build in that case.
+# The products and features to include in a set can be listed directly or
+# indirectly: they can be named explicitely, but also by including other
+# productsets in a set, whose products and features will then be part of the
+# first set as well.
+# Products, features and productsets can be listed as dependencies in multiple
+# product sets. As with dependencies for products or features, they must have
+# been defined before.
 
 # Products, features and product sets are in the same namespace, so a given
 # identifier can be only used either for a product or for a feature or for a
@@ -670,6 +672,14 @@ calligra_define_productset(OKULAR "Okular generators"
 # How to add another productset?
 # ==============================
 #
+# There are two possible places to put a productset definition. The first is to
+# add it to this file, which should be done for more generic sets that are
+# useful for many people. The second is a file of its own, in the directory
+# "cmake/productsets", which should be done for more special ones or for those
+# which should not be added to the repository.
+# The file must be named with the name of the productset in lowercase and have
+# the extension ".cmake".
+#
 # 1. Define the productset by a call of calligra_define_productset,
 #    e.g.
 #
@@ -690,16 +700,9 @@ calligra_define_productset(OKULAR "Okular generators"
 # 3. Add the productset to all product sets which have this product set as
 #     REQUIRED or OPTIONAL dependency.
 #
-# The definition could be added to this file, which should be done for more
-# generic sets. Or it can be put into a file of its own, in the directory
-# cmake/productsets, which should be done for more special ones or for those
-# which should not be added to the repository.
-# The file must be named with the name of the productset in lowercase and have
-# the extension ".cmake".
-#
-# Example:
+# Example for a file-based productset definition:
 # You want a productset "MYWORDS". For that you add a file named
-# "mywords.cmake" into the directory cmake/productsets, with the content:
+# "mywords.cmake" into the directory "cmake/productsets", with the content:
 # --- 8< ---
 # calligra_define_productset(MYWORDS "My Words"
 #     REQUIRES

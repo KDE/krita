@@ -34,12 +34,6 @@
 #include "testutil.h"
 
 
-
-void KisGradientPainterTest::testCreation()
-{
-    KisGradientPainter test;
-}
-
 void KisGradientPainterTest::testSimplifyPath()
 {
     QPolygonF selectionPolygon;
@@ -96,9 +90,10 @@ void testShapedGradientPainterImpl(const QPolygonF &selectionPolygon,
 
     KisGradientPainter gc(dev, selection);
     gc.setGradient(gradient.data());
+    gc.setGradientShape(KisGradientPainter::GradientShapePolygonal);
+
     gc.paintGradient(selectionPolygon.boundingRect().topLeft(),
                      selectionPolygon.boundingRect().bottomRight(),
-                     KisGradientPainter::GradientShapePolygonal,
                      KisGradientPainter::GradientRepeatNone,
                      0,
                      false,
@@ -136,6 +131,65 @@ void KisGradientPainterTest::testShapedGradientPainterNonRegular()
     selectionPolygon << QPointF(30, 220);
 
     testShapedGradientPainterImpl(selectionPolygon, "nonregular_shape");
+}
+
+#include "kis_polygonal_gradient_shape_strategy.h"
+#include "kis_cached_gradient_shape_strategy.h"
+
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/variance.hpp>
+#include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/max.hpp>
+
+using namespace boost::accumulators;
+
+void KisGradientPainterTest::testCachedStrategy()
+{
+    QPolygonF selectionPolygon;
+    selectionPolygon << QPointF(100, 100);
+    selectionPolygon << QPointF(200, 120);
+    selectionPolygon << QPointF(170, 140);
+    selectionPolygon << QPointF(200, 180);
+    selectionPolygon << QPointF(30, 220);
+
+    QRect rc = selectionPolygon.boundingRect().toAlignedRect();
+
+    KisGradientShapeStrategy *strategy =
+        new KisPolygonalGradientShapeStrategy(selectionPolygon, 2.0);
+
+    KisCachedGradientShapeStrategy cached(rc, 4, 4, strategy);
+
+    accumulator_set<qreal, stats<tag::variance, tag::max, tag::min> > accum;
+    const qreal maxRelError = 5.0 / 256;
+
+
+    for (int y = rc.y(); y <= rc.bottom(); y++) {
+        for (int x = rc.x(); x <= rc.right(); x++) {
+            if (!selectionPolygon.containsPoint(QPointF(x, y), Qt::OddEvenFill)) continue;
+
+            qreal ref = strategy->valueAt(x, y);
+            qreal value = cached.valueAt(x, y);
+
+            if (ref == 0.0) continue;
+
+            qreal relError = (ref - value)/* / ref*/;
+            accum(relError);
+
+            if (relError > maxRelError) {
+                qDebug() << ppVar(x) << ppVar(y) << ppVar(value) << ppVar(ref) << ppVar(relError);
+            }
+        }
+    }
+
+    qDebug() << ppVar(count(accum));
+    qDebug() << ppVar(mean(accum));
+    qDebug() << ppVar(variance(accum));
+    qDebug() << ppVar((min)(accum));
+    qDebug() << ppVar((max)(accum));
+
+    qreal maxError = qMax(qAbs((min)(accum)), qAbs((max)(accum)));
+    QVERIFY(maxError < maxRelError);
 }
 
 QTEST_KDEMAIN(KisGradientPainterTest, GUI)

@@ -165,7 +165,8 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         updater->start(100, i18nc("@info:progress", "Gradient..."));
         painter.setProgress(updater->startSubtask());
 
-        painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, image->width(), image->height());
+        painter.setGradientShape(m_shape);
+        painter.paintGradient(m_startPos, m_endPos, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, image->width(), image->height());
         painter.endTransaction(undoAdapter);
         undoAdapter->endMacro();
 

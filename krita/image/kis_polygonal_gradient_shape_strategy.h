@@ -28,9 +28,7 @@
 class KRITAIMAGE_EXPORT KisPolygonalGradientShapeStrategy : public KisGradientShapeStrategy
 {
 public:
-    KisPolygonalGradientShapeStrategy(const QPointF& gradientVectorStart,
-                                      const QPointF& gradientVectorEnd,
-                                      const QPolygonF &selection,
+    KisPolygonalGradientShapeStrategy(const QPolygonF &selection,
                                       qreal exponent);
     ~KisPolygonalGradientShapeStrategy();
 

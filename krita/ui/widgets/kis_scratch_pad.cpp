@@ -425,9 +425,9 @@ void KisScratchPad::fillGradient()
     KisGradientPainter painter(paintDevice);
 
     painter.setGradient(gradient);
+    painter.setGradientShape(KisGradientPainter::GradientShapeLinear);
     painter.paintGradient(gradientRect.topLeft(),
                           gradientRect.bottomRight(),
-                          KisGradientPainter::GradientShapeLinear,
                           KisGradientPainter::GradientRepeatNone,
                           0.2, false,
                           gradientRect.left(), gradientRect.top(),

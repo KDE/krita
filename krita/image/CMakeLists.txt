@@ -139,6 +139,7 @@ set(kritaimage_LIB_SRCS
    kis_safe_transform.cpp
    kis_gradient_painter.cc
    kis_gradient_shape_strategy.cpp
+   kis_cached_gradient_shape_strategy.cpp
    kis_polygonal_gradient_shape_strategy.cpp
    kis_iterator_ng.cpp
    kis_async_merger.cpp
@@ -205,9 +206,9 @@ set(kritaimage_LIB_SRCS
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
-#   bsplines/kis_bspline_1d.cpp
-#   bsplines/kis_bspline_2d.cpp
-#   bsplines/kis_nu_bspline_2d.cpp
+   bsplines/kis_bspline_1d.cpp
+   bsplines/kis_bspline_2d.cpp
+   bsplines/kis_nu_bspline_2d.cpp
    kis_warptransform_worker.cc
    kis_cage_transform_worker.cpp
    kis_liquify_transform_worker.cpp
@@ -261,15 +262,15 @@ set(kritaimage_LIB_SRCS
 )
 
 set(einspline_SRCS
-#   bsplines/einspline/bspline_create.c
-#   bsplines/einspline/bspline_data.c
-#   bsplines/einspline/multi_bspline_create.c
-#   bsplines/einspline/nubasis.c
-#   bsplines/einspline/nubspline_create.c
-#   bsplines/einspline/nugrid.c
+   bsplines/einspline/bspline_create.c
+   bsplines/einspline/bspline_data.c
+   bsplines/einspline/multi_bspline_create.c
+   bsplines/einspline/nubasis.c
+   bsplines/einspline/nubspline_create.c
+   bsplines/einspline/nugrid.c
 )
 
-#SET_SOURCE_FILES_PROPERTIES(${einspline_SRCS} PROPERTIES COMPILE_FLAGS -std=c99)
+SET_SOURCE_FILES_PROPERTIES(${einspline_SRCS} PROPERTIES COMPILE_FLAGS -std=c99)
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 

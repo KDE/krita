@@ -471,9 +471,9 @@ target_link_libraries(KisPerspectiveTransformWorkerTest  ${KDE4_KDEUI_LIBS} krit
 
 ########### next target ###############
 
-#set(kis_bsplines_test_SRCS kis_bsplines_test.cpp )
-#kde4_add_unit_test(KisBSplinesTest TESTNAME krita-image-KisBSplinesTest ${kis_bsplines_test_SRCS})
-#target_link_libraries(KisBSplinesTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+set(kis_bsplines_test_SRCS kis_bsplines_test.cpp )
+kde4_add_unit_test(KisBSplinesTest TESTNAME krita-image-KisBSplinesTest ${kis_bsplines_test_SRCS})
+target_link_libraries(KisBSplinesTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

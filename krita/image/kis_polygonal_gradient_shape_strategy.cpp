@@ -40,6 +40,10 @@ namespace Private {
 
     qreal getDisnormedGradientValue(const QPointF &pt, const QPolygonF &selection, qreal exponent)
     {
+        // FIXME: exponent = 2.0
+        //        We explicitly use pow2() and sqrt() functions here
+        //        for efficiency reasons.
+
         const qreal minHiLevel = std::pow(0.5, 1.0 / exponent);
         qreal ptWeightNode = 0.0;
 
@@ -71,10 +75,17 @@ namespace Private {
             }
 
             hi = qMax(minHiLevel, hi);
-            ptWeightNode += 1.0 / std::pow(hi, exponent);
+
+            // disabled for efficiency reasons
+            // ptWeightNode += 1.0 / std::pow(hi, exponent);
+
+            ptWeightNode += 1.0 / pow2(hi);
         }
 
-        return 1.0 / std::pow(ptWeightNode, 1.0 / exponent);
+        // disabled for efficiency reasons
+        // return 1.0 / std::pow(ptWeightNode, 1.0 / exponent);
+
+        return 1.0 / std::sqrt(ptWeightNode);
     }
 
 #ifdef HAVE_GSL
@@ -197,12 +208,9 @@ namespace Private {
 
 }
 
-KisPolygonalGradientShapeStrategy::KisPolygonalGradientShapeStrategy(const QPointF& gradientVectorStart,
-                                                                     const QPointF& gradientVectorEnd,
-                                                                     const QPolygonF &selection,
+KisPolygonalGradientShapeStrategy::KisPolygonalGradientShapeStrategy(const QPolygonF &selection,
                                                                      qreal exponent)
-    : KisGradientShapeStrategy(gradientVectorStart, gradientVectorEnd),
-      m_exponent(exponent)
+    : m_exponent(exponent)
 {
     QPainterPath p;
     p.addPolygon(selection);

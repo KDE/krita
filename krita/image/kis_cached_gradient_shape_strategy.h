@@ -16,24 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_GRADIENT_SHAPE_STRATEGY_H
-#define __KIS_GRADIENT_SHAPE_STRATEGY_H
+#ifndef __KIS_CACHED_GRADIENT_SHAPE_STRATEGY_H
+#define __KIS_CACHED_GRADIENT_SHAPE_STRATEGY_H
 
-#include <QPointF>
+#include "kis_gradient_shape_strategy.h"
+#include "krita_export.h"
+
+#include <QScopedPointer>
+
+class QRect;
 
 
-class KisGradientShapeStrategy
+class KRITAIMAGE_EXPORT KisCachedGradientShapeStrategy : public KisGradientShapeStrategy
 {
 public:
-    KisGradientShapeStrategy();
-    KisGradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
-    virtual ~KisGradientShapeStrategy();
+    KisCachedGradientShapeStrategy(const QRect &rc, qreal xStep, qreal yStep, KisGradientShapeStrategy *baseStrategy);
+    ~KisCachedGradientShapeStrategy();
 
-    virtual double valueAt(double x, double y) const = 0;
+    double valueAt(double x, double y) const;
 
-protected:
-    QPointF m_gradientVectorStart;
-    QPointF m_gradientVectorEnd;
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_GRADIENT_SHAPE_STRATEGY_H */
+#endif /* __KIS_CACHED_GRADIENT_SHAPE_STRATEGY_H */

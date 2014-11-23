@@ -198,5 +198,12 @@ inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
     return rc;
 }
 
+#include <QSharedPointer>
+
+template <class T>
+inline QSharedPointer<T> toQShared(T* ptr) {
+    return QSharedPointer<T>(ptr);
+}
+
 #endif // KISGLOBAL_H_
 

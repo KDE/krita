@@ -204,11 +204,10 @@ void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detai
         if (m_kodata/* && !curs->eof()*/) {
             QStringList keys;
             QStringList keyValues;
-            bool status = false;
             QList<int> shownGroups;
             ORDetailGroupSectionData * grp = 0;
 
-            status = m_kodata->moveFirst();
+            bool status = m_kodata->moveFirst();
             m_recordCount = m_kodata->recordCount();
 
             //kDebug() << "Record Count:" << m_recordCount;

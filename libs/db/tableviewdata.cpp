@@ -136,13 +136,11 @@ private:
             return false;
         }
 
-        unsigned short au;
-        unsigned short bu;
         int len = qMin(as.length(), bs.length());
 
         forever {
-            au = a->unicode();
-            bu = b->unicode();
+            unsigned short au = a->unicode();
+            unsigned short bu = b->unicode();
             au = (au <= 0x17e ? charTable[au] : 0xffff);
             bu = (bu <= 0x17e ? charTable[bu] : 0xffff);
 

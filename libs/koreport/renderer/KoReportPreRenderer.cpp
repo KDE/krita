@@ -550,9 +550,6 @@ ORODocument* KoReportPreRenderer::generate()
     d->createNewPage();
     if (!label.isNull()) {
 // Label Print Run
-        int row = 0;
-        int col = 0;
-
         // remember the initial margin setting as we will be modifying
         // the value and restoring it as we move around
         qreal margin = d->m_leftMargin;
@@ -583,6 +580,8 @@ ORODocument* KoReportPreRenderer::generate()
 
             if (mydata && mydata->recordCount() > 0) { /* && !((query = orqThis->getQuery())->eof()))*/
                 mydata->moveFirst();
+                int row = 0;
+                int col = 0;
                 do {
                     tmp = d->m_yOffset; // store the value as renderSection changes it
                     d->renderSection(*(detailData->m_detailSection));

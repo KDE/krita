@@ -62,7 +62,7 @@ solve_NUB_deriv_interp_1d_s (NUBasis* restrict basis,
 #ifdef HAVE_C_VARARRAYS
   float bands[4*N];
 #else
-  float *bands = malloc (4*N*sizeof(float));
+  float *bands = new float[4*N];
 #endif
   
 
@@ -117,7 +117,7 @@ solve_NUB_deriv_interp_1d_s (NUBasis* restrict basis,
   p[0] = bands[4*(0)+3] - bands[4*(0)+1]*p[pstride*1] - bands[4*(0)+2]*p[pstride*2];
 
 #ifndef HAVE_C_VARARRAYS
-  free (bands);
+  delete[] bands;
 #endif
 }
 
@@ -138,8 +138,8 @@ solve_NUB_periodic_interp_1d_s (NUBasis* restrict basis,
 #ifdef HAVE_C_VARARRAYS
   float bands[4*M], lastCol[M];
 #else
-  float *bands   = malloc (4*M*sizeof(float));
-  float *lastCol = malloc (  M*sizeof(float));
+  float *bands   = new float[4*M];
+  float *lastCol = new float[  M];
 #endif
 
   // Fill up bands
@@ -190,8 +190,8 @@ solve_NUB_periodic_interp_1d_s (NUBasis* restrict basis,
   p[pstride*(M+1)] = p[pstride*1];
   p[pstride*(M+2)] = p[pstride*2];
 #ifndef HAVE_C_VARARRAYS
-  free (bands);
-  free (lastCol);
+  delete[] bands;
+  delete[] lastCol;
 #endif
 }
 
@@ -244,7 +244,7 @@ NUBspline_1d_s *
 create_NUBspline_1d_s (NUgrid* x_grid, BCtype_s xBC, float *data)
 {
   // First, create the spline structure
-  NUBspline_1d_s* spline = malloc (sizeof(NUBspline_1d_s));
+  NUBspline_1d_s* spline = new NUBspline_1d_s;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU1D;
@@ -259,7 +259,7 @@ create_NUBspline_1d_s (NUgrid* x_grid, BCtype_s xBC, float *data)
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve  
-  spline->coefs = malloc(N*sizeof(float));
+  spline->coefs = new float[N];
   find_NUBcoefs_1d_s (spline->x_basis, xBC, data, 1, spline->coefs, 1);
     
   return spline;
@@ -270,7 +270,7 @@ create_NUBspline_2d_s (NUgrid* x_grid, NUgrid* y_grid,
 		       BCtype_s xBC, BCtype_s yBC, float *data)
 {
   // First, create the spline structure
-  NUBspline_2d_s* spline = malloc (sizeof(NUBspline_2d_s));
+  NUBspline_2d_s* spline = new NUBspline_2d_s;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU2D;
@@ -290,7 +290,7 @@ create_NUBspline_2d_s (NUgrid* x_grid, NUgrid* y_grid,
     
   spline->x_stride = Ny;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(float)*Nx*Ny);
+  spline->coefs = new float[Nx*Ny];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(float)*Nx*Ny);
 #endif
@@ -320,7 +320,7 @@ create_NUBspline_3d_s (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 		       BCtype_s xBC, BCtype_s yBC, BCtype_s zBC, float *data)
 {
   // First, create the spline structure
-  NUBspline_3d_s* spline = malloc (sizeof(NUBspline_3d_s));
+  NUBspline_3d_s* spline = new NUBspline_3d_s;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU3D;
@@ -346,7 +346,7 @@ create_NUBspline_3d_s (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_stride = Ny*Nz;
   spline->y_stride = Nz;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(float)*Nx*Ny*Nz);
+  spline->coefs = new float[Nx*Ny*Nz];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(float)*Nx*Ny*Nz);
 #endif
@@ -399,7 +399,7 @@ solve_NUB_deriv_interp_1d_d (NUBasis* restrict basis,
 #ifdef HAVE_C_VARARRAYS
   double bands[4*N];
 #else
-  double *bands = malloc (4*N*sizeof(double));
+  double *bands = new double[4*N];
 #endif
 
   // Fill up bands
@@ -455,7 +455,7 @@ solve_NUB_deriv_interp_1d_d (NUBasis* restrict basis,
   // Finish with first row
   p[0] = bands[4*(0)+3] - bands[4*(0)+1]*p[pstride*1] - bands[4*(0)+2]*p[pstride*2];
 #ifndef HAVE_C_VARARRAYS
-  free (bands);
+  delete[] bands;
 #endif
 }
 
@@ -473,8 +473,8 @@ solve_NUB_periodic_interp_1d_d (NUBasis* restrict basis,
 #ifdef HAVE_C_VARARRAYS
   double bands[4*M], lastCol[M];
 #else
-  double *bands   = malloc (4*M*sizeof(double));
-  double *lastCol = malloc (  M*sizeof(double));
+  double *bands   = new double[4*M];
+  double *lastCol = new double[  M];
 #endif
 
   // Fill up bands
@@ -525,8 +525,8 @@ solve_NUB_periodic_interp_1d_d (NUBasis* restrict basis,
   p[pstride*(M+1)] = p[pstride*1];
   p[pstride*(M+2)] = p[pstride*2];
 #ifndef HAVE_C_VARARRAYS
-  free (bands);
-  free (lastCol);
+  delete[] bands;
+  delete[] lastCol;
 #endif
 }
 
@@ -580,7 +580,7 @@ NUBspline_1d_d *
 create_NUBspline_1d_d (NUgrid* x_grid, BCtype_d xBC, double *data)
 {
   // First, create the spline structure
-  NUBspline_1d_d* spline = malloc (sizeof(NUBspline_1d_d));
+  NUBspline_1d_d* spline = new NUBspline_1d_d;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU1D;
@@ -595,7 +595,7 @@ create_NUBspline_1d_d (NUgrid* x_grid, BCtype_d xBC, double *data)
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve
-  spline->coefs = malloc(N*sizeof(double));
+  spline->coefs = new double[N];
   find_NUBcoefs_1d_d (spline->x_basis, xBC, data, 1, spline->coefs, 1);
     
   return spline;
@@ -606,7 +606,7 @@ create_NUBspline_2d_d (NUgrid* x_grid, NUgrid* y_grid,
 		       BCtype_d xBC, BCtype_d yBC, double *data)
 {
   // First, create the spline structure
-  NUBspline_2d_d* spline = malloc (sizeof(NUBspline_2d_d));
+  NUBspline_2d_d* spline = new NUBspline_2d_d;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU2D;
@@ -627,7 +627,7 @@ create_NUBspline_2d_d (NUgrid* x_grid, NUgrid* y_grid,
   
   spline->x_stride = Ny;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(double)*Nx*Ny);
+  spline->coefs = new double[Nx*Ny];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(double)*Nx*Ny);
 #endif
@@ -657,7 +657,7 @@ create_NUBspline_3d_d (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 		       BCtype_d xBC, BCtype_d yBC, BCtype_d zBC, double *data)
 {
   // First, create the spline structure
-  NUBspline_3d_d* spline = malloc (sizeof(NUBspline_3d_d));
+  NUBspline_3d_d* spline = new NUBspline_3d_d;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU3D;
@@ -683,7 +683,7 @@ create_NUBspline_3d_d (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_stride = Ny*Nz;
   spline->y_stride = Nz;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(double)*Nx*Ny*Nz);
+  spline->coefs = new double[Nx*Ny*Nz];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(double)*Nx*Ny*Nz);
 #endif
@@ -749,7 +749,7 @@ NUBspline_1d_c *
 create_NUBspline_1d_c (NUgrid* x_grid, BCtype_c xBC, complex_float *data)
 {
   // First, create the spline structure
-  NUBspline_1d_c* spline = malloc (sizeof(NUBspline_1d_c));
+  NUBspline_1d_c* spline = new NUBspline_1d_c;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU1D;
@@ -764,7 +764,7 @@ create_NUBspline_1d_c (NUgrid* x_grid, BCtype_c xBC, complex_float *data)
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve  
-  spline->coefs = malloc(N*sizeof(complex_float));
+  spline->coefs = new complex_float[N];
   find_NUBcoefs_1d_c (spline->x_basis, xBC, data, 1, spline->coefs, 1);
     
   return spline;
@@ -775,7 +775,7 @@ create_NUBspline_2d_c (NUgrid* x_grid, NUgrid* y_grid,
 		       BCtype_c xBC, BCtype_c yBC, complex_float *data)
 {
   // First, create the spline structure
-  NUBspline_2d_c* spline = malloc (sizeof(NUBspline_2d_c));
+  NUBspline_2d_c* spline = new NUBspline_2d_c;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU2D;
@@ -795,7 +795,7 @@ create_NUBspline_2d_c (NUgrid* x_grid, NUgrid* y_grid,
     
   spline->x_stride = Ny;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(complex_float)*Nx*Ny);
+  spline->coefs = new complex_float[Nx*Ny];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(complex_float)*Nx*Ny);
 #endif
@@ -825,7 +825,7 @@ create_NUBspline_3d_c (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 		       BCtype_c xBC, BCtype_c yBC, BCtype_c zBC, complex_float *data)
 {
   // First, create the spline structure
-  NUBspline_3d_c* spline = malloc (sizeof(NUBspline_3d_c));
+  NUBspline_3d_c* spline = new NUBspline_3d_c;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU3D;
@@ -851,7 +851,7 @@ create_NUBspline_3d_c (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_stride = Ny*Nz;
   spline->y_stride = Nz;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(complex_float)*Nx*Ny*Nz);
+  spline->coefs = new complex_float[Nx*Ny*Nz];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(complex_float)*Nx*Ny*Nz);
 #endif
@@ -916,7 +916,7 @@ NUBspline_1d_z *
 create_NUBspline_1d_z (NUgrid* x_grid, BCtype_z xBC, complex_double *data)
 {
   // First, create the spline structure
-  NUBspline_1d_z* spline = malloc (sizeof(NUBspline_1d_z));
+  NUBspline_1d_z* spline = new NUBspline_1d_z;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU1D;
@@ -931,7 +931,7 @@ create_NUBspline_1d_z (NUgrid* x_grid, BCtype_z xBC, complex_double *data)
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve  
-  spline->coefs = malloc(N*sizeof(complex_double));
+  spline->coefs = new complex_double[N];
   find_NUBcoefs_1d_z (spline->x_basis, xBC, data, 1, spline->coefs, 1);
     
   return spline;
@@ -942,7 +942,7 @@ create_NUBspline_2d_z (NUgrid* x_grid, NUgrid* y_grid,
 		       BCtype_z xBC, BCtype_z yBC, complex_double *data)
 {
   // First, create the spline structure
-  NUBspline_2d_z* spline = malloc (sizeof(NUBspline_2d_z));
+  NUBspline_2d_z* spline = new NUBspline_2d_z;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU2D;
@@ -962,7 +962,7 @@ create_NUBspline_2d_z (NUgrid* x_grid, NUgrid* y_grid,
     
   spline->x_stride = Ny;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(complex_double)*Nx*Ny);
+  spline->coefs = new complex_double[Nx*Ny];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(complex_double)*Nx*Ny);
 #endif
@@ -992,7 +992,7 @@ create_NUBspline_3d_z (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 		       BCtype_z xBC, BCtype_z yBC, BCtype_z zBC, complex_double *data)
 {
   // First, create the spline structure
-  NUBspline_3d_z* spline = malloc (sizeof(NUBspline_3d_z));
+  NUBspline_3d_z* spline = new NUBspline_3d_z;
   if (spline == NULL)
     return spline;
   spline->sp_code = NU3D;
@@ -1021,7 +1021,7 @@ create_NUBspline_3d_z (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_stride = Ny*Nz;
   spline->y_stride = Nz;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(complex_double)*Nx*Ny*Nz);
+  spline->coefs = new complex_double[Nx*Ny*Nz];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(complex_double)*Nx*Ny*Nz);
 #endif
@@ -1068,7 +1068,7 @@ create_NUBspline_3d_z (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 void
 destroy_NUBspline(Bspline *spline)
 {
-  free (spline->coefs);
+ delete[] (spline->coefs);
   switch (spline->sp_code) {
   case NU1D:
     destroy_NUBasis (((NUBspline_1d*)spline)->x_basis);
@@ -1084,6 +1084,6 @@ destroy_NUBspline(Bspline *spline)
     destroy_NUBasis (((NUBspline_3d*)spline)->z_basis);
     break;
   }
-  free(spline);
+  delete spline;
 }
     

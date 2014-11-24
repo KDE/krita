@@ -201,9 +201,9 @@ set(kritaimage_LIB_SRCS
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
-#   bsplines/kis_bspline_1d.cpp
-#   bsplines/kis_bspline_2d.cpp
-#   bsplines/kis_nu_bspline_2d.cpp
+   bsplines/kis_bspline_1d.cpp
+   bsplines/kis_bspline_2d.cpp
+   bsplines/kis_nu_bspline_2d.cpp
    kis_warptransform_worker.cc
    kis_cage_transform_worker.cpp
    kis_liquify_transform_worker.cpp
@@ -256,12 +256,12 @@ set(kritaimage_LIB_SRCS
 )
 
 set(einspline_SRCS
-#   bsplines/einspline/bspline_create.c
-#   bsplines/einspline/bspline_data.c
-#   bsplines/einspline/multi_bspline_create.c
-#   bsplines/einspline/nubasis.c
-#   bsplines/einspline/nubspline_create.c
-#   bsplines/einspline/nugrid.c
+   bsplines/einspline/bspline_create.cpp
+   bsplines/einspline/bspline_data.cpp
+   bsplines/einspline/multi_bspline_create.cpp
+   bsplines/einspline/nubasis.cpp
+   bsplines/einspline/nubspline_create.cpp
+   bsplines/einspline/nugrid.cpp
 )
 
 #SET_SOURCE_FILES_PROPERTIES(${einspline_SRCS} PROPERTIES COMPILE_FLAGS -std=c99)

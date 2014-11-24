@@ -19,9 +19,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "nugrid.h"
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 #include <assert.h>
+
+#include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/special_functions/expm1.hpp>
+using namespace boost::math;
+
 
 int
 center_grid_reverse_map (void* gridptr, double x)
@@ -30,7 +35,7 @@ center_grid_reverse_map (void* gridptr, double x)
 
   x -= grid->center;
   double index = 
-    copysign (log1p(fabs(x)*grid->aInv)*grid->bInv, x);
+      copysign (log1p(fabs(x)*grid->aInv)*grid->bInv, x);
   return (int)floor(grid->half_points + index - grid->even_half);
 }
 
@@ -78,7 +83,7 @@ NUgrid*
 create_center_grid (double start, double end, double ratio, 
 		    int num_points)
 {
-  center_grid *grid = malloc (sizeof (center_grid));
+  center_grid *grid = new center_grid;
   if (grid != NULL) {
     assert (ratio > 1.0);
     grid->start       = start;
@@ -89,7 +94,7 @@ create_center_grid (double start, double end, double ratio,
     grid->odd = ((num_points % 2) == 1);
     grid->b = log(ratio) / (double)(grid->half_points-1);
     grid->bInv = 1.0/grid->b;
-    grid->points = malloc (num_points * sizeof(double));
+    grid->points = new double[num_points];
     if (grid->odd) {
       grid->even_half = 0.0;  
       grid->odd_one   = 1;
@@ -130,12 +135,12 @@ NUgrid*
 create_log_grid (double start, double end,
 		 int num_points)
 {
-  log_grid *grid = malloc (sizeof (log_grid));
+  log_grid *grid = new log_grid;
   grid->code = LOG;
   grid->start = start;
   grid->end = end;
   grid->num_points = num_points;
-  grid->points = malloc(num_points*sizeof(double));
+  grid->points = new double[num_points];
   grid->a = 1.0/(double)(num_points-1)*log(end/start);
   grid->ainv = 1.0/grid->a;
   grid->startinv = 1.0/start;
@@ -149,11 +154,11 @@ create_log_grid (double start, double end,
 NUgrid*
 create_general_grid (double *points, int num_points)
 {
-  NUgrid* grid = malloc (sizeof(NUgrid));
+  NUgrid* grid = new NUgrid;
   if (grid != NULL) {
     grid->reverse_map = general_grid_reverse_map;
     grid->code = GENERAL;
-    grid->points = malloc (num_points*sizeof(double));
+    grid->points = new double[num_points];
     grid->start = points[0];
     grid->end   = points[num_points-1];
     grid->num_points = num_points;
@@ -167,6 +172,6 @@ create_general_grid (double *points, int num_points)
 void
 destroy_grid (NUgrid *grid)
 {
-  free (grid->points);
-  free (grid);
+  delete[] grid->points;
+  delete grid;
 }

@@ -27,7 +27,6 @@
 #endif
 #include <stdlib.h>
 #include <stdio.h>
-#include <inttypes.h>
 
 int posix_memalign(void **memptr, size_t alignment, size_t size);
 
@@ -88,7 +87,7 @@ multi_UBspline_1d_s*
 create_multi_UBspline_1d_s (Ugrid x_grid, BCtype_s xBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_1d_s* restrict spline = malloc (sizeof(multi_UBspline_1d_s));
+  multi_UBspline_1d_s* restrict spline = new multi_UBspline_1d_s;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_1d_s.\n");
     abort();
@@ -121,7 +120,7 @@ create_multi_UBspline_1d_s (Ugrid x_grid, BCtype_s xBC, int num_splines)
   x_grid.delta_inv = 1.0/x_grid.delta;
   spline->x_grid   = x_grid;
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = malloc (sizeof(float)*Nx*N);
+  spline->coefs = new float[Nx*N];
 #else
   posix_memalign ((void**)&spline->coefs, 64, (sizeof(float)*Nx*N));
 #endif
@@ -153,7 +152,7 @@ create_multi_UBspline_2d_s (Ugrid x_grid, Ugrid y_grid,
 			    BCtype_s xBC, BCtype_s yBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_2d_s* restrict spline = malloc (sizeof(multi_UBspline_2d_s));
+  multi_UBspline_2d_s* restrict spline = new multi_UBspline_2d_s;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_2d_s.\n");
     abort();
@@ -196,7 +195,7 @@ create_multi_UBspline_2d_s (Ugrid x_grid, Ugrid y_grid,
   spline->y_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = malloc ((size_t)sizeof(float)*Nx*Ny*N);
+  spline->coefs = new float[Nx*Ny*N];
 #else
   posix_memalign ((void**)&spline->coefs, 64, 
 		  sizeof(float)*Nx*Ny*N);
@@ -254,7 +253,7 @@ create_multi_UBspline_3d_s (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 			    int num_splines)
 {
   // Create new spline
-  multi_UBspline_3d_s* restrict spline = malloc (sizeof(multi_UBspline_3d_s));
+  multi_UBspline_3d_s* restrict spline = new multi_UBspline_3d_s;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_3d_s.\n");
     abort();
@@ -304,10 +303,10 @@ create_multi_UBspline_3d_s (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
   spline->z_stride      = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs      = malloc (sizeof(float)*Nx*Ny*Nz*N);
+  spline->coefs      = new float[Nx*Ny*Nz*N];
 #else
   posix_memalign ((void**)&spline->coefs, 64, 
-		  ((size_t)sizeof(float)*Nx*Ny*Nz*N));
+		  (sizeof(float)*Nx*Ny*Nz*N));
 #endif
 #ifdef HAVE_SSE
   init_sse_data();
@@ -389,7 +388,7 @@ multi_UBspline_1d_c*
 create_multi_UBspline_1d_c (Ugrid x_grid, BCtype_c xBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_1d_c* restrict spline = malloc (sizeof(multi_UBspline_1d_c));
+  multi_UBspline_1d_c* restrict spline = new multi_UBspline_1d_c;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_1d_c.\n");
     abort();
@@ -415,7 +414,7 @@ create_multi_UBspline_1d_c (Ugrid x_grid, BCtype_c xBC, int num_splines)
   spline->x_grid   = x_grid;
   spline->x_stride = num_splines;
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = malloc (2*sizeof(float)*N*num_splines);
+  spline->coefs = new complex_float[N*num_splines];
 #else
   posix_memalign ((void**)&spline->coefs, 64, 2*sizeof(float)*N*num_splines);
 #endif
@@ -457,7 +456,7 @@ create_multi_UBspline_2d_c (Ugrid x_grid, Ugrid y_grid,
 			    BCtype_c xBC, BCtype_c yBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_2d_c* restrict spline = malloc (sizeof(multi_UBspline_2d_c));
+  multi_UBspline_2d_c* restrict spline = new multi_UBspline_2d_c;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_2d_c.\n");
     abort();
@@ -499,8 +498,8 @@ create_multi_UBspline_2d_c (Ugrid x_grid, Ugrid y_grid,
   spline->y_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = malloc (2*sizeof(float)*Nx*Ny*N);
-  spline->lapl2 = malloc (4*sizeof(float)*N);
+  spline->coefs = new complex_float[Nx*Ny*N];
+  spline->lapl2 = new complex_float[2*N];
 #else
   posix_memalign ((void**)&spline->coefs, 64, 
 		  2*sizeof(float)*Nx*Ny*N);
@@ -579,7 +578,7 @@ create_multi_UBspline_3d_c (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      int num_splines)
 {
   // Create new spline
-  multi_UBspline_3d_c* restrict spline = malloc (sizeof(multi_UBspline_3d_c));
+  multi_UBspline_3d_c* restrict spline = new multi_UBspline_3d_c;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_3d_c.\n");
     abort();
@@ -630,10 +629,10 @@ create_multi_UBspline_3d_c (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
   spline->z_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = malloc ((size_t)2*sizeof(float)*Nx*Ny*Nz*N);
-  spline->lapl3 = malloc (6*sizeof(float)*N);
+  spline->coefs = new complex_float[Nx*Ny*Nz*N];
+  spline->lapl3 = new complex_float[3*N];
 #else
-  posix_memalign ((void**)&spline->coefs, 64, (size_t)2*sizeof(float)*Nx*Ny*Nz*N);
+  posix_memalign ((void**)&spline->coefs, 64, 2*sizeof(float)*Nx*Ny*Nz*N);
   posix_memalign ((void**)&spline->lapl3, 64, 6*sizeof(float)*N);  
 #endif
 #ifdef HAVE_SSE
@@ -767,7 +766,7 @@ multi_UBspline_1d_d*
 create_multi_UBspline_1d_d (Ugrid x_grid, BCtype_d xBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_1d_d* restrict spline = malloc (sizeof(multi_UBspline_1d_d));
+  multi_UBspline_1d_d* restrict spline = new multi_UBspline_1d_d;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_1d_d.\n");
     abort();
@@ -802,7 +801,7 @@ create_multi_UBspline_1d_d (Ugrid x_grid, BCtype_d xBC, int num_splines)
   spline->x_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = malloc (sizeof(double)*Nx*N);
+  spline->coefs = new double[Nx*N];
 
 #else
   posix_memalign ((void**)&spline->coefs, 64, sizeof(double)*Nx*N);
@@ -841,7 +840,7 @@ create_multi_UBspline_2d_d (Ugrid x_grid, Ugrid y_grid,
 			    BCtype_d xBC, BCtype_d yBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_2d_d* restrict spline = malloc (sizeof(multi_UBspline_2d_d));
+  multi_UBspline_2d_d* restrict spline = new multi_UBspline_2d_d;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_2d_d.\n");
     abort();
@@ -884,7 +883,7 @@ create_multi_UBspline_2d_d (Ugrid x_grid, Ugrid y_grid,
   spline->y_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = malloc (sizeof(double)*Nx*Ny*N);
+  spline->coefs = new double[Nx*Ny*N];
 #else
   posix_memalign ((void**)&spline->coefs, 64, (sizeof(double)*Nx*Ny*N));
 #endif
@@ -948,7 +947,7 @@ create_multi_UBspline_3d_d (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 #ifdef HAVE_POSIX_MEMALIGN
   posix_memalign ((void**)&spline, 64, (size_t)sizeof(multi_UBspline_3d_d));
 #else
-  spline = malloc (sizeof(multi_UBspline_3d_d));
+  spline = new multi_UBspline_3d_d;
 #endif
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_3d_d.\n");
@@ -1004,7 +1003,7 @@ create_multi_UBspline_3d_d (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 #ifdef HAVE_POSIX_MEMALIGN
   posix_memalign ((void**)&spline->coefs, 64, ((size_t)sizeof(double)*Nx*Ny*Nz*N));
 #else
-  spline->coefs      = malloc ((size_t)sizeof(double)*Nx*Ny*Nz*N);
+  spline->coefs      = new double[Nx*Ny*Nz*N];
 #endif
 #ifdef HAVE_SSE2
   init_sse_data();
@@ -1091,7 +1090,7 @@ multi_UBspline_1d_z*
 create_multi_UBspline_1d_z (Ugrid x_grid, BCtype_z xBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_1d_z* restrict spline = malloc (sizeof(multi_UBspline_1d_z));
+  multi_UBspline_1d_z* restrict spline = new multi_UBspline_1d_z;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_1d_z.\n");
     abort();
@@ -1119,7 +1118,7 @@ create_multi_UBspline_1d_z (Ugrid x_grid, BCtype_z xBC, int num_splines)
   spline->x_stride = num_splines;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = malloc (2*sizeof(double)*Nx*num_splines);
+  spline->coefs = new complex_double[Nx*num_splines];
 #else
   posix_memalign ((void**)&spline->coefs, 64, 2*sizeof(double)*Nx*num_splines);
 #endif
@@ -1200,7 +1199,7 @@ create_multi_UBspline_2d_z (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_z xBC, BCtype_z yBC, int num_splines)
 {
   // Create new spline
-  multi_UBspline_2d_z* restrict spline = malloc (sizeof(multi_UBspline_2d_z));
+  multi_UBspline_2d_z* restrict spline = new multi_UBspline_2d_z;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_2d_z.\n");
     abort();
@@ -1235,8 +1234,8 @@ create_multi_UBspline_2d_z (Ugrid x_grid, Ugrid y_grid,
   spline->y_stride = num_splines;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = malloc (2*sizeof(double)*Nx*Ny*num_splines);
-  spline->lapl2 = malloc (4*sizeof(double)*num_splines);
+  spline->coefs = new complex_double[Nx*Ny*num_splines];
+  spline->lapl2 = new complex_double[2*num_splines];
 #else
   posix_memalign ((void**)&spline->coefs, 64, 2*sizeof(double)*Nx*Ny*num_splines);
   posix_memalign ((void**)&spline->lapl2, 64, 4*sizeof(double)*num_splines);
@@ -1320,7 +1319,7 @@ create_multi_UBspline_3d_z (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 			    int num_splines)
 {
   // Create new spline
-  multi_UBspline_3d_z* restrict spline = malloc (sizeof(multi_UBspline_3d_z));
+  multi_UBspline_3d_z* restrict spline = new multi_UBspline_3d_z;
   if (!spline) {
     fprintf (stderr, "Out of memory allocating spline in create_multi_UBspline_3d_z.\n");
     abort();
@@ -1371,8 +1370,8 @@ create_multi_UBspline_3d_z (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
   spline->z_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs      = malloc ((size_t)2*sizeof(double)*Nx*Ny*Nz*N);
-  spline->lapl3 = malloc (6*sizeof(double)*N);
+  spline->coefs      = new complex_double[Nx*Ny*Nz*N];
+  spline->lapl3 = new complex_double[3*N];
 #else
   posix_memalign ((void**)&spline->coefs, 64, (size_t)2*sizeof(double)*Nx*Ny*Nz*N);
   posix_memalign ((void**)&spline->lapl3, 64, 6*sizeof(double)*N);
@@ -1480,6 +1479,6 @@ set_multi_UBspline_3d_z (multi_UBspline_3d_z* spline, int num, complex_double *d
 void
 destroy_multi_UBspline (Bspline *spline)
 {
-  free (spline->coefs);
-  free (spline);
+  delete[] spline->coefs;
+  delete spline;
 }

@@ -13,7 +13,7 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QGridLayout" name="m_filterConfigLayout" columnstretch="1,2,2,1">
-     <item row="0" column="0" rowspan="3" alignment="Qt::AlignLeft">
+     <item row="0" column="0" rowspan="3">
       <widget class="KisGmicInputOutputWidget" name="m_inputOutputOptions" native="true"/>
      </item>
      <item row="0" column="1">

@@ -1383,7 +1383,7 @@
            </attribute>
           </widget>
          </item>
-         <item alignment="Qt::AlignLeft">
+         <item>
           <widget class="QSpinBox" name="densityBox">
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1442,7 +1442,7 @@
            </attribute>
           </widget>
          </item>
-         <item alignment="Qt::AlignLeft">
+         <item>
           <widget class="QWidget" name="customWarpWidget" native="true">
            <property name="enabled">
             <bool>false</bool>
@@ -1695,7 +1695,7 @@
            <property name="verticalSpacing">
             <number>5</number>
            </property>
-           <item row="5" column="0" alignment="Qt::AlignRight">
+           <item row="5" column="0">
             <widget class="QLabel" name="label">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -1717,7 +1717,7 @@
            <item row="4" column="1">
             <widget class="KisDoubleSliderSpinBox" name="liquifySpacingSlider" native="true"/>
            </item>
-           <item row="4" column="0" alignment="Qt::AlignRight">
+           <item row="4" column="0">
             <widget class="QLabel" name="lblSpacing">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -1736,7 +1736,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="0" alignment="Qt::AlignRight">
+           <item row="3" column="0">
             <widget class="QLabel" name="lblFlow">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -1758,7 +1758,7 @@
            <item row="3" column="1">
             <widget class="KisDoubleSliderSpinBox" name="liquifyFlowSlider" native="true"/>
            </item>
-           <item row="1" column="0" alignment="Qt::AlignRight">
+           <item row="1" column="0">
             <widget class="QLabel" name="lblSize">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -1780,7 +1780,7 @@
            <item row="1" column="1">
             <widget class="KisDoubleSliderSpinBox" name="liquifySizeSlider" native="true"/>
            </item>
-           <item row="2" column="0" alignment="Qt::AlignRight">
+           <item row="2" column="0">
             <widget class="QLabel" name="lblAmount">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -1802,7 +1802,7 @@
            <item row="2" column="1">
             <widget class="KisDoubleSliderSpinBox" name="liquifyAmountSlider" native="true"/>
            </item>
-           <item row="0" column="0" alignment="Qt::AlignRight">
+           <item row="0" column="0">
             <widget class="QLabel" name="label_2">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">

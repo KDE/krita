@@ -161,14 +161,14 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0" alignment="Qt::AlignRight">
+    <item row="2" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>Bristle Ink Weight:</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0" alignment="Qt::AlignRight">
+    <item row="1" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
        <string>Pressure Weight:</string>
@@ -185,7 +185,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0" alignment="Qt::AlignRight">
+    <item row="3" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
        <string>Bristle Length Weight:</string>
@@ -212,7 +212,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" alignment="Qt::AlignRight">
+    <item row="4" column="0">
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>Ink Depletion Curve Weight:</string>

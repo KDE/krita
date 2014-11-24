@@ -24,6 +24,8 @@
 #include "tool_transform_args.h"
 #include "kis_transform_utils.h"
 
+#include "kis_node.h"
+
 
 struct KisTransformMaskAdapter::Private
 {

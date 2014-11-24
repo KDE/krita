@@ -52,6 +52,8 @@ public:
     KisDumbTransformMaskParams();
     KisDumbTransformMaskParams(const QTransform &transform);
     KisDumbTransformMaskParams(bool isHidden);
+    ~KisDumbTransformMaskParams();
+
 
     QTransform finalAffineTransform() const;
     bool isAffine() const;

@@ -29,6 +29,7 @@ KisTransformMaskParamsInterface::~KisTransformMaskParamsInterface()
 
 #include <QDomElement>
 #include "kis_dom_utils.h"
+#include "kis_node.h"
 
 
 struct KisDumbTransformMaskParams::Private
@@ -55,6 +56,10 @@ KisDumbTransformMaskParams::KisDumbTransformMaskParams(bool isHidden)
     : m_d(new Private)
 {
     m_d->isHidden = isHidden;
+}
+
+KisDumbTransformMaskParams::~KisDumbTransformMaskParams()
+{
 }
 
 QTransform KisDumbTransformMaskParams::finalAffineTransform() const

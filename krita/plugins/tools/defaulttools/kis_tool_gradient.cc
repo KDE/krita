@@ -230,7 +230,7 @@ QWidget* KisToolGradient::createOptionWidget()
     m_cmbShape->addItem(i18nc("the gradient will be drawn in a square around a centre", "Square"));
     m_cmbShape->addItem(i18nc("the gradient will be drawn as an assymmetric cone", "Conical"));
     m_cmbShape->addItem(i18nc("the gradient will be drawn as a symmetric cone", "Conical Symmetric"));
-    m_cmbShape->addItem(i18nc("the gradient will be drawn in a selection outline", "Polygonal"));
+    m_cmbShape->addItem(i18nc("the gradient will be drawn in a selection outline", "Shaped"));
     addOptionWidgetOption(m_cmbShape, m_lbShape);
     connect(m_cmbShape, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetShape(int)));
 

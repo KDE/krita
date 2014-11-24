@@ -177,17 +177,17 @@ void KUndo2Group::setActiveStack(KUndo2QStack *stack)
 
     if (m_active != 0) {
         disconnect(m_active, SIGNAL(canUndoChanged(bool)),
-                    this, SIGNAL(canUndoChanged(bool)));
+                   this, SIGNAL(canUndoChanged(bool)));
         disconnect(m_active, SIGNAL(undoTextChanged(QString)),
-                    this, SIGNAL(undoTextChanged(QString)));
+                   this, SIGNAL(undoTextChanged(QString)));
         disconnect(m_active, SIGNAL(canRedoChanged(bool)),
-                    this, SIGNAL(canRedoChanged(bool)));
+                   this, SIGNAL(canRedoChanged(bool)));
         disconnect(m_active, SIGNAL(redoTextChanged(QString)),
-                    this, SIGNAL(redoTextChanged(QString)));
+                   this, SIGNAL(redoTextChanged(QString)));
         disconnect(m_active, SIGNAL(indexChanged(int)),
-                    this, SIGNAL(indexChanged(int)));
+                   this, SIGNAL(indexChanged(int)));
         disconnect(m_active, SIGNAL(cleanChanged(bool)),
-                    this, SIGNAL(cleanChanged(bool)));
+                   this, SIGNAL(cleanChanged(bool)));
     }
 
     m_active = stack;

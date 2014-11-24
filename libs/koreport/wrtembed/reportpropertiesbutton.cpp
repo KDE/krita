@@ -24,6 +24,7 @@
 
 ReportPropertiesButton::ReportPropertiesButton(QWidget* parent) :  QCheckBox(parent)
 {
+    setToolTip(i18n("Select entire report"));
     setWhatsThis(i18n("A button that allows a report's surface to be selected, allowing its properties to be seen."));
 }
 

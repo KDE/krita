@@ -26,11 +26,12 @@
 #include <KoCanvasController.h>
 #include <KoZoomController.h>
 
-#include "kis_canvas2.h"
+#include <kis_canvas2.h>
 #include <kis_view2.h>
-#include "kis_image.h"
-#include "kis_paint_device.h"
-#include "kis_signal_compressor.h"
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_signal_compressor.h>
+#include <kis_config.h>
 
 OverviewWidget::OverviewWidget(QWidget * parent)
     : QWidget(parent)
@@ -40,6 +41,9 @@ OverviewWidget::OverviewWidget(QWidget * parent)
 {
     setMouseTracking(true);
     connect(m_compressor, SIGNAL(timeout()), SLOT(startUpdateCanvasProjection()));
+    KisConfig cfg;
+    QRgb c = cfg.readEntry("OverviewWidgetColor", 0xFF454C);
+    m_outlineColor = QColor(c);
 }
 
 OverviewWidget::~OverviewWidget()
@@ -189,20 +193,19 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
 void OverviewWidget::paintEvent(QPaintEvent* event)
 {
     QWidget::paintEvent(event);
-    
+
     if (m_canvas) {
         QPainter p(this);
         p.translate(previewOrigin());
         
         p.drawPixmap(0, 0, m_pixmap.width(), m_pixmap.height(), m_pixmap);
 
-
         QRect r = rect().translated(-previewOrigin().toPoint());
         QPolygonF outline;
         outline << r.topLeft() << r.topRight() << r.bottomRight() << r.bottomLeft();
 
         QPen pen;
-        pen.setColor(QColor(Qt::red));
+        pen.setColor(m_outlineColor);
         pen.setStyle(Qt::DashLine);
 
         p.setPen(pen);

@@ -859,10 +859,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int color_nb_bits = 8 * device->pixelSize() / device->channelCount();
     int color_type = getColorTypeforColorSpace(device->colorSpace(), options.alpha);
 
-    if (color_type == -1) {
-        device->convertTo(KoColorSpaceRegistry::instance()->rgb8(0));
-        color_type = options.alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
-    }
+    Q_ASSERT(color_type > -1);
 
     // Try to compute a table of color if the colorspace is RGB8f
     png_colorp palette = 0;

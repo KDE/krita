@@ -38,7 +38,6 @@
 
 #include <klocale.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include "generator/kis_generator.h"

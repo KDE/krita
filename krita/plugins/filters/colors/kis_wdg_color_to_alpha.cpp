@@ -24,6 +24,7 @@
 #include <QSpinBox>
 
 #include <KoColor.h>
+#include <KoToolManager.h>
 
 #include <kis_view2.h>
 #include <kis_canvas_resource_provider.h>
@@ -41,9 +42,14 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
 {
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
+
+
     m_widget->textLabel1->hide();
+
+    m_widget->intThreshold->setRange(1, 255, 0);
+
     connect(m_widget->colorSelector, SIGNAL(colorChanged(const QColor&)), SLOT(slotColorSelectorChanged(const QColor&)));
-    connect(m_widget->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_widget->intThreshold, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_widget->btnCustomColor, SIGNAL(changed(const QColor&)), SLOT(slotCustomColorSelected(const QColor&)));
 
     m_widget->btnCustomColor->setColor(Qt::white);

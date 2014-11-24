@@ -47,10 +47,10 @@ public:
 
     void setGenChanges(KoGenChanges &changes);
 
-    KoGenChanges& genChanges();
+    KoGenChanges& genChanges() const;
 
-    void addRdfIdMapping(QString oldid, QString newid);
-    QMap<QString, QString> getRdfIdMapping();
+    void addRdfIdMapping(const QString &oldid, const QString &newid);
+    QMap<QString, QString> getRdfIdMapping() const;
 
     /**
      * The Rdf Model ownership is not taken, you must still delete it,
@@ -74,13 +74,13 @@ public:
      * @param styleId the id of the style in KoStyleManager
      * @return the saved name of the style
      */
-    QString styleName(int styleId);
+    QString styleName(int styleId) const;
 
     /**
      * @brief styleNames List of all names of the styles that are saved
      * @return All the names of styles that are saved in the style manager
      */
-    QList<QString> styleNames();
+    QList<QString> styleNames() const;
 
 private:
 

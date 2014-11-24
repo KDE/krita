@@ -38,12 +38,10 @@ set(kowidgets_LIB_SRCS KoZoomWidget.cpp
     KoEditColorSetDialog.cpp
     KoTriangleColorSelector.cpp
     KoUniColorChooser.cpp
-    KoUniColorDialog.cpp
     KoXYColorSelector.cpp
     KoResourcePopupAction.cpp
     KoStrokeConfigWidget.cpp
     KoFillConfigWidget.cpp
-    KoOpacityConfigWidget.cpp
     KoShadowConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
@@ -53,6 +51,8 @@ set(kowidgets_LIB_SRCS KoZoomWidget.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
     KoResourceTagStore.cpp
+    KoRuler.cpp
+    KoRulerController.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -116,7 +116,6 @@ install( FILES
     KoColorPatch.h
     KoStrokeConfigWidget.h
     KoFillConfigWidget.h
-    KoOpacityConfigWidget.h
     KoShadowConfigWidget.h
     KoColorPopupAction.h
     KoColorSetWidget.h
@@ -125,7 +124,6 @@ install( FILES
     KoEditColorSetDialog.h
     KoTriangleColorSelector.h
     KoUniColorChooser.h
-    KoUniColorDialog.h
     KoXYColorSelector.h
     KoResourceItemChooser.h
     KoResourceSelector.h

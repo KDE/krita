@@ -18,7 +18,6 @@
 
 #include "kis_doc2_test.h"
 
-#include <kundo2stack.h>
 #include <qtest_kde.h>
 #include "kis_doc2.h"
 #include "kis_image.h"

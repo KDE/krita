@@ -40,7 +40,7 @@ KoReplaceStrategy::~KoReplaceStrategy()
         delete m_dialog;
 }
 
-KFindDialog *KoReplaceStrategy::dialog()
+KFindDialog *KoReplaceStrategy::dialog() const
 {
     return m_dialog;
 }

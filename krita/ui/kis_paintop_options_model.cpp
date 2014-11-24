@@ -82,3 +82,7 @@ bool operator==(const KisOptionInfo& a, const KisOptionInfo& b)
     if (a.option->isChecked() != b.option->isChecked()) return false;
     return true;
 }
+void KisPaintOpOptionListModel::signalDataChanged(const QModelIndex& index)
+{
+    emit dataChanged(index,index);
+}

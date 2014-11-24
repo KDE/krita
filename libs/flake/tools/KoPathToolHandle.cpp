@@ -30,7 +30,6 @@
 #include "KoParameterChangeStrategy.h"
 #include "KoParameterShape.h"
 #include "KoCanvasBase.h"
-#include "KoShapeManager.h"
 #include "KoDocumentResourceManager.h"
 #include "KoConnectionShape.h"
 #include "KoViewConverter.h"

@@ -30,7 +30,6 @@
 
 #include <klocale.h>
 
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpace.h>
 #include "KoColorProfile.h"
 #include "KoColor.h"

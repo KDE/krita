@@ -27,9 +27,9 @@
 #include <klocale.h>
 
 //Calligra includes
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 #include <KoCanvasResourceManager.h>
-#include <KoPAView.h>
+#include <KoPAViewBase.h>
 #include <KoPAPageBase.h> // this is needed to make setResource work correctly
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>

@@ -45,6 +45,7 @@
 #include <kmessagebox.h>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>
+#include <kdialog.h>
 
 #include <KoCanvasBase.h>
 #include <KoMainWindow.h>
@@ -55,6 +56,7 @@
 #include <KoFileDialog.h>
 #include <KoDocumentEntry.h>
 #include <KoFilterManager.h>
+#include <KoToolManager.h>
 #include <KoIcon.h>
 
 #include "filter/kis_filter.h"
@@ -288,7 +290,14 @@ void MainWindow::resetWindowTitle()
     QString fileName = url.fileName();
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Gemini")));
+
+    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KisDoc2* document = DocumentManager::instance()->document();
+    if (document && document->isModified() ) {
+        flags |= KDialog::ModifiedCaption;
+    }
+
+    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 void MainWindow::switchDesktopForced()
@@ -557,7 +566,7 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->sketchKisView != 0) {
-        KisPaintOpPresetSP clone = preset->clone();
+        KisPaintOpPresetSP clone = preset;
         clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
         d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
     }
@@ -571,7 +580,7 @@ void MainWindow::resourceChangedSketch(int key, const QVariant& v)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->desktopKisView != 0) {
-        KisPaintOpPresetSP clone = preset->clone();
+        KisPaintOpPresetSP clone = preset;
         clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
         d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);
     }

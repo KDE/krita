@@ -171,7 +171,7 @@ void KoTextDrag::setData(const QString & mimeType, const QByteArray & data)
     m_mimeData->setData(mimeType, data);
 }
 
-QMimeData * KoTextDrag::mimeData()
+QMimeData * KoTextDrag::takeMimeData()
 {
     QMimeData * mimeData = m_mimeData;
     m_mimeData = 0;

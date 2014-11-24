@@ -33,8 +33,6 @@
 #include <KoBasicHistogramProducers.h>
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
-#include <KoProgressUpdater.h>
-
 
 #include "kis_paint_device.h"
 #include "kis_histogram.h"

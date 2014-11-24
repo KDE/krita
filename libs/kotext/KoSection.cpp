@@ -98,7 +98,7 @@ int KoSection::level() const
     return d->level;
 }
 
-bool KoSection::setName(QString name)
+bool KoSection::setName(const QString &name)
 {
     Q_D(KoSection);
 

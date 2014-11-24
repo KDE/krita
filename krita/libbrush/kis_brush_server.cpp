@@ -65,7 +65,9 @@ public:
             }
         }
         else {
+
             return KisBrushResourceServer::importResourceFile(filename, fileCreation);
+
         }
         qApp->processEvents(QEventLoop::AllEvents);
         return true;

@@ -639,7 +639,7 @@ qreal KisDoubleSliderSpinBox::value()
 void KisDoubleSliderSpinBox::setValue(qreal value)
 {
     Q_D(KisAbstractSliderSpinBox);
-    setInternalValue(d->value = value * d->factor);
+    setInternalValue(d->value = qRound(value * d->factor));
     update();
 }
 

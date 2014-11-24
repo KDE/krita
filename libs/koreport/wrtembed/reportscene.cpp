@@ -40,6 +40,7 @@ ReportScene::ReportScene(qreal w, qreal h, KoReportDesigner *rd)
         : QGraphicsScene(0, 0, w, h, rd)
 {
     m_rd = rd;
+    m_minorSteps = 0;
 
     if (m_unit.type() != m_rd->pageUnit().type()) {
         m_unit = m_rd->pageUnit();
@@ -179,8 +180,8 @@ QPointF ReportScene::gridPoint(const QPointF& p)
 
 void ReportScene::focusOutEvent(QFocusEvent * focusEvent)
 {
-    emit lostFocus();
     QGraphicsScene::focusOutEvent(focusEvent);
+    emit lostFocus();
 }
 
 qreal ReportScene::lowestZValue()

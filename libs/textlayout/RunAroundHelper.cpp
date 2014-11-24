@@ -44,7 +44,7 @@ void RunAroundHelper::setObstructions(const QList<KoTextLayoutObstruction*> &obs
     m_obstructions = obstructions;
 }
 
-bool RunAroundHelper::stayOnBaseline()
+bool RunAroundHelper::stayOnBaseline() const
 {
     return m_stayOnBaseline;
 }

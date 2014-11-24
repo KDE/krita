@@ -32,6 +32,7 @@
 #include "guidestool/GuidesTool.h"
 #include "guidestool/GuidesToolFactory.h" // for the ID
 
+#include <KoGuidesData.h>
 #include <KoPointerEvent.h>
 #include <KoToolSelection.h>
 #include <KoToolManager.h>
@@ -43,7 +44,6 @@
 #include <KoShapePaste.h>
 #include <KoShapeOdfSaveHelper.h>
 #include <KoDrag.h>
-#include <KoDocument.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceManager.h>
 #include <KoShapeRubberSelectStrategy.h>
@@ -56,7 +56,6 @@
 #include <KoStrokeConfigWidget.h>
 #include <KoFillConfigWidget.h>
 #include <KoShadowConfigWidget.h>
-#include <KoOpacityConfigWidget.h>
 
 #include <KoIcon.h>
 

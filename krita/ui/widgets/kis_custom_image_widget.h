@@ -67,6 +67,8 @@ private slots:
     void screenSizeClicked();
     void predefinedClicked(int index);
     void saveAsPredefined();
+    void setLandscape();
+    void setPortrait();
     void switchWidthHeight();
     void createImage();
     void switchPortraitLandscape();
@@ -86,7 +88,8 @@ private:
     
     double m_width, m_height;
     quint8 backgroundOpacity() const;
-    
+    void setBackgroundOpacity(quint8 value);
+
     void fillPredefined();
     void showEvent(QShowEvent *);
     

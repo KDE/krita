@@ -55,7 +55,7 @@ KoReportDesignerItemWeb::KoReportDesignerItemWeb(KoReportDesigner *rw, QGraphics
 {
     Q_UNUSED(pos);
     init(scene, rw);
-    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    setSceneRect(properRect(*rw, KOREPORT_ITEM_RECT_DEFAULT_WIDTH, KOREPORT_ITEM_RECT_DEFAULT_WIDTH));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
@@ -80,14 +80,6 @@ KoReportDesignerItemWeb *KoReportDesignerItemWeb::clone() //done,compared
 KoReportDesignerItemWeb::~KoReportDesignerItemWeb() //done,compared
 {
     // do we need to clean anything up?
-}
-
-QSizeF KoReportDesignerItemWeb::minimumSize(const KoReportDesigner &designer) const
-{
-    if (designer.countSelectionWidth() < 100 || designer.countSelectionHeight() < 100) {
-        return QSizeF(100, 100);
-    }
-    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 void KoReportDesignerItemWeb::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

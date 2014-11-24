@@ -35,6 +35,7 @@ KisSprayShapeDynamicsOption::KisSprayShapeDynamicsOption()
     m_checkable = true;
     m_options = new KisShapeDynamicsOptionsWidget();
 
+
     // UI signals
     connect(m_options->fixedRotation, SIGNAL(toggled(bool)), m_options->fixedAngleBox, SLOT(setEnabled(bool)));
     connect(m_options->randomRotation, SIGNAL(toggled(bool)), m_options->randomAngleWeight, SLOT(setEnabled(bool)));
@@ -48,15 +49,32 @@ KisSprayShapeDynamicsOption::KisSprayShapeDynamicsOption()
 
 void KisSprayShapeDynamicsOption::setupBrushPreviewSignals()
 {
+     // initialize sliders
+
+
+    m_options->drawingAngleWeight->setRange(0.0, 1.0, 2);
+    m_options->drawingAngleWeight->setDisabled(true);
+
+    m_options->followCursorWeight->setRange(0.0, 1.0, 2);
+    m_options->followCursorWeight->setDisabled(true);
+
+    m_options->randomAngleWeight->setRange(0.0, 1.0, 2);
+    m_options->randomAngleWeight->setDisabled(true);
+
+    m_options->fixedAngleBox->setRange(0, 360, 0);
+    m_options->fixedAngleBox->setValue(30);
+    m_options->fixedAngleBox->setSuffix(QChar(Qt::Key_degree));
+    m_options->fixedAngleBox->setDisabled(true);
+
     connect(m_options->randomSizeCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->fixedRotation, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->fixedAngleBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->fixedAngleBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->randomRotation, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomAngleWeight, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomAngleWeight, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->followCursor, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->followCursorWeight, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->followCursorWeight, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->drawingAngle, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->drawingAngleWeight, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->drawingAngleWeight, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
 }
 
 

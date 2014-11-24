@@ -29,7 +29,6 @@
 #include <kcomponentdata.h>
 #include <klocale.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <kis_image.h>

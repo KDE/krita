@@ -101,6 +101,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, K
 
     m_page->intOpacity->setRange(0, 100);
     m_page->intOpacity->setValue(sliderOpacity);
+    m_page->intOpacity->setSuffix("%");
 
     m_page->cmbComposite->setEnabled(d->compositeOp);
     if(d->compositeOp) {

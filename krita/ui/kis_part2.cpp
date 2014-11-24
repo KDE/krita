@@ -34,7 +34,6 @@
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
-#include <KoShapeManager.h>
 #include <KoDocument.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoResourceServerProvider.h>

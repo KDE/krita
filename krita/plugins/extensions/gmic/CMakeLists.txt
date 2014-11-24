@@ -78,7 +78,10 @@ set(kritagmic_shared_PART_SRCS
     kis_gmic_filter_proxy_model.cpp
     kis_gmic_widget.cpp
     kis_gmic_updater.cpp
+    kis_filter_preview_widget.cpp
 )
+
+kde4_add_ui_files(kritagmic_shared_PART_SRCS wdg_gmic.ui wdg_gmic_input_output.ui)
 
 set(kritagmic_PART_SRCS
     kis_gmic_simple_convertor.cpp
@@ -92,8 +95,6 @@ set(kritagmic_PART_SRCS
 
 set(gmicparser_PART_SRCS main.cpp ${kritagmic_shared_PART_SRCS})
 
-
-kde4_add_ui_files(kritagmic_PART_SRCS wdg_gmic.ui )
 kde4_add_plugin(kritagmic ${kritagmic_PART_SRCS})
 
 target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY} ${ZLIB_LIBRARIES})

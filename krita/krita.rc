@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="53">
+<kpartgui name="Krita" version="55">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -80,6 +80,7 @@
 
 <Menu name="Image"><text>&amp;Image</text>
   <Action name="image_properties"/>
+  <Action name="image_color"/>
   <Action name="duplicate_image"/>
   <Separator/>
   <DefineGroup name="canvas_resize_merge" append="canvas_resize_merge"/>

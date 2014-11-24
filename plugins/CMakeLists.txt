@@ -5,10 +5,6 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 
-include_directories(
-    ${KOMAIN_INCLUDES}
-)
-
 if (SHOULD_BUILD_PLUGIN_COLORENGINES)
     add_subdirectory( colorengines )
 endif (SHOULD_BUILD_PLUGIN_COLORENGINES)

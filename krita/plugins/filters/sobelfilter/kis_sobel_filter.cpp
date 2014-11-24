@@ -41,7 +41,6 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>

@@ -108,6 +108,7 @@ void KisSimplifiedActionPolicyStrategy::continueAlternateAction(KoPointerEvent *
 
 bool KisSimplifiedActionPolicyStrategy::endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
+    Q_UNUSED(event);
     Q_UNUSED(action);
 
     if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) return false;

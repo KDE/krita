@@ -12,7 +12,11 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QListView" name="sensorsList"/>
+    <widget class="QListView" name="sensorsList">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QWidget" name="widgetConfiguration" native="true"/>

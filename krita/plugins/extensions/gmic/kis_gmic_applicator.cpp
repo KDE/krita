@@ -28,13 +28,15 @@
 #include "kis_image.h"
 #include <kis_selection.h>
 
-KisGmicApplicator::KisGmicApplicator()
+KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorFinished(false)
 {
 }
 
 
 KisGmicApplicator::~KisGmicApplicator()
 {
+    dbgPlugins << "Destructor: " << m_applicator;
+    delete m_applicator;
 }
 
 void KisGmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands)
@@ -47,15 +49,21 @@ void KisGmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const K
     m_customCommands = customCommands;
 }
 
-void KisGmicApplicator::run()
+
+void KisGmicApplicator::preview()
 {
+    // cancel previous preview if there is one
+    dbgPlugins << "Request for preview, cancelling any previous possible on-canvas preview";
+    cancel();
+
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
-    KisProcessingApplicator applicator(m_image, m_node,
+    m_applicator = new KisProcessingApplicator(m_image, m_node,
                                        KisProcessingApplicator::RECURSIVE,
                                        emitSignals, m_actionName);
 
+    dbgPlugins << "Creating applicator " << m_applicator;
 
     QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
     gmicLayers->assign(m_kritaNodes->size());
@@ -71,21 +79,69 @@ void KisGmicApplicator::run()
     {
         layerSize = QRect(0,0,m_image->width(), m_image->height());
     }
-    KisProcessingVisitorSP visitor;
 
     // convert krita layers to gmic layers
-    visitor = new KisExportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize);
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    KisProcessingVisitorSP exportVisitor = new KisExportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize);
+    m_applicator->applyVisitor(exportVisitor, KisStrokeJobData::CONCURRENT);
 
     // apply gmic filters to provided layers
     const char * customCommands = m_customCommands.isNull() ? 0 : m_customCommands.constData();
-    applicator.applyCommand(new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands));
+    m_applicator->applyCommand(new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands));
 
     // synchronize layer count
-    applicator.applyCommand(new KisGmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    m_applicator->applyCommand(new KisGmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
     // would sleep(3) help here?
-    visitor = new KisImportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize, selection);
-    applicator.applyVisitor(visitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
-    applicator.end();
+    KisProcessingVisitorSP  importVisitor = new KisImportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize, selection);
+    m_applicator->applyVisitor(importVisitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
+    m_applicator->explicitlyEmitFinalSignals();
+}
+
+void KisGmicApplicator::cancel()
+{
+
+    if (m_applicator)
+    {
+
+        if (!m_applicatorFinished)
+        {
+            dbgPlugins << "Cancelling applicator: Yes!";
+            m_applicator->cancel();
+        }
+        else
+        {
+            dbgPlugins << "Cancelling applicator: No! Reason: Already finished!";
+        }
+
+
+        dbgPlugins << "deleting applicator: " << m_applicator;
+        delete m_applicator;
+        m_applicator = 0;
+
+
+        m_applicatorFinished = false;
+        dbgPlugins << ppVar(m_applicatorFinished);
+
+    }
+    else
+    {
+        dbgPlugins << "Cancelling applicator: No! Reason: Null applicator!";
+    }
+
+
+}
+
+void KisGmicApplicator::finish()
+{
+    dbgPlugins << "aplicator " << m_applicator << " finished";
+    if (m_applicator)
+    {
+        m_applicator->end();
+        m_applicatorFinished = true;
+        dbgPlugins << ppVar(m_applicatorFinished);
+    }
+    else
+    {
+        dbgPlugins << ppVar(m_applicatorFinished);
+    }
 }

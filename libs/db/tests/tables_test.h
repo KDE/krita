@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TABLETEST_H
-#define TABLETEST_H
+#ifndef TABLESTEST_H
+#define TABLESTEST_H
 
 int tablesTest()
 {

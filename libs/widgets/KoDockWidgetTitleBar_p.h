@@ -56,7 +56,7 @@ public:
     }
 
     KoDockWidgetTitleBar* thePublic;
-    KIcon openIcon, closeIcon, lockIcon;
+    KIcon openIcon, closeIcon, lockIcon, floatIcon, removeIcon; // close/open are for collapsing
     QAbstractButton* closeButton;
     QAbstractButton* floatButton;
     QAbstractButton* collapseButton;

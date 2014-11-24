@@ -41,6 +41,8 @@
 #include "KoColorTransformation.h"
 #include "KoCompositeOp.h"
 
+#include <KoToolManager.h>
+
 #include "kis_config_widget.h"
 
 #include "kis_bookmarked_configuration_manager.h"

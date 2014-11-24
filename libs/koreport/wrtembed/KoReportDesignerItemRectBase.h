@@ -17,8 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REPORTRECTENTITY_H
-#define REPORTRECTENTITY_H
+#ifndef KOREPORTDESIGNERITEMRECTBASE_H
+#define KOREPORTDESIGNERITEMRECTBASE_H
 
 #include <QGraphicsRectItem>
 #include "KoReportDesignerItemBase.h"
@@ -33,6 +33,9 @@ class KRSize;
 /**
  @author
 */
+const int KOREPORT_ITEM_RECT_DEFAULT_WIDTH = 100;
+const int KOREPORT_ITEM_RECT_DEFAULT_HEIGHT = 100;
+
 class KOREPORT_EXPORT KoReportDesignerItemRectBase : public QGraphicsRectItem, public KoReportDesignerItemBase
 {
 public:
@@ -57,8 +60,6 @@ protected:
         DontUpdateProperty
     };
 
-    virtual QSizeF minimumSize(const KoReportDesigner &d) const = 0;
-
     void setSceneRect(const QPointF& topLeft, const QSizeF& size, UpdatePropertyFlag update = UpdateProperty);
     void setSceneRect(const QRectF& rect, UpdatePropertyFlag update = UpdateProperty);
 
@@ -73,8 +74,10 @@ protected:
     void propertyChanged(const KoProperty::Set &s, const KoProperty::Property &p);
 
     virtual void move(const QPointF&);
+    QRectF properRect(const KoReportDesigner &d, qreal minWidth, qreal minHeight) const;
 private:
     int grabHandle(QPointF);
+    QPointF properPressPoint(const KoReportDesigner &d) const;
     int m_grabAction;
 
     KRPos* m_ppos;

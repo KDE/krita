@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __VECTOR_MATH_H
-#define __VECTOR_MATH_H
+#ifndef __KOSTREAMED_MATH_H
+#define __KOSTREAMED_MATH_H
 
 #include <Vc/Vc>
 #include <Vc/IO>
@@ -301,4 +301,4 @@ template<bool useMask, bool useFlow, class Compositor>
 }
 };
 
-#endif /* __VECTOR_MATH_H */
+#endif /* __KOSTREAMED_MATH_H */

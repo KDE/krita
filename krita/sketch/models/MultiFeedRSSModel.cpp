@@ -36,6 +36,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QLocale>
 
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
@@ -75,7 +76,7 @@ public:
                     QString dateStr = streamReader.readElementText();
                     // fixme: honor time zone!
                     dateStr = dateStr.left(dateStr.indexOf('+')-1);
-                    item.pubDate = QDateTime::fromString(dateStr, "ddd, dd MMM yyyy HH:mm:ss");
+                    item.pubDate = QLocale(QLocale::English).toDateTime(dateStr, "ddd, dd MMM yyyy HH:mm:ss");
                 }
                 else if (streamReader.name() == QLatin1String("description"))
                     item.description = streamReader.readElementText(); //shortenHtml(streamReader.readElementText());

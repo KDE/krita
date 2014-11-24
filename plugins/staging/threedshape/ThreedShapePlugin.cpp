@@ -35,7 +35,7 @@
 
 
 K_PLUGIN_FACTORY(ThreedShapePluginFactory, registerPlugin<ThreedShapePlugin>();)
-K_EXPORT_PLUGIN(ThreedShapePluginFactory("ThreedShape"))
+K_EXPORT_PLUGIN(ThreedShapePluginFactory("calligra_shape_threed"))
 
 ThreedShapePlugin::ThreedShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

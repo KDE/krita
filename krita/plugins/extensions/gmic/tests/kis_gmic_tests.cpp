@@ -26,7 +26,6 @@
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
-#include <KoProperties.h>
 #include <kis_surrogate_undo_adapter.h>
 
 #include <qtest_kde.h>
@@ -591,8 +590,8 @@ void KisGmicTests::testFilterOnlySelection()
 
     KisGmicApplicator applicator;
     applicator.setProperties(image, image->root(), kundo2_noi18n("Gmic filter"), kritaNodes, gmicCommand);
-    applicator.start();
-    applicator.wait();
+    applicator.preview();
+    applicator.finish();
     image->waitForDone();
 
     //image->convertToQImage(image->bounds(), 0).save("filteredSelection.png");

@@ -233,16 +233,16 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                 newLayer = layer;
 
             }
-            foreach(ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
-                if (channelInfo->channelId < 0) {
-                    KisTransparencyMaskSP mask = new KisTransparencyMask();
-                    mask->initSelection(newLayer);
-                    if (!layerRecord->readMask(&f, mask->paintDevice(), channelInfo)) {
-                        dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
-                    }
-                    m_image->addNode(mask, newLayer);
-                }
-            }
+//            foreach(ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
+//                if (channelInfo->channelId < 0) {
+//                    KisTransparencyMaskSP mask = new KisTransparencyMask();
+//                    mask->initSelection(newLayer);
+//                    if (!layerRecord->readMask(&f, mask->paintDevice(), channelInfo)) {
+//                        dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
+//                    }
+//                    m_image->addNode(mask, newLayer);
+//                }
+//            }
         }
     }
 

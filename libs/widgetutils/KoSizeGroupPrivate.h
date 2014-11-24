@@ -69,7 +69,7 @@ class GroupItem : public QObject, public QWidgetItem
     Q_OBJECT
 
 public:
-    GroupItem(QWidget* widget);
+    explicit GroupItem(QWidget* widget);
     ~GroupItem() {}
 
     void setSize(const QSize &size) { m_size = size; }

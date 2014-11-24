@@ -27,6 +27,7 @@ set(flake_SRCS
     KoInsets.cpp
     KoPasteController.cpp
     KoGuidesData.cpp
+    KoGridData.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
     KoPathSegment.cpp
@@ -266,6 +267,7 @@ install(
     KoFlake.h
     KoFrameShape.h
     KoGuidesData.h
+    KoGridData.h
     KoImageCollection.h
     KoImageData.h
     KoInputDevice.h

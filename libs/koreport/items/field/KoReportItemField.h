@@ -15,8 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef KRFIELDDATA_H
-#define KRFIELDDATA_H
+
+#ifndef KOREPORTITEMFIELD_H
+#define KOREPORTITEMFIELD_H
+
 #include <KoReportItemBase.h>
 #include <QRect>
 #include <QDomDocument>

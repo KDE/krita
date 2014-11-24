@@ -29,7 +29,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
-#include <kundo2command.h>
 #include <QFile>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
@@ -41,7 +40,6 @@
 
 #include <KoIcon.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorProfile.h>
 #include <KoID.h>
 #include <KoColor.h>

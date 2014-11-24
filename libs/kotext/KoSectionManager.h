@@ -30,7 +30,7 @@ class KoSection;
 class KoSectionManagerPrivate
 {
 public:
-    KoSectionManagerPrivate(QTextDocument *_doc);
+    explicit KoSectionManagerPrivate(QTextDocument *_doc);
     ~KoSectionManagerPrivate();
 
     QTextDocument *doc;
@@ -69,7 +69,7 @@ public:
     /**
      * Returns if this name is possible.
      */
-    bool isValidNewName(QString name) const;
+    bool isValidNewName(const QString &name) const;
 
     /**
      * Returns tree model of sections to use in views
@@ -90,7 +90,7 @@ public slots:
     /**
      * Call this to notify that some section changed its name
      */
-    void sectionRenamed(QString oldName, QString name);
+    void sectionRenamed(const QString &oldName, const QString &name);
 
     /**
      * Call this to register new section in manager

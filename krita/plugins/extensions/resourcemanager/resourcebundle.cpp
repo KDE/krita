@@ -357,11 +357,11 @@ bool ResourceBundle::save()
             }
         }
         else if (resType  == "kis_paintoppresets") {
-            KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-                KoResource *res = paintoppresetServer->resourceByMD5(ref.md5sum);
+                KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(ref.md5sum);
                 if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
-                if (!saveResourceToStore(res, store.data(), "paintoppresets")) {
+                if (!saveResourceToStore(res.data(), store.data(), "paintoppresets")) {
                     if (res) {
                         qWarning() << "Could not save resource" << resType << res->name();
                     }
@@ -593,13 +593,13 @@ bool ResourceBundle::install()
             }
         }
         else if (resType  == "paintoppresets") {
-            KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            KisPaintOpPresetResourceServer*  paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
 
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KisPaintOpPreset *res = paintoppresetServer->createResource(ref.resourcePath);
+                KisPaintOpPresetSP res = paintoppresetServer->createResource(ref.resourcePath);
                 if (!res) {
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -615,9 +615,9 @@ bool ResourceBundle::install()
                 dbgResources << "\t\tresource:" << res->name();
                 paintoppresetServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
-                    paintoppresetServer->addTag(res, tag);
+                    paintoppresetServer->addTag(res.data(), tag);
                 }
-                paintoppresetServer->addTag(res, name());
+                paintoppresetServer->addTag(res.data(), name());
             }
         }
     }
@@ -669,9 +669,9 @@ bool ResourceBundle::uninstall()
         }
     }
 
-    KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
-        KisPaintOpPreset *res = paintoppresetServer->resourceByMD5(ref.md5sum);
+        KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(ref.md5sum);
         if (res) {
             paintoppresetServer->removeResourceFromServer(res);
         }
@@ -750,9 +750,9 @@ QList<KoResource*> ResourceBundle::resources(const QString &resType)
             if (res) ret << res;
         }
         else if (resType  == "paintoppresets") {
-            KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-            KoResource *res =  paintoppresetServer->resourceByMD5(ref.md5sum);
-            if (res) ret << res;
+            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            KisPaintOpPresetSP res =  paintoppresetServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res.data();
         }
     }
     return ret;

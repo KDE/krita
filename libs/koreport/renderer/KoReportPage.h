@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef KEXIREPORTPAGE_H
-#define KEXIREPORTPAGE_H
+#ifndef KOREPORTPAGE_H
+#define KOREPORTPAGE_H
 
 #include <KoReportRendererBase.h>
 #include <QGraphicsRectItem>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="16"
+   height="16"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="dark_transform_icons_main.svg">
+  <sodipodi:namedview
+     pagecolor="#919191"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1021"
+     inkscape:window-height="659"
+     id="namedview17"
+     showgrid="false"
+     inkscape:zoom="10.429825"
+     inkscape:cx="8.1829481"
+     inkscape:cy="6.3913273"
+     inkscape:window-x="1779"
+     inkscape:window-y="243"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3780"
+       id="linearGradient3786"
+       x1="6.4204822"
+       y1="4.0600982"
+       x2="6.315412"
+       y2="29.194195"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3780">
+      <stop
+         style="stop-color:#424242;stop-opacity:1;"
+         offset="0"
+         id="stop3782" />
+      <stop
+         style="stop-color:#171717;stop-opacity:0;"
+         offset="1"
+         id="stop3784" />
+    </linearGradient>
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3923"
+       is_visible="true" />
+    <linearGradient
+       gradientTransform="matrix(-1.3317383,0.00815264,-0.00910434,-1.1925288,17.767959,17.846735)"
+       y2="29.194195"
+       x2="6.315412"
+       y1="4.0600982"
+       x1="6.4204822"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3826"
+       xlink:href="#linearGradient3780"
+       inkscape:collect="always" />
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-1036.3622)"
+     id="layer1"
+     style="opacity:0.47976882;display:none">
+    <image
+       xlink:href="file:///mnt/6A0F06C454D4F476/One-offs/MyPaint/scrap009_a.png"
+       x="-574.85712"
+       y="61.505039"
+       width="1344"
+       height="896"
+       id="image3082" />
+  </g>
+  <g
+     transform="translate(0,-1036.3622)"
+     id="layer2" />
+  <path
+     style="fill:none;stroke:url(#linearGradient3826);stroke-width:2.64270854;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     d="m 14.826398,1.44996 c 0,4.3815841 -0.023,8.763168 -0.06899,13.144511 L 1.4991849,14.696652 1.2372815,1.5280087 14.826398,1.4499475 c 0,4.2e-6 0,8.3e-6 0,1.25e-5"
+     id="path3921"
+     inkscape:path-effect="#path-effect3923"
+     inkscape:original-d="M 14.826398,1.44996 14.757403,14.594471 1.4991849,14.696652 1.2372815,1.5280087 C 1.2264942,2.0772969 14.279197,2.0279245 14.826398,1.4499475 z"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccc" />
+</svg>

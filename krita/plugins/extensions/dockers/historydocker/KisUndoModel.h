@@ -95,6 +95,7 @@ public:
     QIcon cleanIcon() const;
 
     void setCanvas(KisCanvas2* canvas);
+    bool checkMergedCommand(int index);
 
 public slots:
     void setStack(KUndo2QStack *stack);

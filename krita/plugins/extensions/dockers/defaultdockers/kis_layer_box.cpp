@@ -221,6 +221,8 @@ KisLayerBox::KisLayerBox()
     // END NOTE
 
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
+    m_wdgLayerBox->doubleOpacity->setSuffix("%");
+
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 

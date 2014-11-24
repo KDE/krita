@@ -64,23 +64,29 @@ void KoPADocumentModel::update()
 {
     emit layoutAboutToBeChanged();
     emit layoutChanged();
+    if (m_document) {
+        dataChanged(createIndex(0, 0), createIndex(m_document->pageCount() - 1, columnCount() - 1));
+    }
 }
 
 int KoPADocumentModel::rowCount( const QModelIndex &parent ) const
 {
-    if(!m_document)
+    if (!m_document) {
         return 0;
+    }
 
     // check if parent is root node
-    if( ! parent.isValid() )
+    if ( ! parent.isValid() ) {
         return m_document->pages(m_master).count();
+    }
 
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
 
     KoShapeContainer *parentShape = dynamic_cast<KoShapeContainer*>( (KoShape*)parent.internalPointer() );
-    if( ! parentShape )
+    if ( ! parentShape ) {
         return 0;
+    }
 
     return parentShape->shapeCount();
 }
@@ -92,53 +98,58 @@ int KoPADocumentModel::columnCount( const QModelIndex & ) const
 
 QModelIndex KoPADocumentModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    if( !m_document )
+    if ( !m_document ) {
         return QModelIndex();
-    
+    }
+
     // check if parent is root node
-    if( ! parent.isValid() )
-    {
-        if( row >= 0 && row < m_document->pages(m_master).count() )
+    if ( ! parent.isValid() ) {
+        if ( row >= 0 && row < m_document->pages(m_master).count() ) {
             return createIndex( row, column, m_document->pages(m_master).at(row) );
-        else
+        } else {
             return QModelIndex();
+        }
     }
 
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
 
     KoShapeContainer *parentShape = dynamic_cast<KoShapeContainer*>( (KoShape*)parent.internalPointer() );
-    if( ! parentShape )
+    if ( ! parentShape ) {
         return QModelIndex();
+    }
 
-    if( row < parentShape->shapeCount() )
+    if ( row < parentShape->shapeCount() ) {
         return createIndex( row, column, childFromIndex( parentShape, row ) );
-    else
+    } else {
         return QModelIndex();
+    }
 }
 
 QModelIndex KoPADocumentModel::parent( const QModelIndex &child ) const
 {
     // check if child is root node
-    if( ! child.isValid() || !m_document )
+    if ( ! child.isValid() || !m_document ) {
         return QModelIndex();
+    }
 
     Q_ASSERT(child.model() == this);
     Q_ASSERT(child.internalPointer());
 
     KoShape *childShape = static_cast<KoShape*>( child.internalPointer() );
-    if( ! childShape )
+    if ( ! childShape ) {
         return QModelIndex();
+    }
 
     // get the children's parent shape
     KoShapeContainer *parentShape = childShape->parent();
-    if( ! parentShape )
+    if ( ! parentShape ) {
         return QModelIndex();
+    }
 
     // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
-    if( ! grandParentShape )
-    {
+    if ( ! grandParentShape ) {
         KoPAPageBase* page = dynamic_cast<KoPAPageBase*>( parentShape);
         return createIndex( m_document->pages(m_master).indexOf( page ), 0, parentShape );
     }
@@ -148,8 +159,9 @@ QModelIndex KoPADocumentModel::parent( const QModelIndex &child ) const
 
 QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
 {
-    if( ! index.isValid() || !m_document )
+    if ( ! index.isValid() || !m_document ) {
         return QVariant();
+    }
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
@@ -161,22 +173,18 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
         case Qt::DisplayRole:
         {
             QString name = shape->name();
-            if( name.isEmpty() )
-            {
+            if ( name.isEmpty() ) {
                 if ( dynamic_cast<KoPAPageBase *>( shape ) ) {
-                    if(m_document->pageType() == KoPageApp::Slide ) {
+                    if (m_document->pageType() == KoPageApp::Slide ) {
                         name = i18n("Slide %1",  m_document->pageIndex(dynamic_cast<KoPAPageBase *>(shape)) + 1);
                     } else {
                         name = i18n("Page  %1", m_document->pageIndex(dynamic_cast<KoPAPageBase *>(shape)) + 1);
                     }
-                }
-                else if( dynamic_cast<KoShapeLayer*>( shape ) ) {
+                } else if ( dynamic_cast<KoShapeLayer*>( shape ) ) {
                     name = i18n("Layer") + QString(" (%1)").arg(shape->zIndex());
-                }
-                else if( dynamic_cast<KoShapeGroup*>( shape ) ) {
+                } else if ( dynamic_cast<KoShapeGroup*>( shape ) ) {
                     name = i18n("Group") + QString(" (%1)").arg(shape->zIndex());
-                }
-                else {
+                } else {
                     name = i18n("Shape") + QString(" (%1)").arg(shape->zIndex());
                 }
             }
@@ -198,11 +206,12 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
         {
             KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
             KoSelection * selection = canvasController->canvas()->shapeManager()->selection();
-            if( ! selection )
+            if ( ! selection ) {
                 return false;
+            }
 
             /* KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-            if( layer )
+            if ( layer )
                 return (layer == selection->activeLayer() );
             else */
             return selection->isSelected( shape );
@@ -213,43 +222,47 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
             QTransform matrix = shape->absoluteTransformation( 0 );
             QRectF bbox = matrix.mapRect( shape->outline().boundingRect() );
             KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
-            if( container )
-            {
+            if ( container ) {
                 bbox = QRectF();
-                foreach( KoShape* shape, container->shapes() )
+                foreach( KoShape* shape, container->shapes() ) {
                     bbox = bbox.united( shape->outline().boundingRect() );
+                }
             }
             return qreal(bbox.width()) / bbox.height();
         }
         default:
-            if (role >= int(BeginThumbnailRole))
+            if (role >= int(BeginThumbnailRole)) {
                 return createThumbnail( shape, QSize( role - int(BeginThumbnailRole), role - int(BeginThumbnailRole) ) );
-            else
+            } else {
                 return QVariant();
+            }
     }
 }
 
 Qt::ItemFlags KoPADocumentModel::flags(const QModelIndex &index) const
 {
-    if( !m_document )
+    if ( !m_document ) {
         return 0;
+    }
 
-    if( ! index.isValid() )
+    if ( ! index.isValid() ) {
         return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
+    }
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable;
-    //if( dynamic_cast<KoShapeContainer*>( (KoShape*)index.internalPointer() ) )
+    //if ( dynamic_cast<KoShapeContainer*>( (KoShape*)index.internalPointer() ) )
         flags |= Qt::ItemIsDropEnabled;
     return flags;
 }
 
 bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value, int role )
 {
-    if( ! index.isValid() || !m_document )
+    if ( ! index.isValid() || !m_document ) {
         return false;
+    }
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
@@ -264,8 +277,7 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
             if (dynamic_cast<KoPAPageBase *>(shape)) {
                 if (m_document->pageType() == KoPageApp::Slide) {
                     cmd->setText(kundo2_i18n("Rename Slide"));
-                }
-                else {
+                } else {
                     cmd->setText(kundo2_i18n("Rename Page"));
                 }
             }
@@ -284,7 +296,7 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
                 KoSelection * selection = canvasController->canvas()->shapeManager()->selection();
 
                 KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-                if( layer && selection ) {
+                if ( layer && selection ) {
                     selection->setActiveLayer( layer );
                 }
             } */
@@ -322,8 +334,9 @@ void KoPADocumentModel::setProperties( KoShape* shape, const PropertyList &prope
     shape->setVisible( properties.at( 0 ).state.toBool() );
     shape->setGeometryProtected( properties.at( 1 ).state.toBool() );
 
-    if( ( oldVisibleState != shape->isVisible() ) || ( oldLockedState != shape->isGeometryProtected() ) )
+    if ( ( oldVisibleState != shape->isVisible() ) || ( oldLockedState != shape->isGeometryProtected() ) ) {
         shape->update();
+    }
 }
 
 QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSize ) const
@@ -338,8 +351,7 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
         qreal ratio = (zoomHandler.resolutionX() * layout.width) / (zoomHandler.resolutionY() * layout.height);
         if ( ratio > 1 ) {
             size.setHeight( size.width() / ratio );
-        }
-        else {
+        } else {
             size.setWidth( size.height() * ratio );
         }
         QPixmap pixmap = m_document->pageThumbnail( page, size );
@@ -348,8 +360,9 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 
     QList<KoShape*> shapes;
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
-    if (container)
+    if (container) {
         shapes = container->shapes();
+    }
     shapes.append(shape);
 
     shapePainter.setShapes( shapes );
@@ -369,8 +382,9 @@ KoShape * KoPADocumentModel::childFromIndex( KoShapeContainer *parent, int row )
 
 int KoPADocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
 {
-    if ( !m_document )
+    if ( !m_document ) {
         return 0;
+    }
 
     return parent->shapes().indexOf( child );
 }
@@ -390,13 +404,15 @@ QStringList KoPADocumentModel::mimeTypes() const
 QMimeData * KoPADocumentModel::mimeData( const QModelIndexList & indexes ) const
 {
     // check if there is data to encode
-    if( ! indexes.count() )
+    if ( ! indexes.count() ) {
         return 0;
+    }
 
     // check if we support a format
     QStringList types = mimeTypes();
-    if( types.isEmpty() )
+    if ( types.isEmpty() ) {
         return 0;
+    }
 
     QMimeData *data = new QMimeData();
     QString format = types[0];
@@ -405,8 +421,9 @@ QMimeData * KoPADocumentModel::mimeData( const QModelIndexList & indexes ) const
 
     // encode the data
     QModelIndexList::ConstIterator it = indexes.begin();
-    for( ; it != indexes.end(); ++it)
+    for( ; it != indexes.end(); ++it) {
         stream << QVariant::fromValue( qulonglong( it->internalPointer() ) );
+    }
 
     data->setData(format, encoded);
     return data;
@@ -418,23 +435,25 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
     Q_UNUSED( column );
 
     // check if the action is supported
-    if( ! data || action != Qt::MoveAction )
+    if ( ! data || action != Qt::MoveAction ) {
         return false;
+    }
     // check if the format is supported
     QStringList types = mimeTypes();
-    if( types.isEmpty() )
+    if ( types.isEmpty() ) {
         return false;
+    }
     QString format = types[0];
-    if( ! data->hasFormat(format) )
+    if ( ! data->hasFormat(format) ) {
         return false;
+    }
 
     QByteArray encoded = data->data( format );
     QDataStream stream(&encoded, QIODevice::ReadOnly);
     QList<KoShape*> shapes;
 
     // decode the data
-    while( ! stream.atEnd() )
-    {
+    while( ! stream.atEnd() ) {
         QVariant v;
         stream >> v;
         shapes.append( static_cast<KoShape*>( (void*)v.value<qulonglong>() ) );
@@ -445,8 +464,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
     QList<KoPAPageBase *> pages;
     // remove shapes having its parent in the list
     // and separate the layers
-    foreach( KoShape * shape, shapes )
-    {
+    foreach( KoShape * shape, shapes ) {
         // check whether the selection contains page
         // by the UI rules, the selection should contains page only
         KoPAPageBase *page = dynamic_cast<KoPAPageBase *>( shape );
@@ -464,14 +482,16 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             }
             parentShape = parentShape->parent();
         }
-        if( hasParentInList )
+        if ( hasParentInList ) {
             continue;
+        }
 
         KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( shape );
-        if( layer )
+        if ( layer ) {
             layers.append( layer );
-        else
+        } else {
             toplevelShapes.append( shape );
+        }
     }
 
     // dropping to root, only page(s) is allowed
@@ -505,13 +525,13 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
 
     KoShape *shape = static_cast<KoShape*>( parent.internalPointer() );
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
-    if( container ) {
+    if ( container ) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( container );
-        if( group )
-        {
+        if ( group ) {
             kDebug(30010) <<"KoPADocumentModel::dropMimeData parent = group";
-            if( ! toplevelShapes.count() )
+            if ( ! toplevelShapes.count() ) {
                 return false;
+            }
 
             emit layoutAboutToBeChanged();
             beginInsertRows( parent, group->shapeCount(), group->shapeCount()+toplevelShapes.count() );
@@ -519,8 +539,9 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             KUndo2Command * cmd = new KUndo2Command();
             cmd->setText( kundo2_i18n("Reparent shapes") );
 
-            foreach( KoShape * shape, toplevelShapes )
+            foreach( KoShape * shape, toplevelShapes ) {
                 new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd );
+            }
 
             new KoShapeGroupCommand( group, toplevelShapes, cmd );
             KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
@@ -528,12 +549,9 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
 
             endInsertRows();
             emit layoutChanged();
-        }
-        else
-        {
+        } else {
             kDebug(30010) <<"KoPADocumentModel::dropMimeData parent = container";
-            if( toplevelShapes.count() )
-            {
+            if ( toplevelShapes.count() ) {
                 emit layoutAboutToBeChanged();
                 beginInsertRows( parent, container->shapeCount(), container->shapeCount()+toplevelShapes.count() );
 
@@ -542,10 +560,8 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
 
                 QList<bool> clipped;
                 QList<bool> inheritsTransform;
-                foreach( KoShape * shape, toplevelShapes )
-                {
-                    if( ! shape->parent() )
-                    {
+                foreach( KoShape * shape, toplevelShapes ) {
+                    if ( ! shape->parent() ) {
                         clipped.append( false );
                         inheritsTransform.append(false);
                         continue;
@@ -562,23 +578,21 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
 
                 endInsertRows();
                 emit layoutChanged();
-            }
-            else if( layers.count() )
-            {
+            } else if ( layers.count() ) {
                 KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( container );
-                if( ! layer )
+                if ( ! layer ) {
                     return false;
+                }
 
                 // TODO layers are dropped on a layer, so change layer ordering
                 return false;
             }
         }
-    }
-    else
-    {
+    } else {
         kDebug(30010) <<"KoPADocumentModel::dropMimeData parent = shape";
-        if( ! toplevelShapes.count() )
+        if ( ! toplevelShapes.count() ) {
             return false;
+        }
 
         // TODO shapes are dropped on a shape, reorder them
         return false;
@@ -589,32 +603,37 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
 
 QModelIndex KoPADocumentModel::parentIndexFromShape( const KoShape * child )
 {
-    if( !m_document )
+    if ( !m_document ) {
         return QModelIndex();
+    }
 
     // check if child shape is a layer, and return invalid model index if it is
     const KoShapeLayer *childlayer = dynamic_cast<const KoShapeLayer*>( child );
-    if( childlayer )
+    if ( childlayer ) {
         return QModelIndex();
+    }
 
     // get the children's parent shape
     KoShapeContainer *parentShape = child->parent();
-    if( ! parentShape )
+    if ( ! parentShape ) {
         return QModelIndex();
+    }
 
     // check if the parent is a layer
     KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>( parentShape );
 
 
-    if( parentLayer ) {
+    if ( parentLayer ) {
         KoPAPageBase * page = dynamic_cast<KoPAPageBase*>( parentLayer->parent() );
-        if ( page )
+        if ( page ) {
             return createIndex( m_document->pages(m_master).count() - 1 - m_document->pages(m_master).indexOf( page ), 0, parentLayer );
+        }
     }
     // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
-    if( ! grandParentShape )
+    if ( ! grandParentShape ) {
         return QModelIndex();
+    }
 
     return createIndex( indexFromChild( grandParentShape, parentShape ), 0, parentShape );
 }
@@ -633,8 +652,7 @@ void KoPADocumentModel::setDocument( KoPADocument* document )
     }
     m_document = document;
 
-    if ( m_document )
-    {
+    if ( m_document ) {
         connect( m_document, SIGNAL(pageAdded( KoPAPageBase* ) ), this, SLOT( update() ) );
         connect( m_document, SIGNAL(pageRemoved( KoPAPageBase* ) ), this, SLOT( update() ) );
         connect( m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT( update() ) );
@@ -692,21 +710,16 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
 
            if (result == popupCopyAction) {
                action = Qt::CopyAction;
-           }
-           else if (result == popupMoveAction) {
+           } else if (result == popupMoveAction) {
                action = Qt::MoveAction;
-           }
-           else {
+           } else {
                return false;
            }
-    }
-    else if ((modifiers & Qt::ControlModifier) != 0) {
+    } else if ((modifiers & Qt::ControlModifier) != 0) {
         action = Qt::CopyAction;
-    }
-    else if ((modifiers & Qt::ShiftModifier) != 0) {
+    } else if ((modifiers & Qt::ShiftModifier) != 0) {
         action = Qt::MoveAction;
-    }
-    else {
+    } else {
         return false;
     }
 

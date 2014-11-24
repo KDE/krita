@@ -23,6 +23,8 @@
  *    Boston, MA 02110-1301, USA.
  */
 
+#include "KoTagToolButton.h"
+
 #include <QToolButton>
 #include <QGridLayout>
 
@@ -31,8 +33,6 @@
 #include <KoIcon.h>
 
 #include "KoResourceItemChooserContextMenu.h"
-
-#include "KoTagToolButton.h"
 
 class KoTagToolButton::Private
 {

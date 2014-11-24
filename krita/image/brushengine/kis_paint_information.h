@@ -63,7 +63,8 @@ public:
      * of the return value. So if it doesn't work for some reason,
      * please implement a proper copy c-tor
      */
-    class KRITAIMAGE_EXPORT DistanceInformationRegistrar {
+    class KRITAIMAGE_EXPORT DistanceInformationRegistrar
+    {
     public:
         DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo);
         ~DistanceInformationRegistrar();
@@ -84,7 +85,7 @@ public:
                         qreal rotation = 0.0,
                         qreal tangentialPressure = 0.0,
                         qreal perspective = 1.0,
-                        int   time = 0);
+                        qreal time = 0.0);
 
     KisPaintInformation(const KisPaintInformation& rhs);
 
@@ -165,9 +166,9 @@ public:
 
     /// reciprocal of distance on the perspective grid
     qreal perspective() const;
-    
+
     /// Number of ms since the beginning of the stroke
-    int currentTime() const;
+    qreal currentTime() const;
 
     /**
      * The paint information may be generated not only during real
@@ -191,11 +192,11 @@ public:
      * \see isHoveringMode()
      */
     static KisPaintInformation createHoveringModeInfo(const QPointF &pos,
-                                                      qreal pressure = PRESSURE_DEFAULT,
-                                                      qreal xTilt = 0.0, qreal yTilt = 0.0,
-                                                      qreal rotation = 0.0,
-                                                      qreal tangentialPressure = 0.0,
-                                                      qreal perspective = 1.0);
+            qreal pressure = PRESSURE_DEFAULT,
+            qreal xTilt = 0.0, qreal yTilt = 0.0,
+            qreal rotation = 0.0,
+            qreal tangentialPressure = 0.0,
+            qreal perspective = 1.0);
 
     void toXML(QDomDocument&, QDomElement&) const;
 
@@ -205,8 +206,8 @@ public:
     static KisPaintInformation mixOnlyPosition(qreal t, const KisPaintInformation& mixedPi, const KisPaintInformation& basePi);
     static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2);
     static KisPaintInformation mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2);
-    static qreal tiltDirection(const KisPaintInformation& info, bool normalize=true);
-    static qreal tiltElevation(const KisPaintInformation& info, qreal maxTiltX=60.0, qreal maxTiltY=60.0, bool normalize=true);
+    static qreal tiltDirection(const KisPaintInformation& info, bool normalize = true);
+    static qreal tiltElevation(const KisPaintInformation& info, qreal maxTiltX = 60.0, qreal maxTiltY = 60.0, bool normalize = true);
 
 private:
     struct Private;

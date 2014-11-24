@@ -113,7 +113,11 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
     QRectF tile;
     KoColor color(painter()->paintColor());
-    KisCrossDeviceColorPicker colorPicker(m_settings->node()->paintDevice(), color);
+
+    KisCrossDeviceColorPicker *colorPicker = 0;
+    if (m_settings->node()) {
+        colorPicker = new KisCrossDeviceColorPicker(m_settings->node()->paintDevice(), color);
+    }
 
     qreal vertBorder = m_properties.vertBorder;
     qreal horzBorder = m_properties.horizBorder;
@@ -142,8 +146,8 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
             // do color transformation
             if (shouldColor) {
-                if (m_colorProperties.sampleInputColor) {
-                    colorPicker.pickOldColor(tile.center().x(), tile.center().y(), color.data());
+                if (colorPicker && m_colorProperties.sampleInputColor) {
+                    colorPicker->pickOldColor(tile.center().x(), tile.center().y(), color.data());
                 }
 
                 // mix the color with background color
@@ -222,6 +226,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
 
+    delete colorPicker;
 
 #ifdef BENCHMARK
     int msec = time.elapsed();

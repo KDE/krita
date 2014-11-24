@@ -51,6 +51,14 @@ KisToolMove::~KisToolMove()
     endStroke();
 }
 
+void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+{
+    KisTool::activate(toolActivation, shapes);
+    configGroup = KGlobal::config()->group(toolId());
+}
+
+
+
 void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(gc);
@@ -262,7 +270,18 @@ QWidget* KisToolMove::createOptionWidget()
     connect(m_optionsWidget->radioGroup, SIGNAL(toggled(bool)),
             this, SLOT(slotWidgetRadioToggled(bool)));
 
-    //connect(m_optionsWidget, SIGNAL(sigConfigurationChanged()), SLOT(endStroke()));
+
+    // load config for correct radio button
+    MoveToolMode newMode = static_cast<MoveToolMode>(configGroup.readEntry("moveToolMode", 0));
+    if(newMode == MoveSelectedLayer)
+        m_optionsWidget->radioSelectedLayer->setChecked(true);
+    else if (newMode == MoveFirstLayer)
+        m_optionsWidget->radioFirstLayer->setChecked(true);
+    else
+        m_optionsWidget->radioGroup->setChecked(true);
+
+    m_moveToolMode = newMode; // set the internal variable for calculations
+
 
     return m_optionsWidget;
 }
@@ -270,6 +289,7 @@ QWidget* KisToolMove::createOptionWidget()
 void KisToolMove::setMoveToolMode(KisToolMove::MoveToolMode newMode)
 {
     m_moveToolMode = newMode;
+    configGroup.writeEntry("moveToolMode", static_cast<int>(newMode));
 }
 
 KisToolMove::MoveToolMode KisToolMove::moveToolMode() const

@@ -872,7 +872,7 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
 }
 
 void KoTableCellStyle::setEdge(KoBorder::BorderSide side, KoBorder::BorderStyle style,
-                               qreal width, QColor color)
+                               qreal width, const QColor &color)
 {
     KoBorder::BorderData edge;
     qreal innerWidth = 0;

@@ -49,12 +49,14 @@ public:
     bool resetSelectionOutlineCache;
 };
 
+
 KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent)
     : KUndo2Command(name, parent)
+
     , m_d(new Private())
 {
     m_d->resetSelectionOutlineCache = resetSelectionOutlineCache;
-
+    setTimedID(-1);
     init(device);
     saveSelectionOutlineCache();
 }
@@ -135,10 +137,12 @@ void KisTransactionData::redo()
     if (m_d->firstRedo) {
         m_d->firstRedo = false;
 
+
         possiblyResetOutlineCache();
         possiblyNotifySelectionChanged();
         return;
     }
+
 
     restoreSelectionOutlineCache(false);
 
@@ -158,7 +162,6 @@ void KisTransactionData::redo()
 void KisTransactionData::undo()
 {
     DEBUG_ACTION("Undo()");
-
     Q_ASSERT(m_d->memento);
     m_d->device->dataManager()->rollback(m_d->memento);
 

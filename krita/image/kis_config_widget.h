@@ -77,6 +77,8 @@ signals:
      * widget.
      */
     void sigConfigurationItemChanged();
+    void sigSaveLockedConfig(KisPropertiesConfiguration* p);
+    void sigDropLockedConfig(KisPropertiesConfiguration* p);
 
 private slots:
 

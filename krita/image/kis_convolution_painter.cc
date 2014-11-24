@@ -38,8 +38,6 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
-#include <KoProgressUpdater.h>
-
 #include "kis_convolution_kernel.h"
 #include "kis_global.h"
 #include "kis_image.h"

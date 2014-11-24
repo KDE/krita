@@ -228,9 +228,6 @@
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
-              <property name="placeholderText">
-               <string notr="true"/>
-              </property>
              </widget>
             </item>
             <item row="0" column="1">
@@ -243,12 +240,6 @@
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="placeholderText">
-               <string notr="true"/>
-              </property>
-              <property name="cursorMoveStyle">
-               <enum>Qt::VisualMoveStyle</enum>
               </property>
              </widget>
             </item>
@@ -276,12 +267,6 @@
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="placeholderText">
-               <string notr="true"/>
-              </property>
-              <property name="cursorMoveStyle">
-               <enum>Qt::VisualMoveStyle</enum>
               </property>
              </widget>
             </item>

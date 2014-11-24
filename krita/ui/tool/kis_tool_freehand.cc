@@ -322,10 +322,12 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
      */
     QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
 
-    currentPaintOpPreset()->settings()->changePaintOpSize(scaledOffset.x(), scaledOffset.y());
-    requestUpdateOutline(m_initialGestureDocPoint, 0);
+    if (qRound(scaledOffset.x()) != 0) {
+        currentPaintOpPreset()->settings()->changePaintOpSize(scaledOffset.x(), scaledOffset.y());
+        requestUpdateOutline(m_initialGestureDocPoint, 0);
 
-    m_lastDocumentPoint = event->point;
+        m_lastDocumentPoint = event->point;
+    }
 }
 
 void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction action)

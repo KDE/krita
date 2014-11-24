@@ -24,22 +24,28 @@
 #include <kis_types.h>
 #include <QThread>
 
+class KisProcessingApplicator;
 
-class KisGmicApplicator : public QThread
+class KisGmicApplicator
 {
 public:
     KisGmicApplicator();
     ~KisGmicApplicator();
     void setProperties(KisImageWSP image, KisNodeSP node, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands = QByteArray());
-protected:
-    virtual void run();
+
+    void preview();
+    void cancel();
+    void finish();
+
 private:
+    KisProcessingApplicator * m_applicator;
     KisImageWSP m_image;
     KisNodeSP m_node;
     KUndo2MagicString m_actionName;
     KisNodeListSP m_kritaNodes;
     QString m_gmicCommand;
     QByteArray m_customCommands;
+    bool m_applicatorFinished;
 };
 
 #endif

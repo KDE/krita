@@ -101,6 +101,7 @@ KisFiltersModel::KisFiltersModel(bool showAll, KisPaintDeviceSP thumb)
     qSort(d->categoriesKeys);
     d->previewCacheWatcher = new QSignalMapper(this);
     connect(d->previewCacheWatcher, SIGNAL(mapped(int)), SLOT(previewUpdated(int)));
+
 }
 
 KisFiltersModel::~KisFiltersModel()

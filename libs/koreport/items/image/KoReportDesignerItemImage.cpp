@@ -60,7 +60,7 @@ KoReportDesignerItemImage::KoReportDesignerItemImage(KoReportDesigner * rw, QGra
     Q_UNUSED(pos);
     //kDebug();
     init(scene, rw);
-    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    setSceneRect(properRect(*rw, KOREPORT_ITEM_RECT_DEFAULT_WIDTH, KOREPORT_ITEM_RECT_DEFAULT_WIDTH));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
@@ -69,14 +69,6 @@ KoReportDesignerItemImage::KoReportDesignerItemImage(QDomNode & element, KoRepor
 {
     init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
-}
-
-QSizeF KoReportDesignerItemImage::minimumSize(const KoReportDesigner &designer) const
-{
-    if (designer.countSelectionWidth() < 100 || designer.countSelectionHeight() < 100) {
-        return QSizeF(100, 100);
-    }
-    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemImage* KoReportDesignerItemImage::clone()

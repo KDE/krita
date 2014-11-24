@@ -67,7 +67,7 @@ struct KisPaintInformation::Private {
     qreal rotation;
     qreal tangentialPressure;
     qreal perspective;
-    int time;
+    qreal time;
     bool isHoveringMode;
 
     QScopedPointer<qreal> drawingAngleOverride;
@@ -96,12 +96,12 @@ KisPaintInformation::DistanceInformationRegistrar::
 }
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos_,
-                                         qreal pressure_,
-                                         qreal xTilt_, qreal yTilt_,
-                                         qreal rotation_,
-                                         qreal tangentialPressure_,
-                                         qreal perspective_,
-                                         int time)
+        qreal pressure_,
+        qreal xTilt_, qreal yTilt_,
+        qreal rotation_,
+        qreal tangentialPressure_,
+        qreal perspective_,
+        qreal time)
     : d(new Private)
 {
     d->pos = pos_;
@@ -136,11 +136,11 @@ bool KisPaintInformation::isHoveringMode() const
 
 KisPaintInformation
 KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
-                                            qreal pressure,
-                                            qreal xTilt, qreal yTilt,
-                                            qreal rotation,
-                                            qreal tangentialPressure,
-                                            qreal perspective)
+        qreal pressure,
+        qreal xTilt, qreal yTilt,
+        qreal rotation,
+        qreal tangentialPressure,
+        qreal perspective)
 {
     KisPaintInformation info(pos,
                              pressure,
@@ -178,7 +178,7 @@ KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
     qreal perspective = qreal(e.attribute("perspective", "0.0").toDouble());
     qreal xTilt = qreal(e.attribute("xTilt", "0.0").toDouble());
     qreal yTilt = qreal(e.attribute("yTilt", "0.0").toDouble());
-    int time = e.attribute("time", "0").toInt();
+    qreal time = e.attribute("time", "0").toDouble();
 
     return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt,
                                rotation, tangentialPressure, perspective, time);
@@ -280,7 +280,7 @@ qreal KisPaintInformation::drawingSpeed() const
         return 0.5;
     }
 
-    int timeDiff = currentTime() - d->currentDistanceInfo->lastTime();
+    qreal timeDiff = currentTime() - d->currentDistanceInfo->lastTime();
 
     if (timeDiff <= 0) {
         return 0.5;
@@ -305,7 +305,7 @@ qreal KisPaintInformation::perspective() const
     return d->perspective;
 }
 
-int KisPaintInformation::currentTime() const
+qreal KisPaintInformation::currentTime() const
 {
     return d->time;
 }
@@ -369,7 +369,7 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
 
     qreal tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
     qreal perspective = (1 - t) * pi1.perspective() + t * pi2.perspective();
-    int   time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
+    qreal time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
 
     KisPaintInformation result(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time);
     KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
@@ -392,17 +392,17 @@ qreal KisPaintInformation::tiltElevation(const KisPaintInformation& info, qreal 
 {
     qreal xTilt = qBound(qreal(-1.0), info.xTilt() / maxTiltX , qreal(1.0));
     qreal yTilt = qBound(qreal(-1.0), info.yTilt() / maxTiltY , qreal(1.0));
-    
+
     qreal e;
     if (fabs(xTilt) > fabs(yTilt)) {
-        e = sqrt(qreal(1.0) + yTilt*yTilt);
+        e = sqrt(qreal(1.0) + yTilt * yTilt);
     } else {
-        e = sqrt(qreal(1.0) + xTilt*xTilt);
+        e = sqrt(qreal(1.0) + xTilt * xTilt);
     }
-    
-    qreal cosAlpha    = sqrt(xTilt*xTilt + yTilt*yTilt)/e;
+
+    qreal cosAlpha    = sqrt(xTilt * xTilt + yTilt * yTilt) / e;
     qreal tiltElevation = acos(cosAlpha); // in radians in [0, 0.5 * PI]
-    
+
     // mapping to 0.0..1.0 if normalize is true
     return normalize ? (tiltElevation / (M_PI * qreal(0.5))) : tiltElevation;
 }

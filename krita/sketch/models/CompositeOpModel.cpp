@@ -33,6 +33,7 @@
 #include <kis_paintop_settings_widget.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
+#include <KoToolManager.h>
 
 class CompositeOpModel::Private
 {

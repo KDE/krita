@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_CONN_SQLITE_H
-#define KEXIDB_CONN_SQLITE_H
+#ifndef KEXIDB_SQLITECONNECTION_H
+#define KEXIDB_SQLITECONNECTION_H
 
 #include <QStringList>
 

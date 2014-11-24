@@ -796,8 +796,8 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
             d1 = d->distanceFromChord(d->first->controlPoint2());
         else
             d1 = d->distanceFromChord(d->second->controlPoint1());
-        dmin = qMin(0.0, 0.5 * d1);
-        dmax = qMax(0.0, 0.5 * d1);
+        dmin = qMin(qreal(0.0), 0.5 * d1);
+        dmax = qMax(qreal(0.0), 0.5 * d1);
     } else {
         qreal d1 = d->distanceFromChord(d->first->controlPoint2());
         qreal d2 = d->distanceFromChord(d->second->controlPoint1());

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "zoomhandler_test.h"
+
 #include <QTest>
 #include <QCoreApplication>
 
@@ -24,8 +26,6 @@
 #include "KoZoomHandler.h"
 #include "KoDpi.h"
 #include "KoUnit.h"
-
-#include "zoomhandler_test.h"
 
 // Same as qfuzzycompare, but less precise because KoZoomHandler is a
 // bit messy itself.

@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+ *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -33,11 +34,9 @@ public:
     KisCategorizedItemDelegate(bool indicateError, QObject *parent);
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    
+
 private:
     void paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const;
-    
-private:
     bool           m_indicateError;
     mutable qint32 m_minimumItemHeight;
 };

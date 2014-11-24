@@ -22,15 +22,14 @@
 #include <kis_types.h>
 #include <QWidget>
 #include <QQueue>
-#include <KoTriangleColorSelector.h>
 #include <KoColorDisplayRendererInterface.h>
 
 
 class KisFavoriteBrushData;
 class KisFavoriteResourceManager;
 class QWidget;
-class KisTriangleColorSelector;
 class KoColor;
+class KoTriangleColorSelector;
 
 class KisPopupPalette : public QWidget
 {

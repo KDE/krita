@@ -29,7 +29,7 @@
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(PathShapesPluginFactory, registerPlugin<PathShapesPlugin>();)
-K_EXPORT_PLUGIN(PathShapesPluginFactory("PathShapes"))
+K_EXPORT_PLUGIN(PathShapesPluginFactory("calligra_shape_paths"))
 
 PathShapesPlugin::PathShapesPlugin(QObject *parent, const QVariantList&)
     : QObject(parent)

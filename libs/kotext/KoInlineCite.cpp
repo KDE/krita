@@ -102,7 +102,7 @@ void KoInlineCite::setType(Type t)
     d->type = t;
 }
 
-QString KoInlineCite::dataField(QString fieldName) const
+QString KoInlineCite::dataField(const QString &fieldName) const
 {
     if ( fieldName == "address" ) {
         return d->address;
@@ -563,7 +563,7 @@ void KoInlineCite::updatePosition(const QTextDocument *document, int posInDocume
     d->posInDocument = posInDocument;
 }
 
-void KoInlineCite::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void KoInlineCite::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
@@ -589,7 +589,7 @@ void KoInlineCite::resize(const QTextDocument *document, QTextInlineObject objec
     object.setDescent(fm.descent());
 }
 
-void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document);
     Q_UNUSED(object);

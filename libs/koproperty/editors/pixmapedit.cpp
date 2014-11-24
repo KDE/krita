@@ -122,6 +122,8 @@ void PixmapEdit::setValue(const QVariant &value)
     }
 //    if (emitChange)
 //        emit valueChanged(this);
+    
+    emit commitData(this);
 }
 
 QString PixmapEdit::selectPixmapFileName()

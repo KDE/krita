@@ -29,7 +29,6 @@
 
 #include <KoRdfSemanticItem.h>
 #include <KoDocumentRdf.h>
-#include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoBookmark.h>
 #include <KoTextInlineRdf.h>

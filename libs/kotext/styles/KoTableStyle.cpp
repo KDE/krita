@@ -247,7 +247,7 @@ void KoTableStyle::setBreakBefore(KoText::KoTextBreakProperty state)
     setProperty(BreakBefore, state);
 }
 
-KoText::KoTextBreakProperty KoTableStyle::breakBefore()
+KoText::KoTextBreakProperty KoTableStyle::breakBefore() const
 {
     return (KoText::KoTextBreakProperty) propertyInt(BreakBefore);
 }
@@ -257,7 +257,7 @@ void KoTableStyle::setBreakAfter(KoText::KoTextBreakProperty state)
     setProperty(BreakAfter, state);
 }
 
-KoText::KoTextBreakProperty KoTableStyle::breakAfter()
+KoText::KoTextBreakProperty KoTableStyle::breakAfter() const
 {
     return (KoText::KoTextBreakProperty) propertyInt(BreakAfter);
 }
@@ -267,7 +267,7 @@ void KoTableStyle::setCollapsingBorderModel(bool on)
     setProperty(CollapsingBorders, on);
 }
 
-bool KoTableStyle::collapsingBorderModel()
+bool KoTableStyle::collapsingBorderModel() const
 {
     return propertyBoolean(CollapsingBorders);
 }
@@ -424,7 +424,7 @@ int KoTableStyle::pageNumber() const
     return propertyInt(PageNumber);
 }
 
-bool KoTableStyle::visible()
+bool KoTableStyle::visible() const
 {
     if (hasProperty(Visible))
         return propertyBoolean(Visible);

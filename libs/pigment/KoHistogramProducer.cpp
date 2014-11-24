@@ -16,13 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KoHistogramProducer.h"
+
 #include <QList>
 
 #include <kglobal.h>
 
 #include <KoID.h>
 
-#include "KoHistogramProducer.h"
 #include "KoBasicHistogramProducers.h"
 
 #include "KoColorSpace.h"

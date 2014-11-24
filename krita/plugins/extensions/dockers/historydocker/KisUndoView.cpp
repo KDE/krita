@@ -66,6 +66,13 @@
 #include <QAbstractItemModel>
 #include <QPointer>
 #include <QIcon>
+#include <QLabel>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
+#include <QWidgetAction>
+#include <QGridLayout>
+#include <kis_config.h>
+
 
 
 /*!
@@ -291,6 +298,93 @@ QIcon KisUndoView::cleanIcon() const
 
 void KisUndoView::setCanvas(KisCanvas2 *canvas) {
     d->model->setCanvas(canvas);
+}
+void KisUndoView::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::RightButton)
+    {
+        QMenu menu(this);
+        QAction* action1 = menu.addAction(koIcon("linked2"),stack()->useCumulativeUndoRedo()?i18n("Disable Cumulative Undo"):i18n("Enable Cumulative Undo"));
+        connect(action1, SIGNAL(triggered()), this, SLOT(toggleCumulativeUndoRedo()));
+        QLabel *l = new QLabel("Start merging time");
+        QDoubleSpinBox *s = new QDoubleSpinBox();
+        s->setToolTip("The amount of time after a merged stroke before merging again");
+        s->setRange(3,10);
+        s->setValue(stack()->timeT1());
+        QGridLayout *g = new QGridLayout();
+        g->addWidget(l);
+        g->addWidget(s);
+        QWidget *w = new QWidget();
+        w->setLayout(g);
+        w->setVisible(stack()->useCumulativeUndoRedo());
+        QWidgetAction* action2 = new QWidgetAction(s);
+        action2->setDefaultWidget(w);
+        connect(s,SIGNAL(valueChanged(double)),SLOT(setStackT1(double)));
+
+        QLabel *l1 = new QLabel("Group time");
+        QDoubleSpinBox *s1 = new QDoubleSpinBox();
+        s1->setToolTip("The amount of time every stroke should be \napart from its previous stroke\nto be classified in one group");
+        s1->setRange(0.3,s->value());
+        s1->setValue(stack()->timeT2());
+        QGridLayout *g1 = new QGridLayout();
+        g1->addWidget(l1);
+        g1->addWidget(s1);
+        QWidget *w1 = new QWidget();
+        w1->setLayout(g1);
+        w1->setVisible(stack()->useCumulativeUndoRedo());
+        QWidgetAction* action3 = new QWidgetAction(s1);
+        action3->setDefaultWidget(w1);
+        connect(s1,SIGNAL(valueChanged(double)),SLOT(setStackT2(double)));
+
+        QLabel *l2 = new QLabel("Split Strokes");
+        QSpinBox *s2 = new QSpinBox();
+        s2->setToolTip("The number of last strokes which Krita should store separately");
+        s2->setRange(1,stack()->undoLimit());
+        s2->setValue(stack()->strokesN());
+        QGridLayout *g2 = new QGridLayout();
+        g1->addWidget(l2);
+        g1->addWidget(s2);
+        QWidget *w2 = new QWidget();
+        w2->setLayout(g2);
+        w2->setVisible(stack()->useCumulativeUndoRedo());
+        QWidgetAction* action4 = new QWidgetAction(s2);
+        action4->setDefaultWidget(w2);
+        connect(s2,SIGNAL(valueChanged(int)),SLOT(setStackN(int)));
+
+        menu.addAction(action2);
+        menu.addAction(action3);
+        menu.addAction(action4);
+
+        menu.exec(event->globalPos());
+
+    }
+    else{
+    QListView::mousePressEvent(event);
+    }
+}
+void KisUndoView::toggleCumulativeUndoRedo()
+{
+    stack()->setUseCumulativeUndoRedo(!stack()->useCumulativeUndoRedo() );
+    KisConfig cfg;
+    cfg.setCumulativeUndoRedo(stack()->useCumulativeUndoRedo());
+}
+void KisUndoView::setStackT1(double value)
+{
+    stack()->setTimeT1(value);
+    KisConfig cfg;
+    cfg.setStackT1(value);
+}
+void KisUndoView::setStackT2(double value)
+{
+    stack()->setTimeT2(value);
+    KisConfig cfg;
+    cfg.setStackT2(value);
+}
+void KisUndoView::setStackN(int value)
+{
+    stack()->setStrokesN(value);
+    KisConfig cfg;
+    cfg.setStackN(value);
 }
 
 #include "KisUndoView.moc"

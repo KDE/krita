@@ -31,7 +31,6 @@
 
 #include <QMetaType>
 #include <QColor>
-#include <QMetaType>
 
 
 class KoShape;

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="light_transform_icons_penPressure.svg"
+   inkscape:export-filename="/home/scott/kde4/src/calligra/krita/pics/tool_transform/light_transform_icons_penPressure.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3158"
+       is_visible="true" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3150"
+       is_visible="true" />
+    <linearGradient
+       id="linearGradient8178">
+      <stop
+         style="stop-color:#909090;stop-opacity:1;"
+         offset="0"
+         id="stop8180" />
+      <stop
+         style="stop-color:#dcdcdc;stop-opacity:1;"
+         offset="1"
+         id="stop8182" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8178"
+       id="linearGradient3973"
+       x1="4.2073441"
+       y1="12.771108"
+       x2="1.9079816"
+       y2="0.49153402"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#757575"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="10.220225"
+     inkscape:cx="17.903583"
+     inkscape:cy="9.985201"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg2"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1707"
+     inkscape:window-height="928"
+     inkscape:window-x="1716"
+     inkscape:window-y="106"
+     inkscape:window-maximized="0"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="false" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     sodipodi:insensitive="true"
+     style="opacity:0.47976882;display:none"
+     transform="translate(0,-1036.3622)">
+    <image
+       y="61.505039"
+       x="-574.85712"
+       id="image3082"
+       xlink:href="file:///mnt/6A0F06C454D4F476/One-offs/MyPaint/scrap009_a.png"
+       height="896"
+       width="1344" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="basde"
+     transform="translate(0,-1036.3622)" />
+  <path
+     style="fill:url(#linearGradient3973);fill-opacity:1;stroke:none"
+     d="m 9.761818,0.16163402 c 0,0 -2.0391804,2.12272268 -3.5527039,3.92181608 -2.829042,3.362821 -3.368148,7.0131299 -3.368148,7.0131299 l 2.3992287,2.306951 c 0,0 4.9820562,-2.286106 6.6901572,-3.4604262 1.708098,-1.1743183 4.152511,-3.5527041 4.152511,-3.5527041 0,0 -2.121325,0.3133776 -4.664845,-1.5360859 -2.1130897,-1.900181 -1.6562,-4.69268078 -1.6562,-4.69268078 z"
+     id="path3958"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="csccsccc" />
+  <path
+     style="fill:#acacac;fill-opacity:1;stroke:none"
+     d="m 2.9082125,12.035786 0.989935,0.752463 c 0,0 -0.8547942,2.837669 -2.6615905,2.936192 C 0.56939718,15.828752 -0.16661973,15.090593 0.04836002,14.090457 0.30393028,12.901496 2.9082125,12.035786 2.9082125,12.035786 z"
+     id="path3964"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccsc" />
+</svg>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>425</width>
-    <height>265</height>
+    <height>279</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -17,11 +17,23 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
     <layout class="QVBoxLayout">
+     <property name="spacing">
+      <number>8</number>
+     </property>
      <item>
       <widget class="QToolButton" name="brushPreview">
        <property name="sizePolicy">
@@ -88,22 +100,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Antialiasing:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnAntialiasing">
+      <widget class="QCheckBox" name="btnAntialiasing">
        <property name="toolTip">
         <string>The border of the brush will be smoothed to avoid aliasing</string>
        </property>
        <property name="text">
         <string>Smooth Lines</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -362,12 +364,6 @@
    <class>KisCurveWidget</class>
    <extends>QWidget</extends>
    <header>widgets/kis_curve_widget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisMultipliersDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_multipliers_double_slider_spinbox.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

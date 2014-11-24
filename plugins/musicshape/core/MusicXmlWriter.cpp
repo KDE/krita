@@ -32,7 +32,6 @@
 #include "Staff.h"
 
 #include <KoXmlWriter.h>
-#include <calligraversion.h>
 
 #include <kdebug.h>
 

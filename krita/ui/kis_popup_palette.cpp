@@ -24,6 +24,7 @@
 #include "KoIcon.h"
 #include "kis_paintop_preset.h"
 #include "kis_resource_server_provider.h"
+#include <KoTriangleColorSelector.h>
 #include "KoColorSpaceRegistry.h"
 #include "KoResource.h"
 #include <KoResourceServer.h>
@@ -422,7 +423,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
             QPainterPath settingCircle;
             settingCircle.addEllipse(width() / 2 + side / 2 - 40, height() / 2 + side / 2 - 40, 40, 40);
             if (settingCircle.contains(point)) {                
-                KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+                KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
                 QStringList tags = rServer->tagNamesList();
                 qSort(tags);
 

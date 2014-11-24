@@ -2,6 +2,7 @@
  * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -113,8 +114,12 @@ public:
     explicit ReportSectionTitle(QWidget *parent = 0);
     ~ReportSectionTitle();
 
+signals:
+    void clicked();
+
 protected:
     virtual void paintEvent(QPaintEvent* event);
+    virtual void mousePressEvent(QMouseEvent *event);
 };
 
 #endif

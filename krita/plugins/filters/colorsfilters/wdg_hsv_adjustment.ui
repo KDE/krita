@@ -11,28 +11,28 @@
    </rect>
   </property>
   <layout class="QGridLayout">
-   <property name="verticalSpacing">
+   <property name="leftMargin">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="topMargin">
     <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="verticalSpacing">
+    <number>5</number>
    </property>
    <item row="2" column="1">
-    <widget class="KIntNumInput" name="hue">
+    <widget class="KisDoubleSliderSpinBox" name="hue" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="minimum">
-      <number>-180</number>
-     </property>
-     <property name="maximum">
-      <number>180</number>
-     </property>
-     <property name="sliderEnabled">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -92,21 +92,12 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="KIntNumInput" name="value">
+    <widget class="KisDoubleSliderSpinBox" name="value" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="minimum">
-      <number>-100</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="sliderEnabled">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -176,21 +167,12 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="KIntNumInput" name="saturation">
+    <widget class="KisDoubleSliderSpinBox" name="saturation" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="minimum">
-      <number>-100</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="sliderEnabled">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -198,9 +180,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KIntNumInput</class>
+   <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>knuminput.h</header>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

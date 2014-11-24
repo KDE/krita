@@ -58,11 +58,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushResetShadows">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
        <property name="text">
         <string>Reset Shadows  </string>
        </property>
@@ -193,11 +188,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushResetMidtones">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
        <property name="text">
         <string>Reset Midtones  </string>
        </property>
@@ -328,11 +318,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushResetHighlights">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
        <property name="text">
         <string>Reset Highlights</string>
        </property>

@@ -1,6 +1,6 @@
 project( vectorshape)
 
-include_directories(${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${VECTORIMAGE_INCLUDES})
+include_directories(${FLAKE_INCLUDES} ${VECTORIMAGE_INCLUDES})
 
 SET ( VectorShape_SRCS
     VectorShapePlugin.cpp

@@ -182,7 +182,7 @@
      <item row="3" column="0">
       <widget class="QLabel">
        <property name="text">
-        <string>Position:</string>
+        <string comment="Character position">Position:</string>
        </property>
        <property name="buddy">
         <cstring>positionList</cstring>

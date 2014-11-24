@@ -70,7 +70,7 @@ public:
 
     virtual ~KoResourceServerBase() {}
 
-    virtual int resoureCount() const = 0;
+    virtual int resourceCount() const = 0;
     virtual void loadResources(QStringList filenames) = 0;
     virtual QStringList blackListedFiles() const = 0;
     QString type() const { return m_type; }
@@ -115,7 +115,9 @@ protected:
  * can be observed with a KoResourceServerObserver
  *
  * The \p Policy template parameter defines the way how the lifetime
+
  * of a resource is handled.  There are to predefined policies:
+
  *
  *   o PointerStroragePolicy --- usual pointers with ownership over
  *                               the resource.
@@ -134,7 +136,6 @@ class KoResourceServer : public KoResourceServerBase
 public:
     typedef typename Policy::PointerType PointerType;
     typedef KoResourceServerObserver<T, Policy> ObserverType;
-public:
     KoResourceServer(const QString& type, const QString& extensions)
         : KoResourceServerBase(type, extensions)
     {
@@ -161,7 +162,7 @@ public:
 
     }
 
-    int resoureCount() const {
+    int resourceCount() const {
         return m_resources.size();
     }
 
@@ -227,6 +228,7 @@ public:
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
         }
+
         if (save) {
             QFileInfo fileInfo(resource->filename());
 
@@ -286,7 +288,9 @@ public:
     }
 
     /// Remove a resource from the resourceserver and blacklist it
+
     bool removeResourceAndBlacklist(PointerType resource) {
+
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
@@ -337,7 +341,9 @@ public:
         if (!resource->valid()) {
             kWarning(30009) << "Import failed! Resource is not valid";
             Policy::deleteResource(resource);
+
             return false;
+
         }
 
         if (fileCreation) {
@@ -355,7 +361,8 @@ public:
             resource->setFilename(fileInfo.filePath());
         }
 
-        if (!addResource(resource)) {
+
+        if(!addResource(resource)) {
             Policy::deleteResource(resource);
         }
 
@@ -392,6 +399,7 @@ public:
             if(notifyLoadedResources) {
                 foreach(PointerType resource, m_resourcesByFilename) {
                     observer->resourceAdded(resource);
+
                 }
             }
         }

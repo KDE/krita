@@ -270,10 +270,12 @@ struct TranslateOp
         return pt + lambda * m_offset;
     }
 
-    static const qreal maxDistCoeff = 3.0;
+    static const qreal maxDistCoeff;
 
     QPointF m_offset;
 };
+
+const qreal TranslateOp::maxDistCoeff = 3.0;
 
 struct ScaleOp
 {
@@ -289,10 +291,12 @@ struct ScaleOp
         return base + (1.0 + m_scale * lambda) * diff;
     }
 
-    static const qreal maxDistCoeff = 3.0;
+    static const qreal maxDistCoeff;
 
     qreal m_scale;
 };
+
+const qreal ScaleOp::maxDistCoeff = 3.0;
 
 struct RotateOp
 {
@@ -315,10 +319,12 @@ struct RotateOp
         return base + QPointF(x, y);
     }
 
-    static const qreal maxDistCoeff = 4.0;
+    static const qreal maxDistCoeff;
 
     qreal m_angle;
 };
+
+const qreal RotateOp::maxDistCoeff = 3.0;
 
 void KisLiquifyTransformWorker::translatePoints(const QPointF &base,
                                                 const QPointF &offset,

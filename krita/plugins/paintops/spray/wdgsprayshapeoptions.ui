@@ -39,9 +39,18 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
+     <property name="bottomMargin">
+      <number>10</number>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="widthInfoLbl_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Shape:</string>
        </property>
@@ -52,6 +61,12 @@
      </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="shapeBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -82,19 +97,6 @@
        </item>
       </widget>
      </item>
-     <item row="0" column="2" colspan="3">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>198</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="widthInfoLbl">
        <property name="text">
@@ -105,42 +107,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="2">
-      <widget class="QSlider" name="widthSlider">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1000</number>
-       </property>
-       <property name="pageStep">
-        <number>100</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="tickPosition">
-        <enum>QSlider::TicksBelow</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QSpinBox" name="widthSpin">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1000</number>
-       </property>
-       <property name="value">
-        <number>6</number>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="4" rowspan="2">
+     <item row="1" column="2" rowspan="2">
       <widget class="KoAspectButton" name="aspectButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -175,38 +142,16 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1" colspan="2">
-      <widget class="QSlider" name="heightSlider">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1000</number>
-       </property>
-       <property name="pageStep">
-        <number>100</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="tickPosition">
-        <enum>QSlider::TicksBelow</enum>
-       </property>
-      </widget>
+     <item row="2" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="heightSpin" native="true"/>
      </item>
-     <item row="2" column="3">
-      <widget class="QSpinBox" name="heightSpin">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1000</number>
-       </property>
-       <property name="value">
-        <number>6</number>
+     <item row="1" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="widthSpin" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -267,72 +212,13 @@
    <header>kurlrequester.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>widthSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>widthSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>257</x>
-     <y>46</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>763</x>
-     <y>55</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>heightSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>heightSpin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>281</x>
-     <y>80</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>763</x>
-     <y>87</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>widthSpin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>widthSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>763</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>118</x>
-     <y>50</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>heightSpin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>heightSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>763</x>
-     <y>87</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>150</x>
-     <y>87</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

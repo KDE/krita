@@ -36,10 +36,10 @@ public:
     Private()
         : view(0)
     {
-        rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();;
     }
 
-    KoResourceServer<KisPaintOpPreset> * rserver;
+    KisPaintOpPresetResourceServer * rserver;
     QString currentPreset;
     KisView2* view;
 
@@ -177,7 +177,7 @@ void PresetModel::setCurrentPreset(QString presetName)
 int PresetModel::nameToIndex(QString presetName) const
 {
     int index = 0;
-    QList<KisPaintOpPreset*> resources = d->rserver->resources();
+    QList<KisPaintOpPresetSP> resources = d->rserver->resources();
     for(int i = 0; i < resources.count(); ++i)
     {
         if (resources.at(i)->name() == presetName || resources.at(i)->name().replace(QLatin1String("_"), QLatin1String(" ")) == presetName)
@@ -194,10 +194,10 @@ void PresetModel::activatePreset(int index)
     if ( !d->view )
         return;
 
-    QList<KisPaintOpPreset*> resources = d->rserver->resources();
+    QList<KisPaintOpPresetSP> resources = d->rserver->resources();
     if (index >= 0 && index < resources.count())  {
-        KisPaintOpPreset* preset = resources.at( index );
-        d->setCurrentPaintop(preset->paintOp(), preset->clone());
+        KisPaintOpPresetSP preset = resources.at( index );
+        d->setCurrentPaintop(preset->paintOp(), preset);
     }
 }
 

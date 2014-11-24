@@ -315,7 +315,7 @@ void KoTemplateCreateDia::slotOk() {
     }
     bool ignore = false;
     kDebug(30004) <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
-    KoTemplate *t=new KoTemplate(d->m_name->text(), QString(), ".source/"+file+ext, tmpIcon, "", "", false, true);
+    KoTemplate *t=new KoTemplate(d->m_name->text(), QString(), ".source/"+file+ext, tmpIcon, "", "", "", "", "", false, false, true);
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(d->m_name->text());
         if(existingTemplate && !existingTemplate->isHidden()) {

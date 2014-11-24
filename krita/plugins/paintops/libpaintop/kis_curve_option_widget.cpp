@@ -171,5 +171,10 @@ void KisCurveOptionWidget::disableWidgets(bool disable)
     m_curveOptionWidget->checkBoxUseSameCurve->setDisabled(disable);
     m_curveOptionWidget->curveWidget->setDisabled(disable);
     m_curveOptionWidget->sensorSelector->setDisabled(disable);
+    m_curveOptionWidget->label_xmax->setDisabled(disable);
+    m_curveOptionWidget->label_xmin->setDisabled(disable);
+    m_curveOptionWidget->label_ymax->setDisabled(disable);
+    m_curveOptionWidget->label_ymin->setDisabled(disable);
+
 }
 

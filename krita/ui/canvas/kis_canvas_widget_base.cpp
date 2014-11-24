@@ -24,6 +24,7 @@
 #include <QMenu>
 
 #include <KoShapeManager.h>
+#include <KoToolManager.h>
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>

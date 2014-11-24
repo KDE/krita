@@ -208,28 +208,26 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
     pos += offset;
 
     QRectF trf(pos, size);
-
-    int     intLineCounter  = 0;
-    qreal   intStretch      = trf.top() - offset.y();
-    qreal   intBaseTop      = trf.top();
-    qreal   intRectHeight   = trf.height();
+    qreal intStretch = trf.top() - offset.y();
 
     //kDebug() << qstrValue;
     if (qstrValue.length()) {
         QRectF rect = trf;
 
         int pos = 0;
-        int idx;
         QChar separator;
         QRegExp re("\\s");
         QPrinter prnt(QPrinter::HighResolution);
         QFontMetrics fm(font(), &prnt);
 
         // int   intRectWidth    = (int)(trf.width() * prnt.resolution()) - 10;
-        int   intRectWidth    = (int)((m_size.toPoint().width() / 72) * prnt.resolution());
+        int     intRectWidth    = (int)((m_size.toPoint().width() / 72) * prnt.resolution());
+        int     intLineCounter  = 0;
+        qreal   intBaseTop      = trf.top();
+        qreal   intRectHeight   = trf.height();
 
         while (qstrValue.length()) {
-            idx = re.indexIn(qstrValue, pos);
+            int idx = re.indexIn(qstrValue, pos);
             if (idx == -1) {
                 idx = qstrValue.length();
                 separator = QChar('\n');
@@ -240,7 +238,7 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
                 pos = idx + 1;
                 if (separator == '\n') {
                     QString line = qstrValue.left(idx);
-                    qstrValue.remove(idx + 1);
+                    qstrValue.remove(0, idx + 1);
                     pos = 0;
 
                     rect.setTop(intBaseTop + (intLineCounter * intRectHeight));

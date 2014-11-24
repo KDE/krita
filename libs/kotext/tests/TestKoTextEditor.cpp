@@ -31,7 +31,6 @@
 #include <KoShapeBasedDocumentBase.h>
 #include <KoShape.h>
 #include <KoStyleManager.h>
-#include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoBookmark.h>
 #include <KoTextDocument.h>

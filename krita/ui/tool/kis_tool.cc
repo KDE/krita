@@ -38,7 +38,6 @@
 #include <KoColor.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeManager.h>
 #include <KoToolBase.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
@@ -156,9 +155,16 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+    Q_UNUSED(toolActivation);
+    Q_UNUSED(shapes);
+
     resetCursorStyle();
+
+    if (!canvas()) return;
+    if (!canvas()->resourceManager()) return;
+
 
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
@@ -167,11 +173,12 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
                                                            resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
+    KisPaintOpPresetSP preset = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    if (preset && preset->settings()) {
+        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
+    }
 
-    canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
-
-    d->currentNode = canvas()->resourceManager()->
-            resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    d->currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
@@ -188,7 +195,7 @@ void KisTool::deactivate()
 {
     bool result = true;
 
-    result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested())/*, this, 0*/);
+    result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);
     result &= disconnect(image().data(), SIGNAL(sigStrokeEndRequested()), this, 0);
     result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);

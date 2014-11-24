@@ -51,7 +51,6 @@
 #include <KoPathConnectionPointStrategy.h>
 #include <KoStrokeConfigWidget.h>
 
-#include <KoToolManager.h>
 #include <KoIcon.h>
 
 #include <kaction.h>

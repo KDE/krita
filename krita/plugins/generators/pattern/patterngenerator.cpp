@@ -27,7 +27,6 @@
 #include <klocale.h>
 
 #include <KoColor.h>
-#include <KoProgressUpdater.h>
 #include <KoResourceServer.h>
 #include <KoPattern.h>
 #include <KoResourceServerProvider.h>

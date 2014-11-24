@@ -82,7 +82,7 @@ void KoSectionManager::invalidate()
     d->valid = false;
 }
 
-bool KoSectionManager::isValidNewName(QString name) const
+bool KoSectionManager::isValidNewName(const QString &name) const
 {
     Q_D(const KoSectionManager);
     return (d->sectionNames.find(name) == d->sectionNames.end());
@@ -92,12 +92,15 @@ QString KoSectionManager::possibleNewName() const
 {
     Q_D(const KoSectionManager);
 
-    int i = d->sectionCount + 1;
-    while (!isValidNewName(QString(i18n("New section %1")).arg(i))) {
-        i++;
-    }
+    QString newName;
 
-    return QString(i18n("New section %1")).arg(i);
+    int i = d->sectionCount;
+    do {
+        ++i;
+        newName = i18nc("new numbered section name", "New section %1", i);
+    } while (!isValidNewName(newName));
+
+    return newName;
 }
 
 void KoSectionManager::registerSection(KoSection* section)
@@ -108,7 +111,7 @@ void KoSectionManager::registerSection(KoSection* section)
     invalidate();
 }
 
-void KoSectionManager::sectionRenamed(QString oldName, QString name)
+void KoSectionManager::sectionRenamed(const QString &oldName, const QString &name)
 {
     Q_D(KoSectionManager);
     QHash<QString, KoSection *>::iterator it = d->sectionNames.find(oldName);

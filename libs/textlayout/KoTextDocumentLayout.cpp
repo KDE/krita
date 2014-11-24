@@ -176,13 +176,13 @@ void KoTextDocumentLayout::setWordprocessingMode()
     d->wordprocessingMode = true;
 }
 
-bool KoTextDocumentLayout::wordprocessingMode()
+bool KoTextDocumentLayout::wordprocessingMode() const
 {
     return d->wordprocessingMode;
 }
 
 
-bool KoTextDocumentLayout::relativeTabs(QTextBlock block) const
+bool KoTextDocumentLayout::relativeTabs(const QTextBlock &block) const
 {
     return KoTextDocument(document()).relativeTabs() 
                 && KoTextDocument(block.document()).relativeTabs();
@@ -285,7 +285,7 @@ void KoTextDocumentLayout::setTabSpacing(qreal spacing)
     d->defaultTabSizing = spacing;
 }
 
-qreal KoTextDocumentLayout::defaultTabSpacing()
+qreal KoTextDocumentLayout::defaultTabSpacing() const
 {
     return d->defaultTabSizing;
 }
@@ -901,7 +901,7 @@ void KoTextDocumentLayout::executeScheduledLayout()
     }
 }
 
-bool KoTextDocumentLayout::continuousLayout()
+bool KoTextDocumentLayout::continuousLayout() const
 {
     return d->continuousLayout;
 }
@@ -946,7 +946,7 @@ QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const
     return QRectF();
 }
 
-void KoTextDocumentLayout::clearInlineObjectRegistry(QTextBlock block)
+void KoTextDocumentLayout::clearInlineObjectRegistry(const QTextBlock &block)
 {
     d->inlineObjectExtents.clear();
     d->inlineObjectOffset = block.position();

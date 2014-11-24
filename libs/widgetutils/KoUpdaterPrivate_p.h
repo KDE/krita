@@ -22,7 +22,6 @@
 #define KO_UPDATERPRIVATE__P_H
 
 #include "KoProgressUpdater.h"
-#include "KoProgressProxy.h"
 
 #include <QTime>
 

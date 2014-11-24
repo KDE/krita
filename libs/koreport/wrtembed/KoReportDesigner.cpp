@@ -74,6 +74,8 @@ class ReportWriterSectionData
 {
 public:
     ReportWriterSectionData() {
+        selected_x_offset = 0;
+        selected_y_offset = 0;
         selected_items_rw = 0;
         mouseAction = ReportWriterSectionData::MA_None;
     }
@@ -866,7 +868,6 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
     m_releaseX = e->pos().x();
     m_releaseY = e->pos().y();
 
-    QGraphicsItem * item = 0;
     if (e->button() == Qt::LeftButton) {
         QPointF pos(m_pressX, m_pressY);
         QPointF end(m_releaseX, m_releaseY);
@@ -881,6 +882,7 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
         }
 
         if (m_sectionData->mouseAction == ReportWriterSectionData::MA_Insert) {
+            QGraphicsItem * item = 0;
             if (m_sectionData->insertItem == "report:line") {
                 item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos, end);
 
@@ -1034,7 +1036,6 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
         if (activeItems.count() == 1) {
             activeItem = activeItems.first();
         }
-        QGraphicsItem * pasted_ent = 0;
         canvas->clearSelection();
         m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
 
@@ -1054,8 +1055,7 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
                 new_obj->position().setScenePos(QPointF(0, 0));
             }
             changeSet(new_obj->propertySet());
-            pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
-
+            QGraphicsItem *pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
             if (pasted_ent) {
                 pasted_ent->setSelected(true);
                 canvas->addItem(pasted_ent);
@@ -1205,7 +1205,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
 
 static bool actionPriortyLessThan(QAction* act1, QAction* act2)
 {
-    if (act1->data().toInt() > 0 && act1->data().toInt() > 0) {
+    if (act1->data().toInt() > 0 && act2->data().toInt() > 0) {
         return act1->data().toInt() < act2->data().toInt();
     }
     return false;
@@ -1237,9 +1237,7 @@ QList<QAction*> KoReportDesigner::actions(QActionGroup* group)
             actList.insert(i-1, sep);
             sepInserted = true;
         }
-        else {
-            group->addAction(a);
-        }
+        group->addAction(a);
     }
     
     return actList;
@@ -1306,7 +1304,7 @@ qreal KoReportDesigner::countSelectionHeight() const
     if (m_releaseY == -1 || m_pressY == -1) {
         return -1;
     }
-    return m_releaseY - m_pressY;
+    return qAbs(m_releaseY - m_pressY);
 }
 
 qreal KoReportDesigner::countSelectionWidth() const
@@ -1314,7 +1312,7 @@ qreal KoReportDesigner::countSelectionWidth() const
     if (m_releaseX == -1 || m_pressX == -1) {
         return -1;
     }
-    return m_releaseX - m_pressX;
+    return qAbs(m_releaseX - m_pressX);
 }
 
 qreal KoReportDesigner::getSelectionPressX() const
@@ -1330,4 +1328,9 @@ qreal KoReportDesigner::getSelectionPressY() const
 QPointF KoReportDesigner::getPressPoint() const
 {
     return QPointF(m_pressX, m_pressY);
+}
+
+QPointF KoReportDesigner::getReleasePoint() const
+{
+    return QPointF(m_releaseX, m_releaseY);
 }

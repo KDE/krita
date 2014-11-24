@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <KoID.h>
 #include <krita_export.h>
+#include "kis_paintop_preset.h"
 
 class KoResource;
 
@@ -35,10 +36,11 @@ public:
     virtual ~KisPaintOpPresetsChooserPopup();
     
     void showButtons(bool show);
+    void updateViewSettings();
 public slots:
-    void canvasResourceChanged( KoResource * resource );
+    void canvasResourceChanged( KoResource * resource, KisPaintOpPresetSP  preset  );
 signals:
-    void resourceSelected( KoResource * resource );
+    void resourceSelected( KoResource * resource);
     
 private slots:
     void slotThumbnailMode();

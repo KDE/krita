@@ -28,7 +28,6 @@
 #include "KoDocument.h"
 #include "KoView.h"
 #include "KoOpenPane.h"
-#include "KoProgressProxy.h"
 #include "KoFilterManager.h"
 #include <KoDocumentInfoDlg.h>
 
@@ -63,7 +62,11 @@ public:
 
     ~Private()
     {
-        delete canvasItem;
+        /// FIXME ok, so this is obviously bad to leave like this
+        // For now, this is undeleted, but only to avoid an odd double
+        // delete condition. Until that's discovered, we'll need this
+        // to avoid crashes in Gemini
+        //delete canvasItem;
     }
 
     KoPart *parent;

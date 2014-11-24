@@ -34,6 +34,7 @@
 #include <KoFilterManager.h>
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
+#include "kis_slider_spin_box.h"
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -93,9 +94,18 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     cfg.fromXML(filterConfig);
 
     wdgUi.progressive->setChecked(cfg.getBool("progressive", false));
+
     wdgUi.qualityLevel->setValue(cfg.getInt("quality", 80));
+    wdgUi.qualityLevel->setRange(0, 100, 0);
+    wdgUi.qualityLevel->setSuffix("%");
+
     wdgUi.optimize->setChecked(cfg.getBool("optimize", true));
+
     wdgUi.smoothLevel->setValue(cfg.getInt("smoothing", 0));
+    wdgUi.smoothLevel->setRange(0, 100, 0);
+    wdgUi.smoothLevel->setSuffix("%");
+
+
     wdgUi.baseLineJPEG->setChecked(cfg.getBool("baseline", true));
     wdgUi.subsampling->setCurrentIndex(cfg.getInt("subsampling", 0));
     wdgUi.exif->setChecked(cfg.getBool("exif", true));
@@ -130,7 +140,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     options.progressive = wdgUi.progressive->isChecked();
     cfg.setProperty("progressive", options.progressive);
 
-    options.quality = wdgUi.qualityLevel->value();
+    options.quality = (int)wdgUi.qualityLevel->value();
     cfg.setProperty("quality", options.quality);
 
     options.forceSRGB = wdgUi.chkForceSRGB->isChecked();
@@ -140,7 +150,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     options.optimize = wdgUi.optimize->isChecked();
     cfg.setProperty("optimize", options.optimize);
 
-    options.smooth = wdgUi.smoothLevel->value();
+    options.smooth = (int)wdgUi.smoothLevel->value();
     cfg.setProperty("smoothing", options.smooth);
 
     options.baseLineJPEG = wdgUi.baseLineJPEG->isChecked();

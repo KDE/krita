@@ -35,7 +35,6 @@
 
 #include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>
-#include <KoUpdater.h>
 
 #include <kis_shape_selection.h>
 #include <kis_undo_adapter.h>

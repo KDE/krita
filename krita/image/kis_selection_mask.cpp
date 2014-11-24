@@ -24,6 +24,7 @@
 #include "kis_selection.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
+#include <KoProperties.h>
 #include "kis_fill_painter.h"
 #include <KoCompositeOp.h>
 #include "kis_node_visitor.h"

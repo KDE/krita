@@ -50,6 +50,7 @@
 #include "kis_node_commands_adapter.h"
 #include "commands/kis_selection_commands.h"
 #include "kis_iterator_ng.h"
+#include <KoProperties.h>
 
 KisMaskManager::KisMaskManager(KisView2 * view)
         : m_view(view)

@@ -42,7 +42,6 @@ public:
     virtual KoReportDesignerItemMaps* clone();
 
 protected:
-    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
 private:

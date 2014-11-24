@@ -42,6 +42,7 @@ public:
 
 public slots:
     void updateConfig(const ToolTransformArgs &config);
+    void slotUpdateIcons();
 
 signals:
     void sigConfigChanged();
@@ -56,23 +57,25 @@ public slots:
     void slotWarpTypeChanged(int index);
     void slotRotationCenterChanged(int index);
 
-    void slotSetScaleX(double value);
-    void slotSetScaleY(double value);
+    void slotSetScaleX(int value);
+    void slotSetScaleY(int value);
 
-    void slotSetShearX(double value);
-    void slotSetShearY(double value);
+    void slotSetShearX(qreal value);
+    void slotSetShearY(qreal value);
 
-    void slotSetTranslateX(double value);
-    void slotSetTranslateY(double value);
+    void slotSetTranslateX(int value);
+    void slotSetTranslateY(int value);
 
-    void slotSetAX(double value);
-    void slotSetAY(double value);
-    void slotSetAZ(double value);
+    void slotSetAX(qreal value);
+    void slotSetAY(qreal value);
+    void slotSetAZ(qreal value);
 
-    void slotSetWarpAlpha(double value);
+    void slotSetWarpAlpha(qreal value);
     void slotSetWarpDensity(int value);
 
     void slotSetKeepAspectRatio(bool value);
+
+    void slotTransformAreaVisible(bool value);
 
     void slotWarpDefaultPointsButtonClicked(bool value);
     void slotWarpCustomPointsButtonClicked(bool value);
@@ -82,6 +85,8 @@ public slots:
     void slotSetFreeTransformModeButtonClicked(bool);
     void slotSetWarpModeButtonClicked(bool);
     void slotSetCageModeButtonClicked(bool);
+    void slotCageOptionsChanged(int);
+
     void slotSetPerspectiveModeButtonClicked(bool);
     void slotSetLiquifyModeButtonClicked(bool);
     void slotButtonBoxClicked(QAbstractButton *button);
@@ -91,7 +96,7 @@ public slots:
     void liquifySizeChanged(qreal value);
     void liquifyAmountChanged(qreal value);
     void liquifyFlowChanged(qreal value);
-    void liquifyBuildUpChanged(bool value);
+    void liquifyBuildUpChanged(int value);
     void liquifySpacingChanged(qreal value);
     void liquifySizePressureChanged(bool value);
     void liquifyAmountPressureChanged(bool value);
@@ -119,6 +124,8 @@ private:
     void updateLockPointsButtonCaption();
 
     void updateLiquifyControls();
+
+    void resetUIOptions();
 
 private:
     static const int DEFAULT_POINTS_PER_LINE;

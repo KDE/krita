@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+ *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +26,11 @@
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionViewItemV4>
 #include <QApplication>
+#include <QPushButton>
+#include <KoIcon.h>
+#include <KPushButton>
+
+
 
 KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError, QObject *parent)
     : QStyledItemDelegate(parent),
@@ -44,6 +50,23 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             sovi.decorationPosition = QStyleOptionViewItem::Right;
 
         QStyledItemDelegate::paint(painter, sovi, index);
+        if(index.data(__CategorizedListModelBase::isLockableRole).toBool())
+        {
+            if(index.data(__CategorizedListModelBase::isLockedRole).toBool())
+            {
+                KIcon *i = new KIcon("linked2");
+                QPixmap pixmap = i->pixmap(QSize(sovi.rect.height(),10));
+                painter->drawPixmap(sovi.rect.width()-pixmap.width(),sovi.rect.y(),pixmap);
+            }
+            else
+            {
+                KIcon *i = new KIcon("linked2");
+                painter->setOpacity(0.4);
+                QPixmap pixmap = i->pixmap(QSize(sovi.rect.height(),10));
+                painter->drawPixmap(sovi.rect.width()-pixmap.width(),sovi.rect.y(),pixmap);
+            }
+        }
+        painter->setOpacity(1);
     }
     else {
         QPalette palette = QApplication::palette();
@@ -63,7 +86,6 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             !index.data(__CategorizedListModelBase::ExpandCategoryRole).toBool()
         );
     }
-
     painter->resetTransform();
 }
 
@@ -76,7 +98,6 @@ QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, c
             m_minimumItemHeight = qMax(m_minimumItemHeight, indexSize.height());
         }
     }
-
     return QSize(QStyledItemDelegate::sizeHint(option, index).width(), m_minimumItemHeight);
 }
 
@@ -97,3 +118,4 @@ void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint
     painter->setBrush(palette.buttonText());
     painter->drawPolygon(triangle);
 }
+

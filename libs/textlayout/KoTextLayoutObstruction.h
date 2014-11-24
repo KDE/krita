@@ -38,7 +38,7 @@ class KOTEXTLAYOUT_EXPORT KoTextLayoutObstruction
 public:
     KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix);
 
-    KoTextLayoutObstruction(QRectF rect, bool rtl);
+    KoTextLayoutObstruction(const QRectF &rect, bool rtl);
 
     void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal borderHalfWidth);
 

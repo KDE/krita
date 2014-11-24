@@ -39,13 +39,13 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Rotation</string>
+      <string>Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
        <widget class="QCheckBox" name="fixedRotation">
         <property name="text">
-         <string>Constant</string>
+         <string>Fixed rotation:</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -55,7 +55,7 @@
       <item row="1" column="0">
        <widget class="QCheckBox" name="randomRotation">
         <property name="text">
-         <string>Random</string>
+         <string>Randomize rotation:</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -65,89 +65,28 @@
       <item row="2" column="0">
        <widget class="QCheckBox" name="followCursor">
         <property name="text">
-         <string>Follow cursor</string>
+         <string>Follow cursor weight:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1" colspan="2">
-       <widget class="KDoubleNumInput" name="fixedAngleBox">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="value">
-         <double>30.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>360.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="suffix">
-         <string>°</string>
-        </property>
-        <property name="decimals">
-         <number>0</number>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="KisDoubleSliderSpinBox" name="fixedAngleBox" />
       </item>
       <item row="1" column="1" colspan="2">
-       <widget class="KDoubleNumInput" name="randomAngleWeight">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="value">
-         <double>0.500000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="KisDoubleSliderSpinBox" name="randomAngleWeight" native="true" />
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="KDoubleNumInput" name="followCursorWeight">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="KisDoubleSliderSpinBox" name="followCursorWeight" />
       </item>
       <item row="3" column="0">
        <widget class="QCheckBox" name="drawingAngle">
         <property name="text">
-         <string>Drawing angle</string>
+         <string>Angle weight:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1" colspan="2">
-       <widget class="KDoubleNumInput" name="drawingAngleWeight">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="KisDoubleSliderSpinBox" name="drawingAngleWeight" native="true" />
       </item>
      </layout>
     </widget>
@@ -168,6 +107,14 @@
   </layout>
  </widget>
  <customwidgets>
+
+ <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+
   <customwidget>
    <class>KDoubleNumInput</class>
    <extends>QWidget</extends>

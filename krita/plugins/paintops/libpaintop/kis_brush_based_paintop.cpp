@@ -111,7 +111,8 @@ bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation) const
 {
-    return effectiveSpacing(scale, rotation, 1.0, false);
+    QSizeF metric = m_brush->characteristicSize(scale, scale, rotation);
+    return effectiveSpacing(metric.width(), metric.height(), 1.0, false);
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const

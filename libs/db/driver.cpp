@@ -22,7 +22,6 @@
 #include "drivermanager.h"
 #include "drivermanager_p.h"
 #include "error.h"
-#include "drivermanager.h"
 #include "connection.h"
 #include "connectiondata.h"
 #include "admin.h"

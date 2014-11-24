@@ -37,6 +37,7 @@
 class KOWIDGETS_EXPORT KoZoomAction : public KSelectAction
 {
     Q_OBJECT
+    Q_PROPERTY(qreal effectiveZoom READ effectiveZoom NOTIFY zoomChanged)
 public:
 
   /**

@@ -36,6 +36,7 @@
 
 #include <kurl.h>
 #include <kstandarddirs.h>
+#include <kdialog.h>
 #include <kdebug.h>
 
 #include "filter/kis_filter.h"
@@ -121,7 +122,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
 #else
     view->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
-    QString mainqml = KGlobal::dirs()->findResource("pics", "kritasketch.qml");
+    QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
 #endif
 
     Q_ASSERT(QFile::exists(mainqml));
@@ -148,7 +149,14 @@ void MainWindow::resetWindowTitle()
     QString fileName = url.fileName();
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Sketch")));
+
+    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KisDoc2* document = DocumentManager::instance()->document();
+    if (document && document->isModified() ) {
+        flags |= KDialog::ModifiedCaption;
+    }
+
+    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 bool MainWindow::allowClose() const

@@ -42,7 +42,6 @@ private slots:
 
 private:
     KisDoubleSliderSpinBox* m_opacitySlider;
-    KisDoubleSliderSpinBox* m_flowSlider;
 };
 
 #endif // KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H

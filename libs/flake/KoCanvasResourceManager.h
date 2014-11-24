@@ -27,7 +27,6 @@
 
 class KoShape;
 class KoShapeStroke;
-class KUndo2Stack;
 class KoColor;
 class KoUnit;
 
@@ -234,10 +233,6 @@ public:
      * @see KoCanvasResourceManager::CanvasResource
      */
     void clearResource(int key);
-
-    KUndo2Stack *undoStack() const;
-    void setUndoStack(KUndo2Stack *undoStack);
-
 
 signals:
     /**

@@ -18,7 +18,6 @@
 #include "KoReportItemMaps.h"
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <QBuffer>
@@ -85,7 +84,7 @@ KoReportItemMaps::~KoReportItemMaps()
     QMap<QString, Marble::MarbleWidget*>::iterator i = m_marbles.begin();
     while(i != m_marbles.end()){
         delete i.value();
-        i++;
+        ++i;
     }
     delete m_set;
 }

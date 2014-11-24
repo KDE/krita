@@ -146,7 +146,7 @@ bool FloatingAnchorStrategy::moveSubject()
     return true;
 }
 
-bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, QTextBlock &block, QTextLayout *layout)
+bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, const QRectF &containerBoundingRect, QTextBlock &block, QTextLayout *layout)
 {
     switch (m_anchor->horizontalRel()) {
     case KoShapeAnchor::HPage:
@@ -248,7 +248,7 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
     return true;
 }
 
-void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect)
+void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, const QRectF &anchorBoundingRect)
 {
     switch (m_anchor->horizontalPos()) {
     case KoShapeAnchor::HCenter:
@@ -292,7 +292,7 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
     }
 }
 
-bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
+bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, const QRectF &containerBoundingRect,
                                           KoTextShapeData *data, QTextBlock &block, QTextLayout *layout)
 {
     //FIXME proper handle VFrame and VFrameContent but fallback to VPage/VPageContent for now to produce better results
@@ -362,7 +362,7 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
     return true;
 }
 
-void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect)
+void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, const QRectF &anchorBoundingRect)
 {
     switch (m_anchor->verticalPos()) {
     case KoShapeAnchor::VBottom:

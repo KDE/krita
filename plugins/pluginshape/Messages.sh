@@ -1,4 +1,4 @@
 #! /bin/sh
 source ../../calligra_xgettext.sh
 
-calligra_xgettext PluginShape.pot *.cpp
+calligra_xgettext calligra_shape_plugin.pot *.cpp

@@ -99,7 +99,7 @@ public:
     }
 
     KisBrushResourceServer* brushServer;
-    KoResourceServer<KisPaintOpPreset>* paintopServer;
+    KisPaintOpPresetResourceServer * paintopServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<ResourceBundle> *bundleServer;
     KoResourceServer<KoPattern>* patternServer;
@@ -146,7 +146,6 @@ void ResourceManager::slotImport()
     filterToTypeMap[i18n("Photoshop Brushes (*.abr)")] = "brushes";
     filterToTypeMap[i18n("PNG Brushes (*.png)")] = "brushes";
     filterToTypeMap[i18n("SVG Brushes (*.svg)")] = "brushes";
-    filterToTypeMap[i18n("Brush Presets (*.kpp)")] = "brushes";
     filterToTypeMap[i18n("GIMP Gradients (*.ggr)")] = "gradients";
     filterToTypeMap[i18n("SVG Gradients (*.svg)")] = "gradients";
     filterToTypeMap[i18n("Karbon Gradients (*.kgr)")] = "gradients";
@@ -280,7 +279,8 @@ void ResourceManager::slotCreateBundle()
 
     res = dlgCreateBundle.selectedPresets();
     foreach(const QString &r, res) {
-        KoResource *res = d->paintopServer->resourceByFilename(r);
+        KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
+        KoResource *res = preset.data();
         newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->tagObject()->assignedTagsList(res), res->md5());
     }
 

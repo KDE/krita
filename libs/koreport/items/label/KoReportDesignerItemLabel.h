@@ -17,8 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __REPORTENTITYLABEL_H__
-#define __REPORTENTITYLABEL_H__
+#ifndef __KOREPORTDESIGNERITEMLABEL_H__
+#define __KOREPORTDESIGNERITEMLABEL_H__
 
 #include <QGraphicsRectItem>
 #include <koproperty/Property.h>
@@ -39,9 +39,6 @@ public:
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual KoReportDesignerItemLabel* clone();
-
-protected:
-    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
 
 private:
     void init(QGraphicsScene*, KoReportDesigner*);

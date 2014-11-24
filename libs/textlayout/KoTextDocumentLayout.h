@@ -111,7 +111,7 @@ public:
     void setStyleManager(KoStyleManager *manager);
 
     /// Returns the bounding rectangle of block.
-    QRectF blockBoundingRect(const QTextBlock & block) const;
+    QRectF blockBoundingRect(const QTextBlock &block) const;
     /**
      * Returns the total size of the document. This is useful to display
      * widgets since they can use to information to update their scroll bars
@@ -122,7 +122,7 @@ public:
     virtual QRectF frameBoundingRect(QTextFrame*) const;
 
     /// the default tab size for this document
-    qreal defaultTabSpacing();
+    qreal defaultTabSpacing() const;
 
     /// set default tab size for this document
     void setTabSpacing(qreal spacing);
@@ -131,10 +131,10 @@ public:
     void setWordprocessingMode();
 
     /// is it for a word processor (slight changes in layout may occur)
-    bool wordprocessingMode();
+    bool wordprocessingMode() const;
 
     /// are the tabs relative to indent or not
-    bool relativeTabs(QTextBlock block) const;
+    bool relativeTabs(const QTextBlock &block) const;
 
     /// visualize inline objects during paint
     void showInlineObjectVisualization(bool show);
@@ -203,7 +203,7 @@ public:
     /// remove inline object
     void removeInlineObject(KoShapeAnchor *textAnchor);
 
-    void clearInlineObjectRegistry(QTextBlock block);
+    void clearInlineObjectRegistry(const QTextBlock& block);
 
     KoInlineObjectExtent inlineObjectExtent(const QTextFragment&);
 
@@ -275,7 +275,7 @@ signals:
      */
     void layoutIsDirty();
 
-    void foundAnnotation(KoShape *annotationShape, QPointF refPosition);
+    void foundAnnotation(KoShape *annotationShape, const QPointF &refPosition);
 
 public slots:
     /**
@@ -314,7 +314,7 @@ protected:
     virtual void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
     /// should we continue layout when done with current root area
-    bool continuousLayout();
+    bool continuousLayout() const;
 
     void registerInlineObject(const QTextInlineObject &inlineObject);
 

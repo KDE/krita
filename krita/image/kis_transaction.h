@@ -34,12 +34,14 @@
 class KisTransaction
 {
 public:
-    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0) {
+    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1) {
         m_transactionData = new KisTransactionData(KUndo2MagicString(), device, true, parent);
+        m_transactionData->setTimedID(timedID);
     }
 
-    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0) {
+    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1) {
         m_transactionData = new KisTransactionData(name, device, true, parent);
+        m_transactionData->setTimedID(timedID);
     }
 
     virtual ~KisTransaction() {

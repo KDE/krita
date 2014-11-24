@@ -24,7 +24,7 @@
 
 #include <KoPageApp.h>
 #include <KoPADocument.h>
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 #include <KoPAViewBase.h>
 #include <KoIcon.h>
 
@@ -47,9 +47,11 @@ KoToolBase * KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
     if (dynamic_cast<KoPACanvasBase *>(canvas)) {
         KoPAViewBase *view = static_cast<KoPACanvasBase *>(canvas)->koPAView();
 
-        const QString toolTip =
+        if (view) {
+            const QString toolTip =
                 (view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Design") : i18n("Slide Design");
-        setToolTip(toolTip);
+            setToolTip(toolTip);
+        }
         return new KoPABackgroundTool(canvas);
     }
     return 0;

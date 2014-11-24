@@ -19,6 +19,7 @@ hi16-palette_library.png
 icon-kritasketch-256.png
 landscape.png
 linked.png
+linked2.png
 local_selection_active.png
 local_selection_inactive.png
 locked.png
@@ -33,6 +34,7 @@ paintop_settings_disabled.png
 portrait.png
 ratio_icon.png
 removefromfolder.png
+reload_preset.png
 selection_add.png
 selection_exclude.png
 selection_intersect.png
@@ -98,7 +100,32 @@ light_properties.png
 light_selection-mode_ants.png
 light_selection-mode_invisible.png
 light_selection-mode_mask.png
-    DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+
+tool_transform/dark_transform_icons_cage.png
+tool_transform/dark_transform_icons_liquify_erase.png
+tool_transform/dark_transform_icons_liquify_main.png
+tool_transform/dark_transform_icons_liquify_move.png
+tool_transform/dark_transform_icons_liquify_offset.png
+tool_transform/dark_transform_icons_liquify_resize.png
+tool_transform/dark_transform_icons_liquify_rotate.png
+tool_transform/dark_transform_icons_main.png
+tool_transform/dark_transform_icons_perspective.png
+tool_transform/dark_transform_icons_warp.png
+tool_transform/dark_transform_icons_penPressure.png
+
+tool_transform/light_transform_icons_cage.png
+tool_transform/light_transform_icons_liquify_erase.png
+tool_transform/light_transform_icons_liquify_main.png
+tool_transform/light_transform_icons_liquify_move.png
+tool_transform/light_transform_icons_liquify_offset.png
+tool_transform/light_transform_icons_liquify_resize.png
+tool_transform/light_transform_icons_liquify_rotate.png
+tool_transform/light_transform_icons_main.png
+tool_transform/light_transform_icons_perspective.png
+tool_transform/light_transform_icons_warp.png
+tool_transform/light_transform_icons_penPressure.png
+
+DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 add_subdirectory(app)
 

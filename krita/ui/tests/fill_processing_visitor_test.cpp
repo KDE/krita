@@ -23,7 +23,6 @@
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
 
-#include <KoProgressUpdater.h>
 #include "testutil.h"
 #include "qimage_based_test.h"
 #include "stroke_testing_utils.h"

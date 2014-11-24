@@ -43,8 +43,6 @@
 #include <KoPointerEvent.h>
 #include <KoColorProfile.h>
 #include <KoSelection.h>
-#include <KoShapeManager.h>
-#include <KoProgressUpdater.h>
 #include <KoPart.h>
 
 #include <filter/kis_filter_configuration.h>
@@ -551,6 +549,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 
     KisSelectionSP selection = m_view->selection();
     KisAdjustmentLayerSP adjl = addAdjustmentLayer(activeNode, QString(), 0, selection);
+    image->refreshGraph();
 
     KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
 

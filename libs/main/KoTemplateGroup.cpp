@@ -82,6 +82,9 @@ bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch)
         m_templates.append(t);
         m_touched = touch;
         return true;
+    } else if (myTemplate) {
+        m_templates.append(t);
+        return true;
     }
     return false;
 }

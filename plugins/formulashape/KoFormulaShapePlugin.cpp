@@ -30,7 +30,7 @@
 #endif
 
 K_PLUGIN_FACTORY(KoFormulaShapePluginFactory, registerPlugin<KoFormulaShapePlugin>();)
-K_EXPORT_PLUGIN(KoFormulaShapePluginFactory("FormulaShape"))
+K_EXPORT_PLUGIN(KoFormulaShapePluginFactory("calligra_shape_formular"))
 
 KoFormulaShapePlugin::KoFormulaShapePlugin( QObject* parent, const QVariantList& )
                     : QObject( parent )

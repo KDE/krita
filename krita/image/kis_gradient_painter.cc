@@ -499,7 +499,19 @@ double GradientRepeatAlternateStrategy::valueAt(double t) const
 struct KisGradientPainter::Private
 {
     enumGradientShape shape;
-    QSharedPointer<KisGradientShapeStrategy> precalculatedShapeStrategy;
+
+    struct ProcessRegion {
+        ProcessRegion() {}
+        ProcessRegion(QSharedPointer<KisGradientShapeStrategy> _precalculatedShapeStrategy,
+                      const QRect &_processRect)
+            : precalculatedShapeStrategy(_precalculatedShapeStrategy),
+              processRect(_processRect) {}
+
+        QSharedPointer<KisGradientShapeStrategy> precalculatedShapeStrategy;
+        QRect processRect;
+    };
+
+    QVector<ProcessRegion> processRegions;
 };
 
 KisGradientPainter::KisGradientPainter()
@@ -528,29 +540,8 @@ void KisGradientPainter::setGradientShape(enumGradientShape shape)
     m_d->shape = shape;
 }
 
-/**
- * TODO: make this call happen asyncronously when the user does nothing
- */
-void KisGradientPainter::precalculateShape()
+KisGradientShapeStrategy* createPolygonShapeStrategy(const QPolygonF &polygon)
 {
-    if (m_d->precalculatedShapeStrategy) return;
-
-    QPolygonF polygon;
-
-    if (selection()) {
-        if (!selection()->outlineCacheValid()) {
-            selection()->recalculateOutlineCache();
-        }
-
-        KIS_ASSERT_RECOVER_RETURN(selection()->outlineCacheValid());
-        KIS_ASSERT_RECOVER_RETURN(!selection()->outlineCache().isEmpty());
-
-        QPainterPath path = selection()->outlineCache();
-        polygon = path.toFillPolygons().first();
-    } else {
-        polygon = QPolygonF(QRectF(device()->defaultBounds()->bounds()));
-    }
-
     // TODO: implement UI for exponent option
     const qreal exponent = 2.0;
     KisGradientShapeStrategy *strategy =
@@ -561,10 +552,37 @@ void KisGradientPainter::precalculateShape()
     const qreal step =
         qMin(8.0, KritaUtils::maxDimensionPortion(selectionRect, 0.01, 3.0));
 
-    m_d->precalculatedShapeStrategy =
-        toQShared(new KisCachedGradientShapeStrategy(selectionRect, step, step, strategy));
+    return new KisCachedGradientShapeStrategy(selectionRect, step, step, strategy);
+}
 
-    Q_CHECK_PTR(m_d->precalculatedShapeStrategy);
+/**
+ * TODO: make this call happen asyncronously when the user does nothing
+ */
+void KisGradientPainter::precalculateShape()
+{
+    if (!m_d->processRegions.isEmpty()) return;
+
+    QList<QPolygonF> polygons;
+
+    if (selection()) {
+        if (!selection()->outlineCacheValid()) {
+            selection()->recalculateOutlineCache();
+        }
+
+        KIS_ASSERT_RECOVER_RETURN(selection()->outlineCacheValid());
+        KIS_ASSERT_RECOVER_RETURN(!selection()->outlineCache().isEmpty());
+
+        QPainterPath path = selection()->outlineCache();
+        polygons = path.toFillPolygons();
+    } else {
+        polygons << QPolygonF(QRectF(device()->defaultBounds()->bounds()));
+    }
+
+    foreach (const QPolygonF &poly, polygons) {
+        Private::ProcessRegion r(toQShared(createPolygonShapeStrategy(poly)),
+                                 poly.boundingRect().toAlignedRect());
+        m_d->processRegions << r;
+    }
 }
 
 bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
@@ -583,31 +601,59 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     QRect requestedRect(startx, starty, width, height);
 
+    //If the device has a selection only iterate over that selection united with our area of interest
+    if (selection()) {
+        requestedRect &= selection()->selectedExactRect();
+    }
+
     QSharedPointer<KisGradientShapeStrategy> shapeStrategy;
 
     precalculateShape();
 
     switch (m_d->shape) {
-    case GradientShapeLinear:
-        shapeStrategy = toQShared(new LinearGradientStrategy(gradientVectorStart, gradientVectorEnd));
+    case GradientShapeLinear: {
+        Private::ProcessRegion r(toQShared(new LinearGradientStrategy(gradientVectorStart, gradientVectorEnd)),
+                                 requestedRect);
+        m_d->processRegions.clear();
+        m_d->processRegions << r;
         break;
-    case GradientShapeBiLinear:
-        shapeStrategy = toQShared(new BiLinearGradientStrategy(gradientVectorStart, gradientVectorEnd));
+    }
+    case GradientShapeBiLinear: {
+        Private::ProcessRegion r(toQShared(new BiLinearGradientStrategy(gradientVectorStart, gradientVectorEnd)),
+                                 requestedRect);
+        m_d->processRegions.clear();
+        m_d->processRegions << r;
         break;
-    case GradientShapeRadial:
-        shapeStrategy = toQShared(new RadialGradientStrategy(gradientVectorStart, gradientVectorEnd));
+    }
+    case GradientShapeRadial: {
+        Private::ProcessRegion r(toQShared(new RadialGradientStrategy(gradientVectorStart, gradientVectorEnd)),
+                                 requestedRect);
+        m_d->processRegions.clear();
+        m_d->processRegions << r;
         break;
-    case GradientShapeSquare:
-        shapeStrategy = toQShared(new SquareGradientStrategy(gradientVectorStart, gradientVectorEnd));
+    }
+    case GradientShapeSquare: {
+        Private::ProcessRegion r(toQShared(new SquareGradientStrategy(gradientVectorStart, gradientVectorEnd)),
+                                 requestedRect);
+        m_d->processRegions.clear();
+        m_d->processRegions << r;
         break;
-    case GradientShapeConical:
-        shapeStrategy = toQShared(new ConicalGradientStrategy(gradientVectorStart, gradientVectorEnd));
+    }
+    case GradientShapeConical: {
+        Private::ProcessRegion r(toQShared(new ConicalGradientStrategy(gradientVectorStart, gradientVectorEnd)),
+                                 requestedRect);
+        m_d->processRegions.clear();
+        m_d->processRegions << r;
         break;
-    case GradientShapeConicalSymetric:
-        shapeStrategy = toQShared(new ConicalSymetricGradientStrategy(gradientVectorStart, gradientVectorEnd));
+    }
+    case GradientShapeConicalSymetric: {
+        Private::ProcessRegion r(toQShared(new ConicalSymetricGradientStrategy(gradientVectorStart, gradientVectorEnd)),
+                                 requestedRect);
+        m_d->processRegions.clear();
+        m_d->processRegions << r;
         break;
+    }
     case GradientShapePolygonal:
-        shapeStrategy = m_d->precalculatedShapeStrategy;
         repeat = GradientRepeatNone;
         break;
     }
@@ -628,50 +674,38 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     Q_ASSERT(repeatStrategy != 0);
 
 
-    //If the device has a selection only iterate over that selection united with our area of interest
-    QRect r;
-
-    if (selection()) {
-        r = selection()->selectedExactRect();
-        requestedRect &= r;
-    }
-    startx = requestedRect.x();
-    starty = requestedRect.y();
-    width = requestedRect.width();
-    height = requestedRect.height();
-
-    qint32 endx = startx + width - 1;
-    qint32 endy = starty + height - 1;
-
     KisPaintDeviceSP dev = device()->createCompositionSourceDevice();
 
     const KoColorSpace * colorSpace = dev->colorSpace();
-    KoColor color(colorSpace);
-    qint32 pixelSize = colorSpace->pixelSize();
-    KisHLineIteratorSP hit = dev->createHLineIteratorNG(startx, starty, width);
+    const qint32 pixelSize = colorSpace->pixelSize();
 
-    KisProgressUpdateHelper progressHelper(progressUpdater(), 100, height);
-    CachedGradient cachedGradient(gradient(), qMax(endy-starty, endx - startx), colorSpace);
-    for (int y = starty; y <= endy; y++) {
+    foreach (const Private::ProcessRegion &r, m_d->processRegions) {
+        QRect processRect = r.processRect;
+        QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
 
-        for (int x = startx; x <= endx; x++) {
-            double t = shapeStrategy->valueAt(x, y);
+        CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
+
+        KisSequentialIterator it(dev, processRect);
+        const int rightCol = processRect.right();
+        KisProgressUpdateHelper progressHelper(progressUpdater(), 100, processRect.height());
+
+        do {
+            double t = shapeStrategy->valueAt(it.x(), it.y());
             t = repeatStrategy->valueAt(t);
 
             if (reverseGradient) {
                 t = 1 - t;
             }
 
-            memcpy(hit->rawData(), cachedGradient.cachedAt(t), pixelSize);
+            memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
 
-            hit->nextPixel();
-        }
-        hit->nextRow();
+            if (it.x() == rightCol) {
+                progressHelper.step();
+            }
+        } while (it.nextPixel());
 
-        progressHelper.step();
+        bitBlt(processRect.topLeft(), dev, processRect);
     }
-
-    bitBlt(startx, starty, dev, startx, starty, width, height);
 
     return true;
 }

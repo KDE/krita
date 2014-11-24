@@ -20,16 +20,22 @@
 #define __KIS_LIQUIFY_PROPERTIES_H
 
 #include <QtGlobal>
+#include <boost/operators.hpp>
+
+class QDomElement;
 
 
-class KisLiquifyProperties {
+class KisLiquifyProperties : boost::equality_comparable<KisLiquifyProperties>
+{
 public:
     enum LiquifyMode {
         MOVE,
         SCALE,
         ROTATE,
         OFFSET,
-        UNDO
+        UNDO,
+
+        N_MODES
     };
 
     KisLiquifyProperties()
@@ -44,6 +50,8 @@ public:
           m_flow(0.2)
     {
     }
+
+    bool operator==(const KisLiquifyProperties &other) const;
 
     LiquifyMode mode() const {
         return m_mode;
@@ -120,6 +128,9 @@ public:
     void loadMode();
 
     void loadAndResetMode();
+
+    void toXML(QDomElement *e) const;
+    static KisLiquifyProperties fromXML(const QDomElement &e);
 
 private:
     LiquifyMode m_mode;

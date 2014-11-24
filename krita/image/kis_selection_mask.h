@@ -44,8 +44,6 @@ public:
     virtual ~KisSelectionMask();
     KisSelectionMask(const KisSelectionMask& rhs);
 
-    bool allowAsChild(KisNodeSP) const;
-
     QIcon icon() const;
 
     KisNodeSP clone() const {

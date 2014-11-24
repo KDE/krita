@@ -32,6 +32,7 @@
 #include "kis_external_layer_iface.h"
 #include "kis_clone_layer.h"
 #include "kis_filter_mask.h"
+#include "kis_transform_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 #include "generator/kis_generator_layer.h"
@@ -90,6 +91,9 @@ public:
         return check(mask);
     }
 
+    bool visit(KisTransformMask *mask) {
+        return check(mask);
+    }
 
     bool visit(KisTransparencyMask *mask) {
         return check(mask);

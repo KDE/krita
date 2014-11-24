@@ -47,6 +47,7 @@ SpreadsheetMigrate::SpreadsheetMigrate(QObject *parent, const QVariantList &args
 {
   m_CurSheet = 0;
   m_KSDoc = 0;
+  m_Row = 0;
 }
 
 SpreadsheetMigrate::~SpreadsheetMigrate()

@@ -263,6 +263,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     NEW_MASK_ACTION("add_new_filter_mask", i18n("&Filter Mask..."),
                     "KisFilterMask", koIcon("bookmarks"));
 
+    NEW_MASK_ACTION("add_new_transform_mask", i18n("&Transform Mask..."),
+                    "KisTransformMask", koIcon("bookmarks"));
+
     NEW_MASK_ACTION("add_new_selection_mask", i18n("&Local Selection"),
                     "KisSelectionMask", koIcon("edit-paste"));
 
@@ -447,6 +450,8 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet)
         m_d->maskManager->createTransparencyMask(activeNode, 0);
     } else if (nodeType == "KisFilterMask") {
         m_d->maskManager->createFilterMask(activeNode, 0, quiet);
+    } else if (nodeType == "KisTransformMask") {
+        m_d->maskManager->createTransformMask(activeNode);
     } else if (nodeType == "KisSelectionMask") {
         m_d->maskManager->createSelectionMask(activeNode, 0);
     } else if (nodeType == "KisFileLayer") {

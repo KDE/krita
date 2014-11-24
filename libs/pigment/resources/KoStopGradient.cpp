@@ -220,7 +220,7 @@ KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
     }
 
     foreach(const QGradientStop & stop, gradient->stops()) {
-        KoColor color;
+        KoColor color(newGradient->colorSpace());
         color.fromQColor(stop.second);
         newGradient->m_stops.append(KoGradientStop(stop.first, color));
     }

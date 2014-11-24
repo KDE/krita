@@ -84,7 +84,7 @@ KoReportItemMaps::~KoReportItemMaps()
     QMap<QString, Marble::MarbleWidget*>::iterator i = m_marbles.begin();
     while(i != m_marbles.end()){
         delete i.value();
-        i++;
+        ++i;
     }
     delete m_set;
 }

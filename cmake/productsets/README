@@ -1,3 +1,4 @@
 This directory stores additional productsets.
 
-Please read the explanation in the toplevel file "CalligraProducts.cmake".
+Please read the explanation in the toplevel file "CalligraProducts.cmake",
+secion "How to add another productset?" at the end.

@@ -118,17 +118,21 @@ KisWarpTransformStrategy::~KisWarpTransformStrategy()
 
 void KisWarpTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
 {
-    double handleRadiusSq = pow2(KisTransformUtils::effectiveHandleGrabRadius(m_d->converter));
+    double handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 
     bool cursorOverPoint = false;
     m_d->pointIndexUnderCursor = -1;
 
+    KisTransformUtils::HandleChooser<Private::Mode>
+        handleChooser(mousePos, Private::NOTHING);
+
     const QVector<QPointF> &points = m_d->currentArgs.transfPoints();
     for (int i = 0; i < points.size(); ++i) {
-        if (kisSquareDistance(mousePos, points[i]) <= handleRadiusSq) {
+        if (handleChooser.addFunction(points[i],
+                                      handleRadius, Private::NOTHING)) {
+
             cursorOverPoint = true;
             m_d->pointIndexUnderCursor = i;
-            break;
         }
     }
 

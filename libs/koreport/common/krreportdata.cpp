@@ -164,10 +164,8 @@ KoReportReportData::~KoReportReportData()
 QList<KoReportItemBase*> KoReportReportData::objects() const
 {
     QList<KoReportItemBase*> obs;
-    KRSectionData *sec;
-
     for (int i = 1; i <= KRSectionData::PageFooterAny; i++) {
-        sec = section((KRSectionData::Section)i);
+        KRSectionData *sec = section((KRSectionData::Section)i);
         if (sec) {
             obs << sec->objects();
         }
@@ -209,9 +207,8 @@ KoReportItemBase* KoReportReportData::object(const QString& n) const
 QList<KRSectionData*> KoReportReportData::sections() const
 {
     QList<KRSectionData*> secs;
-    KRSectionData *sec;
     for (int i = 0; i < 12 ; ++i) {
-        sec = section((KRSectionData::Section)(i + 1));
+        KRSectionData *sec = section((KRSectionData::Section)(i + 1));
         if (sec) {
             secs << sec;
         }

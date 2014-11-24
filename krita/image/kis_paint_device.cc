@@ -461,6 +461,15 @@ QRect KisPaintDevice::calculateExactBounds() const
         }
     }
 
+    /**
+     * If the first pass hasn't found any opaque pixel, there is no
+     * reason to check that 3 more times. They will not appear in the
+     * meantime. Just return an empty bounding rect.
+     */
+    if (!found) {
+        return QRect();
+    }
+
     found = false;
 
     for (qint32 y2 = y + h - 1; y2 >= y ; --y2) {

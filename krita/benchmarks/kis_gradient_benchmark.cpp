@@ -72,8 +72,8 @@ void KisGradientBenchmark::benchmarkGradient()
         fillPainter.setOpacity(OPACITY_OPAQUE_U8);
         // default
         fillPainter.setCompositeOp(COMPOSITE_OVER);
-        
-        fillPainter.paintGradient(QPointF(0,0), QPointF(3000,3000), KisGradientPainter::GradientShapeBiLinear, KisGradientPainter::GradientRepeatNone, true, false, 0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT);
+        fillPainter.setGradientShape(KisGradientPainter::GradientShapeBiLinear);
+        fillPainter.paintGradient(QPointF(0,0), QPointF(3000,3000), KisGradientPainter::GradientRepeatNone, true, false, 0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT);
 
         fillPainter.deleteTransaction();
     }

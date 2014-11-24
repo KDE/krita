@@ -52,6 +52,7 @@ const QString COMPOSITE_OP = "compositeop";
 const QString DESCRIPTION = "description";
 
 const QString DOT_FILTERCONFIG = ".filterconfig";
+const QString DOT_TRANSFORMCONFIG = ".transformconfig";
 const QString DOT_ICC = ".icc";
 const QString DOT_PIXEL_SELECTION = ".pixelselection";
 const QString DOT_SHAPE_SELECTION = ".shapeselection";
@@ -86,6 +87,7 @@ const QString SELECTION_MASK = "selectionmask";
 const QString SHAPE_LAYER = "shapelayer";
 const QString FILE_LAYER = "filelayer";
 const QString TRANSPARENCY_MASK = "transparencymask";
+const QString TRANSFORM_MASK = "transformmask";
 const QString UUID = "uuid";
 const QString VISIBLE = "visible";
 const QString WIDTH = "width";

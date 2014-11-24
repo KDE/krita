@@ -188,7 +188,6 @@ int code128Index(QChar code, int set)
 void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int align)
 {
     QVector<int> str;
-    int i = 0;
 
     // create the list.. if the list is empty then just set a start code and move on
     if (_str.isEmpty())
@@ -199,7 +198,7 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
         int rank_c = 0;
 
         QChar c;
-        for (i = 0; i < _str.length(); ++i) {
+        for (int i = 0; i < _str.length(); ++i) {
             c = _str.at(i);
             rank_a += (code128Index(c, SETA) != -1 ? 1 : 0);
             rank_b += (code128Index(c, SETB) != -1 ? 1 : 0);
@@ -208,17 +207,19 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
         if (rank_c == _str.length() && ((rank_c % 2) == 0 || rank_c > 4)) {
             // every value in the is a digit so we are going to go with mode C
             // and we have an even number or we have more than 4 values
-            i = 0;
+            int i;
             if ((rank_c % 2) == 1) {
                 str.push_back(104); // START B
                 c = _str.at(0);
                 str.push_back(code128Index(c, SETB));
                 str.push_back(99); // MODE C
                 i = 1;
-            } else
+            } else {
                 str.push_back(105); // START C
+                i = 0;
+            }
 
-            for (i = i; i < _str.length(); i += 2) {
+            for (; i < _str.length(); i += 2) {
                 char a, b;
                 c = _str.at(i);
                 a = c.toLatin1();
@@ -233,10 +234,9 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
             // just shift into the opposite mode as needed
             int set = (rank_a > rank_b ? SETA : SETB);
             str.push_back((rank_a > rank_b ? 103 : 104));
-            int v = -1;
-            for (i = 0; i < _str.length(); ++i) {
+            for (int i = 0; i < _str.length(); ++i) {
                 c = _str.at(i);
-                v = code128Index(c, set);
+                int v = code128Index(c, set);
                 if (v == -1) {
                     v = code128Index(c, (set == SETA ? SETB : SETA));
                     if (v != -1) {
@@ -251,7 +251,7 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
 
     // calculate and append the checksum value to the list
     int checksum = str.at(0);
-    for (i = 1; i < str.size(); ++i)
+    for (int i = 1; i < str.size(); ++i)
         checksum += (str.at(i) * i);
     checksum = checksum % 103;
     str.push_back(checksum);
@@ -307,18 +307,16 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
     QBrush brush(QColor("black"));
 
     bool space = false;
-    int idx = 0, b = 0;
-    qreal w = 0.0;
-    for (i = 0; i < str.size(); ++i) {
+    for (int i = 0; i < str.size(); ++i) {
         // loop through each value and render the barcode
-        idx = str.at(i);
+        const int idx = str.at(i);
         if (idx < 0 || idx > 105) {
             qDebug("Encountered a non-compliant element while rendering a 3of9 barcode -- skipping");
             continue;
         }
         space = false;
-        for (b = 0; b < 6; ++b, space = !space) {
-            w = _128codes[idx].values[b] * bar_width;
+        for (int b = 0; b < 6; ++b, space = !space) {
+            qreal w = _128codes[idx].values[b] * bar_width;
             if (!space) {
                 ORORect * rect = new ORORect();
                 rect->setPen(pen);
@@ -334,8 +332,8 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
     // 7 elements in it's bar sequence rather than 6 like the others
     int STOP_CHARACTER[] = { 2, 3, 3, 1, 1, 1, 2 };
     space = false;
-    for (b = 0; b < 7; ++b, space = !space) {
-        w = STOP_CHARACTER[b] * bar_width;
+    for (int b = 0; b < 7; ++b, space = !space) {
+        qreal w = STOP_CHARACTER[b] * bar_width;
         if (!space) {
             ORORect * rect = new ORORect();
             rect->setPen(pen);

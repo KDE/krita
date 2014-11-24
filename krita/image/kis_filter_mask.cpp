@@ -48,12 +48,6 @@ KisFilterMask::~KisFilterMask()
 {
 }
 
-bool KisFilterMask::allowAsChild(KisNodeSP node) const
-{
-    Q_UNUSED(node);
-    return false;
-}
-
 KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
         : KisEffectMask(rhs)
         , KisNodeFilterInterface(rhs)
@@ -75,8 +69,11 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 
 QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
                                   KisPaintDeviceSP &dst,
-                                  const QRect & rc) const
+                                  const QRect & rc,
+                                  PositionToFilthy parentPos) const
 {
+    Q_UNUSED(parentPos);
+
     KisSafeFilterConfigurationSP filterConfig = filter();
 
     Q_ASSERT(nodeProgressProxy());

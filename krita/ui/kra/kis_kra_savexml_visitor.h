@@ -50,6 +50,7 @@ public:
     bool visit(KisGeneratorLayer *layer);
     bool visit(KisCloneLayer *layer);
     bool visit(KisFilterMask *mask);
+    bool visit(KisTransformMask *mask);
     bool visit(KisTransparencyMask *mask);
     bool visit(KisSelectionMask *mask);
 

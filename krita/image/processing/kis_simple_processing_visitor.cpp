@@ -25,7 +25,11 @@
 
 #include "kis_transparency_mask.h"
 #include "kis_filter_mask.h"
+#include "kis_transform_mask.h"
 #include "kis_selection_mask.h"
+
+#include "kis_selection.h"
+
 
 KisSimpleProcessingVisitor::~KisSimpleProcessingVisitor()
 {
@@ -75,6 +79,13 @@ void KisSimpleProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter 
 void KisSimpleProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)
 {
     visitNodeWithPaintDevice(mask, undoAdapter);
+}
+
+void KisSimpleProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter)
+{
+    // If (when) it had paint device, we would implement different default
+    // strategy for it. Right now it has neither selection nor a paint device.
+    KIS_ASSERT_RECOVER_NOOP(!mask->selection() && !mask->paintDevice());
 }
 
 void KisSimpleProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)

@@ -167,32 +167,36 @@ void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     }
 
     QPolygonF transformedPolygon = m_d->transform.map(QPolygonF(m_d->transaction.originalRect()));
-    m_d->function =
-        transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : ROTATE;
-
     qreal handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
-    qreal handleRadiusSq = pow2(handleRadius);
+    qreal rotationHandleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 
-    qreal rotationHandleRadiusSq = pow2(KisTransformUtils::effectiveHandleGrabRadius(m_d->converter));
 
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.topMiddle) <= handleRadiusSq)
-        m_d->function = TOPSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.topRight) <= handleRadiusSq)
-        m_d->function = TOPRIGHTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.middleRight) <= handleRadiusSq)
-        m_d->function = RIGHTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.bottomRight) <= handleRadiusSq)
-        m_d->function = BOTTOMRIGHTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.bottomMiddle) <= handleRadiusSq)
-        m_d->function = BOTTOMSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.bottomLeft) <= handleRadiusSq)
-        m_d->function = BOTTOMLEFTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.middleLeft) <= handleRadiusSq)
-        m_d->function = LEFTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.topLeft) <= handleRadiusSq)
-        m_d->function = TOPLEFTSCALE;
-    if (kisSquareDistance(mousePos, m_d->transformedHandles.rotationCenter) <= rotationHandleRadiusSq)
-        m_d->function = MOVECENTER;
+    StrokeFunction defaultFunction =
+        transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : ROTATE;
+    KisTransformUtils::HandleChooser<StrokeFunction>
+        handleChooser(mousePos, defaultFunction);
+
+    handleChooser.addFunction(m_d->transformedHandles.topMiddle,
+                              handleRadius, TOPSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.topRight,
+                              handleRadius, TOPRIGHTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.middleRight,
+                              handleRadius, RIGHTSCALE);
+
+    handleChooser.addFunction(m_d->transformedHandles.bottomRight,
+                              handleRadius, BOTTOMRIGHTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.bottomMiddle,
+                              handleRadius, BOTTOMSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.bottomLeft,
+                              handleRadius, BOTTOMLEFTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.middleLeft,
+                              handleRadius, LEFTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.topLeft,
+                              handleRadius, TOPLEFTSCALE);
+    handleChooser.addFunction(m_d->transformedHandles.rotationCenter,
+                              rotationHandleRadius, MOVECENTER);
+
+    m_d->function = handleChooser.function();
 
     if (m_d->function == ROTATE || m_d->function == MOVE) {
         QRectF originalRect = m_d->transaction.originalRect();
@@ -307,13 +311,19 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
 
     // Draw Handles
 
-    qreal handlesExtraScale = KisTransformUtils::scaleFromAffineMatrix(m_d->handlesTransform);
+    qreal d = 1;
+    QRectF handleRect =
+        KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
+                                      m_d->handlesTransform,
+                                      m_d->transaction.originalRect(),
+                                      &d);
 
-    qreal d = KisTransformUtils::handleVisualRadius / handlesExtraScale;
-    QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
-
-    qreal r = KisTransformUtils::rotationHandleVisualRadius / handlesExtraScale;
-    QRectF rotationCenterRect(-0.5 * r, -0.5 * r, r, r);
+    qreal r = 1;
+    QRectF rotationCenterRect =
+        KisTransformUtils::handleRect(KisTransformUtils::rotationHandleVisualRadius,
+                                      m_d->handlesTransform,
+                                      m_d->transaction.originalRect(),
+                                      &r);
 
     QPainterPath handles;
 
@@ -332,7 +342,7 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
     handles.addRect(handleRect.translated(m_d->transaction.originalMiddleTop()));
     handles.addRect(handleRect.translated(m_d->transaction.originalMiddleBottom()));
 
-    QPointF rotationCenter = m_d->transaction.originalCenter() + m_d->currentArgs.rotationCenterOffset();
+    QPointF rotationCenter = m_d->currentArgs.originalCenter() + m_d->currentArgs.rotationCenterOffset();
     QPointF dx(r + 3, 0);
     QPointF dy(0, r + 3);
     handles.addEllipse(rotationCenterRect.translated(rotationCenter));
@@ -342,16 +352,18 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
     handles.lineTo(rotationCenter + dy);
 
     gc.save();
-    gc.setTransform(m_d->handlesTransform, true);
+
+    //gc.setTransform(m_d->handlesTransform, true); <-- don't do like this!
+    QPainterPath mappedHandles = m_d->handlesTransform.map(handles);
 
     QPen pen[2];
-    pen[0].setWidth(1 / handlesExtraScale);
-    pen[1].setWidth(2 / handlesExtraScale);
+    pen[0].setWidth(1);
+    pen[1].setWidth(2);
     pen[1].setColor(Qt::lightGray);
 
     for (int i = 1; i >= 0; --i) {
         gc.setPen(pen[i]);
-        gc.drawPath(handles);
+        gc.drawPath(mappedHandles);
     }
 
     gc.restore();
@@ -577,7 +589,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
         QPointF pt = m_d->transform.inverted().map(mousePos);
         pt = KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect());
 
-        QPointF newRotationCenterOffset = pt - m_d->transaction.originalCenter();
+        QPointF newRotationCenterOffset = pt - m_d->currentArgs.originalCenter();
 
         if (specialModifierActive) {
             if (qAbs(newRotationCenterOffset.x()) > qAbs(newRotationCenterOffset.y())) {
@@ -652,7 +664,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
      * The center of the original image should still
      * stay the the origin of CS
      */
-    KIS_ASSERT_RECOVER_NOOP(sanityCheckMatrix.map(transaction.originalCenter()).manhattanLength() < 1e-4);
+    KIS_ASSERT_RECOVER_NOOP(sanityCheckMatrix.map(currentArgs.originalCenter()).manhattanLength() < 1e-4);
 
     transform = m.finalTransform();
 

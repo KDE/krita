@@ -33,6 +33,7 @@
 
 #include "kis_transparency_mask.h"
 #include "kis_filter_mask.h"
+#include "kis_transform_mask.h"
 #include "kis_selection_mask.h"
 
 #include "kis_external_layer_iface.h"
@@ -117,6 +118,14 @@ void KisTransformProcessingVisitor::visit(KisCloneLayer *layer, KisUndoAdapter *
 void KisTransformProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)
 {
     transformSelection(mask->selection(), undoAdapter, ProgressHelper(mask));
+}
+
+void KisTransformProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter)
+{
+    Q_UNUSED(mask);
+    Q_UNUSED(undoAdapter);
+
+    qWarning() << "WARNING: transformation of the transform mask is not implemented";
 }
 
 void KisTransformProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)

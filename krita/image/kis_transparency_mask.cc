@@ -44,16 +44,13 @@ KisTransparencyMask::~KisTransparencyMask()
 {
 }
 
-bool KisTransparencyMask::allowAsChild(KisNodeSP node) const
-{
-    Q_UNUSED(node);
-    return false;
-}
-
 QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
                                         KisPaintDeviceSP &dst,
-                                        const QRect & rc) const
+                                        const QRect & rc,
+                                        PositionToFilthy parentPos) const
 {
+    Q_UNUSED(parentPos);
+
     if (src != dst) {
         KisPainter gc(dst);
         gc.setCompositeOp(src->colorSpace()->compositeOp(COMPOSITE_COPY));

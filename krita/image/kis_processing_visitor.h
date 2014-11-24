@@ -34,6 +34,7 @@ class KisAdjustmentLayer;
 class KisExternalLayer;
 class KisCloneLayer;
 class KisFilterMask;
+class KisTransformMask;
 class KisTransparencyMask;
 class KisSelectionMask;
 class KisGeneratorLayer;
@@ -56,6 +57,7 @@ public:
     virtual void visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
 

@@ -80,13 +80,6 @@ QIcon KisSelectionMask::icon() const {
     return koIcon("edit-paste");
 }
 
-bool KisSelectionMask::allowAsChild(KisNodeSP node) const
-{
-    Q_UNUSED(node);
-    return false;
-}
-
-
 void KisSelectionMask::setSelection(KisSelectionSP selection)
 {
     if (selection) {

@@ -53,10 +53,8 @@ private:
     bool createContent(KoOdfWriteStore* odfStore, KoGenStyles &coll);
     void createPages(KoXmlWriter* bodyWriter, KoGenStyles &coll);
 
-    KoStore *m_store;
     KoXmlWriter* manifestWriter;
     ReportPageOptions m_pageOptions;
-    KoStoreDevice *m_stylesDevice;
 
     QMap<int, QList<KoOdtFrameReportPrimitive*> > m_pagemap;
 };

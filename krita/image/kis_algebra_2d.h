@@ -222,6 +222,9 @@ QPainterPath KRITAIMAGE_EXPORT smallArrow();
  */
 QRect KRITAIMAGE_EXPORT blowRect(const QRect &rect, qreal coeff);
 
+QPoint ensureInRect(QPoint pt, const QRect &bounds);
+QPointF ensureInRect(QPointF pt, const QRectF &bounds);
+
 }
 
 #endif /* __KIS_ALGEBRA_2D_H */

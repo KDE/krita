@@ -132,4 +132,32 @@ QRect blowRect(const QRect &rect, qreal coeff)
     return rect.adjusted(-w, -h, w, h);
 }
 
+template <class Point, class Rect>
+inline Point ensureInRectImpl(Point pt, const Rect &bounds)
+{
+    if (pt.x() > bounds.right()) {
+        pt.rx() = bounds.right();
+    } else if (pt.x() < bounds.left()) {
+        pt.rx() = bounds.left();
+    }
+
+    if (pt.y() > bounds.bottom()) {
+        pt.ry() = bounds.bottom();
+    } else if (pt.y() < bounds.top()) {
+        pt.ry() = bounds.top();
+    }
+
+    return pt;
+}
+
+QPoint ensureInRect(QPoint pt, const QRect &bounds)
+{
+    return ensureInRectImpl(pt, bounds);
+}
+
+QPointF ensureInRect(QPointF pt, const QRectF &bounds)
+{
+    return ensureInRectImpl(pt, bounds);
+}
+
 }

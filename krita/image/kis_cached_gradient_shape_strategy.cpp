@@ -23,9 +23,10 @@
 
 #include <cmath>
 
-
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+
+#include "kis_algebra_2d.h"
 
 
 using namespace KisBSplines;
@@ -76,5 +77,6 @@ KisCachedGradientShapeStrategy::~KisCachedGradientShapeStrategy()
 
 double KisCachedGradientShapeStrategy::valueAt(double x, double y) const
 {
-    return m_d->spline->value(x, y);
+    QPointF pt = KisAlgebra2D::ensureInRect(QPointF(x, y), m_d->rc);
+    return m_d->spline->value(pt.x(), pt.y());
 }

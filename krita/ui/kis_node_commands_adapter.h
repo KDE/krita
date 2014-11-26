@@ -41,6 +41,7 @@ public:
     virtual ~KisNodeCommandsAdapter();
 public:
     void beginMacro(const KUndo2MagicString& macroName);
+    void addExtraCommand(KUndo2Command *command);
     void endMacro();
     void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void addNode(KisNodeSP node, KisNodeSP parent, quint32 index);

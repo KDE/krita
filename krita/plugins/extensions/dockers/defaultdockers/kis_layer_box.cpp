@@ -495,6 +495,11 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         addActionToMenu(convertToMenu, "convert_to_transform_mask");
         addActionToMenu(convertToMenu, "convert_to_selection_mask");
 
+        QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
+        addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
+        addActionToMenu(splitAlphaMenu, "split_alpha_write");
+        addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
+
         addActionToMenu(&menu, "isolate_layer");
     }
     menu.addSeparator();

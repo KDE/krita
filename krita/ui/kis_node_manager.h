@@ -198,6 +198,10 @@ public slots:
     // merges the active layer with the layer below it.
     void mergeLayerDown();
 
+    void slotSplitAlphaIntoMask();
+    void slotSplitAlphaWrite();
+    void slotSplitAlphaSaveMerged();
+
 public:
 
     

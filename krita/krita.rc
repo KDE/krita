@@ -117,7 +117,11 @@
     <Action name="convert_to_selection_mask"/>
   </Menu>
   <Separator/>
-
+  <Menu name="LayerSplitAlpha"><text>S&amp;plit Alpha</text>
+    <Action name="split_alpha_into_mask"/>
+    <Action name="split_alpha_write"/>
+    <Action name="split_alpha_save_merged"/>
+  </Menu>
   <Separator/>
   <Action name="mirrorNodeX"/>
   <Action name="mirrorNodeY"/>

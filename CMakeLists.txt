@@ -925,7 +925,7 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
 )
 
-calligra_drop_product_on_bad_condition( APP_GEMINI
+calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
     LIBQGIT2_FOUND "libqgit2 devel not found"
 )

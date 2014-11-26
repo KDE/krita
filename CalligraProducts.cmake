@@ -136,6 +136,7 @@ calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligr
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport"  REQUIRES LIB_KOREPORT LIB_KDCHART)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins"  REQUIRES FEATURE_RDF LIB_CALLIGRA)
+calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini")
 
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  REQUIRES LIB_CALLIGRA)
@@ -560,6 +561,7 @@ calligra_define_productset(GEMINI "Calligra for 2:1 devices"
         PLUGIN_FORMULASHAPE
         PLUGIN_VIDEOSHAPE
         PLUGIN_VECTORSHAPE
+        PLUGIN_CALLIGRAGEMINI_GIT
         # filters
         FILTERS_WORDS
         FILTERS_STAGE

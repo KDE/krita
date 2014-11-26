@@ -43,6 +43,9 @@ public:
 public slots:
 
     void slotImportLayerFromFile();
+    void slotImportLayerAsTransparencyMask();
+    void slotImportLayerAsFilterMask();
+    void slotImportLayerAsSelectionMask();
 
     /**
      * Import an image as a layer. If there is more than
@@ -52,7 +55,7 @@ public slots:
      * @param url the url to the image file
      * @return the number of layers added
      */
-    qint32 importImage(const KUrl& url = KUrl(), bool importAsLayer = true);
+    qint32 importImage(const KUrl& url, const QString &layerType = "KisPaintLayer");
 
     void resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset);
     void scaleCurrentImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);

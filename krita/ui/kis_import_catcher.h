@@ -43,7 +43,7 @@ class KisImportCatcher : QObject
 
 public:
 
-    KisImportCatcher(const KUrl & url, KisView2* view, bool importAsLayer);
+    KisImportCatcher(const KUrl & url, KisView2* view, const QString &layerType);
     ~KisImportCatcher();
 
 private slots:

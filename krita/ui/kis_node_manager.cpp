@@ -419,7 +419,7 @@ void KisNodeManager::slotTryFinishIsolatedMode()
     }
 }
 
-void KisNodeManager::createNode(const QString & nodeType, bool quiet)
+void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDeviceSP copyFrom)
 {
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) {
@@ -447,13 +447,13 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet)
     } else if (nodeType == "KisCloneLayer") {
         m_d->layerManager->addCloneLayer(activeNode);
     } else if (nodeType == "KisTransparencyMask") {
-        m_d->maskManager->createTransparencyMask(activeNode, 0);
+        m_d->maskManager->createTransparencyMask(activeNode, copyFrom, false);
     } else if (nodeType == "KisFilterMask") {
-        m_d->maskManager->createFilterMask(activeNode, 0, quiet);
+        m_d->maskManager->createFilterMask(activeNode, copyFrom, quiet, false);
     } else if (nodeType == "KisTransformMask") {
         m_d->maskManager->createTransformMask(activeNode);
     } else if (nodeType == "KisSelectionMask") {
-        m_d->maskManager->createSelectionMask(activeNode, 0);
+        m_d->maskManager->createSelectionMask(activeNode, copyFrom, false);
     } else if (nodeType == "KisFileLayer") {
         m_d->layerManager->addFileLayer(activeNode);
     }
@@ -477,11 +477,11 @@ void KisNodeManager::convertNode(const QString &nodeType)
         m_d->commandsAdapter->beginMacro(kundo2_i18n("Convert to a Selection Mask"));
 
         if (nodeType == "KisSelectionMask") {
-            m_d->maskManager->createSelectionMask(activeNode, copyFrom);
+            m_d->maskManager->createSelectionMask(activeNode, copyFrom, true);
         } else if (nodeType == "KisFilterMask") {
-            m_d->maskManager->createFilterMask(activeNode, copyFrom);
+            m_d->maskManager->createFilterMask(activeNode, copyFrom, false, true);
         } else if (nodeType == "KisTransparencyMask") {
-            m_d->maskManager->createTransparencyMask(activeNode, copyFrom);
+            m_d->maskManager->createTransparencyMask(activeNode, copyFrom, true);
         }
 
         m_d->commandsAdapter->removeNode(activeNode);

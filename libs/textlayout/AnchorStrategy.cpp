@@ -51,7 +51,7 @@ void AnchorStrategy::detachFromModel()
     m_model = 0;
 }
 
-QRectF AnchorStrategy::pageRect()
+QRectF AnchorStrategy::pageRect() const
 {
     return m_pageRect;
 }
@@ -61,7 +61,7 @@ void AnchorStrategy::setPageRect(const QRectF &pageRect)
     m_pageRect = pageRect;
 }
 
-QRectF AnchorStrategy::pageContentRect()
+QRectF AnchorStrategy::pageContentRect() const
 {
     return m_pageContentRect;
 }
@@ -71,7 +71,7 @@ void AnchorStrategy::setPageContentRect(const QRectF &pageContentRect)
     m_pageContentRect = pageContentRect;
 }
 
-QRectF AnchorStrategy::paragraphRect()
+QRectF AnchorStrategy::paragraphRect() const
 {
     return m_paragraphRect;
 }
@@ -81,7 +81,7 @@ void AnchorStrategy::setParagraphRect(const QRectF &paragraphRect)
     m_paragraphRect = paragraphRect;
 }
 
-QRectF AnchorStrategy::paragraphContentRect()
+QRectF AnchorStrategy::paragraphContentRect() const
 {
     return m_paragraphContentRect;
 }
@@ -91,7 +91,7 @@ void AnchorStrategy::setParagraphContentRect(const QRectF &paragraphContentRect)
     m_paragraphContentRect = paragraphContentRect;
 }
 
-QRectF AnchorStrategy::layoutEnvironmentRect()
+QRectF AnchorStrategy::layoutEnvironmentRect() const
 {
     return m_layoutEnvironmentRect;
 }
@@ -101,7 +101,7 @@ void AnchorStrategy::setLayoutEnvironmentRect(const QRectF &layoutEnvironmentRec
     m_layoutEnvironmentRect = layoutEnvironmentRect;
 }
 
-int AnchorStrategy::pageNumber()
+int AnchorStrategy::pageNumber() const
 {
     return m_pageNumber;
 }

@@ -373,6 +373,20 @@ public:
     int numDefaultLayers() const;
     void setNumDefaultLayers(int num);
 
+    quint8 defaultBackgroundOpacity() const;
+    void setDefaultBackgroundOpacity(quint8 value);
+
+    QColor defaultBackgroundColor() const;
+    void setDefaultBackgroundColor(QColor value);
+
+    enum BackgroundStyle {
+        LAYER = 0,
+        PROJECTION = 1
+    };
+
+    BackgroundStyle defaultBackgroundStyle() const;
+    void setDefaultBackgroundStyle(BackgroundStyle value);
+    
     int lineSmoothingType() const;
     void setLineSmoothingType(int value);
 
@@ -409,7 +423,9 @@ public:
     bool useDirtyPresets() const;
     void setUseDirtyPresets(bool value);
 
-
+    bool useEraserBrushSize() const;
+    void setUseEraserBrushSize(bool value);    
+    
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

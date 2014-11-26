@@ -56,7 +56,7 @@ class QTextBlock;
  * fresh when the list resumes. However you can set the list to continue if you like.
  *
  * Following from the above you can use the same paragraph style for several paragraphs and the
- * the counter wil increase. If you want a paragraph to be on a sub level you do however need to
+ * the counter will increase. If you want a paragraph to be on a sub level you do however need to
  * create a new paragraph-style when another listLevel set.
  */
 class  KOTEXT_EXPORT KoListStyle : public QObject

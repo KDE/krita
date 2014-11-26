@@ -149,6 +149,14 @@ namespace KoOdfWorkaround
      * table:body elements, which is not a valid attribute for the element.
      */
     FLAKE_EXPORT QString fixTableTemplateCellStyleName(const KoXmlElement &e);
+
+    /**
+     * LibreOffice used to have a bug with handling of z command in svg path.
+     * This resulted in broken marker path used (and copied also to Calligra).
+     * This methods substitutes known old marker paths with the latest (fixed)
+     * path variant.
+     */
+    FLAKE_EXPORT void fixMarkerPath(QString &path);
 }
 
 #endif /* KOODFWORKAROUND_H */

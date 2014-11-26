@@ -102,12 +102,11 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
         }
 
     }
-    QModelIndex index = QListView::indexAt(event->pos());
+
     QListView::mousePressEvent(event);
-    if(index.data(__CategorizedListModelBase::isToggledRole).toBool() && index.isValid()){
-        emit sigEntryChecked(index);
-    }
+
     if(event->button() == Qt::RightButton){
+        QModelIndex index = QListView::indexAt(event->pos());
         QMenu menu(this);
         if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()){
             QAction* action1 = menu.addAction(koIcon("linked2"),index.data(__CategorizedListModelBase::isLockedRole).toBool()?i18n("Unlock (Drop Locked)"):i18n("Lock"));
@@ -124,6 +123,11 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)
 {
     QListView::mouseReleaseEvent(event);
+
+    QModelIndex index = QListView::indexAt(event->pos());
+    if(index.data(__CategorizedListModelBase::isToggledRole).toBool() && index.isValid()){
+        emit sigEntryChecked(index);
+    }
 }
 
 

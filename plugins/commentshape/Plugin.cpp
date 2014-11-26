@@ -27,7 +27,7 @@
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("CommentShape"))
+K_EXPORT_PLUGIN(PluginFactory("calligra_shape_comment"))
 
 Plugin::Plugin(QObject* parent, const QVariantList&)
 : QObject(parent)

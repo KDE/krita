@@ -81,8 +81,15 @@ Point normalize(const Point &a)
  */
 template <typename T>
 T signPZ(T x) {
-    const T zeroValue(0);
     return x >= T(0) ? T(1) : T(-1);
+}
+
+/**
+ * Usual sign() function with zero returning zero
+ */
+template <typename T>
+T signZZ(T x) {
+    return x == T(0) ? T(0) : x > T(0) ? T(1) : T(-1);
 }
 
 template <class T>
@@ -208,6 +215,15 @@ inline Point clampPoint(Point pt, const Rect &bounds)
 }
 
 QPainterPath KRITAIMAGE_EXPORT smallArrow();
+
+/**
+ * Multiply width and height of \p rect by \p coeff keeping the
+ * center of the rectangle pinned
+ */
+QRect KRITAIMAGE_EXPORT blowRect(const QRect &rect, qreal coeff);
+
+QPoint ensureInRect(QPoint pt, const QRect &bounds);
+QPointF ensureInRect(QPointF pt, const QRectF &bounds);
 
 }
 

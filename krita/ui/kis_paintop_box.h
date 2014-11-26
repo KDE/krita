@@ -155,7 +155,7 @@ private slots:
     void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
     void slotDropLockedOption(KisPropertiesConfiguration* p);
     void slotDirtyPresetToggled(bool);
-
+    void slotEraserBrushSizeToggled(bool);
 
 
 private:
@@ -225,6 +225,7 @@ private:
     bool             m_presetsEnabled;
     bool             m_blockUpdate;
     bool             m_dirtyPresetsEnabled;
+    bool             m_eraserBrushSizeEnabled;
 
 
 };

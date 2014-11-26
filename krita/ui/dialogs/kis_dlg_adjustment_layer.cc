@@ -67,7 +67,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
     connect(wdgFilterNodeCreation.layerName, SIGNAL(textChanged(QString)), SLOT(slotNameChanged(QString)));
 
-    enableButtonOk(false);
+    enableButtonOk(true);
 }
 
 KisDlgAdjustmentLayer::~KisDlgAdjustmentLayer()

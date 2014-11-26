@@ -135,7 +135,15 @@ set(kritaimage_LIB_SRCS
    kis_fill_painter.cc
    kis_filter_mask.cpp
    kis_filter_strategy.cc
+   kis_transform_mask.cpp
+   kis_transform_mask_params_interface.cpp
+   kis_recalculate_transform_mask_job.cpp
+   kis_transform_mask_params_factory_registry.cpp
+   kis_safe_transform.cpp
    kis_gradient_painter.cc
+   kis_gradient_shape_strategy.cpp
+   kis_cached_gradient_shape_strategy.cpp
+   kis_polygonal_gradient_shape_strategy.cpp
    kis_iterator_ng.cpp
    kis_async_merger.cpp
    kis_merge_walker.cc
@@ -201,14 +209,15 @@ set(kritaimage_LIB_SRCS
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
-#   bsplines/kis_bspline_1d.cpp
-#   bsplines/kis_bspline_2d.cpp
-#   bsplines/kis_nu_bspline_2d.cpp
+   bsplines/kis_bspline_1d.cpp
+   bsplines/kis_bspline_2d.cpp
+   bsplines/kis_nu_bspline_2d.cpp
    kis_warptransform_worker.cc
    kis_cage_transform_worker.cpp
    kis_liquify_transform_worker.cpp
    kis_green_coordinates_math.cpp
    kis_algebra_2d.cpp
+   kis_dom_utils.cpp
    kis_transparency_mask.cc
    kis_undo_store.cpp
    kis_undo_stores.cpp
@@ -256,15 +265,13 @@ set(kritaimage_LIB_SRCS
 )
 
 set(einspline_SRCS
-#   bsplines/einspline/bspline_create.c
-#   bsplines/einspline/bspline_data.c
-#   bsplines/einspline/multi_bspline_create.c
-#   bsplines/einspline/nubasis.c
-#   bsplines/einspline/nubspline_create.c
-#   bsplines/einspline/nugrid.c
+   bsplines/einspline/bspline_create.cpp
+   bsplines/einspline/bspline_data.cpp
+   bsplines/einspline/multi_bspline_create.cpp
+   bsplines/einspline/nubasis.cpp
+   bsplines/einspline/nubspline_create.cpp
+   bsplines/einspline/nugrid.cpp
 )
-
-#SET_SOURCE_FILES_PROPERTIES(${einspline_SRCS} PROPERTIES COMPILE_FLAGS -std=c99)
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
@@ -287,6 +294,12 @@ endif(FFTW3_FOUND)
 if(HAVE_VC)
   target_link_libraries(kritaimage  ${Vc_LIBRARIES})
 endif(HAVE_VC)
+
+if (NOT GSL_FOUND)
+  message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Shaped Gradients might be non-normalized! Please install GSL library.")
+else (NOT GSL_FOUND)
+  target_link_libraries(kritaimage ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+endif (NOT GSL_FOUND)
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

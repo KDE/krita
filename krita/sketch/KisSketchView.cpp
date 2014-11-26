@@ -76,7 +76,7 @@
 #include "Settings.h"
 #include "DocumentManager.h"
 #include "SketchDeclarativeView.h"
-#include <gemini/ViewModeSwitchEvent.h>
+#include "krita/gemini/ViewModeSwitchEvent.h"
 
 class KisSketchView::Private
 {

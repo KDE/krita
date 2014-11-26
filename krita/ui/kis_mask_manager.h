@@ -115,11 +115,12 @@ private:
     void activateMask(KisMaskSP mask);
 
     void adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bool avoidActiveNode, KisNodeSP &parent, KisNodeSP &above);
-    void createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString &macroName, const QString &nodeType, const QString &nodeName);
+    void createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString &macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection, bool avoidActiveNode);
 
-    void createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
-    void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet = false);
-    void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
+    void createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
+    void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool avoidActiveNode);
+    void createTransformMask(KisNodeSP activeNode);
+    void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
 
     KisView2 * m_view;
 

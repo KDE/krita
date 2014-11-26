@@ -103,7 +103,7 @@ void KoTextDocument::setTextEditor (KoTextEditor* textEditor)
     m_document->addResource(KoTextDocument::TextEditor, TextEditorURL, v);
 }
 
-KoTextEditor* KoTextDocument::textEditor()
+KoTextEditor* KoTextDocument::textEditor() const
 {
     QVariant resource = m_document->resource(KoTextDocument::TextEditor, TextEditorURL);
     return resource.value<KoTextEditor *>();
@@ -380,7 +380,7 @@ QTextCharFormat KoTextDocument::frameCharFormat() const
         return QTextCharFormat();
 }
 
-void KoTextDocument::setFrameCharFormat(QTextCharFormat format)
+void KoTextDocument::setFrameCharFormat(const QTextCharFormat &format)
 {
     m_document->addResource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl, QVariant::fromValue(format));
 }
@@ -394,7 +394,7 @@ QTextBlockFormat KoTextDocument::frameBlockFormat() const
         return QTextBlockFormat();
 }
 
-void KoTextDocument::setFrameBlockFormat(QTextBlockFormat format)
+void KoTextDocument::setFrameBlockFormat(const QTextBlockFormat &format)
 {
     m_document->addResource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl, QVariant::fromValue(format));
 }

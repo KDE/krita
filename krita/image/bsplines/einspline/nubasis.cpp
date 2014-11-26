@@ -26,12 +26,12 @@
 NUBasis*
 create_NUBasis (NUgrid *grid, bool periodic)
 {
-  NUBasis* restrict basis = malloc (sizeof(NUBasis));
+  NUBasis* restrict basis = new NUBasis;
   basis->grid = grid;
   basis->periodic = periodic;
   int N = grid->num_points;
-  basis->xVals = malloc ((N+5)*sizeof(double));
-  basis->dxInv = malloc (3*(N+2)*sizeof(double));
+  basis->xVals = new double[N+5];
+  basis->dxInv = new double[3*(N+2)];
   for (int i=0; i<N; i++)
     basis->xVals[i+2] = grid->points[i];
   double*  restrict g = grid->points;
@@ -61,9 +61,9 @@ create_NUBasis (NUgrid *grid, bool periodic)
 void
 destroy_NUBasis (NUBasis *basis)
 {
-  free (basis->xVals);
-  free (basis->dxInv);
-  free (basis);
+  delete[] (basis->xVals);
+  delete[] (basis->dxInv);
+  delete (basis);
 }
 
 

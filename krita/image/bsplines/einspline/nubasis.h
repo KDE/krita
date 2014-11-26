@@ -23,7 +23,6 @@
 
 #include "nugrid.h"
 //#include "config.h"
-#include <stdbool.h>
 
 typedef struct
 {

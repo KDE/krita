@@ -81,8 +81,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->printHeightUnit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
     m_page->printHeightUnit->addItem(percentStr);
 
-    m_page->printResolutionUnit->addItem(pixelsCentimeterStr);
     m_page->printResolutionUnit->addItem(pixelsInchStr);
+    m_page->printResolutionUnit->addItem(pixelsCentimeterStr);
 
     // pick selected print units from user locale
     if (KGlobal::locale()->measureSystem() == KLocale::Metric) {

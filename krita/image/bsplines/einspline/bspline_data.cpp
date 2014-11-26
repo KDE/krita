@@ -20,6 +20,8 @@
 
 //#include "config.h"
 
+#include "local_definitions.h"
+
 /*****************
 /*   SSE Data    */
 /*****************/

@@ -31,23 +31,25 @@ class KRITAUI_EXPORT KisAction : public KAction
 public:
     enum ActivationFlag {
         NONE = 0,
-        ACTIVE_NODE = 1,
-        ACTIVE_DEVICE = 2,
-        ACTIVE_LAYER = 4,
-        ACTIVE_SHAPE_LAYER = 8,
-        PIXELS_SELECTED = 16,
-        SHAPES_SELECTED = 32,
-        PIXEL_SELECTION_WITH_PIXELS = 64,
-        PIXELS_IN_CLIPBOARD = 128,
-        SHAPES_IN_CLIPBOARD = 256,
-        NEVER_ACTIVATE = 512
+        ACTIVE_NODE = 0x1,
+        ACTIVE_DEVICE = 0x2,
+        ACTIVE_LAYER = 0x4,
+        ACTIVE_TRANSPARENCY_MASK = 0x8,
+        ACTIVE_SHAPE_LAYER = 0x10,
+        PIXELS_SELECTED = 0x20,
+        SHAPES_SELECTED = 0x40,
+        PIXEL_SELECTION_WITH_PIXELS = 0x80,
+        PIXELS_IN_CLIPBOARD = 0x100,
+        SHAPES_IN_CLIPBOARD = 0x200,
+        NEVER_ACTIVATE = 0x400
     };
     Q_DECLARE_FLAGS(ActivationFlags, ActivationFlag)
 
     enum ActivationCondition {
         NO_CONDITION = 0,
-        ACTIVE_NODE_EDITABLE = 1,
-        SELECTION_EDITABLE = 2
+        ACTIVE_NODE_EDITABLE = 0x1,
+        ACTIVE_NODE_EDITABLE_PAINT_DEVICE = 0x2,
+        SELECTION_EDITABLE = 0x4
     };
     Q_DECLARE_FLAGS(ActivationConditions, ActivationCondition)
     

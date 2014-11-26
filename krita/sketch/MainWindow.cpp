@@ -36,6 +36,7 @@
 
 #include <kurl.h>
 #include <kstandarddirs.h>
+#include <kdialog.h>
 #include <kdebug.h>
 
 #include "filter/kis_filter.h"
@@ -148,7 +149,14 @@ void MainWindow::resetWindowTitle()
     QString fileName = url.fileName();
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Sketch")));
+
+    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KisDoc2* document = DocumentManager::instance()->document();
+    if (document && document->isModified() ) {
+        flags |= KDialog::ModifiedCaption;
+    }
+
+    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 bool MainWindow::allowClose() const

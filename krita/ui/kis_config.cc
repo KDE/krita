@@ -300,6 +300,15 @@ void KisConfig::setUseDirtyPresets(bool value)
 {
     m_cfg.writeEntry("useDirtyPresets",value);
 }
+bool KisConfig::useEraserBrushSize() const
+{
+   return m_cfg.readEntry("useEraserBrushSize",false);
+}
+void KisConfig::setUseEraserBrushSize(bool value)
+{
+    m_cfg.writeEntry("useEraserBrushSize",value);
+}
+
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
@@ -1231,6 +1240,36 @@ int KisConfig::numDefaultLayers() const
 void KisConfig::setNumDefaultLayers(int num)
 {
     m_cfg.writeEntry("NumberOfLayersForNewImage", num);
+}
+
+quint8 KisConfig::defaultBackgroundOpacity() const
+{
+  return m_cfg.readEntry("BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8);
+}
+
+void KisConfig::setDefaultBackgroundOpacity(quint8 value)
+{
+  m_cfg.writeEntry("BackgroundOpacityForNewImage", (int)value);
+}
+
+QColor KisConfig::defaultBackgroundColor() const
+{
+  return m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)); 
+}
+
+void KisConfig::setDefaultBackgroundColor(QColor value) 
+{
+  m_cfg.writeEntry("BackgroundColorForNewImage", value);
+}
+
+KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle() const
+{
+  return (KisConfig::BackgroundStyle)m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER);
+}
+
+void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)
+{
+  m_cfg.writeEntry("BackgroundStyleForNewImage", (int)value);
 }
 
 int KisConfig::lineSmoothingType() const

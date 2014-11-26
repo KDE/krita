@@ -27,7 +27,7 @@
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(ArtisticTextShapePluginFactory, registerPlugin<ArtisticTextShapePlugin>();)
-K_EXPORT_PLUGIN(ArtisticTextShapePluginFactory("ArtisticTextShape"))
+K_EXPORT_PLUGIN(ArtisticTextShapePluginFactory("calligra_shape_artistictext"))
 
 ArtisticTextShapePlugin::ArtisticTextShapePlugin( QObject * parent, const QVariantList & )
     : QObject(parent)

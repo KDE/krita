@@ -23,27 +23,33 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>10</number>
+   </property>
+   <property name="topMargin">
     <number>0</number>
    </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="9" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>162</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="minimumSize">
-        <size>
-         <width>90</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Scale:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="minimumSize">
@@ -60,6 +66,42 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="densityBox" native="true"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="shearBox" native="true"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="scaleBox" native="true"/>
+     </item>
+     <item row="7" column="1">
+      <widget class="QCheckBox" name="antialiasCBox">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QCheckBox" name="mousePressureCBox">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QCheckBox" name="connectedCBox">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="rndBox" native="true"/>
+     </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
        <property name="minimumSize">
@@ -70,6 +112,22 @@
        </property>
        <property name="text">
         <string>Shear:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="minimumSize">
+        <size>
+         <width>90</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Scale:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -92,73 +150,59 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="rndBox" native="true"/>
+     <item row="5" column="1">
+      <widget class="QCheckBox" name="thresholdCBox">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="shearBox" native="true"/>
+     <item row="8" column="1">
+      <widget class="QCheckBox" name="compositingCBox">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="scaleBox" native="true"/>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Mouse pressure:</string>
+       </property>
+      </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="densityBox" native="true"/>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Threshold:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Connect hairs:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Anti-aliasing:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Composite bristles:</string>
+       </property>
+      </widget>
      </item>
     </layout>
-   </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="mousePressureCBox">
-     <property name="text">
-      <string>Mouse pressure</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="thresholdCBox">
-     <property name="text">
-      <string>Threshold</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QCheckBox" name="connectedCBox">
-     <property name="text">
-      <string>Connect hairs</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QCheckBox" name="antialiasCBox">
-     <property name="text">
-      <string>Anti-aliasing</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QCheckBox" name="compositingCBox">
-     <property name="text">
-      <string>Composite bristles</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>162</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

@@ -304,7 +304,7 @@ KisSelectionSP KisLayer::selection() const
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-QList<KisEffectMaskSP> KisLayer::effectMasks() const
+QList<KisEffectMaskSP> KisLayer::effectMasks(KisNodeSP lastNode) const
 {
     QList<KisEffectMaskSP> masks;
 
@@ -314,6 +314,8 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
         QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
 
         foreach(const KisNodeSP& node,  nodes) {
+            if (node == lastNode) break;
+
             KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
             if (mask)
                 masks.append(mask);
@@ -389,12 +391,14 @@ QRect KisLayer::masksNeedRect(const QList<KisEffectMaskSP> &masks,
 
 QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                            const KisPaintDeviceSP destination,
-                           const QRect &requestedRect) const
+                           const QRect &requestedRect,
+                           PositionToFilthy pos,
+                           KisNodeSP lastNode) const
 {
     Q_ASSERT(source);
     Q_ASSERT(destination);
 
-    QList<KisEffectMaskSP> masks = effectMasks();
+    QList<KisEffectMaskSP> masks = effectMasks(lastNode);
     QRect changeRect;
     QRect needRect;
 
@@ -434,7 +438,11 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
             }
 
             foreach(const KisEffectMaskSP& mask, masks) {
-                mask->apply(destination, applyRects.pop());
+                const QRect maskApplyRect = applyRects.pop();
+                const QRect maskNeedRect =
+                    applyRects.isEmpty() ? needRect : applyRects.top();
+
+                mask->apply(destination, maskApplyRect, maskNeedRect, pos);
             }
             Q_ASSERT(applyRects.isEmpty());
         } else {
@@ -445,10 +453,19 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
              */
 
             KisPaintDeviceSP tempDevice = new KisPaintDevice(colorSpace());
+            tempDevice->prepareClone(source);
             copyOriginalToProjection(source, tempDevice, needRect);
 
+            QRect maskApplyRect = applyRects.pop();
+            QRect maskNeedRect = needRect;
+
             foreach(const KisEffectMaskSP& mask, masks) {
-                mask->apply(tempDevice, applyRects.pop());
+                mask->apply(tempDevice, maskApplyRect, maskNeedRect, pos);
+
+                if (!applyRects.isEmpty()) {
+                    maskNeedRect = maskApplyRect;
+                    maskApplyRect = applyRects.pop();
+                }
             }
             Q_ASSERT(applyRects.isEmpty());
 
@@ -461,7 +478,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
     return changeRect;
 }
 
-QRect KisLayer::updateProjection(const QRect& rect)
+QRect KisLayer::updateProjection(const QRect& rect, PositionToFilthy pos)
 {
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
@@ -478,11 +495,27 @@ QRect KisLayer::updateProjection(const QRect& rect)
                 m_d->safeProjection.getDeviceLazy(originalDevice);
 
             updatedRect = applyMasks(originalDevice, projection,
-                                     updatedRect);
+                                     updatedRect, pos, 0);
         }
     }
 
     return updatedRect;
+}
+
+void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect, PositionToFilthy pos)
+{
+    bool changeRectVaries = false;
+    QRect changeRect = masksChangeRect(effectMasks(lastNode), rect,
+                                       changeRectVaries);
+
+    KisPaintDeviceSP originalDevice = original();
+
+    KIS_ASSERT_RECOVER_RETURN(needProjection() || hasEffectMasks());
+
+    if (!changeRect.isEmpty()) {
+        applyMasks(originalDevice, projection,
+                   changeRect, pos, lastNode);
+    }
 }
 
 bool KisLayer::needProjection() const

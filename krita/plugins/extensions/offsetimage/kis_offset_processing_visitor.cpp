@@ -46,64 +46,7 @@ KisOffsetProcessingVisitor::KisOffsetProcessingVisitor(const QPoint &offsetPoint
 {
 }
 
-void KisOffsetProcessingVisitor::visit(KisNode *node, KisUndoAdapter *undoAdapter)
-{
-    Q_UNUSED(node);
-    Q_UNUSED(undoAdapter);
-}
-
-void KisOffsetProcessingVisitor::visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    Q_UNUSED(layer);
-    Q_UNUSED(undoAdapter);
-}
-
-void KisOffsetProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    Q_UNUSED(layer);
-    Q_UNUSED(undoAdapter);
-}
-
-void KisOffsetProcessingVisitor::visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    offsetNode(layer, undoAdapter);
-}
-
-void KisOffsetProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    Q_UNUSED(undoAdapter);
-
-    layer->resetCache();
-}
-
-void KisOffsetProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    offsetNode(layer, undoAdapter);
-    layer->resetCache();
-}
-
-void KisOffsetProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    offsetNode(layer, undoAdapter);
-    layer->resetCache();
-}
-
-void KisOffsetProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)
-{
-    offsetNode(mask, undoAdapter);
-}
-
-void KisOffsetProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)
-{
-    offsetNode(mask, undoAdapter);
-}
-
-void KisOffsetProcessingVisitor::visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter)
-{
-    offsetNode(mask, undoAdapter);
-}
-
-void KisOffsetProcessingVisitor::offsetNode(KisNode *node, KisUndoAdapter *undoAdapter)
+void KisOffsetProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     KisPaintDeviceSP device = node->paintDevice();
     KisTransaction transaction(device);
@@ -111,3 +54,8 @@ void KisOffsetProcessingVisitor::offsetNode(KisNode *node, KisUndoAdapter *undoA
     transaction.commit(undoAdapter);
 }
 
+void KisOffsetProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
+{
+    Q_UNUSED(layer);
+    Q_UNUSED(undoAdapter);
+}

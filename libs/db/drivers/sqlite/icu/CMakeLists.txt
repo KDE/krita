@@ -1,4 +1,4 @@
-add_library(kexidb_sqlite3_icu SHARED icu.c)
+kde4_add_plugin(kexidb_sqlite3_icu icu.c)
 
 include_directories(${ICU_INCLUDE_DIRS})
 

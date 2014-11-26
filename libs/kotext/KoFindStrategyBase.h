@@ -37,7 +37,7 @@ public:
     /**
      * Get the find dialog
      */
-    virtual KFindDialog * dialog() = 0;
+    virtual KFindDialog * dialog() const = 0;
 
     /**
      * Reset internal status

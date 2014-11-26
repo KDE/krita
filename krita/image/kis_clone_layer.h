@@ -116,6 +116,8 @@ public:
      */
     void setDirtyOriginal(const QRect &rect);
 
+    QRect needRectOnSourceForMasks(const QRect &rc) const;
+
 protected:
     void notifyParentVisibilityChanged(bool value);
 

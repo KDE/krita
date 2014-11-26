@@ -161,7 +161,7 @@ bool UserVariable::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     return true;
 }
 
-void UserVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void UserVariable::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     KoVariable::resize(document, object, posInDocument, format, pd);
 

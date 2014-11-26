@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1006</width>
+    <width>1059</width>
     <height>335</height>
    </rect>
   </property>
@@ -23,7 +23,16 @@
       <property name="spacing">
        <number>6</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -58,6 +67,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
         <item>
          <widget class="QPushButton" name="paintPresetIcon">
+          <property name="toolTip">
+           <string>Fill preset area with current icon</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -72,6 +84,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="fillGradient">
+          <property name="toolTip">
+           <string>Fill area with gradient</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -79,6 +94,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="fillSolid">
+          <property name="toolTip">
+           <string>Fill area with background color</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -86,6 +104,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="eraseScratchPad">
+          <property name="toolTip">
+           <string>Reset area to white</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -238,6 +259,25 @@
        </property>
        <property name="checked">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="eraserBrushSizeCheckBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Erase mode will use a separate brush size</string>
+       </property>
+       <property name="text">
+        <string>Eraser switch size</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

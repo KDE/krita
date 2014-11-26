@@ -21,8 +21,7 @@
 #ifndef NUGRID_H
 #define NUGRID_H
 
-#include <stdbool.h>
-
+#include "local_definitions.h"
 
 typedef enum { LINEAR, GENERAL, CENTER, LOG } grid_type;
 

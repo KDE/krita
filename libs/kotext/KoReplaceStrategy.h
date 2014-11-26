@@ -35,7 +35,7 @@ public:
     virtual ~KoReplaceStrategy();
 
     /// reimplmented
-    KFindDialog *dialog();
+    KFindDialog *dialog() const;
 
     /// reimplmented
     virtual void reset();

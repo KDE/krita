@@ -112,7 +112,7 @@ public:
 
     bool abortVisiting() { return m_abortVisiting;}
     void setAbortVisiting(bool abort) {m_abortVisiting = abort;}
-    KoTextEditor * editor() {return m_editor;}
+    KoTextEditor * editor() const {return m_editor;}
 private:
     bool m_abortVisiting;
     KoTextEditor *m_editor;

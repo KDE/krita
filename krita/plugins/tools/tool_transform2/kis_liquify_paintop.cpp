@@ -98,6 +98,8 @@ QPainterPath KisLiquifyPaintop::brushOutline(const KisLiquifyProperties &props,
     }
     case KisLiquifyProperties::UNDO:
         break;
+    case KisLiquifyProperties::N_MODES:
+        qFatal("Not supported mode");
     }
 
     return outline;
@@ -156,6 +158,8 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
                                 size);
 
         break;
+    case KisLiquifyProperties::N_MODES:
+        qFatal("Not supported mode");
     }
 
     return KisSpacingInformation(spacing);

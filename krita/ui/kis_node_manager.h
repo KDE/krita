@@ -150,7 +150,7 @@ public slots:
     void slotTryFinishIsolatedMode();
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    void createNode(const QString& nodeType, bool quiet = false);
+    void createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);
     void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
@@ -197,6 +197,10 @@ public slots:
 
     // merges the active layer with the layer below it.
     void mergeLayerDown();
+
+    void slotSplitAlphaIntoMask();
+    void slotSplitAlphaWrite();
+    void slotSplitAlphaSaveMerged();
 
 public:
 

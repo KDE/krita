@@ -64,6 +64,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     }
 
     m_opacityOption.readOptionSetting(settings);
+    m_flowOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
@@ -74,6 +75,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_scatterOption.readOptionSetting(settings);
 
     m_opacityOption.resetAllSensors();
+    m_flowOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
     m_softnessOption.resetAllSensors();
     m_sharpnessOption.resetAllSensors();
@@ -121,8 +123,9 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                               brush->maskHeight(scale, rotation, 0, 0, info));
 
     quint8 origOpacity = painter()->opacity();
-    quint8 origFlow    = painter()->flow();
+//    quint8 origFlow    = m_flowOption.apply(info);
 
+    m_opacityOption.setFlow(m_flowOption.apply(info));
     m_opacityOption.apply(painter(), info);
     m_colorSource->selectColor(m_mixOption.apply(info));
     m_darkenOption.apply(m_colorSource, info);
@@ -155,7 +158,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                     dab,
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
-    painter()->setFlow(origFlow);
+//    painter()->setFlow(origFlow);
 
     return effectiveSpacing(scale, rotation,
                             m_spacingOption, info);

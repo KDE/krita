@@ -433,16 +433,16 @@ public:
     QList<KoSectionStyle*> sectionStyles() const;
 
     /// returns the default style for the ToC entries for the specified outline level
-    KoParagraphStyle *defaultTableOfContentsEntryStyle(int outlineLevel);
+    KoParagraphStyle *defaultTableOfContentsEntryStyle(int outlineLevel) const;
 
     /// returns the default style for the ToC title
-    KoParagraphStyle *defaultTableOfcontentsTitleStyle();
+    KoParagraphStyle *defaultTableOfcontentsTitleStyle() const;
 
     /// returns the default style for the Bibliography entries for the specified bibliography type
     KoParagraphStyle *defaultBibliographyEntryStyle(const QString &bibType);
 
     /// returns the default style for the Bibliography title
-    KoParagraphStyle *defaultBibliographyTitleStyle();
+    KoParagraphStyle *defaultBibliographyTitleStyle() const;
 
     /// adds a paragraph style to unused paragraph style list
     void addUnusedStyle(KoParagraphStyle *style);
@@ -450,7 +450,7 @@ public:
     /// moves a style from the unused list to the used list i.e paragStyles list
     void moveToUsedStyles(int id);
 
-    KoParagraphStyle *unusedStyle(int id);
+    KoParagraphStyle *unusedStyle(int id) const;
 
     QVector<int> usedCharacterStyles() const;
     QVector<int> usedParagraphStyles() const;

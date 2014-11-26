@@ -67,10 +67,12 @@ void KisTransparencyMaskTest::testApply()
     KisTransparencyMaskSP mask;
 
 
+    QRect applyRect(0, 0, 200, 100);
+
     // Everything is selected
     initImage(image, layer, dev, mask);
     mask->initSelection(layer);
-    mask->apply(dev, QRect(0, 0, 200, 100));
+    mask->apply(dev, applyRect, applyRect, KisNode::N_FILTHY);
     QImage qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
     if (!TestUtil::compareQImages(errpoint,
@@ -83,7 +85,7 @@ void KisTransparencyMaskTest::testApply()
     initImage(image, layer, dev, mask);
     mask->initSelection(layer);
     mask->selection()->pixelSelection()->invert();
-    mask->apply(dev, QRect(0, 0, 200, 100));
+    mask->apply(dev, applyRect, applyRect, KisNode::N_FILTHY);
     qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
     if (!TestUtil::compareQImages(errpoint,
@@ -96,7 +98,7 @@ void KisTransparencyMaskTest::testApply()
     mask->initSelection(layer);
     mask->selection()->pixelSelection()->invert();
     mask->select(QRect(50, 0, 100, 100));
-    mask->apply(dev, QRect(0, 0, 200, 100));
+    mask->apply(dev, applyRect, applyRect, KisNode::N_FILTHY);
     qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
     if (!TestUtil::compareQImages(errpoint,

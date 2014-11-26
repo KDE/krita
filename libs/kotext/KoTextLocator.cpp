@@ -111,7 +111,7 @@ void KoTextLocator::updatePosition(const QTextDocument *document, int posInDocum
     }
 }
 
-void KoTextLocator::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void KoTextLocator::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
@@ -122,7 +122,7 @@ void KoTextLocator::resize(const QTextDocument *document, QTextInlineObject obje
     object.setDescent(0);
 }
 
-void KoTextLocator::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &)
+void KoTextLocator::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int , const QTextCharFormat &)
 {
     // nothing to paint.
 }

@@ -28,10 +28,59 @@
 #include <kis_transaction.h>
 #include <kis_painter.h>
 #include <kis_transform_worker.h>
-#include <kis_perspectivetransform_worker.h>
-#include <kis_warptransform_worker.h>
-#include <kis_cage_transform_worker.h>
-#include <kis_liquify_transform_worker.h>
+#include <kis_transform_mask.h>
+#include "kis_transform_mask_adapter.h"
+#include "kis_transform_utils.h"
+
+
+
+class ModifyTransformMaskCommand : public KUndo2Command {
+public:
+    ModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params)
+        : m_mask(mask),
+          m_params(params),
+          m_oldParams(m_mask->transformParams())
+        {
+        }
+
+    void redo() {
+        m_mask->setTransformParams(m_params);
+
+        /**
+         * NOTE: this code "duplicates" the functionality provided
+         * by KisRecalculateTransformMaskJob, but there is not much
+         * reason for starting a separate stroke when a transformation
+         * has happened
+         */
+
+        m_mask->recaclulateStaticImage();
+        updateMask();
+    }
+
+    void undo() {
+        m_mask->setTransformParams(m_oldParams);
+
+        m_mask->recaclulateStaticImage();
+        updateMask();
+    }
+
+private:
+    void updateMask() {
+        QRect updateRect = m_mask->extent();
+
+        KisNodeSP parent = m_mask->parent();
+        if (parent && parent->original()) {
+            updateRect |= parent->original()->defaultBounds()->bounds();
+        }
+
+        m_mask->setDirty(updateRect);
+    }
+
+private:
+    KisTransformMaskSP m_mask;
+    KisTransformMaskParamsInterfaceSP m_params;
+    KisTransformMaskParamsInterfaceSP m_oldParams;
+};
 
 
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
@@ -41,7 +90,19 @@ TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
       m_selection(selection)
 {
     if (rootNode->childCount() || !rootNode->paintDevice()) {
-        m_previewDevice = createDeviceCache(rootNode->projection());
+        KisPaintDeviceSP device;
+
+        if (KisTransformMask* tmask =
+            dynamic_cast<KisTransformMask*>(rootNode.data())) {
+
+            device = tmask->buildPreviewDevice();
+
+        } else {
+            device = rootNode->projection();
+        }
+
+        m_previewDevice = createDeviceCache(device);
+
     } else {
         m_previewDevice = createDeviceCache(rootNode->paintDevice());
         putDeviceCache(rootNode->paintDevice(), m_previewDevice);
@@ -100,42 +161,6 @@ KisPaintDeviceSP TransformStrokeStrategy::getDeviceCache(KisPaintDeviceSP src)
     return cache;
 }
 
-KisTransformWorker createTransformWorker(const ToolTransformArgs &config,
-                                         KisPaintDeviceSP device,
-                                         KoUpdaterPtr updater,
-                                         QVector3D *transformedCenter /* OUT */)
-{
-    {
-        KisTransformWorker t(0,
-                             config.scaleX(), config.scaleY(),
-                             config.shearX(), config.shearY(),
-                             config.originalCenter().x(),
-                             config.originalCenter().y(),
-                             config.aZ(),
-                             0, // set X and Y translation
-                             0, // to null for calculation
-                             0,
-                             config.filter());
-
-        *transformedCenter = QVector3D(t.transform().map(config.originalCenter()));
-    }
-
-    QPointF translation = config.transformedCenter() - (*transformedCenter).toPointF();
-
-    KisTransformWorker transformWorker(device,
-                                       config.scaleX(), config.scaleY(),
-                                       config.shearX(), config.shearY(),
-                                       config.originalCenter().x(),
-                                       config.originalCenter().y(),
-                                       config.aZ(),
-                                       (int)(translation.x()),
-                                       (int)(translation.y()),
-                                       updater,
-                                       config.filter());
-
-    return transformWorker;
-}
-
 bool TransformStrokeStrategy::checkBelongsToSelection(KisPaintDeviceSP device) const
 {
     return m_selection &&
@@ -171,21 +196,31 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             } if (KisExternalLayer *extLayer =
                   dynamic_cast<KisExternalLayer*>(td->node.data())) {
 
-                if (td->config.mode() == ToolTransformArgs::WARP) {
-                    qWarning() << "Warp transform of an external layer is not supported:" << extLayer->name();
-                } else {
+                if (td->config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
+                    td->config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+
                     if (td->config.aX() || td->config.aY()) {
                         qWarning() << "Perspective transform of an external layer is not supported:" << extLayer->name();
                     }
 
                     QVector3D transformedCenter;
-                    KisTransformWorker w = createTransformWorker(td->config, 0, 0, &transformedCenter);
+                    KisTransformWorker w = KisTransformUtils::createTransformWorker(td->config, 0, 0, &transformedCenter);
                     QTransform t = w.transform();
 
                     runAndSaveCommand(KUndo2CommandSP(extLayer->transform(t)),
                                       KisStrokeJobData::CONCURRENT,
-                                      KisStrokeJobData::NORMAL);;
+                                      KisStrokeJobData::NORMAL);
                 }
+
+            } else if (KisTransformMask *transformMask =
+                       dynamic_cast<KisTransformMask*>(td->node.data())) {
+
+                runAndSaveCommand(KUndo2CommandSP(
+                                      new ModifyTransformMaskCommand(transformMask,
+                                                                     KisTransformMaskParamsInterfaceSP(
+                                                                         new KisTransformMaskAdapter(td->config)))),
+                                  KisStrokeJobData::CONCURRENT,
+                                  KisStrokeJobData::NORMAL);
             }
         } else if (m_selection) {
 
@@ -196,9 +231,9 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             KisTransaction transaction(m_selection->pixelSelection());
 
             KisProcessingVisitor::ProgressHelper helper(td->node);
-            transformDevice(td->config,
-                            m_selection->pixelSelection(),
-                            &helper);
+            KisTransformUtils::transformDevice(td->config,
+                                               m_selection->pixelSelection(),
+                                               &helper);
 
             runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
                               KisStrokeJobData::CONCURRENT,
@@ -211,6 +246,15 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 putDeviceCache(device, createDeviceCache(device));
             }
             clearSelection(device);
+        } else if (KisTransformMask *transformMask =
+                   dynamic_cast<KisTransformMask*>(csd->node.data())) {
+
+            runAndSaveCommand(KUndo2CommandSP(
+                                  new ModifyTransformMaskCommand(transformMask,
+                                                                 KisTransformMaskParamsInterfaceSP(
+                                                                     new KisDumbTransformMaskParams(true)))),
+                                  KisStrokeJobData::SEQUENTIAL,
+                                  KisStrokeJobData::NORMAL);
         }
     } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
@@ -239,74 +283,12 @@ void TransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &c
 {
     KoUpdaterPtr mergeUpdater = src != dst ? helper->updater() : 0;
 
-    transformDevice(config, src, helper);
+    KisTransformUtils::transformDevice(config, src, helper);
     if (src != dst) {
         QRect mergeRect = src->extent();
         KisPainter painter(dst);
         painter.setProgress(mergeUpdater);
         painter.bitBlt(mergeRect.topLeft(), src, mergeRect);
         painter.end();
-    }
-}
-
-void TransformStrokeStrategy::transformDevice(const ToolTransformArgs &config,
-                                              KisPaintDeviceSP device,
-                                              KisProcessingVisitor::ProgressHelper *helper)
-{
-    if (config.mode() == ToolTransformArgs::WARP) {
-        KoUpdaterPtr updater = helper->updater();
-
-        KisWarpTransformWorker worker(config.warpType(),
-                                      device,
-                                      config.origPoints(),
-                                      config.transfPoints(),
-                                      config.alpha(),
-                                      updater);
-        worker.run();
-    } else if (config.mode() == ToolTransformArgs::CAGE) {
-        KoUpdaterPtr updater = helper->updater();
-
-        KisCageTransformWorker worker(device,
-                                      config.origPoints(),
-                                      updater,
-                                      8);
-
-        worker.prepareTransform();
-        worker.setTransformedCage(config.transfPoints());
-        worker.run();
-    } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
-        KoUpdaterPtr updater = helper->updater();
-        //FIXME:
-        Q_UNUSED(updater);
-
-        config.liquifyWorker()->run(device);
-    } else {
-        QVector3D transformedCenter;
-        KoUpdaterPtr updater1 = helper->updater();
-        KoUpdaterPtr updater2 = helper->updater();
-
-        KisTransformWorker transformWorker =
-            createTransformWorker(config, device, updater1, &transformedCenter);
-
-        transformWorker.run();
-
-        if (config.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-            KisPerspectiveTransformWorker perspectiveWorker(device,
-                                                            config.transformedCenter(),
-                                                            config.aX(),
-                                                            config.aY(),
-                                                            config.cameraPos().z(),
-                                                            updater2);
-            perspectiveWorker.run();
-        } else if (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
-            QTransform T =
-                QTransform::fromTranslate(config.transformedCenter().x(),
-                                          config.transformedCenter().y());
-
-            KisPerspectiveTransformWorker perspectiveWorker(device,
-                                                            T.inverted() * config.flattenedPerspectiveTransform() * T,
-                                                            updater2);
-            perspectiveWorker.run();
-        }
     }
 }

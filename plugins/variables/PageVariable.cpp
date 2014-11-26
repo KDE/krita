@@ -83,7 +83,7 @@ void PageVariable::propertyChanged(Property property, const QVariant &value)
     }
 }
 
-void PageVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void PageVariable::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     KoTextPage *page = 0;
     if (m_type != PageCount) {

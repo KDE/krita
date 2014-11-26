@@ -30,7 +30,7 @@ KoTextBlockPaintStrategyBase::~KoTextBlockPaintStrategyBase()
 {
 }
 
-QBrush KoTextBlockPaintStrategyBase::background(const QBrush &defaultBackground)
+QBrush KoTextBlockPaintStrategyBase::background(const QBrush &defaultBackground) const
 {
     return defaultBackground;
 }
@@ -39,6 +39,7 @@ void KoTextBlockPaintStrategyBase::applyStrategy(QPainter *)
 {
 }
 
-bool KoTextBlockPaintStrategyBase::isVisible() {
+bool KoTextBlockPaintStrategyBase::isVisible() const
+{
     return true;
 }

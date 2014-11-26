@@ -21,7 +21,6 @@
 #ifndef MULTI_BSPLINE_STRUCTS_STD_H
 #define MULTI_BSPLINE_STRUCTS_STD_H
 
-#include <inttypes.h>
 
 ///////////////////////////
 // Single precision real //

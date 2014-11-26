@@ -85,6 +85,8 @@ private:
 
     KisNodeSP loadFilterMask(const KoXmlElement& elem, KisNodeSP parent);
 
+    KisNodeSP loadTransformMask(const KoXmlElement& elem, KisNodeSP parent);
+
     KisNodeSP loadTransparencyMask(const KoXmlElement& elem, KisNodeSP parent);
 
     KisNodeSP loadSelectionMask(KisImageWSP image, const KoXmlElement& elem, KisNodeSP parent);

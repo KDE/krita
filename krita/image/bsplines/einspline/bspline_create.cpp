@@ -27,7 +27,7 @@
 #endif
 #include <stdlib.h>
 #include <stdio.h>
-#include <inttypes.h>
+#include <vector>
 
 int posix_memalign(void **memptr, size_t alignment, size_t size);
 
@@ -98,7 +98,8 @@ void
 solve_periodic_interp_1d_s (float bands[], float coefs[],
 			    int M, int cstride)
 {
-  float lastCol[M];
+  std::vector<float> lastCol(M);
+
   // Now solve:
   // First and last rows are different
   bands[4*(0)+2] /= bands[4*(0)+1];
@@ -158,7 +159,8 @@ solve_antiperiodic_interp_1d_s (float bands[], float coefs[],
   bands[4*0+0]     *= -1.0;
   bands[4*(M-1)+2] *= -1.0;
 
-  float lastCol[M];
+  std::vector<float> lastCol(M);
+
   // Now solve:
   // First and last rows are different
   bands[4*(0)+2] /= bands[4*(0)+1];
@@ -222,15 +224,15 @@ find_coefs_1d_s (Ugrid grid, BCtype_s bc,
   if (bc.lCode == PERIODIC || bc.lCode == ANTIPERIODIC)    N = M+3;
   else                         N = M+2;
 
-  d_data  = malloc (N*sizeof(double));
-  d_coefs = malloc (N*sizeof(double));
+  d_data  = new double[N];
+  d_coefs = new double[N];
   for (int i=0; i<M; i++)
     d_data[i] = data[i*dstride];
   find_coefs_1d_d (grid, d_bc, d_data, 1, d_coefs, 1);
   for (int i=0; i<N; i++)
     coefs[i*cstride] = d_coefs[i];
-  free (d_data);
-  free (d_coefs);
+  delete[] d_data;
+  delete[] d_coefs;
 }
 
 #else
@@ -242,11 +244,9 @@ find_coefs_1d_s (Ugrid grid, BCtype_s bc,
   int M = grid.num;
   float basis[4] = {1.0/6.0, 2.0/3.0, 1.0/6.0, 0.0};
   if (bc.lCode == PERIODIC || bc.lCode == ANTIPERIODIC) {
-#ifdef HAVE_C_VARARRAYS
-    float bands[4*M];
-#else
-    float *bands = malloc(4*M*sizeof(float));
-#endif    
+
+    float *bands = new float[4*M];
+
     for (int i=0; i<M; i++) {
       bands[4*i+0] = basis[0];
       bands[4*i+1] = basis[1];
@@ -257,9 +257,8 @@ find_coefs_1d_s (Ugrid grid, BCtype_s bc,
       solve_periodic_interp_1d_s (bands, coefs, M, cstride);
     else
       solve_antiperiodic_interp_1d_s (bands, coefs, M, cstride);
-#ifndef HAVE_C_VARARRAYS
-    free (bands);
-#endif
+
+    delete[] bands;
   }
   else {
     // Setup boundary conditions
@@ -295,11 +294,8 @@ find_coefs_1d_s (Ugrid grid, BCtype_s bc,
       abcd_right[2] = 1.0 *grid.delta_inv * grid.delta_inv;
       abcd_right[3] = bc.rVal;
     }
-#ifdef HAVE_C_VARARRAYS
-    float bands[4*(M+2)];
-#else
-    float *bands = malloc ((M+2)*4*sizeof(float));
-#endif    
+
+    float *bands = new float[4*(M+2)];
     for (int i=0; i<4; i++) {
       bands[4*( 0 )+i]   = abcd_left[i];
       bands[4*(M+1)+i] = abcd_right[i];
@@ -311,9 +307,7 @@ find_coefs_1d_s (Ugrid grid, BCtype_s bc,
     }   
     // Now, solve for coefficients
     solve_deriv_interp_1d_s (bands, coefs, M, cstride);
-#ifndef HAVE_C_VARARRAYS
-    free (bands);
-#endif
+    delete[] bands;
   }
 }
 
@@ -335,7 +329,7 @@ UBspline_1d_s*
 create_UBspline_1d_s (Ugrid x_grid, BCtype_s xBC, float *data)
 {
   // Create new spline
-  UBspline_1d_s* restrict spline = malloc (sizeof(UBspline_1d_s));
+  UBspline_1d_s* restrict spline = new UBspline_1d_s;
   spline->spcode = U1D;
   spline->tcode  = SINGLE_REAL;
   spline->xBC = xBC; spline->x_grid = x_grid;
@@ -356,7 +350,7 @@ create_UBspline_1d_s (Ugrid x_grid, BCtype_s xBC, float *data)
   x_grid.delta_inv = 1.0/x_grid.delta;
   spline->x_grid   = x_grid;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(float)*N);
+  spline->coefs = new float[N];
 #else
   posix_memalign ((void**)&spline->coefs, 16, (sizeof(float)*N));
 #endif
@@ -378,7 +372,7 @@ create_UBspline_2d_s (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_s xBC, BCtype_s yBC, float *data)
 {
   // Create new spline
-  UBspline_2d_s* restrict spline = malloc (sizeof(UBspline_2d_s));
+  UBspline_2d_s* restrict spline = new UBspline_2d_s;
   spline->spcode = U2D;
   spline->tcode  = SINGLE_REAL;
   spline->xBC = xBC; 
@@ -401,7 +395,7 @@ create_UBspline_2d_s (Ugrid x_grid, Ugrid y_grid,
   spline->y_grid   = y_grid;
   spline->x_stride = Ny;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(float)*Nx*Ny);
+  spline->coefs = new float[Nx*Ny];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(float)*Nx*Ny);
 #endif
@@ -461,7 +455,7 @@ create_UBspline_3d_s (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      float *data)
 {
   // Create new spline
-  UBspline_3d_s* restrict spline = malloc (sizeof(UBspline_3d_s));
+  UBspline_3d_s* restrict spline = new UBspline_3d_s;
   spline->spcode = U3D;
   spline->tcode  = SINGLE_REAL;
   spline->xBC = xBC; 
@@ -493,7 +487,7 @@ create_UBspline_3d_s (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
   spline->y_stride = Nz;
 
 #ifndef HAVE_SSE2
-  spline->coefs      = malloc (sizeof(float)*Nx*Ny*Nz);
+  spline->coefs      = new float[Nx*Ny*Nz];
 #else
   posix_memalign ((void**)&spline->coefs, 16, (sizeof(float)*Nx*Ny*Nz));
 #endif
@@ -588,7 +582,7 @@ UBspline_1d_c*
 create_UBspline_1d_c (Ugrid x_grid, BCtype_c xBC, complex_float *data)
 {
   // Create new spline
-  UBspline_1d_c* restrict spline = malloc (sizeof(UBspline_1d_c));
+  UBspline_1d_c* restrict spline = new UBspline_1d_c;
   spline->spcode = U1D;
   spline->tcode  = SINGLE_COMPLEX;
   spline->xBC = xBC; 
@@ -608,7 +602,7 @@ create_UBspline_1d_c (Ugrid x_grid, BCtype_c xBC, complex_float *data)
   x_grid.delta_inv = 1.0/x_grid.delta;
   spline->x_grid   = x_grid;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (2*sizeof(float)*N);
+  spline->coefs = new complex_float[N];
 #else
   posix_memalign ((void**)&spline->coefs, 16, 2*sizeof(float)*N);
 #endif
@@ -654,7 +648,7 @@ create_UBspline_2d_c (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_c xBC, BCtype_c yBC, complex_float *data)
 {
   // Create new spline
-  UBspline_2d_c* restrict spline = malloc (sizeof(UBspline_2d_c));
+  UBspline_2d_c* restrict spline = new UBspline_2d_c;
   spline->spcode = U2D;
   spline->tcode  = SINGLE_COMPLEX;
   spline->xBC = xBC; 
@@ -679,7 +673,7 @@ create_UBspline_2d_c (Ugrid x_grid, Ugrid y_grid,
   spline->x_stride = Ny;
 
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (2*sizeof(float)*Nx*Ny);
+  spline->coefs = new complex_float[Nx*Ny];
 #else
   posix_memalign ((void**)&spline->coefs, 16, 2*sizeof(float)*Nx*Ny);
 #endif
@@ -779,7 +773,7 @@ create_UBspline_3d_c (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      complex_float *data)
 {
   // Create new spline
-  UBspline_3d_c* restrict spline = malloc (sizeof(UBspline_3d_c));
+  UBspline_3d_c* restrict spline = new UBspline_3d_c;
   spline->spcode = U3D;
   spline->tcode  = SINGLE_COMPLEX;
   spline->xBC = xBC; 
@@ -812,7 +806,7 @@ create_UBspline_3d_c (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
   spline->y_stride = Nz;
 
 #ifndef HAVE_SSE2
-  spline->coefs      = malloc (2*sizeof(float)*Nx*Ny*Nz);
+  spline->coefs      =  new complex_float[Nx*Ny*Nz];
 #else
   posix_memalign ((void**)&spline->coefs, 16, 2*sizeof(float)*Nx*Ny*Nz);
 #endif
@@ -1010,7 +1004,8 @@ void
 solve_periodic_interp_1d_d (double bands[], double coefs[],
 			    int M, int cstride)
 {
-  double lastCol[M];
+  std::vector<double> lastCol(M);
+
   // Now solve:
   // First and last rows are different
   bands[4*(0)+2] /= bands[4*(0)+1];
@@ -1064,7 +1059,8 @@ void
 solve_antiperiodic_interp_1d_d (double bands[], double coefs[],
 			    int M, int cstride)
 {
-  double lastCol[M];
+  std::vector<double> lastCol(M);
+
   bands[4*0+0]     *= -1.0;
   bands[4*(M-1)+2] *= -1.0;
   // Now solve:
@@ -1123,7 +1119,7 @@ find_coefs_1d_d (Ugrid grid, BCtype_d bc,
 #ifdef HAVE_C_VARARRAYS
     double bands[M*4];
 #else
-    double *bands = malloc (4*M*sizeof(double));
+    double *bands = new double[4*M];
 #endif
     for (int i=0; i<M; i++) {
       bands[4*i+0] = basis[0];
@@ -1138,7 +1134,7 @@ find_coefs_1d_d (Ugrid grid, BCtype_d bc,
 
 
 #ifndef HAVE_C_VARARRAYS
-    free (bands);
+    delete[] bands;
 #endif
   }
   else {
@@ -1178,7 +1174,7 @@ find_coefs_1d_d (Ugrid grid, BCtype_d bc,
 #ifdef HAVE_C_VARARRAYS
     double bands[(M+2)*4];
 #else
-    double *bands = malloc ((M+2)*4*sizeof(double));
+    double *bands = new double[(M+2)*4];
 #endif
     for (int i=0; i<4; i++) {
       bands[4*( 0 )+i] = abcd_left[i];
@@ -1192,7 +1188,7 @@ find_coefs_1d_d (Ugrid grid, BCtype_d bc,
     // Now, solve for coefficients
     solve_deriv_interp_1d_d (bands, coefs, M, cstride);
 #ifndef HAVE_C_VARARRAYS
-    free (bands);
+    delete[] bands;
 #endif
   }
 }
@@ -1203,7 +1199,7 @@ UBspline_1d_d*
 create_UBspline_1d_d (Ugrid x_grid, BCtype_d xBC, double *data)
 {
   // Create new spline
-  UBspline_1d_d* restrict spline = malloc (sizeof(UBspline_1d_d));
+  UBspline_1d_d* restrict spline = new UBspline_1d_d;
   spline->spcode = U1D;
   spline->tcode  = DOUBLE_REAL;
   spline->xBC = xBC; 
@@ -1225,7 +1221,7 @@ create_UBspline_1d_d (Ugrid x_grid, BCtype_d xBC, double *data)
   spline->x_grid   = x_grid;
 
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(double)*N);
+  spline->coefs = new double[N];
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(double)*N);
 #endif
@@ -1247,7 +1243,7 @@ create_UBspline_2d_d (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_d xBC, BCtype_d yBC, double *data)
 {
   // Create new spline
-  UBspline_2d_d* restrict spline = malloc (sizeof(UBspline_2d_d));
+  UBspline_2d_d* restrict spline = new UBspline_2d_d;
   spline->spcode = U2D;
   spline->tcode  = DOUBLE_REAL;
   spline->xBC = xBC; 
@@ -1272,7 +1268,7 @@ create_UBspline_2d_d (Ugrid x_grid, Ugrid y_grid,
   spline->x_stride = Ny;
 
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (sizeof(double)*Nx*Ny);
+  spline->coefs = new double[Nx*Ny];
 #else
   posix_memalign ((void**)&spline->coefs, 16, (sizeof(double)*Nx*Ny));
 #endif
@@ -1338,7 +1334,7 @@ create_UBspline_3d_d (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      double *data)
 {
   // Create new spline
-  UBspline_3d_d* restrict spline = malloc (sizeof(UBspline_3d_d));
+  UBspline_3d_d* restrict spline = new UBspline_3d_d;
   spline->spcode = U3D;
   spline->tcode  = DOUBLE_REAL;
   spline->xBC = xBC; 
@@ -1371,7 +1367,7 @@ create_UBspline_3d_d (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
   spline->y_stride = Nz;
 
 #ifndef HAVE_SSE2
-  spline->coefs      = malloc (sizeof(double)*Nx*Ny*Nz);
+  spline->coefs      = new double[Nx*Ny*Nz];
 #else
   posix_memalign ((void**)&spline->coefs, 16, (sizeof(double)*Nx*Ny*Nz));
 #endif
@@ -1475,7 +1471,7 @@ UBspline_1d_z*
 create_UBspline_1d_z (Ugrid x_grid, BCtype_z xBC, complex_double *data)
 {
   // Create new spline
-  UBspline_1d_z* restrict spline = malloc (sizeof(UBspline_1d_z));
+  UBspline_1d_z* restrict spline = new UBspline_1d_z;
   spline->spcode = U1D;
   spline->tcode  = DOUBLE_COMPLEX;
   spline->xBC = xBC; 
@@ -1496,7 +1492,7 @@ create_UBspline_1d_z (Ugrid x_grid, BCtype_z xBC, complex_double *data)
   x_grid.delta_inv = 1.0/x_grid.delta;
   spline->x_grid   = x_grid;
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (2*sizeof(double)*N);
+  spline->coefs = new complex_double[N];
 #else
   posix_memalign ((void**)&spline->coefs, 16, 2*sizeof(double)*N);
 #endif
@@ -1548,7 +1544,7 @@ create_UBspline_2d_z (Ugrid x_grid, Ugrid y_grid,
 		      BCtype_z xBC, BCtype_z yBC, complex_double *data)
 {
   // Create new spline
-  UBspline_2d_z* restrict spline = malloc (sizeof(UBspline_2d_z));
+  UBspline_2d_z* restrict spline = new UBspline_2d_z;
   spline->spcode = U2D;
   spline->tcode  = DOUBLE_COMPLEX;
   spline->xBC = xBC; 
@@ -1577,7 +1573,7 @@ create_UBspline_2d_z (Ugrid x_grid, Ugrid y_grid,
   spline->x_stride = Ny;
 
 #ifndef HAVE_SSE2
-  spline->coefs = malloc (2*sizeof(double)*Nx*Ny);
+  spline->coefs = new complex_double[Nx*Ny];
 #else
   posix_memalign ((void**)&spline->coefs, 16, 2*sizeof(double)*Nx*Ny);
 #endif
@@ -1679,7 +1675,7 @@ create_UBspline_3d_z (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
 		      complex_double *data)
 {
   // Create new spline
-  UBspline_3d_z* restrict spline = malloc (sizeof(UBspline_3d_z));
+  UBspline_3d_z* restrict spline = new UBspline_3d_z;
   spline->spcode = U3D;
   spline->tcode  = DOUBLE_COMPLEX;
   spline->xBC = xBC; 
@@ -1712,7 +1708,7 @@ create_UBspline_3d_z (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
   spline->y_stride = Nz;
 
 #ifndef HAVE_SSE2
-  spline->coefs      = malloc (2*sizeof(double)*Nx*Ny*Nz);
+  spline->coefs      = new complex_double[Nx*Ny*Nz];
 #else
   posix_memalign ((void**)&spline->coefs, 16, 2*sizeof(double)*Nx*Ny*Nz);
 #endif
@@ -1851,8 +1847,8 @@ recompute_UBspline_3d_z (UBspline_3d_z* spline, complex_double *data)
 void
 destroy_UBspline (Bspline *spline)
 {
-  free (spline->coefs);
-  free (spline);
+  delete[] spline->coefs;
+  delete spline;
 }
 
 void 

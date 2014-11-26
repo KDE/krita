@@ -170,11 +170,12 @@ void KoTemplateTree::readGroups()
 
 void KoTemplateTree::readTemplates()
 {
-    QString dontShow = "imperial";
-
-    if (KGlobal::locale()->pageSize() == QPrinter::Letter) {
-        dontShow = "metric";
-    }
+//     QString dontShow = "imperial";
+// 
+//     if (KGlobal::locale()->pageSize() == QPrinter::Letter) {
+//         dontShow = "metric";
+//     }
+    QString dontShow = "hide nothing at all - show all the templates, please, and let the user make the choice";
 
     foreach (KoTemplateGroup* group, m_groups) {
         QStringList dirs = group->dirs();
@@ -191,6 +192,11 @@ void KoTemplateTree::readTemplates()
                 QString description;
                 QString hidden_str;
                 QString fileName;
+                QString color;
+                QString swatch;
+                QString variantName;
+                QString thumbnail;
+                bool wide = false;
                 bool hidden = false;
                 bool defaultTemplate = false;
                 QString templatePath;
@@ -210,6 +216,11 @@ void KoTemplateTree::readTemplates()
                                 QFile::exists(*it + icon)) // allow icons from icontheme
                             icon = *it + icon;
                         //kDebug( 30003 ) <<"icon2:" << icon;
+                        color = config.readEntry("X-KDE-Color");
+                        swatch = config.readEntry("X-KDE-Swatch");
+                        wide = config.readEntry("X-KDE-TemplateIsWideFormat", false);
+                        variantName = config.readEntry("X-KDE-VariantName");
+                        thumbnail = config.readEntry("X-KDE-Thumbnail");
                         hidden = config.readEntry("X-KDE-Hidden", false);
                         defaultTemplate = config.readEntry("X-KDE-DefaultTemplate", false);
                         measureSystem = config.readEntry("X-KDE-MeasureSystem").toLower();
@@ -245,7 +256,9 @@ void KoTemplateTree::readTemplates()
                     // That's the way it's always been done. Then the app replaces the extension...
                 }
                 KoTemplate *t = new KoTemplate(text, description, templatePath, icon, fileName,
-                                               measureSystem, hidden);
+                                               measureSystem, color, swatch, variantName, wide, hidden);
+                if (!thumbnail.isEmpty())
+                    t->setThumbnail(*it + thumbnail);
                 group->add(t, false, false); // false -> we aren't a "user", false -> don't
                 // "touch" the group to avoid useless
                 // creation of dirs in .kde/blah/...

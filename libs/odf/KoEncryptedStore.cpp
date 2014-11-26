@@ -179,7 +179,8 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
         KoXmlDocument xmldoc;
         bool namespaceProcessing = true; // for the manifest ignore the namespace (bug #260515)
         if (!xmldoc.setContent(dev, namespaceProcessing) || xmldoc.documentElement().localName() != "manifest" || xmldoc.documentElement().namespaceURI() != KoXmlNS::manifest) {
-            KMessage::message(KMessage::Warning, i18n("The manifest file seems to be corrupted. The document could not be opened."));
+            //KMessage::message(KMessage::Warning, i18n("The manifest file seems to be corrupted. The document could not be opened."));
+            /// FIXME this message is not something we actually want to not mention, but it makes thumbnails noisy at times, so... let's not
             dev->close();
             delete dev;
             m_pZip->close();

@@ -82,7 +82,7 @@ void KoAnchorInlineObject::updatePosition(const QTextDocument *document, int pos
     }
 }
 
-void KoAnchorInlineObject::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void KoAnchorInlineObject::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
@@ -156,7 +156,7 @@ void KoAnchorInlineObject::resize(const QTextDocument *document, QTextInlineObje
     }
 }
 
-void KoAnchorInlineObject::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &)
+void KoAnchorInlineObject::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int , const QTextCharFormat &)
 {
 }
 

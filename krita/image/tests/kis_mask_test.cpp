@@ -98,7 +98,7 @@ void KisMaskTest::testCropUpdateBySelection()
 
     mask->initSelection(sel, p.layer);
 
-    mask->apply(p.layer->projection(), updateRect);
+    mask->apply(p.layer->projection(), updateRect, updateRect, KisNode::N_FILTHY);
     // Here we crash! :)
 
     /**

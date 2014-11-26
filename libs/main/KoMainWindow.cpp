@@ -1194,7 +1194,7 @@ void KoMainWindow::saveWindowSettings()
         d->windowSizeDirty = false;
     }
 
-    if ( rootDocument()) {
+    if ( rootDocument() && d->rootPart) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
         KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName());
@@ -1231,7 +1231,7 @@ bool KoMainWindow::queryClose()
         return true;
     //kDebug(30003) <<"KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
     //               << " mainWindowCount=" << rootDocument()->mainWindowCount() << endl;
-    if (!d->forQuit && d->rootPart->mainwindowCount() > 1)
+    if (!d->forQuit && d->rootPart && d->rootPart->mainwindowCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
         return true;
 
@@ -1629,9 +1629,9 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
 void KoMainWindow::viewFullscreen(bool fullScreen)
 {
     if (fullScreen) {
-        setWindowState(windowState() | Qt::WindowFullScreen);   // set
+        window()->setWindowState(window()->windowState() | Qt::WindowFullScreen);   // set
     } else {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
+        window()->setWindowState(window()->windowState() & ~Qt::WindowFullScreen);   // reset
     }
 }
 

@@ -81,6 +81,8 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     connect(m_d->optionsList, SIGNAL(doubleClicked(QModelIndex))         , this, SLOT(lockProperties(const QModelIndex&)));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuDropSettingsTriggered())         , this, SLOT(slotLockPropertiesDrop()));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuSaveSettingsTriggered())         , this, SLOT(slotLockPropertiesSave()));
+    connect(m_d->optionsList, SIGNAL(sigEntryChecked(QModelIndex)), this, SLOT(slotEntryChecked(QModelIndex)));
+
 }
 
 

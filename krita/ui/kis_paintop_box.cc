@@ -91,6 +91,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     , m_presetsEnabled(true)
     , m_blockUpdate(false)
     , m_dirtyPresetsEnabled(false)
+    , m_eraserBrushSizeEnabled(false)
 {
     Q_ASSERT(view != 0);
 
@@ -99,6 +100,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     setObjectName(name);
     KisConfig cfg;
     m_dirtyPresetsEnabled = cfg.useDirtyPresets();
+    m_eraserBrushSizeEnabled = cfg.useEraserBrushSize();
 
     KAcceleratorManager::setNoAccel(this);
 
@@ -303,6 +305,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
     connect(m_presetsPopup       , SIGNAL(reloadPresetClicked())              , SLOT(slotReloadPreset()));
     connect(m_presetsPopup       , SIGNAL(dirtyPresetToggled(bool))           , SLOT(slotDirtyPresetToggled(bool)));
+    connect(m_presetsPopup       , SIGNAL(eraserBrushSizeToggled(bool))       , SLOT(slotEraserBrushSizeToggled(bool)));
 
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
@@ -409,7 +412,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         }
 
         m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = m_resourceProvider->currentPreset();
-        m_tabletToolMap[m_currTabletToolID].preset    = m_resourceProvider->currentPreset();
+        m_tabletToolMap[m_currTabletToolID].preset = m_resourceProvider->currentPreset();
         m_tabletToolMap[m_currTabletToolID].paintOpID = m_resourceProvider->currentPreset()->paintOp();
     }
 
@@ -632,7 +635,7 @@ void KisPaintopBox::slotSaveActivePreset()
 
     m_favoriteResourceManager->setBlockUpdates(true);
 
-    KisPaintOpPresetSP newPreset = curPreset;
+    KisPaintOpPresetSP newPreset = curPreset->clone();
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
     QString name = m_presetsPopup->getPresetName();
@@ -657,8 +660,8 @@ void KisPaintopBox::slotSaveActivePreset()
     foreach(const QString & tag, tags) {
         rServer->addTag(newPreset.data(), tag);
     }
-
     m_favoriteResourceManager->setBlockUpdates(false);
+
 }
 
 void KisPaintopBox::slotUpdatePreset()
@@ -741,19 +744,34 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
     if (checked)
     {
          updateCompositeOp(COMPOSITE_ERASE);
-
-         // remember brush size. set the eraser size to the normal brush size if not set
-         normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
-         if (!eraserBrushSize)
-             eraserBrushSize = normalBrushSize;
+         //add an option to enable eraser brush size
+         if (m_eraserBrushSizeEnabled==true)
+         {
+           // remember brush size. set the eraser size to the normal brush size if not set
+           normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+           if (!eraserBrushSize)
+               eraserBrushSize = normalBrushSize;
+         }
+         else
+         {
+          normalBrushSize = eraserBrushSize;
+          eraserBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value(); 
+         }
     }
 
     else
     {
          updateCompositeOp(m_prevCompositeOpID);
-
+ 
+         if (m_eraserBrushSizeEnabled==true)
+         {
          // save eraser brush size as eraserBrushSize (they are all the same, so just grab the first one)
          eraserBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+         }
+         else
+         {
+          normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value(); 
+         }
     }
 
 
@@ -910,7 +928,7 @@ void KisPaintopBox::slotPreviousFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (KisPaintOpPreset* preset, m_favoriteResourceManager->favoritePresetList()) {
+    foreach (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
@@ -929,7 +947,7 @@ void KisPaintopBox::slotNextFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (KisPaintOpPreset* preset, m_favoriteResourceManager->favoritePresetList()) {
+    foreach (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i + 1);
@@ -986,7 +1004,7 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if (preset) {
         preset->load();
-        preset->settings()->setNode(m_resourceProvider->currentPreset()->settings()->node());
+        preset->settings()->setNode(m_resourceProvider->currentNode());
         preset->settings()->setOptionsWidget(m_optionWidget);
         m_optionWidget->setConfiguration(preset->settings());
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
@@ -1054,4 +1072,10 @@ void KisPaintopBox::slotDirtyPresetToggled(bool value)
     KisConfig cfg;
     cfg.setUseDirtyPresets(m_dirtyPresetsEnabled);
 
+}
+void KisPaintopBox::slotEraserBrushSizeToggled(bool value)
+{
+  m_eraserBrushSizeEnabled = value;
+  KisConfig cfg;
+  cfg.setUseEraserBrushSize(m_eraserBrushSizeEnabled);
 }

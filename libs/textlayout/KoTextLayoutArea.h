@@ -133,7 +133,7 @@ public:
     /// Returns the rect of the layout environment (see odf style:flow-with-text).
     QRectF layoutEnvironmentRect() const;
 
-    qreal textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const;
+    qreal textIndent(const QTextBlock &block, QTextList *textList, const KoParagraphStyle &pStyle) const;
     void setExtraTextIndent(qreal extraTextIndent);
     qreal x() const;
     qreal width() const;
@@ -198,7 +198,7 @@ private:
     qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData &blockData);
 
     /// looks for footnotes and preregisters them
-    void findFootNotes(QTextBlock block, const QTextLine &line, qreal bottomOfText);
+    void findFootNotes(const QTextBlock &block, const QTextLine &line, qreal bottomOfText);
 
     void clearPreregisteredFootNotes();
 

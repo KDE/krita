@@ -488,7 +488,7 @@ bool KoColorSet::loadAco()
             e.color.fromQColor(c);
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
-        else if (colorSpace == 2) { //
+        else if (colorSpace == 2) { // CMYK
             e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), ""));
             reinterpret_cast<quint16*>(e.color.data())[0] = quint16_MAX - ch1;
             reinterpret_cast<quint16*>(e.color.data())[1] = quint16_MAX - ch2;

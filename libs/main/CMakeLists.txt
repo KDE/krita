@@ -30,7 +30,6 @@ set(komain_LIB_SRCS
     KoDocumentInfoDlg.cpp
     KoDocumentInfoPropsPage.cpp
     KoGlobal.cpp
-    KoGridData.cpp
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
@@ -163,7 +162,6 @@ install( FILES
     KoFindOption.h
     KoFindOptionSet.h
     KoGlobal.h
-    KoGridData.h
     KoMainWindow.h
     KoPageWidgetItem.h
     MacSupport.h

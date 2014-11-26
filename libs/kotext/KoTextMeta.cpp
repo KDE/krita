@@ -95,7 +95,7 @@ void KoTextMeta::updatePosition(const QTextDocument *document, int posInDocument
     d->posInDocument = posInDocument;
 }
 
-void KoTextMeta::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void KoTextMeta::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
@@ -106,7 +106,7 @@ void KoTextMeta::resize(const QTextDocument *document, QTextInlineObject object,
     object.setDescent(0);
 }
 
-void KoTextMeta::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &)
+void KoTextMeta::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int , const QTextCharFormat &)
 {
     // nothing to paint.
 }

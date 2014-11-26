@@ -221,6 +221,8 @@ KisLayerBox::KisLayerBox()
     // END NOTE
 
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
+    m_wdgLayerBox->doubleOpacity->setSuffix("%");
+
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
@@ -365,6 +367,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_newLayerMenu->addSeparator();
         addActionToMenu(m_newLayerMenu, "add_new_transparency_mask");
         addActionToMenu(m_newLayerMenu, "add_new_filter_mask");
+        addActionToMenu(m_newLayerMenu, "add_new_transform_mask");
         addActionToMenu(m_newLayerMenu, "add_new_selection_mask");
     }
 
@@ -489,13 +492,20 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         addActionToMenu(convertToMenu, "convert_to_paint_layer");
         addActionToMenu(convertToMenu, "convert_to_transparency_mask");
         addActionToMenu(convertToMenu, "convert_to_filter_mask");
+        addActionToMenu(convertToMenu, "convert_to_transform_mask");
         addActionToMenu(convertToMenu, "convert_to_selection_mask");
+
+        QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
+        addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
+        addActionToMenu(splitAlphaMenu, "split_alpha_write");
+        addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
 
         addActionToMenu(&menu, "isolate_layer");
     }
     menu.addSeparator();
     addActionToMenu(&menu, "add_new_transparency_mask");
     addActionToMenu(&menu, "add_new_filter_mask");
+    addActionToMenu(&menu, "add_new_transform_mask");
     addActionToMenu(&menu, "add_new_selection_mask");
     menu.addSeparator();
     menu.addAction(m_selectOpaque);

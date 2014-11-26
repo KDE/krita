@@ -1,4 +1,4 @@
 #! /bin/sh
 source ../../../calligra_xgettext.sh
 
-calligra_xgettext thesaurus_tool.pot *.cpp
+calligra_xgettext calligra_textediting_thesaurus.pot *.cpp

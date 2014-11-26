@@ -26,12 +26,16 @@
 #include "kis_paintop_settings.h"
 
 /**
- * This class acts as a proxy for all transfers between KisLockedPropertiesServer and KisPaintOpSettings
- * while using setConfiguration and writeConfiguration methods. It is used to override the local settings of a
- * paintop with the settings present in the KisLockedProperties List.
- * Settings with the "_previous" suffix are used to save the local settings of a preset in the preset itself.
- * Whenever the user selects the option of going back to the previous configuration of the preset or "unlocks" an option -- these settings are restored
- * and the settings with the "_previous" suffix are destroyed.
+ * This class acts as a proxy for all transfers between KisLockedPropertiesServer
+ * and KisPaintOpSettings while using setConfiguration and writeConfiguration
+ * methods. It is used to override the local settings of a * paintop with the
+ * settings present in the KisLockedProperties List.
+ *
+ * Settings with the "_previous" suffix are used to save the local settings of
+ * a preset in the preset itself. Whenever the user selects the option of going
+ *  back to the previous configuration of the preset or "unlocks" an option
+ * -- these settings are restored and the settings with the "_previous"
+ * suffix are destroyed.
  */
 class KisLockedPropertiesServer;
 

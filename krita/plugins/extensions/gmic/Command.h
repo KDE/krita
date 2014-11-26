@@ -40,6 +40,7 @@ public:
 
     QString m_command;
     QString m_commandPreview;
+    QString m_commandPreviewZoom;
     QList<Parameter*> m_parameters;
 
     virtual void add(Component* c);

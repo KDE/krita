@@ -56,7 +56,7 @@ void ChapterVariable::readProperties(const KoProperties *props)
     m_level = qMax(1, props->intProperty("level"));
 }
 
-void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject object, int _posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject &object, int _posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     QTextDocument *document = const_cast<QTextDocument*>(_document);
     int posInDocument = _posInDocument;

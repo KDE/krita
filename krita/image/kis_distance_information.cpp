@@ -31,7 +31,7 @@ struct KisDistanceInformation::Private {
     QPointF distance;
     KisSpacingInformation spacing;
     QPointF lastPosition;
-    int lastTime;
+    qreal lastTime;
     bool lastDabInfoValid;
 
     KisPaintInformation lastPaintInformation;
@@ -45,7 +45,7 @@ KisDistanceInformation::KisDistanceInformation()
 }
 
 KisDistanceInformation::KisDistanceInformation(const QPointF &lastPosition,
-                                               int lastTime)
+                                               qreal lastTime)
     : m_d(new Private)
 {
     m_d->lastPosition = lastPosition;
@@ -86,7 +86,7 @@ QPointF KisDistanceInformation::lastPosition() const
     return m_d->lastPosition;
 }
 
-int KisDistanceInformation::lastTime() const
+qreal KisDistanceInformation::lastTime() const
 {
     return m_d->lastTime;
 }

@@ -111,6 +111,7 @@ tool_transform/dark_transform_icons_liquify_rotate.png
 tool_transform/dark_transform_icons_main.png
 tool_transform/dark_transform_icons_perspective.png
 tool_transform/dark_transform_icons_warp.png
+tool_transform/dark_transform_icons_penPressure.png
 
 tool_transform/light_transform_icons_cage.png
 tool_transform/light_transform_icons_liquify_erase.png
@@ -122,6 +123,7 @@ tool_transform/light_transform_icons_liquify_rotate.png
 tool_transform/light_transform_icons_main.png
 tool_transform/light_transform_icons_perspective.png
 tool_transform/light_transform_icons_warp.png
+tool_transform/light_transform_icons_penPressure.png
 
 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 

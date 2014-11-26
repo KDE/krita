@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="54">
+<kpartgui name="Krita" version="56">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -80,6 +80,7 @@
 
 <Menu name="Image"><text>&amp;Image</text>
   <Action name="image_properties"/>
+  <Action name="image_color"/>
   <Action name="duplicate_image"/>
   <Separator/>
   <DefineGroup name="canvas_resize_merge" append="canvas_resize_merge"/>
@@ -94,22 +95,33 @@
     <Action name="add_new_paint_layer"/>
     <Action name="duplicatelayer"/>
     <Separator/>
-    <Action name="import_layer_from_file"/>
-    <Separator/>
     <Action name="cut_selection_to_new_layer"/>
     <Action name="copy_selection_to_new_layer"/>
   </Menu>
-  <Menu name="LayerConvert"><text>Convert</text>
+  <Menu name="LayerImportExport"><text>&amp;Import/Export</text>
+    <Action name="save_node_as_image"/>
+    <Action name="save_groups_as_images"/>
+    <Separator/>
+    <Action name="import_layer_from_file"/>
+    <Menu name="LayerImportAs"><text>Import</text>
+      <Action name="import_layer_as_paint_layer"/>
+      <Action name="import_layer_as_transparency_mask"/>
+      <Action name="import_layer_as_filter_mask"/>
+      <Action name="import_layer_as_selection_mask"/>
+    </Menu>
+  </Menu>
+  <Menu name="LayerConvert"><text>&amp;Convert</text>
     <Action name="convert_to_paint_layer"/>
     <Action name="convert_to_transparency_mask"/>
     <Action name="convert_to_filter_mask"/>
     <Action name="convert_to_selection_mask"/>
   </Menu>
-  <Action name="resizelayertoowner"/>
   <Separator/>
-  <Action name="save_node_as_image"/>
-  <Action name="save_groups_as_images"/>
-  <Action name="layer_to_image"/>
+  <Menu name="LayerSplitAlpha"><text>S&amp;plit Alpha</text>
+    <Action name="split_alpha_into_mask"/>
+    <Action name="split_alpha_write"/>
+    <Action name="split_alpha_save_merged"/>
+  </Menu>
   <Separator/>
   <Action name="mirrorNodeX"/>
   <Action name="mirrorNodeY"/>

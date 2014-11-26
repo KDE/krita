@@ -92,6 +92,7 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 0, 0, 1, 2);
     d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 2, 1);
 
+
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -112,12 +113,22 @@ void KisFilterSelectorWidget::setPaintDevice(bool showAll, KisPaintDeviceSP _pai
 {
     if (!_paintDevice) return;
 
+    if (d->filtersModel) delete d->filtersModel;
+
     d->paintDevice = _paintDevice;
     d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
     d->thumb->setDefaultBounds(new ThumbnailBounds());
     d->filtersModel = new KisFiltersModel(showAll, d->thumb);
+
     d->uiFilterSelector.filtersSelector->setFilterModel(d->filtersModel);
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
+
+    KisConfig cfg;
+    QModelIndex idx = d->filtersModel->indexForFilter(cfg.readEntry<QString>("FilterSelector/LastUsedFilter", "levels"));
+    if (isFilterGalleryVisible()) {
+        d->uiFilterSelector.filtersSelector->activateFilter(idx);
+    }
+
 }
 
 void KisFilterSelectorWidget::showFilterGallery(bool visible)
@@ -125,8 +136,11 @@ void KisFilterSelectorWidget::showFilterGallery(bool visible)
     QList<int> sizes;
     int currentCentralWidgetWidth = d->currentCentralWidget ? d->currentCentralWidget->width() : 0;
     if (visible) {
+        d->uiFilterSelector.filtersSelector->setMidLineWidth(200);
         sizes << d->uiFilterSelector.filtersSelector->sizeHint().width() << currentCentralWidgetWidth;
+
     } else {
+        d->uiFilterSelector.filtersSelector->setMidLineWidth(0);
         sizes << 0 << currentCentralWidgetWidth;
     }
     d->uiFilterSelector.splitter->setSizes(sizes);
@@ -192,7 +206,8 @@ void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
     KisFilter* filter = const_cast<KisFilter*>(d->filtersModel->indexToFilter(idx));
     if (filter) {
         setFilter(filter);
-    } else {
+    }
+    else {
         if (d->currentFilter) {
             bool v = d->uiFilterSelector.filtersSelector->blockSignals(true);
             QModelIndex idx = d->filtersModel->indexForFilter(d->currentFilter->id());
@@ -201,6 +216,9 @@ void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
             d->uiFilterSelector.filtersSelector->blockSignals(v);
         }
     }
+
+    KisConfig cfg;
+    cfg.writeEntry<QString>("FilterSelector/LastUsedFilter", d->currentFilter->id());
     emit(configurationChanged());
 }
 
@@ -236,4 +254,20 @@ KisFilterConfiguration* KisFilterSelectorWidget::configuration()
 
 }
 
+void KisFilterTree::setFilterModel(QAbstractItemModel *model)
+{
+    m_model = model;
+
+}
+
+void KisFilterTree::activateFilter(QModelIndex idx)
+{
+    setModel(m_model);
+    selectionModel()->select(idx, QItemSelectionModel::SelectCurrent);
+    expand(idx);
+    scrollTo(idx);
+    emit activated(idx);
+}
+
 #include "kis_filter_selector_widget.moc"
+

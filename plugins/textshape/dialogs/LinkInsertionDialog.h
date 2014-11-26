@@ -33,7 +33,7 @@ class LinkInsertionDialog : public QDialog
 {
     Q_OBJECT
 public :
-    LinkInsertionDialog(KoTextEditor *editor, QWidget *parent = 0);
+    explicit LinkInsertionDialog(KoTextEditor *editor, QWidget *parent = 0);
     virtual ~LinkInsertionDialog();
 
 private slots:

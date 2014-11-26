@@ -59,7 +59,7 @@ void KoTextSoftPageBreak::updatePosition(const QTextDocument *document,
     Q_UNUSED(format)
 }
 
-void KoTextSoftPageBreak::resize(const QTextDocument *document, QTextInlineObject object,
+void KoTextSoftPageBreak::resize(const QTextDocument *document, QTextInlineObject &object,
                                  int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(document)
@@ -73,7 +73,7 @@ void KoTextSoftPageBreak::resize(const QTextDocument *document, QTextInlineObjec
 }
 
 void KoTextSoftPageBreak::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                                const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+                                const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(painter)
     Q_UNUSED(pd)

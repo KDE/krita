@@ -6,76 +6,59 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>210</height>
+    <width>476</width>
+    <height>243</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PNG Options</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="alpha">
-     <property name="toolTip">
-      <string>Disable to get smaller files if your image has no transparency</string>
-     </property>
-     <property name="whatsThis">
-      <string>&lt;p&gt;The Portable Network Graphics (PNG) file format allows transparency in your image to be stored by saving an alpha channel.
-You can uncheck the box if you are not using transparency and you want to make the resulting file smaller .&lt;br&gt;Always saving the alpha channel is recommended.&lt;/p&gt;</string>
-     </property>
-     <property name="text">
-      <string>Store alpha channel (transparency)</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="interlacing">
-     <property name="toolTip">
-      <string>Use interlacing when publishing on the Internet.</string>
-     </property>
-     <property name="whatsThis">
-      <string>&lt;p&gt;Interlacing is useful if you intend to publish your image on the Internet.&lt;br&gt;
-Enabling interlacing will cause the image to be displayed by the browser even while downloading.&lt;/p&gt;</string>
-     </property>
-     <property name="text">
-      <string>Interlacing</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <layout class="QGridLayout">
-     <property name="margin">
+     <property name="leftMargin">
       <number>0</number>
      </property>
-     <property name="spacing">
+     <property name="topMargin">
       <number>0</number>
      </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>0</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>6</number>
+     </property>
+     <item row="5" column="1">
+      <widget class="QCheckBox" name="chkSRGB">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PNG&lt;/span&gt; files have &lt;span style=&quot; font-style:italic;&quot;&gt;two&lt;/span&gt; options to save &lt;span style=&quot; font-weight:600;&quot;&gt;sRGB&lt;/span&gt; information: as a tag or as an explicit profile. For use with in websites, &lt;span style=&quot; font-style:italic;&quot;&gt;disable&lt;/span&gt; this option. For interchange with other applications, &lt;span style=&quot; font-style:italic;&quot;&gt;enable&lt;/span&gt; this option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Embed sRGB profile</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QCheckBox" name="chkForceSRGB">
+       <property name="text">
+        <string>Force convert to sRGB</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1" colspan="2">
-      <widget class="QSlider" name="compressionLevel">
+      <widget class="KisDoubleSliderSpinBox" name="compressionLevel" native="true">
        <property name="toolTip">
         <string>Note: the compression level does not change the quality of the result</string>
        </property>
        <property name="whatsThis">
         <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
 &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>9</number>
-       </property>
-       <property name="pageStep">
-        <number>1</number>
-       </property>
-       <property name="value">
-        <number>9</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -89,7 +72,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
 &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
        </property>
        <property name="text">
-        <string>Compress:</string>
+        <string>Compression (Lossless): </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
@@ -103,7 +86,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
 &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
        </property>
        <property name="text">
-        <string comment="The compression will take a long time; saving the file will be slow.">Slow</string>
+        <string comment="The compression will take a long time; saving the file will be slow.">Small File Size</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -117,51 +100,78 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
 &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
        </property>
        <property name="text">
-        <string comment="The file will save fast but will not be compressed a lot">Fast</string>
+        <string comment="The file will save fast but will not be compressed a lot">Large file size</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="textLabel4">
+     <item row="4" column="1">
+      <widget class="QCheckBox" name="alpha">
+       <property name="toolTip">
+        <string>Disable to get smaller files if your image has no transparency</string>
+       </property>
        <property name="whatsThis">
-        <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+        <string>&lt;p&gt;The Portable Network Graphics (PNG) file format allows transparency in your image to be stored by saving an alpha channel.
+You can uncheck the box if you are not using transparency and you want to make the resulting file smaller .&lt;br&gt;Always saving the alpha channel is recommended.&lt;/p&gt;</string>
        </property>
        <property name="text">
-        <string comment="the file will be small">Small</string>
+        <string>Store alpha channel (transparency)</string>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="textLabel3_2">
+     <item row="3" column="1">
+      <widget class="QCheckBox" name="interlacing">
+       <property name="toolTip">
+        <string>Use interlacing when publishing on the Internet.</string>
+       </property>
        <property name="whatsThis">
-        <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
+        <string>&lt;p&gt;Interlacing is useful if you intend to publish your image on the Internet.&lt;br&gt;
+Enabling interlacing will cause the image to be displayed by the browser even while downloading.&lt;/p&gt;</string>
        </property>
        <property name="text">
-        <string comment="the file will be big">Big</string>
+        <string>Interlacing</string>
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item row="6" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
+     <item row="7" column="1">
+      <widget class="QCheckBox" name="tryToSaveAsIndexed">
+       <property name="toolTip">
+        <string>Indexed PNG images are smaller. If you enabled this option, your image will be analyzed to see whether it is possible to save as an indexed PNG.</string>
+       </property>
+       <property name="text">
+        <string>Save as indexed PNG, if possible</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Transparent pixel fill color:</string>
+        <string>Transparent color: </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="8" column="1">
       <widget class="KColorButton" name="bnTransparencyFillColor">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Background color to replace transparent pixels with.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
@@ -169,7 +179,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
      </item>
     </layout>
    </item>
-   <item row="7" column="0">
+   <item row="6" column="0">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -185,39 +195,15 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
      </property>
     </spacer>
    </item>
-   <item row="5" column="0">
-    <widget class="QCheckBox" name="tryToSaveAsIndexed">
-     <property name="toolTip">
-      <string>Indexed PNG images are smaller. If you enabled this option, your image will be analyzed to see whether it is possible to save as an indexed PNG.</string>
-     </property>
-     <property name="text">
-      <string>Save as indexed PNG, if possible</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QCheckBox" name="chkSRGB">
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PNG&lt;/span&gt; files have &lt;span style=&quot; font-style:italic;&quot;&gt;two&lt;/span&gt; options to save &lt;span style=&quot; font-weight:600;&quot;&gt;sRGB&lt;/span&gt; information: as a tag or as an explicit profile. For use with in websites, &lt;span style=&quot; font-style:italic;&quot;&gt;disable&lt;/span&gt; this option. For interchange with other applications, &lt;span style=&quot; font-style:italic;&quot;&gt;enable&lt;/span&gt; this option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>Embed sRGB profile</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QCheckBox" name="chkForceSRGB">
-     <property name="text">
-      <string>Force convert to sRGB</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>

@@ -74,7 +74,7 @@ private:
 class KRITAIMAGE_EXPORT KisDistanceInformation {
 public:
     KisDistanceInformation();
-    KisDistanceInformation(const QPointF &lastPosition, int lastTime);
+    KisDistanceInformation(const QPointF &lastPosition, qreal lastTime);
     KisDistanceInformation(const KisDistanceInformation &rhs);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
 
@@ -83,7 +83,7 @@ public:
     const KisSpacingInformation& currentSpacing() const;
     bool hasLastDabInformation() const;
     QPointF lastPosition() const;
-    int lastTime() const;
+    qreal lastTime() const;
     qreal lastDrawingAngle() const;
 
     bool hasLastPaintInformation() const;

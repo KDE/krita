@@ -64,6 +64,8 @@ private:
 
     bool m_dragging;
     QPointF m_lastPos;
+
+    QColor m_outlineColor;
 };
 
 

@@ -472,7 +472,6 @@ public:
      *
      * @param maxw: maximum width
      * @param maxh: maximum height
-     * @param selection: if present, only the selected pixels will be added to the thumbnail. May be 0
      * @param rect: only this rect will be used for the thumbnail
      *
      */

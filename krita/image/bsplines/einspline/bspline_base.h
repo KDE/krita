@@ -22,7 +22,7 @@
 #define BSPLINE_BASE_H
 
 //#include "config.h"
-#define restrict
+#include "local_definitions.h"
 
 #ifdef __cplusplus
 #include <complex>

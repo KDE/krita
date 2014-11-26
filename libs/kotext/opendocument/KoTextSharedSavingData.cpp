@@ -53,17 +53,17 @@ void KoTextSharedSavingData::setGenChanges(KoGenChanges& changes) {
     d->changes = &changes;
 }
 
-KoGenChanges& KoTextSharedSavingData::genChanges()
+KoGenChanges& KoTextSharedSavingData::genChanges() const
 {
     return *(d->changes);
 }
 
-void KoTextSharedSavingData::addRdfIdMapping(QString oldid, QString newid)
+void KoTextSharedSavingData::addRdfIdMapping(const QString &oldid, const QString &newid)
 {
     d->m_rdfIdMapping[ oldid ] = newid;
 }
 
-QMap<QString, QString> KoTextSharedSavingData::getRdfIdMapping()
+QMap<QString, QString> KoTextSharedSavingData::getRdfIdMapping() const
 {
     return d->m_rdfIdMapping;
 }
@@ -83,12 +83,12 @@ void KoTextSharedSavingData::setStyleName(int styleId, const QString &name)
     d->styleIdToName.insert(styleId, name);
 }
 
-QString KoTextSharedSavingData::styleName(int styleId)
+QString KoTextSharedSavingData::styleName(int styleId) const
 {
     return d->styleIdToName.value(styleId);
 }
 
-QList<QString> KoTextSharedSavingData::styleNames()
+QList<QString> KoTextSharedSavingData::styleNames() const
 {
     return d->styleIdToName.values();
 }

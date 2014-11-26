@@ -128,6 +128,7 @@ void KoTriangleColorSelector::updateTriangleCircleParameters()
 
 void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
 {
+
     if( d->invalidTriangle )
     {
       generateTriangle();
@@ -142,7 +143,10 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
     p.drawPixmap( -pos, d->wheelPixmap );
     // Draw the triangle
     p.save();
+
     p.rotate( hue() + 150 );
+
+
     p.drawPixmap( -pos , d->trianglePixmap );
     // Draw selectors
     p.restore();
@@ -187,6 +191,12 @@ int KoTriangleColorSelector::hue() const
 
 void KoTriangleColorSelector::setHue(int h)
 {
+    // setRealColor() will give you -1 when saturation is 0
+    // ignore setting hue in this instance. otherwise it will mess up the hue ring
+    if (h == -1)
+        return;
+
+
     h = qBound(0, h, 359);
     d->hue = h;
     tellColorChanged();
@@ -237,9 +247,18 @@ KoColor KoTriangleColorSelector::realColor() const
 
 void KoTriangleColorSelector::setRealColor(const KoColor & color)
 {
-   int hueRef = hue();
-   int saturationRef = saturation();
-   int valueRef = saturation();
+    if ( realColor() == color)
+        return;
+
+    // set colors for pop up color triangle
+    QColor newColor = color.toQColor();
+    setHSV(newColor.hue(), newColor.saturation(), newColor.value());
+
+    //sanitize color data in case it gives us weird values
+    int hueRef = hue();
+    int saturationRef = saturation();
+    int valueRef = value();
+
 
     //displayrenderer->getHsv is what sets the foreground color in the application
     if(d->updateAllowed) {

@@ -1089,7 +1089,7 @@ QMimeData *TextTool::generateMimeData() const
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
     drag.setData("text/plain", fragment.toPlainText().toUtf8());
 
-    return drag.mimeData();
+    return drag.takeMimeData();
 }
 
 void TextTool::copy() const

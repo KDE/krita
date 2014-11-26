@@ -22,19 +22,26 @@
 #include <QHash>
 #include "kis_gmic_filter_settings.h"
 
+#include "ui_wdg_gmic_input_output.h"
+
 /**
  * creates GUI for Input/Output configuration
  */
-class KisGmicInputOutputWidget : public QWidget
+class KisGmicInputOutputWidget : public QWidget, public Ui::WdgGmicInputOutput
 {
     Q_OBJECT
 
 public:
-    KisGmicInputOutputWidget();
+    KisGmicInputOutputWidget(QWidget * parent);
     ~KisGmicInputOutputWidget();
 
     InputLayerMode inputMode() const { return m_inputMode; };
     OutputMode outputMode() const { return m_outputMode; };
+
+    OutputPreviewMode previewMode() const { return m_previewMode; };
+    PreviewSize previewSize() const { return m_previewSize; };
+
+    KisFilterPreviewWidget * previewWidget();
 
 signals:
     void sigConfigurationChanged();
@@ -45,10 +52,14 @@ private:
 private slots:
     void setIntputMode(int index);
     void setOutputMode(int index);
+    void setPreviewMode(int index);
+    void setPreviewSize(int index);
 
 private:
     InputLayerMode m_inputMode;
     OutputMode m_outputMode;
+    OutputPreviewMode m_previewMode;
+    PreviewSize m_previewSize;
 
 };
 

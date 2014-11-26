@@ -231,7 +231,9 @@ private:
     void commitChanges();
 
 
+    bool tryInitTransformModeFromNode(KisNodeSP node);
     void initTransformMode(ToolTransformArgs::TransformMode mode);
+    void initGuiAfterTransformMode();
 
     void initThumbnailImage(KisPaintDeviceSP previewDevice);
     void updateSelectionPath();

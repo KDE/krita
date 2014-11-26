@@ -20,6 +20,7 @@
 #define __KRITA_UTILS_H
 
 class QRect;
+class QRectF;
 class QSize;
 class QPen;
 class QPointF;
@@ -41,6 +42,9 @@ namespace KritaUtils
                                        int antLength = 4, int antSpace = 4);
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value);
+
+    qreal KRITAIMAGE_EXPORT maxDimensionPortion(const QRectF &bounds, qreal portion, qreal minValue);
+    QPainterPath KRITAIMAGE_EXPORT trySimplifyPath(const QPainterPath &path, qreal lengthThreshold);
 }
 
 #endif /* __KRITA_UTILS_H */

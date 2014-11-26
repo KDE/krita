@@ -26,7 +26,7 @@
 #include <KoParagraphStyle.h>
 #include <KoOdfBibliographyConfiguration.h>
 
-int KoBibliographyInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
+int KoBibliographyInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, const QString &styleName)
 {
     KoParagraphStyle * style = sharedLoadingData->paragraphStyle(styleName, true);
     if (style) {

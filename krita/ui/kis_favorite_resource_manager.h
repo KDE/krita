@@ -56,7 +56,7 @@ public:
 
     int numFavoritePresets();
 
-    QVector<KisPaintOpPreset*> favoritePresetList();
+    QVector<KisPaintOpPresetSP> favoritePresetList();
 
     int recentColorsTotal();
     const KoColor& recentColorAt(int pos);
@@ -118,7 +118,7 @@ private slots:
 private:
     KisPaintopBox *m_paintopBox;
 
-    QVector<KisPaintOpPreset*> m_favoritePresetsList;
+    QVector<KisPaintOpPresetSP> m_favoritePresetsList;
 
     class ColorDataList;
     ColorDataList *m_colorList;

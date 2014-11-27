@@ -123,7 +123,8 @@ struct QTabletDeviceData
         void tryFetchAxesMapping(XDevice *dev);
 
         void setAxesMap(const QVector<AxesIndexes> &axesMap) {
-            KIS_ASSERT_RECOVER_RETURN(axesMap.size() >= NAxes);
+            // the size of \p axesMap can be smaller/equal/bigger
+            // than m_axes_data. Everything depends on the driver
 
             m_x11_to_local_axis_mapping = axesMap;
         }

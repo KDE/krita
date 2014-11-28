@@ -104,6 +104,11 @@ private slots:
     /// add a tool post-initialization. The tool will also be activated.
     void toolAdded(const KoToolButton &button, KoCanvasController *canvas);
 
+    /// resize the toolbox to show the icons without any gap at the edge
+    void adjustToFit();
+
+    /// unlocks the with after adjustToFit
+    void resizeUnlock();
 protected:
     void paintEvent(QPaintEvent *event);
 protected:

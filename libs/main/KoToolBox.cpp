@@ -86,6 +86,8 @@ KoToolBox::KoToolBox()
     connect(KoToolManager::instance(),
             SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
             this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
+
+    QTimer::singleShot(0, this, SLOT(adjustToFit()));
 }
 
 KoToolBox::~KoToolBox()
@@ -255,4 +257,18 @@ void KoToolBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas
         d->visibilityCodes.insert(button.button, button.visibilityCode);
         setButtonsVisible(QList<QString>());
     }
+}
+
+void KoToolBox::adjustToFit()
+{
+    int newWidth = width() - (width() % layout()->minimumSize().width());
+    if(newWidth != width() && newWidth >= layout()->minimumSize().width()) {
+        setMaximumWidth(newWidth);
+        QTimer::singleShot(0, this, SLOT(resizeUnlock()));
+    }
+}
+
+void KoToolBox::resizeUnlock()
+{
+    setMaximumWidth(QWIDGETSIZE_MAX);
 }

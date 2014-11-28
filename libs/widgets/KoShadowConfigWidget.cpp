@@ -83,7 +83,11 @@ KoShadowConfigWidget::~KoShadowConfigWidget()
 void KoShadowConfigWidget::setShadowColor(const QColor &color)
 {
     d->widget.shadowColor->blockSignals(true);
+    d->actionShadowColor->blockSignals(true);
+
     d->actionShadowColor->setCurrentColor( color );
+
+    d->actionShadowColor->blockSignals(false);
     d->widget.shadowColor->blockSignals(false);
 }
 

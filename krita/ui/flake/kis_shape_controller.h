@@ -61,7 +61,7 @@ private:
 
 signals:
     /**
-     * These two signals are forwarded from the local shape manager of
+     * These three signals are forwarded from the local shape manager of
      * KisShapeLayer. This is done because we switch KoShapeManager and
      * therefore KoSelection in KisCanvas2, so we need to connect local
      * managers to the UI as well.
@@ -69,6 +69,7 @@ signals:
      * \see comment in the constructor of KisCanvas2
      */
     void selectionChanged();
+    void selectionContentChanged();
     void currentLayerChanged(const KoShapeLayer*);
 
 protected:

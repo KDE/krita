@@ -114,7 +114,9 @@ public:
     }
 
     bool operator==(const KoUnit &other) const {
-        return m_type == other.m_type;
+        return
+            m_type == other.m_type &&
+            qFuzzyCompare(m_pixelConversion, other.m_pixelConversion);
     }
 
     KoUnit::Type type() const {

@@ -382,12 +382,40 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *
     blockChildSignals(false);
 }
 
+#include <cmath>
+inline KoUnit adjustUnitByLocalTransform(KoUnit unit, const QTransform &t)
+{
+    qreal multiplier =
+        0.5 * (std::sqrt(t.m11() * t.m11() + t.m21() * t.m21()) +
+               std::sqrt(t.m12() * t.m12() + t.m22() * t.m22()));
+
+    multiplier *= unit.toUserValue(1.0);
+    unit.setFactor(multiplier);
+
+    return unit;
+}
+
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
     blockChildSignals(true);
 
-    d->lineWidth->setUnit(unit);
-    d->capNJoinMenu->miterLimit->setUnit(unit);
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    KoShape * shape = selection->firstSelectedShape();
+
+    /**
+     * KoStrokeShape knows nothing about the transformations applied
+     * to the shape, which doesn't prevent the shape to apply them and
+     * display the stroke differently. So just take that into account
+     * and show the user correct values using the multiplier in KoUnit.
+     */
+    KoUnit newUnit(unit);
+    if (shape) {
+        newUnit = adjustUnitByLocalTransform(unit, shape->absoluteTransformation(0));
+    }
+
+    d->lineWidth->setUnit(newUnit);
+    d->capNJoinMenu->miterLimit->setUnit(newUnit);
 
     blockChildSignals(false);
 }
@@ -495,6 +523,9 @@ void KoStrokeConfigWidget::selectionChanged()
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();
     if (shape && shape->stroke()) {
+        // see a comment in setUnit()
+        setUnit(d->canvas->unit());
+
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
             updateControls(shape->stroke(), pathShape->marker(KoMarkerData::MarkerStart),
@@ -510,6 +541,8 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
 {
     if (canvas) {
         connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
+                this, SLOT(selectionChanged()));
+        connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 this, SLOT(selectionChanged()));
         connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(canvasResourceChanged(int, const QVariant &)));

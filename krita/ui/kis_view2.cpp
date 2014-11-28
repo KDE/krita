@@ -1172,6 +1172,10 @@ void KisView2::slotImageResolutionChanged()
 {
     resetImageSizeAndScroll(false);
     m_d->zoomManager->updateGUI();
+
+    // update KoUnit value for the document
+    m_d->resourceProvider->resourceManager()->
+        setResource(KoCanvasResourceManager::Unit, m_d->canvas->unit());
 }
 
 void KisView2::slotNodeChanged()

@@ -97,6 +97,8 @@ void KisShapeController::addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP
          */
         connect(shapeLayer, SIGNAL(selectionChanged()),
                 SIGNAL(selectionChanged()));
+        connect(shapeLayer->shapeManager(), SIGNAL(selectionContentChanged()),
+                SIGNAL(selectionContentChanged()));
         connect(shapeLayer, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
                 SIGNAL(currentLayerChanged(const KoShapeLayer*)));
         ((KoShapeLayer*)shapeLayer)->setParent(newShape);

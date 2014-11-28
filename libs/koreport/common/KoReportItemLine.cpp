@@ -59,6 +59,10 @@ KoReportItemLine::KoReportItemLine(QDomNode & element)
     }
 }
 
+KoReportItemLine::~KoReportItemLine()
+{
+    delete m_set;
+}
 
 void KoReportItemLine::createProperties()
 {

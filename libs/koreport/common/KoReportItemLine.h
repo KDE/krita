@@ -43,7 +43,7 @@ public:
         createProperties();
     }
     explicit KoReportItemLine(QDomNode & element);
-    ~KoReportItemLine() {};
+    ~KoReportItemLine();
 
     virtual QString typeName() const;
     virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);

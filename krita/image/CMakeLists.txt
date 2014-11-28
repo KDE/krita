@@ -262,6 +262,8 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_paint_action.cpp
    recorder/kis_recorded_path_paint_action.cpp
    recorder/kis_recorded_shape_paint_action.cpp
+
+   kis_psd_layer_style.cpp
 )
 
 set(einspline_SRCS

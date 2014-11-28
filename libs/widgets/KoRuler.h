@@ -92,6 +92,12 @@ public:
      */
     QList<QAction*> popupActionList() const;
 
+    /// reimplemented
+    virtual QSize minimumSizeHint() const;
+
+    /// reimplemented
+    virtual QSize sizeHint() const;
+
 public slots:
     /// Set the unit of the ruler
     void setUnit(const KoUnit &unit);
@@ -260,10 +266,6 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *ev);
     /// reimplemented
     virtual void mouseMoveEvent(QMouseEvent *ev);
-    /// reimplemented
-    virtual QSize minimumSizeHint() const;
-    /// reimplemented
-    virtual QSize sizeHint() const;
 
 private:
     KoRulerPrivate * const d;

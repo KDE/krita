@@ -36,9 +36,7 @@ class Text;
 class KoReportItemText : public KoReportItemBase
 {
 public:
-    KoReportItemText() {
-        createProperties();
-    };
+    KoReportItemText();
     KoReportItemText(QDomNode & element);
     virtual ~KoReportItemText();
 

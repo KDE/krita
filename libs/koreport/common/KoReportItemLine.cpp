@@ -24,6 +24,11 @@
 #include <klocalizedstring.h>
 #include <renderobjects.h>
 
+KoReportItemLine::KoReportItemLine()
+{
+    createProperties();
+}
+
 KoReportItemLine::KoReportItemLine(QDomNode & element)
 {
     createProperties();

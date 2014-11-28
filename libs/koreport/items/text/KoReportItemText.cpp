@@ -26,6 +26,11 @@
 #include <QPrinter>
 #include <renderobjects.h>
 
+KoReportItemText::KoReportItemText()
+{
+    createProperties();
+}
+
 KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
 {
     QDomNodeList nl = element.childNodes();

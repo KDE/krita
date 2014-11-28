@@ -25,6 +25,11 @@
 #include <kcodecs.h>
 #include <renderobjects.h>
 
+KoReportItemImage::KoReportItemImage()
+{
+    createProperties();
+}
+
 KoReportItemImage::KoReportItemImage(QDomNode & element)
 {
     createProperties();

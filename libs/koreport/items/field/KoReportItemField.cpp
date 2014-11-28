@@ -25,9 +25,9 @@
 
 #include "renderer/scripting/krscripthandler.h"
 
-KoReportItemField::~KoReportItemField()
+KoReportItemField::KoReportItemField()
 {
-    delete m_set;
+    createProperties();
 }
 
 KoReportItemField::KoReportItemField(QDomNode & element)
@@ -72,6 +72,11 @@ KoReportItemField::KoReportItemField(QDomNode & element)
             kWarning() << "while parsing field element encountered unknow element: " << n;
         }
     }
+}
+
+KoReportItemField::~KoReportItemField()
+{
+    delete m_set;
 }
 
 void KoReportItemField::createProperties()

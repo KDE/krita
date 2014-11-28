@@ -24,6 +24,11 @@
 
 #include "barcodes.h"
 
+KoReportItemBarcode::KoReportItemBarcode()
+{
+    createProperties();
+}
+
 KoReportItemBarcode::KoReportItemBarcode(QDomNode & element)
 {
     createProperties();

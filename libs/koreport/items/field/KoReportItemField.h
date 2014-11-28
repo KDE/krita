@@ -36,10 +36,8 @@ class Field;
 class KoReportItemField : public KoReportItemBase
 {
 public:
-    KoReportItemField() {
-        createProperties();
-    };
-    KoReportItemField(QDomNode & element);
+    KoReportItemField();
+    explicit KoReportItemField(QDomNode & element);
     virtual ~KoReportItemField();
 
     virtual QString typeName() const;

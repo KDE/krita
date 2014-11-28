@@ -36,10 +36,8 @@ class Label;
 class KoReportItemLabel : public KoReportItemBase
 {
 public:
-    KoReportItemLabel() {
-        createProperties();
-    };
-    KoReportItemLabel(QDomNode & element);
+    KoReportItemLabel();
+    explicit KoReportItemLabel(QDomNode & element);
     virtual ~KoReportItemLabel();
 
     virtual QString typeName() const;

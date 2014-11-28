@@ -19,10 +19,10 @@
 
 #include <QIODevice>
 #include <QString>
+#include <QDebug>
 
 #include <netinet/in.h> // htonl
-
-#include <kis_debug.h>
+#include "psd.h"
 
 bool psdwrite(QIODevice* io, quint8 v)
 {
@@ -184,25 +184,19 @@ bool psdread_pascalstring(QIODevice* io, QString& s, int padding)
 {
     quint8 length;
     if (!psdread(io, &length)) {
-        //dbgFile << 1;
         return false;
     }
-
-    //dbgFile << "psdread_pascalstring length:" << length;
 
     if (length == 0) {
         // read the padding
         for (int i = 0; i < padding -1; ++i) {
             io->seek(io->pos() + 1);
         }
-        //dbgFile << 3 << (length == 0);
         return (length == 0);
     }
 
     QByteArray chars = io->read(length);
-    //dbgFile << "psdread_pascalstring bytes:" << QString::fromLatin1(chars, length) << chars.length();
     if (chars.length() != length) {
-        //dbgFile << 4;
         return false;
     }
 
@@ -211,7 +205,6 @@ bool psdread_pascalstring(QIODevice* io, QString& s, int padding)
     if (padding > 0) {
         while (paddedLength % padding != 0) {
             if (!io->seek(io->pos() + 1)) {
-                //dbgFile << 5;
                 return false;
             }
             paddedLength++;
@@ -219,8 +212,6 @@ bool psdread_pascalstring(QIODevice* io, QString& s, int padding)
     }
 
     s.append(QString::fromLatin1(chars));
-    ////dbgFile << "psdread_pascalstring bytes:" << s;
-
 
     return true;
 }
@@ -234,10 +225,76 @@ bool psd_read_blendmode(QIODevice *io, QString &blendModeKey)
     if(b.size() != 4 || QString(b) != "8BIM") {
         return false;
     }
-    dbgFile << "reading blend mode at pos" << io->pos();
     blendModeKey = QString(io->read(4));
     if (blendModeKey.size() != 4) {
         return false;
+    }
+    return true;
+}
+
+
+bool psd_write_pattern(QIODevice *io, KoPattern *pattern)
+{
+    return false;
+}
+
+
+bool psd_read_pattern(QIODevice *io, KoPattern *pattern)
+{
+    quint32 length;
+    psd_pattern pat;
+    psdread(io, &length);
+    psdread(io, &pat.version);
+    if (pat.version != 1) return false;
+    psdread(io, (quint32*)&pat.color_mode);
+    psdread(io, &pat.height);
+    psdread(io, &pat.width);
+    psdread_unicodestring(io, pat.name);
+    psdread_pascalstring(io, pat.uuid, 2);
+
+    if (pat.color_mode == Indexed) {
+        pat.color_table.reserve(256);
+        quint8 r;
+        quint8 g;
+        quint8 b;
+        for (int i = 0; i < 256; ++i) {
+            psdread(io, &r);
+            psdread(io, &g);
+            psdread(io, &b);
+            pat.color_table.append(qRgb(r, g, b));
+        }
+    }
+
+    // Now load the virtual memory array
+    psdread(io, &pat.version);
+    if (!pat.version == 3) return false;
+    psdread(io, &length);
+    psdread(io, &pat.top);
+    psdread(io, &pat.left);
+    psdread(io, &pat.bottom);
+    psdread(io, &pat.right);
+
+    quint32 max_channels;
+    psdread(io, &max_channels);
+
+
+    return true;
+}
+
+
+bool psdread_unicodestring(QIODevice *io, QString &s)
+{
+    quint32 stringlen;
+    if (!psdread(io, &stringlen)) {
+        return false;
+    }
+    for (uint i = 0; i < stringlen; ++i) {
+        quint16 ch;
+        if (!psdread(io, &ch)) {
+            return false;
+        }
+        QChar uch(ch);
+        s.append(uch);
     }
     return true;
 }

@@ -17,9 +17,10 @@
  */
 #include "psd.h"
 
+#include <QDebug>
+
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOpRegistry.h>
-#include <kis_debug.h>
 
 QPair<QString, QString> psd_colormode_to_colormodelid(psd_color_mode colormode, quint16 channelDepth)
 {
@@ -125,7 +126,7 @@ QString psd_blendmode_to_composite_op(const QString& blendmode)
     // 'lum ' = luminosity
     if (blendmode == "lum ") return COMPOSITE_LUMINIZE;
 
-    warnFile << "Unknown blendmode:" << blendmode << ". Returning Normal";
+    qDebug() << "Unknown blendmode:" << blendmode << ". Returning Normal";
     return COMPOSITE_OVER;
 }
 
@@ -189,7 +190,7 @@ QString composite_op_to_psd_blendmode(const QString& compositeop)
     // 'lum ' = luminosity
     if (compositeop == COMPOSITE_LUMINIZE) return "lum ";
 
-    warnFile << "Krita blending mode" << compositeop << "does not exist in Photoshop, returning Normal";
+    qDebug() << "Krita blending mode" << compositeop << "does not exist in Photoshop, returning Normal";
     return "norm";
 
 }

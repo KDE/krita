@@ -88,6 +88,7 @@ set(KRITA_INCLUDES
     # For config-*.h
     ${CMAKE_CURRENT_BINARY_DIR}
 
+    ${CMAKE_SOURCE_DIR}/krita/libpsd
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
     ${CMAKE_SOURCE_DIR}/krita/image/tiles
@@ -125,6 +126,7 @@ if(HAVE_OPENGL)
     endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
 
+add_subdirectory( libpsd )
 add_subdirectory( image )
 add_subdirectory( libbrush )
 add_subdirectory( ui )

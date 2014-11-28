@@ -19,8 +19,9 @@
 #define COMPRESSION_H
 
 #include <QByteArray>
+#include "libkispsd_export.h"
 
-class Compression
+class LIBKISPSD_EXPORT Compression
 {
 public:
 

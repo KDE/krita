@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 #include <klocale.h>
 #include <qtest_kde.h>
-#include "../psd.h"
+#include "../../../../libpsd/psd.h"
 #include "../psd_header.h"
 #include "../psd_colormode_block.h"
 #ifndef FILES_DATA_DIR

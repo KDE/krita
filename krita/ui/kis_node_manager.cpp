@@ -1090,7 +1090,7 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
     // guaranteed by KisActionManager
     KIS_ASSERT_RECOVER_RETURN(node->inherits("KisTransparencyMask"));
 
-    if (!parentNode->hasEditablePaintDevice()) {
+    if (writeToLayers && !parentNode->hasEditablePaintDevice()) {
         KMessageBox::information(view,
                                  i18n("Cannot write alpha channel of "
                                       "the parent layer \"%1\".\n"
@@ -1100,12 +1100,14 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
         return;
     }
 
-    KIS_ASSERT_RECOVER_RETURN(parentNode->hasEditablePaintDevice());
-
-    KisPaintDeviceSP dstDevice =
-        writeToLayers ?
-        parentNode->paintDevice() :
-        new KisPaintDevice(*parentNode->paintDevice());
+    KisPaintDeviceSP dstDevice;
+    if (writeToLayers) {
+        KIS_ASSERT_RECOVER_RETURN(parentNode->paintDevice());
+        dstDevice = parentNode->paintDevice();
+    } else {
+        KisPaintDeviceSP copyDevice = parentNode->projection();
+        dstDevice = new KisPaintDevice(*copyDevice);
+    }
 
     const KoColorSpace *dstCS = dstDevice->colorSpace();
 

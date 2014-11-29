@@ -57,8 +57,5 @@ void KisSmudgeOption::readOptionSetting(const KisPropertiesConfiguration* settin
 {
     KisRateOption::readOptionSetting(setting);
 
-    if (setting->hasProperty(name() + "Mode"))
-        m_mode = (Mode)setting->getInt(name() + "Mode", m_mode);
-    else
-        m_mode = SMEARING_MODE;
+    m_mode = (Mode)setting->getInt(name() + "Mode", SMEARING_MODE);
 }

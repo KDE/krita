@@ -37,8 +37,6 @@ bool LIBKISPSD_EXPORT psdwrite_pascalstring(QIODevice* io, const QString &s);
 bool LIBKISPSD_EXPORT psdwrite_pascalstring(QIODevice* io, const QString &s, int padding);
 bool LIBKISPSD_EXPORT psdpad(QIODevice* io, quint32 padding);
 
-bool LIBKISPSD_EXPORT psd_write_pattern(QIODevice* io, KoPattern *pattern);
-
 bool LIBKISPSD_EXPORT psdread(QIODevice* io, quint8* v);
 bool LIBKISPSD_EXPORT psdread(QIODevice* io, quint16* v);
 bool LIBKISPSD_EXPORT psdread(QIODevice* io, qint16* v);
@@ -49,6 +47,5 @@ bool LIBKISPSD_EXPORT psdread_pascalstring(QIODevice* io, QString& s, int paddin
 bool LIBKISPSD_EXPORT psdread_unicodestring(QIODevice* io, QString &s);
 bool LIBKISPSD_EXPORT psd_read_blendmode(QIODevice* io, QString &blendModeKey);
 
-bool LIBKISPSD_EXPORT psd_read_pattern(QIODevice* io, KoPattern *pattern);
 
 #endif // PSD_UTILS_H

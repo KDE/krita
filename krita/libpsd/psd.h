@@ -192,6 +192,7 @@ struct psd_gradient_color {
 };
 
 struct psd_pattern {
+
     psd_color_mode color_mode; // The image mode of the file.
     quint8 height; // Point: vertical, 2 bytes and horizontal, 2 bytes
     quint8 width;

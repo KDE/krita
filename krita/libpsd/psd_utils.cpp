@@ -233,53 +233,6 @@ bool psd_read_blendmode(QIODevice *io, QString &blendModeKey)
 }
 
 
-bool psd_write_pattern(QIODevice *io, KoPattern *pattern)
-{
-    return false;
-}
-
-
-bool psd_read_pattern(QIODevice *io, KoPattern *pattern)
-{
-    quint32 length;
-    psd_pattern pat;
-    psdread(io, &length);
-    psdread(io, &pat.version);
-    if (pat.version != 1) return false;
-    psdread(io, (quint32*)&pat.color_mode);
-    psdread(io, &pat.height);
-    psdread(io, &pat.width);
-    psdread_unicodestring(io, pat.name);
-    psdread_pascalstring(io, pat.uuid, 2);
-
-    if (pat.color_mode == Indexed) {
-        pat.color_table.reserve(256);
-        quint8 r;
-        quint8 g;
-        quint8 b;
-        for (int i = 0; i < 256; ++i) {
-            psdread(io, &r);
-            psdread(io, &g);
-            psdread(io, &b);
-            pat.color_table.append(qRgb(r, g, b));
-        }
-    }
-
-    // Now load the virtual memory array
-    psdread(io, &pat.version);
-    if (!pat.version == 3) return false;
-    psdread(io, &length);
-    psdread(io, &pat.top);
-    psdread(io, &pat.left);
-    psdread(io, &pat.bottom);
-    psdread(io, &pat.right);
-
-    quint32 max_channels;
-    psdread(io, &max_channels);
-
-
-    return true;
-}
 
 
 bool psdread_unicodestring(QIODevice *io, QString &s)

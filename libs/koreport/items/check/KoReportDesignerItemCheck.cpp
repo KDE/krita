@@ -92,7 +92,7 @@ void KoReportDesignerItemCheck::paint(QPainter* painter, const QStyleOptionGraph
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
-        painter->setPen(QPen(QColor(224, 224, 224)));
+        painter->setPen(QPen(Qt::lightGray));
     } else {
         painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }

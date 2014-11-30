@@ -704,8 +704,9 @@ void KoReportDesigner::slotPageButton_Pressed()
         QStringList sl = m_kordata->scriptList(m_interpreter->value().toString());
 
         m_script->setListData(sl, sl);
-        changeSet(m_set);
+        
     }
+    changeSet(m_set);
 }
 
 QSize KoReportDesigner::sizeHint() const
@@ -904,11 +905,13 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
                 item->setVisible(true);
                 item->setSelected(true);
                 KoReportItemBase* baseReportItem = dynamic_cast<KoReportItemBase*>(item);
-                changeSet(baseReportItem->propertySet());
-                if (v && v->designer()) {
-                    v->designer()->setModified(true);
+                if (baseReportItem) {
+                    changeSet(baseReportItem->propertySet());
+                    if (v && v->designer()) {
+                        v->designer()->setModified(true);
+                    }
+                    emit itemInserted(m_sectionData->insertItem);
                 }
-                emit itemInserted(m_sectionData->insertItem);
             }
                 
             m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
@@ -1149,7 +1152,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
             const QGraphicsItemList l = sec->items();
             for (QGraphicsItemList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it) {
                 KoReportItemBase* itm = dynamic_cast<KoReportItemBase*>(*it);
-                if (itm->entityName() == n  && itm != ignore) {
+                if (itm && itm->entityName() == n  && itm != ignore) {
                     unique = false;
                     break;
                 }
@@ -1166,7 +1169,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
                 const QGraphicsItemList l = sec->items();
                 for (QGraphicsItemList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it) {
                     KoReportItemBase* itm = dynamic_cast<KoReportItemBase*>(*it);
-                    if (itm->entityName() == n  && itm != ignore) {
+                    if (itm && itm->entityName() == n  && itm != ignore) {
                         unique = false;
                         break;
                     }
@@ -1178,7 +1181,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
                 const QGraphicsItemList l = sec->items();
                 for (QGraphicsItemList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it) {
                     KoReportItemBase* itm = dynamic_cast<KoReportItemBase*>(*it);
-                    if (itm->entityName() == n  && itm != ignore) {
+                    if (itm && itm->entityName() == n  && itm != ignore) {
                         unique = false;
                         break;
                     }
@@ -1192,7 +1195,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
             const QGraphicsItemList l = sec->items();
             for (QGraphicsItemList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it) {
                 KoReportItemBase* itm = dynamic_cast<KoReportItemBase*>(*it);
-                if (itm->entityName() == n  && itm != ignore) {
+                if (itm && itm && itm->entityName() == n  && itm != ignore) {
                     unique = false;
                     break;
                 }

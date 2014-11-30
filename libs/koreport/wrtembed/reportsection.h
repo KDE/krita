@@ -87,7 +87,7 @@ protected:
     ReportSceneView * m_sceneView;
     KoReportDesigner* m_reportDesigner;
     KoRuler* m_sectionRuler;
-
+    
 private:
     KRSectionData *m_sectionData;
 

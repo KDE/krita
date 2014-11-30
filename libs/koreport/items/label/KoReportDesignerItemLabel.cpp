@@ -20,6 +20,7 @@
 #include "KoReportDesignerItemLabel.h"
 #include <KoReportDesignerItemBase.h>
 #include <KoReportDesigner.h>
+#include "reportscene.h"
 
 #include <QDomDocument>
 #include <QPainter>
@@ -28,6 +29,8 @@
 #include <koproperty/EditorView.h>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QTextCursor>
+
 
 //
 // class ReportEntityLabel
@@ -44,6 +47,15 @@ void KoReportDesignerItemLabel::init(QGraphicsScene *scene, KoReportDesigner *d)
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
+    setFlag(ItemIsFocusable);
+    
+    m_inlineEdit = new BoundedTextItem(this);
+    m_inlineEdit->setVisible(false);
+    m_inlineEdit->setFlag(ItemIsFocusable);
+    m_inlineEdit->setFlag(ItemIsSelectable, false);
+    m_inlineEdit->setPlainText(text());
+    
+    connect(m_inlineEdit, SIGNAL(exitEditMode()), this, SLOT(exitInlineEditingMode()));
 }
 
 // methods (constructors)
@@ -54,10 +66,12 @@ KoReportDesignerItemLabel::KoReportDesignerItemLabel(KoReportDesigner* d, QGraph
     init(scene, d);
     setSceneRect(properRect(*d, getTextRect().width(), getTextRect().height()));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
+    
+    enterInlineEditingMode();
 }
 
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
-        : KoReportItemLabel(element), KoReportDesignerItemRectBase(d)
+        : KoReportItemLabel(element), KoReportDesignerItemRectBase(d), m_inlineEdit(0)
 {
     init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
@@ -87,6 +101,10 @@ void KoReportDesignerItemLabel::paint(QPainter* painter, const QStyleOptionGraph
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
+    if (m_inlineEdit->isVisible()) {
+        return;
+    }
+    
     // store any values we plan on changing so we can restore them
     QFont f = painter->font();
     QPen  p = painter->pen();
@@ -109,8 +127,6 @@ void KoReportDesignerItemLabel::paint(QPainter* painter, const QStyleOptionGraph
     }
 
     painter->drawRect(QGraphicsRectItem::rect());
-
-
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     drawHandles(painter);
@@ -155,6 +171,8 @@ void KoReportDesignerItemLabel::slotPropertyChanged(KoProperty::Set &s, KoProper
         } else {
             m_oldName = p.value().toString();
         }
+    } else if (p.name() == "caption") {
+        m_inlineEdit->setPlainText(p.value().toString());
     }
 
     KoReportDesignerItemRectBase::propertyChanged(s, p);
@@ -162,6 +180,46 @@ void KoReportDesignerItemLabel::slotPropertyChanged(KoProperty::Set &s, KoProper
 
 }
 
+void KoReportDesignerItemLabel::enterInlineEditingMode()
+{
+    if (!m_inlineEdit->isVisible()) {
+        m_inlineEdit->setVisible(true);
+        m_inlineEdit->setPlainText(text());
+        m_inlineEdit->setFocus();
+        
+        QTextCursor c = m_inlineEdit->textCursor();
+        c.select(QTextCursor::Document);
+        m_inlineEdit->setTextCursor(c);
+        
+        m_inlineEdit->setFont(m_font->value().value<QFont>());
+        m_inlineEdit->setDefaultTextColor(m_foregroundColor->value().value<QColor>());
+        m_inlineEdit->setBackgroudColor(m_backgroundColor->value().value<QColor>());
+        m_inlineEdit->setBackgroudOpacity(m_backgroundOpacity->value().toInt());
+        m_inlineEdit->setForegroundColor(m_foregroundColor->value().value<QColor>());
+        m_inlineEdit->setFont(m_font->value().value<QFont>());
+        
+        update();
+    }
+}
 
+void KoReportDesignerItemLabel::exitInlineEditingMode()
+{
+    if (m_inlineEdit->isVisible()) {        
+        m_inlineEdit->setVisible(false);
+        setText(m_inlineEdit->toPlainText());
+    }
+}
 
+void KoReportDesignerItemLabel::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+{
+    enterInlineEditingMode();
+}
 
+void KoReportDesignerItemLabel::keyReleaseEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_F2) {
+        enterInlineEditingMode();
+    } else {
+        QGraphicsRectItem::keyReleaseEvent(event);
+    }
+}

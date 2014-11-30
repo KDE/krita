@@ -45,6 +45,9 @@ public:
 
     QRectF pointRect() const;
 
+    virtual void enterInlineEditingMode();
+    virtual void exitInlineEditingMode();
+    
 protected:
     void init(KRPos*, KRSize*, KoProperty::Set*, KoReportDesigner *r);
 
@@ -70,7 +73,7 @@ protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-
+    
     void propertyChanged(const KoProperty::Set &s, const KoProperty::Property &p);
 
     virtual void move(const QPointF&);

@@ -361,3 +361,11 @@ QRectF KoReportDesignerItemRectBase::properRect(const KoReportDesigner &d, qreal
     }
     return (QRectF(QPointF(currentPressX, currentPressY), QSizeF(width, height)));
 }
+
+void KoReportDesignerItemRectBase::enterInlineEditingMode()
+{
+}
+
+void KoReportDesignerItemRectBase::exitInlineEditingMode()
+{
+}

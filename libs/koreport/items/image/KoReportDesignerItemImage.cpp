@@ -106,7 +106,7 @@ void KoReportDesignerItemImage::paint(QPainter* painter, const QStyleOptionGraph
     }
 
     //Draw a border so user knows the object edge
-    painter->setPen(QPen(QColor(224, 224, 224)));
+    painter->setPen(QPen(Qt::lightGray));
     painter->drawRect(rect());
 
 

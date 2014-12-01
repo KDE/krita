@@ -38,6 +38,7 @@
  */
 class KOWIDGETS_EXPORT KoResourceLoaderThread : public QThread {
 
+    Q_OBJECT
 public:
 
     /**
@@ -46,7 +47,7 @@ public:
      */
     explicit KoResourceLoaderThread(KoResourceServerBase *server);
     ~KoResourceLoaderThread();
-
+public slots:
     /**
      * Checks whether the thread has finished loading and waits
      * until it is finished if necessary

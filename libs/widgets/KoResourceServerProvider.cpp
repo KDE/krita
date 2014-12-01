@@ -128,11 +128,11 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
             }
         }
     }
+    connect(qApp, SIGNAL(aboutToQuit()), SLOT(barrier()));
 }
 
 KoResourceLoaderThread::~KoResourceLoaderThread()
 {
-    barrier();
 }
 
 void KoResourceLoaderThread::run()

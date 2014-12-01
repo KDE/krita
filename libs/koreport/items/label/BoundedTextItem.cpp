@@ -27,6 +27,7 @@
 BoundedTextItem::BoundedTextItem(QGraphicsItem* parent): QGraphicsTextItem(parent)
 {
     setTextInteractionFlags(Qt::TextEditorInteraction);
+    setCursor(QCursor(Qt::IBeamCursor));
 }
 
 QRectF BoundedTextItem::boundingRect() const

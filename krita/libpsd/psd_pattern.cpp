@@ -18,6 +18,7 @@
 #include "psd_pattern.h"
 
 #include "psd_utils.h"
+#include "compression.h"
 
 #include <QImage>
 #include <QDebug>
@@ -108,6 +109,8 @@ bool psd_read_pattern(QIODevice *io)
     qint32 max_channels;
     psdread(io, &max_channels);
 
+    QVector<QByteArray> channelData;
+
     for (int i = 0; i < max_channels; ++i) {
         quint32 written;
         qint32 len;
@@ -149,7 +152,6 @@ bool psd_read_pattern(QIODevice *io)
         psdread(io, &compression_mode);
 
         quint32 per_channel_length = 0;
-        quint8 *temp_channel_data = new quint8(len);
 
         if (written > 0) {
             if (pattern.channel_number == 0) {
@@ -170,7 +172,7 @@ bool psd_read_pattern(QIODevice *io)
                     return false;
                 }
 
-                quint32 per_channel_length = length;
+                per_channel_length = length;
 
                 switch(pattern.color_mode) {
                 case Bitmap:
@@ -193,17 +195,18 @@ bool psd_read_pattern(QIODevice *io)
                     length *= 4;
                 default:
                     qDebug() << "Impossible color mode" << pattern.color_mode;
-                    delete temp_channel_data;
                     return false;
                 }
 
-
-
+                QByteArray ba = io->read(len);
+                channelData << Compression::uncompress(length, ba, compression_mode);
 
             }
         }
 
-        delete temp_channel_data;
+
+
+
 
     }
 

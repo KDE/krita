@@ -42,9 +42,7 @@ class Image;
 class KoReportItemImage : public KoReportItemBase
 {
 public:
-    KoReportItemImage() {
-        createProperties();
-    }
+    KoReportItemImage();
     explicit KoReportItemImage(QDomNode & element);
     virtual ~KoReportItemImage();
 

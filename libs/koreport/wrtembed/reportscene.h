@@ -32,6 +32,7 @@ typedef QList<QGraphicsItem*> QGraphicsItemList;
 class KoReportDesigner;
 class QGraphicsSceneContextMenuEvent;
 class QGraphicsSceneMouseEvent;
+class KoReportDesignerItemRectBase;
 
 class ReportScene : public QGraphicsScene
 {
@@ -63,6 +64,7 @@ signals:
 private:
     qreal lowestZValue();
     qreal highestZValue();
+    void exitInlineEditingModeInItems(KoReportDesignerItemRectBase *rectUnderCursor);
 
     KoReportDesigner * m_rd;
 

@@ -35,9 +35,7 @@ class Barcode;
 class KoReportItemBarcode : public KoReportItemBase
 {
 public:
-    KoReportItemBarcode() {
-        createProperties();
-    }
+    KoReportItemBarcode();
     explicit KoReportItemBarcode(QDomNode &element);
     ~KoReportItemBarcode();
 

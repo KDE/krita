@@ -24,6 +24,11 @@
 #include <kglobalsettings.h>
 #include "renderobjects.h"
 
+KoReportItemLabel::KoReportItemLabel()
+{
+    createProperties();
+}
+
 KoReportItemLabel::KoReportItemLabel(QDomNode & element)
 {
     createProperties();

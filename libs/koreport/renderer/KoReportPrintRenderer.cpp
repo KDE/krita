@@ -189,7 +189,7 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                     context.painter->setPen(chk->foregroundColor());
 
                     if (chk->lineStyle().style == Qt::NoPen || chk->lineStyle().weight <= 0) {
-                        context.painter->setPen(QPen(QColor(224, 224, 224)));
+                        context.painter->setPen(QPen(Qt::lightGray));
                     } else {
                         context.painter->setPen(QPen(chk->lineStyle().lineColor, chk->lineStyle().weight, chk->lineStyle().style));
                     }

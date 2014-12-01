@@ -114,7 +114,7 @@ bool KoOdtFrameReportCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWri
     QSizeF sz = chk->size();
     QPen fpen; // frame pen
     if (chk->lineStyle().style == Qt::NoPen || chk->lineStyle().weight <= 0) {
-        fpen = QPen(QColor(224, 224, 224));
+        fpen = QPen(Qt::lightGray);
     } else {
         fpen = QPen(chk->lineStyle().lineColor, chk->lineStyle().weight, chk->lineStyle().style);
     }

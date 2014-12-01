@@ -25,6 +25,11 @@
 #include <renderobjects.h>
 #include "renderer/scripting/krscripthandler.h"
 
+KoReportItemCheck::KoReportItemCheck()
+{
+    createProperties();
+}
+
 KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
 {
     createProperties();

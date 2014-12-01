@@ -17,7 +17,7 @@ include_directories(
 )
 
 #build a shared library
-set(koreport_LIB_SRCS 
+set(koreport_LIB_SRCS
     common/krutils.cpp
     common/krpos.cpp
     common/krsize.cpp
@@ -84,6 +84,7 @@ set(koreport_LIB_SRCS
     items/label/KoReportDesignerItemLabel.cpp
     items/label/krscriptlabel.cpp
     items/label/KoReportLabelPlugin.cpp
+    items/label/BoundedTextItem.cpp 
 
     items/check/KoReportItemCheck.cpp
     items/check/KoReportDesignerItemCheck.cpp

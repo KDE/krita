@@ -34,10 +34,8 @@ class Check;
 class KoReportItemCheck : public KoReportItemBase
 {
 public:
-    KoReportItemCheck() {
-        createProperties();
-    };
-    KoReportItemCheck(QDomNode &element);
+    KoReportItemCheck();
+    explicit KoReportItemCheck(QDomNode &element);
     virtual ~KoReportItemCheck();
 
     virtual QString typeName() const;

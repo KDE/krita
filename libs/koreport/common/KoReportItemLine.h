@@ -39,11 +39,9 @@ class Line;
 class KOREPORT_EXPORT  KoReportItemLine : public KoReportItemBase
 {
 public:
-    KoReportItemLine() {
-        createProperties();
-    }
+    KoReportItemLine();
     explicit KoReportItemLine(QDomNode & element);
-    ~KoReportItemLine() {};
+    ~KoReportItemLine();
 
     virtual QString typeName() const;
     virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);

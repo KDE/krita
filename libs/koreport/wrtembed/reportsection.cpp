@@ -92,6 +92,7 @@ ReportSection::ReportSection(KoReportDesigner * rptdes)
     glayout->addWidget(m_sectionRuler, 1, 0);
     glayout->addWidget(m_sceneView , 1, 1);
     glayout->addWidget(m_resizeBar, 2, 0, 1, 2);
+    m_sectionRuler->setFixedWidth(m_sectionRuler->sizeHint().width());
 
     setLayout(glayout);
     slotResizeBarDragged(0);

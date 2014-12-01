@@ -30,7 +30,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QTextCursor>
-
+#include <QTextDocument>
 
 //
 // class ReportEntityLabel
@@ -53,7 +53,10 @@ void KoReportDesignerItemLabel::init(QGraphicsScene *scene, KoReportDesigner *d)
     m_inlineEdit->setVisible(false);
     m_inlineEdit->setFlag(ItemIsFocusable);
     m_inlineEdit->setFlag(ItemIsSelectable, false);
-    m_inlineEdit->setPlainText(text());
+    QTextDocument *doc = new QTextDocument;
+    doc->setDocumentMargin(0);
+    doc->setPlainText(text());
+    m_inlineEdit->setDocument(doc);
     
     connect(m_inlineEdit, SIGNAL(exitEditMode()), this, SLOT(exitInlineEditingMode()));
 }

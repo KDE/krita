@@ -28,6 +28,10 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 
+#include "kis_locked_properties_proxy.h"
+#include "kis_locked_properties_server.h"
+#include "kis_locked_properties.h"
+
 #include <klocale.h>
 
 const int STEP = 25;
@@ -100,6 +104,11 @@ void KisCanvasControlsManager::stepAlpha(float step)
     alpha += step;
     alpha = qBound<qreal>(0.0, alpha, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
+    if (m_view->resourceProvider()->currentPreset()->settings()->hasProperty("OpacityValue"))
+        m_view->resourceProvider()->currentPreset()->settings()->setProperty("OpacityValue", alpha);
+
+    KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_view->resourceProvider()->currentPreset()->settings());
+    p->setProperty("OpacityValue", alpha);
 }
 
 void KisCanvasControlsManager::increaseOpacity()

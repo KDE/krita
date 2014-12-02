@@ -596,7 +596,7 @@ void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
 
 void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/)
 {
-    if (m_view) {
+     if (m_view) {
         sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if (preset && m_resourceProvider->currentPreset()->name() != preset->name()) {
@@ -815,6 +815,7 @@ void KisPaintopBox::slotVerticalMirrorChanged(bool value)
 
 void KisPaintopBox::sliderChanged(int n)
 {
+
     m_optionWidget->blockSignals(true);
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
     qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value();

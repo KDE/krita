@@ -44,6 +44,7 @@
 
 #include "kis_clone_layer.h"
 
+#include "kis_psd_layer_style.h"
 
 class KisSafeProjection {
 public:
@@ -114,6 +115,7 @@ public:
     KisMetaData::Store* metaDataStore;
     KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
+    KisPSDLayerStyle* layerStyle;
 };
 
 
@@ -125,6 +127,7 @@ KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
     setOpacity(opacity);
     m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
+    m_d->layerStyle = 0;
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -134,12 +137,14 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
+        m_d->layerStyle = new KisPSDLayerStyle(*rhs.m_d->layerStyle);
         setName(rhs.name());
     }
 }
 
 KisLayer::~KisLayer()
 {
+    delete m_d->layerStyle;
     delete m_d->metaDataStore;
     delete m_d;
 }
@@ -166,6 +171,17 @@ const KoCompositeOp * KisLayer::compositeOp() const
     if (!parentNode->colorSpace()) return 0;
     const KoCompositeOp* op = parentNode->colorSpace()->compositeOp(compositeOpId());
     return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
+}
+
+KisPSDLayerStyle *KisLayer::layerStyle() const
+{
+    return m_d->layerStyle;
+}
+
+void KisLayer::setLayerStyle(KisPSDLayerStyle *layerStyle)
+{
+    delete layerStyle;
+    m_d->layerStyle = layerStyle;
 }
 
 KoDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const

@@ -28,7 +28,7 @@
 
 void KisPSDLayerStyleTest::testRoundTrip()
 {
-    KisPSDLayerStyle layerStyle(0);
+    KisPSDLayerStyle layerStyle;
     QFile f(FILES_DATA_DIR + QDir::separator() + "teststyles.asl");
     bool res = f.open(QIODevice::ReadOnly);
     Q_ASSERT(res);

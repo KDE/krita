@@ -23,8 +23,9 @@
 
 #include "kis_config.h"
 
-KisDlgLayerStyle::KisDlgLayerStyle(QWidget *parent) :
-    KDialog(parent)
+KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent)
+    : KDialog(parent)
+    , m_layerStyle(layerStyle)
 {
     setCaption(i18n("Layer Styles"));
     setButtons(Ok | Cancel);
@@ -34,34 +35,34 @@ KisDlgLayerStyle::KisDlgLayerStyle(QWidget *parent) :
     wdgLayerStyles.setupUi(page);
     setMainWidget(page);
 
-    stylesSelector = new StylesSelector(this);
-    wdgLayerStyles.stylesStack->addWidget(stylesSelector);
-    blendingOptions = new BlendingOptions(this);
-    wdgLayerStyles.stylesStack->addWidget(blendingOptions);
-    dropShadow = new DropShadow(this);
-    wdgLayerStyles.stylesStack->addWidget(dropShadow);
-    innerShadow = new InnerShadow(this);
-    wdgLayerStyles.stylesStack->addWidget(innerShadow);
-    outerGlow = new OuterGlow(this);
-    wdgLayerStyles.stylesStack->addWidget(outerGlow);
-    innerGlow = new InnerGlow(this);
-    wdgLayerStyles.stylesStack->addWidget(innerGlow);
-    bevelAndEmboss = new BevelAndEmboss(this);
-    wdgLayerStyles.stylesStack->addWidget(bevelAndEmboss);
-    contour = new Contour(this);
-    wdgLayerStyles.stylesStack->addWidget(contour);
-    texture = new Texture(this);
-    wdgLayerStyles.stylesStack->addWidget(texture);
-    satin = new Satin(this);
-    wdgLayerStyles.stylesStack->addWidget(satin);
-    colorOverlay = new ColorOverlay(this);
-    wdgLayerStyles.stylesStack->addWidget(colorOverlay);
-    gradientOverlay = new GradientOverlay(this);
-    wdgLayerStyles.stylesStack->addWidget(gradientOverlay);
-    patternOverlay = new PatternOverlay(this);
-    wdgLayerStyles.stylesStack->addWidget(patternOverlay);
-    stroke = new Stroke(this);
-    wdgLayerStyles.stylesStack->addWidget(stroke);
+    m_stylesSelector = new StylesSelector(this);
+    wdgLayerStyles.stylesStack->addWidget(m_stylesSelector);
+    m_blendingOptions = new BlendingOptions(this);
+    wdgLayerStyles.stylesStack->addWidget(m_blendingOptions);
+    m_dropShadow = new DropShadow(this);
+    wdgLayerStyles.stylesStack->addWidget(m_dropShadow);
+    m_innerShadow = new InnerShadow(this);
+    wdgLayerStyles.stylesStack->addWidget(m_innerShadow);
+    m_outerGlow = new OuterGlow(this);
+    wdgLayerStyles.stylesStack->addWidget(m_outerGlow);
+    m_innerGlow = new InnerGlow(this);
+    wdgLayerStyles.stylesStack->addWidget(m_innerGlow);
+    m_bevelAndEmboss = new BevelAndEmboss(this);
+    wdgLayerStyles.stylesStack->addWidget(m_bevelAndEmboss);
+    m_contour = new Contour(this);
+    wdgLayerStyles.stylesStack->addWidget(m_contour);
+    m_texture = new Texture(this);
+    wdgLayerStyles.stylesStack->addWidget(m_texture);
+    m_satin = new Satin(this);
+    wdgLayerStyles.stylesStack->addWidget(m_satin);
+    m_colorOverlay = new ColorOverlay(this);
+    wdgLayerStyles.stylesStack->addWidget(m_colorOverlay);
+    m_gradientOverlay = new GradientOverlay(this);
+    wdgLayerStyles.stylesStack->addWidget(m_gradientOverlay);
+    m_patternOverlay = new PatternOverlay(this);
+    wdgLayerStyles.stylesStack->addWidget(m_patternOverlay);
+    m_stroke = new Stroke(this);
+    wdgLayerStyles.stylesStack->addWidget(m_stroke);
 
     KisConfig cfg;
     wdgLayerStyles.stylesStack->setCurrentIndex(cfg.readEntry("KisDlgLayerStyle::current", 1));

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,7 @@
 #include "ui_wdgTexture.h"
 
 class QListWidgetItem;
+class KisPSDLayerStyle;
 
 class BevelAndEmboss : public QWidget {
 public:
@@ -143,7 +144,7 @@ class KisDlgLayerStyle : public KDialog
 {
     Q_OBJECT
 public:
-    explicit KisDlgLayerStyle(QWidget *parent = 0);
+    explicit KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent = 0);
 
 signals:
 
@@ -151,22 +152,25 @@ public slots:
     void changePage(QListWidgetItem *, QListWidgetItem*);
 
 private:
+
+    KisPSDLayerStyle *m_layerStyle;
+
     Ui::WdgStylesDialog wdgLayerStyles;
 
-    BevelAndEmboss *bevelAndEmboss;
-    BlendingOptions *blendingOptions;
-    ColorOverlay *colorOverlay;
-    Contour *contour;
-    DropShadow *dropShadow;
-    GradientOverlay *gradientOverlay;
-    InnerGlow *innerGlow;
-    InnerShadow *innerShadow;
-    OuterGlow *outerGlow;
-    PatternOverlay *patternOverlay;
-    Satin *satin;
-    Stroke *stroke;
-    StylesSelector *stylesSelector;
-    Texture *texture;
+    BevelAndEmboss *m_bevelAndEmboss;
+    BlendingOptions *m_blendingOptions;
+    ColorOverlay *m_colorOverlay;
+    Contour *m_contour;
+    DropShadow *m_dropShadow;
+    GradientOverlay *m_gradientOverlay;
+    InnerGlow *m_innerGlow;
+    InnerShadow *m_innerShadow;
+    OuterGlow *m_outerGlow;
+    PatternOverlay *m_patternOverlay;
+    Satin *m_satin;
+    Stroke *m_stroke;
+    StylesSelector *m_stylesSelector;
+    Texture *m_texture;
 
 
 };

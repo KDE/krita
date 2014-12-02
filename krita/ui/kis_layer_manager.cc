@@ -63,6 +63,7 @@
 #include <kis_painter.h>
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_psd_layer_style.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -92,6 +93,7 @@
 #include "kis_node_manager.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
+
 
 
 class KisSaveGroupVisitor : public KisNodeVisitor
@@ -892,9 +894,10 @@ void KisLayerManager::layerStyle()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisDlgLayerStyle dlg;
+    KisPSDLayerStyle *style = new KisPSDLayerStyle(*layer->layerStyle());
+    KisDlgLayerStyle dlg(style);
     if (dlg.exec() == QDialog::Accepted) {
-        // Do stuff...
+        layer->setLayerStyle(style);
     }
 
 }

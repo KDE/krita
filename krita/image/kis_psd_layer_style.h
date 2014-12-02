@@ -18,8 +18,6 @@
 #ifndef KIS_PSD_LAYER_STYLE_H
 #define KIS_PSD_LAYER_STYLE_H
 
-#include <QObject>
-
 class QIODevice;
 
 #include <krita_export.h>
@@ -29,11 +27,15 @@ class QIODevice;
  * the PSD layer effects.
  *
  */
-class KRITAIMAGE_EXPORT KisPSDLayerStyle : public QObject
+class KRITAIMAGE_EXPORT KisPSDLayerStyle
 {
-    Q_OBJECT
+
 public:
-    explicit KisPSDLayerStyle(QObject *parent = 0);
+    explicit KisPSDLayerStyle();
+    virtual ~KisPSDLayerStyle();
+    KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
+    void operator=(const KisPSDLayerStyle& rhs);
+
 
     /// Save the ASL style format. See http://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
     bool writeASL(QIODevice *io) const;
@@ -43,10 +45,6 @@ public:
 
     bool write(QIODevice *io) const;
     bool read(QIODevice *io);
-
-signals:
-
-public slots:
 
 private:
     struct Private;

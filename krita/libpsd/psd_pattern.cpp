@@ -199,7 +199,7 @@ bool psd_read_pattern(QIODevice *io)
                 }
 
                 QByteArray ba = io->read(len);
-                channelData << Compression::uncompress(length, ba, compression_mode);
+                channelData << Compression::uncompress(length, ba, (Compression::CompressionType)compression_mode);
 
             }
         }

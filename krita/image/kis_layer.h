@@ -40,6 +40,7 @@ class QIcon;
 class QBitArray;
 class KisCloneLayer;
 class KisNodeVisitor;
+class KisPSDLayerStyle;
 
 namespace KisMetaData
 {
@@ -78,6 +79,9 @@ public:
 
     /// returns the layer's composite op for the colorspace of the layer's parent.
     const KoCompositeOp * compositeOp() const;
+
+    KisPSDLayerStyle *layerStyle() const;
+    void setLayerStyle(KisPSDLayerStyle *layerStyle);
 
     /**
      * Ask the layer to assemble its data & apply all the effect masks

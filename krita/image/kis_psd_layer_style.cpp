@@ -57,10 +57,25 @@ struct KisPSDLayerStyle::Private
 
 };
 
-KisPSDLayerStyle::KisPSDLayerStyle(QObject *parent)
-    : QObject(parent)
-    , d(new Private())
+KisPSDLayerStyle::KisPSDLayerStyle()
+    : d(new Private())
 {
+}
+
+KisPSDLayerStyle::~KisPSDLayerStyle()
+{
+    delete d;
+}
+
+KisPSDLayerStyle::KisPSDLayerStyle(const KisPSDLayerStyle &rhs)
+    : d(new Private())
+{
+    // XXX: copy all the contents of KisPSDLayerStyle::Private
+}
+
+void KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
+{
+    // XXX copy all the contents of KisPSDLayerStyle::Private
 }
 
 bool KisPSDLayerStyle::writeASL(QIODevice *io) const

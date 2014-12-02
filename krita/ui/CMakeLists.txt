@@ -166,6 +166,7 @@ set(kritaui_LIB_SRCS
     tool/kis_selection_tool_config_widget_helper.cpp
     tool/kis_shape_tool_helper.cpp
     tool/kis_tool.cc
+    tool/kis_delegated_tool_policies.cpp
     tool/kis_tool_freehand.cc
     tool/kis_painting_information_builder.cpp
     tool/kis_tool_freehand_helper.cpp

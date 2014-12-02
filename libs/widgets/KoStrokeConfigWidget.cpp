@@ -506,13 +506,14 @@ void KoStrokeConfigWidget::endMarkerChanged()
 
 void KoStrokeConfigWidget::selectionChanged()
 {
+    // see a comment in setUnit()
+    setUnit(d->canvas->unit());
+
+
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();
     if (shape && shape->stroke()) {
-        // see a comment in setUnit()
-        setUnit(d->canvas->unit());
-
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
             updateControls(shape->stroke(), pathShape->marker(KoMarkerData::MarkerStart),

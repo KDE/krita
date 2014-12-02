@@ -244,6 +244,24 @@ public:
         return symbol();
     }
 
+    /**
+     * Get an approximate scale of a unit vector that was converted by
+     * the transfomation.
+     *
+     * Please note that exact values are guarenteed only for
+     * combinations of Translate, Rotation and Unifor Scale
+     * matrices. For combinations having shears and perspective the
+     * value will be average for the point near CS origin.
+     */
+    static qreal approxTransformScale(const QTransform &t);
+
+    /**
+     * Adjust the unit by pixel transformation applied to the
+     * describing object. It multiplies the pixel coefficient by the
+     * average scale of the matrix.
+     */
+    void adjustByPixelTransform(const QTransform &t);
+
 private:
     Type m_type;
     qreal m_pixelConversion;

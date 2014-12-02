@@ -22,6 +22,9 @@
 #include "KoUnit.h"
 
 #include <cmath>
+
+#include <QTransform>
+
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
@@ -367,6 +370,16 @@ qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
         return val * 0.9;
 
     return defaultVal;
+}
+
+qreal KoUnit::approxTransformScale(const QTransform &t)
+{
+    return std::sqrt(t.determinant());
+}
+
+void KoUnit::adjustByPixelTransform(const QTransform &t)
+{
+    m_pixelConversion *= approxTransformScale(t);
 }
 
 #ifndef QT_NO_DEBUG_STREAM

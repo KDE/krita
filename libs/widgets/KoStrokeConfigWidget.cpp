@@ -382,19 +382,6 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *
     blockChildSignals(false);
 }
 
-#include <cmath>
-inline KoUnit adjustUnitByLocalTransform(KoUnit unit, const QTransform &t)
-{
-    qreal multiplier =
-        0.5 * (std::sqrt(t.m11() * t.m11() + t.m21() * t.m21()) +
-               std::sqrt(t.m12() * t.m12() + t.m22() * t.m22()));
-
-    multiplier *= unit.toUserValue(1.0);
-    unit.setFactor(multiplier);
-
-    return unit;
-}
-
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
     blockChildSignals(true);
@@ -411,7 +398,7 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
      */
     KoUnit newUnit(unit);
     if (shape) {
-        newUnit = adjustUnitByLocalTransform(unit, shape->absoluteTransformation(0));
+        newUnit.adjustByPixelTransform(shape->absoluteTransformation(0));
     }
 
     d->lineWidth->setUnit(newUnit);

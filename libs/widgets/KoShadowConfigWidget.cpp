@@ -25,6 +25,7 @@
 #include <KoUnit.h>
 #include <KoColorPopupAction.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
@@ -207,6 +208,9 @@ void KoShadowConfigWidget::setCanvas(KoCanvasBase *canvas)
     connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(selectionChanged()));
 
     setUnit(canvas->unit());
+
+    connect( d->canvas->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
+             this, SLOT( resourceChanged( int, const QVariant& ) ) );
 }
 
 void KoShadowConfigWidget::setUnit(const KoUnit &unit)
@@ -217,6 +221,13 @@ void KoShadowConfigWidget::setUnit(const KoUnit &unit)
     d->widget.shadowBlur->setUnit(unit);
     d->widget.shadowOffset->blockSignals(false);
     d->widget.shadowBlur->blockSignals(false);
+}
+
+void KoShadowConfigWidget::resourceChanged( int key, const QVariant & res )
+{
+    if( key == KoCanvasResourceManager::Unit ) {
+        setUnit(res.value<KoUnit>());
+    }
 }
 
 #include <KoShadowConfigWidget.moc>

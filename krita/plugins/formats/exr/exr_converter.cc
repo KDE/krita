@@ -197,6 +197,9 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
     Q_ASSERT(info.channelMap.contains("G"));
     dbgFile << "G -> " << info.channelMap["G"];
 
+    KIS_ASSERT_RECOVER_RETURN(
+        layer->paintDevice()->colorSpace()->colorModelId() == GrayAColorModelID);
+
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         _T_* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
@@ -215,8 +218,9 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
 
             _T_* dst = reinterpret_cast<_T_*>(it->rawData());
 
-            *dst = unmultipliedRed;
-
+            // WARNING: We expect GRAYA colorspace only!
+            dst[0] = unmultipliedRed;
+            dst[1] = 1.0;
 
             ++rgba;
         } while (it->nextPixel());
@@ -564,7 +568,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         QString modelId;
 
         if (info.channelMap.size() == 1) {
-            modelId = GrayColorModelID.id();
+            modelId = GrayAColorModelID.id();
             QString key = info.channelMap.begin().key();
             if (key != "G") {
                 info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(key, "G"));

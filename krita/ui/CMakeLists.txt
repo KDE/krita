@@ -272,6 +272,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
     kis_mirror_axis.cpp
+    kis_psd_layer_style_resource.cpp
 
 )
 

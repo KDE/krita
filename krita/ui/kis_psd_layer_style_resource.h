@@ -19,6 +19,7 @@
 #define KIS_PSD_LAYER_STYLE_RESOURCE_H
 
 #include <KoResource.h>
+#include <QVector>
 
 #include <krita_export.h>
 
@@ -27,11 +28,11 @@ class KisPSDLayerStyle;
 /**
  * @brief The KisPSDLayerStyleResource class represents and ASL file type resource.
  */
-class KRITAUI_EXPORT KisPSDLayerStyleResource : public KoResource
+class KRITAUI_EXPORT KisPSDLayerStyleCollectionResource : public KoResource
 {
 public:
-    explicit KisPSDLayerStyleResource(const QString &filename);
-    virtual ~KisPSDLayerStyleResource();
+    explicit KisPSDLayerStyleCollectionResource(const QString &filename);
+    virtual ~KisPSDLayerStyleCollectionResource();
 
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
@@ -41,13 +42,15 @@ public:
 
     virtual QString defaultFileExtension() const;
 
+    QVector<KisPSDLayerStyle *> layerStyles() const;
+
 protected:
 
     virtual QByteArray generateMD5() const;
 
 private:
 
-    KisPSDLayerStyle *m_layerStyle;
+    QVector<KisPSDLayerStyle*> m_layerStyles;
 
 };
 

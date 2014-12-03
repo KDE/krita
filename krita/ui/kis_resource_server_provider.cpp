@@ -49,7 +49,6 @@ typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<Ki
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
-
     KisBrushServer *brushServer = KisBrushServer::instance();
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
@@ -57,7 +56,7 @@ KisResourceServerProvider::KisResourceServerProvider()
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
 
-    KGlobal::mainComponent().dirs()->addResourceType("psd_layer_styles", "data", "krita/asl");
+    KGlobal::mainComponent().dirs()->addResourceType("psd_layer_style_collections", "data", "krita/asl");
     
     m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp");
     if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {
@@ -79,15 +78,17 @@ KisResourceServerProvider::KisResourceServerProvider()
         m_workspaceThread->barrier();
     }
 
-    m_layerStyleServer = new KoResourceServer<KisPSDLayerStyleResource>("psd_layer_styles", "*.asl");
-    if (!QFileInfo(m_layerStyleServer->saveLocation()).exists()) {
-        QDir().mkpath(m_layerStyleServer->saveLocation());
+    m_layerStyleCollectionServer = new KoResourceServer<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");
+    if (!QFileInfo(m_layerStyleCollectionServer->saveLocation()).exists()) {
+        QDir().mkpath(m_layerStyleCollectionServer->saveLocation());
     }
-    m_layerStyleThread = new KoResourceLoaderThread(m_layerStyleServer);
-    m_layerStyleThread->start();
+
+    m_layerStyleCollectionThread = new KoResourceLoaderThread(m_layerStyleCollectionServer);
+    m_layerStyleCollectionThread->start();
     if (!qApp->applicationName().toLower().contains("krita")) {
-        m_layerStyleThread->barrier();
+        m_layerStyleCollectionThread->barrier();
     }
+
 
     connect(this, SIGNAL(notifyBrushBlacklistCleanup()),
             brushServer, SLOT(slotRemoveBlacklistedResources()));
@@ -98,11 +99,11 @@ KisResourceServerProvider::~KisResourceServerProvider()
 {
     delete m_paintOpPresetThread;
     delete m_workspaceThread;
-    delete m_layerStyleThread;
+    delete m_layerStyleCollectionThread;
 
     delete m_paintOpPresetServer;
     delete m_workspaceServer;
-    delete m_layerStyleServer;
+    delete m_layerStyleCollectionServer;
 }
 
 KisResourceServerProvider* KisResourceServerProvider::instance()
@@ -124,10 +125,10 @@ KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceSe
     return m_workspaceServer;
 }
 
-KoResourceServer<KisPSDLayerStyleResource> *KisResourceServerProvider::layerStyleServer()
+KoResourceServer<KisPSDLayerStyleCollectionResource> *KisResourceServerProvider::layerStyleCollectionServer()
 {
-    m_layerStyleThread->barrier();
-    return m_layerStyleServer;
+    m_layerStyleCollectionThread->barrier();
+    return m_layerStyleCollectionServer;
 }
 
 void KisResourceServerProvider::brushBlacklistCleanup()

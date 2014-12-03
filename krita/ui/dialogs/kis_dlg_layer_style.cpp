@@ -20,8 +20,14 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include <QTreeWidget>
+#include <QListWidget>
+#include <QListWidgetItem>
 
 #include "kis_config.h"
+
+#include "kis_resource_server_provider.h"
+#include "kis_psd_layer_style_resource.h"
+#include "kis_psd_layer_style.h"
 
 KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent)
     : KDialog(parent)
@@ -36,7 +42,9 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent
     setMainWidget(page);
 
     m_stylesSelector = new StylesSelector(this);
+    connect(m_stylesSelector, SIGNAL(styleSelected(KisPSDLayerStyle*)), SLOT(setStyle(KisPSDLayerStyle*)));
     wdgLayerStyles.stylesStack->addWidget(m_stylesSelector);
+
     m_blendingOptions = new BlendingOptions(this);
     wdgLayerStyles.stylesStack->addWidget(m_blendingOptions);
     m_dropShadow = new DropShadow(this);
@@ -72,6 +80,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent
             SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
              this, SLOT(changePage(QListWidgetItem*,QListWidgetItem*)));
 
+
+
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -82,7 +92,10 @@ void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *pre
     wdgLayerStyles.stylesStack->setCurrentIndex(wdgLayerStyles.lstStyleSelector->row(current));
 }
 
+void KisDlgLayerStyle::setStyle(KisPSDLayerStyle *style)
+{
 
+}
 
 BevelAndEmboss::BevelAndEmboss(QWidget *parent)
     : QWidget(parent)
@@ -160,13 +173,48 @@ Stroke::Stroke(QWidget *parent)
     ui.setupUi(this);
 }
 
-
 StylesSelector::StylesSelector(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
+    connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
+    connect(ui.listStyles, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectStyle(QListWidgetItem*,QListWidgetItem*)));
+    foreach(KoResource *res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
+        ui.cmbStyleCollections->addItem(res->name());
+    }
 }
 
+class StyleItem : public QListWidgetItem {
+public:
+    StyleItem(KisPSDLayerStyle *style, const QString &name)
+        : QListWidgetItem(name)
+        , m_style(style)
+    {
+    }
+    KisPSDLayerStyle *m_style;
+};
+
+void StylesSelector::loadStyles(const QString &name)
+{
+    ui.listStyles->clear();
+    KoResource *res = KisResourceServerProvider::instance()->layerStyleCollectionServer()->resourceByName(name);
+    KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(res);
+    if (collection) {
+        foreach(KisPSDLayerStyle *style, collection->layerStyles()) {
+            // XXX: also use the preview image, when we have one
+            ui.listStyles->addItem(new StyleItem(style, style->name()));
+        }
+    }
+}
+
+void StylesSelector::selectStyle(QListWidgetItem */*previous*/, QListWidgetItem* current)
+{
+    StyleItem *item = dynamic_cast<StyleItem*>(current);
+    if (item) {
+        emit styleSelected(item->m_style);
+    }
+}
 
 Texture::Texture(QWidget *parent)
     : QWidget(parent)

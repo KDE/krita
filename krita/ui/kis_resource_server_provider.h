@@ -27,7 +27,6 @@
 #include <QStringList>
 #include <QList>
 
-
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
@@ -41,7 +40,7 @@ class KoResource;
 class KoResourceLoaderThread;
 class KisPaintOpPreset;
 class KisWorkspaceResource;
-class KisPSDLayerStyleResource;
+class KisPSDLayerStyleCollectionResource;
 
 typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
@@ -57,9 +56,10 @@ public:
 
     KisPaintOpPresetResourceServer* paintOpPresetServer();
     KoResourceServer<KisWorkspaceResource>* workspaceServer();
-    KoResourceServer<KisPSDLayerStyleResource>* layerStyleServer();
+    KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer();
 
     void brushBlacklistCleanup();
+
 signals:
     void notifyBrushBlacklistCleanup();
     
@@ -71,13 +71,14 @@ private:
 
     KisPaintOpPresetResourceServer* m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
-    KoResourceServer<KisPSDLayerStyleResource>* m_layerStyleServer;
+    KoResourceServer<KisPSDLayerStyleCollectionResource>* m_layerStyleCollectionServer;
 
 private:
 
     KoResourceLoaderThread *m_paintOpPresetThread;
     KoResourceLoaderThread *m_workspaceThread;
-    KoResourceLoaderThread *m_layerStyleThread;
+    KoResourceLoaderThread *m_layerStyleCollectionThread;
+
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

@@ -20,11 +20,15 @@
 
 class QIODevice;
 
+#include <QVector>
+
 #include <krita_export.h>
 
 /**
  * @brief The KisPSDLayerStyle class implements loading, saving and applying
  * the PSD layer effects.
+ *
+ * See http://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
  *
  */
 class KRITAIMAGE_EXPORT KisPSDLayerStyle
@@ -36,14 +40,24 @@ public:
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
     void operator=(const KisPSDLayerStyle& rhs);
 
+    QString name() const;
 
-    /// Save the ASL style format. See http://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
-    bool writeASL(QIODevice *io) const;
+    /**
+     * Save given styles to the ASL style format. All patterns references in the
+     * contained styles will also be saved.
+     */
+    static bool writeASL(QIODevice *io, QVector<KisPSDLayerStyle *> styles);
 
-    /// Load the ASL style format. See http://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
-    bool readASL(QIODevice *io);
+    /**
+     * Load all style objects in the ASL style format. All patterns contained in the
+     * asl file will be added to the global pattern server.
+     */
+    static QVector<KisPSDLayerStyle *> readASL(QIODevice *io);
 
+    /// Save this style object
     bool write(QIODevice *io) const;
+
+    /// Load this style object
     bool read(QIODevice *io);
 
 private:

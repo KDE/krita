@@ -28,19 +28,19 @@
 
 #include "kis_psd_layer_style.h"
 
-KisPSDLayerStyleResource::KisPSDLayerStyleResource(const QString &filename)
+KisPSDLayerStyleCollectionResource::KisPSDLayerStyleCollectionResource(const QString &filename)
     : KoResource(filename)
-    , m_layerStyle(0)
 {
 
 }
 
-KisPSDLayerStyleResource::~KisPSDLayerStyleResource()
+KisPSDLayerStyleCollectionResource::~KisPSDLayerStyleCollectionResource()
 {
-    delete m_layerStyle;
+    qDeleteAll(m_layerStyles);
+    m_layerStyles.clear();
 }
 
-bool KisPSDLayerStyleResource::load()
+bool KisPSDLayerStyleCollectionResource::load()
 {
     QFile file(filename());
     if (file.size() == 0) return false;
@@ -54,18 +54,15 @@ bool KisPSDLayerStyleResource::load()
     file.close();
 
     return result;
-
 }
 
-bool KisPSDLayerStyleResource::loadFromDevice(QIODevice *dev)
+bool KisPSDLayerStyleCollectionResource::loadFromDevice(QIODevice *dev)
 {
-    if (!m_layerStyle) {
-        m_layerStyle = new KisPSDLayerStyle();
-    }
-    return m_layerStyle->readASL(dev);
+    m_layerStyles = KisPSDLayerStyle::readASL(dev);
+    return true;
 }
 
-bool KisPSDLayerStyleResource::save()
+bool KisPSDLayerStyleCollectionResource::save()
 {
     QFile file(filename());
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
@@ -74,19 +71,24 @@ bool KisPSDLayerStyleResource::save()
     return res;
 }
 
-bool KisPSDLayerStyleResource::saveToDevice(QIODevice *dev) const
+bool KisPSDLayerStyleCollectionResource::saveToDevice(QIODevice *dev) const
 {
-    return m_layerStyle->writeASL(dev);
+    return KisPSDLayerStyle::writeASL(dev, m_layerStyles);
 }
 
-QString KisPSDLayerStyleResource::defaultFileExtension() const
+QString KisPSDLayerStyleCollectionResource::defaultFileExtension() const
 {
     return QString(".asl");
 }
 
-QByteArray KisPSDLayerStyleResource::generateMD5() const
+QVector<KisPSDLayerStyle *> KisPSDLayerStyleCollectionResource::layerStyles() const
 {
-    if (m_layerStyle) {
+    return m_layerStyles;
+}
+
+QByteArray KisPSDLayerStyleCollectionResource::generateMD5() const
+{
+    if (m_layerStyles.size() > 0) {
         QByteArray ba;
         QBuffer buf(&ba);
         saveToDevice(&buf);

@@ -273,7 +273,6 @@ set(kritaui_LIB_SRCS
     processing/fill_processing_visitor.cpp
     kis_mirror_axis.cpp
     kis_psd_layer_style_resource.cpp
-
 )
 
 if(WIN32)
@@ -345,7 +344,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     input/config/kis_mouse_input_editor.ui
     input/config/kis_wheel_input_editor.ui
     input/config/kis_key_input_editor.ui
-
 
     layerstyles/wdgBevelAndEmboss.ui
     layerstyles/wdgblendingoptions.ui

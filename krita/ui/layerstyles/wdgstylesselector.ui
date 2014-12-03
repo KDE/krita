@@ -20,8 +20,11 @@
       <string>Styles</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QListWidget" name="listStyles"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QComboBox" name="cmbStyleCollections"/>
       </item>
      </layout>
     </widget>

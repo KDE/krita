@@ -127,8 +127,14 @@ private:
 };
 
 class StylesSelector : public QWidget {
+    Q_OBJECT
 public:
     StylesSelector(QWidget *parent);
+private slots:
+    void loadStyles(const QString &name);
+    void selectStyle(QListWidgetItem *previous, QListWidgetItem* current);
+signals:
+    void styleSelected(KisPSDLayerStyle *style);
 private:
     Ui::WdgStylesSelector ui;
 };
@@ -150,7 +156,7 @@ signals:
 
 public slots:
     void changePage(QListWidgetItem *, QListWidgetItem*);
-
+    void setStyle(KisPSDLayerStyle *style);
 private:
 
     KisPSDLayerStyle *m_layerStyle;

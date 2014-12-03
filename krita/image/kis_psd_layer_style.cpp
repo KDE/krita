@@ -29,6 +29,9 @@ struct KisPSDLayerStyle::Private
         , effects_count(0)
         , visible(false)
     {}
+
+    QString name;
+
     quint16 version;
     quint8 effects_count; // Effects count: may be 6 (for the 6 effects in Photoshop 5 and 6) or 7 (for Photoshop 7.0)
     bool visible; // common state info, visible: always true
@@ -78,16 +81,19 @@ void KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
     // XXX copy all the contents of KisPSDLayerStyle::Private
 }
 
-bool KisPSDLayerStyle::writeASL(QIODevice *io) const
+QString KisPSDLayerStyle::name() const
+{
+    return d->name;
+}
+
+bool KisPSDLayerStyle::writeASL(QIODevice *io, QVector<KisPSDLayerStyle *> )
 {
     return false;
 }
 
-bool KisPSDLayerStyle::readASL(QIODevice *io)
+QVector<KisPSDLayerStyle *> KisPSDLayerStyle::readASL(QIODevice *io)
 {
-    quint32 tag;
-
-    return false;
+    return QVector<KisPSDLayerStyle*>();
 }
 
 bool KisPSDLayerStyle::write(QIODevice *io) const

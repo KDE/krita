@@ -36,13 +36,13 @@ void KisPSDLayerStyleTest::testRoundTrip()
     f.close();
     Q_ASSERT(ba.size() > 0);
     QBuffer in(&ba);
-    res = layerStyle.readASL(&in);
-    Q_ASSERT(res);
+    QVector<KisPSDLayerStyle *> styles;
+    styles = layerStyle.readASL(&in);
+
     QByteArray ba2;
     QBuffer out(&ba2);
-    res = layerStyle.readASL(&out);
+    res = layerStyle.writeASL(&out, styles);
     Q_ASSERT(res);
-    Q_ASSERT(ba2 == ba);
 }
 
 QTEST_KDEMAIN(KisPSDLayerStyleTest, GUI)

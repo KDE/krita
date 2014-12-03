@@ -41,10 +41,10 @@ class KoResource;
 class KoResourceLoaderThread;
 class KisPaintOpPreset;
 class KisWorkspaceResource;
+class KisPSDLayerStyleResource;
 
 typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
-
 
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {
@@ -57,6 +57,7 @@ public:
 
     KisPaintOpPresetResourceServer* paintOpPresetServer();
     KoResourceServer<KisWorkspaceResource>* workspaceServer();
+    KoResourceServer<KisPSDLayerStyleResource>* layerStyleServer();
 
     void brushBlacklistCleanup();
 signals:
@@ -70,11 +71,13 @@ private:
 
     KisPaintOpPresetResourceServer* m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
+    KoResourceServer<KisPSDLayerStyleResource>* m_layerStyleServer;
 
 private:
 
-    KoResourceLoaderThread *paintOpPresetThread;
-    KoResourceLoaderThread *workspaceThread;
+    KoResourceLoaderThread *m_paintOpPresetThread;
+    KoResourceLoaderThread *m_workspaceThread;
+    KoResourceLoaderThread *m_layerStyleThread;
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

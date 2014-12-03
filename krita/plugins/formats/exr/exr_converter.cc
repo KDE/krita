@@ -131,11 +131,14 @@ struct exrConverter::Private {
     bool showNotifications;
 
 
-    template <typename T>
-    void unmultiplyAlpha(Rgba<T> *pixel);
+    template <class WrapperType>
+    void unmultiplyAlpha(typename WrapperType::pixel_type *pixel);
 
     template<typename _T_>
     void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype);
+
+    template<typename _T_>
+    void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype);
 
 
     QDomDocument loadExtraLayersInfo(const Imf::Header &header);
@@ -189,45 +192,6 @@ const KoColorSpace* kisTypeToColorSpace(QString model, ImageType imageType)
     }
 }
 
-template<typename _T_>
-void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
-{
-    QVector<_T_> pixels(width*height);
-
-    Q_ASSERT(info.channelMap.contains("G"));
-    dbgFile << "G -> " << info.channelMap["G"];
-
-    KIS_ASSERT_RECOVER_RETURN(
-        layer->paintDevice()->colorSpace()->colorModelId() == GrayAColorModelID);
-
-    for (int y = 0; y < height; ++y) {
-        Imf::FrameBuffer frameBuffer;
-        _T_* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
-                           Imf::Slice(ptype, (char *) frameBufferData,
-                                      sizeof(_T_) * 1,
-                                      sizeof(_T_) * width));
-
-        file.setFrameBuffer(frameBuffer);
-        file.readPixels(ystart + y);
-        _T_ *rgba = pixels.data();
-        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
-        do {
-
-            _T_ unmultipliedRed = *rgba;
-
-            _T_* dst = reinterpret_cast<_T_*>(it->rawData());
-
-            // WARNING: We expect GRAYA colorspace only!
-            dst[0] = unmultipliedRed;
-            dst[1] = 1.0;
-
-            ++rgba;
-        } while (it->nextPixel());
-    }
-
-}
-
 template <typename T>
 static inline T alphaEpsilon()
 {
@@ -241,45 +205,107 @@ static inline T alphaNoiseThreshold()
 }
 
 template <typename T>
-void exrConverter::Private::unmultiplyAlpha(Rgba<T> *pixel)
+struct RgbPixelWrapper
 {
-    if (pixel->a < alphaEpsilon<T>() &&
-        (pixel->r > 0.0 ||
-         pixel->g > 0.0 ||
-         pixel->b > 0.0)) {
+    typedef T channel_type;
+    typedef Rgba<T> pixel_type;
+
+    RgbPixelWrapper(Rgba<T> &_pixel) : pixel(_pixel) {}
+
+    inline T alpha() const {
+        return pixel.a;
+    }
+
+    inline bool checkMultipliedColorsConsistent() const {
+        return !(pixel.a < alphaEpsilon<T>() &&
+                 (pixel.r > 0.0 ||
+                  pixel.g > 0.0 ||
+                  pixel.b > 0.0));
+    }
+
+    inline bool checkUnmultipliedColorsConsistent(const Rgba<T> &mult) const {
+        const T alpha = pixel.a;
+
+        return alpha >= alphaNoiseThreshold<T>() ||
+            (pixel.r * alpha == mult.r &&
+             pixel.g * alpha == mult.g &&
+             pixel.b * alpha == mult.b);
+    }
+
+    inline void setUnmultiplied(const Rgba<T> &mult, qreal newAlpha) {
+        pixel.r = mult.r / newAlpha;
+        pixel.g = mult.g / newAlpha;
+        pixel.b = mult.b / newAlpha;
+        pixel.a = newAlpha;
+    }
+
+    Rgba<T> &pixel;
+};
+
+template <typename T>
+struct GrayPixelWrapper
+{
+    typedef T channel_type;
+    typedef typename KoGrayTraits<T>::Pixel pixel_type;
+
+    GrayPixelWrapper(pixel_type &_pixel) : pixel(_pixel) {}
+
+    inline T alpha() const {
+        return pixel.alpha;
+    }
+
+    inline bool checkMultipliedColorsConsistent() const {
+        return !(pixel.alpha < alphaEpsilon<T>() &&
+                 pixel.gray > 0.0);
+    }
+
+    inline bool checkUnmultipliedColorsConsistent(const pixel_type &mult) const {
+        const T alpha = pixel.alpha;
+
+        return alpha >= alphaNoiseThreshold<T>() ||
+            pixel.gray * alpha == mult.gray;
+    }
+
+    inline void setUnmultiplied(const pixel_type &mult, qreal newAlpha) {
+        pixel.gray = mult.gray / newAlpha;
+        pixel.alpha = newAlpha;
+    }
+
+    pixel_type &pixel;
+};
+
+template <class WrapperType>
+void exrConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pixel)
+{
+    typedef typename WrapperType::pixel_type pixel_type;
+    typedef typename WrapperType::channel_type channel_type;
+
+    WrapperType srcPixel(*pixel);
+
+    if (!srcPixel.checkMultipliedColorsConsistent()) {
 
         bool alphaWasModified = false;
-        T newAlpha = 0.0;
+        channel_type newAlpha = srcPixel.alpha();
 
-        T r;
-        T g;
-        T b;
+        pixel_type __dstPixelData;
+        WrapperType dstPixel(__dstPixelData);
 
         /**
          * Division by a tiny alpha may result in an overflow of half
          * value. That is why we use safe iterational approach.
          */
         while (1) {
-            r = pixel->r / newAlpha;
-            g = pixel->g / newAlpha;
-            b = pixel->b / newAlpha;
+            dstPixel.setUnmultiplied(srcPixel.pixel, newAlpha);
 
-            if (newAlpha >= alphaNoiseThreshold<T>() ||
-                (r * newAlpha == pixel->r &&
-                 g * newAlpha == pixel->g &&
-                 b * newAlpha == pixel->b)) {
-
+            if (dstPixel.checkUnmultipliedColorsConsistent(srcPixel.pixel)) {
                 break;
             }
 
-            newAlpha += alphaEpsilon<T>();
+            newAlpha += alphaEpsilon<channel_type>();
             alphaWasModified = true;
         }
 
-        pixel->r = r;
-        pixel->g = g;
-        pixel->b = b;
-        pixel->a = newAlpha;
+        *pixel = dstPixel.pixel;
 
         if (alphaWasModified &&
             !this->warnedAboutChangedAlpha) {
@@ -293,7 +319,9 @@ void exrConverter::Private::unmultiplyAlpha(Rgba<T> *pixel)
                       "<nl/><nl/>"
                       "This will hardly make any visual difference just keep it in mind."
                       "<nl/><nl/>"
-                      "<note>Modified alpha will have a range from <numid>%1</numid> to <numid>%2</numid></note>", alphaEpsilon<T>(), alphaNoiseThreshold<T>());
+                      "<note>Modified alpha will have a range from <numid>%1</numid> to <numid>%2</numid></note>",
+                      alphaEpsilon<channel_type>(),
+                      alphaNoiseThreshold<channel_type>());
 
             if (this->showNotifications) {
                 KMessageBox::information(0, msg, i18nc("@title:window", "EXR image will be modified"), "dontNotifyEXRChangedAgain");
@@ -304,10 +332,8 @@ void exrConverter::Private::unmultiplyAlpha(Rgba<T> *pixel)
             this->warnedAboutChangedAlpha = true;
         }
 
-    } else if (pixel->a > 0.0) {
-        pixel->r /= pixel->a;
-        pixel->g /= pixel->a;
-        pixel->b /= pixel->a;
+    } else if (srcPixel.alpha() > 0.0) {
+        srcPixel.setUnmultiplied(srcPixel.pixel, srcPixel.alpha());
     }
 }
 
@@ -365,7 +391,7 @@ void exrConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo&
         do {
 
             if (hasAlpha) {
-                unmultiplyAlpha(rgba);
+                unmultiplyAlpha<RgbPixelWrapper<_T_> >(rgba);
             }
 
             typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it->rawData());
@@ -381,6 +407,61 @@ void exrConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo&
 
 
             ++rgba;
+        } while (it->nextPixel());
+    }
+
+}
+
+template<typename _T_>
+void exrConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
+{
+    typedef typename GrayPixelWrapper<_T_>::channel_type channel_type;
+    typedef typename GrayPixelWrapper<_T_>::pixel_type pixel_type;
+
+    KIS_ASSERT_RECOVER_RETURN(
+        layer->paintDevice()->colorSpace()->colorModelId() == GrayAColorModelID);
+
+    QVector<pixel_type> pixels(width);
+
+    Q_ASSERT(info.channelMap.contains("G"));
+    dbgFile << "G -> " << info.channelMap["G"];
+
+    bool hasAlpha = info.channelMap.contains("A");
+    dbgFile << "Has Alpha:" << hasAlpha;
+
+
+    for (int y = 0; y < height; ++y) {
+        Imf::FrameBuffer frameBuffer;
+        pixel_type* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
+        frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
+                           Imf::Slice(ptype, (char *) &frameBufferData->gray,
+                                      sizeof(pixel_type) * 1,
+                                      sizeof(pixel_type) * width));
+
+        if (hasAlpha) {
+            frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
+                               Imf::Slice(ptype, (char *) &frameBufferData->alpha,
+                                          sizeof(pixel_type) * 1,
+                                          sizeof(pixel_type) * width));
+        }
+
+        file.setFrameBuffer(frameBuffer);
+        file.readPixels(ystart + y);
+
+        pixel_type *srcPtr = pixels.data();
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+        do {
+
+            if (hasAlpha) {
+                unmultiplyAlpha<GrayPixelWrapper<_T_> >(srcPtr);
+            }
+
+            pixel_type* dstPtr = reinterpret_cast<pixel_type*>(it->rawData());
+
+            dstPtr->gray = srcPtr->gray;
+            dstPtr->alpha = hasAlpha ? srcPtr->alpha : channel_type(1.0);
+
+            ++srcPtr;
         } while (it->nextPixel());
     }
 
@@ -576,8 +657,29 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 info.channelMap.clear();
                 info.channelMap["G"] = channel;
             }
-        }
-        else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+        } else if (info.channelMap.size() == 2) {
+            modelId = GrayAColorModelID.id();
+
+            QMap<QString,QString>::iterator it = info.channelMap.begin();
+            QMap<QString,QString>::iterator end = info.channelMap.end();
+
+            QString failingChannelKey;
+
+            for (; it != end; ++it) {
+                if (it.key() != "G" && it.key() != "A") {
+                    failingChannelKey = it.key();
+                    break;
+                }
+            }
+
+            info.remappedChannels.push_back(
+                ExrPaintLayerInfo::Remap(failingChannelKey, "G"));
+
+            QString failingChannelValue = info.channelMap[failingChannelKey];
+            info.channelMap.remove(failingChannelKey);
+            info.channelMap["G"] = failingChannelValue;
+
+        } else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
 
             if (info.channelMap.contains("R") && info.channelMap.contains("G") && info.channelMap.contains("B")) {
                 modelId = RGBAColorModelID.id();
@@ -676,13 +778,14 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
 
             switch (info.channelMap.size()) {
             case 1:
+            case 2:
                 // Decode the data
                 switch (imageType) {
                 case IT_FLOAT16:
-                    decodeData1<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
+                    m_d->decodeData1<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
                     break;
                 case IT_FLOAT32:
-                    decodeData1<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
+                    m_d->decodeData1<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
                     break;
                 case IT_UNKNOWN:
                 case IT_UNSUPPORTED:

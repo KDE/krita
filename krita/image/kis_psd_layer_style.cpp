@@ -22,6 +22,8 @@
 #include <psd.h>
 #include <psd_utils.h>
 
+#include <klocale.h>
+
 struct KisPSDLayerStyle::Private
 {
     Private()
@@ -63,6 +65,11 @@ struct KisPSDLayerStyle::Private
 KisPSDLayerStyle::KisPSDLayerStyle()
     : d(new Private())
 {
+    d->name = i18n("Unnamed");
+    d->version = 7;
+    d->visible = true;
+
+
 }
 
 KisPSDLayerStyle::~KisPSDLayerStyle()
@@ -104,4 +111,14 @@ bool KisPSDLayerStyle::write(QIODevice *io) const
 bool KisPSDLayerStyle::read(QIODevice *io)
 {
     return false;
+}
+
+psd_layer_effects_drop_shadow &KisPSDLayerStyle::dropShadow() const
+{
+    return d->drop_shadow;
+}
+
+void KisPSDLayerStyle::setDropShadow(const psd_layer_effects_drop_shadow &dropShadow)
+{
+    d->drop_shadow = dropShadow;
 }

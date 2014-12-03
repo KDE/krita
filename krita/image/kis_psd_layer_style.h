@@ -22,6 +22,8 @@ class QIODevice;
 
 #include <QVector>
 
+#include <psd.h>
+
 #include <krita_export.h>
 
 /**
@@ -59,6 +61,10 @@ public:
 
     /// Load this style object
     bool read(QIODevice *io);
+
+
+    psd_layer_effects_drop_shadow & dropShadow() const;
+    void setDropShadow(const psd_layer_effects_drop_shadow &dropShadow);
 
 private:
     struct Private;

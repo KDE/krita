@@ -104,7 +104,9 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyle *style)
 
 KisPSDLayerStyle *KisDlgLayerStyle::style() const
 {
-    m_layerStyle->setDropShadow(m_dropShadow->dropShadow());
+    psd_layer_effects_drop_shadow ds = m_dropShadow->dropShadow();
+    ds.effect_enable = (wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
+    m_layerStyle->setDropShadow(ds);
 
     return m_layerStyle;
 }

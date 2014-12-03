@@ -904,8 +904,10 @@ void KisLayerManager::layerStyle()
 
     KisDlgLayerStyle dlg(style);
     if (dlg.exec() == QDialog::Accepted) {
-        layer->setLayerStyle(style);
+        layer->setLayerStyle(new KisPSDLayerStyle(*style));
     }
+
+    delete style;
 
 }
 

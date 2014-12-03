@@ -68,8 +68,6 @@ KisPSDLayerStyle::KisPSDLayerStyle()
     d->name = i18n("Unnamed");
     d->version = 7;
     d->visible = true;
-
-
 }
 
 KisPSDLayerStyle::~KisPSDLayerStyle()
@@ -80,8 +78,11 @@ KisPSDLayerStyle::~KisPSDLayerStyle()
 KisPSDLayerStyle::KisPSDLayerStyle(const KisPSDLayerStyle &rhs)
     : d(new Private())
 {
-    // XXX: copy all the contents of KisPSDLayerStyle::Private
-}
+    d->name = rhs.d->name;
+    d->version = rhs.d->version;
+    d->visible = rhs.d->visible;
+    d->drop_shadow = rhs.d->drop_shadow;
+ }
 
 void KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
 {

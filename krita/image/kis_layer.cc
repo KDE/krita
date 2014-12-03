@@ -107,9 +107,6 @@ private:
 
 struct KisLayer::Private
 {
-
-public:
-
     KisImageWSP image;
     QBitArray channelFlags;
     KisMetaData::Store* metaDataStore;
@@ -137,7 +134,12 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
-        m_d->layerStyle = new KisPSDLayerStyle(*rhs.m_d->layerStyle);
+        if (rhs.m_d->layerStyle) {
+            m_d->layerStyle = new KisPSDLayerStyle(*rhs.m_d->layerStyle);
+        }
+        else {
+            m_d->layerStyle = 0;
+        }
         setName(rhs.name());
     }
 }
@@ -180,7 +182,7 @@ KisPSDLayerStyle *KisLayer::layerStyle() const
 
 void KisLayer::setLayerStyle(KisPSDLayerStyle *layerStyle)
 {
-    delete layerStyle;
+    delete m_d->layerStyle;
     m_d->layerStyle = layerStyle;
 }
 

@@ -465,8 +465,6 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         gc.setCompositeOp(COMPOSITE_COPY);
         QRect rc(srcDevice->extent());
         gc.bitBlt(rc.topLeft(), srcDevice, rc);
-
-        qDebug() << "Doing complex copying";
     } else {
         clone = new KisPaintDevice(*srcDevice);
     }
@@ -904,7 +902,7 @@ void KisLayerManager::layerStyle()
 
     KisDlgLayerStyle dlg(style);
     if (dlg.exec() == QDialog::Accepted) {
-        layer->setLayerStyle(new KisPSDLayerStyle(*style));
+        layer->setLayerStyle(new KisPSDLayerStyle(*dlg.style()));
     }
 
     delete style;

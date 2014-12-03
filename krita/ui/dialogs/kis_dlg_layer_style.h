@@ -20,6 +20,8 @@
 
 #include <kdialog.h>
 
+#include <psd.h>
+
 #include "ui_wdglayerstyles.h"
 #include "ui_wdgBevelAndEmboss.h"
 #include "ui_wdgblendingoptions.h"
@@ -72,6 +74,8 @@ private:
 class DropShadow : public QWidget {
 public:
     DropShadow(QWidget *parent);
+    void setDropShadow(const psd_layer_effects_drop_shadow &dropShadow);
+    psd_layer_effects_drop_shadow dropShadow() const;
 private:
     Ui::WdgDropShadow ui;
 
@@ -156,7 +160,12 @@ signals:
 
 public slots:
     void changePage(QListWidgetItem *, QListWidgetItem*);
+
+    // Sets all the widgets to the contents of the given style
     void setStyle(KisPSDLayerStyle *style);
+
+    KisPSDLayerStyle *style() const;
+
 private:
 
     KisPSDLayerStyle *m_layerStyle;

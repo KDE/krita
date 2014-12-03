@@ -22,6 +22,10 @@
 #include <QTreeWidget>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QComboBox>
+#include <QDial>
+#include <QCheckBox>
+#include <QSpinBox>
 
 #include "kis_config.h"
 
@@ -80,8 +84,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent
             SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
              this, SLOT(changePage(QListWidgetItem*,QListWidgetItem*)));
 
-
-
+    setStyle(layerStyle);
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -94,7 +97,16 @@ void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *pre
 
 void KisDlgLayerStyle::setStyle(KisPSDLayerStyle *style)
 {
+    QListWidgetItem *item = wdgLayerStyles.lstStyleSelector->item(2);
+    item->setCheckState(style->dropShadow().effect_enable ? Qt::Checked : Qt::Unchecked);
+    m_dropShadow->setDropShadow(style->dropShadow());
+}
 
+KisPSDLayerStyle *KisDlgLayerStyle::style() const
+{
+    m_layerStyle->setDropShadow(m_dropShadow->dropShadow());
+
+    return m_layerStyle;
 }
 
 BevelAndEmboss::BevelAndEmboss(QWidget *parent)
@@ -129,6 +141,44 @@ DropShadow::DropShadow(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
+    ui.doubleOpacity->setRange(0, 100, 0);
+    ui.doubleOpacity->setSuffix("%");
+
+}
+
+void DropShadow::setDropShadow(const psd_layer_effects_drop_shadow &dropShadow)
+{
+    ui.chkLayerKnocksOutDropShadow->setChecked(dropShadow.knocks_out);
+    //ui.cmbContour;
+    ui.chkAntiAliased->setChecked(dropShadow.anti_aliased);
+    ui.intNoise->setValue(dropShadow.noise);
+    ui.cmbCompositeOp->selectCompositeOp(KoID(dropShadow.blend_mode));
+    ui.doubleOpacity->setValue(dropShadow.opacity);
+    ui.dialAngle->setValue(dropShadow.angle);
+    ui.intAngle->setValue(dropShadow.angle);
+    ui.chkUseGlobalLight->setChecked(dropShadow.use_global_light);
+    ui.intDistance->setValue(dropShadow.distance);
+    ui.intSpread->setValue(dropShadow.spread);
+    ui.intSize->setValue(dropShadow.size);
+}
+
+psd_layer_effects_drop_shadow DropShadow::dropShadow() const
+{
+    psd_layer_effects_drop_shadow ds;
+    ds.knocks_out = ui.chkLayerKnocksOutDropShadow->isChecked();
+    // ui.cmbContour;
+    ds.anti_aliased = ui.chkAntiAliased->isChecked();
+    ds.noise = ui.intNoise->value();
+    ds.blend_mode = ui.cmbCompositeOp->selectedCompositeOp().id();
+    ds.opacity = ui.doubleOpacity->value();
+    ds.angle = ui.dialAngle->value();
+    ds.use_global_light = ui.chkUseGlobalLight->isChecked();
+    ds.distance = ui.intDistance->value();
+    ds.spread = ui.intSpread->value();
+    ds.size = ui.intSize->value();
+
+    return ds;
 }
 
 

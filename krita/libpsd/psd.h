@@ -26,6 +26,9 @@
 #include <QColor>
 #include <QVector>
 
+#include <KoColorModelStandardIds.h>
+#include <KoCompositeOpRegistry.h>
+
 #include "libkispsd_export.h"
 
 const int MAX_CHANNELS = 56;
@@ -210,6 +213,27 @@ struct psd_pattern {
 
 // dsdw, isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
 struct psd_layer_effects_drop_shadow {
+
+    psd_layer_effects_drop_shadow()
+        : effect_enable(false)
+        , blend_mode(COMPOSITE_MULT)
+        , color(Qt::black)
+        , native_color(Qt::black)
+        , opacity(75)
+        , angle(120)
+        , use_global_light(true)
+        , distance(21)
+        , spread(0)
+        , size(21)
+        , anti_aliased(0)
+        , noise(0)
+        , knocks_out(true)
+    {
+        for(int i = 0; i < 256; ++i) {
+            contour_lookup_table[i] = i;
+        }
+    }
+
     bool effect_enable; // Effect enabled
 
     QString blend_mode; // Blend mode: 4 bytes for signature and 4 bytes for key

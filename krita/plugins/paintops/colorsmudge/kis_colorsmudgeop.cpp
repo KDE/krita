@@ -202,43 +202,27 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     }
 
     if (m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
-        // cut out the area from the canvas under the brush
-        // and blit it to the temporary painting device
-        if(m_smudgeRadiusOption.isChecked())
-        {
-            m_smudgeRadiusOption.apply(*m_smudgePainter,info,m_brush->width(),m_dstDabRect.center().x(),m_dstDabRect.center().y(),painter()->device());
-            color = m_smudgePainter->paintColor();
-
-        }
         m_smudgePainter->bitBlt(QPoint(), painter()->device(), srcDabRect);
-    }
-    else {
-        QPoint pt = (srcDabRect.topLeft() + hotSpot).toPoint();
-        // get the pixel on the canvas that lies beneath the hot spot
-        // of the dab and fill  the temporary paint device with that color
+    } else {
+            QPoint pt = (srcDabRect.topLeft() + hotSpot).toPoint();
 
-        KoColor color = painter()->paintColor();
-
-
-
-        if(m_smudgeRadiusOption.isChecked())
-        {
+        if(m_smudgeRadiusOption.isChecked()) {
             m_smudgeRadiusOption.apply(*m_smudgePainter,info,m_brush->width(),pt.x(),pt.y(),painter()->device());
             KoColor color2 =  m_smudgePainter->paintColor();
             m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(),color2);
 
-        }
+        } else {
+            KoColor color = painter()->paintColor();
 
-        else
-        {
+
+            // get the pixel on the canvas that lies beneath the hot spot
+            // of the dab and fill  the temporary paint device with that color
+
             KisCrossDeviceColorPickerInt colorPicker(painter()->device(), color);
-             colorPicker.pickColor(pt.x(), pt.y(), color.data());
+            colorPicker.pickColor(pt.x(), pt.y(), color.data());
 
-             m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color);
-
+            m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color);
         }
-
-
     }
 
     // if the user selected the color smudge option
@@ -256,7 +240,6 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         KoColor color = painter()->paintColor();
         m_gradientOption.apply(color, m_gradient, info);
         m_colorRatePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color);
-        
     }
 
 

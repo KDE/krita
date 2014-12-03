@@ -261,5 +261,22 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>dialAngle</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>intAngle</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>149</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>194</x>
+     <y>139</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

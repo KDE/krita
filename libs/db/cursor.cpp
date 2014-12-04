@@ -41,7 +41,7 @@ Cursor::Cursor(Connection* conn, const QString& statement, uint options)
         , m_options(options)
 {
 #ifdef CALLIGRADB_DEBUG_GUI
-    KexiDB::debugGUI(QString("Create cursor: ") + statement);
+    KexiDB::debugGUI(QString("Create cursor for raw SQL: ") + statement);
 #endif
     init();
 }
@@ -53,7 +53,9 @@ Cursor::Cursor(Connection* conn, QuerySchema& query, uint options)
         , m_options(options)
 {
 #ifdef CALLIGRADB_DEBUG_GUI
-    KexiDB::debugGUI(QString("Create cursor for query \"%1\": ").arg(query.name()) + query.debugString());
+    KexiDB::debugGUI(QString("Create cursor for query \"%1\":\n")
+                     .arg(KexiDB::iifNotEmpty(query.name(), "<unnamed>"))
+                     + query.debugString());
 #endif
     init();
 }
@@ -105,10 +107,12 @@ void Cursor::init()
 Cursor::~Cursor()
 {
 #ifdef CALLIGRADB_DEBUG_GUI
+#if 0 // too many details
     if (m_query)
         KexiDB::debugGUI(QString("~ Delete cursor for query"));
     else
         KexiDB::debugGUI(QString("~ Delete cursor: ") + m_rawStatement);
+#endif
 #endif
     /* if (!m_query)
         KexiDBDbg << "Cursor::~Cursor() '" << m_rawStatement.toLatin1() << "'";

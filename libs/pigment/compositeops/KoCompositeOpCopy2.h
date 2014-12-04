@@ -52,17 +52,23 @@ public:
         using namespace Arithmetic;
         opacity = mul(maskAlpha, opacity);
 
+        channels_type newAlpha = zeroValue<channels_type>();
+
         if(dstAlpha == zeroValue<channels_type>() ||
            opacity == unitValue<channels_type>()) {
 
+            newAlpha = lerp(dstAlpha, srcAlpha, opacity);
 
             // don't blend if the color of the destination is undefined (has zero opacity)
             // copy the source channel instead
             for(qint32 i=0; i<channels_nb; ++i)
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
                     dst[i] = src[i];
-        }
-        else {
+
+        } else if (opacity == zeroValue<channels_type>()) {
+            newAlpha = dstAlpha;
+
+        } else {
             /**
              * In case the mask is not opaque, we should also pre-blend
              * the source pixel alpha channel to the mask. Otherwise
@@ -70,16 +76,33 @@ public:
              * be mixed into destination event when the source alpha
              * is negligible.
              */
-            channels_type srcBlend = mul(opacity, srcAlpha);
+
+            newAlpha = lerp(dstAlpha, srcAlpha, opacity);
 
             // blend the color channels
-            for(qint32 i=0; i<channels_nb; ++i)
-                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
-                    dst[i] = lerp(dst[i], src[i], srcBlend);
+            for(qint32 i=0; i<channels_nb; ++i) {
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+
+                    /**
+                     * We use the most fundamental OVER algorithm here,
+                     * which miltiplies, blends and then unmultiplies the
+                     * channels
+                     */
+
+                    typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype composite_type;
+
+                    channels_type dstMult = mul(dst[i], dstAlpha);
+                    channels_type srcMult = mul(src[i], srcAlpha);
+                    channels_type blendedValue = lerp(dstMult, srcMult, opacity);
+
+                    composite_type normedValue = KoColorSpaceMaths<channels_type>::divide(blendedValue, newAlpha);
+
+                    dst[i] = KoColorSpaceMaths<channels_type>::clampAfterScale(normedValue);
+                }
+            }
         }
 
-        // blend the alpha channel
-        return lerp(dstAlpha, srcAlpha, opacity);
+        return newAlpha;
     }
 };
 

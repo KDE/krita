@@ -32,6 +32,7 @@ private slots:
     void testColorSmudgeStroke();
     void testAutoTextured17();
     void testAutoTextured38();
+    void testMixDullCompositioning();
 };
 
 #endif /* __FREEHAND_STROKE_TEST_H */

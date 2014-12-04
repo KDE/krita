@@ -42,7 +42,8 @@
 #include "kis_splash_screen.h"
 
 #if defined Q_OS_WIN
-#include "stdlib.h"
+#include <Windows.h>
+#include <stdlib.h>
 #include <ui/input/wintab/kis_tablet_support_win.h>
 #ifdef USE_BREAKPAD
     #include "kis_crash_handler.h"
@@ -63,6 +64,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     qputenv("KDE_DEBUG", "1");
     KisCrashHandler crashHandler;
     Q_UNUSED(crashHandler);
+#endif
+
+#if defined Q_OS_WIN
+    SetProcessDPIAware(); // The n-trig wintab driver needs this to report the correct dimensions
 #endif
 
     int state;

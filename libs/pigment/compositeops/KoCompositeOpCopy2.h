@@ -79,6 +79,10 @@ public:
 
             newAlpha = lerp(dstAlpha, srcAlpha, opacity);
 
+            if (newAlpha == zeroValue<channels_type>()) {
+                return newAlpha;
+            }
+
             // blend the color channels
             for(qint32 i=0; i<channels_nb; ++i) {
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {

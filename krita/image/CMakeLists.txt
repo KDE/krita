@@ -56,6 +56,7 @@ endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_debug.cpp
    kis_assert.cpp
    kis_distance_information.cpp
    kis_painter.cc

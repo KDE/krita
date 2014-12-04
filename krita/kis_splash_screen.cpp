@@ -118,7 +118,7 @@ void KisSplashScreen::show()
 {
     QRect r(QPoint(), sizeHint());
     resize(r.size());
-    move(QApplication::desktop()->screenGeometry().center() - r.center());
+    move(QApplication::desktop()->availableGeometry().center() - r.center());
     if (isVisible()) {
         repaint();
     }

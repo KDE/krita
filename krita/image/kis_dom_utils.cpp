@@ -21,6 +21,7 @@
 #include <QTransform>
 #include <QDebug>
 
+#include "kis_debug.h"
 
 namespace KisDomUtils {
 
@@ -95,7 +96,6 @@ void saveValue(QDomElement *parent, const QString &tag, const QTransform &t)
     e.setAttribute("m32", t.m32());
     e.setAttribute("m33", t.m33());
 }
-#include "kis_debug.h"
 
 bool findOnlyElement(const QDomElement &parent, const QString &tag, QDomElement *el, QStringList *errorMessages)
 {

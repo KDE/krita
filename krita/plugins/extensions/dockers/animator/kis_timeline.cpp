@@ -251,7 +251,6 @@ void KisTimelineWidget::init()
     setLayout(lay);
 
     connect(m_settingsDialog, SIGNAL(sigTimelineWithChanged(int)), this, SLOT(timelineWidthChanged(int)));
-    connect(m_playbackDialog, SIGNAL(playbackStateChanged()), dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document()), SLOT(playbackStateChanged()));
 
     m_imported = false;
 }
@@ -283,8 +282,9 @@ void KisTimelineWidget::setCanvas(KisCanvas2 *canvas)
     m_timeline->setModel(new KisAnimationModel(doc));
 
     // Connect all the document signals here
-    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document()), SIGNAL(sigFrameModified()), this, SLOT(documentModified()));
-    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->viewManager()->document()), SIGNAL(sigImportFinished(QHash<int, QList<QRect> >)), this, SLOT(importUI(QHash<int, QList<QRect> >)));
+    connect(doc, SIGNAL(sigFrameModified()), this, SLOT(documentModified()));
+    connect(doc, SIGNAL(sigImportFinished(QHash<int, QList<QRect> >)), this, SLOT(importUI(QHash<int, QList<QRect> >)));
+    connect(m_playbackDialog, SIGNAL(playbackStateChanged()), doc, SLOT(playbackStateChanged()));
 }
 
 void KisTimelineWidget::unsetCanvas()

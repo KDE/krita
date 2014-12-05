@@ -131,7 +131,7 @@
          <property name="spacing">
           <number>3</number>
          </property>
-         <item row="0" column="0" alignment="Qt::AlignRight">
+         <item row="0" column="0">
           <widget class="QLabel" name="textLabel2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -167,7 +167,7 @@
            </item>
           </widget>
          </item>
-         <item row="1" column="0" alignment="Qt::AlignRight">
+         <item row="1" column="0">
           <widget class="QLabel" name="textLabel3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">

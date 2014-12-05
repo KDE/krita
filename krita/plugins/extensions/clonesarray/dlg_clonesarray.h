@@ -25,7 +25,7 @@
 #include "kis_types.h"
 #include "ui_wdg_clonesarray.h"
 
-class KisView2;
+class KisViewManager;
 class KisProcessingApplicator;
 
 
@@ -45,7 +45,7 @@ class DlgClonesArray: public KDialog
     Q_OBJECT
 
 public:
-    DlgClonesArray(KisView2 *view, QWidget * parent = 0);
+    DlgClonesArray(KisViewManager *view, QWidget * parent = 0);
     ~DlgClonesArray();
 
 private slots:
@@ -70,7 +70,7 @@ private:
 
 private:
     WdgClonesArray *m_page;
-    KisView2 *m_view;
+    KisViewManager *m_view;
     KisProcessingApplicator *m_applicator;
     KisLayerSP m_baseLayer;
     bool m_isDirty;

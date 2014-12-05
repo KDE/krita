@@ -20,7 +20,7 @@
 #include "modify_selection_operations.h"
 #include <kis_selection_filters.h>
 
-void GrowSelectionOperation::runFromXML(KisView2* view, const KisOperationConfiguration& config)
+void GrowSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     int xradius = config.getInt("x-radius", 1);
     int yradius = config.getInt("y-radius", 1);
@@ -28,7 +28,7 @@ void GrowSelectionOperation::runFromXML(KisView2* view, const KisOperationConfig
     runFilter(filter, view, config);
 }
 
-void ShrinkSelectionOperation::runFromXML(KisView2* view, const KisOperationConfiguration& config)
+void ShrinkSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     int xradius = config.getInt("x-radius", 1);
     int yradius = config.getInt("y-radius", 1);
@@ -37,7 +37,7 @@ void ShrinkSelectionOperation::runFromXML(KisView2* view, const KisOperationConf
     runFilter(filter, view, config);
 }
 
-void BorderSelectionOperation::runFromXML(KisView2* view, const KisOperationConfiguration& config)
+void BorderSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     int xradius = config.getInt("x-radius", 1);
     int yradius = config.getInt("y-radius", 1);
@@ -45,14 +45,14 @@ void BorderSelectionOperation::runFromXML(KisView2* view, const KisOperationConf
     runFilter(filter, view, config);
 }
 
-void FeatherSelectionOperation::runFromXML(KisView2* view, const KisOperationConfiguration& config)
+void FeatherSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     int radius = config.getInt("radius", 1);
     KisSelectionFilter* filter = new KisFeatherSelectionFilter(radius);
     runFilter(filter, view, config);
 }
 
-void SmoothSelectionOperation::runFromXML(KisView2* view, const KisOperationConfiguration& config)
+void SmoothSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     Q_UNUSED(config);
     KisSelectionFilter* filter = new KisSmoothSelectionFilter();

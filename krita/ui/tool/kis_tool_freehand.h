@@ -109,7 +109,8 @@ private:
     qreal calculatePerspective(const QPointF &documentPoint);
 
 protected:
-    friend class KisView2;
+    friend class KisViewManager;
+    friend class KisView;
     friend class KisSketchView;
     KisSmoothingOptionsSP smoothingOptions() const;
     bool m_assistant;

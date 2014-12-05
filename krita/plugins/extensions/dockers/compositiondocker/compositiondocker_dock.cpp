@@ -35,9 +35,10 @@
 #include <KoCanvasBase.h>
 #include <KoFileDialog.h>
 
-#include <kis_view2.h>
+#include <KisPart.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
@@ -97,9 +98,9 @@ CompositionDockerDock::~CompositionDockerDock()
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    KActionCollection *actionCollection = m_canvas->view()->actionCollection();
+    KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
     foreach(KisAction *action, m_actions) {
-       m_canvas->view()->actionManager()->addAction(action->objectName(), action, actionCollection);
+       m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action, actionCollection);
     }
     updateModel();
 }
@@ -107,9 +108,9 @@ void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 void CompositionDockerDock::unsetCanvas()
 {
     if (m_canvas) {
-        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
+        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->view()->actionManager()->takeAction(action, actionCollection);
+            m_canvas->viewManager()->actionManager()->takeAction(action, actionCollection);
         }
     }
     m_canvas = 0;
@@ -127,14 +128,14 @@ void CompositionDockerDock::deleteClicked()
     QModelIndex index = compositionView->currentIndex();
     if(index.isValid()) {
         KisLayerComposition* composition = m_model->compositionFromIndex(index);
-        m_canvas->view()->image()->removeComposition(composition);
+        m_canvas->viewManager()->image()->removeComposition(composition);
         updateModel();
     }
 }
 
 void CompositionDockerDock::saveClicked()
 {
-    KisImageWSP image = m_canvas->view()->image();
+    KisImageWSP image = m_canvas->viewManager()->image();
     // format as 001, 002 ...
     QString name = saveNameEdit->text();
     if (name.isEmpty()) {
@@ -143,7 +144,7 @@ void CompositionDockerDock::saveClicked()
         do {
             name = QString("%1").arg(i, 3, 10, QChar('0'));
             found = false;
-            foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
+            foreach(KisLayerComposition* composition, m_canvas->viewManager()->image()->compositions()) {
                 if (composition->name() == name) {
                     found = true;
                     break;
@@ -163,7 +164,7 @@ void CompositionDockerDock::saveClicked()
 
 void CompositionDockerDock::updateModel()
 {
-    m_model->setCompositions(m_canvas->view()->image()->compositions());
+    m_model->setCompositions(m_canvas->viewManager()->image()->compositions());
 }
 
 void CompositionDockerDock::exportClicked()
@@ -182,14 +183,14 @@ void CompositionDockerDock::exportClicked()
 		path.append('/');
 	}
 
-    KisImageWSP image = m_canvas->view()->image();
-    QString filename = m_canvas->view()->document()->localFilePath();
+    KisImageWSP image = m_canvas->viewManager()->image();
+    QString filename = m_canvas->viewManager()->document()->localFilePath();
     if (!filename.isEmpty()) {
         QFileInfo info(filename);
         path += info.baseName() + '_';
     }
 
-    foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
+    foreach(KisLayerComposition* composition, m_canvas->viewManager()->image()->compositions()) {
         if (!composition->isExportEnabled()) {
             continue;
         }
@@ -202,13 +203,13 @@ void CompositionDockerDock::exportClicked()
 #else
         QRect r = image->bounds();
 
-        KisDoc2 d;
+        KisDocument *d = KisPart::instance()->createDocument();
 
-        d.prepareForImport();
+        d->prepareForImport();
 
-        KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), image->colorSpace(), composition->name());
+        KisImageWSP dst = new KisImage(d->createUndoStore(), r.width(), r.height(), image->colorSpace(), composition->name());
         dst->setResolution(image->xRes(), image->yRes());
-        d.setCurrentImage(dst);
+        d->setCurrentImage(dst);
         KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", OPACITY_OPAQUE_U8);
         KisPainter gc(paintLayer->paintDevice());
         gc.bitBlt(QPoint(0, 0), image->rootLayer()->projection(), r);
@@ -216,10 +217,12 @@ void CompositionDockerDock::exportClicked()
 
         dst->refreshGraph();
 
-        d.setOutputMimeType("image/png");
-        d.setSaveInBatchMode(true);
+        d->setOutputMimeType("image/png");
+        d->setSaveInBatchMode(true);
 
-        d.exportDocument(KUrl(path + composition->name() + ".png"));
+        d->exportDocument(KUrl(path + composition->name() + ".png"));
+
+        delete d;
 
 #endif
         image->unlock();

@@ -21,16 +21,16 @@
 
 #include <QVariant>
 
-#include <KoFilter.h>
+#include <KisImportExportFilter.h>
 
-class jp2Import : public KoFilter
+class jp2Import : public KisImportExportFilter
 {
     Q_OBJECT
 public:
     jp2Import(QObject *parent, const QVariantList &);
     virtual ~jp2Import();
 public:
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

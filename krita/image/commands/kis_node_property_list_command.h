@@ -20,7 +20,7 @@
 #define KIS_IMAGE_NODE_PROPERTY_LIST_COMMAND_H_
 
 #include "kis_node_command.h"
-#include "KoDocumentSectionModel.h"
+#include "KisDocumentSectionModel.h"
 
 
 /// The command for changing the property list of a layer
@@ -32,13 +32,13 @@ public:
      * Constructor
      * @param node the layer to add
      */
-    KisNodePropertyListCommand(KisNodeSP node, KoDocumentSectionModel::PropertyList newPropertyList);
+    KisNodePropertyListCommand(KisNodeSP node, KisDocumentSectionModel::PropertyList newPropertyList);
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KoDocumentSectionModel::PropertyList m_newPropertyList;
-    KoDocumentSectionModel::PropertyList m_oldPropertyList;
+    KisDocumentSectionModel::PropertyList m_newPropertyList;
+    KisDocumentSectionModel::PropertyList m_oldPropertyList;
 };
 #endif

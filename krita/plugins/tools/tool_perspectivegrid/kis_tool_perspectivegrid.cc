@@ -39,9 +39,10 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 #include <canvas/kis_canvas2.h>
+#include <kis_perspective_grid_decoration.h>
 
 KisToolPerspectiveGrid::KisToolPerspectiveGrid(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_perspectivegrid_cursor.png", 6, 6)),
@@ -59,21 +60,22 @@ void KisToolPerspectiveGrid::activate(ToolActivation toolActivation, const QSet<
 {
     KisTool::activate(toolActivation, shapes);
 
-    m_canvas->view()->perspectiveGridManager()->startEdition();
-    if (! m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid()->hasSubGrids()) {
+    m_canvas->viewManager()->perspectiveGridManager()->startEdition();
+    if (! m_canvas->viewManager()->resourceProvider()->currentImage()->perspectiveGrid()->hasSubGrids()) {
         m_internalMode = MODE_CREATION;
         m_points.clear();
     } else {
         m_internalMode = MODE_EDITING;
         useCursor(KisCursor::arrowCursor());
-        m_canvas->view()->perspectiveGridManager()->setVisible(true);
+        
+        decoration()->setVisible(true);
         m_canvas->updateCanvas(); // TODO only the correct rect
     }
 }
 
 void KisToolPerspectiveGrid::deactivate()
 {
-    m_canvas->view()->perspectiveGridManager()->stopEdition();
+    m_canvas->viewManager()->perspectiveGridManager()->stopEdition();
     if (m_internalMode == MODE_CREATION) {
         m_points.clear();
     }
@@ -106,11 +108,16 @@ KisPerspectiveGridNodeSP KisToolPerspectiveGrid::nodeNearPoint(KisSubPerspective
     return 0;
 }
 
+KisPerspectiveGridDecoration* KisToolPerspectiveGrid::decoration()
+{
+    return qobject_cast<KisPerspectiveGridDecoration*>(m_canvas->decoration("perspectiveGrid"));
+}
+
 void KisToolPerspectiveGrid::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
 
-    KisPerspectiveGrid* pGrid = m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid();
+    KisPerspectiveGrid* pGrid = m_canvas->viewManager()->resourceProvider()->currentImage()->perspectiveGrid();
     if (!pGrid->hasSubGrids() && m_internalMode != MODE_CREATION) { // it's possible that the perspectiv grid was cleared
         m_internalMode = MODE_CREATION;
         m_points.clear();
@@ -227,7 +234,7 @@ void KisToolPerspectiveGrid::continuePrimaryAction(KoPointerEvent *event)
     }
     bool wasHiglightedNode = m_higlightedNode != 0;
     QPointF mousep = m_canvas->viewConverter()->documentToView(event->point);
-    KisPerspectiveGrid* pGrid = m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid();
+    KisPerspectiveGrid* pGrid = m_canvas->viewManager()->resourceProvider()->currentImage()->perspectiveGrid();
     for (QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it) {
         KisSubPerspectiveGrid* grid = *it;
         if ((m_higlightedNode = nodeNearPoint(grid, mousep))) {
@@ -253,13 +260,13 @@ void KisToolPerspectiveGrid::endPrimaryAction(KoPointerEvent *event)
         if (!m_isFirstPoint)  {
             m_points.append(m_currentPt);
             if (m_points.size() == 4) { // wow we have a grid, isn't that cool ?
-                m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid()->addNewSubGrid(
+                m_canvas->viewManager()->resourceProvider()->currentImage()->perspectiveGrid()->addNewSubGrid(
                     new KisSubPerspectiveGrid(
                         new KisPerspectiveGridNode(convertToPixelCoord(m_points[0])),
                         new KisPerspectiveGridNode(convertToPixelCoord(m_points[1])),
                         new KisPerspectiveGridNode(convertToPixelCoord(m_points[2])),
                         new KisPerspectiveGridNode(convertToPixelCoord(m_points[3]))));
-                m_canvas->view()->perspectiveGridManager()->setVisible(true);
+                decoration()->setVisible(true);
                 m_internalMode = MODE_EDITING;
                 useCursor(KisCursor::arrowCursor());
             }
@@ -327,7 +334,7 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
     gc.setPen(pen);
     gc.setRenderHint(QPainter::Antialiasing);
 //     gc.setRasterOp(Qt::XorROP);
-    KisPerspectiveGrid* pGrid = m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid();
+    KisPerspectiveGrid* pGrid = m_canvas->viewManager()->resourceProvider()->currentImage()->perspectiveGrid();
 
     for (QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it) {
         KisSubPerspectiveGrid* grid = *it;

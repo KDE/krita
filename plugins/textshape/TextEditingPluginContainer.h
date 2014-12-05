@@ -44,7 +44,10 @@ public:
     KoTextEditingPlugin *spellcheck() const;
 
     KoTextEditingPlugin *plugin(const QString &pluginId) const {
-        return m_textEditingPlugins.value(pluginId);
+        if (m_textEditingPlugins.contains(pluginId)) {
+            return m_textEditingPlugins.value(pluginId);
+        }
+        return 0;
     }
 
     QList<KoTextEditingPlugin*> values() const {

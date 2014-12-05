@@ -23,12 +23,12 @@
 
 #include <kpluginfactory.h>
 
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_shape_layer.h>
 
 #include <KoOdfReadStore.h>
@@ -44,7 +44,7 @@
 K_PLUGIN_FACTORY(ODGImportFactory, registerPlugin<KisODGImport>();)
 K_EXPORT_PLUGIN(ODGImportFactory("calligrafilters"))
 
-KisODGImport::KisODGImport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisODGImport::KisODGImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -52,24 +52,24 @@ KisODGImport::~KisODGImport()
 {
 }
 
-KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "Import odg";
 
     if (to != "application/x-krita")
-        return KoFilter::BadMimeType;
+        return KisImportExportFilter::BadMimeType;
 
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
+    KisDocument * doc = m_chain->outputDocument();
 
     if (!doc)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
     QString filename = m_chain->inputFile();
 
     KoStore* store = KoStore::createStore(filename, KoStore::Read, from, KoStore::Zip);
     if (!store || store->bad()) {
         delete store;
-        return KoFilter::BadConversionGraph;
+        return KisImportExportFilter::BadConversionGraph;
     }
     
 
@@ -82,7 +82,7 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
 
     if (!errorMessage.isEmpty()) {
         warnKrita << errorMessage;
-        return KoFilter::CreationError;
+        return KisImportExportFilter::CreationError;
     }
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
@@ -91,19 +91,19 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
 
     if (body.isNull()) {
         //setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
-        return KoFilter::CreationError;
+        return KisImportExportFilter::CreationError;
     }
 
     body = KoXml::namedItemNS(body, KoXmlNS::office, "drawing");
     if (body.isNull()) {
         //setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
-        return KoFilter::CreationError;
+        return KisImportExportFilter::CreationError;
     }
 
     KoXmlElement page(KoXml::namedItemNS(body, KoXmlNS::draw, "page"));
     if (page.isNull()) {
         //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
-        return KoFilter::CreationError;
+        return KisImportExportFilter::CreationError;
     }
 
     KoXmlElement * master = 0;
@@ -144,7 +144,7 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
                                         OPACITY_OPAQUE_U8);
     if (!shapeLayer->loadOdf(layerElement, shapeContext)) {
             kWarning() << "Could not load vector layer!";
-            return KoFilter::CreationError;
+            return KisImportExportFilter::CreationError;
         }
         image->addNode(shapeLayer, image->rootLayer(), 0);
     }
@@ -154,7 +154,7 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
         /*KoShape * shape = */KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
     }
 
-    return KoFilter::OK;
+    return KisImportExportFilter::OK;
 }
 
 

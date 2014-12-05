@@ -31,11 +31,12 @@ class KoCompositeOp;
 class KoColorSpace;
 class KUndo2MagicString;
 
-class KisDoc2;
+class KisDocument;
 class KisFilterStrategy;
-class KisView2;
+class KisViewManager;
 class KisFilterConfiguration;
 class KisActionManager;
+class KisView;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -48,10 +49,11 @@ class KRITAUI_EXPORT KisNodeManager : public QObject
 
 public:
 
-    KisNodeManager(KisView2 * view,  KisDoc2 * doc);
+    KisNodeManager(KisViewManager * view);
     ~KisNodeManager();
-
     
+    void setView(QPointer<KisView>imageView);
+
 signals:
 
     /// emitted whenever a node is selected.

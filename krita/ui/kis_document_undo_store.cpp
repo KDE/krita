@@ -18,7 +18,7 @@
 
 #include "kis_document_undo_store.h"
 
-#include "KoDocument.h"
+#include "KisDocument.h"
 #include <kundo2stack.h>
 
 
@@ -26,7 +26,7 @@
 /*                KisDocumentUndoStore                           */
 /*****************************************************************/
 
-KisDocumentUndoStore::KisDocumentUndoStore(KoDocument *doc)
+KisDocumentUndoStore::KisDocumentUndoStore(KisDocument *doc)
     : m_doc(doc)
 {
 }

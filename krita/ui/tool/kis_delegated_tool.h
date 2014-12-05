@@ -22,6 +22,8 @@
 #include <KoPointerEvent.h>
 #include <KoShape.h>
 
+#include <QPointer>
+
 #include "kis_delegated_tool_policies.h"
 
 
@@ -111,9 +113,9 @@ public:
         m_localTool->paint(painter, converter);
     }
 
-    QList<QWidget *> createOptionWidgets()
+    QList<QPointer<QWidget> > createOptionWidgets()
     {
-        QList<QWidget *> list = BaseClass::createOptionWidgets();
+        QList<QPointer<QWidget> > list = BaseClass::createOptionWidgets();
         list.append(m_localTool->createOptionWidgets());
         return list;
     }

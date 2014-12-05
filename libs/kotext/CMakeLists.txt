@@ -1,4 +1,4 @@
-include_directories(${KOTEXT_INCLUDES}
+include_directories(${KOMAIN_INCLUDES}
                     ${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 

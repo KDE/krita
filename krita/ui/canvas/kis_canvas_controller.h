@@ -24,14 +24,14 @@
 #include "krita_export.h"
 #include "kis_types.h"
 
-class KisView2;
+class KisView;
 
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
 {
     Q_OBJECT
 
 public:
-    KisCanvasController(KisView2 *parent, KActionCollection * actionCollection);
+    KisCanvasController(QPointer<KisView>parent, KActionCollection * actionCollection);
     ~KisCanvasController();
 
     virtual void setCanvas(KoCanvasBase *canvas);
@@ -39,6 +39,7 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual bool eventFilter(QObject *watched, QEvent *event);
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
+    virtual void activate();
 
 public:
     using KoCanvasController::documentSize;

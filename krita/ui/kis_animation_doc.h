@@ -20,20 +20,26 @@
 #ifndef KIS_ANIMATION_DOC_H
 #define KIS_ANIMATION_DOC_H
 
-#include "kis_doc2.h"
-#include "kis_animation_part.h"
+#include "KisDocument.h"
+#include "KisPart.h"
 #include "kranimstore/kis_animation_store.h"
 #include "kis_animation.h"
 
 #include <QHash>
 
-class KisOnionSkinLoader;
 class KisKranimLoader;
+class KisAnimationLayer;
 
 #define KIS_ANIM_MIME_TYPE "application/x-krita-animation"
 
 /**
- * This class represents te animation document.
+ * This class represents the animation document.
+ *
+ * An animation is a sparse two dimensional matrix with frames on the X axis
+ * and layers on the Y axis. Where x,y is not empty, we find an image (that
+ * is, a Krita layer).
+ *
+ * In theory, every 'frame' is a Krita image reproducing the entire layer stack.
  *
  * It handles all the frame and layer events from
  * coming from the timeline and onion skin dockers.
@@ -41,12 +47,26 @@ class KisKranimLoader;
  * It also manages a state of the animation and the
  * animation file on disk
  */
-class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
+class KRITAUI_EXPORT KisAnimationDoc : public KisDocument
 {
     Q_OBJECT
 public:
-    KisAnimationDoc();
+    KisAnimationDoc(const KisPart *part);
     virtual ~KisAnimationDoc();
+
+    /// @return the total number of layers and masks excluding the root layer
+    int numberOfLayers();
+
+    /// @return the layer at the given index, or 0 if the index is out of range
+    KisAnimationLayer *layer(int index);
+
+    /// @return the number of frames
+    int numberOfFrames() const;
+
+    void resetAnimationLayers();
+
+public:
+
     void frameSelectionChanged(QRect frame, bool savePreviousFrame=true);
 
     void addKeyFrame(QRect frame);
@@ -62,31 +82,22 @@ public:
     void addPaintLayer();
     void addVectorLayer();
 
-    KisAnimationStore* getStore();
     KisAnimation* getAnimation();
 
     void loadAnimationFile(KisAnimation* animation, KisAnimationStore* store, QDomDocument doc);
 
-    QRect getParentFramePosition(int frame, int layer);
     QRect getPreviousKeyFramePosition(int frame, int layer);
     QRect getNextKeyFramePosition(int frame, int layer);
 
     QString getFrameFile(int frame, int layer);
-    QString getPreviousKeyFrameFile(int frame, int layer);
-    QString getNextKeyFrameFile(int frame, int layer);
 
-    QRect currentFramePosition();
-    KisNodeSP currentFrame();
-
-    int numberOfLayers();
-
-    KisKranimLoader* kranimLoader();
 
     void play();
     void pause();
     void stop();
 
     void onionSkinStateChanged();
+    void refreshOnionSkins();
 
     void addCurrentLoadedLayer(KisLayerSP layer);
 
@@ -102,12 +113,19 @@ public:
     void visibilityStateToggled(QHash<int, bool> states);
     void lockStateToggled(QHash<int, bool> states);
 
-public slots:
-    void setImageModified();
-
-    void playbackStateChanged();
-
 private:
+    KisKranimLoader* kranimLoader();
+
+    QString getNextKeyFrameFile(int frame, int layer);
+
+    QString getPreviousKeyFrameFile(int frame, int layer);
+
+    QRect getParentFramePosition(int frame, int layer);
+
+    KisAnimationStore* getStore();
+
+    QRect currentFramePosition();
+
     void preSaveAnimation();
 
     void addFrameToXML();
@@ -126,6 +144,20 @@ private:
 
     void applyLayerStates(int layerNumber, KisLayerSP layer);
 
+    void loadOnionSkins(QHash<int, bool> states);
+
+    QBitArray prevFramesChannelFlags();
+    QBitArray nextFramesChannelFlags();
+
+    bool isPlaying();
+    void cache();
+    void refresh();
+
+private slots:
+    void updateFrame();
+    void playbackStateChanged();
+    void setImageModified();
+
 private:
     class KisAnimationDocPrivate;
     KisAnimationDocPrivate* const d;
@@ -133,6 +165,8 @@ private:
 signals:
     void sigFrameModified();
     void sigImportFinished(QHash<int, QList<QRect> >);
+
+
 };
 
 #endif // KIS_ANIMATION_DOC_H

@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QVariant>
 
-class KisView2;
+class KisViewManager;
 
 /**
  * Template of view plugin
@@ -34,7 +34,7 @@ public:
     ColorSliderPlugin(QObject *parent, const QVariantList &);
     virtual ~ColorSliderPlugin();
 private:
-    KisView2* m_view;
+    KisViewManager* m_view;
 };
 
 #endif

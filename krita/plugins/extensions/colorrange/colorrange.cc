@@ -29,7 +29,7 @@
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "kis_selection_tool_helper.h"
@@ -65,7 +65,7 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    DlgColorRange *dlgColorRange = new DlgColorRange(m_view, m_view);
+    DlgColorRange *dlgColorRange = new DlgColorRange(m_view, m_view->mainWindow());
     Q_CHECK_PTR(dlgColorRange);
 
     dlgColorRange->exec();

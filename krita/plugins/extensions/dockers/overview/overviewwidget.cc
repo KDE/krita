@@ -27,7 +27,7 @@
 #include <KoZoomController.h>
 
 #include <kis_canvas2.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_signal_compressor.h>
@@ -183,9 +183,9 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
     float delta = event->delta();
     
     if (delta > 0) {
-        m_canvas->view()->zoomController()->zoomAction()->zoomIn();
+        m_canvas->viewManager()->zoomController()->zoomAction()->zoomIn();
     } else {
-        m_canvas->view()->zoomController()->zoomAction()->zoomOut();
+        m_canvas->viewManager()->zoomController()->zoomAction()->zoomOut();
     }
 }
 

@@ -25,7 +25,7 @@ class QStringList;
 #include "KoXmlReaderForward.h"
 class KoStore;
 
-class KisDoc2;
+class KisDocument;
 class KisNode;
 class KoColorSpace;
 class KisPaintingAssistant;
@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisKraLoader
 
 public:
 
-    KisKraLoader(KisDoc2 * document, int syntaxVersion);
+    KisKraLoader(KisDocument * document, int syntaxVersion);
 
     ~KisKraLoader();
 

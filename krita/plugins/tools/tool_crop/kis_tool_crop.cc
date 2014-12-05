@@ -47,7 +47,7 @@
 #include <kis_selection.h>
 #include <kis_layer.h>
 #include <kis_canvas2.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_floating_message.h>
 #include <kis_group_layer.h>
 #include <kis_resources_snapshot.h>
@@ -138,7 +138,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     configGroup = KGlobal::config()->group(toolId()); // save settings to kritarc
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
 
     // load settings from configuration

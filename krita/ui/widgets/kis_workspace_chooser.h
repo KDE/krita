@@ -25,14 +25,14 @@
 
 class KLineEdit;
 class KoResourceItemChooser;
-class KisView2;
+class KisViewManager;
 class KoResource;
 
 class KisWorkspaceChooser : public QWidget
 {
     Q_OBJECT
 public:
-    KisWorkspaceChooser(KisView2 * view, QWidget* parent = 0);
+    KisWorkspaceChooser(KisViewManager * view, QWidget* parent = 0);
     virtual ~KisWorkspaceChooser();
 
 private slots:
@@ -41,7 +41,7 @@ private slots:
     
 private:
     KoResourceItemChooser * m_itemChooser;
-    KisView2* m_view;
+    KisViewManager* m_view;
     KLineEdit* m_nameEdit;
 };
 

@@ -28,7 +28,7 @@ class SmallColorSelectorDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     SmallColorSelectorDock();
-
+    QString observerName() { return "SmallColorSelectorDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }

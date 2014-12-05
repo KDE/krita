@@ -28,18 +28,17 @@
 #include <kcolordialog.h>
 
 #include <KoIcon.h>
-#include <KoCanvasBase.h>
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoCanvasResourceManager.h>
 
-#include <kis_view2.h>
-#include <kis_canvas2.h>
 #include <kis_layer.h>
 #include <kis_node_manager.h>
 #include <kis_config.h>
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
+#include <KisMainWindow.h>
+#include <kis_canvas_resource_provider.h>
+#include <KisViewManager.h>
 #include <kis_display_color_converter.h>
 
 #include "palettemodel.h"
@@ -115,9 +114,9 @@ bool PaletteDockerDock::eventFilter(QObject* object, QEvent* event)
 
 PaletteDockerDock::PaletteDockerDock( )
     : QDockWidget(i18n("Palette"))
-    , m_canvas(0)
     , m_wdgPaletteDock(new Ui_WdgPaletteDock())
     , m_currentColorSet(0)
+    , m_resourceProvider(0)
 {
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -146,7 +145,7 @@ PaletteDockerDock::PaletteDockerDock( )
     pal.setColor(QPalette::Base, pal.dark().color());
     m_wdgPaletteDock->paletteView->setAutoFillBackground(true);
     m_wdgPaletteDock->paletteView->setPalette(pal);
- 
+
     connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
     m_wdgPaletteDock->paletteView->viewport()->installEventFilter(this);
 
@@ -186,22 +185,17 @@ PaletteDockerDock::~PaletteDockerDock()
     }
 }
 
-void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
+void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
 {
-    if (m_canvas && m_canvas->view()) {
-        m_canvas->view()->nodeManager()->disconnect(m_model);
-    }
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    KisView2* view = m_canvas->view();
-    connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
-    connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
-    m_model->setDisplayRenderer(m_canvas->displayColorConverter()->displayRendererInterface());
-}
+    m_resourceProvider = kisview->resourceProvider();
+    connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
+    connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
 
-void PaletteDockerDock::unsetCanvas()
-{
-    m_model->setDisplayRenderer(0);
-    m_canvas = 0;
+    kisview->nodeManager()->disconnect(m_model);
+
+    // XXX: FIX!!!
+    //m_model->setDisplayRenderer(kisview->canvas()->displayColorConverter()->displayRendererInterface());
+
 }
 
 void PaletteDockerDock::unsetResourceServer()
@@ -238,31 +232,34 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
 
 void PaletteDockerDock::addColorForeground()
 {
-    KoColorSetEntry newEntry;
-    newEntry.color = m_canvas->resourceManager()->foregroundColor();
-    m_currentColorSet->add(newEntry);
-    m_currentColorSet->save();
-    setColorSet(m_currentColorSet); // update model
+    if (m_resourceProvider) {
+        KoColorSetEntry newEntry;
+        newEntry.color = m_resourceProvider->fgColor();
+        m_currentColorSet->add(newEntry);
+        m_currentColorSet->save();
+        setColorSet(m_currentColorSet); // update model
+    }
 }
 
 void PaletteDockerDock::addColor()
 {
-    if (m_currentColorSet) {
-        const KoColorDisplayRendererInterface *displayRenderer =
-            m_canvas->displayColorConverter()->displayRendererInterface();
+//    if (m_currentColorSet && m_resourceProvider) {
+//        const KoColorDisplayRendererInterface *displayRenderer =
+//            m_canvas->displayColorConverter()->displayRendererInterface();
 
-        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
-        QColor color;
+//        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
+//        QColor color;
 
-        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
-        if (result == KColorDialog::Accepted) {
-            KoColorSetEntry newEntry;
-            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
-            m_currentColorSet->add(newEntry);
-            m_currentColorSet->save();
-            setColorSet(m_currentColorSet); // update model
-        }
-    }
+//        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
+
+//        if (result == KColorDialog::Accepted) {
+//            KoColorSetEntry newEntry;
+//            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
+//            m_currentColorSet->add(newEntry);
+//            m_currentColorSet->save();
+//            setColorSet(m_currentColorSet); // update model
+//        }
+//    }
 }
 
 void PaletteDockerDock::removeColor()
@@ -287,8 +284,8 @@ void PaletteDockerDock::entrySelected(QModelIndex index)
     int i = index.row()*m_model->columnCount()+index.column();
     if (i < m_currentColorSet->nColors()) {
         KoColorSetEntry entry = m_currentColorSet->getColor(i);
-        if (m_canvas) {
-            m_canvas->resourceManager()->setForegroundColor(entry.color);
+        if (m_resourceProvider) {
+            m_resourceProvider->setFGColor(entry.color);
         }
         if (m_currentColorSet->removable()) {
             m_wdgPaletteDock->bnRemove->setEnabled(true);

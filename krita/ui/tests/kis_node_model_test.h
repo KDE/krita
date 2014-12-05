@@ -23,8 +23,8 @@
 
 #include "empty_nodes_test.h"
 
-class KisDoc2;
-class KisPart2;
+class KisDocument;
+class KisPart;
 class KisNameServer;
 class KisShapeController;
 class KisNodeDummy;
@@ -46,7 +46,7 @@ private slots:
     void testSubstituteRootNode();
 
 private:
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     KisNameServer *m_nameServer;
     KisShapeController *m_shapeController;
     KisNodeModel *m_nodeModel;

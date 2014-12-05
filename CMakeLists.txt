@@ -668,6 +668,13 @@ include(MacroCalligraBuildTest)
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
+
+set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version 
+                       ${CMAKE_BINARY_DIR}/libs/version 
+)
+
+include_directories(${KOVERSION_INCLUDES})
+
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
@@ -676,15 +683,16 @@ set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
+                   ${KOVERSION_INCLUDES} 
                    ${KDE4_INCLUDES})
-
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
+                   ${KOVERSION_INCLUDES} 
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
-                   ${Boost_INCLUDE_DIRS} 
+                   ${Boost_INCLUDE_DIRS}
                    ${QT_INCLUDES}
                    ${KDE4_INCLUDES})
 
@@ -715,23 +723,31 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
                    ${SOPRANO_INCLUDE_DIR}
                    ${FLAKE_INCLUDES}
-                   ${KOODF_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/main)
+                   ${KOODF_INCLUDES})
 
 # TextLayout depends on kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/textlayout)
 
+# Widgets depends on flake
+set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/widgetutils
+                   ${CMAKE_SOURCE_DIR}/libs/widgets)
+
 # BasicFlakes depends on flake, widgets
-set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES}
+set(BASICFLAKES_INCLUDES ${FLAKE_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
+set(KOWIDGETS_INCLUDES ${KDE4_INCLUDES}
+                    ${BASICFLAKES_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/libs/widgets
+                    ${CMAKE_SOURCE_DIR}/libs/widgetutils)
+
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
+                    ${KOWIDGETS_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_BINARY_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config)

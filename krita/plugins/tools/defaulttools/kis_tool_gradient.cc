@@ -50,7 +50,7 @@
 #include <kis_system_locker.h>
 
 #include <canvas/kis_canvas2.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <widgets/kis_cmb_composite.h>
 #include <widgets/kis_double_widget.h>
 #include <widgets/kis_slider_spin_box.h>
@@ -151,7 +151,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
     KisImageSP image = this->image();
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image, 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image, currentNode(), 0,  this->canvas()->resourceManager());
 
     if (image && (device = resources->currentNode()->paintDevice())) {
         QApplication::setOverrideCursor(Qt::BusyCursor);
@@ -166,7 +166,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         painter.beginTransaction();
 
         KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
-        KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
+        KoProgressUpdater * updater = canvas->viewManager()->createProgressUpdater(KoProgressUpdater::Unthreaded);
 
         updater->start(100, i18nc("@info:progress", "Gradient..."));
         painter.setProgress(updater->startSubtask());

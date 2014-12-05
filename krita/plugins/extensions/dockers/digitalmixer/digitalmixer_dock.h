@@ -25,12 +25,13 @@
 class KoColorPopupAction;
 class KoColorSlider;
 class KoColorPatch;
-class KisView2;
+class KisViewManager;
 
 class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     DigitalMixerDock( );
+    QString observerName() { return "DigitalMixerDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }

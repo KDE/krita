@@ -20,11 +20,11 @@
 #include "LayerThumbProvider.h"
 #include <PropertyContainer.h>
 #include <kis_node_model.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <kis_node_manager.h>
 #include <kis_dummies_facade_base.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_composite_ops_model.h>
 #include <kis_node.h>
 #include <kis_image.h>
@@ -91,7 +91,7 @@ public:
     QHash<const KisNode*, LayerModelMetaInfo> layerMeta;
     KisNodeModel* nodeModel;
     bool aboutToRemoveRoots;
-    KisView2* view;
+    KisViewManager* view;
     KisCanvas2* canvas;
     QPointer<KisNodeManager> nodeManager;
     KisImageWSP image;
@@ -248,7 +248,7 @@ QObject* LayerModel::view() const
 
 void LayerModel::setView(QObject *newView)
 {
-    KisView2* view = qobject_cast<KisView2*>(newView);
+    KisViewManager* view = qobject_cast<KisViewManager*>(newView);
     // This has to happen very early, and we will be filling it back up again soon anyway...
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this);
@@ -572,12 +572,12 @@ void LayerModel::setOpacity(int index, float newOpacity)
 void LayerModel::setVisible(int index, bool newVisible)
 {
     if (index > -1 && index < d->layers.count()) {
-        KoDocumentSectionModel::PropertyList props = d->layers[index]->sectionModelProperties();
-        KoDocumentSectionModel::Property prop = props[0];
+        KisDocumentSectionModel::PropertyList props = d->layers[index]->sectionModelProperties();
+        KisDocumentSectionModel::Property prop = props[0];
         if(props[0].state == newVisible)
             return;
-        props[0] = KoDocumentSectionModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
-        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KoDocumentSectionModel::PropertyList>(props), KoDocumentSectionModel::PropertiesRole );
+        props[0] = KisDocumentSectionModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
+        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisDocumentSectionModel::PropertyList>(props), KisDocumentSectionModel::PropertiesRole );
         d->layers[index]->setDirty(d->layers[index]->extent());
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);

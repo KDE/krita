@@ -28,6 +28,7 @@
 
 KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString &name,
                                                          KisImageWSP image,
+                                                         KisNodeSP currentNode,
                                                          KoCanvasResourceManager *resourceManager,
                                                          KisPainter::StrokeStyle strokeStyle,
                                                          KisPainter::FillStyle fillStyle)
@@ -36,6 +37,7 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
 
     m_resources =
         new KisResourcesSnapshot(image,
+                                 currentNode,
                                  image->postExecutionUndoAdapter(),
                                  resourceManager);
 

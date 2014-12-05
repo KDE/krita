@@ -88,10 +88,10 @@ public:
      * name is it is a filter. Overrides sectionModelProperties
      * in KisLayer, and KisLayer overrides
      * sectionModelProperties in KisBaseNode.
-     * @return KoDocumentSectionModel::PropertyList returns a list
+     * @return KisDocumentSectionModel::PropertyList returns a list
      * of the properties
      */
-    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
 public:
 

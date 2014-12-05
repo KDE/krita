@@ -21,7 +21,7 @@
 #include "kis_external_layer_iface.h"
 #include "kis_safe_document_loader.h"
 
-class KisPart2;
+class KisPart;
 
 
 /**
@@ -48,7 +48,7 @@ public:
 
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
-    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     void setFileName(const QString &basePath, const QString &filename);
     QString fileName() const;

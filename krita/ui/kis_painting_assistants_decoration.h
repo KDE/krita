@@ -27,6 +27,7 @@
 #include <krita_export.h>
 
 class KActionCollection;
+class KisView;
 
 /**
  * This class hold a list of painting assistants.
@@ -35,14 +36,13 @@ class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoratio
 {
     Q_OBJECT
 public:
-    KisPaintingAssistantsDecoration(KisView2* parent);
+    KisPaintingAssistantsDecoration(QPointer<KisView> parent);
     ~KisPaintingAssistantsDecoration();
     void addAssistant(KisPaintingAssistant* assistant);
     void removeAssistant(KisPaintingAssistant* assistant);
     void removeAll();
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void endStroke();
-    void setup(KActionCollection * collection);
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistant*> assistants();
     /*sets whether the main assistant is visible*/
@@ -55,6 +55,8 @@ public:
     bool outlineVisibility();
     /*uncache all assistants*/
     void uncache();
+signals:
+    void assistantChanged();
 public slots:
     void toggleAssistantVisible();
     void toggleOutlineVisible();
@@ -62,7 +64,6 @@ protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
 private:
-    void updateAction();
     struct Private;
     Private* const d;
 };

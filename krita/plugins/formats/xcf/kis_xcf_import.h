@@ -22,20 +22,20 @@
 
 #include <QVariant>
 
-#include <KoFilter.h>
+#include <KisImportExportFilter.h>
 
-class KisDoc2;
+class KisDocument;
 
-class KisXCFImport : public KoFilter
+class KisXCFImport : public KisImportExportFilter
 {
     Q_OBJECT
 public:
     KisXCFImport(QObject *parent, const QVariantList &);
     virtual ~KisXCFImport();
 public:
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 private:
-    KoFilter::ConversionStatus loadFromDevice(QIODevice* device, KisDoc2* doc);
+    KisImportExportFilter::ConversionStatus loadFromDevice(QIODevice* device, KisDocument* doc);
 };
 
 #endif

@@ -42,7 +42,6 @@ KisDummiesFacadeBase::KisDummiesFacadeBase(QObject *parent)
 
 KisDummiesFacadeBase::~KisDummiesFacadeBase()
 {
-    Q_ASSERT(!m_d->image);
     delete m_d;
 }
 

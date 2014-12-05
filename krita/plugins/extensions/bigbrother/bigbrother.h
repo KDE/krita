@@ -24,7 +24,7 @@
 
 class KisAction;
 class KisMacro;
-class KisView2;
+class KisViewManager;
 class KUrl;
 
 class BigBrotherPlugin : public KisViewPlugin
@@ -46,7 +46,7 @@ private:
     KisMacro* openMacro(KUrl* url = 0);
 private:
 
-    KisView2 * m_view;
+    KisViewManager * m_view;
     KisMacro * m_recorder;
     KisAction* m_startRecordingMacroAction;
     KisAction* m_stopRecordingMacroAction;

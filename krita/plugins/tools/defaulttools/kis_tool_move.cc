@@ -145,7 +145,7 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
     KisImageSP image = this->image();
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image, 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image, currentNode(), 0, this->canvas()->resourceManager());
     KisSelectionSP selection = resources->activeSelection();
 
     if (mode != MoveSelectedLayer) {

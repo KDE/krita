@@ -18,7 +18,7 @@
 
 
 #include "kis_view_plugin.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "operations/kis_operation.h"
 
@@ -27,10 +27,10 @@
 KisViewPlugin::KisViewPlugin(QObject* parent, const QString& rcFile)
     : m_view(0)
 {
-    if (parent->inherits("KisView2")) {
+    if (parent->inherits("KisViewManager")) {
         setXMLFile(KStandardDirs::locate("data", rcFile), true);
 
-        m_view = static_cast<KisView2*>(parent);
+        m_view = static_cast<KisViewManager*>(parent);
     }
 }
 

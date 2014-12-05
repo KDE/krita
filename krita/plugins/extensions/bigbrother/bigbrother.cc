@@ -36,7 +36,7 @@
 #include <kis_image.h>
 #include <kis_resource_server_provider.h>
 #include <kis_types.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <KoPattern.h>
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_macro.h>
@@ -79,8 +79,8 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/bigbrother.rc")
         , m_recorder(0)
 {
-    if (parent->inherits("KisView2")) {
-        m_view = (KisView2*) parent;
+    if (parent->inherits("KisViewManager")) {
+        m_view = (KisViewManager*) parent;
 
         KisAction* action = 0;
         // Open and play action
@@ -136,7 +136,7 @@ void BigBrotherPlugin::slotOpenEdit()
     KUrl url;
     KisMacro* m = openMacro(&url);
     if (!m) return;
-    KisActionsEditorDialog aed(m_view);
+    KisActionsEditorDialog aed(m_view->mainWindow());
 
     aed.actionsEditor()->setMacro(m);
 
@@ -182,7 +182,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
     QStringList mimeFilter;
     mimeFilter << "*.krarec|Recorded actions (*.krarec)";
 
-    KoFileDialog dialog(m_view, KoFileDialog::OpenFile, "OpenDocument");
+    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Macro"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
@@ -221,7 +221,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 
 void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
 {
-    KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "krita/bigbrother");
+    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "krita/bigbrother");
     dialog.setCaption(i18n("Save Macro"));
     dialog.setOverrideDir(url.url());
     dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));

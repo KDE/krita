@@ -38,7 +38,7 @@
 
 #include <kis_debug.h>
 #include <kis_action.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_resource_server_provider.h>
 #include <kis_workspace_resource.h>
 #include <kis_paintop_preset.h>
@@ -136,7 +136,7 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::slotImport()
 {
-    KoFileDialog dlg(m_view, KoFileDialog::OpenFiles, "krita_resources");
+    KoFileDialog dlg(m_view->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
     dlg.setCaption(i18n("Add Resources"));
 
     QMap<QString, QString> filterToTypeMap;
@@ -296,7 +296,7 @@ void ResourceManager::slotCreateBundle()
     newBundle->setThumbnail(dlgCreateBundle.previewImage());
 
     if (!newBundle->save()) {
-        KMessageBox::error(m_view, i18n("Could not create the new bundle."), i18n("Error"));
+        KMessageBox::error(m_view->mainWindow(), i18n("Could not create the new bundle."), i18n("Error"));
     }
 
 

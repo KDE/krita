@@ -20,7 +20,7 @@
 #include <QFile>
 
 #include <kis_group_layer.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kra/kis_kra_loader.h>
 

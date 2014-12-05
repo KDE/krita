@@ -48,7 +48,7 @@
 #include <KoColor.h>
 
 #include <kis_painter.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
 #include <kis_layer.h>
@@ -256,7 +256,7 @@ void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, i
 }
 }
 
-KisPNGConverter::KisPNGConverter(KisDoc2 *doc)
+KisPNGConverter::KisPNGConverter(KisDocument *doc)
 {
 //     Q_ASSERT(doc);
 //     Q_ASSERT(adapter);

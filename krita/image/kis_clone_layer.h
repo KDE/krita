@@ -77,7 +77,7 @@ public:
                                   const QRect& rect) const;
 
     QIcon icon() const;
-    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     qint32 x() const;
     qint32 y() const;

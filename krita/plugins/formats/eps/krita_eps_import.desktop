@@ -41,5 +41,5 @@ X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-eps
 X-KDE-Weight=1
 X-KDE-Library=kritaepsimport
-X-KDE-ServiceTypes=Calligra/Filter
+X-KDE-ServiceTypes=Krita/FileFilter
 NoDisplay=true

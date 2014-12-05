@@ -18,7 +18,7 @@
 #ifndef KIS_NODE_MODEL
 #define KIS_NODE_MODEL
 
-#include <KoDocumentSectionModel.h>
+#include <KisDocumentSectionModel.h>
 #include "krita_export.h"
 #include <kis_types.h>
 
@@ -36,7 +36,7 @@ class KisShapeController;
  * The node model shows an inverse view on the layer tree: we want the
  * first layer to show up at the bottom.
  */
-class KRITAUI_EXPORT KisNodeModel : public KoDocumentSectionModel
+class KRITAUI_EXPORT KisNodeModel : public KisDocumentSectionModel
 {
 
     Q_OBJECT

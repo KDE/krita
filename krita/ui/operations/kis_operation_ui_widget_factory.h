@@ -26,7 +26,7 @@
 
 #include "kis_operation_ui_factory.h"
 #include "operations/kis_operation_ui_widget.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 /**
  *  Factory to get operation configurations from QWidget based operation widgets
@@ -45,13 +45,13 @@ public:
     }
 
     /**
-    *  Reimplemted. Show a dialog the widget specify as T
+    *  Reimplemented. Show a dialog the widget specify as T
     *  @param view the view
     *  @param configuration the configuration to the operation
     *  @returns true if the configuration could be constructed (not canceled)
     */
-    virtual bool fetchConfiguration(KisView2* view, KisOperationConfiguration* configuration) {
-        KDialog * dialog = new KDialog(view);
+    virtual bool fetchConfiguration(KisViewManager* view, KisOperationConfiguration* configuration) {
+        KDialog * dialog = new KDialog(view->mainWindow());
         Q_CHECK_PTR(dialog);
 
         T* configWidget = new T(dialog, view);

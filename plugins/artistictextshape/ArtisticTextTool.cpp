@@ -579,9 +579,9 @@ void ArtisticTextTool::convertText()
     emit done();
 }
 
-QList<QWidget *> ArtisticTextTool::createOptionWidgets()
+QList<QPointer<QWidget> > ArtisticTextTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");

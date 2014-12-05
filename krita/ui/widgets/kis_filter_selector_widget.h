@@ -30,7 +30,7 @@
 
 class QModelIndex;
 class KisFilterConfiguration;
-class KisView2;
+class KisViewManager;
 class QAbstractItemModel;
 class QHideEvent;
 class QShowEvent;
@@ -45,7 +45,7 @@ public:
     KisFilterSelectorWidget(QWidget* parent);
     ~KisFilterSelectorWidget();
     void setFilter(KisFilterSP f);
-    void setView(KisView2 *view);
+    void setView(KisViewManager *view);
     void setPaintDevice(bool showAll, KisPaintDeviceSP);
     KisFilterConfiguration* configuration();
     void showFilterGallery(bool visible);

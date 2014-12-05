@@ -18,19 +18,22 @@
 
 #include "kis_doc2_test.h"
 
+#include <KisDocumentEntry.h>
+#include <KisMainWindow.h>
+
 #include <qtest_kde.h>
-#include "kis_doc2.h"
+
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_undo_store.h"
 #include "kis_factory2.h"
-#include <KoDocumentEntry.h>
-#include "kis_part2.h"
-#include <KoMainWindow.h>
-#include <kis_view2.h>
+#include "KisPart.h"
+#include <KisViewManager.h>
 #include "util.h"
+#include <KisView.h>
+#include "KisPart.h"
 
-
-void KisDoc2Test::testOpenImageTwiceInSameDoc()
+void KisDocumentTest::testOpenImageTwiceInSameDoc()
 {
     QString fname2 = QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra";
     QString fname = QString(FILES_DATA_DIR) + QDir::separator() + "load_test2.kra";
@@ -39,17 +42,19 @@ void KisDoc2Test::testOpenImageTwiceInSameDoc()
     Q_ASSERT(!fname.isEmpty());
     Q_ASSERT(!fname2.isEmpty());
 
-    KisDoc2 doc;
+    KisDocument *doc = KisPart::instance()->createDocument();
 
-    doc.loadNativeFormat(fname);
-    doc.loadNativeFormat(fname2);
+    doc->loadNativeFormat(fname);
+    doc->loadNativeFormat(fname2);
+
+    delete doc;
 }
 
-void KisDoc2Test::testActiveNodes()
+void KisDocumentTest::testActiveNodes()
 {
-    KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
-    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
+    KisDocument *doc = createEmptyDocument();
+    KisMainWindow *mainWindow = doc->documentPart()->createMainWindow();
+    QPointer<KisView>view = new KisView(static_cast<KisPart*>(doc->documentPart()), static_cast<KisDocument*>(doc), mainWindow->actionCollection(), mainWindow);
     doc->documentPart()->addView(view, doc);
     vKisNodeSP nodes = doc->activeNodes();
     QVERIFY(nodes.isEmpty());
@@ -61,6 +66,6 @@ void KisDoc2Test::testActiveNodes()
 }
 
 
-QTEST_KDEMAIN(KisDoc2Test, GUI)
+QTEST_KDEMAIN(KisDocumentTest, GUI)
 #include "kis_doc2_test.moc"
 

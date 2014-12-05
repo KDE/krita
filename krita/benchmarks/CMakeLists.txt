@@ -1,5 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/tiles3 ${CMAKE_SOURCE_DIR}/krita/sdk/tests)
+include_directories(    ${CMAKE_SOURCE_DIR}/krita/image/tiles3 ${CMAKE_SOURCE_DIR}/krita/sdk/tests)
 
 
 set(LINK_VC_LIB)

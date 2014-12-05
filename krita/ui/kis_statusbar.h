@@ -20,13 +20,15 @@
 #define KIS_STATUSBAR_H
 
 #include <QObject>
+#include <QPointer>
 
 #include <kis_types.h>
+#include "KisView.h"
 
 class QLabel;
 class QToolButton;
 class KSqueezedTextLabel;
-class KisView2;
+class KisViewManager;
 class KisProgressWidget;
 
 #include "krita_export.h"
@@ -37,8 +39,10 @@ class KRITAUI_EXPORT KisStatusBar : public QObject
 
 public:
 
-    KisStatusBar(KisView2 * view);
+    KisStatusBar(KisViewManager * view);
     ~KisStatusBar();
+
+    void setView(QPointer<KisView> imageView);
 
     KisProgressWidget *progress();
 
@@ -57,7 +61,8 @@ private slots:
 
 private:
 
-    KisView2 * m_view;
+    KisViewManager * m_view;
+    QPointer<KisView> m_imageView;
     KisProgressWidget * m_progress;
 
     QToolButton *m_selectionStatus;

@@ -31,7 +31,7 @@
 #include <kis_config.h>
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 
 KisPaletteDocker::KisPaletteDocker()
@@ -76,7 +76,7 @@ void KisPaletteDocker::setCanvas(KoCanvasBase * canvas)
 
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(canvas);
-    KisView2* view = kisCanvas->view();
+    KisViewManager* view = kisCanvas->viewManager();
     connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
 }

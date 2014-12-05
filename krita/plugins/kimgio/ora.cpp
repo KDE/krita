@@ -18,7 +18,7 @@
 #include <kzip.h>
 
 #include <kis_image.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_open_raster_stack_load_visitor.h>

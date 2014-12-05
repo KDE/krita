@@ -95,10 +95,10 @@ KoPAViewBase * KoPABackgroundTool::view() const
     return m_view;
 }
 
-QList<QWidget *> KoPABackgroundTool::createOptionWidgets()
+QList<QPointer<QWidget> > KoPABackgroundTool::createOptionWidgets()
 {
     KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     const QString title =
         (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Background") : i18n("Background");
     widget->setWindowTitle(title);

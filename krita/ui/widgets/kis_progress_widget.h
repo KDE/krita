@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisProgressWidget : public QWidget, public KisProgressInter
     Q_OBJECT
 
 public:
-    KisProgressWidget(QWidget* parent);
+    KisProgressWidget(QWidget* parent = 0);
     virtual ~KisProgressWidget();
 
 public:

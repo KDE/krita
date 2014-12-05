@@ -168,16 +168,16 @@ const KoCompositeOp * KisLayer::compositeOp() const
     return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
 }
 
-KoDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
+    KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
+    l << KisDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
     if (compositeOp())
-        l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
+        l << KisDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
     return l;
 }
 
-void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
+void KisLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
 {
     KisBaseNode::setSectionModelProperties(properties);
 }

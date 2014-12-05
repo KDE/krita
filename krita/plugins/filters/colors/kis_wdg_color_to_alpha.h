@@ -38,7 +38,7 @@ public:
         return m_widget;
     }
 
-    void setView(KisView2 *view);
+    void setView(KisViewManager *view);
 
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
@@ -55,7 +55,7 @@ private slots:
 
 private:
     Ui_WdgColorToAlphaBase* m_widget;
-    KisView2 *m_view;
+    KisViewManager *m_view;
 };
 
 #endif

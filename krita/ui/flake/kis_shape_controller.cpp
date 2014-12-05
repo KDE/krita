@@ -26,7 +26,7 @@
 #include <KoShapeManager.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
-#include <KoView.h>
+#include <KisView.h>
 #include <KoSelection.h>
 #include <KoShapeLayer.h>
 #include <KoPathShape.h>
@@ -40,7 +40,7 @@
 #include "kis_adjustment_layer.h"
 #include "kis_clone_layer.h"
 #include "canvas/kis_canvas2.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
 #include "kis_node_shape.h"
@@ -48,7 +48,7 @@
 #include "kis_name_server.h"
 #include "kis_mask.h"
 #include "kis_shape_layer.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_node.h"
 
 #include <KoTextDocumentLayout.h>
@@ -62,15 +62,15 @@
 struct KisShapeController::Private
 {
 public:
-    KisDoc2 *doc;
+    KisDocument *doc;
     KisNameServer *nameServer;
 
     KisNodeShapesGraph shapesGraph;
 };
 
-KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
-        : KisDummiesFacadeBase(doc)
-        , m_d(new Private())
+KisShapeController::KisShapeController(KisDocument *doc, KisNameServer *nameServer)
+    : KisDummiesFacadeBase(doc)
+    , m_d(new Private())
 {
     m_d->doc = doc;
     m_d->nameServer = nameServer;
@@ -80,7 +80,7 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
 
 KisShapeController::~KisShapeController()
 {
-    setImage(0);
+    //setImage(0);
     delete m_d;
 }
 
@@ -157,7 +157,7 @@ void KisShapeController::addShape(KoShape* shape)
 
     if (belongsToShapeSelection(shape)) {
 
-        KisSelectionSP selection = canvas->view()->selection();
+        KisSelectionSP selection = canvas->viewManager()->selection();
         if (selection) {
             if (!selection->shapeSelection()) {
                 selection->setShapeSelection(new KisShapeSelection(image(), selection));
@@ -197,16 +197,16 @@ void KisShapeController::removeShape(KoShape* shape)
     m_d->doc->setModified(true);
 }
 
-void KisShapeController::setInitialShapeForView(KisView2 * view)
+void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
 {
     if (!image()) return;
 
     KisNodeSP rootNode = image()->root();
 
     if (m_d->shapesGraph.containsNode(rootNode)) {
-        Q_ASSERT(view->canvasBase());
-        Q_ASSERT(view->canvasBase()->shapeManager());
-        KoSelection *selection = view->canvasBase()->shapeManager()->selection();
+        Q_ASSERT(canvas);
+        Q_ASSERT(canvas->shapeManager());
+        KoSelection *selection = canvas->shapeManager()->selection();
         if (selection) {
             selection->select(m_d->shapesGraph.nodeToShape(rootNode));
             KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));

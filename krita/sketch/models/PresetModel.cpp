@@ -20,7 +20,7 @@
 
 #include <KoResourceServerAdapter.h>
 #include <ui/kis_resource_server_provider.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_canvas2.h>
 #include <kis_paintop_box.h>
@@ -41,7 +41,7 @@ public:
 
     KisPaintOpPresetResourceServer * rserver;
     QString currentPreset;
-    KisView2* view;
+    KisViewManager* view;
 
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp)
     {
@@ -153,7 +153,7 @@ QObject* PresetModel::view() const
 
 void PresetModel::setView(QObject* newView)
 {
-    d->view = qobject_cast<KisView2*>( newView );
+    d->view = qobject_cast<KisViewManager*>( newView );
     if (d->view)
     {
         connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),

@@ -27,7 +27,7 @@
 
 #include <KoColorSpaceRegistry.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 
 class DocumentManager::Private
@@ -47,7 +47,7 @@ public:
     { }
 
     ProgressProxy* proxy;
-    QPointer<KisDoc2> document;
+    QPointer<KisDocument> document;
     QPointer<KisSketchPart> part;
     Settings* settingsManager;
     RecentFileManager* recentFileManager;
@@ -62,7 +62,7 @@ public:
 
 DocumentManager *DocumentManager::sm_instance = 0;
 
-KisDoc2* DocumentManager::document() const
+KisDocument* DocumentManager::document() const
 {
     return d->document;
 }
@@ -119,7 +119,7 @@ void DocumentManager::newDocument(const QVariantMap& options)
 
 void DocumentManager::delayedNewDocument()
 {
-    d->document = new KisDoc2(part());
+    d->document = new KisDocument(part());
     d->document->setProgressProxy(d->proxy);
     if (qAppName().contains("sketch")) {
         d->document->setSaveInBatchMode(true);
@@ -195,7 +195,7 @@ void DocumentManager::openDocument(const QString& document, bool import)
 
 void DocumentManager::delayedOpenDocument()
 {
-    d->document = new KisDoc2(part());
+    d->document = new KisDocument(part());
     d->document->setProgressProxy(d->proxy);
     if (qAppName().contains("sketch")) {
         d->document->setSaveInBatchMode(true);

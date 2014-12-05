@@ -33,7 +33,7 @@ class CompositionDockerDock : public QDockWidget, public KoCanvasObserverBase, p
 public:
     CompositionDockerDock();
     ~CompositionDockerDock();
-
+    QString observerName() { return "CompositionDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
     

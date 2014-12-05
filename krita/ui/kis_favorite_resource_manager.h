@@ -34,7 +34,7 @@ class QPoint;
 class KoID;
 class KisPaintopBox;
 class KisPaletteManager;
-class KisView2;
+class KisViewManager;
 class KisPaintOpPreset;
 
 class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> >

@@ -18,11 +18,11 @@
  */
 
 #include "KisSketchPart.h"
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <kis_factory2.h>
 
 KisSketchPart::KisSketchPart(QObject* parent)
-    : KisPart2(parent)
+    : KisPart(parent)
 {
     KisFactory2 factory;
     Q_UNUSED(factory);

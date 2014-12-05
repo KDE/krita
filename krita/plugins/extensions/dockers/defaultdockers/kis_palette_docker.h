@@ -30,7 +30,7 @@
 class KisWorkspaceResource;
 class KoColorSetWidget;
 class KoColor;
-class KisView2;
+class KisViewManager;
 
 /**
  * A color palette in table form.
@@ -44,6 +44,7 @@ class KisPaletteDocker : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     KisPaletteDocker();
+    QString observerName() { return "KisPaletteDocker"; }
     virtual ~KisPaletteDocker();
 
     QString palette() const;

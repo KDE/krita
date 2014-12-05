@@ -20,7 +20,7 @@
 
 #include <QRect>
 
-#include "KoDocumentSectionModel.h"
+#include "KisDocumentSectionModel.h"
 
 #include "kis_types.h"
 #include "kis_mask.h"
@@ -56,8 +56,8 @@ public:
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
-    virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
-    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
+    virtual KisDocumentSectionModel::PropertyList sectionModelProperties() const;
+    virtual void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
 
     void setVisible(bool visible, bool isLoading = false);
     bool active() const;

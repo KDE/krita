@@ -32,7 +32,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_node_manager.h"
@@ -84,8 +84,8 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 {
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_canvas->view()->nodeManager()->disconnect(this);
-        KActionCollection *ac = m_canvas->view()->actionCollection();
+        m_canvas->viewManager()->nodeManager()->disconnect(this);
+        KActionCollection *ac = m_canvas->viewManager()->actionCollection();
         ac->takeAction(ac->action("show_color_selector"));
         ac->takeAction(ac->action("show_mypaint_shade_selector"));
         ac->takeAction(ac->action("show_minimal_shade_selector"));
@@ -97,10 +97,10 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
     m_myPaintShadeSelector->setCanvas(canvas);
     m_minimalShadeSelector->setCanvas(canvas);
 
-    if (m_canvas && m_canvas->view()->nodeManager()) {
-        connect(m_canvas->view()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
+    if (m_canvas && m_canvas->viewManager()->nodeManager()) {
+        connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
     }
-    KActionCollection* actionCollection = canvas->view()->actionCollection();
+    KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
 
     if (!m_colorSelAction) {
         m_colorSelAction = new KAction("Show color selector", this);
@@ -156,7 +156,7 @@ void KisColorSelectorContainer::updateSettings()
 void KisColorSelectorContainer::reactOnLayerChange()
 {
     if (m_canvas) {
-        KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
+        KisNodeSP node = m_canvas->viewManager()->resourceProvider()->currentNode();
         if (node) {
             KisPaintDeviceSP device = node->paintDevice();
             if (device) {

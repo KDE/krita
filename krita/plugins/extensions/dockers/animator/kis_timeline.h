@@ -27,28 +27,28 @@
 #include "animator_settings_dialog.h"
 #include "animator_playback_dialog.h"
 
-class KisFrameBox;
-class KisAnimationLayerBox;
 class KisCanvas2;
 class KisAnimation;
+class TimelineView;
+class KisAnimationLayerBox;
 
 /**
  * This class represents the timeline widget
  * contained in the animator docker.
  */
-class KisTimeline : public QWidget
+class KisTimelineWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisTimeline(QWidget* parent = 0);
+    KisTimelineWidget(QWidget* parent = 0);
 
     void setCanvas(KisCanvas2* canvas);
+    void unsetCanvas();
+
     KisCanvas2* getCanvas();
 
-    KisAnimationLayerBox* getLayerBox();
-    KisFrameBox* getFrameBox();
 
-    void setModel(KisAnimation* animation);
+    void setAnimation(KisAnimation* animation);
 
     int numberOfLayers();
 
@@ -67,18 +67,6 @@ private:
 public slots:
     void documentModified();
 
-private:
-    KisFrameBox* m_cells;
-    KisCanvas2* m_canvas;
-    KisAnimationLayerBox *m_list;
-    KisAnimation* m_animation;
-    QRect m_lastBrokenFrame;
-    bool m_frameBreakState;
-    AnimatorSettingsDialog* m_settingsDialog;
-    AnimatorPlaybackDialog* m_playbackDialog;
-    bool m_initialized;
-    QWidget* m_parent;
-    bool m_imported;
 
 private slots:
     void blankFramePressed();
@@ -115,6 +103,21 @@ private slots:
 
 signals:
     void canvasModified();
+
+private:
+
+    KisCanvas2 *m_canvas;
+    KisAnimation *m_animation;
+    TimelineView *m_timeline;
+    KisAnimationLayerBox *m_animationLayerBox;
+
+    QRect m_lastBrokenFrame;
+    bool m_frameBreakState;
+    AnimatorSettingsDialog *m_settingsDialog;
+    AnimatorPlaybackDialog *m_playbackDialog;
+
+    bool m_imported;
+
 };
 
 #endif // KIS_TIMELINE_H

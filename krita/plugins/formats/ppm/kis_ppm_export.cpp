@@ -22,13 +22,13 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
-#include <KoFilterChain.h>
-#include <KoFilterManager.h>
+#include <KisFilterChain.h>
+#include <KisImportExportManager.h>
 
 #include <kdialog.h>
 
 #include <kis_debug.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
@@ -47,7 +47,7 @@
 K_PLUGIN_FACTORY(KisPPMExportFactory, registerPlugin<KisPPMExport>();)
 K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
 
-KisPPMExport::KisPPMExport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisPPMExport::KisPPMExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -137,20 +137,20 @@ private:
     quint8 m_current;
 };
 
-KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "PPM export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
-    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
     if (!input)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     KDialog* kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("PPM Export Options"));
@@ -172,7 +172,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
-            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+            return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
     else {
@@ -287,5 +287,5 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     }
     delete flow;
     fp.close();
-    return KoFilter::OK;
+    return KisImportExportFilter::OK;
 }

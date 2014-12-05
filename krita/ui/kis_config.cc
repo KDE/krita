@@ -36,7 +36,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -484,7 +484,7 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 bool KisConfig::useOpenGL() const
 {
     if (qApp->applicationName() == "krita" || qApp->applicationName() == "kritaanimation") {
-        qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+        //qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
     }
@@ -841,7 +841,7 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
 
 int KisConfig::autoSaveInterval()  const
 {
-    return m_cfg.readEntry("AutoSaveInterval", KoDocument::defaultAutoSave());
+    return m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave());
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const

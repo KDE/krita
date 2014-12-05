@@ -24,13 +24,13 @@
 #include "ui_wdg_shrink_selection.h"
 #include <operations/kis_operation_ui_widget.h>
 
-class KisView2;
+class KisViewManager;
 class WdgShrinkSelection : public KisOperationUIWidget, public Ui::WdgShrinkSelection
 {
     Q_OBJECT
 
 public:
-    WdgShrinkSelection(QWidget *parent, KisView2* view);
+    WdgShrinkSelection(QWidget *parent, KisViewManager* view);
 
     virtual void getConfiguration(KisOperationConfiguration* config);
 

@@ -1,8 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="kritaresourcemanager" version="8">
 <MenuBar>
-     <Menu name="Edit"><text>&amp;Edit</text>
-         <Menu name="Resources"><text>&amp;Resources</text>
+     <Menu name="edit"><text>&amp;Edit</text>
+         <Menu name="resources"><text>&amp;Resources</text>
             <Action name="import"/>
             <Action name="createbundle"/>
             <Action name="managebundles"/>

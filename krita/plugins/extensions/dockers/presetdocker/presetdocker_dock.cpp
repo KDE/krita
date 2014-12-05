@@ -26,7 +26,7 @@
 #include <KoCanvasBase.h>
 
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_paintop_box.h"
 #include "kis_paintop_presets_chooser_popup.h"
 #include "kis_canvas_resource_provider.h"
@@ -47,15 +47,15 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_presetChooser->disconnect(m_canvas->view()->paintOpBox());
+        m_presetChooser->disconnect(m_canvas->viewManager()->paintOpBox());
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
-    if (!m_canvas) return;
+    if (!m_canvas || !m_canvas->viewManager()) return;
 
     connect(m_presetChooser, SIGNAL(resourceSelected(KoResource*)),
-            m_canvas->view()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
+            m_canvas->viewManager()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
     connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
             this, SLOT(canvasResourceChanged(int,QVariant)));
 }

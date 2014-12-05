@@ -18,7 +18,7 @@
 #ifndef KIS_ANIMATION_H
 #define KIS_ANIMATION_H
 
-#include <QStandardItemModel>
+#include <QObject>
 
 #include "krita_export.h"
 
@@ -27,7 +27,7 @@
 
 class QString;
 
-class KRITAUI_EXPORT KisAnimation : public QStandardItemModel
+class KRITAUI_EXPORT KisAnimation : public QObject
 {
     Q_OBJECT
 public:
@@ -110,10 +110,6 @@ public:
     QColor prevOnionSkinColor();
 
     QColor nextOnionSkinColor();
-
-    void load(const QString &url);
-
-    void save(const QString &url);
 
 private:
     QString m_name;

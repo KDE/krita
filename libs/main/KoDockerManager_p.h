@@ -29,7 +29,7 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-#include "KoToolDocker_p.h"
+#include "KoToolDocker.h"
 
 #include "KoView.h"
 #include "KoMainWindow.h"

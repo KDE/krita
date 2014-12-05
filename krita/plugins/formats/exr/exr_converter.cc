@@ -42,7 +42,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -125,7 +125,7 @@ struct exrConverter::Private {
                 showNotifications(false) {}
 
     KisImageSP image;
-    KisDoc2 *doc;
+    KisDocument *doc;
 
     bool warnedAboutChangedAlpha;
     bool showNotifications;
@@ -149,7 +149,7 @@ struct exrConverter::Private {
     QString fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>& informationObjects);
 };
 
-exrConverter::exrConverter(KisDoc2 *doc, bool showNotifications)
+exrConverter::exrConverter(KisDocument *doc, bool showNotifications)
     : m_d(new Private)
 {
     m_d->doc = doc;

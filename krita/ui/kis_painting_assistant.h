@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QMessageBox>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <krita_export.h>
 #include <kis_shared.h>
 #include <kis_canvas2.h>
@@ -36,7 +36,7 @@ class QRect;
 class QRectF;
 class KoStore;
 class KisCoordinatesConverter;
-class KisDoc2;
+class KisDocument;
 
 #include <kis_shared_ptr.h>
 #include <KoGenericRegistry.h>

@@ -311,7 +311,7 @@ bool RESN_INFO_1005::interpretBlock(QByteArray data)
 {
     dbgFile << "Reading RESN_INFO_1005";
 
-    // the resolution we set on the image should be dpi; we can also set the unit on the KoDocument.
+    // the resolution we set on the image should be dpi; we can also set the unit on the KisDocument.
     QDataStream ds(data);
     ds.setByteOrder(QDataStream::BigEndian);
 

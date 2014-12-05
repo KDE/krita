@@ -42,7 +42,7 @@
 #include <kis_selection_manager.h>
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_transaction.h>
 #include <kis_cursor.h>
 #include "kis_iterator_ng.h"
@@ -160,7 +160,7 @@ quint32 matchColors(const QColor & c, enumAction action)
     return MIN_SELECTED;
 }
 
-DlgColorRange::DlgColorRange(KisView2 *view, QWidget *parent)
+DlgColorRange::DlgColorRange(KisViewManager *view, QWidget *parent)
         : KDialog(parent)
         , m_selectionCommandsAdded(0)
 {

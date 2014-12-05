@@ -26,10 +26,11 @@
 #include <QLineF>
 #include <QTransform>
 
-class PerspectiveAssistant : public KisPaintingAssistant, public KisAbstractPerspectiveGrid
+class PerspectiveAssistant : public KisAbstractPerspectiveGrid, public KisPaintingAssistant
 {
+    Q_OBJECT
 public:
-    PerspectiveAssistant();
+    PerspectiveAssistant(QObject * parent = 0);
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     virtual void endStroke();
     virtual QPointF buttonPosition() const;

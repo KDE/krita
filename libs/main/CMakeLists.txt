@@ -1,11 +1,5 @@
 add_subdirectory( tests )
 
-# generate calligraversion.h
-configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h)
-
-# generate calligragitversion.h
-configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h)
-
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 if (APPLE)
@@ -26,23 +20,11 @@ set(komain_LIB_SRCS
     KoDockerManager.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
-    KoDocumentInfo.cpp
-    KoDocumentInfoDlg.cpp
-    KoDocumentInfoPropsPage.cpp
-    KoGlobal.cpp
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
-    KoModeBox.cpp
-    KoModeBoxDocker.cpp
-    KoModeBoxFactory.cpp
-    KoToolBox.cpp
-    KoToolBoxDocker.cpp
-    KoToolBoxFactory.cpp
-    KoToolDocker_p.cpp
     KoVersionDialog.cpp
     KoView.cpp
-    calligraversion.cpp
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp
@@ -84,7 +66,6 @@ set(komain_LIB_SRCS
 
     KoPart.cpp
 
-    thememanager.cpp
 )
 
 if( QT_QTDBUS_FOUND )
@@ -102,8 +83,6 @@ if (APPLE)
 endif (APPLE)
 
 kde4_add_ui_files( komain_LIB_SRCS
-   koDocumentInfoAboutWidget.ui
-   koDocumentInfoAuthorWidget.ui
    config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
@@ -142,11 +121,13 @@ if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
 endif (APPLE)
 
+# For now, don't install the header files because of the conflict with the komvc
+# library.
+if (FALSE)
 install( FILES
     KoApplication.h
     KoDocument.h
     KoDocumentEntry.h
-    KoDocumentInfo.h
     KoDocumentSectionModel.h
     KoFilter.h
     KoFilterChain.h
@@ -161,17 +142,13 @@ install( FILES
     KoFindMatch.h
     KoFindOption.h
     KoFindOptionSet.h
-    KoGlobal.h
     KoMainWindow.h
     KoPageWidgetItem.h
     MacSupport.h
-    KoModeBoxFactory.h
     KoPart.h
     KoPrintJob.h
     KoVersionDialog.h
     KoView.h
-    ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h
-    ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h
     KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
@@ -182,3 +159,5 @@ if( QT_QTDBUS_FOUND )
         KoViewAdaptor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 endif( QT_QTDBUS_FOUND )
+endif(FALSE)
+

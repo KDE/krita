@@ -25,7 +25,7 @@
 #include <kstatusbar.h>
 
 #include "kis_canvas2.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_zoom_manager.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
@@ -63,7 +63,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
     m_overviewWidget->setCanvas(canvas);
-    m_zoomSlider = m_canvas->view()->zoomController()->zoomAction()->createWidget(m_canvas->view()->KoView::statusBar());
+    m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
     m_layout->addWidget(m_zoomSlider);
 }
 

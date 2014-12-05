@@ -46,10 +46,10 @@
 #include <KoZoomController.h>
 #include <KoIcon.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <kis_canvas_controller.h>
 #include "kis_config.h"
-#include <kis_doc2.h>
+#include <KisDocument.h>
 
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
@@ -72,7 +72,7 @@ public:
 	}
 	MainWindow* q;
     bool allowClose;
-    KisView2* sketchKisView;
+    KisViewManager* sketchKisView;
     QString currentSketchPage;
 	QTimer *centerer;
 };
@@ -151,7 +151,7 @@ void MainWindow::resetWindowTitle()
         fileName = i18n("Untitled");
 
     KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
-    KisDoc2* document = DocumentManager::instance()->document();
+    KisDocument* document = DocumentManager::instance()->document();
     if (document && document->isModified() ) {
         flags |= KDialog::ModifiedCaption;
     }
@@ -202,7 +202,7 @@ void MainWindow::setSketchKisView(QObject* newView)
         d->sketchKisView->disconnect(this);
     if (d->sketchKisView != newView)
     {
-        d->sketchKisView = qobject_cast<KisView2*>(newView);
+        d->sketchKisView = qobject_cast<KisViewManager*>(newView);
         connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
         d->centerer->start();
         emit sketchKisViewChanged();

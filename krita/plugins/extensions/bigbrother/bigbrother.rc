@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="kritabigbrother" version="3">
 <MenuBar>
-    <Menu name="Tools">
+    <Menu name="tools"><text>&amp;Tools</text>
         <Menu name="Recording"><text>Recording</text>
             <Action name="Recording_Start_Recording_Macro"/>
             <Action name="Recording_Stop_Recording_Macro"/>

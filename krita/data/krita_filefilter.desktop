@@ -1,0 +1,51 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/FileFilter
+Comment=Krita FileFilter
+Comment[bg]=Филтър за Krita
+Comment[bs]=Krita FileFilter
+Comment[ca]=Filtre del Krita
+Comment[ca@valencia]=Filtre del Krita
+Comment[cs]=Filtr Krita
+Comment[da]=Krita-FileFilter
+Comment[de]=Krita-FileFilter
+Comment[el]=Φίλτρο Krita
+Comment[en_GB]=Krita FileFilter
+Comment[es]=Filtro de Krita
+Comment[et]=Krita FileFilter
+Comment[eu]=Krita iragazkia
+Comment[fi]=Krita-suodatin
+Comment[fr]=Filtres pour Krita
+Comment[gl]=Filtro para Krita.
+Comment[hu]=Krita szűrő
+Comment[it]=Filtro di Krita
+Comment[ja]=Krita フィルタ
+Comment[kk]=Krita сүзгісі
+Comment[ko]=Krita 필터
+Comment[mr]=कॅलिग्रा गाळणी
+Comment[nb]=Krita-FileFilter
+Comment[nds]=Krita-FileFilter
+Comment[nl]=Krita FileFilter
+Comment[pl]=Filtr Krita
+Comment[pt]=Filtro do Krita
+Comment[pt_BR]=Filtro do Krita
+Comment[ru]=Фильтр Krita
+Comment[sk]=Krita FileFilter
+Comment[sl]=FileFilter Calligre
+Comment[sv]=Krita-FileFilter
+Comment[uk]=Фільтр Krita
+Comment[x-test]=xxKrita FileFilterxx
+Comment[zh_CN]=Krita 过滤器
+Comment[zh_TW]=Krita 過濾器
+
+[PropertyDef::X-KDE-Import]
+Type=QStringList
+
+[PropertyDef::X-KDE-Export]
+Type=QStringList
+
+[PropertyDef::X-KDE-Weight]
+Type=int
+
+[PropertyDef::X-KDE-Available]
+Type=QString

@@ -45,8 +45,8 @@
 
 #include "kis_aboutdata.h"
 #include "flake/kis_shape_selection.h"
-#include "kis_doc2.h"
-#include "kis_part2.h"
+#include "KisDocument.h"
+#include "KisPart.h"
 
 #include "kisexiv2/kis_exiv2.h"
 
@@ -105,9 +105,7 @@ QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, 
     Q_UNUSED( args );
     Q_UNUSED( keyword );
 
-    KisDoc2 *doc = new KisDoc2();
-
-    return doc->documentPart();
+    return KisPart::instance();
 }
 
 

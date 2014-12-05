@@ -26,7 +26,7 @@
 
 class KisOperation;
 class KisAction;
-class KisView2;
+class KisViewManager;
 
 /**
  *  KisViewPlugin is the base for plugins which add actions to the view
@@ -49,7 +49,7 @@ protected:
 
     void addOperation(KisOperation* operation);
     
-    KisView2* m_view;
+    KisViewManager* m_view;
 };
 
 #endif // KIS_VIEW_PLUGIN_H

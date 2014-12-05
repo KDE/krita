@@ -28,7 +28,7 @@
 
 #include "krita_export.h"
 
-#include "KoDocumentSectionModel.h"
+#include "KisDocumentSectionModel.h"
 
 #include "kis_types.h"
 #include "kis_node.h"
@@ -117,8 +117,8 @@ public:
      */
     virtual KisSelectionSP selection() const;
 
-    virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
-    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
+    virtual KisDocumentSectionModel::PropertyList sectionModelProperties() const;
+    virtual void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
 
     /**
      * set/unset the channel flag for the alpha channel of this layer

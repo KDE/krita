@@ -30,7 +30,7 @@
 #include <KoUpdater.h>
 #include <KoColorSpace.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_types.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -70,7 +70,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (!dev) return;
 
     DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->name(),
-            image->colorSpace()->name(), m_view, "Separate");
+            image->colorSpace()->name(), m_view->mainWindow(), "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));

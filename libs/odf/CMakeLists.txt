@@ -15,6 +15,7 @@ set(koodf_LIB_SRCS
     KoXmlNS.cpp
     KoOdfManifestEntry.cpp
     KoDom.cpp
+    KoDocumentInfo.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
     KoFontFace.cpp
@@ -29,7 +30,7 @@ set(koodf_LIB_SRCS
     KoOdfGraphicStyles.cpp
     KoGenChange.cpp
     KoGenChanges.cpp
-    KoOdfDocument.cpp
+    KoDocumentBase.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
     Ko3dScene.cpp
@@ -91,7 +92,7 @@ install( FILES
     KoOdfWriteStore.h
     KoStyleStack.h
     KoOdfGraphicStyles.h
-    KoOdfDocument.h
+    KoDocumentBase.h
     KoGenChange.h
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h

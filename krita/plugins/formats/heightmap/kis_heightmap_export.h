@@ -21,16 +21,16 @@
 
 #include <QVariant>
 
-#include <KoFilter.h>
+#include <KisImportExportFilter.h>
 
-class KisHeightMapExport : public KoFilter
+class KisHeightMapExport : public KisImportExportFilter
 {
     Q_OBJECT
 public:
     KisHeightMapExport(QObject *parent, const QVariantList &);
     virtual ~KisHeightMapExport();
 public:
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

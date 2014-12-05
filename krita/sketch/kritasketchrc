@@ -9,7 +9,7 @@ ShowCustomDocumentWidgetByDefault=true
 [Undo]
 UndoLimit=0
 
-[KoDockerManager]
+[KisDockerManager]
 StatusOfTheseToolDockers=KisRulerAssistantTool Option Widget,KisToolTransform option widget,KritaSelected/KisToolColorPicker option widget,KritaShape/KisToolBrushoption widget,KritaShape/KisToolLine,KritaShape/KisToolMeasure option widget,KritaShape/KisToolRectangle
 
 [krita]

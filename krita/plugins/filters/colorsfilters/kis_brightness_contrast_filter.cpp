@@ -50,7 +50,7 @@
 #include "widgets/kis_curve_widget.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <KoColor.h>
 #include <kis_canvas_resource_provider.h>
 
@@ -282,7 +282,7 @@ void KisBrightnessContrastConfigWidget::slotDrawLine(const KoColor &color)
     m_page->curveWidget->setPixmap(pix);
 }
 
-void KisBrightnessContrastConfigWidget::setView(KisView2 *view)
+void KisBrightnessContrastConfigWidget::setView(KisViewManager *view)
 {
     connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotDrawLine(const KoColor&)));
     KoToolManager::instance()->switchToolTemporaryRequested("KritaSelected/KisToolColorPicker");

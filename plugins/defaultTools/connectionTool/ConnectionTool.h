@@ -88,7 +88,7 @@ private slots:
 
 private:
     /// reimplemented from superclass
-    virtual QList<QWidget *>  createOptionWidgets();
+    virtual QList<QPointer<QWidget> >  createOptionWidgets();
 
     /**
      * @brief Return the square of the absolute distance between p1 and p2

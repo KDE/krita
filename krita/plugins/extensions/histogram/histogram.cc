@@ -27,7 +27,7 @@
 #include <kis_layer.h>
 #include <kis_paint_device.h>
 #include <kis_image.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 #include "dlg_histogram.h"
 #include "kis_node_manager.h"
@@ -51,7 +51,7 @@ Histogram::~Histogram()
 
 void Histogram::slotActivated()
 {
-    DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
+    DlgHistogram * dlgHistogram = new DlgHistogram(m_view->mainWindow(), "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
     KisLayerSP layer = m_view->nodeManager()->activeLayer();

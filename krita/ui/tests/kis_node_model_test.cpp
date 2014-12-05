@@ -22,8 +22,8 @@
 #include <qtest_kde.h>
 #include <kis_debug.h>
 
-#include "kis_doc2.h"
-
+#include "KisDocument.h"
+#include "KisPart.h"
 #include "kis_node_model.h"
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
@@ -33,7 +33,7 @@
 
 void KisNodeModelTest::init()
 {
-    m_doc = new KisDoc2();
+    m_doc = KisPart::instance()->createDocument();
 
     m_nameServer = new KisNameServer();
     m_shapeController = new KisShapeController(m_doc, m_nameServer);

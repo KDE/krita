@@ -6,6 +6,9 @@ set(kritarulerassistanttool_PART_SRCS
     Ellipse.cc
     SplineAssistant.cc
     PerspectiveAssistant.cc
+    VanishingPointAssistant.cc
+    InfiniteRulerAssistant.cc
+    ParallelRulerAssistant.cc
     ruler_assistant_tool.cc
     kis_ruler_assistant_tool.cc
     )

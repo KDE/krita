@@ -17,7 +17,8 @@
 
 #include "kis_color_history.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
+#include "KisView.h"
 #include "kis_canvas_resource_provider.h"
 
 #include <KoCompositeOpRegistry.h>
@@ -46,9 +47,10 @@ void KisColorHistory::setCanvas(KisCanvas2 *canvas)
         m_resourceProvider->disconnect(this);
     }
 
-    m_resourceProvider = canvas->view()->resourceProvider();
+    m_resourceProvider = canvas->imageView()->resourceProvider();
 
-    connect(canvas->view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
+
+    connect(canvas->imageView()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
             this,                               SLOT(addColorToHistory(KoColor)), Qt::UniqueConnection);
 }
 

@@ -119,12 +119,12 @@ QIcon KisAdjustmentLayer::icon() const
     return koIcon("view-filter");
 }
 
-KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const
 {
     KisSafeFilterConfigurationSP filterConfig = filter();
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     if (filterConfig)
-        l << KoDocumentSectionModel::Property(i18nc("property of a filter layer, noun", "Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
+        l << KisDocumentSectionModel::Property(i18nc("property of a filter layer, noun", "Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
     return l;
 }
 

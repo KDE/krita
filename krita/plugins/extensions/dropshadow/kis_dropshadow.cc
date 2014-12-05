@@ -33,7 +33,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
@@ -47,7 +47,7 @@
 #include <KoUpdater.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_paint_device.h>
 #include <KoChannelInfo.h>
 #include <kis_convolution_painter.h>
@@ -59,7 +59,7 @@
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
-KisDropshadow::KisDropshadow(KisView2 * view)
+KisDropshadow::KisDropshadow(KisViewManager * view)
         : m_view(view)
 {
 }

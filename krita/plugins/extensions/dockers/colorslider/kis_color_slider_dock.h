@@ -24,7 +24,7 @@
 
 #include <kis_types.h>
 
-class KisView2;
+class KisViewManager;
 class KisCanvas2;
 class KisColorSliderWidget;
 
@@ -33,7 +33,7 @@ class ColorSliderDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     ColorSliderDock();
-
+    QString observerName() { return "ColorSliderDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
@@ -42,7 +42,7 @@ public slots:
     
 private:
     KisCanvas2 *m_canvas;
-    KisView2 *m_view;
+    KisViewManager *m_view;
     KoCanvasBase * b_canvas;
     KisColorSliderWidget* m_colorSliders;
 };

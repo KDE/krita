@@ -16,6 +16,7 @@ add_subdirectory( paintoppresets )
 
 install( FILES  
     krita_filter.desktop      
+    krita_filefilter.desktop
     krita_brush.desktop      
     krita_paintop.desktop      
     krita_plugin.desktop      

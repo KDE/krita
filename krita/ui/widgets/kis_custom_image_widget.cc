@@ -56,19 +56,19 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_config.h>
 
+#include "kis_config.h"
+#include "KisPart.h"
 #include "kis_clipboard.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
     : WdgNewImage(parent)
 {
     setObjectName("KisCustomImageWidget");
-    m_doc = doc;
 
     txtName->setText(imageName);
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
@@ -219,13 +219,15 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
-    if (createNewImage()) {
-        emit documentSelected();
+    KisDocument *doc = createNewImage();
+    if (doc) {
+        emit documentSelected(doc);
     }
 }
 
-bool KisCustomImageWidget::createNewImage()
+KisDocument* KisCustomImageWidget::createNewImage()
 {
+
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
 
     if (cs->colorModelId() == RGBAColorModelID &&
@@ -252,10 +254,11 @@ bool KisCustomImageWidget::createNewImage()
                 qDebug() << ppVar(cs->name());
                 qDebug() << ppVar(cs->profile()->name());
                 qDebug() << ppVar(cs->profile()->info());
-                return false;
+                return 0;
             }
         }
     }
+    KisDocument *doc = static_cast<KisDocument*>(KisPart::instance()->createDocument());
 
     qint32 width, height;
     double resolution;
@@ -267,18 +270,18 @@ bool KisCustomImageWidget::createNewImage()
     QColor qc = cmbColor->color();
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
-    
+
     bool backgroundAsLayer = radioBackgroundAsLayer->isChecked();
-    
-    m_doc->newImage(txtName->text(), width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), txtDescription->toPlainText(), resolution);
-    
+
+    doc->newImage(txtName->text(), width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), txtDescription->toPlainText(), resolution);
+
     KisConfig cfg;
     cfg.setNumDefaultLayers(intNumLayers->value());
     cfg.setDefaultBackgroundOpacity(backgroundOpacity());
     cfg.setDefaultBackgroundColor(cmbColor->color());
     cfg.setDefaultBackgroundStyle(backgroundAsLayer ? KisConfig::LAYER : KisConfig::PROJECTION);
-    
-    return true;
+
+    return doc;
 }
 
 void KisCustomImageWidget::setNumberOfLayers(int layers)

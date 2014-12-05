@@ -21,6 +21,7 @@
 #define KOTOOLBASE_H
 
 #include <QObject>
+#include <QPointer>
 #include <QSet>
 #include <QList>
 #include <QHash>
@@ -113,7 +114,7 @@ public:
      *
      * @see m_optionWidgets
      */
-    QList<QWidget *> optionWidgets();
+    QList<QPointer<QWidget> > optionWidgets();
 
     /**
      * Retrieves the entire collection of actions for the tool.
@@ -444,7 +445,7 @@ protected:
      * Sets the option widget to 0 by default.
      */
     virtual QWidget *createOptionWidget();
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /**
      * Add an action under the given name to the collection.
@@ -502,6 +503,7 @@ protected:
     KoToolBase(KoToolBasePrivate &dd);
 
     KoToolBasePrivate *d_ptr;
+
 
 private:
     KoToolBase();

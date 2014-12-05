@@ -20,15 +20,16 @@
 #include "krita_export.h"
 #include "kis_config.h"
 
-#include <KoApplication.h>
-#include <KoPart.h>
+#include <KisApplication.h>
+#include <KisPart.h>
 
 #include <QFile>
 #include <QDomDocument>
 #include <QByteArray>
 #include <QString>
 
-KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
+KisAnimation::KisAnimation(QObject *parent)
+    : QObject(parent)
 {
     KisConfig cfg;
     m_frameBreakingEnabled = cfg.defAutoFrameBreakEnabled();
@@ -236,14 +237,4 @@ void KisAnimation::setNextOnionSkinColor(QColor color)
 QColor KisAnimation::nextOnionSkinColor()
 {
     return m_nextOnionSkinColor;
-}
-
-void KisAnimation::load(const QString &url)
-{
-    Q_UNUSED(url);
-}
-
-void KisAnimation::save(const QString &url)
-{
-    Q_UNUSED(url);
 }

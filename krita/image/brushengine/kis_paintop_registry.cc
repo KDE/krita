@@ -143,18 +143,6 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id) const
     return preset;
 }
 
-bool KisPaintOpRegistry::userVisible(const KoID & id, const KoColorSpace* cs) const
-{
-
-    KisPaintOpFactory* f = value(id.id());
-    if (!f) {
-        dbgRegistry << "No paintop" << id.id() << "";
-        return false;
-    }
-    return f->userVisible(cs);
-
-}
-
 QString KisPaintOpRegistry::pixmap(const KoID & id) const
 {
     KisPaintOpFactory* f = value(id.id());

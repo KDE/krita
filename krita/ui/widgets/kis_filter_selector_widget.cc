@@ -61,7 +61,7 @@ struct KisFilterSelectorWidget::Private {
     KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
     KisFiltersModel* filtersModel;
     QGridLayout *widgetLayout;
-    KisView2 *view;
+    KisViewManager *view;
 };
 
 KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Private)
@@ -104,7 +104,7 @@ KisFilterSelectorWidget::~KisFilterSelectorWidget()
     delete d;
 }
 
-void KisFilterSelectorWidget::setView(KisView2 *view)
+void KisFilterSelectorWidget::setView(KisViewManager *view)
 {
     d->view = view;
 }

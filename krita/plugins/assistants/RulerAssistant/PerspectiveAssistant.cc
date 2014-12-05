@@ -30,8 +30,9 @@
 #include <math.h>
 #include <limits>
 
-PerspectiveAssistant::PerspectiveAssistant()
-        : KisPaintingAssistant("perspective", i18n("Perspective assistant"))
+PerspectiveAssistant::PerspectiveAssistant(QObject *parent)
+        : KisAbstractPerspectiveGrid(parent)
+        , KisPaintingAssistant("perspective", i18n("Perspective assistant"))
 {
 }
 

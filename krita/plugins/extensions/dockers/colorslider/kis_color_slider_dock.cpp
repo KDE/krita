@@ -29,7 +29,7 @@
 #include <kconfiggroup.h>
 
 #include <kis_layer.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <canvas/kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_image.h>
@@ -58,7 +58,7 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
 
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
-    KisView2* view = kisCanvas->view();
+    KisViewManager* view = kisCanvas->viewManager();
 
     if (m_colorSliders) {
         m_colorSliders->disconnect(); // explicit disconnect in case Qt gets confused.

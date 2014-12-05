@@ -17,14 +17,14 @@
  */
 
 #include "kis_layer_contents.h"
-#include "kis_animation_frame.h"
+#include "kis_animation_frame_widget.h"
 #include "kis_debug.h"
 
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPainter>
 
-KisLayerContents::KisLayerContents(KisFrameBox *parent)
+KisLayerContentsWidget::KisLayerContentsWidget(KisFrameBox *parent)
 {
     this->setFixedHeight(20);
     this->setFixedWidth(100000);
@@ -36,31 +36,31 @@ KisLayerContents::KisLayerContents(KisFrameBox *parent)
 }
 
 
-void KisLayerContents::initialize()
+void KisLayerContentsWidget::initialize()
 {
 
     int length;
 
-    if(this->m_parent->getFirstLayer()) {
+    if (this->m_parent->getFirstLayer()) {
         length = this->m_parent->getFirstLayer()->getContentLength();
     }
     else {
         length = 1;
     }
 
-    KisAnimationFrame* firstFrame = new KisAnimationFrame(this, KisAnimationFrame::FRAME, length * 10);
+    KisAnimationFrameWidget* firstFrame = new KisAnimationFrameWidget(this, KisAnimationFrameWidget::FRAME, length * 10);
     firstFrame->setGeometry(0, 0, length * 10, 20);
     this->m_frames[0] = firstFrame;
 }
 
-void KisLayerContents::paintEvent(QPaintEvent *event)
+void KisLayerContentsWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
     QPainter painter(this);
 
-    for(int i = 0; i < 10000; i++) {
-        if(i % 10 == 0) {
+    for (int i = 0; i < 10000; i++) {
+        if (i % 10 == 0) {
             painter.setPen(Qt::red);
             painter.drawRect(QRectF(10 * i, 0, 9, height() - 1));
         }
@@ -72,48 +72,48 @@ void KisLayerContents::paintEvent(QPaintEvent *event)
     }
 }
 
-void KisLayerContents::mouseReleaseEvent(QMouseEvent *event)
+void KisLayerContentsWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     int x = event->x();
     x = x - (x % 10);
     this->m_parent->setSelectedFrame(x, this);
 }
 
-void KisLayerContents::mapFrame(int frameNumber, KisAnimationFrame *frame)
+void KisLayerContentsWidget::mapFrame(int frameNumber, KisAnimationFrameWidget *frame)
 {
-    if(this->m_frames.contains(frameNumber)) {
+    if (this->m_frames.contains(frameNumber)) {
         this->m_frames.remove(frameNumber);
     }
 
     this->m_frames[frameNumber] = frame;
 }
 
-void KisLayerContents::unmapFrame(int frameNumber)
+void KisLayerContentsWidget::unmapFrame(int frameNumber)
 {
-    if(this->m_frames.contains(frameNumber)) {
+    if (this->m_frames.contains(frameNumber)) {
         this->m_frames.remove(frameNumber);
     }
 }
 
-int KisLayerContents::getLastFrameIndex()
+int KisLayerContentsWidget::getLastFrameIndex()
 {
     QList<int> keys = m_frames.keys();
     int maximum = keys.at(0);
-    for(int i = 1; i < keys.length(); i++) {
-        if(maximum < keys.at(i)) {
+    for (int i = 1; i < keys.length(); i++) {
+        if (maximum < keys.at(i)) {
             maximum = keys.at(i);
         }
     }
     return maximum;
 }
 
-int KisLayerContents::getPreviousFrameIndexFrom(int index)
+int KisLayerContentsWidget::getPreviousFrameIndexFrom(int index)
 {
     QList<int> keys = m_frames.keys();
     int previous = 0;
-    for(int i = 0; i < keys.length(); i++) {
-        if(keys.at(i) < index) {
-            if(keys.at(i) > previous) {
+    for (int i = 0; i < keys.length(); i++) {
+        if (keys.at(i) < index) {
+            if (keys.at(i) > previous) {
                 previous = keys.at(i);
             }
         }
@@ -121,13 +121,13 @@ int KisLayerContents::getPreviousFrameIndexFrom(int index)
     return previous;
 }
 
-int KisLayerContents::getNextFrameIndexFrom(int index)
+int KisLayerContentsWidget::getNextFrameIndexFrom(int index)
 {
     QList<int> keys = m_frames.keys();
     int next = this->getLastFrameIndex();
-    for(int i = 0; i < keys.length(); i++) {
-        if(keys.at(i) > index) {
-            if(keys.at(i) < next){
+    for (int i = 0; i < keys.length(); i++) {
+        if (keys.at(i) > index) {
+            if (keys.at(i) < next) {
                 next = keys.at(i);
             }
         }
@@ -135,44 +135,44 @@ int KisLayerContents::getNextFrameIndexFrom(int index)
     return next;
 }
 
-int KisLayerContents::getContentLength()
+int KisLayerContentsWidget::getContentLength()
 {
     int lastFrameLength = this->m_frames.value(this->getLastFrameIndex())->getWidth() / 10;
     return this->getLastFrameIndex() + lastFrameLength;
 }
 
-int KisLayerContents::getIndex(KisAnimationFrame *frame)
+int KisLayerContentsWidget::getIndex(KisAnimationFrameWidget *frame)
 {
     return this->m_frames.key(frame);
 }
 
-KisAnimationFrame* KisLayerContents::getNextFrameFrom(KisAnimationFrame *frame)
+KisAnimationFrameWidget* KisLayerContentsWidget::getNextFrameFrom(KisAnimationFrameWidget *frame)
 {
     return this->m_frames.value(this->getNextFrameIndexFrom(this->getIndex(frame)));
 }
 
-KisAnimationFrame* KisLayerContents::getNextFrameFrom(int index)
+KisAnimationFrameWidget* KisLayerContentsWidget::getNextFrameFrom(int index)
 {
     return this->m_frames.value(this->getNextFrameIndexFrom(index));
 }
 
-KisAnimationFrame* KisLayerContents::getPreviousFrameFrom(KisAnimationFrame *frame)
+KisAnimationFrameWidget* KisLayerContentsWidget::getPreviousFrameFrom(KisAnimationFrameWidget *frame)
 {
     return this->m_frames.value(this->getPreviousFrameIndexFrom(this->getIndex(frame)));
 }
 
-KisAnimationFrame* KisLayerContents::getPreviousFrameFrom(int index)
+KisAnimationFrameWidget* KisLayerContentsWidget::getPreviousFrameFrom(int index)
 {
     return this->m_frames.value(this->getNextFrameIndexFrom(index));
 }
 
-KisAnimationFrame* KisLayerContents::getFrameAt(int index)
+KisAnimationFrameWidget* KisLayerContentsWidget::getFrameAt(int index)
 {
     QList<int> keys = m_frames.keys();
     int previous = 0;
-    for(int i = 0; i < keys.length(); i++) {
-        if(keys.at(i) <= index) {
-            if(keys.at(i) > previous) {
+    for (int i = 0; i < keys.length(); i++) {
+        if (keys.at(i) <= index) {
+            if (keys.at(i) > previous) {
                 previous = keys.at(i);
             }
         }
@@ -180,12 +180,12 @@ KisAnimationFrame* KisLayerContents::getFrameAt(int index)
     return m_frames.value(previous);
 }
 
-KisFrameBox* KisLayerContents::getParent()
+KisFrameBox* KisLayerContentsWidget::getParent()
 {
     return m_parent;
 }
 
-int KisLayerContents::getLayerIndex()
+int KisLayerContentsWidget::getLayerIndex()
 {
     return this->getParent()->getLayerContents().indexOf(this);
 }

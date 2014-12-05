@@ -964,7 +964,10 @@ bool KoDocument::saveNativeFormatCalligra(KoStore *store)
         return false;
     }
     if (store->open("documentinfo.xml")) {
-        QDomDocument doc = d->docInfo->save();
+        QDomDocument doc = KoDocument::createDomDocument("document-info"
+                           /*DTD name*/, "document-info" /*tag name*/, "1.1");
+
+        doc = d->docInfo->save(doc);
         KoStoreDevice dev(store);
 
         QByteArray s = doc.toByteArray(); // this is already Utf8!
@@ -2420,7 +2423,12 @@ void KoDocument::setupOpenFileSubProgress() {}
 
 KoDocumentInfoDlg *KoDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
 {
-    return new KoDocumentInfoDlg(parent, docInfo);
+    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+    KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(parent);
+    if (mainwin) {
+        connect(dlg, SIGNAL(saveRequested()), mainwin, SLOT(slotFileSave()));
+    }
+    return dlg;
 }
 
 bool KoDocument::isReadWrite() const

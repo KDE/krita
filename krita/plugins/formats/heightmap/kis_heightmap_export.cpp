@@ -26,8 +26,8 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
-#include <KoFilterChain.h>
-#include <KoFilterManager.h>
+#include <KisFilterChain.h>
+#include <KisImportExportManager.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -35,7 +35,7 @@
 #include <kdialog.h>
 
 #include <kis_debug.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
@@ -48,7 +48,7 @@
 K_PLUGIN_FACTORY(KisHeightMapExportFactory, registerPlugin<KisHeightMapExport>();)
 K_EXPORT_PLUGIN(KisHeightMapExportFactory("krita"))
 
-KisHeightMapExport::KisHeightMapExport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisHeightMapExport::KisHeightMapExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -56,32 +56,32 @@ KisHeightMapExport::~KisHeightMapExport()
 {
 }
 
-KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "HeightMap export! From:" << from << ", To:" << to;
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
-    KisDoc2 *inputDoc = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *inputDoc = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
     if (!inputDoc)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     KisImageWSP image = inputDoc->image();
     Q_CHECK_PTR(image);
 
     if (inputDoc->image()->width() != inputDoc->image()->height()) {
         inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not square"));
-        return KoFilter::WrongFormat;
+        return KisImportExportFilter::WrongFormat;
     }
 
     if (inputDoc->image()->colorSpace()->colorModelId() != GrayAColorModelID) {
         inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not grayscale"));
-        return KoFilter::WrongFormat;
+        return KisImportExportFilter::WrongFormat;
     }
 
     KDialog* kdb = new KDialog(0);
@@ -113,7 +113,7 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
-            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+            return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
     else {
@@ -166,5 +166,5 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
     }
 
     f.close();
-    return KoFilter::OK;
+    return KisImportExportFilter::OK;
 }

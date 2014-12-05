@@ -51,7 +51,7 @@ extern "C" {
 #include <KoColor.h>
 
 #include <kis_painter.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
@@ -112,7 +112,7 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 
 }
 
-KisJPEGConverter::KisJPEGConverter(KisDoc2 *doc)
+KisJPEGConverter::KisJPEGConverter(KisDocument *doc)
 {
     m_doc = doc;
     m_job = 0;

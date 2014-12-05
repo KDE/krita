@@ -28,7 +28,7 @@
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 #include <kis_image_manager.h>
 #include <kis_node_manager.h>
@@ -80,7 +80,7 @@ void ImageSize::slotImageSize()
 
     if (!image) return;
 
-    DlgImageSize * dlgImageSize = new DlgImageSize(m_view, image->width(), image->height(), image->yRes());
+    DlgImageSize * dlgImageSize = new DlgImageSize(m_view->mainWindow(), image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgImageSize);
     dlgImageSize->setObjectName("ImageSize");
 
@@ -101,7 +101,7 @@ void ImageSize::slotCanvasSize()
 
     if (!image) return;
 
-    DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(m_view, image->width(), image->height(), image->yRes());
+    DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(m_view->mainWindow(), image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgCanvasSize);
 
     if (dlgCanvasSize->exec() == QDialog::Accepted) {
@@ -125,7 +125,7 @@ void ImageSize::slotLayerSize()
     Q_ASSERT(dev);
     QRect rc = dev->exactBounds();
 
-    DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view, "LayerSize", rc.width(), rc.height(), image->yRes());
+    DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view->mainWindow(), "LayerSize", rc.width(), rc.height(), image->yRes());
     Q_CHECK_PTR(dlgLayerSize);
     dlgLayerSize->setCaption(i18n("Layer Size"));
 
@@ -155,7 +155,7 @@ void ImageSize::slotSelectionScale()
     KIS_ASSERT_RECOVER_RETURN(selectionMask);
 
     QRect rc = selectionMask->selection()->selectedRect();
-    DlgLayerSize * dlgSize = new DlgLayerSize(m_view, "SelectionScale", rc.width(), rc.height(), image->yRes());
+    DlgLayerSize * dlgSize = new DlgLayerSize(m_view->mainWindow(), "SelectionScale", rc.width(), rc.height(), image->yRes());
     dlgSize->setCaption(i18n("Scale Selection"));
 
     if (dlgSize->exec() == QDialog::Accepted) {

@@ -24,9 +24,11 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
-class KisView2;
-class KisDoc2;
+class KisViewManager;
+class KisDocument;
 class KActionCollection;
+class KisActionManager;
+class KisView;
 
 /**
  * Create all the filter actions for the specified view and implement re-apply filter
@@ -38,10 +40,11 @@ class KRITAUI_EXPORT KisFilterManager : public QObject
 
 public:
 
-    KisFilterManager(KisView2 * parent, KisDoc2 * doc);
+    KisFilterManager(KisViewManager * parent);
     ~KisFilterManager();
+    void setView(QPointer<KisView>imageView);
 
-    void setup(KActionCollection * ac);
+    void setup(KActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();
 
     void apply(KisSafeFilterConfigurationSP filterConfig);

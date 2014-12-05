@@ -22,7 +22,7 @@
 #include "ui_kis_wdg_options_kranimseq.h"
 
 #include <QVariantList>
-#include <KoFilter.h>
+#include <KisImportExportFilter.h>
 
 /**
  * Exports the animation as a PNG sequence.
@@ -38,7 +38,7 @@ public:
 
 };
 
-class KranimSequence : public KoFilter
+class KranimSequence : public KisImportExportFilter
 {
     Q_OBJECT
 
@@ -47,7 +47,7 @@ public:
     virtual ~KranimSequence();
 
 public:
-    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 private:
     KisWdgOptionsKranimseq* m_wdg;

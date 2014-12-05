@@ -26,13 +26,14 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 
-#include <kis_doc2.h>
-#include <KoPart.h>
+#include <KisDocument.h>
+#include <KisPart.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KisPart.h>
 
 #include <ktemporaryfile.h>
 #include <QFileInfo>
@@ -59,24 +60,25 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 continue;
             }
 
-            KisDoc2 doc;
+            KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
-            KoFilterManager manager(&doc);
+            KisImportExportManager manager(doc);
             manager.setBatchMode(true);
-            QByteArray nativeFormat = doc.nativeFormatMimeType();
-            KoFilter::ConversionStatus status;
+
+            KisImportExportFilter::ConversionStatus status;
             QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
                                                status);
+            qDebug() << s;
 
-            if (!doc.image()) {
+            if (!doc->image()) {
                 failuresDocImage << sourceFileInfo.fileName();
                 continue;
             }
 
-            QString id = doc.image()->colorSpace()->id();
+            QString id = doc->image()->colorSpace()->id();
             if (id != "GRAYA" && id != "GRAYAU16" && id != "RGBA" && id != "RGBA16") {
                 dbgKrita << "Images need conversion";
-                doc.image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
+                doc->image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
                                                     KoColorConversionTransformation::IntentAbsoluteColorimetric,
                                                     KoColorConversionTransformation::NoOptimization);
             }
@@ -84,9 +86,9 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             KTemporaryFile tmpFile;
             tmpFile.setSuffix(".png");
             tmpFile.open();
-            doc.setBackupFile(false);
-            doc.setOutputMimeType("image/png");
-            doc.saveAs(KUrl("file://" + tmpFile.fileName()));
+            doc->setBackupFile(false);
+            doc->setOutputMimeType("image/png");
+            doc->saveAs(KUrl("file://" + tmpFile.fileName()));
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
@@ -102,6 +104,8 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 resultImage.save(sourceFileInfo.fileName() + ".png");
                 continue;
             }
+
+            delete doc;
         }
     }
     if (failuresCompare.isEmpty() && failuresDocImage.isEmpty() && failuresFileInfo.isEmpty()) {

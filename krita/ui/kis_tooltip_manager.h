@@ -21,13 +21,13 @@
 #include <QObject>
 #include <QMap>
 
-class KisView2;
+class KisViewManager;
 class KisTooltipManager : public QObject
 {
     Q_OBJECT
 
 public:
-    KisTooltipManager(KisView2* view);
+    KisTooltipManager(KisViewManager* view);
     ~KisTooltipManager();
 
     void record();
@@ -36,7 +36,7 @@ private slots:
     void captureToolip();
 
 private:
-    KisView2* m_view;
+    KisViewManager* m_view;
     bool m_recording;
     QMap<QString, QString> m_tooltipMap;
 };

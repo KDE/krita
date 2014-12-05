@@ -25,8 +25,8 @@
 
 class QLabel;
 class KisCanvas2;
-class KisAnimation;
-class KisTimeline;
+class KisAnimationModel;
+class KisTimelineWidget;
 
 /**
  * The animator docker class
@@ -35,13 +35,12 @@ class AnimatorDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     AnimatorDock();
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas(){ m_canvas = 0;}
+    QString observerName() { return "AnimatorDock"; }
+    virtual void setCanvas(KoCanvasBase *canvasBase);
+    virtual void unsetCanvas();
 
 private:
-    KisCanvas2 *m_canvas;
-    KisAnimation *m_animation;
-    KisTimeline* m_mainWidget;
+    KisTimelineWidget *m_timeLine;
 };
 
 

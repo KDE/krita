@@ -27,19 +27,23 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class KisView2;
+class KisGridDecoration;
+class KisViewManager;
 class KActionCollection;
 class KToggleAction;
 class KAction;
 
-class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
+class KRITAUI_EXPORT KisGridManager : public QObject
 {
     Q_OBJECT
 public:
-    KisGridManager(KisView2 * parent);
-    ~KisGridManager();
+    KisGridManager(KisViewManager * parent);
+    virtual ~KisGridManager();
 public:
+
     void setup(KActionCollection * collection);
+
+    void setView(QPointer<KisView>imageView);
 
 public slots:
 
@@ -60,13 +64,11 @@ private slots:
     void fastConfig16x16();
     void fastConfig32x32();
     void fastConfig64x64();
-protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
 private:
+    void setFastConfig(int size);
 
-    KisView2* m_view;
-    KToggleAction *toggleGrid;
+    KToggleAction *m_toggleGrid;
     KToggleAction* m_toggleSnapToGrid;
     KAction* m_gridFastConfig1x1;
     KAction* m_gridFastConfig2x2;
@@ -79,6 +81,9 @@ private:
     KAction* m_gridFastConfig16x16;
     KAction* m_gridFastConfig32x32;
     KAction* m_gridFastConfig64x64;
+
+    QPointer<KisView> m_imageView;
+    KisGridDecoration* m_gridDecoration;
 };
 
 #endif

@@ -23,10 +23,10 @@
 #include <QList>
 
 #include "kis_timeline.h"
-#include "kis_animation_layer.h"
+#include "kis_animation_layer_widget.h"
 
-class KisLayerContents;
-class KisAnimationFrame;
+class KisLayerContentsWidget;
+class KisAnimationFrameWidget;
 class KisTimelineHeader;
 
 /**
@@ -37,13 +37,13 @@ class KisFrameBox : public QListWidget
 {
     Q_OBJECT
 public:
-    KisFrameBox(KisTimeline* parent = 0);
+    KisFrameBox(KisTimelineWidget* parent = 0);
 
-    void setSelectedFrame(int x=-1, KisLayerContents* parent=0, int width=10);
+    void setSelectedFrame(int x = -1, KisLayerContentsWidget* parent = 0, int width = 10);
 
-    KisAnimationFrame* getSelectedFrame();
-    KisLayerContents* getFirstLayer();
-    QList<KisLayerContents*> getLayerContents();
+    KisAnimationFrameWidget* getSelectedFrame();
+    KisLayerContentsWidget* getFirstLayer();
+    QList<KisLayerContentsWidget*> getLayerContents();
 
     void addLayerUiUpdate();
     void removeLayerUiUpdate(int layer);
@@ -51,12 +51,12 @@ public:
     void moveLayerUpUiUpdate(int layer);
     void moveLayerDownUiUpdate(int layer);
 
-    KisAnimationFrame* m_selectedFrame;
+    KisAnimationFrameWidget* m_selectedFrame;
 
 private:
-    KisTimeline* m_dock;
-    QList<KisAnimationLayer*> m_layers;
-    QList<KisLayerContents*> m_layerContents;
+    KisTimelineWidget* m_dock;
+    QList<KisAnimationLayerWidget*> m_layers;
+    QList<KisLayerContentsWidget*> m_layerContents;
     KisTimelineHeader* m_timelineHeader;
 
 signals:

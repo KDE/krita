@@ -46,13 +46,12 @@ class KoColorSpace;
 class KoResource;
 class KoCanvasController;
 
-class KisView2;
+class KisViewManager;
 class KisCanvasResourceProvider;
 class KisPopupButton;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
-class KisPaintOpListWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
@@ -100,7 +99,7 @@ class KisPaintopBox : public QWidget
 
 public:
 
-    KisPaintopBox(KisView2* view, QWidget* parent, const char* name);
+    KisPaintopBox(KisViewManager* view, QWidget* parent, const char* name);
     ~KisPaintopBox();
 
 public slots:
@@ -110,6 +109,7 @@ public slots:
     void slotCurrentNodeChanged(KisNodeSP node);
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
+    KisFavoriteResourceManager *favoriteResourcesManager() { return m_favoriteResourceManager; }
 
 private:
 
@@ -120,7 +120,6 @@ private:
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
     KisPaintOpPresetSP activePreset(const KoID& paintOp);
     void updateCompositeOp(QString compositeOpID, bool localUpdate = false);
-    void updatePaintops(const KoColorSpace* colorSpace);
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
@@ -173,7 +172,7 @@ private:
     QToolButton*                         vMirrorButton;
     KisPaintOpPresetsPopup*              m_presetsPopup;
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
-    KisView2*                            m_view;
+    KisViewManager*                            m_view;
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;

@@ -25,7 +25,7 @@
 #include <kio/job.h>
 
 #include "kis_types.h"
-class KisDoc2;
+class KisDocument;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -51,7 +51,7 @@ class OraConverter : public QObject
 {
     Q_OBJECT
 public:
-    OraConverter(KisDoc2 *doc);
+    OraConverter(KisDocument *doc);
     virtual ~OraConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -65,7 +65,7 @@ public slots:
     virtual void cancel();
 private:
     KisImageWSP m_image;
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     vKisNodeSP m_activeNodes;
     bool m_stop;
     KIO::TransferJob *m_job;

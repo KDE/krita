@@ -340,7 +340,9 @@ void KoDockWidgetTitleBar::Private::updateIcons()
 
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
 
-   collapseButton->setIcon(q->widget()->isHidden() ? themedIcon("docker_collapse_b") : themedIcon("docker_collapse_a"));
+    if (q->widget()) {
+        collapseButton->setIcon(q->widget()->isHidden() ? themedIcon("docker_collapse_b") : themedIcon("docker_collapse_a"));
+    }
 
 }
 

@@ -89,7 +89,7 @@ protected:
     void cancelPath();
 
     /// reimplemented
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
     KoShapeStroke *createStroke();

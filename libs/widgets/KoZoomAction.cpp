@@ -263,10 +263,6 @@ void KoZoomAction::zoomOut()
 
 QWidget * KoZoomAction::createWidget(QWidget *parent)
 {
-    // create the custom widget only if we add the action to the status bar
-    if (!qobject_cast<QStatusBar*>(parent))
-        return KSelectAction::createWidget(parent);
-
     KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->specialButtons, d->sliderLookup.size() - 1);
     connect(this, SIGNAL(zoomLevelsChanged(QStringList)), zoomWidget, SLOT(setZoomLevels(QStringList)));
     connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));

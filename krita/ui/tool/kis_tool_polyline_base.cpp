@@ -28,7 +28,7 @@
 
 #include "kis_tool_polyline_base.h"
 #include "kis_canvas2.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_action.h>
 #include <kactioncollection.h>
 
@@ -43,11 +43,13 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
       m_closeSnappingActivated(false)
 {
 
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(this->canvas());
-    KAction *undo_polygon_selection = new KAction("Undo Polygon Selection Points",this);
-    undo_polygon_selection->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::Key_Z));
-    kiscanvas->view()->actionCollection()->addAction("undo_polygon_selection", undo_polygon_selection);
-    connect(undo_polygon_selection, SIGNAL(triggered()), SLOT(undoSelection()));
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    if (kiscanvas && kiscanvas->viewManager()) {
+        KAction *undo_polygon_selection = new KAction("Undo Polygon Selection Points",this);
+        undo_polygon_selection->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::Key_Z));
+        kiscanvas->viewManager()->actionCollection()->addAction("undo_polygon_selection", undo_polygon_selection);
+        connect(undo_polygon_selection, SIGNAL(triggered()), SLOT(undoSelection()));
+    }
 }
 
 void KisToolPolylineBase::deactivate()

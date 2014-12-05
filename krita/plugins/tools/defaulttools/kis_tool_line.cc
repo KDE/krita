@@ -158,6 +158,7 @@ void KisToolLine::updateStroke()
 {
     m_helper->repaintLine(canvas()->resourceManager(),
                           image(),
+                          currentNode(),
                           image().data(),
                           image()->postExecutionUndoAdapter());
 }

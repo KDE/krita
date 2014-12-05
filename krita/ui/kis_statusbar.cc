@@ -30,6 +30,7 @@
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
+#include "KoIcon.h"
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -37,24 +38,26 @@
 #include <kis_paint_device.h>
 #include <kis_selection_manager.h>
 
-#include "KoIcon.h"
-#include "kis_view2.h"
+#include <KisView.h>
+#include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
+#include "kis_zoom_manager.h"
 
 #include <KoToolManager.h>
 #include <KoViewConverter.h>
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 
 enum {
     IMAGE_SIZE_ID,
     POINTER_POSITION_ID
 };
 
-KisStatusBar::KisStatusBar(KisView2 * view)
+KisStatusBar::KisStatusBar(KisViewManager * view)
         : m_view(view)
+        , m_imageView(0)
 {
-    m_selectionStatus = new QToolButton(view);
+    m_selectionStatus = new QToolButton();
     m_selectionStatus->setIconSize(QSize(16,16));
     m_selectionStatus->setAutoRaise(true);
     m_selectionStatus->setEnabled(false);
@@ -67,25 +70,25 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     view->addStatusBarItem(m_selectionStatus);
 
     // XXX: Use the KStatusbar fixed size labels!
-    m_statusBarStatusLabel = new KSqueezedTextLabel(view);
+    m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
             m_statusBarStatusLabel, SLOT(setText(const QString &)));
     view->addStatusBarItem(m_statusBarStatusLabel, 2);
 
-    m_statusBarProfileLabel = new KSqueezedTextLabel(view);
+    m_statusBarProfileLabel = new KSqueezedTextLabel();
     m_statusBarProfileLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
-    m_progress = new KisProgressWidget(view);
+    m_progress = new KisProgressWidget();
     view->addStatusBarItem(m_progress);
 
-    m_imageSizeLabel = new QLabel(QString(), view);
+    m_imageSizeLabel = new QLabel(QString());
     m_imageSizeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_imageSizeLabel->setMinimumWidth(100);
     view->addStatusBarItem(m_imageSizeLabel);
 
-    m_pointerPositionLabel = new QLabel(QString(), view);
+    m_pointerPositionLabel = new QLabel(QString());
     m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_pointerPositionLabel->setMinimumWidth(100);
     view->addStatusBarItem(m_pointerPositionLabel);
@@ -100,6 +103,30 @@ KisStatusBar::~KisStatusBar()
     m_view->removeStatusBarItem(m_imageSizeLabel);
     m_view->removeStatusBarItem(m_pointerPositionLabel);
     m_view->removeStatusBarItem(m_progress);
+}
+
+void KisStatusBar::setView(QPointer<KisView> imageView)
+{
+    if (m_imageView == imageView) {
+        return;
+    }
+    if (m_imageView) {
+        m_imageView->disconnect(this);
+        m_view->removeStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+    }
+    if (imageView) {
+        m_imageView = imageView;
+
+        connect(m_imageView, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
+                this, SLOT(updateStatusBarProfileLabel()));
+        connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile*)),
+                this, SLOT(updateStatusBarProfileLabel()));
+        connect(m_imageView, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+                this, SLOT(imageSizeChanged()));
+        updateStatusBarProfileLabel();
+        imageSizeChanged();
+        m_view->addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+    }
 }
 
 void KisStatusBar::documentMousePositionChanged(const QPointF &pos)

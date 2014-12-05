@@ -33,7 +33,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoIcon.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_global.h"
 #include "kis_autogradient.h"
 #include "kis_canvas_resource_provider.h"

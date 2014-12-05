@@ -22,20 +22,13 @@
 
 #include <klocale.h>
 
-#include <KoCanvasResourceManager.h>
-#include <KoCanvasBase.h>
-
-#include <kis_canvas2.h>
-#include <kis_view2.h>
-#include <kis_paintop_box.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_pattern_chooser.h>
+#include <KisViewManager.h>
 #include <KoPattern.h>
-
 
 PatternDockerDock::PatternDockerDock( )
     : QDockWidget(i18n("Patterns"))
-    , m_canvas(0)
 {
     m_patternChooser = new KoPatternChooser(this);
     m_patternChooser->setPreviewOrientation(Qt::Vertical);
@@ -44,24 +37,14 @@ PatternDockerDock::PatternDockerDock( )
     setWidget(m_patternChooser);
 }
 
-void PatternDockerDock::setCanvas(KoCanvasBase * canvas)
+void PatternDockerDock::setMainWindow(KisViewManager* kisview)
 {
-    if (m_canvas) {
-        m_canvas->disconnectCanvasObserver(this);
-        m_patternChooser->disconnect(m_canvas->view()->resourceProvider());
-        m_canvas->view()->resourceProvider()->disconnect(this);
-    }
-
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    Q_ASSERT(m_canvas);
-    if (!m_canvas) return;
-
-    connect(m_canvas->view()->resourceProvider(), SIGNAL(sigPatternChanged(KoPattern*)),
+    KisCanvasResourceProvider* resourceProvider = kisview->resourceProvider();
+    connect(resourceProvider, SIGNAL(sigPatternChanged(KoPattern*)),
             this, SLOT(patternChanged(KoPattern*)));
 
     connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
-            m_canvas->view()->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
-
+            resourceProvider, SLOT(slotPatternActivated(KoResource*)));
 }
 
 void PatternDockerDock::patternChanged(KoPattern *pattern)

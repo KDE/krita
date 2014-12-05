@@ -33,7 +33,7 @@
 
 #include <klocale.h>
 
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 #include <KoFileDialog.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -42,8 +42,8 @@
 #include <KoColorModelStandardIds.h>
 
 #include "KoIcon.h"
-#include <kis_view2.h>
-#include <kis_doc2.h>
+#include <KisViewManager.h>
+#include <KisDocument.h>
 #include <kis_config.h>
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
@@ -183,8 +183,13 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         m_canvas = canvas;
         if (m_canvas) {
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
-            connect(m_canvas->view()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
-            canvas->setDisplayFilter(m_displayFilter);
+            connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
+            if (m_chkUseOcio->isChecked() && m_ocioConfig) {
+                m_canvas->setDisplayFilter(m_displayFilter);
+            }
+            else {
+                m_canvas->setDisplayFilter(KisDisplayFilterSP());
+            }
         }
     }
     resetOcioConfiguration();
@@ -233,7 +238,7 @@ void LutDockerDock::setCurrentExposureImpl(qreal value)
     m_exposureDoubleWidget->setValue(value);
     if (!m_canvas) return;
 
-    m_canvas->view()->showFloatingMessage(
+    m_canvas->viewManager()->showFloatingMessage(
         i18nc("floating message about exposure", "Exposure: %1",
               KritaUtils::prettyFormatReal(m_exposureDoubleWidget->value())),
         QIcon(), 500, KisFloatingMessage::Low);
@@ -244,7 +249,7 @@ void LutDockerDock::setCurrentGammaImpl(qreal value)
     m_gammaDoubleWidget->setValue(value);
     if (!m_canvas) return;
 
-    m_canvas->view()->showFloatingMessage(
+    m_canvas->viewManager()->showFloatingMessage(
         i18nc("floating message about gamma", "Gamma: %1",
               KritaUtils::prettyFormatReal(m_gammaDoubleWidget->value())),
         QIcon(), 500, KisFloatingMessage::Low);
@@ -260,7 +265,7 @@ void LutDockerDock::slotImageColorSpaceChanged()
 void LutDockerDock::exposureValueChanged(double exposure)
 {
     if (m_canvas && !m_draggingSlider) {
-        m_canvas->view()->resourceProvider()->setHDRExposure(exposure);
+        m_canvas->viewManager()->resourceProvider()->setHDRExposure(exposure);
         updateDisplaySettings();
     }
 }
@@ -280,7 +285,7 @@ void LutDockerDock::exposureSliderReleased()
 void LutDockerDock::gammaValueChanged(double gamma)
 {
     if (m_canvas && !m_draggingSlider) {
-        m_canvas->view()->resourceProvider()->setHDRGamma(gamma);
+        m_canvas->viewManager()->resourceProvider()->setHDRGamma(gamma);
         updateDisplaySettings();
     }
 }
@@ -300,7 +305,7 @@ void LutDockerDock::enableControls()
 {
     KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
-    KisImageSP image = m_canvas->view()->image();
+    KisImageSP image = m_canvas->viewManager()->image();
 
     bool canDoExternalColorCorrection =
         image->colorSpace()->colorModelId() == RGBAColorModelID;
@@ -332,7 +337,7 @@ void LutDockerDock::enableControls()
 
 void LutDockerDock::updateDisplaySettings()
 {
-    if (!m_canvas || !m_canvas->view() || !m_canvas->view()->image()) return;
+    if (!m_canvas || !m_canvas->viewManager() || !m_canvas->viewManager()->image()) return;
 
     enableControls();
     writeControls();
@@ -441,16 +446,16 @@ void LutDockerDock::refillControls()
 
     { // Exposure
         KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
-        m_exposureDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRExposure());
+        m_exposureDoubleWidget->setValue(m_canvas->viewManager()->resourceProvider()->HDRExposure());
     }
 
     { // Gamma
         KisSignalsBlocker gammaBlocker(m_gammaDoubleWidget);
-        m_gammaDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRGamma());
+        m_gammaDoubleWidget->setValue(m_canvas->viewManager()->resourceProvider()->HDRGamma());
     }
 
     { // Components
-        const KoColorSpace *cs = m_canvas->view()->image()->colorSpace();
+        const KoColorSpace *cs = m_canvas->viewManager()->image()->colorSpace();
 
         KisSignalsBlocker componentsBlocker(m_cmbComponents);
         m_cmbComponents->clear();

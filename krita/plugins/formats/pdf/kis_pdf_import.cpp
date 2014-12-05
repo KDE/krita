@@ -39,14 +39,14 @@
 #include <kio/netaccess.h>
 
 // calligra's headers
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 // krita's headers
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
@@ -58,7 +58,7 @@
 K_PLUGIN_FACTORY(PDFImportFactory, registerPlugin<KisPDFImport>();)
 K_EXPORT_PLUGIN(PDFImportFactory("krita"))
 
-KisPDFImport::KisPDFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisPDFImport::KisPDFImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -68,17 +68,17 @@ KisPDFImport::~KisPDFImport()
 
 KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&)
 {
-    QString filename = m_chain -> inputFile();
+    QString filename = m_chain->inputFile();
     dbgFile << "Importing using PDFImport!" << filename;
 
     if (filename.isEmpty())
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
 
 
     KUrl url(filename);
 
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
     }
 
     // We're not set up to handle asynchronous loading at the moment.
@@ -98,7 +98,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     if (!pdoc) {
         dbgFile << "Error when reading the PDF";
-        return KoFilter::StorageCreationError;
+        return KisImportExportFilter::StorageCreationError;
     }
 
 
@@ -108,7 +108,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         dlg.setWindowTitle(i18n("A password is required to read that pdf"));
         if (dlg.exec() != QDialog::Accepted) {
             dbgFile << "Password canceled";
-            return KoFilter::StorageCreationError;
+            return KisImportExportFilter::StorageCreationError;
         } else
             pdoc->unlock(dlg.password().toLocal8Bit(), dlg.password().toLocal8Bit());
     }
@@ -123,15 +123,15 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     if (kdb->exec() == QDialog::Rejected) {
         delete pdoc;
         delete kdb;
-        return KoFilter::StorageCreationError; // FIXME Cancel doesn't exist :(
+        return KisImportExportFilter::StorageCreationError; // FIXME Cancel doesn't exist :(
     }
 
     // Init kis's doc
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
+    KisDocument * doc = m_chain->outputDocument();
     if (!doc) {
         delete pdoc;
         delete kdb;
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
     }
 
     doc -> prepareForImport();
@@ -176,7 +176,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     delete pdoc;
     delete kdb;
-    return KoFilter::OK;
+    return KisImportExportFilter::OK;
 }
 
 #include "kis_pdf_import.moc"

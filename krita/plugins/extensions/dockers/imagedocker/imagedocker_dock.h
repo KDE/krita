@@ -55,6 +55,7 @@ class ImageDockerDock: public QDockWidget, public KoCanvasObserverBase
 public:
     ImageDockerDock();
     virtual ~ImageDockerDock();
+    QString observerName() { return "ImageDockerDock"; }
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
     

@@ -42,12 +42,11 @@
 #include <qgl.h>
 #endif
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoColorProfile.h>
-#include <KoApplication.h>
-#include <KoConfigAuthorPage.h>
+#include <KisApplication.h>
 #include <KoFileDialog.h>
-#include <KoPart.h>
+#include <KisPart.h>
 #include <KoColorSpaceEngine.h>
 #include <KoIcon.h>
 #include <KoConfig.h>
@@ -104,6 +103,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_undoStackSize->setValue(cfg.undoStackLimit());
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
+    m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", 0));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
 }
 
@@ -115,10 +115,11 @@ void GeneralTab::setDefault()
     chkShowRootLayer->setChecked(false);
     m_autosaveCheckBox->setChecked(true);
     //convert to minutes
-    m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);
+    m_autosaveSpinBox->setValue(KisDocument::defaultAutoSave() / 60);
     m_undoStackSize->setValue(30);
     m_backupFileCheckBox->setChecked(true);
     m_showOutlinePainting->setChecked(true);
+    m_cmbMDIType->setCurrentIndex(1);
     m_favoritePresetsSpinBox->setValue(10);
 }
 
@@ -146,6 +147,12 @@ int GeneralTab::undoStackSize()
 bool GeneralTab::showOutlineWhilePainting()
 {
     return m_showOutlinePainting->isChecked();
+}
+
+
+int GeneralTab::mdiMode()
+{
+    return m_cmbMDIType->currentIndex();
 }
 
 int GeneralTab::favoritePresets()
@@ -668,13 +675,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
 
-    // author settings
-    vbox = new KVBox();
-    m_authorSettings = new KoConfigAuthorPage();
-    page = addPage(m_authorSettings, i18nc("@title:tab Author page", "Author"));
-    page->setHeader(i18n("Author"));
-    page->setIcon(koIcon("user-identity"));
-
+    // input settings
     m_inputConfiguration = new KisInputConfigurationPage();
     page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
     page->setHeader(i18n("Canvas Input"));
@@ -734,19 +735,17 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCursorStyle(dialog->m_general->cursorStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
+        cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-        KoApplication *app = qobject_cast<KoApplication*>(qApp);
-        if (app) {
-            foreach(KoPart* part, app->partList()) {
-                if (part) {
-                    KoDocument *doc = part->document();
-                    if (doc) {
-                        doc->setAutoSave(dialog->m_general->autoSaveInterval());
-                        doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-                        doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
-                    }
+        KisPart *part = KisPart::instance();
+        if (part) {
+            foreach(QPointer<KisDocument> doc, part->documents()) {
+                if (doc) {
+                    doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                    doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+                    doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
                 }
             }
         }
@@ -817,7 +816,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
 
-        dialog->m_authorSettings->apply();
     }
     delete dialog;
     return baccept;

@@ -21,22 +21,22 @@
 #include "kis_layer_contents.h"
 #include "kis_debug.h"
 #include "kis_timeline_header.h"
-#include "kis_animation_frame.h"
+#include "kis_animation_frame_widget.h"
 #include "kis_animation_doc.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 #include <QPainter>
 
-KisFrameBox::KisFrameBox(KisTimeline *parent)
+KisFrameBox::KisFrameBox(KisTimelineWidget *parent)
     : m_selectedFrame(0)
 {
     this->m_dock = parent;
-    m_layers = this->m_dock->getLayerBox()->getLayers();
+    //m_layers = this->m_dock->getLayerBox()->getLayers();
 
     m_timelineHeader = new KisTimelineHeader(this);
     m_timelineHeader->setGeometry(QRect(0, 0, 100000, 20));
 
-    KisLayerContents* firstContents = new KisLayerContents(this);
+    KisLayerContentsWidget* firstContents = new KisLayerContentsWidget(this);
     m_layerContents << firstContents;
     firstContents->setGeometry(QRect(0, m_layerContents.length() * 20, 100000, 20));
 
@@ -44,15 +44,15 @@ KisFrameBox::KisFrameBox(KisTimeline *parent)
 }
 
 void KisFrameBox::addLayerUiUpdate()
-{   
+{
     this->setFixedHeight(this->height() + 20);
 
-    KisLayerContents* newContents = new KisLayerContents(this);
+    KisLayerContentsWidget* newContents = new KisLayerContentsWidget(this);
     m_layerContents << newContents;
     int y = 0;
     int noLayers = m_layerContents.length();
 
-    for(int i = 0; i < noLayers - 1; i++) {
+    for (int i = 0; i < noLayers - 1; i++) {
         y = m_layerContents.at(i)->geometry().y();
         m_layerContents.at(i)->setGeometry(QRect(0, y + 20, 100000, 20));
     }
@@ -60,10 +60,10 @@ void KisFrameBox::addLayerUiUpdate()
     newContents->setGeometry(QRect(0, 20, 100000, 20));
     newContents->show();
 
-    KisAnimationFrame* currSelection = this->getSelectedFrame();
+    KisAnimationFrameWidget* currSelection = this->getSelectedFrame();
     currSelection->hide();
 
-    KisAnimationFrame* newSelection = new KisAnimationFrame(newContents, KisAnimationFrame::SELECTION, 10);
+    KisAnimationFrameWidget* newSelection = new KisAnimationFrameWidget(newContents, KisAnimationFrameWidget::SELECTION, 10);
     newSelection->setGeometry(0, 0, 10, 20);
 
     // Don't call setSelectedFrame here because it will emit frameSelectionChanged
@@ -76,8 +76,8 @@ void KisFrameBox::removeLayerUiUpdate(int layer)
 {
     m_layerContents.at(layer)->hide();
 
-    for(int i = 0 ; i < layer ; i++) {
-        KisLayerContents* l = m_layerContents.at(i);
+    for (int i = 0 ; i < layer ; i++) {
+        KisLayerContentsWidget* l = m_layerContents.at(i);
         l->setGeometry(QRect(0, l->y() - 20, 100000, 20));
     }
 
@@ -86,8 +86,8 @@ void KisFrameBox::removeLayerUiUpdate(int layer)
 
 void KisFrameBox::moveLayerDownUiUpdate(int layer)
 {
-    KisLayerContents* l = m_layerContents.at(layer);
-    KisLayerContents* l_below = m_layerContents.at(layer - 1);
+    KisLayerContentsWidget* l = m_layerContents.at(layer);
+    KisLayerContentsWidget* l_below = m_layerContents.at(layer - 1);
 
     l->setGeometry(QRect(0, l->y() + 20, width(), 20));
     l_below->setGeometry(QRect(0, l->y() - 20, width(), 20));
@@ -97,8 +97,8 @@ void KisFrameBox::moveLayerDownUiUpdate(int layer)
 
 void KisFrameBox::moveLayerUpUiUpdate(int layer)
 {
-    KisLayerContents* l = m_layerContents.at(layer);
-    KisLayerContents* l_above = m_layerContents.at(layer + 1);
+    KisLayerContentsWidget* l = m_layerContents.at(layer);
+    KisLayerContentsWidget* l_above = m_layerContents.at(layer + 1);
 
     l->setGeometry(QRect(0, l->y() - 20, width(), 20));
     l_above->setGeometry(QRect(0, l->y() + 20, width(), 20));
@@ -106,50 +106,50 @@ void KisFrameBox::moveLayerUpUiUpdate(int layer)
     m_layerContents.swap(layer, layer + 1);
 }
 
-void KisFrameBox::setSelectedFrame(int x, KisLayerContents* parent, int width)
+void KisFrameBox::setSelectedFrame(int x, KisLayerContentsWidget* parent, int width)
 {
-    if(x < 0) {
+    if (x < 0) {
         x = m_selectedFrame->geometry().x();
     }
 
-    if(!parent) {
+    if (!parent) {
         parent = m_selectedFrame->getParent();
     }
 
-    if(m_selectedFrame) {
+    if (m_selectedFrame) {
         m_selectedFrame->hide();
         delete m_selectedFrame;
         m_selectedFrame = 0;
     }
 
-    this->m_selectedFrame = new KisAnimationFrame(parent, KisAnimationFrame::SELECTION, width);
+    this->m_selectedFrame = new KisAnimationFrameWidget(parent, KisAnimationFrameWidget::SELECTION, width);
     this->m_selectedFrame->setGeometry(x, 0, width, 20);
     this->m_selectedFrame->show();
 
     int layerIndex = this->m_selectedFrame->getParent()->getLayerIndex();
     QRect globalPosition(this->m_selectedFrame->x(),
-                             layerIndex * 20,
-                             this->m_selectedFrame->width(),
-                             this->m_selectedFrame->height());
+                         layerIndex * 20,
+                         this->m_selectedFrame->width(),
+                         this->m_selectedFrame->height());
     emit frameSelectionChanged(globalPosition);
 }
 
-KisAnimationFrame* KisFrameBox::getSelectedFrame()
+KisAnimationFrameWidget* KisFrameBox::getSelectedFrame()
 {
     return m_selectedFrame;
 }
 
-KisLayerContents* KisFrameBox::getFirstLayer()
+KisLayerContentsWidget* KisFrameBox::getFirstLayer()
 {
 
-    if(m_layerContents.isEmpty()) {
+    if (m_layerContents.isEmpty()) {
         return 0;
     }
 
     return m_layerContents.at(0);
 }
 
-QList<KisLayerContents*> KisFrameBox::getLayerContents()
+QList<KisLayerContentsWidget*> KisFrameBox::getLayerContents()
 {
     return this->m_layerContents;
 }

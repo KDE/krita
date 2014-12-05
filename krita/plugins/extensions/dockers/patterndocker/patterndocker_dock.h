@@ -19,24 +19,23 @@
 #define _PATTERN_DOCK_H_
 
 #include <QDockWidget>
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 
 class KoPattern;
 class KoPatternChooser;
-class KisCanvas2;
 
-class PatternDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class PatternDockerDock : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
 public:
     PatternDockerDock( );
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+
+    virtual void setMainWindow(KisViewManager* kisview);
+    QString observerName() { return "PatternDockerDock"; }
 public slots:
     void patternChanged(KoPattern *pattern);
 private slots:
 
 private:
-    KisCanvas2* m_canvas;
     KoPatternChooser* m_patternChooser;
 };
 

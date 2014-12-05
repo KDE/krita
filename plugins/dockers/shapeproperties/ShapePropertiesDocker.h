@@ -34,7 +34,7 @@ class ShapePropertiesDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit ShapePropertiesDocker(QWidget *parent = 0);
     ~ShapePropertiesDocker();
-
+    QString observerName() { return "ShapePropertiesDocker"; }
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
     virtual void unsetCanvas();

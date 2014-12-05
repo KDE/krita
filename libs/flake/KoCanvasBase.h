@@ -66,6 +66,9 @@ public:
     explicit KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument);
     virtual ~KoCanvasBase();
 
+    /// For apps that want to share a resource manager with other views
+    void setSharedResourceManager(KoCanvasResourceManager *resourceManager);
+
 public:
 
     /**

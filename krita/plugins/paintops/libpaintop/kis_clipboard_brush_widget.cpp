@@ -41,6 +41,8 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     setWindowTitle(caption);
     preview->setScaledContents(true);
     preview->setFixedSize(preview->size());
+    preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
+
 
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
@@ -100,7 +102,7 @@ void KisClipboardBrushWidget::slotUseBrushClicked()
         }
     }
     else {
-        preview->setText("No clip.");
+        preview->setText("Nothing copied \n to Clipboard");
     }
 }
 

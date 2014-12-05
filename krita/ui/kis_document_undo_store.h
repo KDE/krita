@@ -21,13 +21,13 @@
 
 #include "kis_undo_store.h"
 
-class KoDocument;
+class KisDocument;
 class KUndo2Stack;
 
 class KRITAUI_EXPORT KisDocumentUndoStore : public KisUndoStore
 {
 public:
-    KisDocumentUndoStore(KoDocument *doc);
+    KisDocumentUndoStore(KisDocument *doc);
 
     const KUndo2Command* presentCommand();
     void undoLastCommand();
@@ -36,7 +36,7 @@ public:
     void endMacro();
 
 private:
-    KoDocument* m_doc;
+    KisDocument* m_doc;
 };
 
 #endif /* __KIS_DOCUMENT_UNDO_STORES_H */

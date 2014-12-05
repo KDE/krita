@@ -38,7 +38,7 @@
 
 #include <krita_export.h>
 
-class KoDocument;
+class KisDocument;
 class KoColorSpace;
 class KoColor;
 
@@ -271,7 +271,7 @@ public:
     /**
      * Replace current undo store with the new one. The old store
      * will be deleted.
-     * This method is used by KisDoc2 for dropping all the commands
+     * This method is used by KisDocument for dropping all the commands
      * during file loading.
      */
     void setUndoStore(KisUndoStore *undoStore);

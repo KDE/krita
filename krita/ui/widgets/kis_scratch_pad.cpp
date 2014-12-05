@@ -201,6 +201,7 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
     m_helper->initPaint(event,
                         resourceManager,
                         0,
+                        0,
                         m_updateScheduler,
                         m_undoAdapter,
                         m_paintLayer,

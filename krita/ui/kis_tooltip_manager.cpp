@@ -27,10 +27,10 @@
 #include <kdebug.h>
 #include <kmenubar.h>
 
-#include <KoMainWindow.h>
-#include "kis_view2.h"
+#include <KisMainWindow.h>
+#include "KisViewManager.h"
 
-KisTooltipManager::KisTooltipManager(KisView2* view) : QObject(view), m_view(view), m_recording(false)
+KisTooltipManager::KisTooltipManager(KisViewManager* view) : QObject(view), m_view(view), m_recording(false)
 {
     m_view->mainWindow()->menuBar()->installEventFilter(this);
 }
@@ -67,7 +67,7 @@ void KisTooltipManager::record()
 {
     m_recording = true;
     QList<QAction*> actions =  m_view->actionCollection()->actions();
-    foreach(KXMLGUIClient* client, m_view->childClients() ) {
+    foreach(KXMLGUIClient* client, m_view->mainWindow()->childClients() ) {
         actions.append(client->actionCollection()->actions());
     }
 
@@ -87,7 +87,7 @@ void KisTooltipManager::captureToolip()
     }
 
     bool ok;
-    QString tooltip = QInputDialog::getText(m_view, "Add Tooltip",
+    QString tooltip = QInputDialog::getText(m_view->mainWindow(), "Add Tooltip",
                                             "New Tooltip:", QLineEdit::Normal,
                                             oldTooltip, &ok);
     if (ok && !tooltip.isEmpty()) {

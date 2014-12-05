@@ -28,11 +28,12 @@
 
 #include "kis_config.h"
 
-#include "KoMainWindow.h"
+#include "KisMainWindow.h"
 #include "KoZoomController.h"
-#include "kis_doc2.h"
-#include "kis_part2.h"
-#include "kis_view2.h"
+#include "KisDocument.h"
+#include "KisPart.h"
+#include "KisViewManager.h"
+#include "KisView.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_coordinates_converter.h"
@@ -52,13 +53,12 @@ public:
         m_image->initialRefreshGraph();
         QVERIFY(checkLayersInitial(m_image));
 
-        m_doc = new KisDoc2();
-        m_part = m_doc->documentPart();
+        m_doc = KisPart::instance()->createDocument();
 
         m_doc->setCurrentImage(m_image);
 
         m_mainWindow = m_doc->documentPart()->createMainWindow();
-        m_view = new KisView2(m_part, m_doc, m_mainWindow);
+        m_view = new KisView(m_part, m_doc, m_mainWindow->actionCollection(), m_mainWindow);
 
         m_image->refreshGraph();
 
@@ -81,11 +81,11 @@ public:
         QApplication::removePostedEvents(0);
     }
 
-    KisView2* view() {
+    QPointer<KisView> view() {
         return m_view;
     }
 
-    KoMainWindow* mainWindow() {
+    KisMainWindow* mainWindow() {
         return m_mainWindow;
     }
 
@@ -116,10 +116,10 @@ public:
 private:
     KisSurrogateUndoStore *m_undoStore;
     KisImageSP m_image;
-    KoPart *m_part;
-    KisDoc2 *m_doc;
-    KisView2 *m_view;
-    KoMainWindow *m_mainWindow;
+    KisPart *m_part;
+    KisDocument *m_doc;
+    QPointer<KisView>m_view;
+    KisMainWindow *m_mainWindow;
 };
 
 template<class P, class T>
@@ -376,7 +376,7 @@ void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenM
     if (fullscreenMode) {
         QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320,220));
 
-        QAction *action = t.view()->actionCollection()->action("view_show_just_the_canvas");
+        QAction *action = t.view()->viewManager()->actionCollection()->action("view_show_just_the_canvas");
         action->setChecked(true);
 
         QVERIFY(verifyOffset(t, QPoint(79,-21)));

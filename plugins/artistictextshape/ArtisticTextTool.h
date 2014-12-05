@@ -56,7 +56,7 @@ public:
     /// reimplemented
     virtual void deactivate();
     /// reimplemented
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented

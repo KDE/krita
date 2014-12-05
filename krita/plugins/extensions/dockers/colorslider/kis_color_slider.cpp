@@ -33,7 +33,7 @@
 #include "kis_cursor.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 #include "kis_color_slider_dock.h"
 

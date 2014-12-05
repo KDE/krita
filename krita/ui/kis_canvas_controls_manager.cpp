@@ -24,7 +24,9 @@
 
 #include <KoCanvasResourceManager.h>
 
-#include "kis_view2.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
+#include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 
@@ -36,7 +38,7 @@
 
 const int STEP = 25;
 
-KisCanvasControlsManager::KisCanvasControlsManager(KisView2 * view) : m_view(view)
+KisCanvasControlsManager::KisCanvasControlsManager(KisViewManager * view) : m_view(view)
 {
 
 }
@@ -46,32 +48,41 @@ KisCanvasControlsManager::~KisCanvasControlsManager()
 
 }
 
-void KisCanvasControlsManager::setup(KActionCollection* collection)
+void KisCanvasControlsManager::setup(KActionCollection *actionCollection, KisActionManager *actionManager)
 {
-    KAction *lighterColor = new KAction(i18n("Make brush color lighter"), collection);
+    KisAction *lighterColor = new KisAction(i18n("Make brush color lighter"));
     lighterColor->setShortcut(Qt::Key_L);
-    collection->addAction("make_brush_color_lighter", lighterColor);
+    actionManager->addAction("make_brush_color_lighter", lighterColor, actionCollection);
     connect(lighterColor, SIGNAL(triggered()), SLOT(makeColorLighter()));
 
-    KAction *darkerColor = new KAction(i18n("Make brush color darker"), collection);
+    KisAction *darkerColor = new KisAction(i18n("Make brush color darker"));
     darkerColor->setShortcut(Qt::Key_K);
-    collection->addAction("make_brush_color_darker", darkerColor);
+    actionManager->addAction("make_brush_color_darker", darkerColor, actionCollection);
     connect(darkerColor, SIGNAL(triggered()), SLOT(makeColorDarker()));
 
-    KAction *increaseOpacity = new KAction(i18n("Increase opacity"), collection);
+    KisAction *increaseOpacity = new KisAction(i18n("Increase opacity"));
     increaseOpacity->setShortcut(Qt::Key_O);
-    collection->addAction("increase_opacity", increaseOpacity);
+    actionManager->addAction("increase_opacity", increaseOpacity, actionCollection);
     connect(increaseOpacity, SIGNAL(triggered()), SLOT(increaseOpacity()));
 
-    KAction *decreaseOpacity = new KAction(i18n("Decrease opacity"), collection);
+    KisAction *decreaseOpacity = new KisAction(i18n("Decrease opacity"));
     decreaseOpacity->setShortcut(Qt::Key_I);
-    collection->addAction("decrease_opacity", decreaseOpacity);
+    actionManager->addAction("decrease_opacity", decreaseOpacity, actionCollection);
     connect(decreaseOpacity, SIGNAL(triggered()), SLOT(decreaseOpacity()));
+}
+
+void KisCanvasControlsManager::setView(QPointer<KisView>imageView)
+{
+    Q_UNUSED(imageView);
 }
 
 void KisCanvasControlsManager::transformColor(int step)
 {
-    KoColor color = m_view->canvasBase()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+    if (!m_view) return;
+    if (!m_view->canvasBase()) return;
+    if (!m_view->resourceProvider()->resourceManager()) return;
+
+    KoColor color = m_view->resourceProvider()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     QColor rgb = color.toQColor();
     int h = 0, s = 0, v = 0;
     rgb.getHsv(&h,&s,&v);
@@ -84,7 +95,7 @@ void KisCanvasControlsManager::transformColor(int step)
     }
     rgb.setHsv(h,s,v);
     color.fromQColor(rgb);
-    m_view->canvasBase()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
+    m_view->resourceProvider()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
 
 
@@ -100,7 +111,11 @@ void KisCanvasControlsManager::makeColorLighter()
 
 void KisCanvasControlsManager::stepAlpha(float step)
 {
-    qreal alpha = m_view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
+    if (!m_view) return;
+    if (!m_view->canvasBase()) return;
+    if (!m_view->resourceProvider()->resourceManager()) return;
+
+    qreal alpha = m_view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
     alpha += step;
     alpha = qBound<qreal>(0.0, alpha, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);

@@ -53,9 +53,9 @@ public:
     };
     Q_DECLARE_FLAGS(ActivationConditions, ActivationCondition)
     
-    explicit KisAction(QObject* parent);
-    KisAction(const QString& text, QObject* parent);
-    KisAction(const KIcon& icon, const QString& text, QObject* parent);
+    explicit KisAction(QObject* parent = 0);
+    KisAction(const QString& text, QObject* parent = 0);
+    KisAction(const KIcon& icon, const QString& text, QObject* parent = 0);
     virtual ~KisAction();
 
     void setActivationFlags(ActivationFlags flags);

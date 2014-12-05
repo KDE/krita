@@ -33,7 +33,7 @@ class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
 class KisBrush;
 
-class KisView2;
+class KisViewManager;
 
 /**
  * Compound widget that collects all the various brush selection widgets.

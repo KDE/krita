@@ -20,7 +20,7 @@
 #define KIS_OPERATION_UI_FACTORY_H
 
 #include "kis_operation_configuration.h"
-class KisView2;
+class KisViewManager;
 
 class KRITAUI_EXPORT KisOperationUIFactory
 {
@@ -42,7 +42,7 @@ public:
     * @param view the view
     * @param configuration the into which the setting will be written
     */
-    virtual bool fetchConfiguration(KisView2* view, KisOperationConfiguration* configuration) = 0;
+    virtual bool fetchConfiguration(KisViewManager* view, KisOperationConfiguration* configuration) = 0;
     
 private:
     class Private;

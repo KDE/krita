@@ -21,7 +21,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_config_widget.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_filter_manager.h>
 
 class FiltersModel::Private
@@ -30,7 +30,7 @@ public:
     Private()
         : view(0)
     {};
-    KisView2* view;
+    KisViewManager* view;
     QList<KisFilterSP> filters;
     QList<KisSafeFilterConfigurationSP> configurations;
 };
@@ -147,7 +147,7 @@ QObject* FiltersModel::view() const
 
 void FiltersModel::setView(QObject* newView)
 {
-    d->view = qobject_cast<KisView2*>( newView );
+    d->view = qobject_cast<KisViewManager*>( newView );
     emit viewChanged();
 }
 

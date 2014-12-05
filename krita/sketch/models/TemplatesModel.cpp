@@ -22,9 +22,9 @@
 
 #include "TemplatesModel.h"
 #include <kis_factory2.h>
-#include <KoTemplateTree.h>
-#include <KoTemplateGroup.h>
-#include <KoTemplate.h>
+#include <KisTemplateTree.h>
+#include <KisTemplateGroup.h>
+#include <KisTemplate.h>
 #include <kiconloader.h>
 #include <QApplication>
 #include <QTimer>
@@ -156,12 +156,12 @@ void TemplatesModel::toggleGroup(const QString& name)
 
 void TemplatesModel::populate()
 {
-    KoTemplateTree templateTree("krita_template", KisFactory2::componentData(), true);
-    foreach (KoTemplateGroup *group, templateTree.groups()) {
+    KisTemplateTree templateTree("krita_template", KisFactory2::componentData(), true);
+    foreach (KisTemplateGroup *group, templateTree.groups()) {
         if (group->isHidden()) {
             continue;
         }
-        foreach (KoTemplate* t, group->templates()) {
+        foreach (KisTemplate* t, group->templates()) {
             if (t->isHidden())
                 continue;
 

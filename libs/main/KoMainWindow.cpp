@@ -93,8 +93,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include "thememanager.h"
-
 #include "calligraversion.h"
 
 class KoMainWindowPrivate
@@ -140,7 +138,6 @@ public:
 #ifdef HAVE_KACTIVITIES
         activityResource = 0;
 #endif
-        themeManager = 0;
 
         m_helpMenu = 0;
 
@@ -245,7 +242,6 @@ public:
     KActivities::ResourceInstance *activityResource;
 #endif
 
-    Digikam::ThemeManager *themeManager;
 
     KHelpMenu *m_helpMenu;
 
@@ -362,15 +358,6 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->uncompressToDir->setEnabled(false);
 #endif
 
-    // populate theme menu
-    d->themeManager = new Digikam::ThemeManager(this);
-    KConfigGroup group(KGlobal::config(), "theme");
-    d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
-    d->themeManager->registerThemeActions(actionCollection());
-    d->themeManager->setCurrentTheme(group.readEntry("Theme",
-                                                     d->themeManager->defaultThemeName()));
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SIGNAL(themeChanged()));
-
     KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
     fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
@@ -449,11 +436,6 @@ KoMainWindow::~KoMainWindow()
     KConfigGroup cfg(KGlobal::config(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
     cfg.writeEntry("ko_windowstate", saveState().toBase64());
-
-    {
-        KConfigGroup group(KGlobal::config(), "theme");
-        group.writeEntry("Theme", d->themeManager->currentThemeName());
-    }
 
     // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;

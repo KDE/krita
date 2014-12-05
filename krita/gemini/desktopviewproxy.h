@@ -26,13 +26,13 @@
 #include <QObject>
 
 class KUrl;
-class KoMainWindow;
+class KisMainWindow;
 class MainWindow;
 class DesktopViewProxy : public QObject
 {
     Q_OBJECT
 public:
-    explicit DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent = 0);
+    explicit DesktopViewProxy(MainWindow* mainWindow, KisMainWindow* parent = 0);
     virtual ~DesktopViewProxy();
 
 public Q_SLOTS:

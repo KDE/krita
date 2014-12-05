@@ -30,7 +30,7 @@
 
 #include <kcmdlineargs.h>
 
-#include <KoApplication.h>
+#include <KisApplication.h>
 #include <KoConfig.h>
 
 #include <krita_export.h>
@@ -38,7 +38,7 @@
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
 #include "ui/kis_factory2.h"
-#include "ui/kis_doc2.h"
+#include "ui/KisDocument.h"
 #include "kis_splash_screen.h"
 
 #if defined Q_OS_WIN
@@ -81,7 +81,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
 
     // first create the application so we can create a  pixmap
-    KoApplication app(KIS_MIME_TYPE);
+    KisApplication app(KIS_MIME_TYPE);
 
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();

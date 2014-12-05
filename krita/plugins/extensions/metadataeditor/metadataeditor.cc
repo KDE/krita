@@ -33,7 +33,7 @@
 #include "kis_layer.h"
 #include "kis_node_manager.h"
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_action.h"
 #include "kis_image.h"
 
@@ -74,7 +74,7 @@ void metadataeditorPlugin::slotEditLayerMetaData()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisMetaDataEditor editor(m_view, m_view->nodeManager()->activeLayer()->metaData());
+    KisMetaDataEditor editor(m_view->mainWindow(), m_view->nodeManager()->activeLayer()->metaData());
     editor.exec();
 }
 

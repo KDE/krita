@@ -29,7 +29,7 @@
 #include <kactioncollection.h>
 
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_color_space_selector.h"
@@ -104,7 +104,7 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 {
     if (m_canvas) {
         m_canvas->disconnect(this);
-        KActionCollection *ac = m_canvas->view()->actionCollection();
+        KActionCollection *ac = m_canvas->viewManager()->actionCollection();
         ac->takeAction(ac->action("show_color_history"));
         ac->takeAction(ac->action("show_common_colors"));
     }
@@ -115,11 +115,10 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
     m_colorHistoryWidget->setCanvas(canvas);
     m_colorSelectorContainer->setCanvas(canvas);
 
-
-    if (m_canvas && m_canvas->view()->nodeManager()) {
-        connect(m_canvas->view()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
+    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->nodeManager()) {
+        connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
     }
-    KActionCollection* actionCollection = canvas->view()->actionCollection();
+    KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
 
     if (!m_colorHistoryAction) {
         m_colorHistoryAction = new KAction("Show color history", this);

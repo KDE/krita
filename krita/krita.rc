@@ -1,16 +1,43 @@
 <?xml version="1.0"?>
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="56">
+<kpartgui name="Krita" version="59"
+               xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
+                         http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd" >
 
 <MenuBar>
- <Menu name="file"><text>&amp;File</text>
-  <Separator/>
+ <Menu name="file" noMerge="1"><text>&amp;File</text>
+  <Action name="file_new" />
+  <Action name="activeauthor" />
+  <Action name="file_open" />
+  <Action name="file_open_recent" />
+  <Separator />
+  <Action name="file_save" />
+  <Action name="file_save_as" />
+  <Action name="file_reload_file" />
+  <Action name="file_versions_file"/>
+  <Separator />
+  <Action name="file_import_file" />
+  <Action name="file_export_file" />
+  <Action name="file_export_pdf" />
+  <Action name="file_send_file" />
+  <Separator />
   <Action name="save_incremental_version"/>
   <Action name="save_incremental_backup"/>
   <Action name="createTemplate"/>
+  <Separator />
+  <Action name="file_print" />
+  <Action name="file_print_preview" />
+  <Separator/>
+  <Action name="file_documentinfo" />
+  <DefineGroup name="file_infos" />
+  <Separator />
+  <Action name="file_close" />
+  <Action name="file_close_all" />
+  <Action name="file_quit" />
  </Menu>
 
- <Menu name="Edit"><text>&amp;Edit</text>
+ <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -28,7 +55,7 @@
   <Separator/>
   <Action name="revert"/>
   <Separator/>
-  <Menu name="Resources"><text>&amp;Resources</text>
+  <Menu name="resources"><text>&amp;Resources</text>
    <Action name="open_resources_directory"/>
    <Separator/>
    <Action name="add_palette"/>
@@ -37,14 +64,12 @@
   </Menu>
  </Menu>
 
- <Menu name="View"><text>&amp;View</text>
+ <Menu name="view"><text>&amp;View</text>
   <Action name="view_show_just_the_canvas"/>
   <Action name="view_fullscreen"/>
   <Action name="mirror_canvas"/>
   <Action name="wrap_around_mode"/>
   <Separator/>
-  <Action name="view_newview"/>    
-  <Separator/>      
   <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
@@ -169,7 +194,9 @@
 	<Action name="other_filters"/>
 </Menu>
 
-<Menu name="Tools"><text>&amp;Tools</text>
+<Menu name="tools"><text>&amp;Tools</text>
+    <Action name="dummy"/>
+    <MergeLocal/>
 </Menu>
 
 <Menu name="settings"><text>Settings</text>
@@ -177,12 +204,48 @@
   <Action name="view_toggledockers" group="settings_show"/>
   <Action name="showStatusBar" group="settings_show"/>
   <Action name="settings_active_author" group="settings_configure"/>
+  <Action name="settings_dockers_menu"/>
+  <DefineGroup name="settings_show"/>
+  <Separator/>
+  <Action name="options_configure_keybinding"/>
+  <Action name="options_configure_toolbars"/>
+  <DefineGroup name="settings_configure"/>
   <Action name="preferences" group="settings_configure"/>
   <Action name="theme_menu"/>
-  <Action name="palette_manager"/>
 </Menu>
 
+  <Separator/>
+  <Menu name="help"><text>&amp;Help</text>
+    <Action name="help_contents"/>
+    <Action name="help_whats_this"/>
+    <MergeLocal name="help_whats_this_merge"/>
+    <Separator/>
+    <MergeLocal/>
+    <Action name="help_show_tip"/>
+    <Separator/>
+    <Action name="help_report_bug"/>
+    <Separator/>
+    <Action name="switch_application_language"/>
+    <Separator/>
+    <MergeLocal name="about_merge"/>
+    <Action name="help_about_app"/>
+    <Action name="help_about_kde"/>
+  </Menu>
+
+
+<Action name="window"/>
+
 </MenuBar>
+
+<ToolBar name="mainToolBar" fullWidth="false" noMerge="1"><Text>File</Text>
+  <Action name="file_new" />
+  <Action name="file_open" />
+  <Action name="file_save" />
+  <!--
+  <Action name="file_print" />
+  <Action name="file_print_preview" />
+  //-->
+</ToolBar>
 
 <ToolBar name="BrushesAndStuff" position="top">
      <Text>Brushes and Stuff</Text>

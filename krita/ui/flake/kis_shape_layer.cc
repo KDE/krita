@@ -42,7 +42,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoDataCenterBase.h>
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyles.h>
 #include <KoImageCollection.h>
@@ -317,7 +317,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KisDocument::SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!store->open("content.xml"))
         return false;

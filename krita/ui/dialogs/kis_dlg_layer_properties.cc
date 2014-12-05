@@ -39,8 +39,8 @@
 #include "QTimer"
 #include "commands/kis_layer_commands.h"
 #include "kis_layer.h"
-#include "kis_view2.h"
-#include "kis_doc2.h"
+#include "KisViewManager.h"
+#include "KisDocument.h"
 #include "kis_cursor.h"
 #include <kis_debug.h>
 #include <kis_global.h>
@@ -63,7 +63,7 @@ struct KisDlgLayerProperties::Private
     quint8 opacity;
 };
 
-KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, KisDoc2 *doc, QWidget *parent, const char *name, Qt::WFlags f)
+KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *view, KisDocument *doc, QWidget *parent, const char *name, Qt::WFlags f)
                       : KDialog(parent)
                       , m_layer(layer)
                       , m_view(view)

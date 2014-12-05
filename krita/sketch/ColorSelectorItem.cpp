@@ -24,7 +24,7 @@
 #include <plugins/extensions/dockers/advancedcolorselector/kis_color_selector_simple.h>
 #include <plugins/extensions/dockers/advancedcolorselector/kis_color_selector_wheel.h>
 #include <kis_canvas2.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <KoCanvasResourceManager.h>
 #include <QPainter>
@@ -87,7 +87,7 @@ public:
     KisColorSelectorComponent* main;
     KisColorSelectorComponent* sub;
 
-    KisView2* view;
+    KisViewManager* view;
     Acs::ColorRole colorRole;
     KoColor currentColor;
     KisColorSelectorComponent* grabbingComponent;
@@ -251,7 +251,7 @@ QObject* ColorSelectorItem::view() const
 
 void ColorSelectorItem::setView(QObject* newView)
 {
-    d->view = qobject_cast<KisView2*>( newView );
+    d->view = qobject_cast<KisViewManager*>( newView );
     if (d->view) {
         connect(d->view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)),
                 this, SLOT(fgColorChanged(KoColor)));

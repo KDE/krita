@@ -27,8 +27,8 @@
 class KisNodeDummy;
 class KoShapeLayer;
 
-class KisView2;
-class KisDoc2;
+class KisCanvas2;
+class KisDocument;
 class KisNameServer;
 class KoDataCenterBase;
 
@@ -44,7 +44,7 @@ class KRITAUI_EXPORT KisShapeController : public KisDummiesFacadeBase, public Ko
 
 public:
 
-    KisShapeController(KisDoc2 * doc, KisNameServer *nameServer);
+    KisShapeController(KisDocument *doc, KisNameServer *nameServer);
     ~KisShapeController();
 
     bool hasDummyForNode(KisNodeSP node) const;
@@ -53,7 +53,8 @@ public:
     int dummiesCount() const;
 
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
-    void setInitialShapeForView(KisView2 * view);
+    void setInitialShapeForCanvas(KisCanvas2 *canvas);
+
 
 private:
     void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);

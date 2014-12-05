@@ -43,7 +43,7 @@
 #include <kis_selection.h>
 #include <kis_system_locker.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <canvas/kis_canvas2.h>
 #include <widgets/kis_cmb_composite.h>
 #include <widgets/kis_slider_spin_box.h>
@@ -130,7 +130,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                                        kundo2_i18n("Flood Fill"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
     KisProcessingVisitorSP visitor =
         new FillProcessingVisitor(m_startPos,

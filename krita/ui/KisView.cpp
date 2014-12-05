@@ -301,6 +301,8 @@ KisView::~KisView()
 void KisView::setViewManager(KisViewManager *view)
 {
     d->viewManager = view;
+    canvasBase()->setSharedResourceManager(view->resourceProvider()->resourceManager());
+
     KoToolManager::instance()->addController(d->canvasController);
     dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(d->canvas);
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");

@@ -38,6 +38,9 @@ public:
     KoShapeShadow();
     ~KoShapeShadow();
 
+    KoShapeShadow(const KoShapeShadow &rhs);
+    KoShapeShadow& operator=(const KoShapeShadow &rhs);
+
     /**
      * Fills the style object
      * @param style object

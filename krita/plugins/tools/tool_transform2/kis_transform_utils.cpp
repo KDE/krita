@@ -20,6 +20,7 @@
 
 #include <cmath>
 #include <QTransform>
+#include <KoUnit.h>
 #include "tool_transform_args.h"
 
 
@@ -47,7 +48,7 @@ qreal KisTransformUtils::effectiveRotationHandleGrabRadius(const KisCoordinatesC
 }
 
 qreal KisTransformUtils::scaleFromAffineMatrix(const QTransform &t) {
-    return std::sqrt(t.m11() * t.m11() + t.m22() * t.m22() + t.m12() * t.m12() + t.m21() * t.m21());
+    return KoUnit::approxTransformScale(t);
 }
 
 qreal KisTransformUtils::scaleFromPerspectiveMatrix(const QTransform &t, const QPointF &basePt) {

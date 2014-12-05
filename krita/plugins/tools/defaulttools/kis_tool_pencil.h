@@ -44,7 +44,9 @@ private:
     KisToolPencil* const m_parentTool;
 };
 
-typedef KisDelegatedTool<KisToolShape, __KisToolPencilLocalTool> DelegatedPencilTool;
+typedef KisDelegatedTool<KisToolShape,
+                         __KisToolPencilLocalTool,
+                         DeselectShapesActivationPolicy> DelegatedPencilTool;
 
 class KisToolPencil : public DelegatedPencilTool
 {

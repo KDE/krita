@@ -47,7 +47,9 @@ private:
     KisToolPath* const m_parentTool;
 };
 
-typedef KisDelegatedTool<KisToolShape, __KisToolPathLocalTool> DelegatedPathTool;
+typedef KisDelegatedTool<KisToolShape,
+                         __KisToolPathLocalTool,
+                         DeselectShapesActivationPolicy> DelegatedPathTool;
 
 class KisToolPath : public DelegatedPathTool
 {

@@ -154,6 +154,8 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KisView2 *view, 
     KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
+    connect(kritaShapeController, SIGNAL(selectionContentChanged()),
+            globalShapeManager(), SIGNAL(selectionContentChanged()));
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
@@ -307,7 +309,21 @@ const QWidget* KisCanvas2::canvasWidget() const
 
 KoUnit KisCanvas2::unit() const
 {
-    return KoUnit(KoUnit::Pixel);
+    KoUnit unit(KoUnit::Pixel);
+
+    KisImageWSP image = m_d->view->image();
+    if (image) {
+        if (!qFuzzyCompare(image->xRes(), image->yRes())) {
+            qWarning() << "WARNING: resolution of the image is anisotropic"
+                       << ppVar(image->xRes())
+                       << ppVar(image->yRes());
+        }
+
+        const qreal resolution = image->xRes();
+        unit.setFactor(resolution);
+    }
+
+    return unit;
 }
 
 KoToolProxy * KisCanvas2::toolProxy() const

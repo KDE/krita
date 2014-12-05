@@ -201,6 +201,19 @@ KoShapeShadow::~KoShapeShadow()
     delete d;
 }
 
+KoShapeShadow::KoShapeShadow(const KoShapeShadow &rhs)
+    : d(new Private(*rhs.d))
+{
+    d->refCount = 0;
+}
+
+KoShapeShadow& KoShapeShadow::operator=(const KoShapeShadow &rhs)
+{
+    *d = *rhs.d;
+    d->refCount = 0;
+    return *this;
+}
+
 void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
     Q_UNUSED(context);

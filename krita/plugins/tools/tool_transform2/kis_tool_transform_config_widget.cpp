@@ -552,7 +552,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         warpButton->setChecked(true);
 
         if (config.defaultPoints()) {
-            densityBox->setValue(config.numPoints());
+            densityBox->setValue(std::sqrt(config.numPoints()));
         }
 
         cmbWarpType->setCurrentIndex((int)config.warpType());

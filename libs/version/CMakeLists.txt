@@ -4,7 +4,7 @@ configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversi
 # generate calligragitversion.h
 configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h)
 
-include_directories( ${QT_INCLUDES})
+include_directories( ${QT_INCLUDES} ${KDE4_INCLUDES})
 
 set(koversion_LIB_SRCS
     calligraversion.cpp

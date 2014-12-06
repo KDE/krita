@@ -22,10 +22,10 @@ kde4_add_plugin(kritaanimator ${KRITA_ANIMATOR_PART_SRCS})
 
 target_link_libraries(kritaanimator kritaui)
 
-install(TARGETS kritaanimator  DESTINATION ${PLUGIN_INSTALL_DIR})
+#install(TARGETS kritaanimator  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  krita_animator.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+#install( FILES  krita_animator.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

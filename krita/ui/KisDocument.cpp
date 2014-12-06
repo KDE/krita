@@ -1132,14 +1132,11 @@ QPixmap KisDocument::generatePreview(const QSize& size)
         newSize.scale(size, Qt::KeepAspectRatio);
 
         QImage image;
-        if (bounds.width() < 10000 && bounds.height() < 10000) {
-            image = d->image->convertToQImage(d->image->bounds(), 0);
-        }
-        else {
-            image = d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
-        }
+        image = d->image->convertToQImage(QRect(0, 0, qMin(bounds.width(), newSize.width() * 2), qMin(bounds.width(), newSize.height() * 2)), newSize, 0);
         image = image.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
         return QPixmap::fromImage(image);
+
     }
     return QPixmap(size);
 }

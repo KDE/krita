@@ -85,8 +85,7 @@ public:
 
 
     /// Replace the existing color data, and colorspace with the specified data.
-    /// The data pointer remains of the responsibility of the caller, and this function
-    /// might change the internal pointer and reallocate memory if necesserary.
+    /// The data is copied.
     void setColor(const quint8 * data, const KoColorSpace * colorSpace = 0);
 
     /// Convert the color from src and replace the value of the current color with the converted data.

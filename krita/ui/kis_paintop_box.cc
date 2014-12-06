@@ -986,7 +986,7 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
 
 void KisPaintopBox::toggleHighlightedButton(QToolButton* m_tool)
 {
-    palette_highlight.setColor(QPalette::Button, palette.color(QPalette::Base));
+    palette_highlight.setColor(QPalette::Button, palette.color(QPalette::Highlight));
 
     if (m_tool->isChecked())
         m_tool->setPalette(this->palette_highlight);

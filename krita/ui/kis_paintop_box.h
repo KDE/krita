@@ -26,16 +26,19 @@
 #include <QWidget>
 #include <QList>
 
+
 #include <KoID.h>
 #include <KoInputDevice.h>
 
 #include <kis_types.h>
 #include <kis_paintop_settings.h>
+#include <kaction.h>
 
 #include "kis_locked_properties_proxy.h"
 #include "kis_locked_properties_server.h"
 #include "kis_locked_properties.h"
 #include "kis_config.h"
+
 
 class QToolButton;
 class QPushButton;
@@ -154,8 +157,8 @@ private slots:
     void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
     void slotDropLockedOption(KisPropertiesConfiguration* p);
     void slotDirtyPresetToggled(bool);
-    void slotEraserBrushSizeToggled(bool);
-
+    void slotEraserBrushSizeToggled(bool);    
+    void slotUpdateSelectionIcon();
 
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
@@ -189,6 +192,9 @@ private:
 
     int normalBrushSize; // when toggling between eraser mode
     int eraserBrushSize;
+
+    KAction* hMirrorAction;
+    KAction* vMirrorAction;
 
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {

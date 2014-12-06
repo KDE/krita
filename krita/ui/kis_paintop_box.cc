@@ -62,6 +62,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_resource_server_provider.h"
 #include "kis_favorite_resource_manager.h"
+#include "thememanager.h"
 #include "kis_config.h"
 
 #include "widgets/kis_popup_button.h"
@@ -152,8 +153,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     hMirrorButton = new QToolButton(this);
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
-    KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
-    hMirrorAction->setIcon(koIcon("symmetry-horyzontal"));
+    hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
+
+    hMirrorAction->setIcon(themedIcon("symmetry-horizontal"));
     hMirrorAction->setCheckable(true);
     hMirrorButton->setDefaultAction(hMirrorAction);
     m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
@@ -161,8 +163,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     vMirrorButton = new QToolButton(this);
     vMirrorButton->setFixedSize(32, 32);
     vMirrorButton->setCheckable(true);
-    KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
-    vMirrorAction->setIcon(koIcon("symmetry-vertical"));
+
+    vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
+    vMirrorAction->setIcon(themedIcon("symmetry-vertical"));
     vMirrorAction->setCheckable(true);
     vMirrorButton->setDefaultAction(vMirrorAction);
     m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
@@ -347,6 +350,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_favoriteResourceManager, SIGNAL(sigSetFGColor(KoColor)), m_resourceProvider, SLOT(slotSetFGColor(KoColor)));
     connect(m_favoriteResourceManager, SIGNAL(sigSetBGColor(KoColor)), m_resourceProvider, SLOT(slotSetBGColor(KoColor)));
     connect(m_favoriteResourceManager, SIGNAL(sigEnableChangeColor(bool)), m_resourceProvider, SLOT(slotResetEnableFGChange(bool)));
+
+    connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
+
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -981,7 +987,7 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
 
 void KisPaintopBox::toggleHighlightedButton(QToolButton* m_tool)
 {
-    palette_highlight.setColor(QPalette::Button, palette.color(QPalette::Highlight));
+    palette_highlight.setColor(QPalette::Button, palette.color(QPalette::Base));
 
     if (m_tool->isChecked())
         m_tool->setPalette(this->palette_highlight);
@@ -1071,4 +1077,10 @@ void KisPaintopBox::slotEraserBrushSizeToggled(bool value)
   m_eraserBrushSizeEnabled = value;
   KisConfig cfg;
   cfg.setUseEraserBrushSize(m_eraserBrushSizeEnabled);
+}
+
+void KisPaintopBox::slotUpdateSelectionIcon()
+{
+    hMirrorAction->setIcon(themedIcon("symmetry-horizontal"));
+    vMirrorAction->setIcon(themedIcon("symmetry-vertical"));
 }

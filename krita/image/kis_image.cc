@@ -1115,27 +1115,7 @@ QImage KisImage::convertToQImage(qint32 x,
                                         KoColorConversionTransformation::InternalRenderingIntent,
                                         KoColorConversionTransformation::InternalConversionFlags);
 
-    if (!image.isNull()) {
-#ifdef WORDS_BIGENDIAN
-        uchar * data = image.bits();
-        for (int i = 0; i < w * h; ++i) {
-            uchar r, g, b, a;
-            a = data[0];
-            b = data[1];
-            g = data[2];
-            r = data[3];
-            data[0] = r;
-            data[1] = g;
-            data[2] = b;
-            data[3] = a;
-            data += 4;
-        }
-#endif
-
-        return image;
-    }
-
-    return QImage();
+    return image;
 }
 
 
@@ -1197,22 +1177,6 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
                                                      KoColorConversionTransformation::InternalConversionFlags);
 
         delete [] scaledImageData;
-
-#ifdef WORDS_BIGENDIAN
-        uchar * data = image.bits();
-        for (int i = 0; i < image.width() * image.height(); ++i) {
-            uchar r, g, b, a;
-            a = data[0];
-            b = data[1];
-            g = data[2];
-            r = data[3];
-            data[0] = r;
-            data[1] = g;
-            data[2] = b;
-            data[3] = a;
-            data += 4;
-        }
-#endif
 
         return image;
     }

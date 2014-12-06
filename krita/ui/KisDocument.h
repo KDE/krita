@@ -278,15 +278,6 @@ public:
     virtual QPixmap generatePreview(const QSize& size);
 
     /**
-     *  Paints the data itself.
-     *  It's this method that %Calligra Parts have to implement.
-     *
-     *  @param painter     The painter object onto which will be drawn.
-     *  @param rect        The rect that should be used in the painter object.
-     */
-    virtual void paintContent(QPainter &painter, const QRect &rect);
-
-    /**
      *  Tells the document that its title has been modified, either because
      *  the modified status changes (this is done by setModified() ) or
      *  because the URL or the document-info's title changed.

@@ -1141,16 +1141,6 @@ QPixmap KisDocument::generatePreview(const QSize& size)
     return QPixmap(size);
 }
 
-void KisDocument::paintContent(QPainter& painter, const QRect& rc)
-{
-    if (!d->image) return;
-    KisConfig cfg;
-    const KoColorProfile *profile = cfg.displayProfile();
-    QRect rect = rc & d->image->bounds();
-    d->image->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
-}
-
-
 QString KisDocument::autoSaveFile(const QString & path) const
 {
     QString retval;

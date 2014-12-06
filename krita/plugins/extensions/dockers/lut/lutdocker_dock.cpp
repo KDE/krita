@@ -303,15 +303,17 @@ void LutDockerDock::gammaSliderReleased()
 
 void LutDockerDock::enableControls()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_canvas);
+    bool canDoExternalColorCorrection = false;
 
-    KisImageSP image = m_canvas->viewManager()->image();
-
-    bool canDoExternalColorCorrection =
-        image->colorSpace()->colorModelId() == RGBAColorModelID;
+    if (m_canvas) {
+        KisImageSP image = m_canvas->viewManager()->image();
+        canDoExternalColorCorrection =
+            image->colorSpace()->colorModelId() == RGBAColorModelID;
+    }
 
     if (!canDoExternalColorCorrection) {
         KisSignalsBlocker colorManagementBlocker(m_colorManagement);
+        Q_UNUSED(colorManagementBlocker);
         m_colorManagement->setCurrentIndex((int) KisConfig::INTERNAL);
     }
 

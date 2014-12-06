@@ -85,7 +85,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
         }
     }
     backers.chop(2);
-    backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html"));
+    backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
     lblKickstarter->setText(backers);
     wdg->addTab(lblKickstarter, i18n("Backers"));
 
@@ -108,7 +108,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
         }
     }
     credits.chop(2);
-    credits.append(i18n(".</p><p><i>For supporting Krita development with advice, icons, brush sets and more.</i></p></body></html"));
+    credits.append(i18n(".</p><p><i>For supporting Krita development with advice, icons, brush sets and more.</i></p></body></html>"));
 
     lblCredits->setText(credits);
     wdg->addTab(lblCredits, i18n("Also Thanks To"));

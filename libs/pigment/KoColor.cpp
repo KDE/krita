@@ -134,6 +134,15 @@ KoColor & KoColor::operator=(const KoColor & rhs)
     return * this;
 }
 
+bool KoColor::operator<(const KoColor &other) const
+{
+    QColor c = toQColor();
+    int gray = qGray(c.red(), c.green(), c.blue());
+
+    QColor c2 = other.toQColor();
+    return gray > qGray(c2.red(), c2.green(), c2.blue());
+}
+
 bool KoColor::operator==(const KoColor &other) const
 {
     if (!(*colorSpace() == *other.colorSpace()))

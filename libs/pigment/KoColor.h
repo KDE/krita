@@ -67,6 +67,11 @@ public:
      */
     KoColor &operator=(const KoColor &other);
 
+    /**
+     * @brief operator < compares the current color the other color and return true if this color is darker
+     */
+    bool operator<(const KoColor &other) const;
+
     bool operator==(const KoColor &other) const;
 
     /// return the current colorSpace

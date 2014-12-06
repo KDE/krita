@@ -810,6 +810,9 @@ void KisPaintopBox::slotVerticalMirrorChanged(bool value)
 
 void KisPaintopBox::sliderChanged(int n)
 {
+    if (!m_optionWidget) // widget will not exist if the are no documents open
+        return;
+
 
     m_optionWidget->blockSignals(true);
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));

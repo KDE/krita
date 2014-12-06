@@ -85,7 +85,9 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
     QRect r = m_image->bounds();
 
     gc.scale(scaleX, scaleY);
-    m_image->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile);
+
+    QImage image = m_image->convertToQImage(0, 0, r.width(), r.height(), printerProfile);
+    gc.drawImage(r.x(), r.y(), image, 0, 0, r.width(), r.height());
     if (removePolicy == DeleteWhenDone)
         deleteLater();
 }

@@ -96,19 +96,6 @@ public: // KisProjectionUpdateListener implementation
 public:
 
     /**
-     * Paint the specified rect onto the painter, adjusting the colors
-     * using the given profile.
-     */
-    void renderToPainter(qint32 srcX,
-                         qint32 srcY,
-                         qint32 dstX,
-                         qint32 dstY,
-                         qint32 width,
-                         qint32 height,
-                         QPainter &painter,
-                         const KoColorProfile *profile);
-
-    /**
      * Render the projection onto a QImage.
      */
     QImage convertToQImage(qint32 x1,

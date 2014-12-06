@@ -1092,19 +1092,6 @@ void KisImage::setModified()
     m_d->signalRouter->emitNotification(ModifiedSignal);
 }
 
-void KisImage::renderToPainter(qint32 srcX,
-                               qint32 srcY,
-                               qint32 dstX,
-                               qint32 dstY,
-                               qint32 width,
-                               qint32 height,
-                               QPainter &painter,
-                               const KoColorProfile *  monitorProfile)
-{
-    QImage image = convertToQImage(srcX, srcY, width, height, monitorProfile);
-    painter.drawImage(dstX, dstY, image, 0, 0, width, height);
-}
-
 QImage KisImage::convertToQImage(QRect imageRect,
                                  const KoColorProfile * profile)
 {

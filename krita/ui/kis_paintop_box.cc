@@ -62,7 +62,6 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_resource_server_provider.h"
 #include "kis_favorite_resource_manager.h"
-#include "thememanager.h"
 #include "kis_config.h"
 
 #include "widgets/kis_popup_button.h"

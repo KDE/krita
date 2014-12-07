@@ -122,6 +122,10 @@ void LayerSplit::slotLayerSplit()
                 KoColor c(cs);
                 c.setColor(acc->rawDataConst(), cs);
 
+                if (c.opacityU8() == OPACITY_TRANSPARENT_U8) {
+                    continue;
+                }
+
                 if (dlg.disregardOpacity()) {
                     c.setOpacity(OPACITY_OPAQUE_U8);
                 }

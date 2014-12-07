@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgLayerSplit</class>
+ <widget class="QWidget" name="WdgLayerSplit">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>449</width>
+    <height>271</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Image Size</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="chkCreateGroupLayer">
+       <property name="text">
+        <string>Put all new layers in a group layer</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QCheckBox" name="chkSeparateGroupLayers">
+       <property name="text">
+        <string>Put every layer in its own, separate group layer.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="chkAlphaLock">
+       <property name="text">
+        <string>Alpha-lock every new layer</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="chkHideOriginal">
+       <property name="text">
+        <string>Hide the original layer</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="QCheckBox" name="chkSortLayers">
+       <property name="text">
+        <string>Sort layers by amount of non-transparent pixels</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Fuzziness:</string>
+       </property>
+       <property name="buddy">
+        <cstring>intFuzziness</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="KisSliderSpinBox" name="intFuzziness" native="true"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QCheckBox" name="chkDisregardOpacity">
+       <property name="text">
+        <string>Disregard opacity</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Split a layer according to color&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Creates a new layer for every color in the active layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>chkCreateGroupLayer</tabstop>
+  <tabstop>chkSeparateGroupLayers</tabstop>
+  <tabstop>chkAlphaLock</tabstop>
+  <tabstop>chkHideOriginal</tabstop>
+  <tabstop>chkSortLayers</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

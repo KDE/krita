@@ -15,6 +15,7 @@ add_subdirectory( shearimage )
 add_subdirectory( dockers )
 add_subdirectory( layergroupswitcher )
 add_subdirectory( resourcemanager )
+add_subdirectory( layersplit )
 
 # Allow to skip building GMIC plugin
 option(WITH_GMIC "Build the G'Mic plugin" ON)

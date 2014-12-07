@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Layer Splitter
+X-KDE-ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritalayersplit
+X-Krita-Version=28

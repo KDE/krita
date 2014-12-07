@@ -34,7 +34,7 @@ SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape 
 {
 }
 
-KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int, bool *isNewRootArea)
+KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int requestedPosition, bool *isNewRootArea)
 {
     if(m_area == 0) {
         *isNewRootArea = true;
@@ -44,7 +44,10 @@ KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *docu
 
         return m_area;
     }
-    *isNewRootArea = false;
+    if (requestedPosition == 0) {
+        *isNewRootArea = false;
+	return m_area;
+    }
     return 0;
 }
 

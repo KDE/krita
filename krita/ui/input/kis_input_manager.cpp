@@ -556,7 +556,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (!d->matcher.mouseMoved(mouseEvent)) {
             //Update the current tool so things like the brush outline gets updated.
-            d->toolProxy->forwardMouseHoverEvent(mouseEvent, lastTabletEvent(), canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+            d->toolProxy->forwardMouseHoverEvent(mouseEvent, lastTabletEvent());
         }
         retval = true;
         event->setAccepted(retval);

@@ -29,6 +29,12 @@ KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
 {
 }
 
+QPointF KisToolProxy::tabletToDocument(const QPointF &globalPos)
+{
+    const QPointF pos = globalPos - canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
+    return widgetToDocument(pos);
+}
+
 QPointF KisToolProxy::widgetToDocument(const QPointF &widgetPoint) const
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -71,16 +77,10 @@ KoPointerEvent KisToolProxy::convertEventToPointerEvent(QEvent *event, const QPo
     return KoPointerEvent(&fakeEvent, QPointF());
 }
 
-QPointF KisToolProxy::tabletToDocument(const QPointF &globalPos, const QPoint &canvasOriginWorkaround)
-{
-    const QPointF pos = globalPos - canvasOriginWorkaround;
-    return widgetToDocument(pos);
-}
-
-void KisToolProxy::forwardMouseHoverEvent(QMouseEvent *mouseEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround)
+void KisToolProxy::forwardMouseHoverEvent(QMouseEvent *mouseEvent, QTabletEvent *lastTabletEvent)
 {
     if (lastTabletEvent) {
-        QPointF docPoint = tabletToDocument(lastTabletEvent->hiResGlobalPos(), canvasOriginWorkaround);
+        QPointF docPoint = tabletToDocument(lastTabletEvent->hiResGlobalPos());
         this->tabletEvent(lastTabletEvent, docPoint);
     } else {
         KIS_ASSERT_RECOVER_RETURN(mouseEvent->type() == QEvent::MouseMove);
@@ -89,7 +89,7 @@ void KisToolProxy::forwardMouseHoverEvent(QMouseEvent *mouseEvent, QTabletEvent 
     }
 }
 
-bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround)
+bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent)
 {
     bool retval = true;
 
@@ -98,7 +98,7 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
     if (tabletEvent) {
-        QPointF docPoint = tabletToDocument(tabletEvent->hiResGlobalPos(), canvasOriginWorkaround);
+        QPointF docPoint = tabletToDocument(tabletEvent->hiResGlobalPos());
         tabletEvent->accept();
         this->tabletEvent(tabletEvent, docPoint);
         forwardToTool(state, action, tabletEvent, docPoint);
@@ -113,7 +113,7 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
         }
     } else if (mouseEvent) {
         if (lastTabletEvent) {
-            QPointF docPoint = tabletToDocument(lastTabletEvent->hiResGlobalPos(), canvasOriginWorkaround);
+            QPointF docPoint = tabletToDocument(lastTabletEvent->hiResGlobalPos());
             lastTabletEvent->accept();
             this->tabletEvent(lastTabletEvent, docPoint);
             forwardToTool(state, action, lastTabletEvent, docPoint);

@@ -152,7 +152,6 @@ public:
         prepareRegion -= m_cropRect;
 
         QStack<QRect> applyRects;
-        bool rectVariesFlag;
 
         /**
          * If a clone has complicated masks, we should prepare additional

@@ -322,8 +322,6 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
 QString KoColor::toQString(const KoColor &color)
 {
     QStringList ls;
-    ls << color.colorSpace()->name();
-
     foreach(KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(color.colorSpace()->channels())) {
         ls << channel->name();
         ls << color.colorSpace()->channelValueText(color.data(), channel->pos());

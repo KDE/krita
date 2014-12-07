@@ -67,11 +67,6 @@ public:
      */
     KoColor &operator=(const KoColor &other);
 
-    /**
-     * @brief operator < compares the current color the other color and return true if this color is darker
-     */
-    bool operator<(const KoColor &other) const;
-
     bool operator==(const KoColor &other) const;
 
     /// return the current colorSpace
@@ -160,6 +155,8 @@ public:
      *         to unserialize the color
      */
     static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId, const QHash<QString, QString> & aliases);
+
+    static QString toQString(const KoColor &color);
 
 #ifndef NODEBUG
     /// use kDebug calls to print internal info

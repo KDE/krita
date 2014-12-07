@@ -46,7 +46,7 @@ KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *docu
     }
     if (requestedPosition == 0) {
         *isNewRootArea = false;
-	return m_area;
+        return m_area;
     }
     return 0;
 }

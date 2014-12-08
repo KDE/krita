@@ -217,7 +217,7 @@ private:
      * to the integer range 0...255
      */
     qint32 convertOpacityToInt(qreal opacity);
-    void removeSelectedNodes(QList<KisNodeSP> selectedNodes, bool removeActive = true);
+    void removeSelectedNodes(QList<KisNodeSP> selectedNodes);
     void removeSingleNode(KisNodeSP node);
 
     struct Private;

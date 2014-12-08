@@ -778,16 +778,13 @@ void KisNodeManager::removeSingleNode(KisNodeSP node)
     }
 }
 
-void KisNodeManager::removeSelectedNodes(QList<KisNodeSP> selectedNodes, bool removeActive)
+void KisNodeManager::removeSelectedNodes(QList<KisNodeSP> selectedNodes)
 {
     m_d->commandsAdapter->beginMacro(kundo2_i18n("Remove Multiple Layers and Masks"));
     foreach(KisNodeSP node, selectedNodes) {
-        if (!scanForParent(selectedNodes, node) && node != activeNode()) {
+        if (!scanForParent(selectedNodes, node)) {
             removeSingleNode(node);
         }
-    }
-    if (removeActive) {
-        removeSingleNode(activeNode());
     }
     m_d->commandsAdapter->endMacro();
 }
@@ -934,7 +931,7 @@ void KisNodeManager::mergeLayerDown()
         m_d->commandsAdapter->addNode(flattenLayer, l->parent(), l);
 
         // remove all nodes in the selection but the active node
-        removeSelectedNodes(selectedNodes, false);
+        removeSelectedNodes(selectedNodes);
 
         m_d->commandsAdapter->endMacro();
 
@@ -945,6 +942,8 @@ void KisNodeManager::mergeLayerDown()
         m_d->imageView->image()->waitForDone();
         m_d->imageView->image()->notifyLayersChanged();
         m_d->imageView->image()->setModified();
+
+        slotNonUiActivatedNode(flattenLayer);
 
     }
     else {

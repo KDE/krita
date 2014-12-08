@@ -20,12 +20,12 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9 Pre-Alpha")
+set(CALLIGRA_VERSION_STRING "2.9 Beta 1")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
-#set(CALLIGRA_BETA 1) # uncomment only for Beta
+set(CALLIGRA_VERSION_RELEASE 90)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+#set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
+set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
 set(CALLIGRA_YEAR 2014) # update every year
 

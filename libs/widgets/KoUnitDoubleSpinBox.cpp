@@ -143,8 +143,7 @@ void KoUnitDoubleSpinBox::setUnit( KoUnit unit )
     qreal step = unit.toUserValue( d->stepInPoints );
 
     if (unit.type() == KoUnit::Pixel) {
-        // KoUnit rounds the pixel value to 1.0, so we cannot
-        // have step less than 1.0.
+        // limit the pixel step by 1.0
         step = qMax(1.0, step);
     }
 

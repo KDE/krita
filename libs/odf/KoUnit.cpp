@@ -150,7 +150,7 @@ qreal KoUnit::toUserValue(qreal ptValue) const
     case Cicero:
         return toCicero(ptValue);
     case Pixel:
-        return floor(ptValue * m_pixelConversion + 0.5);
+        return ptValue * m_pixelConversion;
     case Point:
     default:
         return toPoint(ptValue);

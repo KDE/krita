@@ -456,11 +456,9 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
 
-    QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::SubWindowView);
-
     m_mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_mdiArea->setViewMode(viewMode);
+
     m_mdiArea->setTabPosition(QTabWidget::North);
 
 #if QT_VERSION >= 0x040800
@@ -566,8 +564,6 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     plugActionList("toolbarlist", toolbarList);
     setToolbarList(toolbarList);
 
-
-
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
@@ -580,6 +576,8 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
         existingShortcuts.insert(action->shortcut());
     }
 #endif
+
+    configChanged();
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -2152,6 +2150,7 @@ void KisMainWindow::configChanged()
 {
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
+    qDebug() << "viewmode" << viewMode;
     m_mdiArea->setViewMode(viewMode);
 }
 

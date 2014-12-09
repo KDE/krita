@@ -37,6 +37,7 @@
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QGroupBox>
+#include <QMdiArea>
 
 #ifdef HAVE_OPENGL
 #include <qgl.h>
@@ -103,7 +104,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_undoStackSize->setValue(cfg.undoStackLimit());
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
-    m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", 0));
+    m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
 }
 

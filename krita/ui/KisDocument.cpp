@@ -1460,8 +1460,7 @@ bool KisDocument::openFile()
 
     if (ok) {
         setMimeTypeAfterLoading(typeName);
-
-
+        emit sigLoadingFinished();
     }
 
     if (progressUpdater()) {

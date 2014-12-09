@@ -876,7 +876,6 @@ bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
     connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
     bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
-        d->part->removeMainWindow(this);
         delete newdoc;
         return false;
     }

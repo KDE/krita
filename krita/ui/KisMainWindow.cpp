@@ -670,7 +670,7 @@ void KisMainWindow::showView(KisView *imageView)
         imageView->slotLoadingFinished();;
 
         QMdiSubWindow *subwin = m_mdiArea->addSubWindow(imageView);
-        subwin->setWindowIcon(QIcon(imageView->document()->generatePreview(QSize(64,64))));
+        subwin->setWindowIcon(qApp->windowIcon());
         subwin->setWindowTitle(imageView->document()->url().fileName());
         if (m_mdiArea->subWindowList().size() == 1) {
             imageView->showMaximized();
@@ -2084,7 +2084,7 @@ void KisMainWindow::updateWindowMenu()
     foreach (QPointer<KisDocument> doc, part()->documents()) {
         if (doc) {
             QAction *action = docMenu->addAction(doc->url().prettyUrl());
-            action->setIcon(QIcon(doc->generatePreview(QSize(64,64))));
+            action->setIcon(qApp->windowIcon());
             connect(action, SIGNAL(triggered()), m_documentMapper, SLOT(map()));
             m_documentMapper->setMapping(action, doc);
         }
@@ -2118,7 +2118,7 @@ void KisMainWindow::updateWindowMenu()
             }
 
             QAction *action  = menu->addAction(text);
-            action->setIcon(QIcon(child->document()->generatePreview(QSize(64,64))));
+            action->setIcon(qApp->windowIcon());
             action->setCheckable(true);
             action->setChecked(child == activeKisView());
             connect(action, SIGNAL(triggered()), m_windowMapper, SLOT(map()));
@@ -2150,7 +2150,6 @@ void KisMainWindow::configChanged()
 {
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
-    qDebug() << "viewmode" << viewMode;
     m_mdiArea->setViewMode(viewMode);
 }
 

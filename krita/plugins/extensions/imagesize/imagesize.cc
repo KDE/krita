@@ -154,7 +154,7 @@ void ImageSize::slotSelectionScale()
 
     KIS_ASSERT_RECOVER_RETURN(selectionMask);
 
-    QRect rc = selectionMask->selection()->selectedRect();
+    QRect rc = selectionMask->selection()->selectedExactRect();
     DlgLayerSize * dlgSize = new DlgLayerSize(m_view->mainWindow(), "SelectionScale", rc.width(), rc.height(), image->yRes());
     dlgSize->setCaption(i18n("Scale Selection"));
 

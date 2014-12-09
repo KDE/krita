@@ -1461,12 +1461,6 @@ bool KisDocument::openFile()
     if (ok) {
         setMimeTypeAfterLoading(typeName);
 
-        KNotification *notify = new KNotification("DocumentLoaded");
-        notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
-        notify->addContext("url", url().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
-
-        emit
 
     }
 

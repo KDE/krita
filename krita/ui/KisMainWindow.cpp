@@ -271,6 +271,8 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     , m_brushesAndStuff(0)
 {
 
+    setAcceptDrops(true);
+
 #ifdef Q_OS_MAC
     #if QT_VERSION < 0x050000
     MacSupport::addFullscreen(this);
@@ -476,29 +478,29 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     m_documentMapper = new QSignalMapper(this);
     connect(m_documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
-    m_guiClient = new KisViewManager(this, actionCollection());
+    m_viewManager = new KisViewManager(this, actionCollection());
 
-    m_guiClient->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
+    m_viewManager->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
 
     m_windowMenu = new KActionMenu(i18n("Window"), this);
-    m_guiClient->actionCollection()->addAction("window", m_windowMenu);
+    m_viewManager->actionCollection()->addAction("window", m_windowMenu);
 
     m_documentMenu = new KActionMenu(i18n("New View"), this);
 
     m_mdiCascade = new KAction(i18n("Cascade"), this);
-    m_guiClient->actionCollection()->addAction("windows_cascade", m_mdiCascade);
+    m_viewManager->actionCollection()->addAction("windows_cascade", m_mdiCascade);
     connect(m_mdiCascade, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
 
     m_mdiTile = new KAction(i18n("Tile"), this);
-    m_guiClient->actionCollection()->addAction("windows_tile", m_mdiTile);
+    m_viewManager->actionCollection()->addAction("windows_tile", m_mdiTile);
     connect(m_mdiTile, SIGNAL(triggered()), m_mdiArea, SLOT(tileSubWindows()));
 
     m_mdiNextWindow = new KAction(i18n("Next"), this);
-    m_guiClient->actionCollection()->addAction("windows_next", m_mdiNextWindow);
+    m_viewManager->actionCollection()->addAction("windows_next", m_mdiNextWindow);
     connect(m_mdiNextWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activateNextSubWindow()));
 
     m_mdiPreviousWindow = new KAction(i18n("Previous"), this);
-    m_guiClient->actionCollection()->addAction("windows_previous", m_mdiPreviousWindow);
+    m_viewManager->actionCollection()->addAction("windows_previous", m_mdiPreviousWindow);
     connect(m_mdiPreviousWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
 
     m_newWindow= new KAction(koIcon("window-new"), i18n("&New Window"), this);
@@ -610,7 +612,7 @@ KisMainWindow::~KisMainWindow()
 
     delete d;
 
-    delete m_guiClient;
+    delete m_viewManager;
 }
 
 void KisMainWindow::addView(KisView *view)
@@ -665,7 +667,9 @@ void KisMainWindow::showView(KisView *imageView)
 {
     if (imageView && activeView() != imageView) {
         // XXX: find a better way to initialize this!
-        imageView->canvasBase()->setFavoriteResourceManager(m_guiClient->paintOpBox()->favoriteResourcesManager());
+        imageView->setViewManager(m_viewManager);
+        imageView->canvasBase()->setFavoriteResourceManager(m_viewManager->paintOpBox()->favoriteResourcesManager());
+        imageView->slotLoadingFinished();;
 
         QMdiSubWindow *subwin = m_mdiArea->addSubWindow(imageView);
         subwin->setWindowIcon(QIcon(imageView->document()->generatePreview(QSize(64,64))));
@@ -704,7 +708,7 @@ void KisMainWindow::slotPreferences()
 
         }
 
-        m_guiClient->showHideScrollbars();
+        m_viewManager->showHideScrollbars();
     }
 }
 
@@ -1315,6 +1319,22 @@ void KisMainWindow::setActiveView(KisView* view)
 
     actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
     actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
+}
+
+void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->accept();
+    }
+}
+
+void KisMainWindow::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
+        foreach(const QUrl &url, event->mimeData()->urls()) {
+            KisPart::instance()->openExistingFile(url);
+        }
+    }
 }
 
 bool KisMainWindow::queryClose()
@@ -2121,7 +2141,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         KisView *view = qobject_cast<KisView *>(subwin->widget());
         //qDebug() << "\t" << view << activeView();
         if (view && view != activeView()) {
-            m_guiClient->setCurrentView(view);
+            m_viewManager->setCurrentView(view);
             setActiveView(view);
         }
         m_activeSubWindow = subwin;

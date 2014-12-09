@@ -235,7 +235,7 @@ protected:
      */
     QString newObjectName();
 
-private slots:
+public slots:
     void slotLoadingFinished();
     void slotSavingFinished();
     void slotImageResolutionChanged();

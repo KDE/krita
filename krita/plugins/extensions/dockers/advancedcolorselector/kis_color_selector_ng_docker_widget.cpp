@@ -125,7 +125,7 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
     m_colorHistoryWidget->setCanvas(canvas);
     m_colorSelectorContainer->setCanvas(canvas);
 
-    if (m_canvas) {
+    if (m_canvas && m_canvas->viewManager()) {
         if (m_canvas->viewManager() && m_canvas->viewManager()->nodeManager()) {
             connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
         }

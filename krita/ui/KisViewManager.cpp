@@ -443,8 +443,6 @@ void KisViewManager::setCurrentView(KisView *view)
 
     if (imageView) {
 
-        imageView->setViewManager(this);
-
         connect(resourceProvider(), SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), imageView->canvasBase(), SLOT(slotSetDisplayProfile(const KoColorProfile*)));
         resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(mainWindow()));
 

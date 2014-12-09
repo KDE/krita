@@ -284,10 +284,6 @@ KisView::KisView(KisPart *part, KisDocument *document, KActionCollection *action
     d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
     d->canvas->addDecoration(d->paintingAssistantsDecoration);
 
-    if (!d->document->isLoading() || d->document->image()) {
-        slotLoadingFinished();
-    }
-
 }
 
 KisView::~KisView()

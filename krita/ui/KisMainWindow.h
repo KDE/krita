@@ -394,12 +394,19 @@ private:
      * - create an empty document with default settings if InitDocEmpty
      */
     enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
+
 protected:
+
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
 
     /// Set the active view, this will update the undo/redo actions
     virtual void setActiveView(KisView *view);
+
+    // QWidget overrides
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dropEvent(QDropEvent * event);
+
 private:
     /**
      * Ask user about saving changes to the document upon exit.
@@ -476,7 +483,7 @@ private:
 
     bool m_constructing;
 
-    KisViewManager *m_guiClient;
+    KisViewManager *m_viewManager;
 
     QMdiArea *m_mdiArea;
     QMdiSubWindow *m_activeSubWindow;

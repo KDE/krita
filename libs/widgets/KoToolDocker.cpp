@@ -78,7 +78,9 @@ public:
     void recreateLayout(const QList<QPointer<QWidget> > &optionWidgetList)
     {
         foreach(QWidget* widget, currentWidgetList) {
-            widget->setParent(hiderWidget);
+            if (widget && hiderWidget) {
+                widget->setParent(hiderWidget);
+            }
         }
         qDeleteAll(currentAuxWidgets);
         currentAuxWidgets.clear();

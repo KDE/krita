@@ -330,7 +330,9 @@ void KisPart::openExistingFile(const KUrl& url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
     KisDocument *document = createDocument();
-    document->openUrl(url);
+    if (!document->openUrl(url)) {
+        return;
+    }
     document->setModified(false);
     addDocument(document);
 

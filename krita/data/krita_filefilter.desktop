@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Krita/FileFilter
 Comment=Krita FileFilter
 Comment[ca]=Filtre de fitxers per al Krita
+Comment[cs]=Krita FileFilter
 Comment[de]=Krita-Dateifilter
 Comment[nl]=Bestandsfilter voor Krita
 Comment[pl]=Filtr plików Krita

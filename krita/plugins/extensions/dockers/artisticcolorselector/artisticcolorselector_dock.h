@@ -33,10 +33,13 @@ class ArtisticColorSelectorDock: public QDockWidget, public KisMainwindowObserve
     Q_OBJECT
     
 public:
-     ArtisticColorSelectorDock();
+    ArtisticColorSelectorDock();
     ~ArtisticColorSelectorDock();
-     QString observerName() { return "ArtisticColorSelectorDock"; }
+    QString observerName() { return "ArtisticColorSelectorDock"; }
     virtual void setMainWindow(KisViewManager* kisview);
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
+
     
 private slots:
     void slotCanvasResourceChanged(int key, const QVariant& value);

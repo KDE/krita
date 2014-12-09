@@ -39,6 +39,7 @@ class QMdiSubWindow;
 
 class KAction;
 class KActionMenu;
+class KToolBar;
 
 struct KoPageLayout;
 
@@ -492,6 +493,8 @@ private:
 
     KActionMenu *m_windowMenu;
     KActionMenu *m_documentMenu;
+
+    KToolBar *m_brushesAndStuff;
 };
 
 #endif

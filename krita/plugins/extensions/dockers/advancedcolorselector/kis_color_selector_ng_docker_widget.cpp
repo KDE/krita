@@ -90,6 +90,16 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
 
     emit settingsChanged();
+
+    m_colorHistoryAction = new KAction("Show color history", this);
+    m_colorHistoryAction->setShortcut(QKeySequence(tr("H")));
+    connect(m_colorHistoryAction, SIGNAL(triggered()), m_colorHistoryWidget, SLOT(showPopup()), Qt::UniqueConnection);
+
+
+    m_commonColorsAction = new KAction("Show common colors", this);
+    m_commonColorsAction->setShortcut(QKeySequence(tr("U")));
+    connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()), Qt::UniqueConnection);
+
 }
 
 void KisColorSelectorNgDockerWidget::unsetCanvas()
@@ -115,25 +125,15 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
     m_colorHistoryWidget->setCanvas(canvas);
     m_colorSelectorContainer->setCanvas(canvas);
 
-    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->nodeManager()) {
-        connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
-    }
-    KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
+    if (m_canvas) {
+        if (m_canvas->viewManager() && m_canvas->viewManager()->nodeManager()) {
+            connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
+        }
+        KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
 
-    if (!m_colorHistoryAction) {
-        m_colorHistoryAction = new KAction("Show color history", this);
-        m_colorHistoryAction->setShortcut(QKeySequence(tr("H")));
-        connect(m_colorHistoryAction, SIGNAL(triggered()), m_colorHistoryWidget, SLOT(showPopup()), Qt::UniqueConnection);
+        actionCollection->addAction("show_color_history", m_colorHistoryAction);
+        actionCollection->addAction("show_common_colors", m_commonColorsAction);
     }
-    actionCollection->addAction("show_color_history", m_colorHistoryAction);
-
-    if (!m_commonColorsAction) {
-        m_commonColorsAction = new KAction("Show common colors", this);
-        m_commonColorsAction->setShortcut(QKeySequence(tr("U")));
-        connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()), Qt::UniqueConnection);
-    }
-    actionCollection->addAction("show_common_colors", m_commonColorsAction);
-
 
     reactOnLayerChange();
 }

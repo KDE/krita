@@ -47,6 +47,8 @@ ColorSliderDock::ColorSliderDock()
 
 void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
 {
+    setEnabled(canvas != 0);
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
     }
@@ -57,59 +59,57 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
     }
 
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
-    KisViewManager* view = kisCanvas->viewManager();
+    if (kisCanvas) {
+        KisViewManager* view = kisCanvas->viewManager();
 
-    if (m_colorSliders) {
-        m_colorSliders->disconnect(); // explicit disconnect in case Qt gets confused.
-        delete m_colorSliders;
+        if (m_colorSliders) {
+            m_colorSliders->disconnect(); // explicit disconnect in case Qt gets confused.
+            delete m_colorSliders;
+        }
+        QWidget *m_sliderdockerwidget = new QWidget;
+        QVBoxLayout *m_layout = new QVBoxLayout(m_sliderdockerwidget);
+        setWidget(m_sliderdockerwidget);
+        //m_updateAllowed = true;
+
+        //settings//
+        QBitArray m_SlidersConfigArray(12);
+
+        KConfigGroup cfg = KGlobal::config()->group("hsxColorSlider");
+
+        m_SlidersConfigArray[0] =cfg.readEntry("hsvH", false);
+        m_SlidersConfigArray[1] =cfg.readEntry("hsvS", false);
+        m_SlidersConfigArray[2] =cfg.readEntry("hsvV", false);
+
+        m_SlidersConfigArray[3] =cfg.readEntry("hslH", true);
+        m_SlidersConfigArray[4] =cfg.readEntry("hslS", true);
+        m_SlidersConfigArray[5] =cfg.readEntry("hslL", true);
+
+        m_SlidersConfigArray[6] =cfg.readEntry("hsiH", false);
+        m_SlidersConfigArray[7] =cfg.readEntry("hsiS", false);
+        m_SlidersConfigArray[8] =cfg.readEntry("hsiI", false);
+
+        m_SlidersConfigArray[9] =cfg.readEntry("hsyH", false);
+        m_SlidersConfigArray[10]=cfg.readEntry("hsyS", false);
+        m_SlidersConfigArray[11]=cfg.readEntry("hsyY", false);
+
+
+        m_colorSliders = new KisColorSliderWidget(kisCanvas->displayColorConverter()->displayRendererInterface(), this, kisCanvas, m_SlidersConfigArray);
+        m_layout->addWidget(m_colorSliders);
+        connect(m_colorSliders, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
+        connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSliders, SLOT(setColor(const KoColor&)));
+
+        connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
+        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_colorSliders, SLOT(slotConfigChanged()));
+
+        m_canvas = kisCanvas;
+        m_view = view;
     }
-    QWidget *m_sliderdockerwidget = new QWidget;
-    QVBoxLayout *m_layout = new QVBoxLayout(m_sliderdockerwidget);
-    setWidget(m_sliderdockerwidget);
-    //m_updateAllowed = true;
-    
-    //settings//
-    QBitArray m_SlidersConfigArray(12);
-    
-    KConfigGroup cfg = KGlobal::config()->group("hsxColorSlider");
-	
-    m_SlidersConfigArray[0] =cfg.readEntry("hsvH", false);
-    m_SlidersConfigArray[1] =cfg.readEntry("hsvS", false);
-    m_SlidersConfigArray[2] =cfg.readEntry("hsvV", false);
-    
-    m_SlidersConfigArray[3] =cfg.readEntry("hslH", true);
-    m_SlidersConfigArray[4] =cfg.readEntry("hslS", true);
-    m_SlidersConfigArray[5] =cfg.readEntry("hslL", true);
-    
-    m_SlidersConfigArray[6] =cfg.readEntry("hsiH", false);
-    m_SlidersConfigArray[7] =cfg.readEntry("hsiS", false);
-    m_SlidersConfigArray[8] =cfg.readEntry("hsiI", false);
-    
-    m_SlidersConfigArray[9] =cfg.readEntry("hsyH", false);
-    m_SlidersConfigArray[10]=cfg.readEntry("hsyS", false);
-    m_SlidersConfigArray[11]=cfg.readEntry("hsyY", false);
-    
-    
-    m_colorSliders = new KisColorSliderWidget(kisCanvas->displayColorConverter()->displayRendererInterface(), this, kisCanvas, m_SlidersConfigArray);
-    m_layout->addWidget(m_colorSliders);
-    connect(m_colorSliders, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
-    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSliders, SLOT(setColor(const KoColor&)));
-
-    connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_colorSliders, SLOT(slotConfigChanged()));
-    
-    
-    //connect(view->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSliders, SLOT(setColorSpace(const KoColorSpace*)));
-
-    m_canvas = kisCanvas;
-    m_view = view;
-    //b_canvas = canvas;
 }
 
 
 void ColorSliderDock::unsetCanvas()
 {
+    setEnabled(false);
     m_canvas = 0;
     m_view = 0;
 

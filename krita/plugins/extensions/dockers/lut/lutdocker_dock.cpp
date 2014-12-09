@@ -179,6 +179,8 @@ LutDockerDock::~LutDockerDock()
 
 void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 {
+    setEnabled(_canvas != 0);
+
     if (KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(_canvas)) {
         m_canvas = canvas;
         if (m_canvas) {

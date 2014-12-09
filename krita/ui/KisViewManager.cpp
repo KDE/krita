@@ -361,7 +361,9 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
         if (mainWindow())
             mainWindow()->createDockWidget(factory);
     }
+
     foreach(KoCanvasObserverBase* observer, mainWindow()->canvasObservers()) {
+        observer->setObservedCanvas(0);
         KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
         if (mainwindowObserver) {
             mainwindowObserver->setMainWindow(this);
@@ -372,6 +374,7 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
 
     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();
+
 }
 
 

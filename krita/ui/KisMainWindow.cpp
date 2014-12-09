@@ -268,6 +268,7 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     , m_constructing(true)
     , m_mdiArea(new QMdiArea(this))
     , m_activeSubWindow(0)
+    , m_brushesAndStuff(0)
 {
 
 #ifdef Q_OS_MAC
@@ -520,23 +521,6 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
         }
     }
 
-    // Create and plug toolbar list for Settings menu
-    QList<QAction *> toolbarList;
-    foreach(QWidget* it, guiFactory()->containers("ToolBar")) {
-        KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
-        if (toolBar) {
-            KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
-            actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
-            act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
-            connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
-            act->setChecked(!toolBar->isHidden());
-            toolbarList.append(act);
-        } else
-            kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
-    }
-    plugActionList("toolbarlist", toolbarList);
-    setToolbarList(toolbarList);
-
     updateMenus();
     updateWindowMenu();
 
@@ -556,6 +540,31 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     setXMLFile(KStandardDirs::locate("config", "ui/ui_standards.rc", componentData));
     setXMLFile( f, true );
     guiFactory()->addClient( this );
+
+    // Create and plug toolbar list for Settings menu
+    QList<QAction *> toolbarList;
+    foreach(QWidget* it, guiFactory()->containers("ToolBar")) {
+        KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+
+        if (toolBar) {
+            if (toolBar->objectName() == "BrushesAndStuff") {
+                m_brushesAndStuff = toolBar;
+                m_brushesAndStuff->setEnabled(false);
+            }
+
+            KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
+            actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
+            act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
+            connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
+            act->setChecked(!toolBar->isHidden());
+            toolbarList.append(act);
+        } else
+            kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+    }
+    plugActionList("toolbarlist", toolbarList);
+    setToolbarList(toolbarList);
+
+
 
 #if 0
     //check for colliding shortcuts
@@ -636,6 +645,9 @@ void KisMainWindow::addView(KisView *view)
     d->printActionPreview->setEnabled(viewHasDocument);
     d->sendFileAction->setEnabled(viewHasDocument);
     d->exportPdf->setEnabled(viewHasDocument);
+
+    m_brushesAndStuff->setEnabled(viewHasDocument);
+
     //d->closeFile->setEnabled(viewHasDocument);
 //     statusBar()->setVisible(viewHasDocument);
 
@@ -1856,6 +1868,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
 
+
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget) return 0;
@@ -2029,6 +2042,15 @@ void KisMainWindow::updateMenus()
     m_closeAll->setEnabled(enabled);
 
     setActiveSubWindow(m_mdiArea->activeSubWindow());
+    foreach(QToolBar *tb, toolBars()) {
+        if (tb->objectName() == "BrushesAndStuff") {
+            tb->setEnabled(enabled);
+        }
+    }
+
+    if (m_brushesAndStuff) {
+        m_brushesAndStuff->setEnabled(enabled);
+    }
 }
 
 void KisMainWindow::updateWindowMenu()

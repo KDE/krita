@@ -46,14 +46,18 @@ AnimatorDock::AnimatorDock()
 
 void AnimatorDock::setCanvas(KoCanvasBase *canvasBase)
 {
+    setEnabled(canvasBase != 0);
+
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(canvasBase);
     if (canvas && canvas->viewManager() && canvas->viewManager()->document()) {
         m_timeLine->setCanvas(canvas);
     }
+
 }
 
 void AnimatorDock::unsetCanvas()
 {
+    setEnabled(false);
     m_timeLine->unsetCanvas();
 }
 

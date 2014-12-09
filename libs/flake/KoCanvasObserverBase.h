@@ -42,7 +42,7 @@ public:
 
     /**
      * set observed canvas
-     * @param canvas canvas to observe
+     * @param canvas canvas to observe. Can be 0.
      */
     void setObservedCanvas(KoCanvasBase *canvas);
 

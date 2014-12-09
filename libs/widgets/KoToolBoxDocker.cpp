@@ -44,11 +44,13 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
 {
+    setEnabled(canvas != 0);
     m_toolBox->setCanvas(canvas);
 }
 
 void KoToolBoxDocker::unsetCanvas()
 {
+    setEnabled(false);
     m_toolBox->unsetCanvas();
 }
 

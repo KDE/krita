@@ -72,13 +72,16 @@ KisPaletteDocker::~KisPaletteDocker()
 
 void KisPaletteDocker::setCanvas(KoCanvasBase * canvas)
 {
+    setEnabled(canvas != 0);
+
     m_canvas = canvas;
 
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-    Q_ASSERT(canvas);
-    KisViewManager* view = kisCanvas->viewManager();
-    connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
-    connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    if (kisCanvas && kisCanvas->viewManager()) {
+        KisViewManager* view = kisCanvas->viewManager();
+        connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
+        connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    }
 }
 
 void KisPaletteDocker::colorSelected(const KoColor& c, bool final)

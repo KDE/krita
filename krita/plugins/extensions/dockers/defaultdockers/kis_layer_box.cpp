@@ -306,6 +306,7 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
 
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
+    setEnabled(canvas != 0);
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_nodeModel->setDummiesFacade(0, 0, 0);
@@ -385,6 +386,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
 void KisLayerBox::unsetCanvas()
 {
+    setEnabled(false);
     if (m_canvas) {
         KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
         foreach(KisAction *action, m_actions) {

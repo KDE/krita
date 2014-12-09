@@ -31,7 +31,7 @@ public:
     QString observerName() { return "SmallColorSelectorDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false); }
 public slots:
     void colorChangedProxy(const QColor&);
     void canvasResourceChanged(int, const QVariant&);

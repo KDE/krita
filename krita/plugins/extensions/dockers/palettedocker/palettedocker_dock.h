@@ -44,6 +44,8 @@ public:
     virtual ~PaletteDockerDock();
     QString observerName() { return "PaletteDockerDock"; }
     virtual void setMainWindow(KisViewManager* kisview);
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
 
 public: // KoResourceServerObserver
 

@@ -10,12 +10,3 @@ KisMainwindowObserver::~KisMainwindowObserver()
 {
 
 }
-
-void KisMainwindowObserver::setCanvas(KoCanvasBase*)
-{
-}
-
-void KisMainwindowObserver::unsetCanvas()
-{
-
-}

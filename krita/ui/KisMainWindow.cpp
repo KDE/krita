@@ -156,9 +156,6 @@ public:
         dockWidgetMenu = 0;
         dockerManager = 0;
         deferredClosingEvent = 0;
-//#ifdef HAVE_KACTIVITIES
-//        activityResource = 0;
-//#endif
         themeManager = 0;
         m_helpMenu = 0;
         m_activeWidget = 0;
@@ -253,10 +250,6 @@ public:
     QByteArray m_dockerStateBeforeHiding;
 
     QCloseEvent *deferredClosingEvent;
-
-//#ifdef HAVE_KACTIVITIES
-//    KActivities::ResourceInstance *activityResource;
-//#endif
 
     Digikam::ThemeManager *themeManager;
 
@@ -743,12 +736,6 @@ void KisMainWindow::addRecentURL(const KUrl& url)
         }
         saveRecentFiles();
 
-//#ifdef HAVE_KACTIVITIES
-//        if (!d->activityResource) {
-//            d->activityResource = new KActivities::ResourceInstance(winId(), this);
-//        }
-//        d->activityResource->setUri(url);
-//#endif
     }
 }
 

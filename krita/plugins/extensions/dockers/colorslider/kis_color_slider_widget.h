@@ -26,7 +26,7 @@
 
 class KoColorSpace;
 class KoColorDisplayRendererInterface;
-class QGridLayout;
+class QVBoxLayout;
 class KisColorSliderInput;
 class KisSignalCompressor;
 class QBitArray;
@@ -59,7 +59,7 @@ signals:
 private:
     QList<KisColorSliderInput*> m_inputs;
     const KoColorSpace* m_colorSpace;
-    QGridLayout *m_layout;
+    QVBoxLayout *m_layout;
     KoColor m_color;
     bool m_updateAllowed;
     KisSignalCompressor *m_updateCompressor;

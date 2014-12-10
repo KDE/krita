@@ -18,8 +18,10 @@
 
 #include "kis_color_slider_widget.h"
 #include <QLabel>
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QBitArray>
+#include <QSpacerItem>
+
 
 #include <klocale.h>
 #include <kconfiggroup.h>
@@ -36,6 +38,8 @@
 #include "kis_signal_compressor.h"
 //#include "kis_color_space_selector.h"
 
+
+
 KisColorSliderWidget::KisColorSliderWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget* parent, KisCanvas2* canvas, QBitArray SlidersConfigArray)
     : QWidget(parent)
     //, m_colorSpace(0)
@@ -44,15 +48,14 @@ KisColorSliderWidget::KisColorSliderWidget(KoColorDisplayRendererInterface *disp
     , m_displayRenderer(displayRenderer)
     , m_canvas(canvas)
 {
-    m_layout = new QGridLayout(this);
+    m_layout = new QVBoxLayout(this);
     m_updateAllowed = true;
     
     connect(m_updateCompressor, SIGNAL(timeout()), SLOT(updateTimeout()));
     m_configCompressor = new KisSignalCompressor(10, KisSignalCompressor::POSTPONE, this);
     connect(m_configCompressor, SIGNAL(timeout()), SLOT(setConfig()));
     //qDebug()<<"m_canvas:"<<m_canvas;
-    
-    
+        
     m_inputs.clear();
     
     //this first creates and set the sliders.
@@ -60,77 +63,77 @@ KisColorSliderWidget::KisColorSliderWidget(KoColorDisplayRendererInterface *disp
     //This way they can also be disabled more easily.
     
     //hsv sliders//
-    
-    
-        hsvH = new KisHSXColorSliderInput(this, 0, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hsvH);
-        m_layout->addWidget(hsvH);
-        hsvH->setVisible(false);
-    
-        hsvS = new KisHSXColorSliderInput(this, 1, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hsvS);
-        m_layout->addWidget(hsvS);
-        hsvS->setVisible(false);
         
-        hsvV = new KisHSXColorSliderInput(this, 2, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hsvV);
-        m_layout->addWidget(hsvV);
-        hsvV->setVisible(false);
+    hsvH = new KisHSXColorSliderInput(this, 0, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hsvH);
+    m_layout->addWidget(hsvH);
+    hsvH->setVisible(false);
+    
+    hsvS = new KisHSXColorSliderInput(this, 1, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hsvS);
+    m_layout->addWidget(hsvS);
+    hsvS->setVisible(false);
+
+    hsvV = new KisHSXColorSliderInput(this, 2, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hsvV);
+    m_layout->addWidget(hsvV);
+    hsvV->setVisible(false);
     
     //hsl sliders//
     
-        hslH = new KisHSXColorSliderInput(this, 3, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hslH);
-        m_layout->addWidget(hslH);
-        hslH->setVisible(false);
-        
-        hslS = new KisHSXColorSliderInput(this, 4, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hslS);
-        m_layout->addWidget(hslS);
-        hslS->setVisible(false);
+    hslH = new KisHSXColorSliderInput(this, 3, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hslH);
+    m_layout->addWidget(hslH);
+    hslH->setVisible(false);
+
+    hslS = new KisHSXColorSliderInput(this, 4, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hslS);
+    m_layout->addWidget(hslS);
+    hslS->setVisible(false);
     
-        hslL = new KisHSXColorSliderInput(this, 5, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hslL);
-        m_layout->addWidget(hslL);
-        hslL->setVisible(false);
+    hslL = new KisHSXColorSliderInput(this, 5, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hslL);
+    m_layout->addWidget(hslL);
+    hslL->setVisible(false);
     
     
     //hsi sliders//
     
-        hsiH = new KisHSXColorSliderInput(this, 6, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hsiH);
-        m_layout->addWidget(hsiH);
-        hsiH->setVisible(false);
+    hsiH = new KisHSXColorSliderInput(this, 6, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hsiH);
+    m_layout->addWidget(hsiH);
+    hsiH->setVisible(false);
     
-        hsiS = new KisHSXColorSliderInput(this, 7, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hsiS);
-        m_layout->addWidget(hsiS);
-        hsiS->setVisible(false);
+    hsiS = new KisHSXColorSliderInput(this, 7, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hsiS);
+    m_layout->addWidget(hsiS);
+    hsiS->setVisible(false);
     
-        hsiI = new KisHSXColorSliderInput(this, 8, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hsiI);
-        m_layout->addWidget(hsiI);
-        hsiI->setVisible(false);
+    hsiI = new KisHSXColorSliderInput(this, 8, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hsiI);
+    m_layout->addWidget(hsiI);
+    hsiI->setVisible(false);
     
     //hsy'sliders//
     
-        hsyH = new KisHSXColorSliderInput(this, 9, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hsyH);
-        m_layout->addWidget(hsyH);
-        hsyH->setVisible(false);
+    hsyH = new KisHSXColorSliderInput(this, 9, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hsyH);
+    m_layout->addWidget(hsyH);
+    hsyH->setVisible(false);
     
-        hsyS = new KisHSXColorSliderInput(this, 10, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hsyS);
-        m_layout->addWidget(hsyS);
-        hsyS->setVisible(false);
+    hsyS = new KisHSXColorSliderInput(this, 10, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hsyS);
+    m_layout->addWidget(hsyS);
+    hsyS->setVisible(false);
     
-        hsyY = new KisHSXColorSliderInput(this, 11, &m_color, m_displayRenderer, m_canvas);
-        m_inputs.append(hsyY);
-        m_layout->addWidget(hsyY);
-        hsyY->setVisible(false);
-        
-        
-        setSlidersVisible(SlidersConfigArray);
+    hsyY = new KisHSXColorSliderInput(this, 11, &m_color, m_displayRenderer, m_canvas);
+    m_inputs.append(hsyY);
+    m_layout->addWidget(hsyY);
+    hsyY->setVisible(false);
+
+    m_layout->addStretch(1);
+
+    setSlidersVisible(SlidersConfigArray);
     
 
 }
@@ -164,7 +167,7 @@ void KisColorSliderWidget::updateTimeout()
 
 void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
 {
-//qDebug()<<"check2";
+    //qDebug()<<"check2";
     
     if (SlidersConfigArray[0]==true) {
         hsvH->setVisible(true);
@@ -182,7 +185,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hsvH, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsvH, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[1]==true) {
         hsvS->setVisible(true);
         connect(hsvS, SIGNAL(updated()), this, SLOT(update()));
@@ -199,7 +202,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(hsvS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsvS, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[2]==true) {
         hsvV->setVisible(true);
         connect(hsvV, SIGNAL(updated()), this, SLOT(update()));
@@ -214,7 +217,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hsvV, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsvV, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[3]==true) {
         hslH->setVisible(true);
         connect(hslH, SIGNAL(updated()), this, SLOT(update()));
@@ -231,7 +234,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hslH, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hslH, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[4]==true) {
         hslS->setVisible(true);
         connect(hslS, SIGNAL(updated()), this, SLOT(update()));
@@ -248,7 +251,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(hslS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hslS, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[5]==true) {
         hslL->setVisible(true);
         connect(hslL, SIGNAL(updated()), this,  SLOT(update()));
@@ -263,7 +266,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hslL, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hslL, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[6]==true) {
         hsiH->setVisible(true);
         connect(hsiH, SIGNAL(updated()), this, SLOT(update()));
@@ -280,7 +283,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hsiH, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsiH, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[7]==true) {
         hsiS->setVisible(true);
         connect(hsiS, SIGNAL(updated()), this, SLOT(update()));
@@ -297,7 +300,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(hsiS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsiS, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[8]==true) {
         hsiI->setVisible(true);
         connect(hsiI, SIGNAL(updated()), this, SLOT(update()));
@@ -312,7 +315,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hsiI, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsiI, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[9]==true) {
         hsyH->setVisible(true);
         connect(hsyH, SIGNAL(updated()), this, SLOT(update()));
@@ -329,7 +332,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hsyH, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsyH, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[10]==true) {
         hsyS->setVisible(true);
         connect(hsyS, SIGNAL(updated()), this, SLOT(update()));
@@ -346,7 +349,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(hsyS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsyS, SLOT(satUpdate(int, int)));
     }
-        
+
     if (SlidersConfigArray[11]==true) {
         hsyY->setVisible(true);
         connect(hsyY, SIGNAL(updated()), this, SLOT(update()));
@@ -361,7 +364,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hsyY, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsyY, SLOT(satUpdate(int, int)));
     }
-        
+
     updateTimeout();
 }
 void KisColorSliderWidget::slotConfigChanged()
@@ -378,7 +381,7 @@ void KisColorSliderWidget::setConfig()
     QBitArray m_SlidersConfigArray(12);
     //qDebug()<<"check";
     KConfigGroup cfg = KGlobal::config()->group("hsxColorSlider");
-	
+
     m_SlidersConfigArray[0] =cfg.readEntry("hsvH", false);
     m_SlidersConfigArray[1] =cfg.readEntry("hsvS", false);
     m_SlidersConfigArray[2] =cfg.readEntry("hsvV", false);

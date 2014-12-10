@@ -368,7 +368,7 @@ private slots:
 
     void undo();
     void redo();
-    void updateMenus();
+    void subWindowActivated();
     void updateWindowMenu();
     void setActiveSubWindow(QWidget *window);
     void configChanged();

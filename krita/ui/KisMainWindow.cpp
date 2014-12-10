@@ -458,7 +458,7 @@ KisMainWindow::KisMainWindow()
     setCentralWidget(m_mdiArea);
     m_mdiArea->show();
 
-    connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateMenus()));
+    connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
 
     m_windowMapper = new QSignalMapper(this);
     connect(m_windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
@@ -511,7 +511,7 @@ KisMainWindow::KisMainWindow()
         }
     }
 
-    updateMenus();
+    subWindowActivated();
     updateWindowMenu();
 
     connect(koApp, SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
@@ -2004,7 +2004,7 @@ void KisMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
 }
 
 
-void KisMainWindow::updateMenus()
+void KisMainWindow::subWindowActivated()
 {
     //qDebug() << "updateMenus";
     bool enabled = (activeKisView() != 0);

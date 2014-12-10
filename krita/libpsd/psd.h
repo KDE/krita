@@ -211,8 +211,21 @@ struct psd_pattern {
     QVector<QRgb> color_table;
 };
 
+struct psd_layer_effects_context {
+    psd_layer_effects_context()
+        : global_angle(120),
+          keep_original(true)
+    {
+    }
+
+    qint32 global_angle;
+    bool keep_original;
+};
+
+#define PSD_LOOKUP_TABLE_SIZE 256
+
 // dsdw, isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
-struct psd_layer_effects_drop_shadow {
+struct LIBKISPSD_EXPORT psd_layer_effects_drop_shadow {
 
     psd_layer_effects_drop_shadow()
         : effect_enable(false)
@@ -227,26 +240,28 @@ struct psd_layer_effects_drop_shadow {
         , size(21)
         , anti_aliased(0)
         , noise(0)
-        , knocks_out(true)
+        , knocks_out(false)
     {
-        for(int i = 0; i < 256; ++i) {
+        for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
             contour_lookup_table[i] = i;
         }
     }
 
+    QPoint calculateOffset(const psd_layer_effects_context *context) const;
+
     bool effect_enable; // Effect enabled
 
-    QString blend_mode; // Blend mode: 4 bytes for signature and 4 bytes for key
+    QString blend_mode; // already in Krita format!
     QColor color;
     QColor native_color;
-    quint8 opacity; // Opacity as a percent
+    quint8 opacity; // Opacity as a percent (0...100)
     qint32 angle; // Angle in degrees
     bool use_global_light; // Use this angle in all of the layer effects
     qint32 distance; // Distance in pixels
     qint32 spread; // Intensity as a percent
     qint32 size; // Blur value in pixels
 
-    quint8 contour_lookup_table[256];
+    quint8 contour_lookup_table[PSD_LOOKUP_TABLE_SIZE];
     bool anti_aliased;
     qint32 noise;
     bool knocks_out;

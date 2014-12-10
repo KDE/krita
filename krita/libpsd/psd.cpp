@@ -18,9 +18,13 @@
 #include "psd.h"
 
 #include <QDebug>
+#include <QPoint>
 
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOpRegistry.h>
+
+#include "kis_global.h"
+
 
 QPair<QString, QString> psd_colormode_to_colormodelid(psd_color_mode colormode, quint16 channelDepth)
 {
@@ -193,4 +197,15 @@ QString composite_op_to_psd_blendmode(const QString& compositeop)
     qDebug() << "Krita blending mode" << compositeop << "does not exist in Photoshop, returning Normal";
     return "norm";
 
+}
+
+QPoint psd_layer_effects_drop_shadow::calculateOffset(const psd_layer_effects_context *context) const
+{
+    qint32 angle = this->use_global_light ?
+        context->global_angle : this->angle;
+
+    qint32 distance_x = -qRound(this->distance * cos(kisDegreesToRadians(angle)));
+    qint32 distance_y =  qRound(this->distance * sin(kisDegreesToRadians(angle)));
+
+    return QPoint(distance_x, distance_y);
 }

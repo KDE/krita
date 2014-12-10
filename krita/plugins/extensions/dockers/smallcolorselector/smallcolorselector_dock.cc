@@ -25,7 +25,6 @@
 
 #include <KoColorSpaceRegistry.h>
 
-#include <QSpacerItem>
 #include <QVBoxLayout>
 
 SmallColorSelectorDock::SmallColorSelectorDock()

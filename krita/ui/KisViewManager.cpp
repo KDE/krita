@@ -842,7 +842,7 @@ void KisViewManager::slotCreateTemplate()
 {
     if (!document()) return;
     KisTemplateCreateDia::createTemplate("krita_template", ".kra",
-                                        KisFactory2::componentData(), document(), mainWindow());
+                                        KisFactory::componentData(), document(), mainWindow());
 }
 
 QMainWindow* KisViewManager::qtMainWindow() const

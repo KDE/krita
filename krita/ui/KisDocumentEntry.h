@@ -71,13 +71,7 @@ public:
      */
     bool supportsMimeType(const QString & _mimetype) const;
 
-    /**
-     *  Uses the factory of the component to create
-     *  a part. If that is not possible, 0 is returned.
-     */
-    KisPart *createKisPart(QString* errorMsg = 0) const;
-
-    /**
+        /**
      *  This function will query ksycoca to find all available components.
      *  The result will only contain parts, which are embeddable into a document
      *

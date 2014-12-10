@@ -235,10 +235,9 @@ private:
 class KisDocument::Private
 {
 public:
-    Private(KisDocument *document, const KisPart *part) :
+    Private(KisDocument *document) :
         document(document),
         // XXX: the part should _not_ be modified from the document
-        parentPart(const_cast<KisPart*>(part)),
         docInfo(0),
         progressUpdater(0),
         progressProxy(0),
@@ -289,7 +288,6 @@ public:
     }
 
     KisDocument *document;
-    KisPart *const parentPart;
 
     KoDocumentInfo *docInfo;
 
@@ -372,8 +370,8 @@ public:
         DocumentProgressProxy *progressProxy = 0;
         if (!document->progressProxy()) {
             KisMainWindow *mainWindow = 0;
-            if (parentPart->mainWindows().count() > 0) {
-                mainWindow = parentPart->mainWindows()[0];
+            if (KisPart::instance()->mainWindows().count() > 0) {
+                mainWindow = KisPart::instance()->mainWindows()[0];
             }
             progressProxy = new DocumentProgressProxy(mainWindow);
             document->setProgressProxy(progressProxy);
@@ -548,11 +546,9 @@ public:
 
 };
 
-KisDocument::KisDocument(const KisPart *parent)
-    : d(new Private(this, parent))
+KisDocument::KisDocument()
+    : d(new Private(this))
 {
-    Q_ASSERT(parent);
-
     d->undoStack = new UndoStack(this);
     d->undoStack->setParent(this);
 
@@ -574,7 +570,7 @@ KisDocument::KisDocument(const KisPart *parent)
     d->pageLayout.rightMargin = 0;
 
 
-    KConfigGroup cfgGrp(d->parentPart->componentData().config(), "Undo");
+    KConfigGroup cfgGrp(KisFactory::componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
 
     connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
@@ -624,11 +620,6 @@ void KisDocument::init()
 
     d->kraSaver = 0;
     d->kraLoader = 0;
-}
-
-KisPart *KisDocument::documentPart() const
-{
-    return d->parentPart;
 }
 
 bool KisDocument::reload()
@@ -706,7 +697,7 @@ bool KisDocument::saveFile()
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(url(),
                                      entry,
-                                     d->parentPart->currentMainwindow())) {     // this file exists => backup
+                                     KisPart::instance()->currentMainwindow())) {     // this file exists => backup
                 emit statusBarMessage(i18n("Making backup..."));
                 KUrl backup;
                 if (d->backupPath.isEmpty())
@@ -871,7 +862,7 @@ void KisDocument::slotAutoSave()
             // That advice should also fix this error from occurring again
             emit statusBarMessage(i18n("The password of this encrypted document is not known. Autosave aborted! Please save your work manually."));
         } else {
-            connect(this, SIGNAL(sigProgress(int)), d->parentPart->currentMainwindow(), SLOT(slotProgress(int)));
+            connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
             emit statusBarMessage(i18n("Autosaving..."));
             d->autosaving = true;
             bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
@@ -882,7 +873,7 @@ void KisDocument::slotAutoSave()
             }
             d->autosaving = false;
             emit clearStatusBarMessage();
-            disconnect(this, SIGNAL(sigProgress(int)), d->parentPart->currentMainwindow(), SLOT(slotProgress(int)));
+            disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
             if (!ret && !d->disregardAutosaveFailure) {
                 emit statusBarMessage(i18n("Error during autosave! Partition full?"));
             }
@@ -895,7 +886,7 @@ void KisDocument::setReadWrite(bool readwrite)
     d->readwrite = readwrite;
     setAutoSave(d->autoSaveDelay);
 
-    foreach(KisMainWindow *mainWindow, d->parentPart->mainWindows()) {
+    foreach(KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
     }
 
@@ -1157,10 +1148,10 @@ QString KisDocument::autoSaveFile(const QString & path) const
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(d->parentPart->componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(KisPart::instance()->componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(d->parentPart->componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(KisFactory::componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
 #endif
     } else {
         KUrl url = KUrl::fromPath(path);
@@ -1248,7 +1239,7 @@ bool KisDocument::openUrl(const KUrl & _url)
         setModified(true);
     }
     else {
-        d->parentPart->addRecentURLToAllMainWindows(_url);
+        KisPart::instance()->addRecentURLToAllMainWindows(_url);
 
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
@@ -1492,8 +1483,8 @@ KoProgressProxy* KisDocument::progressProxy() const
 {
     if (!d->progressProxy) {
         KisMainWindow *mainWindow = 0;
-        if (d->parentPart->mainwindowCount() > 0) {
-            mainWindow = d->parentPart->mainWindows()[0];
+        if (KisPart::instance()->mainwindowCount() > 0) {
+            mainWindow = KisPart::instance()->mainWindows()[0];
         }
         d->progressProxy = new DocumentProgressProxy(mainWindow);
     }
@@ -1937,7 +1928,7 @@ bool KisDocument::completeSaving(KoStore* store)
 
 QDomDocument KisDocument::createDomDocument(const QString& tagName, const QString& version) const
 {
-    return createDomDocument(d->parentPart->componentData().componentName(), tagName, version);
+    return createDomDocument(KisFactory::componentName(), tagName, version);
 }
 
 //static
@@ -2340,8 +2331,8 @@ bool KisDocument::save()
     DocumentProgressProxy *progressProxy = 0;
     if (!d->document->progressProxy()) {
         KisMainWindow *mainWindow = 0;
-        if (d->parentPart->mainwindowCount() > 0) {
-            mainWindow = d->parentPart->mainWindows()[0];
+        if (KisPart::instance()->mainwindowCount() > 0) {
+            mainWindow = KisPart::instance()->mainWindows()[0];
         }
         progressProxy = new DocumentProgressProxy(mainWindow);
         d->document->setProgressProxy(progressProxy);
@@ -2437,8 +2428,8 @@ bool KisDocument::queryClose()
             if (d->m_url.isEmpty())
             {
                 KisMainWindow *mainWindow = 0;
-                if (d->parentPart->mainWindows().count() > 0) {
-                    mainWindow = d->parentPart->mainWindows()[0];
+                if (KisPart::instance()->mainWindows().count() > 0) {
+                    mainWindow = KisPart::instance()->mainWindows()[0];
                 }
                 KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile, "SaveDocument");
                 KUrl url = dialog.url();
@@ -2637,7 +2628,7 @@ KoShapeLayer* KisDocument::shapeForNode(KisNodeSP layer) const
 vKisNodeSP KisDocument::activeNodes() const
 {
     vKisNodeSP nodes;
-    foreach(KisView *v, documentPart()->views()) {
+    foreach(KisView *v, KisPart::instance()->views()) {
         KisViewManager *view = qobject_cast<KisViewManager*>(v);
         if (view) {
             KisNodeSP activeNode = view->activeNode();
@@ -2655,7 +2646,7 @@ vKisNodeSP KisDocument::activeNodes() const
 QList<KisPaintingAssistant*> KisDocument::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KisView *view, documentPart()->views()) {
+    foreach(KisView *view, KisPart::instance()->views()) {
         if (view && view->document() == this) {
             KisPaintingAssistantsDecoration* assistantsDecoration = view->canvasBase()->paintingAssistantsDecoration();
             assistants.append(assistantsDecoration->assistants());

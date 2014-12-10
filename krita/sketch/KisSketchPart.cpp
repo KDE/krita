@@ -24,7 +24,7 @@
 KisSketchPart::KisSketchPart(QObject* parent)
     : KisPart(parent)
 {
-    KisFactory2 factory;
+    KisFactory factory;
     Q_UNUSED(factory);
 }
 

@@ -56,6 +56,7 @@
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kcomponentdata.h>
+#include <kis_factory2.h>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
@@ -179,7 +180,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const char *templateType, const KComp
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
-    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",componentData.aboutData()->programName() ) );
+    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts", KisFactory::aboutData()->programName() ) );
     rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOk(false);

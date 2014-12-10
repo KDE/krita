@@ -46,7 +46,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     chkShowAtStartup->hide();
     connect(chkShowAtStartup, SIGNAL(toggled(bool)), this, SLOT(toggleShowAtStartup(bool)));
 
-    KConfigGroup cfg(KisFactory2::componentData().config(), "SplashScreen");
+    KConfigGroup cfg(KisFactory::componentData().config(), "SplashScreen");
     bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
     chkShowAtStartup->setChecked(hideSplash);
 
@@ -73,7 +73,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     lblVersion->setText(i18n("Version: %1", version));
 
-    KConfigGroup cfg2(KisFactory2::componentData().config(), "RecentFiles");
+    KConfigGroup cfg2(KisFactory::componentData().config(), "RecentFiles");
     int i = 1;
 
     QString recent = i18n("<html>"
@@ -133,10 +133,7 @@ void KisSplashScreen::toggleShowAtStartup(bool toggle)
 
 void KisSplashScreen::linkClicked(const QString &link)
 {
-    KisPart *part = KisPart::instance();
-    if (part) {
-        part->openExistingFile(KUrl(link));
-    }
+    KisPart::instance()->openExistingFile(KUrl(link));
     if (isTopLevel()) {
         close();
     }

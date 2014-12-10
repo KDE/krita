@@ -83,12 +83,6 @@ public:
      */
     ~KisPart();
 
-    /**
-     * @return The componentData ( KComponentData ) for this GUI client. You set the componentdata
-     * in your subclass: setComponentData(AppFactory::componentData()); in the constructor
-     */
-    KComponentData componentData() const;
-
     // ----------------- mainwindow management -----------------
 
     /**
@@ -267,11 +261,6 @@ protected:
      * on proxying a KoCanvasController.
      */
     QGraphicsItem *createCanvasItem(KisDocument *document);
-
-protected:
-
-    /// Call in the constructor of the subclass: setComponentData(AppFactory::componentData());
-    void setComponentData(const KComponentData &componentData);
 
 protected slots:
 

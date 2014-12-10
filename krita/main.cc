@@ -40,6 +40,7 @@
 #include "ui/kis_factory2.h"
 #include "ui/KisDocument.h"
 #include "kis_splash_screen.h"
+#include "KisPart.h"
 
 #if defined Q_OS_WIN
 #include <Windows.h>
@@ -71,7 +72,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 
     int state;
-    KAboutData *aboutData = KisFactory2::aboutData();
+    KAboutData *aboutData = KisFactory::aboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 

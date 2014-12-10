@@ -72,9 +72,8 @@
 class KisPart::Private
 {
 public:
-    Private(KisPart *_parent)
-        : parent(_parent)
-        , canvasItem(0)
+    Private()
+        : canvasItem(0)
         , startupWidget(0)
         , m_componentData(KGlobal::mainComponent())
     {
@@ -84,8 +83,6 @@ public:
     {
         delete canvasItem;
     }
-
-    KisPart *parent;
 
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
@@ -105,10 +102,8 @@ KisPart* KisPart::instance()
 
 
 KisPart::KisPart()
-    : d(new Private(this))
+    : d(new Private())
 {
-    KisFactory2 factory;
-    setComponentData(factory.componentData());
     setTemplateType("krita_template");
 
     // Preload all the resources in the background
@@ -135,11 +130,6 @@ KisPart::~KisPart()
     delete d;
 }
 
-KComponentData KisPart::componentData() const
-{
-    return d->m_componentData;
-}
-
 void KisPart::addDocument(KisDocument *document)
 {
     //qDebug() << "Adding document to part list" << document;
@@ -156,13 +146,13 @@ QList<QPointer<KisDocument> > KisPart::documents() const
 
 KisDocument *KisPart::createDocument() const
 {
-    KisDocument *doc = new KisDocument(this);
+    KisDocument *doc = new KisDocument();
     return doc;
 }
 
 KisAnimationDoc *KisPart::createAnimationDoc() const
 {
-    return new KisAnimationDoc(this);
+    return new KisAnimationDoc();
 }
 
 
@@ -180,7 +170,8 @@ void KisPart::removeDocument(KisDocument *document)
 
 KisMainWindow *KisPart::createMainWindow()
 {
-    return new KisMainWindow(this, componentData());
+    KisMainWindow *mw = new KisMainWindow();
+    return mw;
 }
 
 KisView *KisPart::createView(KisDocument *document, KisMainWindow *parent)
@@ -192,7 +183,6 @@ KisView *KisPart::createView(KisDocument *document, KisMainWindow *parent)
 
 void KisPart::addView(KisView *view, KisDocument *document)
 {
-    qDebug() << "addView" << view << document;
     if (!view)
         return;
 
@@ -418,7 +408,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 #endif
 
     if (!alwaysShow) {
-        KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+        KConfigGroup cfgGrp(KisFactory::componentData().config(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
         if (!fullTemplateName.isEmpty()) {
             KUrl url(fullTemplateName);
@@ -448,7 +438,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
     if (!d->startupWidget) {
         const QStringList mimeFilter = koApp->mimeFilter(KisImportExportManager::Import);
 
-        d->startupWidget = new KisOpenPane(0, componentData(), mimeFilter, d->templateType);
+        d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templateType);
         d->startupWidget->setWindowModality(Qt::WindowModal);
         QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
         foreach(const CustomDocumentWidgetItem & item, widgetList) {
@@ -540,20 +530,10 @@ void KisPart::startCustomDocument(KisDocument* doc)
     d->startupWidget->hide();
 }
 
-void KisPart::setComponentData(const KComponentData &componentData)
-{
-    d->m_componentData = componentData;
-
-    KGlobal::locale()->insertCatalog(componentData.catalogName());
-    // install 'instancename'data resource type
-    KGlobal::dirs()->addResourceType(QString(componentData.componentName() + "data").toUtf8(),
-                                     "data", componentData.componentName());
-}
-
 KisView *KisPart::createViewInstance(KisDocument *document, KisMainWindow *parent)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    QPointer<KisView>v = new KisView(this, document, parent->actionCollection(), parent);
+    QPointer<KisView>v = new KisView(document, parent->actionCollection(), parent);
 
     // XXX: this prevents a crash when opening a new document after opening a
     // a document that has not been touched! I have no clue why, though.

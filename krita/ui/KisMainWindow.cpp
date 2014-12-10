@@ -99,6 +99,7 @@
 #include "KisDockerManager.h"
 #include "KisPart.h"
 #include "KisApplication.h"
+#include "kis_factory2.h"
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas2.h"
@@ -125,9 +126,8 @@
 class KisMainWindowPrivate
 {
 public:
-    KisMainWindowPrivate(KisPart *_part, KisMainWindow *w)
+    KisMainWindowPrivate(KisMainWindow *w)
     {
-        part = _part;
         parent = w;
         activeView = 0;
         firstTime = true;
@@ -189,16 +189,11 @@ public:
 
         if (title.isEmpty()) {
             // #139905
-            const QString programName = parent->componentData().aboutData() ?
-                        parent->componentData().aboutData()->programName() : parent->componentData().componentName();
-            title = i18n("%1 unsaved document (%2)", programName,
+            title = i18n("%1 unsaved document (%2)", KisFactory::aboutData()->programName(),
                          KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
         }
         printer.setDocName(title);
     }
-
-    // PartManager
-    QPointer<KisPart> part;
 
     KisMainWindow *parent;
 
@@ -262,9 +257,9 @@ public:
 
 };
 
-KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
+KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
-    , d(new KisMainWindowPrivate(part, this))
+    , d(new KisMainWindowPrivate(this))
     , m_constructing(true)
     , m_mdiArea(new QMdiArea(this))
     , m_activeSubWindow(0)
@@ -283,17 +278,12 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
 #endif
 
     setStandardToolBarMenuEnabled(true);
-    Q_ASSERT(componentData.isValid());
 
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
-    if (componentData.isValid()) {
-        setComponentData(componentData);   // don't load plugins! we don't want
-        // the part's plugins with this main window, even though we are using the
-        // part's componentData! (Simon)
-        KGlobal::setActiveComponent(part ? part->componentData() : KGlobal::mainComponent());
-    }
+    setComponentData(KisFactory::componentData());
+    KGlobal::setActiveComponent(KisFactory::componentData());
 
     actionCollection()->addAssociatedWidget(this);
 
@@ -406,7 +396,7 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     d->dockWidgetMenu->setDelayed(false);
 
     // Load list of recent files
-    KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
+    KSharedConfigPtr configPtr = KisFactory::componentData().config();
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
 
@@ -513,7 +503,7 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     connect(m_closeAll, SIGNAL(triggered()), SLOT(closeAllWindows()));
     actionCollection()->addAction("file_close_all", m_closeAll);
 
-    setAutoSaveSettings(part->componentData().componentName(), false);
+    setAutoSaveSettings(KisFactory::componentName(), false);
 
     foreach (QDockWidget *wdg, dockWidgets()) {
         if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
@@ -532,12 +522,12 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
 
     if (isHelpMenuEnabled() && !d->m_helpMenu) {
-        d->m_helpMenu = new KHelpMenu( this, componentData.aboutData(), false, actionCollection() );
+        d->m_helpMenu = new KHelpMenu( this, KisFactory::aboutData(), false, actionCollection() );
         connect(d->m_helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 
     QString f = xmlFile();
-    setXMLFile(KStandardDirs::locate("config", "ui/ui_standards.rc", componentData));
+    setXMLFile(KStandardDirs::locate("config", "ui/ui_standards.rc", KisFactory::componentData()));
     setXMLFile( f, true );
     guiFactory()->addClient( this );
 
@@ -601,9 +591,7 @@ KisMainWindow::~KisMainWindow()
     d->dockerManager = 0;
 
     // The doc and view might still exist (this is the case when closing the window)
-    if (d->part) {
-        d->part->removeMainWindow(this);
-    }
+    KisPart::instance()->removeMainWindow(this);
 
     if (d->noCleanup)
         return;
@@ -690,7 +678,7 @@ void KisMainWindow::slotPreferences()
         KisConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
-        foreach(QPointer<KisView> koview, part()->views()) {
+        foreach(QPointer<KisView> koview, KisPart::instance()->views()) {
             KisViewManager *view = qobject_cast<KisViewManager*>(koview);
             if (view) {
                 view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
@@ -756,8 +744,7 @@ void KisMainWindow::addRecentURL(const KUrl& url)
 void KisMainWindow::saveRecentFiles()
 {
     // Save list of recent files
-    KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
-    kDebug(30003) << this << " Saving recent files list into config. componentData()=" << componentData().componentName();
+    KSharedConfigPtr config = KisFactory::componentData().config();
     d->recent->saveEntries(config->group("RecentFiles"));
     config->sync();
 
@@ -769,7 +756,7 @@ void KisMainWindow::saveRecentFiles()
 
 void KisMainWindow::reloadRecentFileList()
 {
-    KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
+    KSharedConfigPtr config = KisFactory::componentData().config();
     d->recent->loadEntries(config->group("RecentFiles"));
 }
 
@@ -821,11 +808,6 @@ KisView *KisMainWindow::activeView() const
     return 0;
 }
 
-KisPart* KisMainWindow::part()
-{
-    return d->part;
-}
-
 bool KisMainWindow::openDocument(const KUrl & url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
@@ -839,8 +821,8 @@ bool KisMainWindow::openDocument(const KUrl & url)
 
 KisDocument *KisMainWindow::createDocumentFromUrl(const KUrl & url)
 {
-    KisDocument *newdoc = d->part->createDocument();
-    d->part->addDocument(newdoc);
+    KisDocument *newdoc = KisPart::instance()->createDocument();
+    KisPart::instance()->addDocument(newdoc);
 
     // For remote documents
 #if 0 // XXX: seems broken for now
@@ -864,8 +846,8 @@ KisDocument *KisMainWindow::createDocumentFromUrl(const KUrl & url)
 bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
 {
     if (!newdoc) {
-        newdoc = d->part->createDocument();
-        d->part->addDocument(newdoc);
+        newdoc = KisPart::instance()->createDocument();
+        KisPart::instance()->addDocument(newdoc);
     }
 
     d->firstTime = true;
@@ -891,7 +873,7 @@ void KisMainWindow::slotLoadCompleted()
 {
     KisDocument *newdoc = qobject_cast<KisDocument*>(sender());
 
-    KisView *view = newdoc->documentPart()->createView(newdoc, this);
+    KisView *view = KisPart::instance()->createView(newdoc, this);
     addView(view);
 
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -939,7 +921,7 @@ void KisMainWindow::slotSaveCompleted()
 // returns true if we should save, false otherwise.
 bool KisMainWindow::exportConfirmation(const QByteArray &outputFormat)
 {
-    KConfigGroup group = KGlobal::config()->group(d->part->componentData().componentName());
+    KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
     if (!group.readEntry("WantExportConfirmation", true)) {
         return true;
     }
@@ -980,7 +962,7 @@ bool KisMainWindow::exportConfirmation(const QByteArray &outputFormat)
 
 bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent, int specialOutputFlag)
 {
-    if (!document || !d->part) {
+    if (!document) {
         return true;
     }
 
@@ -1255,7 +1237,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
             return;
 
         foreach(KisView *view, d->views) {
-            d->part->removeView(view);
+            KisPart::instance()->removeView(view);
         }
 
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
@@ -1269,7 +1251,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 
 void KisMainWindow::saveWindowSettings()
 {
-    KSharedConfigPtr config = componentData().config();
+    KSharedConfigPtr config = KisFactory::componentData().config();
 
     if (d->windowSizeDirty ) {
 
@@ -1283,7 +1265,7 @@ void KisMainWindow::saveWindowSettings()
     if (!d->activeView || d->activeView->document()) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
-        KConfigGroup group = KGlobal::config()->group(d->part->componentData().componentName());
+        KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
         saveMainWindowSettings(group);
 
         // Save collapsable state of dock widgets
@@ -1341,7 +1323,7 @@ bool KisMainWindow::queryClose()
 
     //kDebug(30003) <<"KisMainWindow::queryClose() viewcount=" << d->activeView->document()->viewCount()
     //               << " mainWindowCount=" << d->activeView->document()->mainWindowCount() << endl;
-    if (d->part->mainwindowCount() > 1)
+    if (KisPart::instance()->mainwindowCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
         return true;
 
@@ -1384,7 +1366,7 @@ bool KisMainWindow::queryClose()
 
 void KisMainWindow::slotFileNew()
 {
-    d->part->showStartUpWidget(this, true /*Always show widget*/);
+    KisPart::instance()->showStartUpWidget(this, true /*Always show widget*/);
 }
 
 void KisMainWindow::slotFileOpen()
@@ -1491,8 +1473,7 @@ void KisMainWindow::slotFileCloseAll()
 
 void KisMainWindow::slotFileQuit()
 {
-    KisPart *part = KisPart::instance();
-    foreach(QPointer<KisMainWindow> mainWin, part->mainWindows()) {
+    foreach(QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
         if (mainWin != this) {
             mainWin->slotFileCloseAll();
             close();
@@ -1643,7 +1624,7 @@ void KisMainWindow::slotConfigureKeys()
 
 void KisMainWindow::slotConfigureToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
+    saveMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1651,7 +1632,7 @@ void KisMainWindow::slotConfigureToolbars()
 
 void KisMainWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
+    applyMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
 
     KXMLGUIFactory *factory = guiFactory();
     Q_UNUSED(factory);
@@ -1677,7 +1658,7 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
         }
 
         if (d->activeView && d->activeView->document()) {
-            saveMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
+            saveMainWindowSettings(KGlobal::config()->group(KisFactory::componentName()));
         }
     } else
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
@@ -1903,7 +1884,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             visible = false;
         }
 
-        KConfigGroup group = KGlobal::config()->group(d->part->componentData().componentName()).group("DockWidget " + factory->id());
+        KConfigGroup group = KGlobal::config()->group(KisFactory::componentName()).group("DockWidget " + factory->id());
         side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
         if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
 
@@ -1917,7 +1898,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;
-        group = KGlobal::config()->group(d->part->componentData().componentName()).group("DockWidget " + factory->id());
+        group = KGlobal::config()->group(KisFactory::componentName()).group("DockWidget " + factory->id());
         collapsed = group.readEntry("Collapsed", collapsed);
         locked = group.readEntry("Locked", locked);
 
@@ -2058,7 +2039,7 @@ void KisMainWindow::updateWindowMenu()
     KMenu *docMenu = m_documentMenu->menu();
     docMenu->clear();
 
-    foreach (QPointer<KisDocument> doc, part()->documents()) {
+    foreach (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
             QAction *action = docMenu->addAction(doc->url().prettyUrl());
             action->setIcon(qApp->windowIcon());
@@ -2133,13 +2114,13 @@ void KisMainWindow::configChanged()
 void KisMainWindow::newView(QObject *document)
 {
     KisDocument *doc = qobject_cast<KisDocument*>(document);
-    KisView *view = part()->createView(doc, this);
+    KisView *view = KisPart::instance()->createView(doc, this);
     addView(view);
 }
 
 void KisMainWindow::newWindow()
 {
-    part()->createMainWindow()->show();
+    KisPart::instance()->createMainWindow()->show();
 }
 
 void KisMainWindow::closeCurrentWindow()
@@ -2155,7 +2136,7 @@ void KisMainWindow::closeAllWindows()
 
 void KisMainWindow::showAboutApplication()
 {
-    KisAboutApplication dlg(componentData().aboutData(), this);
+    KisAboutApplication dlg(KisFactory::aboutData(), this);
     dlg.exec();
 }
 

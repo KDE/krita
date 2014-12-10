@@ -77,7 +77,7 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KisMainWindow(KisPart *part, const KComponentData &instance);
+    explicit KisMainWindow();
 
     /**
      *  Destructor.
@@ -111,8 +111,6 @@ public:
      * @returns the currently active view
      */
     KisView *activeView() const;
-
-    KisPart* part();
 
 public:
 

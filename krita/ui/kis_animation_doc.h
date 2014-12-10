@@ -51,7 +51,7 @@ class KRITAUI_EXPORT KisAnimationDoc : public KisDocument
 {
     Q_OBJECT
 public:
-    KisAnimationDoc(const KisPart *part);
+    KisAnimationDoc();
     virtual ~KisAnimationDoc();
 
     /// @return the total number of layers and masks excluding the root layer

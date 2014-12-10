@@ -71,7 +71,7 @@ public:
         preset->settings()->setNode(view->resourceProvider()->currentNode());
 
         KisPaintOpFactory* paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
-        QString            pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
+        QString            pixFilename = KisFactory::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
 
         view->resourceProvider()->setPaintOpPreset(preset);
     }

@@ -32,30 +32,21 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
-#include <KoPluginLoader.h>
-#include <KoShapeRegistry.h>
-
 #include <kis_debug.h>
 #include <metadata/kis_meta_data_io_backend.h>
-#include <filter/kis_filter.h>
-#include <filter/kis_filter_registry.h>
-#include <generator/kis_generator_registry.h>
-#include <generator/kis_generator.h>
-#include <kis_paintop_registry.h>
 
 #include "kis_aboutdata.h"
-#include "flake/kis_shape_selection.h"
-#include "KisDocument.h"
+
 #include "KisPart.h"
 
 #include "kisexiv2/kis_exiv2.h"
 
-KAboutData* KisFactory2::s_aboutData = 0;
-KComponentData* KisFactory2::s_instance = 0;
+KAboutData* KisFactory::s_aboutData = 0;
+KComponentData* KisFactory::s_instance = 0;
 
 static int factoryCount = 0;
 
-KisFactory2::KisFactory2(QObject* parent)
+KisFactory::KisFactory(QObject* parent)
     : KPluginFactory(*aboutData(), parent)
 {
     (void)componentData();
@@ -64,30 +55,11 @@ KisFactory2::KisFactory2(QObject* parent)
 
         // XXX_EXIV: make the exiv io backends real plugins
         KisExiv2::initialize();
-
-        KoShapeRegistry* r = KoShapeRegistry::instance();
-        r->add(new KisShapeSelectionFactory());
-
-        KisFilterRegistry::instance();
-        KisGeneratorRegistry::instance();
-        KisPaintOpRegistry::instance();
-
-        // Load the krita-specific tools
-        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                         QString::fromLatin1("[X-Krita-Version] == 28"));
-
-        // Load dockers
-        KoPluginLoader::PluginsConfig config;
-        config.blacklist = "DockerPluginsDisabled";
-        config.group = "krita";
-        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                         QString::fromLatin1("[X-Krita-Version] == 28"));
-
     }
     factoryCount++;
 }
 
-KisFactory2::~KisFactory2()
+KisFactory::~KisFactory()
 {
     delete s_aboutData;
     s_aboutData = 0;
@@ -98,7 +70,7 @@ KisFactory2::~KisFactory2()
 /**
  * Create the document
  */
-QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
+QObject* KisFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
                               const QVariantList& args, const QString& keyword )
 {
     Q_UNUSED( parent );
@@ -109,7 +81,7 @@ QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, 
 }
 
 
-KAboutData* KisFactory2::aboutData()
+KAboutData* KisFactory::aboutData()
 {
     if (!s_aboutData) {
         s_aboutData = newKritaAboutData();
@@ -117,7 +89,7 @@ KAboutData* KisFactory2::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &KisFactory2::componentData()
+const KComponentData &KisFactory::componentData()
 {
     if (!s_instance) {
         s_instance = new KComponentData(aboutData());
@@ -137,10 +109,18 @@ const KComponentData &KisFactory2::componentData()
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
 
+        KGlobal::locale()->insertCatalog(s_instance->catalogName());
+        // install 'instancename'data resource type
+        KGlobal::dirs()->addResourceType(QString(s_instance->componentName() + "data").toUtf8(), "data", s_instance->componentName());
 
     }
 
     return *s_instance;
+}
+
+const QString KisFactory::componentName()
+{
+    return "krita";
 }
 
 #include "kis_factory2.moc"

@@ -212,7 +212,7 @@ public:
             group.writeEntry("Theme", "Krita-dark");
         }
 
-        desktopView = new KisMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
+        desktopView = new KisMainWindow(KIS_MIME_TYPE, KisFactory::componentData());
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);

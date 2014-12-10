@@ -77,21 +77,6 @@ bool KisDocumentEntry::supportsMimeType(const QString & _mimetype) const {
     return mimeTypes().contains(_mimetype);
 }
 
-KisPart *KisDocumentEntry::createKisPart(QString* errorMsg) const
-{
-    QString error;
-    KisPart* part = m_service->createInstance<KisPart>(0, QVariantList(), &error);
-
-    if (!part) {
-        kWarning(30003) << error;
-        if (errorMsg)
-            *errorMsg = error;
-        return 0;
-    }
-
-    return part;
-}
-
 KisDocumentEntry KisDocumentEntry::queryByMimeType(const QString & mimetype)
 {
     QList<KisDocumentEntry> vec = query(mimetype);

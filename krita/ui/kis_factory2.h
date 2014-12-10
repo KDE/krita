@@ -30,23 +30,24 @@
 class KComponentData;
 class KAboutData;
 
-class KRITAUI_EXPORT KisFactory2 : public KPluginFactory
+class KRITAUI_EXPORT KisFactory : public KPluginFactory
 {
     Q_OBJECT
 
 public:
 
-    KisFactory2(QObject* parent = 0);
-    ~KisFactory2();
+    KisFactory(QObject* parent = 0);
+    ~KisFactory();
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    static KAboutData * aboutData();
+    static KAboutData *aboutData();
     static const KComponentData &componentData();
+    static const QString componentName();
 
 private:
-    static KComponentData* s_instance;
-    static KAboutData * s_aboutData;
+    static KComponentData *s_instance;
+    static KAboutData *s_aboutData;
 };
 
 #endif

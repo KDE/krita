@@ -25,13 +25,10 @@
 #include <QtDBus>
 #endif
 
-#include "KisPrintJob.h"
-#include "KisDocumentEntry.h"
-#include "KisDocument.h"
-#include "KisMainWindow.h"
-#include "KisAutoSaveRecoveryDialog.h"
+#include <KoPluginLoader.h>
+#include <KoShapeRegistry.h>
+
 #include <KoDpi.h>
-#include "KisPart.h"
 #include "KoGlobal.h"
 
 #include <kdeversion.h>
@@ -58,6 +55,7 @@
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
+#include <QDesktopWidget>
 
 #include <stdlib.h>
 
@@ -66,7 +64,21 @@
 #include <tchar.h>
 #endif
 
-#include <QDesktopWidget>
+#include "KisPrintJob.h"
+#include "KisDocumentEntry.h"
+#include "KisDocument.h"
+#include "KisMainWindow.h"
+#include "kis_factory2.h"
+#include "KisAutoSaveRecoveryDialog.h"
+#include "KisPart.h"
+
+#include "flake/kis_shape_selection.h"
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_registry.h>
+#include <generator/kis_generator_registry.h>
+#include <generator/kis_generator.h>
+#include <kis_paintop_registry.h>
+
 
 KisApplication* KisApplication::KoApp = 0;
 
@@ -78,11 +90,9 @@ class KisApplicationPrivate
 {
 public:
     KisApplicationPrivate()
-        : part(0)
-        , splashScreen(0)
+        : splashScreen(0)
     {}
     QByteArray nativeMimeType;
-    KisPart *part;
     QWidget *splashScreen;
 };
 
@@ -294,27 +304,34 @@ bool KisApplication::start()
     // Figure out _which_ application we actually are
     KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(d->nativeMimeType);
     if (entry.isEmpty()) {
+
         QMessageBox::critical(0, i18n("%1: Critical Error", applicationName()), i18n("Essential application components could not be found.\n"
                                                                                     "This might be an installation issue.\n"
                                                                                     "Try restarting or reinstalling."));
         return false;
     }
 
-    // Create the global document, view, window factory
-    // XXX: maybe the main() should create the factory
-    //      and pass it to KisApplication?
-    QString errorMsg;
-    d->part = entry.createKisPart(&errorMsg);
+    // Load various global plugins
 
-    if (!d->part) {
-        if (!errorMsg.isEmpty())
-            KMessageBox::error(0, errorMsg);
-        return false;
-    }
+    KoShapeRegistry* r = KoShapeRegistry::instance();
+    r->add(new KisShapeSelectionFactory());
+
+    KisFilterRegistry::instance();
+    KisGeneratorRegistry::instance();
+    KisPaintOpRegistry::instance();
+
+    // Load the krita-specific tools
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
+                                     QString::fromLatin1("[X-Krita-Version] == 28"));
+
+    // Load dockers
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
+                                     QString::fromLatin1("[X-Krita-Version] == 28"));
 
     // show a mainWindow asap, if we want that
-    KisMainWindow *mainWindow = d->part->createMainWindow();
-    d->part->addMainWindow(mainWindow);
+    KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();
+
+    KisPart::instance()->addMainWindow(mainWindow);
     if (showmainWindow) {
         mainWindow->show();
     }
@@ -484,7 +501,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
     }
 
     QStringList filters;
-    filters << QString(".%1-%2-%3-autosave%4").arg(d->part->componentData().componentName()).arg("*").arg("*").arg(extension);
+    filters << QString(".%1-%2-%3-autosave%4").arg("krita").arg("*").arg("*").arg(extension);
 
 #ifdef Q_OS_WIN
         QDir dir = QDir::tempPath();
@@ -504,7 +521,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
     QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
 
     foreach (const QString &name, reply.value()) {
-        if (name.contains(d->part->componentData().componentName())) {
+        if (name.contains("krita")) {
             // we got another instance of ourselves running, let's get the pid
             QString pid = name.split('-').last();
             if (pid != ourPid) {

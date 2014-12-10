@@ -385,7 +385,7 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
     if (pixmapName.isEmpty())
         return QPixmap();
 
-    return QPixmap(KisFactory2::componentData().dirs()->findResource("kis_images", pixmapName));
+    return QPixmap(KisFactory::componentData().dirs()->findResource("kis_images", pixmapName));
 }
 
 KoID KisPaintopBox::currentPaintop()
@@ -436,7 +436,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
 
     KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
-    QString pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
+    QString pixFilename = KisFactory::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
 
     m_settingsWidget->setIcon(QIcon(pixFilename));
 

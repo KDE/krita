@@ -99,8 +99,8 @@ public:
     int localPlaybackRange;
 };
 
-KisAnimationDoc::KisAnimationDoc(const KisPart *part)
-    : KisDocument(part)
+KisAnimationDoc::KisAnimationDoc()
+    : KisDocument()
     , d(new KisAnimationDocPrivate())
 {
     setMimeType(APP_MIMETYPE);
@@ -985,7 +985,7 @@ KisKranimLoader* KisAnimationDoc::kranimLoader()
 void KisAnimationDoc::updateActiveFrame()
 {
     setPreActivatedNode(d->currentFrame);
-    QPointer<KisView> view = documentPart()->views().first();
+    QPointer<KisView> view = KisPart::instance()->views().first();
     if (view) {
         //dynamic_cast<KisViewManager*>(view.data())->nodeManager()->slotNonUiActivatedNode(d->currentFrame);
     }

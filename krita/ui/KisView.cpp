@@ -140,7 +140,6 @@ public:
     bool inOperation; //in the middle of an operation (no screen refreshing)?
 
     QPointer<KisDocument> document; // our KisDocument
-    QPointer<KisPart> part; // our part
     QWidget *tempActiveWidget;
     bool documentDeleted; // true when document gets deleted [can't use document==0
                           // since this only happens in ~QObject, and views
@@ -218,17 +217,15 @@ public:
 
 };
 
-KisView::KisView(KisPart *part, KisDocument *document, KActionCollection *actionCollection, QWidget *parent)
+KisView::KisView(KisDocument *document, KActionCollection *actionCollection, QWidget *parent)
     : QWidget(parent)
     , d(new Private)
 {
     Q_ASSERT(document);
-    Q_ASSERT(part);
 
     setObjectName(newObjectName());
 
     d->document = document;
-    d->part = part;
     d->actionCollection = actionCollection;
 
     setFocusPolicy(Qt::StrongFocus);
@@ -288,7 +285,7 @@ KisView::KisView(KisPart *part, KisDocument *document, KActionCollection *action
 
 KisView::~KisView()
 {
-    d->part->removeView(this);
+    KisPart::instance()->removeView(this);
     delete d;
 }
 

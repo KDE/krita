@@ -57,8 +57,8 @@ public:
 
         m_doc->setCurrentImage(m_image);
 
-        m_mainWindow = m_doc->documentPart()->createMainWindow();
-        m_view = new KisView(m_part, m_doc, m_mainWindow->actionCollection(), m_mainWindow);
+        m_mainWindow = KisPart::instance()->createMainWindow();
+        m_view = new KisView(m_doc, m_mainWindow->actionCollection(), m_mainWindow);
 
         m_image->refreshGraph();
 
@@ -116,7 +116,6 @@ public:
 private:
     KisSurrogateUndoStore *m_undoStore;
     KisImageSP m_image;
-    KisPart *m_part;
     KisDocument *m_doc;
     QPointer<KisView>m_view;
     KisMainWindow *m_mainWindow;

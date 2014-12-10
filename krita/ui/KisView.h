@@ -72,7 +72,7 @@ public:
     /**
      * Creates a new view for the document.
      */
-    KisView(KisPart *part, KisDocument *document, KActionCollection *actionCollection, QWidget *parent = 0);
+    KisView(KisDocument *document, KActionCollection *actionCollection, QWidget *parent = 0);
 virtual ~KisView();
 
     KAction *undoAction() const;

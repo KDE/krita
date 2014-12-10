@@ -86,15 +86,7 @@ class KRITAUI_EXPORT KisDocument : public QObject, public KoDocumentBase
 
 protected:
 
-    /**
-     * Constructor.
-     *
-     * @param parent The KisPart that owns the document. XXX: should be removed!
-     * @param undoStack accepts the stack for the document. You can create any type of stack if you need.
-     *        The stack objects will become owned by the document. This is used by Krita's KisDocument. The default value for this
-     *        parameter is a usual Qt's stack.
-     */
-    explicit KisDocument(const KisPart *parent);
+    explicit KisDocument();
 
 public:
 
@@ -105,10 +97,6 @@ public:
      * delete the attached widget as returned by widget().
      */
     virtual ~KisDocument();
-
-    /// XXX: Temporary!
-    KisPart *documentPart() const;
-
 
     /**
      * @brief reload Reloads the document from the original url

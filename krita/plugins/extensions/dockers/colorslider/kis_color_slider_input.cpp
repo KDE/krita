@@ -30,7 +30,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QFontMetrics>
- 
+
 #include <klocale.h>
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
@@ -44,13 +44,14 @@
 #include "kis_hsv_slider.h"
 #include "kis_display_color_converter.h"
 
-KisColorSliderInput::KisColorSliderInput(QWidget* parent, KoColor* color, const int type, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas) : QWidget(parent), 
-m_type(type),
-m_color(color), 
-m_displayRenderer(displayRenderer),
-m_canvas(canvas)
+KisColorSliderInput::KisColorSliderInput(QWidget* parent, KoColor* color, const int type, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas)
+    : QWidget(parent),
+    m_type(type),
+    m_color(color),
+    m_displayRenderer(displayRenderer),
+    m_canvas(canvas)
 {
-//init
+    //init
 }
 
 void KisColorSliderInput::init()
@@ -97,13 +98,13 @@ void KisColorSliderInput::init()
 }
 
 KisHSXColorSliderInput::KisHSXColorSliderInput(QWidget* parent, const int type, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas) : KisColorSliderInput(parent, color, type, displayRenderer, canvas),
-m_canvas(canvas),
-m_hue(0),
-m_sat(0),
-m_val(0),
-R(0),
-G(0),
-B(0)
+    m_canvas(canvas),
+    m_hue(0),
+    m_sat(0),
+    m_val(0),
+    R(0),
+    G(0),
+    B(0)
 {
     init();
 }
@@ -112,12 +113,12 @@ void KisHSXColorSliderInput::setValue(double v)
 {
 
     //This function returns the colour based on the type of the slider as well as the value//
-	
-	qreal h=0.0;
-	qreal s=0.0;
-	qreal l=0.0;
-	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-	R = cfg.readEntry("lumaR", 0.2126);
+
+    qreal h=0.0;
+    qreal s=0.0;
+    qreal l=0.0;
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
 
@@ -276,31 +277,31 @@ void KisHSXColorSliderInput::update()
     case 0:
         this->converter()->getHsvF(*m_color, &hue, &sat, &val);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
             
             
         }
         else{
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
         }
         break;
     case 1:
         this->converter()->getHsvF(*m_color, &hue, &sat, &val);
         if (m_sliderisupdating==true)
-        {   
+        {
             if( (hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1 ) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
             
             
@@ -308,55 +309,55 @@ void KisHSXColorSliderInput::update()
         else{
             
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
         }
         break;
     case 2:
         this->converter()->getHsvF(*m_color, &hue, &sat, &val);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
         }
         else{
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
         }
         break;
     case 3:
         this->converter()->getHslF(*m_color, &hue, &sat, &val);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
             
             
         }
         else{
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
         }
         break;
     case 4:
         this->converter()->getHslF(*m_color, &hue, &sat, &val);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
             
             
@@ -364,55 +365,55 @@ void KisHSXColorSliderInput::update()
         else{
             
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
         }
         break;
     case 5:
         this->converter()->getHslF(*m_color, &hue, &sat, &val);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
         }
         else{
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
         }
         break;
     case 6:
         this->converter()->getHsiF(*m_color, &hue, &sat, &val);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
             
             
         }
         else{
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
         }
         break;
     case 7:
         this->converter()->getHsiF(*m_color, &hue, &sat, &val);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
             
             
@@ -420,55 +421,55 @@ void KisHSXColorSliderInput::update()
         else{
             
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
         }
         break;
     case 8:
         this->converter()->getHsiF(*m_color, &hue, &sat, &val);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
         }
         else{
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
         }
         break;
     case 9:
         this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
             
             
         }
         else{
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
         }
         break;
     case 10:
         this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
             
             
@@ -476,24 +477,24 @@ void KisHSXColorSliderInput::update()
         else{
             
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
         }
         break;
     case 11:
         this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B);
         if (m_sliderisupdating==true)
-        {   
+        {
             if((sat*100.0)<m_sat+1 && (sat*100.0)>m_sat-1) {
-            sat = (sat_backup*0.01);
+                sat = (sat_backup*0.01);
             }
             if((hue*360.0)<m_hue+1 && (hue*360.0)>m_hue-1) {
-            hue = (hue_backup/360.0);
+                hue = (hue_backup/360.0);
             }
         }
         else{
             if((val*100.0)<m_val+1 && (val*100.0)>m_val-1) {
-            val = (val_backup*0.01);
+                val = (val_backup*0.01);
             }
         }
         break;
@@ -560,8 +561,8 @@ void KisHSXColorSliderInput::update()
         break;
     default:
         Q_ASSERT(false);
-    }    
-m_hsvSlider->setColors(*m_color,m_type, m_hue, R, G, B);
+    }
+    m_hsvSlider->setColors(*m_color,m_type, m_hue, R, G, B);
 }
 
 QWidget* KisHSXColorSliderInput::createInput()
@@ -615,8 +616,8 @@ void KisHSXColorSliderInput::sliderOut(){
 KisDisplayColorConverter* KisHSXColorSliderInput::converter() const
 {
     return m_canvas ?
-        m_canvas->displayColorConverter() :
-        KisDisplayColorConverter::dumbConverterInstance();
+                m_canvas->displayColorConverter() :
+                KisDisplayColorConverter::dumbConverterInstance();
 }
 
 void KisHSXColorSliderInput::hueUpdate(int h)

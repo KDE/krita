@@ -106,6 +106,7 @@ struct KisPainter::Private {
     QPointF                     axesCenter;
     bool                        mirrorHorizontaly;
     bool                        mirrorVerticaly;
+    bool                        isOpacityUnit; // TODO: move into ParameterInfo
     KoCompositeOp::ParameterInfo paramInfo;
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
@@ -161,6 +162,7 @@ void KisPainter::init()
     d->maskImageHeight = 255;
     d->mirrorHorizontaly = false;
     d->mirrorVerticaly = false;
+    d->isOpacityUnit = true;
     d->paramInfo = KoCompositeOp::ParameterInfo();
     d->renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
     d->conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
@@ -485,7 +487,9 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
 
     if (d->compositeOp->id() == COMPOSITE_COPY) {
-        if(!d->selection && srcX == dstX && srcY == dstY && d->device->fastBitBltPossible(srcDev)) {
+        if(!d->selection && d->isOpacityUnit &&
+           srcX == dstX && srcY == dstY &&
+           d->device->fastBitBltPossible(srcDev)) {
 
             if(useOldSrcData) {
                 d->device->fastBitBltOldData(srcDev, srcRect);
@@ -2397,11 +2401,13 @@ quint8 KisPainter::flow() const
 
 void KisPainter::setOpacityUpdateAverage(quint8 opacity)
 {
+    d->isOpacityUnit = opacity == OPACITY_OPAQUE_U8;
     d->paramInfo.updateOpacityAndAverage(float(opacity) / 255.0f);
 }
 
 void KisPainter::setOpacity(quint8 opacity)
 {
+    d->isOpacityUnit = opacity == OPACITY_OPAQUE_U8;
     d->paramInfo.opacity = float(opacity) / 255.0f;
 }
 

@@ -1480,29 +1480,6 @@ void KisMainWindow::slotDocumentInfo()
     delete dlg;
 }
 
-void KisMainWindow::slotFileClose()
-{
-    if (queryClose()) {
-        saveWindowSettings();
-
-        KisView *activeView = d->activeView;
-        d->views.removeAll(activeView);
-        if (activeView->document()) {
-            activeView->document()->clearUndoHistory();
-        }
-        d->part->removeView(activeView);
-
-        if (d->views.size() > 0) {
-            showView(d->views.first());
-        }
-        else {
-            d->activeView = 0;
-        }
-        activeView->close();
-        delete activeView;
-    }
-}
-
 void KisMainWindow::slotFileCloseAll()
 {
     foreach(QPointer<KisView> view, d->views) {
@@ -2167,7 +2144,6 @@ void KisMainWindow::newWindow()
 
 void KisMainWindow::closeCurrentWindow()
 {
-    slotFileClose();
     m_mdiArea->currentSubWindow()->close();
 }
 

@@ -47,6 +47,19 @@ void PatternDockerDock::setMainWindow(KisViewManager* kisview)
             resourceProvider, SLOT(slotPatternActivated(KoResource*)));
 }
 
+
+void PatternDockerDock::setCanvas(KoCanvasBase *canvas)
+{
+    setEnabled(canvas != 0);
+}
+
+
+void PatternDockerDock::unsetCanvas()
+{
+    setEnabled(false);
+}
+
+
 void PatternDockerDock::patternChanged(KoPattern *pattern)
 {
     m_patternChooser->setCurrentPattern(pattern);

@@ -104,6 +104,7 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
 
 void OnionSkinDock::setCanvas(KoCanvasBase *canvas)
 {
+    setEnabled(canvas != 0);
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
         KisAnimationDoc *doc = qobject_cast<KisAnimationDoc*>(m_canvas->viewManager()->document());

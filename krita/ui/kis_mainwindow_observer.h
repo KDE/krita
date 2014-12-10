@@ -13,8 +13,7 @@ public:
     virtual ~KisMainwindowObserver();
 
     virtual void setMainWindow(KisViewManager* kisview) = 0;
-    virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas();
+
 };
 
 #endif // KIS_MAINWINDOW_OBSERVER_H

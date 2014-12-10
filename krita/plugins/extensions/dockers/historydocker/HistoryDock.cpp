@@ -29,18 +29,21 @@ HistoryDock::HistoryDock() : QDockWidget(), historyCanvas(0) {
 
 void HistoryDock::setCanvas(KoCanvasBase *canvas) {
 
+    setEnabled(canvas != 0);
+
     KisCanvas2* myCanvas = dynamic_cast<KisCanvas2*>( canvas );
+    if (myCanvas) {
+        KUndo2Stack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
 
-    KUndo2Stack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
-
-    undoView->setStack(undoStack);
-    KisConfig cfg;
-    undoView->stack()->setUseCumulativeUndoRedo(cfg.useCumulativeUndoRedo());
-    undoView->stack()->setTimeT1(cfg.stackT1());
-    undoView->stack()->setTimeT2(cfg.stackT2());
-    undoView->stack()->setStrokesN(cfg.stackN());
-
+        undoView->setStack(undoStack);
+        KisConfig cfg;
+        undoView->stack()->setUseCumulativeUndoRedo(cfg.useCumulativeUndoRedo());
+        undoView->stack()->setTimeT1(cfg.stackT1());
+        undoView->stack()->setTimeT2(cfg.stackT2());
+        undoView->stack()->setStrokesN(cfg.stackN());
+    }
     undoView->setCanvas( myCanvas );
+
 }
 
 #include <HistoryDock.moc>

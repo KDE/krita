@@ -97,16 +97,23 @@ CompositionDockerDock::~CompositionDockerDock()
 
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 {
+    setEnabled(canvas != 0);
+
+    unsetCanvas();
+
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
-    foreach(KisAction *action, m_actions) {
-       m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action, actionCollection);
+    if (m_canvas) {
+        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
+        foreach(KisAction *action, m_actions) {
+            m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action, actionCollection);
+        }
+        updateModel();
     }
-    updateModel();
 }
 
 void CompositionDockerDock::unsetCanvas()
 {
+    setEnabled(false);
     if (m_canvas) {
         KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
         foreach(KisAction *action, m_actions) {

@@ -57,13 +57,12 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
-    connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
-    
-    connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
-            this, SLOT(update()));
-    m_compressor->start();
+    if (m_canvas) {
+        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
+        connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
+        m_compressor->start();
+    }
 }
 
 QSize OverviewWidget::calculatePreviewSize()

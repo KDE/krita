@@ -45,14 +45,16 @@ PresetDockerDock::PresetDockerDock( )
 
 void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
 {
+    setEnabled(canvas != 0);
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_presetChooser->disconnect(m_canvas->viewManager()->paintOpBox());
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    Q_ASSERT(m_canvas);
-    if (!m_canvas || !m_canvas->viewManager()) return;
+
+    if (!m_canvas || !m_canvas->viewManager() || !m_canvas->resourceManager()) return;
 
     connect(m_presetChooser, SIGNAL(resourceSelected(KoResource*)),
             m_canvas->viewManager()->paintOpBox(), SLOT(resourceSelected(KoResource*)));

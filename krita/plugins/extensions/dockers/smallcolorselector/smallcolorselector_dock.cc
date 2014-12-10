@@ -47,11 +47,18 @@ SmallColorSelectorDock::SmallColorSelectorDock()
 
 void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
-    if (m_canvas) m_canvas->disconnectCanvasObserver(this);
+    setEnabled(canvas != 0);
+
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+        m_smallColorWidget->setQColor(Qt::black);
+    }
     m_canvas = canvas;
-    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            this, SLOT(canvasResourceChanged(int, const QVariant&)));
-    m_smallColorWidget->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());
+    if (m_canvas && m_canvas->resourceManager()) {
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                this, SLOT(canvasResourceChanged(int, const QVariant&)));
+        m_smallColorWidget->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());
+    }
 }
 
 void SmallColorSelectorDock::colorChangedProxy(const QColor& c)

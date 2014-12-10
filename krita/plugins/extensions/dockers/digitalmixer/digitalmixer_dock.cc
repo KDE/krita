@@ -100,17 +100,22 @@ DigitalMixerDock::DigitalMixerDock( )
 
 void DigitalMixerDock::setCanvas(KoCanvasBase * canvas)
 {
+    setEnabled(canvas != 0);
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
     }
 
     m_canvas = canvas;
-    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            this, SLOT(canvasResourceChanged(int, const QVariant&)));
 
-    m_tellCanvas=false;
-    setCurrentColor(m_canvas->resourceManager()->foregroundColor());
-    m_tellCanvas=true;
+    if (m_canvas) {
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                this, SLOT(canvasResourceChanged(int, const QVariant&)));
+
+        m_tellCanvas=false;
+        setCurrentColor(m_canvas->resourceManager()->foregroundColor());
+        m_tellCanvas=true;
+    }
 }
 
 void DigitalMixerDock::popupColorChanged(int i)

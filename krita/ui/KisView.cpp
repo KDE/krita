@@ -284,10 +284,6 @@ KisView::KisView(KisPart *part, KisDocument *document, KActionCollection *action
     d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
     d->canvas->addDecoration(d->paintingAssistantsDecoration);
 
-    if (!d->document->isLoading() || d->document->image()) {
-        slotLoadingFinished();
-    }
-
 }
 
 KisView::~KisView()
@@ -458,19 +454,15 @@ void KisView::dropEvent(QDropEvent *event)
             QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
             QAction *openManyDocuments = new KAction(i18n("Open Many Documents"), &popup);
 
-            QAction *replaceCurrentDocument = new KAction(i18n("Replace Current Document"), &popup);
-
             QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
             popup.addAction(insertAsNewLayer);
             popup.addAction(openInNewDocument);
-            popup.addAction(replaceCurrentDocument);
             popup.addAction(insertManyLayers);
             popup.addAction(openManyDocuments);
 
             insertAsNewLayer->setEnabled(image() && urls.count() == 1);
             openInNewDocument->setEnabled(urls.count() == 1);
-            replaceCurrentDocument->setEnabled(image() && urls.count() == 1);
             insertManyLayers->setEnabled(image() && urls.count() > 1);
             openManyDocuments->setEnabled(urls.count() > 1);
 
@@ -486,20 +478,7 @@ void KisView::dropEvent(QDropEvent *event)
                         d->viewManager->imageManager()->importImage(KUrl(url));
                         activateWindow();
                     }
-                    else if (action == replaceCurrentDocument) {
-                        if (d->document->isModified()) {
-                            d->document->save();
-                        }
-                        if (mainWindow() != 0) {
-                            /**
-                             * NOTE: this is effectively deferred self-destruction
-                             */
-                            connect(mainWindow(), SIGNAL(loadCompleted()),
-                                    mainWindow(), SLOT(close()));
-
-                            mainWindow()->openDocument(url);
-                        }
-                    } else {
+                    else {
                         Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
                         if (mainWindow()) {
                             mainWindow()->openDocument(url);

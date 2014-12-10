@@ -30,6 +30,9 @@ public:
     PatternDockerDock( );
 
     virtual void setMainWindow(KisViewManager* kisview);
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
+
     QString observerName() { return "PatternDockerDock"; }
 public slots:
     void patternChanged(KoPattern *pattern);

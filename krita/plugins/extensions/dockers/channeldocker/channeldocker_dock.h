@@ -31,7 +31,7 @@ public:
     ChannelDockerDock();
     QString observerName() { return "ChannelDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
 private:
     KisCanvas2 *m_canvas;
     QTableView *m_channelTable;

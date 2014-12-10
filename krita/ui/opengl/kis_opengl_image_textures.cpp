@@ -398,6 +398,8 @@ bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
 
 void KisOpenGLImageTextures::updateTextureFormat()
 {
+    if (!m_image) return;
+
     m_texturesInfo.internalFormat = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
     m_texturesInfo.format = GL_BGRA;

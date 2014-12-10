@@ -61,7 +61,7 @@ public:
 QString observerName() { return "LutDockerDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
 
     bool canChangeExposureAndGamma() const;
     qreal currentExposure() const;

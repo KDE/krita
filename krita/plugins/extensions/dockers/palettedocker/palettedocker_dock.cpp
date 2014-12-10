@@ -40,6 +40,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <KisViewManager.h>
 #include <kis_display_color_converter.h>
+#include <kis_canvas2.h>
 
 #include "palettemodel.h"
 #include "colorsetchooser.h"
@@ -193,9 +194,22 @@ void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
 
     kisview->nodeManager()->disconnect(m_model);
 
-    // XXX: FIX!!!
-    //m_model->setDisplayRenderer(kisview->canvas()->displayColorConverter()->displayRendererInterface());
 
+}
+
+void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
+{
+    setEnabled(canvas != 0);
+    if (canvas) {
+        KisCanvas2 *cv = dynamic_cast<KisCanvas2*>(canvas);
+        m_model->setDisplayRenderer(cv->displayColorConverter()->displayRendererInterface());
+    }
+}
+
+
+void PaletteDockerDock::unsetCanvas()
+{
+    setEnabled(false);
 }
 
 void PaletteDockerDock::unsetResourceServer()

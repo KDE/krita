@@ -34,7 +34,7 @@ public:
     QString observerName() { return "DigitalMixerDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
 public slots:
     void setCurrentColor(const KoColor& );
     void canvasResourceChanged(int, const QVariant&);

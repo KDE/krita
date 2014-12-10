@@ -199,3 +199,14 @@ void ArtisticColorSelectorDock::slotLightModeChanged(bool setToAbsolute)
     m_selectorUI->colorSelector->setLight(m_selectorUI->colorSelector->getLight(), !setToAbsolute);
 }
 
+
+
+void ArtisticColorSelectorDock::setCanvas(KoCanvasBase *canvas)
+{
+    setEnabled(canvas != 0);
+}
+
+void ArtisticColorSelectorDock::unsetCanvas()
+{
+    setEnabled(false);
+}

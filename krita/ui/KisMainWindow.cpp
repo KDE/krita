@@ -156,9 +156,6 @@ public:
         dockWidgetMenu = 0;
         dockerManager = 0;
         deferredClosingEvent = 0;
-//#ifdef HAVE_KACTIVITIES
-//        activityResource = 0;
-//#endif
         themeManager = 0;
         m_helpMenu = 0;
         m_activeWidget = 0;
@@ -254,10 +251,6 @@ public:
 
     QCloseEvent *deferredClosingEvent;
 
-//#ifdef HAVE_KACTIVITIES
-//    KActivities::ResourceInstance *activityResource;
-//#endif
-
     Digikam::ThemeManager *themeManager;
 
     KHelpMenu *m_helpMenu;
@@ -275,7 +268,10 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     , m_constructing(true)
     , m_mdiArea(new QMdiArea(this))
     , m_activeSubWindow(0)
+    , m_brushesAndStuff(0)
 {
+
+    setAcceptDrops(true);
 
 #ifdef Q_OS_MAC
     #if QT_VERSION < 0x050000
@@ -460,11 +456,9 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
 
-    QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::SubWindowView);
-
     m_mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_mdiArea->setViewMode(viewMode);
+
     m_mdiArea->setTabPosition(QTabWidget::North);
 
 #if QT_VERSION >= 0x040800
@@ -482,29 +476,29 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     m_documentMapper = new QSignalMapper(this);
     connect(m_documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
-    m_guiClient = new KisViewManager(this, actionCollection());
+    m_viewManager = new KisViewManager(this, actionCollection());
 
-    m_guiClient->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
+    m_viewManager->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
 
     m_windowMenu = new KActionMenu(i18n("Window"), this);
-    m_guiClient->actionCollection()->addAction("window", m_windowMenu);
+    m_viewManager->actionCollection()->addAction("window", m_windowMenu);
 
     m_documentMenu = new KActionMenu(i18n("New View"), this);
 
     m_mdiCascade = new KAction(i18n("Cascade"), this);
-    m_guiClient->actionCollection()->addAction("windows_cascade", m_mdiCascade);
+    m_viewManager->actionCollection()->addAction("windows_cascade", m_mdiCascade);
     connect(m_mdiCascade, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
 
     m_mdiTile = new KAction(i18n("Tile"), this);
-    m_guiClient->actionCollection()->addAction("windows_tile", m_mdiTile);
+    m_viewManager->actionCollection()->addAction("windows_tile", m_mdiTile);
     connect(m_mdiTile, SIGNAL(triggered()), m_mdiArea, SLOT(tileSubWindows()));
 
     m_mdiNextWindow = new KAction(i18n("Next"), this);
-    m_guiClient->actionCollection()->addAction("windows_next", m_mdiNextWindow);
+    m_viewManager->actionCollection()->addAction("windows_next", m_mdiNextWindow);
     connect(m_mdiNextWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activateNextSubWindow()));
 
     m_mdiPreviousWindow = new KAction(i18n("Previous"), this);
-    m_guiClient->actionCollection()->addAction("windows_previous", m_mdiPreviousWindow);
+    m_viewManager->actionCollection()->addAction("windows_previous", m_mdiPreviousWindow);
     connect(m_mdiPreviousWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
 
     m_newWindow= new KAction(koIcon("window-new"), i18n("&New Window"), this);
@@ -527,23 +521,6 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
         }
     }
 
-    // Create and plug toolbar list for Settings menu
-    QList<QAction *> toolbarList;
-    foreach(QWidget* it, guiFactory()->containers("ToolBar")) {
-        KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
-        if (toolBar) {
-            KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
-            actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
-            act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
-            connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
-            act->setChecked(!toolBar->isHidden());
-            toolbarList.append(act);
-        } else
-            kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
-    }
-    plugActionList("toolbarlist", toolbarList);
-    setToolbarList(toolbarList);
-
     updateMenus();
     updateWindowMenu();
 
@@ -564,6 +541,29 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
     setXMLFile( f, true );
     guiFactory()->addClient( this );
 
+    // Create and plug toolbar list for Settings menu
+    QList<QAction *> toolbarList;
+    foreach(QWidget* it, guiFactory()->containers("ToolBar")) {
+        KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+
+        if (toolBar) {
+            if (toolBar->objectName() == "BrushesAndStuff") {
+                m_brushesAndStuff = toolBar;
+                m_brushesAndStuff->setEnabled(false);
+            }
+
+            KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
+            actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
+            act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
+            connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
+            act->setChecked(!toolBar->isHidden());
+            toolbarList.append(act);
+        } else
+            kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+    }
+    plugActionList("toolbarlist", toolbarList);
+    setToolbarList(toolbarList);
+
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
@@ -576,6 +576,8 @@ KisMainWindow::KisMainWindow(KisPart *part, const KComponentData &componentData)
         existingShortcuts.insert(action->shortcut());
     }
 #endif
+
+    configChanged();
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -608,7 +610,7 @@ KisMainWindow::~KisMainWindow()
 
     delete d;
 
-    delete m_guiClient;
+    delete m_viewManager;
 }
 
 void KisMainWindow::addView(KisView *view)
@@ -643,6 +645,9 @@ void KisMainWindow::addView(KisView *view)
     d->printActionPreview->setEnabled(viewHasDocument);
     d->sendFileAction->setEnabled(viewHasDocument);
     d->exportPdf->setEnabled(viewHasDocument);
+
+    m_brushesAndStuff->setEnabled(viewHasDocument);
+
     //d->closeFile->setEnabled(viewHasDocument);
 //     statusBar()->setVisible(viewHasDocument);
 
@@ -660,10 +665,12 @@ void KisMainWindow::showView(KisView *imageView)
 {
     if (imageView && activeView() != imageView) {
         // XXX: find a better way to initialize this!
-        imageView->canvasBase()->setFavoriteResourceManager(m_guiClient->paintOpBox()->favoriteResourcesManager());
+        imageView->setViewManager(m_viewManager);
+        imageView->canvasBase()->setFavoriteResourceManager(m_viewManager->paintOpBox()->favoriteResourcesManager());
+        imageView->slotLoadingFinished();;
 
         QMdiSubWindow *subwin = m_mdiArea->addSubWindow(imageView);
-        subwin->setWindowIcon(QIcon(imageView->document()->generatePreview(QSize(64,64))));
+        subwin->setWindowIcon(qApp->windowIcon());
         subwin->setWindowTitle(imageView->document()->url().fileName());
         if (m_mdiArea->subWindowList().size() == 1) {
             imageView->showMaximized();
@@ -699,7 +706,7 @@ void KisMainWindow::slotPreferences()
 
         }
 
-        m_guiClient->showHideScrollbars();
+        m_viewManager->showHideScrollbars();
     }
 }
 
@@ -743,12 +750,6 @@ void KisMainWindow::addRecentURL(const KUrl& url)
         }
         saveRecentFiles();
 
-//#ifdef HAVE_KACTIVITIES
-//        if (!d->activityResource) {
-//            d->activityResource = new KActivities::ResourceInstance(winId(), this);
-//        }
-//        d->activityResource->setUri(url);
-//#endif
     }
 }
 
@@ -873,7 +874,6 @@ bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
     connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
     bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
-        d->part->removeMainWindow(this);
         delete newdoc;
         return false;
     }
@@ -1316,6 +1316,22 @@ void KisMainWindow::setActiveView(KisView* view)
 
     actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
     actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
+}
+
+void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->accept();
+    }
+}
+
+void KisMainWindow::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
+        foreach(const QUrl &url, event->mimeData()->urls()) {
+            KisPart::instance()->openExistingFile(url);
+        }
+    }
 }
 
 bool KisMainWindow::queryClose()
@@ -1869,6 +1885,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
 
+
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget) return 0;
@@ -2042,6 +2059,15 @@ void KisMainWindow::updateMenus()
     m_closeAll->setEnabled(enabled);
 
     setActiveSubWindow(m_mdiArea->activeSubWindow());
+    foreach(QToolBar *tb, toolBars()) {
+        if (tb->objectName() == "BrushesAndStuff") {
+            tb->setEnabled(enabled);
+        }
+    }
+
+    if (m_brushesAndStuff) {
+        m_brushesAndStuff->setEnabled(enabled);
+    }
 }
 
 void KisMainWindow::updateWindowMenu()
@@ -2058,7 +2084,7 @@ void KisMainWindow::updateWindowMenu()
     foreach (QPointer<KisDocument> doc, part()->documents()) {
         if (doc) {
             QAction *action = docMenu->addAction(doc->url().prettyUrl());
-            action->setIcon(QIcon(doc->generatePreview(QSize(64,64))));
+            action->setIcon(qApp->windowIcon());
             connect(action, SIGNAL(triggered()), m_documentMapper, SLOT(map()));
             m_documentMapper->setMapping(action, doc);
         }
@@ -2092,7 +2118,7 @@ void KisMainWindow::updateWindowMenu()
             }
 
             QAction *action  = menu->addAction(text);
-            action->setIcon(QIcon(child->document()->generatePreview(QSize(64,64))));
+            action->setIcon(qApp->windowIcon());
             action->setCheckable(true);
             action->setChecked(child == activeKisView());
             connect(action, SIGNAL(triggered()), m_windowMapper, SLOT(map()));
@@ -2112,7 +2138,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         KisView *view = qobject_cast<KisView *>(subwin->widget());
         //qDebug() << "\t" << view << activeView();
         if (view && view != activeView()) {
-            m_guiClient->setCurrentView(view);
+            m_viewManager->setCurrentView(view);
             setActiveView(view);
         }
         m_activeSubWindow = subwin;

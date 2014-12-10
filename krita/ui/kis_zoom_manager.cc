@@ -96,6 +96,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 {
 
     KisImageWSP image = m_view->image();
+    if (!image) return;
     QSize imageSize = image->size();
 
     qreal minDimension = qMin(imageSize.width(), imageSize.height());
@@ -214,7 +215,6 @@ void KisZoomManager::updateGUI()
     m_horizontalRuler->setRulerLength(documentSize.width());
     m_verticalRuler->setRulerLength(documentSize.height());
 
-    KIS_ASSERT_RECOVER_NOOP(m_horizontalRuler->unit() == m_verticalRuler->unit());
     applyRulersUnit(m_horizontalRuler->unit());
 }
 

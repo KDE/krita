@@ -495,7 +495,9 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID& paintOp)
 
 void KisPaintopBox::updateCompositeOp(QString compositeOpID, bool localUpdate)
 {
-    m_optionWidget->blockSignals(true);
+    if (m_optionWidget) {
+        m_optionWidget->blockSignals(true);
+    }
     KisNodeSP node = m_resourceProvider->currentNode();
 
     if (node && node->paintDevice()) {

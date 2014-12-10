@@ -1259,81 +1259,6 @@ bool KisDocument::openUrl(const KUrl & _url)
     return ret;
 }
 
-// It seems that people have started to save .docx files as .doc and
-// similar for xls and ppt.  So let's make a small replacement table
-// here and see if we can open the files anyway.
-static struct MimetypeReplacement {
-    const char *typeFromName;         // If the mime type from the name is this...
-    const char *typeFromContents;     // ...and findByFileContents() reports this type...
-    const char *useThisType;          // ...then use this type for real.
-} replacementMimetypes[] = {
-    // doc / docx
-    {
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    },
-    {
-        "application/msword",
-        "application/zip",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    },
-    {
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "application/msword",
-        "application/msword"
-    },
-    {
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "application/x-ole-storage",
-        "application/msword"
-    },
-
-    // xls / xlsx
-    {
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    },
-    {
-        "application/vnd.ms-excel",
-        "application/zip",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    },
-    {
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "application/vnd.ms-excel",
-        "application/vnd.ms-excel"
-    },
-    {
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "application/x-ole-storage",
-        "application/vnd.ms-excel"
-    },
-
-    // ppt / pptx
-    {
-        "application/vnd.ms-powerpoint",
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-    },
-    {
-        "application/vnd.ms-powerpoint",
-        "application/zip",
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-    },
-    {
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "application/vnd.ms-powerpoint",
-        "application/vnd.ms-powerpoint"
-    },
-    {
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "application/x-ole-storage",
-        "application/vnd.ms-powerpoint"
-    }
-};
-
 bool KisDocument::openFile()
 {
     //kDebug(30003) <<"for" << localFilePath();
@@ -1361,67 +1286,7 @@ bool KisDocument::openFile()
     // for images, always check content.
     typeName = checkImageMimeTypes(typeName, u);
 
-    // Sometimes it seems that arguments().mimeType() contains a much
-    // too generic mime type.  In that case, let's try some educated
-    // guesses based on what we know about file extension.
-    //
-    // FIXME: Should we just ignore this and always call
-    //        KMimeType::findByUrl()? David Faure says that it's
-    //        impossible for findByUrl() to fail to initiate the
-    //        mimetype for "*.doc" to application/msword.  This hints
-    //        that we should do that.  But why does it happen like
-    //        this at all?
-    if (typeName == "application/zip") {
-        QString filename = u.fileName();
 
-        // None of doc, xls or ppt are really zip files.  But docx,
-        // xlsx and pptx are.  This miscategorization seems to only
-        // crop up when there is a, say, docx file saved as doc.  The
-        // conversion to the docx mimetype will happen below.
-        if (filename.endsWith(".doc"))
-            typeName = "application/msword";
-        else if (filename.endsWith(".xls"))
-            typeName = "application/vnd.ms-excel";
-        else if (filename.endsWith(".ppt"))
-            typeName = "application/vnd.ms-powerpoint";
-
-        // Potentially more guesses here...
-    } else if (typeName == "application/x-ole-storage") {
-        QString filename = u.fileName();
-
-        // None of docx, xlsx or pptx are really OLE files.  But doc,
-        // xls and ppt are.  This miscategorization seems to only crop
-        // up when there is a, say, doc file saved as docx.  The
-        // conversion to the doc mimetype will happen below.
-        if (filename.endsWith(".docx"))
-            typeName = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        else if (filename.endsWith(".xlsx"))
-            typeName = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        else if (filename.endsWith(".pptx"))
-            typeName = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-
-        // Potentially more guesses here...
-    }
-    //kDebug(30003) << "mimetypes 3:" << typeName;
-
-    // In some cases docx files are saved as doc and similar.  We have
-    // a small hardcoded table for those cases.  Check if this is
-    // applicable here.
-    for (uint i = 0; i < sizeof(replacementMimetypes) / sizeof(struct MimetypeReplacement); ++i) {
-        struct MimetypeReplacement *replacement = &replacementMimetypes[i];
-
-        if (typeName == replacement->typeFromName) {
-            //kDebug(30003) << "found potential replacement target:" << typeName;
-            int accuracy;
-            QString typeFromContents = KMimeType::findByFileContent(u.path(), &accuracy)->name();
-            //kDebug(30003) << "found potential replacement:" << typeFromContents;
-            if (typeFromContents == replacement->typeFromContents) {
-                typeName = replacement->useThisType;
-                //kDebug(30003) << "So really use this:" << typeName;
-                break;
-            }
-        }
-    }
     //kDebug(30003) << "mimetypes 4:" << typeName;
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
@@ -1595,12 +1460,7 @@ bool KisDocument::openFile()
 
     if (ok) {
         setMimeTypeAfterLoading(typeName);
-
-        KNotification *notify = new KNotification("DocumentLoaded");
-        notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
-        notify->addContext("url", url().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
-
+        emit sigLoadingFinished();
     }
 
     if (progressUpdater()) {

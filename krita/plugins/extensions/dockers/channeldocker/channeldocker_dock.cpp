@@ -46,9 +46,8 @@ ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canva
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-//     if (m_canvas) {
-//         m_canvas->disconnect();
-//     }
+    setEnabled(canvas != 0);
+
     if (!canvas) {
         m_canvas = 0;
         return;

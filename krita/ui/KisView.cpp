@@ -365,6 +365,11 @@ KisCanvasResourceProvider *KisView::resourceProvider() const
     return 0;
 }
 
+KisInputManager* KisView::globalInputManager() const
+{
+    return d->viewManager ? d->viewManager->inputManager() : 0;
+}
+
 KisCanvas2 *KisView::canvasBase() const
 {
     return d->canvas;

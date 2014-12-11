@@ -59,6 +59,10 @@
 
 #include "kis_extended_modifiers_mapper.h"
 
+template <typename T>
+uint qHash(QPointer<T> value) {
+    return reinterpret_cast<quintptr>(value.data());
+}
 
 class KisInputManager::Private
 {
@@ -120,12 +124,15 @@ public:
     KisSignalCompressor moveEventCompressor;
     QScopedPointer<KisTabletEvent> compressedMoveEvent;
 
-    QSet<QObject*> priorityEventFilter;
+    QSet<QPointer<QObject> > priorityEventFilter;
 
     template <class Event, bool useBlocking>
     void debugEvent(QEvent *event);
 
     class ProximityNotifier;
+
+    class CanvasSwitcher;
+    QPointer<CanvasSwitcher> canvasSwitcher;
 };
 
 template <class Event, bool useBlocking>
@@ -144,6 +151,95 @@ void KisInputManager::Private::debugEvent(QEvent *event)
 #define touch_start_block_press_events() d->touchHasBlockedPressEvents = d->disableTouchOnCanvas
 #define touch_stop_block_press_events() d->touchHasBlockedPressEvents = false
 #define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
+
+class KisInputManager::Private::CanvasSwitcher : public QObject {
+public:
+    CanvasSwitcher(Private *_d, QObject *p)
+        : QObject(p),
+          d(_d),
+          eatOneMouseStroke(false)
+    {
+    }
+
+    void addCanvas(KisCanvas2 *canvas) {
+        QObject *widget = canvas->canvasWidget();
+
+        if (!canvasResolver.contains(widget)) {
+            canvasResolver.insert(widget, canvas);
+            d->q->setupAsEventFilter(widget);
+            widget->installEventFilter(this);
+
+            d->canvas = canvas;
+            d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
+        } else {
+            KIS_ASSERT_RECOVER_RETURN(d->canvas == canvas);
+        }
+    }
+
+    void removeCanvas(KisCanvas2 *canvas) {
+        QObject *widget = canvas->canvasWidget();
+
+        canvasResolver.remove(widget);
+
+        if (d->eventsReceiver == widget) {
+            d->q->setupAsEventFilter(0);
+        }
+
+        widget->removeEventFilter(this);
+    }
+
+    bool eventFilter(QObject* object, QEvent* event ) {
+        if (canvasResolver.contains(object)) {
+            switch (event->type()) {
+            case QEvent::FocusIn: {
+                QFocusEvent *fevent = static_cast<QFocusEvent*>(event);
+                eatOneMouseStroke = 2 * (fevent->reason() == Qt::MouseFocusReason);
+
+                KisCanvas2 *canvas = canvasResolver.value(object);
+                d->canvas = canvas;
+                d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
+
+                d->q->setupAsEventFilter(object);
+
+                object->removeEventFilter(this);
+                object->installEventFilter(this);
+
+                QEvent event(QEvent::Enter);
+                d->q->eventFilter(object, &event);
+                break;
+            }
+
+            case QEvent::Wheel: {
+                QWidget *widget = static_cast<QWidget*>(object);
+                widget->setFocus();
+                break;
+            }
+            case QEvent::MouseButtonPress:
+            case QEvent::MouseButtonRelease:
+            case QEvent::TabletPress:
+            case QEvent::TabletRelease:
+                if (eatOneMouseStroke) {
+                    eatOneMouseStroke--;
+                    return true;
+                }
+                break;
+            case QEvent::MouseButtonDblClick:
+                if (eatOneMouseStroke) {
+                    return true;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        return QObject::eventFilter(object, event);
+    }
+
+private:
+    KisInputManager::Private *d;
+    QMap<QObject*, KisCanvas2*> canvasResolver;
+    int eatOneMouseStroke;
+};
 
 class KisInputManager::Private::ProximityNotifier : public QObject {
 public:
@@ -388,11 +484,11 @@ void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type /*type*/)
     lastTabletEvent = 0;
 }
 
-KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
-    : QObject(canvas), d(new Private(this))
+KisInputManager::KisInputManager(QObject *parent)
+    : QObject(parent), d(new Private(this))
 {
-    d->canvas = canvas;
-    d->toolProxy = proxy;
+    d->canvas = 0;
+    d->toolProxy = 0;
 
     d->setupActions();
 
@@ -405,11 +501,23 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
     QApplication::instance()->
         installEventFilter(new Private::ProximityNotifier(d, this));
 #endif
+
+    d->canvasSwitcher = new Private::CanvasSwitcher(d, this);
 }
 
 KisInputManager::~KisInputManager()
 {
     delete d;
+}
+
+void KisInputManager::addTrackedCanvas(KisCanvas2 *canvas)
+{
+    d->canvasSwitcher->addCanvas(canvas);
+}
+
+void KisInputManager::removeTrackedCanvas(KisCanvas2 *canvas)
+{
+    d->canvasSwitcher->removeCanvas(canvas);
 }
 
 void KisInputManager::toggleTabletLogger()
@@ -429,12 +537,12 @@ void KisInputManager::toggleTabletLogger()
 
 void KisInputManager::attachPriorityEventFilter(QObject *filter)
 {
-    d->priorityEventFilter.insert(filter);
+    d->priorityEventFilter.insert(QPointer<QObject>(filter));
 }
 
 void KisInputManager::detachPriorityEventFilter(QObject *filter)
 {
-    d->priorityEventFilter.remove(filter);
+    d->priorityEventFilter.remove(QPointer<QObject>(filter));
 }
 
 void KisInputManager::setupAsEventFilter(QObject *receiver)
@@ -473,7 +581,12 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
          event->type() != QEvent::TabletMove &&
          event->type() != QEvent::TabletRelease)) {
 
-        foreach (QObject *filter, d->priorityEventFilter) {
+        foreach (QPointer<QObject> filter, d->priorityEventFilter) {
+            if (filter.isNull()) {
+                d->priorityEventFilter.remove(filter);
+                continue;
+            }
+
             if (filter->eventFilter(object, event)) return true;
         }
     }

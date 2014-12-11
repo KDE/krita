@@ -77,6 +77,7 @@
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 
+#include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
@@ -279,6 +280,7 @@ public:
     KisSignalCompressor* guiUpdateCompressor;
     KActionCollection *actionCollection;
     KisMirrorManager *mirrorManager;
+    QPointer<KisInputManager> inputManager;
 };
 
 
@@ -344,6 +346,9 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
 
     connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
             d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
+
+    connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
+    connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
 
     loadPlugins();
 
@@ -417,6 +422,16 @@ KisViewManager::~KisViewManager()
 KActionCollection *KisViewManager::actionCollection() const
 {
     return d->actionCollection;
+}
+
+void KisViewManager::slotViewAdded(KisView *view)
+{
+    d->inputManager->addTrackedCanvas(view->canvasBase());
+}
+
+void KisViewManager::slotViewRemoved(KisView *view)
+{
+    d->inputManager->removeTrackedCanvas(view->canvasBase());
 }
 
 void KisViewManager::setCurrentView(KisView *view)
@@ -625,6 +640,11 @@ KisImageManager * KisViewManager::imageManager()
     return d->imageManager;
 }
 
+KisInputManager* KisViewManager::inputManager() const
+{
+    return d->inputManager;
+}
+
 KisSelectionSP KisViewManager::selection()
 {
     if (d->currentImageView) {
@@ -771,6 +791,7 @@ void KisViewManager::createManagers()
     d->mirrorManager = new KisMirrorManager(this);
     d->mirrorManager->setup(actionCollection());
 
+    d->inputManager = new KisInputManager(this);
 }
 
 void KisViewManager::updateGUI()
@@ -1200,9 +1221,7 @@ void KisViewManager::showJustTheCanvas(bool toggled)
 
 void KisViewManager::toggleTabletLogger()
 {
-    if (d->currentImageView) {
-        d->currentImageView->canvasBase()->toggleTabletLogger();
-    }
+    d->inputManager->toggleTabletLogger();
 }
 
 void KisViewManager::openResourcesDirectory()

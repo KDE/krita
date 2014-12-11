@@ -42,11 +42,11 @@ class KisViewManager;
 class KisPaintopBox;
 class KisFavoriteResourceManager;
 class KisDisplayFilter;
-class KisInputManager;
 class KisDisplayColorConverter;
 struct KisExposureGammaCorrectionInterface;
 class KisPaintingAssistantsDecoration;
 class KisView;
+class KisInputManager;
 
 enum KisCanvasType {
     QPAINTER,
@@ -84,8 +84,6 @@ public:
     void notifyZoomChanged();
 
     virtual void disconnectCanvasObserver(QObject *object);
-
-    void toggleTabletLogger();
 
 public: // KoCanvasBase implementation
 
@@ -145,8 +143,13 @@ public: // KoCanvasBase implementation
     // current shape selection.
     KisImageWSP currentImage() const;
 
-
-    KisInputManager *inputManager() const;
+    /**
+     * Filters events and sends them to canvas actions. Shared
+     * among all the views/canvases
+     *
+     * NOTE: May be null while initialization!
+     */
+    KisInputManager* globalInputManager() const;
 
     KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
 

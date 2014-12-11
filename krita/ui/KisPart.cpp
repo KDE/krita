@@ -202,11 +202,16 @@ void KisPart::addView(KisView *view, KisDocument *document)
             emit app->documentOpened('/'+objectName());
         }
     }
+
+    emit sigViewAdded(view);
 }
 
 void KisPart::removeView(KisView *view)
 {
     if (!view) return;
+
+    emit sigViewRemoved(view);
+
     QPointer<KisDocument> doc = view->document();
     d->views.removeAll(view);
 

@@ -59,7 +59,7 @@ class KisZoomManager;
 class KisPaintopBox;
 class KisCanvasController;
 class KisActionManager;
-
+class KisInputManager;
 
 /**
  * Krita view class
@@ -159,6 +159,9 @@ public:  // Krita specific interfaces
     /// current image
     KisImageManager * imageManager();
 
+    /// Filters events and sends them to canvas actions
+    KisInputManager* inputManager() const;
+
     /// Convenience method to get at the active selection (the
     /// selection of the current layer, or, if that does not exist,
     /// the global selection.
@@ -209,6 +212,9 @@ public slots:
     /// Go to all managers and enable or disable all actions and other
     /// gui elements
     void updateGUI();
+
+    void slotViewAdded(KisView *view);
+    void slotViewRemoved(KisView *view);
 
 signals:
 

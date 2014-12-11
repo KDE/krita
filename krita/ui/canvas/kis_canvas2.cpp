@@ -114,8 +114,6 @@ public:
     KisPrescaledProjectionSP prescaledProjection;
     bool vastScrolling;
 
-    KisInputManager* inputManager;
-
     KisSignalCompressor *updateSignalCompressor;
     QRect savedUpdateRect;
 
@@ -132,8 +130,6 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, QPointer<KisView
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
-
-    m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
 
     createCanvas(cfg.useOpenGL());
 
@@ -300,6 +296,11 @@ const KisCoordinatesConverter* KisCanvas2::coordinatesConverter() const
 KoViewConverter* KisCanvas2::viewConverter() const
 {
     return m_d->coordinatesConverter;
+}
+
+KisInputManager* KisCanvas2::globalInputManager() const
+{
+    return m_d->view->globalInputManager();
 }
 
 QWidget* KisCanvas2::canvasWidget()
@@ -690,11 +691,6 @@ void KisCanvas2::disconnectCanvasObserver(QObject *object)
     m_d->view->disconnect(object);
 }
 
-void KisCanvas2::toggleTabletLogger()
-{
-    m_d->inputManager->toggleTabletLogger();
-}
-
 void KisCanvas2::notifyZoomChanged()
 {
     if (!m_d->currentCanvasIsOpenGL) {
@@ -740,11 +736,6 @@ KisImageWSP KisCanvas2::image() const
 KisImageWSP KisCanvas2::currentImage() const
 {
     return m_d->view->image();
-}
-
-KisInputManager *KisCanvas2::inputManager() const
-{
-    return m_d->inputManager;
 }
 
 void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)

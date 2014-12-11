@@ -105,7 +105,11 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
     d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, point);
 
     parent->installEventFilter(this);
-    parent->canvasBase()->inputManager()->attachPriorityEventFilter(this);
+
+    KisInputManager *inputManager = parent->canvasBase()->globalInputManager();
+    if (inputManager) {
+        inputManager->attachPriorityEventFilter(this);
+    }
 }
 
 KisMirrorAxis::~KisMirrorAxis()

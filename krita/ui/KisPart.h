@@ -161,6 +161,10 @@ private slots:
 
     void startCustomDocument(KisDocument *doc);
 
+signals:
+
+    void sigViewAdded(KisView *view);
+    void sigViewRemoved(KisView *view);
 
 public:
 

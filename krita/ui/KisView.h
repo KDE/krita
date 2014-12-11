@@ -40,6 +40,7 @@ class KisViewManager;
 class KisDocument;
 class KisCanvasResourceProvider;
 class KisCoordinatesConverter;
+class KisInputManager;
 
 class KoZoomController;
 class KoZoomManager;
@@ -175,6 +176,14 @@ public:
      */
     KisCanvasController *canvasController() const;
     KisCanvasResourceProvider *resourceProvider() const;
+
+    /**
+     * Filters events and sends them to canvas actions. Shared
+     * among all the views/canvases
+     *
+     * NOTE: May be null while initialization!
+     */
+    KisInputManager* globalInputManager() const;
 
     /**
      * @return the canvas object

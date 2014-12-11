@@ -39,6 +39,7 @@
 #include "kis_image.h"
 #include "canvas/kis_canvas_controller.h"
 #include "input/kis_input_manager.h"
+#include "kis_algebra_2d.h"
 
 class KisMirrorAxis::Private
 {
@@ -51,15 +52,18 @@ public:
         , handleSize(32.f)
         , xActive(false)
         , yActive(false)
-        , horizontalHandlePosition(0.f)
-        , verticalHandlePosition(0.f)
+        , horizontalHandlePosition(64.f)
+        , verticalHandlePosition(64.f)
         , sideMargin(10.f)
         , minHandlePosition(10.f + 32.f)
         , horizontalContainsCursor(false)
         , verticalContainsCursor(false)
+        , horizontalAxis(QLineF())
+        , verticalAxis(QLineF())
     { }
 
     void setAxisPosition(float x, float y);
+    void recomputeVisibleAxes(QRect viewport);
 
     KisMirrorAxis* q;
 
@@ -83,6 +87,9 @@ public:
     float minHandlePosition;
     bool horizontalContainsCursor;
     bool verticalContainsCursor;
+
+    QLineF horizontalAxis;
+    QLineF verticalAxis;
 };
 
 KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisView>parent)
@@ -138,20 +145,12 @@ void KisMirrorAxis::setHandleSize(float newSize)
 void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas)
 {
     Q_UNUSED(updateArea);
+    Q_UNUSED(converter);
+    Q_UNUSED(canvas);
 
     gc.setPen(QPen(QColor(0, 0, 0, 128), 1));
     gc.setBrush(Qt::white);
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-
-    float halfHandleSize = d->handleSize / 2;
-
-    d->axisPosition = converter->imageToWidget<QPointF>(canvas->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF());
-
-    QRectF horizontalIndicator = QRectF(d->axisPosition.x() - halfHandleSize, 10, d->handleSize, d->handleSize);
-    QRectF verticalIndicator = QRectF(10, d->axisPosition.y() - halfHandleSize, d->handleSize, d->handleSize);
-
-    d->horizontalHandle = QRectF(d->axisPosition.x() - halfHandleSize, d->horizontalHandlePosition, d->handleSize, d->handleSize);
-    d->verticalHandle = QRectF(d->verticalHandlePosition, d->axisPosition.y() - halfHandleSize, d->handleSize, d->handleSize);
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
@@ -163,20 +162,49 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     }
 #endif
 
+    float halfHandleSize = d->handleSize / 2;
+
+    d->recomputeVisibleAxes(gc.viewport());
+
     if(d->mirrorHorizontal) {
-        gc.drawLine(d->axisPosition.x(), 0, d->axisPosition.x(), view()->height());
-        gc.drawEllipse(horizontalIndicator);
-        gc.drawPixmap(horizontalIndicator.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
-        gc.drawEllipse(d->horizontalHandle);
-        gc.drawPixmap(d->horizontalHandle.adjusted(5, 5, -5, -5).toRect(), d->horizontalHandleIcon);
+        if (!d->horizontalAxis.isNull()) {
+            QPointF horizontalIndicatorCenter = d->horizontalAxis.unitVector().pointAt(15);
+            QRectF horizontalIndicator = QRectF(horizontalIndicatorCenter.x() - halfHandleSize, horizontalIndicatorCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+
+            float horizontalHandlePosition = qBound<float>(d->minHandlePosition, d->horizontalHandlePosition, d->horizontalAxis.length() - d->minHandlePosition);
+            QPointF horizontalHandleCenter = d->horizontalAxis.unitVector().pointAt(horizontalHandlePosition);
+            d->horizontalHandle = QRectF(horizontalHandleCenter.x() - halfHandleSize, horizontalHandleCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+
+            gc.drawLine(d->horizontalAxis);
+
+            gc.drawEllipse(horizontalIndicator);
+            gc.drawPixmap(horizontalIndicator.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
+            gc.drawEllipse(d->horizontalHandle);
+            gc.drawPixmap(d->horizontalHandle.adjusted(5, 5, -5, -5).toRect(), d->horizontalHandleIcon);
+        } else {
+            d->horizontalHandle = QRectF();
+        }
     }
 
     if(d->mirrorVertical) {
-        gc.drawLine(0, d->axisPosition.y(), view()->width(), d->axisPosition.y());
-        gc.drawEllipse(verticalIndicator);
-        gc.drawPixmap(verticalIndicator.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
-        gc.drawEllipse(d->verticalHandle);
-        gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalHandleIcon);
+        if (!d->verticalAxis.isNull()) {
+
+            gc.drawLine(d->verticalAxis);
+
+            QPointF verticalIndicatorCenter = d->verticalAxis.unitVector().pointAt(15);
+            QRectF verticalIndicator = QRectF(verticalIndicatorCenter.x() - halfHandleSize, verticalIndicatorCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+
+            float verticalHandlePosition = qBound<float>(d->minHandlePosition, d->verticalHandlePosition, d->verticalAxis.length() - d->minHandlePosition);
+            QPointF verticalHandleCenter = d->verticalAxis.unitVector().pointAt(verticalHandlePosition);
+            d->verticalHandle = QRectF(verticalHandleCenter.x() - halfHandleSize, verticalHandleCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+
+            gc.drawEllipse(verticalIndicator);
+            gc.drawPixmap(verticalIndicator.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
+            gc.drawEllipse(d->verticalHandle);
+            gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalHandleIcon);
+        } else {
+            d->verticalHandle = QRectF();
+        }
     }
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
@@ -209,14 +237,20 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent* me = static_cast<QMouseEvent*>(event);
         if(d->xActive) {
-            d->setAxisPosition(me->posF().x(), d->axisPosition.y());
-            d->horizontalHandlePosition = qBound<float>(d->minHandlePosition, me->posF().y() - d->handleSize / 2, view()->height() - d->handleSize);
+            float axisX = view()->viewConverter()->widgetToImage<QPoint>(me->pos()).x();
+
+            d->setAxisPosition(axisX, d->axisPosition.y());
+            d->horizontalHandlePosition = KisAlgebra2D::dotProduct<QPointF>(me->pos() - d->horizontalAxis.p1(), d->horizontalAxis.unitVector().p2() - d->horizontalAxis.p1());
+
             event->accept();
             return true;
         }
         if(d->yActive) {
-            d->setAxisPosition(d->axisPosition.x(), me->posF().y());
-            d->verticalHandlePosition = qBound<float>(d->minHandlePosition, me->posF().x() - d->handleSize / 2, view()->width() - d->handleSize);
+            float axisY = view()->viewConverter()->widgetToImage<QPoint>(me->pos()).y();
+
+            d->setAxisPosition(d->axisPosition.x(), axisY);
+            d->verticalHandlePosition = KisAlgebra2D::dotProduct<QPointF>(me->pos() - d->verticalAxis.p1(), d->verticalAxis.unitVector().p2() - d->verticalAxis.p1());
+
             event->accept();
             return true;
         }
@@ -257,13 +291,6 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             return true;
         }
     }
-    if(target == view() && event->type() == QEvent::Resize) {
-        QResizeEvent* re = static_cast<QResizeEvent*>(event);
-        if(re->oldSize().width() > 0 && re->oldSize().height() > 0) {
-            d->horizontalHandlePosition = qBound<float>(d->minHandlePosition, (d->horizontalHandlePosition / re->oldSize().height()) * re->size().height(), re->size().height());
-            d->verticalHandlePosition = qBound<float>(d->minHandlePosition, (d->verticalHandlePosition / re->oldSize().width()) * re->size().width(), re->size().width());
-        }
-    }
     return QObject::eventFilter(target, event);
 }
 
@@ -278,12 +305,26 @@ void KisMirrorAxis::Private::setAxisPosition(float x, float y)
 {
     QPointF newPosition = QPointF(x, y);
 
-    newPosition = q->view()->canvasBase()->coordinatesConverter()->widgetToDocument(newPosition);
-    newPosition = q->view()->canvasBase()->image()->documentToPixel(newPosition);
-
     resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, newPosition);
 
     q->view()->canvasBase()->updateCanvas();
+}
+
+void KisMirrorAxis::Private::recomputeVisibleAxes(QRect viewport)
+{
+    KisCoordinatesConverter *converter = q->view()->viewConverter();
+
+    axisPosition = resourceProvider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+
+    QPointF samplePt1 = converter->imageToWidget<QPointF>(axisPosition);
+    QPointF samplePt2 = converter->imageToWidget<QPointF>(QPointF(axisPosition.x(), axisPosition.y() - 100));
+
+    horizontalAxis = QLineF(samplePt1, samplePt2);
+    if (!KisAlgebra2D::intersectLineRect(horizontalAxis, viewport)) horizontalAxis = QLineF();
+
+    samplePt2 = converter->imageToWidget<QPointF>(QPointF(axisPosition.x() - 100, axisPosition.y()));
+    verticalAxis = QLineF(samplePt1, samplePt2);
+    if (!KisAlgebra2D::intersectLineRect(verticalAxis, viewport)) verticalAxis = QLineF();
 }
 
 #include "kis_mirror_axis.moc"

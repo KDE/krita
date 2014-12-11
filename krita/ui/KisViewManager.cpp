@@ -473,6 +473,7 @@ void KisViewManager::setCurrentView(KisView *view)
     d->mirrorManager->setView(imageView);
 
     if (d->currentImageView) {
+        d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
     }
     actionManager()->updateGUI();

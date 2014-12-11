@@ -78,6 +78,8 @@
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
 #include <kis_paintop_registry.h>
+#include <metadata/kis_meta_data_io_backend.h>
+#include "kisexiv2/kis_exiv2.h"
 
 
 KisApplication* KisApplication::KoApp = 0;
@@ -327,6 +329,10 @@ bool KisApplication::start()
     // Load dockers
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
+
+
+    // XXX_EXIV: make the exiv io backends real plugins
+    KisExiv2::initialize();
 
     // show a mainWindow asap, if we want that
     KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();

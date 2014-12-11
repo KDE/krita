@@ -33,30 +33,19 @@
 #include <kiconloader.h>
 
 #include <kis_debug.h>
-#include <metadata/kis_meta_data_io_backend.h>
 
 #include "kis_aboutdata.h"
 
 #include "KisPart.h"
 
-#include "kisexiv2/kis_exiv2.h"
 
 KAboutData* KisFactory::s_aboutData = 0;
 KComponentData* KisFactory::s_instance = 0;
-
-static int factoryCount = 0;
 
 KisFactory::KisFactory(QObject* parent)
     : KPluginFactory(*aboutData(), parent)
 {
     (void)componentData();
-
-    if (factoryCount == 0) {
-
-        // XXX_EXIV: make the exiv io backends real plugins
-        KisExiv2::initialize();
-    }
-    factoryCount++;
 }
 
 KisFactory::~KisFactory()

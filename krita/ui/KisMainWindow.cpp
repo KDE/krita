@@ -197,7 +197,6 @@ public:
 
     KisMainWindow *parent;
 
-    QList<QPointer<KisView> > views;
     QPointer<KisView> activeView;
 
     QWidget *m_activeWidget;
@@ -613,8 +612,6 @@ void KisMainWindow::addView(KisView *view)
             activeDocument->disconnect(this);
         }
     }
-
-    d->views.append(view);
 
     showView(view);
 
@@ -1236,8 +1233,11 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
         if (d->noCleanup)
             return;
 
-        foreach(KisView *view, d->views) {
-            KisPart::instance()->removeView(view);
+        foreach(QMdiSubWindow *subwin, m_mdiArea->subWindowList()) {
+            KisView *view = dynamic_cast<KisView*>(subwin);
+            if (view) {
+                KisPart::instance()->removeView(view);
+            }
         }
 
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
@@ -1464,9 +1464,9 @@ void KisMainWindow::slotDocumentInfo()
 
 void KisMainWindow::slotFileCloseAll()
 {
-    foreach(QPointer<KisView> view, d->views) {
-        if (view) {
-            view->close();
+    foreach(QMdiSubWindow *subwin, m_mdiArea->subWindowList()) {
+        if (subwin) {
+            subwin->close();
         }
     }
 }

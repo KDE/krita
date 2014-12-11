@@ -56,17 +56,15 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
                            "<body>"
                            "<p align=\"center\"><b>Links</b></p>"
 
-                           "<p><a href=\"https://krita.org/support-us/donations/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Donations</span></a></p>"
-                           "<p><a href=\"http://www.zazzle.com/kritashop\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Merchandise</span></a></p>"
+                           "<p><a href=\"https://krita.org/support-us/donations/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Support Krita</span></a></p>"
 
                            "<p><a href=\"http://krita.org/resources\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Getting Started</span></a></p>"
-//                           "<p><a href=\"http://userbase.kde.org/Krita\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Manual</span></a></p>"
+                           "<p><a href=\"http://userbase.kde.org/Krita\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Manual</span></a></p>"
                            "<p><a href=\"http://krita.org\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Krita Website</span></a></p>"
                            "<p><a href=\"http://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:#FFFFFF;\">User Community</span></a></p>"
 
                            "<p><a href=\"https://projects.kde.org/projects/calligra\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Source Code</span></a></p>"
 
-                           "<p><a href=\"http://kritastudio.com\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Commercial Support</span></a></p>"
                            "<p><a href=\"http://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Krita on Steam</span></a></p>"
                            "</body>"
                            "</html>"));

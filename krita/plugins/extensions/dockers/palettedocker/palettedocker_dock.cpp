@@ -210,6 +210,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
 void PaletteDockerDock::unsetCanvas()
 {
     setEnabled(false);
+    m_model->setDisplayRenderer(0);
 }
 
 void PaletteDockerDock::unsetResourceServer()

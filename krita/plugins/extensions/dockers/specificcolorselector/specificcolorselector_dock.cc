@@ -52,6 +52,7 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     if (m_colorSelector) {
         m_colorSelector->disconnect(); // explicit disconnect in case Qt gets confused.
         delete m_colorSelector;
+        m_colorSelector = 0;
     }
 
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);

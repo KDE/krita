@@ -60,6 +60,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     if (m_zoomSlider) {
         m_layout->removeWidget(m_zoomSlider);
         delete m_zoomSlider;
+        m_zoomSlider = 0;
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);

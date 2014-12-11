@@ -963,6 +963,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         return true;
     }
 
+    qDebug() << "Going to save" << document->localFilePath();
+
     bool reset_url;
 
     if (document->url().isEmpty()) {
@@ -1295,7 +1297,7 @@ void KisMainWindow::resizeEvent(QResizeEvent * e)
 void KisMainWindow::setActiveView(KisView* view)
 {
     d->activeView = view;
-
+    updateCaption();
     actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
     actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
 }

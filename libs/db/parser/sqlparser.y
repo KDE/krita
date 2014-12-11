@@ -420,9 +420,6 @@
 /*%type <integerValue> SIGNED_INTEGER */
 
 %{
-#ifndef YYDEBUG /* compat. */
-# define YYDEBUG 0
-#endif
 #include <stdio.h>
 #include <string.h>
 #include <string>
@@ -512,37 +509,56 @@ using namespace KexiDB;
 }
 
 /* precedence: lowest to highest */
-%left		UNION EXCEPT
-%left		INTERSECT
-%left		OR
-%left		AND XOR
-%right	NOT
+%left UNION
+%left EXCEPT
+%left INTERSECT
+%left OR
+%left AND
+%left XOR
+%right NOT
 
-%nonassoc '=' '<' '>'
-%nonassoc LESS_OR_EQUAL GREATER_OR_EQUAL 
+%nonassoc '='
+%nonassoc '<'
+%nonassoc '>'
+%nonassoc LESS_OR_EQUAL
+%nonassoc GREATER_OR_EQUAL
 %nonassoc NOT_EQUAL NOT_EQUAL2
-%nonassoc SQL_IN LIKE NOT_LIKE ILIKE SIMILAR_TO NOT_SIMILAR_TO
-//%nonassoc	LIKE ILIKE SIMILAR
+%nonassoc SQL_IN
+%nonassoc LIKE
+%nonassoc NOT_LIKE
+%nonassoc ILIKE
+%nonassoc SIMILAR_TO
+%nonassoc NOT_SIMILAR_TO
+%nonassoc SIMILAR
 //%nonassoc	ESCAPE
 //%nonassoc	OVERLAPS
-%nonassoc	BETWEEN
+%nonassoc BETWEEN
 //%nonassoc	IN_P
 //%left		POSTFIXOP		// dummy for postfix Op rules 
 //%left		Op OPERATOR		// multi-character ops and user-defined operators 
 //%nonassoc	NOTNULL
 //%nonassoc	ISNULL
-//%nonassoc	IS NULL_P TRUE_P FALSE_P UNKNOWN // sets precedence for IS NULL, etc 
-%left		'+' '-'
-%left		'*' '/' '%'
-%left		'^'
+//%nonassoc	IS              // sets precedence for IS NULL, etc
+//%nonassoc NULL_P
+//%nonassoc TRUE_P
+//%nonassoc FALSE_P
+//%nonassoc UNKNOWN
+%left '+'
+%left '-'
+%left '*'
+%left '/'
+%left '%'
+%left '^'
 %left UMINUS
 // Unary Operators 
 //%left		AT ZONE			// sets precedence for AT TIME ZONE
 //%right		UMINUS
-%left		'[' ']'
-%left		'(' ')'
-//%left		TYPECAST
-%left		'.'
+%left '['
+%left ']'
+%left '('
+%left ')'
+//%left TYPECAST
+%left '.'
 
 /*
  * These might seem to be low-precedence, but actually they are not part
@@ -551,7 +567,15 @@ using namespace KexiDB;
  * They wouldn't be given a precedence at all, were it not that we need
  * left-associativity among the JOIN rules themselves.
  */
-/*%left		JOIN UNIONJOIN CROSS LEFT FULL RIGHT INNER_P NATURAL
+/*
+%left JOIN
+%left UNIONJOIN
+%left CROSS
+%left LEFT
+%left FULL
+%left RIGHT
+%left INNER_P
+%left NATURAL
 */
 %%
 

@@ -41,7 +41,7 @@ bool parseData(KexiDB::Parser *p, const char *data);
 # define YY_YY_SQLPARSER_TAB_H_INCLUDED
 /* Enabling traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -94,22 +94,22 @@ extern int yydebug;
      WHERE = 296,
      SCAN_ERROR = 297,
      __LAST_TOKEN = 298,
-     EXCEPT = 299,
-     UNION = 300,
+     UNION = 299,
+     EXCEPT = 300,
      INTERSECT = 301,
      OR = 302,
-     XOR = 303,
-     AND = 304,
+     AND = 303,
+     XOR = 304,
      NOT = 305,
      GREATER_OR_EQUAL = 306,
      NOT_EQUAL2 = 307,
      NOT_EQUAL = 308,
-     NOT_SIMILAR_TO = 309,
-     SIMILAR_TO = 310,
-     ILIKE = 311,
-     NOT_LIKE = 312,
-     LIKE = 313,
-     SQL_IN = 314,
+     SQL_IN = 309,
+     LIKE = 310,
+     NOT_LIKE = 311,
+     ILIKE = 312,
+     SIMILAR_TO = 313,
+     NOT_SIMILAR_TO = 314,
      BETWEEN = 315,
      UMINUS = 316
    };
@@ -120,7 +120,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 498 "sqlparser.y"
+#line 495 "sqlparser.y"
 
 	QString* stringValue;
 	qint64 integerValue;

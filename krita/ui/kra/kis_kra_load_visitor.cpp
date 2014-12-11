@@ -405,7 +405,10 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
     KisMetaData::IOBackend* backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
 
     if (!backend || !backend->supportLoading()) {
-        dbgFile << "Backend " << backend->id() << " does not support loading.";
+        if (backend)
+            dbgFile << "Backend " << backend->id() << " does not support loading.";
+        else
+            dbgFile << "Could not load the XMP backenda t all";
         return true;
     }
 

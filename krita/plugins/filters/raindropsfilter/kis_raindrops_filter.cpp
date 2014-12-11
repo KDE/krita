@@ -92,7 +92,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     quint32 DropSize = config->getInt("dropSize", 80);
     quint32 number = config->getInt("number", 80);
     quint32 fishEyes = config->getInt("fishEyes", 30);
-    srand(config->getInt("seed"));
+    qsrand(config->getInt("seed"));
 
     if (progressUpdater) {
         progressUpdater->setRange(0, applyRect.width() * applyRect.height());
@@ -139,7 +139,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     KisRandomAccessorSP dstAccessor = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
     
     for (uint NumBlurs = 0; (NumBlurs <= number) && !(progressUpdater && progressUpdater->interrupted()); ++NumBlurs) {
-        NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
+        NewSize = (int)(qrand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
         halfSize = NewSize / 2;
         Radius = halfSize;
         s = Radius / log(NewfishEyes * Radius + 1);
@@ -148,8 +148,8 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
         do {
             FindAnother = false;
-            y = (int)(rand() * ((double)(Width - 1) / RAND_MAX));
-            x = (int)(rand() * ((double)(Height - 1) / RAND_MAX));
+            y = (int)(qrand() * ((double)(Width - 1) / RAND_MAX));
+            x = (int)(qrand() * ((double)(Height - 1) / RAND_MAX));
 
             if (BoolMatrix[y][x])
                 FindAnother = true;
@@ -395,9 +395,7 @@ KisFilterConfiguration* KisRainDropsFilter::factoryConfiguration(const KisPaintD
     config->setProperty("dropsize", 80);
     config->setProperty("number", 80);
     config->setProperty("fishEyes", 30);
-    QDateTime dt = QDateTime::currentDateTime();
-    QDateTime Y2000(QDate(2000, 1, 1), QTime(0, 0, 0));
-    config->setProperty("seed", dt.secsTo(Y2000));
+    config->setProperty("seed", QTime::currentTime().msec());
 
 
     return config;

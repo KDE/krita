@@ -655,6 +655,9 @@ void KisMainWindow::showView(KisView *imageView)
         imageView->slotLoadingFinished();;
 
         QMdiSubWindow *subwin = m_mdiArea->addSubWindow(imageView);
+        KisConfig cfg;
+        subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
+        subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
         subwin->setWindowTitle(imageView->document()->url().fileName());
         if (m_mdiArea->subWindowList().size() == 1) {
@@ -2111,6 +2114,10 @@ void KisMainWindow::configChanged()
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
     m_mdiArea->setViewMode(viewMode);
+    foreach(QMdiSubWindow *subwin, m_mdiArea->subWindowList()) {
+        subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
+        subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
+    }
 }
 
 void KisMainWindow::newView(QObject *document)

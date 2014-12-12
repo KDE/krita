@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>470</width>
-    <height>443</height>
+    <width>496</width>
+    <height>375</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -31,14 +31,14 @@
      <property name="spacing">
       <number>9</number>
      </property>
-     <item row="10" column="1">
+     <item row="11" column="1">
       <widget class="QCheckBox" name="m_backupFileCheckBox">
        <property name="text">
         <string>Create backup file </string>
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
+     <item row="10" column="1">
       <widget class="QCheckBox" name="chkShowRootLayer">
        <property name="text">
         <string>Show root layer</string>
@@ -116,6 +116,23 @@
        </property>
       </widget>
      </item>
+     <item row="7" column="1">
+      <widget class="QComboBox" name="m_cmbMDIType">
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Subwindows</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Tabs</string>
+        </property>
+       </item>
+      </widget>
+     </item>
      <item row="3" column="1">
       <widget class="QSpinBox" name="m_autosaveSpinBox">
        <property name="suffix">
@@ -154,18 +171,11 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
-      <widget class="QComboBox" name="m_cmbMDIType">
-       <item>
-        <property name="text">
-         <string>Subwindows</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Tabs</string>
-        </property>
-       </item>
+     <item row="9" column="1">
+      <widget class="QCheckBox" name="m_showOutlinePainting">
+       <property name="text">
+        <string>Show brush outline while painting</string>
+       </property>
       </widget>
      </item>
      <item row="0" column="0">
@@ -185,9 +195,9 @@
       </widget>
      </item>
      <item row="8" column="1">
-      <widget class="QCheckBox" name="m_showOutlinePainting">
+      <widget class="QCheckBox" name="m_chkRubberBand">
        <property name="text">
-        <string>Show brush outline while painting</string>
+        <string>Don't show contents when moving sub-windows</string>
        </property>
       </widget>
      </item>

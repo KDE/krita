@@ -105,6 +105,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
+    m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
 }
 
@@ -121,6 +122,7 @@ void GeneralTab::setDefault()
     m_backupFileCheckBox->setChecked(true);
     m_showOutlinePainting->setChecked(true);
     m_cmbMDIType->setCurrentIndex(1);
+    m_chkRubberBand->setChecked(cfg.useOpenGL());
     m_favoritePresetsSpinBox->setValue(10);
 }
 

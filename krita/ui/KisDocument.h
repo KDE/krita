@@ -260,7 +260,7 @@ public:
 
 
     /**
-     * @brief Generates a preview picture of the document.
+     * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
     virtual QPixmap generatePreview(const QSize& size);

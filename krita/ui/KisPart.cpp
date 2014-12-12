@@ -37,6 +37,7 @@
 #include "KisMainWindow.h"
 #include "KisDocument.h"
 #include "KisView.h"
+#include "KisViewManager.h"
 #include "KisOpenPane.h"
 #include "KisImportExportManager.h"
 
@@ -50,6 +51,9 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <klocale.h>
+#include <kactioncollection.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include <QDialog>
 #include <QGraphicsScene>
@@ -75,7 +79,6 @@ public:
     Private()
         : canvasItem(0)
         , startupWidget(0)
-        , m_componentData(KGlobal::mainComponent())
     {
     }
 
@@ -90,7 +93,6 @@ public:
     QGraphicsItem *canvasItem;
     QString templateType;
     KisOpenPane *startupWidget;
-    KComponentData m_componentData;
 
 };
 
@@ -176,8 +178,18 @@ KisMainWindow *KisPart::createMainWindow()
 
 KisView *KisPart::createView(KisDocument *document, KisMainWindow *parent)
 {
-    KisView *view = createViewInstance(document, parent);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    KisView *view  = new KisView(document, parent->resourceManager(), parent->actionCollection(), parent);
+
+    // XXX: this prevents a crash when opening a new document after opening a
+    // a document that has not been touched! I have no clue why, though.
+    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
+    document->setModified(true);
+    document->setModified(false);
+    QApplication::restoreOverrideCursor();
+
     addView(view, document);
+
     return view;
 }
 
@@ -535,20 +547,6 @@ void KisPart::startCustomDocument(KisDocument* doc)
     d->startupWidget->hide();
 }
 
-KisView *KisPart::createViewInstance(KisDocument *document, KisMainWindow *parent)
-{
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    QPointer<KisView>v = new KisView(document, parent->resourceManager(), parent->actionCollection(), parent);
-
-    // XXX: this prevents a crash when opening a new document after opening a
-    // a document that has not been touched! I have no clue why, though.
-    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
-    document->setModified(true);
-    document->setModified(false);
-    QApplication::restoreOverrideCursor();
-
-    return v;
-}
 
 
 void KisPart::showErrorAndDie()

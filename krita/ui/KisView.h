@@ -257,6 +257,8 @@ private:
 
     class Private;
     Private * const d;
+
+    static bool s_firstView;
 };
 
 #endif

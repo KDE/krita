@@ -258,8 +258,6 @@ protected:
      */
     QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
-    KisView *createViewInstance(KisDocument *document, KisMainWindow *parent);
-
     /**
      * Override this to create a QGraphicsItem that does not rely
      * on proxying a KoCanvasController.

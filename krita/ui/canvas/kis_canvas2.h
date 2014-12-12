@@ -75,7 +75,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter* coordConverter, QPointer<KisView> viewManager, KoShapeBasedDocumentBase* sc);
+    KisCanvas2(KisCoordinatesConverter* coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView> viewManager, KoShapeBasedDocumentBase* sc);
 
     virtual ~KisCanvas2();
 

@@ -46,6 +46,7 @@ class KoZoomController;
 class KoZoomManager;
 class KoZoomController;
 struct KoPageLayout;
+class KoCanvasResourceManager;
 
 // KDE classes
 class KStatusBar;
@@ -73,7 +74,7 @@ public:
     /**
      * Creates a new view for the document.
      */
-    KisView(KisDocument *document, KActionCollection *actionCollection, QWidget *parent = 0);
+    KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
 virtual ~KisView();
 
     KAction *undoAction() const;

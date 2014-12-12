@@ -42,6 +42,7 @@ class KActionMenu;
 class KToolBar;
 
 struct KoPageLayout;
+class KoCanvasResourceManager;
 
 class KisMainWindowPrivate;
 class KisDocument;
@@ -336,6 +337,8 @@ private slots:
     void slotEncryptDocument();
     void slotUncompressToDir();
 
+    KoCanvasResourceManager *resourceManager() const;
+
 public slots:
 
     void slotProgress(int value);
@@ -345,8 +348,6 @@ private slots:
      * Hide the dockers
      */
     void toggleDockersVisibility(bool visible);
-
-
 
 public slots:
     /**

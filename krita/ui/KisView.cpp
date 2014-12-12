@@ -217,7 +217,7 @@ public:
 
 };
 
-KisView::KisView(KisDocument *document, KActionCollection *actionCollection, QWidget *parent)
+KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
     : QWidget(parent)
     , d(new Private)
 {
@@ -262,7 +262,8 @@ KisView::KisView(KisDocument *document, KActionCollection *actionCollection, QWi
     }
     grp.writeEntry("CreatingCanvas", true);
     grp.sync();
-    d->canvas = new KisCanvas2(d->viewConverter, this, document->shapeController());
+    d->canvas = new KisCanvas2(d->viewConverter, resourceManager, this, document->shapeController());
+
     grp.writeEntry("CreatingCanvas", false);
     grp.sync();
 
@@ -293,7 +294,6 @@ KisView::~KisView()
 void KisView::setViewManager(KisViewManager *view)
 {
     d->viewManager = view;
-    canvasBase()->setSharedResourceManager(view->resourceProvider()->resourceManager());
 
     KoToolManager::instance()->addController(d->canvasController);
     KoToolManager::instance()->registerTools(d->actionCollection, d->canvasController);

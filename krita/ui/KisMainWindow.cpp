@@ -1443,6 +1443,11 @@ void KisMainWindow::slotUncompressToDir()
         emit documentSaved();
 }
 
+KoCanvasResourceManager *KisMainWindow::resourceProvider() const
+{
+    return m_viewManager->resourceProvider()->resourceManager();
+}
+
 void KisMainWindow::slotDocumentInfo()
 {
     if (!d->activeView->document())

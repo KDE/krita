@@ -123,10 +123,12 @@ public:
     KisDisplayColorConverter *displayColorConverter;
 };
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
+    setSharedResourceManager(resourceManager);
+
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();

@@ -64,7 +64,7 @@ void KisPaintingAssistantsManager::setView(QPointer<KisView> imageView)
         m_imageView->canvasBase()->addDecoration(deco);
     }
     if (m_imageView && decoration()) {
-        connect(m_toggleAssistant, SIGNAL(triggered()), decoration(), SLOT(toggleVisibility()));
+        connect(m_toggleAssistant, SIGNAL(triggered()), decoration(), SLOT(toggleAssistantVisible()));
         connect(m_togglePreview, SIGNAL(triggered()), decoration(), SLOT(toggleOutlineVisible()));
         connect(decoration(), SIGNAL(assistantChanged()), SLOT(updateAction()));
     }

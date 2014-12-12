@@ -163,6 +163,7 @@ void KisColorSliderWidget::setColor(const KoColor& c)
 void KisColorSliderWidget::updateTimeout()
 {
     emit(colorChanged(m_color));
+    
 }
 
 void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
@@ -176,6 +177,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(hsvH, SIGNAL(hueUpdated(int)), this, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(hueUpdated(int)), hsvH, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsvH, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hsvH, SLOT(toneUpdate(int, int)));
     }
     else {
         hsvH->setVisible(false);
@@ -184,6 +186,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(hsvH, SIGNAL(hueUpdated(int)), this, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(hueUpdated(int)), hsvH, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsvH, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hsvH, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[1]==true) {
@@ -193,6 +196,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(this, SIGNAL(hueUpdated(int)), hsvS, SLOT(hueUpdate(int)));
         connect(hsvS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsvS, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hsvS, SLOT(toneUpdate(int, int)));
     }
     else {
         hsvS->setVisible(false);
@@ -201,6 +205,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hsvS, SLOT(hueUpdate(int)));
         disconnect(hsvS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsvS, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hsvS, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[2]==true) {
@@ -209,13 +214,17 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(this, SIGNAL(updated()), hsvV, SLOT(update()));
         connect(this, SIGNAL(hueUpdated(int)), hsvV, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsvV, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hsvV, SLOT(toneUpdate(int, int)));
+        connect(hsvV, SIGNAL(toneUpdated(int, int)), this, SLOT(toneUpdate(int, int)));
     }
     else {
         hsvV->setVisible(false);
         disconnect(hsvV, SIGNAL(updated()), this, SLOT(update()));
         disconnect(this, SIGNAL(updated()), hsvV, SLOT(update()));
         disconnect(this, SIGNAL(hueUpdated(int)), hsvV, SLOT(hueUpdate(int)));
-        connect(this, SIGNAL(satUpdated(int, int)), hsvV, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(satUpdated(int, int)), hsvV, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hsvV, SLOT(toneUpdate(int, int)));
+        disconnect(hsvV, SIGNAL(toneUpdated(int, int)), this, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[3]==true) {
@@ -225,6 +234,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(hslH, SIGNAL(hueUpdated(int)), this, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(hueUpdated(int)), hslH, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(satUpdated(int, int)), hslH, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hslH, SLOT(toneUpdate(int, int)));
     }
     else {
         hslH->setVisible(false);
@@ -233,6 +243,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(hslH, SIGNAL(hueUpdated(int)), this,  SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(hueUpdated(int)), hslH, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hslH, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hslH, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[4]==true) {
@@ -242,6 +253,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(this, SIGNAL(hueUpdated(int)), hslS, SLOT(hueUpdate(int)));
         connect(hslS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         connect(this, SIGNAL(satUpdated(int, int)), hslS, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hslS, SLOT(toneUpdate(int, int)));
     }
     else {
         hslS->setVisible(false);
@@ -250,6 +262,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hslS, SLOT(hueUpdate(int)));
         disconnect(hslS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hslS, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hslS, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[5]==true) {
@@ -258,6 +271,8 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(this, SIGNAL(updated()), hslL, SLOT(update()));
         connect(this, SIGNAL(hueUpdated(int)), hslL, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(satUpdated(int, int)), hslL, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hslL, SLOT(toneUpdate(int, int)));
+        connect(hslL, SIGNAL(toneUpdated(int, int)), this, SLOT(toneUpdate(int, int)));
     }
     else {
         hslL->setVisible(false);
@@ -265,6 +280,8 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(updated()), hslL, SLOT(update()));
         disconnect(this, SIGNAL(hueUpdated(int)), hslL, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hslL, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hslL, SLOT(toneUpdate(int, int)));
+        disconnect(hslL, SIGNAL(toneUpdated(int, int)), this, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[6]==true) {
@@ -274,6 +291,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(hsiH, SIGNAL(hueUpdated(int)), this, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(hueUpdated(int)), hsiH, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsiH, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hsiH, SLOT(toneUpdate(int, int)));
     }
     else {
         hsiH->setVisible(false);
@@ -282,6 +300,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(hsiH, SIGNAL(hueUpdated(int)), this, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(hueUpdated(int)), hsiH, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsiH, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hsiH, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[7]==true) {
@@ -291,6 +310,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(this, SIGNAL(hueUpdated(int)), hsiS, SLOT(hueUpdate(int)));
         connect(hsiS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsiS, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hsiS, SLOT(toneUpdate(int, int)));
     }
     else {
         hsiS->setVisible(false);
@@ -299,6 +319,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hsiS, SLOT(hueUpdate(int)));
         disconnect(hsiS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsiS, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hsiS, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[8]==true) {
@@ -307,6 +328,8 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(this, SIGNAL(updated()), hsiI, SLOT(update()));
         connect(this, SIGNAL(hueUpdated(int)), hsiI, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsiI, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hsiI, SLOT(toneUpdate(int, int)));
+        connect(hsiI, SIGNAL(toneUpdated(int, int)), this, SLOT(toneUpdate(int, int)));
     }
     else {
         hsiI->setVisible(false);
@@ -314,6 +337,8 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(updated()), hsiI, SLOT(update()));
         disconnect(this, SIGNAL(hueUpdated(int)), hsiI, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsiI, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hsiI, SLOT(toneUpdate(int, int)));
+        disconnect(hsiI, SIGNAL(toneUpdated(int, int)), this, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[9]==true) {
@@ -323,6 +348,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(hsyH, SIGNAL(hueUpdated(int)), this, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(hueUpdated(int)), hsyH, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsyH, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hsyH, SLOT(toneUpdate(int, int)));
     }
     else {
         hsyH->setVisible(false);
@@ -331,6 +357,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(hsyH, SIGNAL(hueUpdated(int)), this, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(hueUpdated(int)), hsyH, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsyH, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hsyH, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[10]==true) {
@@ -340,6 +367,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(this, SIGNAL(hueUpdated(int)), hsyS, SLOT(hueUpdate(int)));
         connect(hsyS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsyS, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hsyS, SLOT(toneUpdate(int, int)));
     }
     else {
         hsyS->setVisible(false);
@@ -348,6 +376,7 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(hueUpdated(int)), hsyS, SLOT(hueUpdate(int)));
         disconnect(hsyS, SIGNAL(satUpdated(int, int)), this, SLOT(satUpdate(int, int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsyS, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hsyS, SLOT(toneUpdate(int, int)));
     }
 
     if (SlidersConfigArray[11]==true) {
@@ -356,6 +385,8 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         connect(this, SIGNAL(updated()), hsyY, SLOT(update()));
         connect(this, SIGNAL(hueUpdated(int)), hsyY, SLOT(hueUpdate(int)));
         connect(this, SIGNAL(satUpdated(int, int)), hsyY, SLOT(satUpdate(int, int)));
+        connect(this, SIGNAL(toneUpdated(int, int)), hsyY, SLOT(toneUpdate(int, int)));
+        connect(hsyY, SIGNAL(toneUpdated(int, int)), this, SLOT(toneUpdate(int, int)));
     }
     else {
         hsyY->setVisible(false);
@@ -363,6 +394,8 @@ void KisColorSliderWidget::setSlidersVisible(QBitArray SlidersConfigArray)
         disconnect(this, SIGNAL(updated()), hsyY, SLOT(update()));
         disconnect(this, SIGNAL(hueUpdated(int)), hsyY, SLOT(hueUpdate(int)));
         disconnect(this, SIGNAL(satUpdated(int, int)), hsyY, SLOT(satUpdate(int, int)));
+        disconnect(this, SIGNAL(toneUpdated(int, int)), hsyY, SLOT(toneUpdate(int, int)));
+        disconnect(hsyY, SIGNAL(toneUpdated(int, int)), this, SLOT(toneUpdate(int, int)));
     }
 
     updateTimeout();
@@ -411,4 +444,9 @@ void KisColorSliderWidget::satUpdate(int s, int type)
 {
     emit(satUpdated(s, type));
 }
+void KisColorSliderWidget::toneUpdate(int l, int type)
+{
+    emit(toneUpdated(l, type));
+}
+
 #include "kis_color_slider_widget.moc"

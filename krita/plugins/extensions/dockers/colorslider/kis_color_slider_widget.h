@@ -48,6 +48,7 @@ private slots:
     void updateTimeout();
     void hueUpdate(int h);
     void satUpdate(int s, int type);
+    void toneUpdate(int l, int type);
     void setSlidersVisible(QBitArray SlidersConfigArray);
     void setConfig();
     //void setCustomColorSpace(const KoColorSpace *);
@@ -56,6 +57,7 @@ signals:
     void updated();
     void hueUpdated(int);
     void satUpdated(int, int);
+    void toneUpdated(int, int);
 private:
     QList<KisColorSliderInput*> m_inputs;
     const KoColorSpace* m_colorSpace;

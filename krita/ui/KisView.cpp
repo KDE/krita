@@ -246,6 +246,7 @@ KisView::KisView(KisDocument *document, KActionCollection *actionCollection, QWi
     KisConfig cfg;
 
     d->canvasController = new KisCanvasController(this, d->actionCollection);
+
     d->canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->canvasController->setDrawShadow(false);
@@ -295,8 +296,9 @@ void KisView::setViewManager(KisViewManager *view)
     canvasBase()->setSharedResourceManager(view->resourceProvider()->resourceManager());
 
     KoToolManager::instance()->addController(d->canvasController);
+    KoToolManager::instance()->registerTools(d->actionCollection, d->canvasController);
+
     dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(d->canvas);
-    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
     if (resourceProvider()) {
         resourceProvider()->slotImageSizeChanged();

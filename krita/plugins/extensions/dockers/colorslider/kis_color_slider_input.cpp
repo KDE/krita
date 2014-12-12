@@ -60,18 +60,18 @@ void KisColorSliderInput::init()
 
     QString m_name;
     switch (m_type){
-    case 0: m_name="Hue"; break;
-    case 1: m_name="Saturation"; break;
-    case 2: m_name="Value"; break;
-    case 3: m_name="Hue"; break;
-    case 4: m_name="Saturation"; break;
-    case 5: m_name="Lightness"; break;
-    case 6: m_name="Hue"; break;
-    case 7: m_name="Saturation"; break;
-    case 8: m_name="Intensity"; break;
-    case 9: m_name="Hue"; break;
-    case 10: m_name="Saturation"; break;
-    case 11: m_name="Luma"; break;
+    case 0: m_name=i18n("Hue"); break;
+    case 1: m_name=i18n("Saturation"); break;
+    case 2: m_name=i18n("Value"); break;
+    case 3: m_name=i18n("Hue"); break;
+    case 4: m_name=i18n("Saturation"); break;
+    case 5: m_name=i18n("Lightness"); break;
+    case 6: m_name=i18n("Hue"); break;
+    case 7: m_name=i18n("Saturation"); break;
+    case 8: m_name=i18n("Intensity"); break;
+    case 9: m_name=i18n("Hue"); break;
+    case 10: m_name=i18n("Saturation"); break;
+    case 11: m_name=i18n("Luma"); break;
     }
     
     QLabel* m_label = new QLabel(i18n("%1:", m_name), this);

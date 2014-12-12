@@ -74,7 +74,7 @@ protected slots:
 private slots:
     /// when clicked "Open Existing Document" button
     void openFileDialog();
-
+    
 signals:
     void openExistingFile(const KUrl&);
     void openTemplate(const KUrl&);
@@ -84,6 +84,7 @@ signals:
 
     /// Emitted when one of the detail panes have changed it's splitter
     void splitterResized(KisDetailsPane* sender, const QList<int>& sizes);
+    void cancelButton();
 
 protected:
     void initRecentDocs();

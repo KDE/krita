@@ -1443,7 +1443,7 @@ void KisMainWindow::slotUncompressToDir()
         emit documentSaved();
 }
 
-KoCanvasResourceManager *KisMainWindow::resourceProvider() const
+KoCanvasResourceManager *KisMainWindow::resourceManager() const
 {
     return m_viewManager->resourceProvider()->resourceManager();
 }

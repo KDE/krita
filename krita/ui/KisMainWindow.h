@@ -180,6 +180,8 @@ public:
      */
     KisDockerManager * dockerManager() const;
 
+    KoCanvasResourceManager *resourceManager() const;
+
 signals:
 
     /**
@@ -337,7 +339,6 @@ private slots:
     void slotEncryptDocument();
     void slotUncompressToDir();
 
-    KoCanvasResourceManager *resourceManager() const;
 
 public slots:
 

@@ -54,7 +54,7 @@ void KisDocumentTest::testActiveNodes()
 {
     KisDocument *doc = createEmptyDocument();
     KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();
-    QPointer<KisView>view = new KisView(doc, mainWindow->actionCollection(), mainWindow);
+    QPointer<KisView>view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisPart::instance()->addView(view, doc);
     vKisNodeSP nodes = doc->activeNodes();
     QVERIFY(nodes.isEmpty());

@@ -819,30 +819,6 @@ bool KisMainWindow::openDocument(const KUrl & url)
     return openDocumentInternal(url);
 }
 
-KisDocument *KisMainWindow::createDocumentFromUrl(const KUrl & url)
-{
-    KisDocument *newdoc = KisPart::instance()->createDocument();
-    KisPart::instance()->addDocument(newdoc);
-
-    // For remote documents
-#if 0 // XXX: seems broken for now
-    if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
-        newdoc->initEmpty(); //create an empty document
-        addView(view);
-        newdoc->setUrl(url);
-        QString mime = KMimeType::findByUrl(url)->name();
-        if (mime.isEmpty() || mime == KMimeType::defaultMimeType())
-            mime = newdoc->nativeFormatMimeType();
-        newdoc->setMimeTypeAfterLoading(mime);
-        updateCaption();
-        return newdoc;
-    }
-#endif
-    openDocumentInternal(url, newdoc);
-
-    return newdoc;
-}
-
 bool KisMainWindow::openDocumentInternal(const KUrl & url, KisDocument *newdoc)
 {
     if (!newdoc) {

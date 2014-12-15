@@ -828,8 +828,6 @@ private:
     bool saveToUrl();
     bool openUrlInternal(const KUrl &url);
 
-    void abortLoad();
-
     class Private;
     Private *const d;
 

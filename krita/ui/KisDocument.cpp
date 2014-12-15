@@ -1206,8 +1206,6 @@ bool KisDocument::openUrl(const KUrl & _url)
         return false;
     }
 
-    abortLoad();
-
     KUrl url(_url);
     bool autosaveOpened = false;
     d->isLoading = true;
@@ -2276,7 +2274,6 @@ KUrl KisDocument::url() const
 
 bool KisDocument::closeUrl(bool promptToSave)
 {
-    abortLoad(); //just in case
     if (promptToSave) {
         if ( d->document->isReadWrite() && d->document->isModified()) {
             if (!queryClose())
@@ -2373,21 +2370,6 @@ bool KisDocument::waitSaveComplete()
     d->m_waitForSave = false;
 
     return d->m_saveOk;
-}
-
-
-void KisDocument::abortLoad()
-{
-    if ( d->m_statJob ) {
-        //kDebug(1000) << "Aborting job" << d->m_statJob;
-        d->m_statJob->kill();
-        d->m_statJob = 0;
-    }
-    if ( d->m_job ) {
-        //kDebug(1000) << "Aborting job" << d->m_job;
-        d->m_job->kill();
-        d->m_job = 0;
-    }
 }
 
 

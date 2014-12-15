@@ -134,16 +134,6 @@ public:
     bool openDocument(const KUrl & url);
 
 private:
-    friend class KisApplication;
-    /**
-     * Create a document, open the given url, create a view, set the document
-     * on the view and add the view to the mainwindow.
-     *
-     * Special method for KisApplication::start, don't use.
-     */
-    KisDocument *createDocumentFromUrl(const KUrl & url);
-
-private:
 
     /**
      * Reloads the recent documents list.
@@ -404,6 +394,7 @@ protected:
     virtual void dropEvent(QDropEvent * event);
 
 private:
+    friend class KisApplication;
     /**
      * Ask user about saving changes to the document upon exit.
      */

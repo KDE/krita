@@ -526,6 +526,7 @@ extern "C"
 //%nonassoc    ESCAPE
 //%nonassoc    OVERLAPS
 %nonassoc BETWEEN
+%nonassoc NOT_BETWEEN
 //%nonassoc IN_P
 //%left     POSTFIXOP        // dummy for postfix Op rules
 //%left     Op OPERATOR        // multi-character ops and user-defined operators
@@ -933,6 +934,13 @@ aExpr5 NOT_EQUAL2 aExpr4
 | aExpr5 BETWEEN aExpr4 AND aExpr4 
 {
     $$ = new NArgExpr(KexiDBExpr_Relational, KEXIDB_TOKEN_BETWEEN_AND);
+    $$->toNArg()->add( $1 );
+    $$->toNArg()->add( $3 );
+    $$->toNArg()->add( $5 );
+}
+| aExpr5 NOT_BETWEEN aExpr4 AND aExpr4 
+{
+    $$ = new NArgExpr(KexiDBExpr_Relational, KEXIDB_TOKEN_NOT_BETWEEN_AND);
     $$->toNArg()->add( $1 );
     $$->toNArg()->add( $3 );
     $$->toNArg()->add( $5 );

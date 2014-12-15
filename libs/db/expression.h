@@ -51,6 +51,7 @@ namespace KexiDB
 //! Custom tokens are not used in parser but used as extension in expression classes.
 //#define KEXIDB_CUSTOM_TOKEN 0x1000
 #define KEXIDB_TOKEN_BETWEEN_AND 0x1001
+#define KEXIDB_TOKEN_NOT_BETWEEN_AND 0x1002
 
 //! \return class name of class \a c
 CALLIGRADB_EXPORT QString exprClassName(int c);

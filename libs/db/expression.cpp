@@ -168,6 +168,7 @@ Field::Type NArgExpr::type()
 {
     switch (m_token) {
     case KEXIDB_TOKEN_BETWEEN_AND:
+    case KEXIDB_TOKEN_NOT_BETWEEN_AND:
         foreach (BaseExpr* e, list) {
             Field::Type type = e->type();
             if (type == Field::InvalidType || type == Field::Null) {
@@ -198,6 +199,9 @@ QString NArgExpr::toString(QuerySchemaParameterValueListIterator* params)
 {
     if (BaseExpr::token() == KEXIDB_TOKEN_BETWEEN_AND && list.count() == 3) {
         return list[0]->toString() + " BETWEEN " + list[1]->toString() + " AND " + list[2]->toString();
+    }
+    if (BaseExpr::token() == KEXIDB_TOKEN_NOT_BETWEEN_AND && list.count() == 3) {
+        return list[0]->toString() + " NOT BETWEEN " + list[1]->toString() + " AND " + list[2]->toString();
     }
 
     QString s;
@@ -250,10 +254,11 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
     }
 
     switch (m_token) {
-    case KEXIDB_TOKEN_BETWEEN_AND: {
+    case KEXIDB_TOKEN_BETWEEN_AND:
+    case KEXIDB_TOKEN_NOT_BETWEEN_AND: {
         if (list.count() != 3) {
             parseInfo.errMsg = i18n("Three arguments required");
-            parseInfo.errDescr = i18nc("@info BETWEEN..AND error", "%1 operator requires exactly three arguments.", "BETWEEN..AND");
+            parseInfo.errDescr = i18nc("@info BETWEEN..AND error", "%1 operator requires exactly three arguments.", "BETWEEN...AND");
             return false;
         }
 
@@ -282,6 +287,7 @@ QString NArgExpr::tokenToString()
 {
     switch (m_token) {
     case KEXIDB_TOKEN_BETWEEN_AND: return "BETWEEN_AND";
+    case KEXIDB_TOKEN_NOT_BETWEEN_AND: return "NOT_BETWEEN_AND";
     default:;
     }
     return QString("{INVALID_N_ARG_OPERATOR#%1} ").arg(m_token);

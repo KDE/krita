@@ -355,6 +355,7 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
 
             case BLUR_RLE:
                 curve = make_curve(std_dev, &length);
+                delete[] sum;
                 sum = new qint32[2 * length + 1];
 
                 sum[0] = 0;
@@ -477,20 +478,13 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
         }
     }
 
-    /*  free up buffers  */
-    switch (method) {
-    case BLUR_IIR:
-        delete[] val_p;
-        delete[] val_m;
-        break;
 
-    case BLUR_RLE:
-        delete[] buf;
-        break;
-    }
-
+    delete[] val_p;
+    delete[] val_m;
+    delete[] buf;
     delete[] src;
     delete[] dest;
+    delete[] sum;
 }
 
 void KisDropshadow::find_constants(double n_p[], double n_m[], double d_p[], double d_m[], double bd_p[], double bd_m[], double std_dev)

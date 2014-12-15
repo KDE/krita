@@ -250,19 +250,15 @@ void KoTriangleColorSelector::setRealColor(const KoColor & color)
     if ( realColor() == color)
         return;
 
-    // set colors for pop up color triangle
-    QColor newColor = color.toQColor();
-    setHSV(newColor.hue(), newColor.saturation(), newColor.value());
-
-    //sanitize color data in case it gives us weird values
-    int hueRef = hue();
-    int saturationRef = saturation();
-    int valueRef = value();
-
-
     //displayrenderer->getHsv is what sets the foreground color in the application
     if(d->updateAllowed) {
+        int hueRef = hue();
+        int saturationRef = saturation();
+        int valueRef = value();
+
         d->displayRenderer->getHsv(color, &hueRef, &saturationRef, &valueRef);
+        setHSV(hueRef, saturationRef, valueRef);
+
         d->invalidTriangle = true;
         d->updateTimer.start();
     }

@@ -170,6 +170,11 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
     return NOT_LIKE;
 }
 
+"BETWEEN" {
+    ECOUNT;
+    return BETWEEN;
+}
+
 "NOT"{whitespace}+"SIMILAR"{whitespace}+"TO" {
 	ECOUNT;
 	return NOT_SIMILAR_TO;

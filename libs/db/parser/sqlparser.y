@@ -937,6 +937,14 @@ aExpr5 NOT_EQUAL2 aExpr4
 {
 	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_SIMILAR_TO, $3);
 }
+| aExpr5 BETWEEN aExpr4 AND aExpr4 
+{
+	$$ = new NArgExpr(KexiDBExpr_Relational, KEXIDB_TOKEN_BETWEEN_AND);
+
+	$$->toNArg()->add( $1 );
+	$$->toNArg()->add( $3 );
+	$$->toNArg()->add( $5 );
+}
 |
 aExpr5
 ;

@@ -50,6 +50,7 @@ namespace KexiDB
 
 //! Custom tokens are not used in parser but used as extension in expression classes.
 //#define KEXIDB_CUSTOM_TOKEN 0x1000
+#define KEXIDB_TOKEN_BETWEEN_AND 0x1001
 
 //! \return class name of class \a c
 CALLIGRADB_EXPORT QString exprClassName(int c);
@@ -149,6 +150,7 @@ public:
     virtual ~NArgExpr();
     //! \return a deep copy of this object.
     virtual NArgExpr* copy() const;
+    virtual Field::Type type();
     void add(BaseExpr *expr);
     void prepend(BaseExpr *expr);
     BaseExpr *arg(int n);
@@ -157,6 +159,8 @@ public:
     virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
     virtual void getQueryParameters(QuerySchemaParameterList& params);
     virtual bool validate(ParseInfo& parseInfo);
+    virtual QString tokenToString();
+
     BaseExpr::List list;
 };
 

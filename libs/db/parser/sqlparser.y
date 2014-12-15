@@ -359,7 +359,8 @@
 
 %token __LAST_TOKEN /* sentinel */
 
-%token '-' '+'
+%token '-'
+%token '+'
 %token '*'
 %token '%'
 %token '@'
@@ -367,7 +368,8 @@
 %token ','
 %token '.'
 %token '$'
-%token '(' ')'
+%token '('
+%token ')'
 %token '?'
 %token '\''
 %token '/'
@@ -512,7 +514,8 @@ extern "C"
 %nonassoc '>'
 %nonassoc LESS_OR_EQUAL
 %nonassoc GREATER_OR_EQUAL
-%nonassoc NOT_EQUAL NOT_EQUAL2
+%nonassoc NOT_EQUAL
+%nonassoc NOT_EQUAL2
 %nonassoc SQL_IN
 %nonassoc LIKE
 %nonassoc NOT_LIKE

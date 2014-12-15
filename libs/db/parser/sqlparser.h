@@ -102,8 +102,8 @@ extern int yydebug;
      XOR = 304,
      NOT = 305,
      GREATER_OR_EQUAL = 306,
-     NOT_EQUAL2 = 307,
-     NOT_EQUAL = 308,
+     NOT_EQUAL = 307,
+     NOT_EQUAL2 = 308,
      SQL_IN = 309,
      LIKE = 310,
      NOT_LIKE = 311,
@@ -121,7 +121,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 485 "sqlparser.y"
+#line 487 "sqlparser.y"
 
     QString* stringValue;
     qint64 integerValue;

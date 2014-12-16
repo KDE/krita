@@ -257,7 +257,7 @@ bool KisApplication::start()
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     int argsCount = args->count();
 
-    KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("calligra");
+    KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("krita");
     QString dpiValues = koargs->getOption("dpi");
     if (!dpiValues.isEmpty()) {
         int sep = dpiValues.indexOf(QRegExp("[x, ]"));

@@ -180,7 +180,7 @@ bool KisApplication::initHack()
     options.add("export-filename <filename>", ki18n("Filename for export/export-pdf"));
     options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
     options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
-    KCmdLineArgs::addCmdLineOptions(options, ki18n("Calligra"), "calligra", "kde");
+    KCmdLineArgs::addCmdLineOptions(options, ki18n("Krita"), "krita", "kde");
     return true;
 }
 

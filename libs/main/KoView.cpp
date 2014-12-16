@@ -209,6 +209,7 @@ KoView::~KoView()
             d->part->removeView(this);
         }
     }
+    delete d;
 }
 
 

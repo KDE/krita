@@ -493,6 +493,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(m_removeAction);
 
         addActionToMenu(&menu, "duplicatelayer");
+        addActionToMenu(&menu, "flatten_image");
 
         // TODO: missing icon "edit-merge"
         QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));

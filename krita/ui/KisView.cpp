@@ -298,6 +298,8 @@ void KisView::setViewManager(KisViewManager *view)
 
     KoToolManager::instance()->addController(d->canvasController);
     KoToolManager::instance()->registerTools(d->actionCollection, d->canvasController);
+    dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(d->canvas);
+    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
     if (s_firstView) {
         // Restore the tool shortcuts from the config file
@@ -321,7 +323,6 @@ void KisView::setViewManager(KisViewManager *view)
         s_firstView = false;
     }
 
-    dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(d->canvas);
 
     if (resourceProvider()) {
         resourceProvider()->slotImageSizeChanged();

@@ -425,6 +425,11 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     }
     }
 
+    if (!cinfo) {
+        // Could not create compression info object
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
     // Setup an event manager
     opj_event_mgr_t event_mgr;    /* event manager */
     memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
@@ -440,6 +445,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     opj_setup_encoder(cinfo, &parameters, image);
 
     opj_cio_t* cio = opj_cio_open((opj_common_ptr) cinfo, 0, 0);
+
 
     /* encode the image */
     if (!opj_encode(cinfo, cio, image, parameters.index)) {

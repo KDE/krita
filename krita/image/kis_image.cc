@@ -1595,7 +1595,7 @@ void KisImage::removeComposition(KisLayerComposition* composition)
     delete composition;
 }
 
-bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
+bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)
 {
     KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(root.data());
     if (mask &&
@@ -1608,7 +1608,7 @@ bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
     KisNodeSP node = root->firstChild();
 
     while (node) {
-        if (checkMasksNeedConersion(node, bounds)) {
+        if (checkMasksNeedConversion(node, bounds)) {
             return true;
         }
 
@@ -1623,7 +1623,7 @@ void KisImage::setWrapAroundModePermitted(bool value)
     m_d->wrapAroundModePermitted = value;
 
     if (m_d->wrapAroundModePermitted &&
-        checkMasksNeedConersion(root(), bounds())) {
+        checkMasksNeedConversion(root(), bounds())) {
 
         KisProcessingApplicator applicator(this, root(),
                                            KisProcessingApplicator::RECURSIVE,

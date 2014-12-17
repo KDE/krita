@@ -659,7 +659,7 @@ void KisMainWindow::showView(KisView *imageView)
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
-        subwin->setWindowTitle(imageView->document()->url().fileName());
+
         if (m_mdiArea->subWindowList().size() == 1) {
             imageView->showMaximized();
         }
@@ -669,6 +669,7 @@ void KisMainWindow::showView(KisView *imageView)
 
         setActiveView(imageView);
         updateWindowMenu();
+        updateCaption();
     }
 }
 
@@ -772,7 +773,11 @@ void KisMainWindow::updateCaption()
             caption += ' ' + i18n("(write protected)");
         }
 
+        qDebug() << "activeView" << d->activeView << "caption" << caption;
+        d->activeView->setWindowTitle(caption);
+
         updateCaption(caption, d->activeView->document()->isModified());
+
         if (!d->activeView->document()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty())
             d->saveAction->setToolTip(i18n("Save as %1", d->activeView->document()->url().fileName(KUrl::ObeyTrailingSlash)));
         else
@@ -1031,6 +1036,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 fn.append(mime->mainExtension());
                 newURL = KUrl::fromPath(fn);
             }
+        }
+
+        if (document->documentInfo()->aboutInfo("title") == i18n("Unnamed")) {
+            QString fn = newURL.toLocalFile();
+            QFileInfo info(fn);
+            document->documentInfo()->setAboutInfo("title", info.baseName());
         }
 
         QByteArray outputFormat = _native_format;

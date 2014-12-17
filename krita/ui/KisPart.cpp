@@ -485,7 +485,7 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
         KisPart::CustomDocumentWidgetItem item;
         item.widget = new KisCustomImageWidget(parent,
                                                w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
-                                               i18n("unnamed"));
+                                               i18n("Unnamed"));
 
         item.icon = "application-x-krita";
         widgetList << item;
@@ -501,7 +501,7 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
         KisPart::CustomDocumentWidgetItem item;
         item.widget = new KisImageFromClipboard(parent,
                                                 w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
-                                                i18n("unnamed"));
+                                                i18n("Unnamed"));
 
         item.title = i18n("Create from Clipboard");
         item.icon = "klipper";

@@ -28,7 +28,6 @@
 #include "KoPageLayout.h"
 #include <KoToolManager.h>
 
-
 #include <KoIcon.h>
 
 #include <kactioncollection.h>
@@ -87,6 +86,7 @@
 #include "kis_statusbar.h"
 #include "kis_painting_assistants_decoration.h"
 #include "kis_progress_widget.h"
+#include "KisDockerManager.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
@@ -295,6 +295,8 @@ KisView::~KisView()
 void KisView::setViewManager(KisViewManager *view)
 {
     d->viewManager = view;
+
+    connect(canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), d->viewManager->mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
     KoToolManager::instance()->addController(d->canvasController);
     KoToolManager::instance()->registerTools(d->actionCollection, d->canvasController);

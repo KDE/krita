@@ -569,11 +569,6 @@ void KisView::removeStatusBarItem(QWidget *widget)
 }
 
 
-KisPrintJob * KisView::createPdfPrintJob()
-{
-    return createPrintJob();
-}
-
 KoPageLayout KisView::pageLayout() const
 {
     return document()->pageLayout();

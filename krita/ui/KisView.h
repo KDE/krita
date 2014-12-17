@@ -109,13 +109,6 @@ public:
     KisPrintJob * createPrintJob();
 
     /**
-     * In order to export the document represented by this view a new print job should
-     * be constructed that is capable of doing the printing.
-     * The default implementation call createPrintJob.
-     */
-    KisPrintJob * createPdfPrintJob();
-
-    /**
      * @return the page layout to be used for printing.
      * Default is the documents layout.
      * Reimplement if your application needs to use a different layout.

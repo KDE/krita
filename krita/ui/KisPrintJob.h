@@ -58,29 +58,29 @@ public:
     };
 
     /// Returns the printer that is used for this print job so others can alter the details of the print-job.
-    virtual QPrinter &printer() { return m_printer; }
+     QPrinter &printer() { return m_printer; }
 
     /// If this print job is used in combination with a printdialog the option widgets this method
     /// retuns will be shown in the print dialog.
-    virtual QList<QWidget*> createOptionWidgets() const;
+     QList<QWidget*> createOptionWidgets() const;
 
-    virtual int documentFirstPage() const {
+     int documentFirstPage() const {
         return 1;
     }
-    virtual int documentLastPage() const {
+     int documentLastPage() const {
         return 1;
     }
-    virtual int documentCurrentPage() const {
+     int documentCurrentPage() const {
         return 1;
     }
 
-    virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
+     QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
     /**
      *@brief Check if the painter can print to the printer
      *@returns true if the print job can print to the given printer
      */
-    virtual bool canPrint();
+     bool canPrint();
 
 public slots:
     /**
@@ -92,7 +92,7 @@ public slots:
      * @param removePolicy a policy that should be honored so the caller can make sure
      *   this job doesn't leak memory after being used.
      */
-    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
+     void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 private:
     KisImageWSP m_image;
     QPrinter m_printer;

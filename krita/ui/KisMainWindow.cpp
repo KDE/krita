@@ -1479,10 +1479,16 @@ void KisMainWindow::slotFilePrint()
         return;
     d->applyDefaultSettings(printJob->printer());
     QPrintDialog *printDialog = activeView()->createPrintDialog( printJob, this );
-    if (printDialog && printDialog->exec() == QDialog::Accepted)
+    if (printDialog && printDialog->exec() == QDialog::Accepted) {
+        printJob->printer().setPageMargins(0.0, 0.0, 0.0, 0.0, QPrinter::Point);
+        printJob->printer().setPaperSize(QSizeF(activeView()->image()->width() / (72.0 * activeView()->image()->xRes()),
+                                                activeView()->image()->height()/ (72.0 * activeView()->image()->yRes())),
+                                         QPrinter::Inch);
         printJob->startPrinting(KisPrintJob::DeleteWhenDone);
-    else
+    }
+    else {
         delete printJob;
+    }
     delete printDialog;
 }
 
@@ -1520,6 +1526,9 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
 {
     if (!activeView())
         return 0;
+    if (!activeView()->document())
+        return 0;
+
     if (pdfFileName.isEmpty()) {
         KConfigGroup group = KGlobal::config()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");
@@ -1555,7 +1564,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
             return 0;
     }
 
-    KisPrintJob *printJob = activeView()->createPdfPrintJob();
+    KisPrintJob *printJob = activeView()->createPrintJob();
     if (printJob == 0)
         return 0;
     if (isHidden()) {
@@ -1565,6 +1574,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
     d->applyDefaultSettings(printJob->printer());
     // TODO for remote files we have to first save locally and then upload.
     printJob->printer().setOutputFileName(pdfFileName);
+    printJob->printer().setDocName(pdfFileName);
     printJob->printer().setColorMode(QPrinter::Color);
 
     if (pageLayout.format == KoPageFormat::CustomSize) {
@@ -1573,12 +1583,16 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         printJob->printer().setPaperSize(KoPageFormat::printerPageSize(pageLayout.format));
     }
 
-    switch (pageLayout.orientation) {
-    case KoPageFormat::Portrait: printJob->printer().setOrientation(QPrinter::Portrait); break;
-    case KoPageFormat::Landscape: printJob->printer().setOrientation(QPrinter::Landscape); break;
-    }
-
     printJob->printer().setPageMargins(pageLayout.leftMargin, pageLayout.topMargin, pageLayout.rightMargin, pageLayout.bottomMargin, QPrinter::Millimeter);
+
+    switch (pageLayout.orientation) {
+    case KoPageFormat::Portrait:
+        printJob->printer().setOrientation(QPrinter::Portrait);
+        break;
+    case KoPageFormat::Landscape:
+        printJob->printer().setOrientation(QPrinter::Landscape);
+        break;
+    }
 
     //before printing check if the printer can handle printing
     if (!printJob->canPrint()) {

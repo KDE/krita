@@ -38,17 +38,11 @@ public:
      */
     KisBookmarkedFilterConfigurationsModel(KisPaintDeviceSP thumb, KisFilterSP filter);
     ~KisBookmarkedFilterConfigurationsModel();
-    /**
-     * Calling this method with role == Qt::DecorationRole will return a 100x100
-     * thumbnail.
-     */
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     /**
      * @return the filter configuration
      */
     KisFilterConfiguration* configuration(const QModelIndex &index) const;
-private slots:
-    void previewUpdated(int i);
 private:
     struct Private;
     Private* const d;

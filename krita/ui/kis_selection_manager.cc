@@ -159,7 +159,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     connect(m_clear, SIGNAL(triggered()), SLOT(clear()));
 
     m_reselect  = new KisAction(i18n("&Reselect"), this);
-    actionManager->addAction("select_all", m_reselect, collection);
+    actionManager->addAction("reselect", m_reselect, collection);
     m_reselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D));
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 

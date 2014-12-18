@@ -124,16 +124,20 @@ public:
         // enable actions which where disabled on activating the active tool
         // and re-add them to the action collection
         KActionCollection *ac = canvas->actionCollection();
-        foreach(KAction *action, disabledDisabledActions) {
-            if(ac) {
-                ac->addAction(action->objectName(), action);
+        foreach(QPointer<KAction> action, disabledDisabledActions) {
+            if (action) {
+                if (ac) {
+                    ac->addAction(action->objectName(), action);
+                }
             }
         }
         disabledDisabledActions.clear();
-        foreach(QAction *action, disabledActions) {
-            action->setEnabled(true);
-            if(ac) {
-                ac->addAction(action->objectName(), action);
+        foreach(QPointer<KAction> action, disabledActions) {
+            if (action) {
+                action->setEnabled(true);
+                if(ac) {
+                    ac->addAction(action->objectName(), action);
+                }
             }
         }
         disabledActions.clear();
@@ -148,8 +152,8 @@ public:
     const KoInputDevice inputDevice;
     QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
     QLabel *dummyToolLabel;
-    QList<KAction*> disabledActions; ///< disabled conflicting actions
-    QList<KAction*> disabledDisabledActions; ///< disabled conflicting actions that were already disabled
+    QList<QPointer<KAction> > disabledActions; ///< disabled conflicting actions
+    QList<QPointer<KAction> > disabledDisabledActions; ///< disabled conflicting actions that were already disabled
 };
 
 KoToolManager::Private::Private(KoToolManager *qq)

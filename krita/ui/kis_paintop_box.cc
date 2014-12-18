@@ -362,6 +362,17 @@ KisPaintopBox::~KisPaintopBox()
     delete m_favoriteResourceManager;
 }
 
+void KisPaintopBox::restoreResource(KoResource* resource)
+{
+    KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
+    if (preset) {
+        setCurrentPaintop(preset->paintOp(), preset);
+
+        m_presetsPopup->setPresetImage(preset->image());
+        m_presetsPopup->resourceSelected(resource);
+    }
+}
+
 void KisPaintopBox::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
@@ -369,7 +380,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
         if (!preset->settings()->isLoadable())
             return;
         bool saveDirtyPreset = preset->isPresetDirty();
-        setCurrentPaintop(preset->paintOp(), preset);
+        setCurrentPaintopAndReload(preset->paintOp(), preset);
         m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
         preset->setPresetDirty(saveDirtyPreset);
         m_resourceProvider->currentPreset()->setPresetDirty(saveDirtyPreset);
@@ -391,6 +402,17 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
 KoID KisPaintopBox::currentPaintop()
 {
     return m_resourceProvider->currentPreset()->paintOp();
+}
+
+void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset)
+{
+    setCurrentPaintop(paintop, preset);
+
+    if (!m_dirtyPresetsEnabled) {
+        slotReloadPreset();
+        m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+        m_presetsPopup->updateViewSettings();
+    }
 }
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
@@ -455,11 +477,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
      * so just call the slot directly
      */
     slotUpdatePreset();
-    if (!m_dirtyPresetsEnabled) {
-        slotReloadPreset();
-        m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
-        m_presetsPopup->updateViewSettings();
-    }
 }
 
 KoID KisPaintopBox::defaultPaintOp()
@@ -573,10 +590,14 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 {
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
 
-    if (toolData == m_tabletToolMap.end())
-        setCurrentPaintop(currentPaintop());
-    else
+    if (toolData == m_tabletToolMap.end()) {
+        KisPaintOpPresetSP preset =
+            m_resourceProvider->currentPreset()->clone();
+        m_resourceProvider->setPaintOpPreset(preset);
+        setCurrentPaintop(preset->paintOp(), preset);
+    } else {
         setCurrentPaintop(toolData->paintOpID, toolData->preset);
+    }
 
     m_currTabletToolID = TabletToolID(inputDevice);
 }

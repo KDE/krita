@@ -507,7 +507,7 @@ void KisViewManager::setCurrentView(KisView *view)
             preset = rserver->resources().first();
         }
         if (preset) {
-            paintOpBox()->resourceSelected(preset.data());
+            paintOpBox()->restoreResource(preset.data());
         }
 
     }

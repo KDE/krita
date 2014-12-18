@@ -105,6 +105,8 @@ public:
     KisPaintopBox(KisViewManager* view, QWidget* parent, const char* name);
     ~KisPaintopBox();
 
+    void restoreResource(KoResource* resource);
+
 public slots:
 
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
@@ -112,12 +114,16 @@ public slots:
     void slotCurrentNodeChanged(KisNodeSP node);
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
+
     KisFavoriteResourceManager *favoriteResourcesManager() { return m_favoriteResourceManager; }
 
 private:
 
     KoID currentPaintop();
+
     void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset = 0);
+    void setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset);
+
     QPixmap paintopPixmap(const KoID& paintop);
     KoID defaultPaintOp();
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);

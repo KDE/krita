@@ -426,9 +426,17 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             m_d->parentOfRemovedNode = 0;
         }
 
-        KisNodeSP activatedNode =
-            index.isValid() && value.toBool() ? nodeFromIndex(index) : nodeFromIndex(parentIndex);
+        KisNodeSP activatedNode;
 
+        if (index.isValid() && value.toBool()) {
+            activatedNode = nodeFromIndex(index);
+        }
+        else if (parentIndex.isValid() && value.toBool()) {
+            activatedNode = nodeFromIndex(parentIndex);
+        }
+        else {
+            activatedNode = 0;
+        }
 
 
         emit nodeActivated(activatedNode);

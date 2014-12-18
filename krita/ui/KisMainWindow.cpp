@@ -1303,7 +1303,7 @@ void KisMainWindow::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
         foreach(const QUrl &url, event->mimeData()->urls()) {
-            KisPart::instance()->openExistingFile(url);
+            openDocument(url);
         }
     }
 }

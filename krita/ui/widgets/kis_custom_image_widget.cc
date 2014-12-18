@@ -364,11 +364,15 @@ void KisCustomImageWidget::predefinedClicked(int index)
 
     KisPropertiesConfiguration *predefined = m_predefined[index - 1];
     txtPredefinedName->setText(predefined->getString("name"));
-    doubleWidth->setValue(predefined->getDouble("width"));
-    doubleHeight->setValue(predefined->getDouble("height"));
     doubleResolution->setValue(predefined->getDouble("resolution"));
     cmbWidthUnit->setCurrentIndex(predefined->getInt("x-unit"));
     cmbHeightUnit->setCurrentIndex(predefined->getInt("y-unit"));
+
+    widthUnitChanged(cmbWidthUnit->currentIndex());
+    heightUnitChanged(cmbHeightUnit->currentIndex());
+
+    doubleWidth->setValue(predefined->getDouble("width"));
+    doubleHeight->setValue(predefined->getDouble("height"));
 
 }
 

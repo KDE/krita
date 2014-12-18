@@ -422,6 +422,9 @@ void KisView::dragEnterEvent(QDragEnterEvent *event)
             || event->mimeData()->hasUrls()
             || event->mimeData()->hasFormat("application/x-krita-node")) {
         event->accept();
+
+        // activate view if it should accept the drop
+        this->setFocus();
     } else {
         event->ignore();
     }

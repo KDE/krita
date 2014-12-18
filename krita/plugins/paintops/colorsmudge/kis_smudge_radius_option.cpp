@@ -35,6 +35,7 @@
 #include "KoColorSet.h"
 #include <KoChannelInfo.h>
 #include <KoMixColorsOp.h>
+#include <kis_cross_device_color_picker.h>
 
 #include <KoColor.h>
 
@@ -80,6 +81,8 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
         int k = 0;
         int j = 0;
         KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
+        KisCrossDeviceColorPickerInt colorPicker(painter.device(), color);
+        colorPicker.pickColor(posx, posy, color.data());
 
         for (int y = 0; y <= smudgeRadius; y = y + loop_increment) {
             for (int x = 0; x <= smudgeRadius; x = x + loop_increment) {
@@ -97,10 +100,10 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
                             x = x*(-1);
                         }
                         accessor->moveTo(posx + x, posy + y);
-                        memcpy(pixels[1], accessor->oldRawData(), pixelSize);
+                        memcpy(pixels[1], accessor->rawDataConst(), pixelSize);
                         if(i == 0)
                         {
-                            memcpy(pixels[0],accessor->oldRawData(),pixelSize);
+                            memcpy(pixels[0],accessor->rawDataConst(),pixelSize);
                         }
                         if (x == 0 && y == 0) {
                             // Because the sum of the weights must be 255,
@@ -108,9 +111,9 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
                             // to sum to 255 in total
                             // It's -(counts -1), because we'll add the center one implicitly
                             // through that calculation
-                            weights[1] = (255 - (i + 1) * (255 /(i+2)));
+                            weights[1] = (255 - (k + 1) * (255 /(k+2)));
                         } else {
-                            weights[1] = 255 /(i+2);
+                            weights[1] = 255 /(k+2);
                         }
 
 

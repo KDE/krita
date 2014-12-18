@@ -493,7 +493,7 @@ void KisCanvas2::startUpdateInPatches(QRect imageRect)
     }
 }
 
-void KisCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
+void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     m_d->displayColorConverter->setDisplayFilter(displayFilter);
 
@@ -532,6 +532,11 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
     }
 }
 
+KisDisplayFilter *KisCanvas2::displayFilter() const
+{
+    return m_d->displayColorConverter->displayFilter();
+}
+
 KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
 {
     return m_d->displayColorConverter;
@@ -539,7 +544,7 @@ KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
 
 KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterface() const
 {
-    KisDisplayFilterSP displayFilter =
+    KisDisplayFilter *displayFilter =
         m_d->displayColorConverter->displayFilter();
 
     return displayFilter ?

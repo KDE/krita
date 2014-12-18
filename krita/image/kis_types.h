@@ -226,10 +226,6 @@ typedef KisStrokeWSP KisStrokeId;
 class KisFilterConfiguration;
 typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
 
-class KisDisplayFilter;
-typedef QSharedPointer<KisDisplayFilter> KisDisplayFilterSP;
-
-
 #include <QSharedPointer>
 #include <QWeakPointer>
 #include <kis_shared_ptr.h>

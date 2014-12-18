@@ -271,7 +271,7 @@ void KisPrescaledProjection::setChannelFlags(const QBitArray &channelFlags)
     m_d->projectionBackend->setChannelFlags(channelFlags);
 }
 
-void KisPrescaledProjection::setDisplayFilter(KisDisplayFilterSP displayFilter)
+void KisPrescaledProjection::setDisplayFilter(KisDisplayFilter* displayFilter)
 {
     m_d->projectionBackend->setDisplayFilter(displayFilter);
 }

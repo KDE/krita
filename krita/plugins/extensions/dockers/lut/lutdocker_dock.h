@@ -61,7 +61,7 @@ public:
 QString observerName() { return "LutDockerDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false); m_displayFilter = 0;}
 
     bool canChangeExposureAndGamma() const;
     qreal currentExposure() const;
@@ -109,7 +109,7 @@ private:
 
     KisCanvas2 *m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
-    OcioDisplayFilterSP m_displayFilter;
+    OcioDisplayFilter *m_displayFilter;
 
     bool m_draggingSlider;
 

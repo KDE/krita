@@ -189,7 +189,7 @@ private:
 
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
-    KisNodeSP           m_previousNode;
+    KisNodeWSP          m_previousNode;
 
     QPalette palette;
     QPalette palette_highlight;

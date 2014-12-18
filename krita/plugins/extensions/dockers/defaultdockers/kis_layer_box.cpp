@@ -392,11 +392,13 @@ void KisLayerBox::unsetCanvas()
         m_newLayerMenu->clear();
     }
     setCanvas(0);
+    m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
 }
 
 void KisLayerBox::notifyImageDeleted()
 {
     setCanvas(0);
+    m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
 }
 
 void KisLayerBox::updateUI()

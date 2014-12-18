@@ -148,6 +148,9 @@ void KisInputManager::Private::debugEvent(QEvent *event)
 #define stop_ignore_cursor_events() d->ignoreQtCursorEvents = false
 #define break_if_should_ignore_cursor_events() if (d->ignoreQtCursorEvents) break;
 
+#define push_and_stop_ignore_cursor_events() bool __saved_ignore_events = d->ignoreQtCursorEvents; d->ignoreQtCursorEvents = false
+#define pop_ignore_cursor_events() d->ignoreQtCursorEvents = __saved_ignore_events
+
 #define touch_start_block_press_events() d->touchHasBlockedPressEvents = d->disableTouchOnCanvas
 #define touch_stop_block_press_events() d->touchHasBlockedPressEvents = false
 #define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
@@ -776,6 +779,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
             d->compressedMoveEvent.reset(new KisTabletEvent(*tevent));
             d->moveEventCompressor.start();
+            tevent->setAccepted(true);
+
             retval = true;
         } else {
             slotCompressedMoveEvent();
@@ -856,7 +861,14 @@ bool KisInputManager::Private::handleKisTabletEvent(QObject *object, KisTabletEv
 void KisInputManager::slotCompressedMoveEvent()
 {
     if (d->compressedMoveEvent) {
+
+        push_and_stop_ignore_cursor_events();
+        touch_stop_block_press_events();
+
         (void) d->handleKisTabletEvent(d->eventsReceiver, d->compressedMoveEvent.data());
+
+        pop_ignore_cursor_events();
+
         d->compressedMoveEvent.reset();
     }
 }

@@ -231,7 +231,7 @@ void KoToolBox::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
     if (!d->floating) {
-        setMinimumSize(layout()->minimumSize()); // This enfoce the minimum size on the widget
+        setMinimumSize(layout()->minimumSize()); // This enforces the minimum size on the widget
     }
 }
 

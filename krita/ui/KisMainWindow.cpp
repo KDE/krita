@@ -763,8 +763,7 @@ void KisMainWindow::reloadRecentFileList()
 
 void KisMainWindow::updateCaption()
 {
-    kDebug(30003) << "KisMainWindow::updateCaption()";
-    if (!d->activeView || !d->activeView->document()) {
+    if (!m_mdiArea->activeSubWindow()) {
         updateCaption(QString(), false);
     }
     else {
@@ -773,7 +772,6 @@ void KisMainWindow::updateCaption()
             caption += ' ' + i18n("(write protected)");
         }
 
-        qDebug() << "activeView" << d->activeView << "caption" << caption;
         d->activeView->setWindowTitle(caption);
 
         updateCaption(caption, d->activeView->document()->isModified());
@@ -946,8 +944,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     if (!document) {
         return true;
     }
-
-    qDebug() << "Going to save" << document->localFilePath();
 
     bool reset_url;
 
@@ -1466,6 +1462,7 @@ void KisMainWindow::slotFileCloseAll()
             subwin->close();
         }
     }
+    updateCaption();
 }
 
 void KisMainWindow::slotFileQuit()
@@ -1913,6 +1910,8 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         collapsed = group.readEntry("Collapsed", collapsed);
         locked = group.readEntry("Locked", locked);
 
+        //qDebug() << "docker" << factory->id() << "collapsed" << collapsed << "locked" << locked << "titlebar" << titleBar;
+
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
         if (titleBar && locked)
@@ -2037,6 +2036,8 @@ void KisMainWindow::subWindowActivated()
     if (m_brushesAndStuff) {
         m_brushesAndStuff->setEnabled(enabled);
     }
+
+    updateCaption();
 }
 
 void KisMainWindow::updateWindowMenu()
@@ -2095,6 +2096,7 @@ void KisMainWindow::updateWindowMenu()
         }
     }
 
+    updateCaption();
 }
 
 void KisMainWindow::setActiveSubWindow(QWidget *window)
@@ -2131,6 +2133,7 @@ void KisMainWindow::newView(QObject *document)
     KisDocument *doc = qobject_cast<KisDocument*>(document);
     KisView *view = KisPart::instance()->createView(doc, this);
     addView(view);
+
 }
 
 void KisMainWindow::newWindow()

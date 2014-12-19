@@ -356,6 +356,11 @@ public slots:
      */
     bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
 
+    /**
+     * Update the option widgets to the argument ones, removing the currently set widgets.
+     */
+    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
+
 private slots:
 
     void undo();

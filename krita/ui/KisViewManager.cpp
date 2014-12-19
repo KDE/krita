@@ -92,7 +92,6 @@
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
 #include "kis_coordinates_converter.h"
-#include <KisDockerManager.h>
 #include <KisDocumentEntry.h>
 #include "KisDocument.h"
 #include "kis_factory2.h"
@@ -325,8 +324,6 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
         KoToolBoxFactory toolBoxFactory;
         QDockWidget* toolbox = mainWindow()->createDockWidget(&toolBoxFactory);
         toolbox->setMinimumWidth(60);
-
-        mainWindow()->dockerManager()->setIcons(false);
     }
 
     d->statusBar = new KisStatusBar(this);
@@ -450,7 +447,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->rotateCanvasRight->disconnect();
         d->rotateCanvasLeft->disconnect();
         d->wrapAroundAction->disconnect();
-        d->currentImageView->canvasController()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
+        d->currentImageView->canvasController()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow());
         resourceProvider()->disconnect(d->currentImageView->canvasBase());
     }
 
@@ -471,7 +468,7 @@ void KisViewManager::setCurrentView(KisView *view)
         connect(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasRight15()));
         connect(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasLeft15()));
         connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
-        connect(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
+        connect(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         connect(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
     }
 

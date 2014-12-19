@@ -91,12 +91,12 @@
 #include <KoPageLayoutWidget.h>
 #include <KoToolManager.h>
 #include <KoZoomController.h>
+#include "KoToolDocker.h"
 
 #include "KisView.h"
 #include "KisDocument.h"
 #include "KisImportExportManager.h"
 #include "KisPrintJob.h"
-#include "KisDockerManager.h"
 #include "KisPart.h"
 #include "KisApplication.h"
 #include "kis_factory2.h"
@@ -122,6 +122,26 @@
 #include "thememanager.h"
 
 #include "calligraversion.h"
+
+class ToolDockerFactory : public KoDockFactoryBase
+{
+public:
+    ToolDockerFactory() : KoDockFactoryBase() { }
+
+    QString id() const {
+        return "sharedtooldocker";
+    }
+
+    QDockWidget* createDockWidget() {
+        KoToolDocker* dockWidget = new KoToolDocker();
+        dockWidget->setTabEnabled(false);
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const {
+        return DockRight;
+    }
+};
 
 class KisMainWindowPrivate
 {
@@ -154,7 +174,6 @@ public:
         lastExportSpecialOutputFlag = 0;
         readOnly = false;
         dockWidgetMenu = 0;
-        dockerManager = 0;
         deferredClosingEvent = 0;
         themeManager = 0;
         m_helpMenu = 0;
@@ -164,6 +183,8 @@ public:
 
         undo = 0;
         redo = 0;
+
+        toolOptionsDocker = 0;
     }
 
     ~KisMainWindowPrivate() {
@@ -239,7 +260,6 @@ public:
     QMap<QString, QDockWidget *> dockWidgetsMap;
     KActionMenu *dockWidgetMenu;
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
-    KisDockerManager *dockerManager;
     QList<QDockWidget *> dockWidgets;
     QByteArray m_dockerStateBeforeHiding;
 
@@ -253,6 +273,8 @@ public:
 
     KAction *undo;
     KAction *redo;
+
+    KoToolDocker *toolOptionsDocker;
 
 };
 
@@ -440,7 +462,8 @@ KisMainWindow::KisMainWindow()
     }
     restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
 
-    d->dockerManager = new KisDockerManager(this);
+    ToolDockerFactory toolDockerFactory;
+    d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
 
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
@@ -584,10 +607,6 @@ KisMainWindow::~KisMainWindow()
         KConfigGroup group(KGlobal::config(), "theme");
         group.writeEntry("Theme", d->themeManager->currentThemeName());
     }
-
-    // Explicitly delete the docker manager to ensure that it is deleted before the dockers
-    delete d->dockerManager;
-    d->dockerManager = 0;
 
     // The doc and view might still exist (this is the case when closing the window)
     KisPart::instance()->removeMainWindow(this);
@@ -1851,13 +1870,15 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
 
-
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
-        if (!dockWidget) return 0;
+        if (!dockWidget) {
+            qWarning() << "Could not create docker for" << factory->id();
+            return 0;
+        }
         d->dockWidgets.push_back(dockWidget);
 
-        KoDockWidgetTitleBar *titleBar = 0;
+        KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
         // Check if the dock widget is supposed to be collapsable
         if (!dockWidget->titleBarWidget()) {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
@@ -1910,7 +1931,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         collapsed = group.readEntry("Collapsed", collapsed);
         locked = group.readEntry("Locked", locked);
 
-        //qDebug() << "docker" << factory->id() << "collapsed" << collapsed << "locked" << locked << "titlebar" << titleBar;
+        //qDebug() << "docker" << factory->id() << dockWidget << "collapsed" << collapsed << "locked" << locked << "titlebar" << titleBar;
 
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
@@ -1919,7 +1940,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
-        dockWidget = d->dockWidgetsMap[ factory->id()];
+        dockWidget = d->dockWidgetsMap[factory->id()];
     }
 
     KConfigGroup group(KGlobal::config(), "GUI");
@@ -1957,7 +1978,6 @@ QList<QDockWidget*> KisMainWindow::dockWidgets()
 
 QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers()
 {
-
     QList<KoCanvasObserverBase*> observers;
 
     foreach(QDockWidget *docker, dockWidgets()) {
@@ -1969,11 +1989,6 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers()
     return observers;
 }
 
-
-KisDockerManager * KisMainWindow::dockerManager() const
-{
-    return d->dockerManager;
-}
 
 void KisMainWindow::toggleDockersVisibility(bool visible)
 {
@@ -2016,7 +2031,6 @@ void KisMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
 
 void KisMainWindow::subWindowActivated()
 {
-    //qDebug() << "updateMenus";
     bool enabled = (activeKisView() != 0);
 
     m_mdiCascade->setEnabled(enabled);
@@ -2165,6 +2179,25 @@ QPointer<KisView>KisMainWindow::activeKisView()
     //qDebug() << "activeKisView" << activeSubWindow;
     if (!activeSubWindow) return 0;
     return qobject_cast<KisView*>(activeSubWindow->widget());
+}
+
+
+void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
+{
+    d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
+
+    KConfigGroup group(KGlobal::config(), "GUI");
+    QFont dockWidgetFont  = KGlobalSettings::generalFont();
+    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
+    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
+    dockWidgetFont.setPointSizeF(pointSize);
+
+    foreach(QWidget *w, optionWidgetList) {
+#ifdef Q_OS_MAC
+        w->setAttribute(Qt::WA_MacSmallSize, true);
+#endif
+        w->setFont(dockWidgetFont);
+    }
 }
 
 #include <KisMainWindow.moc>

@@ -279,11 +279,9 @@ set(kritaui_LIB_SRCS
 
     kis_abstract_perspective_grid.cpp
 
-
     KisApplication.cpp
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp
-    KisDockerManager.cpp
     KisDocument.cpp
     KisDocumentEntry.cpp
     KisDocumentSectionDelegate.cpp

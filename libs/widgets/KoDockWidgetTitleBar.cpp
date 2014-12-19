@@ -235,9 +235,13 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     d->lockButton->setGeometry(lockRect);
 
     if (width() < (closeRect.width() + lockRect.width()) + 50) {
+        d->collapsable = false;
+        d->collapseButton->setVisible(false);
         d->lockButton->setVisible(false);
         d->lockable = false;
     } else {
+        d->collapsable = d->collapsableSet;
+        d->collapseButton->setVisible(true);
         d->lockButton->setVisible(true);
         d->lockable = true;
     }
@@ -284,6 +288,7 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
 
 void KoDockWidgetTitleBar::setCollapsable(bool collapsable)
 {
+    d->collapsableSet = collapsable;
     d->collapsable = collapsable;
     d->collapseButton->setVisible(collapsable);
 }

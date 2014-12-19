@@ -32,9 +32,8 @@ SpecificColorSelectorDock::SpecificColorSelectorDock()
     : QDockWidget(i18n("Specific Color Selector"))
     , m_canvas(0)
     , m_view(0)
-    , m_colorSelector(0)
+    , m_colorSelector(new KisSpecificColorSelectorWidget(this))
 {
-    m_colorSelector = new KisSpecificColorSelectorWidget(this);
     setWidget(m_colorSelector);
 }
 
@@ -81,8 +80,7 @@ void SpecificColorSelectorDock::unsetCanvas()
     m_canvas = 0;
     m_view = 0;
 
-    delete m_colorSelector;
-    m_colorSelector = 0;
+    m_colorSelector->setDisplayRenderer(0);
 }
 
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)

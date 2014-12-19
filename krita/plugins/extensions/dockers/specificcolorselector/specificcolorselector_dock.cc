@@ -34,6 +34,8 @@ SpecificColorSelectorDock::SpecificColorSelectorDock()
     , m_view(0)
     , m_colorSelector(0)
 {
+    m_colorSelector = new KisSpecificColorSelectorWidget(this);
+    setWidget(m_colorSelector);
 }
 
 void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
@@ -49,11 +51,6 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
         m_view->image()->disconnect(m_colorSelector);
     }
 
-    if (m_colorSelector) {
-        m_colorSelector->disconnect(); // explicit disconnect in case Qt gets confused.
-        delete m_colorSelector;
-        m_colorSelector = 0;
-    }
 
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
     m_canvas = kisCanvas;
@@ -62,19 +59,18 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
         return;
     }
 
+    m_colorSelector->setDisplayRenderer(kisCanvas->displayColorConverter()->displayRendererInterface());
+
     KisViewManager* view = kisCanvas->viewManager();
     m_view = view;
     if (!view) return;
 
-    m_colorSelector = new KisSpecificColorSelectorWidget(kisCanvas->displayColorConverter()->displayRendererInterface(), this);
-    setWidget(m_colorSelector);
+    m_colorSelector->setColorSpace(view->activeNode()->colorSpace());
 
-    connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
     connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
-
+    connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
     connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
     connect(view->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace*)));
-
 
 }
 

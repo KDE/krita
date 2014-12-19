@@ -34,11 +34,11 @@ class KisSpecificColorSelectorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisSpecificColorSelectorWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget* parent);
+    KisSpecificColorSelectorWidget(QWidget* parent);
     ~KisSpecificColorSelectorWidget();
-
     bool customColorSpaceUsed();
 public slots:
+    void setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer);
     void setColorSpace(const KoColorSpace*);
     void setColor(const KoColor&);
 private slots:
@@ -59,6 +59,7 @@ private:
     bool m_customColorSpaceSelected;
     QCheckBox *m_chkShowColorSpaceSelector;
     KoColorDisplayRendererInterface *m_displayRenderer;
+    KoColorDisplayRendererInterface *m_fallbackRenderer;
 };
 
 #endif

@@ -36,13 +36,15 @@
 #include "kis_signal_compressor.h"
 
 
-KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
+KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     : QWidget(parent)
     , m_colorSpace(0)
     , m_updateCompressor(new KisSignalCompressor(10, KisSignalCompressor::POSTPONE, this))
     , m_customColorSpaceSelected(false)
-    , m_displayRenderer(displayRenderer)
+    , m_displayRenderer(0)
+    , m_fallbackRenderer(new KoDumbColorDisplayRenderer())
 {
+
     m_layout = new QVBoxLayout(this);
     m_updateAllowed = true;
     connect(m_updateCompressor, SIGNAL(timeout()), SLOT(updateTimeout()));
@@ -59,6 +61,10 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(KoColorDisplayRen
     m_layout->addWidget(m_chkShowColorSpaceSelector);
     m_layout->addWidget(m_colorspaceSelector);
 
+    setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
+    KoColor c(KoColorSpaceRegistry::instance()->rgb8());
+    c.setOpacity(OPACITY_OPAQUE_U8);
+    setColor(c);
 
 }
 
@@ -72,6 +78,11 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
 {
     return m_customColorSpaceSelected;
+}
+
+void KisSpecificColorSelectorWidget::setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer)
+{
+    m_displayRenderer = displayRenderer;
 }
 
 void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
@@ -90,6 +101,8 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
 
+    KoColorDisplayRendererInterface *displayRenderer = m_displayRenderer ? m_displayRenderer : m_fallbackRenderer;
+
     foreach(KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             KisColorInput* input = 0;
@@ -97,12 +110,12 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
             case KoChannelInfo::UINT8:
             case KoChannelInfo::UINT16:
             case KoChannelInfo::UINT32: {
-                input = new KisIntegerColorInput(this, channel, &m_color, m_displayRenderer);
+                input = new KisIntegerColorInput(this, channel, &m_color, displayRenderer);
             }
             break;
             case KoChannelInfo::FLOAT16:
             case KoChannelInfo::FLOAT32: {
-                input = new KisFloatColorInput(this, channel, &m_color, m_displayRenderer);
+                input = new KisFloatColorInput(this, channel, &m_color, displayRenderer);
             }
             break;
             default:
@@ -125,7 +138,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         }
     }
     if (allChannels8Bit) {
-        KisColorInput* input = new KisHexColorInput(this, &m_color, m_displayRenderer);
+        KisColorInput* input = new KisHexColorInput(this, &m_color, displayRenderer);
         m_inputs.append(input);
         m_layout->addWidget(input);
         connect(input, SIGNAL(updated()), this,  SLOT(update()));

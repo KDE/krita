@@ -670,7 +670,7 @@ bool ResourceBundle::uninstall()
     }
 
     KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
+    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("paintoppresets")) {
         KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(ref.md5sum);
         if (res) {
             paintoppresetServer->removeResourceFromServer(res);

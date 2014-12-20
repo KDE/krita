@@ -37,6 +37,9 @@ public:
     void cancel();
     void finish();
 
+    float getProgress() const;
+    KoUpdater * getUpdater() const;
+
 private:
     KisProcessingApplicator * m_applicator;
     KisImageWSP m_image;
@@ -46,6 +49,9 @@ private:
     QString m_gmicCommand;
     QByteArray m_customCommands;
     bool m_applicatorFinished;
+    float * m_progress;
 };
 
 #endif
+
+class KoUpdater;

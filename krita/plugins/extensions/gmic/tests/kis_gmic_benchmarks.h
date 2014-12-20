@@ -19,12 +19,13 @@
 #ifndef _KIS_GMIC_BENCHMARKS_H_
 #define _KIS_GMIC_BENCHMARKS_H_
 
-#include <gmic.h>
 #include <kis_types.h>
 
 #include <QtTest>
 #include <QImage>
 #include <QColor>
+
+#include <gmic.h>
 
 class KisGmicBenchmarks : public QObject
 {

@@ -22,24 +22,27 @@
 #include <QMap>
 #include <QString>
 #include <QStringList>
+#include <QVector>
 #include <QColor>
 
 class Parameter
 {
 public:
     enum ParameterType {
-        INVALID_P,
-        FLOAT_P,
-        INT_P,
+        INVALID_P = -1,
         BOOL_P,
+        BUTTON_P,
         CHOICE_P,
-        TEXT_P,
-        FILE_P,
-        FOLDER_P,
         COLOR_P,
-        NOTE_P,
+        CONST_P,
+        FILE_P,
+        FLOAT_P,
+        FOLDER_P,
+        INT_P,
         LINK_P,
-        SEPARATOR_P
+        NOTE_P,
+        TEXT_P,
+        SEPARATOR_P,
     };
 
     Parameter(const QString &name, bool updatePreview = true);
@@ -82,6 +85,8 @@ static QMap<Parameter::ParameterType, QString> initMap()
     map.insert(Parameter::NOTE_P, "note");
     map.insert(Parameter::LINK_P, "link");
     map.insert(Parameter::SEPARATOR_P, "separator");
+    map.insert(Parameter::CONST_P,"const");
+    map.insert(Parameter::BUTTON_P,"button");
     return map;
 }
 
@@ -123,6 +128,8 @@ public:
 
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
+    // reset parameter to default value from gmic definition
+    // some parameters do not need reset, e.g. const is not mutable
     virtual void reset();
 };
 
@@ -245,6 +252,32 @@ public:
 
     QString m_filePath;
     QString m_defaultFilePath;
+};
+
+class ConstParameter : public Parameter
+{
+public:
+    ConstParameter(const QString& name, bool updatePreview = false);
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+    virtual QString value() const;
+
+    QStringList m_values;
+};
+
+class ButtonParameter : public Parameter
+{
+public:
+    ButtonParameter(const QString& name, bool updatePreview = false);
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+    virtual QString value() const;
+    virtual void setValue(const QString& value);
+    virtual void reset();
+    void initValue(bool value);
+    
+    bool m_value;
+    bool m_defaultValue;
 };
 
 

@@ -42,7 +42,7 @@
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 
-#include "gmic.h"
+
 #include "kis_gmic_parser.h"
 #include "Component.h"
 #include "kis_gmic_filter_model.h"
@@ -58,11 +58,24 @@
 #include "kis_gmic_synchronize_layers_command.h"
 
 #include "KoColorSpaceConstants.h"
+#include <KoUpdater.h>
+
+#include <QThread>
+#include <kis_processing_visitor.h>
+#include "gmic.h"
 
 K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
 K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
 
 const QString STANDARD_GMIC_DEFINITION = "gmic_def.gmic";
+
+
+
+class Sleeper : public QThread
+{
+public:
+    static void msleep(unsigned long msecs){ QThread::msleep(msecs); }
+};
 
 class TemporaryFeedback
 {
@@ -128,6 +141,8 @@ void KisGmicPlugin::setupDefinitionPaths()
         QString standardGmicDefinitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION);
         m_definitionFilePaths.prepend(standardGmicDefinitionFilePath);
     }
+
+    dbgPlugins << m_definitionFilePaths;
 }
 
 void KisGmicPlugin::slotShowGmicDialog()
@@ -342,7 +357,8 @@ void KisGmicPlugin::startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSett
         KisNodeSP rootNode = m_view->image()->root();
         m_gmicApplicator->setProperties(m_view->image(), rootNode, actionName, layers, setting->gmicCommand(), m_gmicCustomCommands);
         m_gmicApplicator->preview();
-        // do not call KisImage::waitForDone(): strokes are not finished or cancelled, it's just preview!
+        // Note: do not call KisImage::waitForDone(): strokes are not finished or cancelled, it's just preview!
+        // waitForDone would cause infinite hang
 }
 
 

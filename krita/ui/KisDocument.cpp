@@ -19,8 +19,7 @@
  */
 
 #include "KisMainWindow.h" // XXX: remove
-#include <kmessagebox.h> // XXX: remove
-#include <KNotification> // XXX: remove
+#include <QMessageBox> // XXX: remove
 
 #include "KisApplication.h"
 #include "KisDocument.h"
@@ -741,9 +740,9 @@ bool KisDocument::saveFile()
     if (!ret) {
         if (!suppressErrorDialog) {
             if (errorMessage().isEmpty()) {
-                KMessageBox::error(0, i18n("Could not save\n%1", localFilePath()));
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()));
             } else if (errorMessage() != "USER_CANCELED") {
-                KMessageBox::error(0, i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
             }
 
         }
@@ -769,13 +768,6 @@ bool KisDocument::saveFile()
         setConfirmNonNativeSave(isExporting(), false);
     }
     emit clearStatusBarMessage();
-
-    if (ret) {
-        KNotification *notify = new KNotification("DocumentSaved");
-        notify->setText(i18n("Document <i>%1</i> saved", url().url()));
-        notify->addContext("url", url().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
-    }
 
     return ret;
 }
@@ -1215,14 +1207,16 @@ bool KisDocument::openUrl(const KUrl & _url)
         if (QFile::exists(asf)) {
             //kDebug(30003) <<"asf=" << asf;
             // ## TODO compare timestamps ?
-            int res = KMessageBox::warningYesNoCancel(0,
-                      i18n("An autosaved file exists for this document.\nDo you want to open it instead?"));
+            int res = QMessageBox::warning(0,
+                                           i18nc("@title:window", "Krita"),
+                                           i18n("An autosaved file exists for this document.\nDo you want to open it instead?"),
+                                           QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             switch (res) {
-            case KMessageBox::Yes :
+            case QMessageBox::Yes :
                 url.setPath(asf);
                 autosaveOpened = true;
                 break;
-            case KMessageBox::No :
+            case QMessageBox::No :
                 QFile::remove(asf);
                 break;
             default: // Cancel
@@ -1258,7 +1252,7 @@ bool KisDocument::openFile()
         QApplication::restoreOverrideCursor();
         if (d->autoErrorHandlingEnabled)
             // Maybe offer to create a new document with that name ?
-            KMessageBox::error(0, i18n("The file %1 does not exist.", localFilePath()));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
         d->isLoading = false;
         return false;
     }
@@ -1398,7 +1392,7 @@ bool KisDocument::openFile()
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
                 QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
-                KMessageBox::error(0, errorMsg);
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), errorMsg);
             }
 
             d->isLoading = false;
@@ -1812,19 +1806,21 @@ int KisDocument::queryCloseDia()
     if (name.isEmpty())
         name = i18n("Untitled");
 
-    int res = KMessageBox::warningYesNoCancel(0,
-              i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name));
+    int res = QMessageBox::warning(0,
+                                   i18nc("@title:window", "Krita"),
+                                   i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
     switch (res) {
-    case KMessageBox::Yes :
+    case QMessageBox::Yes :
         save(); // NOTE: External files always in native format. ###TODO: Handle non-native format
         setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
         break;
-    case KMessageBox::No :
+    case QMessageBox::No :
         removeAutoSaveFiles();
         setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
         break;
-    default : // case KMessageBox::Cancel :
+    default : // case QMessageBox::Cancel :
         return res; // cancels the rest of the files
     }
     return res;
@@ -2060,10 +2056,10 @@ QString KisDocument::errorMessage() const
 void KisDocument::showLoadingErrorDialog()
 {
     if (errorMessage().isEmpty()) {
-        KMessageBox::error(0, i18n("Could not open\n%1", localFilePath()));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open\n%1", localFilePath()));
     }
     else if (errorMessage() != "USER_CANCELED") {
-        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
     }
 }
 
@@ -2398,16 +2394,17 @@ bool KisDocument::queryClose()
     if (docName.isEmpty()) docName = i18n( "Untitled" );
 
 
-    int res = KMessageBox::warningYesNoCancel( 0,
-                                               i18n( "The document \"%1\" has been modified.\n"
-                                                     "Do you want to save your changes or discard them?" ,  docName ),
-                                               i18n( "Close Document" ), KStandardGuiItem::save(), KStandardGuiItem::discard() );
+    int res = QMessageBox::warning(0,
+                                   i18nc("@title:window", "Close Document"),
+                                   i18n("The document \"%1\" has been modified.\n"
+                                        "Do you want to save your changes or discard them?" ,  docName),
+                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
 
     bool abortClose=false;
     bool handled=false;
 
     switch(res) {
-    case KMessageBox::Yes :
+    case QMessageBox::Yes :
         if (!handled)
         {
             if (d->m_url.isEmpty())
@@ -2429,9 +2426,9 @@ bool KisDocument::queryClose()
             }
         } else if (abortClose) return false;
         return waitSaveComplete();
-    case KMessageBox::No :
+    case QMessageBox::No :
         return true;
-    default : // case KMessageBox::Cancel :
+    default : // case QMessageBox::Cancel :
         return false;
     }
 }

@@ -34,7 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <QByteArray>
 
 #include <klocale.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <klibloader.h>
 #include <ksqueezedtextlabel.h>
 #include <kmimetype.h>
@@ -226,7 +226,9 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
 
     if (!m_graph.isValid()) {
         kError(30500) << "Couldn't create a valid graph for this source mimetype.";
-        if (!d->batch && !userCancelled) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!d->batch && !userCancelled) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not export file: the export filter is missing."));
+        }
         return KisImportExportFilter::BadConversionGraph;
     }
 
@@ -235,7 +237,9 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
 
     if (!chain) {
         kError(30500) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
-        if (!d->batch) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!d->batch) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not export file: the export filter is missing."));
+        }
         return KisImportExportFilter::BadConversionGraph;
     }
 
@@ -522,9 +526,10 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
 
 void KisImportExportManager::importErrorHelper(const QString& mimeType, const bool suppressDialog)
 {
-    QString tmp = i18n("Could not import file of type\n%1", mimeType);
     // ###### FIXME: use KLibLoader::lastErrorMessage() here
-    if (!suppressDialog) KMessageBox::error(0, tmp, i18n("Missing Import Filter"));
+    if (!suppressDialog) {
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not import file of type\n%1. The import filter is missing.", mimeType));
+    }
 }
 
 void KisImportExportManager::setBatchMode(const bool batch)

@@ -38,7 +38,7 @@ extern "C" {
 #include <QBuffer>
 #include <QApplication>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <klocale.h>
 
 #include <kio/netaccess.h>
@@ -93,7 +93,7 @@ J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
     if (KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16")) {
         return JCS_CMYK;
     }
-    KMessageBox::information(0, i18n("Cannot export images in %1.\nWill save as RGB.", cs->name())) ;
+    QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name())) ;
     return JCS_UNKNOWN;
 }
 

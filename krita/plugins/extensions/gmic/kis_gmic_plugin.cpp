@@ -26,7 +26,7 @@
 #include <kcomponentdata.h>
 #include <kglobal.h>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
@@ -350,17 +350,17 @@ bool KisGmicPlugin::checkSettingsValidity(KisNodeListSP layers, const KisGmicFil
 {
     if (setting->isBlacklisted())
     {
-        KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this filter is crashing Krita and is turned off."), i18n("Krita"));
+        QMessageBox::warning(m_gmicWidget, i18nc("@title:window", "Krita"), i18n("Sorry, this filter is crashing Krita and is turned off."));
         return false;
     }
 
     if (setting->outputMode() != IN_PLACE) {
-        KMessageBox::sorry(m_gmicWidget,QString("Sorry, this output mode is not implemented"),"Krita");
+        QMessageBox::warning(m_gmicWidget, i18nc("@title:window", "Krita"), i18n("Sorry, this output mode is not implemented"));
         return false;
     }
 
     if (layers->isEmpty()) {
-        KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this input mode is not implemented"), i18n("Krita"));
+        QMessageBox::warning(m_gmicWidget, i18nc("@title:window", "Krita"), i18n("Sorry, this input mode is not implemented"));
         return false;
     }
 

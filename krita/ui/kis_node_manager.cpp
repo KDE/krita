@@ -19,11 +19,10 @@
 #include "kis_node_manager.h"
 
 #include <QDesktopServices>
+#include <QMessageBox>
 
 #include <kactioncollection.h>
 #include <kmimetype.h>
-#include <kmessagebox.h>
-
 
 #include <KoIcon.h>
 #include <KoProperties.h>
@@ -1116,12 +1115,11 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
     KIS_ASSERT_RECOVER_RETURN(node->inherits("KisTransparencyMask"));
 
     if (writeToLayers && !parentNode->hasEditablePaintDevice()) {
-        KMessageBox::information(view->mainWindow(),
+        QMessageBox::information(view->mainWindow(),
+                                 i18nc("@title:window", "Layer %1 is not editable").arg(parentNode->name()),
                                  i18n("Cannot write alpha channel of "
                                       "the parent layer \"%1\".\n"
-                                      "The operation will be cancelled.").arg(parentNode->name()),
-                                 i18n("Layer %1 is not editable").arg(parentNode->name()),
-                                 "messagebox_splitAlphaIntoLockedLayer");
+                                      "The operation will be cancelled.").arg(parentNode->name()));
         return;
     }
 

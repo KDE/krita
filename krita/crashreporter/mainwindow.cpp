@@ -69,7 +69,7 @@
 //void doRestart(bool resetConfig)
 //{
 //    if (!startProcess(QString("krita").toStdWString().data())) {
-//        QMessageBox::warning(0, "Krita",
+//        QMessageBox::warning(0, i18nc("@title:window", "Krita"),
 //                             i18n("Could not restart %1. Please try to restart %1 manually.").arg("krita"));
 //    }
 //}
@@ -130,7 +130,7 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
     qDebug() << "restartCommand" << restartCommand;
     QProcess restartProcess;
     if (!restartProcess.startDetached(restartCommand)) {
-        QMessageBox::warning(mainWindow, "krita",
+        QMessageBox::warning(mainWindow, i18nc("@title:window", "Krita"),
                              i18n("Could not restart Krita. Please try to restart manually."));
     }
 }

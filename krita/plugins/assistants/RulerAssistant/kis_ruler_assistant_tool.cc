@@ -28,7 +28,7 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <KoIcon.h>
 #include <KoFileDialog.h>
@@ -653,10 +653,10 @@ void KisRulerAssistantTool::loadAssistants()
         delete assistant;
     }
     if (xml.hasError()) {
-        KMessageBox::sorry(0, xml.errorString());
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), xml.errorString());
     }
     if (errors) {
-        KMessageBox::sorry(0, i18n("Errors were encountered. Not all assistants were successfully loaded."));
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Errors were encountered. Not all assistants were successfully loaded."));
     }
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->updateCanvas();

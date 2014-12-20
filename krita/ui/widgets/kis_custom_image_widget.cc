@@ -33,7 +33,7 @@
 #include <QGraphicsScene>
 #include <QSpacerItem>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -241,15 +241,16 @@ KisDocument* KisCustomImageWidget::createNewImage()
             profile->info().contains("scRGB")) {
 
             int result =
-                KMessageBox::warningContinueCancel(this,
-                                                   "Linear gamma RGB color spaces are not supposed to be used "
-                                                   "in 8-bit integer modes. It is suggested to use 16-bit integer "
-                                                   "or any floating point colorspace for linear profiles.\n\n"
-                                                   "Press \"Continue\" to create a 8-bit integer linear RGB color space "
-                                                   "or \"Cancel\" to return to the settings dialog.",
-                                                   "Linear RGB + 8bit integer");
+                QMessageBox::warning(this,
+                                     i18nc("@title:window", "Krita"),
+                                     i18n("Linear gamma RGB color spaces are not supposed to be used "
+                                          "in 8-bit integer modes. It is suggested to use 16-bit integer "
+                                          "or any floating point colorspace for linear profiles.\n\n"
+                                          "Press \"Continue\" to create a 8-bit integer linear RGB color space "
+                                          "or \"Cancel\" to return to the settings dialog."),
+                                     QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
 
-            if (result == KMessageBox::Cancel) {
+            if (result == QMessageBox::Cancel) {
                 qDebug() << "Model RGB8" << "NOT SUPPORTED";
                 qDebug() << ppVar(cs->name());
                 qDebug() << ppVar(cs->profile()->name());

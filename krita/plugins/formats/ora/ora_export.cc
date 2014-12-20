@@ -21,7 +21,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
@@ -103,17 +103,16 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
     if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
             !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
         if (!m_chain->manager()->getBatchMode()) {
-            KMessageBox::error(0, i18n("Cannot export images in this colorspace or channel depth to OpenRaster"), i18n("Krita OpenRaster Export"));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita OpenRaster Export"), i18n("Cannot export images in this colorspace or channel depth to OpenRaster"));
         }
         return KisImportExportFilter::UsageError;
     }
 
 
     if (hasShapeLayerChild(image->root()) && !m_chain->manager()->getBatchMode()) {
-        KMessageBox::information(0,
-                                 i18n("This image contains vector, clone or fill layers.\nThese layers will be saved as raster layers."),
-                                 i18n("Warning"),
-                                 "krita/ora/vector");
+        QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita:Warning"),
+                                 i18n("This image contains vector, clone or fill layers.\nThese layers will be saved as raster layers."));
     }
 
     OraConverter kpc(input);

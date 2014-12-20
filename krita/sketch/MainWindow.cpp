@@ -127,7 +127,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     Q_ASSERT(QFile::exists(mainqml));
     if (!QFile::exists(mainqml)) {
-        QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
+        QMessageBox::warning(0, i18nc("@title:window", "No QML found"), mainqml + " doesn't exist.");
     }
     QFileInfo fi(mainqml);
 

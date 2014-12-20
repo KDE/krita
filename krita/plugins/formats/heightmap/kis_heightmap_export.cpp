@@ -21,6 +21,7 @@
 #include <qendian.h>
 #include <QDataStream>
 #include <QApplication>
+#include <QMessageBox>
 
 #include <kpluginfactory.h>
 
@@ -135,9 +136,9 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     if (to == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
 
         downscale = (QMessageBox::question(0,
-                                                i18n("Downscale Image"),
-                                                i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
-                                                QMessageBox::Yes | QMessageBox::No)
+                                           i18nc("@title:window", "Downscale Image"),
+                                           i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
+                                           QMessageBox::Yes | QMessageBox::No)
                           == QMessageBox::Yes);
     }
 

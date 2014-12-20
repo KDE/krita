@@ -24,7 +24,7 @@
 #include <QHash>
 #include <QSignalMapper>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
@@ -211,21 +211,21 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
     if (dev->colorSpace()->willDegrade(filter->colorSpaceIndependence())) {
         // Warning bells!
         if (filter->colorSpaceIndependence() == TO_LAB16) {
-            if (KMessageBox::warningContinueCancel(d->view->mainWindow(),
-                                                   i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. ",
-                                                        filter->name(),
-                                                        dev->colorSpace()->name()),
-                                                   i18n("Filter Will Convert Your Layer Data"),
-                                                   KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
-                                                   "lab16degradation") != KMessageBox::Continue) return;
+            if (QMessageBox::warning(d->view->mainWindow(),
+                                     i18nc("@title:window", "Krita"),
+                                     i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. ",
+                                          filter->name(),
+                                          dev->colorSpace()->name()),
+                                     QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)
+                    != QMessageBox::Ok) return;
 
         } else if (filter->colorSpaceIndependence() == TO_RGBA16) {
-            if (KMessageBox::warningContinueCancel(d->view->mainWindow(),
-                                                   i18n("The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. ",
-                                                        filter->name() , dev->colorSpace()->name()),
-                                                   i18n("Filter Will Convert Your Layer Data"),
-                                                   KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
-                                                   "rgba16degradation") != KMessageBox::Continue) return;
+            if (QMessageBox::warning(d->view->mainWindow(),
+                                     i18nc("@title:window", "Krita"),
+                                     i18n("The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. ",
+                                          filter->name() , dev->colorSpace()->name()),
+                                     QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)
+                    != QMessageBox::Ok) return;
         }
     }
 

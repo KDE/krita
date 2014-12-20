@@ -32,7 +32,7 @@
 
 #include <QApplication>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <kio/netaccess.h>
 
@@ -324,7 +324,7 @@ void exrConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
                       alphaNoiseThreshold<channel_type>());
 
             if (this->showNotifications) {
-                KMessageBox::information(0, msg, i18nc("@title:window", "EXR image will be modified"), "dontNotifyEXRChangedAgain");
+                QMessageBox::information(0, i18nc("@title:window", "EXR image will be modified"), msg);
             } else {
                 qWarning() << "WARNING:" << msg;
             }
@@ -1185,7 +1185,7 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
               "<para><warning>these layers will NOT be saved to the final EXR file</warning></para>", layersList);
 
     if (this->showNotifications) {
-        KMessageBox::information(0, msg, i18nc("@title:window", "Layers will be lost"), "dontNotifyEXRDropsLayers");
+        QMessageBox::information(0, i18nc("@title:window", "Layers will be lost"), msg);
     } else {
         qWarning() << "WARNING:" << msg;
     }

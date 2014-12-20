@@ -29,12 +29,12 @@ KisAnimationModel::KisAnimationModel(KisAnimationDoc *document, QObject *parent)
 {
 }
 
-int KisAnimationModel::rowCount(const QModelIndex &parent) const
+int KisAnimationModel::rowCount(const QModelIndex &/*parent*/) const
 {
     return m_document->numberOfLayers();
 }
 
-int KisAnimationModel::columnCount(const QModelIndex &parent) const
+int KisAnimationModel::columnCount(const QModelIndex &/*parent*/) const
 {
     return m_document->numberOfFrames() + 100; // XXX: make configurable?
 }

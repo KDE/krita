@@ -65,7 +65,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmenu.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kmimetype.h>
 #include <krecentdocument.h>
 #include <krecentfilesaction.h>
@@ -290,12 +290,12 @@ KisMainWindow::KisMainWindow()
     setAcceptDrops(true);
 
 #ifdef Q_OS_MAC
-    #if QT_VERSION < 0x050000
+#if QT_VERSION < 0x050000
     MacSupport::addFullscreen(this);
-    #endif
-    #if QT_VERSION >= 0x050201
+#endif
+#if QT_VERSION >= 0x050201
     setUnifiedTitleAndToolBarOnMac(true);
-    #endif
+#endif
 #endif
 
     setStandardToolBarMenuEnabled(true);
@@ -653,7 +653,7 @@ void KisMainWindow::addView(KisView *view)
     m_brushesAndStuff->setEnabled(viewHasDocument);
 
     //d->closeFile->setEnabled(viewHasDocument);
-//     statusBar()->setVisible(viewHasDocument);
+    //     statusBar()->setVisible(viewHasDocument);
 
     updateCaption();
 
@@ -833,7 +833,7 @@ KisView *KisMainWindow::activeView() const
 bool KisMainWindow::openDocument(const KUrl & url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
-        KMessageBox::error(0, i18n("The file %1 does not exist.", url.url()));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
         d->recent->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
         return false;
@@ -884,7 +884,7 @@ void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 {
     kDebug(30003) << "KisMainWindow::slotLoadCanceled";
     if (!errMsg.isEmpty())   // empty when canceled by user
-        KMessageBox::error(this, errMsg);
+        QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
     // ... can't delete the document, it's the one who emitted the signal...
 
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
@@ -898,7 +898,7 @@ void KisMainWindow::slotSaveCanceled(const QString &errMsg)
 {
     kDebug(30003) << "KisMainWindow::slotSaveCanceled";
     if (!errMsg.isEmpty())   // empty when canceled by user
-        KMessageBox::error(this, errMsg);
+        QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
     slotSaveCompleted();
 }
 
@@ -915,49 +915,6 @@ void KisMainWindow::slotSaveCompleted()
         KXmlGuiWindow::closeEvent(d->deferredClosingEvent);
     }
 }
-
-// returns true if we should save, false otherwise.
-bool KisMainWindow::exportConfirmation(const QByteArray &outputFormat)
-{
-    KConfigGroup group = KGlobal::config()->group(KisFactory::componentName());
-    if (!group.readEntry("WantExportConfirmation", true)) {
-        return true;
-    }
-
-    KMimeType::Ptr mime = KMimeType::mimeType(outputFormat);
-    QString comment = mime ? mime->comment() : i18n("%1 (unknown file type)", QString::fromLatin1(outputFormat));
-
-    // Warn the user
-    int ret;
-    if (!isExporting()) { // File --> Save
-        ret = KMessageBox::warningContinueCancel
-                (
-                    this,
-                    i18n("<qt>Saving as a %1 may result in some loss of formatting."
-                         "<p>Do you still want to save in this format?</qt>",
-                         QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
-                    i18n("Confirm Save"),
-                    KStandardGuiItem::save(),
-                    KStandardGuiItem::cancel(),
-                    "NonNativeSaveConfirmation"
-                    );
-    } else { // File --> Export
-        ret = KMessageBox::warningContinueCancel
-                (
-                    this,
-                    i18n("<qt>Exporting as a %1 may result in some loss of formatting."
-                         "<p>Do you still want to export to this format?</qt>",
-                         QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
-                    i18n("Confirm Export"),
-                    KGuiItem(i18n("Export")),
-                    KStandardGuiItem::cancel(),
-                    "NonNativeExportConfirmation" // different to the one used for Save (above)
-                    );
-    }
-
-    return (ret == KMessageBox::Continue);
-}
-
 bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent, int specialOutputFlag)
 {
     if (!document) {
@@ -995,8 +952,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         mimeFilter = mime->patterns();
     else
         mimeFilter = KisImportExportManager::mimeFilter(_native_format,
-                                                 KisImportExportManager::Export,
-                                                 document->extraNativeMimeTypes());
+                                                        KisImportExportManager::Export,
+                                                        document->extraNativeMimeTypes());
 
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
@@ -1033,14 +990,10 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     bool ret = false;
 
     if (document->url().isEmpty() || saveas) {
-        // if you're just File/Save As'ing to change filter options you
-        // don't want to be reminded about overwriting files etc.
-        bool justChangingFilterOptions = false;
-
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
-                                d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
+                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
         dialog.setMimeTypeFilters(mimeFilter);
         KUrl newURL = dialog.url();
 
@@ -1066,16 +1019,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             QString outputFormatString = mime->name();
             outputFormat = outputFormatString.toLatin1();
         }
-
-        if (!isExporting())
-            justChangingFilterOptions = (newURL == document->url()) &&
-                    (outputFormat == document->mimeType()) &&
-                    (specialOutputFlag == oldSpecialOutputFlag);
-        else
-            justChangingFilterOptions = (newURL == d->lastExportUrl) &&
-                    (outputFormat == d->lastExportedFormat) &&
-                    (specialOutputFlag == d->lastExportSpecialOutputFlag);
-
 
         bool bOk = true;
         if (newURL.isEmpty()) {
@@ -1103,71 +1046,59 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         }
 
         if (bOk) {
-            bool wantToSave = true;
+            //
+            // Note:
+            // If the user is stupid enough to Export to the current URL,
+            // we do _not_ change this operation into a Save As.  Reasons
+            // follow:
+            //
+            // 1. A check like "isExporting() && oldURL == newURL"
+            //    doesn't _always_ work on case-insensitive filesystems
+            //    and inconsistent behaviour is bad.
+            // 2. It is probably not a good idea to change document->mimeType
+            //    and friends because the next time the user File/Save's,
+            //    (not Save As) they won't be expecting that they are
+            //    using their File/Export settings
+            //
+            // As a bad side-effect of this, the modified flag will not
+            // be updated and it is possible that what is currently on
+            // their screen is not what is stored on disk (through loss
+            // of formatting).  But if you are dumb enough to change
+            // mimetype but not the filename, then arguably, _you_ are
+            // the "bug" :)
+            //
+            // - Clarence
+            //
+            document->setOutputMimeType(outputFormat, specialOutputFlag);
+            if (!isExporting()) {  // Save As
+                ret = document->saveAs(newURL);
 
-            // don't change this line unless you know what you're doing :)
-            if (!justChangingFilterOptions || document->confirmNonNativeSave(isExporting())) {
-                if (!document->isNativeFormat(outputFormat))
-                    wantToSave = exportConfirmation(outputFormat);
-            }
-
-            if (wantToSave) {
-                //
-                // Note:
-                // If the user is stupid enough to Export to the current URL,
-                // we do _not_ change this operation into a Save As.  Reasons
-                // follow:
-                //
-                // 1. A check like "isExporting() && oldURL == newURL"
-                //    doesn't _always_ work on case-insensitive filesystems
-                //    and inconsistent behaviour is bad.
-                // 2. It is probably not a good idea to change document->mimeType
-                //    and friends because the next time the user File/Save's,
-                //    (not Save As) they won't be expecting that they are
-                //    using their File/Export settings
-                //
-                // As a bad side-effect of this, the modified flag will not
-                // be updated and it is possible that what is currently on
-                // their screen is not what is stored on disk (through loss
-                // of formatting).  But if you are dumb enough to change
-                // mimetype but not the filename, then arguably, _you_ are
-                // the "bug" :)
-                //
-                // - Clarence
-                //
-                document->setOutputMimeType(outputFormat, specialOutputFlag);
-                if (!isExporting()) {  // Save As
-                    ret = document->saveAs(newURL);
-
-                    if (ret) {
-                        kDebug(30003) << "Successful Save As!";
-                        addRecentURL(newURL);
-                        setReadWrite(true);
-                    } else {
-                        kDebug(30003) << "Failed Save As!";
-                        document->setUrl(oldURL);
-                        document->setLocalFilePath(oldFile);
-                        document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
-                    }
-                } else { // Export
-                    ret = document->exportDocument(newURL);
-
-                    if (ret) {
-                        // a few file dialog convenience things
-                        d->lastExportUrl = newURL;
-                        d->lastExportedFormat = outputFormat;
-                        d->lastExportSpecialOutputFlag = specialOutputFlag;
-                    }
-
-                    // always restore output format
+                if (ret) {
+                    kDebug(30003) << "Successful Save As!";
+                    addRecentURL(newURL);
+                    setReadWrite(true);
+                } else {
+                    kDebug(30003) << "Failed Save As!";
+                    document->setUrl(oldURL);
+                    document->setLocalFilePath(oldFile);
                     document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
                 }
+            } else { // Export
+                ret = document->exportDocument(newURL);
 
-                if (silent) // don't let the document change the window caption
-                    document->setTitleModified();
-            }   // if (wantToSave)  {
-            else
-                ret = false;
+                if (ret) {
+                    // a few file dialog convenience things
+                    d->lastExportUrl = newURL;
+                    d->lastExportedFormat = outputFormat;
+                    d->lastExportSpecialOutputFlag = specialOutputFlag;
+                }
+
+                // always restore output format
+                document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+            }
+
+            if (silent) // don't let the document change the window caption
+                document->setTitleModified();
         }   // if (bOk) {
         else
             ret = false;
@@ -1175,9 +1106,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         bool needConfirm = document->confirmNonNativeSave(false) && !document->isNativeFormat(oldOutputFormat);
 
-        if (!needConfirm ||
-                (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
-                ) {
+        if (!needConfirm) {
             // be sure document has the correct outputMimeType!
             if (isExporting() || document->isModified()) {
                 ret = document->save();
@@ -1346,24 +1275,23 @@ bool KisMainWindow::queryClose()
         if (name.isEmpty())
             name = i18n("Untitled");
 
-        int res = KMessageBox::warningYesNoCancel(this,
-                                                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                                                  QString(),
-                                                  KStandardGuiItem::save(),
-                                                  KStandardGuiItem::discard());
+        int res = QMessageBox::warning(this,
+                                       i18nc("@title:window", "Krita"),
+                                       i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
         switch (res) {
-        case KMessageBox::Yes : {
+        case QMessageBox::Yes : {
             bool isNative = (d->activeView->document()->outputMimeType() == d->activeView->document()->nativeFormatMimeType());
             if (!saveDocument(d->activeView->document(), !isNative))
                 return false;
             break;
         }
-        case KMessageBox::No :
+        case QMessageBox::No :
             d->activeView->document()->removeAutoSaveFiles();
             d->activeView->document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
-        default : // case KMessageBox::Cancel :
+        default : // case QMessageBox::Cancel :
             return false;
         }
     }
@@ -1383,8 +1311,8 @@ void KisMainWindow::slotFileOpen()
         KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocument");
         dialog.setCaption(i18n("Open Images"));
         dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
-                               ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                               : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+                             ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                             : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KisImportExportManager::Import));
         dialog.setHideNameFilterDetailsOption();
         urls = dialog.urls();
@@ -1393,8 +1321,8 @@ void KisMainWindow::slotFileOpen()
         KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
         dialog.setCaption(i18n("Import Images"));
         dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
-                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+                             ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                             : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KisImportExportManager::Import));
         dialog.setHideNameFilterDetailsOption();
         urls = dialog.urls();
@@ -1623,7 +1551,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
 
     //before printing check if the printer can handle printing
     if (!printJob->canPrint()) {
-        KMessageBox::error(this, i18n("Cannot export to the specified file"));
+        QMessageBox::critical(this, i18nc("@title:window", "Krita"), i18n("Cannot export to the specified file"));
     }
 
     printJob->startPrinting(KisPrintJob::DeleteWhenDone);
@@ -1816,10 +1744,11 @@ void KisMainWindow::slotReloadFile()
         return;
 
     if (document->isModified()) {
-        bool ok = KMessageBox::questionYesNo(this,
-                                          i18n("You will lose all changes made since your last save\n"
-                                               "Do you want to continue?"),
-                                          i18n("Warning")) == KMessageBox::Yes;
+        bool ok = QMessageBox::question(this,
+                                        i18nc("@title:window", "Krita"),
+                                        i18n("You will lose all changes made since your last save\n"
+                                             "Do you want to continue?"),
+                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes;
         if (!ok)
             return;
     }
@@ -1828,7 +1757,7 @@ void KisMainWindow::slotReloadFile()
 
     saveWindowSettings();
     if (!document->reload()) {
-        KMessageBox::error(this, i18n("Could not reload this document", i18n("Warning")));
+        QMessageBox::critical(this, i18nc("@title:window", "Krita"), i18n("Error: Could not reload this document"));
     }
 
     return;

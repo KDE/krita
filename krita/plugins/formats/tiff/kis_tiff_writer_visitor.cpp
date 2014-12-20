@@ -19,7 +19,7 @@
 
 #include "kis_tiff_writer_visitor.h"
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <klocale.h>
 
 #include <KoColorProfile.h>
@@ -65,7 +65,7 @@ namespace
             return true;
         }
 
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", cs->name())) ;
         return false;
 
     }

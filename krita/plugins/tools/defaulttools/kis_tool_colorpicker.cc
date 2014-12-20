@@ -32,7 +32,7 @@
 #include <QVector>
 
 #include <klocale.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include "kis_layer.h"
 #include "kis_cursor.h"
@@ -247,12 +247,12 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
     bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
     if (!sampleMerged) {
         if (!currentNode()) {
-            KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
+            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot pick a color as no layer is active."));
             event->ignore();
             return;
         }
         if (!currentNode()->visible()) {
-            KMessageBox::information(0, i18n("Cannot pick a color as the active layer is not visible."));
+            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot pick a color as the active layer is not visible."));
             event->ignore();
             return;
         }
@@ -293,7 +293,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
         palette->add(ent);
 
         if (!palette->save()) {
-            KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), i18n("Palette"));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
         }
     }
 }

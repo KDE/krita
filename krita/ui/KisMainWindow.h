@@ -457,14 +457,6 @@ private slots:
 
 private:
 
-    /**
-     * Asks the user if they really want to save the document.
-     * Called only if outputFormat != nativeFormat.
-     *
-     * @return true if the document should be saved
-     */
-    bool exportConfirmation(const QByteArray &outputFormat);
-
     void saveWindowSettings();
 
 private:

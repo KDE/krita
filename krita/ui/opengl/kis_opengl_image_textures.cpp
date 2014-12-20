@@ -21,7 +21,7 @@
 #ifdef HAVE_OPENGL
 #include <QGLWidget>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -477,18 +477,17 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (!m_internalColorManagementActive &&
         colorModelId != destinationColorModelId) {
 
-        KMessageBox::information(0,
-                                 "It was requested to disable final color "
-                                 "conversion for a image that has non-RGB "
-                                 "color space. This is a bug in Krita. "
-                                 "Please report us how you managed to get "
-                                 "this message.\n\n"
-                                 "Right now the internal color conversion "
-                                 "into the monitor profile will be activated. "
-                                 "Please take it into account if you use OCIO "
-                                 "or activated it for some other reason.",
-                                 "Internal color management was activated",
-                                 "messagebox_InternalColorManagementWasActivated");
+        QMessageBox::critical(0,
+                              i18nc("@title:window", "Internal color management was activated"),
+                              i18n("It was requested to disable final color "
+                                   "conversion for a image that has non-RGB "
+                                   "color space. This is a bug in Krita. "
+                                      "Please report us how you managed to get "
+                                      "this message.\n\n"
+                                      "Right now the internal color conversion "
+                                      "into the monitor profile will be activated. "
+                                      "Please take it into account if you use OCIO "
+                                      "or activated it for some other reason."));
 
         qWarning() << "WARNING: Internal color management was forcely enabled";
         qWarning() << ppVar(m_image->colorSpace());

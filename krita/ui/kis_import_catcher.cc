@@ -40,8 +40,6 @@
 #include "kis_progress_widget.h"
 #include "KisPart.h"
 
-#include <QMessageBox>
-
 struct KisImportCatcher::Private
 {
 public:

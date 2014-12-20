@@ -87,7 +87,7 @@ void KisOpenGL::createContext()
 
     if (!((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) ||
           (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0))) {
-        QMessageBox::warning(0, "Krita", i18n("Cannot use OpenGL: Krita needs at least OpenGL 2.0 or ES 2.0."));
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Cannot use OpenGL: Krita needs at least OpenGL 2.0 or ES 2.0."));
         KisConfig cfg;
         cfg.setUseOpenGL(false);
         return;

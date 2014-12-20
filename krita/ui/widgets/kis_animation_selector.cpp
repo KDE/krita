@@ -44,7 +44,7 @@
 #include <KoColor.h>
 #include <KoUnit.h>
 #include <KoColorModelStandardIds.h>
-#include <KMessageBox>
+#include <QMessageBox>
 
 #include <kis_fill_painter.h>
 #include <kis_image.h>
@@ -143,14 +143,14 @@ void KisAnimationSelector::selectFile()
 void KisAnimationSelector::openAnimation()
 {
     if(!txtOpenFile->text().length()) {
-        KMessageBox::error(0, "No file name specified.", "No file name specified.");
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No file name specified."));
         return;
     }
 
     KisAnimationStore* store = new KisAnimationStore(txtOpenFile->text());
 
     if(!store->hasFile("maindoc.xml")) {
-        KMessageBox::error(0, "This file does not appear to be a valid animation file", "Not a valid animation file");
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("This file does not appear to be a valid animation file"));
         return;
     }
 

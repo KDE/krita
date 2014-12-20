@@ -41,7 +41,7 @@
 // KDE includes
 
 #include <kmenu.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcolorscheme.h>
@@ -268,8 +268,8 @@ void ThemeManager::slotConfigColors()
     int ret = KToolInvocation::kdeinitExec("kcmshell4", QStringList() << "colors");
     if (ret > 0)
     {
-        KMessageBox::error(0, i18n("Cannot start Colors Settings panel from KDE Control Center. "
-                                   "Please check your system..."));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot start Colors Settings panel from KDE Control Center. "
+                                                     "Please check your system..."));
     }
 }
 

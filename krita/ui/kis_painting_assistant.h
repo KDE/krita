@@ -24,7 +24,6 @@
 #include <QRect>
 #include <QFile>
 #include <QObject>
-#include <QMessageBox>
 
 #include <KisDocument.h>
 #include <krita_export.h>

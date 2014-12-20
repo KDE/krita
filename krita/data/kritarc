@@ -2,7 +2,6 @@ favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,
 SpecificColorSelector/ShowColorSpaceSelector=false
 
 [krita]
-WantExportConfirmation=false
 cursorStyleDef=3
 
 [TemplateChooserDialog]

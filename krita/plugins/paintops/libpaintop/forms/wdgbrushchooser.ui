@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>508</width>
+    <width>527</width>
     <height>300</height>
    </rect>
   </property>
@@ -95,25 +95,39 @@
         <string>Use to set the size from which the Automatic Precision Setting should begin. The Precision will remain 5 before this value.</string>
        </property>
        <property name="text">
-        <string>Size to Start From</string>
+        <string>Starting Brush Size:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sizeToStartFromSpinBox"/>
+      <widget class="QDoubleSpinBox" name="sizeToStartFromSpinBox">
+       <property name="suffix">
+        <string> px</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string>This determines every interval after which the precision should change. For example: if the delta value is set to be 15.00, after every 15 pts change in the size of brush, the precision will change.</string>
        </property>
        <property name="text">
-        <string>Delta Value :</string>
+        <string>Delta :</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="deltaValueSpinBox"/>
+      <widget class="QDoubleSpinBox" name="deltaValueSpinBox">
+       <property name="suffix">
+        <string> px</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="lblPrecisionValue">

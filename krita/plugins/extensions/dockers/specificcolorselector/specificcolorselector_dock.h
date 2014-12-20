@@ -19,23 +19,24 @@
 #define _SPECIFICCOLORSELECTOR_DOCK_H_
 
 #include <QDockWidget>
-#include <KoCanvasObserverBase.h>
 
 #include <kis_types.h>
+#include <kis_mainwindow_observer.h>
 
 class KisViewManager;
 class KisCanvas2;
 class KisSpecificColorSelectorWidget;
 
-class SpecificColorSelectorDock : public QDockWidget, public KoCanvasObserverBase
+class SpecificColorSelectorDock : public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:
     SpecificColorSelectorDock();
     QString observerName() { return "SpecificColorSelectorDock"; }
-    /// reimplemented from KoCanvasObserverBase
+    /// reimplemented from KoCanvasObserverBase/KisMainwindowObserver
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
+    virtual void setMainWindow(KisViewManager* kisview);
 public slots:
     void layerChanged(const KisNodeSP);
 private:

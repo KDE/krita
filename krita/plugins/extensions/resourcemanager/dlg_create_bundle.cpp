@@ -58,6 +58,7 @@ DlgCreateBundle::DlgCreateBundle(ResourceBundle *bundle, QWidget *parent)
     setFixedSize(m_page->sizeHint());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
+    setButtonText(Ok, i18n("Save"));
 
     connect(m_ui->bnSelectSaveLocation, SIGNAL(clicked()), SLOT(selectSaveLocation()));
 

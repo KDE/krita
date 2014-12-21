@@ -73,6 +73,9 @@
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_widget_chooser.h"
 #include "tool/kis_tool.h"
+#include "kis_signals_blocker.h"
+
+
 
 typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
@@ -379,11 +382,8 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
     if (preset) {
         if (!preset->settings()->isLoadable())
             return;
-        bool saveDirtyPreset = preset->isPresetDirty();
+
         setCurrentPaintopAndReload(preset->paintOp(), preset);
-        m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
-        preset->setPresetDirty(saveDirtyPreset);
-        m_resourceProvider->currentPreset()->setPresetDirty(saveDirtyPreset);
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
@@ -406,13 +406,12 @@ KoID KisPaintopBox::currentPaintop()
 
 void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset)
 {
-    setCurrentPaintop(paintop, preset);
-
     if (!m_dirtyPresetsEnabled) {
-        slotReloadPreset();
-        m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
-        m_presetsPopup->updateViewSettings();
+        KisSignalsBlocker blocker(m_optionWidget);
+        preset->load();
     }
+
+    setCurrentPaintop(paintop, preset);
 }
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
@@ -1031,11 +1030,7 @@ void KisPaintopBox::slotReloadPreset()
         preset->settings()->setNode(m_resourceProvider->currentNode());
         preset->settings()->setOptionsWidget(m_optionWidget);
         m_optionWidget->setConfiguration(preset->settings());
-        m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
-        m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
-        m_resourceProvider->currentPreset()->setPresetDirty(false);
         m_presetsPopup->resourceSelected(preset.data());
-
     }
     slotUpdatePreset();
     m_optionWidget->blockSignals(false);

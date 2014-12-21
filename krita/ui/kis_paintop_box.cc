@@ -186,7 +186,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slFlow->setSingleStep(0.05);
         slFlow->setMinimumWidth(120);
 
-        slSize->setRange(0, 1000, 0);
+        slSize->setRange(0, 1000, 2);
         slSize->setValue(100);
 
         slSize->setSingleStep(1);

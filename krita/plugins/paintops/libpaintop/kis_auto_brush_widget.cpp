@@ -50,7 +50,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
-    inputRadius->setRange(0, 1000, 0);
+    inputRadius->setRange(0, 1000, 2);
     inputRadius->setExponentRatio(3.0);
     inputRadius->setSingleStep(1);
     inputRadius->setValue(5);

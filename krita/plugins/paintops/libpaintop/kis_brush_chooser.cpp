@@ -102,7 +102,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbSize = new QLabel(i18n("Size:"), this);
     m_slSize = new KisDoubleSliderSpinBox(this);
-    m_slSize->setRange(0, 1000, 0);
+    m_slSize->setRange(0, 1000, 2);
     m_slSize->setValue(5);
     m_slSize->setExponentRatio(3.0);
     m_slSize->setSuffix(" px");

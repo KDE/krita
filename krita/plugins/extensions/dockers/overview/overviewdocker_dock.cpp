@@ -50,6 +50,9 @@ OverviewDockerDock::OverviewDockerDock( )
 
 void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
 {
+    if(m_canvas == canvas)
+        return;
+
     setEnabled(canvas != 0);
 
     if (m_canvas) {

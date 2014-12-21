@@ -1151,7 +1151,8 @@ void KisViewManager::showJustTheCanvas(bool toggled)
                                               "Krita in pure canvas only mode. At least "
                                               "one UI control must be shown to "
                                               "workaround it.\n\nShow the scroll bars?"),
-                                         , QMessageBox::Yes | QMessageBox::No, QMessageBox::No));
+                                         QMessageBox::Yes | QMessageBox::No,
+                                         QMessageBox::No);
 
             if (result == QMessageBox::Yes) {
                 cfg.setHideScrollbarsFullscreen(false);

@@ -4659,7 +4659,12 @@ namespace cimg_library_suffixed {
       struct stat st_buf;
       if (!stat(path,&st_buf) && S_ISDIR(st_buf.st_mode)) return true;
 #elif cimg_OS==2
-      if (GetFileAttributes(path)&16) return true;
+      int length = lstrlenA(path);
+      BSTR unicodestr = SysAllocStringLen(NULL, length);
+      ::MultiByteToWideChar(CP_ACP, 0, path, length, unicodestr, length);
+      bool res = (GetFileAttributes(unicodestr)&16);
+      ::SysFreeString(unicodestr);
+      return res;
 #endif
       return false;
     }

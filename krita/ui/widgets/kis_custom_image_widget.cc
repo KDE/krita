@@ -459,6 +459,9 @@ void KisCustomImageWidget::switchWidthHeight()
     cmbWidthUnit->blockSignals(false);
     cmbHeightUnit->blockSignals(false);
     switchPortraitLandscape();
+
+    widthChanged(doubleWidth->value());
+    heightChanged(doubleHeight->value());
 }
 
 void KisCustomImageWidget::switchPortraitLandscape()

@@ -179,9 +179,11 @@ bool ResourceBundle::load()
             qWarning() << "Could not load meta.xml";
             return false;
         }
-
+        
         if (resourceStore->open("preview.png")) {
-            m_thumbnail.load(resourceStore->device(), "PNG");
+            QByteArray data = resourceStore->device()->readAll();
+            QBuffer buffer(&data);
+            m_thumbnail.load(&buffer, "PNG");
             resourceStore->close();
         }
         else {

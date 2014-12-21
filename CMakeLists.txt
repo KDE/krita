@@ -342,7 +342,7 @@ endif(NOT Soprano_FOUND)
 ##
 ## Test for marble
 ##
-macro_optional_find_package(Marble)
+macro_optional_find_package(CalligraMarble)
 macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 if(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE FALSE)

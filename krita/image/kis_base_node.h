@@ -23,7 +23,7 @@
 #include <QUuid>
 #include <QString>
 
-#include "KoDocumentSectionModel.h"
+#include "KisDocumentSectionModel.h"
 
 #include "kis_shared.h"
 #include "kis_paint_device.h"
@@ -187,12 +187,12 @@ public:
      * KisLayer defines  opacity = 2, compositeOp = 3
      * KisMask defines active = 2 (KisMask does not inherit kislayer)
      */
-    virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    virtual KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     /**
      * Change the section model properties.
      */
-    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
+    virtual void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
 
     /**
      * Return all the properties of this layer as a KoProperties-based

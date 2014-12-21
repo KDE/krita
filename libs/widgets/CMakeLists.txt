@@ -8,6 +8,8 @@ if (LIBATTICA_FOUND)
 endif (LIBATTICA_FOUND)
 
 set(kowidgets_LIB_SRCS
+    KoGlobal.cpp
+    KoZoomWidget.cpp
     KoTagToolButton.cpp
     KoTagChooserWidget.cpp
     KoTagFilterWidget.cpp
@@ -28,7 +30,7 @@ set(kowidgets_LIB_SRCS
     KoZoomHandler.cpp
     KoZoomMode.cpp
     KoDpi.cpp
-
+    KoGlobal.cpp
     KoFileDialog.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
@@ -38,12 +40,10 @@ set(kowidgets_LIB_SRCS
     KoEditColorSetDialog.cpp
     KoTriangleColorSelector.cpp
     KoUniColorChooser.cpp
-    KoUniColorDialog.cpp
     KoXYColorSelector.cpp
     KoResourcePopupAction.cpp
     KoStrokeConfigWidget.cpp
     KoFillConfigWidget.cpp
-    KoOpacityConfigWidget.cpp
     KoShadowConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
@@ -53,6 +53,8 @@ set(kowidgets_LIB_SRCS
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
     KoResourceTagStore.cpp
+    KoRuler.cpp
+    KoRulerController.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -68,14 +70,29 @@ set(kowidgets_LIB_SRCS
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
     KoResourceFiltering.cpp
-
     KoResourceModelBase.cpp
+
+    KoToolBox.cpp
+    KoToolBoxDocker.cpp
+    KoToolBoxFactory.cpp
+    KoToolDocker.cpp
+    
+    KoModeBox.cpp
+    KoModeBoxDocker.cpp
+    KoModeBoxFactory.cpp
+
+    KoDocumentInfoDlg.cpp
+    KoDocumentInfoPropsPage.cpp
+
+    KoGlobal.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
     KoCsvImportDialog.ui
-    KoPageLayoutWidget.ui
+    koDocumentInfoAboutWidget.ui
+    koDocumentInfoAuthorWidget.ui
     KoEditColorSet.ui
+    KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
 )
 
@@ -97,6 +114,7 @@ set_target_properties(kowidgets PROPERTIES
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
+    KoGlobal.h
     KoResourceItemChooserContextMenu.h
     KoResourceTaggingManager.h
     KoGenericRegistryModel.h
@@ -111,12 +129,11 @@ install( FILES
     KoDpi.h
     KoZoomHandler.h
     KoZoomMode.h
-
+    KoGlobal.h
     KoFileDialog.h
     KoColorPatch.h
     KoStrokeConfigWidget.h
     KoFillConfigWidget.h
-    KoOpacityConfigWidget.h
     KoShadowConfigWidget.h
     KoColorPopupAction.h
     KoColorSetWidget.h
@@ -125,7 +142,6 @@ install( FILES
     KoEditColorSetDialog.h
     KoTriangleColorSelector.h
     KoUniColorChooser.h
-    KoUniColorDialog.h
     KoXYColorSelector.h
     KoResourceItemChooser.h
     KoResourceSelector.h
@@ -139,6 +155,8 @@ install( FILES
     KoDockWidgetTitleBarButton.h
 
     KoResourceModelBase.h
+
+    KoGlobal.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra

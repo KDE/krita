@@ -24,7 +24,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <kis_action.h>
 #include "kis_types.h"
 #include "kis_image.h"
@@ -63,7 +63,7 @@ void KisDropshadowPlugin::slotDropshadow()
 
     DlgDropshadow * dlgDropshadow = new DlgDropshadow(layer->colorSpace()->name(),
             image->colorSpace()->name(),
-            m_view, "Dropshadow");
+            m_view->mainWindow(), "Dropshadow");
     Q_CHECK_PTR(dlgDropshadow);
 
     dlgDropshadow->setCaption(i18n("Drop Shadow"));

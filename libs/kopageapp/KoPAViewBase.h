@@ -25,9 +25,7 @@
 class KoPACanvasBase;
 class KoViewConverter;
 class KoPAPageBase;
-class KoZoomHandler;
 class KoPADocument;
-class KoRuler;
 class KoZoomHandler;
 class KoZoomController;
 

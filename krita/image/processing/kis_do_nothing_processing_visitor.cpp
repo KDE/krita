@@ -79,6 +79,12 @@ void KisDoNothingProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *u
     Q_UNUSED(undoAdapter);
 }
 
+void KisDoNothingProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter)
+{
+    Q_UNUSED(mask);
+    Q_UNUSED(undoAdapter);
+}
+
 void KisDoNothingProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)
 {
     Q_UNUSED(mask);

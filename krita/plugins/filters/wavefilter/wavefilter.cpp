@@ -24,16 +24,11 @@
 #include <math.h>
 #include <QPoint>
 
-#include <kcombobox.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <knuminput.h>
-#include <kstandarddirs.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <kis_image.h>

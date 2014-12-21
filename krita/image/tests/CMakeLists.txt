@@ -1,5 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
+include_directories(    ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
 macro_add_unittest_definitions()
 
@@ -134,6 +134,14 @@ set(kis_filter_mask_test_SRCS kis_filter_mask_test.cpp )
 kde4_add_unit_test(KisFilterMaskTest TESTNAME krita-image-KisFilterMaskTest ${kis_filter_mask_test_SRCS})
 
 target_link_libraries(KisFilterMaskTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_transform_mask_test_SRCS kis_transform_mask_test.cpp )
+
+kde4_add_unit_test(KisTransformMaskTest TESTNAME krita-image-KisTransformMaskTest ${kis_transform_mask_test_SRCS})
+
+target_link_libraries(KisTransformMaskTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -451,12 +459,6 @@ target_link_libraries(KisSharedPtrTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTES
 
 ########### next target ###############
 
-set(kis_shared_ptr_vector_test_SRCS kis_shared_ptr_vector_test.cpp )
-kde4_add_unit_test(KisSharedPtrVectorTest TESTNAME krita-image-KisSharedPtrVectorTest ${kis_shared_ptr_vector_test_SRCS})
-target_link_libraries(KisSharedPtrVectorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_transform_worker_test_SRCS kis_transform_worker_test.cpp )
 kde4_add_unit_test(KisTransformWorkerTest TESTNAME krita-image-KisTransformWorkerTest ${kis_transform_worker_test_SRCS})
 target_link_libraries(KisTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -466,6 +468,31 @@ target_link_libraries(KisTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 set(kis_perspective_transform_worker_test_SRCS kis_perspective_transform_worker_test.cpp )
 kde4_add_unit_test(KisPerspectiveTransformWorkerTest TESTNAME krita-image-KisPerspectiveTransformWorkerTest ${kis_perspective_transform_worker_test_SRCS})
 target_link_libraries(KisPerspectiveTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_bsplines_test_SRCS kis_bsplines_test.cpp )
+kde4_add_unit_test(KisBSplinesTest TESTNAME krita-image-KisBSplinesTest ${kis_bsplines_test_SRCS})
+target_link_libraries(KisBSplinesTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_warp_transform_worker_test_SRCS  kis_warp_transform_worker_test.cpp)
+kde4_add_unit_test(KisWarpTransformWorkerTest TESTNAME krita-image-KisWarpTransformWorkerTest ${kis_warp_transform_worker_test_SRCS})
+target_link_libraries(KisWarpTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_cage_transform_worker_test_SRCS  kis_cage_transform_worker_test.cpp)
+kde4_add_unit_test(KisCageTransformWorkerTest TESTNAME krita-image-KisCageTransformWorkerTest ${kis_cage_transform_worker_test_SRCS})
+target_link_libraries(KisCageTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_liquify_transform_worker_test_SRCS  kis_liquify_transform_worker_test.cpp)
+kde4_add_unit_test(KisLiquifyTransformWorkerTest TESTNAME krita-image-KisLiquifyTransformWorkerTest ${kis_liquify_transform_worker_test_SRCS})
+target_link_libraries(KisLiquifyTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
 
 ########### next target ###############
 

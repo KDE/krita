@@ -28,7 +28,6 @@
 
 // KDE's headers
 #include <kis_debug.h>
-#include <knuminput.h>
 
 // For ceil()
 #include <math.h>

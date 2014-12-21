@@ -46,6 +46,7 @@
 
 #include <klocale.h>
 #include <kstandardaction.h>
+#include <kaction.h>
 #include <kdebug.h>
 
 #include <QAction>
@@ -578,9 +579,9 @@ void ArtisticTextTool::convertText()
     emit done();
 }
 
-QList<QWidget *> ArtisticTextTool::createOptionWidgets()
+QList<QPointer<QWidget> > ArtisticTextTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");

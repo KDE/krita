@@ -25,6 +25,12 @@
 #include <QVector3D>
 #include <kis_warptransform_worker.h>
 #include <kis_filter_strategy.h>
+#include "kis_liquify_properties.h"
+
+
+#include <QScopedPointer>
+class KisLiquifyTransformWorker;
+class QDomElement;
 
 /**
  * Class used to store the parameters of a transformation.
@@ -33,12 +39,15 @@
  * memory.
  */
 
-class ToolTransformArgs
+class KDE_EXPORT ToolTransformArgs
 {
 public:
     enum TransformMode {FREE_TRANSFORM = 0,
                         WARP,
-                        PERSPECTIVE_4POINT};
+                        CAGE,
+                        LIQUIFY,
+                        PERSPECTIVE_4POINT,
+                        N_MODES};
 
     /**
      * Initializes the parameters for an identity transformation,
@@ -68,6 +77,8 @@ public:
                       const QString &filterId);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
+
+    bool operator==(const ToolTransformArgs& other) const;
 
     inline TransformMode mode() const {
         return m_mode;
@@ -146,9 +157,6 @@ public:
     inline QVector3D cameraPos() const {
         return m_cameraPos;
     }
-    inline QVector3D eyePos() const {
-        return m_eyePos;
-    }
     inline double scaleX() const {
         return m_scaleX;
     }
@@ -189,9 +197,6 @@ public:
     inline void setCameraPos(const QVector3D &pos) {
         m_cameraPos = pos;
     }
-    inline void setEyePos(const QVector3D &pos) {
-        m_eyePos = pos;
-    }
     inline void setScaleX(double scaleX) {
         m_scaleX = scaleX;
     }
@@ -230,6 +235,32 @@ public:
         m_flattenedPerspectiveTransform = value;
     }
 
+    bool isEditingTransformPoints() const {
+        return m_editTransformPoints;
+    }
+
+    void setEditingTransformPoints(bool value) {
+        m_editTransformPoints = value;
+    }
+
+    const KisLiquifyProperties* liquifyProperties() const {
+        return &m_liquifyProperties;
+    }
+
+    KisLiquifyProperties* liquifyProperties() {
+        return &m_liquifyProperties;
+    }
+
+    void initLiquifyTransformMode(const QRect &srcRect);
+    void saveLiquifyTransformMode() const;
+
+    KisLiquifyTransformWorker* liquifyWorker() const {
+        return m_liquifyWorker.data();
+    }
+
+    void toXML(QDomElement *e) const;
+    static ToolTransformArgs fromXML(const QDomElement &e);
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -255,16 +286,19 @@ private:
     double m_aY;
     double m_aZ;
     QVector3D m_cameraPos;
-    QVector3D m_eyePos;
     double m_scaleX;
     double m_scaleY;
     double m_shearX;
     double m_shearY;
     bool m_keepAspectRatio;
 
+    // perspective trasform related
     QTransform m_flattenedPerspectiveTransform;
 
     KisFilterStrategy *m_filter;
+    bool m_editTransformPoints;
+    KisLiquifyProperties m_liquifyProperties;
+    QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

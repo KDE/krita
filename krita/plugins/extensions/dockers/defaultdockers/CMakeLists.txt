@@ -1,11 +1,9 @@
 set(kritadefaultdockers_PART_SRCS 
-    kis_palette_docker.cc
     kis_layer_box.cpp
     defaultdockers.cpp
 )
 
 set(kritadefaultdockers_PART_HEADERS
-    kis_palette_docker.h
     kis_layer_box.h
     defaultdockers.h
 )

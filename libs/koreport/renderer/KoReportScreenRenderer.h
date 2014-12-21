@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __KRSCREENRENDER_H__
-#define __KRSCREENRENDER_H__
+#ifndef __KOREPORTSCREENRENDERER_H__
+#define __KOREPORTSCREENRENDERER_H__
 
 #include <QPainter>
 #include "koreport_export.h"
@@ -42,4 +42,4 @@ protected:
     //QPainter* m_painter;
 };
 
-#endif // __ORPRINTRENDER_H__
+#endif // __KOREPORTSCREENRENDERER_H__

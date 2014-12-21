@@ -35,6 +35,7 @@ public:
     void visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter);
     void visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter);
     void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter);
+    void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter);
     void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter);
     void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter);
 

@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <KoColorSpaceMaths.h>
+
 #include <cfloat>
 
 #include <QtGlobal>
-
-#include <KoColorSpaceMaths.h>
 
 #ifdef HAVE_OPENEXR
 const half KoColorSpaceMathsTraits<half>::zeroValue = 0.0;

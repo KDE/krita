@@ -57,7 +57,7 @@ public:
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     QIcon icon() const;
-    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     /**
      * re-run the generator. This happens over the bounds

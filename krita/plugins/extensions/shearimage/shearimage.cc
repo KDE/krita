@@ -24,7 +24,7 @@
 #include <kpluginfactory.h>
 
 #include <kis_image.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_node_manager.h>
 #include <kis_image_manager.h>
 #include <kis_action.h>
@@ -58,7 +58,7 @@ void ShearImage::slotShearImage()
 
     if (!image) return;
 
-    DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearImage");
+    DlgShearImage * dlgShearImage = new DlgShearImage(m_view->mainWindow(), "ShearImage");
     Q_CHECK_PTR(dlgShearImage);
 
     dlgShearImage->setCaption(i18n("Shear Image"));
@@ -77,7 +77,7 @@ void ShearImage::slotShearLayer()
 
     if (!image) return;
 
-    DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearLayer");
+    DlgShearImage * dlgShearImage = new DlgShearImage(m_view->mainWindow(), "ShearLayer");
     Q_CHECK_PTR(dlgShearImage);
 
     dlgShearImage->setCaption(i18n("Shear Layer"));

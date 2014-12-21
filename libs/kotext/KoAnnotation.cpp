@@ -30,6 +30,7 @@
 #include <KoShape.h>
 
 #include <QTextDocument>
+#include <QTextBlock>
 #include <QTextCursor>
 #include <kdebug.h>
 
@@ -78,7 +79,7 @@ void KoAnnotation::setAnnotationShape(KoShape *shape)
     d->shape = shape;
 }
 
-KoShape *KoAnnotation::annotationShape()
+KoShape *KoAnnotation::annotationShape() const
 {
     return d->shape;
 }
@@ -159,7 +160,7 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
 }
 
 QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
-                                                 QString annotationName, bool isEndMarker)
+                                                 const QString &annotationName, bool isEndMarker)
 {
     QString ret = annotationName;
     int uniqID = 0;

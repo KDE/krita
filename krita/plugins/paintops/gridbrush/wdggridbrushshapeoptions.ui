@@ -22,41 +22,57 @@
     <height>200</height>
    </size>
   </property>
-  <widget class="QComboBox" name="shapeCBox">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>121</width>
-     <height>25</height>
-    </rect>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <property name="text">
-     <string>Ellipse</string>
-    </property>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Shape:</string>
+     </property>
+    </widget>
    </item>
    <item>
-    <property name="text">
-     <string>Rectangle</string>
-    </property>
+    <widget class="QComboBox" name="shapeCBox">
+     <item>
+      <property name="text">
+       <string>Ellipse</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Rectangle</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Line</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Pixel</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Anti-aliased pixel</string>
+      </property>
+     </item>
+    </widget>
    </item>
    <item>
-    <property name="text">
-     <string>Line</string>
-    </property>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>202</height>
+      </size>
+     </property>
+    </spacer>
    </item>
-   <item>
-    <property name="text">
-     <string>Pixel</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Anti-aliased pixel</string>
-    </property>
-   </item>
-  </widget>
+  </layout>
  </widget>
  <resources/>
  <connections/>

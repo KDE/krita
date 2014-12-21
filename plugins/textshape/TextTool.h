@@ -40,8 +40,10 @@
 #include <QTimer>
 #include <QWeakPointer>
 #include <QRectF>
+#include <QPointer>
 
-class TextEditingPluginContainer;
+#include <TextEditingPluginContainer.h>
+
 class InsertCharacter;
 class KoChangeTracker;
 class KoCharacterStyle;
@@ -128,7 +130,7 @@ public:
     /// reimplemented from superclass
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
@@ -329,6 +331,8 @@ private:
 
     QMimeData *generateMimeData() const;
 
+    TextEditingPluginContainer *textEditingPluginContainer();
+
 private:
     friend class UndoTextCommand;
     friend class ChangeTracker;
@@ -381,7 +385,7 @@ private:
 
     InsertCharacter *m_specialCharacterDocker;
 
-    TextEditingPluginContainer *m_textEditingPlugins;
+    QPointer<TextEditingPluginContainer> m_textEditingPlugins;
 
     bool m_textTyping;
     bool m_textDeleting;

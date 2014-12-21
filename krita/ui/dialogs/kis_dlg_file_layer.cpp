@@ -23,16 +23,11 @@
 #include <QCheckBox>
 #include <QDesktopServices>
 
-#include <klineedit.h>
 #include <klocale.h>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kurl.h>
-
 #include <KoFileDialog.h>
-#include <KoApplication.h>
-#include <KoFilterManager.h>
+#include <KisApplication.h>
+#include <KisImportExportManager.h>
 
 #include <kis_config_widget.h>
 #include <kis_paint_device.h>
@@ -95,7 +90,7 @@ void KisDlgFileLayer::slotSelectFile()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Select file to use as dynamic file layer."));
     dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
-    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
     QString url = dialog.url();
     if (m_basePath.isEmpty()) {
         dlgWidget.txtFileName->setText(url);

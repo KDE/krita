@@ -20,13 +20,13 @@
 
 #include <kpluginfactory.h>
 
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 
 #include "kis_debug.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
@@ -43,7 +43,7 @@ K_PLUGIN_FACTORY(KisRawImportFactory, registerPlugin<KisRawImport>();)
 K_EXPORT_PLUGIN(KisRawImportFactory("calligrafilters"))
 
 KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
-        : KoFilter(parent)
+        : KisImportExportFilter(parent)
 {
     m_dialog = new KDialog();
     m_dialog->enableButtonApply(false);
@@ -67,26 +67,26 @@ inline quint16 correctIndian(quint16 v)
 #endif
 }
 
-KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << from << " " << to << "";
     if (/*from != "image/x-raw" || */to != "application/x-krita") { // too many from to check, and I don't think it can happen an unsupported from
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
     }
 
     dbgFile << "Krita importing from Raw";
 
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
+    KisDocument * doc = m_chain->outputDocument();
     if (!doc) {
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
     }
 
     doc -> prepareForImport();
 
-    QString filename = m_chain -> inputFile();
+    QString filename = m_chain->inputFile();
 
     if (filename.isEmpty()) {
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
     }
 
 
@@ -112,22 +112,22 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         settings.sixteenBitsImage =  true;
         int width, height, rgbmax;
         KDcraw dcraw;
-        if (!dcraw.decodeRAWImage(m_chain->inputFile(), settings, imageData, width, height, rgbmax)) return KoFilter::CreationError;
+        if (!dcraw.decodeRAWImage(m_chain->inputFile(), settings, imageData, width, height, rgbmax)) return KisImportExportFilter::CreationError;
 
         QApplication::restoreOverrideCursor();
 
         // Init the image
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
         KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, filename);
-        if (image.isNull()) return KoFilter::CreationError;
+        if (image.isNull()) return KisImportExportFilter::CreationError;
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
 
         image->addNode(layer, image->rootLayer());
-        if (layer.isNull()) return KoFilter::CreationError;
+        if (layer.isNull()) return KisImportExportFilter::CreationError;
 
         KisPaintDeviceSP device = layer->paintDevice();
-        if (device.isNull()) return KoFilter::CreationError;
+        if (device.isNull()) return KisImportExportFilter::CreationError;
 
         // Copy the data
         KisHLineIteratorSP it = device->createHLineIteratorNG(0, 0, width);
@@ -151,11 +151,11 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
         QApplication::restoreOverrideCursor();
         doc->setCurrentImage(image);
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     }
 
     QApplication::restoreOverrideCursor();
-    return KoFilter::UserCancelled;
+    return KisImportExportFilter::UserCancelled;
 }
 
 void KisRawImport::slotUpdatePreview()

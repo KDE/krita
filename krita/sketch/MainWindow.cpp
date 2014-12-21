@@ -34,9 +34,9 @@
 #include <QGLWidget>
 #include <QTimer>
 
-#include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
+#include <kdialog.h>
 #include <kdebug.h>
 
 #include "filter/kis_filter.h"
@@ -44,11 +44,12 @@
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include <KoZoomController.h>
+#include <KoIcon.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <kis_canvas_controller.h>
 #include "kis_config.h"
-#include <kis_doc2.h>
+#include <KisDocument.h>
 
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
@@ -71,7 +72,7 @@ public:
 	}
 	MainWindow* q;
     bool allowClose;
-    KisView2* sketchKisView;
+    KisViewManager* sketchKisView;
     QString currentSketchPage;
 	QTimer *centerer;
 };
@@ -82,7 +83,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Sketch"));
-    setWindowIcon(KIcon("kritasketch"));
+    setWindowIcon(koIcon("kritasketch"));
 
     // Load filters and other plugins in the gui thread
     Q_UNUSED(KisFilterRegistry::instance());
@@ -121,7 +122,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
 #else
     view->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
-    QString mainqml = KGlobal::dirs()->findResource("pics", "kritasketch.qml");
+    QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
 #endif
 
     Q_ASSERT(QFile::exists(mainqml));
@@ -148,7 +149,14 @@ void MainWindow::resetWindowTitle()
     QString fileName = url.fileName();
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Sketch")));
+
+    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KisDocument* document = DocumentManager::instance()->document();
+    if (document && document->isModified() ) {
+        flags |= KDialog::ModifiedCaption;
+    }
+
+    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 bool MainWindow::allowClose() const
@@ -194,7 +202,7 @@ void MainWindow::setSketchKisView(QObject* newView)
         d->sketchKisView->disconnect(this);
     if (d->sketchKisView != newView)
     {
-        d->sketchKisView = qobject_cast<KisView2*>(newView);
+        d->sketchKisView = qobject_cast<KisViewManager*>(newView);
         connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
         d->centerer->start();
         emit sketchKisViewChanged();

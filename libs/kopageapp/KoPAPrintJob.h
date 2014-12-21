@@ -42,7 +42,7 @@ public:
     virtual ~KoPAPrintJob();
 
     virtual QPrinter & printer();
-    virtual QList<QWidget*> createOptionWidgets() const;
+    virtual QList<QWidget *> createOptionWidgets() const;
 
 public slots:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);

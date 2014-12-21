@@ -28,13 +28,9 @@
 #include <QDesktopServices>
 #include <QDir>
 
-#include <kglobal.h>
 #include <kcmdlineargs.h>
-#include <ksycoca.h>
-#include <kstandarddirs.h>
-#include <kcrash.h>
 
-#include <KoApplication.h>
+#include <KisApplication.h>
 #include <KoConfig.h>
 
 #include <krita_export.h>
@@ -42,11 +38,12 @@
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
 #include "ui/kis_factory2.h"
-#include "ui/kis_doc2.h"
+#include "ui/KisDocument.h"
 #include "kis_splash_screen.h"
 
 #if defined Q_OS_WIN
-#include "stdlib.h"
+#include <Windows.h>
+#include <stdlib.h>
 #include <ui/input/wintab/kis_tablet_support_win.h>
 #ifdef USE_BREAKPAD
     #include "kis_crash_handler.h"
@@ -69,6 +66,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     Q_UNUSED(crashHandler);
 #endif
 
+#if defined Q_OS_WIN
+    SetProcessDPIAware(); // The n-trig wintab driver needs this to report the correct dimensions
+#endif
+
     int state;
     KAboutData *aboutData = KisFactory2::aboutData();
 
@@ -80,7 +81,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
 
     // first create the application so we can create a  pixmap
-    KoApplication app(KIS_MIME_TYPE);
+    KisApplication app(KIS_MIME_TYPE);
 
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();

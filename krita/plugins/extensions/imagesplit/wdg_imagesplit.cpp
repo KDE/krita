@@ -26,7 +26,6 @@
 #include <QListWidgetItem>
 #include <QDebug>
 
-#include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
 #include "kis_factory2.h"

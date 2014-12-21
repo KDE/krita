@@ -33,11 +33,8 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 
 #include "KoIntegerMaths.h"
 #include <KoUpdater.h>
@@ -48,7 +45,6 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
-#include <KoProgressUpdater.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_random_accessor_ng.h>

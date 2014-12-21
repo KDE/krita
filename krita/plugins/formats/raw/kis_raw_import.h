@@ -20,7 +20,7 @@
 #ifndef KIS_RAW_IMPORT_H_
 #define KIS_RAW_IMPORT_H_
 
-#include <KoFilter.h>
+#include <KisImportExportFilter.h>
 
 #include "ui_wdgrawimport.h"
 
@@ -33,7 +33,7 @@ namespace KDcrawIface
 class RawDecodingSettings;
 }
 
-class KisRawImport : public KoFilter
+class KisRawImport : public KisImportExportFilter
 {
     Q_OBJECT
 
@@ -42,7 +42,7 @@ public:
     virtual ~KisRawImport();
 
 public:
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 
 private slots:

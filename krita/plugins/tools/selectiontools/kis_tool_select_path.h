@@ -54,7 +54,9 @@ struct __KisToolSelectBaseWrapper : public KisToolSelectBase {
     }
 };
 
-typedef KisDelegatedTool<__KisToolSelectBaseWrapper, __KisToolSelectPathLocalTool> DelegatedSelectPathTool;
+typedef KisDelegatedTool<__KisToolSelectBaseWrapper,
+                         __KisToolSelectPathLocalTool,
+                         DeselectShapesActivationPolicy> DelegatedSelectPathTool;
 
 class KisToolSelectPath : public DelegatedSelectPathTool
 {
@@ -69,7 +71,7 @@ protected:
     void requestStrokeEnd();
 
     friend class __KisToolSelectPathLocalTool;
-    QList<QWidget *> createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets();
 };
 
 class KisToolSelectPathFactory : public KoToolFactoryBase

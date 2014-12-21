@@ -25,6 +25,11 @@
 #include <renderobjects.h>
 #include "renderer/scripting/krscripthandler.h"
 
+KoReportItemCheck::KoReportItemCheck()
+{
+    createProperties();
+}
+
 KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
 {
     createProperties();
@@ -75,8 +80,8 @@ void KoReportItemCheck::createProperties()
 
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
     m_controlSource->setOption("extraValueAllowed", "true");
-
-    m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, i18n("Foreground Color"));
+    
+    m_foregroundColor = new KoProperty::Property("foreground-color", QPalette().color(QPalette::Foreground), i18n("Foreground Color"));
 
     m_lineWeight = new KoProperty::Property("line-weight", 1, i18n("Line Weight"));
     m_lineColor = new KoProperty::Property("line-color", Qt::black, i18n("Line Color"));

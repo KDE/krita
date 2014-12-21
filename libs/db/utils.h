@@ -536,9 +536,9 @@ class CALLIGRADB_EXPORT StaticSetOfStrings
 {
 public:
     StaticSetOfStrings();
-    explicit StaticSetOfStrings(const char* array[]);
+    explicit StaticSetOfStrings(const char* const array[]);
     ~StaticSetOfStrings();
-    void setStrings(const char* array[]);
+    void setStrings(const char* const array[]);
     bool isEmpty() const;
 
     //! @return true if @a string can be found within set, comparison is case sensitive

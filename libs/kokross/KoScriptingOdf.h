@@ -24,7 +24,6 @@
 
 #include <QPair>
 #include <KoXmlReader.h>
-#include <KoXmlWriter.h>
 #include <KoDocument.h>
 
 class KoScriptingOdfStore;

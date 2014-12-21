@@ -23,6 +23,7 @@
 #include <KoDragOdfSaveHelper.h>
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
+#include <QSharedPointer>
 #endif
 #include "kotext_export.h"
 

@@ -59,7 +59,7 @@ public:
 
 protected:
     /// reimplemented from superclass
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private slots:
     /// insert a citation

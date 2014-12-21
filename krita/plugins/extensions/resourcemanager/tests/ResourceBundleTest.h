@@ -36,3 +36,4 @@ private slots:
 };
 
 #endif // KORESOURCEBUNDLE_TEST_H
+

@@ -26,6 +26,10 @@
 
 #include <KoIcon.h>
 
+#include <KConfig>
+#include <KConfigGroup>
+
+#include <KShortcut>
 #include <KoToolFactoryBase.h>
 #include "kis_tool.h"
 #include "flake/kis_node_shape.h"
@@ -177,6 +181,8 @@ private:
     bool m_grow;
     int m_decoration;
 
+    KConfigGroup configGroup;
+
     enum handleType {
         None = 0,
         UpperLeft = 1,
@@ -203,6 +209,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(10);
         setIconName(koIconNameCStr("tool_crop"));
+        setShortcut(KShortcut("C"));
     }
 
     virtual ~KisToolCropFactory() {}

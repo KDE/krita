@@ -18,12 +18,15 @@
 #include <klocale.h>
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
+#include <KoColor.h>
 
 #include <QWidget>
 #include <QMenu>
 #include <QButtonGroup>
 
 #include "artisticcolorselector_dock.h"
+#include <KisViewManager.h>
+#include <kis_canvas_resource_provider.h>
 
 #include "ui_wdgArtisticColorSelector.h"
 #include "ui_wdgColorPreferencesPopup.h"
@@ -46,7 +49,7 @@ struct ColorPreferencesPopupUI: public QWidget, public Ui_wdgColorPreferencesPop
 
 ArtisticColorSelectorDock::ArtisticColorSelectorDock():
     QDockWidget(i18n("Artistic Color Selector")),
-    m_canvas(0)
+    m_resourceProvider(0)
 {
     m_hsxButtons    = new QButtonGroup();
     m_resetMenu     = new QMenu();
@@ -105,16 +108,13 @@ ArtisticColorSelectorDock::~ArtisticColorSelectorDock()
     delete m_resetMenu;
 }
 
-void ArtisticColorSelectorDock::setCanvas(KoCanvasBase* canvas)
+void ArtisticColorSelectorDock::setMainWindow(KisViewManager* kisview)
 {
-    // "Every connection you make emits a signal, so duplicate connections emit two signals"
-    if(m_canvas)
-        m_canvas->disconnectCanvasObserver(this);
-
-    m_canvas = canvas;
-    m_selectorUI->colorSelector->setFgColor(m_canvas->resourceManager()->foregroundColor().toQColor());
-    m_selectorUI->colorSelector->setBgColor(m_canvas->resourceManager()->backgroundColor().toQColor());
-    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)), SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+    m_resourceProvider = kisview->resourceProvider();
+    m_selectorUI->colorSelector->setFgColor(m_resourceProvider->resourceManager()->foregroundColor().toQColor());
+    m_selectorUI->colorSelector->setBgColor(m_resourceProvider->resourceManager()->backgroundColor().toQColor());
+    connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+            SLOT(slotCanvasResourceChanged(int, const QVariant&)));
 }
 
 void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant& value)
@@ -128,15 +128,15 @@ void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVarian
 
 void ArtisticColorSelectorDock::slotFgColorChanged(const KisColor& color)
 {
-    m_canvas->resourceManager()->setForegroundColor(
-        KoColor(color.getQColor(), m_canvas->resourceManager()->foregroundColor().colorSpace())
+    m_resourceProvider->resourceManager()->setForegroundColor(
+        KoColor(color.getQColor(), m_resourceProvider->resourceManager()->foregroundColor().colorSpace())
     );
 }
 
 void ArtisticColorSelectorDock::slotBgColorChanged(const KisColor& color)
 {
-    m_canvas->resourceManager()->setBackgroundColor(
-        KoColor(color.getQColor(), m_canvas->resourceManager()->backgroundColor().colorSpace())
+    m_resourceProvider->resourceManager()->setBackgroundColor(
+        KoColor(color.getQColor(), m_resourceProvider->resourceManager()->backgroundColor().colorSpace())
     );
 }
 
@@ -199,3 +199,14 @@ void ArtisticColorSelectorDock::slotLightModeChanged(bool setToAbsolute)
     m_selectorUI->colorSelector->setLight(m_selectorUI->colorSelector->getLight(), !setToAbsolute);
 }
 
+
+
+void ArtisticColorSelectorDock::setCanvas(KoCanvasBase *canvas)
+{
+    setEnabled(canvas != 0);
+}
+
+void ArtisticColorSelectorDock::unsetCanvas()
+{
+    setEnabled(false);
+}

@@ -20,6 +20,7 @@
 
 #include <QImage>
 #include <QTransform>
+#include "KoPointerEvent.h"
 
 
 struct KisTransformStrategyBase::Private
@@ -30,12 +31,17 @@ struct KisTransformStrategyBase::Private
 
 
 KisTransformStrategyBase::KisTransformStrategyBase()
-    : m_d(new Private)
+    : m_d(new Private())
 {
 }
 
 KisTransformStrategyBase::~KisTransformStrategyBase()
 {
+}
+
+QPainterPath KisTransformStrategyBase::getCursorOutline() const
+{
+    return QPainterPath();
 }
 
 QImage KisTransformStrategyBase::originalImage() const
@@ -52,4 +58,39 @@ void KisTransformStrategyBase::setThumbnailImage(const QImage &image, QTransform
 {
     m_d->originalImage = image;
     m_d->thumbToImageTransform = thumbToImageTransform;
+}
+
+bool KisTransformStrategyBase::acceptsClicks() const
+{
+    return false;
+}
+
+void KisTransformStrategyBase::activateAlternateAction(KisTool::AlternateAction action)
+{
+    Q_UNUSED(action);
+}
+
+void KisTransformStrategyBase::deactivateAlternateAction(KisTool::AlternateAction action)
+{
+    Q_UNUSED(action);
+}
+
+bool KisTransformStrategyBase::beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(action);
+    return false;
+}
+
+void KisTransformStrategyBase::continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(action);
+}
+
+bool KisTransformStrategyBase::endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(action);
+    return false;
 }

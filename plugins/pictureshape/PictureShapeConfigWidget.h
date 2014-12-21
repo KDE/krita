@@ -21,7 +21,6 @@
 #define PICTURESHAPECONFIGWIDGET_H
 
 #include <KoShapeConfigWidgetBase.h>
-#include <kurl.h>
 #include <QWidget>
 
 class PictureShape;

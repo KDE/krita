@@ -52,7 +52,7 @@ public:
         bool extraValueAllowed : 1;
     };
 
-//    ComboBox(const Property* property, QWidget *parent = 0);
+//    explicit ComboBox(const Property* property, QWidget *parent = 0);
     ComboBox(const Property::ListData& listData, const Options& options, 
              QWidget *parent = 0);
 

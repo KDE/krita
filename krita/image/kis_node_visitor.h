@@ -54,6 +54,8 @@ public:
 
     virtual bool visit(KisFilterMask *mask) = 0;
 
+    virtual bool visit(KisTransformMask *mask) = 0;
+
     virtual bool visit(KisTransparencyMask *mask) = 0;
 
     virtual bool visit(KisSelectionMask *mask) = 0;

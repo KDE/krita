@@ -143,7 +143,7 @@ void KoInlineNote::updatePosition(const QTextDocument *document, int posInDocume
     d->posInDocument = posInDocument;
 }
 
-void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
@@ -160,10 +160,9 @@ void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject objec
     }
 }
 
-void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document);
-    Q_UNUSED(object);
     Q_UNUSED(posInDocument);
 
     if (d->label.isEmpty())
@@ -266,7 +265,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
     }
 }
 
-int KoInlineNote::getPosInDocument()
+int KoInlineNote::getPosInDocument() const
 {
     return d->posInDocument;
 }

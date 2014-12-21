@@ -1,0 +1,27 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/FileFilter
+Comment=Krita FileFilter
+Comment[ca]=Filtre de fitxers per al Krita
+Comment[cs]=Krita FileFilter
+Comment[de]=Krita-Dateifilter
+Comment[en_GB]=Krita FileFilter
+Comment[nl]=Bestandsfilter voor Krita
+Comment[pl]=Filtr plików Krita
+Comment[pt]=Filtro de Ficheiros do Krita
+Comment[pt_BR]=Filtro de arquivos do Krita
+Comment[sk]=Filter súborov Krita
+Comment[uk]=Фільтр файлів для Krita
+Comment[x-test]=xxKrita FileFilterxx
+
+[PropertyDef::X-KDE-Import]
+Type=QStringList
+
+[PropertyDef::X-KDE-Export]
+Type=QStringList
+
+[PropertyDef::X-KDE-Weight]
+Type=int
+
+[PropertyDef::X-KDE-Available]
+Type=QString

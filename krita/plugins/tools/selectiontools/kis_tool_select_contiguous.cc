@@ -32,7 +32,6 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <kcolorbutton.h>
 
 #include "KoPointerEvent.h"
 #include "KoViewConverter.h"
@@ -63,6 +62,12 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
 {
+}
+
+void KisToolSelectContiguous::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+{
+    KisTool::activate(toolActivation, shapes);
+    m_configGroup = KGlobal::config()->group(toolId());
 }
 
 void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
@@ -118,16 +123,19 @@ void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &co
 void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 {
     m_fuzziness = fuzziness;
+    m_configGroup.writeEntry("fuzziness", fuzziness);
 }
 
 void KisToolSelectContiguous::slotSetSizemod(int sizemod)
 {
     m_sizemod = sizemod;
+    m_configGroup.writeEntry("sizemod", sizemod);
 }
 
 void KisToolSelectContiguous::slotSetFeather(int feather)
 {
     m_feather = feather;
+    m_configGroup.writeEntry("feather", feather);
 }
 
 QWidget* KisToolSelectContiguous::createOptionWidget()
@@ -153,7 +161,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         input->setObjectName("fuzziness");
         input->setRange(0, 200);
         input->setSingleStep(10);
-        input->setValue(20);
         hbox->addWidget(input);
         
         hbox = new QHBoxLayout();
@@ -165,10 +172,9 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         
         KisSliderSpinBox *sizemod = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(sizemod);
-        sizemod->setObjectName("sizemod");
+        sizemod->setObjectName("sizemod"); //grow/shrink selection
         sizemod->setRange(-40, 40);
-        sizemod->setSingleStep(1);
-        sizemod->setValue(0);
+        sizemod->setSingleStep(1);       
         hbox->addWidget(sizemod);
         
         hbox = new QHBoxLayout();
@@ -181,8 +187,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         Q_CHECK_PTR(feather);
         feather->setObjectName("feathering");
         feather->setRange(0, 40);
-        feather->setSingleStep(1);
-        feather->setValue(0);
+        feather->setSingleStep(1);       
         hbox->addWidget(feather);
         
         connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int) ));
@@ -190,9 +195,17 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)   ));
 
         QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
-        l->insertWidget(4, limitToCurrentLayer);
-        limitToCurrentLayer->setChecked(m_limitToCurrentLayer);
+        l->insertWidget(4, limitToCurrentLayer);       
         connect (limitToCurrentLayer, SIGNAL(stateChanged(int)), this, SLOT(slotLimitToCurrentLayer(int)));
+
+
+
+        // load configuration settings into tool options
+        input->setValue(m_configGroup.readEntry("fuzziness", 20)); // fuzziness
+        sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
+        feather->setValue(m_configGroup.readEntry("feather", 0));
+        limitToCurrentLayer->setChecked(m_configGroup.readEntry("limitToCurrentLayer", false));
+
 
     }
     return selectionWidget;
@@ -203,6 +216,7 @@ void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
     if (state == Qt::PartiallyChecked)
         return;
     m_limitToCurrentLayer = (state == Qt::Checked);
+    m_configGroup.writeEntry("limitToCurrentLayer", state);
 }
 
 #include "kis_tool_select_contiguous.moc"

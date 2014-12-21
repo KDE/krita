@@ -102,9 +102,9 @@ set(KRITA_INCLUDES
     ${CMAKE_BINARY_DIR}/krita/ui
 
     ${PIGMENT_INCLUDES}
-    ${KOTEXT_INCLUDES}
-    ${KOMAIN_INCLUDES}
     ${BASICFLAKES_INCLUDES}
+    ${TEXTLAYOUT_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/widgets
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
@@ -121,7 +121,7 @@ include_directories(${KRITA_INCLUDES})
 if(HAVE_OPENGL)
     include_directories(${OPENGL_INCLUDE_DIR})
     if(HAVE_GLEW)
-        include_directories(${GLEW_INCLUDE_DIR})
+        include_directories(${GLEW_INCLUDE_DIRS})
     endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
 
@@ -140,17 +140,13 @@ endif (WIN32 AND USE_BREAKPAD)
 if (NOT WIN32)
     add_subdirectory( benchmarks )
 endif (NOT WIN32)
-add_subdirectory( animator )
 
 set(kritapart_PART_SRCS krita_part_init.cc)
 kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
 target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
-set(krita_KDEINIT_SRCS main.cc kis_splash_screen.cpp)
-kde4_add_ui_files(krita_KDEINIT_SRCS
-    wdgsplash.ui
-)
+set(krita_KDEINIT_SRCS main.cc)
 
 if(WIN32 AND USE_BREAKPAD)
     set(krita_KDEINIT_SRCS ${krita_KDEINIT_SRCS} kis_crash_handler.cpp)
@@ -167,7 +163,7 @@ if (Q_WS_MAC)
 endif (Q_WS_MAC)
 
 target_link_libraries(kdeinit_krita kritaui ${BREAKPAD_LIBS})
-target_link_libraries(krita kdeinit_krita)
+target_link_libraries(krita kdeinit_krita kritaui)
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -177,6 +173,6 @@ install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
 if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
-    add_subdirectory(sketch)
-    add_subdirectory(gemini)
+#    add_subdirectory(sketch)
+#    add_subdirectory(gemini)
 endif (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)

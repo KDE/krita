@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTCANVASRESOURCEPROVIDER_H
-#define TESTCANVASRESOURCEPROVIDER_H
+#ifndef TESTRESOURCEMANAGER_H
+#define TESTRESOURCEMANAGER_H
 
 #include <qtest_kde.h>
 
@@ -30,4 +30,4 @@ private slots:
     void testUnitChanged();
 };
 
-#endif // TESTCANVASRESOURCEPROVIDER_H
+#endif // TESTRESOURCEMANAGER_H

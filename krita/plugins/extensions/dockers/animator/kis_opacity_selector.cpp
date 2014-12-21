@@ -22,6 +22,8 @@
 
 KisOpacitySelector::KisOpacitySelector(int x, int y, int width, int height, int type, QGraphicsScene *scene, int frames)
 {
+    Q_UNUSED(scene);
+
     m_x = x;
     m_y = y;
     m_width = width;
@@ -32,12 +34,12 @@ KisOpacitySelector::KisOpacitySelector(int x, int y, int width, int height, int 
 
     QList<int> l;
 
-    if(type == KisOpacitySelector::NEXT_FRAMES_OPACITY_SELECTOR) {
-        for(int i = frames; i > 0; i--) {
+    if (type == KisOpacitySelector::NEXT_FRAMES_OPACITY_SELECTOR) {
+        for (int i = frames; i > 0; i--) {
             l.append((i * 50) / frames);
         }
-    } else if(type == KisOpacitySelector::PREV_FRAMES_OPACITY_SELECTOR) {
-        for(int i = 1; i <= frames; i++) {
+    } else if (type == KisOpacitySelector::PREV_FRAMES_OPACITY_SELECTOR) {
+        for (int i = 1; i <= frames; i++) {
             l.append((i * 50) / frames);
         }
     }
@@ -54,7 +56,10 @@ KisOpacitySelector::~KisOpacitySelector()
 
 void KisOpacitySelector::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if(m_frames == 0) {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+    if (m_frames == 0) {
         return;
     }
 
@@ -62,28 +67,28 @@ void KisOpacitySelector::paint(QPainter *painter, const QStyleOptionGraphicsItem
     int j = 0;
     int opacityVal = 0;
     int nextOpacityVal = 0;
-    for(int i = 0; i < m_width; i += step) {
+    for (int i = 0; i < m_width; i += step) {
         painter->setPen(Qt::gray);
         painter->drawLine(i, 0, i, m_height);
         painter->setPen(Qt::green);
 
         //To fix assertion
-        if(j < m_opacityValues->length()) {
+        if (j < m_opacityValues->length()) {
             opacityVal = m_opacityValues->at(j);
         }
         else {
             opacityVal = 0;
         }
 
-        if(j < m_opacityValues->length() - 1) {
-            nextOpacityVal = m_opacityValues->at(j+1);
+        if (j < m_opacityValues->length() - 1) {
+            nextOpacityVal = m_opacityValues->at(j + 1);
         }
         else {
             nextOpacityVal = 0;
         }
 
-        painter->drawEllipse(i + (step / 2),m_height - (opacityVal * (m_height)) / 100, 2, 2);
-        if(j<m_opacityValues->length() - 1) {
+        painter->drawEllipse(i + (step / 2), m_height - (opacityVal * (m_height)) / 100, 2, 2);
+        if (j < m_opacityValues->length() - 1) {
             painter->drawLine(i + (step / 2), m_height - (opacityVal * (m_height)) / 100, i + (3 * step / 2), m_height - (nextOpacityVal * (m_height)) / 100);
         }
         j++;

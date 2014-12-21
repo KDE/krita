@@ -25,6 +25,7 @@
 
 #include <QTextLayout>
 #include <QTextBlock>
+#include <QTextDocument>
 #include <kdebug.h>
 
 InlineAnchorStrategy::InlineAnchorStrategy(KoAnchorInlineObject *anchorObject, KoTextLayoutRootArea *rootArea)

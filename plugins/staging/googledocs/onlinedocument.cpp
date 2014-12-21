@@ -22,7 +22,6 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <kmimetype.h>
 #include <kpluginfactory.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>

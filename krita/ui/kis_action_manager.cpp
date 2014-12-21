@@ -22,7 +22,7 @@
 #include <kactioncollection.h>
 
 #include "kis_action.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection_manager.h"
 #include "operations/kis_operation_ui_factory.h"
 #include "operations/kis_operation_registry.h"
@@ -34,20 +34,27 @@ class KisActionManager::Private {
 public:
     Private() {}
 
-    KisView2* view;
+    KisViewManager* view;
     QList<KisAction*> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
     KisOperationRegistry operationRegistry;
+    QPointer<KisView> imageView;
 };
 
-KisActionManager::KisActionManager(KisView2* view) : d(new Private)
+KisActionManager::KisActionManager(KisViewManager* view) : d(new Private)
 {
     d->view = view;
+    d->imageView = 0;
 }
 
 KisActionManager::~KisActionManager()
 {
     delete d;
+}
+
+void KisActionManager::setView(QPointer<KisView> imageView)
+{
+    d->imageView = imageView;
 }
 
 void KisActionManager::addAction(const QString& name, KisAction* action, KActionCollection* actionCollection)
@@ -83,8 +90,15 @@ KisAction *KisActionManager::actionByName(const QString &name) const
 
 void KisActionManager::updateGUI()
 {
+    if (!d->imageView) {
+        foreach(KisAction* action, d->actions) {
+            action->setActionEnabled(false);
+        }
+        return;
+    }
+    
     KisNodeSP node = d->view->activeNode();
-    KisLayerSP layer = d->view->activeLayer();
+    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
 
     //TODO other flags
     KisAction::ActivationFlags flags;
@@ -93,6 +107,9 @@ void KisActionManager::updateGUI()
     }
     if (node) {
         flags |= KisAction::ACTIVE_NODE;
+        if (node->inherits("KisTransparencyMask")) {
+            flags |= KisAction::ACTIVE_TRANSPARENCY_MASK;
+        }
     }
     if (layer) {
         flags |= KisAction::ACTIVE_LAYER;
@@ -121,6 +138,9 @@ void KisActionManager::updateGUI()
     if (node && node->isEditable()) {
         conditions |= KisAction::ACTIVE_NODE_EDITABLE;
     }
+    if (node && node->hasEditablePaintDevice()) {
+        conditions |= KisAction::ACTIVE_NODE_EDITABLE_PAINT_DEVICE;
+    }
     if (d->view->selectionEditable()) {
         conditions |= KisAction::SELECTION_EDITABLE;
     }
@@ -133,7 +153,7 @@ void KisActionManager::updateGUI()
             enable = action->activationFlags() & flags;
         }
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
-
+        
         if (node && enable) {
             foreach (const QString &type, action->excludedNodeTypes()) {
                 if (node->inherits(type.toLatin1())) {
@@ -198,6 +218,9 @@ void KisActionManager::dumpActionFlags()
             if (flags & KisAction::ACTIVE_LAYER) {
                 out << "    Active layer\n";
             }
+            if (flags & KisAction::ACTIVE_TRANSPARENCY_MASK) {
+                out << "    Active transparency mask\n";
+            }
             if (flags & KisAction::ACTIVE_NODE) {
                 out << "    Active node\n";
             }
@@ -227,6 +250,9 @@ void KisActionManager::dumpActionFlags()
             }
             if (conditions & KisAction::ACTIVE_NODE_EDITABLE) {
                 out << "    Active Node editable\n";
+            }
+            if (conditions & KisAction::ACTIVE_NODE_EDITABLE_PAINT_DEVICE) {
+                out << "    Active Node has editable paint device\n";
             }
             if (conditions & KisAction::SELECTION_EDITABLE) {
                 out << "    Selection is editable\n";

@@ -25,7 +25,7 @@
 #include "kis_properties_configuration.h"
 #include "operations/kis_operation_configuration.h"
 
-class KisView2;
+class KisViewManager;
 class KisProcessingApplicator;
 
 class KRITAUI_EXPORT KisOperation
@@ -36,10 +36,10 @@ public:
 
     QString id() const;
 
-    virtual void runFromXML(KisView2 *view, const KisOperationConfiguration &config);
+    virtual void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
 
 protected:
-    KisProcessingApplicator* beginAction(KisView2 *view, const KUndo2MagicString &actionName);
+    KisProcessingApplicator* beginAction(KisViewManager *view, const KUndo2MagicString &actionName);
     void endAction(KisProcessingApplicator *applicator, const QString &xmlData);
 private:
     const QString m_id;

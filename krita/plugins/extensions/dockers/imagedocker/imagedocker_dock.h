@@ -55,8 +55,11 @@ class ImageDockerDock: public QDockWidget, public KoCanvasObserverBase
 public:
     ImageDockerDock();
     virtual ~ImageDockerDock();
+    QString observerName() { return "ImageDockerDock"; }
     virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() {
+        m_canvas = 0; // Intentionally not disabled if there's no canvas
+    }
     
 private slots:
     void slotItemDoubleClicked(const QModelIndex& index);

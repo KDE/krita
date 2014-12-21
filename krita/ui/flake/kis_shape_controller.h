@@ -27,8 +27,8 @@
 class KisNodeDummy;
 class KoShapeLayer;
 
-class KisView2;
-class KisDoc2;
+class KisCanvas2;
+class KisDocument;
 class KisNameServer;
 class KoDataCenterBase;
 
@@ -44,7 +44,7 @@ class KRITAUI_EXPORT KisShapeController : public KisDummiesFacadeBase, public Ko
 
 public:
 
-    KisShapeController(KisDoc2 * doc, KisNameServer *nameServer);
+    KisShapeController(KisDocument *doc, KisNameServer *nameServer);
     ~KisShapeController();
 
     bool hasDummyForNode(KisNodeSP node) const;
@@ -53,7 +53,8 @@ public:
     int dummiesCount() const;
 
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
-    void setInitialShapeForView(KisView2 * view);
+    void setInitialShapeForCanvas(KisCanvas2 *canvas);
+
 
 private:
     void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
@@ -61,7 +62,7 @@ private:
 
 signals:
     /**
-     * These two signals are forwarded from the local shape manager of
+     * These three signals are forwarded from the local shape manager of
      * KisShapeLayer. This is done because we switch KoShapeManager and
      * therefore KoSelection in KisCanvas2, so we need to connect local
      * managers to the UI as well.
@@ -69,6 +70,7 @@ signals:
      * \see comment in the constructor of KisCanvas2
      */
     void selectionChanged();
+    void selectionContentChanged();
     void currentLayerChanged(const KoShapeLayer*);
 
 protected:

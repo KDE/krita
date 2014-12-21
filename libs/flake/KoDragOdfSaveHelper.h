@@ -20,11 +20,12 @@
 #ifndef KODRAGODFSAVEHELPER_H
 #define KODRAGODFSAVEHELPER_H
 
-#include <KoShapeSavingContext.h>
-
 #include "flake_export.h"
 
+class KoShapeSavingContext;
 class KoXmlWriter;
+class KoGenStyles;
+class KoEmbeddedDocumentSaver;
 class KoDragOdfSaveHelperPrivate;
 
 class FLAKE_EXPORT KoDragOdfSaveHelper

@@ -26,7 +26,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <ksharedptr.h>
 
 class KoShapeBasedDocumentBasePrivate
 {

@@ -179,11 +179,16 @@ public:
         }
 
         inline void unite(const LinePos &rhs) {
-            int newStart = qMin(start(), rhs.start());
-            int newEnd = qMax(end(), rhs.end());
+            if (m_size > 0) {
+                int newStart = qMin(start(), rhs.start());
+                int newEnd = qMax(end(), rhs.end());
 
-            m_start = newStart;
-            m_size = newEnd - newStart;
+                m_start = newStart;
+                m_size = newEnd - newStart;
+            } else {
+                m_start = rhs.start();
+                m_size = rhs.size();
+            }
         }
 
     private:

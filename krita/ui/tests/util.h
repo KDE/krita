@@ -22,7 +22,7 @@
 #include <QTest>
 #include <QBitArray>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoShapeContainer.h>
@@ -34,7 +34,8 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
+#include "KisPart.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
@@ -49,6 +50,8 @@
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "kis_default_bounds.h"
+#include "kis_transform_mask_params_interface.h"
+
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
@@ -80,12 +83,15 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
     return vectorSelection;
 }
 
+QTransform createTestingTransform() {
+    return QTransform(1,2,3,4,5,6,7,8,9);
+}
 
-KisDoc2* createCompleteDocument()
+KisDocument* createCompleteDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
-    KisDoc2 *doc = new KisDoc2();
+    KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
@@ -184,14 +190,21 @@ KisDoc2* createCompleteDocument()
     selectionMask2->setSelection(createPixelSelection(paintLayer2->paintDevice()));
     image->addNode(selectionMask2, paintLayer2);
 
+    KisTransformMaskSP transformMask = new KisTransformMask();
+    transformMask->setName("testTransformMask");
+    transformMask->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                          new KisDumbTransformMaskParams(createTestingTransform())));
+
+    image->addNode(transformMask, paintLayer2);
+
     return doc;
 }
 
-KisDoc2* createEmptyDocument()
+KisDocument* createEmptyDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
-    KisDoc2 *doc = new KisDoc2();
+    KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());

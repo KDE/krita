@@ -61,7 +61,7 @@ public:
      *
      * This transfers the ownership of the mimeData to the caller
      */
-    QMimeData *mimeData();
+    QMimeData *takeMimeData();
 
 private:
     QMimeData *m_mimeData;

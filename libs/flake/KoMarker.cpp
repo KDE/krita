@@ -20,7 +20,6 @@
 #include "KoMarker.h"
 
 #include <KoXmlReader.h>
-#include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
@@ -28,6 +27,7 @@
 #include "KoPathShapeLoader.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
+#include "KoOdfWorkaround.h"
 
 #include <QString>
 #include <QUrl>
@@ -67,6 +67,10 @@ bool KoMarker::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &conte
     if (d->d.isEmpty()) {
         return false;
     }
+
+#ifndef NWORKAROUND_ODF_BUGS
+    KoOdfWorkaround::fixMarkerPath(d->d);
+#endif
 
     KoPathShape pathShape;
     KoPathShapeLoader loader(&pathShape);

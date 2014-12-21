@@ -32,6 +32,7 @@
 #include <flake/kis_shape_layer.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoSelection.h>
+#include <KoUnit.h>
 
 #include <kis_debug.h>
 

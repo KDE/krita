@@ -18,7 +18,6 @@
 #include "krscriptimage.h"
 #include "KoReportItemImage.h"
 #include <QBuffer>
-#include <kcodecs.h>
 #include <kdebug.h>
 
 namespace Scripting

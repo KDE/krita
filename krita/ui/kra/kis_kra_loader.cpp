@@ -29,7 +29,7 @@
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -44,6 +44,7 @@
 #include <kis_assert.h>
 #include <kis_external_layer_iface.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -56,7 +57,7 @@
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
 
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_kra_tags.h"
 #include "kis_kra_utils.h"
@@ -104,7 +105,7 @@ struct KisKraLoader::Private
 {
 public:
 
-    KisDoc2* document;
+    KisDocument* document;
     QString imageName; // used to be stored in the image, is now in the documentInfo block
     QString imageComment; // used to be stored in the image, is now in the documentInfo block
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
@@ -154,7 +155,7 @@ void convertColorSpaceNames(QString &colorspacename, QString &profileProductName
     }
 }
 
-KisKraLoader::KisKraLoader(KisDoc2 * document, int syntaxVersion)
+KisKraLoader::KisKraLoader(KisDocument * document, int syntaxVersion)
         : m_d(new Private())
 {
     m_d->document = document;
@@ -486,6 +487,8 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         node = loadCloneLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == FILTER_MASK)
         node = loadFilterMask(element, parent);
+    else if (nodeType == TRANSFORM_MASK)
+        node = loadTransformMask(element, parent);
     else if (nodeType == TRANSPARENCY_MASK)
         node = loadTransparencyMask(element, parent);
     else if (nodeType == SELECTION_MASK)
@@ -608,7 +611,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
         if (result == KMessageBox::Yes) {
 
             KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-            dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+            dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
             dialog.setDefaultDir(basePath);
             QString url = dialog.url();
 
@@ -783,6 +786,22 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP pa
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();
     mask->setFilter(kfc);
+    Q_CHECK_PTR(mask);
+
+    return mask;
+}
+
+KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element, KisNodeSP parent)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(parent);
+    KisTransformMask* mask;
+
+    /**
+     * We'll load the transform configuration later on a stage
+     * of binary data loading
+     */
+    mask = new KisTransformMask();
     Q_CHECK_PTR(mask);
 
     return mask;

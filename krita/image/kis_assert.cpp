@@ -28,7 +28,7 @@
  * TODO: Add automatic saving of the documents
  *
  * Requirements:
- * 1) Should save all open KisDoc2 objects
+ * 1) Should save all open KisDocument objects
  * 2) Should *not* overwrite original document since the saving
  *    process may fail.
  * 3) Should *not* overwrite any autosaved documents since the saving

@@ -36,6 +36,7 @@ public:
 
     void repaintLine(KoCanvasResourceManager *resourceManager,
                      KisImageWSP image,
+                     KisNodeSP node,
                      KisStrokesFacade *strokesFacade,
                      KisPostExecutionUndoAdapter *undoAdapter);
 

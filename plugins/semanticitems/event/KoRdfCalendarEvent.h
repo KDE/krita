@@ -22,6 +22,7 @@
 
 #include "KoRdfSemanticItem.h"
 
+#include <kdatetime.h>
 // calendars
 #ifdef KDEPIMLIBS_FOUND
 #include <kcalcore/event.h>

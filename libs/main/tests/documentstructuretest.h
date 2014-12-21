@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef DOCUMENTINFOTEST_H
-#define DOCUMENTINFOTEST_H
+#ifndef DOCUMENTSTRUCTURETEST_H
+#define DOCUMENTSTRUCTURETEST_H
 
 #include <QObject>
 
@@ -46,5 +46,5 @@ private:
     KComponentData *componentData;
 };
 
-#endif // DOCUMENTSTRUCTURE_H
+#endif // DOCUMENTSTRUCTURETEST_H
 

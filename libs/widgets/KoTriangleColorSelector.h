@@ -61,6 +61,8 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
     signals:
         void colorChanged(const QColor& );
         void realColorChanged(const KoColor& );
+    private slots:
+        void configurationChanged();
     private:
         void tellColorChanged();
         void generateTriangle();

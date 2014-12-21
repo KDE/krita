@@ -27,7 +27,7 @@ set(TestDocumentLayout_test_SRCS
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
 
-target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestDocumentLayout ${EXTRA_LIBS}  ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -94,7 +94,7 @@ set(TestChangeListCommand_test_SRCS
 
 
 kde4_add_unit_test(TestChangeListCommand TESTNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
-target_link_libraries(TestChangeListCommand ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestChangeListCommand ${EXTRA_LIBS}  ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -124,7 +124,7 @@ target_link_libraries(TestChangesDatabase ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRA
 #    ../InlineAnchorStrategy.cpp
 #)
 #kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-#target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
+#target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS}  ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -143,7 +143,7 @@ set(TestTableLayout_test_SRCS
     ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
-target_link_libraries(TestTableLayout kotext komain ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestTableLayout kotext  ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -232,7 +232,7 @@ set(TestTextTool_test_SRCS
     ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestTextTool TESTNAME shapes-text-TestTextTool ${TestTextTool_test_SRCS})
-target_link_libraries(TestTextTool komain ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestTextTool  ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -303,5 +303,5 @@ set(TestChangeTrackedDelete_test_SRCS
     ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestChangeTrackedDelete TESTNAME shapes-text-TestChangeTrackedDelete ${TestChangeTrackedDelete_test_SRCS})
-target_link_libraries(TestChangeTrackedDelete ${EXTRA_LIBS} komain kotext ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestChangeTrackedDelete ${EXTRA_LIBS}  kotext ${QT_QTTEST_LIBRARY})
 

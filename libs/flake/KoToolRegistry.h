@@ -21,8 +21,6 @@
 #ifndef KO_TOOL_REGISTRY_H_
 #define KO_TOOL_REGISTRY_H_
 
-#include <QObject>
-
 #include "KoGenericRegistry.h"
 #include <KoToolFactoryBase.h>
 #include "flake_export.h"

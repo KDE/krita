@@ -21,11 +21,9 @@
 
 #include <QTimer>
 
-#include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 #include <KoDockFactoryBase.h>
 
@@ -34,7 +32,7 @@
 #include "kis_cursor.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 #include "patterndocker_dock.h"
 #include <KoDockRegistry.h>

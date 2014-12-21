@@ -23,6 +23,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColor.h>
 #include <KoIcon.h>
 
 #include <QFileSystemModel>
@@ -299,6 +300,8 @@ void ImageDockerDock::dropEvent(QDropEvent *event)
 
 void ImageDockerDock::setCanvas(KoCanvasBase* canvas)
 {
+    // Intentionally not disabled if there's no canvas
+
     // "Every connection you make emits a signal, so duplicate connections emit two signals"
     if(m_canvas)
         m_canvas->disconnectCanvasObserver(this);

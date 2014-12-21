@@ -26,7 +26,7 @@
 #include <kis_layer.h>
 #include <kis_selection.h>
 #include <kis_config_widget.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_node_manager.h>
 #include <kis_selection_manager.h>
 #include <kis_canvas2.h>
@@ -55,7 +55,7 @@ public:
 
     FiltersCategoryModel* q;
     int currentCategory;
-    KisView2* view;
+    KisViewManager* view;
     QList<FiltersModel*> categories;
     FiltersModel* categoryByName(const QString& name)
     {
@@ -175,7 +175,7 @@ void FiltersCategoryModel::setView(QObject* newView)
         d->view->nodeManager()->disconnect(this);
         d->view->selectionManager()->disconnect(this);
     }
-    d->view = qobject_cast<KisView2*>( newView );
+    d->view = qobject_cast<KisViewManager*>( newView );
     if (d->view)
     {
         d->refreshContents();

@@ -167,7 +167,7 @@ void KoToolBase::useCursor(const QCursor &cursor)
     emit cursorChanged(d->currentCursor);
 }
 
-QList<QWidget *> KoToolBase::optionWidgets()
+QList<QPointer<QWidget> > KoToolBase::optionWidgets()
 {
     Q_D(KoToolBase);
     if (d->optionWidgets.empty()) {
@@ -199,9 +199,9 @@ QWidget * KoToolBase::createOptionWidget()
     return 0;
 }
 
-QList<QWidget *>  KoToolBase::createOptionWidgets()
+QList<QPointer<QWidget> >  KoToolBase::createOptionWidgets()
 {
-    QList<QWidget *> ow;
+    QList<QPointer<QWidget> > ow;
     if (QWidget *widget = createOptionWidget()) {
         if (widget->objectName().isEmpty()) {
             widget->setObjectName(toolId());

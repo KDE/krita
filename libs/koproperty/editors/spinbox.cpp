@@ -149,8 +149,8 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
     QVariant minVal(prop->option("min", 0.0));
     QVariant maxVal(prop->option("max", double(INT_MAX / 100)));
     QVariant step(prop->option("step", KOPROPERTY_DEFAULT_DOUBLE_VALUE_STEP));
-    bool slider(prop->option("slider", false).toBool());
     if (!minVal.isNull() && !maxVal.isNull() && !step.isNull()) {
+        bool slider = prop->option("slider", false).toBool();
         setRange(minVal.toDouble(), maxVal.toDouble(), step.toDouble(), slider);
     }
     else {

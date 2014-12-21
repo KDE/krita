@@ -34,12 +34,11 @@
 
 #include <QBuffer>
 #include <QFile>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpace.h>
 #include <KoDocumentInfo.h>
@@ -49,7 +48,7 @@
 #include <KoColor.h>
 
 #include <kis_painter.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
 #include <kis_layer.h>
@@ -196,13 +195,14 @@ QByteArray png_read_raw_profile(png_textp text)
 {
     QByteArray profile;
 
-    static unsigned char unhex[103] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12,
-                                       13, 14, 15
-                                      };
+    static const unsigned char unhex[103] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12,
+        13, 14, 15
+    };
 
     png_charp sp = text[0].text + 1;
     /* look for newline */
@@ -256,7 +256,7 @@ void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, i
 }
 }
 
-KisPNGConverter::KisPNGConverter(KisDoc2 *doc)
+KisPNGConverter::KisPNGConverter(KisDocument *doc)
 {
 //     Q_ASSERT(doc);
 //     Q_ASSERT(adapter);
@@ -859,10 +859,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int color_nb_bits = 8 * device->pixelSize() / device->channelCount();
     int color_type = getColorTypeforColorSpace(device->colorSpace(), options.alpha);
 
-    if (color_type == -1) {
-        device->convertTo(KoColorSpaceRegistry::instance()->rgb8(0));
-        color_type = options.alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
-    }
+    Q_ASSERT(color_type > -1);
 
     // Try to compute a table of color if the colorspace is RGB8f
     png_colorp palette = 0;
@@ -953,7 +950,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 
             QByteArray keyData = (*it)->description().toLatin1();
             text[0].key = keyData.data();
-            text[0].text = (*it)->annotation().data();
+            text[0].text = (char*)(*it)->annotation().data();
             text[0].text_length = (*it)->annotation().size();
             text[0].compression = -1;
 
@@ -967,11 +964,10 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
     if (!sRGB || options.saveSRGBProfile) {
-        QString t ("icc");
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, t.toAscii().data(), PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
-        png_set_iCCP(png_ptr, info_ptr, t.toAscii().data(), PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
 #endif
     }
 

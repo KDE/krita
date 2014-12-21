@@ -29,7 +29,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorConversionTransformation.h>
 
-#include "kundo2command.h"
+#include "kundo2magicstring.h"
 #include "kis_distance_information.h"
 #include "kis_global.h"
 #include "kis_types.h"
@@ -109,7 +109,7 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const KUndo2MagicString& transactionName = KUndo2MagicString());
+    void beginTransaction(const KUndo2MagicString& transactionName = KUndo2MagicString(),int timedID = -1);
 
     /// Cancel all the changes made by the painter
     void revertTransaction();

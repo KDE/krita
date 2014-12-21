@@ -26,21 +26,17 @@
 #include <qendian.h>
 #include <QCursor>
 
-#include <kapplication.h>
 #include <kpluginfactory.h>
 
-#include <kio/netaccess.h>
-#include <kio/deletejob.h>
-
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceTraits.h>
 
 #include <kis_debug.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
@@ -55,7 +51,7 @@
 K_PLUGIN_FACTORY(HeightMapImportFactory, registerPlugin<KisHeightMapImport>();)
 K_EXPORT_PLUGIN(HeightMapImportFactory("krita"))
 
-KisHeightMapImport::KisHeightMapImport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisHeightMapImport::KisHeightMapImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -63,13 +59,13 @@ KisHeightMapImport::~KisHeightMapImport()
 {
 }
 
-KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to)
 {
 
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
+    KisDocument * doc = m_chain->outputDocument();
 
     if (!doc) {
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
     }
 
     KoID depthId;
@@ -81,18 +77,18 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
     }
     else {
         doc->setErrorMessage(i18n("The file is not 8 or 16 bits raw"));
-        return KoFilter::WrongFormat;
+        return KisImportExportFilter::WrongFormat;
     }
     dbgFile << "Importing using HeightMapImport!";
 
     if (to != "application/x-krita") {
-        return KoFilter::BadMimeType;
+        return KisImportExportFilter::BadMimeType;
     }
 
-    QString filename = m_chain -> inputFile();
+    QString filename = m_chain->inputFile();
 
     if (filename.isEmpty()) {
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
     }
 
     KUrl url(filename);
@@ -100,13 +96,13 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
 
     dbgFile << "Import: " << url;
     if (url.isEmpty())
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
 
     if (!url.isLocalFile()) {
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
     }
 
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     KDialog* kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("R16 HeightMap Import Options"));
@@ -130,7 +126,7 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
 
     if (!f.exists()) {
         doc->setErrorMessage(i18n("File does not exist."));
-        return KoFilter::CreationError;
+        return KisImportExportFilter::CreationError;
     }
 
     if (!f.isOpen()) {
@@ -148,7 +144,7 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
-            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+            return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
 
@@ -156,7 +152,7 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
 
     if ((w * h * (from == "image/x-r16" ? 2 : 1)) != f.size()) {
         doc->setErrorMessage(i18n("Source file is not the right size for the specified width and height."));
-        return KoFilter::WrongFormat;
+        return KisImportExportFilter::WrongFormat;
     }
 
 
@@ -200,6 +196,6 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
 
     image->addNode(layer.data(), image->rootLayer().data());
     doc->setCurrentImage(image);
-    return KoFilter::OK;
+    return KisImportExportFilter::OK;
 }
 

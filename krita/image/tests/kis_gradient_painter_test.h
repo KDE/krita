@@ -26,8 +26,12 @@ class KisGradientPainterTest : public QObject
     Q_OBJECT
 private slots:
 
-    void testCreation();
+    void testSimplifyPath();
 
+    void testShapedGradientPainterRect();
+    void testShapedGradientPainterNonRegular();
+
+    void testCachedStrategy();
 };
 
 #endif

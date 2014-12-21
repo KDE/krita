@@ -78,6 +78,8 @@ void KisAnimationStore::closeFile()
 
 QIODevice* KisAnimationStore::getDevice(QString location)
 {
+    Q_UNUSED(location);
+
     return m_currentFile;
 }
 
@@ -109,7 +111,7 @@ void KisAnimationStore::readFromFile(char *buffer, qint64 length)
 void KisAnimationStore::setMimetype()
 {
     QByteArray mimetype("x-krita-animation");
-    this->openFileWriting("mimetype");
-    this->writeDataToFile(mimetype);
-    this->closeFile();
+    openFileWriting("mimetype");
+    writeDataToFile(mimetype);
+    closeFile();
 }

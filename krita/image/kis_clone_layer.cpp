@@ -34,6 +34,9 @@
 #include "kis_clone_info.h"
 #include "kis_paint_layer.h"
 
+#include <QStack>
+#include <kis_effect_mask.h>
+
 
 struct KisCloneLayer::Private
 {
@@ -157,6 +160,28 @@ void KisCloneLayer::notifyParentVisibilityChanged(bool value)
     KisLayer::notifyParentVisibilityChanged(value);
 }
 
+QRect KisCloneLayer::needRectOnSourceForMasks(const QRect &rc) const
+{
+    QStack<QRect> applyRects_unused;
+    bool rectVariesFlag;
+
+    QList<KisEffectMaskSP> effectMasks = this->effectMasks();
+    if (effectMasks.isEmpty()) return QRect();
+
+    QRect needRect = this->masksNeedRect(effectMasks,
+                                         rc,
+                                         applyRects_unused,
+                                         rectVariesFlag);
+
+    if (needRect.isEmpty() ||
+        (!rectVariesFlag && needRect == rc)) {
+
+        return QRect();
+    }
+
+    return needRect;
+}
+
 qint32 KisCloneLayer::x() const
 {
     return m_d->x;
@@ -196,8 +221,17 @@ QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect resultRect = rect;
 
-    if(pos & (N_FILTHY_PROJECTION | N_FILTHY) && (m_d->x || m_d->y)) {
-        resultRect |= rect.translated(-m_d->x, -m_d->y);
+    if(pos & (N_FILTHY_PROJECTION | N_FILTHY)) {
+        if (m_d->x || m_d->y) {
+            resultRect |= rect.translated(-m_d->x, -m_d->y);
+        }
+
+        /**
+         * KisUpdateOriginalVisitor will try to recalculate some area
+         * on the clone's source, so this extra rectangle should also
+         * be taken into account
+         */
+        resultRect |= needRectOnSourceForMasks(rect);
     }
 
     return resultRect;
@@ -257,11 +291,11 @@ QIcon KisCloneLayer::icon() const
     return koIcon("edit-copy");
 }
 
-KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     if (m_d->copyFrom)
-        l << KoDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
+        l << KisDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
     return l;
 }
 

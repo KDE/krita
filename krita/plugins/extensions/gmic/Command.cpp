@@ -59,6 +59,14 @@ void Command::processCommandName(const QString& line)
     m_command = commands.at(0).trimmed();
     m_commandPreview = commands.at(1).trimmed();
 
+    QStringList splitted = m_commandPreview.split("(");
+    if (splitted.size() == 2)
+    {
+        m_commandPreview = splitted.at(0);
+        m_commandPreviewZoom = splitted.at(1);
+        m_commandPreviewZoom.chop(1);
+    }
+
 }
 
 
@@ -106,7 +114,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         QString typeName = line.mid(index, helperIndex - index);
         if (typeName.startsWith(underscore))
         {
-            typeName = typeName.mid(1);
+            typeName.remove(0, 1);
         }
 
         const QList<QString> &typeDefs = PARAMETER_NAMES_STRINGS;
@@ -124,7 +132,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         // Type separators '()' can be replaced by '[]' or '{}' if necessary ...
         QChar delimiter = line.at(index);
         QChar closingdelimiter;
-        switch (delimiter.toAscii())
+        switch (delimiter.toLatin1())
         {
             case '(':
             {
@@ -369,11 +377,13 @@ void Command::writeConfiguration(KisGmicFilterSetting* setting)
 {
     // example: -gimp_poster_edges 20,60,5,0,10,0,0
     QString command = "-" + m_command + " ";
+    QString commandPreview = "-" + m_commandPreview + " ";
     foreach(Parameter * p, m_parameters)
     {
         if (!p->value().isNull())
         {
             command.append(p->value() +",");
+            commandPreview.append(p->value() +",");
         }
         else
         {
@@ -382,7 +392,6 @@ void Command::writeConfiguration(KisGmicFilterSetting* setting)
                 // implement for given parameter value()!
                 dbgPlugins << "UNHANDLED command parameter: " << p->m_name << p->toString();
             }
-
         }
     }
 
@@ -391,7 +400,13 @@ void Command::writeConfiguration(KisGmicFilterSetting* setting)
         command.chop(1);
     }
 
+    if (commandPreview.endsWith(","))
+    {
+        commandPreview.chop(1);
+    }
+
     setting->setGmicCommand(command);
+    setting->setPreviewGmicCommand(commandPreview);
 }
 
 QString Command::mergeBlockToLine(const QStringList& block)

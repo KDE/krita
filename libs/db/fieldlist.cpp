@@ -173,7 +173,7 @@ void FieldList::debug()
 #define _ADD_FIELD(fname) \
     { \
         if (fname.isEmpty()) return fl; \
-        f = m_fields_by_name.value(fname.toLower()); \
+        Field *f = m_fields_by_name.value(fname.toLower()); \
         if (!f) { KexiDBWarn << subListWarning1(fname); delete fl; return 0; } \
         fl->addField(f); \
     }
@@ -195,7 +195,6 @@ FieldList* FieldList::subList(const QString& n1, const QString& n2,
 {
     if (n1.isEmpty())
         return 0;
-    Field *f;
     FieldList *fl = new FieldList(false);
     _ADD_FIELD(n1);
     _ADD_FIELD(n2);
@@ -220,7 +219,6 @@ FieldList* FieldList::subList(const QString& n1, const QString& n2,
 
 FieldList* FieldList::subList(const QStringList& list)
 {
-    Field *f;
     FieldList *fl = new FieldList(false);
     for (QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it) {
         _ADD_FIELD((*it));
@@ -230,10 +228,9 @@ FieldList* FieldList::subList(const QStringList& list)
 
 FieldList* FieldList::subList(const QList<uint>& list)
 {
-    Field *f;
     FieldList *fl = new FieldList(false);
     foreach(uint index, list) {
-        f = field(index);
+        Field *f = field(index);
         if (!f) {
             KexiDBWarn << QString("could not find field at position %1").arg(index);
             delete fl;

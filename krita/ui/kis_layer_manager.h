@@ -19,22 +19,22 @@
 #define KIS_LAYER_MANAGER
 
 #include <QObject>
+#include <QPointer>
 #include <QList>
 
 #include "kis_types.h"
+#include "KisView.h"
 
 class KAction;
 class QAction;
-class KToggleAction;
 class KActionCollection;
 
-
-class KisDoc2;
 class KisFilterStrategy;
-class KisView2;
+class KisViewManager;
 class KisFilterConfiguration;
 class KisNodeCommandsAdapter;
 class KisAction;
+class KisActionManager;
 
 /**
  * KisLayerManager takes care of the gui around working with layers:
@@ -48,16 +48,18 @@ class KisLayerManager : public QObject
 
 public:
 
-    KisLayerManager(KisView2 * view,  KisDoc2 * doc);
+    KisLayerManager(KisViewManager * view);
     ~KisLayerManager();
+    void setView(QPointer<KisView>view);
+
 signals:
 
     void sigLayerActivated(KisLayerSP layer);
 
 private:
-    
+
     friend class KisNodeManager;
-    
+
     /**
      * Activate the specified layer. The layer may be 0.
      */
@@ -65,19 +67,19 @@ private:
 
     KisLayerSP activeLayer();
     KisPaintDeviceSP activeDevice();
-    
-    
-    void setup(KActionCollection * collection);
+
+
+    void setup(KActionCollection * collection, KisActionManager *actionManager);
 
     void updateGUI();
-    
+
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
 
 private slots:
 
     void mergeLayer();
-    
+
     void imageResizeToActiveLayer();
 
     void layerProperties();
@@ -89,7 +91,7 @@ private slots:
     void layerBack();
 
     void flattenImage();
-    
+
     void flattenLayer();
     void rasterizeLayer();
 
@@ -120,16 +122,15 @@ private:
 
 private:
 
-    KisView2 * m_view;
-    KisDoc2 * m_doc;
+    KisViewManager * m_view;
+    QPointer<KisView>m_imageView;
 
-    KAction *m_imageFlatten;
-    KAction *m_imageMergeLayer;
-    KAction *m_groupLayersSave;
+    KisAction *m_imageFlatten;
+    KisAction *m_imageMergeLayer;
+    KisAction *m_groupLayersSave;
     KisAction *m_imageResizeToLayer;
-    KAction *m_flattenLayer;
+    KisAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;
-    KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };
 

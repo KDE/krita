@@ -18,6 +18,9 @@
  */
 #include "KoViewConverter.h"
 
+#include <QPointF>
+#include <QRectF>
+
 KoViewConverter::KoViewConverter()
     : m_zoomLevel(1.0)
 {

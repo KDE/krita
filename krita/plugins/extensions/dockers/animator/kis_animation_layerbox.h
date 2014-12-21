@@ -30,8 +30,8 @@
 
 class KisNodeModel;
 class KisNodeManager;
-class KisTimeline;
-class KisAnimationLayer;
+class KisTimelineWidget;
+class KisAnimationLayerWidget;
 
 /**
  * This class represents the widget containing
@@ -41,9 +41,9 @@ class KisAnimationLayerBox : public QListWidget
 {
     Q_OBJECT
 public:
-    KisAnimationLayerBox(KisTimeline* parent = 0);
+    KisAnimationLayerBox(KisTimelineWidget* parent = 0);
 
-    QList<KisAnimationLayer*> getLayers();
+    QList<KisAnimationLayerWidget*> getLayers();
 
     void addLayerUiUpdate();
     void removeLayerUiUpdate(int layer);
@@ -65,7 +65,7 @@ public:
     bool lockState(int layer);
     QHash<int, bool> lockStates();
 
-    int indexOf(KisAnimationLayer* layer);
+    int indexOf(KisAnimationLayerWidget* layer);
 
     KisCanvas2* getCanvas();
 
@@ -73,10 +73,10 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    KisTimeline* m_dock;
+    KisTimelineWidget* m_dock;
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;
-    QList<KisAnimationLayer*> m_layers;
+    QList<KisAnimationLayerWidget*> m_layers;
     int m_layerIndex;
 
     QHash<int, bool> m_onionSkinStates;

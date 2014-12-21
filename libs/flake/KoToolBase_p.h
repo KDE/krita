@@ -30,6 +30,7 @@
 #include <QWidget>
 #include <QString>
 #include <QSet>
+#include <QPointer>
 #include <string.h> // for the qt version check
 
 class QWidget;
@@ -50,16 +51,13 @@ public:
 
     ~KoToolBasePrivate()
     {
-        bool badQt = strcmp(qVersion(), "4.6.2") <= 0;
-        if (badQt) { // In <= Qt462 we do a bit more to avoid a crash
-            foreach(QWidget *optionWidget, optionWidgets) {
+        foreach(QPointer<QWidget> optionWidget, optionWidgets) {
+            if (optionWidget) {
                 optionWidget->setParent(0);
                 delete optionWidget;
             }
-            optionWidgets.clear();
-        } else {
-            qDeleteAll(optionWidgets);
         }
+        optionWidgets.clear();
     }
 
     void connectSignals()
@@ -80,7 +78,7 @@ public:
         }
     }
 
-    QList<QWidget *> optionWidgets; ///< the optionwidgets associated with this tool
+    QList<QPointer<QWidget> > optionWidgets; ///< the optionwidgets associated with this tool
     QCursor currentCursor;
     QHash<QString, KAction*> actionCollection;
     QString toolId;

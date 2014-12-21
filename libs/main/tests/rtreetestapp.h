@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef RTREETESTAPP_H
+#define RTREETESTAPP_H
 
 #define CALLIGRA_RTREE_DEBUG
 

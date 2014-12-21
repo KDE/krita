@@ -25,7 +25,6 @@
 
 #include <kundo2command.h>
 #include <QList>
-#include <QBrush>
 #include <QSharedPointer>
 
 class KoShape;

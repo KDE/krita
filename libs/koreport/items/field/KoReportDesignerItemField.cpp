@@ -52,7 +52,7 @@ KoReportDesignerItemField::KoReportDesignerItemField(KoReportDesigner * rw, QGra
 {
     Q_UNUSED(pos);
     init(scene, rw);
-    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    setSceneRect(properRect(*rw, getTextRect().width(), getTextRect().height()));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
@@ -61,14 +61,6 @@ KoReportDesignerItemField::KoReportDesignerItemField(QDomNode & element, KoRepor
 {
     init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
-}
-
-QSizeF KoReportDesignerItemField::minimumSize(const KoReportDesigner &designer) const
-{
-    if (designer.countSelectionWidth() < getTextRect().width() || designer.countSelectionHeight() < getTextRect().height()) {
-        return QSizeF(getTextRect().width(), getTextRect().height());
-    }
-    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemField* KoReportDesignerItemField::clone()
@@ -102,11 +94,11 @@ void KoReportDesignerItemField::paint(QPainter* painter, const QStyleOptionGraph
     QPen  p = painter->pen();
 
     painter->setFont(font());
+    painter->setBackgroundMode(Qt::TransparentMode);
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+    bg.setAlphaF(m_backgroundOpacity->value().toReal() *0.01);
 
-    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(QGraphicsRectItem::rect(), bg);
@@ -114,14 +106,13 @@ void KoReportDesignerItemField::paint(QPainter* painter, const QStyleOptionGraph
 
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
-        painter->setPen(QPen(QColor(224, 224, 224)));
+        painter->setPen(QPen(Qt::lightGray));
     } else {
         painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }
 
     painter->drawRect(rect());
 
-    painter->setBackgroundMode(Qt::TransparentMode);
 
     drawHandles(painter);
 

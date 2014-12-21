@@ -19,12 +19,15 @@
 #include "KoReportItemBarcode.h"
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 
 #include "barcodes.h"
+
+KoReportItemBarcode::KoReportItemBarcode()
+{
+    createProperties();
+}
 
 KoReportItemBarcode::KoReportItemBarcode(QDomNode & element)
 {
@@ -128,6 +131,7 @@ void KoReportItemBarcode::createProperties()
 
 KoReportItemBarcode::~KoReportItemBarcode()
 {
+    delete m_set;
 }
 
 int KoReportItemBarcode::alignment()

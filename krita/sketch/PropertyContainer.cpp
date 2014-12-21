@@ -30,12 +30,12 @@ PropertyContainer::~PropertyContainer()
 
 void PropertyContainer::writeProperty(QString name, QVariant value)
 {
-    setProperty(name.toAscii(), value);
+    setProperty(name.toLatin1(), value);
 }
 
 QVariant PropertyContainer::readProperty(QString name)
 {
-    return property(name.toAscii());
+    return property(name.toLatin1());
 }
 
 const KisCubicCurve& PropertyContainer::curve() const

@@ -25,6 +25,7 @@
 #include "generator/kis_generator_layer.h"
 #include "kis_clone_layer.h"
 #include "kis_filter_mask.h"
+#include "kis_transform_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 
@@ -56,6 +57,7 @@ public:
     virtual bool visit(KisGeneratorLayer* layer) { return process(layer); }
     virtual bool visit(KisCloneLayer* layer) { return process(layer); }
     virtual bool visit(KisFilterMask* mask) { return process(mask); }
+    virtual bool visit(KisTransformMask* mask) { return process(mask); }
     virtual bool visit(KisTransparencyMask* mask) { return process(mask); }
     virtual bool visit(KisSelectionMask* mask) { return process(mask); }
 

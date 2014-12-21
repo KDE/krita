@@ -112,7 +112,7 @@ void KoSectionManager::invalidate()
     d->valid = false;
 }
 
-bool KoSectionManager::isValidNewName(QString name)
+bool KoSectionManager::isValidNewName(const QString &name)
 {
     Q_D(KoSectionManager);
     return (d->sectionNames().find(name) == d->sectionNames().end());
@@ -136,6 +136,19 @@ void KoSectionManager::registerSection(KoSection* section)
     d->registeredSections.insert(section);
     invalidate();
 }
+
+// void KoSectionManager::sectionRenamed(const QString &oldName, const QString &name)
+// {
+//     Q_D(KoSectionManager);
+//     QHash<QString, KoSection *>::iterator it = d->sectionNames.find(oldName);
+//     KoSection *sec = *it;
+//     d->sectionNames.erase(it);
+//     d->sectionNames[name] = sec;
+//
+//     if (sec->modelItem()) {
+//         sec->modelItem()->setData(name, Qt::DisplayRole);
+//     }
+// }
 
 void KoSectionManager::unregisterSection(KoSection* section)
 {

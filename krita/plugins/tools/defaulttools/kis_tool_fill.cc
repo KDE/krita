@@ -33,12 +33,8 @@
 #include <QRect>
 #include <QColor>
 
-#include <knuminput.h>
-
-#include <KoUpdater.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-#include <KoProgressUpdater.h>
 
 #include <kis_layer.h>
 #include <kis_painter.h>
@@ -47,7 +43,7 @@
 #include <kis_selection.h>
 #include <kis_system_locker.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <canvas/kis_canvas2.h>
 #include <widgets/kis_cmb_composite.h>
 #include <widgets/kis_slider_spin_box.h>
@@ -75,6 +71,12 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
 
 KisToolFill::~KisToolFill()
 {
+}
+
+void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+{
+    KisToolPaint::activate(toolActivation, shapes);
+    m_configGroup = KGlobal::config()->group(toolId());
 }
 
 
@@ -128,7 +130,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                                        kundo2_i18n("Flood Fill"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
     KisProcessingVisitorSP visitor =
         new FillProcessingVisitor(m_startPos,
@@ -161,44 +163,40 @@ QWidget* KisToolFill::createOptionWidget()
         i18n("Fills area faster, but does not take composition "
              "mode into account. Selections and other extended "
              "features will also be disabled."));
-    m_useFastMode->setChecked(false);
+
 
     QLabel *lbl_threshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KisSliderSpinBox(widget);
     m_slThreshold->setObjectName("int_widget");
     m_slThreshold->setRange(1, 100);
     m_slThreshold->setPageStep(3);
-    m_slThreshold->setValue(m_threshold);
+
 
     QLabel *lbl_sizemod = new QLabel(i18n("Grow selection: "), widget);
     m_sizemodWidget = new KisSliderSpinBox(widget);
     m_sizemodWidget->setObjectName("sizemod");
     m_sizemodWidget->setRange(-40, 40);
     m_sizemodWidget->setSingleStep(1);
-    m_sizemodWidget->setValue(0);
     m_sizemodWidget->setSuffix("px");
 
     QLabel *lbl_feather = new QLabel(i18n("Feathering radius: "), widget);
     m_featherWidget = new KisSliderSpinBox(widget);
     m_featherWidget->setObjectName("feather");
     m_featherWidget->setRange(0, 40);
-    m_featherWidget->setSingleStep(1);
-    m_featherWidget->setValue(0);
+    m_featherWidget->setSingleStep(1);   
     m_featherWidget->setSuffix("px");
 
     QLabel *lbl_usePattern = new QLabel(i18n("Use pattern:"), widget);
     m_checkUsePattern = new QCheckBox(QString(), widget);
     m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the gradient selected to fill with"));
-    m_checkUsePattern->setChecked(m_usePattern);
 
     QLabel *lbl_sampleMerged = new QLabel(i18n("Limit to current layer:"), widget);
     m_checkSampleMerged = new QCheckBox(QString(), widget);
-    m_checkSampleMerged->setChecked(m_unmerged);
+
 
     QLabel *lbl_fillSelection = new QLabel(i18n("Fill entire selection:"), widget);
     m_checkFillSelection = new QCheckBox(QString(), widget);
     m_checkFillSelection->setToolTip(i18n("When checked do not look at the current layer colors, but just fill all of the selected area"));
-    m_checkFillSelection->setChecked(m_fillOnlySelection);
 
     connect (m_useFastMode       , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
     connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
@@ -221,6 +219,18 @@ QWidget* KisToolFill::createOptionWidget()
 
     widget->setFixedHeight(widget->sizeHint().height());
 
+
+
+    // load configuration options
+    m_useFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
+    m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 80));
+    m_sizemodWidget->setValue(m_configGroup.readEntry("growSelection", 0));
+
+    m_featherWidget->setValue(m_configGroup.readEntry("featherAmount", 0));
+    m_checkUsePattern->setChecked(m_configGroup.readEntry("usePattern", false));
+    m_checkSampleMerged->setChecked(m_configGroup.readEntry("sampleMerged", false));
+    m_checkFillSelection->setChecked(m_configGroup.readEntry("fillSelection", false));
+
     return widget;
 }
 
@@ -238,39 +248,46 @@ void KisToolFill::updateGUI()
     m_checkUsePattern->setEnabled(useAdvancedMode);
 }
 
-void KisToolFill::slotSetUseFastMode(bool)
+void KisToolFill::slotSetUseFastMode(bool value)
 {
     updateGUI();
+    m_configGroup.writeEntry("useFastMode", value);
 }
 
 void KisToolFill::slotSetThreshold(int threshold)
 {
     m_threshold = threshold;
+    m_configGroup.writeEntry("thresholdAmount", threshold);
 }
 
 void KisToolFill::slotSetUsePattern(bool state)
 {
     m_usePattern = state;
+    m_configGroup.writeEntry("usePattern", state);
 }
 
 void KisToolFill::slotSetSampleMerged(bool state)
 {
     m_unmerged = state;
+    m_configGroup.writeEntry("sampleMerged", state);
 }
 
 void KisToolFill::slotSetFillSelection(bool state)
 {
     m_fillOnlySelection = state;
+    m_configGroup.writeEntry("fillSelection", state);
     updateGUI();
 }
 
 void KisToolFill::slotSetSizemod(int sizemod)
 {
     m_sizemod = sizemod;
+    m_configGroup.writeEntry("growSelection", sizemod);
 }
 
 void KisToolFill::slotSetFeather(int feather)
 {
     m_feather = feather;
+    m_configGroup.writeEntry("featherAmount", feather);
 }
 #include "kis_tool_fill.moc"

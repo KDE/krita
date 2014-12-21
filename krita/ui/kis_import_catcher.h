@@ -21,12 +21,11 @@
 
 #include <QObject>
 
-#include <kurl.h>
-
 #include <kis_types.h>
 
-class KisView2;
-class KisDoc2;
+class KisViewManager;
+class KisDocument;
+class KUrl;
 
 /**
  * This small helper class takes an url and an image; tries to import
@@ -44,7 +43,7 @@ class KisImportCatcher : QObject
 
 public:
 
-    KisImportCatcher(const KUrl & url, KisView2* view, bool importAsLayer);
+    KisImportCatcher(const KUrl & url, KisViewManager* view, const QString &layerType);
     ~KisImportCatcher();
 
 private slots:

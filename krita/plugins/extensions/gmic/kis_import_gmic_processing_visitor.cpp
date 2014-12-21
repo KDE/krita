@@ -62,7 +62,13 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
         {
             KisGmicSimpleConvertor::convertFromGmicFast(m_images->_data[index], dst, 255.0f);
         }
-        transaction.commit(undoAdapter);
+
+        if (undoAdapter)
+        {
+            transaction.commit(undoAdapter);
+            node->setDirty(m_dstRect);
+        }
+
     }
 }
 

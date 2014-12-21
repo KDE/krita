@@ -36,7 +36,6 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <knuminput.h>
 
 #include <KoCanvasBase.h>
 #include <kis_global.h>
@@ -48,7 +47,7 @@
 #include <kis_selection.h>
 #include <kis_layer.h>
 #include <kis_canvas2.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_floating_message.h>
 #include <kis_group_layer.h>
 #include <kis_resources_snapshot.h>
@@ -103,7 +102,7 @@ DecorationLine decors[20] =
 };
 
 #define DECORATION_COUNT 5
-int decorsIndex[DECORATION_COUNT] = {0,4,12,18,20};
+const int decorsIndex[DECORATION_COUNT] = {0,4,12,18,20};
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
@@ -134,10 +133,24 @@ KisToolCrop::~KisToolCrop()
 
 void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+
     KisTool::activate(toolActivation, shapes);
+    configGroup = KGlobal::config()->group(toolId()); // save settings to kritarc
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
+
+
+    // load settings from configuration
+    setGrowCenter(configGroup.readEntry("growCenter", false));
+    setForceRatio(configGroup.readEntry("forceRatio", false));
+    setAllowGrow(configGroup.readEntry("allowGrow", true));
+    setDecoration(configGroup.readEntry("decoration", 0));
+
+    // can't save Enum values, so we ened to convert it to int.
+    setCropType(configGroup.readEntry("cropType") == 0 ? LayerCropType : ImageCropType);
+
+
 
     KisSelectionSP sel = resources->activeSelection();
     if (sel) {
@@ -541,16 +554,8 @@ void KisToolCrop::validateSelection(bool updateratio)
     }
 }
 
-#define FADE_AREA_OUTSIDE_CROP 1
-
-#if FADE_AREA_OUTSIDE_CROP
 #define BORDER_LINE_WIDTH 0
 #define HALF_BORDER_LINE_WIDTH 0
-#else
-#define BORDER_LINE_WIDTH 1
-#define HALF_BORDER_LINE_WIDTH (BORDER_LINE_WIDTH / 2.0)
-#endif
-
 #define HANDLE_BORDER_LINE_WIDTH 1
 
 QRectF KisToolCrop::borderLineRect()
@@ -570,8 +575,6 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
     if (canvas() && (mode() == KisTool::PAINT_MODE || m_haveCropSelection)) {
         gc.save();
 
-#if FADE_AREA_OUTSIDE_CROP
-
         QRectF wholeImageRect = pixelToView(image()->bounds());
         QRectF borderRect = borderLineRect();
 
@@ -588,7 +591,7 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
         pen.setWidth(HANDLE_BORDER_LINE_WIDTH);
         pen.setColor(Qt::black);
         gc.setPen(pen);
-        gc.setBrush(Qt::yellow);
+        gc.setBrush(QColor(200, 200, 200, OUTSIDE_CROP_ALPHA));
         gc.drawPath(handlesPath());
 
         gc.setClipRect(borderRect, Qt::IntersectClip);
@@ -598,28 +601,6 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
                 drawDecorationLine(&gc, &(decors[i]), borderRect);
             }
         }
-
-#else
-        QPen pen(Qt::SolidLine);
-        pen.setWidth(BORDER_LINE_WIDTH);
-        gc.setPen(pen);
-
-        QRectF borderRect = borderLineRect();
-
-        //  Border
-        gc.setBrush(Qt::NoBrush);
-        gc.drawRect(borderRect);
-
-        // Handles
-        gc.setBrush(Qt::black);
-        gc.drawPath(handlesPath());
-
-        //draw guides
-        gc.drawLine(borderRect.bottomLeft(), QPointF(-canvas()->canvasWidget()->width(), borderRect.bottom()));
-        gc.drawLine(borderRect.bottomLeft(), QPointF(borderRect.left(), canvas()->canvasWidget()->height()));
-        gc.drawLine(borderRect.topRight(), QPointF(canvas()->canvasWidget()->width(), borderRect.top()));
-        gc.drawLine(borderRect.topRight(), QPointF(borderRect.right(), -canvas()->canvasWidget()->height()));
-#endif
         gc.restore();
     }
 }
@@ -660,6 +641,10 @@ void KisToolCrop::setCropType(KisToolCrop::CropToolType cropType)
     if(m_cropType == cropType)
         return;
     m_cropType = cropType;
+
+    // can't save LayerCropType, so have to convert it to int for saving
+    configGroup.writeEntry("cropType", cropType == LayerCropType ? 0 : 1);
+
     emit cropTypeChanged();
 }
 
@@ -694,6 +679,8 @@ void KisToolCrop::setDecoration(int i)
     m_decoration = i;
     emit decorationChanged();
     updateCanvasViewRect(boundingRect());
+
+    configGroup.writeEntry("decoration", i);
 }
 
 void KisToolCrop::setCropX(int x)
@@ -859,6 +846,7 @@ bool KisToolCrop::forceHeight() const
 void KisToolCrop::setAllowGrow(bool g)
 {
     m_grow = g;
+    configGroup.writeEntry("allowGrow", g);
 }
 
 bool KisToolCrop::allowGrow() const
@@ -869,6 +857,7 @@ bool KisToolCrop::allowGrow() const
 void KisToolCrop::setGrowCenter(bool g)
 {
     m_growCenter = g;
+    configGroup.writeEntry("growCenter", g);
 }
 
 bool KisToolCrop::growCenter() const
@@ -926,6 +915,8 @@ void KisToolCrop::setForceRatio(bool force)
     if(force == m_forceRatio)
         return;
     m_forceRatio = force;
+    configGroup.writeEntry("forceRatio", force);
+
     emit forceRatioChanged();
 }
 

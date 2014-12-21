@@ -31,10 +31,6 @@
 #include <KoDocumentRdfBase.h>
 #include <KoXmlReaderForward.h>
 #include <KoDataCenterBase.h>
-// KDE
-#include <kconfig.h>
-#include <kaction.h>
-#include <kdatetime.h>
 // Soprano
 #include <Soprano/Soprano>
 // Qt
@@ -55,6 +51,7 @@ class KoTextEditor;
 
 class KoDocumentRdfPrivate;
 
+class KAction;
 
 /**
  * @short The central access point for the Rdf metadata of an ODF document.

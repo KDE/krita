@@ -33,7 +33,6 @@ using namespace KexiDB;
 
 Parser *parser = 0;
 Field *field = 0;
-//bool requiresTable;
 QList<Field*> fieldList;
 int current = 0;
 QByteArray ctoken;
@@ -173,7 +172,6 @@ bool parseData(Parser *p, const char *data)
     parser->clear();
     field = 0;
     fieldList.clear();
-// requiresTable = false;
 
     if (!data) {
         ParserError err(i18n("Error"), i18n("No query statement specified."), ctoken, current);
@@ -193,32 +191,15 @@ bool parseData(Parser *p, const char *data)
     bool ok = true;
     if (parser->operation() == Parser::OP_Select) {
         KexiDBDbg << "parseData(): ok";
-//   KexiDBDbg << "parseData(): " << tableDict.count() << " loaded tables";
+        //   KexiDBDbg << "parseData(): " << tableDict.count() << " loaded tables";
         /*   TableSchema *ts;
               for(QDictIterator<TableSchema> it(tableDict); TableSchema *s = tableList.first(); s; s = tableList.next())
               {
                 KexiDBDbg << " " << s->name();
               }*/
-        /*removed
-              Field::ListIterator it = parser->select()->fieldsIterator();
-              for(Field *item; (item = it.current()); ++it)
-              {
-                if(tableList.findRef(item->table()) == -1)
-                {
-                  ParserError err(futureI18n("Field List Error"), i18n("Unknown table '%1' in field list",item->table()->name()), ctoken, current);
-                  parser->setError(err);
-
-                  yyerror("fieldlisterror");
-                  ok = false;
-                }
-              }*/
-        //take the dummy table out of the query
-//   parser->select()->removeTable(dummy);
     } else {
         ok = false;
     }
-
-//  tableDict.clear();
     yylex_destroy();
     parser = 0;
     return ok;
@@ -258,133 +239,6 @@ bool addColumn(ParseInfo& parseInfo, BaseExpr* columnExpr)
 
     //it's complex expression
     parseInfo.querySchema->addExpression(columnExpr);
-
-#if 0
-    KexiDBDbg << "found variable name: " << varName;
-    int dotPos = varName.find('.');
-    QString tableName, fieldName;
-//TODO: shall we also support db name?
-    if (dotPos > 0) {
-        tableName = varName.left(dotPos);
-        fieldName = varName.mid(dotPos + 1);
-    }
-    if (tableName.isEmpty()) {//fieldname only
-        fieldName = varName;
-        if (fieldName == "*") {
-            parseInfo.querySchema->addAsterisk(new QueryAsterisk(parseInfo.querySchema));
-        } else {
-            //find first table that has this field
-            Field *firstField = 0;
-            foreach(TableSchema *ts, *parseInfo.querySchema->tables()) {
-                Field *f = ts->field(fieldName);
-                if (f) {
-                    if (!firstField) {
-                        firstField = f;
-                    } else if (f->table() != firstField->table()) {
-                        //ambiguous field name
-                        setError(futureI18n("Ambiguous field name"),
-                                 futureI18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
-                                      "Use \"<tableName>.%4\" notation to specify table name."
-                                      , firstField->table()->name(), f->table()->name()
-                                      , fieldName, fieldName));
-                        return false;
-                    }
-                }
-            }
-            if (!firstField) {
-                setError(futureI18n("Field not found"),
-                         futureI18n("Table containing \"%1\" field not found", fieldName));
-                return false;
-            }
-            //ok
-            parseInfo.querySchema->addField(firstField);
-        }
-    } else {//table.fieldname or tableAlias.fieldname
-        tableName = tableName.toLower();
-        TableSchema *ts = parseInfo.querySchema->table(tableName);
-        if (ts) {//table.fieldname
-            //check if "table" is covered by an alias
-            const QList<int> tPositions(parseInfo.querySchema->tablePositions(tableName));
-            QList<int>::ConstIterator it = tPositions.constBegin();
-            QByteArray tableAlias;
-            bool covered = true;
-            foreach(int position, tPositions) {
-                tableAlias = parseInfo.querySchema->tableAlias(position).toLower();
-                if (tableAlias.isEmpty() || tableAlias == tableName.toLatin1()) {
-                    covered = false; //uncovered
-                    break;
-                }
-                KexiDBDbg << " --" << "covered by " << tableAlias << " alias";
-            }
-            if (covered) {
-                setError(futureI18n("Could not access the table directly using its name"),
-                         futureI18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
-                              "you can write \"%3\""
-                              , tableName
-                              , (tableName + "." + fieldName)
-                              , tableAlias + "." + fieldName.toLatin1()));
-                return false;
-            }
-        }
-
-        int tablePosition = -1;
-        if (!ts) {//try to find tableAlias
-            tablePosition = parseInfo.querySchema->tablePositionForAlias(tableName.toLatin1());
-            if (tablePosition >= 0) {
-                ts = parseInfo.querySchema->tables()->at(tablePosition);
-                if (ts) {
-//     KexiDBDbg << " --it's a tableAlias.name";
-                }
-            }
-        }
-
-
-        if (ts) {
-            if (!repeatedTablesAndAliases.contains(tableName)) {
-                IMPL_ERROR(tableName + "." + fieldName + ", !positionsList ");
-                return false;
-            }
-            const QList<int> positionsList(repeatedTablesAndAliases.value(tableName));
-
-            if (fieldName == "*") {
-                if (positionsList.count() > 1) {
-                    setError(futureI18n("Ambiguous \"%1.*\" expression", tableName),
-                             futureI18n("More than one \"%1\" table or alias defined.", tableName));
-                    return false;
-                }
-                parseInfo.querySchema->addAsterisk(new QueryAsterisk(parseInfo.querySchema, ts));
-            } else {
-//    KexiDBDbg << " --it's a table.name";
-                Field *realField = ts->field(fieldName);
-                if (realField) {
-                    // check if table or alias is used twice and both have the same column
-                    // (so the column is ambiguous)
-                    int numberOfTheSameFields = 0;
-                    foreach(int position, positionsList) {
-                        TableSchema *otherTS = parseInfo.querySchema->tables()->at(position);
-                        if (otherTS->field(fieldName))
-                            numberOfTheSameFields++;
-                        if (numberOfTheSameFields > 1) {
-                            setError(futureI18n("Ambiguous \"%1.%2\" expression", tableName, fieldName),
-                                     futureI18n("More than one \"%1\" table or alias defined containing \"%2\" field."
-                                          , tableName, fieldName));
-                            return false;
-                        }
-                    }
-
-                    parseInfo.querySchema->addField(realField, tablePosition);
-                } else {
-                    setError(futureI18n("Field not found"), futureI18n("Table \"%1\" has no \"%2\" field."
-                                                           , tableName, fieldName));
-                    return false;
-                }
-            }
-        } else {
-            tableNotFoundError(tableName);
-            return false;
-        }
-    }
-#endif
     return true;
 }
 

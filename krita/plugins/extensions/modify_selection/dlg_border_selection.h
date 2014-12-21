@@ -24,13 +24,13 @@
 #include "ui_wdg_border_selection.h"
 #include <operations/kis_operation_ui_widget.h>
 
-class KisView2;
+class KisViewManager;
 class WdgBorderSelection : public KisOperationUIWidget, public Ui::WdgBorderSelection
 {
     Q_OBJECT
 
 public:
-    WdgBorderSelection(QWidget *parent, KisView2* view);
+    WdgBorderSelection(QWidget *parent, KisViewManager* view);
 
     virtual void getConfiguration(KisOperationConfiguration* config);
 

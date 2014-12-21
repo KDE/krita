@@ -4,7 +4,7 @@ ColorAmount=0.15
 ColorEffect=0
 ContrastAmount=0.250
 ContrastEffect=1
-IntensityAmount=0.04
+IntensityAmount=0
 IntensityEffect=1
 
 [ColorEffects:Inactive]
@@ -76,7 +76,7 @@ ForegroundVisited=100,74,155
 
 [Colors:Window]
 BackgroundAlternate=114,114,114
-BackgroundNormal=107,107,107
+BackgroundNormal=100,100,100
 DecorationFocus=96,128,160
 DecorationHover=144,168,192
 ForegroundActive=148,190,201

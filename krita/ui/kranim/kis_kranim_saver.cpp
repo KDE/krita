@@ -19,7 +19,7 @@
 #include "kis_kranim_saver.h"
 #include "kis_kranim_tags.h"
 #include "kis_animation_doc.h"
-#include "kis_animation_part.h"
+#include "KisPart.h"
 #include "kis_animation.h"
 #include "kis_layer.h"
 #include "kis_store_paintdevice_writer.h"
@@ -39,7 +39,7 @@ KisKranimSaver::KisKranimSaver(KisAnimationDoc *document)
     : m_d(new Private)
 {
     m_d->doc = document;
-    m_d->animation = dynamic_cast<KisAnimationPart*>(document->documentPart())->animation();
+    m_d->animation = document->getAnimation();
 }
 
 KisKranimSaver::~KisKranimSaver()

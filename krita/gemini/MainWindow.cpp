@@ -39,25 +39,25 @@
 #include <QGLWidget>
 #include <QDesktopServices>
 
-#include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
-#include <kaboutdata.h>
-#include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>
+#include <kdialog.h>
 
 #include <KoCanvasBase.h>
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 #include <KoGlobal.h>
 #include <KoDocumentInfo.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 #include <KoFileDialog.h>
-#include <KoDocumentEntry.h>
-#include <KoFilterManager.h>
+#include <KisDocumentEntry.h>
+#include <KisImportExportManager.h>
+#include <KoToolManager.h>
+#include <KoIcon.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -68,8 +68,8 @@
 #include <KoPattern.h>
 #include <kis_config.h>
 #include <kis_factory2.h>
-#include <kis_doc2.h>
-#include <kis_view2.h>
+#include <KisDocument.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_canvas_controller.h>
 
@@ -123,15 +123,15 @@ public:
     MainWindow* q;
     bool allowClose;
     SketchDeclarativeView* sketchView;
-    KoMainWindow* desktopView;
+    KisMainWindow* desktopView;
     QObject* currentView;
     enumCursorStyle desktopCursorStyle;
 
     bool slateMode;
     bool docked;
     QString currentSketchPage;
-    KisView2* sketchKisView;
-    KisView2* desktopKisView;
+    KisViewManager* sketchKisView;
+    KisViewManager* desktopKisView;
     DesktopViewProxy* desktopViewProxy;
 
     bool forceFullScreen;
@@ -212,7 +212,7 @@ public:
             group.writeEntry("Theme", "Krita-dark");
         }
 
-        desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
+        desktopView = new KisMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);
@@ -249,7 +249,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Gemini"));
-    setWindowIcon(KIcon("kritagemini"));
+    setWindowIcon(koIcon("kritagemini"));
 
 	// Load filters and other plugins in the gui thread
 	Q_UNUSED(KisFilterRegistry::instance());
@@ -290,7 +290,14 @@ void MainWindow::resetWindowTitle()
     QString fileName = url.fileName();
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Gemini")));
+
+    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KisDocument* document = DocumentManager::instance()->document();
+    if (document && document->isModified() ) {
+        flags |= KDialog::ModifiedCaption;
+    }
+
+    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 void MainWindow::switchDesktopForced()
@@ -316,12 +323,12 @@ void MainWindow::switchToSketch()
     }
 
     d->syncObject = new ViewModeSynchronisationObject;
-    KisView2* view = 0;
+    KisViewManager* view = 0;
 
     KisConfig cfg;
     if (d->desktopView && centralWidget() == d->desktopView) {
         d->desktopCursorStyle = cfg.cursorStyle();
-        view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
 
         //Notify the view we are switching away from that we are about to switch away from it
         //giving it the possibility to set up the synchronisation object.
@@ -359,7 +366,7 @@ void MainWindow::sketchChange()
             return;
         }
         qApp->processEvents();
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        KisViewManager* view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, d->syncObject);
@@ -384,9 +391,9 @@ void MainWindow::switchToDesktop(bool justLoaded)
 
     ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
 
-    KisView2* view = 0;
+    KisViewManager* view = 0;
     if (d->desktopView) {
-        view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
     }
 
     //Notify the view we are switching away from that we are about to switch away from it
@@ -429,7 +436,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
     if (d->desktopView && centralWidget() == d->desktopView) {
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        KisViewManager* view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
         view->canvasControllerWidget()->setFocus();
@@ -465,7 +472,7 @@ void MainWindow::documentChanged()
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
-    d->desktopKisView = qobject_cast<KisView2*>(d->desktopView->rootView());
+    d->desktopKisView = qobject_cast<KisViewManager*>(d->desktopView->rootView());
     d->desktopKisView->setQtMainWindow(d->desktopView);
 
     // Define new actions here
@@ -543,9 +550,9 @@ QString MainWindow::openImage()
     dialog.setCaption(i18n("Open Document"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
 
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType("application/x-krita");
+    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType("application/x-krita");
     KService::Ptr service = entry.service();
-    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
 
     dialog.setHideNameFilterDetailsOption();
     return dialog.url();
@@ -553,11 +560,13 @@ QString MainWindow::openImage()
 
 void MainWindow::resourceChanged(int key, const QVariant& v)
 {
+    Q_UNUSED(key);
+
     if(centralWidget() == d->sketchView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->sketchKisView != 0) {
-        KisPaintOpPresetSP clone = preset->clone();
+        KisPaintOpPresetSP clone = preset;
         clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
         d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
     }
@@ -565,11 +574,13 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
 
 void MainWindow::resourceChangedSketch(int key, const QVariant& v)
 {
+    Q_UNUSED(key);
+
     if(centralWidget() == d->desktopView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
     if(preset && d->desktopKisView != 0) {
-        KisPaintOpPresetSP clone = preset->clone();
+        KisPaintOpPresetSP clone = preset;
         clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
         d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);
     }
@@ -588,7 +599,7 @@ void MainWindow::setSketchKisView(QObject* newView)
     }
     if (d->sketchKisView != newView)
     {
-        d->sketchKisView = qobject_cast<KisView2*>(newView);
+        d->sketchKisView = qobject_cast<KisViewManager*>(newView);
         if(d->sketchKisView) {
             d->sketchView->addActions(d->sketchKisView->actions());
             d->sketchKisView->setQtMainWindow(this);

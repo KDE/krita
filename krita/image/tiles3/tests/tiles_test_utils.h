@@ -44,10 +44,9 @@ public:
 class KoStoreFake : public KoStore
 {
 public:
-    KoStoreFake() {
+    KoStoreFake() : KoStore(KoStore::Write) {
         d_ptr->stream = &m_buffer;
         d_ptr->isOpen = true;
-        d_ptr->mode = KoStore::Write;
         m_buffer.open(QIODevice::ReadWrite);
     }
     ~KoStoreFake() {

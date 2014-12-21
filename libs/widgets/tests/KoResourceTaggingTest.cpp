@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KoResourceTaggingTest.h"
 
 #include <QTest>
 #include <QCoreApplication>
@@ -24,7 +25,6 @@
 #include <kactioncollection.h>
 #include <kdebug.h>
 
-#include "KoResourceTaggingTest.h"
 #include "KoResource.h"
 #include "KoResourceServerProvider.h"
 

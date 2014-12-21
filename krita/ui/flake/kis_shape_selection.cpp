@@ -32,7 +32,7 @@
 #include <KoShapeGroup.h>
 #include <KoCompositeOp.h>
 #include <KoShapeManager.h>
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
@@ -121,7 +121,7 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KisDocument::SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!store->open("content.xml"))
         return false;

@@ -68,7 +68,7 @@ private:
     QLabel* m_lbSize;
     QLabel* m_lbSpacing;
     KisDoubleSliderSpinBox* m_slRotation;
-    KisMultipliersDoubleSliderSpinBox* m_slSize;
+    KisDoubleSliderSpinBox* m_slSize;
     KisSpacingSelectionWidget* m_slSpacing;
     QCheckBox* m_chkColorMask;
     KisBrushSP m_brush;

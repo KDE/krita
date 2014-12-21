@@ -17,14 +17,18 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __REPORTENTITYLABEL_H__
-#define __REPORTENTITYLABEL_H__
+#ifndef __KOREPORTDESIGNERITEMLABEL_H__
+#define __KOREPORTDESIGNERITEMLABEL_H__
 
 #include <QGraphicsRectItem>
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include "KoReportItemLabel.h"
 #include <KoReportDesignerItemRectBase.h>
+#include <QGraphicsItem>
+#include <QGraphicsItemGroup>
+#include "BoundedTextItem.h"
+
 //
 // ReportEntityLabel
 //
@@ -39,16 +43,23 @@ public:
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual KoReportDesignerItemLabel* clone();
-
+    
+public slots:
+    virtual void enterInlineEditingMode();
+    virtual void exitInlineEditingMode();
+    
 protected:
-    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
-
+    virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * event );
+    virtual void keyReleaseEvent ( QKeyEvent * event );
+  
 private:
     void init(QGraphicsScene*, KoReportDesigner*);
     QRectF getTextRect() const;
+    BoundedTextItem *m_inlineEdit;
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
+
 };
 
 #endif

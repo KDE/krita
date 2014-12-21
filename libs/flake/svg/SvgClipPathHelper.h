@@ -21,7 +21,6 @@
 #define SVGCLIPPATHHELPER_H
 
 #include <KoXmlReader.h>
-#include <QRectF>
 
 class SvgClipPathHelper
 {

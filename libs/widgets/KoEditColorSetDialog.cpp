@@ -36,8 +36,6 @@
 #include <KoFileDialog.h>
 
 // debug
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 
 KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)

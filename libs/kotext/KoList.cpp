@@ -235,7 +235,7 @@ int KoList::level(const QTextBlock &block)
     return l;
 }
 
-KoList *KoList::listContinuedFrom()
+KoList *KoList::listContinuedFrom() const
 {
     return d->listToBeContinuedFrom;
 }

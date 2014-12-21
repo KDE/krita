@@ -22,8 +22,8 @@
 #include <QList>
 
 #include <kis_image.h>
-
-#include "kis_doc2.h"
+#
+#include "KisDocument.h"
 
 #include <krita_export.h>
 
@@ -34,10 +34,11 @@ class KToggleAction;
 class KActionCollection;
 class KoViewConverter;
 
-class KisView2;
+class KisViewManager;
 class KisDoc;
 class KisClipboard;
 class KisNodeCommandsAdapter;
+class KisView;
 
 class KisSelectionFilter;
 class KisSelectionDecoration;
@@ -54,10 +55,12 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject
     Q_PROPERTY(bool havePixelsSelected READ havePixelsSelected NOTIFY currentSelectionChanged);
 public:
 
-    KisSelectionManager(KisView2 * view, KisDoc2 * doc);
+    KisSelectionManager(KisViewManager * view);
     virtual ~KisSelectionManager();
 
     void setup(KActionCollection * collection, KisActionManager* actionManager);
+
+    void setView(QPointer<KisView>imageView);
 
 public:
     /**
@@ -132,9 +135,9 @@ private:
     void copyFromDevice(KisPaintDeviceSP device);
     void applySelectionFilter(KisSelectionFilter *filter);
 
-    KisView2 * m_view;
-    KisDoc2 * m_doc;
-
+    KisViewManager * m_view;
+    KisDocument * m_doc;
+    QPointer<KisView>m_imageView;
     KisClipboard * m_clipboard;
 
     KisNodeCommandsAdapter* m_adapter;
@@ -146,10 +149,10 @@ private:
     KAction *m_pasteAt;
     KAction *m_pasteNew;
     KisAction *m_cutToNewLayer;
-    KAction *m_selectAll;
-    KAction *m_deselect;
-    KAction *m_clear;
-    KAction *m_reselect;
+    KisAction *m_selectAll;
+    KisAction *m_deselect;
+    KisAction *m_clear;
+    KisAction *m_reselect;
     KisAction *m_invert;
     KisAction *m_copyToNewLayer;
 //     KAction *m_load;

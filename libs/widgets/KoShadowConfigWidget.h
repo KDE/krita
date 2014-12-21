@@ -67,6 +67,7 @@ private slots:
     void visibilityChanged();
     void applyChanges();
     void selectionChanged();
+    void resourceChanged( int key, const QVariant & res );
 
 private:
     class Private;

@@ -28,13 +28,13 @@
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 #include <KoResource.h>
 
 #include "KoPattern.h"
 #include "kis_resource_server_provider.h"
 #include "kis_workspace_resource.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <QGridLayout>
 #include <klineedit.h>
 #include <kis_canvas_resource_provider.h>
@@ -73,7 +73,7 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
 
 }
 
-KisWorkspaceChooser::KisWorkspaceChooser(KisView2 * view, QWidget* parent): QWidget(parent), m_view(view)
+KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent): QWidget(parent), m_view(view)
 {
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));

@@ -25,9 +25,6 @@
 #include "kis_node_visitor.h"
 #include "kis_image.h"
 
-#include <KoProgressUpdater.h>
-#include <KoProgressProxy.h>
-
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
     , m_basePath(basePath)
@@ -84,10 +81,10 @@ KisPaintDeviceSP KisFileLayer::paintDevice() const
     return 0;
 }
 
-KoDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("File"), m_filename);
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    l << KisDocumentSectionModel::Property(i18n("File"), m_filename);
     return l;
 }
 

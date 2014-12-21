@@ -25,7 +25,8 @@
 
 #include <ui_wdgnewimage.h>
 
-class KisDoc2;
+class KisDocument;
+class KisDocument;
 class KoID;
 
 enum CustomImageWidgetType { CUSTOM_DOCUMENT, NEW_IMG_FROM_CB };
@@ -54,7 +55,7 @@ public:
      * @param parent the parent widget
      * @param doc the document that wants to be altered
      */
-    KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
+    KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
     virtual ~KisCustomImageWidget();
     
 private slots:
@@ -67,17 +68,19 @@ private slots:
     void screenSizeClicked();
     void predefinedClicked(int index);
     void saveAsPredefined();
+    void setLandscape();
+    void setPortrait();
     void switchWidthHeight();
     void createImage();
     void switchPortraitLandscape();
+
 signals:
-    /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
-    void documentSelected();
+    /// this signal is emitted (as defined by KisDocument) the moment the document is 'ready'
+    void documentSelected(KisDocument*);
 
 protected:
-    KisDoc2 *m_doc;
     
-    bool createNewImage();
+    KisDocument *createNewImage();
     
     /// Set the number of layers that will be created
     void setNumberOfLayers(int layers);
@@ -86,7 +89,8 @@ private:
     
     double m_width, m_height;
     quint8 backgroundOpacity() const;
-    
+    void setBackgroundOpacity(quint8 value);
+
     void fillPredefined();
     void showEvent(QShowEvent *);
     

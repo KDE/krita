@@ -22,7 +22,6 @@
 
 #include "KoColorModelStandardIds.h"
 
-#include <kconfiggroup.h>
 #include <klocale.h>
 
 #include "LcmsColorSpace.h"

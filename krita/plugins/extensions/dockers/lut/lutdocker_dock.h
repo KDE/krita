@@ -43,7 +43,6 @@ class KisDoubleWidget;
 class KoZoomAdapter;
 class SqueezedComboBox;
 class QCheckBox;
-class KComboBox;
 class QToolButton;
 class BlackWhitePointChooser;
 
@@ -59,10 +58,10 @@ public:
 
     LutDockerDock();
     ~LutDockerDock();
-
+QString observerName() { return "LutDockerDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
 
     bool canChangeExposureAndGamma() const;
     qreal currentExposure() const;

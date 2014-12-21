@@ -19,8 +19,8 @@
 */
 
 // Qt
-#include <QSizeF>
-#include <QPointF>
+#include <QRectF>
+#include <QTransform>
 
 // KChart
 #include "ChartLayout.h"

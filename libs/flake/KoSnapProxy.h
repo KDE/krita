@@ -24,11 +24,11 @@ class KoSnapGuide;
 class KoShape;
 class KoPathSegment;
 class KoCanvasBase;
-
 #include <QList>
-#include <QPointF>
-#include <QRectF>
 #include "flake_export.h"
+
+class QPointF;
+class QRectF;
 /**
  * This class provides access to different shape related snap targets to snap strategies.
  */

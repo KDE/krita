@@ -24,10 +24,8 @@
 
 #include <QObject>
 
-#include <kio/job.h>
-
 #include "kis_types.h"
-class KisDoc2;
+class KisDocument;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -53,7 +51,7 @@ class exrConverter : public QObject
 {
     Q_OBJECT
 public:
-    exrConverter(KisDoc2 *doc, bool showNotifications);
+    exrConverter(KisDocument *doc, bool showNotifications);
     virtual ~exrConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);

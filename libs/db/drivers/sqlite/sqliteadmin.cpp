@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QDir>
-
 #include "sqliteadmin.h"
 #include <db/drivermanager.h>
 #include <db/driver_p.h>
 
 #include "sqlitevacuum.h"
+
+#include <QDir>
 
 SQLiteAdminTools::SQLiteAdminTools()
         : KexiDB::AdminTools()

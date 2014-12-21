@@ -32,7 +32,7 @@ class AnimatorPlaybackDialog : public QDialog
 {
     Q_OBJECT
 public:
-    AnimatorPlaybackDialog(QWidget* parent=0);
+    AnimatorPlaybackDialog(QWidget* parent = 0);
     void setModel(KisAnimation* model);
 
 private slots:

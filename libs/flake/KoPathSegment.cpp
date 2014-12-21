@@ -796,8 +796,8 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
             d1 = d->distanceFromChord(d->first->controlPoint2());
         else
             d1 = d->distanceFromChord(d->second->controlPoint1());
-        dmin = qMin(0.0, 0.5 * d1);
-        dmax = qMax(0.0, 0.5 * d1);
+        dmin = qMin(qreal(0.0), 0.5 * d1);
+        dmax = qMax(qreal(0.0), 0.5 * d1);
     } else {
         qreal d1 = d->distanceFromChord(d->first->controlPoint2());
         qreal d2 = d->distanceFromChord(d->second->controlPoint1());
@@ -1375,11 +1375,11 @@ qreal KoPathSegment::nearestPoint(const QPointF &point) const
     }
 
     // Precomputed "z" for cubics
-    static qreal z3[3*4] = {1.0, 0.6, 0.3, 0.1, 0.4, 0.6, 0.6, 0.4, 0.1, 0.3, 0.6, 1.0};
+    static const qreal z3[3*4] = {1.0, 0.6, 0.3, 0.1, 0.4, 0.6, 0.6, 0.4, 0.1, 0.3, 0.6, 1.0};
     // Precomputed "z" for quadrics
-    static qreal z2[2*3] = {1.0, 2./3., 1./3., 1./3., 2./3., 1.0};
+    static const qreal z2[2*3] = {1.0, 2./3., 1./3., 1./3., 2./3., 1.0};
 
-    qreal *z = degree() == 3 ? z3 : z2;
+    const qreal *z = degree() == 3 ? z3 : z2;
 
     // Set f(u)-values.
     for (int k = 0; k <= 2 * deg - 1; ++k) {

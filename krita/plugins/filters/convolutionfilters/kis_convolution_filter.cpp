@@ -27,7 +27,6 @@
 #include "kis_painter.h"
 #include "kis_convolution_painter.h"
 #include "kis_convolution_kernel.h"
-#include "KoProgressUpdater.h"
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>

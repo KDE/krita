@@ -33,11 +33,11 @@
 
 #include <KoColorSpace.h>
 #include <KoDockFactoryBase.h>
-#include <KoCanvasObserverBase.h>
 
 #include <kis_types.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
+#include "kis_mainwindow_observer.h"
 
 class QModelIndex;
 
@@ -55,7 +55,7 @@ class Ui_WdgLayerBox;
  * A widget that visualized the layer structure.
  *
  */
-class KisLayerBox : public QDockWidget, public KoCanvasObserverBase
+class KisLayerBox : public QDockWidget, public KisMainwindowObserver
 {
 
     Q_OBJECT
@@ -64,8 +64,9 @@ public:
 
     KisLayerBox();
     virtual ~KisLayerBox();
-
-    /// reimplemented from KoCanvasObserverBase
+    QString observerName() { return "KisLayerBox"; }
+    /// reimplemented from KisMainwindowObserver
+    virtual void setMainWindow(KisViewManager* kisview);
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 private slots:
@@ -110,7 +111,7 @@ private slots:
     void selectionChanged(const QModelIndexList selection);
 
 private:
-    inline void connectActionToButton(QAbstractButton *button, const QString &id);
+    inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);

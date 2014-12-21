@@ -29,22 +29,18 @@
 #include <QHoverEvent>
 
 #include <kdebug.h>
-#include <kmimetype.h>
-#include <kstandarddirs.h>
 #include <kactioncollection.h>
-#include <kaction.h>
 
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
-#include <KoProgressUpdater.h>
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoUnit.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
-#include <KoShapeManager.h>
+#include <KoToolManager.h>
 #include <KoGridData.h>
 
 #include <kundo2stack.h>
@@ -54,12 +50,12 @@
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_canvas2.h"
 #include <kis_canvas_controller.h>
 #include <kis_qpainter_canvas.h>
 #include "kis_config.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include <kis_image_signal_router.h>
 #include "kis_clipboard.h"
@@ -71,7 +67,7 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_qpainter_canvas.h>
-#include <kis_part2.h>
+#include <KisPart.h>
 #include <kis_canvas_decoration.h>
 #include <kis_tool_freehand.h>
 
@@ -80,7 +76,7 @@
 #include "Settings.h"
 #include "DocumentManager.h"
 #include "SketchDeclarativeView.h"
-#include <gemini/ViewModeSwitchEvent.h>
+#include "krita/gemini/ViewModeSwitchEvent.h"
 
 class KisSketchView::Private
 {
@@ -108,8 +104,8 @@ public:
 
     KisSketchView* q;
 
-    QPointer<KisDoc2> doc;
-    QPointer<KisView2> view;
+    QPointer<KisDocument> doc;
+    QPointer<KisViewManager> view;
     QPointer<KisCanvas2> canvas;
     KUndo2Stack* undoStack;
 
@@ -310,7 +306,7 @@ void KisSketchView::documentAboutToBeDeleted()
     if (d->redoAction)
         d->redoAction->disconnect(this);
 
-    KisView2 *oldView = d->view;
+    KisViewManager *oldView = d->view;
     disconnect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     d->view = 0;
     emit viewChanged();
@@ -330,7 +326,7 @@ void KisSketchView::documentChanged()
 
 	KisSketchPart *part = DocumentManager::instance()->part();
 	Q_ASSERT(part);
-	QPointer<KisView2> view = qobject_cast<KisView2*>(part->createView(d->doc, QApplication::activeWindow()));
+	QPointer<KisViewManager> view = qobject_cast<KisViewManager*>(part->createView(d->doc, QApplication::activeWindow()));
     d->view = view;
     d->view->setShowFloatingMessage(false);
 

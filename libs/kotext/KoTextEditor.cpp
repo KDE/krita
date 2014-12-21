@@ -484,7 +484,7 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
 
     return bookmark;
 }
-KoTextRangeManager *KoTextEditor::textRangeManager()
+KoTextRangeManager *KoTextEditor::textRangeManager() const
 {
     return KoTextDocument(d->document).textRangeManager();
 }
@@ -1527,7 +1527,7 @@ void KoTextEditor::newSection()
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::renameSection(KoSection* section, QString newName)
+void KoTextEditor::renameSection(KoSection* section, const QString &newName)
 {
     if (isEditProtected()) {
         return;

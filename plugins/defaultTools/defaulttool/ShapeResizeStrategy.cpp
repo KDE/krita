@@ -28,9 +28,11 @@
 #include <commands/KoShapeTransformCommand.h>
 #include <KoSnapGuide.h>
 #include <KoToolBase.h>
+#include <KoSelection.h>
 
 #include <klocale.h>
 #include <limits>
+#include <math.h>
 
 ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
         const QPointF &clicked, KoFlake::SelectionHandle direction )

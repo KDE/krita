@@ -26,7 +26,6 @@
 #include <KoCharacterStyle.h>
 #include <KoIcon.h>
 
-#include <kfontdialog.h>
 #include <QFontDatabase>
 #include <QStringList>
 #include <QVBoxLayout>

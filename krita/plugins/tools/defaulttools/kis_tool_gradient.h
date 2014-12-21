@@ -34,8 +34,8 @@
 #include <kis_gradient_painter.h>
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
-
-class KDoubleNumInput;
+#include <KConfig>
+#include <KConfigGroup>
 
 
 class QLabel;
@@ -63,6 +63,7 @@ public:
     QWidget* createOptionWidget();
 
 public slots:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void slotSetShape(int);
     void slotSetRepeat(int);
     void slotSetReverse(bool);
@@ -97,6 +98,7 @@ private:
     KComboBox *m_cmbRepeat;
     QLabel *m_lbAntiAliasThreshold;
     KisDoubleSliderSpinBox *m_slAntiAliasThreshold;
+    KConfigGroup m_configGroup;
 
 };
 

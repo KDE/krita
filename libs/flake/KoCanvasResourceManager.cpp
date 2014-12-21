@@ -22,7 +22,6 @@
 #include "KoCanvasResourceManager.h"
 
 #include <QVariant>
-#include <kundo2stack.h>
 #include <kdebug.h>
 
 #include "KoShape.h"

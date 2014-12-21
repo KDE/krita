@@ -24,6 +24,7 @@
 
 #include <QPoint>
 #include <QPaintDevice>
+#include <QTransform>
 
 #include <KoCanvasBase.h>
 

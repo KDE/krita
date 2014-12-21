@@ -22,7 +22,6 @@
 #include "drivermanager.h"
 #include "drivermanager_p.h"
 #include "error.h"
-#include "drivermanager.h"
 #include "connection.h"
 #include "connectiondata.h"
 #include "admin.h"
@@ -357,7 +356,7 @@ QByteArray Driver::escapeIdentifier(const QByteArray& str, int options) const
     }
 }
 
-void Driver::initDriverSpecificKeywords(const char** keywords)
+void Driver::initDriverSpecificKeywords(const char* const* keywords)
 {
     d->driverSpecificSQLKeywords.setStrings(keywords);
 }

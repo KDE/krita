@@ -34,6 +34,7 @@
 */
 
 #include "SvgWriter.h"
+
 #include "SvgUtil.h"
 #include "SvgSavingContext.h"
 #include "SvgShape.h"

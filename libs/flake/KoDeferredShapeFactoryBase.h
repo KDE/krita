@@ -20,17 +20,15 @@
 #ifndef KODEFERREDSHAPEFACTORYBASE_H
 #define KODEFERREDSHAPEFACTORYBASE_H
 
-#include <QStringList>
-#include <QString>
-#include <QList>
-
 #include "flake_export.h"
 
-#include <KoShapeFactoryBase.h>
+#include <QObject>
 
 class KoShape;
 class KoDocumentResourceManager;
 class KoProperties;
+
+class QString;
 
 /**
  * A factory for KoShape objects. This factory differs from the public KoShapeFactorBase

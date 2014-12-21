@@ -38,7 +38,7 @@
 
 #include <kis_debug.h>
 #include <kis_action.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_resource_server_provider.h>
 #include <kis_workspace_resource.h>
 #include <kis_paintop_preset.h>
@@ -99,7 +99,7 @@ public:
     }
 
     KisBrushResourceServer* brushServer;
-    KoResourceServer<KisPaintOpPreset>* paintopServer;
+    KisPaintOpPresetResourceServer * paintopServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<ResourceBundle> *bundleServer;
     KoResourceServer<KoPattern>* patternServer;
@@ -136,7 +136,7 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::slotImport()
 {
-    KoFileDialog dlg(m_view, KoFileDialog::OpenFiles, "krita_resources");
+    KoFileDialog dlg(m_view->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
     dlg.setCaption(i18n("Add Resources"));
 
     QMap<QString, QString> filterToTypeMap;
@@ -146,7 +146,6 @@ void ResourceManager::slotImport()
     filterToTypeMap[i18n("Photoshop Brushes (*.abr)")] = "brushes";
     filterToTypeMap[i18n("PNG Brushes (*.png)")] = "brushes";
     filterToTypeMap[i18n("SVG Brushes (*.svg)")] = "brushes";
-    filterToTypeMap[i18n("Brush Presets (*.kpp)")] = "brushes";
     filterToTypeMap[i18n("GIMP Gradients (*.ggr)")] = "gradients";
     filterToTypeMap[i18n("SVG Gradients (*.svg)")] = "gradients";
     filterToTypeMap[i18n("Karbon Gradients (*.kgr)")] = "gradients";
@@ -280,7 +279,8 @@ void ResourceManager::slotCreateBundle()
 
     res = dlgCreateBundle.selectedPresets();
     foreach(const QString &r, res) {
-        KoResource *res = d->paintopServer->resourceByFilename(r);
+        KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
+        KoResource *res = preset.data();
         newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->tagObject()->assignedTagsList(res), res->md5());
     }
 
@@ -296,7 +296,7 @@ void ResourceManager::slotCreateBundle()
     newBundle->setThumbnail(dlgCreateBundle.previewImage());
 
     if (!newBundle->save()) {
-        KMessageBox::error(m_view, i18n("Could not create the new bundle."), i18n("Error"));
+        KMessageBox::error(m_view->mainWindow(), i18n("Could not create the new bundle."), i18n("Error"));
     }
 
 

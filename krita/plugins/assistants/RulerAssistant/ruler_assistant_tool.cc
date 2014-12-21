@@ -24,6 +24,9 @@
 #include "EllipseAssistant.h"
 #include "SplineAssistant.h"
 #include "PerspectiveAssistant.h"
+#include "VanishingPointAssistant.h"
+#include "InfiniteRulerAssistant.h"
+#include "ParallelRulerAssistant.h"
 //#include "mesh_assistant.h"
 
 K_PLUGIN_FACTORY(RulerAssistantToolFactory, registerPlugin<RulerAssistantToolPlugin>();)
@@ -40,6 +43,9 @@ RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVaria
     KisPaintingAssistantFactoryRegistry::instance()->add(new EllipseAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new SplineAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new PerspectiveAssistantFactory);
+    KisPaintingAssistantFactoryRegistry::instance()->add(new VanishingPointAssistantFactory);
+    KisPaintingAssistantFactoryRegistry::instance()->add(new InfiniteRulerAssistantFactory);
+    KisPaintingAssistantFactoryRegistry::instance()->add(new ParallelRulerAssistantFactory);
 //    KisPaintingAssistantFactoryRegistry::instance()->add(new MeshAssistantFactory);
 }
 

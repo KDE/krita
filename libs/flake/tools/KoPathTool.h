@@ -27,6 +27,7 @@
 #include "KoToolBase.h"
 #include "KoPathToolSelection.h"
 #include <QList>
+#include <QCursor>
 
 class QButtonGroup;
 class KoCanvasBase;
@@ -84,7 +85,7 @@ signals:
     void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
 protected:
     /// reimplemented
-    virtual QList<QWidget *>  createOptionWidgets();
+    virtual QList<QPointer<QWidget> >  createOptionWidgets();
 
 private:
     struct PathSegment;

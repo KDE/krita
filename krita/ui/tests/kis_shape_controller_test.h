@@ -21,8 +21,8 @@
 
 #include "kis_dummies_facade_base_test.h"
 
-class KisDoc2;
-class KisPart2;
+class KisDocument;
+class KisPart;
 class KisNameServer;
 class KisShapeController;
 
@@ -39,7 +39,7 @@ protected:
     void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade);
 
 private:
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     KisNameServer *m_nameServer;
 };
 

@@ -38,7 +38,7 @@
 
 #include <krita_export.h>
 
-class KoDocument;
+class KisDocument;
 class KoColorSpace;
 class KoColor;
 
@@ -50,7 +50,6 @@ class KisImageSignalRouter;
 class KisPostExecutionUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
-class KoUpdater;
 class KisPerspectiveGrid;
 class KisLayerComposition;
 class KisSpontaneousJob;
@@ -95,19 +94,6 @@ public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc);
 
 public:
-
-    /**
-     * Paint the specified rect onto the painter, adjusting the colors
-     * using the given profile.
-     */
-    void renderToPainter(qint32 srcX,
-                         qint32 srcY,
-                         qint32 dstX,
-                         qint32 dstY,
-                         qint32 width,
-                         qint32 height,
-                         QPainter &painter,
-                         const KoColorProfile *profile);
 
     /**
      * Render the projection onto a QImage.
@@ -272,7 +258,7 @@ public:
     /**
      * Replace current undo store with the new one. The old store
      * will be deleted.
-     * This method is used by KisDoc2 for dropping all the commands
+     * This method is used by KisDocument for dropping all the commands
      * during file loading.
      */
     void setUndoStore(KisUndoStore *undoStore);

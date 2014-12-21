@@ -201,6 +201,7 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
     m_helper->initPaint(event,
                         resourceManager,
                         0,
+                        0,
                         m_updateScheduler,
                         m_undoAdapter,
                         m_paintLayer,
@@ -294,7 +295,7 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
 
     QPointF offset = alignedImageRect.topLeft();
 
-    m_paintLayer->updateProjection(alignedImageRect);
+    m_paintLayer->updateProjection(alignedImageRect, KisNode::N_FILTHY);
     KisPaintDeviceSP projection = m_paintLayer->projection();
 
     QImage image = projection->convertToQImage(m_displayProfile,
@@ -425,9 +426,9 @@ void KisScratchPad::fillGradient()
     KisGradientPainter painter(paintDevice);
 
     painter.setGradient(gradient);
+    painter.setGradientShape(KisGradientPainter::GradientShapeLinear);
     painter.paintGradient(gradientRect.topLeft(),
                           gradientRect.bottomRight(),
-                          KisGradientPainter::GradientShapeLinear,
                           KisGradientPainter::GradientRepeatNone,
                           0.2, false,
                           gradientRect.left(), gradientRect.top(),

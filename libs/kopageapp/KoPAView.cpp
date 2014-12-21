@@ -24,9 +24,6 @@
 #include "KoPAView.h"
 
 #include <QGridLayout>
-#include <QToolBar>
-#include <QScrollBar>
-#include <QTimer>
 #include <QApplication>
 #include <QClipboard>
 #include <QLabel>
@@ -38,7 +35,6 @@
 #include <KoProperties.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoCanvasResourceManager.h>
-#include <KoDocumentResourceManager.h>
 #include <KoColorBackground.h>
 #include <KoFind.h>
 #include <KoTextDocumentLayout.h>
@@ -60,10 +56,8 @@
 #include <KoRuler.h>
 #include <KoRulerController.h>
 #include <KoDrag.h>
-#include <KoShapeDeleteCommand.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
-#include <KoFilterManager.h>
 
 #include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"
@@ -77,7 +71,6 @@
 #include "KoPAPrintJob.h"
 #include "commands/KoPAPageInsertCommand.h"
 #include "commands/KoPAChangeMasterPageCommand.h"
-#include "commands/KoPAChangePageLayoutCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
 #include "dialogs/KoPAPageLayoutDialog.h"
 #include "dialogs/KoPAConfigureDialog.h"
@@ -326,8 +319,8 @@ void KoPAView::initGUI(KoPAFlags flags)
         if (mw) {
             KoToolBoxFactory toolBoxFactory;
             mw->createDockWidget( &toolBoxFactory );
-            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-            mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
+            mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QPointer<QWidget> > &) ));
         }
     }
 

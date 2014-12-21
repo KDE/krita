@@ -525,7 +525,7 @@ void PivotMain::Summarize()
     }
 
 
-    QString title=d->func + "-" + valueList.at(0)->text();
+    const QString title = d->func + QLatin1Char('-') + valueList.at(0)->text();
     Cell(mySheet,1,1).setValue(Value(title));
     Cell(mySheet,1,1).setStyle(st);
     for(int l=0;l<rowVect[0].count();l++)

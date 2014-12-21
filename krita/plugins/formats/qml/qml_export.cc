@@ -20,14 +20,12 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
-#include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <kurl.h>
 
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 
 #include "qml_converter.h"
@@ -35,7 +33,7 @@
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<QMLExport>();)
 K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
-QMLExport::QMLExport(QObject *parent, const QVariantList &) : KoFilter(parent)
+QMLExport::QMLExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -43,25 +41,25 @@ QMLExport::~QMLExport()
 {
 }
 
-KoFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByteArray& to)
 {
     Q_UNUSED(to);
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
-    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
     kDebug() << "input " << input;
     if (!input) {
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
     }
 
     kDebug() << "filename " << input;
 
     if (filename.isEmpty()) {
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
     }
 
     KUrl url;
@@ -78,10 +76,10 @@ KoFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByt
     KisImageBuilder_Result result = converter.buildFile(url, image);
     if (result == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     }
     dbgFile << " Result =" << result;
-    return KoFilter::InternalError;
+    return KisImportExportFilter::InternalError;
 }
 
 #include <qml_export.moc>

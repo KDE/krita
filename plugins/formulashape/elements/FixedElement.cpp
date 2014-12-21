@@ -19,7 +19,6 @@
 
 #include "FixedElement.h"
 #include "FormulaCursor.h"
-#include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <QPainter>
 

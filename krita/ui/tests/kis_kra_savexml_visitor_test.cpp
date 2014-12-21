@@ -23,7 +23,7 @@
 #include <QBitArray>
 #include <QDomDocument>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoDocumentInfo.h>
 #include <KoShapeContainer.h>
 #include <KoPathShape.h>
@@ -32,7 +32,7 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
@@ -52,7 +52,7 @@
 
 void KisKraSaveXmlVisitorTest::testCreateDomDocument()
 {
-    KisDoc2* doc = createCompleteDocument();
+    KisDocument* doc = createCompleteDocument();
 
     quint32 count = 0;
 

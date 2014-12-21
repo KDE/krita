@@ -2,5 +2,5 @@
 source ../../calligra_xgettext.sh
 
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp || exit 11
-calligra_xgettext VideoShape.pot `find . -name \*.cpp`
+calligra_xgettext calligra_shape_video.pot `find . -name \*.cpp`
 rm -f rc.cpp

@@ -1,4 +1,4 @@
 #! /bin/sh
 source ../../../calligra_xgettext.sh
 
-calligra_xgettext ThreedShape.pot *.cpp
+calligra_xgettext calligra_shape_threed.pot *.cpp

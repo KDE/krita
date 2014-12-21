@@ -27,7 +27,6 @@
 
 #include "KoDocument.h"
 #include "KoPart.h"
-#include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
 #include "KoFileDialog.h"
@@ -55,15 +54,8 @@
 #include <klocale.h>
 #include <ksavefile.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
-#include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
-#include <kfileitem.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
-#include <kfileitem.h>
-#include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
 
@@ -972,7 +964,10 @@ bool KoDocument::saveNativeFormatCalligra(KoStore *store)
         return false;
     }
     if (store->open("documentinfo.xml")) {
-        QDomDocument doc = d->docInfo->save();
+        QDomDocument doc = KoDocument::createDomDocument("document-info"
+                           /*DTD name*/, "document-info" /*tag name*/, "1.1");
+
+        doc = d->docInfo->save(doc);
         KoStoreDevice dev(store);
 
         QByteArray s = doc.toByteArray(); // this is already Utf8!
@@ -1279,7 +1274,7 @@ bool KoDocument::openUrl(const KUrl & _url)
 // It seems that people have started to save .docx files as .doc and
 // similar for xls and ppt.  So let's make a small replacement table
 // here and see if we can open the files anyway.
-static struct MimetypeReplacement {
+static const struct MimetypeReplacement {
     const char *typeFromName;         // If the mime type from the name is this...
     const char *typeFromContents;     // ...and findByFileContents() reports this type...
     const char *useThisType;          // ...then use this type for real.
@@ -1425,7 +1420,7 @@ bool KoDocument::openFile()
     // a small hardcoded table for those cases.  Check if this is
     // applicable here.
     for (uint i = 0; i < sizeof(replacementMimetypes) / sizeof(struct MimetypeReplacement); ++i) {
-        struct MimetypeReplacement *replacement = &replacementMimetypes[i];
+        const MimetypeReplacement *replacement = &replacementMimetypes[i];
 
         if (typeName == replacement->typeFromName) {
             //kDebug(30003) << "found potential replacement target:" << typeName;
@@ -2428,7 +2423,12 @@ void KoDocument::setupOpenFileSubProgress() {}
 
 KoDocumentInfoDlg *KoDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
 {
-    return new KoDocumentInfoDlg(parent, docInfo);
+    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+    KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(parent);
+    if (mainwin) {
+        connect(dlg, SIGNAL(saveRequested()), mainwin, SLOT(slotFileSave()));
+    }
+    return dlg;
 }
 
 bool KoDocument::isReadWrite() const

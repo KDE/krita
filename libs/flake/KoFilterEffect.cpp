@@ -21,6 +21,7 @@
 #include "KoFilterEffect.h"
 #include "KoXmlWriter.h"
 
+#include <QImage>
 #include <QString>
 #include <QRectF>
 

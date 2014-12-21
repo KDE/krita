@@ -1,4 +1,5 @@
 if (SHOULD_BUILD_LIB_CALLIGRA)
+    add_subdirectory( version )
     add_subdirectory( koplugin )
     add_subdirectory( widgetutils )
     add_subdirectory( widgets )

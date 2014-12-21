@@ -34,13 +34,14 @@ class KoAbstractGradient;
 class KoResource;
 
 class KoCanvasBase;
-class KisView2;
+class KisViewManager;
 class KoPattern;
 class KisFilterConfiguration;
-class KisAbstractPerspectiveGrid;
+
+#include <kis_abstract_perspective_grid.h>
 
 /**
- * KisCanvasResourceProvider contains the per-view current settings that
+ * KisCanvasResourceProvider contains the per-window current settings that
  * influence painting, like paintop, color, gradients and so on.
  */
 class KRITAUI_EXPORT KisCanvasResourceProvider : public QObject
@@ -71,7 +72,7 @@ public:
     };
 
 
-    KisCanvasResourceProvider(KisView2 * view);
+    KisCanvasResourceProvider(KisViewManager * view);
     ~KisCanvasResourceProvider();
 
     void setResourceManager(KoCanvasResourceManager *resourceManager);
@@ -113,7 +114,7 @@ public:
     void setCurrentCompositeOp(const QString& compositeOp);
     QString currentCompositeOp() const;
 
-    QList<KisAbstractPerspectiveGrid*> perspectiveGrids() const;
+    QList<QPointer<KisAbstractPerspectiveGrid> > perspectiveGrids() const;
     void addPerspectiveGrid(KisAbstractPerspectiveGrid*);
     void removePerspectiveGrid(KisAbstractPerspectiveGrid*);
     void clearPerspectiveGrids();
@@ -186,11 +187,11 @@ signals:
 
 private:
 
-    KisView2 * m_view;
+    KisViewManager * m_view;
     KoCanvasResourceManager *m_resourceManager;
     const KoColorProfile *m_displayProfile;
     bool m_fGChanged;
-    QList<KisAbstractPerspectiveGrid*> m_perspectiveGrids;
+    QList<QPointer<KisAbstractPerspectiveGrid> > m_perspectiveGrids;
 
     // This is a flag to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour

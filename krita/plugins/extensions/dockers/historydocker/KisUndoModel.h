@@ -66,7 +66,7 @@
 #include <kundo2command.h>
 #include "kis_types.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 
@@ -95,6 +95,7 @@ public:
     QIcon cleanIcon() const;
 
     void setCanvas(KisCanvas2* canvas);
+    bool checkMergedCommand(int index);
 
 public slots:
     void setStack(KUndo2QStack *stack);

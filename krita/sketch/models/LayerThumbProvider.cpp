@@ -19,7 +19,7 @@
 
 #include "LayerThumbProvider.h"
 #include "LayerModel.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_image.h>
 
 class LayerThumbProvider::Private {
@@ -48,7 +48,7 @@ QImage LayerThumbProvider::requestImage(const QString& id, QSize* size, const QS
     Q_UNUSED(size);
     Q_UNUSED(requestedSize);
     if (id.split("/").first() == QLatin1String("fullimage")) {
-        KisView2* view = qobject_cast<KisView2*>(d->layerModel->view());
+        KisViewManager* view = qobject_cast<KisViewManager*>(d->layerModel->view());
         int width = 300 * ((float)view->image()->bounds().width() / (float)view->image()->bounds().height());
         return view->image()->convertToQImage(QRect(0, 0, width, 300), QSize(width, 300), view->image()->profile());
     }

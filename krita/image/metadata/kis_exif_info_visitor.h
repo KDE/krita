@@ -44,6 +44,9 @@ public:
     bool visit(KisFilterMask*) {
         return true;
     }
+    bool visit(KisTransformMask*) {
+        return true;
+    }
     bool visit(KisTransparencyMask*) {
         return true;
     }

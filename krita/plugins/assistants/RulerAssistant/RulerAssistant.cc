@@ -17,7 +17,7 @@
 
 #include "RulerAssistant.h"
 
-#include <kdebug.h>
+#include "kis_debug.h"
 #include <klocale.h>
 
 #include <QPainter>
@@ -72,8 +72,48 @@ inline double norm2(const QPointF& p)
     return sqrt(p.x() * p.x() + p.y() * p.y());
 }
 
-void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)
+void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
+    gc.save();
+    gc.resetTransform();
+    QPointF mousePos;
+    
+    if (canvas){
+        //simplest, cheapest way to get the mouse-position//
+        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+    }
+    else {
+        //...of course, you need to have access to a canvas-widget for that.//
+        mousePos = QCursor::pos();//this'll give an offset//
+        dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
+    }
+    
+    if (handles().size() > 1) {
+    //don't draw if invalid.
+        QTransform initialTransform = converter->documentToWidgetTransform();
+
+        // first we find the path that our point create.
+        QPointF p1 = *handles()[0];
+        QPointF p2 = *handles()[1];
+
+        gc.setTransform(initialTransform);
+        QPainterPath path;
+        path.moveTo(p1);
+        path.lineTo(p2);
+        //then we use this path to check the bounding rectangle//
+        if (outline()==true && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible==true){
+            drawPreview(gc, path);//and we draw the preview.
+        }
+    }
+    gc.restore();
+    
+    KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
+
+}
+
+void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
+{
+    if (assistantVisible==false){return;}
     if (handles().size() < 2) return;
 
     QTransform initialTransform = converter->documentToWidgetTransform();
@@ -86,7 +126,7 @@ void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *conv
     QPainterPath path;
     path.moveTo(p1);
     path.lineTo(p2);
-    drawPath(gc, path);
+    drawPath(gc, path, snapping());
 }
 
 QPointF RulerAssistant::buttonPosition() const

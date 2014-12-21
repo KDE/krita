@@ -57,7 +57,7 @@
 #include <kross/core/manager.h>
 
 //! Also add public method for runtime?
-const char* ns = "http://kexi-project.org/report/2.0";
+const char ns[] = "http://kexi-project.org/report/2.0";
 
 static QDomElement propertyToElement(QDomDocument* d, KoProperty::Property* p)
 {
@@ -74,6 +74,8 @@ class ReportWriterSectionData
 {
 public:
     ReportWriterSectionData() {
+        selected_x_offset = 0;
+        selected_y_offset = 0;
         selected_items_rw = 0;
         mouseAction = ReportWriterSectionData::MA_None;
     }
@@ -702,8 +704,9 @@ void KoReportDesigner::slotPageButton_Pressed()
         QStringList sl = m_kordata->scriptList(m_interpreter->value().toString());
 
         m_script->setListData(sl, sl);
-        changeSet(m_set);
+        
     }
+    changeSet(m_set);
 }
 
 QSize KoReportDesigner::sizeHint() const
@@ -866,7 +869,6 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
     m_releaseX = e->pos().x();
     m_releaseY = e->pos().y();
 
-    QGraphicsItem * item = 0;
     if (e->button() == Qt::LeftButton) {
         QPointF pos(m_pressX, m_pressY);
         QPointF end(m_releaseX, m_releaseY);
@@ -881,6 +883,7 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
         }
 
         if (m_sectionData->mouseAction == ReportWriterSectionData::MA_Insert) {
+            QGraphicsItem * item = 0;
             if (m_sectionData->insertItem == "report:line") {
                 item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos, end);
 
@@ -902,11 +905,13 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
                 item->setVisible(true);
                 item->setSelected(true);
                 KoReportItemBase* baseReportItem = dynamic_cast<KoReportItemBase*>(item);
-                changeSet(baseReportItem->propertySet());
-                if (v && v->designer()) {
-                    v->designer()->setModified(true);
+                if (baseReportItem) {
+                    changeSet(baseReportItem->propertySet());
+                    if (v && v->designer()) {
+                        v->designer()->setModified(true);
+                    }
+                    emit itemInserted(m_sectionData->insertItem);
                 }
-                emit itemInserted(m_sectionData->insertItem);
             }
                 
             m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
@@ -1026,8 +1031,14 @@ void KoReportDesigner::slotEditPaste()
 
 void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
 {
+
     // paste a new item of the copy we have in the specified location
     if (!m_sectionData->copy_list.isEmpty()) {
+        QList<QGraphicsItem*> activeItems = canvas->selectedItems();
+        QGraphicsItem *activeItem = 0;
+        if (activeItems.count() == 1) {
+            activeItem = activeItems.first();
+        }
         canvas->clearSelection();
         m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
 
@@ -1041,8 +1052,15 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
             KoReportDesignerItemBase *ent = (m_sectionData->copy_list[i])->clone();
             KoReportItemBase *new_obj = dynamic_cast<KoReportItemBase*>(ent);
             new_obj->setEntityName(suggestEntityName(type));    
+            if (activeItem) {
+                new_obj->position().setScenePos(QPointF(activeItem->x() + 10, activeItem->y() + 10));
+            } else {
+                new_obj->position().setScenePos(QPointF(0, 0));
+            }
+            changeSet(new_obj->propertySet());
             QGraphicsItem *pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
             if (pasted_ent) {
+                pasted_ent->setSelected(true);
                 canvas->addItem(pasted_ent);
                 pasted_ent->show();
                 m_sectionData->mouseAction = ReportWriterSectionData::MA_Grab;
@@ -1134,7 +1152,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
             const QGraphicsItemList l = sec->items();
             for (QGraphicsItemList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it) {
                 KoReportItemBase* itm = dynamic_cast<KoReportItemBase*>(*it);
-                if (itm->entityName() == n  && itm != ignore) {
+                if (itm && itm->entityName() == n  && itm != ignore) {
                     unique = false;
                     break;
                 }
@@ -1151,7 +1169,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
                 const QGraphicsItemList l = sec->items();
                 for (QGraphicsItemList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it) {
                     KoReportItemBase* itm = dynamic_cast<KoReportItemBase*>(*it);
-                    if (itm->entityName() == n  && itm != ignore) {
+                    if (itm && itm->entityName() == n  && itm != ignore) {
                         unique = false;
                         break;
                     }
@@ -1163,7 +1181,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
                 const QGraphicsItemList l = sec->items();
                 for (QGraphicsItemList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it) {
                     KoReportItemBase* itm = dynamic_cast<KoReportItemBase*>(*it);
-                    if (itm->entityName() == n  && itm != ignore) {
+                    if (itm && itm->entityName() == n  && itm != ignore) {
                         unique = false;
                         break;
                     }
@@ -1177,7 +1195,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
             const QGraphicsItemList l = sec->items();
             for (QGraphicsItemList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it) {
                 KoReportItemBase* itm = dynamic_cast<KoReportItemBase*>(*it);
-                if (itm->entityName() == n  && itm != ignore) {
+                if (itm && itm && itm->entityName() == n  && itm != ignore) {
                     unique = false;
                     break;
                 }
@@ -1190,7 +1208,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
 
 static bool actionPriortyLessThan(QAction* act1, QAction* act2)
 {
-    if (act1->data().toInt() > 0 && act1->data().toInt() > 0) {
+    if (act1->data().toInt() > 0 && act2->data().toInt() > 0) {
         return act1->data().toInt() < act2->data().toInt();
     }
     return false;
@@ -1222,9 +1240,7 @@ QList<QAction*> KoReportDesigner::actions(QActionGroup* group)
             actList.insert(i-1, sep);
             sepInserted = true;
         }
-        else {
-            group->addAction(a);
-        }
+        group->addAction(a);
     }
     
     return actList;
@@ -1291,7 +1307,7 @@ qreal KoReportDesigner::countSelectionHeight() const
     if (m_releaseY == -1 || m_pressY == -1) {
         return -1;
     }
-    return m_releaseY - m_pressY;
+    return qAbs(m_releaseY - m_pressY);
 }
 
 qreal KoReportDesigner::countSelectionWidth() const
@@ -1299,7 +1315,7 @@ qreal KoReportDesigner::countSelectionWidth() const
     if (m_releaseX == -1 || m_pressX == -1) {
         return -1;
     }
-    return m_releaseX - m_pressX;
+    return qAbs(m_releaseX - m_pressX);
 }
 
 qreal KoReportDesigner::getSelectionPressX() const
@@ -1315,4 +1331,9 @@ qreal KoReportDesigner::getSelectionPressY() const
 QPointF KoReportDesigner::getPressPoint() const
 {
     return QPointF(m_pressX, m_pressY);
+}
+
+QPointF KoReportDesigner::getReleasePoint() const
+{
+    return QPointF(m_releaseX, m_releaseY);
 }

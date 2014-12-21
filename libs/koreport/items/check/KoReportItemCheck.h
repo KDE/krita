@@ -16,8 +16,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KRCHECKDATA_H
-#define KRCHECKDATA_H
+#ifndef KOREPORTITEMCHECK_H
+#define KOREPORTITEMCHECK_H
 
 #include <KoReportItemBase.h>
 #include <QRect>
@@ -34,10 +34,8 @@ class Check;
 class KoReportItemCheck : public KoReportItemBase
 {
 public:
-    KoReportItemCheck() {
-        createProperties();
-    };
-    KoReportItemCheck(QDomNode &element);
+    KoReportItemCheck();
+    explicit KoReportItemCheck(QDomNode &element);
     virtual ~KoReportItemCheck();
 
     virtual QString typeName() const;
@@ -65,4 +63,4 @@ private:
     friend class Scripting::Check;
 };
 
-#endif // KRCHECKDATA_H
+#endif // KOREPORTITEMCHECK_H

@@ -18,8 +18,6 @@
 
 #include "kis_filter_selections_benchmark.h"
 
-#include <kundo2command.h>
-
 #include "kis_painter.h"
 
 #include <qtest_kde.h>

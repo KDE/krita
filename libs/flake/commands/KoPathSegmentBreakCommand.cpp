@@ -19,6 +19,7 @@
  */
 
 #include "KoPathSegmentBreakCommand.h"
+#include "KoPathPoint.h"
 #include <klocale.h>
 #include <math.h>
 

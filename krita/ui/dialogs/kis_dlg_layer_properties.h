@@ -30,8 +30,8 @@
 class QWidget;
 class QBitArray;
 class KisChannelFlagsWidget;
-class KisView2;
-class KisDoc2;
+class KisViewManager;
+class KisDocument;
 
 class WdgLayerProperties : public QWidget, public Ui::WdgLayerProperties
 {
@@ -53,7 +53,7 @@ class KisDlgLayerProperties : public KDialog
     Q_OBJECT
 
 public:
-    KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, KisDoc2 *doc, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+    KisDlgLayerProperties(KisLayerSP layer, KisViewManager *view, KisDocument *doc, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
     virtual ~KisDlgLayerProperties();
 
@@ -81,8 +81,8 @@ protected slots:
     
 private:
     KisLayerSP m_layer;
-    KisView2 *m_view;
-    KisDoc2 *m_doc;
+    KisViewManager *m_view;
+    KisDocument *m_doc;
     WdgLayerProperties * m_page;
     KisChannelFlagsWidget * m_channelFlags;
     

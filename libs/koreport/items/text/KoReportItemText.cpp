@@ -26,6 +26,11 @@
 #include <QPrinter>
 #include <renderobjects.h>
 
+KoReportItemText::KoReportItemText()
+{
+    createProperties();
+}
+
 KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
 {
     QDomNodeList nl = element.childNodes();
@@ -121,12 +126,12 @@ void KoReportItemText::createProperties()
     m_font = new KoProperty::Property("Font", KGlobalSettings::generalFont(), "Font", i18n("Font"));
 
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, i18n("Background Color"));
-    m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, i18n("Foreground Color"));
+    m_foregroundColor = new KoProperty::Property("foreground-color", QPalette().color(QPalette::Foreground), i18n("Foreground Color"));
 
     m_lineWeight = new KoProperty::Property("line-weight", 1, i18n("Line Weight"));
     m_lineColor = new KoProperty::Property("line-color", Qt::black, i18n("Line Color"));
     m_lineStyle = new KoProperty::Property("line-style", Qt::NoPen, i18n("Line Style"), i18n("Line Style"), KoProperty::LineStyle);
-    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, i18n("Opacity"));
+    m_backgroundOpacity = new KoProperty::Property("background-opacity", QVariant(0), i18n("Background Opacity"));
     m_backgroundOpacity->setOption("max", 100);
     m_backgroundOpacity->setOption("min", 0);
     m_backgroundOpacity->setOption("unit", "%");
@@ -208,28 +213,26 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
     pos += offset;
 
     QRectF trf(pos, size);
-
-    int     intLineCounter  = 0;
-    qreal   intStretch      = trf.top() - offset.y();
-    qreal   intBaseTop      = trf.top();
-    qreal   intRectHeight   = trf.height();
+    qreal intStretch = trf.top() - offset.y();
 
     //kDebug() << qstrValue;
     if (qstrValue.length()) {
         QRectF rect = trf;
 
         int pos = 0;
-        int idx;
         QChar separator;
         QRegExp re("\\s");
         QPrinter prnt(QPrinter::HighResolution);
         QFontMetrics fm(font(), &prnt);
 
         // int   intRectWidth    = (int)(trf.width() * prnt.resolution()) - 10;
-        int   intRectWidth    = (int)((m_size.toPoint().width() / 72) * prnt.resolution());
+        int     intRectWidth    = (int)((m_size.toPoint().width() / 72) * prnt.resolution());
+        int     intLineCounter  = 0;
+        qreal   intBaseTop      = trf.top();
+        qreal   intRectHeight   = trf.height();
 
         while (qstrValue.length()) {
-            idx = re.indexIn(qstrValue, pos);
+            int idx = re.indexIn(qstrValue, pos);
             if (idx == -1) {
                 idx = qstrValue.length();
                 separator = QChar('\n');
@@ -240,7 +243,7 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
                 pos = idx + 1;
                 if (separator == '\n') {
                     QString line = qstrValue.left(idx);
-                    qstrValue = qstrValue.mid(idx + 1, qstrValue.length());
+                    qstrValue.remove(0, idx + 1);
                     pos = 0;
 
                     rect.setTop(intBaseTop + (intLineCounter * intRectHeight));
@@ -274,7 +277,7 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
                 }
             } else {
                 QString line = qstrValue.left(pos - 1);
-                qstrValue = qstrValue.mid(pos, qstrValue.length());
+                qstrValue.remove(0, pos);
                 pos = 0;
 
                 rect.setTop(intBaseTop + (intLineCounter * intRectHeight));

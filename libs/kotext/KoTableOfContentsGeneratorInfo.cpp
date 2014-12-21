@@ -27,7 +27,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
-int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
+int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, const QString &styleName)
 {
     //find styleId of a style based on its style:name property
     KoParagraphStyle * style = sharedLoadingData->paragraphStyle(styleName, true);

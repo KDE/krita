@@ -44,12 +44,14 @@ public slots:
     void savePreferences() const;
     void loadPreferences();
     void loadDefaultPreferences();
+    void hsxchange();
 
 signals:
     void settingsChanged() const;
+    void hsxchanged(int);
 
 protected:
-//    void changeEvent(QEvent *e);
+    //void changeEvent(QEvent *e);
 
 private:
     Ui::KisColorSelectorSettings *ui;

@@ -1,5 +1,5 @@
 /* XPM */
-static const char * wait_cursor_xpm[] = {
+static const char * const wait_cursor_xpm[] = {
 "32 32 3 1",
 " 	c None",
 ".	c #000000",

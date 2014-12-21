@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QVariant>
 
-class KisView2;
+class KisViewManager;
 
 /**
  * Template of view plugin
@@ -33,7 +33,7 @@ class PatternDockerPlugin : public QObject
         PatternDockerPlugin(QObject *parent, const QVariantList &);
         virtual ~PatternDockerPlugin();
     private:
-        KisView2* m_view;
+        KisViewManager* m_view;
 };
 
 #endif

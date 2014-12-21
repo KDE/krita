@@ -19,7 +19,7 @@
 
 #include "CompositeOpModel.h"
 #include <kis_composite_ops_model.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_tool.h>
 #include <kis_canvas2.h>
@@ -33,6 +33,7 @@
 #include <kis_paintop_settings_widget.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
+#include <KoToolManager.h>
 
 class CompositeOpModel::Private
 {
@@ -53,7 +54,7 @@ public:
 
     CompositeOpModel* q;
     KisCompositeOpListModel* model;
-    KisView2* view;
+    KisViewManager* view;
     QString currentCompositeOpID;
     QString prevCompositeOpID;
     bool eraserMode;
@@ -186,7 +187,7 @@ void CompositeOpModel::setView(QObject* newView)
         d->view->canvasBase()->inputManager()->disconnect(this);
         d->view->nodeManager()->disconnect(this);
     }
-    d->view = qobject_cast<KisView2*>( newView );
+    d->view = qobject_cast<KisViewManager*>( newView );
     if (d->view)
     {
         connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),

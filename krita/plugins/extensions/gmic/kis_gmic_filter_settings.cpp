@@ -20,7 +20,7 @@
 #include <kis_gmic_filter_settings.h>
 
 
-KisGmicFilterSetting::KisGmicFilterSetting():m_gmicCommand(),m_inputLayerMode(ACTIVE_LAYER),m_outputMode(IN_PLACE),m_isBlacklisted(false)
+KisGmicFilterSetting::KisGmicFilterSetting():m_gmicCommand(),m_previewGmicCommand(),m_inputLayerMode(ACTIVE_LAYER),m_outputMode(IN_PLACE),m_isBlacklisted(false)
 {
 
 }
@@ -40,7 +40,17 @@ void KisGmicFilterSetting::setGmicCommand(QString cmd)
     m_gmicCommand = cmd;
 }
 
-InputLayerMode KisGmicFilterSetting::inputLayerMode()
+const QString& KisGmicFilterSetting::previewGmicCommand() const
+{
+    return m_previewGmicCommand;
+}
+
+void KisGmicFilterSetting::setPreviewGmicCommand(QString cmd)
+{
+    m_previewGmicCommand = cmd;
+}
+
+InputLayerMode KisGmicFilterSetting::inputLayerMode() const
 {
      return m_inputLayerMode;
 }
@@ -50,7 +60,7 @@ void KisGmicFilterSetting::setInputLayerMode(InputLayerMode mode)
     m_inputLayerMode = mode;
 }
 
-OutputMode KisGmicFilterSetting::outputMode()
+OutputMode KisGmicFilterSetting::outputMode() const
 {
      return m_outputMode;
 }
@@ -58,4 +68,24 @@ OutputMode KisGmicFilterSetting::outputMode()
 void KisGmicFilterSetting::setOutputMode(OutputMode mode)
 {
     m_outputMode = mode;
+}
+
+OutputPreviewMode KisGmicFilterSetting::previewMode() const
+{
+    return m_previewMode;
+}
+
+void KisGmicFilterSetting::setPreviewMode(OutputPreviewMode mode)
+{
+    m_previewMode = mode;
+}
+
+PreviewSize KisGmicFilterSetting::previewSize() const
+{
+    return m_previewSize;
+}
+
+void KisGmicFilterSetting::setPreviewSize(PreviewSize size)
+{
+    m_previewSize = size;
 }

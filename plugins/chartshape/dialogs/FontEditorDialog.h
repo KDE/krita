@@ -22,8 +22,9 @@
 #define KCHART_FONT_EDITOR_DIALOG_H
 
 
-#include <kfontchooser.h>
 #include <kdialog.h>
+
+class KFontChooser;
 
 namespace KChart {
 

@@ -26,6 +26,7 @@
 #include "kis_tool_rectangle_base.h"
 #include "kis_selection_tool_config_widget_helper.h"
 #include <KoIcon.h>
+#include <kshortcut.h>
 
 
 class KisToolSelectRectangular : public KisToolRectangleBase

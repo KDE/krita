@@ -2,7 +2,7 @@ project(autocorrection)
 
 add_subdirectory( data )
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOWIDGETS_INCLUDES} )
 
 set(autocorrect_SRCS
     AutocorrectPlugin.cpp
@@ -17,7 +17,7 @@ kde4_add_ui_files( autocorrect_SRCS
 
 kde4_add_plugin(calligra_textediting_autocorrect ${autocorrect_SRCS})
 
-target_link_libraries(calligra_textediting_autocorrect komain)
+target_link_libraries(calligra_textediting_autocorrect kowidgets)
 
 install(TARGETS calligra_textediting_autocorrect DESTINATION ${PLUGIN_INSTALL_DIR})
 

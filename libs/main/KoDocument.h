@@ -35,18 +35,15 @@
 #include "KoGridData.h"
 #include "KoGuidesData.h"
 #include <KoXmlReader.h>
-#include <KoOdfDocument.h>
+#include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
 #include <klocale.h>
-#include <kglobal.h>
 
 class KisSketchPart;
 class KUndo2Command;
 class KoPart;
 class KoStore;
-class KoOdfReadStore;
-class KoOdfWriteStore;
 class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;
@@ -72,7 +69,7 @@ public:
  *
  *  @short The %Calligra document class
  */
-class KOMAIN_EXPORT KoDocument : public QObject, public KoOdfDocument
+class KOMAIN_EXPORT KoDocument : public QObject, public KoDocumentBase
 {
     Q_OBJECT
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
@@ -164,14 +161,6 @@ public:
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KoDocument without a filter, in *addition* to the main one
     virtual QStringList extraNativeMimeTypes() const = 0;
-
-    /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
-    enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
-        SaveAsDirectoryStore = 2,
-        SaveAsFlatXML = 4,
-        SaveEncrypted = 8
-                        // bitfield! next value is 16
-    };
 
     /**
      * Return the set of SupportedSpecialFormats that the application wants to
@@ -479,7 +468,7 @@ public:
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
-    bool isModified() const;
+    Q_INVOKABLE bool isModified() const;
 
     /**
      * Returns true during loading (openUrl can be asynchronous)
@@ -579,7 +568,7 @@ public:
      *  Sets the modified flag on the document. This means that it has
      *  to be saved or not before deleting it.
      */
-    virtual void setModified(bool _mod);
+    Q_INVOKABLE virtual void setModified(bool _mod);
 
     /**
      * Initialize an empty document using default values

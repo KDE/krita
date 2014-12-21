@@ -22,8 +22,7 @@
 #include <QImageReader>
 
 #include <KoStore.h>
-#include <KoDocument.h>
-#include <KMimeTypeTrader>
+#include <KisDocument.h>
 #include <KMimeType>
 #include <kio/previewjob.h>
 

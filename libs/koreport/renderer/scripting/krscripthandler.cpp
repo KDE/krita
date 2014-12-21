@@ -173,7 +173,7 @@ QString KRScriptHandler::where()
         w += '(' + i.key() + " = '" + i.value().toString() + "') AND ";
         ++i;
     }
-    w = w.mid(0, w.length() - 4);
+    w.chop(4);
     //kDebug() << w;
     return w;
 }

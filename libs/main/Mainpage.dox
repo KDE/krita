@@ -123,3 +123,4 @@ of the same document can be in separate KoMainWindow[s].
  */
 
 // DOXYGEN_SET_PROJECT_NAME = KoMain
+// DOXYGEN_SET_IGNORE_PREFIX = Ko K

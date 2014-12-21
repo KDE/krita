@@ -31,7 +31,6 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kis_debug.h>
-#include <kcolorbutton.h>
 
 DlgDropshadow::DlgDropshadow(const QString & /*imageCS*/,
                              const QString & /*layerCS*/,

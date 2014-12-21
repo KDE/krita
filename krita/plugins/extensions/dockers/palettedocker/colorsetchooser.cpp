@@ -30,13 +30,12 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
-#include <KoMainWindow.h>
 #include <KoResource.h>
 #include <KoColorSet.h>
 
 #include "KoPattern.h"
 #include "kis_resource_server_provider.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <QGridLayout>
 #include <QLabel>
 #include <QSpinBox>

@@ -37,7 +37,7 @@ class TasksetDockerDock : public QDockWidget, public KoCanvasObserverBase, publi
 public:
     TasksetDockerDock();
     ~TasksetDockerDock();
-
+    QString observerName() { return "TasksetDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
     

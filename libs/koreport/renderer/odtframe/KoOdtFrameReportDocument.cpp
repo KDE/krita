@@ -22,11 +22,11 @@
 #include "KoOdtFrameReportPrimitive.h"
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
+#include <KoStore.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
 
-#include <KoStoreDevice.h>
 #include <KoDpi.h>
 
 #include "renderobjects.h"

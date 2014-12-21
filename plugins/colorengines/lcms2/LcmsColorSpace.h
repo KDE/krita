@@ -22,9 +22,6 @@
 #ifndef KOLCMSCOLORSPACE_H_
 #define KOLCMSCOLORSPACE_H_
 
-#include <kconfig.h>
-#include <kglobal.h>
-
 #include <colorprofiles/LcmsColorProfileContainer.h>
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>

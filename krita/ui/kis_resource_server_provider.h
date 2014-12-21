@@ -27,7 +27,13 @@
 #include <QStringList>
 #include <QList>
 
+
+#include <KoResource.h>
 #include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
+#include <KoResourceServerAdapter.h>
+
+#include <kis_paintop_preset.h>
 
 #include <krita_export.h>
 
@@ -35,6 +41,10 @@ class KoResource;
 class KoResourceLoaderThread;
 class KisPaintOpPreset;
 class KisWorkspaceResource;
+
+typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
+typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
+
 
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {
@@ -45,7 +55,7 @@ public:
 
     static KisResourceServerProvider* instance();
 
-    KoResourceServer<KisPaintOpPreset>* paintOpPresetServer();
+    KisPaintOpPresetResourceServer* paintOpPresetServer();
     KoResourceServer<KisWorkspaceResource>* workspaceServer();
 
     void brushBlacklistCleanup();
@@ -58,7 +68,7 @@ private:
     KisResourceServerProvider(const KisResourceServerProvider&);
     KisResourceServerProvider operator=(const KisResourceServerProvider&);
 
-    KoResourceServer<KisPaintOpPreset>* m_paintOpPresetServer;
+    KisPaintOpPresetResourceServer* m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
 
 private:

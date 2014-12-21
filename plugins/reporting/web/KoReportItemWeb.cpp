@@ -22,12 +22,9 @@
 
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
-#include <kcodecs.h>
 #include <renderobjects.h>
 
 #include <QGraphicsRectItem>

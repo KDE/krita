@@ -30,10 +30,12 @@ KisTimelineHeader::KisTimelineHeader(KisFrameBox *parent)
 
 void KisTimelineHeader::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
 
-    for(int i = 0; i < 10000; i++) {
-        if(i % 5 == 0){
+    for (int i = 0; i < 10000; i++) {
+        if (i % 5 == 0) {
             painter.drawText(10 * i, 15, QString("%1").arg(i));
         }
     }

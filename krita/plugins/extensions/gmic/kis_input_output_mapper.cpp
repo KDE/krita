@@ -61,6 +61,7 @@ KisNodeListSP KisInputOutputMapper::inputNodes(InputLayerMode inputMode)
             result->append(m_activeNode->nextSibling());
             break;
         }
+        case NONE:
         case ALL_VISIBLE_LAYERS:
         case ALL_INVISIBLE_LAYERS:
         case ALL_VISIBLE_LAYERS_DECR:
@@ -77,6 +78,7 @@ KisNodeListSP KisInputOutputMapper::inputNodes(InputLayerMode inputMode)
         case ALL_DECR:
         {
             allInversedOrderedLayers(result);
+            break;
         }
         default:
         {

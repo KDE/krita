@@ -55,11 +55,11 @@ public slots:
 
 protected:
     ///Reimplemented from KoToolBase
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
     KoPAViewBase * m_view;
-    QList<QWidget *> m_addOnWidgets;
+    QList<QPointer<QWidget> > m_addOnWidgets;
 };
 
 #endif //KOPABACKGROUNDTOOL_H

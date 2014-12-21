@@ -37,7 +37,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoGenStyle.h>
 #include <KoStyleStack.h>
@@ -49,8 +48,6 @@
 #include <KoPathShape.h>
 
 #include <kdebug.h>
-#include <kjob.h>
-#include <KIO/Job>
 
 #include <QPainter>
 #include <QTimer>

@@ -22,7 +22,6 @@
 #define __ko_document_entry_h__
 
 #include <kservice.h>
-#include <ksharedptr.h>
 #include <QList>
 #include "komain_export.h"
 

@@ -22,16 +22,15 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
 #include <kpluginfactory.h>
 
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
@@ -45,7 +44,7 @@
 K_PLUGIN_FACTORY(KisTIFFExportFactory, registerPlugin<KisTIFFExport>();)
 K_EXPORT_PLUGIN(KisTIFFExportFactory("calligrafilters"))
 
-KisTIFFExport::KisTIFFExport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisTIFFExport::KisTIFFExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -53,19 +52,19 @@ KisTIFFExport::~KisTIFFExport()
 {
 }
 
-KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "Tiff export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
 
     KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
 
-    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *input = m_chain->inputDocument();
     if (!input)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
     const KoColorSpace* cs = input->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
@@ -81,7 +80,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     }
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
-            return KoFilter::UserCancelled;
+            return KisImportExportFilter::UserCancelled;
         }
     }
     else {
@@ -99,7 +98,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     QString filename = m_chain->outputFile();
 
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
@@ -126,11 +125,11 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     if ((res = ktc.buildFile(url, image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         image->unlock();
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     }
     image->unlock();
     dbgFile << " Result =" << res;
-    return KoFilter::InternalError;
+    return KisImportExportFilter::InternalError;
 }
 
 #include <kis_tiff_export.moc>

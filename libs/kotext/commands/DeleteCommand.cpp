@@ -111,7 +111,7 @@ public:
     //   Then we have multiple cases: selection start split some block
     // or don't split any block.
     //   In the first case all formatting info will be stored in the
-    // splitted block(it has startBlockNum number).
+    // split block(it has startBlockNum number).
     //   In the second case it will be stored in the block pointed by the
     // selection end(it has endBlockNum number).
     //   Also there is a trivial case, when whole selection is inside
@@ -256,7 +256,7 @@ public:
     enum SectionHandleAction
     {
         SectionClose, // Denotes close of the section.
-        SectionOpen // Denotes start or begining of the section.
+        SectionOpen // Denotes start or beginning of the section.
     };
 
     //Helper struct for handling sections.

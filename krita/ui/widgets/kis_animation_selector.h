@@ -22,8 +22,12 @@
 #define KIS_ANIMATION_SELECTOR_H
 
 #include <QWidget>
+
 #include "kis_global.h"
-#include "KoUnit.h"
+
+#include <KoUnit.h>
+#include <KisDocument.h>
+
 #include "kis_properties_configuration.h"
 #include "ui_wdganimationselector.h"
 
@@ -45,11 +49,11 @@ class KisAnimationSelector : public WdgAnimationSelector
 {
     Q_OBJECT
 public:
-    KisAnimationSelector(QWidget* parent, KisAnimationDoc *document, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString&animationName);
+    KisAnimationSelector(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString&animationName);
     virtual ~KisAnimationSelector();
 
 signals:
-    void documentSelected();
+    void documentSelected(KisDocument*);
 
 private slots:
     void createAnimation();
@@ -64,7 +68,6 @@ private slots:
 
 private:
     quint8 backgroundOpacity();
-    KisAnimationDoc *m_document;
     double m_width, m_height;
     KoUnit m_widthUnit, m_heightUnit;
     QList<KisPropertiesConfiguration*> m_predefined;

@@ -21,6 +21,8 @@
 
 #include "KoShapeStrokeModel.h"
 
+#include <QAtomicInt>
+
 class KoShapeStrokeModel::Private
 {
 public:

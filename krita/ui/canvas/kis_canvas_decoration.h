@@ -20,8 +20,12 @@
 #define _KIS_CANVAS_DECORATION_H_
 
 #include <QObject>
+#include <QPointer>
+
 #include <krita_export.h>
+#include <kis_image.h>
 #include <kis_canvas2.h>
+#include <KisView.h>
 
 class QPoint;
 class QRect;
@@ -29,7 +33,8 @@ class QRectF;
 class QPainter;
 class KoViewConverter;
 class KisCoordinatesConverter;
-class KisView2;
+class KisViewManager;
+
 
 /**
  * This class is the base class for object that draw a decoration on the canvas,
@@ -39,8 +44,11 @@ class KRITAUI_EXPORT KisCanvasDecoration : public QObject
 {
     Q_OBJECT
 public:
-    KisCanvasDecoration(const QString& id, KisView2 * parent, bool visible = false);
+    KisCanvasDecoration(const QString& id, QPointer<KisView>parent);
     ~KisCanvasDecoration();
+
+    void setView(QPointer<KisView> imageView);
+
     const QString& id() const;
 
     /**
@@ -67,10 +75,13 @@ public slots:
 protected:
     virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter,KisCanvas2* canvas) = 0;
 
+    /// XXX: unify view and imageview!
+    QPointer<KisView>imageView();
+
     /**
      * @return the parent KisView
      */
-    KisView2* view() const;
+    QPointer<KisView> view() const;
 private:
     struct Private;
     Private* const d;

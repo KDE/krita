@@ -160,6 +160,8 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                                        qreal baseScale, const QSize &baseSize,
                                        QTransform *outputTransform, QSize *outputSize)
 {
+    Q_UNUSED(baseScale);
+
     QRectF originalBounds = QRectF(QPointF(), originalSize);
     QTransform originalTransform =
         baseBrushTransform(scale, scale,

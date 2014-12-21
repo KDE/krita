@@ -23,21 +23,14 @@
 #ifndef KOCANVASBASE_H
 #define KOCANVASBASE_H
 
-#include <KoUnit.h>
-
-#include <QPointF>
 #include <QPoint>
-#include <QRectF>
-#include <QRect>
-#include <QWidget>
-#include <QCursor>
-#include <QObject>
 
 #include "flake_export.h"
 
 class QGraphicsObject;
 class KUndo2Command;
 
+class KoUnit;
 class KoCanvasResourceManager;
 class KoShapeManager;
 class KoToolProxy;
@@ -49,6 +42,11 @@ class KoShape;
 class KoSnapGuide;
 class KoGuidesData;
 
+class QWidget;
+class QCursor;
+class QObject;
+class QPointF;
+class QRectF;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -67,6 +65,9 @@ public:
      */
     explicit KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument);
     virtual ~KoCanvasBase();
+
+    /// For apps that want to share a resource manager with other views
+    void setSharedResourceManager(KoCanvasResourceManager *resourceManager);
 
 public:
 

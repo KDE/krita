@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __ORPRINTRENDER_H__
-#define __ORPRINTRENDER_H__
+#ifndef __KOREPORTPRINTRENDERER_H__
+#define __KOREPORTPRINTRENDERER_H__
 
 #include "KoReportRendererBase.h"
 
@@ -34,7 +34,7 @@ class KoReportPrintRenderer : public KoReportRendererBase
         bool setupPrinter(ORODocument *, QPrinter *);
 };
 
-#endif // __ORPRINTRENDER_H__
+#endif // __KOREPORTPRINTRENDERER_H__
 
 
 

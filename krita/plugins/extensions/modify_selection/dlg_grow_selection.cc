@@ -23,11 +23,11 @@
 
 #include <KoUnit.h>
 #include <KoSizeGroup.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgGrowSelection::WdgGrowSelection(QWidget* parent, KisView2* view)
+WdgGrowSelection::WdgGrowSelection(QWidget* parent, KisViewManager* view)
     : KisOperationUIWidget(i18n("Grow Selection"), parent)
     , m_growValue(1)
 {

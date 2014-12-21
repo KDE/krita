@@ -19,28 +19,17 @@
 #ifndef __KIS_OFFSET_PROCESSING_VISITOR_H
 #define __KIS_OFFSET_PROCESSING_VISITOR_H
 
-#include "kis_processing_visitor.h"
+#include "processing/kis_simple_processing_visitor.h"
 #include <QRect>
 
 
-class KisOffsetProcessingVisitor : public KisProcessingVisitor
+class KisOffsetProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
     KisOffsetProcessingVisitor(const QPoint &offsetPoint, const QRect &wrapRect);
 
-    void visit(KisNode *node, KisUndoAdapter *undoAdapter);
-    void visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter);
-    void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter);
-    void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter);
-
-private:
-    void offsetNode(KisNode *node, KisUndoAdapter *undoAdapter);
+    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
+    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
 
 private:
     QPoint m_offset;

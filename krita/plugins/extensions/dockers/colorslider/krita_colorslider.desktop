@@ -1,0 +1,21 @@
+[Desktop Entry]
+Name=ColorSlider
+Name[ca]=ControlLliscantColor
+Name[de]=Farbschieber
+Name[en_GB]=ColourSlider
+Name[es]=Selector de color
+Name[it]=Cursore del colore
+Name[ja]=カラースライダー
+Name[nb]=ColorSlider
+Name[nl]=KleurSchuifknop
+Name[pl]=Suwa koloru
+Name[pt]=Barras de Cores
+Name[pt_BR]=Seletor de Cores
+Name[sk]=Posuvník farieb
+Name[sv]=Färgskjutreglage
+Name[uk]=ПовзунокКольору
+Name[x-test]=xxColorSliderxx
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritacolorslider
+X-Krita-Version=28

@@ -2,6 +2,7 @@
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Michał Poteralski <michalpoteralskikde@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +30,7 @@
 #include "cursor.h"
 #include "utils.h"
 #include "error.h"
+#include <unicode/coll.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -38,11 +40,42 @@
 
 using namespace KexiDB;
 
-unsigned short charTable[] = {
+const unsigned short charTable[] = {
 #include "chartable.txt"
 };
 
 //-------------------------------
+
+class CollatorInstance
+{
+public:
+    CollatorInstance() {
+        UErrorCode status = U_ZERO_ERROR;
+        m_collator = Collator::createInstance(status);
+        if (U_FAILURE(status)) {
+            kWarning() << "Could not create instance of collator: " << status;
+            m_collator = NULL;
+        }
+
+        // enable normalization by default
+        m_collator->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
+        if (U_FAILURE(status))
+            kWarning() << "Could not set collator attribute: " << status;
+    }
+
+    Collator* getCollator() {
+        return m_collator;
+    }
+
+    ~CollatorInstance() {
+        delete m_collator;
+    }
+
+private:
+    Collator *m_collator;
+};
+
+K_GLOBAL_STATIC(CollatorInstance, _collator)
 
 //! @internal A functor used in qSort() in order to sort by a given column
 class LessThanFunctor
@@ -103,13 +136,11 @@ private:
             return false;
         }
 
-        unsigned short au;
-        unsigned short bu;
         int len = qMin(as.length(), bs.length());
 
         forever {
-            au = a->unicode();
-            bu = b->unicode();
+            unsigned short au = a->unicode();
+            unsigned short bu = b->unicode();
             au = (au <= 0x17e ? charTable[au] : 0xffff);
             bu = (bu <= 0x17e ? charTable[bu] : 0xffff);
 
@@ -123,6 +154,13 @@ private:
             b++;
         }
         return false;
+    }
+
+    static  bool cmpStringWithCollator(const QVariant& left, const QVariant& right) {
+        const QString &as = left.toString();
+        const QString &bs = right.toString();
+        return (Collator::LESS == _collator->getCollator()->compare((const UChar *)as.constData(), as.size(),
+                (const UChar *)bs.constData(), bs.size())) ? true : false;
     }
 
     //! Compare function for BLOB data (QByteArray). Uses size as the weight.
@@ -162,8 +200,13 @@ public:
         else if (t == Field::BLOB)
             //! @todo allow users to define BLOB sorting function?
             m_lessThanFunction = &cmpBLOB;
-        else
-            m_lessThanFunction = &cmpString; //anything else
+        else { // anything else
+            // check if CollatorInstance is not destroyed and has valid collator
+            if (!_collator.isDestroyed() && _collator->getCollator())
+                m_lessThanFunction = &cmpStringWithCollator;
+            else
+                m_lessThanFunction = &cmpString;
+        }
     }
 
     void setAscendingOrder(bool ascending) {

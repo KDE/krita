@@ -38,7 +38,6 @@
 #include <KoColor.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeManager.h>
 #include <KoToolBase.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
@@ -46,7 +45,7 @@
 #include <KoSelection.h>
 #include <KoAbstractGradient.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_selection.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -71,6 +70,7 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include <kis_selection_mask.h>
 #include "kis_resources_snapshot.h"
+#include <KisView.h>
 
 
 struct KisTool::Private {
@@ -95,7 +95,6 @@ struct KisTool::Private {
     KoAbstractGradient* currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KisNodeSP currentNode;
     float currentExposure;
     KisFilterConfiguration* currentGenerator;
     QWidget* optionWidget;
@@ -156,9 +155,16 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+    Q_UNUSED(toolActivation);
+    Q_UNUSED(shapes);
+
     resetCursorStyle();
+
+    if (!canvas()) return;
+    if (!canvas()->resourceManager()) return;
+
 
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
@@ -167,11 +173,11 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
                                                            resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
+    KisPaintOpPresetSP preset = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    if (preset && preset->settings()) {
+        preset->settings()->activate();
+    }
 
-    canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
-
-    d->currentNode = canvas()->resourceManager()->
-            resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
@@ -179,18 +185,25 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
-    connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()));
-    connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()));
-    connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()));
+    connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
+    connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
+    connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
 }
 
 void KisTool::deactivate()
 {
-    disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()));
-    disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()));
-    disconnect(image().data(), SIGNAL(sigStrokeEndRequested()));
-    disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
-    disconnect(actions().value("reset_fg_bg"), 0, this, 0);
+    bool result = true;
+
+    result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
+    result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);
+    result &= disconnect(image().data(), SIGNAL(sigStrokeEndRequested()), this, 0);
+    result &= disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
+    result &= disconnect(actions().value("reset_fg_bg"), 0, this, 0);
+
+    if (!result) {
+        qWarning() << "WARNING: KisTool::deactivate() failed to disconnect"
+                   << "some signal connections. Your actions might be executed twice!";
+    }
 }
 
 void KisTool::requestUndoDuringStroke()
@@ -211,7 +224,6 @@ void KisTool::requestStrokeEnd()
 
 void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
-
     switch (key) {
     case(KoCanvasResourceManager::ForegroundColor):
         d->currentFgColor = v.value<KoColor>();
@@ -230,9 +242,6 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::CurrentGeneratorConfiguration):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
-        break;
-    case(KisCanvasResourceProvider::CurrentKritaNode):
-        d->currentNode = (v.value<KisNodeSP>());
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
         emit statusTextChanged(v.value<KisPaintOpPresetSP>()->name());
@@ -400,7 +409,8 @@ KisPaintOpPresetSP KisTool::currentPaintOpPreset()
 
 KisNodeSP KisTool::currentNode()
 {
-    return d->currentNode;
+    KisNodeSP node = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    return node;
 }
 
 KoColor KisTool::currentFgColor()
@@ -530,7 +540,7 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 void KisTool::deleteSelection()
 {
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
     KisSelectionSP selection = resources->activeSelection();
     KisNodeSP node = resources->currentNode();
@@ -724,7 +734,7 @@ bool KisTool::nodeEditable()
         } else {
             message = i18n("Group not editable.");
         }
-        kiscanvas->view()->showFloatingMessage(message, koIcon("object-locked"));
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
     }
     return node->isEditable();
 }
@@ -732,12 +742,12 @@ bool KisTool::nodeEditable()
 bool KisTool::selectionEditable()
 {
     KisCanvas2 * kisCanvas = static_cast<KisCanvas2*>(canvas());
-    KisView2 * view = kisCanvas->view();
+    KisViewManager * view = kisCanvas->viewManager();
 
     bool editable = view->selectionEditable();
     if (!editable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        kiscanvas->view()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
+        kiscanvas->viewManager()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
     }
     return editable;
 }

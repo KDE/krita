@@ -22,8 +22,6 @@
 
 #include <QLayout>
 
-#include <knuminput.h>
-
 #include <KoColor.h>
 #include <KoResourceServer.h>
 #include <KoPattern.h>

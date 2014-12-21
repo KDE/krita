@@ -15,8 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef KRLINEDATA_H
-#define KRLINEDATA_H
+
+#ifndef KOREPORTITEMLINE_H
+#define KOREPORTITEMLINE_H
+
 #include "KoReportItemBase.h"
 #include <QRect>
 #include <QPainter>
@@ -37,11 +39,9 @@ class Line;
 class KOREPORT_EXPORT  KoReportItemLine : public KoReportItemBase
 {
 public:
-    KoReportItemLine() {
-        createProperties();
-    }
+    KoReportItemLine();
     explicit KoReportItemLine(QDomNode & element);
-    ~KoReportItemLine() {};
+    ~KoReportItemLine();
 
     virtual QString typeName() const;
     virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);

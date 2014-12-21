@@ -18,17 +18,21 @@
 
 #include "kis_canvas_decoration.h"
 
-#include "kis_view2.h"
+#include "KisView.h"
+#include "kis_canvas2.h"
+#include "kis_debug.h"
 
 struct KisCanvasDecoration::Private {
     bool visible;
-    KisView2* view;
+    QPointer<KisView> view;
     QString id;
 };
 
-KisCanvasDecoration::KisCanvasDecoration(const QString& id, KisView2 * parent, bool visible) : QObject(parent), d(new Private)
+KisCanvasDecoration::KisCanvasDecoration(const QString& id, QPointer<KisView>parent)
+    : QObject(parent)
+    , d(new Private)
 {
-    d->visible = visible;
+    d->visible = false;
     d->view = parent;
     d->id = id;
 }
@@ -38,6 +42,12 @@ KisCanvasDecoration::~KisCanvasDecoration()
     delete d;
 }
 
+void KisCanvasDecoration::setView(QPointer<KisView>imageView)
+{
+    d->view = imageView;
+}
+
+
 const QString& KisCanvasDecoration::id() const
 {
     return d->id;
@@ -46,7 +56,10 @@ const QString& KisCanvasDecoration::id() const
 void KisCanvasDecoration::setVisible(bool v)
 {
     d->visible = v;
-    d->view->canvas()->update();
+    if (d->view && d->view->canvasBase()) {
+
+        d->view->canvasBase()->canvasWidget()->update();
+    }
 }
 
 bool KisCanvasDecoration::visible() const
@@ -61,11 +74,21 @@ void KisCanvasDecoration::toggleVisibility()
 
 void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas = 0)
 {
+    if (!canvas) {
+        dbgFile<<"canvas does not exist:"<<canvas;
+        }
     if (visible())
         drawDecoration(gc, updateArea, converter,canvas);
 }
 
-KisView2* KisCanvasDecoration::view() const
+
+QPointer<KisView>KisCanvasDecoration::imageView()
+{
+    return d->view;
+}
+
+
+QPointer<KisView>KisCanvasDecoration::view() const
 {
     return d->view;
 }

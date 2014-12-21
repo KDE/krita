@@ -25,7 +25,7 @@
 #include <KoTextEditingRegistry.h>
 
 K_PLUGIN_FACTORY( ChangecasePluginFactory, registerPlugin<ChangecasePlugin>(); )
-K_EXPORT_PLUGIN( ChangecasePluginFactory("ChangecasePlugin") )
+K_EXPORT_PLUGIN( ChangecasePluginFactory("calligra_textediting_changecase") )
 
 ChangecasePlugin::ChangecasePlugin( QObject *parent, const QVariantList& )
     : QObject(parent)

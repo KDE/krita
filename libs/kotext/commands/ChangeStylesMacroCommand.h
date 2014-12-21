@@ -33,8 +33,8 @@ class KoStyleManager;
 class ChangeStylesMacroCommand : public KUndo2Command
 {
 public:
-    ChangeStylesMacroCommand(const QList<ChangeFollower *> &changeFollowers
-        , KoStyleManager *styleManager);
+    ChangeStylesMacroCommand(const QList<ChangeFollower *> &changeFollowers,
+                             KoStyleManager *styleManager);
 
     virtual ~ChangeStylesMacroCommand();
 

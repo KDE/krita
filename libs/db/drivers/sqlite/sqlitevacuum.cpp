@@ -17,8 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <db/utils.h>
 #include "sqlitevacuum.h"
+
+#include <db/utils.h>
 
 #include <kstandarddirs.h>
 #include <kprogressdialog.h>

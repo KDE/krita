@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 #include <kis_layer.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <canvas/kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_image.h>
@@ -38,6 +38,8 @@ SpecificColorSelectorDock::SpecificColorSelectorDock()
 
 void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
+    setEnabled(canvas != 0);
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
     }
@@ -47,14 +49,22 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
         m_view->image()->disconnect(m_colorSelector);
     }
 
-    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
-    KisView2* view = kisCanvas->view();
-
     if (m_colorSelector) {
         m_colorSelector->disconnect(); // explicit disconnect in case Qt gets confused.
         delete m_colorSelector;
     }
+
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
+    m_canvas = kisCanvas;
+
+    if (!kisCanvas) {
+        return;
+    }
+
+    KisViewManager* view = kisCanvas->viewManager();
+    m_view = view;
+    if (!view) return;
+
     m_colorSelector = new KisSpecificColorSelectorWidget(kisCanvas->displayColorConverter()->displayRendererInterface(), this);
     setWidget(m_colorSelector);
 
@@ -64,12 +74,13 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
     connect(view->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace*)));
 
-    m_canvas = kisCanvas;
-    m_view = view;
+
 }
 
 void SpecificColorSelectorDock::unsetCanvas()
 {
+    setEnabled(false);
+
     m_canvas = 0;
     m_view = 0;
 

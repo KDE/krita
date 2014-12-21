@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KORENDERERBASE_H
-#define KORENDERERBASE_H
+#ifndef KOREPORTRENDERERBASE_H
+#define KOREPORTRENDERERBASE_H
 #include "koreport_export.h"
 #include <kurl.h>
 
@@ -60,4 +60,4 @@ class KOREPORT_EXPORT KoReportRendererFactory
         KoReportRendererBase* createInstance(const QString& key);
 };
 
-#endif // KORENDERERBASE_H
+#endif // KOREPORTRENDERERBASE_H

@@ -23,11 +23,10 @@
 #include <QLayout>
 #include <QSpinBox>
 
-#include <kcolorbutton.h>
-
 #include <KoColor.h>
+#include <KoToolManager.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -43,9 +42,14 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
 {
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
+
+
     m_widget->textLabel1->hide();
+
+    m_widget->intThreshold->setRange(1, 255, 0);
+
     connect(m_widget->colorSelector, SIGNAL(colorChanged(const QColor&)), SLOT(slotColorSelectorChanged(const QColor&)));
-    connect(m_widget->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_widget->intThreshold, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_widget->btnCustomColor, SIGNAL(changed(const QColor&)), SLOT(slotCustomColorSelected(const QColor&)));
 
     m_widget->btnCustomColor->setColor(Qt::white);
@@ -56,7 +60,7 @@ KisWdgColorToAlpha::~KisWdgColorToAlpha()
     delete m_widget;
 }
 
-void KisWdgColorToAlpha::setView(KisView2 *view)
+void KisWdgColorToAlpha::setView(KisViewManager *view)
 {
     m_view = view;
 }

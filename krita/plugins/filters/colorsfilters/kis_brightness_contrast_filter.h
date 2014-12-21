@@ -30,7 +30,6 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
-#include <KoProgressUpdater.h>
 #include <KoColor.h>
 
 class QWidget;
@@ -108,7 +107,7 @@ public:
     virtual KisBrightnessContrastFilterConfiguration * configuration() const;
     virtual void setConfiguration(const KisPropertiesConfiguration* config);
     WdgBrightnessContrast * m_page;
-    void setView(KisView2 *view);
+    void setView(KisViewManager *view);
 
 public slots:
     void slotDrawLine(const KoColor &color);

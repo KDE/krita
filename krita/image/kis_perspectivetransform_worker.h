@@ -30,11 +30,8 @@
 #include <KoUpdater.h>
 
 
-class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker : public QObject
+class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker
 {
-
-    Q_OBJECT
-
 public:
     KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress);
     KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QTransform &transform, KoUpdaterPtr progress);
@@ -42,16 +39,30 @@ public:
     ~KisPerspectiveTransformWorker();
 
     void run();
+    void runPartialDst(KisPaintDeviceSP srcDev,
+                       KisPaintDeviceSP dstDev,
+                       const QRect &dstRect);
+
+    void setForwardTransform(const QTransform &transform);
+
+    QTransform forwardTransform() const;
+    QTransform backwardTransform() const;
 
 private:
     void init(const QTransform &transform);
+
+    void fillParams(const QRectF &srcRect,
+                    const QRect &dstBaseClipRect,
+                    QRegion *dstRegion,
+                    QPolygonF *dstClipPolygon);
 
 private:
     KisPaintDeviceSP m_dev;
     KoUpdaterPtr m_progressUpdater;
     QRegion m_dstRegion;
     QRectF m_srcRect;
-    QTransform m_newTransform;
+    QTransform m_backwardTransform;
+    QTransform m_forwardTransform;
     bool m_isIdentity;
 };
 

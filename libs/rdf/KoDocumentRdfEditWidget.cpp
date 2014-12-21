@@ -29,7 +29,6 @@
 #include "KoRdfSemanticTreeWidgetItem.h"
 // main
 #include <KoDocument.h>
-#include <KoGlobal.h>
 #include <KoIcon.h>
 // KDE
 #include <kdebug.h>

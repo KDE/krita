@@ -36,14 +36,32 @@ KisHairyInkOption::KisHairyInkOption()
     m_checkable = true;
     m_options = new KisInkOptionsWidget();
 
+    // init values for slider
+    m_options->pressureSlider->setRange(0.0, 100, 0);
+    m_options->pressureSlider->setValue(50);
+    m_options->pressureSlider->setSuffix("%");
+
+    m_options->bristleLengthSlider->setRange(0, 100, 0);
+    m_options->bristleLengthSlider->setValue(50);
+    m_options->bristleLengthSlider->setSuffix("%");
+
+    m_options->bristleInkAmountSlider->setRange(0, 100, 0);
+    m_options->bristleInkAmountSlider->setValue(50);
+    m_options->bristleInkAmountSlider->setSuffix("%");
+
+    m_options->inkDepletionSlider->setRange(0, 100, 0);
+    m_options->inkDepletionSlider->setValue(50);
+    m_options->inkDepletionSlider->setSuffix("%");
+
+
     connect(m_options->inkAmountSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->saturationCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->opacityCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->useWeightCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->pressureSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->bristleLengthSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->bristleInkAmountSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->inkDepletionSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->pressureSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->bristleLengthSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->bristleInkAmountSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->inkDepletionSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->inkCurve, SIGNAL(modified()), SIGNAL(sigSettingChanged()));
     connect(m_options->soakInkCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 

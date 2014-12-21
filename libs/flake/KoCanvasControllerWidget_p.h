@@ -35,9 +35,7 @@
 #include "KoCanvasSupervisor.h"
 #include "KoToolManager_p.h"
 
-#include <ksharedconfig.h>
 #include <kdebug.h>
-#include <kconfiggroup.h>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
@@ -59,7 +57,6 @@ public:
     Private(KoCanvasControllerWidget *qq)
         : q(qq)
         , canvas(0)
-        , lastActivatedCanvas(0)
         , ignoreScrollSignals(false)
         , zoomWithWheel(false)
         , vastScrollingFactor(0)
@@ -79,7 +76,6 @@ public:
 
     KoCanvasControllerWidget *q;
     KoCanvasBase *canvas;
-    KoCanvasBase *lastActivatedCanvas;
     Viewport *viewportWidget;
     bool ignoreScrollSignals;
     bool zoomWithWheel;

@@ -30,6 +30,7 @@
 #include <KoTextEditor.h>
 #include <opendocument/KoTextLoader.h>
 #include <KoTextSharedLoadingData.h>
+#include <KoSectionManager.h>
 
 #include <kdebug.h>
 #ifdef SHOULD_BUILD_RDF

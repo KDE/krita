@@ -26,7 +26,7 @@
 #include <kio/job.h>
 
 #include "kis_types.h"
-class KisDoc2;
+class KisDocument;
 
 struct JP2ConvertOptions {
   int rate;
@@ -63,7 +63,7 @@ private:
         JPT_CFMT = 2
     };
 public:
-    jp2Converter(KisDoc2 *doc);
+    jp2Converter(KisDocument *doc);
     virtual ~jp2Converter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -80,7 +80,7 @@ private:
     int getFileFormat(const KUrl& uri) const;
 private:
     KisImageWSP m_image;
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     bool m_stop;
     KIO::TransferJob *m_job;
 };

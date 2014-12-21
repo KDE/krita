@@ -22,7 +22,6 @@
 
 #include <KoGenericRegistry.h>
 #include <KoFilterEffectFactoryBase.h>
-#include <QTransform>
 
 #include "flake_export.h"
 

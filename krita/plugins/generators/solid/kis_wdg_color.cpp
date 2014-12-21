@@ -22,7 +22,6 @@
 
 #include <QLayout>
 
-#include <knuminput.h>
 #include <KoColor.h>
 #include <filter/kis_filter_configuration.h>
 

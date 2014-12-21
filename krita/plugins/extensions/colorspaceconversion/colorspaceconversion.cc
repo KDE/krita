@@ -41,7 +41,7 @@
 #include <kis_types.h>
 #include <kis_colorspace_convert_visitor.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_paint_device.h>
 #include <kis_action.h>
 #include <kis_group_layer.h>
@@ -77,7 +77,7 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
     if (!image) return;
 
 
-    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
+    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view->mainWindow(), "ColorSpaceConversion");
     bool allowLCMSOptimization = KisConfig().allowLCMSOptimization();
     dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->setChecked(allowLCMSOptimization);
     Q_CHECK_PTR(dlgColorSpaceConversion);
@@ -108,7 +108,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
+    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view->mainWindow(), "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + layer->colorSpace()->name());

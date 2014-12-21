@@ -29,9 +29,13 @@
 
 #include "flake_export.h"
 
+#include <QMetaType>
+#include <QColor>
+
+
 class KoShape;
 class QPainter;
-class QColor;
+class QBrush;
 class KoViewConverter;
 
 /**

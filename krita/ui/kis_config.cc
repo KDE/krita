@@ -33,11 +33,10 @@
 #include <QThread>
 #include <QStringList>
 
-#include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kconfig.h>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -115,6 +114,45 @@ int KisConfig::undoStackLimit() const
 void KisConfig::setUndoStackLimit(int limit) const
 {
     m_cfg.writeEntry("undoStackLimit", limit);
+}
+bool KisConfig::useCumulativeUndoRedo()
+{
+    return m_cfg.readEntry("useCumulativeUndoRedo",false);
+}
+
+void KisConfig::setCumulativeUndoRedo(bool value)
+{
+    m_cfg.writeEntry("useCumulativeUndoRedo", value);
+}
+
+double KisConfig::stackT1()
+{
+     return m_cfg.readEntry("stackT1",5);
+}
+
+void KisConfig::setStackT1(int T1)
+{
+    m_cfg.writeEntry("stackT1", T1);
+}
+
+double KisConfig::stackT2()
+{
+     return m_cfg.readEntry("stackT2",1);
+}
+
+void KisConfig::setStackT2(int T2)
+{
+    m_cfg.writeEntry("stackT2", T2);
+}
+
+int KisConfig::stackN()
+{
+    return m_cfg.readEntry("stackN",5);
+}
+
+void KisConfig::setStackN(int N)
+{
+     m_cfg.writeEntry("stackN", N);
 }
 
 qint32 KisConfig::defImageWidth() const
@@ -254,6 +292,23 @@ void KisConfig::setMonitorProfile(const QString & monitorProfile, bool override)
     m_cfg.writeEntry("monitorProfile/OverrideX11", override);
     m_cfg.writeEntry("monitorProfile", monitorProfile);
 }
+bool KisConfig::useDirtyPresets() const
+{
+   return m_cfg.readEntry("useDirtyPresets",false);
+}
+void KisConfig::setUseDirtyPresets(bool value)
+{
+    m_cfg.writeEntry("useDirtyPresets",value);
+}
+bool KisConfig::useEraserBrushSize() const
+{
+   return m_cfg.readEntry("useEraserBrushSize",false);
+}
+void KisConfig::setUseEraserBrushSize(bool value)
+{
+    m_cfg.writeEntry("useEraserBrushSize",value);
+}
+
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
@@ -429,7 +484,7 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 bool KisConfig::useOpenGL() const
 {
     if (qApp->applicationName() == "krita" || qApp->applicationName() == "kritaanimation") {
-        qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+        //qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
     }
@@ -786,7 +841,7 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
 
 int KisConfig::autoSaveInterval()  const
 {
-    return m_cfg.readEntry("AutoSaveInterval", KoDocument::defaultAutoSave());
+    return m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave());
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const
@@ -1037,6 +1092,17 @@ void KisConfig::setUseOcio(bool useOCIO) const
     m_cfg.writeEntry("Krita/Ocio/UseOcio", useOCIO);
 }
 
+int KisConfig::favoritePresets() const
+{
+    return m_cfg.readEntry("favoritePresets", 10);
+}
+
+void KisConfig::setFavoritePresets(const int value)
+{
+    m_cfg.writeEntry("favoritePresets", value);
+}
+
+
 KisConfig::OcioColorManagementMode
 KisConfig::ocioColorManagementMode() const
 {
@@ -1174,6 +1240,36 @@ int KisConfig::numDefaultLayers() const
 void KisConfig::setNumDefaultLayers(int num)
 {
     m_cfg.writeEntry("NumberOfLayersForNewImage", num);
+}
+
+quint8 KisConfig::defaultBackgroundOpacity() const
+{
+  return m_cfg.readEntry("BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8);
+}
+
+void KisConfig::setDefaultBackgroundOpacity(quint8 value)
+{
+  m_cfg.writeEntry("BackgroundOpacityForNewImage", (int)value);
+}
+
+QColor KisConfig::defaultBackgroundColor() const
+{
+  return m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)); 
+}
+
+void KisConfig::setDefaultBackgroundColor(QColor value) 
+{
+  m_cfg.writeEntry("BackgroundColorForNewImage", value);
+}
+
+KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle() const
+{
+  return (KisConfig::BackgroundStyle)m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER);
+}
+
+void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)
+{
+  m_cfg.writeEntry("BackgroundStyleForNewImage", (int)value);
 }
 
 int KisConfig::lineSmoothingType() const

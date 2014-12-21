@@ -23,6 +23,8 @@
 
 #include "flake_export.h"
 #include <KoShapeStroke.h>
+#include <QFont>
+#include <QTransform>
 
 class FLAKE_EXPORT SvgGraphicsContext
 {

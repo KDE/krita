@@ -57,7 +57,7 @@ public:
     virtual void deactivate();
     virtual void createActions();
 
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 public slots:
     void removeAnnotation();

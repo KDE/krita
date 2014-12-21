@@ -70,7 +70,7 @@ public:
      * The created thumbnail is cached.
      */
     QImage thumbnail(KoParagraphStyle *style,
-                     QSize size = QSize(), bool recreateThumbnail = false,
+                     const QSize &size = QSize(), bool recreateThumbnail = false,
                      KoStyleThumbnailerFlags flags =
                           KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
 
@@ -83,14 +83,14 @@ public:
      * The created thumbnail is cached.
      */
     QImage thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle = 0,
-                     QSize size = QSize(), bool recreateThumbnail = false,
+                     const QSize &size = QSize(), bool recreateThumbnail = false,
                      KoStyleThumbnailerFlags flags =
                           KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
 
     /**
      * Sets the size of the thumbnails returned by the @fn thumbnail with no size arguments.
      */
-    void setThumbnailSize(QSize size);
+    void setThumbnailSize(const QSize &size);
 
     /**
      * Sets the text that will be layouted.
@@ -110,7 +110,7 @@ public:
     void removeFromCache(KoCharacterStyle *style);
 
 private:
-    void layoutThumbnail(QSize size, QImage *im, KoStyleThumbnailerFlags flags);
+    void layoutThumbnail(const QSize &size, QImage *im, KoStyleThumbnailerFlags flags);
     void removeFromCache(const QString &expr);
 
     class Private;

@@ -26,11 +26,12 @@
 #include <KoCanvasController.h>
 #include <KoZoomController.h>
 
-#include "kis_canvas2.h"
-#include <kis_view2.h>
-#include "kis_image.h"
-#include "kis_paint_device.h"
-#include "kis_signal_compressor.h"
+#include <kis_canvas2.h>
+#include <KisViewManager.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_signal_compressor.h>
+#include <kis_config.h>
 
 OverviewWidget::OverviewWidget(QWidget * parent)
     : QWidget(parent)
@@ -40,6 +41,9 @@ OverviewWidget::OverviewWidget(QWidget * parent)
 {
     setMouseTracking(true);
     connect(m_compressor, SIGNAL(timeout()), SLOT(startUpdateCanvasProjection()));
+    KisConfig cfg;
+    QRgb c = cfg.readEntry("OverviewWidgetColor", 0xFF454C);
+    m_outlineColor = QColor(c);
 }
 
 OverviewWidget::~OverviewWidget()
@@ -53,13 +57,12 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
-    connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
-    
-    connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
-            this, SLOT(update()));
-    m_compressor->start();
+    if (m_canvas) {
+        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
+        connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
+        m_compressor->start();
+    }
 }
 
 QSize OverviewWidget::calculatePreviewSize()
@@ -179,9 +182,9 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
     float delta = event->delta();
     
     if (delta > 0) {
-        m_canvas->view()->zoomController()->zoomAction()->zoomIn();
+        m_canvas->viewManager()->zoomController()->zoomAction()->zoomIn();
     } else {
-        m_canvas->view()->zoomController()->zoomAction()->zoomOut();
+        m_canvas->viewManager()->zoomController()->zoomAction()->zoomOut();
     }
 }
 
@@ -189,14 +192,26 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
 void OverviewWidget::paintEvent(QPaintEvent* event)
 {
     QWidget::paintEvent(event);
-    
+
     if (m_canvas) {
         QPainter p(this);
         p.translate(previewOrigin());
         
         p.drawPixmap(0, 0, m_pixmap.width(), m_pixmap.height(), m_pixmap);
 
-        p.setPen(QColor(Qt::red));
+        QRect r = rect().translated(-previewOrigin().toPoint());
+        QPolygonF outline;
+        outline << r.topLeft() << r.topRight() << r.bottomRight() << r.bottomLeft();
+
+        QPen pen;
+        pen.setColor(m_outlineColor);
+        pen.setStyle(Qt::DashLine);
+
+        p.setPen(pen);
+        p.drawPolygon(outline.intersected(previewPolygon()));
+
+        pen.setStyle(Qt::SolidLine);
+        p.setPen(pen);
         p.drawPolygon(previewPolygon());
     }
 }

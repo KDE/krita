@@ -41,7 +41,6 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <kglobal.h>
 
 #include <KoColorSpace.h>
 #include <KoColor.h>
@@ -205,7 +204,7 @@ void KisPainter::end()
                "Please use end/deleteTransaction() instead");
 }
 
-void KisPainter::beginTransaction(const KUndo2MagicString& transactionName)
+void KisPainter::beginTransaction(const KUndo2MagicString& transactionName,int timedID)
 {
     Q_ASSERT_X(!d->transaction, "KisPainter::beginTransaction()",
                "You asked for a new transaction while still having "
@@ -214,6 +213,7 @@ void KisPainter::beginTransaction(const KUndo2MagicString& transactionName)
 
     d->transaction = new KisTransaction(transactionName, d->device);
     Q_CHECK_PTR(d->transaction);
+    d->transaction->undoCommand()->setTimedID(timedID);
 }
 
 void KisPainter::revertTransaction()

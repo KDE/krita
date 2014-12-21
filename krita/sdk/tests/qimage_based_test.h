@@ -27,7 +27,7 @@
 
 #include <KoShapeContainer.h>
 #include <KoShapeRegistry.h>
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_shape_layer.h"
 
 #include "kis_undo_stores.h"
@@ -134,7 +134,7 @@ protected:
         image->undoAdapter()->addCommand(cmd);
     }
 
-    void addShapeLayer(KisDoc2 *doc, KisImageSP image) {
+    void addShapeLayer(KisDocument *doc, KisImageSP image) {
         KoShapeContainer *parentContainer =
             dynamic_cast<KoShapeContainer*>(doc->shapeForNode(image->root()));
 

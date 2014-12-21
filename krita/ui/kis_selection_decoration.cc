@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection.h"
 #include "kis_image.h"
 #include "flake/kis_shape_selection.h"
@@ -36,12 +36,13 @@
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
 #include "krita_utils.h"
+#include "KisView.h"
 
 static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
 static const unsigned int ANT_ADVANCE_WIDTH = ANT_LENGTH + ANT_SPACE;
 
-KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
+KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)
     : KisCanvasDecoration("selection", view),
       m_signalCompressor(500 /*ms*/, KisSignalCompressor::FIRST_INACTIVE),
       m_offset(0),
@@ -101,7 +102,9 @@ void KisSelectionDecoration::selectionChanged()
                 m_thumbnailImage = selection->thumbnailImage();
                 m_thumbnailImageTransform = selection->thumbnailImageTransform();
             }
-            view()->canvasBase()->updateCanvas();
+            if (view() && view()->canvasBase()) {
+                view()->canvasBase()->updateCanvas();
+            }
 
         } else {
             m_signalCompressor.start();

@@ -21,10 +21,14 @@
 #include <koproperty/Set.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 #include <QBuffer>
 #include <kcodecs.h>
 #include <renderobjects.h>
+
+KoReportItemImage::KoReportItemImage()
+{
+    createProperties();
+}
 
 KoReportItemImage::KoReportItemImage(QDomNode & element)
 {

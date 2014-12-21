@@ -29,6 +29,19 @@
 class KoSection;
 class KoSectionManagerPrivate;
 
+// class KoSectionManagerPrivate
+// {
+// public:
+//     explicit KoSectionManagerPrivate(QTextDocument *_doc);
+//     ~KoSectionManagerPrivate();
+//
+//     QTextDocument *doc;
+//     bool valid; //< is current section info is valid
+//     QHash<QString, KoSection *> sectionNames; //< stores name -> pointer reference
+//     int sectionCount; //< how many sections is registered
+//     QScopedPointer<QStandardItemModel> model;
+// };
+
 /**
  * Used to handle all the sections in the document
  *
@@ -60,7 +73,12 @@ public:
     /**
      * Returns if this name is possible.
      */
-    bool isValidNewName(QString name);
+    bool isValidNewName(const QString &name);
+
+//     /**
+//      * Returns tree model of sections to use in views
+//      */
+//     QStandardItemModel *sectionsModel();
 
 public slots:
     /**
@@ -78,7 +96,13 @@ public slots:
      */
     void invalidate();
 
+//     /**
+//      * Call this to notify that some section changed its name
+//      */
+//     void sectionRenamed(const QString &oldName, const QString &name);
+
     /**
+     *
      * Call this to register new section in manager
      */
     void registerSection(KoSection *section);

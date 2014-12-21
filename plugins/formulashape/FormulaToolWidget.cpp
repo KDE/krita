@@ -28,7 +28,6 @@
 
 #include <kaction.h>
 
-#include <kmessagebox.h>
 #include <QMenu>
 #include <kdebug.h>
 #include "FormulaCursor.h"

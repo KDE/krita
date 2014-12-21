@@ -1091,13 +1091,13 @@ QList<KoSectionStyle*> KoStyleManager::sectionStyles() const
     return d->sectionStyles.values();
 }
 
-KoParagraphStyle *KoStyleManager::defaultTableOfContentsEntryStyle(int outlineLevel)
+KoParagraphStyle *KoStyleManager::defaultTableOfContentsEntryStyle(int outlineLevel) const
 {
     KoParagraphStyle *style = paragraphStyle(d->defaultToCEntriesStyleId.at(outlineLevel - 1));
     return style;
 }
 
-KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle()
+KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle() const
 {
     return defaultParagraphStyle();
 }
@@ -1109,7 +1109,7 @@ KoParagraphStyle *KoStyleManager::defaultBibliographyEntryStyle(const QString &b
     return style;
 }
 
-KoParagraphStyle *KoStyleManager::defaultBibliographyTitleStyle()
+KoParagraphStyle *KoStyleManager::defaultBibliographyTitleStyle() const
 {
     KoParagraphStyle *style = new KoParagraphStyle();
     style->setName("Bibliography Heading");
@@ -1161,7 +1161,7 @@ void KoStyleManager::moveToUsedStyles(int id)
     emit styleAdded(style);
 }
 
-KoParagraphStyle *KoStyleManager::unusedStyle(int id)
+KoParagraphStyle *KoStyleManager::unusedStyle(int id) const
 {
     return d->unusedParagraphStyles.value(id);
 }

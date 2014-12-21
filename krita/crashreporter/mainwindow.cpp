@@ -23,10 +23,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kaboutdata.h>
 #include <kstandarddirs.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 
 #include <calligraversion.h>
 #include <calligragitversion.h>
@@ -316,13 +313,13 @@ void MainWindow::startUpload()
     platform += "_x64";
 #endif
 
-    fields << Field("Platform", platform.toAscii());
+    fields << Field("Platform", platform.toLatin1());
 #endif
 #ifdef Q_WS_X11
     fields << Field("Platform", "Linux/X11");
 #endif
 #ifdef Q_WS_MAC
-    fields << Field("Platform", platformToStringMac(QSysInfo::MacintoshVersion).toAscii());
+    fields << Field("Platform", platformToStringMac(QSysInfo::MacintoshVersion).toLatin1());
 #endif
 
     QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
@@ -345,7 +342,7 @@ void MainWindow::startUpload()
     QString dumpfile = m_d->dumpPath + "/" + m_d->id + ".dmp";
     qDebug() << "dumpfile" << dumpfile;
     body += "Content-Disposition: form-data; name=\"upload_file_minidump\"; filename=\""
-            + QFileInfo(dumpfile).fileName().toAscii() + "\"\r\n";
+            + QFileInfo(dumpfile).fileName().toLatin1() + "\"\r\n";
     body += "Content-Type: application/octet-stream\r\n\r\n";
     QFile file(dumpfile);
     if (file.exists()) {

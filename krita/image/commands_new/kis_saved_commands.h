@@ -33,6 +33,7 @@ public:
     KisSavedCommandBase(const KUndo2MagicString &name, KisStrokesFacade *strokesFacade);
     virtual ~KisSavedCommandBase();
 
+
     void undo();
     void redo();
 
@@ -52,6 +53,18 @@ class KisSavedCommand : public KisSavedCommandBase
 {
 public:
     KisSavedCommand(KUndo2CommandSP command, KisStrokesFacade *strokesFacade);
+    virtual int timedId();
+    void setTimedID(int timedID);
+    virtual void undoMergedCommands();
+    virtual void redoMergedCommands();
+
+    virtual bool timedMergeWith(KUndo2Command *other);
+    virtual QVector<KUndo2Command*> mergeCommandsVector();
+    virtual void setTime();
+    virtual QTime time();
+    virtual void setEndTime();
+    virtual QTime endTime();
+    virtual bool isMerged();
 
 protected:
     void addCommands(KisStrokeId id, bool undo);

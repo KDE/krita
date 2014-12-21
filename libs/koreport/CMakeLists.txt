@@ -9,16 +9,15 @@ endif(KDE4_BUILD_TESTS)
 add_subdirectory(pics)
 add_subdirectory(tests)
 
-include_directories( ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/
-    ${CMAKE_SOURCE_DIR}/libs/koreport
-    ${CMAKE_SOURCE_DIR}/libs/koreport/common
-    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${FLAKE_INCLUDES}
+    ${KOREPORT_INCLUDES}
+    ${QT_INCLUDES}
 )
 
 #build a shared library
-set(koreport_LIB_SRCS 
+set(koreport_LIB_SRCS
     common/krutils.cpp
     common/krpos.cpp
     common/krsize.cpp
@@ -85,6 +84,7 @@ set(koreport_LIB_SRCS
     items/label/KoReportDesignerItemLabel.cpp
     items/label/krscriptlabel.cpp
     items/label/KoReportLabelPlugin.cpp
+    items/label/BoundedTextItem.cpp 
 
     items/check/KoReportItemCheck.cpp
     items/check/KoReportDesignerItemCheck.cpp
@@ -115,10 +115,10 @@ target_link_libraries(koreport
   ${KOPROPERTY_LIBS}
   ${CALLIGRADB_LIBS}
   ${KDE4_KROSSCORE_LIBS}
-  komain)
+  kowidgets)
 
 target_link_libraries(koreport LINK_INTERFACE_LIBRARIES
-  ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} komain)
+  ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} kowidgets)
 
 set_target_properties(koreport PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS koreport  ${INSTALL_TARGETS_DEFAULT_ARGS})

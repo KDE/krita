@@ -59,7 +59,6 @@
 %token VARCHAR
 %token WHERE
 %token SCAN_ERROR
-%token NOT_LIKE
 
 //%token UMINUS
 //%token SQL_ABS
@@ -89,7 +88,6 @@
 //%token AVG
 //%token BEFORE
 //%token SQL_BEGIN
-//%token BETWEEN
 //%token BIGINT
 //%token BINARY
 //%token BIT_LENGTH
@@ -161,7 +159,6 @@
 //%token END
 //%token END_EXEC
 //%token ESCAPE
-//%token EXCEPT
 //%token SQL_EXCEPTION
 //%token EXEC
 //%token EXECUTE
@@ -187,7 +184,6 @@
 //%token GO
 //%token GOTO
 //%token GRANT
-//%token GREATER_OR_EQUAL
 //conflict %token GROUP
 //%token HAVING
 //%token HOUR
@@ -196,7 +192,6 @@
 //%token IFNULL
 //%token SQL_IGNORE
 //%token IMMEDIATE
-//%token SQL_IN
 //%token INCLUDE
 //%token INDEX
 //%token INDICATOR
@@ -206,7 +201,6 @@
 //%token INSENSITIVE
 //%token INSERT
 //%token INTEGER
-//%token INTERSECT
 //%token INTERVAL
 //%token INTO
 //%token IS
@@ -217,7 +211,6 @@
 //%token LCASE
 //%token LENGTH
 //%token LEVEL
-//%token LIKE
 //%token LINE_WIDTH
 //%token LOCAL
 //%token LOCATE
@@ -245,8 +238,6 @@
 //%token NODUP
 //%token NONE
 //%token NOT
-//%token NOT_EQUAL //<>
-//%token NOT_EQUAL2 //!=
 //%token NOW
 //%token NULLIF
 //%token NUMERIC
@@ -257,7 +248,6 @@
 //%token ONLY
 //%token OPEN
 //%token OPTION
-//%token OR
 //%token OUTER
 //%token OUTPUT
 //%token OVERLAPS
@@ -301,8 +291,6 @@
 //%token SHOWOPT
 //%token SIGN
 //%token SIMILAR
-//%token SIMILAR_TO */ /* helper */
-//%token NOT_SIMILAR_TO /* helper */
 //%token SIN
 //%token SQL_SIZE
 //%token SMALLINT
@@ -341,7 +329,6 @@
 //%token GENERAL_TITLE
 //%token TWO_DIGITS
 //%token UCASE
-//%token UNION
 //%token UNIQUE
 //%token SQL_UNKNOWN
 //%token UNSIGNED_INTEGER
@@ -380,8 +367,6 @@
 %token ','
 %token '.'
 %token '$'
-//%token '<'
-//%token '>'
 %token '(' ')'
 %token '?'
 %token '\''
@@ -526,22 +511,14 @@ using namespace KexiDB;
 	QVariant *variantValue;
 }
 
-//%left '=' NOT_EQUAL '>' GREATER_OR_EQUAL '<' LESS_OR_EQUAL LIKE '%' NOT
-//%left '+' '-'
-//%left ASTERISK SLASH
-
 /* precedence: lowest to highest */
 %left		UNION EXCEPT
 %left		INTERSECT
 %left		OR
 %left		AND XOR
 %right	NOT
-//%right		'='
-//%nonassoc	'<' '>'
-//%nonassoc '=' '<' '>' "<=" ">=" "<>" ":=" LIKE ILIKE SIMILAR
-//%nonassoc '=' LESS_THAN GREATER_THAN LESS_OR_EQUAL GREATER_OR_EQUAL NOT_EQUAL
+
 %nonassoc '=' '<' '>'
-//LESS_THAN GREATER_THAN 
 %nonassoc LESS_OR_EQUAL GREATER_OR_EQUAL 
 %nonassoc NOT_EQUAL NOT_EQUAL2
 %nonassoc SQL_IN LIKE NOT_LIKE ILIKE SIMILAR_TO NOT_SIMILAR_TO

@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kfontchooser.h>
 
 // Calligra
 #include <interfaces/KoChartModel.h>

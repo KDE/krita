@@ -21,6 +21,7 @@
 #include "ToCBibGeneratorInfo.h"
 
 #include <KoXmlWriter.h>
+#include <KoUnit.h>
 
 IndexEntry::IndexEntry(const QString &_styleName, IndexEntry::IndexEntryName _name)
         :   styleName(_styleName),

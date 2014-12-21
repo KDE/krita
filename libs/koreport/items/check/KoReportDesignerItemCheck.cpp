@@ -51,16 +51,8 @@ KoReportDesignerItemCheck::KoReportDesignerItemCheck(KoReportDesigner* d, QGraph
 {
     Q_UNUSED(pos);
     init(scene, d);
-    setSceneRect(d->getPressPoint(), minimumSize(*d));
+    setSceneRect(properRect(*d, KOREPORT_ITEM_CHECK_DEFAULT_WIDTH, KOREPORT_ITEM_CHECK_DEFAULT_HEIGHT));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
-}
-
-QSizeF KoReportDesignerItemCheck::minimumSize(const KoReportDesigner &designer) const
-{
-    const qreal width = qMax(designer.countSelectionWidth(), qreal(15));
-    const qreal height = qMax(designer.countSelectionHeight(), qreal(15));
-
-    return QSizeF(width, height);
 }
 
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
@@ -100,7 +92,7 @@ void KoReportDesignerItemCheck::paint(QPainter* painter, const QStyleOptionGraph
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
-        painter->setPen(QPen(QColor(224, 224, 224)));
+        painter->setPen(QPen(Qt::lightGray));
     } else {
         painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }

@@ -24,6 +24,12 @@
 #include <QMatrix4x4>
 #include <QTransform>
 #include <QVector3D>
+#include <QPolygonF>
+
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
+#include <KoColor.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_paint_device.h"
 #include "kis_perspective_math.h"
@@ -33,10 +39,8 @@
 #include <kis_iterator_ng.h>
 #include "krita_utils.h"
 #include "kis_progress_update_helper.h"
+#include "kis_painter.h"
 
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
-#include <KoColor.h>
 
 KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress)
         : m_dev(dev), m_progressUpdater(progress)
@@ -60,21 +64,38 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
     init(transform);
 }
 
+void KisPerspectiveTransformWorker::fillParams(const QRectF &srcRect,
+                                               const QRect &dstBaseClipRect,
+                                               QRegion *dstRegion,
+                                               QPolygonF *dstClipPolygon)
+{
+    QPolygonF bounds = srcRect;
+    QPolygonF newBounds = m_forwardTransform.map(bounds);
+
+    newBounds = newBounds.intersected(QRectF(dstBaseClipRect));
+
+    QPainterPath path;
+    path.addPolygon(newBounds);
+    *dstRegion = KritaUtils::splitPath(path);
+    *dstClipPolygon = newBounds;
+}
+
 void KisPerspectiveTransformWorker::init(const QTransform &transform)
 {
-    QPolygon bounds(m_dev->exactBounds());
-    QPolygon newBounds = transform.map(bounds);
-
     m_isIdentity = transform.isIdentity();
 
-    if (!m_isIdentity && transform.isInvertible()) {
-        m_newTransform = transform.inverted();
-        m_srcRect = m_dev->exactBounds();
-        newBounds = newBounds.intersected(m_dev->defaultBounds()->bounds());
+    m_forwardTransform = transform;
+    m_backwardTransform = transform.inverted();
 
-        QPainterPath path;
-        path.addPolygon(newBounds);
-        m_dstRegion = KritaUtils::splitPath(path);
+    if (m_dev) {
+        m_srcRect = m_dev->exactBounds();
+
+        QPolygonF dstClipPolygonUnused;
+
+        fillParams(m_srcRect,
+                   m_dev->defaultBounds()->bounds(),
+                   &m_dstRegion,
+                   &dstClipPolygonUnused);
     }
 }
 
@@ -82,17 +103,26 @@ KisPerspectiveTransformWorker::~KisPerspectiveTransformWorker()
 {
 }
 
+void KisPerspectiveTransformWorker::setForwardTransform(const QTransform &transform)
+{
+    init(transform);
+}
+
 void KisPerspectiveTransformWorker::run()
 {
-    KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, m_dstRegion.rectCount());
-    if (m_isIdentity) return;
+    KIS_ASSERT_RECOVER_RETURN(m_dev);
 
+    if (m_isIdentity) return;
 
     KisPaintDeviceSP cloneDevice = new KisPaintDevice(*m_dev.data());
 
     // Clear the destination device, since all the tiles are already
     // shared with cloneDevice
     m_dev->clear();
+
+    KIS_ASSERT_RECOVER_NOOP(!m_isIdentity);
+
+    KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, m_dstRegion.rectCount());
 
     KisRandomSubAccessorSP srcAcc = cloneDevice->createRandomSubAccessor();
     KisRandomAccessorSP accessor = m_dev->createRandomAccessorNG(0, 0);
@@ -102,19 +132,60 @@ void KisPerspectiveTransformWorker::run()
             for (int x = rect.x(); x < rect.x() + rect.width(); ++x) {
 
                 QPointF dstPoint(x, y);
-                QPointF srcPoint = m_newTransform.map(dstPoint);
+                QPointF srcPoint = m_backwardTransform.map(dstPoint);
 
                 if (m_srcRect.contains(srcPoint)) {
                     accessor->moveTo(dstPoint.x(), dstPoint.y());
                     srcAcc->moveTo(srcPoint.x(), srcPoint.y());
                     srcAcc->sampledOldRawData(accessor->rawData());
                 }
-
-
             }
         }
         progressHelper.step();
     }
 }
 
-#include "kis_perspectivetransform_worker.moc"
+void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
+                                                  KisPaintDeviceSP dstDev,
+                                                  const QRect &dstRect)
+{
+    if (m_isIdentity) {
+        KisPainter gc(dstDev);
+        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.bitBltOldData(dstRect.topLeft(), srcDev, dstRect);
+        return;
+    }
+
+    QRectF srcClipRect = srcDev->exactBounds();
+
+    KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height());
+
+    KisRandomSubAccessorSP srcAcc = srcDev->createRandomSubAccessor();
+    KisRandomAccessorSP accessor = dstDev->createRandomAccessorNG(0, 0);
+
+    for (int y = dstRect.y(); y < dstRect.y() + dstRect.height(); ++y) {
+        for (int x = dstRect.x(); x < dstRect.x() + dstRect.width(); ++x) {
+
+            QPointF dstPoint(x, y);
+            QPointF srcPoint = m_backwardTransform.map(dstPoint);
+
+            if (srcClipRect.contains(srcPoint)) {
+                accessor->moveTo(dstPoint.x(), dstPoint.y());
+                srcAcc->moveTo(srcPoint.x(), srcPoint.y());
+                srcAcc->sampledOldRawData(accessor->rawData());
+            }
+        }
+        progressHelper.step();
+    }
+
+}
+
+QTransform KisPerspectiveTransformWorker::forwardTransform() const
+{
+    return m_forwardTransform;
+}
+
+QTransform KisPerspectiveTransformWorker::backwardTransform() const
+{
+    return m_backwardTransform;
+}

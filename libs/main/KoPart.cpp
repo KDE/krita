@@ -28,7 +28,6 @@
 #include "KoDocument.h"
 #include "KoView.h"
 #include "KoOpenPane.h"
-#include "KoProgressProxy.h"
 #include "KoFilterManager.h"
 #include <KoDocumentInfoDlg.h>
 
@@ -38,11 +37,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kxmlguifactory.h>
-#include <kdeprintdialog.h>
-#include <knotification.h>
-#include <kdialog.h>
 #include <kdesktopfile.h>
-#include <kmessagebox.h>
 #include <kmimetype.h>
 
 #include <QGraphicsScene>
@@ -67,7 +62,11 @@ public:
 
     ~Private()
     {
-        delete canvasItem;
+        /// FIXME ok, so this is obviously bad to leave like this
+        // For now, this is undeleted, but only to avoid an odd double
+        // delete condition. Until that's discovered, we'll need this
+        // to avoid crashes in Gemini
+        //delete canvasItem;
     }
 
     KoPart *parent;
@@ -245,15 +244,15 @@ KoMainWindow *KoPart::currentMainwindow() const
 
 void KoPart::openExistingFile(const KUrl& url)
 {
-    qApp->setOverrideCursor(Qt::BusyCursor);
+    QApplication::setOverrideCursor(Qt::BusyCursor);
     d->document->openUrl(url);
     d->document->setModified(false);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 }
 
 void KoPart::openTemplate(const KUrl& url)
 {
-    qApp->setOverrideCursor(Qt::BusyCursor);
+    QApplication::setOverrideCursor(Qt::BusyCursor);
     bool ok = d->document->loadNativeFormat(url.toLocalFile());
     d->document->setModified(false);
     d->document->undoStack()->clear();
@@ -270,7 +269,7 @@ void KoPart::openTemplate(const KUrl& url)
         d->document->showLoadingErrorDialog();
         d->document->initEmpty();
     }
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 }
 
 void KoPart::addRecentURLToAllMainWindows(KUrl url)

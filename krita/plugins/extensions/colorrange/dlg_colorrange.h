@@ -31,7 +31,7 @@
 
 #include "ui_wdg_colorrange.h"
 
-class KisView2;
+class KisViewManager;
 class DlgColorRange;
 
 enum enumAction {
@@ -67,7 +67,7 @@ class DlgColorRange: public KDialog
 
 public:
 
-    DlgColorRange(KisView2 *view, QWidget *parent = 0);
+    DlgColorRange(KisViewManager *view, QWidget *parent = 0);
     ~DlgColorRange();
 
 private slots:
@@ -88,7 +88,7 @@ private:
 private:
 
     WdgColorRange * m_page;
-    KisView2 * m_view;
+    KisViewManager * m_view;
     SelectionAction m_mode;
     QCursor m_oldCursor;
     enumAction m_currentAction;

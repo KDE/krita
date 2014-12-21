@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QVariant>
 
-class KisView2;
+class KisViewManager;
 
 /**
  * Docker compositions of the image

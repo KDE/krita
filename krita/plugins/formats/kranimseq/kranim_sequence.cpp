@@ -22,19 +22,17 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
 
 #include <KoColorSpace.h>
-#include <KoFilterChain.h>
-#include <KoFilterManager.h>
+#include <KisFilterChain.h>
+#include <KisImportExportManager.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
 #include "kis_paint_device.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
@@ -50,7 +48,7 @@
 K_PLUGIN_FACTORY(KranimSequenceFactory, registerPlugin<KranimSequence>();)
 K_EXPORT_PLUGIN(KranimSequenceFactory("calligrafilters"))
 
-KranimSequence::KranimSequence(QObject *parent, const QVariantList &) : KoFilter(parent)
+KranimSequence::KranimSequence(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 
 }
@@ -72,8 +70,11 @@ bool hasVisibleWidgets()
     return false;
 }
 
-KoFilter::ConversionStatus KranimSequence::convert(const QByteArray &from, const QByteArray &to)
+KisImportExportFilter::ConversionStatus KranimSequence::convert(const QByteArray &from, const QByteArray &to)
 {
+    Q_UNUSED(from);
+    Q_UNUSED(to);
+
     KDialog* kdb = new KDialog(0);
     kdb->setCaption(i18n("Animation Sequence export options"));
     kdb->setModal(false);
@@ -92,9 +93,9 @@ KoFilter::ConversionStatus KranimSequence::convert(const QByteArray &from, const
         int endFrame = m_wdg->stopFrameInput->value();
 
         if(generator->generate(keyFrameOnly, startFrame, endFrame)) {
-            return KoFilter::OK;
+            return KisImportExportFilter::OK;
         }
     }
 
-    return KoFilter::InternalError;
+    return KisImportExportFilter::InternalError;
 }

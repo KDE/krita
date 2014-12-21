@@ -28,7 +28,7 @@
 #include <QTableWidget>
 #include <QPainter>
 
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
 #include <KoIcon.h>
@@ -288,8 +288,8 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         }
     }
     else if (resourceType == "presets") {
-        KoResourceServer<KisPaintOpPreset>* server = KisResourceServerProvider::instance()->paintOpPresetServer();
-        foreach(KoResource *res, server->resources()) {
+        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
+        foreach(KisPaintOpPresetSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
@@ -364,7 +364,7 @@ void DlgCreateBundle::getPreviewImage()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BundlePreviewImage");
     dialog.setCaption(i18n("Select file to use as dynamic file layer."));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
     m_previewImage = dialog.url();
     QImage img(m_previewImage);
     img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);

@@ -21,7 +21,6 @@
 #ifndef KOREPORTDESIGNERITEMWEB_H
 #define KOREPORTDESIGNERITEMWEB_H
 
-#include <KoViewConverter.h>
 #include <KoReportDesignerItemRectBase.h>
 #include "KoReportItemWeb.h"
 
@@ -45,7 +44,6 @@ public:
     virtual KoReportDesignerItemWeb *clone();
 
 protected:
-    virtual QSizeF minimumSize(const KoReportDesigner &designer) const;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 private:

@@ -17,15 +17,14 @@
 
 #include "ora_converter.h"
 
-#include <kapplication.h>
+#include <QApplication>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_open_raster_stack_load_visitor.h>
@@ -35,7 +34,7 @@
 #include "ora_load_context.h"
 #include "ora_save_context.h"
 
-OraConverter::OraConverter(KisDoc2 *doc)
+OraConverter::OraConverter(KisDocument *doc)
 {
     m_doc = doc;
     m_job = 0;

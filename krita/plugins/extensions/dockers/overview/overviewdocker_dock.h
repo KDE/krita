@@ -21,6 +21,7 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
+class QVBoxLayout;
 class KisCanvas2;
 class OverviewWidget;
 
@@ -28,11 +29,14 @@ class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     OverviewDockerDock();
+    QString observerName() { return "OverviewDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
 private:
+    QVBoxLayout *m_layout;
     OverviewWidget *m_overviewWidget;
+    QWidget *m_zoomSlider;
     KisCanvas2 *m_canvas;
 };
 

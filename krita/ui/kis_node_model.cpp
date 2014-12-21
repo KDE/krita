@@ -75,7 +75,7 @@ public:
 };
 
 KisNodeModel::KisNodeModel(QObject * parent)
-        : KoDocumentSectionModel(parent)
+        : KisDocumentSectionModel(parent)
         , m_d(new Private)
 {
     updateSettings();
@@ -441,7 +441,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             // don't record undo/redo for visibility, locked or alpha locked changes
             PropertyList proplist = value.value<PropertyList>();
             bool undo = true;
-            foreach(const KoDocumentSectionModel::Property &prop, proplist) {
+            foreach(const KisDocumentSectionModel::Property &prop, proplist) {
                 if (prop.name == i18n("Visible") && node->visible() !=prop.state.toBool()) undo = false;
                 if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
                 if (prop.name == i18n("Active")) {

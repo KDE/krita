@@ -400,9 +400,9 @@ void KoTextLayoutArea::backtrackKeepWithNext(FrameIterator *cursor)
             //setBottom(d->blockRects.last()->bottom() + d->footNotesHeight);
         }
         if (!keepWithNext) {
+            cursor->it = ++it;
             break;
         }
-        --(cursor->it);
     }
 }
 
@@ -1355,7 +1355,7 @@ bool KoTextLayoutArea::presentationListTabWorkaround(qreal indent, qreal labelBo
     return false;
 }
 
-qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const
+qreal KoTextLayoutArea::textIndent(const QTextBlock &block, QTextList *textList, const KoParagraphStyle &pStyle) const
 {
     if (pStyle.autoTextIndent()) {
         // if auto-text-indent is set,
@@ -1800,7 +1800,7 @@ void KoTextLayoutArea::setBottom(qreal bottom)
     d->bottom = bottom;
 }
 
-void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line, qreal bottomOfText)
+void KoTextLayoutArea::findFootNotes(const QTextBlock &block, const QTextLine &line, qreal bottomOfText)
 {
     if (d->documentLayout->inlineTextObjectManager() == 0) {
         return;

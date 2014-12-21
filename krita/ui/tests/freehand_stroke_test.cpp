@@ -20,6 +20,7 @@
 
 #include <qtest_kde.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoColor.h>
 #include "stroke_testing_utils.h"
 #include "strokes/freehand_stroke.h"
 #include "kis_resources_snapshot.h"
@@ -32,11 +33,33 @@ class FreehandStrokeTester : public utils::StrokeTester
 {
 public:
     FreehandStrokeTester(const QString &presetFilename)
-        : StrokeTester("freehand", QSize(500, 500), presetFilename)
+        : StrokeTester("freehand", QSize(500, 500), presetFilename),
+          m_flipLineDirection(false)
     {
     }
 
+    void setFlipLineDirection(bool value) {
+        m_flipLineDirection = value;
+        setNumIterations(2);
+    }
+
+    void setPaintColor(const QColor &color) {
+        m_paintColor.reset(new QColor(color));
+    }
+
 protected:
+
+    void modifyResourceManager(KoCanvasResourceManager *manager,
+                               KisImageWSP image,
+                               int iteration) {
+
+        if (m_paintColor && iteration > 0) {
+            QVariant i;
+            i.setValue(KoColor(*m_paintColor, image->colorSpace()));
+            manager->setResource(KoCanvasResourceManager::ForegroundColor, i);
+        }
+    }
+
     KisStrokeStrategy* createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
                                     KisPainter *painter,
@@ -50,7 +73,7 @@ protected:
         return new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, kundo2_noi18n("Freehand Stroke"));
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter, int iteration) {
 
         Q_ASSERT(painter == m_painterInfo->painter);
         Q_UNUSED(painter);
@@ -58,16 +81,24 @@ protected:
         KisPaintInformation pi1;
         KisPaintInformation pi2;
 
-        pi1 = KisPaintInformation(QPointF(200, 200));
-        pi2 = KisPaintInformation(QPointF(300, 300));
+        if (!iteration) {
+            pi1 = KisPaintInformation(QPointF(200, 200));
+            pi2 = KisPaintInformation(QPointF(300, 300));
+        } else {
+            pi1 = KisPaintInformation(QPointF(200, 300));
+            pi2 = KisPaintInformation(QPointF(300, 200));
+        }
 
         image->addJob(strokeId(),
             new FreehandStrokeStrategy::Data(resources->currentNode(),
                                              m_painterInfo, pi1, pi2));
+
     }
 
 private:
     FreehandStrokeStrategy::PainterInfo *m_painterInfo;
+    bool m_flipLineDirection;
+    QScopedPointer<QColor> m_paintColor;
 };
 
 void FreehandStrokeTest::testAutobrushStroke()
@@ -97,6 +128,14 @@ void FreehandStrokeTest::testAutoTextured17()
 void FreehandStrokeTest::testAutoTextured38()
 {
     FreehandStrokeTester tester("auto_textured_38.kpp");
+    tester.test();
+}
+
+void FreehandStrokeTest::testMixDullCompositioning()
+{
+    FreehandStrokeTester tester("Mix_dull.kpp");
+    tester.setFlipLineDirection(true);
+    tester.setPaintColor(Qt::red);
     tester.test();
 }
 

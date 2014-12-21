@@ -19,6 +19,7 @@
 #define KIS_SHAPE_LAYER_CANVAS_H
 
 #include <QMutex>
+#include <QRegion>
 #include <KoCanvasBase.h>
 
 #include <kis_types.h>

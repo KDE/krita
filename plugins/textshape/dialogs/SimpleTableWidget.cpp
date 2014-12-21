@@ -23,6 +23,7 @@
 #include <KoTextLayoutCellHelper.h>
 #include <KoZoomHandler.h>
 #include <KoColorPopupAction.h>
+#include <KoColor.h>
 #include <KoIcon.h>
 
 #include <kaction.h>

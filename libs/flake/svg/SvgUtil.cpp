@@ -25,6 +25,7 @@
 #include <QString>
 #include <QRectF>
 #include <QStringList>
+#include <QFontMetrics>
 
 #include <math.h>
 

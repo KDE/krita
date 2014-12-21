@@ -29,7 +29,7 @@
 #include <canvas/kis_canvas2.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 
 KisToolGrid::KisToolGrid(KoCanvasBase * canvas)
@@ -48,9 +48,10 @@ void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     KisTool::activate(toolActivation, shapes);
     m_canvas->updateCanvas();
 
-    if (!m_canvas->view()->gridManager()->visible()) {
-        m_canvas->view()->showFloatingMessage( "The grid is not visible. Press Return to show it.",
-                                              KIcon(koIconNameCStr("krita_tool_grid")));
+    KisCanvasDecoration* decoration = m_canvas->decoration("grid");
+    if (decoration && !decoration->visible()) {
+        m_canvas->viewManager()->showFloatingMessage( "The grid is not visible. Press Return to show it.",
+                                              koIcon("krita_tool_grid"));
     }
 }
 
@@ -164,8 +165,11 @@ void KisToolGrid::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolGrid::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Return) {
-        m_canvas->view()->gridManager()->setVisible(true);
-        m_canvas->view()->gridManager()->checkVisibilityAction(true);
+        KisCanvasDecoration* decoration = m_canvas->decoration("grid");
+        if (decoration) {
+            decoration->setVisible(true);
+        }
+        m_canvas->viewManager()->gridManager()->checkVisibilityAction(true);
     }
     KoToolBase::keyPressEvent(event);
 }

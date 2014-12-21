@@ -30,7 +30,6 @@
 #include <krsize.h>
 #include "reportscene.h"
 
-
 KoReportDesignerItemRectBase::KoReportDesignerItemRectBase(KoReportDesigner *r)
         : QGraphicsRectItem(), KoReportDesignerItemBase(r)
 {
@@ -325,3 +324,48 @@ void KoReportDesignerItemRectBase::move(const QPointF& /*m*/)
 //! TODO
 }
 
+QPointF KoReportDesignerItemRectBase::properPressPoint(const KoReportDesigner &d) const
+{
+    const QPointF pressPoint = d.getPressPoint();
+    const QPointF releasePoint = d.getReleasePoint();
+    if (releasePoint.x() < pressPoint.x() && releasePoint.y() < pressPoint.y()) {
+        return releasePoint;
+    }
+    if (releasePoint.x() < pressPoint.x() && releasePoint.y() > pressPoint.y()) {
+        return QPointF(releasePoint.x(), pressPoint.y());
+    }
+    if (releasePoint.x() > pressPoint.x() && releasePoint.y() < pressPoint.y()) {
+        return QPointF(pressPoint.x(), releasePoint.y());
+    }
+    return QPointF(pressPoint);
+}
+
+QRectF KoReportDesignerItemRectBase::properRect(const KoReportDesigner &d, qreal minWidth, qreal minHeight) const
+{
+    QPointF tempPressPoint = properPressPoint(d);
+    qreal currentPressX = tempPressPoint.x();
+    qreal currentPressY = tempPressPoint.y();
+    const qreal width = qMax(d.countSelectionWidth(), minWidth);
+    const qreal height = qMax(d.countSelectionHeight(), minHeight);
+
+    qreal tempReleasePointX = tempPressPoint.x() + width;
+    qreal tempReleasePointY = tempPressPoint.y() + height;
+
+    if (tempReleasePointX > scene()->width()) {
+        int offsetWidth = tempReleasePointX - scene()->width();
+        currentPressX = tempPressPoint.x() - offsetWidth;
+    }
+    if (tempReleasePointY > scene()->height()) {
+        int offsetHeight = tempReleasePointY - scene()->height();
+        currentPressY = tempPressPoint.y() - offsetHeight;
+    }
+    return (QRectF(QPointF(currentPressX, currentPressY), QSizeF(width, height)));
+}
+
+void KoReportDesignerItemRectBase::enterInlineEditingMode()
+{
+}
+
+void KoReportDesignerItemRectBase::exitInlineEditingMode()
+{
+}

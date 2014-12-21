@@ -19,7 +19,6 @@
 
 #include "KoPASavingContext.h"
 
-#include <QPixmap>
 #include <QRegExp>
 
 #include "KoPAPage.h"

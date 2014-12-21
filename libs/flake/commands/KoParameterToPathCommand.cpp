@@ -19,6 +19,7 @@
  */
 
 #include "KoParameterToPathCommand.h"
+#include "KoPathPoint.h"
 #include "KoParameterShape.h"
 #include <klocale.h>
 

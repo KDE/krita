@@ -25,6 +25,7 @@
 #include <kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"
 #include "../kis_categorized_item_delegate.h"
+#include <kis_locked_properties_server.h>
 
 KisPaintOpListWidget::KisPaintOpListWidget(QWidget* parent, const char* name):
     KisCategorizedListView(false, parent),
@@ -64,6 +65,7 @@ QString KisPaintOpListWidget::currentItem() const
 void KisPaintOpListWidget::setCurrent(const KisPaintOpFactory* op)
 {
     setCurrentIndex(m_model->indexOf(KisPaintOpInfo(op->id())));
+
 }
 
 void KisPaintOpListWidget::setCurrent(const QString& paintOpId)
@@ -75,3 +77,4 @@ void KisPaintOpListWidget::slotOpActivated(const QModelIndex& index)
 {
     emit activated(itemAt(index.row()));
 }
+

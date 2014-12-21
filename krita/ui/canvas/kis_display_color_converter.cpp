@@ -18,6 +18,8 @@
 
 #include "kis_display_color_converter.h"
 
+#include <kglobal.h>
+
 #include <KoColor.h>
 #include <KoColorDisplayRendererInterface.h>
 #include <KoColorSpaceMaths.h>
@@ -29,7 +31,7 @@
 #include "kis_config_notifier.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include "kis_node.h"
 
@@ -494,8 +496,7 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
     return QImage();
 }
 
-KoColor
-KisDisplayColorConverter::Private::approximateFromQColor(const QColor &qcolor)
+KoColor KisDisplayColorConverter::Private::approximateFromQColor(const QColor &qcolor)
 {
     if (!useOcio()) {
         return KoColor(qcolor, paintingColorSpace);
@@ -555,7 +556,12 @@ KoColor KisDisplayColorConverter::fromHslF(qreal h, qreal s, qreal l, qreal a)
 {
     // generate HSL from sRGB!
     QColor qcolor(QColor::fromHslF(h, s, l, a));
+    if (!qcolor.isValid()) {
+        qWarning() << "Could not construct valid color from h" << h << "s" << s << "l" << l << "a" << a;
+        qcolor = Qt::black;
+    }
     return m_d->approximateFromQColor(qcolor);
+
 }
 
 void KisDisplayColorConverter::getHslF(const KoColor &srcColor, qreal *h, qreal *s, qreal *l, qreal *a)
@@ -588,27 +594,27 @@ void KisDisplayColorConverter::getHsiF(const KoColor &srcColor, qreal *h, qreal 
 	RGBToHSI(r, g, b, h, s, i);
 }
 
-KoColor KisDisplayColorConverter::fromHsyF(qreal h, qreal s, qreal y)
+KoColor KisDisplayColorConverter::fromHsyF(qreal h, qreal s, qreal y, qreal R, qreal G, qreal B)
 {
     // generate HSL from sRGB!
 	qreal r=0.0;
 	qreal g=0.0;
 	qreal b=0.0;
 	qreal a=1.0;
-	HSYToRGB(h, s, y, &r, &g, &b);
+	HSYToRGB(h, s, y, &r, &g, &b, R, G, B);
 	QColor qcolor;
 	qcolor.setRgbF(r, g, b, a);
     return m_d->approximateFromQColor(qcolor);
 }
 
-void KisDisplayColorConverter::getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y)
+void KisDisplayColorConverter::getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y, qreal R, qreal G, qreal B)
 {
     // we are going through sRGB here!
 	QColor color = m_d->approximateToQColor(srcColor);
 	qreal r=color.redF();
 	qreal g=color.greenF();
 	qreal b=color.blueF();
-	RGBToHSY(r, g, b, h, s, y);
+	RGBToHSY(r, g, b, h, s, y, R, G, B);
 }
 
 #include "moc_kis_display_color_converter.cpp"

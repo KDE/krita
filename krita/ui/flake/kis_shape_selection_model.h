@@ -20,6 +20,7 @@
 #define KIS_SHAPE_SELECTION_MODEL_H
 
 #include <QObject>
+#include <QRect>
 #include "KoShapeContainerModel.h"
 #include "kis_types.h"
 #include "kis_signal_compressor.h"

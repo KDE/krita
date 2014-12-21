@@ -37,16 +37,14 @@
 #include <QPointer>
 #include <QScrollArea>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
 
 #include <KoColorSet.h>
-#include <KoColorPatch.h>
-#include <KoEditColorSetDialog.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
+
+class KoColorPatch;
 
 class KoColorSetWidget::KoColorSetWidgetPrivate {
 public:

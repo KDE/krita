@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>457</width>
-    <height>518</height>
+    <width>497</width>
+    <height>643</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -56,7 +56,7 @@
    <item row="3" column="0">
     <widget class="QGroupBox" name="grpCheckers">
      <property name="title">
-      <string>Transparency Checkboxes</string>
+      <string>Transparency Checkerboard Pattern</string>
      </property>
      <layout class="QGridLayout">
       <item row="0" column="0">
@@ -74,6 +74,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QSpinBox" name="intCheckSize">
+        <property name="suffix">
+         <string> px</string>
+        </property>
         <property name="maximum">
          <number>256</number>
         </property>
@@ -98,7 +101,7 @@
       <item row="0" column="3">
        <widget class="QLabel" name="lblColor">
         <property name="text">
-         <string>Color:</string>
+         <string>Colors:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

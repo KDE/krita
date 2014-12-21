@@ -21,21 +21,20 @@
 #include <openjpeg.h>
 
 #include <QFileInfo>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceConstants.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
@@ -43,7 +42,7 @@
 #include <kis_transaction.h>
 #include "kis_iterator_ng.h"
 
-jp2Converter::jp2Converter(KisDoc2 *doc)
+jp2Converter::jp2Converter(KisDocument *doc)
 {
     m_doc = doc;
     m_job = 0;

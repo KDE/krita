@@ -21,7 +21,6 @@
 #include <QPainter>
 #include <QComboBox>
 
-#include <kcolorbutton.h>
 #include <knuminput.h>
 
 #include <KoColorSpace.h>

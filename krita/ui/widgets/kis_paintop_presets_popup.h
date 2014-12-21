@@ -77,6 +77,10 @@ public:
 
     bool detached() const;
 
+    void setReloadEnabled(bool value);
+
+    void updateViewSettings();
+
 protected:
     void contextMenuEvent(QContextMenuEvent *);
     void hideEvent(QHideEvent *);
@@ -87,14 +91,18 @@ public slots:
     void hideScratchPad();
     void showScratchPad();
     void resourceSelected(KoResource* resource);
-
+    void slotDirtyPresetToggled(bool value);
+    
 signals:
     void savePresetClicked();
     void defaultPresetClicked();
     void presetNameLineEditChanged(const QString& presetName);
     void paintopActivated(const QString& presetName);
     void signalResourceSelected(KoResource* resource);
-
+    void reloadPresetClicked();
+    void dirtyPresetToggled(bool value);
+    void eraserBrushSizeToggled(bool value);
+    
     void sizeChanged();
 
 private slots:

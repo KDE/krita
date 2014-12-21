@@ -24,6 +24,7 @@
 #include "kis_selection.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
+#include <KoProperties.h>
 #include "kis_fill_painter.h"
 #include <KoCompositeOp.h>
 #include "kis_node_visitor.h"
@@ -79,13 +80,6 @@ QIcon KisSelectionMask::icon() const {
     return koIcon("edit-paste");
 }
 
-bool KisSelectionMask::allowAsChild(KisNodeSP node) const
-{
-    Q_UNUSED(node);
-    return false;
-}
-
-
 void KisSelectionMask::setSelection(KisSelectionSP selection)
 {
     if (selection) {
@@ -116,14 +110,14 @@ void KisSelectionMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
     return visitor.visit(this, undoAdapter);
 }
 
-KoDocumentSectionModel::PropertyList KisSelectionMask::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisSelectionMask::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Active"), koIcon("local_selection_active"), koIcon("local_selection_inactive"), active());
+    KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
+    l << KisDocumentSectionModel::Property(i18n("Active"), koIcon("local_selection_active"), koIcon("local_selection_inactive"), active());
     return l;
 }
 
-void KisSelectionMask::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
+void KisSelectionMask::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
 {
     setVisible(properties.at(0).state.toBool());
     setUserLocked(properties.at(1).state.toBool());

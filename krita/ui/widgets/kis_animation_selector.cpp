@@ -29,20 +29,14 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
-#include <kundo2command.h>
 #include <QFile>
 #include <QFileDialog>
-#include <kcolorcombo.h>
 #include <kcomponentdata.h>
-#include <kfiledialog.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
 
 #include <kis_debug.h>
 
 #include <KoIcon.h>
 #include <KoCompositeOp.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
@@ -62,7 +56,7 @@
 
 #include "kis_clipboard.h"
 #include "kis_animation_doc.h"
-#include "kis_animation_part.h"
+#include "KisPart.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 #include "kis_animation.h"
@@ -70,11 +64,10 @@
 #include <QDesktopServices>
 #include <kis_config.h>
 
-KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *document, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &animationName)
+KisAnimationSelector::KisAnimationSelector(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &animationName)
     : WdgAnimationSelector(parent)
 {
     setObjectName("KisAnimationSelector");
-    m_document = document;
     txtAnimationName->setText(animationName);
 
     txtLocation->setText(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
@@ -182,13 +175,12 @@ void KisAnimationSelector::openAnimation()
     animation->setLocation(txtOpenFile->text());
     animation->setBgColor(KoColor(inputBackground->color(), colorSpaceSelector->currentColorSpace()));
 
-    static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation);
-
+    KisAnimationDoc *document = KisPart::instance()->createAnimationDoc();
     //Load a temporary image before opening the animation file
-    m_document->newImage(animation->name(), animation->width(), animation->height(), animation->colorSpace(),
+    document->newImage(animation->name(), animation->width(), animation->height(), animation->colorSpace(),
                          animation->bgColor(), animation->description(), animation->resolution());
 
-    KisImageWSP image = m_document->image();
+    KisImageWSP image = document->image();
 
     if(image && image->root() && image->root()->firstChild()) {
         KisLayer* layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
@@ -204,9 +196,11 @@ void KisAnimationSelector::openAnimation()
         }
         layer->setDirty(QRect(0, 0, animation->width(), animation->height()));
     }
-    emit documentSelected();
 
-    dynamic_cast<KisAnimationDoc*>(m_document)->loadAnimationFile(animation, store, doc);
+    dynamic_cast<KisAnimationDoc*>(document)->loadAnimationFile(animation, store, doc);
+    document->resetAnimationLayers();
+    emit documentSelected(document);
+
 }
 
 void KisAnimationSelector::createAnimation()
@@ -243,11 +237,10 @@ void KisAnimationSelector::createAnimation()
 
     animation->setLocation(animationLocation);
 
-    static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation); 
+    KisAnimationDoc *document = KisPart::instance()->createAnimationDoc();
+    document->newImage(txtAnimationName->text(), width, height, cs, bgColor, txtDescription->text(), resolution);
 
-    m_document->newImage(txtAnimationName->text(), width, height, cs, bgColor, txtDescription->text(), resolution);
-
-    KisImageWSP image = m_document->image();
+    KisImageWSP image = document->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
         if (layer) {
@@ -264,7 +257,9 @@ void KisAnimationSelector::createAnimation()
         layer->setDirty(QRect(0, 0, width, height));
     }
 
-    emit documentSelected();
+    document->resetAnimationLayers();
+
+    emit documentSelected(document);
 }
 
 void KisAnimationSelector::resolutionChanged(double value)

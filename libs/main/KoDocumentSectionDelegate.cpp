@@ -39,7 +39,7 @@
 class KoDocumentSectionDelegate::Private
 {
 public:
-    Private() : view(0), edit(0) { }
+    Private() : view(0), edit(0) {}
 
     KoDocumentSectionView *view;
     QPointer<QWidget> edit;
@@ -82,8 +82,7 @@ void KoDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &o
 {
     p->save();
     {
-      
-	QStyleOptionViewItemV4 option = getOptions(o, index);
+        QStyleOptionViewItemV4 option = getOptions(o, index);
         QStyle *style = option.widget ? option.widget->style() : QApplication::style();
         style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, p, option.widget);
 
@@ -483,7 +482,9 @@ void KoDocumentSectionDelegate::drawThumbnail(QPainter *p, const QStyleOptionVie
         offset.setX(r.width()/2 - img.width()/2);
         offset.setY(r.height()/2 - img.height()/2);
 
-        p->drawImage(r.topLeft() + offset, img);
+        if (!img.isNull() && img.width() > 0 && img.height() > 0) {
+            p->drawImage(r.topLeft() + offset, img);
+        }
     }
     p->restore();
 }

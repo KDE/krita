@@ -25,15 +25,13 @@
 #include <QColor>
 #include <QVector>
 
-#include <kio/job.h>
-
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
 #include <krita_export.h>
 
 
-class KisDoc2;
+class KisDocument;
 
 
 namespace KisMetaData
@@ -100,10 +98,10 @@ class KRITAUI_EXPORT KisPNGConverter : public QObject
 public:
     /**
      * Initialize the converter.
-     * @param doc the KisDoc2 related to the image, can be null if you don't have a KisDoc2
+     * @param doc the KisDocument related to the image, can be null if you don't have a KisDocument
      * @param adapter the undo adapter to be used by the image, can be null if you don't want to use an undo adapter
      */
-    KisPNGConverter(KisDoc2 *doc);
+    KisPNGConverter(KisDocument *doc);
     virtual ~KisPNGConverter();
 public:
     /**
@@ -140,7 +138,7 @@ private:
 private:
     png_uint_32 m_max_row;
     KisImageWSP m_image;
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     bool m_stop;
 };
 

@@ -22,10 +22,7 @@
 #include <QCheckBox>
 #include <QSpinBox>
 
-#include <kcolorbutton.h>
-
 #include <KoColorSpaceMaths.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include "kis_progress_update_helper.h"

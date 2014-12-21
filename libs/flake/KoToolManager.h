@@ -25,7 +25,6 @@
 #include "flake_export.h"
 
 #include <QObject>
-#include <QCursor>
 #include <QList>
 
 class KoCanvasController;
@@ -41,6 +40,7 @@ class KoInputDeviceHandlerEvent;
 class KoShapeLayer;
 class ToolHelper;
 
+class QCursor;
 
 /// Struct for the createToolList return type.
 struct KoToolButton {
@@ -138,6 +138,14 @@ public:
      * @param controller the controller that is removed
      */
     void removeCanvasController(KoCanvasController *controller);
+    /**
+     * Attempt to remove a controller.
+     * This is automatically called when a controller's proxy object is deleted, and
+     * it ensures that the controller is, in fact, removed, even if the creator forgot
+     * to do so.
+     * @param controller the proxy object of the controller to be removed
+     */
+    Q_SLOT void attemptCanvasControllerRemoval(QObject *controller);
 
     /// @return the active canvas controller
     KoCanvasController *activeCanvasController() const;

@@ -29,8 +29,6 @@
 #include <kdebug.h>
 
 #include <KoGenStyles.h>
-#include <KoStore.h>
-#include <KoStoreDevice.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>

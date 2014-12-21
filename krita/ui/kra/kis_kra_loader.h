@@ -25,7 +25,7 @@ class QStringList;
 #include "KoXmlReaderForward.h"
 class KoStore;
 
-class KisDoc2;
+class KisDocument;
 class KisNode;
 class KoColorSpace;
 class KisPaintingAssistant;
@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisKraLoader
 
 public:
 
-    KisKraLoader(KisDoc2 * document, int syntaxVersion);
+    KisKraLoader(KisDocument * document, int syntaxVersion);
 
     ~KisKraLoader();
 
@@ -84,6 +84,8 @@ private:
     KisNodeSP loadCloneLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
     KisNodeSP loadFilterMask(const KoXmlElement& elem, KisNodeSP parent);
+
+    KisNodeSP loadTransformMask(const KoXmlElement& elem, KisNodeSP parent);
 
     KisNodeSP loadTransparencyMask(const KoXmlElement& elem, KisNodeSP parent);
 

@@ -19,11 +19,14 @@
 #include "overviewwidget.h"
 
 #include <QLabel>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <klocale.h>
+#include <kstatusbar.h>
 
 #include "kis_canvas2.h"
+#include <KisViewManager.h>
+#include <kis_zoom_manager.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_signal_compressor.h"
@@ -31,34 +34,46 @@
 
 OverviewDockerDock::OverviewDockerDock( )
     : QDockWidget(i18n("Overview"))
+    , m_zoomSlider(0)
     , m_canvas(0)
 {
     QWidget *page = new QWidget(this);
-    QHBoxLayout *layout = new QHBoxLayout(page);
+    m_layout = new QVBoxLayout(page);
 
     m_overviewWidget = new OverviewWidget(this);
     m_overviewWidget->setMinimumHeight(50);
 
-    layout->addWidget(m_overviewWidget);
+    m_layout->addWidget(m_overviewWidget, 1);
 
     setWidget(page);
 }
 
 void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
 {
+    setEnabled(canvas != 0);
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(this);
     }
 
+    if (m_zoomSlider) {
+        m_layout->removeWidget(m_zoomSlider);
+        delete m_zoomSlider;
+    }
+
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
     m_overviewWidget->setCanvas(canvas);
+    if (m_canvas) {
+        m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
+        m_layout->addWidget(m_zoomSlider);
+    }
 }
 
 void OverviewDockerDock::unsetCanvas()
 {
+    setEnabled(false);
     m_canvas = 0;
     m_overviewWidget->unsetCanvas();
 }

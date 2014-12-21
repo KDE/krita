@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QVariant>
 
-class KisView2;
+class KisViewManager;
 
 /**
  * Template of view plugin

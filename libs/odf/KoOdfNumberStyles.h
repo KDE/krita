@@ -27,7 +27,6 @@
 #include <QPair>
 
 class KoGenStyles;
-class KoXmlWriter;
 class KoGenStyle;
 
 /**

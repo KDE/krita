@@ -67,7 +67,7 @@ public slots:
 
 protected:
     /// reimplemented form KoToolBase
-    virtual QList<QWidget*> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private slots:
     void updateGuidePosition(qreal position);

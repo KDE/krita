@@ -67,6 +67,8 @@ KisToolMultihand::~KisToolMultihand()
 {
 }
 
+
+
 void KisToolMultihand::beginPrimaryAction(KoPointerEvent *event)
 {
     if(m_setupAxesFlag) {
@@ -222,7 +224,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     QWidget *widget = KisToolBrush::createOptionWidget();
 
     m_axesChCkBox = new QCheckBox(i18n("Show Axes"));
-    m_axesChCkBox->setChecked(m_showAxes);
+
     connect(m_axesChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetAxesVisible(bool)));
 
     m_axesPointBtn = new QPushButton(i18n("Axes point"), widget);
@@ -233,7 +235,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     m_axesAngleSlider = new KisDoubleSliderSpinBox(widget);
     m_axesAngleSlider->setToolTip(i18n("Set axes angle (degrees)"));
     m_axesAngleSlider->setRange(0.0, 90.0,1);
-    m_axesAngleSlider->setValue(0.0);
+
     m_axesAngleSlider->setEnabled(true);
     connect(m_axesAngleSlider, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
     addOptionWidgetOption(m_axesAngleSlider, new QLabel(i18n("Axes Angle:")));
@@ -242,14 +244,13 @@ QWidget* KisToolMultihand::createOptionWidget()
     m_transformModesComboBox->addItem(i18n("Symmetry"),int(SYMMETRY));
     m_transformModesComboBox->addItem(i18n("Mirror"),int(MIRROR));
     m_transformModesComboBox->addItem(i18n("Translate"),int(TRANSLATE));
-    m_transformModesComboBox->setCurrentIndex(m_transformModesComboBox->findData(int(m_transformMode)));
+
     connect(m_transformModesComboBox,SIGNAL(currentIndexChanged(int)),SLOT(slotSetTransformMode(int)));
     addOptionWidgetOption(m_transformModesComboBox);
 
     m_handsCountSlider = new KisSliderSpinBox(widget);
     m_handsCountSlider->setToolTip(i18n("Brush count"));
     m_handsCountSlider->setRange(1, MAXIMUM_BRUSHES);
-    m_handsCountSlider->setValue(m_handsCount);
     m_handsCountSlider->setEnabled(true);
     connect(m_handsCountSlider, SIGNAL(valueChanged(int)),this, SLOT(slotSetHandsCount(int)));
     addOptionWidgetOption(m_handsCountSlider);
@@ -261,9 +262,9 @@ QWidget* KisToolMultihand::createOptionWidget()
 
     QWidget * mirrorWidget = new QWidget(m_modeCustomOption);
     m_mirrorHorizontallyChCkBox = new QCheckBox(i18n("Horizontally"));
-    m_mirrorHorizontallyChCkBox->setChecked(m_mirrorHorizontally);
+
     m_mirrorVerticallyChCkBox = new QCheckBox(i18n("Vertically"));
-    m_mirrorVerticallyChCkBox->setChecked(m_mirrorVertically);
+
     connect(m_mirrorHorizontallyChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetMirrorHorizontally(bool)));
     connect(m_mirrorVerticallyChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetMirrorVertically(bool)));
 
@@ -276,7 +277,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     QWidget * translateWidget = new QWidget(m_modeCustomOption);
     m_translateRadiusSlider = new KisSliderSpinBox(translateWidget);
     m_translateRadiusSlider->setRange(0, 200);
-    m_translateRadiusSlider->setValue(m_translateRadius);
+
     m_translateRadiusSlider->setSuffix(" px");
     connect(m_translateRadiusSlider,SIGNAL(valueChanged(int)),this,SLOT(slotSetTranslateRadius(int)));
 
@@ -289,6 +290,16 @@ QWidget* KisToolMultihand::createOptionWidget()
     m_modeCustomOption->setCurrentIndex(m_transformModesComboBox->currentIndex());
 
     addOptionWidgetOption(m_modeCustomOption);
+
+
+    // read values from configuration file
+    m_axesChCkBox->setChecked((bool)m_configGroup.readEntry("showAxes", false));
+    m_mirrorHorizontallyChCkBox->setChecked((bool)m_configGroup.readEntry("mirrorHorizontally", false));
+    m_mirrorVerticallyChCkBox->setChecked((bool)m_configGroup.readEntry("mirrorVertically", false));
+    m_axesAngleSlider->setValue(m_configGroup.readEntry("axesAngle", 0.0));
+    m_transformModesComboBox->setCurrentIndex(m_configGroup.readEntry("transformMode", 0));
+    m_translateRadiusSlider->setValue(m_configGroup.readEntry("translateRadius", 0));
+    m_handsCountSlider->setValue(m_configGroup.readEntry("handsCount", 4));
 
     return widget;
 }
@@ -322,6 +333,7 @@ void KisToolMultihand::updateCanvas()
 void KisToolMultihand::slotSetHandsCount(int count)
 {
     m_handsCount = count;
+    m_configGroup.writeEntry("handsCount", count);
 }
 
 void KisToolMultihand::slotSetAxesAngle(qreal angle)
@@ -329,6 +341,7 @@ void KisToolMultihand::slotSetAxesAngle(qreal angle)
     //negative so axes rotates counter clockwise
     m_angle = -angle*M_PI/180;
     updateCanvas();
+    m_configGroup.writeEntry("axesAngle", angle);
 }
 
 void KisToolMultihand::slotSetTransformMode(int index)
@@ -336,27 +349,32 @@ void KisToolMultihand::slotSetTransformMode(int index)
     m_transformMode = enumTransforModes(m_transformModesComboBox->itemData(index).toInt());
     m_modeCustomOption->setCurrentIndex(index);
     m_handsCountSlider->setVisible(m_transformMode != MIRROR);
+    m_configGroup.writeEntry("transformMode", index);
 }
 
 void KisToolMultihand::slotSetAxesVisible(bool vis)
 {
     m_showAxes = vis;
     updateCanvas();
+    m_configGroup.writeEntry("showAxes", vis);
 }
 
 
 void KisToolMultihand::slotSetMirrorVertically(bool mirror)
 {
     m_mirrorVertically = mirror;
+    m_configGroup.writeEntry("mirrorVertically", mirror);
 }
 
 void KisToolMultihand::slotSetMirrorHorizontally(bool mirror)
 {
     m_mirrorHorizontally = mirror;
+    m_configGroup.writeEntry("mirrorHorizontally", mirror);
 }
 
 void KisToolMultihand::slotSetTranslateRadius(int radius)
 {
     m_translateRadius = radius;
+    m_configGroup.writeEntry("translateRadius", radius);
 }
 

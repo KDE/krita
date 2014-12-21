@@ -118,16 +118,16 @@ public:
     void setPageNumber (int page);
 
     void setBreakBefore(KoText::KoTextBreakProperty state);
-    KoText::KoTextBreakProperty breakBefore();
+    KoText::KoTextBreakProperty breakBefore() const;
     void setBreakAfter(KoText::KoTextBreakProperty state);
-    KoText::KoTextBreakProperty breakAfter();
+    KoText::KoTextBreakProperty breakAfter() const;
 
     void setVisible(bool on);
-    bool visible();
-    
+    bool visible() const;
+
     void setCollapsingBorderModel(bool on);
-    bool collapsingBorderModel();
-    
+    bool collapsingBorderModel() const;
+
     KoText::Direction textDirection() const;
     void setTextDirection(KoText::Direction direction);
 
@@ -241,8 +241,8 @@ private:
      * OpenDocument format.
      */
     void loadOdfProperties(KoStyleStack &styleStack);
-    Qt::Alignment alignmentFromString(const QString &align);
-    QString alignmentToString(Qt::Alignment alignment);
+    static Qt::Alignment alignmentFromString(const QString &align);
+    static QString alignmentToString(Qt::Alignment alignment);
     qreal propertyDouble(int key) const;
     QTextLength propertyLength(int key) const;
     int propertyInt(int key) const;

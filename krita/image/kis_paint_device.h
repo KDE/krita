@@ -446,6 +446,14 @@ public:
                                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
 
     /**
+     * Overridden method for convenience
+     */
+    QImage convertToQImage(const KoColorProfile *dstProfile,
+                           const QRect &rc,
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
+
+    /**
      * Create an RGBA QImage from a rectangle in the paint device. The
      * rectangle is defined by the parent image's bounds.
      *
@@ -464,7 +472,6 @@ public:
      *
      * @param maxw: maximum width
      * @param maxh: maximum height
-     * @param selection: if present, only the selected pixels will be added to the thumbnail. May be 0
      * @param rect: only this rect will be used for the thumbnail
      *
      */

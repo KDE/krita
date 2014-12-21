@@ -28,6 +28,7 @@
 #include "KoSelection.h"
 #include "KoShapeFactoryBase.h"
 #include "KoShapeController.h"
+#include "KoViewConverter.h"
 
 #include <QPainter>
 

@@ -31,7 +31,7 @@ public:
     SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape);
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
+    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewRootArea);
 
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
 

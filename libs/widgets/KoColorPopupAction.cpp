@@ -29,7 +29,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
-#include <kcolordialog.h>
 #include <kdebug.h>
 #include <klocale.h>
 

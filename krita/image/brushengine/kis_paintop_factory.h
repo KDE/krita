@@ -83,15 +83,6 @@ public:
      */
     virtual QString pixmap();
 
-    void setUserVisible(PaintopVisibility visibility);
-
-    /**
-     * Whether this paintop is internal to a certain tool or can be used
-     * in various tools. If false, it won't show up in the toolchest.
-     * The KoColorSpace argument can be used when certain paintops only support a specific cs
-     */
-    virtual bool userVisible(const KoColorSpace * cs = 0) const;
-
     /**
      * Create and return an settings object for this paintop.
      */

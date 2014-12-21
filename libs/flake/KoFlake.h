@@ -23,10 +23,9 @@
 
 #include "flake_export.h"
 
-#include <QBrush>
-
-class KoShape;
 class QGradient;
+class QPointF;
+class QSizeF;
 
 /**
  * Flake reference

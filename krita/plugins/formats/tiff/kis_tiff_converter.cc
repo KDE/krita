@@ -22,8 +22,8 @@
 #include <stdio.h>
 
 #include <QFile>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <KoDocumentInfo.h>
 
 #include <kio/netaccess.h>
@@ -33,7 +33,7 @@
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <KoColorProfile.h>
@@ -141,7 +141,7 @@ namespace
     }
 }
 
-KisTIFFConverter::KisTIFFConverter(KisDoc2 *doc)
+KisTIFFConverter::KisTIFFConverter(KisDocument *doc)
 {
     m_doc = doc;
     m_job = 0;

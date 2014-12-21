@@ -24,14 +24,13 @@
 #include <QPointF>
 #include <KoColor.h>
 #include <KoAbstractGradient.h>
-#include <KoZoomMode.h>
 #include <kis_node.h>
 #include <KoPattern.h>
 #include <KoGridData.h>
 #include <kis_paintop_preset.h>
 #include <kis_smoothing_options.h>
 
-class KisView2;
+class KisViewManager;
 struct ViewModeSynchronisationObject {
     ViewModeSynchronisationObject() : initialized(false), gridData(0) { }
 
@@ -99,5 +98,3 @@ private:
 };
 
 #endif // VIEWMODESWITCHEVENT_H
-
-extern QMap< QString, QString > m;

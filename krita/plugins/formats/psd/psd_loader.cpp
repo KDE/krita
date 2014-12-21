@@ -17,10 +17,9 @@
  */
 #include "psd_loader.h"
 
-#include <kapplication.h>
+#include <QApplication>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -32,11 +31,12 @@
 #include <kis_annotation.h>
 #include <kis_types.h>
 #include <kis_paint_layer.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
+#include <kis_transparency_mask.h>
 
 #include "psd.h"
 #include "psd_header.h"
@@ -47,7 +47,7 @@
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
 
-PSDLoader::PSDLoader(KisDoc2 *doc)
+PSDLoader::PSDLoader(KisDocument *doc)
 {
     m_image = 0;
     m_doc = doc;
@@ -94,7 +94,6 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "failed reading resource section: " << resourceSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
-
     dbgFile << "Read resource section. pos:" << f.pos();
 
     PSDLayerSection layerSection(header);
@@ -102,14 +101,15 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "failed reading layer section: " << layerSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    // XXX: add all the image resource blocks as annotations to the image
-
     dbgFile << "Read layer section. " << layerSection.nLayers << "layers. pos:" << f.pos();
 
     // Get the right colorspace
     QPair<QString, QString> colorSpaceId = psd_colormode_to_colormodelid(header.colormode,
                                                                          header.channelDepth);
-    if (colorSpaceId.first.isNull()) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    if (colorSpaceId.first.isNull()) {
+        dbgFile << "Unsupported colorspace" << header.colormode << header.channelDepth;
+        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
 
     // Get the icc profile!
     const KoColorProfile* profile = 0;
@@ -120,8 +120,8 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                                                                        colorSpaceId.second,
                                                                        iccProfileData->icc);
             dbgFile  << "Loaded ICC profile" << profile->name();
+            delete resourceSection.resources.take(PSDResourceSection::ICC_PROFILE);
         }
-
     }
 
     // Create the colorspace
@@ -140,9 +140,16 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
         if (resInfo) {
             m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
-            // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
+            // let's skip the unit for now; we can only set that on the KisDocument, and krita doesn't use it.
+            delete resourceSection.resources.take(PSDResourceSection::RESN_INFO);
         }
     }
+
+    // Preserve all the annotations
+    foreach(PSDResourceBlock *resourceBlock, resourceSection.resources.values()) {
+        m_image->addAnnotation(resourceBlock);
+    }
+
     // Preserve the duotone colormode block for saving back to psd
     if (header.colormode == DuoTone) {
         KisAnnotationSP annotation = new KisAnnotation("DuotoneColormodeBlock",
@@ -151,7 +158,11 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         m_image->addAnnotation(annotation);
     }
 
-    // read the projection into our single layer
+
+    // Read the projection into our single layer. Since we only read the projection when
+    // we have just one layer, we don't need to later on apply the alpha channel of the
+    // first layer to the projection if the number of layers is negative/
+    // See http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000.
     if (layerSection.nLayers == 0) {
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
 
@@ -160,8 +171,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         PSDImageData imageData(&header);
         imageData.read(&f, layer->paintDevice());
 
-        //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.width, header.height));
-        m_image->addNode(layer, m_image->rootLayer());
+        // m_image->addNode(layer, m_image->rootLayer());
 
     }
     else {
@@ -175,14 +185,13 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
         QStack<KisGroupLayerSP> groupStack;
         groupStack.push(m_image->rootLayer());
+
         // read the channels for the various layers
         for(int i = 0; i < layerSection.nLayers; ++i) {
 
-            // XXX: work out the group layer structure in Photoshop, as well as the adjustment layers
-
             PSDLayerRecord* layerRecord = layerSection.layers.at(i);
             dbgFile << "Going to read channels for layer" << i << layerRecord->layerName;
-
+            KisLayerSP newLayer;
             QStringList infoBlocks = layerRecord->infoBlocks.keys();
             if (infoBlocks.contains("lsct")) {
                 QBuffer buffer;
@@ -197,14 +206,19 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                     KisGroupLayerSP groupLayer = new KisGroupLayer(m_image, "temp", OPACITY_OPAQUE_U8);
                     m_image->addNode(groupLayer, groupStack.top());
                     groupStack.push(groupLayer);
-                } else if ((type == OPEN_FOLDER || type == CLOSED_FOLDER) && !groupStack.isEmpty()) {
+                    newLayer = groupLayer;
+                }
+                else if ((type == OPEN_FOLDER || type == CLOSED_FOLDER) && !groupStack.isEmpty()) {
                     KisGroupLayerSP groupLayer = groupStack.pop();
                     groupLayer->setName(layerRecord->layerName);
                     groupLayer->setVisible(layerRecord->visible);
+                    newLayer = groupLayer;
                 }
-            } else {
+            }
+            else {
                 KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
                 layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
+
                 if (!layerRecord->readPixelData(&f, layer->paintDevice())) {
                     dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
                     return KisImageBuilder_RESULT_FAILURE;
@@ -216,8 +230,19 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                     m_image->addNode(layer, m_image->root());
                 }
                 layer->setVisible(layerRecord->visible);
+                newLayer = layer;
 
             }
+//            foreach(ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
+//                if (channelInfo->channelId < 0) {
+//                    KisTransparencyMaskSP mask = new KisTransparencyMask();
+//                    mask->initSelection(newLayer);
+//                    if (!layerRecord->readMask(&f, mask->paintDevice(), channelInfo)) {
+//                        dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
+//                    }
+//                    m_image->addNode(mask, newLayer);
+//                }
+//            }
         }
     }
 

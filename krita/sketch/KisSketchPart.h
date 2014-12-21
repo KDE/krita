@@ -20,11 +20,11 @@
 #ifndef KISSKETCHPART_H
 #define KISSKETCHPART_H
 
-#include <kis_part2.h>
+#include <KisPart.h>
 
-// This class exists primarily to stop KoPart from removing the progress proxy
+// This class exists primarily to stop KisPart from removing the progress proxy
 // we set on the document when saving...
-class KisSketchPart : public KisPart2
+class KisSketchPart : public KisPart
 {
 public:
     KisSketchPart(QObject *parent = 0);

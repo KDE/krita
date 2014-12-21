@@ -30,9 +30,6 @@
 #include <KoStyleStack.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfGraphicStyles.h>
-#include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
 #include <KoViewConverter.h>
 #include <KoShapeLayer.h>

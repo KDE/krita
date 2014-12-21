@@ -32,7 +32,7 @@
 #include "kis_shape_tool_helper.h"
 
 #include "kis_system_locker.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection_manager.h"
 
 
@@ -93,7 +93,7 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
     // If the user just clicks on the canvas deselect
     if (rc.isEmpty()) {
         // Queueing this action to ensure we avoid a race condition when unlocking the node system
-        QTimer::singleShot(0, kisCanvas->view()->selectionManager(), SLOT(deselect()));
+        QTimer::singleShot(0, kisCanvas->viewManager()->selectionManager(), SLOT(deselect()));
         return;
     }
 

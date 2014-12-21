@@ -27,7 +27,6 @@
 #include <QDebug>
 
 #include <klocalizedstring.h>
-#include <klineedit.h>
 #include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
 #include <kaction.h>

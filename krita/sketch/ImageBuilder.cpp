@@ -24,8 +24,8 @@
 
 #include <KoCompositeOpRegistry.h>
 
-#include <kis_part2.h>
-#include <kis_doc2.h>
+#include <KisPart.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_config.h>
 #include <kis_clipboard.h>

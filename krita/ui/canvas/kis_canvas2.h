@@ -38,13 +38,15 @@ class KoToolProxy;
 class KoColorProfile;
 
 class KisCanvasDecoration;
-class KisView2;
+class KisViewManager;
 class KisPaintopBox;
 class KisFavoriteResourceManager;
 class KisDisplayFilter;
 class KisInputManager;
 class KisDisplayColorConverter;
 struct KisExposureGammaCorrectionInterface;
+class KisPaintingAssistantsDecoration;
+class KisView;
 
 enum KisCanvasType {
     QPAINTER,
@@ -73,7 +75,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2* view, KoShapeBasedDocumentBase* sc);
+    KisCanvas2(KisCoordinatesConverter* coordConverter, QPointer<KisView> viewManager, KoShapeBasedDocumentBase* sc);
 
     virtual ~KisCanvas2();
 
@@ -141,19 +143,23 @@ public: // KoCanvasBase implementation
     // Temporary! Either get the current layer and image from the
     // resource provider, or use this, which gets them from the
     // current shape selection.
-    KisImageWSP currentImage();
+    KisImageWSP currentImage() const;
 
 
     KisInputManager *inputManager() const;
 
+    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
+
+
 public: // KisCanvas2 methods
 
-    KisImageWSP image();
-    KisView2* view();
+    KisImageWSP image() const;
+    KisViewManager* viewManager() const;
+    QPointer<KisView>imageView() const;
 
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     void addDecoration(KisCanvasDecoration* deco);
-    KisCanvasDecoration* decoration(const QString& id);
+    KisCanvasDecoration* decoration(const QString& id) const;
 
     void setDisplayFilter(KisDisplayFilterSP displayFilter);
     KisDisplayColorConverter* displayColorConverter() const;
@@ -224,7 +230,7 @@ public:
     // interafce for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
     void initializeImage();
-    // interface for KisView2 only
+    // interface for KisViewManager only
     void resetCanvas(bool useOpenGL);
 
     void setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager);

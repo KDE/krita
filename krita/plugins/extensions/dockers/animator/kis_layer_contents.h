@@ -24,38 +24,36 @@
 #include <QWidget>
 #include <QHash>
 
-class KisAnimationFrame;
+class KisAnimationFrameWidget;
 
 /**
  * This is a widget class representing
  * the contents of an animation layer.
  */
-class KisLayerContents : public QWidget
+class KisLayerContentsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    KisLayerContents(KisFrameBox* parent = 0);
+    KisLayerContentsWidget(KisFrameBox* parent = 0);
 
-    void mapFrame(int frameNumber, KisAnimationFrame* frame);
+    void mapFrame(int frameNumber, KisAnimationFrameWidget* frame);
     void unmapFrame(int frameNumber);
 
     int getLastFrameIndex();
     int getPreviousFrameIndexFrom(int index);
     int getNextFrameIndexFrom(int index);
-    int getIndex(KisAnimationFrame* frame);
+    int getIndex(KisAnimationFrameWidget* frame);
 
-    KisAnimationFrame* getNextFrameFrom(KisAnimationFrame* frame);
-    KisAnimationFrame* getNextFrameFrom(int index);
-    KisAnimationFrame* getPreviousFrameFrom(KisAnimationFrame* frame);
-    KisAnimationFrame* getPreviousFrameFrom(int index);
-    KisAnimationFrame* getFrameAt(int index);
+    KisAnimationFrameWidget* getNextFrameFrom(KisAnimationFrameWidget* frame);
+    KisAnimationFrameWidget* getNextFrameFrom(int index);
+    KisAnimationFrameWidget* getPreviousFrameFrom(KisAnimationFrameWidget* frame);
+    KisAnimationFrameWidget* getPreviousFrameFrom(int index);
+    KisAnimationFrameWidget* getFrameAt(int index);
 
     int getContentLength();
     KisFrameBox* getParent();
     int getLayerIndex();
-
-    void mouseReleased(int x);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -66,7 +64,7 @@ private:
 
 private:
     KisFrameBox* m_parent;
-    QHash<int, KisAnimationFrame*> m_frames;
+    QHash<int, KisAnimationFrameWidget*> m_frames;
 };
 
 #endif // KIS_LAYER_CONTENTS_H

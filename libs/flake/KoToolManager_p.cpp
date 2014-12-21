@@ -21,6 +21,7 @@
 
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoToolBase.h>
 #include <KoToolFactoryBase.h>
 #include <QToolButton>
 #include <kicon.h>

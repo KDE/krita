@@ -17,11 +17,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KoColorModelStandardIds.h"
+
 #include <qtest_kde.h>
 #include <kdebug.h>
 #include <string.h>
-
-#include "KoColorModelStandardIds.h"
 
 #include "KoColor.h"
 #include "KoColorSpace.h"

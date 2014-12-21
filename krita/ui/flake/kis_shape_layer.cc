@@ -42,7 +42,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoDataCenterBase.h>
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyles.h>
 #include <KoImageCollection.h>
@@ -51,7 +51,6 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfWriteStore.h>
 #include <KoPageLayout.h>
-#include <KoProperties.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
@@ -69,6 +68,9 @@
 #include <KoSelection.h>
 #include <KoShapeMoveCommand.h>
 #include <KoShapeTransformCommand.h>
+#include <KoShapeShadow.h>
+#include <KoShapeShadowCommand.h>
+
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -315,7 +317,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KisDocument::SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!store->open("content.xml"))
         return false;
@@ -516,6 +518,10 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;
 
+    QList<KoShapeShadow*> newShadows;
+    const qreal transformBaseScale = KoUnit::approxTransformScale(transform);
+
+
     // this code won't work if there are shapes, that inherit the transformation from the parent container.
     // the chart and tree shapes are examples for that, but they aren't used in krita and there are no other shapes like that.
     foreach(const KoShape* shape, shapes) {
@@ -528,9 +534,30 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
             QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
             newTransformations.append(localTransform*oldTransform);
         }
+
+        KoShapeShadow *shadow = 0;
+
+        if (shape->shadow()) {
+            shadow = new KoShapeShadow(*shape->shadow());
+            shadow->setOffset(transformBaseScale * shadow->offset());
+            shadow->setBlur(transformBaseScale * shadow->blur());
+        }
+
+        newShadows.append(shadow);
+
     }
 
-    return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
+    KUndo2Command *parentCommand = new KUndo2Command();
+    new KoShapeTransformCommand(shapes,
+                                oldTransformations,
+                                newTransformations,
+                                parentCommand);
+
+    new KoShapeShadowCommand(shapes,
+                             newShadows,
+                             parentCommand);
+
+    return parentCommand;
 }
 
 #include "kis_shape_layer.moc"

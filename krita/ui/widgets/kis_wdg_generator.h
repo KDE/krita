@@ -24,7 +24,7 @@
 
 class QListWidgetItem;
 class KisFilterConfiguration;
-class KisView2;
+class KisViewManager;
 
 /**
  * A widget that allows users to select a generator and
@@ -46,7 +46,7 @@ public:
 
     ~KisWdgGenerator();
 
-    void initialize(KisView2 *view);
+    void initialize(KisViewManager *view);
 
     void setConfiguration(const KisFilterConfiguration * config);
 

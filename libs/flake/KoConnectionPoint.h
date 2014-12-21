@@ -21,9 +21,9 @@
 #ifndef KOCONNECTIONPOINT_H
 #define KOCONNECTIONPOINT_H
 
-#include "KoFlake.h"
 #include "flake_export.h"
 #include <QPointF>
+#include <QMap>
 
 /// Data of a single connection point
 struct FLAKE_EXPORT KoConnectionPoint

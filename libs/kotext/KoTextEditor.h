@@ -265,7 +265,7 @@ public slots:
     /// Add an annotation at the current cursor location or the current selection.
     KoAnnotation *addAnnotation(KoShape *annotationShape);
 
-    KoTextRangeManager *textRangeManager();
+    KoTextRangeManager *textRangeManager() const;
 
     /**
      * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
@@ -462,7 +462,7 @@ public slots:
 
     void newSection();
 
-    void renameSection(KoSection *section, QString newName);
+    void renameSection(KoSection *section, const QString &newName);
 
     void newLine();
 

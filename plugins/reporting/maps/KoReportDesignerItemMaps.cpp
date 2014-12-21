@@ -25,7 +25,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QBuffer>
-#include <kcodecs.h>
 #include <QDomDocument>
 #include <QPainter>
 #include <kdebug.h>
@@ -63,7 +62,7 @@ KoReportDesignerItemMaps::KoReportDesignerItemMaps(KoReportDesigner * rw, QGraph
     Q_UNUSED(pos);
     myDebug() << "\e[35m======KoReportDesigner\e[0m";
     init(scene, rw);
-    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    setSceneRect(properRect(*rw, KOREPORT_ITEM_RECT_DEFAULT_WIDTH, KOREPORT_ITEM_RECT_DEFAULT_WIDTH));
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
@@ -73,14 +72,6 @@ KoReportDesignerItemMaps::KoReportDesignerItemMaps(QDomNode & element, KoReportD
     myDebug() << "\e[35m======QDomNode\e[0m";
     init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
-}
-
-QSizeF KoReportDesignerItemMaps::minimumSize(const KoReportDesigner &designer) const
-{
-    if (designer.countSelectionWidth() < 100 || designer.countSelectionHeight() < 100) {
-        return QSizeF(100, 100);
-    }
-    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
 }
 
 KoReportDesignerItemMaps* KoReportDesignerItemMaps::clone()

@@ -81,9 +81,9 @@ void KoTextRange::setManager(KoTextRangeManager *manager)
     d->manager = manager;
 }
 
-KoTextRangeManager *KoTextRange::manager()
+KoTextRangeManager *KoTextRange::manager() const
 {
-    Q_D(KoTextRange);
+    Q_D(const KoTextRange);
     return d->manager;
 }
 

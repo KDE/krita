@@ -461,6 +461,15 @@ QRect KisPaintDevice::calculateExactBounds() const
         }
     }
 
+    /**
+     * If the first pass hasn't found any opaque pixel, there is no
+     * reason to check that 3 more times. They will not appear in the
+     * meantime. Just return an empty bounding rect.
+     */
+    if (!found) {
+        return QRect();
+    }
+
     found = false;
 
     for (qint32 y2 = y + h - 1; y2 >= y ; --y2) {
@@ -721,6 +730,16 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, KoColor
     h = rc.height();
 
     return convertToQImage(dstProfile, x1, y1, w, h, renderingIntent, conversionFlags);
+}
+
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile,
+                                       const QRect &rc,
+                                       KoColorConversionTransformation::Intent renderingIntent,
+                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const
+{
+    return convertToQImage(dstProfile,
+                           rc.x(), rc.y(), rc.width(), rc.height(),
+                           renderingIntent, conversionFlags);
 }
 
 QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const

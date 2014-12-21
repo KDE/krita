@@ -29,7 +29,7 @@ public:
         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     }
 
-    KoResourceServer<KisPaintOpPreset> * rserver;
+    KisPaintOpPresetResourceServer * rserver ;
 };
 
 PresetImageProvider::PresetImageProvider()
@@ -43,7 +43,7 @@ QImage PresetImageProvider::requestImage(const QString &id, QSize *size, const Q
     Q_UNUSED(size);
     Q_UNUSED(requestedSize);
     QImage image(requestedSize, QImage::Format_ARGB32);
-    QList<KisPaintOpPreset*> resources = d->rserver->resources();
+    QList<KisPaintOpPresetSP> resources = d->rserver->resources();
     int theID = id.toInt();
     if (theID >= 0 && theID < resources.count())
     {

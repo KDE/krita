@@ -29,22 +29,16 @@
 
 #include <KoView.h>
 #include <KoDocument.h>
-#include <KoToolManager.h>
 #include <KoTextDocument.h>
 #include <KoTextRdfCore.h>
-#include "KoOdfWriteStore.h"
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
 #include <KoDocumentResourceManager.h>
-#include <KoTextEditor.h>
-#include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoTextShapeDataBase.h>
 #include <KoCanvasBase.h>
-#include <KoTextDocument.h>
 #include <KoTextEditor.h>
-#include <KoCanvasBase.h>
 #include <KoInlineObject.h>
 #include <KoTextInlineRdf.h>
 #include <KoInlineTextObjectManager.h>
@@ -52,11 +46,9 @@
 #include <KoTextMeta.h>
 #include <KoShapeController.h>
 
-#include <kconfig.h>
 #include <kdebug.h>
-#include <kglobal.h>
 #include <klocale.h>
-#include <kuser.h>
+#include <kaction.h>
 
 
 #include <QWeakPointer>

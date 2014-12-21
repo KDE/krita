@@ -4,7 +4,7 @@ add_subdirectory( tests )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-# Chose a tiles backend 
+# Chose a tiles backend
 # 1 - image/tiles
 # 3 - image/tiles3
 
@@ -40,7 +40,7 @@ option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak trac
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
 include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata
-                     ${KOMAIN_INCLUDES}
+                     
 )
 
 if(FFTW3_FOUND)
@@ -56,6 +56,7 @@ endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_debug.cpp
    kis_assert.cpp
    kis_distance_information.cpp
    kis_painter.cc
@@ -66,6 +67,9 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_preset.cpp
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
+   brushengine/kis_locked_properties.cc
+   brushengine/kis_locked_properties_proxy.cpp
+   brushengine/kis_locked_properties_server.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_command.cpp
@@ -132,7 +136,15 @@ set(kritaimage_LIB_SRCS
    kis_fill_painter.cc
    kis_filter_mask.cpp
    kis_filter_strategy.cc
+   kis_transform_mask.cpp
+   kis_transform_mask_params_interface.cpp
+   kis_recalculate_transform_mask_job.cpp
+   kis_transform_mask_params_factory_registry.cpp
+   kis_safe_transform.cpp
    kis_gradient_painter.cc
+   kis_gradient_shape_strategy.cpp
+   kis_cached_gradient_shape_strategy.cpp
+   kis_polygonal_gradient_shape_strategy.cpp
    kis_iterator_ng.cpp
    kis_async_merger.cpp
    kis_merge_walker.cc
@@ -198,7 +210,15 @@ set(kritaimage_LIB_SRCS
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
+   bsplines/kis_bspline_1d.cpp
+   bsplines/kis_bspline_2d.cpp
+   bsplines/kis_nu_bspline_2d.cpp
    kis_warptransform_worker.cc
+   kis_cage_transform_worker.cpp
+   kis_liquify_transform_worker.cpp
+   kis_green_coordinates_math.cpp
+   kis_algebra_2d.cpp
+   kis_dom_utils.cpp
    kis_transparency_mask.cc
    kis_undo_store.cpp
    kis_undo_stores.cpp
@@ -245,8 +265,16 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_shape_paint_action.cpp
 )
 
+set(einspline_SRCS
+   bsplines/einspline/bspline_create.cpp
+   bsplines/einspline/bspline_data.cpp
+   bsplines/einspline/multi_bspline_create.cpp
+   bsplines/einspline/nubasis.cpp
+   bsplines/einspline/nubspline_create.cpp
+   bsplines/einspline/nugrid.cpp
+)
 
-kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
+kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
 target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
@@ -268,6 +296,12 @@ if(HAVE_VC)
   target_link_libraries(kritaimage  ${Vc_LIBRARIES})
 endif(HAVE_VC)
 
+if (NOT GSL_FOUND)
+  message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Shaped Gradients might be non-normalized! Please install GSL library.")
+else (NOT GSL_FOUND)
+  target_link_libraries(kritaimage ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+endif (NOT GSL_FOUND)
+
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
@@ -282,12 +316,12 @@ install( FILES
     metadata/schemas/xmp.schema
     metadata/schemas/xmpmm.schema
     metadata/schemas/xmprights.schema
-    
+
     DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
     kis_base_node.h
     kis_base_processor.h
     kis_config_widget.h
@@ -318,11 +352,13 @@ install( FILES
     kis_selection.h
     kis_shared.h
     kis_shared_ptr.h
-    kis_shared_ptr_vector.h
     kis_transaction.h
     kis_types.h
     krita_export.h
     filter/kis_filter_configuration.h
     generator/kis_generator.h
     generator/kis_generator_registry.h
+    brushengine/kis_locked_properties.h
+    brushengine/kis_locked_properties_proxy.h
+    brushengine/kis_locked_properties_server.h  
     DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

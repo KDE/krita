@@ -36,9 +36,7 @@
 
 // KDE
 #include <kdebug.h>
-#include <kapplication.h>
 #include <kmessagebox.h>
-#include <kmimetype.h>
 #include <kurl.h>
 
 // KDChart
@@ -77,10 +75,8 @@
 #include <KoGenStyles.h>
 #include <KoStyleStack.h>
 #include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
-#include <KoOdfReadStore.h>
 #include <KoDocumentEntry.h>
 #include <KoOdfStylesReader.h>
 #include <KoCanvasBase.h>
@@ -837,7 +833,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
 
     QString tmpURL;
     if (url[0] == '#')
-        url = url.mid(1);
+        url.remove(0, 1);
 
     if (KUrl::isRelativeUrl(url)) {
         if (url.startsWith("./"))

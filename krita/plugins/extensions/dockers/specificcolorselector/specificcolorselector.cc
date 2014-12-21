@@ -20,7 +20,6 @@
 
 #include <QTimer>
 
-#include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
@@ -34,7 +33,7 @@
 #include "kis_cursor.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 #include "specificcolorselector_dock.h"
 

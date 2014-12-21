@@ -1,4 +1,4 @@
-/*
+ /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -30,8 +30,6 @@
 
 #include <QFile>
 #include "DebugPigment.h"
-#include "KoChromaticities.h"
-
 #include "LcmsColorProfileContainer.h"
 
 #include "lcms2.h"
@@ -75,29 +73,20 @@ IccColorProfile::Container::~Container()
 
 struct IccColorProfile::Private {
     struct Shared {
-        Shared() : count(0), data(0), lcmsProfile(0), chromacities(0) {}
+        Shared()
+            : count(0)
+            , data(0)
+            , lcmsProfile(0) {}
         ~Shared() {
-            delete data; delete lcmsProfile; delete chromacities;
+            delete data;
+            delete lcmsProfile;
         }
         int count;
         IccColorProfile::Data* data;
         LcmsColorProfileContainer* lcmsProfile;
-        KoRGBChromaticities* chromacities;
     };
     Shared* shared;
 };
-
-IccColorProfile::IccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, const QString &name)
-    : KoColorProfile(QString()), d(new Private)
-{
-    d->shared = new Private::Shared();
-    d->shared->count ++;
-    d->shared->chromacities = new KoRGBChromaticities(chromacities);
-    d->shared->data = new Data();
-    d->shared->lcmsProfile = 0;
-    d->shared->data->setRawData(LcmsColorProfileContainer::createFromChromacities(chromacities, gamma, name));
-    init();
-}
 
 IccColorProfile::IccColorProfile(const QString &fileName)
     : KoColorProfile(fileName), d(new Private)
@@ -106,7 +95,6 @@ IccColorProfile::IccColorProfile(const QString &fileName)
     d->shared->count ++;
     d->shared->data = new Data();
     d->shared->lcmsProfile = 0;
-    d->shared->chromacities = 0;
 }
 
 IccColorProfile::IccColorProfile(const QByteArray& rawData)
@@ -116,7 +104,6 @@ IccColorProfile::IccColorProfile(const QByteArray& rawData)
     d->shared->count ++;
     d->shared->data = new Data();
     d->shared->lcmsProfile = 0;
-    d->shared->chromacities = 0;
     setRawData(rawData);
     init();
 }

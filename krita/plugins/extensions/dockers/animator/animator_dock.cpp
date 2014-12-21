@@ -18,32 +18,47 @@
 
 #include "animator_dock.h"
 
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QToolBar>
+
 #include <klocale.h>
 
-#include "kis_view2.h"
-#include "kis_animation.h"
-#include "kis_canvas2.h"
-#include "kis_animation_doc.h"
-#include "kis_animation_part.h"
+#include <kis_action.h>
+#include <KisViewManager.h>
+#include <kis_animation.h>
+#include <kis_canvas2.h>
+#include <kis_animation_doc.h>
+#include <KisPart.h>
+#include <kis_animation_model.h>
+
 #include "kis_timeline.h"
 
-AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_animation(0)
+
+AnimatorDock::AnimatorDock()
+    : QDockWidget(i18n("Animator"))
 {
-    this->setMinimumHeight(120);
-    m_mainWidget = new KisTimeline(this);
-    this->setWidget(m_mainWidget);
+    setMinimumHeight(120);
+    m_timeLine = new KisTimelineWidget(this);
+    this->setWidget(m_timeLine);
 }
 
-void AnimatorDock::setCanvas(KoCanvasBase *canvas)
+void AnimatorDock::setCanvas(KoCanvasBase *canvasBase)
 {
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if(m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()) {
-        m_animation = dynamic_cast<KisAnimationPart*>(m_canvas->view()->document()->documentPart())->animation();
-        if(m_animation) {
-            m_mainWidget->setCanvas(m_canvas);
-            m_mainWidget->setModel(m_animation);
-        }
+    setEnabled(canvasBase != 0);
+
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(canvasBase);
+    if (canvas && canvas->viewManager() && canvas->viewManager()->document()) {
+        m_timeLine->setCanvas(canvas);
     }
+
+}
+
+void AnimatorDock::unsetCanvas()
+{
+    setEnabled(false);
+    m_timeLine->unsetCanvas();
 }
 
 #include "animator_dock.moc"

@@ -87,10 +87,10 @@ public:
                                   KisDistanceInformation *currentDistance);
 
 
-     /**
-     * Whether this paintop can paint. Can be false in case that some setting isn't read correctly.
-     * @return if paintop is ready for painting, default is true
-     */
+    /**
+    * Whether this paintop can paint. Can be false in case that some setting isn't read correctly.
+    * @return if paintop is ready for painting, default is true
+    */
     virtual bool canPaint() const {
         return true;
     }

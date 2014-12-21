@@ -78,8 +78,8 @@ int MessageHandler::askQuestion(const QString& message,
                                                   buttonNo, dontShowAskAgainName, options);
     }
     else {
-        return askQuestion(message, dlgType, defaultResult, buttonYes,
-                           buttonNo, dontShowAskAgainName, options);
+        return askQuestionInternal(message, dlgType, defaultResult, buttonYes,
+                                   buttonNo, dontShowAskAgainName, options);
     }
 }
 

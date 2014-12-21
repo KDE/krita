@@ -28,8 +28,9 @@ class PresetDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     PresetDockerDock( );
+    QString observerName() { return "PresetDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
 public slots:
     void canvasResourceChanged(int key, const QVariant& v);
 private slots:

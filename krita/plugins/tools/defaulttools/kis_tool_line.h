@@ -25,6 +25,8 @@
 
 #include "kis_tool_paint.h"
 
+#include <KConfig>
+#include <KConfigGroup>
 #include <QScopedPointer>
 #include "kis_global.h"
 #include "kis_types.h"
@@ -39,7 +41,7 @@ class KoCanvasBase;
 class KisRecordedPolyLinePaintAction;
 class QCheckBox;
 class QPushButton;
-class KisToolPaintingInformationBuilder;
+class KisPaintingInformationBuilder;
 class KisToolLineHelper;
 
 
@@ -54,6 +56,7 @@ public:
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
 
     virtual int flags() const;
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
@@ -62,6 +65,8 @@ public:
 
 private slots:
     void updateStroke();
+    void setUseSensors(bool value);
+    void setShowOutline(bool value);
 
 private:
     void paintLine(QPainter& gc, const QRect& rc);
@@ -79,10 +84,12 @@ private:
     QCheckBox *m_chkUseSensors;
     QCheckBox *m_chkShowOutline;
 
-    QScopedPointer<KisToolPaintingInformationBuilder> m_infoBuilder;
+    QScopedPointer<KisPaintingInformationBuilder> m_infoBuilder;
     QScopedPointer<KisToolLineHelper> m_helper;
     KisSignalCompressor m_strokeUpdateCompressor;
     KisSignalCompressor m_longStrokeUpdateCompressor;
+
+    KConfigGroup configGroup;
 };
 
 

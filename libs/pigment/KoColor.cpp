@@ -18,13 +18,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
+#include "KoColor.h"
+
 #include <QColor>
 
 #include <QDomDocument>
 
 #include "DebugPigment.h"
-#include "KoColor.h"
-
 
 #include "KoColorModelStandardIds.h"
 #include "KoColorProfile.h"
@@ -316,4 +317,14 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
     } else {
         return KoColor();
     }
+}
+
+QString KoColor::toQString(const KoColor &color)
+{
+    QStringList ls;
+    foreach(KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(color.colorSpace()->channels())) {
+        ls << channel->name();
+        ls << color.colorSpace()->channelValueText(color.data(), channel->pos());
+    }
+    return ls.join(" ");
 }

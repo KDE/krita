@@ -39,7 +39,6 @@
 #include <KoPostscriptPaintDevice.h>
 #include <KoSelection.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeManager.h>
 #include <KoShapeBackground.h>
 #include <KoShapePaintingContext.h>
 #include <KoShapeSavingContext.h>

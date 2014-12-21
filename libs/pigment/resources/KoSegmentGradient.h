@@ -25,8 +25,6 @@
 #include <QList>
 #include <QColor>
 
-#include <kio/job.h>
-
 #include <KoResource.h>
 #include "KoAbstractGradient.h"
 #include "KoColor.h"

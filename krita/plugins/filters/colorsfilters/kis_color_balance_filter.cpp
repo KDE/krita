@@ -18,7 +18,6 @@
 */
 
 #include "kis_color_balance_filter.h"
-#include <KoProgressUpdater.h>
 #include "filter/kis_filter_configuration.h"
 #include "kis_selection.h"
 #include "kis_paint_device.h"

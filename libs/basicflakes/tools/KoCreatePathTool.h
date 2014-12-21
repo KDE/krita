@@ -28,7 +28,6 @@
 #include <QList>
 
 class KoPathShape;
-class KoPathPoint;
 class KoShapeStroke;
 
 class KoCreatePathToolPrivate;
@@ -90,7 +89,7 @@ protected:
     void cancelPath();
 
     /// reimplemented
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
     KoShapeStroke *createStroke();

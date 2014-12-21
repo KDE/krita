@@ -126,8 +126,7 @@ void SectionFormatDialog::updateTreeState()
 
 inline KoSection* SectionFormatDialog::sectionFromModel(QModelIndex idx)
 {
-    return static_cast<KoSection *>(m_widget.sectionTree->model()
-    ->itemData(idx)[Qt::UserRole + 1].value<void *>());
+    return m_widget.sectionTree->model()->itemData(idx)[Qt::UserRole + 1].value<KoSection *>();
 }
 
 #include <SectionFormatDialog.moc>

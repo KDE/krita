@@ -34,13 +34,18 @@ SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape 
 {
 }
 
-KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
+KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int requestedPosition, bool *isNewRootArea)
 {
     if(m_area == 0) {
+        *isNewRootArea = true;
         m_area = new KoTextLayoutRootArea(documentLayout);
         m_area->setAssociatedShape(m_textShape);
         m_textShapeData->setRootArea(m_area);
 
+        return m_area;
+    }
+    if (requestedPosition == 0) {
+        *isNewRootArea = false;
         return m_area;
     }
     return 0;

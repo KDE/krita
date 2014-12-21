@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef WRITEODF_ODFWRITER_H
-#define WRITEODF_ODFWRITER_H
+#ifndef WRITEODF_HELPERS_H
+#define WRITEODF_HELPERS_H
 
 #include "writeodf/writeodfconfig.h"
 #include "writeodf/writeodftext.h"

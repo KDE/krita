@@ -208,7 +208,7 @@ void KUndo2View::setGroup(KUndo2Group *group)
 
     if (d->group != 0) {
         disconnect(d->group, SIGNAL(activeStackChanged(KUndo2QStack*)),
-                d->model, SLOT(setStack(KUndo2QStack*)));
+                   d->model, SLOT(setStack(KUndo2QStack*)));
     }
 
     d->group = group;

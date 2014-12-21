@@ -25,11 +25,13 @@
 #include <kis_signal_compressor.h>
 #include "canvas/kis_canvas_decoration.h"
 
+class KisView;
+
 class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration
 {
     Q_OBJECT
 public:
-    KisSelectionDecoration(KisView2* view);
+    KisSelectionDecoration(QPointer<KisView> view);
     ~KisSelectionDecoration();
 
     enum Mode {

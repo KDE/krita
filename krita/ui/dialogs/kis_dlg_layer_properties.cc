@@ -29,10 +29,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-#include <klineedit.h>
 #include <klocale.h>
-#include <kpushbutton.h>
-#include <knuminput.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -42,8 +39,8 @@
 #include "QTimer"
 #include "commands/kis_layer_commands.h"
 #include "kis_layer.h"
-#include "kis_view2.h"
-#include "kis_doc2.h"
+#include "KisViewManager.h"
+#include "KisDocument.h"
 #include "kis_cursor.h"
 #include <kis_debug.h>
 #include <kis_global.h>
@@ -66,7 +63,7 @@ struct KisDlgLayerProperties::Private
     quint8 opacity;
 };
 
-KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, KisDoc2 *doc, QWidget *parent, const char *name, Qt::WFlags f)
+KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *view, KisDocument *doc, QWidget *parent, const char *name, Qt::WFlags f)
                       : KDialog(parent)
                       , m_layer(layer)
                       , m_view(view)
@@ -104,6 +101,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, K
 
     m_page->intOpacity->setRange(0, 100);
     m_page->intOpacity->setValue(sliderOpacity);
+    m_page->intOpacity->setSuffix("%");
 
     m_page->cmbComposite->setEnabled(d->compositeOp);
     if(d->compositeOp) {

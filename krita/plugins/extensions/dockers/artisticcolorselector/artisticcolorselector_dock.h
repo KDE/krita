@@ -19,24 +19,27 @@
 #define H_ARTISTIC_COLOR_SELECTOR_DOCK_H
 
 #include <QDockWidget>
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 
+class KisCanvasResourceProvider;
 class KisColor;
 class QButtonGroup;
 class QMenu;
 struct ArtisticColorSelectorUI;
 struct ColorPreferencesPopupUI;
 
-class ArtisticColorSelectorDock: public QDockWidget, public KoCanvasObserverBase
+class ArtisticColorSelectorDock: public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
     
 public:
-     ArtisticColorSelectorDock();
+    ArtisticColorSelectorDock();
     ~ArtisticColorSelectorDock();
-    
-    virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    QString observerName() { return "ArtisticColorSelectorDock"; }
+    virtual void setMainWindow(KisViewManager* kisview);
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
+
     
 private slots:
     void slotCanvasResourceChanged(int key, const QVariant& value);
@@ -49,7 +52,7 @@ private slots:
     void slotLightModeChanged(bool setToAbsolute);
     
 private:
-    KoCanvasBase*            m_canvas;
+    KisCanvasResourceProvider* m_resourceProvider;
     QButtonGroup*            m_hsxButtons;
     QMenu*                   m_resetMenu;
     ArtisticColorSelectorUI* m_selectorUI;

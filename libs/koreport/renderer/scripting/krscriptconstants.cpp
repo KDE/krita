@@ -21,6 +21,8 @@
 
 KRScriptConstants::KRScriptConstants(QObject *parent)
         : QObject(parent)
+        , m_currentPage(0)
+        , m_totalPages(0)
 {
 }
 

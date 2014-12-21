@@ -76,7 +76,8 @@ void KisFilterMaskTest::testProjectionNotSelected()
     mask->initSelection(layer);
     mask->createNodeProgressProxy();
     mask->select(qimage.rect(), MIN_SELECTED);
-    mask->apply(projection, QRect(0, 0, qimage.width(), qimage.height()));
+
+    mask->apply(projection, qimage.rect(), qimage.rect(), KisNode::N_FILTHY);
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, qimage, projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -110,7 +111,7 @@ void KisFilterMaskTest::testProjectionSelected()
 
     mask->initSelection(layer);
     mask->select(qimage.rect(), MAX_SELECTED);
-    mask->apply(projection, QRect(0, 0, qimage.width(), qimage.height()));
+    mask->apply(projection, qimage.rect(), qimage.rect(), KisNode::N_FILTHY);
     QCOMPARE(mask->exactBounds(), QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
 
     QPoint errpoint;

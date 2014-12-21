@@ -21,7 +21,6 @@
 #include "renderobjects.h"
 #include "KoReportData.h"
 
-#include <kdeversion.h>
 #include <QFontMetrics>
 #include <labelsizeinfo.h>
 #include <KoPageFormat.h>
@@ -205,11 +204,10 @@ void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detai
         if (m_kodata/* && !curs->eof()*/) {
             QStringList keys;
             QStringList keyValues;
-            bool status = false;
             QList<int> shownGroups;
             ORDetailGroupSectionData * grp = 0;
 
-            status = m_kodata->moveFirst();
+            bool status = m_kodata->moveFirst();
             m_recordCount = m_kodata->recordCount();
 
             //kDebug() << "Record Count:" << m_recordCount;
@@ -552,9 +550,6 @@ ORODocument* KoReportPreRenderer::generate()
     d->createNewPage();
     if (!label.isNull()) {
 // Label Print Run
-        int row = 0;
-        int col = 0;
-
         // remember the initial margin setting as we will be modifying
         // the value and restoring it as we move around
         qreal margin = d->m_leftMargin;
@@ -585,6 +580,8 @@ ORODocument* KoReportPreRenderer::generate()
 
             if (mydata && mydata->recordCount() > 0) { /* && !((query = orqThis->getQuery())->eof()))*/
                 mydata->moveFirst();
+                int row = 0;
+                int col = 0;
                 do {
                     tmp = d->m_yOffset; // store the value as renderSection changes it
                     d->renderSection(*(detailData->m_detailSection));

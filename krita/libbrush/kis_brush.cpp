@@ -221,6 +221,8 @@ void KisBrush::setHotSpot(QPointF pt)
 
 QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const
 {
+    Q_UNUSED(info);
+
     QSizeF metric = characteristicSize(scaleX, scaleY, rotation);
 
     qreal w = metric.width();

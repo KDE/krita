@@ -25,6 +25,7 @@
 #include "KoPAUtil.h"
 #include "KoPAPageBase.h"
 #include "KoPAPageProvider.h"
+#include <KoZoomHandler.h>
 
 #include <QPainter>
 #include <kdebug.h>

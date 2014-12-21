@@ -21,7 +21,9 @@
 #define SVGFILTERHELPER_H
 
 #include <KoXmlReader.h>
-#include <QRectF>
+#include <QSizeF>
+
+class QRectF;
 
 class SvgFilterHelper
 {

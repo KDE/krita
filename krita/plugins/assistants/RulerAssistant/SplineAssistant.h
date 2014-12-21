@@ -30,7 +30,8 @@ public:
     virtual QPointF buttonPosition() const;
     virtual int numHandles() const { return 4; }
 protected:
-    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible=true, bool previewVisible=true);
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true);
 private:
     QPointF project(const QPointF& pt) const;
 };

@@ -15,8 +15,8 @@ add_subdirectory( pics )
 include_directories(
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
-    ${FLAKE_INCLUDES}
-    ${KOMAIN_INCLUDES})
+    ${KOWIDGETS_INCLUDES}
+)
 
 ########### Flake Plugin library ###############
 
@@ -172,7 +172,7 @@ kde4_add_ui_files(textshape_SRCS
 
 kde4_add_plugin(calligra_shape_text ${textshape_SRCS})
 
-target_link_libraries(calligra_shape_text kotext kotextlayout komain ${EXTRA_LIBS})
+target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets ${EXTRA_LIBS})
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
 endif( SHOULD_BUILD_FEATURE_RDF )

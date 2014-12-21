@@ -24,8 +24,7 @@
 #include <QLayout>
 #include <QSlider>
 #include <QHBoxLayout>
-
-#include <knuminput.h>
+#include <QDoubleSpinBox>
 
 KisDoubleWidget::KisDoubleWidget(QWidget* parent, const char* name)
         : QWidget(parent)

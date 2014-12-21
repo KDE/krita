@@ -21,7 +21,7 @@
 
 #include <QtTest>
 
-class KisDoc2Test : public QObject
+class KisDocumentTest : public QObject
 {
     Q_OBJECT
 

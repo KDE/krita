@@ -20,6 +20,7 @@
 #include "KoReportPrintRenderer.h"
 #include "renderobjects.h"
 #include <KoPageFormat.h>
+#include <KoDpi.h>
 #include <kdebug.h>
 #include <QPainter>
 
@@ -73,6 +74,9 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
     int toPage = context.printer->toPage();
     if (toPage == 0 || toPage > document->pages())
         toPage = document->pages();
+         
+    qreal scale = context.printer->resolution() / qreal(KoDpi::dpiX());
+    
     for (int copy = 0; copy < context.printer->numCopies(); copy++) {
         for (int page = fromPage; page < toPage; page++) {
             if (page > fromPage)
@@ -82,10 +86,13 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
             if (context.printer->pageOrder() == QPrinter::LastPageFirst)
                 p = document->page(toPage - 1 - page);
 
-
             // Render Page Objects
             for (int i = 0; i < p->primitives(); i++) {
                 OROPrimitive * prim = p->primitive(i);
+                
+                
+                prim->setPosition(prim->position() * scale);
+                prim->setSize(prim->size() * scale);
                 //kDebug() << "Rendering object" << i << "type" << prim->type();
                 if (prim->type() == OROTextBox::TextBox) {
                     //kDebug() << "Text Box";
@@ -99,10 +106,9 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                     //Background
 
                     QColor bg = tb->textStyle().backgroundColor;
-                    bg.setAlpha(tb->textStyle().backgroundOpacity);
+                    bg.setAlphaF(0.01 * tb->textStyle().backgroundOpacity);
 
                     //_painter->setBackgroundMode(Qt::OpaqueMode);
-                    context.painter->setBackground(bg);
                     context.painter->fillRect(rc, bg);
 
                     //Text
@@ -112,7 +118,7 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                     context.painter->drawText(rc, tb->flags(), tb->text());
 
                     //outer line
-                    context.painter->setPen(QPen(tb->lineStyle().lineColor, tb->lineStyle().weight, tb->lineStyle().style));
+                    context.painter->setPen(QPen(tb->lineStyle().lineColor, tb->lineStyle().weight * scale, tb->lineStyle().style));
                     context.painter->drawRect(rc);
 
                     //Reset back to defaults for next element
@@ -122,9 +128,9 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                     //kDebug() << "Line";
                     OROLine * ln = (OROLine*) prim;
                     QPointF s = ln->startPoint();
-                    QPointF e = ln->endPoint();
+                    QPointF e = ln->endPoint() * scale;
                     //QPen pen ( _painter->pen() );
-                    QPen pen(ln->lineStyle().lineColor, ln->lineStyle().weight, ln->lineStyle().style);
+                    QPen pen(ln->lineStyle().lineColor, ln->lineStyle().weight * scale, ln->lineStyle().style);
 
                     context.painter->save();
                     context.painter->setRenderHint(QPainter::Antialiasing, true);
@@ -190,9 +196,9 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                     context.painter->setPen(chk->foregroundColor());
 
                     if (chk->lineStyle().style == Qt::NoPen || chk->lineStyle().weight <= 0) {
-                        context.painter->setPen(QPen(QColor(224, 224, 224)));
+                        context.painter->setPen(QPen(Qt::lightGray));
                     } else {
-                        context.painter->setPen(QPen(chk->lineStyle().lineColor, chk->lineStyle().weight, chk->lineStyle().style));
+                        context.painter->setPen(QPen(chk->lineStyle().lineColor, chk->lineStyle().weight * scale, chk->lineStyle().style));
                     }
 
                     qreal ox = sz.width() / 5;

@@ -96,7 +96,7 @@ public:
     static void setMaximumZoom(qreal zoom);
     
 private:
-    static const char * modes[];
+    static const char * const modes[];
     static qreal minimumZoomValue;
     static qreal maximumZoomValue;
 };

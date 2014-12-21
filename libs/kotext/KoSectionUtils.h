@@ -59,7 +59,12 @@ namespace KoSectionUtils {
      *                            according to QTextBlockFormat.
      */
     KOTEXT_EXPORT QList<KoSection *> sectionStartings(const QTextBlockFormat &fmt);
-    
+
+//     /**
+//      * TODO: PLACE DOC HERE
+//      */
+//     QString sectionStartName(const QVariant &q);
+
     /**
      * Convinient function to get section endings from QTextBlockFormat.
      * @param fmt QTextBlockFormat format to retrieve section startings from.
@@ -67,6 +72,11 @@ namespace KoSectionUtils {
      *                               according to QTextBlockFormat.
      */
     KOTEXT_EXPORT QList<KoSectionEnd *> sectionEndings(const QTextBlockFormat& fmt);
+
+//     /**
+//      * TODO: PLACE DOC HERE
+//      */
+//     QString sectionEndName(const QVariant &q);
 }
 
 #endif //KOSECTIONUTILS_H

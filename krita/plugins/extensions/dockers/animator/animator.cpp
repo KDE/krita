@@ -22,12 +22,10 @@
 
 #include <QTimer>
 
-#include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
@@ -36,7 +34,7 @@
 #include "kis_cursor.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 #include "animator_dock.h"
 #include "onionskin_dock.h"
@@ -63,7 +61,7 @@ public:
     virtual QDockWidget* createDockWidget()
     {
         AnimatorDock * dockWidget = new AnimatorDock();
-        
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -76,7 +74,7 @@ public:
 
 };
 
-class OnionSkinDockFactory : public KoDockFactoryBase{
+class OnionSkinDockFactory : public KoDockFactoryBase {
 public:
     OnionSkinDockFactory()
     {

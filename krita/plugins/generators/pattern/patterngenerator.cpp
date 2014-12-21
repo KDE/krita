@@ -25,12 +25,8 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <knuminput.h>
-#include <kstandarddirs.h>
 
 #include <KoColor.h>
-#include <KoProgressUpdater.h>
 #include <KoResourceServer.h>
 #include <KoPattern.h>
 #include <KoResourceServerProvider.h>

@@ -25,6 +25,7 @@
 #include <KoToolFactoryBase.h>
 #include <KoIcon.h>
 
+class KisPerspectiveGridDecoration;
 class KisCanvas2;
 
 class KisToolPerspectiveGrid : public KisTool
@@ -68,6 +69,7 @@ private:
     bool mouseNear(const QPointF& mousep, const QPointF& point);
     KisPerspectiveGridNodeSP nodeNearPoint(KisSubPerspectiveGrid* grid, QPointF point);
 
+    KisPerspectiveGridDecoration* decoration();
 protected:
     QPointF m_dragEnd;
 

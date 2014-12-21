@@ -114,8 +114,7 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 
     inputManager()->toolProxy()->forwardEvent(
         KisToolProxy::BEGIN, m_d->savedAction, &targetEvent, event,
-        inputManager()->lastTabletEvent(),
-        inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+        inputManager()->lastTabletEvent());
 }
 
 void KisAlternateInvocationAction::end(QEvent *event)
@@ -139,8 +138,7 @@ void KisAlternateInvocationAction::end(QEvent *event)
 
     inputManager()->toolProxy()->forwardEvent(
         KisToolProxy::END, m_d->savedAction, &targetEvent, event,
-        inputManager()->lastTabletEvent(),
-        inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+        inputManager()->lastTabletEvent());
 
     KisAbstractInputAction::end(event);
 }
@@ -165,7 +163,6 @@ void KisAlternateInvocationAction::inputEvent(QEvent* event)
 
         inputManager()->toolProxy()->forwardEvent(
             KisToolProxy::CONTINUE, m_d->savedAction, &targetEvent, event,
-            inputManager()->lastTabletEvent(),
-            inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+            inputManager()->lastTabletEvent());
     }
 }

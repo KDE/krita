@@ -44,11 +44,11 @@ public:
     virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
 
-    virtual void resize(const QTextDocument *document, QTextInlineObject object,
+    virtual void resize(const QTextDocument *document, QTextInlineObject &object,
                         int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
 
     virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
 };
 
 #endif /* KOTEXTSOFTPAGEBREAK_H */

@@ -28,11 +28,13 @@
 #include "kis_filter_strategy.h"
 #include "kis_selection_manager.h"
 #include "kis_node_manager.h"
-#include "kis_view2.h"
-#include <KoDocument.h>
-#include <KoPart.h>
+#include "KisViewManager.h"
+#include "KisView.h"
+#include "KisPart.h"
+#include <KisDocument.h>
+#include <KisPart.h>
 #include <kis_action_manager.h>
-#include "KoMainWindow.h"
+#include "KisMainWindow.h"
 #include "kis_selection_mask.h"
 
 namespace TestUtil
@@ -47,8 +49,10 @@ public:
         undoStore = new KisSurrogateUndoStore();
         image = createImage(undoStore);
 
-        doc = new KisDoc2();
+        part = KisPart::instance();
+        doc = qobject_cast<KisDocument*>(part->createDocument());
         doc->setCurrentImage(image);
+
 
         if(useSelection) addGlobalSelection(image);
         if(useShapeLayer) addShapeLayer(doc, image);
@@ -56,8 +60,9 @@ public:
 
         QVERIFY(checkLayersInitial());
 
-        mainWindow = new KoMainWindow(KIS_MIME_TYPE, doc->documentPart()->componentData());
-        view = new KisView2(doc->documentPart(), doc, mainWindow);
+        mainWindow = new KisMainWindow(part, doc->documentPart()->componentData());
+        imageView = new KisView(doc->documentPart(), doc, mainWindow->actionCollection(), mainWindow);
+        view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 
         KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
@@ -156,9 +161,11 @@ public:
     KisSurrogateUndoStore *undoStore;
 
 protected:
-    KisView2 *view;
-    KisDoc2 *doc;
-    KoMainWindow *mainWindow;
+    KisView *imageView;
+    KisViewManager *view;
+    KisDocument *doc;
+    KisPart *part;
+    KisMainWindow *mainWindow;
 };
 
 }

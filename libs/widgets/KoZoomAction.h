@@ -37,6 +37,7 @@
 class KOWIDGETS_EXPORT KoZoomAction : public KSelectAction
 {
     Q_OBJECT
+    Q_PROPERTY(qreal effectiveZoom READ effectiveZoom NOTIFY zoomChanged)
 public:
 
   /**
@@ -168,11 +169,16 @@ signals:
      */
     void zoomedToAll();
 
+    void zoomLevelsChanged(QStringList values);
+    void currentZoomLevelChanged(QString valueString);
+    void sliderChanged(int value);
 protected:
     /// Regenerates the action's items
     void regenerateItems( const qreal zoom, bool asCurrent = false );
 
 private:
+    void syncSliderWithZoom();
+
     Q_DISABLE_COPY( KoZoomAction )
 
     class Private;

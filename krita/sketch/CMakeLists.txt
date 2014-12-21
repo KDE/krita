@@ -121,7 +121,6 @@ target_link_libraries(kritasketchlib
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
     ${QT_LIBRARIES}
-    komain
     kritaui
     kowidgets
     ${KDE4_KFILE_LIBRARY}
@@ -146,7 +145,6 @@ target_link_libraries(kritasketch
     ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}
     kritaui
-    ${GLEW_LIBRARIES}
     kritasketchlib
 )
 
@@ -166,7 +164,6 @@ target_link_libraries(kritasketchplugin
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
     ${QT_LIBRARIES}
-    komain
     kritaui
     kowidgets
     ${KDE4_KFILE_LIBRARY}

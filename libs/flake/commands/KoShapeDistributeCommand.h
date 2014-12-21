@@ -22,12 +22,12 @@
 #define KOSHAPEDISTRIBUTECOMMAND_H
 
 
-#include "commands/KoShapeMoveCommand.h"
-
 #include "flake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
+
+class KoShape;
 
 /// The undo / redo command for distributing shapes
 class FLAKE_EXPORT KoShapeDistributeCommand : public KUndo2Command

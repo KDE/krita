@@ -25,10 +25,10 @@
 #include <KoOdfReadStore.h>
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include "KoPALoadingContext.h"
 #include "KoPADocument.h"
+#include "KoPAPage.h"
 #include "KoPAMasterPage.h"
 #include "KoPASavingContext.h"
 #include "commands/KoPAPageInsertCommand.h"

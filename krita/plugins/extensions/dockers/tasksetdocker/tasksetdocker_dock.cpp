@@ -37,8 +37,9 @@
 #include <KoResourceServerProvider.h>
 
 #include <kis_resource_server_provider.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
+#include <KisMainWindow.h>
 #include "tasksetmodel.h"
 
 
@@ -136,9 +137,9 @@ TasksetDockerDock::~TasksetDockerDock()
 
 void TasksetDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    if (m_canvas && m_canvas->view()) {
-         m_canvas->view()->actionCollection()->disconnect(this);
-         foreach(KXMLGUIClient* client, m_canvas->view()->childClients()) {
+    if (m_canvas && m_canvas->viewManager()) {
+         m_canvas->viewManager()->actionCollection()->disconnect(this);
+         foreach(KXMLGUIClient* client, m_canvas->viewManager()->mainWindow()->childClients()) {
             client->actionCollection()->disconnect(this);
         }
     }
@@ -171,10 +172,10 @@ void TasksetDockerDock::activated(const QModelIndex& index)
 void TasksetDockerDock::recordClicked()
 {
     if(m_canvas) {
-        KisView2* view = m_canvas->view();
+        KisViewManager* view = m_canvas->viewManager();
         connect(view->actionCollection(), SIGNAL(actionTriggered(QAction*)),
                 this, SLOT(actionTriggered(QAction*)), Qt::UniqueConnection);
-        foreach(KXMLGUIClient* client, view->childClients()) {
+        foreach(KXMLGUIClient* client, view->mainWindow()->childClients()) {
             connect(client->actionCollection(), SIGNAL(actionTriggered(QAction*)),
                     this, SLOT(actionTriggered(QAction*)), Qt::UniqueConnection);
         }
@@ -237,7 +238,7 @@ void TasksetDockerDock::resourceSelected(KoResource* resource)
     m_model->clear();
     saveButton->setEnabled(true);
     foreach(const QString& actionName, static_cast<TasksetResource*>(resource)->actionList()) {
-        QAction* action = m_canvas->view()->actionCollection()->action(actionName);
+        QAction* action = m_canvas->viewManager()->actionCollection()->action(actionName);
         if(action) {
             m_model->addAction(action);
         }

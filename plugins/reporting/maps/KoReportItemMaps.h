@@ -25,10 +25,8 @@
 #include "krsize.h"
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 #include <marble/MarbleWidget.h>
 #include <QMap>
 

@@ -24,9 +24,7 @@
 // Qt
 #include <QStackedWidget>
 
-class KoPageNavigatorButton;
 class KoPAView;
-class KActionCollection;
 
 
 class KoPageNavigator : public QStackedWidget

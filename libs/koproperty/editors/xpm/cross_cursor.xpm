@@ -1,5 +1,5 @@
 /* XPM */
-static const char * cross_cursor_xpm[] = {
+static const char * const cross_cursor_xpm[] = {
 "32 32 2 1",
 " 	c None",
 ".	c #0B0B0B",

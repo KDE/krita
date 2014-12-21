@@ -22,21 +22,19 @@
 #include <QCheckBox>
 #include <QBuffer>
 #include <QSlider>
+#include <QApplication>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
-#include <kapplication.h>
-#include <kdialog.h>
 #include <kpluginfactory.h>
 
 #include <KoColorSpace.h>
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_transaction.h>
 #include <kis_paint_device.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_node.h>
@@ -47,7 +45,7 @@
 K_PLUGIN_FACTORY(KisTGAImportFactory, registerPlugin<KisTGAImport>();)
 K_EXPORT_PLUGIN(KisTGAImportFactory("calligrafilters"))
 
-KisTGAImport::KisTGAImport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisTGAImport::KisTGAImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -244,19 +242,19 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
 
 
 
-KoFilter::ConversionStatus KisTGAImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "TGA import! From:" << from << ", To:" << to << 0;
 
     if (to != "application/x-krita")
-        return KoFilter::BadMimeType;
+        return KisImportExportFilter::BadMimeType;
 
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
+    KisDocument * doc = m_chain->outputDocument();
 
     if (!doc)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain -> inputFile();
+    QString filename = m_chain->inputFile();
 
     doc->prepareForImport();
 
@@ -264,10 +262,10 @@ KoFilter::ConversionStatus KisTGAImport::convert(const QByteArray& from, const Q
         KUrl url(filename);
 
         if (url.isEmpty())
-            return KoFilter::FileNotFound;
+            return KisImportExportFilter::FileNotFound;
 
         if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
-            return KoFilter::FileNotFound;
+            return KisImportExportFilter::FileNotFound;
         }
 
 
@@ -285,19 +283,19 @@ KoFilter::ConversionStatus KisTGAImport::convert(const QByteArray& from, const Q
 
         // Check image file format.
         if (s.atEnd()) {
-            return KoFilter::InvalidFormat;
+            return KisImportExportFilter::InvalidFormat;
         }
 
         // Check supported file types.
         if (!isSupported(tga)) {
-            return KoFilter::InvalidFormat;
+            return KisImportExportFilter::InvalidFormat;
         }
 
         QImage img;
         bool result = loadTGA(s, tga, img);
 
         if (result == false) {
-            return KoFilter::CreationError;
+            return KisImportExportFilter::CreationError;
         }
 
         const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -308,9 +306,9 @@ KoFilter::ConversionStatus KisTGAImport::convert(const QByteArray& from, const Q
         image->addNode(layer.data(), image->rootLayer().data());
 
         doc->setCurrentImage(image);
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     }
-    return KoFilter::StorageCreationError;
+    return KisImportExportFilter::StorageCreationError;
 
 }
 

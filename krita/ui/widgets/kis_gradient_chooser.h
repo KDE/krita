@@ -24,10 +24,10 @@
 
 class KoSegmentGradient;
 class KisAutogradientResource;
-class KisView2;
+class KisViewManager;
 class QLabel;
 class QPushButton;
-class KisView2;
+class KisViewManager;
 class KisAutogradient;
 class KoResource;
 class KoResourceItemChooser;

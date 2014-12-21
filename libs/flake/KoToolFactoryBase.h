@@ -21,11 +21,13 @@
 #ifndef KO_TOOL_FACTORY_H
 #define KO_TOOL_FACTORY_H
 
-#include "KoToolBase.h"
 #include "flake_export.h"
 
-#include <klocale.h>
-#include <kshortcut.h>
+#include <QString>
+
+class KoCanvasBase;
+class KoToolBase;
+class KShortcut;
 
 /**
  * A factory for KoToolBase objects.
@@ -62,7 +64,7 @@ public:
     virtual ~KoToolFactoryBase();
 
     /**
-     * Instanciate a new tool
+     * Instantiate a new tool
      * @param canvas the canvas that the new tool will work on. Should be passed
      *    to the constructor of the tool.
      * @return a new KoToolBase instance, or zero if the tool doesn't want to show up.

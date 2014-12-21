@@ -304,15 +304,9 @@ public:
      * ZIP backend.
      */
     virtual void setCompressionEnabled(bool e);
+
 protected:
-
-    KoStore(bool writeMimetype = true);
-
-    /**
-     * Init store - called by constructor.
-     * @return true on success
-     */
-    virtual bool init(Mode mode);
+    KoStore(Mode mode, bool writeMimetype = true);
 
     /**
      * Finalize store - called by finalize.

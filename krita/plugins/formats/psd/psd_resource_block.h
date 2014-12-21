@@ -20,9 +20,11 @@
 
 class QIODevice;
 
+#include <klocale.h>
 #include <QDebug>
 #include <QString>
 
+#include <kis_annotation.h>
 #include <kis_debug.h>
 
 #include "psd.h"
@@ -41,6 +43,8 @@ public:
     virtual bool createBlock(QByteArray & /*data*/) { return true; }
     virtual bool valid() { return true; }
 
+    virtual QString displayText() { return QString(); }
+
     QString error;
 
 };
@@ -51,14 +55,22 @@ public:
  * XXX: make KisAnnotations out of the resource blocks so we can load/save them. Need to
  *      expand KisAnnotation to make that work.
  */
-class PSDResourceBlock //: public KisAnnotation
+class PSDResourceBlock : public KisAnnotation
 {
 
 public:
     PSDResourceBlock();
+
     ~PSDResourceBlock()
     {
         delete resource;
+    }
+
+    QString displayText() const {
+        if (resource) {
+            return resource->displayText();
+        }
+        return i18n("Unparsed Resource Block");
     }
 
     bool read(QIODevice* io);

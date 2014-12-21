@@ -45,13 +45,31 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     ui->lbl_commonColorsNumCols->hide();
     ui->commonColorsNumCols->hide();
+    
+    if (ui->colorSelectorHSVtype->isChecked()==false){
+    ui->l_HSVtypeInfo->hide();
+    }
+    ui->l_HSLtypeInfo->hide();
+    ui->l_HSItypeInfo->hide();
+    ui->l_HSYtypeInfo->hide();
     resize(minimumSize());
 
     ui->colorSelectorConfiguration->setColorSpace(ui->colorSpace->currentColorSpace());
 
     connect(ui->colorSpace,                 SIGNAL(colorSpaceChanged(const KoColorSpace*)),
             ui->colorSelectorConfiguration, SLOT(setColorSpace(const KoColorSpace*)));
-
+    connect(ui->colorSelectorHSVtype, SIGNAL(toggled(bool)),
+            this, SLOT(hsxchange())); 
+    connect(ui->colorSelectorHSLtype, SIGNAL(toggled(bool)),
+            this, SLOT(hsxchange())); 
+    connect(ui->colorSelectorHSItype, SIGNAL(toggled(bool)),
+            this, SLOT(hsxchange())); 
+    connect(ui->colorSelectorHSYtype, SIGNAL(toggled(bool)),
+            this, SLOT(hsxchange())); 
+            
+    connect(this, SIGNAL(hsxchanged(int)),
+            ui->colorSelectorConfiguration, SLOT(setList(int)));
+            
     connect(ui->minimalShadeSelectorLineCount,      SIGNAL(valueChanged(int)),
             ui->minimalShadeSelectorLineSettings,   SLOT(setLineCount(int)));
 
@@ -102,6 +120,7 @@ void KisColorSelectorSettings::savePreferences() const
 {
     //write cfg
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
 
     //general
     cfg.writeEntry("shadeSelectorHideable", ui->shadeSelectorHideable->isChecked());
@@ -170,6 +189,35 @@ void KisColorSelectorSettings::savePreferences() const
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
+    
+    QString hsxSettingType("HSV");
+    if(ui->colorSelectorHSLtype->isChecked())
+        hsxSettingType="HSL";
+    if(ui->colorSelectorHSItype->isChecked())
+        hsxSettingType="HSI";
+    if(ui->colorSelectorHSYtype->isChecked())
+        hsxSettingType="HSY";
+    
+    cfg.writeEntry("hsxSettingType", hsxSettingType);
+    
+    //luma//
+    cfg.writeEntry("lumaR", ui->l_lumaR->text());
+    cfg.writeEntry("lumaG", ui->l_lumaG->text());
+    cfg.writeEntry("lumaB", ui->l_lumaB->text());
+    
+    //slider//
+    hsxcfg.writeEntry("hsvH", ui->csl_hsvH->isChecked());
+    hsxcfg.writeEntry("hsvS", ui->csl_hsvS->isChecked());
+    hsxcfg.writeEntry("hsvV", ui->csl_hsvV->isChecked());
+    hsxcfg.writeEntry("hslH", ui->csl_hslH->isChecked());
+    hsxcfg.writeEntry("hslS", ui->csl_hslS->isChecked());
+    hsxcfg.writeEntry("hslL", ui->csl_hslL->isChecked());
+    hsxcfg.writeEntry("hsiH", ui->csl_hsiH->isChecked());
+    hsxcfg.writeEntry("hsiS", ui->csl_hsiS->isChecked());
+    hsxcfg.writeEntry("hsiI", ui->csl_hsiI->isChecked());
+    hsxcfg.writeEntry("hsyH", ui->csl_hsyH->isChecked());
+    hsxcfg.writeEntry("hsyS", ui->csl_hsyS->isChecked());
+    hsxcfg.writeEntry("hsyY", ui->csl_hsyY->isChecked());
 
     emit settingsChanged();
 }
@@ -192,6 +240,7 @@ void KisColorSelectorSettings::loadPreferences()
     //don't forget to also add a new entry to the default preferences
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    KConfigGroup hsxcfg = KGlobal::config()->group("hsxColorSlider");
 
     //general
 
@@ -278,9 +327,34 @@ void KisColorSelectorSettings::loadPreferences()
     ui->minimalShadeSelectorLineSettings->fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;"));
     ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 10));
 
+    QString hsxSettingType=cfg.readEntry("hsxSettingType", "HSV");
+    ui->colorSelectorHSVtype->setChecked(hsxSettingType=="HSV");
+    ui->colorSelectorHSLtype->setChecked(hsxSettingType=="HSL");
+    ui->colorSelectorHSItype->setChecked(hsxSettingType=="HSI");
+    ui->colorSelectorHSYtype->setChecked(hsxSettingType=="HSY");
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
+    
+    //luma values//
+    ui->l_lumaR->setText(cfg.readEntry("lumaR", "0.2126"));
+    ui->l_lumaG->setText(cfg.readEntry("lumaG", "0.7152"));
+    ui->l_lumaB->setText(cfg.readEntry("lumaB", "0.0722"));
+    
+    //color sliders//
+    ui->csl_hsvH->setChecked(hsxcfg.readEntry("hsvH", false));
+    ui->csl_hsvS->setChecked(hsxcfg.readEntry("hsvS", false));
+    ui->csl_hsvV->setChecked(hsxcfg.readEntry("hsvV", false));
+    ui->csl_hslH->setChecked(hsxcfg.readEntry("hslH", true));
+    ui->csl_hslS->setChecked(hsxcfg.readEntry("hslS", true));
+    ui->csl_hslL->setChecked(hsxcfg.readEntry("hslL", true));
+    ui->csl_hsiH->setChecked(hsxcfg.readEntry("hsiH", false));
+    ui->csl_hsiS->setChecked(hsxcfg.readEntry("hsiS", false));
+    ui->csl_hsiI->setChecked(hsxcfg.readEntry("hsiI", false));
+    ui->csl_hsyH->setChecked(hsxcfg.readEntry("hsyH", false));
+    ui->csl_hsyS->setChecked(hsxcfg.readEntry("hsyS", false));
+    ui->csl_hsyY->setChecked(hsxcfg.readEntry("hsyY", false));
+    
 }
 
 void KisColorSelectorSettings::loadDefaultPreferences()
@@ -349,8 +423,45 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->minimalShadeSelectorLineHeight->setValue(10);
 
     //color selector
+    ui->colorSelectorHSVtype->setChecked(true);
+    ui->colorSelectorHSVtype->setChecked(false);
+    ui->colorSelectorHSVtype->setChecked(false);
+    ui->colorSelectorHSVtype->setChecked(false);
+    
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration("3|0|5|0")); // triangle selector
+    
+    //luma//
+    ui->l_lumaR->setText("0.2126");
+    ui->l_lumaG->setText("0.7152");
+    ui->l_lumaB->setText("0.0722");
+    
+    //color sliders//
+    ui->csl_hsvH->setChecked(false);
+    ui->csl_hsvS->setChecked(false);
+    ui->csl_hsvV->setChecked(false);
+    ui->csl_hslH->setChecked(true);
+    ui->csl_hslS->setChecked(true);
+    ui->csl_hslL->setChecked(true);
+    ui->csl_hsiH->setChecked(false);
+    ui->csl_hsiS->setChecked(false);
+    ui->csl_hsiI->setChecked(false);
+    ui->csl_hsyH->setChecked(false);
+    ui->csl_hsyS->setChecked(false);
+    ui->csl_hsyY->setChecked(false);
+}
+
+void KisColorSelectorSettings::hsxchange() {
+
+    int hsxSettingType=0;
+    if(ui->colorSelectorHSLtype->isChecked())
+        hsxSettingType=1;
+    if(ui->colorSelectorHSItype->isChecked())
+        hsxSettingType=2;
+    if(ui->colorSelectorHSYtype->isChecked())
+        hsxSettingType=3;
+        
+    emit hsxchanged(hsxSettingType);
 }
 
 KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) :
@@ -373,4 +484,6 @@ KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) 
     connect(buttonBox->button(QDialogButtonBox::RestoreDefaults),
                        SIGNAL(clicked()),  m_widget, SLOT(loadDefaultPreferences()));
 }
+
+
 

@@ -117,7 +117,7 @@ bool KoPattern::loadFromDevice(QIODevice *dev)
     }
     else {
         QImage image;
-        result = image.load(dev, fileExtension.toUpper().toAscii());
+        result = image.load(dev, fileExtension.toUpper().toLatin1());
         setPatternImage(image);
     }
 

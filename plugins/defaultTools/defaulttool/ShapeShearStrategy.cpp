@@ -31,6 +31,7 @@
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeTransformCommand.h>
 
+#include <KoSelection.h>
 #include <QPointF>
 
 #include <math.h>

@@ -27,7 +27,7 @@ More information about Krita can be found at http://www.krita.org
 
 Management:
 - Plan       -  Project planning
-- Kexi       -  Integrated data management
+- Kexi       -  Visual database applications creator
 
 Advanced plugins:
 - KChart     -  Graphic data visualization
@@ -54,9 +54,9 @@ installed if you want to compile and run Calligra Suite. Installing kdepimlibs
 gives more functionality.
 For importing some external file formats or other plugins, you may
 also need some other dependencies.  For more details on how to build
-Calligra Suite from the sources, see
+Calligra Suite from the sources, see:
 
-http://community.kde.org/Calligra/Building/Building_Calligra
+http://community.kde.org/Calligra/Building
 
 
 Contact info
@@ -64,6 +64,7 @@ Contact info
 
 Developer and User mailing list: mailto:calligra-devel@kde.org
 Kexi User mailing list:          mailto:kexi@kde.org
+Kexi Developer mailing list:     mailto:kexi-devel@kde.org
 Krita mailing list:              mailto:kimageshop@kde.org
 
 Subscribing and list information: http://www.kde.org/mailinglists
@@ -73,8 +74,9 @@ IRC channel for developers:  #calligra on irc.freenode.org
 IRC channel for Kexi:        #kexi on irc.freenode.org
 IRC channel for Krita:       #krita on irc.freenode.org
 
-Calligra Suite forums:       http://forum.kde.org/viewforum.php?f=203
-Krita forums:                http://forum.kde.org/viewforum.php?f=136
+Calligra Suite forums:       http://forum.kde.org/calligra
+Kexi forums:                 http://forum.kde.org/kexi
+Krita forums:                http://forum.kde.org/krita
 
 If you have questions about this README file or about Calligra Suite in general,
 please mail to the Calligra Suite mailing list: mailto:calligra-devel@kde.org

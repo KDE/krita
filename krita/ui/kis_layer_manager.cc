@@ -30,7 +30,7 @@
 
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kfilewidget.h>
 #include <kurl.h>
 #include <kdiroperator.h>
@@ -628,7 +628,9 @@ void KisLayerManager::layerDuplicate()
     if (dup) {
         activateLayer(dup);
     } else {
-        KMessageBox::error(m_view->mainWindow(), i18n("Could not add layer to image."), i18n("Layer Error"));
+        QMessageBox::critical(m_view->mainWindow(),
+                              i18nc("@title:window", "Krita"),
+                              i18n("Could not add layer to image."));
     }
 }
 
@@ -713,13 +715,13 @@ void KisLayerManager::flattenImage()
         bool doIt = true;
 
         if (image->nHiddenLayers() > 0) {
-            int answer = KMessageBox::warningYesNo(m_view->mainWindow(),
-                                                   i18n("The image contains hidden layers that will be lost."),
-                                                   i18n("Flatten Image"),
-                                                   KGuiItem(i18n("&Flatten Image")),
-                                                   KStandardGuiItem::cancel());
+            int answer = QMessageBox::warning(m_view->mainWindow(),
+                                              i18nc("@title:window", "Flatten Image"),
+                                              i18n("The image contains hidden layers that will be lost. Do you want to flatten the image?"),
+                                              QMessageBox::Yes | QMessageBox::No,
+                                              QMessageBox::No);
 
-            if (answer != KMessageBox::Yes) {
+            if (answer != QMessageBox::Yes) {
                 doIt = false;
             }
         }
@@ -878,7 +880,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
         QString fileName = dlg.fileName();
 
         if(fileName.isEmpty()){
-            KMessageBox::error(m_view->mainWindow(), i18n("No file name specified."), i18n("No file specified"));
+            QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("No file name specified"));
             return;
         }
 

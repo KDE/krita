@@ -22,7 +22,7 @@
 #include <QApplication>
 #include <QStringList>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
@@ -605,10 +605,9 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
             "%2<nl/><nl/>"
             "Do you want to locate it manually?", name, fullPath);
 
-        int result = KMessageBox::warningYesNo(0, msg,
-                                               i18n("File not found"));
+        int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-        if (result == KMessageBox::Yes) {
+        if (result == QMessageBox::Yes) {
 
             KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
             dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));

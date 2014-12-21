@@ -23,7 +23,7 @@
 #include <QDir>
 #include <QFileInfo>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -167,7 +167,7 @@ void ResourceManager::slotImport()
     QStringList resources = dlg.urls();
     QString resourceType = dlg.selectedNameFilter();
     if (!filterToTypeMap.contains(resourceType)) {
-        QMessageBox::warning(0, "Krita", i18n("The selected resource type is unknown."));
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("The selected resource type is unknown."));
         return;
     }
 
@@ -194,11 +194,11 @@ void ResourceManager::slotImport()
             bundle->load();
             if (bundle->valid()) {
                 if (!bundle->install()) {
-                    QMessageBox::warning(0, "Krita", i18n("Could not install the resources for bundle %1.").arg(res));
+                    QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.").arg(res));
                 }
             }
             else {
-                QMessageBox::warning(0, "Krita", i18n("Could not load bundle %1.").arg(res));
+                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.").arg(res));
             }
 
             QFileInfo fi(res);
@@ -296,7 +296,7 @@ void ResourceManager::slotCreateBundle()
     newBundle->setThumbnail(dlgCreateBundle.previewImage());
 
     if (!newBundle->save()) {
-        KMessageBox::error(m_view->mainWindow(), i18n("Could not create the new bundle."), i18n("Error"));
+        QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));
     }
 
 

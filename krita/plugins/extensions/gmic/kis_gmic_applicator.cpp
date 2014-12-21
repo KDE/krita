@@ -16,22 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <gmic.h>
-
 #include <kis_gmic_applicator.h>
 #include <kis_image_signal_router.h>
 #include <kis_processing_applicator.h>
-#include "kis_export_gmic_processing_visitor.h"
-#include "kis_gmic_synchronize_layers_command.h"
+
+
 #include "kis_gmic_command.h"
 #include "kis_import_gmic_processing_visitor.h"
 #include "kis_image.h"
 #include <kis_selection.h>
+#include <KoUpdater.h>
 
-KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorFinished(false)
+#include <gmic.h>
+#include "kis_gmic_synchronize_layers_command.h"
+#include "kis_export_gmic_processing_visitor.h"
+
+KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorFinished(false),m_progress(0)
 {
 }
-
 
 KisGmicApplicator::~KisGmicApplicator()
 {
@@ -86,12 +88,13 @@ void KisGmicApplicator::preview()
 
     // apply gmic filters to provided layers
     const char * customCommands = m_customCommands.isNull() ? 0 : m_customCommands.constData();
-    m_applicator->applyCommand(new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands));
+    KisGmicCommand * gmicCommand = new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands);
+    m_progress = gmicCommand->getProgress();
+    m_applicator->applyCommand(gmicCommand);
 
     // synchronize layer count
-    m_applicator->applyCommand(new KisGmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    m_applicator->applyCommand(new KisGmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image, layerSize, selection), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
-    // would sleep(3) help here?
     KisProcessingVisitorSP  importVisitor = new KisImportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize, selection);
     m_applicator->applyVisitor(importVisitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
     m_applicator->explicitlyEmitFinalSignals();
@@ -138,10 +141,16 @@ void KisGmicApplicator::finish()
     {
         m_applicator->end();
         m_applicatorFinished = true;
-        dbgPlugins << ppVar(m_applicatorFinished);
     }
-    else
+    dbgPlugins << ppVar(m_applicatorFinished);
+}
+
+float KisGmicApplicator::getProgress() const
+{
+    if (m_progress)
     {
-        dbgPlugins << ppVar(m_applicatorFinished);
+        return *m_progress;
     }
+
+    return -1.0f;
 }

@@ -36,7 +36,6 @@
 #include <QFile>
 #include <QApplication>
 
-#include <kmessagebox.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
 
@@ -76,7 +75,6 @@ int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
         return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
     }
 
-//    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
     return -1;
 
 }

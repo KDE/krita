@@ -21,6 +21,8 @@
 #include "tool_transform_args.h"
 #include "kis_transform_utils.h"
 
+#include <QMessageBox>
+
 #include <config-gsl.h>
 
 #ifdef HAVE_GSL
@@ -327,22 +329,18 @@ namespace GSL
 
 #else /* HAVE_GSL */
 
-#include <kmessagebox.h>
-
 namespace GSL
 {
 
     void warnNoGSL()
     {
-        KMessageBox::information(0,
-                                 "Sorry, Krita was build without the support "
-                                 "of GNU Scientific Library, so you cannot scale "
-                                 "the selection with handles. Please compile "
-                                 "Krita with GNU Scientific Library support, or use "
-                                 "options widget for editing scale values manually.",
-                                 "No GSL support",
-                                 "messagebox_noGSLSupportWasBuiltIn",
-                                 KMessageBox::Dangerous);
+        QMessageBox::warning(0,
+                             i18nc("@title:window", "Krita"),
+                             i18n("Sorry, Krita was build without the support "
+                                  "of GNU Scientific Library, so you cannot scale "
+                                  "the selection with handles. Please compile "
+                                  "Krita with GNU Scientific Library support, or use "
+                                  "options widget for editing scale values manually."));
     }
 
     ScaleResult2D calculateScale2D(const ToolTransformArgs &args,

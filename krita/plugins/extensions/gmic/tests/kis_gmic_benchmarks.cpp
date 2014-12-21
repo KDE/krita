@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_gmic_benchmarks.h"
-#include "kis_gmic_simple_convertor.h"
+
+
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -29,6 +29,8 @@
 #include <QImage>
 #include <QColor>
 
+#include "kis_gmic_benchmarks.h"
+#include "kis_gmic_simple_convertor.h"
 // #define SAVE_OUTPUT
 
 void KisGmicBenchmarks::initTestCase()

@@ -23,7 +23,7 @@
 #include <QFileInfo>
 #include <QApplication>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <kio/netaccess.h>
 
@@ -340,7 +340,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         channelorder[1] = KoBgrU16Traits::green_pos;
         channelorder[2] = KoBgrU16Traits::blue_pos;
     } else {
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -351,7 +351,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
 //     } else if (layer->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
 //         bitdepth = 16;
     } else {
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;
     }
 

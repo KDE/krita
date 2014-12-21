@@ -65,7 +65,6 @@ KisToolLine::KisToolLine(KoCanvasBase * canvas)
       m_longStrokeUpdateCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
 {
     setObjectName("tool_line");
-    currentImage() = 0;
 
     setSupportOutline(true);
 

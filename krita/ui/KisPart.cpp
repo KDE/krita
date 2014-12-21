@@ -48,7 +48,7 @@
 #include <knotification.h>
 #include <kdialog.h>
 #include <kdesktopfile.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -551,9 +551,9 @@ void KisPart::startCustomDocument(KisDocument* doc)
 
 void KisPart::showErrorAndDie()
 {
-    KMessageBox::error(0,
-                       m_errorMessage,
-                       i18n("Installation error"));
+    QMessageBox::critical(0,
+                          i18n("Installation error"),
+                          m_errorMessage);
     if (m_dieOnError) {
         exit(10);
     }

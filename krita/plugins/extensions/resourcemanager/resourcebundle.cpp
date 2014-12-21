@@ -608,7 +608,9 @@ bool ResourceBundle::install()
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
-                if (!res->loadFromDevice(resourceStore->device())) {
+                QByteArray data = resourceStore->device()->readAll();
+                QBuffer buffer(&data);
+                if (!res->loadFromDevice(&buffer)) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }

@@ -19,6 +19,7 @@
 #include <Parameter.h>
 #include <QString>
 #include <QStringList>
+#include <QDir>
 
 #include <kis_debug.h>
 
@@ -360,9 +361,6 @@ void BoolParameter::initValue(bool value)
 
 void BoolParameter::parseValues(const QString& typeDefinition)
 {
-    QString currentType = PARAMETER_NAMES[m_type];
-    Q_ASSERT(typeDefinition.startsWith(currentType));
-
     QStringList values = getValues(typeDefinition);
 
     QString boolValue = values.at(0);
@@ -580,7 +578,7 @@ void TextParameter::reset()
     == FolderParameter ==
  ***************************/
 
-FolderParameter::FolderParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+FolderParameter::FolderParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview),m_folderPath(QDir::homePath())
 {
     m_type = FOLDER_P;
 }
@@ -591,7 +589,11 @@ void FolderParameter::parseValues(const QString& typeDefinition)
     QStringList values = getValues(typeDefinition);
     if (!values.isEmpty())
     {
-        m_folderPath = values.at(0);
+        QString folderPath = stripQuotes(values.at(0));
+        if (!folderPath.isEmpty())
+        {
+            m_folderPath = folderPath;
+        }
     }
     m_defaultFolderPath = m_folderPath;
 }
@@ -599,6 +601,10 @@ void FolderParameter::parseValues(const QString& typeDefinition)
 
 QString FolderParameter::value() const
 {
+    if (m_folderPath.isEmpty())
+    {
+        return QDir::homePath();
+    }
     return m_folderPath;
 }
 
@@ -620,7 +626,7 @@ void FolderParameter::reset()
     == FileParameter ==
  ***************************/
 
-FileParameter::FileParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+FileParameter::FileParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview),m_filePath(QDir::homePath())
 {
     m_type = FILE_P;
 }
@@ -630,14 +636,22 @@ void FileParameter::parseValues(const QString& typeDefinition)
     QStringList values = getValues(typeDefinition);
     if (!values.isEmpty())
     {
-        m_filePath = values.at(0);
+        QString filePath = stripQuotes(values.at(0));
+        if (!filePath.isEmpty())
+        {
+            m_filePath = filePath;
+        }
     }
     m_defaultFilePath = m_filePath;
-
 }
 
 QString FileParameter::value() const
 {
+    if (m_filePath.isEmpty())
+    {
+        return QDir::homePath();
+    }
+
     return m_filePath;
 }
 
@@ -652,4 +666,107 @@ QString FileParameter::toString()
 void FileParameter::reset()
 {
     m_filePath = m_defaultFilePath;
+}
+
+/**************************
+    == ConstParameter ==
+ ***************************/
+
+ConstParameter::ConstParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+{
+    m_type = CONST_P;
+}
+
+void ConstParameter::parseValues(const QString& typeDefinition)
+{
+   // "const(0,0,100,100,-1,0,0,100,100,-1,0,0,100,100,-1,0,0,100,100,-1,0,0,100,100)"
+
+    QStringList values = getValues(typeDefinition);
+    if (values.isEmpty())
+    {
+        dbgPlugins << "Wrong gmic_def" << typeDefinition << " not parsed correctly";
+        return;
+    }
+
+    m_values = values;
+
+}
+
+QString ConstParameter::toString()
+{
+    QString result;
+    result.append(m_name + ";");
+    result.append(m_values.join(",") + ";");
+    return result;
+}
+
+QString ConstParameter::value() const
+{
+    // "0,0,100,100,..."
+    return m_values.join(",");
+}
+
+/**************************
+    == ConstParameter ==
+ ***************************/
+
+ButtonParameter::ButtonParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview), m_value(false),m_defaultValue(false)
+{
+    m_type = BUTTON_P;
+}
+
+void ButtonParameter::parseValues(const QString& typeDefinition)
+{
+    QStringList values = getValues(typeDefinition);
+
+    QString boolValue = values.at(0);
+    if (boolValue == "0")
+    {
+        initValue(false);
+    }
+    else if (boolValue == "1")
+    {
+        initValue(true);
+    } else
+    {
+        dbgPlugins << "Invalid bool value, assuming 1 " << m_name << ":" << boolValue;
+        initValue(true);
+    }
+}
+
+void ButtonParameter::reset()
+{
+    m_value = m_defaultValue;
+}
+
+void ButtonParameter::setValue(const QString& value)
+{
+    if (value == "0")
+    {
+        m_value = false;
+    }
+    else if (value == "1")
+    {
+        m_value = true;
+    }
+    Q_ASSERT_X(false, "setValue", "Invalid value set");
+}
+
+QString ButtonParameter::value() const
+{
+    if (m_value)
+    {
+        return QString("1");
+    }
+    return QString("0");
+}
+
+QString ButtonParameter::toString()
+{
+    return QString("%1;%2;").arg(m_name).arg(m_value);;
+}
+
+void ButtonParameter::initValue(bool value)
+{
+    m_defaultValue = m_value = value;
 }

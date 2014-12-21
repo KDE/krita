@@ -52,7 +52,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmenu.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <KoServiceLocator.h>
 #include <kservice.h>
 #include <kstandardaction.h>
@@ -353,7 +353,7 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
 
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     if (rserver->resources().isEmpty()) {
-        KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
+        QMessageBox::critical(mainWindow(), i18nc("@title:window", "Critical Error"), i18n("Krita cannot find any brush presets and will close now. Please check your installation."));
         exit(0);
     }
 
@@ -970,7 +970,7 @@ void KisViewManager::slotSaveIncremental()
     } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
 
     if (letter == "{") {
-        KMessageBox::error(mainWindow(), "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental version");
+        QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental version"), i18n("Alternative names exhausted, try manually saving with a higher number"));
         return;
     }
     document()->setSaveInBatchMode(true);
@@ -1041,7 +1041,7 @@ void KisViewManager::slotSaveIncrementalBackup()
         } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
 
         if (letter == "{") {
-            KMessageBox::error(mainWindow(), "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
+            QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental backup"), i18n("Alternative names exhausted, try manually saving with a higher number"));
             return;
         }
         QFile::copy(fileName, backupFileName);
@@ -1144,18 +1144,16 @@ void KisViewManager::showJustTheCanvas(bool toggled)
                 cfg.hideScrollbarsFullscreen()) {
 
             int result =
-                    KMessageBox::warningYesNo(0,
-                                              "Intel(R) HD Graphics video adapters "
+                    QMessageBox::warning(0,
+                                         i18nc("@title:window", "Failing video adapter"),
+                                         i18n("Intel(R) HD Graphics video adapters "
                                               "are known to have problems with running "
                                               "Krita in pure canvas only mode. At least "
                                               "one UI control must be shown to "
-                                              "workaround it.\n\nShow the scroll bars?",
-                                              "Failing video adapter",
-                                              KStandardGuiItem::yes(),
-                                              KStandardGuiItem::no(),
-                                              "messagebox_WorkaroundIntelVideoOnWindows");
+                                              "workaround it.\n\nShow the scroll bars?"),
+                                         , QMessageBox::Yes | QMessageBox::No, QMessageBox::No));
 
-            if (result == KMessageBox::Yes) {
+            if (result == QMessageBox::Yes) {
                 cfg.setHideScrollbarsFullscreen(false);
             }
         }

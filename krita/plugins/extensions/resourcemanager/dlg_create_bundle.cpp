@@ -166,7 +166,7 @@ void DlgCreateBundle::accept()
 
     if (name.isEmpty()) {
         m_ui->editBundleName->setStyleSheet(QString(" border: 1px solid red"));
-        QMessageBox::warning(this, "Krita", i18n("The resource bundle name cannot be empty."));
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The resource bundle name cannot be empty."));
         return;
     }
     else {
@@ -174,7 +174,7 @@ void DlgCreateBundle::accept()
 
         if (fileInfo.exists()) {
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
-            QMessageBox::warning(this, "Krita", i18n("A bundle with this name already exists."));
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("A bundle with this name already exists."));
             return;
         }
         else {

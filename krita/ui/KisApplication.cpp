@@ -35,7 +35,7 @@
 #include <klocale.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -180,7 +180,7 @@ bool KisApplication::initHack()
     options.add("export-filename <filename>", ki18n("Filename for export/export-pdf"));
     options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
     options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
-    KCmdLineArgs::addCmdLineOptions(options, ki18n("Krita"), "krita", "kde");
+    KCmdLineArgs::addCmdLineOptions(options, ki18nc("@title:window", "Krita"), "krita", "kde");
     return true;
 }
 
@@ -216,11 +216,11 @@ bool KisApplication::start()
 #if defined(Q_OS_WIN)  || defined (Q_OS_MACX)
 #ifdef ENV32BIT
     if (isWow64()) {
-        KMessageBox::information(0,
+        QMessageBox::information(0,
+
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
                                       "Please download and install the x64 build instead."),
-                                 qApp->applicationName(),
                                  "calligra_32_on_64_warning");
 
     }
@@ -309,7 +309,7 @@ bool KisApplication::start()
     KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(d->nativeMimeType);
     if (entry.isEmpty()) {
 
-        QMessageBox::critical(0, i18n("%1: Critical Error", applicationName()), i18n("Essential application components could not be found.\n"
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Critical Error"), i18n("Essential application components could not be found.\n"
                                                                                     "This might be an installation issue.\n"
                                                                                     "Try restarting or reinstalling."));
         return false;
@@ -386,12 +386,12 @@ bool KisApplication::start()
                         paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/" + desktopName);
                     }
                     if (paths.isEmpty()) {
-                        KMessageBox::error(0, i18n("No template found for: %1", desktopName));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1"));
                         delete mainWindow;
                         mainWindow = 0;
                     }
                     else if (paths.count() > 1) {
-                        KMessageBox::error(0, i18n("Too many templates found for: %1", desktopName));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1"));
                         delete mainWindow;
                         mainWindow = 0;
                     }
@@ -421,7 +421,7 @@ bool KisApplication::start()
                         numberOfOpenDocuments++;
                     }
                     else {
-                        KMessageBox::error(0, i18n("Template %1 failed to load.", templateURL.prettyUrl()));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Template %1 failed to load.", templateURL.prettyUrl()));
 
                     }
                 }

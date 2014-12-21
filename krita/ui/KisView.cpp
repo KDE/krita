@@ -36,7 +36,7 @@
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 #include <kselectaction.h>
@@ -44,7 +44,7 @@
 #include <kdeprintdialog.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -804,24 +804,23 @@ bool KisView::queryClose()
         if (name.isEmpty())
             name = i18n("Untitled");
 
-        int res = KMessageBox::warningYesNoCancel(this,
-                                                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                                                  QString(),
-                                                  KStandardGuiItem::save(),
-                                                  KStandardGuiItem::discard());
+        int res = QMessageBox::warning(this,
+                                       i18nc("@title:window", "Krita"),
+                                       i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
         switch (res) {
-        case KMessageBox::Yes : {
+        case QMessageBox::Yes : {
             bool isNative = (document()->outputMimeType() == document()->nativeFormatMimeType());
             if (!viewManager()->mainWindow()->saveDocument(document(), !isNative))
                 return false;
             break;
         }
-        case KMessageBox::No :
+        case QMessageBox::No :
             document()->removeAutoSaveFiles();
             document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
-        default : // case KMessageBox::Cancel :
+        default : // case QMessageBox::Cancel :
             return false;
         }
     }

@@ -176,9 +176,21 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
         m_d->popupPalette->setParent(widget);
     }
 
-    if(m_d->canvasWidget!=0)
+    if(m_d->canvasWidget != 0)
+    {
         tmp->setDecorations(m_d->canvasWidget->decorations());
+
+        // Redundant check for the constructor case, see below
+        if(viewManager() != 0)
+            viewManager()->inputManager()->removeTrackedCanvas(this);
+    }
+
     m_d->canvasWidget = tmp;
+
+    // Either tmp was null or we are being called by KisCanvas2 constructor that is called by KisView
+    // constructor, so the view manager still doesn't exists.
+    if(m_d->canvasWidget != 0 && viewManager() != 0)
+        viewManager()->inputManager()->addTrackedCanvas(this);
 
     if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
         KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);

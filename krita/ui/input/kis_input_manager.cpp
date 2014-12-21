@@ -528,8 +528,9 @@ void KisInputManager::toggleTabletLogger()
     KisTabletDebugger::instance()->toggleDebugging();
 
     bool enabled = KisTabletDebugger::instance()->debugEnabled();
-    QMessageBox::information(0, "Krita", enabled ? "Tablet Event Logging Enabled" :
-                             "Tablet Event Logging Disabled");
+    QMessageBox::information(0, i18nc("@title:window", "Krita"), enabled ?
+                                 i18n("Tablet Event Logging Enabled") :
+                                 i18n("Tablet Event Logging Disabled"));
     if (enabled) {
         qDebug() << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
     }

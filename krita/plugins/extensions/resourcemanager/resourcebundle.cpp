@@ -809,3 +809,7 @@ void ResourceBundle::writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *w
         writer->endElement();
     }
 }
+void ResourceBundle::setInstalled(bool install)
+{
+    m_installed = install;
+}

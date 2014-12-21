@@ -270,7 +270,23 @@ public:
 
         return true;
     }
-
+    
+    /*Removes a given resource from the blacklist.
+     */
+    bool removeFromBlacklist(PointerType resource) {
+        if (m_blackListFileNames.contains(resource->filename())) {
+            m_blackListFileNames.removeAll(resource->filename());
+            writeBlackListFile();
+            }
+            else{
+                kWarning(30009)<<"Doesn't contain filename";
+                return false;
+            }
+        
+        
+        //then return true//
+        return true;
+    }
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(PointerType resource){
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
@@ -625,7 +641,7 @@ protected:
         doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
         root = doc.createElement("resourceFilesList");
         doc.appendChild(root);
-
+        
         foreach(QString filename, m_blackListFileNames) {
             QDomElement fileEl = doc.createElement("file");
             QDomElement nameEl = doc.createElement("name");
@@ -634,6 +650,8 @@ protected:
             fileEl.appendChild(nameEl);
             root.appendChild(fileEl);
         }
+        
+        
 
         QTextStream metastream(&f);
         metastream << doc.toByteArray();

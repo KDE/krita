@@ -98,6 +98,11 @@ public:
      * @return true if the bundle is installed, false otherwise.
      */
     bool isInstalled();
+    /**
+     * @brief setInstalled
+     * This allows you to set installed or uninstalled upon loading. This is used with blacklists. 
+     */
+    void setInstalled(bool install);
 
     void setThumbnail(QString);
 

@@ -27,6 +27,7 @@
 #include <QListWidgetItem>
 #include <QPainter>
 #include <QPixmap>
+#include <QMessageBox>
 
 #include <KoIcon.h>
 
@@ -70,6 +71,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
         ResourceBundle *bundle = new ResourceBundle(f);
         bundle->load();
         if (bundle->valid()) {
+            bundle->setInstalled(false);
             m_blacklistedBundles[f] = bundle;
         }
     }
@@ -93,9 +95,41 @@ void DlgBundleManager::accept()
         QListWidgetItem *item = m_ui->listActive->item(i);
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
         ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
-
-        if (bundle && !bundle->isInstalled()) {
-            bundle->install();
+        QMessageBox bundleFeedback;
+        
+        if (!bundle) {
+            // Get it from the blacklisted bundles
+            foreach (ResourceBundle *b2, m_blacklistedBundles.values()) {
+                if (b2->md5() == ba) {
+                    bundle = b2;
+                    break;
+                }
+            }
+        }
+        
+        if (bundle) {
+            if(!bundle->isInstalled()){
+                bundle->install();
+                //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
+                if(!bundleServer->addResource(bundle, false, false)){
+                
+                 bundleFeedback.setText("Couldn't add bundle to resource server");
+                 bundleFeedback.exec();;
+                 }
+                if(!bundleServer->removeFromBlacklist(bundle)){
+                 bundleFeedback.setText("Couldn't remove bundle from blacklist");
+                 bundleFeedback.exec();;
+                }
+            }
+            else {
+            bundleServer->removeFromBlacklist(bundle);
+            //let's asume that bundles who exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
+            }
+        }
+        else{
+        bundleFeedback.setText("Bundle doesn't exist!");
+        bundleFeedback.exec();;
+        
         }
     }
 

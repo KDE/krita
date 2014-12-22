@@ -1081,7 +1081,9 @@ void KisNodeManager::slotSplitAlphaIntoMask()
 
     KisPaintDeviceSP srcDevice = node->paintDevice();
     const KoColorSpace *srcCS = srcDevice->colorSpace();
-    const QRect processRect = srcDevice->exactBounds();
+    const QRect processRect =
+        srcDevice->exactBounds() |
+        srcDevice->defaultBounds()->bounds();
 
     KisPaintDeviceSP selectionDevice =
         new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
@@ -1138,7 +1140,9 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
     KIS_ASSERT_RECOVER_RETURN(selectionDevice->colorSpace()->pixelSize() == 1);
 
     const QRect processRect =
-        selectionDevice->exactBounds() | dstDevice->exactBounds();
+        selectionDevice->exactBounds() |
+        dstDevice->exactBounds() |
+        selectionDevice->defaultBounds()->bounds();
 
     QScopedPointer<KisTransaction> transaction;
 
@@ -1163,7 +1167,7 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
         commandsAdapter->endMacro();
     } else {
         KisImageWSP image = view->image();
-        QRect saveRect = image->bounds() | dstDevice->exactBounds();
+        QRect saveRect = image->bounds();
 
         saveDeviceAsImage(dstDevice, parentNode->name(),
                           saveRect,

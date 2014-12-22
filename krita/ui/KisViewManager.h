@@ -175,6 +175,8 @@ public:  // Krita specific interfaces
 
     KisDocument* document() const;
 
+    int viewCount() const;
+
 public:
 
     KisGridManager * gridManager() const;

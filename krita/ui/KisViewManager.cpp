@@ -286,6 +286,9 @@ public:
 KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionCollection)
     : d(new KisViewManagerPrivate())
 {
+
+    d->actionManager = new KisActionManager(this);
+
     d->actionCollection = _actionCollection;
     d->mainWindow = dynamic_cast<QMainWindow*>(parent);
 
@@ -488,7 +491,8 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
     }
-    actionManager()->updateGUI();
+
+    d->actionManager->updateGUI();
 
     // Restore the last used brush preset
     if (first) {
@@ -759,8 +763,6 @@ void KisViewManager::createManagers()
     // XXX: When the currentlayer changes, call updateGUI on all
     // managers
 
-    d->actionManager = new KisActionManager(this);
-
     d->filterManager = new KisFilterManager(this);
     d->filterManager->setup(actionCollection(), actionManager());
 
@@ -852,6 +854,15 @@ KisDocument *KisViewManager::document() const
 {
     if (d->currentImageView && d->currentImageView->document()) {
         return d->currentImageView->document();
+    }
+    return 0;
+}
+
+int KisViewManager::viewCount() const
+{
+    KisMainWindow *mw  = qobject_cast<KisMainWindow*>(d->mainWindow);
+    if (mw) {
+        return mw->viewCount();
     }
     return 0;
 }

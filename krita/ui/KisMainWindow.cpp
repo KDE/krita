@@ -1378,6 +1378,11 @@ KoCanvasResourceManager *KisMainWindow::resourceManager() const
     return m_viewManager->resourceProvider()->resourceManager();
 }
 
+int KisMainWindow::viewCount() const
+{
+    return m_mdiArea->subWindowList().size();
+}
+
 void KisMainWindow::slotDocumentInfo()
 {
     if (!d->activeView->document())

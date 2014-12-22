@@ -155,6 +155,8 @@ public:
 
     KoCanvasResourceManager *resourceManager() const;
 
+    int viewCount() const;
+
 signals:
 
     /**

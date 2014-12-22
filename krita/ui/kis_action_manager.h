@@ -33,11 +33,15 @@ class KisOperationUIFactory;
 class KisOperation;
 class KisOperationConfiguration;
 
+/**
+ * @brief The KisActionManager class keeps track of (nearly) all actions in krita, and enables
+ * and disables the action depending on the state of the application.
+ */
 class KRITAUI_EXPORT KisActionManager
 {
 
 public:
-    KisActionManager(KisViewManager* view);
+    KisActionManager(KisViewManager* viewManager);
     virtual ~KisActionManager();
 
     void setView(QPointer<KisView> imageView);

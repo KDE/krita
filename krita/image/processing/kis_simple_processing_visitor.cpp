@@ -33,7 +33,6 @@
 #include "kis_do_something_command.h"
 
 
-
 KisSimpleProcessingVisitor::~KisSimpleProcessingVisitor()
 {
 }

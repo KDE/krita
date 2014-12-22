@@ -217,11 +217,10 @@ bool KisApplication::start()
 #ifdef ENV32BIT
     if (isWow64()) {
         QMessageBox::information(0,
-
+                                 i18nc("@title:window", "Krita: Critical Error"),
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
-                                      "Please download and install the x64 build instead."),
-                                 "calligra_32_on_64_warning");
+                                      "Please download and install the x64 build instead."));
 
     }
 #endif
@@ -288,7 +287,7 @@ bool KisApplication::start()
 
     // only show the mainWindow when no command-line mode option is passed
     const bool showmainWindow = (   !(exportAsPdf || exportAs)
-                                 && roundtripFileName.isEmpty());
+                                    && roundtripFileName.isEmpty());
 
     if (d->splashScreen && showmainWindow) {
         d->splashScreen->show();
@@ -301,17 +300,17 @@ bool KisApplication::start()
 
 
     const bool batchRun = (   showmainWindow
-                           && !print
-                           && !exportAs
-                           && !profileFileName.isEmpty());
+                              && !print
+                              && !exportAs
+                              && !profileFileName.isEmpty());
 
     // Figure out _which_ application we actually are
     KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(d->nativeMimeType);
     if (entry.isEmpty()) {
 
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Critical Error"), i18n("Essential application components could not be found.\n"
-                                                                                    "This might be an installation issue.\n"
-                                                                                    "Try restarting or reinstalling."));
+                                                                                       "This might be an installation issue.\n"
+                                                                                       "Try restarting or reinstalling."));
         return false;
     }
 

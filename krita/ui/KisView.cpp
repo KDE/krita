@@ -300,7 +300,6 @@ void KisView::setViewManager(KisViewManager *view)
     KoToolManager::instance()->addController(d->canvasController);
     KoToolManager::instance()->registerTools(d->actionCollection, d->canvasController);
     dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(d->canvas);
-    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
     if (s_firstView) {
         // Restore the tool shortcuts from the config file
@@ -351,6 +350,8 @@ void KisView::setViewManager(KisViewManager *view)
     connect(d->viewManager->statusBar()->progress(), SIGNAL(sigCancellationRequested()), image(), SLOT(requestStrokeCancellation()));
 
     d->viewManager->updateGUI();
+
+    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 }
 
 KisViewManager* KisView::viewManager() const
@@ -807,7 +808,7 @@ bool KisView::queryClose()
         int res = QMessageBox::warning(this,
                                        i18nc("@title:window", "Krita"),
                                        i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                                       QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
         switch (res) {
         case QMessageBox::Yes : {

@@ -1210,7 +1210,7 @@ bool KisDocument::openUrl(const KUrl & _url)
             int res = QMessageBox::warning(0,
                                            i18nc("@title:window", "Krita"),
                                            i18n("An autosaved file exists for this document.\nDo you want to open it instead?"),
-                                           QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                                           QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
             switch (res) {
             case QMessageBox::Yes :
                 url.setPath(asf);
@@ -1809,7 +1809,7 @@ int KisDocument::queryCloseDia()
     int res = QMessageBox::warning(0,
                                    i18nc("@title:window", "Krita"),
                                    i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
     switch (res) {
     case QMessageBox::Yes :
@@ -2398,7 +2398,7 @@ bool KisDocument::queryClose()
                                    i18nc("@title:window", "Close Document"),
                                    i18n("The document \"%1\" has been modified.\n"
                                         "Do you want to save your changes or discard them?" ,  docName),
-                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
+                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes );
 
     bool abortClose=false;
     bool handled=false;

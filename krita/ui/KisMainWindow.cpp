@@ -1278,7 +1278,7 @@ bool KisMainWindow::queryClose()
         int res = QMessageBox::warning(this,
                                        i18nc("@title:window", "Krita"),
                                        i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                                       QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
         switch (res) {
         case QMessageBox::Yes : {

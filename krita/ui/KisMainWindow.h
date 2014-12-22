@@ -60,17 +60,16 @@ class KisView;
 class KisDockerManager;
 
 /**
- * @brief Main window for a Calligra application
+ * @brief Main window for Krita
  *
  * This class is used to represent a main window
- * of a Calligra component. Each main window contains
+ * of a Krita. Each main window contains
  * a menubar and some toolbars.
- *
- * @note This class does NOT need to be subclassed in your application.
  */
 class KRITAUI_EXPORT KisMainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
+
 public:
 
     /**
@@ -113,8 +112,6 @@ public:
      */
     KisView *activeView() const;
 
-public:
-
     /**
      * Sets the maximum number of recent documents entries.
      */
@@ -133,20 +130,6 @@ public:
      */
     bool openDocument(const KUrl & url);
 
-private:
-
-    /**
-     * Reloads the recent documents list.
-     */
-    void reloadRecentFileList();
-
-    /**
-     * Updates the window caption based on the document info and path.
-     */
-    void updateCaption(const QString & caption, bool mod);
-    void updateReloadFileAction(KisDocument *doc);
-
-public:
     void setReadWrite(bool readwrite);
 
     /**
@@ -233,35 +216,72 @@ public slots:
      */
     void slotPreferences();
 
-public slots:
     /**
      *  Saves the current document with the current name.
      */
     void slotFileSave();
+
+    KisPrintJob* exportToPdf(const QString &pdfFileName = QString());
+
+    void slotProgress(int value);
+
+    /**
+     * Saves the document, asking for a filename if necessary.
+     *
+     * @param saveas if set to TRUE the user is always prompted for a filename
+     *
+     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
+     *
+     * @param specialOutputFlag set to enums defined in KisDocument if save to special output format
+     *
+     * @return TRUE on success, false on error or cancel
+     *         (don't display anything in this case, the error dialog box is also implemented here
+     *         but restore the original URL in slotFileSaveAs)
+     */
+    bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
+
+    /**
+     * Update the option widgets to the argument ones, removing the currently set widgets.
+     */
+    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
+
+
 private slots:
     /**
-     *  Saves the current document with a new name.
+     * Save the list of recent files.
      */
-    void slotFileSaveAs();
-public slots:
+    void saveRecentFiles();
+
+    void slotLoadCompleted();
+    void slotLoadCanceled(const QString &);
+    void slotSaveCompleted();
+    void slotSaveCanceled(const QString &);
+    void forceDockTabFonts();
+
+
+    /**
+     * @internal
+     */
+    void slotDocumentTitleModified(const QString &caption, bool mod);
+
     /**
      *  Prints the actual document.
      */
     void slotFilePrint();
 
-private slots:
+    /**
+     *  Saves the current document with a new name.
+     */
+    void slotFileSaveAs();
+
     void slotFilePrintPreview();
-public slots:
-    KisPrintJob* exportToPdf(const QString &pdfFileName = QString());
-private slots:
+
     KisPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.
      */
     void slotDocumentInfo();
-
-protected slots:
 
     /**
      * Closes all open documents.
@@ -273,7 +293,6 @@ protected slots:
      */
     virtual void showAboutApplication();
 
-private slots:
     /**
      *  Closes the mainwindow.
      */
@@ -329,39 +348,10 @@ private slots:
     void slotEncryptDocument();
     void slotUncompressToDir();
 
-
-public slots:
-
-    void slotProgress(int value);
-
-private slots:
     /**
      * Hide the dockers
      */
     void toggleDockersVisibility(bool visible);
-
-public slots:
-    /**
-     * Saves the document, asking for a filename if necessary.
-     *
-     * @param saveas if set to TRUE the user is always prompted for a filename
-     *
-     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
-     *
-     * @param specialOutputFlag set to enums defined in KisDocument if save to special output format
-     *
-     * @return TRUE on success, false on error or cancel
-     *         (don't display anything in this case, the error dialog box is also implemented here
-     *         but restore the original URL in slotFileSaveAs)
-     */
-    bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
-
-    /**
-     * Update the option widgets to the argument ones, removing the currently set widgets.
-     */
-    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
-
-private slots:
 
     void undo();
     void redo();
@@ -375,17 +365,6 @@ private slots:
     void closeAllWindows();
 
 
-private:
-
-    /**
-     * This setting indicates who is calling chooseNewDocument.
-     * Usually the app will want to
-     * - show the template dialog with 'everything' if InitDocAppStarting, InitDocFileClose or InitDocEmbedded
-     * - show the template dialog with 'templates only' if InitDocFileNew
-     * - create an empty document with default settings if InitDocEmpty
-     */
-    enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
-
 protected:
 
     void closeEvent(QCloseEvent * e);
@@ -398,8 +377,21 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent * event);
     virtual void dropEvent(QDropEvent * event);
 
+    void setToolbarList(QList<QAction*> toolbarList);
+
 private:
+
     friend class KisApplication;
+
+    /**
+     * This setting indicates who is calling chooseNewDocument.
+     * Usually the app will want to
+     * - show the template dialog with 'everything' if InitDocAppStarting, InitDocFileClose or InitDocEmbedded
+     * - show the template dialog with 'templates only' if InitDocFileNew
+     * - create an empty document with default settings if InitDocEmpty
+     */
+    enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
+
     /**
      * Ask user about saving changes to the document upon exit.
      */
@@ -429,41 +421,24 @@ private:
 
     KRecentFilesAction *recentAction() const;
 
-private slots:
     /**
-     * Save the list of recent files.
+     * Reloads the recent documents list.
      */
-    void saveRecentFiles();
-
-    void slotLoadCompleted();
-    void slotLoadCanceled(const QString &);
-    void slotSaveCompleted();
-    void slotSaveCanceled(const QString &);
-    void forceDockTabFonts();
-
-// ---------------------  PartManager
-protected:
-
-    void setToolbarList(QList<QAction*> toolbarList);
-
-private slots:
+    void reloadRecentFileList();
 
     /**
-     * @internal
+     * Updates the window caption based on the document info and path.
      */
-    void slotDocumentTitleModified(const QString &caption, bool mod);
-
-// ---------------------  PartManager
-
-private:
+    void updateCaption(const QString & caption, bool mod);
+    void updateReloadFileAction(KisDocument *doc);
 
     void saveWindowSettings();
+
+    QPointer<KisView>activeKisView();
 
 private:
 
     KisMainWindowPrivate * const d;
-
-    QPointer<KisView>activeKisView();
 
     bool m_constructing;
 

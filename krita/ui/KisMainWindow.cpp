@@ -118,7 +118,6 @@
 #include "kis_config_notifier.h"
 #include "dialogs/kis_about_application.h"
 
-
 #include "thememanager.h"
 
 #include "calligraversion.h"
@@ -143,84 +142,62 @@ public:
     }
 };
 
-class KisMainWindowPrivate
+class KisMainWindow::Private
 {
 public:
-    KisMainWindowPrivate(KisMainWindow *w)
+    Private(KisMainWindow *parent)
+        : viewManager(0)
+        , firstTime(true)
+        , windowSizeDirty(false)
+        , readOnly(false)
+        , isImporting(false)
+        , isExporting(false)
+        , noCleanup(false)
+        , showDocumentInfo(0)
+        , saveAction(0)
+        , saveActionAs(0)
+        , printAction(0)
+        , printActionPreview(0)
+        , exportPdf(0)
+        , closeFile(0)
+        , closeAll(0)
+        , reloadFile(0)
+        , importFile(0)
+        , exportFile(0)
+    #ifndef NDEBUG
+        ,  uncompressToDir(0)
+    #endif
+        , undo(0)
+        , redo(0)
+        , newWindow(0)
+        , close(0)
+        , mdiCascade(0)
+        , mdiTile(0)
+        , mdiNextWindow(0)
+        , mdiPreviousWindow(0)
+        , dockWidgetMenu(0)
+        , windowMenu(0)
+        , documentMenu(0)
+        , helpMenu(0)
+        , brushesAndStuff(0)
+        , toggleDockers(0)
+        , recentFiles(0)
+        , toolOptionsDocker(0)
+        , deferredClosingEvent(0)
+        , themeManager(0)
+        , mdiArea(new QMdiArea(parent))
+        , activeSubWindow(0)
+        , windowMapper(0)
+        , documentMapper(0)
     {
-        parent = w;
-        activeView = 0;
-        firstTime = true;
-        progress = 0;
-        showDocumentInfo = 0;
-        saveAction = 0;
-        saveActionAs = 0;
-        printAction = 0;
-        printActionPreview = 0;
-        sendFileAction = 0;
-        exportPdf = 0;
-        closeFile = 0;
-        closeAll = 0;
-        reloadFile = 0;
-        importFile = 0;
-        exportFile = 0;
-        encryptDocument = 0;
-#ifndef NDEBUG
-        uncompressToDir = 0;
-#endif
-        isImporting = false;
-        isExporting = false;
-        windowSizeDirty = false;
-        lastExportSpecialOutputFlag = 0;
-        readOnly = false;
-        dockWidgetMenu = 0;
-        deferredClosingEvent = 0;
-        themeManager = 0;
-        m_helpMenu = 0;
-        m_activeWidget = 0;
-
-        noCleanup = false;
-
-        undo = 0;
-        redo = 0;
-
-        toolOptionsDocker = 0;
     }
 
-    ~KisMainWindowPrivate() {
+    ~Private() {
         qDeleteAll(toolbarList);
     }
 
-    void applyDefaultSettings(QPrinter &printer) {
-
-        if (!activeView) return;
-
-        QString title = activeView->document()->documentInfo()->aboutInfo("title");
-        if (title.isEmpty()) {
-            title = activeView->document()->url().fileName();
-            // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
-            KMimeType::Ptr mime = KMimeType::mimeType(activeView->document()->outputMimeType());
-            if (mime) {
-                QString extension = mime->property("X-KDE-NativeExtension").toString();
-
-                if (title.endsWith(extension))
-                    title.chop(extension.length());
-            }
-        }
-
-        if (title.isEmpty()) {
-            // #139905
-            title = i18n("%1 unsaved document (%2)", KisFactory::aboutData()->programName(),
-                         KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
-        }
-        printer.setDocName(title);
-    }
-
-    KisMainWindow *parent;
-
+    KisViewManager *viewManager;
     QPointer<KisView> activeView;
-
-    QWidget *m_activeWidget;
 
     QPointer<QProgressBar> progress;
     QMutex progressMutex;
@@ -230,63 +207,67 @@ public:
     bool firstTime;
     bool windowSizeDirty;
     bool readOnly;
+    bool isImporting;
+    bool isExporting;
+    bool noCleanup;
 
     KAction *showDocumentInfo;
     KAction *saveAction;
     KAction *saveActionAs;
     KAction *printAction;
     KAction *printActionPreview;
-    KAction *sendFileAction;
     KAction *exportPdf;
     KAction *closeFile;
     KAction *closeAll;
     KAction *reloadFile;
     KAction *importFile;
     KAction *exportFile;
-    KAction *encryptDocument;
 #ifndef NDEBUG
     KAction *uncompressToDir;
 #endif
-    KToggleAction *toggleDockers;
-    KRecentFilesAction *recent;
+    KAction *undo;
+    KAction *redo;
+    KAction *newWindow;
+    KAction *close;
+    KAction *mdiCascade;
+    KAction *mdiTile;
+    KAction *mdiNextWindow;
+    KAction *mdiPreviousWindow;
 
-    bool isImporting;
-    bool isExporting;
+    KActionMenu *dockWidgetMenu;
+    KActionMenu *windowMenu;
+    KActionMenu *documentMenu;
+
+    KHelpMenu *helpMenu;
+
+    KToolBar *brushesAndStuff;
+
+    KToggleAction *toggleDockers;
+    KRecentFilesAction *recentFiles;
 
     KUrl lastExportUrl;
-    QByteArray lastExportedFormat;
-    int lastExportSpecialOutputFlag;
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
-    KActionMenu *dockWidgetMenu;
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
     QList<QDockWidget *> dockWidgets;
-    QByteArray m_dockerStateBeforeHiding;
+    QByteArray dockerStateBeforeHiding;
+    KoToolDocker *toolOptionsDocker;
 
     QCloseEvent *deferredClosingEvent;
 
     Digikam::ThemeManager *themeManager;
 
-    KHelpMenu *m_helpMenu;
-
-    bool noCleanup;
-
-    KAction *undo;
-    KAction *redo;
-
-    KoToolDocker *toolOptionsDocker;
+    QMdiArea *mdiArea;
+    QMdiSubWindow *activeSubWindow;
+    QSignalMapper *windowMapper;
+    QSignalMapper *documentMapper;
 
 };
 
 KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
-    , d(new KisMainWindowPrivate(this))
-    , m_constructing(true)
-    , m_mdiArea(new QMdiArea(this))
-    , m_activeSubWindow(0)
-    , m_brushesAndStuff(0)
+    , d(new Private(this))
 {
-
     setAcceptDrops(true);
 
 #ifdef Q_OS_MAC
@@ -315,8 +296,8 @@ KisMainWindow::KisMainWindow()
 
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
-    d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
-    connect(d->recent, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
+    d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
+    connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
 
     d->saveAction = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
 
@@ -334,7 +315,6 @@ KisMainWindow::KisMainWindow()
     actionCollection()->addAction("file_export_pdf", d->exportPdf);
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
-    d->sendFileAction = actionCollection()->addAction(KStandardAction::Mail,  "file_send_file", this, SLOT(slotEmailFile()));
 
     actionCollection()->addAction(KStandardAction::Quit,  "file_quit", this, SLOT(slotFileQuit()));
 
@@ -342,7 +322,6 @@ KisMainWindow::KisMainWindow()
     d->closeAll->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
     actionCollection()->addAction("file_close_all", d->closeAll);
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
-
 
     d->reloadFile  = new KAction(i18n("Reload"), this);
     actionCollection()->addAction("file_reload_file", d->reloadFile);
@@ -355,10 +334,6 @@ KisMainWindow::KisMainWindow()
     d->exportFile  = new KAction(koIcon("document-export"), i18n("E&xport..."), this);
     actionCollection()->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
-
-    d->encryptDocument = new KAction(i18n("En&crypt Document"), this);
-    actionCollection()->addAction("file_encrypt_doc", d->encryptDocument);
-    connect(d->encryptDocument, SIGNAL(triggered(bool)), this, SLOT(slotEncryptDocument()));
 
 #ifndef NDEBUG
     d->uncompressToDir = new KAction(i18n("&Uncompress to Directory"), this);
@@ -384,10 +359,8 @@ KisMainWindow::KisMainWindow()
     d->saveAction->setEnabled(false);
     d->printAction->setEnabled(false);
     d->printActionPreview->setEnabled(false);
-    d->sendFileAction->setEnabled(false);
     d->exportPdf->setEnabled(false);
     //d->closeFile->setEnabled(false);
-    d->encryptDocument->setEnabled(false);
 #ifndef NDEBUG
     d->uncompressToDir->setEnabled(false);
 #endif
@@ -418,7 +391,7 @@ KisMainWindow::KisMainWindow()
 
     // Load list of recent files
     KSharedConfigPtr configPtr = KisFactory::componentData().config();
-    d->recent->loadEntries(configPtr->group("RecentFiles"));
+    d->recentFiles->loadEntries(configPtr->group("RecentFiles"));
 
 
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
@@ -468,62 +441,58 @@ KisMainWindow::KisMainWindow()
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
 
-    m_mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    d->mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    d->mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    m_mdiArea->setTabPosition(QTabWidget::North);
+    d->mdiArea->setTabPosition(QTabWidget::North);
 
 #if QT_VERSION >= 0x040800
-    m_mdiArea->setTabsClosable(true);
+    d->mdiArea->setTabsClosable(true);
 #endif /* QT_VERSION >= 0x040800 */
 
-    setCentralWidget(m_mdiArea);
-    m_mdiArea->show();
+    setCentralWidget(d->mdiArea);
+    d->mdiArea->show();
 
-    connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
+    connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
 
-    m_windowMapper = new QSignalMapper(this);
-    connect(m_windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
+    d->windowMapper = new QSignalMapper(this);
+    connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
 
-    m_documentMapper = new QSignalMapper(this);
-    connect(m_documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
+    d->documentMapper = new QSignalMapper(this);
+    connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
-    m_viewManager = new KisViewManager(this, actionCollection());
+    d->viewManager = new KisViewManager(this, actionCollection());
 
-    m_viewManager->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
+    d->viewManager->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
 
-    m_windowMenu = new KActionMenu(i18n("Window"), this);
-    m_viewManager->actionCollection()->addAction("window", m_windowMenu);
+    d->windowMenu = new KActionMenu(i18n("Window"), this);
+    d->viewManager->actionCollection()->addAction("window", d->windowMenu);
 
-    m_documentMenu = new KActionMenu(i18n("New View"), this);
+    d->documentMenu = new KActionMenu(i18n("New View"), this);
 
-    m_mdiCascade = new KAction(i18n("Cascade"), this);
-    m_viewManager->actionCollection()->addAction("windows_cascade", m_mdiCascade);
-    connect(m_mdiCascade, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
+    d->mdiCascade = new KAction(i18n("Cascade"), this);
+    d->viewManager->actionCollection()->addAction("windows_cascade", d->mdiCascade);
+    connect(d->mdiCascade, SIGNAL(triggered()), d->mdiArea, SLOT(cascadeSubWindows()));
 
-    m_mdiTile = new KAction(i18n("Tile"), this);
-    m_viewManager->actionCollection()->addAction("windows_tile", m_mdiTile);
-    connect(m_mdiTile, SIGNAL(triggered()), m_mdiArea, SLOT(tileSubWindows()));
+    d->mdiTile = new KAction(i18n("Tile"), this);
+    d->viewManager->actionCollection()->addAction("windows_tile", d->mdiTile);
+    connect(d->mdiTile, SIGNAL(triggered()), d->mdiArea, SLOT(tileSubWindows()));
 
-    m_mdiNextWindow = new KAction(i18n("Next"), this);
-    m_viewManager->actionCollection()->addAction("windows_next", m_mdiNextWindow);
-    connect(m_mdiNextWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activateNextSubWindow()));
+    d->mdiNextWindow = new KAction(i18n("Next"), this);
+    d->viewManager->actionCollection()->addAction("windows_next", d->mdiNextWindow);
+    connect(d->mdiNextWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activateNextSubWindow()));
 
-    m_mdiPreviousWindow = new KAction(i18n("Previous"), this);
-    m_viewManager->actionCollection()->addAction("windows_previous", m_mdiPreviousWindow);
-    connect(m_mdiPreviousWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
+    d->mdiPreviousWindow = new KAction(i18n("Previous"), this);
+    d->viewManager->actionCollection()->addAction("windows_previous", d->mdiPreviousWindow);
+    connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
-    m_newWindow= new KAction(koIcon("window-new"), i18n("&New Window"), this);
-    actionCollection()->addAction("view_newwindow", m_newWindow);
-    connect(m_newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
+    d->newWindow = new KAction(koIcon("window-new"), i18n("&New Window"), this);
+    actionCollection()->addAction("view_newwindow", d->newWindow);
+    connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
-    m_close = new KAction(i18n("Close"), this);
-    connect(m_close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
-    actionCollection()->addAction("file_close", m_close);
-
-    m_closeAll = new KAction(i18n("Close All"), this);
-    connect(m_closeAll, SIGNAL(triggered()), SLOT(closeAllWindows()));
-    actionCollection()->addAction("file_close_all", m_closeAll);
+    d->close = new KAction(i18n("Close"), this);
+    connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
+    actionCollection()->addAction("file_close", d->close);
 
     setAutoSaveSettings(KisFactory::componentName(), false);
 
@@ -539,13 +508,11 @@ KisMainWindow::KisMainWindow()
     connect(koApp, SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(koApp, SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
 
-    m_constructing = false;
-
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
 
-    if (isHelpMenuEnabled() && !d->m_helpMenu) {
-        d->m_helpMenu = new KHelpMenu( this, KisFactory::aboutData(), false, actionCollection() );
-        connect(d->m_helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
+    if (isHelpMenuEnabled() && !d->helpMenu) {
+        d->helpMenu = new KHelpMenu( this, KisFactory::aboutData(), false, actionCollection() );
+        connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 
     QString f = xmlFile();
@@ -560,8 +527,8 @@ KisMainWindow::KisMainWindow()
 
         if (toolBar) {
             if (toolBar->objectName() == "BrushesAndStuff") {
-                m_brushesAndStuff = toolBar;
-                m_brushesAndStuff->setEnabled(false);
+                d->brushesAndStuff = toolBar;
+                d->brushesAndStuff->setEnabled(false);
             }
 
             KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
@@ -614,9 +581,9 @@ KisMainWindow::~KisMainWindow()
     if (d->noCleanup)
         return;
 
+    delete d->viewManager;
     delete d;
 
-    delete m_viewManager;
 }
 
 void KisMainWindow::addView(KisView *view)
@@ -641,16 +608,14 @@ void KisMainWindow::addView(KisView *view)
     d->saveActionAs->setEnabled(viewHasDocument);
     d->importFile->setEnabled(viewHasDocument);
     d->exportFile->setEnabled(viewHasDocument);
-    d->encryptDocument->setEnabled(viewHasDocument);
-#ifndef NDEBUG
+    #ifndef NDEBUG
     d->uncompressToDir->setEnabled(viewHasDocument);
 #endif
     d->printAction->setEnabled(viewHasDocument);
     d->printActionPreview->setEnabled(viewHasDocument);
-    d->sendFileAction->setEnabled(viewHasDocument);
     d->exportPdf->setEnabled(viewHasDocument);
 
-    m_brushesAndStuff->setEnabled(viewHasDocument);
+    d->brushesAndStuff->setEnabled(viewHasDocument);
 
     //d->closeFile->setEnabled(viewHasDocument);
     //     statusBar()->setVisible(viewHasDocument);
@@ -669,17 +634,17 @@ void KisMainWindow::showView(KisView *imageView)
 {
     if (imageView && activeView() != imageView) {
         // XXX: find a better way to initialize this!
-        imageView->setViewManager(m_viewManager);
-        imageView->canvasBase()->setFavoriteResourceManager(m_viewManager->paintOpBox()->favoriteResourcesManager());
+        imageView->setViewManager(d->viewManager);
+        imageView->canvasBase()->setFavoriteResourceManager(d->viewManager->paintOpBox()->favoriteResourcesManager());
         imageView->slotLoadingFinished();
 
-        QMdiSubWindow *subwin = m_mdiArea->addSubWindow(imageView);
+        QMdiSubWindow *subwin = d->mdiArea->addSubWindow(imageView);
         KisConfig cfg;
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
 
-        if (m_mdiArea->subWindowList().size() == 1) {
+        if (d->mdiArea->subWindowList().size() == 1) {
             imageView->showMaximized();
         }
         else {
@@ -714,7 +679,7 @@ void KisMainWindow::slotPreferences()
 
         }
 
-        m_viewManager->showHideScrollbars();
+        d->viewManager->showHideScrollbars();
     }
 }
 
@@ -727,7 +692,7 @@ void KisMainWindow::setReadWrite(bool readwrite)
 {
     d->saveAction->setEnabled(readwrite);
     d->importFile->setEnabled(readwrite);
-    d->readOnly =  !readwrite;
+    d->readOnly = !readwrite;
     updateCaption();
 }
 
@@ -754,7 +719,7 @@ void KisMainWindow::addRecentURL(const KUrl& url)
             KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
         }
         if (ok) {
-            d->recent->addUrl(url);
+            d->recentFiles->addUrl(url);
         }
         saveRecentFiles();
 
@@ -765,7 +730,7 @@ void KisMainWindow::saveRecentFiles()
 {
     // Save list of recent files
     KSharedConfigPtr config = KisFactory::componentData().config();
-    d->recent->saveEntries(config->group("RecentFiles"));
+    d->recentFiles->saveEntries(config->group("RecentFiles"));
     config->sync();
 
     // Tell all windows to reload their list, after saving
@@ -777,12 +742,12 @@ void KisMainWindow::saveRecentFiles()
 void KisMainWindow::reloadRecentFileList()
 {
     KSharedConfigPtr config = KisFactory::componentData().config();
-    d->recent->loadEntries(config->group("RecentFiles"));
+    d->recentFiles->loadEntries(config->group("RecentFiles"));
 }
 
 void KisMainWindow::updateCaption()
 {
-    if (!m_mdiArea->activeSubWindow()) {
+    if (!d->mdiArea->activeSubWindow()) {
         updateCaption(QString(), false);
     }
     else {
@@ -834,7 +799,7 @@ bool KisMainWindow::openDocument(const KUrl & url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
-        d->recent->removeUrl(url); //remove the file from the recent-opened-file-list
+        d->recentFiles->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
         return false;
     }
@@ -1031,18 +996,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
                 qDebug() << "save to directory: " << newURL.url();
             }
-            else if (specialOutputFlag == KisDocument::SaveEncrypted) {
-                int dot = fileName.lastIndexOf('.');
-                qDebug() << dot;
-                QString ext = mime->mainExtension();
-                if (!ext.isEmpty()) {
-                    if (dot < 0) fileName += ext;
-                    else fileName = fileName.left(dot) + ext;
-                } else { // current filename extension wrong anyway
-                    if (dot > 0) fileName = fileName.left(dot);
-                }
-                newURL.setFileName(fileName);
-            }
         }
 
         if (bOk) {
@@ -1089,8 +1042,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 if (ret) {
                     // a few file dialog convenience things
                     d->lastExportUrl = newURL;
-                    d->lastExportedFormat = outputFormat;
-                    d->lastExportSpecialOutputFlag = specialOutputFlag;
                 }
 
                 // always restore output format
@@ -1149,7 +1100,7 @@ void KisMainWindow::redo()
 
 void KisMainWindow::closeEvent(QCloseEvent *e)
 {
-    m_mdiArea->closeAllSubWindows();
+    d->mdiArea->closeAllSubWindows();
 
     if(d->activeView && d->activeView->document() && d->activeView->document()->isLoading()) {
         e->setAccepted(false);
@@ -1158,8 +1109,8 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
     if (queryClose()) {
         d->deferredClosingEvent = e;
 
-        if (!d->m_dockerStateBeforeHiding.isEmpty()) {
-            restoreState(d->m_dockerStateBeforeHiding);
+        if (!d->dockerStateBeforeHiding.isEmpty()) {
+            restoreState(d->dockerStateBeforeHiding);
         }
         statusBar()->setVisible(true);
         menuBar()->setVisible(true);
@@ -1169,7 +1120,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
         if (d->noCleanup)
             return;
 
-        foreach(QMdiSubWindow *subwin, m_mdiArea->subWindowList()) {
+        foreach(QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
             KisView *view = dynamic_cast<KisView*>(subwin);
             if (view) {
                 KisPart::instance()->removeView(view);
@@ -1361,12 +1312,6 @@ void KisMainWindow::slotFileSaveAs()
         emit documentSaved();
 }
 
-void KisMainWindow::slotEncryptDocument()
-{
-    if (saveDocument(d->activeView->document(), false, false, KisDocument::SaveEncrypted))
-        emit documentSaved();
-}
-
 void KisMainWindow::slotUncompressToDir()
 {
     if (saveDocument(d->activeView->document(), true, false, KisDocument::SaveAsDirectoryStore))
@@ -1375,12 +1320,12 @@ void KisMainWindow::slotUncompressToDir()
 
 KoCanvasResourceManager *KisMainWindow::resourceManager() const
 {
-    return m_viewManager->resourceProvider()->resourceManager();
+    return d->viewManager->resourceProvider()->resourceManager();
 }
 
 int KisMainWindow::viewCount() const
 {
-    return m_mdiArea->subWindowList().size();
+    return d->mdiArea->subWindowList().size();
 }
 
 void KisMainWindow::slotDocumentInfo()
@@ -1409,11 +1354,12 @@ void KisMainWindow::slotDocumentInfo()
 
 void KisMainWindow::slotFileCloseAll()
 {
-    foreach(QMdiSubWindow *subwin, m_mdiArea->subWindowList()) {
+    foreach(QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         if (subwin) {
             subwin->close();
         }
     }
+    d->mdiArea->closeAllSubWindows();
     updateCaption();
 }
 
@@ -1437,7 +1383,7 @@ void KisMainWindow::slotFilePrint()
     KisPrintJob *printJob = activeView()->createPrintJob();
     if (printJob == 0)
         return;
-    d->applyDefaultSettings(printJob->printer());
+    applyDefaultSettings(printJob->printer());
     QPrintDialog *printDialog = activeView()->createPrintDialog( printJob, this );
     if (printDialog && printDialog->exec() == QDialog::Accepted) {
         printJob->printer().setPageMargins(0.0, 0.0, 0.0, 0.0, QPrinter::Point);
@@ -1531,7 +1477,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         printJob->setProperty("noprogressdialog", true);
     }
 
-    d->applyDefaultSettings(printJob->printer());
+    applyDefaultSettings(printJob->printer());
     // TODO for remote files we have to first save locally and then upload.
     printJob->printer().setOutputFileName(pdfFileName);
     printJob->printer().setDocName(pdfFileName);
@@ -1682,7 +1628,7 @@ void KisMainWindow::slotProgress(int value)
 
 void KisMainWindow::setMaxRecentItems(uint _number)
 {
-    d->recent->setMaxItems(_number);
+    d->recentFiles->setMaxItems(_number);
 }
 
 void KisMainWindow::slotEmailFile()
@@ -1927,7 +1873,7 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers()
 void KisMainWindow::toggleDockersVisibility(bool visible)
 {
     if (!visible) {
-        d->m_dockerStateBeforeHiding = saveState();
+        d->dockerStateBeforeHiding = saveState();
 
         foreach(QObject* widget, children()) {
             if (widget->inherits("QDockWidget")) {
@@ -1939,16 +1885,14 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
         }
     }
     else {
-        restoreState(d->m_dockerStateBeforeHiding);
+        restoreState(d->dockerStateBeforeHiding);
     }
 }
 
 KRecentFilesAction *KisMainWindow::recentAction() const
 {
-    return d->recent;
+    return d->recentFiles;
 }
-
-
 
 void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
 {
@@ -1967,22 +1911,22 @@ void KisMainWindow::subWindowActivated()
 {
     bool enabled = (activeKisView() != 0);
 
-    m_mdiCascade->setEnabled(enabled);
-    m_mdiNextWindow->setEnabled(enabled);
-    m_mdiPreviousWindow->setEnabled(enabled);
-    m_mdiTile->setEnabled(enabled);
-    m_close->setEnabled(enabled);
-    m_closeAll->setEnabled(enabled);
+    d->mdiCascade->setEnabled(enabled);
+    d->mdiNextWindow->setEnabled(enabled);
+    d->mdiPreviousWindow->setEnabled(enabled);
+    d->mdiTile->setEnabled(enabled);
+    d->close->setEnabled(enabled);
+    d->closeAll->setEnabled(enabled);
 
-    setActiveSubWindow(m_mdiArea->activeSubWindow());
+    setActiveSubWindow(d->mdiArea->activeSubWindow());
     foreach(QToolBar *tb, toolBars()) {
         if (tb->objectName() == "BrushesAndStuff") {
             tb->setEnabled(enabled);
         }
     }
 
-    if (m_brushesAndStuff) {
-        m_brushesAndStuff->setEnabled(enabled);
+    if (d->brushesAndStuff) {
+        d->brushesAndStuff->setEnabled(enabled);
     }
 
     updateCaption();
@@ -1990,38 +1934,38 @@ void KisMainWindow::subWindowActivated()
 
 void KisMainWindow::updateWindowMenu()
 {
-    KMenu *menu = m_windowMenu->menu();
+    KMenu *menu = d->windowMenu->menu();
     menu->clear();
 
-    menu->addAction(m_newWindow);
-    menu->addAction(m_documentMenu);
+    menu->addAction(d->newWindow);
+    menu->addAction(d->documentMenu);
 
-    KMenu *docMenu = m_documentMenu->menu();
+    KMenu *docMenu = d->documentMenu->menu();
     docMenu->clear();
 
     foreach (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
             QAction *action = docMenu->addAction(doc->url().prettyUrl());
             action->setIcon(qApp->windowIcon());
-            connect(action, SIGNAL(triggered()), m_documentMapper, SLOT(map()));
-            m_documentMapper->setMapping(action, doc);
+            connect(action, SIGNAL(triggered()), d->documentMapper, SLOT(map()));
+            d->documentMapper->setMapping(action, doc);
         }
     }
 
     menu->addSeparator();
-    menu->addAction(m_close);
-    menu->addAction(m_closeAll);
-    if (m_mdiArea->viewMode() == QMdiArea::SubWindowView) {
+    menu->addAction(d->close);
+    menu->addAction(d->closeAll);
+    if (d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
         menu->addSeparator();
-        menu->addAction(m_mdiTile);
-        menu->addAction(m_mdiCascade);
+        menu->addAction(d->mdiTile);
+        menu->addAction(d->mdiCascade);
     }
     menu->addSeparator();
-    menu->addAction(m_mdiNextWindow);
-    menu->addAction(m_mdiPreviousWindow);
+    menu->addAction(d->mdiNextWindow);
+    menu->addAction(d->mdiPreviousWindow);
     menu->addSeparator();
 
-    QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
+    QList<QMdiSubWindow *> windows = d->mdiArea->subWindowList();
     for (int i = 0; i < windows.size(); ++i) {
         QPointer<KisView>child = qobject_cast<KisView*>(windows.at(i)->widget());
         if (child) {
@@ -2039,8 +1983,8 @@ void KisMainWindow::updateWindowMenu()
             action->setIcon(qApp->windowIcon());
             action->setCheckable(true);
             action->setChecked(child == activeKisView());
-            connect(action, SIGNAL(triggered()), m_windowMapper, SLOT(map()));
-            m_windowMapper->setMapping(action, windows.at(i));
+            connect(action, SIGNAL(triggered()), d->windowMapper, SLOT(map()));
+            d->windowMapper->setMapping(action, windows.at(i));
         }
     }
 
@@ -2051,16 +1995,16 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 {
     if (!window) return;
     QMdiSubWindow *subwin = qobject_cast<QMdiSubWindow *>(window);
-    //qDebug() << "setActiveSubWindow();" << subwin << m_activeSubWindow;
+    //qDebug() << "setActiveSubWindow();" << subwin << d->activeSubWindow;
 
-    if (subwin && subwin != m_activeSubWindow) {
+    if (subwin && subwin != d->activeSubWindow) {
         KisView *view = qobject_cast<KisView *>(subwin->widget());
         //qDebug() << "\t" << view << activeView();
         if (view && view != activeView()) {
-            m_viewManager->setCurrentView(view);
+            d->viewManager->setCurrentView(view);
             setActiveView(view);
         }
-        m_activeSubWindow = subwin;
+        d->activeSubWindow = subwin;
     }
     updateWindowMenu();
 }
@@ -2069,8 +2013,8 @@ void KisMainWindow::configChanged()
 {
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
-    m_mdiArea->setViewMode(viewMode);
-    foreach(QMdiSubWindow *subwin, m_mdiArea->subWindowList()) {
+    d->mdiArea->setViewMode(viewMode);
+    foreach(QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     }
@@ -2091,13 +2035,7 @@ void KisMainWindow::newWindow()
 
 void KisMainWindow::closeCurrentWindow()
 {
-    m_mdiArea->currentSubWindow()->close();
-}
-
-void KisMainWindow::closeAllWindows()
-{
-    slotFileCloseAll();
-    m_mdiArea->closeAllSubWindows();
+    d->mdiArea->currentSubWindow()->close();
 }
 
 void KisMainWindow::showAboutApplication()
@@ -2108,8 +2046,8 @@ void KisMainWindow::showAboutApplication()
 
 QPointer<KisView>KisMainWindow::activeKisView()
 {
-    if (!m_mdiArea) return 0;
-    QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow();
+    if (!d->mdiArea) return 0;
+    QMdiSubWindow *activeSubWindow = d->mdiArea->activeSubWindow();
     //qDebug() << "activeKisView" << activeSubWindow;
     if (!activeSubWindow) return 0;
     return qobject_cast<KisView*>(activeSubWindow->widget());
@@ -2133,5 +2071,31 @@ void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
         w->setFont(dockWidgetFont);
     }
 }
+
+void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
+
+    if (!d->activeView) return;
+
+    QString title = d->activeView->document()->documentInfo()->aboutInfo("title");
+    if (title.isEmpty()) {
+        title = d->activeView->document()->url().fileName();
+        // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
+        KMimeType::Ptr mime = KMimeType::mimeType(d->activeView->document()->outputMimeType());
+        if (mime) {
+            QString extension = mime->property("X-KDE-NativeExtension").toString();
+
+            if (title.endsWith(extension))
+                title.chop(extension.length());
+        }
+    }
+
+    if (title.isEmpty()) {
+        // #139905
+        title = i18n("%1 unsaved document (%2)", KisFactory::aboutData()->programName(),
+                     KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
+    }
+    printer.setDocName(title);
+}
+
 
 #include <KisMainWindow.moc>

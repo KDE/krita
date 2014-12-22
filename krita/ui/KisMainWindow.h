@@ -32,19 +32,11 @@
 
 #include "KisView.h"
 
-class QMdiArea;
-class QSignalMapper;
 class QCloseEvent;
-class QMdiSubWindow;
-
-class KAction;
-class KActionMenu;
-class KToolBar;
 
 struct KoPageLayout;
 class KoCanvasResourceManager;
 
-class KisMainWindowPrivate;
 class KisDocument;
 class KisPart;
 class KisView;
@@ -347,7 +339,6 @@ private slots:
      */
     void slotExportFile();
 
-    void slotEncryptDocument();
     void slotUncompressToDir();
 
     /**
@@ -364,8 +355,6 @@ private slots:
     void newView(QObject *document);
     void newWindow();
     void closeCurrentWindow();
-    void closeAllWindows();
-
 
 protected:
 
@@ -438,31 +427,11 @@ private:
 
     QPointer<KisView>activeKisView();
 
+    void applyDefaultSettings(QPrinter &printer);
 private:
+    class Private;
+    Private * const d;
 
-    KisMainWindowPrivate * const d;
-
-    bool m_constructing;
-
-    KisViewManager *m_viewManager;
-
-    QMdiArea *m_mdiArea;
-    QMdiSubWindow *m_activeSubWindow;
-    QSignalMapper *m_windowMapper;
-    QSignalMapper *m_documentMapper;
-
-    KAction *m_newWindow;
-    KAction *m_close;
-    KAction *m_closeAll;
-    KAction *m_mdiCascade;
-    KAction *m_mdiTile;
-    KAction *m_mdiNextWindow;
-    KAction *m_mdiPreviousWindow;
-
-    KActionMenu *m_windowMenu;
-    KActionMenu *m_documentMenu;
-
-    KToolBar *m_brushesAndStuff;
 };
 
 #endif

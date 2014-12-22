@@ -250,7 +250,7 @@ void KoToolManager::Private::disconnectActiveTool()
 
 void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
 {
-    Q_UNUSED(temporary);
+
     Q_ASSERT(tool);
     if (canvasData == 0)
         return;

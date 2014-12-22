@@ -139,27 +139,27 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
 
     m_copyMerged = new KisAction(i18n("Copy merged"), this);
     m_copyMerged->setActivationFlags(KisAction::PIXELS_SELECTED);
-    actionManager->addAction("copy_merged", m_copyMerged, collection);
+    actionManager->addAction("copy_merged", m_copyMerged);
     m_copyMerged->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
     m_selectAll = new KisAction(koIcon("edit-select-all"), i18n("Select &All"), this);
-    actionManager->addAction("select_all", m_selectAll, collection);
+    actionManager->addAction("select_all", m_selectAll);
     m_selectAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(m_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
 
     m_deselect = new KisAction(koIcon("edit-select-all"), i18n("Deselect"), this);
-    actionManager->addAction("deselect", m_deselect, collection);
+    actionManager->addAction("deselect", m_deselect);
     m_deselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
     m_clear = new KisAction(koIcon("edit-clear"), i18n("Clear"), this);
-    actionManager->addAction("clear", m_clear, collection);
+    actionManager->addAction("clear", m_clear);
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
     connect(m_clear, SIGNAL(triggered()), SLOT(clear()));
 
     m_reselect  = new KisAction(i18n("&Reselect"), this);
-    actionManager->addAction("reselect", m_reselect, collection);
+    actionManager->addAction("reselect", m_reselect);
     m_reselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D));
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
@@ -169,47 +169,47 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     m_invert->setOperationID("invertselection");
     m_invert->setToolTip("foo");
 
-    actionManager->addAction("invert", m_invert, collection);
+    actionManager->addAction("invert", m_invert);
     m_invert->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
 
     actionManager->registerOperation(new KisInvertSelectionOperaton);
     
     m_copyToNewLayer  = new KisAction(i18n("Copy Selection to New Layer"), this);
     m_copyToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
-    actionManager->addAction("copy_selection_to_new_layer", m_copyToNewLayer, collection);
+    actionManager->addAction("copy_selection_to_new_layer", m_copyToNewLayer);
     m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer  = new KisAction(i18n("Cut Selection to New Layer"), this);
     m_cutToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
     m_cutToNewLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("cut_selection_to_new_layer", m_cutToNewLayer, collection);
+    actionManager->addAction("cut_selection_to_new_layer", m_cutToNewLayer);
     m_cutToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_J));
     connect(m_cutToNewLayer, SIGNAL(triggered()), this, SLOT(cutToNewLayer()));
 
     m_fillForegroundColor  = new KisAction(i18n("Fill with Foreground Color"), this);
     m_fillForegroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillForegroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("fill_selection_foreground_color", m_fillForegroundColor, collection);
+    actionManager->addAction("fill_selection_foreground_color", m_fillForegroundColor);
     m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));  
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor  = new KisAction(i18n("Fill with Background Color"), this);
     m_fillBackgroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillBackgroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("fill_selection_background_color", m_fillBackgroundColor, collection);
+    actionManager->addAction("fill_selection_background_color", m_fillBackgroundColor);
     m_fillBackgroundColor->setShortcut(QKeySequence(Qt::Key_Backspace));
     connect(m_fillBackgroundColor, SIGNAL(triggered()), this, SLOT(fillBackgroundColor()));
 
     m_fillPattern  = new KisAction(i18n("Fill with Pattern"), this);
     m_fillPattern->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillPattern->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("fill_selection_pattern", m_fillPattern, collection);
+    actionManager->addAction("fill_selection_pattern", m_fillPattern);
     connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
 
     m_strokeShapes  = new KisAction(i18nc("@action:inmenu", "Stro&ke selected shapes"), this);
     m_strokeShapes->setActivationFlags(KisAction::SHAPES_SELECTED);
-    actionManager->addAction("stroke_shapes", m_strokeShapes, collection);
+    actionManager->addAction("stroke_shapes", m_strokeShapes);
     connect(m_strokeShapes, SIGNAL(triggered()), this, SLOT(paintSelectedShapes()));
 
     m_toggleDisplaySelection  = new KToggleAction(i18n("Display Selection"), this);
@@ -221,21 +221,21 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
 
     m_imageResizeToSelection  = new KisAction(i18n("Size Canvas to Size of Selection"), this);
     m_imageResizeToSelection->setActivationFlags(KisAction::PIXELS_SELECTED);
-    actionManager->addAction("resizeimagetoselection", m_imageResizeToSelection, collection);
+    actionManager->addAction("resizeimagetoselection", m_imageResizeToSelection);
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
 
     KisAction *action = new KisAction(i18nc("@action:inmenu", "&Convert to Vector Selection"), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-    actionManager->addAction("convert_to_vector_selection", action, collection);
+    actionManager->addAction("convert_to_vector_selection", action);
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
     action = new KisAction(i18nc("@action:inmenu", "Convert &Shapes to Vector Selection"), this);
     action->setActivationFlags(KisAction::SHAPES_SELECTED);
-    actionManager->addAction("convert_shapes_to_vector_selection", action, collection);
+    actionManager->addAction("convert_shapes_to_vector_selection", action);
     connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
 
     m_toggleSelectionOverlayMode  = new KisAction(i18nc("@action:inmenu", "&Toggle Selection Display Mode"), this);
-    actionManager->addAction("toggle-selection-overlay-mode", m_toggleSelectionOverlayMode, collection);
+    actionManager->addAction("toggle-selection-overlay-mode", m_toggleSelectionOverlayMode);
     connect(m_toggleSelectionOverlayMode, SIGNAL(triggered()), SLOT(slotToggleSelectionDecoration()));
 
 //     m_load

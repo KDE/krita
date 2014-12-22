@@ -58,10 +58,10 @@ void KisActionManager::setView(QPointer<KisView> imageView)
     Q_UNUSED(imageView);
 }
 
-void KisActionManager::addAction(const QString& name, KisAction* action, KActionCollection* actionCollection)
+void KisActionManager::addAction(const QString& name, KisAction* action)
 {
     if (!name.isEmpty()) {
-        actionCollection->addAction(name, action);
+        d->viewManager->actionCollection()->addAction(name, action);
         action->setObjectName(name);
     }
 
@@ -69,13 +69,13 @@ void KisActionManager::addAction(const QString& name, KisAction* action, KAction
     action->setActionManager(this);
 }
 
-void KisActionManager::takeAction(KisAction* action, KActionCollection *actionCollection)
+void KisActionManager::takeAction(KisAction* action)
 {
     d->actions.removeOne(action);
 
     if (!action->objectName().isEmpty()) {
-        KIS_ASSERT_RECOVER_RETURN(actionCollection);
-        actionCollection->takeAction(action);
+        KIS_ASSERT_RECOVER_RETURN(d->viewManager->actionCollection());
+        d->viewManager->actionCollection()->takeAction(action);
     }
 }
 

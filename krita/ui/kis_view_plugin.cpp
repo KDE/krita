@@ -37,7 +37,7 @@ KisViewPlugin::KisViewPlugin(QObject* parent, const QString& rcFile)
 void KisViewPlugin::addAction(const QString& name, KisAction* action)
 {
     if (m_view) {
-        m_view->actionManager()->addAction(name, action, actionCollection());
+        m_view->actionManager()->addAction(name, action);
     }
 }
 

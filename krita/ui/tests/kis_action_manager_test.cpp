@@ -40,11 +40,11 @@ void KisActionManagerTest::testUpdateGUI()
 
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    view->viewManager()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action);
 
     KisAction* action2 = new KisAction("dummy", this);
     action2->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
-    view->viewManager()->actionManager()->addAction("dummy", action2, mainWindow->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action2);
     
     view->viewManager()->actionManager()->updateGUI();
     QVERIFY(!action->isEnabled());
@@ -68,7 +68,7 @@ void KisActionManagerTest::testCondition()
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    view->viewManager()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action);
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(doc->image(), "paintlayer1", OPACITY_OPAQUE_U8);
     doc->image()->addNode(paintLayer1);
@@ -103,10 +103,10 @@ void KisActionManagerTest::testTakeAction()
     KisPart::instance()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
-    view->viewManager()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action);
     QVERIFY(view->viewManager()->actionManager()->actionByName("dummy") != 0);
 
-    view->viewManager()->actionManager()->takeAction(action, mainWindow->actionCollection());
+    view->viewManager()->actionManager()->takeAction(action);
     QVERIFY(view->viewManager()->actionManager()->actionByName("dummy") == 0);
 }
 

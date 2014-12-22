@@ -782,7 +782,7 @@ void KisViewManager::createManagers()
     d->paintingAssistantsManager->setup(actionCollection());
 
     d->canvasControlsManager = new KisCanvasControlsManager(this);
-    d->canvasControlsManager->setup(actionCollection(), actionManager());
+    d->canvasControlsManager->setup(actionManager());
 
     d->mirrorManager = new KisMirrorManager(this);
     d->mirrorManager->setup(actionCollection());

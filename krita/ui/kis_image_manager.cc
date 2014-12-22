@@ -57,27 +57,27 @@ void KisImageManager::setup(KActionCollection * actionCollection, KisActionManag
 {
 
     KisAction *action  = new KisAction(i18n("I&mport Layer..."), this);
-    actionManager->addAction("import_layer_from_file", action, actionCollection);
+    actionManager->addAction("import_layer_from_file", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
     action  = new KisAction(koIcon("document-properties"), i18n("Properties..."), this);
-    actionManager->addAction("image_properties", action, actionCollection);
+    actionManager->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 
     action  = new KisAction(koIcon("document-new"), i18n("as Paint Layer..."), this);
-    actionManager->addAction("import_layer_as_paint_layer", action, actionCollection);
+    actionManager->addAction("import_layer_as_paint_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
     action  = new KisAction(koIcon("edit-copy"), i18n("as Transparency Mask..."), this);
-    actionManager->addAction("import_layer_as_transparency_mask", action, actionCollection);
+    actionManager->addAction("import_layer_as_transparency_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsTransparencyMask()));
 
     action  = new KisAction(koIcon("bookmarks"), i18n("as Filter Mask..."), this);
-    actionManager->addAction("import_layer_as_filter_mask", action, actionCollection);
+    actionManager->addAction("import_layer_as_filter_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsFilterMask()));
 
     action  = new KisAction(koIcon("edit-paste"), i18n("as Selection Mask..."), this);
-    actionManager->addAction("import_layer_as_selection_mask", action, actionCollection);
+    actionManager->addAction("import_layer_as_selection_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsSelectionMask()));
 
     action = new KisAction(koIcon("format-stroke-color"), i18n("Image Background Color and Transparency..."), this);

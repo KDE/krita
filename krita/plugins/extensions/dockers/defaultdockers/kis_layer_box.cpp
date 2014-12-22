@@ -359,12 +359,10 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollToBottom();
 
-        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
         foreach(KisAction *action, m_actions) {
             m_canvas->viewManager()->actionManager()->
                 addAction(action->objectName(),
-                          action,
-                          actionCollection);
+                          action);
         }
 
         addActionToMenu(m_newLayerMenu, "add_new_paint_layer");
@@ -388,9 +386,8 @@ void KisLayerBox::unsetCanvas()
 {
     setEnabled(false);
     if (m_canvas) {
-        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->viewManager()->actionManager()->takeAction(action, actionCollection);
+            m_canvas->viewManager()->actionManager()->takeAction(action);
         }
         m_newLayerMenu->clear();
     }

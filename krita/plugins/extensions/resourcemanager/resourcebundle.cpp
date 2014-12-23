@@ -475,11 +475,19 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                gradientServer->addResource(res, false);
-                foreach(const QString &tag, ref.tagList) {
-                    gradientServer->addTag(res, tag);
+                
+                KoAbstractGradient *res2 = gradientServer->resourceByName(res->name());
+                if (!res2)  {//if it doesn't exist...
+                    gradientServer->addResource(res, false);//add it!   
+                    foreach(const QString &tag, ref.tagList) {
+                        gradientServer->addTag(res, tag);
+                    }
+                    gradientServer->addTag(res, name());
                 }
-                gradientServer->addTag(res, name());
+                else {
+                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                }
+                
             }
         }
         else if (resType  == "patterns") {
@@ -503,10 +511,16 @@ bool ResourceBundle::install()
                     continue;
                 }
                 patternServer->addResource(res, false);
-                foreach(const QString &tag, ref.tagList) {
-                    patternServer->addTag(res, tag);
+                
+                KoPattern *res2 = patternServer->resourceByName(res->name());
+                if (!res2)  {//if it doesn't exist...
+                    patternServer->addResource(res, false);//add it!   
+                    foreach(const QString &tag, ref.tagList) {
+                        patternServer->addTag(res, tag);
+                    }
+                    patternServer->addTag(res, name());
                 }
-                patternServer->addTag(res, name());
+                
             }
         }
         else if (resType  == "brushes") {
@@ -530,11 +544,19 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                brushServer->addResource(res, false);
-                foreach(const QString &tag, ref.tagList) {
-                    brushServer->addTag(res.data(), tag);
+                
+                //find the resouce on the server
+                KisBrushSP res2 = brushServer->resourceByName(res->name());
+                if (!res2)  {//if it doesn't exist...
+                    brushServer->addResource(res, false);//add it!   
+                    foreach(const QString &tag, ref.tagList) {
+                        brushServer->addTag(res.data(), tag);
+                    }
+                    brushServer->addTag(res.data(), name());
                 }
-                brushServer->addTag(res.data(), name());
+                else {
+                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                }
             }
         }
         else if (resType  == "palettes") {
@@ -559,11 +581,19 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                paletteServer->addResource(res, false);
-                foreach(const QString &tag, ref.tagList) {
-                    paletteServer->addTag(res, tag);
+                
+                //find the resouce on the server
+                KoColorSet *res2 = paletteServer->resourceByName(res->name());
+                if (!res2)  {//if it doesn't exist...
+                    paletteServer->addResource(res, false);//add it!   
+                    foreach(const QString &tag, ref.tagList) {
+                        paletteServer->addTag(res, tag);
+                    }
+                    paletteServer->addTag(res, name());
                 }
-                paletteServer->addTag(res, name());
+                else {
+                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                }
             }
         }
         else if (resType  == "workspaces") {
@@ -587,11 +617,20 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                workspaceServer->addResource(res, false);
-                foreach(const QString &tag, ref.tagList) {
-                    workspaceServer->addTag(res, tag);
+                
+                //the following tries to find the resource by name.
+                KisWorkspaceResource *res2 = workspaceServer->resourceByName(res->name());
+                if (!res2)  {//if it doesn't exist...
+                    workspaceServer->addResource(res, false);//add it!   
+                    foreach(const QString &tag, ref.tagList) {
+                        workspaceServer->addTag(res, tag);
+                    }
+                    workspaceServer->addTag(res, name());
                 }
-                workspaceServer->addTag(res, name());
+                else {
+                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                }
+               
             }
         }
         else if (resType  == "paintoppresets") {
@@ -617,11 +656,21 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                paintoppresetServer->addResource(res, false);
-                foreach(const QString &tag, ref.tagList) {
-                    paintoppresetServer->addTag(res.data(), tag);
+                
+                //the following tries to find the resource by name.
+                KisPaintOpPresetSP res2 = paintoppresetServer->resourceByName(res->name());
+                if (!res2)  {//if it doesn't exist...
+                    paintoppresetServer->addResource(res, false);//add it!   
+                    
+                    foreach(const QString &tag, ref.tagList) {
+                        paintoppresetServer->addTag(res.data(), tag);
+                    }
+                    paintoppresetServer->addTag(res.data(), name());
                 }
-                paintoppresetServer->addTag(res.data(), name());
+                else {
+                    qWarning() << "Didn't install" << res->name()<<"It already exists on the server";
+                }
+                
             }
         }
     }

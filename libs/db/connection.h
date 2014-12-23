@@ -337,7 +337,7 @@ public:
 //js: MOVED TO Driver  virtual QString escapeString(const QString& str) const = 0;
 //  virtual QCString escapeString(const QCString& str) const = 0;
 
-    /*! Prepares SELECT query described by raw \a statement.
+    /*! Prepares SELECT query described by a raw SQL statement \a sql.
      \return opened cursor created for results of this query
      or NULL if there was any error. Cursor can have optionally applied \a cursor_options
      (one of more selected from KexiDB::Cursor::Options).
@@ -346,11 +346,11 @@ public:
 
      Note for driver developers: you should initialize cursor engine-specific
      resources and return Cursor subclass' object
-     (passing \a statement and \a cursor_options to it's constructor).
+     (passing \a sql and \a cursor_options to it's constructor).
     */
-    virtual Cursor* prepareQuery(const QString& statement, uint cursor_options = 0) = 0;
+    virtual Cursor* prepareQuery(const QString& sql, uint cursor_options = 0) = 0;
 
-    /*! \overload prepareQuery( const QString& statement = QString(), uint cursor_options = 0)
+    /*! \overload prepareQuery(const QString&, uint cursor_options = 0)
      Prepares query described by \a query schema. \a params are values of parameters that
      will be inserted into places marked with [] before execution of the query.
 
@@ -368,22 +368,22 @@ public:
     */
     virtual Cursor* prepareQuery(QuerySchema& query, uint cursor_options = 0) = 0;
 
-    /*! \overload prepareQuery( const QString& statement = QString(), uint cursor_options = 0)
+    /*! \overload prepareQuery( const QString& sql, uint cursor_options = 0)
      Statement is build from data provided by \a table schema,
      it is like "select * from table_name".*/
     Cursor* prepareQuery(TableSchema& table, uint cursor_options = 0);
 
-    /*! Executes SELECT query described by \a statement.
+    /*! Executes SELECT query described by a raw SQL statement \a sql.
      \return opened cursor created for results of this query
      or NULL if there was any error on the cursor creation or opening.
      Cursor can have optionally applied \a cursor_options
      (one of more selected from KexiDB::Cursor::Options).
-     Identifiers in \a statement that are the same as keywords in Kexi
+     Identifiers in \a sql that are the same as keywords in Kexi
      SQL or the backend's SQL need to have been escaped.
      */
-    Cursor* executeQuery(const QString& statement, uint cursor_options = 0);
+    Cursor* executeQuery(const QString& sql, uint cursor_options = 0);
 
-    /*! \overload executeQuery( const QString& statement, uint cursor_options = 0 )
+    /*! \overload executeQuery( const QString& sql, uint cursor_options = 0 )
      \a params are values of parameters that
      will be inserted into places marked with [] before execution of the query.
 
@@ -396,7 +396,7 @@ public:
       uint cursor_options = 0 ) */
     Cursor* executeQuery(QuerySchema& query, uint cursor_options = 0);
 
-    /*! \overload executeQuery( const QString& statement, uint cursor_options = 0 )
+    /*! \overload executeQuery( const QString&, uint cursor_options = 0 )
      Executes query described by \a query schema without parameters.
      Statement is build from data provided by \a table schema,
      it is like "select * from table_name".*/
@@ -439,10 +439,7 @@ public:
      \return true if there is such query. Otherwise the method does nothing. */
     bool setQuerySchemaObsolete(const QString& queryName);
 
-//js: MOVED TO Driver  QString valueToSQL( const Field::Type ftype, const QVariant& v ) const;
-//  QString valueToSQL( const Field *field, const QVariant& v ) const;
-
-    /*! Executes \a sql query and stores first record's data inside \a data.
+    /*! Executes query for a raw SQL statement \a sql and stores first record's data inside \a data.
      This is convenient method when we need only first record from query result,
      or when we know that query result has only one record.
      If \a addLimitTo1 is true (the default), adds a LIMIT clause to the query,
@@ -456,8 +453,9 @@ public:
      If \a addLimitTo1 is true (the default), adds a LIMIT clause to the query. */
     tristate querySingleRecord(QuerySchema& query, RecordData &data, bool addLimitTo1 = true);
 
-    /*! Executes \a sql query and stores first record's field's (number \a column) string value
-     inside \a value. For efficiency it's recommended that a query defined by \a sql
+    /*! Executes query for a raw SQL statement \a sql and stores first record's field's
+     (number \a column) string value inside \a value.
+     For efficiency it's recommended that a query defined by \a sql
      should have just one field (SELECT one_field FROM ....).
      If \a addLimitTo1 is true (the default), adds a LIMIT clause to the query,
      so \a sql should not include one already.
@@ -467,7 +465,7 @@ public:
     tristate querySingleString(const QString& sql, QString &value, uint column = 0,
                                bool addLimitTo1 = true);
 
-    /*! Convenience function: executes \a sql query and stores first
+    /*! Convenience function: executes query for a raw SQL statement \a sql and stores first
      record's field's (number \a column) value inside \a number. \sa querySingleString().
      Note: "LIMIT 1" is appended to \a sql statement if \a addLimitTo1 is true (the default).
      \return true if query was successfully executed and first record has been found,
@@ -475,8 +473,8 @@ public:
     tristate querySingleNumber(const QString& sql, int &number, uint column = 0,
                                bool addLimitTo1 = true);
 
-    /*! Executes \a sql query and stores Nth field's string value of every record
-     inside \a list, where N is equal to \a column. The list is initially cleared.
+    /*! Executes query for a raw SQL statement \a sql and stores Nth field's string value
+     of every record inside \a list, where N is equal to \a column. The list is initially cleared.
      For efficiency it's recommended that a query defined by \a sql
      should have just one field (SELECT one_field FROM ....).
      \return true if all values were fetched successfuly,
@@ -484,7 +482,8 @@ public:
      On errors, the list is not cleared, it may contain a few retrieved values. */
     bool queryStringList(const QString& sql, QStringList& list, uint column = 0);
 
-    /*! \return true if there is at least one record returned in \a sql query.
+    /*! \return true if there is at least one record has been returned by executing query
+     for a raw SQL statement \a sql.
      Does not fetch any records. \a success will be set to false
      on query execution errors (true otherwise), so you can see a difference between
      "no results" and "query execution error" states.
@@ -494,13 +493,6 @@ public:
 
     /*! \return true if there is at least one record in \a table. */
     bool isEmpty(TableSchema& table, bool &success);
-
-//! @todo perhaps use quint64 here?
-    /*! \return number of records in \a sql query.
-     Does not fetch any records. -1 is returned on query execution errors (>0 otherwise).
-     Note: real executed query is: "SELECT COUNT() FROM (\a sql) LIMIT 1"
-     (using querySingleNumber()) */
-    int resultCount(const QString& sql);
 
     //PROTOTYPE:
 #define A , const QVariant&
@@ -688,10 +680,10 @@ public:
     quint64 lastInsertedAutoIncValue(const QString& aiFieldName,
                                      const TableSchema& table, quint64* ROWID = 0);
 
-    /*! Executes query \a statement, but without returning resulting
-     rows (used mostly for functional queries).
+    /*! Executes query for a raw SQL statement \a sql, but without returning resulting
+     records (used mostly for functional queries).
      Only use this method if you really need. */
-    bool executeSQL(const QString& statement);
+    bool executeSQL(const QString& sql);
 
     //! @short options used in selectStatement()
     class CALLIGRADB_EXPORT SelectStatementOptions
@@ -911,10 +903,10 @@ protected:
       \return true on success. */
     virtual bool drv_disconnect() = 0;
 
-    /*! Executes query \a statement, but without returning resulting
-     rows (used mostly for functional queries).
+    /*! Executes query for a raw SQL statement \a sql without returning resulting
+     records. It is useful mostly for functional queries.
      Only use this method if you really need. */
-    virtual bool drv_executeSQL(const QString& statement) = 0;
+    virtual bool drv_executeSQL(const QString& sql) = 0;
 
     /*! For reimplementation: loads list of databases' names available for this connection
      and adds these names to \a list. If your server is not able to offer such a list,
@@ -1007,14 +999,10 @@ protected:
     */
     virtual bool drv_createTable(const QString& tableSchemaName);
 
-//  /*! Executes query \a statement and returns resulting rows
-//   (used mostly for SELECT query). */
-//  virtual bool drv_executeQuery( const QString& statement ) = 0;
-
-    /*! \return unique identifier of last inserted row.
+    /*! \return unique identifier of last inserted record.
      Typically this is just primary key value.
      This identifier could be reused when we want to reference
-     just inserted row.
+     just inserted record.
      Note for driver developers: contact staniek (at) kde.org
      if your engine do not offers this information. */
     virtual quint64 drv_lastInsertRowID() = 0;
@@ -1156,8 +1144,8 @@ protected:
     bool rollbackAutoCommitTransaction(const Transaction& trans);
 
     /*! Creates cursor data and initializes cursor
-      using \a statement for later data retrieval. */
-//  virtual CursorData* drv_createCursor( const QString& statement ) = 0;
+      using \a sql for later data retrieval. */
+//  virtual CursorData* drv_createCursor( const QString& sql ) = 0;
     /*! Closes and deletes cursor data. */
 //  virtual bool drv_deleteCursor( CursorData *data ) = 0;
 
@@ -1177,13 +1165,13 @@ protected:
      Used internally by querySchema() methods. */
     QuerySchema* setupQuerySchema(const RecordData &data);
 
-    /*! Update a row. */
+    /*! Update a record. */
     bool updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& buf, bool useROWID = false);
-    /*! Insert a new row. */
+    /*! Insert a new record. */
     bool insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& buf, bool getROWID = false);
-    /*! Delete an existing row. */
+    /*! Delete an existing record. */
     bool deleteRow(QuerySchema &query, RecordData& data, bool useROWID = false);
-    /*! Delete all existing rows. */
+    /*! Delete all existing records. */
     bool deleteAllRows(QuerySchema &query);
 
     /*! Allocates all needed table KexiDB system objects for kexi__* KexiDB liblary's

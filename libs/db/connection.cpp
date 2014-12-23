@@ -1188,12 +1188,12 @@ bool Connection::insertRecord(FieldList& fields, const QList<QVariant>& values)
     return res;
 }
 
-bool Connection::executeSQL(const QString& statement)
+bool Connection::executeSQL(const QString& sql)
 {
-    m_sql = statement; //remember for error handling
+    m_sql = sql; //remember for error handling
     if (!drv_executeSQL(m_sql)) {
         m_errMsg.clear(); //clear as this could be most probably just "Unknown error" string.
-        m_errorSql = statement;
+        m_errorSql = sql;
         setError(this, ERR_SQL_EXECUTION_ERROR, i18n("Error while executing SQL statement."));
         return false;
     }
@@ -2367,11 +2367,11 @@ bool Connection::drv_setAutoCommit(bool /*on*/)
     return true;
 }
 
-Cursor* Connection::executeQuery(const QString& statement, uint cursor_options)
+Cursor* Connection::executeQuery(const QString& sql, uint cursor_options)
 {
-    if (statement.isEmpty())
+    if (sql.isEmpty())
         return 0;
-    Cursor *c = prepareQuery(statement, cursor_options);
+    Cursor *c = prepareQuery(sql, cursor_options);
     if (!c)
         return 0;
     if (!c->open()) {//err - kill that

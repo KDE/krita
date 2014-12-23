@@ -192,7 +192,9 @@ void KisGmicWidget::slotOkClicked()
         }
     }
 
-    close();
+
+    emit sigRequestFinishAndClose();
+    hide();
 }
 
  void KisGmicWidget::closeEvent(QCloseEvent *event)

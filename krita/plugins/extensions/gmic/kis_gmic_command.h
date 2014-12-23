@@ -30,8 +30,9 @@
 
 class QString;
 
-class KisGmicCommand : public KUndo2Command
+class KisGmicCommand : public QObject, public KUndo2Command
 {
+    Q_OBJECT
 public:
     KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, const char * customCommands = 0);
     virtual ~KisGmicCommand();
@@ -41,6 +42,10 @@ public:
 
     float * getProgress();
     void cancel();
+
+signals:
+    void gmicFinished(int miliseconds);
+    void gmicFailed(const QString &msg);
 
 private:
     QString gmicDimensionString(const gmic_image<float>& img);

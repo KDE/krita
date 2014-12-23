@@ -117,6 +117,7 @@ set(kritagmic_PART_SRCS
     kis_gmic_command.cpp
     kis_gmic_synchronize_layers_command.cpp
     kis_import_gmic_processing_visitor.cpp
+    kis_gmic_progress_manager.cpp
     kis_gmic_plugin.cpp ${kritagmic_shared_PART_SRCS}
 )
 kde4_add_plugin(kritagmic ${kritagmic_PART_SRCS})

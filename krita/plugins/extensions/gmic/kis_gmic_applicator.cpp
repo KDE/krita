@@ -31,7 +31,7 @@
 #include "kis_gmic_synchronize_layers_command.h"
 #include "kis_export_gmic_processing_visitor.h"
 
-KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorFinished(false),m_progress(0)
+KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorStrokeEnded(false),m_progress(0)
 {
 }
 
@@ -62,8 +62,8 @@ void KisGmicApplicator::preview()
     emitSignals << ModifiedSignal;
 
     m_applicator = new KisProcessingApplicator(m_image, m_node,
-                                       KisProcessingApplicator::RECURSIVE,
-                                       emitSignals, m_actionName);
+            KisProcessingApplicator::RECURSIVE,
+            emitSignals, m_actionName);
 
     dbgPlugins << "Creating applicator " << m_applicator;
 
@@ -89,6 +89,9 @@ void KisGmicApplicator::preview()
     // apply gmic filters to provided layers
     const char * customCommands = m_customCommands.isNull() ? 0 : m_customCommands.constData();
     KisGmicCommand * gmicCommand = new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands);
+    connect(gmicCommand, SIGNAL(gmicFinished(int)), this, SIGNAL(gmicFinished(int)));
+    connect(gmicCommand, SIGNAL(gmicFailed(const QString&)), this, SIGNAL(gmicFailed(const QString&)));
+
     m_progress = gmicCommand->getProgress();
     m_applicator->applyCommand(gmicCommand);
 
@@ -106,7 +109,7 @@ void KisGmicApplicator::cancel()
     if (m_applicator)
     {
 
-        if (!m_applicatorFinished)
+        if (!m_applicatorStrokeEnded)
         {
             dbgPlugins << "Cancelling applicator: Yes!";
             m_applicator->cancel();
@@ -122,8 +125,8 @@ void KisGmicApplicator::cancel()
         m_applicator = 0;
 
 
-        m_applicatorFinished = false;
-        dbgPlugins << ppVar(m_applicatorFinished);
+        m_applicatorStrokeEnded = false;
+        dbgPlugins << ppVar(m_applicatorStrokeEnded);
 
     }
     else
@@ -140,9 +143,9 @@ void KisGmicApplicator::finish()
     if (m_applicator)
     {
         m_applicator->end();
-        m_applicatorFinished = true;
+        m_applicatorStrokeEnded = true;
     }
-    dbgPlugins << ppVar(m_applicatorFinished);
+    dbgPlugins << ppVar(m_applicatorStrokeEnded);
 }
 
 float KisGmicApplicator::getProgress() const
@@ -152,5 +155,5 @@ float KisGmicApplicator::getProgress() const
         return *m_progress;
     }
 
-    return -1.0f;
+    return -2.0f;
 }

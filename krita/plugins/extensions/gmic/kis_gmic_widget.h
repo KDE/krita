@@ -52,6 +52,7 @@ signals:
     void sigCancelOnCanvasPreview();
     void sigPreviewActiveLayer();
     void sigClose();
+    void sigRequestFinishAndClose();
 
 private slots:
     void slotSelectedFilterChanged(const QItemSelection & newSelection, const QItemSelection & oldSelection);

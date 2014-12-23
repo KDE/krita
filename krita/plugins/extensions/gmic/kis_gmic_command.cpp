@@ -66,14 +66,18 @@ void KisGmicCommand::redo()
         dbgPlugins << "G'Mic command executed: " << gmicCmd;
         bool include_default_commands = true;
 
+        QTime timer;
+        timer.start();
         try
         {
             gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands, include_default_commands, m_progress, m_cancelEvent);
         }
         catch (gmic_exception &e)
         {
-            dbgPlugins << "\n- Error encountered when calling G'MIC : " << e.what();
-            *m_progress = 100.0;
+            QString message = QString::fromUtf8(e.what());
+            dbgPlugins << "\n- Error encountered when calling G'MIC : " << message;
+
+            emit gmicFailed(message);
             return;
         }
 
@@ -82,6 +86,8 @@ void KisGmicCommand::redo()
         {
             dbgPlugins << "   Output image "<< i << " = " << gmicDimensionString(m_images->_data[i]) << ", buffer : " << m_images->_data[i]._data;
         }
+
+        emit gmicFinished(timer.elapsed());
     }
 }
 

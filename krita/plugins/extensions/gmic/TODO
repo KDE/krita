@@ -8,13 +8,13 @@ List of known bugs:
 [done] * turning off preview: it shows non-filtered active layer
 [done] * preview is computed using gmic command, not using gmic preview command
 * add support for panning in preview viewport
-* implement progress bar for filters and preview
+[done ]* implement progress bar for filters 
 [postponed ]* separate included gmic code to stand-alone library and link dynamically : 
 [postponed ]  ,upstream changes in gmic are needed; does not support source or binary compatibility; visibility not set for exported symbols correctly
 
 * if the gmic filter outputs layer smaller than original, it supposed to be centered to canvas size, not bitblt(0,0,image->rect) 
 * what to do with selections for small preview?
-* sometimes preview blocks the UI because it takes too long  => progress bar
+* sometimes small preview blocks the UI because it takes too long  => progress bar
 * resizing the preview has to work (Small, Tiny, Large, ...)
 * resizing "input/output area/preview viewport" from filter settings tree
 * support all preview output modes
@@ -22,7 +22,7 @@ List of known bugs:
 * support for zooming/panning preview
 * preview area needs scrollbars
 * tiny, small, normal, large behaves exactly same for now
-* "Preview mode" only 1st ouput works 
+* "Preview mode" only 1st output works 
 * missing: Favorite presets group
 * missing: button for expanding all folders
 * missing: Available filters information 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (c) 2013-2014 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,10 +25,15 @@
 #include "kis_gmic_parser.h"
 #include <kis_types.h>
 
+class KoProgressUpdater;
+class QTimer;
 class QSize;
 class QRect;
 class KisGmicApplicator;
 class KisGmicWidget;
+class KisGmicProgressManager;
+
+enum Activity { PREVIEWING, FILTERING };
 
 class KisGmicPlugin : public KisViewPlugin
 {
@@ -41,12 +46,18 @@ private slots:
     // life cycle: show -> close
     void slotShowGmicDialog();
     void slotCloseGmicDialog();
+    void slotRequestFinishAndClose();
 
     void slotPreviewGmicCommand(KisGmicFilterSetting* setting);
     void slotFilterCurrentImage(KisGmicFilterSetting* setting);
     void slotCancelOnCanvasPreview();
     void slotAcceptOnCanvasPreview();
     void slotPreviewActiveLayer();
+    // miliseconds - time gmic spent filtering images
+    void slotGmicFinished(int miliseconds);
+    void slotGmicFailed(const QString& msg);
+    void slotUpdateProgress();
+
 
 private:
     void parseGmicCommandDefinitions(const QStringList &gmicDefinitionFilePaths);
@@ -54,11 +65,13 @@ private:
     static KisNodeListSP createPreviewThumbnails(KisNodeListSP layers,const QSize &dstSize,const QRect &srcRect);
     void createViewportPreview(KisNodeListSP layers, KisGmicFilterSetting* setting);
     // has to be accepted or cancelled!
-    void startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSetting* setting);
+    void startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSetting* setting,Activity activity);
     bool checkSettingsValidity(KisNodeListSP layers, const KisGmicFilterSetting * setting);
 
     // TODO: refactor into responsible classes
     void showInPreviewViewport(KisPaintDeviceSP device);
+
+    void initProgress();
 
 private:
     KisGmicWidget * m_gmicWidget;
@@ -66,7 +79,11 @@ private:
     QStringList m_definitionFilePaths;
     QString m_blacklistPath;
     QByteArray m_gmicCustomCommands;
-    bool m_previewFilter;
+
+    // progress
+    KisGmicProgressManager * m_progressManager;
+    Activity m_currentActivity;
+    bool m_requestFinishAndClose;
 };
 
 #endif

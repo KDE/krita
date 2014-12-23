@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * Copyright (c) 2013-2014 Lukáš Tvrdý <lukast.dev@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,8 +26,10 @@
 
 class KisProcessingApplicator;
 
-class KisGmicApplicator
+class KisGmicApplicator : public QObject
 {
+    Q_OBJECT
+
 public:
     KisGmicApplicator();
     ~KisGmicApplicator();
@@ -38,7 +40,10 @@ public:
     void finish();
 
     float getProgress() const;
-    KoUpdater * getUpdater() const;
+
+signals:
+    void gmicFinished(int miliseconds);
+    void gmicFailed(const QString &msg);
 
 private:
     KisProcessingApplicator * m_applicator;
@@ -48,10 +53,10 @@ private:
     KisNodeListSP m_kritaNodes;
     QString m_gmicCommand;
     QByteArray m_customCommands;
-    bool m_applicatorFinished;
+    bool m_applicatorStrokeEnded;
     float * m_progress;
 };
 
 #endif
 
-class KoUpdater;
+

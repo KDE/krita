@@ -189,6 +189,7 @@ public:
         , activeSubWindow(0)
         , windowMapper(0)
         , documentMapper(0)
+        , lastExportSpecialOutputFlag(0)
     {
     }
 
@@ -262,6 +263,8 @@ public:
     QSignalMapper *windowMapper;
     QSignalMapper *documentMapper;
 
+    QByteArray lastExportedFormat;
+    int lastExportSpecialOutputFlag;
 };
 
 KisMainWindow::KisMainWindow()
@@ -880,6 +883,7 @@ void KisMainWindow::slotSaveCompleted()
         KXmlGuiWindow::closeEvent(d->deferredClosingEvent);
     }
 }
+
 bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent, int specialOutputFlag)
 {
     if (!document) {
@@ -917,8 +921,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         mimeFilter = mime->patterns();
     else
         mimeFilter = KisImportExportManager::mimeFilter(_native_format,
-                                                        KisImportExportManager::Export,
-                                                        document->extraNativeMimeTypes());
+                                                 KisImportExportManager::Export,
+                                                 document->extraNativeMimeTypes());
 
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
@@ -955,10 +959,14 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     bool ret = false;
 
     if (document->url().isEmpty() || saveas) {
+        // if you're just File/Save As'ing to change filter options you
+        // don't want to be reminded about overwriting files etc.
+        bool justChangingFilterOptions = false;
+
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
-                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
+                                d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
         dialog.setMimeTypeFilters(mimeFilter);
         KUrl newURL = dialog.url();
 
@@ -985,6 +993,16 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             outputFormat = outputFormatString.toLatin1();
         }
 
+        if (!isExporting())
+            justChangingFilterOptions = (newURL == document->url()) &&
+                    (outputFormat == document->mimeType()) &&
+                    (specialOutputFlag == oldSpecialOutputFlag);
+        else
+            justChangingFilterOptions = (newURL == d->lastExportUrl) &&
+                    (outputFormat == d->lastExportedFormat) &&
+                    (specialOutputFlag == d->lastExportSpecialOutputFlag);
+
+
         bool bOk = true;
         if (newURL.isEmpty()) {
             bOk = false;
@@ -996,60 +1014,86 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
                 qDebug() << "save to directory: " << newURL.url();
             }
+            else if (specialOutputFlag == KisDocument::SaveEncrypted) {
+                int dot = fileName.lastIndexOf('.');
+                qDebug() << dot;
+                QString ext = mime->mainExtension();
+                if (!ext.isEmpty()) {
+                    if (dot < 0) fileName += ext;
+                    else fileName = fileName.left(dot) + ext;
+                } else { // current filename extension wrong anyway
+                    if (dot > 0) fileName = fileName.left(dot);
+                }
+                newURL.setFileName(fileName);
+            }
         }
 
         if (bOk) {
-            //
-            // Note:
-            // If the user is stupid enough to Export to the current URL,
-            // we do _not_ change this operation into a Save As.  Reasons
-            // follow:
-            //
-            // 1. A check like "isExporting() && oldURL == newURL"
-            //    doesn't _always_ work on case-insensitive filesystems
-            //    and inconsistent behaviour is bad.
-            // 2. It is probably not a good idea to change document->mimeType
-            //    and friends because the next time the user File/Save's,
-            //    (not Save As) they won't be expecting that they are
-            //    using their File/Export settings
-            //
-            // As a bad side-effect of this, the modified flag will not
-            // be updated and it is possible that what is currently on
-            // their screen is not what is stored on disk (through loss
-            // of formatting).  But if you are dumb enough to change
-            // mimetype but not the filename, then arguably, _you_ are
-            // the "bug" :)
-            //
-            // - Clarence
-            //
-            document->setOutputMimeType(outputFormat, specialOutputFlag);
-            if (!isExporting()) {  // Save As
-                ret = document->saveAs(newURL);
+            bool wantToSave = true;
 
-                if (ret) {
-                    kDebug(30003) << "Successful Save As!";
-                    addRecentURL(newURL);
-                    setReadWrite(true);
-                } else {
-                    kDebug(30003) << "Failed Save As!";
-                    document->setUrl(oldURL);
-                    document->setLocalFilePath(oldFile);
-                    document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
-                }
-            } else { // Export
-                ret = document->exportDocument(newURL);
-
-                if (ret) {
-                    // a few file dialog convenience things
-                    d->lastExportUrl = newURL;
-                }
-
-                // always restore output format
-                document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+            // don't change this line unless you know what you're doing :)
+            if (!justChangingFilterOptions || document->confirmNonNativeSave(isExporting())) {
+                if (!document->isNativeFormat(outputFormat))
+                    wantToSave = true;
             }
 
-            if (silent) // don't let the document change the window caption
-                document->setTitleModified();
+            if (wantToSave) {
+                //
+                // Note:
+                // If the user is stupid enough to Export to the current URL,
+                // we do _not_ change this operation into a Save As.  Reasons
+                // follow:
+                //
+                // 1. A check like "isExporting() && oldURL == newURL"
+                //    doesn't _always_ work on case-insensitive filesystems
+                //    and inconsistent behaviour is bad.
+                // 2. It is probably not a good idea to change document->mimeType
+                //    and friends because the next time the user File/Save's,
+                //    (not Save As) they won't be expecting that they are
+                //    using their File/Export settings
+                //
+                // As a bad side-effect of this, the modified flag will not
+                // be updated and it is possible that what is currently on
+                // their screen is not what is stored on disk (through loss
+                // of formatting).  But if you are dumb enough to change
+                // mimetype but not the filename, then arguably, _you_ are
+                // the "bug" :)
+                //
+                // - Clarence
+                //
+                document->setOutputMimeType(outputFormat, specialOutputFlag);
+                if (!isExporting()) {  // Save As
+                    ret = document->saveAs(newURL);
+
+                    if (ret) {
+                        kDebug(30003) << "Successful Save As!";
+                        addRecentURL(newURL);
+                        setReadWrite(true);
+                    } else {
+                        kDebug(30003) << "Failed Save As!";
+                        document->setUrl(oldURL);
+                        document->setLocalFilePath(oldFile);
+                        document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                    }
+                } else { // Export
+                    ret = document->exportDocument(newURL);
+
+                    if (ret) {
+                        // a few file dialog convenience things
+                        d->lastExportUrl = newURL;
+                        d->lastExportedFormat = outputFormat;
+                        d->lastExportSpecialOutputFlag = specialOutputFlag;
+                    }
+
+                    // always restore output format
+                    document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                }
+
+                if (silent) // don't let the document change the window caption
+                    document->setTitleModified();
+            }   // if (wantToSave)  {
+            else
+                ret = false;
         }   // if (bOk) {
         else
             ret = false;
@@ -1057,7 +1101,9 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         bool needConfirm = document->confirmNonNativeSave(false) && !document->isNativeFormat(oldOutputFormat);
 
-        if (!needConfirm) {
+        if (!needConfirm ||
+                (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
+                ) {
             // be sure document has the correct outputMimeType!
             if (isExporting() || document->isModified()) {
                 ret = document->save();
@@ -1080,6 +1126,13 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     updateCaption();
 
     return ret;
+}
+
+
+
+bool KisMainWindow::exportConfirmation(const QByteArray &outputFormat)
+{
+    return true;
 }
 
 void KisMainWindow::undo()

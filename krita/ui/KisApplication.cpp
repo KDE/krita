@@ -118,7 +118,7 @@ public:
             else {
                 m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
                 QRect r(QPoint(), m_splash->size());
-                m_splash->move(QApplication::desktop()->screenGeometry().center() - r.center());
+                m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
                 foreach(QObject *o, m_splash->children()) {
                     QWidget *w = qobject_cast<QWidget*>(o);

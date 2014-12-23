@@ -96,6 +96,8 @@ void DlgBundleManager::accept()
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
         ResourceBundle *bundle = bundleServer->resourceByMD5(ba);
         QMessageBox bundleFeedback;
+        bundleFeedback.setIcon(QMessageBox::Warning);
+        QString feedback = "bundlefeedback";
         
         if (!bundle) {
             // Get it from the blacklisted bundles
@@ -113,12 +115,14 @@ void DlgBundleManager::accept()
                 //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
                 if(!bundleServer->addResource(bundle, false, false)){
                 
-                 bundleFeedback.setText("Couldn't add bundle to resource server");
-                 bundleFeedback.exec();;
-                 }
+                    feedback = i18n("Couldn't add bundle to resource server");
+                    bundleFeedback.setText(feedback);
+                    bundleFeedback.exec();;
+                }
                 if(!bundleServer->removeFromBlacklist(bundle)){
-                 bundleFeedback.setText("Couldn't remove bundle from blacklist");
-                 bundleFeedback.exec();;
+                    feedback = i18n("Couldn't remove bundle from blacklist");
+                    bundleFeedback.setText(feedback);
+                    bundleFeedback.exec();;
                 }
             }
             else {
@@ -127,7 +131,8 @@ void DlgBundleManager::accept()
             }
         }
         else{
-        bundleFeedback.setText("Bundle doesn't exist!");
+        QString feedback = i18n("Bundle doesn't exist!");
+        bundleFeedback.setText(feedback);
         bundleFeedback.exec();;
         
         }

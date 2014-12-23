@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -448,10 +448,15 @@ public:
      false on data retrieving failure, and cancelled if there's no single record available. */
     tristate querySingleRecord(const QString& sql, RecordData &data, bool addLimitTo1 = true);
 
-    /*! Like tristate querySingleRecord(const QString& sql, RecordData &data)
-     but uses QuerySchema object.
-     If \a addLimitTo1 is true (the default), adds a LIMIT clause to the query. */
+    /*! \overload tristate querySingleRecord(const QString& sql, RecordData &data, bool addLimitTo1 = true)
+     Uses a QuerySchema object. */
     tristate querySingleRecord(QuerySchema& query, RecordData &data, bool addLimitTo1 = true);
+
+    /*! \overload tristate querySingleRecord(QuerySchema& query, RecordData &data, bool addLimitTo1 = true)
+     Accepts \a params as parameters that will be inserted into places marked with [] before
+     query execution. */
+    tristate querySingleRecord(QuerySchema& query, RecordData &data,
+                               const QList<QVariant>& params, bool addLimitTo1 = true);
 
     /*! Executes query for a raw SQL statement \a sql and stores first record's field's
      (number \a column) string value inside \a value.
@@ -465,6 +470,19 @@ public:
     tristate querySingleString(const QString& sql, QString &value, uint column = 0,
                                bool addLimitTo1 = true);
 
+    /*! \overload tristate querySingleString(const QString& sql, QString &value, uint column = 0,
+                                             bool addLimitTo1 = true)
+     Uses a QuerySchema object. */
+    tristate querySingleString(QuerySchema& query, QString &value, uint column = 0,
+                               bool addLimitTo1 = true);
+
+    /*! \overload tristate querySingleString(QuerySchema& query, QString &value, uint column = 0,
+                                             bool addLimitTo1 = true)
+     Accepts \a params as parameters that will be inserted into places marked with [] before
+     query execution. */
+    tristate querySingleString(QuerySchema& query, QString &value, const QList<QVariant>& params,
+                               uint column = 0, bool addLimitTo1 = true);
+
     /*! Convenience function: executes query for a raw SQL statement \a sql and stores first
      record's field's (number \a column) value inside \a number. \sa querySingleString().
      Note: "LIMIT 1" is appended to \a sql statement if \a addLimitTo1 is true (the default).
@@ -472,6 +490,18 @@ public:
      false on data retrieving failure, and cancelled if there's no single record available. */
     tristate querySingleNumber(const QString& sql, int &number, uint column = 0,
                                bool addLimitTo1 = true);
+
+    /*! \overload tristate querySingleNumber(const QString& sql, int &number, uint column = 0,
+                                             bool addLimitTo1 = true);
+    Uses a QuerySchema object. */
+    tristate querySingleNumber(QuerySchema& query, int &number, uint column = 0, bool addLimitTo1 = true);
+
+    /*! \overload tristate querySingleNumber(QuerySchema& query, int &number, uint column,
+                                             bool addLimitTo1 = true)
+     Accepts \a params as parameters that will be inserted into places marked with [] before
+     query execution. */
+    tristate querySingleNumber(QuerySchema& query, int &number,
+                               const QList<QVariant>& params, uint column = 0, bool addLimitTo1 = true);
 
     /*! Executes query for a raw SQL statement \a sql and stores Nth field's string value
      of every record inside \a list, where N is equal to \a column. The list is initially cleared.
@@ -481,6 +511,16 @@ public:
      false on data retrieving failure. Returning empty list can be still a valid result.
      On errors, the list is not cleared, it may contain a few retrieved values. */
     bool queryStringList(const QString& sql, QStringList& list, uint column = 0);
+
+    /*! \overload bool queryStringList(const QString& sql, QStringList& list, uint column = 0)
+     Uses a QuerySchema object. */
+    bool queryStringList(QuerySchema& query, QStringList& list, uint column = 0);
+
+    /*! \overload bool queryStringList(QuerySchema& query, QStringList& list, uint column = 0)
+     Accepts \a params as parameters that will be inserted into places marked with [] before
+     query execution. */
+    bool queryStringList(QuerySchema& query, QStringList& list,
+                         const QList<QVariant>& params, uint column = 0);
 
     /*! \return true if there is at least one record has been returned by executing query
      for a raw SQL statement \a sql.
@@ -1217,7 +1257,30 @@ protected:
     /*! @internal used by querySingleRecord() methods.
      Note: "LIMIT 1" is appended to \a sql statement if \a addLimitTo1 is true (the default). */
     tristate querySingleRecordInternal(RecordData &data, const QString* sql,
-                                       QuerySchema* query, bool addLimitTo1 = true);
+                                       QuerySchema* query, const QList<QVariant>* params,
+                                       bool addLimitTo1 = true);
+
+    /*! @internal used by querySingleString() methods.
+     Note: "LIMIT 1" is appended to \a sql statement if \a addLimitTo1 is true (the default). */
+    tristate querySingleStringInternal(const QString *sql, QString &value,
+                                       QuerySchema* query, const QList<QVariant>* params,
+                                       uint column, bool addLimitTo1);
+
+    /*! @internal used by queryNumberString() methods.
+     Note: "LIMIT 1" is appended to \a sql statement if \a addLimitTo1 is true (the default). */
+    tristate querySingleNumberInternal(const QString *sql, int &number,
+                                       QuerySchema* query, const QList<QVariant>* params,
+                                       uint column, bool addLimitTo1);
+
+    /*! @internal used by queryStringList() methods. */
+    bool queryStringListInternal(const QString *sql, QStringList& list,
+                                 QuerySchema* query, const QList<QVariant>* params,
+                                 uint column);
+
+    /*! @internal used by *Internal() methods.
+     Executes query based on a raw SQL statement \a sql or \a query with optional \a params. */
+    Cursor* executeQueryInternal(const QString& sql, QuerySchema* query,
+                                 const QList<QVariant>* params);
 
     /*! @internal used by Driver::createConnection().
      Only works if connection is not yet established. */

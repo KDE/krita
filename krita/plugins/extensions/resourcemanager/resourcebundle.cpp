@@ -39,6 +39,8 @@
 #include <QCryptographicHash>
 #include <QByteArray>
 #include <QPainter>
+#include <QStringList>
+#include <QMessageBox>
 
 #include <kis_resource_server_provider.h>
 #include <kis_workspace_resource.h>
@@ -441,6 +443,7 @@ bool ResourceBundle::saveToDevice(QIODevice */*dev*/) const
 
 bool ResourceBundle::install()
 {
+    QStringList md5Mismatch;
     if (filename().isEmpty())  {
         qWarning() << "Cannot install bundle: no file name" << this;
         return false;
@@ -479,6 +482,14 @@ bool ResourceBundle::install()
                 KoAbstractGradient *res2 = gradientServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     gradientServer->addResource(res, false);//add it!   
+                    
+                    if (!m_gradientsMd5Installed.contains(res->md5())) {
+                        m_gradientsMd5Installed.append(res->md5());
+                    }
+                    if (ref.md5sum!=res->md5()) {
+                        md5Mismatch.append(res->name());
+                    }
+                    
                     foreach(const QString &tag, ref.tagList) {
                         gradientServer->addTag(res, tag);
                     }
@@ -514,7 +525,15 @@ bool ResourceBundle::install()
                 
                 KoPattern *res2 = patternServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    patternServer->addResource(res, false);//add it!   
+                    patternServer->addResource(res, false);//add it!
+                    
+                    if (!m_patternsMd5Installed.contains(res->md5())) {
+                        m_patternsMd5Installed.append(res->md5());
+                    }
+                    if (ref.md5sum!=res->md5()) {
+                        md5Mismatch.append(res->name());
+                    }
+                       
                     foreach(const QString &tag, ref.tagList) {
                         patternServer->addTag(res, tag);
                     }
@@ -548,7 +567,15 @@ bool ResourceBundle::install()
                 //find the resouce on the server
                 KisBrushSP res2 = brushServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    brushServer->addResource(res, false);//add it!   
+                    brushServer->addResource(res, false);//add it!
+                    
+                    if (!m_brushesMd5Installed.contains(res->md5())) {
+                        m_brushesMd5Installed.append(res->md5());
+                    }
+                    if (ref.md5sum!=res->md5()) {
+                        md5Mismatch.append(res->name());
+                    }
+                       
                     foreach(const QString &tag, ref.tagList) {
                         brushServer->addTag(res.data(), tag);
                     }
@@ -586,6 +613,14 @@ bool ResourceBundle::install()
                 KoColorSet *res2 = paletteServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     paletteServer->addResource(res, false);//add it!   
+                    
+                    if (!m_palettesMd5Installed.contains(res->md5())) {
+                        m_palettesMd5Installed.append(res->md5());
+                    }
+                    if (ref.md5sum!=res->md5()) {
+                        md5Mismatch.append(res->name());
+                    }
+                    
                     foreach(const QString &tag, ref.tagList) {
                         paletteServer->addTag(res, tag);
                     }
@@ -621,7 +656,15 @@ bool ResourceBundle::install()
                 //the following tries to find the resource by name.
                 KisWorkspaceResource *res2 = workspaceServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    workspaceServer->addResource(res, false);//add it!   
+                    workspaceServer->addResource(res, false);//add it! 
+                    
+                    if (!m_workspacesMd5Installed.contains(res->md5())) {
+                        m_workspacesMd5Installed.append(res->md5());
+                    }
+                    if (ref.md5sum!=res->md5()) {
+                        md5Mismatch.append(res->name());
+                    }
+                      
                     foreach(const QString &tag, ref.tagList) {
                         workspaceServer->addTag(res, tag);
                     }
@@ -660,7 +703,13 @@ bool ResourceBundle::install()
                 //the following tries to find the resource by name.
                 KisPaintOpPresetSP res2 = paintoppresetServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    paintoppresetServer->addResource(res, false);//add it!   
+                    paintoppresetServer->addResource(res, false);//add it!
+                    if (!m_presetsMd5Installed.contains(res->md5())){
+                        m_presetsMd5Installed.append(res->md5());
+                    }
+                    if (ref.md5sum!=res->md5()) {
+                        md5Mismatch.append(res->name());
+                    }
                     
                     foreach(const QString &tag, ref.tagList) {
                         paintoppresetServer->addTag(res.data(), tag);
@@ -675,6 +724,17 @@ bool ResourceBundle::install()
         }
     }
     m_installed = true;
+    if(!md5Mismatch.isEmpty()){
+        QString message = i18n("The following resources had mismatching MD5 sums. They may have gotten corrupted, for example, during download.");
+        QMessageBox bundleFeedback;
+        bundleFeedback.setIcon(QMessageBox::Warning);
+        foreach (QString name, md5Mismatch) {
+            message.append("\n");
+            message.append(name);
+        }
+        bundleFeedback.setText(message);
+        bundleFeedback.exec();
+    }
     return true;
 }
 
@@ -684,47 +744,53 @@ bool ResourceBundle::uninstall()
 
 
     KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
-    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {
-        KoAbstractGradient *res = gradientServer->resourceByMD5(ref.md5sum);
+    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {
+    foreach(const QByteArray md5, m_gradientsMd5Installed) {
+        KoAbstractGradient *res = gradientServer->resourceByMD5(md5);
         if (res) {
             gradientServer->removeResourceFromServer(res);
         }
     }
 
     KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("patterns")) {
-        KoPattern *res = patternServer->resourceByMD5(ref.md5sum);
+    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("patterns")) {
+    foreach(const QByteArray md5, m_patternsMd5Installed) {
+        KoPattern *res = patternServer->resourceByMD5(md5);
         if (res) {
             patternServer->removeResourceFromServer(res);
         }
     }
 
     KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
-    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("brushes")) {
-        KisBrushSP res = brushServer->resourceByMD5(ref.md5sum);
+    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("brushes")) {
+    foreach(const QByteArray md5, m_brushesMd5Installed) {
+        KisBrushSP res = brushServer->resourceByMD5(md5);
         if (res) {
             brushServer->removeResourceFromServer(res);
         }
     }
 
     KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("palettes")) {
-        KoColorSet *res = paletteServer->resourceByMD5(ref.md5sum);
+    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("palettes")) {
+    foreach(const QByteArray md5, m_palettesMd5Installed) {
+        KoColorSet *res = paletteServer->resourceByMD5(md5);
         if (res) {
             paletteServer->removeResourceFromServer(res);
         }
     }
     KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
-    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
-        KisWorkspaceResource *res = workspaceServer->resourceByMD5(ref.md5sum);
+    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
+    foreach(const QByteArray md5, m_workspacesMd5Installed) {
+        KisWorkspaceResource *res = workspaceServer->resourceByMD5(md5);
         if (res) {
             workspaceServer->removeResourceFromServer(res);
         }
     }
 
     KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("paintoppresets")) {
-        KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(ref.md5sum);
+    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("paintoppresets")) {
+    foreach(const QByteArray md5, m_presetsMd5Installed) {
+        KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(md5);
         if (res) {
             paintoppresetServer->removeResourceFromServer(res);
         }
@@ -747,7 +813,6 @@ const QString ResourceBundle::getMeta(const QString &type, const QString &defaul
        return defaultValue;
     }
 }
-
 
 void ResourceBundle::addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum)
 {
@@ -858,6 +923,7 @@ void ResourceBundle::writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *w
         writer->endElement();
     }
 }
+
 void ResourceBundle::setInstalled(bool install)
 {
     m_installed = install;

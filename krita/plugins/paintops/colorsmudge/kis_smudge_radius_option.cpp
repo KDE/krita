@@ -53,7 +53,7 @@ KisSmudgeRadiusOption::KisSmudgeRadiusOption(const QString& name, const QString&
 void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scale, qreal posx, qreal posy,KisPaintDeviceSP dev) const
 {
     double sliderValue = computeValue(info);
-    int smudgeRadius = (sliderValue * scale);
+    int smudgeRadius = (sliderValue * scale)*0.5;//scale is diameter?
 
 
     KoColor color = painter.paintColor();
@@ -111,13 +111,14 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
                             // to sum to 255 in total
                             // It's -(counts -1), because we'll add the center one implicitly
                             // through that calculation
-                            weights[1] = (255 - (k + 1) * (255 /(k+2)));
+                            weights[1] = (255 - ((i + 1) * (255 /(i+2) )) );
                         } else {
-                            weights[1] = 255 /(k+2);
+                            weights[1] = 255 /(i+2);
                         }
 
 
                         i++;
+                        if (i>smudgeRadius){i=0;}
                         weights[0] = 255 - weights[1];
                         const quint8** cpixels = const_cast<const quint8**>(pixels);
                         cs->mixColorsOp()->mixColors(cpixels, weights,2, data);
@@ -135,8 +136,8 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
         KoColor color = KoColor(pixels[0],cs);
         painter.setPaintColor(color);
 
-        for (i = 0; i < 2; i++){
-            delete[] pixels[i];
+        for (int l = 0; l < 2; l++){
+            delete[] pixels[l];
         }
        // delete[] pixels;
         delete[] data;

@@ -29,7 +29,6 @@
 #include <ktoggleaction.h>
 #include <kis_debug.h>
 
-#include <KisStandardAction.h>
 #include <KisView.h>
 #include <KoZoomAction.h>
 #include <KoRuler.h>
@@ -126,10 +125,11 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
                                           "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers.</p>"));
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
-    m_showGuidesAction = KisStandardAction::showGuides(this, SLOT(showGuides()), this);
-    actionCollection->addAction(KisStandardAction::name(KisStandardAction::ShowGuides), m_showGuidesAction);
+    m_showGuidesAction = new KToggleAction(i18n("Show Guides"), this);
+    m_showGuidesAction->setToolTip(i18n("Shows or hides guides"));
     m_showGuidesAction->setChecked(m_view->document()->guidesData().showGuideLines());
-
+    connect(m_showGuidesAction, SIGNAL(triggered(bool)), this, SLOT(showGuides()));
+    actionCollection->addAction("view_show_guides", m_showGuidesAction);
 
     m_100pct = new KAction(i18n("Reset zoom"), this);
     actionCollection->addAction("zoom_to_100pct", m_100pct);

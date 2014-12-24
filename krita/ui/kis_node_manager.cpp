@@ -241,7 +241,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
 
 void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
 {
-    m_d->layerManager->setup(actionCollection, actionManager);
+    m_d->layerManager->setup(actionManager);
     m_d->maskManager->setup(actionCollection, actionManager);
 
     KisAction * action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Layer Horizontally"), this);

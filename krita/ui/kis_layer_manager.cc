@@ -279,7 +279,7 @@ void KisLayerManager::activateLayer(KisLayerSP layer)
 }
 
 
-void KisLayerManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
+void KisLayerManager::setup(KisActionManager* actionManager)
 {
     m_imageFlatten = new KisAction(i18n("&Flatten image"), this);
     actionManager->addAction("flatten_image", m_imageFlatten);

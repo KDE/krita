@@ -316,11 +316,6 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
         actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
 
         connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
-        KAction *action = dynamic_cast<KAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
-        if (action) {
-            action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-            action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
-        }
 
         KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
         KoToolManager::instance()->registerTools(actionCollection(), dummy);

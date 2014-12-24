@@ -432,6 +432,10 @@ private:
 
     bool exportConfirmation(const QByteArray &outputFormat);
 
+    void createActions();
+
+    void initializeGeometry();
+
 private:
     class Private;
     Private * const d;

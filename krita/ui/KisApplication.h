@@ -107,23 +107,6 @@ public:
      */
     static KisApplication* koApplication();
 
-signals:
-
-    /// KisPart needs to be able to emit document signals from here. These
-    /// signals are used for the dbus interface of stage, see commit
-    /// d102d9beef80cc93fc9c130b0ad5fe1caf238267
-    friend class KisPart;
-
-    /**
-     * emitted when a new document is opened.
-     */
-    void documentOpened(const QString &ref);
-
-    /**
-     * emitted when an old document is closed.
-     */
-    void documentClosed(const QString &ref);
-
 protected:
 
     // Current application object.

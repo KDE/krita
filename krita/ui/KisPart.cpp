@@ -209,10 +209,7 @@ void KisPart::addView(KisView *view, KisDocument *document)
     connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
 
     if (d->views.size() == 1) {
-        KisApplication *app = qobject_cast<KisApplication*>(KApplication::kApplication());
-        if (0 != app) {
-            emit app->documentOpened('/'+objectName());
-        }
+        documentOpened('/'+objectName());
     }
 
     emit sigViewAdded(view);
@@ -241,10 +238,7 @@ void KisPart::removeView(KisView *view)
     }
 
     if (d->views.isEmpty()) {
-        KisApplication *app = qobject_cast<KisApplication*>(KApplication::kApplication());
-        if (0 != app) {
-            emit app->documentClosed('/'+objectName());
-        }
+        emit documentClosed('/'+objectName());
     }
 }
 

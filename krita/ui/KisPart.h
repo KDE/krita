@@ -162,6 +162,15 @@ private slots:
     void startCustomDocument(KisDocument *doc);
 
 signals:
+    /**
+     * emitted when a new document is opened.
+     */
+    void documentOpened(const QString &ref);
+
+    /**
+     * emitted when an old document is closed.
+     */
+    void documentClosed(const QString &ref);
 
     void sigViewAdded(KisView *view);
     void sigViewRemoved(KisView *view);

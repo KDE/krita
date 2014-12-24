@@ -55,7 +55,6 @@
 #include <QMessageBox>
 #include <KoServiceLocator.h>
 #include <kservice.h>
-#include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
@@ -71,7 +70,6 @@
 #include <KoResourceServerProvider.h>
 #include <KoSelection.h>
 #include <KoStore.h>
-#include <KoToolBoxFactory.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>
 #include <KoViewConverter.h>
@@ -284,10 +282,9 @@ public:
 };
 
 
-KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionCollection)
+KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollection)
     : d(new KisViewManagerPrivate())
 {
-
     d->actionCollection = _actionCollection;
     d->actionManager = new KisActionManager(this);
     d->mainWindow = dynamic_cast<QMainWindow*>(parent);
@@ -302,26 +299,14 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
     createActions();
     createManagers();
 
-    d->controlFrame = new KisControlFrame(this, mainWindow());
+    d->controlFrame = new KisControlFrame(this, parent);
 
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
     this->showHideScrollbars();
 
+    KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
+    KoToolManager::instance()->registerTools(actionCollection(), dummy);
 
-    //Workaround, by default has the same shortcut as hide/show dockers
-    if (mainWindow()) {
-
-        mainWindow()->setDockNestingEnabled(true);
-
-        connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
-
-        KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
-        KoToolManager::instance()->registerTools(actionCollection(), dummy);
-
-        KoToolBoxFactory toolBoxFactory;
-        QDockWidget* toolbox = mainWindow()->createDockWidget(&toolBoxFactory);
-        toolbox->setMinimumWidth(60);
-    }
 
     d->statusBar = new KisStatusBar(this);
     QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
@@ -345,30 +330,9 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
 
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     if (rserver->resources().isEmpty()) {
-        QMessageBox::critical(mainWindow(), i18nc("@title:window", "Critical Error"), i18n("Krita cannot find any brush presets and will close now. Please check your installation."));
+        QMessageBox::critical(parent, i18nc("@title:window", "Critical Error"), i18n("Krita cannot find any brush presets and will close now. Please check your installation."));
         exit(0);
     }
-
-    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
-        KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        if (mainWindow())
-            mainWindow()->createDockWidget(factory);
-    }
-
-    foreach(KoCanvasObserverBase* observer, mainWindow()->canvasObservers()) {
-        observer->setObservedCanvas(0);
-        KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
-        if (mainwindowObserver) {
-            mainwindowObserver->setMainWindow(this);
-        }
-    }
-
-    d->actionManager->updateGUI();
-
-    connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
-    updateIcons();
-
-    loadPlugins();
 }
 
 
@@ -792,12 +756,6 @@ void KisViewManager::slotBlacklistCleanup()
     KisDlgBlacklistCleanup dialog;
     dialog.exec();
 }
-
-void KisViewManager::loadPlugins()
-{
-    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), this);
-}
-
 
 KisNodeManager * KisViewManager::nodeManager() const
 {

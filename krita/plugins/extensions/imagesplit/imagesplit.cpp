@@ -50,7 +50,7 @@ K_PLUGIN_FACTORY(ImagesplitFactory, registerPlugin<Imagesplit>();)
 K_EXPORT_PLUGIN(ImagesplitFactory("krita"))
 
 Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/imagesplit.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Image Split "), this);
     addAction("imagesplit", action);

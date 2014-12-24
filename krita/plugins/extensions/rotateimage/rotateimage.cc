@@ -42,7 +42,7 @@ K_PLUGIN_FACTORY(RotateImageFactory, registerPlugin<RotateImage>();)
 K_EXPORT_PLUGIN(RotateImageFactory("krita"))
 
 RotateImage::RotateImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/rotateimage.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Rotate Image..."), this);
     addAction("rotateimage", action);

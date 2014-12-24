@@ -43,7 +43,7 @@ K_PLUGIN_FACTORY(OffsetImageFactory, registerPlugin<OffsetImage>();)
 K_EXPORT_PLUGIN(OffsetImageFactory("krita"))
 
 OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/offsetimage.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Offset Image..."), this);
     addAction("offsetimage", action);

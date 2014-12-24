@@ -76,6 +76,7 @@
 #include <KoToolRegistry.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
+#include <KoPluginLoader.h>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -347,8 +348,6 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
 
-    loadPlugins();
-
     KisInputProfileManager::instance()->loadProfiles();
 
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -356,7 +355,6 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
         QMessageBox::critical(mainWindow(), i18nc("@title:window", "Critical Error"), i18n("Krita cannot find any brush presets and will close now. Please check your installation."));
         exit(0);
     }
-
 
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -377,6 +375,7 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();
 
+    loadPlugins();
 }
 
 
@@ -803,22 +802,7 @@ void KisViewManager::slotBlacklistCleanup()
 
 void KisViewManager::loadPlugins()
 {
-    // Load all plugins
-    const KService::List offers = KoServiceLocator::instance()->entries("Krita/ViewPlugin");
-    KService::List::ConstIterator iter;
-    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-        KService::Ptr service = *iter;
-        dbgUI << "Load plugin " << service->name();
-        QString error;
-
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        if (plugin) {
-            mainWindow()->insertChildClient(plugin);
-        } else {
-            errKrita << "Fail to create an instance for " << service->name() << " " << error;
-        }
-    }
+    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), this);
 }
 
 

@@ -47,7 +47,7 @@ K_PLUGIN_FACTORY(KisSeparateChannelsPluginFactory, registerPlugin<KisSeparateCha
 K_EXPORT_PLUGIN(KisSeparateChannelsPluginFactory("krita"))
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/imageseparate.rc")
+    : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Separate Image..."), this);
     addAction("separate", action);
@@ -70,7 +70,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (!dev) return;
 
     DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->name(),
-            image->colorSpace()->name(), m_view->mainWindow(), "Separate");
+                                                image->colorSpace()->name(), m_view->mainWindow(), "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));

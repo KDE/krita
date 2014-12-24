@@ -53,7 +53,7 @@ K_EXPORT_PLUGIN(ColorSpaceConversionFactory("krita"))
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/colorspaceconversion.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Convert Image Color Space..."), this);
     addAction("imagecolorspaceconversion", action);

@@ -49,7 +49,7 @@ K_PLUGIN_FACTORY(metadataeditorPluginFactory, registerPlugin<metadataeditorPlugi
 K_EXPORT_PLUGIN(metadataeditorPluginFactory("krita"))
 
 metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/metadataeditor.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Edit metadata..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);

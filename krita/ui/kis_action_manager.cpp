@@ -34,7 +34,9 @@
 class KisActionManager::Private {
 
 public:
-    Private() {}
+    Private()
+        : viewManager(0)
+    {}
 
     KisViewManager* viewManager;
     QList<KisAction*> actions;

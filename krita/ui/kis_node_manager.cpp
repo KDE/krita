@@ -1130,7 +1130,10 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
         KIS_ASSERT_RECOVER_RETURN(parentNode->paintDevice());
         dstDevice = parentNode->paintDevice();
     } else {
-        KisPaintDeviceSP copyDevice = parentNode->projection();
+        KisPaintDeviceSP copyDevice = parentNode->paintDevice();
+        if (!copyDevice) {
+            copyDevice = parentNode->original();
+        }
         dstDevice = new KisPaintDevice(*copyDevice);
     }
 

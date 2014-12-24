@@ -54,10 +54,8 @@ public:
     /**
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
-     *
-     * @param nativeMimeType: the nativeMimeType of the calligra application
      */
-    explicit KisApplication(const QByteArray &nativeMimeType);
+    explicit KisApplication();
 
     /**
      *  Destructor.
@@ -134,9 +132,6 @@ protected:
 private:
     /// @return the number of autosavefiles opened
     int checkAutosaveFiles(KisMainWindow *mainWindow);
-
-    // Set the Calligra-specific command-line options
-    bool initHack();
 
     KisApplicationPrivate * const d;
     class ResetStarting;

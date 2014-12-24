@@ -77,12 +77,20 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     KCmdLineArgs::init(argc, argv, aboutData);
 
     KCmdLineOptions options;
+    options.add("print", ki18n("Only print and exit"));
+    options.add("template", ki18n("Open a new document with a template"));
+    options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
+    options.add("export-pdf", ki18n("Only export to PDF and exit"));
+    options.add("export", ki18n("Export to the given filename and exit"));
+    options.add("export-filename <filename>", ki18n("Filename for export/export-pdf"));
+    options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
+    options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
-    options.add( "hwinfo", ki18n( "Show some information about the hardware" ));
+
     KCmdLineArgs::addCmdLineOptions(options);
 
     // first create the application so we can create a  pixmap
-    KisApplication app(KIS_MIME_TYPE);
+    KisApplication app;
 
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();

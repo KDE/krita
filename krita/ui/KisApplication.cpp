@@ -94,7 +94,6 @@ public:
     KisApplicationPrivate()
         : splashScreen(0)
     {}
-    QByteArray nativeMimeType;
     QWidget *splashScreen;
 };
 
@@ -137,13 +136,12 @@ public:
 
 
 
-KisApplication::KisApplication(const QByteArray &nativeMimeType)
-    : KApplication(initHack())
+KisApplication::KisApplication()
+    : KApplication()
     , d(new KisApplicationPrivate)
 {
     KisApplication::KoApp = this;
 
-    d->nativeMimeType = nativeMimeType;
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
 
@@ -166,22 +164,6 @@ KisApplication::KisApplication(const QByteArray &nativeMimeType)
         setStyle("Oxygen");
     }
 
-}
-
-// This gets called before entering KApplication::KApplication
-bool KisApplication::initHack()
-{
-    KCmdLineOptions options;
-    options.add("print", ki18n("Only print and exit"));
-    options.add("template", ki18n("Open a new document with a template"));
-    options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
-    options.add("export-pdf", ki18n("Only export to PDF and exit"));
-    options.add("export", ki18n("Export to the given filename and exit"));
-    options.add("export-filename <filename>", ki18n("Filename for export/export-pdf"));
-    options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
-    options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
-    KCmdLineArgs::addCmdLineOptions(options, ki18nc("@title:window", "Krita"), "krita", "kde");
-    return true;
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -256,8 +238,7 @@ bool KisApplication::start()
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     int argsCount = args->count();
 
-    KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("krita");
-    QString dpiValues = koargs->getOption("dpi");
+    QString dpiValues = args->getOption("dpi");
     if (!dpiValues.isEmpty()) {
         int sep = dpiValues.indexOf(QRegExp("[x, ]"));
         int dpiX;
@@ -276,13 +257,13 @@ bool KisApplication::start()
         }
     }
 
-    const bool doTemplate = koargs->isSet("template");
-    const bool print = koargs->isSet("print");
-    const bool exportAs = koargs->isSet("export");
-    const bool exportAsPdf = koargs->isSet("export-pdf");
-    const QString exportFileName = koargs->getOption("export-filename");
-    const QString roundtripFileName = koargs->getOption("roundtrip-filename");
-    const QString profileFileName = koargs->getOption("profile-filename");
+    const bool doTemplate = args->isSet("template");
+    const bool print = args->isSet("print");
+    const bool exportAs = args->isSet("export");
+    const bool exportAsPdf = args->isSet("export-pdf");
+    const QString exportFileName = args->getOption("export-filename");
+    const QString roundtripFileName = args->getOption("roundtrip-filename");
+    const QString profileFileName = args->getOption("profile-filename");
 
 
     // only show the mainWindow when no command-line mode option is passed
@@ -305,7 +286,7 @@ bool KisApplication::start()
                               && !profileFileName.isEmpty());
 
     // Figure out _which_ application we actually are
-    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(d->nativeMimeType);
+    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(KIS_MIME_TYPE);
     if (entry.isEmpty()) {
 
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Critical Error"), i18n("Essential application components could not be found.\n"
@@ -356,7 +337,7 @@ bool KisApplication::start()
     if (argsCount > 0) {
 
         // remove all non-filename options
-        koargs->clear();
+        args->clear();
 
         QTextStream profileoutput;
         QFile profileFile(profileFileName);
@@ -508,9 +489,9 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
 
 QStringList KisApplication::mimeFilter(KisImportExportManager::Direction direction) const
 {
-    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(d->nativeMimeType);
+    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(KIS_MIME_TYPE);
     KService::Ptr service = entry.service();
-    return KisImportExportManager::mimeFilter(d->nativeMimeType,
+    return KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
                                        direction,
                                        service->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList());
 }
@@ -546,9 +527,9 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
     // get all possible autosave files in the home dir, this is for unsaved document autosave files
     // Using the extension allows to avoid relying on the mime magic when opening
-    KMimeType::Ptr mime = KMimeType::mimeType(d->nativeMimeType);
+    KMimeType::Ptr mime = KMimeType::mimeType(KIS_MIME_TYPE);
     if (!mime) {
-        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", d->nativeMimeType.constData());
+        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", KIS_MIME_TYPE);
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
     if (extension.isEmpty()) {

@@ -288,9 +288,8 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
     : d(new KisViewManagerPrivate())
 {
 
-    d->actionManager = new KisActionManager(this);
-
     d->actionCollection = _actionCollection;
+    d->actionManager = new KisActionManager(this);
     d->mainWindow = dynamic_cast<QMainWindow*>(parent);
 
     d->canvasResourceProvider = new KisCanvasResourceProvider(this);
@@ -313,7 +312,6 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
     if (mainWindow()) {
 
         mainWindow()->setDockNestingEnabled(true);
-        actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
 
         connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
 

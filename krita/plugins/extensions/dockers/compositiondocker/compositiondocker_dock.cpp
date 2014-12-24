@@ -97,9 +97,8 @@ CompositionDockerDock::~CompositionDockerDock()
 
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    setEnabled(canvas != 0);
-
     unsetCanvas();
+    setEnabled(canvas != 0);
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas) {

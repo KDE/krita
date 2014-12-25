@@ -50,12 +50,6 @@ public:
     void setPaintOpSettingsWidget(QWidget * widget);
 
     /**
-     * changes the "save to preset" button text to "override preset"
-     * and highlites the preset name lineedit
-     */
-    void changeSavePresetButtonText(bool change);
-
-    /**
      * @return the name entered in the preset name lineedit
      */
     QString getPresetName() const;
@@ -77,8 +71,6 @@ public:
 
     bool detached() const;
 
-    void setReloadEnabled(bool value);
-
     void updateViewSettings();
 
 protected:
@@ -87,16 +79,15 @@ protected:
     void showEvent(QShowEvent *);
 
 public slots:
+    void slotWatchPresetNameLineEdit();
     void switchDetached(bool show = true);
     void hideScratchPad();
     void showScratchPad();
     void resourceSelected(KoResource* resource);
-    void slotDirtyPresetToggled(bool value);
-    
+
 signals:
     void savePresetClicked();
     void defaultPresetClicked();
-    void presetNameLineEditChanged(const QString& presetName);
     void paintopActivated(const QString& presetName);
     void signalResourceSelected(KoResource* resource);
     void reloadPresetClicked();
@@ -106,7 +97,6 @@ signals:
     void sizeChanged();
 
 private slots:
-    void slotCheckPresetValidity();
     void slotSwitchPresetStrip(bool visible);
     void slotSwitchScratchpad(bool visible);
 

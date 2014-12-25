@@ -142,7 +142,6 @@ private slots:
     void slotToggleEraseMode(bool checked);
     void slotSetCompositeMode(int index);
     void slotSetPaintop(const QString& paintOpId);
-    void slotWatchPresetNameLineEdit(const QString& text);
     void slotHorizontalMirrorChanged(bool value);
     void slotVerticalMirrorChanged(bool value);
     void slotSlider1Changed();

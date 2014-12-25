@@ -299,6 +299,7 @@ bool KisConfig::useDirtyPresets() const
 void KisConfig::setUseDirtyPresets(bool value)
 {
     m_cfg.writeEntry("useDirtyPresets",value);
+    KisConfigNotifier::instance()->notifyConfigChanged();
 }
 bool KisConfig::useEraserBrushSize() const
 {
@@ -307,6 +308,7 @@ bool KisConfig::useEraserBrushSize() const
 void KisConfig::setUseEraserBrushSize(bool value)
 {
     m_cfg.writeEntry("useEraserBrushSize",value);
+    KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
 

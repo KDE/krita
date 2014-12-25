@@ -71,6 +71,9 @@ signals:
 public slots:
     void updateViewSettings();
 
+private slots:
+    void notifyConfigChanged();
+
 protected:
     virtual void resizeEvent(QResizeEvent* event);
 

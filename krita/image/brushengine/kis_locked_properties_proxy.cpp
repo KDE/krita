@@ -41,7 +41,8 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
     KisPaintOpSettings* t = dynamic_cast<KisPaintOpSettings*>(temp);
 
     if (t->preset()) {
-        bool saveDirtyState = t->preset()->isPresetDirty();
+        // restores the dirty state on returns automagically
+        KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
 
         if (m_lockedProperties->lockedProperties()) {
             if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
@@ -51,7 +52,6 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
                     temp->setProperty(name + "_previous", m_parent->getProperty(name));
                 }
                 temp->setProperty(name, m_lockedProperties->lockedProperties()->getProperty(name));
-                t->preset()->setPresetDirty(saveDirtyState);
                 return m_lockedProperties->lockedProperties()->getProperty(name);
             } else {
                 if (m_parent->hasProperty(name + "_previous")) {
@@ -61,8 +61,6 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
                 }
             }
         }
-
-        t->preset()->setPresetDirty(saveDirtyState);
     }
     return m_parent->getProperty(name);
 }
@@ -72,7 +70,9 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
     KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
     KisPaintOpSettings* t = dynamic_cast<KisPaintOpSettings*>(temp);
     if (t->preset()) {
-        bool saveDirtyState = t->preset()->isPresetDirty();
+        // restores the dirty state on returns automagically
+        KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
+
         if (m_lockedProperties->lockedProperties()) {
             if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
                 m_lockedProperties->lockedProperties()->setProperty(name, value);
@@ -80,7 +80,6 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
                 if (!m_parent->hasProperty(name + "_previous")) {
                     t->setProperty(name + "_previous", m_parent->getProperty(name));
                 }
-                t->preset()->setPresetDirty(saveDirtyState);
                 return;
             }
         }

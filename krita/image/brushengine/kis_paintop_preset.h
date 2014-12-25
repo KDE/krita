@@ -82,6 +82,27 @@ public:
 
     bool isPresetDirty() const;
 
+    /**
+     * Never use manual save/restore calls to
+     * isPresetDirty()/setPresetDirty()! They will lead to
+     * hard-to-tack-down bugs when the dirty state will not be
+     * restored on jumps like 'return', 'break' or exception.
+     */
+    class DirtyStateSaver {
+    public:
+        DirtyStateSaver(KisPaintOpPreset *preset)
+            : m_preset(preset), m_isDirty(preset->isPresetDirty())
+        {
+        }
+
+        ~DirtyStateSaver() {
+            m_preset->setPresetDirty(m_isDirty);
+        }
+
+    private:
+        KisPaintOpPreset *m_preset;
+        bool m_isDirty;
+    };
 
 protected:
 

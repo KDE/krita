@@ -41,11 +41,34 @@
 #include<kis_types.h>
 
 struct KisPaintOpSettings::Private {
+    Private() : disableDirtyNotifications(false) {}
+
     KisNodeWSP node;
     QPointer<KisPaintOpSettingsWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;
 
+
+    bool disableDirtyNotifications;
+
+    class DirtyNotificationsLocker {
+    public:
+        DirtyNotificationsLocker(KisPaintOpSettings::Private *d)
+            : m_d(d),
+              m_oldNotificationsState(d->disableDirtyNotifications)
+        {
+            m_d->disableDirtyNotifications = true;
+        }
+
+        ~DirtyNotificationsLocker() {
+            m_d->disableDirtyNotifications = m_oldNotificationsState;
+        }
+
+    private:
+        KisPaintOpSettings::Private *m_d;
+        bool m_oldNotificationsState;
+        Q_DISABLE_COPY(DirtyNotificationsLocker);
+    };
 };
 
 
@@ -211,32 +234,29 @@ QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal
 
 void KisPaintOpSettings::setCanvasRotation(qreal angle)
 {
+    Private::DirtyNotificationsLocker locker(d.data());
+
     setProperty("runtimeCanvasRotation", angle);
     setPropertyNotSaved("runtimeCanvasRotation");
-    if (this->preset()) {
-        this->preset()->setPresetDirty(false);
-    }
 }
 
 void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored)
 {
+    Private::DirtyNotificationsLocker locker(d.data());
+
     setProperty("runtimeCanvasMirroredX", xAxisMirrored);
     setPropertyNotSaved("runtimeCanvasMirroredX");
 
     setProperty("runtimeCanvasMirroredY", yAxisMirrored);
     setPropertyNotSaved("runtimeCanvasMirroredY");
-
-    if (this->preset()) {
-        this->preset()->setPresetDirty(false);
-    }
 }
 
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
-    if (value != KisPropertiesConfiguration::getProperty(name)) {
-        if (this->preset()) {
-            this->preset()->setPresetDirty(true);
-        }
+    if (value != KisPropertiesConfiguration::getProperty(name) &&
+        !d->disableDirtyNotifications && this->preset()) {
+
+        this->preset()->setPresetDirty(true);
     }
 
     KisPropertiesConfiguration::setProperty(name, value);

@@ -555,8 +555,6 @@ public:
 
     virtual PointerType createResource( const QString & filename ) { return new T(filename); }
 
-protected:
-
     /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
     virtual QList<PointerType> sortedResources()
     {
@@ -566,6 +564,8 @@ protected:
         }
         return sortedNames.values();
     }
+
+protected:
 
     void notifyResourceAdded(PointerType resource)
     {

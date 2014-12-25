@@ -126,19 +126,25 @@ public:
     KisPresetProxyAdapter(KisPaintOpPresetResourceServer* resourceServer)
         : KisPaintOpPresetResourceServerAdapter(resourceServer)
     {
+        setSortingEnabled(true);
     }
     virtual ~KisPresetProxyAdapter() {}
 
     virtual QList< KoResource* > resources() {
 
+        QList<KoResource*> serverResources =
+            KisPaintOpPresetResourceServerAdapter::resources();
+
         if (m_paintopID.isEmpty()) {
-            return KisPaintOpPresetResourceServerAdapter::resources();
+            return serverResources;
         }
-        QList<KisPaintOpPresetSP> serverResources = resourceServer()->resources();
+
         QList<KoResource*> resources;
-        foreach( KisPaintOpPresetSP preset, serverResources ) {
+        foreach (KoResource *resource, serverResources) {
+            KisPaintOpPreset *preset = static_cast<KisPaintOpPreset*>(resource);
+
             if( preset->paintOp().id() == m_paintopID) {
-                resources.append( preset.data() );
+                resources.append(preset);
             }
         }
         return resources;

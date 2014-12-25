@@ -670,6 +670,10 @@ void KisPaintopBox::slotSaveActivePreset()
         rServer->addTag(newPreset.data(), tag);
     }
 
+    // HACK ALERT! the server does not notify the observers
+    // automatically, so we need to call theupdate manually!
+    rServer->tagCategoryMembersChanged();
+
     restoreResource(newPreset.data());
 
     m_favoriteResourceManager->setBlockUpdates(false);

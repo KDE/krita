@@ -494,11 +494,13 @@ public:
         return m_tagStore->tagNamesList();
     }
 
+    // don't use these method directly since it doesn't update views!
     void addTag( KoResource* resource,const QString& tag)
     {
         m_tagStore->addTag(resource,tag);
     }
 
+    // don't use these method directly since it doesn't update views!
     void delTag( KoResource* resource,const QString& tag)
     {
         m_tagStore->delTag(resource,tag);

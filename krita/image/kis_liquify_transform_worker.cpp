@@ -70,6 +70,8 @@ KisLiquifyTransformWorker::KisLiquifyTransformWorker(const QRect &srcBounds,
                                                      int pixelPrecision)
     : m_d(new Private(srcBounds, progress, pixelPrecision))
 {
+    KIS_ASSERT_RECOVER_RETURN(!srcBounds.isEmpty());
+
     // TODO: implement 'progress' stuff
     m_d->preparePoints();
 }

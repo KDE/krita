@@ -83,12 +83,16 @@ bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
 void KisSpecificColorSelectorWidget::setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer)
 {
     m_displayRenderer = displayRenderer;
+
+    if (m_colorSpace) {
+        setColorSpace(m_colorSpace);
+    }
 }
 
 void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 {
     Q_ASSERT(cs);
-    if (m_colorSpace && *m_colorSpace == *cs) return;
+
     dbgPlugins << cs->id() << " " << cs->profile()->name();
     m_colorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
     Q_ASSERT(m_colorSpace);

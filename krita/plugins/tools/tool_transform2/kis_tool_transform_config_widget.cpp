@@ -343,7 +343,7 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
     liquifySizeSlider->setValue(props->size());
     liquifyAmountSlider->setValue(props->amount());
     liquifyFlowSlider->setValue(props->flow());
-    buidupModeComboBox->setCurrentIndex(!useWashMode);
+    buidupModeComboBox->setCurrentIndex(useWashMode);
 
     liquifySpacingSlider->setValue(props->spacing());
     liquifySizePressureBox->setChecked(props->sizeHasPressure());
@@ -435,7 +435,7 @@ void KisToolTransformConfigWidget::liquifyBuildUpChanged(int value)
     KisLiquifyProperties *props =
         config->liquifyProperties();
 
-    props->setUseWashMode(!value); // 0 == build up mode / 1 == wash mode
+    props->setUseWashMode(value); // 0 == build up mode / 1 == wash mode
 
     notifyConfigChanged();
 

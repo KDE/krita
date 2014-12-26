@@ -582,7 +582,7 @@ public:
      * Some paintops really want to know about the image they work
      * for, e.g. the clone paintop.
      */
-    void setPaintOpPreset(KisPaintOpPresetSP preset, KisImageWSP image);
+    void setPaintOpPreset(KisPaintOpPresetSP preset, KisNodeSP node, KisImageSP image);
 
     /// Return the paintop preset
     KisPaintOpPresetSP preset() const;

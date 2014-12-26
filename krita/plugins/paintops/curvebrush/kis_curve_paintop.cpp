@@ -29,11 +29,12 @@
 #include "kis_painter.h"
 #include "kis_types.h"
 
-KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter), m_painter(0)
 {
     Q_ASSERT(settings);
     Q_UNUSED(image);
+    Q_UNUSED(node);
 
     m_curveProperties.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);

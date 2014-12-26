@@ -40,10 +40,6 @@ public:
     virtual ~KisFilterOpSettings();
     bool paintIncremental();
 
-    void setNode(KisNodeSP node);
-
-    void setImage(KisImageWSP image);
-
     KisFilterConfiguration* filterConfig() const;
 
     using KisPaintOpSettings::toXML;

@@ -28,7 +28,6 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
-#include "kis_node.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -43,7 +42,6 @@
 struct KisPaintOpSettings::Private {
     Private() : disableDirtyNotifications(false) {}
 
-    KisNodeWSP node;
     QPointer<KisPaintOpSettingsWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;
@@ -145,16 +143,6 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
 
 void KisPaintOpSettings::activate()
 {
-}
-
-void KisPaintOpSettings::setNode(KisNodeSP node)
-{
-    d->node = node;
-}
-
-KisNodeSP KisPaintOpSettings::node() const
-{
-    return d->node;
 }
 
 void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)

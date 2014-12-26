@@ -363,8 +363,7 @@ inline void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     preset->load();
-    preset->settings()->setNode(m_layer);
-    m_painter->setPaintOpPreset(preset, m_image);
+    m_painter->setPaintOpPreset(preset, m_layer, m_image);
 
     QPointF startPoint(0.10 * TEST_IMAGE_WIDTH, 0.5 * TEST_IMAGE_HEIGHT);
     QPointF endPoint(0.90 * TEST_IMAGE_WIDTH, 0.5 * TEST_IMAGE_HEIGHT);
@@ -393,9 +392,7 @@ void KisStrokeBenchmark::benchmarkCircle(QString presetFileName)
         return;
     }
 
-
-    preset->settings()->setNode(m_layer);
-    m_painter->setPaintOpPreset(preset, m_image);
+    m_painter->setPaintOpPreset(preset, m_layer, m_image);
 
 QBENCHMARK{
 
@@ -449,8 +446,7 @@ void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
         qDebug() << "preset : " << presetFileName;
     }
 
-    preset->settings()->setNode(m_layer);
-    m_painter->setPaintOpPreset(preset, m_image);
+    m_painter->setPaintOpPreset(preset, m_layer, m_image);
 
     QBENCHMARK{
         KisDistanceInformation currentDistance;
@@ -477,8 +473,7 @@ void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
         qDebug() << "preset : " << presetFileName;
     }
 
-    preset->settings()->setNode(m_layer);
-    m_painter->setPaintOpPreset(preset, m_image);
+    m_painter->setPaintOpPreset(preset, m_layer, m_image);
 
     QBENCHMARK{
         KisDistanceInformation currentDistance;

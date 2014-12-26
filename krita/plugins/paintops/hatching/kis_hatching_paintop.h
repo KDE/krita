@@ -43,7 +43,7 @@ class KisHatchingPaintOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     virtual ~KisHatchingPaintOp();
 
     /**

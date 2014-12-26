@@ -439,11 +439,10 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
     m_optionWidget = m_paintopOptionWidgets[paintop];
 
-    // the node should be initialized before the configuration (see KisFilterOp)
     preset->settings()->setOptionsWidget(m_optionWidget);
-    preset->settings()->setNode(m_resourceProvider->currentNode());
 
     m_optionWidget->setImage(m_view->image());
+    m_optionWidget->setNode(m_view->activeNode());
     m_optionWidget->setConfiguration(preset->settings());
 
     m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
@@ -598,14 +597,6 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
     m_currTabletToolID = TabletToolID(inputDevice);
 }
 
-void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
-{
-    for (TabletToolMap::iterator itr = m_tabletToolMap.begin(); itr != m_tabletToolMap.end(); ++itr) {
-        if (itr->preset && itr->preset->settings())
-            itr->preset->settings()->setNode(node);
-    }
-}
-
 void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/)
 {
      if (m_view) {
@@ -720,7 +711,6 @@ void KisPaintopBox::slotUpdatePreset()
 void KisPaintopBox::slotSetupDefaultPreset()
 {
     KisPaintOpPresetSP preset = defaultPreset(m_resourceProvider->currentPreset()->paintOp());
-    preset->settings()->setNode(m_resourceProvider->currentPreset()->settings()->node());
     preset->settings()->setOptionsWidget(m_optionWidget);
     m_optionWidget->setConfiguration(preset->settings());
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
@@ -739,15 +729,8 @@ void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
         slotColorSpaceChanged(node->colorSpace());
     }
 
-    for (TabletToolMap::iterator itr = m_tabletToolMap.begin(); itr != m_tabletToolMap.end(); ++itr) {
-
-        if (itr->preset && itr->preset->settings()) {
-            itr->preset->settings()->setNode(node);
-        }
-    }
-
-    if (m_resourceProvider->currentPreset() && m_resourceProvider->currentPreset()->settings()) {
-        m_resourceProvider->currentPreset()->settings()->setNode(node);
+    if (m_optionWidget) {
+        m_optionWidget->setNode(node);
     }
 }
 
@@ -1020,7 +1003,6 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if (preset) {
         preset->load();
-        preset->settings()->setNode(m_resourceProvider->currentNode());
         preset->settings()->setOptionsWidget(m_optionWidget);
         m_optionWidget->setConfiguration(preset->settings());
         m_presetsPopup->resourceSelected(preset.data());

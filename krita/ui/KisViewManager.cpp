@@ -332,9 +332,6 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
     d->statusBar = new KisStatusBar(this);
     QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
 
-    connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-            d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
-
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
             d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
 

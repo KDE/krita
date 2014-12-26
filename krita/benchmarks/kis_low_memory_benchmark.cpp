@@ -79,8 +79,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
     KisPainter *painter = new KisPainter(layer->paintDevice());
 
     painter->setPaintColor(KoColor(Qt::black, colorSpace));
-    painter->setPaintOpPreset(preset, image);
-    preset->settings()->setNode(layer);
+    painter->setPaintOpPreset(preset, layer, image);
 
     /**
      * A simple adapter that will store all the transactions for us

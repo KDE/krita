@@ -65,6 +65,7 @@ void KisActionManager::addAction(const QString& name, KisAction* action)
     if (!name.isEmpty()) {
         d->viewManager->actionCollection()->addAction(name, action);
         action->setObjectName(name);
+        action->setParent(d->viewManager->actionCollection());
     }
 
     d->actions.append(action);
@@ -202,6 +203,37 @@ void KisActionManager::updateGUI()
 
         action->setActionEnabled(enable);
     }
+}
+
+KisAction *KisActionManager::createStandardAction(KStandardAction::StandardAction actionType, const QObject *receiver, const char *member)
+{
+    KAction *standardAction = KStandardAction::create(actionType, receiver, member, 0);
+    KisAction *action = new KisAction(KIcon(standardAction->icon()), standardAction->text());
+    action->setShortcut(standardAction->shortcut(KAction::DefaultShortcut), KAction::DefaultShortcut);
+    action->setShortcut(standardAction->shortcut(KAction::ActiveShortcut), KAction::ActiveShortcut);
+    action->setCheckable(standardAction->isCheckable());
+    if (action->isCheckable()) {
+        action->setChecked(standardAction->isChecked());
+    }
+    action->setMenuRole(standardAction->menuRole());
+    action->setText(standardAction->text());
+    action->setToolTip(standardAction->toolTip());
+
+    if (receiver && member) {
+        if (actionType == KStandardAction::OpenRecent) {
+            QObject::connect(action, SIGNAL(urlSelected(KUrl)), receiver, member);
+        }
+        else if (actionType == KStandardAction::ConfigureToolbars) {
+            QObject::connect(action, SIGNAL(triggered(bool)), receiver, member, Qt::QueuedConnection);
+        }
+        else {
+            QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
+        }
+    }
+
+    addAction(standardAction->objectName(), action);
+    delete standardAction;
+    return action;
 }
 
 void KisActionManager::registerOperationUIFactory(KisOperationUIFactory* factory)

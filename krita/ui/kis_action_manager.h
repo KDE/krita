@@ -26,6 +26,8 @@
 
 #include "KisView.h"
 
+#include "kstandardaction.h"
+
 class KActionCollection;
 class KisViewManager;
 class KisAction;
@@ -60,6 +62,11 @@ public:
     void runOperationFromConfiguration(KisOperationConfiguration* config);
     
     void updateGUI();
+
+    /// Create a KisAction based on a KStandardAction. The KStandardAction is deleted.
+    KisAction *createStandardAction(KStandardAction::StandardAction,
+                                    const QObject *receiver, const char *member);
+
 private:
     void dumpActionFlags();
 

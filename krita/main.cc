@@ -56,9 +56,11 @@
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
+    bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
+
 #ifdef Q_WS_X11
-    if (!qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        setenv("QT_NO_GLIB", "1", true);
+    if (runningInKDE) {
+        qputenv("QT_NO_GLIB", "1");
     }
 #endif
 #ifdef USE_BREAKPAD
@@ -95,7 +97,6 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();
     app.setEventFilter(&KisTabletSupportWin::eventFilter);
-    app.setAttribute(Qt::AA_DontShowIconsInMenus);
 #elif defined Q_WS_X11
     KisTabletSupportX11::init();
     app.setEventFilter(&KisTabletSupportX11::eventFilter);
@@ -104,6 +105,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     app.setAttribute(Qt::AA_X11InitThreads, true);
 #endif
+
+    if (!runningInKDE) {
+        app.setAttribute(Qt::AA_DontShowIconsInMenus);
+    }
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

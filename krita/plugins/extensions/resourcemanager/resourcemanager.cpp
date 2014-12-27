@@ -118,15 +118,15 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     Q_UNUSED(ResourceBundleServerProvider::instance()); // load the bundles
 
     KisAction *action = new KisAction(i18n("Import Resources or Bundles..."), this);
-    addAction("import", action);
+    addAction("import_resources", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImport()));
 
     action = new KisAction(i18n("Create Resource Bundle..."), this);
-    addAction("createbundle", action);
+    addAction("create_bundle", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCreateBundle()));
 
     action = new KisAction(i18n("Manage Resource Bundles..."), this);
-    addAction("managebundles", action);
+    addAction("manage_bundles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotManageBundles()));
 }
 

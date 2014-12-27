@@ -28,6 +28,7 @@
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
+#include <KoDockWidgetTitleBar.h>
 #include <KisMainWindow.h>
 #include <KoResource.h>
 
@@ -144,6 +145,16 @@ void KisWorkspaceChooser::resourceSelected(KoResource* resource)
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
+    // Unlock all dockers before making a change in the docker configuration.
+    // See https://bugs.kde.org/show_bug.cgi?id=342242
+    foreach(QDockWidget *docker, m_view->mainWindow()->dockWidgets()) {
+        docker->setFeatures(QDockWidget::AllDockWidgetFeatures);
+        KoDockWidgetTitleBar *titleBar = qobject_cast<KoDockWidgetTitleBar*>(docker->titleBarWidget());
+        if (titleBar) {
+            titleBar->setLocked(false);
+        }
+    }
+
     m_view->qtMainWindow()->restoreState(workspace->dockerState());
     m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
 }

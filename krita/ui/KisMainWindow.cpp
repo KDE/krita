@@ -255,7 +255,6 @@ public:
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
-    QList<QDockWidget *> dockWidgets;
     QByteArray dockerStateBeforeHiding;
     KoToolDocker *toolOptionsDocker;
 
@@ -1665,7 +1664,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             qWarning() << "Could not create docker for" << factory->id();
             return 0;
         }
-        d->dockWidgets.push_back(dockWidget);
 
         KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
         // Check if the dock widget is supposed to be collapsable

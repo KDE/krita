@@ -655,7 +655,7 @@ void KisViewManager::createActions()
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
     d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
-    actionCollection()->addAction("createTemplate", d->createTemplate);
+    actionCollection()->addAction("create_t`emplate", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
     d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);
@@ -676,14 +676,12 @@ void KisViewManager::createActions()
     actionCollection()->addAction("wrap_around_mode", d->wrapAroundAction);
     d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
 
-
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
     tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
     tAction->setChecked(true);
     tAction->setToolTip(i18n("Shows or hides the status bar"));
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
-
 
     tAction = new KToggleAction(i18n("Show Canvas Only"), this);
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));

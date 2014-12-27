@@ -1,26 +1,23 @@
 <?xml version="1.0"?>
-<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="61" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
+<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="62" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
       <text>&amp;File</text>
       <Action name="file_new"/>
-      <Action name="activeauthor"/>
       <Action name="file_open"/>
       <Action name="file_open_recent"/>
       <Separator/>
       <Action name="file_save"/>
       <Action name="file_save_as"/>
       <Action name="file_reload_file"/>
-      <Action name="file_versions_file"/>
       <Separator/>
       <Action name="file_import_file"/>
       <Action name="file_export_file"/>
       <Action name="file_export_pdf"/>
-      <Action name="file_send_file"/>
       <Separator/>
       <Action name="save_incremental_version"/>
       <Action name="save_incremental_backup"/>
-      <Action name="createTemplate"/>
+      <Action name="create_template"/>
       <Separator/>
       <Action name="file_print"/>
       <Action name="file_print_preview"/>
@@ -53,9 +50,9 @@
       <Menu name="resources">
         <text>&amp;Resources</text>
         <Action name="open_resources_directory"/>
-        <Action name="import"/>
-        <Action name="createbundle"/>
-        <Action name="managebundles"/>
+        <Action name="import_resources"/>
+        <Action name="create_bundle"/>
+        <Action name="manage_bundles"/>
         <Separator/>
         <Action name="add_palette"/>
         <Action name="edit_palette"/>
@@ -65,7 +62,6 @@
     <Menu name="view">
       <text>&amp;View</text>
       <Action name="view_show_just_the_canvas"/>
-      <Action name="view_fullscreen"/>
       <Action name="mirror_canvas"/>
       <Action name="wrap_around_mode"/>
       <Separator/>
@@ -259,37 +255,32 @@
     </Menu>
     <Menu name="settings">
       <text>Settings</text>
-      <!--Action name="view_fullscreen"/-->
+      <Action name="fullscreen"/>
       <Action name="view_toggledockers"/>
-      <Action name="showStatusBar"/>
-      <Action name="settings_active_author"/>
       <Action name="settings_dockers_menu"/>
+      <Action name="theme_menu"/>
       <Separator/>
+      <Action name="switch_application_language"/>
       <Action name="options_configure_keybinding"/>
       <Action name="options_configure_toolbars"/>
       <Separator/>
-      <Action name="preferences"/>
-      <Action name="theme_menu"/>
+      <Action name="options_configure"/>
     </Menu>
+    <Action name="window"/>
     <Separator/>
     <Menu name="help">
       <text>&amp;Help</text>
       <Action name="help_contents"/>
       <Action name="help_whats_this"/>
-      <MergeLocal name="help_whats_this_merge"/>
       <Separator/>
       <MergeLocal/>
       <Action name="help_show_tip"/>
       <Separator/>
       <Action name="help_report_bug"/>
       <Separator/>
-      <Action name="switch_application_language"/>
-      <Separator/>
-      <MergeLocal name="about_merge"/>
       <Action name="help_about_app"/>
       <Action name="help_about_kde"/>
     </Menu>
-    <Action name="window"/>
   </MenuBar>
   <ToolBar name="mainToolBar" fullWidth="false" noMerge="1">
     <Text>File</Text>

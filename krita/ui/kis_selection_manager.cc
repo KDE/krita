@@ -93,26 +93,24 @@ KisSelectionManager::KisSelectionManager(KisViewManager * view)
         : m_view(view),
           m_doc(0),
           m_imageView(0),
-        m_adapter(new KisNodeCommandsAdapter(view)),
-        m_copy(0),
-        m_copyMerged(0),
-        m_cut(0),
-        m_paste(0),
-        m_pasteNew(0),
-        m_cutToNewLayer(0),
-        m_selectAll(0),
-        m_deselect(0),
-        m_clear(0),
-        m_reselect(0),
-        m_invert(0),
-        m_copyToNewLayer(0),
-//         m_load(0),
-//         m_save(0),
-        m_fillForegroundColor(0),
-        m_fillBackgroundColor(0),
-        m_fillPattern(0),
-        m_imageResizeToSelection(0),
-        m_selectionDecoration(0)
+          m_adapter(new KisNodeCommandsAdapter(view)),
+          m_copy(0),
+          m_copyMerged(0),
+          m_cut(0),
+          m_paste(0),
+          m_pasteNew(0),
+          m_cutToNewLayer(0),
+          m_selectAll(0),
+          m_deselect(0),
+          m_clear(0),
+          m_reselect(0),
+          m_invert(0),
+          m_copyToNewLayer(0),
+          m_fillForegroundColor(0),
+          m_fillBackgroundColor(0),
+          m_fillPattern(0),
+          m_imageResizeToSelection(0),
+          m_selectionDecoration(0)
 {
     m_clipboard = KisClipboard::instance();
 }
@@ -123,18 +121,16 @@ KisSelectionManager::~KisSelectionManager()
 
 void KisSelectionManager::setup(KActionCollection * collection, KisActionManager* actionManager)
 {
-    // XXX: setup shortcuts!
+    m_cut = actionManager->createStandardAction(KStandardAction::Cut, this, SLOT(cut()));
+    m_copy = actionManager->createStandardAction(KStandardAction::Copy, this, SLOT(copy()));
+    m_paste = actionManager->createStandardAction(KStandardAction::Paste, this, SLOT(paste()));
 
-    m_cut = KStandardAction::cut(this, SLOT(cut()), collection);
-    m_copy = KStandardAction::copy(this, SLOT(copy()), collection);
-    m_paste = KStandardAction::paste(this, SLOT(paste()), collection);
-
-    m_pasteNew  = new KAction(i18n("Paste into &New Image"), this);
-    collection->addAction("paste_new", m_pasteNew);
+    m_pasteNew  = new KisAction(i18n("Paste into &New Image"), this);
+    actionManager->addAction("paste_new", m_pasteNew);
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
-    m_pasteAt = new KAction(i18n("Paste at cursor"), this);
-    collection->addAction("paste_at", m_pasteAt);
+    m_pasteAt = new KisAction(i18n("Paste at cursor"), this);
+    actionManager->addAction("paste_at", m_pasteAt);
     connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
 
     m_copyMerged = new KisAction(i18n("Copy merged"), this);
@@ -237,19 +233,6 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     m_toggleSelectionOverlayMode  = new KisAction(i18nc("@action:inmenu", "&Toggle Selection Display Mode"), this);
     actionManager->addAction("toggle-selection-overlay-mode", m_toggleSelectionOverlayMode);
     connect(m_toggleSelectionOverlayMode, SIGNAL(triggered()), SLOT(slotToggleSelectionDecoration()));
-
-//     m_load
-//         = new KAction(i18n("Load..."),
-//                   0, 0,
-//                   this, SLOT(load()),
-//                   collection, "load_selection");
-//
-//
-//     m_save
-//         = new KAction(i18n("Save As..."),
-//                   0, 0,
-//                   this, SLOT(save()),
-//                   collection, "save_selection");
 
     QClipboard *cb = QApplication::clipboard();
     connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));

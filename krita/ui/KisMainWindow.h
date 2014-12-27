@@ -340,8 +340,6 @@ private slots:
      */
     void slotExportFile();
 
-    void slotUncompressToDir();
-
     /**
      * Hide the dockers
      */
@@ -410,8 +408,6 @@ private:
      * openDocumentInternal().
      */
     bool isImporting() const;
-
-    KRecentFilesAction *recentAction() const;
 
     /**
      * Reloads the recent documents list.

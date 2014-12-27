@@ -104,6 +104,7 @@
 #include "KisApplication.h"
 #include "kis_factory2.h"
 
+#include "kis_action.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
@@ -121,7 +122,7 @@
 #include "kis_config_notifier.h"
 #include "dialogs/kis_about_application.h"
 #include "kis_mainwindow_observer.h"
-
+#include "kis_action_manager.h"
 #include "thememanager.h"
 
 #include "calligraversion.h"
@@ -163,14 +164,10 @@ public:
         , printAction(0)
         , printActionPreview(0)
         , exportPdf(0)
-        , closeFile(0)
         , closeAll(0)
         , reloadFile(0)
         , importFile(0)
         , exportFile(0)
-    #ifndef NDEBUG
-        ,  uncompressToDir(0)
-    #endif
         , undo(0)
         , redo(0)
         , newWindow(0)
@@ -179,12 +176,12 @@ public:
         , mdiTile(0)
         , mdiNextWindow(0)
         , mdiPreviousWindow(0)
-        , dockWidgetMenu(new KActionMenu(i18n("Dockers"), parent))
-        , windowMenu(new KActionMenu(i18n("Window"), parent))
-        , documentMenu(new KActionMenu(i18n("New View"), parent))
+        , toggleDockers(0)
+        , dockWidgetMenu(new KActionMenu(i18nc("@action:inmenu", "Dockers"), parent))
+        , windowMenu(new KActionMenu(i18nc("@action:inmenu", "Window"), parent))
+        , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New View"), parent))
         , helpMenu(0)
         , brushesAndStuff(0)
-        , toggleDockers(0)
         , recentFiles(0)
         , toolOptionsDocker(0)
         , deferredClosingEvent(0)
@@ -217,28 +214,25 @@ public:
     bool isExporting;
     bool noCleanup;
 
-    KAction *showDocumentInfo;
-    KAction *saveAction;
-    KAction *saveActionAs;
-    KAction *printAction;
-    KAction *printActionPreview;
-    KAction *exportPdf;
-    KAction *closeFile;
-    KAction *closeAll;
-    KAction *reloadFile;
-    KAction *importFile;
-    KAction *exportFile;
-#ifndef NDEBUG
-    KAction *uncompressToDir;
-#endif
-    KAction *undo;
-    KAction *redo;
-    KAction *newWindow;
-    KAction *close;
-    KAction *mdiCascade;
-    KAction *mdiTile;
-    KAction *mdiNextWindow;
-    KAction *mdiPreviousWindow;
+    KisAction *showDocumentInfo;
+    KisAction *saveAction;
+    KisAction *saveActionAs;
+    KisAction *printAction;
+    KisAction *printActionPreview;
+    KisAction *exportPdf;
+    KisAction *closeAll;
+    KisAction *reloadFile;
+    KisAction *importFile;
+    KisAction *exportFile;
+    KisAction *undo;
+    KisAction *redo;
+    KisAction *newWindow;
+    KisAction *close;
+    KisAction *mdiCascade;
+    KisAction *mdiTile;
+    KisAction *mdiNextWindow;
+    KisAction *mdiPreviousWindow;
+    KisAction *toggleDockers;
 
     KActionMenu *dockWidgetMenu;
     KActionMenu *windowMenu;
@@ -248,7 +242,6 @@ public:
 
     KToolBar *brushesAndStuff;
 
-    KToggleAction *toggleDockers;
     KRecentFilesAction *recentFiles;
 
     KUrl lastExportUrl;
@@ -399,7 +392,7 @@ KisMainWindow::KisMainWindow()
                 d->brushesAndStuff->setEnabled(false);
             }
 
-            KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
+            KToggleAction* act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
             actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
             act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
             connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
@@ -459,29 +452,11 @@ void KisMainWindow::addView(KisView *view)
 
     showView(view);
 
-    bool viewHasDocument = d->activeView ? (d->activeView->document() ? true : false) : false;
-
-    d->showDocumentInfo->setEnabled(viewHasDocument);
-    d->saveAction->setEnabled(viewHasDocument);
-    d->saveActionAs->setEnabled(viewHasDocument);
-    d->importFile->setEnabled(viewHasDocument);
-    d->exportFile->setEnabled(viewHasDocument);
-    #ifndef NDEBUG
-    d->uncompressToDir->setEnabled(viewHasDocument);
-#endif
-    d->printAction->setEnabled(viewHasDocument);
-    d->printActionPreview->setEnabled(viewHasDocument);
-    d->exportPdf->setEnabled(viewHasDocument);
-
-    d->brushesAndStuff->setEnabled(viewHasDocument);
-
-    //d->closeFile->setEnabled(viewHasDocument);
-    //     statusBar()->setVisible(viewHasDocument);
-
     updateCaption();
 
     emit restoringDone();
 
+    bool viewHasDocument = d->activeView ? (d->activeView->document() ? true : false) : false;
     if (viewHasDocument) {
         connect(d->activeView->document(), SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
@@ -983,9 +958,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     return ret;
 }
 
-
-
-bool KisMainWindow::exportConfirmation(const QByteArray &outputFormat)
+bool KisMainWindow::exportConfirmation(const QByteArray &/*outputFormat*/)
 {
     return true;
 }
@@ -1166,26 +1139,13 @@ void KisMainWindow::slotFileNew()
 void KisMainWindow::slotFileOpen()
 {
     QStringList urls;
-    if (!isImporting()) {
-        KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocument");
-        dialog.setCaption(i18n("Open Images"));
-        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
-                             ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                             : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-        dialog.setMimeTypeFilters(koApp->mimeFilter(KisImportExportManager::Import));
-        dialog.setHideNameFilterDetailsOption();
-        urls = dialog.urls();
-    }
-    else {
-        KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
-        dialog.setCaption(i18n("Import Images"));
-        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
-                             ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                             : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-        dialog.setMimeTypeFilters(koApp->mimeFilter(KisImportExportManager::Import));
-        dialog.setHideNameFilterDetailsOption();
-        urls = dialog.urls();
-    }
+    KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(koApp->mimeFilter(KisImportExportManager::Import));
+    dialog.setHideNameFilterDetailsOption();
+    dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
+
+    urls = dialog.urls();
 
     if (urls.isEmpty())
         return;
@@ -1217,12 +1177,6 @@ void KisMainWindow::slotFileSave()
 void KisMainWindow::slotFileSaveAs()
 {
     if (saveDocument(d->activeView->document(), true))
-        emit documentSaved();
-}
-
-void KisMainWindow::slotUncompressToDir()
-{
-    if (saveDocument(d->activeView->document(), true, false, KisDocument::SaveAsDirectoryStore))
         emit documentSaved();
 }
 
@@ -1796,11 +1750,6 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
     }
 }
 
-KRecentFilesAction *KisMainWindow::recentAction() const
-{
-    return d->recentFiles;
-}
-
 void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
 {
     qDeleteAll(d->toolbarList);
@@ -1935,11 +1884,12 @@ void KisMainWindow::newView(QObject *document)
     KisDocument *doc = qobject_cast<KisDocument*>(document);
     KisView *view = KisPart::instance()->createView(doc, this);
     addView(view);
-
+    qDebug() << "?>>>>>>>>>>>>>>>>" << KActionCollection::allCollections().size();
 }
 
 void KisMainWindow::newWindow()
 {
+    qDebug() << "?>>>>>>>>>>>>>>>>" << KActionCollection::allCollections().size();
     KisPart::instance()->createMainWindow()->show();
 }
 
@@ -2009,125 +1959,117 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 
 void KisMainWindow::createActions()
 {
-    actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
-    actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
+    KisActionManager *actionManager = d->viewManager->actionManager();
+
+    actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
+    actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
+
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
-    // Load list of recent files
     KSharedConfigPtr configPtr = KisFactory::componentData().config();
     d->recentFiles->loadEntries(configPtr->group("RecentFiles"));
 
-    d->saveAction = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
+    d->saveAction = actionManager->createStandardAction(KStandardAction::Save, this, SLOT(slotFileSave()));
+    d->saveAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->saveActionAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
-    d->saveActionAs->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
+    d->saveActionAs = actionManager->createStandardAction(KStandardAction::SaveAs, this, SLOT(slotFileSaveAs()));
+    d->saveActionAs->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->printAction = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
-    d->printActionPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
+    d->printAction = actionManager->createStandardAction(KStandardAction::Print, this, SLOT(slotFilePrint()));
+    d->printAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->undo = actionCollection()->addAction(KStandardAction::Undo, "edit_undo", this, SLOT(undo()));
-    d->redo = actionCollection()->addAction(KStandardAction::Redo, "edit_redo", this, SLOT(redo()));
+    d->printActionPreview = actionManager->createStandardAction(KStandardAction::PrintPreview, this, SLOT(slotFilePrintPreview()));
+    d->printActionPreview->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->exportPdf  = new KAction(i18n("Export as PDF..."), this);
+    d->undo = actionManager->createStandardAction(KStandardAction::Undo, this, SLOT(undo()));
+    d->undo ->setActivationFlags(KisAction::ACTIVE_IMAGE);
+
+    d->redo = actionManager->createStandardAction(KStandardAction::Redo, this, SLOT(redo()));
+    d->redo->setActivationFlags(KisAction::ACTIVE_IMAGE);
+
+    d->exportPdf  = new KisAction(i18nc("@action:inmenu", "Export as PDF..."));
+    d->exportPdf->setActivationFlags(KisAction::ACTIVE_IMAGE);
     d->exportPdf->setIcon(koIcon("application-pdf"));
-    actionCollection()->addAction("file_export_pdf", d->exportPdf);
+    actionManager->addAction("file_export_pdf", d->exportPdf);
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
-    actionCollection()->addAction(KStandardAction::Quit,  "file_quit", this, SLOT(slotFileQuit()));
+    actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
 
-    d->closeAll = new KAction(i18n("Close All"), this);
+    d->closeAll = new KisAction(i18nc("@action:inmenu", "Close All"));
+    d->closeAll->setActivationFlags(KisAction::ACTIVE_IMAGE);
     d->closeAll->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
-    actionCollection()->addAction("file_close_all", d->closeAll);
+    actionManager->addAction("file_close_all", d->closeAll);
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
 
-    d->reloadFile  = new KAction(i18n("Reload"), this);
-    actionCollection()->addAction("file_reload_file", d->reloadFile);
+    d->reloadFile  = new KisAction(i18nc("@action:inmenu", "Reload"));
+    d->reloadFile->setActivationFlags(KisAction::CURRENT_IMAGE_MODIFIED);
+    actionManager->addAction("file_reload_file", d->reloadFile);
     connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
-    d->importFile  = new KAction(koIcon("document-import"), i18n("Open ex&isting Document as Untitled Document..."), this);
-    actionCollection()->addAction("file_import_file", d->importFile);
+    d->importFile  = new KisAction(koIcon("document-import"), i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
+    actionManager->addAction("file_import_file", d->importFile);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
-    d->exportFile  = new KAction(koIcon("document-export"), i18n("E&xport..."), this);
-    actionCollection()->addAction("file_export_file", d->exportFile);
+    d->exportFile  = new KisAction(koIcon("document-export"), i18nc("@action:inmenu", "E&xport..."));
+    d->exportFile->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
-
-#ifndef NDEBUG
-    d->uncompressToDir = new KAction(i18n("&Uncompress to Directory"), this);
-    actionCollection()->addAction("file_uncompress_doc", d->uncompressToDir);
-    connect(d->uncompressToDir, SIGNAL(triggered(bool)), this, SLOT(slotUncompressToDir()));
-#endif
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->showDocumentInfo  = new KAction(koIcon("document-properties"), i18n("Document Information"), this);
-    actionCollection()->addAction("file_documentinfo", d->showDocumentInfo);
+    d->showDocumentInfo  = new KisAction(koIcon("document-properties"), i18nc("@action:inmenu", "Document Information"));
+    d->showDocumentInfo->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager->addAction("file_documentinfo", d->showDocumentInfo);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
-    KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actionCollection());
-    KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbars()), actionCollection());
+    actionManager->createStandardAction(KStandardAction::KeyBindings, this, SLOT(slotConfigureKeys()));
+    actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
 
-    d->showDocumentInfo->setEnabled(false);
-    d->saveActionAs->setEnabled(false);
-    d->reloadFile->setEnabled(false);
-    d->importFile->setEnabled(true);    // always enabled like File --> Open
-    d->exportFile->setEnabled(false);
-    d->saveAction->setEnabled(false);
-    d->printAction->setEnabled(false);
-    d->printActionPreview->setEnabled(false);
-    d->exportPdf->setEnabled(false);
-    //d->closeFile->setEnabled(false);
-#ifndef NDEBUG
-    d->uncompressToDir->setEnabled(false);
-#endif
-
-    d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
+    d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SIGNAL(themeChanged()));
 
-    KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
-    actionCollection()->addAction("view_fullscreen", fullscreenAction);
-    fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
-    connect(fullscreenAction, SIGNAL(toggled(bool)), this, SLOT(viewFullscreen(bool)));
+    actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 
-    d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
+    d->toggleDockers = new KisAction(i18nc("@action:inmenu", "Show Dockers"));
+    d->toggleDockers->setCheckable(true);
     d->toggleDockers->setChecked(true);
-    actionCollection()->addAction("view_toggledockers", d->toggleDockers);
+    actionManager->addAction("view_toggledockers", d->toggleDockers);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
-
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
-    d->dockWidgetMenu->setDelayed(false);
-
-
     actionCollection()->addAction("window", d->windowMenu);
 
-
-    d->mdiCascade = new KAction(i18n("Cascade"), this);
-    actionCollection()->addAction("windows_cascade", d->mdiCascade);
+    d->mdiCascade = new KisAction(i18nc("@action:inmenu", "Cascade"));
+    d->mdiCascade->setActivationFlags(KisAction::MULTIPLE_IMAGES);
+    actionManager->addAction("windows_cascade", d->mdiCascade);
     connect(d->mdiCascade, SIGNAL(triggered()), d->mdiArea, SLOT(cascadeSubWindows()));
 
-    d->mdiTile = new KAction(i18n("Tile"), this);
-    actionCollection()->addAction("windows_tile", d->mdiTile);
+    d->mdiTile = new KisAction(i18nc("@action:inmenu", "Tile"));
+    d->mdiTile->setActivationFlags(KisAction::MULTIPLE_IMAGES);
+    actionManager->addAction("windows_tile", d->mdiTile);
     connect(d->mdiTile, SIGNAL(triggered()), d->mdiArea, SLOT(tileSubWindows()));
 
-    d->mdiNextWindow = new KAction(i18n("Next"), this);
-    actionCollection()->addAction("windows_next", d->mdiNextWindow);
+    d->mdiNextWindow = new KisAction(i18nc("@action:inmenu", "Next"));
+    d->mdiNextWindow->setActivationFlags(KisAction::MULTIPLE_IMAGES);
+    actionManager->addAction("windows_next", d->mdiNextWindow);
     connect(d->mdiNextWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activateNextSubWindow()));
 
-    d->mdiPreviousWindow = new KAction(i18n("Previous"), this);
+    d->mdiPreviousWindow = new KisAction(i18nc("@action:inmenu", "Previous"));
+    d->mdiPreviousWindow->setActivationFlags(KisAction::MULTIPLE_IMAGES);
     actionCollection()->addAction("windows_previous", d->mdiPreviousWindow);
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
-    d->newWindow = new KAction(koIcon("window-new"), i18n("&New Window"), this);
-    actionCollection()->addAction("view_newwindow", d->newWindow);
+    d->newWindow = new KisAction(koIcon("window-new"), i18nc("@action:inmenu", "&New Window"));
+    actionManager->addAction("view_newwindow", d->newWindow);
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
-    d->close = new KAction(i18n("Close"), this);
+    d->close = new KisAction(i18nc("@action:inmenu", "Close"));
+    d->mdiPreviousWindow->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
-    actionCollection()->addAction("file_close", d->close);
+    actionManager->addAction("file_close", d->close);
 
-    actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
+    actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
 }
 
 void KisMainWindow::initializeGeometry()

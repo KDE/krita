@@ -263,7 +263,6 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
     d->lockButton->setChecked(locked);
     d->lockButton->blockSignals(false);
 
-
     //qDebug() << "setlocked" << q << d->locked << locked;
 
     if (locked) {
@@ -275,6 +274,7 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
     }
     else {
         q->setFeatures(d->features);
+        q->toggleViewAction()->setEnabled(true);
         d->closeButton->setEnabled(true);
         d->floatButton->setEnabled(true);
         d->collapseButton->setEnabled(true);

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="60" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
+<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="61" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
       <text>&amp;File</text>
@@ -26,7 +26,6 @@
       <Action name="file_print_preview"/>
       <Separator/>
       <Action name="file_documentinfo"/>
-      <DefineGroup name="file_infos"/>
       <Separator/>
       <Action name="file_close"/>
       <Action name="file_close_all"/>
@@ -79,6 +78,7 @@
       <Separator/>
       <Action name="view_ruler"/>
       <Action name="view_guidelines"/>
+      <Action name="view_show_guides"/>
       <Separator/>
       <Action name="view_grid"/>
       <Action name="view_snap_to_grid"/>
@@ -109,7 +109,6 @@
       <Action name="imagecolorspaceconversion"/>
       <Action name="duplicate_image"/>
       <Separator/>
-      <DefineGroup name="canvas_resize_merge" append="canvas_resize_merge"/>
       <Action name="resizeimagetolayer"/>
       <Action name="resizeimagetoselection"/>
       <Separator/>
@@ -121,15 +120,15 @@
         <Action name="rotateImageCCW90"/>
         <Action name="rotateImage180"/>
       </Menu>
-      <Action name="shearimage" group="image_transform_merge"/>
+      <Action name="shearimage"/>
       <Separator/>
       <Action name="mirrorImageHorizontal"/>
       <Action name="mirrorImageVertical"/>
       <Separator/>
-      <Action name="imagesize" group="image_transform_merge"/>
-      <Action name="offsetimage" group="image_transform_merge"/>
+      <Action name="imagesize"/>
+      <Action name="offsetimage"/>
       <Action name="imageresolution"/>
-      <Action name="canvassize" group="canvas_resize_merge"/>
+      <Action name="canvassize"/>
       <Separator/>
       <Action name="imagesplit"/>
       <Action name="separate"/>
@@ -176,7 +175,7 @@
       <Separator/>
       <Action name="mirrorNodeX"/>
       <Action name="mirrorNodeY"/>
-      <Menu name="Rotate" group="layer_transform_merge">
+      <Menu name="Rotate">
         <text>&amp;Rotate</text>
         <Action name="rotatelayer"/>
         <Separator/>
@@ -184,14 +183,14 @@
         <Action name="rotateLayerCCW90"/>
         <Action name="rotateLayer180"/>
       </Menu>
-      <Action name="layersize" group="layer_transform_merge"/>
-      <Action name="shearlayer" group="layer_transform_merge"/>
-      <Action name="offsetlayer" group="layer_transform_merge"/>
-      <Action name="clones_array" group="layer_transform_merge"/>
+      <Action name="layersize"/>
+      <Action name="shearlayer"/>
+      <Action name="offsetlayer"/>
+      <Action name="clones_array"/>
       <Separator/>
-      <Action name="EditLayerMetaData" group="layer_properties_merge"/>
-      <Action name="histogram" group="layer_properties_merge"/>
-      <Action name="layercolorspaceconversion" group="layer_properties_merge"/>
+      <Action name="EditLayerMetaData"/>
+      <Action name="histogram"/>
+      <Action name="layercolorspaceconversion"/>
       <Separator/>
       <Action name="merge_layer"/>
       <Action name="flatten_layer"/>
@@ -260,17 +259,16 @@
     </Menu>
     <Menu name="settings">
       <text>Settings</text>
-      <!--Action name="view_fullscreen" group="settings_show"/-->
-      <Action name="view_toggledockers" group="settings_show"/>
-      <Action name="showStatusBar" group="settings_show"/>
-      <Action name="settings_active_author" group="settings_configure"/>
+      <!--Action name="view_fullscreen"/-->
+      <Action name="view_toggledockers"/>
+      <Action name="showStatusBar"/>
+      <Action name="settings_active_author"/>
       <Action name="settings_dockers_menu"/>
-      <DefineGroup name="settings_show"/>
       <Separator/>
       <Action name="options_configure_keybinding"/>
       <Action name="options_configure_toolbars"/>
-      <DefineGroup name="settings_configure"/>
-      <Action name="preferences" group="settings_configure"/>
+      <Separator/>
+      <Action name="preferences"/>
       <Action name="theme_menu"/>
     </Menu>
     <Separator/>
@@ -298,10 +296,9 @@
     <Action name="file_new"/>
     <Action name="file_open"/>
     <Action name="file_save"/>
-    <!--
-    <Action name="file_print" />
-    <Action name="file_print_preview" />
-    //-->
+    <Separator/>
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
   </ToolBar>
   <ToolBar name="BrushesAndStuff" position="top">
     <Text>Brushes and Stuff</Text>

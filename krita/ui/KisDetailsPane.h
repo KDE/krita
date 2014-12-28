@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef KODETAILSPANE_H
-#define KODETAILSPANE_H
+#ifndef KISDETAILSPANE_H
+#define KISDETAILSPANE_H
 
 #include "ui_KisDetailsPaneBase.h"
 

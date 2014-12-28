@@ -18,8 +18,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef __koView_h__
-#define __koView_h__
+#ifndef KIS_VIEW_H
+#define KIS_VIEW_H
 
 #include <QWidget>
 

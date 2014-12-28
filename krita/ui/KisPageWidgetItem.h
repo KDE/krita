@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPAGEWIDGETITEM_H
-#define KOPAGEWIDGETITEM_H
+#ifndef KISPAGEWIDGETITEM_H
+#define KISPAGEWIDGETITEM_H
 
 #include "krita_export.h"
 

@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPART_H
-#define KOPART_H
+#ifndef KIS_PART_H
+#define KIS_PART_H
 
 #include <QList>
 #include <QPointer>

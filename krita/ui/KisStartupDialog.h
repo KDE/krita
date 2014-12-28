@@ -1,5 +1,5 @@
-#ifndef KOSTARTUPDIALOG_H
-#define KOSTARTUPDIALOG_H
+#ifndef KIS_STARTUP_DIALOG_H
+#define KIS_STARTUP_DIALOG_H
 
 #include <QDialog>
 

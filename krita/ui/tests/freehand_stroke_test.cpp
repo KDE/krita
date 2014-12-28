@@ -50,6 +50,13 @@ public:
 protected:
 
     void modifyResourceManager(KoCanvasResourceManager *manager,
+                               KisImageWSP image)
+    {
+        modifyResourceManager(manager, image, 0);
+    }
+
+
+    void modifyResourceManager(KoCanvasResourceManager *manager,
                                KisImageWSP image,
                                int iteration) {
 
@@ -71,6 +78,13 @@ protected:
                                                     new KisDistanceInformation());
 
         return new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, kundo2_noi18n("Freehand Stroke"));
+    }
+
+    virtual void addPaintingJobs(KisImageWSP image,
+                                 KisResourcesSnapshotSP resources,
+                                 KisPainter *painter)
+    {
+        addPaintingJobs(image, resources, painter, 0);
     }
 
     void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter, int iteration) {

@@ -77,8 +77,10 @@
 #include <ktoolinvocation.h>
 #include <kurlcombobox.h>
 #include <kurl.h>
-#include <kxmlguiclient.h>
+#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
+#include <kxmlguiclient.h>
 
 #include <KoConfig.h>
 #include "KoDockFactoryBase.h"
@@ -372,7 +374,6 @@ KisMainWindow::KisMainWindow()
 
     configChanged();
 
-    setXMLFile(KStandardDirs::locate("config", "ui/ui_standards.rc", KisFactory::componentData()));
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources("data", "krita/krita.rc");
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
@@ -416,6 +417,28 @@ void KisMainWindow::setNoCleanup(bool noCleanup)
 
 KisMainWindow::~KisMainWindow()
 {
+//    foreach(QAction *ac, actionCollection()->actions()) {
+//        KAction *action = qobject_cast<KAction*>(ac);
+//        if (action) {
+//        qDebug() << "<Action"
+//                 << "name=" << action->objectName()
+//                 << "icon=" << action->icon().name()
+//                 << "text="  << action->text().replace("&", "&amp;")
+//                 << "whatsThis="  << action->whatsThis()
+//                 << "toolTip="  << action->toolTip().replace("<html>", "").replace("</html>", "")
+//                 << "iconText="  << action->iconText().replace("&", "&amp;")
+//                 << "shortcut="  << action->shortcut(KAction::ActiveShortcut).toString()
+//                 << "defaultShortcut="  << action->shortcut(KAction::DefaultShortcut).toString()
+//                 << "isCheckable="  << QString((action->isChecked() ? "true" : "false"))
+//                 << "statusTip=" << action->statusTip()
+//                 << "/>"   ;
+//        }
+//        else {
+//            qDebug() << "Got a QAction:" << ac->objectName();
+//        }
+
+//    }
+
     KConfigGroup cfg(KGlobal::config(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
     cfg.writeEntry("ko_windowstate", saveState().toBase64());

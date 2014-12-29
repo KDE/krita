@@ -86,7 +86,6 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     options.add("export", ki18n("Export to the given filename and exit"));
     options.add("export-filename <filename>", ki18n("Filename for export/export-pdf"));
     options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
-    options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
 
     KCmdLineArgs::addCmdLineOptions(options);

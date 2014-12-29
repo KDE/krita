@@ -103,7 +103,9 @@ void KoReportDesignerItemBarcode::paint(QPainter* painter, const QStyleOptionGra
 
     drawHandles(painter);
 
-    if (m_format->value().toString() == "3of9")
+    if (m_format->value().toString() == "i2of5")
+        renderI2of5(rect().toRect(), "i2of5", alignment(), painter);
+    else if (m_format->value().toString() == "3of9")
         render3of9(rect().toRect(), "3of9", alignment(), painter);
     else if (m_format->value().toString() == "3of9+")
         renderExtended3of9(rect().toRect(), "3of9+", alignment(), painter);

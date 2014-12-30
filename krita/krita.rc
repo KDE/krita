@@ -287,9 +287,9 @@
     <Action name="file_new"/>
     <Action name="file_open"/>
     <Action name="file_save"/>
-    <Separator/>
+    <!--Separator/>
     <Action name="edit_undo"/>
-    <Action name="edit_redo"/>
+    <Action name="edit_redo"/-->
   </ToolBar>
   <ToolBar name="BrushesAndStuff" position="top">
     <Text>Brushes and Stuff</Text>

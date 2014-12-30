@@ -142,7 +142,7 @@ void ThemeManager::slotChangePalette()
     d->palette = KGlobalSettings::createNewApplicationPalette(config);
     */
 
-    QPalette palette               = kapp->palette();
+    QPalette palette               = qApp->palette();
     QPalette::ColorGroup states[3] = { QPalette::Active, QPalette::Inactive, QPalette::Disabled };
     // TT thinks tooltips shouldn't use active, so we use our active colors for all states
     KColorScheme schemeTooltip(QPalette::Active, KColorScheme::Tooltip, config);
@@ -177,17 +177,17 @@ void ThemeManager::slotChangePalette()
         palette.setBrush(state, QPalette::LinkVisited,     schemeView.foreground(KColorScheme::VisitedText));
     }
 
-    kapp->setPalette(palette);
+    qApp->setPalette(palette);
 
     if (theme == defaultThemeName() || theme.isEmpty()) {
 #ifdef __APPLE__
-        kapp->setStyle("Macintosh");
-        kapp->style()->polish(kapp);
+        qApp->setStyle("Macintosh");
+        qApp->style()->polish(kapp);
 #endif
     } else {
 #ifdef __APPLE__
-        kapp->setStyle("Plastique");
-        kapp->style()->polish(kapp);
+        qApp->setStyle("Plastique");
+        qApp->style()->polish(kapp);
 #endif
     }
 

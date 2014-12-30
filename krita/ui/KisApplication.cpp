@@ -262,13 +262,11 @@ bool KisApplication::start()
     const bool exportAs = args->isSet("export");
     const bool exportAsPdf = args->isSet("export-pdf");
     const QString exportFileName = args->getOption("export-filename");
-    const QString roundtripFileName = args->getOption("roundtrip-filename");
     const QString profileFileName = args->getOption("profile-filename");
 
 
     // only show the mainWindow when no command-line mode option is passed
-    const bool showmainWindow = (   !(exportAsPdf || exportAs)
-                                    && roundtripFileName.isEmpty());
+    const bool showmainWindow = (   !(exportAsPdf || exportAs) );
 
     if (d->splashScreen && showmainWindow) {
         d->splashScreen->show();

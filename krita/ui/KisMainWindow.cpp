@@ -306,7 +306,6 @@ KisMainWindow::KisMainWindow()
 
     KoToolBoxFactory toolBoxFactory;
     QDockWidget* toolbox = createDockWidget(&toolBoxFactory);
-    toolbox->setMinimumWidth(60);
 
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);

@@ -1,0 +1,358 @@
+To the best of my knowledge, all profiles included in the "Elle Stone's Well behaved Profiles" pack are free from known copyright restrictions. I am not a lawyer.
+
+All nominally "Gamma=2.2" profiles have a gamma=2.19921875 TRC, in keeping with the gamma value used in nominally "gamma=2.2" V2 profiles. This gamma value reflects hexadecimal rounding that was unavoidable in V2 profiles.
+
+All nominally "Gamma=1.8" profiles have a gamma=1.80078125 TRC, in keeping with the gamma value used in nominally "gamma=1.8" V2 profiles. This gamma value reflects hexadecimal rounding that was unavoidable in V2 profiles.
+
+All the RGB and Gray profiles are provided in V2 and V4 versions, using their "normal" tone reproduction curve, plus variants with the sRGB TRC and the linear gamma TRC.
+
+Profiles included:
+
+1. AdobeRGB; to avoid copyright infringement issues, I used "ClayRGB" (following ArgyllCMS) as the base name for these profiles.
+
+2. AllColorsRGB; this profile's color gamut is roughly the same size and shape as the ACES color gamut, but AllColorsRGB has a slightly larger color gamut and uses the D50 white point.
+
+3. CIERGB
+
+4. IdentityRGB
+
+5. Prophoto/Romm; to avoid possible copyright infringement issues, I used "LargeRGB" (following RawTherapee) as the base name for these profiles.
+
+6. sRGB
+
+7. WideGamutRGB; to avoid possible copyright infringement issues, I used "WideRGB" as the base name for these profiles.
+
+8. Gray ICC profiles, D50 white point
+
+9. LCMS built-in LAB and XYZ ICC profiles
+
+
+For more information about ICC profiles and also about why I think my profiles are better than the ICC profiles currently supplied by most vendors of free/libre ICC profiles, see:
+
+Are Your Working Space Profiles Well Behaved?
+http://ninedegreesbelow.com/photography/are-your-working-space-profiles-well-behaved.html
+
+Survey of Free and Open Source ICC RGB Working Space Profiles
+http://ninedegreesbelow.com/photography/linux-icc-profiles.html
+
+Use LCMS to Make Your Own RGB Working Space Profiles
+http://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html
+
+
+Details about the supplied profiles and variants:
+
+1. AdobeRGB, D65, Gamma=2.19921875
+
+Profile variants:
+
+Gamma=2.19921875:
+	ClayRGB-elle-V4-g22.icc
+	ClayRGB-elle-V2-g22.icc
+	
+Linear gamma:
+	ClayRGB-elle-V4-g10.icc
+	ClayRGB-elle-V2-g10.icc
+	
+sRGB TRC:
+	ClayRGB-elle-V4-srgbtrc.icc
+	ClayRGB-elle-V2-srgbtrc.icc
+
+Notes:
+
+The Adobe RGB 1998 color gamut covers a higher percentage of real-world greens than sRGB, but still doesn't include all printable greens, yellows, and cyans. 
+
+When made using the Gamma=2.19921875 tone response curve, this profile can be used for 8-bit image editing if used with appropriate caution to avoid posterization. 
+
+When made with the Gamma=2.19921875 tone response curve, this profile can be applied to DCF R98 camera-generated jpegs.
+
+The linear gamma version should only be used for high bit depth image editing and shouldn't be applied to camera-generated jpegs.
+
+Primaries and white point:
+
+cmsCIExyYTRIPLE adobe_primaries = {
+{0.6400, 0.3300, 1.0},
+{0.2100, 0.7100, 1.0},
+{0.1500, 0.0600, 1.0}
+};
+cmsCIExyYTRIPLE adobe_primaries_prequantized = {
+{0.639996511, 0.329996864, 1.0},
+{0.210005295, 0.710004866, 1.0},
+{0.149997606, 0.060003644, 1.0}
+};
+primaries = adobe_primaries_prequantized;
+whitepoint = d65_srgb_adobe_specs;
+
+
+2. AllColorsRGB, D50, Gamma=1.00:
+
+Profile variants:
+
+Linear gamma:
+	AllColorsRGB-elle-V4-g10.icc
+	AllColorsRGB-elle-V2-g10.icc
+	
+sRGB TRC:
+	AllColorsRGB-elle-V4-srgbtrc.icc
+	AllColorsRGB-elle-V2-srgbtrc.icc
+
+Notes:
+
+For high bit depth image editing only.
+
+AllColors.icc has a slightly larger color gamut than the ACES color space. It has a D50 white point and a linear gamma TRC. It holds all visible colors.
+
+Just like the ACES color space, AllColors also holds a high percentage of imaginary colors. See http://ninedegreesbelow.com/photography/xyz-rgb.html#xyY for more information about imaginary colors.
+
+AllColors primaries for red and blue were calculated from http://www.ledtuning.nl/cie.php
+blue 375nm red 780nm, plus Y intercepts:
+Color Wavelength (): 375 nm.
+Spectral Locus coordinates: X:0.17451 Y:0.005182
+Color Wavelength (): 780 nm.
+Spectral Locus coordinates: X:0.734690265 Y:0.265309735
+X1:0.17451 Y1:0.005182
+X2:0.734690265 Y2:0.265309735
+X3:0.00Y3:? Solve for Y3:
+(0.265309735-0.005182)/(0.734690265-0.17451)=0.46436433279205221554=m
+y=mx+b let x=0; y=b
+Y1=0.005182=(0.46436433279205221554*0.17451)+b
+b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
+
+Primaries and white point:
+
+cmsCIExyYTRIPLE allcolors_primaries = 
+{
+{0.734690265,  0.265309735,  1.0},
+{0.000000000,  1.000000000,  1.0},
+{0.000000000, -.0758542197,  1.0}
+}; 
+whitepoint = d50_illuminant_specs;
+primaries = allcolors_primaries;
+
+
+
+3. The CIERGB profile, E white point:
+
+Profile variants:
+
+Gamma=2.19921875:
+	CIERGB-elle-V4-g22.icc
+	CIERGB-elle-V2-g22.icc
+
+Linear gamma:
+	CIERGB-elle-V4-g10.icc
+	CIERGB-elle-V2-g10.icc
+
+sRGB TRC:
+	CIERGB-elle-V4-srgbtrc.icc
+	CIERGB-elle-V2-srgbtrc.icc";
+
+Notes:
+
+For high bit depth image editing only.
+
+The ASTM E white point is probably the right E white point to use when making the CIERGB color space profile. It's not clear to me what the correct CIERGB primaries really are. Lindbloom gives one set. The LCMS version 1 tutorial gives a different set. I asked a friend to ask an expert, who said the real primaries should be calculated from the spectral wavelengths, so I did.
+
+This page explains what the CIE color space is:
+https://en.wikipedia.org/wiki/CIE_1931
+
+These pages give the wavelengths:
+http://hackipedia.org/Color%20space/pdf/CIE%20Color%20Space.pdf 
+http://infocom.ing.uniroma1.it/~gaetano/texware/Full-How%20the%20CIE%201931%20Color-Matching%20Functions%20Were%20Derived%20from%20Wright-Guild%20Data.pdf
+
+This page has resources for calculating xy values given a spectral color wavelength:
+http://www.cvrl.org/cmfs.htm
+
+This page does the calculations for you:
+http://www.ledtuning.nl/cie.php
+
+Plugging the wavelengths into the ledtuning website gives the following CIE RGB xy primaries:
+700.0 nm has Spectral Locus coordinates: x:0.734690023  y:0.265309977
+546.1 nm has Spectral Locus coordinates: x:0.2736747378 y:0.7174284409
+435.8 nm has Spectral Locus coordinates: x:0.1665361196 y:0.0088826412
+
+Primaries and white point:
+
+cmsCIExyYTRIPLE cie_primaries_ledtuning = {
+{0.7346900230, 0.2653099770, 1.0},
+{0.2736747378, 0.7174284409, 1.0},
+{0.1665361196, 0.0088826412, 1.0}
+}
+primaries = cie_primaries_ledtuning_prequantized;
+whitepoint = e_astm;
+
+
+4. IdentityRGB, D50, Gamma=1.0:
+
+Profile variants:
+
+Linear Gamma:
+	IdentityRGB-elle-V4-g10.icc
+	IdentityRGB-elle-V2-g10.icc
+
+sRGB TRC:
+	IdentityRGB-elle-V4-srgbtrc.icc
+	IdentityRGB-elle-V2-srgbtrc.icc
+	
+Notes:
+
+For high bit depth image editing only.
+
+This profile also hold all possible visible colors, but less efficiently than the AllColors profile.
+
+Primaries and white point:
+
+cmsCIExyYTRIPLE identity_primaries = {
+{1.0, 0.0, 1.0},
+{0.0, 1.0, 1.0},
+{0.0, 0.0, 1.0}
+};
+whitepoint = d50_illuminant_specs;
+primaries = identity_primaries;
+
+
+5. Prophoto/Romm, D50, Gamma=1.80078125:
+
+Profile variants:
+
+Gamma=1.80078125:
+	LargeRGB-elle-V4-g18.icc
+	LargeRGB-elle-V2-g18.icc
+
+Linear gamma:
+	LargeRGB-elle-V4-g10.icc
+	LargeRGB-elle-V2-g10.icc
+
+sRGB TRC:
+	LargeRGB-elle-V4-srgbtrc.icc
+	LargeRGB-elle-V2-srgbtrc.icc
+
+Notes:
+
+For high bit depth image editing only.
+
+Reference Input/Output Medium Metric RGB Color Encodings (RIMM/ROMM RGB)
+Kevin E. Spaulding, Geoffrey J. Woolfe and Edward J. Giorgianni
+Eastman Kodak Company, Rochester, New York, U.S.A.
+
+Above document is available at http://photo-lovers.org/pdf/color/romm.pdf
+
+Kodak designed the Romm (ProPhoto) color gamut to include all printable and most real world colors. It includes some imaginary colors and excludes some of the real world blues and violet blues that can be captured by digital cameras. It also excludes some very saturated "camera-captured" yellows as interpreted by some camera matrix input profiles.
+
+Primaries and white point:
+cmsCIExyYTRIPLE romm_primaries = {
+{0.7347, 0.2653, 1.0},
+{0.1596, 0.8404, 1.0},
+{0.0366, 0.0001, 1.0}
+};
+primaries = romm_primaries;
+whitepoint = d50_romm_spec;
+
+
+6. sRGB, D65, sRGB-trc:
+
+Profile variants:
+
+sRGB TRC:
+	sRGB-elle-V4-srgbtrc.icc
+	sRGB-elle-V2-srgbtrc.icc
+
+Linear gamma:
+	sRGB-elle-V4-g100.icc
+	sRGB-elle-V2-g100.icc
+	
+Notes:
+
+When made using the standard sRGB TRC, this sRGB profile can be applied to DCF R03 camera-generated jpegs and is an excellent color space for editing 8-bit images.
+
+The linear gamma sRGB profile should only be used for high bit depth image editing.
+
+http://en.wikipedia.org/wiki/Srgb:
+Hewlett-Packard and Microsoft designed sRGB to match the color gamut of consumer-grade CRTs from the 1990s and to be the standard color space for the world wide web.
+
+Primaries and white point:
+
+cmsCIExyYTRIPLE srgb_primaries = {
+{0.6400, 0.3300, 1.0},
+{0.3000, 0.6000, 1.0},
+{0.1500, 0.0600, 1.0}
+};
+cmsCIExyYTRIPLE srgb_primaries_pre_quantized = {
+{0.639998686, 0.330010138, 1.0},
+{0.300003784, 0.600003357, 1.0},
+{0.150002046, 0.059997204, 1.0}
+};
+primaries = srgb_primaries_pre_quantized;
+whitepoint = d65_srgb_adobe_specs;
+
+
+VII. WideGamutRGB, D50, Gamma=2.19921875:
+
+Profile variants: 
+Gamma=2.19921875
+	WideRGB-elle-V4-g22.icc
+	WideRGB-elle-V2-g22.icc
+
+Linear gamma:
+	WideRGB-elle-V4-g10.icc
+	WideRGB-elle-V2-g10.icc
+
+sRGB TRC:
+	WideRGB-elle-V4-srgbtrc.icc
+	WideRGB-elle-V2-srgbtrc.icc
+
+
+Notes:
+
+For high bit depth image editing only.
+
+WideGamutRGB was designed by Adobe to be a wide gamut color space that uses spectral colors as its primaries.
+
+Pascale's primary values produce a profile that matches old V2 Widegamut profiles from Adobe and Canon:
+Danny Pascale: A review of RGB color spaces
+http://www.babelcolor.com/download/A%20review%20of%20RGB%20color%20spaces.pdf
+
+Primaries and white point:
+
+cmsCIExyYTRIPLE widegamut_pascale_primaries = {
+{0.7347, 0.2653, 1.0},
+{0.1152, 0.8264, 1.0},
+{0.1566, 0.0177, 1.0}
+};
+primaries = widegamut_pascale_primaries;
+whitepoint = d50_romm_spec;
+
+
+8. Gray ICC profiles, D50 white point:
+
+Profile variants:
+
+Gray profile with Gamma=1.00, linear gamma, "linear light", etc:
+	Gray-D50-elle-V4-g10.icc
+	Gray-D50-elle-V2-g10.icc
+
+Gray profile with Gamma=1.80078125:
+	Gray-D50-elle-V4-g18.icc
+	Gray-D50-elle-V2-g18.icc
+
+Gray profile with Gamma=2.19921875:
+	Gray-D50-elle-V4-g22.icc
+	Gray-D50-elle-V2-g22.icc"
+
+Gray profiles with srgb-trc:
+	Gray-D50-elle-V4-srgbtrc.icc
+	Gray-D50-elle-V2-srgbtrc.icc
+
+
+9. LCMS built-in LAB and XYZ Profile variants:
+
+Profile variants:
+
+	Lab-D50-Identity-elle-V2.icc.
+	Lab-D50-Identity-elle-V4.icc.
+	XYZ-D50-Identity-elle-V4.icc
+
+Notes:
+
+I don't think LCMS2 code makes a V2 XYZ profile.
+
+

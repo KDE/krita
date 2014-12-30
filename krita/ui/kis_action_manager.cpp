@@ -19,6 +19,8 @@
 #include "kis_action_manager.h"
 
 #include <QList>
+
+#include <kstandarddirs.h>
 #include <kactioncollection.h>
 
 #include "KisPart.h"
@@ -31,6 +33,8 @@
 #include "kis_layer.h"
 #include "KisDocument.h"
 
+
+
 class KisActionManager::Private {
 
 public:
@@ -42,12 +46,17 @@ public:
     QList<KisAction*> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
     KisOperationRegistry operationRegistry;
+
 };
 
 KisActionManager::KisActionManager(KisViewManager* viewManager)
     : d(new Private)
 {
     d->viewManager = viewManager;
+
+    QString kritarc = KStandardDirs::locate("data", "krita/krita.rc");
+    qDebug() << kritarc;
+
 }
 
 KisActionManager::~KisActionManager()
@@ -62,12 +71,12 @@ void KisActionManager::setView(QPointer<KisView> imageView)
 
 void KisActionManager::addAction(const QString& name, KisAction* action)
 {
-    if (!name.isEmpty()) {
-        d->viewManager->actionCollection()->addAction(name, action);
-        action->setObjectName(name);
-        action->setParent(d->viewManager->actionCollection());
-    }
+    Q_ASSERT(!name.isEmpty());
+    Q_ASSERT(action);
 
+    d->viewManager->actionCollection()->addAction(name, action);
+    action->setObjectName(name);
+    action->setParent(d->viewManager->actionCollection());
     d->actions.append(action);
     action->setActionManager(this);
 }

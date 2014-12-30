@@ -49,6 +49,10 @@ public:
     explicit KisDocumentEntry(const KService::Ptr& service);
     ~KisDocumentEntry();
 
+    static QString nativeMimeType();
+
+    static QStringList extraNativeMimeTypes();
+
     KService::Ptr service() const;
 
     /**

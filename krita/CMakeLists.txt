@@ -141,20 +141,14 @@ if (NOT WIN32)
     add_subdirectory( benchmarks )
 endif (NOT WIN32)
 
-set(kritapart_PART_SRCS krita_part_init.cc)
-kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
-target_link_libraries(kritapart kritaui)
-install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
-
-set(krita_KDEINIT_SRCS main.cc)
+set(krita_SRCS main.cc)
 
 if(WIN32 AND USE_BREAKPAD)
-    set(krita_KDEINIT_SRCS ${krita_KDEINIT_SRCS} kis_crash_handler.cpp)
+    set(krita_SRCS ${krita_SRCS} kis_crash_handler.cpp)
     set(BREAKPAD_LIBS breakpad)
 endif(WIN32 AND USE_BREAKPAD)
 
-kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
-kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
+kde4_add_app_icon(krita_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
 
 if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
@@ -162,13 +156,11 @@ if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_krita kritaui ${BREAKPAD_LIBS})
-target_link_libraries(krita kdeinit_krita kritaui)
+kde4_add_executable(krita ${krita_SRCS})
+target_link_libraries(krita kritaui ${BREAKPAD_LIBS})
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
-install(FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 

@@ -124,13 +124,6 @@ public:
 
     void setReadWrite(bool readwrite);
 
-    /**
-     * Returns the dockwidget specified by the @p factory. If the dock widget doesn't exist yet it's created.
-     * Add a "view_palette_action_menu" action to your view menu if you want to use closable dock widgets.
-     * @param factory the factory used to create the dock widget if needed
-     * @return the dock widget specified by @p factory (may be 0)
-     */
-    QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
     /// Return the list of dock widgets belonging to this main window.
     QList<QDockWidget*> dockWidgets();
@@ -373,14 +366,14 @@ private:
 
     friend class KisApplication;
 
+
     /**
-     * This setting indicates who is calling chooseNewDocument.
-     * Usually the app will want to
-     * - show the template dialog with 'everything' if InitDocAppStarting, InitDocFileClose or InitDocEmbedded
-     * - show the template dialog with 'templates only' if InitDocFileNew
-     * - create an empty document with default settings if InitDocEmpty
+     * Returns the dockwidget specified by the @p factory. If the dock widget doesn't exist yet it's created.
+     * Add a "view_palette_action_menu" action to your view menu if you want to use closable dock widgets.
+     * @param factory the factory used to create the dock widget if needed
+     * @return the dock widget specified by @p factory (may be 0)
      */
-    enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
+    QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
     /**
      * Ask user about saving changes to the document upon exit.

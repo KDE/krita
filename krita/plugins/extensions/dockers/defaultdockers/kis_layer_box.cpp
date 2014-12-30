@@ -44,7 +44,6 @@
 #include <kis_debug.h>
 #include <kmenu.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 
 #include <KoIcon.h>
 #include <KisDocumentSectionView.h>
@@ -81,7 +80,9 @@
 class ButtonAction : public KisAction
 {
 public:
-    ButtonAction(QAbstractButton* button, const KIcon& icon, const QString& text, QObject* parent) : KisAction(icon, text, parent) , m_button(button)
+    ButtonAction(QAbstractButton* button, const KIcon& icon, const QString& text, QObject* parent)
+        : KisAction(icon, text, parent)
+        , m_button(button)
     {
         connect(m_button, SIGNAL(clicked()), this, SLOT(trigger()));
     }
@@ -231,7 +232,7 @@ KisLayerBox::KisLayerBox()
 
     m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
     m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_selectOpaque->setObjectName(""); // no name to avoid addition to the action collection
+    m_selectOpaque->setObjectName("select_opaque");
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
     m_actions.append(m_selectOpaque);
 

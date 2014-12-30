@@ -20,7 +20,7 @@
 #ifndef KIS_APPLICATION_H
 #define KIS_APPLICATION_H
 
-#include <kapplication.h>
+#include <qtsingleapplication/qtsingleapplication.h>
 #include "krita_export.h"
 
 class KisPart;
@@ -46,7 +46,7 @@ class QStringList;
  *  If the last mainwindow becomes closed, KisApplication automatically
  *  calls QApplication::quit.
  */
-class KRITAUI_EXPORT KisApplication : public KApplication
+class KRITAUI_EXPORT KisApplication : public QtSingleApplication
 {
     Q_OBJECT
 
@@ -55,7 +55,7 @@ public:
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
      */
-    explicit KisApplication();
+    explicit KisApplication(const QString &key);
 
     /**
      *  Destructor.
@@ -83,11 +83,6 @@ public:
     void setSplashScreen(QWidget *splash);
 
     /**
-     * Remove the splash dialog
-     */
-    void removeSplash();
-
-    /**
      * return a list of mimetypes this application supports.
      */
     QStringList mimeFilter(KisImportExportManager::Direction direction) const;
@@ -111,6 +106,11 @@ protected:
 
     // Current application object.
     static KisApplication *KoApp;
+
+public slots:
+
+    void remoteArguments(const QByteArray &message, QObject*socket);
+    void fileOpenRequested(const QString & url);
 
 private:
     /// @return the number of autosavefiles opened

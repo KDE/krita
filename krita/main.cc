@@ -54,7 +54,7 @@
 
 #endif
 
-extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+extern "C" int main(int argc, char **argv)
 {
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
@@ -63,6 +63,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
         qputenv("QT_NO_GLIB", "1");
     }
 #endif
+
 #ifdef USE_BREAKPAD
     qputenv("KDE_DEBUG", "1");
     KisCrashHandler crashHandler;
@@ -74,6 +75,8 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 
     int state;
+    KisFactory factory;
+    Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
     KAboutData *aboutData = KisFactory::aboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
@@ -90,8 +93,29 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     KCmdLineArgs::addCmdLineOptions(options);
 
+    // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
+    QString key = "Krita" +
+                  QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
+    key = key.replace(":", "_").replace("\\","_");
+
+     // initialize qt plugin path (see KComponentDataPrivate::lazyInit)
+    KGlobal::config();
+
     // first create the application so we can create a  pixmap
-    KisApplication app;
+    KisApplication app(key);
+
+    if (app.isRunning()) {
+
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+        QByteArray ba;
+        QDataStream ds(&ba, QIODevice::WriteOnly);
+        args->saveAppArgs(ds);
+        ds.device()->close();
+
+        if (app.sendMessage(ba)) {
+            return 0;
+        }
+    }
 
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();
@@ -105,9 +129,8 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     app.setAttribute(Qt::AA_X11InitThreads, true);
 #endif
 
-    if (!runningInKDE) {
-        app.setAttribute(Qt::AA_DontShowIconsInMenus);
-    }
+    // Icons in menus are ugly and distracting
+    app.setAttribute(Qt::AA_DontShowIconsInMenus);
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
@@ -118,6 +141,14 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     if (!app.start()) {
         return 1;
     }
+
+    // Set up remote arguments.
+    QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
+                     &app, SLOT(remoteArguments(QByteArray,QObject*)));
+
+    QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
+                     &app, SLOT(fileOpenRequested(QString)));
+
 
     state = app.exec();
 

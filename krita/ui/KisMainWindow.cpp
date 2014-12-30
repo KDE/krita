@@ -307,7 +307,7 @@ KisMainWindow::KisMainWindow()
     d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
 
     KoToolBoxFactory toolBoxFactory;
-    QDockWidget* toolbox = createDockWidget(&toolBoxFactory);
+    createDockWidget(&toolBoxFactory);
 
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -377,9 +377,8 @@ KisMainWindow::KisMainWindow()
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources("data", "krita/krita.rc");
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
-    setLocalXMLFile(KStandardDirs::locateLocal("data", "krita/krita.rc"));
 
-    guiFactory()->addClient( this );
+    guiFactory()->addClient(this);
 
     // Create and plug toolbar list for Settings menu
     QList<QAction *> toolbarList;
@@ -1709,8 +1708,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
     KConfigGroup group(KGlobal::config(), "GUI");
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
-    dockWidgetFont.setPointSizeF(pointSize);
+    dockWidgetFont.setPointSizeF(qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF()));
 #ifdef Q_OS_MAC
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
@@ -1723,13 +1721,13 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
 void KisMainWindow::forceDockTabFonts()
 {
-    QObjectList chis = children();
-    for (int i = 0; i < chis.size(); ++i) {
-        if (chis.at(i)->inherits("QTabBar")) {
+    foreach(QObject *child, children()) {
+        if (child->inherits("QTabBar")) {
+            KConfigGroup group(KGlobal::config(), "GUI");
             QFont dockWidgetFont  = KGlobalSettings::generalFont();
-            qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
-            dockWidgetFont.setPointSizeF(pointSize);
-            ((QTabBar *)chis.at(i))->setFont(dockWidgetFont);
+            qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
+            dockWidgetFont.setPointSizeF(qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF()));
+            ((QTabBar *)child)->setFont(dockWidgetFont);
         }
     }
 }
@@ -1747,6 +1745,9 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers()
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer) {
             observers << observer;
+        }
+        else {
+            qWarning() << docker << "is not a canvas observer";
         }
     }
     return observers;
@@ -1808,6 +1809,7 @@ void KisMainWindow::subWindowActivated()
     }
 
     updateCaption();
+    d->viewManager->actionManager()->updateGUI();
 }
 
 void KisMainWindow::updateWindowMenu()
@@ -1885,6 +1887,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         d->activeSubWindow = subwin;
     }
     updateWindowMenu();
+    d->viewManager->actionManager()->updateGUI();
 }
 
 void KisMainWindow::configChanged()
@@ -1899,6 +1902,7 @@ void KisMainWindow::configChanged()
 
     KConfigGroup group(KGlobal::config(), "theme");
     d->themeManager->setCurrentTheme(group.readEntry("Theme", "Krita dark"));
+    d->viewManager->actionManager()->updateGUI();
 }
 
 void KisMainWindow::newView(QObject *document)
@@ -1906,18 +1910,18 @@ void KisMainWindow::newView(QObject *document)
     KisDocument *doc = qobject_cast<KisDocument*>(document);
     KisView *view = KisPart::instance()->createView(doc, this);
     addView(view);
-    qDebug() << "?>>>>>>>>>>>>>>>>" << KActionCollection::allCollections().size();
+    d->viewManager->actionManager()->updateGUI();
 }
 
 void KisMainWindow::newWindow()
 {
-    qDebug() << "?>>>>>>>>>>>>>>>>" << KActionCollection::allCollections().size();
     KisPart::instance()->createMainWindow()->show();
 }
 
 void KisMainWindow::closeCurrentWindow()
 {
     d->mdiArea->currentSubWindow()->close();
+    d->viewManager->actionManager()->updateGUI();
 }
 
 void KisMainWindow::showAboutApplication()

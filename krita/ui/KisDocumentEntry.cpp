@@ -44,6 +44,16 @@ KisDocumentEntry::~KisDocumentEntry()
 {
 }
 
+QString KisDocumentEntry::nativeMimeType()
+{
+    return QString::fromLatin1(KIS_MIME_TYPE);
+}
+
+QStringList KisDocumentEntry::extraNativeMimeTypes()
+{
+    return QStringList() << KIS_MIME_TYPE;
+}
+
 
 KService::Ptr KisDocumentEntry::service() const {
     return m_service;

@@ -334,9 +334,6 @@ bool KisApplication::start()
 
     if (argsCount > 0) {
 
-        // remove all non-filename options
-        args->clear();
-
         QTextStream profileoutput;
         QFile profileFile(profileFileName);
         if (!profileFileName.isEmpty()

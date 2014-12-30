@@ -26,7 +26,7 @@
 #include <QList>
 #include <QPointer>
 
-#include <kcomponentdata.h>
+
 #include <kurl.h>
 #include <kxmlguiclient.h>
 

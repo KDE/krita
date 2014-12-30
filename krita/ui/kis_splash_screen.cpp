@@ -27,7 +27,7 @@
 #include <KisPart.h>
 #include <KisApplication.h>
 
-#include <kcomponentdata.h>
+
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>

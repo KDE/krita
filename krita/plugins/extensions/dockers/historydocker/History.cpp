@@ -18,7 +18,7 @@
  */
 #include "History.h"
 
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 #include <klocale.h>
 

@@ -27,7 +27,7 @@
 #include <KoResourceTagStore.h>
 
 #include <kglobal.h>
-#include <kcomponentdata.h>
+
 #include <kstandarddirs.h>
 
 #include <QScopedPointer>

@@ -30,7 +30,7 @@
 #include <QtGlobal>
 #include <qmath.h>
 
-#include <kcomponentdata.h>
+
 #include <kstandarddirs.h>
 
 #include "kis_factory2.h"

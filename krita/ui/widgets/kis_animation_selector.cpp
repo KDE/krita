@@ -31,7 +31,7 @@
 #include <QDesktopWidget>
 #include <QFile>
 #include <QFileDialog>
-#include <kcomponentdata.h>
+
 
 #include <kis_debug.h>
 

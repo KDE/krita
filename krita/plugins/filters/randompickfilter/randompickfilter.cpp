@@ -26,7 +26,7 @@
 #include <QPoint>
 
 #include <kis_debug.h>
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 #include <klocale.h>
 

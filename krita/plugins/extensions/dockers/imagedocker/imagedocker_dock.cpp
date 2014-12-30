@@ -515,9 +515,9 @@ void ImageDockerDock::slotZoomChanged(int zoom)
 
 void ImageDockerDock::slotColorSelected(const QColor& color)
 {
-    m_canvas->resourceManager()->setForegroundColor(
-        KoColor(color, KoColorSpaceRegistry::instance()->rgb8())
-    );
+    if (m_canvas) {
+        m_canvas->resourceManager()->setForegroundColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
+    }
 }
 
 void ImageDockerDock::slotViewModeChanged(int viewMode, qreal scale)

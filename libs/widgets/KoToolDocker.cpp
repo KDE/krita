@@ -267,4 +267,15 @@ void KoToolDocker::resetWidgets()
     d->resetWidgets();
 }
 
+
+void KoToolDocker::setCanvas(KoCanvasBase *canvas)
+{
+    setEnabled(canvas != 0);
+}
+
+void KoToolDocker::unsetCanvas()
+{
+    setEnabled(false);
+}
+
 #include <KoToolDocker.moc>

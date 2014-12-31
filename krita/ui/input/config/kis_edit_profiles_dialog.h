@@ -20,7 +20,7 @@
 #ifndef KISEDITPROFILESDIALOG_H
 #define KISEDITPROFILESDIALOG_H
 
-#include <kdialog.h >
+#include <kdialog.h>
 
 class QListWidgetItem;
 /**

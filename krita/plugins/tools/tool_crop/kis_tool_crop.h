@@ -26,8 +26,8 @@
 
 #include <KoIcon.h>
 
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include <KShortcut>
 #include <KoToolFactoryBase.h>

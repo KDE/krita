@@ -27,7 +27,7 @@
 #include "kis_opacity_selector_view.h"
 
 #include <klocale.h>
-#include <KColorButton>
+#include <kcolorbutton.h>
 
 #include <QLabel>
 #include <QHBoxLayout>

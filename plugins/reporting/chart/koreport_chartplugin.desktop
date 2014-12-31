@@ -42,6 +42,7 @@ Comment[pl]=Wtyczka sprawozdania z wykresami dla Calligry
 Comment[pt]='Plugin' de Gráficos dos Relatórios do Calligra
 Comment[pt_BR]=Plugin de gráficos de relatórios do Calligra
 Comment[sk]=Grafový plugin Calligra Reports
+Comment[sv]=Calligra-insticksprogram för diagramrapport
 Comment[uk]=Додаток діаграм у звітах Calligra
 Comment[x-test]=xxCalligra Reports Chart Pluginxx
 X-KDE-Library=koreport_chartplugin

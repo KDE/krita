@@ -752,6 +752,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
             result = (KisImageBuilder_RESULT_NOT_EXIST);
         }
 
+        delete fp;
         KIO::NetAccess::removeTempFile(tmpFile);
     }
 

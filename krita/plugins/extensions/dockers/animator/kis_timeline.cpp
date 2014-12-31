@@ -20,7 +20,7 @@
 
 #include <KisPart.h>
 
-#include <KActionCollection>
+#include <kactioncollection.h>
 
 #include <QToolButton>
 #include <QToolBar>

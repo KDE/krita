@@ -224,21 +224,21 @@ KoResourceServerProvider* KoResourceServerProvider::instance()
     return s_instance;
 }
 
-KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer()
+KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer(bool block)
 {
-    d->patternThread->barrier();
+    if (block) d->patternThread->barrier();
     return d->patternServer;
 }
 
-KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer()
+KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer(bool block)
 {
-    d->patternThread->barrier();
+    if (block) d->patternThread->barrier();
     return d->gradientServer;
 }
 
-KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
+KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer(bool block)
 {
-    d->patternThread->barrier();
+    if (block) d->patternThread->barrier();
     return d->paletteServer;
 }
 

@@ -99,15 +99,15 @@ KisResourceServerProvider* KisResourceServerProvider::instance()
 }
 
 
-KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer()
+KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer(bool block)
 {
-    paintOpPresetThread->barrier();
+    if (block) paintOpPresetThread->barrier();
     return m_paintOpPresetServer;
 }
 
-KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer()
+KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer(bool block)
 {
-    workspaceThread->barrier();
+    if (block) workspaceThread->barrier();
     return m_workspaceServer;
 }
 

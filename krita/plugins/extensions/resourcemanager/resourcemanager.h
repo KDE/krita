@@ -54,6 +54,8 @@ private slots:
     void slotImport();
     void slotCreateBundle();
     void slotManageBundles();
+    void loadBundles();
+    void bundlesLoaded();
 private:
     class Private;
     Private *const d;

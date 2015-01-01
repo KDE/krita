@@ -150,9 +150,9 @@ KisBrushServer* KisBrushServer::instance()
 }
 
 
-KisBrushResourceServer* KisBrushServer::brushServer()
+KisBrushResourceServer* KisBrushServer::brushServer(bool block)
 {
-    m_brushThread->barrier();
+    if (block) m_brushThread->barrier();
     return m_brushServer;
 }
 

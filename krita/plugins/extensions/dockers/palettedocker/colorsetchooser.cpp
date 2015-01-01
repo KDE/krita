@@ -84,7 +84,7 @@ void ColorSetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 
 ColorSetChooser::ColorSetChooser(QWidget* parent): QWidget(parent)
 {
-    KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer();
+    KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoColorSet>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new ColorSetDelegate(this));

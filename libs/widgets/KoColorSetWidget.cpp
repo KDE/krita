@@ -180,7 +180,8 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     setLayout(d->mainLayout);
 
     KoColorSet *colorSet = new KoColorSet();
-    setColorSet(colorSet);
+    d->colorSet = colorSet;
+    d->fillColors();
 }
 
 KoColorSetWidget::~KoColorSetWidget()

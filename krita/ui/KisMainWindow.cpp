@@ -409,7 +409,7 @@ KisMainWindow::KisMainWindow()
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
 
-    QTimer::singleShot(0, this, SLOT(checkSanity()));
+    QTimer::singleShot(1000, this, SLOT(checkSanity()));
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)

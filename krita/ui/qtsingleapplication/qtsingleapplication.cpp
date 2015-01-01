@@ -133,14 +133,11 @@ bool QtSingleApplication::isRunning(qint64 pid)
     if (pid == -1) {
         pid = firstPeer;
         if (pid == -1) {
-            qDebug() << "isRunning" << pid;
             return false;
         }
     }
 
     QtLocalPeer peer(this, appId + QLatin1Char('-') + QString::number(pid, 10));
-
-    qDebug() << "is not yet running" << pid << peer.isClient();
 
     return peer.isClient();
 }

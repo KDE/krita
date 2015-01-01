@@ -307,7 +307,6 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
     KoToolManager::instance()->registerTools(actionCollection(), dummy);
 
-
     d->statusBar = new KisStatusBar(this);
     QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
 
@@ -327,12 +326,6 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
 
     KisInputProfileManager::instance()->loadProfiles();
-
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    if (rserver->resources().isEmpty()) {
-        QMessageBox::critical(parent, i18nc("@title:window", "Critical Error"), i18n("Krita cannot find any brush presets and will close now. Please check your installation."));
-        exit(0);
-    }
 }
 
 

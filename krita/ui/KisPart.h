@@ -273,10 +273,6 @@ protected:
      */
     QGraphicsItem *createCanvasItem(KisDocument *document);
 
-protected slots:
-
-    /// Quits Krita with error message from m_errorMessage.
-    void showErrorAndDie();
 
 private:
 
@@ -285,9 +281,6 @@ private:
     class Private;
     Private *const d;
 
-protected:
-    QString m_errorMessage;
-    bool m_dieOnError;
 
 };
 

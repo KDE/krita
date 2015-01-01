@@ -97,6 +97,7 @@
 #include <KoToolBoxFactory.h>
 #include <KoDockRegistry.h>
 #include <KoPluginLoader.h>
+#include <KoColorSpaceEngine.h>
 
 #include "KisView.h"
 #include "KisDocument.h"
@@ -126,6 +127,7 @@
 #include "kis_mainwindow_observer.h"
 #include "kis_action_manager.h"
 #include "thememanager.h"
+#include "kis_resource_server_provider.h"
 
 #include "calligraversion.h"
 
@@ -407,6 +409,7 @@ KisMainWindow::KisMainWindow()
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
 
+    QTimer::singleShot(0, this, SLOT(checkSanity()));
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -1892,6 +1895,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 
 void KisMainWindow::configChanged()
 {
+
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
     d->mdiArea->setViewMode(viewMode);
@@ -1922,6 +1926,34 @@ void KisMainWindow::closeCurrentWindow()
 {
     d->mdiArea->currentSubWindow()->close();
     d->viewManager->actionManager()->updateGUI();
+}
+
+void KisMainWindow::checkSanity()
+{
+    // print error if the lcms engine is not available
+    if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
+        // need to wait 1 event since exiting here would not work.
+        m_errorMessage = i18n("The Calligra LittleCMS color management plugin is not installed. Krita will quit now.");
+        m_dieOnError = true;
+        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+        return;
+    }
+
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    if (rserver->resources().isEmpty()) {
+        m_errorMessage = i18n("Krita cannot find any brush presets!.");
+        m_dieOnError = false;
+        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+        return;
+    }
+}
+
+void KisMainWindow::showErrorAndDie()
+{
+    QMessageBox::critical(0, i18nc("@title:window", "Installation error"), m_errorMessage);
+    if (m_dieOnError) {
+        exit(10);
+    }
 }
 
 void KisMainWindow::showAboutApplication()

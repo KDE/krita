@@ -111,8 +111,6 @@ KisPart::KisPart()
     // Preload all the resources in the background
     Q_UNUSED(KoResourceServerProvider::instance());
     Q_UNUSED(KisResourceServerProvider::instance());
-
-    m_dieOnError = false;
 }
 
 KisPart::~KisPart()
@@ -405,13 +403,6 @@ void KisPart::addRecentURLToAllMainWindows(KUrl url)
 
 void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 {
-    // print error if the lcms engine is not available
-    if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
-        // need to wait 1 event since exiting here would not work.
-        m_errorMessage = i18n("The Calligra LittleCMS color management plugin is not installed. Krita will quit now.");
-        m_dieOnError = true;
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-    }
 
 #ifndef NDEBUG
     if (d->templateType.isEmpty())
@@ -543,14 +534,5 @@ void KisPart::startCustomDocument(KisDocument* doc)
 
 
 
-void KisPart::showErrorAndDie()
-{
-    QMessageBox::critical(0,
-                          i18n("Installation error"),
-                          m_errorMessage);
-    if (m_dieOnError) {
-        exit(10);
-    }
-}
 
 #include <KisPart.moc>

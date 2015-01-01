@@ -347,6 +347,9 @@ private slots:
     void newView(QObject *document);
     void newWindow();
     void closeCurrentWindow();
+    void checkSanity();
+    /// Quits Krita with error message from m_errorMessage.
+    void showErrorAndDie();
 
 protected:
 
@@ -428,6 +431,9 @@ private:
 private:
     class Private;
     Private * const d;
+
+    QString m_errorMessage;
+    bool m_dieOnError;
 
 };
 

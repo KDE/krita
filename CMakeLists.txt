@@ -89,7 +89,7 @@ endif (WIN32)
 option(GHNS "support Get Hot New Stuff" OFF)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
-option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
+
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
 
 # TODO: remove option and migration code below before 3.0 release
@@ -145,11 +145,7 @@ calligra_set_productset(${PRODUCTSET})
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
-if (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus Qt3Support)
-else (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
-endif (QT3SUPPORT)
+find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
 
 if (USEOPENGL)
     find_package(Qt4 4.6.0 REQUIRED QtOpenGL)
@@ -863,10 +859,6 @@ calligra_drop_product_on_bad_condition( APP_ACTIVE
 calligra_drop_product_on_bad_condition( LIB_CALLIGRADB
     HAVE_ICU "ICU devel not found"
     HAVE_SQLITE "sqlite devel not found"
-)
-
-calligra_drop_product_on_bad_condition( APP_KEXI
-    QT3SUPPORT "Qt3Support not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP

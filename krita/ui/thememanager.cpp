@@ -251,7 +251,7 @@ void ThemeManager::populateThemeMenu()
     }
 
     updateCurrentKDEdefaultThemePreview();
-    setCurrentTheme(theme);
+
 #ifdef Q_WS_X11
     d->themeMenuAction->addSeparator();
     KAction* config = new KAction(i18n("Configuration..."), d->themeMenuAction);

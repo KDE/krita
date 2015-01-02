@@ -59,6 +59,8 @@ KisNodeShape::KisNodeShape(KisNodeSP node)
 
 KisNodeShape::~KisNodeShape()
 {
+    removeAllShapes();
+
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     // If we're the active layer, we should tell the active selection we're dead meat.
     if (canvasController && canvasController->canvas() && canvasController->canvas()->shapeManager()) {

@@ -344,12 +344,12 @@ void KoDockWidgetTitleBar::Private::updateIcons()
 {    
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
 
-    lockIcon = (!locked) ? themedIcon("docker_lock_a") : themedIcon("docker_lock_b");
+    lockIcon = (!locked) ? themedIcon("docker_lock_a", true) : themedIcon("docker_lock_b", true);
     lockButton->setIcon(lockIcon);
 
     // this method gets called when switching themes, so update all of the themed icons now
-   floatButton->setIcon(themedIcon("docker_float"));
-   closeButton->setIcon(themedIcon("docker_close"));
+   floatButton->setIcon(themedIcon("docker_float", true));
+   closeButton->setIcon(themedIcon("docker_close", true));
 
     if (q->widget()) {
         collapseButton->setIcon(q->widget()->isHidden() ? themedIcon("docker_collapse_b") : themedIcon("docker_collapse_a"));

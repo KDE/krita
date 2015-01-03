@@ -124,11 +124,8 @@ void KisPart::Private::loadActions()
         f.open(QFile::ReadOnly);
         doc.setContent(f.readAll());
         QDomElement e = doc.documentElement(); // Actions
-        qDebug() << e.tagName();
         e = e.firstChild().toElement(); // ActionProperties
-        qDebug() << e.tagName();
         e = e.firstChild().toElement(); //
-        qDebug() << e.tagName();
 
         while (!e.isNull()) {
             if (e.tagName() == "Action") {
@@ -434,7 +431,12 @@ void KisPart::configureShortcuts(QWidget *parent)
         d->loadActions();
     }
 
-    KShortcutsDialog::configure(d->actionCollection, KShortcutsEditor::LetterShortcutsAllowed, parent, true);
+    KShortcutsDialog dlg;
+    dlg.setButtons(KDialog::Reset|KDialog::Ok|KDialog::Cancel|KDialog::User1);
+    dlg.addCollection(d->actionCollection);
+    dlg.setButtonText(KDialog::User1, i18n("Print"));
+    dlg.setButtonIcon(KDialog::User1, KIcon("document-print"));
+    dlg.configure();
 
     foreach(KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();

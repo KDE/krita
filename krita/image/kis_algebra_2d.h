@@ -92,6 +92,15 @@ T signZZ(T x) {
     return x == T(0) ? T(0) : x > T(0) ? T(1) : T(-1);
 }
 
+/**
+ * Copies the sign of \p y into \p x and returns the result
+ */
+template <typename T>
+    inline T copysign(T x, T y) {
+    T strippedX = qAbs(x);
+    return y >= T(0) ? strippedX : -strippedX;
+}
+
 template <class T>
 T leftUnitNormal(const T &a)
 {

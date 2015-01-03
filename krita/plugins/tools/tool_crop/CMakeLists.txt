@@ -3,6 +3,7 @@
 set(kritatoolcrop_PART_SRCS
     tool_crop.cc
     kis_tool_crop.cc
+    kis_constrained_rect.cpp
     kistoolcropconfigwidget.cpp
     )
 

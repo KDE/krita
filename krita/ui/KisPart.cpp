@@ -443,6 +443,22 @@ void KisPart::configureShortcuts()
     foreach(KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
         ac->readSettings();
+
+        // append shortcuts to tooltips if they exist
+        foreach( QAction* tempAction, ac->actions())
+        {
+            // find the shortcut pattern and delete (note the preceding space in the RegEx)
+            QString strippedTooltip = tempAction->toolTip().remove(QRegExp("\\s\\(.*\\)"));
+
+            // append shortcut if it exists for action
+            if(tempAction->shortcut() == QKeySequence(0))
+                 tempAction->setToolTip( strippedTooltip);
+            else
+                 tempAction->setToolTip( strippedTooltip + " (" + tempAction->shortcut().toString() + ")");
+
+        }
+
+
     }
 }
 

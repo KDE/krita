@@ -251,13 +251,12 @@ public:
 public:
     KisFilterManager *filterManager;
     KisStatusBar *statusBar;
-    KAction *totalRefresh;
     KisAction *createTemplate;
-    KAction *saveIncremental;
-    KAction *saveIncrementalBackup;
-    KAction *openResourcesDirectory;
-    KAction *rotateCanvasRight;
-    KAction *rotateCanvasLeft;
+    KisAction *saveIncremental;
+    KisAction *saveIncrementalBackup;
+    KisAction *openResourcesDirectory;
+    KisAction *rotateCanvasRight;
+    KisAction *rotateCanvasLeft;
     KToggleAction *wrapAroundAction;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
@@ -606,14 +605,16 @@ KisUndoAdapter * KisViewManager::undoAdapter()
 
 void KisViewManager::createActions()
 {
-    d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
+    d->saveIncremental = new KisAction(i18n("Save Incremental &Version"), this);
     d->saveIncremental->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
-    actionCollection()->addAction("save_incremental_version", d->saveIncremental);
+    d->saveIncremental->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("save_incremental_version", d->saveIncremental);
     connect(d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
 
-    d->saveIncrementalBackup = new KAction(i18n("Save Incremental Backup"), this);
+    d->saveIncrementalBackup = new KisAction(i18n("Save Incremental Backup"), this);
     d->saveIncrementalBackup->setShortcut(Qt::Key_F4);
-    actionCollection()->addAction("save_incremental_backup", d->saveIncrementalBackup);
+    d->saveIncrementalBackup->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("save_incremental_backup", d->saveIncrementalBackup);
     connect(d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
     connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
@@ -621,8 +622,8 @@ void KisViewManager::createActions()
     d->saveIncremental->setEnabled(false);
     d->saveIncrementalBackup->setEnabled(false);
 
-    KAction *tabletDebugger = new KAction(i18n("Toggle Tablet Debugger"), this);
-    actionCollection()->addAction("tablet_debugger", tabletDebugger );
+    KisAction *tabletDebugger = new KisAction(i18n("Toggle Tablet Debugger"), this);
+    actionManager()->addAction("tablet_debugger", tabletDebugger );
     tabletDebugger->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
@@ -630,22 +631,24 @@ void KisViewManager::createActions()
     actionManager()->addAction("create_t`emplate", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);
+    d->openResourcesDirectory = new KisAction(i18n("Open Resources Folder"), this);
     d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
     d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
-    actionCollection()->addAction("open_resources_directory", d->openResourcesDirectory);
+    actionManager()->addAction("open_resources_directory", d->openResourcesDirectory);
     connect(d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
 
-    d->rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
-    actionCollection()->addAction("rotate_canvas_right", d->rotateCanvasRight);
+    d->rotateCanvasRight = new KisAction(i18n("Rotate Canvas Right"), this);
+    actionManager()->addAction("rotate_canvas_right", d->rotateCanvasRight);
+    d->rotateCanvasRight->setActivationFlags(KisAction::ACTIVE_IMAGE);
     d->rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
 
-    d->rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
-    actionCollection()->addAction("rotate_canvas_left", d->rotateCanvasLeft);
+    d->rotateCanvasLeft = new KisAction(i18n("Rotate Canvas Left"), this);
+    actionManager()->addAction("rotate_canvas_left", d->rotateCanvasLeft);
+    d->rotateCanvasLeft->setActivationFlags(KisAction::ACTIVE_IMAGE);
     d->rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
 
     d->wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
-    actionCollection()->addAction("wrap_around_mode", d->wrapAroundAction);
+    actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
     d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
@@ -666,14 +669,15 @@ void KisViewManager::createActions()
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
 
     //Workaround, by default has the same shortcut as mirrorCanvas
-    KAction *a = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
+    KisAction *a = dynamic_cast<KisAction*>(actionCollection()->action("format_italic"));
     if (a) {
         a->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        a->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+        a->setShortcut(QKeySequence(), KAction::ActiveShortcut);        
+        a->setActivationConditions(KisAction::SELECTION_EDITABLE);
     }
 
-    a = new KAction(i18n("Cleanup removed files..."), this);
-    actionCollection()->addAction("edit_blacklist_cleanup", a);
+    a = new KisAction(i18n("Cleanup removed files..."), this);
+    actionManager()->addAction("edit_blacklist_cleanup", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 
 }

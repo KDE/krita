@@ -32,6 +32,7 @@
 #include <KoInteractionTool.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoResourceServerProvider.h>
+#include <KoIcon.h>
 
 #include "KisApplication.h"
 #include "KisMainWindow.h"
@@ -54,11 +55,14 @@
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kshortcutsdialog.h>
 
 #include <QDialog>
 #include <QGraphicsScene>
 #include <QApplication>
 #include <QGraphicsProxyWidget>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include "KisView.h"
 #include "KisDocument.h"
@@ -72,13 +76,16 @@
 #include "kis_animation_selector.h"
 #include "kis_animation_doc.h"
 
+#include "kis_action.h"
 
 class KisPart::Private
 {
 public:
-    Private()
-        : canvasItem(0)
+    Private(KisPart *_part)
+        : part(_part)
+        , canvasItem(0)
         , startupWidget(0)
+        , actionCollection(0)
     {
     }
 
@@ -87,6 +94,8 @@ public:
         delete canvasItem;
     }
 
+    KisPart *part;
+
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
@@ -94,7 +103,64 @@ public:
     QString templateType;
     KisOpenPane *startupWidget;
 
+    KActionCollection *actionCollection;
+
+    void loadActions();
+
 };
+
+
+void KisPart::Private::loadActions()
+{
+    actionCollection = new KActionCollection(part, KGlobal::mainComponent());
+
+    KGlobal::mainComponent().dirs()->addResourceType("kis_actions", "data", "krita/actions/");
+    QStringList actionDefinitions = KGlobal::mainComponent().dirs()->findAllResources("kis_actions", "*.actions", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+    qDebug() << actionDefinitions;
+
+    foreach(const QString &actionDefinition, actionDefinitions)  {
+        QDomDocument doc;
+        QFile f(actionDefinition);
+        f.open(QFile::ReadOnly);
+        doc.setContent(f.readAll());
+        QDomElement e = doc.documentElement(); // Actions
+        qDebug() << e.tagName();
+        e = e.firstChild().toElement(); // ActionProperties
+        qDebug() << e.tagName();
+        e = e.firstChild().toElement(); //
+        qDebug() << e.tagName();
+
+        while (!e.isNull()) {
+            if (e.tagName() == "Action") {
+                QString name = e.attribute("name");
+                QString icon = e.attribute("icon");
+                QString text = i18n(e.attribute("text").toUtf8().constData());
+                QString whatsthis = i18n(e.attribute("whatsThis").toUtf8().constData());
+                QString toolTip = i18n(e.attribute("toolTip").toUtf8().constData());
+                QString statusTip = i18n(e.attribute("statusTip").toUtf8().constData());
+                QString iconText = i18n(e.attribute("iconText").toUtf8().constData());
+                KShortcut shortcut = KShortcut(e.attribute("shortcut"));
+                bool isCheckable = e.attribute("isCheckable") == "true" ? true : false;
+                KShortcut defaultShortcut = KShortcut(e.attribute("defaultShortcut"));
+
+                KisAction *action = new KisAction(KIcon(icon), text);
+                action->setObjectName(name);
+                action->setWhatsThis(whatsthis);
+                action->setToolTip(toolTip);
+                action->setStatusTip(statusTip);
+                action->setIconText(iconText);
+                action->setShortcut(shortcut, KAction::ActiveShortcut);
+                action->setCheckable(isCheckable);
+                action->setShortcut(defaultShortcut, KAction::DefaultShortcut);
+                actionCollection->addAction(name, action);
+            }
+            e = e.nextSiblingElement();
+        }
+
+    }
+    actionCollection->readSettings();
+
+}
 
 KisPart* KisPart::instance()
 {
@@ -104,13 +170,14 @@ KisPart* KisPart::instance()
 
 
 KisPart::KisPart()
-    : d(new Private())
+    : d(new Private(this))
 {
     setTemplateType("krita_template");
 
     // Preload all the resources in the background
     Q_UNUSED(KoResourceServerProvider::instance());
     Q_UNUSED(KisResourceServerProvider::instance());
+
 }
 
 KisPart::~KisPart()
@@ -351,6 +418,28 @@ void KisPart::openExistingFile(const KUrl& url)
         d->startupWidget->hide();
     }
     qApp->restoreOverrideCursor();
+}
+
+KActionCollection *KisPart::masterActionCollection() const
+{
+    if (!d->actionCollection) {
+        d->loadActions();
+    }
+    return d->actionCollection;
+}
+
+void KisPart::configureShortcuts(QWidget *parent)
+{
+    if (!d->actionCollection) {
+        d->loadActions();
+    }
+
+    KShortcutsDialog::configure(d->actionCollection, KShortcutsEditor::LetterShortcutsAllowed, parent, true);
+
+    foreach(KisMainWindow *mainWindow, d->mainWindows) {
+        KActionCollection *ac = mainWindow->actionCollection();
+        ac->readSettings();
+    }
 }
 
 void KisPart::openTemplate(const KUrl& url)

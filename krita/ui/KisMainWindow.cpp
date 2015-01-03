@@ -1397,20 +1397,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
 
 void KisMainWindow::slotConfigureKeys()
 {
-    QString oldUndoText;
-    QString oldRedoText;
-
-    //The undo/redo action text is "undo" + command, replace by simple text while inside editor
-    oldUndoText = d->undo->text();
-    oldRedoText = d->redo->text();
-    d->undo->setText(i18n("Undo"));
-    d->redo->setText(i18n("Redo"));
-
-    guiFactory()->configureShortcuts();
-
-    d->undo->setText(oldUndoText);
-    d->redo->setText(oldRedoText);
-
+    KisPart::instance()->configureShortcuts(this);
     emit keyBindingsChanged();
 }
 

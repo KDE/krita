@@ -340,28 +340,6 @@ KisViewManager::~KisViewManager()
     if (d->filterManager->isStrokeRunning()) {
         d->filterManager->cancel();
     }
-
-    // The reason for this is to ensure the shortcuts are saved at the right time,
-    // and only the right shortcuts. Gemini has two views at all times, and shortcuts
-    // must be handled by the desktopview, but if we use the logic as below, we
-    // overwrite the desktop view's settings with the sketch view's
-    if(qApp->applicationName() == QLatin1String("kritagemini")) {
-        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
-        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
-            const QObject* obj = dynamic_cast<const QObject*>(collection->parentGUIClient());
-            if(obj && qobject_cast<const KisViewManager*>(obj) && !obj->objectName().startsWith("view_0"))
-                break;
-            collection->setConfigGroup("krita/shortcuts");
-            collection->writeSettings(&group);
-        }
-    }
-    else {
-        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
-        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
-            collection->setConfigGroup("krita/shortcuts");
-            collection->writeSettings(&group);
-        }
-    }
     delete d;
 }
 

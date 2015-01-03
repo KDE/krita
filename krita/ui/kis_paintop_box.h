@@ -179,7 +179,7 @@ private:
     QToolButton*                         vMirrorButton;
     KisPaintOpPresetsPopup*              m_presetsPopup;
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
-    KisViewManager*                            m_view;
+    KisViewManager*                      m_viewManager;
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;

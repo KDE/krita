@@ -349,6 +349,7 @@ calligra_define_productset(ACTIVE "Full Calligra Active"
         PLUGIN_CHARTSHAPE
         PLUGIN_PICTURESHAPE
         PLUGIN_TEXTSHAPE
+        PLUGIN_TEXTEDITING
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
@@ -373,6 +374,7 @@ calligra_define_productset(AUTHOR "Full Author (for Desktop)"
         PLUGIN_CHARTSHAPE
         PLUGIN_PICTURESHAPE
         PLUGIN_TEXTSHAPE
+        PLUGIN_TEXTEDITING
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
@@ -416,6 +418,7 @@ calligra_define_productset(FLOW "Full Flow (for Desktop)"
         PLUGIN_CHARTSHAPE
         PLUGIN_PICTURESHAPE
         PLUGIN_TEXTSHAPE
+        PLUGIN_TEXTEDITING
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
@@ -437,6 +440,7 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
         PLUGIN_CHARTSHAPE
         PLUGIN_PICTURESHAPE
         PLUGIN_TEXTSHAPE
+        PLUGIN_TEXTEDITING
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
@@ -495,6 +499,7 @@ calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
         PLUGIN_CHARTSHAPE
         PLUGIN_PICTURESHAPE
         PLUGIN_TEXTSHAPE
+        PLUGIN_TEXTEDITING
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
@@ -517,6 +522,7 @@ calligra_define_productset(STAGE "Full Stage (for Desktop)"
         PLUGIN_CHARTSHAPE
         PLUGIN_PICTURESHAPE
         PLUGIN_TEXTSHAPE
+        PLUGIN_TEXTEDITING
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
@@ -539,6 +545,7 @@ calligra_define_productset(WORDS "Full Words (for Desktop)"
         PLUGIN_CHARTSHAPE
         PLUGIN_PICTURESHAPE
         PLUGIN_TEXTSHAPE
+        PLUGIN_TEXTEDITING
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE

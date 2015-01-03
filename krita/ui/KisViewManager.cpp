@@ -84,6 +84,7 @@
 #include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_action_manager.h"
+#include "kis_action.h"
 #include "kis_canvas_controls_manager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_composite_progress_proxy.h"
@@ -251,7 +252,7 @@ public:
     KisFilterManager *filterManager;
     KisStatusBar *statusBar;
     KAction *totalRefresh;
-    KAction *createTemplate;
+    KisAction *createTemplate;
     KAction *saveIncremental;
     KAction *saveIncrementalBackup;
     KAction *openResourcesDirectory;
@@ -625,8 +626,8 @@ void KisViewManager::createActions()
     tabletDebugger->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
-    d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
-    actionCollection()->addAction("create_t`emplate", d->createTemplate);
+    d->createTemplate = new KisAction( i18n( "&Create Template From Image..." ), this);
+    actionManager()->addAction("create_t`emplate", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
     d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);

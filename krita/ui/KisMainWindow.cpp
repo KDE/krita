@@ -1397,7 +1397,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
 
 void KisMainWindow::slotConfigureKeys()
 {
-    KisPart::instance()->configureShortcuts(this);
+    KisPart::instance()->configureShortcuts();
     emit keyBindingsChanged();
 }
 

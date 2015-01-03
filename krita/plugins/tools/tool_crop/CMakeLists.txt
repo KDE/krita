@@ -25,3 +25,6 @@ install( FILES  tool_crop_cursor.png tool_crop.png dark_tool_crop.png light_tool
 install( FILES  kritatoolcrop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 
+install( FILES
+    KisToolCrop.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

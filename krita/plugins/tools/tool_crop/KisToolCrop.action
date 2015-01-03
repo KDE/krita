@@ -1,0 +1,4 @@
+<Actions version="1" name="KisToolCrop">
+ <Action iconText="Reset Foreground and Background Color" shortcut="D" toolTip="Reset Foreground and Background Color" icon="" whatsThis="" statusTip="" name="reset_fg_bg" isCheckable="false" text="Reset Foreground and Background Color" defaultShortcut="D"/>
+ <Action iconText="Swap Foreground and Background Color" shortcut="X" toolTip="Swap Foreground and Background Color" icon="" whatsThis="" statusTip="" name="toggle_fg_bg" isCheckable="false" text="Swap Foreground and Background Color" defaultShortcut="X"/>
+</Actions>

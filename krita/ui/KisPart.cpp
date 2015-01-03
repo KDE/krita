@@ -115,21 +115,23 @@ void KisPart::Private::loadActions()
     actionCollection = new KActionCollection(part, KGlobal::mainComponent());
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_actions", "data", "krita/actions/");
-    QStringList actionDefinitions = KGlobal::mainComponent().dirs()->findAllResources("kis_actions", "*.actions", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
-    qDebug() << actionDefinitions;
+    QStringList actionDefinitions = KGlobal::mainComponent().dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
     foreach(const QString &actionDefinition, actionDefinitions)  {
         QDomDocument doc;
         QFile f(actionDefinition);
         f.open(QFile::ReadOnly);
         doc.setContent(f.readAll());
+
         QDomElement e = doc.documentElement(); // Actions
-        e = e.firstChild().toElement(); // ActionProperties
-        e = e.firstChild().toElement(); //
+        QString collection = e.attribute("name");
+
+        e = e.firstChild().toElement(); // Action
 
         while (!e.isNull()) {
             if (e.tagName() == "Action") {
                 QString name = e.attribute("name");
+
                 QString icon = e.attribute("icon");
                 QString text = i18n(e.attribute("text").toUtf8().constData());
                 QString whatsthis = i18n(e.attribute("whatsThis").toUtf8().constData());
@@ -140,6 +142,10 @@ void KisPart::Private::loadActions()
                 bool isCheckable = e.attribute("isCheckable") == "true" ? true : false;
                 KShortcut defaultShortcut = KShortcut(e.attribute("defaultShortcut"));
 
+                if (name.isEmpty()) {
+                    qDebug() << text << "has no name! From:" << actionDefinition;
+                }
+
                 KisAction *action = new KisAction(KIcon(icon), text);
                 action->setObjectName(name);
                 action->setWhatsThis(whatsthis);
@@ -149,13 +155,19 @@ void KisPart::Private::loadActions()
                 action->setShortcut(shortcut, KAction::ActiveShortcut);
                 action->setCheckable(isCheckable);
                 action->setShortcut(defaultShortcut, KAction::DefaultShortcut);
-                actionCollection->addAction(name, action);
+
+                if (!actionCollection->action(name)) {
+                    actionCollection->addAction(name, action);
+                }
+//                else {
+//                    qDebug() << "duplicate action" << name << action << "from" << collection;
+//                    delete action;
+//                }
             }
             e = e.nextSiblingElement();
         }
-
+        actionCollection->readSettings();
     }
-    actionCollection->readSettings();
 
 }
 
@@ -218,8 +230,6 @@ KisAnimationDoc *KisPart::createAnimationDoc() const
 {
     return new KisAnimationDoc();
 }
-
-
 
 int KisPart::documentCount() const
 {
@@ -417,15 +427,7 @@ void KisPart::openExistingFile(const KUrl& url)
     qApp->restoreOverrideCursor();
 }
 
-KActionCollection *KisPart::masterActionCollection() const
-{
-    if (!d->actionCollection) {
-        d->loadActions();
-    }
-    return d->actionCollection;
-}
-
-void KisPart::configureShortcuts(QWidget *parent)
+void KisPart::configureShortcuts()
 {
     if (!d->actionCollection) {
         d->loadActions();

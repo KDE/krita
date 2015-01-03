@@ -154,17 +154,7 @@ public slots:
      * After the user closes the dialog, all actioncollections will be updated
      * with the new shortcuts.
      */
-    void configureShortcuts(QWidget *parent);
-
-    /**
-     * @brief masterActionCollection retrieve the master action collection
-     * @return the master action collection created from the .action definitions
-     *
-     * The *.action files define the actions used in Krita. You should never do a
-     * new KisAction, new KAction, new QAction! Only fetch actions defined in a .action
-     * definition file.
-     */
-    KActionCollection *masterActionCollection() const;
+    void configureShortcuts();
 
 protected slots:
 

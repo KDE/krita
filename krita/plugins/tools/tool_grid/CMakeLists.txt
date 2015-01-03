@@ -20,3 +20,6 @@ install( FILES  krita_tool_grid.png dark_krita_tool_grid.png light_krita_tool_gr
 install( FILES  kritatoolgrid.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 
+install( FILES
+    KisToolGrid.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

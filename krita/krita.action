@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Krita" version="62" xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0      http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
-  <ActionProperties>
+<Actions name="krita">
     <Action name="save_incremental_version" icon="" text="Save Incremental &amp;Version" whatsThis="" toolTip="Save Incremental Version" iconText="Save Incremental Version" shortcut="Ctrl+Alt+S" defaultShortcut="Ctrl+Alt+S" isCheckable="false" statusTip=""/>
     <Action name="save_incremental_backup" icon="" text="Save Incremental Backup" whatsThis="" toolTip="Save Incremental Backup" iconText="Save Incremental Backup" shortcut="F4" defaultShortcut="F4" isCheckable="false" statusTip=""/>
     <Action name="tablet_debugger" icon="" text="Toggle Tablet Debugger" whatsThis="" toolTip="Toggle Tablet Debugger" iconText="Toggle Tablet Debugger" shortcut="Ctrl+Shift+T" defaultShortcut="Ctrl+Shift+T" isCheckable="false" statusTip=""/>
@@ -332,5 +331,4 @@
     <Action name="show_minimal_shade_selector" icon="" text="Show minimal shade selector" whatsThis="" toolTip="Show minimal shade selector" iconText="Show minimal shade selector" shortcut="Shift+N" defaultShortcut="Shift+N" isCheckable="false" statusTip=""/>
     <Action name="show_color_history" icon="" text="Show color history" whatsThis="" toolTip="Show color history" iconText="Show color history" shortcut="H" defaultShortcut="H" isCheckable="false" statusTip=""/>
     <Action name="show_common_colors" icon="" text="Show common colors" whatsThis="" toolTip="Show common colors" iconText="Show common colors" shortcut="U" defaultShortcut="U" isCheckable="false" statusTip=""/>
-  </ActionProperties>
-</kpartgui>
+</Actions>

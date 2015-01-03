@@ -145,16 +145,26 @@ void KisWorkspaceChooser::resourceSelected(KoResource* resource)
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
-    // Unlock all dockers before making a change in the docker configuration.
-    // See https://bugs.kde.org/show_bug.cgi?id=342242
+
+    QMap<QDockWidget *, bool> dockWidgetMap;
     foreach(QDockWidget *docker, m_view->mainWindow()->dockWidgets()) {
-        docker->setFeatures(QDockWidget::AllDockWidgetFeatures);
-        KoDockWidgetTitleBar *titleBar = qobject_cast<KoDockWidgetTitleBar*>(docker->titleBarWidget());
-        if (titleBar) {
-            titleBar->setLocked(false);
-        }
+        dockWidgetMap[docker] = docker->property("Locked").toBool();
     }
 
     m_view->qtMainWindow()->restoreState(workspace->dockerState());
     m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
+
+    foreach(QDockWidget *docker, dockWidgetMap.keys()) {
+        qDebug() << docker << docker->isVisible() << docker->property("Locked");
+        if (docker->isVisible()) {
+            docker->setProperty("Locked", dockWidgetMap[docker]);
+            docker->updateGeometry();
+        }
+        else {
+            docker->setProperty("Locked", false); // Unlock invisible dockers
+            docker->toggleViewAction()->setEnabled(true);
+        }
+
+    }
+
 }

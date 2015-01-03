@@ -268,17 +268,15 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
     if (locked) {
         d->features = q->features();
         q->setFeatures(QDockWidget::NoDockWidgetFeatures);
-        d->closeButton->setEnabled(false);
-        d->floatButton->setEnabled(false);
-        d->collapseButton->setEnabled(false);
     }
     else {
         q->setFeatures(d->features);
-        q->toggleViewAction()->setEnabled(true);
-        d->closeButton->setEnabled(true);
-        d->floatButton->setEnabled(true);
-        d->collapseButton->setEnabled(true);
     }
+
+    q->toggleViewAction()->setEnabled(!locked);
+    d->closeButton->setEnabled(!locked);
+    d->floatButton->setEnabled(!locked);
+    d->collapseButton->setEnabled(!locked);
 
     d->updateIcons();
     q->setProperty("Locked", locked);

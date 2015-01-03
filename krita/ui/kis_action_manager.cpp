@@ -54,8 +54,6 @@ KisActionManager::KisActionManager(KisViewManager* viewManager)
 {
     d->viewManager = viewManager;
 
-    QString kritarc = KStandardDirs::locate("data", "krita/krita.rc");
-    qDebug() << kritarc;
 
 }
 

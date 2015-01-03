@@ -47,8 +47,8 @@ public:
         if (srcCs->colorDepthId() == Integer8BitsColorDepthID
                 || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
 
-            if ((srcProfile->name().toLower().contains("linear") ||
-                    dstProfile->name().toLower().contains("linear")) &&
+            if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
+                    dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
                     !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization) ) {
                 conversionFlags |= KoColorConversionTransformation::NoOptimization;
             }

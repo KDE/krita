@@ -184,7 +184,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->patternThread = new KoResourceLoaderThread(d->patternServer);
     d->patternThread->start();
-    if (qApp->applicationName().toLower().contains("test")) {
+    if (qApp->applicationName().contains(QLatin1String("test"), Qt::CaseInsensitive)) {
         d->patternThread->wait();
     }
 

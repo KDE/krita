@@ -530,7 +530,7 @@ void Autocorrect::advancedAutocorrect()
     }
 
     if (m_autocorrectEntries.contains(actualWord)) {
-        int pos = m_word.toLower().indexOf(trimmedWord);
+        int pos = m_word.indexOf(trimmedWord, Qt::CaseInsensitive);
         QString replacement = m_autocorrectEntries.value(actualWord);
         // Keep capitalized words capitalized.
         // (Necessary to make sure the first letters match???)

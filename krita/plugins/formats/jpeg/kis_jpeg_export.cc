@@ -113,7 +113,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     wdgUi.xmp->setChecked(cfg.getBool("xmp", true));
 
     const KoColorSpace* cs = image->projection()->colorSpace();
-    bool sRGB = cs->profile()->name().toLower().contains("srgb");
+    bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
     wdgUi.chkForceSRGB->setVisible(!sRGB);
     wdgUi.chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));
 

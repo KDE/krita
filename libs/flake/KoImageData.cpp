@@ -275,7 +275,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             Finalizer closer;
             closer.store = store;
             KoStoreDevice device(store);
-            const bool lossy =url.toLower().endsWith(".jpg") || url.toLower().endsWith(".gif");
+            const bool lossy = url.endsWith(".jpg", Qt::CaseInsensitive) || url.endsWith(".gif", Qt::CaseInsensitive);
             if (!lossy && device.size() < MAX_MEMORY_IMAGESIZE) {
                 QByteArray data = device.readAll();
                 if (d->image.loadFromData(data)) {

@@ -129,7 +129,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     if (qApp->applicationName() != "qttest") {
 
-        bool sRGB = cs->profile()->name().toLower().contains("srgb");
+        bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
 
         KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
 

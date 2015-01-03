@@ -177,14 +177,14 @@ QWidget* KisToolFill::createOptionWidget()
     m_sizemodWidget->setObjectName("sizemod");
     m_sizemodWidget->setRange(-40, 40);
     m_sizemodWidget->setSingleStep(1);
-    m_sizemodWidget->setSuffix("px");
+    m_sizemodWidget->setSuffix(" px");
 
     QLabel *lbl_feather = new QLabel(i18n("Feathering radius: "), widget);
     m_featherWidget = new KisSliderSpinBox(widget);
     m_featherWidget->setObjectName("feather");
     m_featherWidget->setRange(0, 40);
     m_featherWidget->setSingleStep(1);   
-    m_featherWidget->setSuffix("px");
+    m_featherWidget->setSuffix(" px");
 
     QLabel *lbl_usePattern = new QLabel(i18n("Use pattern:"), widget);
     m_checkUsePattern = new QCheckBox(QString(), widget);

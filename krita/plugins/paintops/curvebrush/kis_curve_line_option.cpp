@@ -30,7 +30,7 @@ public:
 
         lineWidthSlider->setRange(1, 100);
         lineWidthSlider->setValue(1);
-        lineWidthSlider->setSuffix("px");
+        lineWidthSlider->setSuffix(" px");
 
         curvesOpacitySlider->setRange(0.0, 1.0, 2);
         curvesOpacitySlider->setValue(1.0);

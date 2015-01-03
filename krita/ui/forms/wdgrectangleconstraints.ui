@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>172</width>
+    <width>184</width>
     <height>135</height>
    </rect>
   </property>
@@ -36,7 +36,7 @@
       <string>Width</string>
      </property>
      <property name="suffix">
-      <string>px</string>
+      <string> px</string>
      </property>
      <property name="maximum">
       <number>99999</number>
@@ -62,7 +62,7 @@
       <string>Height</string>
      </property>
      <property name="suffix">
-      <string>px</string>
+      <string> px</string>
      </property>
      <property name="maximum">
       <number>99999</number>

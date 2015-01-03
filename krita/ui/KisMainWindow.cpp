@@ -379,6 +379,7 @@ KisMainWindow::KisMainWindow()
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources("data", "krita/krita.rc");
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
+    setLocalXMLFile(KStandardDirs::locateLocal("data", "krita/krita.rc"));
 
     guiFactory()->addClient(this);
 
@@ -389,8 +390,7 @@ KisMainWindow::KisMainWindow()
 
         if (toolBar) {
             if (toolBar->objectName() == "BrushesAndStuff") {
-                d->brushesAndStuff = toolBar;
-                d->brushesAndStuff->setEnabled(false);
+                toolBar->setEnabled(false);
             }
 
             KToggleAction* act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
@@ -1792,10 +1792,6 @@ void KisMainWindow::subWindowActivated()
         if (tb->objectName() == "BrushesAndStuff") {
             tb->setEnabled(enabled);
         }
-    }
-
-    if (d->brushesAndStuff) {
-        d->brushesAndStuff->setEnabled(enabled);
     }
 
     updateCaption();

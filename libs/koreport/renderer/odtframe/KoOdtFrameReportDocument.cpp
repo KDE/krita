@@ -36,12 +36,12 @@
 
 #include <kdebug.h>
 
-KoOdtFramesReportDocument::KoOdtFramesReportDocument()
+KoOdtFrameReportDocument::KoOdtFrameReportDocument()
     : manifestWriter(0)
 {
 }
 
-KoOdtFramesReportDocument::~KoOdtFramesReportDocument()
+KoOdtFrameReportDocument::~KoOdtFrameReportDocument()
 {
     foreach (const QList<KoOdtFrameReportPrimitive*> &lst, m_pagemap) {
         foreach(KoOdtFrameReportPrimitive *p, lst) {
@@ -50,22 +50,22 @@ KoOdtFramesReportDocument::~KoOdtFramesReportDocument()
     }
 }
 
-void KoOdtFramesReportDocument::setPageOptions(const ReportPageOptions &pageOptions)
+void KoOdtFrameReportDocument::setPageOptions(const ReportPageOptions &pageOptions)
 {
     m_pageOptions = pageOptions;
 }
 
-void KoOdtFramesReportDocument::startTable(OROSection* section)
+void KoOdtFrameReportDocument::startTable(OROSection* section)
 {
     Q_UNUSED(section);
 }
 
-void KoOdtFramesReportDocument::addPrimitive(KoOdtFrameReportPrimitive *data)
+void KoOdtFrameReportDocument::addPrimitive(KoOdtFrameReportPrimitive *data)
 {
     m_pagemap[data->pageNumber()].append( data);
 }
 
-QFile::FileError KoOdtFramesReportDocument::saveDocument(const QString& path)
+QFile::FileError KoOdtFrameReportDocument::saveDocument(const QString& path)
 {
     // create output store
     KoStore *store = KoStore::createStore(path, KoStore::Write,
@@ -100,7 +100,7 @@ QFile::FileError KoOdtFramesReportDocument::saveDocument(const QString& path)
 
 }
 
-void KoOdtFramesReportDocument::createStyles(KoGenStyles &coll)
+void KoOdtFrameReportDocument::createStyles(KoGenStyles &coll)
 {
     // convert to inches
     qreal pw = m_pageOptions.widthPx() / KoDpi::dpiX();
@@ -145,7 +145,7 @@ void KoOdtFramesReportDocument::createStyles(KoGenStyles &coll)
 
 }
 
-bool KoOdtFramesReportDocument::createContent(KoOdfWriteStore* store, KoGenStyles &coll)
+bool KoOdtFrameReportDocument::createContent(KoOdfWriteStore* store, KoGenStyles &coll)
 {
     KoXmlWriter* bodyWriter = store->bodyWriter();
     KoXmlWriter* contentWriter = store->contentWriter();
@@ -204,7 +204,7 @@ bool KoOdtFramesReportDocument::createContent(KoOdfWriteStore* store, KoGenStyle
     return store->closeContentWriter();
 }
 
-void KoOdtFramesReportDocument::createPages(KoXmlWriter* bodyWriter, KoGenStyles &coll)
+void KoOdtFrameReportDocument::createPages(KoXmlWriter* bodyWriter, KoGenStyles &coll)
 {
     QMap<int, QList<KoOdtFrameReportPrimitive*> >::const_iterator it;
     for (it = m_pagemap.constBegin(); it != m_pagemap.constEnd(); ++it) {

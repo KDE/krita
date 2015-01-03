@@ -433,7 +433,7 @@ void KisPart::configureShortcuts()
         d->loadActions();
     }
 
-    KShortcutsDialog dlg;
+    KShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
     dlg.setButtons(KDialog::Reset|KDialog::Ok|KDialog::Cancel|KDialog::User1);
     dlg.addCollection(d->actionCollection);
     dlg.setButtonText(KDialog::User1, i18n("Print"));

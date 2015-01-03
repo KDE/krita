@@ -394,9 +394,12 @@ calligra_define_productset(BRAINDUMP "Full Braindump (for Desktop)"
         PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
         PLUGIN_PICTURESHAPE
+        PLUGIN_TEXTSHAPE
+        PLUGIN_THREEDSHAPE
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
+        PLUGIN_VIDEOSHAPE
 )
 calligra_define_productset(FLOW "Full Flow (for Desktop)"
     REQUIRES

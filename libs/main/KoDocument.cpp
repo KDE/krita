@@ -21,11 +21,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoDocument.h"
+
 #include "KoMainWindow.h" // XXX: remove
 #include <kmessagebox.h> // XXX: remove
 #include <KNotification> // XXX: remove
 
-#include "KoDocument.h"
 #include "KoPart.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"

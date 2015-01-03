@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KoRgbU8ColorSpaceTester.h"
+
 #include "KoColorModelStandardIds.h"
 
 #include <qtest_kde.h>
@@ -29,9 +31,6 @@
 #include "KoCompositeOp.h"
 #include "KoMixColorsOp.h"
 #include <KoCompositeOpRegistry.h>
-
-
-#include "KoRgbU8ColorSpaceTester.h"
 
 
 #define NUM_CHANNELS 4

@@ -31,6 +31,7 @@
 
 #ifndef QT_NO_DBUS
 #include "KoViewAdaptor.h"
+#include <QDBusConnection>
 #endif
 
 #include "KoDockFactoryBase.h"

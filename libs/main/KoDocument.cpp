@@ -31,7 +31,6 @@
 #include "KoFilterManager.h"
 #include "KoFileDialog.h"
 #include "KoDocumentInfo.h"
-#include "KoMainWindow.h"
 #include "KoView.h"
 
 #include "KoOdfStylesReader.h"

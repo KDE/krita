@@ -54,7 +54,7 @@ public:
     void undo();
 
 private:
-    KoShapeShearCommandPrivate *d;
+    KoShapeShearCommandPrivate * const d;
 };
 
 #endif

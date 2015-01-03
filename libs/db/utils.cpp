@@ -24,6 +24,8 @@
 */
 
 #include "utils.h"
+#include "utils_p.h"
+
 #include "cursor.h"
 #include "drivermanager.h"
 #include "lookupfieldschema.h"
@@ -32,7 +34,6 @@
 
 #include <QMap>
 #include <QHash>
-#include <QThread>
 #include <QDomDocument>
 #include <QBuffer>
 #include <QPixmap>
@@ -51,8 +52,6 @@
 #include <kstandarddirs.h>
 
 #include <memory>
-
-#include "utils_p.h"
 
 using namespace KexiDB;
 

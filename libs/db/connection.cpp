@@ -18,9 +18,9 @@
 */
 
 #include "connection.h"
+#include "connection_p.h"
 
 #include "error.h"
-#include "connection_p.h"
 #include "connectiondata.h"
 #include "driver.h"
 #include "driver_p.h"

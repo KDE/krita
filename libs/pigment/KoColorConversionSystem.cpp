@@ -18,24 +18,18 @@
 */
 
 #include "KoColorConversionSystem.h"
+#include "KoColorConversionSystem_p.h"
 
 #include <QHash>
 #include <QString>
 
-#include "DebugPigment.h"
-
 #include "KoColorConversionAlphaTransformation.h"
 #include "KoColorConversionTransformation.h"
-#include "KoColorConversionTransformationFactory.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
-#include "KoColorSpaceEngine.h"
-#include "KoColorSpaceRegistry.h"
-#include "KoColorModelStandardIds.h"
 #include "KoCopyColorConversionTransformation.h"
 #include "KoMultipleColorConversionTransformation.h"
 
-#include "KoColorConversionSystem_p.h"
 
 KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
 {

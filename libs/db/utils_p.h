@@ -22,6 +22,7 @@
 
 #include <QTimer>
 #include <QWaitCondition>
+#include <QThread>
 
 #include <kprogressdialog.h>
 

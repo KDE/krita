@@ -21,9 +21,9 @@
  */
 
 #include "KoImageData.h"
+#include "KoImageData_p.h"
 
 #include "KoImageCollection.h"
-#include "KoImageData_p.h"
 
 #include <KoUnit.h>
 #include <KoStore.h>

@@ -29,6 +29,7 @@
 ****************************************************************************/
 
 #include <QApplication>
+#include <kapplication.h>
 
 QT_FORWARD_DECLARE_CLASS(QSharedMemory)
 
@@ -36,7 +37,7 @@ class QtLocalPeer;
 
 #include <krita_export.h>
 
-class KRITAUI_EXPORT QtSingleApplication : public QApplication
+class KRITAUI_EXPORT QtSingleApplication : public KApplication
 {
     Q_OBJECT
 

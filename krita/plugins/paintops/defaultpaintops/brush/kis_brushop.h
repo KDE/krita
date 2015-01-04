@@ -51,7 +51,7 @@ class KisBrushOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisBrushOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

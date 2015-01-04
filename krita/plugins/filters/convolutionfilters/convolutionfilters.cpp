@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 #include <klocale.h>
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 
 #include <kis_convolution_kernel.h>

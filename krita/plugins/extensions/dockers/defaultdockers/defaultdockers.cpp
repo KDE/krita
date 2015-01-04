@@ -17,7 +17,7 @@
 
 #include "defaultdockers.h"
 
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 
 #include <KoDockFactoryBase.h>

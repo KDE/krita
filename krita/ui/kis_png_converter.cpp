@@ -752,6 +752,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
             result = (KisImageBuilder_RESULT_NOT_EXIST);
         }
 
+        delete fp;
         KIO::NetAccess::removeTempFile(tmpFile);
     }
 
@@ -919,7 +920,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
 
-    bool sRGB = device->colorSpace()->profile()->name().toLower().contains("srgb");
+    bool sRGB = device->colorSpace()->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
     if (!options.saveSRGBProfile && sRGB) {
         png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
     }

@@ -254,18 +254,10 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
 
-
-
-
-
-
-    connect(liquifySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
-    connect(liquifyAmountSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
-    connect(liquifySpacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
-    connect(liquifySizePressureBox, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
-    connect(liquifyAmountPressureBox, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
-    connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
-    connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(notifyEditingFinished()));
+    // Liquify
+    //
+    // liquify brush options do not affect the image directly and are not
+    // saved to undo, so we don't emit notifyEditingFinished() for them
 
     // Connect Apply/Reset buttons
     connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
@@ -282,7 +274,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     tooBigLabelWidget->hide();
 
-    connect(canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()));
+    connect(canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
     slotUpdateIcons();
 }
 

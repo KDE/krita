@@ -124,13 +124,6 @@ public:
 
     void setReadWrite(bool readwrite);
 
-    /**
-     * Returns the dockwidget specified by the @p factory. If the dock widget doesn't exist yet it's created.
-     * Add a "view_palette_action_menu" action to your view menu if you want to use closable dock widgets.
-     * @param factory the factory used to create the dock widget if needed
-     * @return the dock widget specified by @p factory (may be 0)
-     */
-    QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
     /// Return the list of dock widgets belonging to this main window.
     QList<QDockWidget*> dockWidgets();
@@ -340,8 +333,6 @@ private slots:
      */
     void slotExportFile();
 
-    void slotUncompressToDir();
-
     /**
      * Hide the dockers
      */
@@ -356,6 +347,9 @@ private slots:
     void newView(QObject *document);
     void newWindow();
     void closeCurrentWindow();
+    void checkSanity();
+    /// Quits Krita with error message from m_errorMessage.
+    void showErrorAndDie();
 
 protected:
 
@@ -375,14 +369,14 @@ private:
 
     friend class KisApplication;
 
+
     /**
-     * This setting indicates who is calling chooseNewDocument.
-     * Usually the app will want to
-     * - show the template dialog with 'everything' if InitDocAppStarting, InitDocFileClose or InitDocEmbedded
-     * - show the template dialog with 'templates only' if InitDocFileNew
-     * - create an empty document with default settings if InitDocEmpty
+     * Returns the dockwidget specified by the @p factory. If the dock widget doesn't exist yet it's created.
+     * Add a "view_palette_action_menu" action to your view menu if you want to use closable dock widgets.
+     * @param factory the factory used to create the dock widget if needed
+     * @return the dock widget specified by @p factory (may be 0)
      */
-    enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
+    QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
     /**
      * Ask user about saving changes to the document upon exit.
@@ -411,8 +405,6 @@ private:
      */
     bool isImporting() const;
 
-    KRecentFilesAction *recentAction() const;
-
     /**
      * Reloads the recent documents list.
      */
@@ -432,9 +424,16 @@ private:
 
     bool exportConfirmation(const QByteArray &outputFormat);
 
+    void createActions();
+
+    void initializeGeometry();
+
 private:
     class Private;
     Private * const d;
+
+    QString m_errorMessage;
+    bool m_dieOnError;
 
 };
 

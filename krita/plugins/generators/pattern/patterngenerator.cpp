@@ -22,7 +22,7 @@
 
 #include <QPoint>
 
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 #include <klocale.h>
 

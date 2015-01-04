@@ -37,10 +37,11 @@
 #include <kis_spray_shape_option.h>
 #include <kis_color_option.h>
 
-KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
     , m_settings(settings)
     , m_isPresetValid(true)
+    , m_node(node)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -111,7 +112,7 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
 
     m_sprayBrush.paint(m_dab,
-                       m_settings->node()->paintDevice(),
+                       m_node->paintDevice(),
                        info,
                        rotation,
                        scale,

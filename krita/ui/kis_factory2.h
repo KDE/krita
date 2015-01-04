@@ -23,30 +23,24 @@
 
 #include <QStringList>
 
-#include <kpluginfactory.h>
-
 #include <krita_export.h>
 
-class KComponentData;
-class KAboutData;
+#include <kcomponentdata.h>
+#include <kaboutdata.h>
 
-class KRITAUI_EXPORT KisFactory : public KPluginFactory
+class KRITAUI_EXPORT KisFactory
 {
-    Q_OBJECT
 
 public:
-
-    KisFactory(QObject* parent = 0);
+    KisFactory();
     ~KisFactory();
-
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static KAboutData *aboutData();
     static const KComponentData &componentData();
     static const QString componentName();
 
 private:
-    static KComponentData *s_instance;
+    static KComponentData *s_componentData;
     static KAboutData *s_aboutData;
 };
 

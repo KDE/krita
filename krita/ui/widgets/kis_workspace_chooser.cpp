@@ -28,6 +28,7 @@
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
+#include <KoDockWidgetTitleBar.h>
 #include <KisMainWindow.h>
 #include <KoResource.h>
 
@@ -75,7 +76,7 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
 
 KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent): QWidget(parent), m_view(view)
 {
-    KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
+    KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
@@ -144,6 +145,26 @@ void KisWorkspaceChooser::resourceSelected(KoResource* resource)
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
+
+    QMap<QDockWidget *, bool> dockWidgetMap;
+    foreach(QDockWidget *docker, m_view->mainWindow()->dockWidgets()) {
+        dockWidgetMap[docker] = docker->property("Locked").toBool();
+    }
+
     m_view->qtMainWindow()->restoreState(workspace->dockerState());
     m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
+
+    foreach(QDockWidget *docker, dockWidgetMap.keys()) {
+        qDebug() << docker << docker->isVisible() << docker->property("Locked");
+        if (docker->isVisible()) {
+            docker->setProperty("Locked", dockWidgetMap[docker]);
+            docker->updateGeometry();
+        }
+        else {
+            docker->setProperty("Locked", false); // Unlock invisible dockers
+            docker->toggleViewAction()->setEnabled(true);
+        }
+
+    }
+
 }

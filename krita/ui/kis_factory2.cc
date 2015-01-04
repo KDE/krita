@@ -40,10 +40,9 @@
 
 
 KAboutData* KisFactory::s_aboutData = 0;
-KComponentData* KisFactory::s_instance = 0;
+KComponentData* KisFactory::s_componentData = 0;
 
-KisFactory::KisFactory(QObject* parent)
-    : KPluginFactory(*aboutData(), parent)
+KisFactory::KisFactory()
 {
     (void)componentData();
 }
@@ -52,21 +51,8 @@ KisFactory::~KisFactory()
 {
     delete s_aboutData;
     s_aboutData = 0;
-    delete s_instance;
-    s_instance = 0;
-}
-
-/**
- * Create the document
- */
-QObject* KisFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
-                              const QVariantList& args, const QString& keyword )
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( args );
-    Q_UNUSED( keyword );
-
-    return KisPart::instance();
+    delete s_componentData;
+    s_componentData = 0;
 }
 
 
@@ -80,36 +66,34 @@ KAboutData* KisFactory::aboutData()
 
 const KComponentData &KisFactory::componentData()
 {
-    if (!s_instance) {
-        s_instance = new KComponentData(aboutData());
-        Q_CHECK_PTR(s_instance);
-        s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
+    if (!s_componentData) {
+        s_componentData = new KComponentData(aboutData());
+        Q_CHECK_PTR(s_componentData);
+        s_componentData->dirs()->addResourceType("krita_template", "data", "krita/templates");
 
         // for cursors
-        s_instance->dirs()->addResourceType("kis_pics", "data", "krita/pics/");
+        s_componentData->dirs()->addResourceType("kis_pics", "data", "krita/pics/");
 
         // for images in the paintop box
-        s_instance->dirs()->addResourceType("kis_images", "data", "krita/images/");
+        s_componentData->dirs()->addResourceType("kis_images", "data", "krita/images/");
 
-        s_instance->dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
+        s_componentData->dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
 
-        s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
+        s_componentData->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
 
-        KGlobal::locale()->insertCatalog(s_instance->catalogName());
+        KGlobal::locale()->insertCatalog(s_componentData->catalogName());
         // install 'instancename'data resource type
-        KGlobal::dirs()->addResourceType(QString(s_instance->componentName() + "data").toUtf8(), "data", s_instance->componentName());
+        KGlobal::dirs()->addResourceType(QString(s_componentData->componentName() + "data").toUtf8(), "data", s_componentData->componentName());
 
     }
 
-    return *s_instance;
+    return *s_componentData;
 }
 
 const QString KisFactory::componentName()
 {
     return "krita";
 }
-
-#include "kis_factory2.moc"

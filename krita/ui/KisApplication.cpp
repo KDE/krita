@@ -31,6 +31,7 @@
 #include <KoDpi.h>
 #include "KoGlobal.h"
 
+#include <kcrash.h>
 #include <kdeversion.h>
 #include <klocale.h>
 #include <kcmdlineargs.h>
@@ -94,7 +95,6 @@ public:
     KisApplicationPrivate()
         : splashScreen(0)
     {}
-    QByteArray nativeMimeType;
     QWidget *splashScreen;
 };
 
@@ -137,18 +137,29 @@ public:
 
 
 
-KisApplication::KisApplication(const QByteArray &nativeMimeType)
-    : KApplication(initHack())
+KisApplication::KisApplication(const QString &key)
+    : QtSingleApplication(key, KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv())
     , d(new KisApplicationPrivate)
 {
     KisApplication::KoApp = this;
 
-    d->nativeMimeType = nativeMimeType;
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
 
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
+
+    setApplicationName(KGlobal::mainComponent().componentName());
+    setOrganizationDomain(KGlobal::mainComponent().aboutData()->organizationDomain());
+    setApplicationVersion(KGlobal::mainComponent().aboutData()->version());
+
+    // make sure the clipboard is created before setting the window icon (bug 209263)
+    (void) QApplication::clipboard();
+    setWindowIcon(KIcon(KGlobal::mainComponent().aboutData()->programIconName()));
+
+    KCrash::setDrKonqiEnabled(true);
+    KCrash::setApplicationName(applicationName());
+    KCrash::setApplicationPath(QCoreApplication::applicationDirPath());
 
 #ifdef Q_OS_MACX
     if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
@@ -160,28 +171,13 @@ KisApplication::KisApplication(const QByteArray &nativeMimeType)
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
+
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
         setStyle("Oxygen");
     }
 
-}
-
-// This gets called before entering KApplication::KApplication
-bool KisApplication::initHack()
-{
-    KCmdLineOptions options;
-    options.add("print", ki18n("Only print and exit"));
-    options.add("template", ki18n("Open a new document with a template"));
-    options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
-    options.add("export-pdf", ki18n("Only export to PDF and exit"));
-    options.add("export", ki18n("Export to the given filename and exit"));
-    options.add("export-filename <filename>", ki18n("Filename for export/export-pdf"));
-    options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
-    options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
-    KCmdLineArgs::addCmdLineOptions(options, ki18nc("@title:window", "Krita"), "krita", "kde");
-    return true;
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -198,7 +194,7 @@ BOOL isWow64()
     //and GetProcAddress to get a pointer to the function if available.
 
     fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
-        GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+                GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
 
     if(NULL != fnIsWow64Process)
     {
@@ -256,8 +252,7 @@ bool KisApplication::start()
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     int argsCount = args->count();
 
-    KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("krita");
-    QString dpiValues = koargs->getOption("dpi");
+    QString dpiValues = args->getOption("dpi");
     if (!dpiValues.isEmpty()) {
         int sep = dpiValues.indexOf(QRegExp("[x, ]"));
         int dpiX;
@@ -276,18 +271,16 @@ bool KisApplication::start()
         }
     }
 
-    const bool doTemplate = koargs->isSet("template");
-    const bool print = koargs->isSet("print");
-    const bool exportAs = koargs->isSet("export");
-    const bool exportAsPdf = koargs->isSet("export-pdf");
-    const QString exportFileName = koargs->getOption("export-filename");
-    const QString roundtripFileName = koargs->getOption("roundtrip-filename");
-    const QString profileFileName = koargs->getOption("profile-filename");
+    const bool doTemplate = args->isSet("template");
+    const bool print = args->isSet("print");
+    const bool exportAs = args->isSet("export");
+    const bool exportAsPdf = args->isSet("export-pdf");
+    const QString exportFileName = args->getOption("export-filename");
+    const QString profileFileName = args->getOption("profile-filename");
 
 
     // only show the mainWindow when no command-line mode option is passed
-    const bool showmainWindow = (   !(exportAsPdf || exportAs)
-                                    && roundtripFileName.isEmpty());
+    const bool showmainWindow = (   !(exportAsPdf || exportAs) );
 
     if (d->splashScreen && showmainWindow) {
         d->splashScreen->show();
@@ -304,18 +297,8 @@ bool KisApplication::start()
                               && !exportAs
                               && !profileFileName.isEmpty());
 
-    // Figure out _which_ application we actually are
-    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(d->nativeMimeType);
-    if (entry.isEmpty()) {
-
-        QMessageBox::critical(0, i18nc("@title:window", "Krita: Critical Error"), i18n("Essential application components could not be found.\n"
-                                                                                       "This might be an installation issue.\n"
-                                                                                       "Try restarting or reinstalling."));
-        return false;
-    }
 
     // Load various global plugins
-
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
 
@@ -354,9 +337,6 @@ bool KisApplication::start()
     }
 
     if (argsCount > 0) {
-
-        // remove all non-filename options
-        koargs->clear();
 
         QTextStream profileoutput;
         QFile profileFile(profileFileName);
@@ -508,11 +488,9 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
 
 QStringList KisApplication::mimeFilter(KisImportExportManager::Direction direction) const
 {
-    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(d->nativeMimeType);
-    KService::Ptr service = entry.service();
-    return KisImportExportManager::mimeFilter(d->nativeMimeType,
-                                       direction,
-                                       service->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList());
+    return KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                              direction,
+                                              KisDocumentEntry::extraNativeMimeTypes());
 }
 
 
@@ -536,19 +514,66 @@ KisApplication *KisApplication::koApplication()
     return KoApp;
 }
 
+void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
+{
+    Q_UNUSED(socket);
+
+    QDataStream ds(message);
+    KCmdLineArgs::loadAppArgs(ds);
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    int argsCount = args->count();
+
+    KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
+    if (!mw) {
+        mw = KisPart::instance()->mainWindows().first();
+    }
+
+    if (!mw) {
+        return;
+    }
+
+    if (argsCount > 0) {
+
+        // Loop through arguments
+        for (int argNumber = 0; argNumber < argsCount; argNumber++) {
+            KUrl url = args->url(argNumber);
+            if (url.isValid()) {
+                KisDocument *doc = KisPart::instance()->createDocument();
+
+                if (doc) {
+                    mw->openDocumentInternal(url, doc);
+
+                }
+            }
+
+        }
+    }
+
+}
+
+void KisApplication::fileOpenRequested(const QString &url)
+{
+    KisDocument *doc = KisPart::instance()->createDocument();
+    KisPart::instance()->addDocument(doc);
+    KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
+    if (mainWindow) {
+        mainWindow->openDocumentInternal(url, doc);
+    }
+}
+
 
 int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 {
-
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!
     QStringList autoSaveFiles;
 
     // get all possible autosave files in the home dir, this is for unsaved document autosave files
     // Using the extension allows to avoid relying on the mime magic when opening
-    KMimeType::Ptr mime = KMimeType::mimeType(d->nativeMimeType);
+    KMimeType::Ptr mime = KMimeType::mimeType(KIS_MIME_TYPE);
     if (!mime) {
-        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", d->nativeMimeType.constData());
+        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", KIS_MIME_TYPE);
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
     if (extension.isEmpty()) {
@@ -559,9 +584,9 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
     filters << QString(".%1-%2-%3-autosave%4").arg("krita").arg("*").arg("*").arg(extension);
 
 #ifdef Q_OS_WIN
-        QDir dir = QDir::tempPath();
+    QDir dir = QDir::tempPath();
 #else
-        QDir dir = QDir::home();
+    QDir dir = QDir::home();
 #endif
 
     // all autosave files for our application
@@ -569,7 +594,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
     QStringList pids;
     QString ourPid;
-    ourPid.setNum(kapp->applicationPid());
+    ourPid.setNum(qApp->applicationPid());
 
 #ifndef QT_NO_DBUS
     // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
@@ -634,7 +659,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
                 mainWindow->openDocumentInternal(url, doc);
             }
 
-           if (doc) {
+            if (doc) {
                 doc->resetURL();
                 doc->setModified(true);
                 QFile::remove(url.toLocalFile());

@@ -20,12 +20,12 @@
  */
 
 #include "KoFind.h"
+#include "KoFind_p.h"
 
 #include <KoCanvasResourceManager.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 
-#include "KoFind_p.h"
 
 KoFind::KoFind(QWidget *parent, KoCanvasResourceManager *canvasResourceManager, KActionCollection *ac)
         : QObject(parent)

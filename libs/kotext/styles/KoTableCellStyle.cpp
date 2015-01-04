@@ -22,12 +22,11 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoTableCellStyle.h"
+#include "KoTableCellStyle_p.h"
 
 #include <KoXmlReaderForward.h>
 
 #include <KoGenStyle.h>
-#include "Styles_p.h"
-#include "KoTableCellStyle_p.h"
 #include <KoShapeLoadingContext.h>
 #include <KoOdfGraphicStyles.h>
 #include "KoParagraphStyle.h"

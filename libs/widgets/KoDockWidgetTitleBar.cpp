@@ -263,22 +263,20 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
     d->lockButton->setChecked(locked);
     d->lockButton->blockSignals(false);
 
-
     //qDebug() << "setlocked" << q << d->locked << locked;
 
     if (locked) {
         d->features = q->features();
         q->setFeatures(QDockWidget::NoDockWidgetFeatures);
-        d->closeButton->setEnabled(false);
-        d->floatButton->setEnabled(false);
-        d->collapseButton->setEnabled(false);
     }
     else {
         q->setFeatures(d->features);
-        d->closeButton->setEnabled(true);
-        d->floatButton->setEnabled(true);
-        d->collapseButton->setEnabled(true);
     }
+
+    q->toggleViewAction()->setEnabled(!locked);
+    d->closeButton->setEnabled(!locked);
+    d->floatButton->setEnabled(!locked);
+    d->collapseButton->setEnabled(!locked);
 
     d->updateIcons();
     q->setProperty("Locked", locked);
@@ -344,12 +342,12 @@ void KoDockWidgetTitleBar::Private::updateIcons()
 {    
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
 
-    lockIcon = (!locked) ? themedIcon("docker_lock_a") : themedIcon("docker_lock_b");
+    lockIcon = (!locked) ? themedIcon("docker_lock_a", true) : themedIcon("docker_lock_b", true);
     lockButton->setIcon(lockIcon);
 
     // this method gets called when switching themes, so update all of the themed icons now
-   floatButton->setIcon(themedIcon("docker_float"));
-   closeButton->setIcon(themedIcon("docker_close"));
+   floatButton->setIcon(themedIcon("docker_float", true));
+   closeButton->setIcon(themedIcon("docker_close", true));
 
     if (q->widget()) {
         collapseButton->setIcon(q->widget()->isHidden() ? themedIcon("docker_collapse_b") : themedIcon("docker_collapse_a"));

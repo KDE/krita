@@ -40,7 +40,7 @@ public:
     void undo();
 
 private:
-    KoEventActionRemoveCommandPrivate *d;
+    KoEventActionRemoveCommandPrivate * const d;
 };
 
 #endif /* KOEVENTACTIONREMOVECOMMAND_H */

@@ -47,13 +47,14 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_transaction.h>
 
-KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisImageWSP image)
+KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_filterConfiguration(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
+
     m_tmpDevice = source()->createCompositionSourceDevice();
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);

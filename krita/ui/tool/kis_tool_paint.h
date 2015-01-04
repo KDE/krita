@@ -155,7 +155,6 @@ public slots:
 private slots:
 
     void slotPopupQuickHelp();
-    void slotSetOpacity(qreal opacity);
 
     void increaseBrushSize();
     void decreaseBrushSize();
@@ -175,6 +174,7 @@ protected:
 
 private:
     QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
+    void setOpacity(qreal opacity);
 
 private:
 

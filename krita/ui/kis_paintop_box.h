@@ -111,7 +111,6 @@ public slots:
 
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
-    void slotCurrentNodeChanged(KisNodeSP node);
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
 
@@ -180,7 +179,7 @@ private:
     QToolButton*                         vMirrorButton;
     KisPaintOpPresetsPopup*              m_presetsPopup;
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
-    KisViewManager*                            m_view;
+    KisViewManager*                      m_viewManager;
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
@@ -190,7 +189,7 @@ private:
 
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
-    KisNodeSP           m_previousNode;
+    KisNodeWSP          m_previousNode;
 
     QPalette palette;
     QPalette palette_highlight;

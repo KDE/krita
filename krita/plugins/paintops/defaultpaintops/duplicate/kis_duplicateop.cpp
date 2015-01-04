@@ -66,9 +66,10 @@
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
 
-KisDuplicateOp::KisDuplicateOp(KisImageWSP image, const KisDuplicateOpSettings *settings, KisPainter *painter)
+KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_image(image)
+    , m_node(node)
     , m_settings(settings)
 {
     Q_ASSERT(settings);
@@ -87,7 +88,6 @@ KisDuplicateOp::~KisDuplicateOp()
 }
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-
 
 KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
@@ -111,7 +111,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         realSourceDevice = m_image->projection();
     }
     else {
-        realSourceDevice = m_settings->node()->projection();
+        realSourceDevice = m_node->projection();
     }
 
     qreal scale = m_sizeOption.apply(info);

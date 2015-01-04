@@ -49,25 +49,6 @@ bool KisFilterOpSettings::paintIncremental()
     return true; // We always paint on the existing data
 }
 
-void KisFilterOpSettings::setNode(KisNodeSP node)
-{
-    KisFilterOpSettingsWidget* options = dynamic_cast<KisFilterOpSettingsWidget*>(optionsWidget());
-
-    KisPaintOpSettings::setNode(node);
-    if (options) {
-        options->m_filterOption->setNode(node);
-    }
-}
-
-void KisFilterOpSettings::setImage(KisImageWSP image)
-{
-    KisFilterOpSettingsWidget* options = dynamic_cast<KisFilterOpSettingsWidget*>(optionsWidget());
-
-    if (options) {
-        options->m_filterOption->setImage(image);
-    }
-}
-
 KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
     if (hasProperty(FILTER_ID)) {

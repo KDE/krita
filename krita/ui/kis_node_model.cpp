@@ -21,7 +21,6 @@
 #include <iostream>
 
 #include <QMimeData>
-#include <QDataStream>
 #include <QBuffer>
 
 #include <KoColorSpaceConstants.h>

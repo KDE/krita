@@ -27,8 +27,8 @@
 #include "kis_text_tool_option_widget.h"
 #include <KoIcon.h>
 
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class KisToolText : public KisToolRectangleBase
 {

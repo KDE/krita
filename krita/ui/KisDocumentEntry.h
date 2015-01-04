@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __ko_document_entry_h__
-#define __ko_document_entry_h__
+#ifndef KIS_DOCUMENT_ENTRY_H
+#define KIS_DOCUMENT_ENTRY_H
 
 #include <kservice.h>
 #include <ksharedptr.h>
@@ -48,6 +48,10 @@ public:
      */
     explicit KisDocumentEntry(const KService::Ptr& service);
     ~KisDocumentEntry();
+
+    static QString nativeMimeType();
+
+    static QStringList extraNativeMimeTypes();
 
     KService::Ptr service() const;
 

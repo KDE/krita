@@ -71,3 +71,14 @@ install( FILES  tool_path_selection.png
 install( FILES  kritaselectiontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 
+install( FILES
+    KisToolSelectPolygonal.action
+    KisToolSelectElliptical.action
+    KisToolSelectBrush.action
+    KisToolSelectSimilar.action
+    KisToolSelectContiguous.action
+    KisToolSelectRectangular.action
+    KisToolSelectOutline.action
+    KisToolSelectPath.action
+
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

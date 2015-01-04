@@ -90,6 +90,9 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     const KoColorSpace *rgb8cs = shadowDev->colorSpace();
 
     QRect rect = dev->exactBounds();
+    if (rect.isEmpty()) {
+        return;
+    }
 
     {
         KisHLineConstIteratorSP srcIt = dev->createHLineConstIteratorNG(rect.x(), rect.y(), rect.width());

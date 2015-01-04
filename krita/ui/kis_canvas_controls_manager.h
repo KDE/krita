@@ -38,7 +38,7 @@ public:
     KisCanvasControlsManager(KisViewManager * view);
     virtual ~KisCanvasControlsManager();
 
-    void setup(KActionCollection *actionCollection, KisActionManager *actionManager);
+    void setup(KisActionManager *actionManager);
     void setView(QPointer<KisView>imageView);
 
 private slots:

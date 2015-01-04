@@ -55,10 +55,8 @@
 #include <QMessageBox>
 #include <KoServiceLocator.h>
 #include <kservice.h>
-#include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <ktoggleaction.h>
 #include <kurl.h>
 #include <kxmlguifactory.h>
 
@@ -71,11 +69,11 @@
 #include <KoResourceServerProvider.h>
 #include <KoSelection.h>
 #include <KoStore.h>
-#include <KoToolBoxFactory.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
+#include <KoPluginLoader.h>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -85,6 +83,7 @@
 #include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_action_manager.h"
+#include "kis_action.h"
 #include "kis_canvas_controls_manager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_composite_progress_proxy.h"
@@ -251,14 +250,13 @@ public:
 public:
     KisFilterManager *filterManager;
     KisStatusBar *statusBar;
-    KAction *totalRefresh;
-    KAction *createTemplate;
-    KAction *saveIncremental;
-    KAction *saveIncrementalBackup;
-    KAction *openResourcesDirectory;
-    KAction *rotateCanvasRight;
-    KAction *rotateCanvasLeft;
-    KToggleAction *wrapAroundAction;
+    KisAction *createTemplate;
+    KisAction *saveIncremental;
+    KisAction *saveIncrementalBackup;
+    KisAction *openResourcesDirectory;
+    KisAction *rotateCanvasRight;
+    KisAction *rotateCanvasLeft;
+    KisAction *wrapAroundAction;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
     KisNodeManager *nodeManager;
@@ -283,13 +281,11 @@ public:
 };
 
 
-KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionCollection)
+KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollection)
     : d(new KisViewManagerPrivate())
 {
-
-    d->actionManager = new KisActionManager(this);
-
     d->actionCollection = _actionCollection;
+    d->actionManager = new KisActionManager(this);
     d->mainWindow = dynamic_cast<QMainWindow*>(parent);
 
     d->canvasResourceProvider = new KisCanvasResourceProvider(this);
@@ -302,38 +298,16 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
     createActions();
     createManagers();
 
-    d->controlFrame = new KisControlFrame(this, mainWindow());
+    d->controlFrame = new KisControlFrame(this, parent);
 
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
     this->showHideScrollbars();
 
-
-    //Workaround, by default has the same shortcut as hide/show dockers
-    if (mainWindow()) {
-
-        mainWindow()->setDockNestingEnabled(true);
-        actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
-
-        connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
-        KAction *action = dynamic_cast<KAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
-        if (action) {
-            action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-            action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
-        }
-
-        KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
-        KoToolManager::instance()->registerTools(actionCollection(), dummy);
-
-        KoToolBoxFactory toolBoxFactory;
-        QDockWidget* toolbox = mainWindow()->createDockWidget(&toolBoxFactory);
-        toolbox->setMinimumWidth(60);
-    }
+    KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
+    KoToolManager::instance()->registerTools(actionCollection(), dummy);
 
     d->statusBar = new KisStatusBar(this);
     QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
-
-    connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-            d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
             d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
@@ -350,36 +324,7 @@ KisViewManager::KisViewManager(QWidget * parent, KActionCollection *_actionColle
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
 
-    loadPlugins();
-
     KisInputProfileManager::instance()->loadProfiles();
-
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    if (rserver->resources().isEmpty()) {
-        QMessageBox::critical(mainWindow(), i18nc("@title:window", "Critical Error"), i18n("Krita cannot find any brush presets and will close now. Please check your installation."));
-        exit(0);
-    }
-
-
-    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
-        KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        if (mainWindow())
-            mainWindow()->createDockWidget(factory);
-    }
-
-    foreach(KoCanvasObserverBase* observer, mainWindow()->canvasObservers()) {
-        observer->setObservedCanvas(0);
-        KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
-        if (mainwindowObserver) {
-            mainwindowObserver->setMainWindow(this);
-        }
-    }
-
-    d->actionManager->updateGUI();
-
-    connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
-    updateIcons();
-
 }
 
 
@@ -393,28 +338,6 @@ KisViewManager::~KisViewManager()
 
     if (d->filterManager->isStrokeRunning()) {
         d->filterManager->cancel();
-    }
-
-    // The reason for this is to ensure the shortcuts are saved at the right time,
-    // and only the right shortcuts. Gemini has two views at all times, and shortcuts
-    // must be handled by the desktopview, but if we use the logic as below, we
-    // overwrite the desktop view's settings with the sketch view's
-    if(qApp->applicationName() == QLatin1String("kritagemini")) {
-        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
-        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
-            const QObject* obj = dynamic_cast<const QObject*>(collection->parentGUIClient());
-            if(obj && qobject_cast<const KisViewManager*>(obj) && !obj->objectName().startsWith("view_0"))
-                break;
-            collection->setConfigGroup("krita/shortcuts");
-            collection->writeSettings(&group);
-        }
-    }
-    else {
-        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
-        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
-            collection->setConfigGroup("krita/shortcuts");
-            collection->writeSettings(&group);
-        }
     }
     delete d;
 }
@@ -681,14 +604,16 @@ KisUndoAdapter * KisViewManager::undoAdapter()
 
 void KisViewManager::createActions()
 {
-    d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
+    d->saveIncremental = new KisAction(i18n("Save Incremental &Version"), this);
     d->saveIncremental->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
-    actionCollection()->addAction("save_incremental_version", d->saveIncremental);
+    d->saveIncremental->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("save_incremental_version", d->saveIncremental);
     connect(d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
 
-    d->saveIncrementalBackup = new KAction(i18n("Save Incremental Backup"), this);
+    d->saveIncrementalBackup = new KisAction(i18n("Save Incremental Backup"), this);
     d->saveIncrementalBackup->setShortcut(Qt::Key_F4);
-    actionCollection()->addAction("save_incremental_backup", d->saveIncrementalBackup);
+    d->saveIncrementalBackup->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("save_incremental_backup", d->saveIncrementalBackup);
     connect(d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
     connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
@@ -696,61 +621,65 @@ void KisViewManager::createActions()
     d->saveIncremental->setEnabled(false);
     d->saveIncrementalBackup->setEnabled(false);
 
-    KAction *tabletDebugger = new KAction(i18n("Toggle Tablet Debugger"), this);
-    actionCollection()->addAction("tablet_debugger", tabletDebugger );
+    KisAction *tabletDebugger = new KisAction(i18n("Toggle Tablet Debugger"), this);
+    actionManager()->addAction("tablet_debugger", tabletDebugger );
     tabletDebugger->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
-    d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
-    actionCollection()->addAction("createTemplate", d->createTemplate);
+    d->createTemplate = new KisAction( i18n( "&Create Template From Image..." ), this);
+    actionManager()->addAction("create_t`emplate", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);
+    d->openResourcesDirectory = new KisAction(i18n("Open Resources Folder"), this);
     d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
     d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
-    actionCollection()->addAction("open_resources_directory", d->openResourcesDirectory);
+    actionManager()->addAction("open_resources_directory", d->openResourcesDirectory);
     connect(d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
 
-    d->rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
-    actionCollection()->addAction("rotate_canvas_right", d->rotateCanvasRight);
+    d->rotateCanvasRight = new KisAction(i18n("Rotate Canvas Right"), this);
+    actionManager()->addAction("rotate_canvas_right", d->rotateCanvasRight);
+    d->rotateCanvasRight->setActivationFlags(KisAction::ACTIVE_IMAGE);
     d->rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
 
-    d->rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
-    actionCollection()->addAction("rotate_canvas_left", d->rotateCanvasLeft);
+    d->rotateCanvasLeft = new KisAction(i18n("Rotate Canvas Left"), this);
+    actionManager()->addAction("rotate_canvas_left", d->rotateCanvasLeft);
+    d->rotateCanvasLeft->setActivationFlags(KisAction::ACTIVE_IMAGE);
     d->rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
 
-    d->wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
-    actionCollection()->addAction("wrap_around_mode", d->wrapAroundAction);
+    d->wrapAroundAction = new KisAction(i18n("Wrap Around Mode"), this);
+    d->wrapAroundAction->setCheckable(true);
+    d->wrapAroundAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
     d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
 
-
-    KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
-    tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
+    KisAction *tAction = new KisAction(i18n("Show Status Bar"), this);
+    tAction->setCheckable(true);
     tAction->setChecked(true);
     tAction->setToolTip(i18n("Shows or hides the status bar"));
-    actionCollection()->addAction("showStatusBar", tAction);
+    actionManager()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
-
-    tAction = new KToggleAction(i18n("Show Canvas Only"), this);
-    tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
+    tAction = new KisAction(i18n("Show Canvas Only"), this);
+    tAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    tAction->setCheckable(true);
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
     QList<QKeySequence> shortcuts;
     shortcuts << QKeySequence(Qt::Key_Tab);
     tAction->setShortcuts(shortcuts);
     tAction->setChecked(false);
-    actionCollection()->addAction("view_show_just_the_canvas", tAction);
+    actionManager()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
 
     //Workaround, by default has the same shortcut as mirrorCanvas
-    KAction *a = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
+    KisAction *a = dynamic_cast<KisAction*>(actionCollection()->action("format_italic"));
     if (a) {
         a->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        a->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+        a->setShortcut(QKeySequence(), KAction::ActiveShortcut);        
+        a->setActivationConditions(KisAction::SELECTION_EDITABLE);
     }
 
-    a = new KAction(i18n("Cleanup removed files..."), this);
-    actionCollection()->addAction("edit_blacklist_cleanup", a);
+    a = new KisAction(i18n("Cleanup removed files..."), this);
+    actionManager()->addAction("edit_blacklist_cleanup", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 
 }
@@ -785,7 +714,7 @@ void KisViewManager::createManagers()
     d->paintingAssistantsManager->setup(actionCollection());
 
     d->canvasControlsManager = new KisCanvasControlsManager(this);
-    d->canvasControlsManager->setup(actionCollection(), actionManager());
+    d->canvasControlsManager->setup(actionManager());
 
     d->mirrorManager = new KisMirrorManager(this);
     d->mirrorManager->setup(actionCollection());
@@ -803,27 +732,6 @@ void KisViewManager::slotBlacklistCleanup()
     KisDlgBlacklistCleanup dialog;
     dialog.exec();
 }
-
-void KisViewManager::loadPlugins()
-{
-    // Load all plugins
-    const KService::List offers = KoServiceLocator::instance()->entries("Krita/ViewPlugin");
-    KService::List::ConstIterator iter;
-    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-        KService::Ptr service = *iter;
-        dbgUI << "Load plugin " << service->name();
-        QString error;
-
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        if (plugin) {
-            mainWindow()->insertChildClient(plugin);
-        } else {
-            errKrita << "Fail to create an instance for " << service->name() << " " << error;
-        }
-    }
-}
-
 
 KisNodeManager * KisViewManager::nodeManager() const
 {
@@ -1149,7 +1057,8 @@ void KisViewManager::showJustTheCanvas(bool toggled)
     }
 
     if (cfg.hideDockersFullscreen()) {
-        KToggleAction* action = qobject_cast<KToggleAction*>(main->actionCollection()->action("view_toggledockers"));
+        KisAction* action = qobject_cast<KisAction*>(main->actionCollection()->action("view_toggledockers"));
+        action->setCheckable(true);
         if (action && action->isChecked() == toggled) {
             action->setChecked(!toggled);
         }

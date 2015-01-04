@@ -1,0 +1,13 @@
+<Actions version="1" name="ArtisticTextToolFactoryID">
+ <Action iconText="Select All" shortcut="Ctrl+A" toolTip="Select All" icon="edit-select-all" whatsThis="" statusTip="" name="edit_select_all" isCheckable="false" text="Select &amp;All" defaultShortcut="Ctrl+A"/>
+ <Action iconText="Subscript" shortcut="" toolTip="Subscript" icon="format-text-subscript" whatsThis="" statusTip="" name="artistictext_subscript" isCheckable="false" text="Subscript" defaultShortcut=""/>
+ <Action iconText="Detach Path" shortcut="" toolTip="Detach Path" icon="artistictext-detach-path" whatsThis="" statusTip="" name="artistictext_detach_from_path" isCheckable="false" text="Detach Path" defaultShortcut=""/>
+ <Action iconText="Italic text" shortcut="" toolTip="Italic text" icon="format-text-italic" whatsThis="" statusTip="" name="artistictext_font_italic" isCheckable="false" text="Italic text" defaultShortcut=""/>
+ <Action iconText="Anchor at Middle" shortcut="" toolTip="Anchor at Middle" icon="format-justify-center" whatsThis="" statusTip="" name="artistictext_anchor_middle" isCheckable="false" text="Anchor at Middle" defaultShortcut=""/>
+ <Action iconText="Anchor at End" shortcut="" toolTip="Anchor at End" icon="format-justify-right" whatsThis="" statusTip="" name="artistictext_anchor_end" isCheckable="false" text="Anchor at End" defaultShortcut=""/>
+ <Action iconText="Convert to Path" shortcut="" toolTip="Convert to Path" icon="pathshape" whatsThis="" statusTip="" name="artistictext_convert_to_path" isCheckable="false" text="Convert to Path" defaultShortcut=""/>
+ <Action iconText="Anchor at Start" shortcut="" toolTip="Anchor at Start" icon="format-justify-left" whatsThis="" statusTip="" name="artistictext_anchor_start" isCheckable="false" text="Anchor at Start" defaultShortcut=""/>
+ <Action iconText="Bold text" shortcut="" toolTip="Bold text" icon="format-text-bold" whatsThis="" statusTip="" name="artistictext_font_bold" isCheckable="false" text="Bold text" defaultShortcut=""/>
+ <Action iconText="Deselect" shortcut="Ctrl+Shift+A" toolTip="Deselect" icon="" whatsThis="" statusTip="" name="edit_deselect_all" isCheckable="false" text="Dese&amp;lect" defaultShortcut="Ctrl+Shift+A"/>
+ <Action iconText="Superscript" shortcut="" toolTip="Superscript" icon="format-text-superscript" whatsThis="" statusTip="" name="artistictext_superscript" isCheckable="false" text="Superscript" defaultShortcut=""/>
+</Actions>

@@ -72,10 +72,6 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
 {
     bool ignoreEvent = true;
 
-    if (m_activeNode && modifiers == (Qt::ControlModifier | Qt::AltModifier)) {
-        KisPaintOpSettings::setNode(m_activeNode);
-    }
-
     if (modifiers == Qt::ControlModifier) {
         m_position = info.pos();
         m_isOffsetNotUptodate = true;
@@ -158,12 +154,3 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     return path;
 }
 
-void KisDuplicateOpSettings::setNode(KisNodeSP node)
-{
-    // Only pass the node to the base class when it's the first time it's called
-    if (!KisPaintOpSettings::node()) {
-        KisPaintOpSettings::setNode(node);
-
-    }
-    m_activeNode = node;
-}

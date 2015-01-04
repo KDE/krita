@@ -18,8 +18,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_DOCUMENT_SECTION_MODEL_H
-#define KO_DOCUMENT_SECTION_MODEL_H
+#ifndef KIS_DOCUMENT_SECTION_MODEL_H
+#define KIS_DOCUMENT_SECTION_MODEL_H
 
 #include <QAbstractItemModel>
 #include <QIcon>

@@ -83,12 +83,6 @@ public:
     virtual KisPaintOpSettingsSP clone() const;
 
     /**
-     * Override this function if your paintop is interested in which
-     * node is currently active.
-     */
-    virtual void setNode(KisNodeSP node);
-
-    /**
      * @return the node the paintop is working on.
      */
     KisNodeSP node() const;

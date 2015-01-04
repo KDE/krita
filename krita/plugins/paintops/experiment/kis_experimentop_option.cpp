@@ -33,7 +33,7 @@ public:
         speed->setSingleStep(1.0);
 
         smoothThreshold->setRange(0.0, 100.0, 0);
-        smoothThreshold->setSuffix(i18n("px"));
+        smoothThreshold->setSuffix(i18n(" px"));
         smoothThreshold->setValue(20.0);
         smoothThreshold->setSingleStep(1.0);
 

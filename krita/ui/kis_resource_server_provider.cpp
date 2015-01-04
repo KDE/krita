@@ -63,7 +63,7 @@ KisResourceServerProvider::KisResourceServerProvider()
     }
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     paintOpPresetThread->start();
-    if (!qApp->applicationName().toLower().contains("krita")) {
+    if (!qApp->applicationName().contains(QLatin1String("krita"), Qt::CaseInsensitive)) {
         paintOpPresetThread->barrier();
     }
 
@@ -73,7 +73,7 @@ KisResourceServerProvider::KisResourceServerProvider()
     }
     workspaceThread = new KoResourceLoaderThread(m_workspaceServer);
     workspaceThread->start();
-    if (!qApp->applicationName().toLower().contains("krita")) {
+    if (!qApp->applicationName().contains(QLatin1String("krita"), Qt::CaseInsensitive)) {
         workspaceThread->barrier();
     }
 
@@ -99,15 +99,15 @@ KisResourceServerProvider* KisResourceServerProvider::instance()
 }
 
 
-KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer()
+KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer(bool block)
 {
-    paintOpPresetThread->barrier();
+    if (block) paintOpPresetThread->barrier();
     return m_paintOpPresetServer;
 }
 
-KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer()
+KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer(bool block)
 {
-    workspaceThread->barrier();
+    if (block) workspaceThread->barrier();
     return m_workspaceServer;
 }
 

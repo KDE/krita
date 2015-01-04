@@ -17,7 +17,7 @@
 
 #include "kis_animation_store.h"
 
-#include <KDebug>
+#include <kis_debug.h>
 
 #include <QDir>
 #include <QFile>

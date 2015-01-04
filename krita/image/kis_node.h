@@ -316,4 +316,6 @@ private:
 
 Q_DECLARE_METATYPE(KisNodeSP)
 
+Q_DECLARE_METATYPE(KisNodeWSP)
+
 #endif

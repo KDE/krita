@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef __koFilterManager_p_h__
-#define __koFilterManager_p_h__
+#ifndef KIS_FILTER_MANAGER_P_H
+#define KIS_FILTER_MANAGER_P_H
 
 #include "KisImportExportManager.h"
 

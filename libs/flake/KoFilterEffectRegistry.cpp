@@ -25,6 +25,7 @@
 #include <KoXmlReader.h>
 
 KoFilterEffectRegistry::KoFilterEffectRegistry()
+  : d(0)
 {
 }
 

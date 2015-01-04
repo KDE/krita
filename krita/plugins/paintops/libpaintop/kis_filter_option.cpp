@@ -93,7 +93,7 @@ bool KisFilterOption::smudgeMode() const
     return m_options->checkBoxSmudgeMode->isChecked();
 }
 
-void KisFilterOption::setNode(KisNodeSP node)
+void KisFilterOption::setNode(KisNodeWSP node)
 {
     if (node && node->paintDevice()) {
         m_paintDevice = node->paintDevice();

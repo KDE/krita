@@ -80,7 +80,11 @@ KisShapeController::KisShapeController(KisDocument *doc, KisNameServer *nameServ
 
 KisShapeController::~KisShapeController()
 {
-    //setImage(0);
+    KisNodeDummy *node = m_d->shapesGraph.rootDummy();
+    if (node) {
+        m_d->shapesGraph.removeNode(node->node());
+    }
+
     delete m_d;
 }
 

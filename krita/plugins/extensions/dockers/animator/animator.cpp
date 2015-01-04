@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-#include <kcomponentdata.h>
+
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>

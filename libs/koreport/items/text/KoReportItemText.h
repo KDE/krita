@@ -37,7 +37,7 @@ class KoReportItemText : public KoReportItemBase
 {
 public:
     KoReportItemText();
-    KoReportItemText(QDomNode & element);
+    explicit KoReportItemText(QDomNode & element);
     virtual ~KoReportItemText();
 
     virtual QString typeName() const;

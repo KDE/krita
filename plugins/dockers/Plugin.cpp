@@ -19,7 +19,6 @@
 #include "Plugin.h"
 #include "snapguidedocker/SnapGuideDockerFactory.h"
 #include "shapeproperties/ShapePropertiesDockerFactory.h"
-#include "colordocker/ColorDockerFactory.h"
 #include "shapecollection/ShapeCollectionDocker.h"
 
 #include <KoDockRegistry.h>
@@ -35,9 +34,6 @@ Plugin::Plugin(QObject *parent, const QVariantList&)
     Q_UNUSED(parent);
     KoDockRegistry::instance()->add(new SnapGuideDockerFactory());
     KoDockRegistry::instance()->add(new ShapePropertiesDockerFactory());
-//    KoDockRegistry::instance()->add(new ShapeSelectorFactory());
-    // TODO color docker isn't finished and connected'
-//     KoDockRegistry::instance()->add(new ColorDockerFactory());
     KoDockRegistry::instance()->add(new ShapeCollectionDockerFactory());
 }
 

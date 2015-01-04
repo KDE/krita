@@ -25,8 +25,8 @@
 #include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
 #include <KoIcon.h>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 
 /**

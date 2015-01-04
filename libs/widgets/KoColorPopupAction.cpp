@@ -45,7 +45,7 @@ class KoColorPopupAction::KoColorPopupActionPrivate
 public:
     KoColorPopupActionPrivate()
         : colorSetWidget(0), colorChooser(0), opacitySlider(0), menu(0), checkerPainter(4)
-        , showFilter(true), applyMode(true)
+        , showFilter(true), applyMode(true), firstTime(true)
     {}
 
     ~KoColorPopupActionPrivate()
@@ -66,6 +66,8 @@ public:
     KoCheckerBoardPainter checkerPainter;
     bool showFilter;
     bool applyMode;
+
+    bool firstTime;
 };
 
 KoColorPopupAction::KoColorPopupAction(QObject *parent)
@@ -76,12 +78,6 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     QWidget *widget = new QWidget(d->menu);
     QWidgetAction *wdgAction = new QWidgetAction(d->menu);
     d->colorSetWidget = new KoColorSetWidget(widget);
-
-    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
-    QList<KoColorSet*> palettes = srv->resources();
-    if (!palettes.empty()) {
-        d->colorSetWidget->setColorSet(palettes.first());
-    }
 
     d->colorChooser = new KoTriangleColorSelector( widget );
     // prevent mouse release on color selector from closing popup
@@ -159,7 +155,7 @@ KoColor KoColorPopupAction::currentKoColor() const
     return d->currentColor;
 }
 
-void KoColorPopupAction::updateIcon( )
+void KoColorPopupAction::updateIcon()
 {
     QSize iconSize;
     QToolButton *toolButton = dynamic_cast<QToolButton*>(parentWidget());
@@ -235,6 +231,18 @@ void KoColorPopupAction::opacityWasChanged( int opacity )
     d->currentColor.setOpacity( quint8(opacity) );
 
     emitColorChanged();
+}
+
+void KoColorPopupAction::slotTriggered(bool)
+{
+    if (d->firstTime) {
+        KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer(false);
+        QList<KoColorSet*> palettes = srv->resources();
+        if (!palettes.empty()) {
+            d->colorSetWidget->setColorSet(palettes.first());
+        }
+        d->firstTime = false;
+    }
 }
 
 #include <KoColorPopupAction.moc>

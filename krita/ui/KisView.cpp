@@ -301,29 +301,6 @@ void KisView::setViewManager(KisViewManager *view)
     KoToolManager::instance()->registerTools(d->actionCollection, d->canvasController);
     dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(d->canvas);
 
-    if (s_firstView) {
-        // Restore the tool shortcuts from the config file
-        if(qApp->applicationName() == QLatin1String("kritagemini")) {
-            KConfigGroup group(KGlobal::config(), "krita/shortcuts");
-            foreach(KActionCollection *collection, KActionCollection::allCollections()) {
-                const QObject* obj = dynamic_cast<const QObject*>(collection->parentGUIClient());
-                if(obj && qobject_cast<const KisViewManager*>(obj) && !obj->objectName().startsWith("view_0"))
-                    break;
-                collection->setConfigGroup("krita/shortcuts");
-                collection->readSettings(&group);
-            }
-        }
-        else {
-            KConfigGroup group(KGlobal::config(), "krita/shortcuts");
-            foreach(KActionCollection *collection, KActionCollection::allCollections()) {
-                collection->setConfigGroup("krita/shortcuts");
-                collection->readSettings(&group);
-            }
-        }
-        s_firstView = false;
-    }
-
-
     if (resourceProvider()) {
         resourceProvider()->slotImageSizeChanged();
     }

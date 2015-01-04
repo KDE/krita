@@ -25,7 +25,9 @@
 
 #ifndef QT_NO_DBUS
 #include "KoApplicationAdaptor.h"
-#include <QtDBus>
+#include <QDBusConnection>
+#include <QDBusReply>
+#include <QDBusConnectionInterface>
 #endif
 
 #include "KoPrintJob.h"

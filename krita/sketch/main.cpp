@@ -30,7 +30,7 @@
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kcomponentdata.h>
+
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 

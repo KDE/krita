@@ -82,3 +82,7 @@ install( FILES
 
 install( FILES  kritadefaulttools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
+install( FILES
+    KisToolPath.action
+    KisToolPencil.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

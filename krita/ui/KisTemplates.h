@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_TEMPLATES_H
-#define KO_TEMPLATES_H
+#ifndef KIS_TEMPLATES_H
+#define KIS_TEMPLATES_H
 
 class QString;
 

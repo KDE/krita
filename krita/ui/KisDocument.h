@@ -25,7 +25,7 @@
 #include <QTransform>
 #include <QList>
 
-#include <kcomponentdata.h>
+
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>

@@ -70,9 +70,9 @@ K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
 const QString STANDARD_GMIC_DEFINITION = "gmic_def.gmic";
 
 KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
-        :   KisViewPlugin(parent, "kritaplugins/gmic.rc"),
-            m_gmicWidget(0),
-            m_requestFinishAndClose(false)
+    :   KisViewPlugin(parent),
+      m_gmicWidget(0),
+      m_requestFinishAndClose(false)
 {
     KisAction *action  = new KisAction(i18n("Apply G'Mic Action..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
@@ -217,14 +217,14 @@ void KisGmicPlugin::slotPreviewActiveLayer()
 
 void KisGmicPlugin::showInPreviewViewport(KisPaintDeviceSP device)
 {
-        QRect deviceRect = device->exactBounds();
-        qreal aspectRatio = (qreal)deviceRect.width()/deviceRect.height();
+    QRect deviceRect = device->exactBounds();
+    qreal aspectRatio = (qreal)deviceRect.width()/deviceRect.height();
 
-        int dstWidth = m_gmicWidget->previewWidget()->size().width();
-        int dstHeight = dstWidth / aspectRatio;
+    int dstWidth = m_gmicWidget->previewWidget()->size().width();
+    int dstHeight = dstWidth / aspectRatio;
 
-        QImage previewImage = device->createThumbnail(dstWidth, dstHeight, deviceRect);
-        m_gmicWidget->previewWidget()->setImage(previewImage);
+    QImage previewImage = device->createThumbnail(dstWidth, dstHeight, deviceRect);
+    m_gmicWidget->previewWidget()->setImage(previewImage);
 }
 
 
@@ -267,76 +267,76 @@ void KisGmicPlugin::parseGmicCommandDefinitions(const QStringList& gmicDefinitio
 
 KisNodeListSP KisGmicPlugin::createPreviewThumbnails(KisNodeListSP layers,const QSize &dstSize,const QRect &srcRect)
 {
-        KisNodeListSP previewKritaNodes(new QList< KisNodeSP >());
-        for (int i = 0; i < layers->size(); i++)
-        {
-            KisPaintDeviceSP thumbnail = layers->at(i)->paintDevice()->createThumbnailDevice(dstSize.width(), dstSize.height(), srcRect);
-            KisNodeSP node(new KisPaintLayer(0, "", OPACITY_OPAQUE_U8, thumbnail));
-            previewKritaNodes->append(node);
-        }
-        return previewKritaNodes;
+    KisNodeListSP previewKritaNodes(new QList< KisNodeSP >());
+    for (int i = 0; i < layers->size(); i++)
+    {
+        KisPaintDeviceSP thumbnail = layers->at(i)->paintDevice()->createThumbnailDevice(dstSize.width(), dstSize.height(), srcRect);
+        KisNodeSP node(new KisPaintLayer(0, "", OPACITY_OPAQUE_U8, thumbnail));
+        previewKritaNodes->append(node);
+    }
+    return previewKritaNodes;
 }
 
 
 void KisGmicPlugin::createViewportPreview(KisNodeListSP layers, KisGmicFilterSetting* setting)
 {
-        QRect canvasRect = m_view->image()->bounds();
-        qreal aspectRatio = (qreal)canvasRect.width() / canvasRect.height();
+    QRect canvasRect = m_view->image()->bounds();
+    qreal aspectRatio = (qreal)canvasRect.width() / canvasRect.height();
 
-        int previewWidth = m_gmicWidget->previewWidget()->size().width();
-        int previewHeight = qRound(previewWidth / aspectRatio);
-        QRect previewRect = QRect(QPoint(0,0), QSize(previewWidth, previewHeight));
+    int previewWidth = m_gmicWidget->previewWidget()->size().width();
+    int previewHeight = qRound(previewWidth / aspectRatio);
+    QRect previewRect = QRect(QPoint(0,0), QSize(previewWidth, previewHeight));
 
-        KisNodeListSP previewKritaNodes = KisGmicPlugin::createPreviewThumbnails(layers, previewRect.size(), canvasRect);
+    KisNodeListSP previewKritaNodes = KisGmicPlugin::createPreviewThumbnails(layers, previewRect.size(), canvasRect);
 
-        QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
-        gmicLayers->assign(previewKritaNodes->size());
+    QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
+    gmicLayers->assign(previewKritaNodes->size());
 
-        KisExportGmicProcessingVisitor exportVisitor(previewKritaNodes, gmicLayers, previewRect);
-        for (int i = 0; i < previewKritaNodes->size(); i++)
-        {
-            exportVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0);
-        }
+    KisExportGmicProcessingVisitor exportVisitor(previewKritaNodes, gmicLayers, previewRect);
+    for (int i = 0; i < previewKritaNodes->size(); i++)
+    {
+        exportVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0);
+    }
 
-        QString gmicCommand = setting->previewGmicCommand();
-        if (gmicCommand.isEmpty())
-        {
-            gmicCommand = setting->gmicCommand();
-        }
+    QString gmicCommand = setting->previewGmicCommand();
+    if (gmicCommand.isEmpty())
+    {
+        gmicCommand = setting->gmicCommand();
+    }
 
-        KisGmicCommand gmicCmd(gmicCommand, gmicLayers, m_gmicCustomCommands);
-        gmicCmd.redo();
+    KisGmicCommand gmicCmd(gmicCommand, gmicLayers, m_gmicCustomCommands);
+    gmicCmd.redo();
 
-        KisGmicSynchronizeLayersCommand syncCmd(previewKritaNodes, gmicLayers, 0);
-        syncCmd.redo();
+    KisGmicSynchronizeLayersCommand syncCmd(previewKritaNodes, gmicLayers, 0);
+    syncCmd.redo();
 
-        KisImportGmicProcessingVisitor importVisitor(previewKritaNodes, gmicLayers, previewRect, 0);
-        for (int i = 0; i < previewKritaNodes->size(); i++)
-        {
-            importVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0 );
-        }
+    KisImportGmicProcessingVisitor importVisitor(previewKritaNodes, gmicLayers, previewRect, 0);
+    for (int i = 0; i < previewKritaNodes->size(); i++)
+    {
+        importVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0 );
+    }
 
-        if (previewKritaNodes->size() > 0)
-        {
-            showInPreviewViewport(previewKritaNodes->at(0)->paintDevice());
-        }
-        else
-        {
-            // TODO: show error preview
-        }
+    if (previewKritaNodes->size() > 0)
+    {
+        showInPreviewViewport(previewKritaNodes->at(0)->paintDevice());
+    }
+    else
+    {
+        // TODO: show error preview
+    }
 }
 
 
 void KisGmicPlugin::startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSetting* setting, Activity activity)
 {
-        KUndo2MagicString actionName = kundo2_i18n("Gmic filter");
-        KisNodeSP rootNode = m_view->image()->root();
-        m_gmicApplicator->setProperties(m_view->image(), rootNode, actionName, layers, setting->gmicCommand(), m_gmicCustomCommands);
-        m_gmicApplicator->preview();
-        // Note: do not call KisImage::waitForDone(): strokes are not finished or cancelled, it's just preview!
-        // waitForDone would cause infinite hang
-        m_currentActivity = activity;
-        m_progressManager->initProgress();
+    KUndo2MagicString actionName = kundo2_i18n("Gmic filter");
+    KisNodeSP rootNode = m_view->image()->root();
+    m_gmicApplicator->setProperties(m_view->image(), rootNode, actionName, layers, setting->gmicCommand(), m_gmicCustomCommands);
+    m_gmicApplicator->preview();
+    // Note: do not call KisImage::waitForDone(): strokes are not finished or cancelled, it's just preview!
+    // waitForDone would cause infinite hang
+    m_currentActivity = activity;
+    m_progressManager->initProgress();
 }
 
 

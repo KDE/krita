@@ -25,14 +25,11 @@
 #include <kmessagebox.h>
 
 #include "KoApplication.h"
-
-#include "KoApplication.h"
 #include "KoPart.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
 #include "KoDocumentEntry.h"
 #include "KoView.h"
-#include "KoPart.h"
 
 KoApplicationAdaptor::KoApplicationAdaptor(KoApplication *parent)
         : QDBusAbstractAdaptor(parent)

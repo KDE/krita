@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOTEMPLATESPANE
-#define KOTEMPLATESPANE
+#ifndef KIS_TEMPLATES_PANE_H
+#define KIS_TEMPLATES_PANE_H
 
 #include "KisDetailsPane.h"
 

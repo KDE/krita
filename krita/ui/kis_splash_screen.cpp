@@ -27,11 +27,13 @@
 #include <KisPart.h>
 #include <KisApplication.h>
 
-#include <kcomponentdata.h>
+
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kaboutdata.h>
 
 #include <kis_factory2.h>
 
@@ -39,6 +41,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
     setupUi(this);
+    setWindowIcon(KIcon(KGlobal::mainComponent().aboutData()->programIconName()));
 
     lblSplash->setPixmap(pixmap);
     bnClose->hide();

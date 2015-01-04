@@ -50,13 +50,15 @@ void Barcode::setSize(const QSizeF& s)
 
 int Barcode::horizontalAlignment()
 {
-    QString a = m_barcode->m_horizontalAlignment->value().toString();
+    const QString a = m_barcode->m_horizontalAlignment->value().toString().toLower();
 
-    if (a.toLower() == "left") {
+    if (a == QLatin1String("left")) {
         return -1;
-    } else if (a.toLower() == "center") {
+    }
+    if (a == QLatin1String("center")) {
         return 0;
-    } else if (a.toLower() == "right") {
+    }
+    if (a == QLatin1String("right")) {
         return 1;
     }
     return -1;

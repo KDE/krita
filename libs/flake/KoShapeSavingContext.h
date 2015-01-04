@@ -283,7 +283,7 @@ public:
     QTransform shapeOffset(const KoShape *shape) const;
 
 private:
-    KoShapeSavingContextPrivate *d;
+    KoShapeSavingContextPrivate * const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoShapeSavingContext::ShapeSavingOptions)

@@ -25,8 +25,8 @@
 
 #include "kis_tool_paint.h"
 
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <QScopedPointer>
 #include "kis_global.h"
 #include "kis_types.h"

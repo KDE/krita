@@ -140,7 +140,10 @@ KisMemoryLeakTracker::~KisMemoryLeakTracker()
 
 void KisMemoryLeakTracker::reference(const void* what, const void* bywho, const char* whatName)
 {
+    if(what == 0x0) return;
+
     QMutexLocker l(&d->m);
+
     if (whatName == 0 || ( strcmp(whatName, "PK13KisSharedData") != 0
 #ifdef IGNORE_MEMENTO_ITEM
                            && strcmp(whatName, "PK14KisMementoItem") != 0

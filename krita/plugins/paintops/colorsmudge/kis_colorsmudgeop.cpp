@@ -37,7 +37,7 @@
 #include <kis_fixed_paint_device.h>
 
 
-KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisImageWSP image):
+KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
     KisBrushBasedPaintOp(settings, painter),
     m_firstRun(true), m_image(image),
     m_tempDev(painter->device()->createCompositionSourceDevice()),
@@ -48,6 +48,8 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_colorRateOption("ColorRate"),
     m_smudgeRadiusOption("SmudgeRadius")
 {
+    Q_UNUSED(node);
+
     Q_ASSERT(settings);
     Q_ASSERT(painter);
 

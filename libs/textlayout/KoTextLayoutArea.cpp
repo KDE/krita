@@ -29,10 +29,8 @@
  */
 
 #include "KoTextLayoutArea.h"
+#include "KoTextLayoutArea_p.h"
 
-#include "KoTextLayoutEndNotesArea.h"
-#include "KoTextLayoutTableArea.h"
-#include "KoTextLayoutNoteArea.h"
 #include "TableIterator.h"
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
@@ -47,7 +45,6 @@
 #include <KoTableStyle.h>
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
-#include <KoTextBlockBorderData.h>
 #include <KoText.h>
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
@@ -71,8 +68,6 @@ Q_DECLARE_METATYPE(QTextDocument *)
 
 #define DropCapsAdditionalFormattingId 25602902
 #define PresenterFontStretch 1.2
-
-#include "KoTextLayoutArea_p.h"
 
 KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *documentLayout)
  : d (new Private)

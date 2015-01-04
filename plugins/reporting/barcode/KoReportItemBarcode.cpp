@@ -72,6 +72,13 @@ void KoReportItemBarcode::setMaxLength(int i)
             /*if(min_height < 0.25)*/ m_minHeight = 0.25;
             m_minWidthTotal = m_minWidthData + 0.22; // added a little buffer to make sure we don't loose any
             // of our required quiet zone in conversions
+        } else if (m_format->value().toString() == "i2of5") {
+            int C = i * 2; // number of characters
+            int N = 2; // narrow mult for wide line
+            int X = 1; // 1px narrow line
+            m_minWidthTotal = ((C * (2.0*N + 3.0) + 6.0 + N) * X);
+            m_minHeight = 0.25;
+            m_minWidthTotal = m_minWidthData + 0.22;
         } else if (m_format->value().toString() == "128") {
             int C = i; // assuming 1:1 ratio of data passed in to data actually used in encoding
             int X = 1; // 1px wide
@@ -116,8 +123,8 @@ void KoReportItemBarcode::createProperties()
 
     keys.clear();
     strings.clear();
-    keys << "3of9" << "3of9+" << "128" << "upc-a" << "upc-e" << "ean13" << "ean8";
-    strings << "3of9" << "3of9+" << "128" << "upc-a" << "upc-e" << "ean13" << "ean8";
+    keys << "3of9" << "3of9+" << "128" << "ean8" << "ean13" << "i2of5" << "upc-a" << "upc-e";
+    strings << i18nc("Barcode symbology, keep short", "Code 3 of 9") << i18nc("Barcode symbology, keep short", "Code 3 of 9 Ext.") << i18nc("Barcode symbology, keep short", "Code 128") << i18nc("Barcode symbology, keep short", "EAN-8") << i18nc("Barcode symbology, keep short", "EAN-13") << i18nc("Barcode symbology, keep short", "Interleaved 2 of 5") << i18nc("Barcode symbology, keep short", "UPC-A") << i18nc("Barcode symbology, keep short", "UPC-E");
     m_format = new KoProperty::Property("barcode-format", keys, strings, "3of9", i18n("Barcode Format"));
 
     m_maxLength = new KoProperty::Property("barcode-max-length", 5, i18n("Max Length"), i18n("Maximum Barcode Length"));
@@ -194,25 +201,27 @@ int KoReportItemBarcode::renderSimpleData(OROPage *page, OROSection *section, co
     QString val = data.toString();
 
     if (page) {
-      QString fmt = m_format->value().toString();
-      int align = alignment();
-      if (fmt == "3of9")
-	  render3of9(page, rect, val, align);
-      else if (fmt == "3of9+")
-	  renderExtended3of9(page, rect, val, align);
-      else if (fmt == "128")
-	  renderCode128(page, rect, val, align);
-      else if (fmt == "ean13")
-	  renderCodeEAN13(page, rect, val, align);
-      else if (fmt == "ean8")
-	  renderCodeEAN8(page, rect, val, align);
-      else if (fmt == "upc-a")
-	  renderCodeUPCA(page, rect, val, align);
-      else if (fmt == "upc-e")
-	  renderCodeUPCE(page, rect, val, align);
-      else {
-	  kDebug() << "Unknown barcode format:" << fmt;
-      }
+        QString fmt = m_format->value().toString();
+        int align = alignment();
+        if (fmt == "3of9")
+            render3of9(page, rect, val, align);
+        else if (fmt == "3of9+")
+            renderExtended3of9(page, rect, val, align);
+        else if (fmt == "i2of5")
+            renderI2of5(page, rect, val, align);
+        else if (fmt == "128")
+            renderCode128(page, rect, val, align);
+        else if (fmt == "ean13")
+            renderCodeEAN13(page, rect, val, align);
+        else if (fmt == "ean8")
+            renderCodeEAN8(page, rect, val, align);
+        else if (fmt == "upc-a")
+            renderCodeUPCA(page, rect, val, align);
+        else if (fmt == "upc-e")
+            renderCodeUPCE(page, rect, val, align);
+        else {
+            kDebug() << "Unknown barcode format:" << fmt;
+        }
     }
     return 0;
 }

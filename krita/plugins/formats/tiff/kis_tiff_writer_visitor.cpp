@@ -50,7 +50,7 @@ namespace
             color_type = PHOTOMETRIC_RGB;
             return true;
         }
-        if (KoID(cs->id()) == KoID("RgbAF16") || KoID(cs->id()) == KoID("RgbAF32")) {
+        if (KoID(cs->id()) == KoID("RGBAF16") || KoID(cs->id()) == KoID("RGBAF32")) {
             color_type = PHOTOMETRIC_RGB;
             sample_type = SAMPLEFORMAT_IEEEFP;
             return true;

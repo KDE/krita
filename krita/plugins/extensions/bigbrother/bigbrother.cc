@@ -20,7 +20,7 @@
 #include <unistd.h>
 
 #include <kis_action.h>
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 #include <klocale.h>
 
@@ -76,7 +76,7 @@ class RecordedActionLoadContext : public KisRecordedActionLoadContext {
 };
 
 BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/bigbrother.rc")
+        : KisViewPlugin(parent)
         , m_recorder(0)
 {
     if (parent->inherits("KisViewManager")) {

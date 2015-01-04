@@ -20,6 +20,12 @@
 #ifndef KOCOLORCONVERSIONSYSTEM_P_H
 #define KOCOLORCONVERSIONSYSTEM_P_H
 
+#include "DebugPigment.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoColorModelStandardIds.h"
+#include "KoColorConversionTransformationFactory.h"
+#include "KoColorSpaceEngine.h"
+
 #include <QList>
 
 struct KoColorConversionSystem::Node {

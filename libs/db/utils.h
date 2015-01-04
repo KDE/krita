@@ -262,13 +262,20 @@ int rowCount(Connection &conn, const QString& sql);
  -1 is returned if error occurred. */
 CALLIGRADB_EXPORT int rowCount(const TableSchema& tableSchema);
 
-/*! Like above but operates on a query schema. */
+/*! Like rowCount(const TableSchema&) but operates on a query schema.
+ \a params are optional values of parameters that will be inserted into places marked
+ with [] before execution of the query. */
 //! @todo perhaps use quint64 here?
-CALLIGRADB_EXPORT int rowCount(QuerySchema& querySchema);
+CALLIGRADB_EXPORT int rowCount(QuerySchema& querySchema,
+                               const QList<QVariant>& params = QList<QVariant>());
 
-/*! Like above but operates on a table or query schema variant. */
+/*! Like int rowCount(QuerySchema& querySchema, const QList<QVariant>& params = QList<QVariant>())
+ but operates on a table or query schema variant.
+ \a params are optional values of parameters that will be inserted into places marked
+ with [] before execution of the query. */
 //! @todo perhaps use quint64 here?
-CALLIGRADB_EXPORT int rowCount(TableOrQuerySchema& tableOrQuery);
+CALLIGRADB_EXPORT int rowCount(TableOrQuerySchema& tableOrQuery,
+                               const QList<QVariant>& params = QList<QVariant>());
 
 /*! \return a number of columns that can be retrieved from table or query schema.
  In case of query, expanded fields are counted. Can return -1 if \a tableOrQuery

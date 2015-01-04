@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    Contains code from KConfigGroupPrivate from kconfiggroup.cpp (kdelibs 4)
@@ -24,6 +24,8 @@
 */
 
 #include "utils.h"
+#include "utils_p.h"
+
 #include "cursor.h"
 #include "drivermanager.h"
 #include "lookupfieldschema.h"
@@ -32,7 +34,6 @@
 
 #include <QMap>
 #include <QHash>
-#include <QThread>
 #include <QDomDocument>
 #include <QBuffer>
 #include <QPixmap>
@@ -51,8 +52,6 @@
 #include <kstandarddirs.h>
 
 #include <memory>
-
-#include "utils_p.h"
 
 using namespace KexiDB;
 
@@ -535,7 +534,7 @@ int KexiDB::rowCount(const KexiDB::TableSchema& tableSchema)
     return count;
 }
 
-int KexiDB::rowCount(KexiDB::QuerySchema& querySchema)
+int KexiDB::rowCount(KexiDB::QuerySchema& querySchema, const QList<QVariant>& params)
 {
 //! @todo does not work with non-SQL data sources
     if (!querySchema.connection()) {
@@ -543,20 +542,20 @@ int KexiDB::rowCount(KexiDB::QuerySchema& querySchema)
         return -1;
     }
     int count = -1; //will be changed only on success of querySingleNumber()
-    querySchema.connection()->querySingleNumber(
+    tristate result = querySchema.connection()->querySingleNumber(
         QString::fromLatin1("SELECT COUNT(*) FROM (")
-        + querySchema.connection()->selectStatement(querySchema) + ") AS kexidb__subquery",
+        + querySchema.connection()->selectStatement(querySchema, params) + ") AS kexidb__subquery",
         count
     );
-    return count;
+    return true == result ? count : -1;
 }
 
-int KexiDB::rowCount(KexiDB::TableOrQuerySchema& tableOrQuery)
+int KexiDB::rowCount(KexiDB::TableOrQuerySchema& tableOrQuery, const QList<QVariant>& params)
 {
     if (tableOrQuery.table())
         return rowCount(*tableOrQuery.table());
     if (tableOrQuery.query())
-        return rowCount(*tableOrQuery.query());
+        return rowCount(*tableOrQuery.query(), params);
     return -1;
 }
 

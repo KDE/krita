@@ -89,6 +89,11 @@ void KisPaintOpOption::setImage(KisImageWSP image)
     Q_UNUSED(image);
 }
 
+void KisPaintOpOption::setNode(KisNodeWSP node)
+{
+    Q_UNUSED(node);
+}
+
 void KisPaintOpOption::setConfigurationPage(QWidget * page)
 {
     m_d->configurationPage = page;

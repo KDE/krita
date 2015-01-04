@@ -20,13 +20,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPART_H
-#define KOPART_H
+#ifndef KIS_PART_H
+#define KIS_PART_H
 
 #include <QList>
 #include <QPointer>
 
-#include <kcomponentdata.h>
+
 #include <kurl.h>
 #include <kxmlguiclient.h>
 
@@ -147,6 +147,15 @@ public slots:
      */
     void openExistingFile(const KUrl& url);
 
+    /**
+     * @brief configureShortcuts opens the shortcut configuration dialog.
+     * @param parent the parent widget for the dialog
+     *
+     * After the user closes the dialog, all actioncollections will be updated
+     * with the new shortcuts.
+     */
+    void configureShortcuts();
+
 protected slots:
 
     /**
@@ -162,6 +171,15 @@ private slots:
     void startCustomDocument(KisDocument *doc);
 
 signals:
+    /**
+     * emitted when a new document is opened.
+     */
+    void documentOpened(const QString &ref);
+
+    /**
+     * emitted when an old document is closed.
+     */
+    void documentClosed(const QString &ref);
 
     void sigViewAdded(KisView *view);
     void sigViewRemoved(KisView *view);
@@ -264,10 +282,6 @@ protected:
      */
     QGraphicsItem *createCanvasItem(KisDocument *document);
 
-protected slots:
-
-    /// Quits Krita with error message from m_errorMessage.
-    void showErrorAndDie();
 
 private:
 
@@ -276,9 +290,6 @@ private:
     class Private;
     Private *const d;
 
-protected:
-    QString m_errorMessage;
-    bool m_dieOnError;
 
 };
 

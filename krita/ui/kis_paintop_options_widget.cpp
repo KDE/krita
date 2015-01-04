@@ -144,6 +144,13 @@ void KisPaintOpOptionsWidget::setImage(KisImageWSP image)
     }
 }
 
+void KisPaintOpOptionsWidget::setNode(KisNodeWSP node)
+{
+    foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
+        option->setNode(node);
+    }
+}
+
 void KisPaintOpOptionsWidget::changePage(const QModelIndex& index)
 {
     KisOptionInfo info;

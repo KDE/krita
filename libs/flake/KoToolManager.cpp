@@ -109,6 +109,7 @@ public:
             }
             it.value()->setEnabled(true);
         }
+        ac->readSettings(); // The shortcuts might have been configured in the meantime.
     }
 
     void deactivateToolActions()

@@ -46,7 +46,7 @@ K_PLUGIN_FACTORY(ImageSizeFactory, registerPlugin<ImageSize>();)
 K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
 
 ImageSize::ImageSize(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/imagesize.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Scale To New Size..."), this);
     addAction("imagesize", action);

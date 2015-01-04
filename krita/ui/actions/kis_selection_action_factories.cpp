@@ -252,6 +252,9 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
         KisNodeSP node = view->activeNode();
         if (!node) return;
 
+        KisSelectionSP selection = view->selection();
+        if (selection.isNull()) return;
+
         image->barrierLock();
         KisPaintDeviceSP dev = node->paintDevice();
         if (!dev) {
@@ -277,7 +280,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
                 }
             };
 
-            command = new ClearSelection(node, view->selection());
+            command = new ClearSelection(node, selection);
         }
 
         KUndo2MagicString actionName = willCut ?

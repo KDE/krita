@@ -248,7 +248,7 @@ public:
      * Get an approximate scale of a unit vector that was converted by
      * the transfomation.
      *
-     * Please note that exact values are guarenteed only for
+     * Please note that exact values are guaranteed only for
      * combinations of Translate, Rotation and Unifor Scale
      * matrices. For combinations having shears and perspective the
      * value will be average for the point near CS origin.

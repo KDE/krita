@@ -62,6 +62,7 @@ public:
      */
     virtual void setImage(KisImageWSP image);
 
+    virtual void setNode(KisNodeWSP node);
 
 
 public slots:

@@ -23,7 +23,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
+
 #include <kglobal.h>
 #include <kaction.h>
 #include <kactioncollection.h>

@@ -16,6 +16,8 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
     ${CMAKE_CURRENT_SOURCE_DIR}/ora
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    ${CMAKE_SOURCE_DIR}/krita/ui/qtsingleapplication
+    ${CMAKE_SOURCE_DIR}/krita/ui/qtlockedfile
     ${EXIV2_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR})
 
@@ -302,7 +304,6 @@ set(kritaui_LIB_SRCS
     KisPart.cpp
     KisPrintJob.cpp
     KisRecentDocumentsPane.cpp
-    KisStandardAction.cpp
     KisStartupDialog.cpp
     KisTemplate.cpp
     KisTemplateCreateDia.cpp
@@ -318,6 +319,12 @@ set(kritaui_LIB_SRCS
     kis_mainwindow_observer.cpp
     KisViewManager.cpp
     kis_mirror_manager.cpp
+
+
+    qtlockedfile/qtlockedfile.cpp
+
+    qtsingleapplication/qtlocalpeer.cpp
+    qtsingleapplication/qtsingleapplication.cpp
 )
 
 if(WIN32)
@@ -325,6 +332,7 @@ if(WIN32)
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support_win.cpp
+        qtlockedfile/qtlockedfile_win.cpp
         )
 endif(WIN32)
 
@@ -333,6 +341,7 @@ if(UNIX)
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support.cpp
+        qtlockedfile/qtlockedfile_unix.cpp
         )
     if(NOT APPLE)
         set(kritaui_LIB_SRCS

@@ -31,6 +31,12 @@
 #ifndef KOTEXTLAYOUTAREA_P_H
 #define KOTEXTLAYOUTAREA_P_H
 
+#include "KoTextLayoutTableArea.h"
+#include "KoTextLayoutEndNotesArea.h"
+#include "KoTextLayoutNoteArea.h"
+
+#include <KoTextBlockBorderData.h>
+
 class KoTextLayoutArea::Private
 {
 public:

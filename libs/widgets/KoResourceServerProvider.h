@@ -79,9 +79,9 @@ public:
 
     static KoResourceServerProvider* instance();
 
-    KoResourceServer<KoPattern>* patternServer();
-    KoResourceServer<KoAbstractGradient>* gradientServer();
-    KoResourceServer<KoColorSet>* paletteServer();
+    KoResourceServer<KoPattern>* patternServer(bool block = true);
+    KoResourceServer<KoAbstractGradient>* gradientServer(bool block = true);
+    KoResourceServer<KoColorSet>* paletteServer(bool block = true);
 
 private:
     KoResourceServerProvider();

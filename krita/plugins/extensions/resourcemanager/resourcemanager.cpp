@@ -22,6 +22,8 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QTimer>
+#include <QThread>
 
 #include <QMessageBox>
 #include <klocale.h>
@@ -56,14 +58,6 @@ ResourceBundleServerProvider::ResourceBundleServerProvider()
     if (!QFileInfo(m_resourceBundleServer->saveLocation()).exists()) {
         QDir().mkpath(m_resourceBundleServer->saveLocation());
     }
-    KoResourceLoaderThread loader(m_resourceBundleServer);
-    loader.start();
-    loader.barrier();
-    foreach(ResourceBundle *bundle, m_resourceBundleServer->resources()) {
-        if (!bundle->install()) {
-            qWarning() << "Could not install resources for bundle" << bundle->name();
-        }
-    }
 }
 
 
@@ -88,23 +82,25 @@ class ResourceManager::Private {
 
 public:
 
-    Private() {
-        brushServer = KisBrushServer::instance()->brushServer();
-        paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-        gradientServer = KoResourceServerProvider::instance()->gradientServer();
-        bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
-        patternServer = KoResourceServerProvider::instance()->patternServer();
-        paletteServer = KoResourceServerProvider::instance()->paletteServer();
-        workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+    Private()
+        : loader(0)
+    {
+        brushServer = KisBrushServer::instance()->brushServer(false);
+        paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+        gradientServer = KoResourceServerProvider::instance()->gradientServer(false);
+        patternServer = KoResourceServerProvider::instance()->patternServer(false);
+        paletteServer = KoResourceServerProvider::instance()->paletteServer(false);
+        workspaceServer = KisResourceServerProvider::instance()->workspaceServer(false);
     }
 
     KisBrushResourceServer* brushServer;
     KisPaintOpPresetResourceServer * paintopServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
-    KoResourceServer<ResourceBundle> *bundleServer;
-    KoResourceServer<KoPattern>* patternServer;
+    KoResourceServer<KoPattern> *patternServer;
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer<KisWorkspaceResource>* workspaceServer;
+
+    QThread *loader;
 
 };
 
@@ -112,21 +108,21 @@ K_PLUGIN_FACTORY(ResourceManagerFactory, registerPlugin<ResourceManager>();)
 K_EXPORT_PLUGIN(ResourceManagerFactory("krita"))
 
 ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent, "kritaplugins/resourcemanager.rc")
+    : KisViewPlugin(parent)
     , d(new Private())
 {
-    Q_UNUSED(ResourceBundleServerProvider::instance()); // load the bundles
+    QTimer::singleShot(0, this, SLOT(loadBundles()));
 
     KisAction *action = new KisAction(i18n("Import Resources or Bundles..."), this);
-    addAction("import", action);
+    addAction("import_resources", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImport()));
 
     action = new KisAction(i18n("Create Resource Bundle..."), this);
-    addAction("createbundle", action);
+    addAction("create_bundle", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCreateBundle()));
 
     action = new KisAction(i18n("Manage Resource Bundles..."), this);
-    addAction("managebundles", action);
+    addAction("manage_bundles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotManageBundles()));
 }
 
@@ -190,7 +186,7 @@ void ResourceManager::slotImport()
     }
     else if (resourceType == "bundles") {
         foreach(const QString &res, resources) {
-            ResourceBundle *bundle = d->bundleServer->createResource(res);
+            ResourceBundle *bundle = ResourceBundleServerProvider::instance()->resourceBundleServer()->createResource(res);
             bundle->load();
             if (bundle->valid()) {
                 if (!bundle->install()) {
@@ -202,17 +198,17 @@ void ResourceManager::slotImport()
             }
 
             QFileInfo fi(res);
-            QString newFilename = d->bundleServer->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
+            QString newFilename = ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
             QFileInfo fileInfo(newFilename);
 
             int i = 1;
             while (fileInfo.exists()) {
-                fileInfo.setFile(d->bundleServer->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
+                fileInfo.setFile(ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
                 i++;
             }
             bundle->setFilename(fileInfo.filePath());
             QFile::copy(res, newFilename);
-            d->bundleServer->addResource(bundle, false);
+            ResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(bundle, false);
         }
     }
     else if (resourceType == "patterns") {
@@ -307,6 +303,26 @@ void ResourceManager::slotManageBundles()
     DlgBundleManager dlg;
     if (dlg.exec() != QDialog::Accepted) {
         return;
+    }
+
+}
+
+void ResourceManager::loadBundles()
+{
+    d->loader = new KoResourceLoaderThread(ResourceBundleServerProvider::instance()->resourceBundleServer());
+    connect(d->loader, SIGNAL(finished()), this, SLOT(bundlesLoaded()));
+    d->loader->start();
+}
+
+void ResourceManager::bundlesLoaded()
+{
+    delete d->loader;
+    d->loader = 0;
+
+    foreach(ResourceBundle *bundle, ResourceBundleServerProvider::instance()->resourceBundleServer()->resources()) {
+        if (!bundle->install()) {
+            qWarning() << "Could not install resources for bundle" << bundle->name();
+        }
     }
 
 }

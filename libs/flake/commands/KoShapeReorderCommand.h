@@ -69,7 +69,7 @@ public:
     void undo();
 
 private:
-    KoShapeReorderCommandPrivate *d;
+    KoShapeReorderCommandPrivate * const d;
 };
 
 #endif

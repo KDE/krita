@@ -279,41 +279,42 @@ void KisLayerManager::activateLayer(KisLayerSP layer)
 }
 
 
-void KisLayerManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
+void KisLayerManager::setup(KisActionManager* actionManager)
 {
-    m_imageFlatten  = new KisAction(i18n("&Flatten image"), this);
-    actionManager->addAction("flatten_image", m_imageFlatten, actionCollection);
+    m_imageFlatten = new KisAction(i18n("&Flatten image"), this);
+    actionManager->addAction("flatten_image", m_imageFlatten);
     m_imageFlatten->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
     connect(m_imageFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
-    m_imageMergeLayer  = new KisAction(i18n("&Merge with Layer Below"), this);
-    actionManager->addAction("merge_layer", m_imageMergeLayer, actionCollection);
+    m_imageMergeLayer = new KisAction(i18n("&Merge with Layer Below"), this);
+    actionManager->addAction("merge_layer", m_imageMergeLayer);
     m_imageMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imageMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
-    m_flattenLayer  = new KisAction(i18n("&Flatten Layer"), this);
-    actionManager->addAction("flatten_layer", m_flattenLayer, actionCollection);
+    m_flattenLayer = new KisAction(i18n("&Flatten Layer"), this);
+    m_flattenLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionManager->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
     KisAction * action = new KisAction(i18n("Rename current layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    actionManager->addAction("RenameCurrentLayer", action, actionCollection);
+    actionManager->addAction("RenameCurrentLayer", action);
     action->setShortcut(KShortcut(Qt::Key_F2));
     connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
-    m_rasterizeLayer  = new KisAction(i18n("Rasterize Layer"), this);
+    m_rasterizeLayer = new KisAction(i18n("Rasterize Layer"), this);
     m_rasterizeLayer->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
     m_rasterizeLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("rasterize_layer", m_rasterizeLayer, actionCollection);
+    actionManager->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
     m_groupLayersSave = new KisAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
-    actionManager->addAction("save_groups_as_images", m_groupLayersSave, actionCollection);
+    actionManager->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
-    m_imageResizeToLayer  = new KisAction(i18n("Size Canvas to Size of Current Layer"), this);
+    m_imageResizeToLayer = new KisAction(i18n("Size Canvas to Size of Current Layer"), this);
     m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
-    actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer, actionCollection);
+    actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
 }
 
@@ -380,7 +381,7 @@ void KisLayerManager::layerProperties()
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
-                    = new KisChangeFilterCmd(alayer,
+                   = new KisChangeFilterCmd(alayer,
                                              configBefore->name(),
                                              xmlBefore,
                                              configAfter->name(),
@@ -423,7 +424,7 @@ void KisLayerManager::layerProperties()
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
-                    = new KisChangeFilterCmd(alayer,
+                   = new KisChangeFilterCmd(alayer,
                                              configBefore->name(),
                                              xmlBefore,
                                              configAfter->name(),

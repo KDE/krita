@@ -49,6 +49,7 @@
 #include <KoProgressUpdater.h>
 #include <KoSelection.h>
 #include <KoShape.h>
+#include <KoShapeController.h>
 #include <KoStore.h>
 #include <KoUpdater.h>
 #include <KoXmlWriter.h>
@@ -356,6 +357,7 @@ public:
     KisImageSP image;
     KisNodeSP preActivatedNode;
     KisShapeController* shapeController;
+    KoShapeController* koShapeController;
 
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
@@ -597,6 +599,7 @@ KisDocument::~KisDocument()
 
     // Despite being QObject they needs to be deleted before the image
     delete d->shapeController;
+    delete d->koShapeController;
 
     if (d->image) {
         d->image->notifyAboutToBeDeleted();
@@ -616,6 +619,7 @@ void KisDocument::init()
     Q_CHECK_PTR(d->nserver);
 
     d->shapeController = new KisShapeController(this, d->nserver);
+    d->koShapeController = new KoShapeController(0, d->shapeController);
 
     d->kraSaver = 0;
     d->kraLoader = 0;
@@ -1143,10 +1147,10 @@ QString KisDocument::autoSaveFile(const QString & path) const
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(KisFactory::componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(KisFactory::componentName()).arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(KisFactory::componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(KisFactory::componentName()).arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #endif
     } else {
         KUrl url = KUrl::fromPath(path);

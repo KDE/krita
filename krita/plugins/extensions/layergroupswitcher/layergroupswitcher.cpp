@@ -39,7 +39,7 @@ K_PLUGIN_FACTORY(LayerGroupSwitcherFactory, registerPlugin<LayerGroupSwitcher>()
 K_EXPORT_PLUGIN(LayerGroupSwitcherFactory("krita"))
 
 LayerGroupSwitcher::LayerGroupSwitcher(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent, "")
+    : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Move into previous group"), this);
     addAction("LayerGroupSwitcher/previous", action);

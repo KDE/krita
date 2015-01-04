@@ -19,8 +19,8 @@
 
 #include "kis_input_type_delegate.h"
 
-#include <KComboBox>
-#include <KLocalizedString>
+#include <kcombobox.h>
+#include <klocalizedstring.h>
 
 class KisInputTypeDelegate::Private
 {

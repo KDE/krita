@@ -215,6 +215,9 @@ public slots:
     /// gui elements
     void updateGUI();
 
+    /// Update the style of all the icons
+    void updateIcons();
+
     void slotViewAdded(KisView *view);
     void slotViewRemoved(KisView *view);
 
@@ -232,14 +235,12 @@ private slots:
     void showStatusBar(bool toggled);
     void toggleTabletLogger();
     void openResourcesDirectory();
-    void updateIcons();
     void makeStatusBarVisible();
     void guiUpdateTimeout();
 
 private:
     void createActions();
     void createManagers();
-    void loadPlugins();
 
     /// The zoommanager handles everything action-related to zooming
     KisZoomManager * zoomManager();

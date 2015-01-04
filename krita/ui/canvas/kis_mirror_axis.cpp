@@ -100,8 +100,8 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
     connect(d->resourceProvider, SIGNAL(mirrorModeChanged()), SLOT(mirrorModeChanged()));
     d->mirrorHorizontal = d->resourceProvider->mirrorHorizontal();
     d->mirrorVertical = d->resourceProvider->mirrorVertical();
-    d->horizontalIcon = koIcon("dark_symmetry-horizontal").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-    d->verticalIcon = koIcon("dark_symmetry-vertical").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+    d->horizontalIcon = koIcon("mirrorAxis-HorizontalMove").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+    d->verticalIcon = koIcon("mirrorAxis-VerticalMove").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
     d->horizontalHandleIcon = koIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
     d->verticalHandleIcon = koIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
     setVisible(d->mirrorHorizontal || d->mirrorVertical);

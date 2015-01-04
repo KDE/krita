@@ -66,6 +66,9 @@ width.png
 workspace-chooser.png
 onionA.png
 onionB.png
+mirrorAxis-HorizontalMove.png
+mirrorAxis-VerticalMove.png
+
 
 dark_select.png
 dark_pattern.png

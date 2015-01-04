@@ -292,6 +292,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     connect(m_imageMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
     m_flattenLayer = new KisAction(i18n("&Flatten Layer"), this);
+    m_flattenLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 

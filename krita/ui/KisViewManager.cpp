@@ -648,7 +648,7 @@ void KisViewManager::createActions()
     d->rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
 
     d->wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
-    actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
+    actionCollection()->addAction("wrap_around_mode", d->wrapAroundAction);
     d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);

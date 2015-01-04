@@ -129,8 +129,10 @@ extern "C" int main(int argc, char **argv)
     app.setAttribute(Qt::AA_X11InitThreads, true);
 #endif
 
-    // Icons in menus are ugly and distracting
-    app.setAttribute(Qt::AA_DontShowIconsInMenus);
+    if (!runningInKDE) {
+        // Icons in menus are ugly and distracting
+        app.setAttribute(Qt::AA_DontShowIconsInMenus);
+    }
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

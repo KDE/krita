@@ -27,6 +27,8 @@
 #include <QProcessEnvironment>
 #include <QDesktopServices>
 #include <QDir>
+#include <QDate>
+#include <QDebug>
 
 #include <kcmdlineargs.h>
 
@@ -36,6 +38,7 @@
 #include <krita_export.h>
 
 #include "data/splash/splash_screen.xpm"
+#include "data/splash/splash_holidays.xpm"
 #include "ui/kis_aboutdata.h"
 #include "ui/kis_factory2.h"
 #include "ui/KisDocument.h"
@@ -137,7 +140,15 @@ extern "C" int main(int argc, char **argv)
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
-    QWidget *splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
+    QDate currentDate = QDate::currentDate();
+    QWidget *splash = 0;
+    if (currentDate > QDate(currentDate.year(), 12, 4) ||
+            currentDate < QDate(currentDate.year(), 1, 9)) {
+         splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_holidays_xpm));
+    }
+    else {
+        splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
+    }
     app.setSplashScreen(splash);
 
     if (!app.start()) {

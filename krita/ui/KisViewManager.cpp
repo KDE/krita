@@ -57,7 +57,6 @@
 #include <kservice.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <ktoggleaction.h>
 #include <kurl.h>
 #include <kxmlguifactory.h>
 
@@ -257,7 +256,7 @@ public:
     KisAction *openResourcesDirectory;
     KisAction *rotateCanvasRight;
     KisAction *rotateCanvasLeft;
-    KToggleAction *wrapAroundAction;
+    KisAction *wrapAroundAction;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
     KisNodeManager *nodeManager;
@@ -647,25 +646,28 @@ void KisViewManager::createActions()
     d->rotateCanvasLeft->setActivationFlags(KisAction::ACTIVE_IMAGE);
     d->rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
 
-    d->wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
-    actionCollection()->addAction("wrap_around_mode", d->wrapAroundAction);
+    d->wrapAroundAction = new KisAction(i18n("Wrap Around Mode"), this);
+    d->wrapAroundAction->setCheckable(true);
+    d->wrapAroundAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
     d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
 
-    KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
-    tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
+    KisAction *tAction = new KisAction(i18n("Show Status Bar"), this);
+    tAction->setCheckable(true);
     tAction->setChecked(true);
     tAction->setToolTip(i18n("Shows or hides the status bar"));
-    actionCollection()->addAction("showStatusBar", tAction);
+    actionManager()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
-    tAction = new KToggleAction(i18n("Show Canvas Only"), this);
-    tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
+    tAction = new KisAction(i18n("Show Canvas Only"), this);
+    tAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    tAction->setCheckable(true);
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
     QList<QKeySequence> shortcuts;
     shortcuts << QKeySequence(Qt::Key_Tab);
     tAction->setShortcuts(shortcuts);
     tAction->setChecked(false);
-    actionCollection()->addAction("view_show_just_the_canvas", tAction);
+    actionManager()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
 
     //Workaround, by default has the same shortcut as mirrorCanvas
@@ -1055,7 +1057,8 @@ void KisViewManager::showJustTheCanvas(bool toggled)
     }
 
     if (cfg.hideDockersFullscreen()) {
-        KToggleAction* action = qobject_cast<KToggleAction*>(main->actionCollection()->action("view_toggledockers"));
+        KisAction* action = qobject_cast<KisAction*>(main->actionCollection()->action("view_toggledockers"));
+        action->setCheckable(true);
         if (action && action->isChecked() == toggled) {
             action->setChecked(!toggled);
         }

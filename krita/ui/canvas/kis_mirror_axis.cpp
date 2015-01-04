@@ -168,19 +168,23 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
     if(d->mirrorHorizontal) {
         if (!d->horizontalAxis.isNull()) {
-            QPointF horizontalIndicatorCenter = d->horizontalAxis.unitVector().pointAt(15);
-            QRectF horizontalIndicator = QRectF(horizontalIndicatorCenter.x() - halfHandleSize, horizontalIndicatorCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+           // QPointF horizontalIndicatorCenter = d->horizontalAxis.unitVector().pointAt(15);
+           // QRectF horizontalIndicator = QRectF(horizontalIndicatorCenter.x() - halfHandleSize, horizontalIndicatorCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
 
             float horizontalHandlePosition = qBound<float>(d->minHandlePosition, d->horizontalHandlePosition, d->horizontalAxis.length() - d->minHandlePosition);
             QPointF horizontalHandleCenter = d->horizontalAxis.unitVector().pointAt(horizontalHandlePosition);
             d->horizontalHandle = QRectF(horizontalHandleCenter.x() - halfHandleSize, horizontalHandleCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
 
+            gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
             gc.drawLine(d->horizontalAxis);
 
-            gc.drawEllipse(horizontalIndicator);
-            gc.drawPixmap(horizontalIndicator.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
+           // gc.drawEllipse(horizontalIndicator);
+          //  gc.drawPixmap(horizontalIndicator.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
+
+            gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
             gc.drawEllipse(d->horizontalHandle);
-            gc.drawPixmap(d->horizontalHandle.adjusted(5, 5, -5, -5).toRect(), d->horizontalHandleIcon);
+            gc.drawPixmap(d->horizontalHandle.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
+
         } else {
             d->horizontalHandle = QRectF();
         }
@@ -189,19 +193,22 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     if(d->mirrorVertical) {
         if (!d->verticalAxis.isNull()) {
 
+            gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
             gc.drawLine(d->verticalAxis);
 
-            QPointF verticalIndicatorCenter = d->verticalAxis.unitVector().pointAt(15);
-            QRectF verticalIndicator = QRectF(verticalIndicatorCenter.x() - halfHandleSize, verticalIndicatorCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+
+           // QPointF verticalIndicatorCenter = d->verticalAxis.unitVector().pointAt(15);
+           // QRectF verticalIndicator = QRectF(verticalIndicatorCenter.x() - halfHandleSize, verticalIndicatorCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
 
             float verticalHandlePosition = qBound<float>(d->minHandlePosition, d->verticalHandlePosition, d->verticalAxis.length() - d->minHandlePosition);
             QPointF verticalHandleCenter = d->verticalAxis.unitVector().pointAt(verticalHandlePosition);
             d->verticalHandle = QRectF(verticalHandleCenter.x() - halfHandleSize, verticalHandleCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
 
-            gc.drawEllipse(verticalIndicator);
-            gc.drawPixmap(verticalIndicator.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
+           // gc.drawEllipse(verticalIndicator);
+          //  gc.drawPixmap(verticalIndicator.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
+            gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
             gc.drawEllipse(d->verticalHandle);
-            gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalHandleIcon);
+            gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
         } else {
             d->verticalHandle = QRectF();
         }

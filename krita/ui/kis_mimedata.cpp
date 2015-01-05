@@ -176,10 +176,7 @@ void KisMimeData::initializeExternalNode(KisNodeSP &node,
     }
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
     if (shapeLayer) {
-        KoShapeContainer * parentContainer =
-                dynamic_cast<KoShapeContainer*>(shapeController->shapeForNode(image->root()));
-
-        KisShapeLayer *shapeLayer2 = new KisShapeLayer(parentContainer, shapeController, image, node->name(), node->opacity());
+        KisShapeLayer *shapeLayer2 = new KisShapeLayer(shapeController, image, node->name(), node->opacity());
         QList<KoShape *> shapes = shapeLayer->shapes();
         shapeLayer->removeAllShapes();
         foreach(KoShape *shape, shapes) {

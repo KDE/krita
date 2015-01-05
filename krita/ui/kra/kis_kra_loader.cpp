@@ -690,7 +690,7 @@ KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP 
     if (m_d->document) {
         shapeController = m_d->document->shapeController();
     }
-    KisShapeLayer* layer = new KisShapeLayer(0, shapeController, image, name, opacity);
+    KisShapeLayer* layer = new KisShapeLayer(shapeController, image, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;

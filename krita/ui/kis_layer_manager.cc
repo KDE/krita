@@ -551,13 +551,9 @@ void KisLayerManager::addShapeLayer(KisNodeSP activeNode)
     if (!m_view->document()) return;
 
     KisImageWSP image = m_view->image();
-    KisShapeLayerSP layer = new KisShapeLayer(0, m_view->document()->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
+    KisShapeLayerSP layer = new KisShapeLayer(m_view->document()->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
 
     addLayerCommon(activeNode, layer);
-
-    KoShapeContainer *parentContainer =
-        dynamic_cast<KoShapeContainer*>(m_view->document()->shapeForNode(static_cast<KisNode*>(layer.data())->parent()));
-    static_cast<KoShapeContainer*>(layer.data())->setParent(parentContainer);
 }
 
 void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)

@@ -128,8 +128,7 @@ public:
 };
 
 
-KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
-                             KoShapeBasedDocumentBase* controller,
+KisShapeLayer::KisShapeLayer(KoShapeBasedDocumentBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity)
@@ -137,7 +136,6 @@ KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
       KoShapeLayer(new ShapeLayerContainerModel(this)),
       m_d(new Private())
 {
-    KoShapeContainer::setParent(parent);
     initShapeLayer(controller);
 }
 
@@ -149,7 +147,6 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
     // Make sure our new layer is visible otherwise the shapes cannot be painted.
     setVisible(true);
 
-    KoShapeContainer::setParent(_rhs.KoShapeContainer::parent());
     initShapeLayer(_rhs.m_d->controller);
 
     KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
@@ -213,6 +210,12 @@ void KisShapeLayer::setImage(KisImageWSP _image)
     delete m_d->converter;
     m_d->converter = new KisImageViewConverter(image());
     m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
+}
+
+void KisShapeLayer::setParent(KoShapeContainer *parent)
+{
+    Q_UNUSED(parent)
+    KIS_ASSERT_RECOVER_RETURN(0)
 }
 
 QIcon KisShapeLayer::icon() const

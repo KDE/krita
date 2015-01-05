@@ -217,9 +217,7 @@ public:
         return m_filter->id();
     }
 
-    inline void setFilterId(const QString &id) {
-        m_filter = KisFilterStrategyRegistry::instance()->value(id);
-    }
+    void setFilterId(const QString &id);
 
     inline KisFilterStrategy* filter() const {
         return m_filter;

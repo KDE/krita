@@ -52,6 +52,13 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Init Filter  combo
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     cmbFilter->setCurrent("Bicubic");
+    cmbFilter->setToolTip(i18nc("@info:tooltip",
+                                "<para>Select filtering mode:\n"
+                                "<list>"
+                                "<item><interface>Bilinear</interface> for areas with uniform color to avoid artifacts</item>"
+                                "<item><interface>Bicubic</interface> for smoother results</item>"
+                                "<item><interface>Lanczos3</interface> for sharp results. May produce aerials.</item>"
+                                "</list></para>"));
     connect(cmbFilter, SIGNAL(activated(const KoID &)),
             this, SLOT(slotFilterChanged(const KoID &)));
 

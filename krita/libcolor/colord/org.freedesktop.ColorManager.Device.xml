@@ -1,0 +1,514 @@
+<!DOCTYPE node PUBLIC
+"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <interface name='org.freedesktop.ColorManager.Device'>
+    <doc:doc>
+      <doc:description>
+        <doc:para>
+          The interface used for quering color parameters for a specific device.
+        </doc:para>
+      </doc:description>
+    </doc:doc>
+
+    <!--***********************************************************-->
+    <property name='Created' type='t' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The date the device was created.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Modified' type='t' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The date the device was last modified, which in this
+            instance means having a profile added or removed, or a
+            different profile set as default.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Model' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The device model string.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Serial' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The device serial string.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Vendor' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The device vendor string.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Colorspace' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The device supported colorspace string, e.g. <doc:tt>RGB</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Kind' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The device kind, e.g. <doc:tt>scanner</doc:tt>,
+            <doc:tt>display</doc:tt>, <doc:tt>printer</doc:tt> or
+            <doc:tt>camera</doc:tt>
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='DeviceId' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The device id string.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Profiles' type='ao' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The profile paths associated with this device.
+            Profiles are returned even if the device is disabled or
+            is profiling, and clients should not assume that the first
+            profile in this array should be applied.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Mode' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The mode of the device, e.g. <doc:tt>virtual</doc:tt>,
+            <doc:tt>physical</doc:tt> or <doc:tt>unknown</doc:tt>.
+          </doc:para>
+          <doc:para>
+            Virtual devices are not tied to a specific item of hardware
+            and can represent abstract devices such as "Boots Photo Lab".
+          </doc:para>
+          <doc:para>
+            Physical devices correspond to a connected device that
+            cannot be removed by client software.
+          </doc:para>
+          <doc:para>
+            If a virtual 'disk' device gets added by a client then it
+            is promoted to a 'physical' device.
+            This can happen if a printer is saved and then restored at
+            next boot before the CUPS daemon is running.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Format' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The qualifier format for the device, e.g.
+            <doc:tt>ColorModel.OutputMode.OutputResolution</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Scope' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The scope of the device, e.g. <doc:tt>normal</doc:tt>,
+            <doc:tt>temp</doc:tt> or <doc:tt>disk</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Owner' type='u' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The user ID of the account that created the device.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Enabled' type='b' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the device is enabled. Devices are enabled by default
+            until <doc:tt>Device.SetEnabled(False)</doc:tt> is called.
+            If the enabled state is changed then this is reflected for
+            all users and persistent across reboots.
+          </doc:para>
+          <doc:para>
+            If a device is not enabled then no profiles can be added or
+            removed and the default cannot be changed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Seat' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The seat that the device belongs to, or an empty string for
+            none or unknown.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Embedded' type='b' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the device is embedded into the hardware itself, for
+            example the internal webcam or laptop screen.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Metadata' type='a{ss}' access='read'>
+      <annotation name="org.qtproject.QtDBus.QtTypeName" value="CdStringMap"/>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The metadata for the device, which may include optional
+            keys like <doc:tt>XRANDR_name</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='ProfilingInhibitors' type='as' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The bus names of all the clients that have inhibited the
+            device for profiling. e.g. <doc:tt>[ ":1.99", ":1.109" ]</doc:tt>
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <method name='SetProperty'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Sets a property on the object.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='property_name' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The property name, e.g. <doc:tt>Model</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='property_value' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The property value, e.g. <doc:tt>RGB.Plain.</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!-- ************************************************************ -->
+    <signal name='Changed'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Some value on the interface has changed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+    <!--***********************************************************-->
+    <method name='AddProfile'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Adds a profile to the device. The profile must have been
+            previously created.
+          </doc:para>
+          <doc:para>
+            This method also stores the device to profile mapping in a
+            persistent datadase, so that if the device and profile
+            happen to both exist in the future, the profiles are
+            auto-added to the device.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='relation' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The strength of the relationship from profile to device.
+              This can be <doc:tt>soft</doc:tt> to indicate that the
+              mapping is not important, or that the profile is assumed
+              from a device and not in response to user action.
+            <doc:para>
+            </doc:para>
+              The default option is <doc:tt>hard</doc:tt>, and this
+              means that the user has explicitly mapped a profile to
+              a device, and this should take precidence over any
+              <doc:tt>soft</doc:tt> profiles.
+            </doc:para>
+            <doc:para>
+              If the user makes a <doc:tt>soft</doc:tt> profile default,
+              then it is explicitly promoted to a <doc:tt>hard</doc:tt>
+              relationship.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The profile path to add.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='RemoveProfile'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Removes a profile for a device.
+          </doc:para>
+          <doc:para>
+            This method also removes the device to profile mapping from
+            a persistent datadase, so that if the device and profile
+            happen to both exist in the future, the profiles are
+            no longer auto-added to the device.
+          </doc:para>
+          <doc:para>
+            If the profile was automatically added due to metadata in
+            the profile (e.g. the profile was created for the device)
+            then manually removing the profile will cause this metadata
+            add to be supressed.
+            This allows the user to remove old or obsolete profiles
+            from any color control panel without having to delete them.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The profile ID that has already been added to the device.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='MakeProfileDefault'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Sets the default profile for a device.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='profile_path' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The profile ID that has already been added to the device.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='GetProfileForQualifiers'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a single profile object path for a qualifier.
+            The search term can contain '*' and '?' wildcards.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='as' name='qualifiers' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              An array of qualifiers, e.g. <doc:tt>['RGB.*.300dpi', 'RGB.*.*', '*.*.*']</doc:tt>.
+            </doc:para>
+            <doc:para>
+              If the qualifier <doc:tt>*</doc:tt> is specified then
+              the default profile is returned.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The profile path for the search terms.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='GetProfileRelation'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a profile relation for a given profile that has been
+            added to this device.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile object path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='relation' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The profile to device relation, e.g. <doc:tt>hard</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='ProfilingInhibit'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Adds an inhibit on all profiles for this device. This means
+            that any calls to <doc:tt>GetProfileForQualifier</doc:tt>
+            will always match no profiles.
+          </doc:para>
+          <doc:para>
+            This method will be used when creating profiles for devices,
+            where the session color manager wants to be very sure that
+            no profiles are being applied wen displaying color samples
+            or printing color swatches.
+          </doc:para>
+          <doc:para>
+            If the calling program exits without calling
+            <doc:tt>ProfilingUninhibit</doc:tt> then the inhibit is
+            automatically removed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='ProfilingUninhibit'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Removes an inhibit on the device.
+            This method should be used when profiling has finished and
+            normal device matching behaviour should resume.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='SetEnabled'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Sets the device enable state.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='b' name='enabled' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              If the device is enabled.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+  </interface>
+</node>

@@ -421,9 +421,9 @@ if(APPLE)
 endif (APPLE)
             
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)

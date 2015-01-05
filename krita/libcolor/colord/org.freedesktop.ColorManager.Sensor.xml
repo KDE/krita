@@ -1,0 +1,292 @@
+<!DOCTYPE node PUBLIC
+"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <interface name='org.freedesktop.ColorManager.Sensor'>
+    <doc:doc>
+      <doc:description>
+        <doc:para>
+          The interface used for quering color sensors.
+        </doc:para>
+      </doc:description>
+    </doc:doc>
+
+    <!--***********************************************************-->
+    <property name='SensorId' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The sensor id string.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Kind' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The kind of the sensor, e.g. <doc:tt>colormunki</doc:tt>
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='State' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The state of the sensor, e.g. <doc:tt>starting</doc:tt>,
+            <doc:tt>idle</doc:tt> or <doc:tt>measuring</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Mode' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The operating mode of the sensor, e.g. <doc:tt>ambient</doc:tt>,
+            <doc:tt>printer</doc:tt> or <doc:tt>unknown</doc:tt>.
+          </doc:para>
+          <doc:para>
+            On some devices, a sensor has to be set to a specific
+            position before a reading can be taken.
+            This property should be set to the current device mode.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Serial' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The sensor serial number, e.g. <doc:tt>012345678a</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Model' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The sensor model, e.g. <doc:tt>ColorMunki</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Vendor' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The sensor vendor, e.g. <doc:tt>XRite</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Native' type='b' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the sensor is supported with a native driver, which does
+            not require additional tools such as argyllcms.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Embedded' type='b' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the sensor is embedded into the laptop hardware, for
+            example the W700 device from Lenovo.
+          </doc:para>
+          <doc:para>
+            If this property is set then the calibration process should
+            show the color patch fullscreen and should emit an audible
+            alert when completed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Locked' type='b' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the sensor is locked for use by colord.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Capabilities' type='as' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The capabilities of the sensor, e.g <doc:tt>['display',
+            'printer', 'projector', 'spot']</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Options' type='a{sv}' access='read'>
+      <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The options currently set on the sensor.
+          </doc:para>
+          <doc:para>
+            This is a dictionary of property keys and values, e.g.
+            <doc:tt>remote-profile-hash = deadbeef</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Metadata' type='a{ss}' access='read'>
+      <annotation name="org.qtproject.QtDBus.QtTypeName" value="CdStringMap"/>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The metadata for the sensor, which may include optional
+            keys like <doc:tt>AttachImage</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <method name='Lock'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Locks the sensor for use by an application.
+          </doc:para>
+          <doc:para>
+            If the current holder of the lock quits without calling
+            <doc:tt>Unlock</doc:tt> then it is automatically removed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='Unlock'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Unlocks the sensor for use by other applications.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='GetSample'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a color sample using the sensor.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='capability' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The capability we are using, e.g. <doc:tt>crt</doc:tt>,
+              <doc:tt>ambient</doc:tt>, <doc:tt>lcd</doc:tt>,
+              <doc:tt>led</doc:tt> or <doc:tt>projector</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='d' name='sample_x' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The X value, or <doc:tt>-1.0</doc:tt> for an error.
+            </doc:para>
+            <doc:para>
+              For the capability of <doc:tt>ambient</doc:tt> this is
+              the brightness in Lux.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='d' name='sample_y' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The Y value, or <doc:tt>-1.0</doc:tt> for an error.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='d' name='sample_z' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The Z value, or <doc:tt>-1.0</doc:tt> for an error.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='SetOptions'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Sets one or multiple options on the sensor.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='a{sv}' name='values' direction='in'>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A dictionary of property keys and values, e.g.
+              <doc:tt>remote-profile-hash = deadbeef</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!-- ************************************************************ -->
+    <signal name='ButtonPressed'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            A button on the sensor has been pressed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+  </interface>
+</node>

@@ -42,6 +42,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QTemporaryFile>
+#include <QDesktopWidget>
 
 KisMimeData::KisMimeData(QList<KisNodeSP> nodes)
     : QMimeData()
@@ -114,7 +115,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         doc->image()->refreshGraph();
         doc->image()->waitForDone();
 
-        return doc->image()->projection()->convertToQImage(cfg.displayProfile(),
+        return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
                                                            KoColorConversionTransformation::InternalRenderingIntent,
                                                            KoColorConversionTransformation::InternalConversionFlags);
     }

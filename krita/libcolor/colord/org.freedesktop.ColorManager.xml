@@ -1,0 +1,845 @@
+<!DOCTYPE node PUBLIC
+"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <interface name='org.freedesktop.ColorManager'>
+    <doc:doc>
+      <doc:description>
+        <doc:para>
+          The interface used for quering color parameters for the system.
+        </doc:para>
+      </doc:description>
+    </doc:doc>
+
+    <!--***********************************************************-->
+    <property name='DaemonVersion' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The daemon version.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <method name='GetDevices'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a list of all the devices which have assigned color profiles.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='ao' name='devices' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              An array of device IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/device/xrandr_ibm_france_ltn154p2_l05']</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='GetDevicesByKind'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a list of all the devices which have assigned color profiles.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='kind' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A device kind, e.g. <doc:tt>scanner</doc:tt>, <doc:tt>display</doc:tt>,
+              <doc:tt>printer</doc:tt> or <doc:tt>camera</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='ao' name='devices' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              An array of device IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/device/xrandr_ibm_france_ltn154p2_l05']</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='FindDeviceById'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a device path for the device ID.
+            This method is required as device ID's may have to be mangled
+            to conform with the DBus path specification.
+            For instance, a device ID of "cups$34:dev' would have a object
+            path of "/org/freedesktop/ColorManager/cups_34_dev".
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='device_id' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A device ID.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A device path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='FindSensorById'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a sensor path for the sensor ID.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='sensor_id' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A sensor ID.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A sensor path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='FindDeviceByProperty'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a device path for the device with the specified property.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='key' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A property key, e.g. <doc:tt>XRANDR_name</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='value' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A property value, e.g. <doc:tt>lvds</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A device path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='FindProfileById'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a profile path for the profile ID.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='profile_id' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile ID.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='FindProfileByProperty'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a profile path for the profile with the specified property.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='key' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A property key, e.g. <doc:tt>FILE_checksum</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='value' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A property value, e.g. <doc:tt>5b3855e8630c9d8a48177cc70680da93</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='FindProfileByFilename'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a profile path for the profile filename.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='filename' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile filename.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='GetStandardSpace'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a profile path for a defined profile space.
+            The defined space is set from the profile metadata,
+            specifically in the <doc:tt>STANDARD_space</doc:tt> entry.
+            The <doc:tt>colord.conf</doc:tt> file allows an
+            administrator to manually override profiles if required.
+          </doc:para>
+          <doc:para>
+            NOTE: only system wide profiles are able to define
+            themselves as standard spaces.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='standard_space' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile space, e.g. <doc:tt>srgb</doc:tt> or
+              <doc:tt>adobe-srgb</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='GetProfiles'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a list of all the profiles recognised by the system.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='ao' name='devices' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              An array of profile IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/profile/adobe_rgb']</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='GetSensors'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a list of all the sensors recognised by the system.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='ao' name='devices' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              An array of sensor IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/sensor/colormunki']</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='GetProfilesByKind'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Gets a list of all the profiles of a specified type.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='kind' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile kind, e.g. <doc:tt>input-device</doc:tt> or
+              <doc:tt>abstract</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='ao' name='devices' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              An array of device IDs, e.g. <doc:tt>['/org/freedesktop/ColorManager/device/xrandr_ibm_france_ltn154p2_l05']</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='CreateProfileWithFd'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Creates a profile.
+          </doc:para>
+          <doc:para>
+            If the profile has been added to a device in the past, and
+            that device exists already, then the new profile will be
+            automatically added to the device.
+            To prevent this from happening, remove the assignment by
+            doing <doc:tt>RemoveProfile</doc:tt>doc:tt> on the relevant
+            device object.
+          </doc:para>
+          <doc:para>
+            An optional file descriptor can be sent out of band for the
+            ICC profile file.
+          </doc:para>
+          <doc:para>
+            Using a file descriptor in addition to the filename allows
+            the daemon to parse the ICC profile without re-opening it,
+            which allows the daemon to read files inside the users
+            home directory in a SELinux environment.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='profile_id' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A unique profile ID that is used to map to the profile.
+              This is normally the MD5 hash of the disk profile.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='scope' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              Options for creating the profile. This allows the session
+              color management component to have per-user profiles
+              stored in the home directory that would not be valid if
+              the user logged off, or no users are logged in.
+            </doc:para>
+          </doc:summary>
+          <doc:list>
+            <doc:item>
+              <doc:term>normal</doc:term>
+              <doc:definition>
+                Normal profile.
+              </doc:definition>
+            </doc:item>
+            <doc:item>
+              <doc:term>temp</doc:term>
+              <doc:definition>
+                Profile is removed if the user logs out.
+              </doc:definition>
+            </doc:item>
+            <doc:item>
+              <doc:term>disk</doc:term>
+              <doc:definition>
+                Profile that is saved to disk and restored on next startup.
+              </doc:definition>
+            </doc:item>
+          </doc:list>
+        </doc:doc>
+      </arg>
+      <arg type='h' name='handle' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              An index into the array of file descriptors that may have
+              been sent with the DBus message.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='a{ss}' name='properties' direction='in'>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In3" value="CdStringMap"/>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              Properties to be used when constructing the profile.
+            </doc:para>
+            <doc:para>
+              This optional value allows the profile to be created with
+              the latency of one bus round-trip, rather than doing
+              a few <doc:tt>SetProperty</doc:tt> methods indervidually.
+            </doc:para>
+            <doc:para>
+              Any properties not interstood by colord will be added as
+              dictionary values to the <doc:tt>Metadata</doc:tt>
+              property.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='CreateProfile'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Creates a profile without using a file descriptor.
+            It is recomended you use CreateProfileWithFd() as the
+            daemon may not be running as root and have read access
+            to profiles in the users home directory.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='profile_id' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A unique profile ID that is used to map to the profile.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='scope' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              Options for creating the profile.
+              See CreateProfileWithFd() for the allowed values.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='a{ss}' name='properties' direction='in'>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="CdStringMap"/>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              Properties to be used when constructing the profile.
+              See CreateProfileWithFd() for the allowed values.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='CreateDevice'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Creates a device.
+          </doc:para>
+          <doc:para>
+            If the device has profiles added to it in the past, and
+            that profiles exists already, then the new device will be
+            automatically have profiles added to the device.
+            To prevent this from happening, remove the assignment by
+            doing <doc:tt>RemoveProfile</doc:tt> on the relevant
+            device object.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='device_id' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A device ID that is used to map to the device path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='scope' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              Options for creating the device. This allows the session
+              color management component to have per-session virtual
+              devices cleaned up automatically or devices that are
+              re-created on each boot.
+            </doc:para>
+          </doc:summary>
+          <doc:list>
+            <doc:item>
+              <doc:term>normal</doc:term>
+              <doc:definition>
+                Normal device.
+              </doc:definition>
+            </doc:item>
+            <doc:item>
+              <doc:term>temp</doc:term>
+              <doc:definition>
+                Device that is removed if the user logs out.
+              </doc:definition>
+            </doc:item>
+            <doc:item>
+              <doc:term>disk</doc:term>
+              <doc:definition>
+                Device that is saved to disk, and restored if the
+                computer is restarted.
+              </doc:definition>
+            </doc:item>
+          </doc:list>
+        </doc:doc>
+      </arg>
+      <arg type='a{ss}' name='properties' direction='in'>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="CdStringMap"/>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              Properties to be used when constructing the device.
+            </doc:para>
+            <doc:para>
+              This optional value allows the device to be created with
+              the latency of one bus round-trip, rather than doing
+              a few <doc:tt>SetProperty</doc:tt> methods indervidually.
+            </doc:para>
+            <doc:para>
+              Any properties not interstood by colord will be added as
+              dictionary values to the <doc:tt>Metadata</doc:tt>
+              property.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A device path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='DeleteDevice'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Deletes a device.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A device path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='DeleteProfile'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Deletes a profile.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              A profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <signal name='Changed'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Some value on the interface or the number of devices or
+            profiles has changed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+    <!--***********************************************************-->
+    <signal name='DeviceAdded'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            A device has been added.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The device path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!--***********************************************************-->
+    <signal name='DeviceRemoved'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            A device has been removed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The device path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!--***********************************************************-->
+    <signal name='DeviceChanged'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            A device has changed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The device path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!--***********************************************************-->
+    <signal name='ProfileAdded'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            A profile has been added.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!--***********************************************************-->
+    <signal name='ProfileRemoved'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            A profile has been removed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+   <!--***********************************************************-->
+    <signal name='SensorAdded'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            A sensor has been added.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The sensor path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!--***********************************************************-->
+    <signal name='SensorRemoved'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            A sensor has been removed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The sensor path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!--***********************************************************-->
+    <signal name='ProfileChanged'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            A profile has been changed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='o' name='object_path' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The profile path.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+  </interface>
+</node>

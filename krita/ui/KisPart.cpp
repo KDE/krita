@@ -76,6 +76,8 @@
 #include "kis_animation_selector.h"
 #include "kis_animation_doc.h"
 
+#include "kis_color_manager.h"
+
 #include "kis_action.h"
 
 class KisPart::Private
@@ -186,6 +188,7 @@ KisPart::KisPart()
     // Preload all the resources in the background
     Q_UNUSED(KoResourceServerProvider::instance());
     Q_UNUSED(KisResourceServerProvider::instance());
+    Q_UNUSED(KisColorManager::instance());
 
 }
 

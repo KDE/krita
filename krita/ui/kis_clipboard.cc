@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QDesktopWidget>
 #include <QMimeData>
 #include <QObject>
 #include <QImage>
@@ -145,7 +146,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     // We also create a QImage so we can interchange with other applications
     QImage qimage;
     KisConfig cfg;
-    const KoColorProfile *monitorProfile = cfg.displayProfile();
+    const KoColorProfile *monitorProfile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
     qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     if (!qimage.isNull() && mimeData) {
         mimeData->setImageData(qimage);
@@ -259,7 +260,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
         const KoColorSpace * cs;
         const KoColorProfile *profile = 0;
         if (behaviour == PASTE_ASSUME_MONITOR)
-            profile = cfg.displayProfile();
+            profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
 
         cs = KoColorSpaceRegistry::instance()->rgb8(profile);
         if (!cs) {

@@ -1,0 +1,241 @@
+<!DOCTYPE node PUBLIC
+"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <interface name='org.freedesktop.ColorManager.Profile'>
+    <doc:doc>
+      <doc:description>
+        <doc:para>
+          The interface used for quering color profiles.
+        </doc:para>
+      </doc:description>
+    </doc:doc>
+
+    <!--***********************************************************-->
+    <property name='ProfileId' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The identification hash of the profile.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Title' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The printable title for the profile.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Metadata' type='a{ss}' access='read'>
+      <annotation name="org.qtproject.QtDBus.QtTypeName" value="CdStringMap"/>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The metadata for the profile, which may include optional
+            keys like <doc:tt>EDID_md5</doc:tt> and
+            <doc:tt>EDID_manufacturer</doc:tt> that are set by several
+            CMS frameworks.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Qualifier' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The qualifier for the profile.
+            A qualifier is used as a way to select a profile for a device.
+            This might be something free text like
+            <doc:tt>High quality studio</doc:tt>doc:tt> or something more
+            programmable like <doc:tt>RGB.Plain.300dpi</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Format' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The qualifier format for the profile.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Kind' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The profile kind, e.g. <doc:tt>colorspace-conversion</doc:tt>,
+            <doc:tt>abstract</doc:tt> or <doc:tt>display-device</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Colorspace' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The profile colorspace, e.g. <doc:tt>rgb</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='HasVcgt' type='b' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the profile has a VCGT entry.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='IsSystemWide' type='b' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            If the profile is installed system wide and available
+            for all users.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Filename' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The profile filename, if one exists.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Created' type='x' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The date and time the profile was created in UNIX time.
+          </doc:para>
+          <doc:para>
+            NOTE: this is NOT the time the meta-profile was created,
+            or added to colord, nor the disk timestamp for the profile
+            filename.
+            This is the encoded date and time inside the ICC filename.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Scope' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The scope of the device, e.g. <doc:tt>normal</doc:tt>,
+            <doc:tt>temp</doc:tt> or <doc:tt>disk</doc:tt>.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Owner' type='u' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The user ID of the account that created the profile.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <property name='Warnings' type='as' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Any warnings for the profile, e.g.
+            '<doc:tt>description-missing</doc:tt>' or
+            '<doc:tt>vcgt-non-monotonic</doc:tt>'.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <method name='SetProperty'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Sets a property on the object.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='property_name' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The property name, e.g. <doc:tt>Filename</doc:tt>,
+              or <doc:tt>Qualifier</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='property_value' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The property value, e.g. <doc:tt>RGB.Plain.</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='InstallSystemWide'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Copies the profile system-wide so it can be used by all
+            users on the system or when no users are logged-in.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!-- ************************************************************ -->
+    <signal name='Changed'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Some value on the interface has changed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </signal>
+
+  </interface>
+</node>

@@ -20,14 +20,8 @@
 
 #include <limits.h>
 
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <fixx11h.h>
-#include <QX11Info>
-#endif
-
-
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QMutex>
 #include <QFont>
 #include <QThread>
@@ -50,6 +44,7 @@
 
 #include <config-ocio.h>
 
+#include <kis_color_manager.h>
 
 namespace
 {
@@ -280,18 +275,6 @@ void KisConfig::setCursorStyle(enumCursorStyle style) const
     m_cfg.writeEntry("cursorStyleDef", (int)style);
 }
 
-QString KisConfig::monitorProfile() const
-{
-    QString profile = m_cfg.readEntry("monitorProfile", "");
-    //qDebug() << "KisConfig::monitorProfile()" << profile;
-    return profile;
-}
-
-void KisConfig::setMonitorProfile(const QString & monitorProfile, bool override) const
-{
-    m_cfg.writeEntry("monitorProfile/OverrideX11", override);
-    m_cfg.writeEntry("monitorProfile", monitorProfile);
-}
 bool KisConfig::useDirtyPresets() const
 {
    return m_cfg.readEntry("useDirtyPresets",false);
@@ -301,10 +284,12 @@ void KisConfig::setUseDirtyPresets(bool value)
     m_cfg.writeEntry("useDirtyPresets",value);
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
+
 bool KisConfig::useEraserBrushSize() const
 {
    return m_cfg.readEntry("useEraserBrushSize",false);
 }
+
 void KisConfig::setUseEraserBrushSize(bool value)
 {
     m_cfg.writeEntry("useEraserBrushSize",value);
@@ -332,55 +317,54 @@ void KisConfig::setMDIBackgroundImage(const QString &filename) const
     m_cfg.writeEntry("mdiBackgroundImage", filename);
 }
 
+QString KisConfig::monitorProfile(int screen) const
+{
+    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "");
+    //qDebug() << "KisConfig::monitorProfile()" << profile;
+    return profile;
+}
+
+QString KisConfig::monitorForScreen(int screen, const QString &defaultMonitor) const
+{
+    return m_cfg.readEntry(QString("monitor_for_screen_%1").arg(screen), defaultMonitor);
+}
+
+void KisConfig::setMonitorForScreen(int screen, const QString& monitor)
+{
+    m_cfg.writeEntry(QString("monitor_for_screen_%1").arg(screen), monitor);
+}
+
+void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bool override) const
+{
+    m_cfg.writeEntry("monitorProfile/OverrideX11", override);
+    m_cfg.writeEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), monitorProfile);
+}
+
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
-#ifdef Q_WS_X11
+    KisConfig cfg;
+    QString monitorId = cfg.monitorForScreen(screen, "");
+    if (monitorId.isEmpty()) {
+        return 0;
+    }
 
-    Atom type;
-    int format;
-    unsigned long nitems;
-    unsigned long bytes_after;
-    quint8 * str;
+    QByteArray bytes = KisColorManager::instance()->displayProfile(monitorId);
 
-    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
-
-    if (XGetWindowProperty(QX11Info::display(),
-                           QX11Info::appRootWindow(screen),
-                           icc_atom,
-                           0,
-                           INT_MAX,
-                           False,
-                           XA_CARDINAL,
-                           &type,
-                           &format,
-                           &nitems,
-                           &bytes_after,
-                           (unsigned char **) &str) == Success
-       ) {
-        QByteArray bytes(nitems, '\0');
-        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
-        // XXX: this assumes the screen is 8 bits -- which might not be true
+    if (bytes.length() > 0) {
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
         //qDebug() << "KisConfig::getScreenProfile for screen" << screen << profile->name();
         return profile;
     }
     else {
+        //qDebug() << "Could not get a system monitor profile";
         return 0;
     }
-#else
-    Q_UNUSED(screen)
-    return 0;
-
-#endif
 }
 
 const KoColorProfile *KisConfig::displayProfile(int screen) const
 {
-    // first try to get the screen profile set by the X11 _ICC_PROFILE atom (compatible with colord,
-    // but colord can set the atom to none, in which case we cannot create a suitable profile)
-
     // if the user plays with the settings, they can override the display profile, in which case
-    // we don't want the X11 atom setting.
+    // we don't want the system setting.
     bool override = m_cfg.readEntry("monitorProfile/OverrideX11", false);
     //qDebug() << "KisConfig::displayProfile(). Override X11:" << override;
     const KoColorProfile *profile = 0;
@@ -391,13 +375,18 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
 
     // if it fails. check the configuration
     if (!profile || !profile->isSuitableForDisplay()) {
-        //qDebug() << "\tGoing to get the monitor profile";
-        QString monitorProfileName = monitorProfile();
+        //ebug() << "\tGoing to get the monitor profile";
+        QString monitorProfileName = monitorProfile(screen);
         //qDebug() << "\t\tmonitorProfileName:" << monitorProfileName;
         if (!monitorProfileName.isEmpty()) {
             profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
         }
-        //qDebug() << "\t\tsuitable for display6" << profile->isSuitableForDisplay();
+        if (profile) {
+            //qDebug() << "\t\tsuitable for display6" << profile->isSuitableForDisplay();
+        }
+        else {
+            //qDebug() << "\t\tstill no profile";
+        }
     }
     // if we still don't have a profile, or the profile isn't suitable for display,
     // we need to get a last-resort profile. the built-in sRGB is a good choice then.
@@ -406,7 +395,12 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
         profile = KoColorSpaceRegistry::instance()->profileByName("sRGB Built-in");
     }
 
-    //qDebug() << "\tKisConfig::displayProfile for screen" << screen << "is" << profile->name();
+    if (profile) {
+        //qDebug() << "\tKisConfig::displayProfile for screen" << screen << "is" << profile->name();
+    }
+    else {
+        //qDebug() << "\tCOuldn't get a display profile at all";
+    }
 
     return profile;
 }

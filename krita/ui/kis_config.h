@@ -119,10 +119,17 @@ public:
     enumCursorStyle getDefaultCursorStyle() const;
     void setCursorStyle(enumCursorStyle style) const;
 
-    QString monitorProfile() const;
-    void setMonitorProfile(const QString & monitorProfile, bool override) const;
-    static const KoColorProfile* getScreenProfile(int screen = -1);
-    const KoColorProfile *displayProfile(int screen = -1) const;
+    /// get the profile the user has selected for the given screen
+    QString monitorProfile(int screen) const;
+    void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;
+
+    QString monitorForScreen(int screen, const QString &defaultMonitor) const;
+    void setMonitorForScreen(int screen, const QString& monitor);
+
+    /// Get the actual profile to be used for the given screen, which is
+    /// either the screen profile set by the color management system or
+    /// the custom monitor profile set by the user, depending on the configuration
+    const KoColorProfile *displayProfile(int screen) const;
 
     QString workingColorSpace() const;
     void setWorkingColorSpace(const QString & workingColorSpace) const;
@@ -466,6 +473,9 @@ public:
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&) const;
+
+    /// get the profile the color managment system has stored for the given screen
+    static const KoColorProfile* getScreenProfile(int screen);
 
 private:
     mutable KConfigGroup m_cfg;

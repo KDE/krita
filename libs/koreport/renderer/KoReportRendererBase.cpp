@@ -46,7 +46,7 @@ KoReportRendererFactory::KoReportRendererFactory()
 
 KoReportRendererBase* KoReportRendererFactory::createInstance(const QString& key)
 {
-    const QString lowerKey =lowerKey;
+    const QString lowerKey = key.toLower();
     if (lowerKey == QLatin1String("screen")) {
         return new KoReportScreenRenderer();
     }

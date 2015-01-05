@@ -1520,18 +1520,6 @@ QString KexiDB::defaultFileBasedDriverMimeType()
     return QString::fromLatin1("application/x-kexiproject-sqlite3");
 }
 
-QString KexiDB::defaultFileBasedDriverIconName()
-{
-    KMimeType::Ptr mimeType(KMimeType::mimeType(
-                                KexiDB::defaultFileBasedDriverMimeType()));
-    if (mimeType.isNull()) {
-        KexiDBWarn << QString("'%1' mimetype not installed!")
-        .arg(KexiDB::defaultFileBasedDriverMimeType());
-        return QString();
-    }
-    return mimeType->iconName();
-}
-
 QString KexiDB::defaultFileBasedDriverName()
 {
     DriverManager dm;

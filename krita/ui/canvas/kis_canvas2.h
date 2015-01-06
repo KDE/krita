@@ -173,7 +173,7 @@ public: // KisCanvas2 methods
 signals:
     void imageChanged(KisImageWSP image);
 
-    void sigCanvasCacheUpdated(KisUpdateInfoSP);
+    void sigCanvasCacheUpdated();
     void sigContinueResizeImage(qint32 w, qint32 h);
 
     void documentOffsetUpdateFinished();
@@ -199,7 +199,7 @@ private slots:
     /// The image projection has changed, now start an update
     /// of the canvas representation.
     void startUpdateCanvasProjection(const QRect & rc);
-    void updateCanvasProjection(KisUpdateInfoSP info);
+    void updateCanvasProjection();
 
     void startUpdateInPatches(QRect imageRect);
 

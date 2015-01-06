@@ -34,6 +34,7 @@ public:
     virtual ~KisUpdateInfo();
 
     virtual QRect dirtyViewportRect();
+    virtual QRect dirtyImageRect() const = 0;
 };
 
 Q_DECLARE_METATYPE(KisUpdateInfoSP)
@@ -48,7 +49,14 @@ class KisOpenGLUpdateInfo : public KisUpdateInfo
 {
 public:
     KisTextureTileUpdateInfoSPList tileList;
+
     QRect dirtyViewportRect();
+    QRect dirtyImageRect() const;
+
+    void assignDirtyImageRect(const QRect &rect);
+
+private:
+    QRect m_dirtyImageRect;
 };
 #endif /* HAVE_OPENGL */
 
@@ -61,11 +69,12 @@ public:
     };
 
     QRect dirtyViewportRect();
+    QRect dirtyImageRect() const;
 
     /**
      * The rect that was reported by KisImage as dirty
      */
-    QRect dirtyImageRect;
+    QRect dirtyImageRectVar;
 
     /**
      * Rect of KisImage corresponding to @viewportRect.

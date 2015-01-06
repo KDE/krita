@@ -307,7 +307,7 @@ void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)
 {
     KisPaintDevice *src;
     KisPaintDevice *dst;
-    QRect currentSrcRect = info->dirtyImageRect;
+    QRect currentSrcRect = info->dirtyImageRectVar;
 
     for (int i = FIRST_NOT_ORIGINAL_INDEX; i < m_pyramidHeight; i++) {
         src = m_pyramid[i-1].data();

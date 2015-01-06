@@ -76,6 +76,8 @@
 #include "input/kis_input_manager.h"
 #include "kis_painting_assistants_decoration.h"
 
+#include "kis_canvas_updates_compressor.h"
+
 class KisCanvas2::KisCanvas2Private
 {
 
@@ -121,6 +123,8 @@ public:
 
     KisPopupPalette *popupPalette;
     KisDisplayColorConverter *displayColorConverter;
+
+    KisCanvasUpdatesCompressor projectionUpdatesCompressor;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
@@ -427,7 +431,7 @@ void KisCanvas2::initializeImage()
     m_d->coordinatesConverter->setImage(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
-    connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)), SLOT(updateCanvasProjection(KisUpdateInfoSP)));
+    connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
 
@@ -593,62 +597,71 @@ void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
 
 void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
+    KisUpdateInfoSP info;
+
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->setChannelFlags(m_d->channelFlags);
-        KisUpdateInfoSP info = m_d->openGLImageTextures->updateCache(rc);
-
-        emit sigCanvasCacheUpdated(info);
+        info = m_d->openGLImageTextures->updateCache(rc);
 #else
         Q_ASSERT_X(0, "startUpdateCanvasProjection()", "Bad use of startUpdateCanvasProjection(). It shouldn't have happened =(");
 #endif
     } else {
         Q_ASSERT(m_d->prescaledProjection);
-        KisUpdateInfoSP info = m_d->prescaledProjection->updateCache(rc);
-
-        emit sigCanvasCacheUpdated(info);
+        info = m_d->prescaledProjection->updateCache(rc);
     }
+
+    if (m_d->projectionUpdatesCompressor.putUpdateInfo(info)) {
+        emit sigCanvasCacheUpdated();
+    }
+
 }
 
-void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
+void KisCanvas2::updateCanvasProjection()
 {
-    /**
-     * It might happen that the canvas type is switched while the
-     * update info is being stuck in the Qt's signals queue. Than a wrong
-     * type of the info may come. So just check it here.
-     */
-#ifdef HAVE_OPENGL
-    bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
-    if (isOpenGLUpdateInfo != m_d->currentCanvasIsOpenGL)
-        return;
-#endif
+    KisUpdateInfoSP info;
 
-    if (m_d->currentCanvasIsOpenGL) {
-#ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->recalculateCache(info);
+    while (info = m_d->projectionUpdatesCompressor.takeUpdateInfo()) {
 
         /**
-         * FIXME: Please not update entire canvas
-         * Implement info->dirtyViewportRect()
+         * It might happen that the canvas type is switched while the
+         * update info is being stuck in the Qt's signals queue. Than a wrong
+         * type of the info may come. So just check it here.
          */
-        updateCanvasWidgetImpl();
-#else
-        Q_ASSERT_X(0, "updateCanvasProjection()", "Bad use of updateCanvasProjection(). It shouldn't have happened =(");
+#ifdef HAVE_OPENGL
+        bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
+        if (isOpenGLUpdateInfo != m_d->currentCanvasIsOpenGL)
+            continue;
 #endif
-    }
-    else {
-        // See comment in startUpdateCanvasProjection()
-        Q_ASSERT(m_d->prescaledProjection);
 
-        m_d->prescaledProjection->recalculateCache(info);
+        if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
 
-        QRect vRect = m_d->coordinatesConverter->
+            Q_ASSERT(m_d->openGLImageTextures);
+            m_d->openGLImageTextures->recalculateCache(info);
+
+            /**
+             * FIXME: Please not update entire canvas
+             * Implement info->dirtyViewportRect()
+             */
+            updateCanvasWidgetImpl();
+#else
+            Q_ASSERT_X(0, "updateCanvasProjection()", "Bad use of updateCanvasProjection(). It shouldn't have happened =(");
+#endif
+        }
+        else {
+            // See comment in startUpdateCanvasProjection()
+            Q_ASSERT(m_d->prescaledProjection);
+
+            m_d->prescaledProjection->recalculateCache(info);
+
+            QRect vRect = m_d->coordinatesConverter->
                 viewportToWidget(info->dirtyViewportRect()).toAlignedRect();
 
-        if (!vRect.isEmpty()) {
-            updateCanvasWidgetImpl(vRect);
+            if (!vRect.isEmpty()) {
+                updateCanvasWidgetImpl(vRect);
+            }
         }
     }
 }

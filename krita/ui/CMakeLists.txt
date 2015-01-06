@@ -30,6 +30,7 @@ endif (APPLE)
 set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
+    canvas/kis_canvas_updates_compressor.cpp
     canvas/kis_canvas_controller.cpp
     canvas/kis_paintop_transformation_connector.cpp
     canvas/kis_display_color_converter.cpp

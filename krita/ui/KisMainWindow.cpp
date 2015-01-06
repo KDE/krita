@@ -821,7 +821,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         dialog.setCaption(i18n("untitled"));
         dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
-        dialog.setMimeTypeFilters(mimeFilter);
+        dialog.setMimeTypeFilters(mimeFilter, KIS_MIME_TYPE);
         KUrl newURL = dialog.url();
 
         if (newURL.isLocalFile()) {

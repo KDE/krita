@@ -1394,6 +1394,36 @@ void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
     m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
 }
 
+int KisConfig::tabletEventsDelay() const
+{
+    return m_cfg.readEntry("tabletEventsDelay", 10);
+}
+
+void KisConfig::setTabletEventsDelay(int value)
+{
+    m_cfg.writeEntry("tabletEventsDelay", value);
+}
+
+bool KisConfig::testingAcceptCompressedTabletEvents() const
+{
+    return m_cfg.readEntry("testingAcceptCompressedTabletEvents", false);
+}
+
+void KisConfig::setTestingAcceptCompressedTabletEvents(bool value)
+{
+    m_cfg.writeEntry("testingAcceptCompressedTabletEvents", value);
+}
+
+bool KisConfig::testingCompressBrushEvents() const
+{
+    return m_cfg.readEntry("testingCompressBrushEvents", false);
+}
+
+void KisConfig::setTestingCompressBrushEvents(bool value)
+{
+    m_cfg.writeEntry("testingCompressBrushEvents", value);
+}
+
 const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
 {
     const KoColorSpace *cs = 0;

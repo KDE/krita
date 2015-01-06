@@ -82,9 +82,15 @@ public:
         , defaultInputAction(0)
         , eventsReceiver(0)
         , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
+        , testingAcceptCompressedTabletEvents(false)
+        , testingCompressBrushEvents(false)
     {
         KisConfig cfg;
         disableTouchOnCanvas = cfg.disableTouchOnCanvas();
+
+        moveEventCompressor.setDelay(cfg.tabletEventsDelay());
+        testingAcceptCompressedTabletEvents = cfg.testingAcceptCompressedTabletEvents();
+        testingCompressBrushEvents = cfg.testingCompressBrushEvents();
     }
 
     bool tryHidePopupPalette();
@@ -123,6 +129,9 @@ public:
     QObject *eventsReceiver;
     KisSignalCompressor moveEventCompressor;
     QScopedPointer<KisTabletEvent> compressedMoveEvent;
+    bool testingAcceptCompressedTabletEvents;
+    bool testingCompressBrushEvents;
+
 
     QSet<QPointer<QObject> > priorityEventFilter;
 
@@ -776,11 +785,21 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         KisTabletEvent *tevent = static_cast<KisTabletEvent*>(event);
 
         if (tevent->type() == (QEvent::Type)KisTabletEvent::TabletMoveEx &&
-            !d->matcher.supportsHiResInputEvents()) {
+            (!d->matcher.supportsHiResInputEvents() ||
+             d->testingCompressBrushEvents)) {
 
             d->compressedMoveEvent.reset(new KisTabletEvent(*tevent));
             d->moveEventCompressor.start();
-            tevent->setAccepted(true);
+
+            /**
+             * On Linux Qt eats the rest of unneeded events if we
+             * ignore the first of the chunk of tablet events. So
+             * generally we should never activate this feature. Only
+             * for testing purposes!
+             */
+            if (d->testingAcceptCompressedTabletEvents) {
+                tevent->setAccepted(true);
+            }
 
             retval = true;
         } else {

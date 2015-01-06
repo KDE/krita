@@ -417,6 +417,15 @@ public:
     int paletteDockerPaletteViewSectionSize() const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;
 
+    int tabletEventsDelay() const;
+    void setTabletEventsDelay(int value);
+
+    bool testingAcceptCompressedTabletEvents() const;
+    void setTestingAcceptCompressedTabletEvents(bool value);
+
+    bool testingCompressBrushEvents() const;
+    void setTestingCompressBrushEvents(bool value);
+
     const KoColorSpace* customColorSelectorColorSpace() const;
     void setCustomColorSelectorColorSpace(const KoColorSpace *cs);
 

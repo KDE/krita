@@ -311,6 +311,26 @@ void KisConfig::setUseEraserBrushSize(bool value)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
+QColor KisConfig::getMDIBackgroundColor() const
+{
+    QColor col(200, 200, 200);
+    return m_cfg.readEntry("mdiBackgroundColor", col);
+}
+
+void KisConfig::setMDIBackgroundColor(const QColor &v) const
+{
+    m_cfg.writeEntry("mdiBackgroundColor", v);
+}
+
+QString KisConfig::getMDIBackgroundImage() const
+{
+    return m_cfg.readEntry("mdiBackgroundImage", "");
+}
+
+void KisConfig::setMDIBackgroundImage(const QString &filename) const
+{
+    m_cfg.writeEntry("mdiBackgroundImage", filename);
+}
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {

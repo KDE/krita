@@ -1878,7 +1878,6 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 
 void KisMainWindow::configChanged()
 {
-
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
     d->mdiArea->setViewMode(viewMode);
@@ -1890,6 +1889,18 @@ void KisMainWindow::configChanged()
     KConfigGroup group(KGlobal::config(), "theme");
     d->themeManager->setCurrentTheme(group.readEntry("Theme", "Krita dark"));
     d->viewManager->actionManager()->updateGUI();
+
+    QBrush brush(cfg.getMDIBackgroundColor());
+    d->mdiArea->setBackground(brush);
+
+    QString backgroundImage = cfg.getMDIBackgroundImage();
+    if (backgroundImage != "") {
+        QImage image(backgroundImage);
+        QBrush brush(image);
+        d->mdiArea->setBackground(brush);
+    }
+
+    d->mdiArea->update();
 }
 
 void KisMainWindow::newView(QObject *document)

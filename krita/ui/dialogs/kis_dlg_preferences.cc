@@ -107,6 +107,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
     m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
+    m_mdiColor->setColor(cfg.getMDIBackgroundColor());
 }
 
 void GeneralTab::setDefault()
@@ -124,6 +125,7 @@ void GeneralTab::setDefault()
     m_cmbMDIType->setCurrentIndex(1);
     m_chkRubberBand->setChecked(cfg.useOpenGL());
     m_favoritePresetsSpinBox->setValue(10);
+    m_mdiColor->setColor(QColor(220, 220, 220));
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -739,6 +741,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
+        cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color());
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());

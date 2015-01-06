@@ -425,7 +425,13 @@ public:
 
     bool useEraserBrushSize() const;
     void setUseEraserBrushSize(bool value);    
-    
+
+    QColor getMDIBackgroundColor() const;
+    void setMDIBackgroundColor(const QColor & v) const;
+
+    QString getMDIBackgroundImage() const;
+    void setMDIBackgroundImage(const QString & fileName) const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

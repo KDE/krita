@@ -273,9 +273,25 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
                 KisSelectionSP m_sel;
 
                 KUndo2Command* paint() {
+                    KisSelectionSP cutSelection = m_sel;
+                    QRect originalRect = cutSelection->selectedExactRect();
+                    static const int preciseSelectionThreshold = 16;
+
+                    if (originalRect.width() > preciseSelectionThreshold ||
+                        originalRect.height() > preciseSelectionThreshold) {
+
+                        cutSelection = new KisSelection(*m_sel);
+                        delete cutSelection->flatten();
+
+                        KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
+
+                        QRect processingRect = filter->changeRect(originalRect);
+                        filter->process(cutSelection->pixelSelection(), processingRect);
+                    }
+
                     KisTransaction transaction(m_node->paintDevice());
-                    m_node->paintDevice()->clearSelection(m_sel);
-                    m_node->setDirty(m_sel->selectedRect());
+                    m_node->paintDevice()->clearSelection(cutSelection);
+                    m_node->setDirty(cutSelection->selectedRect());
                     return transaction.endAndTake();
                 }
             };

@@ -71,6 +71,8 @@ public:
     bool showOutlineWhilePainting();
     int mdiMode();
     int favoritePresets();
+private slots:
+    void getBackgroundImage();
 
 };
 

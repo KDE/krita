@@ -38,6 +38,7 @@
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QMdiArea>
+#include <QMessageBox>
 
 #ifdef HAVE_OPENGL
 #include <qgl.h>
@@ -108,6 +109,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
     m_mdiColor->setColor(cfg.getMDIBackgroundColor());
+    m_backgroundimage->setText(cfg.getMDIBackgroundImage());
+    connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
 }
 
 void GeneralTab::setDefault()
@@ -126,6 +129,7 @@ void GeneralTab::setDefault()
     m_chkRubberBand->setChecked(cfg.useOpenGL());
     m_favoritePresetsSpinBox->setValue(10);
     m_mdiColor->setColor(QColor(220, 220, 220));
+    m_backgroundimage->setText("");
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -163,6 +167,23 @@ int GeneralTab::mdiMode()
 int GeneralTab::favoritePresets()
 {
     return m_favoritePresetsSpinBox->value();
+}
+
+void GeneralTab::getBackgroundImage()
+{
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "BackgroundImages");
+    dialog.setCaption(i18n("Select a Background Image"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setImageFilters();
+    QString fn = dialog.url();
+    QImage image(fn);
+    if (image.isNull()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("%1 is not a valid image file!", fn));
+    }
+    else {
+        m_backgroundimage->setText(fn);
+    }
+
 }
 
 
@@ -742,7 +763,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
         cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color());
-
+        cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         KisPart *part = KisPart::instance();

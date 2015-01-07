@@ -396,7 +396,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     KAction *toggleaction = new KAction(i18n("Toggle Assistant"), this);
     addAction("toggle_assistant", toggleaction);
-    toggleaction->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_L));
+    toggleaction->setShortcut(KShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_L));
     connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()));
 
     addOptionWidgetOption(m_sliderMagnetism, m_chkAssistant);

@@ -27,6 +27,7 @@
 #include <QTransform>
 
 #include "kis_coordinates_converter.h"
+#include "kis_algebra_2d.h"
 
 #include <math.h>
 
@@ -89,33 +90,12 @@ void InfiniteRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
     if (handles().size() > 1 && outline()==true && previewVisible==true) {
         //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
-        QLineF snapLine= QLineF(*handles()[0], *handles()[1]);
-        QPointF startPoint, endPoint;
-        
-        //find the lines on the canvas border.
-        QPointF gcp1=initialTransform.inverted().map(QPointF(0,0));
-        QPointF gcp2=initialTransform.inverted().map(QPointF(gc.viewport().width(),0));
-        QPointF gcp3=initialTransform.inverted().map(QPointF(0,gc.viewport().height()));
-        QPointF gcp4=initialTransform.inverted().map(QPointF(gc.viewport().width(),gc.viewport().height()));
-        //qDebug()<< gcp1 << ", "<< gcp2 << ", "<< gcp3 << ", "<< gcp4;
-
-        if (snapLine.intersect(QLineF(gcp1, gcp2 ), &startPoint) != QLineF::NoIntersection) {
-            snapLine.intersect(QLineF(gcp3, gcp4 ), &endPoint);
-            }
-        else if (snapLine.intersect(QLineF(gcp1,gcp3 ), &startPoint) != QLineF::NoIntersection) {
-            snapLine.intersect(QLineF(gcp2, gcp4 ), &endPoint);
-            }
-        else {
-            startPoint=*handles()[0];
-            endPoint=*handles()[1];
-            dbgFile<<"ruler can't find canvas borders."<<canvas;
-            }
-         
-        gc.setTransform(initialTransform);
-        mousePos=initialTransform.inverted().map(mousePos);
+        QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
+        QRect viewport= gc.viewport();
+        KisAlgebra2D::intersectLineRect(snapLine, viewport);
         QPainterPath path;
-        path.moveTo(startPoint);
-        path.lineTo(endPoint);
+        path.moveTo(snapLine.p1());
+        path.lineTo(snapLine.p2());
         drawPreview(gc, path);//and we draw the preview.
     }
     gc.restore();

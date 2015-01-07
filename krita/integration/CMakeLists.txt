@@ -1,3 +1,5 @@
 if (SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     add_subdirectory( thumbnail )
 endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
+
+add_subdirectory( kimgio )

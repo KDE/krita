@@ -392,6 +392,12 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                      << "Dsk:"  << QRect(currentTabletPointer.sysOrgX, currentTabletPointer.sysOrgY, currentTabletPointer.sysExtX,  currentTabletPointer.sysExtY)
                      << "Raw:" << ptNew.x << ptNew.y
                      << "Scaled:" << hiResGlobal;
+
+            qDebug() << "WinTab (BN):"
+                     << "old:" << btnOld
+                     << "new:" << btnNew
+                     << "diff:" << (btnOld ^ btnNew)
+                     << (buttonPressed ? "P" : buttonReleased ? "R" : ".");
         }
 
 
@@ -615,6 +621,15 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
                     currentTabletPointer.buttonsMap[0x1] = logicalButtons[0];
                     currentTabletPointer.buttonsMap[0x2] = logicalButtons[1];
                     currentTabletPointer.buttonsMap[0x4] = logicalButtons[2];
+
+                    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+                        qDebug() << "--------------------------";
+                        qDebug() << "--- Tablet buttons map ---";
+                        for (int i = 0; i < 32; i++) {
+                            qDebug() << "( 1 <<" << i << ")" << "->" << logicalButtons[i];
+                        }
+                        qDebug() << "--------------------------";
+                    }
                 }
             }
         break;

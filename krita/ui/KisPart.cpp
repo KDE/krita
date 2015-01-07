@@ -171,6 +171,20 @@ void KisPart::Private::loadActions()
         actionCollection->readSettings();
     }
 
+    //check for colliding shortcuts
+    QMap<QKeySequence, QAction*> existingShortcuts;
+    foreach(QAction* action, actionCollection->actions()) {
+        if(action->shortcut() == QKeySequence(0)) {
+            continue;
+        }
+        if (existingShortcuts.contains(action->shortcut())) {
+            qDebug() << "action" << action->text() << "and" <<  existingShortcuts[action->shortcut()]->text() << "have the same shortcut:" << action->shortcut();
+        }
+        else {
+            existingShortcuts[action->shortcut()] = action;
+        }
+    }
+
 }
 
 KisPart* KisPart::instance()

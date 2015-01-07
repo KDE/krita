@@ -11,7 +11,7 @@
  <Action iconText="Grow To Fit Width" shortcut="" toolTip="Grow To Fit Width" icon="zoom-fit-best" whatsThis="" statusTip="" name="grow_to_fit_width" isCheckable="false" text="Grow To Fit Width" defaultShortcut=""/>
  <Action iconText="Subscript" shortcut="Ctrl+Shift+B" toolTip="Subscript" icon="format-text-subscript" whatsThis="" statusTip="" name="format_sub" isCheckable="false" text="Subscript" defaultShortcut="Ctrl+Shift+B"/>
  <Action iconText="Insert Non-Breaking Hyphen" shortcut="Ctrl+Shift+-" toolTip="Insert Non-Breaking Hyphen" icon="" whatsThis="" statusTip="" name="nonbreaking_hyphen" isCheckable="false" text="Insert Non-Breaking Hyphen" defaultShortcut="Ctrl+Shift+-"/>
- <Action iconText="Align Left" shortcut="Ctrl+L" toolTip="Align Left" icon="format-justify-left" whatsThis="" statusTip="" name="format_alignleft" isCheckable="false" text="Align Left" defaultShortcut="Ctrl+L"/>
+ <Action iconText="Align Left" shortcut="" toolTip="Align Left" icon="format-justify-left" whatsThis="" statusTip="" name="format_alignleft" isCheckable="false" text="Align Left" defaultShortcut=""/>
  <Action iconText="Insert Comment" shortcut="Ctrl+Shift+C" toolTip="Insert Comment" icon="" whatsThis="" statusTip="" name="insert_annotation" isCheckable="false" text="Insert Comment" defaultShortcut="Ctrl+Shift+C"/>
  <Action iconText="Strikethrough" shortcut="" toolTip="Strikethrough" icon="format-text-strikethrough" whatsThis="" statusTip="" name="format_strike" isCheckable="false" text="Strikethrough" defaultShortcut=""/>
  <Action iconText="Configure current section" shortcut="" toolTip="Configure current section" icon="configure" whatsThis="" statusTip="" name="configure_section" isCheckable="false" text="Configure current section" defaultShortcut=""/>

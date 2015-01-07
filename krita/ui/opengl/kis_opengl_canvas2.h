@@ -95,6 +95,9 @@ protected: // KisCanvasWidgetBase
     virtual bool callFocusNextPrevChild(bool next);
 
 private:
+    void reportShaderLinkFailedAndExit(bool result, const QString &context, const QString &log);
+
+private:
 
 
 

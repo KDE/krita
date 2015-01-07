@@ -441,6 +441,8 @@ public:
     QString getMDIBackgroundImage() const;
     void setMDIBackgroundImage(const QString & fileName) const;
 
+    bool useVerboseOpenGLDebugOutput() const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

@@ -1424,6 +1424,11 @@ void KisConfig::setTestingCompressBrushEvents(bool value)
     m_cfg.writeEntry("testingCompressBrushEvents", value);
 }
 
+bool KisConfig::useVerboseOpenGLDebugOutput() const
+{
+    return m_cfg.readEntry("useVerboseOpenGLDebugOutput", false);
+}
+
 const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
 {
     const KoColorSpace *cs = 0;

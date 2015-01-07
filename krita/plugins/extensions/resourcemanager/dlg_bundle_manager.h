@@ -22,6 +22,7 @@
 #include <QWidget>
 
 #include <kdialog.h>
+#include "kis_action_manager.h"
 
 class ResourceBundle;
 class QListWidget;
@@ -36,7 +37,7 @@ class DlgBundleManager : public KDialog
 {
     Q_OBJECT
 public:
-    explicit DlgBundleManager(QWidget *parent = 0);
+    explicit DlgBundleManager(KisActionManager* actionMgr, QWidget *parent = 0);
 
 private slots:
 
@@ -45,7 +46,11 @@ private slots:
     void removeSelected();
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
     void itemSelected(QListWidgetItem *current);
-    void editBundle();
+    void editBundle();    
+    void slotImportResource() ;
+    void slotCreateBundle() ;
+    void slotDeleteBackupFiles();
+    void slotOpenResourceFolder();
 
 private:
 
@@ -58,6 +63,7 @@ private:
     QMap<QString, ResourceBundle*> m_activeBundles;
 
     ResourceBundle *m_currentBundle;
+    KisActionManager* m_actionManager;
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

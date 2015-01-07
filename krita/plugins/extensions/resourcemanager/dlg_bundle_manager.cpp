@@ -30,10 +30,11 @@
 #include <QMessageBox>
 
 #include <KoIcon.h>
+#include "kis_action.h"
 
 #define ICON_SIZE 48
 
-DlgBundleManager::DlgBundleManager(QWidget *parent)
+DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
     : KDialog(parent)
     , m_page(new QWidget())
     , m_ui(new Ui::WdgDlgBundleManager)
@@ -66,6 +67,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     m_ui->listBundleContents->setSelectionMode(QAbstractItemView::NoSelection);
 
     KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
+    m_actionManager = actionMgr;
 
     foreach(const QString &f, bundleServer->blackListedFiles()) {
         ResourceBundle *bundle = new ResourceBundle(f);
@@ -85,6 +87,12 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     fillListWidget(m_activeBundles.values(), m_ui->listActive);
 
     connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
+
+    connect(m_ui->importBundleButton, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->createBundleButton, SIGNAL(clicked()), SLOT(slotCreateBundle()));
+    connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
+    connect(m_ui->openResourceFolderButton, SIGNAL(clicked()), SLOT(slotOpenResourceFolder()));
+
 }
 
 void DlgBundleManager::accept()
@@ -177,7 +185,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
         m_ui->lblEmail->setText("");
         m_ui->lblLicense->setText("");
         m_ui->lblWebsite->setText("");
-        m_ui->lblDescription->setText("");
+        m_ui->lblDescription->setPlainText("");
         m_ui->lblCreated->setText("");
         m_ui->lblUpdated->setText("");
         m_ui->lblPreview->setPixmap(QPixmap::fromImage(QImage()));
@@ -211,7 +219,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             m_ui->lblEmail->setText(bundle->getMeta("email"));
             m_ui->lblLicense->setText(bundle->getMeta("license"));
             m_ui->lblWebsite->setText(bundle->getMeta("website"));
-            m_ui->lblDescription->setText(bundle->getMeta("description"));
+            m_ui->lblDescription->setPlainText(bundle->getMeta("description"));
             m_ui->lblCreated->setText(bundle->getMeta("created"));
             m_ui->lblUpdated->setText(bundle->getMeta("updated"));
             m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
@@ -294,6 +302,43 @@ void DlgBundleManager::fillListWidget(QList<ResourceBundle *> bundles, QListWidg
         QListWidgetItem *item = new QListWidgetItem(pixmap, bundle->name());
         item->setData(Qt::UserRole, bundle->md5());
         w->addItem(item);
+    }
+}
+
+
+void DlgBundleManager::slotImportResource() {
+
+    if (m_actionManager)
+    {
+        KisAction *action = m_actionManager->actionByName("import_resources");
+        action->trigger();
+    }
+}
+
+void DlgBundleManager::slotCreateBundle() {
+
+    if (m_actionManager)
+    {
+        KisAction *action = m_actionManager->actionByName("create_bundle");
+        action->trigger();
+    }
+}
+
+void DlgBundleManager::slotDeleteBackupFiles() {
+
+    if (m_actionManager)
+    {
+        KisAction *action = m_actionManager->actionByName("edit_blacklist_cleanup");
+        action->trigger();
+    }
+}
+
+void DlgBundleManager::slotOpenResourceFolder() {
+
+    if (m_actionManager)
+    {
+        KisAction *action = m_actionManager->actionByName("open_resources_directory");
+        action->trigger();
     }
 }
 

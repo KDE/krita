@@ -124,6 +124,7 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     action = new KisAction(i18n("Manage Resource Bundles..."), this);
     addAction("manage_bundles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotManageBundles()));
+
 }
 
 ResourceManager::~ResourceManager()
@@ -300,8 +301,10 @@ void ResourceManager::slotCreateBundle()
 
 void ResourceManager::slotManageBundles()
 {
-    DlgBundleManager dlg;
-    if (dlg.exec() != QDialog::Accepted) {
+
+
+    DlgBundleManager* dlg = new DlgBundleManager(m_view->actionManager());
+    if (dlg->exec() != QDialog::Accepted) {
         return;
     }
 

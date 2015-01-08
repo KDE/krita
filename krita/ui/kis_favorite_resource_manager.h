@@ -46,8 +46,6 @@ public:
     KisFavoriteResourceManager(KisPaintopBox *paintopBox);
     ~KisFavoriteResourceManager();
 
-    void setPopupPalette(QWidget *palette);
-
     virtual void unsetResourceServer();
 
     QList<QImage> favoritePresetImages();

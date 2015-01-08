@@ -34,9 +34,9 @@ public:
         ACTIVE_IMAGE                = 0x0001, ///< Activate if there is at least one image
         MULTIPLE_IMAGES             = 0x0002, ///< Activate if there is more than one image open
         CURRENT_IMAGE_MODIFIED      = 0x0004, ///< Activate if the current image is modified
-        ACTIVE_NODE                 = 0x0008, ///< Activate if there's an active node
-        ACTIVE_DEVICE               = 0x0010, ///< Activate if the active node has a paint device
-        ACTIVE_LAYER                = 0x0020, ///< Activate if the current node is a layer
+        ACTIVE_NODE                 = 0x0008, ///< Activate if there's an active node (layer or mask)
+        ACTIVE_DEVICE               = 0x0010, ///< Activate if the active node has a paint device, i.e. there are pixels to be modified
+        ACTIVE_LAYER                = 0x0020, ///< Activate if the current node is a layer (vector or pixel)
         ACTIVE_TRANSPARENCY_MASK    = 0x0040, ///< Activate if the current node is a transparency mask
         ACTIVE_SHAPE_LAYER          = 0x0080, ///< Activate if the current node is a vector layer
         PIXELS_SELECTED             = 0x0100, ///< Activate if there is an active pixel selection

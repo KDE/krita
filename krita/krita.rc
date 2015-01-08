@@ -196,7 +196,6 @@
       <Action name="merge_selected_layers"/>
       <Separator/>
       <Action name="dropshadow"/>
-      <Action name="gmic"/>
     </Menu>
     <Menu name="Select">
       <text>&amp;Select</text>
@@ -235,10 +234,13 @@
       <Action name="decor_filters"/>
       <Action name="edge_filters"/>
       <Action name="enhance_filters"/>
-      <Action name="emboss_filters"/>
+      <Action name="emboss_filters"/>     
       <Action name="map_filters"/>
       <Action name="nonphotorealistic_filters"/>
       <Action name="other_filters"/>
+      <Separator/>
+      <Action name="gmic"/>
+
     </Menu>
     <Menu name="tools">
       <text>&amp;Tools</text>

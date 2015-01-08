@@ -74,7 +74,7 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
       m_gmicWidget(0),
       m_requestFinishAndClose(false)
 {
-    KisAction *action  = new KisAction(i18n("Apply G'Mic Action..."), this);
+    KisAction *action  = new KisAction(i18n("G'MIC"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotShowGmicDialog()));

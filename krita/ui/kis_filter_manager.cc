@@ -135,7 +135,7 @@ void KisFilterManager::insertFilter(const QString & filterName)
 
     KisAction *action = new KisAction(filter->menuEntry(), this);
     action->setShortcut(filter->shortcut(), KAction::DefaultShortcut);
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationFlags(KisAction::ACTIVE_DEVICE);
 
     d->actionManager->addAction(QString("krita_filter_%1").arg(filterName), action);
     d->filters2Action[filter.data()] = action;

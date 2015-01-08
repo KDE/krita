@@ -211,7 +211,8 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
 #define NEW_LAYER_ACTION(id, text, layerType, icon)                     \
     {                                                                   \
         action = new KisAction(icon, text, this);                       \
-        actionManager->addAction(id, action);         \
+        action->setActivationFlags(KisAction::ACTIVE_NODE);             \
+        actionManager->addAction(id, action);                           \
         m_d->nodeCreationSignalMapper.setMapping(action, layerType);    \
         connect(action, SIGNAL(triggered()),                            \
                 &m_d->nodeCreationSignalMapper, SLOT(map()));           \

@@ -24,7 +24,6 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <kactioncollection.h>
 #include <kcolordialog.h>
 
 #include <KoColor.h>
@@ -53,7 +52,7 @@ void KisImageManager::setView(QPointer<KisView>imageView)
     Q_UNUSED(imageView);
 }
 
-void KisImageManager::setup(KActionCollection * actionCollection, KisActionManager *actionManager)
+void KisImageManager::setup(KisActionManager *actionManager)
 {
 
     KisAction *action  = new KisAction(i18n("I&mport Layer..."), this);
@@ -89,7 +88,7 @@ void KisImageManager::setup(KActionCollection * actionCollection, KisActionManag
     action = new KisAction(koIcon("format-stroke-color"), i18n("Image Background Color and Transparency..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setToolTip(i18n("Change the background color of the image"));
-    actionCollection->addAction("image_color", action);
+    actionManager->addAction("image_color", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColor()));
 
 }

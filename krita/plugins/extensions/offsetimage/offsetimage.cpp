@@ -46,6 +46,7 @@ OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Offset Image..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("offsetimage", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotOffsetImage()));
 

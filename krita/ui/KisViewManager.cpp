@@ -702,7 +702,7 @@ void KisViewManager::createManagers()
     d->nodeManager->setup(actionCollection(), actionManager());
 
     d->imageManager = new KisImageManager(this);
-    d->imageManager->setup(actionCollection(), actionManager());
+    d->imageManager->setup(actionManager());
 
     d->gridManager = new KisGridManager(this);
     d->gridManager->setup(this->actionManager());

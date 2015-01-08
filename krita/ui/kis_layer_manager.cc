@@ -311,6 +311,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
     m_groupLayersSave = new KisAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
+    m_groupLayersSave->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 

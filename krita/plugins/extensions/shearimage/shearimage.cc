@@ -38,6 +38,7 @@ ShearImage::ShearImage(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Shear Image..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("shearimage", action);
     connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));
 

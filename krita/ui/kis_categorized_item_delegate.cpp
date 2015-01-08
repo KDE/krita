@@ -50,21 +50,11 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             sovi.decorationPosition = QStyleOptionViewItem::Right;
 
         QStyledItemDelegate::paint(painter, sovi, index);
-        if(index.data(__CategorizedListModelBase::isLockableRole).toBool())
-        {
-            if(index.data(__CategorizedListModelBase::isLockedRole).toBool())
-            {
-                KIcon *i = new KIcon("linked2");
-                QPixmap pixmap = i->pixmap(QSize(sovi.rect.height(),10));
-                painter->drawPixmap(sovi.rect.width()-pixmap.width(),sovi.rect.y(),pixmap);
-            }
-            else
-            {
-                KIcon *i = new KIcon("linked2");
-                painter->setOpacity(0.4);
-                QPixmap pixmap = i->pixmap(QSize(sovi.rect.height(),10));
-                painter->drawPixmap(sovi.rect.width()-pixmap.width(),sovi.rect.y(),pixmap);
-            }
+        if (index.data(__CategorizedListModelBase::isLockableRole).toBool()) {
+            bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
+            const KIcon icon = locked ? koIcon(koIconName("locked")) : koIcon(koIconName("unlocked"));
+            QPixmap pixmap = icon.pixmap(QSize(sovi.rect.height() - 8, sovi.rect.height() -8));
+            painter->drawPixmap(sovi.rect.width() - pixmap.width(), sovi.rect.y(), pixmap);
         }
         painter->setOpacity(1);
     }

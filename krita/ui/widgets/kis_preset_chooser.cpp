@@ -100,11 +100,10 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
-    if(m_useDirtyPresets && preset->isPresetDirty())
-    {
-        KIcon *i = new KIcon("addlayer");
-        QPixmap pixmap = i->pixmap(QSize(15,15));
-        painter->drawPixmap(paintRect.x()+3,paintRect.y()+3,pixmap);
+    if (m_useDirtyPresets && preset->isPresetDirty()) {
+        const KIcon icon = koIcon(koIconName("addlayer"));
+        QPixmap pixmap = icon.pixmap(QSize(15,15));
+        painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }
 
     if (!preset->settings() || !preset->settings()->isValid()) {

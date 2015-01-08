@@ -170,6 +170,8 @@ public: // KisCanvas2 methods
     KisDisplayColorConverter* displayColorConverter() const;
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
 
+    void setCursor(const QCursor &cursor);
+
 signals:
     void imageChanged(KisImageWSP image);
 
@@ -221,7 +223,6 @@ private slots:
      */
     void slotSetDisplayProfile(const KoColorProfile * profile);
 
-    void setCursor(const QCursor &cursor);
 
     void slotSelectionChanged();
 

@@ -361,6 +361,7 @@ void KisViewManager::setCurrentView(KisView *view)
 {
     bool first = true;
     if (d->currentImageView) {
+        d->currentImageView->canvasBase()->setCursor(QCursor(Qt::ArrowCursor));
         first = false;
         KisDocument* doc = d->currentImageView->document();
         if (doc) {

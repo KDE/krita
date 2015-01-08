@@ -92,7 +92,7 @@ struct KisNodeManager::Private {
     KisMaskManager * maskManager;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
-    KAction *mergeSelectedLayers;
+    KisAction *mergeSelectedLayers;
 
     QList<KisNodeSP> selectedNodes;
 
@@ -171,8 +171,9 @@ KisNodeManager::KisNodeManager(KisViewManager *view)
 
     connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
 
-    m_d->mergeSelectedLayers = new KAction(i18n("&Merge Selected Layers"), this);
-    view->actionCollection()->addAction("merge_selected_layers", m_d->mergeSelectedLayers);
+    m_d->mergeSelectedLayers = new KisAction(i18n("&Merge Selected Layers"), this);
+    m_d->mergeSelectedLayers->setActivationFlags(KisAction::ACTIVE_LAYER);
+    view->actionManager()->addAction("merge_selected_layers", m_d->mergeSelectedLayers);
     connect(m_d->mergeSelectedLayers, SIGNAL(triggered()), this, SLOT(mergeLayerDown()));
 
 }

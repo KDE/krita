@@ -282,11 +282,13 @@ void KisLayerManager::activateLayer(KisLayerSP layer)
 void KisLayerManager::setup(KisActionManager* actionManager)
 {
     m_imageFlatten = new KisAction(i18n("&Flatten image"), this);
+    m_imageFlatten->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("flatten_image", m_imageFlatten);
     m_imageFlatten->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
     connect(m_imageFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
     m_imageMergeLayer = new KisAction(i18n("&Merge with Layer Below"), this);
+    m_imageMergeLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("merge_layer", m_imageMergeLayer);
     m_imageMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imageMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));

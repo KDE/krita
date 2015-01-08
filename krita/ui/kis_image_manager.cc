@@ -57,30 +57,37 @@ void KisImageManager::setup(KActionCollection * actionCollection, KisActionManag
 {
 
     KisAction *action  = new KisAction(i18n("I&mport Layer..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("import_layer_from_file", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
     action  = new KisAction(koIcon("document-properties"), i18n("Properties..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 
     action  = new KisAction(koIcon("document-new"), i18n("as Paint Layer..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_paint_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
     action  = new KisAction(koIcon("edit-copy"), i18n("as Transparency Mask..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_transparency_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsTransparencyMask()));
 
     action  = new KisAction(koIcon("bookmarks"), i18n("as Filter Mask..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_filter_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsFilterMask()));
 
     action  = new KisAction(koIcon("edit-paste"), i18n("as Selection Mask..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("import_layer_as_selection_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsSelectionMask()));
 
     action = new KisAction(koIcon("format-stroke-color"), i18n("Image Background Color and Transparency..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setToolTip(i18n("Change the background color of the image"));
     actionCollection->addAction("image_color", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColor()));

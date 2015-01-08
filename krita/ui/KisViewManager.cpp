@@ -705,7 +705,7 @@ void KisViewManager::createManagers()
     d->imageManager->setup(actionCollection(), actionManager());
 
     d->gridManager = new KisGridManager(this);
-    d->gridManager->setup(actionCollection());
+    d->gridManager->setup(this->actionManager());
 
     d->perspectiveGridManager = new KisPerspectiveGridManager(this);
     d->perspectiveGridManager->setup(actionCollection());

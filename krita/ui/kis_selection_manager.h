@@ -156,7 +156,7 @@ private:
     KisAction *m_fillPattern;
     KisAction *m_imageResizeToSelection;
     KisAction *m_strokeShapes;
-    KToggleAction *m_toggleDisplaySelection;
+    KisAction *m_toggleDisplaySelection;
     KisAction *m_toggleSelectionOverlayMode;
 
     QList<QAction*> m_pluginActions;

@@ -208,8 +208,11 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     actionManager->addAction("stroke_shapes", m_strokeShapes);
     connect(m_strokeShapes, SIGNAL(triggered()), this, SLOT(paintSelectedShapes()));
 
-    m_toggleDisplaySelection  = new KToggleAction(i18n("Display Selection"), this);
-    collection->addAction("toggle_display_selection", m_toggleDisplaySelection);
+    m_toggleDisplaySelection  = new KisAction(i18n("Display Selection"), this);
+    m_toggleDisplaySelection->setCheckable(true);
+    m_toggleDisplaySelection->setActivationFlags(KisAction::ACTIVE_NODE);
+
+    actionManager->addAction("toggle_display_selection", m_toggleDisplaySelection);
     m_toggleDisplaySelection->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
 

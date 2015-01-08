@@ -50,6 +50,7 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVar
     : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Separate Image..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("separate", action);
     connect(action, SIGNAL(triggered(bool)), SLOT(slotSeparate()));
 }

@@ -92,6 +92,8 @@ void KisShapeController::addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP
 {
     KisNodeShape *newShape =
         m_d->shapesGraph.addNode(node, parent, aboveThis);
+    // XXX: what are we going to do with this shape?
+    Q_UNUSED(newShape);
 
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
     if (shapeLayer) {

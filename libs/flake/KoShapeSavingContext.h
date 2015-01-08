@@ -153,7 +153,7 @@ public:
      * @param referent the object we are referring to
      * @param prefix a prefix for the xml:id string
      * @param counter if counter is true, shapesavingcontext will use a counter to create the xml:id
-     * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementrefence will be invalid.
+     * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementreference will be invalid.
      */
     KoElementReference xmlid(const void *referent, const QString& prefix = QString(), KoElementReference::GenerationOption counter = KoElementReference::UUID);
 

@@ -114,6 +114,10 @@ private slots:
     void updateFavoritePresets();
 
 private:
+
+    // Loads the favorite preset list for the first time
+    void init();
+
     KisPaintopBox *m_paintopBox;
 
     QVector<KisPaintOpPresetSP> m_favoritePresetsList;
@@ -127,6 +131,8 @@ private:
 
     KoColor m_bgColor;
     QString m_currentTag;
+
+    bool m_initialized;
 };
 
 #endif

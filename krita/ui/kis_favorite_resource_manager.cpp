@@ -164,31 +164,13 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
     : m_paintopBox(paintopBox)
     , m_colorList(0)
     , m_blockUpdates(false)
+    , m_initialized(false)
 {
     m_colorList = new ColorDataList();
-
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateFavoritePresets()));
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
     rServer->addObserver(this);
 
-    KConfigGroup group(KGlobal::config(), "favoriteList");
-    QStringList oldFavoritePresets = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
-
-    KisConfig cfg;
-    m_currentTag = cfg.readEntry<QString>("favoritePresetsTag", QString());
-
-    if (!oldFavoritePresets.isEmpty() && m_currentTag.isEmpty()) {
-        m_currentTag = i18n("Favorite Presets");
-        foreach( const QString& name, oldFavoritePresets) {
-            KisPaintOpPresetSP preset = rServer->resourceByName(name);
-            rServer->addTag(preset.data(), m_currentTag);
-        }
-        rServer->tagCategoryAdded(m_currentTag);
-        cfg.writeEntry<QString>("favoritePresets", QString());
-    }
-
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateFavoritePresets()));
-
-    updateFavoritePresets();
 }
 
 KisFavoriteResourceManager::~KisFavoriteResourceManager()
@@ -208,11 +190,13 @@ void KisFavoriteResourceManager::unsetResourceServer()
 
 QVector<KisPaintOpPresetSP>  KisFavoriteResourceManager::favoritePresetList()
 {
+    init();
     return m_favoritePresetsList;
 }
 
 QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
+    init();
     QList<QImage> images;   
     foreach(KisPaintOpPresetSP preset, m_favoritePresetsList) {
         if (preset) {
@@ -241,6 +225,7 @@ void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
 
 int KisFavoriteResourceManager::numFavoritePresets()
 {
+    init();
     return m_favoritePresetsList.size();
 }
 
@@ -349,6 +334,29 @@ void KisFavoriteResourceManager::updateFavoritePresets()
         qSort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
     }
     emit updatePalettes();
+}
+
+void KisFavoriteResourceManager::init()
+{
+    if (!m_initialized) {
+        KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+        KConfigGroup group(KGlobal::config(), "favoriteList");
+        QStringList oldFavoritePresets = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
+
+        KisConfig cfg;
+        m_currentTag = cfg.readEntry<QString>("favoritePresetsTag", QString());
+
+        if (!oldFavoritePresets.isEmpty() && m_currentTag.isEmpty()) {
+            m_currentTag = i18n("Favorite Presets");
+            foreach( const QString& name, oldFavoritePresets) {
+                KisPaintOpPresetSP preset = rServer->resourceByName(name);
+                rServer->addTag(preset.data(), m_currentTag);
+            }
+            rServer->tagCategoryAdded(m_currentTag);
+            cfg.writeEntry<QString>("favoritePresets", QString());
+        }
+        updateFavoritePresets();
+    }
 }
 
 #include "kis_favorite_resource_manager.moc"

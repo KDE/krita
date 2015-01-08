@@ -201,15 +201,6 @@ KisPresetChooser::~KisPresetChooser()
 {
 }
 
-void KisPresetChooser::filterPaletteFavorites(const QStringList& filteredNames)
-{
-    m_adapter->setFilterIncludes(filteredNames);
-    m_adapter->enableResourceFiltering(true);
-    m_adapter->updateServer();
-
-    updateViewSettings();
-}
-
 void KisPresetChooser::showButtons(bool show)
 {
     m_chooser->showButtons(show);

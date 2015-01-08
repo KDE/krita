@@ -71,6 +71,8 @@ void KisActionManager::addAction(const QString& name, KisAction* action)
 {
     Q_ASSERT(!name.isEmpty());
     Q_ASSERT(action);
+    Q_ASSERT(d->viewManager);
+    Q_ASSERT(d->viewManager->actionCollection());
 
     d->viewManager->actionCollection()->addAction(name, action);
     action->setObjectName(name);

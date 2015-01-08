@@ -301,6 +301,13 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
 
+
+    foreach(KisAction *action, m_actions) {
+        kisview->actionManager()->
+            addAction(action->objectName(),
+                      action);
+    }
+
     connectActionToButton(kisview, m_wdgLayerBox->bnAdd, "add_new_paint_layer");
     connectActionToButton(kisview, m_wdgLayerBox->bnDuplicate, "duplicatelayer");
 }
@@ -360,11 +367,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollToBottom();
 
-        foreach(KisAction *action, m_actions) {
-            m_canvas->viewManager()->actionManager()->
-                addAction(action->objectName(),
-                          action);
-        }
+
 
         addActionToMenu(m_newLayerMenu, "add_new_paint_layer");
         addActionToMenu(m_newLayerMenu, "add_new_group_layer");
@@ -387,9 +390,6 @@ void KisLayerBox::unsetCanvas()
 {
     setEnabled(false);
     if (m_canvas) {
-        foreach(KisAction *action, m_actions) {
-            m_canvas->viewManager()->actionManager()->takeAction(action);
-        }
         m_newLayerMenu->clear();
     }
     setCanvas(0);

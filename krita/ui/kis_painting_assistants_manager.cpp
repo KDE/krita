@@ -21,11 +21,13 @@
 #include "kis_painting_assistants_decoration.h"
 #include "KisView.h"
 #include "KisViewManager.h"
+#include "kis_action_manager.h"
 
 #include <klocale.h>
 #include <kguiitem.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
+
 
 KisPaintingAssistantsManager::KisPaintingAssistantsManager(KisViewManager* view) : QObject(view)
     , m_imageView(0)
@@ -38,14 +40,17 @@ KisPaintingAssistantsManager::~KisPaintingAssistantsManager()
 
 }
 
-void KisPaintingAssistantsManager::setup(KActionCollection * collection)
+void KisPaintingAssistantsManager::setup(KisActionManager * actionManager)
 {
-    m_toggleAssistant = new KToggleAction(i18n("Show Painting Assistants"), this);
-    collection->addAction("view_toggle_painting_assistants", m_toggleAssistant);
-    m_toggleAssistant->setCheckedState(KGuiItem(i18n("Hide Painting Assistants")));
+    m_toggleAssistant = new KisAction(i18n("Show Painting Assistants"), this);
+    m_toggleAssistant->setCheckable(true);
+    m_toggleAssistant->setActivationFlags(KisAction::ACTIVE_NODE);
+    actionManager->addAction("view_toggle_painting_assistants", m_toggleAssistant);
 
-    m_togglePreview = new KToggleAction(i18n("Show Assistant Previews"), this);
-    collection->addAction("view_toggle_assistant_previews", m_togglePreview);
+    m_togglePreview = new KisAction(i18n("Show Assistant Previews"), this);
+    m_togglePreview->setCheckable(true);
+    m_togglePreview->setActivationFlags(KisAction::ACTIVE_NODE);
+    actionManager->addAction("view_toggle_assistant_previews", m_togglePreview);
 
     updateAction();
 }

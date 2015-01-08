@@ -711,7 +711,7 @@ void KisViewManager::createManagers()
     d->perspectiveGridManager->setup(actionCollection());
 
     d->paintingAssistantsManager = new KisPaintingAssistantsManager(this);
-    d->paintingAssistantsManager->setup(actionCollection());
+    d->paintingAssistantsManager->setup(actionManager());
 
     d->canvasControlsManager = new KisCanvasControlsManager(this);
     d->canvasControlsManager->setup(actionManager());

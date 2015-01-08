@@ -46,18 +46,6 @@
       <Action name="delete"/>
       <Separator/>
       <Action name="revert"/>
-      <Separator/>
-      <Menu name="resources">
-        <text>&amp;Resources</text>
-        <Action name="open_resources_directory"/>
-        <Action name="import_resources"/>
-        <Action name="create_bundle"/>
-        <Action name="manage_bundles"/>
-        <Separator/>
-        <Action name="add_palette"/>
-        <Action name="edit_palette"/>
-        <Action name="edit_blacklist_cleanup"/>
-      </Menu>
     </Menu>
     <Menu name="view">
       <text>&amp;View</text>
@@ -264,6 +252,7 @@
       <Separator/>
       <Action name="switch_application_language"/>
       <Action name="options_configure_keybinding"/>
+      <Action name="manage_bundles"/>
       <Action name="options_configure_toolbars"/>
       <Separator/>
       <Action name="options_configure"/>

@@ -121,7 +121,7 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     addAction("create_bundle", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCreateBundle()));
 
-    action = new KisAction(i18n("Manage Resource Bundles..."), this);
+    action = new KisAction(i18n("Manage Resources..."), this);
     addAction("manage_bundles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotManageBundles()));
 

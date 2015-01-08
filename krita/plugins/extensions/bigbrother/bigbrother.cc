@@ -95,11 +95,13 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
 
         // Start recording action
         m_startRecordingMacroAction = new KisAction(koIcon("media-record"), i18n("Start recording macro"), this);
+        m_startRecordingMacroAction->setActivationFlags(KisAction::ACTIVE_NODE);
         addAction("Recording_Start_Recording_Macro", m_startRecordingMacroAction);
         connect(m_startRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStartRecordingMacro()));
 
         // Save recorded action
         m_stopRecordingMacroAction  = new KisAction(koIcon("media-playback-stop"), i18n("Stop recording actions"), this);
+        m_stopRecordingMacroAction->setActivationFlags(KisAction::ACTIVE_NODE);
         addAction("Recording_Stop_Recording_Macro", m_stopRecordingMacroAction);
         connect(m_stopRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStopRecordingMacro()));
         m_stopRecordingMacroAction->setEnabled(false);

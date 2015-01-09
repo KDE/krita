@@ -446,6 +446,7 @@
         </doc:doc>
       </arg>
       <arg type='h' name='handle' direction='in'>
+        <annotation name="com.trolltech.QtDBus.QtTypeName.In2" value="int"/>
         <doc:doc>
           <doc:summary>
             <doc:para>
@@ -457,6 +458,7 @@
       </arg>
       <arg type='a{ss}' name='properties' direction='in'>
         <annotation name="org.qtproject.QtDBus.QtTypeName.In3" value="CdStringMap"/>
+        <annotation name="com.trolltech.QtDBus.QtTypeName.In3" value="CdStringMap"/>
         <doc:doc>
           <doc:summary>
             <doc:para>
@@ -519,6 +521,7 @@
       </arg>
       <arg type='a{ss}' name='properties' direction='in'>
         <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="CdStringMap"/>
+        <annotation name="com.trolltech.QtDBus.QtTypeName.In2" value="CdStringMap"/>
         <doc:doc>
           <doc:summary>
             <doc:para>
@@ -600,6 +603,7 @@
       </arg>
       <arg type='a{ss}' name='properties' direction='in'>
         <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="CdStringMap"/>
+        <annotation name="com.trolltech.QtDBus.QtTypeName.In2" value="CdStringMap"/>
         <doc:doc>
           <doc:summary>
             <doc:para>

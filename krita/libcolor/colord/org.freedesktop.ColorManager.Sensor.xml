@@ -150,6 +150,7 @@
     <!--***********************************************************-->
     <property name='Options' type='a{sv}' access='read'>
       <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName" value="QVariantMap"/>
       <doc:doc>
         <doc:description>
           <doc:para>
@@ -166,6 +167,7 @@
     <!--***********************************************************-->
     <property name='Metadata' type='a{ss}' access='read'>
       <annotation name="org.qtproject.QtDBus.QtTypeName" value="CdStringMap"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName" value="CdStringMap"/>
       <doc:doc>
         <doc:description>
           <doc:para>
@@ -266,6 +268,7 @@
       </doc:doc>
       <arg type='a{sv}' name='values' direction='in'>
         <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+        <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantMap"/>
         <doc:doc>
           <doc:summary>
             <doc:para>

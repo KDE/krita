@@ -21,6 +21,8 @@
 #include "kis_tool_colorpicker.h"
 #include <string.h>
 
+#include <boost/thread/locks.hpp>
+
 #include <QPoint>
 #include <QLayout>
 #include <QCheckBox>
@@ -150,6 +152,8 @@ void KisToolColorPicker::deactivate()
     KisTool::deactivate();
 }
 
+
+
 void KisToolColorPicker::pickColor(const QPointF& pos)
 {
         if(m_colorPickerDelayTimer.isActive()) {
@@ -160,17 +164,17 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             m_colorPickerDelayTimer.start(100);
         }
 
-        if (!currentNode())
-        {
-            return;
-        }
 
-        KisPaintDeviceSP dev = currentNode()->projection();
-        KIS_ASSERT_RECOVER_RETURN(dev);
+        QScopedPointer<boost::lock_guard<KisImage> > imageLocker;
 
+        KisPaintDeviceSP dev;
 
-        if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
-            currentImage()->lock();
+        if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
+            currentNode() && currentNode()->projection()) {
+
+            dev = currentNode()->projection();
+        } else {
+            imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
             dev = currentImage()->projection();
         }
 
@@ -235,10 +239,6 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             } else {
                 canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
             }
-        }
-
-        if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
-            currentImage()->unlock();
         }
 }
 

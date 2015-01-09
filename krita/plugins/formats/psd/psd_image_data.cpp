@@ -307,7 +307,7 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
             channelLengthPos +=2;
             io->seek(channelStartPos);
 
-            if (!io->write(compressed) == compressed.size()) {
+            if (io->write(compressed) != compressed.size()) {
                 error = "Could not write image data";
                 return false;
             }

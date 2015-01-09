@@ -715,7 +715,7 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
             channelRLESizePos +=2;
             io->seek(channelStartPos);
 
-            if (!io->write(compressed) == size) {
+            if (io->write(compressed) != size) {
                 error = "Could not write image data";
                 return false;
             }

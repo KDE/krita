@@ -128,16 +128,18 @@ void KisOpenGL::createContext()
 #endif
 
 #ifdef Q_OS_WIN
-    QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
-    f.open(QFile::WriteOnly);
-    QString vendor((const char*)glGetString(GL_VENDOR));
-    f.write(vendor.toLatin1());
-    f.write(", ");
-    QString renderer((const char*)glGetString(GL_RENDERER));
-    f.write(renderer.toLatin1());
-    f.write(", ");
-    QString version((const char*)glGetString(GL_VERSION));
-    f.write(version.toLatin1());
+    {
+        QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
+        f.open(QFile::WriteOnly);
+        QString vendor((const char*)glGetString(GL_VENDOR));
+        f.write(vendor.toLatin1());
+        f.write(", ");
+        QString renderer((const char*)glGetString(GL_RENDERER));
+        f.write(renderer.toLatin1());
+        f.write(", ");
+        QString version((const char*)glGetString(GL_VERSION));
+        f.write(version.toLatin1());
+    }
 #endif
 
     // Check if we have a bugged driver that needs fence workaround

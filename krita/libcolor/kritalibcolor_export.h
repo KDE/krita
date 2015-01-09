@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KRITALIBCOLOR_EXPORT
-# if defined(MAKE_KRITALIBCOLOR_LIB)
+# if defined(MAKE_KRITACOLOR_LIB)
 /* We are building this library */
 #  define KRITALIBCOLOR_EXPORT KDE_EXPORT
 # else

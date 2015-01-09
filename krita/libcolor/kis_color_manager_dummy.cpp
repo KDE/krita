@@ -18,13 +18,43 @@
 
 #include "kis_color_manager.h"
 
-KisColorManager::KisColorManager(QObject *parent) :
-    QObject(parent)
+#include <kglobal.h>
+
+class KisColorManager::Private {
+public:
+    // we are too dumb for that :)
+};
+
+
+KisColorManager::KisColorManager()
+    : QObject()
+    , d(new Private())
 {
 }
 
-QByteArray KisColorManager::displayProfile(int screen) const
+KisColorManager::~KisColorManager()
 {
-    QByteArray ba;
-    return ba;
 }
+
+QString KisColorManager::deviceName(const QString &id)
+{
+    return QString();
+}
+
+QStringList KisColorManager::devices(DeviceType type) const
+{
+    return QStringList();
+}
+
+QByteArray KisColorManager::displayProfile(const QString &device, int profile) const
+{
+    return QByteArray();
+}
+
+KisColorManager *KisColorManager::instance()
+{
+    K_GLOBAL_STATIC(KisColorManager, s_instance);
+    return s_instance;
+}
+
+#include "kis_color_manager.moc"

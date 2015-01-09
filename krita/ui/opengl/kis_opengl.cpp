@@ -142,8 +142,9 @@ void KisOpenGL::createContext()
 
     // Check if we have a bugged driver that needs fence workaround
     QString renderer((const char*)glGetString(GL_RENDERER));
-    if(renderer.startsWith("AMD"))
+    if (renderer.startsWith("AMD")) {
         NeedsFenceWorkaround = true;
+    }
 }
 
 void KisOpenGL::initialMakeContextCurrent()

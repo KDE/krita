@@ -558,7 +558,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     double coeff = quint8_MAX / (double)(pow((double)2, color_nb_bits) - 1);
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
-    KisTransaction(layer -> paintDevice());
 
     // Read comments/texts...
     png_text* text_ptr;

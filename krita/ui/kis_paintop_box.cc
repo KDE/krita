@@ -842,16 +842,9 @@ void KisPaintopBox::sliderChanged(int n)
         delete propertiesProxy;
 
         m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
-    } else {
-        m_resourceProvider->setOpacity(opacity);
     }
 
-    if (m_presetsEnabled) {
-        m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
-        KisLockedPropertiesProxy *propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
-        propertiesProxy->setProperty("OpacityValue", opacity);
-        delete propertiesProxy;
-    }
+    m_resourceProvider->setOpacity(opacity);
 
     m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 }

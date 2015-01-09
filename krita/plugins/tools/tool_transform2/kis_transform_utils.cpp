@@ -25,9 +25,9 @@
 
 
 const int KisTransformUtils::rotationHandleVisualRadius = 12;
-const int KisTransformUtils::rotationHandleRadius = 24;
+const int KisTransformUtils::rotationHandleRadius = 8;
 const int KisTransformUtils::handleVisualRadius = 12;
-const int KisTransformUtils::handleRadius = 24;
+const int KisTransformUtils::handleRadius = 8;
 
 
 QTransform KisTransformUtils::imageToFlakeTransform(const KisCoordinatesConverter *converter)

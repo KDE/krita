@@ -186,6 +186,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
+    KisOpenGL::makeContextCurrent(this);
     delete d;
 }
 

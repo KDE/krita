@@ -376,7 +376,8 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
-    KisOpenGL::initialMakeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
+
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(),
                                                                         m_d->displayColorConverter->monitorProfile(),
                                                                         m_d->displayColorConverter->renderingIntent(),

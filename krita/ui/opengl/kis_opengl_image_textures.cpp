@@ -80,7 +80,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
 {
     Q_ASSERT(renderingIntent < 4);
 
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
 
     getTextureSize(&m_texturesInfo);
 
@@ -117,7 +117,7 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
 
     if (imageCanShareTextures()) {
         ImageTexturesMap::iterator it = imageTexturesMap.find(image);
@@ -152,7 +152,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 {
     KisConfig cfg;
 
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
 
     destroyImageTextureTiles();
     updateTextureFormat();
@@ -189,7 +189,8 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
 {
     if(m_textureTiles.isEmpty()) return;
 
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
+
     foreach(KisTextureTile *tile, m_textureTiles) {
         delete tile;
     }
@@ -270,7 +271,8 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if(!glInfo) return;
 
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
+
     KIS_OPENGL_CLEAR_ERROR();
 
     KisTextureTileUpdateInfoSP tileInfo;
@@ -286,7 +288,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
 void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 {
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
 
     glBindTexture(GL_TEXTURE_2D, m_checkerTexture);
 

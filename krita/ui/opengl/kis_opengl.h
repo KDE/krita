@@ -87,6 +87,12 @@ public:
      */
     static bool supportsGLSL13();
 
+    /**
+     * Returns true if we have a driver that has bugged support to sync objects (a fence)
+     * and false otherwise.
+     */
+    static bool needsFenceWorkaround();
+
 private:
     KisOpenGL();
 

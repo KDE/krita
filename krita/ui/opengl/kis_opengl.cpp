@@ -35,6 +35,7 @@
 namespace
 {
     QGLWidget *SharedContextWidget = 0;
+    bool NeedsFenceWorkaround = false;
 }
 
 void KisOpenGL::createContext()
@@ -138,6 +139,11 @@ void KisOpenGL::createContext()
     QString version((const char*)glGetString(GL_VERSION));
     f.write(version.toLatin1());
 #endif
+
+    // Check if we have a bugged driver that needs fence workaround
+    QString renderer((const char*)glGetString(GL_RENDERER));
+    if(renderer.startsWith("AMD"))
+        NeedsFenceWorkaround = true;
 }
 
 void KisOpenGL::initialMakeContextCurrent()
@@ -189,6 +195,11 @@ void KisOpenGL::clearError()
 bool KisOpenGL::supportsGLSL13()
 {
     return QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_0;
+}
+
+bool KisOpenGL::needsFenceWorkaround()
+{
+    return NeedsFenceWorkaround;
 }
 
 #endif // HAVE_OPENGL

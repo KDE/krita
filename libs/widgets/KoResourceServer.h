@@ -218,6 +218,10 @@ public:
         m_resources = sortedResources();
         m_tagStore->loadTags();
 
+        foreach(ObserverType* observer, m_observers) {
+            observer->syncTaggedResourceView();
+        }
+
         kDebug(30009) << "done loading  resources for type " << type();
     }
 

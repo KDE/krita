@@ -110,13 +110,17 @@ extern "C" int main(int argc, char **argv)
     if (app.isRunning()) {
 
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-        QByteArray ba;
-        QDataStream ds(&ba, QIODevice::WriteOnly);
-        args->saveAppArgs(ds);
-        ds.device()->close();
 
-        if (app.sendMessage(ba)) {
-            return 0;
+        if (!args->isSet("export")) {
+
+            QByteArray ba;
+            QDataStream ds(&ba, QIODevice::WriteOnly);
+            args->saveAppArgs(ds);
+            ds.device()->close();
+
+            if (app.sendMessage(ba)) {
+                return 0;
+            }
         }
     }
 

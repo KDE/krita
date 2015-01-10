@@ -628,7 +628,7 @@ void KisViewManager::createActions()
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
     d->createTemplate = new KisAction( i18n( "&Create Template From Image..." ), this);
-    actionManager()->addAction("create_t`emplate", d->createTemplate);
+    actionManager()->addAction("create_template", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
     d->openResourcesDirectory = new KisAction(i18n("Open Resources Folder"), this);

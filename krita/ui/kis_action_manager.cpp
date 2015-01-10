@@ -19,7 +19,6 @@
 #include "kis_action_manager.h"
 
 #include <QList>
-
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 
@@ -32,6 +31,7 @@
 #include "operations/kis_operation.h"
 #include "kis_layer.h"
 #include "KisDocument.h"
+
 
 
 
@@ -111,84 +111,99 @@ void KisActionManager::updateGUI()
     KisLayerSP layer;
     KisPaintDeviceSP device;
     KisDocument* document = 0;
+    KisSelectionManager* selectionManager = 0;
+    KisAction::ActivationConditions conditions = KisAction::NO_CONDITION;
 
     if (d->viewManager) {
-        image = d->viewManager->image();
-        node = d->viewManager->activeNode();
-        device = d->viewManager->activeDevice();
-        document = d->viewManager->document();
 
-        if (d->viewManager->viewCount() > 1) {
-            flags |= KisAction::MULTIPLE_IMAGES;
+        // if there are no views, that means no document is open.
+        // we cannot have nodes (selections), devices, or documents without a view
+        if ( d->viewManager->viewCount() > 0 )
+        {
+            image = d->viewManager->image();
+            flags |= KisAction::ACTIVE_IMAGE;
+
+            node = d->viewManager->activeNode();
+            device = d->viewManager->activeDevice();
+            document = d->viewManager->document();
+            selectionManager = d->viewManager->selectionManager();
+
+            if (d->viewManager->viewCount() > 1) {
+                flags |= KisAction::MULTIPLE_IMAGES;
+            }
+
+            if (document && document->isModified()) {
+                flags |= KisAction::CURRENT_IMAGE_MODIFIED;
+            }
+
+            if (device) {
+                flags |= KisAction::ACTIVE_DEVICE;
+            }
         }
-    }
 
-    if (node) {
-        layer = dynamic_cast<KisLayer*>(node.data());
     }
 
 
-    if (document && document->isModified()) {
-        flags |= KisAction::CURRENT_IMAGE_MODIFIED;
-    }
+    // is there a selection/mask?
+    // you have to have at least one view(document) open for this to be true
+    if (node)
+    {
 
-    if (image) {
-        flags |= KisAction::ACTIVE_IMAGE;
-    }
-
-    if (device) {
-        flags |= KisAction::ACTIVE_DEVICE;
-    }
-
-    if (node) {
+        // if a node exists, we know there is an active layer as well
         flags |= KisAction::ACTIVE_NODE;
+
+        layer = dynamic_cast<KisLayer*>(node.data());
+        flags |= KisAction::ACTIVE_LAYER;
+
         if (node->inherits("KisTransparencyMask")) {
             flags |= KisAction::ACTIVE_TRANSPARENCY_MASK;
         }
-    }
 
-    if (layer) {
-        flags |= KisAction::ACTIVE_LAYER;
-        if (layer->inherits("KisShapeLayer")) {
+
+        if (layer && layer->inherits("KisShapeLayer")) {
             flags |= KisAction::ACTIVE_SHAPE_LAYER;
+        }
+
+        if (selectionManager)
+        {
+            if (selectionManager->havePixelsSelected()) {
+                flags |= KisAction::PIXELS_SELECTED;
+            }
+
+            if (selectionManager->haveShapesSelected()) {
+                flags |= KisAction::SHAPES_SELECTED;
+            }
+
+            if (selectionManager->havePixelSelectionWithPixels()) {
+                flags |= KisAction::PIXEL_SELECTION_WITH_PIXELS;
+            }
+
+            if (selectionManager->havePixelsInClipboard()) {
+                flags |= KisAction::PIXELS_IN_CLIPBOARD;
+            }
+
+            if (selectionManager->haveShapesInClipboard()) {
+                flags |= KisAction::SHAPES_IN_CLIPBOARD;
+            }
+        }
+
+
+        if (node->isEditable()) {
+            conditions |= KisAction::ACTIVE_NODE_EDITABLE;
+        }
+
+        if (node->hasEditablePaintDevice()) {
+            conditions |= KisAction::ACTIVE_NODE_EDITABLE_PAINT_DEVICE;
+        }
+
+        if (d->viewManager->selectionEditable()) {
+            conditions |= KisAction::SELECTION_EDITABLE;
         }
     }
 
-    KisSelectionManager* selectionManager = d->viewManager->selectionManager();
-    if (selectionManager->havePixelsSelected()) {
-        flags |= KisAction::PIXELS_SELECTED;
-    }
 
-    if (selectionManager->haveShapesSelected()) {
-        flags |= KisAction::SHAPES_SELECTED;
-    }
 
-    if (selectionManager->havePixelSelectionWithPixels()) {
-        flags |= KisAction::PIXEL_SELECTION_WITH_PIXELS;
-    }
-
-    if (selectionManager->havePixelsInClipboard()) {
-        flags |= KisAction::PIXELS_IN_CLIPBOARD;
-    }
-
-    if (selectionManager->haveShapesInClipboard()) {
-        flags |= KisAction::SHAPES_IN_CLIPBOARD;
-    }
-
-    KisAction::ActivationConditions conditions = KisAction::NO_CONDITION;
-
-    if (node && node->isEditable()) {
-        conditions |= KisAction::ACTIVE_NODE_EDITABLE;
-    }
-
-    if (node && node->hasEditablePaintDevice()) {
-        conditions |= KisAction::ACTIVE_NODE_EDITABLE_PAINT_DEVICE;
-    }
-
-    if (d->viewManager->selectionEditable()) {
-        conditions |= KisAction::SELECTION_EDITABLE;
-    }
-
+    // loop through all actions in action manager and determine what should be enabled
     foreach(KisAction* action, d->actions) {
         bool enable;
 
@@ -196,7 +211,7 @@ void KisActionManager::updateGUI()
             enable = true;
         }
         else {
-            enable = action->activationFlags() & flags;
+            enable = action->activationFlags() & flags; // combine action flags with updateGUI flags
         }
 
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();

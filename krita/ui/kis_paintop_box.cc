@@ -108,8 +108,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
-    if (parent) palette = parent->palette();
-
     m_settingsWidget = new KisPopupButton(this);
     m_settingsWidget->setIcon(koIcon("paintop_settings_02"));
     m_settingsWidget->setToolTip(i18n("Edit brush settings"));
@@ -985,12 +983,15 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
 
 void KisPaintopBox::toggleHighlightedButton(QToolButton* m_tool)
 {
-    palette_highlight.setColor(QPalette::Button, palette.color(QPalette::Highlight));
-
-    if (m_tool->isChecked())
-        m_tool->setPalette(this->palette_highlight);
-    else
-        m_tool->setPalette(this->palette);
+    QPalette p = palette();
+    if (m_tool->isChecked()) {
+        QPalette palette_highlight(p);
+        palette_highlight.setColor(QPalette::Button, p.color(QPalette::Highlight));
+        m_tool->setPalette(palette_highlight);
+    }
+    else {
+        m_tool->setPalette(p);
+    }
 }
 void KisPaintopBox::slotReloadPreset()
 {

@@ -191,9 +191,6 @@ private:
     QString             m_currCompositeOpID;
     KisNodeWSP          m_previousNode;
 
-    QPalette palette;
-    QPalette palette_highlight;
-
     int normalBrushSize; // when toggling between eraser mode
     int eraserBrushSize;
 

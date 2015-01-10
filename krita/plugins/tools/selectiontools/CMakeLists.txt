@@ -35,8 +35,6 @@ install( FILES  tool_path_selection.png
                 tool_polygonal_selection_cursor.png
                 tool_similar_selection.png
                 tool_similar_selection_cursor.png
-                tool_magneticoutline_selection.png
-                tool_magneticoutline_selection_cursor.png
                 
                 dark_tool_contiguous_selection.png
                 dark_tool_outline_selection.png

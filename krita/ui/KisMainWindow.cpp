@@ -467,22 +467,15 @@ void KisMainWindow::addView(KisView *view)
     if (d->activeView == view) return;
 
     if (d->activeView) {
-        KisDocument *activeDocument = d->activeView->document();
-
-        if (activeDocument) {
-            activeDocument->disconnect(this);
-        }
+        d->activeView->disconnect(this);
     }
 
     showView(view);
-
     updateCaption();
-
     emit restoringDone();
 
-    bool viewHasDocument = d->activeView ? (d->activeView->document() ? true : false) : false;
-    if (viewHasDocument) {
-        connect(d->activeView->document(), SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
+    if (d->activeView) {
+        connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
 
 }

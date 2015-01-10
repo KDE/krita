@@ -222,7 +222,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     , d(new Private)
 {
     Q_ASSERT(document);
-
+    connect(document, SIGNAL(titleModified(QString,bool)), this, SIGNAL(titleModified(QString,bool)));
     setObjectName(newObjectName());
 
     d->document = document;

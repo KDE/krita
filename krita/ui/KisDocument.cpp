@@ -599,6 +599,7 @@ KisDocument::~KisDocument()
 
     // Despite being QObject they needs to be deleted before the image
     delete d->shapeController;
+    
     delete d->koShapeController;
 
     if (d->image) {

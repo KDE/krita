@@ -224,6 +224,7 @@ signals:
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
+    void titleModified(QString,bool);
 
 protected:
 

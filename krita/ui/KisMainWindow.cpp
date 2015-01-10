@@ -1772,7 +1772,7 @@ void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
 void KisMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
 {
     updateCaption(caption, mod);
-    updateReloadFileAction(d->activeView->document());
+    updateReloadFileAction(d->activeView ? d->activeView->document() : 0);
 }
 
 

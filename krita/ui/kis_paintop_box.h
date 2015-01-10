@@ -154,8 +154,6 @@ private slots:
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
 
-    void toggleHighlightedButton(QToolButton* m_tool);
-
     void slotReloadPreset();
     void slotConfigurationItemChanged();
     void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);

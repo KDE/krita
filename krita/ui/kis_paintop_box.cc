@@ -786,8 +786,6 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
     m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")->setValue(updateSize);
     m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")->setValue(updateSize);
 
-
-    toggleHighlightedButton(m_eraseModeButton);
 }
 
 void KisPaintopBox::slotSetCompositeMode(int index)
@@ -803,13 +801,11 @@ void KisPaintopBox::slotSetCompositeMode(int index)
 void KisPaintopBox::slotHorizontalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorHorizontal(value);
-    toggleHighlightedButton(hMirrorButton);
 }
 
 void KisPaintopBox::slotVerticalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorVertical(value);
-    toggleHighlightedButton(vMirrorButton);
 }
 
 void KisPaintopBox::sliderChanged(int n)
@@ -978,20 +974,9 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
     } else {
         m_alphaLockButton->actions()[0]->setIcon(koIcon("transparency-unlocked"));
     }
-    toggleHighlightedButton(m_alphaLockButton);
     m_resourceProvider->setGlobalAlphaLock(checked);
 }
 
-
-void KisPaintopBox::toggleHighlightedButton(QToolButton* m_tool)
-{
-    palette_highlight.setColor(QPalette::Button, palette.color(QPalette::Highlight));
-
-    if (m_tool->isChecked())
-        m_tool->setPalette(this->palette_highlight);
-    else
-        m_tool->setPalette(this->palette);
-}
 void KisPaintopBox::slotReloadPreset()
 {
     KisSignalsBlocker blocker(m_optionWidget);

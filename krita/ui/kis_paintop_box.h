@@ -32,7 +32,6 @@
 
 #include <kis_types.h>
 #include <kis_paintop_settings.h>
-#include <kaction.h>
 
 #include "kis_locked_properties_proxy.h"
 #include "kis_locked_properties_server.h"
@@ -59,6 +58,7 @@ class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
 class KisLockedProperties;
+class KisAction;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -197,8 +197,8 @@ private:
     int normalBrushSize; // when toggling between eraser mode
     int eraserBrushSize;
 
-    KAction* hMirrorAction;
-    KAction* vMirrorAction;
+    KisAction* m_hMirrorAction;
+    KisAction* m_vMirrorAction;
 
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {

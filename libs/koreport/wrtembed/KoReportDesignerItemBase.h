@@ -79,6 +79,20 @@ protected:
     KoReportDesignerItemBase(KoReportDesigner*);
     KoReportDesigner* m_reportDesigner;
     QString dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName) const;
+    
+    /**
+     * @brief Updates the text that is shown for the item in the report designer
+     * If itemDataSource is set then it is preferred over itemStaticValue
+     * itemType is appended to the end of the text
+     * 
+     * @param itemDataSource source field property
+     * @param itemStaticValue value property
+     * @param itemType type of item
+     * @return void
+     */
+    void updateRenderText(const QString &itemDataSource, const QString &itemStaticValue, const QString &itemType);
+    QString m_renderText;
+    
 private:
     static bool m_readDefaultFont;
     static QFont m_defaultFont;

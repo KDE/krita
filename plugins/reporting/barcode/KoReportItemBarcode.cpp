@@ -38,6 +38,7 @@ KoReportItemBarcode::KoReportItemBarcode(QDomNode & element)
 
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
+    m_itemValue->setValue(element.toElement().attribute("report:value"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_maxLength->setValue(element.toElement().attribute("report:barcode-max-length"));
@@ -117,6 +118,8 @@ void KoReportItemBarcode::createProperties()
 
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
+    m_itemValue = new KoProperty::Property("value", QString(), i18n("Value"), i18n("Value used if not bound to a field"));
+
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
     m_horizontalAlignment = new KoProperty::Property("horizontal-align", keys, strings, "left", i18n("Horizontal Alignment"));
@@ -131,6 +134,7 @@ void KoReportItemBarcode::createProperties()
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
+    m_set->addProperty(m_itemValue);
     m_set->addProperty(m_format);
     m_set->addProperty(m_horizontalAlignment);
     m_set->addProperty(m_maxLength);
@@ -198,8 +202,14 @@ int KoReportItemBarcode::renderSimpleData(OROPage *page, OROSection *section, co
 
     QRectF rect = QRectF(pos, size);
 
-    QString val = data.toString();
+    QString val;
 
+    if (m_controlSource->value().toString().isEmpty()) {
+        val = m_itemValue->value().toString();
+    } else {
+        val = data.toString();
+    }
+    
     if (page) {
         QString fmt = m_format->value().toString();
         int align = alignment();

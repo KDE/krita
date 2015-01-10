@@ -378,6 +378,10 @@ KisMainWindow::KisMainWindow()
 
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources("data", "krita/krita.rc");
+    KIS_ASSERT(allFiles.size() > 0);
+
+    kis_assert_exception(allFiles.size() > 0); // We need at least one krita.rc file!
+
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
     setLocalXMLFile(KStandardDirs::locateLocal("data", "krita/krita.rc"));
 

@@ -457,14 +457,16 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     KisConfig cfg;
 
 #ifdef HAVE_OPENGL
-    if (!QGLFormat::hasOpenGL()) {
-        cbUseOpenGL->setEnabled(false);
+    if (!QGLFormat::hasOpenGL()) {       
+        grpOpenGL->setEnabled(false);
+        grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
         chkDisableDoubleBuffering->setEnabled(false);
         chkDisableVsync->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
-        cbUseOpenGL->setChecked(cfg.useOpenGL());
+        grpOpenGL->setEnabled(true);
+        grpOpenGL->setChecked(cfg.useOpenGL());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
         chkDisableDoubleBuffering->setVisible(cfg.showAdvancedOpenGLSettings());
@@ -481,11 +483,12 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
     }
     if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
-        cbUseOpenGL->setVisible(false);
-        cbUseOpenGL->setMaximumHeight(0);
+       grpOpenGL->setVisible(false);
+       grpOpenGL->setMaximumHeight(0);
     }
 #else
     grpOpenGL->setEnabled(false);
+    grpOpenGL->setChecked(false);
 #endif
 
     KoColor c;
@@ -507,12 +510,12 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline());
     chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor());
 
-    connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
+    connect(grpOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
 }
 
 void DisplaySettingsTab::setDefault()
 {
-    cbUseOpenGL->setChecked(true);
+    grpOpenGL->setChecked(true);
     chkUseTextureBuffer->setChecked(false);
     chkUseTextureBuffer->setEnabled(true);
     chkDisableDoubleBuffering->setEnabled(true);
@@ -849,9 +852,9 @@ bool KisDlgPreferences::editPreferences()
 #endif
 
 #ifdef HAVE_OPENGL
-        if (!cfg.useOpenGL() && dialog->m_displaySettings->cbUseOpenGL->isChecked())
+        if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
             cfg.setCanvasState("TRY_OPENGL");
-        cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
+        cfg.setUseOpenGL(dialog->m_displaySettings->grpOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
         cfg.setDisableDoubleBuffering(dialog->m_displaySettings->chkDisableDoubleBuffering->isChecked());

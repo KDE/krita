@@ -2112,7 +2112,7 @@ void KisMainWindow::createActions()
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
     d->close = new KisAction(i18nc("@action:inmenu", "Close"));
-    d->mdiPreviousWindow->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    d->close->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
     actionManager->addAction("file_close", d->close);
 

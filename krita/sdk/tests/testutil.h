@@ -55,7 +55,7 @@ inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
 
     KisNodeSP child = root->firstChild();
     while (child) {
-        if(root = findNode(child, name)) return root;
+        if((root = findNode(child, name))) return root;
         child = child->nextSibling();
     }
 

@@ -50,6 +50,7 @@
     <Menu name="view">
       <text>&amp;View</text>
       <Action name="view_show_just_the_canvas"/>
+      <Action name="fullscreen"/>
       <Action name="mirror_canvas"/>
       <Action name="wrap_around_mode"/>
       <Separator/>
@@ -245,8 +246,7 @@
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
-      <Action name="fullscreen"/>
-      <Action name="view_toggledockers"/>
+       <Action name="view_toggledockers"/>
       <Action name="settings_dockers_menu"/>
       <Action name="theme_menu"/>
       <Separator/>

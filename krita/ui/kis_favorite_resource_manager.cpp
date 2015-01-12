@@ -339,7 +339,8 @@ void KisFavoriteResourceManager::updateFavoritePresets()
 void KisFavoriteResourceManager::init()
 {
     if (!m_initialized) {
-        KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+        m_initialized = true;
+        KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(true);
         KConfigGroup group(KGlobal::config(), "favoriteList");
         QStringList oldFavoritePresets = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
 

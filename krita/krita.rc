@@ -64,6 +64,7 @@
       <Action name="view_ruler"/>
       <Action name="view_guidelines"/>
       <Action name="view_show_guides"/>
+      <Action name="showStatusBar" />
       <Separator/>
       <Action name="view_grid"/>
       <Action name="view_snap_to_grid"/>

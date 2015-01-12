@@ -658,6 +658,7 @@ void KisViewManager::createActions()
     tAction->setChecked(true);
     tAction->setToolTip(i18n("Shows or hides the status bar"));
     actionManager()->addAction("showStatusBar", tAction);
+    tAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
     tAction = new KisAction(i18n("Show Canvas Only"), this);

@@ -73,6 +73,7 @@ public:
     int favoritePresets();
 private slots:
     void getBackgroundImage();
+    void clearBackgroundImage();
 
 };
 

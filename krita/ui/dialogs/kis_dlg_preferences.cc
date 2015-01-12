@@ -112,7 +112,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
     m_mdiColor->setColor(cfg.getMDIBackgroundColor());
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
+
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
+    connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
 }
 
 void GeneralTab::setDefault()
@@ -188,6 +190,11 @@ void GeneralTab::getBackgroundImage()
 
 }
 
+void GeneralTab::clearBackgroundImage()
+{
+    // clearing the background image text will implicitly make the background color be used
+    m_backgroundimage->setText("");
+}
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     : QWidget(parent)

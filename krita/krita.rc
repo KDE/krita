@@ -246,16 +246,18 @@
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
-       <Action name="view_toggledockers"/>
+      <Action name="view_toggledockers"/>
       <Action name="settings_dockers_menu"/>
-      <Action name="theme_menu"/>
       <Separator/>
-      <Action name="switch_application_language"/>
+      <Action name="theme_menu"/> 
+      <Separator/>    
       <Action name="options_configure_keybinding"/>
-      <Action name="manage_bundles"/>
-      <Action name="options_configure_toolbars"/>
+      <Action name="options_configure"/>        
+      <Action name="manage_bundles"/> 
+      <Action name="switch_application_language"/>    
       <Separator/>
-      <Action name="options_configure"/>
+      <Action name="options_configure_toolbars"/>
+      <!-- "toolbars shown" is dynamically inserted at the bottom -->   
     </Menu>
     <Action name="window"/>
     <Separator/>

@@ -104,15 +104,8 @@ void KisPaintOp::setFanCornersInfo(bool fanCornersEnabled, qreal fanCornersStep)
 
 void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fraction)
 {
-    qint32 i = static_cast<qint32>(coordinate);
-
-    if (coordinate < 0) {
-        // We always want the fractional part to be positive.
-        // E.g. -1.25 becomes -2 and +0.75
-        i--;
-    }
-
-    qreal f = coordinate - i;
+    const qint32 i = std::floor(coordinate);
+    const qreal f = coordinate - i;
 
     *whole = i;
     *fraction = f;

@@ -73,6 +73,10 @@ KisPatternChooser::~KisPatternChooser()
 
 KoResource *  KisPatternChooser::currentResource()
 {
+    if (!m_itemChooser->currentResource()) {
+        KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
+        m_itemChooser->setCurrentResource(rserver->resources().first());
+    }
     return m_itemChooser->currentResource();
 }
 

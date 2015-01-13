@@ -148,7 +148,7 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     m_patternsTab->setFont(m_font);
     l2->addWidget(m_patternsTab);
 
-    m_patternChooser = new KoPatternChooser(m_patternChooserPopup);
+    m_patternChooser = new KisPatternChooser(m_patternChooserPopup);
     m_patternChooser->setFont(m_font);
     QWidget *patternChooserPage = new QWidget(m_patternChooserPopup);
     QHBoxLayout *patternChooserPageLayout  = new QHBoxLayout(patternChooserPage);

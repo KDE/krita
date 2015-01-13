@@ -30,7 +30,7 @@
 PatternDockerDock::PatternDockerDock( )
     : QDockWidget(i18n("Patterns"))
 {
-    m_patternChooser = new KoPatternChooser(this);
+    m_patternChooser = new KisPatternChooser(this);
     m_patternChooser->setPreviewOrientation(Qt::Vertical);
     m_patternChooser->setCurrentItem(0,0);
     m_patternChooser->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);

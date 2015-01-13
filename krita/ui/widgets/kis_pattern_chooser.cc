@@ -35,7 +35,7 @@
 #include "kis_global.h"
 #include "KoPattern.h"
 
-KoPatternChooser::KoPatternChooser(QWidget *parent)
+KisPatternChooser::KisPatternChooser(QWidget *parent)
         : QFrame(parent)
 {
     m_lbName = new QLabel(this);
@@ -67,21 +67,21 @@ KoPatternChooser::KoPatternChooser(QWidget *parent)
     setLayout(mainLayout);
 }
 
-KoPatternChooser::~KoPatternChooser()
+KisPatternChooser::~KisPatternChooser()
 {
 }
 
-KoResource *  KoPatternChooser::currentResource()
+KoResource *  KisPatternChooser::currentResource()
 {
     return m_itemChooser->currentResource();
 }
 
-void KoPatternChooser::setCurrentPattern(KoResource *resource)
+void KisPatternChooser::setCurrentPattern(KoResource *resource)
 {
     m_itemChooser->setCurrentResource(resource);
 }
 
-void KoPatternChooser::setCurrentItem(int row, int column)
+void KisPatternChooser::setCurrentItem(int row, int column)
 {
     m_itemChooser->setCurrentItem(row, column);
     if (currentResource()) {
@@ -89,12 +89,12 @@ void KoPatternChooser::setCurrentItem(int row, int column)
     }
 }
 
-void KoPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
+void KisPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
 {
     m_itemChooser->setPreviewOrientation(orientation);
 }
 
-void KoPatternChooser::update(KoResource * resource)
+void KisPatternChooser::update(KoResource * resource)
 {
     KoPattern *pattern = static_cast<KoPattern *>(resource);
 
@@ -102,7 +102,7 @@ void KoPatternChooser::update(KoResource * resource)
     m_lbName->setText(text);
 }
 
-void KoPatternChooser::setGrayscalePreview(bool grayscale)
+void KisPatternChooser::setGrayscalePreview(bool grayscale)
 {
     m_itemChooser->setGrayscalePreview(grayscale);
 }

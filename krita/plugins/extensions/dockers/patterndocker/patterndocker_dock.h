@@ -22,7 +22,7 @@
 #include <kis_mainwindow_observer.h>
 
 class KoPattern;
-class KoPatternChooser;
+class KisPatternChooser;
 
 class PatternDockerDock : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
@@ -39,7 +39,7 @@ public slots:
 private slots:
 
 private:
-    KoPatternChooser* m_patternChooser;
+    KisPatternChooser* m_patternChooser;
 };
 
 

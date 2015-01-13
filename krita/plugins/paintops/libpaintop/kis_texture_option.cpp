@@ -59,7 +59,7 @@ public:
         QFormLayout *formLayout = new QFormLayout(this);
         formLayout->setMargin(0);
 
-        chooser = new KoPatternChooser(this);
+        chooser = new KisPatternChooser(this);
         chooser->setGrayscalePreview(true);
         chooser->setMaximumHeight(250);
         chooser->setCurrentItem(0, 0);
@@ -120,7 +120,7 @@ public:
 
         setLayout(formLayout);
     }
-    KoPatternChooser *chooser;
+    KisPatternChooser *chooser;
     KisMultipliersDoubleSliderSpinBox *scaleSlider;
     KisSliderSpinBox *offsetSliderX;
     QCheckBox *randomOffsetX;

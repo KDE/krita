@@ -58,7 +58,8 @@ struct KisPaintOp::Private {
         : q(_q), dab(0),
           currentScale(1.0),
           currentRotation(0),
-          fanCornersEnabled(false)  {}
+          fanCornersEnabled(false),
+          fanCornersStep(1.0) {}
 
     KisPaintOp *q;
 

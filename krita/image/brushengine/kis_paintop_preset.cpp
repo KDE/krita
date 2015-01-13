@@ -42,7 +42,9 @@
 
 struct KisPaintOpPreset::Private {
     Private()
-        : settings(0) {
+        : settings(0),
+          dirtyPreset(false)
+    {
     }
 
     KisPaintOpSettingsSP settings;
@@ -55,7 +57,6 @@ KisPaintOpPreset::KisPaintOpPreset()
     : KoResource(QString())
     , m_d(new Private)
 {
-    m_d->dirtyPreset = false;
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)

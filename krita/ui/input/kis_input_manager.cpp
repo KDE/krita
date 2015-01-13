@@ -861,21 +861,23 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
 bool KisInputManager::Private::handleKisTabletEvent(QObject *object, KisTabletEvent *tevent)
 {
+    if(object == 0) return false;
+
     bool retval = false;
 
     QTabletEvent qte = tevent->toQTabletEvent();
     qte.ignore();
-    q->eventFilter(object, &qte);
+    retval = q->eventFilter(object, &qte);
     tevent->setAccepted(qte.isAccepted());
 
     if (!retval && !qte.isAccepted()) {
         QMouseEvent qme = tevent->toQMouseEvent();
         qme.ignore();
-        q->eventFilter(object, &qme);
+        retval = q->eventFilter(object, &qme);
         tevent->setAccepted(qme.isAccepted());
     }
 
-    return tevent->isAccepted();
+    return retval;
 }
 
 void KisInputManager::slotCompressedMoveEvent()

@@ -218,7 +218,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
 
     m_toggleDisplaySelection->setChecked(true);
 
-    m_imageResizeToSelection  = new KisAction(i18n("Size Canvas to Size of Selection"), this);
+    m_imageResizeToSelection  = new KisAction(i18n("Trim to Selection"), this);
     m_imageResizeToSelection->setActivationFlags(KisAction::PIXELS_SELECTED);
     actionManager->addAction("resizeimagetoselection", m_imageResizeToSelection);
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));

@@ -315,7 +315,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     actionManager->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
-    m_imageResizeToLayer = new KisAction(i18n("Size Canvas to Size of Current Layer"), this);
+    m_imageResizeToLayer = new KisAction(i18n("Trim to Current Layer"), this);
     m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));

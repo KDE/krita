@@ -163,6 +163,15 @@ void KoResourceTaggingManager::syncTagBoxEntryRemoval(const QString& tag)
     d->tagChooser->removeItem(tag);
 }
 
+void KoResourceTaggingManager::syncTagBoxEntries()
+{
+    QList<QString> tags = d->model->tagNamesList();
+
+    foreach (QString tag, tags) {
+        d->tagChooser->insertItem(tag);
+    }
+}
+
 void KoResourceTaggingManager::contextAddTagToResource(KoResource* resource, const QString& tag)
 {
     addResourceTag(resource, tag);
@@ -349,6 +358,8 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModelBase* model, Q
             this, SLOT(syncTagBoxEntryAddition(QString)));
     connect(d->model, SIGNAL(tagBoxEntryRemoved(QString)),
             this, SLOT(syncTagBoxEntryRemoval(QString)));
+    connect(d->model, SIGNAL(tagBoxEntryModified()),
+            this, SLOT(syncTagBoxEntries()));
 
     /// FIXME: fix tag completer
     /// d->tagCompleter = new QCompleter(this);

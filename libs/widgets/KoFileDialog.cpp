@@ -48,6 +48,7 @@ public:
         , mimeType(0)
         , useStaticForNative(false)
         , hideDetails(false)
+        , swapExtensionOrder(false)
     {
         // Force the native file dialogs on Windows. Except for KDE, the native file dialogs are only possible
         // using the static methods. The Qt documentation is wrong here, if it means what it says " By default,
@@ -71,6 +72,7 @@ public:
             useStaticForNative = true;
             QClipboard *cb = QApplication::clipboard();
             cb->blockSignals(true);
+            swapExtensionOrder = true;
         }
 
 #endif
@@ -96,6 +98,7 @@ public:
     KMimeType::Ptr mimeType;
     bool useStaticForNative;
     bool hideDetails;
+    bool swapExtensionOrder;
 };
 
 KoFileDialog::KoFileDialog(QWidget *parent,
@@ -183,7 +186,7 @@ void KoFileDialog::setNameFilters(const QStringList &filterList,
 void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
                                       QString defaultFilter)
 {
-    d->filterList = getFilterStringListFromMime(filterList, true);
+    d->filterList = getFilterStringListFromMime(filterList, false);
 
     if (!defaultFilter.isEmpty()) {
         QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultFilter, false);
@@ -441,20 +444,29 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
 
     for (QStringList::ConstIterator
          it = mimeList.begin(); it != mimeList.end(); ++it) {
-        KMimeType::Ptr mimeType = KMimeType::mimeType( *it );
-        if(!mimeType)
+        KMimeType::Ptr mimeType = KMimeType::mimeType(*it);
+        if (!mimeType) {
             continue;
+        }
         if (!mimeSeen.contains(mimeType->name())) {
-            QString oneFilter(mimeType->comment() + " ( ");
+            QString oneFilter;
             QStringList patterns = mimeType->patterns();
             QStringList::ConstIterator jt;
             for (jt = patterns.begin(); jt != patterns.end(); ++jt) {
-                oneFilter.append(*jt + " ");
-                if (withAllSupportedEntry) {
-                    ret[0].append(*jt + " ");
+                if (d->swapExtensionOrder) {
+                    oneFilter.prepend(*jt + " ");
+                    if (withAllSupportedEntry) {
+                        ret[0].prepend(*jt + " ");
+                    }
+                }
+                else {
+                    oneFilter.append(*jt + " ");
+                    if (withAllSupportedEntry) {
+                        ret[0].append(*jt + " ");
+                    }
                 }
             }
-            oneFilter.append(")");
+            oneFilter = mimeType->comment() + " ( " + oneFilter + ")";
             ret << oneFilter;
             mimeSeen << mimeType->name();
         }

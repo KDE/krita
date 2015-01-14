@@ -928,8 +928,17 @@ void KisNodeManager::mergeLayerDown()
         // start a big macro
         m_d->commandsAdapter->beginMacro(kundo2_i18n("Merge Selected Nodes"));
 
-        // Add the new merged node on top of the active node
-        m_d->commandsAdapter->addNode(flattenLayer, l->parent(), l);
+        // Add the new merged node on top of the active node -- checking whether the parent is in the selection
+        KisNodeSP parent = l->parent();
+        while (selectedNodes.contains(parent)) {
+            parent = parent->parent();
+        }
+        if (parent == l->parent()) {
+            m_d->commandsAdapter->addNode(flattenLayer, parent, l);
+        }
+        else {
+            m_d->commandsAdapter->addNode(flattenLayer, parent, parent->lastChild());
+        }
 
         // remove all nodes in the selection but the active node
         removeSelectedNodes(selectedNodes);

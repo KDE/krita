@@ -58,7 +58,7 @@ public:
     KisSelectionManager(KisViewManager * view);
     virtual ~KisSelectionManager();
 
-    void setup(KActionCollection * collection, KisActionManager* actionManager);
+    void setup(KisActionManager* actionManager);
 
     void setView(QPointer<KisView>imageView);
 

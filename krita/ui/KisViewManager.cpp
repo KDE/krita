@@ -743,7 +743,7 @@ void KisViewManager::createManagers()
     d->filterManager->setup(actionCollection(), actionManager());
 
     d->selectionManager = new KisSelectionManager(this);
-    d->selectionManager->setup(actionCollection(), actionManager());
+    d->selectionManager->setup(actionManager());
 
     d->nodeManager = new KisNodeManager(this);
     d->nodeManager->setup(actionCollection(), actionManager());

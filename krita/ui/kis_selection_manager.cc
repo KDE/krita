@@ -119,7 +119,7 @@ KisSelectionManager::~KisSelectionManager()
 {
 }
 
-void KisSelectionManager::setup(KActionCollection * collection, KisActionManager* actionManager)
+void KisSelectionManager::setup(KisActionManager* actionManager)
 {
     m_cut = actionManager->createStandardAction(KStandardAction::Cut, this, SLOT(cut()));
     m_copy = actionManager->createStandardAction(KStandardAction::Copy, this, SLOT(copy()));

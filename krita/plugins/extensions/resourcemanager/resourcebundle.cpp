@@ -724,17 +724,17 @@ bool ResourceBundle::install()
         }
     }
     m_installed = true;
-    if(!md5Mismatch.isEmpty()){
-        QString message = i18n("The following resources had mismatching MD5 sums. They may have gotten corrupted, for example, during download.");
-        QMessageBox bundleFeedback;
-        bundleFeedback.setIcon(QMessageBox::Warning);
-        foreach (QString name, md5Mismatch) {
-            message.append("\n");
-            message.append(name);
-        }
-        bundleFeedback.setText(message);
-        bundleFeedback.exec();
-    }
+//    if(!md5Mismatch.isEmpty()){
+//        QString message = i18n("The following resources had mismatching MD5 sums. They may have gotten corrupted, for example, during download.");
+//        QMessageBox bundleFeedback;
+//        bundleFeedback.setIcon(QMessageBox::Warning);
+//        foreach (QString name, md5Mismatch) {
+//            message.append("\n");
+//            message.append(name);
+//        }
+//        bundleFeedback.setText(message);
+//        bundleFeedback.exec();
+//    }
     return true;
 }
 

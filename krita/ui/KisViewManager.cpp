@@ -212,6 +212,16 @@ public:
     KisViewManagerPrivate()
         : filterManager(0)
         , statusBar(0)
+        , createTemplate(0)
+        , saveIncremental(0)
+        , saveIncrementalBackup(0)
+        , openResourcesDirectory(0)
+        , rotateCanvasRight(0)
+        , rotateCanvasLeft(0)
+        , wrapAroundAction(0)
+        , showRulersAction(0)
+        , zoomTo100pct(0)
+        , showGuidesAction(0)
         , selectionManager(0)
         , controlFrame(0)
         , nodeManager(0)
@@ -257,6 +267,10 @@ public:
     KisAction *rotateCanvasRight;
     KisAction *rotateCanvasLeft;
     KisAction *wrapAroundAction;
+    KisAction *showRulersAction;
+    KisAction *zoomTo100pct;
+    KisAction *showGuidesAction;
+
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
     KisNodeManager *nodeManager;
@@ -278,6 +292,9 @@ public:
     KActionCollection *actionCollection;
     KisMirrorManager *mirrorManager;
     QPointer<KisInputManager> inputManager;
+
+
+
 };
 
 
@@ -374,6 +391,10 @@ void KisViewManager::setCurrentView(KisView *view)
         d->rotateCanvasRight->disconnect();
         d->rotateCanvasLeft->disconnect();
         d->wrapAroundAction->disconnect();
+        d->showRulersAction->disconnect();
+        d->zoomTo100pct->disconnect();
+        d->showGuidesAction->disconnect();
+
         d->currentImageView->canvasController()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow());
         resourceProvider()->disconnect(d->currentImageView->canvasBase());
     }
@@ -397,6 +418,9 @@ void KisViewManager::setCurrentView(KisView *view)
         connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
         connect(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         connect(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+        connect(d->showRulersAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
+        connect(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
+        connect(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
     }
 
     d->filterManager->setView(imageView);
@@ -684,6 +708,27 @@ void KisViewManager::createActions()
     actionManager()->addAction("edit_blacklist_cleanup", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 
+    d->showRulersAction = new KisAction(i18n("Show Rulers"), this);
+    d->showRulersAction->setCheckable(true);
+    d->showRulersAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("view_ruler", d->showRulersAction);
+    d->showRulersAction->setWhatsThis(i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
+                                           "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers.</p>"));
+    KisConfig cfg;
+    d->showRulersAction->setChecked(cfg.showRulers());
+
+
+    d->showGuidesAction = new KisAction(i18n("Show Guides"), this);
+    d->showGuidesAction->setCheckable(true);
+    d->showGuidesAction->setCheckable(false);
+    d->showGuidesAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    d->showGuidesAction->setToolTip(i18n("Shows or hides guides"));
+    actionManager()->addAction("view_show_guides", d->showGuidesAction);
+
+    d->zoomTo100pct = new KisAction(i18n("Reset zoom"), this);
+    d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
+    d->zoomTo100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
 }
 
 

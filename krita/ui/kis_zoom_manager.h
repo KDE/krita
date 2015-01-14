@@ -61,7 +61,7 @@ public:
 
     QWidget *zoomActionWidget() const;
 
-private slots:
+public slots:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
     void slotScrollAreaSizeChanged();
@@ -70,7 +70,7 @@ private slots:
     void changeAspectMode(bool aspectMode);
     void pageOffsetChanged();
     void zoomTo100();
-    void showGuides();
+    void showGuides(bool toggle);
     void applyRulersUnit(const KoUnit &baseUnit);
 
 private:
@@ -81,11 +81,8 @@ private:
     KoZoomController *m_zoomController;
     KoRuler * m_horizontalRuler;
     KoRuler * m_verticalRuler;
-    QAction *m_showRulersAction;
     KoZoomAction * m_zoomAction;
     QWidget * m_zoomActionWidget;
-    KAction *m_100pct;
-    QAction * m_showGuidesAction;
     QPoint m_rulersOffset;
 };
 

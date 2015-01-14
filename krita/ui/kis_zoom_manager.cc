@@ -79,15 +79,13 @@ KisZoomManager::KisZoomManager(QPointer<KisView> view, KoZoomHandler * zoomHandl
         , m_verticalRuler(0)
         , m_zoomAction(0)
         , m_zoomActionWidget(0)
-        , m_100pct(0)
-        , m_showGuidesAction(0)
 {
 }
 
 KisZoomManager::~KisZoomManager()
 {
     KisConfig cfg;
-    cfg.setShowRulers(m_showRulersAction->isChecked());
+    cfg.setShowRulers(m_horizontalRuler->isVisible());
     delete m_zoomActionWidget;
 }
 
@@ -107,7 +105,6 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
 
-    KisConfig cfg;
     m_zoomController = new KisZoomController(m_canvasController, converter, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
     m_zoomHandler->setZoom(1.0);
@@ -118,22 +115,6 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_zoomAction = m_zoomController->zoomAction();
     m_zoomActionWidget = m_zoomAction->createWidget(0);
 
-    m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
-    actionCollection->addAction("view_ruler", m_showRulersAction);
-    m_showRulersAction->setWhatsThis(i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
-                                          "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers.</p>"));
-    connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
-
-    m_showGuidesAction = new KToggleAction(i18n("Show Guides"), this);
-    m_showGuidesAction->setToolTip(i18n("Shows or hides guides"));
-    m_showGuidesAction->setChecked(m_view->document()->guidesData().showGuideLines());
-    connect(m_showGuidesAction, SIGNAL(triggered(bool)), this, SLOT(showGuides()));
-    actionCollection->addAction("view_show_guides", m_showGuidesAction);
-
-    m_100pct = new KAction(i18n("Reset zoom"), this);
-    actionCollection->addAction("zoom_to_100pct", m_100pct);
-    m_100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
-    connect(m_100pct, SIGNAL(triggered()), SLOT(zoomTo100()));
 
     // Put the canvascontroller in a layout so it resizes with us
     QGridLayout * layout = new QGridLayout(m_view);
@@ -141,21 +122,17 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     layout->setMargin(0);
     m_view->setLayout(layout);
 
-    bool show = cfg.showRulers();
-
     m_view->document()->setUnit(KoUnit(KoUnit::Pixel));
 
     m_horizontalRuler = new KoRuler(m_view, Qt::Horizontal, m_zoomHandler);
     m_horizontalRuler->setShowMousePosition(true);
-    m_horizontalRuler->setVisible(show);
     m_horizontalRuler->createGuideToolConnection(m_view->canvasBase());
 
     new KoRulerController(m_horizontalRuler, m_canvasController->canvas()->resourceManager());
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
-    m_verticalRuler->setVisible(show);
     m_verticalRuler->createGuideToolConnection(m_view->canvasBase());
-    m_showRulersAction->setChecked(show);
+
 
     QList<QAction*> unitActions = m_view->createChangeUnitActions(true);
     m_horizontalRuler->setPopupActionList(unitActions);
@@ -184,6 +161,11 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
             this, SLOT(changeAspectMode(bool)));
 
     applyRulersUnit(m_view->document()->unit());
+
+    KisConfig cfg;
+    toggleShowRulers(cfg.showRulers());
+
+
 
 }
 
@@ -287,9 +269,9 @@ void KisZoomManager::zoomTo100()
     m_view->canvasBase()->notifyZoomChanged();
 }
 
-void KisZoomManager::showGuides()
+void KisZoomManager::showGuides(bool toggle)
 {
-    m_view->document()->guidesData().setShowGuideLines(m_showGuidesAction->isChecked());
+    m_view->document()->guidesData().setShowGuideLines(toggle);
     m_view->canvasBase()->canvasWidget()->update();
 }
 

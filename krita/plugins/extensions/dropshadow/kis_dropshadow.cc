@@ -173,6 +173,7 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
     qint32 start, end;
     qint32 *curve;
     qint32 *sum = NULL;
+    qint32 *sumPtr = NULL;
     qint32 val;
     qint32 length;
     qint32 initial_pp, initial_mm;
@@ -222,15 +223,15 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
 
         case BLUR_RLE:
             curve = make_curve(std_dev, &length);
-            sum = new qint32[2 * length + 1];
+            sumPtr = sum = new qint32[2 * length + 1];
 
-            sum[0] = 0;
+            sumPtr[0] = 0;
 
             for (i = 1; i <= length*2; i++)
-                sum[i] = curve[i-length-1] + sum[i-1];
-            sum += length;
+                sumPtr[i] = curve[i-length-1] + sumPtr[i-1];
+            sumPtr += length;
 
-            total = sum[length] - sum[-length];
+            total = sumPtr[length] - sumPtr[-length];
             break;
         }
 
@@ -311,20 +312,20 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
                         bb = buf + (row + i) * 2;
 
                         if (start != -length)
-                            val += initial_pp * (sum[start] - sum[-length]);
+                            val += initial_pp * (sumPtr[start] - sumPtr[-length]);
 
                         while (i < end) {
                             pixels = bb[0];
                             i += pixels;
                             if (i > end)
                                 i = end;
-                            val += bb[1] * (sum[i] - sum[start]);
+                            val += bb[1] * (sumPtr[i] - sumPtr[start]);
                             bb += (pixels * 2);
                             start = i;
                         }
 
                         if (end != length)
-                            val += initial_mm * (sum[length] - sum[end]);
+                            val += initial_mm * (sumPtr[length] - sumPtr[end]);
 
                         dp[row * bytes + b] = val / total;
                     }
@@ -359,15 +360,15 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
             case BLUR_RLE:
                 curve = make_curve(std_dev, &length);
                 delete[] sum;
-                sum = new qint32[2 * length + 1];
+                sumPtr = sum = new qint32[2 * length + 1];
 
-                sum[0] = 0;
+                sumPtr[0] = 0;
 
                 for (i = 1; i <= length*2; i++)
-                    sum[i] = curve[i-length-1] + sum[i-1];
-                sum += length;
+                    sumPtr[i] = curve[i-length-1] + sumPtr[i-1];
+                sumPtr += length;
 
-                total = sum[length] - sum[-length];
+                total = sumPtr[length] - sumPtr[-length];
                 break;
             }
         }
@@ -449,20 +450,20 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
                         bb = buf + (col + i) * 2;
 
                         if (start != -length)
-                            val += initial_pp * (sum[start] - sum[-length]);
+                            val += initial_pp * (sumPtr[start] - sumPtr[-length]);
 
                         while (i < end) {
                             pixels = bb[0];
                             i += pixels;
                             if (i > end)
                                 i = end;
-                            val += bb[1] * (sum[i] - sum[start]);
+                            val += bb[1] * (sumPtr[i] - sumPtr[start]);
                             bb += (pixels * 2);
                             start = i;
                         }
 
                         if (end != length)
-                            val += initial_mm * (sum[length] - sum[end]);
+                            val += initial_mm * (sumPtr[length] - sumPtr[end]);
 
                         dp[col * bytes + b] = val / total;
                     }

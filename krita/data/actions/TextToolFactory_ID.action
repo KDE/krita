@@ -26,7 +26,6 @@
  <Action iconText="Decrease Font Size" shortcut="Ctrl+&lt;" toolTip="Decrease Font Size" icon="" whatsThis="" statusTip="" name="fontsizedown" isCheckable="false" text="Decrease Font Size" defaultShortcut="Ctrl+&lt;"/>
  <Action iconText="Insert new section" shortcut="" toolTip="Insert new section" icon="insert-text" whatsThis="" statusTip="" name="insert_section" isCheckable="false" text="Insert new section" defaultShortcut=""/>
  <Action iconText="Font Size" shortcut="" toolTip="Font Size" icon="" whatsThis="" statusTip="" name="format_fontsize" isCheckable="false" text="Font Size" defaultShortcut=""/>
- <Action iconText="Paste As Text" shortcut="Ctrl+Shift+V" toolTip="Paste As Text" icon="edit-paste" whatsThis="" statusTip="" name="edit_paste_text" isCheckable="false" text="Paste As Text" defaultShortcut="Ctrl+Shift+V"/>
  <Action iconText="Italic" shortcut="Ctrl+I" toolTip="Italic" icon="format-text-italic" whatsThis="" statusTip="" name="format_italic" isCheckable="false" text="Italic" defaultShortcut="Ctrl+I"/>
  <Action iconText="Bold" shortcut="Ctrl+B" toolTip="Bold" icon="format-text-bold" whatsThis="" statusTip="" name="format_bold" isCheckable="false" text="Bold" defaultShortcut="Ctrl+B"/>
  <Action iconText="Increase Font Size" shortcut="Ctrl+>" toolTip="Increase Font Size" icon="" whatsThis="" statusTip="" name="fontsizeup" isCheckable="false" text="Increase Font Size" defaultShortcut="Ctrl+>"/>

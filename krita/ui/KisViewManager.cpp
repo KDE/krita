@@ -35,8 +35,6 @@
 #include <QRect>
 #include <QWidget>
 #include <QToolBar>
-#include <QDropEvent>
-#include <QDragEnterEvent>
 #include <QApplication>
 #include <QPrintDialog>
 #include <QObject>

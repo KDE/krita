@@ -65,7 +65,7 @@ void KisGridManager::setup(KisActionManager* actionManager)
     m_toggleSnapToGrid->setCheckable(true);
     m_toggleSnapToGrid->setActivationFlags(KisAction::ACTIVE_NODE);
     m_toggleSnapToGrid->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Semicolon));
-    actionManager->addAction("view_snap_to_grid", m_toggleSnapToGrid);
+    //actionManager->addAction("view_snap_to_grid", m_toggleSnapToGrid);
     connect(m_toggleSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 
     // Fast grid config

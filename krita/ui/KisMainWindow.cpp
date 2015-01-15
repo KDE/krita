@@ -169,7 +169,7 @@ public:
         , printActionPreview(0)
         , exportPdf(0)
         , closeAll(0)
-        , reloadFile(0)
+//        , reloadFile(0)
         , importFile(0)
         , exportFile(0)
         , undo(0)
@@ -225,7 +225,7 @@ public:
     KisAction *printActionPreview;
     KisAction *exportPdf;
     KisAction *closeAll;
-    KisAction *reloadFile;
+//    KisAction *reloadFile;
     KisAction *importFile;
     KisAction *exportFile;
     KisAction *undo;
@@ -537,7 +537,7 @@ void KisMainWindow::slotPreferences()
 
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
 {
-    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
+//    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
 }
 
 void KisMainWindow::setReadWrite(bool readwrite)
@@ -2048,10 +2048,10 @@ void KisMainWindow::createActions()
     actionManager->addAction("file_close_all", d->closeAll);
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
 
-    d->reloadFile  = new KisAction(i18nc("@action:inmenu", "Reload"));
-    d->reloadFile->setActivationFlags(KisAction::CURRENT_IMAGE_MODIFIED);
-    actionManager->addAction("file_reload_file", d->reloadFile);
-    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
+//    d->reloadFile  = new KisAction(i18nc("@action:inmenu", "Reload"));
+//    d->reloadFile->setActivationFlags(KisAction::CURRENT_IMAGE_MODIFIED);
+//    actionManager->addAction("file_reload_file", d->reloadFile);
+//    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
     d->importFile  = new KisAction(koIcon("document-import"), i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
     actionManager->addAction("file_import_file", d->importFile);

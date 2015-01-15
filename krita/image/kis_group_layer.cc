@@ -216,8 +216,16 @@ KisPaintDeviceSP KisGroupLayer::original() const
      * Try to use children's paintDevice if it's the only
      * one in stack and meets some conditions
      */
-    KisPaintDeviceSP childOriginal = tryObligeChild();
-    return childOriginal ? childOriginal : m_d->paintDevice;
+    KisPaintDeviceSP realOriginal = tryObligeChild();
+
+    if (!realOriginal) {
+        if (!childCount() && !m_d->paintDevice->extent().isEmpty()) {
+            m_d->paintDevice->clear();
+        }
+        realOriginal = m_d->paintDevice;
+    }
+
+    return realOriginal;
 }
 
 bool KisGroupLayer::accept(KisNodeVisitor &v)

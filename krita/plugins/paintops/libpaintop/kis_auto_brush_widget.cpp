@@ -33,7 +33,6 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_mask_generator.h>
 #include <kis_slider_spin_box.h>
-#include <kis_signals_blocker.h>
 
 
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
@@ -309,24 +308,15 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 
     comboBoxMaskType->setCurrentIndex(comboBoxMaskType->findText(aBrush->maskGenerator()->name()));
 
-
     inputRadius->setValue(aBrush->maskGenerator()->diameter());
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
-
-    {
-        KisSignalsBlocker b1(inputVFade);
-        KisSignalsBlocker b2(inputHFade);
-        inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
-        inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
-    }
-
+    inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
+    inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
     inputAngle->setValue(aBrush->angle() * 180 / M_PI);
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
-
     spacingWidget->setSpacing(aBrush->autoSpacingActive(),
                               aBrush->autoSpacingActive() ?
                               aBrush->autoSpacingCoeff() : aBrush->spacing());
-
     inputRandomness->setValue(aBrush->randomness() * 100);
     density->setValue(aBrush->density() * 100);
 
@@ -336,10 +326,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
         softnessCurve->setCurve(curve);
     }
 
-    {
-        KisSignalsBlocker b(btnAntialiasing);
-        btnAntialiasing->setChecked(aBrush->maskGenerator()->antialiasEdges());
-    }
+    btnAntialiasing->setChecked(aBrush->maskGenerator()->antialiasEdges());
 }
 
 

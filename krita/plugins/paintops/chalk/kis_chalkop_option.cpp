@@ -41,10 +41,10 @@ KisChalkOpOption::KisChalkOpOption()
     m_options->radiusSpinBox->setValue(5);
     m_options->radiusSpinBox->setSuffix(" px");
 
-    connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->inkDepletionCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->opacity, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->saturation, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->inkDepletionCHBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->opacity, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->saturation, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
     setConfigurationPage(m_options);
 }
 

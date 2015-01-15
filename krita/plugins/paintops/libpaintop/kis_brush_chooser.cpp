@@ -250,7 +250,6 @@ void KisBrushChooser::update(KoResource * resource)
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
     if (brush) {
-        blockSignals(true);
         QString text = QString("%1 (%2 x %3)")
                        .arg(i18n(brush->name().toUtf8().data()))
                        .arg(brush->width())
@@ -258,20 +257,12 @@ void KisBrushChooser::update(KoResource * resource)
 
         m_lbName->setText(text);
 
-        {
-            KisSignalsBlocker b(m_slSpacing);
-            m_slSpacing->setSpacing(brush->autoSpacingActive(),
-                                    brush->autoSpacingActive() ?
-                                    brush->autoSpacingCoeff() : brush->spacing());
-        }
+        m_slSpacing->setSpacing(brush->autoSpacingActive(),
+                                brush->autoSpacingActive() ?
+                                brush->autoSpacingCoeff() : brush->spacing());
 
-        m_slRotation->blockSignals(true);
         m_slRotation->setValue(brush->angle() * 180 / M_PI);
-        m_slRotation->blockSignals(false);
-
-        m_slSize->blockSignals(true);
         m_slSize->setValue(brush->width() * brush->scale());
-        m_slSize->blockSignals(false);
 
         // useColorAsMask support is only in gimp brush so far
         KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(resource);
@@ -279,7 +270,6 @@ void KisBrushChooser::update(KoResource * resource)
             m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
         }
         m_chkColorMask->setEnabled(brush->hasColor() && gimpBrush);
-        blockSignals(false);
 
         slotActivatedBrush(brush);
         emit sigBrushChanged();

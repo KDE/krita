@@ -162,6 +162,35 @@ QSizeF KisPaintOpSettings::paintOpSize() const
     return QSizeF(1.0, 1.0);
 }
 
+void KisPaintOpSettings::setPaintOpOpacity(qreal value)
+{
+    setProperty("OpacityValue", value);
+}
+
+void KisPaintOpSettings::setPaintOpFlow(qreal value)
+{
+    setProperty("FlowValue", value);
+}
+
+void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
+{
+    setProperty("CompositeOp", value);
+}
+
+qreal KisPaintOpSettings::paintOpOpacity() const
+{
+    return getDouble("OpacityValue", 1.0);
+}
+
+qreal KisPaintOpSettings::paintOpFlow() const
+{
+    return getDouble("FlowValue", 1.0);
+}
+
+QString KisPaintOpSettings::paintOpCompositeOp() const
+{
+    return getString("CompositeOp", COMPOSITE_OVER);
+}
 
 QString KisPaintOpSettings::modelName() const
 {

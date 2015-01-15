@@ -162,6 +162,36 @@ public:
      */
     virtual QSizeF paintOpSize() const;
 
+    /**
+     * Set paintop opacity directly in the properties
+     */
+    void setPaintOpOpacity(qreal value);
+
+    /**
+     * Set paintop flow directly in the properties
+     */
+    void setPaintOpFlow(qreal value);
+
+    /**
+     * Set paintop composite mode directly in the properties
+     */
+    void setPaintOpCompositeOp(const QString &value);
+
+    /**
+     * @return opacity saved in the properties
+     */
+    qreal paintOpOpacity() const;
+
+    /**
+     * @return flow saved in the properties
+     */
+    qreal paintOpFlow() const;
+
+    /**
+     * @return composite mode saved in the properties
+     */
+    QString paintOpCompositeOp() const;
+
     void setPreset(KisPaintOpPresetWSP preset);
 
     KisPaintOpPresetWSP preset() const;

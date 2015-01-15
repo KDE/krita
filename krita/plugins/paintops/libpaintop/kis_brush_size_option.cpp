@@ -72,14 +72,14 @@ KisBrushSizeOption::KisBrushSizeOption()
     m_options->jitterMove->setRange(0.0, 5.0, 2);
     m_options->jitterMove->setValue(0.0);
 
-    connect(m_options->diameter, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->scale, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->aspectBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->spacing, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->rotationBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->densityBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMove, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->diameter, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->scale, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->aspectBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->spacing, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->rotationBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->densityBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->jitterMove, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMove, SLOT(setEnabled(bool)));
     setConfigurationPage(m_options);

@@ -66,5 +66,5 @@ void KisFlowOpacityOptionWidget::slotSliderValueChanged()
 {
     KisFlowOpacityOption* option = static_cast<KisFlowOpacityOption*>(curveOption());
     option->setOpacity(m_opacitySlider->value());
-    emit sigSettingChanged();
+    emitSettingChanged();
 }

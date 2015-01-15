@@ -532,7 +532,7 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID, bool localUpdate)
         m_eraseModeButton->defaultAction()->blockSignals(false);
 
         if (compositeOpID != m_currCompositeOpID) {
-            m_resourceProvider->currentPreset()->settings()->setProperty("CompositeOp", compositeOpID);
+            m_resourceProvider->currentPreset()->settings()->setPaintOpCompositeOp(compositeOpID);
             m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
             if (!localUpdate)
                 m_resourceProvider->setCurrentCompositeOp(compositeOpID);
@@ -682,32 +682,23 @@ void KisPaintopBox::slotUpdatePreset()
 
     setSliderValue("size", m_resourceProvider->currentPreset()->settings()->paintOpSize().width());
 
-    if (m_resourceProvider->currentPreset()->settings()->hasProperty("OpacityValue")) {
-        qreal opacity = m_resourceProvider->currentPreset()->settings()->getDouble("OpacityValue");
+    {
+        qreal opacity = m_resourceProvider->currentPreset()->settings()->paintOpOpacity();
         m_resourceProvider->setOpacity(opacity);
         setSliderValue("opacity", opacity);
         setWidgetState(ENABLE_OPACITY);
-    } else {
-        m_resourceProvider->setOpacity(1.0);
-        setSliderValue("opacity", 1.0);
-        setWidgetState(DISABLE_OPACITY);
     }
 
-    if (m_resourceProvider->currentPreset()->settings()->hasProperty("FlowValue")) {
-        setSliderValue("flow", m_resourceProvider->currentPreset()->settings()->getDouble("FlowValue"));
+    {
+        setSliderValue("flow", m_resourceProvider->currentPreset()->settings()->paintOpFlow());
         setWidgetState(ENABLE_FLOW);
-    } else {
-        setSliderValue("flow", 1.0);
-        setWidgetState(DISABLE_FLOW);
     }
 
-    if (m_resourceProvider->currentPreset()->settings()->hasProperty("CompositeOp")) {
-        updateCompositeOp(m_resourceProvider->currentPreset()->settings()->getString("CompositeOp"));
+    {
+        updateCompositeOp(m_resourceProvider->currentPreset()->settings()->paintOpCompositeOp());
         setWidgetState(ENABLE_COMPOSITEOP);
-    } else {
-        updateCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
-        setWidgetState(DISABLE_COMPOSITEOP);
     }
+
     m_blockUpdate = false;
 }
 
@@ -833,11 +824,8 @@ void KisPaintopBox::sliderChanged(int n)
         qreal sizeDiff = size - m_resourceProvider->currentPreset()->settings()->paintOpSize().width();
         m_resourceProvider->currentPreset()->settings()->changePaintOpSize(sizeDiff, 0);
 
-        if (m_resourceProvider->currentPreset()->settings()->hasProperty("OpacityValue"))
-            m_resourceProvider->currentPreset()->settings()->setProperty("OpacityValue", opacity);
-
-        if (m_resourceProvider->currentPreset()->settings()->hasProperty("FlowValue"))
-            m_resourceProvider->currentPreset()->settings()->setProperty("FlowValue", flow);
+        m_resourceProvider->currentPreset()->settings()->setPaintOpOpacity(opacity);
+        m_resourceProvider->currentPreset()->settings()->setPaintOpFlow(flow);
 
         KisLockedPropertiesProxy *propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
         propertiesProxy->setProperty("OpacityValue", opacity);
@@ -911,8 +899,7 @@ void KisPaintopBox::slotOpacityChanged(qreal opacity)
         opacitySlider->blockSignals(false);
     }
     if (m_presetsEnabled) {
-        if (m_resourceProvider->currentPreset()->settings()->hasProperty("OpacityValue"))
-            m_resourceProvider->currentPreset()->settings()->setProperty("OpacityValue", opacity);
+        m_resourceProvider->currentPreset()->settings()->setPaintOpOpacity(opacity);
         m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
     }
     m_blockUpdate = false;

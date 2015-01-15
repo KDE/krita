@@ -67,11 +67,11 @@ KisExperimentShapeOption::KisExperimentShapeOption()
 
 void KisExperimentShapeOption::setupBrushPreviewSignals()
 {
-    connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterShape, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->jitterShape, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 }
 
 

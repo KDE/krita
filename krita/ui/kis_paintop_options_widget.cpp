@@ -108,7 +108,8 @@ void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration 
     KisLockedPropertiesProxy* propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
     int indexcount = 0;
     foreach (KisPaintOpOption* option, m_d->paintOpOptions) {
-        option->readOptionSetting(propertiesProxy);
+        option->startReadOptionSetting(propertiesProxy);
+
         if (KisLockedPropertiesServer::instance()->propertiesFromLocked()) {
             option->setLocked(true);
         }
@@ -132,7 +133,7 @@ void KisPaintOpOptionsWidget::writeConfiguration(KisPropertiesConfiguration *con
 {
     KisLockedPropertiesProxy* propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
     foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
-        option->writeOptionSetting(propertiesProxy);
+        option->startWriteOptionSetting(propertiesProxy);
     }
     delete propertiesProxy;
 }
@@ -168,7 +169,7 @@ void KisPaintOpOptionsWidget::lockProperties(const QModelIndex& index)
     if (m_d->model->entryAt(info, index)) {
         m_d->optionsList->setCurrentIndex(index);
         KisPropertiesConfiguration* p = new KisPropertiesConfiguration();
-        info.option->writeOptionSetting(p);
+        info.option->startWriteOptionSetting(p);
 
         if (!info.option->isLocked()){
             KisLockedPropertiesServer::instance()->addToLockedProperties(p);

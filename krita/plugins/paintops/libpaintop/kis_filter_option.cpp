@@ -74,7 +74,7 @@ KisFilterOption::KisFilterOption()
         setCurrentFilter(l2.first());
     }
 
-    connect(m_options->checkBoxSmudgeMode, SIGNAL(stateChanged(int)), this, SIGNAL(sigSettingChanged()));
+    connect(m_options->checkBoxSmudgeMode, SIGNAL(stateChanged(int)), this, SLOT(emitSettingChanged()));
 }
 
 const KisFilterSP KisFilterOption::filter() const
@@ -136,7 +136,7 @@ void KisFilterOption::setCurrentFilter(const KoID& id)
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
     m_options->filtersList->setCurrent(id);
     updateFilterConfigWidget();
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 
@@ -158,7 +158,7 @@ void KisFilterOption::updateFilterConfigWidget()
             m_layout->addWidget(m_currentFilterConfigWidget);
             m_options->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();
-            connect(m_currentFilterConfigWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(sigSettingChanged()));
+            connect(m_currentFilterConfigWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(emitSettingChanged()));
         }
     }
     m_layout->update();

@@ -119,11 +119,10 @@ void KisCanvasControlsManager::stepAlpha(float step)
     alpha += step;
     alpha = qBound<qreal>(0.0, alpha, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
-    if (m_view->resourceProvider()->currentPreset()->settings()->hasProperty("OpacityValue"))
-        m_view->resourceProvider()->currentPreset()->settings()->setProperty("OpacityValue", alpha);
 
-    KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_view->resourceProvider()->currentPreset()->settings());
-    p->setProperty("OpacityValue", alpha);
+    // FIXME: DK: should we uncomment it back?
+    //KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_view->resourceProvider()->currentPreset()->settings());
+    //p->setProperty("OpacityValue", alpha);
 }
 
 void KisCanvasControlsManager::increaseOpacity()

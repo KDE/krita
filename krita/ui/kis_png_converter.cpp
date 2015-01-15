@@ -446,6 +446,10 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Initialize the special
     png_set_read_fn(png_ptr, iod, _read_fn);
 
+#if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
+   png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
+#endif
+
     // read all PNG info up to image data
     png_read_info(png_ptr, info_ptr);
 
@@ -784,6 +788,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP i
 
 KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
+
+
     if (!iodevice->open(QIODevice::WriteOnly)) {
         dbgFile << "Failed to open PNG File for writing";
         return (KisImageBuilder_RESULT_FAILURE);
@@ -820,6 +826,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     if (!png_ptr) {
         return (KisImageBuilder_RESULT_FAILURE);
     }
+
+#if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
+   png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
+#endif
+
 
 #ifdef PNG_READ_CHECK_FOR_INVALID_INDEX_SUPPORTED
     png_set_check_for_invalid_index(png_ptr, 0);

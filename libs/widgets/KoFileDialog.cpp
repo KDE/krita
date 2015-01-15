@@ -186,7 +186,7 @@ void KoFileDialog::setNameFilters(const QStringList &filterList,
 void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
                                       QString defaultFilter)
 {
-    d->filterList = getFilterStringListFromMime(filterList, false);
+    d->filterList = getFilterStringListFromMime(filterList, true);
 
     if (!defaultFilter.isEmpty()) {
         QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultFilter, false);

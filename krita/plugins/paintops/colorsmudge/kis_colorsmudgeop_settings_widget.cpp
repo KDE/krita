@@ -26,7 +26,6 @@
 #include <kis_properties_configuration.h>
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_size_option.h>
-#include <kis_pressure_rate_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option_widget.h>

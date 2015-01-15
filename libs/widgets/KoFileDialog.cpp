@@ -439,7 +439,7 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
 
     QStringList ret;
     if (withAllSupportedEntry) {
-        ret << QString(i18n("All supported formats") + " ( ");
+        ret << QString();
     }
 
     for (QStringList::ConstIterator
@@ -473,7 +473,7 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
     }
 
     if (withAllSupportedEntry) {
-        ret[0].append(")");
+        ret[0] = i18n("All supported formats") + " ( " + ret[0] + (")");
     }
     return ret;
 }

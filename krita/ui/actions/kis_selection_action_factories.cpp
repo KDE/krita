@@ -352,9 +352,9 @@ void KisPasteActionFactory::run(KisViewManager *view)
     }
 }
 
-void KisPasteNewActionFactory::run(KisViewManager *view)
+void KisPasteNewActionFactory::run(KisViewManager *viewManager)
 {
-    Q_UNUSED(view);
+    Q_UNUSED(viewManager);
 
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
     if (!clip) return;
@@ -363,6 +363,7 @@ void KisPasteNewActionFactory::run(KisViewManager *view)
     if (rect.isEmpty()) return;
 
     KisDocument *doc = KisPart::instance()->createDocument();
+    KisPart::instance()->addDocument(doc);
 
     KisImageSP image = new KisImage(doc->createUndoStore(),
                                     rect.width(),
@@ -381,9 +382,9 @@ void KisPasteNewActionFactory::run(KisViewManager *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KisMainWindow *win = KisPart::instance()->createMainWindow();
-    win->show();
-    win->addView(KisPart::instance()->createView(doc, win));
+    KisMainWindow *win = viewManager->mainWindow();
+    KisView *view = KisPart::instance()->createView(doc, win);
+    win->addView(view);
 }
 
 void KisInvertSelectionOperaton::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)

@@ -76,7 +76,7 @@ public:
     static void addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p);
 
 protected:
-    KoReportDesignerItemBase(KoReportDesigner*);
+    explicit KoReportDesignerItemBase(KoReportDesigner*);
     KoReportDesigner* m_reportDesigner;
     QString dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName) const;
     

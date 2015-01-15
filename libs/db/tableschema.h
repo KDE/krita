@@ -178,7 +178,7 @@ public:
 
 protected:
     /*! Automatically retrieves table schema via connection. */
-    TableSchema(Connection *conn, const QString & name = QString());
+    explicit TableSchema(Connection *conn, const QString & name = QString());
 
     IndexSchema::List m_indices;
 

@@ -694,7 +694,7 @@ protected:
      Used internally by query schemas, e.g. to declare asterisks or
      to add expression columns.
      No other properties are set, so these should be set later. */
-    Field(QuerySchema *querySchema, BaseExpr* expr = 0);
+    explicit Field(QuerySchema *querySchema, BaseExpr* expr = 0);
 
     /*! @internal Used by constructors. */
     void init();

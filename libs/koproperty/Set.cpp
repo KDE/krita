@@ -36,7 +36,7 @@ namespace KoProperty
 class SetPrivate
 {
 public:
-    SetPrivate(KoProperty::Set *set) :
+    explicit SetPrivate(KoProperty::Set *set) :
             q(set),
             readOnly(false),
             informAboutClearing(0),

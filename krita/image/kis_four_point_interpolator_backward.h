@@ -97,7 +97,7 @@ public:
                     qreal nu2 = (-qB + sqrtD) * m_qD_div;
 
                     if (nu2 < 0.0 || nu2 > 1.0) {
-                        nu = qBound(0.0, nu, 1.0);
+                        nu = qBound(qreal(0.0), nu, qreal(1.0));
                     } else {
                         nu = nu2;
                     }

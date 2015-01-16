@@ -219,7 +219,7 @@ KisPolygonalGradientShapeStrategy::KisPolygonalGradientShapeStrategy(const QPoly
     const qreal lengthStep =
         KritaUtils::maxDimensionPortion(selection.boundingRect(),
                                         0.01, 3.0);
-    const qreal portionStep = qMin(lengthStep / length, 0.01);
+    const qreal portionStep = qMin(lengthStep / length, qreal(0.01));
 
     for (qreal t = 0.0; t < 1.0; t += portionStep) {
         m_selection << p.pointAtPercent(t);

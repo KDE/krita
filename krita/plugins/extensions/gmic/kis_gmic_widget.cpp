@@ -164,11 +164,10 @@ void KisGmicWidget::slotSelectedFilterChanged(const QItemSelection & /*newSelect
 
 void KisGmicWidget::slotCancelClicked()
 {
-    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
+    if (m_onCanvasPreviewRequested)
     {
         emit sigCancelOnCanvasPreview();
     }
-
     close();
 }
 

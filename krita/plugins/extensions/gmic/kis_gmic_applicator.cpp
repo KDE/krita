@@ -31,7 +31,7 @@
 #include "kis_gmic_synchronize_layers_command.h"
 #include "kis_export_gmic_processing_visitor.h"
 
-KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorStrokeEnded(false),m_progress(0)
+KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorStrokeEnded(false),m_progress(0),m_cancel(0)
 {
 }
 
@@ -89,10 +89,10 @@ void KisGmicApplicator::preview()
     // apply gmic filters to provided layers
     const char * customCommands = m_customCommands.isNull() ? 0 : m_customCommands.constData();
     KisGmicCommand * gmicCommand = new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands);
-    connect(gmicCommand, SIGNAL(gmicFinished(int)), this, SIGNAL(gmicFinished(int)));
-    connect(gmicCommand, SIGNAL(gmicFailed(const QString&)), this, SIGNAL(gmicFailed(const QString&)));
+    connect(gmicCommand, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool,int,QString)));
 
-    m_progress = gmicCommand->getProgress();
+    m_progress = gmicCommand->progressPtr();
+    m_cancel = gmicCommand->cancelPtr();
     m_applicator->applyCommand(gmicCommand);
 
     // synchronize layer count
@@ -105,6 +105,11 @@ void KisGmicApplicator::preview()
 
 void KisGmicApplicator::cancel()
 {
+    if (m_cancel)
+    {
+        dbgPlugins << "Cancel gmic script";
+        *m_cancel = true;
+    }
 
     if (m_applicator)
     {

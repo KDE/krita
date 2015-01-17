@@ -40,12 +40,11 @@ public:
     void undo();
     void redo();
 
-    float * getProgress();
-    void cancel();
+    float * progressPtr();
+    bool * cancelPtr();
 
 signals:
-    void gmicFinished(int miliseconds);
-    void gmicFailed(const QString &msg);
+    void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
 private:
     QString gmicDimensionString(const gmic_image<float>& img);
@@ -56,8 +55,8 @@ private:
     const char * m_customCommands;
     bool m_firstRedo;
 
-    float * const m_progress;
-    bool * const m_cancelEvent;
+    float * const m_progress; 
+    bool * const m_cancel; // cancels gmic command execution
 
 };
 

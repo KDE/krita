@@ -25,6 +25,7 @@
 #include "kis_gmic_parser.h"
 #include <kis_types.h>
 
+class KisGmicSmallApplicator;
 class KoProgressUpdater;
 class QTimer;
 class QSize;
@@ -33,14 +34,20 @@ class KisGmicApplicator;
 class KisGmicWidget;
 class KisGmicProgressManager;
 
-enum Activity { PREVIEWING, FILTERING };
+
 
 class KisGmicPlugin : public KisViewPlugin
 {
     Q_OBJECT
+    Q_ENUMS(Activity)
 public:
     KisGmicPlugin(QObject *parent, const QVariantList &);
     virtual ~KisGmicPlugin();
+
+    enum Activity { INIT, PREVIEWING, FILTERING, SMALL_PREVIEW };
+
+signals:
+    void filteringFinished();
 
 private slots:
     // life cycle: show -> close
@@ -53,29 +60,33 @@ private slots:
     void slotCancelOnCanvasPreview();
     void slotAcceptOnCanvasPreview();
     void slotPreviewActiveLayer();
+    void slotPreviewSmallWindow(KisPaintDeviceSP device);
     // miliseconds - time gmic spent filtering images
-    void slotGmicFinished(int miliseconds);
-    void slotGmicFailed(const QString& msg);
+    void slotGmicFinished(bool successfully, int miliseconds = -1, const QString& msg = QString());
     void slotUpdateProgress();
+    void slotPreviewReady();
 
 
 private:
     void parseGmicCommandDefinitions(const QStringList &gmicDefinitionFilePaths);
     void setupDefinitionPaths();
-    static KisNodeListSP createPreviewThumbnails(KisNodeListSP layers,const QSize &dstSize,const QRect &srcRect);
     void createViewportPreview(KisNodeListSP layers, KisGmicFilterSetting* setting);
     // has to be accepted or cancelled!
-    void startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSetting* setting,Activity activity);
+    void startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSetting* setting, Activity activity);
     bool checkSettingsValidity(KisNodeListSP layers, const KisGmicFilterSetting * setting);
 
-    // TODO: refactor into responsible classes
-    void showInPreviewViewport(KisPaintDeviceSP device);
+    void setActivity(Activity activity);
 
-    void initProgress();
+    void gmicFailed(const QString& msg);
+    void gmicFinished(int miliseconds);
+
+    void waitForFilterFinish();
+
 
 private:
     KisGmicWidget * m_gmicWidget;
     KisGmicApplicator * m_gmicApplicator;
+    KisGmicSmallApplicator * m_smallApplicator;
     QStringList m_definitionFilePaths;
     QString m_blacklistPath;
     QByteArray m_gmicCustomCommands;
@@ -84,6 +95,12 @@ private:
     KisGmicProgressManager * m_progressManager;
     Activity m_currentActivity;
     bool m_requestFinishAndClose;
+
+    quint32 m_smallPreviewRequestCounter;
+    quint32 m_onCanvasPreviewRequestCounter;
+
+    bool m_filteringIsRunning;
+
 };
 
 #endif

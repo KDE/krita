@@ -30,6 +30,7 @@ KisGmicProgressManager::KisGmicProgressManager(KisViewManager* viewManager):m_pr
 
 KisGmicProgressManager::~KisGmicProgressManager()
 {
+    finishProgress();
     delete m_progressTimer;
     delete m_progressUpdater;
 }
@@ -45,6 +46,7 @@ void KisGmicProgressManager::initProgress()
 
 void KisGmicProgressManager::updateProgress(float progress)
 {
+    int currentProgress = 0.0;
     if (progress >= 0.0)
     {
         if (m_progressPulseRequest > 0)
@@ -53,7 +55,7 @@ void KisGmicProgressManager::updateProgress(float progress)
             m_updater = m_progressUpdater->startSubtask();
             m_progressPulseRequest = 0;
         }
-        m_updater->setProgress((int)progress);
+        currentProgress = (int)progress;
     }
     else
     {
@@ -64,9 +66,11 @@ void KisGmicProgressManager::updateProgress(float progress)
             m_progressUpdater->start(100);
             m_updater = m_progressUpdater->startSubtask();
         }
-        int pulseProgress = (m_progressPulseRequest % 10) * 10;
-        m_updater->setProgress(pulseProgress);
+        currentProgress = (m_progressPulseRequest % 10) * 10;
     }
+
+    dbgPlugins << "Current progress : " << currentProgress;
+    m_updater->setProgress(currentProgress);
 }
 
 void KisGmicProgressManager::finishProgress()

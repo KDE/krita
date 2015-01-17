@@ -33,13 +33,13 @@ KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer<
     m_customCommands(customCommands),
     m_firstRedo(true),
     m_progress(new float(-1)),
-    m_cancelEvent(new bool(false))
+    m_cancel(new bool(false))
 {
 }
 
 KisGmicCommand::~KisGmicCommand()
 {
-    delete m_cancelEvent;
+    delete m_cancel;
     delete m_progress;
 }
 
@@ -70,14 +70,14 @@ void KisGmicCommand::redo()
         timer.start();
         try
         {
-            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands, include_default_commands, m_progress, m_cancelEvent);
+            gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands, include_default_commands, m_progress, m_cancel);
         }
         catch (gmic_exception &e)
         {
             QString message = QString::fromUtf8(e.what());
             dbgPlugins << "\n- Error encountered when calling G'MIC : " << message;
 
-            emit gmicFailed(message);
+            emit gmicFinished(false, -1, message);
             return;
         }
 
@@ -86,19 +86,20 @@ void KisGmicCommand::redo()
         {
             dbgPlugins << "   Output image "<< i << " = " << gmicDimensionString(m_images->_data[i]) << ", buffer : " << m_images->_data[i]._data;
         }
-
-        emit gmicFinished(timer.elapsed());
+        int elapsed = timer.elapsed();
+        dbgPlugins << "Filtering took " << elapsed << " ms";
+        emit gmicFinished(true, elapsed);
     }
 }
 
-float*KisGmicCommand::getProgress()
+float*KisGmicCommand::progressPtr()
 {
     return m_progress;
 }
 
-void KisGmicCommand::cancel()
+bool * KisGmicCommand::cancelPtr()
 {
-    *m_cancelEvent = true;
+    return m_cancel;
 }
 
 QString KisGmicCommand::gmicDimensionString(const gmic_image<float>& img)

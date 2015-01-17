@@ -42,8 +42,7 @@ public:
     float getProgress() const;
 
 signals:
-    void gmicFinished(int miliseconds);
-    void gmicFailed(const QString &msg);
+    void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
 private:
     KisProcessingApplicator * m_applicator;
@@ -55,6 +54,7 @@ private:
     QByteArray m_customCommands;
     bool m_applicatorStrokeEnded;
     float * m_progress;
+    bool * m_cancel;
 };
 
 #endif

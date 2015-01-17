@@ -25,8 +25,10 @@
 #include <QSharedPointer>
 #include <QList>
 
-#include <kis_types.h>
+#include <kis_image.h>
+#include <kis_selection.h>
 #include <kis_node.h>
+#include <kis_types.h>
 
 #include <gmic.h>
 

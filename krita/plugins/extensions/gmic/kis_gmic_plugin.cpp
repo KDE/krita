@@ -62,6 +62,7 @@
 #include "kis_gmic_progress_manager.h"
 
 #include <kis_processing_visitor.h>
+#include <kis_gmic_small_applicator.h>
 #include "gmic.h"
 
 K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
@@ -69,10 +70,27 @@ K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
 
 const QString STANDARD_GMIC_DEFINITION = "gmic_def.gmic";
 
+#define debugActivity( activity ) \
+    {\
+        const QMetaObject & mo = KisGmicPlugin::staticMetaObject; \
+        QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Activity")); \
+        QString test(me.valueToKey(activity)); \
+        dbgPlugins << "m_currentActivity == " << test; \
+    }\
+
+
+
 KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
-    :   KisViewPlugin(parent),
-      m_gmicWidget(0),
-      m_requestFinishAndClose(false)
+        :   KisViewPlugin(parent),
+            m_gmicWidget(0),
+            m_gmicApplicator(0),
+            m_smallApplicator(0),
+            m_progressManager(0),
+            m_currentActivity(INIT),
+            m_requestFinishAndClose(false),
+            m_smallPreviewRequestCounter(0),
+            m_onCanvasPreviewRequestCounter(0),
+            m_filteringIsRunning(false)
 {
     KisAction *action  = new KisAction(i18n("G'MIC"), this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -135,15 +153,14 @@ void KisGmicPlugin::slotShowGmicDialog()
     connect(m_progressManager, SIGNAL(sigProgress()), this, SLOT(slotUpdateProgress()));
 
     m_gmicApplicator = new KisGmicApplicator();
-    connect(m_gmicApplicator, SIGNAL(gmicFinished(int)), this, SLOT(slotGmicFinished(int)));
-    connect(m_gmicApplicator, SIGNAL(gmicFailed(const QString&)), this, SLOT(slotGmicFailed(const QString&)));
+    connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
 
     setupDefinitionPaths();
     parseGmicCommandDefinitions(m_definitionFilePaths);
 
     KisGmicParser parser(m_definitionFilePaths);
     Component * root = parser.createFilterTree();
-    KisGmicFilterModel * model = new KisGmicFilterModel(root); // filter mode takes owner ship
+    KisGmicFilterModel * model = new KisGmicFilterModel(root); // filter mode takes ownership of root
 
     KisGmicBlacklister * blacklister = new KisGmicBlacklister(m_blacklistPath);
     model->setBlacklister(blacklister);
@@ -175,6 +192,8 @@ void KisGmicPlugin::slotShowGmicDialog()
 
 void KisGmicPlugin::slotCloseGmicDialog()
 {
+    dbgPlugins << "progress manager: " << m_progressManager;
+
     m_gmicWidget = 0;
     if (m_gmicApplicator)
     {
@@ -185,11 +204,25 @@ void KisGmicPlugin::slotCloseGmicDialog()
     m_gmicApplicator = 0;
 
     delete m_progressManager;
+    m_progressManager = 0;
+
+    //reset state
+    {
+        m_gmicWidget = 0;
+        m_gmicApplicator = 0;
+        m_smallApplicator = 0;
+        m_progressManager = 0;
+        m_currentActivity = INIT;
+        m_requestFinishAndClose = false;
+        m_smallPreviewRequestCounter = 0;
+        m_onCanvasPreviewRequestCounter = 0;
+        m_filteringIsRunning = false;
+    }
 }
 
 void KisGmicPlugin::slotPreviewGmicCommand(KisGmicFilterSetting* setting)
 {
-    dbgPlugins << "Preview Request, type : " << setting->previewSize();
+    dbgPlugins << "Preview Request, preview size: " << setting->previewSize();
     KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
     KisNodeListSP layers = mapper.inputNodes(setting->inputLayerMode());
     if (!checkSettingsValidity(layers, setting))
@@ -211,11 +244,11 @@ void KisGmicPlugin::slotPreviewGmicCommand(KisGmicFilterSetting* setting)
 
 void KisGmicPlugin::slotPreviewActiveLayer()
 {
-    showInPreviewViewport(m_view->activeNode()->paintDevice());
+    slotPreviewSmallWindow(m_view->activeNode()->paintDevice());
 }
 
 
-void KisGmicPlugin::showInPreviewViewport(KisPaintDeviceSP device)
+void KisGmicPlugin::slotPreviewSmallWindow(KisPaintDeviceSP device)
 {
     QRect deviceRect = device->exactBounds();
     qreal aspectRatio = (qreal)deviceRect.width()/deviceRect.height();
@@ -265,77 +298,50 @@ void KisGmicPlugin::parseGmicCommandDefinitions(const QStringList& gmicDefinitio
     }
 }
 
-KisNodeListSP KisGmicPlugin::createPreviewThumbnails(KisNodeListSP layers,const QSize &dstSize,const QRect &srcRect)
-{
-    KisNodeListSP previewKritaNodes(new QList< KisNodeSP >());
-    for (int i = 0; i < layers->size(); i++)
-    {
-        KisPaintDeviceSP thumbnail = layers->at(i)->paintDevice()->createThumbnailDevice(dstSize.width(), dstSize.height(), srcRect);
-        KisNodeSP node(new KisPaintLayer(0, "", OPACITY_OPAQUE_U8, thumbnail));
-        previewKritaNodes->append(node);
-    }
-    return previewKritaNodes;
-}
-
 
 void KisGmicPlugin::createViewportPreview(KisNodeListSP layers, KisGmicFilterSetting* setting)
 {
+    if (m_filteringIsRunning)
+    {
+        dbgPlugins << "Filtering is running...";
+        waitForFilterFinish();
+    }
+
+    m_smallPreviewRequestCounter++;
+
+    setActivity(SMALL_PREVIEW);
+    m_smallApplicator = new KisGmicSmallApplicator;
+    dbgPlugins << "created m_smallApplicator " << m_smallApplicator << " and locking image!";
+    m_view->image()->lock();
     QRect canvasRect = m_view->image()->bounds();
-    qreal aspectRatio = (qreal)canvasRect.width() / canvasRect.height();
+    QSize previewSize = m_gmicWidget->previewWidget()->size();
 
-    int previewWidth = m_gmicWidget->previewWidget()->size().width();
-    int previewHeight = qRound(previewWidth / aspectRatio);
-    QRect previewRect = QRect(QPoint(0,0), QSize(previewWidth, previewHeight));
+    m_smallApplicator->setProperties(canvasRect,previewSize, layers, setting, m_gmicCustomCommands);
+    connect(m_smallApplicator , SIGNAL(gmicFinished(bool,int,QString)), this, SLOT(slotGmicFinished(bool,int,QString)));
+    connect(m_smallApplicator , SIGNAL(previewReady()), this, SLOT(slotPreviewReady()));
 
-    KisNodeListSP previewKritaNodes = KisGmicPlugin::createPreviewThumbnails(layers, previewRect.size(), canvasRect);
+    m_view->image()->unlock();
+    dbgPlugins << "Unlocked image...";
 
-    QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
-    gmicLayers->assign(previewKritaNodes->size());
+    m_smallApplicator->start();
+    m_progressManager->initProgress();
 
-    KisExportGmicProcessingVisitor exportVisitor(previewKritaNodes, gmicLayers, previewRect);
-    for (int i = 0; i < previewKritaNodes->size(); i++)
-    {
-        exportVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0);
-    }
-
-    QString gmicCommand = setting->previewGmicCommand();
-    if (gmicCommand.isEmpty())
-    {
-        gmicCommand = setting->gmicCommand();
-    }
-
-    KisGmicCommand gmicCmd(gmicCommand, gmicLayers, m_gmicCustomCommands);
-    gmicCmd.redo();
-
-    KisGmicSynchronizeLayersCommand syncCmd(previewKritaNodes, gmicLayers, 0);
-    syncCmd.redo();
-
-    KisImportGmicProcessingVisitor importVisitor(previewKritaNodes, gmicLayers, previewRect, 0);
-    for (int i = 0; i < previewKritaNodes->size(); i++)
-    {
-        importVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0 );
-    }
-
-    if (previewKritaNodes->size() > 0)
-    {
-        showInPreviewViewport(previewKritaNodes->at(0)->paintDevice());
-    }
-    else
-    {
-        // TODO: show error preview
-    }
 }
-
 
 void KisGmicPlugin::startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSetting* setting, Activity activity)
 {
+    m_onCanvasPreviewRequestCounter++;
+
+    m_filteringIsRunning = true;
+
+    setActivity(activity);
     KUndo2MagicString actionName = kundo2_i18n("Gmic filter");
     KisNodeSP rootNode = m_view->image()->root();
     m_gmicApplicator->setProperties(m_view->image(), rootNode, actionName, layers, setting->gmicCommand(), m_gmicCustomCommands);
     m_gmicApplicator->preview();
     // Note: do not call KisImage::waitForDone(): strokes are not finished or cancelled, it's just preview!
     // waitForDone would cause infinite hang
-    m_currentActivity = activity;
+    debugActivity(m_currentActivity);
     m_progressManager->initProgress();
 }
 
@@ -365,39 +371,75 @@ bool KisGmicPlugin::checkSettingsValidity(KisNodeListSP layers, const KisGmicFil
 
 void KisGmicPlugin::slotUpdateProgress()
 {
-    float progress = m_gmicApplicator->getProgress();
+    float progress = 0;
+    if (m_currentActivity == SMALL_PREVIEW)
+    {
+        progress = m_smallApplicator->getProgress();
+    }
+    else
+    {
+        progress = m_gmicApplicator->getProgress();
+    }
+
     m_progressManager->updateProgress(progress);
 }
 
-void KisGmicPlugin::slotGmicFinished(int miliseconds)
+
+
+void KisGmicPlugin::slotGmicFinished(bool successfully, int miliseconds, const QString& msg)
+{
+    dbgPlugins << "GMIC_FINISHED";
+    debugActivity(m_currentActivity);
+    dbgPlugins << ppVar(m_smallPreviewRequestCounter) << " " << ppVar(m_onCanvasPreviewRequestCounter);
+
+    if (successfully)
+    {
+        gmicFinished(miliseconds);
+    }
+    else
+    {
+        gmicFailed(msg);
+    }
+
+    m_progressManager->finishProgress();
+
+    if (m_currentActivity == FILTERING || m_currentActivity == PREVIEWING)
+    {
+        m_filteringIsRunning = false;
+        emit filteringFinished();
+    }
+
+    if (m_requestFinishAndClose)
+    {
+        slotRequestFinishAndClose();
+    }
+
+}
+
+void KisGmicPlugin::gmicFinished(int miliseconds)
 {
     if (m_currentActivity == FILTERING)
     {
         slotAcceptOnCanvasPreview();
     }
-
-    double seconds = miliseconds * 0.001;
-    m_gmicWidget->setWindowTitle(QString("Filtering took ") + QString::number(seconds) + QString(" seconds"));
-
-    m_progressManager->finishProgress();
-
-    if (m_requestFinishAndClose)
-    {
-        slotRequestFinishAndClose();
-    }
+    m_gmicWidget->setWindowTitle(QString("Filtering took ") + QString::number(miliseconds * 0.001) + QString(" seconds"));
 }
 
-void KisGmicPlugin::slotGmicFailed(const QString& msg)
+void KisGmicPlugin::gmicFailed(const QString& msg)
 {
-    dbgPlugins << msg;
-    slotCancelOnCanvasPreview();
-    m_progressManager->finishProgress();
+    dbgPlugins << "Activity :" << m_currentActivity << " Message: " << msg;
+    if ((m_currentActivity == PREVIEWING) || (m_currentActivity == FILTERING))
+    {
+        slotCancelOnCanvasPreview();
+    }
 
     QMessageBox::warning(m_gmicWidget, i18nc("@title:window", "Krita"), i18n("Sorry! G'Mic failed, reason:") + msg);
 
-    if (m_requestFinishAndClose)
+    if (m_currentActivity == SMALL_PREVIEW)
     {
-        slotRequestFinishAndClose();
+        dbgPlugins << "Deleting " << m_smallApplicator;
+        delete m_smallApplicator;
+        m_smallApplicator = 0;
     }
 }
 
@@ -412,6 +454,45 @@ void KisGmicPlugin::slotRequestFinishAndClose()
         m_gmicWidget->close();
     }
 }
+
+void KisGmicPlugin::slotPreviewReady()
+{
+    if (m_currentActivity == SMALL_PREVIEW)
+    {
+        slotPreviewSmallWindow(m_smallApplicator->preview());
+
+        dbgPlugins << "Deleting " << m_smallApplicator;
+        delete m_smallApplicator;
+        m_smallApplicator = 0;
+    }
+}
+
+
+void KisGmicPlugin::setActivity(KisGmicPlugin::Activity activity)
+{
+     m_currentActivity = activity;
+     dbgPlugins << "Changing activity: ";
+     debugActivity(m_currentActivity);
+}
+
+
+void KisGmicPlugin::waitForFilterFinish()
+{
+    dbgPlugins << "starting local event loop!";
+    QEventLoop localEventLoop;
+    connect(this, SIGNAL(filteringFinished()), &localEventLoop, SLOT(quit()));
+    localEventLoop.exec();
+
+#if 0
+    while (m_filteringIsRunning)
+    {
+        QCoreApplication::processEvents();
+    }
+#endif
+
+}
+
+
 
 
 #include "kis_gmic_plugin.moc"

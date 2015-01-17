@@ -42,6 +42,7 @@
 #include <kis_paint_layer.h>
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
+#include <kis_config.h>
 
 
 #include "kis_gmic_parser.h"
@@ -165,7 +166,10 @@ void KisGmicPlugin::slotShowGmicDialog()
     KisGmicBlacklister * blacklister = new KisGmicBlacklister(m_blacklistPath);
     model->setBlacklister(blacklister);
 
-    QString updateUrl = "http://gmic.sourceforge.net/" + QString("update") + QString::number(gmic_version) + ".gmic";
+    KisConfig cfg;
+    QString gmicUpdatesUrl = cfg.readEntry<QString>("gmic_updates_url", "http://www.gmic.eu/");
+
+    QString updateUrl = gmicUpdatesUrl + QString("update") + QString::number(gmic_version) + ".gmic";
     m_gmicWidget = new KisGmicWidget(model, updateUrl);
 
     // preview filter

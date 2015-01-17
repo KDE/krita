@@ -32,6 +32,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <QTime>
+#include <QFileInfo>
 
 #include <KisViewManager.h>
 #include <kis_action.h>
@@ -113,16 +114,23 @@ void KisGmicPlugin::setupDefinitionPaths()
 {
     m_definitionFilePaths = KGlobal::dirs()->findAllResources("gmic_definitions", "*.gmic");
     QMutableStringListIterator it(m_definitionFilePaths);
-    // remove all instances of gmic_def.gmic
+
+    // remove all instances of gmic_def.gmic and updateXXXX.gmic, they cause problems when merged/mixed
+    QRegExp rx("update\\d\\d\\d\\d.gmic");
     while (it.hasNext())
     {
-        if ( it.next().endsWith(STANDARD_GMIC_DEFINITION) )
+        QFileInfo fi(it.next());
+        if (fi.fileName() == STANDARD_GMIC_DEFINITION)
+        {
+            it.remove();
+        }
+        else if ( rx.exactMatch( fi.fileName() ) )
         {
             it.remove();
         }
     }
 
-    // if we don't have updateXXXX.gmic, prepend standard gmic_def.gmic
+    // if we don't have updateXXXX.gmic for current version, prepend standard gmic_def.gmic
     int gmicVersion = gmic_version;
     QString updateFileName = "update" + QString::number(gmicVersion) + ".gmic";
     QString updatedGmicDefinitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", updateFileName);
@@ -131,8 +139,15 @@ void KisGmicPlugin::setupDefinitionPaths()
         QString standardGmicDefinitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION);
         m_definitionFilePaths.prepend(standardGmicDefinitionFilePath);
     }
+    else
+    {
+        m_definitionFilePaths.prepend(updatedGmicDefinitionFilePath);
+    }
 
-    dbgPlugins << m_definitionFilePaths;
+    foreach (const QString item, m_definitionFilePaths)
+    {
+        dbgPlugins << "registered gmic file: " << item;
+    }
 }
 
 void KisGmicPlugin::slotShowGmicDialog()

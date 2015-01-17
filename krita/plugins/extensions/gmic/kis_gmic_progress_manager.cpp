@@ -30,7 +30,7 @@ KisGmicProgressManager::KisGmicProgressManager(KisViewManager* viewManager):m_pr
 
 KisGmicProgressManager::~KisGmicProgressManager()
 {
-    finishProgress();
+    QApplication::restoreOverrideCursor();
     delete m_progressTimer;
     delete m_progressUpdater;
 }

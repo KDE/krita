@@ -148,6 +148,9 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
         }
         ++it;
     }
+    if (d->annotationShapePositions.isEmpty()) {
+        emit hasAnnotationsChanged(true);
+    }
     d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
     layoutAnnotationShapes();
     if (d->canvas && yPositionChanged) {
@@ -166,6 +169,9 @@ void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape)
         ++it;
     }
     layoutAnnotationShapes();
+    if (d->annotationShapePositions.isEmpty()) {
+        emit hasAnnotationsChanged(false);
+    }
     //Should update canvas.
     d->canvas->canvasWidget()->update();
 }

@@ -33,6 +33,11 @@
  */
 
 
+// RJVB
+#ifndef HAVE_GLEW
+	typedef void* GLsync;
+#endif
+
 #if defined Q_OS_LINUX
 
 #include <QByteArray>

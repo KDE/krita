@@ -450,6 +450,8 @@ public:
 
     bool useVerboseOpenGLDebugOutput() const;
 
+    int workaroundX11SmoothPressureSteps() const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

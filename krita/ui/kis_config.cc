@@ -1423,6 +1423,11 @@ bool KisConfig::useVerboseOpenGLDebugOutput() const
     return m_cfg.readEntry("useVerboseOpenGLDebugOutput", false);
 }
 
+int KisConfig::workaroundX11SmoothPressureSteps() const
+{
+    return m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0);
+}
+
 const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
 {
     const KoColorSpace *cs = 0;

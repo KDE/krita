@@ -23,9 +23,10 @@
 #include <QThread>
 #include <kis_types.h>
 
+#include <QSize>
+#include <QRect>
+
 class KisGmicFilterSetting;
-class QRect;
-class QSize;
 class KisGmicSmallApplicator : public QThread
 {
     Q_OBJECT

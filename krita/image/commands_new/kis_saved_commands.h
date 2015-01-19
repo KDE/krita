@@ -55,8 +55,6 @@ public:
     KisSavedCommand(KUndo2CommandSP command, KisStrokesFacade *strokesFacade);
     virtual int timedId();
     void setTimedID(int timedID);
-    virtual void undoMergedCommands();
-    virtual void redoMergedCommands();
 
     virtual bool timedMergeWith(KUndo2Command *other);
     virtual QVector<KUndo2Command*> mergeCommandsVector();

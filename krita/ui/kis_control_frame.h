@@ -34,7 +34,7 @@ class QPushButton;
 
 class KoAbstractGradient;
 class KisGradientChooser;
-class KoPatternChooser;
+class KisPatternChooser;
 class KisPaintopBox;
 class KisViewManager;
 class KisIconWidget;
@@ -82,7 +82,7 @@ private:
     QWidget *m_gradientChooserPopup;
 
     KisGradientChooser *m_gradientChooser;
-    KoPatternChooser *m_patternChooser;
+    KisPatternChooser *m_patternChooser;
 
     KisPaintopBox *m_paintopBox;
 

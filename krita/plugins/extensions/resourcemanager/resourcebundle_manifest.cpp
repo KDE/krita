@@ -120,10 +120,10 @@ bool ResourceBundleManifest::load(QIODevice *device)
         QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
 
         QStringList tagList;
-        KoXmlNode tagNode = n.firstChild();
+        KoXmlNode tagNode = n.firstChildElement().firstChildElement();
         while (!tagNode.isNull()) {
-            if (tagNode.isText()) {
-                tagList.append(tagNode.toText().data());
+            if (tagNode.firstChild().isText()) {
+                tagList.append(tagNode.firstChild().toText().data());
             }
             tagNode = tagNode.nextSibling();
         }

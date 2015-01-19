@@ -134,12 +134,10 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
     KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     doc->setCurrentImage(image);
 
-    KoShapeLayer *rootLayer = doc->shapeForNode(image->root());
-
     KoXmlElement layerElement;
     forEachElement(layerElement, KoXml::namedItemNS(page, KoXmlNS::draw, "layer-set")) {
 
-    KisShapeLayerSP shapeLayer = new KisShapeLayer(rootLayer, doc->shapeController(), image,
+    KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image,
                                         i18n("Vector Layer"),
                                         OPACITY_OPAQUE_U8);
     if (!shapeLayer->loadOdf(layerElement, shapeContext)) {

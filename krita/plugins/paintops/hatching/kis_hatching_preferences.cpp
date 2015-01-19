@@ -37,13 +37,13 @@ KisHatchingPreferences::KisHatchingPreferences()
     m_options = new KisHatchingPreferencesWidget();
 
     /*
-    connect(m_options->trigonometryAlgebraRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->scratchOffRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->trigonometryAlgebraRadioButton, SIGNAL(clicked(bool)),SLOT(emitSettingChanged()));
+    connect(m_options->scratchOffRadioButton, SIGNAL(clicked(bool)),SLOT(emitSettingChanged()));
     */
 
-    connect(m_options->antialiasCheckBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->opaqueBackgroundCheckBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->subpixelPrecisionCheckBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->antialiasCheckBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->opaqueBackgroundCheckBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->subpixelPrecisionCheckBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }

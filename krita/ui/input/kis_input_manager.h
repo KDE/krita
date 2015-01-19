@@ -54,15 +54,18 @@ class KRITAUI_EXPORT KisInputManager : public QObject
 public:
     /**
      * Constructor.
-     *
-     * \param canvas The parent canvas.
-     * \param proxy The application's tool proxy.
      */
-    explicit KisInputManager(KisCanvas2* canvas, KisToolProxy* proxy);
+    KisInputManager(QObject *parent);
+
     /**
      * Destructor.
      */
     ~KisInputManager();
+
+
+
+    void addTrackedCanvas(KisCanvas2 *canvas);
+    void removeTrackedCanvas(KisCanvas2 *canvas);
 
     void toggleTabletLogger();
 

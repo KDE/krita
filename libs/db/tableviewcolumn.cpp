@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -247,9 +247,15 @@ bool TableViewColumn::isVisible() const
 
 void TableViewColumn::setVisible(bool v)
 {
-    if (d->columnInfo)
+    bool changed = d->visible != v;
+    if (d->columnInfo && d->columnInfo->visible != v) {
         d->columnInfo->visible = v;
+        changed = true;
+    }
     d->visible = v;
+    if (changed && d->data) {
+        d->data->columnVisibilityChanged(*this);
+    }
 }
 
 void TableViewColumn::setIcon(const QIcon& icon)

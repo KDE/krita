@@ -135,11 +135,8 @@ protected:
     }
 
     void addShapeLayer(KisDocument *doc, KisImageSP image) {
-        KoShapeContainer *parentContainer =
-            dynamic_cast<KoShapeContainer*>(doc->shapeForNode(image->root()));
 
-        Q_ASSERT(parentContainer);
-        KisShapeLayerSP shapeLayer = new KisShapeLayer(parentContainer, doc->shapeController(), image.data(), "shape", OPACITY_OPAQUE_U8);
+        KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image.data(), "shape", OPACITY_OPAQUE_U8);
         image->addNode(shapeLayer);
 
         KoShapeFactoryBase *f1 = KoShapeRegistry::instance()->get("StarShape");

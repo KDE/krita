@@ -26,7 +26,7 @@
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kcomponentdata.h>
+
 #include <klocale.h>
 
 #include <KoUpdater.h>

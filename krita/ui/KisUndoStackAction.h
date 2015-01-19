@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOUNDOSTACKACTION_H
-#define KOUNDOSTACKACTION_H
+#ifndef KIS_UNDOSTACKACTION_H
+#define KIS_UNDOSTACKACTION_H
 
 #include <kaction.h>
 

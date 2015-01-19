@@ -69,15 +69,15 @@ KisSprayShapeOption::KisSprayShapeOption()
 
 void KisSprayShapeOption::setupBrushPreviewSignals()
 {
-    connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
 
-    connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->widthSpin, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->heightSpin, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->widthSpin, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->heightSpin, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
 
-    connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->imageUrl, SIGNAL(textChanged(QString)), SIGNAL(sigSettingChanged()));
+    connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->imageUrl, SIGNAL(textChanged(QString)), SLOT(emitSettingChanged()));
 }
 
 

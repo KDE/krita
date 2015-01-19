@@ -50,6 +50,9 @@ struct KisDisplayColorConverter::Private
           paintingColorSpace(0),
           monitorColorSpace(0),
           monitorProfile(0),
+          renderingIntent(KoColorConversionTransformation::InternalRenderingIntent),
+          conversionFlags(KoColorConversionTransformation::InternalConversionFlags),
+          displayFilter(0),
           intermediateColorSpace(0),
           displayRenderer(new DisplayRenderer(_q, _parentCanvas))
     {
@@ -68,7 +71,7 @@ struct KisDisplayColorConverter::Private
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
 
-    KisDisplayFilterSP displayFilter;
+    KisDisplayFilter *displayFilter;
     const KoColorSpace *intermediateColorSpace;
 
     KoColor intermediateFgColor;
@@ -155,17 +158,20 @@ KisDisplayColorConverter::KisDisplayColorConverter(KisCanvas2 *parentCanvas)
 
     m_d->setCurrentNode(0);
     setMonitorProfile(0);
-    setDisplayFilter(KisDisplayFilterSP());
+    setDisplayFilter(0);
 }
 
 KisDisplayColorConverter::KisDisplayColorConverter()
     : m_d(new Private(this, 0))
 {
+    setDisplayFilter(0);
+    delete m_d->displayFilter;
+
     m_d->paintingColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     m_d->setCurrentNode(0);
     setMonitorProfile(0);
-    setDisplayFilter(KisDisplayFilterSP());
+
 }
 
 KisDisplayColorConverter::~KisDisplayColorConverter()
@@ -283,7 +289,7 @@ void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorPr
     emit displayConfigurationChanged();
 }
 
-void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilterSP displayFilter)
+void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     if (m_d->displayFilter && displayFilter &&
         displayFilter->lockCurrentColorVisualRepresentation()) {
@@ -343,7 +349,7 @@ KisDisplayColorConverter::conversionFlags()
     return conversionFlags;
 }
 
-KisDisplayFilterSP KisDisplayColorConverter::displayFilter() const
+KisDisplayFilter *KisDisplayColorConverter::displayFilter() const
 {
     return m_d->displayFilter;
 }

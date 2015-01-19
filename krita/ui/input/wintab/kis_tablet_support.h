@@ -29,9 +29,11 @@
 #include <QTabletEvent>
 
 #ifdef Q_WS_X11
+#include "kis_config.h"
 #include <algorithm>
 #include <X11/extensions/XInput.h>
 #include <kis_global.h>
+#include "kis_incremental_average.h"
 #endif
 
 
@@ -114,9 +116,18 @@ struct QTabletDeviceData
 
     public:
         SavedAxesData()
+            : m_workaroundX11SmoothPressureSteps(KisConfig().workaroundX11SmoothPressureSteps()),
+              m_pressureAverage(m_workaroundX11SmoothPressureSteps)
         {
             for (int i = 0; i < NAxes; i++) {
                 m_x11_to_local_axis_mapping.append((AxesIndexes)i);
+            }
+
+            if (m_workaroundX11SmoothPressureSteps) {
+                qWarning() << "WARNING: Workaround for broken tablet"
+                           << "pressure reports is activated. Number"
+                           << "of smooth steps:"
+                           << m_workaroundX11SmoothPressureSteps;
             }
         }
 
@@ -156,7 +167,15 @@ struct QTabletDeviceData
                  srcIt < axesCount;
                  srcIt++, dstIt++) {
 
-                m_axis_data[m_x11_to_local_axis_mapping[dstIt]] = axes[srcIt];
+                int index = m_x11_to_local_axis_mapping[dstIt];
+                int newValue = axes[srcIt];
+
+                if (m_workaroundX11SmoothPressureSteps > 0 &&
+                    index == Pressure) {
+                    newValue = m_pressureAverage.pushThrough(newValue);
+                }
+
+                m_axis_data[index] = newValue;
             }
 
             return true;
@@ -164,6 +183,8 @@ struct QTabletDeviceData
     private:
         int m_axis_data[NAxes];
         QVector<AxesIndexes> m_x11_to_local_axis_mapping;
+        int m_workaroundX11SmoothPressureSteps;
+        KisIncrementalAverage m_pressureAverage;
     };
 
     SavedAxesData savedAxesData;

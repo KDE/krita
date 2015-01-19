@@ -114,13 +114,20 @@ void KisInfinityManager::imagePositionChanged()
     }
 
     if (!m_filteringEnabled && visible && this->visible()) {
-        m_canvas->inputManager()->attachPriorityEventFilter(this);
+        KisInputManager *inputManager = m_canvas->globalInputManager();
+        if (inputManager) {
+            inputManager->attachPriorityEventFilter(this);
+        }
+
         m_filteringEnabled = true;
     }
 
     if (m_filteringEnabled && (!visible || !this->visible())) {
-        view()->canvasBase()->inputManager()->detachPriorityEventFilter(this);
-        m_canvas->inputManager()->detachPriorityEventFilter(this);
+        KisInputManager *inputManager = m_canvas->globalInputManager();
+        if (inputManager) {
+            inputManager->detachPriorityEventFilter(this);
+        }
+
         m_filteringEnabled = false;
     }
 }

@@ -45,7 +45,7 @@ class BRUSH_EXPORT KisBrushServer : public QObject
 public:
 
     virtual ~KisBrushServer();
-    KisBrushResourceServer* brushServer();
+    KisBrushResourceServer* brushServer(bool block = true);
 
     static KisBrushServer* instance();
 

@@ -88,7 +88,7 @@ public:
     void setListContinuedFrom(KoList *list);
 
 private:
-    KoListPrivate *d;
+    KoListPrivate * const d;
 
     Q_PRIVATE_SLOT(d, void styleChanged(int))
 };

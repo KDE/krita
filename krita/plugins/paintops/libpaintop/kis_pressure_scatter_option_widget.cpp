@@ -72,11 +72,11 @@ void KisPressureScatterOptionWidget::readOptionSetting(const KisPropertiesConfig
 void KisPressureScatterOptionWidget::xAxisEnabled(bool enable)
 {
     static_cast<KisPressureScatterOption*>(curveOption())->enableAxisX(enable);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 void KisPressureScatterOptionWidget::yAxisEnabled(bool enable)
 {
     static_cast<KisPressureScatterOption*>(curveOption())->enableAxisY(enable);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }

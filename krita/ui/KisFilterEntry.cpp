@@ -51,7 +51,7 @@ QList<KisFilterEntry::Ptr> KisFilterEntry::query()
     unsigned int max = offers.count();
     kDebug(30500) <<"Query returned" << max <<" offers";
     for (unsigned int i = 0; i < max; i++) {
-        kDebug(30500) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
+        kDebug(30500) <<"   desktopEntryPath=" << (*it)->entryPath()
                        << "   library=" << (*it)->library() << endl;
         // Append converted offer
         lst.append(KisFilterEntry::Ptr(new KisFilterEntry(*it)));

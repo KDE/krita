@@ -46,7 +46,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
         m_selectedShapes << shape;
         m_previousPositions << shape->position();
         m_newPositions << shape->position();
-        boundingRect = boundingRect.unite( shape->boundingRect() );
+        boundingRect = boundingRect.united( shape->boundingRect() );
     }
     KoSelection * selection = m_canvas->shapeManager()->selection();
     m_initialOffset = selection->absolutePosition( SelectionDecorator::hotPosition() ) - m_start;

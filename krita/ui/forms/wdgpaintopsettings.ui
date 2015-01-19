@@ -23,16 +23,7 @@
       <property name="spacing">
        <number>6</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
@@ -184,7 +175,7 @@
        <item>
         <widget class="QLineEdit" name="txtPreset">
          <property name="toolTip">
-          <string>Current Brush Preset. Pink in Color whenever the preset has modified settings. Stays the same if original settings are loaded.</string>
+          <string>Current Brush Preset. Typed in italic when the preset has unsaved settings.</string>
          </property>
         </widget>
        </item>

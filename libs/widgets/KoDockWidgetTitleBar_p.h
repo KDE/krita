@@ -43,6 +43,9 @@ public:
             openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)),
             closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)),
             lockIcon(koIcon("object-unlocked")),
+            collapsable(true),
+            collapsableSet(true),
+            lockable(true),
             textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible),
             preCollapsedWidth(-1),
             locked(false)
@@ -60,7 +63,10 @@ public:
     QAbstractButton* closeButton;
     QAbstractButton* floatButton;
     QAbstractButton* collapseButton;
+    bool collapsable;
+    bool collapsableSet;
     QAbstractButton* lockButton;
+    bool lockable;
     KoDockWidgetTitleBar::TextVisibilityMode textVisibilityMode;
     int preCollapsedWidth;
     bool locked;
@@ -68,7 +74,6 @@ public:
 
     void toggleFloating();
     void toggleCollapsed();
-    void toggleLocked();
     void topLevelChanged(bool topLevel);
     void featuresChanged(QDockWidget::DockWidgetFeatures features);
     void updateIcons();

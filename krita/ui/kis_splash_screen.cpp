@@ -27,11 +27,13 @@
 #include <KisPart.h>
 #include <KisApplication.h>
 
-#include <kcomponentdata.h>
+
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kaboutdata.h>
 
 #include <kis_factory2.h>
 
@@ -39,6 +41,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
 {
     setupUi(this);
+    setWindowIcon(KIcon(KGlobal::mainComponent().aboutData()->programIconName()));
 
     lblSplash->setPixmap(pixmap);
     bnClose->hide();
@@ -46,7 +49,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     chkShowAtStartup->hide();
     connect(chkShowAtStartup, SIGNAL(toggled(bool)), this, SLOT(toggleShowAtStartup(bool)));
 
-    KConfigGroup cfg(KisFactory2::componentData().config(), "SplashScreen");
+    KConfigGroup cfg(KisFactory::componentData().config(), "SplashScreen");
     bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
     chkShowAtStartup->setChecked(hideSplash);
 
@@ -56,24 +59,22 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
                            "<body>"
                            "<p align=\"center\"><b>Links</b></p>"
 
-                           "<p><a href=\"https://krita.org/support-us/donations/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Donations</span></a></p>"
-                           "<p><a href=\"http://www.zazzle.com/kritashop\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Merchandise</span></a></p>"
+                           "<p><a href=\"https://krita.org/support-us/donations/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Support Krita</span></a></p>"
 
                            "<p><a href=\"http://krita.org/resources\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Getting Started</span></a></p>"
-//                           "<p><a href=\"http://userbase.kde.org/Krita\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Manual</span></a></p>"
+                           "<p><a href=\"http://userbase.kde.org/Krita\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Manual</span></a></p>"
                            "<p><a href=\"http://krita.org\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Krita Website</span></a></p>"
                            "<p><a href=\"http://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:#FFFFFF;\">User Community</span></a></p>"
 
                            "<p><a href=\"https://projects.kde.org/projects/calligra\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Source Code</span></a></p>"
 
-                           "<p><a href=\"http://kritastudio.com\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Commercial Support</span></a></p>"
                            "<p><a href=\"http://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Krita on Steam</span></a></p>"
                            "</body>"
                            "</html>"));
 
     lblVersion->setText(i18n("Version: %1", version));
 
-    KConfigGroup cfg2(KisFactory2::componentData().config(), "RecentFiles");
+    KConfigGroup cfg2(KisFactory::componentData().config(), "RecentFiles");
     int i = 1;
 
     QString recent = i18n("<html>"
@@ -133,10 +134,7 @@ void KisSplashScreen::toggleShowAtStartup(bool toggle)
 
 void KisSplashScreen::linkClicked(const QString &link)
 {
-    KisPart *part = KisPart::instance();
-    if (part) {
-        part->openExistingFile(KUrl(link));
-    }
+    KisPart::instance()->openExistingFile(KUrl(link));
     if (isTopLevel()) {
         close();
     }

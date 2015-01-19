@@ -217,9 +217,7 @@ public:
         return m_filter->id();
     }
 
-    inline void setFilterId(const QString &id) {
-        m_filter = KisFilterStrategyRegistry::instance()->value(id);
-    }
+    void setFilterId(const QString &id);
 
     inline KisFilterStrategy* filter() const {
         return m_filter;
@@ -244,11 +242,11 @@ public:
     }
 
     const KisLiquifyProperties* liquifyProperties() const {
-        return &m_liquifyProperties;
+        return m_liquifyProperties.data();
     }
 
     KisLiquifyProperties* liquifyProperties() {
-        return &m_liquifyProperties;
+        return m_liquifyProperties.data();
     }
 
     void initLiquifyTransformMode(const QRect &srcRect);
@@ -297,7 +295,7 @@ private:
 
     KisFilterStrategy *m_filter;
     bool m_editTransformPoints;
-    KisLiquifyProperties m_liquifyProperties;
+    QSharedPointer<KisLiquifyProperties> m_liquifyProperties;
     QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
 };
 

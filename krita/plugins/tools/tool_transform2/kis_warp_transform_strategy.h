@@ -85,7 +85,7 @@ protected:
                                              const QPointF &srcOffset,
                                              QPointF *dstOffset);
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> m_d;
 };
 

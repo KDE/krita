@@ -3,15 +3,15 @@
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -50,21 +50,11 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             sovi.decorationPosition = QStyleOptionViewItem::Right;
 
         QStyledItemDelegate::paint(painter, sovi, index);
-        if(index.data(__CategorizedListModelBase::isLockableRole).toBool())
-        {
-            if(index.data(__CategorizedListModelBase::isLockedRole).toBool())
-            {
-                KIcon *i = new KIcon("linked2");
-                QPixmap pixmap = i->pixmap(QSize(sovi.rect.height(),10));
-                painter->drawPixmap(sovi.rect.width()-pixmap.width(),sovi.rect.y(),pixmap);
-            }
-            else
-            {
-                KIcon *i = new KIcon("linked2");
-                painter->setOpacity(0.4);
-                QPixmap pixmap = i->pixmap(QSize(sovi.rect.height(),10));
-                painter->drawPixmap(sovi.rect.width()-pixmap.width(),sovi.rect.y(),pixmap);
-            }
+        if (index.data(__CategorizedListModelBase::isLockableRole).toBool()) {
+            bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
+            const KIcon icon = locked ? koIcon(koIconName("locked")) : koIcon(koIconName("unlocked"));
+            QPixmap pixmap = icon.pixmap(QSize(sovi.rect.height() - 8, sovi.rect.height() -8));
+            painter->drawPixmap(sovi.rect.width() - pixmap.width(), sovi.rect.y(), pixmap);
         }
         painter->setOpacity(1);
     }

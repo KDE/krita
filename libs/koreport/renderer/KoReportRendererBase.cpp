@@ -46,25 +46,26 @@ KoReportRendererFactory::KoReportRendererFactory()
 
 KoReportRendererBase* KoReportRendererFactory::createInstance(const QString& key)
 {
-    if (key.toLower() == QLatin1String("screen")) {
+    const QString lowerKey = key.toLower();
+    if (lowerKey == QLatin1String("screen")) {
         return new KoReportScreenRenderer();
     }
-    if (key.toLower() == QLatin1String("print")) {
+    if (lowerKey == QLatin1String("print")) {
         return new KoReportPrintRenderer();
     }  
-    if (key.toLower() == QLatin1String("ods")) {
+    if (lowerKey == QLatin1String("ods")) {
         return new KoReportKSpreadRenderer();
     } 
-    if (key.toLower() == QLatin1String("htmltable")) {
+    if (lowerKey == QLatin1String("htmltable")) {
         return new KoReportHTMLTableRenderer();
     }
-    if (key.toLower() == QLatin1String("htmlcss")) {
+    if (lowerKey == QLatin1String("htmlcss")) {
         return new KoReportHTMLCSSRenderer();
     }
-    if (key.toLower() == QLatin1String("odttable") || key.toLower() == QLatin1String("odt")) {
+    if (lowerKey == QLatin1String("odttable") || lowerKey == QLatin1String("odt")) {
         return new KoReportODTRenderer();
     }
-    if (key.toLower() == QLatin1String("odtframes")) {
+    if (lowerKey == QLatin1String("odtframes")) {
         return new KoOdtFrameReportRenderer();
 }
 return 0;

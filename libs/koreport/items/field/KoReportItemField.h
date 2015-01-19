@@ -63,6 +63,7 @@ protected:
     KoProperty::Property* m_lineStyle;
     KoProperty::Property* m_wordWrap;
     KoProperty::Property* m_canGrow;
+    KoProperty::Property* m_itemValue;
     
     //bool builtinFormat;
     //QString format;

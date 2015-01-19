@@ -60,8 +60,8 @@ public:
 
         QVERIFY(checkLayersInitial());
 
-        mainWindow = new KisMainWindow(part, doc->documentPart()->componentData());
-        imageView = new KisView(doc->documentPart(), doc, mainWindow->actionCollection(), mainWindow);
+        mainWindow = new KisMainWindow();
+        imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
         view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 
         KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));

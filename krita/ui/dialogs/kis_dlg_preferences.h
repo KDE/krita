@@ -71,6 +71,9 @@ public:
     bool showOutlineWhilePainting();
     int mdiMode();
     int favoritePresets();
+private slots:
+    void getBackgroundImage();
+    void clearBackgroundImage();
 
 };
 
@@ -105,6 +108,8 @@ public:
     void setDefault();
     WdgColorSettings  *m_page;
     QButtonGroup m_pasteBehaviourGroup;
+    QList<QLabel*> m_monitorProfileLabels;
+    QList<SqueezedComboBox*> m_monitorProfileWidgets;
 };
 
 //=======================

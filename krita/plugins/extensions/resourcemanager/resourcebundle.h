@@ -21,6 +21,7 @@
 #define KORESOURCEBUNDLE_H
 
 #include <QSet>
+#include <QList>
 
 #include <KoXmlWriter.h>
 
@@ -98,6 +99,11 @@ public:
      * @return true if the bundle is installed, false otherwise.
      */
     bool isInstalled();
+    /**
+     * @brief setInstalled
+     * This allows you to set installed or uninstalled upon loading. This is used with blacklists. 
+     */
+    void setInstalled(bool install);
 
     void setThumbnail(QString);
 
@@ -119,6 +125,13 @@ private:
     QMap<QString, QString> m_metadata;
     QSet<QString> m_bundletags;
     bool m_installed;
+    QList<QByteArray> m_gradientsMd5Installed;
+    QList<QByteArray> m_patternsMd5Installed;
+    QList<QByteArray> m_brushesMd5Installed;
+    QList<QByteArray> m_palettesMd5Installed;
+    QList<QByteArray> m_workspacesMd5Installed;
+    QList<QByteArray> m_presetsMd5Installed;
+    
 };
 
 #endif // KORESOURCEBUNDLE_H

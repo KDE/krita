@@ -42,7 +42,9 @@
 
 struct KisPaintOpPreset::Private {
     Private()
-        : settings(0) {
+        : settings(0),
+          dirtyPreset(false)
+    {
     }
 
     KisPaintOpSettingsSP settings;
@@ -55,7 +57,6 @@ KisPaintOpPreset::KisPaintOpPreset()
     : KoResource(QString())
     , m_d(new Private)
 {
-    m_d->dirtyPreset = false;
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
@@ -113,7 +114,8 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", "").isEmpty());
 
-    bool saveDirtyPreset = isPresetDirty();
+    DirtyStateSaver dirtyStateSaver(this);
+
     if (settings) {
         m_d->settings = settings->clone();
         m_d->settings->setPreset(KisPaintOpPresetWSP(this));
@@ -121,8 +123,6 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
         m_d->settings = 0;
         m_d->settings->setPreset(0);
     }
-    setPresetDirty(saveDirtyPreset);
-
     setValid(m_d->settings);
 }
 

@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __ko_document_entry_h__
-#define __ko_document_entry_h__
+#ifndef KIS_DOCUMENT_ENTRY_H
+#define KIS_DOCUMENT_ENTRY_H
 
 #include <kservice.h>
 #include <ksharedptr.h>
@@ -49,6 +49,10 @@ public:
     explicit KisDocumentEntry(const KService::Ptr& service);
     ~KisDocumentEntry();
 
+    static QString nativeMimeType();
+
+    static QStringList extraNativeMimeTypes();
+
     KService::Ptr service() const;
 
     /**
@@ -71,13 +75,7 @@ public:
      */
     bool supportsMimeType(const QString & _mimetype) const;
 
-    /**
-     *  Uses the factory of the component to create
-     *  a part. If that is not possible, 0 is returned.
-     */
-    KisPart *createKisPart(QString* errorMsg = 0) const;
-
-    /**
+        /**
      *  This function will query ksycoca to find all available components.
      *  The result will only contain parts, which are embeddable into a document
      *

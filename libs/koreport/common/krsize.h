@@ -28,15 +28,19 @@
 class KOREPORT_EXPORT KRSize
 {
 public:
+    enum UpdatePropertyFlag {
+        UpdateProperty,
+        DontUpdateProperty
+    };
     explicit KRSize(const KoUnit& unit = KoUnit(KoUnit::Centimeter));
 
     ~KRSize();
     QSizeF toUnit() const;
     QSizeF toPoint() const;
     QSizeF toScene() const;
-    void setSceneSize(const QSizeF&, bool update= true);
-    void setUnitSize(const QSizeF&, bool update = true);
-    void setPointSize(const QSizeF&, bool update = true);
+    void setSceneSize(const QSizeF&, UpdatePropertyFlag update = UpdateProperty);
+    void setUnitSize(const QSizeF&, UpdatePropertyFlag update = UpdateProperty);
+    void setPointSize(const QSizeF&, UpdatePropertyFlag update = UpdateProperty);
     void setUnit(KoUnit);
 
     KoProperty::Property* property() const {

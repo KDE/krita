@@ -20,7 +20,7 @@
 
 #include "hairy_paintop_plugin.h"
 #include <klocale.h>
-#include <kcomponentdata.h>
+
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
@@ -40,7 +40,7 @@ HairyPaintOpPlugin::HairyPaintOpPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisHairyPaintOp, KisHairyPaintOpSettings, KisHairyPaintOpSettingsWidget>("hairybrush", i18n("Hairy"), KisPaintOpFactory::categoryStable(), "krita-sumi.png", QString(), QStringList(), 4));
+    r->add(new KisSimplePaintOpFactory<KisHairyPaintOp, KisHairyPaintOpSettings, KisHairyPaintOpSettingsWidget>("hairybrush", i18n("Bristle"), KisPaintOpFactory::categoryStable(), "krita-sumi.png", QString(), QStringList(), 4));
 
 }
 

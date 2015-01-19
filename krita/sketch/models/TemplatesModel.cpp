@@ -156,7 +156,7 @@ void TemplatesModel::toggleGroup(const QString& name)
 
 void TemplatesModel::populate()
 {
-    KisTemplateTree templateTree("krita_template", KisFactory2::componentData(), true);
+    KisTemplateTree templateTree("krita_template", KisFactory::componentData(), true);
     foreach (KisTemplateGroup *group, templateTree.groups()) {
         if (group->isHidden()) {
             continue;

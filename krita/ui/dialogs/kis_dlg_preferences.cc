@@ -38,6 +38,8 @@
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QMdiArea>
+#include <QMessageBox>
+#include <QDesktopWidget>
 
 #ifdef HAVE_OPENGL
 #include <qgl.h>
@@ -51,6 +53,7 @@
 #include <KoColorSpaceEngine.h>
 #include <KoIcon.h>
 #include <KoConfig.h>
+#include "KoID.h"
 
 #include <klocale.h>
 #include <kvbox.h>
@@ -68,7 +71,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_preference_set_registry.h"
 #include "kis_factory2.h"
-#include "KoID.h"
+#include "kis_color_manager.h"
 
 // for the performance update
 #include <kis_cubic_curve.h>
@@ -105,7 +108,13 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
+    m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
+    m_mdiColor->setColor(cfg.getMDIBackgroundColor());
+    m_backgroundimage->setText(cfg.getMDIBackgroundImage());
+
+    connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
+    connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
 }
 
 void GeneralTab::setDefault()
@@ -121,7 +130,10 @@ void GeneralTab::setDefault()
     m_backupFileCheckBox->setChecked(true);
     m_showOutlinePainting->setChecked(true);
     m_cmbMDIType->setCurrentIndex(1);
+    m_chkRubberBand->setChecked(cfg.useOpenGL());
     m_favoritePresetsSpinBox->setValue(10);
+    m_mdiColor->setColor(QColor(220, 220, 220));
+    m_backgroundimage->setText("");
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -161,6 +173,28 @@ int GeneralTab::favoritePresets()
     return m_favoritePresetsSpinBox->value();
 }
 
+void GeneralTab::getBackgroundImage()
+{
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "BackgroundImages");
+    dialog.setCaption(i18n("Select a Background Image"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setImageFilters();
+    QString fn = dialog.url();
+    QImage image(fn);
+    if (image.isNull()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("%1 is not a valid image file!", fn));
+    }
+    else {
+        m_backgroundimage->setText(fn);
+    }
+
+}
+
+void GeneralTab::clearBackgroundImage()
+{
+    // clearing the background image text will implicitly make the background color be used
+    m_backgroundimage->setText("");
+}
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     : QWidget(parent)
@@ -180,6 +214,10 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
+// XXX: no color management integration on Windows or OSX yet
+#ifndef Q_WS_X11
+    m_page->chkUseSystemMonitorProfile->setVisible(false);
+#endif
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
@@ -190,14 +228,29 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
-    refillMonitorProfiles(KoID("RGBA", ""));
     refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
 
     //hide printing settings
     m_page->groupBox2->hide();
 
-    if (m_page->cmbMonitorProfile->contains(cfg.monitorProfile()))
-        m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
+    QGridLayout *monitorProfileGrid = new QGridLayout(m_page->monitorprofileholder);
+    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+        QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen: %1", i + 1));
+        monitorProfileGrid->addWidget(lbl, i, 0);
+        m_monitorProfileLabels << lbl;
+        SqueezedComboBox *cmb = new SqueezedComboBox();
+        monitorProfileGrid->addWidget(cmb, i, 1);
+        m_monitorProfileWidgets << cmb;
+    }
+
+    refillMonitorProfiles(KoID("RGBA", ""));
+
+    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+        if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
+            m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
+        }
+    }
+
     if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
         m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
 
@@ -252,8 +305,12 @@ void ColorSettingsTab::installProfile()
     refillMonitorProfiles(KoID("RGBA", ""));
     refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
 
-    if (m_page->cmbMonitorProfile->contains(cfg.monitorProfile()))
-        m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
+    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+        if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
+            m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
+        }
+    }
+
     if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
         m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
 
@@ -262,23 +319,27 @@ void ColorSettingsTab::installProfile()
 
 void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
 {
-    // XXX: this needs to be available per screen!
     if (useSystemProfile) {
-        const KoColorProfile *profile = KisConfig::getScreenProfile();
-        if (profile && profile->isSuitableForDisplay()) {
-            // We've got an X11 profile, don't allow to override
-            m_page->cmbMonitorProfile->hide();
-            m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
+        KisConfig cfg;
+        QStringList devices = KisColorManager::instance()->devices();
+        if (devices.size() == QApplication::desktop()->screenCount()) {
+            for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+                m_monitorProfileWidgets[i]->clear();
+                QString monitorForScreen = cfg.monitorForScreen(i, devices[i]);
+                foreach(const QString &device, devices) {
+                    m_monitorProfileLabels[i]->setText(i18nc("The display/screen we got from Qt", "Screen %1:", i + 1));
+                    m_monitorProfileWidgets[i]->addSqueezedItem(KisColorManager::instance()->deviceName(device), device);
+                    if (devices[i] == monitorForScreen) {
+                        m_monitorProfileWidgets[i]->setCurrentIndex(i);
+                    }
+                }
+            }
         }
     }
     else {
-        m_page->cmbMonitorProfile->show();
-        m_page->lblMonitorProfile->setText(i18n("&Monitor profile: "));
+        refillMonitorProfiles(KoID("RGBA", ""));
     }
-
-
 }
-
 
 void ColorSettingsTab::setDefault()
 {
@@ -292,7 +353,7 @@ void ColorSettingsTab::setDefault()
     m_page->chkBlackpoint->setChecked(false);
     m_page->chkAllowLCMSOptimization->setChecked(true);
     m_page->cmbMonitorIntent->setCurrentIndex(INTENT_PERCEPTUAL);
-
+    m_page->chkUseSystemMonitorProfile->setChecked(false);
     QAbstractButton *button = m_pasteBehaviourGroup.button(PASTE_ASK);
     Q_ASSERT(button);
 
@@ -306,19 +367,27 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
 {
     const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
 
-    m_page->cmbMonitorProfile->clear();
+    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+        m_monitorProfileWidgets[i]->clear();
+    }
 
     if (!csf)
         return;
 
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
-    foreach(const KoColorProfile *profile, profileList) {
-        if (profile->isSuitableForDisplay())
-            m_page->cmbMonitorProfile->addSqueezedItem(profile->name());
+    foreach (const KoColorProfile *profile, profileList) {
+        if (profile->isSuitableForDisplay()) {
+            for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+                m_monitorProfileWidgets[i]->addSqueezedItem(profile->name());
+            }
+        }
     }
 
-    m_page->cmbMonitorProfile->setCurrent(csf->defaultProfile());
+    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+        m_monitorProfileLabels[i]->setText(i18nc("The number of the screen", "Screen: %1", i + 1));
+        m_monitorProfileWidgets[i]->setCurrent(csf->defaultProfile());
+    }
 }
 
 void ColorSettingsTab::refillPrintProfiles(const KoID & s)
@@ -395,14 +464,16 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     KisConfig cfg;
 
 #ifdef HAVE_OPENGL
-    if (!QGLFormat::hasOpenGL()) {
-        cbUseOpenGL->setEnabled(false);
+    if (!QGLFormat::hasOpenGL()) {       
+        grpOpenGL->setEnabled(false);
+        grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
         chkDisableDoubleBuffering->setEnabled(false);
         chkDisableVsync->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
-        cbUseOpenGL->setChecked(cfg.useOpenGL());
+        grpOpenGL->setEnabled(true);
+        grpOpenGL->setChecked(cfg.useOpenGL());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
         chkDisableDoubleBuffering->setVisible(cfg.showAdvancedOpenGLSettings());
@@ -419,11 +490,12 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
     }
     if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
-        cbUseOpenGL->setVisible(false);
-        cbUseOpenGL->setMaximumHeight(0);
+       grpOpenGL->setVisible(false);
+       grpOpenGL->setMaximumHeight(0);
     }
 #else
     grpOpenGL->setEnabled(false);
+    grpOpenGL->setChecked(false);
 #endif
 
     KoColor c;
@@ -445,12 +517,12 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline());
     chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor());
 
-    connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
+    connect(grpOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
 }
 
 void DisplaySettingsTab::setDefault()
 {
-    cbUseOpenGL->setChecked(true);
+    grpOpenGL->setChecked(true);
     chkUseTextureBuffer->setChecked(false);
     chkUseTextureBuffer->setEnabled(true);
     chkDisableDoubleBuffering->setEnabled(true);
@@ -737,7 +809,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
-
+        cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color());
+        cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         KisPart *part = KisPart::instance();
@@ -755,8 +828,18 @@ bool KisDlgPreferences::editPreferences()
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
-        cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted(),
-                              dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
+        for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+            if (dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked()) {
+                int currentIndex = dialog->m_colorSettings->m_monitorProfileWidgets[i]->currentIndex();
+                QString monitorid = dialog->m_colorSettings->m_monitorProfileWidgets[i]->itemData(currentIndex).toString();
+                cfg.setMonitorForScreen(i, monitorid);
+            }
+            else {
+                cfg.setMonitorProfile(i,
+                                      dialog->m_colorSettings->m_monitorProfileWidgets[i]->itemHighlighted(),
+                                      dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
+            }
+        }
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
         cfg.setPrinterColorSpace(dialog->m_colorSettings->m_page->cmbPrintingColorSpace->currentItem().id());
         cfg.setPrinterProfile(dialog->m_colorSettings->m_page->cmbPrintProfile->itemHighlighted());
@@ -776,9 +859,9 @@ bool KisDlgPreferences::editPreferences()
 #endif
 
 #ifdef HAVE_OPENGL
-        if (!cfg.useOpenGL() && dialog->m_displaySettings->cbUseOpenGL->isChecked())
+        if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
             cfg.setCanvasState("TRY_OPENGL");
-        cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
+        cfg.setUseOpenGL(dialog->m_displaySettings->grpOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
         cfg.setDisableDoubleBuffering(dialog->m_displaySettings->chkDisableDoubleBuffering->isChecked());

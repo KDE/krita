@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOVIEW_P_H
-#define KOVIEW_P_H
+#ifndef KIS_VIEW_P_H
+#define KIS_VIEW_P_H
 
 // Calligra
 #include "KoUnit.h"

@@ -2,14 +2,14 @@
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2014 Wolthera van Hövell <griffinvalley@gmail.com>    
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -69,12 +69,15 @@ public slots:
     void update();
     void hueUpdate(int h);
     void satUpdate(int s, int type);
+    void toneUpdate(int l, int type);
     void sliderChanged(int i);
     void sliderIn();
     void sliderOut();
+    void numInputChanged(double v);
 signals:
     void hueUpdated(int);
     void satUpdated(int, int);
+    void toneUpdated(int, int);
 private:
     QDoubleSpinBox* m_NumInput;
     qreal m_hue;
@@ -83,6 +86,7 @@ private:
     qreal R, G, B;
     bool m_hueupdating;
     bool m_satupdating;
+    bool m_toneupdating;
     bool m_sliderisupdating;
 };
 

@@ -56,7 +56,7 @@ class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLaye
 
 public:
 
-    KisShapeLayer(KoShapeContainer * parent, KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
+    KisShapeLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
     KisShapeLayer(const KisShapeLayer& _rhs);
     virtual ~KisShapeLayer();
 private:
@@ -75,6 +75,8 @@ public:
     bool isSelectable() const {
         return false;
     }
+
+    void setParent(KoShapeContainer *parent);
 
     // KisExternalLayer implementation
     QIcon icon() const;

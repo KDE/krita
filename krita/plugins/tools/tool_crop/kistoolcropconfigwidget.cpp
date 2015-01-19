@@ -20,6 +20,8 @@
 #include "kistoolcropconfigwidget.h"
 #include "kis_tool_crop.h"
 #include <KoIcon.h>
+#include <kis_acyclic_signal_connector.h>
+
 
 KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* cropTool)
     : QWidget(parent)
@@ -47,129 +49,62 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     boolGrow->setChecked(m_cropTool->allowGrow());
     boolCenter->setChecked(m_cropTool->growCenter());
 
-    connect(intHeight, SIGNAL(valueChanged(int)), SIGNAL(cropHeightChanged(int)));
-    connect(intWidth, SIGNAL(valueChanged(int)), SIGNAL(cropWidthChanged(int)));
-    connect(cmbType, SIGNAL(currentIndexChanged(int)), SIGNAL(cropTypeChanged(int)));
-    connect(intX, SIGNAL(valueChanged(int)), SIGNAL(cropXChanged(int)));
-    connect(intY, SIGNAL(valueChanged(int)), SIGNAL(cropYChanged(int)));
-    connect(boolHeight, SIGNAL(toggled(bool)), SIGNAL(forceHeightChanged(bool)));
-    connect(boolWidth, SIGNAL(toggled(bool)), SIGNAL(forceWidthChanged(bool)));
-    connect(boolRatio, SIGNAL(toggled(bool)), SIGNAL(forceRatioChanged(bool)));
-    connect(boolGrow, SIGNAL(toggled(bool)), SIGNAL(allowGrowChanged(bool)));
-    connect(boolCenter, SIGNAL(toggled(bool)), SIGNAL(growCenterChanged(bool)));
-    connect(doubleRatio, SIGNAL(valueChanged(double)), SIGNAL(ratioChanged(double)));
-    connect(cmbDecor, SIGNAL(currentIndexChanged(int)), SIGNAL(decorationChanged(int)));
+    KisAcyclicSignalConnector *connector;
 
-    connect(cropTool, SIGNAL(cropHeightChanged()), SLOT(cropHeightChanged()));
-    connect(cropTool, SIGNAL(cropTypeChanged()), SLOT(cropTypeChanged()));
-    connect(cropTool, SIGNAL(cropTypeSelectableChanged()), SLOT(cropTypeSelectableChanged()));
-    connect(cropTool, SIGNAL(cropWidthChanged()), SLOT(cropWidthChanged()));
-    connect(cropTool, SIGNAL(cropXChanged()), SLOT(cropXChanged()));
-    connect(cropTool, SIGNAL(cropYChanged()), SLOT(cropYChanged()));
-    connect(cropTool, SIGNAL(forceHeightChanged()), SLOT(forceHeightChanged()));
-    connect(cropTool, SIGNAL(forceRatioChanged()), SLOT(forceRatioChanged()));
-    connect(cropTool, SIGNAL(forceWidthChanged()), SLOT(forceWidthChanged()));
-    connect(cropTool, SIGNAL(ratioChanged()), SLOT(ratioChanged()));
-    connect(cropTool, SIGNAL(decorationChanged()), SLOT(decorationChanged()));
-    connect(cropTool, SIGNAL(cropChanged(bool)), SLOT(cropChanged(bool)));
-}
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardDouble(doubleRatio, SIGNAL(valueChanged(double)), this, SIGNAL(ratioChanged(double)));
+    connector->connectBackwardDouble(cropTool, SIGNAL(ratioChanged(double)), doubleRatio, SLOT(setValue(double)));
 
-void KisToolCropConfigWidget::cropHeightChanged()
-{
-    intHeight->blockSignals(true);
-    intHeight->setValue(m_cropTool->cropHeight());
-    intHeight->blockSignals(false);
-}
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardInt(intHeight, SIGNAL(valueChanged(int)), this, SIGNAL(cropHeightChanged(int)));
+    connector->connectBackwardInt(cropTool, SIGNAL(cropHeightChanged(int)), intHeight, SLOT(setValue(int)));
 
-void KisToolCropConfigWidget::cropTypeChanged()
-{
-    cmbType->blockSignals(true);
-    cmbType->setCurrentIndex(m_cropTool->cropType());
-    cmbType->blockSignals(false);
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardInt(intWidth, SIGNAL(valueChanged(int)), this, SIGNAL(cropWidthChanged(int)));
+    connector->connectBackwardInt(cropTool, SIGNAL(cropWidthChanged(int)), intWidth, SLOT(setValue(int)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardInt(intX, SIGNAL(valueChanged(int)), this, SIGNAL(cropXChanged(int)));
+    connector->connectBackwardInt(cropTool, SIGNAL(cropXChanged(int)), intX, SLOT(setValue(int)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardInt(intY, SIGNAL(valueChanged(int)), this, SIGNAL(cropYChanged(int)));
+    connector->connectBackwardInt(cropTool, SIGNAL(cropYChanged(int)), intY, SLOT(setValue(int)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardBool(boolHeight, SIGNAL(toggled(bool)), this, SIGNAL(forceHeightChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(forceHeightChanged(bool)), boolHeight, SLOT(setChecked(bool)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardBool(boolWidth, SIGNAL(toggled(bool)), this, SIGNAL(forceWidthChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(forceWidthChanged(bool)), boolWidth, SLOT(setChecked(bool)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardBool(boolRatio, SIGNAL(toggled(bool)), this, SIGNAL(forceRatioChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(forceRatioChanged(bool)), boolRatio, SLOT(setChecked(bool)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardInt(cmbType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(cropTypeChanged(int)));
+    connector->connectBackwardInt(cropTool, SIGNAL(cropTypeChanged(int)), cmbType, SLOT(setCurrentIndex(int)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardInt(cmbDecor, SIGNAL(currentIndexChanged(int)), this, SIGNAL(decorationChanged(int)));
+    connector->connectBackwardInt(cropTool, SIGNAL(decorationChanged(int)), cmbDecor, SLOT(setCurrentIndex(int)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardBool(boolGrow, SIGNAL(toggled(bool)), this, SIGNAL(allowGrowChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(canGrowChanged(bool)), boolGrow, SLOT(setChecked(bool)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardBool(boolCenter, SIGNAL(toggled(bool)), this, SIGNAL(growCenterChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(isCenteredChanged(bool)), boolCenter, SLOT(setChecked(bool)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    //connector->connectForwardDouble();
+    connector->connectBackwardVoid(cropTool, SIGNAL(cropTypeSelectableChanged()), this, SLOT(cropTypeSelectableChanged()));
 }
 
 void KisToolCropConfigWidget::cropTypeSelectableChanged()
 {
     cmbType->setEnabled(m_cropTool->cropTypeSelectable());
-}
-
-void KisToolCropConfigWidget::cropWidthChanged()
-{
-    intWidth->blockSignals(true);
-    intWidth->setValue(m_cropTool->cropWidth());
-    intWidth->blockSignals(false);
-}
-
-void KisToolCropConfigWidget::cropXChanged()
-{
-    intX->blockSignals(true);
-    intX->setValue(m_cropTool->cropX());
-    intX->blockSignals(false);
-}
-
-void KisToolCropConfigWidget::cropYChanged()
-{
-    intY->blockSignals(true);
-    intY->setValue(m_cropTool->cropY());
-    intY->blockSignals(false);
-}
-
-void KisToolCropConfigWidget::forceHeightChanged()
-{
-    boolHeight->blockSignals(true);
-    boolHeight->setChecked(m_cropTool->forceHeight());
-    boolHeight->blockSignals(false);
-}
-
-void KisToolCropConfigWidget::forceRatioChanged()
-{
-    boolRatio->blockSignals(true);
-    boolRatio->setChecked(m_cropTool->forceRatio());
-    boolRatio->blockSignals(false);
-}
-
-void KisToolCropConfigWidget::forceWidthChanged()
-{
-    boolWidth->blockSignals(true);
-    boolWidth->setChecked(m_cropTool->forceWidth());
-    boolWidth->blockSignals(false);
-}
-
-void KisToolCropConfigWidget::ratioChanged()
-{
-    doubleRatio->blockSignals(true);
-    doubleRatio->setValue(m_cropTool->ratio());
-    doubleRatio->blockSignals(false);
-}
-
-void KisToolCropConfigWidget::decorationChanged()
-{
-    cmbDecor->blockSignals(true);
-    cmbDecor->setCurrentIndex(m_cropTool->decoration());
-    cmbDecor->blockSignals(false);
-}
-
-
-void KisToolCropConfigWidget::allowGrowChanged(){
-    boolGrow->blockSignals(true);
-    boolGrow->setChecked(m_cropTool->allowGrow());
-    boolGrow->blockSignals(false);
-}
-
-void KisToolCropConfigWidget::growCenterChanged(){
-    boolCenter->blockSignals(true);
-    boolCenter->setChecked(m_cropTool->growCenter());
-    boolCenter->blockSignals(false);
-}
-
-
-void KisToolCropConfigWidget::cropChanged(bool updateRatio)
-{
-    cropHeightChanged();
-    cropWidthChanged();
-    cropXChanged();
-    cropYChanged();
-    if(updateRatio){
-        ratioChanged();
-    }
 }

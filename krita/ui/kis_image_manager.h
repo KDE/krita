@@ -25,7 +25,6 @@
 #include <krita_export.h>
 
 class KisViewManager;
-class KActionCollection;
 class KisFilterStrategy;
 class KisActionManager;
 class KisView;
@@ -42,7 +41,7 @@ public:
     ~KisImageManager() {}
 
     void setView(QPointer<KisView>imageView);
-    void setup(KActionCollection * actionCollection, KisActionManager *actionManager);
+    void setup(KisActionManager *actionManager);
 
 public slots:
 

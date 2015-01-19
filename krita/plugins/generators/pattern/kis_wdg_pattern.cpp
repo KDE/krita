@@ -53,7 +53,6 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfiguration* config)
     if (pattern) {
        widget()->patternChooser->setCurrentPattern(pattern);
     }
-//    widget()->bnColor->setColor(config->getColor("color").toQColor());
 
 }
 
@@ -63,11 +62,6 @@ KisPropertiesConfiguration* KisWdgPattern::configuration() const
     QVariant v;
     v.setValue(widget()->patternChooser->currentResource()->name());
     config->setProperty("pattern", v);
-
-//    KoColor c;
-//    c.fromQColor(this->widget()->bnColor->color());
-//    v.setValue(c);
-//    config->setProperty("color", v);
 
     return config;
 }

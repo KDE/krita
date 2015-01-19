@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef koTemplate_h
-#define koTemplate_h
+#ifndef KIS_TEMPLATE_H
+#define KIS_TEMPLATE_H
 
 #include <QStringList>
 #include <QPixmap>

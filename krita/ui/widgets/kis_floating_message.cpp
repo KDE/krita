@@ -223,7 +223,7 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
     if (parentWidget() && m_showOverParent) {
         screen = parentWidget()->geometry();
-        screen.setTopLeft(parentWidget()->mapToGlobal(QPoint(MARGIN, MARGIN)));
+        screen.setTopLeft(parentWidget()->mapToGlobal(QPoint(MARGIN, MARGIN + 50)));
         newPos = screen.topLeft();
     }
     else {

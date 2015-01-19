@@ -39,6 +39,7 @@ KoReportItemField::KoReportItemField(QDomNode & element)
 
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
+    m_itemValue->setValue(element.toElement().attribute("report:value"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
@@ -86,8 +87,9 @@ void KoReportItemField::createProperties()
     QStringList keys, strings;
 
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
-
     m_controlSource->setOption("extraValueAllowed", "true");
+    
+    m_itemValue = new KoProperty::Property("value", QString(), i18n("Value"), i18n("Value used if not bound to a field"));
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
@@ -127,6 +129,7 @@ void KoReportItemField::createProperties()
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
+    m_set->addProperty(m_itemValue);
     m_set->addProperty(m_horizontalAlignment);
     m_set->addProperty(m_verticalAlignment);
     m_set->addProperty(m_font);
@@ -225,18 +228,22 @@ int KoReportItemField::renderSimpleData(OROPage *page, OROSection *section, cons
     QString str;
     
     QString ids = itemDataSource();
-    if (ids.left(1) == "=" && script) { //Everything after = is treated as code
-        if (!ids.contains("PageTotal()")) {
-            QVariant v = script->evaluate(ids.mid(1));
-            str = v.toString();
-        } else {
+    if (!ids.isEmpty()) {
+        if (ids.left(1) == "=" && script) { //Everything after = is treated as code
+            if (!ids.contains("PageTotal()")) {
+                QVariant v = script->evaluate(ids.mid(1));
+                str = v.toString();
+            } else {
+                str = ids.mid(1);
+                tb->setRequiresPostProcessing();
+            }
+        } else if (ids.left(1) == "$") { //Everything past $ is treated as a string
             str = ids.mid(1);
-            tb->setRequiresPostProcessing();
+        } else {
+            str = data.toString();
         }
-    } else if (ids.left(1) == "$") { //Everything past $ is treated as a string
-        str = ids.mid(1);
     } else {
-        str = data.toString();
+            str = m_itemValue->value().toString();
     }
 
     tb->setText(str);

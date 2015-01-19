@@ -33,18 +33,23 @@ public:
     KisActionManager* actionManager;
 };
 
-KisAction::KisAction(QObject* parent) : KAction(parent), d(new Private)
+KisAction::KisAction(QObject* parent)
+    : KAction(parent)
+    , d(new Private)
 {
     connect(this, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
-KisAction::KisAction(const QString& text, QObject* parent) : KAction(text, parent), d(new KisAction::Private)
+KisAction::KisAction(const QString& text, QObject* parent)
+    : KAction(text, parent)
+    , d(new KisAction::Private)
 {
     connect(this, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
-KisAction::KisAction(const KIcon& icon, const QString& text, QObject* parent): KAction(icon, text, parent), d(new Private)
-{
+KisAction::KisAction(const KIcon& icon, const QString& text, QObject* parent)
+    : KAction(icon, text, parent)
+    , d(new Private) {
     connect(this, SIGNAL(changed()), SLOT(slotChanged()));
 }
 

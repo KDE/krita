@@ -53,9 +53,10 @@ K_PLUGIN_FACTORY(LayerSplitFactory, registerPlugin<LayerSplit>();)
 K_EXPORT_PLUGIN(LayerSplitFactory("krita"))
 
 LayerSplit::LayerSplit(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent, "kritaplugins/layersplit.rc")
+    : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Split Layer..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("layersplit", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSplit()));
 }

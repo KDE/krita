@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef KOOPENPANE_H
-#define KOOPENPANE_H
+#ifndef KISOPENPANE_H
+#define KISOPENPANE_H
 
 #include <QDialog>
 #include <QWidget>
@@ -74,7 +74,7 @@ protected slots:
 private slots:
     /// when clicked "Open Existing Document" button
     void openFileDialog();
-
+    
 signals:
     void openExistingFile(const KUrl&);
     void openTemplate(const KUrl&);
@@ -84,6 +84,7 @@ signals:
 
     /// Emitted when one of the detail panes have changed it's splitter
     void splitterResized(KisDetailsPane* sender, const QList<int>& sizes);
+    void cancelButton();
 
 protected:
     void initRecentDocs();

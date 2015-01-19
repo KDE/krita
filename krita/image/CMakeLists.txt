@@ -171,6 +171,7 @@ set(kritaimage_LIB_SRCS
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp
    kis_thread_safe_signal_compressor.cpp
+   kis_acyclic_signal_connector.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_mask.cc

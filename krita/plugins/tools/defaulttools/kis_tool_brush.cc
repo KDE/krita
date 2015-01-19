@@ -255,7 +255,6 @@ void KisToolBrush::setDelayDistance(qreal value)
     emit delayDistanceChanged();
 }
 
-
 void KisToolBrush::setFinishStabilizedCurve(bool value)
 {
     smoothingOptions()->setFinishStabilizedCurve(value);
@@ -395,8 +394,12 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
 
-    addOptionWidgetOption(m_sliderMagnetism, m_chkAssistant);
+    KAction *toggleaction = new KAction(i18n("Toggle Assistant"), this);
+    addAction("toggle_assistant", toggleaction);
+    toggleaction->setShortcut(KShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_L));
+    connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()));
 
+    addOptionWidgetOption(m_sliderMagnetism, m_chkAssistant);
 
     //load settings from configuration kritarc file
     slotSetSmoothingType((int)m_configGroup.readEntry("smoothingType", 0));

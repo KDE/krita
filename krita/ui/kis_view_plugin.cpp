@@ -24,20 +24,21 @@
 
 #include <kstandarddirs.h>
 
-KisViewPlugin::KisViewPlugin(QObject* parent, const QString& rcFile)
+KisViewPlugin::KisViewPlugin(QObject* parent)
     : m_view(0)
 {
-    if (parent->inherits("KisViewManager")) {
-        setXMLFile(KStandardDirs::locate("data", rcFile), true);
+    m_view = qobject_cast<KisViewManager*>(parent);
+    Q_ASSERT(m_view);
+}
 
-        m_view = static_cast<KisViewManager*>(parent);
-    }
+KisViewPlugin::~KisViewPlugin()
+{
 }
 
 void KisViewPlugin::addAction(const QString& name, KisAction* action)
 {
     if (m_view) {
-        m_view->actionManager()->addAction(name, action, actionCollection());
+        m_view->actionManager()->addAction(name, action);
     }
 }
 

@@ -521,19 +521,8 @@ KisDocument* KisFilterChain::createDocument(const QString& file)
 
 KisDocument* KisFilterChain::createDocument(const QByteArray& mimeType)
 {
-    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(mimeType);
-
-    if (entry.isEmpty()) {
-        kError(30500) << "Couldn't find a part that can handle mimetype " << mimeType << endl;
-    }
-
-    QString errorMsg;
-    KisPart *part = entry.createKisPart(&errorMsg);
-    if (!part) {
-        kError(30500) << "Couldn't create the document: " << errorMsg << endl;
-        return 0;
-    }
-    return part->createDocument();
+    Q_UNUSED(mimeType);
+    return KisPart::instance()->createDocument();
 }
 
 int KisFilterChain::weight() const

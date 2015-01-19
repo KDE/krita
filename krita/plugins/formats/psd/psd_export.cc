@@ -21,7 +21,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <KisImportExportManager.h>
 #include <KisFilterChain.h>
@@ -87,9 +87,10 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
 
     if (input->image()->width() > 30000 || input->image()->height() > 30000) {
         if (!m_chain->manager()->getBatchMode()) {
-            KMessageBox::error(0, i18n("Unable to save to the Photoshop format.\n"
-                                       "The Photoshop format only supports images that are smaller than 30000x3000 pixels."),
-                               "Photoshop Export Error");
+            QMessageBox::critical(0,
+                                  i18nc("@title:window", "Photoshop Export Error"),
+                                  i18n("Unable to save to the Photoshop format.\n"
+                                       "The Photoshop format only supports images that are smaller than 30000x3000 pixels."));
         }
         return KisImportExportFilter::InvalidFormat;
     }
@@ -97,9 +98,10 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
 
     if (!checkHomogenity(input->image()->rootLayer(), input->image()->colorSpace())) {
         if (!m_chain->manager()->getBatchMode()) {
-            KMessageBox::error(0, i18n("Unable to save to the Photoshop format.\n"
-                                       "The Photoshop format only supports images where all layers have the same colorspace as the image."),
-                               "Photoshop Export Error");
+            QMessageBox::critical(0,
+                                  i18nc("@title:window", "Photoshop Export Error"),
+                                  i18n("Unable to save to the Photoshop format.\n"
+                                       "The Photoshop format only supports images where all layers have the same colorspace as the image."));
         }
         return KisImportExportFilter::InvalidFormat;
     }

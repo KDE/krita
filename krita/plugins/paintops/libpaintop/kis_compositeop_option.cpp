@@ -26,6 +26,9 @@
 #include <KoID.h>
 #include <ui_wdgCompositeOpOption.h>
 #include <kis_composite_ops_model.h>
+#include "kis_signals_blocker.h"
+
+
 
 KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
     KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::generalCategory(), true),
@@ -79,12 +82,12 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
 
     if (m_createConfigWidget) {
         m_label->setText(compositeOp.name());
-        m_bnEraser->blockSignals(true);
+
+        KisSignalsBlocker b(m_bnEraser);
         m_bnEraser->setChecked(m_currCompositeOpID == "erase");
-        m_bnEraser->blockSignals(false);
     }
 
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 

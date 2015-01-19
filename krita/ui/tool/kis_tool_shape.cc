@@ -244,7 +244,7 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     }
     image->actionRecorder()->addAction(bezierCurvePaintAction);
 
-    if (!node->inherits("KisShapeLayer")) {
+    if (node->hasEditablePaintDevice()) {
         KisSystemLocker locker(node);
 
         KisFigurePaintingToolHelper helper(name,
@@ -254,9 +254,10 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
                                            strokeStyle(),
                                            fillStyle());
         helper.paintPainterPath(mapedOutline);
-    } else {
+    } else if (node->inherits("KisShapeLayer")) {
         pathShape->normalize();
         addShape(pathShape);
+
     }
 
     notifyModified();

@@ -49,15 +49,15 @@ KisHairyBristleOption::KisHairyBristleOption()
     m_options = new KisBristleOptionsWidget();
 
     // signals
-    connect(m_options->mousePressureCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->thresholdCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->rndBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->scaleBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->shearBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->densityBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->connectedCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->antialiasCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->compositingCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->mousePressureCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->thresholdCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->rndBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->scaleBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->shearBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->densityBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->connectedCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->antialiasCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->compositingCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     setConfigurationPage(m_options);
 }
 

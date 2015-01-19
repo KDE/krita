@@ -21,6 +21,8 @@
 #include "kis_tool_colorpicker.h"
 #include <string.h>
 
+#include <boost/thread/locks.hpp>
+
 #include <QPoint>
 #include <QLayout>
 #include <QCheckBox>
@@ -32,7 +34,7 @@
 #include <QVector>
 
 #include <klocale.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include "kis_layer.h"
 #include "kis_cursor.h"
@@ -150,6 +152,8 @@ void KisToolColorPicker::deactivate()
     KisTool::deactivate();
 }
 
+
+
 void KisToolColorPicker::pickColor(const QPointF& pos)
 {
         if(m_colorPickerDelayTimer.isActive()) {
@@ -160,17 +164,17 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             m_colorPickerDelayTimer.start(100);
         }
 
-        if (!currentNode())
-        {
-            return;
-        }
 
-        KisPaintDeviceSP dev = currentNode()->projection();
-        KIS_ASSERT_RECOVER_RETURN(dev);
+        QScopedPointer<boost::lock_guard<KisImage> > imageLocker;
 
+        KisPaintDeviceSP dev;
 
-        if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
-            currentImage()->lock();
+        if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
+            currentNode() && currentNode()->projection()) {
+
+            dev = currentNode()->projection();
+        } else {
+            imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
             dev = currentImage()->projection();
         }
 
@@ -236,10 +240,6 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
                 canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
             }
         }
-
-        if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
-            currentImage()->unlock();
-        }
 }
 
 void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
@@ -247,12 +247,12 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
     bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
     if (!sampleMerged) {
         if (!currentNode()) {
-            KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
+            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot pick a color as no layer is active."));
             event->ignore();
             return;
         }
         if (!currentNode()->visible()) {
-            KMessageBox::information(0, i18n("Cannot pick a color as the active layer is not visible."));
+            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot pick a color as the active layer is not visible."));
             event->ignore();
             return;
         }
@@ -293,7 +293,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
         palette->add(ent);
 
         if (!palette->save()) {
-            KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), i18n("Palette"));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
         }
     }
 }

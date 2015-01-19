@@ -61,7 +61,7 @@ signals:
     void requestShowImageTooBig(bool value);
 
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> m_d;
 };
 

@@ -64,9 +64,15 @@ public:
      * make the context current before creating textures, display lists,
      * shader objects, etc, that are to be shared by multiple QGLWidgets.
      */
-    static void makeContextCurrent();
+    static void makeSharedContextCurrent();
 
-    static void initialMakeContextCurrent();
+    /**
+     * Make the context of the widget current. You should
+     * make the context current before creating textures, display lists,
+     * shader objects, etc, that are to be shared by multiple QGLWidgets.
+     */
+    static void makeContextCurrent(QGLWidget *widget);
+
 
     /**
      * Print any error messages waiting to be read from glGetError(). Use
@@ -86,6 +92,12 @@ public:
      * @return true if we have a modern opengl capable of high-quality filtering
      */
     static bool supportsGLSL13();
+
+    /**
+     * Returns true if we have a driver that has bugged support to sync objects (a fence)
+     * and false otherwise.
+     */
+    static bool needsFenceWorkaround();
 
 private:
     KisOpenGL();

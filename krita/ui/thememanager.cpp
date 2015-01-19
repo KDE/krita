@@ -41,7 +41,7 @@
 // KDE includes
 
 #include <kmenu.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcolorscheme.h>
@@ -142,7 +142,7 @@ void ThemeManager::slotChangePalette()
     d->palette = KGlobalSettings::createNewApplicationPalette(config);
     */
 
-    QPalette palette               = kapp->palette();
+    QPalette palette               = qApp->palette();
     QPalette::ColorGroup states[3] = { QPalette::Active, QPalette::Inactive, QPalette::Disabled };
     // TT thinks tooltips shouldn't use active, so we use our active colors for all states
     KColorScheme schemeTooltip(QPalette::Active, KColorScheme::Tooltip, config);
@@ -177,17 +177,17 @@ void ThemeManager::slotChangePalette()
         palette.setBrush(state, QPalette::LinkVisited,     schemeView.foreground(KColorScheme::VisitedText));
     }
 
-    kapp->setPalette(palette);
+    qApp->setPalette(palette);
 
     if (theme == defaultThemeName() || theme.isEmpty()) {
 #ifdef __APPLE__
-        kapp->setStyle("Macintosh");
-        kapp->style()->polish(kapp);
+        qApp->setStyle("Macintosh");
+        qApp->style()->polish(kapp);
 #endif
     } else {
 #ifdef __APPLE__
-        kapp->setStyle("Plastique");
-        kapp->style()->polish(kapp);
+        qApp->setStyle("Plastique");
+        qApp->style()->polish(kapp);
 #endif
     }
 
@@ -251,7 +251,7 @@ void ThemeManager::populateThemeMenu()
     }
 
     updateCurrentKDEdefaultThemePreview();
-    setCurrentTheme(theme);
+
 #ifdef Q_WS_X11
     d->themeMenuAction->addSeparator();
     KAction* config = new KAction(i18n("Configuration..."), d->themeMenuAction);
@@ -268,8 +268,8 @@ void ThemeManager::slotConfigColors()
     int ret = KToolInvocation::kdeinitExec("kcmshell4", QStringList() << "colors");
     if (ret > 0)
     {
-        KMessageBox::error(0, i18n("Cannot start Colors Settings panel from KDE Control Center. "
-                                   "Please check your system..."));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot start Colors Settings panel from KDE Control Center. "
+                                                     "Please check your system..."));
     }
 }
 

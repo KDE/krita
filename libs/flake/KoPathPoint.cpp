@@ -313,12 +313,12 @@ QRectF KoPathPoint::boundingRect(bool active) const
     if (!active && activeControlPoint1()) {
         QRectF r1(d->point, QSize(1, 1));
         r1.setBottomRight(d->controlPoint1);
-        rect = rect.unite(r1);
+        rect = rect.united(r1);
     }
     if (!active && activeControlPoint2()) {
         QRectF r2(d->point, QSize(1, 1));
         r2.setBottomRight(d->controlPoint2);
-        rect = rect.unite(r2);
+        rect = rect.united(r2);
     }
     if (d->shape)
         return d->shape->shapeToDocument(rect);

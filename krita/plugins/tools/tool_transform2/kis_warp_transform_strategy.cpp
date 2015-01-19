@@ -418,8 +418,7 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool spe
                                m_d->pointIndexUnderCursor >= 0 &&
                                m_d->pointsInAction.size() == 1) ||
                               (m_d->mode == Private::MULTIPLE_POINT_SELECTION &&
-                               m_d->pointIndexUnderCursor >= 0 &&
-                               m_d->pointsInAction.size() >= 1));
+                               m_d->pointIndexUnderCursor >= 0));
 
     if (m_d->mode == Private::OVER_POINT) {
         if (m_d->currentArgs.isEditingTransformPoints()) {

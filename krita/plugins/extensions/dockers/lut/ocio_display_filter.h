@@ -36,10 +36,6 @@ enum OCIO_CHANNEL_SWIZZLE {
     A
 };
 
-class OcioDisplayFilter;
-typedef QSharedPointer<OcioDisplayFilter> OcioDisplayFilterSP;
-
-
 class OcioDisplayFilter : public KisDisplayFilter
 {
     Q_OBJECT

@@ -55,7 +55,8 @@ public:
     ///Reimplemented, sets image on option widgets
     virtual void setImage(KisImageWSP image);
 
-
+    ///Reimplemented, sets node on option widgets
+    virtual void setNode(KisNodeWSP node);
 
 
 

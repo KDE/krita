@@ -30,8 +30,8 @@
 #include <QWidget>
 #include <QGroupBox>
 #include <QRadioButton>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 
 class KoCanvasBase;

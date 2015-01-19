@@ -174,7 +174,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         if (line.at(index) != closingdelimiter)
         {
             lastTokenEnclosed = false;
-            dbgPlugins << "Enclosing delimiter not found, trying again" << line.at(index);
+            //dbgPlugins << "Enclosing delimiter not found, trying again" << line.at(index);
             break;
         }
         else
@@ -222,7 +222,7 @@ bool Command::processParameter(const QStringList& block)
     if (!lastTokenEnclosed)
     {
         // we need more lines of command parameters
-        dbgPlugins << "ParameterLine not enclosed";
+        //dbgPlugins << "ParameterLine not enclosed";
         return false;
     }
 
@@ -288,6 +288,14 @@ bool Command::processParameter(const QStringList& block)
         else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FILE_P]))
         {
             parameter = new FileParameter(paramName, showPreviewOnChange);
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::CONST_P]))
+        {
+            parameter = new ConstParameter(paramName, showPreviewOnChange);
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::BUTTON_P]))
+        {
+            parameter = new ButtonParameter(paramName, showPreviewOnChange);
         }
         else
         {

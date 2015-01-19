@@ -117,7 +117,7 @@ public:
     int checkerUniformLocationModelViewProjection;
     int checkerUniformLocationTextureMatrix;
 
-    KisDisplayFilterSP displayFilter;
+    KisDisplayFilter* displayFilter;
     KisTextureTile::FilterMode filterMode;
 
     GLsync glSyncObject;
@@ -186,10 +186,11 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
+    KisOpenGL::makeContextCurrent(this);
     delete d;
 }
 
-void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
+void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
 {
     d->displayFilter = displayFilter;
     initializeDisplayShader();
@@ -490,7 +491,24 @@ void KisOpenGLCanvas2::drawImage() const
     d->displayShader->release();
 }
 
+void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString &context, const QString &log)
+{
+    KisConfig cfg;
 
+    if (cfg.useVerboseOpenGLDebugOutput()) {
+        qDebug() << "GL-log:" << context << log;
+    }
+
+    if (result) return;
+
+    QMessageBox::critical(this, i18nc("@title:window", "Krita"),
+                          QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n%2\n\n Krita will disable OpenGL and close now.")).arg(log),
+                          QMessageBox::Close);
+
+    cfg.setUseOpenGL(false);
+    cfg.setCanvasState("OPENGL_FAILED");
+    exit(1);
+}
 
 void KisOpenGLCanvas2::initializeCheckerShader()
 {
@@ -508,19 +526,20 @@ void KisOpenGLCanvas2::initializeCheckerShader()
         fragmentShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/simple_texture_legacy.frag");
     }
 
-    d->checkerShader->addShaderFromSourceFile(QGLShader::Vertex, vertexShaderName);
-    d->checkerShader->addShaderFromSourceFile(QGLShader::Fragment, fragmentShaderName);
+    bool result;
+
+    result = d->checkerShader->addShaderFromSourceFile(QGLShader::Vertex, vertexShaderName);
+    reportShaderLinkFailedAndExit(result, "Checker vertex shader", d->checkerShader->log());
+
+    result = d->checkerShader->addShaderFromSourceFile(QGLShader::Fragment, fragmentShaderName);
+    reportShaderLinkFailedAndExit(result, "Checker fragment shader", d->checkerShader->log());
 
     d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
     d->checkerShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
 
-    if (!d->checkerShader->link()) {
-        QMessageBox::critical(this, "Fatal Error", QString(i18n("Krita could not initialize the OpenGL canvas:\n %1.\n Krita will disable OpenGL and close now.")).arg(d->checkerShader->log()), QMessageBox::Close);
-        KisConfig cfg;
-        cfg.setUseOpenGL(false);
-        cfg.setCanvasState("OPENGL_FAILED");
-        exit(1);
-    }
+    result = d->checkerShader->link();
+    reportShaderLinkFailedAndExit(result, "Checker shader (link)", d->checkerShader->log());
+
     Q_ASSERT(d->checkerShader->isLinked());
 
     d->checkerUniformLocationModelViewProjection = d->checkerShader->uniformLocation("modelViewProjection");
@@ -575,24 +594,21 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     delete d->displayShader;
     d->displayShader = new QGLShaderProgram();
 
-    d->displayShader->addShaderFromSourceCode(QGLShader::Fragment, buildFragmentShader());
+    bool result = d->displayShader->addShaderFromSourceCode(QGLShader::Fragment, buildFragmentShader());
+    reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
 
     if (KisOpenGL::supportsGLSL13()) {
-        d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert"));
+        result = d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert"));
     } else {
-        d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
+        result = d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
     }
+    reportShaderLinkFailedAndExit(result, "Display vertex shader", d->displayShader->log());
 
     d->displayShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
     d->displayShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
 
-    if (!d->displayShader->link()) {
-        QMessageBox::critical(this, "Fatal Error", QString(i18n("Krita could not initialize the OpenGL canvas:\n %1.\n Krita will disable OpenGL and close now.")).arg(d->displayShader->log()), QMessageBox::Close);
-        KisConfig cfg;
-        cfg.setUseOpenGL(false);
-        cfg.setCanvasState("OPENGL_FAILED");
-        exit(1);
-    }
+    result = d->displayShader->link();
+    reportShaderLinkFailedAndExit(result, "Display shader (link)", d->displayShader->log());
 
     Q_ASSERT(d->displayShader->isLinked());
 

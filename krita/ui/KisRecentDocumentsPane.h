@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KORECENTDOCUMENTSPANE_H
-#define KORECENTDOCUMENTSPANE_H
+#ifndef KIS_RECENT_DOCUMENTS_PANE_H
+#define KIS_RECENT_DOCUMENTS_PANE_H
 
 #include "KisDetailsPane.h"
 

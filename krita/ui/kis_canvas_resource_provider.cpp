@@ -263,7 +263,7 @@ void KisCanvasResourceProvider::slotSetBGColor(const KoColor& c)
 void KisCanvasResourceProvider::slotNodeActivated(const KisNodeSP node)
 {
     QVariant v;
-    v.setValue(node);
+    v.setValue(KisNodeWSP(node));
     m_resourceManager->setResource(CurrentKritaNode, v);
     emit sigNodeChanged(currentNode());
 }

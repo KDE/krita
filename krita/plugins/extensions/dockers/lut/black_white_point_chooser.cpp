@@ -79,7 +79,17 @@ qreal BlackWhitePointChooser::blackPoint() const
     return m_black->value();
 }
 
+void BlackWhitePointChooser::setBlackPoint(qreal bp)
+{
+    m_black->setValue(bp);
+}
+
 qreal BlackWhitePointChooser::whitePoint() const
 {
     return m_white->value();
+}
+
+void BlackWhitePointChooser::setWhitePoint(qreal wp)
+{
+    m_white->setValue(wp);
 }

@@ -29,12 +29,25 @@ QRect KisPPUpdateInfo::dirtyViewportRect() {
     return viewportRect.toAlignedRect();
 }
 
+QRect KisPPUpdateInfo::dirtyImageRect() const {
+    return dirtyImageRectVar;
+}
 
 #ifdef HAVE_OPENGL
 
 QRect KisOpenGLUpdateInfo::dirtyViewportRect() {
     qFatal("Not implemented yet!");
     return QRect();
+}
+
+void KisOpenGLUpdateInfo::assignDirtyImageRect(const QRect &rect)
+{
+    m_dirtyImageRect = rect;
+}
+
+QRect KisOpenGLUpdateInfo::dirtyImageRect() const
+{
+    return m_dirtyImageRect;
 }
 
 #endif /* HAVE_OPENGL */

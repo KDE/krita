@@ -49,6 +49,8 @@ void KoReportDesignerItemText::init(QGraphicsScene *scene, KoReportDesigner *d)
 
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
+    
+    updateRenderText(m_controlSource->value().toString(), m_itemValue->value().toString(), "textarea");
 }
 
 KoReportDesignerItemText::KoReportDesignerItemText(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
@@ -84,7 +86,7 @@ KoReportDesignerItemText::~KoReportDesignerItemText
 
 QRect KoReportDesignerItemText::getTextRect() const
 {
-    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "textarea"));
+    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), m_renderText);
 }
 
 void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -105,7 +107,7 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(rect(),  bg);
-    painter->drawText(rect(), textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "textarea"));
+    painter->drawText(rect(), textFlags(), m_renderText);
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
         painter->setPen(QPen(Qt::lightGray));
@@ -135,6 +137,7 @@ void KoReportDesignerItemText::buildXML(QDomDocument & doc, QDomElement & parent
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
     entity.setAttribute("report:bottom-padding", m_bottomPadding);
     entity.setAttribute("report:z-index", zValue());
+    addPropertyAsAttribute(&entity, m_itemValue);
 
     // bounding rect
     buildXMLRect(doc, entity, &m_pos, &m_size);
@@ -162,7 +165,7 @@ void KoReportDesignerItemText::slotPropertyChanged(KoProperty::Set &s, KoPropert
     if (p.name() == "Position") {
         m_pos.setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
     } else if (p.name() == "Size") {
-        m_size.setUnitSize(p.value().toSizeF(), KRPos::DontUpdateProperty);
+        m_size.setUnitSize(p.value().toSizeF(), KRSize::DontUpdateProperty);
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
@@ -177,4 +180,6 @@ void KoReportDesignerItemText::slotPropertyChanged(KoProperty::Set &s, KoPropert
         m_reportDesigner->setModified(true);
     if (scene())
         scene()->update();
+    
+    updateRenderText(m_controlSource->value().toString(), m_itemValue->value().toString(), "textarea");
 }

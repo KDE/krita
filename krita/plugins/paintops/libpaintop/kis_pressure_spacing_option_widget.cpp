@@ -56,5 +56,5 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
 void KisPressureSpacingOptionWidget::setIsotropicSpacing(int isotropic)
 {
     dynamic_cast<KisPressureSpacingOption*>(KisCurveOptionWidget::curveOption())->setIsotropicSpacing(isotropic);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }

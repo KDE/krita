@@ -264,7 +264,7 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
         text.append(i18nc("Mouse Back Button", "Back"));
     }
 
-    if (buttons & Qt::XButton1) {
+    if (buttons & Qt::XButton2) {
         if (buttonCount++ > 0) {
             text.append(sep);
         }

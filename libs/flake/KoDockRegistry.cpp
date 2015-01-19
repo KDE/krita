@@ -24,6 +24,7 @@
 #include <kglobal.h>
 
 KoDockRegistry::KoDockRegistry()
+  : d(0)
 {
 }
 

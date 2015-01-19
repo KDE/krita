@@ -33,7 +33,6 @@
 #include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
-#include <QMessageBox>
 #include <QToolButton>
 #include <QFileInfo>
 #include <QGLWidget>
@@ -42,7 +41,7 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>
 #include <kdialog.h>
@@ -175,7 +174,7 @@ public:
 
         Q_ASSERT(QFile::exists(mainqml));
         if (!QFile::exists(mainqml)) {
-            QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
+            QMessageBox::warning(0, i18nc("@title:window", "Krita: No QML Found"), i18n("%1 doesn't exist.", mainqml));
         }
         QFileInfo fi(mainqml);
 
@@ -212,7 +211,7 @@ public:
             group.writeEntry("Theme", "Krita-dark");
         }
 
-        desktopView = new KisMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
+        desktopView = new KisMainWindow(KIS_MIME_TYPE, KisFactory::componentData());
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);
@@ -653,14 +652,13 @@ bool MainWindow::Private::queryClose()
         if (name.isEmpty())
             name = i18n("Untitled");
 
-        int res = KMessageBox::warningYesNoCancel(q,
+        int res = QMessageBox::warning(q,
+                                        i18nc("@title:window", "Krita"),
                   i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                  QString(),
-                  KStandardGuiItem::save(),
-                  KStandardGuiItem::discard());
+                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
         switch (res) {
-        case KMessageBox::Yes : {
+        case QMessageBox::Yes : {
             if (DocumentManager::instance()->isTemporaryFile()) {
                 if(!desktopViewProxy->fileSaveAs())
                     return false;
@@ -670,11 +668,11 @@ bool MainWindow::Private::queryClose()
             }
             break;
         }
-        case KMessageBox::No :
+        case QMessageBox::No :
             DocumentManager::instance()->document()->removeAutoSaveFiles();
             DocumentManager::instance()->document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
-        default : // case KMessageBox::Cancel :
+        default : // case QMessageBox::Cancel :
             return false;
         }
     }

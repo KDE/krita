@@ -367,13 +367,18 @@ void DeleteCommand::doDelete()
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
         KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(range);
         if (anchorRange) {
-            KoShape *shape = anchorRange->anchor()->shape();
-            if (m_shapeController) {
-                KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
-                shapeDeleteCommand->redo();
+            // we should only delete the anchor if the selection is covering it... not if the selection is
+            // just adjecent to the anchor. This is more in line with what other wordprocessors do
+            if (anchorRange->position() != textEditor->selectionStart()
+            && anchorRange->position() != textEditor->selectionEnd()) {
+                KoShape *shape = anchorRange->anchor()->shape();
+                if (m_shapeController) {
+                    KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
+                    shapeDeleteCommand->redo();
+                }
+                // via m_shapeController->removeShape a DeleteAnchorsCommand should be created that
+                // also calls rangeManager->remove(range), so we shouldn't do that here aswell
             }
-            // via m_shapeController->removeShape a DeleteAnchorsCommand should be created that
-            // also calls rangeManager->remove(range), so we shouldn't do that here aswell
         } else if (annotation) {
             KoShape *shape = annotation->annotationShape();
             if (m_shapeController) {

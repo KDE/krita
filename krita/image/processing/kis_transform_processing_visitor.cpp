@@ -43,6 +43,8 @@
 #include "kis_transform_worker.h"
 #include "commands_new/kis_node_move_command2.h"
 
+#include "kis_do_something_command.h"
+
 
 KisTransformProcessingVisitor::
 KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
@@ -76,15 +78,20 @@ void KisTransformProcessingVisitor::visit(KisPaintLayer *layer, KisUndoAdapter *
 
 void KisTransformProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    Q_UNUSED(undoAdapter);
-    layer->resetCache();
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, false));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, true));
     transformClones(layer, undoAdapter);
+
 }
 
 void KisTransformProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
 {
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer*>(layer, false));
     transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
-    layer->resetCache();
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer*>(layer, true));
+
     transformClones(layer, undoAdapter);
 }
 
@@ -105,8 +112,11 @@ void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapte
 
 void KisTransformProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
 {
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer*>(layer, false));
     transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
-    layer->update();
+    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer*>(layer, true));
+
     transformClones(layer, undoAdapter);
 }
 

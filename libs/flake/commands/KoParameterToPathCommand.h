@@ -52,7 +52,7 @@ public:
     /// revert the actions done in redo
     void undo();
 private:
-    KoParameterToPathCommandPrivate *d;
+    KoParameterToPathCommandPrivate * const d;
 };
 
 #endif // KOPARAMETERTOPATHCOMMAND_H

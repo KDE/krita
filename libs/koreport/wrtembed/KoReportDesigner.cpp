@@ -199,7 +199,7 @@ KoReportDesigner::~KoReportDesigner()
 }
 
 ///The loading Code
-KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(parent), d(new Private())
+KoReportDesigner::KoReportDesigner(QWidget *parent, const QDomElement &data) : QWidget(parent), d(new Private())
 {
     m_kordata = 0;
 

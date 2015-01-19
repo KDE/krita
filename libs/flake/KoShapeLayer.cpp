@@ -53,7 +53,7 @@ QRectF KoShapeLayer::boundingRect() const
         if (bb.isEmpty())
             bb = shape->boundingRect();
         else
-            bb = bb.unite(shape->boundingRect());
+            bb = bb.united(shape->boundingRect());
     }
 
     return bb;

@@ -41,8 +41,8 @@
 #include <kis_pressure_sharpness_option.h>
 #include <kis_fixed_paint_device.h>
 
-KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-    : KisBrushBasedPaintOp(settings, painter), m_opacityOption(settings->node()), m_hsvTransformation(0)
+KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
+    : KisBrushBasedPaintOp(settings, painter), m_opacityOption(node), m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);

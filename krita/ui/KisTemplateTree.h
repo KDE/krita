@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef koTemplateTree_h
-#define koTemplateTree_h
+#ifndef KIS_TEMPLATE_TREE_H
+#define KIS_TEMPLATE_TREE_H
 
 #include <QList>
 #include <QStringList>

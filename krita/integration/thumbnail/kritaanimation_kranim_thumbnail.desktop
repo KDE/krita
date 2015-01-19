@@ -1,0 +1,30 @@
+
+[Desktop Entry]
+Type=Service
+Name=Krita Animation Documents
+Name[ca]=Documents d'animació del Krita
+Name[cs]=Dokumenty animace Krita
+Name[da]=Krita Animation-dokumenter
+Name[de]=Krita-Animationsdokumente
+Name[en_GB]=Krita Animation Documents
+Name[es]=Documentos de Krita animación
+Name[fi]=Krita-animaatiotiedostot
+Name[ia]=Documentos de animation de Krita
+Name[it]=Documenti di animazione di Krita
+Name[ja]=Krita Animation 文書
+Name[nb]=Krita animasjonsdokumenter
+Name[nl]=Animatiedocumenten van Krita
+Name[pl]=Dokumenty animacji Krita
+Name[pt]=Documentos do Krita Animação
+Name[pt_BR]=Documentos de animação do Krita
+Name[sk]=Dokumenty animácií Krita
+Name[sv]=Krita-animeringsdokument
+Name[uk]=Документи анімації Krita
+Name[x-test]=xxKrita Animation Documentsxx
+
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/x-krita-animation;
+
+X-KDE-Library=kritathumbnail
+CacheThumbnail=true

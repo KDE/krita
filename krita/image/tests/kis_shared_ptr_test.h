@@ -34,7 +34,10 @@ private slots:
     void testClear();
     void testWeakSP();
     void testBoolOnInvalidWeakPointer();
-
+    void testInvalidWeakSPAssignToSP();
+    void testInvalidWeakSPToSPCopy();
+    void testWeakSPAssignToWeakSP();
+    void testWeakSPToWeakSPCopy();
 };
 
 #endif

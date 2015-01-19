@@ -125,6 +125,8 @@ public:
     int m_freeCustomWidgetIndex;
     KoSectionListItem* m_customWidgetsSeparator;
     KoSectionListItem* m_templatesSeparator;
+
+   
 };
 
 KisOpenPane::KisOpenPane(QWidget *parent, const KComponentData &componentData, const QStringList& mimeFilter, const QString& templateType)
@@ -149,6 +151,8 @@ KisOpenPane::KisOpenPane(QWidget *parent, const KComponentData &componentData, c
             this, SLOT(itemClicked(QTreeWidgetItem*)));
     connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
+   
+   connect(d->cancelButton,SIGNAL(clicked()),this,SLOT(close()));
 
     initRecentDocs();
     initTemplates(templateType);
@@ -195,6 +199,8 @@ KisOpenPane::~KisOpenPane()
 
     delete d;
 }
+
+
 
 void KisOpenPane::openFileDialog()
 {
@@ -258,6 +264,8 @@ void KisOpenPane::initTemplates(const QString& templateType)
                     pane, SLOT(resizeSplitter(KisDetailsPane*, const QList<int>&)));
             QTreeWidgetItem* item = addPane(group->name(), group->templates().first()->loadPicture(),
                                             pane, group->sortingWeight() + templateOffset);
+	    
+
 
             if (!firstItem) {
                 firstItem = item;
@@ -391,7 +399,7 @@ void KisOpenPane::itemClicked(QTreeWidgetItem* item)
 
     if (selectedItem && selectedItem->widgetIndex() >= 0) {
         d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
-    }
+    } 
 }
 
 #include <KisOpenPane.moc>

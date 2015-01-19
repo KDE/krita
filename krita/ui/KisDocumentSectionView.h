@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_DOCUMENT_SECTION_VIEW_H
-#define KO_DOCUMENT_SECTION_VIEW_H
+#ifndef KIS_DOCUMENT_SECTION_VIEW_H
+#define KIS_DOCUMENT_SECTION_VIEW_H
 
 #include <QTreeView>
 #include "krita_export.h"

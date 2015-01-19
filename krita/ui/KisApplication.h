@@ -20,7 +20,7 @@
 #ifndef KIS_APPLICATION_H
 #define KIS_APPLICATION_H
 
-#include <kapplication.h>
+#include <qtsingleapplication/qtsingleapplication.h>
 #include "krita_export.h"
 
 class KisPart;
@@ -46,7 +46,7 @@ class QStringList;
  *  If the last mainwindow becomes closed, KisApplication automatically
  *  calls QApplication::quit.
  */
-class KRITAUI_EXPORT KisApplication : public KApplication
+class KRITAUI_EXPORT KisApplication : public QtSingleApplication
 {
     Q_OBJECT
 
@@ -54,10 +54,8 @@ public:
     /**
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
-     *
-     * @param nativeMimeType: the nativeMimeType of the calligra application
      */
-    explicit KisApplication(const QByteArray &nativeMimeType);
+    explicit KisApplication(const QString &key);
 
     /**
      *  Destructor.
@@ -85,11 +83,6 @@ public:
     void setSplashScreen(QWidget *splash);
 
     /**
-     * Remove the splash dialog
-     */
-    void removeSplash();
-
-    /**
      * return a list of mimetypes this application supports.
      */
     QStringList mimeFilter(KisImportExportManager::Direction direction) const;
@@ -109,34 +102,19 @@ public:
      */
     static KisApplication* koApplication();
 
-signals:
-
-    /// KisPart needs to be able to emit document signals from here. These
-    /// signals are used for the dbus interface of stage, see commit
-    /// d102d9beef80cc93fc9c130b0ad5fe1caf238267
-    friend class KisPart;
-
-    /**
-     * emitted when a new document is opened.
-     */
-    void documentOpened(const QString &ref);
-
-    /**
-     * emitted when an old document is closed.
-     */
-    void documentClosed(const QString &ref);
-
 protected:
 
     // Current application object.
     static KisApplication *KoApp;
 
+public slots:
+
+    void remoteArguments(const QByteArray &message, QObject*socket);
+    void fileOpenRequested(const QString & url);
+
 private:
     /// @return the number of autosavefiles opened
     int checkAutosaveFiles(KisMainWindow *mainWindow);
-
-    // Set the Calligra-specific command-line options
-    bool initHack();
 
     KisApplicationPrivate * const d;
     class ResetStarting;

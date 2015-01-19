@@ -83,7 +83,7 @@ void KisPaintOpRegistry::preinitializePaintOpIfNeeded(const KisPaintOpPresetSP p
 }
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image) const
 {
     if (painter == 0) {
         warnKrita << " KisPaintOpRegistry::paintOp painter is null";
@@ -94,7 +94,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
 
     KisPaintOpFactory* f = value(id);
     if (f) {
-        KisPaintOp * op = f->createOp(settings, painter, image);
+        KisPaintOp * op = f->createOp(settings, painter, node, image);
         if (op) {
             return op;
         }
@@ -103,14 +103,14 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
     return 0;
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageWSP image) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisNodeSP node, KisImageSP image) const
 {
     Q_ASSERT(preset);
     Q_ASSERT(painter);
 
     if (!preset) return 0;
 
-    return paintOp(preset->paintOp().id(), preset->settings(), painter, image);
+    return paintOp(preset->paintOp().id(), preset->settings(), painter, node, image);
 }
 
 KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id) const

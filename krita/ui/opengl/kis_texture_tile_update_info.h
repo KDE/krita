@@ -60,7 +60,9 @@ public:
                     m_size = size;
                 }
                 catch (std::bad_alloc) {
-                    QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
+                    QMessageBox::critical(0,
+                                          i18nc("@title:window", "Fatal Error"),
+                                          i18n("Krita has run out of memory and has to close."));
                     qFatal("KisTextureTileUpdateInfo: Could not allocate enough memory");
                 }
             }

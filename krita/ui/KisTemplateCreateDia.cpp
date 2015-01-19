@@ -47,7 +47,7 @@
 #include <KisTemplate.h>
 #include <kicondialog.h>
 #include <kinputdialog.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
@@ -56,6 +56,7 @@
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kcomponentdata.h>
+#include <kis_factory2.h>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
@@ -179,7 +180,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const char *templateType, const KComp
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
-    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",componentData.aboutData()->programName() ) );
+    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts", KisFactory::aboutData()->programName() ) );
     rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOk(false);
@@ -319,8 +320,10 @@ void KisTemplateCreateDia::slotOk() {
     if(!group->add(t)) {
         KisTemplate *existingTemplate=group->find(d->m_name->text());
         if(existingTemplate && !existingTemplate->isHidden()) {
-            if(KMessageBox::warningYesNo(this, i18n("Do you really want to overwrite"
-                                                    " the existing '%1' template?",existingTemplate->name()))==KMessageBox::Yes)
+            if (QMessageBox::warning(this,
+                                     i18nc("@title:window", "Krita"),
+                                     i18n("Do you really want to overwrite the existing '%1' template?", existingTemplate->name()),
+                                     QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
                 group->add(t, true);
             else
             {
@@ -437,7 +440,7 @@ void KisTemplateCreateDia::slotAddGroup() {
     KisTemplateGroup *group=d->m_tree->find(name);
     if(group && !group->isHidden())
     {
-        KMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
+        QMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
     QString dir=d->m_tree->componentData().dirs()->saveLocation(d->m_tree->templateType());
@@ -462,14 +465,16 @@ void KisTemplateCreateDia::slotRemove() {
         QString removed;
         if (item->parent() == NULL) {
                 what =  i18n("Do you really want to remove that group?");
-                removed = i18n("Remove Group");
+                removed = i18nc("@title:window", "Remove Group");
         } else {
                 what =  i18n("Do you really want to remove that template?");
-        removed = i18n("Remove Template");
+        removed = i18nc("@title:window", "Remove Template");
         }
 
-    if(KMessageBox::warningContinueCancel(this, what,
-                                 removed,KGuiItem(i18n("&Delete"), koIconName("edit-delete")))==KMessageBox::Cancel) {
+    if (QMessageBox::warning(this,
+                             removed,
+                             what,
+                             QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox:: No) {
         d->m_name->setFocus();
         return;
     }

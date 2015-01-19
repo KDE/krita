@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KO_FILTER_CHAIN_H__
-#define __KO_FILTER_CHAIN_H__
+#ifndef KIS_FILTER_CHAIN_H
+#define KIS_FILTER_CHAIN_H
 
 #include <QHash>
 #include <QList>

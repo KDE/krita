@@ -65,7 +65,7 @@ namespace KexiDB
 class QuerySchemaPrivate
 {
 public:
-    QuerySchemaPrivate(QuerySchema* q, QuerySchemaPrivate* copy = 0)
+    explicit QuerySchemaPrivate(QuerySchema* q, QuerySchemaPrivate* copy = 0)
             : query(q)
             , masterTable(0)
             , fakeRowIDField(0)

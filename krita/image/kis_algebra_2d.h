@@ -92,6 +92,15 @@ T signZZ(T x) {
     return x == T(0) ? T(0) : x > T(0) ? T(1) : T(-1);
 }
 
+/**
+ * Copies the sign of \p y into \p x and returns the result
+ */
+template <typename T>
+    inline T copysign(T x, T y) {
+    T strippedX = qAbs(x);
+    return y >= T(0) ? strippedX : -strippedX;
+}
+
 template <class T>
 T leftUnitNormal(const T &a)
 {
@@ -225,6 +234,21 @@ QRect KRITAIMAGE_EXPORT blowRect(const QRect &rect, qreal coeff);
 QPoint ensureInRect(QPoint pt, const QRect &bounds);
 QPointF ensureInRect(QPointF pt, const QRectF &bounds);
 
+
+
+/**
+ * Attempt to intersect a line to the area of the a rectangle.
+ *
+ * If the line intersects the rectange, it will be modified to represent the intersecting line segment and true is returned.
+ * If the line does not intersect the area, it remains unmodified and false will be returned.
+ *
+ * @param segment
+ * @param area
+ * @return true if successful
+ */
+bool KRITAIMAGE_EXPORT intersectLineRect(QLineF &line, const QRect rect);
+
 }
+
 
 #endif /* __KIS_ALGEBRA_2D_H */

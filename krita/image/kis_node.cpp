@@ -413,14 +413,12 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
     {
         QWriteLocker l(&m_d->nodeSubgraphLock);
 
-        newNode->prepareForAddition();
         newNode->createNodeProgressProxy();
 
         m_d->nodes.insert(idx, newNode);
 
         newNode->setParent(this);
         newNode->setGraphListener(m_d->graphListener);
-        newNode->initAfterAddition();
     }
 
     if (m_d->graphListener) {
@@ -443,7 +441,6 @@ bool KisNode::remove(quint32 index)
         {
             QWriteLocker l(&m_d->nodeSubgraphLock);
 
-            removedNode->prepareForRemoval();
             removedNode->setGraphListener(0);
 
             removedNode->setParent(0);   // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest

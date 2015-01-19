@@ -122,7 +122,7 @@ public:
 protected:
     /* Constructs a new object.
      \a handler can be provided to receive error messages. */
-    Object(MessageHandler* handler = 0);
+    explicit Object(MessageHandler* handler = 0);
 
     virtual ~Object();
 

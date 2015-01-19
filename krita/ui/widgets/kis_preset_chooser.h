@@ -49,10 +49,6 @@ public:
         STRIP  /// Shows thumbnails arranged in a single row
     };
 
-    /// Set a list of preset names for resources that should be show, others will be hidden
-    /// Turns on name filter mode
-    ///@param filteredNames list of names of presets that will be shown
-    void filterPaletteFavorites(const QStringList& filteredNames);
     /// Sets a list of resources in the paintop list, when ever user press enter in the linedit of paintop_presets_popup Class
     void setViewMode(ViewMode mode);
     void showButtons(bool show);
@@ -70,6 +66,9 @@ signals:
 
 public slots:
     void updateViewSettings();
+
+private slots:
+    void notifyConfigChanged();
 
 protected:
     virtual void resizeEvent(QResizeEvent* event);

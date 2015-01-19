@@ -34,7 +34,10 @@ public:
     void showPopup(const QPoint &basePoint);
 
     qreal blackPoint() const;
+    void setBlackPoint(qreal bp);
+
     qreal whitePoint() const;
+    void setWhitePoint(qreal wp);
 
 signals:
     void sigBlackPointChanged(qreal value);

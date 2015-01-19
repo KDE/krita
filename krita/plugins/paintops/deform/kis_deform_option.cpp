@@ -36,19 +36,19 @@ KisDeformOption::KisDeformOption()
     m_checkable = false;
     m_options = new KisDeformOptionsWidget();
 
-    connect(m_options->deformAmount, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->interpolationChBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->useCounter, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->useOldData, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->deformAmount, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->interpolationChBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->useCounter, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->useOldData, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
-    connect(m_options->growBtn, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->shrinkBtn, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->swirlCWBtn, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->swirlCCWBtn, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->moveBtn, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->lensBtn, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->lensOutBtn, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->colorBtn, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->growBtn, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->shrinkBtn, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->swirlCWBtn, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->swirlCCWBtn, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->moveBtn, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->lensBtn, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->lensOutBtn, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->colorBtn, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }

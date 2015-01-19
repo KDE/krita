@@ -16,6 +16,8 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
     ${CMAKE_CURRENT_SOURCE_DIR}/ora
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    ${CMAKE_SOURCE_DIR}/krita/ui/qtsingleapplication
+    ${CMAKE_SOURCE_DIR}/krita/ui/qtlockedfile
     ${EXIV2_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR})
 
@@ -28,6 +30,7 @@ endif (APPLE)
 set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
+    canvas/kis_canvas_updates_compressor.cpp
     canvas/kis_canvas_controller.cpp
     canvas/kis_paintop_transformation_connector.cpp
     canvas/kis_display_color_converter.cpp
@@ -279,11 +282,9 @@ set(kritaui_LIB_SRCS
 
     kis_abstract_perspective_grid.cpp
 
-
     KisApplication.cpp
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp
-    KisDockerManager.cpp
     KisDocument.cpp
     KisDocumentEntry.cpp
     KisDocumentSectionDelegate.cpp
@@ -304,7 +305,6 @@ set(kritaui_LIB_SRCS
     KisPart.cpp
     KisPrintJob.cpp
     KisRecentDocumentsPane.cpp
-    KisStandardAction.cpp
     KisStartupDialog.cpp
     KisTemplate.cpp
     KisTemplateCreateDia.cpp
@@ -320,6 +320,12 @@ set(kritaui_LIB_SRCS
     kis_mainwindow_observer.cpp
     KisViewManager.cpp
     kis_mirror_manager.cpp
+
+
+    qtlockedfile/qtlockedfile.cpp
+
+    qtsingleapplication/qtlocalpeer.cpp
+    qtsingleapplication/qtsingleapplication.cpp
 )
 
 if(WIN32)
@@ -327,6 +333,7 @@ if(WIN32)
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support_win.cpp
+        qtlockedfile/qtlockedfile_win.cpp
         )
 endif(WIN32)
 
@@ -335,6 +342,7 @@ if(UNIX)
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support.cpp
+        qtlockedfile/qtlockedfile_unix.cpp
         )
     if(NOT APPLE)
         set(kritaui_LIB_SRCS
@@ -413,9 +421,9 @@ if(APPLE)
 endif (APPLE)
             
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)

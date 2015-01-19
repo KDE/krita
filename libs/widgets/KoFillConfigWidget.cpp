@@ -452,7 +452,9 @@ void KoFillConfigWidget::shapeChanged()
         return;
     }
 
+    d->colorAction->blockSignals(true);
     updateWidget(shape);
+    d->colorAction->blockSignals(false);
 }
 
 

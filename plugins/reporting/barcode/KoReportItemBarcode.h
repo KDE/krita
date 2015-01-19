@@ -49,6 +49,8 @@ protected:
     KoProperty::Property * m_horizontalAlignment;
     KoProperty::Property * m_format;
     KoProperty::Property * m_maxLength;
+    KoProperty::Property* m_itemValue;
+
 
     int alignment();
     void setAlignment(int);

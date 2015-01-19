@@ -220,6 +220,16 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     loadDefaultShapes();
 }
 
+void ShapeCollectionDocker::setCanvas(KoCanvasBase *canvas)
+{
+    setEnabled(canvas != 0);
+}
+
+void ShapeCollectionDocker::unsetCanvas()
+{
+    setEnabled(false);
+}
+
 void ShapeCollectionDocker::loadDefaultShapes()
 {
     QList<KoCollectionItem> defaultList;

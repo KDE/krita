@@ -1,0 +1,16 @@
+<Actions version="1" name="PathToolFactoryId">
+ <Action iconText="To Path" shortcut="P" toolTip="To Path" icon="convert-to-path" whatsThis="" statusTip="" name="convert-to-path" isCheckable="false" text="To Path" defaultShortcut="P"/>
+ <Action iconText="Remove point" shortcut="Backspace" toolTip="Remove point" icon="pathpoint-remove" whatsThis="" statusTip="" name="pathpoint-remove" isCheckable="false" text="Remove point" defaultShortcut="Backspace"/>
+ <Action iconText="Break at segment" shortcut="" toolTip="Break at segment" icon="path-break-segment" whatsThis="" statusTip="" name="path-break-segment" isCheckable="false" text="Break at segment" defaultShortcut=""/>
+ <Action iconText="Segment to Line" shortcut="F" toolTip="Segment to Line" icon="pathsegment-line" whatsThis="" statusTip="" name="pathsegment-line" isCheckable="false" text="Segment to Line" defaultShortcut="F"/>
+ <Action iconText="Break at point" shortcut="" toolTip="Break at point" icon="path-break-point" whatsThis="" statusTip="" name="path-break-point" isCheckable="false" text="Break at point" defaultShortcut=""/>
+ <Action iconText="Make line point" shortcut="" toolTip="Make line point" icon="pathpoint-line" whatsThis="" statusTip="" name="pathpoint-line" isCheckable="false" text="Make line point" defaultShortcut=""/>
+ <Action iconText="Symmetric Point" shortcut="" toolTip="Symmetric Point" icon="pathpoint-symmetric" whatsThis="" statusTip="" name="pathpoint-symmetric" isCheckable="false" text="Symmetric Point" defaultShortcut=""/>
+ <Action iconText="Make curve point" shortcut="" toolTip="Make curve point" icon="pathpoint-curve" whatsThis="" statusTip="" name="pathpoint-curve" isCheckable="false" text="Make curve point" defaultShortcut=""/>
+ <Action iconText="Segment to Curve" shortcut="C" toolTip="Segment to Curve" icon="pathsegment-curve" whatsThis="" statusTip="" name="pathsegment-curve" isCheckable="false" text="Segment to Curve" defaultShortcut="C"/>
+ <Action iconText="Insert point" shortcut="Ins" toolTip="Insert point" icon="pathpoint-insert" whatsThis="" statusTip="" name="pathpoint-insert" isCheckable="false" text="Insert point" defaultShortcut="Ins"/>
+ <Action iconText="Corner point" shortcut="" toolTip="Corner point" icon="pathpoint-corner" whatsThis="" statusTip="" name="pathpoint-corner" isCheckable="false" text="Corner point" defaultShortcut=""/>
+ <Action iconText="Merge points" shortcut="" toolTip="Merge points" icon="pathpoint-merge" whatsThis="" statusTip="" name="pathpoint-merge" isCheckable="false" text="Merge points" defaultShortcut=""/>
+ <Action iconText="Join with segment" shortcut="J" toolTip="Join with segment" icon="pathpoint-join" whatsThis="" statusTip="" name="pathpoint-join" isCheckable="false" text="Join with segment" defaultShortcut="J"/>
+ <Action iconText="Smooth point" shortcut="" toolTip="Smooth point" icon="pathpoint-smooth" whatsThis="" statusTip="" name="pathpoint-smooth" isCheckable="false" text="Smooth point" defaultShortcut=""/>
+</Actions>

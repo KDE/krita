@@ -44,7 +44,6 @@
 #include <kis_debug.h>
 #include <kmenu.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 
 #include <KoIcon.h>
 #include <KisDocumentSectionView.h>
@@ -81,7 +80,9 @@
 class ButtonAction : public KisAction
 {
 public:
-    ButtonAction(QAbstractButton* button, const KIcon& icon, const QString& text, QObject* parent) : KisAction(icon, text, parent) , m_button(button)
+    ButtonAction(QAbstractButton* button, const KIcon& icon, const QString& text, QObject* parent)
+        : KisAction(icon, text, parent)
+        , m_button(button)
     {
         connect(m_button, SIGNAL(clicked()), this, SLOT(trigger()));
     }
@@ -231,7 +232,7 @@ KisLayerBox::KisLayerBox()
 
     m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
     m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_selectOpaque->setObjectName(""); // no name to avoid addition to the action collection
+    m_selectOpaque->setObjectName("select_opaque");
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
     m_actions.append(m_selectOpaque);
 
@@ -300,6 +301,13 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
 
+
+    foreach(KisAction *action, m_actions) {
+        kisview->actionManager()->
+            addAction(action->objectName(),
+                      action);
+    }
+
     connectActionToButton(kisview, m_wdgLayerBox->bnAdd, "add_new_paint_layer");
     connectActionToButton(kisview, m_wdgLayerBox->bnDuplicate, "duplicatelayer");
 }
@@ -359,13 +367,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollToBottom();
 
-        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
-        foreach(KisAction *action, m_actions) {
-            m_canvas->viewManager()->actionManager()->
-                addAction(action->objectName(),
-                          action,
-                          actionCollection);
-        }
+
 
         addActionToMenu(m_newLayerMenu, "add_new_paint_layer");
         addActionToMenu(m_newLayerMenu, "add_new_group_layer");
@@ -388,18 +390,16 @@ void KisLayerBox::unsetCanvas()
 {
     setEnabled(false);
     if (m_canvas) {
-        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
-        foreach(KisAction *action, m_actions) {
-            m_canvas->viewManager()->actionManager()->takeAction(action, actionCollection);
-        }
         m_newLayerMenu->clear();
     }
     setCanvas(0);
+    m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
 }
 
 void KisLayerBox::notifyImageDeleted()
 {
     setCanvas(0);
+    m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
 }
 
 void KisLayerBox::updateUI()
@@ -493,6 +493,8 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(m_removeAction);
 
         addActionToMenu(&menu, "duplicatelayer");
+        addActionToMenu(&menu, "flatten_image");
+        addActionToMenu(&menu, "flatten_layer");
 
         // TODO: missing icon "edit-merge"
         QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));

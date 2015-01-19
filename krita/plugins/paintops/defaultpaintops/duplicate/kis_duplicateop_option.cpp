@@ -47,10 +47,10 @@ KisDuplicateOpOption::KisDuplicateOpOption()
     m_checkable = false;
     m_optionWidget = new KisDuplicateOpOptionsWidget();
 
-    connect(m_optionWidget->cbHealing, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->cbPerspective, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->cbSourcePoint, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->chkCloneProjection, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->cbHealing, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->cbPerspective, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->cbSourcePoint, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->chkCloneProjection, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_optionWidget);
 }
@@ -114,7 +114,6 @@ void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* s
     m_optionWidget->cbPerspective->setChecked(setting->getBool(DUPLICATE_CORRECT_PERSPECTIVE, false));
     m_optionWidget->cbSourcePoint->setChecked(setting->getBool(DUPLICATE_MOVE_SOURCE_POINT, true));
     m_optionWidget->chkCloneProjection->setChecked(setting->getBool(DUPLICATE_CLONE_FROM_PROJECTION, false));
-    emit sigSettingChanged();
 }
 
 void KisDuplicateOpOption::setImage(KisImageWSP image)

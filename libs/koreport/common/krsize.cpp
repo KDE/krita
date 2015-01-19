@@ -31,7 +31,7 @@ KRSize::~KRSize()
 {
 }
 
-void KRSize::setSceneSize(const QSizeF& s, bool update)
+void KRSize::setSceneSize(const QSizeF& s, UpdatePropertyFlag update)
 {
     qreal w, h;
 
@@ -40,11 +40,11 @@ void KRSize::setSceneSize(const QSizeF& s, bool update)
     m_pointSize.setWidth(w);
     m_pointSize.setHeight(h);
 
-    if (update)
+    if (update == UpdateProperty)
         m_property->setValue(toUnit());
 }
 
-void KRSize::setUnitSize(const QSizeF& s, bool update)
+void KRSize::setUnitSize(const QSizeF& s, UpdatePropertyFlag update)
 {
     qreal w, h;
     w = m_unit.fromUserValue(s.width());
@@ -52,16 +52,16 @@ void KRSize::setUnitSize(const QSizeF& s, bool update)
     m_pointSize.setWidth(w);
     m_pointSize.setHeight(h);
     
-    if (update)
+    if (update == UpdateProperty)
         m_property->setValue(toUnit());
 }
 
-void KRSize::setPointSize(const QSizeF& s, bool update)
+void KRSize::setPointSize(const QSizeF& s, UpdatePropertyFlag update)
 {
     m_pointSize.setWidth(s.width());
     m_pointSize.setHeight(s.height());
 
-    if (update)
+    if (update == UpdateProperty)
         m_property->setValue(toUnit());
 }
 

@@ -23,8 +23,7 @@
 
 #ifndef QT_NO_DBUS
 
-#include <QObject>
-#include <QtDBus>
+#include <QDBusAbstractAdaptor>
 #include "komain_export.h"
 template<class T> class QList;
 template<class Key, class Value> class QMap;

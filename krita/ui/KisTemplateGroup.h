@@ -18,13 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef koTemplateGroup_h
-#define koTemplateGroup_h
+#ifndef KIS_TEMPLATE_GROUP_H
+#define KIS_TEMPLATE_GROUP_H
 
 #include <QList>
 #include <QStringList>
 #include <QPixmap>
-#include <kcomponentdata.h>
+
 #include "krita_export.h"
 
 class KisTemplate;

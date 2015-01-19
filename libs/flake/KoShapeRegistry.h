@@ -79,7 +79,7 @@ private:
     KoShapeRegistry operator=(const KoShapeRegistry&);
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

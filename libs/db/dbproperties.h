@@ -57,7 +57,7 @@ public:
     QStringList names();
 
 protected:
-    DatabaseProperties(Connection *conn);
+    explicit DatabaseProperties(Connection *conn);
     ~DatabaseProperties();
 
     QPointer<Connection> m_conn;

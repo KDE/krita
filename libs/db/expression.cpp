@@ -164,20 +164,46 @@ NArgExpr* NArgExpr::copy() const
     return new NArgExpr(*this);
 }
 
+Field::Type NArgExpr::type()
+{
+    switch (m_token) {
+    case KEXIDB_TOKEN_BETWEEN_AND:
+    case KEXIDB_TOKEN_NOT_BETWEEN_AND:
+        foreach (BaseExpr* e, list) {
+            Field::Type type = e->type();
+            if (type == Field::InvalidType || type == Field::Null) {
+                return type;
+            }
+        }
+
+        return Field::Boolean;
+    default:;
+    }
+
+    return BaseExpr::type();
+}
+
 QString NArgExpr::debugString()
 {
     QString s = QString("NArgExpr(")
-                + "class=" + exprClassName(m_cl);
+                + tokenToString() + ", " + "class=" + exprClassName(m_cl);
     foreach(BaseExpr *expr, list) {
         s += ", " +
              expr->debugString();
     }
-    s += ')';
+    s += QString::fromLatin1(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
     return s;
 }
 
 QString NArgExpr::toString(QuerySchemaParameterValueListIterator* params)
 {
+    if (BaseExpr::token() == KEXIDB_TOKEN_BETWEEN_AND && list.count() == 3) {
+        return list[0]->toString() + " BETWEEN " + list[1]->toString() + " AND " + list[2]->toString();
+    }
+    if (BaseExpr::token() == KEXIDB_TOKEN_NOT_BETWEEN_AND && list.count() == 3) {
+        return list[0]->toString() + " NOT BETWEEN " + list[1]->toString() + " AND " + list[2]->toString();
+    }
+
     QString s;
     s.reserve(256);
     foreach(BaseExpr* e, list) {
@@ -226,7 +252,45 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
         if (!e->validate(parseInfo))
             return false;
     }
+
+    switch (m_token) {
+    case KEXIDB_TOKEN_BETWEEN_AND:
+    case KEXIDB_TOKEN_NOT_BETWEEN_AND: {
+        if (list.count() != 3) {
+            parseInfo.errMsg = i18n("Three arguments required");
+            parseInfo.errDescr = i18nc("@info BETWEEN..AND error", "%1 operator requires exactly three arguments.", "BETWEEN...AND");
+            return false;
+        }
+
+        if (!(!Field::isNumericType(list[0]->type()) || !Field::isNumericType(list[1]->type()) || !Field::isNumericType(list[2]->type()))) {
+            return true;
+        } else if (!(!Field::isTextType(list[0]->type()) || !Field::isTextType(list[1]->type()) || !Field::isTextType(list[2]->type()))) {
+            return true;
+        }
+
+        if ((list[0]->type() == list[1]->type() && list[1]->type() == list[2]->type())) {
+            return true;
+        }
+
+        parseInfo.errMsg = i18n("Incompatible types of arguments");
+        parseInfo.errDescr = i18nc("@info BETWEEN..AND type error", "%1 operator requires compatible types of arguments.", "BETWEEN..AND");
+
+        return false;
+    }
+    default:;
+    }
+
     return true;
+}
+
+QString NArgExpr::tokenToString()
+{
+    switch (m_token) {
+    case KEXIDB_TOKEN_BETWEEN_AND: return "BETWEEN_AND";
+    case KEXIDB_TOKEN_NOT_BETWEEN_AND: return "NOT_BETWEEN_AND";
+    default:;
+    }
+    return QString("{INVALID_N_ARG_OPERATOR#%1} ").arg(m_token);
 }
 
 //=========================================

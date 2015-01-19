@@ -27,12 +27,12 @@
 class QWidget;
 
 #include <kowidgets_export.h>
-
+#include <KoCanvasObserverBase.h>
 /**
  * The tool docker shows the tool option widget associated with the
  * current tool and the current canvas.
  */
-class KOWIDGETS_EXPORT KoToolDocker : public QDockWidget
+class KOWIDGETS_EXPORT KoToolDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
@@ -40,6 +40,11 @@ public:
     ~KoToolDocker();
 
     void resetWidgets();
+
+    /// reimplemented
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
+
 
 protected:
     virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget

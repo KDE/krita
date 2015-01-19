@@ -7,7 +7,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2.1 of the License, or (at your option) any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -65,6 +65,9 @@ public:
 
     virtual QString serverType() const { return QString(); }
 
+    virtual void setSortingEnabled(bool value) = 0;
+    virtual bool sortingEnabled() const = 0;
+
 signals:
     void resourceAdded(KoResource*);
     void removingResource(KoResource*);
@@ -95,6 +98,7 @@ public:
     KoResourceServerAdapter(ServerType* resourceServer, QObject *parent = 0)
         : KoAbstractResourceServerAdapter(parent)
         , m_resourceServer(resourceServer)
+        , m_sortingEnabled(false)
     {
         m_changeCounter = 0;
         m_oldChangeCounter = 0;
@@ -135,7 +139,12 @@ public:
 
         bool cacheDirty = serverResourceCacheInvalid();
         if (cacheDirty) {
-            cacheServerResources(m_resourceServer->resources());
+            QList<PointerType> serverResources =
+                m_sortingEnabled ?
+                m_resourceServer->sortedResources() :
+                m_resourceServer->resources();
+
+            cacheServerResources(serverResources);
         }
         if (m_enableFiltering) {
             if (m_resourceFilter.filtersHaveChanged() || cacheDirty) {
@@ -293,6 +302,15 @@ public:
         m_resourceFilter.configure(filterType,enable);
     }
 
+    void setSortingEnabled(bool value) {
+        m_sortingEnabled = value;
+        serverResourceCacheInvalid(true);
+    }
+
+    bool sortingEnabled() const {
+        return m_sortingEnabled;
+    }
+
 protected:
     ServerType* resourceServer() const {
         return m_resourceServer;
@@ -327,6 +345,7 @@ private:
     QList<KoResource*> m_serverResources;
     QList<KoResource*> m_filteredResources;
     bool m_enableFiltering;
+    bool m_sortingEnabled;
 };
 
 #endif // KO_RESOURCESERVER_ADAPTER_H_

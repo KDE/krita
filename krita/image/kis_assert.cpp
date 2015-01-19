@@ -66,7 +66,7 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 
     if (!disableAssertMsg) {
         button =
-            QMessageBox::critical(0, i18n("Krita Internal Error"),
+            QMessageBox::critical(0, i18nc("@title:window", "Krita: Internal Error"),
                                   longMessage,
                                   QMessageBox::Ignore | QMessageBox::Abort,
                                   QMessageBox::Ignore);

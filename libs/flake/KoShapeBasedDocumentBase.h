@@ -80,7 +80,7 @@ public:
     virtual KoDocumentResourceManager *resourceManager() const;
 
 private:
-    KoShapeBasedDocumentBasePrivate * d;
+    KoShapeBasedDocumentBasePrivate * const d;
 };
 
 #endif

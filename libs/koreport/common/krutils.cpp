@@ -295,18 +295,20 @@ void KRUtils::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, KRLine
 
 void KRUtils::addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p)
 {
+    const QString name = QLatin1String("report:") + p->name().toLower();
+
     switch (p->value().type()) {
         case QVariant::Int :
-            e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toInt());
+            e->setAttribute(name, p->value().toInt());
             break;
         case QVariant::Double:
-            e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toDouble());
+            e->setAttribute(name, p->value().toDouble());
             break;
         case QVariant::Bool:
-            e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toInt());
+            e->setAttribute(name, p->value().toInt());
             break;
         default:
-            e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toString());
+            e->setAttribute(name, p->value().toString());
             break;
     }
 }

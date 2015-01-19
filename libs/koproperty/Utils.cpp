@@ -73,7 +73,7 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
     class GroupWidgetBase : public QWidget
     {
     public:
-        GroupWidgetBase(QWidget* parent)
+        explicit GroupWidgetBase(QWidget* parent)
                 : QWidget(parent)
                 , m_isOpen(true)
                 , m_mouseDown(false) {
@@ -152,7 +152,7 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
 /*    class GroupWidget : public GroupWidgetBase
     {
     public:
-        GroupWidget(EditorGroupItem *parentItem)
+        explicit GroupWidget(EditorGroupItem *parentItem)
                 : GroupWidgetBase(parentItem->listView()->viewport())
                 , m_parentItem(parentItem) {
         }

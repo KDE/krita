@@ -153,7 +153,7 @@ KisDocument* createCompleteDocument()
     path->lineTo(QPointF(10, 10) + QPointF(0, 100));
     path->close();
     path->normalize();
-    KisShapeLayerSP shapeLayer = new KisShapeLayer(parentContainer, doc->shapeController(), image, "shapeLayer1", 75);
+    KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image, "shapeLayer1", 75);
     shapeLayer->addShape(path);
     image->addNode(shapeLayer, group1);
     image->addNode(adjustmentLayer2, group1);

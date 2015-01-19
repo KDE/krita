@@ -19,8 +19,7 @@
  */
 
 #include "KisMainWindow.h" // XXX: remove
-#include <kmessagebox.h> // XXX: remove
-#include <KNotification> // XXX: remove
+#include <QMessageBox> // XXX: remove
 
 #include "KisApplication.h"
 #include "KisDocument.h"
@@ -50,6 +49,7 @@
 #include <KoProgressUpdater.h>
 #include <KoSelection.h>
 #include <KoShape.h>
+#include <KoShapeController.h>
 #include <KoStore.h>
 #include <KoUpdater.h>
 #include <KoXmlWriter.h>
@@ -235,10 +235,9 @@ private:
 class KisDocument::Private
 {
 public:
-    Private(KisDocument *document, const KisPart *part) :
+    Private(KisDocument *document) :
         document(document),
         // XXX: the part should _not_ be modified from the document
-        parentPart(const_cast<KisPart*>(part)),
         docInfo(0),
         progressUpdater(0),
         progressProxy(0),
@@ -289,7 +288,6 @@ public:
     }
 
     KisDocument *document;
-    KisPart *const parentPart;
 
     KoDocumentInfo *docInfo;
 
@@ -359,6 +357,7 @@ public:
     KisImageSP image;
     KisNodeSP preActivatedNode;
     KisShapeController* shapeController;
+    KoShapeController* koShapeController;
 
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
@@ -372,8 +371,8 @@ public:
         DocumentProgressProxy *progressProxy = 0;
         if (!document->progressProxy()) {
             KisMainWindow *mainWindow = 0;
-            if (parentPart->mainWindows().count() > 0) {
-                mainWindow = parentPart->mainWindows()[0];
+            if (KisPart::instance()->mainWindows().count() > 0) {
+                mainWindow = KisPart::instance()->mainWindows()[0];
             }
             progressProxy = new DocumentProgressProxy(mainWindow);
             document->setProgressProxy(progressProxy);
@@ -548,11 +547,9 @@ public:
 
 };
 
-KisDocument::KisDocument(const KisPart *parent)
-    : d(new Private(this, parent))
+KisDocument::KisDocument()
+    : d(new Private(this))
 {
-    Q_ASSERT(parent);
-
     d->undoStack = new UndoStack(this);
     d->undoStack->setParent(this);
 
@@ -574,7 +571,7 @@ KisDocument::KisDocument(const KisPart *parent)
     d->pageLayout.rightMargin = 0;
 
 
-    KConfigGroup cfgGrp(d->parentPart->componentData().config(), "Undo");
+    KConfigGroup cfgGrp(KisFactory::componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
 
     connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
@@ -602,6 +599,8 @@ KisDocument::~KisDocument()
 
     // Despite being QObject they needs to be deleted before the image
     delete d->shapeController;
+    
+    delete d->koShapeController;
 
     if (d->image) {
         d->image->notifyAboutToBeDeleted();
@@ -621,14 +620,10 @@ void KisDocument::init()
     Q_CHECK_PTR(d->nserver);
 
     d->shapeController = new KisShapeController(this, d->nserver);
+    d->koShapeController = new KoShapeController(0, d->shapeController);
 
     d->kraSaver = 0;
     d->kraLoader = 0;
-}
-
-KisPart *KisDocument::documentPart() const
-{
-    return d->parentPart;
 }
 
 bool KisDocument::reload()
@@ -706,7 +701,7 @@ bool KisDocument::saveFile()
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(url(),
                                      entry,
-                                     d->parentPart->currentMainwindow())) {     // this file exists => backup
+                                     KisPart::instance()->currentMainwindow())) {     // this file exists => backup
                 emit statusBarMessage(i18n("Making backup..."));
                 KUrl backup;
                 if (d->backupPath.isEmpty())
@@ -750,9 +745,9 @@ bool KisDocument::saveFile()
     if (!ret) {
         if (!suppressErrorDialog) {
             if (errorMessage().isEmpty()) {
-                KMessageBox::error(0, i18n("Could not save\n%1", localFilePath()));
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()));
             } else if (errorMessage() != "USER_CANCELED") {
-                KMessageBox::error(0, i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
             }
 
         }
@@ -778,13 +773,6 @@ bool KisDocument::saveFile()
         setConfirmNonNativeSave(isExporting(), false);
     }
     emit clearStatusBarMessage();
-
-    if (ret) {
-        KNotification *notify = new KNotification("DocumentSaved");
-        notify->setText(i18n("Document <i>%1</i> saved", url().url()));
-        notify->addContext("url", url().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
-    }
 
     return ret;
 }
@@ -871,7 +859,7 @@ void KisDocument::slotAutoSave()
             // That advice should also fix this error from occurring again
             emit statusBarMessage(i18n("The password of this encrypted document is not known. Autosave aborted! Please save your work manually."));
         } else {
-            connect(this, SIGNAL(sigProgress(int)), d->parentPart->currentMainwindow(), SLOT(slotProgress(int)));
+            connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
             emit statusBarMessage(i18n("Autosaving..."));
             d->autosaving = true;
             bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
@@ -882,7 +870,7 @@ void KisDocument::slotAutoSave()
             }
             d->autosaving = false;
             emit clearStatusBarMessage();
-            disconnect(this, SIGNAL(sigProgress(int)), d->parentPart->currentMainwindow(), SLOT(slotProgress(int)));
+            disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
             if (!ret && !d->disregardAutosaveFailure) {
                 emit statusBarMessage(i18n("Error during autosave! Partition full?"));
             }
@@ -895,7 +883,7 @@ void KisDocument::setReadWrite(bool readwrite)
     d->readwrite = readwrite;
     setAutoSave(d->autoSaveDelay);
 
-    foreach(KisMainWindow *mainWindow, d->parentPart->mainWindows()) {
+    foreach(KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
     }
 
@@ -1132,11 +1120,14 @@ QPixmap KisDocument::generatePreview(const QSize& size)
         newSize.scale(size, Qt::KeepAspectRatio);
 
         QImage image;
-        image = d->image->convertToQImage(QRect(0, 0, qMin(bounds.width(), newSize.width() * 2), qMin(bounds.width(), newSize.height() * 2)), newSize, 0);
+        if (bounds.width() < 10000 && bounds.height() < 10000) {
+            image = d->image->convertToQImage(d->image->bounds(), 0);
+        }
+        else {
+            image = d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
+        }
         image = image.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
         return QPixmap::fromImage(image);
-
     }
     return QPixmap(size);
 }
@@ -1157,10 +1148,10 @@ QString KisDocument::autoSaveFile(const QString & path) const
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(d->parentPart->componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(KisFactory::componentName()).arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(d->parentPart->componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(KisFactory::componentName()).arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #endif
     } else {
         KUrl url = KUrl::fromPath(path);
@@ -1212,8 +1203,6 @@ bool KisDocument::openUrl(const KUrl & _url)
         return false;
     }
 
-    abortLoad();
-
     KUrl url(_url);
     bool autosaveOpened = false;
     d->isLoading = true;
@@ -1223,14 +1212,16 @@ bool KisDocument::openUrl(const KUrl & _url)
         if (QFile::exists(asf)) {
             //kDebug(30003) <<"asf=" << asf;
             // ## TODO compare timestamps ?
-            int res = KMessageBox::warningYesNoCancel(0,
-                      i18n("An autosaved file exists for this document.\nDo you want to open it instead?"));
+            int res = QMessageBox::warning(0,
+                                           i18nc("@title:window", "Krita"),
+                                           i18n("An autosaved file exists for this document.\nDo you want to open it instead?"),
+                                           QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
             switch (res) {
-            case KMessageBox::Yes :
+            case QMessageBox::Yes :
                 url.setPath(asf);
                 autosaveOpened = true;
                 break;
-            case KMessageBox::No :
+            case QMessageBox::No :
                 QFile::remove(asf);
                 break;
             default: // Cancel
@@ -1248,7 +1239,7 @@ bool KisDocument::openUrl(const KUrl & _url)
         setModified(true);
     }
     else {
-        d->parentPart->addRecentURLToAllMainWindows(_url);
+        KisPart::instance()->addRecentURLToAllMainWindows(_url);
 
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
@@ -1266,7 +1257,7 @@ bool KisDocument::openFile()
         QApplication::restoreOverrideCursor();
         if (d->autoErrorHandlingEnabled)
             // Maybe offer to create a new document with that name ?
-            KMessageBox::error(0, i18n("The file %1 does not exist.", localFilePath()));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
         d->isLoading = false;
         return false;
     }
@@ -1406,7 +1397,7 @@ bool KisDocument::openFile()
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
                 QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
-                KMessageBox::error(0, errorMsg);
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), errorMsg);
             }
 
             d->isLoading = false;
@@ -1492,8 +1483,8 @@ KoProgressProxy* KisDocument::progressProxy() const
 {
     if (!d->progressProxy) {
         KisMainWindow *mainWindow = 0;
-        if (d->parentPart->mainwindowCount() > 0) {
-            mainWindow = d->parentPart->mainWindows()[0];
+        if (KisPart::instance()->mainwindowCount() > 0) {
+            mainWindow = KisPart::instance()->mainWindows()[0];
         }
         d->progressProxy = new DocumentProgressProxy(mainWindow);
     }
@@ -1820,19 +1811,21 @@ int KisDocument::queryCloseDia()
     if (name.isEmpty())
         name = i18n("Untitled");
 
-    int res = KMessageBox::warningYesNoCancel(0,
-              i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name));
+    int res = QMessageBox::warning(0,
+                                   i18nc("@title:window", "Krita"),
+                                   i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
     switch (res) {
-    case KMessageBox::Yes :
+    case QMessageBox::Yes :
         save(); // NOTE: External files always in native format. ###TODO: Handle non-native format
         setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
         break;
-    case KMessageBox::No :
+    case QMessageBox::No :
         removeAutoSaveFiles();
         setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
         break;
-    default : // case KMessageBox::Cancel :
+    default : // case QMessageBox::Cancel :
         return res; // cancels the rest of the files
     }
     return res;
@@ -1937,7 +1930,7 @@ bool KisDocument::completeSaving(KoStore* store)
 
 QDomDocument KisDocument::createDomDocument(const QString& tagName, const QString& version) const
 {
-    return createDomDocument(d->parentPart->componentData().componentName(), tagName, version);
+    return createDomDocument(KisFactory::componentName(), tagName, version);
 }
 
 //static
@@ -2068,10 +2061,10 @@ QString KisDocument::errorMessage() const
 void KisDocument::showLoadingErrorDialog()
 {
     if (errorMessage().isEmpty()) {
-        KMessageBox::error(0, i18n("Could not open\n%1", localFilePath()));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open\n%1", localFilePath()));
     }
     else if (errorMessage() != "USER_CANCELED") {
-        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
     }
 }
 
@@ -2282,7 +2275,6 @@ KUrl KisDocument::url() const
 
 bool KisDocument::closeUrl(bool promptToSave)
 {
-    abortLoad(); //just in case
     if (promptToSave) {
         if ( d->document->isReadWrite() && d->document->isModified()) {
             if (!queryClose())
@@ -2340,8 +2332,8 @@ bool KisDocument::save()
     DocumentProgressProxy *progressProxy = 0;
     if (!d->document->progressProxy()) {
         KisMainWindow *mainWindow = 0;
-        if (d->parentPart->mainwindowCount() > 0) {
-            mainWindow = d->parentPart->mainWindows()[0];
+        if (KisPart::instance()->mainwindowCount() > 0) {
+            mainWindow = KisPart::instance()->mainWindows()[0];
         }
         progressProxy = new DocumentProgressProxy(mainWindow);
         d->document->setProgressProxy(progressProxy);
@@ -2382,21 +2374,6 @@ bool KisDocument::waitSaveComplete()
 }
 
 
-void KisDocument::abortLoad()
-{
-    if ( d->m_statJob ) {
-        //kDebug(1000) << "Aborting job" << d->m_statJob;
-        d->m_statJob->kill();
-        d->m_statJob = 0;
-    }
-    if ( d->m_job ) {
-        //kDebug(1000) << "Aborting job" << d->m_job;
-        d->m_job->kill();
-        d->m_job = 0;
-    }
-}
-
-
 void KisDocument::setUrl(const KUrl &url)
 {
     d->m_url = url;
@@ -2422,23 +2399,24 @@ bool KisDocument::queryClose()
     if (docName.isEmpty()) docName = i18n( "Untitled" );
 
 
-    int res = KMessageBox::warningYesNoCancel( 0,
-                                               i18n( "The document \"%1\" has been modified.\n"
-                                                     "Do you want to save your changes or discard them?" ,  docName ),
-                                               i18n( "Close Document" ), KStandardGuiItem::save(), KStandardGuiItem::discard() );
+    int res = QMessageBox::warning(0,
+                                   i18nc("@title:window", "Close Document"),
+                                   i18n("The document \"%1\" has been modified.\n"
+                                        "Do you want to save your changes or discard them?" ,  docName),
+                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes );
 
     bool abortClose=false;
     bool handled=false;
 
     switch(res) {
-    case KMessageBox::Yes :
+    case QMessageBox::Yes :
         if (!handled)
         {
             if (d->m_url.isEmpty())
             {
                 KisMainWindow *mainWindow = 0;
-                if (d->parentPart->mainWindows().count() > 0) {
-                    mainWindow = d->parentPart->mainWindows()[0];
+                if (KisPart::instance()->mainWindows().count() > 0) {
+                    mainWindow = KisPart::instance()->mainWindows()[0];
                 }
                 KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile, "SaveDocument");
                 KUrl url = dialog.url();
@@ -2453,9 +2431,9 @@ bool KisDocument::queryClose()
             }
         } else if (abortClose) return false;
         return waitSaveComplete();
-    case KMessageBox::No :
+    case QMessageBox::No :
         return true;
-    default : // case KMessageBox::Cancel :
+    default : // case QMessageBox::Cancel :
         return false;
     }
 }
@@ -2579,7 +2557,7 @@ bool KisDocument::newImage(const QString& name,
 
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
-    if (name != i18n("unnamed") && !name.isEmpty()) {
+    if (name != i18n("Unnamed") && !name.isEmpty()) {
         setUrl(KUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
     }
     documentInfo()->setAboutInfo("comments", description);
@@ -2637,7 +2615,7 @@ KoShapeLayer* KisDocument::shapeForNode(KisNodeSP layer) const
 vKisNodeSP KisDocument::activeNodes() const
 {
     vKisNodeSP nodes;
-    foreach(KisView *v, documentPart()->views()) {
+    foreach(KisView *v, KisPart::instance()->views()) {
         KisViewManager *view = qobject_cast<KisViewManager*>(v);
         if (view) {
             KisNodeSP activeNode = view->activeNode();
@@ -2655,7 +2633,7 @@ vKisNodeSP KisDocument::activeNodes() const
 QList<KisPaintingAssistant*> KisDocument::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KisView *view, documentPart()->views()) {
+    foreach(KisView *view, KisPart::instance()->views()) {
         if (view && view->document() == this) {
             KisPaintingAssistantsDecoration* assistantsDecoration = view->canvasBase()->paintingAssistantsDecoration();
             assistants.append(assistantsDecoration->assistants());

@@ -715,7 +715,7 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
             channelRLESizePos +=2;
             io->seek(channelStartPos);
 
-            if (!io->write(compressed) == size) {
+            if (io->write(compressed) != size) {
                 error = "Could not write image data";
                 return false;
             }
@@ -790,7 +790,7 @@ bool PSDLayerRecord::readPixelData(QIODevice *io, KisPaintDeviceSP device)
     return false;
 }
 
-bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *channelInfo)
+bool PSDLayerRecord::readMask(QIODevice */*io*/, KisPaintDeviceSP /*dev*/, ChannelInfo *channelInfo)
 {
     dbgFile << "Going to read" << channelIdToChannelType(channelInfo->channelId, m_header.colormode) << "mask";
 //    quint64 oldPosition = io->pos();

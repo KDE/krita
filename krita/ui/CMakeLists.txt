@@ -333,6 +333,7 @@ if(WIN32)
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support_win.cpp
+        input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         )
 endif(WIN32)
@@ -360,6 +361,14 @@ if (APPLE)
 endif (APPLE)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
+if(WIN32)
+    kde4_add_ui_files(
+        input/wintab/kis_screen_size_choice_dialog.ui
+    )
+endif(WIN32)
+
+
 
 kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfullscreensettings.ui

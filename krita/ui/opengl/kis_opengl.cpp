@@ -144,7 +144,13 @@ void KisOpenGL::createContext()
 
     // Check if we have a bugged driver that needs fence workaround
     QString renderer((const char*)glGetString(GL_RENDERER));
-    if (renderer.startsWith("AMD")) {
+
+    bool isOnX11 = false;
+#ifdef Q_WS_X11
+    isOnX11 = true;
+#endif
+
+    if ((isOnX11 && renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         NeedsFenceWorkaround = true;
     }
 }

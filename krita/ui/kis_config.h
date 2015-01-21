@@ -175,6 +175,8 @@ public:
 
     bool showAdvancedOpenGLSettings() const;
 
+    bool forceOpenGLFenceWorkaround() const;
+
     int numMipmapLevels() const;
     int openGLTextureSize() const;
     int textureOverlapBorder() const;
@@ -449,6 +451,8 @@ public:
     void setMDIBackgroundImage(const QString & fileName) const;
 
     bool useVerboseOpenGLDebugOutput() const;
+
+    int workaroundX11SmoothPressureSteps() const;
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

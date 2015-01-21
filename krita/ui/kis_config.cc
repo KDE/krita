@@ -567,6 +567,11 @@ bool KisConfig::showAdvancedOpenGLSettings() const
     return m_cfg.readEntry("showAdvancedOpenGLSettings", false);
 }
 
+bool KisConfig::forceOpenGLFenceWorkaround() const
+{
+    return m_cfg.readEntry("forceOpenGLFenceWorkaround", false);
+}
+
 int KisConfig::numMipmapLevels() const
 {
     return m_cfg.readEntry("numMipmapLevels", 4);
@@ -1421,6 +1426,11 @@ void KisConfig::setTestingCompressBrushEvents(bool value)
 bool KisConfig::useVerboseOpenGLDebugOutput() const
 {
     return m_cfg.readEntry("useVerboseOpenGLDebugOutput", false);
+}
+
+int KisConfig::workaroundX11SmoothPressureSteps() const
+{
+    return m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0);
 }
 
 const KoColorSpace* KisConfig::customColorSelectorColorSpace() const

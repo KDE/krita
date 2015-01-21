@@ -442,6 +442,9 @@ void TextTool::createActions()
         action  = new KAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
         addAction("split_tablecells", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
+
+        action = new KAction(koIcon("borderpainter"), "", this);
+        addAction("activate_borderpainter", action);
     }
 
     action = new KAction(i18n("Paragraph..."), this);
@@ -1934,6 +1937,7 @@ void TextTool::updateActions()
         action("delete_tablecolumn")->setEnabled(hasTable && notInAnnotation);
         action("merge_tablecells")->setEnabled(hasTable && notInAnnotation);
         action("split_tablecells")->setEnabled(hasTable && notInAnnotation);
+        action("activate_borderpainter")->setEnabled(hasTable && notInAnnotation);
     }
     action("insert_annotation")->setEnabled(notInAnnotation);
 

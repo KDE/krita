@@ -53,6 +53,9 @@ public:
     KisToolLine(KoCanvasBase * canvas);
     virtual ~KisToolLine();
 
+    void requestStrokeCancellation();
+    void requestStrokeEnd();
+
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
@@ -74,12 +77,18 @@ private:
     void updatePreview();
     virtual QWidget* createOptionWidget();
 
+    void endStroke();
+    void cancelStroke();
+
 private:
     bool m_showOutline;
 
     QPointF m_startPoint;
     QPointF m_endPoint;
     QPointF m_lastUpdatedPoint;
+
+    bool m_strokeIsRunning;
+
 
     QCheckBox *m_chkUseSensors;
     QCheckBox *m_chkShowOutline;

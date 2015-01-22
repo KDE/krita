@@ -145,9 +145,18 @@ void KisToolLineHelper::translatePoints(const QPointF &offset)
 void KisToolLineHelper::end()
 {
     if (!m_d->enabled) return;
+    KIS_ASSERT_RECOVER_RETURN(isRunning());
 
     endPaint();
     m_d->linePoints.clear();
 }
 
 
+void KisToolLineHelper::cancel()
+{
+    if (!m_d->enabled) return;
+    KIS_ASSERT_RECOVER_RETURN(isRunning());
+
+    cancelPaint();
+    m_d->linePoints.clear();
+}

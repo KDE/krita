@@ -38,8 +38,6 @@
 KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, QWidget * parent)
     : KDialog(parent)
     , m_basePath(basePath)
-    , m_customName(false)
-    , m_freezeName(false)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
@@ -47,19 +45,20 @@ KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, 
     dlgWidget.setupUi(page);
     setMainWidget(page);
 
+    //dlgWidget.wdgUrlRequester->setBasePath(m_basePath);
+    dlgWidget.wdgUrlRequester->setStartDir(m_basePath);
+
     dlgWidget.txtLayerName->setText(name);
-    connect(dlgWidget.txtLayerName, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotNameChanged(const QString &)));
-    connect(dlgWidget.bnGetFileName, SIGNAL(clicked()), SLOT(slotSelectFile()));
+
+    connect(dlgWidget.wdgUrlRequester, SIGNAL(textChanged(const QString &)),
+            SLOT(slotNameChanged(const QString &)));
+
+    enableButtonOk(false);
 }
 
 void KisDlgFileLayer::slotNameChanged(const QString & text)
 {
-    if (m_freezeName)
-        return;
-
-    m_customName = !text.isEmpty();
-    enableButtonOk(m_customName);
+    enableButtonOk(!text.isEmpty());
 }
 
 QString KisDlgFileLayer::layerName() const
@@ -82,23 +81,14 @@ KisFileLayer::ScalingMethod KisDlgFileLayer::scaleToImageResolution() const
 
 QString KisDlgFileLayer::fileName() const
 {
-    return dlgWidget.txtFileName->text();
-}
+    QString path = dlgWidget.wdgUrlRequester->url().path();
 
-void KisDlgFileLayer::slotSelectFile()
-{
-    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setCaption(i18n("Select file to use as dynamic file layer."));
-    dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
-    QString url = dialog.url();
-    if (m_basePath.isEmpty()) {
-        dlgWidget.txtFileName->setText(url);
+    if (!m_basePath.isEmpty() && QFileInfo(path).isAbsolute()) {
+        QDir directory(m_basePath);
+        path = directory.relativeFilePath(path);
     }
-    else {
-        QDir d(m_basePath);
-        dlgWidget.txtFileName->setText(d.relativeFilePath(url));
-    }
+
+    return path;
 }
 
 #include "kis_dlg_file_layer.moc"

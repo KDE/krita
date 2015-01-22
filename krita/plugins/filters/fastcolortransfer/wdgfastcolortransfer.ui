@@ -40,19 +40,13 @@
     </widget>
    </item>
    <item>
+    <widget class="KisUrlRequester" name="fileNameURLRequester" native="true"/>
+   </item>
+   <item>
     <layout class="QHBoxLayout">
      <property name="margin">
       <number>0</number>
      </property>
-     <item>
-      <widget class="KUrlRequester" name="fileNameURLRequester">
-       <property name="toolTip">
-        <string>Filename of the image whose tones and color you want to transfer to the current layer.</string>
-       </property>
-       <zorder>label1</zorder>
-       <zorder>label1</zorder>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
@@ -75,9 +69,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <class>KisUrlRequester</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/kis_url_requester.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

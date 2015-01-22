@@ -19,6 +19,8 @@
 #include <klocale.h>
 
 #include <QImage>
+#include <QFile>
+
 
 #include "ui_wdgsprayshapeoptions.h"
 
@@ -113,7 +115,7 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
     m_options->aspectButton->setKeepAspectRatio(setting->getBool(SPRAYSHAPE_USE_ASPECT, false));
     m_options->widthSpin->setValue(setting->getInt(SPRAYSHAPE_WIDTH));
     m_options->heightSpin->setValue(setting->getInt(SPRAYSHAPE_HEIGHT));
-    m_options->imageUrl->setText(setting->getString(SPRAYSHAPE_IMAGE_URL));
+    m_options->imageUrl->setUrl(setting->getString(SPRAYSHAPE_IMAGE_URL));
 }
 
 

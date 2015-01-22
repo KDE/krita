@@ -26,16 +26,7 @@
    </size>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -171,6 +162,12 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Texture:</string>
        </property>
@@ -180,7 +177,14 @@
       </widget>
      </item>
      <item>
-      <widget class="KUrlRequester" name="imageUrl"/>
+      <widget class="KisUrlRequester" name="imageUrl" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -201,21 +205,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KoAspectButton</class>
-   <extends>QLabel</extends>
-   <header>KoAspectButton.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <class>KisUrlRequester</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/kis_url_requester.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QLabel</extends>
+   <header>KoAspectButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

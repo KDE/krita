@@ -335,6 +335,7 @@ if(WIN32)
         input/wintab/kis_tablet_support_win.cpp
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
+        widgets/kis_url_requester_impl.cpp
         )
 endif(WIN32)
 
@@ -419,6 +420,12 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     input/config/kis_key_input_editor.ui
     wdgsplash.ui
 )
+
+if(WIN32)
+    kde4_add_ui_files(
+      forms/kis_url_requester_impl.ui
+    )
+endif(WIN32)
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 

@@ -167,6 +167,19 @@ TextTool::TextTool(KoCanvasBase *canvas)
     createActions();
 
     m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceManager::Unit);
+
+    foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
+        connect(plugin, SIGNAL(startMacro(const QString &)),
+                this, SLOT(startMacro(const QString &)));
+        connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+        QHash<QString, KAction*> actions = plugin->actions();
+        QHash<QString, KAction*>::iterator i = actions.begin();
+        while (i != actions.end()) {
+            addAction(i.key(), i.value());
+            ++i;
+        }
+    }
+
     // setup the context list.
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));

@@ -457,6 +457,7 @@ void TextTool::createActions()
         connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
 
         action = new KAction(koIcon("borderpainter"), "", this);
+        action->setToolTip(i18n("Select a border style and paint that style onto a table"));
         addAction("activate_borderpainter", action);
     }
 

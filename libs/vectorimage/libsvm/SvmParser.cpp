@@ -639,11 +639,12 @@ void SvmParser::parseFont(QDataStream &stream, QFont &font)
     stream >> tempu16;          // pitch
     stream >> tempu16;          // weight
     stream >> tempu16;          // underline
+    font.setUnderline(tempu16);
     stream >> tempu16;          // strikeout
     stream >> tempu16;          // italic
+    font.setItalic(tempu16);
     stream >> tempu16;          // language
     stream >> tempu16;          // width
-
     stream >> tempu16;          // orientation
 
     stream >> tempbool;         // wordline

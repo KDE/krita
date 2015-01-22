@@ -832,7 +832,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.restore();
 }
 
-void TextTool::updateSelectedShape(const QPointF &point)
+void TextTool::updateSelectedShape(const QPointF &point, bool noDocumentChange)
 {
     QRectF area(point, QSizeF(1, 1));
     if (m_textEditor.data()->hasSelection())
@@ -849,6 +849,17 @@ void TextTool::updateSelectedShape(const QPointF &point)
         TextShape *textShape = dynamic_cast<TextShape*>(shape);
         if (textShape) {
             if (textShape != m_textShape) {
+                if (static_cast<KoTextShapeData*>(textShape->userData())->document() != m_textShapeData->document()) {
+                    //we should only change to another document if allowed
+                    if (noDocumentChange) {
+                        return;
+                    }
+
+                    // if we change to another textdocument we need to remove selection in old document
+                    // or it would continue to be painted etc
+
+                    m_textEditor.data()->setPosition(m_textEditor.data()->position());
+                }
                 m_textShape = textShape;
 
                 setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
@@ -891,11 +902,9 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
-    repaintSelection(); //needed to delete any possible text selection i other text docs
+    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
 
-    m_textEditor.data()->setPosition(m_textEditor.data()->position());
-
-    updateSelectedShape(event->point);
+    updateSelectedShape(event->point, shiftPressed);
 
     KoSelection *selection = canvas()->shapeManager()->selection();
     if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
@@ -903,7 +912,6 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         selection->select(m_textShape);
     }
 
-    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
     KoPointedAt pointedAt = hitTest(event->point);
     m_tableDraggedOnce = false;
     m_clickWithinSelection = false;
@@ -913,7 +921,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         if ((event->button() == Qt::LeftButton) && !shiftPressed && m_textEditor.data()->hasSelection() && m_textEditor.data()->isWithinSelection(pointedAt.position)) {
             m_clickWithinSelection = true;
             m_draggingOrigin = event->pos(); //we store the pixel pos
-        } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection())) {
+        } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection() && m_textEditor.data()->isWithinSelection(pointedAt.position))) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
             useCursor(Qt::IBeamCursor);
         }
@@ -1326,7 +1334,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     m_editTipPos = event->globalPos();
 
     if (event->buttons()) {
-        updateSelectedShape(event->point);
+        updateSelectedShape(event->point, true);
     }
 
     m_editTipTimer.stop();

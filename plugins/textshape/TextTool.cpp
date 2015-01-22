@@ -258,21 +258,22 @@ void TextTool::createActions()
 
     m_actionAlignRight  = new KAction(koIcon("format-justify-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight);
-    m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
+    m_actionAlignRight->setShortcut(Qt::CTRL + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
     connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
 
     m_actionAlignCenter  = new KAction(koIcon("format-justify-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter);
-    m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
+    m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::Key_E);
     m_actionAlignCenter->setCheckable(true);
+
     alignmentGroup->addAction(m_actionAlignCenter);
     connect(m_actionAlignCenter, SIGNAL(triggered(bool)), this, SLOT(alignCenter()));
 
     m_actionAlignBlock  = new KAction(koIcon("format-justify-fill"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock);
-    m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
+    m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::Key_J);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));

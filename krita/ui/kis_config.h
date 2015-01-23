@@ -175,6 +175,8 @@ public:
 
     bool showAdvancedOpenGLSettings() const;
 
+    bool forceOpenGLFenceWorkaround() const;
+
     int numMipmapLevels() const;
     int openGLTextureSize() const;
     int textureOverlapBorder() const;

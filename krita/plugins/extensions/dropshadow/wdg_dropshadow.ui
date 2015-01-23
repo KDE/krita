@@ -99,6 +99,9 @@
    </item>
    <item row="0" column="1">
     <widget class="QSpinBox" name="xOffsetSpinBox">
+     <property name="suffix">
+      <string> px</string>
+     </property>
      <property name="minimum">
       <number>-99</number>
      </property>
@@ -125,6 +128,9 @@
    </item>
    <item row="1" column="1">
     <widget class="QSpinBox" name="yOffsetSpinBox">
+     <property name="suffix">
+      <string> px</string>
+     </property>
      <property name="minimum">
       <number>-99</number>
      </property>
@@ -151,6 +157,9 @@
    </item>
    <item row="2" column="1">
     <widget class="QSpinBox" name="blurRadiusSpinBox">
+     <property name="suffix">
+      <string> px</string>
+     </property>
      <property name="value">
       <number>5</number>
      </property>
@@ -202,6 +211,7 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

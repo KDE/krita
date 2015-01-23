@@ -170,6 +170,11 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                   bounds);
 }
 
+bool KisToolFreehandHelper::isRunning() const
+{
+    return m_d->strokeId;
+}
+
 void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPaintInformation,
                                           KoCanvasResourceManager *resourceManager,
                                           KisImageWSP image,

@@ -57,6 +57,8 @@ public:
     void setSmoothness(KisSmoothingOptionsSP smoothingOptions);
     KisSmoothingOptionsSP smoothingOptions() const;
 
+    bool isRunning() const;
+
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,
                    KisImageWSP image,

@@ -567,6 +567,11 @@ bool KisConfig::showAdvancedOpenGLSettings() const
     return m_cfg.readEntry("showAdvancedOpenGLSettings", false);
 }
 
+bool KisConfig::forceOpenGLFenceWorkaround() const
+{
+    return m_cfg.readEntry("forceOpenGLFenceWorkaround", false);
+}
+
 int KisConfig::numMipmapLevels() const
 {
     return m_cfg.readEntry("numMipmapLevels", 4);

@@ -320,7 +320,7 @@ private:
     void repaintSelection();
     KoPointedAt hitTest(const QPointF & point) const;
     void updateStyleManager();
-    void updateSelectedShape(const QPointF &point);
+    void updateSelectedShape(const QPointF &point, bool noDocumentChange);
     void updateSelectionHandler();
     void editingPluginEvents();
     void finishedWord();

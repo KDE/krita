@@ -479,6 +479,8 @@ bool ResourceBundle::install()
                 }
                 dbgResources << "\t\tresource:" << res->name();
                 
+                res->setFilename(filename()+"/"+ref.resourcePath);
+                
                 KoAbstractGradient *res2 = gradientServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     gradientServer->addResource(res, false);//add it!   
@@ -521,7 +523,9 @@ bool ResourceBundle::install()
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
-                patternServer->addResource(res, false);
+                dbgResources << "\t\tresource:" << res->name();
+                
+                res->setFilename(filename()+"/"+ref.resourcePath);
                 
                 KoPattern *res2 = patternServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
@@ -564,6 +568,7 @@ bool ResourceBundle::install()
                 }
                 dbgResources << "\t\tresource:" << res->name();
                 
+                res->setFilename(filename()+"/"+ref.resourcePath);
                 //find the resouce on the server
                 KisBrushSP res2 = brushServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
@@ -609,6 +614,7 @@ bool ResourceBundle::install()
                 }
                 dbgResources << "\t\tresource:" << res->name();
                 
+                res->setFilename(filename()+"/"+ref.resourcePath);
                 //find the resouce on the server
                 KoColorSet *res2 = paletteServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
@@ -652,6 +658,8 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
+                
+                res->setFilename(filename()+"/"+ref.resourcePath);
                 
                 //the following tries to find the resource by name.
                 KisWorkspaceResource *res2 = workspaceServer->resourceByName(res->name());
@@ -699,6 +707,8 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
+                
+                res->setFilename(filename()+"/"+ref.resourcePath);
                 
                 //the following tries to find the resource by name.
                 KisPaintOpPresetSP res2 = paintoppresetServer->resourceByName(res->name());

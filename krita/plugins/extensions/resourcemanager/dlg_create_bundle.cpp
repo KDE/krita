@@ -305,14 +305,18 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     else if (resourceType == "gradients") {
         KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
         foreach(KoResource *res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
+            if (res->filename()!="Foreground to Transparent" && res->filename()!="Foreground to Background") {
+            //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
+            //qDebug()<<res->filename();
+                QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
+                item->setData(Qt::UserRole, res->shortFilename());
 
-            if (m_selectedGradients.contains(res->shortFilename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
+                if (m_selectedGradients.contains(res->shortFilename())) {
+                    m_ui->tableSelected->addItem(item);
+                }
+                else {
+                    m_ui->tableAvailable->addItem(item);
+                }
             }
         }
     }

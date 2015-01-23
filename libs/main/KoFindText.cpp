@@ -91,6 +91,10 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
     QList<KoFindMatch> matchBefore;
     foreach(QTextDocument* document, d->documents) {
         QTextCursor cursor = document->find(pattern, start, flags);
+        #if QT_VERSION >= 0x040700
+        cursor.setKeepPositionOnInsert(true);
+        #endif
+
         QVector<QAbstractTextDocumentLayout::Selection> selections;
         while(!cursor.isNull()) {
             if(findInSelection && d->selectionEnd <= cursor.position()) {
@@ -117,6 +121,9 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
             }
 
             cursor = document->find(pattern, cursor, flags);
+            #if QT_VERSION >= 0x040700
+            cursor.setKeepPositionOnInsert(true);
+            #endif
         }
         if (before && document == d->currentCursor.document()) {
             before = false;
@@ -140,6 +147,9 @@ void KoFindText::replaceImplementation(const KoFindMatch &match, const QVariant 
     }
 
     QTextCursor cursor = match.location().value<QTextCursor>();
+    #if QT_VERSION >= 0x040700
+    cursor.setKeepPositionOnInsert(true);
+    #endif
 
     //Search for the selection matching this match.
     QVector<QAbstractTextDocumentLayout::Selection> selections = d->selections.value(match.container().value<QTextDocument*>());

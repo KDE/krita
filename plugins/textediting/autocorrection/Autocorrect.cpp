@@ -43,7 +43,7 @@ Autocorrect::Autocorrect()
     m_enabled->setChecked(true);
     addAction("enable_autocorrection", m_enabled);
 
-    m_singleSpaces = true;
+    m_singleSpaces = false;
     m_uppercaseFirstCharOfSentence = false;
     m_fixTwoUppercaseChars = false;
     m_autoFormatURLs = false;

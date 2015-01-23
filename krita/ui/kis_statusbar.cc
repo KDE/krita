@@ -60,7 +60,7 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
     m_selectionStatus = new QToolButton();
     m_selectionStatus->setIconSize(QSize(16,16));
     m_selectionStatus->setAutoRaise(true);
-    m_selectionStatus->setEnabled(false);
+    m_selectionStatus->setEnabled(false);   
     updateSelectionIcon();
 
     connect(m_selectionStatus, SIGNAL(clicked()), view->selectionManager(), SLOT(slotToggleSelectionDecoration()));
@@ -72,12 +72,14 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
     // XXX: Use the KStatusbar fixed size labels!
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+    m_statusBarStatusLabel->setContentsMargins(5, 5, 5, 5);
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
             m_statusBarStatusLabel, SLOT(setText(const QString &)));
     view->addStatusBarItem(m_statusBarStatusLabel, 2);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel();
     m_statusBarProfileLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+    m_statusBarProfileLabel->setContentsMargins(5, 5, 5, 5);
     view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
     m_progress = new KisProgressWidget();
@@ -85,14 +87,17 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
 
     m_imageSizeLabel = new QLabel(QString());
     m_imageSizeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_imageSizeLabel->setContentsMargins(5,5, 5, 5);
     m_imageSizeLabel->setMinimumWidth(100);
     view->addStatusBarItem(m_imageSizeLabel);
 
     m_pointerPositionLabel = new QLabel(QString());
     m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_pointerPositionLabel->setMinimumWidth(100);
+    m_pointerPositionLabel->setContentsMargins(5,5, 5, 5);
     view->addStatusBarItem(m_pointerPositionLabel);
     m_pointerPositionLabel->setVisible(false);
+
 }
 
 KisStatusBar::~KisStatusBar()

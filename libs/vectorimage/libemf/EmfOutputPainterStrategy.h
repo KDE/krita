@@ -189,6 +189,7 @@ private:
     QPainter                *m_painter;
     QTransform               m_worldTransform; // The transform inside the EMF.
     QTransform               m_outputTransform; // The transform that the painter already had
+    qreal                    m_outputScale;
 
     // Everything that has to do with window and viewport calculation
     QPoint        m_windowOrg;

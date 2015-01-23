@@ -650,6 +650,7 @@ void KisViewManager::createActions()
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
     d->createTemplate = new KisAction( i18n( "&Create Template From Image..." ), this);
+    d->createTemplate->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("create_template", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 

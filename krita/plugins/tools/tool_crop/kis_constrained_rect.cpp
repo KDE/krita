@@ -40,7 +40,9 @@ KisConstrainedRect::~KisConstrainedRect()
 void KisConstrainedRect::setRectInitial(const QRect &rect)
 {
     m_rect = rect;
-    storeRatioSafe(m_rect.size());
+    if (!ratioLocked()) {
+        storeRatioSafe(m_rect.size());
+    }
     emit sigValuesChanged();
 }
 

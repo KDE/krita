@@ -136,8 +136,10 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     // load settings from configuration
     setGrowCenter(configGroup.readEntry("growCenter", false));
     setForceRatio(configGroup.readEntry("forceRatio", false));
+    setRatio(configGroup.readEntry("defaultRatio", 1.0));
     setAllowGrow(configGroup.readEntry("allowGrow", true));
     setDecoration(configGroup.readEntry("decoration", 0));
+
 
     // can't save Enum values, so we ened to convert it to int.
     setCropType(configGroup.readEntry("cropType") == 0 ? LayerCropType : ImageCropType);
@@ -570,6 +572,7 @@ void KisToolCrop::setRatio(double ratio)
     }
 
     m_finalRect.setRatio(ratio);
+    configGroup.writeEntry("defaultRatio", ratio);
 }
 
 double KisToolCrop::ratio() const

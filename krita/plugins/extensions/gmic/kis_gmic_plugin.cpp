@@ -393,10 +393,20 @@ void KisGmicPlugin::slotUpdateProgress()
     float progress = 0;
     if (m_currentActivity == SMALL_PREVIEW)
     {
+        if (!m_smallApplicator)
+        {
+            dbgPlugins << "WARNING: small applicator already deleted!!!";
+            return;
+        }
         progress = m_smallApplicator->getProgress();
     }
     else
     {
+        if (!m_gmicApplicator)
+        {
+            dbgPlugins << "WARNING: gmic applicator already deleted!!!";
+            return;
+        }
         progress = m_gmicApplicator->getProgress();
     }
 

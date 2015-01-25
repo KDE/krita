@@ -64,6 +64,9 @@ void DeleteCommand::undo()
     foreach (KoTextRange *range, m_rangesToRemove) {
         rangeManager->insert(range);
     }
+    foreach (KoInlineObject *object, m_invalidInlineObjects) {
+        object->manager()->addInlineObject(object);
+    }
 }
 
 void DeleteCommand::redo()
@@ -356,7 +359,7 @@ void DeleteCommand::doDelete()
     m_mergePossible = visitor.m_mergePossible;
 
     foreach (KoInlineObject *object, m_invalidInlineObjects) {
-        deleteAnchorInlineObject(object);
+        deleteInlineObject(object);
     }
 
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
@@ -410,7 +413,7 @@ void DeleteCommand::doDelete()
     }
 }
 
-void DeleteCommand::deleteAnchorInlineObject(KoInlineObject *object)
+void DeleteCommand::deleteInlineObject(KoInlineObject *object)
 {
     if (object) {
         KoAnchorInlineObject *anchorObject = dynamic_cast<KoAnchorInlineObject *>(object);
@@ -418,6 +421,8 @@ void DeleteCommand::deleteAnchorInlineObject(KoInlineObject *object)
             KoShape *shape = anchorObject->anchor()->shape();
             KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
             shapeDeleteCommand->redo();
+        } else {
+            object->manager()->removeInlineObject(object);
         }
     }
 }

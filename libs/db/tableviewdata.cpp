@@ -467,12 +467,12 @@ int TableViewData::visibleColumnIndex(int globalIndex) const
     return d->visibleColumnsIDs.value(globalIndex, -1);
 }
 
-uint TableViewData::columnsCount() const
+uint TableViewData::columnCount() const
 {
     return d->columns.count();
 }
 
-uint TableViewData::visibleColumnsCount() const
+uint TableViewData::visibleColumnCount() const
 {
     return d->visibleColumns.count();
 }

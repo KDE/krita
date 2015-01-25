@@ -115,10 +115,10 @@ public:
     Cursor* cursor() const;
 
     /*! \return number of all columns */
-    uint columnsCount() const;
+    uint columnCount() const;
 
     /*! \return number of visible columns */
-    uint visibleColumnsCount() const;
+    uint visibleColumnCount() const;
 
     /*! \return column at index @a index (visible or not) */
     TableViewColumn* column(uint index);

@@ -540,19 +540,20 @@ void KisGradientPainter::setGradientShape(enumGradientShape shape)
     m_d->shape = shape;
 }
 
-KisGradientShapeStrategy* createPolygonShapeStrategy(const QPolygonF &polygon)
+KisGradientShapeStrategy* createPolygonShapeStrategy(const QPolygonF &polygon, const QRect &boundingRect)
 {
     // TODO: implement UI for exponent option
     const qreal exponent = 2.0;
     KisGradientShapeStrategy *strategy =
         new KisPolygonalGradientShapeStrategy(polygon, exponent);
 
-    const QRect selectionRect = polygon.boundingRect().toAlignedRect();
+    KIS_ASSERT_RECOVER_NOOP(boundingRect.width() >= 3 &&
+                            boundingRect.height() >= 3);
 
     const qreal step =
-        qMin(qreal(8.0), KritaUtils::maxDimensionPortion(selectionRect, 0.01, 3.0));
+        qMin(qreal(8.0), KritaUtils::maxDimensionPortion(boundingRect, 0.01, 3.0));
 
-    return new KisCachedGradientShapeStrategy(selectionRect, step, step, strategy);
+    return new KisCachedGradientShapeStrategy(boundingRect, step, step, strategy);
 }
 
 /**
@@ -579,8 +580,14 @@ void KisGradientPainter::precalculateShape()
     }
 
     foreach (const QPolygonF &poly, polygons) {
-        Private::ProcessRegion r(toQShared(createPolygonShapeStrategy(poly)),
-                                 poly.boundingRect().toAlignedRect());
+        QRect boundingRect = poly.boundingRect().toAlignedRect();
+
+        if (boundingRect.width() < 3 || boundingRect.height() < 3) {
+            boundingRect = kisGrowRect(boundingRect, 2);
+        }
+
+        Private::ProcessRegion r(toQShared(createPolygonShapeStrategy(poly, boundingRect)),
+                                 boundingRect);
         m_d->processRegions << r;
     }
 }

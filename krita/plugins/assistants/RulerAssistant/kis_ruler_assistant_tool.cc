@@ -734,13 +734,8 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);
         }
-#ifndef QT_NO_DBUS
         connect(m_options.saveButton, SIGNAL(clicked()), SLOT(saveAssistants()));
         connect(m_options.loadButton, SIGNAL(clicked()), SLOT(loadAssistants()));
-#else
-        m_options.saveButton->hide();
-        m_options.loadButton->hide();
-#endif
         connect(m_options.deleteButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
     }
     return m_optionsWidget;

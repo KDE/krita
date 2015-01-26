@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>288</width>
-    <height>288</height>
+    <width>256</width>
+    <height>292</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,12 +31,22 @@
   <property name="windowTitle">
    <string>Levels</string>
   </property>
-  <layout class="QGridLayout" rowstretch="0,2,0,0,0,0,0,0,0,0">
+  <layout class="QGridLayout" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0">
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="8" column="0">
-    <widget class="KisGradientSlider" name="outgradient" native="true">
+   <item row="7" column="0">
+    <widget class="QLabel" name="textLabel3">
+     <property name="text">
+      <string>&lt;b&gt;Output Levels&lt;/b&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="KisGradientSlider" name="ingradient" native="true">
      <property name="minimumSize">
       <size>
        <width>256</width>
@@ -45,41 +55,72 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
-    <layout class="QHBoxLayout">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QSpinBox" name="outblackspin">
-       <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::PlusMinus</enum>
+      <widget class="QLabel" name="textLabel2">
+       <property name="text">
+        <string>&lt;b&gt;Input Levels&lt;/b&gt;</string>
        </property>
-       <property name="maximum">
-        <number>255</number>
+       <property name="wordWrap">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="spacer3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QCheckBox" name="chkLogarithmic">
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
        </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::MinimumExpanding</enum>
+       <property name="text">
+        <string>Logarithmic</string>
        </property>
-       <property name="sizeHint" stdset="0">
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" rowspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>5</number>
+     </property>
+     <property name="rightMargin">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="histview">
+       <property name="minimumSize">
         <size>
-         <width>50</width>
-         <height>20</height>
+         <width>200</width>
+         <height>100</height>
         </size>
        </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="outwhitespin">
-       <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::PlusMinus</enum>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>300</height>
+        </size>
        </property>
-       <property name="maximum">
-        <number>255</number>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <property name="indent">
+        <number>-1</number>
        </property>
       </widget>
      </item>
@@ -176,18 +217,72 @@
      </item>
     </layout>
    </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="textLabel3">
-     <property name="text">
-      <string>&lt;b&gt;Output Levels&lt;/b&gt;</string>
-     </property>
-     <property name="wordWrap">
-      <bool>false</bool>
-     </property>
-    </widget>
+   <item row="9" column="0">
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QSpinBox" name="outblackspin">
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::PlusMinus</enum>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacer3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::MinimumExpanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>50</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="outwhitespin">
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::PlusMinus</enum>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="4" column="0">
-    <widget class="KisGradientSlider" name="ingradient" native="true">
+   <item row="11" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QPushButton" name="butauto">
+       <property name="text">
+        <string>&amp;Auto Levels</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="8" column="0">
+    <widget class="KisGradientSlider" name="outgradient" native="true">
      <property name="minimumSize">
       <size>
        <width>256</width>
@@ -195,77 +290,6 @@
       </size>
      </property>
     </widget>
-   </item>
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="textLabel2">
-       <property name="text">
-        <string>&lt;b&gt;Input Levels&lt;/b&gt;</string>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="chkLogarithmic">
-       <property name="layoutDirection">
-        <enum>Qt::RightToLeft</enum>
-       </property>
-       <property name="text">
-        <string>Logarithmic</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0" rowspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="leftMargin">
-      <number>5</number>
-     </property>
-     <property name="rightMargin">
-      <number>5</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="histview">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>300</height>
-        </size>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignJustify|Qt::AlignVCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <property name="indent">
-        <number>-1</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

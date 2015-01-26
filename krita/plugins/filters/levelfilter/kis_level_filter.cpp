@@ -132,6 +132,8 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect(m_page.outgradient, SIGNAL(sigModifiedBlack(int)), m_page.outblackspin, SLOT(setValue(int)));
     connect(m_page.outgradient, SIGNAL(sigModifiedWhite(int)), m_page.outwhitespin, SLOT(setValue(int)));
 
+    connect(m_page.butauto, SIGNAL(clicked(bool)), this, SLOT(slotAutoLevel(void)));
+
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
@@ -209,6 +211,64 @@ void KisLevelConfigWidget::slotModifyOutBlackLimit(int limit)
 void KisLevelConfigWidget::slotModifyOutWhiteLimit(int limit)
 {
     m_page.outwhitespin->setMinimum(limit + 1);
+}
+
+void KisLevelConfigWidget::slotAutoLevel(void)
+{
+    Q_ASSERT(histogram);
+
+    qint32 num_bins = histogram->producer()->numberOfBins();
+
+    Q_ASSERT(num_bins > 1);
+
+    int chosen_low_bin = 0, chosen_high_bin = num_bins-1;
+    int count_thus_far = histogram->getValue(0);
+    const int total_count = histogram->producer()->count();
+    const double threshold = 0.006;
+
+    // find the low and hi point/bins based on summing count percentages
+    //
+    // this implementation is a port of GIMP's auto level implementation
+    // (use a GPLv2 version as reference, specifically commit 51bfd07f18ef045a3e43632218fd92cae9ff1e48)
+
+    for (int bin=0; bin<(num_bins-1); ++bin) {
+        int next_count_thus_far = count_thus_far + histogram->getValue(bin+1);
+
+        double this_percentage = static_cast<double>(count_thus_far) /  total_count;
+        double next_percentage = static_cast<double>(next_count_thus_far) / total_count;
+
+        //qDebug() << "bin" << bin << "this_percentage" << this_percentage << "next_percentage" << next_percentage;
+        if (fabs(this_percentage - threshold) < fabs(next_percentage - threshold)) {
+            chosen_low_bin = bin;
+            break;
+        }
+
+        count_thus_far = next_count_thus_far;
+    }
+
+    count_thus_far = histogram->getValue(num_bins-1);
+    for (int bin=(num_bins-1); bin>0; --bin) {
+        int next_count_thus_far = count_thus_far + histogram->getValue(bin-1);
+
+        double this_percentage = static_cast<double>(count_thus_far) /  total_count;
+        double next_percentage = static_cast<double>(next_count_thus_far) / total_count;
+
+        //qDebug() << "hi-bin" << bin << "this_percentage" << this_percentage << "next_percentage" << next_percentage;
+        if (fabs(this_percentage - threshold) < fabs(next_percentage - threshold)) {
+            chosen_high_bin = bin;
+            break;
+        }
+
+        count_thus_far = next_count_thus_far;
+    }
+
+    if (chosen_low_bin < chosen_high_bin) {
+        m_page.blackspin->setValue(chosen_low_bin);
+        m_page.ingradient->slotModifyBlack(chosen_low_bin);
+
+        m_page.whitespin->setValue(chosen_high_bin);
+        m_page.ingradient->slotModifyWhite(chosen_high_bin);
+    }
 }
 
 KisPropertiesConfiguration * KisLevelConfigWidget::configuration() const

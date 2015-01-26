@@ -76,6 +76,8 @@ protected slots:
     void slotModifyOutBlackLimit(int);
     void slotModifyOutWhiteLimit(int);
 
+    void slotAutoLevel(void);
+
 protected:
     KisHistogram *histogram;
     bool m_histlog;

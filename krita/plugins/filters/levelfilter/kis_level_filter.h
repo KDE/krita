@@ -79,7 +79,7 @@ protected slots:
     void slotAutoLevel(void);
 
 protected:
-    KisHistogram *histogram;
+    QScopedPointer<KisHistogram> m_histogram;
     bool m_histlog;
 };
 

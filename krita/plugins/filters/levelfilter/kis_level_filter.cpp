@@ -94,7 +94,6 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
         : KisConfigWidget(parent)
 {
     m_page.setupUi(this);
-    histogram = NULL;
 
     m_page.ingradient->enableGamma(true);
     m_page.blackspin->setValue(0);
@@ -137,7 +136,7 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
-    histogram = new KisHistogram(dev, dev->exactBounds(), producer, LINEAR);
+    m_histogram.reset( new KisHistogram(dev, dev->exactBounds(), producer, LINEAR) );
     m_histlog = false;
     m_page.histview->resize(288,100);
     slotDrawHistogram();
@@ -146,7 +145,6 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
 
 KisLevelConfigWidget::~KisLevelConfigWidget()
 {
-    delete histogram;
 }
 
 void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
@@ -156,11 +154,11 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
     int wWidth = m_page.histview->width();
 
     if (m_histlog != logarithmic) {
-        // Update the histogram
+        // Update the m_histogram
         if (logarithmic)
-            histogram->setHistogramType(LOGARITHMIC);
+            m_histogram->setHistogramType(LOGARITHMIC);
         else
-            histogram->setHistogramType(LINEAR);
+            m_histogram->setHistogramType(LINEAR);
         m_histlog = logarithmic;
     }
 
@@ -170,23 +168,23 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
 
     p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
 
-    double highest = (double)histogram->calculations().getHighest();
-    qint32 bins = histogram->producer()->numberOfBins();
+    double highest = (double)m_histogram->calculations().getHighest();
+    qint32 bins = m_histogram->producer()->numberOfBins();
 
     // use nearest neighbour interpolation
-    if (histogram->getHistogramType() == LINEAR) {
+    if (m_histogram->getHistogramType() == LINEAR) {
         double factor = (double)(wHeight - wHeight / 5.0) / highest;
         for (int i = 0; i < wWidth; i++) {
             int binNo = qRound((double)i / wWidth * (bins - 1));
-            if ((int)histogram->getValue(binNo) != 0)
-                p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - (int)histogram->getValue(binNo) * factor);
+            if ((int)m_histogram->getValue(binNo) != 0)
+                p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - (int)m_histogram->getValue(binNo) * factor);
         }
     } else {
         double factor = (double)(wHeight - wHeight / 5.0) / (double)log(highest);
         for (int i = 0; i < wWidth; i++) {
             int binNo = qRound((double)i / wWidth * (bins - 1)) ;
-            if ((int)histogram->getValue(binNo) != 0)
-                p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log((double)histogram->getValue(binNo)) * factor);
+            if ((int)m_histogram->getValue(binNo) != 0)
+                p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log((double)m_histogram->getValue(binNo)) * factor);
         }
     }
 
@@ -215,15 +213,15 @@ void KisLevelConfigWidget::slotModifyOutWhiteLimit(int limit)
 
 void KisLevelConfigWidget::slotAutoLevel(void)
 {
-    Q_ASSERT(histogram);
+    Q_ASSERT(m_histogram);
 
-    qint32 num_bins = histogram->producer()->numberOfBins();
+    qint32 num_bins = m_histogram->producer()->numberOfBins();
 
     Q_ASSERT(num_bins > 1);
 
     int chosen_low_bin = 0, chosen_high_bin = num_bins-1;
-    int count_thus_far = histogram->getValue(0);
-    const int total_count = histogram->producer()->count();
+    int count_thus_far = m_histogram->getValue(0);
+    const int total_count = m_histogram->producer()->count();
     const double threshold = 0.006;
 
     // find the low and hi point/bins based on summing count percentages
@@ -232,7 +230,7 @@ void KisLevelConfigWidget::slotAutoLevel(void)
     // (use a GPLv2 version as reference, specifically commit 51bfd07f18ef045a3e43632218fd92cae9ff1e48)
 
     for (int bin=0; bin<(num_bins-1); ++bin) {
-        int next_count_thus_far = count_thus_far + histogram->getValue(bin+1);
+        int next_count_thus_far = count_thus_far + m_histogram->getValue(bin+1);
 
         double this_percentage = static_cast<double>(count_thus_far) /  total_count;
         double next_percentage = static_cast<double>(next_count_thus_far) / total_count;
@@ -246,9 +244,9 @@ void KisLevelConfigWidget::slotAutoLevel(void)
         count_thus_far = next_count_thus_far;
     }
 
-    count_thus_far = histogram->getValue(num_bins-1);
+    count_thus_far = m_histogram->getValue(num_bins-1);
     for (int bin=(num_bins-1); bin>0; --bin) {
-        int next_count_thus_far = count_thus_far + histogram->getValue(bin-1);
+        int next_count_thus_far = count_thus_far + m_histogram->getValue(bin-1);
 
         double this_percentage = static_cast<double>(count_thus_far) /  total_count;
         double next_percentage = static_cast<double>(next_count_thus_far) / total_count;

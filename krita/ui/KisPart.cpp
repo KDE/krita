@@ -73,8 +73,6 @@
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_shape_controller.h"
 #include "kis_resource_server_provider.h"
-#include "kis_animation_selector.h"
-#include "kis_animation_doc.h"
 
 #include "kis_color_manager.h"
 
@@ -243,10 +241,6 @@ KisDocument *KisPart::createDocument() const
     return doc;
 }
 
-KisAnimationDoc *KisPart::createAnimationDoc() const
-{
-    return new KisAnimationDoc();
-}
 
 int KisPart::documentCount() const
 {
@@ -621,17 +615,6 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
 
 
     }
-#if 0
-    {
-        KisPart::CustomDocumentWidgetItem item;
-        item.widget = new KisAnimationSelector(parent, w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
-                                               i18n("untitled-animation"));
-
-        item.title = i18n("Animation");
-        item.icon = "tool-animator";
-        widgetList << item;
-    }
-#endif
 
     return widgetList;
 }

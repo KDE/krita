@@ -44,7 +44,6 @@ class KisView;
 class KisOpenPane;
 class QGraphicsItem;
 class KisDocument;
-class KisAnimationDoc;
 
 /**
  * Override this class in your application. It's the main entry point that
@@ -89,7 +88,6 @@ public:
      * create an empty document. The document is not automatically registered with the part.
      */
     KisDocument *createDocument() const;
-    KisAnimationDoc *createAnimationDoc() const;
 
     /**
      * Add the specified document to the list of documents this KisPart manages.

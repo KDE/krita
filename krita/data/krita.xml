@@ -26,18 +26,4 @@
          </magic>
          <glob pattern="*.r8"/>
   </mime-type>
-  <mime-type type="application/x-krita-animation">
-        <comment xml:lang="en">Krita Animation</comment>
-        <magic priority="50">
-            <match type="string" value="!DOCTYPE krita-animation" offset="1"/>
-        </magic>
-        <glob pattern="*.kranim"/>
-    </mime-type>
-    <mime-type type="application/x-kranim-sequence">
-        <comment xml:lang="en">Animation Sequence</comment>
-        <magic priority="50">
-            <match type="string" value="kranimseq" offset="40"/>
-        </magic>
-        <glob pattern="*.kranimseq"/>
-    </mime-type>
 </mime-info>

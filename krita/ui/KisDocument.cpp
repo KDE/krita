@@ -364,8 +364,6 @@ public:
 
     QList<KisPaintingAssistant*> assistants;
 
-    QString animation;
-
     bool openFile()
     {
         DocumentProgressProxy *progressProxy = 0;

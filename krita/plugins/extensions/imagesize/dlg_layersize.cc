@@ -75,13 +75,13 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     m_page->newHeightUnit->setCurrentIndex(pixelUnitIndex);
 
     m_page->aspectRatioBtn->setKeepAspectRatio(true);
-    m_page->aspectRatioCkb->setChecked(true);
+    m_page->constrainProportionsCkb->setChecked(true);
 
     setMainWidget(m_page);
     connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
 
     connect(m_page->aspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
-    connect(m_page->aspectRatioCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
+    connect(m_page->constrainProportionsCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
 
     connect(m_page->newWidth, SIGNAL(valueChanged(int)), this, SLOT(slotWidthChanged(int)));
     connect(m_page->newHeight, SIGNAL(valueChanged(int)), this, SLOT(slotHeightChanged(int)));
@@ -198,13 +198,13 @@ void DlgLayerSize::slotHeightUnitChanged(int index)
 void DlgLayerSize::slotAspectChanged(bool keep)
 {
     m_page->aspectRatioBtn->blockSignals(true);
-    m_page->aspectRatioCkb->blockSignals(true);
+    m_page->constrainProportionsCkb->blockSignals(true);
 
     m_page->aspectRatioBtn->setKeepAspectRatio(keep);
-    m_page->aspectRatioCkb->setChecked(keep);
+    m_page->constrainProportionsCkb->setChecked(keep);
 
     m_page->aspectRatioBtn->blockSignals(false);
-    m_page->aspectRatioCkb->blockSignals(false);
+    m_page->constrainProportionsCkb->blockSignals(false);
 
     m_keepAspect = keep;
 

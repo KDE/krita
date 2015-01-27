@@ -48,17 +48,17 @@ K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
 ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
-    KisAction *action  = new KisAction(i18n("Scale To New Size..."), this);
+    KisAction *action  = new KisAction(i18n("Scale Image To New Size..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("imagesize", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
-    action = new KisAction(i18n("Size Canvas..."), this);
+    action = new KisAction(i18n("Resize Canvas..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("canvassize", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
 
-    action = new KisAction(i18n("Scale &Layer..."), this);
+    action = new KisAction(i18n("Scale &Layer to new Size..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("layersize", action);
@@ -129,7 +129,7 @@ void ImageSize::slotLayerSize()
 
     DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view->mainWindow(), "LayerSize", rc.width(), rc.height(), image->yRes());
     Q_CHECK_PTR(dlgLayerSize);
-    dlgLayerSize->setCaption(i18n("Layer Size"));
+    dlgLayerSize->setCaption(i18n("Resize Layer"));
 
     if (dlgLayerSize->exec() == QDialog::Accepted) {
         qint32 w = dlgLayerSize->width();

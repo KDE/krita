@@ -44,9 +44,10 @@ public:
     {
     }
 
-    KisSpacingInformation(const QPointF &anisotropicSpacing)
+KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation)
         : m_spacing(anisotropicSpacing),
-          m_isIsotropic(anisotropicSpacing.x() == anisotropicSpacing.y())
+          m_isIsotropic(anisotropicSpacing.x() == anisotropicSpacing.y()),
+          m_rotation(rotation)
     {
     }
 
@@ -62,9 +63,14 @@ public:
         return m_isIsotropic ? m_spacing.x() : QVector2D(m_spacing).length();
     }
 
+    inline qreal rotation() const {
+        return m_rotation;
+    }
+
 private:
     QPointF m_spacing;
     bool m_isIsotropic;
+    qreal m_rotation;
 };
 
 /**

@@ -32,11 +32,13 @@
 #include <KoInteractionTool.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoResourceServerProvider.h>
+#include <KoIcon.h>
 
 #include "KisApplication.h"
 #include "KisMainWindow.h"
 #include "KisDocument.h"
 #include "KisView.h"
+#include "KisViewManager.h"
 #include "KisOpenPane.h"
 #include "KisImportExportManager.h"
 
@@ -47,14 +49,20 @@
 #include <knotification.h>
 #include <kdialog.h>
 #include <kdesktopfile.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kmimetype.h>
 #include <klocale.h>
+#include <kactioncollection.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kshortcutsdialog.h>
 
 #include <QDialog>
 #include <QGraphicsScene>
 #include <QApplication>
 #include <QGraphicsProxyWidget>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include "KisView.h"
 #include "KisDocument.h"
@@ -68,15 +76,18 @@
 #include "kis_animation_selector.h"
 #include "kis_animation_doc.h"
 
+#include "kis_color_manager.h"
+
+#include "kis_action.h"
 
 class KisPart::Private
 {
 public:
-    Private(KisPart *_parent)
-        : parent(_parent)
+    Private(KisPart *_part)
+        : part(_part)
         , canvasItem(0)
         , startupWidget(0)
-        , m_componentData(KGlobal::mainComponent())
+        , actionCollection(0)
     {
     }
 
@@ -85,7 +96,7 @@ public:
         delete canvasItem;
     }
 
-    KisPart *parent;
+    KisPart *part;
 
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
@@ -93,9 +104,88 @@ public:
     QGraphicsItem *canvasItem;
     QString templateType;
     KisOpenPane *startupWidget;
-    KComponentData m_componentData;
+
+    KActionCollection *actionCollection;
+
+    void loadActions();
 
 };
+
+
+void KisPart::Private::loadActions()
+{
+    actionCollection = new KActionCollection(part, KGlobal::mainComponent());
+
+    KGlobal::mainComponent().dirs()->addResourceType("kis_actions", "data", "krita/actions/");
+    QStringList actionDefinitions = KGlobal::mainComponent().dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+
+    foreach(const QString &actionDefinition, actionDefinitions)  {
+        QDomDocument doc;
+        QFile f(actionDefinition);
+        f.open(QFile::ReadOnly);
+        doc.setContent(f.readAll());
+
+        QDomElement e = doc.documentElement(); // Actions
+        QString collection = e.attribute("name");
+
+        e = e.firstChild().toElement(); // Action
+
+        while (!e.isNull()) {
+            if (e.tagName() == "Action") {
+                QString name = e.attribute("name");
+
+                QString icon = e.attribute("icon");
+                QString text = i18n(e.attribute("text").toUtf8().constData());
+                QString whatsthis = i18n(e.attribute("whatsThis").toUtf8().constData());
+                QString toolTip = i18n(e.attribute("toolTip").toUtf8().constData());
+                QString statusTip = i18n(e.attribute("statusTip").toUtf8().constData());
+                QString iconText = i18n(e.attribute("iconText").toUtf8().constData());
+                KShortcut shortcut = KShortcut(e.attribute("shortcut"));
+                bool isCheckable = e.attribute("isCheckable") == "true" ? true : false;
+                KShortcut defaultShortcut = KShortcut(e.attribute("defaultShortcut"));
+
+                if (name.isEmpty()) {
+                    qDebug() << text << "has no name! From:" << actionDefinition;
+                }
+
+                KisAction *action = new KisAction(KIcon(icon), text);
+                action->setObjectName(name);
+                action->setWhatsThis(whatsthis);
+                action->setToolTip(toolTip);
+                action->setStatusTip(statusTip);
+                action->setIconText(iconText);
+                action->setShortcut(shortcut, KAction::ActiveShortcut);
+                action->setCheckable(isCheckable);
+                action->setShortcut(defaultShortcut, KAction::DefaultShortcut);
+
+                if (!actionCollection->action(name)) {
+                    actionCollection->addAction(name, action);
+                }
+//                else {
+//                    qDebug() << "duplicate action" << name << action << "from" << collection;
+//                    delete action;
+//                }
+            }
+            e = e.nextSiblingElement();
+        }
+        actionCollection->readSettings();
+    }
+
+    //check for colliding shortcuts
+    QMap<QKeySequence, QAction*> existingShortcuts;
+    foreach(QAction* action, actionCollection->actions()) {
+        if(action->shortcut() == QKeySequence(0)) {
+            continue;
+        }
+        if (existingShortcuts.contains(action->shortcut())) {
+            qDebug() << "action" << action->text() << "and" <<  existingShortcuts[action->shortcut()]->text() << "have the same shortcut:" << action->shortcut();
+        }
+        else {
+            existingShortcuts[action->shortcut()] = action;
+        }
+    }
+
+}
 
 KisPart* KisPart::instance()
 {
@@ -107,15 +197,13 @@ KisPart* KisPart::instance()
 KisPart::KisPart()
     : d(new Private(this))
 {
-    KisFactory2 factory;
-    setComponentData(factory.componentData());
     setTemplateType("krita_template");
 
     // Preload all the resources in the background
     Q_UNUSED(KoResourceServerProvider::instance());
     Q_UNUSED(KisResourceServerProvider::instance());
+    Q_UNUSED(KisColorManager::instance());
 
-    m_dieOnError = false;
 }
 
 KisPart::~KisPart()
@@ -135,11 +223,6 @@ KisPart::~KisPart()
     delete d;
 }
 
-KComponentData KisPart::componentData() const
-{
-    return d->m_componentData;
-}
-
 void KisPart::addDocument(KisDocument *document)
 {
     //qDebug() << "Adding document to part list" << document;
@@ -156,16 +239,14 @@ QList<QPointer<KisDocument> > KisPart::documents() const
 
 KisDocument *KisPart::createDocument() const
 {
-    KisDocument *doc = new KisDocument(this);
+    KisDocument *doc = new KisDocument();
     return doc;
 }
 
 KisAnimationDoc *KisPart::createAnimationDoc() const
 {
-    return new KisAnimationDoc(this);
+    return new KisAnimationDoc();
 }
-
-
 
 int KisPart::documentCount() const
 {
@@ -180,19 +261,29 @@ void KisPart::removeDocument(KisDocument *document)
 
 KisMainWindow *KisPart::createMainWindow()
 {
-    return new KisMainWindow(this, componentData());
+    KisMainWindow *mw = new KisMainWindow();
+    return mw;
 }
 
 KisView *KisPart::createView(KisDocument *document, KisMainWindow *parent)
 {
-    KisView *view = createViewInstance(document, parent);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    KisView *view  = new KisView(document, parent->resourceManager(), parent->actionCollection(), parent);
+
+    // XXX: this prevents a crash when opening a new document after opening a
+    // a document that has not been touched! I have no clue why, though.
+    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
+    document->setModified(true);
+    document->setModified(false);
+    QApplication::restoreOverrideCursor();
+
     addView(view, document);
+
     return view;
 }
 
 void KisPart::addView(KisView *view, KisDocument *document)
 {
-    qDebug() << "addView" << view << document;
     if (!view)
         return;
 
@@ -207,16 +298,18 @@ void KisPart::addView(KisView *view, KisDocument *document)
     connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
 
     if (d->views.size() == 1) {
-        KisApplication *app = qobject_cast<KisApplication*>(KApplication::kApplication());
-        if (0 != app) {
-            emit app->documentOpened('/'+objectName());
-        }
+        documentOpened('/'+objectName());
     }
+
+    emit sigViewAdded(view);
 }
 
 void KisPart::removeView(KisView *view)
 {
     if (!view) return;
+
+    emit sigViewRemoved(view);
+
     QPointer<KisDocument> doc = view->document();
     d->views.removeAll(view);
 
@@ -234,10 +327,7 @@ void KisPart::removeView(KisView *view)
     }
 
     if (d->views.isEmpty()) {
-        KisApplication *app = qobject_cast<KisApplication*>(KApplication::kApplication());
-        if (0 != app) {
-            emit app->documentClosed('/'+objectName());
-        }
+        emit documentClosed('/'+objectName());
     }
 }
 
@@ -354,6 +444,41 @@ void KisPart::openExistingFile(const KUrl& url)
     qApp->restoreOverrideCursor();
 }
 
+void KisPart::configureShortcuts()
+{
+    if (!d->actionCollection) {
+        d->loadActions();
+    }
+
+    KShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
+    dlg.setButtons(KDialog::Reset|KDialog::Ok|KDialog::Cancel|KDialog::User1);
+    dlg.addCollection(d->actionCollection);
+    dlg.setButtonText(KDialog::User1, i18n("Print"));
+    dlg.setButtonIcon(KDialog::User1, KIcon("document-print"));
+    dlg.configure();
+
+    foreach(KisMainWindow *mainWindow, d->mainWindows) {
+        KActionCollection *ac = mainWindow->actionCollection();
+        ac->readSettings();
+
+        // append shortcuts to tooltips if they exist
+        foreach( QAction* tempAction, ac->actions())
+        {
+            // find the shortcut pattern and delete (note the preceding space in the RegEx)
+            QString strippedTooltip = tempAction->toolTip().remove(QRegExp("\\s\\(.*\\)"));
+
+            // append shortcut if it exists for action
+            if(tempAction->shortcut() == QKeySequence(0))
+                 tempAction->setToolTip( strippedTooltip);
+            else
+                 tempAction->setToolTip( strippedTooltip + " (" + tempAction->shortcut().toString() + ")");
+
+        }
+
+
+    }
+}
+
 void KisPart::openTemplate(const KUrl& url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
@@ -404,13 +529,6 @@ void KisPart::addRecentURLToAllMainWindows(KUrl url)
 
 void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 {
-    // print error if the lcms engine is not available
-    if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
-        // need to wait 1 event since exiting here would not work.
-        m_errorMessage = i18n("The Calligra LittleCMS color management plugin is not installed. Krita will quit now.");
-        m_dieOnError = true;
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-    }
 
 #ifndef NDEBUG
     if (d->templateType.isEmpty())
@@ -418,7 +536,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 #endif
 
     if (!alwaysShow) {
-        KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+        KConfigGroup cfgGrp(KisFactory::componentData().config(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
         if (!fullTemplateName.isEmpty()) {
             KUrl url(fullTemplateName);
@@ -448,7 +566,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
     if (!d->startupWidget) {
         const QStringList mimeFilter = koApp->mimeFilter(KisImportExportManager::Import);
 
-        d->startupWidget = new KisOpenPane(0, componentData(), mimeFilter, d->templateType);
+        d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templateType);
         d->startupWidget->setWindowModality(Qt::WindowModal);
         QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
         foreach(const CustomDocumentWidgetItem & item, widgetList) {
@@ -478,7 +596,7 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
         KisPart::CustomDocumentWidgetItem item;
         item.widget = new KisCustomImageWidget(parent,
                                                w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
-                                               i18n("unnamed"));
+                                               i18n("Unnamed"));
 
         item.icon = "application-x-krita";
         widgetList << item;
@@ -494,7 +612,7 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
         KisPart::CustomDocumentWidgetItem item;
         item.widget = new KisImageFromClipboard(parent,
                                                 w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
-                                                i18n("unnamed"));
+                                                i18n("Unnamed"));
 
         item.title = i18n("Create from Clipboard");
         item.icon = "klipper";
@@ -540,40 +658,7 @@ void KisPart::startCustomDocument(KisDocument* doc)
     d->startupWidget->hide();
 }
 
-void KisPart::setComponentData(const KComponentData &componentData)
-{
-    d->m_componentData = componentData;
-
-    KGlobal::locale()->insertCatalog(componentData.catalogName());
-    // install 'instancename'data resource type
-    KGlobal::dirs()->addResourceType(QString(componentData.componentName() + "data").toUtf8(),
-                                     "data", componentData.componentName());
-}
-
-KisView *KisPart::createViewInstance(KisDocument *document, KisMainWindow *parent)
-{
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    QPointer<KisView>v = new KisView(this, document, parent->actionCollection(), parent);
-
-    // XXX: this prevents a crash when opening a new document after opening a
-    // a document that has not been touched! I have no clue why, though.
-    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
-    document->setModified(true);
-    document->setModified(false);
-    QApplication::restoreOverrideCursor();
-
-    return v;
-}
 
 
-void KisPart::showErrorAndDie()
-{
-    KMessageBox::error(0,
-                       m_errorMessage,
-                       i18n("Installation error"));
-    if (m_dieOnError) {
-        exit(10);
-    }
-}
 
 #include <KisPart.moc>

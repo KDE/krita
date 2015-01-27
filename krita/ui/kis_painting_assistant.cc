@@ -397,19 +397,19 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
     else if (d->id == "vanishing point"){
         QDomElement assistantElement = doc.createElement("assistant");
         assistantElement.setAttribute("type", "vanishing point");
-        assistantElement.setAttribute("filename", QString("vanishing_point%1.assistant").arg(count));
+        assistantElement.setAttribute("filename", QString("vanishing point%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
     else if (d->id == "infinite ruler"){
         QDomElement assistantElement = doc.createElement("assistant");
         assistantElement.setAttribute("type", "infinite ruler");
-        assistantElement.setAttribute("filename", QString("infinite_rulers%1.assistant").arg(count));
+        assistantElement.setAttribute("filename", QString("infinite ruler%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
     else if (d->id == "parallel ruler"){
         QDomElement assistantElement = doc.createElement("assistant");
         assistantElement.setAttribute("type", "parallel ruler");
-        assistantElement.setAttribute("filename", QString("parallel_ruler%1.assistant").arg(count));
+        assistantElement.setAttribute("filename", QString("parallel ruler%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
     else if (d->id == "ruler"){

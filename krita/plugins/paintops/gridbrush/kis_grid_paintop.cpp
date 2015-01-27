@@ -51,12 +51,12 @@
 #define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
 #endif
 
-KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
     , m_settings(settings)
     , m_image(image)
+    , m_node(node)
 {
-
     m_properties.fillProperties(settings);
     m_colorProperties.fillProperties(settings);
 
@@ -115,8 +115,8 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     KoColor color(painter()->paintColor());
 
     KisCrossDeviceColorPicker *colorPicker = 0;
-    if (m_settings->node()) {
-        colorPicker = new KisCrossDeviceColorPicker(m_settings->node()->paintDevice(), color);
+    if (m_node) {
+        colorPicker = new KisCrossDeviceColorPicker(m_node->paintDevice(), color);
     }
 
     qreal vertBorder = m_properties.vertBorder;

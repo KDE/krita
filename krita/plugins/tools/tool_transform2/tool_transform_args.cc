@@ -22,11 +22,16 @@
 
 #include <QDomElement>
 
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+
 #include "kis_liquify_transform_worker.h"
 #include "kis_dom_utils.h"
 
 
 ToolTransformArgs::ToolTransformArgs()
+    : m_liquifyProperties(new KisLiquifyProperties())
 {
     m_mode = FREE_TRANSFORM;
     m_transformedCenter = QPointF(0, 0);
@@ -47,9 +52,20 @@ ToolTransformArgs::ToolTransformArgs()
     m_keepAspectRatio = false;
     m_defaultPoints = true;
 
+    KConfigGroup configGroup = KGlobal::config()->group("KisToolTransform");
+    QString savedFilterId = configGroup.readEntry("filterId", "Bicubic");
+    setFilterId(savedFilterId);
 
-    setFilterId("Bicubic");
     m_editTransformPoints = false;
+}
+
+void ToolTransformArgs::setFilterId(const QString &id) {
+    m_filter = KisFilterStrategyRegistry::instance()->value(id);
+
+    if (m_filter) {
+        KConfigGroup configGroup = KGlobal::config()->group("KisToolTransform");
+        configGroup.writeEntry("filterId", id);
+    }
 }
 
 void ToolTransformArgs::init(const ToolTransformArgs& args)
@@ -75,7 +91,6 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_filter = args.m_filter;
     m_flattenedPerspectiveTransform = args.m_flattenedPerspectiveTransform;
     m_editTransformPoints = args.m_editTransformPoints;
-    m_liquifyProperties = args.m_liquifyProperties;
 
     if (args.m_liquifyWorker) {
         m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
@@ -89,6 +104,7 @@ void ToolTransformArgs::clear()
 }
 
 ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
+    : m_liquifyProperties(args.m_liquifyProperties)
 {
     init(args);
 }
@@ -96,6 +112,8 @@ ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
 ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
 {
     clear();
+
+    m_liquifyProperties = args.m_liquifyProperties;
     init(args);
 
     return *this;
@@ -124,7 +142,8 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
         m_keepAspectRatio == other.m_keepAspectRatio &&
         m_flattenedPerspectiveTransform == other.m_flattenedPerspectiveTransform &&
         m_editTransformPoints == other.m_editTransformPoints &&
-        m_liquifyProperties == other.m_liquifyProperties &&
+        (m_liquifyProperties == other.m_liquifyProperties ||
+         *m_liquifyProperties == *other.m_liquifyProperties) &&
 
         // pointer types
 
@@ -148,6 +167,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      double alpha,
                                      bool defaultPoints,
                                      const QString &filterId)
+    : m_liquifyProperties(new KisLiquifyProperties())
 {
     m_mode = mode;
     m_transformedCenter = transformedCenter;
@@ -205,12 +225,12 @@ bool ToolTransformArgs::isIdentity() const
 void ToolTransformArgs::initLiquifyTransformMode(const QRect &srcRect)
 {
     m_liquifyWorker.reset(new KisLiquifyTransformWorker(srcRect, 0, 8));
-    m_liquifyProperties.loadAndResetMode();
+    m_liquifyProperties->loadAndResetMode();
 }
 
 void ToolTransformArgs::saveLiquifyTransformMode() const
 {
-    m_liquifyProperties.saveMode();
+    m_liquifyProperties->saveMode();
 }
 
 void ToolTransformArgs::toXML(QDomElement *e) const
@@ -260,7 +280,7 @@ void ToolTransformArgs::toXML(QDomElement *e) const
         QDomElement liqEl = doc.createElement("liquify_transform");
         e->appendChild(liqEl);
 
-        m_liquifyProperties.toXML(&liqEl);
+        m_liquifyProperties->toXML(&liqEl);
         m_liquifyWorker->toXML(&liqEl);
     } else {
         KIS_ASSERT_RECOVER_RETURN(0 && "Unknown transform mode");
@@ -346,7 +366,7 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
         result =
             KisDomUtils::findOnlyElement(e, "liquify_transform", &liquifyEl);
 
-        args.m_liquifyProperties = KisLiquifyProperties::fromXML(e);
+        *args.m_liquifyProperties = KisLiquifyProperties::fromXML(e);
         args.m_liquifyWorker.reset(KisLiquifyTransformWorker::fromXML(e));
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "Unknown transform mode");

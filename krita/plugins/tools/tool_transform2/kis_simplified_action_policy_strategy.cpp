@@ -52,7 +52,21 @@ bool KisSimplifiedActionPolicyStrategy::beginPrimaryAction(KoPointerEvent *event
 
 void KisSimplifiedActionPolicyStrategy::continuePrimaryAction(KoPointerEvent *event)
 {
-    continuePrimaryAction(m_d->converter->documentToImage(event->point), false);
+    /**
+     * HACK ALERT!
+     *
+     * Here we explicitly check for Shift key pressed! The chioce of
+     * the stroke type is usually done before the tablet press, but
+     * for some actions like constrain proportions we should be able
+     * to activate it even after the strokehas been started. For now,
+     * KisShortcutMatcher does not support it, so just hardcode this
+     * special case.
+     *
+     * See bug 340496
+     */
+    const bool shiftIsActive = event->modifiers() & Qt::ShiftModifier;
+
+    continuePrimaryAction(m_d->converter->documentToImage(event->point), shiftIsActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::hoverActionCommon(KoPointerEvent *event)

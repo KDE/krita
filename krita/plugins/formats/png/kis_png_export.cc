@@ -25,7 +25,7 @@
 
 #include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <KoColorSpace.h>
 #include <KisFilterChain.h>
@@ -109,7 +109,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
             !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
         if (!m_chain->manager()->getBatchMode()) {
-            KMessageBox::error(0, i18n("Cannot export images in this colorspace or channel depth to PNG"), i18n("Krita PNG Export"));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("Cannot export images in this colorspace or channel depth to PNG"));
         }
         return KisImportExportFilter::UsageError;
     }
@@ -129,7 +129,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     if (qApp->applicationName() != "qttest") {
 
-        bool sRGB = cs->profile()->name().toLower().contains("srgb");
+        bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
 
         KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
 

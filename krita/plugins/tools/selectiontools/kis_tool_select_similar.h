@@ -21,8 +21,8 @@
 #include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
 #include <KoIcon.h>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 /**
  * Tool to select colors by pointing at a color on the image.

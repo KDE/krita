@@ -108,11 +108,18 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
     if(event->button() == Qt::RightButton){
         QModelIndex index = QListView::indexAt(event->pos());
         QMenu menu(this);
-        if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()){
-            QAction* action1 = menu.addAction(koIcon("linked2"),index.data(__CategorizedListModelBase::isLockedRole).toBool()?i18n("Unlock (Drop Locked)"):i18n("Lock"));
+        if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()) {
+
+            bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
+
+            QIcon icon = locked ? koIcon("locked") : koIcon("unlocked");
+
+            QAction* action1 = menu.addAction(icon, locked ? i18n("Unlock (restore settings from preset)") : i18n("Lock"));
+
             connect(action1, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuDropSettingsTriggered()));
-            if(index.data(__CategorizedListModelBase::isLockedRole).toBool()){
-                QAction* action2 = menu.addAction(koIcon("linked2"),i18n("Unlock (keep locked)"));
+
+            if (locked){
+                QAction* action2 = menu.addAction(icon, i18n("Unlock (keep current settings)"));
                 connect(action2, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuSaveSettingsTriggered()));
             }
             menu.exec(event->globalPos());

@@ -46,3 +46,6 @@ install( FILES  rotate_cursor.xpm
                 krita_tool_transform_recursive.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 install( FILES  kritatooltransform.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES
+    KisToolTransform.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

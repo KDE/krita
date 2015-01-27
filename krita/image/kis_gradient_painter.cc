@@ -550,7 +550,7 @@ KisGradientShapeStrategy* createPolygonShapeStrategy(const QPolygonF &polygon)
     const QRect selectionRect = polygon.boundingRect().toAlignedRect();
 
     const qreal step =
-        qMin(8.0, KritaUtils::maxDimensionPortion(selectionRect, 0.01, 3.0));
+        qMin(qreal(8.0), KritaUtils::maxDimensionPortion(selectionRect, 0.01, 3.0));
 
     return new KisCachedGradientShapeStrategy(selectionRect, step, step, strategy);
 }

@@ -368,4 +368,18 @@ void KisInputManagerTest::testMouseMoves()
     a->reset();
 }
 
+#include "../input/wintab/kis_incremental_average.h"
+
+void KisInputManagerTest::testIncrementalAverage()
+{
+    KisIncrementalAverage avg(3);
+
+    QCOMPARE(avg.pushThrough(10), 10);
+    QCOMPARE(avg.pushThrough(20), 13);
+    QCOMPARE(avg.pushThrough(30), 20);
+    QCOMPARE(avg.pushThrough(30), 26);
+    QCOMPARE(avg.pushThrough(30), 30);
+
+}
+
 QTEST_KDEMAIN(KisInputManagerTest, GUI)

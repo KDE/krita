@@ -70,7 +70,7 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
 
         QPixmap pm;
         if (!pixmapName.isEmpty()) {
-            QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", pixmapName);
+            QString fname = KisFactory::componentData().dirs()->findResource("kis_images", pixmapName);
             pm = QPixmap(fname);
         }
 

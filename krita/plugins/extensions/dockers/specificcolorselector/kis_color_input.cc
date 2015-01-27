@@ -2,14 +2,14 @@
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -219,7 +219,7 @@ void KisFloatColorInput::update()
     m_dblNumInput->setMaximum(m_maxValue);
 
     // ensure at least 3 significant digits are always shown
-    int newPrecision = 2 + qMax(0.0, std::ceil(-std::log10(m_maxValue)));
+    int newPrecision = 2 + qMax(qreal(0.0), std::ceil(-std::log10(m_maxValue)));
     if (newPrecision != m_dblNumInput->decimals()) {
         m_dblNumInput->setDecimals(newPrecision);
         m_dblNumInput->updateGeometry();

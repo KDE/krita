@@ -252,8 +252,8 @@ KisFixedPaintDeviceSP KisDabCache::tryFetchFromCache(const SavedDabParameters &p
 }
 
 qreal positiveFraction(qreal x) {
-    int unused;
-    qreal fraction;
+    qint32 unused = 0;
+    qreal fraction = 0.0;
     KisPaintOp::splitCoordinate(x, &unused, &fraction);
 
     return fraction;
@@ -267,8 +267,8 @@ KisDabCache::calculateDabRect(const QPointF &cursorPoint,
                               const KisPaintInformation& info,
                               const MirrorProperties &mirrorProperties)
 {
-    int x, y;
-    qreal subPixelX, subPixelY;
+    qint32 x = 0, y = 0;
+    qreal subPixelX = 0.0, subPixelY = 0.0;
 
     if (mirrorProperties.coordinateSystemFlipped) {
         angle = 2 * M_PI - angle;
@@ -296,13 +296,13 @@ KisDabCache::calculateDabRect(const QPointF &cursorPoint,
     if (mirrorProperties.horizontalMirror) {
         subPixelX = positiveFraction(-(cursorPoint.x() + hotSpot.x()));
         width = m_d->brush->maskWidth(scaleX, angle, subPixelX, subPixelY, info);
-        x = cursorPoint.x() + subPixelX + hotSpot.x() - width;
+        x = qRound(cursorPoint.x() + subPixelX + hotSpot.x()) - width;
     }
 
     if (mirrorProperties.verticalMirror) {
         subPixelY = positiveFraction(-(cursorPoint.y() + hotSpot.y()));
         height = m_d->brush->maskHeight(scaleY, angle, subPixelX, subPixelY, info);
-        y = cursorPoint.y() + subPixelY + hotSpot.y() - height;
+        y = qRound(cursorPoint.y() + subPixelY + hotSpot.y()) - height;
     }
 
     return DabPosition(QRect(x, y, width, height),

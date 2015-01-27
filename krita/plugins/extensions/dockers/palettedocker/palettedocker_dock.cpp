@@ -142,15 +142,17 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->paletteView->verticalHeader()->setVisible(false);
     m_wdgPaletteDock->paletteView->setItemDelegate(new PaletteDelegate());
 
+    KisConfig cfg;
+
     QPalette pal(palette());
-    pal.setColor(QPalette::Base, pal.dark().color());
+    pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
     m_wdgPaletteDock->paletteView->setAutoFillBackground(true);
     m_wdgPaletteDock->paletteView->setPalette(pal);
 
     connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
     m_wdgPaletteDock->paletteView->viewport()->installEventFilter(this);
 
-    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer(false);
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
     m_serverAdapter->connectToResourceServer();
     rServer->addObserver(this);
@@ -161,8 +163,6 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->bnColorSets->setIcon(koIcon("hi16-palette_library"));
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
-
-    KisConfig cfg;
 
     int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
     m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
@@ -210,6 +210,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
 void PaletteDockerDock::unsetCanvas()
 {
     setEnabled(false);
+    m_model->setDisplayRenderer(0);
 }
 
 void PaletteDockerDock::unsetResourceServer()

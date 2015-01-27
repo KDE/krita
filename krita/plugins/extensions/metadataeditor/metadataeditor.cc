@@ -1,15 +1,15 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -49,7 +49,7 @@ K_PLUGIN_FACTORY(metadataeditorPluginFactory, registerPlugin<metadataeditorPlugi
 K_EXPORT_PLUGIN(metadataeditorPluginFactory("krita"))
 
 metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/metadataeditor.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Edit metadata..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);

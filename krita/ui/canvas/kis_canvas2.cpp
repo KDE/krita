@@ -76,6 +76,8 @@
 #include "input/kis_input_manager.h"
 #include "kis_painting_assistants_decoration.h"
 
+#include "kis_canvas_updates_compressor.h"
+
 class KisCanvas2::KisCanvas2Private
 {
 
@@ -114,8 +116,6 @@ public:
     KisPrescaledProjectionSP prescaledProjection;
     bool vastScrolling;
 
-    KisInputManager* inputManager;
-
     KisSignalCompressor *updateSignalCompressor;
     QRect savedUpdateRect;
 
@@ -123,17 +123,17 @@ public:
 
     KisPopupPalette *popupPalette;
     KisDisplayColorConverter *displayColorConverter;
+
+    KisCanvasUpdatesCompressor projectionUpdatesCompressor;
 };
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
-    : KoCanvasBase(sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
+    : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
-
-    m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
 
     createCanvas(cfg.useOpenGL());
 
@@ -180,9 +180,21 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
         m_d->popupPalette->setParent(widget);
     }
 
-    if(m_d->canvasWidget!=0)
+    if(m_d->canvasWidget != 0)
+    {
         tmp->setDecorations(m_d->canvasWidget->decorations());
+
+        // Redundant check for the constructor case, see below
+        if(viewManager() != 0)
+            viewManager()->inputManager()->removeTrackedCanvas(this);
+    }
+
     m_d->canvasWidget = tmp;
+
+    // Either tmp was null or we are being called by KisCanvas2 constructor that is called by KisView
+    // constructor, so the view manager still doesn't exists.
+    if(m_d->canvasWidget != 0 && viewManager() != 0)
+        viewManager()->inputManager()->addTrackedCanvas(this);
 
     if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
         KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);
@@ -302,6 +314,11 @@ KoViewConverter* KisCanvas2::viewConverter() const
     return m_d->coordinatesConverter;
 }
 
+KisInputManager* KisCanvas2::globalInputManager() const
+{
+    return m_d->view->globalInputManager();
+}
+
 QWidget* KisCanvas2::canvasWidget()
 {
     return m_d->canvasWidget->widget();
@@ -359,7 +376,8 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
-    KisOpenGL::initialMakeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
+
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(),
                                                                         m_d->displayColorConverter->monitorProfile(),
                                                                         m_d->displayColorConverter->renderingIntent(),
@@ -414,7 +432,7 @@ void KisCanvas2::initializeImage()
     m_d->coordinatesConverter->setImage(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
-    connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)), SLOT(updateCanvasProjection(KisUpdateInfoSP)));
+    connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
 
@@ -492,7 +510,7 @@ void KisCanvas2::startUpdateInPatches(QRect imageRect)
     }
 }
 
-void KisCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
+void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     m_d->displayColorConverter->setDisplayFilter(displayFilter);
 
@@ -531,6 +549,11 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
     }
 }
 
+KisDisplayFilter *KisCanvas2::displayFilter() const
+{
+    return m_d->displayColorConverter->displayFilter();
+}
+
 KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
 {
     return m_d->displayColorConverter;
@@ -538,7 +561,7 @@ KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
 
 KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterface() const
 {
-    KisDisplayFilterSP displayFilter =
+    KisDisplayFilter *displayFilter =
         m_d->displayColorConverter->displayFilter();
 
     return displayFilter ?
@@ -575,62 +598,71 @@ void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
 
 void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
+    KisUpdateInfoSP info;
+
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->setChannelFlags(m_d->channelFlags);
-        KisUpdateInfoSP info = m_d->openGLImageTextures->updateCache(rc);
-
-        emit sigCanvasCacheUpdated(info);
+        info = m_d->openGLImageTextures->updateCache(rc);
 #else
         Q_ASSERT_X(0, "startUpdateCanvasProjection()", "Bad use of startUpdateCanvasProjection(). It shouldn't have happened =(");
 #endif
     } else {
         Q_ASSERT(m_d->prescaledProjection);
-        KisUpdateInfoSP info = m_d->prescaledProjection->updateCache(rc);
-
-        emit sigCanvasCacheUpdated(info);
+        info = m_d->prescaledProjection->updateCache(rc);
     }
+
+    if (m_d->projectionUpdatesCompressor.putUpdateInfo(info)) {
+        emit sigCanvasCacheUpdated();
+    }
+
 }
 
-void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
+void KisCanvas2::updateCanvasProjection()
 {
-    /**
-     * It might happen that the canvas type is switched while the
-     * update info is being stuck in the Qt's signals queue. Than a wrong
-     * type of the info may come. So just check it here.
-     */
-#ifdef HAVE_OPENGL
-    bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
-    if (isOpenGLUpdateInfo != m_d->currentCanvasIsOpenGL)
-        return;
-#endif
+    KisUpdateInfoSP info;
 
-    if (m_d->currentCanvasIsOpenGL) {
-#ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->recalculateCache(info);
+    while (info = m_d->projectionUpdatesCompressor.takeUpdateInfo()) {
 
         /**
-         * FIXME: Please not update entire canvas
-         * Implement info->dirtyViewportRect()
+         * It might happen that the canvas type is switched while the
+         * update info is being stuck in the Qt's signals queue. Than a wrong
+         * type of the info may come. So just check it here.
          */
-        updateCanvasWidgetImpl();
-#else
-        Q_ASSERT_X(0, "updateCanvasProjection()", "Bad use of updateCanvasProjection(). It shouldn't have happened =(");
+#ifdef HAVE_OPENGL
+        bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
+        if (isOpenGLUpdateInfo != m_d->currentCanvasIsOpenGL)
+            continue;
 #endif
-    }
-    else {
-        // See comment in startUpdateCanvasProjection()
-        Q_ASSERT(m_d->prescaledProjection);
 
-        m_d->prescaledProjection->recalculateCache(info);
+        if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
 
-        QRect vRect = m_d->coordinatesConverter->
+            Q_ASSERT(m_d->openGLImageTextures);
+            m_d->openGLImageTextures->recalculateCache(info);
+
+            /**
+             * FIXME: Please not update entire canvas
+             * Implement info->dirtyViewportRect()
+             */
+            updateCanvasWidgetImpl();
+#else
+            Q_ASSERT_X(0, "updateCanvasProjection()", "Bad use of updateCanvasProjection(). It shouldn't have happened =(");
+#endif
+        }
+        else {
+            // See comment in startUpdateCanvasProjection()
+            Q_ASSERT(m_d->prescaledProjection);
+
+            m_d->prescaledProjection->recalculateCache(info);
+
+            QRect vRect = m_d->coordinatesConverter->
                 viewportToWidget(info->dirtyViewportRect()).toAlignedRect();
 
-        if (!vRect.isEmpty()) {
-            updateCanvasWidgetImpl(vRect);
+            if (!vRect.isEmpty()) {
+                updateCanvasWidgetImpl(vRect);
+            }
         }
     }
 }
@@ -690,11 +722,6 @@ void KisCanvas2::disconnectCanvasObserver(QObject *object)
     m_d->view->disconnect(object);
 }
 
-void KisCanvas2::toggleTabletLogger()
-{
-    m_d->inputManager->toggleTabletLogger();
-}
-
 void KisCanvas2::notifyZoomChanged()
 {
     if (!m_d->currentCanvasIsOpenGL) {
@@ -740,11 +767,6 @@ KisImageWSP KisCanvas2::image() const
 KisImageWSP KisCanvas2::currentImage() const
 {
     return m_d->view->image();
-}
-
-KisInputManager *KisCanvas2::inputManager() const
-{
-    return m_d->inputManager;
 }
 
 void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)

@@ -25,20 +25,18 @@
 #include <QtDBus>
 #endif
 
-#include "KisPrintJob.h"
-#include "KisDocumentEntry.h"
-#include "KisDocument.h"
-#include "KisMainWindow.h"
-#include "KisAutoSaveRecoveryDialog.h"
+#include <KoPluginLoader.h>
+#include <KoShapeRegistry.h>
+
 #include <KoDpi.h>
-#include "KisPart.h"
 #include "KoGlobal.h"
 
+#include <kcrash.h>
 #include <kdeversion.h>
 #include <klocale.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -58,6 +56,7 @@
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
+#include <QDesktopWidget>
 
 #include <stdlib.h>
 
@@ -66,7 +65,23 @@
 #include <tchar.h>
 #endif
 
-#include <QDesktopWidget>
+#include "KisPrintJob.h"
+#include "KisDocumentEntry.h"
+#include "KisDocument.h"
+#include "KisMainWindow.h"
+#include "kis_factory2.h"
+#include "KisAutoSaveRecoveryDialog.h"
+#include "KisPart.h"
+
+#include "flake/kis_shape_selection.h"
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_registry.h>
+#include <generator/kis_generator_registry.h>
+#include <generator/kis_generator.h>
+#include <kis_paintop_registry.h>
+#include <metadata/kis_meta_data_io_backend.h>
+#include "kisexiv2/kis_exiv2.h"
+
 
 KisApplication* KisApplication::KoApp = 0;
 
@@ -78,11 +93,8 @@ class KisApplicationPrivate
 {
 public:
     KisApplicationPrivate()
-        : part(0)
-        , splashScreen(0)
+        : splashScreen(0)
     {}
-    QByteArray nativeMimeType;
-    KisPart *part;
     QWidget *splashScreen;
 };
 
@@ -106,7 +118,7 @@ public:
             else {
                 m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
                 QRect r(QPoint(), m_splash->size());
-                m_splash->move(QApplication::desktop()->screenGeometry().center() - r.center());
+                m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
                 foreach(QObject *o, m_splash->children()) {
                     QWidget *w = qobject_cast<QWidget*>(o);
@@ -125,18 +137,29 @@ public:
 
 
 
-KisApplication::KisApplication(const QByteArray &nativeMimeType)
-    : KApplication(initHack())
+KisApplication::KisApplication(const QString &key)
+    : QtSingleApplication(key, KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv())
     , d(new KisApplicationPrivate)
 {
     KisApplication::KoApp = this;
 
-    d->nativeMimeType = nativeMimeType;
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
 
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
+
+    setApplicationName(KGlobal::mainComponent().componentName());
+    setOrganizationDomain(KGlobal::mainComponent().aboutData()->organizationDomain());
+    setApplicationVersion(KGlobal::mainComponent().aboutData()->version());
+
+    // make sure the clipboard is created before setting the window icon (bug 209263)
+    (void) QApplication::clipboard();
+    setWindowIcon(KIcon(KGlobal::mainComponent().aboutData()->programIconName()));
+
+    KCrash::setDrKonqiEnabled(true);
+    KCrash::setApplicationName(applicationName());
+    KCrash::setApplicationPath(QCoreApplication::applicationDirPath());
 
 #ifdef Q_OS_MACX
     if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
@@ -148,27 +171,13 @@ KisApplication::KisApplication(const QByteArray &nativeMimeType)
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
+
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
         setStyle("Oxygen");
     }
 
-}
-
-// This gets called before entering KApplication::KApplication
-bool KisApplication::initHack()
-{
-    KCmdLineOptions options;
-    options.add("print", ki18n("Only print and exit"));
-    options.add("template", ki18n("Open a new document with a template"));
-    options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
-    options.add("export-pdf", ki18n("Only export to PDF and exit"));
-    options.add("export-filename <filename>", ki18n("Filename for export-pdf"));
-    options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
-    options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
-    KCmdLineArgs::addCmdLineOptions(options, ki18n("Calligra"), "calligra", "kde");
-    return true;
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -185,7 +194,7 @@ BOOL isWow64()
     //and GetProcAddress to get a pointer to the function if available.
 
     fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
-        GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+                GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
 
     if(NULL != fnIsWow64Process)
     {
@@ -203,12 +212,11 @@ bool KisApplication::start()
 #if defined(Q_OS_WIN)  || defined (Q_OS_MACX)
 #ifdef ENV32BIT
     if (isWow64()) {
-        KMessageBox::information(0,
+        QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita: Critical Error"),
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
-                                      "Please download and install the x64 build instead."),
-                                 qApp->applicationName(),
-                                 "calligra_32_on_64_warning");
+                                      "Please download and install the x64 build instead."));
 
     }
 #endif
@@ -240,21 +248,11 @@ bool KisApplication::start()
 
 #endif
 
-    if (d->splashScreen) {
-        d->splashScreen->show();
-        d->splashScreen->repaint();
-        processEvents();
-    }
-
-    ResetStarting resetStarting(d->splashScreen); // remove the splash when done
-    Q_UNUSED(resetStarting);
-
     // Get the command line arguments which we have to parse
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     int argsCount = args->count();
 
-    KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("calligra");
-    QString dpiValues = koargs->getOption("dpi");
+    QString dpiValues = args->getOption("dpi");
     if (!dpiValues.isEmpty()) {
         int sep = dpiValues.indexOf(QRegExp("[x, ]"));
         int dpiX;
@@ -273,52 +271,64 @@ bool KisApplication::start()
         }
     }
 
-    const bool doTemplate = koargs->isSet("template");
-    const bool print = koargs->isSet("print");
-
-    const bool exportAsPdf = koargs->isSet("export-pdf");
-    const QString pdfFileName = koargs->getOption("export-filename");
-
-    const QString roundtripFileName = koargs->getOption("roundtrip-filename");
-    const QString profileFileName = koargs->getOption("profile-filename");
+    const bool doTemplate = args->isSet("template");
+    const bool print = args->isSet("print");
+    const bool exportAs = args->isSet("export");
+    const bool exportAsPdf = args->isSet("export-pdf");
+    const QString exportFileName = args->getOption("export-filename");
+    const QString profileFileName = args->getOption("profile-filename");
 
 
     // only show the mainWindow when no command-line mode option is passed
-    const bool showmainWindow = (   !exportAsPdf
-                                 && roundtripFileName.isEmpty());
+    const bool showmainWindow = (   !(exportAsPdf || exportAs) );
+
+    if (d->splashScreen && showmainWindow) {
+        d->splashScreen->show();
+        d->splashScreen->repaint();
+        processEvents();
+    }
+
+    ResetStarting resetStarting(d->splashScreen); // remove the splash when done
+    Q_UNUSED(resetStarting);
+
 
     const bool batchRun = (   showmainWindow
-                           && !print
-                           && !profileFileName.isEmpty());
+                              && !print
+                              && !exportAs
+                              && !profileFileName.isEmpty());
 
-    // Figure out _which_ application we actually are
-    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(d->nativeMimeType);
-    if (entry.isEmpty()) {
-        QMessageBox::critical(0, i18n("%1: Critical Error", applicationName()), i18n("Essential application components could not be found.\n"
-                                                                                    "This might be an installation issue.\n"
-                                                                                    "Try restarting or reinstalling."));
-        return false;
+
+    // Load various global plugins
+    KoShapeRegistry* r = KoShapeRegistry::instance();
+    r->add(new KisShapeSelectionFactory());
+
+    KisFilterRegistry::instance();
+    KisGeneratorRegistry::instance();
+    KisPaintOpRegistry::instance();
+
+    // Load the krita-specific tools
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
+                                     QString::fromLatin1("[X-Krita-Version] == 28"));
+
+    // Load dockers
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
+                                     QString::fromLatin1("[X-Krita-Version] == 28"));
+
+
+    // XXX_EXIV: make the exiv io backends real plugins
+    KisExiv2::initialize();
+
+    KisMainWindow *mainWindow = 0;
+
+    if (!exportAs) {
+        // show a mainWindow asap, if we want that
+        mainWindow = KisPart::instance()->createMainWindow();
+
+        KisPart::instance()->addMainWindow(mainWindow);
+        if (showmainWindow) {
+            mainWindow->show();
+        }
     }
-
-    // Create the global document, view, window factory
-    // XXX: maybe the main() should create the factory
-    //      and pass it to KisApplication?
-    QString errorMsg;
-    d->part = entry.createKisPart(&errorMsg);
-
-    if (!d->part) {
-        if (!errorMsg.isEmpty())
-            KMessageBox::error(0, errorMsg);
-        return false;
-    }
-
-    // show a mainWindow asap, if we want that
-    KisMainWindow *mainWindow = d->part->createMainWindow();
-    d->part->addMainWindow(mainWindow);
-    if (showmainWindow) {
-        mainWindow->show();
-    }
-
     short int numberOfOpenDocuments = 0; // number of documents open
 
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
@@ -327,9 +337,6 @@ bool KisApplication::start()
     }
 
     if (argsCount > 0) {
-
-        // remove all non-filename options
-        koargs->clear();
 
         QTextStream profileoutput;
         QFile profileFile(profileFileName);
@@ -341,7 +348,7 @@ bool KisApplication::start()
         // Loop through arguments
         short int nPrinted = 0;
         for (int argNumber = 0; argNumber < argsCount; argNumber++) {
-
+            KUrl url = args->url(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
                 QStringList paths;
@@ -358,12 +365,14 @@ bool KisApplication::start()
                         paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/" + desktopName);
                     }
                     if (paths.isEmpty()) {
-                        KMessageBox::error(0, i18n("No template found for: %1", desktopName));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No template found for: %1"));
                         delete mainWindow;
+                        mainWindow = 0;
                     }
                     else if (paths.count() > 1) {
-                        KMessageBox::error(0, i18n("Too many templates found for: %1", desktopName));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Too many templates found for: %1"));
                         delete mainWindow;
+                        mainWindow = 0;
                     }
                 }
 
@@ -375,8 +384,15 @@ bool KisApplication::start()
                     QString templateName = templateInfo.readUrl();
                     KUrl templateURL;
                     templateURL.setPath(templateBase.directory() + '/' + templateName);
-                    KisDocument *doc = mainWindow->createDocumentFromUrl(templateURL);
+
+                    KisDocument *doc = KisPart::instance()->createDocument();
+
                     if (doc) {
+                        KisPart::instance()->addDocument(doc);
+                        if (mainWindow) {
+                            mainWindow->openDocumentInternal(templateURL, doc);
+                        }
+
                         doc->resetURL();
                         doc->setEmpty();
                         doc->setTitleModified();
@@ -384,37 +400,73 @@ bool KisApplication::start()
                         numberOfOpenDocuments++;
                     }
                     else {
-                        KMessageBox::error(0, i18n("Template %1 failed to load.", templateURL.prettyUrl()));
+                        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Template %1 failed to load.", templateURL.prettyUrl()));
 
                     }
                 }
                 // now try to load
             }
-            else if (mainWindow->createDocumentFromUrl(args->url(argNumber))) {
+            else {
 
-                if (print) {
-                    mainWindow->slotFilePrint();
-                    nPrinted++;
-                }
-                else if (exportAsPdf) {
-                    KisPrintJob *job = mainWindow->exportToPdf(pdfFileName);
-                    if (job)
-                        connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
-                                 SLOT(slotFileQuit()), Qt::QueuedConnection);
-                    nPrinted++;
+                KisDocument *doc = KisPart::instance()->createDocument();
+
+                if (doc) {
+
+                    if (mainWindow) {
+                        mainWindow->openDocumentInternal(url, doc);
+                    }
+
+                    if (print && mainWindow) {
+                        mainWindow->slotFilePrint();
+                        nPrinted++;
+                    }
+                    else if (exportAsPdf && mainWindow) {
+                        KisPrintJob *job = mainWindow->exportToPdf(exportFileName);
+                        if (job)
+                            connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
+                                     SLOT(slotFileQuit()), Qt::QueuedConnection);
+                        nPrinted++;
+                    }
+                    else if (exportAs) {
+
+                        KMimeType::Ptr outputMimetype;
+                        outputMimetype = KMimeType::findByUrl(exportFileName, 0, false, true /* file doesn't exist */);
+                        if (outputMimetype->name() == KMimeType::defaultMimeType()) {
+                            kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
+                            return 1;
+                        }
+
+                        QApplication::setOverrideCursor(Qt::WaitCursor);
+
+                        QString outputFormat = outputMimetype->name();
+
+                        KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
+                        KisImportExportManager manager(url.path());
+                        manager.setBatchMode(true);
+                        QByteArray mime(outputFormat.toLatin1());
+                        status = manager.exportDocument(exportFileName, mime);
+
+                        if (status != KisImportExportFilter::OK) {
+                            kError() << "Could not export " << url.path() << "to" << exportFileName << ":" << (int)status;
+                        }
+                        nPrinted++;
+                        QTimer::singleShot(0, this, SLOT(quit()));
+
+                    } else {
+                        // Normal case, success
+                        numberOfOpenDocuments++;
+                    }
+
                 } else {
-                    // Normal case, success
-                    numberOfOpenDocuments++;
+                    // .... if failed
+                    // delete doc; done by openDocument
+                    delete mainWindow;
+                    mainWindow = 0;
                 }
-
-            } else {
-                // .... if failed
-                // delete doc; done by openDocument
-                // delete mainWindow; done by ~KisDocument
             }
 
         }
-        if (print || exportAsPdf) {
+        if (print || exportAsPdf || exportAs) {
             return nPrinted > 0;
         }
     }
@@ -436,11 +488,9 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
 
 QStringList KisApplication::mimeFilter(KisImportExportManager::Direction direction) const
 {
-    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType(d->nativeMimeType);
-    KService::Ptr service = entry.service();
-    return KisImportExportManager::mimeFilter(d->nativeMimeType,
-                                       direction,
-                                       service->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList());
+    return KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                              direction,
+                                              KisDocumentEntry::extraNativeMimeTypes());
 }
 
 
@@ -464,19 +514,66 @@ KisApplication *KisApplication::koApplication()
     return KoApp;
 }
 
+void KisApplication::remoteArguments(const QByteArray &message, QObject *socket)
+{
+    Q_UNUSED(socket);
+
+    QDataStream ds(message);
+    KCmdLineArgs::loadAppArgs(ds);
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    int argsCount = args->count();
+
+    KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
+    if (!mw) {
+        mw = KisPart::instance()->mainWindows().first();
+    }
+
+    if (!mw) {
+        return;
+    }
+
+    if (argsCount > 0) {
+
+        // Loop through arguments
+        for (int argNumber = 0; argNumber < argsCount; argNumber++) {
+            KUrl url = args->url(argNumber);
+            if (url.isValid()) {
+                KisDocument *doc = KisPart::instance()->createDocument();
+
+                if (doc) {
+                    mw->openDocumentInternal(url, doc);
+
+                }
+            }
+
+        }
+    }
+
+}
+
+void KisApplication::fileOpenRequested(const QString &url)
+{
+    KisDocument *doc = KisPart::instance()->createDocument();
+    KisPart::instance()->addDocument(doc);
+    KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
+    if (mainWindow) {
+        mainWindow->openDocumentInternal(url, doc);
+    }
+}
+
 
 int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 {
-
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!
     QStringList autoSaveFiles;
 
     // get all possible autosave files in the home dir, this is for unsaved document autosave files
     // Using the extension allows to avoid relying on the mime magic when opening
-    KMimeType::Ptr mime = KMimeType::mimeType(d->nativeMimeType);
+    KMimeType::Ptr mime = KMimeType::mimeType(KIS_MIME_TYPE);
     if (!mime) {
-        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", d->nativeMimeType.constData());
+        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", KIS_MIME_TYPE);
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
     if (extension.isEmpty()) {
@@ -484,12 +581,12 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
     }
 
     QStringList filters;
-    filters << QString(".%1-%2-%3-autosave%4").arg(d->part->componentData().componentName()).arg("*").arg("*").arg(extension);
+    filters << QString(".%1-%2-%3-autosave%4").arg("krita").arg("*").arg("*").arg(extension);
 
 #ifdef Q_OS_WIN
-        QDir dir = QDir::tempPath();
+    QDir dir = QDir::tempPath();
 #else
-        QDir dir = QDir::home();
+    QDir dir = QDir::home();
 #endif
 
     // all autosave files for our application
@@ -497,14 +594,14 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
 
     QStringList pids;
     QString ourPid;
-    ourPid.setNum(kapp->applicationPid());
+    ourPid.setNum(qApp->applicationPid());
 
 #ifndef QT_NO_DBUS
     // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
     QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
 
     foreach (const QString &name, reply.value()) {
-        if (name.contains(d->part->componentData().componentName())) {
+        if (name.contains("krita")) {
             // we got another instance of ourselves running, let's get the pid
             QString pid = name.split('-').last();
             if (pid != ourPid) {
@@ -555,7 +652,13 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
         foreach(const QString &autoSaveFile, autoSaveFiles) {
             // For now create an empty document
             url.setPath(QDir::homePath() + "/" + autoSaveFile);
-            KisDocument *doc = mainWindow->createDocumentFromUrl(url);
+
+            KisDocument *doc = KisPart::instance()->createDocument();
+            KisPart::instance()->addDocument(doc);
+            if (mainWindow) {
+                mainWindow->openDocumentInternal(url, doc);
+            }
+
             if (doc) {
                 doc->resetURL();
                 doc->setModified(true);

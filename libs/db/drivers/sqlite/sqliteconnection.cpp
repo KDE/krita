@@ -45,7 +45,9 @@
 #if defined(Q_OS_WIN)
 #define SHARED_LIB_EXTENSION ".dll"
 #elif defined(Q_OS_MAC)
-#define SHARED_LIB_EXTENSION ".dylib"
+// #define SHARED_LIB_EXTENSION ".dylib"
+// shared libraries indeed have a dylib extension on OS X, but most KDE apps use .so for plugins
+#define SHARED_LIB_EXTENSION ".so"
 #else
 #define SHARED_LIB_EXTENSION ".so"
 #endif

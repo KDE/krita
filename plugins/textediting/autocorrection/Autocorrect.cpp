@@ -43,7 +43,7 @@ Autocorrect::Autocorrect()
     m_enabled->setChecked(true);
     addAction("enable_autocorrection", m_enabled);
 
-    m_singleSpaces = true;
+    m_singleSpaces = false;
     m_uppercaseFirstCharOfSentence = false;
     m_fixTwoUppercaseChars = false;
     m_autoFormatURLs = false;
@@ -530,7 +530,7 @@ void Autocorrect::advancedAutocorrect()
     }
 
     if (m_autocorrectEntries.contains(actualWord)) {
-        int pos = m_word.toLower().indexOf(trimmedWord);
+        int pos = m_word.indexOf(trimmedWord, Qt::CaseInsensitive);
         QString replacement = m_autocorrectEntries.value(actualWord);
         // Keep capitalized words capitalized.
         // (Necessary to make sure the first letters match???)

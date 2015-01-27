@@ -39,8 +39,6 @@ set(kowidgets_LIB_SRCS
     KoDualColorButton.cpp
     KoEditColorSetDialog.cpp
     KoTriangleColorSelector.cpp
-    KoUniColorChooser.cpp
-    KoXYColorSelector.cpp
     KoResourcePopupAction.cpp
     KoStrokeConfigWidget.cpp
     KoFillConfigWidget.cpp
@@ -141,8 +139,6 @@ install( FILES
     KoDualColorButton.h
     KoEditColorSetDialog.h
     KoTriangleColorSelector.h
-    KoUniColorChooser.h
-    KoXYColorSelector.h
     KoResourceItemChooser.h
     KoResourceSelector.h
     KoResourceServer.h

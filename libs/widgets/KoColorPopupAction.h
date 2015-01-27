@@ -78,6 +78,7 @@ private slots:
     void colorWasSelected(const KoColor &color, bool final);
     void colorWasEdited( const QColor &color );
     void opacityWasChanged( int opacity );
+    void slotTriggered(bool);
 
 private:
     class KoColorPopupActionPrivate;

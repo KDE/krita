@@ -34,7 +34,7 @@
 #include <QGraphicsScene>
 
 
-#include <kcomponentdata.h>
+
 
 #include <kis_debug.h>
 

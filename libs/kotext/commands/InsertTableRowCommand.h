@@ -31,7 +31,7 @@ class InsertTableRowCommand : public KUndo2Command
 {
 public:
 
-    InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bool below, int changeId = 0, KUndo2Command *parent = 0);
+    InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bool below, KUndo2Command *parent = 0);
 
     virtual void undo();
     virtual void redo();
@@ -41,7 +41,6 @@ private:
     KoTextEditor *m_textEditor;
     QTextTable *m_table;
     int m_row;
-    int m_changeId;
     bool m_below;
     KoTableRowStyle m_style;
 };

@@ -349,7 +349,11 @@ namespace Sync {
     //Get a fence sync object from OpenGL
     GLsync getSync() {
         if(k_glFenceSync) {
-            return k_glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+            GLsync sync = k_glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+            if (KisOpenGL::needsFenceWorkaround()) {
+                glClientWaitSync(sync, 0, 1);
+            }
+            return sync;
         }
         return 0;
     }

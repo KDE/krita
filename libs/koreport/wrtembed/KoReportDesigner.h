@@ -78,7 +78,7 @@ public:
     @param widget QWidget parent
     @param element Report structure XML element
     */
-    KoReportDesigner(QWidget *, QDomElement);
+    KoReportDesigner(QWidget *, const QDomElement &data);
 
     /**
     @brief Desctructor

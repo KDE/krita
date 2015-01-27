@@ -25,8 +25,8 @@
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
 #include <QPoint>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 
 

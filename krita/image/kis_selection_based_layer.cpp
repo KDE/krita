@@ -208,7 +208,6 @@ void KisSelectionBasedLayer::setX(qint32 x)
 {
     if (m_d->selection) {
         m_d->selection->setX(x);
-        resetCache();
     }
 }
 
@@ -216,7 +215,6 @@ void KisSelectionBasedLayer::setY(qint32 y)
 {
     if (m_d->selection) {
         m_d->selection->setY(y);
-        resetCache();
     }
 }
 

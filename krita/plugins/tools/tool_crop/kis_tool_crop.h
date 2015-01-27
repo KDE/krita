@@ -26,14 +26,16 @@
 
 #include <KoIcon.h>
 
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include <KShortcut>
 #include <KoToolFactoryBase.h>
 #include "kis_tool.h"
 #include "flake/kis_node_shape.h"
 #include "ui_wdg_tool_crop.h"
+#include "kis_constrained_rect.h"
+
 
 class QRect;
 struct DecorationLine;
@@ -99,18 +101,23 @@ public:
 
 
 signals:
-    void cropTypeChanged();
     void cropTypeSelectableChanged();
-    void cropXChanged();
-    void cropYChanged();
-    void cropWidthChanged();
-    void forceWidthChanged();
-    void cropHeightChanged();
-    void forceHeightChanged();
-    void ratioChanged();
-    void forceRatioChanged();
-    void decorationChanged();
-    void cropChanged(bool updateRatio);
+    void cropTypeChanged(int value);
+    void decorationChanged(int value);
+
+    void cropXChanged(int value);
+    void cropYChanged(int value);
+    void cropWidthChanged(int value);
+    void cropHeightChanged(int value);
+
+    void ratioChanged(double value);
+
+    void forceWidthChanged(bool value);
+    void forceHeightChanged(bool value);
+    void forceRatioChanged(bool value);
+
+    void canGrowChanged(bool value);
+    void isCenteredChanged(bool value);
 
 public slots:
 
@@ -137,6 +144,11 @@ public slots:
     void setAllowGrow(bool g);
     void setGrowCenter(bool g);
 
+    void slotRectChanged();
+
+private:
+    void doCanvasUpdate(const QRect &updateRect);
+
 private:
     void cancelStroke();
     QRectF boundingRect();
@@ -145,7 +157,6 @@ private:
     void paintOutlineWithHandles(QPainter& gc);
     qint32 mouseOnHandle(const QPointF currentViewPoint);
     void setMoveResizeCursor(qint32 handle);
-    void validateSelection(bool updateratio=true);
     QRectF lowerRightHandleRect(QRectF cropBorderRect);
     QRectF upperRightHandleRect(QRectF cropBorderRect);
     QRectF lowerLeftHandleRect(QRectF cropBorderRect);
@@ -157,29 +168,18 @@ private:
     void drawDecorationLine(QPainter *p, DecorationLine *decorLine, QRectF rect);
 
 private:
-    QRect m_rectCrop; // Is the coordinate of the region to crop.
-    QPoint m_center;
     QPoint m_dragStart;
 
     qint32 m_handleSize;
     bool m_haveCropSelection;
-    bool m_lastCropSelectionWasReset;
     qint32 m_mouseOnHandleType;
 
     CropToolType m_cropType;
     bool m_cropTypeSelectable;
-    int m_cropX;
-    int m_cropY;
-    int m_cropWidth;
-    bool m_forceWidth;
-    int m_cropHeight;
-    bool m_forceHeight;
-    double m_ratio;
-    double m_originalRatio;
-    bool m_forceRatio;
-    bool m_growCenter;
-    bool m_grow;
+
     int m_decoration;
+    bool m_resettingStroke;
+    QRect m_lastCanvasUpdateRect;
 
     KConfigGroup configGroup;
 
@@ -196,6 +196,9 @@ private:
         Inside = 9
     };
     QList<DecorationLine *> m_decorations;
+
+    KisConstrainedRect m_finalRect;
+    QRect m_initialDragRect;
 };
 
 class KisToolCropFactory : public KoToolFactoryBase

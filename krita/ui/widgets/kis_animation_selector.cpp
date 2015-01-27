@@ -4,15 +4,15 @@
  *  Copyright (C) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License (or at your option)
+ *  the Free Software Foundation; version 2.1 of the License, or (at your option)
  *  any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -31,7 +31,7 @@
 #include <QDesktopWidget>
 #include <QFile>
 #include <QFileDialog>
-#include <kcomponentdata.h>
+
 
 #include <kis_debug.h>
 
@@ -44,7 +44,7 @@
 #include <KoColor.h>
 #include <KoUnit.h>
 #include <KoColorModelStandardIds.h>
-#include <KMessageBox>
+#include <QMessageBox>
 
 #include <kis_fill_painter.h>
 #include <kis_image.h>
@@ -143,14 +143,14 @@ void KisAnimationSelector::selectFile()
 void KisAnimationSelector::openAnimation()
 {
     if(!txtOpenFile->text().length()) {
-        KMessageBox::error(0, "No file name specified.", "No file name specified.");
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("No file name specified."));
         return;
     }
 
     KisAnimationStore* store = new KisAnimationStore(txtOpenFile->text());
 
     if(!store->hasFile("maindoc.xml")) {
-        KMessageBox::error(0, "This file does not appear to be a valid animation file", "Not a valid animation file");
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("This file does not appear to be a valid animation file"));
         return;
     }
 

@@ -58,7 +58,7 @@ public:
      * Create and return a paintop based on the given preset. A preset defines
      * a paintop, a settings object and possible a brush tip.
      */
-    KisPaintOp* paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageWSP image) const;
+    KisPaintOp* paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisNodeSP node, KisImageSP image) const;
 
     /**
      * Create and return an (abstracted) configuration widget
@@ -99,7 +99,7 @@ private:
     /**
      * Return a newly created paintop. You are responsible for deleting
      */
-    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0) const;
+    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image) const;
 
 };
 

@@ -65,7 +65,7 @@ void KoPADocumentModel::update()
     emit layoutAboutToBeChanged();
     emit layoutChanged();
     if (m_document) {
-        dataChanged(createIndex(0, 0), createIndex(m_document->pageCount() - 1, columnCount() - 1));
+        dataChanged(index(0, 0), index(m_document->pageCount() - 1, columnCount() - 1));
     }
 }
 

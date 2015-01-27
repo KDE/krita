@@ -24,9 +24,9 @@
 #include <QPointer>
 
 #include "KisView.h"
+#include "kis_action.h"
 
 class KisViewManager;
-class KToggleAction;
 class KActionCollection;
 class KisPaintingAssistantsDecoration;
 
@@ -39,7 +39,7 @@ public:
     KisPaintingAssistantsManager(KisViewManager* view);
     virtual ~KisPaintingAssistantsManager();
 
-    void setup(KActionCollection* collection);
+    void setup(KisActionManager* actionManager);
 
     void setView(QPointer<KisView> imageView);
 
@@ -50,8 +50,8 @@ private:
     KisPaintingAssistantsDecoration* decoration();
     
     QPointer<KisView> m_imageView;
-    KToggleAction* m_toggleAssistant;
-    KToggleAction* m_togglePreview;
+    KisAction* m_toggleAssistant;
+    KisAction* m_togglePreview;
 };
 
 #endif // KIS_PAINTING_ASSISTANTS_MANAGER_H

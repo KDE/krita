@@ -181,6 +181,7 @@ enum RecordType {
     EMR_SETBKCOLOR             = 0x00000019,
     EMR_MOVETOEX               = 0x0000001B,
     EMR_SETMETARGN             = 0x0000001C,
+    EMR_EXCLUDECLIPRECT        = 0x0000001D,
     EMR_INTERSECTCLIPRECT      = 0x0000001E,
     EMR_SAVEDC                 = 0x00000021,
     EMR_RESTOREDC              = 0x00000022,
@@ -527,6 +528,13 @@ bool Parser::readRecord( QDataStream &stream )
             mOutput->setMetaRgn();
         }
         break;
+    case EMR_EXCLUDECLIPRECT:
+    {
+        QRect clip;
+        stream >> clip;
+        //kDebug(33100) << "EMR_EXCLUDECLIPRECT" << clip;
+    }
+    break;
     case EMR_INTERSECTCLIPRECT:
     {
         QRect clip;

@@ -193,6 +193,9 @@ void KisDatamanagerBenchmark::benchmarkMemCpy()
             memcpy(dst, src , imgSize);
 #endif
     }
+
+    delete[] src;
+    delete[] dst;
 }
 
 

@@ -22,7 +22,7 @@
 
 #include <QtTest>
 
-class KoRgbColorSpaceTester : public QObject
+class KoRgbU8ColorSpaceTester : public QObject
 {
     Q_OBJECT
     void testCompositeOps();

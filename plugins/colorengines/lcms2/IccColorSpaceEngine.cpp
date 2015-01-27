@@ -5,7 +5,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -47,8 +47,8 @@ public:
         if (srcCs->colorDepthId() == Integer8BitsColorDepthID
                 || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
 
-            if ((srcProfile->name().toLower().contains("linear") ||
-                    dstProfile->name().toLower().contains("linear")) &&
+            if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
+                    dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
                     !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization) ) {
                 conversionFlags |= KoColorConversionTransformation::NoOptimization;
             }

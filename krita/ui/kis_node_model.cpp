@@ -21,7 +21,6 @@
 #include <iostream>
 
 #include <QMimeData>
-#include <QDataStream>
 #include <QBuffer>
 
 #include <KoColorSpaceConstants.h>
@@ -59,7 +58,9 @@ public:
                 indexConverter(0),
                 dummiesFacade(0),
                 needFinishRemoveRows(false),
-                needFinishInsertRows(false) {}
+                needFinishInsertRows(false),
+                parentOfRemovedNode(0)
+    {}
 
     KisImageWSP image;
     KisShapeController *shapeController;
@@ -72,6 +73,8 @@ public:
     KisDummiesFacadeBase *dummiesFacade;
     bool needFinishRemoveRows;
     bool needFinishInsertRows;
+
+    KisNodeDummy* parentOfRemovedNode;
 };
 
 KisNodeModel::KisNodeModel(QObject * parent)
@@ -292,16 +295,16 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();
 
-    KisNodeDummy *parentDummy = dummy->parent();
+    m_d->parentOfRemovedNode = dummy->parent();
 
     QModelIndex parentIndex;
-    if(parentDummy) {
-        parentIndex = m_d->indexConverter->indexFromDummy(parentDummy);
+    if (m_d->parentOfRemovedNode) {
+        parentIndex = m_d->indexConverter->indexFromDummy(m_d->parentOfRemovedNode);
     }
 
     QModelIndex itemIndex = m_d->indexConverter->indexFromDummy(dummy);
 
-    if(itemIndex.isValid()) {
+    if (itemIndex.isValid()) {
         connectDummy(dummy, false);
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
@@ -413,9 +416,28 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(role == ActiveRole || role == AlternateActiveRole) {
-        KisNodeSP activatedNode =
-            index.isValid() && value.toBool() ? nodeFromIndex(index) : 0;
+
+    if (role == ActiveRole || role == AlternateActiveRole) {
+
+        QModelIndex parentIndex;
+        if (!index.isValid() && m_d->parentOfRemovedNode && m_d->dummiesFacade && m_d->indexConverter) {
+            parentIndex = m_d->indexConverter->indexFromDummy(m_d->parentOfRemovedNode);
+            m_d->parentOfRemovedNode = 0;
+        }
+
+        KisNodeSP activatedNode;
+
+        if (index.isValid() && value.toBool()) {
+            activatedNode = nodeFromIndex(index);
+        }
+        else if (parentIndex.isValid() && value.toBool()) {
+            activatedNode = nodeFromIndex(parentIndex);
+        }
+        else {
+            activatedNode = 0;
+        }
+
+
         emit nodeActivated(activatedNode);
 
         if (role == AlternateActiveRole) {

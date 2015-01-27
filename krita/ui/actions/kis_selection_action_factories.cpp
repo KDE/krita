@@ -252,6 +252,9 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
         KisNodeSP node = view->activeNode();
         if (!node) return;
 
+        KisSelectionSP selection = view->selection();
+        if (selection.isNull()) return;
+
         image->barrierLock();
         KisPaintDeviceSP dev = node->paintDevice();
         if (!dev) {
@@ -270,14 +273,30 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
                 KisSelectionSP m_sel;
 
                 KUndo2Command* paint() {
+                    KisSelectionSP cutSelection = m_sel;
+                    QRect originalRect = cutSelection->selectedExactRect();
+                    static const int preciseSelectionThreshold = 16;
+
+                    if (originalRect.width() > preciseSelectionThreshold ||
+                        originalRect.height() > preciseSelectionThreshold) {
+
+                        cutSelection = new KisSelection(*m_sel);
+                        delete cutSelection->flatten();
+
+                        KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
+
+                        QRect processingRect = filter->changeRect(originalRect);
+                        filter->process(cutSelection->pixelSelection(), processingRect);
+                    }
+
                     KisTransaction transaction(m_node->paintDevice());
-                    m_node->paintDevice()->clearSelection(m_sel);
-                    m_node->setDirty(m_sel->selectedRect());
+                    m_node->paintDevice()->clearSelection(cutSelection);
+                    m_node->setDirty(cutSelection->selectedRect());
                     return transaction.endAndTake();
                 }
             };
 
-            command = new ClearSelection(node, view->selection());
+            command = new ClearSelection(node, selection);
         }
 
         KUndo2MagicString actionName = willCut ?
@@ -333,9 +352,9 @@ void KisPasteActionFactory::run(KisViewManager *view)
     }
 }
 
-void KisPasteNewActionFactory::run(KisViewManager *view)
+void KisPasteNewActionFactory::run(KisViewManager *viewManager)
 {
-    Q_UNUSED(view);
+    Q_UNUSED(viewManager);
 
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
     if (!clip) return;
@@ -344,6 +363,7 @@ void KisPasteNewActionFactory::run(KisViewManager *view)
     if (rect.isEmpty()) return;
 
     KisDocument *doc = KisPart::instance()->createDocument();
+    KisPart::instance()->addDocument(doc);
 
     KisImageSP image = new KisImage(doc->createUndoStore(),
                                     rect.width(),
@@ -362,9 +382,9 @@ void KisPasteNewActionFactory::run(KisViewManager *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KisMainWindow *win = KisPart::instance()->createMainWindow();
-    win->show();
-    win->addView(KisPart::instance()->createView(doc, win));
+    KisMainWindow *win = viewManager->mainWindow();
+    KisView *view = KisPart::instance()->createView(doc, win);
+    win->addView(view);
 }
 
 void KisInvertSelectionOperaton::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)

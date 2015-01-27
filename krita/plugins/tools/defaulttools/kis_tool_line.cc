@@ -59,13 +59,13 @@ const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
     : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
       m_showOutline(false),
+      m_strokeIsRunning(false),
       m_infoBuilder(new KisConverterPaintingInformationBuilder(getCoordinatesConverter(canvas))),
       m_helper(new KisToolLineHelper(m_infoBuilder.data(), kundo2_i18n("Draw Line"))),
       m_strokeUpdateCompressor(500, KisSignalCompressor::FIRST_ACTIVE),
       m_longStrokeUpdateCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
 {
     setObjectName("tool_line");
-    currentImage() = 0;
 
     setSupportOutline(true);
 
@@ -121,8 +121,15 @@ void KisToolLine::setShowOutline(bool value)
     configGroup.writeEntry("showOutline", value);
 }
 
+void KisToolLine::requestStrokeCancellation()
+{
+    cancelStroke();
+}
 
-
+void KisToolLine::requestStrokeEnd()
+{
+    endStroke();
+}
 
 void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 {
@@ -152,6 +159,8 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
     m_startPoint = convertToPixelCoord(event);
     m_endPoint = m_startPoint;
     m_lastUpdatedPoint = m_startPoint;
+
+    m_strokeIsRunning = true;
 }
 
 void KisToolLine::updateStroke()
@@ -166,6 +175,7 @@ void KisToolLine::updateStroke()
 void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+    if (!m_strokeIsRunning) return;
 
     // First ensure the old temp line is deleted
     updatePreview();
@@ -205,11 +215,18 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 
     updatePreview();
 
-    if (m_startPoint == m_endPoint)
-        return;
+    endStroke();
+}
 
+void KisToolLine::endStroke()
+{
     NodePaintAbility nodeAbility = nodePaintAbility();
-    if (nodeAbility == NONE) {
+
+    if (!m_strokeIsRunning ||
+        (nodeAbility == PAINT && !m_helper->isRunning())||
+        m_startPoint == m_endPoint ||
+        nodeAbility == NONE) {
+
         return;
     }
 
@@ -233,6 +250,21 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
         KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
         canvas()->addCommand(cmd);
     }
+
+    m_strokeIsRunning = false;
+    m_endPoint = m_startPoint;
+}
+
+void KisToolLine::cancelStroke()
+{
+    if (!m_strokeIsRunning) return;
+    if (m_startPoint == m_endPoint) return;
+
+    m_helper->cancel();
+
+
+    m_strokeIsRunning = false;
+    m_endPoint = m_startPoint;
 }
 
 QPointF KisToolLine::straightLine(QPointF point)

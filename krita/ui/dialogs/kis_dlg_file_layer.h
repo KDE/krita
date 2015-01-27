@@ -52,16 +52,12 @@ public:
     KisFileLayer::ScalingMethod scaleToImageResolution() const;
 
 protected slots:
-
     void slotNameChanged(const QString &);
-    void slotSelectFile();
 
 private:
 
     Ui_WdgDlgFileLayer dlgWidget;
     QString m_basePath;
-    bool m_customName;
-    bool m_freezeName;
 };
 
 #endif

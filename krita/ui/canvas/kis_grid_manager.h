@@ -26,12 +26,12 @@
 
 #include "kis_types.h"
 #include <krita_export.h>
+#include "kis_action_manager.h"
+#include "kis_action.h"
 
 class KisGridDecoration;
 class KisViewManager;
-class KActionCollection;
-class KToggleAction;
-class KAction;
+
 
 class KRITAUI_EXPORT KisGridManager : public QObject
 {
@@ -41,7 +41,7 @@ public:
     virtual ~KisGridManager();
 public:
 
-    void setup(KActionCollection * collection);
+    void setup(KisActionManager * actionManager);
 
     void setView(QPointer<KisView>imageView);
 
@@ -68,19 +68,19 @@ private slots:
 private:
     void setFastConfig(int size);
 
-    KToggleAction *m_toggleGrid;
-    KToggleAction* m_toggleSnapToGrid;
-    KAction* m_gridFastConfig1x1;
-    KAction* m_gridFastConfig2x2;
-    KAction* m_gridFastConfig5x5;
-    KAction* m_gridFastConfig10x10;
-    KAction* m_gridFastConfig20x20;
-    KAction* m_gridFastConfig40x40;
-    KAction* m_gridFastConfig4x4;
-    KAction* m_gridFastConfig8x8;
-    KAction* m_gridFastConfig16x16;
-    KAction* m_gridFastConfig32x32;
-    KAction* m_gridFastConfig64x64;
+    KisAction *m_toggleGrid;
+    KisAction* m_toggleSnapToGrid;
+    KisAction* m_gridFastConfig1x1;
+    KisAction* m_gridFastConfig2x2;
+    KisAction* m_gridFastConfig5x5;
+    KisAction* m_gridFastConfig10x10;
+    KisAction* m_gridFastConfig20x20;
+    KisAction* m_gridFastConfig40x40;
+    KisAction* m_gridFastConfig4x4;
+    KisAction* m_gridFastConfig8x8;
+    KisAction* m_gridFastConfig16x16;
+    KisAction* m_gridFastConfig32x32;
+    KisAction* m_gridFastConfig64x64;
 
     QPointer<KisView> m_imageView;
     KisGridDecoration* m_gridDecoration;

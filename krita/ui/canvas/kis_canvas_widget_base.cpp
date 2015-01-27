@@ -78,7 +78,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     gc.save();
     if (!m_d->canvas) {
         dbgFile<<"canvas doesn't exist, in canvas widget base!";
-        }
+    }
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
     gc.setRenderHint(QPainter::Antialiasing);
@@ -145,8 +145,8 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     // then paint the guides
     m_d->canvas->viewManager()->document()->guidesData().paintGuides(gc,
-                                                              *m_d->viewConverter,
-                                                              updateWidgetRect);
+                                                                     *m_d->viewConverter,
+                                                                     updateWidgetRect);
 
     gc.restore();
 }
@@ -227,7 +227,7 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy() const
     return m_d->toolProxy;
 }
 
-void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilterSP /*displayFilter*/)
+void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilter */*displayFilter*/)
 {
 }
 

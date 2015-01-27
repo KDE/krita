@@ -50,6 +50,10 @@ public:
         m_image = image;
     }
 
+    virtual void setNode(KisNodeWSP node) {
+        m_node = node;
+    }
+
     /**
      * @see KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
      */
@@ -83,6 +87,7 @@ public:
 
 protected:
     KisImageWSP m_image;
+    KisNodeWSP m_node;
 };
 
 #endif

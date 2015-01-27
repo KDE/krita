@@ -115,7 +115,7 @@ void KisShapeLayerCanvas::repaint()
 
     if (r.isEmpty()) return;
 
-    r.intersect(m_parentLayer->image()->bounds());
+    r = r.intersected(m_parentLayer->image()->bounds());
     QImage image(r.width(), r.height(), QImage::Format_ARGB32);
     image.fill(0);
     QPainter p(&image);

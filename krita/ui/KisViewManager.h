@@ -59,7 +59,7 @@ class KisZoomManager;
 class KisPaintopBox;
 class KisCanvasController;
 class KisActionManager;
-
+class KisInputManager;
 
 /**
  * Krita view class
@@ -129,16 +129,16 @@ public:  // Krita specific interfaces
     KisPaintopBox* paintOpBox() const;
 
     /// create a new progress updater
-    KoProgressUpdater* createProgressUpdater(KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
+    KoProgressUpdater *createProgressUpdater(KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
 
     /// The selection manager handles everything action related to
     /// selections.
-    KisSelectionManager * selectionManager();
+    KisSelectionManager *selectionManager();
 
     /// The node manager handles everything about nodes
-    KisNodeManager * nodeManager() const;
+    KisNodeManager *nodeManager() const;
 
-    KisActionManager* actionManager() const;
+    KisActionManager *actionManager() const;
 
     /**
      * Convenience method to get at the active node, which may be
@@ -153,11 +153,14 @@ public:  // Krita specific interfaces
     KisPaintDeviceSP activeDevice();
 
     /// The filtermanager handles everything action-related to filters
-    KisFilterManager * filterManager();
+    KisFilterManager *filterManager();
 
     /// The image manager handles everything action-related to the
     /// current image
-    KisImageManager * imageManager();
+    KisImageManager *imageManager();
+
+    /// Filters events and sends them to canvas actions
+    KisInputManager *inputManager() const;
 
     /// Convenience method to get at the active selection (the
     /// selection of the current layer, or, if that does not exist,
@@ -168,9 +171,11 @@ public:  // Krita specific interfaces
     bool selectionEditable();
 
     /// The undo adapter is used to add commands to the undo stack
-    KisUndoAdapter * undoAdapter();
+    KisUndoAdapter *undoAdapter();
 
-    KisDocument* document() const;
+    KisDocument *document() const;
+
+    int viewCount() const;
 
 public:
 
@@ -210,6 +215,12 @@ public slots:
     /// gui elements
     void updateGUI();
 
+    /// Update the style of all the icons
+    void updateIcons();
+
+    void slotViewAdded(KisView *view);
+    void slotViewRemoved(KisView *view);
+
 signals:
 
     void floatingMessageRequested(QString message, QString iconName);
@@ -224,14 +235,12 @@ private slots:
     void showStatusBar(bool toggled);
     void toggleTabletLogger();
     void openResourcesDirectory();
-    void updateIcons();
     void makeStatusBarVisible();
     void guiUpdateTimeout();
 
 private:
     void createActions();
     void createManagers();
-    void loadPlugins();
 
     /// The zoommanager handles everything action-related to zooming
     KisZoomManager * zoomManager();

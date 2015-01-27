@@ -56,7 +56,7 @@ public: // KisAbstractCanvasWidget
 
 
     /// set the specified display filter on the canvas
-    virtual void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    virtual void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Draw the specified decorations on the view.

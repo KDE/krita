@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -42,6 +42,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QTemporaryFile>
+#include <QDesktopWidget>
 
 KisMimeData::KisMimeData(QList<KisNodeSP> nodes)
     : QMimeData()
@@ -114,7 +115,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         doc->image()->refreshGraph();
         doc->image()->waitForDone();
 
-        return doc->image()->projection()->convertToQImage(cfg.displayProfile(),
+        return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
                                                            KoColorConversionTransformation::InternalRenderingIntent,
                                                            KoColorConversionTransformation::InternalConversionFlags);
     }
@@ -176,10 +177,7 @@ void KisMimeData::initializeExternalNode(KisNodeSP &node,
     }
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
     if (shapeLayer) {
-        KoShapeContainer * parentContainer =
-                dynamic_cast<KoShapeContainer*>(shapeController->shapeForNode(image->root()));
-
-        KisShapeLayer *shapeLayer2 = new KisShapeLayer(parentContainer, shapeController, image, node->name(), node->opacity());
+        KisShapeLayer *shapeLayer2 = new KisShapeLayer(shapeController, image, node->name(), node->opacity());
         QList<KoShape *> shapes = shapeLayer->shapes();
         shapeLayer->removeAllShapes();
         foreach(KoShape *shape, shapes) {

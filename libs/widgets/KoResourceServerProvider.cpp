@@ -8,7 +8,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2.1 of the License, or (at your option) any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -184,7 +184,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->patternThread = new KoResourceLoaderThread(d->patternServer);
     d->patternThread->start();
-    if (qApp->applicationName().toLower().contains("test")) {
+    if (qApp->applicationName().contains(QLatin1String("test"), Qt::CaseInsensitive)) {
         d->patternThread->wait();
     }
 
@@ -224,21 +224,21 @@ KoResourceServerProvider* KoResourceServerProvider::instance()
     return s_instance;
 }
 
-KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer()
+KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer(bool block)
 {
-    d->patternThread->barrier();
+    if (block) d->patternThread->barrier();
     return d->patternServer;
 }
 
-KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer()
+KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer(bool block)
 {
-    d->patternThread->barrier();
+    if (block) d->patternThread->barrier();
     return d->gradientServer;
 }
 
-KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
+KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer(bool block)
 {
-    d->patternThread->barrier();
+    if (block) d->patternThread->barrier();
     return d->paletteServer;
 }
 

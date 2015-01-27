@@ -92,19 +92,19 @@ QSize SqueezedComboBox::sizeHint() const
                                      QSize(maxW, maxH), this).expandedTo(QApplication::globalStrut());
 }
 
-void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index)
+void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index, QVariant userData)
 {
     m_originalItems[index] = newItem;
-    QComboBox::insertItem(index, squeezeText(newItem));
+    QComboBox::insertItem(index, squeezeText(newItem), userData);
 
     // if this is the first item, set the tooltip.
     if (index == 0)
         slotUpdateToolTip(0);
 }
 
-void SqueezedComboBox::addSqueezedItem(const QString& newItem)
+void SqueezedComboBox::addSqueezedItem(const QString& newItem, QVariant userData)
 {
-    insertSqueezedItem(newItem, count());
+    insertSqueezedItem(newItem, count(), userData);
 }
 
 void SqueezedComboBox::setCurrent(const QString& itemText)

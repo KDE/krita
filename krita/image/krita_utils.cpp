@@ -128,7 +128,7 @@ namespace KritaUtils
         QRect totalRect = path.boundingRect().toAlignedRect();
 
         // adjust the rect for antialiasing to work
-        totalRect.adjusted(-1,-1,1,1);
+        totalRect = totalRect.adjusted(-1,-1,1,1);
 
         const int step = 64;
         const int right = totalRect.x() + totalRect.width();

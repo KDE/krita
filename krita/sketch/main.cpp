@@ -30,7 +30,7 @@
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kcomponentdata.h>
+
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
@@ -90,7 +90,7 @@ int main( int argc, char** argv )
 #ifdef Q_OS_WIN
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
-    //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
+    //QMessageBox::information(0, i18nc("@title:window", "Krita sketch", "KDEHOME: " + env.value("KDEHOME"));
     if (!env.contains("KDEHOME") ) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }

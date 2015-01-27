@@ -37,7 +37,7 @@
 #include <kis_fixed_paint_device.h>
 
 
-KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisImageWSP image):
+KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
     KisBrushBasedPaintOp(settings, painter),
     m_firstRun(true), m_image(image),
     m_tempDev(painter->device()->createCompositionSourceDevice()),
@@ -48,6 +48,8 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_colorRateOption("ColorRate"),
     m_smudgeRadiusOption("SmudgeRadius")
 {
+    Q_UNUSED(node);
+
     Q_ASSERT(settings);
     Q_ASSERT(painter);
 
@@ -207,11 +209,12 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
             QPoint pt = (srcDabRect.topLeft() + hotSpot).toPoint();
 
         if(m_smudgeRadiusOption.isChecked()) {
-            m_smudgeRadiusOption.apply(*m_smudgePainter,info,m_brush->width(),pt.x(),pt.y(),painter()->device());
+            m_smudgeRadiusOption.apply(*m_smudgePainter, info,  m_dstDabRect.width(), pt.x(), pt.y(), painter()->device());
             KoColor color2 =  m_smudgePainter->paintColor();
-            m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(),color2);
+            m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color2);
 
-        } else {
+        } 
+        else {
             KoColor color = painter()->paintColor();
 
 

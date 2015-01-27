@@ -3,7 +3,6 @@ set(kritadeformpaintop_PART_SRCS
     deform_paintop_plugin.cpp
     kis_deform_paintop.cpp
     kis_deform_paintop_settings.cpp
-    kis_deform_paintop_factory.cpp
     kis_deform_option.cpp
     kis_deform_paintop_settings_widget.cpp
     )

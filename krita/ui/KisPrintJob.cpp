@@ -66,9 +66,6 @@ bool KisPrintJob::canPrint()
 
 void KisPrintJob::startPrinting(RemovePolicy removePolicy)
 {
-    m_printer.setPageMargins(0.0, 0.0, 0.0, 0.0, QPrinter::Point);
-    m_printer.setPaperSize(QSizeF(m_image->width()/ (72.0 * m_image->xRes()), m_image->height()/ (72.0 * m_image->yRes())), QPrinter::Inch);
-
     QPainter gc(&m_printer);
 
     if (!m_image) return;

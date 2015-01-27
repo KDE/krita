@@ -49,15 +49,15 @@ KisColorOption::KisColorOption()
     // ui
     connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), m_options->hsvWidget, SLOT(setEnabled(bool)));
     // settings
-    connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->hueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->saturationSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->valueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->sampleInputCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->colorPerParticleCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->fillBackgroundCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->mixBgColorCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->hueSlider, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->saturationSlider, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->valueSlider, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->sampleInputCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->colorPerParticleCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->fillBackgroundCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->mixBgColorCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }

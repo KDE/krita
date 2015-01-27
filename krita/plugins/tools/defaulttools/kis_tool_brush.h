@@ -29,8 +29,8 @@
 #include <KoIcon.h>
 #include <kshortcut.h>
 
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class QCheckBox;
 class QComboBox;

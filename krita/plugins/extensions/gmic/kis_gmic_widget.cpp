@@ -24,7 +24,7 @@
 #include <QLineEdit>
 #include <QApplication>
 #include <kis_debug.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <QMetaType>
 #include <klocalizedstring.h>
@@ -164,11 +164,10 @@ void KisGmicWidget::slotSelectedFilterChanged(const QItemSelection & /*newSelect
 
 void KisGmicWidget::slotCancelClicked()
 {
-    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
+    if (m_onCanvasPreviewRequested)
     {
         emit sigCancelOnCanvasPreview();
     }
-
     close();
 }
 
@@ -192,7 +191,9 @@ void KisGmicWidget::slotOkClicked()
         }
     }
 
-    close();
+
+    emit sigRequestFinishAndClose();
+    hide();
 }
 
  void KisGmicWidget::closeEvent(QCloseEvent *event)
@@ -261,7 +262,7 @@ void KisGmicWidget::finishUpdate()
     QString msg = i18nc("@info",
                         "Update filters done. "
                         "Restart G'MIC dialog to finish updating! ");
-    KMessageBox::information(this, msg, i18nc("@title:window", "Updated"));
+    QMessageBox::information(this, i18nc("@title:window", "Updated"), msg);
 }
 
 void KisGmicWidget::slotPreviewChanged(bool enabling)
@@ -411,5 +412,5 @@ KisFilterPreviewWidget * KisGmicWidget::previewWidget()
 
 void KisGmicWidget::slotNotImplemented()
 {
-    KMessageBox::sorry(this, i18n("Sorry, support not implemented yet."), i18n("Krita"));
+    QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Sorry, support not implemented yet."));
 }

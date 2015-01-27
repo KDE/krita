@@ -34,7 +34,7 @@
      <item row="1" column="3">
       <widget class="KoGroupButton" name="intersect">
        <property name="toolTip">
-        <string>Intersect (Shortcut T)</string>
+        <string>Intersect</string>
        </property>
        <property name="text">
         <string>...</string>

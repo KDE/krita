@@ -34,7 +34,7 @@ class KoCanvasBase::Private
 public:
     Private() : shapeController(0),
         resourceManager(0),
-        sharedResourceManager(false),
+        isResourceManagerShared(false),
         controller(0),
         snapGuide(0)
     {
@@ -42,22 +42,25 @@ public:
 
     ~Private() {
         delete shapeController;
-        if (!sharedResourceManager) {
+        if (!isResourceManagerShared) {
             delete resourceManager;
         }
         delete snapGuide;
     }
     KoShapeController *shapeController;
     KoCanvasResourceManager *resourceManager;
-    bool sharedResourceManager;
+    bool isResourceManagerShared;
     KoCanvasController *controller;
     KoSnapGuide *snapGuide;
 };
 
-KoCanvasBase::KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument)
+KoCanvasBase::KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument, KoCanvasResourceManager *sharedResourceManager)
         : d(new Private())
 {
-    d->resourceManager = new KoCanvasResourceManager();
+    d->resourceManager = sharedResourceManager ?
+        sharedResourceManager : new KoCanvasResourceManager();
+    d->isResourceManagerShared = sharedResourceManager;
+
     d->shapeController = new KoShapeController(this, shapeBasedDocument);
     d->snapGuide = new KoSnapGuide(this);
 }
@@ -65,15 +68,6 @@ KoCanvasBase::KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument)
 KoCanvasBase::~KoCanvasBase()
 {
     delete d;
-}
-
-void KoCanvasBase::setSharedResourceManager(KoCanvasResourceManager *resourceManager)
-{
-    if (d->resourceManager != resourceManager) {
-        delete d->resourceManager;
-    }
-    d->sharedResourceManager = true;
-    d->resourceManager = resourceManager;
 }
 
 QPointF KoCanvasBase::viewToDocument(const QPointF &viewPoint) const

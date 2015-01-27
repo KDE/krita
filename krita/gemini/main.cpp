@@ -25,13 +25,12 @@
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
-#include <QMessageBox>
 #include <QSplashScreen>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kcomponentdata.h>
+
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include "data/splash/splash_screen.xpm"
@@ -106,7 +105,6 @@ int main( int argc, char** argv )
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
-    //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
     if (!env.contains("KDEHOME") ) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }

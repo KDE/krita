@@ -52,6 +52,7 @@ signals:
     void sigCancelOnCanvasPreview();
     void sigPreviewActiveLayer();
     void sigClose();
+    void sigRequestFinishAndClose();
 
 private slots:
     void slotSelectedFilterChanged(const QItemSelection & newSelection, const QItemSelection & oldSelection);
@@ -88,6 +89,7 @@ private:
     int m_filterOptionsRow;
     int m_filterOptionsColumn;
 
+    // flag which says if the image was filtered at least once
     bool m_filterApplied;
     bool m_onCanvasPreviewActivated;
     bool m_onCanvasPreviewRequested;

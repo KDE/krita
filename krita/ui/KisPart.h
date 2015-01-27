@@ -20,13 +20,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPART_H
-#define KOPART_H
+#ifndef KIS_PART_H
+#define KIS_PART_H
 
 #include <QList>
 #include <QPointer>
 
-#include <kcomponentdata.h>
+
 #include <kurl.h>
 #include <kxmlguiclient.h>
 
@@ -82,12 +82,6 @@ public:
      * delete the attached widget as returned by widget().
      */
     ~KisPart();
-
-    /**
-     * @return The componentData ( KComponentData ) for this GUI client. You set the componentdata
-     * in your subclass: setComponentData(AppFactory::componentData()); in the constructor
-     */
-    KComponentData componentData() const;
 
     // ----------------- mainwindow management -----------------
 
@@ -153,6 +147,15 @@ public slots:
      */
     void openExistingFile(const KUrl& url);
 
+    /**
+     * @brief configureShortcuts opens the shortcut configuration dialog.
+     * @param parent the parent widget for the dialog
+     *
+     * After the user closes the dialog, all actioncollections will be updated
+     * with the new shortcuts.
+     */
+    void configureShortcuts();
+
 protected slots:
 
     /**
@@ -167,6 +170,19 @@ private slots:
 
     void startCustomDocument(KisDocument *doc);
 
+signals:
+    /**
+     * emitted when a new document is opened.
+     */
+    void documentOpened(const QString &ref);
+
+    /**
+     * emitted when an old document is closed.
+     */
+    void documentClosed(const QString &ref);
+
+    void sigViewAdded(KisView *view);
+    void sigViewRemoved(KisView *view);
 
 public:
 
@@ -260,23 +276,12 @@ protected:
      */
     QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
-    KisView *createViewInstance(KisDocument *document, KisMainWindow *parent);
-
     /**
      * Override this to create a QGraphicsItem that does not rely
      * on proxying a KoCanvasController.
      */
     QGraphicsItem *createCanvasItem(KisDocument *document);
 
-protected:
-
-    /// Call in the constructor of the subclass: setComponentData(AppFactory::componentData());
-    void setComponentData(const KComponentData &componentData);
-
-protected slots:
-
-    /// Quits Krita with error message from m_errorMessage.
-    void showErrorAndDie();
 
 private:
 
@@ -285,9 +290,6 @@ private:
     class Private;
     Private *const d;
 
-protected:
-    QString m_errorMessage;
-    bool m_dieOnError;
 
 };
 

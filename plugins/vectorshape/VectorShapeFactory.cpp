@@ -42,7 +42,7 @@ VectorShapeFactory::VectorShapeFactory()
     setToolTip(i18n("A shape that shows a vector image (EMF/WMF/SVM)"));
     setIconName(koIconNameCStrNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
     setXmlElementNames(KoXmlNS::draw, QStringList("image"));
-    setLoadingPriority(2);
+    setLoadingPriority(5);
 }
 
 KoShape *VectorShapeFactory::createDefaultShape(KoDocumentResourceManager */*documentResources*/) const

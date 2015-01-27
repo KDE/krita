@@ -33,7 +33,7 @@ class KisChalkPaintOp : public KisPaintOp
 
 public:
 
-    KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     virtual ~KisChalkPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

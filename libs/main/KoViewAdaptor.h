@@ -25,8 +25,7 @@
 #ifndef QT_NO_DBUS
 
 #include <QMap>
-#include <QObject>
-#include <QtDBus>
+#include <QDBusAbstractAdaptor>
 
 class QString;
 class QStringList;

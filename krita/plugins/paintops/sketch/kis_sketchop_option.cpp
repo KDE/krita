@@ -54,16 +54,16 @@ KisSketchOpOption::KisSketchOpOption()
     m_options->densitySPBox->setSuffix("%");
 
 
-    connect(m_options->offsetSPBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->lineWidthSPBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->densitySPBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->simpleModeCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->connectionCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->magnetifyCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomRGBCHbox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomOpacityCHbox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->distanceDensityCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->distanceOpacityCHbox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->offsetSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->lineWidthSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->densitySPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->simpleModeCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->connectionCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->magnetifyCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->randomRGBCHbox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->randomOpacityCHbox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->distanceDensityCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->distanceOpacityCHbox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
 
     setConfigurationPage(m_options);

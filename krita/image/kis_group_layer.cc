@@ -153,9 +153,10 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         dev->setY(m_d->y);
         quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
 
-        colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
-                                    KoColorConversionTransformation::InternalRenderingIntent,
-                                    KoColorConversionTransformation::InternalConversionFlags);
+        m_d->paintDevice->colorSpace()->
+            convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
+                            KoColorConversionTransformation::InternalRenderingIntent,
+                            KoColorConversionTransformation::InternalConversionFlags);
         dev->setDefaultPixel(defaultPixel);
         delete[] defaultPixel;
         m_d->paintDevice = dev;
@@ -215,8 +216,16 @@ KisPaintDeviceSP KisGroupLayer::original() const
      * Try to use children's paintDevice if it's the only
      * one in stack and meets some conditions
      */
-    KisPaintDeviceSP childOriginal = tryObligeChild();
-    return childOriginal ? childOriginal : m_d->paintDevice;
+    KisPaintDeviceSP realOriginal = tryObligeChild();
+
+    if (!realOriginal) {
+        if (!childCount() && !m_d->paintDevice->extent().isEmpty()) {
+            m_d->paintDevice->clear();
+        }
+        realOriginal = m_d->paintDevice;
+    }
+
+    return realOriginal;
 }
 
 bool KisGroupLayer::accept(KisNodeVisitor &v)

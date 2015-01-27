@@ -16,8 +16,8 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#ifndef KOFILTEREDGE_H
-#define KOFILTEREDGE_H
+#ifndef KISFILTEREDGE_H
+#define KISFILTEREDGE_H
 
 #include "KisFilterChain.h"
 #include "PriorityQueue_p.h"

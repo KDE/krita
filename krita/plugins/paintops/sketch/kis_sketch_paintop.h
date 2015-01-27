@@ -41,7 +41,7 @@ class KisSketchPaintOp : public KisPaintOp
 
 public:
 
-    KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisSketchPaintOp();
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);

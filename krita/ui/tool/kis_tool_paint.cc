@@ -137,7 +137,7 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
     switch(key){
     case(KisCanvasResourceProvider::Opacity):
-        slotSetOpacity(v.toDouble());
+        setOpacity(v.toDouble());
         break;
     default: //nothing
         break;
@@ -439,7 +439,7 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 }
 
 
-void KisToolPaint::slotSetOpacity(qreal opacity)
+void KisToolPaint::setOpacity(qreal opacity)
 {
     m_opacity = quint8(opacity * OPACITY_OPAQUE_U8);
 }

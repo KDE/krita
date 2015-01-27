@@ -238,7 +238,7 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
 void KisMaskManager::createTransformMask(KisNodeSP activeNode)
 {
     KisTransformMaskSP mask = new KisTransformMask();
-    createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Transform Mask"), "KisTransformMask", i18n("Transform Mask"), false, false);
+    createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Transform Mask"), "KisTransformMask", i18n("Transform Mask"), true, false);
 }
 
 void KisMaskManager::duplicateMask()

@@ -66,13 +66,13 @@ void KisPressureMirrorOptionWidget::readOptionSetting(const KisPropertiesConfigu
 void KisPressureMirrorOptionWidget::horizontalMirrorChanged(bool mirror)
 {
     static_cast<KisPressureMirrorOption*>(curveOption())->enableHorizontalMirror(mirror);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 void KisPressureMirrorOptionWidget::verticalMirrorChanged(bool mirror)
 {
     static_cast<KisPressureMirrorOption*>(curveOption())->enableVerticalMirror(mirror);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 

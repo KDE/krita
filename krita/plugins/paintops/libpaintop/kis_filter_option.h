@@ -62,7 +62,7 @@ public:
     /**
      * XXX
      */
-    void setNode(KisNodeSP node);
+    void setNode(KisNodeWSP node);
 
     /**
      * XXX

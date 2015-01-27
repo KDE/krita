@@ -42,6 +42,8 @@ DlgRotateImage::DlgRotateImage(QWidget *  parent,
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
+    m_page->doubleCustom->setSuffix(QChar(Qt::Key_degree));
+
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));
     connect(m_page->doubleCustom, SIGNAL(valueChanged(double)),

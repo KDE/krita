@@ -63,6 +63,9 @@ public slots:
     /// Update layout annotation shapes. Called when shape size changed.
     void updateLayout(KoShape *shape);
 
+signals:
+    void hasAnnotationsChanged(bool hasAnnotations);
+
 private:
     /// layout annotation shapes
     void layoutAnnotationShapes();

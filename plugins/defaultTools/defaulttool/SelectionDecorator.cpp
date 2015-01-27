@@ -73,7 +73,8 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     QTransform painterMatrix = painter.worldTransform();
 
     QPen pen;
-    pen.setColor(QColor("#00adf5"));
+    //Use the #00adf5 color with 50% opacity
+    pen.setColor(QColor(0, 173, 245, 127));
     pen.setWidth(m_lineWidth);
     pen.setJoinStyle(Qt::RoundJoin);
     painter.setPen( pen );

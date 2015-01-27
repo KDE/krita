@@ -160,7 +160,7 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
     if (type == KoShape::ParentChanged) return;
 
     QRectF changedRect = m_shapeMap[child];
-    changedRect = changedRect.unite(child->boundingRect());
+    changedRect = changedRect.united(child->boundingRect());
     m_shapeMap[child] = child->boundingRect();
 
     QTransform matrix;

@@ -151,7 +151,7 @@ void KisImagePyramid::setChannelFlags(const QBitArray &channelFlags)
     m_onlyOneChannelSelected = (selectedChannels == 1);
 }
 
-void KisImagePyramid::setDisplayFilter(KisDisplayFilterSP displayFilter)
+void KisImagePyramid::setDisplayFilter(KisDisplayFilter* displayFilter)
 {
     m_displayFilter = displayFilter;
 }
@@ -307,7 +307,7 @@ void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)
 {
     KisPaintDevice *src;
     KisPaintDevice *dst;
-    QRect currentSrcRect = info->dirtyImageRect;
+    QRect currentSrcRect = info->dirtyImageRectVar;
 
     for (int i = FIRST_NOT_ORIGINAL_INDEX; i < m_pyramidHeight; i++) {
         src = m_pyramid[i-1].data();

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
+    <width>504</width>
     <height>643</height>
    </rect>
   </property>
@@ -161,12 +161,40 @@
    </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="grpOpenGL">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>OpenGL</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
      <layout class="QGridLayout">
-      <item row="3" column="0">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Scaling Mode:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
        <widget class="QCheckBox" name="chkDisableDoubleBuffering">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Try to disable double buffering. This makes painting more responsive, but might cause crashes with some ATI GPU/driver combinations.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -178,8 +206,14 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
+      <item row="0" column="1">
        <widget class="QComboBox" name="cmbFilterMode">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -205,34 +239,7 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="chkUseTextureBuffer">
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Texture Buffering. This can be faster on some GPU/Driver combinations (like Intel) or broken on some others (like AMD/Radeon).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="text">
-         <string>Use Texture Buffer</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="cbUseOpenGL">
-        <property name="text">
-         <string>Enable OpenGL</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Scaling Mode:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
+      <item row="2" column="1">
        <widget class="QCheckBox" name="chkDisableVsync">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Try to disable vsync for Krita. This makes painting more responsive. Uncheck only when experiencing crashes with some GPU/driver combinations.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -242,6 +249,22 @@
         </property>
         <property name="checked">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="chkUseTextureBuffer">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Texture Buffering. This can be faster on some GPU/Driver combinations (like Intel) or broken on some others (like AMD/Radeon).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Use Texture Buffer</string>
         </property>
        </widget>
       </item>

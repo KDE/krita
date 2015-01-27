@@ -75,7 +75,7 @@ private:
     KoInlineObjectRegistry operator=(const KoInlineObjectRegistry&);
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

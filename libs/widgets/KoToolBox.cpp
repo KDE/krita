@@ -38,7 +38,6 @@ public:
     Private()
         : layout(0)
         , buttonGroup(0)
-        , canvas(0)
         , floating(false)
     {
     }
@@ -48,7 +47,6 @@ public:
     QMap<QString, Section*> sections;
     KoToolBoxLayout *layout;
     QButtonGroup *buttonGroup;
-    KoCanvasBase *canvas;
     QHash<QToolButton*, QString> visibilityCodes;
     bool floating;
 };
@@ -127,10 +125,7 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
 
 void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
 {
-    if (canvas->canvas() != d->canvas) {
-        return;
-    }
-
+    Q_UNUSED(canvas);
     QAbstractButton *button = d->buttonGroup->button(id);
     if (button) {
         button->setChecked(true);
@@ -167,9 +162,7 @@ void KoToolBox::setButtonsVisible(const QList<QString> &codes)
 
 void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
 {
-    if (canvas->canvas() != d->canvas) {
-        return;
-    }
+    Q_UNUSED(canvas);
     const bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
     foreach (QToolButton *button, d->visibilityCodes.keys()) {
         if (d->visibilityCodes[button].endsWith( QLatin1String( "/always") ) ) {
@@ -177,16 +170,6 @@ void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
         }
         button->setEnabled(enabled);
     }
-}
-
-void KoToolBox::setCanvas(KoCanvasBase *canvas)
-{
-    d->canvas = canvas;
-}
-
-void KoToolBox::unsetCanvas()
-{
-    d->canvas = 0;
 }
 
 void KoToolBox::paintEvent(QPaintEvent *)
@@ -231,7 +214,7 @@ void KoToolBox::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
     if (!d->floating) {
-        setMinimumSize(layout()->minimumSize()); // This enfoce the minimum size on the widget
+        setMinimumSize(layout()->minimumSize()); // This enforces the minimum size on the widget
     }
 }
 
@@ -252,11 +235,11 @@ void KoToolBox::setFloating(bool v)
 
 void KoToolBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas)
 {
-    if (canvas->canvas() == d->canvas) {
-        addButton(button.button, button.section, button.priority, button.buttonGroupId);
-        d->visibilityCodes.insert(button.button, button.visibilityCode);
-        setButtonsVisible(QList<QString>());
-    }
+    Q_UNUSED(canvas);
+    addButton(button.button, button.section, button.priority, button.buttonGroupId);
+    d->visibilityCodes.insert(button.button, button.visibilityCode);
+    setButtonsVisible(QList<QString>());
+
 }
 
 void KoToolBox::adjustToFit()

@@ -91,10 +91,10 @@
     <p xml:lang="uk">Отримуйте задоволення від малювання за допомогою пензлів з найширшими можливостями, чудових фільтрів та багатьох зручних можливостей, які роблять Krita надзвичайно продуктивним засобом малювання.</p>
     <p xml:lang="x-test">xxHave fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.xx</p>
   </description>
-  <url type="homepage">http://www.krita.org/</url>
-  <url type="faq">http://krita.org/faq</url>
-  <url type="donation">http://krita.org/support-krita</url>
-  <url type="help">http://krita.org/resources</url>
+  <url type="homepage">https://www.krita.org/</url>
+  <url type="faq">https://krita.org/about/faq/</url>
+  <url type="donation">https://krita.org/support-us/donations/</url>
+  <url type="help">https://krita.org/learn/tutorials/</url>
   <screenshots>
     <screenshot type="default">
       <image>http://heap.kogmbh.net/downloads/krita_appdata_1.png</image>

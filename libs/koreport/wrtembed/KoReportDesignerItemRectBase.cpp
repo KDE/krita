@@ -313,7 +313,7 @@ void KoReportDesignerItemRectBase::propertyChanged(const KoProperty::Set &s, con
     if (p.name() == "Position") {
         m_ppos->setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
     } else if (p.name() == "Size") {
-        m_psize->setUnitSize(p.value().toSizeF(), KRPos::DontUpdateProperty);
+        m_psize->setUnitSize(p.value().toSizeF(), KRSize::DontUpdateProperty);
     }
 
     setSceneRect(m_ppos->toScene(), m_psize->toScene(), DontUpdateProperty);
@@ -368,4 +368,21 @@ void KoReportDesignerItemRectBase::enterInlineEditingMode()
 
 void KoReportDesignerItemRectBase::exitInlineEditingMode()
 {
+}
+
+void KoReportDesignerItemBase::updateRenderText(const QString &itemDataSource, const QString &itemStaticValue, const QString &itemType)
+{
+    if (itemDataSource.isEmpty()) {
+        if (itemType.isEmpty()) {
+            m_renderText = itemStaticValue;
+        } else {
+            m_renderText = dataSourceAndObjectTypeName(itemStaticValue, itemType);
+        }
+    } else {
+        if (itemType.isEmpty()) {
+            m_renderText = itemDataSource;
+        } else {
+            m_renderText = dataSourceAndObjectTypeName(itemDataSource, itemType);
+        }
+    }  
 }

@@ -153,7 +153,7 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
      * The paintOp should be initialized the last, because it may
      * ask the painter for some options while initialization
      */
-    painter->setPaintOpPreset(m_d->currentPaintOpPreset, m_d->image);
+    painter->setPaintOpPreset(m_d->currentPaintOpPreset, m_d->currentNode, m_d->image);
 }
 
 void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)

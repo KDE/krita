@@ -36,6 +36,7 @@
 #include <KoPluginLoader.h>
 
 KoToolRegistry::KoToolRegistry()
+  : d(0)
 {
 }
 

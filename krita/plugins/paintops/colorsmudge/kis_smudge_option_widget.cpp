@@ -28,6 +28,7 @@
 #include "kis_smudge_option_widget.h"
 #include "kis_smudge_option.h"
 
+
 KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked):
     KisCurveOptionWidget(new KisSmudgeOption(name, label, checked))
 {
@@ -57,7 +58,7 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString& label, const QString
 void KisSmudgeOptionWidget::slotCurrentIndexChanged(int index)
 {
     static_cast<KisSmudgeOption*>(curveOption())->setMode((KisSmudgeOption::Mode)index);
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 void KisSmudgeOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -65,8 +66,5 @@ void KisSmudgeOptionWidget::readOptionSetting(const KisPropertiesConfiguration* 
     KisCurveOptionWidget::readOptionSetting(setting);
 
     KisSmudgeOption::Mode mode = static_cast<KisSmudgeOption*>(curveOption())->getMode();
-
-    mCbSmudgeMode->blockSignals(true);
     mCbSmudgeMode->setCurrentIndex(mode == KisSmudgeOption::SMEARING_MODE ? 0 : 1);
-    mCbSmudgeMode->blockSignals(false);
 }

@@ -27,7 +27,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KoPatternChooser" name="patternChooser" native="true"/>
+      <widget class="KisPatternChooser" name="patternChooser" native="true"/>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="lblColor">
@@ -72,7 +72,7 @@
    <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KoPatternChooser</class>
+   <class>KisPatternChooser</class>
    <extends>QWidget</extends>
    <header location="global">kis_pattern_chooser.h</header>
    <container>1</container>

@@ -18,6 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QDebug>
+
+#include <kaction.h>
+
 #include "KoToolBase.h"
 #include "KoToolBase_p.h"
 #include "KoCanvasBase.h"
@@ -32,6 +36,9 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <QWidget>
+#include <QFile>
+#include <QDomDocument>
+#include <QDomElement>
 
 KoToolBase::KoToolBase(KoCanvasBase *canvas)
     : d_ptr(new KoToolBasePrivate(this, canvas))
@@ -49,6 +56,48 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
 
 KoToolBase::~KoToolBase()
 {
+
+    Q_D(const KoToolBase);
+
+// Enable this to easily generate action files for tools
+//    if (d->actionCollection.size() > 0) {
+
+//        QDomDocument doc;
+//        QDomElement e = doc.createElement("Actions");
+//        e.setAttribute("name", toolId());
+//        e.setAttribute("version", "1");
+//        doc.appendChild(e);
+
+//        foreach(QAction *ac, d->actionCollection.values()) {
+//            KAction *action = qobject_cast<KAction*>(ac);
+//            if (action) {
+//                QDomElement a = doc.createElement("Action");
+//                a.setAttribute("name", action->objectName());
+//                a.setAttribute("icon", action->icon().name());
+//                a.setAttribute("text" , action->text());
+//                a.setAttribute("whatsThis" , action->whatsThis());
+//                a.setAttribute("toolTip" , action->toolTip());
+//                a.setAttribute("iconText" , action->iconText());
+//                a.setAttribute("shortcut" , action->shortcut(KAction::ActiveShortcut).toString());
+//                a.setAttribute("defaultShortcut" , action->shortcut(KAction::DefaultShortcut).toString());
+//                a.setAttribute("isCheckable" , QString((action->isChecked() ? "true" : "false")));
+//                a.setAttribute("statusTip", action->statusTip());
+//                e.appendChild(a);
+//            }
+//            else {
+//                qDebug() << "Got a QAction:" << ac->objectName();
+//            }
+
+//        }
+//        QFile f(toolId() + ".action");
+//        f.open(QFile::WriteOnly);
+//        f.write(doc.toString().toUtf8());
+//        f.close();
+
+//    }
+//    else {
+//        qDebug() << "Tool" << toolId() << "has no actions";
+//    }
     delete d_ptr;
 }
 
@@ -179,6 +228,9 @@ QList<QPointer<QWidget> > KoToolBase::optionWidgets()
 void KoToolBase::addAction(const QString &name, KAction *action)
 {
     Q_D(KoToolBase);
+    if (action->objectName().isEmpty()) {
+        action->setObjectName(name);
+    }
     d->actionCollection.insert(name, action);
 }
 

@@ -415,6 +415,7 @@ void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
 
 void KoStrokeConfigWidget::blockChildSignals(bool block)
 {
+    d->colorAction->blockSignals(block);
     d->lineWidth->blockSignals(block);
     d->capNJoinMenu->capGroup->blockSignals(block);
     d->capNJoinMenu->joinGroup->blockSignals(block);

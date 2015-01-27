@@ -59,7 +59,7 @@ public:
     void undo();
 
 private:
-    KoPathPointMoveCommandPrivate *d;
+    KoPathPointMoveCommandPrivate * const d;
 };
 
 #endif // KOPATHPOINTMOVECOMMAND_H

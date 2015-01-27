@@ -1,11 +1,11 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger (cberger@cberger.net)
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
@@ -20,7 +20,7 @@
 #include <unistd.h>
 
 #include <kis_action.h>
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 #include <klocale.h>
 
@@ -76,7 +76,7 @@ class RecordedActionLoadContext : public KisRecordedActionLoadContext {
 };
 
 BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/bigbrother.rc")
+        : KisViewPlugin(parent)
         , m_recorder(0)
 {
     if (parent->inherits("KisViewManager")) {
@@ -95,11 +95,13 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
 
         // Start recording action
         m_startRecordingMacroAction = new KisAction(koIcon("media-record"), i18n("Start recording macro"), this);
+        m_startRecordingMacroAction->setActivationFlags(KisAction::ACTIVE_NODE);
         addAction("Recording_Start_Recording_Macro", m_startRecordingMacroAction);
         connect(m_startRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStartRecordingMacro()));
 
         // Save recorded action
         m_stopRecordingMacroAction  = new KisAction(koIcon("media-playback-stop"), i18n("Stop recording actions"), this);
+        m_stopRecordingMacroAction->setActivationFlags(KisAction::ACTIVE_NODE);
         addAction("Recording_Stop_Recording_Macro", m_stopRecordingMacroAction);
         connect(m_stopRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStopRecordingMacro()));
         m_stopRecordingMacroAction->setEnabled(false);

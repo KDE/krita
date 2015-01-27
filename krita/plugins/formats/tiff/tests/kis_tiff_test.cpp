@@ -27,6 +27,7 @@
 #include "filestest.h"
 
 #include <KoColorModelStandardIds.h>
+#include <KoColor.h>
 
 #include "kisexiv2/kis_exiv2.h"
 
@@ -63,6 +64,49 @@ void KisTiffTest::testFiles()
 
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes);
 }
+
+void KisTiffTest::testRoundTripRGBF16()
+{
+    QRect testRect(0,0,1000,1000);
+    QRect fillRect(100,100,100,100);
+
+    const KoColorSpace *csf16 = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), 0);
+    KisDocument *doc0 = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+    doc0->newImage("test", testRect.width(), testRect.height(), csf16, KoColor(Qt::blue, csf16), QString(), 1.0);
+
+    KTemporaryFile tmpFile;
+    tmpFile.setSuffix(".tiff");
+    tmpFile.open();
+    doc0->setBackupFile(false);
+    doc0->setOutputMimeType("image/tiff");
+    doc0->setSaveInBatchMode(true);
+    doc0->saveAs(KUrl("file://" + tmpFile.fileName()));
+
+    KisNodeSP layer0 = doc0->image()->root()->firstChild();
+    Q_ASSERT(layer0);
+    layer0->paintDevice()->fill(fillRect, KoColor(Qt::red, csf16));
+
+
+    KisDocument *doc1 = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+
+    KisImportExportManager manager(doc1);
+    manager.setBatchMode(false);
+
+    KisImportExportFilter::ConversionStatus status;
+
+    QString s = manager.importDocument(tmpFile.fileName(),
+                                       QString(),
+                                       status);
+
+    qDebug() << s;
+    Q_ASSERT(doc1->image());
+
+    QImage ref0 = doc0->image()->projection()->convertToQImage(0, testRect);
+    QImage ref1 = doc1->image()->projection()->convertToQImage(0, testRect);
+
+    QCOMPARE(ref0, ref1);
+}
+
 QTEST_KDEMAIN(KisTiffTest, GUI)
 
 #include "kis_tiff_test.moc"

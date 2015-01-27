@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -21,6 +21,7 @@
 #include <qendian.h>
 #include <QDataStream>
 #include <QApplication>
+#include <QMessageBox>
 
 #include <kpluginfactory.h>
 
@@ -135,9 +136,9 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     if (to == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
 
         downscale = (QMessageBox::question(0,
-                                                i18n("Downscale Image"),
-                                                i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
-                                                QMessageBox::Yes | QMessageBox::No)
+                                           i18nc("@title:window", "Downscale Image"),
+                                           i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
+                                           QMessageBox::Yes | QMessageBox::No)
                           == QMessageBox::Yes);
     }
 

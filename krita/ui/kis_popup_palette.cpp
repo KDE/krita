@@ -18,6 +18,7 @@
 
 */
 
+#include "kis_config.h"
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
 #include "kis_favorite_resource_manager.h"
@@ -542,7 +543,8 @@ int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
 
 int KisPopupPalette::numSlots()
 {
-    return qMax(m_resourceManager->numFavoritePresets(), 10);
+    KisConfig config;
+    return qMax(config.favoritePresets(), 10);
 }
 
 #include "kis_popup_palette.moc"

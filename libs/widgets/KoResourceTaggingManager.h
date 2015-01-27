@@ -54,6 +54,7 @@ private slots:
     void contextCreateNewTag(const QString& tag);
     void syncTagBoxEntryRemoval(const QString& tag);
     void syncTagBoxEntryAddition(const QString& tag);
+    void syncTagBoxEntries();
     void tagSaveButtonPressed();
     void contextRemoveTagFromResource(KoResource* resource, const QString& tag);
     void contextAddTagToResource(KoResource* resource, const QString& tag);

@@ -26,6 +26,7 @@ class KisTiffTest : public QObject
     Q_OBJECT
 private slots:
     void testFiles();
+    void testRoundTripRGBF16();
 };
 
 #endif

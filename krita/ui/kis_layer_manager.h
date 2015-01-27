@@ -69,7 +69,7 @@ private:
     KisPaintDeviceSP activeDevice();
 
 
-    void setup(KActionCollection * collection, KisActionManager *actionManager);
+    void setup(KisActionManager *actionManager);
 
     void updateGUI();
 

@@ -56,7 +56,7 @@ public:
     QList<KoPathPoint*> insertedPoints() const;
 
 private:
-    KoPathPointInsertCommandPrivate *d;
+    KoPathPointInsertCommandPrivate * const d;
 };
 
 #endif // KOPATHPOINTINSERTCOMMAND_H

@@ -59,7 +59,7 @@ public:
         QFormLayout *formLayout = new QFormLayout(this);
         formLayout->setMargin(0);
 
-        chooser = new KoPatternChooser(this);
+        chooser = new KisPatternChooser(this);
         chooser->setGrayscalePreview(true);
         chooser->setMaximumHeight(250);
         chooser->setCurrentItem(0, 0);
@@ -120,7 +120,7 @@ public:
 
         setLayout(formLayout);
     }
-    KoPatternChooser *chooser;
+    KisPatternChooser *chooser;
     KisMultipliersDoubleSliderSpinBox *scaleSlider;
     KisSliderSpinBox *offsetSliderX;
     QCheckBox *randomOffsetX;
@@ -141,17 +141,17 @@ KisTextureOption::KisTextureOption(QObject *)
     setConfigurationPage(m_optionWidget);
 
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
-    connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->randomOffsetX, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->randomOffsetY, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->offsetSliderY, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->cmbTexturingMode, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->cmbCutoffPolicy, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedBlack(int)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedWhite(int)), SIGNAL(sigSettingChanged()));
-    connect(m_optionWidget->chkInvert, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->randomOffsetX, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->randomOffsetY, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->offsetSliderY, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->cmbTexturingMode, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->cmbCutoffPolicy, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedBlack(int)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->cutoffSlider, SIGNAL(sigModifiedWhite(int)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->chkInvert, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     resetGUI(m_optionWidget->chooser->currentResource());
 }
 

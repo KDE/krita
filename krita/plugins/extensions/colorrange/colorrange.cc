@@ -44,7 +44,7 @@ K_PLUGIN_FACTORY(ColorRangeFactory, registerPlugin<ColorRange>();)
 K_EXPORT_PLUGIN(ColorRangeFactory("krita"))
 
 ColorRange::ColorRange(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/colorrange.rc")
+        : KisViewPlugin(parent)
 {
     KisAction* action = new KisAction(i18n("Select from Color Range..."), this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);

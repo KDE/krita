@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -23,7 +23,7 @@
 #include <QFileInfo>
 #include <QApplication>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <kio/netaccess.h>
 
@@ -340,7 +340,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         channelorder[1] = KoBgrU16Traits::green_pos;
         channelorder[2] = KoBgrU16Traits::blue_pos;
     } else {
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -351,7 +351,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
 //     } else if (layer->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
 //         bitdepth = 16;
     } else {
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -425,6 +425,11 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     }
     }
 
+    if (!cinfo) {
+        // Could not create compression info object
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
     // Setup an event manager
     opj_event_mgr_t event_mgr;    /* event manager */
     memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
@@ -440,6 +445,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     opj_setup_encoder(cinfo, &parameters, image);
 
     opj_cio_t* cio = opj_cio_open((opj_common_ptr) cinfo, 0, 0);
+
 
     /* encode the image */
     if (!opj_encode(cinfo, cio, image, parameters.index)) {

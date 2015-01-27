@@ -33,7 +33,7 @@ K_PLUGIN_FACTORY(ClonesArrayFactory, registerPlugin<ClonesArray>();)
 K_EXPORT_PLUGIN(ClonesArrayFactory("krita"))
 
 ClonesArray::ClonesArray(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/clonesarray.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action = new KisAction(i18n("Clones &Array..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);

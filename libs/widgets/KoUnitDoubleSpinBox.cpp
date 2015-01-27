@@ -144,7 +144,7 @@ void KoUnitDoubleSpinBox::setUnit( KoUnit unit )
 
     if (unit.type() == KoUnit::Pixel) {
         // limit the pixel step by 1.0
-        step = qMax(1.0, step);
+        step = qMax(qreal(1.0), step);
     }
 
     QDoubleSpinBox::setSingleStep( step );

@@ -167,6 +167,19 @@ TextTool::TextTool(KoCanvasBase *canvas)
     createActions();
 
     m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceManager::Unit);
+
+    foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
+        connect(plugin, SIGNAL(startMacro(const QString &)),
+                this, SLOT(startMacro(const QString &)));
+        connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+        QHash<QString, KAction*> actions = plugin->actions();
+        QHash<QString, KAction*>::iterator i = actions.begin();
+        while (i != actions.end()) {
+            addAction(i.key(), i.value());
+            ++i;
+        }
+    }
+
     // setup the context list.
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
@@ -245,21 +258,22 @@ void TextTool::createActions()
 
     m_actionAlignRight  = new KAction(koIcon("format-justify-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight);
-    m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
+    m_actionAlignRight->setShortcut(Qt::CTRL + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
     connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
 
     m_actionAlignCenter  = new KAction(koIcon("format-justify-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter);
-    m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
+    m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::Key_E);
     m_actionAlignCenter->setCheckable(true);
+
     alignmentGroup->addAction(m_actionAlignCenter);
     connect(m_actionAlignCenter, SIGNAL(triggered(bool)), this, SLOT(alignCenter()));
 
     m_actionAlignBlock  = new KAction(koIcon("format-justify-fill"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock);
-    m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
+    m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::Key_J);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
@@ -442,6 +456,10 @@ void TextTool::createActions()
         action  = new KAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
         addAction("split_tablecells", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
+
+        action = new KAction(koIcon("borderpainter"), "", this);
+        action->setToolTip(i18n("Select a border style and paint that style onto a table"));
+        addAction("activate_borderpainter", action);
     }
 
     action = new KAction(i18n("Paragraph..."), this);
@@ -815,7 +833,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.restore();
 }
 
-void TextTool::updateSelectedShape(const QPointF &point)
+void TextTool::updateSelectedShape(const QPointF &point, bool noDocumentChange)
 {
     QRectF area(point, QSizeF(1, 1));
     if (m_textEditor.data()->hasSelection())
@@ -832,6 +850,17 @@ void TextTool::updateSelectedShape(const QPointF &point)
         TextShape *textShape = dynamic_cast<TextShape*>(shape);
         if (textShape) {
             if (textShape != m_textShape) {
+                if (static_cast<KoTextShapeData*>(textShape->userData())->document() != m_textShapeData->document()) {
+                    //we should only change to another document if allowed
+                    if (noDocumentChange) {
+                        return;
+                    }
+
+                    // if we change to another textdocument we need to remove selection in old document
+                    // or it would continue to be painted etc
+
+                    m_textEditor.data()->setPosition(m_textEditor.data()->position());
+                }
                 m_textShape = textShape;
 
                 setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
@@ -874,11 +903,9 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
-    repaintSelection(); //needed to delete any possible text selection i other text docs
+    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
 
-    m_textEditor.data()->setPosition(m_textEditor.data()->position());
-
-    updateSelectedShape(event->point);
+    updateSelectedShape(event->point, shiftPressed);
 
     KoSelection *selection = canvas()->shapeManager()->selection();
     if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
@@ -886,7 +913,6 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         selection->select(m_textShape);
     }
 
-    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
     KoPointedAt pointedAt = hitTest(event->point);
     m_tableDraggedOnce = false;
     m_clickWithinSelection = false;
@@ -896,7 +922,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         if ((event->button() == Qt::LeftButton) && !shiftPressed && m_textEditor.data()->hasSelection() && m_textEditor.data()->isWithinSelection(pointedAt.position)) {
             m_clickWithinSelection = true;
             m_draggingOrigin = event->pos(); //we store the pixel pos
-        } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection())) {
+        } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection() && m_textEditor.data()->isWithinSelection(pointedAt.position))) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
             useCursor(Qt::IBeamCursor);
         }
@@ -1309,7 +1335,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     m_editTipPos = event->globalPos();
 
     if (event->buttons()) {
-        updateSelectedShape(event->point);
+        updateSelectedShape(event->point, true);
     }
 
     m_editTipTimer.stop();
@@ -1934,6 +1960,7 @@ void TextTool::updateActions()
         action("delete_tablecolumn")->setEnabled(hasTable && notInAnnotation);
         action("merge_tablecells")->setEnabled(hasTable && notInAnnotation);
         action("split_tablecells")->setEnabled(hasTable && notInAnnotation);
+        action("activate_borderpainter")->setEnabled(hasTable && notInAnnotation);
     }
     action("insert_annotation")->setEnabled(notInAnnotation);
 

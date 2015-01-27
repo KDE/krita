@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -97,15 +97,13 @@ CompositionDockerDock::~CompositionDockerDock()
 
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    setEnabled(canvas != 0);
-
     unsetCanvas();
+    setEnabled(canvas != 0);
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
-        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action, actionCollection);
+            m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action);
         }
         updateModel();
     }
@@ -115,9 +113,8 @@ void CompositionDockerDock::unsetCanvas()
 {
     setEnabled(false);
     if (m_canvas) {
-        KActionCollection *actionCollection = m_canvas->viewManager()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->viewManager()->actionManager()->takeAction(action, actionCollection);
+            m_canvas->viewManager()->actionManager()->takeAction(action);
         }
     }
     m_canvas = 0;

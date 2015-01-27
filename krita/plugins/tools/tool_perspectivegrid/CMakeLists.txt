@@ -23,3 +23,6 @@ install( FILES  tool_perspectivegrid.png
 install( FILES  kritatoolperspectivegrid.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 
+install( FILES
+    KisToolPerspectiveGrid.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

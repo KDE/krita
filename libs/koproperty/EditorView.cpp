@@ -47,7 +47,7 @@ using namespace KoProperty;
 class EditorViewStyle : public KexiUtils::StyleProxy
 {
 public:
-    EditorViewStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
+    explicit EditorViewStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
     {
     }
 
@@ -81,7 +81,7 @@ static bool computeAutoSync(Property *property, bool defaultAutoSync)
 class ItemDelegate : public QItemDelegate
 {
 public:
-    ItemDelegate(QWidget *parent);
+    explicit ItemDelegate(QWidget *parent);
     virtual ~ItemDelegate();
     virtual void paint(QPainter *painter, 
         const QStyleOptionViewItem &option, const QModelIndex &index) const;

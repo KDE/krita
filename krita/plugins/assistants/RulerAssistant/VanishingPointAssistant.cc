@@ -3,14 +3,14 @@
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
  * Copyright (c) 2014 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -27,6 +27,7 @@
 #include <QTransform>
 
 #include "kis_coordinates_converter.h"
+#include "kis_algebra_2d.h"
 
 #include <math.h>
 
@@ -89,37 +90,23 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
     if (handles().size() > 0 && outline()==true && previewVisible==true) {
         //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
-        QPointF startPoint = *handles()[0];
+        QPointF startPoint = initialTransform.map(*handles()[0]);
         
-        QPointF gcp1=initialTransform.inverted().map(QPointF(0,0));
-        QPointF gcp2=initialTransform.inverted().map(QPointF(gc.viewport().width(),0));
-        QPointF gcp3=initialTransform.inverted().map(QPointF(0,gc.viewport().height()));
-        QPointF gcp4=initialTransform.inverted().map(QPointF(gc.viewport().width(),gc.viewport().height()));
-        mousePos=initialTransform.inverted().map(mousePos);
-         
         QLineF snapLine= QLineF(startPoint, mousePos);
-        if (mousePos.y()>startPoint.y()) {
-            snapLine.intersect(QLineF(gcp3, gcp4 ), &endPoint);
-            }
-        else if (mousePos.y()<startPoint.y()) {
-            snapLine.intersect(QLineF(gcp1, gcp2 ), &endPoint);
-            }
-        else if (mousePos.x()>startPoint.x()) {
-            snapLine.intersect(QLineF(gcp2, gcp4 ), &endPoint);
-            }
-        else if (mousePos.x()<startPoint.x()) {
-            snapLine.intersect(QLineF(gcp1, gcp3 ), &endPoint);
-            }
-        else {
-            startPoint=*handles()[0];
-            endPoint=mousePos;
-            dbgFile<<"ruler can't find canvas borders."<<canvas;
-            }
-        gc.setTransform(initialTransform);
+        QRect viewport= gc.viewport();
+        
+        KisAlgebra2D::intersectLineRect(snapLine, viewport);
+        
+        QRect bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
+        
         QPainterPath path;
+        if (bounds.contains(startPoint.toPoint())){
         path.moveTo(startPoint);
-        path.lineTo(mousePos);
-        path.lineTo(endPoint);
+        path.lineTo(snapLine.p1());
+        }
+        else
+        {path.moveTo(snapLine.p1());
+        path.lineTo(snapLine.p2());}
         
         drawPreview(gc, path);//and we draw the preview.
     }

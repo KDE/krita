@@ -24,6 +24,11 @@
 #include <QString>
 
 //
+// i2of5
+//
+void renderI2of5(const QRectF &, const QString &, int align, QPainter *);
+
+//
 // 3of9
 //
 void render3of9(const QRect &, const QString &, int align, QPainter *);

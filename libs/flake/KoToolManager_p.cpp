@@ -38,6 +38,7 @@ ToolHelper::ToolHelper(KoToolFactoryBase *tool)
 QToolButton* ToolHelper::createButton()
 {
     QToolButton *but = new QToolButton();
+    but->setObjectName(m_toolFactory->id());
     but->setIcon(KIcon(m_toolFactory->iconName()));
     but->setToolTip(m_toolFactory->toolTip());
     connect(but, SIGNAL(clicked()), this, SLOT(buttonPressed()));

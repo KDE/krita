@@ -80,7 +80,11 @@ KisShapeController::KisShapeController(KisDocument *doc, KisNameServer *nameServ
 
 KisShapeController::~KisShapeController()
 {
-    //setImage(0);
+    KisNodeDummy *node = m_d->shapesGraph.rootDummy();
+    if (node) {
+        m_d->shapesGraph.removeNode(node->node());
+    }
+
     delete m_d;
 }
 
@@ -88,6 +92,8 @@ void KisShapeController::addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP
 {
     KisNodeShape *newShape =
         m_d->shapesGraph.addNode(node, parent, aboveThis);
+    // XXX: what are we going to do with this shape?
+    Q_UNUSED(newShape);
 
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
     if (shapeLayer) {
@@ -101,7 +107,6 @@ void KisShapeController::addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP
                 SIGNAL(selectionContentChanged()));
         connect(shapeLayer, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
                 SIGNAL(currentLayerChanged(const KoShapeLayer*)));
-        ((KoShapeLayer*)shapeLayer)->setParent(newShape);
     }
 }
 
@@ -110,7 +115,6 @@ void KisShapeController::removeNodeImpl(KisNodeSP node)
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
     if (shapeLayer) {
         shapeLayer->disconnect(this);
-        ((KoShapeLayer*)shapeLayer)->setParent(0);
     }
 
     m_d->shapesGraph.removeNode(node);
@@ -170,8 +174,7 @@ void KisShapeController::addShape(KoShape* shape)
         KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(shape->parent());
 
         if (!shapeLayer) {
-            KoShapeLayer *rootLayer = shapeForNode(image()->rootLayer().data());
-            shapeLayer = new KisShapeLayer(rootLayer, this, image(),
+            shapeLayer = new KisShapeLayer(this, image(),
                                            i18n("Vector Layer %1", m_d->nameServer->number()),
                                            OPACITY_OPAQUE_U8);
 

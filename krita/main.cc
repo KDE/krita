@@ -27,6 +27,8 @@
 #include <QProcessEnvironment>
 #include <QDesktopServices>
 #include <QDir>
+#include <QDate>
+#include <QDebug>
 
 #include <kcmdlineargs.h>
 
@@ -36,10 +38,12 @@
 #include <krita_export.h>
 
 #include "data/splash/splash_screen.xpm"
+#include "data/splash/splash_holidays.xpm"
 #include "ui/kis_aboutdata.h"
 #include "ui/kis_factory2.h"
 #include "ui/KisDocument.h"
 #include "kis_splash_screen.h"
+#include "KisPart.h"
 
 #if defined Q_OS_WIN
 #include <Windows.h>
@@ -53,13 +57,16 @@
 
 #endif
 
-extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+extern "C" int main(int argc, char **argv)
 {
+    bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
+
 #ifdef Q_WS_X11
-    if (!qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        setenv("QT_NO_GLIB", "1", true);
+    if (runningInKDE) {
+        qputenv("QT_NO_GLIB", "1");
     }
 #endif
+
 #ifdef USE_BREAKPAD
     qputenv("KDE_DEBUG", "1");
     KisCrashHandler crashHandler;
@@ -71,22 +78,55 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 
     int state;
-    KAboutData *aboutData = KisFactory2::aboutData();
+    KisFactory factory;
+    Q_UNUSED(factory); // Not really, it'll self-destruct on exiting main
+    KAboutData *aboutData = KisFactory::aboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 
     KCmdLineOptions options;
+    options.add("print", ki18n("Only print and exit"));
+    options.add("template", ki18n("Open a new document with a template"));
+    options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
+    options.add("export-pdf", ki18n("Only export to PDF and exit"));
+    options.add("export", ki18n("Export to the given filename and exit"));
+    options.add("export-filename <filename>", ki18n("Filename for export/export-pdf"));
+    options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
-    options.add( "hwinfo", ki18n( "Show some information about the hardware" ));
+
     KCmdLineArgs::addCmdLineOptions(options);
 
+    // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
+    QString key = "Krita" +
+                  QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
+    key = key.replace(":", "_").replace("\\","_");
+
+     // initialize qt plugin path (see KComponentDataPrivate::lazyInit)
+    KGlobal::config();
+
     // first create the application so we can create a  pixmap
-    KisApplication app(KIS_MIME_TYPE);
+    KisApplication app(key);
+
+    if (app.isRunning()) {
+
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+        if (!args->isSet("export")) {
+
+            QByteArray ba;
+            QDataStream ds(&ba, QIODevice::WriteOnly);
+            args->saveAppArgs(ds);
+            ds.device()->close();
+
+            if (app.sendMessage(ba)) {
+                return 0;
+            }
+        }
+    }
 
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();
     app.setEventFilter(&KisTabletSupportWin::eventFilter);
-    app.setAttribute(Qt::AA_DontShowIconsInMenus);
 #elif defined Q_WS_X11
     KisTabletSupportX11::init();
     app.setEventFilter(&KisTabletSupportX11::eventFilter);
@@ -96,15 +136,36 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     app.setAttribute(Qt::AA_X11InitThreads, true);
 #endif
 
+    if (!runningInKDE) {
+        // Icons in menus are ugly and distracting
+        app.setAttribute(Qt::AA_DontShowIconsInMenus);
+    }
+
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
-    QWidget *splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
+    QDate currentDate = QDate::currentDate();
+    QWidget *splash = 0;
+    if (currentDate > QDate(currentDate.year(), 12, 4) ||
+            currentDate < QDate(currentDate.year(), 1, 9)) {
+         splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_holidays_xpm));
+    }
+    else {
+        splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
+    }
     app.setSplashScreen(splash);
 
     if (!app.start()) {
         return 1;
     }
+
+    // Set up remote arguments.
+    QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
+                     &app, SLOT(remoteArguments(QByteArray,QObject*)));
+
+    QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
+                     &app, SLOT(fileOpenRequested(QString)));
+
 
     state = app.exec();
 

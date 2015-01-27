@@ -105,10 +105,10 @@ void KisLiquifyProperties::loadMode()
 
 void KisLiquifyProperties::loadAndResetMode()
 {
-    loadMode();
-
     KConfigGroup globalCfg = KGlobal::config()->group("LiquifyTool");
     m_mode = (LiquifyMode) globalCfg.readEntry("mode", (int)m_mode);
+
+    loadMode();
 }
 
 void KisLiquifyProperties::toXML(QDomElement *e) const

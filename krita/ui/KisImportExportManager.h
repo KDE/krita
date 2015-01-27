@@ -19,8 +19,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KO_FILTER_MANAGER_H__
-#define __KO_FILTER_MANAGER_H__
+#ifndef KIS_IMPORT_EXPORT_MANAGER_H
+#define KIS_IMPORT_EXPORT_MANAGER_H
 
 #include <QObject>
 #include <QMap>

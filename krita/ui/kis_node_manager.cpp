@@ -19,11 +19,10 @@
 #include "kis_node_manager.h"
 
 #include <QDesktopServices>
+#include <QMessageBox>
 
 #include <kactioncollection.h>
 #include <kmimetype.h>
-#include <kmessagebox.h>
-
 
 #include <KoIcon.h>
 #include <KoProperties.h>
@@ -93,7 +92,7 @@ struct KisNodeManager::Private {
     KisMaskManager * maskManager;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
-    KAction *mergeSelectedLayers;
+    KisAction *mergeSelectedLayers;
 
     QList<KisNodeSP> selectedNodes;
 
@@ -172,8 +171,9 @@ KisNodeManager::KisNodeManager(KisViewManager *view)
 
     connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
 
-    m_d->mergeSelectedLayers = new KAction(i18n("&Merge Selected Layers"), this);
-    view->actionCollection()->addAction("merge_selected_layers", m_d->mergeSelectedLayers);
+    m_d->mergeSelectedLayers = new KisAction(i18n("&Merge Selected Layers"), this);
+    m_d->mergeSelectedLayers->setActivationFlags(KisAction::ACTIVE_LAYER);
+    view->actionManager()->addAction("merge_selected_layers", m_d->mergeSelectedLayers);
     connect(m_d->mergeSelectedLayers, SIGNAL(triggered()), this, SLOT(mergeLayerDown()));
 
 }
@@ -211,7 +211,8 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
 #define NEW_LAYER_ACTION(id, text, layerType, icon)                     \
     {                                                                   \
         action = new KisAction(icon, text, this);                       \
-        actionManager->addAction(id, action, actionCollection);         \
+        action->setActivationFlags(KisAction::ACTIVE_NODE);             \
+        actionManager->addAction(id, action);                           \
         m_d->nodeCreationSignalMapper.setMapping(action, layerType);    \
         connect(action, SIGNAL(triggered()),                            \
                 &m_d->nodeCreationSignalMapper, SLOT(map()));           \
@@ -234,7 +235,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         action = new KisAction(icon, text, this);                       \
         action->setActivationFlags(KisAction::ACTIVE_NODE);             \
         action->setExcludedNodeTypes(QStringList(layerType));           \
-        actionManager->addAction(id, action, actionCollection);         \
+        actionManager->addAction(id, action);         \
         m_d->nodeConversionSignalMapper.setMapping(action, layerType);  \
         connect(action, SIGNAL(triggered()),                            \
                 &m_d->nodeConversionSignalMapper, SLOT(map()));         \
@@ -242,42 +243,42 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
 
 void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
 {
-    m_d->layerManager->setup(actionCollection, actionManager);
+    m_d->layerManager->setup(actionManager);
     m_d->maskManager->setup(actionCollection, actionManager);
 
     KisAction * action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Layer Horizontally"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("mirrorNodeX", action, actionCollection);
+    actionManager->addAction("mirrorNodeX", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
     action  = new KisAction(koIcon("object-flip-vertical"), i18n("Mirror Layer Vertically"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("mirrorNodeY", action, actionCollection);
+    actionManager->addAction("mirrorNodeY", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
 
     action = new KisAction(i18n("Activate next layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setShortcut(KShortcut(Qt::Key_PageUp));
-    actionManager->addAction("activateNextLayer", action, actionCollection);
+    actionManager->addAction("activateNextLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
 
     action = new KisAction(i18n("Activate previous layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setShortcut(KShortcut(Qt::Key_PageDown));
-    actionManager->addAction("activatePreviousLayer", action, actionCollection);
+    actionManager->addAction("activatePreviousLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
 
     action  = new KisAction(koIcon("document-save"), i18n("Save Layer/Mask..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
-    actionManager->addAction("save_node_as_image", action, actionCollection);
+    actionManager->addAction("save_node_as_image", action);
     connect(action, SIGNAL(triggered()), this, SLOT(saveNodeAsImage()));
 
     action = new KisAction(koIcon("edit-copy"), i18n("&Duplicate Layer or Mask"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_J));
-    actionManager->addAction("duplicatelayer", action, actionCollection);
+    actionManager->addAction("duplicatelayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(duplicateActiveNode()));
 
 
@@ -336,25 +337,25 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = new KisAction(koIcon("view-filter"), i18n("&Isolate Layer"), this);
     action->setCheckable(true);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
-    actionManager->addAction("isolate_layer", action, actionCollection);
+    actionManager->addAction("isolate_layer", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
 
     action  = new KisAction(koIcon("edit-copy"), i18n("Alpha into Mask"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE_PAINT_DEVICE);
-    actionManager->addAction("split_alpha_into_mask", action, actionCollection);
+    actionManager->addAction("split_alpha_into_mask", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaIntoMask()));
 
     action  = new KisAction(koIcon("transparency-enabled"), i18n("Write as Alpha"), this);
     action->setActivationFlags(KisAction::ACTIVE_TRANSPARENCY_MASK);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("split_alpha_write", action, actionCollection);
+    actionManager->addAction("split_alpha_write", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaWrite()));
 
     action  = new KisAction(koIcon("document-save"), i18n("Save Merged..."), this);
     action->setActivationFlags(KisAction::ACTIVE_TRANSPARENCY_MASK);
     // HINT: we can save even when the nodes are not editable
-    actionManager->addAction("split_alpha_save_merged", action, actionCollection);
+    actionManager->addAction("split_alpha_save_merged", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaSaveMerged()));
 
     connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotUpdateIsolateModeAction()));
@@ -927,8 +928,17 @@ void KisNodeManager::mergeLayerDown()
         // start a big macro
         m_d->commandsAdapter->beginMacro(kundo2_i18n("Merge Selected Nodes"));
 
-        // Add the new merged node on top of the active node
-        m_d->commandsAdapter->addNode(flattenLayer, l->parent(), l);
+        // Add the new merged node on top of the active node -- checking whether the parent is in the selection
+        KisNodeSP parent = l->parent();
+        while (selectedNodes.contains(parent)) {
+            parent = parent->parent();
+        }
+        if (parent == l->parent()) {
+            m_d->commandsAdapter->addNode(flattenLayer, parent, l);
+        }
+        else {
+            m_d->commandsAdapter->addNode(flattenLayer, parent, parent->lastChild());
+        }
 
         // remove all nodes in the selection but the active node
         removeSelectedNodes(selectedNodes);
@@ -1082,7 +1092,9 @@ void KisNodeManager::slotSplitAlphaIntoMask()
 
     KisPaintDeviceSP srcDevice = node->paintDevice();
     const KoColorSpace *srcCS = srcDevice->colorSpace();
-    const QRect processRect = srcDevice->exactBounds();
+    const QRect processRect =
+        srcDevice->exactBounds() |
+        srcDevice->defaultBounds()->bounds();
 
     KisPaintDeviceSP selectionDevice =
         new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
@@ -1116,12 +1128,11 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
     KIS_ASSERT_RECOVER_RETURN(node->inherits("KisTransparencyMask"));
 
     if (writeToLayers && !parentNode->hasEditablePaintDevice()) {
-        KMessageBox::information(view->mainWindow(),
+        QMessageBox::information(view->mainWindow(),
+                                 i18nc("@title:window", "Layer %1 is not editable").arg(parentNode->name()),
                                  i18n("Cannot write alpha channel of "
                                       "the parent layer \"%1\".\n"
-                                      "The operation will be cancelled.").arg(parentNode->name()),
-                                 i18n("Layer %1 is not editable").arg(parentNode->name()),
-                                 "messagebox_splitAlphaIntoLockedLayer");
+                                      "The operation will be cancelled.").arg(parentNode->name()));
         return;
     }
 
@@ -1130,7 +1141,10 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
         KIS_ASSERT_RECOVER_RETURN(parentNode->paintDevice());
         dstDevice = parentNode->paintDevice();
     } else {
-        KisPaintDeviceSP copyDevice = parentNode->projection();
+        KisPaintDeviceSP copyDevice = parentNode->paintDevice();
+        if (!copyDevice) {
+            copyDevice = parentNode->original();
+        }
         dstDevice = new KisPaintDevice(*copyDevice);
     }
 
@@ -1140,7 +1154,9 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
     KIS_ASSERT_RECOVER_RETURN(selectionDevice->colorSpace()->pixelSize() == 1);
 
     const QRect processRect =
-        selectionDevice->exactBounds() | dstDevice->exactBounds();
+        selectionDevice->exactBounds() |
+        dstDevice->exactBounds() |
+        selectionDevice->defaultBounds()->bounds();
 
     QScopedPointer<KisTransaction> transaction;
 
@@ -1165,7 +1181,7 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
         commandsAdapter->endMacro();
     } else {
         KisImageWSP image = view->image();
-        QRect saveRect = image->bounds() | dstDevice->exactBounds();
+        QRect saveRect = image->bounds();
 
         saveDeviceAsImage(dstDevice, parentNode->name(),
                           saveRect,

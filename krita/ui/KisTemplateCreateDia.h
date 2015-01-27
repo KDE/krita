@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef koTemplateCreateDia_h
-#define koTemplateCreateDia_h
+#ifndef KIS_TEMPLATE_CREATE_DIA_H
+#define KIS_TEMPLATE_CREATE_DIA_H
 
 #include <kdialog.h>
 #include "krita_export.h"

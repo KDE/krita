@@ -31,6 +31,7 @@
 
 #ifndef QT_NO_DBUS
 #include "KoViewAdaptor.h"
+#include <QDBusConnection>
 #endif
 
 #include "KoDockFactoryBase.h"
@@ -209,6 +210,7 @@ KoView::~KoView()
             d->part->removeView(this);
         }
     }
+    delete d;
 }
 
 

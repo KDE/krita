@@ -41,7 +41,7 @@ K_PLUGIN_FACTORY(KisDropshadowPluginFactory, registerPlugin<KisDropshadowPlugin>
 K_EXPORT_PLUGIN(KisDropshadowPluginFactory("krita"))
 
 KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/dropshadow.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Add Drop Shadow..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);

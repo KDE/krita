@@ -1,4 +1,5 @@
 ########### install files ###############
+add_subdirectory(elles-icc-profiles)
 install(FILES
     README
     scRGB.icm

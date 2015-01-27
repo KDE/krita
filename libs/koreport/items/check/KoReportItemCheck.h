@@ -51,6 +51,7 @@ protected:
     KoProperty::Property* m_lineColor;
     KoProperty::Property* m_lineWeight;
     KoProperty::Property* m_lineStyle;
+    KoProperty::Property* m_staticValue;
 
     bool value();
     void setValue(bool);
@@ -58,7 +59,6 @@ protected:
     
 private:
     virtual void createProperties();
-    bool m_value;
     
     friend class Scripting::Check;
 };

@@ -1,3 +1,4 @@
+add_subdirectory( actions )
 add_subdirectory( brushes )
 add_subdirectory( bundles )
 add_subdirectory( patterns )

@@ -35,12 +35,12 @@
 #include "kis_global.h"
 #include "KoPattern.h"
 
-KoPatternChooser::KoPatternChooser(QWidget *parent)
+KisPatternChooser::KisPatternChooser(QWidget *parent)
         : QFrame(parent)
 {
     m_lbName = new QLabel(this);
 
-    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
+    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->showPreview(true);
@@ -67,21 +67,27 @@ KoPatternChooser::KoPatternChooser(QWidget *parent)
     setLayout(mainLayout);
 }
 
-KoPatternChooser::~KoPatternChooser()
+KisPatternChooser::~KisPatternChooser()
 {
 }
 
-KoResource *  KoPatternChooser::currentResource()
+KoResource *  KisPatternChooser::currentResource()
 {
+    if (!m_itemChooser->currentResource()) {
+        KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
+        if (rserver->resources().size() > 0) {
+            m_itemChooser->setCurrentResource(rserver->resources().first());
+        }
+    }
     return m_itemChooser->currentResource();
 }
 
-void KoPatternChooser::setCurrentPattern(KoResource *resource)
+void KisPatternChooser::setCurrentPattern(KoResource *resource)
 {
     m_itemChooser->setCurrentResource(resource);
 }
 
-void KoPatternChooser::setCurrentItem(int row, int column)
+void KisPatternChooser::setCurrentItem(int row, int column)
 {
     m_itemChooser->setCurrentItem(row, column);
     if (currentResource()) {
@@ -89,12 +95,12 @@ void KoPatternChooser::setCurrentItem(int row, int column)
     }
 }
 
-void KoPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
+void KisPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
 {
     m_itemChooser->setPreviewOrientation(orientation);
 }
 
-void KoPatternChooser::update(KoResource * resource)
+void KisPatternChooser::update(KoResource * resource)
 {
     KoPattern *pattern = static_cast<KoPattern *>(resource);
 
@@ -102,7 +108,7 @@ void KoPatternChooser::update(KoResource * resource)
     m_lbName->setText(text);
 }
 
-void KoPatternChooser::setGrayscalePreview(bool grayscale)
+void KisPatternChooser::setGrayscalePreview(bool grayscale)
 {
     m_itemChooser->setGrayscalePreview(grayscale);
 }

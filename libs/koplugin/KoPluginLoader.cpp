@@ -50,7 +50,7 @@ KoPluginLoader* KoPluginLoader::instance()
     return s_instance;
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config)
+void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject *owner)
 {
     // Don't load the same plugins again
     if (d->loadedServiceTypes.contains(serviceType)) {
@@ -118,11 +118,13 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     QList<QString> whiteList;
     foreach(KSharedPtr<KService> service, serviceNames) {
         QString error;
-        QObject * plugin = service->createInstance<QObject>(this, QVariantList(), &error);
+        QObject * plugin = service->createInstance<QObject>(owner ? owner : this, QVariantList(), &error);
         if (plugin) {
             whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name"), QVariant::String).toString();
-            kDebug(30003) << "Loaded plugin" << service->name();
-            delete plugin;
+            kDebug(30003) << "Loaded plugin" << service->name() << owner;
+            if (!owner) {
+                delete plugin;
+            }
         } else {
             kWarning(30003) << "Loading plugin" << service->name() << "failed, " << error;
         }

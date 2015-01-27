@@ -52,8 +52,8 @@ private:
 };
 
 SectionFormatDialog::SectionFormatDialog(QWidget *parent, KoTextEditor *editor)
-: KDialog(parent)
-, m_editor(editor)
+    : KDialog(parent)
+    , m_editor(editor)
 {
     setCaption(i18n("Configure sections"));
     setButtons(KDialog::Ok | KDialog::Cancel);
@@ -84,7 +84,7 @@ void SectionFormatDialog::sectionNameChanged()
 {
     m_editor->renameSection(sectionFromModel(m_curIdx), m_widget.sectionNameLineEdit->text());
     m_widget.sectionTree->model()->setData(m_curIdx, m_widget.sectionNameLineEdit->text(), Qt::DisplayRole);
-    m_widget.sectionNameLineEdit->setModified(false); // value is set, to line edit isn't modified (has new default value)
+    m_widget.sectionNameLineEdit->setModified(false); // value is set to line edit isn't modified (has new default value)
 }
 
 void SectionFormatDialog::sectionSelected(QModelIndex idx)

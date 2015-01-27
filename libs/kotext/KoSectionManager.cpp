@@ -122,12 +122,14 @@ QString KoSectionManager::possibleNewName()
 {
     Q_D(KoSectionManager);
 
-    int i = d->registeredSections.count() + 1;
-    while (!isValidNewName(QString(i18n("New section %1")).arg(i))) {
+    QString newName;
+    int i = d->registeredSections.count();
+    do {
         i++;
-    }
+        newName = i18nc("new numbered section name", "New section %1", i);
+    } while (!isValidNewName(newName));
 
-    return QString(i18n("New section %1")).arg(i);
+    return newName;
 }
 
 void KoSectionManager::registerSection(KoSection* section)
@@ -136,19 +138,6 @@ void KoSectionManager::registerSection(KoSection* section)
     d->registeredSections.insert(section);
     invalidate();
 }
-
-// void KoSectionManager::sectionRenamed(const QString &oldName, const QString &name)
-// {
-//     Q_D(KoSectionManager);
-//     QHash<QString, KoSection *>::iterator it = d->sectionNames.find(oldName);
-//     KoSection *sec = *it;
-//     d->sectionNames.erase(it);
-//     d->sectionNames[name] = sec;
-//
-//     if (sec->modelItem()) {
-//         sec->modelItem()->setData(name, Qt::DisplayRole);
-//     }
-// }
 
 void KoSectionManager::unregisterSection(KoSection* section)
 {

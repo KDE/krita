@@ -434,11 +434,6 @@ void KoToolManager::Private::switchCanvasData(CanvasData *cd)
     if (oldCanvas != canvasData->canvas->canvas()) {
         emit q->changedCanvas(canvasData->canvas->canvas());
     }
-
-//     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-//     if (canvasControllerWidget) {
-//         canvasControllerWidget->activate();
-//     }
 }
 
 

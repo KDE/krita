@@ -87,6 +87,8 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
 
     m_page->aspectRatioBtn->setKeepAspectRatio(cfg.readEntry("CanvasSize/KeepAspectRatio", false));
     m_page->constrainProportionsCkb->setChecked(cfg.readEntry("CanvasSize/ConstrainProportions", false));
+    m_keepAspect = cfg.readEntry("CanvasSize/KeepAspectRatio", false);
+
 
     m_group = new QButtonGroup(m_page);
     m_group->addButton(m_page->topLeft, NORTH_WEST);

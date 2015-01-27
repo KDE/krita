@@ -207,6 +207,17 @@ inline QSharedPointer<T> toQShared(T* ptr) {
     return QSharedPointer<T>(ptr);
 }
 
+template <>
+inline QPoint qAbs<QPoint>(const QPoint &pt)
+{
+    return QPoint(qAbs(pt.x()), qAbs(pt.y()));
+}
+
+template <>
+inline QPointF qAbs<QPointF>(const QPointF &pt)
+{
+    return QPointF(qAbs(pt.x()), qAbs(pt.y()));
+}
 
 #endif // KISGLOBAL_H_
 

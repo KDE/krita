@@ -248,6 +248,12 @@ QPointF ensureInRect(QPointF pt, const QRectF &bounds);
  */
 bool KRITAIMAGE_EXPORT intersectLineRect(QLineF &line, const QRect rect);
 
+
+template <class Point>
+inline Point abs(const Point &pt) {
+    return Point(qAbs(pt.x()), qAbs(pt.y()));
+}
+
 }
 
 

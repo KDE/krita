@@ -23,6 +23,8 @@
 #include <QtCore/qmath.h>
 #include <QVector2D>
 #include <QTransform>
+#include "kis_algebra_2d.h"
+
 
 
 struct KisDistanceInformation::Private {
@@ -199,7 +201,7 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
             t = k;
             m_d->distance = QPointF();
         } else {
-            m_d->distance += qAbs(diff);
+            m_d->distance += KisAlgebra2D::abs(diff);
         }
     } else {
         qWarning() << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";

@@ -19,6 +19,8 @@
 #ifndef __KIS_TABLET_EVENT_RATE_LOGGER_H
 #define __KIS_TABLET_EVENT_RATE_LOGGER_H
 
+#include "kis_algebra_2d.h"
+
 
 class KisTabletEventRateLogger
 {
@@ -48,7 +50,7 @@ public:
 
         m_avgTime = (m_avgTime * oldCoeff + m_time.restart()) / newCoeff;
 
-        QPointF posDiff = qAbs(newPos - m_lastPos);
+        QPointF posDiff = KisAlgebra2D::abs(newPos - m_lastPos);
         m_avgPosDiff = (m_avgPosDiff * oldCoeff + posDiff) / newCoeff;
 
         m_lastPos = newPos;

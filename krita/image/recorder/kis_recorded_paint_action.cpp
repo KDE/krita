@@ -287,15 +287,16 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
 
     painter->setPaintColor(d->foregroundColor);
     painter->setBackgroundColor(d->backgroundColor);
-    if (d->paintOpPreset) {
-        painter->setPaintOpPreset(d->paintOpPreset, node, info.image());
-    }
 
     painter->setStrokeStyle(d->strokeStyle);
     painter->setFillStyle(d->fillStyle);
     painter->setPattern(d->pattern);
     painter->setGradient(d->gradient);
     painter->setGenerator(d->generator);
+
+    if (d->paintOpPreset) {
+        painter->setPaintOpPreset(d->paintOpPreset, node, info.image());
+    }
 
     playPaint(info, painter);
 

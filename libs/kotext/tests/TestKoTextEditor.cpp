@@ -156,7 +156,7 @@ void TestKoTextEditor::pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEdito
     QTextBlockFormat fmt = editor.blockFormat();
     fmt.clearProperty(KoParagraphStyle::SectionStartings);
     fmt.clearProperty(KoParagraphStyle::SectionEndings);
-    
+
     KoSectionUtils::setSectionEndings(fmt, QList<KoSectionEnd *>() << secEnd);
     editor.setBlockFormat(fmt);
 
@@ -171,13 +171,13 @@ bool TestKoTextEditor::checkStartings(const QVector<int> &needStartings, KoSecti
     QList<KoSection *> lst = KoSectionUtils::sectionStartings(editor.blockFormat());
 
     if (lst.size() != needStartings.size()) {
-        qDebug() << QString("Startings list size is wrong. Found %1, Expected %2").arg(lst.size()).arg(needStartings.size());
+        kDebug() << QString("Startings list size is wrong. Found %1, Expected %2").arg(lst.size()).arg(needStartings.size());
         return false;
     }
 
     for (int i = 0; i < needStartings.size(); i++) {
         if (lst[i] != sec[needStartings[i]]) {
-            qDebug() << QString("Found unexpected section starting. Expected %1 section.").arg(needStartings[i]);
+            kDebug() << QString("Found unexpected section starting. Expected %1 section.").arg(needStartings[i]);
             return false;
         }
     }
@@ -190,13 +190,13 @@ bool TestKoTextEditor::checkEndings(const QVector<int> &needEndings, KoSectionEn
     QList<KoSectionEnd *> lst = KoSectionUtils::sectionEndings(editor.blockFormat());
 
     if (lst.size() != needEndings.size()) {
-        qDebug() << QString("Endings list size is wrong. Found %1, expected %2").arg(lst.size()).arg(needEndings.size());
+        kDebug() << QString("Endings list size is wrong. Found %1, expected %2").arg(lst.size()).arg(needEndings.size());
         return false;
     }
 
     for (int i = 0; i < needEndings.size(); i++) {
         if (lst[i] != secEnd[needEndings[i]]) {
-            qDebug() << QString("Found unexpected section ending. Expected %1 section.").arg(needEndings[i]);
+            kDebug() << QString("Found unexpected section ending. Expected %1 section.").arg(needEndings[i]);
             return false;
         }
     }

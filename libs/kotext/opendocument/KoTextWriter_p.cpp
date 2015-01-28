@@ -129,14 +129,14 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         }
 
         QTextBlockFormat format = block.blockFormat();
-        
+
         foreach (const KoSection *section, KoSectionUtils::sectionStartings(format)) {
             // We are writing in only sections, that are completely inside selection.
             if (entireWithinSectionNames.contains(section->name())) {
                 section->saveOdf(context);
             }
         }
-        
+
         if (format.hasProperty(KoParagraphStyle::HiddenByTable)) {
             block = block.next();
             continue;

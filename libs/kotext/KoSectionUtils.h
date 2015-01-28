@@ -33,25 +33,25 @@ namespace KoSectionUtils {
      * @return @c false if there is no next block, @c true otherwise
      */
     bool getNextBlock(QTextCursor &cur);
-    
+
     /**
      * Convinient function to set a list of startings to QTextBlockFormat.
      * This checks that list is empty.
-     * 
+     *
      * @param fmt QTextBlockFormat reference to set startings.
      * @param list QList<KoSection *> is a list to set.
      */
     KOTEXT_EXPORT void setSectionStartings(QTextBlockFormat &fmt, QList<KoSection *> &list);
-    
+
     /**
      * Convinient function to set a list of endings to QTextBlockFormat.
      * This checks that list is empty.
-     * 
+     *
      * @param fmt QTextBlockFormat reference to set endings.
      * @param list QList<KoSectionEnd *> is a list to set.
      */
     KOTEXT_EXPORT void setSectionEndings(QTextBlockFormat& fmt, QList<KoSectionEnd *> &list);
-    
+
     /**
      * Convinient function to get section startings from QTextBlockFormat.
      * @param fmt QTextBlockFormat format to retrieve section startings from.

@@ -271,7 +271,7 @@ public:
             , data(static_cast<void *>(_data))
         {
         }
-        
+
         SectionHandle(QString _name, KoSectionEnd *_data)
             : name(_name)
             , type(SectionClose)

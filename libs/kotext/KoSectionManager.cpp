@@ -115,7 +115,7 @@ void KoSectionManager::invalidate()
 bool KoSectionManager::isValidNewName(const QString &name)
 {
     Q_D(KoSectionManager);
-    return (d->sectionNames().find(name) == d->sectionNames().end());
+    return (d->sectionNames().constFind(name) == d->sectionNames().constEnd());
 }
 
 QString KoSectionManager::possibleNewName()

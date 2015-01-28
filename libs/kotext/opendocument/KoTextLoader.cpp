@@ -840,10 +840,10 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
     loadBody(sectionElem, cursor);
 
     // Close the section on the last block of text we have loaded just now.
-    QTextBlockFormat format = cursor.block().blockFormat();    
+    QTextBlockFormat format = cursor.block().blockFormat();
     KoSectionUtils::setSectionEndings(format,
         KoSectionUtils::sectionEndings(format) << new KoSectionEnd(section));
-    
+
     cursor.setBlockFormat(format);
 }
 

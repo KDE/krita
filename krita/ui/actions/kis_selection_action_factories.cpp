@@ -263,6 +263,13 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
         ActionHelper::copyFromDevice(view, dev);
         image->unlock();
 
+        if (dev->exactBounds().isEmpty()) {
+            view->showFloatingMessage(
+                i18nc("floating message when copying empty selection",
+                      "Selection is empty: no pixels were copied "),
+                QIcon(), 3000, KisFloatingMessage::Medium);
+        }
+
         if (willCut) {
             KUndo2Command *command = 0;
 

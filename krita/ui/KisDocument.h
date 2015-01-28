@@ -458,8 +458,6 @@ public:
      */
     bool isLoading() const;
 
-    int queryCloseDia();
-
     /**
      * Sets the backup path of the document
      */
@@ -824,7 +822,6 @@ private:
 
     QString prettyPathOrUrl() const;
 
-    bool queryClose();
     bool saveToUrl();
     bool openUrlInternal(const KUrl &url);
 

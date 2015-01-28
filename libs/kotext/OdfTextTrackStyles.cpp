@@ -27,12 +27,13 @@
 #include <kdebug.h>
 
 
-QMap<KoStyleManager *, OdfTextTrackStyles *> OdfTextTrackStyles::instances;
+QMap<QObject *, OdfTextTrackStyles *> OdfTextTrackStyles::instances;
 
 OdfTextTrackStyles *OdfTextTrackStyles::instance(KoStyleManager *manager)
 {
     if (! instances.contains(manager)) {
         instances[manager] = new OdfTextTrackStyles(manager);
+        connect(manager,SIGNAL(destroyed(QObject *)),instances[manager], SLOT(styleManagerDied(QObject *)));
     }
 
     return instances[manager];
@@ -42,7 +43,7 @@ void OdfTextTrackStyles::registerDocument(QTextDocument *qDoc)
 {
     if (! m_documents.contains(qDoc)) {
         m_documents.append(qDoc);
-        new OdfTextTrackStylesAutoDocumentRemover(qDoc, this); // ensures unregisterDocument is called when qDoc dies
+        connect(qDoc,SIGNAL(destroyed(QObject *)), this, SLOT(documentDied(QObject *)));
     }
 }
 
@@ -78,7 +79,9 @@ void OdfTextTrackStyles::endEdit()
 {
     if (m_documents.length() > 0) {
         KUndo2Stack *undoStack= KoTextDocument(m_documents.first()).undoStack();
-        undoStack->push(m_changeCommand);
+        if (undoStack) {
+            undoStack->push(m_changeCommand);
+        }
     } else
         delete m_changeCommand;
 
@@ -105,6 +108,15 @@ void OdfTextTrackStyles::recordStyleChange(int id, const KoCharacterStyle *origS
     }
 }
 
+void OdfTextTrackStyles::styleManagerDied(QObject *manager)
+{
+    OdfTextTrackStyles::instances.remove(manager);
+}
+
+void OdfTextTrackStyles::documentDied(QObject *document)
+{
+    unregisterDocument(qobject_cast<QTextDocument *>(document));
+}
 
 #include <OdfTextTrackStyles.moc>
 

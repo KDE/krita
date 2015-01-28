@@ -52,7 +52,7 @@ public:
     static OdfTextTrackStyles *instance(KoStyleManager *manager);
 
 private:
-    static QMap<KoStyleManager *, OdfTextTrackStyles *> instances;
+    static QMap<QObject *, OdfTextTrackStyles *> instances;
 
     OdfTextTrackStyles(KoStyleManager *manager);
 
@@ -64,6 +64,8 @@ private slots:
     void endEdit();
     void recordStyleChange(int id, const KoParagraphStyle *origStyle, const KoParagraphStyle *newStyle);
     void recordStyleChange(int id, const KoCharacterStyle *origStyle, const KoCharacterStyle *newStyle);
+    void styleManagerDied(QObject *manager);
+    void documentDied(QObject *manager);
 
 public:
     void registerDocument(QTextDocument *qDoc);
@@ -73,25 +75,6 @@ private:
     QList<QTextDocument *> m_documents;
     QWeakPointer<KoStyleManager> m_styleManager;
     ChangeStylesMacroCommand *m_changeCommand;
-};
-
-class OdfTextTrackStylesAutoDocumentRemover : public QObject
-{
-    Q_OBJECT
-    public:
-    OdfTextTrackStylesAutoDocumentRemover(QTextDocument *parent, OdfTextTrackStyles *follower)
-     : QObject(parent)
-     , m_doc(parent)
-     , m_follower(follower)
-    {
-    }
-
-    virtual ~OdfTextTrackStylesAutoDocumentRemover()
-    {
-        m_follower->unregisterDocument(m_doc);
-    }
-    QTextDocument *m_doc;
-    OdfTextTrackStyles *m_follower;
 };
 
 #endif

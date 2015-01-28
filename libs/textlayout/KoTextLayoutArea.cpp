@@ -1164,6 +1164,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
     }
 
+    // Whenever we relayout the markup layout becomes invalid
+    blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, false);
+    blockData.setMarkupsLayoutValidity(KoTextBlockData::Grammar, false);
+
     // ==============
     // Now once we know the physical context we can work on the borders of the paragraph
     // ==============

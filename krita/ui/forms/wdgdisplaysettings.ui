@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>504</width>
-    <height>643</height>
+    <width>446</width>
+    <height>563</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,7 +29,7 @@
       <item>
        <widget class="QCheckBox" name="chkChannelsAsColor">
         <property name="text">
-         <string>Color Channels in Color</string>
+         <string>Color channels in color</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -47,6 +47,13 @@
        <widget class="QCheckBox" name="chkSelectionOutlineAntialiasing">
         <property name="text">
          <string>Enable selection outline anti-aliasing</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkHidePopups">
+        <property name="text">
+         <string>Hide layer thumbnail popup</string>
         </property>
        </widget>
       </item>
@@ -264,7 +271,7 @@
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Texture Buffering. This can be faster on some GPU/Driver combinations (like Intel) or broken on some others (like AMD/Radeon).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>Use Texture Buffer</string>
+         <string>Use texture buffer</string>
         </property>
        </widget>
       </item>

@@ -18,6 +18,7 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
+#include "kis_config.h"
 #include "KisDocumentSectionDelegate.h"
 #include "KisDocumentSectionModel.h"
 #include "KisDocumentSectionToolTip.h"
@@ -179,8 +180,10 @@ bool KisDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *
         }
     }
     else if (event->type() == QEvent::ToolTip) {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
-        d->tip.showTip(d->view, helpEvent->pos(), option, index);
+        if (!KisConfig().hidePopups()) {
+            QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
+            d->tip.showTip(d->view, helpEvent->pos(), option, index);
+        }
         return true;
     } else if (event->type() == QEvent::Leave) {
         d->tip.hide();

@@ -1253,6 +1253,16 @@ void KisConfig::setShowSingleChannelAsColor(bool asColor)
     m_cfg.writeEntry("showSingleChannelAsColor", asColor);
 }
 
+bool KisConfig::hidePopups() const
+{
+    return m_cfg.readEntry("hidePopups", false);
+}
+
+void KisConfig::setHidePopups(bool hidepopups)
+{
+    m_cfg.writeEntry("hidePopups", hidepopups);
+}
+
 int KisConfig::numDefaultLayers() const
 {
     return m_cfg.readEntry("NumberOfLayersForNewImage", 2);

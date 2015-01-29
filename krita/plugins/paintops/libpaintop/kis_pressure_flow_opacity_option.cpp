@@ -28,9 +28,8 @@
 #include <kis_node.h>
 #include <widgets/kis_curve_widget.h>
 
-KisFlowOpacityOption::KisFlowOpacityOption(KisNodeSP currentNode)
+KisPixelBrushOpacityOption::KisPixelBrushOpacityOption(KisNodeSP currentNode)
     : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::generalCategory(), true, 1.0, 0.0, 1.0)
-    , m_flow(1.0)
 {
     setCurveUsed(true);
     setSeparateCurveValue(true);
@@ -44,50 +43,38 @@ KisFlowOpacityOption::KisFlowOpacityOption(KisNodeSP currentNode)
         dynamic_cast<KisIndirectPaintingSupport*>(currentNode.data());
 }
 
-void KisFlowOpacityOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPixelBrushOpacityOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
-    setting->setProperty("FlowValue", m_flow);
 }
 
-void KisFlowOpacityOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPixelBrushOpacityOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOption::readOptionSetting(setting);
-    setFlow(setting->getDouble("FlowValue", 1.0));
     m_paintActionType = setting->getInt("PaintOpAction", BUILDUP);
 }
 
-qreal KisFlowOpacityOption::getFlow() const
-{
-    return m_flow;
-}
 
-qreal KisFlowOpacityOption::getStaticOpacity() const
+qreal KisPixelBrushOpacityOption::getStaticOpacity() const
 {
     return value();
 }
 
-qreal KisFlowOpacityOption::getDynamicOpacity(const KisPaintInformation& info) const
+qreal KisPixelBrushOpacityOption::getDynamicOpacity(const KisPaintInformation& info) const
 {
     return computeValue(info);
 }
 
-void KisFlowOpacityOption::setFlow(qreal flow)
-{
-    m_flow = qBound(qreal(0), flow, qreal(1));
-}
-
-void KisFlowOpacityOption::setOpacity(qreal opacity)
+void KisPixelBrushOpacityOption::setOpacity(qreal opacity)
 {
     setValue(opacity);
 }
 
-void KisFlowOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info)
+void KisPixelBrushOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info)
 {
     if (m_paintActionType == WASH && m_nodeHasIndirectPaintingSupport)
         painter->setOpacityUpdateAverage(quint8(getDynamicOpacity(info) * 255.0));
     else
         painter->setOpacityUpdateAverage(quint8(getStaticOpacity() * getDynamicOpacity(info) * 255.0));
 
-    painter->setFlow(quint8(getFlow() * 255.0));
 }

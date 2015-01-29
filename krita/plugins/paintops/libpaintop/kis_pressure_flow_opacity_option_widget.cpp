@@ -35,7 +35,7 @@
 #include "ui_wdgflowopacityoption.h"
 
 KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
-    KisCurveOptionWidget(new KisFlowOpacityOption(0), true)
+    KisCurveOptionWidget(new KisPixelBrushOpacityOption(0), true)
 {
     QWidget* widget = new QWidget();
 
@@ -55,7 +55,7 @@ KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
 void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
-    KisFlowOpacityOption* option = static_cast<KisFlowOpacityOption*>(curveOption());
+    KisPixelBrushOpacityOption* option = static_cast<KisPixelBrushOpacityOption*>(curveOption());
 
     m_opacitySlider->blockSignals(true);
     m_opacitySlider->setValue(option->getStaticOpacity());
@@ -64,7 +64,7 @@ void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfigurat
 
 void KisFlowOpacityOptionWidget::slotSliderValueChanged()
 {
-    KisFlowOpacityOption* option = static_cast<KisFlowOpacityOption*>(curveOption());
+    KisPixelBrushOpacityOption* option = static_cast<KisPixelBrushOpacityOption*>(curveOption());
     option->setOpacity(m_opacitySlider->value());
     emitSettingChanged();
 }

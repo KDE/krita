@@ -28,25 +28,22 @@
 class KisPaintInformation;
 class KisPainter;
 
-class PAINTOP_EXPORT KisFlowOpacityOption: public KisCurveOption
+class PAINTOP_EXPORT KisPixelBrushOpacityOption: public KisCurveOption
 {
 public:
-    KisFlowOpacityOption(KisNodeSP currentNode);
-    virtual ~KisFlowOpacityOption() { }
+    KisPixelBrushOpacityOption(KisNodeSP currentNode);
+    virtual ~KisPixelBrushOpacityOption() { }
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-    void setFlow(qreal flow);
     void setOpacity(qreal opacity);
     void apply(KisPainter* painter, const KisPaintInformation& info);
 
-    qreal getFlow() const;
     qreal getStaticOpacity() const;
     qreal getDynamicOpacity(const KisPaintInformation& info) const;
 
 protected:
-    qreal m_flow;
     int   m_paintActionType;
     bool  m_nodeHasIndirectPaintingSupport;
 };

@@ -79,7 +79,6 @@ void SpellCheckMenu::createSuggestionsMenu()
     m_suggestionsMenu->addAction(m_ignoreWordAction);
     m_suggestionsMenu->addAction(m_addToDictionaryAction);
     m_suggestionsMenu->addSeparator();
-
     if (!m_currentMisspelled.isEmpty()) {
         m_suggestions = m_speller.suggest(m_currentMisspelled);
         for (int i = 0; i < m_suggestions.count(); ++i) {

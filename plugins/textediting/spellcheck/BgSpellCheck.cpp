@@ -183,9 +183,14 @@ void BgSpellCheck::foundMisspelling(const QString &word, int start)
     BackgroundChecker::continueChecking();
 }
 
-QString BgSpellCheck::currentLanguage()
+QString BgSpellCheck::currentLanguage() const
 {
     return m_currentLanguage;
+}
+
+QString BgSpellCheck::currentCountry() const
+{
+    return m_currentCountry;
 }
 
 #include <BgSpellCheck.moc>

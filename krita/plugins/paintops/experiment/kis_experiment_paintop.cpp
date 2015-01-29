@@ -87,7 +87,6 @@ void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
     }
     else {
         painter()->setFillStyle(KisPainter::FillStyleForegroundColor);
-        painter()->setCompositeOp(COMPOSITE_COPY);
         painter()->setAntiAliasPolygonFill(!m_hardEdge);
 
         foreach(const QRect & rect, changedRegion.rects()) {

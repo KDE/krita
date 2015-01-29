@@ -70,6 +70,7 @@ KisMask::KisMask(const QString & name)
 
 KisMask::KisMask(const KisMask& rhs)
         : KisNode(rhs)
+        , KisIndirectPaintingSupport()
         , m_d(new Private(this))
 {
     setName(rhs.name());

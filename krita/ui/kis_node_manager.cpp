@@ -32,6 +32,7 @@
 #include <KoShapeLayer.h>
 #include <KisImportExportManager.h>
 #include <KoFileDialog.h>
+#include <KoToolManager.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -367,6 +368,7 @@ void KisNodeManager::updateGUI()
     // enable/disable all relevant actions
     m_d->layerManager->updateGUI();
     m_d->maskManager->updateGUI();
+
 }
 
 
@@ -560,7 +562,7 @@ void KisNodeManager::convertNode(const QString &nodeType)
 
 void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 {
-    if(m_d->activateNodeImpl(node)) {
+    if (m_d->activateNodeImpl(node)) {
         emit sigUiNeedChangeActiveNode(node);
         emit sigNodeActivated(node);
         nodesUpdated();
@@ -575,9 +577,35 @@ void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 
 void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
 {
-    if(m_d->activateNodeImpl(node)) {
+    if (m_d->activateNodeImpl(node)) {
         emit sigNodeActivated(node);
         nodesUpdated();
+    }
+
+    QStringList vectorTools = QStringList()
+                << "InteractionTool"
+                << "KarbonPatternTool"
+                << "KarbonGradientTool"
+                << "KarbonCalligraphyTool"
+                << "CreateShapesTool"
+                << "PathToolFactoryId";
+
+    QStringList pixelTools = QStringList()
+            << "KritaShape/KisToolBrush"
+            << "KritaShape/KisToolDyna"
+            << "KritaShape/KisToolMultiBrush"
+            << "KritaFill/KisToolFill"
+            << "KritaFill/KisToolGradient";
+
+    if (node->inherits("KisShapeLayer")) {
+        if (pixelTools.contains(KoToolManager::instance()->activeToolId())) {
+            KoToolManager::instance()->switchToolRequested("InteractionTool");
+        }
+    }
+    else {
+        if (vectorTools.contains(KoToolManager::instance()->activeToolId())) {
+            KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+        }
     }
 }
 

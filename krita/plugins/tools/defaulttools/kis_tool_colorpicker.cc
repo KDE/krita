@@ -54,18 +54,18 @@
 
 namespace
 {
-    // The location of the sample all visible layers in the combobox
-    const int SAMPLE_MERGED = 0;
-    const QString CONFIG_GROUP_NAME = "tool_color_picker";
+// The location of the sample all visible layers in the combobox
+const int SAMPLE_MERGED = 0;
+const QString CONFIG_GROUP_NAME = "tool_color_picker";
 }
 
 KisToolColorPicker::Configuration::Configuration()
-    : toForegroundColor(true),
-      updateColor(true),
-      addPalette(false),
-      normaliseValues(false),
-      sampleMerged(true),
-      radius(1)
+    : toForegroundColor(true)
+    , updateColor(true)
+    , addPalette(false)
+    , normaliseValues(false)
+    , sampleMerged(true)
+    , radius(1)
 {
 }
 
@@ -115,7 +115,7 @@ void KisToolColorPicker::Configuration::load(ToolActivation activation)
 }
 
 KisToolColorPicker::KisToolColorPicker(KoCanvasBase* canvas)
-        :  KisTool(canvas, KisCursor::pickerCursor())
+    : KisTool(canvas, KisCursor::pickerCursor())
 {
     setObjectName("tool_colorpicker");
     m_isActivated = false;
@@ -152,81 +152,80 @@ void KisToolColorPicker::deactivate()
     KisTool::deactivate();
 }
 
-
-
 void KisToolColorPicker::pickColor(const QPointF& pos)
 {
-        if(m_colorPickerDelayTimer.isActive()) {
-            return;
-        }
-        else {
-            m_colorPickerDelayTimer.setSingleShot(true);
-            m_colorPickerDelayTimer.start(100);
-        }
+    if (m_colorPickerDelayTimer.isActive()) {
+        return;
+    }
+    else {
+        m_colorPickerDelayTimer.setSingleShot(true);
+        m_colorPickerDelayTimer.start(100);
+    }
 
 
-        QScopedPointer<boost::lock_guard<KisImage> > imageLocker;
+    QScopedPointer<boost::lock_guard<KisImage> > imageLocker;
 
-        KisPaintDeviceSP dev;
+    KisPaintDeviceSP dev;
 
-        if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
+    if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
             currentNode() && currentNode()->projection()) {
-            dev = currentNode()->projection();
-        }
-        else {
-            imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
-            dev = currentImage()->projection();
-        }
+        dev = currentNode()->projection();
+    }
+    else {
+        imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
+        dev = currentImage()->projection();
+    }
 
-        if (m_config.radius == 1) {
-            dev->pixel(pos.x(), pos.y(), &m_pickedColor);
-        }
-        else {
+    if (m_config.radius == 1) {
+        dev->pixel(pos.x(), pos.y(), &m_pickedColor);
+    }
+    else {
 
-            const KoColorSpace* cs = dev->colorSpace();
-            int pixelSize = cs->pixelSize();
+        const KoColorSpace* cs = dev->colorSpace();
+        int pixelSize = cs->pixelSize();
 
-            quint8* dstColor = new quint8[pixelSize];
-            QVector<const quint8*> pixels;
-            QVector<qint16> weights;
+        quint8* dstColor = new quint8[pixelSize];
+        QVector<const quint8*> pixels;
+        QVector<qint16> weights;
 
-            KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
+        KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
 
-            for (int y = -m_config.radius; y <= m_config.radius; y++) {
-                for (int x = -m_config.radius; x <= m_config.radius; x++) {
-                    if (((x * x) + (y * y)) < m_config.radius * m_config.radius) {
-                        accessor->moveTo(pos.x() + x, pos.y() + y);
-                        pixels << accessor->oldRawData();
-                    }
+        for (int y = -m_config.radius; y <= m_config.radius; y++) {
+            for (int x = -m_config.radius; x <= m_config.radius; x++) {
+                if (((x * x) + (y * y)) < m_config.radius * m_config.radius) {
+                    accessor->moveTo(pos.x() + x, pos.y() + y);
+                    pixels << accessor->oldRawData();
                 }
             }
-
-            weights.fill(255 / pixels.size(), pixels.size());
-            // Because the sum of the weights must be 255,
-            // we cheat a bit, and weigh the center pixel differently in order
-            // to sum to 255 in total
-            weights[(weights.size() / 2)] = 255 - (weights.size() -1) * (255 / weights.size());
-
-            const quint8** cpixels = const_cast<const quint8**>(pixels.constData());
-            cs->mixColorsOp()->mixColors(cpixels, weights.constData(), pixels.size(), dstColor);
-
-            m_pickedColor = KoColor(dstColor, cs);
-
-            delete[] dstColor;
         }
 
-        m_pickedColor.convertTo(dev->compositionSourceColorSpace());
+        weights.fill(255 / pixels.size(), pixels.size());
+        // Because the sum of the weights must be 255,
+        // we cheat a bit, and weigh the center pixel differently in order
+        // to sum to 255 in total
+        weights[(weights.size() / 2)] = 255 - (weights.size() -1) * (255 / weights.size());
 
-        if (m_config.updateColor) {
-            KoColor publicColor = m_pickedColor;
-            publicColor.setOpacity(OPACITY_OPAQUE_U8);
+        const quint8** cpixels = const_cast<const quint8**>(pixels.constData());
+        cs->mixColorsOp()->mixColors(cpixels, weights.constData(), pixels.size(), dstColor);
 
-            if (m_config.toForegroundColor) {
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, publicColor);
-            } else {
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
-            }
+        m_pickedColor = KoColor(dstColor, cs);
+
+        delete[] dstColor;
+    }
+
+    m_pickedColor.convertTo(dev->compositionSourceColorSpace());
+
+    if (m_config.updateColor) {
+        KoColor publicColor = m_pickedColor;
+        publicColor.setOpacity(OPACITY_OPAQUE_U8);
+
+        if (m_config.toForegroundColor) {
+            canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, publicColor);
         }
+        else {
+            canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
+        }
+    }
 }
 
 void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
@@ -363,10 +362,6 @@ QWidget* KisToolColorPicker::createOptionWidget()
             m_palettes.append(palette);
         }
     }
-
-    //TODO
-    //connect(srv, SIGNAL(resourceAdded(KoResource*)), this, SLOT(slotAddPalette(KoResource*)));
-    //m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 
     return m_optionsWidget;
 }

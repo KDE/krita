@@ -254,6 +254,9 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
             break;
         }
     }
+    if (!currentPaintOpPreset()) {
+        return false;
+    }
     bool paintOpIgnoredEvent = currentPaintOpPreset()->settings()->
         mousePressEvent(KisPaintInformation(convertToPixelCoord(event->point),
                                             pressureToCurve(event->pressure()),

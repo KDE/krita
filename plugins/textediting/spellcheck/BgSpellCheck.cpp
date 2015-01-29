@@ -92,7 +92,7 @@ QString BgSpellCheck::fetchMoreText()
             m_nextPosition = m_endPosition; // ends run
             return QString();
         }
-        if (block.length() <= 1) { // only linefeed or empty block
+        if (m_currentPosition >= block.position() + block.length() - 1) { // only linefeed or empty block left
             block = block.next();
             m_currentPosition++;
             continue;
@@ -125,8 +125,9 @@ QString BgSpellCheck::fetchMoreText()
         end = iter.fragment().position() + iter.fragment().length();
         // qDebug() << " + " << iter.fragment().position() << "-" << iter.fragment().position() + iter.fragment().length()
             // << block.text().mid(iter.fragment().position() - block.position(), iter.fragment().length());
-        if (end >= qMin(m_endPosition, m_currentPosition + MaxCharsPerRun))
+        if (end >= qMin(m_endPosition, m_currentPosition + MaxCharsPerRun)) {
             break;
+        }
         if (!iter.atEnd())
             ++iter;
         if (iter.atEnd()) { // end of block.
@@ -143,14 +144,16 @@ QString BgSpellCheck::fetchMoreText()
         if ((cf.hasProperty(KoCharacterStyle::Language)
                     && language != cf.property(KoCharacterStyle::Language).toString())
                 || (!cf.hasProperty(KoCharacterStyle::Language)
-                    && language != m_defaultLanguage))
+                    && language != m_defaultLanguage)) {
             break;
+        }
 
         if ((cf.hasProperty(KoCharacterStyle::Country)
                     && country != cf.property(KoCharacterStyle::Country).toString())
                 || (!cf.hasProperty(KoCharacterStyle::Country)
-                    && country != m_defaultCountry))
+                    && country != m_defaultCountry)) {
             break;
+        }
     }
 
     if (m_currentLanguage != language || m_currentCountry != country) {

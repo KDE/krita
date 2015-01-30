@@ -237,14 +237,20 @@ void KisBaseNode::setSystemLocked(bool locked, bool update)
     }
 }
 
-bool KisBaseNode::isEditable() const
+bool KisBaseNode::isEditable(bool checkVisibility) const
 {
-    bool editable = (m_d->properties.boolProperty("visible", true) && !userLocked() && !systemLocked());
+    bool editable = true;
+    if (checkVisibility) {
+        editable = (m_d->properties.boolProperty("visible", true) && !userLocked() && !systemLocked());
+    }
+    else {
+        editable = (!userLocked() && !systemLocked());
+    }
 
     if (editable) {
         KisBaseNodeSP parentNode = parentCallback();
         if (parentNode && parentNode != this) {
-            editable = parentNode->isEditable();
+            editable = parentNode->isEditable(checkVisibility);
         }
     }
     return editable;

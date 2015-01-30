@@ -46,13 +46,6 @@
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at qt-info@nokia.com.
 **
-**
-**
-**
-**
-**
-**
-**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
@@ -113,6 +106,6 @@ private:
     QString m_empty_label;
     QIcon m_clean_icon;
     KisCanvas2* m_canvas;
-    QMap<const KUndo2Command*, QImage> imageMap;
+    QMap<const KUndo2Command*, QImage> m_imageMap;
 };
 #endif

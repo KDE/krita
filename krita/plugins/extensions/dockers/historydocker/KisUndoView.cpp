@@ -301,7 +301,7 @@ void KisUndoView::setCanvas(KisCanvas2 *canvas) {
 }
 void KisUndoView::mousePressEvent(QMouseEvent *event)
 {
-    if(event->button() == Qt::RightButton)
+    if (event->button() == Qt::RightButton)
     {
         QMenu menu(this);
         QAction* action1 = menu.addAction(koIcon("linked2"),stack()->useCumulativeUndoRedo()?i18n("Disable Cumulative Undo"):i18n("Enable Cumulative Undo"));

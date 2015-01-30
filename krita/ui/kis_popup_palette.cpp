@@ -35,6 +35,8 @@
 #include <QQueue>
 #include <QMenu>
 #include <math.h>
+#include "kis_signal_compressor.h"
+
 
 #define brushInnerRadius 94.0
 #define brushOuterRadius 145.0
@@ -91,6 +93,7 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     , m_triangleColorSelector(0)
     , m_timer(0)
     , m_displayRenderer(displayRenderer)
+    , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
 {
     m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
     m_triangleColorSelector->move(77, 77);
@@ -101,11 +104,20 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     setAttribute(Qt::WA_ContentsPropagated, true);
     //setAttribute(Qt::WA_TranslucentBackground, true);
 
-    connect(m_triangleColorSelector, SIGNAL(realColorChanged(KoColor)), SLOT(slotChangefGColor(KoColor)));
+    connect(m_triangleColorSelector, SIGNAL(realColorChanged(KoColor)),
+            m_colorChangeCompressor, SLOT(start()));
+    connect(m_colorChangeCompressor, SIGNAL(timeout()),
+            SLOT(slotEmitColorChanged()));
+
+    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
+            SLOT(slotExternalFgColorChanged(KoColor)));
+    connect(this, SIGNAL(sigChangefGColor(KoColor)),
+            m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
+
+
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
-    connect(this, SIGNAL(sigChangefGColor(KoColor)), m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
-    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)), m_triangleColorSelector, SLOT(setRealColor(KoColor)));
+
     connect(m_resourceManager, SIGNAL(setSelectedColor(int)), SLOT(slotSetSelectedColor(int)));
     connect(m_resourceManager, SIGNAL(updatePalettes()), SLOT(slotUpdate()));
     connect(m_resourceManager, SIGNAL(hidePalettes()), SLOT(slotHide()));
@@ -121,10 +133,7 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotEnableChangeFGColor()));
     connect(this, SIGNAL(sigEnableChangeFGColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
 
-    m_colorChangeTimer = new QTimer(this);
-    m_colorChangeTimer->setInterval(50);
-    m_colorChangeTimer->setSingleShot(true);
-    connect(m_colorChangeTimer, SIGNAL(timeout()), this, SLOT(slotColorChangeTimeout()));
+
 
     setMouseTracking(true);
     setHoveredPreset(-1);
@@ -133,6 +142,19 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
 
     setVisible(true);
     setVisible(false);
+}
+
+void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
+{
+    m_triangleColorSelector->setRealColor(color);
+}
+
+void KisPopupPalette::slotEmitColorChanged()
+{
+    if (isVisible()) {
+        update();
+        emit sigChangefGColor(m_triangleColorSelector->realColor());
+    }
 }
 
 //setting KisPopupPalette properties
@@ -164,17 +186,6 @@ int KisPopupPalette::selectedColor() const
 void KisPopupPalette::setSelectedColor(int x)
 {
     m_selectedColor = x;
-}
-
-void KisPopupPalette::slotChangefGColor(const KoColor& /*newColor*/)
-{
-    m_colorChangeTimer->start();
-    update();
-}
-
-void KisPopupPalette::slotColorChangeTimeout()
-{
-    emit sigChangefGColor(m_triangleColorSelector->realColor());
 }
 
 void KisPopupPalette::slotTriggerTimer()

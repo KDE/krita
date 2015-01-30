@@ -30,6 +30,7 @@ class KisFavoriteResourceManager;
 class QWidget;
 class KoColor;
 class KoTriangleColorSelector;
+class KisSignalCompressor;
 
 class KisPopupPalette : public QWidget
 {
@@ -95,8 +96,10 @@ private:
     KoTriangleColorSelector* m_triangleColorSelector;
 
     QTimer* m_timer;
-    QTimer* m_colorChangeTimer;
+
     const KoColorDisplayRendererInterface *m_displayRenderer;
+
+    KisSignalCompressor *m_colorChangeCompressor;
 
 signals:
     void sigChangeActivePaintop(int);
@@ -112,9 +115,8 @@ signals:
     void sigTriggerTimer();
 
 private slots:
-
-    void slotChangefGColor(const KoColor& newColor);
-    void slotColorChangeTimeout();
+    void slotExternalFgColorChanged(const KoColor &color);
+    void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
     void slotTriggerTimer();
     void slotEnableChangeFGColor();

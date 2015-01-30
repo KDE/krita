@@ -83,7 +83,7 @@ class KisCanvas2::KisCanvas2Private
 
 public:
 
-    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisView> view)
+    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisView> view, KoCanvasResourceManager* resourceManager)
         : coordinatesConverter(coordConverter)
         , view(view)
         , canvasWidget(0)
@@ -92,7 +92,7 @@ public:
         , toolProxy(new KisToolProxy(parent))
         , vastScrolling(true)
         , popupPalette(0)
-        , displayColorConverter(new KisDisplayColorConverter(static_cast<KisCanvas2*>(parent)))
+        , displayColorConverter(new KisDisplayColorConverter(resourceManager, view))
     {
     }
 
@@ -129,7 +129,7 @@ public:
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc, resourceManager)
-    , m_d(new KisCanvas2Private(this, coordConverter, view))
+    , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;

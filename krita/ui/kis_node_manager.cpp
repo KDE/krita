@@ -582,7 +582,8 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
         nodesUpdated();
     }
 
-    QStringList vectorTools = QStringList()
+    if (node) {
+        QStringList vectorTools = QStringList()
                 << "InteractionTool"
                 << "KarbonPatternTool"
                 << "KarbonGradientTool"
@@ -590,21 +591,22 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
                 << "CreateShapesTool"
                 << "PathToolFactoryId";
 
-    QStringList pixelTools = QStringList()
-            << "KritaShape/KisToolBrush"
-            << "KritaShape/KisToolDyna"
-            << "KritaShape/KisToolMultiBrush"
-            << "KritaFill/KisToolFill"
-            << "KritaFill/KisToolGradient";
+        QStringList pixelTools = QStringList()
+                << "KritaShape/KisToolBrush"
+                << "KritaShape/KisToolDyna"
+                << "KritaShape/KisToolMultiBrush"
+                << "KritaFill/KisToolFill"
+                << "KritaFill/KisToolGradient";
 
-    if (node->inherits("KisShapeLayer")) {
-        if (pixelTools.contains(KoToolManager::instance()->activeToolId())) {
-            KoToolManager::instance()->switchToolRequested("InteractionTool");
+        if (node->inherits("KisShapeLayer")) {
+            if (pixelTools.contains(KoToolManager::instance()->activeToolId())) {
+                KoToolManager::instance()->switchToolRequested("InteractionTool");
+            }
         }
-    }
-    else {
-        if (vectorTools.contains(KoToolManager::instance()->activeToolId())) {
-            KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+        else {
+            if (vectorTools.contains(KoToolManager::instance()->activeToolId())) {
+                KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+            }
         }
     }
 }

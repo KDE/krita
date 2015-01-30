@@ -203,9 +203,11 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
         return currentCommand->isMerged()?m_stack->text(index.row() - 1)+"(Merged)":m_stack->text(index.row() - 1);
     }
     else if (role == Qt::DecorationRole) {
-        if (!index.row()) {
+        if (index.row() > 0) {
             const KUndo2Command* currentCommand = m_stack->command(index.row() - 1);
-            return m_imageMap[currentCommand];
+            if (m_imageMap.contains(currentCommand)) {
+                return m_imageMap[currentCommand];
+            }
         }
     }
     return QVariant();

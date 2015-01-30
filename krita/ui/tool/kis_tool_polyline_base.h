@@ -43,6 +43,7 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     void deactivate();
     void requestStrokeEnd();
     void requestStrokeCancellation();

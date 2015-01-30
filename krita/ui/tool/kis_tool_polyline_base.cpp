@@ -42,18 +42,26 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
       m_type(type),
       m_closeSnappingActivated(false)
 {
-
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
     if (kiscanvas && kiscanvas->viewManager()) {
         KAction *undo_polygon_selection = new KAction("Undo Polygon Selection Points",this);
         undo_polygon_selection->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::Key_Z));
-        kiscanvas->viewManager()->actionCollection()->addAction("undo_polygon_selection", undo_polygon_selection);
-        connect(undo_polygon_selection, SIGNAL(triggered()), SLOT(undoSelection()));
+        collection->addAction("undo_polygon_selection", undo_polygon_selection);
+        addAction("undo_polygon_selection", undo_polygon_selection);
     }
+}
+
+
+void KisToolPolylineBase::activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes)
+{
+    KisToolShape::activate(activation, shapes);
+    connect(actions().value("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoSelection()), Qt::UniqueConnection);
 }
 
 void KisToolPolylineBase::deactivate()
 {
+    disconnect(actions().value("undo_polygon_selection"), 0, this, 0);
     cancelStroke();
     KisToolShape::deactivate();
 }

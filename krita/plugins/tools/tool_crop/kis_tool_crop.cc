@@ -135,7 +135,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 
     // load settings from configuration
     setGrowCenter(configGroup.readEntry("growCenter", false));
-    setForceRatio(configGroup.readEntry("forceRatio", false));
+    //setForceRatio(configGroup.readEntry("forceRatio", false));
     setRatio(configGroup.readEntry("defaultRatio", 1.0));
     setAllowGrow(configGroup.readEntry("allowGrow", false));
 
@@ -584,7 +584,7 @@ double KisToolCrop::ratio() const
 void KisToolCrop::setForceRatio(bool force)
 {
     m_finalRect.setRatioLocked(force);
-    configGroup.writeEntry("forceRatio", force);
+    //configGroup.writeEntry("forceRatio", force);
 }
 
 bool KisToolCrop::forceRatio() const

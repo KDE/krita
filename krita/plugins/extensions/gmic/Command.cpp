@@ -487,5 +487,18 @@ void Command::setParameter(const QString& name, const QString& value)
             m_parameters[i]->setValue(value);
         }
     }
-
 }
+
+QString Command::parameter(const QString &name) const
+{
+    for (int i = 0; i < m_parameters.size(); i++)
+    {
+        if (m_parameters.at(i)->name() == name)
+        {
+            return m_parameters.at(i)->value();
+        }
+    }
+
+    return QString();
+}
+

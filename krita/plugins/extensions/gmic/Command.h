@@ -53,6 +53,7 @@ public:
     virtual QVariant data(int column);
 
     void setParameter(const QString &name, const QString &value);
+    QString parameter(const QString &name) const;
 
     // reset to default values
     void reset();

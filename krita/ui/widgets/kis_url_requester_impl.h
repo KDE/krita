@@ -25,6 +25,7 @@
 #include <QWidget>
 #include <QString>
 #include <kurl.h>
+#include <KoFileDialog.h>
 
 
 
@@ -45,12 +46,16 @@ public:
     KUrl url() const;
     void setUrl(const KUrl &url);
 
+    void setMode(KoFileDialog::DialogType mode);
+    KoFileDialog::DialogType mode() const;
+
 public slots:
     void slotSelectFile();
 
 signals:
     void textChanged(const QString &fileName);
-
+    void urlSelected(const KUrl &url);
+    
 private:
     QString fileName() const;
     void setFileName(const QString &path);
@@ -58,6 +63,7 @@ private:
 private:
     Ui::KisUrlRequesterImpl *ui;
     QString m_basePath;
+    KoFileDialog::DialogType m_mode;
 };
 
 #endif // KIS_URL_REQUESTER_IMPL_H

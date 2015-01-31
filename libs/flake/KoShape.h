@@ -483,6 +483,20 @@ public:
     KoShapeAnchor *anchor() const;
 
     /**
+     * Set the minimum height of the shape.
+     * Currently it's not respected but only for informational purpose
+     * @param minimumShapeHeight the minimum height of the frame.
+     */
+    void setMinimumHeight(qreal height);
+
+    /**
+     * Return the minimum height of the shape.
+     * @return the minimum height of the shape. Default is 0.0.
+     */
+    qreal minimumHeight() const;
+
+
+    /**
      * Set the background of the shape.
      * A shape background can be a plain color, a gradient, a pattern, be fully transparent
      * or have a complex fill.

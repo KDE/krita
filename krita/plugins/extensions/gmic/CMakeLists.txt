@@ -57,9 +57,14 @@ endif( ZLIB_FOUND )
 if(X11_FOUND)
     add_definitions(-Dcimg_display=1)
     add_definitions(-Dcimg_appname="gmic")
+elseif (WIN32 AND MSVC)
+    # CMake for MSVC automatically links and finds headers for gdi32
+    add_definitions(-Dcimg_display=2)
+    add_definitions(-Dcimg_appname="gmic")
 else(X11_FOUND)
     add_definitions(-Dcimg_display=0)
 endif(X11_FOUND)
+
 
 # Extra for Krita
 if(APPLE)
@@ -74,7 +79,7 @@ endif(FFTW3_FOUND)
 
 if (X11_FOUND)
     target_link_libraries(gmic ${X11_LIBRARIES})
-endif()
+endif(X11_FOUND)
 
 target_link_libraries(gmic ${ZLIB_LIBRARIES})
 target_link_libraries(gmic ${PNG_LIBRARIES})

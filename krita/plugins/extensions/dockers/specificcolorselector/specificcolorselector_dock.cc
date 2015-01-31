@@ -56,7 +56,9 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     connect(kisCanvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace*)));
     m_colorSelector->setDisplayRenderer(kisCanvas->displayColorConverter()->displayRendererInterface());
 
-    m_colorSelector->setColorSpace(m_view->activeNode()->colorSpace());
+    if (m_view && m_view->activeNode()) {
+        m_colorSelector->setColorSpace(m_view->activeNode()->colorSpace());
+    }
 
 }
 

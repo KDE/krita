@@ -200,9 +200,9 @@ public:
             QList<KoSectionEnd *> closeList;
             foreach (const SectionHandle &handle, m_curSectionDelimiters) {
                 if (handle.type == SectionOpen) { // Start of the section.
-                    openList << static_cast<KoSection *>(handle.data);
+                    openList << handle.dataSec;
                 } else { // End of the section.
-                    closeList << static_cast<KoSectionEnd *>(handle.data);
+                    closeList << handle.dataSecEnd;
                 }
             }
 
@@ -263,19 +263,23 @@ public:
     struct SectionHandle {
         QString name; // Name of the section.
         SectionHandleAction type; // Action of a SectionHandle.
-        void *data; //  Pointer to KoSection or KoSectionEnd.
+
+        KoSection *dataSec; // Pointer to KoSection.
+        KoSectionEnd *dataSecEnd; // Pointer to KoSectionEnd.
 
         SectionHandle(QString _name, KoSection *_data)
             : name(_name)
             , type(SectionOpen)
-            , data(static_cast<void *>(_data))
+            , dataSec(_data)
+            , dataSecEnd(0)
         {
         }
 
         SectionHandle(QString _name, KoSectionEnd *_data)
             : name(_name)
             , type(SectionClose)
-            , data(static_cast<void *>(_data))
+            , dataSec(0)
+            , dataSecEnd(_data)
         {
         }
     };
@@ -442,7 +446,7 @@ bool DeleteCommand::checkMerge(const KUndo2Command *command)
         return true;
     }
 
-    if ( (other->m_position + other->m_length == m_position)
+    if ((other->m_position + other->m_length == m_position)
             && (m_format == other->m_format)) {
         m_position = other->m_position;
         m_length += other->m_length;

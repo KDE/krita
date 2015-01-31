@@ -74,7 +74,7 @@ private:
 };
 
 KoSectionManager::KoSectionManager(QTextDocument* doc)
-: d_ptr(new KoSectionManagerPrivate(this, doc))
+    : d_ptr(new KoSectionManagerPrivate(this, doc))
 {
     KoTextDocument(doc).setSectionManager(this); //FIXME: setting it back from here looks bad
 }

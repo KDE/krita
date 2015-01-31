@@ -419,6 +419,8 @@ void KisViewManager::setCurrentView(KisView *view)
         connect(d->showRulersAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
         connect(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         connect(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
+
+        showHideScrollbars();
     }
 
     d->filterManager->setView(imageView);

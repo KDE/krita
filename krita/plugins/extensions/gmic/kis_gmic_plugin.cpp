@@ -486,8 +486,7 @@ void KisGmicPlugin::slotRequestFinishAndClose()
 
 void KisGmicPlugin::slotPreviewReady()
 {
-    if (m_currentActivity == SMALL_PREVIEW)
-    {
+    if (m_currentActivity == SMALL_PREVIEW && m_smallApplicator) {
         slotPreviewSmallWindow(m_smallApplicator->preview());
 
         dbgPlugins << "Deleting " << m_smallApplicator;

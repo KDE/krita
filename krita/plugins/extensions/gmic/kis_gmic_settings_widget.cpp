@@ -19,13 +19,13 @@
 #include <kis_properties_configuration.h>
 
 //
-#include <kurlrequester.h>
+#include "widgets/kis_url_requester.h"
 #include <kdeversion.h>
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 
-#include <kfiledialog.h> // For kurlrequester...
+#include <kfiledialog.h> // For kisurlrequester...
 
 KisGmicSettingsWidget::KisGmicSettingsWidget(Command * command)
     :   KisConfigWidget(0, 0, 250),
@@ -293,10 +293,10 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
             case Parameter::FOLDER_P:
             {
                 FolderParameter * folderParam = static_cast<FolderParameter *>(p);
-                KUrlRequester * urlRequester(0);
+                KisUrlRequester * urlRequester(0);
                 if (role == CreateRole)
                 {
-                    urlRequester = new KUrlRequester;
+                    urlRequester = new KisUrlRequester;
                     urlRequester->fileDialog()->setMode(KFile::Directory);
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
@@ -311,7 +311,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 }
                 else if (role == LoadRole)
                 {
-                    urlRequester = qobject_cast<KUrlRequester *>(widget(folderParam));
+                    urlRequester = qobject_cast<KisUrlRequester *>(widget(folderParam));
                 }
 
                 if (urlRequester)
@@ -327,10 +327,10 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
             case Parameter::FILE_P:
             {
                 FileParameter * fileParam = static_cast<FileParameter *>(p);
-                KUrlRequester * urlRequester(0);
+                KisUrlRequester * urlRequester(0);
                 if (role == CreateRole)
                 {
-                    urlRequester = new KUrlRequester;
+                    urlRequester = new KisUrlRequester;
                     urlRequester->fileDialog()->setMode(KFile::File);
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
@@ -345,7 +345,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 }
                 else if (role == LoadRole)
                 {
-                    urlRequester = qobject_cast<KUrlRequester *>(widget(fileParam));
+                    urlRequester = qobject_cast<KisUrlRequester *>(widget(fileParam));
                 }
 
                 if (urlRequester)

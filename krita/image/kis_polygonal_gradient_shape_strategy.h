@@ -22,20 +22,25 @@
 #include "kis_gradient_shape_strategy.h"
 
 #include <QPolygonF>
+#include <QPainterPath>
+
 #include "krita_export.h"
 
 
 class KRITAIMAGE_EXPORT KisPolygonalGradientShapeStrategy : public KisGradientShapeStrategy
 {
 public:
-    KisPolygonalGradientShapeStrategy(const QPolygonF &selection,
+    KisPolygonalGradientShapeStrategy(const QPainterPath &selectionPath,
                                       qreal exponent);
     ~KisPolygonalGradientShapeStrategy();
 
     double valueAt(double x, double y) const;
 
+    static QPointF testingCalculatePathCenter(int numSamples, const QPainterPath &path, qreal exponent, bool searchForMax);
+
 private:
-    QPolygonF m_selection;
+    QPainterPath m_selectionPath;
+
     qreal m_exponent;
     qreal m_minWeight;
     qreal m_maxWeight;

@@ -540,12 +540,12 @@ void KisGradientPainter::setGradientShape(enumGradientShape shape)
     m_d->shape = shape;
 }
 
-KisGradientShapeStrategy* createPolygonShapeStrategy(const QPolygonF &polygon, const QRect &boundingRect)
+KisGradientShapeStrategy* createPolygonShapeStrategy(const QPainterPath &path, const QRect &boundingRect)
 {
     // TODO: implement UI for exponent option
     const qreal exponent = 2.0;
     KisGradientShapeStrategy *strategy =
-        new KisPolygonalGradientShapeStrategy(polygon, exponent);
+        new KisPolygonalGradientShapeStrategy(path, exponent);
 
     KIS_ASSERT_RECOVER_NOOP(boundingRect.width() >= 3 &&
                             boundingRect.height() >= 3);
@@ -563,7 +563,7 @@ void KisGradientPainter::precalculateShape()
 {
     if (!m_d->processRegions.isEmpty()) return;
 
-    QList<QPolygonF> polygons;
+    QPainterPath path;
 
     if (selection()) {
         if (!selection()->outlineCacheValid()) {
@@ -573,20 +573,21 @@ void KisGradientPainter::precalculateShape()
         KIS_ASSERT_RECOVER_RETURN(selection()->outlineCacheValid());
         KIS_ASSERT_RECOVER_RETURN(!selection()->outlineCache().isEmpty());
 
-        QPainterPath path = selection()->outlineCache();
-        polygons = path.toFillPolygons();
+        path = selection()->outlineCache();
     } else {
-        polygons << QPolygonF(QRectF(device()->defaultBounds()->bounds()));
+        path.addRect(device()->defaultBounds()->bounds());
     }
 
-    foreach (const QPolygonF &poly, polygons) {
-        QRect boundingRect = poly.boundingRect().toAlignedRect();
+    QList<QPainterPath> splitPaths = KritaUtils::splitDisjointPaths(path);
+
+    foreach (const QPainterPath &subpath, splitPaths) {
+        QRect boundingRect = subpath.boundingRect().toAlignedRect();
 
         if (boundingRect.width() < 3 || boundingRect.height() < 3) {
             boundingRect = kisGrowRect(boundingRect, 2);
         }
 
-        Private::ProcessRegion r(toQShared(createPolygonShapeStrategy(poly, boundingRect)),
+        Private::ProcessRegion r(toQShared(createPolygonShapeStrategy(subpath, boundingRect)),
                                  boundingRect);
         m_d->processRegions << r;
     }

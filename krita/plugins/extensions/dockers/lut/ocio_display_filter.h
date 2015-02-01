@@ -18,6 +18,7 @@
 #ifndef OCIO_DISPLAY_FILTER_H
 #define OCIO_DISPLAY_FILTER_H
 
+#include "lut_export.h"
 #include <kis_display_filter.h>
 #include <OpenColorIO/OpenColorIO.h>
 #include <OpenColorIO/OpenColorTransforms.h>
@@ -36,7 +37,7 @@ enum OCIO_CHANNEL_SWIZZLE {
     A
 };
 
-class OcioDisplayFilter : public KisDisplayFilter
+class LUT_EXPORT OcioDisplayFilter : public KisDisplayFilter
 {
     Q_OBJECT
 public:

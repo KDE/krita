@@ -120,6 +120,9 @@ KisFileLayer::ScalingMethod KisFileLayer::scalingMethod() const
 
 void KisFileLayer::slotLoadingFinished()
 {
+    qint32 oldX = x();
+    qint32 oldY = y();
+
     KisImageWSP importedImage = m_loader.image();
     m_image = importedImage->projection();
     if (m_scalingMethod == ToImagePPI && (image()->xRes() != importedImage->xRes()
@@ -138,6 +141,9 @@ void KisFileLayer::slotLoadingFinished()
         KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
     }
+
+    m_image->setX(oldX);
+    m_image->setY(oldY);
 
     setDirty();
 }

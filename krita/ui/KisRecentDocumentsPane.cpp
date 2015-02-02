@@ -39,8 +39,8 @@ class KoFileListItem : public QStandardItem
 {
 public:
     KoFileListItem(const QIcon &icon, const QString &text, const KFileItem& item)
-            : QStandardItem(icon, text)
-            , m_fileItem(item){
+        : QStandardItem(icon, text)
+        , m_fileItem(item){
     }
 
     ~KoFileListItem() {
@@ -74,9 +74,9 @@ public:
 
 
 KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData,
-        const QString& header)
-        : KisDetailsPane(parent, _componentData, header)
-        , d(new KisRecentDocumentsPanePrivate)
+                                               const QString& header)
+    : KisDetailsPane(parent, _componentData, header)
+    , d(new KisRecentDocumentsPanePrivate)
 {
     setFocusProxy(m_documentList);
     KGuiItem openGItem(i18n("Open This Document"), koIconName("document-open"));
@@ -175,14 +175,14 @@ void KisRecentDocumentsPane::selectionChanged(const QModelIndex& index)
 
         if (!fileItem.isNull()) {
             QString details = QString("<center>%1<br>").arg(fileItem.url().path()) +
-                "<table border=\"0\">" +
-                i18nc("File modification date and time. %1 is date time",
-                      "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
-                      QString(fileItem.timeString(KFileItem::ModificationTime))) +
-                i18nc("File access date and time. %1 is date time",
-                      "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
-                      QString(fileItem.timeString(KFileItem::AccessTime))) +
-                "</table></center>";
+                    "<table border=\"0\">" +
+                    i18nc("File modification date and time. %1 is date time",
+                          "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
+                          QString(fileItem.timeString(KFileItem::ModificationTime))) +
+                    i18nc("File access date and time. %1 is date time",
+                          "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
+                          QString(fileItem.timeString(KFileItem::AccessTime))) +
+                    "</table></center>";
             m_detailsLabel->setHtml(details);
         } else {
             m_detailsLabel->clear();

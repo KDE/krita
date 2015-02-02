@@ -557,21 +557,21 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
         }
     }
 
-    if (!d->startupWidget) {
-        const QStringList mimeFilter = koApp->mimeFilter(KisImportExportManager::Import);
-
-        d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templateType);
-        d->startupWidget->setWindowModality(Qt::WindowModal);
-        QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
-        foreach(const CustomDocumentWidgetItem & item, widgetList) {
-            d->startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
-            connect(item.widget, SIGNAL(documentSelected(KisDocument*)), this, SLOT(startCustomDocument(KisDocument*)));
-        }
-
-        connect(d->startupWidget, SIGNAL(openExistingFile(const KUrl&)), this, SLOT(openExistingFile(const KUrl&)));
-        connect(d->startupWidget, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
-
+    if (d->startupWidget) {
+        delete d->startupWidget;
     }
+    const QStringList mimeFilter = koApp->mimeFilter(KisImportExportManager::Import);
+
+    d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templateType);
+    d->startupWidget->setWindowModality(Qt::WindowModal);
+    QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
+    foreach(const CustomDocumentWidgetItem & item, widgetList) {
+        d->startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+        connect(item.widget, SIGNAL(documentSelected(KisDocument*)), this, SLOT(startCustomDocument(KisDocument*)));
+    }
+
+    connect(d->startupWidget, SIGNAL(openExistingFile(const KUrl&)), this, SLOT(openExistingFile(const KUrl&)));
+    connect(d->startupWidget, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
 
     d->startupWidget->setParent(mainWindow);
     d->startupWidget->setWindowFlags(Qt::Dialog);

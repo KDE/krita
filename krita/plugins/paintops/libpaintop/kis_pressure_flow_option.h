@@ -23,7 +23,7 @@
 #include "kis_curve_option.h"
 #include <kis_paint_information.h>
 #include <krita_export.h>
-#include <kis_painter.h>
+
 /**
  * The pressure flow option defines a curve that is used to
  * calculate the effect of pressure on the flow of the dab
@@ -32,17 +32,8 @@ class PAINTOP_EXPORT KisPressureFlowOption : public KisCurveOption
 {
 public:
     KisPressureFlowOption();
+    double apply(const KisPaintInformation & info) const;
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-
-    void apply(KisPainter* painter, const KisPaintInformation &) const;
-
-    void setFlow(qreal flow);
-    qreal getFlow() const;
-
-protected:
-    qreal m_flow;
 
 };
 

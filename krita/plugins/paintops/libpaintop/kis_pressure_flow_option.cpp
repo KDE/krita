@@ -29,31 +29,10 @@ KisPressureFlowOption::KisPressureFlowOption()
     setMaximumLabel(i18n("100%"));
 }
 
-void KisPressureFlowOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
-{
-    KisCurveOption::writeOptionSetting(setting);
-    setting->setProperty("FlowValue", m_flow);
-}
 
-void KisPressureFlowOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+double KisPressureFlowOption::apply(const KisPaintInformation & info) const
 {
-    KisCurveOption::readOptionSetting(setting);
-    setFlow(setting->getDouble("FlowValue", 1.0));
-}
-
-
-void KisPressureFlowOption::apply(KisPainter *painter, const KisPaintInformation & /*info*/) const
-{
-    painter->setFlow(quint8(getFlow() * 255.0));
+    if (!isChecked()) return 1.0;
+    return computeValue(info);
 }
  
-void KisPressureFlowOption::setFlow(qreal flow)
-{
-    m_flow = qBound(qreal(0), flow, qreal(1));
-}
-
-qreal KisPressureFlowOption::getFlow() const
-{
-    return m_flow;
-}
-

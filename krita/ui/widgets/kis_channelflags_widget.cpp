@@ -43,6 +43,7 @@ KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QW
     for (int i = 0; i < colorSpace->channels().size(); ++i) {
         KoChannelInfo * channel = colorSpace->channels().at(i);
         QCheckBox * bx = new QCheckBox(channel->name(), w);
+        connect(bx, SIGNAL(toggled(bool)), SIGNAL(channelSelectionChanced()));
         bx->setCheckState(Qt::Checked);
         vbl->addWidget(bx);
         m_channelChecks.append(bx);

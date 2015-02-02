@@ -21,10 +21,16 @@
 
 #include <QObject>
 
-
+/**
+ * A special wrapper class that represents a connection between two QObject objects.
+ * It creates the connection on the construction and disconnects it on destruction.
+ */
 class KisSignalAutoConnection
 {
 public:
+    /**
+     * Creates a connection object and starts the requested connection
+     */
     inline KisSignalAutoConnection(const QObject *sender, const char *signal,
                                   const QObject *receiver, const char *method,
                                   Qt::ConnectionType type = Qt::AutoConnection)
@@ -54,9 +60,23 @@ private:
 
 typedef QSharedPointer<KisSignalAutoConnection> KisSignalAutoConnectionSP;
 
+
+/**
+ * A class to store multiple connections and to be able to stop all of
+ * them at once. It is handy when you need to reconnect some other
+ * object to the current manager. Then you just call
+ * connectionsStore.clear() and then call addConnection() again to
+ * recreate them.
+ */
 class KisSignalAutoConnectionsStore
 {
 public:
+    /**
+     * Connects \p sender to \p reciever with a connection of type \p type.
+     * The connection is saved into the store so can be reset later with clear()
+     *
+     * \see addUniqueConnection()
+     */
     inline void addConnection(const QObject *sender, const char *signal,
                               const QObject *receiver, const char *method,
                               Qt::ConnectionType type = Qt::AutoConnection)
@@ -66,6 +86,11 @@ public:
                                                              receiver, method, type)));
     }
 
+    /**
+     * Convenience override for addConnection() that creates a unique connection
+     *
+     * \see addConnection()
+     */
     inline void addUniqueConnection(const QObject *sender, const char *signal,
                                     const QObject *receiver, const char *method)
     {
@@ -74,6 +99,9 @@ public:
                                                              receiver, method, Qt::UniqueConnection)));
     }
 
+    /**
+     * Disconnects all the stored connections and removes them from the store
+     */
     inline void clear() {
         m_connections.clear();
     }

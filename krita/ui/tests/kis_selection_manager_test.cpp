@@ -338,4 +338,67 @@ void KisSelectionManagerTest::testBorderSelectionSimplified()
     QVERIFY(t.checkSelectionOnly("border_selection"));
 }
 
+#include <floodfill/kis_scanline_fill.h>
+
+void KisSelectionManagerTest::testScanline16bit()
+{
+    const int THRESHOLD = 20;
+
+    QString fileName = TestUtil::fetchDataFileLazy("flood_fill_16bit.kra");
+    QVERIFY(QFile::exists(fileName));
+
+    KisDocument *doc = KisPart::instance()->createDocument();
+    doc->loadNativeFormat(fileName);
+
+    KisPaintDeviceSP dev = doc->image()->root()->firstChild()->paintDevice();
+    QVERIFY(dev);
+
+    qDebug() << ppVar(dev->colorSpace());
+
+    QRect imageRect = doc->image()->bounds();
+
+    qDebug() << ppVar(imageRect);
+
+    QPoint startPoint = imageRect.center();
+
+    qDebug() << ppVar(startPoint);
+
+    KisPixelSelectionSP pixelSelection = new KisPixelSelection();
+
+    {
+        KisScanlineFill gc(dev, startPoint, imageRect);
+        gc.setThreshold(THRESHOLD);
+        gc.fillSelection(pixelSelection);
+
+        QImage resultImage =
+            pixelSelection->convertToQImage(0,
+                                            imageRect);
+
+        QVERIFY(TestUtil::checkQImage(resultImage,
+                                      "selection_manager_test",
+                                      "scanline",
+                                      "16bit_thres_20"));
+    }
+
+    const KoColorSpace *rgb8CS = KoColorSpaceRegistry::instance()->rgb8();
+    pixelSelection->clear();
+    dev->convertTo(rgb8CS);
+
+    {
+        KisScanlineFill gc(dev, startPoint, imageRect);
+        gc.setThreshold(THRESHOLD);
+        gc.fillSelection(pixelSelection);
+
+        QImage resultImage =
+            pixelSelection->convertToQImage(0,
+                                            imageRect);
+
+        QVERIFY(TestUtil::checkQImage(resultImage,
+                                      "selection_manager_test",
+                                      "scanline",
+                                      "8bit_thres_20"));
+    }
+
+}
+
 QTEST_KDEMAIN(KisSelectionManagerTest, GUI)

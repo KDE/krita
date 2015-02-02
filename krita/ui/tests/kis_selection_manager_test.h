@@ -48,6 +48,8 @@ private slots:
     void testErodeSelectionSimplified();
     void testDilateSelectionSimplified();
     void testBorderSelectionSimplified();
+
+    void testScanline16bit();
 };
 
 #endif /* __KIS_SELECTION_MANAGER_TEST_H */

@@ -76,6 +76,7 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
 
     selectCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp());
 
+    KAction *action = 0;
 //    //    Cycle through blending modes
 //    //    Shift + + (plus) or – (minus)
 //    KAction *action = new KAction(i18n("Next Blending Mode"), this);

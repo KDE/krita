@@ -154,6 +154,9 @@ private:
     //! Otherwise invalid QRect is returned.
     QRect revertButtonArea( const QModelIndex& index ) const;
 
+    //! Updates item for @a index and all its children.
+    void updateSubtree(const QModelIndex &index);
+
     /*! Undoes the last change in the property editor.*/
     void undo();
 

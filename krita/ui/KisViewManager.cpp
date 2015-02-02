@@ -128,6 +128,8 @@
 #include "kis_zoom_manager.h"
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
+#include "kis_signal_auto_connection.h"
+
 
 class StatusBarItem
 {
@@ -291,8 +293,7 @@ public:
     KisMirrorManager *mirrorManager;
     QPointer<KisInputManager> inputManager;
 
-
-
+    KisSignalAutoConnectionsStore viewConnections;
 };
 
 
@@ -383,25 +384,13 @@ void KisViewManager::setCurrentView(KisView *view)
             doc->disconnect(this);
         }
         d->currentImageView->canvasController()->proxyObject->disconnect(d->statusBar);
-        d->nodeManager->disconnect(doc->image());
-        doc->image()->disconnect(d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-
-        d->rotateCanvasRight->disconnect();
-        d->rotateCanvasLeft->disconnect();
-        d->wrapAroundAction->disconnect();
-        d->showRulersAction->disconnect();
-        d->zoomTo100pct->disconnect();
-        d->showGuidesAction->disconnect();
-
-        d->currentImageView->canvasController()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow());
-        resourceProvider()->disconnect(d->currentImageView->canvasBase());
+        d->viewConnections.clear();
     }
 
     QPointer<KisView>imageView = qobject_cast<KisView*>(view);
 
     if (imageView) {
-
-        connect(resourceProvider(), SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), imageView->canvasBase(), SLOT(slotSetDisplayProfile(const KoColorProfile*)));
+        d->viewConnections.addUniqueConnection(resourceProvider(), SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), imageView->canvasBase(), SLOT(slotSetDisplayProfile(const KoColorProfile*)));
         resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(mainWindow()));
 
         // Wait for the async image to have loaded
@@ -410,15 +399,15 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->currentImageView = imageView;
 
-        connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
-        connect(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasRight15()));
-        connect(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasLeft15()));
-        connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
-        connect(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
-        connect(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-        connect(d->showRulersAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
-        connect(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
-        connect(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
+        d->viewConnections.addUniqueConnection(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
+        d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasRight15()));
+        d->viewConnections.addUniqueConnection(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(rotateCanvasLeft15()));
+        d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
+        d->viewConnections.addUniqueConnection(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
+        d->viewConnections.addUniqueConnection(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
+        d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
+        d->viewConnections.addUniqueConnection(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
 
         showHideScrollbars();
     }
@@ -441,6 +430,26 @@ void KisViewManager::setCurrentView(KisView *view)
     }
 
     d->actionManager->updateGUI();
+
+    d->viewConnections.addUniqueConnection(
+        image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+        resourceProvider(), SLOT(slotImageSizeChanged()));
+
+    d->viewConnections.addUniqueConnection(
+        image(), SIGNAL(sigResolutionChanged(double,double)),
+        resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+
+    d->viewConnections.addUniqueConnection(
+        image(), SIGNAL(sigNodeChanged(KisNodeSP)),
+        this, SLOT(updateGUI()));
+
+    d->viewConnections.addUniqueConnection(
+        view->zoomManager()->zoomController(),
+        SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+        resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+
+    resourceProvider()->slotImageSizeChanged();
+    resourceProvider()->slotOnScreenResolutionChanged();
 
     // Restore the last used brush preset
     if (first) {

@@ -63,6 +63,7 @@ public:
     }
 
     void setText(const QString& txt);
+    QString text(void) const;
 
     QFont font();
     void setFont(const QFont& font);

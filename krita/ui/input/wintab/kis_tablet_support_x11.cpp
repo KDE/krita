@@ -520,30 +520,37 @@ QTabletEvent::TabletDevice parseWacomDeviceId(quint32 deviceId)
 
     QTabletEvent::TabletDevice device;
 
-    switch (deviceId & CSR_TYPE_SPECIFIC_MASK) {
-    case CSR_TYPE_SPECIFIC_STYLUS_BITS:
-        device = QTabletEvent::Stylus;
-        break;
-    case CSR_TYPE_SPECIFIC_AIRBRUSH_BITS:
-        device = QTabletEvent::Airbrush;
-        break;
-    case CSR_TYPE_SPECIFIC_4DMOUSE_BITS:
-        device = QTabletEvent::FourDMouse;
-        break;
-    case CSR_TYPE_SPECIFIC_LENSCURSOR_BITS:
-        device = QTabletEvent::Puck;
-        break;
-    case CSR_TYPE_SPECIFIC_ROTATIONSTYLUS_BITS:
-        device = QTabletEvent::RotationStylus;
-        break;
-    default:
-        if (deviceId != 0) {
-            qWarning() << "Unrecognized stylus device found! Falling back to usual \'Stylus\' definition";
-            qWarning() << ppVar(deviceId);
-            qWarning() << ppVar((deviceId & CSR_TYPE_SPECIFIC_MASK));
-        }
+    if ((((deviceId & 0x0006) == 0x0002) &&
+         ((deviceId & CSR_TYPE_SPECIFIC_MASK) != CSR_TYPE_SPECIFIC_AIRBRUSH_BITS)) || // Bamboo
+        deviceId == 0x4020) { // Surface Pro 2 tablet device
 
         device = QTabletEvent::Stylus;
+    } else {
+        switch (deviceId & CSR_TYPE_SPECIFIC_MASK) {
+        case CSR_TYPE_SPECIFIC_STYLUS_BITS:
+            device = QTabletEvent::Stylus;
+            break;
+        case CSR_TYPE_SPECIFIC_AIRBRUSH_BITS:
+            device = QTabletEvent::Airbrush;
+            break;
+        case CSR_TYPE_SPECIFIC_4DMOUSE_BITS:
+            device = QTabletEvent::FourDMouse;
+            break;
+        case CSR_TYPE_SPECIFIC_LENSCURSOR_BITS:
+            device = QTabletEvent::Puck;
+            break;
+        case CSR_TYPE_SPECIFIC_ROTATIONSTYLUS_BITS:
+            device = QTabletEvent::RotationStylus;
+            break;
+        default:
+            if (deviceId != 0) {
+                qWarning() << "Unrecognized stylus device found! Falling back to usual \'Stylus\' definition";
+                qWarning() << ppVar(deviceId);
+                qWarning() << ppVar((deviceId & CSR_TYPE_SPECIFIC_MASK));
+            }
+
+            device = QTabletEvent::Stylus;
+        }
     }
 
     return device;

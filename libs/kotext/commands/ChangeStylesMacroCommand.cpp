@@ -23,17 +23,19 @@
 #include "ChangeStylesCommand.h"
 #include "KoCharacterStyle.h"
 #include "KoParagraphStyle.h"
-#include "ChangeFollower.h"
+#include "OdfTextTrackStyles.h"
 
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 
 #include <klocale.h>
 
-ChangeStylesMacroCommand::ChangeStylesMacroCommand(const QList<ChangeFollower *> &changeFollowers
+#include <QTextDocument>
+
+ChangeStylesMacroCommand::ChangeStylesMacroCommand(const QList<QTextDocument *> &documents
         , KoStyleManager *styleManager)
     : KUndo2Command(kundo2_i18n("Change Styles"))
-    , m_changeFollowers(changeFollowers)
+    , m_documents(documents)
     , m_styleManager(styleManager)
     , m_first(true)
 {
@@ -52,8 +54,8 @@ void ChangeStylesMacroCommand::redo()
     if (m_first) {
         // IMPORTANT: the sub commands needs to be created now so the can collect
         // info before we change the styles
-        foreach(ChangeFollower *cf, m_changeFollowers) {
-            commands.append(new ChangeStylesCommand(cf, m_origCharacterStyles, m_origParagraphStyles, m_changedStyles, this));
+        foreach(QTextDocument *qDoc, m_documents) {
+            commands.append(new ChangeStylesCommand(qDoc, m_origCharacterStyles, m_origParagraphStyles, m_changedStyles, this));
         }
     }
 
@@ -61,24 +63,20 @@ void ChangeStylesMacroCommand::redo()
     foreach(KoCharacterStyle *newStyle, m_changedCharacterStyles) {
         int id = newStyle->styleId();
         m_styleManager->characterStyle(id)->copyProperties(newStyle);
-
-        emit m_styleManager->styleAltered(m_styleManager->characterStyle(id));
     }
 
     foreach(KoParagraphStyle *newStyle, m_changedParagraphStyles) {
         int id = newStyle->styleId();
         m_styleManager->paragraphStyle(id)->copyProperties(newStyle);
-
-        emit m_styleManager->styleAltered(m_styleManager->paragraphStyle(id));
     }
 
     if (m_first) {
         int i = 0;
-        foreach(ChangeFollower *cf, m_changeFollowers) {
+        foreach(QTextDocument *qDoc, m_documents) {
             //add and execute it's redo
             // ToC documents doesn't have a texteditor so make sure we ignore that
-            if (KoTextDocument(cf->document()).textEditor()) {
-                KoTextDocument(cf->document()).textEditor()->addCommand(commands[i]);
+            if (KoTextDocument(qDoc).textEditor()) {
+                KoTextDocument(qDoc).textEditor()->addCommand(commands[i]);
             }
             i++;
         }
@@ -93,15 +91,11 @@ void ChangeStylesMacroCommand::undo()
     foreach(KoCharacterStyle *oldStyle, m_origCharacterStyles) {
         int id = oldStyle->styleId();
         m_styleManager->characterStyle(id)->copyProperties(oldStyle);
-
-        emit m_styleManager->styleAltered(m_styleManager->characterStyle(id));
     }
 
     foreach(KoParagraphStyle *oldStyle, m_origParagraphStyles) {
         int id = oldStyle->styleId();
         m_styleManager->paragraphStyle(id)->copyProperties(oldStyle);
-
-        emit m_styleManager->styleAltered(m_styleManager->paragraphStyle(id));
     }
 
     KUndo2Command::undo(); // calls undo on all children

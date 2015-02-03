@@ -364,8 +364,6 @@ public:
 
     QList<KisPaintingAssistant*> assistants;
 
-    QString animation;
-
     bool openFile()
     {
         DocumentProgressProxy *progressProxy = 0;
@@ -1797,40 +1795,6 @@ void KisDocument::setModified(bool mod)
     emit modified(mod);
 }
 
-int KisDocument::queryCloseDia()
-{
-    //kDebug(30003);
-
-    QString name;
-    if (documentInfo()) {
-        name = documentInfo()->aboutInfo("title");
-    }
-    if (name.isEmpty())
-        name = url().fileName();
-
-    if (name.isEmpty())
-        name = i18n("Untitled");
-
-    int res = QMessageBox::warning(0,
-                                   i18nc("@title:window", "Krita"),
-                                   i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
-
-    switch (res) {
-    case QMessageBox::Yes :
-        save(); // NOTE: External files always in native format. ###TODO: Handle non-native format
-        setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
-        break;
-    case QMessageBox::No :
-        removeAutoSaveFiles();
-        setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
-        break;
-    default : // case QMessageBox::Cancel :
-        return res; // cancels the rest of the files
-    }
-    return res;
-}
-
 QString KisDocument::prettyPathOrUrl() const
 {
     QString _url( url().pathOrUrl() );
@@ -2277,8 +2241,13 @@ bool KisDocument::closeUrl(bool promptToSave)
 {
     if (promptToSave) {
         if ( d->document->isReadWrite() && d->document->isModified()) {
-            if (!queryClose())
-                return false;
+            foreach(KisView *view, KisPart::instance()->views()) {
+                if (view && view->document() == this) {
+                    if (!view->queryClose()) {
+                        return false;
+                    }
+                }
+            }
         }
     }
     // Not modified => ok and delete temp file.
@@ -2389,55 +2358,6 @@ void KisDocument::setLocalFilePath( const QString &localFilePath )
 {
     d->m_file = localFilePath;
 }
-
-bool KisDocument::queryClose()
-{
-    if ( !d->document->isReadWrite() || !d->document->isModified() )
-        return true;
-
-    QString docName = url().fileName();
-    if (docName.isEmpty()) docName = i18n( "Untitled" );
-
-
-    int res = QMessageBox::warning(0,
-                                   i18nc("@title:window", "Close Document"),
-                                   i18n("The document \"%1\" has been modified.\n"
-                                        "Do you want to save your changes or discard them?" ,  docName),
-                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes );
-
-    bool abortClose=false;
-    bool handled=false;
-
-    switch(res) {
-    case QMessageBox::Yes :
-        if (!handled)
-        {
-            if (d->m_url.isEmpty())
-            {
-                KisMainWindow *mainWindow = 0;
-                if (KisPart::instance()->mainWindows().count() > 0) {
-                    mainWindow = KisPart::instance()->mainWindows()[0];
-                }
-                KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile, "SaveDocument");
-                KUrl url = dialog.url();
-                if (url.isEmpty())
-                    return false;
-
-                saveAs( url );
-            }
-            else
-            {
-                save();
-            }
-        } else if (abortClose) return false;
-        return waitSaveComplete();
-    case QMessageBox::No :
-        return true;
-    default : // case QMessageBox::Cancel :
-        return false;
-    }
-}
-
 
 bool KisDocument::saveToUrl()
 {

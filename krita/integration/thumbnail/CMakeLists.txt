@@ -13,6 +13,5 @@ install(TARGETS kritathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 install(
     FILES
         krita_kra_thumbnail.desktop
-        kritaanimation_kranim_thumbnail.desktop
     DESTINATION ${SERVICES_INSTALL_DIR}
 )

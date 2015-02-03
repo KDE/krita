@@ -48,7 +48,7 @@ signals:
     void sigItemContentChanged(ImageItem* item);
     
 public:
-    ImageLoader(float size): m_size(size), m_run(true) { }
+    ImageLoader(float size);
     
     void addPath(ImageItem* item, const QString& path) {
         m_data[item] = Data(path);
@@ -61,13 +61,13 @@ public:
     QImage getImage(ImageItem* item) const {
         return m_data[item].image;
     }
-    
-    void stopExecution() {
-        m_run = false;
-    }
-    
+
     virtual void run();
-    
+
+public slots:
+
+    void stopExecution();
+
 private:
     float                     m_size;
     QHash<ImageItem*,Data> m_data;

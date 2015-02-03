@@ -409,14 +409,14 @@ void KisLayerBox::updateUI()
 
     KisNodeSP activeNode = m_nodeManager->activeNode();
 
-    m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable() && (activeNode->nextSibling()
+    m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->nextSibling()
                                        || (activeNode->parent() && activeNode->parent() != m_image->root())));
-    m_wdgLayerBox->bnLower->setEnabled(activeNode && activeNode->isEditable() && (activeNode->prevSibling()
+    m_wdgLayerBox->bnLower->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->prevSibling()
                                        || (activeNode->parent() && activeNode->parent() != m_image->root())));
 
-    m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable());
+    m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable(false));
 
-    m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable());
+    m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable(false));
 
     if (activeNode) {
         if (m_nodeManager->activePaintDevice()) {

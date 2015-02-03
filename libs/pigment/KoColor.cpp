@@ -323,8 +323,9 @@ QString KoColor::toQString(const KoColor &color)
 {
     QStringList ls;
     foreach(KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(color.colorSpace()->channels())) {
+        int realIndex = KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), color.colorSpace()->channels());
         ls << channel->name();
-        ls << color.colorSpace()->channelValueText(color.data(), channel->pos());
+        ls << color.colorSpace()->channelValueText(color.data(), realIndex);
     }
     return ls.join(" ");
 }

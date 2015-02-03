@@ -309,13 +309,8 @@ void KisView::setViewManager(KisViewManager *view)
         d->viewManager->nodeManager()->nodesUpdated();
     }
 
-    connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), resourceProvider(), SLOT(slotImageSizeChanged()));
-    connect(image(), SIGNAL(sigResolutionChanged(double,double)), resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
     connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
     connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
-    connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), d->viewManager, SLOT(updateGUI()));
-
-    connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
 
     /*
      * WARNING: Currently we access the global progress bar in two ways:

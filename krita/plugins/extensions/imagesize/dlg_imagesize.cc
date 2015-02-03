@@ -102,7 +102,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     m_page->pixelAspectRatioBtn->setKeepAspectRatio(true);
     m_page->printAspectRatioBtn->setKeepAspectRatio(true);
-    m_page->aspectRatioCkb->setChecked(true);
+    m_page->constrainProportionsCkb->setChecked(true);
 
     KoSizeGroup *labelsGroup = new KoSizeGroup(this);
     labelsGroup->addWidget(m_page->lblPixelWidth);
@@ -131,7 +131,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     connect(m_page->pixelAspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
     connect(m_page->printAspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
-    connect(m_page->aspectRatioCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
+    connect(m_page->constrainProportionsCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
 
     connect(m_page->pixelWidth, SIGNAL(valueChanged(int)), this, SLOT(slotPixelWidthChanged(int)));
     connect(m_page->pixelHeight, SIGNAL(valueChanged(int)), this, SLOT(slotPixelHeightChanged(int)));
@@ -335,15 +335,15 @@ void DlgImageSize::slotAspectChanged(bool keep)
 {
     m_page->pixelAspectRatioBtn->blockSignals(true);
     m_page->printAspectRatioBtn->blockSignals(true);
-    m_page->aspectRatioCkb->blockSignals(true);
+    m_page->constrainProportionsCkb->blockSignals(true);
 
     m_page->pixelAspectRatioBtn->setKeepAspectRatio(keep);
     m_page->printAspectRatioBtn->setKeepAspectRatio(keep);
-    m_page->aspectRatioCkb->setChecked(keep);
+    m_page->constrainProportionsCkb->setChecked(keep);
 
     m_page->pixelAspectRatioBtn->blockSignals(false);
     m_page->printAspectRatioBtn->blockSignals(false);
-    m_page->aspectRatioCkb->blockSignals(false);
+    m_page->constrainProportionsCkb->blockSignals(false);
 
     m_keepAspect = keep;
 

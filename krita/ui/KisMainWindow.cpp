@@ -1006,7 +1006,10 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
         e->setAccepted(false);
         return;
     }
-    if (queryClose()) {
+
+    QList<QMdiSubWindow*> childrenList = d->mdiArea->subWindowList();
+
+    if (childrenList.isEmpty()) {
         d->deferredClosingEvent = e;
 
         if (!d->dockerStateBeforeHiding.isEmpty()) {
@@ -1101,53 +1104,6 @@ void KisMainWindow::dropEvent(QDropEvent *event)
             openDocument(url);
         }
     }
-}
-
-bool KisMainWindow::queryClose()
-{
-    if (!d->activeView || d->activeView->document() == 0)
-        return true;
-
-    //kDebug(30003) <<"KisMainWindow::queryClose() viewcount=" << d->activeView->document()->viewCount()
-    //               << " mainWindowCount=" << d->activeView->document()->mainWindowCount() << endl;
-    if (KisPart::instance()->mainwindowCount() > 1)
-        // there are more open, and we are closing just one, so no problem for closing
-        return true;
-
-    // main doc + internally stored child documents
-    if (d->activeView->document()->isModified()) {
-        QString name;
-        if (d->activeView->document()->documentInfo()) {
-            name = d->activeView->document()->documentInfo()->aboutInfo("title");
-        }
-        if (name.isEmpty())
-            name = d->activeView->document()->url().fileName();
-
-        if (name.isEmpty())
-            name = i18n("Untitled");
-
-        int res = QMessageBox::warning(this,
-                                       i18nc("@title:window", "Krita"),
-                                       i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                                       QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
-
-        switch (res) {
-        case QMessageBox::Yes : {
-            bool isNative = (d->activeView->document()->outputMimeType() == d->activeView->document()->nativeFormatMimeType());
-            if (!saveDocument(d->activeView->document(), !isNative))
-                return false;
-            break;
-        }
-        case QMessageBox::No :
-            d->activeView->document()->removeAutoSaveFiles();
-            d->activeView->document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
-            break;
-        default : // case QMessageBox::Cancel :
-            return false;
-        }
-    }
-
-    return true;
 }
 
 void KisMainWindow::slotFileNew()

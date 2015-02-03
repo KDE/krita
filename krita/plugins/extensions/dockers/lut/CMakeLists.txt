@@ -1,3 +1,4 @@
+add_subdirectory(tests)
 include_directories( ${OCIO_INCLUDE_DIR})
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 

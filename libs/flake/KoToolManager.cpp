@@ -434,11 +434,6 @@ void KoToolManager::Private::switchCanvasData(CanvasData *cd)
     if (oldCanvas != canvasData->canvas->canvas()) {
         emit q->changedCanvas(canvasData->canvas->canvas());
     }
-
-//     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-//     if (canvasControllerWidget) {
-//         canvasControllerWidget->activate();
-//     }
 }
 
 
@@ -508,8 +503,10 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
 {
     Q_ASSERT(controller);
     CanvasData *cd = createCanvasData(controller, KoInputDevice::mouse());
+
     // switch to new canvas as the active one.
-    canvasData = cd;
+    switchCanvasData(cd);
+
     inputDevice = cd->inputDevice;
     QList<CanvasData*> canvasses_;
     canvasses_.append(cd);
@@ -571,13 +568,17 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
         }
     }
 
-    if (newCanvas == 0)
+    if (newCanvas == 0) {
         return;
-    if (canvasData && newCanvas == canvasData->canvas)
-        return;
+    }
 
-    if (! canvasses.contains(newCanvas))
+    if (canvasData && newCanvas == canvasData->canvas) {
         return;
+    }
+
+    if (!canvasses.contains(newCanvas)) {
+        return;
+    }
     foreach(CanvasData *data, canvasses.value(newCanvas)) {
         if (data->inputDevice == inputDevice) {
             switchCanvasData(data);

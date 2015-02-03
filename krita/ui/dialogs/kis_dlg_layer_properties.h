@@ -27,6 +27,8 @@
 
 #include "ui_wdglayerproperties.h"
 
+
+class QTimer;
 class QWidget;
 class QBitArray;
 class KisChannelFlagsWidget;
@@ -71,21 +73,15 @@ private:
      */
     QBitArray getChannelFlags() const;
 
-public slots:
-    void updatePreview();
-
 protected slots:
     void slotNameChanged(const QString &);
     void applyNewProperties();
     void cleanPreviewChanges();
-    
+    void kickTimer();
+    void updatePreview();
+
 private:
-    KisLayerSP m_layer;
-    KisViewManager *m_view;
-    KisDocument *m_doc;
-    WdgLayerProperties * m_page;
-    KisChannelFlagsWidget * m_channelFlags;
-    
+
     struct Private;
     Private * const d;
 };

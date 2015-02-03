@@ -378,11 +378,6 @@ private:
      */
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
-    /**
-     * Ask user about saving changes to the document upon exit.
-     */
-    bool queryClose();
-
     bool openDocumentInternal(const KUrl &url, KisDocument *newdoc = 0);
 
     /**

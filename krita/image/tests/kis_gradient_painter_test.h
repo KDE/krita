@@ -29,7 +29,12 @@ private slots:
     void testSimplifyPath();
 
     void testShapedGradientPainterRect();
+    void testShapedGradientPainterRectPierced();
     void testShapedGradientPainterNonRegular();
+    void testShapedGradientPainterNonRegularPierced();
+
+    void testFindShapedExtremums();
+    void testSplitDisjointPaths();
 
     void testCachedStrategy();
 };

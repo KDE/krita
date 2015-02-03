@@ -187,8 +187,7 @@ void KisActionManager::updateGUI()
             }
         }
 
-
-        if (node->isEditable()) {
+        if (node->isEditable(false)) {
             conditions |= KisAction::ACTIVE_NODE_EDITABLE;
         }
 

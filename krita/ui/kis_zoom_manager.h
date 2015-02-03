@@ -72,6 +72,7 @@ public slots:
     void zoomTo100();
     void showGuides(bool toggle);
     void applyRulersUnit(const KoUnit &baseUnit);
+    void setMinMaxZoom();
 
 private:
 

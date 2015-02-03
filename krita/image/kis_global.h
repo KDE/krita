@@ -26,6 +26,8 @@
 #include <KoConfig.h>
 #include "kis_assert.h"
 
+#include <QPoint>
+#include <QPointF>
 
 #define KRITA_VERSION CALLIGRA_VERSION
 

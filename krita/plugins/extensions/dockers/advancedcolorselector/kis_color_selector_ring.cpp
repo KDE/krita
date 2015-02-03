@@ -66,7 +66,7 @@ bool KisColorSelectorRing::containsPointInComponentCoords(int x, int y) const
 
 void KisColorSelectorRing::paint(QPainter* painter)
 {
-    if(colorSpace()!=m_cachedColorSpace) {
+    if(isDirty()) {
         m_cachedColorSpace = colorSpace();
         m_cachedSize=qMin(width(), height());
         colorCache();

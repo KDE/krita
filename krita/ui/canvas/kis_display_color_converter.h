@@ -29,7 +29,7 @@
 
 class KoColor;
 class KoColorProfile;
-class KisCanvas2;
+class KoCanvasResourceManager;
 
 
 /**
@@ -49,7 +49,7 @@ class KRITAUI_EXPORT KisDisplayColorConverter : public QObject
     Q_OBJECT
 
 public:
-    KisDisplayColorConverter(KisCanvas2 *parentCanvas);
+    KisDisplayColorConverter(KoCanvasResourceManager *resourceManager, QObject *parent);
     virtual ~KisDisplayColorConverter();
 
     static KisDisplayColorConverter* dumbConverterInstance();

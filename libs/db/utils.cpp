@@ -522,7 +522,7 @@ int KexiDB::rowCount(const KexiDB::TableSchema& tableSchema)
 {
 //! @todo does not work with non-SQL data sources
     if (!tableSchema.connection()) {
-        KexiDBWarn << "KexiDB::rowsCount(const KexiDB::TableSchema&): no tableSchema.connection() !";
+        KexiDBWarn << "no tableSchema.connection() !";
         return -1;
     }
     int count = -1; //will be changed only on success of querySingleNumber()
@@ -538,7 +538,7 @@ int KexiDB::rowCount(KexiDB::QuerySchema& querySchema, const QList<QVariant>& pa
 {
 //! @todo does not work with non-SQL data sources
     if (!querySchema.connection()) {
-        KexiDBWarn << "KexiDB::rowsCount(const KexiDB::QuerySchema&): no querySchema.connection() !";
+        KexiDBWarn << "no querySchema.connection() !";
         return -1;
     }
     int count = -1; //will be changed only on success of querySingleNumber()

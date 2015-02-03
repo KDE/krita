@@ -20,7 +20,7 @@
 #include "ui_kis_url_requester_impl.h"
 
 #include <QDesktopServices>
-#include <KoFileDialog.h>
+
 #include <KisImportExportManager.h>
 #include "KoIcon.h"
 
@@ -53,6 +53,8 @@ void KisUrlRequesterImpl::setStartDir(const QString &path)
 void KisUrlRequesterImpl::setFileName(const QString &path)
 {
     ui->txtFileName->setText(path);
+    KUrl url(path);
+    emit urlSelected(url);
 }
 
 QString KisUrlRequesterImpl::fileName() const
@@ -71,27 +73,47 @@ void KisUrlRequesterImpl::setUrl(const KUrl &urlObj)
     QString url = urlObj.path();
 
     if (m_basePath.isEmpty()) {
-        ui->txtFileName->setText(url);
+        setFileName(url);
     }
     else {
         QDir d(m_basePath);
-        ui->txtFileName->setText(d.relativeFilePath(url));
+        setFileName(d.relativeFilePath(url));
     }
+}
+
+void KisUrlRequesterImpl::setMode(KoFileDialog::DialogType mode)
+{
+    m_mode = mode;
+}
+
+KoFileDialog::DialogType KisUrlRequesterImpl::mode() const
+{
+    return m_mode;
 }
 
 void KisUrlRequesterImpl::slotSelectFile()
 {
-    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setCaption(i18n("Select a file to load..."));
+    KoFileDialog dialog(this, m_mode, "OpenDocument");
+    if (m_mode == KoFileDialog::OpenFile)
+    {
+        dialog.setCaption(i18n("Select a file to load..."));
+    }else if (m_mode == KoFileDialog::OpenDirectory)
+    {
+        dialog.setCaption(i18n("Select a directory to load..."));
+    }
+
     dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
     QString url = dialog.url();
 
     if (m_basePath.isEmpty()) {
-        ui->txtFileName->setText(url);
+        setFileName(url);
     }
-    else {
+    else
+    {
         QDir d(m_basePath);
-        ui->txtFileName->setText(d.relativeFilePath(url));
+        setFileName(d.relativeFilePath(url));
     }
+
+
 }

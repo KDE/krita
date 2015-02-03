@@ -294,14 +294,15 @@ inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPain
 #ifdef FILES_OUTPUT_DIR
 
 inline bool checkQImageImpl(bool externalTest,
-                            const QImage &image, const QString &testName,
+                            const QImage &srcImage, const QString &testName,
                             const QString &prefix, const QString &name,
                             int fuzzy, int fuzzyAlpha, int maxNumFailingPixels)
 {
+    QImage image = srcImage.convertToFormat(QImage::Format_ARGB32);
+
     if (fuzzyAlpha == -1) {
         fuzzyAlpha = fuzzy;
     }
-
 
     QString filename(prefix + "_" + name + ".png");
     QString dumpName(prefix + "_" + name + "_expected.png");

@@ -58,7 +58,7 @@ public:
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 private:
-    KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing) const;
+    KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation) const;
 
 protected: // XXX: make private!
 

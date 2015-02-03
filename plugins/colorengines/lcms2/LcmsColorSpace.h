@@ -344,10 +344,11 @@ public:
         cmsLabEncoded2Float(&labF1, (cmsUInt16Number *)lab1);
         cmsLabEncoded2Float(&labF2, (cmsUInt16Number *)lab2);
         qreal diff = cmsDeltaE(&labF1, &labF2);
-        if (diff > 255)
+
+        if (diff > 255.0)
             return 255;
         else
-            return qint8(diff);
+            return quint8(diff);
     }
 
     virtual quint8 differenceA(const quint8* src1, const quint8* src2) const {
@@ -382,10 +383,10 @@ public:
 
         qreal diff = pow(dL * dL + da * da + db * db + dAlpha * dAlpha, 0.5);
 
-        if (diff > 255)
+        if (diff > 255.0)
             return 255;
         else
-            return qint8(diff);
+            return quint8(diff);
     }
 
 private:

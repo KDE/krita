@@ -149,18 +149,6 @@ KisApplication::KisApplication(const QString &key)
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
-    setApplicationName(KGlobal::mainComponent().componentName());
-    setOrganizationDomain(KGlobal::mainComponent().aboutData()->organizationDomain());
-    setApplicationVersion(KGlobal::mainComponent().aboutData()->version());
-
-    // make sure the clipboard is created before setting the window icon (bug 209263)
-    (void) QApplication::clipboard();
-    setWindowIcon(KIcon(KGlobal::mainComponent().aboutData()->programIconName()));
-
-    KCrash::setDrKonqiEnabled(true);
-    KCrash::setApplicationName(applicationName());
-    KCrash::setApplicationPath(QCoreApplication::applicationDirPath());
-
 #ifdef Q_OS_MACX
     if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
     {

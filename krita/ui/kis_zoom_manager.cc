@@ -94,13 +94,8 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
     KisImageWSP image = m_view->image();
     if (!image) return;
-    QSize imageSize = image->size();
 
-    qreal minDimension = qMin(imageSize.width(), imageSize.height());
-    qreal minZoom = qMin(100.0 / minDimension, 0.1);
-
-    KoZoomMode::setMinimumZoom(minZoom);
-    KoZoomMode::setMaximumZoom(90.0);
+    connect(image, SIGNAL(sigSizeChanged(const QPointF &, const QPointF &)), this, SLOT(setMinMaxZoom()));
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
@@ -113,6 +108,9 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_zoomController->setDocumentSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()), true);
 
     m_zoomAction = m_zoomController->zoomAction();
+
+    setMinMaxZoom();
+
     m_zoomActionWidget = m_zoomAction->createWidget(0);
 
 
@@ -165,8 +163,6 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     KisConfig cfg;
     toggleShowRulers(cfg.showRulers());
 
-
-
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
@@ -187,6 +183,20 @@ void KisZoomManager::applyRulersUnit(const KoUnit &baseUnit)
 {
     m_horizontalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->xRes()));
     m_verticalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->yRes()));
+}
+
+void KisZoomManager::setMinMaxZoom()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    QSize imageSize = image->size();
+    qreal minDimension = qMin(imageSize.width(), imageSize.height());
+    qreal minZoom = qMin(100.0 / minDimension, 0.1);
+
+    m_zoomAction->setMinimumZoom(minZoom);
+    m_zoomAction->setMaximumZoom(90.0);
+
 }
 
 void KisZoomManager::updateGUI()

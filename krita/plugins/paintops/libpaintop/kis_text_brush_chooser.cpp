@@ -64,6 +64,7 @@ void KisTextBrushChooser::rebuildTextBrush()
 
     lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
     lblFont->setFont(m_font);
+
     KisTextBrush* textBrush = dynamic_cast<KisTextBrush*>(m_textBrush.data());
     textBrush->setFont(m_font);
     textBrush->setText(lineEdit->text());
@@ -76,8 +77,26 @@ void KisTextBrushChooser::rebuildTextBrush()
 
 void KisTextBrushChooser::setBrush(KisBrushSP brush)
 {
+    bool b;
+
     m_textBrush = brush;
-    m_font = static_cast<KisTextBrush*>(brush.data())->font();
+
+    KisTextBrush *textBrush = dynamic_cast<KisTextBrush*>(brush.data());
+
+    m_font = textBrush->font();
+
+    // we want to set all the gui widgets without triggering any signals
+    // (and thus calling rebuildTextBrush)
+    b = lineEdit->blockSignals(true);
+    lineEdit->setText(textBrush->text());
+    lineEdit->blockSignals(b);
+
+    b = pipeModeChbox->blockSignals(true);
+    pipeModeChbox->setChecked(textBrush->pipeMode());
+    pipeModeChbox->blockSignals(b);
+
+    // trigger rebuildTextBrush on the last change
+    inputSpacing->setValue(textBrush->spacing());
 }
 
 #include "kis_text_brush_chooser.moc"

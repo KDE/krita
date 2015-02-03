@@ -218,6 +218,7 @@ public slots:
      */
     void slotClearStatusText();
 
+    bool queryClose();
 
 signals:
     // From KisImage
@@ -246,8 +247,6 @@ public slots:
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
 
 private:
-
-    bool queryClose();
 
     class Private;
     Private * const d;

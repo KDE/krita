@@ -36,7 +36,6 @@ endif(TIFF_FOUND)
 
 if(PNG_FOUND)
     add_subdirectory(png)
-    add_subdirectory(kranimseq)
 endif(PNG_FOUND)
 
 if(OPENEXR_FOUND)

@@ -135,12 +135,15 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 
     // load settings from configuration
     setGrowCenter(configGroup.readEntry("growCenter", false));
-    setForceRatio(configGroup.readEntry("forceRatio", false));
-    setAllowGrow(configGroup.readEntry("allowGrow", true));
-    setDecoration(configGroup.readEntry("decoration", 0));
+    //setForceRatio(configGroup.readEntry("forceRatio", false));
+    setRatio(configGroup.readEntry("defaultRatio", 1.0));
+    setAllowGrow(configGroup.readEntry("allowGrow", false));
 
-    // can't save Enum values, so we ened to convert it to int.
-    setCropType(configGroup.readEntry("cropType") == 0 ? LayerCropType : ImageCropType);
+    // Default: thirds decoration
+    setDecoration(configGroup.readEntry("decoration", 1));
+
+    // Default: crop the entire image
+    setCropType(configGroup.readEntry("cropType", 1) == 0 ? LayerCropType : ImageCropType);
 
     m_finalRect.setCropRect(image()->bounds());
 
@@ -570,6 +573,7 @@ void KisToolCrop::setRatio(double ratio)
     }
 
     m_finalRect.setRatio(ratio);
+    configGroup.writeEntry("defaultRatio", ratio);
 }
 
 double KisToolCrop::ratio() const
@@ -580,7 +584,7 @@ double KisToolCrop::ratio() const
 void KisToolCrop::setForceRatio(bool force)
 {
     m_finalRect.setRatioLocked(force);
-    configGroup.writeEntry("forceRatio", force);
+    //configGroup.writeEntry("forceRatio", force);
 }
 
 bool KisToolCrop::forceRatio() const

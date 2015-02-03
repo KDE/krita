@@ -323,7 +323,12 @@ void SpellCheck::setCurrentCursorPosition(QTextDocument *document, int cursorPos
             if (int length = range.lastChar - range.firstChar) {
                 QString word = block.text().mid(range.firstChar, length);
                 m_spellCheckMenu->setMisspelled(word, block.position() + range.firstChar, length);
-                m_spellCheckMenu->setCurrentLanguage(m_bgSpellCheck->currentLanguage());
+                QString language = m_bgSpellCheck->currentLanguage();
+                if (!m_bgSpellCheck->currentLanguage().isEmpty() && !m_bgSpellCheck->currentCountry().isEmpty()) {
+                    language += '_';
+                }
+                language += m_bgSpellCheck->currentCountry();
+                m_spellCheckMenu->setCurrentLanguage(language);
                 m_spellCheckMenu->setVisible(true);
                 m_spellCheckMenu->setEnabled(true);
                 return;

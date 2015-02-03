@@ -105,7 +105,8 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       textRunAroundDistanceBottom(0.0),
       textRunAroundThreshold(0.0),
       textRunAroundContour(KoShape::ContourFull),
-      anchor(0)
+      anchor(0),
+      minimumHeight(0.0)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
@@ -1004,6 +1005,19 @@ KoShapeAnchor *KoShape::anchor() const
     Q_D(const KoShape);
     return d->anchor;
 }
+
+void KoShape::setMinimumHeight(qreal height)
+{
+    Q_D(KoShape);
+    d->minimumHeight = height;
+}
+
+qreal KoShape::minimumHeight() const
+{
+    Q_D(const KoShape);
+    return d->minimumHeight;
+}
+
 
 void KoShape::setBackground(QSharedPointer<KoShapeBackground> fill)
 {

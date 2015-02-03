@@ -42,18 +42,26 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
       m_type(type),
       m_closeSnappingActivated(false)
 {
-
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
     if (kiscanvas && kiscanvas->viewManager()) {
         KAction *undo_polygon_selection = new KAction("Undo Polygon Selection Points",this);
         undo_polygon_selection->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::Key_Z));
-        kiscanvas->viewManager()->actionCollection()->addAction("undo_polygon_selection", undo_polygon_selection);
-        connect(undo_polygon_selection, SIGNAL(triggered()), SLOT(undoSelection()));
+        collection->addAction("undo_polygon_selection", undo_polygon_selection);
+        addAction("undo_polygon_selection", undo_polygon_selection);
     }
+}
+
+
+void KisToolPolylineBase::activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes)
+{
+    KisToolShape::activate(activation, shapes);
+    connect(actions().value("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoSelection()), Qt::UniqueConnection);
 }
 
 void KisToolPolylineBase::deactivate()
 {
+    disconnect(actions().value("undo_polygon_selection"), 0, this, 0);
     cancelStroke();
     KisToolShape::deactivate();
 }
@@ -156,12 +164,19 @@ void KisToolPolylineBase::undoSelection()
         updateCanvasViewRect(updateRect);
 
         //Update canvas for last segment
-        QRectF rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size()-2)).normalized());
-        rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
-        rect |= rect;
-        updateCanvasViewRect(rect);
-        m_points.pop_back();
-        m_dragStart = m_points.last();
+        QRectF rect;
+        if (m_points.size() > 2) {
+            rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size()-2)).normalized());
+            rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
+            rect |= rect;
+            updateCanvasViewRect(rect);
+        }
+        if (m_points.size() > 0) {
+            m_points.pop_back();
+        }
+        if (m_points.size() > 0) {
+            m_dragStart = m_points.last();
+        }
     }
 }
 

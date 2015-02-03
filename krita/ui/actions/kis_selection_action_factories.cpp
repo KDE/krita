@@ -263,56 +263,65 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
         ActionHelper::copyFromDevice(view, dev);
         image->unlock();
 
-        KUndo2Command *command = 0;
+        if (dev->exactBounds().isEmpty()) {
+            view->showFloatingMessage(
+                i18nc("floating message when copying empty selection",
+                      "Selection is empty: no pixels were copied "),
+                QIcon(), 3000, KisFloatingMessage::Medium);
+        }
 
-        if (willCut && node->hasEditablePaintDevice()) {
-            struct ClearSelection : public KisTransactionBasedCommand {
-                ClearSelection(KisNodeSP node, KisSelectionSP sel)
-                    : m_node(node), m_sel(sel) {}
-                KisNodeSP m_node;
-                KisSelectionSP m_sel;
+        if (willCut) {
+            KUndo2Command *command = 0;
 
-                KUndo2Command* paint() {
-                    KisSelectionSP cutSelection = m_sel;
-                    QRect originalRect = cutSelection->selectedExactRect();
-                    static const int preciseSelectionThreshold = 16;
+            if (willCut && node->hasEditablePaintDevice()) {
+                struct ClearSelection : public KisTransactionBasedCommand {
+                    ClearSelection(KisNodeSP node, KisSelectionSP sel)
+                        : m_node(node), m_sel(sel) {}
+                    KisNodeSP m_node;
+                    KisSelectionSP m_sel;
 
-                    if (originalRect.width() > preciseSelectionThreshold ||
-                        originalRect.height() > preciseSelectionThreshold) {
+                    KUndo2Command* paint() {
+                        KisSelectionSP cutSelection = m_sel;
+                        QRect originalRect = cutSelection->selectedExactRect();
+                        static const int preciseSelectionThreshold = 16;
 
-                        cutSelection = new KisSelection(*m_sel);
-                        delete cutSelection->flatten();
+                        if (originalRect.width() > preciseSelectionThreshold ||
+                                originalRect.height() > preciseSelectionThreshold) {
 
-                        KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
+                            cutSelection = new KisSelection(*m_sel);
+                            delete cutSelection->flatten();
 
-                        QRect processingRect = filter->changeRect(originalRect);
-                        filter->process(cutSelection->pixelSelection(), processingRect);
+                            KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
+
+                            QRect processingRect = filter->changeRect(originalRect);
+                            filter->process(cutSelection->pixelSelection(), processingRect);
+                        }
+
+                        KisTransaction transaction(m_node->paintDevice());
+                        m_node->paintDevice()->clearSelection(cutSelection);
+                        m_node->setDirty(cutSelection->selectedRect());
+                        return transaction.endAndTake();
                     }
+                };
 
-                    KisTransaction transaction(m_node->paintDevice());
-                    m_node->paintDevice()->clearSelection(cutSelection);
-                    m_node->setDirty(cutSelection->selectedRect());
-                    return transaction.endAndTake();
-                }
-            };
+                command = new ClearSelection(node, selection);
+            }
 
-            command = new ClearSelection(node, selection);
+            KUndo2MagicString actionName = willCut ?
+                        kundo2_i18n("Cut") :
+                        kundo2_i18n("Copy");
+            KisProcessingApplicator *ap = beginAction(view, actionName);
+
+            if (command) {
+                ap->applyCommand(command,
+                                 KisStrokeJobData::SEQUENTIAL,
+                                 KisStrokeJobData::NORMAL);
+            }
+
+            KisOperationConfiguration config(id());
+            config.setProperty("will-cut", willCut);
+            endAction(ap, config.toXML());
         }
-
-        KUndo2MagicString actionName = willCut ?
-            kundo2_i18n("Cut") :
-            kundo2_i18n("Copy");
-        KisProcessingApplicator *ap = beginAction(view, actionName);
-
-        if (command) {
-            ap->applyCommand(command,
-                             KisStrokeJobData::SEQUENTIAL,
-                             KisStrokeJobData::NORMAL);
-        }
-
-        KisOperationConfiguration config(id());
-        config.setProperty("will-cut", willCut);
-        endAction(ap, config.toXML());
     }
 }
 

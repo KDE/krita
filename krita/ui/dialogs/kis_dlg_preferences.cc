@@ -279,7 +279,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 void ColorSettingsTab::installProfile()
 {
     QStringList mime;
-    mime << "ICM Profile (*.icm(" <<  "ICC Profile (*.icc)";
+    mime << "ICM Profile (*.icm)" <<  "ICC Profile (*.icc)";
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
@@ -516,6 +516,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
     chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline());
     chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor());
+    chkHidePopups->setChecked(cfg.hidePopups());
 
     connect(grpOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
 }
@@ -540,6 +541,7 @@ void DisplaySettingsTab::setDefault()
     chkCurveAntialiasing->setChecked(true);
     chkSelectionOutlineAntialiasing->setChecked(false);
     chkChannelsAsColor->setChecked(false);
+    chkHidePopups->setChecked(false);
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
@@ -878,6 +880,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
         cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());
+        cfg.setHidePopups(dialog->m_displaySettings->chkHidePopups->isChecked());
         // Grid settings
         cfg.setGridMainStyle(dialog->m_gridSettings->selectMainStyle->currentIndex());
         cfg.setGridSubdivisionStyle(dialog->m_gridSettings->selectSubdivisionStyle->currentIndex());

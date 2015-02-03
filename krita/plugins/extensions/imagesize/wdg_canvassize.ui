@@ -137,7 +137,7 @@
        </spacer>
       </item>
       <item row="2" column="2" colspan="4">
-       <widget class="QCheckBox" name="aspectRatioCkb">
+       <widget class="QCheckBox" name="constrainProportionsCkb">
         <property name="toolTip">
          <string>Constrain aspect ratio</string>
         </property>
@@ -660,7 +660,7 @@
   <tabstop>newHeight</tabstop>
   <tabstop>newHeightDouble</tabstop>
   <tabstop>heightUnit</tabstop>
-  <tabstop>aspectRatioCkb</tabstop>
+  <tabstop>constrainProportionsCkb</tabstop>
   <tabstop>xOffset</tabstop>
   <tabstop>xOffsetDouble</tabstop>
   <tabstop>xOffUnit</tabstop>

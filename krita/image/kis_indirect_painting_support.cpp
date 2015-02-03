@@ -117,18 +117,18 @@ void KisIndirectPaintingSupport::setupTemporaryPainter(KisPainter *painter) cons
     painter->setSelection(d->selection);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
+void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
 {
     mergeToLayerImpl(layer, undoAdapter, transactionText,timedID);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
+void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
 {
     mergeToLayerImpl(layer, undoAdapter, transactionText,timedID);
 }
 
 template<class UndoAdapter>
-void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
+void KisIndirectPaintingSupport::mergeToLayerImpl(KisNodeSP layer,
                                                   UndoAdapter *undoAdapter,
                                                   const KUndo2MagicString &transactionText,int timedID)
 {

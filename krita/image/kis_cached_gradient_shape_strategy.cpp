@@ -47,6 +47,8 @@ KisCachedGradientShapeStrategy::KisCachedGradientShapeStrategy(const QRect &rc,
     : KisGradientShapeStrategy(),
       m_d(new Private())
 {
+    KIS_ASSERT_RECOVER_NOOP(rc.width() >= 3 && rc.height() >= 3);
+
     m_d->rc = rc;
     m_d->xStep = xStep;
     m_d->yStep = yStep;

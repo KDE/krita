@@ -178,14 +178,6 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
 bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 {
-//     if (!loadPaintDevice(layer->paintDevice(), getLocation(layer))) {
-//         return false;
-//     }
-//
-//     if (!loadProfile(layer->paintDevice(), getLocation(layer, DOT_ICC))) {
-//         return false;
-//     }
-
     if (!loadMetaData(layer)) {
         return false;
     }
@@ -194,8 +186,6 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
     result = loadSelection(getLocation(layer), layer->internalSelection());
 
     result = loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
-
-    layer->update();
 
     result = visitAll(layer);
     return result;

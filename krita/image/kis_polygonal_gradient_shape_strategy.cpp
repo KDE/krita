@@ -310,7 +310,7 @@ namespace Private {
     {
         QPointF center = centerFromPath(selectionPath);
         return searchForMax ?
-            getDisnormedGradientValue(center, selection, exponent) : 0.0;
+            getDisnormedGradientValue(center, selectionPath, exponent) : 0.0;
     }
 
 #endif /* HAVE_GSL */

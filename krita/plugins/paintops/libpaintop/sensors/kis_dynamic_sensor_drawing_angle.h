@@ -39,14 +39,17 @@ public:
 
     bool fanCornersEnabled() const;
     int fanCornersStep() const;
+    int angleOffset() const;
 
 public slots:
     void setFanCornersEnabled(int state);
     void setFanCornersStep(int angle);
+    void setAngleOffset(int angle);
 
 private:
     bool m_fanCornersEnabled;
     int m_fanCornersStep;
+    int m_angleOffset; // in degrees
 };
 
 #endif /* __KIS_DYNAMIC_SENSOR_DRAWING_ANGLE_H */

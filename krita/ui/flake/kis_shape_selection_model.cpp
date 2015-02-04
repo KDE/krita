@@ -102,7 +102,7 @@ void KisShapeSelectionModel::remove(KoShape *child)
     if (m_shapeSelection) {
         m_shapeSelection->shapeManager()->remove(child);
     }
-    if (k.isValid()) {
+    if (m_image.isValid()) {
         QTransform matrix;
         matrix.scale(m_image->xRes(), m_image->yRes());
         updateRect = matrix.mapRect(updateRect);

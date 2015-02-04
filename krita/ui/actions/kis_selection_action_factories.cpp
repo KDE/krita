@@ -35,6 +35,8 @@
 #include <KoSelection.h>
 #include <KoDrag.h>
 #include <KoShapeOdfSaveHelper.h>
+#include <KoShapeController.h>
+#include <KoDocumentResourceManager.h>
 
 #include "KisViewManager.h"
 #include "kis_canvas_resource_provider.h"
@@ -62,50 +64,50 @@
 
 namespace ActionHelper {
 
-    void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device) {
-        KisImageWSP image = view->image();
-        if (!image) return;
-        
-        KisSelectionSP selection = view->selection();
+void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device) {
+    KisImageWSP image = view->image();
+    if (!image) return;
 
-        QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
+    KisSelectionSP selection = view->selection();
 
-        KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
-        Q_CHECK_PTR(clip);
+    QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
 
-        const KoColorSpace *cs = clip->colorSpace();
+    KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
+    Q_CHECK_PTR(clip);
 
-        // TODO if the source is linked... copy from all linked layers?!?
+    const KoColorSpace *cs = clip->colorSpace();
 
-        // Copy image data
-        KisPainter gc;
-        gc.begin(clip);
-        gc.setCompositeOp(COMPOSITE_COPY);
-        gc.bitBlt(0, 0, device, rc.x(), rc.y(), rc.width(), rc.height());
-        gc.end();
+    // TODO if the source is linked... copy from all linked layers?!?
 
-        if (selection) {
-            // Apply selection mask.
-            KisPaintDeviceSP selectionProjection = selection->projection();
-            KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, rc.width());
-            KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
+    // Copy image data
+    KisPainter gc;
+    gc.begin(clip);
+    gc.setCompositeOp(COMPOSITE_COPY);
+    gc.bitBlt(0, 0, device, rc.x(), rc.y(), rc.width(), rc.height());
+    gc.end();
 
-            for (qint32 y = 0; y < rc.height(); y++) {
+    if (selection) {
+        // Apply selection mask.
+        KisPaintDeviceSP selectionProjection = selection->projection();
+        KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, rc.width());
+        KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
 
-                for (qint32 x = 0; x < rc.width(); x++) {
+        for (qint32 y = 0; y < rc.height(); y++) {
 
-                    cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
+            for (qint32 x = 0; x < rc.width(); x++) {
 
-                    layerIt->nextPixel();
-                    selectionIt->nextPixel();
-                }
-                layerIt->nextRow();
-                selectionIt->nextRow();
+                cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
+
+                layerIt->nextPixel();
+                selectionIt->nextPixel();
             }
+            layerIt->nextRow();
+            selectionIt->nextRow();
         }
-
-        KisClipboard::instance()->setClip(clip, rc.topLeft());
     }
+
+    KisClipboard::instance()->setClip(clip, rc.topLeft());
+}
 
 }
 
@@ -171,7 +173,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
 
     KisSelectionSP selection = view->selection();
     QRect selectedRect = selection ?
-        selection->selectedRect() : view->image()->bounds();
+                selection->selectedRect() : view->image()->bounds();
     Q_UNUSED(selectedRect);
     KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
     Q_UNUSED(filled);
@@ -184,29 +186,29 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
     else if (fillSource == "bg") {
         useBgColor = true;
     }
-        
+
     KisProcessingApplicator applicator(view->image(), node,
                                        KisProcessingApplicator::NONE,
                                        KisImageSignalVector() << ModifiedSignal,
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(view->image(), node, 0, view->resourceProvider()->resourceManager());
+            new KisResourcesSnapshot(view->image(), node, 0, view->resourceProvider()->resourceManager());
     resources->setOpacity(1.0);
 
     KisProcessingVisitorSP visitor =
-        new FillProcessingVisitor(QPoint(0, 0), // start position
-                                  selection,
-                                  resources,
-                                  false, // fast mode
-                                  usePattern,
-                                  true, // fill only selection,
-                                  0, // feathering radius
-                                  0, // sizemod
-                                  80, // threshold,
-                                  false, // unmerged
-                                  useBgColor);
-                        
+            new FillProcessingVisitor(QPoint(0, 0), // start position
+                                      selection,
+                                      resources,
+                                      false, // fast mode
+                                      usePattern,
+                                      true, // fill only selection,
+                                      0, // feathering radius
+                                      0, // sizemod
+                                      80, // threshold,
+                                      false, // unmerged
+                                      useBgColor);
+
     applicator.applyVisitor(visitor,
                             KisStrokeJobData::SEQUENTIAL,
                             KisStrokeJobData::EXCLUSIVE);
@@ -265,9 +267,9 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
 
         if (dev->exactBounds().isEmpty()) {
             view->showFloatingMessage(
-                i18nc("floating message when copying empty selection",
-                      "Selection is empty: no pixels were copied "),
-                QIcon(), 3000, KisFloatingMessage::Medium);
+                        i18nc("floating message when copying empty selection",
+                              "Selection is empty: no pixels were copied "),
+                        QIcon(), 3000, KisFloatingMessage::Medium);
         }
 
         if (willCut) {
@@ -380,8 +382,8 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
                                     clip->colorSpace(),
                                     i18n("Pasted"));
     KisPaintLayerSP layer =
-        new KisPaintLayer(image.data(), clip->objectName(),
-                          OPACITY_OPAQUE_U8, clip->colorSpace());
+            new KisPaintLayer(image.data(), clip->objectName(),
+                              OPACITY_OPAQUE_U8, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());
     p.setCompositeOp(COMPOSITE_COPY);
@@ -407,7 +409,7 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
     KisSelectionSP selection = view->selection();
 
     if (selection->hasShapeSelection() ||
-        !selection->outlineCacheValid()) {
+            !selection->outlineCacheValid()) {
 
         return;
     }
@@ -447,14 +449,14 @@ public:
 
     virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-        KoShapeLoadingContext context(loadingContext, 0);
+        KoShapeLoadingContext context(loadingContext, m_view->canvasBase()->shapeController()->resourceManager());
         KoXmlElement child;
 
         QList<KoShape*> shapes;
         forEachElement(child, body) {
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
             if (shape) {
-	shapes.append(shape);
+                shapes.append(shape);
             }
         }
         if (!shapes.isEmpty()) {

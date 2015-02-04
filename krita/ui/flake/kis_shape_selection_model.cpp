@@ -98,12 +98,13 @@ void KisShapeSelectionModel::remove(KoShape *child)
     if (m_shapeSelection) {
         m_shapeSelection->shapeManager()->remove(child);
     }
-
-    QTransform matrix;
-    matrix.scale(m_image->xRes(), m_image->yRes());
-    updateRect = matrix.mapRect(updateRect);
-    if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
-        requestUpdate(updateRect);
+    if (m_image.isValid()) {
+        QTransform matrix;
+        matrix.scale(m_image->xRes(), m_image->yRes());
+        updateRect = matrix.mapRect(updateRect);
+        if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
+            requestUpdate(updateRect);
+        }
     }
 }
 

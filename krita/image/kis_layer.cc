@@ -502,11 +502,16 @@ QRect KisLayer::updateProjection(const QRect& rect, PositionToFilthy pos)
     return updatedRect;
 }
 
+
+/**
+ * \p rect is a dirty rect in layer's original() coordinates!
+ */
 void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect, PositionToFilthy pos)
 {
     bool changeRectVaries = false;
-    QRect changeRect = masksChangeRect(effectMasks(lastNode), rect,
-                                       changeRectVaries);
+    QRect changeRect = outgoingChangeRect(rect);
+    changeRect = masksChangeRect(effectMasks(lastNode), changeRect,
+                                 changeRectVaries);
 
     KisPaintDeviceSP originalDevice = original();
 
@@ -544,13 +549,30 @@ KisPaintDeviceSP KisLayer::projection() const
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect changeRect = rect;
+    changeRect = incomingChangeRect(changeRect);
 
     if(pos == KisNode::N_FILTHY) {
         bool changeRectVaries;
-        changeRect = masksChangeRect(effectMasks(), rect, changeRectVaries);
+        changeRect = outgoingChangeRect(changeRect);
+        changeRect = masksChangeRect(effectMasks(), changeRect, changeRectVaries);
+    }
+
+    // TODO: string comparizon: optimize!
+    if (compositeOpId() != COMPOSITE_COPY) {
+        changeRect |= rect;
     }
 
     return changeRect;
+}
+
+QRect KisLayer::incomingChangeRect(const QRect &rect) const
+{
+    return rect;
+}
+
+QRect KisLayer::outgoingChangeRect(const QRect &rect) const
+{
+    return rect;
 }
 
 QImage KisLayer::createThumbnail(qint32 w, qint32 h)

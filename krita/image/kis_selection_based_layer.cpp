@@ -148,15 +148,11 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
     unlockTemporaryTarget();
 }
 
-QRect KisSelectionBasedLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
+QRect KisSelectionBasedLayer::cropChangeRectBySelection(const QRect &rect) const
 {
-    Q_UNUSED(pos);
-    /**
-     * Warn: we won't call KisNode's copy of changeRect as it's dummy
-     */
     return m_d->selection ?
-           rect & m_d->selection->selectedRect() :
-           rect;
+        rect & m_d->selection->selectedRect() :
+        rect;
 }
 
 QRect KisSelectionBasedLayer::needRect(const QRect &rect, PositionToFilthy pos) const

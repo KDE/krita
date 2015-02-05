@@ -83,7 +83,7 @@ public:
      * Ask the layer to assemble its data & apply all the effect masks
      * to it.
      */
-    virtual QRect updateProjection(const QRect& rect, PositionToFilthy pos);
+    QRect updateProjection(const QRect& rect, PositionToFilthy pos);
 
     void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect, PositionToFilthy pos);
 
@@ -247,6 +247,54 @@ public:
     KisMetaData::Store* metaData();
 
 protected:
+
+    /**
+     * For KisLayer classes change rect transformation consists of two
+     * parts: incoming and outgoing.
+     *
+     * 1) incomingChangeRect(rect) chande rect transformation
+     *    performed by the transformations done basing on global
+     *    projection. It is performed in KisAsyncMerger +
+     *    KisUpdateOriginalVisitor classes. It happens before data
+     *    coming to KisLayer::original() therefore it is
+     *    'incoming'. See KisAdjustmentLayer for example of usage.
+     *
+     * 2) outgoingChangeRect(rect) change rect transformation that
+     *    happens in KisLayer::copyOriginalToProjection(). It applies
+     *    *only* when the layer is 'filthy', that is was the cause of
+     *    the merge process. See KisCloneLayer for example of usage.
+     *
+     * The flow of changed areas can be illustrated in the
+     * following way:
+     *
+     * 1. Current projection of size R1 is stored in KisAsyncMerger::m_currentProjection
+     *      |
+     *      | <-- KisUpdateOriginalVisitor writes data into layer's original() device.
+     *      |     The changed area on KisLayer::original() is
+     *      |     R2 = KisLayer::incomingChangeRect(R1)
+     *      |
+     * 2. KisLayer::original() / changed rect: R2
+     *      |
+     *      | <-- KisLayer::updateProjection() starts composing a layer
+     *      |     It calls KisLayer::copyOriginalToProjection() which copies some area
+     *      |     to a temporaty device. The temporary device now stores
+     *      |     R3 = KisLayer::outgoingChangeRect(R2)
+     *      |
+     * 3. Temporary device / changed rect: R3
+     *      |
+     *      | <-- KisLayer::updateProjection() continues composing a layer. It merges a mask.
+     *      |     R4 = KisMask::changeRect(R3)
+     *      |
+     * 4. KisLayer::original() / changed rect: R4
+     *
+     * So in the end rect R4 will be passed up to the next layers in the stack.
+     */
+    virtual QRect incomingChangeRect(const QRect &rect) const;
+
+    /**
+     * \see incomingChangeRect()
+     */
+    virtual QRect outgoingChangeRect(const QRect &rect) const;
 
     /**
      * @param rectVariesFlag (out param) a flag, showing whether

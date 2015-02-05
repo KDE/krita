@@ -100,7 +100,7 @@ public:
      */
     void setFilter(KisFilterConfiguration *filterConfig);
 
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+    QRect incomingChangeRect(const QRect &rect) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     void setChannelFlags(const QBitArray & channelFlags);

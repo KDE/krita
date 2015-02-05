@@ -74,7 +74,6 @@ public:
                                   const QRect& rect) const;
 
     // From KisNode
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     /**
@@ -163,6 +162,8 @@ public:
 
 protected:
     void initSelection();
+
+    QRect cropChangeRectBySelection(const QRect &rect) const;
 
 public slots:
 

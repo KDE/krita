@@ -195,11 +195,15 @@ void KisTransformMaskTest::testSafeTransformSingleVanishingPoint()
     QCOMPARE(bwdNastyRect.toRect(), QRect(1463,0,585,1232));
 }
 
-bool checkImage(KisImageSP image, const QString &testName, const QString &prefix) {
-    return TestUtil::checkQImageExternal(image->projection()->convertToQImage(0, image->bounds()),
+bool checkDeviceImpl(KisPaintDeviceSP device, KisImageSP image, const QString &testName, const QString &prefix) {
+    return TestUtil::checkQImageExternal(device->convertToQImage(0, image->bounds()),
                                          "transform_mask_updates",
                                          prefix,
                                          testName, 1, 1, 100);
+}
+
+bool checkImage(KisImageSP image, const QString &testName, const QString &prefix) {
+    return checkDeviceImpl(image->projection(), image, testName, prefix);
 }
 
 bool doPartialTests(const QString &prefix, KisImageSP image, KisLayerSP paintLayer,
@@ -418,6 +422,53 @@ void KisTransformMaskTest::testMaskOnCloneLayer()
                                  new KisDumbTransformMaskParams(transform)));
 
     QVERIFY(doPartialTests("cl", p.image, p.layer, clone, mask));
+}
+
+void KisTransformMaskTest::testMaskOnCloneLayerWithOffset()
+{
+    QRect refRect(0,0,512,512);
+    QRect fillRect(400,400,100,100);
+    TestUtil::MaskParent p(refRect);
+
+    p.layer->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
+
+    KisPaintLayerSP player = new KisPaintLayer(p.image, "bg", OPACITY_OPAQUE_U8, p.image->colorSpace());
+    p.image->addNode(player, p.image->root(), KisNodeSP());
+
+    KisCloneLayerSP clone = new KisCloneLayer(p.layer, p.image, "clone", OPACITY_OPAQUE_U8);
+    p.image->addNode(clone, p.image->root());
+
+    KisTransformMaskSP mask = new KisTransformMask();
+    p.image->addNode(mask, clone);
+
+    QTransform transform(1, 0, 0,
+                         0, 1, 0,
+                         0, -150, 1);
+
+    mask->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                 new KisDumbTransformMaskParams(transform)));
+
+    p.layer->setDirty(refRect);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "0_initial", "clone_offset_simple"));
+
+    clone->setX(-300);
+    clone->setDirty();
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "1_after_offset", "clone_offset_simple"));
+
+    mask->setDirty();
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "2_after_offset_dirty_mask", "clone_offset_simple"));
+
+    QTest::qWait(4000);
+    QVERIFY(checkImage(p.image, "3_delayed_regeneration", "clone_offset_simple"));
+
+    KisPaintDeviceSP previewDevice = mask->buildPreviewDevice();
+    QVERIFY(checkDeviceImpl(previewDevice, p.image, "4_preview_device", "clone_offset_simple"));
+
+
+    QVERIFY(doPartialTests("clone_offset_complex", p.image, p.layer, clone, mask));
 }
 
 QTEST_KDEMAIN(KisTransformMaskTest, GUI)

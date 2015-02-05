@@ -234,6 +234,7 @@ QWidget* KisToolMultihand::createOptionWidget()
 
     m_axesAngleSlider = new KisDoubleSliderSpinBox(widget);
     m_axesAngleSlider->setToolTip(i18n("Set axes angle (degrees)"));
+    m_axesAngleSlider->setSuffix(QChar(Qt::Key_degree));
     m_axesAngleSlider->setRange(0.0, 90.0,1);
 
     m_axesAngleSlider->setEnabled(true);

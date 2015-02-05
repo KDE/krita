@@ -318,14 +318,17 @@ QWidget * KisToolBrush::createOptionWidget()
     optionsWidget->layout()->addWidget(specialSpacer);
 
     // Line smoothing configuration
+    m_smoothingLabel = new QLabel(optionsWidget);
+    m_smoothingLabel->setText(i18n("Smoothing:"));
+
     m_cmbSmoothingType = new QComboBox(optionsWidget);
     m_cmbSmoothingType->addItems(QStringList()
-            << i18n("No Smoothing")
-            << i18n("Basic Smoothing")
-            << i18n("Weighted Smoothing")
+            << i18n("None")
+            << i18n("Basic")
+            << i18n("Weighted")
             << i18n("Stabilizer"));
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
-    addOptionWidgetOption(m_cmbSmoothingType);
+    addOptionWidgetOption(m_cmbSmoothingType, m_smoothingLabel);
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);

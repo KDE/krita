@@ -847,7 +847,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
         kisCanvas->viewManager()->
             showFloatingMessage(
                 i18nc("floating message in transformation tool",
-                      "Cannot transform empty layer"),
+                      "Cannot transform empty layer "),
                 QIcon(), 1000, KisFloatingMessage::Medium);
 
         return;

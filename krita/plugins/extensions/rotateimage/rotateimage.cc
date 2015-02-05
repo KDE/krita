@@ -50,7 +50,7 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
     addAction("rotateimage", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage()));
 
-    action  = new KisAction(koIcon("object-rotate-right"), i18nc("rotate image 90 degrees to the right", "Rotate Image 90° to the Right"), this);
+    action  = new KisAction(koIcon("object-rotate-right"), i18nc("rotate image 90 degrees Clockwise", "Rotate Image 90° Clockwise"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("rotateImageCW90", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage90()));
@@ -60,7 +60,7 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
     addAction("rotateImage180", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage180()));
 
-    action  = new KisAction(koIcon("object-rotate-left"), i18nc("rotate image 90 degrees to the left", "Rotate Image 90° to the Left"), this);
+    action  = new KisAction(koIcon("object-rotate-left"), i18nc("rotate image 90 degrees Counter-Clockwise", "Rotate Image 90° Counter-Clockwise"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("rotateImageCCW90", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));

@@ -7,7 +7,7 @@
  *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  but WITHOUT ANY WARRANTY; without even the ied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_url_requester_impl.h"
-#include "ui_kis_url_requester_impl.h"
+#include "kis_url_requester.h"
+#include "ui_wdg_url_requester.h"
 
 #include <QDesktopServices>
 
@@ -26,11 +26,10 @@
 
 #include "kis_debug.h"
 
-
-
-KisUrlRequesterImpl::KisUrlRequesterImpl(QWidget *parent)
-    : QWidget(parent),
-      ui(new Ui::KisUrlRequesterImpl)
+KisUrlRequester::KisUrlRequester(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::WdgUrlRequester)
+    , m_mode(KoFileDialog::OpenFile)
 {
     ui->setupUi(this);
 
@@ -40,35 +39,35 @@ KisUrlRequesterImpl::KisUrlRequesterImpl(QWidget *parent)
     connect(ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));
 }
 
-KisUrlRequesterImpl::~KisUrlRequesterImpl()
+KisUrlRequester::~KisUrlRequester()
 {
     delete ui;
 }
 
-void KisUrlRequesterImpl::setStartDir(const QString &path)
+void KisUrlRequester::setStartDir(const QString &path)
 {
     m_basePath = path;
 }
 
-void KisUrlRequesterImpl::setFileName(const QString &path)
+void KisUrlRequester::setFileName(const QString &path)
 {
     ui->txtFileName->setText(path);
     KUrl url(path);
     emit urlSelected(url);
 }
 
-QString KisUrlRequesterImpl::fileName() const
+QString KisUrlRequester::fileName() const
 {
     QString path = ui->txtFileName->text();
     return path;
 }
 
-KUrl KisUrlRequesterImpl::url() const
+KUrl KisUrlRequester::url() const
 {
     return KUrl(fileName());
 }
 
-void KisUrlRequesterImpl::setUrl(const KUrl &urlObj)
+void KisUrlRequester::setUrl(const KUrl &urlObj)
 {
     QString url = urlObj.path();
 
@@ -81,24 +80,23 @@ void KisUrlRequesterImpl::setUrl(const KUrl &urlObj)
     }
 }
 
-void KisUrlRequesterImpl::setMode(KoFileDialog::DialogType mode)
+void KisUrlRequester::setMode(KoFileDialog::DialogType mode)
 {
     m_mode = mode;
 }
 
-KoFileDialog::DialogType KisUrlRequesterImpl::mode() const
+KoFileDialog::DialogType KisUrlRequester::mode() const
 {
     return m_mode;
 }
 
-void KisUrlRequesterImpl::slotSelectFile()
+void KisUrlRequester::slotSelectFile()
 {
     KoFileDialog dialog(this, m_mode, "OpenDocument");
-    if (m_mode == KoFileDialog::OpenFile)
-    {
+    if (m_mode == KoFileDialog::OpenFile) {
         dialog.setCaption(i18n("Select a file to load..."));
-    }else if (m_mode == KoFileDialog::OpenDirectory)
-    {
+    }
+    else if (m_mode == KoFileDialog::OpenDirectory)  {
         dialog.setCaption(i18n("Select a directory to load..."));
     }
 
@@ -108,8 +106,7 @@ void KisUrlRequesterImpl::slotSelectFile()
 
     if (m_basePath.isEmpty()) {
         setFileName(url);
-    }
-    else
+    } else
     {
         QDir d(m_basePath);
         setFileName(d.relativeFilePath(url));

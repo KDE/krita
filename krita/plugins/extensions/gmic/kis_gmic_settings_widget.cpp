@@ -298,12 +298,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 if (role == CreateRole)
                 {
                     urlRequester = new KisUrlRequester;
-#ifdef Q_OS_WIN
                     urlRequester->setMode(KoFileDialog::OpenDirectory);
-#else
-                    urlRequester->fileDialog()->setMode(KFile::Directory);
-#endif
-
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(folderParam, urlRequester);
@@ -337,11 +332,8 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 if (role == CreateRole)
                 {
                     urlRequester = new KisUrlRequester;
-#ifdef Q_OS_WIN
                     urlRequester->setMode(KoFileDialog::OpenFile);
-#else
-                    urlRequester->fileDialog()->setMode(KFile::File);
-#endif
+
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(fileParam, urlRequester);
 

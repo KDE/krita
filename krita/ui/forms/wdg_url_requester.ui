@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>KisUrlRequesterImpl</class>
- <widget class="QWidget" name="KisUrlRequesterImpl">
+ <class>WdgUrlRequester</class>
+ <widget class="QWidget" name="WdgUrlRequester">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>156</width>
-    <height>39</height>
+    <width>194</width>
+    <height>46</height>
    </rect>
   </property>
   <property name="sizePolicy">

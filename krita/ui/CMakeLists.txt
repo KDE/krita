@@ -312,11 +312,12 @@ set(kritaui_LIB_SRCS
     KisViewManager.cpp
     kis_mirror_manager.cpp
 
-
     qtlockedfile/qtlockedfile.cpp
 
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
+
+    widgets/kis_url_requester.cpp
 )
 
 if(WIN32)
@@ -326,7 +327,6 @@ if(WIN32)
         input/wintab/kis_tablet_support_win.cpp
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
-        widgets/kis_url_requester_impl.cpp
         )
 endif(WIN32)
 
@@ -410,14 +410,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     input/config/kis_key_input_editor.ui
     wdgsplash.ui
 	input/wintab/kis_screen_size_choice_dialog.ui
-	forms/kis_url_requester_impl.ui
+	forms/wdg_url_requester.ui
 )
-
-if(WIN32)
-    #kde4_add_ui_files(
-    #  forms/kis_url_requester_impl.ui
-    #)
-endif(WIN32)
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 

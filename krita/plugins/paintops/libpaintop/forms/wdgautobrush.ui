@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
+    <width>429</width>
     <height>279</height>
    </rect>
   </property>
@@ -105,7 +105,7 @@
         <string>The border of the brush will be smoothed to avoid aliasing</string>
        </property>
        <property name="text">
-        <string>Smooth Lines</string>
+        <string>Anti-alias</string>
        </property>
       </widget>
      </item>

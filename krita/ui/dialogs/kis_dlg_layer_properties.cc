@@ -66,7 +66,7 @@ struct KisDlgLayerProperties::Private
     KisDocument *doc;
     WdgLayerProperties *page;
     KisChannelFlagsWidget *channelFlagsWidget;
-    QTimer *previewTimer;
+    QTimer previewTimer;
 };
 
 KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *view, KisDocument *doc, QWidget *parent, const char *name, Qt::WFlags f)
@@ -132,8 +132,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *v
 
     setMinimumSize(d->page->sizeHint());
 
-    d->previewTimer = new QTimer(this);
-    connect(d->previewTimer, SIGNAL(timeout()), SLOT(updatePreview()));
+    connect(&d->previewTimer, SIGNAL(timeout()), SLOT(updatePreview()));
 }
 
 KisDlgLayerProperties::~KisDlgLayerProperties()
@@ -210,7 +209,7 @@ void KisDlgLayerProperties::cleanPreviewChanges()
 
 void KisDlgLayerProperties::kickTimer()
 {
-    d->previewTimer->start(200);
+    d->previewTimer.start(200);
 }
 
 void KisDlgLayerProperties::slotNameChanged(const QString &_text)

@@ -162,8 +162,10 @@ KisTextureOption::~KisTextureOption()
 
 void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
+    m_optionWidget->chooser->blockSignals(true); // Checking
     if (!m_optionWidget->chooser->currentResource()) return;
     KoPattern *pattern = static_cast<KoPattern*>(m_optionWidget->chooser->currentResource());
+    m_optionWidget->chooser->blockSignals(false); // Checking
     if (!pattern) return;
 
     qreal scale = m_optionWidget->scaleSlider->value();

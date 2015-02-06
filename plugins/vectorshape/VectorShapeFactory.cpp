@@ -69,7 +69,8 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
                 mimetype == QLatin1String("image/x-svm") ||
                 mimetype == QLatin1String("image/x-emf") ||
                 mimetype == QLatin1String("image/x-wmf") ||
-                mimetype == QLatin1String("image/svg+xml") ||
+                // Note: the Vector Shape supports SVG, but _NOT_ in this method, otherwise it will stomp all over loading the artistic text shape's svg
+                //mimetype == QLatin1String("image/svg+xml") ||
                 // next three for backward compatibility with Calligra
                 mimetype == QLatin1String("application/x-svm") ||
                 mimetype == QLatin1String("application/x-emf") ||

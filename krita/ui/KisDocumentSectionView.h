@@ -122,6 +122,7 @@ public:
      */
     void addPropertyActions(QMenu *menu, const QModelIndex &index);
 
+    void updateNode(const QModelIndex &index);
 
 protected:
     virtual bool viewportEvent(QEvent *event);

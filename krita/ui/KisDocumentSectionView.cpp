@@ -128,6 +128,11 @@ void KisDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &
     }
 }
 
+void KisDocumentSectionView::updateNode(const QModelIndex &index)
+{
+    dataChanged(index, index);
+}
+
 bool KisDocumentSectionView::viewportEvent(QEvent *e)
 {
     if (model()) {

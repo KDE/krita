@@ -124,7 +124,7 @@ KisLayerBox::KisLayerBox()
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
-    m_delayTimer.setSingleShot(true);
+    m_opacityDelayTimer.setSingleShot(true);
 
     m_wdgLayerBox->setupUi(mainWidget);
 
@@ -226,7 +226,7 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->doubleOpacity->setSuffix("%");
 
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
-    connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
+    connect(&m_opacityDelayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
@@ -329,6 +329,8 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_image = m_canvas->image();
+
+        connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(updateThumbnail()));
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
         KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
@@ -653,7 +655,7 @@ void KisLayerBox::slotOpacityChanged()
 void KisLayerBox::slotOpacitySliderMoved(qreal opacity)
 {
     m_newOpacity = opacity;
-    m_delayTimer.start(200);
+    m_opacityDelayTimer.start(200);
 }
 
 void KisLayerBox::slotCollapsed(const QModelIndex &index)
@@ -773,6 +775,11 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
 
     m_nodeManager->setSelectedNodes(selectedNodes);
     updateUI();
+}
+
+void KisLayerBox::updateThumbnail()
+{
+    m_wdgLayerBox->listLayers->updateNode(m_wdgLayerBox->listLayers->currentIndex());
 }
 
 #include "kis_layer_box.moc"

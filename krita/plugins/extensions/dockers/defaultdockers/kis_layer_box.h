@@ -110,6 +110,8 @@ private slots:
 
     void selectionChanged(const QModelIndexList selection);
 
+    void updateThumbnail();
+
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
@@ -124,7 +126,7 @@ private:
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;
     Ui_WdgLayerBox* m_wdgLayerBox;
-    QTimer m_delayTimer;
+    QTimer m_opacityDelayTimer;
     int m_newOpacity;
 
     QVector<KisAction*> m_actions;

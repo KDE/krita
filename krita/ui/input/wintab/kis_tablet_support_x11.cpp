@@ -683,14 +683,14 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     yTilt = tablet->savedAxesData.yTilt();
 
 
-    qreal normalizedRotation =
-        std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
-                  (tablet->maxRotation - tablet->minRotation) + 0.5, 1.0);
-
     if (deviceType == QTabletEvent::Airbrush) {
-        tangentialPressure = normalizedRotation;
+        tangentialPressure =
+            std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+                      (tablet->maxRotation - tablet->minRotation) , 2.0);
     } else {
-        rotation = normalizedRotation * 360;
+        rotation =
+            std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+                      (tablet->maxRotation - tablet->minRotation) + 0.5, 1.0) * 360.0;
     }
 
 #endif

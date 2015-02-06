@@ -269,6 +269,8 @@ void KisGmicPlugin::slotPreviewActiveLayer()
 
 void KisGmicPlugin::slotPreviewSmallWindow(KisPaintDeviceSP device)
 {
+    if (!device) return;
+
     QRect deviceRect = device->exactBounds();
     qreal aspectRatio = (qreal)deviceRect.width()/deviceRect.height();
 

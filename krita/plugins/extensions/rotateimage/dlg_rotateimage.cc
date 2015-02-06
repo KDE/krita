@@ -24,6 +24,8 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
+#include <KoIcon.h>
+
 DlgRotateImage::DlgRotateImage(QWidget *  parent,
                                const char * name)
         : KDialog(parent)
@@ -43,6 +45,9 @@ DlgRotateImage::DlgRotateImage(QWidget *  parent,
     resize(m_page->sizeHint());
 
     m_page->doubleCustom->setSuffix(QChar(Qt::Key_degree));
+
+    m_page->radioCCW->setIcon(themedIcon("transform_icons_liquify_rotateCCW"));
+    m_page->radioCW->setIcon(themedIcon("transform_icons_liquify_rotate"));
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));

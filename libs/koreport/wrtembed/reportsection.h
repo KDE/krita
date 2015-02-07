@@ -30,6 +30,7 @@
 #include <krsectiondata.h>
 #include <QGraphicsScene>
 
+#include "koreport_export.h"
 #include "reportscene.h"
 
 typedef QList<QGraphicsItem*> QGraphicsItemList;
@@ -53,7 +54,7 @@ class ReportSectionTitle;
 //     This class is the base to all Report Section's visual representation.
 // It contains the basic data and interface that all the sections need to work.
 //
-class ReportSection : public QWidget
+class KOREPORT_EXPORT ReportSection : public QWidget
 {
     Q_OBJECT
 public:
@@ -65,13 +66,19 @@ public:
     void initFromXML(QDomNode & section);
     virtual QSize sizeHint() const;
 
-    const QGraphicsItemList items() {
-        return m_scene->items();
-    };
+    /**
+     * @brief Return the items in the section
+     * Only return top-level items ... ie, items with no parent item
+     * because child items are not full report-items, they are implementation
+     * details of a report item and do not need to be counted individually
+     *
+     * @return QGraphicsItemList
+     */
+    QGraphicsItemList items() const;
 
     void setSectionCursor(const QCursor&);
     void unsetSectionCursor();
-    
+
 protected slots:
     void slotResizeBarDragged(int delta);
 
@@ -87,7 +94,7 @@ protected:
     ReportSceneView * m_sceneView;
     KoReportDesigner* m_reportDesigner;
     KoRuler* m_sectionRuler;
-    
+
 private:
     KRSectionData *m_sectionData;
 

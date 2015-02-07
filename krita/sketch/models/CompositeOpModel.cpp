@@ -184,7 +184,7 @@ void CompositeOpModel::setView(QObject* newView)
     if (d->view)
     {
         d->view->canvasBase()->disconnect(this);
-        d->view->canvasBase()->inputManager()->disconnect(this);
+        d->view->canvasBase()->globalInputManager()->disconnect(this);
         d->view->nodeManager()->disconnect(this);
     }
     d->view = qobject_cast<KisViewManager*>( newView );

@@ -318,6 +318,7 @@ void KisSketchView::documentAboutToBeDeleted()
 
 void KisSketchView::documentChanged()
 {
+#if 0
     d->doc = DocumentManager::instance()->document();
 	if (!d->doc) return;
 
@@ -375,10 +376,12 @@ void KisSketchView::documentChanged()
     d->resetDocumentPosition();
 
 	emit viewChanged();
+#endif
 }
 
 bool KisSketchView::event( QEvent* event )
 {
+#if 0
     switch(static_cast<int>(event->type())) {
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
@@ -507,11 +510,12 @@ bool KisSketchView::event( QEvent* event )
         default:
             break;
     }
+#endif
     return QDeclarativeItem::event( event );
 }
 
 bool KisSketchView::sceneEvent(QEvent* event)
-{
+{    
     if (d->canvas && d->canvasWidget) {
         switch(event->type()) {
         case QEvent::GraphicsSceneMousePress: {
@@ -564,8 +568,10 @@ bool KisSketchView::sceneEvent(QEvent* event)
         case QEvent::TabletPress:
         case QEvent::TabletMove:
         case QEvent::TabletRelease:
+#if 0
             d->canvas->inputManager()->stopIgnoringEvents();
             QApplication::sendEvent(d->canvasWidget, event);
+#endif
             return true;
         default:
             if (QApplication::sendEvent(d->canvasWidget, event)) {
@@ -579,6 +585,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
 
 void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
+#if 0
     if (d->canvasWidget && !newGeometry.isEmpty()) {
         d->view->resize(newGeometry.toRect().size());
         // If we don't ask for this event to be sent, the view does not actually handle
@@ -603,6 +610,7 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& old
             QTimer::singleShot(150, this, SLOT(zoomOut()));
         }
     }
+#endif
 }
 
 void KisSketchView::centerDoc()
@@ -629,7 +637,7 @@ void KisSketchView::Private::documentOffsetMoved()
 void KisSketchView::Private::resetDocumentPosition()
 {
     view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
-
+#if 0
     QPoint pos;
     QScrollBar *sb = view->canvasControllerWidget()->horizontalScrollBar();
 
@@ -639,6 +647,7 @@ void KisSketchView::Private::resetDocumentPosition()
     pos.ry() = sb->minimum() + (sb->maximum() - sb->minimum()) / 2;
 
     view->canvasControllerWidget()->setScrollBarValue(pos);
+#endif
 }
 
 
@@ -659,6 +668,7 @@ void KisSketchView::Private::zoomChanged()
 
 void KisSketchView::activate()
 {
+#if 0
     if (d->canvasWidget != d->canvas->canvasWidget()) {
         d->canvasWidget = d->canvas->canvasWidget();
 		SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
@@ -671,6 +681,7 @@ void KisSketchView::activate()
 	Q_ASSERT(d->view);
 	Q_ASSERT(d->view->canvasControllerWidget());
     d->view->canvasControllerWidget()->activate();
+#endif
 }
 
 #include "KisSketchView.moc"

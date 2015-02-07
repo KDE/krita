@@ -277,11 +277,11 @@ void LayerModel::setView(QObject *newView)
     d->declarativeEngine->addImageProvider(QString("layerthumb%1").arg(d->thumbProvider->layerID()), d->thumbProvider);
 
     if (d->canvas) {
-        d->image = d->canvas->view()->image();
-        d->nodeManager = d->canvas->view()->nodeManager();
+        d->image = d->canvas->imageView()->image();
+        d->nodeManager = d->canvas->viewManager()->nodeManager();
 
-        KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(d->canvas->view()->document()->shapeController());
-        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(d->canvas->view()->document()->shapeController());
+        KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(d->canvas->imageView()->document()->shapeController());
+        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(d->canvas->imageView()->document()->shapeController());
         d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image, shapeController);
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
@@ -538,7 +538,7 @@ void LayerModel::moveRight()
 
 void LayerModel::clear()
 {
-    d->canvas->view()->selectionManager()->clear();
+    d->canvas->viewManager()->selectionManager()->clear();
 }
 
 void LayerModel::clone()

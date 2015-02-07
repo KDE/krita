@@ -394,7 +394,7 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     doc->setCurrentImage(image);
 
     KisMainWindow *win = viewManager->mainWindow();
-    KisView *view = KisPart::instance()->createView(doc, win);
+    KisView *view = KisPart::instance()->createView(doc, win->resourceManager(), win->actionCollection(), win);
     win->addView(view);
 }
 

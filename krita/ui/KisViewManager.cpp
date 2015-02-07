@@ -516,6 +516,8 @@ KisStatusBar * KisViewManager::statusBar() const
 
 void KisViewManager::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
+    if (!mainWindow()) return;
+
     StatusBarItem item(widget, stretch, permanent);
     KStatusBar * sb = mainWindow()->statusBar();
     if (sb) {

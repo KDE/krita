@@ -259,10 +259,10 @@ KisMainWindow *KisPart::createMainWindow()
     return mw;
 }
 
-KisView *KisPart::createView(KisDocument *document, KisMainWindow *parent)
+KisView *KisPart::createView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    KisView *view  = new KisView(document, parent->resourceManager(), parent->actionCollection(), parent);
+    KisView *view  = new KisView(document, resourceManager, actionCollection, parent);
 
     // XXX: this prevents a crash when opening a new document after opening a
     // a document that has not been touched! I have no clue why, though.
@@ -358,7 +358,7 @@ QGraphicsItem *KisPart::createCanvasItem(KisDocument *document)
 {
     if (!document) return 0;
 
-    KisView *view = createView(document, 0);
+    KisView *view = createView(document, 0, 0, 0);
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
     QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
     proxy->setWidget(canvasController);
@@ -428,7 +428,7 @@ void KisPart::openExistingFile(const KUrl& url)
         mw = currentMainwindow();
     }
 
-    KisView *view = createView(document, mw);
+    KisView *view = createView(document, mw->resourceManager(), mw->actionCollection(), mw);
     mw->addView(view);
 
     if (d->startupWidget) {
@@ -497,7 +497,7 @@ void KisPart::openTemplate(const KUrl& url)
 
     KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
     if (!mw) mw = currentMainwindow();
-    KisView *view = createView(document, mw);
+    KisView *view = createView(document, mw->resourceManager(), mw->actionCollection(), mw);
     mw->addView(view);
 
     d->startupWidget->setParent(0);
@@ -634,7 +634,7 @@ void KisPart::startCustomDocument(KisDocument* doc)
     addDocument(doc);
     KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
     if (!mw) mw = currentMainwindow();
-    KisView *view = createView(doc, mw);
+    KisView *view = createView(doc, mw->resourceManager(), mw->actionCollection(), mw);
     mw->addView(view);
 
     d->startupWidget->setParent(0);

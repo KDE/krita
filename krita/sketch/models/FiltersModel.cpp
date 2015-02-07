@@ -119,6 +119,8 @@ KisFilter* FiltersModel::filter(int index)
 
 void FiltersModel::addFilter(KisFilterSP filter)
 {
+    if (!d->view || !d->view->activeNode()) return;
+
     if (!filter.isNull())
     {
         int newRow = d->filters.count();
@@ -129,13 +131,15 @@ void FiltersModel::addFilter(KisFilterSP filter)
         // Windows. This can be removed once that bug has been alleviated at some later
         // point in time, but for now it has no side effects, as this filter's default
         // config is fine anyway.
-        if(filter->showConfigurationWidget() && filter->id() != QLatin1String("colortransfer")) {
+        if (filter->showConfigurationWidget() && filter->id() != QLatin1String("colortransfer")) {
             KisConfigWidget* wdg = filter->createConfigurationWidget(0, d->view->activeNode()->original());
             wdg->deleteLater();
             d->configurations << KisSafeFilterConfigurationSP(static_cast<KisFilterConfiguration*>(wdg->configuration()));
+
         }
-        else
+        else {
             d->configurations << KisSafeFilterConfigurationSP(filter->defaultConfiguration(d->view->activeNode()->original()));
+        }
         endInsertRows();
     }
 }

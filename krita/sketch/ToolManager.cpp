@@ -68,8 +68,7 @@ void ToolManager::setView(QObject* newView)
 
 void ToolManager::requestToolChange(QString toolID)
 {
-    if (d->view)
-    {
+    if (d->view) {
         d->toolManager->switchToolRequested(toolID);
     }
 }
@@ -84,8 +83,9 @@ void ToolManager::slotToolChanged(KoCanvasController* canvas, int toolId)
     Q_UNUSED(canvas);
     Q_UNUSED(toolId);
 
-    if (!d->view)
-        return;
+    if (!d->view) return;
+    if (!d->view->canvasBase()) return;
+
 
     QString  id   = KoToolManager::instance()->activeToolId();
     d->currentTool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(d->view->canvasBase(), id));

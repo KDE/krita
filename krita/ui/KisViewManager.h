@@ -39,8 +39,6 @@ class QPoint;
 
 class KisPaintOpPreset;
 
-class KoCanvasController;
-
 class KisCanvas2;
 class KisCanvasResourceProvider;
 class KisDocument;
@@ -57,7 +55,6 @@ class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
 class KisPaintopBox;
-class KisCanvasController;
 class KisActionManager;
 class KisInputManager;
 

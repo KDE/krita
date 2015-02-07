@@ -17,12 +17,11 @@
  */
 
 #include "DocumentManager.h"
-#include "KisSketchPart.h"
 #include "ProgressProxy.h"
 #include "Settings.h"
 #include "RecentFileManager.h"
 #include <libs/pigment/KoColor.h>
-
+#include <KisPart.h>
 #include <kmimetype.h>
 
 #include <KoColorSpaceRegistry.h>
@@ -36,7 +35,6 @@ public:
     Private()
         : proxy(0)
         , document(0)
-        , part(0)
         , settingsManager(0)
         , recentFileManager(0)
         , newDocWidth(0)
@@ -48,7 +46,6 @@ public:
 
     ProgressProxy* proxy;
     QPointer<KisDocument> document;
-    QPointer<KisSketchPart> part;
     Settings* settingsManager;
     RecentFileManager* recentFileManager;
 
@@ -65,13 +62,6 @@ DocumentManager *DocumentManager::sm_instance = 0;
 KisDocument* DocumentManager::document() const
 {
     return d->document;
-}
-
-KisSketchPart* DocumentManager::part()
-{
-    if (!d->part)
-        d->part = new KisSketchPart(this);
-    return d->part;
 }
 
 ProgressProxy* DocumentManager::progressProxy() const
@@ -119,12 +109,12 @@ void DocumentManager::newDocument(const QVariantMap& options)
 
 void DocumentManager::delayedNewDocument()
 {
-    d->document = new KisDocument(part());
+    d->document = KisPart::instance()->createDocument();
     d->document->setProgressProxy(d->proxy);
     if (qAppName().contains("sketch")) {
         d->document->setSaveInBatchMode(true);
     }
-    part()->setDocument(d->document);
+    KisPart::instance()->addDocument(d->document);
 
     if(d->newDocOptions.isEmpty())
     {
@@ -195,12 +185,12 @@ void DocumentManager::openDocument(const QString& document, bool import)
 
 void DocumentManager::delayedOpenDocument()
 {
-    d->document = new KisDocument(part());
+    d->document = KisPart::instance()->createDocument();
     d->document->setProgressProxy(d->proxy);
     if (qAppName().contains("sketch")) {
         d->document->setSaveInBatchMode(true);
     }
-    part()->setDocument(d->document);
+    KisPart::instance()->addDocument(d->document);
 
     d->document->setModified(false);
     if (d->importingDocument)

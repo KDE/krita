@@ -28,13 +28,12 @@ class RecentFileManager;
 class Settings;
 class ProgressProxy;
 class KisDocument;
-class KisSketchPart;
+
 class KRITA_SKETCH_EXPORT DocumentManager : public QObject
 {
     Q_OBJECT
 public:
     KisDocument* document() const;
-    KisSketchPart* part();
     ProgressProxy* progressProxy() const;
     Settings* settingsManager() const;
     void setSettingsManager(Settings* newManager);

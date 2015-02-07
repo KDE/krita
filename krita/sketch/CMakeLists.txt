@@ -20,7 +20,6 @@ set(kritasketchlib_SRCS
     DocumentListModel.cpp
     KisSelectionExtras.cpp
     KisSketchView.cpp
-    KisSketchPart.cpp
     RecentFileManager.cpp
     ProgressProxy.cpp
     PropertyContainer.cpp

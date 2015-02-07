@@ -71,7 +71,6 @@
 #include <kis_canvas_decoration.h>
 #include <kis_tool_freehand.h>
 
-#include "KisSketchPart.h"
 #include "KisSelectionExtras.h"
 #include "Settings.h"
 #include "DocumentManager.h"
@@ -324,9 +323,7 @@ void KisSketchView::documentChanged()
 
     connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
-	KisSketchPart *part = DocumentManager::instance()->part();
-	Q_ASSERT(part);
-	QPointer<KisViewManager> view = qobject_cast<KisViewManager*>(part->createView(d->doc, QApplication::activeWindow()));
+    QPointer<KisViewManager> view = qobject_cast<KisViewManager*>(KisPart::instance()->createView(d->doc, QApplication::activeWindow()));
     d->view = view;
     d->view->setShowFloatingMessage(false);
 

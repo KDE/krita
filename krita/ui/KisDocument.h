@@ -66,7 +66,6 @@ class KisPaintingAssistant;
 class KisViewManager;
 class KisPart;
 
-class KisSketchPart;
 class KisPart;
 
 #define KIS_MIME_TYPE "application/x-krita"
@@ -624,7 +623,6 @@ signals:
 private:
 
     friend class KisPart;
-    friend class KisSketchPart;
 
     /**
      * Generate a name for the document.

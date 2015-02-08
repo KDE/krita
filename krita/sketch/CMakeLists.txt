@@ -171,7 +171,7 @@ target_link_libraries(kritasketchplugin
 )
 
 #install(TARGETS   kritasketchplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
-#install(FILES
+install(FILES
                   qmldir
                   qml/HelpPage.qml
                   qml/KritaSketchBase.qml

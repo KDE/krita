@@ -1596,8 +1596,6 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
 
         }// index-body
     }
-    // Get out of the frame
-    cursor.movePosition(QTextCursor::Right);
 }
 
 void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cursor)
@@ -1663,8 +1661,6 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
 
         }// index-body
     }
-    // Get out of the frame
-    cursor.movePosition(QTextCursor::Right);
 }
 
 void KoTextLoader::startBody(int total)

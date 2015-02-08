@@ -75,7 +75,6 @@
 #include "sketch/SketchDeclarativeView.h"
 #include "sketch/RecentFileManager.h"
 #include "sketch/DocumentManager.h"
-#include "sketch/KisSketchPart.h"
 #include "sketch/QmlGlobalEngine.h"
 #include "sketch/Settings.h"
 

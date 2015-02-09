@@ -5,9 +5,12 @@
 #  PQXX_LIBRARIES, the libraries needed to use libpqxx.
 #  PQXX_FOUND, If false, do not try to use libpqxx.
 
-find_path(PQXX_INCLUDE_DIR pqxx
+FIND_PATH(PQXX_INCLUDE_DIR pqxx
+PATHS
    /usr/include/pqxx
    /usr/local/include/pqxx
+PATH_SUFFIXES
+   pqxx
 )
 
 find_library(PQXX_LIBRARIES NAMES pqxx)

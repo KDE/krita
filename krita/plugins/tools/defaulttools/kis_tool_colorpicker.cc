@@ -215,7 +215,9 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
 
     m_pickedColor.convertTo(dev->compositionSourceColorSpace());
 
-    if (m_config.updateColor) {
+    if (m_config.updateColor &&
+        m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
+
         KoColor publicColor = m_pickedColor;
         publicColor.setOpacity(OPACITY_OPAQUE_U8);
 

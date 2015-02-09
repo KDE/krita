@@ -29,7 +29,7 @@ namespace KisToolUtils {
 /**
  * return the color at the given position on the given paint device.
  */
-KoColor KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint& pos);
+bool KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color);
 
 /**
  * Recursively search a node with a non-transparent pixel

@@ -305,8 +305,10 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
 
     QPoint imagePoint = image()->documentToIntPixel(documentPixel);
 
-    canvas()->resourceManager()->
-        setResource(resource, KisToolUtils::pick(device, imagePoint));
+    KoColor color;
+    if (KisToolUtils::pick(device, imagePoint, &color)) {
+        canvas()->resourceManager()->setResource(resource, color);
+    }
 
     return true;
 }

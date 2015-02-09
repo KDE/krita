@@ -126,6 +126,8 @@ public:
 
     KoAnnotationLayoutManager *annotationLayoutManager;
 
+    QHash<KoInlineObject *, KoTextLayoutRootArea *> rootAreaForInlineObject;
+
     qreal defaultTabSizing;
     qreal y;
     bool isLayouting;
@@ -649,21 +651,31 @@ void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
 {
+    // Note: This method is called by qt during layout AND during paint
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
         return;
-    if(!d->anchoringRootArea->associatedShape())
-        return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
-    if (obj) {
-        QTextDocument *doc = document();
-        QVariant v;
-        v.setValue(d->anchoringRootArea->page());
-        doc->addResource(KoTextDocument::LayoutTextPage, QUrl("kotext://layoutTextPage"), v);
-        obj->resize(doc, item, position, cf, paintDevice());
-        registerInlineObject(item);
+
+    if (!obj) {
+        return;
     }
+
+    if (d->isLayouting) {
+        d->rootAreaForInlineObject[obj] = d->anchoringRootArea;
+    }
+    KoTextLayoutRootArea *rootArea = d->rootAreaForInlineObject.value(obj);
+
+    if (rootArea == 0 || rootArea->associatedShape() == 0)
+        return;
+
+    QTextDocument *doc = document();
+    QVariant v;
+    v.setValue(rootArea->page());
+    doc->addResource(KoTextDocument::LayoutTextPage, KoTextDocument::LayoutTextPageUrl, v);
+    obj->resize(doc, item, position, cf, paintDevice());
+    registerInlineObject(item);
 }
 
 void KoTextDocumentLayout::emitLayoutIsDirty()

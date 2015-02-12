@@ -19,7 +19,8 @@
 #include "kis_merge_walker.h"
 
 
-KisMergeWalker::KisMergeWalker(QRect cropRect)
+KisMergeWalker::KisMergeWalker(QRect cropRect,  Flags flags)
+    : m_flags(flags)
 {
     setCropRect(cropRect);
 }
@@ -30,7 +31,7 @@ KisMergeWalker::~KisMergeWalker()
 
 KisBaseRectsWalker::UpdateType KisMergeWalker::type() const
 {
-    return KisBaseRectsWalker::UPDATE;
+    return m_flags == DEFAULT ? KisBaseRectsWalker::UPDATE : KisBaseRectsWalker::UPDATE_NO_FILTHY;
 }
 
 void KisMergeWalker::startTrip(KisNodeSP startWith)
@@ -40,7 +41,8 @@ void KisMergeWalker::startTrip(KisNodeSP startWith)
         return;
     }
 
-    visitHigherNode(startWith, N_FILTHY);
+    visitHigherNode(startWith,
+                    m_flags == DEFAULT ? N_FILTHY : N_ABOVE_FILTHY);
 
     KisNodeSP prevNode = startWith->prevSibling();
     if(prevNode)
@@ -62,7 +64,8 @@ void KisMergeWalker::startTripWithMask(KisNodeSP filthyMask)
     else if (parentLayer->parent())
         startTrip(parentLayer->parent());
 
-    NodePosition positionToFilthy = N_FILTHY_PROJECTION |
+    NodePosition positionToFilthy =
+        (m_flags == DEFAULT ? N_FILTHY_PROJECTION : N_ABOVE_FILTHY) |
         calculateNodePosition(parentLayer);
     registerNeedRect(parentLayer, positionToFilthy);
 

@@ -471,4 +471,292 @@ void KisTransformMaskTest::testMaskOnCloneLayerWithOffset()
     QVERIFY(doPartialTests("clone_offset_complex", p.image, p.layer, clone, mask));
 }
 
+#define CHECK_MASK1_TOGGLE
+#define CHECK_MASK2_TOGGLE
+#define CHECK_HIDE_ALL
+#define CHECK_HIDE_ALL_AFTER_MOVE
+
+void KisTransformMaskTest::testMultipleMasks()
+{
+    QRect refRect(0,0,512,512);
+    QRect fillRect(400,400,100,100);
+    TestUtil::MaskParent p(refRect);
+
+    p.layer->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
+
+    KisPaintLayerSP player = new KisPaintLayer(p.image, "bg", OPACITY_OPAQUE_U8, p.image->colorSpace());
+    p.image->addNode(player, p.image->root(), KisNodeSP());
+
+    //KisCloneLayerSP clone = new KisCloneLayer(p.layer, p.image, "clone", OPACITY_OPAQUE_U8);
+    //p.image->addNode(clone, p.image->root());
+
+    KisTransformMaskSP mask1 = new KisTransformMask();
+    p.image->addNode(mask1, p.layer);
+
+    KisTransformMaskSP mask2 = new KisTransformMask();
+    p.image->addNode(mask2, p.layer);
+
+    mask1->setName("mask1");
+    mask2->setName("mask2");
+
+    p.layer->setDirty(refRect);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "00_initial_layer_update", "multiple_masks"));
+
+    QTransform transform;
+
+    transform = QTransform::fromTranslate(-150, 0);
+    mask1->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                  new KisDumbTransformMaskParams(transform)));
+
+    p.layer->setDirty(refRect);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "01_mask1_moved_layer_update", "multiple_masks"));
+
+    QTest::qWait(4000);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "01X_mask1_moved_layer_update", "multiple_masks"));
+
+
+    transform = QTransform::fromTranslate(0, -150);
+    mask2->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                  new KisDumbTransformMaskParams(transform)));
+
+    p.layer->setDirty(refRect);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "02_mask2_moved_layer_update", "multiple_masks"));
+
+    QTest::qWait(4000);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "02X_mask2_moved_layer_update", "multiple_masks"));
+
+#ifdef CHECK_MASK1_TOGGLE
+
+    {
+        mask1->setVisible(false);
+        mask1->setDirty(refRect);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "03_mask1_tg_off_refRect", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "03X_mask1_tg_off_refRect", "multiple_masks"));
+
+
+        mask1->setVisible(true);
+        mask1->setDirty(refRect);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "04_mask1_tg_on_refRect", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "04X_mask1_tg_on_refRect", "multiple_masks"));
+
+
+        mask1->setVisible(false);
+        mask1->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "05_mask1_tg_off_default_rect", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "05X_mask1_tg_off_default_rect", "multiple_masks"));
+
+
+        mask1->setVisible(true);
+        mask1->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "06_mask1_tg_on_default_rect", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "06X_mask1_tg_on_default_rect", "multiple_masks"));
+    }
+#endif /* CHECK_MASK1_TOGGLE */
+
+
+#ifdef CHECK_MASK2_TOGGLE
+
+    {
+        mask2->setVisible(false);
+        mask2->setDirty(refRect);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "07_mask2_tg_off_refRect", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "07X_mask2_tg_off_refRect", "multiple_masks"));
+
+
+        mask2->setVisible(true);
+        mask2->setDirty(refRect);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "08_mask2_tg_on_refRect", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "08X_mask2_tg_on_refRect", "multiple_masks"));
+
+        mask2->setVisible(false);
+        mask2->setDirty(refRect);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "09_mask2_tg_off_default_rect", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "09X_mask2_tg_off_default_rect", "multiple_masks"));
+
+
+        mask2->setVisible(true);
+        mask2->setDirty(refRect);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "10_mask2_tg_on_default_rect", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "10X_mask2_tg_on_default_rect", "multiple_masks"));
+
+    }
+
+#endif /* CHECK_MASK2_TOGGLE */
+
+
+#ifdef CHECK_HIDE_ALL
+
+    {
+        mask1->setVisible(false);
+        mask1->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "11.1_hide_both_update_default_mask1", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "11.1X_hide_both_update_default_mask1", "multiple_masks"));
+
+        mask2->setVisible(false);
+        mask2->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "11.2_hide_both_update_default_mask2", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "11.2X_hide_both_update_default_mask2", "multiple_masks"));
+
+        mask1->setVisible(true);
+        mask1->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "12_sh_mask1_on", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "12X_sh_mask1_on", "multiple_masks"));
+
+        mask1->setVisible(false);
+        mask1->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "13_sh_mask1_off", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "13X_sh_mask1_off", "multiple_masks"));
+
+        mask2->setVisible(true);
+        mask2->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "14_sh_mask2_on", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "14X_sh_mask2_on", "multiple_masks"));
+
+
+        mask2->setVisible(false);
+        mask2->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "15_sh_mask2_off", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "15X_sh_mask2_off", "multiple_masks"));
+    }
+
+#endif /* CHECK_HIDE_ALL */
+
+#ifdef CHECK_HIDE_ALL_AFTER_MOVE
+
+    {
+        transform = QTransform::fromTranslate(50, -150);
+        mask2->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                      new KisDumbTransformMaskParams(transform)));
+
+        mask2->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "20_moved_mask2", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "20X_moved_mask2", "multiple_masks"));
+    }
+
+    {
+        mask1->setVisible(false);
+        mask1->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "21.1_hide_both_update_default_mask1", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "21.1X_hide_both_update_default_mask1", "multiple_masks"));
+
+        mask2->setVisible(false);
+        mask2->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "21.2_hide_both_update_default_mask2", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "21.2X_hide_both_update_default_mask2", "multiple_masks"));
+
+        mask1->setVisible(true);
+        mask1->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "22_sh_mask1_on", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "22X_sh_mask1_on", "multiple_masks"));
+
+        mask1->setVisible(false);
+        mask1->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "23_sh_mask1_off", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "23X_sh_mask1_off", "multiple_masks"));
+
+        mask2->setVisible(true);
+        mask2->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "24_sh_mask2_on", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "24X_sh_mask2_on", "multiple_masks"));
+
+
+        mask2->setVisible(false);
+        mask2->setDirty();
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "25_sh_mask2_off", "multiple_masks"));
+
+        QTest::qWait(4000);
+        p.image->waitForDone();
+        QVERIFY(checkImage(p.image, "25X_sh_mask2_off", "multiple_masks"));
+    }
+
+#endif /* CHECK_HIDE_ALL_AFTER_MOVE */
+
+}
+
 QTEST_KDEMAIN(KisTransformMaskTest, GUI)

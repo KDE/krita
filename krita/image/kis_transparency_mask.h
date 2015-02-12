@@ -50,7 +50,7 @@ public:
 
     QRect decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst,
                        const QRect & rc,
-                       PositionToFilthy parentPos) const;
+                       PositionToFilthy maskPos) const;
     QIcon icon() const;
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);

@@ -31,6 +31,8 @@ private slots:
     void testMaskOnCloneLayerWithOffset();
     void testSafeTransformUnity();
     void testSafeTransformSingleVanishingPoint();
+
+    void testMultipleMasks();
 };
 
 #endif /* __KIS_TRANSFORM_MASK_TEST_H */

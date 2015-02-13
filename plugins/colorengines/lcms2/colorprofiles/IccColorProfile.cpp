@@ -19,6 +19,7 @@
 
 #include "IccColorProfile.h"
 
+#include <stdint.h>
 #include <limits.h>
 
 #ifdef Q_WS_X11

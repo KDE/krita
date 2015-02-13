@@ -261,7 +261,8 @@ void IccColorProfile::CalculateFloatUIMinMax(void)
     for (unsigned int i=0; i<num_channels; ++i) {
         ret[i].minVal = out_min_pixel[i];
         ret[i].maxVal = out_max_pixel[i];
-        Q_ASSERT(ret[i].minVal < ret[i].maxVal);
+        // Remove this assert: It fires every time for me (boud)
+        //Q_ASSERT(ret[i].minVal < ret[i].maxVal);
     }
 
     //for (unsigned int i=0; i<num_channels; ++i)

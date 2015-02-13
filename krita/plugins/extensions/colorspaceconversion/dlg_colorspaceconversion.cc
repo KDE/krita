@@ -40,7 +40,6 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
         const char * name)
         : KDialog(parent)
 {
-    setCaption(i18n("Image Size"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setObjectName(name);

@@ -25,6 +25,8 @@
 
 #include "KoColor.h"
 
+class KoChannelInfo;
+
 /**
  * A special interface class provided by pigment to let widgets render
  * a KoColor on screen using custom profiling provided by the user.
@@ -67,19 +69,15 @@ public:
     /**
      * \return the minimum value of a floating point channel that can
      *         be seen on screen
-     *
-     * TODO: what about Lab? (DK)
      */
-    virtual qreal minVisibleFloatValue() const = 0;
+    virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const = 0;
 
     /**
      * \return the maximum value of a floating point channel that can
      *         be seen on screen. In normal situation it is 1.0. When
      *         the user changes exposure the value varies.
-     *
-     * TODO: what about Lab? (DK)
      */
-    virtual qreal maxVisibleFloatValue() const = 0;
+    virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const = 0;
 
 signals:
     void displayConfigurationChanged();
@@ -101,8 +99,8 @@ public:
     KoColor fromHsv(int h, int s, int v, int a = 255) const;
     void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
 
-    qreal minVisibleFloatValue() const;
-    qreal maxVisibleFloatValue() const;
+    virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const;
+    virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const;
 
     static KoColorDisplayRendererInterface* instance();
 };

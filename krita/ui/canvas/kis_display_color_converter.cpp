@@ -122,16 +122,17 @@ struct KisDisplayColorConverter::Private
             m_parent->getHsv(srcColor, h, s, v, a);
         }
 
-        qreal minVisibleFloatValue() const {
-            return 0.0;
+        virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const {
+            return chaninfo->getUIMin();
         }
 
-        qreal maxVisibleFloatValue() const {
-            qreal maxValue = 1.0;
+        virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const {
+            qreal maxValue = chaninfo->getUIMax();
 
             if (m_resourceManager) {
                 qreal exposure = m_resourceManager->resource(KisCanvasResourceProvider::HdrExposure).value<qreal>();
-                maxValue = std::pow(2.0, -exposure);
+                // not sure if *= is what we want
+                maxValue *= std::pow(2.0, -exposure);
             }
 
             return maxValue;

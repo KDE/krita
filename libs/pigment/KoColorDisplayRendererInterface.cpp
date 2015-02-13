@@ -21,6 +21,8 @@
 #include "kglobal.h"
 #include <KoColorSpaceRegistry.h>
 
+#include <KoChannelInfo.h>
+
 
 KoColorDisplayRendererInterface::KoColorDisplayRendererInterface()
 {
@@ -64,12 +66,14 @@ KoColorDisplayRendererInterface* KoDumbColorDisplayRenderer::instance()
     return s_instance;
 }
 
-qreal KoDumbColorDisplayRenderer::minVisibleFloatValue() const
+qreal KoDumbColorDisplayRenderer::minVisibleFloatValue(const KoChannelInfo *chaninfo) const
 {
-    return 0.0;
+    Q_ASSERT(chaninfo);
+    return chaninfo->getUIMin();
 }
 
-qreal KoDumbColorDisplayRenderer::maxVisibleFloatValue() const
+qreal KoDumbColorDisplayRenderer::maxVisibleFloatValue(const KoChannelInfo *chaninfo) const
 {
-    return 1.0;
+    Q_ASSERT(chaninfo);
+    return chaninfo->getUIMax();
 }

@@ -191,8 +191,8 @@ void KisFloatColorInput::update()
     quint8* dataMax = max.data() + m_channelInfo->pos();
 
     qreal value = 1.0;
-    m_minValue = m_displayRenderer->minVisibleFloatValue();
-    m_maxValue = m_displayRenderer->maxVisibleFloatValue();
+    m_minValue = m_displayRenderer->minVisibleFloatValue(m_channelInfo);
+    m_maxValue = m_displayRenderer->maxVisibleFloatValue(m_channelInfo);
 
     switch (m_channelInfo->channelValueType()) {
 #ifdef HAVE_OPENEXR

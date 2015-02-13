@@ -551,7 +551,7 @@ KisGradientShapeStrategy* createPolygonShapeStrategy(const QPainterPath &path, c
                             boundingRect.height() >= 3);
 
     const qreal step =
-        qMin(qreal(8.0), KritaUtils::maxDimensionPortion(boundingRect, 0.01, 3.0));
+        qMin(qreal(8.0), KritaUtils::maxDimensionPortion(boundingRect, 0.01, 2));
 
     return new KisCachedGradientShapeStrategy(boundingRect, step, step, strategy);
 }
@@ -616,8 +616,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     QSharedPointer<KisGradientShapeStrategy> shapeStrategy;
 
-    precalculateShape();
-
     switch (m_d->shape) {
     case GradientShapeLinear: {
         Private::ProcessRegion r(toQShared(new LinearGradientStrategy(gradientVectorStart, gradientVectorEnd)),
@@ -662,6 +660,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         break;
     }
     case GradientShapePolygonal:
+        precalculateShape();
         repeat = GradientRepeatNone;
         break;
     }

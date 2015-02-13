@@ -19,7 +19,7 @@
 #ifndef KOCHANNELINFO_H_
 #define KOCHANNELINFO_H_
 
-#include <stdint.h>
+#include <limits>
 
 #include <QColor>
 #include <QString>
@@ -131,24 +131,24 @@ public:
         if (!uiMinMax.isValid()) {
             switch (m_channelValueType) {
                 case UINT8:
-                    m_uiMinMax.minVal = 0;
-                    m_uiMinMax.maxVal = UINT8_MAX;
+                    m_uiMinMax.minVal = std::numeric_limits<quint8>::min();
+                    m_uiMinMax.maxVal = std::numeric_limits<quint8>::max();
                     break;
                 case INT8:
-                    m_uiMinMax.minVal = INT8_MIN;
-                    m_uiMinMax.maxVal = INT8_MAX;
+                    m_uiMinMax.minVal = std::numeric_limits<qint8>::min();
+                    m_uiMinMax.maxVal = std::numeric_limits<qint8>::max();
                     break;
                 case UINT16:
-                    m_uiMinMax.minVal = 0;
-                    m_uiMinMax.maxVal = UINT16_MAX;
+                    m_uiMinMax.minVal = std::numeric_limits<quint16>::min();
+                    m_uiMinMax.maxVal = std::numeric_limits<quint16>::max();
                     break;
                 case INT16:
-                    m_uiMinMax.minVal = INT16_MIN;
-                    m_uiMinMax.maxVal = INT16_MAX;
+                    m_uiMinMax.minVal = std::numeric_limits<qint16>::min();
+                    m_uiMinMax.maxVal = std::numeric_limits<qint16>::max();
                     break;
                 case UINT32:
-                    m_uiMinMax.minVal = 0;
-                    m_uiMinMax.maxVal = UINT32_MAX;
+                    m_uiMinMax.minVal = std::numeric_limits<quint32>::min();
+                    m_uiMinMax.maxVal = std::numeric_limits<quint32>::max();
                     break;
                 default:
                     // assume real otherwise, which is 0..1 by default

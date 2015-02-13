@@ -108,9 +108,17 @@ public:
 
     /**
      * Create a color profile from a memory array, if possible, otherwise return 0.
+     * This will replace the existing profile with the name in the KoColorSpaceRegistry
+     *
+     * This will call the decendant's createColorProfile()
      */
     const KoColorProfile* colorProfile(const QByteArray& rawData) const;
 
+    /**
+     * Create or reuse the existing colorspace for the given profile.
+     *
+     * This will call the decendant's createColorSpace
+     */
     const KoColorSpace *grabColorSpace(const KoColorProfile *profile);
 
 protected:

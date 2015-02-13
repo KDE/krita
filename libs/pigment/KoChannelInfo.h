@@ -19,6 +19,8 @@
 #ifndef KOCHANNELINFO_H_
 #define KOCHANNELINFO_H_
 
+#include <stdint.h>
+
 #include <QColor>
 #include <QString>
 #include <QList>
@@ -30,6 +32,22 @@
  */
 class KoChannelInfo
 {
+public:
+    /**
+     * Used to represent a min and max range.
+     */
+    struct DoubleRange
+    {
+        public:
+            double minVal, maxVal;
+        public:
+            /// creates an invalid range of 0,0
+            DoubleRange(void) : minVal(0), maxVal(0) { }
+            /// creates
+            DoubleRange(double _minVal, double _maxVal) : minVal(_minVal), maxVal(_maxVal) { Q_ASSERT(minVal <= maxVal); }
+            /// true if this range is usable
+            bool isValid(void) const { return minVal < maxVal; }
+    };
 public:
     /// enum to define the type of the channel
     enum enumChannelType {
@@ -68,7 +86,8 @@ public:
                   enumChannelType channelType, 
                   enumChannelValueType channelValueType,
                   qint32 size = -1, 
-                  QColor color = QColor(0, 0, 0))
+                  QColor color = QColor(0, 0, 0),
+                  DoubleRange uiMinMax = DoubleRange())
         : m_name(name)
         , m_pos(npos)
         , m_displayPosition(displayPosition)
@@ -76,6 +95,7 @@ public:
         , m_channelValueType(channelValueType)
         , m_size(size)
         , m_color(color)
+        , m_uiMinMax(uiMinMax)
     {
         switch(m_channelValueType)
         {
@@ -108,7 +128,36 @@ public:
         case OTHER:
             Q_ASSERT(m_size != -1);
         }
-        
+        if (!uiMinMax.isValid()) {
+            switch (m_channelValueType) {
+                case UINT8:
+                    m_uiMinMax.minVal = 0;
+                    m_uiMinMax.maxVal = UINT8_MAX;
+                    break;
+                case INT8:
+                    m_uiMinMax.minVal = INT8_MIN;
+                    m_uiMinMax.maxVal = INT8_MAX;
+                    break;
+                case UINT16:
+                    m_uiMinMax.minVal = 0;
+                    m_uiMinMax.maxVal = UINT16_MAX;
+                    break;
+                case INT16:
+                    m_uiMinMax.minVal = INT16_MIN;
+                    m_uiMinMax.maxVal = INT16_MAX;
+                    break;
+                case UINT32:
+                    m_uiMinMax.minVal = 0;
+                    m_uiMinMax.maxVal = UINT32_MAX;
+                    break;
+                default:
+                    // assume real otherwise, which is 0..1 by default
+                    m_uiMinMax.minVal = 0.0;
+                    m_uiMinMax.maxVal = 1.0;
+                    break;
+            }
+        }
+        Q_ASSERT(m_uiMinMax.isValid());
     }
 public:
     
@@ -194,6 +243,22 @@ public:
     inline bool operator<(const KoChannelInfo & info) {
         return m_pos < info.m_pos;
     }
+
+    /**
+     * Gets the minimum value that this channel should have.
+     * This is suitable for UI use.
+     */
+    inline double getUIMin(void) const {
+        return m_uiMinMax.minVal;
+    }
+
+    /**
+     * Gets the minimum value that this channel should have.
+     * This is suitable for UI use.
+     */
+    inline double getUIMax(void) const {
+        return m_uiMinMax.maxVal;
+    }
     
 private:
     
@@ -204,6 +269,7 @@ private:
     enumChannelValueType m_channelValueType;
     qint32 m_size;
     QColor m_color;
+    DoubleRange m_uiMinMax;
     
 };
 

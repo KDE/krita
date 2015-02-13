@@ -412,6 +412,9 @@ private:
     Private * const d;
 };
 
+/**
+ * Base class for all LCMS based ColorSpace factories.
+ */
 class LcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo
 {
 public:

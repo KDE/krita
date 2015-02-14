@@ -535,7 +535,7 @@ void KisMainWindow::slotPreferences()
     }
 }
 
-void KisMainWindow::updateReloadFileAction(KisDocument *doc)
+void KisMainWindow::updateReloadFileAction(KisDocument */*doc*/)
 {
 //    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
 }
@@ -688,7 +688,7 @@ void KisMainWindow::slotLoadCompleted()
 {
     KisDocument *newdoc = qobject_cast<KisDocument*>(sender());
 
-    KisView *view = KisPart::instance()->createView(newdoc, this);
+    KisView *view = KisPart::instance()->createView(newdoc, resourceManager(), actionCollection(), this);
     addView(view);
 
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -1857,7 +1857,7 @@ void KisMainWindow::configChanged()
 void KisMainWindow::newView(QObject *document)
 {
     KisDocument *doc = qobject_cast<KisDocument*>(document);
-    KisView *view = KisPart::instance()->createView(doc, this);
+    KisView *view = KisPart::instance()->createView(doc, resourceManager(), actionCollection(), this);
     addView(view);
     d->viewManager->actionManager()->updateGUI();
 }

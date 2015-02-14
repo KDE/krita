@@ -20,7 +20,6 @@ set(kritasketchlib_SRCS
     DocumentListModel.cpp
     KisSelectionExtras.cpp
     KisSketchView.cpp
-    KisSketchPart.cpp
     RecentFileManager.cpp
     ProgressProxy.cpp
     PropertyContainer.cpp
@@ -130,7 +129,7 @@ target_link_libraries(kritasketchlib
 include(GNUInstallDirs)
 
 #install(TARGETS   kritasketchlib DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(TARGETS kritasketchlib ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS kritasketchlib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 # Krita Sketch application
@@ -148,11 +147,11 @@ target_link_libraries(kritasketch
     kritasketchlib
 )
 
-install(TARGETS   kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS  kritasketch.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
-install(FILES     kritasketchrc kritasketchpanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
-install(FILES     kritasketch.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
-install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+#install(TARGETS   kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(PROGRAMS  kritasketch.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+#install(FILES     kritasketchrc kritasketchpanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+#install(FILES     kritasketch.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+#install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 
 # Sketch Qt Quick components
 # =============================================================================
@@ -171,7 +170,7 @@ target_link_libraries(kritasketchplugin
     kritasketchlib
 )
 
-install(TARGETS   kritasketchplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
+#install(TARGETS   kritasketchplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
 install(FILES
                   qmldir
                   qml/HelpPage.qml
@@ -183,10 +182,10 @@ install(FILES
                   qml/WelcomePage.qml
                   qml/CustomImagePage.qml
                                     DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
-install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+#install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+#install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+#install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 
-install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+#install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 
 add_subdirectory(icon)

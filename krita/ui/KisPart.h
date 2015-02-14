@@ -190,7 +190,7 @@ public:
      * Create a new view for the document. The view is added to the list of
      * views, and if the document wasn't known yet, it's registered as well.
      */
-    KisView *createView(KisDocument *document, KisMainWindow *parent);
+    KisView *createView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent);
 
     /**
      * Adds a view to the document. If the part doesn't know yet about

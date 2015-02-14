@@ -63,7 +63,7 @@ public:
     Private(MainWindow* qq)
         : q(qq)
         , allowClose(true)
-        , sketchKisView(0)
+        , viewManager(0)
 	{
         centerer = new QTimer(q);
         centerer->setInterval(10);
@@ -72,15 +72,15 @@ public:
 	}
 	MainWindow* q;
     bool allowClose;
-    KisViewManager* sketchKisView;
+    KisViewManager* viewManager;
     QString currentSketchPage;
 	QTimer *centerer;
 };
 
-MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
-    : QMainWindow( parent, flags ), d( new Private(this) )
+MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags)
+    : QMainWindow(parent, flags ), d( new Private(this))
 {
-    qApp->setActiveWindow( this );
+    qApp->setActiveWindow(this);
 
     setWindowTitle(i18n("Krita Sketch"));
     setWindowIcon(koIcon("kritasketch"));
@@ -181,29 +181,29 @@ void MainWindow::setCurrentSketchPage(QString newPage)
 }
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
-	if (d->sketchKisView) {
+    if (d->viewManager) {
         qApp->processEvents();
-        d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        d->viewManager->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         qApp->processEvents();
-        QPoint center = d->sketchKisView->rect().center();
-        d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        QPoint center = d->viewManager->canvas()->rect().center();
+        static_cast<KoCanvasControllerWidget*>(d->viewManager->canvasBase()->canvasController())->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
     }
 }
 
 QObject* MainWindow::sketchKisView() const
 {
-    return d->sketchKisView;
+    return d->viewManager;
 }
 
 void MainWindow::setSketchKisView(QObject* newView)
 {
-    if (d->sketchKisView)
-        d->sketchKisView->disconnect(this);
-    if (d->sketchKisView != newView)
+    if (d->viewManager)
+        d->viewManager->disconnect(this);
+    if (d->viewManager != newView)
     {
-        d->sketchKisView = qobject_cast<KisViewManager*>(newView);
-        connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+        d->viewManager = qobject_cast<KisViewManager*>(newView);
+        connect(d->viewManager, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
         d->centerer->start();
         emit sketchKisViewChanged();
     }

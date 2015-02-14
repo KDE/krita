@@ -241,7 +241,14 @@ namespace Private {
                                   &center);
 
         if (!centerExists || !selectionPath.contains(center)) {
-            KIS_ASSERT_RECOVER_NOOP(selectionPath.contains(center));
+
+            // if the path is too small just return default values
+            if (selectionPath.boundingRect().width() >= 2.0 &&
+                selectionPath.boundingRect().height() >= 2.0) {
+
+                KIS_ASSERT_RECOVER_NOOP(selectionPath.contains(center));
+            }
+
             return searchForMax ? 1.0 : 0.0;
         }
 

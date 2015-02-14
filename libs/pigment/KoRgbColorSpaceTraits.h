@@ -74,9 +74,6 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
 };
 
 
-struct KoRgbU8Traits : public KoRgbTraits<quint8> {
-};
-
 struct KoRgbU16Traits : public KoRgbTraits<quint16> {
 };
 

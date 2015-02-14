@@ -242,7 +242,10 @@ void KisScratchPad::endPan(KoPointerEvent *event)
 
 void KisScratchPad::pick(KoPointerEvent *event)
 {
-    emit colorSelected(KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint()));
+    KoColor color;
+    if (KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint(), &color)) {
+        emit colorSelected(color);
+    }
 }
 
 void KisScratchPad::setOnScreenResolution(qreal scaleX, qreal scaleY)

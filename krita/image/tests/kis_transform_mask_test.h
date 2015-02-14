@@ -28,6 +28,7 @@ private slots:
     void testSafeTransform();
     void testMaskOnPaintLayer();
     void testMaskOnCloneLayer();
+    void testMaskOnCloneLayerWithOffset();
     void testSafeTransformUnity();
     void testSafeTransformSingleVanishingPoint();
 };

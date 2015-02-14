@@ -707,7 +707,6 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     if (!dstColorSpace) return;
-    if (*m_d->colorSpace == *dstColorSpace) return;
 
     const KoColorSpace *srcColorSpace = m_d->colorSpace;
 

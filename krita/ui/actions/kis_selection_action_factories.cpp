@@ -44,6 +44,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
+#include "kis_image_barrier_locker.h"
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
 #include "kis_iterator_ng.h"
@@ -243,13 +244,12 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
     if (haveShapesSelected) {
         // XXX: "Add saving of XML data for Cut/Copy of shapes"
 
-        image->barrierLock();
+        KisImageBarrierLocker locker(image);
         if (willCut) {
             view->canvasBase()->toolProxy()->cut();
         } else {
             view->canvasBase()->toolProxy()->copy();
         }
-        image->unlock();
     } else {
         KisNodeSP node = view->activeNode();
         if (!node) return;
@@ -257,19 +257,32 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
         KisSelectionSP selection = view->selection();
         if (selection.isNull()) return;
 
-        image->barrierLock();
-        KisPaintDeviceSP dev = node->paintDevice();
-        if (!dev) {
-            dev = node->projection();
-        }
-        ActionHelper::copyFromDevice(view, dev);
-        image->unlock();
+        {
+            KisImageBarrierLocker locker(image);
+            KisPaintDeviceSP dev = node->paintDevice();
+            if (!dev) {
+                dev = node->projection();
+            }
 
-        if (dev->exactBounds().isEmpty()) {
-            view->showFloatingMessage(
-                        i18nc("floating message when copying empty selection",
-                              "Selection is empty: no pixels were copied "),
-                        QIcon(), 3000, KisFloatingMessage::Medium);
+            if (!dev) {
+                view->showFloatingMessage(
+                    i18nc("floating message when cannot copy from a node",
+                          "Cannot copy pixels from this type of layer "),
+                    QIcon(), 3000, KisFloatingMessage::Medium);
+
+                return;
+            }
+
+            if (dev->exactBounds().isEmpty()) {
+                view->showFloatingMessage(
+                    i18nc("floating message when copying empty selection",
+                          "Selection is empty: no pixels were copied "),
+                    QIcon(), 3000, KisFloatingMessage::Medium);
+
+                return;
+            }
+
+            ActionHelper::copyFromDevice(view, dev);
         }
 
         if (willCut) {
@@ -394,7 +407,7 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     doc->setCurrentImage(image);
 
     KisMainWindow *win = viewManager->mainWindow();
-    KisView *view = KisPart::instance()->createView(doc, win);
+    KisView *view = KisPart::instance()->createView(doc, win->resourceManager(), win->actionCollection(), win);
     win->addView(view);
 }
 

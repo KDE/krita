@@ -40,7 +40,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
 
     QVBoxLayout *vlayout = new QVBoxLayout(this);
     vlayout->setMargin(0);
-    QTabWidget *wdg = new QTabWidget(this);
+    QTabWidget *wdg = new QTabWidget;
     vlayout->addWidget(wdg);
 
     KisSplashScreen *splash = new KisSplashScreen(aboutData->version(), splash_screen_xpm);
@@ -141,12 +141,13 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
 
     wdg->addTab(lblLicense, i18n("License"));
 
-    QPushButton *bnClose = new QPushButton(i18n("Close"), this);
+    QPushButton *bnClose = new QPushButton(i18n("Close"));
     connect(bnClose, SIGNAL(clicked()), SLOT(close()));
-    QHBoxLayout *hlayout = new QHBoxLayout(this);
+
+    QHBoxLayout *hlayout = new QHBoxLayout;
     hlayout->setMargin(0);
     hlayout->addStretch(10);
     hlayout->addWidget(bnClose);
-    vlayout->addLayout(hlayout);
 
+    vlayout->addLayout(hlayout);
 }

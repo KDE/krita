@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,27 +15,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_TOOL_UTILS_H
-#define KIS_TOOL_UTILS_H
 
-#include <QPoint>
+#ifndef __KIS_IMAGE_BARRIER_LOCKER_H
+#define __KIS_IMAGE_BARRIER_LOCKER_H
 
-#include <KoColor.h>
-#include <kis_types.h>
-#include <krita_export.h>
+#include "kis_image.h"
 
 
-namespace KisToolUtils {
-/**
- * return the color at the given position on the given paint device.
- */
-bool KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color);
+class KisImageBarrierLocker {
+public:
+    inline KisImageBarrierLocker(KisImageSP image)
+        : m_image(image)
+    {
+        m_image->barrierLock();
+    }
 
-/**
- * Recursively search a node with a non-transparent pixel
- */
-KisNodeSP KRITAUI_EXPORT findNode(KisNodeSP node, const QPoint &point, bool wholeGroup, bool editableOnly = true);
+    inline ~KisImageBarrierLocker() {
+        m_image->unlock();
+    }
 
-}
+private:
+    KisImageBarrierLocker(const KisImageBarrierLocker &rhs);
+    KisImageSP m_image;
+};
 
-#endif // KIS_TOOL_UTILS_H
+#endif /* __KIS_IMAGE_BARRIER_LOCKER_H */

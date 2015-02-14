@@ -31,6 +31,7 @@
 #include <kdebug.h>
 #include <kactioncollection.h>
 
+
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
 #include <KoToolProxy.h>
@@ -47,6 +48,7 @@
 
 #include "ProgressProxy.h"
 
+#include <kis_factory2.h>
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -55,6 +57,7 @@
 #include <kis_canvas_controller.h>
 #include <kis_qpainter_canvas.h>
 #include "kis_config.h"
+#include <KisView.h>
 #include "KisViewManager.h"
 #include "kis_image.h"
 #include <kis_image_signal_router.h>
@@ -70,8 +73,6 @@
 #include <KisPart.h>
 #include <kis_canvas_decoration.h>
 #include <kis_tool_freehand.h>
-
-#include "KisSketchPart.h"
 #include "KisSelectionExtras.h"
 #include "Settings.h"
 #include "DocumentManager.h"
@@ -83,7 +84,9 @@ class KisSketchView::Private
 public:
     Private( KisSketchView* qq)
         : q(qq)
+        , actionCollection(0)
         , doc(0)
+        , viewManager(0)
         , view(0)
         , canvas(0)
         , canvasWidget(0)
@@ -104,8 +107,12 @@ public:
 
     KisSketchView* q;
 
+    KActionCollection *actionCollection;
+
     QPointer<KisDocument> doc;
-    QPointer<KisViewManager> view;
+    QPointer<KisViewManager> viewManager;
+    QPointer<KisView> view;
+
     QPointer<KisCanvas2> canvas;
     KUndo2Stack* undoStack;
 
@@ -135,6 +142,9 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
     setAcceptHoverEvents(true);
 
+    d->actionCollection = new KActionCollection(this, KComponentData(KisFactory::aboutData()));
+    d->viewManager = new KisViewManager(qApp->activeWindow(), d->actionCollection);
+
     grabGesture(Qt::PanGesture);
     //grabGesture(Qt::PinchGesture);
 
@@ -160,8 +170,9 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     connect(DocumentManager::instance()->progressProxy(), SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
     connect(DocumentManager::instance(), SIGNAL(documentSaved()), d->savedTimer, SLOT(start()));
 
-    if (DocumentManager::instance()->document())
+    if (DocumentManager::instance()->document()) {
         documentChanged();
+    }
 }
 
 KisSketchView::~KisSketchView()
@@ -182,15 +193,15 @@ KisSketchView::~KisSketchView()
 
 QObject* KisSketchView::selectionManager() const
 {
-    if (!d->view)
+    if (!d->viewManager)
         return 0;
-    return d->view->selectionManager();
+    return d->viewManager->selectionManager();
 }
 
 QObject* KisSketchView::selectionExtras() const
 {
     if (!d->selectionExtras) {
-        d->selectionExtras = new KisSelectionExtras(d->view);
+        d->selectionExtras = new KisSelectionExtras(d->viewManager);
     }
     return d->selectionExtras;
 }
@@ -202,7 +213,7 @@ QObject* KisSketchView::doc() const
 
 QObject* KisSketchView::view() const
 {
-    return d->view;
+    return d->viewManager;
 }
 
 QString KisSketchView::file() const
@@ -280,12 +291,12 @@ void KisSketchView::redo()
 
 void KisSketchView::zoomIn()
 {
-    d->view->actionCollection()->action("zoom_in")->trigger();
+    d->viewManager->actionCollection()->action("zoom_in")->trigger();
 }
 
 void KisSketchView::zoomOut()
 {
-    d->view->actionCollection()->action("zoom_out")->trigger();
+    d->viewManager->actionCollection()->action("zoom_out")->trigger();
 }
 
 void KisSketchView::save()
@@ -306,12 +317,10 @@ void KisSketchView::documentAboutToBeDeleted()
     if (d->redoAction)
         d->redoAction->disconnect(this);
 
-    KisViewManager *oldView = d->view;
-    disconnect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
+    delete d->view;
     d->view = 0;
-    emit viewChanged();
 
-    delete oldView;
+    emit viewChanged();
 
     d->canvas = 0;
     d->canvasWidget = 0;
@@ -321,34 +330,40 @@ void KisSketchView::documentChanged()
 {
     d->doc = DocumentManager::instance()->document();
 	if (!d->doc) return;
+    if (!d->viewManager) return;
+    if (!d->viewManager->canvasBase()) return;
 
     connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
-	KisSketchPart *part = DocumentManager::instance()->part();
-	Q_ASSERT(part);
-	QPointer<KisViewManager> view = qobject_cast<KisViewManager*>(part->createView(d->doc, QApplication::activeWindow()));
+    QPointer<KisView> view = qobject_cast<KisView*>(KisPart::instance()->createView(d->doc,
+                                                                                    d->viewManager->resourceProvider()->resourceManager(),
+                                                                                    d->viewManager->actionCollection(),
+                                                                                    QApplication::activeWindow()));
     d->view = view;
-    d->view->setShowFloatingMessage(false);
+    d->viewManager->setShowFloatingMessage(false);
+    KisCanvasController *controller = dynamic_cast<KisCanvasController*>(d->viewManager->canvasBase()->canvasController());
 
     connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     
-    d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
+    controller->setGeometry(x(), y(), width(), height());
     d->view->hide();
     d->canvas = d->view->canvasBase();
 
     d->undoStack = d->doc->undoStack();
-    d->undoAction = d->view->actionCollection()->action("edit_undo");
+    d->undoAction = d->viewManager->actionCollection()->action("edit_undo");
     connect(d->undoAction, SIGNAL(changed()), this, SIGNAL(canUndoChanged()));
 
-    d->redoAction = d->view->actionCollection()->action("edit_redo");
+    d->redoAction = d->viewManager->actionCollection()->action("edit_redo");
     connect(d->redoAction, SIGNAL(changed()), this, SIGNAL(canRedoChanged()));
 
     KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
     d->canvasWidget = d->canvas->canvasWidget();
 
+
+
     connect(d->doc->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(imageUpdated(QRect)));
-    connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved()));
+    connect(controller->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved()));
     connect(d->view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(zoomChanged()));
     connect(d->canvas, SIGNAL(updateCanvasRequested(QRect)), SLOT(imageUpdated(QRect)));
     connect(d->doc->image()->signalRouter(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(removeNodeAsync(KisNodeSP)));
@@ -366,28 +381,36 @@ void KisSketchView::documentChanged()
 
     static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
     d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
-    d->view->canvasControllerWidget()->setScrollBarValue(QPoint(0, 0));
-    d->view->canvasControllerWidget()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    d->view->canvasControllerWidget()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    controller->setScrollBarValue(QPoint(0, 0));
+    controller->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    controller->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
 
     d->loadedTimer->start(100);
 
-    d->view->actionCollection()->action("zoom_to_100pct")->trigger();
+    d->viewManager->actionCollection()->action("zoom_to_100pct")->trigger();
     d->resetDocumentPosition();
 
 	emit viewChanged();
+
 }
 
 bool KisSketchView::event( QEvent* event )
 {
+    if (!d->viewManager) return false;
+    if (!d->viewManager->canvasBase()) return false;
+
+    KisCanvasController *controller = dynamic_cast<KisCanvasController*>(d->viewManager->canvasBase()->canvasController());
+    if (!controller) return false;
+
     switch(static_cast<int>(event->type())) {
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
-            if (d->view) {
-                d->view->canvasControllerWidget()->setFocus();
+            if (d->view && d->viewManager && d->viewManager->canvasBase()) {
+
+                controller->setFocus();
                 qApp->processEvents();
 
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
@@ -403,7 +426,7 @@ bool KisSketchView::event( QEvent* event )
                 syncObject->opacity = provider->opacity();
                 syncObject->globalAlphaLock = provider->globalAlphaLock();
 
-                syncObject->documentOffset = d->view->canvasControllerWidget()->scrollBarValue();
+                syncObject->documentOffset = controller->scrollBarValue();
                 syncObject->zoomLevel = d->view->zoomController()->zoomAction()->effectiveZoom();
                 syncObject->rotationAngle = d->view->canvasBase()->rotationAngle();
 
@@ -429,7 +452,7 @@ bool KisSketchView::event( QEvent* event )
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             if (d->view && syncObject->initialized) {
-                d->view->canvasControllerWidget()->setFocus();
+                controller->setFocus();
                 qApp->processEvents();
 
                 KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(d->view->canvasBase(), syncObject->activeToolId));
@@ -481,11 +504,11 @@ bool KisSketchView::event( QEvent* event )
                 qApp->processEvents();
 
                 d->view->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
-                d->view->canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - d->view->canvasBase()->rotationAngle());
+                controller->rotateCanvas(syncObject->rotationAngle - d->view->canvasBase()->rotationAngle());
 
                 qApp->processEvents();
                 QPoint newOffset = syncObject->documentOffset;
-                d->view->canvasControllerWidget()->setScrollBarValue(newOffset);
+                controller->setScrollBarValue(newOffset);
             }
 
             return true;
@@ -493,14 +516,14 @@ bool KisSketchView::event( QEvent* event )
         case KisTabletEvent::TabletPressEx:
         case KisTabletEvent::TabletReleaseEx:
             emit interactionStarted();
-            d->canvas->inputManager()->eventFilter(this, event);
+            d->canvas->globalInputManager()->eventFilter(this, event);
             return true;
         case KisTabletEvent::TabletMoveEx:
             d->tabletEventCount++; //Note that this will wraparound at some point; This is intentional.
 #ifdef Q_OS_X11
             if(d->tabletEventCount % 2 == 0)
 #endif
-                d->canvas->inputManager()->eventFilter(this, event);
+                d->canvas->globalInputManager()->eventFilter(this, event);
             return true;
         case QEvent::KeyPress:
         case QEvent::KeyRelease:
@@ -510,11 +533,12 @@ bool KisSketchView::event( QEvent* event )
         default:
             break;
     }
+
     return QDeclarativeItem::event( event );
 }
 
 bool KisSketchView::sceneEvent(QEvent* event)
-{
+{    
     if (d->canvas && d->canvasWidget) {
         switch(event->type()) {
         case QEvent::GraphicsSceneMousePress: {
@@ -567,7 +591,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
         case QEvent::TabletPress:
         case QEvent::TabletMove:
         case QEvent::TabletRelease:
-            d->canvas->inputManager()->stopIgnoringEvents();
+            d->canvas->globalInputManager()->stopIgnoringEvents();
             QApplication::sendEvent(d->canvasWidget, event);
             return true;
         default:
@@ -610,7 +634,7 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& old
 
 void KisSketchView::centerDoc()
 {
-    d->view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+    d->viewManager->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
 }
 
 void KisSketchView::Private::imageUpdated(const QRect &updated)
@@ -631,17 +655,21 @@ void KisSketchView::Private::documentOffsetMoved()
 
 void KisSketchView::Private::resetDocumentPosition()
 {
-    view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    viewManager->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
 
     QPoint pos;
-    QScrollBar *sb = view->canvasControllerWidget()->horizontalScrollBar();
+    KisCanvasController *controller = dynamic_cast<KisCanvasController*>(viewManager->canvasBase()->canvasController());
 
+    if (!controller) return;
+
+    QScrollBar *sb = controller->horizontalScrollBar();
     pos.rx() = sb->minimum() + (sb->maximum() - sb->minimum()) / 2;
 
-    sb = view->canvasControllerWidget()->verticalScrollBar();
+    sb = controller->verticalScrollBar();
     pos.ry() = sb->minimum() + (sb->maximum() - sb->minimum()) / 2;
 
-    view->canvasControllerWidget()->setScrollBarValue(pos);
+    controller->setScrollBarValue(pos);
+
 }
 
 
@@ -671,9 +699,10 @@ void KisSketchView::activate()
 		}
     }
     d->canvasWidget->setFocus();
-	Q_ASSERT(d->view);
-	Q_ASSERT(d->view->canvasControllerWidget());
-    d->view->canvasControllerWidget()->activate();
+    Q_ASSERT(d->viewManager);
+    KisCanvasController *controller = dynamic_cast<KisCanvasController*>(d->viewManager->canvasBase()->canvasController());
+    Q_ASSERT(controller);
+    controller->activate();
 }
 
 #include "KisSketchView.moc"

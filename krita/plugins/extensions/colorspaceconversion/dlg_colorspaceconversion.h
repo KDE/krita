@@ -1,4 +1,4 @@
-/*
+    /*
  *  dlg_colorspaceconversion.h -- part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>

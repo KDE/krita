@@ -16,14 +16,17 @@ PATHS
     /usr/include/openjpeg
     /usr/include/openjpeg-1.5
     /usr/include
-PATH_SUFFIXES openjpeg
+PATH_SUFFIXES
+    openjpeg-1.5
+    openjpeg
 )
 
 SET(OPENJPEG_NAMES ${OPENJPEG_NAMES} openjpeg)
 FIND_LIBRARY(OPENJPEG_LIBRARY
   NAMES ${OPENJPEG_NAMES}
-  PATHS /usr/lib /usr/local/lib
-  )
+  PATHS
+      /usr/lib /usr/local/lib
+)
 
 IF (OPENJPEG_LIBRARY AND OPENJPEG_INCLUDE_DIR)
     SET(OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARY})

@@ -42,11 +42,18 @@
 static const QString maximizeStr = i18n("Maximize");
 static const QString selectFilterStr = i18n("Select a filter...");
 
-KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl): m_filterModel(filters),m_updateUrl(updateUrl)
+KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl)
+    : m_filterModel(filters)
+    ,m_updateUrl(updateUrl)
 {
     dbgPlugins << "Constructor:" << this;
 
     setupUi(this);
+
+    m_filterOptions = new QWidget(this);
+    m_filterScrollArea->setWidget(m_filterOptions);
+    m_filterOptions->show();
+
     createMainLayout();
     setAttribute(Qt::WA_DeleteOnClose, true);
 
@@ -100,11 +107,6 @@ void KisGmicWidget::createMainLayout()
     connect(controlButtonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked(bool)), this, SLOT(slotApplyClicked()));
     connect(controlButtonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked(bool)), this, SLOT(slotCancelClicked()));
     connect(controlButtonBox->button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotResetClicked()));
-
-    int indexOfFilterOptions = m_filterConfigLayout->indexOf(m_filterOptions);
-    Q_ASSERT(indexOfFilterOptions != -1);
-    int rowSpan = 0, colSpan = 0;
-    m_filterConfigLayout->getItemPosition(indexOfFilterOptions, &m_filterOptionsRow, &m_filterOptionsColumn, &rowSpan, &colSpan);
 
     switchOptionsWidgetFor(new QLabel(selectFilterStr));
 }
@@ -395,14 +397,13 @@ void KisGmicWidget::requestComputePreview()
 
 void KisGmicWidget::switchOptionsWidgetFor(QWidget* widget)
 {
-    m_filterConfigLayout->removeWidget(m_filterOptions);
+    m_filterOptions = m_filterScrollArea->takeWidget();
     delete m_filterOptions;
 
     m_filterOptions = widget;
 
-    m_filterConfigLayout->addWidget(m_filterOptions, m_filterOptionsRow, m_filterOptionsColumn);
-    m_filterConfigLayout->update();
-
+    m_filterScrollArea->setWidget(m_filterOptions);
+    m_filterOptions->show();
 }
 
 KisFilterPreviewWidget * KisGmicWidget::previewWidget()

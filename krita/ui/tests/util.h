@@ -142,8 +142,8 @@ KisDocument* createCompleteDocument()
     image->addNode(cloneLayer1, group2);
     image->addNode(adjustmentLayer1, group2);
 
-    KoShapeContainer * parentContainer =
-        dynamic_cast<KoShapeContainer*>(doc->shapeForNode(group1));
+//    KoShapeContainer * parentContainer =
+//        dynamic_cast<KoShapeContainer*>(doc->shapeForNode(group1));
 
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);

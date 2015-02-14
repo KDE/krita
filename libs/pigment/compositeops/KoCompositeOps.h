@@ -58,17 +58,6 @@ struct OptimizedOpsSelector
 };
 
 template<>
-struct OptimizedOpsSelector<KoRgbU8Traits>
-{
-    static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
-        return KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
-    }
-    static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
-        return KoOptimizedCompositeOpFactory::createOverOp32(cs);
-    }
-};
-
-template<>
 struct OptimizedOpsSelector<KoBgrU8Traits>
 {
     static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {

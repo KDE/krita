@@ -171,7 +171,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         PSDImageData imageData(&header);
         imageData.read(&f, layer->paintDevice());
 
-        // m_image->addNode(layer, m_image->rootLayer());
+        m_image->addNode(layer, m_image->rootLayer());
 
     }
     else {

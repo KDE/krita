@@ -30,9 +30,14 @@
 RgbF32ColorSpace::RgbF32ColorSpace(const QString &name, KoColorProfile *p) :
         LcmsColorSpace<KoRgbF32Traits>(colorSpaceId(), name, TYPE_RGBA_FLT, cmsSigRgbData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Red")  , 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, 4, QColor(255, 0, 0)));
-    addChannel(new KoChannelInfo(i18n("Green"), 1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, 4, QColor(0, 255, 0)));
-    addChannel(new KoChannelInfo(i18n("Blue") , 2 * sizeof(float), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, 4, QColor(0, 0, 255)));
+    const IccColorProfile* icc_p = dynamic_cast<const IccColorProfile*>(p);
+    Q_ASSERT(icc_p);
+    QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->GetFloatUIMinMax());
+    Q_ASSERT(uiRanges.size() == 3);
+
+    addChannel(new KoChannelInfo(i18n("Red")  , 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, 4, QColor(255, 0, 0), uiRanges[0]));
+    addChannel(new KoChannelInfo(i18n("Green"), 1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, 4, QColor(0, 255, 0), uiRanges[1]));
+    addChannel(new KoChannelInfo(i18n("Blue") , 2 * sizeof(float), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, 4, QColor(0, 0, 255), uiRanges[2]));
     addChannel(new KoChannelInfo(i18n("Alpha"), 3 * sizeof(float), 3, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, 4));
 
     init();

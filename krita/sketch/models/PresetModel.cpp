@@ -67,9 +67,9 @@ public:
 
         // handle the settings and expose it through a a simple QObject property
         //m_optionWidget->setConfiguration(preset->settings());
-
+#if 0
         preset->settings()->setNode(view->resourceProvider()->currentNode());
-
+#endif
         KisPaintOpFactory* paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
         QString            pixFilename = KisFactory::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
 
@@ -154,8 +154,7 @@ QObject* PresetModel::view() const
 void PresetModel::setView(QObject* newView)
 {
     d->view = qobject_cast<KisViewManager*>( newView );
-    if (d->view)
-    {
+    if (d->view && d->view->canvasBase()) {
         connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
     }

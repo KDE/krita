@@ -51,6 +51,7 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     : KisBrushBasedPaintOp(settings, painter)
     , m_filterConfiguration(0)
 {
+    Q_UNUSED(node);
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);

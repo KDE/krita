@@ -165,22 +165,12 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-
 Qt::ItemFlags KisGmicFilterModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
-    {
          return 0;
-    }
 
-
-    Component *item = static_cast<Component*>(index.internalPointer());
-    Command * commandItem = dynamic_cast<Command *>(item);
-    if (commandItem)
-    {
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
-    }
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 QVariant KisGmicFilterModel::headerData(int section, Qt::Orientation orientation, int role) const

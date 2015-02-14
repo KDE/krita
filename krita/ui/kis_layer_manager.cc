@@ -370,7 +370,7 @@ void KisLayerManager::layerProperties()
 
 
         KisSafeFilterConfigurationSP configBefore(alayer->filter());
-        Q_ASSERT(configBefore);
+        KIS_ASSERT_RECOVER_RETURN(configBefore);
         QString xmlBefore = configBefore->toXML();
 
 

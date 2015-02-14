@@ -120,7 +120,7 @@ public:
 
 protected:
     void notifyParentVisibilityChanged(bool value);
-
+    QRect outgoingChangeRect(const QRect &rect) const;
 private:
 
     struct Private;

@@ -234,6 +234,12 @@ void KisGmicPlugin::slotCloseGmicDialog()
 
 void KisGmicPlugin::slotPreviewGmicCommand(KisGmicFilterSetting* setting)
 {
+    // Use '_none_' as a special command or preview_command to tell the plug-in that the entry requires no G'MIC call.
+    if (setting->previewGmicCommand().startsWith("-_none_ "))
+    {
+        return;
+    }
+
     dbgPlugins << "Preview Request, preview size: " << setting->previewSize();
     KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
     KisNodeListSP layers = mapper.inputNodes(setting->inputLayerMode());
@@ -287,6 +293,12 @@ void KisGmicPlugin::slotCancelOnCanvasPreview()
 
 void KisGmicPlugin::slotFilterCurrentImage(KisGmicFilterSetting* setting)
 {
+    if (setting->gmicCommand().startsWith("-_none_ "))
+    {
+        dbgPlugins << "_none_ command does not involve g'mic call";
+        return;
+    }
+
     dbgPlugins << "Filtering image on canvas!";
 
     KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());

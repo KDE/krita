@@ -60,6 +60,9 @@ typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
 class KisFixedPaintDevice;
 typedef KisSharedPtr<KisFixedPaintDevice> KisFixedPaintDeviceSP;
 
+class KisMultiPaintDevice;
+typedef KisSharedPtr<KisMultiPaintDevice> KisMultiPaintDeviceSP;
+
 class KisMask;
 typedef KisSharedPtr<KisMask> KisMaskSP;
 typedef KisWeakSharedPtr<KisMask> KisMaskWSP;

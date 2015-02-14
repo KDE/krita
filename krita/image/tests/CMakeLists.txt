@@ -613,3 +613,9 @@ target_link_libraries(KisScanlineFillTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QT
 set(kis_keyframing_test_SRCS kis_keyframing_test.cpp )
 kde4_add_unit_test(KisKeyframingTest TESTNAME krita-image-Keyframing-Test ${kis_keyframing_test_SRCS})
 target_link_libraries(KisKeyframingTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_multi_paint_device_test_SRCS kis_multi_paint_device_test.cpp )
+kde4_add_unit_test(KisMultiPaintDeviceTest TESTNAME krita-image-KisMultiPaintDeviceTest ${kis_multi_paint_device_test_SRCS})
+target_link_libraries(KisMultiPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage koodf ${QT_QTTEST_LIBRARY})

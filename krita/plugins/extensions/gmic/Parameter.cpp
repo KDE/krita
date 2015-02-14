@@ -373,9 +373,8 @@ void BoolParameter::initValue(bool value)
 void BoolParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
-
     QString boolValue = values.at(0);
-    if (boolValue == "0" || boolValue == "false")
+    if (boolValue == "0" || boolValue == "false" || boolValue.isEmpty())
     {
         initValue(false);
     }

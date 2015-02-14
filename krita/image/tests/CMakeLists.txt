@@ -607,3 +607,9 @@ target_link_libraries(KisFillIntervalMapTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 set(kis_scanline_fill_test_SRCS kis_scanline_fill_test.cpp )
 kde4_add_unit_test(KisScanlineFillTest TESTNAME krita-image-ScanlineFill-Test ${kis_scanline_fill_test_SRCS})
 target_link_libraries(KisScanlineFillTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_keyframing_test_SRCS kis_keyframing_test.cpp )
+kde4_add_unit_test(KisKeyframingTest TESTNAME krita-image-Keyframing-Test ${kis_keyframing_test_SRCS})
+target_link_libraries(KisKeyframingTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

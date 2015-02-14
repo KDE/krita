@@ -135,3 +135,15 @@ Fourier transform
 Spectral filters
 -gimp_fourier 0,1
 
+B&W pencil [animated]
+Sequences
+-gimp_animate_pencilbw 10,1,0,"[[:home:]]",2.3,100,0.3,60
+
+B&W stencil [animated]
+Sequences
+-gimp_animate_stencilbw 10,1,0,"[[:home:]]",10,10,10,20
+
+Soft glow [animated]
+Sequences
+-gimp_animate_glow 10,1,0,"[[:home:]]",0,3
+

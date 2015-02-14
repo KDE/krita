@@ -8,12 +8,6 @@
        <filter name="User-defined" />
     </category>
 
-    <category name="Sequences">
-        <filter name="B&amp;W pencil" />
-        <filter name="B&amp;W stencil" />
-        <filter name="Soft glow" />
-    </category>
-
     <category name="Various">
         <filter name="Custom code (local)" />
         <filter name="Custom code (global)" />

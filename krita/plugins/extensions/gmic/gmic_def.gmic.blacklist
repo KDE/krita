@@ -8,37 +8,15 @@
        <filter name="User-defined" />
     </category>
 
-    <category name="Deformations">
-        <filter name="Cartesian transform" />
-        <filter name="Polar transform" />
-    </category>
-
-    <category name="Degradations">
-        <filter name="Visible watermark" />
-    </category>
-
-    <category name="Layers">
-        <filter name="Blend [fade]" />
-    </category>
-
-    <category name="Rendering">
-        <filter name="Quick copyright" />
-    </category>
-
     <category name="Sequences">
         <filter name="B&amp;W pencil" />
         <filter name="B&amp;W stencil" />
         <filter name="Soft glow" />
     </category>
 
-    <category name="Spectral filters">
-        <filter name="Fourier watermark" />
-    </category>
-
     <category name="Various">
         <filter name="Custom code (local)" />
         <filter name="Custom code (global)" />
         <filter name="GREYC Poker Tour" />
-        <filter name="Import data" />
     </category>
 </blacklist>

@@ -103,4 +103,35 @@ Add grain
 Film emulation
 -gimp_emulate_grain 0,1,0.2,100,0,0,1,0,0,0,0,0
 
+Burn
+Lights & shadows
+-gimp_burn 0.5,30,1,0,0
+
+Make seamless
+Patterns
+-gimp_make_seamless 0,0,1,0
+
+Resynthetize texture
+Patterns
+-syntexturize 1024,1024,0
+
+Shock waves
+Patterns
+-gimp_shockwaves 10,10,20,0,0
+
+Upscale [diffusion]
+Repair
+-gimp_upscale_smart "200%","200%",2,0.4,50
+
+Rodilius [animated]
+Sequences
+-gimp_animate_rodilius 10,1,0,"[[:home:]]",1,10,10,300,5,0,10,10,300,5,180
+
+Bandpass
+Spectral filters
+-gimp_bandpass 0,100,0,1,0
+
+Fourier transform
+Spectral filters
+-gimp_fourier 0,1
 

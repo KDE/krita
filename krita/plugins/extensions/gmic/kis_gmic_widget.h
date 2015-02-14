@@ -84,6 +84,8 @@ private:
     KisGmicFilterModel * m_filterModel;
     KisGmicUpdater * m_updater;
 
+    QWidget *m_filterOptions;
+
     QString m_updateUrl;
 
     int m_filterOptionsRow;

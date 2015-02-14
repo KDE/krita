@@ -83,5 +83,8 @@ Import data
 Various
 -gimp_import_image "[[:home:]]",1
 
+Circle abstraction
+Artistic
+-gimp_circle_abstraction 8,5,0.8,0,1,1,1,0
 
 

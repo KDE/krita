@@ -242,30 +242,24 @@ void IccColorProfile::CalculateFloatUIMinMax(void)
         (COLORSPACE_SH(color_space_mask)|FLOAT_SH(1)|CHANNELS_SH(num_channels)|BYTES_SH(0)), //NOTE THAT 'BYTES' FIELD IS SET TO ZERO ON DLB because 8 bytes overflows the bitfield
         INTENT_PERCEPTUAL, 0);      // does the intent matter in this case?
 
-    if (!trans) {
-        // log something?
-        // assume [0..1] for all channels I guess
-        ret.resize(num_channels);
-        for (unsigned int i=0; i<num_channels; ++i) {
-            ret[i].minVal = 0;
-            ret[i].maxVal = 1;
-        }
-        return;
-    }
-    Q_ASSERT(trans);
-    cmsDoTransform(trans, in_min_pixel, out_min_pixel, 1);
-    cmsDoTransform(trans, in_max_pixel, out_max_pixel, 1);
-    cmsDeleteTransform(trans);
+    if (trans) {
+        cmsDoTransform(trans, in_min_pixel, out_min_pixel, 1);
+        cmsDoTransform(trans, in_max_pixel, out_max_pixel, 1);
+        cmsDeleteTransform(trans);
+    }//else, we'll just default to [0..1] below
 
     ret.resize(num_channels);
     for (unsigned int i=0; i<num_channels; ++i) {
-        ret[i].minVal = out_min_pixel[i];
-        ret[i].maxVal = out_max_pixel[i];
-        // Remove this assert: It fires every time for me (boud)
-        //Q_ASSERT(ret[i].minVal < ret[i].maxVal);
+        if (out_min_pixel[i] < out_max_pixel[i]) {
+            ret[i].minVal = out_min_pixel[i];
+            ret[i].maxVal = out_max_pixel[i];
+        } else {
+            // aparently we can't even guarentee that converted_to_double(0x0000) < converted_to_double(0xFFFF)
+            // assume [0..1] in such cases
+            // we need to find a really solid way of determining the bounds of a profile, if possible
+            ret[i].minVal = 0;
+            ret[i].maxVal = 1;
+        }
     }
-
-    //for (unsigned int i=0; i<num_channels; ++i)
-    //qDebug() << "*********** min/max " << i << ret[i].minVal << ret[i].maxVal;
 }
 

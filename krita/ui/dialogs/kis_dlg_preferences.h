@@ -69,6 +69,7 @@ public:
     void setDefault();
     int undoStackSize();
     bool showOutlineWhilePainting();
+    bool hideSplashScreen();
     int mdiMode();
     int favoritePresets();
 private slots:

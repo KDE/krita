@@ -35,6 +35,7 @@
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"
 #include <kis_iterator_ng.h>
+#include "kis_multi_paint_device.h"
 
 void KisPaintLayerTest::testProjection()
 {
@@ -98,6 +99,35 @@ void KisPaintLayerTest::testProjection()
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
+}
+
+void KisPaintLayerTest::testKeyframing()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, cs, "");
+    KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
+    KisMultiPaintDevice *dev = qobject_cast<KisMultiPaintDevice*>(layer->paintDevice().data());
+
+    KisKeyframeChannel *contentChannel = layer->keyframes()->getChannel("content");
+
+    QCOMPARE(contentChannel->times().count(), 0);
+
+    layer->addBlankFrame(7);
+    QCOMPARE(contentChannel->times().count(), 2); // Original content AND added frame
+    QVERIFY(contentChannel->getValueAt(0) != contentChannel->getValueAt(7));
+
+    layer->addBlankFrame(5);
+    QCOMPARE(contentChannel->times().count(), 3);
+    QVERIFY(contentChannel->getValueAt(5) != contentChannel->getValueAt(0));
+    QVERIFY(contentChannel->getValueAt(5) != contentChannel->getValueAt(7));
+
+    layer->seekToTime(5);
+
+    QCOMPARE(QVariant(dev->currentContext()), contentChannel->getValueAt(5));
+
+    layer->seekToTime(0);
+
+    QCOMPARE(QVariant(dev->currentContext()), contentChannel->getValueAt(0));
 }
 
 

@@ -512,6 +512,10 @@ public:
      */
     void notifyNodeCollpasedChanged();
 
+
+    int currentTime();
+    void seekToTime(int);
+
 public:
     void startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();

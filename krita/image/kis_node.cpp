@@ -77,7 +77,9 @@ struct KisNode::Private
 public:
     Private()
             : graphListener(0)
-            , nodeProgressProxy(0) {
+            , nodeProgressProxy(0)
+            , keyframes(new KisKeyframeSequence())
+    {
     }
 
     KisNodeWSP parent;
@@ -85,7 +87,7 @@ public:
     KisSafeReadNodeList nodes;
     KisNodeProgressProxy *nodeProgressProxy;
     QReadWriteLock nodeSubgraphLock;
-
+    KisKeyframeSequence *keyframes;
 
     const KisNode* findSymmetricClone(const KisNode *srcRoot,
                                       const KisNode *dstRoot,
@@ -500,6 +502,22 @@ void KisNode::setDirty(const QRect & rect)
 {
     if(m_d->graphListener) {
         m_d->graphListener->requestProjectionUpdate(this, rect);
+    }
+}
+
+KisKeyframeSequence* KisNode::keyframes()
+{
+    return m_d->keyframes;
+}
+
+void KisNode::seekToTime(int time)
+{
+    // TODO: do we need to do locking??
+
+    KisSafeReadNodeList::const_iterator iter;
+    FOREACH_SAFE(iter, m_d->nodes) {
+        KisNodeSP child = (*iter);
+        child->seekToTime(time);
     }
 }
 

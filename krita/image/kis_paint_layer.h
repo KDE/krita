@@ -23,6 +23,8 @@
 #include "kis_layer.h"
 #include "kis_indirect_painting_support.h"
 
+#include <QBitArray>
+
 class KoColorSpace;
 
 /**
@@ -94,6 +96,10 @@ public:
     KisDocumentSectionModel::PropertyList sectionModelProperties() const;
     void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
 
+    void seekToTime(int time);
+
+    void addBlankFrame(int time);
+
 public:
 
     QRect extent() const;
@@ -147,6 +153,7 @@ public slots:
 
 
 private:
+    void init(KisMultiPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());
 
     struct Private;
     Private * const m_d;

@@ -32,6 +32,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_paint_device.h"
+#include "kis_multi_paint_device.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_default_bounds.h"
@@ -39,8 +40,9 @@
 struct KisPaintLayer::Private
 {
 public:
-    KisPaintDeviceSP paintDevice;
+    KisMultiPaintDeviceSP paintDevice;
     QBitArray        paintChannelFlags;
+    KisKeyframeChannel  *contentChannel;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -48,8 +50,10 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         , m_d(new Private())
 {
     Q_ASSERT(dev);
-    m_d->paintDevice = dev;
-    m_d->paintDevice->setParentNode(this);
+
+    KisMultiPaintDeviceSP multidev = new KisMultiPaintDevice(*dev.data());
+
+    init(multidev);
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 }
 
@@ -59,7 +63,8 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         , m_d(new Private())
 {
     Q_ASSERT(image);
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+
+    init(new KisMultiPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image)));
 }
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
@@ -71,7 +76,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         colorSpace = image->colorSpace();
     }
     Q_ASSERT(colorSpace);
-    m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image));
+    init(new KisMultiPaintDevice(this, colorSpace, new KisDefaultBounds(image)));
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
@@ -79,9 +84,17 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
         , KisIndirectPaintingSupport()
         , m_d(new Private)
 {
-    m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
-    m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
+    init(new KisMultiPaintDevice(*rhs.m_d->paintDevice.data()), rhs.m_d->paintChannelFlags);
+}
+
+void KisPaintLayer::init(KisMultiPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags)
+{
+    m_d->paintDevice = paintDevice;
     m_d->paintDevice->setParentNode(this);
+
+    m_d->paintChannelFlags = paintChannelFlags;
+
+    m_d->contentChannel = keyframes()->createChannel("content", "Content");
 }
 
 KisPaintLayer::~KisPaintLayer()
@@ -223,5 +236,34 @@ void KisPaintLayer::setAlphaLocked(bool lock)
         m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
 }
 
+void KisPaintLayer::seekToTime(int time)
+{
+    KisLayer::seekToTime(time);
+
+    QVariant frameId = m_d->contentChannel->getValueAt(time);
+
+    if (frameId.isNull()) return;
+    int frame = frameId.toInt();
+
+    if (frame != m_d->paintDevice->currentContext()) {
+        m_d->paintDevice->switchContext(frame);
+        setDirty();
+    }
+}
+
+void KisPaintLayer::addBlankFrame(int time)
+{
+    if (m_d->contentChannel->times().count() == 0) {
+        m_d->contentChannel->setKeyframe(0, m_d->paintDevice->currentContext());
+    }
+
+    // TODO: check that we don't overwrite an existing frame
+
+    int frameId = m_d->paintDevice->newContext();
+    m_d->contentChannel->setKeyframe(time, frameId);
+
+    // Make sure we display the new frame (if appropriate)
+    seekToTime(image()->currentTime());
+}
 
 #include "kis_paint_layer.moc"

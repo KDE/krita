@@ -22,6 +22,7 @@
 
 #include "kis_undo_adapter.h"
 #include "kis_base_node.h"
+#include "kis_keyframe_sequence.h"
 
 #include "krita_export.h"
 
@@ -162,6 +163,23 @@ public:
      * layers only.
      */
     virtual QRect accessRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+
+    /**
+     * Return the set of keyframes associated with this node.
+     * @return keyframe sequence
+     */
+    KisKeyframeSequence *keyframes();
+
+    /**
+     * Update the state of the node to that at the given time within
+     * animation timeline.
+     *
+     * Subclasses should override this to implement animation of their
+     * behavior.
+     *
+     * @param time new animation time
+     */
+    virtual void seekToTime(int time);
 
 public: // Graph methods
 

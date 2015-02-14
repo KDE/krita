@@ -79,6 +79,7 @@
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
 
+#include "kis_multi_paint_device.h"
 
 // #define SANITY_CHECKS
 
@@ -133,6 +134,8 @@ public:
     bool startProjection;
 
     bool tryCancelCurrentStrokeAsync();
+
+    int time;
 };
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
@@ -912,8 +915,8 @@ void KisImage::flatten()
     refreshHiddenArea(oldRootLayer, bounds());
 
     lock();
-    KisPaintDeviceSP projectionCopy =
-        new KisPaintDevice(*oldRootLayer->projection());
+    KisMultiPaintDeviceSP projectionCopy =
+        new KisMultiPaintDevice(*oldRootLayer->projection());
     unlock();
 
     KisPaintLayerSP flattenLayer =
@@ -946,11 +949,11 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
     bool alphaDisabled = layer->alphaChannelDisabled();
     bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
-    KisPaintDeviceSP mergedDevice;
+    KisMultiPaintDeviceSP mergedDevice;
 
     if (layer->compositeOpId() != prevLayer->compositeOpId() || prevLayer->opacity() != OPACITY_OPAQUE_U8) {
 
-        mergedDevice = new KisPaintDevice(layer->colorSpace(), "merged");
+        mergedDevice = new KisMultiPaintDevice(layer->colorSpace(), "merged");
         KisPainter gc(mergedDevice);
 
         //Copy the pixels of previous layer with their actual alpha value
@@ -981,7 +984,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     else {
         //Copy prevLayer
         lock();
-        mergedDevice = new KisPaintDevice(*prevLayer->projection());
+        mergedDevice = new KisMultiPaintDevice(*prevLayer->projection());
         unlock();
 
         //Paint layer on the copy
@@ -1061,7 +1064,7 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
     refreshHiddenArea(layer, bounds());
 
     lock();
-    KisPaintDeviceSP mergedDevice = new KisPaintDevice(*layer->projection());
+    KisMultiPaintDeviceSP mergedDevice = new KisMultiPaintDevice(*layer->projection());
     unlock();
 
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
@@ -1651,6 +1654,17 @@ bool KisImage::wrapAroundModeActive() const
 void KisImage::notifyNodeCollpasedChanged()
 {
     emit sigNodeCollapsedChanged();
+}
+
+int KisImage::currentTime()
+{
+    return m_d->time;
+}
+
+void KisImage::seekToTime(int time)
+{
+    m_d->time = time;
+    m_d->rootLayer->seekToTime(time);
 }
 
 

@@ -28,6 +28,8 @@ class KisPaintLayerTest : public QObject
 private slots:
 
     void testProjection();
+
+    void testKeyframing();
 };
 
 #endif

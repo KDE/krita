@@ -75,7 +75,7 @@ public:
         formLayout->addRow(i18n("Scale:"), scaleSlider);
 
 
-        QBoxLayout *offsetLayoutX = new QBoxLayout(QBoxLayout::LeftToRight,this);
+        QBoxLayout *offsetLayoutX = new QBoxLayout(QBoxLayout::LeftToRight);
         offsetSliderX = new KisSliderSpinBox(this);
         offsetSliderX->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         randomOffsetX = new QCheckBox(i18n("Random Offset"),this);
@@ -83,7 +83,7 @@ public:
         offsetLayoutX->addWidget(randomOffsetX,0,0);
         formLayout->addRow(i18n("Horizontal Offset:"), offsetLayoutX);
 
-        QBoxLayout *offsetLayoutY = new QBoxLayout(QBoxLayout::LeftToRight,this);
+        QBoxLayout *offsetLayoutY = new QBoxLayout(QBoxLayout::LeftToRight);
         offsetSliderY = new KisSliderSpinBox(this);
         offsetSliderY->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         randomOffsetY = new QCheckBox(i18n("Random Offset"),this);

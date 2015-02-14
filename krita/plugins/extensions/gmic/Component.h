@@ -29,7 +29,7 @@ public:
     Component(){};
     virtual ~Component(){};
     virtual void add(Component *c) = 0;
-    virtual Component * child(int index) = 0;
+    virtual Component * child(int index) const = 0;
     virtual Component * parent() = 0;
     virtual int row() const = 0;
 

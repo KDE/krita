@@ -70,7 +70,7 @@ bool Parameter::isPresentationalOnly() const
     return false;
 }
 
- QString Parameter::stripQuotes(const QString& str)
+QString Parameter::stripQuotes(const QString& str)
 {
     if (str.startsWith("\"") && str.endsWith("\""))
     {
@@ -79,12 +79,16 @@ bool Parameter::isPresentationalOnly() const
     return str;
 }
 
+QString Parameter::addQuotes(const QString& str)
+{
+    QLatin1String quote("\"");
+    return (quote + str + quote);
+}
 
 QString Parameter::value() const
 {
     return QString();
 }
-
 
 void Parameter::setValue(const QString& value)
 {
@@ -92,7 +96,14 @@ void Parameter::setValue(const QString& value)
     dbgPlugins << "Not implemented for type : " << PARAMETER_NAMES[m_type];
 }
 
-
+Parameter::ParameterType Parameter::nameToType(const QString& typeName)
+{
+    if (PARAMETER_NAMES_STRINGS.contains(typeName))
+    {
+        return PARAMETER_NAMES.key(typeName);
+    }
+    return Parameter::INVALID_P;
+}
 
 /**************************
     == FloatParameter ==
@@ -419,7 +430,7 @@ void ColorParameter::parseValues(const QString& typeDefinition)
     int a = 255;
     if (values.size() == 4)
     {
-        a = values.at(2).toInt(&isOk);
+        a = values.at(3).toInt(&isOk);
         m_hasAlpha = true;
     }
     else
@@ -525,7 +536,7 @@ void TextParameter::parseValues(const QString& typeDefinition)
 
     if (values.size() == 1)
     {
-        m_value = values.at(0);
+        setValue(values.at(0));
     }
     else
     {
@@ -534,7 +545,7 @@ void TextParameter::parseValues(const QString& typeDefinition)
         if (isOk && (values.size() == 2))
         {
             m_multiline = (multilineFlag == 1);
-            m_value = values.at(1);
+            setValue(values.at(1));
         }
         // e.g typeDefinition is text("0,1,0;1,-4,1;0,1,0")
         // e.g typeDefinition is text(1, "0,1,0;1,-4,1;0,1,0")
@@ -545,24 +556,38 @@ void TextParameter::parseValues(const QString& typeDefinition)
             if (isOk)
             {
                 m_multiline = (multilineFlag == 1);
-                m_value = onlyValues.mid(onlyValues.indexOf(","));
+                setValue(onlyValues.mid(onlyValues.indexOf(",")));
             }
             else
             {
-                m_value = onlyValues;
+                setValue(onlyValues);
             }
         }
     }
 
-    // remove first and last "
-    m_value = stripQuotes(m_value);
-    m_defaultValue = m_value;
+    m_defaultValue = value();
 }
 
 QString TextParameter::value() const
 {
     return m_value;
 }
+
+void TextParameter::setValue(const QString& value)
+{
+    m_value = value;
+}
+
+QString TextParameter::toUiValue() const
+{
+    return stripQuotes(value());
+}
+
+void TextParameter::fromUiValue(const QString& uiValue)
+{
+    setValue(addQuotes(uiValue));
+}
+
 
 QString TextParameter::toString()
 {
@@ -587,25 +612,38 @@ FolderParameter::FolderParameter(const QString& name, bool updatePreview): Param
 void FolderParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
-    if (!values.isEmpty())
+    QString folderPath = values.at(0);
+    if (folderPath.isEmpty())
     {
-        QString folderPath = stripQuotes(values.at(0));
-        if (!folderPath.isEmpty())
-        {
-            m_folderPath = folderPath;
-        }
+        setValue(addQuotes(QDir::homePath()));
     }
-    m_defaultFolderPath = m_folderPath;
+    else
+    {
+        setValue(folderPath);
+    }
+
+    m_defaultFolderPath = value();
+}
+
+void FolderParameter::fromUiValue(const QString& uiValue)
+{
+    setValue(addQuotes(uiValue));
+}
+
+QString FolderParameter::toUiValue()
+{
+    return stripQuotes(m_folderPath);
 }
 
 
 QString FolderParameter::value() const
 {
-    if (m_folderPath.isEmpty())
-    {
-        return QDir::homePath();
-    }
     return m_folderPath;
+}
+
+void FolderParameter::setValue(const QString& value)
+{
+    m_folderPath = value;
 }
 
 
@@ -634,25 +672,38 @@ FileParameter::FileParameter(const QString& name, bool updatePreview): Parameter
 void FileParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
-    if (!values.isEmpty())
+    // some definitions are like _file=("")
+    QString filePath = stripQuotes(values.at(0));
+    if (!filePath.isEmpty())
     {
-        QString filePath = stripQuotes(values.at(0));
-        if (!filePath.isEmpty())
-        {
-            m_filePath = filePath;
-        }
+        setValue(addQuotes(filePath));
     }
-    m_defaultFilePath = m_filePath;
+    else
+    {
+        setValue(addQuotes(QDir::homePath()));
+    }
+
+    m_defaultFilePath = value();
 }
 
 QString FileParameter::value() const
 {
-    if (m_filePath.isEmpty())
-    {
-        return QDir::homePath();
-    }
-
     return m_filePath;
+}
+
+void FileParameter::setValue(const QString& value)
+{
+    m_filePath = value;
+}
+
+void FileParameter::fromUiValue(const QString& uiValue)
+{
+    setValue(addQuotes(uiValue));
+}
+
+QString FileParameter::toUiValue()
+{
+    return stripQuotes(value());
 }
 
 QString FileParameter::toString()
@@ -718,20 +769,26 @@ ButtonParameter::ButtonParameter(const QString& name, bool updatePreview): Param
 void ButtonParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
+    QString aligment = values.at(0);
+    if (aligment == "0")
+    {
+        m_buttonAligment = AlignLeft;
+    }
+    else if (aligment == "1")
+    {
+        m_buttonAligment = AlignRight;
+    }
+    else if (aligment == "0.5")
+    {
+        m_buttonAligment = AlignCenter;
+    }
+    else
+    {
+        dbgPlugins << "Unknown button parameter value: " << aligment;
+    }
 
-    QString boolValue = values.at(0);
-    if (boolValue == "0")
-    {
-        initValue(false);
-    }
-    else if (boolValue == "1")
-    {
-        initValue(true);
-    } else
-    {
-        dbgPlugins << "Invalid bool value, assuming 1 " << m_name << ":" << boolValue;
-        initValue(true);
-    }
+    initValue(false);
+
 }
 
 void ButtonParameter::reset()
@@ -741,6 +798,7 @@ void ButtonParameter::reset()
 
 void ButtonParameter::setValue(const QString& value)
 {
+    dbgPlugins << "Setting button to " << value;
     if (value == "0")
     {
         m_value = false;
@@ -754,11 +812,7 @@ void ButtonParameter::setValue(const QString& value)
 
 QString ButtonParameter::value() const
 {
-    if (m_value)
-    {
-        return QString("1");
-    }
-    return QString("0");
+    return m_value ? QString("1") : QString("0");
 }
 
 QString ButtonParameter::toString()

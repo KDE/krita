@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Lukáš Tvrdý <lukast.dev@gmail.com
+ * Copyright (c) 2014-2015 Lukáš Tvrdý <lukast.dev@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,14 +31,15 @@
 KisGmicSmallApplicator::KisGmicSmallApplicator(QObject *parent)
     : QThread(parent),
       m_setting(0),
-      m_progress(0)
+      m_progress(0),
+      m_gmicFinishedSuccessfully(true)
 {
 }
 
 KisGmicSmallApplicator::~KisGmicSmallApplicator()
 {
     wait();
-    qDebug() << "Destroying KisGmicSmallApplicator : " << this;
+    dbgPlugins << "Destroying KisGmicSmallApplicator: " << this;
 }
 
 void KisGmicSmallApplicator::setProperties(const QRect& canvasRect, const QSize& previewSize, KisNodeListSP layers, KisGmicFilterSetting* settings, const QByteArray& customCommands)
@@ -81,6 +82,11 @@ void KisGmicSmallApplicator::run()
     m_progress = gmicCmd.progressPtr();
 
     gmicCmd.redo();
+    if (!gmicCmd.isSuccessfullyDone())
+    {
+        dbgPlugins << "G'MIC command for small preview failed!";
+        return;
+    }
 
     KisGmicSynchronizeLayersCommand syncCmd(previewKritaNodes, gmicLayers, 0);
     syncCmd.redo();
@@ -90,7 +96,6 @@ void KisGmicSmallApplicator::run()
     {
         importVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0 );
     }
-
 
     if (previewKritaNodes->size() > 0)
     {

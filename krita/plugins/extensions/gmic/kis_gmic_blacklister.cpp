@@ -28,6 +28,7 @@
 #include <QTextDocument>
 
 #include <Component.h>
+#include "Command.h"
 
 KisGmicBlacklister::KisGmicBlacklister(const QString& filePath):m_fileName(filePath)
 {
@@ -155,4 +156,57 @@ Component* KisGmicBlacklister::findFilter(const Component* rootNode, const QStri
         }
     }
     return result;
+}
+
+QList<Command*> KisGmicBlacklister::findFilterByParamName(const Component* rootNode, const QString& paramName, const QString& paramType)
+{
+    QList<Command*> commands;
+    ComponentIterator it(rootNode);
+    while (it.hasNext())
+    {
+        Component * component = const_cast<Component *>( it.next() );
+        if (component->childCount() == 0)
+        {
+            Command * cmd = static_cast<Command *>(component);
+            if (cmd->hasParameterName(paramName, paramType))
+            {
+                commands.append(cmd);
+            }
+        }
+    }
+
+    return commands;
+}
+
+
+ComponentIterator::ComponentIterator(const Component* c)
+{
+    if (c)
+    {
+        m_queue.enqueue(c);
+    }
+}
+
+bool ComponentIterator::hasNext() const
+{
+    return !m_queue.isEmpty();
+}
+
+const Component* ComponentIterator::next()
+{
+    if (hasNext())
+    {
+        const Component* c = m_queue.dequeue();
+        for (int i=0; i < c->childCount(); i++)
+        {
+            m_queue.enqueue(c->child(i));
+        }
+        return c;
+    }
+    return 0;
+}
+
+ComponentIterator::~ComponentIterator()
+{
+    m_queue.clear();
 }

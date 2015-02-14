@@ -64,6 +64,7 @@ private:
     QByteArray m_gmicCustomCommands;
     float * m_progress;
     KisPaintDeviceSP m_preview;
+    bool m_gmicFinishedSuccessfully;
 };
 
 #endif

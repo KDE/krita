@@ -317,7 +317,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                 if (urlRequester)
                 {
-                    urlRequester->setUrl(KUrl(folderParam->m_folderPath));
+                    urlRequester->setUrl(KUrl(folderParam->toUiValue()));
                 }
                 else
                 {
@@ -351,7 +351,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                 if (urlRequester)
                 {
-                    urlRequester->setUrl(KUrl(fileParam->m_filePath));
+                    urlRequester->setUrl(KUrl(fileParam->toUiValue()));
                 }
                 else
                 {
@@ -375,7 +375,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                     if (role == CreateRole)
                     {
                         lineEdit = new QLineEdit;
-                        lineEdit->setText(textParam->m_value);
+                        lineEdit->setText(textParam->toUiValue());
 
                         m_widgetToParameterIndexMapper[lineEdit] = i;
                         mapParameterWidget(textParam, lineEdit);
@@ -395,7 +395,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                     if (lineEdit)
                     {
-                        lineEdit->setText(textParam->m_value);
+                        lineEdit->setText(textParam->toUiValue());
                     }
                     else
                     {
@@ -410,7 +410,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                     if (role == CreateRole)
                     {
                         multiLineEdit = new QTextEdit;
-                        multiLineEdit->setText(textParam->m_value);
+                        multiLineEdit->setText(textParam->toUiValue());
 
                         m_widgetToParameterIndexMapper[multiLineEdit] = i;
                         mapParameterWidget(textParam, multiLineEdit);
@@ -432,7 +432,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                     if (multiLineEdit)
                     {
-                        multiLineEdit->setText(textParam->m_value);
+                        multiLineEdit->setText(textParam->toUiValue());
                     }
                     else
                     {
@@ -575,7 +575,7 @@ void KisGmicSettingsWidget::setTextValue()
         }
     }
 
-    textParam->m_value = result;
+    textParam->fromUiValue(result);
 }
 
 
@@ -627,8 +627,8 @@ void KisGmicSettingsWidget::setFolderPathValue(const KUrl& kurl)
         return;
     }
 
-    FolderParameter * folderParam = static_cast<FolderParameter  *>(p);
-    folderParam->m_folderPath = kurl.path();
+    FolderParameter * folderParam = static_cast<FolderParameter *>(p);
+    folderParam->fromUiValue(kurl.path());
 }
 
 void KisGmicSettingsWidget::setFilePathValue(const KUrl& kurl)
@@ -645,7 +645,7 @@ void KisGmicSettingsWidget::setFilePathValue(const KUrl& kurl)
     }
 
     FileParameter * fileParam = static_cast<FileParameter *>(p);
-    fileParam->m_filePath = kurl.path();
+    fileParam->fromUiValue(kurl.path());
 }
 
 void KisGmicSettingsWidget::mapParameterWidget(Parameter* parameter, QWidget* widget)

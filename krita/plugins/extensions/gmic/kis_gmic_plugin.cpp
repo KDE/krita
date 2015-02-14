@@ -72,13 +72,6 @@ K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
 
 const QString STANDARD_GMIC_DEFINITION = "gmic_def.gmic";
 
-#define debugActivity( activity ) \
-    {\
-        const QMetaObject & mo = KisGmicPlugin::staticMetaObject; \
-        QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Activity")); \
-        QString test(me.valueToKey(activity)); \
-        dbgPlugins << "m_currentActivity == " << test; \
-    }\
 
 
 
@@ -362,7 +355,7 @@ void KisGmicPlugin::startOnCanvasPreview(KisNodeListSP layers, KisGmicFilterSett
     m_gmicApplicator->preview();
     // Note: do not call KisImage::waitForDone(): strokes are not finished or cancelled, it's just preview!
     // waitForDone would cause infinite hang
-    debugActivity(m_currentActivity);
+    dbgPlugins << valueToQString(m_currentActivity);
     m_progressManager->initProgress();
 }
 
@@ -419,9 +412,10 @@ void KisGmicPlugin::slotUpdateProgress()
 
 void KisGmicPlugin::slotGmicFinished(bool successfully, int miliseconds, const QString& msg)
 {
-    dbgPlugins << "GMIC_FINISHED";
-    debugActivity(m_currentActivity);
+    dbgPlugins << "GMIC_FINISHED : activity " << valueToQString(m_currentActivity);
     dbgPlugins << ppVar(m_smallPreviewRequestCounter) << " " << ppVar(m_onCanvasPreviewRequestCounter);
+
+    m_progressManager->finishProgress();
 
     if (successfully)
     {
@@ -432,7 +426,6 @@ void KisGmicPlugin::slotGmicFinished(bool successfully, int miliseconds, const Q
         gmicFailed(msg);
     }
 
-    m_progressManager->finishProgress();
 
     if (m_currentActivity == FILTERING || m_currentActivity == PREVIEWING)
     {
@@ -458,13 +451,11 @@ void KisGmicPlugin::gmicFinished(int miliseconds)
 
 void KisGmicPlugin::gmicFailed(const QString& msg)
 {
-    dbgPlugins << "Activity :" << m_currentActivity << " Message: " << msg;
+    dbgPlugins << "G'Mic for activity " << valueToQString(m_currentActivity) << "failed with message: " << msg;
     if ((m_currentActivity == PREVIEWING) || (m_currentActivity == FILTERING))
     {
         slotCancelOnCanvasPreview();
     }
-
-    QMessageBox::warning(m_gmicWidget, i18nc("@title:window", "Krita"), i18n("Sorry! G'Mic failed, reason:") + msg);
 
     if (m_currentActivity == SMALL_PREVIEW)
     {
@@ -472,6 +463,8 @@ void KisGmicPlugin::gmicFailed(const QString& msg)
         delete m_smallApplicator;
         m_smallApplicator = 0;
     }
+
+    QMessageBox::warning(m_gmicWidget, i18nc("@title:window", "Krita"), i18n("Sorry! G'Mic failed, reason:") + msg);
 }
 
 void KisGmicPlugin::slotRequestFinishAndClose()
@@ -500,9 +493,8 @@ void KisGmicPlugin::slotPreviewReady()
 
 void KisGmicPlugin::setActivity(KisGmicPlugin::Activity activity)
 {
-     m_currentActivity = activity;
-     dbgPlugins << "Changing activity: ";
-     debugActivity(m_currentActivity);
+    dbgPlugins << "Changing activity from " << valueToQString(m_currentActivity) << " to " << valueToQString(activity);
+    m_currentActivity = activity;
 }
 
 
@@ -523,6 +515,12 @@ void KisGmicPlugin::waitForFilterFinish()
 }
 
 
+QLatin1String KisGmicPlugin::valueToQString(KisGmicPlugin::Activity activity)
+{
+    const QMetaObject & mo = KisGmicPlugin::staticMetaObject;
+    QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Activity"));
+    return QLatin1String(me.valueToKey(activity));;
+}
 
 
 #include "kis_gmic_plugin.moc"

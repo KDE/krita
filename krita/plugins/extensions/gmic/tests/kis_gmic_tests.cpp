@@ -144,6 +144,124 @@ void KisGmicTests::testColorizeFilter()
 }
 #endif
 
+void KisGmicTests::testParser()
+{
+    QStringList fd; // filter name, category, command
+    QString filePath = QString(FILES_DATA_DIR)+"/"+"filterCommands.txt";
+    QFile inputFile(filePath);
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+       QTextStream in(&inputFile);
+       while ( !in.atEnd() )
+       {
+            QString line = in.readLine();
+            if (!line.startsWith("#") && !line.isEmpty())
+            {
+                line.replace("[[:home:]]", QDir::homePath());
+                fd << line;
+            }
+       }
+       inputFile.close();
+    }
+    else
+    {
+        QString msg = "File " + filePath + " can't be open!";
+        QFAIL(QTest::toString(msg));
+    }
+
+    QVERIFY(fd.size() % 3 == 0);
+    int count = fd.size() / 3;
+
+    int success = 0;
+    for (int i = 0; i < fd.size(); i += 3)
+    {
+        QString filterName = fd.at(i);
+        QString filterCategory = fd.at(i+1);
+        QString expected = fd.at(i+2);
+
+        Component * c = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
+        QVERIFY(c != 0);
+        QVERIFY(c->childCount() == 0);
+        Command * cmd = dynamic_cast<Command *>(c);
+        QVERIFY(cmd != 0);
+
+        KisGmicFilterSetting fc;
+        cmd->writeConfiguration(&fc);
+
+        if (fc.gmicCommand() != expected)
+        {
+            qDebug() << "Category: " << filterCategory << " Filter name: " << filterName;
+            qDebug() << "  Actual: " << fc.gmicCommand();
+            qDebug() << "Expected: " << expected;
+        }
+        else
+        {
+            success++;
+        }
+    }
+
+    if (success != count)
+    {
+        qDebug() << "Number of failed filters: " << count - success;
+    }
+    QCOMPARE(success,count);
+}
+
+
+//#define VERBOSE
+void KisGmicTests::testBlacklisterSearchByParamName()
+{
+
+    QString paramNames [] = {
+        "1st additional palette (.gpl file)",
+        "2nd additional palette (.gpl file)",
+        "CLUT filename",
+        "Filename"
+    };
+
+    QString expectedFilterNames [] =
+    {
+        "Colorize [interactive]",
+        "Colorize [interactive]",
+        "User-defined",
+        "Import data"
+    };
+
+    bool beVerbose = false;
+#ifdef VERBOSE
+    beVerbose = true;
+#endif
+
+    int nameCount = sizeof(paramNames)/sizeof(paramNames[0]);
+
+    if (beVerbose)
+    {
+        qDebug() << nameCount;
+    }
+
+    for (int i = 0; i < nameCount; i++)
+    {
+        if (beVerbose)
+        {
+            qDebug() << "Parameter:" << paramNames[i];
+        }
+
+        QList<Command *> filters = KisGmicBlacklister::findFilterByParamName(m_root, paramNames[i], "file");
+        QCOMPARE(filters.size(), 1);
+
+        Command * c = filters.at(0);
+        QCOMPARE(c->name(), expectedFilterNames[i]);
+        if (beVerbose)
+        {
+            qDebug() << "FilterName: << \"" + c->name() + "\" << \"" + KisGmicBlacklister::toPlainText(c->parent()->name()) + "\"";
+        }
+
+    }
+}
+
+
+
+
 void KisGmicTests::testGatherLayers()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -278,49 +396,6 @@ void KisGmicTests::testAllFilters()
     Q_UNUSED(success);
     Q_UNUSED(failed);
 #endif
-
-
-#ifndef gmic_version
-#error gmic_version has to be defined in gmic.h
-#endif
-
-    int GMIC_FILTER_COUNT;
-    int gmicVersion = gmic_version;
-    switch (gmicVersion)
-    {
-        case 1570:
-        {
-            GMIC_FILTER_COUNT = 260;
-            break;
-        }
-        case 1584:
-        {
-            GMIC_FILTER_COUNT = 288;
-            break;
-        }
-        case 1590:
-        {
-            GMIC_FILTER_COUNT = 298;
-            break;
-        }
-        case 1600:
-        {
-            GMIC_FILTER_COUNT = 305;
-            break;
-        }
-        default:
-        {
-            GMIC_FILTER_COUNT = 260;
-            break;
-        }
-    }
-
-    // If this fails:
-    // gmic version changed and gmic was updated, right? Then please update GMIC_FILTER_COUNT. Or you caused regression in gmic def parser..
-    // For now run test KisGmicTests::testAllFilters to find correct value for GMIC_FILTER_COUNT
-    // If it is suspicious value (e.g. smaller then previous releases), the gmic_def.gmic file maybe changed format and should not be updated
-    // without updating Krita's gmic parser
-    QCOMPARE(filterCount,GMIC_FILTER_COUNT);
 }
 
 
@@ -606,6 +681,7 @@ void KisGmicTests::testLoadingGmicCommands()
     QByteArray data = KisGmicParser::extractGmicCommandsOnly(definitionFilePath);
     QVERIFY(data.size() > 0);
 }
+
 
 
 QTEST_KDEMAIN(KisGmicTests, NoGUI)

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Animation Docker
+Comment=Docker for animating
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritaanimationdocker
+X-Krita-Version=28

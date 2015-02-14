@@ -257,6 +257,9 @@ public:
     bool showOutlineWhilePainting() const;
     void setShowOutlineWhilePainting(bool showOutlineWhilePainting) const;
 
+    bool hideSplashScreen() const;
+    void setHideSplashScreen(bool hideSplashScreen) const;
+
     qreal outlineSizeMinimum() const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 

@@ -850,6 +850,18 @@ void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
     m_cfg.writeEntry("ShowOutlineWhilePainting", showOutlineWhilePainting);
 }
 
+bool KisConfig::hideSplashScreen() const
+{
+    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    return cfg.readEntry("HideSplashAfterStartup", true);
+}
+
+void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
+{
+    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
+}
+
 qreal KisConfig::outlineSizeMinimum() const
 {
     return m_cfg.readEntry("OutlineSizeMinimum", 1.0);

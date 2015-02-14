@@ -87,4 +87,7 @@ Circle abstraction
 Artistic
 -gimp_circle_abstraction 8,5,0.8,0,1,1,1,0
 
+Wind
+Deformations
+-gimp_wind 20,0,0.7,20,1,0,0
 

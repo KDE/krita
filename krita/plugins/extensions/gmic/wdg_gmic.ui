@@ -38,7 +38,10 @@
        <item>
         <widget class="QLabel" name="searchLbl">
          <property name="text">
-          <string>Search:</string>
+          <string>&amp;Search:</string>
+         </property>
+         <property name="buddy">
+          <cstring>searchBox</cstring>
          </property>
         </widget>
        </item>

@@ -34,7 +34,6 @@
 
 class QCheckBox;
 class QComboBox;
-class QLabel;
 class QGridLayout;
 
 class KoCanvasBase;
@@ -116,7 +115,6 @@ private:
     void addSmoothingAction(int enumId, const QString &id, const QString &name, KActionCollection *globalCollection);
 
 private:
-    QLabel *m_smoothingLabel;
     QComboBox *m_cmbSmoothingType;
 
     QCheckBox *m_chkAssistant;

@@ -128,10 +128,8 @@ namespace Private {
     }
 }
 
-bool loadValue(const QDomElement &parent, const QString &tag, QSize *size)
+bool loadValue(const QDomElement &parent, const QDomElement &e, QSize *size)
 {
-    QDomElement e;
-    if (!findOnlyElement(parent, tag, &e)) return false;
     if (!Private::checkType(e, "size")) return false;
 
     size->setWidth(e.attribute("w", "0").toInt());
@@ -140,10 +138,8 @@ bool loadValue(const QDomElement &parent, const QString &tag, QSize *size)
     return true;
 }
 
-bool loadValue(const QDomElement &parent, const QString &tag, QRect *rc)
+bool loadValue(const QDomElement &parent, const QDomElement &e, QRect *rc)
 {
-    QDomElement e;
-    if (!findOnlyElement(parent, tag, &e)) return false;
     if (!Private::checkType(e, "rect")) return false;
 
     rc->setX(e.attribute("x", "0").toInt());
@@ -154,10 +150,8 @@ bool loadValue(const QDomElement &parent, const QString &tag, QRect *rc)
     return true;
 }
 
-bool loadValue(const QDomElement &parent, const QString &tag, QPointF *pt)
+bool loadValue(const QDomElement &parent, const QDomElement &e, QPointF *pt)
 {
-    QDomElement e;
-    if (!findOnlyElement(parent, tag, &e)) return false;
     if (!Private::checkType(e, "pointf")) return false;
 
     pt->setX(e.attribute("x", "0").toDouble());
@@ -166,10 +160,8 @@ bool loadValue(const QDomElement &parent, const QString &tag, QPointF *pt)
     return true;
 }
 
-bool loadValue(const QDomElement &parent, const QString &tag, QVector3D *pt)
+bool loadValue(const QDomElement &parent, const QDomElement &e, QVector3D *pt)
 {
-    QDomElement e;
-    if (!findOnlyElement(parent, tag, &e)) return false;
     if (!Private::checkType(e, "vector3d")) return false;
 
     pt->setX(e.attribute("x", "0").toDouble());
@@ -179,10 +171,8 @@ bool loadValue(const QDomElement &parent, const QString &tag, QVector3D *pt)
     return true;
 }
 
-bool loadValue(const QDomElement &parent, const QString &tag, QTransform *t)
+bool loadValue(const QDomElement &parent, const QDomElement &e, QTransform *t)
 {
-    QDomElement e;
-    if (!findOnlyElement(parent, tag, &e)) return false;
     if (!Private::checkType(e, "transform")) return false;
 
     qreal m11 = e.attribute("m11", "1.0").toDouble();

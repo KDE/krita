@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,37 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_SAFE_DOCUMENT_LOADER_H
-#define __KIS_SAFE_DOCUMENT_LOADER_H
+#ifndef __KIS_FILE_LAYER_TEST_H
+#define __KIS_FILE_LAYER_TEST_H
 
-#include <QObject>
-#include "kis_types.h"
+#include <QtTest/QtTest>
 
-class KisDocument;
-
-
-class KisSafeDocumentLoader : public QObject
+class KisFileLayerTest : public QObject
 {
     Q_OBJECT
-public:
-    KisSafeDocumentLoader(const QString &path = "", QObject *parent = 0);
-    ~KisSafeDocumentLoader();
-
-public:
-    void setPath(const QString &path);
-    void reloadImage();
-
 private slots:
-    void fileChanged();
-    void fileChangedCompressed(bool sync = false);
-    void delayedLoadStart();
-
-signals:
-    void loadingFinished(KisImageSP image);
-
-private:
-    struct Private;
-    Private * const m_d;
+    void testFileLayerPlusTransformMaskOffImage();
+    void testFileLayerPlusTransformMaskSmallFileBigOffset();
 };
 
-#endif /* __KIS_SAFE_DOCUMENT_LOADER_H */
+#endif /* __KIS_FILE_LAYER_TEST_H */

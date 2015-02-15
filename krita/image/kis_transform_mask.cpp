@@ -42,6 +42,8 @@
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 
+#include "kis_image_config.h"
+
 
 
 #define UPDATE_DELAY 3000 /*ms */
@@ -52,7 +54,8 @@ struct KisTransformMask::Private
         : worker(0, QTransform(), 0),
           staticCacheValid(false),
           recalculatingStaticImage(false),
-          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE)
+          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
+          offBoundsReadArea(0.5)
     {
     }
 
@@ -73,6 +76,7 @@ struct KisTransformMask::Private
     KisPaintDeviceSP staticCacheDevice;
 
     KisSignalCompressor updateSignalCompressor;
+    qreal offBoundsReadArea;
 };
 
 
@@ -86,6 +90,9 @@ KisTransformMask::KisTransformMask()
 
     connect(this, SIGNAL(initiateDelayedStaticUpdate()), &m_d->updateSignalCompressor, SLOT(start()));
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
+
+    KisImageConfig cfg;
+    m_d->offBoundsReadArea = cfg.transformMaskOffBoundsReadArea();
 }
 
 KisTransformMask::~KisTransformMask()
@@ -277,7 +284,7 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
                    << "Will limit bounds to" << ppVar(bounds);
     }
 
-    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, 0.5);
+    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
 
     KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
     QRect changeRect = transform.mapRectForward(rect);
@@ -311,7 +318,7 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
                    << "Will limit bounds to" << ppVar(bounds);
     }
 
-    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, 0.5);
+    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
 
     KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
     QRect needRect = transform.mapRectBackward(rect);
@@ -330,6 +337,7 @@ QRect KisTransformMask::extent() const
         partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
         existentProjection = parentLayer->projection()->extent();
     }
+
     return changeRect(partialChangeRect) | existentProjection;
 }
 

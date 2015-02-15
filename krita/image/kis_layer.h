@@ -83,9 +83,10 @@ public:
      * Ask the layer to assemble its data & apply all the effect masks
      * to it.
      */
-    QRect updateProjection(const QRect& rect, PositionToFilthy pos);
+    QRect updateProjection(const QRect& rect, KisNodeSP filthyNode);
 
-    void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect, PositionToFilthy pos);
+    QRect partialChangeRect(KisNodeSP lastNode, const QRect& rect);
+    void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect);
 
     virtual bool needProjection() const;
 
@@ -326,7 +327,7 @@ protected:
     QRect applyMasks(const KisPaintDeviceSP source,
                      const KisPaintDeviceSP destination,
                      const QRect &requestedRect,
-                     PositionToFilthy pos, KisNodeSP lastNode) const;
+                     KisNodeSP filthyNode, KisNodeSP lastNode) const;
 
 private:
     struct Private;

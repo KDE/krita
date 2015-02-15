@@ -33,7 +33,6 @@ public:
     ~KisSafeDocumentLoader();
 
 public:
-    KisImageWSP image() const;
     void setPath(const QString &path);
     void reloadImage();
 
@@ -43,7 +42,7 @@ private slots:
     void delayedLoadStart();
 
 signals:
-    void loadingFinished();
+    void loadingFinished(KisImageSP image);
 
 private:
     struct Private;

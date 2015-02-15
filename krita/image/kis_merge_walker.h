@@ -30,13 +30,26 @@ class KRITAIMAGE_EXPORT KisMergeWalker : public virtual KisBaseRectsWalker
 {
 
 public:
-    KisMergeWalker(QRect cropRect);
+    /**
+     * NO_FILTHY flag notifies the walker that there should be no (!)
+     * filthy node in the update. It means that the projection() of
+     * the node is already guaranteed to be ready, we just need to
+     * update all the higher-level nodes. Used by KisTransformMask
+     * regeneration code.
+     */
+    enum Flags {
+        DEFAULT = 0,
+        NO_FILTHY
+    };
+
+    KisMergeWalker(QRect cropRect, Flags flags = DEFAULT);
+
     virtual ~KisMergeWalker();
 
     UpdateType type() const;
 
 protected:
-    KisMergeWalker() {}
+    KisMergeWalker() : m_flags(DEFAULT) {}
 
     /**
      * Begins visiting nodes starting with @startWith.
@@ -64,6 +77,9 @@ private:
      * startTrip() one more time.
      */
     void visitLowerNode(KisNodeSP node);
+
+private:
+    const Flags m_flags;
 };
 
 

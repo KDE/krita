@@ -19,6 +19,9 @@
 #include "kis_recalculate_transform_mask_job.h"
 
 #include "kis_transform_mask.h"
+#include "kis_debug.h"
+#include "kis_layer.h"
+#include "kis_image.h"
 
 
 KisRecalculateTransformMaskJob::KisRecalculateTransformMaskJob(KisTransformMaskSP mask)
@@ -43,5 +46,16 @@ void KisRecalculateTransformMaskJob::run()
     if (!m_mask->parent()) return;
 
     m_mask->recaclulateStaticImage();
-    m_mask->setDirty();
+
+    KisLayerSP layer = dynamic_cast<KisLayer*>(m_mask->parent().data());
+
+    if (!layer) {
+        qWarning() << "WARNING: KisRecalculateTransformMaskJob::run() Mask has no parent layer! Skipping projection update!";
+        return;
+    }
+
+    KisImageSP image = layer->image();
+    Q_ASSERT(image);
+
+    image->requestProjectionUpdateNoFilthy(layer, layer->extent(), image->bounds());
 }

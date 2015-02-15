@@ -42,6 +42,8 @@
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 
+#include "kis_image_config.h"
+
 
 
 #define UPDATE_DELAY 3000 /*ms */
@@ -52,7 +54,8 @@ struct KisTransformMask::Private
         : worker(0, QTransform(), 0),
           staticCacheValid(false),
           recalculatingStaticImage(false),
-          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE)
+          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
+          offBoundsReadArea(0.5)
     {
     }
 
@@ -73,6 +76,7 @@ struct KisTransformMask::Private
     KisPaintDeviceSP staticCacheDevice;
 
     KisSignalCompressor updateSignalCompressor;
+    qreal offBoundsReadArea;
 };
 
 
@@ -86,6 +90,9 @@ KisTransformMask::KisTransformMask()
 
     connect(this, SIGNAL(initiateDelayedStaticUpdate()), &m_d->updateSignalCompressor, SLOT(start()));
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
+
+    KisImageConfig cfg;
+    m_d->offBoundsReadArea = cfg.transformMaskOffBoundsReadArea();
 }
 
 KisTransformMask::~KisTransformMask()
@@ -162,7 +169,7 @@ KisPaintDeviceSP KisTransformMask::buildPreviewDevice()
         new KisPaintDevice(parentLayer->original()->colorSpace());
 
     QRect requestedRect = parentLayer->original()->exactBounds();
-    parentLayer->buildProjectionUpToNode(device, this, requestedRect, N_FILTHY_PROJECTION);
+    parentLayer->buildProjectionUpToNode(device, this, requestedRect);
 
     return device;
 }
@@ -192,12 +199,11 @@ void KisTransformMask::recaclulateStaticImage()
     QRect requestedRect = parentLayer->changeRect(parentLayer->original()->exactBounds());
 
     /**
-     * TODO: If we use buildProjectionUpToNode() here, then the final
-     *       projection of the node will not be ready. But anyway we
-     *       issue setDirty() call after that... So probably
-     *       setDirty() should be avoided somehow?
+     * Here we use updateProjection() to regenerate the projection of
+     * the layer and after that a special update call (no-filthy) will
+     * be issued to pass the changed further through the stack.
      */
-    parentLayer->updateProjection(requestedRect, N_FILTHY_PROJECTION);
+    parentLayer->updateProjection(requestedRect, this);
     m_d->recalculatingStaticImage = false;
 
     m_d->staticCacheValid = true;
@@ -206,7 +212,7 @@ void KisTransformMask::recaclulateStaticImage()
 QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                                      KisPaintDeviceSP &dst,
                                      const QRect & rc,
-                                     PositionToFilthy parentPos) const
+                                     PositionToFilthy maskPos) const
 {
     Q_ASSERT(nodeProgressProxy());
     Q_ASSERT_X(src != dst, "KisTransformMask::decorateRect",
@@ -216,16 +222,19 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
     KIS_ASSERT_RECOVER(m_d->params) { return rc; }
 
     if (m_d->params->isHidden()) return rc;
+    KIS_ASSERT_RECOVER_NOOP(maskPos == N_FILTHY ||
+                            maskPos == N_ABOVE_FILTHY ||
+                            maskPos == N_BELOW_FILTHY);
 
-    if (parentPos != N_FILTHY_PROJECTION) {
-        // TODO: use special filtering callbacks of KisImage instead
-        //       otherwise it doesn't work with two t-masks
+    if (!m_d->recalculatingStaticImage &&
+        (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY)) {
 
         m_d->staticCacheValid = false;
         emit initiateDelayedStaticUpdate();
     }
 
     if (m_d->recalculatingStaticImage) {
+        m_d->staticCacheDevice->clear();
         m_d->params->transformDevice(const_cast<KisTransformMask*>(this), src, m_d->staticCacheDevice);
         dst->makeCloneFrom(m_d->staticCacheDevice, m_d->staticCacheDevice->extent());
     } else if (!m_d->staticCacheValid && m_d->params->isAffine()) {
@@ -275,7 +284,7 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
                    << "Will limit bounds to" << ppVar(bounds);
     }
 
-    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, 0.5);
+    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
 
     KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
     QRect changeRect = transform.mapRectForward(rect);
@@ -309,7 +318,7 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
                    << "Will limit bounds to" << ppVar(bounds);
     }
 
-    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, 0.5);
+    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
 
     KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
     QRect needRect = transform.mapRectBackward(rect);
@@ -319,20 +328,32 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
 
 QRect KisTransformMask::extent() const
 {
-    // TODO: collect extent of all the previous siblings otherwise
-    //       updates of two t-mask will not work correctly
-
     QRect rc = KisMask::extent();
-    return rc | changeRect(rc);
+
+    QRect partialChangeRect;
+    QRect existentProjection;
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    if (parentLayer) {
+        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
+        existentProjection = parentLayer->projection()->extent();
+    }
+
+    return changeRect(partialChangeRect) | existentProjection;
 }
 
 QRect KisTransformMask::exactBounds() const
 {
-    // TODO: collect exactBounds of all the previous siblings
-    //       otherwise updates of two t-mask will not work correctly
-
     QRect rc = KisMask::exactBounds();
-    return rc | changeRect(rc);
+
+    QRect partialChangeRect;
+    QRect existentProjection;
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    if (parentLayer) {
+        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
+        existentProjection = parentLayer->projection()->exactBounds();
+    }
+
+    return changeRect(partialChangeRect) | existentProjection;
 }
 
 #include "kis_transform_mask.moc"

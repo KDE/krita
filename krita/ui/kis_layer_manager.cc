@@ -576,11 +576,13 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
     // when it is not needed anymore
     previewDevice = 0;
 
-    if (dlg.exec() != QDialog::Accepted) {
+    if (dlg.exec() != QDialog::Accepted || adjl->filter().isNull()) {
+        // XXX: add messagebox warning if there's no filter set!
         m_commandsAdapter->undoLastCommand();
     } else {
         adjl->setName(dlg.layerName());
     }
+
 }
 
 KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, const QString & name,

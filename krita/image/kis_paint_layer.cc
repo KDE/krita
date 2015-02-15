@@ -246,6 +246,8 @@ void KisPaintLayer::seekToTime(int time)
     int frame = frameId.toInt();
 
     if (frame != m_d->paintDevice->currentContext()) {
+        // Setting dirty both with old and new bounds to make sure no artifacts are left behind
+        setDirty();
         m_d->paintDevice->switchContext(frame);
         setDirty();
     }

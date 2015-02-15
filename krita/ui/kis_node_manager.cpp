@@ -305,16 +305,16 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     NEW_LAYER_ACTION("add_new_file_layer", i18n("&File Layer..."),
                      "KisFileLayer", koIcon("document-open"));
 
-    NEW_MASK_ACTION("add_new_transparency_mask", i18n("Add &Transparency Mask"),
+    NEW_MASK_ACTION("add_new_transparency_mask", i18n("&Transparency Mask"),
                     "KisTransparencyMask", koIcon("edit-copy"));
 
-    NEW_MASK_ACTION("add_new_filter_mask", i18n("Add &Filter Mask..."),
+    NEW_MASK_ACTION("add_new_filter_mask", i18n("&Filter Mask..."),
                     "KisFilterMask", koIcon("bookmarks"));
 
-    NEW_MASK_ACTION("add_new_transform_mask", i18n("Add &Transform Mask..."),
+    NEW_MASK_ACTION("add_new_transform_mask", i18n("&Transform Mask..."),
                     "KisTransformMask", koIcon("bookmarks"));
 
-    NEW_MASK_ACTION("add_new_selection_mask", i18n("Add &Local Selection"),
+    NEW_MASK_ACTION("add_new_selection_mask", i18n("&Local Selection"),
                     "KisSelectionMask", koIcon("edit-paste"));
 
     connect(&m_d->nodeCreationSignalMapper, SIGNAL(mapped(const QString &)),

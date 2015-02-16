@@ -50,6 +50,7 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const KComponentData &_compo
     KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
     QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName", QString());
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
+    m_alwaysUseCheckBox->setVisible(false);
     connect(m_alwaysUseCheckBox, SIGNAL(clicked()), this, SLOT(alwaysUseClicked()));
 
     QStandardItem* selectItem = 0;

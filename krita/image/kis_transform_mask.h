@@ -70,6 +70,9 @@ public:
     void recaclulateStaticImage();
     KisPaintDeviceSP buildPreviewDevice();
 
+    void setX(qint32 x);
+    void setY(qint32 y);
+
 private slots:
     void slotDelayedStaticUpdate();
 

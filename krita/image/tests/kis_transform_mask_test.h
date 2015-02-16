@@ -33,6 +33,7 @@ private slots:
     void testSafeTransformSingleVanishingPoint();
 
     void testMultipleMasks();
+    void testMaskWithOffset();
 };
 
 #endif /* __KIS_TRANSFORM_MASK_TEST_H */

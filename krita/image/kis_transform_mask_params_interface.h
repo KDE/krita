@@ -41,6 +41,8 @@ public:
 
     virtual QString id() const = 0;
     virtual void toXML(QDomElement *e) const = 0;
+
+    virtual void translate(const QPointF &offset) = 0;
 };
 
 
@@ -63,6 +65,8 @@ public:
     QString id() const;
     void toXML(QDomElement *e) const;
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
+
+    void translate(const QPointF &offset);
 
     // for tesing purposes only
     QTransform testingGetTransform() const;

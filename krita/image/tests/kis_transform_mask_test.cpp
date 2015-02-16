@@ -759,4 +759,54 @@ void KisTransformMaskTest::testMultipleMasks()
 
 }
 
+void KisTransformMaskTest::testMaskWithOffset()
+{
+    QRect refRect(0,0,512,512);
+    QRect fillRect(400,400,100,100);
+    TestUtil::MaskParent p(refRect);
+
+    p.layer->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
+
+    KisPaintLayerSP player = new KisPaintLayer(p.image, "bg", OPACITY_OPAQUE_U8, p.image->colorSpace());
+    p.image->addNode(player, p.image->root(), KisNodeSP());
+
+    KisTransformMaskSP mask1 = new KisTransformMask();
+    p.image->addNode(mask1, p.layer);
+
+    mask1->setName("mask1");
+
+    p.layer->setDirty(refRect);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "00_initial_layer_update", "mask_with_offset"));
+
+    QTest::qWait(4000);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "00X_initial_layer_update", "mask_with_offset"));
+
+
+    QTransform transform;
+
+    transform = QTransform::fromTranslate(-150, 0);
+    mask1->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                  new KisDumbTransformMaskParams(transform)));
+
+    p.layer->setDirty(refRect);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "01_mask1_moved_layer_update", "mask_with_offset"));
+
+    QTest::qWait(4000);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "01X_mask1_moved_layer_update", "mask_with_offset"));
+
+    mask1->setY(-150);
+
+    mask1->setDirty(refRect);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "02_mask1_y_offset", "mask_with_offset"));
+
+    QTest::qWait(4000);
+    p.image->waitForDone();
+    QVERIFY(checkImage(p.image, "02X_mask1_y_offset", "mask_with_offset"));
+}
+
 QTEST_KDEMAIN(KisTransformMaskTest, GUI)

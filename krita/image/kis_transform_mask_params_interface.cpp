@@ -131,6 +131,11 @@ KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::fromXML(const QDom
         new KisDumbTransformMaskParams(transform));
 }
 
+void KisDumbTransformMaskParams::translate(const QPointF &offset)
+{
+    m_d->transform *= QTransform::fromTranslate(offset.x(), offset.y());
+}
+
 QTransform KisDumbTransformMaskParams::testingGetTransform() const
 {
     return m_d->transform;

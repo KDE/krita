@@ -44,7 +44,8 @@
 
 #include "kis_image_config.h"
 
-
+//#define DEBUG_RENDERING
+//#define DUMP_RECT QRect(0,0,512,512)
 
 #define UPDATE_DELAY 3000 /*ms */
 
@@ -237,12 +238,33 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         m_d->staticCacheDevice->clear();
         m_d->params->transformDevice(const_cast<KisTransformMask*>(this), src, m_d->staticCacheDevice);
         dst->makeCloneFrom(m_d->staticCacheDevice, m_d->staticCacheDevice->extent());
+
+#ifdef DEBUG_RENDERING
+        qDebug() << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        KIS_DUMP_DEVICE_2(src, DUMP_RECT, "recalc_src", "dd");
+        KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "recalc_dst", "dd");
+#endif /* DEBUG_RENDERING */
+
     } else if (!m_d->staticCacheValid && m_d->params->isAffine()) {
         m_d->worker.runPartialDst(src, dst, rc);
+
+#ifdef DEBUG_RENDERING
+        qDebug() << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        KIS_DUMP_DEVICE_2(src, DUMP_RECT, "partial_src", "dd");
+        KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
+#endif /* DEBUG_RENDERING */
+
     } else {
         KisPainter gc(dst);
         gc.setCompositeOp(COMPOSITE_COPY);
         gc.bitBlt(rc.topLeft(), m_d->staticCacheDevice, rc);
+
+#ifdef DEBUG_RENDERING
+        qDebug() << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        KIS_DUMP_DEVICE_2(src, DUMP_RECT, "fetch_src", "dd");
+        KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "fetch_dst", "dd");
+#endif /* DEBUG_RENDERING */
+
     }
 
     return rc;
@@ -354,6 +376,20 @@ QRect KisTransformMask::exactBounds() const
     }
 
     return changeRect(partialChangeRect) | existentProjection;
+}
+
+void KisTransformMask::setX(qint32 x)
+{
+    m_d->params->translate(QPointF(x - this->x(), 0));
+    setTransformParams(m_d->params);
+    KisEffectMask::setX(x);
+}
+
+void KisTransformMask::setY(qint32 y)
+{
+    m_d->params->translate(QPointF(0, y - this->y()));
+    setTransformParams(m_d->params);
+    KisEffectMask::setY(y);
 }
 
 #include "kis_transform_mask.moc"

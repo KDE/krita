@@ -102,11 +102,11 @@ bool KRITAIMAGE_EXPORT findOnlyElement(const QDomElement &parent, const QString 
  *
  * \see saveValue()
  */
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QDomElement &e, QSize *size);
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QDomElement &e, QRect *rc);
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QDomElement &e, QPointF *pt);
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QDomElement &e, QVector3D *pt);
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QDomElement &e, QTransform *t);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QSize *size);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QRect *rc);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QPointF *pt);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QVector3D *pt);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QTransform *t);
 
 namespace Private {
     bool KRITAIMAGE_EXPORT checkType(const QDomElement &e, const QString &expectedType);
@@ -122,7 +122,7 @@ namespace Private {
  * \see saveValue()
  */
 template <typename T>
-bool loadValue(const QDomElement &parent, const QDomElement &e, T *value)
+bool loadValue(const QDomElement &e, T *value)
 {
     if (!Private::checkType(e, "value")) return false;
 
@@ -140,14 +140,14 @@ bool loadValue(const QDomElement &parent, const QDomElement &e, T *value)
  * \see saveValue()
  */
 template <typename T>
-bool loadValue(const QDomElement &parent, const QDomElement &e, QVector<T> *array)
+bool loadValue(const QDomElement &e, QVector<T> *array)
 {
     if (!Private::checkType(e, "array")) return false;
 
     QDomElement child = e.firstChildElement();
     while (!child.isNull()) {
         T value;
-        if (!loadValue(e, child, &value)) return false;
+        if (!loadValue(child, &value)) return false;
         *array << value;
         child = child.nextSiblingElement();
     }
@@ -160,7 +160,7 @@ bool loadValue(const QDomElement &parent, const QString &tag, T *value)
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;
 
-    return loadValue(parent, e, value);
+    return loadValue(e, value);
 }
 
 }

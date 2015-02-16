@@ -82,6 +82,8 @@ bool KisDumbTransformMaskParams::isHidden() const
 
 void KisDumbTransformMaskParams::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const
 {
+    Q_UNUSED(node);
+
     QRect rc = src->exactBounds();
     QPoint dstTopLeft = rc.topLeft();
 

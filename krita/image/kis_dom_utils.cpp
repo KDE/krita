@@ -128,7 +128,7 @@ namespace Private {
     }
 }
 
-bool loadValue(const QDomElement &parent, const QDomElement &e, QSize *size)
+bool loadValue(const QDomElement &e, QSize *size)
 {
     if (!Private::checkType(e, "size")) return false;
 
@@ -138,7 +138,7 @@ bool loadValue(const QDomElement &parent, const QDomElement &e, QSize *size)
     return true;
 }
 
-bool loadValue(const QDomElement &parent, const QDomElement &e, QRect *rc)
+bool loadValue(const QDomElement &e, QRect *rc)
 {
     if (!Private::checkType(e, "rect")) return false;
 
@@ -150,7 +150,7 @@ bool loadValue(const QDomElement &parent, const QDomElement &e, QRect *rc)
     return true;
 }
 
-bool loadValue(const QDomElement &parent, const QDomElement &e, QPointF *pt)
+bool loadValue(const QDomElement &e, QPointF *pt)
 {
     if (!Private::checkType(e, "pointf")) return false;
 
@@ -160,7 +160,7 @@ bool loadValue(const QDomElement &parent, const QDomElement &e, QPointF *pt)
     return true;
 }
 
-bool loadValue(const QDomElement &parent, const QDomElement &e, QVector3D *pt)
+bool loadValue(const QDomElement &e, QVector3D *pt)
 {
     if (!Private::checkType(e, "vector3d")) return false;
 
@@ -171,7 +171,7 @@ bool loadValue(const QDomElement &parent, const QDomElement &e, QVector3D *pt)
     return true;
 }
 
-bool loadValue(const QDomElement &parent, const QDomElement &e, QTransform *t)
+bool loadValue(const QDomElement &e, QTransform *t)
 {
     if (!Private::checkType(e, "transform")) return false;
 

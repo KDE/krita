@@ -23,12 +23,25 @@
 #include <QVector3D>
 #include <QVector>
 #include <QDomElement>
+#include <QLocale>
 #include "klocale.h"
 #include "krita_export.h"
 
 
 namespace KisDomUtils {
 
+    namespace Private {
+        inline QString numberToString(const QString &value) {
+            return value;
+        }
+
+        template<typename T>
+        inline QString numberToString(T value) {
+            return QLocale::c().toString(value);
+        }
+
+
+    }
 
 /**
  * Save a value of type QRect into an XML tree. A child for \p parent
@@ -58,8 +71,7 @@ void saveValue(QDomElement *parent, const QString &tag, T value)
     parent->appendChild(e);
 
     e.setAttribute("type", "value");
-
-    e.setAttribute("value", value);
+    e.setAttribute("value", Private::numberToString(value));
 }
 
 /**
@@ -102,6 +114,8 @@ bool KRITAIMAGE_EXPORT findOnlyElement(const QDomElement &parent, const QString 
  *
  * \see saveValue()
  */
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, float *v);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, double *v);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QSize *size);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QRect *rc);
 bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QPointF *pt);

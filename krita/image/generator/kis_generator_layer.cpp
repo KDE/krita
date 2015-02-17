@@ -29,20 +29,39 @@
 #include "generator/kis_generator.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
+#include "kis_signal_compressor.h"
+#include "kis_recalculate_generator_layer_job.h"
+
+
+#define UPDATE_DELAY 100 /*ms */
+
+struct KisGeneratorLayer::Private
+{
+    Private()
+        : updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::FIRST_INACTIVE)
+    {
+    }
+
+    KisSignalCompressor updateSignalCompressor;
+};
 
 
 KisGeneratorLayer::KisGeneratorLayer(KisImageWSP image,
                                      const QString &name,
                                      KisFilterConfiguration *kfc,
                                      KisSelectionSP selection)
-    : KisSelectionBasedLayer(image, name, selection, kfc, true)
+    : KisSelectionBasedLayer(image, name, selection, kfc, true),
+      m_d(new Private)
 {
+    connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
     update();
 }
 
 KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)
-        : KisSelectionBasedLayer(rhs)
+    : KisSelectionBasedLayer(rhs),
+      m_d(new Private)
 {
+    connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
 }
 
 KisGeneratorLayer::~KisGeneratorLayer()
@@ -55,6 +74,21 @@ void KisGeneratorLayer::setFilter(KisFilterConfiguration *filterConfig)
     update();
 }
 
+void KisGeneratorLayer::slotDelayedStaticUpdate()
+{
+    /**
+     * The mask might have been deleted from the layers stack in the
+     * meanwhile. Just ignore the updates in the case.
+     */
+
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    if (!parentLayer) return;
+
+    KisImageSP image = parentLayer->image();
+    if (image) {
+        image->addSpontaneousJob(new KisRecalculateGeneratorLayerJob(this));
+    }
+}
 
 void KisGeneratorLayer::update()
 {
@@ -79,6 +113,11 @@ void KisGeneratorLayer::update()
 
     filterConfig->setChannelFlags(channelFlags());
     f->generate(dstCfg, processRect.size(), filterConfig.data());
+
+
+    // hack alert!
+    // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
+    KisSelectionBasedLayer::setDirty(extent());
 }
 
 bool KisGeneratorLayer::accept(KisNodeVisitor & v)
@@ -106,5 +145,22 @@ KisDocumentSectionModel::PropertyList KisGeneratorLayer::sectionModelProperties(
     return l;
 }
 
+void KisGeneratorLayer::setX(qint32 x)
+{
+    KisSelectionBasedLayer::setX(x);
+    m_d->updateSignalCompressor.start();
+}
+
+void KisGeneratorLayer::setY(qint32 y)
+{
+    KisSelectionBasedLayer::setY(y);
+    m_d->updateSignalCompressor.start();
+}
+
+void KisGeneratorLayer::setDirty(const QRect & rect)
+{
+    KisSelectionBasedLayer::setDirty(rect);
+    m_d->updateSignalCompressor.start();
+}
 
 #include "kis_generator_layer.moc"

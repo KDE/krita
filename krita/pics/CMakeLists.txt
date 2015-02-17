@@ -88,7 +88,10 @@ dark_selection-mode_mask.png
 dark_symmetry-horizontal.png
 dark_symmetry-vertical.png
 dark_krita_tool_editpath.png
-
+dark_prevframe.png
+dark_nextframe.png
+dark_playpause.png
+dark_addblankframe.png
 
 light_select.png
 light_pattern.png
@@ -108,6 +111,10 @@ light_selection-mode_mask.png
 light_symmetry-vertical.png
 light_symmetry-horizontal.png
 light_krita_tool_editpath.png
+light_prevframe.png
+light_nextframe.png
+light_playpause.png
+light_addblankframe.png
 
 
 

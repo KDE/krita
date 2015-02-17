@@ -267,6 +267,7 @@ set(kritaimage_LIB_SRCS
    kis_keyframe_channel.cpp
    kis_keyframe_sequence.cpp
    kis_multi_paint_device.cpp
+   kis_animation_frame_cache.cpp
 )
 
 set(einspline_SRCS

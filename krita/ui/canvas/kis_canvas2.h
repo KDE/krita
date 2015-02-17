@@ -34,6 +34,8 @@
 #include "kis_ui_types.h"
 #include "kis_coordinates_converter.h"
 
+#include "kis_animation_player.h"
+
 class KoToolProxy;
 class KoColorProfile;
 
@@ -171,6 +173,10 @@ public: // KisCanvas2 methods
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
 
     void setCursor(const QCursor &cursor);
+
+    KisAnimationPlayer *animationPlayer();
+    void startPlayback();
+    void stopPlayback();
 
 signals:
     void imageChanged(KisImageWSP image);

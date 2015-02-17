@@ -125,6 +125,8 @@ public:
     KisDisplayColorConverter *displayColorConverter;
 
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
+
+    KisAnimationPlayer *animationPlayer;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
@@ -136,6 +138,9 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
     m_d->vastScrolling = cfg.vastScrolling();
 
     createCanvas(cfg.useOpenGL());
+
+    m_d->animationPlayer = new KisAnimationPlayer(this, m_d->coordinatesConverter, 0);
+    m_d->animationPlayer->setPrescaledProjection(m_d->prescaledProjection);
 
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -860,6 +865,32 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
 void KisCanvas2::setCursor(const QCursor &cursor)
 {
     canvasWidget()->setCursor(cursor);
+}
+
+KisAnimationPlayer *KisCanvas2::animationPlayer()
+{
+    return m_d->animationPlayer;
+}
+
+void KisCanvas2::startPlayback()
+{
+    // Warning: duct tape ahead
+
+    m_d->animationPlayer->setParent(m_d->canvasWidget->widget()->parentWidget());
+    m_d->animationPlayer->setGeometry(m_d->canvasWidget->widget()->geometry());
+
+    m_d->canvasWidget->widget()->hide();
+    m_d->animationPlayer->show();
+
+    m_d->animationPlayer->play();
+}
+
+void KisCanvas2::stopPlayback()
+{
+    m_d->animationPlayer->hide();
+    m_d->canvasWidget->widget()->show();
+
+    m_d->animationPlayer->stop();
 }
 
 void KisCanvas2::slotSelectionChanged()

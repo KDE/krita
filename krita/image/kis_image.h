@@ -516,6 +516,8 @@ public:
     int currentTime();
     void seekToTime(int);
 
+    QImage getRenderedFrame(int time);
+
 public:
     void startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();

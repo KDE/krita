@@ -16,37 +16,42 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _ANIMATION_DOCK_H_
-#define _ANIMATION_DOCK_H_
+#ifndef KIS_ANIMATION_PLAYER_H
+#define KIS_ANIMATION_PLAYER_H
 
-#include "krita_export.h"
+#include <QWidget>
 
-#include <QDockWidget>
-
-#include <KoCanvasObserverBase.h>
+#include "kis_qpainter_canvas.h"
+#include "kis_coordinates_converter.h"
 
 class KisCanvas2;
-class Ui_WdgAnimation;
 
-class AnimationDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class KRITAIMAGE_EXPORT KisAnimationPlayer : public KisQPainterCanvas
+{
     Q_OBJECT
+
 public:
-    AnimationDockerDock();
-    QString observerName() { return "AnimationDockerDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    KisAnimationPlayer(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent);
+    ~KisAnimationPlayer();
 
-private slots:
-    void slotPreviousFrame();
-    void slotNextFrame();
-    void slotPlayPause();
+    void setFramerate(float fps);
+    void setRange(int firstFrame, int lastFrame);
 
-    void slotAddBlankFrame();
+    void play();
+    void stop();
+    bool isPlaying();
+
+    void resizeEvent(QResizeEvent *e);
+
+public slots:
+    void slotUpdate();
+
+protected:
+    void drawImage(QPainter & gc, const QRect &updateWidgetRect) const;
 
 private:
-
-    KisCanvas2 *m_canvas;
-    Ui_WdgAnimation *m_animationWidget;
+    struct Private;
+    Private * const m_d;
 };
 
 

@@ -40,15 +40,20 @@ AnimationDockerDock::AnimationDockerDock()
     m_animationWidget->btnPreviousFrame->setIcon(themedIcon("prevframe"));
     m_animationWidget->btnPreviousFrame->setIconSize(QSize(22, 22));
 
+    m_animationWidget->btnPlay->setIcon(themedIcon("playpause"));
+    m_animationWidget->btnPlay->setIconSize(QSize(22, 22));
+
     m_animationWidget->btnNextFrame->setIcon(themedIcon("nextframe"));
     m_animationWidget->btnNextFrame->setIconSize(QSize(22, 22));
 
     m_animationWidget->btnAddKeyframe->setIcon(themedIcon("addblankframe"));
     m_animationWidget->btnAddKeyframe->setIconSize(QSize(22, 22));
 
-    connect(m_animationWidget->btnAddKeyframe, SIGNAL(clicked()), this, SLOT(slotAddBlankFrame()));
     connect(m_animationWidget->btnPreviousFrame, SIGNAL(clicked()), this, SLOT(slotPreviousFrame()));
+    connect(m_animationWidget->btnPlay, SIGNAL(clicked()), this, SLOT(slotPlayPause()));
     connect(m_animationWidget->btnNextFrame, SIGNAL(clicked()), this, SLOT(slotNextFrame()));
+
+    connect(m_animationWidget->btnAddKeyframe, SIGNAL(clicked()), this, SLOT(slotAddBlankFrame()));
 }
 
 void AnimationDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -98,6 +103,19 @@ void AnimationDockerDock::slotNextFrame()
     m_canvas->image()->seekToTime(time);
 
     m_animationWidget->lblInfo->setText("Frame: " + QString::number(time));
+}
+
+void AnimationDockerDock::slotPlayPause()
+{
+    if (m_canvas->animationPlayer()->isPlaying()) {
+        m_canvas->stopPlayback();
+    } else {
+        m_canvas->animationPlayer()->setFramerate(m_animationWidget->doubleFramerate->value());
+        m_canvas->animationPlayer()->setRange(m_animationWidget->spinFromFrame->value(), m_animationWidget->spinToFrame->value());
+
+        m_canvas->startPlayback();
+    }
+
 }
 
 #include "animation_docker_dock.moc"

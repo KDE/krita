@@ -16,38 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _ANIMATION_DOCK_H_
-#define _ANIMATION_DOCK_H_
+#include "kis_animation_frame_cache.h"
 
-#include "krita_export.h"
+#include <QMap>
 
-#include <QDockWidget>
-
-#include <KoCanvasObserverBase.h>
-
-class KisCanvas2;
-class Ui_WdgAnimation;
-
-class AnimationDockerDock : public QDockWidget, public KoCanvasObserverBase {
-    Q_OBJECT
-public:
-    AnimationDockerDock();
-    QString observerName() { return "AnimationDockerDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
-
-private slots:
-    void slotPreviousFrame();
-    void slotNextFrame();
-    void slotPlayPause();
-
-    void slotAddBlankFrame();
-
-private:
-
-    KisCanvas2 *m_canvas;
-    Ui_WdgAnimation *m_animationWidget;
+struct KisAnimationFrameCache::Private
+{
+    QMap<int, QImage> frames;
 };
 
+KisAnimationFrameCache::KisAnimationFrameCache()
+    : m_d(new Private())
+{}
 
-#endif
+KisAnimationFrameCache::~KisAnimationFrameCache()
+{
+    delete m_d;
+}
+
+QImage KisAnimationFrameCache::getFrame(int time)
+{
+    return m_d->frames.value(time);
+}
+
+void KisAnimationFrameCache::cacheFrame(int time, QImage frame)
+{
+    m_d->frames.insert(time, frame);
+}

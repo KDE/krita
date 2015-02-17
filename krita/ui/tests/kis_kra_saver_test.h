@@ -30,6 +30,8 @@ private slots:
     void testRoundTrip();
 
     void testSaveEmpty();
+    void testRoundTripFillLayerColor();
+    void testRoundTripFillLayerPattern();
 
 };
 

@@ -28,19 +28,10 @@
 
 #include <testutil.h>
 
-bool checkDeviceImpl(KisPaintDeviceSP device, KisImageSP image, const QString &testName, const QString &prefix) {
-    return TestUtil::checkQImageExternal(device->convertToQImage(0, image->bounds()),
-                                         "file_layer",
-                                         prefix,
-                                         testName, 1, 1, 100);
-}
-
-bool checkImage(KisImageSP image, const QString &testName, const QString &prefix) {
-    return checkDeviceImpl(image->projection(), image, testName, prefix);
-}
-
 void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
 {
+    TestUtil::ExternalImageChecker chk("flayer_tmask_offimage", "file_layer");
+
     QRect refRect(0,0,640,441);
     QRect fillRect(400,400,100,100);
     TestUtil::MaskParent p(refRect);
@@ -60,11 +51,11 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
 
     flayer->setDirty(refRect);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "00_initial_layer_update", "flayer_tmask_offimage"));
+    chk.checkImage(p.image, "00_initial_layer_update");
 
     QTest::qWait(4000);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "00X_initial_layer_update", "flayer_tmask_offimage"));
+    chk.checkImage(p.image, "00X_initial_layer_update");
 
 
     flayer->setX(580);
@@ -72,11 +63,11 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
 
     flayer->setDirty(refRect);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "01_file_layer_moved", "flayer_tmask_offimage"));
+    chk.checkImage(p.image, "01_file_layer_moved");
 
     QTest::qWait(4000);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "01X_file_layer_moved", "flayer_tmask_offimage"));
+    chk.checkImage(p.image, "01X_file_layer_moved");
 
 
     QTransform transform = QTransform::fromTranslate(-580, -400);
@@ -93,15 +84,19 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
 
     mask1->setDirty(refRect);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "02_mask1_moved_mask_update", "flayer_tmask_offimage"));
+    chk.checkImage(p.image, "02_mask1_moved_mask_update");
 
     QTest::qWait(4000);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "02X_mask1_moved_mask_update", "flayer_tmask_offimage"));
+    chk.checkImage(p.image, "02X_mask1_moved_mask_update");
+
+    QVERIFY(chk.testPassed());
 }
 
 void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
 {
+    TestUtil::ExternalImageChecker chk("flayer_tmask_huge_offset", "file_layer");
+
     QRect refRect(0,0,2000,1500);
     QRect fillRect(400,400,100,100);
     TestUtil::MaskParent p(refRect);
@@ -125,11 +120,11 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
 
     flayer->setDirty(refRect);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "00_initial_layer_update", "flayer_tmask_huge_offset"));
+    chk.checkImage(p.image, "00_initial_layer_update");
 
     QTest::qWait(4000);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "00X_initial_layer_update", "flayer_tmask_huge_offset"));
+    chk.checkImage(p.image, "00X_initial_layer_update");
 
     QTransform transform;
 
@@ -139,11 +134,13 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
 
     mask1->setDirty(refRect);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "01_mask1_moved_mask_update", "flayer_tmask_huge_offset"));
+    chk.checkImage(p.image, "01_mask1_moved_mask_update");
 
     QTest::qWait(4000);
     p.image->waitForDone();
-    QVERIFY(checkImage(p.image, "01X_mask1_moved_mask_update", "flayer_tmask_huge_offset"));
+    chk.checkImage(p.image, "01X_mask1_moved_mask_update");
+
+    QVERIFY(chk.testPassed());
 }
 
 QTEST_KDEMAIN(KisFileLayerTest, GUI)

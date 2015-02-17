@@ -40,6 +40,11 @@ void KisKeyframeChannel::deleteKeyframe(int time)
     m_d->keys.remove(time);
 }
 
+bool KisKeyframeChannel::hasKeyframeAt(int time)
+{
+    return m_d->keys.contains(time);
+}
+
 QVariant KisKeyframeChannel::getValueAt(int time)
 {
     QMap<int, QVariant>::iterator nextKeyframe = m_d->keys.upperBound(time);

@@ -128,6 +128,11 @@ void KisPaintLayerTest::testKeyframing()
     layer->seekToTime(0);
 
     QCOMPARE(QVariant(dev->currentContext()), contentChannel->getValueAt(0));
+
+    QVariant frame5ID = contentChannel->getValueAt(5);
+    layer->addBlankFrame(5);
+    QCOMPARE(contentChannel->times().count(), 3);
+    QCOMPARE(contentChannel->getValueAt(5), frame5ID);
 }
 
 

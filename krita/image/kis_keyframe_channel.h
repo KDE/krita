@@ -30,6 +30,8 @@ public:
 
     void setKeyframe(int time, const QVariant& value);
     void deleteKeyframe(int time);
+    bool hasKeyframeAt(int time);
+
     QVariant getValueAt(int time);
 
     QList<int> times();

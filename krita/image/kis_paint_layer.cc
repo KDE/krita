@@ -259,7 +259,7 @@ void KisPaintLayer::addBlankFrame(int time)
         m_d->contentChannel->setKeyframe(0, m_d->paintDevice->currentContext());
     }
 
-    // TODO: check that we don't overwrite an existing frame
+    if (m_d->contentChannel->hasKeyframeAt(time)) return;
 
     int frameId = m_d->paintDevice->newContext();
     m_d->contentChannel->setKeyframe(time, frameId);

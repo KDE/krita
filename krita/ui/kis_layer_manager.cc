@@ -348,7 +348,15 @@ void KisLayerManager::imageResizeToActiveLayer()
     KisImageWSP image = m_view->image();
 
     if (image && (layer = activeLayer())) {
-        image->cropImage(layer->exactBounds());
+        QRect cropRect = layer->projection()->nonDefaultPixelArea();
+        if (!cropRect.isEmpty()) {
+            image->cropImage(cropRect);
+        } else {
+            m_view->showFloatingMessage(
+                i18nc("floating message in layer manager",
+                      "Layer is empty "),
+                QIcon(), 2000, KisFloatingMessage::Low);
+        }
     }
 }
 

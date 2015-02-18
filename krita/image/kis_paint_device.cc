@@ -63,6 +63,7 @@ public:
     PaintDeviceCache(KisPaintDevice *paintDevice)
         : m_paintDevice(paintDevice),
           m_exactBoundsCache(paintDevice),
+          m_nonDefaultPixelAreaCache(paintDevice),
           m_regionCache(paintDevice)
     {
     }
@@ -74,11 +75,16 @@ public:
     void invalidate() {
         m_thumbnailsValid = false;
         m_exactBoundsCache.invalidate();
+        m_nonDefaultPixelAreaCache.invalidate();
         m_regionCache.invalidate();
     }
 
     QRect exactBounds() {
         return m_exactBoundsCache.getValue();
+    }
+
+    QRect nonDefaultPixelArea() {
+        return m_nonDefaultPixelAreaCache.getValue();
     }
 
     QRegion region() {
@@ -125,7 +131,17 @@ private:
         ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
         QRect calculateNewValue() const {
-            return m_paintDevice->calculateExactBounds();
+            return m_paintDevice->calculateExactBounds(false);
+        }
+    private:
+        KisPaintDevice *m_paintDevice;
+    };
+
+    struct NonDefaultPixelCache : KisLockFreeCache<QRect> {
+        NonDefaultPixelCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
+
+        QRect calculateNewValue() const {
+            return m_paintDevice->calculateExactBounds(true);
         }
     private:
         KisPaintDevice *m_paintDevice;
@@ -142,6 +158,7 @@ private:
     };
 
     ExactBoundsCache m_exactBoundsCache;
+    NonDefaultPixelCache m_nonDefaultPixelAreaCache;
     RegionCache m_regionCache;
 
     bool m_thumbnailsValid;
@@ -414,27 +431,38 @@ QRegion KisPaintDevice::region() const
     return m_d->currentStrategy()->region();
 }
 
+QRect KisPaintDevice::nonDefaultPixelArea() const
+{
+    return m_d->cache.nonDefaultPixelArea();
+}
+
 QRect KisPaintDevice::exactBounds() const
 {
     return m_d->cache.exactBounds();
 }
 
-QRect KisPaintDevice::calculateExactBounds() const
+QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
 {
+    QRect rc = extent();
+
     quint8 defaultOpacity = m_d->colorSpace->opacityU8(defaultPixel());
     if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
-        /**
-         * We will not calculate exact bounds for the device,
-         * that is knows to be at least not smaller than image.
-         * It isn't worth it.
-         */
+        if (!nonDefaultOnly) {
+            /**
+             * We will not calculate exact bounds for the device,
+             * that is knows to be at least not smaller than image.
+             * It isn't worth it.
+             */
 
-        return extent();
+            return rc;
+        } else {
+            rc = region().boundingRect();
+        }
     }
 
     // Solution n°2
     qint32  x, y, w, h, boundX2, boundY2, boundW2, boundH2;
-    QRect rc = extent();
+ 
 
     x = boundX2 = rc.x();
     y = boundY2 = rc.y();

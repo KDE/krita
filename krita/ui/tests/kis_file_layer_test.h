@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,23 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KRA_SAVER_TEST_H
-#define KIS_KRA_SAVER_TEST_H
+#ifndef __KIS_FILE_LAYER_TEST_H
+#define __KIS_FILE_LAYER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
-class KisKraSaverTest : public QObject
+class KisFileLayerTest : public QObject
 {
     Q_OBJECT
 private slots:
-
-    // XXX: Also test roundtripping of metadata
-    void testRoundTrip();
-
-    void testSaveEmpty();
-    void testRoundTripFillLayerColor();
-    void testRoundTripFillLayerPattern();
-
+    void testFileLayerPlusTransformMaskOffImage();
+    void testFileLayerPlusTransformMaskSmallFileBigOffset();
 };
 
-#endif
+#endif /* __KIS_FILE_LAYER_TEST_H */

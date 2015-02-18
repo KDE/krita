@@ -74,6 +74,8 @@ public:
     ~TransformStrokeStrategy();
 
     KisPaintDeviceSP previewDevice() const;
+    KisSelectionSP realSelection() const;
+
 
     void doStrokeCallback(KisStrokeJobData *data);
 

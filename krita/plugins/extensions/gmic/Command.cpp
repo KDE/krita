@@ -343,7 +343,7 @@ void Command::print(int level)
     }
 }
 
-Component* Command::child(int index)
+Component* Command::child(int index) const
 {
     Q_UNUSED(index);
     return 0;
@@ -487,5 +487,51 @@ void Command::setParameter(const QString& name, const QString& value)
             m_parameters[i]->setValue(value);
         }
     }
+}
 
+QString Command::parameter(const QString &name) const
+{
+    for (int i = 0; i < m_parameters.size(); i++)
+    {
+        if (m_parameters.at(i)->name() == name)
+        {
+            return m_parameters.at(i)->value();
+        }
+    }
+
+    return QString();
+}
+
+bool Command::hasParameterName(const QString& paramName, const QString& paramType)
+{
+    Parameter::ParameterType type = Parameter::INVALID_P;
+    if (!paramType.isEmpty())
+    {
+        type = Parameter::nameToType(paramType);
+    }
+
+    for (int i = 0; i < m_parameters.size(); i++)
+    {
+        Parameter * currentParameter = m_parameters.at(i);
+        if (currentParameter->name() == paramName)
+        {
+            // if not empty, we check type also
+            if (!paramType.isEmpty())
+            {
+                if (currentParameter->m_type == type)
+                {
+                    return true;
+                }
+                else
+                {
+                    qDebug() << "Ignoring type " << currentParameter->m_type;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }

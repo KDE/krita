@@ -108,5 +108,76 @@ void KisKraSaverTest::testSaveEmpty()
     delete doc2;
     delete doc;
 }
+
+#include <filter/kis_filter_configuration.h>
+#include "generator/kis_generator_registry.h"
+#include <generator/kis_generator.h>
+
+void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfiguration *config)
+{
+    TestUtil::ExternalImageChecker chk(testName, "fill_layer");
+
+    QRect refRect(0,0,512,512);
+    TestUtil::MaskParent p(refRect);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    doc->setCurrentImage(p.image);
+    doc->documentInfo()->setAboutInfo("title", p.image->objectName());
+
+    KisSelectionSP selection;
+    KisGeneratorLayerSP glayer = new KisGeneratorLayer(p.image, "glayer", config, selection);
+
+    p.image->addNode(glayer, p.image->root(), KisNodeSP());
+    glayer->setDirty();
+
+    p.image->waitForDone();
+    chk.checkImage(p.image, "00_initial_layer_update");
+
+    doc->saveNativeFormat("roundtrip_fill_layer_test.kra");
+
+
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
+    doc2->loadNativeFormat("roundtrip_fill_layer_test.kra");
+
+    doc2->image()->waitForDone();
+    chk.checkImage(doc2->image(), "01_fill_layer_round_trip");
+
+    QVERIFY(chk.testPassed());
+}
+
+void KisKraSaverTest::testRoundTripFillLayerColor()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("color");
+    Q_ASSERT(generator);
+
+    // warning: we pass null paint device to the default constructed value
+    KisFilterConfiguration *config = generator->factoryConfiguration(0);
+    Q_ASSERT(config);
+
+    QVariant v;
+    v.setValue(KoColor(Qt::red, cs));
+    config->setProperty("color", v);
+
+    testRoundTripFillLayerImpl("fill_layer_color", config);
+}
+
+void KisKraSaverTest::testRoundTripFillLayerPattern()
+{
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("pattern");
+    Q_ASSERT(generator);
+
+    // warning: we pass null paint device to the default constructed value
+    KisFilterConfiguration *config = generator->factoryConfiguration(0);
+    Q_ASSERT(config);
+
+    QVariant v;
+    v.setValue(QString("11_drawed_furry.png"));
+    config->setProperty("pattern", v);
+
+    testRoundTripFillLayerImpl("fill_layer_pattern", config);
+}
+
 QTEST_KDEMAIN(KisKraSaverTest, GUI)
 #include "kis_kra_saver_test.moc"

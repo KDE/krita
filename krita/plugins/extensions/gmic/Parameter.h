@@ -64,11 +64,15 @@ public:
 
     virtual void reset() { };
 
+    static Parameter::ParameterType nameToType(const QString &typeName);
+
 protected:
     // strips parameter type (int, note, etc.) and enclosing brackets
     QString extractValues(const QString& typeDefinition);
+    // returns list of parameter values or empty item if parameter list is empty
     QStringList getValues(const QString& typeDefinition);
-    QString stripQuotes(const QString& str);
+    static QString stripQuotes(const QString& str);
+    static QString addQuotes(const QString& str);
 };
 
 static QMap<Parameter::ParameterType, QString> initMap()
@@ -93,6 +97,7 @@ static QMap<Parameter::ParameterType, QString> initMap()
 static const QMap<Parameter::ParameterType, QString> PARAMETER_NAMES = initMap();
 
 static const QList<QString> PARAMETER_NAMES_STRINGS = PARAMETER_NAMES.values();
+
 
 class FloatParameter : public Parameter
 {
@@ -221,11 +226,17 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void setValue(const QString& value);
     virtual void reset();
 
+    QString toUiValue() const;
+    void fromUiValue(const QString &uiValue);
+
+    bool m_multiline;
+
+private:
     QString m_value;
     QString m_defaultValue;
-    bool m_multiline;
 };
 
 class FolderParameter : public Parameter
@@ -235,7 +246,11 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void setValue(const QString& value);
     virtual void reset();
+
+    QString toUiValue();
+    void fromUiValue(const QString &uiValue);
 
     QString m_folderPath;
     QString m_defaultFolderPath;
@@ -248,7 +263,11 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void setValue(const QString& value);
     virtual void reset();
+
+    QString toUiValue();
+    void fromUiValue(const QString &uiValue);
 
     QString m_filePath;
     QString m_defaultFilePath;
@@ -269,15 +288,20 @@ class ButtonParameter : public Parameter
 {
 public:
     ButtonParameter(const QString& name, bool updatePreview = false);
+    enum Aligment { AlignLeft, AlignRight, AlignCenter };
+
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
     virtual void setValue(const QString& value);
     virtual void reset();
     void initValue(bool value);
-    
+
     bool m_value;
     bool m_defaultValue;
+    Aligment m_buttonAligment;
+
+
 };
 
 

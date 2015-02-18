@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,23 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KRA_SAVER_TEST_H
-#define KIS_KRA_SAVER_TEST_H
+#ifndef __KIS_RECALCULATE_GENERATOR_LAYER_JOB_H
+#define __KIS_RECALCULATE_GENERATOR_LAYER_JOB_H
 
-#include <QtTest>
+#include "kis_types.h"
+#include "kis_spontaneous_job.h"
 
-class KisKraSaverTest : public QObject
+
+class KRITAIMAGE_EXPORT KisRecalculateGeneratorLayerJob : public KisSpontaneousJob
 {
-    Q_OBJECT
-private slots:
+public:
+    KisRecalculateGeneratorLayerJob(KisGeneratorLayerSP layer);
 
-    // XXX: Also test roundtripping of metadata
-    void testRoundTrip();
+    bool overrides(const KisSpontaneousJob *otherJob);
+    void run();
 
-    void testSaveEmpty();
-    void testRoundTripFillLayerColor();
-    void testRoundTripFillLayerPattern();
-
+private:
+    KisGeneratorLayerSP m_layer;
 };
 
-#endif
+#endif /* __KIS_RECALCULATE_GENERATOR_LAYER_JOB_H */

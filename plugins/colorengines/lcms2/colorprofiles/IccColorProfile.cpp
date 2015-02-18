@@ -184,7 +184,8 @@ bool IccColorProfile::init()
     if (d->shared->lcmsProfile->init()) {
         setName(d->shared->lcmsProfile->name());
         setInfo(d->shared->lcmsProfile->info());
-        CalculateFloatUIMinMax();
+        if (d->shared->lcmsProfile->valid())
+            CalculateFloatUIMinMax();
         return true;
     } else {
         return false;

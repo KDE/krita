@@ -837,8 +837,17 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, resources->activeSelection(), image()->postExecutionUndoAdapter());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
-    KisSelectionSP selection = resources->activeSelection();
+    KisSelectionSP selection = strategy->realSelection();
     QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
+
+    if (!selection && resources->activeSelection()) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Selections are not used when editing transform masks "),
+                QIcon(), 4000, KisFloatingMessage::Low);
+    }
 
     if (srcRect.isEmpty()) {
         delete strategy;

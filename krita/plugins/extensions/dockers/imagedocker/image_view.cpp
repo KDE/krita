@@ -52,7 +52,7 @@ void ImageViewport::setImage(const QPixmap& pixmap, qreal scale)
 
 void ImageViewport::setScale(qreal scale)
 {
-    if(!qFuzzyCompare(scale, m_scale)) {
+    if (!m_pixmap.isNull() && !qFuzzyCompare(scale, m_scale)) {
         m_scale        = scale;
         m_cachedPixmap = m_pixmap.scaled(imageRect().size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }

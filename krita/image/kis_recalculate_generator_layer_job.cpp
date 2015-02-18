@@ -16,24 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_TRANSFORM_MASK_TEST_H
-#define __KIS_TRANSFORM_MASK_TEST_H
+#include "kis_recalculate_generator_layer_job.h"
 
-#include <QtTest/QtTest>
+#include "generator/kis_generator_layer.h"
+#include "kis_debug.h"
+#include "kis_layer.h"
+#include "kis_image.h"
 
-class KisTransformMaskTest : public QObject
+
+KisRecalculateGeneratorLayerJob::KisRecalculateGeneratorLayerJob(KisGeneratorLayerSP layer)
+    : m_layer(layer)
 {
-    Q_OBJECT
-private slots:
-    void testSafeTransform();
-    void testMaskOnPaintLayer();
-    void testMaskOnCloneLayer();
-    void testMaskOnCloneLayerWithOffset();
-    void testSafeTransformUnity();
-    void testSafeTransformSingleVanishingPoint();
+}
 
-    void testMultipleMasks();
-    void testMaskWithOffset();
-};
+bool KisRecalculateGeneratorLayerJob::overrides(const KisSpontaneousJob *_otherJob)
+{
+    const KisRecalculateGeneratorLayerJob *otherJob =
+        dynamic_cast<const KisRecalculateGeneratorLayerJob*>(_otherJob);
 
-#endif /* __KIS_TRANSFORM_MASK_TEST_H */
+    return otherJob && otherJob->m_layer == m_layer;
+}
+
+void KisRecalculateGeneratorLayerJob::run()
+{
+    /**
+     * The layer might have been deleted from the layers stack. In
+     * such a case, don't try do update it.
+     */
+    if (!m_layer->parent()) return;
+
+    m_layer->update();
+}

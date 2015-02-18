@@ -1490,6 +1490,15 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
+void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
+{
+    KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
+
+    if (m_d->scheduler) {
+        m_d->scheduler->updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
+    }
+}
+
 void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
     if (m_d->scheduler) {

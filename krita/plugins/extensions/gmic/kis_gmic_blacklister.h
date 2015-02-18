@@ -19,8 +19,25 @@
 #define _KIS_GMIC_BLACKLISTER_H_
 #include <QHash>
 #include <QSet>
+#include <QQueue>
 
+class Command;
 class Component;
+
+
+class ComponentIterator
+{
+public:
+    ComponentIterator(const Component * c);
+    ~ComponentIterator();
+    bool hasNext() const;
+    const Component * next();
+
+private:
+    QQueue<const Component *> m_queue;
+
+};
+
 class KisGmicBlacklister
 {
 public:
@@ -33,6 +50,8 @@ public:
     void dump();
     static QString toPlainText(const QString& htmlText);
     static Component* findFilter(const Component* rootNode, const QString& filterCategory, const QString& filterName);
+    static QList<Command* > findFilterByParamName(const Component* rootNode, const QString& paramName, const QString& paramType = QString());
+
 private:
     QString m_fileName;
     QHash<QString, QSet<QString> > m_categoryNameBlacklist;

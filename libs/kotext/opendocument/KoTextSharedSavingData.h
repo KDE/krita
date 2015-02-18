@@ -57,8 +57,10 @@ public:
      * and you need to ensure that it lives longer than this object
      * unless you reset the model to 0.
      */
+#ifdef SHOULD_BUILD_RDF
     void setRdfModel(QSharedPointer<Soprano::Model> m);
     QSharedPointer<Soprano::Model> rdfModel() const;
+#endif
 
     /**
      * Stores the name that written to the file for the style
@@ -85,7 +87,7 @@ public:
 private:
 
     class Private;
-    Private * const d;
+    QScopedPointer<Private> d;
 };
 
 #endif // KOTEXTSHAREDSAVINGDATA_H

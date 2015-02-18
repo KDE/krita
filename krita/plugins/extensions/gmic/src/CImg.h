@@ -2586,7 +2586,10 @@ namespace cimg_library_suffixed {
 #endif
       X11_info():nb_wins(0),events_thread(0),display(0),
                  nb_bits(0),is_blue_first(false),is_shm_enabled(false),byte_order(false) {
-        XInitThreads();
+        //krita customization:
+        //XInitThreads cannot be called here, it has to be called before ANY xlib calls
+        //so this must be done in krita's main()
+        //XInitThreads();
         pthread_mutex_init(&wait_event_mutex,0);
         pthread_cond_init(&wait_event,0);
 #ifdef cimg_use_xrandr
@@ -2596,16 +2599,21 @@ namespace cimg_library_suffixed {
 #endif
       }
 
-      ~X11_info() {
+      // krita hack:
+      // this destructor is for an on-demand created static variable
+      // it'll be destructed at program-shutdown, in who knows what order
+      // in relation to other destructors/shutdown functions
+      // it's better just to leak the resources rather than risk crashing
+      /*~X11_info() {
         if (events_thread) {
           pthread_cancel(*events_thread);
           delete events_thread;
         }
         if (display) { } // XLockDisplay(display); XCloseDisplay(display); }
         pthread_cond_destroy(&wait_event);
-        pthread_mutex_unlock(&wait_event_mutex);
+        //pthread_mutex_unlock(&wait_event_mutex);      // question: why is there an unlock here? which lock is this supposed to match up with?
         pthread_mutex_destroy(&wait_event_mutex);
-      }
+      }*/
     };
 #if defined(cimg_module)
     X11_info& X11_attr();
@@ -2639,6 +2647,10 @@ namespace cimg_library_suffixed {
 #elif defined(_PTHREAD_H)
       pthread_mutex_t mutex[32];
       Mutex_info() { for (unsigned int i = 0; i<32; ++i) pthread_mutex_init(&mutex[i],0); }
+      // krita comment: don't even think of adding a destructor here
+      // since this is an on demand static variable, it'll be destructed at program shutdown time,
+      // at who-knows what order
+      // we're better off leaking these mutexes...
       void lock(const unsigned int n) { pthread_mutex_lock(&mutex[n]); }
       void unlock(const unsigned int n) { pthread_mutex_unlock(&mutex[n]); }
       int trylock(const unsigned int n) { return pthread_mutex_trylock(&mutex[n]); }
@@ -7503,7 +7515,15 @@ namespace cimg_library_suffixed {
     static void wait_all() {
       if (!cimg::X11_attr().display) return;
       if (cimg::mutex(13,2)) { cimg::sleep(10); return; }
+      // krita hack:
+      // pthread_cond_wait() requires that the mutex be locked upon entry, so lets do this
+      // even with this fix, the code seems to be a race-condition
+      // ideally the cimg::mutex "array" thing should be removed and all shared access
+      // should be done via the wait_event_mutex.
+      // this would be a major refactor, however
+      pthread_mutex_lock(&cimg::X11_attr().wait_event_mutex);
       pthread_cond_wait(&cimg::X11_attr().wait_event,&cimg::X11_attr().wait_event_mutex);
+      pthread_mutex_unlock(&cimg::X11_attr().wait_event_mutex);
       cimg::mutex(13,0);
     }
 

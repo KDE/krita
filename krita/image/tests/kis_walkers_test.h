@@ -243,6 +243,7 @@ private slots:
     void testFullRefreshVisiting();
     void testCachedVisiting();
     void testMasksVisiting();
+    void testMasksVisitingNoFilthy();
     void testMasksOverlapping();
     void testRectsChecksum();
     void testGraphStructureChecksum();

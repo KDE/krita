@@ -82,6 +82,8 @@ public:
     void toXML(QDomElement *e) const;
     static KisLiquifyTransformWorker* fromXML(const QDomElement &e);
 
+    void translate(const QPointF &offset);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

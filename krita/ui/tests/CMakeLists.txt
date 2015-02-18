@@ -191,3 +191,9 @@ set(kis_resource_server_provider_test_SRCS kis_resource_server_provider_test.cpp
 kde4_add_unit_test(KisResourceServerProviderTest TESTNAME krita-ui-KisResourceServerProviderTest  ${kis_resource_server_provider_test_SRCS})
 target_link_libraries(KisResourceServerProviderTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(kis_file_layer_test_SRCS kis_file_layer_test.cpp )
+kde4_add_unit_test(KisFileLayerTest TESTNAME krita-ui-KisFileLayerTest  ${kis_file_layer_test_SRCS})
+target_link_libraries(KisFileLayerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+

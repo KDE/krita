@@ -29,6 +29,8 @@ public:
     KisImageConfig();
     ~KisImageConfig();
 
+    qreal transformMaskOffBoundsReadArea() const;
+
     int updatePatchHeight() const;
     void setUpdatePatchHeight(int value);
     int updatePatchWidth() const;

@@ -710,6 +710,17 @@ public slots:
     void initialRefreshGraph();
 
     /**
+     * Initiate a stack regeneration skipping the recalculation of the
+     * filthy node's projection.
+     *
+     * Works exactly as pseudoFilthy->setDirty() with the only
+     * exception that pseudoFilthy::updateProjection() will not be
+     * called. That is used by KisRecalculateTransformMaskJob to avoid
+     * cyclic dependencies.
+     */
+    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect);
+
+    /**
      * Adds a spontaneous job to the updates queue.
      *
      * A spontaneous job may do some trivial tasks in the background,

@@ -2536,9 +2536,8 @@ vKisNodeSP KisDocument::activeNodes() const
 {
     vKisNodeSP nodes;
     foreach(KisView *v, KisPart::instance()->views()) {
-        KisViewManager *view = qobject_cast<KisViewManager*>(v);
-        if (view) {
-            KisNodeSP activeNode = view->activeNode();
+        if (v->document() == this && v->viewManager()) {
+            KisNodeSP activeNode = v->viewManager()->activeNode();
             if (activeNode && !nodes.contains(activeNode)) {
                 if (activeNode->inherits("KisMask")) {
                     activeNode = activeNode->parent();

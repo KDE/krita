@@ -78,6 +78,10 @@ public slots:
 
     void cut();
     void copy();
+
+    void cutSharp();
+    void copySharp();
+
     void copyMerged();
     void paste();
     void pasteNew();

@@ -384,13 +384,13 @@ void KisSelectionManager::selectionChanged()
 void KisSelectionManager::cut()
 {
     KisCutCopyActionFactory factory;
-    factory.run(true, m_view);
+    factory.run(true, false, m_view);
 }
 
 void KisSelectionManager::copy()
 {
     KisCutCopyActionFactory factory;
-    factory.run(false, m_view);
+    factory.run(false, false, m_view);
 }
 
 void KisSelectionManager::copyMerged()

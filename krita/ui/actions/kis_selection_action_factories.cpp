@@ -65,7 +65,7 @@
 
 namespace ActionHelper {
 
-void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device) {
+    void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device, bool makeSharpClip = false) {
     KisImageWSP image = view->image();
     if (!image) return;
 
@@ -93,11 +93,27 @@ void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device) {
         KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, rc.width());
         KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
 
+        const KoColorSpace *selCs = selection->projection()->colorSpace();
+
         for (qint32 y = 0; y < rc.height(); y++) {
 
             for (qint32 x = 0; x < rc.width(); x++) {
 
-                cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
+                /**
+                 * Sharp method is an exact reverse of COMPOSITE_OVER
+                 * so if you cover the cut/copied piece over its source
+                 * you get an exactly the same image without any seams
+                 */
+                if (makeSharpClip) {
+                    qreal dstAlpha = cs->opacityF(layerIt->rawData());
+                    qreal sel = selCs->opacityF(selectionIt->oldRawData());
+                    qreal newAlpha = sel * dstAlpha / (1.0 - dstAlpha + sel * dstAlpha);
+                    float mask = newAlpha / dstAlpha;
+
+                    cs->applyAlphaNormedFloatMask(layerIt->rawData(), &mask, 1);
+                } else {
+                    cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
+                }
 
                 layerIt->nextPixel();
                 selectionIt->nextPixel();
@@ -234,7 +250,7 @@ void KisImageResizeToSelectionActionFactory::run(KisViewManager *view)
     view->image()->cropImage(selection->selectedExactRect());
 }
 
-void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
+void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManager *view)
 {
     KisImageSP image = view->image();
     if (!image) return;
@@ -282,7 +298,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
                 return;
             }
 
-            ActionHelper::copyFromDevice(view, dev);
+            ActionHelper::copyFromDevice(view, dev, makeSharpClip);
         }
 
         if (willCut) {
@@ -300,17 +316,21 @@ void KisCutCopyActionFactory::run(bool willCut, KisViewManager *view)
                         QRect originalRect = cutSelection->selectedExactRect();
                         static const int preciseSelectionThreshold = 16;
 
-                        if (originalRect.width() > preciseSelectionThreshold ||
-                                originalRect.height() > preciseSelectionThreshold) {
+                        // Shrinking the cutting area was previously used
+                        // for getting seamless cut-paste. Now we use makeSharpClip
+                        // instead.
+                        //
+                        // if (originalRect.width() > preciseSelectionThreshold ||
+                        //     originalRect.height() > preciseSelectionThreshold) {
 
-                            cutSelection = new KisSelection(*m_sel);
-                            delete cutSelection->flatten();
+                        //     cutSelection = new KisSelection(*m_sel);
+                        //     delete cutSelection->flatten();
 
-                            KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
+                        //     KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
 
-                            QRect processingRect = filter->changeRect(originalRect);
-                            filter->process(cutSelection->pixelSelection(), processingRect);
-                        }
+                        //     QRect processingRect = filter->changeRect(originalRect);
+                        //     filter->process(cutSelection->pixelSelection(), processingRect);
+                        // }
 
                         KisTransaction transaction(m_node->paintDevice());
                         m_node->paintDevice()->clearSelection(cutSelection);

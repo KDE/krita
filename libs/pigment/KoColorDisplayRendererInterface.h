@@ -83,7 +83,7 @@ signals:
     void displayConfigurationChanged();
 
 private:
-    Q_DISABLE_COPY(KoColorDisplayRendererInterface);
+    Q_DISABLE_COPY(KoColorDisplayRendererInterface)
 };
 
 /**

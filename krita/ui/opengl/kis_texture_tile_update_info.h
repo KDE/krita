@@ -246,7 +246,7 @@ public:
     }
 
 private:
-    Q_DISABLE_COPY(KisTextureTileUpdateInfo);
+    Q_DISABLE_COPY(KisTextureTileUpdateInfo)
 
 private:
     qint32 m_tileCol;

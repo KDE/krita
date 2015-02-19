@@ -47,8 +47,8 @@ protected:
     const QScopedPointer<KoSectionEndPrivate> d_ptr;
 
 private:
-    Q_DISABLE_COPY(KoSectionEnd);
-    Q_DECLARE_PRIVATE(KoSectionEnd);
+    Q_DISABLE_COPY(KoSectionEnd)
+    Q_DECLARE_PRIVATE(KoSectionEnd)
 };
 
 #endif // KOSECTIONEND_H

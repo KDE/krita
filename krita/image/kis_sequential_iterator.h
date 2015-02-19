@@ -180,7 +180,7 @@ public:
     }
 
 private:
-    Q_DISABLE_COPY(KisSequentialIteratorBase);
+    Q_DISABLE_COPY(KisSequentialIteratorBase)
     IteratorPolicy m_policy;
     const int m_pixelSize;
     int m_rowsLeft;

@@ -465,7 +465,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     if (!image) return;
 
     KisPaintDeviceSP srcDevice =
-        source->paintDevice() ? source->paintDevice() : source->projection();
+        source->paintDevice() ? source->projection() : source->original();
 
     if (!srcDevice) return;
 

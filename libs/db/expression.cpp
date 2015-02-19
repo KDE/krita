@@ -88,9 +88,6 @@ bool BaseExpr::validate(ParseInfo& /*parseInfo*/)
     return true;
 }
 
-extern const char* tname(int offset);
-#define safe_tname(token) ((token>=255 && token<=__LAST_TOKEN) ? tname(token-255) : "")
-
 QString BaseExpr::tokenToDebugString(int token)
 {
     if (token < 254) {
@@ -99,7 +96,7 @@ QString BaseExpr::tokenToDebugString(int token)
         else
             return QString::number(token);
     }
-    return QString(safe_tname(token));
+    return QLatin1String(tokenName(token));
 }
 
 QString BaseExpr::tokenToString()

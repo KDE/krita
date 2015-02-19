@@ -105,9 +105,6 @@ extern "C" int main(int argc, char **argv)
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
-     // initialize qt plugin path (see KComponentDataPrivate::lazyInit)
-    KGlobal::config();
-
 #if defined Q_WS_X11
 #if QT_VERSION >= 0x040800
     // we need to call XInitThreads() (which this does) because of gmic (and possibly others)

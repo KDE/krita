@@ -459,6 +459,13 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="6" colspan="2">
+        <widget class="QCheckBox" name="hideColorSelector">
+         <property name="text">
+          <string>Hide color selector</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">

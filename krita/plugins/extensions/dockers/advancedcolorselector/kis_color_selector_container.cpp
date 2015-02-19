@@ -46,6 +46,7 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_minimalShadeSelector(new KisMinimalShadeSelector(this)),
     m_shadeSelector(m_myPaintShadeSelector),
     m_shadeSelectorHideable(false),
+    m_hideColorSelector(false),
     m_allowHorizontalLayout(true),
     m_colorSelAction(0),
     m_mypaintAction(0),
@@ -128,6 +129,7 @@ void KisColorSelectorContainer::updateSettings()
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     m_shadeSelectorHideable = cfg.readEntry("shadeSelectorHideable", false);
     m_allowHorizontalLayout = cfg.readEntry("allowHorizontalLayout", true);
+    m_hideColorSelector = cfg.readEntry("hideColorSelector", true);
 
     QString type = cfg.readEntry("shadeSelectorType", "MyPaint");
 
@@ -139,6 +141,10 @@ void KisColorSelectorContainer::updateSettings()
     else
         newShadeSelector = 0;
 
+    if (m_hideColorSelector)
+        m_colorSelector->hide();
+    else
+        m_colorSelector->show();
 
 
     if(m_shadeSelector!=newShadeSelector && m_shadeSelector!=0) {

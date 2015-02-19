@@ -56,6 +56,7 @@ private:
     QWidget* m_shadeSelector;
 
     bool m_shadeSelectorHideable;
+    bool m_hideColorSelector;
     bool m_allowHorizontalLayout;
 
     QBoxLayout* m_widgetLayout;

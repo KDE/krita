@@ -187,6 +187,8 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("minimalShadeSelectorLineHeight", ui->minimalShadeSelectorLineHeight->value());
 
     //color selector
+    cfg.writeEntry("hideColorSelector", ui->hideColorSelector->isChecked());
+
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
     
@@ -327,6 +329,8 @@ void KisColorSelectorSettings::loadPreferences()
     ui->minimalShadeSelectorLineSettings->fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;"));
     ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 10));
 
+    ui->hideColorSelector->setChecked(cfg.readEntry("hideColorSelector", true));
+
     QString hsxSettingType=cfg.readEntry("hsxSettingType", "HSV");
     ui->colorSelectorHSVtype->setChecked(hsxSettingType=="HSV");
     ui->colorSelectorHSLtype->setChecked(hsxSettingType=="HSL");
@@ -427,6 +431,8 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->colorSelectorHSVtype->setChecked(false);
     ui->colorSelectorHSVtype->setChecked(false);
     ui->colorSelectorHSVtype->setChecked(false);
+
+    ui->hideColorSelector->setChecked(false);
     
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration("3|0|5|0")); // triangle selector

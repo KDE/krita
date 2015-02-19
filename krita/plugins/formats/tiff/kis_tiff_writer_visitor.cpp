@@ -37,9 +37,14 @@
 #include <kis_iterator_ng.h>
 #include <kis_shape_layer.h>
 
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
+
 namespace
 {
-    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_type)
+    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_format)
     {
         qDebug() << cs->id();
         if (cs->id() == "GRAYA" || cs->id() == "GRAYAU16") {
@@ -52,7 +57,7 @@ namespace
         }
         if (KoID(cs->id()) == KoID("RGBAF16") || KoID(cs->id()) == KoID("RGBAF32")) {
             color_type = PHOTOMETRIC_RGB;
-            sample_type = SAMPLEFORMAT_IEEEFP;
+            sample_format = SAMPLEFORMAT_IEEEFP;
             return true;
         }
         if (cs->id() == "CMYK" || cs->id() == "CMYKAU16") {
@@ -86,12 +91,13 @@ bool KisTIFFWriterVisitor::saveAlpha()
     return m_options->alpha;
 }
 
-bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses)
+bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint16 sample_format, uint8 nbcolorssamples, quint8* poses)
 {
     if (depth == 32) {
-        quint32 *dst = reinterpret_cast<quint32 *>(buff);
+        Q_ASSERT(sample_format == SAMPLEFORMAT_IEEEFP);
+        float *dst = reinterpret_cast<float *>(buff);
         do {
-            const quint32 *d = reinterpret_cast<const quint32 *>(it->oldRawData());
+            const float *d = reinterpret_cast<const float *>(it->oldRawData());
             int i;
             for (i = 0; i < nbcolorssamples; i++) {
                 *(dst++) = d[poses[i]];
@@ -99,19 +105,38 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
             if (saveAlpha()) *(dst++) = d[poses[i]];
         } while (it->nextPixel());
         return true;
-    } else if (depth == 16) {
-        quint16 *dst = reinterpret_cast<quint16 *>(buff);
-        do {
-            const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
-            int i;
-            for (i = 0; i < nbcolorssamples; i++) {
-                *(dst++) = d[poses[i]];
-            }
-            if (saveAlpha()) *(dst++) = d[poses[i]];
-            
-        } while (it->nextPixel());
-        return true;
-    } else if (depth == 8) {
+    }
+    else if (depth == 16 ) {
+        if (sample_format == SAMPLEFORMAT_IEEEFP) {
+#ifdef HAVE_OPENEXR
+            half *dst = reinterpret_cast<half *>(buff);
+            do {
+                const half *d = reinterpret_cast<const half *>(it->oldRawData());
+                int i;
+                for (i = 0; i < nbcolorssamples; i++) {
+                    *(dst++) = d[poses[i]];
+                }
+                if (saveAlpha()) *(dst++) = d[poses[i]];
+
+            } while (it->nextPixel());
+            return true;
+#endif
+        }
+        else {
+            quint16 *dst = reinterpret_cast<quint16 *>(buff);
+            do {
+                const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                int i;
+                for (i = 0; i < nbcolorssamples; i++) {
+                    *(dst++) = d[poses[i]];
+                }
+                if (saveAlpha()) *(dst++) = d[poses[i]];
+
+            } while (it->nextPixel());
+            return true;
+        }
+    }
+    else if (depth == 8) {
         quint8 *dst = reinterpret_cast<quint8 *>(buff);
         do {
             const quint8 *d = it->oldRawData();
@@ -212,22 +237,22 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
         switch (color_type) {
         case PHOTOMETRIC_MINISBLACK: {
                 quint8 poses[] = { 0, 1 };
-                r = copyDataToStrips(it, buff, depth, 1, poses);
+                r = copyDataToStrips(it, buff, depth, sample_format, 1, poses);
             }
             break;
         case PHOTOMETRIC_RGB: {
                 quint8 poses[] = { 2, 1, 0, 3};
-                r = copyDataToStrips(it, buff, depth, 3, poses);
+                r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
             }
             break;
         case PHOTOMETRIC_SEPARATED: {
                 quint8 poses[] = { 0, 1, 2, 3, 4 };
-                r = copyDataToStrips(it, buff, depth, 4, poses);
+                r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
             }
             break;
         case PHOTOMETRIC_CIELAB: {
                 quint8 poses[] = { 0, 1, 2, 3 };
-                r = copyDataToStrips(it, buff, depth, 3, poses);
+                r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
             }
             break;
             return false;

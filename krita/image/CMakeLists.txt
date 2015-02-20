@@ -278,8 +278,8 @@ set(einspline_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koodf pigmentcms kundo2 kowidgetutils)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})

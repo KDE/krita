@@ -49,7 +49,7 @@ KisColorSliderInput::KisColorSliderInput(QWidget* parent, KoColor* color, const 
     m_type(type),
     m_color(color),
     m_displayRenderer(displayRenderer),
-    m_canvas(canvas),
+    m_canvas(canvas)
 {
     //init
 }

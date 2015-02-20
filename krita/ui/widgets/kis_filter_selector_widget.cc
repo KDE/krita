@@ -125,6 +125,11 @@ void KisFilterSelectorWidget::setPaintDevice(bool showAll, KisPaintDeviceSP _pai
 
     KisConfig cfg;
     QModelIndex idx = d->filtersModel->indexForFilter(cfg.readEntry<QString>("FilterSelector/LastUsedFilter", "levels"));
+
+    if (!idx.isValid()) {
+        idx = d->filtersModel->indexForFilter("levels");
+    }
+
     if (isFilterGalleryVisible()) {
         d->uiFilterSelector.filtersSelector->activateFilter(idx);
     }
@@ -202,6 +207,8 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
 
 void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
 {
+    if (!idx.isValid()) return;
+
     Q_ASSERT(d->filtersModel);
     KisFilter* filter = const_cast<KisFilter*>(d->filtersModel->indexToFilter(idx));
     if (filter) {

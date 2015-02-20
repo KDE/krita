@@ -185,7 +185,6 @@ bool KisPaintOpPreset::load()
     }
 
     bool res = loadFromDevice(dev);
-    qDebug() << "loadFromDevice returned" << res;
     setValid(res);
     setPresetDirty(false);
     return res;

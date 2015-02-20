@@ -69,7 +69,7 @@ int main( int argc, char** argv )
                          version.toLatin1(),
                          ki18n("Krita Gemini: Painting at Home and on the Go for Artists"),
                          KAboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Krita team and KO GmbH.\n").subs(CALLIGRA_YEAR),
+                         ki18n("(c) 1999-%1 The Krita team.\n").subs(CALLIGRA_YEAR),
                          KLocalizedString(),
                          "http://www.kritastudio.com",
                          "submit@bugs.kde.org");

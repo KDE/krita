@@ -67,14 +67,14 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
         if (nbchannels == 0) nbchannels = 3;
         extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
         if (sampletype == SAMPLEFORMAT_IEEEFP) {
-            if (color_nb_bits == 16) {
-                destDepth = 16;
-                return QPair<QString, QString>(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
-            }
-            else if (color_nb_bits == 32) {
-                destDepth = 32;
-                return QPair<QString, QString>(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
-            }
+//            if (color_nb_bits == 16) {
+//                destDepth = 16;
+//                return QPair<QString, QString>(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
+//            }
+//            else if (color_nb_bits == 32) {
+//                destDepth = 32;
+//                return QPair<QString, QString>(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
+//            }
             return QPair<QString, QString>();
         }
         else {

@@ -55,11 +55,11 @@ namespace
             color_type = PHOTOMETRIC_RGB;
             return true;
         }
-        if (KoID(cs->id()) == KoID("RGBAF16") || KoID(cs->id()) == KoID("RGBAF32")) {
-            color_type = PHOTOMETRIC_RGB;
-            sample_format = SAMPLEFORMAT_IEEEFP;
-            return true;
-        }
+//        if (KoID(cs->id()) == KoID("RGBAF16") || KoID(cs->id()) == KoID("RGBAF32")) {
+//            color_type = PHOTOMETRIC_RGB;
+//            sample_format = SAMPLEFORMAT_IEEEFP;
+//            return true;
+//        }
         if (cs->id() == "CMYK" || cs->id() == "CMYKAU16") {
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);

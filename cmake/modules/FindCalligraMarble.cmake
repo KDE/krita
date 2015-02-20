@@ -92,7 +92,7 @@ endif(MARBLE_GLOBAL_HEADER)
 include( FindPackageHandleStandardArgs )
 
 if(MARBLE_VERSION)
-    find_package_handle_standard_args( marble
+    find_package_handle_standard_args( Marble
         REQUIRED_VARS
             MARBLE_INCLUDE_DIR
             MARBLE_LIBRARIES

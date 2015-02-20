@@ -69,7 +69,7 @@ private:
     KPluginFactory *factory() const;
     QString pluginName() const;
 
-    Q_DISABLE_COPY(KexiPluginLoader);
+    Q_DISABLE_COPY(KexiPluginLoader)
     class Private;
     Private * const d;
 };

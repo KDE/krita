@@ -88,7 +88,7 @@ private:
     }
 
 private:
-    Q_DISABLE_COPY(KisSignalsBlocker);
+    Q_DISABLE_COPY(KisSignalsBlocker)
 
 private:
     QVector<QObject*> m_objects;

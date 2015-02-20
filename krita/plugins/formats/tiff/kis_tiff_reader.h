@@ -154,7 +154,7 @@ protected:
     }
 private:
     KisPaintDeviceSP m_device;
-    quint8 m_alphapos;
+    qint8 m_alphapos;
     quint8 m_sourceDepth;
     quint8 m_nbcolorssamples;
     quint8 m_nbextrasamples;

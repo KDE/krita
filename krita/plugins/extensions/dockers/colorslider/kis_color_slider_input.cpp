@@ -106,6 +106,9 @@ KisHSXColorSliderInput::KisHSXColorSliderInput(QWidget* parent, const int type, 
     G(0),
     B(0)
 {
+    m_hueupdating = false;
+    m_satupdating = false;
+    m_toneupdating = false;
     m_sliderisupdating = false;
     init();
 }

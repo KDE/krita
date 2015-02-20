@@ -77,8 +77,8 @@ public:
 
     void recreateLayout(const QList<QPointer<QWidget> > &optionWidgetList)
     {
-        foreach(QWidget* widget, currentWidgetList) {
-            if (widget && hiderWidget) {
+        foreach(QPointer<QWidget> widget, currentWidgetList) {
+            if (!widget.isNull() && widget && hiderWidget) {
                 widget->setParent(hiderWidget);
             }
         }
@@ -95,8 +95,8 @@ public:
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
             t->setDocumentMode(true);
             currentAuxWidgets.insert(t);
-            foreach(QWidget *widget, currentWidgetList) {
-                if (widget->objectName().isEmpty()) {
+            foreach(QPointer<QWidget> widget, currentWidgetList) {
+                if (widget.isNull() || widget->objectName().isEmpty()) {
                     Q_ASSERT(!(widget->objectName().isEmpty()));
                     continue; // skip this docker in release build when assert don't crash
                 }
@@ -111,8 +111,8 @@ public:
             case Qt::BottomDockWidgetArea:
                 housekeeperLayout->setHorizontalSpacing(2);
                 housekeeperLayout->setVerticalSpacing(0);
-                foreach(QWidget* widget, currentWidgetList) {
-                    if (widget->objectName().isEmpty()) {
+                foreach(QPointer<QWidget> widget, currentWidgetList) {
+                    if (widget.isNull() || widget->objectName().isEmpty()) {
                         continue; // skip this docker in release build when assert don't crash
                     }
                     if (!widget->windowTitle().isEmpty()) {
@@ -134,8 +134,8 @@ public:
                 housekeeperLayout->setHorizontalSpacing(0);
                 housekeeperLayout->setVerticalSpacing(2);
                 int specialCount = 0;
-                foreach(QWidget *widget, currentWidgetList) {
-                    if (widget->objectName().isEmpty()) {
+                foreach(QPointer<QWidget> widget, currentWidgetList) {
+                    if (widget.isNull() || widget->objectName().isEmpty()) {
                         Q_ASSERT(!(widget->objectName().isEmpty()));
                         continue; // skip this docker in release build when assert don't crash
                     }

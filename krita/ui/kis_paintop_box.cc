@@ -410,7 +410,9 @@ void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPr
 {
     if (!m_dirtyPresetsEnabled) {
         KisSignalsBlocker blocker(m_optionWidget);
-        preset->load();
+        if (!preset->load()) {
+            qWarning() << "failed to load the preset.";
+        }
     }
 
     setCurrentPaintop(paintop, preset);

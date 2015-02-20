@@ -49,7 +49,7 @@ KisColorSliderInput::KisColorSliderInput(QWidget* parent, KoColor* color, const 
     m_type(type),
     m_color(color),
     m_displayRenderer(displayRenderer),
-    m_canvas(canvas)
+    m_canvas(canvas),
 {
     //init
 }
@@ -106,6 +106,7 @@ KisHSXColorSliderInput::KisHSXColorSliderInput(QWidget* parent, const int type, 
     G(0),
     B(0)
 {
+    m_sliderisupdating = false;
     init();
 }
 
@@ -507,7 +508,7 @@ void KisHSXColorSliderInput::update()
         break;
     case 11:
         this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B);
-        if (m_sliderisupdating==true)
+        if (m_sliderisupdating == true)
         {
             if((sat*100.0)<m_sat+2 && (sat*100.0)>m_sat-2) {
                 sat = (sat_backup*0.01);

@@ -90,6 +90,7 @@ protected:
     OROSection *m_sectionId;
     QPointF m_offset;
     OROPicture * m_oroPicture;
+    MapRenderer m_mapRenderer;
 
 private:
     virtual void createProperties();

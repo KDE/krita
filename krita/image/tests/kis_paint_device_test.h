@@ -50,6 +50,7 @@ private slots:
     void testOpacity();
     void testExactBoundsWeirdNullAlphaCase();
     void benchmarkExactBoundsNullDefaultPixel();
+    void testNonDefaultPixelArea();
 
     void testReadBytesWrapAround();
     void testWrappedRandomAccessor();

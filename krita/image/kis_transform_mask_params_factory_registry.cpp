@@ -20,8 +20,14 @@
 
 #include <kglobal.h>
 
+#include "kis_transform_mask_params_interface.h"
+
 
 KisTransformMaskParamsFactoryRegistry::KisTransformMaskParamsFactoryRegistry()
+{
+}
+
+KisTransformMaskParamsFactoryRegistry::~KisTransformMaskParamsFactoryRegistry()
 {
 }
 

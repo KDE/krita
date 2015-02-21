@@ -51,6 +51,7 @@ private:
     gmic_list<float> m_images;
     gmic_image<float> m_gmicImage;
     QString m_blacklistFilePath;
+    QString m_filterDefinitionsXmlFilePath;
     KisGmicBlacklister * m_blacklister;
 
 private slots:

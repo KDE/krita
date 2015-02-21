@@ -46,12 +46,15 @@
 */
 #include <locale>
 #ifndef gmic_version
-#define gmic_version 1603
+#define gmic_version 1610
 
 // Define environment variables.
 #ifndef gmic_is_beta
 #define gmic_is_beta 0
 #endif // #ifndef gmic_is_beta
+#ifndef gmic_pixel_type
+#define gmic_pixel_type float
+#endif
 #ifndef cimg_verbosity
 #define cimg_verbosity 1
 #endif // #ifndef cimg_verbosity
@@ -144,6 +147,19 @@ inline char *gmic_strreplace(char *const str) {
   return str;
 }
 
+// Compute the basename of a filename.
+//------------------------------------
+inline const char* gmic_basename(const char *const str)  {
+  if (!str) return str;
+  const unsigned int l = (unsigned int)std::strlen(str);
+  if (*str=='[' && (str[l-1]==']' || str[l-1]=='.')) return str;
+  const char *p = 0, *np = str;
+  while (np>=str && (p=np)) np = std::strchr(np,'/') + 1;
+  np = p;
+  while (np>=str && (p=np)) np = std::strchr(np,'\\') + 1;
+  return p;
+}
+
 // Define the G'MIC exception class.
 //----------------------------------
 struct gmic_exception {
@@ -196,7 +212,7 @@ struct gmic {
   // Methods to call interpreter on an already constructed gmic instance.
   gmic& run(const char *const commands_line,
             float *const p_progress=0, bool *const p_is_cancel=0) {
-    gmic_list<float> images;
+    gmic_list<gmic_pixel_type> images;
     gmic_list<char> images_names;
     return run(commands_line,images,images_names,
                p_progress,p_is_cancel);
@@ -251,7 +267,7 @@ struct gmic {
   gmic_image<char> substitute_item(const char *const source,
                                    gmic_list<T>& images, gmic_list<char>& images_names,
                                    gmic_list<T>& parent_images, gmic_list<char>& parent_images_names,
-				   unsigned int variables_sizes[256]);
+				   const unsigned int *const variables_sizes);
   template<typename T>
   gmic& print(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
 	      const char *format, ...);
@@ -308,7 +324,7 @@ struct gmic {
   gmic& _run(const gmic_list<char>& commands_line, unsigned int& position,
              gmic_list<T>& images, gmic_list<char>&images_names,
              gmic_list<T>& parent_images, gmic_list<char>& parent_images_names,
-             unsigned int variables_sizes[256],
+             const unsigned int *const variables_sizes,
              bool *const is_noargs);
 
   // Internal environment variables of the interpreter.

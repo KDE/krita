@@ -95,7 +95,13 @@ void KisGmicTests::initTestCase()
 
     m_images.assign(1);
 
-
+    m_filterDefinitionsXmlFilePath = QString(FILES_DATA_DIR)+"/"+"gmic_def_" + QString::number(int(gmic_version)) + "_krita.xml";
+    if (!QFileInfo(m_filterDefinitionsXmlFilePath).exists())
+    {
+        qWarning() << "Reference xml file for the krita parser does not exist, creating one!";
+        qWarning() << "Creating " << m_filterDefinitionsXmlFilePath;
+        generateXmlDump();
+    }
 }
 
 void KisGmicTests::cleanupTestCase()
@@ -683,8 +689,7 @@ void KisGmicTests::generateXmlDump()
 {
     QDomDocument doc = KisGmicBlacklister::dumpFiltersToXML(m_root);
 
-    QString filePath = QString(FILES_DATA_DIR)+"/"+"gmic_def_1603_krita.xml";
-    QFile outputFile(filePath);
+    QFile outputFile(m_filterDefinitionsXmlFilePath);
     if (outputFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         QTextStream ts(&outputFile);
@@ -698,10 +703,8 @@ void KisGmicTests::testCompareToKrita()
     QVector<FilterDescription> filterDescriptions;
 
     // nacitaj xml a vyzer z neho trojice filter, categoria, prikaz
-    QString filePath = QString(FILES_DATA_DIR)+"/"+"gmic_def_1603_krita.xml";
-
     QDomDocument doc("mydocument");
-    QFile file(filePath);
+    QFile file(m_filterDefinitionsXmlFilePath);
     QVERIFY(file.open(QIODevice::ReadOnly));
     QVERIFY(doc.setContent(&file));
 

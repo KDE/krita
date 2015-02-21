@@ -49,6 +49,9 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
+    m_latitudeProperty->setValue(element.toElement().attribute("report:latitude").toDouble());
+    m_longitudeProperty->setValue(element.toElement().attribute("report:longitude").toDouble());
+    m_zoomProperty->setValue(element.toElement().attribute("report:zoom").toInt());
 
     parseReportRect(element.toElement(), &m_pos, &m_size);
     for (int i = 0; i < nl.count(); i++) {
@@ -69,8 +72,22 @@ void KoReportItemMaps::createProperties()
 
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
+    m_latitudeProperty = new KoProperty::Property("latitude", 0.0, i18n("Latitude"), i18n("Latitude") );
+    m_latitudeProperty->setOption("min", -90);
+    m_latitudeProperty->setOption("max", 90);
+    m_latitudeProperty->setOption("unit", "°");
+
+    m_longitudeProperty = new KoProperty::Property("longitude", 0.0, i18n("longitude"), i18n("longitude") );
+    m_longitudeProperty->setOption("min", -180);
+    m_longitudeProperty->setOption("max", 180);
+    m_longitudeProperty->setOption("unit", "°");
+
+    m_zoomProperty     = new KoProperty::Property("zoom", 1000, i18n("Zoom"), i18n("Zoom") );
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
+    m_set->addProperty(m_latitudeProperty);
+    m_set->addProperty(m_longitudeProperty);
+    m_set->addProperty(m_zoomProperty);
 }
 
 
@@ -120,13 +137,18 @@ int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const
     return 0; //Item doesn't stretch the section height
 }
 
-
 void KoReportItemMaps::deserializeData(const QVariant& serialized)
 {
     QStringList dataList = serialized.toString().split(QLatin1Char(';'));
-    m_latitude = dataList[0].toDouble();
-    m_longtitude = dataList[1].toDouble();
-    m_zoom = dataList[2].toInt();
+    if (dataList.size() == 3) {
+        m_latitude = dataList[0].toDouble();
+        m_longtitude = dataList[1].toDouble();
+        m_zoom = dataList[2].toInt();
+    } else {
+        m_latitude = m_latitudeProperty->value().toReal();
+        m_longtitude = m_longitudeProperty->value().toReal();
+        m_zoom = m_zoomProperty->value().toInt();
+    }
 }
 
 void KoReportItemMaps::renderFinished()
@@ -139,8 +161,6 @@ OROPicture* KoReportItemMaps::oroImage()
 {
     return m_oroPicture;
 }
-
-
 
 qreal KoReportItemMaps::longtitude() const
 {

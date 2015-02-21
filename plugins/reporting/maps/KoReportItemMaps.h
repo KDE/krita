@@ -71,6 +71,10 @@ protected:
     KoProperty::Property * m_controlSource;
     KoProperty::Property* m_resizeMode;
     KoProperty::Property* m_staticImage;
+    KoProperty::Property* m_latitudeProperty;
+    KoProperty::Property* m_longitudeProperty;
+    KoProperty::Property* m_zoomProperty;
+//     KoProperty::Property* m_mapThemeIdProperty;
 
     void setMode(const QString&);
     void setInlineImageData(QByteArray, const QString& = QString());
@@ -79,10 +83,6 @@ protected:
     bool isInline() const;
     QByteArray inlineImageData() const;
 
-private:
-    virtual void createProperties();
-    void deserializeData(const QVariant& serialized);
-
     qreal m_longtitude;
     qreal m_latitude;
     int m_zoom;
@@ -90,7 +90,10 @@ private:
     OROSection *m_sectionId;
     QPointF m_offset;
     OROPicture * m_oroPicture;
-    MapRenderer m_mapRenderer;
+
+private:
+    virtual void createProperties();
+    void deserializeData(const QVariant& serialized);
 
     friend class Scripting::Maps;
 };

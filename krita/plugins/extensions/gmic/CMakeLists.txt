@@ -53,6 +53,14 @@ if ( ZLIB_FOUND )
     include_directories( ${ZLIB_INCLUDE_DIRS} )
 endif( ZLIB_FOUND )
 
+
+# CURL
+find_package(CURL)
+if (CURL_FOUND)
+    add_definitions(-Dcimg_use_curl)
+    include_directories( ${CURL_INCLUDE_DIRS} )
+endif(CURL_FOUND)
+
 # X11
 if(X11_FOUND)
     add_definitions(-Dcimg_display=1)
@@ -80,6 +88,10 @@ endif(FFTW3_FOUND)
 if (X11_FOUND)
     target_link_libraries(gmic ${X11_LIBRARIES})
 endif(X11_FOUND)
+
+if(CURL_FOUND)
+    target_link_libraries(gmic ${CURL_LIBRARIES})
+endif(CURL_FOUND)
 
 target_link_libraries(gmic ${ZLIB_LIBRARIES})
 target_link_libraries(gmic ${PNG_LIBRARIES})

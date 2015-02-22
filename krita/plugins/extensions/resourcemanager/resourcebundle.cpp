@@ -183,6 +183,8 @@ bool ResourceBundle::load()
         }
         
         if (resourceStore->open("preview.png")) {
+            // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
+            // fails with "libpng error: IDAT: CRC error"
             QByteArray data = resourceStore->device()->readAll();
             QBuffer buffer(&data);
             m_thumbnail.load(&buffer, "PNG");
@@ -693,6 +695,8 @@ bool ResourceBundle::install()
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
+                // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
+                // fails with "libpng error: IDAT: CRC error"
                 QByteArray data = resourceStore->device()->readAll();
                 QBuffer buffer(&data);
                 if (!res->loadFromDevice(&buffer)) {

@@ -356,9 +356,6 @@
 //%token YEAR
 //%token YEARS_BETWEEN
 
-
-%token __LAST_TOKEN /* sentinel */
-
 %token '-'
 %token '+'
 %token '*'

@@ -41,6 +41,7 @@ public:
     bool wrapAroundMode() const;
 
 protected:
+    friend class KisPaintDeviceTest;
     static const QRect infiniteRect;
 
 private:

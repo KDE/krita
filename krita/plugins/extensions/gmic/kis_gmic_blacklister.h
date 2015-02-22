@@ -21,9 +21,9 @@
 #include <QSet>
 #include <QQueue>
 
+class QDomDocument;
 class Command;
 class Component;
-
 
 class ComponentIterator
 {
@@ -35,7 +35,6 @@ public:
 
 private:
     QQueue<const Component *> m_queue;
-
 };
 
 class KisGmicBlacklister
@@ -51,6 +50,8 @@ public:
     static QString toPlainText(const QString& htmlText);
     static Component* findFilter(const Component* rootNode, const QString& filterCategory, const QString& filterName);
     static QList<Command* > findFilterByParamName(const Component* rootNode, const QString& paramName, const QString& paramType = QString());
+
+    static QDomDocument dumpFiltersToXML(const Component* rootNode);
 
 private:
     QString m_fileName;

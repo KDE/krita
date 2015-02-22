@@ -66,7 +66,7 @@ void KisImageLayerMoveCommand::redo()
         m_image->moveNode(m_layer, m_newParent, m_newAbove);
     }
 
-    m_image->refreshGraph(m_prevParent);
+    m_image->refreshGraphAsync(m_prevParent);
     if (m_newParent != m_prevParent)
         m_layer->setDirty(m_image->bounds());
 }
@@ -75,7 +75,7 @@ void KisImageLayerMoveCommand::undo()
 {
     m_image->moveNode(m_layer, m_prevParent, m_prevAbove);
 
-    m_image->refreshGraph(m_newParent);
+    m_image->refreshGraphAsync(m_newParent);
     if (m_newParent != m_prevParent)
         m_layer->setDirty(m_image->bounds());
 }

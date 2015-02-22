@@ -58,12 +58,15 @@ class KOTEXT_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
 
 public:
     explicit KoDocumentRdfBase(QObject *parent = 0);
+    virtual ~KoDocumentRdfBase();
 
     /**
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
+#ifdef SHOULD_BUILD_RDF
     virtual QSharedPointer<Soprano::Model> model() const;
+#endif
     virtual void linkToResourceManager(KoDocumentResourceManager *rm);
 
     virtual void updateInlineRdfStatements(const QTextDocument *qdoc);

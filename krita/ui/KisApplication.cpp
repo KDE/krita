@@ -269,8 +269,8 @@ bool KisApplication::start()
 
     // only show the mainWindow when no command-line mode option is passed
     const bool showmainWindow = (   !(exportAsPdf || exportAs) );
-
-    if (d->splashScreen && showmainWindow) {
+    bool runningInGnome = (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME");
+    if (d->splashScreen && showmainWindow && !runningInGnome) {
         d->splashScreen->show();
         d->splashScreen->repaint();
         processEvents();

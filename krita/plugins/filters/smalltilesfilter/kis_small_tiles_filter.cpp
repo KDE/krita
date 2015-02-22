@@ -56,6 +56,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::category
 {
     setSupportsPainting(true);
     setSupportsThreading(false);
+    setSupportsAdjustmentLayers(false);
 }
 
 void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,

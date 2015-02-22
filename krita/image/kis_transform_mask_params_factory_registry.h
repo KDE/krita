@@ -38,6 +38,7 @@ class KRITAIMAGE_EXPORT KisTransformMaskParamsFactoryRegistry
 {
 private:
     KisTransformMaskParamsFactoryRegistry();
+    ~KisTransformMaskParamsFactoryRegistry();
 
 public:
     void addFactory(const QString &id, const KisTransformMaskParamsFactory &factory);

@@ -108,7 +108,7 @@ Lights & shadows
 -gimp_burn 0.5,30,1,0,0
 
 Make seamless
-Patterns
+Arrays & tiles
 -gimp_make_seamless 0,0,1,0
 
 Resynthetize texture

@@ -3,7 +3,6 @@ Type=ServiceType
 X-KDE-ServiceType=CalligraPageApp/Tool
 Comment=Tool for Calligra Page Applications
 Comment[ca]=Eina per les aplicacions de pàgina del Calligra
-Comment[da]=Værktøj til Calligra Page-programmer
 Comment[de]=Werkzeug für Calligra-Seitenanwendungen
 Comment[en_GB]=Tool for Calligra Page Applications
 Comment[es]=Herramienta para las aplicaciones de páginas de Calligra

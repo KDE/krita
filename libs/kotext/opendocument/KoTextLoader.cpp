@@ -83,7 +83,6 @@
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoSectionStyle.h"
-#include <KoSectionUtils.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -140,7 +139,7 @@ public:
     int loadSpanInitialPos;
 
     QVector<QString> nameSpacesList;
-    QList<KoSection *> openingSections;
+    QList<QVariant> openingSections;
 
     QMap<QString, KoList *> xmlIdToListMap;
     QVector<KoList *> m_previousList;
@@ -314,18 +313,25 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
     // If we are pasting text, we should handle sections correctly
     // we are saving which sections end in current block
     // and put their ends after the inserted text.
-    QList<KoSectionEnd *> oldSectionEndings;
+    QList<QVariant> oldSectionEndings;
     if (mode == PasteMode) {
         QTextBlockFormat fmt = cursor.blockFormat();
-        oldSectionEndings = KoSectionUtils::sectionEndings(fmt);
+        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+            oldSectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
+                .value< QList<QVariant> >();
+        }
         fmt.clearProperty(KoParagraphStyle::SectionEndings);
         cursor.setBlockFormat(fmt);
     }
 
     if (!d->openingSections.isEmpty()) {
-        QTextBlockFormat format = cursor.block().blockFormat();
-        d->openingSections << KoSectionUtils::sectionStartings(format); // if we had some already we need to append the new ones
-        KoSectionUtils::setSectionStartings(format, d->openingSections);
+        QTextBlock block = cursor.block();
+        QTextBlockFormat format = block.blockFormat();
+        QVariant v;
+        v = format.property(KoParagraphStyle::SectionStartings);
+        d->openingSections.append(v.value<QList<QVariant> >()); // if we had some already we need to append the new ones
+        v.setValue<QList<QVariant> >(d->openingSections);
+        format.setProperty(KoParagraphStyle::SectionStartings, v);
         cursor.setBlockFormat(format);
         d->openingSections.clear();
     }
@@ -431,8 +437,15 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
     // Here we put old endings after text insertion.
     if (mode == PasteMode) {
         QTextBlockFormat fmt = cursor.blockFormat();
-        oldSectionEndings = KoSectionUtils::sectionEndings(fmt);
-        KoSectionUtils::setSectionEndings(fmt, oldSectionEndings);
+        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+            oldSectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
+                .value< QList<QVariant> >() << oldSectionEndings;
+        }
+
+
+        if (!oldSectionEndings.empty()) {
+            fmt.setProperty(KoParagraphStyle::SectionEndings, oldSectionEndings);
+        }
         cursor.setBlockFormat(fmt);
     }
 
@@ -835,15 +848,24 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
         return;
     }
 
-    d->openingSections << section;
+    QVariant v;
+    v.setValue<void *>(section);
+    d->openingSections.append(v);
 
     loadBody(sectionElem, cursor);
 
     // Close the section on the last block of text we have loaded just now.
-    QTextBlockFormat format = cursor.block().blockFormat();
-    KoSectionUtils::setSectionEndings(format,
-        KoSectionUtils::sectionEndings(format) << new KoSectionEnd(section));
+    KoSectionEnd *sectionEnd = new KoSectionEnd(section);
+    v.setValue<void *>(sectionEnd);
 
+    QTextBlock block = cursor.block();
+    QTextBlockFormat format = block.blockFormat();
+    QVariant listv;
+    listv = format.property(KoParagraphStyle::SectionEndings);
+    QList<QVariant> sectionEndings = listv.value<QList<QVariant> >();
+    sectionEndings.append(v);
+    listv.setValue<QList<QVariant> >(sectionEndings);
+    format.setProperty(KoParagraphStyle::SectionEndings, listv);
     cursor.setBlockFormat(format);
 }
 

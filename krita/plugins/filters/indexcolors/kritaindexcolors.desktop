@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Index Colors Filter
 Name[ca]=Filtre de colors indexats
-Name[da]=Indeksfarvefilter
 Name[de]=Farbfilter-Index
 Name[en_GB]=Index Colours Filter
 Name[es]=Filtros de colores indexados
@@ -19,7 +18,6 @@ Name[uk]=Фільтр індексованих кольорів
 Name[x-test]=xxIndex Colors Filterxx
 Comment=Reduce the amount of colors in the picture to a pre-defined palette.
 Comment[ca]=Redueix la quantitat de colors en la imatge a una paleta predefinida.
-Comment[da]=Reducér mængden af farver i billedet til en prædefineret palette.
 Comment[de]=Reduziert die Anzahl der Farben im Bild auf eine vordefinierte Palette.
 Comment[en_GB]=Reduce the amount of colours in the picture to a pre-defined palette.
 Comment[es]=Reduce la cantidad de colores que hay en una imagen a una paleta predefinida.

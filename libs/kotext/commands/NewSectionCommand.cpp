@@ -24,7 +24,6 @@
 #include <KoParagraphStyle.h>
 #include <KoSectionManager.h>
 #include <KoTextEditor.h>
-#include <KoSectionUtils.h>
 
 #include <klocale.h>
 #include <kundo2command.h>
@@ -64,14 +63,22 @@ void NewSectionCommand::redo()
         KoSectionEnd *end = new KoSectionEnd(start);
         QTextBlockFormat fmt = editor->blockFormat();
 
-        QList<KoSection *> sectionStartings = KoSectionUtils::sectionStartings(fmt);
-        QList<KoSectionEnd *> sectionEndings = KoSectionUtils::sectionEndings(fmt);
+        QList< QVariant > sectionStartings;
+        if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
+            sectionStartings = fmt.property(KoParagraphStyle::SectionStartings)
+                .value< QList<QVariant> >();
+        }
+        QList< QVariant > sectionEndings;
+        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+            sectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
+                .value< QList<QVariant> >();
+        }
 
-        sectionStartings.append(start);
-        sectionEndings.prepend(end);
+        sectionStartings.append(qVariantFromValue<void *>(static_cast<void *>(start)));
+        sectionEndings.prepend(qVariantFromValue<void *>(static_cast<void *>(end)));
 
-        KoSectionUtils::setSectionStartings(fmt, sectionStartings);
-        KoSectionUtils::setSectionEndings(fmt, sectionEndings);
+        fmt.setProperty(KoParagraphStyle::SectionStartings, sectionStartings);
+        fmt.setProperty(KoParagraphStyle::SectionEndings, sectionEndings);
 
         editor->setBlockFormat(fmt);
     }

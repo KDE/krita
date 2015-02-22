@@ -42,7 +42,6 @@
 #include <KoParagraphStyle.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
-#include <KoSectionUtils.h>
 
 Q_DECLARE_METATYPE(QVector< QVector<int> >)
 
@@ -140,7 +139,9 @@ void TestKoTextEditor::pushSectionStart(int num, KoSection *sec, KoTextEditor &e
     QTextBlockFormat fmt = editor.blockFormat();
     fmt.clearProperty(KoParagraphStyle::SectionStartings);
     fmt.clearProperty(KoParagraphStyle::SectionEndings);
-    KoSectionUtils::setSectionStartings(fmt, QList<KoSection *>() << sec);
+    QList<QVariant> lst;
+    lst.push_back(QVariant::fromValue<void *>(static_cast<void *>(sec)));
+    fmt.setProperty(KoParagraphStyle::SectionStartings, lst);
     editor.setBlockFormat(fmt);
 
     editor.insertText("\n");
@@ -156,8 +157,9 @@ void TestKoTextEditor::pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEdito
     QTextBlockFormat fmt = editor.blockFormat();
     fmt.clearProperty(KoParagraphStyle::SectionStartings);
     fmt.clearProperty(KoParagraphStyle::SectionEndings);
-
-    KoSectionUtils::setSectionEndings(fmt, QList<KoSectionEnd *>() << secEnd);
+    QList<QVariant> lst;
+    lst.push_back(QVariant::fromValue<void *>(static_cast<void *>(secEnd)));
+    fmt.setProperty(KoParagraphStyle::SectionEndings, lst);
     editor.setBlockFormat(fmt);
 
     editor.insertText("\n");
@@ -168,16 +170,19 @@ void TestKoTextEditor::pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEdito
 
 bool TestKoTextEditor::checkStartings(const QVector<int> &needStartings, KoSection **sec, KoTextEditor &editor)
 {
-    QList<KoSection *> lst = KoSectionUtils::sectionStartings(editor.blockFormat());
+    QTextBlockFormat fmt = editor.blockFormat();
+    QList<QVariant> lst = fmt.property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
 
     if (lst.size() != needStartings.size()) {
-        kDebug() << QString("Startings list size is wrong. Found %1, Expected %2").arg(lst.size()).arg(needStartings.size());
+        qDebug() << static_cast<KoSection *>(lst[0].value<void *>())->name();
+
+        qDebug() << QString("Startings list size is wrong. Found %1, Expected %2").arg(lst.size()).arg(needStartings.size());
         return false;
     }
 
     for (int i = 0; i < needStartings.size(); i++) {
-        if (lst[i] != sec[needStartings[i]]) {
-            kDebug() << QString("Found unexpected section starting. Expected %1 section.").arg(needStartings[i]);
+        if (static_cast<KoSection *>(lst[i].value<void *>()) != sec[needStartings[i]]) {
+            qDebug() << QString("Found unexpected section starting. Expected %1 section.").arg(needStartings[i]);
             return false;
         }
     }
@@ -187,16 +192,17 @@ bool TestKoTextEditor::checkStartings(const QVector<int> &needStartings, KoSecti
 
 bool TestKoTextEditor::checkEndings(const QVector<int> &needEndings, KoSectionEnd **secEnd, KoTextEditor &editor)
 {
-    QList<KoSectionEnd *> lst = KoSectionUtils::sectionEndings(editor.blockFormat());
+    QTextBlockFormat fmt = editor.blockFormat();
+    QList<QVariant> lst = fmt.property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
 
     if (lst.size() != needEndings.size()) {
-        kDebug() << QString("Endings list size is wrong. Found %1, expected %2").arg(lst.size()).arg(needEndings.size());
+        qDebug() << QString("Endings list size is wrong. Found %1, expected %2").arg(lst.size()).arg(needEndings.size());
         return false;
     }
 
     for (int i = 0; i < needEndings.size(); i++) {
-        if (lst[i] != secEnd[needEndings[i]]) {
-            kDebug() << QString("Found unexpected section ending. Expected %1 section.").arg(needEndings[i]);
+        if (static_cast<KoSectionEnd *>(lst[i].value<void *>()) != secEnd[needEndings[i]]) {
+            qDebug() << QString("Found unexpected section ending. Expected %1 section.").arg(needEndings[i]);
             return false;
         }
     }

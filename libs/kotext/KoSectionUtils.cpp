@@ -18,7 +18,8 @@
  */
 
 #include <KoSectionUtils.h>
-#include <KoParagraphStyle.h>
+#include <KoSection.h>
+#include <KoSectionEnd.h>
 
 bool KoSectionUtils::getNextBlock(QTextCursor &cur)
 {
@@ -37,40 +38,12 @@ bool KoSectionUtils::getNextBlock(QTextCursor &cur)
     return true;
 }
 
-void KoSectionUtils::setSectionStartings(QTextBlockFormat &fmt, QList<KoSection *> &list)
+QString KoSectionUtils::sectionStartName(const QVariant &q)
 {
-    if (list.empty()) {
-        fmt.clearProperty(KoParagraphStyle::SectionStartings);
-    } else {
-        fmt.setProperty(KoParagraphStyle::SectionStartings,
-            QVariant::fromValue< QList<KoSection *> >(list));
-    }
+    return static_cast<KoSection *>(q.value<void *>())->name();
 }
 
-void KoSectionUtils::setSectionEndings(QTextBlockFormat &fmt, QList<KoSectionEnd *> &list)
+QString KoSectionUtils::sectionEndName(const QVariant &q)
 {
-    if (list.empty()) {
-        fmt.clearProperty(KoParagraphStyle::SectionEndings);
-    } else {
-        fmt.setProperty(KoParagraphStyle::SectionEndings,
-            QVariant::fromValue< QList<KoSectionEnd *> >(list));
-    }
-}
-
-QList<KoSection *> KoSectionUtils::sectionStartings(const QTextBlockFormat &fmt)
-{
-    if (!fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
-        return QList<KoSection *>();
-    } else {
-        return fmt.property(KoParagraphStyle::SectionStartings).value< QList<KoSection *> >();
-    }
-}
-
-QList<KoSectionEnd *> KoSectionUtils::sectionEndings(const QTextBlockFormat &fmt)
-{
-    if (!fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
-        return QList<KoSectionEnd *>();
-    } else {
-        return fmt.property(KoParagraphStyle::SectionEndings).value< QList<KoSectionEnd *> >();
-    }
+    return static_cast<KoSectionEnd *>(q.value<void *>())->name();
 }

@@ -23,7 +23,6 @@
 #include "KoSectionEnd.h"
 #include <KLocalizedString>
 #include <KoTextDocument.h>
-#include "KoSectionUtils.h"
 
 #include <QHash>
 #include <QString>
@@ -32,56 +31,27 @@
 
 #include <kdebug.h>
 
-class KoSectionManagerPrivate
+KoSectionManagerPrivate::KoSectionManagerPrivate(QTextDocument *_doc)
+    : doc(_doc)
+    , valid(false)
+    , sectionCount(0)
+    , model(new QStandardItemModel())
 {
-public:
-    KoSectionManagerPrivate(KoSectionManager *parent, QTextDocument *_doc)
-        : doc(_doc)
-        , valid(false)
-        , q_ptr(parent)
-    {
-        Q_ASSERT(_doc);
-    }
-
-    ~KoSectionManagerPrivate()
-    {
-        QSet<KoSection *>::iterator it = registeredSections.begin();
-        for (; it != registeredSections.end(); it++) {
-            delete *it; // KoSectionEnd will be deleted in KoSection
-        }
-    }
-
-    QTextDocument *doc;
-    bool valid; //< is current section info is valid
-    QSet<KoSection *> registeredSections; //< stores pointer to sections that sometime was registered
-
-    // used to prevent using sectionNames without update
-    QHash<QString, KoSection *> &sectionNames()
-    {
-        Q_Q(KoSectionManager);
-        q->update();
-        return m_sectionNames;
-    }
-
-protected:
-    KoSectionManager *q_ptr;
-
-private:
-    Q_DISABLE_COPY(KoSectionManagerPrivate)
-    Q_DECLARE_PUBLIC(KoSectionManager);
-
-    QHash<QString, KoSection *> m_sectionNames; //< stores name -> pointer reference, for sections that are visible in document now
-};
-
-KoSectionManager::KoSectionManager(QTextDocument* doc)
-    : d_ptr(new KoSectionManagerPrivate(this, doc))
-{
-    KoTextDocument(doc).setSectionManager(this); //FIXME: setting it back from here looks bad
+    Q_ASSERT(_doc);
 }
 
-KoSectionManager::~KoSectionManager()
+KoSectionManagerPrivate::~KoSectionManagerPrivate()
 {
-    delete d_ptr;
+    QHash<QString, KoSection *>::iterator it = sectionNames.begin();
+    for (; it != sectionNames.end(); it++) {
+        delete it.value(); // KoSectionEnd will be deleted in KoSection
+    }
+}
+
+KoSectionManager::KoSectionManager(QTextDocument* doc)
+    : d_ptr(new KoSectionManagerPrivate(doc))
+{
+    KoTextDocument(doc).setSectionManager(this);
 }
 
 KoSection *KoSectionManager::sectionAtPosition(int pos)
@@ -91,8 +61,8 @@ KoSection *KoSectionManager::sectionAtPosition(int pos)
 
     KoSection *result = 0;
     int smallest = INT_MAX; //smallest in size section will be the deepest
-    QHash<QString, KoSection *>::iterator it = d->sectionNames().begin();
-    for (; it != d->sectionNames().end(); it++) {
+    QHash<QString, KoSection *>::iterator it = d->sectionNames.begin();
+    for (; it != d->sectionNames.end(); it++) {
         if (it.value()->bounds().first > pos || it.value()->bounds().second < pos) {
             continue;
         }
@@ -112,20 +82,21 @@ void KoSectionManager::invalidate()
     d->valid = false;
 }
 
-bool KoSectionManager::isValidNewName(const QString &name)
+bool KoSectionManager::isValidNewName(const QString &name) const
 {
-    Q_D(KoSectionManager);
-    return (d->sectionNames().constFind(name) == d->sectionNames().constEnd());
+    Q_D(const KoSectionManager);
+    return (d->sectionNames.find(name) == d->sectionNames.end());
 }
 
-QString KoSectionManager::possibleNewName()
+QString KoSectionManager::possibleNewName() const
 {
-    Q_D(KoSectionManager);
+    Q_D(const KoSectionManager);
 
     QString newName;
-    int i = d->registeredSections.count();
+
+    int i = d->sectionCount;
     do {
-        i++;
+        ++i;
         newName = i18nc("new numbered section name", "New section %1", i);
     } while (!isValidNewName(newName));
 
@@ -135,57 +106,73 @@ QString KoSectionManager::possibleNewName()
 void KoSectionManager::registerSection(KoSection* section)
 {
     Q_D(KoSectionManager);
-    d->registeredSections.insert(section);
+    d->sectionCount++;
+    d->sectionNames[section->name()] = section;
     invalidate();
+}
+
+void KoSectionManager::sectionRenamed(const QString &oldName, const QString &name)
+{
+    Q_D(KoSectionManager);
+    QHash<QString, KoSection *>::iterator it = d->sectionNames.find(oldName);
+    KoSection *sec = *it;
+    d->sectionNames.erase(it);
+    d->sectionNames[name] = sec;
+
+    if (sec->modelItem()) {
+        sec->modelItem()->setData(name, Qt::DisplayRole);
+    }
 }
 
 void KoSectionManager::unregisterSection(KoSection* section)
 {
     Q_D(KoSectionManager);
-    d->registeredSections.remove(section);
+
+    d->sectionCount--;
+    d->sectionNames.remove(section->name());
     invalidate();
 }
 
-QStandardItemModel *KoSectionManager::update(bool needModel)
+void KoSectionManager::update()
 {
     Q_D(KoSectionManager);
-    if (d->valid && !needModel) {
-        return 0;
+    if (d->valid) {
+        return;
     }
-    d->valid = true;
-    d->sectionNames().clear();
 
-    QSet<KoSection *>::iterator it = d->registeredSections.begin();
-    for (; it != d->registeredSections.end(); it++) {
-        (*it)->setBeginPos(-1);
-        (*it)->setEndPos(-1);
-        (*it)->setLevel(-1);
+    QHash<QString, KoSection *>::iterator it = d->sectionNames.begin();
+    for (; it != d->sectionNames.end(); it++) {
+        it.value()->setBeginPos(-1);
+        it.value()->setEndPos(-1);
+        it.value()->setLevel(-1);
     }
 
     QTextBlock block = d->doc->begin();
 
-    QStandardItemModel *model = 0;
-    QStack<QStandardItem *> curChain;
+    QStringList head;
+    head << i18n("Section");
+    d->model->clear();
+    d->model->setHorizontalHeaderLabels(head);
+    d->model->setColumnCount(1);
 
-    if (needModel) {
-        model = new QStandardItemModel();
-        curChain.push(model->invisibleRootItem());
-    }
+    QStack<QStandardItem *> curChain;
+    curChain.push(d->model->invisibleRootItem());
 
     int curLevel = -1;
     do {
         QTextBlockFormat fmt = block.blockFormat();
 
-        foreach (KoSection *sec, KoSectionUtils::sectionStartings(fmt)) {
-            curLevel++;
-            sec->setBeginPos(block.position());
-            sec->setLevel(curLevel);
+        if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
+            QList<QVariant> starts = fmt.property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, starts) {
+                curLevel++;
+                KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
+                sec->setBeginPos(block.position());
+                sec->setLevel(curLevel);
 
-            d->sectionNames()[sec->name()] = sec;
-
-            if (needModel) {
                 QStandardItem *item = new QStandardItem(sec->name());
-                item->setData(QVariant::fromValue<KoSection *>(sec), Qt::UserRole + 1);
+                item->setData(qVariantFromValue(static_cast<void *>(sec)), Qt::UserRole + 1);
+                sec->setModelItem(item);
 
                 curChain.top()->appendRow(item);
 
@@ -193,15 +180,24 @@ QStandardItemModel *KoSectionManager::update(bool needModel)
             }
         }
 
-        foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(fmt)) {
-            curLevel--;
-            sec->correspondingSection()->setEndPos(block.position() + block.length());
+        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+            QList<QVariant> ends = fmt.property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, ends) {
+                curLevel--;
+                KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
+                sec->correspondingSection()->setEndPos(block.position() + block.length());
 
-            if (needModel) {
                 curChain.pop();
             }
         }
     } while ((block = block.next()).isValid());
 
-    return model;
+    d->valid = true;
+}
+
+QStandardItemModel* KoSectionManager::sectionsModel()
+{
+    Q_D(KoSectionManager);
+    update();
+    return d->model.data();
 }

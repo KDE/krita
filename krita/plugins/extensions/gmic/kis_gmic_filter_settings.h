@@ -28,11 +28,6 @@ enum OutputMode {   IN_PLACE = 0,
                         NEW_IMAGE
 };
 
-static QStringList OUTPUT_MODE_STRINGS = QStringList() << "In place (default)"
-    << "New layer(s)"
-    << "New active layer(s)"
-    << "New image";
-
 
 // this enum is also index in LAYER_MODE_STRINGS list
 enum InputLayerMode {   NONE = 0,
@@ -47,16 +42,6 @@ enum InputLayerMode {   NONE = 0,
                         ALL_DECR
 };
 
-static QStringList INPUT_MODE_STRINGS = QStringList() << "None"
-    << "Active (default)"
-    << "All"
-    << "Active & below"
-    << "Active & above"
-    << "All visibles"
-    << "All invisibles"
-    << "All visibles (decr.)"
-    << "All invisibles (decr.)"
-    << "All (decr.)";
 
 enum PreviewSize {    TINY = 0,
                             SMALL,
@@ -79,16 +64,6 @@ enum OutputPreviewMode {    FIRST = 0,
                             ALL
 
 };
-
-static QStringList PREVIEW_MODE = QStringList() << "1st output"
-    << "2nd output"
-    << "3rd output"
-    << "4th output"
-    << "1st -> 2nd"
-    << "1st -> 3rd"
-    << "1st -> 4th"
-    << "All outputs";
-
 
 class KisGmicFilterSetting
 {

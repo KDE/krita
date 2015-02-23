@@ -55,17 +55,46 @@ void KisGmicInputOutputWidget::createMainLayout()
     zoomInButton->setIcon(koIcon("zoom-in"));
     zoomOutButton->setIcon(koIcon("zoom-out"));
 
-    QStringListModel * inputModel = new QStringListModel(INPUT_MODE_STRINGS);
+    QStringList outputModeStrings = QStringList()
+            << i18n("In place (default)")
+            << i18n("New layer(s)")
+            << i18n("New active layer(s)")
+            << i18n("New image");
+
+    QStringList inputModeStrings = QStringList()
+            << i18n("None")
+            << i18n("Active (default)")
+            << i18n("All")
+            << i18n("Active & below")
+            << i18n("Active & above")
+            << i18n("All visibles")
+            << i18n("All invisibles")
+            << i18n("All visibles (decr.)")
+            << i18n("All invisibles (decr.)")
+            << i18n("All (decr.)");
+
+    QStringList previewMode = QStringList()
+            << i18n("1st output")
+            << i18n("2nd output")
+            << i18n("3rd output")
+            << i18n("4th output")
+            << i18n("1st -> 2nd")
+            << i18n("1st -> 3rd")
+            << i18n("1st -> 4th")
+            << i18n("All outputs");
+
+
+    QStringListModel * inputModel = new QStringListModel(inputModeStrings);
     inputCombo->setModel(inputModel);
     QObject::connect(inputCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setIntputMode(int)));
     inputCombo->setCurrentIndex(static_cast<int>(m_inputMode));
 
-    QStringListModel * outputModel = new QStringListModel(OUTPUT_MODE_STRINGS);
+    QStringListModel * outputModel = new QStringListModel(outputModeStrings);
     outputCombo->setModel(outputModel);
     QObject::connect(outputCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setOutputMode(int)));
     outputCombo->setCurrentIndex(static_cast<int>(m_outputMode));
 
-    QStringListModel * previewModeModel = new QStringListModel(PREVIEW_MODE);
+    QStringListModel * previewModeModel = new QStringListModel(previewMode);
     outputPreviewCombo->setModel(previewModeModel);
     QObject::connect(outputPreviewCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setPreviewMode(int)));
     outputPreviewCombo->setCurrentIndex(static_cast<int>(m_previewMode));

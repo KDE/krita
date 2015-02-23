@@ -40,7 +40,10 @@ KisGmicInputOutputWidget::KisGmicInputOutputWidget(QWidget * parent):
 
 KisGmicInputOutputWidget::~KisGmicInputOutputWidget()
 {
-
+    delete m_inputModel;
+    delete m_outputModel;
+    delete m_previewModeModel;
+    delete m_previewSizeModel;
 }
 
 KisFilterPreviewWidget* KisGmicInputOutputWidget::previewWidget()
@@ -84,23 +87,23 @@ void KisGmicInputOutputWidget::createMainLayout()
             << i18n("All outputs");
 
 
-    QStringListModel * inputModel = new QStringListModel(inputModeStrings);
-    inputCombo->setModel(inputModel);
+    m_inputModel = new QStringListModel(inputModeStrings);
+    inputCombo->setModel(m_inputModel);
     QObject::connect(inputCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setIntputMode(int)));
     inputCombo->setCurrentIndex(static_cast<int>(m_inputMode));
 
-    QStringListModel * outputModel = new QStringListModel(outputModeStrings);
-    outputCombo->setModel(outputModel);
+    m_outputModel = new QStringListModel(outputModeStrings);
+    outputCombo->setModel(m_outputModel);
     QObject::connect(outputCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setOutputMode(int)));
     outputCombo->setCurrentIndex(static_cast<int>(m_outputMode));
 
-    QStringListModel * previewModeModel = new QStringListModel(previewMode);
-    outputPreviewCombo->setModel(previewModeModel);
+    m_previewModeModel = new QStringListModel(previewMode);
+    outputPreviewCombo->setModel(m_previewModeModel);
     QObject::connect(outputPreviewCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setPreviewMode(int)));
     outputPreviewCombo->setCurrentIndex(static_cast<int>(m_previewMode));
 
-    QStringListModel * previewSizeModel = new QStringListModel(PREVIEW_SIZE);
-    previewSizeCombo->setModel(previewSizeModel);
+    m_previewSizeModel = new QStringListModel(PREVIEW_SIZE);
+    previewSizeCombo->setModel(m_previewSizeModel);
     QObject::connect(previewSizeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setPreviewSize(int)));
     previewSizeCombo->setCurrentIndex(static_cast<int>(m_previewSize));
 }

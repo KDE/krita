@@ -1238,10 +1238,12 @@ void KisViewManager::showFloatingMessage(const QString message, const QIcon& ico
         if (d->savedFloatingMessage) {
             d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
         } else {
-            d->savedFloatingMessage = new KisFloatingMessage(message, d->currentImageView->canvasBase()->canvasWidget(), false, timeout, priority, alignment);
-            d->savedFloatingMessage->setShowOverParent(true);
-            d->savedFloatingMessage->setIcon(icon);
-            d->savedFloatingMessage->showMessage();
+            if(d->currentImageView) {
+                d->savedFloatingMessage = new KisFloatingMessage(message, d->currentImageView->canvasBase()->canvasWidget(), false, timeout, priority, alignment);
+                d->savedFloatingMessage->setShowOverParent(true);
+                d->savedFloatingMessage->setIcon(icon);
+                d->savedFloatingMessage->showMessage();
+            }
         }
     }
 #if QT_VERSION >= 0x040700

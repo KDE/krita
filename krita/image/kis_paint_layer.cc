@@ -246,26 +246,41 @@ void KisPaintLayer::seekToTime(int time)
     int frame = frameId.toInt();
 
     if (frame != m_d->paintDevice->currentContext()) {
-        // Setting dirty both with old and new bounds to make sure no artifacts are left behind
-        setDirty();
         m_d->paintDevice->switchContext(frame);
-        setDirty();
     }
 }
 
-void KisPaintLayer::addBlankFrame(int time)
+void KisPaintLayer::addNewFrame(int time, bool blank)
 {
+    int currentContext = m_d->paintDevice->currentContext();
+
     if (m_d->contentChannel->times().count() == 0) {
-        m_d->contentChannel->setKeyframe(0, m_d->paintDevice->currentContext());
+        m_d->contentChannel->setKeyframe(0, currentContext);
     }
 
     if (m_d->contentChannel->hasKeyframeAt(time)) return;
 
-    int frameId = m_d->paintDevice->newContext();
+    int frameId;
+    if (blank) {
+        frameId = m_d->paintDevice->newContext();
+    } else {
+        frameId = m_d->paintDevice->newContext(currentContext);
+    }
+
     m_d->contentChannel->setKeyframe(time, frameId);
 
     // Make sure we display the new frame (if appropriate)
     seekToTime(image()->currentTime());
+}
+
+void KisPaintLayer::deleteKeyfame(int time)
+{
+    if (!m_d->contentChannel->hasKeyframeAt(time)) return;
+
+    int frameId = m_d->contentChannel->getValueAt(time).toInt();
+    m_d->contentChannel->deleteKeyframe(time);
+
+    m_d->paintDevice->dropContext(frameId);
 }
 
 #include "kis_paint_layer.moc"

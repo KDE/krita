@@ -92,6 +92,8 @@ dark_prevframe.png
 dark_nextframe.png
 dark_playpause.png
 dark_addblankframe.png
+dark_addduplicateframe.png
+dark_deletekeyframe.png
 
 light_select.png
 light_pattern.png
@@ -115,6 +117,8 @@ light_prevframe.png
 light_nextframe.png
 light_playpause.png
 light_addblankframe.png
+light_addduplicateframe.png
+light_deletekeyframe.png
 
 
 

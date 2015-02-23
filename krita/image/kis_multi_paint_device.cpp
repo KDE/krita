@@ -99,21 +99,43 @@ KisMultiPaintDevice::Context * KisMultiPaintDevice::createContext(KisDataManager
 void KisMultiPaintDevice::switchContext(int id)
 {
     Context *context = m_d->storedContexts.value(id, 0);
-    if (context == 0) return;
+    if (!context) return;
+
+    setContext(context);
+}
+
+void KisMultiPaintDevice::setContext(KisMultiPaintDevice::Context *context)
+{
+    // Setting dirty both with old and new bounds to make sure no artifacts are left behind
+    setDirty();
 
     m_d->currentContext = context;
     setDataManager(context->dataManager);
+
+    setDirty();
 }
 
 void KisMultiPaintDevice::dropContext(int id)
 {
-    // TODO
+    if (m_d->storedContexts.count() == 1) return;
+
+    Context *context = m_d->storedContexts.value(id, 0);
+    if (!context) return;
+
+    m_d->storedContexts.remove(id);
+
+    if (m_d->currentContext->id == id) {
+        setContext(m_d->storedContexts.begin().value());
+    }
+
+    delete context;
 }
 
 int KisMultiPaintDevice::currentContext()
 {
     return m_d->currentContext->id;
 }
+
 
 
 #include "kis_multi_paint_device.moc"

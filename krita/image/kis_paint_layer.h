@@ -98,7 +98,9 @@ public:
 
     void seekToTime(int time);
 
-    void addBlankFrame(int time);
+    void addNewFrame(int time, bool blank);
+
+    void deleteKeyfame(int time);
 
 public:
 

@@ -1,6 +1,6 @@
 set(KRITA_ANIMATIONDOCKER_PART_SRCS
+    animation_dockers.cpp
     animation_docker.cpp
-    animation_docker_dock.cpp
 )
 
 kde4_add_ui_files(KRITA_ANIMATIONDOCKER_PART_SRCS

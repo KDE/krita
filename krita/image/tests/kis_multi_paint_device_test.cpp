@@ -129,7 +129,30 @@ void KisMultiPaintDeviceTest::testDuplicateContextCreation()
 
 void KisMultiPaintDeviceTest::testContextDropping()
 {
-    // TODO
+   KisMultiPaintDevice *dev = new KisMultiPaintDevice(cs);
+
+    int id1 = dev->currentContext();
+    int id2 = dev->newContext();
+    int id3 = dev->newContext();
+    int id4 = dev->newContext();
+
+    dev->switchContext(id2);
+    dev->dropContext(id2);
+
+    QVERIFY(dev->currentContext() != id2);
+
+    dev->dropContext(id1);
+    dev->dropContext(id4);
+
+    // This leave only context 3
+    QCOMPARE(id3, dev->currentContext());
+
+    dev->dropContext(id3);
+
+    // Last remaining is not dropped
+    QCOMPARE(id3, dev->currentContext());
+
+    delete dev;
 }
 
 QTEST_KDEMAIN(KisMultiPaintDeviceTest, GUI)

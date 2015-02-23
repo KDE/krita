@@ -16,22 +16,40 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _OVERVIEW_DOCKER_H_
-#define _OVERVIEW_DOCKER_H_
+#ifndef _ANIMATION_DOCKER_H_
+#define _ANIMATION_DOCKER_H_
 
-#include <QObject>
-#include <QVariantList>
+#include "krita_export.h"
 
-class KisViewManager;
+#include <QDockWidget>
 
-class AnimationDockerPlugin : public QObject
-{
+#include <KoCanvasObserverBase.h>
+
+class KisCanvas2;
+class Ui_WdgAnimation;
+
+class AnimationDocker : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
-    public:
-        AnimationDockerPlugin(QObject *parent, const QVariantList &);
-        virtual ~AnimationDockerPlugin();
-    private:
-        KisViewManager* m_view;
+public:
+    AnimationDocker();
+    QString observerName() { return "AnimationDocker"; }
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
+
+private slots:
+    void slotPreviousFrame();
+    void slotNextFrame();
+    void slotPlayPause();
+
+    void slotAddBlankFrame();
+    void slotAddDuplicateFrame();
+    void slotDeleteKeyframe();
+
+private:
+
+    KisCanvas2 *m_canvas;
+    Ui_WdgAnimation *m_animationWidget;
 };
+
 
 #endif

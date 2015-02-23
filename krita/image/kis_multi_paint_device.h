@@ -91,6 +91,9 @@ public:
     int currentContext();
 
 private:
+    struct Context;
+    void setContext(Context *context);
+
     struct Private;
     Private * const m_d;
 

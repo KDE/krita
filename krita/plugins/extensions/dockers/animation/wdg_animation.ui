@@ -48,6 +48,20 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QToolButton" name="btnAddDuplicateFrame">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnDeleteKeyframe">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

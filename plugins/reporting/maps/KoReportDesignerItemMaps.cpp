@@ -120,6 +120,7 @@ void KoReportDesignerItemMaps::buildXML(QDomDocument & doc, QDomElement & parent
     addPropertyAsAttribute(&entity, m_latitudeProperty);
     addPropertyAsAttribute(&entity, m_longitudeProperty);
     addPropertyAsAttribute(&entity, m_zoomProperty);
+    addPropertyAsAttribute(&entity, m_themeProperty);
     //addPropertyAsAttribute(&entity, m_resizeMode);
     entity.setAttribute("report:z-index", zValue());
     buildXMLRect(doc, entity, &m_pos, &m_size);

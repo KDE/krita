@@ -24,6 +24,18 @@ class KisSharedData;
 
 #include <krita_export.h>
 
+#include <config-memory-leak-tracker.h>
+
+// Only linux support the memory leak tracker
+#ifndef Q_OS_LINUX
+#undef HAVE_MEMORY_LEAK_TRACKER
+#endif
+
+// Disable the memory leak tracker on release build
+#ifdef NDEBUG
+#undef HAVE_MEMORY_LEAK_TRACKER
+#endif
+
 /**
  * This class tracks what pointer is reference by who. It is used by
  * the smart pointers to detect leaks.

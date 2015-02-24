@@ -86,6 +86,7 @@ endif(WIN32)
 set(KRITA_INCLUDES
     # For config-*.h
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/image
 
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine

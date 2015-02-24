@@ -96,7 +96,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return "Offset printing, according to ISO/DIS 12647-2:2004, OFCOM, paper type 1 or 2 = coated art, 115 g/m2, screen ruling 60 cm-1, positive-acting plates";
+        return "Chemical proof";
     }
 
     virtual bool isHdr() const

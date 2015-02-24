@@ -92,7 +92,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return "scRGB (linear)";
+        return "sRGB-elle-V2-g10.icc";
     }
 
     virtual bool isHdr() const

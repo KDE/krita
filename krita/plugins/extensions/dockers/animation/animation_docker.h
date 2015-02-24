@@ -24,6 +24,8 @@
 #include <QDockWidget>
 
 #include <KoCanvasObserverBase.h>
+#include "kis_action.h"
+
 
 class KisCanvas2;
 class Ui_WdgAnimation;
@@ -49,6 +51,14 @@ private:
 
     KisCanvas2 *m_canvas;
     Ui_WdgAnimation *m_animationWidget;
+
+    KisAction *m_previousFrameAction;
+    KisAction *m_nextFrameAction;
+    KisAction *m_playPauseAction;
+
+    KisAction *m_addBlankFrameAction;
+    KisAction *m_addDuplicateFrameAction;
+    KisAction *m_deleteKeyframeAction;
 };
 
 

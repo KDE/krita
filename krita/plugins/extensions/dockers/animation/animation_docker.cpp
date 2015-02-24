@@ -37,31 +37,50 @@ AnimationDocker::AnimationDocker()
 
     m_animationWidget->setupUi(mainWidget);
 
-    m_animationWidget->btnPreviousFrame->setIcon(themedIcon("prevframe"));
+    m_previousFrameAction = new KisAction(i18n("Move to previous frame"), m_animationWidget->btnPreviousFrame);
+    m_previousFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    m_previousFrameAction->setIcon(themedIcon("prevframe"));
+    m_animationWidget->btnPreviousFrame->setDefaultAction(m_previousFrameAction);
+
+    m_nextFrameAction = new KisAction(i18n("Move to next frame"), m_animationWidget->btnNextFrame);
+    m_nextFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    m_nextFrameAction->setIcon(themedIcon("nextframe"));
+    m_animationWidget->btnNextFrame->setDefaultAction(m_nextFrameAction);
+
+    m_playPauseAction = new KisAction(i18n("Play / pause animation"), m_animationWidget->btnPlay);
+    m_playPauseAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    m_playPauseAction->setIcon(themedIcon("playpause"));
+    m_animationWidget->btnPlay->setDefaultAction(m_playPauseAction);
+
+    m_addBlankFrameAction = new KisAction(i18n("Add blank frame"), m_animationWidget->btnAddKeyframe);
+    m_addBlankFrameAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_addBlankFrameAction->setIcon(themedIcon("addblankframe"));
+    m_animationWidget->btnAddKeyframe->setDefaultAction(m_addBlankFrameAction);
+
+    m_addDuplicateFrameAction = new KisAction(i18n("Add duplicate frame"), m_animationWidget->btnAddDuplicateFrame);
+    m_addDuplicateFrameAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_addDuplicateFrameAction->setIcon(themedIcon("addduplicateframe"));
+    m_animationWidget->btnAddDuplicateFrame->setDefaultAction(m_addDuplicateFrameAction);
+
+    m_deleteKeyframeAction = new KisAction(i18n("Delete keyframe"), m_animationWidget->btnDeleteKeyframe);
+    m_deleteKeyframeAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_deleteKeyframeAction->setIcon(themedIcon("deletekeyframe"));
+    m_animationWidget->btnDeleteKeyframe->setDefaultAction(m_deleteKeyframeAction);
+
     m_animationWidget->btnPreviousFrame->setIconSize(QSize(22, 22));
-
-    m_animationWidget->btnPlay->setIcon(themedIcon("playpause"));
     m_animationWidget->btnPlay->setIconSize(QSize(22, 22));
-
-    m_animationWidget->btnNextFrame->setIcon(themedIcon("nextframe"));
     m_animationWidget->btnNextFrame->setIconSize(QSize(22, 22));
-
-    m_animationWidget->btnAddKeyframe->setIcon(themedIcon("addblankframe"));
     m_animationWidget->btnAddKeyframe->setIconSize(QSize(22, 22));
-
-    m_animationWidget->btnAddDuplicateFrame->setIcon(themedIcon("addduplicateblankframe"));
     m_animationWidget->btnAddDuplicateFrame->setIconSize(QSize(22, 22));
-
-    m_animationWidget->btnDeleteKeyframe->setIcon(themedIcon("deletekeyframe"));
     m_animationWidget->btnDeleteKeyframe->setIconSize(QSize(22, 22));
 
-    connect(m_animationWidget->btnPreviousFrame, SIGNAL(clicked()), this, SLOT(slotPreviousFrame()));
-    connect(m_animationWidget->btnPlay, SIGNAL(clicked()), this, SLOT(slotPlayPause()));
-    connect(m_animationWidget->btnNextFrame, SIGNAL(clicked()), this, SLOT(slotNextFrame()));
+    connect(m_previousFrameAction, SIGNAL(triggered()), this, SLOT(slotPreviousFrame()));
+    connect(m_nextFrameAction, SIGNAL(triggered()), this, SLOT(slotNextFrame()));
+    connect(m_playPauseAction, SIGNAL(triggered()), this, SLOT(slotPlayPause()));
 
-    connect(m_animationWidget->btnAddKeyframe, SIGNAL(clicked()), this, SLOT(slotAddBlankFrame()));
-    connect(m_animationWidget->btnAddDuplicateFrame, SIGNAL(clicked()), this, SLOT(slotAddDuplicateFrame()));
-    connect(m_animationWidget->btnDeleteKeyframe, SIGNAL(clicked()), this, SLOT(slotDeleteKeyframe()));
+    connect(m_addBlankFrameAction, SIGNAL(triggered()), this, SLOT(slotAddBlankFrame()));
+    connect(m_addDuplicateFrameAction, SIGNAL(triggered()), this, SLOT(slotAddDuplicateFrame()));
+    connect(m_deleteKeyframeAction, SIGNAL(triggered()), this, SLOT(slotDeleteKeyframe()));
 }
 
 void AnimationDocker::setCanvas(KoCanvasBase * canvas)

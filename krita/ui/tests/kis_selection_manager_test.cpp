@@ -29,7 +29,9 @@ public:
     SelectionManagerTester(bool useSelection)
         : UiManagerTest(useSelection, false,  "selection_manager_test")
     {
+        Q_ASSERT(selectionManager);
     }
+
 };
 
 

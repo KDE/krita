@@ -49,6 +49,15 @@
 
 #include "kis_transform_mask_params_interface.h"
 
+#include <filter/kis_filter_registry.h>
+#include <generator/kis_generator_registry.h>
+
+void KisKraSaverTest::initTestCase()
+{
+    KisFilterRegistry::instance();
+    KisGeneratorRegistry::instance();
+}
+
 
 void KisKraSaverTest::testRoundTrip()
 {

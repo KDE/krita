@@ -40,6 +40,10 @@ private slots:
     void testCutPaste();
 
     void testInvertSelection();
+
+    void testScanline16bit();
+private:
+    // These come from a plugin and cannot be tested here
     void testFeatherSelection();
     void testGrowSelectionSimplified();
     void testShrinkSelectionUnlockedSimplified();
@@ -49,7 +53,6 @@ private slots:
     void testDilateSelectionSimplified();
     void testBorderSelectionSimplified();
 
-    void testScanline16bit();
 };
 
 #endif /* __KIS_SELECTION_MANAGER_TEST_H */

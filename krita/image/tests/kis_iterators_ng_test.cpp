@@ -140,7 +140,7 @@ void KisIteratorTest::sequentialIter(const KoColorSpace * colorSpace)
         KisSequentialConstIterator it(dev, QRect(0, 0, 128, 128));
         while (it.nextPixel());
         QCOMPARE(dev->extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
-        QCOMPARE(dev->exactBounds(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+        QCOMPARE(dev->exactBounds(), QRect(QPoint(0, 0), QPoint(-1, -1)));
     }
 
     // Non-const does
@@ -226,7 +226,7 @@ void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
     KisHLineConstIteratorSP cit = dev.createHLineConstIteratorNG(0, 0, 128);
     while (!cit->nextPixel());
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
-    QCOMPARE(dev.exactBounds(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.exactBounds(), QRect(QPoint(0, 0), QPoint(-1, -1)));
 
     dev.clear();
     KisHLineIteratorSP it = dev.createHLineIteratorNG(0, 0, 128);
@@ -297,7 +297,7 @@ void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
     KisVLineConstIteratorSP cit = dev.createVLineConstIteratorNG(0, 0, 128);
     while (cit->nextPixel());
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
-    QCOMPARE(dev.exactBounds(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.exactBounds(), QRect(QPoint(0, 0), QPoint(-1, -1)));
     cit.clear();
 
     KisVLineIteratorSP it = dev.createVLineIteratorNG(0, 0, 128);

@@ -183,14 +183,14 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="0">
+     <item row="10" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
         <string>Background Image (overrides color):</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
+     <item row="10" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
        <item>
         <widget class="QLabel" name="m_backgroundimage">
@@ -233,14 +233,14 @@
        </item>
       </layout>
      </item>
-     <item row="11" column="0">
+     <item row="12" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Window Background:</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="1">
+     <item row="12" column="1">
       <widget class="KColorButton" name="m_mdiColor">
        <property name="text">
         <string/>
@@ -258,6 +258,16 @@
          <green>0</green>
          <blue>0</blue>
         </color>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QCheckBox" name="m_chkCanvasMessages">
+       <property name="text">
+        <string>Show on-canvas popup messages</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

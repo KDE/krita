@@ -341,6 +341,10 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
 
     KisInputProfileManager::instance()->loadProfiles();
+
+    KisConfig cfg;
+    d->showFloatingMessage = cfg.showCanvasMessages();
+
 }
 
 

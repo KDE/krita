@@ -71,6 +71,7 @@ public:
     bool showOutlineWhilePainting();
     int mdiMode();
     int favoritePresets();
+    bool showCanvasMessages();
 private slots:
     void getBackgroundImage();
     void clearBackgroundImage();

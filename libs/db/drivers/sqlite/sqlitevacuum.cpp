@@ -198,7 +198,7 @@ void SQLiteVacuum::dumpProcessFinished(int exitCode, QProcess::ExitStatus exitSt
     QFileInfo fi(m_filePath);
     const uint origSize = fi.size();
 
-    if (0 != KDE::rename(m_tmpFilePath, fi.absoluteFilePath())) {
+    if (!QFile::rename(m_tmpFilePath, fi.absoluteFilePath())) {
         kWarning() << "Rename" << m_tmpFilePath << "to" << fi.absoluteFilePath() << "failed.";
         m_result = false;
     }

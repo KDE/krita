@@ -3,7 +3,10 @@
 ##
 
 include_directories(src)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 set(gmic_sources_SRCS
   src/gmic.cpp

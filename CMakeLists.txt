@@ -288,7 +288,7 @@ if (USEOPENGL)
     else(OPENGL_FOUND)
         message(STATUS "Did NOT find OpenGL libraries")
     endif(OPENGL_FOUND)
-    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
+    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by Gemini, parts of Krita and optionally by flake")
 endif(USEOPENGL)
 
 ##
@@ -940,6 +940,16 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
     LIBQGIT2_FOUND "libqgit2 devel not found"
+)
+
+calligra_drop_product_on_bad_condition( PART_QTQUICK
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
+)
+
+calligra_drop_product_on_bad_condition( APP_GEMINI
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
 )
 
 #############################################

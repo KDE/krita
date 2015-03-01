@@ -171,6 +171,19 @@ public:
     virtual void setImage(KisImageWSP image);
 
     /**
+     * Create and return a layer that is the result of merging
+     * this with layer.
+     *
+     * This method is designed to be called only within KisImage::mergeLayerDown().
+     *
+     * Decendands override this to create specific merged types when possible.
+     * The KisLayer one creates a KisPaintLayerSP via a bitBlt, and can work on all layer types.
+     *
+     * Decendants that perform there own version do NOT call KisLayer::createMergedLayer
+     */
+    virtual KisLayerSP createMergedLayer(KisLayerSP prevLayer);
+
+    /**
      * Clones should be informed about updates of the original
      * layer, so this is a way to register them
      */

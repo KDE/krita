@@ -162,6 +162,47 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
     Q_UNUSED(success); // for release build
 }
 
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)
+        : KisExternalLayer(_rhs)
+        , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _merge here otherwise both layer have the same KoShapeContainerModel
+        , m_d(new Private())
+{
+    // Make sure our new layer is visible otherwise the shapes cannot be painted.
+    setVisible(true);
+
+    initShapeLayer(_rhs.m_d->controller);
+
+    // copy in _rhs's shapes
+    {
+        KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
+        KoDrag drag;
+        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+        QMimeData* mimeData = drag.mimeData();
+
+        Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
+
+        KisShapeLayerShapePaste paste(this, m_d->controller);
+        bool success = paste.paste(KoOdf::Text, mimeData);
+        Q_ASSERT(success);
+        Q_UNUSED(success); // for release build
+    }
+
+    // copy in _addShapes's shapes
+    {
+        KoShapeOdfSaveHelper saveHelper(_addShapes.shapes());
+        KoDrag drag;
+        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+        QMimeData* mimeData = drag.mimeData();
+
+        Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
+
+        KisShapeLayerShapePaste paste(this, m_d->controller);
+        bool success = paste.paste(KoOdf::Text, mimeData);
+        Q_ASSERT(success);
+        Q_UNUSED(success); // for release build
+    }
+}
+
 KisShapeLayer::~KisShapeLayer()
 {
     /**
@@ -210,6 +251,16 @@ void KisShapeLayer::setImage(KisImageWSP _image)
     delete m_d->converter;
     m_d->converter = new KisImageViewConverter(image());
     m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
+}
+
+KisLayerSP KisShapeLayer::createMergedLayer(KisLayerSP prevLayer)
+{
+    KisShapeLayer *prevShape = dynamic_cast<KisShapeLayer*>(prevLayer.data());
+
+    if (prevShape)
+        return new KisShapeLayer(*prevShape, *this);
+    else
+        return KisExternalLayer::createMergedLayer(prevLayer);
 }
 
 void KisShapeLayer::setParent(KoShapeContainer *parent)

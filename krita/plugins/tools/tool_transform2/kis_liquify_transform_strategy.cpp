@@ -260,6 +260,8 @@ inline QPointF KisLiquifyTransformStrategy::Private::imageToThumb(const QPointF 
 
 void KisLiquifyTransformStrategy::Private::recalculateTransformations()
 {
+    KIS_ASSERT_RECOVER_RETURN(currentArgs.liquifyWorker());
+
     QTransform scaleTransform = KisTransformUtils::imageToFlakeTransform(converter);
 
     QTransform resultTransform = q->thumbToImageTransform() * scaleTransform;

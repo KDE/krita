@@ -99,6 +99,10 @@ QSize KoDockWidgetTitleBar::minimumSizeHint() const
 
 QSize KoDockWidgetTitleBar::sizeHint() const
 {
+    if (isHidden()) {
+        return QSize(0, 0);
+    }
+
     QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
 
     int mw = q->style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, q);

@@ -253,6 +253,7 @@
       <Merge name="StandardToolBarMenuHandler" />
       <Separator/>
       <Action name="view_toggledockers"/>
+      <Action name="view_toggledockertitlebars"/>
       <Action name="settings_dockers_menu"/>
       <Separator/>
       <Action name="theme_menu"/> 

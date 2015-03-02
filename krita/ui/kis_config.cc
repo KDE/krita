@@ -1039,6 +1039,16 @@ void KisConfig::setHideDockersFullscreen(const int value) const
     m_cfg.writeEntry("hideDockersFullScreen", value);
 }
 
+bool KisConfig::showDockerTitleBars() const
+{
+    return m_cfg.readEntry("showDockerTitleBars", true);
+}
+
+void KisConfig::setShowDockerTitleBars(const bool value) const
+{
+    m_cfg.writeEntry("showDockerTitleBars", value);
+}
+
 int KisConfig::hideMenuFullscreen() const
 {
     return m_cfg.readEntry("hideMenuFullScreen", (int)Qt::Checked);

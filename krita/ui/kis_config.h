@@ -312,6 +312,9 @@ public:
     int hideDockersFullscreen() const;
     void setHideDockersFullscreen(const int value) const;
 
+    bool showDockerTitleBars() const;
+    void setShowDockerTitleBars(const bool value) const;
+
     int hideMenuFullscreen() const;
     void setHideMenuFullscreen(const int value) const;
 

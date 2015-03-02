@@ -181,6 +181,7 @@ public:
         , mdiNextWindow(0)
         , mdiPreviousWindow(0)
         , toggleDockers(0)
+        , toggleDockerTitleBars(0)
         , dockWidgetMenu(new KActionMenu(i18nc("@action:inmenu", "&Dockers"), parent))
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
@@ -237,6 +238,7 @@ public:
     KisAction *mdiNextWindow;
     KisAction *mdiPreviousWindow;
     KisAction *toggleDockers;
+    KisAction *toggleDockerTitleBars;
 
     KActionMenu *dockWidgetMenu;
     KActionMenu *windowMenu;
@@ -1641,6 +1643,11 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (titleBar && locked)
             titleBar->setLocked(true);
 
+        if (titleBar) {
+            KisConfig cfg;
+            titleBar->setVisible(cfg.showDockerTitleBars());
+        }
+
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
         dockWidget = d->dockWidgetsMap[factory->id()];
@@ -2040,6 +2047,13 @@ void KisMainWindow::createActions()
     actionManager->addAction("view_toggledockers", d->toggleDockers);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
+    d->toggleDockerTitleBars = new KisAction(i18nc("@action:inmenu", "Show Docker Titlebars"));
+    d->toggleDockerTitleBars->setCheckable(true);
+    KisConfig cfg;
+    d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
+    actionManager->addAction("view_toggledockertitlebars", d->toggleDockerTitleBars);
+    connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
+
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);
 
@@ -2117,6 +2131,18 @@ void KisMainWindow::initializeGeometry()
         }
     }
     restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+}
+
+void KisMainWindow::showDockerTitleBars(bool show)
+{
+    foreach (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            dock->titleBarWidget()->setVisible(show);
+        }
+    }
+
+    KisConfig cfg;
+    cfg.setShowDockerTitleBars(show);
 }
 
 

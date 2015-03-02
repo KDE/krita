@@ -89,7 +89,7 @@ Artistic
 
 Wind
 Deformations
--gimp_wind 20,0,0.7,20,1,0,0
+-gimp_wind 20,0,0.7,20,1,0,0,0
 
 Blur [linear]
 Degradations
@@ -97,7 +97,7 @@ Degradations
 
 Dirty
 Degradations
--gimp_dirty 30,1,2,0
+-gimp_dirty 30,1,0,0,0
 
 Add grain
 Film emulation
@@ -105,11 +105,11 @@ Film emulation
 
 Burn
 Lights & shadows
--gimp_burn 0.5,30,1,0,0
+-gimp_burn 0.5,30,1,0,0,0
 
 Make seamless
 Arrays & tiles
--gimp_make_seamless 0,0,1,0
+-gimp_make_seamless 0,0,3,0
 
 Resynthetize texture
 Patterns
@@ -129,7 +129,7 @@ Sequences
 
 Bandpass
 Spectral filters
--gimp_bandpass 0,100,0,1,0
+-gimp_bandpass 0,100,0,2,0
 
 Fourier transform
 Spectral filters

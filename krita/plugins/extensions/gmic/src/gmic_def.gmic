@@ -2006,7 +2006,7 @@ _document_gmic_example_images :
 
 _document_gmic_footer_images : -skip $1
   -v +
-  -e[] "\n - [ All done! ]\n\n"
+  -e[] " - [ All done! ]\n\n"
   -v -
 
 # Define document_gmic commands for LateX output.
@@ -3146,6 +3146,7 @@ update_server : -skip ${1=@.},${2=1}
   -_update_server_move "/Testing/Samj/Chalk~it~up","/Artistic"
   -_update_server_move "/Testing/Samj/Denim~texture","/Patterns"
   -_update_server_move "/Testing/Zonderr/Spiral","/Rendering"
+  -_update_server_move "/Finger~paint","/Artistic"
 
   # Define useful sub-commands.
   -m "parent : -l[] ({'$""1'}) -s -,{'/'} -if @# -rm[-1] -endif -i[0--1] (47) -a y -u @{0,t} -rm -endl" # Command to return parent of a path.
@@ -3211,6 +3212,9 @@ update_server : -skip ${1=@.},${2=1}
   -load_gmic http://www.aljacom.com/~gmic/samj.gmic
   -load_gmic http://gmic.eu/tomkeil.gmic
   -load_gmic http://docgmic.tuxfamily.org/zonderr.gmic
+  -replace_str[^0] "-apply_channels ","-apply_channels_old "
+  -replace_str[^0] "-apply_channels[","-apply_channels_old["
+  -replace_str[^0] "Dtails","Details"
 
   # Merge them together.
   -i[0] (10) -i[2--1] ({"'\n#@gimp ________________\n'"}) -y -a y -discard 13 -replace 9,32
@@ -3499,116 +3503,117 @@ update_tutorial_html :
   -use_vt100
 
   # Init list of pages to retrieve.
-  # -add_page /,1700,index,_index
-  # -add_page basics,4000
+  -add_page /,1700,index,_index
+  -add_page basics,4000
 
-  # -add_page beginners-cookbook,1000
-  # -add_page beginners-cookbook/cauldron,3500
-  # -add_page beginners-cookbook/dyidiffusion,1000
-  # -add_page beginners-cookbook/dyidiffusion/graduated-blurs,3800
-  # -add_page beginners-cookbook/dyidiffusion/variations-on-a-theme,3800
-  # -add_page beginners-cookbook/dyidiffusion/eigenvalues-and-eigenvectors,2300
-  # -add_page beginners-cookbook/dyidiffusion/directional-blurring,3500
-  # -add_page beginners-cookbook/dyidiffusion/tensors-for-the-tonsorially-challenged,8500
-  # -add_page beginners-cookbook/dyidiffusion/eigen-thingys,4800
-  # -add_page beginners-cookbook/dyidiffusion/fake-depth-of-field,7600
-  # -add_page beginners-cookbook/fingerpainting,12000
-  # -add_page beginners-cookbook/ramps,1200
-  # -add_page beginners-cookbook/ramps/applying-a-curve,600
-  # -add_page beginners-cookbook/ramps/blurring,600
-  # -add_page beginners-cookbook/ramps/general-ramps,2500
-  # -add_page beginners-cookbook/ramps/input-and-fill,1200
-  # -add_page beginners-cookbook/ramps/one-dimensional-functions,800
-  # -add_page beginners-cookbook/ramps/remapping-space,2200
-  # -add_page beginners-cookbook/ramps/resizing,600
-  # -add_page beginners-cookbook/ramps/warp,800
-  # -add_page beginners-cookbook/road-systems,2500
-  # -add_page beginners-cookbook/stained-glass,4000
-  # -add_page beginners-cookbook/spectral-art,1500
-  # -add_page beginners-cookbook/spectral-art/the-spatial-and-the-spectral,2000
-  # -add_page beginners-cookbook/spectral-art/the-spectral-course,2000
-  # -add_page beginners-cookbook/spectral-art/the-spectral-domain,2000
-  # -add_page beginners-cookbook/spectral-art/the-complex-number-field,3300
-  # -add_page beginners-cookbook/spectral-art/painting-with-waves-part-one,2200
-  # -add_page beginners-cookbook/spectral-art/painting-with-waves-part-two,2200
-  # -add_page beginners-cookbook/spectral-art/a-revised-map,1500
-  # -add_page beginners-cookbook/spectral-art/intermezzo-spectral-editing,1500
-  # -add_page beginners-cookbook/spectral-art/a-wave-painting-workflow,2000
-  # -add_page beginners-cookbook/spectral-art/tiletex,5000
-  # -add_page beginners-cookbook/spectral-art/coefficient-values,3000
-  # -add_page beginners-cookbook/spectral-art/coefficient-values-part-two,4500
-  # -add_page beginners-cookbook/spectral-art/coefficient-values-part-three,2500
-  # -add_page beginners-cookbook/spectral-art/cheat-sheet,9000
-  # -add_page beginners-cookbook/spectral-art/appendix,2500
+  -add_page beginners-cookbook,1000
+  -add_page beginners-cookbook/cauldron,3500
+  -add_page beginners-cookbook/dyidiffusion,1000
+  -add_page beginners-cookbook/dyidiffusion/graduated-blurs,3800
+  -add_page beginners-cookbook/dyidiffusion/variations-on-a-theme,3800
+  -add_page beginners-cookbook/dyidiffusion/eigenvalues-and-eigenvectors,2300
+  -add_page beginners-cookbook/dyidiffusion/directional-blurring,3500
+  -add_page beginners-cookbook/dyidiffusion/tensors-for-the-tonsorially-challenged,8500
+  -add_page beginners-cookbook/dyidiffusion/eigen-thingys,4800
+  -add_page beginners-cookbook/dyidiffusion/fake-depth-of-field,7600
+  -add_page beginners-cookbook/fingerpainting,12000
+  -add_page beginners-cookbook/ramps,1200
+  -add_page beginners-cookbook/ramps/applying-a-curve,600
+  -add_page beginners-cookbook/ramps/blurring,600
+  -add_page beginners-cookbook/ramps/general-ramps,2500
+  -add_page beginners-cookbook/ramps/input-and-fill,1200
+  -add_page beginners-cookbook/ramps/one-dimensional-functions,800
+  -add_page beginners-cookbook/ramps/remapping-space,2200
+  -add_page beginners-cookbook/ramps/resizing,600
+  -add_page beginners-cookbook/ramps/warp,800
+  -add_page beginners-cookbook/road-systems,2500
+  -add_page beginners-cookbook/stained-glass,4000
+  -add_page beginners-cookbook/spectral-art,1500
+  -add_page beginners-cookbook/spectral-art/the-spatial-and-the-spectral,2000
+  -add_page beginners-cookbook/spectral-art/the-spectral-course,2000
+  -add_page beginners-cookbook/spectral-art/the-spectral-domain,2000
+  -add_page beginners-cookbook/spectral-art/the-complex-number-field,3300
+  -add_page beginners-cookbook/spectral-art/painting-with-waves-part-one,2200
+  -add_page beginners-cookbook/spectral-art/painting-with-waves-part-two,2200
+  -add_page beginners-cookbook/spectral-art/a-revised-map,1500
+  -add_page beginners-cookbook/spectral-art/intermezzo-spectral-editing,1500
+  -add_page beginners-cookbook/spectral-art/a-wave-painting-workflow,2000
+  -add_page beginners-cookbook/spectral-art/tiletex,5000
+  -add_page beginners-cookbook/spectral-art/coefficient-values,3000
+  -add_page beginners-cookbook/spectral-art/coefficient-values-part-two,4500
+  -add_page beginners-cookbook/spectral-art/coefficient-values-part-three,2500
+  -add_page beginners-cookbook/spectral-art/cheat-sheet,9000
+  -add_page beginners-cookbook/spectral-art/appendix,2500
 
-  # -add_page command-decorations,3500
-  # -add_page images,2000
-  # -add_page images/conjuring-images,1000
-  # -add_page images/images-as-datasets,3500
-  # -add_page images/images-have-edges,1200
-  # -add_page command-guide,5500
+  -add_page command-decorations,3500
+  -add_page images,2000
+  -add_page images/conjuring-images,1000
+  -add_page images/images-as-datasets,3500
+  -add_page images/images-have-edges,1200
+  -add_page command-guide,5500
 
-  # -add_page command-guide/color-manipulation/-compose_channels,1000,,,commands-colors-manipulation
-  # -add_page command-guide/color-manipulation/-direction2rgb,1000,,,commands-colors-manipulation
-  # -add_page command-guide/color-manipulation/-gradient2rgb,1000,,,commands-colors-manipulation
-  # -add_page command-guide/color-manipulation/-mix_rgb,4000,,,commands-colors-manipulation
-  # -add_page command-guide/color-manipulation/-select_color,3000,,,commands-colors-manipulation
+  -add_page command-guide/color-manipulation/-compose_channels,1000,,,commands-colors-manipulation
+  -add_page command-guide/color-manipulation/-direction2rgb,1000,,,commands-colors-manipulation
+  -add_page command-guide/color-manipulation/-gradient2rgb,1000,,,commands-colors-manipulation
+  -add_page command-guide/color-manipulation/-mix_rgb,4000,,,commands-colors-manipulation
+  -add_page command-guide/color-manipulation/-select_color,3000,,,commands-colors-manipulation
 
-  # -add_page command-guide/feature-extraction/-distance,9500,,,commands-features-extraction
-  # -add_page command-guide/feature-extraction/-label,1300,,,commands-features-extraction
+  -add_page command-guide/feature-extraction/-distance,9500,,,commands-features-extraction
+  -add_page command-guide/feature-extraction/-area,2000,,,commands-features-extraction
+  -add_page command-guide/feature-extraction/-label,1300,,,commands-features-extraction
 
-  # -add_page command-guide/filtering/-bandpass,5000,,,commands-filtering
-  # -add_page command-guide/filtering/-blur,2000,,,commands-filtering
-  # -add_page command-guide/filtering/-blur_angular,700,,,commands-filtering
-  # -add_page command-guide/filtering/-blur_linear,700,,,commands-filtering
-  # -add_page command-guide/filtering/-blur_radial,700,,,commands-filtering
-  # -add_page command-guide/filtering/-blur_selective,3500,,,commands-filtering
-  # -add_page command-guide/filtering/-blur_x,700,,,commands-filtering
-  # -add_page command-guide/filtering/-blur_xy,700,,,commands-filtering
-  # -add_page command-guide/filtering/-blur_xyz,700,,,commands-filtering
-  # -add_page command-guide/filtering/-blur_y,700,,,commands-filtering
-  # -add_page command-guide/filtering/-blur_z,2500,,,commands-filtering
-  # -add_page command-guide/filtering/-convolve,3500,,,commands-filtering
-  # -add_page command-guide/filtering/-deriche,1500,,,commands-filtering
-  # -add_page command-guide/filtering/-diffusiontensors,7200,,,commands-filtering
+  -add_page command-guide/filtering/-bandpass,5000,,,commands-filtering
+  -add_page command-guide/filtering/-blur,2000,,,commands-filtering
+  -add_page command-guide/filtering/-blur_angular,700,,,commands-filtering
+  -add_page command-guide/filtering/-blur_linear,700,,,commands-filtering
+  -add_page command-guide/filtering/-blur_radial,700,,,commands-filtering
+  -add_page command-guide/filtering/-blur_selective,3500,,,commands-filtering
+  -add_page command-guide/filtering/-blur_x,700,,,commands-filtering
+  -add_page command-guide/filtering/-blur_xy,700,,,commands-filtering
+  -add_page command-guide/filtering/-blur_xyz,700,,,commands-filtering
+  -add_page command-guide/filtering/-blur_y,700,,,commands-filtering
+  -add_page command-guide/filtering/-blur_z,2500,,,commands-filtering
+  -add_page command-guide/filtering/-convolve,3500,,,commands-filtering
+  -add_page command-guide/filtering/-deriche,1500,,,commands-filtering
+  -add_page command-guide/filtering/-diffusiontensors,7200,,,commands-filtering
   -add_page command-guide/filtering/-fft,6300,,,commands-filtering
-  # -add_page command-guide/filtering/-gradient,3000,,,commands-filtering
-  # -add_page command-guide/filtering/-gradient_norm,1300,,,commands-filtering
-  # -add_page command-guide/filtering/-gradient_orientation,3300,,,commands-filtering
-  # -add_page command-guide/filtering/-haar,2000,,,commands-filtering
-  # -add_page command-guide/filtering/-smooth,4300,,,commands-filtering
-  # -add_page command-guide/filtering/-structuretensors,3300,,,commands-filtering
+  -add_page command-guide/filtering/-gradient,3000,,,commands-filtering
+  -add_page command-guide/filtering/-gradient_norm,1300,,,commands-filtering
+  -add_page command-guide/filtering/-gradient_orientation,3300,,,commands-filtering
+  -add_page command-guide/filtering/-haar,2000,,,commands-filtering
+  -add_page command-guide/filtering/-smooth,4300,,,commands-filtering
+  -add_page command-guide/filtering/-structuretensors,3300,,,commands-filtering
 
-  # -add_page command-guide/geometry-manipulation/-warp,5000,,,commands-geometry-manipulation
+  -add_page command-guide/geometry-manipulation/-warp,5000,,,commands-geometry-manipulation
 
-  # -add_page command-guide/image-drawing/-gaussian,2000,,,commands-image-drawing
-  # -add_page command-guide/image-drawing/-plasma,4500,,,commands-image-drawing
-  # -add_page command-guide/image-drawing/-turbulence,5500,,,commands-image-drawing
+  -add_page command-guide/image-drawing/-gaussian,2000,,,commands-image-drawing
+  -add_page command-guide/image-drawing/-plasma,4500,,,commands-image-drawing
+  -add_page command-guide/image-drawing/-turbulence,5500,,,commands-image-drawing
 
-  # -add_page command-guide/inputs-outputs/-display,2000,,,commands-inputs-outputs
-  # -add_page command-guide/inputs-outputs/-display_tensors,1500,,,commands-inputs-outputs
-  # -add_page command-guide/inputs-outputs/-input,7500,,,commands-inputs-outputs
-  # -add_page command-guide/inputs-outputs/-shared,2000,,,commands-inputs-outputs
+  -add_page command-guide/inputs-outputs/-display,2000,,,commands-inputs-outputs
+  -add_page command-guide/inputs-outputs/-display_tensors,1500,,,commands-inputs-outputs
+  -add_page command-guide/inputs-outputs/-input,7500,,,commands-inputs-outputs
+  -add_page command-guide/inputs-outputs/-shared,2000,,,commands-inputs-outputs
 
-  # -add_page command-guide/matrix-computation/-eigen,2000,,,commands-matrix-computation
+  -add_page command-guide/matrix-computation/-eigen,2000,,,commands-matrix-computation
 
-  # -add_page command-guide/program-control/-local,3500,,,commands-program-control
-  # -add_page command-guide/program-control/-do,6500,,,commands-program-control
-  # -add_page command-guide/program-control/-if,3500,,,commands-program-control
-  # -add_page command-guide/program-control/-repeat,2000,,,commands-program-control
+  -add_page command-guide/program-control/-local,3500,,,commands-program-control
+  -add_page command-guide/program-control/-do,6500,,,commands-program-control
+  -add_page command-guide/program-control/-if,3500,,,commands-program-control
+  -add_page command-guide/program-control/-repeat,2000,,,commands-program-control
 
-  # -add_page command-guide/values-manipulation/-eigen2tensor,5500,,,commands-values-manipulation
-  # -add_page command-guide/values-manipulation/-norm,700,,,commands-values-manipulation
-  # -add_page command-guide/values-manipulation/-normalize,1700,,,commands-values-manipulation
-  # -add_page command-guide/values-manipulation/-orientation,5000,,,commands-values-manipulation
-  # -add_page command-guide/values-manipulation/-threshold,1500,,,commands-values-manipulation
+  -add_page command-guide/values-manipulation/-eigen2tensor,5500,,,commands-values-manipulation
+  -add_page command-guide/values-manipulation/-norm,700,,,commands-values-manipulation
+  -add_page command-guide/values-manipulation/-normalize,1700,,,commands-values-manipulation
+  -add_page command-guide/values-manipulation/-orientation,5000,,,commands-values-manipulation
+  -add_page command-guide/values-manipulation/-threshold,1500,,,commands-values-manipulation
 
-  # -add_page technical-notes/trigometric-and-inverse-trigometric-commands,2500
-  # -add_page technical-notes/wavelet-analysis-and-synthesis-in-gmic,5000
-  # -add_page gimp-filters,1500
-  # -add_page gimp-filters/blur-by-color-filter,22500
-  # -add_page gimp-filters/the-fingerpainting-filter,2200
-  # -add_page gimp-filters/the-hairlock-filter,8500
+  -add_page technical-notes/trigometric-and-inverse-trigometric-commands,2500
+  -add_page technical-notes/wavelet-analysis-and-synthesis-in-gmic,5000
+  -add_page gimp-filters,1500
+  -add_page gimp-filters/blur-by-color-filter,22500
+  -add_page gimp-filters/the-fingerpainting-filter,2200
+  -add_page gimp-filters/the-hairlock-filter,8500
 
   # Prepare folder structure.
   -v + -e[] "\n  * Prepare folder structure." -v -
@@ -4795,252 +4800,108 @@ vector2tensor :
 #
 #---------------------------------
 
-#@gmic apply_channels : "command",_channels={ all=0 | rgba=1 | rgb=2 | y=3 | cbcr=4 | cb=5 | cr=6 | l=7 | ab=8 | a=9 | b=10 | h=11 | s=12 | v=13 | k=14 | cg=15 | ch=16 | c=17 | H=18 | r=19 | g=20 | b=21 | alpha==22 },_normalize={ 0=cut | 1=normalize }
-#@gmic : Apply specified command on chosen normalized channels of each selected images.
-#@gmic : Default value: 'normalize=0'.
-#@gmic : $ image.jpg --apply_channels "-equalize -blur 2",cbcr
-apply_channels : -skip ${3=0}
+#@gmic ac : eq. to '-apply_channels'.
+ac :
+  -v - _gmic_s="$?" -v +
+  -_apply_channels $"*"
 
-  # All components.
-  -if {{$2'=='all}" || "{$2'=='0}}
-    -e[^-1] "Apply command '$1' on image$?." -v -
-    -repeat @# -l[$>]
-      -_apply_channels "$1"
-      -if $3 -n 0,255 -else -c 0,255 -endif
-    -endl -done
+#@gmic apply_channels : "command",_channels,_value_action={ 0=none | 1=cut | 2=normalize }
+#@gmic : Apply specified command on the chosen color channel(s) of each selected images.
+#@gmic : (eq. to '-ac').
+#@gmic : Argument 'channels' refers to a colorspace, and can be basically one of { all | rgba | rgb | ycbcr | lab | lch | hsv | hsi | hsl | cmy | cmyk }.
+#@gmic : You can also focus the processing on one particular channel of this colorspace, by setting 'channels' as 'colorspace_channel' (e.g. 'hsv_h' for the hue).
+#@gmic : All channel values are considered to be in the [0,255] range.
+#@gmic : Default value: 'value_action=0'.
+#@gmic : $ image.jpg --apply_channels "-equalize -blur 2",ycbcr_cbcr
+apply_channels :
+  -v - _gmic_s="$?" -v +
+  -_$0 $"*"
 
-  # RGBA.
-  -elif {{$2'=='rgba}" || "{$2'=='1}}
-    -e[^-1] "Apply command '$1' on RGBA channels of image$?." -v -
-    -to_rgba -repeat @# -l[$>]
-      -_apply_channels "$1"
-      -if $3 -n 0,255 -else -c 0,255 -endif
-    -endl -done
-
-  # RGB.
-  -elif {{$2'=='rgb}" || "{$2'=='2}}
-    -e[^-1] "Apply command '$1' on RGB channels of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0]
-      -_apply_channels[0] "$1"
-      -if $3 -n[0] 0,255 -else -c[0] 0,255 -endif
-      -to_rgb[0]
-      -a c
-    -endl -done
-
-  # Y.
-  -elif {{$2'=='y}" || "{$2'=='3}}
-    -e[^-1] "Apply command '$1' on luminance Y of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2ycbcr[0] -s[0] c
-      -_apply_channels[0] "$1" -channels[0] 0
-      -if $3 -n[0] 0,255 -else -c[0] 0,255 -endif
-      -a[0-2] c -ycbcr2rgb[0] -a c
-    -endl -done
-
-  # CbCr.
-  -elif {{$2'=='cbcr}" || "{$2'=='4}}
-    -e[^-1] "Apply command '$1' on blue and red chrominances CbCr of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2ycbcr[0] -s[0] c -a[1,2] c
-      -_apply_channels[1] "$1" -channels[1] 0,1
-      -if $3 -n[1] 0,255 -else -c[1] 0,255 -endif
-      -a[0-1] c -ycbcr2rgb[0] -a c
-    -endl -done
-
-  # Cb.
-  -elif {{$2'=='cb}" || "{$2'=='5}}
-    -e[^-1] "Apply command '$1' on blue chrominance Cb of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2ycbcr[0] -s[0] c
-      -_apply_channels[1] "$1" -channels[1] 0
-      -if $3 -n[1] 0,255 -else -c[1] 0,255 -endif
-      -a[0-2] c -ycbcr2rgb[0] -a c
-    -endl -done
-
-  # Cr.
-  -elif {{$2'=='cr}" || "{$2'=='6}}
-    -e[^-1] "Apply command '$1' on red chrominance Cr of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2ycbcr[0] -s[0] c
-      -_apply_channels[2] "$1" -channels[2] 0
-      -if $3 -n[2] 0,255 -else -c[2] 0,255 -endif
-      -a[0-2] c -ycbcr2rgb[0] -a c
-    -endl -done
-
-  # L.
-  -elif {{$2'=='l}" || "{$2'=='7}}
-    -e[^-1] "Apply command '$1' on lightness L of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2lab[0] -s[0] c
-      -*[0] 2.55 -_apply_channels[0] "$1" -channels[0] 0 -/[0] 2.55
-      -if $3 -n[0] 0,100 -else -c[0] 0,100 -endif
-      -a[0-2] c -lab2rgb[0] -a c
-    -endl -done
-
-  # a-b.
-  -elif {{$2'=='ab}" || "{$2'=='8}}
-    -e[^-1] "Apply command '$1' on a-b channels of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2lab[0] -s[0] c
-      -+[1] 86 -*[1] 1.38587 -+[2] 108 -*[2] 1.25616
-      -a[1,2] c -_apply_channels[1] "$1" -channels[1] 0,1 -s[1] c
-      -/[1] 1.38587 --[1] 86 -/[2] 1.25616 --[2] 108
-      -if $3 -n[1] -86,98 -n[2] -108,95 -endif
-      -a[0-2] c -lab2rgb[0] -a c
-    -endl -done
-
-  # a.
-  -elif {{$2'=='a}" || "{$2'=='9}}
-    -e[^-1] "Apply command '$1' on a-channel of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2lab[0] -s[0] c
-      -+[1] 86 -*[1] 1.38587 -_apply_channels[1] "$1" -channels[1] 0 -/[1] 1.38587 --[1] 86
-      -if $3 -n[1] -86,98 -endif
-      -a[0-2] c -lab2rgb[0] -a c
-    -endl -done
-
-  # b.
-  -elif {{$2'=='b}" || "{$2'=='10}}
-    -e[^-1] "Apply command '$1' on b-channel of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2lab[0] -s[0] c
-      -+[2] 108 -*[2] 1.25616 -_apply_channels[2] "$1" -channels[2] 0 -/[2] 1.25616 --[2] 108
-      -if $3 -n[1] -108,95 -endif
-      -a[0-2] c -lab2rgb[0] -a c
-    -endl -done
-
-  # H.
-  -elif {{$2'=='h}" || "{$2'=='11}}
-    -e[^-1] "Apply command '$1' on hue H of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2hsv[0] -s[0] c
-      -*[0] 0.708333 -_apply_channels[0] "$1" -channels[0] 0 -/[0] 0.708333
-      -if $3 -n[0] 0,360 -else -%[0] 360 -endif
-      -a[0-2] c -hsv2rgb[0] -a c
-    -endl -done
-
-  # S.
-  -elif {{$2'=='s}" || "{$2'=='12}}
-    -e[^-1] "Apply command '$1' on saturation S of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2hsv[0] -s[0] c
-      -*[1] 255 -_apply_channels[1] "$1" -channels[1] 0 -/[1] 255
-      -if $3 -n[1] 0,1 -else -c[1] 0,1 -endif
-      -a[0-2] c -hsv2rgb[0] -a c
-    -endl -done
-
-  # V.
-  -elif {{$2'=='v}" || "{$2'=='13}}
-    -e[^-1] "Apply command '$1' on value V of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2hsv[0] -s[0] c
-      -*[2] 255 -_apply_channels[2] "$1" -channels[2] 0 -/[2] 255
-      -if $3 -n[2] 0,1 -else -c[2] 0,1 -endif
-      -a[0-2] c -hsv2rgb[0] -a c
-    -endl -done
-
-  # K.
-  -elif {{$2'=='k" || "{$2'=='14}}
-    -e[^-1] "Apply command '$1' on key channel K of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2cmyk[0] -s[0] c
-      -_apply_channels[3] "$1" -channels[3] 0
-      -if $3 -n[3] 0,255 -else -c[3] 0,255 -endif
-      -a[0-3] c -cmyk2rgb[0] -a c
-    -endl -done
-
-  # Cg.
-  -elif {{$2'=='cg}" || "{$2'=='15}}
-    -e[^-1] "Apply command(s) '$1' on green chrominance Cg of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -s[0] c -rv[1,2] -a[0-2] c -rgb2ycbcr[0] -s[0] c
-      -_apply_channels[1] "$1" -channels[1] 0
-      -if $3 -n[1] 0,255 -else -c[1] 0,255 -endif
-      -a[0-2] c -ycbcr2rgb[0] -s[0] c -rv[1,2] -a c
-    -endl -done
-
-  # c-h.
-  -elif {{$2'=='ch}" || "{$2'=='16}}
-    -e[^-1] "Apply command '$1' on c-h channels of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2lch[0] -s[0] c
-      -*[1] 2.55 -+[2] {pi} -*[2] {255/(2*pi)}
-      -a[1,2] c -_apply_channels[1] "$1" -channels[1] 0,1 -s[1] c
-      -/[1] 2.55 -/[2] {255/(2*pi)} --[2] {pi}
-      -if $3 -n[1] 0,100 -n[2] -{pi},{pi} -endif
-      -a[0-2] c -lch2rgb[0] -a c
-    -endl -done
-
-  # c.
-  -elif {{$2'=='c}" || "{$2'=='17}}
-    -e[^-1] "Apply command '$1' on c-channel of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2lch[0] -s[0] c
-      -*[1] 2.55 -_apply_channels[1] "$1" -channels[1] 0 -/[1] 2.55
-      -if $3 -n[1] 0,100 -else -c[1] 0,100 -endif
-      -a[0-2] c -lch2rgb[0] -a c
-    -endl -done
-
-  # H.
-  -elif {{$2'=='h}" || "{$2'=='18}}
-    -e[^-1] "Apply command '$1' on h-channel of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -rgb2lch[0] -s[0] c
-      -+[2] {pi} -*[2] {255/(2*pi)} -_apply_channels[2] "$1" -channels[2] 0 -/[2] {255/(2*pi)} --[2] {pi}
-      -if $3 -n[2] -{pi},{pi} -endif
-      -a[0-2] c -lch2rgb[0] -a c
-    -endl -done
-
-  # Red.
-  -elif {{$2'=='r}" || "{$2'=='19}}
-    -e[^-1] "Apply command '$1' on red channel R of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -s[0] c
-      -_apply_channels[0] "$1"
-      -if $3 -n[0] 0,255 -else -c[0] 0,255 -endif
-      -to_gray[0]
-      -a c
-    -endl -done
-
-  # Green.
-  -elif {{$2'=='g}" || "{$2'=='20}}
-    -e[^-1] "Apply command '$1' on green channel G of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -s[0] c
-      -_apply_channels[1] "$1"
-      -if $3 -n[1] 0,255 -else -c[1] 0,255 -endif
-      -to_gray[1]
-      -a c
-    -endl -done
-
-  # Blue.
-  -elif {{$2'=='b}" || "{$2'=='21}}
-    -e[^-1] "Apply command '$1' on blue channel B of image$?." -v -
-    -repeat @# -l[$>]
-      -split_opacity -to_rgb[0] -s[0] c
-      -_apply_channels[2] "$1"
-      -if $3 -n[2] 0,255 -else -c[2] 0,255 -endif
-      -to_gray[2]
-      -a c
-    -endl -done
-
-  # Alpha.
-  -elif {{$2'=='alpha}" || "{$2'=='22}}
-    -e[^-1] "Apply command '$1' on alpha channel A of image$?." -v -
-    -repeat @# -l[$>]
-      -to_rgba -s c
-      -_apply_channels[3] "$1"
-      -if $3 -n[3] 0,255 -else -c[3] 0,255 -endif
-      -to_gray[3]
-      -a c
-    -endl -done
-
-  -endif
+_apply_channels : -check "isint(${3=0}) && $3>=0 && $3<=2"
+  -v -
+  -if {isval("$2")} -if {isint("$2")}
+    mode=@{-arg\ 1+$2,all,rgba,rgb,rgb_r,rgb_g,rgb_b,rgba_a,\
+                      ycbcr_y,ycbcr_cbcr,ycbcr_cb,ycbcr_cr,ycbcr_cg,\
+                      lab_l,lab_ab,lab_a,lab_b,\
+                      lch_ch,lch_c,lch_h,\
+                      hsv_h,hsv_s,hsv_v,hsi_i,hsl_l,\
+                      cmyk_c,cmyk_m,cmyk_y,cmyk_k}
+  -else mode="$2" -endif -else mode="$2" -endif
+  -v + -e[^-1] "Apply command '$1' on channel '"$mode"' of image"$_gmic_s"." -v -
+  -_ac_$mode -m "_ac_precond : "$_p -m "_ac_forward : "$_f -m "_ac_backward : "$_b
+  -repeat @# -l[$>]
+    -_ac_precond is_alpha={s==2" || "s==4}
+    -if $is_alpha -s c,{1-s} -endif
+    -_ac_forward[0] -a c
+    -sh $_s -_ac[-1] "$1"
+    -if {$3==1} -c[-1] 0,255 -elif {$3==2} -n[-1] 0,255 -endif
+    -rm[-1]
+    -if $is_alpha -s c,{1-s} -endif
+    -_ac_backward[0] -a c
+  -endl -done
+  -uncommand "_ac_precond" -uncommand "_ac_forward" -uncommand "_ac_backward"
   -v +
 
-_apply_channels :
-  ${1--1} -k[0]
+_ac :
+  whs={w},{h},1,{s} ${1--1} -k[0] -r $whs,0
+
+_ac_all : _p="" _f="" _b="" _s=0,100%
+
+_ac_rgba : _p="-to_rgba" _f="" _b="" _s=0,3
+_ac_rgba_r : _p="-to_color" _f="" _b="" _s=0,0
+_ac_rgba_g : _p="-to_color" _f="" _b="" _s=1,1
+_ac_rgba_b : _p="-to_color" _f="" _b="" _s=2,2
+_ac_rgba_a : _p="-to_rgba" _f="" _b="" _s=3,3
+
+_ac_rgb : _p="-to_color" _f="" _b="" _s=0,2
+_ac_rgb_r : -_ac_rgba_r
+_ac_rgb_g : -_ac_rgba_g
+_ac_rgb_b : -_ac_rgba_b
+
+_ac_ycbcr : _p="-to_color" _f="-rgb2ycbcr" _b="-ycbcr2rgb" _s=0,2
+_ac_ycbcr_y : _p="-to_color" _f="-rgb2ycbcr" _b="-ycbcr2rgb" _s=0,0
+_ac_ycbcr_cbcr : _p="-to_color" _f="-rgb2ycbcr" _b="-ycbcr2rgb" _s=1,2
+_ac_ycbcr_cb : _p="-to_color" _f="-rgb2ycbcr" _b="-ycbcr2rgb" _s=1,1
+_ac_ycbcr_cr : _p="-to_color" _f="-rgb2ycbcr" _b="-ycbcr2rgb" _s=2,2
+_ac_ycbcr_cg : _p="-to_color" _f="-sh 0,1 -mirror[-1] c -rm[-1] -rgb2ycbcr" _b="-ycbcr2rgb -sh 0,1 -mirror[-1] c -rm[-1]" _s=2,2
+
+_ac_lab : _p="-to_color" _f="-srgb2rgb -rgb2lab8" _b="-lab82rgb -rgb2srgb" _s=0,2
+_ac_lab_l : _p="-to_color" _f="-srgb2rgb -rgb2lab8" _b="-lab82rgb -rgb2srgb" _s=0,0
+_ac_lab_ab : _p="-to_color" _f="-srgb2rgb -rgb2lab8" _b="-lab82rgb -rgb2srgb" _s=1,2
+_ac_lab_a : _p="-to_color" _f="-srgb2rgb -rgb2lab8" _b="-lab82rgb -rgb2srgb" _s=1,1
+_ac_lab_b : _p="-to_color" _f="-srgb2rgb -rgb2lab8" _b="-lab82rgb -rgb2srgb" _s=2,2
+
+_ac_lch : _p="-to_color" _f="-srgb2rgb -rgb2lch8" _b="-lch82rgb -rgb2srgb" _s=0,2
+_ac_lch_l : -_ac_lab_l
+_ac_lch_ch : _p="-to_color" _f="-srgb2rgb -rgb2lch8" _b="-lch82rgb -rgb2srgb" _s=1,2
+_ac_lch_c : _p="-to_color" _f="-srgb2rgb -rgb2lch8" _b="-lch82rgb -rgb2srgb" _s=1,1
+_ac_lch_h : _p="-to_color" _f="-srgb2rgb -rgb2lch8" _b="-lch82rgb -rgb2srgb" _s=2,2
+
+_ac_hsv : _p="-to_color" _f="-rgb2hsv8" _b="-hsv82rgb" _s=0,2
+_ac_hsv_h : _p="-to_color" _f="-rgb2hsv8" _b="-hsv82rgb" _s=0,0
+_ac_hsv_s : _p="-to_color" _f="-rgb2hsv8" _b="-hsv82rgb" _s=1,1
+_ac_hsv_v : _p="-to_color" _f="-rgb2hsv8" _b="-hsv82rgb" _s=2,2
+
+_ac_hsi : _p="-to_color" _f="-rgb2hsi8" _b="-hsi82rgb" _s=0,2
+_ac_hsi_h : _p="-to_color" _f="-rgb2hsi8" _b="-hsi82rgb" _s=0,0
+_ac_hsi_s : _p="-to_color" _f="-rgb2hsi8" _b="-hsi82rgb" _s=1,1
+_ac_hsi_i : _p="-to_color" _f="-rgb2hsi8" _b="-hsi82rgb" _s=2,2
+
+_ac_hsl : _p="-to_color" _f="-rgb2hsl8" _b="-hsl82rgb" _s=0,2
+_ac_hsl_h : _p="-to_color" _f="-rgb2hsl8" _b="-hsl82rgb" _s=0,0
+_ac_hsl_s : _p="-to_color" _f="-rgb2hsl8" _b="-hsl82rgb" _s=1,1
+_ac_hsl_l : _p="-to_color" _f="-rgb2hsl8" _b="-hsl82rgb" _s=2,2
+
+_ac_cmy : _p="-to_color" _f="-rgb2cmy" _b="-cmy2rgb" _s=0,2
+_ac_cmy_c : _p="-to_color" _f="-rgb2cmy" _b="-cmy2rgb" _s=0,0
+_ac_cmy_m : _p="-to_color" _f="-rgb2cmy" _b="-cmy2rgb" _s=1,1
+_ac_cmy_y : _p="-to_color" _f="-rgb2cmy" _b="-cmy2rgb" _s=2,2
+
+_ac_cmyk : _p="-to_color" _f="-rgb2cmyk" _b="-cmyk2rgb" _s=0,3
+_ac_cmyk_c : _p="-to_color" _f="-rgb2cmyk" _b="-cmyk2rgb" _s=0,0
+_ac_cmyk_m : _p="-to_color" _f="-rgb2cmyk" _b="-cmyk2rgb" _s=1,1
+_ac_cmyk_y : _p="-to_color" _f="-rgb2cmyk" _b="-cmyk2rgb" _s=2,2
+_ac_cmyk_k : _p="-to_color" _f="-rgb2cmyk" _b="-cmyk2rgb" _s=3,3
 
 #@gmic autoindex : nb_colors>0,0<=_dithering<=1,_method={ 0=median-cut | 1=k-means }
 #@gmic : Index selected vector-valued images by adapted colormaps.
@@ -6582,7 +6443,7 @@ upscale_smart : -skip ${2=100%},${3=100%} -check "${4=2}>=0 && ${5=0.4}>=0 && $5
       -rm[-1] --diffusiontensors 0,$5,1.2,1.2
       -r[-2,-1] $1,$2,$3,100%,5
       -smooth[-2] [-1],$4 -rm[-1]
-      -apply_channels "-sharpen[-1] $6,10",3,0
+      -ac "-sharpen[-1] $6,10",ycbcr_y
     -endif
   -endl -done -v +
 
@@ -7988,6 +7849,7 @@ watermark_fourier : -check ${2=33}>0
 #@gmic : Compute area of connected components in selected images.
 #@gmic : Default values: 'is_high_connectivity=0'.
 #@gmic : $ image.jpg -luminance -stencil[-1] 1 --area 0
+#@gmic : $$
 area : -check "$1>=0" -skip ${2=0}
   -e[^-1] "Compute area of connected components in image$?, with tolerance $1 and "@{-arg\ 1+!$2,high,low}" connectivity."
   -v - -repeat @# -l[$>] -s c
@@ -11500,7 +11362,7 @@ taquin : -check "isint($1) && $1>0 & isint(${2=$1}) && $2>0" -skip ${3=0},${4=50
    100%,100%,1,1,1
    -if @{"-is_percent $5"} -rectangle[-1] {100*$5/2}%,{100*$5/2}%,{100-50*$5}%,{100-50*$5}%,1,0
    -else -rectangle[-1] $5,$5,{w-1-$5},{h-1-$5},1,0 -endif
-   -*[-1] '1-2*(x<y)' -*[-1] $4
+   -*[-1] '1-2*(x/w<y/h)' -*[-1] $4
    -repeat {@#-1} -l[$>,-1] -split_opacity[0] -+[0] [-1] -a[^-1] c -endl -done -rm[-1] -c 0,255
    -frame $6,$6,${7-10}
    -if {$3==3} -f[-1] 0 -endif
@@ -14901,24 +14763,14 @@ __x_color_curves :
     -m "xcc_goto: -s c,-3 -rgb2hsv8[0] -a c" -m "xcc_backto: -s c,-3 -hsv82rgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,255) 256,1,1,3,if(!c,0,if(c==1,x,128)) 256,1,1,3,if(!c,0,if(c==1,0,x)) -hsv82rgb[-3--1] -permute[-3--1] xcyz "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  # -elif {$1'=='lab}
-  #   _color0="180,180,180" _color1="220,180,220" _color2="220,220,180" _color3="220,220,220" _title0=Lightness _title1=Chroma-A _title2=Chroma-B _title3=Alpha
-  #   -m "xcc_goto: -s c,-3 -srgb2rgb[0] -apply_parallel_overlap[0] -rgb2lab8,0 -a c" -m "xcc_backto: -s c,-3 -apply_parallel_overlap[0] -lab82rgb,0 -rgb2srgb[0] -a c"
-  #   -m "xcc_info: 256,1,1,3,if(!c,x,128) 256,1,1,3,if(!c,240,if(c==1,x,128)) 256,1,1,3,if(!c,240,if(c==1,128,x)) -lab82rgb[-3--1] -permute[-3--1] xcyz "\
-  #      "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
-  # -elif {$1'=='lch}
-  #   _color0="180,180,180" _color1="220,180,220" _color2="255,220,220" _color3="220,220,220" _title0=Lightness _title1=Chroma _title2=Hue _title3=Alpha
-  #   -m "xcc_goto: -s c,-3 -srgb2rgb[0] -apply_parallel_overlap -rgb2lch8[0],0 -a c" -m "xcc_backto: -s c,-3 -apply_parallel_overlap -lch82rgb[0],0 -rgb2srgb[0] -a c"
-  #   -m "xcc_info: 256,1,1,3,if(!c,x,0) 256,1,1,3,if(!c,255,if(c==1,x,128)) 256,1,1,3,if(!c,220,if(c==1,128,x)) -lch82rgb[-3--1] -permute[-3--1] xcyz "\
-  #      "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
   -elif {$1'=='lab}
     _color0="180,180,180" _color1="220,180,220" _color2="220,220,180" _color3="220,220,220" _title0=Lightness _title1=Chroma-A _title2=Chroma-B _title3=Alpha
-    -m "xcc_goto: -s c,-3 -srgb2rgb[0] -rgb2lab8 -a c" -m "xcc_backto: -s c,-3 -lab82rgb -rgb2srgb[0] -a c"
+    -m "xcc_goto: -s c,-3 -srgb2rgb[0] -apply_parallel_overlap[0] -rgb2lab8,0,4 -a c" -m "xcc_backto: -s c,-3 -apply_parallel_overlap[0] -lab82rgb,0,4 -rgb2srgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,128) 256,1,1,3,if(!c,240,if(c==1,x,128)) 256,1,1,3,if(!c,240,if(c==1,128,x)) -lab82rgb[-3--1] -permute[-3--1] xcyz "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
   -elif {$1'=='lch}
     _color0="180,180,180" _color1="220,180,220" _color2="255,220,220" _color3="220,220,220" _title0=Lightness _title1=Chroma _title2=Hue _title3=Alpha
-    -m "xcc_goto: -s c,-3 -srgb2rgb[0] -rgb2lch8[0] -a c" -m "xcc_backto: -s c,-3 -lch82rgb[0] -rgb2srgb[0] -a c"
+    -m "xcc_goto: -s c,-3 -srgb2rgb[0] -apply_parallel_overlap -rgb2lch8[0],0,4 -a c" -m "xcc_backto: -s c,-3 -apply_parallel_overlap -lch82rgb[0],0,4 -rgb2srgb[0] -a c"
     -m "xcc_info: 256,1,1,3,if(!c,x,0) 256,1,1,3,if(!c,255,if(c==1,x,128)) 256,1,1,3,if(!c,220,if(c==1,128,x)) -lch82rgb[-3--1] -permute[-3--1] xcyz "\
        "-a[0,-3] y -a[1,-2] y -a[2,-1] y"
   -elif {$1'=='ycbcr}
@@ -15694,7 +15546,8 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
 
     # Render board graphics.
     -if $render_board
-     --abs[board] --[-1] 1 -*[-1] {360/$3} -->=[board] 0 -*[-1] 0.9 -r[-2,-1] [balls] [balls] -a[-3--1] c -hsv2rgb[-1]
+      --abs[board] --[-1] 1 -*[-1] {360/$3} -->=[board] 0 -*[-1] 0.9 --!=[board] 0
+      -r[-3--1] [balls] [balls] -*[-2,-1] -a[-3--1] c -hsv2rgb[-1]
       --compose_channels[-1] + ->[-1] 0 -dilate[-1] 3
       -j[visu] [back] -j[visu] [-2],0,0,0,0,1,[-1] -rm[-2,-1]
       -if {!$shapescorey} -w[visu] @{back,w},@{back,h},0,"[G\47MIC] Jawbreaker (score : "$score")" -endif
@@ -16674,7 +16527,7 @@ x_plasma :
     -shift[$a21] 0,${dir$a},0,0,2  # Animate plasma background.
     -shift[$b21] 0,${dir$b},0,0,2
     -if {int($t+0.005)>int($t)} dir$a={if(?<0.5,-1,1)*round(?(1,3))} -endif
-    t={($t+(@|-$tic))%$N}
+    t={($t+max(0.005,(@|-$tic))%$N)}
 
     # Render text scrolling.
     --z[-2] $tt,{$tt+w-1+2}
@@ -16684,7 +16537,7 @@ x_plasma :
     -j[-3] [-1],0,0,0,0,1,[-2],255 -rm[-1]
     -j[-2] [-1],-2,-2,0,0,1,[-1],255 -rm[-1]
 
-    tt={$tt+(@|-$tic)*250} # Animate scrolling.
+    tt={$tt+max(2,(@|-$tic)*250)} # Animate scrolling.
     -if {$tt>=$M} tt={-1.5*@{0,w}} -endif
 
     # Display rendered frame.
@@ -18395,8 +18248,8 @@ gimp_display_filter_sources :
 
 #@gimp Friends Hall of Fame : _none_, gimp_friends
 #@gimp : note = note{"\n<span foreground="purple" underline="single">Donators :</span>"}
-#@gimp : note = note{" <b>-</b> We've already received <b>31</b> donations from <b>G'MIC</b> mega-enthusiasts so far.
-#@gimp :               You could be the <b>32nd</b> donator :)"}
+#@gimp : note = note{" <b>-</b> We've already received <b>32</b> donations from <b>G'MIC</b> mega-enthusiasts so far.
+#@gimp :               You could be the <b>33rd</b> donator :)"}
 #@gimp : note = note{"<b><small>Note:</small></b> Donations are mainly used to help us making <b>G'MIC</b> more visible
 #@gimp :              (cover expenses for open-source events, for instance). Also, it will motivate
 #@gimp :              us to design more new image filters and effects. Feel free to donate
@@ -18407,37 +18260,38 @@ gimp_display_filter_sources :
 #@gimp : note = note("<small><b>Bitcoin address:</b> 1N5BsWvLRGHq42KLdCEtXuGvu9pat93kHD</small>")
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these donators (recently received first) :"}
-#@gimp : link = link(0,"[1] Phillip R Ziesemer","")
-#@gimp : link = link(0,"[2] Jean Francois","")
-#@gimp : link = link(0,"[3] Franz Ziereis","")
-#@gimp : link = link(0,"[4] Alessandro Renzi","")
-#@gimp : link = link(0,"[5] Tsuda Koshi","")
-#@gimp : link = link(0,"[6] Boxrec Ltd","http://www.boxrec.com")
-#@gimp : link = link(0,"[7] Wolfgang Schweizer","http://www.wolfgangschweizer.com/")
-#@gimp : link = link(0,"[8] Ramon Miranda","http://www.ramonmiranda.com/")
-#@gimp : link = link(0,"[9] Volker Bradley","")
-#@gimp : link = link(0,"[10] Marco Zara","http://plus.google.com/+MarcoZara")
-#@gimp : link = link(0,"[11] Marco Tedaldi","http://plus.google.com/+MarcoTedaldi")
-#@gimp : link = link(0,"[12] Rodney Lee","http://cybertographer.com")
-#@gimp : link = link(0,"[13] Konstantinos Blatzonis","")
-#@gimp : link = link(0,"[14] Simon Chanson","")
-#@gimp : link = link(0,"[15] Herbert Malle","")
-#@gimp : link = link(0,"[16] Matthias Zepper","http://www.matthias-zepper.de/")
-#@gimp : link = link(0,"[17] Christian Mariucci","")
-#@gimp : link = link(0,"[18] M. R.","")
-#@gimp : link = link(0,"[19] Mark Link","")
-#@gimp : link = link(0,"[20] Rolf Steinort","http://blog.meetthegimp.org/")
-#@gimp : link = link(0,"[21] Pat David","http://blog.patdavid.net/")
-#@gimp : link = link(0,"[22] Daniel Tauro","https://plus.google.com/112357088505488756823/posts")
-#@gimp : link = link(0,"[23] Ben Langhinrichs","http://geniisoft.com/")
-#@gimp : link = link(0,"[24] Paolo Pedaletti","http://www.openlabs.it/")
-#@gimp : link = link(0,"[25] Ricardo Corin","http://blog.photomontager.com")
-#@gimp : link = link(0,"[26] James Prichard","https://plus.google.com/115953666279509959258")
-#@gimp : link = link(0,"[27] Matt Jones","https://plus.google.com/116658221461047313647")
-#@gimp : link = link(0,"[28] Eddy Vervest","http://www.flickr.com/people/twekkel/")
-#@gimp : link = link(0,"[29] Steven Shupe","http://www.flickr.com/photos/ssshupe/")
-#@gimp : link = link(0,"[30] Flavio Casadei Della Chiesa","http://www.flaviocdc.net/wiki/")
-#@gimp : link = link(0,"[31] Lyle Kroll","http://www.artwanted.com/artist.cfm?artid=10918")
+#@gimp : link = link(0,"[1] Thomas Tapping","http://tomtappingphotoblog.blogspot.fr/")
+#@gimp : link = link(0,"[2] Phillip R Ziesemer","")
+#@gimp : link = link(0,"[3] Jean Francois","")
+#@gimp : link = link(0,"[4] Franz Ziereis","")
+#@gimp : link = link(0,"[5] Alessandro Renzi","")
+#@gimp : link = link(0,"[6] Tsuda Koshi","")
+#@gimp : link = link(0,"[7] Boxrec Ltd","http://www.boxrec.com")
+#@gimp : link = link(0,"[8] Wolfgang Schweizer","http://www.wolfgangschweizer.com/")
+#@gimp : link = link(0,"[9] Ramon Miranda","http://www.ramonmiranda.com/")
+#@gimp : link = link(0,"[10] Volker Bradley","")
+#@gimp : link = link(0,"[11] Marco Zara","http://plus.google.com/+MarcoZara")
+#@gimp : link = link(0,"[12] Marco Tedaldi","http://plus.google.com/+MarcoTedaldi")
+#@gimp : link = link(0,"[13] Rodney Lee","http://cybertographer.com")
+#@gimp : link = link(0,"[14] Konstantinos Blatzonis","")
+#@gimp : link = link(0,"[15] Simon Chanson","")
+#@gimp : link = link(0,"[16] Herbert Malle","")
+#@gimp : link = link(0,"[17] Matthias Zepper","http://www.matthias-zepper.de/")
+#@gimp : link = link(0,"[18] Christian Mariucci","")
+#@gimp : link = link(0,"[19] M. R.","")
+#@gimp : link = link(0,"[20] Mark Link","")
+#@gimp : link = link(0,"[21] Rolf Steinort","http://blog.meetthegimp.org/")
+#@gimp : link = link(0,"[22] Pat David","http://blog.patdavid.net/")
+#@gimp : link = link(0,"[23] Daniel Tauro","https://plus.google.com/112357088505488756823/posts")
+#@gimp : link = link(0,"[24] Ben Langhinrichs","http://geniisoft.com/")
+#@gimp : link = link(0,"[25] Paolo Pedaletti","http://www.openlabs.it/")
+#@gimp : link = link(0,"[26] Ricardo Corin","http://blog.photomontager.com")
+#@gimp : link = link(0,"[27] James Prichard","https://plus.google.com/115953666279509959258")
+#@gimp : link = link(0,"[28] Matt Jones","https://plus.google.com/116658221461047313647")
+#@gimp : link = link(0,"[29] Eddy Vervest","http://www.flickr.com/people/twekkel/")
+#@gimp : link = link(0,"[30] Steven Shupe","http://www.flickr.com/photos/ssshupe/")
+#@gimp : link = link(0,"[31] Flavio Casadei Della Chiesa","http://www.flaviocdc.net/wiki/")
+#@gimp : link = link(0,"[32] Lyle Kroll","http://www.artwanted.com/artist.cfm?artid=10918")
 #@gimp : sep = separator()
 #@gimp : note = note{"\n<span foreground="purple" underline="single">Postcard senders :</span>"}
 #@gimp : note = note{" <b>-</b> We've received <b>25</b> postcards from <b>G'MIC</b> enthusiasts so far.
@@ -18554,7 +18408,7 @@ gimp_gmicky_preview :
 #@gimp : - <b>05/14/2014</b> : version <i>1.5.9.0</i>.\n
 #@gimp : - <b>08/20/2014</b> : version <i>1.6.0.0</i>.\n
 #@gimp : - <span foreground="purple"><b>02/04/2015</b> : version <i>1.6.0.4</i> (Current stable).</span>\n
-#@gimp : - <b>02/16/2015</b> : version <i>1.6.1.0</i> (Current beta).\n
+#@gimp : - <b>02/25/2015</b> : version <i>1.6.1.0</i> (Current beta).\n
 #@gimp : "}
 #@gimp : sep = separator()
 #@gimp : link = link("View latest changelog","https://www.flickr.com/groups/gmic/discuss/72157649713920459/")
@@ -18752,44 +18606,55 @@ _dice5 : -_dice3 -ellipse[-1] 25%,50%,5.2%,5.2%,0,1,255 -ellipse[-1] 75%,50%,5.2
 #@gimp Extract objects : gimp_extract_objects, gimp_extract_objects_preview(1)
 #@gimp : X-background (%) = float(0,0,100)
 #@gimp : Y-background (%) = float(0,0,100)
+#@gimp : Select background point = button(0.5)
+#@gimp : sep = separator()
 #@gimp : Color tolerance = int(20,0,256)
 #@gimp : Opacity threshold (%) = int(50,0,100)
 #@gimp : Minimal area = float(0.3,0,5)
 #@gimp : Connectivity = choice("Low","High")
 #@gimp : Output as = _choice(0,"Crop","Segmentation")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>01/26/2015</i>.</small>")
+#@gimp : sep = separator()
+#@gimp : Preview guides = bool(1)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>02/23/2015</i>.</small>")
 #@gimp : note = link("Filter explained here","http://gimpchat.com/viewtopic.php?f=28&t=7905")
 gimp_extract_objects :
-  -if $5 min_area=$5% -else min_area=5 -endif
+  -if $6 min_area=$6% -else min_area=6 -endif
   -repeat @# -l[$<] -to_rgba
     w={w} h={h}
     x={$1%*(w-1)}
     y={$2%*(h-1)}
     color=@{-at\ $x,$y}
-    -if {$7==0} # Output: Crop.
-      --replace_color $3,0,$color,0,0,0,0 -autocrop_components[-1] $4%,$min_area,$6,2
+    -if {$8==0} # Output: Crop.
+      --replace_color $4,0,$color,0,0,0,0 -autocrop_components[-1] $5%,$min_area,$7,2
       -repeat {w}
         --z[0] @{1,i($>,0)},@{1,i($>,1)},@{1,i($>,3)},@{1,i($>,4)}
         -nm[-1] pos(@{1,i($>,0)},@{1,i($>,1)})
       -done -rm[0,1]
-    -elif {$7==1} # Output: Segmentation.
-      -replace_color $3,0,$color,0,0,0,0 --autocrop_components $4%,$min_area,$6,2
-      -repeat {w}
-        --z[0] @{1,i($>,0)},@{1,i($>,1)},@{1,i($>,3)},@{1,i($>,4)}
-        -nm[-1] pos(@{1,i($>,0)},@{1,i($>,1)})
-      -done -rm[0,1]
+    -elif {$8==1} # Output: Segmentation.
+      -replace_color $4,0,$color,0,0,0,0
+      --autocrop_components[0] $5%,$min_area,$7,2
+      -autocrop_components[0] $5%,$min_area,$7,1
+      -repeat {w} -nm[$>] pos({i($>,0)},{i($>,1)}) -done -rm[-1]
     -endif
     $w,$h,1,4 -fc[-1] $color
   -endl -done
 
 gimp_extract_objects_preview :
-  -if $5 min_area=$5% -else min_area=5 -endif
+  -if {$3" && "@#}
+    nm=@{0,n} -nm[0] "[G'MIC] Select background point" --select[0] 0
+    x0={i[0]*100/@{-2,w}} y0={i[1]*100/@{-2,h}} -rm[-1]
+    -nm[0] $nm
+  -else
+    x0=$1 y0=$2
+  -endif
+
+  -if $6 min_area=$6% -else min_area=5 -endif
   -repeat @# -l[$>] -to_rgba
-    x={$1%*(w-1)}
-    y={$2%*(h-1)}
+    x={$x0%*(w-1)}
+    y={$y0%*(h-1)}
     color=@{-at\ $x,$y}
-    --replace_color $3,0,$color,0,0,0,0
-    -autocrop_components[-1] $4%,$min_area,$6,2
+    --replace_color $4,0,$color,0,0,0,0
+    -autocrop_components[-1] $5%,$min_area,$7,2
     -repeat {w}
       xycoords=@{1,i($>,0)},@{1,i($>,1)},@{1,i($>,3)},@{1,i($>,4)}
       -rectangle[0] $xycoords,0.3,0,0,255,255
@@ -18798,9 +18663,13 @@ gimp_extract_objects_preview :
     -drgba[0]
     -text_outline[0] {w}" objects",2,2,13,2,0.3,255,255,255,255
     -k[0]
-    -circle $x,$y,3,1,0,255,0
-    -circle $x,$y,3,1,0xFFFFFFFF,0
+    -if $9
+      -line 0,$y0%,100%,$y0%,0.5,0xF0F0F0F0,255 -line 0,$y0%,100%,$y0%,0.5,0x0F0F0F0F,0
+      -line $x0%,0,$x0%,100%,0.5,0xF0F0F0F0,255 -line $x0%,0,$x0%,100%,0.5,0x0F0F0F0F,0
+    -endif
+    -circle $x,$y,3,1,0,255,0 -circle $x,$y,3,1,0xFFFFFFFF,0
   -endl -done
+  -u "{"$x0"}{"$y0"}{0}{$4}{$5}{$6}{$7}{$8}{$9}"
 
 #@gimp Grid [cartesian] : gimp_imagegrid, gimp_imagegrid(0)
 #@gimp : X-size = int(10,2,100)
@@ -18819,10 +18688,10 @@ gimp_imagegrid :
 #@gimp : Equalize light = float(0,0,100)
 #@gimp : sep = separator(),
 #@gimp : Preview original = bool(0)
-#@gimp : Tiled preview = choice(1,"None","2x2","3x3","4x4")
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : Tiled preview = choice(3,"None","2x1","1x2","2x2","3x3","4x4")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note{"<small><b>Note:</b> This filter helps in converting your input pattern as a <b>seamless</b> (a.k.a periodic) texture.</small>"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/16/2014</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>02/24/2015</i>.</small>")
 gimp_make_seamless :
   -repeat @# -l[$>]
     -if $1 --b {20.5-$1/50}% --[0] [1] -fc[-1] @{-average_color[-1]} -+ -endif
@@ -18830,7 +18699,8 @@ gimp_make_seamless :
   -periodize_poisson -c 0,255
 
 gimp_make_seamless_preview :
-  -gimp_split_preview "-if {!$2} -gimp_make_seamless $* -endif -if $3 -array {$3+1},{$3+1} -endif",$-1
+  u={arg($3,2,1,2,3,4)} v={arg($3,1,2,2,3,4)}
+  -gimp_split_preview "-if {!$2} -gimp_make_seamless $* -endif -if $3 -array "$u","$v" -endif",$-1
 
 #@gimp Ministeck : gimp_ministeck, gimp_ministeck_preview(1)
 #@gimp : Number of colors = int(8,2,24)
@@ -19059,13 +18929,13 @@ gimp_rotate_tiles :
 #@gimp : Y-tiles = int(25,1,80)
 #@gimp : Minimal value = float(0,0,255)
 #@gimp : Maximal value = float(255,0,255)
-#@gimp : Channel(s) = choice(3,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 _gimp_normalize_tiles :
   -repeat @# -l[-1] -split_tiles $1,$2 -n $3,$4 -append_tiles $1,$2 -endl -mv[-1] 0 -done
 
 gimp_normalize_tiles :
-  -apply_channels "-_gimp_normalize_tiles ${1-4}",$-1
+  -ac "-_gimp_normalize_tiles ${1-4}",$-1
 
 #@gimp Tiled random shifts : gimp_shift_tiles, gimp_shift_tiles(1)
 #@gimp : X-tiles = int(10,1,30)
@@ -19268,38 +19138,37 @@ gimp_poster_hope_preview :
 #@gimp Kuwahara : gimp_kuwahara, gimp_kuwahara_preview(0)
 #@gimp : Iterations = int(2,1,20)
 #@gimp : Radius = int(5,1,30)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>05/31/2011</i>.</small>")
 gimp_kuwahara :
-  -apply_channels "-repeat $1 -kuwahara $2 -done",$3,0
+  -ac "-repeat $1 -kuwahara $2 -done",$3,$4
 
 gimp_kuwahara_preview :
   -gimp_split_preview "-gimp_kuwahara $*",$-1
 
 #@gimp Lylejk's painting : gimp_lylejk_painting, gimp_lylejk_painting_preview(0)
-#@gimp : Iterations = int(2,1,20)
+#@gimp : Iterations = int(10,1,20)
+#@gimp : Abstraction = int(2,1,20)
 #@gimp : Radius = int(4,1,30)
 #@gimp : Canvas = float(10,0,100)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>Lyle Kroll</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>09/21/2011</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>Lyle Kroll</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>02/23/2015</i>.</small>")
 #@gimp : note = link("Filter Explained here","http://www.gimpchat.com/viewtopic.php?f=10&t=2624")
 gimp_lylejk_painting :
-  -repeat @#
-    --_gimp_lylejk_painting[-1] 10,10.49,0.75,0
-    -smooth[-1] 300,0.26,1,0,7 -sharpen[-1] $3
+  -repeat @# -l[$>]
+    --l -repeat $1 -b 0.75 -unsharp 0.75,10.49 -c 0,255 -mv[-1] 0 -done -endl
+    -smooth[-1] 300,0.26,1,0,7
     [-1] -rv[-3--1]
     -blend[-2,-1] lighten,0.5
     -blend[-2,-1] grainmerge,1
-    -gimp_kuwahara[-1] $1,$2,0
-    -texturize_canvas[-1] $3,4
-  -mv[-1] 0 -done
+    -gimp_kuwahara[-1] $2,$3,0,0
+    -texturize_canvas[-1] $4,4
+  -endl -done
 
 gimp_lylejk_painting_preview :
   -gimp_split_preview "-gimp_lylejk_painting $*",$-1
-
-_gimp_lylejk_painting :
-  -apply_channels "-repeat $1 -b $3 -unsharp $3,$2 -c 0,255 -mv[-1] 0 -done",$4,0
 
 #@gimp Painting : gimp_painting, gimp_painting_preview(0)
 #@gimp : Abstraction = int(5,1,10)
@@ -19312,7 +19181,7 @@ _gimp_lylejk_painting :
 gimp_painting : -skip ${4=0},${5=0}
   -repeat @# -l[$>]
     -to_colormode {max(3,s)} -split_opacity -rv
-    -repeat $1 -gimp_normalize_local[-1] 10,6,5,20,1,3 -done
+    -repeat $1 -gimp_normalize_local[-1] 10,6,5,20,1,7 -done
     -gimp_anisotropic_smoothing[-1] {100*$2},0.2,1,$2,{2*$2},0.8,90,2,0,1,1,2,1,16
     -gimp_mix_lab[-1] 1,0,0,$3,0,0.5,$3,0,0.5,0,2,0
     -if $5 -gimp_segment_watershed[-1] 10,1,0 -endif
@@ -19413,12 +19282,13 @@ gimp_poster_edges_preview :
 #@gimp : Offset = float(30,0,180)
 #@gimp : Smoothness = int(0,0,5)
 #@gimp : Color mode = choice(1,"Darker","Lighter")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : link = link("Click here for a video tutorial","http://www.youtube.com/watch?v=RC07VUpzwGc")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Rod/GimpChat</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>03/05/2013</i>.</small>")
 gimp_rodilius :
-  -apply_channels "-rodilius ${1-5,7} -repeat $6 -smooth 10,0,1,1,1,0.8,45 -sharpen 30 -done -c 0,255",$8,0
+  -ac "-rodilius ${1-5,7} -repeat $6 -smooth 10,0,1,1,1,0.8,45 -sharpen 30 -done -c 0,255",$8,$9
 
 gimp_rodilius_preview :
   -gimp_split_preview "-gimp_rodilius $*",$-1
@@ -20105,7 +19975,7 @@ gimp_boost_chroma_preview :
 #@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
 #@gimp : Tones smoothness = float(2,0,10)
 #@gimp : sep = separator()
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 _gimp_channel_processing :
@@ -20125,7 +19995,7 @@ _gimp_channel_processing :
 gimp_channel_processing :
   -repeat @# -l[-1] -split_opacity -rv -to_rgb[-1]
     -gimp_start_mix $11,$12
-    -apply_channels[-1] "-_gimp_channel_processing $1,$2,$3,$4,$5,$6,$7,$8,$9,$10",$13,0
+    -ac[-1] "-_gimp_channel_processing $1,$2,$3,$4,$5,$6,$7,$8,$9,$10",$13,1
     -gimp_end_mix $11
   -if {@#!=3} -rv -a c -endif -endl -mv[-1] 0 -done
 
@@ -20199,13 +20069,13 @@ gimp_colormap_preview :
 #@gimp : Ending Y = int(255,0,255)
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Value range = choice("Cut","Normalize")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : Display histogram = float(0,0,1)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_apply_curve :
-  -apply_channels "-_gimp_apply_curve ${1-13}",$14,$15
+  -ac "-_gimp_apply_curve ${1-13}",$14,$15
 
 _gimp_apply_curve :
   -apply_curve $13,0,$1,\
@@ -20319,7 +20189,7 @@ gimp_curves_interactive_preview :
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
 #@gimp : Display histogram = float(0,0,100)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 
 #@gimp Green : gimp_apply_RGBcurve, gimp_apply_Gcurve_preview
@@ -20344,7 +20214,7 @@ gimp_curves_interactive_preview :
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
 #@gimp : Display histogram = float(0,0,100)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 
 #@gimp Blue : gimp_apply_RGBcurve, gimp_apply_Bcurve_preview
@@ -20369,7 +20239,7 @@ gimp_curves_interactive_preview :
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
 #@gimp : Display histogram = float(0,0,100)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 #@gimp _
 gimp_apply_RGBcurve : -skip $1
@@ -20495,7 +20365,7 @@ gimp_apply_RGBcurve_preview :
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
 #@gimp : Display histogram = float(0,0,100)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 
 #@gimp Blue chrominance : gimp_apply_YCbCrcurve, gimp_apply_Cbcurve_preview
@@ -20520,7 +20390,7 @@ gimp_apply_RGBcurve_preview :
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
 #@gimp : Display histogram = float(0,0,100)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 
 #@gimp Red chrominance : gimp_apply_YCbCrcurve, gimp_apply_Crcurve_preview
@@ -20545,7 +20415,7 @@ gimp_apply_RGBcurve_preview :
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
 #@gimp : Display histogram = float(0,0,100)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 #@gimp _
 gimp_apply_YCbCrcurve : -skip $1
@@ -20673,7 +20543,7 @@ gimp_apply_YCbCrcurve_preview :
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
 #@gimp : Display histogram = float(0,0,100)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 
 #@gimp A-color : gimp_apply_Labcurve, gimp_apply_acurve_preview
@@ -20698,7 +20568,7 @@ gimp_apply_YCbCrcurve_preview :
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
 #@gimp : Display histogram = float(0,0,100)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 
 #@gimp B-color : gimp_apply_Labcurve, gimp_apply_bcurve_preview
@@ -20723,7 +20593,7 @@ gimp_apply_YCbCrcurve_preview :
 #@gimp : sep = separator()
 #@gimp : Curve smoothness = float(1,0,1)
 #@gimp : Display histogram = float(0,0,100)
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 #@gimp _
 gimp_apply_Labcurve : -skip $1
@@ -21239,12 +21109,11 @@ gimp_custom_transform :
 #@gimp : sep = separator(), note = note("<small><b>Note:</b> Kernel multiplier is useful only when parameter <i>Value range</i> is set to <i>Cut</i>.</small>")
 #@gimp : Value range = choice(1,"Cut","Normalize")
 #@gimp : Kernel multiplier = float(1,0,50)
-#@gimp : sep = separator()
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/06/2013</i>.</small>")
 gimp_convolve :
-  -apply_channels "-_gimp_convolve $1,$2,\"$3\",${4--3}",$-2,0
+  -ac "-_gimp_convolve $1,$2,\"$3\",${4--3}",$-2
 
 _gimp_convolve :
   -if $1 -_gimp_convolve$1[] -else ($3) -endif
@@ -21395,7 +21264,7 @@ gimp_edge_offsets_preview :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>09/29/2014</i>.</small>")
 gimp_extract_foreground :
-  -nm "[G\47MIC] Interactive Foreground Extraction"
+  -nm "[G'MIC] Interactive foreground extraction"
   -if {!@#} -return -endif
   resolution={arg(1+$3,512,1024,2048,0)}
   -repeat @# -l[$<]
@@ -21488,7 +21357,7 @@ gimp_laplacian_preview :
 #@gimp : Min threshold = float(0,0,100)
 #@gimp : Max threshold = float(100,0,100)
 #@gimp : Negative colors = bool(0)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 _gimp_local_orientation :
@@ -21500,7 +21369,7 @@ _gimp_local_orientation :
   -endl -a c -endl -done
 
 gimp_local_orientation :
-  -apply_channels "-_gimp_local_orientation $1,$2,$3,$4",$5,1
+  -ac "-_gimp_local_orientation $1,$2,$3,$4",$5,2
 
 gimp_local_orientation_preview :
   -gimp_split_preview "-gimp_local_orientation ${^0}",$-1
@@ -21511,12 +21380,12 @@ gimp_local_orientation_preview :
 #@gimp : Size = int(5,2,60)
 #@gimp : Invert colors = bool(false)
 #@gimp : Shape = choice(0,"Square","Octagonal","Circular")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Scale = bool(true)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Stretch")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/06/2014</i>.</small>")
 gimp_morpho :
-  -apply_channels "-__gimp_morpho ${^0}",$5,$6
+  -ac "-__gimp_morpho ${^0}",$5,$6
 
 gimp_morpho_preview :
   -gimp_split_preview "-gimp_morpho ${^0}",$-1
@@ -21537,11 +21406,12 @@ __gimp_morpho :
 #@gimp Segmentation : gimp_segment_watershed, gimp_segment_watershed_preview(0)
 #@gimp : Edge threshold = float(2,0,15)
 #@gimp : Smoothness = float(1,0,5)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_segment_watershed :
-  -apply_channels "-b $2 -segment_watershed $1",$3,0
+gimp_segment_watershed : -skip ${4=1}
+  -ac "-b $2 -segment_watershed $1",$3,$4
 
 gimp_segment_watershed_preview :
   -gimp_split_preview "-gimp_segment_watershed ${^0}",$-1
@@ -21933,12 +21803,13 @@ gimp_twirl :
 #@gimp : Attenuation = float(0.7,0,1)
 #@gimp : Threshold = float(20,0,100)
 #@gimp : Mode = choice(1,"Darker","Brighter")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>07/13/2011</i>.</small>")
 gimp_wind :
   -if {!$5} -negative -endif
-  -apply_channels "-wind ${1-4}",$-2
+  -ac "-wind ${1-4}",$6,$7
   -if {!$5} -negative -endif
 
 gimp_wind_preview :
@@ -21964,11 +21835,11 @@ gimp_zoom :
 #@gimp : Y-center (%) = float(50,0,100)
 #@gimp : Sharpness = float(0,0,500)
 #@gimp : Preview guides = bool(1)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Value range = choice("Cut","Normalize")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>01/16/2015</i>.</small>")
 gimp_blur_angular :
-  -apply_channels "-blur_angular $1%,$2%,$3% -sharpen $4",$6,$7
+  -ac "-blur_angular $1%,$2%,$3% -sharpen $4",$6,$7
 
 gimp_blur_angular_preview :
   -gimp_blur_angular $*
@@ -22061,8 +21932,8 @@ __gimp_dof_blur :
 #@gimp : X-amplitude = float(0,0,20)
 #@gimp : Y-amplitude = float(0,0,20)
 #@gimp : Border conditions = choice(1,"Black","Nearest")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Value range = choice("Cut","Normalize")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 _gimp_gaussian_blur :
@@ -22071,18 +21942,19 @@ _gimp_gaussian_blur :
   -if {$3>0} -repeat @# -l[-1] -s x -b $3,$4 -a x -endl -mv[-1] 0 -done -endif
 
 gimp_gaussian_blur :
-  -apply_channels "-_gimp_gaussian_blur $1,$2,$3,$4",$5,$6
+  -ac "-_gimp_gaussian_blur $1,$2,$3,$4",$5,$6
 
 gimp_gaussian_blur_preview :
   -gimp_split_preview "-gimp_gaussian_blur $*",$-1
 
 #@gimp Blur [glow] : gimp_glow, gimp_glow_preview(0)
 #@gimp : Amplitude = float(6,0,20)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_glow :
-  -apply_channels "-glow $1",$2,0
+  -ac "-glow $1",$2,$3
 
 gimp_glow_preview :
   -gimp_split_preview "-gimp_glow $*",$-1
@@ -22093,12 +21965,12 @@ gimp_glow_preview :
 #@gimp : Angle = float(0,0,180)
 #@gimp : Sharpness = float(0,0,500)
 #@gimp : Border conditions = choice(1,"Black","Nearest")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Value range = choice("Cut","Normalize")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_blur_linear :
-  -apply_channels "-blur_linear $1,{$2*$1/100},$3,$5 -sharpen $4",$6,$7
+  -ac "-blur_linear $1,{$2*$1/100},$3,$5 -sharpen $4",$6,$7
 
 gimp_blur_linear_preview :
   -gimp_split_preview "-gimp_blur_linear $*",$-1
@@ -22109,11 +21981,11 @@ gimp_blur_linear_preview :
 #@gimp : Y-center (%) = float(50,0,100)
 #@gimp : Sharpness = float(0,0,500)
 #@gimp : Preview guides = bool(1)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Value range = choice("Cut","Normalize")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>01/16/2015</i>.</small>")
 gimp_blur_radial :
-  -apply_channels "-blur_radial $1%,$2%,$3% -sharpen $4",$6,$7
+  -ac "-blur_radial $1%,$2%,$3% -sharpen $4",$6,$7
 
 gimp_blur_radial_preview :
   -gimp_blur_radial $*
@@ -22126,11 +21998,12 @@ gimp_blur_radial_preview :
 #@gimp Dirty : gimp_dirty, gimp_dirty_preview(0)
 #@gimp : Amplitude = float(30,0,100)
 #@gimp : Monochrome = bool(1)
-#@gimp : Channel(s) = choice(2,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/24/2014</i>.</small>")
 gimp_dirty :
-  -apply_channels "-_gimp_dirty ${1-2}",$3,0
+  -ac "-_gimp_dirty ${1-2}",$3,$4
 
 gimp_dirty_preview :
   -gimp_split_preview "-gimp_dirty ${1--2}",$-1
@@ -22164,12 +22037,12 @@ gimp_lomo_preview :
 #@gimp Noise [additive] : gimp_noise, gimp_noise_preview(0)
 #@gimp : Amplitude = float(10,0,200)
 #@gimp : Noise type = choice("Gaussian","Uniform","Salt and pepper","Poisson")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Value range = choice("Cut","Normalize")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice(1,"None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_noise :
-  -apply_channels "-noise $1,$2",$3,$4
+  -ac "-noise $1,$2",$3,$4
 
 gimp_noise_preview :
   -gimp_split_preview "-gimp_noise $*",$-1
@@ -22177,22 +22050,24 @@ gimp_noise_preview :
 #@gimp Noise [spread] : gimp_spread, gimp_spread_preview(0)
 #@gimp : X-variations = float(4,0,20)
 #@gimp : Y-variations = float(4,0,20)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_spread :
-  -apply_channels "-spread $1,$2",$3,0
+  -ac "-spread $1,$2",$3,$4
 
 gimp_spread_preview :
   -gimp_split_preview "-gimp_spread $*",$-1
 
 #@gimp Old-movie stripes : gimp_stripes_y, gimp_stripes_y_preview(1)
 #@gimp : Frequency = float(10,0,100)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_stripes_y :
-  -apply_channels "-stripes_y $1",$2,0
+  -ac "-stripes_y $1",$2,$3
 
 gimp_stripes_y_preview :
   -gimp_split_preview "-gimp_stripes_y $*",$-1
@@ -22220,11 +22095,12 @@ gimp_8bits_preview :
 #@gimp : Orientation = choice(1,"Horizontal","Vertical")
 #@gimp : Darkness = float(0.8,0,3)
 #@gimp : Lightness = float(1.3,0,3)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_shade_stripes :
-  -apply_channels "-shade_stripes $1,$2,$3,$4",$5,0
+  -ac "-shade_stripes $1,$2,$3,$4",$5,$6
 
 gimp_shade_stripes_preview :
   -gimp_split_preview "-gimp_shade_stripes $*",$-1
@@ -22235,11 +22111,12 @@ gimp_shade_stripes_preview :
 #@gimp : Shape = choice(0,"Bloc","Triangle","Sine","Sine+","Random")
 #@gimp : Angle = float(0,0,360)
 #@gimp : Offset = float(0,0,500)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/19/2014</i>.</small>")
 gimp_scanlines :
-  -apply_channels "-scanlines ${1-5}",$6
+  -ac "-scanlines ${1-5}",$6,$7
 
 gimp_scanlines_preview :
   -gimp_split_preview "-gimp_scanlines $*",$-1
@@ -22279,10 +22156,9 @@ gimp_watermark_visible :
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : Smoothness type = choice(2,"Gaussian","Bilateral","Diffusion")
 #@gimp : Gain = float(0,-4,4)
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(32,0,256)
-#@gimp : sep = separator(), Channel(s) = choice(0,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>12/15/2013</i>.</small>")
 _gimp_equalize_details :
@@ -22309,7 +22185,7 @@ __gimp_equalize_details :
   -* {10^$4}
 
 gimp_equalize_details :
-  -apply_channels "-gimp_parallel_overlap \"-_gimp_equalize_details ${1-16}\",$17,$18",$19,0
+  -ac "-gimp_parallel_overlap \"-_gimp_equalize_details ${1-16}\",$19,$20",$17,$18
 
 gimp_equalize_details_preview :
   -gimp_split_preview "-gimp_equalize_details $*",$-1
@@ -22318,10 +22194,8 @@ gimp_equalize_details_preview :
 #@gimp : Amplitude = int(2,1,5)
 #@gimp : Scale = float(10,0,100)
 #@gimp : Iterations = int(1,1,4)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(32,0,256)
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i> and <i>Patrick David</i>.      Latest update: <i>02/27/2013</i>.</small>")
 #@gimp : sep = separator(), note = note("This effect has been done following:")
@@ -22336,7 +22210,7 @@ _gimp_freaky_details :
   -endl -done
 
 gimp_freaky_details :
-  -apply_channels "-gimp_parallel_overlap \"-_gimp_freaky_details ${1-3}\",$5,$6",$4,0
+  -ac "-gimp_parallel_overlap \"-_gimp_freaky_details ${1-3}\",$5,$6",$4
   -n 0,255
 
 gimp_freaky_details_preview :
@@ -22348,13 +22222,12 @@ gimp_freaky_details_preview :
 #@gimp : Neighborhood smoothness = float(5,0,40)
 #@gimp : Average smoothness = float(20,0,40)
 #@gimp : Constrain values = bool(1)
-#@gimp : sep = separator()
-#@gimp : Channel(s) = choice(3,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_normalize_local :
   -repeat @# -l[$>]
-    -apply_channels "-normalize_local $1,$2,$3,$4,$5,0,255",$6,0
+    -ac "-normalize_local $1,$2,$3,$4,$5,0,255",$6
   -endl -done
 
 gimp_normalize_local_preview :
@@ -22365,8 +22238,7 @@ gimp_normalize_local_preview :
 #@gimp : Details amount = float(1,0,2)
 #@gimp : Details scale = float(25,1,100)
 #@gimp : Details smoothness = int(1,0,10)
-#@gimp : sep = separator()
-#@gimp : Channel(s) = choice(3,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/08/2014</i>.</small>")
 _gimp_mighty_details :
@@ -22377,7 +22249,7 @@ _gimp_mighty_details :
   -*[1] {-$1/5} -+
 
 gimp_mighty_details :
-  -apply_channels "-_gimp_mighty_details ${1-4}",$5
+  -ac "-_gimp_mighty_details ${1-4}",$5,1
   -n 0,255
 
 gimp_mighty_details_preview :
@@ -22389,14 +22261,12 @@ gimp_mighty_details_preview :
 #@gimp : Time step = float(20,0,50)
 #@gimp : Smoothness = float(0.1,0,10)
 #@gimp : Regularization = choice(1,"Tikhonov","Mean curvature","Total variation")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_deblur :
-  -apply_channels "-gimp_parallel_overlap \"-deblur ${1-5} -c 0,255\",$7,$8",$6,0
+  -ac "-gimp_parallel_overlap \"-deblur ${1-5} -c 0,255\",$7,$8",$6,1
 
 gimp_deblur_preview :
   -gimp_split_preview "-gimp_deblur $*",$-1
@@ -22407,13 +22277,12 @@ gimp_deblur_preview :
 #@gimp : Acceleration = float(1,1,3)
 #@gimp : Blur = choice(1,"Exponential","Gaussian")
 #@gimp : Cut = bool(true)
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author : <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>03/29/2013</i>.</small>")
 gimp_unsharp_goldmeinel:
-  -gimp_parallel_overlap "-_gimp_unsharp_goldmeinel $*",$6,$7
+   -ac "-gimp_parallel_overlap \"-_gimp_unsharp_goldmeinel $*\",$7,$8",$6,1
 
 _gimp_unsharp_goldmeinel :
   -deblur_goldmeinel $*
@@ -22425,14 +22294,12 @@ gimp_unsharp_goldmeinel_preview:
 #@gimp Sharpen [inverse diffusion] : gimp_sharpen_inversediff, gimp_sharpen_inversediff_preview(0)
 #@gimp : Amplitude = float(50,1,300)
 #@gimp : Iterations = int(2,1,10)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_sharpen_inversediff :
-  -apply_channels "-gimp_parallel_overlap \"-repeat $2 -sharpen $1 -c 0,255 -done\",$4,$5",$3,0
+  -ac "-gimp_parallel_overlap \"-repeat $2 -sharpen $1 -c 0,255 -done\",$4,$5",$3,1
 
 gimp_sharpen_inversediff_preview :
   -gimp_split_preview "-gimp_sharpen_inversediff $*",$-1
@@ -22442,14 +22309,12 @@ gimp_sharpen_inversediff_preview :
 #@gimp : Maximal radius = float(5,0,20)
 #@gimp : Amount = float(3,0,10)
 #@gimp : Threshold = float(0,0,255)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_unsharp_octave :
-  -apply_channels "-gimp_parallel_overlap \"-unsharp_octave $1,$2,$3,$4\",$6,$7",$5,0
+  -ac "-gimp_parallel_overlap \"-unsharp_octave $1,$2,$3,$4\",$6,$7",$5,1
 
 gimp_unsharp_octave_preview :
   -gimp_split_preview "-gimp_unsharp_octave $*",$-1
@@ -22474,14 +22339,12 @@ gimp_unsharp_richardsonlucy_preview :
 #@gimp : Gradient smoothness = float(0.8,0,10)
 #@gimp : Tensor smoothness = float(1.1,0,10)
 #@gimp : Iterations = int(1,1,10)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_sharpen_shock :
-  -apply_channels "-gimp_parallel_overlap \"-repeat $5 -sharpen $1,$2,$3,$4 -c 0,255 -done\",$7,$8",$6,0
+  -ac "-gimp_parallel_overlap \"-repeat $5 -sharpen $1,$2,$3,$4 -c 0,255 -done\",$7,$8",$6,1
 
 gimp_sharpen_shock_preview :
   -gimp_split_preview "-gimp_sharpen_shock $*",$-1
@@ -22496,7 +22359,7 @@ gimp_sharpen_shock_preview :
 #@gimp : Lightness level = float(1,0,4)
 #@gimp : Iterations = int(1,1,10)
 #@gimp : Negative effect = bool(0)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : note = note{"\n\n<small><b>Note: </b>
 #@gimp : This filter is inspired by the original <i>Unsharp Mask</i> filter in GIMP, with additional parameters.
@@ -22513,7 +22376,7 @@ _gimp_unsharp :
   -done -mv[-1] 0 -done
 
 gimp_unsharp :
-  -apply_channels "-_gimp_unsharp $1,$2,$3,$4,$5,$6,$7,$8,$9",$10,0
+  -ac "-_gimp_unsharp $1,$2,$3,$4,$5,$6,$7,$8,$9",$10,1
 
 gimp_unsharp_preview :
   -gimp_split_preview "-gimp_unsharp $*",$-1
@@ -22581,11 +22444,11 @@ gimp_split_details_layers_preview :
 #@gimp : Gamma = float(0.7,0,1)
 #@gimp : Smoothness = float(0.1,0,10)
 #@gimp : Iterations = int(30,0,500)
-#@gimp : Channel(s) = choice(3,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_map_tones :
-  -apply_channels "-map_tones ${1-4}",$5,0
+  -ac "-map_tones ${1-4}",$5,1
   -n 0,255
 
 gimp_map_tones_preview :
@@ -22594,11 +22457,11 @@ gimp_map_tones_preview :
 #@gimp Tone mapping [fast] : gimp_map_tones_fast, gimp_map_tones_fast_preview(0)
 #@gimp : Radius = float(3,0,20)
 #@gimp : Power = float(0.5,0,1)
-#@gimp : Channel(s) = choice(3,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Paul Nasca</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>06/10/2011</i>.</small>")
 gimp_map_tones_fast :
-  -apply_channels "-map_tones_fast $1,$2",$3,0
+  -ac "-map_tones_fast $1,$2",$3,2
 
 gimp_map_tones_fast_preview :
   -gimp_split_preview "-gimp_map_tones_fast ${^0}",$-1
@@ -22618,21 +22481,20 @@ gimp_map_tones_fast_preview :
 #@gimp : Brightness = float(0,-255,255)
 #@gimp : Hue = float(0,-180,180)
 #@gimp : Saturation = float(0,0,1)
-#@gimp : sep = separator()
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : Preview grain alone = bool()
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>04/10/2014</i>.</small>")
 gimp_emulate_grain :
-  -__gimp_emulate_grain @{-arg\ {1+$1},@{-_gimp_emulate_grain}},${2-10},0
+  -__gimp_emulate_grain @{-arg\ {1+$1},@{-_gimp_emulate_grain}},${2-10},0,0
 
 _gimp_emulate_grain :
   -u grain_orwo_np20,grain_kodak_tmax400,grain_kodak_tmax3200,grain_kodak_trix1600,grain_unknown
 
 gimp_emulate_grain_preview :
-  -gimp_split_preview "-_gimp_emulate_grain_preview $*",$-1
+  -gimp_split_preview "-_gimp_emulate_grain_preview $*",$-2
 
 _gimp_emulate_grain_preview :
-  -__gimp_emulate_grain @{-arg\ {1+$1},@{-_gimp_emulate_grain}},${2-11}
+  -__gimp_emulate_grain @{-arg\ {1+$1},@{-_gimp_emulate_grain}},${2-12}
 
 __gimp_emulate_grain :
   bm0=alpha bm1=grainmerge bm2=hardlight bm3=overlay bm4=softlight bm5=alpha
@@ -22661,7 +22523,7 @@ __gimp_emulate_grain :
       -sh[-1] 1,1 -+[-1] $10 -rm[-1]
       -hsv2rgb[-1]
     -endif
-    -if $11 -k[0,-1] -rv
+    -if $12 -k[0,-1] -rv
     -else -blend[0,-1] ${bm$2},{if($2<=4,$3,1)}
     -endif
 
@@ -23755,7 +23617,8 @@ gimp_transfer_colors :
 #@gimp : Amplitude = float(0.5,0,1)
 #@gimp : Scale = float(30,1,100)
 #@gimp : Smoothness = float(1,0,4)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/24/2012</i>.</small>")
 _gimp_burn :
@@ -23770,7 +23633,7 @@ _gimp_burn :
   -endl -done
 
 gimp_burn :
-  -apply_channels "-_gimp_burn ${1-3}",$4,1
+  -ac "-_gimp_burn ${1-3}",$4,$5
 
 gimp_burn_preview :
  -gimp_split_preview "-gimp_burn ${^0}",$-1
@@ -23853,11 +23716,9 @@ gimp_equalize_shadow_preview :
 #@gimp Light glow : gimp_lightglow, gimp_lightglow_preview(0)
 #@gimp : Density = float(30,0,100)
 #@gimp : Amplitude = float(0.5,0,2)
-#@gimp : Mode = choice(8,"Burn","Dodge","Freeze","Grain merge","Hard light","Interpolation",
-#@gimp :               "Lighten","Multiply","Overlay","Reflect","Soft light","Stamp","Value")
+#@gimp : Mode = choice(8,"Burn","Dodge","Freeze","Grain merge","Hard light","Interpolation","Lighten","Multiply","Overlay","Reflect","Soft light","Stamp","Value")
 #@gimp : Opacity = float(0.8,0,1)
-#@gimp : note = note()
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>02/21/2011</i>.</small>")
 _gimp_lightglow :
@@ -23867,7 +23728,7 @@ _gimp_lightglow :
   -mv[-1] 0 -done
 
 gimp_lightglow :
-  -apply_channels "-_gimp_lightglow ${1-4}",$5,0
+  -ac "-_gimp_lightglow ${1-4}",$5
 
 gimp_lightglow_preview :
   -gimp_split_preview "-gimp_lightglow $*",$-1
@@ -23876,11 +23737,11 @@ gimp_lightglow_preview :
 #@gimp : Density = int(5,2,30)
 #@gimp : Darkness = float(0.7,0,1)
 #@gimp : Lightness = float(2.5,1,4)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_light_patch :
   -repeat @# -l[$>] -split_opacity -l[0]
-    -apply_channels "-light_patch $1,$2,$3",$4,0
+    -ac "-light_patch $1,$2,$3",$4
   -endl -a c -endl -done
 
 #@gimp Light rays : gimp_lightrays, gimp_lightrays(1)
@@ -23913,11 +23774,11 @@ gimp_light_relief :
 
 #@gimp Shadow patch : gimp_shadow_patch, gimp_shadow_patch(1)
 #@gimp : Opacity = float(0.7,0,1)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_shadow_patch :
   -repeat @# -l[$>] -split_opacity -l[0]
-    -apply_channels "-shadow_patch $1",$2,0
+    -ac "-shadow_patch $1",$2
   -endl -a c -endl -done
 
 #@gimp _<b>Patterns</b>
@@ -23980,11 +23841,11 @@ gimp_canvas_preview :
 #@gimp : Density = float(1,0.1,10)
 #@gimp : Amplitude = float(-80,-255,255)
 #@gimp : Relief = bool(true)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_cracks :
-  -apply_channels "-cracks $1,$2,$3",$4,0
+  -ac "-cracks $1,$2,$3",$4
 
 gimp_cracks_preview :
   -gimp_split_preview "-gimp_cracks $*",$-1
@@ -24040,11 +23901,11 @@ gimp_halftone_preview :
 
 #@gimp Hearts : gimp_hearts, gimp_hearts_preview(0)
 #@gimp : Density = float(10,0,100)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_hearts :
-  -apply_channels "-hearts $1",$2,0
+  -ac "-hearts $1",$2
 
 gimp_hearts_preview :
   -gimp_split_preview "-gimp_hearts $*",$-1
@@ -24124,11 +23985,11 @@ gimp_mineral_mosaic :
 #@gimp Mosaic : gimp_mosaic, gimp_mosaic_preview(0)
 #@gimp : Density = float(1,0.1,10)
 #@gimp : Keep edges = bool(true)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_mosaic :
-  -apply_channels "-mosaic $1,$2",$3,0
+  -ac "-mosaic $1,$2",$3
 
 gimp_mosaic_preview :
   -gimp_split_preview "-gimp_mosaic $*",$-1
@@ -24285,11 +24146,11 @@ gimp_pack_sprites :
   -channels[0] 0,@{0,s-2}
 
 #@gimp Paper texture : gimp_paper, gimp_paper_preview(0)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_paper :
-  -apply_channels "-texturize_paper",$1,0
+  -ac "-texturize_paper",$1
 
 gimp_paper_preview :
   -gimp_split_preview "-gimp_paper $*",$-1
@@ -24401,8 +24262,7 @@ gimp_seamless_turbulence :
 #@gimp : Amplitude = float(10,0,100)
 #@gimp : Low frequency = float(10,0,100)
 #@gimp : Frequency range = float(20,0,100)
-#@gimp : sep = separator()
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/01/2014</i>.</small>")
 _gimp_shockwaves :
@@ -24411,18 +24271,18 @@ _gimp_shockwaves :
   -* -idct -c 0,255
 
 gimp_shockwaves :
-  -apply_channels "-_gimp_shockwaves ${1-3}",$4,0
+  -ac "-_gimp_shockwaves ${1-3}",$4
 
 gimp_shockwaves_preview :
   -gimp_split_preview "-gimp_shockwaves $*",$-1
 
 #@gimp Sponge : gimp_sponge, gimp_sponge_preview(0)
 #@gimp : Size = int(13,3,21)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_sponge :
-  -apply_channels "-sponge $1",$2,0
+  -ac "-sponge $1",$2
 
 gimp_sponge_preview :
   -gimp_split_preview "-gimp_sponge $*",$-1
@@ -24543,11 +24403,11 @@ gimp_turbulence :
 #@gimp : Smoothness = float(2,0,10)
 #@gimp : Darkness = float(0.2,0,1)
 #@gimp : Lightness = float(1.8,1,3)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice(7,"All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_whirls :
-  -apply_channels "-whirls $1,$2,$3,$4",$5,0
+  -ac "-whirls $1,$2,$3,$4",$5
 
 gimp_whirls_preview :
   -gimp_split_preview "-gimp_whirls $*",$-1
@@ -24692,15 +24552,13 @@ gimp_remove_hotpixels_preview :
 #@gimp : Interpolation = choice(0,"Nearest neighbor","Linear","Runge-Kutta")
 #@gimp : Fast approximation = bool(1)
 #@gimp : Iterations = int(1,1,10)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/27/2013</i>.</small>")
 gimp_anisotropic_smoothing : -skip ${13=1},${14=0}
   -repeat @# -l[$>]
-    -apply_channels "-gimp_parallel_overlap \"-repeat $11 -smooth $1,$2,$3,$4,$5,$6,$7,$8,$9,$10 -done\",$13,$14",$12,0
+    -ac "-gimp_parallel_overlap \"-repeat $11 -smooth $1,$2,$3,$4,$5,$6,$7,$8,$9,$10 -done\",$13,$14",$12
   -endl -done -c 0,255
 
 gimp_anisotropic_smoothing_preview :
@@ -24710,14 +24568,12 @@ gimp_anisotropic_smoothing_preview :
 #@gimp : Spatial variance = float(10,0,100)
 #@gimp : Value variance = float(7,0,100)
 #@gimp : Iterations = int(2,1,10)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/27/2013</i>.</small>")
 gimp_bilateral : -skip ${5=0},${6=0}
-  -apply_channels "-gimp_parallel_overlap \"-repeat $3 -bilateral $1,$2 -done\",$5,$6",$4,0
+  -ac "-gimp_parallel_overlap \"-repeat $3 -bilateral $1,$2 -done\",$5,$6",$4
 
 gimp_bilateral_preview :
   -gimp_split_preview "-gimp_bilateral $*",$-1
@@ -24726,14 +24582,12 @@ gimp_bilateral_preview :
 #@gimp : Radius = int(5,1,100)
 #@gimp : Smoothness = float(30,0,512)
 #@gimp : Iterations = int(1,1,10)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>10/29/2014</i>.</small>")
 gimp_blur_guided : -skip ${5=0},${6=0}
-  -apply_channels "-gimp_parallel_overlap \"-repeat $3 -guided $1,$2 -done\",$5,$6",$4,0
+  -ac "-gimp_parallel_overlap \"-repeat $3 -guided $1,$2 -done\",$5,$6",$4
 
 gimp_blur_guided_preview :
   -gimp_split_preview "-gimp_blur_guided $*",$-1
@@ -24745,14 +24599,12 @@ gimp_blur_guided_preview :
 #@gimp : Tensor smoothness = float(1.1,0,10)
 #@gimp : Time step = float(15,5,50)
 #@gimp : Iterations = int(8,1,100)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/27/2013</i>.</small>")
 gimp_diffusion_smoothing :
-  -apply_channels "-gimp_parallel_overlap \"-smooth $6,$1,$2,$3,$4,$5,0 -c 0,255\",$8,$9",$7,0
+  -ac "-gimp_parallel_overlap \"-smooth $6,$1,$2,$3,$4,$5,0 -c 0,255\",$8,$9",$7
 
 gimp_diffusion_smoothing_preview :
   -gimp_split_preview "-gimp_diffusion_smoothing $*",$-1
@@ -24761,14 +24613,12 @@ gimp_diffusion_smoothing_preview :
 #@gimp : Time step = float(30,5,50)
 #@gimp : Iterations = int(4,1,30)
 #@gimp : Keep iterations as different layers = bool(false)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/27/2013</i>.</small>")
 gimp_meancurvature_smoothing :
-  -apply_channels "-gimp_parallel_overlap \"-meancurvature_flow $2,$1,$3 -c 0,255\",$5,$6",$4,0
+  -ac "-gimp_parallel_overlap \"-meancurvature_flow $2,$1,$3 -c 0,255\",$5,$6",$4
 
 gimp_meancurvature_smoothing_preview :
   -gimp_split_preview "-gimp_meancurvature_smoothing $*",$-1
@@ -24776,11 +24626,11 @@ gimp_meancurvature_smoothing_preview :
 #@gimp Smooth [median] : gimp_median, gimp_median_preview(0)
 #@gimp : Radius = int(3,1,20)
 #@gimp : Threshold = float(255,0,255)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_median :
-  -apply_channels "-median $1,$2",$3,0
+  -ac "-median $1,$2",$3
 
 gimp_median_preview :
   -gimp_split_preview "-gimp_median $*",$-1
@@ -24790,13 +24640,13 @@ gimp_median_preview :
 #@gimp : Spatial bandwidth = int(4,3,13)
 #@gimp : Tonal bandwidth = float(10,1,50)
 #@gimp : Patch measure = choice(3,"Linf-norm","L1-norm","L2-norm","Luminance","Lightness","RGB")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>2015/01/07</i>.</small>")
 gimp_nlmeans:
   -repeat @# -l[$>]
     -if {s==1} -nlmeans $1,$2,$3,-_gimp_nlmeans$4 # Handle separatly gray scale images.
-    -else -apply_channels "-nlmeans $1,$2,$3,-_gimp_nlmeans$4",$5,0
+    -else -ac "-nlmeans $1,$2,$3,-_gimp_nlmeans$4",$5
     -endif
   -endl -done
 
@@ -24818,14 +24668,12 @@ gimp_nlmeans_preview:
 #@gimp : Patch smoothness = float(0,0,4)
 #@gimp : Fast approximation = bool(1)
 #@gimp : Iterations = int(1,1,10)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/27/2013</i>.</small>")
 gimp_patch_smoothing :
-  -apply_channels "-gimp_parallel_overlap \"-repeat $7 -denoise $1,$2,$3,$4,$5,$6 -done -c 0,255\",$9,$10",$8,0
+  -ac "-gimp_parallel_overlap \"-repeat $7 -denoise $1,$2,$3,$4,$5,$6 -done -c 0,255\",$9,$10",$8
 
 gimp_patch_smoothing_preview :
   -gimp_split_preview "-gimp_patch_smoothing $*",$-1
@@ -24835,14 +24683,12 @@ gimp_patch_smoothing_preview :
 #@gimp : Time step = float(5,5,50)
 #@gimp : Iterations = int(5,1,30)
 #@gimp : Keep iterations as different layers = bool(false)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/26/2014</i>.</small>")
 gimp_peronamalik_smoothing :
-  -apply_channels "-gimp_parallel_overlap \"-peronamalik_flow $1,$3,$2,$4 -c 0,255\",$6,$7",$5,0
+  -ac "-gimp_parallel_overlap \"-peronamalik_flow $1,$3,$2,$4 -c 0,255\",$6,$7",$5
 
 gimp_peronamalik_smoothing_preview :
   -gimp_split_preview "-gimp_peronamalik_smoothing $*",$-1
@@ -24852,14 +24698,12 @@ gimp_peronamalik_smoothing_preview :
 #@gimp : Edges = float(0.5,0,2)
 #@gimp : Scales = int(5,1,10)
 #@gimp : Iterations = int(1,1,10)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/27/2013</i>.</small>")
 gimp_selective_smoothing :
-  -apply_channels "-gimp_parallel_overlap \"-repeat $4 -blur_selective $1,$2,$3 -done -c 0,255\",$6,$7",$5,0
+  -ac "-gimp_parallel_overlap \"-repeat $4 -blur_selective $1,$2,$3 -done -c 0,255\",$6,$7",$5
 
 gimp_selective_smoothing_preview :
   -gimp_split_preview "-gimp_selective_smoothing $*",$-1
@@ -24886,7 +24730,7 @@ gimp_selective_smoothing_preview :
 #@gimp : sep = separator()
 #@gimp : Preview data = choice{5,"Skin mask","Base scale","Medium scale (original)","Medium scale (smoothed)","Fine scale","Result image"}
 #@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : link = link("Click here for a video tutorial","http://www.youtube.com/watch?v=H8pQfq-ybCc")
+#@gimp : sep = separator(), link = link("Click here for a video tutorial","http://www.youtube.com/watch?v=H8pQfq-ybCc")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/20/2013</i>.</small>")
 gimp_smooth_skin :
   -repeat @# -l[$>] -split_opacity -l[0] -to_rgb
@@ -24951,9 +24795,7 @@ gimp_smooth_skin_preview :
 #@gimp : Fast approximation = bool(1)
 #@gimp : Iterations = int(1,1,10)
 #@gimp : Channel(s) = choice("RGB","Luminance","Blue & Red chrominances","Blue chrominance","Red chrominance")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : note = note{"\n<small><b>Note: </b>This set of anisotropic smoothing parameters has been suggested by PhotoComiX.</small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>PhotoComiX</i>.      Latest update: <i>12/26/2010</i>.</small>")
 
@@ -24961,14 +24803,12 @@ gimp_smooth_skin_preview :
 #@gimp : Time step = float(30,5,100)
 #@gimp : Iterations = int(10,1,40)
 #@gimp : Keep iterations as different layers = bool(false)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/27/2013</i>.</small>")
 gimp_tv_smoothing :
-  -apply_channels "-gimp_parallel_overlap \"-tv_flow $2,$1,$3 -c 0,255\",$5,$6",$4,0
+  -ac "-gimp_parallel_overlap \"-tv_flow $2,$1,$3 -c 0,255\",$5,$6",$4
 
 gimp_tv_smoothing_preview :
   -gimp_split_preview "-gimp_tv_smoothing $*",$-1
@@ -24977,14 +24817,12 @@ gimp_tv_smoothing_preview :
 #@gimp : Threshold = float(1,0,10)
 #@gimp : Iterations = int(10,1,32)
 #@gimp : Scales = int(10,2,10)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
-#@gimp : Spatial overlap = int(24,0,256)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : sep = separator(), Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads"), Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger and David Tschumperl&#233;</i>.      Latest update: <i>08/27/2013</i>.</small>")
 gimp_haar_smoothing :
-  -apply_channels "-gimp_parallel_overlap \"-denoise_haar $1,$3,$2 -c 0,255\",$5,$6",$4,0
+  -ac "-gimp_parallel_overlap \"-denoise_haar $1,$3,$2 -c 0,255\",$5,$6",$4
 
 gimp_haar_smoothing_preview :
   -gimp_split_preview "-gimp_haar_smoothing $*",$-1
@@ -26525,13 +26363,13 @@ gimp_animate_glow_preview :
 #@gimp Bandpass : gimp_bandpass, gimp_bandpass_preview(0)
 #@gimp : Low frequency = float(0,0,100)
 #@gimp : High frequency = float(100,0,100)
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Value range = choice(1,"Cut","Normalize")
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice(2,"None","Cut","Normalize")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_bandpass :
   -repeat @# -l[$>] -split_opacity -l[0]
-    -apply_channels "-bandpass $1%,$2%",$3,$4
+    -ac "-bandpass $1%,$2%",$3,$4
   -endl -a c -endl -done
 
 gimp_bandpass_preview :
@@ -26576,11 +26414,10 @@ gimp_watermark_fourier :
 #@gimp Custom code (local) : gimp_custom_code, gimp_custom_code_preview(0)
 #@gimp : Code = text(1,"-repeat @# -l[$>]\n\n  -to_rgb\n  --deform 20\n  -blend_edges 3\n\n-endl -done\n\n\n")
 #@gimp : sep = separator()
-#@gimp : Value range = choice("Cut","Normalize")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator()
-#@gimp : note = note{"<small><b>Note: </b>
+#@gimp : Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note{"<small><b>Note: </b>
 #@gimp : This filter can execute any set of instructions understood by the <b>G'MIC</b> language interpreter.
 #@gimp : Here, you can then test some commands before creating your own G'MIC custom commands and GIMP menu entries.\n\n
 #@gimp : Please look at the documentation reference web page :</small>"}
@@ -26592,12 +26429,10 @@ gimp_watermark_fourier :
 
 #@gimp Custom code (global) : gimp_custom_code, gimp_custom_code_preview(1)
 #@gimp : Code = text(1,"-repeat @# -l[$>]\n\n  -to_rgb\n  --deform 20\n  -blend_edges 3\n\n-endl -done\n\n\n")
-#@gimp : sep = separator()
-#@gimp : Value range = choice("Cut","Normalize")
-#@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator()
-#@gimp : note = note{"<small><b>Note: </b>
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice("None","Cut","Normalize")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note{"<small><b>Note: </b>
 #@gimp : This filter can execute any set of instructions understood by the <b>G'MIC</b> language interpreter.
 #@gimp : Here, you can then test some commands before creating your own G'MIC custom commands and GIMP menu entries.\n\n
 #@gimp : Please look at the documentation reference web page :</small>"}
@@ -26608,12 +26443,7 @@ gimp_watermark_fourier :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>06/14/2011</i>.</small>")
 gimp_custom_code : -skip "${1=-skip ,}"
   -m "_gimp_custom_code_start : $1"
-  -if {$3>0}
-    -apply_channels "-_gimp_custom_code_start",$3,$2
-  -else
-    -_gimp_custom_code
-    -if $2 -n 0,255 -else -c 0,255 -endif
-  -endif
+  -apply_channels "-_gimp_custom_code_start",$2,$3
   -uncommand _gimp_custom_code_start
 
 gimp_custom_code_preview : -skip "${1=-skip ,}"
@@ -26624,14 +26454,6 @@ gimp_custom_code_preview : -skip "${1=-skip ,}"
     -rr2d $w,$h,2,1
     -gimp_print_preview "Syntax error:",,$error_msg,15,40
   -endl
-
-_gimp_custom_code :
-  -_gimp_custom_code_start
-
-#@gimp Do nothing : gimp_do_nothing, gimp_do_nothing
-#@gimp : note = note("<small><b>Note</b> : This filters does nothing on the image. Use it to manipulate layers in conjunction with the input/output options of the G'MIC plug-in.</small>")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_do_nothing :
 
 #@gimp Games &amp; demos : gimp_gmic_demos, gimp_gmic_demos_preview
 #@gimp : Selection = choice("2048","Blobs editor","Bouncing balls","Fire effect","Fireworks","Fish-eye effect","Fourier filtering",
@@ -26855,7 +26677,7 @@ gmicol_crop_preview :
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>10/18/2012</i>.</small>")
 gmicol_equalize :
-  -apply_channels "-equalize 256,0,255",$1,1
+  -apply_channels "-equalize 256,0,255",$1,2
 
 gmicol_equalize_preview :
   -gimp_split_preview "-gmicol_equalize $*",$-1

@@ -118,6 +118,7 @@ const QString COMPOSITE_COPY         = "copy";
 const QString COMPOSITE_COPY_RED     = "copy_red";
 const QString COMPOSITE_COPY_GREEN   = "copy_green";
 const QString COMPOSITE_COPY_BLUE    = "copy_blue";
+const QString COMPOSITE_TANGENT_NORMALMAP    = "tangent_normalmap";
 
 const QString COMPOSITE_COLORIZE     = "colorize";
 const QString COMPOSITE_BUMPMAP      = "bumpmap";

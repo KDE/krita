@@ -88,6 +88,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_GREEN, i18n("Copy Green")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_BLUE , i18n("Copy Blue")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY      , i18n("Copy")));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_TANGENT_NORMALMAP, i18n("Tangent Normalmap")));
 
     m_map.insert(m_categories[6], KoID(COMPOSITE_COLOR         , i18n("Color")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HUE           , i18n("Hue")));

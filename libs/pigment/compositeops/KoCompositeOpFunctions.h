@@ -83,6 +83,18 @@ inline void cfHue(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db)
     setLightness<HSXType>(dr, dg, db, lum);
 }
 
+template<class HSXType, class TReal>
+inline void cfTangentNormalmap(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    using namespace Arithmetic;
+    TReal half=halfValue<TReal>();
+    
+    dr = sr+(dr-half);
+    dg = sg+(dg-half);
+    db = sb+(db-unitValue<TReal>());
+    
+    
+}
+
 template<class T>
 inline T cfColorBurn(T src, T dst) {
     using namespace Arithmetic;

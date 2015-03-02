@@ -44,8 +44,10 @@ class KisNodeShape;
  * The ownership on the children of the dummy is taken as well.
  */
 
-class KRITAUI_EXPORT KisNodeDummy
+class KRITAUI_EXPORT KisNodeDummy : public QObject
 {
+    Q_OBJECT
+
 public:
     /**
      * Take care tha KisNodeDummy does not take ownership over
@@ -77,7 +79,6 @@ private:
     KisNodeShape* nodeShape() const;
 
     friend class KisNodeDummiesGraph;
-    KisNodeDummy *m_parent;
     QList<KisNodeDummy*> m_children;
 
     KisNodeShape *m_nodeShape;

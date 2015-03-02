@@ -587,17 +587,18 @@ Statement ';' StatementList
     | Statement SelectStatement         {  }
 */
 Statement :
-CreateTableStatement
+/*CreateTableStatement
 {
 YYACCEPT;
 }
-| SelectStatement
+|*/
+SelectStatement
 {
     $$ = $1;
 }
 ;
 
-CreateTableStatement :
+/*CreateTableStatement :
 CREATE TABLE IDENTIFIER
 {
     parser->setOperation(Parser::OP_CreateTable);
@@ -686,7 +687,7 @@ SQL_TYPE
     field = new Field();
     field->setType(Field::InvalidType);
 }
-;
+;*/
 
 SelectStatement:
 Select ColViews

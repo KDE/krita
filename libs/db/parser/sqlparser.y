@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004, 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1109,10 +1109,11 @@ aExpr10:
 aExprList:
 '(' aExprList2 ')'
 {
-//    $$ = new NArgExpr(0, 0);
-//    $$->add( $1 );
-//    $$->add( $3 );
     $$ = $2;
+}
+| '(' ')'
+{
+    $$ = new NArgExpr(KexiDBExpr_ArgumentList, ',');
 }
 ;
 
@@ -1122,11 +1123,10 @@ aExpr ',' aExprList2
     $$ = $3;
     $$->prepend( $1 );
 }
-| aExpr ',' aExpr
+| aExpr
 {
-    $$ = new NArgExpr(0, 0);
+    $$ = new NArgExpr(KexiDBExpr_ArgumentList, ',');
     $$->add( $1 );
-    $$->add( $3 );
 }
 ;
 

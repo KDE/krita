@@ -16,44 +16,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KEYFRAME_CHANNEL_H
-#define KIS_KEYFRAME_CHANNEL_H
+#ifndef KIS_KEYFRAME_H
+#define KIS_KEYFRAME_H
 
 #include <QVariant>
 
 #include "krita_export.h"
 #include "kis_keyframe.h"
 
-class KisKeyframeSequence;
+class KisKeyframeChannel;
 
-class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
-{
+class KRITAIMAGE_EXPORT KisKeyframe : public QObject {
     Q_OBJECT
 
 public:
-    KisKeyframeChannel(const QString& name, const QString& displayName, KisKeyframeSequence *sequence=0);
-    ~KisKeyframeChannel();
+    KisKeyframe(KisKeyframeChannel *channel, int time, const QVariant &value)
+        : QObject()
+        , ch(channel)
+        , val(value)
+        , t(time)
+    {}
 
-    QString name() const;
-    QString displayName() const;
-    KisKeyframeSequence *sequence() const;
-
-    void setKeyframe(int time, const QVariant &value);
-    void deleteKeyframe(int time);
-    bool hasKeyframeAt(int time);
-    bool moveKeyframe(KisKeyframe *keyframe, int time);
-
-    QVariant getValueAt(int time);
-
-    QList<KisKeyframe*> keyframes() const;
-
-signals:
-    void sigChanged();
+    QVariant value() const;
+    int time() const;
+    void setTime(int time);
+    KisKeyframeChannel *channel() const;
 
 private:
-
-    struct Private;
-    Private * const m_d;
+    KisKeyframeChannel *ch;
+    QVariant val;
+    int t;
 };
 
-#endif // KIS_KEYFRAME_CHANNEL_H
+#endif

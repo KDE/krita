@@ -1,6 +1,10 @@
 set(KRITA_ANIMATIONDOCKER_PART_SRCS
     animation_dockers.cpp
     animation_docker.cpp
+    timeline_view.cpp
+    timeline_widget.cpp
+    timeline_docker.cpp
+    keyframe_channel_delegate.cpp
 )
 
 kde4_add_ui_files(KRITA_ANIMATIONDOCKER_PART_SRCS

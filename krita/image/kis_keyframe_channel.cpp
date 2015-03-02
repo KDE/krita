@@ -22,22 +22,52 @@
 
 struct KisKeyframeChannel::Private
 {
-    QMap<int, QVariant> keys;
+    QMap<int, KisKeyframe*> keys;
+    KisKeyframeSequence *sequence;
+    QString name;
+    QString displayName;
 };
 
-KisKeyframeChannel::KisKeyframeChannel(const QString& name, const QString& displayName)
+KisKeyframeChannel::KisKeyframeChannel(const QString &name, const QString &displayName, KisKeyframeSequence *sequence)
     : m_d(new Private)
 {
+    m_d->sequence = sequence;
+    m_d->name = name;
+    m_d->displayName = displayName;
 }
 
-void KisKeyframeChannel::setKeyframe(int time, const QVariant& value)
+KisKeyframeChannel::~KisKeyframeChannel()
 {
-    m_d->keys.insert(time, value);
+    qDeleteAll(m_d->keys.values());
+}
+
+QString KisKeyframeChannel::name() const
+{
+    return m_d->name;
+}
+
+QString KisKeyframeChannel::displayName() const
+{
+    return m_d->displayName;
+}
+
+void KisKeyframeChannel::setKeyframe(int time, const QVariant &value)
+{
+    deleteKeyframe(time);
+
+    KisKeyframe *keyframe = new KisKeyframe(this, time, value);
+    m_d->keys.insert(time, keyframe);
+
+    emit sigChanged();
 }
 
 void KisKeyframeChannel::deleteKeyframe(int time)
 {
+    KisKeyframe *keyframe = m_d->keys.value(time);
+    if (keyframe) delete keyframe;
     m_d->keys.remove(time);
+
+    emit sigChanged();
 }
 
 bool KisKeyframeChannel::hasKeyframeAt(int time)
@@ -45,17 +75,35 @@ bool KisKeyframeChannel::hasKeyframeAt(int time)
     return m_d->keys.contains(time);
 }
 
+bool KisKeyframeChannel::moveKeyframe(KisKeyframe *keyframe, int time)
+{
+    if (m_d->keys.contains(time)) return false;
+
+    m_d->keys.remove(keyframe->time());
+    keyframe->setTime(time);
+    m_d->keys.insert(keyframe->time(), keyframe);
+
+    emit sigChanged();
+    return true;
+}
+
 QVariant KisKeyframeChannel::getValueAt(int time)
 {
-    QMap<int, QVariant>::iterator nextKeyframe = m_d->keys.upperBound(time);
+    QMap<int, KisKeyframe*>::iterator nextKeyframe = m_d->keys.upperBound(time);
 
     if (nextKeyframe == m_d->keys.begin()) return QVariant();
 
     nextKeyframe--;
-    return nextKeyframe.value();
+    return nextKeyframe.value()->value();
 }
 
-QList<int> KisKeyframeChannel::times()
+QList<KisKeyframe*> KisKeyframeChannel::keyframes() const
 {
-    return m_d->keys.keys();
+    return m_d->keys.values();
 }
+
+KisKeyframeSequence *KisKeyframeChannel::sequence() const
+{
+    return m_d->sequence;
+}
+

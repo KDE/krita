@@ -16,44 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KEYFRAME_CHANNEL_H
-#define KIS_KEYFRAME_CHANNEL_H
-
-#include <QVariant>
+#ifndef _TIMELINE_DOCKER_H_
+#define _TIMELINE_DOCKER_H_
 
 #include "krita_export.h"
-#include "kis_keyframe.h"
 
-class KisKeyframeSequence;
+#include <QDockWidget>
+#include <KoCanvasObserverBase.h>
 
-class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
-{
+#include "kis_timeline_model.h"
+#include "timeline_widget.h"
+
+class KisCanvas2;
+class Ui_WdgTimeline;
+
+class TimelineDocker : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
-
 public:
-    KisKeyframeChannel(const QString& name, const QString& displayName, KisKeyframeSequence *sequence=0);
-    ~KisKeyframeChannel();
+    TimelineDocker();
+    QString observerName() { return "TimelineDocker"; }
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
 
-    QString name() const;
-    QString displayName() const;
-    KisKeyframeSequence *sequence() const;
-
-    void setKeyframe(int time, const QVariant &value);
-    void deleteKeyframe(int time);
-    bool hasKeyframeAt(int time);
-    bool moveKeyframe(KisKeyframe *keyframe, int time);
-
-    QVariant getValueAt(int time);
-
-    QList<KisKeyframe*> keyframes() const;
-
-signals:
-    void sigChanged();
+private slots:
 
 private:
 
-    struct Private;
-    Private * const m_d;
+    KisCanvas2 *m_canvas;
+
+    KisTimelineModel *m_model;
+    TimelineWidget *m_timelineWidget;
 };
 
-#endif // KIS_KEYFRAME_CHANNEL_H
+
+#endif

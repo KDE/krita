@@ -119,7 +119,7 @@ light_playpause.png
 light_addblankframe.png
 light_addduplicateframe.png
 light_deletekeyframe.png
-
+light_timeline_keyframe.png
 
 
 tool_transform/dark_transform_icons_cage.png

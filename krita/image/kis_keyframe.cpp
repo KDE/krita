@@ -16,32 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KEYFRAME_SEQUENCE_H
-#define KIS_KEYFRAME_SEQUENCE_H
+#include "kis_keyframe.h"
 
-#include <krita_export.h>
-#include "kis_keyframe_channel.h"
-#include "kis_node.h"
-
-class KRITAIMAGE_EXPORT KisKeyframeSequence
+QVariant KisKeyframe::value() const
 {
+    return val;
+}
 
-public:
+int KisKeyframe::time() const
+{
+    return t;
+}
 
-    KisKeyframeSequence(KisNodeWSP node=0);
-    ~KisKeyframeSequence();
+void KisKeyframe::setTime(int time)
+{
+    t = time;
+}
 
-    KisKeyframeChannel *createChannel(const QString& name, const QString& displayName);
-    KisKeyframeChannel *getChannel(const QString& name);
-
-    QList<KisKeyframeChannel*> channels();
-
-    KisNodeWSP node();
-private:
-
-    struct Private;
-    Private * const m_d;
-
-};
-
-#endif // KIS_KEYFRAME_SEQUENCE_H
+KisKeyframeChannel *KisKeyframe::channel() const
+{
+    return ch;
+}

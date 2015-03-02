@@ -78,7 +78,6 @@ public:
     Private()
             : graphListener(0)
             , nodeProgressProxy(0)
-            , keyframes(new KisKeyframeSequence())
     {
     }
 
@@ -163,6 +162,8 @@ KisNode::KisNode()
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
+
+    m_d->keyframes = new KisKeyframeSequence(this);
 }
 
 KisNode::KisNode(const KisNode & rhs)
@@ -171,6 +172,8 @@ KisNode::KisNode(const KisNode & rhs)
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
+
+    m_d->keyframes = new KisKeyframeSequence(this);
 
     // NOTE: the nodes are not supposed to be added/removed while
     // creation of another node, so we do *no* locking here!

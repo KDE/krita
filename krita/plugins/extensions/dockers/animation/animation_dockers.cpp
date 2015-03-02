@@ -18,6 +18,7 @@
 
 #include "animation_dockers.h"
 #include "animation_docker.h"
+#include "timeline_docker.h"
 
 #include <QVariantList>
 #include <kpluginfactory.h>
@@ -59,10 +60,42 @@ public:
 private:
 };
 
+class TimelineDockerFactory : public KoDockFactoryBase {
+public:
+    TimelineDockerFactory()
+    {
+    }
+
+    virtual QString id() const
+    {
+        return QString( "TimelineDocker" );
+    }
+
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
+        return Qt::RightDockWidgetArea;
+    }
+
+    virtual QDockWidget *createDockWidget()
+    {
+        TimelineDocker *dockWidget = new TimelineDocker();
+        dockWidget->setObjectName(id());
+
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
+private:
+};
+
 AnimationDockersPlugin::AnimationDockersPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoDockRegistry::instance()->add(new AnimationDockerFactory());
+    KoDockRegistry::instance()->add(new TimelineDockerFactory());
 }
 
 AnimationDockersPlugin::~AnimationDockersPlugin()

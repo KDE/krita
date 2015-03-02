@@ -153,6 +153,8 @@ public slots:
         return this;
     }
 
+private slots:
+    void keyframesChanged();
 
 private:
     void init(KisMultiPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());

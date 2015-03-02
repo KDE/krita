@@ -110,14 +110,14 @@ void KisPaintLayerTest::testKeyframing()
 
     KisKeyframeChannel *contentChannel = layer->keyframes()->getChannel("content");
 
-    QCOMPARE(contentChannel->times().count(), 0);
+    QCOMPARE(contentChannel->keyframes().count(), 0);
 
     layer->addNewFrame(7, true);
-    QCOMPARE(contentChannel->times().count(), 2); // Original content AND added frame
+    QCOMPARE(contentChannel->keyframes().count(), 2); // Original content AND added frame
     QVERIFY(contentChannel->getValueAt(0) != contentChannel->getValueAt(7));
 
     layer->addNewFrame(5, true);
-    QCOMPARE(contentChannel->times().count(), 3);
+    QCOMPARE(contentChannel->keyframes().count(), 3);
     QVERIFY(contentChannel->getValueAt(5) != contentChannel->getValueAt(0));
     QVERIFY(contentChannel->getValueAt(5) != contentChannel->getValueAt(7));
 
@@ -131,11 +131,11 @@ void KisPaintLayerTest::testKeyframing()
 
     QVariant frame5ID = contentChannel->getValueAt(5);
     layer->addNewFrame(5, true);
-    QCOMPARE(contentChannel->times().count(), 3);
+    QCOMPARE(contentChannel->keyframes().count(), 3);
     QCOMPARE(contentChannel->getValueAt(5), frame5ID);
 
     layer->deleteKeyfame(7);
-    QCOMPARE(contentChannel->times().count(), 2);
+    QCOMPARE(contentChannel->keyframes().count(), 2);
 
     layer->seekToTime(8);
     QCOMPARE(dev->currentContext(), frame5ID.toInt());

@@ -16,44 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KEYFRAME_CHANNEL_H
-#define KIS_KEYFRAME_CHANNEL_H
+#ifndef _TIMELINE_WIDGET_H_
+#define _TIMELINE_WIDGET_H_
 
-#include <QVariant>
+#include <QWidget>
+#include <QAbstractItemModel>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QVBoxLayout>
+#include "kis_types.h"
+#include "timeline_view.h"
 
-#include "krita_export.h"
-#include "kis_keyframe.h"
-
-class KisKeyframeSequence;
-
-class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
+class TimelineWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    KisKeyframeChannel(const QString& name, const QString& displayName, KisKeyframeSequence *sequence=0);
-    ~KisKeyframeChannel();
+    TimelineWidget(QWidget *parent);
 
-    QString name() const;
-    QString displayName() const;
-    KisKeyframeSequence *sequence() const;
+    void setModel(QAbstractItemModel *model);
+    void setImage(KisImageWSP image);
 
-    void setKeyframe(int time, const QVariant &value);
-    void deleteKeyframe(int time);
-    bool hasKeyframeAt(int time);
-    bool moveKeyframe(KisKeyframe *keyframe, int time);
+    void mousePressEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *e);
 
-    QVariant getValueAt(int time);
 
-    QList<KisKeyframe*> keyframes() const;
-
-signals:
-    void sigChanged();
+private slots:
+    void imageTimeChanged();
 
 private:
-
-    struct Private;
-    Private * const m_d;
+    QVBoxLayout *m_layout;
+    TimelineView *m_timelineView;
+    KisImageWSP m_image;
 };
 
-#endif // KIS_KEYFRAME_CHANNEL_H
+#endif

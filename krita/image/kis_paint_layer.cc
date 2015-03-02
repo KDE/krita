@@ -42,7 +42,7 @@ struct KisPaintLayer::Private
 public:
     KisMultiPaintDeviceSP paintDevice;
     QBitArray        paintChannelFlags;
-    KisKeyframeChannel  *contentChannel;
+    KisKeyframeChannel *contentChannel;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -95,6 +95,7 @@ void KisPaintLayer::init(KisMultiPaintDeviceSP paintDevice, const QBitArray &pai
     m_d->paintChannelFlags = paintChannelFlags;
 
     m_d->contentChannel = keyframes()->createChannel("content", "Content");
+    connect(m_d->contentChannel, SIGNAL(sigChanged()), this, SLOT(keyframesChanged()));
 }
 
 KisPaintLayer::~KisPaintLayer()
@@ -236,6 +237,11 @@ void KisPaintLayer::setAlphaLocked(bool lock)
         m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
 }
 
+void KisPaintLayer::keyframesChanged()
+{
+    seekToTime(image()->currentTime());
+}
+
 void KisPaintLayer::seekToTime(int time)
 {
     KisLayer::seekToTime(time);
@@ -254,7 +260,7 @@ void KisPaintLayer::addNewFrame(int time, bool blank)
 {
     int currentContext = m_d->paintDevice->currentContext();
 
-    if (m_d->contentChannel->times().count() == 0) {
+    if (m_d->contentChannel->keyframes().count() == 0) {
         m_d->contentChannel->setKeyframe(0, currentContext);
     }
 
@@ -268,9 +274,6 @@ void KisPaintLayer::addNewFrame(int time, bool blank)
     }
 
     m_d->contentChannel->setKeyframe(time, frameId);
-
-    // Make sure we display the new frame (if appropriate)
-    seekToTime(image()->currentTime());
 }
 
 void KisPaintLayer::deleteKeyfame(int time)

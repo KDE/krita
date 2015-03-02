@@ -18,21 +18,23 @@
 
 #include "kis_keyframe_sequence.h"
 
-#include <QHash>
+#include <QMap>
 
 struct KisKeyframeSequence::Private
 {
-    QHash<QString, KisKeyframeChannel*> channels;
+    QMap<QString, KisKeyframeChannel*> channels;
+    KisNodeWSP node;
 };
 
-KisKeyframeSequence::KisKeyframeSequence()
+KisKeyframeSequence::KisKeyframeSequence(KisNodeWSP node)
     : m_d(new Private)
 {
+    m_d->node = node;
 }
 
 KisKeyframeSequence::~KisKeyframeSequence()
 {
-    QHash<QString, KisKeyframeChannel*>::const_iterator it = m_d->channels.constBegin();
+    QMap<QString, KisKeyframeChannel*>::const_iterator it = m_d->channels.constBegin();
     while (it != m_d->channels.constEnd()) {
         delete it.value();
         ++it;
@@ -41,7 +43,7 @@ KisKeyframeSequence::~KisKeyframeSequence()
 
 KisKeyframeChannel * KisKeyframeSequence::createChannel(const QString& name, const QString& displayName)
 {
-    KisKeyframeChannel *channel = new KisKeyframeChannel(name, displayName);
+    KisKeyframeChannel *channel = new KisKeyframeChannel(name, displayName, this);
 
     m_d->channels.insert(name, channel);
 
@@ -55,4 +57,14 @@ KisKeyframeChannel* KisKeyframeSequence::getChannel(const QString& name)
     } else {
         return 0;
     }
+}
+
+QList<KisKeyframeChannel*> KisKeyframeSequence::channels()
+{
+    return m_d->channels.values();
+}
+
+KisNodeWSP KisKeyframeSequence::node()
+{
+    return m_d->node;
 }

@@ -319,6 +319,8 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtsingleapplication.cpp
 
     widgets/kis_url_requester.cpp
+
+    kis_timeline_model.cpp
 )
 
 if(WIN32)

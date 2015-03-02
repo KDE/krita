@@ -1676,6 +1676,8 @@ void KisImage::seekToTime(int time)
 
     m_d->time = time;
     m_d->rootLayer->seekToTime(time);
+
+    emit sigTimeChanged();
 }
 
 QImage KisImage::getRenderedFrame(int time)

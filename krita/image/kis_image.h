@@ -657,6 +657,12 @@ signals:
      */
     void sigNodeCollapsedChanged();
 
+    /**
+     * Emitted when the current time is changed, after the states
+     * of nodes have been updated to reflect the change.
+     */
+    void sigTimeChanged();
+
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();
 

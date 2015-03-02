@@ -809,6 +809,7 @@ set(KDCHART_LIBS calligrakdchart)
 # libodf2
 set(KOODF2_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/libodf2
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart
 )
 
 # libodfreader

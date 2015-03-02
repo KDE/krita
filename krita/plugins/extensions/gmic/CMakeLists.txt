@@ -25,7 +25,7 @@ add_definitions(-Dcimg_use_vt100 )
 
 # PARALLEL
 find_package(Threads)
-if (CMAKE_USE_PTHREADS_INIT)
+if (Threads_FOUND)
     add_definitions(-Dgmic_is_parallel)
     add_definitions(-Dcimg_use_rng)
 endif()
@@ -100,11 +100,9 @@ endif(CURL_FOUND)
 target_link_libraries(gmic ${ZLIB_LIBRARIES})
 target_link_libraries(gmic ${PNG_LIBRARIES})
 
-if (WIN32)
-    target_link_libraries(gmic)
-else (WIN32)
-    target_link_libraries(gmic pthread)
-endif (WIN32)
+if(Threads_FOUND)
+    target_link_libraries(gmic ${CMAKE_THREAD_LIBS_INIT})
+endif(Threads_FOUND)
 
 
 ##

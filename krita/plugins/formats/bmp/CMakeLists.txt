@@ -24,4 +24,4 @@ target_link_libraries(kritabmpimport kritaui)
 install(TARGETS kritabmpimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  krita_bmp_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( PROGRAMS  krita_bmp.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS  krita_bmp.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

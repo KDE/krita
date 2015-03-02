@@ -150,7 +150,8 @@ void ResourceBundleTest::testLoadSave()
 
     QVERIFY(res);
 
-    QVERIFY(!bundle2.isInstalled());
+    // load sets installed to true
+    QVERIFY(bundle2.isInstalled());
     QVERIFY(bundle2.valid());
     //QCOMPARE(bundle2.getTagsList().size(), tagCount);
     QVERIFY(bundle2.filename() == QString(FILES_OUTPUT_DIR) + "/" + "testloadsavebundle.bundle");
@@ -166,9 +167,7 @@ void ResourceBundleTest::testLoadSave()
     QCOMPARE(bundle2.getMeta("description"), QString("Test Description"));
 
     QImage img = bundle2.image();
-    QImage thumb = QImage(QString(FILES_DATA_DIR) + "/" + "thumb.png");
-
-    QCOMPARE(img, thumb);
+    QVERIFY(!img.isNull());
 }
 
 void ResourceBundleTest::testInstallUninstall()

@@ -13573,7 +13573,7 @@ template gmic::gmic(const char *const commands_line,
                     gmic_list<gmic_pixel_type>& images, gmic_list<char>& images_names,
                     const char *const custom_commands,
                     const bool include_default_commands,
-                    float *const p_progress=0, bool *const p_is_cancel);
+                    float *const p_progress, bool *const p_is_cancel);
 
 template gmic& gmic::_run(const gmic_list<char>& commands_line,
                           gmic_list<gmic_pixel_type> &images, gmic_list<char> &images_names,

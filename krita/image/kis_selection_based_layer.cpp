@@ -119,7 +119,8 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
 {
     lockTemporaryTarget();
 
-    m_d->selection->updateProjection();
+    m_d->selection->updateProjection(rect);
+
     KisSelectionSP tempSelection = m_d->selection;
     KisPainter gc(projection);
 

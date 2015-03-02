@@ -200,7 +200,7 @@ KisDocument* createCompleteDocument()
     return doc;
 }
 
-KisDocument* createEmptyDocument()
+KisDocument *createEmptyDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 

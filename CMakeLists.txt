@@ -20,12 +20,12 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9 Beta 3")
+set(CALLIGRA_VERSION_STRING "2.9.0")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 92)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_VERSION_RELEASE 0)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 #set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
-set(CALLIGRA_BETA 3) # uncomment only for Beta
+#set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
 set(CALLIGRA_YEAR 2015) # update every year
 
@@ -288,7 +288,7 @@ if (USEOPENGL)
     else(OPENGL_FOUND)
         message(STATUS "Did NOT find OpenGL libraries")
     endif(OPENGL_FOUND)
-    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
+    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by Gemini, parts of Krita and optionally by flake")
 endif(USEOPENGL)
 
 ##
@@ -940,6 +940,16 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
     LIBQGIT2_FOUND "libqgit2 devel not found"
+)
+
+calligra_drop_product_on_bad_condition( PART_QTQUICK
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
+)
+
+calligra_drop_product_on_bad_condition( APP_GEMINI
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
 )
 
 #############################################

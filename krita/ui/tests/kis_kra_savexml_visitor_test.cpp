@@ -50,6 +50,16 @@
 
 #include "kra/kis_kra_savexml_visitor.h"
 
+#include <filter/kis_filter_registry.h>
+#include <generator/kis_generator_registry.h>
+
+void KisKraSaveXmlVisitorTest::initTestCase()
+{
+    KisFilterRegistry::instance();
+    KisGeneratorRegistry::instance();
+}
+
+
 void KisKraSaveXmlVisitorTest::testCreateDomDocument()
 {
     KisDocument* doc = createCompleteDocument();

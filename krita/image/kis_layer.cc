@@ -41,6 +41,7 @@
 #include "kis_selection_mask.h"
 #include "kis_meta_data_store.h"
 #include "kis_selection.h"
+#include "kis_paint_layer.h"
 
 #include "kis_clone_layer.h"
 
@@ -246,6 +247,71 @@ void KisLayer::setImage(KisImageWSP image)
         if (layer)
             layer->setImage(image);
     }
+}
+
+KisLayerSP KisLayer::createMergedLayer(KisLayerSP prevLayer)
+{
+    KisImageWSP my_image = image();
+
+    QRect layerProjectionExtent = this->projection()->extent();
+    QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
+    bool alphaDisabled = this->alphaChannelDisabled();
+    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
+
+    KisPaintDeviceSP mergedDevice;
+
+    if (this->compositeOpId() != prevLayer->compositeOpId() || prevLayer->opacity() != OPACITY_OPAQUE_U8) {
+
+        mergedDevice = new KisPaintDevice(this->colorSpace(), "merged");
+        KisPainter gc(mergedDevice);
+
+        //Copy the pixels of previous layer with their actual alpha value
+        prevLayer->disableAlphaChannel(false);
+
+        gc.setChannelFlags(prevLayer->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
+        gc.setOpacity(prevLayer->opacity());
+
+        gc.bitBlt(prevLayerProjectionExtent.topLeft(), prevLayer->projection(), prevLayerProjectionExtent);
+
+        //Restore the previous prevLayer disableAlpha status for correct undo/redo
+        prevLayer->disableAlphaChannel(prevAlphaDisabled);
+
+        //Paint the pixels of the current layer, using their actual alpha value
+        if (alphaDisabled == prevAlphaDisabled) {
+            this->disableAlphaChannel(false);
+        }
+        gc.setChannelFlags(this->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(this->compositeOpId()));
+        gc.setOpacity(this->opacity());
+
+        gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
+
+        //Restore the layer disableAlpha status for correct undo/redo
+        this->disableAlphaChannel(alphaDisabled);
+    }
+    else {
+        //Copy prevLayer
+        my_image->lock();
+        mergedDevice = new KisPaintDevice(*prevLayer->projection());
+        my_image->unlock();
+
+        //Paint layer on the copy
+        KisPainter gc(mergedDevice);
+        if (alphaDisabled == prevAlphaDisabled) {
+            this->disableAlphaChannel(false);
+        }
+        gc.setChannelFlags(this->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(this->compositeOpId()));
+        gc.setOpacity(this->opacity());
+
+        gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
+
+        //Restore the layer disableAlpha status for correct undo/redo
+        this->disableAlphaChannel(alphaDisabled);
+    }
+
+    return new KisPaintLayer(my_image, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
 }
 
 void KisLayer::registerClone(KisCloneLayerWSP clone)

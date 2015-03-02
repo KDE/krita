@@ -1455,6 +1455,15 @@ int KisConfig::workaroundX11SmoothPressureSteps() const
     return m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0);
 }
 
+bool KisConfig::showCanvasMessages() const
+{
+    return m_cfg.readEntry("showOnCanvasMessages", true);
+}
+void KisConfig::setShowCanvasMessages(bool show)
+{
+    m_cfg.writeEntry("showOnCanvasMessages", show);
+}
+
 const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
 {
     const KoColorSpace *cs = 0;

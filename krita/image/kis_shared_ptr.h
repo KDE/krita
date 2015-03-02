@@ -24,9 +24,7 @@
 
 #include <kis_debug.h>
 
-#ifndef NDEBUG
 #include "kis_memory_leak_tracker.h"
-#endif
 
 template<class T>
 class KisWeakSharedPtr;
@@ -196,7 +194,7 @@ public:
 private:
     inline static void ref(const KisSharedPtr<T>* sp, T* t)
     {
-#ifdef NDEBUG
+#ifndef HAVE_MEMORY_LEAK_TRACKER
         Q_UNUSED(sp);
 #else
         KisMemoryLeakTracker::instance()->reference(t, sp);
@@ -211,7 +209,7 @@ private:
     }
     inline static bool deref(const KisSharedPtr<T>* sp, T* t)
     {
-#ifdef NDEBUG
+#ifndef HAVE_MEMORY_LEAK_TRACKER
         Q_UNUSED(sp);
 #else
         KisMemoryLeakTracker::instance()->dereference(t, sp);

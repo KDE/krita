@@ -57,14 +57,14 @@
 **
 ****************************************************************************/
 #include "kundo2model.h"
-
+#include <klocale.h>
 KUndo2Model::KUndo2Model(QObject *parent)
     : QAbstractItemModel(parent)
 {
     m_stack = 0;
     m_sel_model = new QItemSelectionModel(this, this);
     connect(m_sel_model, SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(setStackCurrentIndex(QModelIndex)));
-    m_emty_label = tr("<empty>");
+    m_emty_label = i18n("<empty>");
 }
 
 QItemSelectionModel *KUndo2Model::selectionModel() const

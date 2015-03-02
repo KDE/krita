@@ -72,6 +72,7 @@ public:
     bool hideSplashScreen();
     int mdiMode();
     int favoritePresets();
+    bool showCanvasMessages();
 private slots:
     void getBackgroundImage();
     void clearBackgroundImage();

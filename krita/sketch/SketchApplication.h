@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,26 +15,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef SKETCHAPPLICATION_H
+#define SKETCHAPPLICATION_H
 
-#ifndef KIS_KRA_SAVER_TEST_H
-#define KIS_KRA_SAVER_TEST_H
+#include <kapplication.h>
 
-#include <QtTest>
-
-class KisKraSaverTest : public QObject
+class SketchApplication : public KApplication
 {
-    Q_OBJECT
-private slots:
-
-    void initTestCase();
-
-    // XXX: Also test roundtripping of metadata
-    void testRoundTrip();
-
-    void testSaveEmpty();
-    void testRoundTripFillLayerColor();
-    void testRoundTripFillLayerPattern();
-
+public:
+    SketchApplication();
+    void start();
 };
 
-#endif
+#endif // SKETCHAPPLICATION_H

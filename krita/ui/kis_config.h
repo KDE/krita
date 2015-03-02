@@ -460,6 +460,9 @@ public:
 
     int workaroundX11SmoothPressureSteps() const;
 
+    bool showCanvasMessages() const;
+    void setShowCanvasMessages(bool show);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

@@ -127,6 +127,7 @@ KAboutData *newKritaAboutData()
     aboutData->addAuthor(ki18n("Hasso Tepper"));
     aboutData->addAuthor(ki18n("Helge Deller"));
     aboutData->addAuthor(ki18n("Helio Castro"));
+    aboutData->addAuthor(ki18n("Hideki Saito"));
     aboutData->addAuthor(ki18n("Hoàng Đức Hiếu"));
     aboutData->addAuthor(ki18n("Hugo Pereira Da Costa"));
     aboutData->addAuthor(ki18n("Inge Wallin"));

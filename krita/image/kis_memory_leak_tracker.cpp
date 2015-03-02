@@ -23,21 +23,9 @@
 #include <kglobal.h>
 #include "kis_debug.h"
 
-#include "config-memory-leak-tracker.h"
-
 // Those defines are used to ignore classes that are often leaked due to a KisPaintDevice leak
 #define IGNORE_MEMENTO_ITEM
 #define IGNORE_TILE
-
-// Only linux support the memory leak tracker
-#ifndef Q_OS_LINUX
-#undef HAVE_MEMORY_LEAK_TRACKER
-#endif
-
-// Disable the memory leak tracker on release build
-#ifdef NDEBUG
-#undef HAVE_MEMORY_LEAK_TRACKER
-#endif
 
 // Common function
 KisMemoryLeakTracker* KisMemoryLeakTracker::instance()

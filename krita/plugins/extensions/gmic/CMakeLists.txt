@@ -3,7 +3,10 @@
 ##
 
 include_directories(src)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 set(gmic_sources_SRCS
   src/gmic.cpp
@@ -37,13 +40,14 @@ endif(OPENMP_FOUND)
 if(FFTW3_FOUND)
     add_definitions(-Dcimg_use_fftw3 )
     add_definitions(-Dcimg_use_fftw3_singlethread )
+    include_directories(${FFTW3_INCLUDE_DIR})
 endif(FFTW3_FOUND)
 
 # PNG
 if (PNG_FOUND)
-    include_directories(${PNG_INCLUDE_DIR})
     add_definitions(${PNG_DEFINITIONS})
     add_definitions(-Dcimg_use_png)
+    include_directories(${PNG_INCLUDE_DIR})
 endif(PNG_FOUND)
 
 # ZLIB

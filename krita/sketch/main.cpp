@@ -40,6 +40,7 @@
 #include "KisSketchView.h"
 #include "SketchInputContext.h"
 
+#include "SketchApplication.h"
 
 #if defined Q_OS_WIN
 #include "stdlib.h"
@@ -94,7 +95,7 @@ int main( int argc, char** argv )
         }
     }
 
-    KApplication app;
+    SketchApplication app;
     app.setApplicationName("kritasketch");
     KIconLoader::global()->addAppDir("krita");
     QDir appdir(app.applicationDirPath());
@@ -141,6 +142,8 @@ int main( int argc, char** argv )
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
+
+    app.start();
 
     MainWindow window(fileNames);
 

@@ -157,7 +157,9 @@ void KisPopupButton::adjustPosition()
     if (popupRect.left() < screenRect.left())
         popupRect.translate(screenRect.left() - popupRect.left(), 0);
     if (popupRect.bottom() > screenRect.bottom())
-            popupRect.translate(0, -m_d->frame->height());
+        popupRect.translate(0, -m_d->frame->height());
+    if (popupRect.top() < screenRect.top())
+        popupRect.moveTo(0,0);
 
     m_d->frame->setGeometry(popupRect);
 }

@@ -704,7 +704,7 @@ void Field::setCustomProperty(const QByteArray& propertyName, const QVariant& va
 //-------------------------------------------------------
 #define ADDTYPE(type, i18, str) \
     (*this)[Field::type] = i18; \
-    (*this)[Field::type+Field::LastType+1] = str; \
+    (*this)[Field::type+Field::Null+1] = str; \
     str2num[ QString::fromLatin1(str).toLower() ] = type; \
     names.append(i18)
 #define ADDGROUP(type, i18, str) \
@@ -724,7 +724,7 @@ void Field::FieldTypeNames::init()
     if (m_initialized)
         return;
     m_initialized = true;
-    resize((Field::LastType + 1)*2);
+    resize((Field::Null + 1)*2);
 
     ADDTYPE(InvalidType, i18n("Invalid Type"), "InvalidType");
     ADDTYPE(Byte, i18n("Byte"), "Byte");
@@ -740,6 +740,7 @@ void Field::FieldTypeNames::init()
     ADDTYPE(Text, i18n("Text"), "Text");
     ADDTYPE(LongText, i18n("Long Text"), "LongText");
     ADDTYPE(BLOB, i18n("Object"), "BLOB");
+    ADDTYPE(Null, QLatin1String("NULL")/*don't translate*/, "NULL");
 }
 
 //-------------------------------------------------------

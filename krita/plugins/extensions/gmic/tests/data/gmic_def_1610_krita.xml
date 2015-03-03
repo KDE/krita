@@ -50,7 +50,7 @@
     <gmicCommand><![CDATA[-gimp_dices 2,24,1]]></gmicCommand>
    </filter>
    <filter name="Extract objects">
-    <gmicCommand><![CDATA[-gimp_extract_objects 0,0,20,50,0.3,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_extract_objects 0,0,0,20,50,0.3,0,0,1]]></gmicCommand>
    </filter>
    <filter name="Grid [cartesian]">
     <gmicCommand><![CDATA[-gimp_imagegrid 10,10]]></gmicCommand>
@@ -59,7 +59,7 @@
     <gmicCommand><![CDATA[-imagegrid_hexagonal 32,0.1,1]]></gmicCommand>
    </filter>
    <filter name="Make seamless">
-    <gmicCommand><![CDATA[-gimp_make_seamless 0,0,1,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_make_seamless 0,0,3,0]]></gmicCommand>
    </filter>
    <filter name="Ministeck">
     <gmicCommand><![CDATA[-gimp_ministeck 8,64,8,2,100,0.3,0]]></gmicCommand>
@@ -80,7 +80,7 @@
     <gmicCommand><![CDATA[-gimp_rotate_tiles 5,5,15,3,3,1.8]]></gmicCommand>
    </filter>
    <filter name="Tiled normalization">
-    <gmicCommand><![CDATA[-gimp_normalize_tiles 25,25,0,255,3]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_normalize_tiles 25,25,0,255,7]]></gmicCommand>
    </filter>
    <filter name="Tiled random shifts">
     <gmicCommand><![CDATA[-gimp_shift_tiles 10,10,10,1]]></gmicCommand>
@@ -121,10 +121,10 @@
     <gmicCommand><![CDATA[-gimp_poster_hope 0,3,0]]></gmicCommand>
    </filter>
    <filter name="Kuwahara">
-    <gmicCommand><![CDATA[-gimp_kuwahara 2,5,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_kuwahara 2,5,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Lylejk's painting">
-    <gmicCommand><![CDATA[-gimp_lylejk_painting 2,4,10,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_lylejk_painting 10,2,4,10,0]]></gmicCommand>
    </filter>
    <filter name="Painting">
     <gmicCommand><![CDATA[-gimp_painting 5,2.5,1.5,50,1,0]]></gmicCommand>
@@ -142,7 +142,7 @@
     <gmicCommand><![CDATA[-gimp_poster_edges 20,60,5,0,10,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Rodilius">
-    <gmicCommand><![CDATA[-gimp_rodilius 10,10,300,5,30,0,1,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_rodilius 10,10,300,5,30,0,1,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Shapeism">
     <gmicCommand><![CDATA[-gimp_shapeism 2,7,0.38,0,1,5,32,8,3,1,5,0.5,1,0,0,0,255]]></gmicCommand>
@@ -331,10 +331,10 @@
     <gmicCommand><![CDATA[-gimp_local_orientation 0,0,100,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Morphological filter">
-    <gmicCommand><![CDATA[-gimp_morpho 0,5,0,0,0,1,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_morpho 0,5,0,0,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Segmentation">
-    <gmicCommand><![CDATA[-gimp_segment_watershed 2,1,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_segment_watershed 2,1,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Skeleton">
     <gmicCommand><![CDATA[-gimp_skeleton 0,0,0,1,0]]></gmicCommand>
@@ -408,7 +408,7 @@
     <gmicCommand><![CDATA[-wave 10,0.4,50,50]]></gmicCommand>
    </filter>
    <filter name="Wind">
-    <gmicCommand><![CDATA[-gimp_wind 20,0,0.7,20,1,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_wind 20,0,0.7,20,1,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Zoom">
     <gmicCommand><![CDATA[-gimp_zoom 2,50,50,0]]></gmicCommand>
@@ -425,7 +425,7 @@
     <gmicCommand><![CDATA[-gimp_gaussian_blur 3,0,0,1,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Blur [glow]">
-    <gmicCommand><![CDATA[-gimp_glow 6,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_glow 6,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Blur [linear]">
     <gmicCommand><![CDATA[-gimp_blur_linear 10,0.5,0,0,1,0,0,0]]></gmicCommand>
@@ -434,28 +434,28 @@
     <gmicCommand><![CDATA[-gimp_blur_radial 3,50,50,0,1,0,0]]></gmicCommand>
    </filter>
    <filter name="Dirty">
-    <gmicCommand><![CDATA[-gimp_dirty 30,1,2,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_dirty 30,1,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Lomo">
     <gmicCommand><![CDATA[-gimp_lomo 20,0]]></gmicCommand>
    </filter>
    <filter name="Noise [additive]">
-    <gmicCommand><![CDATA[-gimp_noise 10,0,0,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_noise 10,0,0,1,0]]></gmicCommand>
    </filter>
    <filter name="Noise [spread]">
-    <gmicCommand><![CDATA[-gimp_spread 4,4,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_spread 4,4,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Old-movie stripes">
-    <gmicCommand><![CDATA[-gimp_stripes_y 10,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_stripes_y 10,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Oldschool 8bits">
     <gmicCommand><![CDATA[-gimp_8bits 25,800,16,0]]></gmicCommand>
    </filter>
    <filter name="Random shade stripes">
-    <gmicCommand><![CDATA[-gimp_shade_stripes 30,1,0.8,1.3,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_shade_stripes 30,1,0.8,1.3,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Scanlines">
-    <gmicCommand><![CDATA[-gimp_scanlines 60,2,0,0,0,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_scanlines 60,2,0,0,0,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Visible watermark">
     <gmicCommand><![CDATA[-gimp_watermark_visible "\251 G'MIC",0.4,50,25,0.5,1]]></gmicCommand>
@@ -463,25 +463,25 @@
   </category>
   <category name="Details">
    <filter name="Details equalizer">
-    <gmicCommand><![CDATA[-gimp_equalize_details 0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,32,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_equalize_details 0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0,7,0,0,32,0]]></gmicCommand>
    </filter>
    <filter name="Freaky details">
-    <gmicCommand><![CDATA[-gimp_freaky_details 2,10,1,0,0,32,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_freaky_details 2,10,1,7,0,32,0]]></gmicCommand>
    </filter>
    <filter name="Local normalization">
-    <gmicCommand><![CDATA[-gimp_normalize_local 2,6,5,20,1,3,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_normalize_local 2,6,5,20,1,7,0]]></gmicCommand>
    </filter>
    <filter name="Mighty details">
-    <gmicCommand><![CDATA[-gimp_mighty_details 25,1,25,1,3,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_mighty_details 25,1,25,1,7,0]]></gmicCommand>
    </filter>
    <filter name="Sharpen [deblur]">
-    <gmicCommand><![CDATA[-gimp_deblur 2,10,20,0.1,1,0,0,24,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_deblur 2,10,20,0.1,1,7,0,24,0]]></gmicCommand>
    </filter>
    <filter name="Sharpen [Gold-Meinel]">
-    <gmicCommand><![CDATA[-gimp_unsharp_goldmeinel 1,5,1,1,1,0,24,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_unsharp_goldmeinel 1,5,1,1,1,7,0,24,0]]></gmicCommand>
    </filter>
    <filter name="Sharpen [inverse diffusion]">
-    <gmicCommand><![CDATA[-gimp_sharpen_inversediff 50,2,0,0,24,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_sharpen_inversediff 50,2,7,0,24,0]]></gmicCommand>
    </filter>
    <filter name="Sharpen [octave sharpening]">
     <gmicCommand><![CDATA[-gimp_unsharp_octave 4,5,3,0,0,0,24,0]]></gmicCommand>
@@ -502,10 +502,10 @@
     <gmicCommand><![CDATA[-gimp_split_details_layers 6,10,1,0]]></gmicCommand>
    </filter>
    <filter name="Tone mapping">
-    <gmicCommand><![CDATA[-gimp_map_tones 0.5,0.7,0.1,30,3,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_map_tones 0.5,0.7,0.1,30,0,0]]></gmicCommand>
    </filter>
    <filter name="Tone mapping [fast]">
-    <gmicCommand><![CDATA[-gimp_map_tones_fast 3,0.5,3,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_map_tones_fast 3,0.5,7,0]]></gmicCommand>
    </filter>
   </category>
   <category name="Film emulation">
@@ -656,7 +656,7 @@
   </category>
   <category name="Lights &amp; shadows">
    <filter name="Burn">
-    <gmicCommand><![CDATA[-gimp_burn 0.5,30,1,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_burn 0.5,30,1,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Contrast swiss mask">
     <gmicCommand><![CDATA[-gimp_contrast_swm 2,0,1]]></gmicCommand>
@@ -784,7 +784,7 @@
     <gmicCommand><![CDATA[-weave 6,65,0,0.5,0,0,0,0,0]]></gmicCommand>
    </filter>
    <filter name="Whirls">
-    <gmicCommand><![CDATA[-gimp_whirls 7,2,0.2,1.8,0,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_whirls 7,2,0.2,1.8,7,0]]></gmicCommand>
    </filter>
   </category>
   <category name="Repair">
@@ -996,7 +996,7 @@
   </category>
   <category name="Spectral filters">
    <filter name="Bandpass">
-    <gmicCommand><![CDATA[-gimp_bandpass 0,100,0,1,0]]></gmicCommand>
+    <gmicCommand><![CDATA[-gimp_bandpass 0,100,0,2,0]]></gmicCommand>
    </filter>
    <filter name="Fourier analysis">
     <gmicCommand><![CDATA[-gimp_display_fft ]]></gmicCommand>
@@ -1014,9 +1014,6 @@
    </filter>
    <filter name="Custom code (global)">
     <gmicCommand><![CDATA[-gimp_custom_code "-repeat @# -l[$>]\n\n  -to_rgb\n  --deform 20\n  -blend_edges 3\n\n-endl -done\n\n\n",0,0,0]]></gmicCommand>
-   </filter>
-   <filter name="Do nothing">
-    <gmicCommand><![CDATA[-gimp_do_nothing ]]></gmicCommand>
    </filter>
    <filter name="Games &amp; demos">
     <gmicCommand><![CDATA[-gimp_gmic_demos 0]]></gmicCommand>

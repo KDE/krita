@@ -37,7 +37,7 @@ namespace KisDomUtils {
 
         template<typename T>
         inline QString numberToString(T value) {
-            return QLocale::c().toString(value);
+            return QString::number(value);
         }
 
 

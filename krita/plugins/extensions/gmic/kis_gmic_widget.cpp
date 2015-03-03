@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (c) 2013-2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,12 +23,14 @@
 #include <QCloseEvent>
 #include <QLineEdit>
 #include <QApplication>
-#include <kis_debug.h>
 #include <QMessageBox>
+
+#include <KoIcon.h>
 
 #include <QMetaType>
 #include <klocalizedstring.h>
 
+#include <kis_debug.h>
 #include <kis_html_delegate.h>
 
 #include <kis_gmic_filter_settings.h>
@@ -96,6 +98,9 @@ void KisGmicWidget::createMainLayout()
     {
         updateBtn->setEnabled(false);
     }
+
+    expandCollapseBtn->setIcon(koIcon("zoom-in"));
+    connect(expandCollapseBtn, SIGNAL(clicked()), this, SLOT(slotExpandCollapse()));
 
     connect(updateBtn, SIGNAL(clicked(bool)), this, SLOT(startUpdate()));
     connect(searchBox, SIGNAL(textChanged(QString)), proxyModel, SLOT(setFilterFixedString(QString)));
@@ -414,4 +419,20 @@ KisFilterPreviewWidget * KisGmicWidget::previewWidget()
 void KisGmicWidget::slotNotImplemented()
 {
     QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Sorry, support not implemented yet."));
+}
+
+void KisGmicWidget::slotExpandCollapse()
+{
+    const QString &iconName = expandCollapseBtn->icon().name();
+    if (iconName == "zoom-in")
+    {
+        m_filterTree->expandAll();
+        expandCollapseBtn->setIcon(koIcon("zoom-out"));
+
+    }
+    else if (iconName == "zoom-out")
+    {
+        m_filterTree->collapseAll();
+        expandCollapseBtn->setIcon(koIcon("zoom-in"));
+    }
 }

@@ -96,6 +96,39 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
     KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
     m_blacklistPath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
 
+
+    dbgPlugins << "<features>";
+#ifdef gmic_is_parallel
+    dbgPlugins << "PTHREADS ON";
+#endif
+
+#if cimg_use_fftw3
+    dbgPlugins << "FFTW3 ON";
+#endif
+
+#if cimg_use_png
+    dbgPlugins << "PNG ON";
+#endif
+
+#ifdef cimg_use_zlib
+    dbgPlugins << "ZLIB ON";
+#endif
+
+#ifdef cimg_use_curl
+    dbgPlugins << "CURL ON";
+#endif
+
+#ifdef cimg_display
+    #if cimg_display == 1
+        dbgPlugins << "Display:X11";
+    #elif cimg_display == 2
+        dbgPlugins << "Display:GDI";
+    #elif cimg_display == 3
+        dbgPlugins << "Display:NONE";
+    #endif
+#endif
+    dbgPlugins << "</features>";
+
 }
 
 KisGmicPlugin::~KisGmicPlugin()

@@ -955,14 +955,15 @@ void KoReportDesigner::slotItem(const QString &entity)
 void KoReportDesigner::slotEditDelete()
 {
     QGraphicsItem * item = 0;
+    bool modified = false;
     while (selectionCount() > 0) {
         item = activeScene()->selectedItems()[0];
         if (item) {
-            setModified(true);
             QGraphicsScene * scene = item->scene();
             delete item;
             scene->update();
             m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
+            modified = true;
         }
     }
     activeScene()->selectedItems().clear();
@@ -975,6 +976,9 @@ void KoReportDesigner::slotEditDelete()
     //and remove it.
     m_sectionData->cut_list.clear();
     m_sectionData->copy_list.clear();
+    if (modified) {
+        setModified(true);
+    }
 }
 
 void KoReportDesigner::slotEditCut()
@@ -986,6 +990,7 @@ void KoReportDesigner::slotEditCut()
         m_sectionData->cut_list.clear();
 
         QGraphicsItem * item = activeScene()->selectedItems().first();
+        bool modified = false;
         if (item) {
             m_sectionData->copy_list.clear();
 
@@ -999,9 +1004,13 @@ void KoReportDesigner::slotEditCut()
                 QGraphicsItem *itm = activeScene()->selectedItems()[0];
                 activeScene()->removeItem(itm);
                 activeScene()->update();
+                modified = true;
             }
             m_sectionData->selected_x_offset = 10;
             m_sectionData->selected_y_offset = 10;
+        }
+        if (modified) {
+            setModified(true);
         }
     }
 }

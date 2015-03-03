@@ -24,6 +24,8 @@
 
 #include "ui_wdg_gmic_input_output.h"
 
+class QStringListModel;
+
 /**
  * creates GUI for Input/Output configuration
  */
@@ -60,6 +62,11 @@ private:
     OutputMode m_outputMode;
     OutputPreviewMode m_previewMode;
     PreviewSize m_previewSize;
+
+    QStringListModel *m_inputModel;
+    QStringListModel *m_outputModel;
+    QStringListModel *m_previewModeModel;
+    QStringListModel *m_previewSizeModel;
 
 };
 

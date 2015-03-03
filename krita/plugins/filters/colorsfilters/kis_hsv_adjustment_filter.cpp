@@ -112,7 +112,6 @@ void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * con
     m_page->saturation->setValue(config->getInt("s", 0));
     m_page->value->setValue(config->getInt("v", 0));
     m_page->chkColorize->setChecked(config->getBool("colorize", false));
-
     switchType(m_page->cmbType->currentIndex());
 }
 
@@ -137,7 +136,9 @@ void KisHSVConfigWidget::switchColorize(bool toggle)
         m_page->hue->setMaximum(360);
         m_page->saturation->setMinimum(0);
         m_page->saturation->setMaximum(100);
-        m_page->saturation->setValue(50);
+        if (m_page->saturation->value() < m_page->saturation->minimum() || m_page->saturation->value() > m_page->saturation->maximum()) {
+            m_page->saturation->setValue(50);
+        }
         switchType(1);
     }
     else {

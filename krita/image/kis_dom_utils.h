@@ -23,12 +23,25 @@
 #include <QVector3D>
 #include <QVector>
 #include <QDomElement>
+#include <QLocale>
 #include "klocale.h"
 #include "krita_export.h"
 
 
 namespace KisDomUtils {
 
+    namespace Private {
+        inline QString numberToString(const QString &value) {
+            return value;
+        }
+
+        template<typename T>
+        inline QString numberToString(T value) {
+            return QString::number(value);
+        }
+
+
+    }
 
 /**
  * Save a value of type QRect into an XML tree. A child for \p parent
@@ -58,8 +71,7 @@ void saveValue(QDomElement *parent, const QString &tag, T value)
     parent->appendChild(e);
 
     e.setAttribute("type", "value");
-
-    e.setAttribute("value", value);
+    e.setAttribute("value", Private::numberToString(value));
 }
 
 /**
@@ -102,11 +114,13 @@ bool KRITAIMAGE_EXPORT findOnlyElement(const QDomElement &parent, const QString 
  *
  * \see saveValue()
  */
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QSize *size);
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QRect *rc);
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QPointF *pt);
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QVector3D *pt);
-bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, QTransform *t);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, float *v);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, double *v);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QSize *size);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QRect *rc);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QPointF *pt);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QVector3D *pt);
+bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, QTransform *t);
 
 namespace Private {
     bool KRITAIMAGE_EXPORT checkType(const QDomElement &e, const QString &expectedType);
@@ -122,10 +136,8 @@ namespace Private {
  * \see saveValue()
  */
 template <typename T>
-bool loadValue(const QDomElement &parent, const QString &tag, T *value)
+bool loadValue(const QDomElement &e, T *value)
 {
-    QDomElement e;
-    if (!findOnlyElement(parent, tag, &e)) return false;
     if (!Private::checkType(e, "value")) return false;
 
     QVariant v(e.attribute("value", "no-value"));
@@ -142,20 +154,27 @@ bool loadValue(const QDomElement &parent, const QString &tag, T *value)
  * \see saveValue()
  */
 template <typename T>
-bool loadValue(const QDomElement &parent, const QString &tag, QVector<T> *array)
+bool loadValue(const QDomElement &e, QVector<T> *array)
 {
-    QDomElement e;
-    if (!findOnlyElement(parent, tag, &e)) return false;
     if (!Private::checkType(e, "array")) return false;
 
     QDomElement child = e.firstChildElement();
     while (!child.isNull()) {
         T value;
-        if (!loadValue(e, child.tagName(), &value)) return false;
+        if (!loadValue(child, &value)) return false;
         *array << value;
         child = child.nextSiblingElement();
     }
     return true;
+}
+
+template <typename T>
+bool loadValue(const QDomElement &parent, const QString &tag, T *value)
+{
+    QDomElement e;
+    if (!findOnlyElement(parent, tag, &e)) return false;
+
+    return loadValue(e, value);
 }
 
 }

@@ -482,7 +482,7 @@ macro(calligra_product_deps_report _filename)
     endforeach(_dependent_product_id)
   endforeach(_product_id)
 
-  set(_dot "${_dot}${_edges}}")
+  set(_dot "${_dot}${_edges}")
   set(_dot "${_dot}}\n")
   file(WRITE ${CMAKE_BINARY_DIR}/${_filename}.dot ${_dot})
 endmacro(calligra_product_deps_report)

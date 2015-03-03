@@ -56,7 +56,7 @@ public:
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
                        const QRect & rc,
-                       PositionToFilthy parentPos) const;
+                       PositionToFilthy maskPos) const;
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
@@ -69,6 +69,9 @@ public:
 
     void recaclulateStaticImage();
     KisPaintDeviceSP buildPreviewDevice();
+
+    void setX(qint32 x);
+    void setY(qint32 y);
 
 private slots:
     void slotDelayedStaticUpdate();

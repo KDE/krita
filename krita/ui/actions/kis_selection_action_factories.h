@@ -77,10 +77,10 @@ struct KRITAUI_EXPORT KisImageResizeToSelectionActionFactory : public KisNoParam
 struct KRITAUI_EXPORT KisCutCopyActionFactory : public KisOperation {
     KisCutCopyActionFactory() : KisOperation("cut-copy-ui-action") {}
     void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
-        run(config.getBool("will-cut", false), view);
+        run(config.getBool("will-cut", false), config.getBool("use-sharp-clip", false), view);
     }
 
-    void run(bool willCut, KisViewManager *view);
+    void run(bool willCut, bool makeSharpClip, KisViewManager *view);
 };
 
 struct KRITAUI_EXPORT KisCopyMergedActionFactory : public KisNoParameterActionFactory {

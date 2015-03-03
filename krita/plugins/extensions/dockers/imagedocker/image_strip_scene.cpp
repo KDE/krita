@@ -27,6 +27,7 @@
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
 #include <QMutexLocker>
+#include <QDebug>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ------------- ImageLoader ---------------------------------------------------------- //
@@ -149,9 +150,16 @@ bool ImageStripScene::setCurrentDirectory(const QString& path)
         
         for (QStringList::iterator name=files.begin(); name!=files.end(); ++name) {
             QString path = directory.absoluteFilePath(*name);
+            QString fileExtension = QFileInfo(path).suffix();
+
+            if (!fileExtension.compare("DNG", Qt::CaseInsensitive)) {
+                qWarning() << "WARNING: Qt is known to crash when trying to open a DNG file. Skip it";
+                continue;
+            }
+
             reader.setFileName(path);
-            
-            if (reader.canRead()) {
+
+            if(reader.canRead()) {
                 ImageItem* item = new ImageItem(m_imgSize, path, m_loader);
                 m_loader->addPath(item, path);
                 layout->addItem(item);

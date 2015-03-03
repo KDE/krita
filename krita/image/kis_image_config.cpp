@@ -32,6 +32,11 @@ KisImageConfig::~KisImageConfig()
     m_config.sync();
 }
 
+qreal KisImageConfig::transformMaskOffBoundsReadArea() const
+{
+    return m_config.readEntry("transformMaskOffBoundsReadArea", 0.5);
+}
+
 int KisImageConfig::updatePatchHeight() const
 {
     return m_config.readEntry("updatePatchHeight", 512);

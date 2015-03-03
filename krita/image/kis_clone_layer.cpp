@@ -242,7 +242,6 @@ QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
 QRect KisCloneLayer::outgoingChangeRect(const QRect &rect) const
 {
     return rect.translated(m_d->x, m_d->y);
-    return rect;
 }
 
 bool KisCloneLayer::accept(KisNodeVisitor & v)

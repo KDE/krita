@@ -156,6 +156,10 @@ bool Cursor::open()
             setError(ERR_SQL_EXECUTION_ERROR, i18n("Query statement is empty."));
             return false;
         }
+#ifdef CALLIGRADB_DEBUG_GUI
+        KexiDB::debugGUI(QString("SQL for query \"%1\": ")
+                         .arg(KexiDB::iifNotEmpty(m_query->name(), "<unnamed>")) + m_conn->m_sql);
+#endif
     }
     m_sql = m_conn->m_sql;
     m_opened = drv_open();

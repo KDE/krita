@@ -75,6 +75,8 @@ void ColorRange::selectOpaque()
 {
     KisCanvas2 *canvas = m_view->canvasBase();
     KisPaintDeviceSP device = m_view->activeNode()->projection();
+    if (!device) device = m_view->activeNode()->paintDevice();
+    if (!device) device = m_view->activeNode()->original();
     KIS_ASSERT_RECOVER_RETURN(canvas && device);
 
     QRect rc = device->exactBounds();

@@ -73,21 +73,18 @@ KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&
         switch (ib.buildImage(url)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
             return KisImportExportFilter::NotImplemented;
-            break;
         case KisImageBuilder_RESULT_INVALID_ARG:
             return KisImportExportFilter::BadMimeType;
-            break;
         case KisImageBuilder_RESULT_NO_URI:
         case KisImageBuilder_RESULT_NOT_LOCAL:
             return KisImportExportFilter::FileNotFound;
-            break;
         case KisImageBuilder_RESULT_BAD_FETCH:
         case KisImageBuilder_RESULT_EMPTY:
             return KisImportExportFilter::ParsingError;
-            break;
         case KisImageBuilder_RESULT_FAILURE:
             return KisImportExportFilter::InternalError;
-            break;
+        case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
+            return KisImportExportFilter::WrongFormat;
         case KisImageBuilder_RESULT_OK:
             doc -> setCurrentImage(ib.image());
             return KisImportExportFilter::OK;

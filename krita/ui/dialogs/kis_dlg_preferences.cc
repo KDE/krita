@@ -112,6 +112,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
     m_mdiColor->setColor(cfg.getMDIBackgroundColor());
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
+    m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
 
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
@@ -134,6 +135,7 @@ void GeneralTab::setDefault()
     m_favoritePresetsSpinBox->setValue(10);
     m_mdiColor->setColor(QColor(220, 220, 220));
     m_backgroundimage->setText("");
+    m_chkCanvasMessages->setChecked(false);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -171,6 +173,11 @@ int GeneralTab::mdiMode()
 int GeneralTab::favoritePresets()
 {
     return m_favoritePresetsSpinBox->value();
+}
+
+bool GeneralTab::showCanvasMessages()
+{
+    return m_chkCanvasMessages->isChecked();
 }
 
 void GeneralTab::getBackgroundImage()
@@ -815,6 +822,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+        cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
         KisPart *part = KisPart::instance();
         if (part) {
             foreach(QPointer<KisDocument> doc, part->documents()) {

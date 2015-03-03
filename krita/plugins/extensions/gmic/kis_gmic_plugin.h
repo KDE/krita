@@ -45,6 +45,8 @@ public:
     virtual ~KisGmicPlugin();
 
     enum Activity { INIT, PREVIEWING, FILTERING, SMALL_PREVIEW };
+    static QLatin1String valueToQString(Activity activity);
+
 
 signals:
     void filteringFinished();

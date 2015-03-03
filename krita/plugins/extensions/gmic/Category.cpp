@@ -60,7 +60,7 @@ void Category::print(int level)
     }
 }
 
-Component* Category::child(int index)
+Component* Category::child(int index) const
 {
     if ((index < 0) && (index > m_components.size()))
     {

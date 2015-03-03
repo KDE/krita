@@ -56,6 +56,8 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+#ifndef K_UNDO_2_MODEL
+#define K_UNDO_2_MODEL
 #include <QAbstractItemModel>
 
 #include "kundo2stack.h"
@@ -100,3 +102,4 @@ private:
     QString m_emty_label;
     QIcon m_clean_icon;
 };
+#endif

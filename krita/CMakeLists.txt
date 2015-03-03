@@ -32,11 +32,9 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     set(CMAKE_CXX_STACK_SIZE "999999999")
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
-if(NOT WIN32)
-    macro_optional_find_package(FFTW3)
-    macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
-    macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
-endif(NOT WIN32)
+macro_optional_find_package(FFTW3)
+macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
+macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 configure_file(image/config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/image/config_convolution.h)
 
 include(CheckFunctionExists)
@@ -88,6 +86,7 @@ endif(WIN32)
 set(KRITA_INCLUDES
     # For config-*.h
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/image
 
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
@@ -164,7 +163,7 @@ if (Q_WS_MAC)
 endif (Q_WS_MAC)
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )

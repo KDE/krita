@@ -53,12 +53,10 @@ public:
         doc = qobject_cast<KisDocument*>(part->createDocument());
         doc->setCurrentImage(image);
 
-
         if(useSelection) addGlobalSelection(image);
         if(useShapeLayer) addShapeLayer(doc, image);
         image->initialRefreshGraph();
 
-        QVERIFY(checkLayersInitial());
 
         mainWindow = new KisMainWindow();
         imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
@@ -71,6 +69,7 @@ public:
 
         KoColor fgColor(Qt::black, image->colorSpace());
         KoColor bgColor(Qt::white, image->colorSpace());
+        view->resourceProvider()->blockSignals(true);
         view->resourceProvider()->setBGColor(bgColor);
         view->resourceProvider()->setFGColor(fgColor);
         view->resourceProvider()->setOpacity(1.0);
@@ -78,9 +77,13 @@ public:
         KisNodeSP paint1 = findNode(image->root(), "paint1");
         Q_ASSERT(paint1);
 
-        view->nodeManager()->slotNonUiActivatedNode(paint1);
         selectionManager = view->selectionManager();
+        Q_ASSERT(selectionManager);
         actionManager = view->actionManager();
+        Q_ASSERT(actionManager);
+
+        QVERIFY(checkLayersInitial());
+
     }
 
     ~UiManagerTest() {

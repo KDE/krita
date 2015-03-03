@@ -26,6 +26,7 @@
 #include "kis_image.h"
 #include "commands_new/kis_node_move_command2.h"
 
+
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
     , m_basePath(basePath)
@@ -39,7 +40,7 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
      */
     m_image = new KisPaintDevice(image->colorSpace());
 
-    connect(&m_loader, SIGNAL(loadingFinished()), SLOT(slotLoadingFinished()));
+    connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
     m_loader.setPath(path());
     m_loader.reloadImage();
 }
@@ -57,7 +58,7 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 
     m_scalingMethod = rhs.m_scalingMethod;
 
-    connect(&m_loader, SIGNAL(loadingFinished()), SLOT(slotLoadingFinished()));
+    connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
     m_loader.setPath(path());
     m_loader.reloadImage();
 }
@@ -118,13 +119,14 @@ KisFileLayer::ScalingMethod KisFileLayer::scalingMethod() const
     return m_scalingMethod;
 }
 
-void KisFileLayer::slotLoadingFinished()
+void KisFileLayer::slotLoadingFinished(KisImageSP importedImage)
 {
     qint32 oldX = x();
     qint32 oldY = y();
 
-    KisImageWSP importedImage = m_loader.image();
-    m_image = importedImage->projection();
+    m_image->makeCloneFrom(importedImage->projection(), importedImage->projection()->extent());
+    m_image->setDefaultBounds(new KisDefaultBounds(image()));
+
     if (m_scalingMethod == ToImagePPI && (image()->xRes() != importedImage->xRes()
                                           || image()->yRes() != importedImage->yRes())) {
         qreal xscale = image()->xRes() / importedImage->xRes();

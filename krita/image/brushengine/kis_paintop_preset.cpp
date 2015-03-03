@@ -38,7 +38,7 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 
-
+#include <KoStore.h>
 
 struct KisPaintOpPreset::Private {
     Private()
@@ -85,6 +85,7 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
     preset->setName(name());
     preset->settings()->setPreset(KisPaintOpPresetWSP(preset));
 
+    Q_ASSERT(preset->valid());
 
     return preset;
 }
@@ -143,18 +144,49 @@ bool KisPaintOpPreset::load()
         return false;
     }
 
-    QFile file(filename());
+    QIODevice *dev = 0;
+    QByteArray ba;
 
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
+    if (filename().startsWith("bundle://")) {
+        qDebug() << "bundle";
+        QString bn = filename().mid(9);
+        QString fn = bn.mid(bn.indexOf(":") + 1);
+        bn = bn.left(bn.indexOf(":"));
+
+        QScopedPointer<KoStore> resourceStore(KoStore::createStore(bn, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+        if (!resourceStore || resourceStore->bad()) {
+            qWarning() << "Could not open store on bundle" << bn;
+            return false;
+        }
+
+        if (resourceStore->isOpen()) resourceStore->close();
+
+        if (!resourceStore->open(fn)) {
+            qWarning() << "Could not open preset" << fn << "in bundle" << bn;
+            return false;
+        }
+
+        ba = resourceStore->device()->readAll();
+        dev = new QBuffer(&ba);
+
+        qDebug() << "Going to load" << fn << "size" << ba.size();
+
+        resourceStore->close();
+    }
+    else {
+        dev = new QFile(filename());
+
+        if (dev->size() == 0) return false;
+        if (!dev->open(QIODevice::ReadOnly)) {
+            warnKrita << "Can't open file " << filename();
+            delete dev;
+            return false;
+        }
     }
 
-    bool res = loadFromDevice(&file);
-
-
-    this->setPresetDirty(false);
+    bool res = loadFromDevice(dev);
+    setValid(res);
+    setPresetDirty(false);
     return res;
 
 }

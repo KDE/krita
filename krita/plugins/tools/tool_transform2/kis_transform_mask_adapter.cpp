@@ -89,6 +89,10 @@ KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromXML(const QDomEle
         new KisTransformMaskAdapter(ToolTransformArgs::fromXML(e)));
 }
 
+void KisTransformMaskAdapter::translate(const QPointF &offset)
+{
+    m_d->args.translate(offset);
+}
 
 #include "kis_transform_mask_params_factory_registry.h"
 

@@ -1,9 +1,18 @@
 [Desktop Entry]
 Name=Layer Splitter
+Name[bs]=Razdjeljivač slojeva
 Name[ca]=Separador de capes
+Name[da]=Lagopdeler
+Name[en_GB]=Layer Splitter
+Name[es]=Divisor de capas
+Name[fi]=Tason jakaja
+Name[it]=Divisore di livelli
 Name[nl]=Splitser van lagen
+Name[pl]=Podzielnik warstwy
 Name[pt]=Divisor de Camadas
+Name[pt_BR]=Divisor de camadas
 Name[sk]=Rozdeľovač vrstiev
+Name[sv]=Lagerdelning
 Name[uk]=Роздільник шарів
 Name[x-test]=xxLayer Splitterxx
 X-KDE-ServiceTypes=Krita/ViewPlugin

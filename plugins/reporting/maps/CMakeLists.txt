@@ -13,6 +13,7 @@ set(koreport_mapsplugin_LIB_SRCS
     KoReportItemMaps.cpp
     KoReportMapsPlugin.cpp
     krscriptmaps.cpp
+    MapRenderer.cpp
 )
 
 kde4_add_plugin(${MAPS_PLUG} ${koreport_mapsplugin_LIB_SRCS})

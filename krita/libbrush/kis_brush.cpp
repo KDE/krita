@@ -303,7 +303,7 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
 
 QByteArray KisBrush::generateMD5() const
 {
-    if (!filename().isNull() && QFileInfo(filename()).exists()) {
+    if (!filename().isNull() && !filename().startsWith("bundle://") && QFileInfo(filename()).exists()) {
         QFile f(filename());
         f.open(QFile::ReadOnly);
         QCryptographicHash md5(QCryptographicHash::Md5);

@@ -20,12 +20,12 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9 Beta 3")
+set(CALLIGRA_VERSION_STRING "2.9.0")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 92)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_VERSION_RELEASE 0)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 #set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
-set(CALLIGRA_BETA 3) # uncomment only for Beta
+#set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
 set(CALLIGRA_YEAR 2015) # update every year
 
@@ -288,7 +288,7 @@ if (USEOPENGL)
     else(OPENGL_FOUND)
         message(STATUS "Did NOT find OpenGL libraries")
     endif(OPENGL_FOUND)
-    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
+    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by Gemini, parts of Krita and optionally by flake")
 endif(USEOPENGL)
 
 ##
@@ -338,8 +338,8 @@ endif(NOT Soprano_FOUND)
 ##
 ## Test for marble
 ##
+set(MARBLE_MIN_VERSION "0.19.2")
 macro_optional_find_package(CalligraMarble)
-macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 if(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE FALSE)
     set(MARBLE_INCLUDE_DIR "")
@@ -347,23 +347,27 @@ else(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE TRUE)
 endif(NOT MARBLE_FOUND)
 if( MARBLE_FOUND )
-    add_definitions( -DCAN_USE_MARBLE )
-    ##
-    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
-    ## with commit ea177ca. This is for compatibility with older versions.
-    ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
-    if( MARBLECONTROLBOX_H )
-    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
-        if( SETMARBLEWIDGET )
-            add_definitions(-DHAVE_SETMARBLEWIDGET)
-        endif( SETMARBLEWIDGET)
-    else( MARBLECONTROLBOX_H )
-        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
-    endif( MARBLECONTROLBOX_H )
+    if(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
+        set(MARBLE_FOUND FALSE)
+    else(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
+        add_definitions( -DCAN_USE_MARBLE )
+        ##
+        ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+        ## with commit ea177ca. This is for compatibility with older versions.
+        ##
+        find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
+        if( MARBLECONTROLBOX_H )
+        file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+        string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+            if( SETMARBLEWIDGET )
+                add_definitions(-DHAVE_SETMARBLEWIDGET)
+            endif( SETMARBLEWIDGET)
+        else( MARBLECONTROLBOX_H )
+            message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
+        endif( MARBLECONTROLBOX_H )
+    endif(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
 endif( MARBLE_FOUND )
-
+macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 ##
 ## Test for lcms
 ##
@@ -936,6 +940,16 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
     LIBQGIT2_FOUND "libqgit2 devel not found"
+)
+
+calligra_drop_product_on_bad_condition( PART_QTQUICK
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
+)
+
+calligra_drop_product_on_bad_condition( APP_GEMINI
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
 )
 
 #############################################

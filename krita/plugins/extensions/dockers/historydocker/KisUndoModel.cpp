@@ -57,6 +57,7 @@
 **
 ****************************************************************************/
 #include "KisUndoModel.h"
+#include <klocale.h>
 
 KisUndoModel::KisUndoModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -66,7 +67,7 @@ KisUndoModel::KisUndoModel(QObject *parent)
     m_canvas = 0;
     m_sel_model = new QItemSelectionModel(this, this);
     connect(m_sel_model, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(setStackCurrentIndex(QModelIndex)));
-    m_empty_label = tr("<empty>");
+    m_empty_label = i18n("<empty>");
 }
 
 QItemSelectionModel *KisUndoModel::selectionModel() const

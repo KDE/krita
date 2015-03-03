@@ -71,7 +71,7 @@ public:
 
 private:
     Q_DECLARE_PRIVATE(KoGradientBackground)
-    Q_DISABLE_COPY(KoGradientBackground);
+    Q_DISABLE_COPY(KoGradientBackground)
 };
 
 #endif // KOGRADIENTBACKGROUND_H

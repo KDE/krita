@@ -195,6 +195,9 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->gradientThread = new KoResourceLoaderThread(d->gradientServer);
     d->gradientThread->start();
+    if (qApp->applicationName().contains(QLatin1String("test"), Qt::CaseInsensitive)) {
+        d->gradientThread->wait();
+    }
 
     d->paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors");
     if (!QFileInfo(d->paletteServer->saveLocation()).exists()) {
@@ -203,6 +206,9 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->paletteThread = new KoResourceLoaderThread(d->paletteServer);
     d->paletteThread->start();
+    if (qApp->applicationName().contains(QLatin1String("test"), Qt::CaseInsensitive)) {
+        d->paletteThread->wait();
+    }
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()

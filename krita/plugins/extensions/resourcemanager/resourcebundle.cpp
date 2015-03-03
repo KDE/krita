@@ -183,6 +183,8 @@ bool ResourceBundle::load()
         }
         
         if (resourceStore->open("preview.png")) {
+            // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
+            // fails with "libpng error: IDAT: CRC error"
             QByteArray data = resourceStore->device()->readAll();
             QBuffer buffer(&data);
             m_thumbnail.load(&buffer, "PNG");
@@ -464,7 +466,7 @@ bool ResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoAbstractGradient *res = gradientServer->createResource(ref.resourcePath);
+                KoAbstractGradient *res = gradientServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -478,8 +480,6 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                
-                res->setFilename(filename()+"/"+ref.resourcePath);
                 
                 KoAbstractGradient *res2 = gradientServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
@@ -510,7 +510,7 @@ bool ResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoPattern *res = patternServer->createResource(ref.resourcePath);
+                KoPattern *res = patternServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -524,8 +524,6 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                
-                res->setFilename(filename()+"/"+ref.resourcePath);
                 
                 KoPattern *res2 = patternServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
@@ -553,7 +551,7 @@ bool ResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KisBrushSP res = brushServer->createResource(ref.resourcePath);
+                KisBrushSP res = brushServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -568,7 +566,6 @@ bool ResourceBundle::install()
                 }
                 dbgResources << "\t\tresource:" << res->name();
                 
-                res->setFilename(filename()+"/"+ref.resourcePath);
                 //find the resouce on the server
                 KisBrushSP res2 = brushServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
@@ -598,7 +595,7 @@ bool ResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoColorSet *res = paletteServer->createResource(ref.resourcePath);
+                KoColorSet *res = paletteServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
 
                 if (!res) {
                     qWarning() << "Could not create resource for" << ref.resourcePath;
@@ -614,7 +611,6 @@ bool ResourceBundle::install()
                 }
                 dbgResources << "\t\tresource:" << res->name();
                 
-                res->setFilename(filename()+"/"+ref.resourcePath);
                 //find the resouce on the server
                 KoColorSet *res2 = paletteServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
@@ -644,7 +640,7 @@ bool ResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KisWorkspaceResource *res = workspaceServer->createResource(ref.resourcePath);
+                KisWorkspaceResource *res = workspaceServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -658,9 +654,7 @@ bool ResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                
-                res->setFilename(filename()+"/"+ref.resourcePath);
-                
+
                 //the following tries to find the resource by name.
                 KisWorkspaceResource *res2 = workspaceServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
@@ -691,7 +685,8 @@ bool ResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KisPaintOpPresetSP res = paintoppresetServer->createResource(ref.resourcePath);
+                KisPaintOpPresetSP res = paintoppresetServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+
                 if (!res) {
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -700,16 +695,16 @@ bool ResourceBundle::install()
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
+                // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
+                // fails with "libpng error: IDAT: CRC error"
                 QByteArray data = resourceStore->device()->readAll();
                 QBuffer buffer(&data);
                 if (!res->loadFromDevice(&buffer)) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
-                dbgResources << "\t\tresource:" << res->name();
-                
-                res->setFilename(filename()+"/"+ref.resourcePath);
-                
+                dbgResources << "\t\tresource:" << res->name() << "File:" << res->filename();
+
                 //the following tries to find the resource by name.
                 KisPaintOpPresetSP res2 = paintoppresetServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...

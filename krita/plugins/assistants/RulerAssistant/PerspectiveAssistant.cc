@@ -212,14 +212,17 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             dbgFile<<"canvas does not exist, you may have passed arguments incorrectly:"<<canvas;
         }
         //figure out if point is in the perspective grid//
+        QPointF intersectTransformed(0, 0); //dummy for holding transformed intersection so the code is more readable.
+
         if (poly.containsPoint(initialTransform.inverted().map(mousePos), Qt::OddEvenFill)==true){
             if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-                snapLine = QLineF(initialTransform.map(intersection), mousePos);
+                intersectTransformed = initialTransform.map(intersection); 
+                snapLine = QLineF(intersectTransformed, mousePos);
                 KisAlgebra2D::intersectLineRect(snapLine, viewport);
                 bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
                 QPainterPath path;
-                if (bounds.contains(intersection.toPoint())){
-                    path2.moveTo(intersection);
+                if (bounds.contains(intersectTransformed.toPoint())){
+                    path2.moveTo(intersectTransformed);
                     path2.lineTo(snapLine.p1());
                 }
                 else {
@@ -228,12 +231,13 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
                 }
             }
             if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-                snapLine = QLineF(initialTransform.map(intersection), mousePos);
+                intersectTransformed = initialTransform.map(intersection); 
+                snapLine = QLineF(intersectTransformed, mousePos);
                 KisAlgebra2D::intersectLineRect(snapLine, viewport);
                 bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
                 QPainterPath path;
-                if (bounds.contains(intersection.toPoint())){
-                    path2.moveTo(intersection);
+                if (bounds.contains(intersectTransformed.toPoint())){
+                    path2.moveTo(intersectTransformed);
                     path2.lineTo(snapLine.p1());
                 }
                 else {

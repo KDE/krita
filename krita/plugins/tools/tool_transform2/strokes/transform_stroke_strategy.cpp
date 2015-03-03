@@ -97,6 +97,12 @@ TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
 
             device = tmask->buildPreviewDevice();
 
+            /**
+             * When working with transform mask, selections are not
+             * taken into account.
+             */
+            m_selection = 0;
+
         } else {
             device = rootNode->projection();
         }
@@ -118,6 +124,11 @@ TransformStrokeStrategy::~TransformStrokeStrategy()
 KisPaintDeviceSP TransformStrokeStrategy::previewDevice() const
 {
     return m_previewDevice;
+}
+
+KisSelectionSP TransformStrokeStrategy::realSelection() const
+{
+    return m_selection;
 }
 
 KisPaintDeviceSP TransformStrokeStrategy::createDeviceCache(KisPaintDeviceSP dev)

@@ -42,7 +42,7 @@ target_link_libraries(kritagemini
 )
 
 install(TARGETS   kritagemini ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS  kritagemini.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install(PROGRAMS  kritagemini.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES     kritageminirc kritageminipanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     kritagemini.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritagemini)
 install(FILES     kritagemini.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritagemini)

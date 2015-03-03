@@ -950,67 +950,15 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     refreshHiddenArea(layer, bounds());
     refreshHiddenArea(prevLayer, bounds());
 
-    QRect layerProjectionExtent = layer->projection()->extent();
+    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
+
+    QRect layerProjectionExtent = this->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
 
-    bool alphaDisabled = layer->alphaChannelDisabled();
-    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
-    KisMultiPaintDeviceSP mergedDevice;
-
-    if (layer->compositeOpId() != prevLayer->compositeOpId() || prevLayer->opacity() != OPACITY_OPAQUE_U8) {
-
-        mergedDevice = new KisMultiPaintDevice(layer->colorSpace(), "merged");
-        KisPainter gc(mergedDevice);
-
-        //Copy the pixels of previous layer with their actual alpha value
-        prevLayer->disableAlphaChannel(false);
-
-        gc.setChannelFlags(prevLayer->channelFlags());
-        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
-        gc.setOpacity(prevLayer->opacity());
-
-        gc.bitBlt(prevLayerProjectionExtent.topLeft(), prevLayer->projection(), prevLayerProjectionExtent);
-
-        //Restore the previous prevLayer disableAlpha status for correct undo/redo
-        prevLayer->disableAlphaChannel(prevAlphaDisabled);
-
-        //Paint the pixels of the current layer, using their actual alpha value
-        if (alphaDisabled == prevAlphaDisabled) {
-            layer->disableAlphaChannel(false);
-        }
-        gc.setChannelFlags(layer->channelFlags());
-        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
-        gc.setOpacity(layer->opacity());
-
-        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
-
-        //Restore the layer disableAlpha status for correct undo/redo
-        layer->disableAlphaChannel(alphaDisabled);
-    }
-    else {
-        //Copy prevLayer
-        lock();
-        mergedDevice = new KisMultiPaintDevice(*prevLayer->projection());
-        unlock();
-
-        //Paint layer on the copy
-        KisPainter gc(mergedDevice);
-        if (alphaDisabled == prevAlphaDisabled) {
-            layer->disableAlphaChannel(false);
-        }
-        gc.setChannelFlags(layer->channelFlags());
-        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
-        gc.setOpacity(layer->opacity());
-
-        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
-
-        //Restore the layer disableAlpha status for correct undo/redo
-        layer->disableAlphaChannel(alphaDisabled);
-    }
-
-
-    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
+    // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
+    KisLayerSP mergedLayer = layer->createMergedLayer(prevLayer);
     Q_CHECK_PTR(mergedLayer);
+
     mergedLayer->setCompositeOp(COMPOSITE_OVER);
     mergedLayer->setChannelFlags(layer->channelFlags());
     mergedLayer->disableAlphaChannel(prevAlphaDisabled);
@@ -1496,6 +1444,15 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
 
     if (m_d->scheduler) {
         m_d->scheduler->fullRefreshAsync(root, rc, cropRect);
+    }
+}
+
+void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
+{
+    KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
+
+    if (m_d->scheduler) {
+        m_d->scheduler->updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
     }
 }
 

@@ -49,7 +49,7 @@ public:
     virtual QString name() const = 0;
 
     /**
-     * @return true if the color space should be shown in an User Interface, or false
+     * @return true if the color space should be shown in a User Interface, or false
      *         other wise.
      */
     virtual bool userVisible() const = 0;

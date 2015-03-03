@@ -943,7 +943,7 @@ QString QuerySchema::debugString() const
                             + " -> " + alias + "\n");
         }
     }
-    dbg += QString("-TABLE ALIASES:\n" + aliases);
+    dbg += QString("\n-TABLE ALIASES:\n" + aliases);
     QString where = d->whereExpr ? d->whereExpr->debugString() : QString();
     if (!where.isEmpty())
         dbg += (QString("\n-WHERE EXPRESSION:\n") + where);

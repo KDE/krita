@@ -46,23 +46,6 @@ void KisDocumentTest::testOpenImageTwiceInSameDoc()
 
     doc->loadNativeFormat(fname);
     doc->loadNativeFormat(fname2);
-
-    delete doc;
-}
-
-void KisDocumentTest::testActiveNodes()
-{
-    KisDocument *doc = createEmptyDocument();
-    KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();
-    QPointer<KisView>view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
-    KisPart::instance()->addView(view, doc);
-    vKisNodeSP nodes = doc->activeNodes();
-    QVERIFY(nodes.isEmpty());
-
-    KisPaintLayerSP paintLayer1 = new KisPaintLayer(doc->image(), "paintlayer1", OPACITY_OPAQUE_U8);
-    doc->image()->addNode(paintLayer1);
-    nodes = doc->activeNodes();
-    QCOMPARE(nodes.count(), 1);
 }
 
 

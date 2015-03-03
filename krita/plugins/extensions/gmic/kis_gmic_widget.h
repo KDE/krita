@@ -63,6 +63,8 @@ private slots:
     void slotResetClicked();
     void slotMaximizeClicked();
 
+    void slotExpandCollapse();
+
     // internet updates slots
     void startUpdate();
     void finishUpdate();

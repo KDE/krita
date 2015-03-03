@@ -31,11 +31,14 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 class KoTextSharedSavingData::Private
 {
 public:
+    Private(void) : changes(0) { }
     ~Private() {}
 
     KoGenChanges *changes;
     QMap<QString, QString> m_rdfIdMapping; //< This lets the RDF system know old->new xml:id
+#ifdef SHOULD_BUILD_RDF
     QSharedPointer<Soprano::Model> m_rdfModel; //< This is so cut/paste can serialize the relevant RDF to the clipboard
+#endif
     QMap<int, QString> styleIdToName;
 };
 
@@ -46,7 +49,6 @@ KoTextSharedSavingData::KoTextSharedSavingData()
 
 KoTextSharedSavingData::~KoTextSharedSavingData()
 {
-    delete d;
 }
 
 void KoTextSharedSavingData::setGenChanges(KoGenChanges& changes) {
@@ -68,6 +70,7 @@ QMap<QString, QString> KoTextSharedSavingData::getRdfIdMapping() const
     return d->m_rdfIdMapping;
 }
 
+#ifdef SHOULD_BUILD_RDF
 void KoTextSharedSavingData::setRdfModel(QSharedPointer<Soprano::Model> m)
 {
     d->m_rdfModel = m;
@@ -77,6 +80,7 @@ QSharedPointer<Soprano::Model> KoTextSharedSavingData::rdfModel() const
 {
     return d->m_rdfModel;
 }
+#endif
 
 void KoTextSharedSavingData::setStyleName(int styleId, const QString &name)
 {

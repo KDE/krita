@@ -28,20 +28,19 @@
 
 KisUrlRequester::KisUrlRequester(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::WdgUrlRequester)
+    , m_ui(new Ui::WdgUrlRequester)
     , m_mode(KoFileDialog::OpenFile)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
-    ui->btnSelectFile->setIcon(koIcon("folder"));
+    m_ui->btnSelectFile->setIcon(koIcon("folder"));
 
-    connect(ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
-    connect(ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));
+    connect(m_ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
+    connect(m_ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));
 }
 
 KisUrlRequester::~KisUrlRequester()
 {
-    delete ui;
 }
 
 void KisUrlRequester::setStartDir(const QString &path)
@@ -51,15 +50,14 @@ void KisUrlRequester::setStartDir(const QString &path)
 
 void KisUrlRequester::setFileName(const QString &path)
 {
-    ui->txtFileName->setText(path);
+    m_ui->txtFileName->setText(path);
     KUrl url(path);
     emit urlSelected(url);
 }
 
 QString KisUrlRequester::fileName() const
 {
-    QString path = ui->txtFileName->text();
-    return path;
+    return m_ui->txtFileName->text();
 }
 
 KUrl KisUrlRequester::url() const
@@ -90,6 +88,13 @@ KoFileDialog::DialogType KisUrlRequester::mode() const
     return m_mode;
 }
 
+void KisUrlRequester::setMimeTypeFilters(const QStringList &filterList,
+                            QString defaultFilter)
+{
+    m_mime_filter_list = filterList;
+    m_mime_default_filter = defaultFilter;
+}
+
 void KisUrlRequester::slotSelectFile()
 {
     KoFileDialog dialog(this, m_mode, "OpenDocument");
@@ -101,7 +106,10 @@ void KisUrlRequester::slotSelectFile()
     }
 
     dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+    if (m_mime_filter_list.isEmpty())
+        dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+    else
+        dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
     QString url = dialog.url();
 
     if (m_basePath.isEmpty()) {

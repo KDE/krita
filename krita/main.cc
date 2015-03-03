@@ -54,6 +54,10 @@
 #endif
 #elif defined Q_WS_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
+#if QT_VERSION < 0x040800
+// needed for XInitThreads()
+#include <X11/Xlib.h>
+#endif
 
 #endif
 
@@ -101,8 +105,16 @@ extern "C" int main(int argc, char **argv)
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
-     // initialize qt plugin path (see KComponentDataPrivate::lazyInit)
-    KGlobal::config();
+#if defined Q_WS_X11
+#if QT_VERSION >= 0x040800
+    // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
+    // do their own X11 stuff in their own threads
+    // this call must happen before the creation of the application (see AA_X11InitThreads docs)
+    QCoreApplication::setAttribute(Qt::AA_X11InitThreads, true);
+#else
+    XInitThreads();
+#endif
+#endif
 
     // first create the application so we can create a  pixmap
     KisApplication app(key);
@@ -132,9 +144,6 @@ extern "C" int main(int argc, char **argv)
     app.setEventFilter(&KisTabletSupportX11::eventFilter);
 #endif
 
-#if defined Q_WS_X11 && QT_VERSION >= 0x040800
-    app.setAttribute(Qt::AA_X11InitThreads, true);
-#endif
 
     if (!runningInKDE) {
         // Icons in menus are ugly and distracting

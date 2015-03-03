@@ -27,6 +27,9 @@
 #include "kis_iterator_ng.h"
 #include "kis_buffer_stream.h"
 
+#include <KoColorSpaceConstants.h>
+#include <KoColorSpaceTraits.h>
+
 uint KisTIFFReaderTarget8bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
 {
     KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
@@ -80,7 +83,7 @@ uint KisTIFFReaderTarget32bit::copyDataToChannels(quint32 x, quint32 y, quint32 
 {
     KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     double coeff = quint32_MAX / (double)(pow(2.0, sourceDepth()) - 1);
-//         dbgFile <<" depth expension coefficient :" << coeff;
+//    dbgFile <<" depth expension coefficient :" << coeff;
     do {
         quint32 *d = reinterpret_cast<quint32 *>(it->rawData());
         quint8 i;
@@ -90,6 +93,7 @@ uint KisTIFFReaderTarget32bit::copyDataToChannels(quint32 x, quint32 y, quint32 
         postProcessor()->postProcess32bit(d);
         if (transform()) transform()->transform((quint8*)d, (quint8*)d, 1);
         d[poses()[i]] = quint32_MAX;
+        KoBgrF32Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_F, 1);
         for (int k = 0; k < nbExtraSamples(); k++) {
             if (k == alphaPos())
                 d[poses()[i]] = (quint32)(tiffstream->nextValue() * coeff);

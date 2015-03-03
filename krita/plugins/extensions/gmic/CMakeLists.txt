@@ -3,7 +3,10 @@
 ##
 
 include_directories(src)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 set(gmic_sources_SRCS
   src/gmic.cpp
@@ -22,7 +25,7 @@ add_definitions(-Dcimg_use_vt100 )
 
 # PARALLEL
 find_package(Threads)
-if (CMAKE_USE_PTHREADS_INIT)
+if (Threads_FOUND)
     add_definitions(-Dgmic_is_parallel)
     add_definitions(-Dcimg_use_rng)
 endif()
@@ -37,13 +40,14 @@ endif(OPENMP_FOUND)
 if(FFTW3_FOUND)
     add_definitions(-Dcimg_use_fftw3 )
     add_definitions(-Dcimg_use_fftw3_singlethread )
+    include_directories(${FFTW3_INCLUDE_DIR})
 endif(FFTW3_FOUND)
 
 # PNG
 if (PNG_FOUND)
-    include_directories(${PNG_INCLUDE_DIR})
     add_definitions(${PNG_DEFINITIONS})
     add_definitions(-Dcimg_use_png)
+    include_directories(${PNG_INCLUDE_DIR})
 endif(PNG_FOUND)
 
 # ZLIB
@@ -52,6 +56,14 @@ if ( ZLIB_FOUND )
     add_definitions(-Dcimg_use_zlib)
     include_directories( ${ZLIB_INCLUDE_DIRS} )
 endif( ZLIB_FOUND )
+
+
+# CURL
+find_package(CURL)
+if (CURL_FOUND)
+    add_definitions(-Dcimg_use_curl)
+    include_directories( ${CURL_INCLUDE_DIRS} )
+endif(CURL_FOUND)
 
 # X11
 if(X11_FOUND)
@@ -81,14 +93,16 @@ if (X11_FOUND)
     target_link_libraries(gmic ${X11_LIBRARIES})
 endif(X11_FOUND)
 
+if(CURL_FOUND)
+    target_link_libraries(gmic ${CURL_LIBRARIES})
+endif(CURL_FOUND)
+
 target_link_libraries(gmic ${ZLIB_LIBRARIES})
 target_link_libraries(gmic ${PNG_LIBRARIES})
 
-if (WIN32)
-    target_link_libraries(gmic)
-else (WIN32)
-    target_link_libraries(gmic pthread)
-endif (WIN32)
+if(Threads_FOUND)
+    target_link_libraries(gmic ${CMAKE_THREAD_LIBS_INIT})
+endif(Threads_FOUND)
 
 
 ##

@@ -32,6 +32,7 @@ class KRITAIMAGE_EXPORT KisBaseRectsWalker : public KisShared
 public:
     enum UpdateType {
         UPDATE,
+        UPDATE_NO_FILTHY,
         FULL_REFRESH,
         UNSUPPORTED
     };

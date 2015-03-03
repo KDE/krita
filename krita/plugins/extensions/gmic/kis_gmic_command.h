@@ -43,11 +43,14 @@ public:
     float * progressPtr();
     bool * cancelPtr();
 
+    /* @return true if gmic failed in redo () */
+    bool isSuccessfullyDone();
+
 signals:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
 private:
-    QString gmicDimensionString(const gmic_image<float>& img);
+    static QString gmicDimensionString(const gmic_image<float>& img);
 
 private:
     QString m_gmicCommandString;
@@ -55,9 +58,9 @@ private:
     const char * m_customCommands;
     bool m_firstRedo;
 
-    float * const m_progress; 
+    float * const m_progress;
     bool * const m_cancel; // cancels gmic command execution
-
+    bool m_isSuccessfullyDone;
 };
 
 #endif /* __KIS_GMIC_COMMAND_H */

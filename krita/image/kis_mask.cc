@@ -212,16 +212,16 @@ void KisMask::select(const QRect & rc, quint8 selectedness)
 QRect KisMask::decorateRect(KisPaintDeviceSP &src,
                             KisPaintDeviceSP &dst,
                             const QRect & rc,
-                            PositionToFilthy parentPos) const
+                            PositionToFilthy maskPos) const
 {
     Q_UNUSED(src);
     Q_UNUSED(dst);
-    Q_UNUSED(parentPos);
+    Q_UNUSED(maskPos);
     Q_ASSERT_X(0, "KisMask::decorateRect", "Should be overridden by successors");
     return rc;
 }
 
-void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const QRect &needRect, PositionToFilthy parentPos) const
+void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const QRect &needRect, PositionToFilthy maskPos) const
 {
     if (selection()) {
 
@@ -232,7 +232,7 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
 
         KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
 
-        QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, parentPos);
+        QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
 
         KisPainter gc(projection);
         // masks don't have any compositioning
@@ -248,7 +248,7 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
         cacheDevice->makeCloneFromRough(projection, needRect);
         projection->clear(needRect);
 
-        decorateRect(cacheDevice, projection, applyRect, parentPos);
+        decorateRect(cacheDevice, projection, applyRect, maskPos);
 
         m_d->paintDeviceCache.putDevice(cacheDevice);
     }

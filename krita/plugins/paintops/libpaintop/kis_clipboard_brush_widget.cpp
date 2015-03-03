@@ -102,7 +102,7 @@ void KisClipboardBrushWidget::slotUseBrushClicked()
         }
     }
     else {
-        preview->setText("Nothing copied \n to Clipboard");
+        preview->setText(i18n("Nothing copied\n to Clipboard"));
     }
 }
 

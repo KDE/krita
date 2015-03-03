@@ -64,7 +64,8 @@ struct LazyInitGlobalSelection : public KisTransactionBasedCommand {
 void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action)
 {
     KisViewManager* view = m_canvas->viewManager();
-    if (selection->selectedRect().isEmpty()) {
+
+    if (selection->selectedExactRect().isEmpty()) {
         m_canvas->viewManager()->selectionManager()->deselect();
         return;
     }

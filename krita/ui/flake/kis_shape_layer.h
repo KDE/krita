@@ -58,6 +58,14 @@ public:
 
     KisShapeLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
     KisShapeLayer(const KisShapeLayer& _rhs);
+    /**
+     * Merge constructor.
+     *
+     * Creates a new layer as a merge of two existing layers.
+     *
+     * This is used by createMergedLayer()
+     */
+    KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
     virtual ~KisShapeLayer();
 private:
     void initShapeLayer(KoShapeBasedDocumentBase* controller);
@@ -69,6 +77,8 @@ public:
 
 
     virtual void setImage(KisImageWSP image);
+
+    virtual KisLayerSP createMergedLayer(KisLayerSP prevLayer);
 public:
 
     // KoShape overrides

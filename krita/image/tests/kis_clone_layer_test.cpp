@@ -103,7 +103,7 @@ KisNodeSP paintLayer1(KisImageSP image) {
 
 void KisCloneLayerTest::testOriginalUpdates()
 {
-    const QRect nullRect(qint32_MAX, qint32_MAX, 0, 0);
+    const QRect nullRect(QPoint(0, 0), QPoint(-1, -1));
     KisImageSP image = createImage();
     KisNodeSP root = image->root();
 
@@ -118,7 +118,7 @@ void KisCloneLayerTest::testOriginalUpdates()
 
 void KisCloneLayerTest::testOriginalUpdatesOutOfBounds()
 {
-    const QRect nullRect(qint32_MAX, qint32_MAX, 0, 0);
+    const QRect nullRect(QPoint(0, 0), QPoint(-1, -1));
     KisImageSP image = createImage();
     KisNodeSP root = image->root();
 
@@ -137,7 +137,7 @@ void KisCloneLayerTest::testOriginalUpdatesOutOfBounds()
 
 void KisCloneLayerTest::testOriginalRefresh()
 {
-    const QRect nullRect(qint32_MAX, qint32_MAX, 0, 0);
+    const QRect nullRect(QPoint(0, 0), QPoint(-1, -1));
     KisImageSP image = createImage();
     KisNodeSP root = image->root();
 

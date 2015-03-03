@@ -619,3 +619,10 @@ target_link_libraries(KisKeyframingTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 set(kis_multi_paint_device_test_SRCS kis_multi_paint_device_test.cpp )
 kde4_add_unit_test(KisMultiPaintDeviceTest TESTNAME krita-image-KisMultiPaintDeviceTest ${kis_multi_paint_device_test_SRCS})
 target_link_libraries(KisMultiPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage koodf ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
+kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
+target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+

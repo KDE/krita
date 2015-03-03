@@ -122,7 +122,7 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 void KisCircleMaskGenerator::setSoftness(qreal softness)
 {
     KisMaskGenerator::setSoftness(softness);
-    qreal safeSoftnessCoeff = 1.0 / qMax(0.01, softness);
+    qreal safeSoftnessCoeff = qreal(1.0) / qMax(qreal(0.01), softness);
 
     d->transformedFadeX = d->xfadecoef * safeSoftnessCoeff;
     d->transformedFadeY = d->yfadecoef * safeSoftnessCoeff;

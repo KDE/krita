@@ -47,9 +47,9 @@ KisTransparencyMask::~KisTransparencyMask()
 QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
                                         KisPaintDeviceSP &dst,
                                         const QRect & rc,
-                                        PositionToFilthy parentPos) const
+                                        PositionToFilthy maskPos) const
 {
-    Q_UNUSED(parentPos);
+    Q_UNUSED(maskPos);
 
     if (src != dst) {
         KisPainter gc(dst);

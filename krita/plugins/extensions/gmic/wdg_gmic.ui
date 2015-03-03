@@ -12,7 +12,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QGridLayout" name="m_filterConfigLayout" columnstretch="1,2,2,1">
+    <layout class="QGridLayout" name="m_filterConfigLayout" columnstretch="1,0,0,0">
      <item row="0" column="0" rowspan="3">
       <widget class="KisGmicInputOutputWidget" name="m_inputOutputOptions" native="true"/>
      </item>
@@ -27,18 +27,35 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QPushButton" name="updateBtn">
-       <property name="text">
-        <string>Update definitions</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="updateBtn">
+         <property name="text">
+          <string>Update definitions</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="expandCollapseBtn">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="2" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QLabel" name="searchLbl">
          <property name="text">
-          <string>Search:</string>
+          <string>&amp;Search:</string>
+         </property>
+         <property name="buddy">
+          <cstring>searchBox</cstring>
          </property>
         </widget>
        </item>
@@ -47,18 +64,11 @@
        </item>
       </layout>
      </item>
-     <item row="1" column="2" colspan="2">
-      <widget class="QDialogButtonBox" name="controlButtonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2" colspan="2">
-      <widget class="QScrollArea" name="m_filterScrollArea" native="true">
+      <widget class="QScrollArea" name="m_filterScrollArea">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
+         <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -67,6 +77,13 @@
          <width>16777215</width>
          <height>16777215</height>
         </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2" colspan="2">
+      <widget class="QDialogButtonBox" name="controlButtonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
        </property>
       </widget>
      </item>

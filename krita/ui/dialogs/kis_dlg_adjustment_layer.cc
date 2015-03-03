@@ -66,7 +66,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
     connect(wdgFilterNodeCreation.layerName, SIGNAL(textChanged(QString)), SLOT(slotNameChanged(QString)));
 
-    enableButtonOk(true);
+    slotConfigChanged();
 }
 
 KisDlgAdjustmentLayer::~KisDlgAdjustmentLayer()
@@ -84,6 +84,9 @@ void KisDlgAdjustmentLayer::slotNameChanged(const QString &text)
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
 {
     KisFilterConfiguration* config = wdgFilterNodeCreation.filterSelector->configuration();
+
+    Q_ASSERT(config);
+
     return config;
 }
 
@@ -95,6 +98,7 @@ QString KisDlgAdjustmentLayer::layerName() const
 void KisDlgAdjustmentLayer::slotConfigChanged()
 {
     m_currentFilter = filterConfiguration();
+
     enableButtonOk(m_currentFilter);
 
     if (m_currentFilter) {

@@ -356,23 +356,12 @@
 //%token YEAR
 //%token YEARS_BETWEEN
 
-
-%token __LAST_TOKEN /* sentinel */
-
-%token '-'
-%token '+'
-%token '*'
-%token '%'
 %token '@'
 %token ';'
 %token ','
-%token '.'
 %token '$'
-%token '('
-%token ')'
 %token '?'
 %token '\''
-%token '/'
 
 %type <stringValue> IDENTIFIER
 %type <stringValue> IDENTIFIER_DOT_ASTERISK
@@ -501,32 +490,31 @@ extern "C"
 }
 
 /* precedence: lowest to highest */
-%left UNION
-%left EXCEPT
-%left INTERSECT
-%left OR
-%left AND
-%left XOR
-%right NOT
+%token UNION
+%token EXCEPT
+%token INTERSECT
+%token OR
+%token AND
+%token XOR
+%token NOT
 
-%nonassoc '='
-%nonassoc '<'
-%nonassoc '>'
-%nonassoc LESS_OR_EQUAL
-%nonassoc GREATER_OR_EQUAL
-%nonassoc NOT_EQUAL
-%nonassoc NOT_EQUAL2
-%nonassoc SQL_IN
-%nonassoc LIKE
-%nonassoc NOT_LIKE
-%nonassoc ILIKE
-%nonassoc SIMILAR_TO
-%nonassoc NOT_SIMILAR_TO
-%nonassoc SIMILAR
+%token '='
+%token '<'
+%token '>'
+%token GREATER_OR_EQUAL
+%token NOT_EQUAL
+%token NOT_EQUAL2
+%token SQL_IN
+%token LIKE
+%token NOT_LIKE
+%token ILIKE
+%token SIMILAR_TO
+%token NOT_SIMILAR_TO
+%token SIMILAR
 //%nonassoc    ESCAPE
 //%nonassoc    OVERLAPS
-%nonassoc BETWEEN
-%nonassoc NOT_BETWEEN
+%token BETWEEN
+%token NOT_BETWEEN
 //%nonassoc IN_P
 //%left     POSTFIXOP        // dummy for postfix Op rules
 //%left     Op OPERATOR        // multi-character ops and user-defined operators
@@ -537,22 +525,22 @@ extern "C"
 //%nonassoc TRUE_P
 //%nonassoc FALSE_P
 //%nonassoc UNKNOWN
-%left '+'
-%left '-'
-%left '*'
-%left '/'
-%left '%'
-%left '^'
-%left UMINUS
+%token '+'
+%token '-'
+%token '*'
+%token '/'
+%token '%'
+%token '^'
+%token UMINUS
 // Unary Operators 
-//%left AT ZONE            // sets precedence for AT TIME ZONE
+//%token AT ZONE            // sets precedence for AT TIME ZONE
 //%right UMINUS
-%left '['
-%left ']'
-%left '('
-%left ')'
-//%left TYPECAST
-%left '.'
+%token '['
+%token ']'
+%token '('
+%token ')'
+//%token TYPECAST
+%token '.'
 
 /*
  * These might seem to be low-precedence, but actually they are not part
@@ -599,17 +587,18 @@ Statement ';' StatementList
     | Statement SelectStatement         {  }
 */
 Statement :
-CreateTableStatement
+/*CreateTableStatement
 {
 YYACCEPT;
 }
-| SelectStatement
+|*/
+SelectStatement
 {
     $$ = $1;
 }
 ;
 
-CreateTableStatement :
+/*CreateTableStatement :
 CREATE TABLE IDENTIFIER
 {
     parser->setOperation(Parser::OP_CreateTable);
@@ -698,7 +687,7 @@ SQL_TYPE
     field = new Field();
     field->setType(Field::InvalidType);
 }
-;
+;*/
 
 SelectStatement:
 Select ColViews

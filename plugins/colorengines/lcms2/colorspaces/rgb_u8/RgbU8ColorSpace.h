@@ -94,7 +94,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return "sRGB built-in";
+        return "sRGB-elle-V2-srgbtrc.icc";
     }
 };
 

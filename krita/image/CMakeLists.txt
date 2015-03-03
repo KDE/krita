@@ -139,6 +139,7 @@ set(kritaimage_LIB_SRCS
    kis_transform_mask.cpp
    kis_transform_mask_params_interface.cpp
    kis_recalculate_transform_mask_job.cpp
+   kis_recalculate_generator_layer_job.cpp
    kis_transform_mask_params_factory_registry.cpp
    kis_safe_transform.cpp
    kis_gradient_painter.cc
@@ -282,8 +283,8 @@ set(einspline_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koodf pigmentcms kundo2 kowidgetutils)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})

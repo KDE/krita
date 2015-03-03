@@ -65,7 +65,7 @@ struct KisPaintOpSettings::Private {
     private:
         KisPaintOpSettings::Private *m_d;
         bool m_oldNotificationsState;
-        Q_DISABLE_COPY(DirtyNotificationsLocker);
+        Q_DISABLE_COPY(DirtyNotificationsLocker)
     };
 };
 

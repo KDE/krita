@@ -133,6 +133,27 @@ void KisGroupLayer::setImage(KisImageWSP image)
     KisLayer::setImage(image);
 }
 
+KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
+{
+    KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer*>(prevLayer.data());
+
+    if (prevGroup) {
+        KisSharedPtr<KisGroupLayer> merged(new KisGroupLayer(*prevGroup));
+
+        KisNodeSP child, cloned;
+
+        for (child = firstChild(); child; child = child->nextSibling()) {
+            cloned = child->clone();
+            image()->addNode(cloned, merged);
+        }
+
+        image()->refreshGraphAsync(merged);
+
+        return merged;
+    } else
+        return KisLayer::createMergedLayer(prevLayer);
+}
+
 void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 {
     if (!colorSpace)

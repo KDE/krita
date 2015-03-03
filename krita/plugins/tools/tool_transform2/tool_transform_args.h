@@ -259,6 +259,8 @@ public:
     void toXML(QDomElement *e) const;
     static ToolTransformArgs fromXML(const QDomElement &e);
 
+    void translate(const QPointF &offset);
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);

@@ -191,7 +191,8 @@ KisNode::KisNode(const KisNode & rhs)
 
 KisNode::~KisNode()
 {
-    m_d->nodeProgressProxy->deleteLater();
+    if (m_d->nodeProgressProxy)
+        m_d->nodeProgressProxy->deleteLater();
 
     {
         QWriteLocker l(&m_d->nodeSubgraphLock);

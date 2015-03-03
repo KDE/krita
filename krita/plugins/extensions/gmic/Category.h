@@ -31,7 +31,7 @@ public:
     Category(Component * parent = 0);
     virtual ~Category();
     virtual void add(Component *c);
-    virtual Component* child(int index);
+    virtual Component* child(int index) const;
     virtual Component* parent() { return m_parent; }
     void setParent(Component * parent) { m_parent = parent; }
 

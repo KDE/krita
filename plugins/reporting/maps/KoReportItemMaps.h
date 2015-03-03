@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
- * Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
+ * Copyright (C) 2011-2015 by Radoslaw Wicik (radoslaw@wicik.pl)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,10 +29,12 @@
 #include <klocalizedstring.h>
 #include <marble/MarbleWidget.h>
 #include <QMap>
+#include "MapRenderer.h"
 
-class QImage;
 class OROImage;
-
+class OROPicture;
+class OROPage;
+class OROSection;
 
 namespace Scripting
 {
@@ -56,14 +58,23 @@ public:
     virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
 
     virtual QString itemDataSource() const;
-public slots:
-    void requestRedraw();
+    void renderFinished();
+
+    qreal longtitude() const;
+    qreal latitude() const;
+    int zoom() const;
+
+    QSize size() const;
+    OROPicture* oroImage();
 
 protected:
-    Marble::MarbleWidget* initMarble();
     KoProperty::Property * m_controlSource;
     KoProperty::Property* m_resizeMode;
     KoProperty::Property* m_staticImage;
+    KoProperty::Property* m_latitudeProperty;
+    KoProperty::Property* m_longitudeProperty;
+    KoProperty::Property* m_zoomProperty;
+//     KoProperty::Property* m_mapThemeIdProperty;
 
     void setMode(const QString&);
     void setInlineImageData(QByteArray, const QString& = QString());
@@ -71,20 +82,20 @@ protected:
     QString mode() const;
     bool isInline() const;
     QByteArray inlineImageData() const;
-    QMap<QString,Marble::MarbleWidget*> m_marbles;
-    class OroIds{
-    public:
-        OroIds():pageId(0),sectionId(0),marbleWidget(0){}
-        OROImage *pageId;
-        OROImage *sectionId;
-        Marble::MarbleWidget* marbleWidget;
-    };
-    QMap<Marble::MarbleModel*, OroIds> m_marbleImgs;
-    QImage m_mapImage;
-    
+
+    qreal m_longtitude;
+    qreal m_latitude;
+    int m_zoom;
+    OROPage *m_pageId;
+    OROSection *m_sectionId;
+    QPointF m_offset;
+    OROPicture * m_oroPicture;
+    MapRenderer m_mapRenderer;
+
 private:
     virtual void createProperties();
     void deserializeData(const QVariant& serialized);
+
     friend class Scripting::Maps;
 };
 

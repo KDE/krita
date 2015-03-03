@@ -31,6 +31,14 @@ namespace Ui {
     class WdgUrlRequester;
 }
 
+/**
+ * This represents an editable file name.
+ * Visual it presents a QLineEdit + a buton that pops up
+ * a file chooser.
+ *
+ * Signals are fired when the user changes the text
+ * or selects a new file via the button/file chooser.
+ */
 class KRITAUI_EXPORT KisUrlRequester : public QWidget
 {
     Q_OBJECT
@@ -47,6 +55,14 @@ public:
     void setMode(KoFileDialog::DialogType mode);
     KoFileDialog::DialogType mode() const;
 
+    /**
+     * Sets the mime type filters to use, same format as KoFileDialog::setMimeTypeFilters.
+     * If this is not called, the default list is used, which simply selects all the image
+     * file formats Krita can load.
+     */
+    void setMimeTypeFilters(const QStringList &filterList,
+                            QString defaultFilter = QString());
+
 public slots:
     void slotSelectFile();
 
@@ -59,9 +75,11 @@ private:
     void setFileName(const QString &path);
 
 private:
-    Ui::WdgUrlRequester *ui;
+    QScopedPointer<Ui::WdgUrlRequester> m_ui;
     QString m_basePath;
     KoFileDialog::DialogType m_mode;
+    QStringList m_mime_filter_list;
+    QString m_mime_default_filter;
 };
 
 #endif // KIS_URL_REQUESTER_H

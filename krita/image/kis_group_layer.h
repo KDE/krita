@@ -47,7 +47,9 @@ public:
 
     QIcon icon() const;
 
-    void setImage(KisImageWSP image);
+    virtual void setImage(KisImageWSP image);
+
+    virtual KisLayerSP createMergedLayer(KisLayerSP prevLayer);
 
     /**
      * Clear the projection

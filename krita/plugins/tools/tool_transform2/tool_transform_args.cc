@@ -197,6 +197,37 @@ ToolTransformArgs::~ToolTransformArgs()
     clear();
 }
 
+void ToolTransformArgs::translate(const QPointF &offset)
+{
+    if (m_mode == FREE_TRANSFORM || m_mode == PERSPECTIVE_4POINT) {
+        m_originalCenter += offset;
+        m_rotationCenterOffset += offset;
+        m_transformedCenter += offset;
+    } else if(m_mode == WARP || m_mode == CAGE) {
+        {
+            QVector<QPointF>::iterator it = m_origPoints.begin();
+            QVector<QPointF>::iterator end = m_origPoints.end();
+            for (; it != end; ++it) {
+                *it += offset;
+            }
+        }
+
+        {
+            QVector<QPointF>::iterator it = m_transfPoints.begin();
+            QVector<QPointF>::iterator end = m_transfPoints.end();
+            for (; it != end; ++it) {
+                *it += offset;
+            }
+        }
+
+    } else if (m_mode == LIQUIFY) {
+        KIS_ASSERT_RECOVER_RETURN(m_liquifyWorker);
+        m_liquifyWorker->translate(offset);
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
+    }
+}
+
 bool ToolTransformArgs::isIdentity() const
 {
     if (m_mode == FREE_TRANSFORM) {

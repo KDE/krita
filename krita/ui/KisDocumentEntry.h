@@ -28,8 +28,6 @@
 
 class QStringList;
 class KisDocument;
-class KisFilter;
-class KisPart;
 
 /**
  *  Represents an available Calligra component

@@ -30,7 +30,6 @@
 #include <QEventLoop>
 
 class VideoData;
-class QTime;
 
 namespace Phonon
 {

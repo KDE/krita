@@ -39,7 +39,6 @@ class KoColorProfile;
 
 class KisCanvasDecoration;
 class KisViewManager;
-class KisPaintopBox;
 class KisFavoriteResourceManager;
 class KisDisplayFilter;
 class KisDisplayColorConverter;

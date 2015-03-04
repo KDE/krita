@@ -36,7 +36,6 @@ class KoProperties;
 class KoShapeConfigFactoryBase;
 class KoShapeConfigWidgetBase;
 class KoShapeLoadingContext;
-class KoDataCenterBase;
 class KoDocumentResourceManager;
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"

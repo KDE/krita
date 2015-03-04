@@ -26,9 +26,7 @@
 
 #include <KoTextEditor.h>
 
-class KoInlineCite;
 class KoBibliographyInfo;
-class BibliographyEntryTemplate;
 class QListWidgetItem;
 
 class InsertBibliographyDialog : public QDialog

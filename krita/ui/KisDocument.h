@@ -54,16 +54,13 @@ class KoShapeBasedDocumentBase;
 class KoShapeLayer;
 class KoStore;
 class KoOdfReadStore;
-class KoOdfWriteStore;
 class KoDocumentInfo;
 class KoProgressUpdater;
 class KoProgressProxy;
 class KoDocumentInfoDlg;
 
-class KisChildDoc;
 class KisUndoStore;
 class KisPaintingAssistant;
-class KisViewManager;
 class KisPart;
 
 class KisPart;

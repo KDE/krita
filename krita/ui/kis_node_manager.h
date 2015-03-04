@@ -24,17 +24,14 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class QAction;
 class KActionCollection;
 
 class KoCompositeOp;
 class KoColorSpace;
 class KUndo2MagicString;
 
-class KisDocument;
 class KisFilterStrategy;
 class KisViewManager;
-class KisFilterConfiguration;
 class KisActionManager;
 class KisView;
 

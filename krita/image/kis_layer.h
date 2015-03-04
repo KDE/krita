@@ -36,10 +36,8 @@
 template <class T>
 class QStack;
 
-class QIcon;
 class QBitArray;
 class KisCloneLayer;
-class KisNodeVisitor;
 
 namespace KisMetaData
 {

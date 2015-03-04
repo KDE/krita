@@ -36,9 +36,7 @@ class QTextBlock;
 class TableOfContentsStyleConfigure;
 class TableOfContentsEntryModel;
 class TableOfContentsEntryDelegate;
-class TextShape;
 class KoTableOfContentsGeneratorInfo;
-class KoStyleManager;
 class KoTextEditor;
 
 class TableOfContentsConfigure : public QDialog

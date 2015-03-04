@@ -29,7 +29,6 @@
 
 class QPainter;
 class QPainter;
-class QPolygonF;
 
 class KisColorSelector: public QWidget
 {

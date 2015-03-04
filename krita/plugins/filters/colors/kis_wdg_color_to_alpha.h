@@ -24,7 +24,6 @@
 #include <kis_config_widget.h>
 
 class KoColor;
-class KisFilter;
 class Ui_WdgColorToAlphaBase;
 
 

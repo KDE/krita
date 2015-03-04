@@ -24,7 +24,6 @@
 #include <kis_canvas2.h>
 #include "kis_acs_types.h"
 
-class QColor;
 class KoColor;
 class QTimer;
 class KoColorSpace;

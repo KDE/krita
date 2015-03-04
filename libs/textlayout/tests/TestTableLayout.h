@@ -27,12 +27,9 @@
 #include <KoTextLayoutRootArea.h>
 #include <KoTextLayoutTableArea.h>
 
-class QPainter;
-class KoViewConverter;
 class KoStyleManager;
 class KoTableStyle;
 class QTextDocument;
-class QTextLayout;
 class QTextTable;
 
 #define ROUNDING 0.126

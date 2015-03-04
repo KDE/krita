@@ -25,7 +25,6 @@
 
 class QString;
 class QIODevice;
-class QXmlStreamReader;
 class KoStore;
 class KoOdfStylesReader;
 

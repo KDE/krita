@@ -39,7 +39,6 @@ class QPen;
 class KUndo2Command;
 class QRect;
 class QRectF;
-class QStringList;
 class QBitArray;
 class QPainterPath;
 

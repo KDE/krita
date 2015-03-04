@@ -27,7 +27,6 @@
 
 #include <kxmlguiclient.h>
 
-class KDialog;
 class KoScriptingModule;
 namespace Kross {
     class Action;

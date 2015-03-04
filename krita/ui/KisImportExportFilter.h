@@ -26,7 +26,6 @@ Boston, MA 02110-1301, USA.
 #include <QPointer>
 
 #include "krita_export.h"
-class QIODevice;
 class KisFilterChain;
 class KoUpdater;
 

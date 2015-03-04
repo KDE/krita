@@ -24,7 +24,6 @@
 #include <kaction.h>
 
 class KoCanvasBase;
-class KoTextEditor;
 
 class InsertSemanticObjectActionBase : public KAction
 {

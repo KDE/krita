@@ -22,10 +22,6 @@
 
 #include <kis_brush_based_paintop_options_widget.h>
 
-class KisHairyInkOption;
-class KisHairyShapeOption;
-class KisHairyBristleOption;
-class KisBrushOptionWidget;
 
 class KisHairyPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {

@@ -23,7 +23,6 @@
 #include <kis_types.h>
 #include "ui_wdgimageproperties.h"
 
-class KoID;
 class KoColorSpace;
 class KoColor;
 class KoColorPopupAction;

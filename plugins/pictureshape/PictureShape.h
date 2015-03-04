@@ -38,7 +38,6 @@
 class KoImageData;
 class KoImageCollection;
 class PictureShape;
-class KoPathShape;
 class KoClipPath;
 
 namespace _Private

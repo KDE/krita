@@ -26,7 +26,6 @@
 #include <kis_brush_based_paintop_options_widget.h>
 #include <kis_image.h>
 
-class KisPressureSizeOption;
 class KisDuplicateOpOption;
 
 class KisDuplicateOpSettingsWidget : public KisBrushBasedPaintopOptionWidget

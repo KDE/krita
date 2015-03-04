@@ -31,9 +31,7 @@ class QPoint;
 class QRect;
 class QRectF;
 class QPainter;
-class KoViewConverter;
 class KisCoordinatesConverter;
-class KisViewManager;
 
 
 /**

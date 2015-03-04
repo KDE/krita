@@ -25,7 +25,6 @@
 #include <kis_painter.h>
 #include <kis_paint_information.h>
 
-class KisPaintDevice;
 class KoColorSpace;
 
 const QString PRESET_FILE_NAME = "hairy-benchmark1.kpp";

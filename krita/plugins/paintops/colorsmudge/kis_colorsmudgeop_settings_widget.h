@@ -21,7 +21,6 @@
 
 #include <kis_brush_based_paintop_options_widget.h>
 
-class KisBrushOptionWidget;
 
 class KisColorSmudgeOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {

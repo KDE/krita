@@ -24,7 +24,6 @@
 #include <kpagedialog.h>
 
 class KoDocumentInfo;
-class KoDocumentRdfBase;
 class KPageWidgetItem;
 class KoPageWidgetItem;
 

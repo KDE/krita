@@ -30,7 +30,6 @@ class KoShapeLayer;
 class KisCanvas2;
 class KisDocument;
 class KisNameServer;
-class KoDataCenterBase;
 
 /**
  * KisShapeController keeps track of new layers, shapes, masks and

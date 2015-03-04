@@ -31,7 +31,6 @@
 #include <QMetaType>
 #include <QVector>
 
-class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
 class KoListStyle;
@@ -41,7 +40,6 @@ class KoTableColumnStyle;
 class KoTableRowStyle;
 class KoTableCellStyle;
 class KoSectionStyle;
-class KoXmlWriter;
 class KoShapeSavingContext;
 class KoTextShapeData;
 class KoTextTableTemplate;

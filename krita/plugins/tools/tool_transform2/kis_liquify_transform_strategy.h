@@ -28,10 +28,8 @@ class QPointF;
 class QPainter;
 class KisCoordinatesConverter;
 class ToolTransformArgs;
-class QTransform;
 class TransformTransactionProperties;
 class QCursor;
-class QImage;
 
 
 class KisLiquifyTransformStrategy : public KisTransformStrategyBase

@@ -58,12 +58,10 @@
 
 #define CHECK_MODE_SANITY_OR_RETURN(_mode) if (mode() != _mode) { WARN_WRONG_MODE(mode()); return; }
 
-class KActionCollection;
 class KoCanvasBase;
 class KoPattern;
 class KoAbstractGradient;
 class KisFilterConfiguration;
-class KisPainter;
 class QPainter;
 class QPainterPath;
 class QPolygonF;

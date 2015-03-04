@@ -12,7 +12,6 @@ class KoTextDocumentLayout;
 class KoSectionStyle;
 class KoStyleManager;
 class QTextDocument;
-class QTextFrame;
 
 class TestSections : public QObject
 {

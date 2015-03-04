@@ -26,7 +26,6 @@
 
 class KDialog;
 class WdgRawImport;
-class QProgressDialog;
 
 namespace KDcrawIface
 {

@@ -28,7 +28,6 @@
 class QImage;
 class QPoint;
 class QRect;
-class QRectF;
 class QSize;
 class QPainter;
 

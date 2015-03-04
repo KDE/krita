@@ -40,8 +40,6 @@
 
 class KisBrushBasedPaintOpSettings;
 
-class QWidget;
-class QPointF;
 class KisPainter;
 class KisColorSource;
 

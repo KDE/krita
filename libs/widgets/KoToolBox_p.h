@@ -31,7 +31,6 @@
 
 class QToolButton;
 class KoCanvasController;
-class KoCanvasBase;
 class KoShapeLayer;
 
 /**

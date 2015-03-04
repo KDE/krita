@@ -23,7 +23,6 @@
 #include "koodf_export.h"
 
 
-class KoStore;
 class QString;
 
 

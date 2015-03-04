@@ -23,7 +23,6 @@
 #include "kis_external_layer_iface.h"
 #include "kis_safe_document_loader.h"
 
-class KisPart;
 
 
 /**

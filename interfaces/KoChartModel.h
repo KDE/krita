@@ -26,7 +26,6 @@
 #include <QtPlugin>
 
 
-class QAbstractItemModel;
 class QRect;
 
 

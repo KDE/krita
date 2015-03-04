@@ -21,7 +21,6 @@
 
 #include <kis_paintop_options_widget.h>
 
-class KisExperimentOpOption;
 
 class KisExperimentPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {

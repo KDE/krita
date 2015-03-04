@@ -24,8 +24,6 @@
 #include "kis_properties_configuration.h"
 #include "kis_custom_image_widget.h"
 
-class KisDocument;
-class KoID;
 
 /**
  * The 'New image from clipboard' widget in the Krita startup widget.

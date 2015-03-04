@@ -20,7 +20,6 @@
 
 #include "kis_color_selector_base.h"
 
-class KisColorSelectorTriangle;
 class KisColorSelectorRing;
 class KisColorSelectorComponent;
 class KisColorSelectorSimple;

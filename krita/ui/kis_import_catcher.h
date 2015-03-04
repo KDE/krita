@@ -24,7 +24,6 @@
 #include <kis_types.h>
 
 class KisViewManager;
-class KisDocument;
 class KUrl;
 
 /**

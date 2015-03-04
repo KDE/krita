@@ -32,12 +32,9 @@
 
 #include <krita_export.h>
 
-class QWidget;
 
 class KisPaintOp;
 class KisPainter;
-class KoColorSpace;
-class KoInputDevice;
 
 /**
  * Manages the loading and creating of all paintop plugins.

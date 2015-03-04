@@ -25,7 +25,6 @@
 
 class QString;
 class KisFilterConfiguration;
-class QRect;
 
 /**
  * Action representing a filter.

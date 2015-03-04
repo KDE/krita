@@ -35,7 +35,6 @@
 #include <KoConfig.h>
 
 class QAbstractProxyModel;
-class QButtonGroup;
 class QAbstractItemDelegate;
 class QToolButton;
 class KoAbstractResourceServerAdapter;

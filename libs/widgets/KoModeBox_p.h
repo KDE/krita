@@ -34,7 +34,6 @@
 
 #include <KoToolManager.h>
 
-class QToolButton;
 class KoCanvasControllerWidget;
 class KoCanvasController;
 class KoCanvasBase;

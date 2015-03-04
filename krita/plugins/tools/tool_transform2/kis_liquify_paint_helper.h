@@ -21,7 +21,6 @@
 
 #include <QScopedPointer>
 
-class KisPaintInformation;
 class KisLiquifyTransformWorker;
 class KisCoordinatesConverter;
 class KoPointerEvent;

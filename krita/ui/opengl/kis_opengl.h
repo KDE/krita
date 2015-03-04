@@ -44,7 +44,6 @@
 #include "krita_export.h"
 
 class QGLWidget;
-class QGLContext;
 
 /**
  * This class manages a shared OpenGL context and provides utility

@@ -25,7 +25,6 @@
 #include <QString>
 #include <QScopedPointer>
 
-class KoXmlElement;
 class KoShapeSavingContext;
 class KoSection;
 

@@ -23,8 +23,6 @@
 #include <QObject>
 #include <QVariant>
 
-class KisColorSpace;
-class KisColorAdjustment;
 
 class LevelFilter : public QObject
 {

@@ -28,9 +28,6 @@
 #include <QPainter>
 
 class QString;
-class QPen;
-class QBrush;
-class QFont;
 class QColor;
 class QImage;
 class QMatrix;

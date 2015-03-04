@@ -23,7 +23,6 @@
 #include "kis_types.h"
 #include "kis_painter.h"
 
-class KisPaintInformation;
 class KisPainter;
 class KoColor;
 

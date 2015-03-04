@@ -22,7 +22,6 @@
 #include <QWidget>
 #include <kis_types.h>
 
-class QListWidgetItem;
 class KisFilterConfiguration;
 class KisViewManager;
 

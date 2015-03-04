@@ -25,7 +25,6 @@
 class KoColorPopupAction;
 class KoColorSlider;
 class KoColorPatch;
-class KisViewManager;
 
 class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT

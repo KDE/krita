@@ -34,7 +34,8 @@
 
 class QCheckBox;
 class QComboBox;
-class QGridLayout;
+
+class KActionCollection;
 
 class KoCanvasBase;
 class KisSliderSpinBox;

@@ -25,9 +25,6 @@
 #include <QStyleOptionProgressBar>
 #include <krita_export.h>
 
-class QLineEdit;
-class QDoubleValidator;
-class QTimer;
 class KisAbstractSliderSpinBoxPrivate;
 class KisSliderSpinBoxPrivate;
 class KisDoubleSliderSpinBoxPrivate;

@@ -23,7 +23,6 @@
 
 #include "flake_export.h"
 
-class KoCanvasBase;
 class KoShapeManager;
 class KoShape;
 class KoViewConverter;

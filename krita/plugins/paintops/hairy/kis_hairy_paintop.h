@@ -31,7 +31,6 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 
-class QPointF;
 class KisPainter;
 class KisBrushBasedPaintOpSettings;
 

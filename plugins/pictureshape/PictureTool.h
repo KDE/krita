@@ -25,10 +25,6 @@
 #include <kjob.h>
 
 class PictureShape;
-class KoFilterEffect;
-class QComboBox;
-class QScrollArea;
-class CropWidget;
 struct PictureToolUI;
 
 class PictureTool : public KoToolBase

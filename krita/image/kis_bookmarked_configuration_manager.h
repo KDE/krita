@@ -23,7 +23,6 @@
 
 class KisSerializableConfiguration;
 class KisSerializableConfigurationFactory;
-class KoID;
 class QString;
 class KLocalizedString;
 

@@ -38,8 +38,6 @@ class KoColorSpace;
 
 class KisPaintInformation;
 class KisBoundary;
-class KisQImageSP;
-class KisScaledBrush;
 
 enum enumBrushType {
     INVALID,
@@ -73,7 +71,6 @@ typedef KisSharedPtr<KisBrush> KisBrushSP;
 class BRUSH_EXPORT KisBrush : public KoResource, public KisShared
 {
 
-    class ScaledBrush;
 
 public:
     class ColoringInformation

@@ -26,16 +26,11 @@ class KoTextEditor;
 class KoTextShapeData;
 class KoViewConverter;
 class TextShape;
-class SimpleAnnotationWidget;
 
 class KAction;
 
-class QModelIndex;
 class QPainter;
-class QRectF;
 class QKeyEvent;
-class QTreeView;
-class QTextCursor;
 template <class T> class QVector;
 /// This tool allows to manipulate the tracked changes of a document. You can accept or reject changes.
 

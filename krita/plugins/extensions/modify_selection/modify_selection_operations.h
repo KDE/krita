@@ -25,7 +25,6 @@
 #include <operations/kis_filter_selection_operation.h>
 
 class KisViewManager;
-class KisSelectionFilter;
 
 struct GrowSelectionOperation : public KisFilterSelectionOperation {
     GrowSelectionOperation() : KisFilterSelectionOperation("growselection") {}

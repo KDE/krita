@@ -21,7 +21,6 @@
 #include <QComboBox>
 #include "kis_color_selector.h"
 
-class KisCanvas2;
 class KisColorSelectorComboBoxPrivate;
 class KoColorSpace;
 

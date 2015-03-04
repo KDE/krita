@@ -57,7 +57,6 @@ class KoCompositeOp;
 
 class KoCanvasBase;
 
-class KisSliderSpinBox;
 
 // wacom
 const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;

@@ -24,7 +24,6 @@
 #include "ui_wdgcompositiondocker.h"
 
 class CompositionModel;
-class QListView;
 class KisCanvas2;
 class KisAction;
 

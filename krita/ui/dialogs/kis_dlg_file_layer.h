@@ -22,9 +22,6 @@
 #include <kdialog.h>
 #include <QString>
 
-class QLabel;
-class QGroupBox;
-class KisConfigWidget;
 
 #include <kis_file_layer.h>
 

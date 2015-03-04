@@ -35,12 +35,9 @@
 #include "kis_signal_compressor.h"
 #include <KoIcon.h>
 
-class KisPainter;
 class QPoint;
 class KoCanvasBase;
-class KisRecordedPolyLinePaintAction;
 class QCheckBox;
-class QPushButton;
 class KisPaintingInformationBuilder;
 class KisToolLineHelper;
 

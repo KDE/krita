@@ -23,7 +23,6 @@
 #include "KoColor.h"
 
 class KoColor;
-class KisCanvas2;
 
 
 class KisColorPatches : public KisColorSelectorBase

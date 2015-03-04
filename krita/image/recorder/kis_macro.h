@@ -26,7 +26,6 @@
 #include "kis_serializable_configuration.h"
 #include "kis_types.h"
 
-class KisPlayInfo;
 class KisRecordedAction;
 class KisRecordedActionLoadContext;
 class KisRecordedActionSaveContext;

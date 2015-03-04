@@ -24,13 +24,10 @@
 #include "kis_canvas2.h"
 
 
-class KoChannelInfo;
 class KoColor;
 class QWidget;
 class QDoubleSpinBox;
 class KisHSVSlider;
-class QLabel;
-class QGridLayout;
 class KisDisplayColorConverter;
 
 

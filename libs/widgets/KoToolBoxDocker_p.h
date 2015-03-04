@@ -28,7 +28,6 @@
 
 class KoCanvasBase;
 class KoToolBox;
-class QTimer;
 
 class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
 {

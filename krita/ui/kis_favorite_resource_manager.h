@@ -28,13 +28,7 @@
 #include <KoColor.h>
 
 class QString;
-class QStringList;
-class QToolButton;
-class QPoint;
-class KoID;
 class KisPaintopBox;
-class KisPaletteManager;
-class KisViewManager;
 class KisPaintOpPreset;
 
 class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> >

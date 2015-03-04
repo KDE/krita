@@ -22,7 +22,6 @@
 
 #include "kis_curve_option_widget.h"
 
-class KisDoubleSliderSpinBox;
 
 class QCheckBox;
 

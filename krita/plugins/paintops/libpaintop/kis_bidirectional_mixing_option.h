@@ -25,7 +25,6 @@
 #include <kis_types.h>
 
 class KisPropertiesConfiguration;
-class QLabel;
 class KisPainter;
 class QRect;
 

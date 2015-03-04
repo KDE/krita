@@ -28,7 +28,6 @@
 #include <krita_export.h>
 #include "kis_node_filter_interface.h"
 
-class KisNodeVisitor;
 class KisFilterConfiguration;
 
 /**

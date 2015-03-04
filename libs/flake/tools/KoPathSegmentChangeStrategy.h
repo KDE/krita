@@ -26,7 +26,6 @@
 #include <QPointF>
 
 class KoPathTool;
-class KoCanvasBase;
 class KoPathShape;
 
 /**

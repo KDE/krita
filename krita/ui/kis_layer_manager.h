@@ -26,10 +26,7 @@
 #include "KisView.h"
 
 class KAction;
-class QAction;
-class KActionCollection;
 
-class KisFilterStrategy;
 class KisViewManager;
 class KisFilterConfiguration;
 class KisNodeCommandsAdapter;

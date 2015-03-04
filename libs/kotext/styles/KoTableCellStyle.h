@@ -38,7 +38,6 @@ class QTextTableCell;
 class QRectF;
 class KoStyleStack;
 class KoGenStyle;
-class KoGenStyles;
 class KoParagraphStyle;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;

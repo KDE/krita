@@ -23,7 +23,6 @@
 #include <qtsingleapplication/qtsingleapplication.h>
 #include "krita_export.h"
 
-class KisPart;
 class KisMainWindow;
 class KisApplicationPrivate;
 

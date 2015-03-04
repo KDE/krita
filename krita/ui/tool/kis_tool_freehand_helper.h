@@ -36,7 +36,6 @@ class KisRecordingAdapter;
 class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
-class KisPainter;
 
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject

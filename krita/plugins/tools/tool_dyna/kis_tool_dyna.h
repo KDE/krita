@@ -32,11 +32,8 @@
 
 class KisDoubleSliderSpinBox;
 class QCheckBox;
-class QComboBox;
 class QGridLayout;
-class QSlider;
 
-class QDoubleSpinBox;
 
 class KoCanvasBase;
 

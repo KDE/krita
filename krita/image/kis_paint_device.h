@@ -42,15 +42,11 @@ class QString;
 class QColor;
 class QIODevice;
 
-class KoStore;
 class KoColor;
 class KoColorSpace;
 class KoColorProfile;
 
-class KisHLineIteratorNG;
-class KisRandomSubAccessorPixel;
 class KisDataManager;
-class KisSelectionComponent;
 class KisPaintDeviceWriter;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;

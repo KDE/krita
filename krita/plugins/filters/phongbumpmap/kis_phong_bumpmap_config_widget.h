@@ -24,7 +24,6 @@
 #include "kis_config_widget.h"
 #include "kis_image.h"
 
-class KisNodeModel;
 
 class KisPhongBumpmapWidget : public QWidget, public Ui::WdgPhongBumpmap
 {

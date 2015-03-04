@@ -30,12 +30,8 @@
 
 
 
-class KisPainter;
-class KisFillPainter;
 class QWidget;
-class QLabel;
 class QCheckBox;
-class QComboBox;
 class KisSliderSpinBox;
 class KoCanvasBase;
 

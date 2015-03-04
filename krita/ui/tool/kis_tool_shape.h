@@ -33,7 +33,6 @@
 class KoCanvasBase;
 class KoPathShape;
 
-class QGridLayout;
 
 class WdgGeometryOptions : public QWidget, public Ui::WdgGeometryOptions
 {

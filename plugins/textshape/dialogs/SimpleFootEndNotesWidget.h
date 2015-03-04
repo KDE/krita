@@ -27,8 +27,6 @@
 #include <KoInlineNote.h>
 
 class TextTool;
-class ReferencesTool;
-class KoStyleManager;
 
 class SimpleFootEndNotesWidget : public QWidget
 {

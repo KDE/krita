@@ -5,8 +5,6 @@
 #include <QtTest>
 
 class QTextDocument;
-class KoTextEditor;
-class TextTool;
 
 class TestChangeTrackedDelete : public QObject
 {

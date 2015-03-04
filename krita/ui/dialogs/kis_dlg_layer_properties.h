@@ -28,10 +28,8 @@
 #include "ui_wdglayerproperties.h"
 
 
-class QTimer;
 class QWidget;
 class QBitArray;
-class KisChannelFlagsWidget;
 class KisViewManager;
 class KisDocument;
 

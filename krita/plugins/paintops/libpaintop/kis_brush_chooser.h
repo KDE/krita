@@ -26,7 +26,6 @@ class KisDoubleSliderSpinBox;
 class QLabel;
 class QCheckBox;
 
-class KisMultipliersDoubleSliderSpinBox;
 class KisDoubleSliderSpinBox;
 class KisSpacingSelectionWidget;
 class KoResourceItemChooser;

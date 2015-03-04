@@ -26,7 +26,6 @@
 #include "kis_shared.h"
 #include "krita_export.h"
 
-class QImage;
 
 /**
  * A KisPaintOpPreset contains a particular set of settings

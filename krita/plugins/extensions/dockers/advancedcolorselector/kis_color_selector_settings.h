@@ -27,7 +27,6 @@ namespace Ui {
     class KisColorSelectorSettings;
 }
 class KIcon;
-class KisCanvas2;
 
 class KisColorSelectorSettings : public KisPreferenceSet {
     Q_OBJECT

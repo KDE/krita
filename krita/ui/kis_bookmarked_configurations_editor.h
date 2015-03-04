@@ -24,7 +24,6 @@
 
 class KisBookmarkedConfigurationsModel;
 class KisSerializableConfiguration;
-class QModelIndex;
 class QItemSelection;
 
 /**

@@ -27,7 +27,6 @@
 #include <QString>
 #include <QDockWidget>
 
-class KoCanvasController;
 
 /**
  * Factory class to create a new KoToolBox that contains the buttons

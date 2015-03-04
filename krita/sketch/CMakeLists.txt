@@ -3,8 +3,8 @@ if (WIN32)
 
     if (ENABLE_SKETCH_STARTUP_MAGIC)
         add_definitions(-DSKETCH_ENABLE_STARTUP_MAGIC)
-    endif (ENABLE_SKETCH_STARTUP_MAGIC)
-endif (WIN32)
+    endif ()
+endif ()
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
@@ -103,9 +103,9 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 
 if (WIN32)
     set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
-else (WIN32)
+else ()
     kde4_add_app_icon(kritasketch_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
-endif (WIN32)
+endif ()
 
 # Krita Sketch library with shared things needed in both plugin and application
 # =============================================================================

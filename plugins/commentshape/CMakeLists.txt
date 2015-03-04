@@ -4,7 +4,7 @@ include_directories(
     ${FLAKE_INCLUDES}
 )
 
-SET( commentshape_LIB_SRCS
+set( commentshape_LIB_SRCS
      CommentShape.cpp
      CommentShapeFactory.cpp
      CommentTool.cpp

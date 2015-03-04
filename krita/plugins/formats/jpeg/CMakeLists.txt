@@ -2,9 +2,9 @@ add_subdirectory(tests)
 
 if(LCMS2_FOUND)
     include_directories( ${LCMS2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
-else(LCMS2_FOUND)
+else()
     include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
-endif(LCMS2_FOUND)
+endif()
 
 set(libkritaconverter_LIB_SRCS
     kis_jpeg_converter.cc
@@ -22,9 +22,9 @@ kde4_add_plugin(kritajpegimport ${kritajpegimport_PART_SRCS})
 
 if(LCMS2_FOUND)
     target_link_libraries(kritajpegimport kritaui jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
-else(LCMS2_FOUND)
+else()
     target_link_libraries(kritajpegimport kritaui jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
-endif(LCMS2_FOUND)
+endif()
 
 install(TARGETS kritajpegimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -41,9 +41,9 @@ kde4_add_plugin(kritajpegexport ${kritajpegexport_PART_SRCS})
 
 if(LCMS2_FOUND)
     target_link_libraries(kritajpegexport kritaui jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
-else(LCMS2_FOUND)
+else()
     target_link_libraries(kritajpegexport kritaui jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
-endif(LCMS2_FOUND)
+endif()
 
 install(TARGETS kritajpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

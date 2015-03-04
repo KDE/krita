@@ -8,4 +8,4 @@ if(KDE4_BUILD_TESTS)
   
   target_link_libraries(propertytest  ${KDE4_KDEUI_LIBS} koproperty )
 
-endif(KDE4_BUILD_TESTS)
+endif()

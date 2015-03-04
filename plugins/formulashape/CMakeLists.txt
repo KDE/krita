@@ -3,7 +3,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-label)
     add_definitions(-Wno-sign-compare)
     add_definitions(-Wno-unused-function)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
@@ -99,7 +99,7 @@ set (formulashape_PART_SRCS
    itexToMML/lex.yy.c
    itexToMML/y.tab.c
 )
-endif (NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+endif ()
 
 kde4_add_ui_files( formulashape_PART_SRCS
     FormulaToolWidget.ui

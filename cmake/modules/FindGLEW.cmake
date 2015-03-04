@@ -22,7 +22,7 @@ if (GLEW_INCLUDE_DIRS AND GLEW_LIBRARIES)
     # Already in cache
     set(GLEW_FOUND TRUE)
 
-else (GLEW_INCLUDE_DIRS AND GLEW_LIBRARIES)
+else ()
 
     find_path(GLEW_INCLUDE_DIR GL/glew.h)
     find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64)
@@ -38,4 +38,4 @@ else (GLEW_INCLUDE_DIRS AND GLEW_LIBRARIES)
 
     mark_as_advanced(GLEW_INCLUDE_DIR GLEW_LIBRARY)
 
-endif (GLEW_INCLUDE_DIRS AND GLEW_LIBRARIES)
+endif ()

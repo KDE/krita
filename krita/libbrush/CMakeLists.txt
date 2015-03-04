@@ -24,16 +24,16 @@ kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
 
 if (WIN32)
     target_link_libraries(kritalibbrush kritaimage kowidgets ${WIN32_PLATFORM_NET_LIBS})
-else (WIN32)
+else ()
     target_link_libraries(kritalibbrush kritaimage kowidgets)
-endif (WIN32)
+endif ()
 
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
   target_link_libraries(kritalibbrush  ${Vc_LIBRARIES})
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
-endif(HAVE_VC)
+endif()
 
 target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaimage kowidgets)
 

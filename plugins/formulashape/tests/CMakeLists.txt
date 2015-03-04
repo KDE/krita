@@ -1,4 +1,4 @@
-ENABLE_TESTING()
+enable_testing()
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 ########### AttributeManager Test ###############
@@ -42,7 +42,7 @@ if(NOT WIN32)
 set(TestCursor_SRCS
     ${TestCursor_SRCS}
     ../FormulaCursor.cpp)
-endif(NOT WIN32)
+endif()
 
 kde4_add_ui_files( TestCursor_SRCS
     ../FormulaToolWidget.ui

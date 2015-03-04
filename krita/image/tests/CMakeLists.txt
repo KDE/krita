@@ -3,7 +3,7 @@ include_directories(    ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_
 
 macro_add_unittest_definitions()
 
-SET(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
+set(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
 kde4_add_ui_files(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
 kde4_add_executable(KisRandomGeneratorDemo ${KisRandomGeneratorDemoSources})
 target_link_libraries(KisRandomGeneratorDemo ${KDE4_KDEUI_LIBS} kritaimage ${KDEWIN_LIBRARIES})
@@ -569,7 +569,7 @@ set(kis_processings_test_SRCS kis_processings_test.cpp )
 kde4_add_unit_test(KisProcessingsTest TESTNAME krita-image-KisProcessingsTest ${kis_processings_test_SRCS})
 target_link_libraries(KisProcessingsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
-endif(LCMS2_FOUND)
+endif()
 
 ########### next target ###############
 

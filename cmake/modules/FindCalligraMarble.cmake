@@ -61,7 +61,7 @@ endfunction()
 if ( MARBLE_INCLUDE_DIR AND MARBLE_LIBRARIES )
    # in cache already
    set( MARBLE_FIND_QUIETLY TRUE )
-endif ( MARBLE_INCLUDE_DIR AND MARBLE_LIBRARIES )
+endif ()
 
 find_path( MARBLE_INCLUDE_DIR NAMES marble/MarbleMap.h PATH_SUFFIXES marble)
 find_file( MARBLE_GLOBAL_HEADER NAMES marble/MarbleGlobal.h PATH_SUFFIXES marble)
@@ -87,7 +87,7 @@ if(MARBLE_GLOBAL_HEADER)
 
     set(MARBLE_VERSION "${MARBLE_VERSION_MAJOR}.${MARBLE_VERSION_MINOR}.${MARBLE_VERSION_PATCH}")
 
-endif(MARBLE_GLOBAL_HEADER)
+endif()
 
 include( FindPackageHandleStandardArgs )
 
@@ -102,9 +102,9 @@ if(MARBLE_VERSION)
             "Could not find Marble"
     )
 
-else(MARBLE_VERSION)
+else()
     find_package_handle_standard_args( marble
             DEFAULT_MSG
             MARBLE_INCLUDE_DIR
             MARBLE_LIBRARIES )
-endif(MARBLE_VERSION)
+endif()

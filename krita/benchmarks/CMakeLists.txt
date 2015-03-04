@@ -7,7 +7,7 @@ if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
   set(LINK_VC_LIB ${Vc_LIBRARIES})
-endif(HAVE_VC)
+endif()
 
 macro_add_unittest_definitions()
 

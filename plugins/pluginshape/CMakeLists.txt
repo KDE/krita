@@ -2,7 +2,7 @@ include_directories( ${KOMAIN_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
-SET (pluginshape_LIB_SRCS
+set (pluginshape_LIB_SRCS
     PluginShape.cpp
     PluginShapeFactory.cpp
     Plugin.cpp

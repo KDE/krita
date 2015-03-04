@@ -830,15 +830,12 @@ void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCo
     bool itemsSelected = selectionCount() > 0;
     if (itemsSelected) {
         QAction *a = KStandardAction::cut(this, SLOT(slotEditCut()), &pop);
-        a->setShortcut(QKeySequence::UnknownKey); // shortcuts have no effect in the popup menu
         pop.addAction(a);
         a = KStandardAction::copy(this, SLOT(slotEditCopy()), &pop);
-        a->setShortcut(QKeySequence::UnknownKey); // shortcuts have no effect in the popup menu
         pop.addAction(a);
     }
     if (!m_sectionData->copy_list.isEmpty()) {
         QAction *a = KStandardAction::paste(this, SLOT(slotEditPaste()), &pop);
-        a->setShortcut(QKeySequence::UnknownKey); // shortcuts have no effect in the popup menu
         pop.addAction(a);
     }
 
@@ -847,6 +844,7 @@ void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCo
         const KGuiItem del = KStandardGuiItem::del();
         QAction *a = new KAction(del.icon(), del.text(), &pop);
         a->setToolTip(del.toolTip());
+        a->setShortcut(QKeySequence(QKeySequence::Delete));
         connect(a, SIGNAL(activated()), SLOT(slotEditDelete()));
         pop.addAction(a);
     }

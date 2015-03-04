@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QRect>
 #include <QVector>
+#include <QIODevice>
 
 #include "kis_paint_device.h"
 
@@ -89,6 +90,11 @@ public:
      * Get the id of the current context.
      */
     int currentContext();
+
+    QList<int> contexts();
+
+    bool writeContext(int id, KisPaintDeviceWriter &store);
+    bool readContext(int id, QIODevice *stream);
 
 private:
     struct Context;

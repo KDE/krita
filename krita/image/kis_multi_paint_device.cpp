@@ -136,6 +136,38 @@ int KisMultiPaintDevice::currentContext()
     return m_d->currentContext->id;
 }
 
+QList<int> KisMultiPaintDevice::contexts()
+{
+    QList<int> result;
 
+    QHash<int, Context*>::const_iterator it = m_d->storedContexts.constBegin();
+    while (it != m_d->storedContexts.constEnd()) {
+        result.append(it.value()->id);
+        ++it;
+    }
+
+    return result;
+}
+
+bool KisMultiPaintDevice::writeContext(int id, KisPaintDeviceWriter &store)
+{
+    Context *context = m_d->storedContexts.value(id, 0);
+    if (!context) return false;
+
+    return context->dataManager->write(store);
+}
+
+bool KisMultiPaintDevice::readContext(int id, QIODevice *stream)
+{
+    KisDataManagerSP dataManager = new KisDataManager(pixelSize(), defaultPixel());
+
+    m_d->storedContexts.insert(id, new Context(id, dataManager));
+
+    if (m_d->nextFreeId <= id) {
+        m_d->nextFreeId = id + 1;
+    }
+
+    return dataManager->read(stream);
+}
 
 #include "kis_multi_paint_device.moc"

@@ -168,7 +168,7 @@ public:
      * Return the set of keyframes associated with this node.
      * @return keyframe sequence
      */
-    KisKeyframeSequence *keyframes();
+    KisKeyframeSequence *keyframes() const;
 
     /**
      * Update the state of the node to that at the given time within

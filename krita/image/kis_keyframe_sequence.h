@@ -34,7 +34,7 @@ public:
     KisKeyframeChannel *createChannel(const QString& name, const QString& displayName);
     KisKeyframeChannel *getChannel(const QString& name);
 
-    QList<KisKeyframeChannel*> channels();
+    QList<KisKeyframeChannel*> channels() const;
 
     KisNodeWSP node();
 private:

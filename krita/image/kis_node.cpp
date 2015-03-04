@@ -509,7 +509,7 @@ void KisNode::setDirty(const QRect & rect)
     }
 }
 
-KisKeyframeSequence* KisNode::keyframes()
+KisKeyframeSequence* KisNode::keyframes() const
 {
     return m_d->keyframes;
 }

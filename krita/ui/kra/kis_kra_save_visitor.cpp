@@ -50,6 +50,7 @@
 #include <kis_pixel_selection.h>
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_io_backend.h>
+#include <kis_multi_paint_device.h>
 
 #include "kis_store_paintdevice_writer.h"
 #include "flake/kis_shape_selection.h"
@@ -256,6 +257,33 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
         m_store->write((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
         m_store->close();
     }
+
+    if (device->inherits("KisMultiPaintDevice")) {
+        KisMultiPaintDevice *dev = qobject_cast<KisMultiPaintDevice*>(device.data());
+        QList<int> contexts = dev->contexts();
+
+        for (int i = 0; i < contexts.count(); i++) {
+            int id = contexts[i];
+            m_store->open(location + ".f" + QString::number(id));
+            if(!dev->writeContext(id, *m_writer)) {
+                device->disconnect();
+                m_store->close();
+                return false;
+            }
+            m_store->close();
+        }
+
+        QByteArray framelist;
+        for (int i = 0; i < contexts.count(); i++) {
+            int id = contexts[i];
+            framelist.append(QString::number(id).toLatin1());
+            framelist.append("\n");
+        }
+        m_store->open(location + ".frames");
+        m_store->write(framelist);
+        m_store->close();
+    }
+
     m_store->setCompressionEnabled(true);
     return true;
 }

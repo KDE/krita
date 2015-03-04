@@ -59,7 +59,7 @@ KisKeyframeChannel* KisKeyframeSequence::getChannel(const QString& name)
     }
 }
 
-QList<KisKeyframeChannel*> KisKeyframeSequence::channels()
+QList<KisKeyframeChannel*> KisKeyframeSequence::channels() const
 {
     return m_d->channels.values();
 }

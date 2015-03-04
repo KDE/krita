@@ -655,7 +655,10 @@ QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
     }
 
     // TODO: string comparizon: optimize!
-    if (compositeOpId() != COMPOSITE_COPY) {
+    if (pos != KisNode::N_FILTHY &&
+        pos != KisNode::N_FILTHY_PROJECTION &&
+        compositeOpId() != COMPOSITE_COPY) {
+
         changeRect |= rect;
     }
 

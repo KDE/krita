@@ -152,7 +152,12 @@ QSize KoDockWidgetTitleBar::sizeHint() const
         return QSize(d->preCollapsedWidth, height);
     }
     else {
-        return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
+        if (d->textVisibilityMode == FullTextAlwaysVisible) {
+            return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
+        }
+        else {
+            return QSize(buttonWidth, height);
+        }
     }
 }
 

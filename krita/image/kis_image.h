@@ -420,7 +420,7 @@ public:
      * Sets the default color of the root layer projection. All the layers
      * will be merged on top of this very color
      */
-    void setDefaultProjectionColor(KoColor color);
+    void setDefaultProjectionColor(const KoColor &color);
 
     /**
      * \see setDefaultProjectionColor()

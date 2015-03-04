@@ -85,10 +85,10 @@ public:
     using KoShape::update;
     void update() const;
 
-signals:
+Q_SIGNALS:
     void updateConfigWidget();
 
-private slots:
+private Q_SLOTS:
     void slotChartTypeChanged(ChartType chartType );
     void slotKdLegendChanged();
 

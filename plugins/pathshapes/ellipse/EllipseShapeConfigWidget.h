@@ -38,7 +38,7 @@ public:
     virtual bool showOnShapeCreate() { return false; }
     /// reimplemented
     virtual KUndo2Command * createCommand();
-private slots:
+private Q_SLOTS:
     void closeEllipse();
 private:
     Ui::EllipseShapeConfigWidget widget;

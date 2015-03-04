@@ -44,10 +44,10 @@ public:
     static QLatin1String valueToQString(Activity activity);
 
 
-signals:
+Q_SIGNALS:
     void filteringFinished();
 
-private slots:
+private Q_SLOTS:
     // life cycle: show -> close
     void slotShowGmicDialog();
     void slotCloseGmicDialog();

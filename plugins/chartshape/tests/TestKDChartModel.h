@@ -37,7 +37,7 @@ class TestKDChartModel : public QObject
 public:
     TestKDChartModel();
 
-private slots:
+private Q_SLOTS:
     void init();
     void cleanup();
     void initTestCase();

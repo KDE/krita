@@ -39,7 +39,7 @@ public:
     qreal whitePoint() const;
     void setWhitePoint(qreal wp);
 
-signals:
+Q_SIGNALS:
     void sigBlackPointChanged(qreal value);
     void sigWhitePointChanged(qreal value);
 

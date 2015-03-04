@@ -48,7 +48,7 @@ public:
     void setProxyModel(ChartProxyModel *proxyModel);
     void setModel(QAbstractItemModel *model);
 
-protected slots:
+protected Q_SLOTS:
     void slotUpdateDialog();
     void slotInsertRowPressed();
     void slotDeleteRowPressed();

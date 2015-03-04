@@ -36,10 +36,10 @@ public:
 
     void save(KoParagraphStyle *style);
 
-signals:
+Q_SIGNALS:
     void parStyleChanged();
 
-private slots:
+private Q_SLOTS:
     void slotAlignChanged();
     void breakAfterChanged();
     void breakBeforeChanged();

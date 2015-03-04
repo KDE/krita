@@ -47,10 +47,10 @@ public:
      */
     void setDrawShadow(bool drawShadow);
 
-public slots:
+public Q_SLOTS:
     void documentOffsetMoved(const QPoint &);
 
-signals:
+Q_SIGNALS:
     void sizeChanged();
 
 public:

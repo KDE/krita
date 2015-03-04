@@ -55,7 +55,7 @@ private:
     void setupBrushPreviewSignals();
     void computeAspect();
 
-private slots:
+private Q_SLOTS:
     void prepareImage();
     void aspectToggled(bool toggled);
     void updateHeight(qreal value);

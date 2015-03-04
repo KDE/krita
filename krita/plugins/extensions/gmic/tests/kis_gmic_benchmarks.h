@@ -38,7 +38,7 @@ private:
     KisPaintDeviceSP m_device;
     QRect m_rect;
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

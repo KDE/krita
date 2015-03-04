@@ -37,7 +37,7 @@ public:
 
     ~Report();
 
-public slots:
+public Q_SLOTS:
     QString title();
     QString name();
     QString recordSource();

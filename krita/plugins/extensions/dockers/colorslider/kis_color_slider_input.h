@@ -40,7 +40,7 @@ public:
 protected:
     void init();
     virtual QWidget* createInput() = 0;
-signals:
+Q_SIGNALS:
     void updated();
     
 protected:
@@ -61,7 +61,7 @@ public:
 protected:
     virtual QWidget* createInput();
     KisCanvas2* m_canvas;
-public slots:
+public Q_SLOTS:
     void setValue(double);
     void update();
     void hueUpdate(int h);
@@ -71,7 +71,7 @@ public slots:
     void sliderIn();
     void sliderOut();
     void numInputChanged(double v);
-signals:
+Q_SIGNALS:
     void hueUpdated(int);
     void satUpdated(int, int);
     void toneUpdated(int, int);

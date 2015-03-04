@@ -36,7 +36,7 @@ public:
 
     void apply();
 
-private slots:
+private Q_SLOTS:
     void profileChanged(int i);
     void addUser();
     void deleteUser();

@@ -109,7 +109,7 @@ private:
     QImage convertToQImageFast(KisPaintDeviceSP paintDevice,
                                const QRect& unscaledRect);
 
-private slots:
+private Q_SLOTS:
 
     void configChanged();
 

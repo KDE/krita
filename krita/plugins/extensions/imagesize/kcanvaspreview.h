@@ -39,7 +39,7 @@ public:
     void setImageSize(qint32 w, qint32 h);
     void setCanvasSize(qint32 w, qint32 h);
     void setImageOffset(qint32 x, qint32 y);
-signals:
+Q_SIGNALS:
     void sigModifiedXOffset(int);
     void sigModifiedYOffset(int);
 

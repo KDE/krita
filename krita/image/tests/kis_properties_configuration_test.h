@@ -30,7 +30,7 @@ class KisPropertiesConfigurationTest : public QObject
     Q_OBJECT
 public:
     KisPropertiesConfigurationTest();
-private slots:
+private Q_SLOTS:
     void testSetGet();
     void testSerialization();
     void testDefaultValues();

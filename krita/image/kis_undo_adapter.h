@@ -47,7 +47,7 @@ public:
         m_undoStore = undoStore;
     }
 
-signals:
+Q_SIGNALS:
     void selectionChanged();
 
 protected:

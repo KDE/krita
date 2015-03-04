@@ -44,10 +44,10 @@ public:
 
   void setUnit(const KoUnit &unit);
 
-signals:
+Q_SIGNALS:
   void parStyleChanged();
 
-private slots:
+private Q_SLOTS:
   void dropCapsStateChanged();
   void paragraphDistanceChanged(qreal distance);
   void dropsLineSpanChanged(int lineSpan);

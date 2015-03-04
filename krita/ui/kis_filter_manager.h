@@ -51,7 +51,7 @@ public:
     void cancel();
     bool isStrokeRunning() const;
 
-private slots:
+private Q_SLOTS:
 
     void insertFilter(const QString &name);
     void showFilterDialog(const QString &filterId);

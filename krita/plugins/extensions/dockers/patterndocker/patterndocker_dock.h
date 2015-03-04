@@ -34,9 +34,9 @@ public:
     virtual void unsetCanvas();
 
     QString observerName() { return "PatternDockerDock"; }
-public slots:
+public Q_SLOTS:
     void patternChanged(KoPattern *pattern);
-private slots:
+private Q_SLOTS:
 
 private:
     KisPatternChooser* m_patternChooser;

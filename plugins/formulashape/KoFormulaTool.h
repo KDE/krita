@@ -71,7 +71,7 @@ public:
     /// Reset the cursor
     void resetFormulaEditor();
 
-public slots:
+public Q_SLOTS:
     /// Called when this tool instance is activated and fills m_formulaShape
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 

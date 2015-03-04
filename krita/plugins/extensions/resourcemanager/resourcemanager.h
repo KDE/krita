@@ -50,7 +50,7 @@ public:
     ResourceManager(QObject *parent, const QVariantList &);
     virtual ~ResourceManager();
 
-private slots:
+private Q_SLOTS:
     void slotImport();
     void slotCreateBundle();
     void slotManageBundles();

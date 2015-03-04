@@ -24,7 +24,7 @@
 class FillProcessingVisitorTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testFillColorNoSelection();
     void testFillPatternNoSelection();
     void testFillColorHaveSelection();

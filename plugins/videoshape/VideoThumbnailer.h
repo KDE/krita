@@ -51,11 +51,11 @@ public:
     void createThumbnail(VideoData *videoData, const QSize &size);
     QImage thumbnail();
 
-signals:
+Q_SIGNALS:
     void thumbnailReady();
     void signalCreateThumbnail(VideoData *videoData, const QSize &size);
 
-private slots:
+private Q_SLOTS:
     void slotCreateThumbnail(VideoData *videoData, const QSize &size);
     void frameReady(const Phonon::Experimental::VideoFrame2 & frame);
     void stateChanged(Phonon::State newState, Phonon::State oldState);

@@ -48,7 +48,7 @@ public:
     QString layerName() const;
     KisFileLayer::ScalingMethod scaleToImageResolution() const;
 
-protected slots:
+protected Q_SLOTS:
     void slotNameChanged(const QString &);
 
 private:

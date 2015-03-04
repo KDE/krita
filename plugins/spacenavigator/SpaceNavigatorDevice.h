@@ -35,7 +35,7 @@ public:
     virtual bool start();
     /// reimplemented from KoInputDeviceHandler
     virtual bool stop();
-private slots:
+private Q_SLOTS:
     void slotMoveEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons );
     void slotButtonEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons, Qt::MouseButton, int type );
 

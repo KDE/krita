@@ -44,10 +44,10 @@ public:
     void setCurrent(const KisPaintOpFactory* op);
     void setCurrent(const QString & paintOpId);
     
-signals:
+Q_SIGNALS:
     void activated(const QString&);
     
-private slots:
+private Q_SLOTS:
     void slotOpActivated(const QModelIndex& index);
     
 protected:

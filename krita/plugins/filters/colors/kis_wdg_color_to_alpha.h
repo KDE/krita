@@ -47,7 +47,7 @@ protected:
     void hideEvent(QHideEvent *);
     void showEvent(QShowEvent *);
 
-private slots:
+private Q_SLOTS:
     void slotFgColorChanged(const KoColor &color);
     void slotColorSelectorChanged(const QColor &color);
     void slotCustomColorSelected(const QColor &color);

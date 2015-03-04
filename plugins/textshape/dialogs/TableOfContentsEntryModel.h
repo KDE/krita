@@ -44,7 +44,7 @@ public:
 
     void saveData();
 
-signals:
+Q_SIGNALS:
     void tocEntryDataChanged();
 
 private:

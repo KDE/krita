@@ -41,7 +41,7 @@ public:
     void finishProgress();
     bool inProgress();
 
-signals:
+Q_SIGNALS:
     void sigProgress();
 
 private:

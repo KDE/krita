@@ -64,7 +64,7 @@ QString observerName() { return "LutDockerDock"; }
     qreal currentGamma() const;
     void setCurrentGamma(qreal value);
 
-private slots:
+private Q_SLOTS:
 
     void slotImageColorSpaceChanged();
 

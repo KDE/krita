@@ -67,7 +67,7 @@ public:
     /// Sets the height of the popup view rows
     void setRowHeight( int rowHeight );
 
-signals:
+Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
 
@@ -82,7 +82,7 @@ protected:
     /// reimplemented
     virtual void mouseMoveEvent( QMouseEvent * event );
 
-private slots:
+private Q_SLOTS:
     void indexChanged( int index );
     void resourceAdded(KoResource*);
     void resourceRemoved(KoResource*);

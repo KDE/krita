@@ -60,7 +60,7 @@ public:
 
     KisImageWSP image();
 
-public slots:
+public Q_SLOTS:
 
     virtual void cancel();
 

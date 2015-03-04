@@ -73,7 +73,7 @@ public:
     TWidget* getWidget(const QString& id) const {
         return dynamic_cast<TWidget*>(getWidget(id));
     }
-public slots:
+public Q_SLOTS:
 
     void showPopupWidget();
     
@@ -83,7 +83,7 @@ private:
     QLayout* createLayout();
     QIcon    arrowIcon();
     
-protected slots:
+protected Q_SLOTS:
     void slotButtonPressed();
     void slotWidgetChoosen(int index);
 

@@ -40,16 +40,16 @@ public:
     explicit SimpleCitationBibliographyWidget(ReferencesTool *tool,QWidget *parent = 0);
     ~SimpleCitationBibliographyWidget();
 
-public slots:
+public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
     void prepareTemplateMenu();
     void pixmapReady(int templateId);
 
-private slots:
+private Q_SLOTS:
     void applyTemplate(int templateId);
     void insertCustomBibliography();
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
     
 private:

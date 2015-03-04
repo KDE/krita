@@ -28,9 +28,9 @@ class KisAboutApplication : public QDialog
 public:
     explicit KisAboutApplication(const KAboutData *aboutData, QWidget *parent = 0);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 
 };
 

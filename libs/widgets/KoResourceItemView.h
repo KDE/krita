@@ -54,7 +54,7 @@ public:
 
     void updateView();
 
-signals:
+Q_SIGNALS:
 
     void currentResourceChanged(const QModelIndex &);
     void contextMenuRequested(const QPoint &);

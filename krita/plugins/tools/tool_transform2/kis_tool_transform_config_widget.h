@@ -40,18 +40,18 @@ public:
     bool showDecorations() const;
     bool workRecursively() const;
 
-public slots:
+public Q_SLOTS:
     void updateConfig(const ToolTransformArgs &config);
     void slotUpdateIcons();
 
-signals:
+Q_SIGNALS:
     void sigConfigChanged();
     void sigApplyTransform();
     void sigResetTransform();
     void sigRestartTransform();
     void sigEditingFinished();
 
-public slots:
+public Q_SLOTS:
 
     void slotFilterChanged(const KoID &filter);
     void slotWarpTypeChanged(int index);

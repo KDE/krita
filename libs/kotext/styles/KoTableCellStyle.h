@@ -339,7 +339,7 @@ public:
 
     KoBorder::BorderData getEdge(KoBorder::BorderSide side) const;
     KoBorder::BorderStyle getBorderStyle(KoBorder::BorderSide side) const;
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &newName);
 
 protected:

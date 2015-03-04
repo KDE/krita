@@ -38,10 +38,10 @@ public:
     QString toString() const;
     void fromString(const QString &string);
 
-private slots:
+private Q_SLOTS:
     void valueChanged();
 
-signals:
+Q_SIGNALS:
     void requestActivateLine(QWidget *widget);
 
 private:

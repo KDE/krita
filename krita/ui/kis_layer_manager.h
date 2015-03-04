@@ -49,7 +49,7 @@ public:
     ~KisLayerManager();
     void setView(QPointer<KisView>view);
 
-signals:
+Q_SIGNALS:
 
     void sigLayerActivated(KisLayerSP layer);
 
@@ -73,7 +73,7 @@ private:
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
 
-private slots:
+private Q_SLOTS:
 
     void mergeLayer();
 

@@ -40,11 +40,11 @@ public:
 
     void setUnit(const KoUnit &unit);
 
-public slots:
+public Q_SLOTS:
     void setParagraphStyle(KoParagraphStyle *style);
     void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
 
-private slots:
+private Q_SLOTS:
     void applyClicked();
 
 protected:

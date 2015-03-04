@@ -34,7 +34,7 @@ public:
     OffsetImage(QObject *parent, const QVariantList &);
     virtual ~OffsetImage();
 
-private slots:
+private Q_SLOTS:
 
     void slotOffsetImage();
     void slotOffsetLayer();

@@ -36,7 +36,7 @@ public:
     void setDisplay(KoCharacterStyle *style);
     void save(KoCharacterStyle *style) const;
     
-private slots:
+private Q_SLOTS:
     void hyphenateStateChanged();
 
 

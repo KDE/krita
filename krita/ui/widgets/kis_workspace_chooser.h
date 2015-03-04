@@ -35,7 +35,7 @@ public:
     KisWorkspaceChooser(KisViewManager * view, QWidget* parent = 0);
     virtual ~KisWorkspaceChooser();
 
-private slots:
+private Q_SLOTS:
     void slotSave();
     void resourceSelected( KoResource * resource );
     

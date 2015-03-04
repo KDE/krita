@@ -41,7 +41,7 @@ public:
     int fanCornersStep() const;
     int angleOffset() const;
 
-public slots:
+public Q_SLOTS:
     void setFanCornersEnabled(int state);
     void setFanCornersStep(int angle);
     void setAngleOffset(int angle);

@@ -167,7 +167,7 @@ public:
 
     bool wantsTouch() const { return true; }
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
     // Applies the current transformation to the original paint device and commits it to the undo stack
@@ -291,7 +291,7 @@ private:
 
     QPainterPath m_cursorOutline;
 
-private slots:
+private Q_SLOTS:
     void slotTrackerChangedConfig();
     void slotUiChangedConfig();
     void slotApplyTransform();

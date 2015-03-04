@@ -69,12 +69,12 @@ public:
     void setPrecisionEnabled(bool value);
     bool autoPrecisionEnabled();
 
-signals:
+Q_SIGNALS:
 
     void sigBrushChanged();
     void sigPrecisionChanged();
 
-private slots:
+private Q_SLOTS:
     void buttonClicked(int id);
     void precisionChanged(int value);
     void setAutoPrecisionEnabled(int value);

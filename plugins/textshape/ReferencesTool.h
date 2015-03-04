@@ -60,7 +60,7 @@ protected:
     /// reimplemented from superclass
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
-private slots:
+private Q_SLOTS:
     /// insert a citation
     void insertCitation();
     /// configure a bibliography
@@ -115,11 +115,11 @@ public:
     LabeledWidget(KAction *action, const QString label, LabelPosition pos, bool warningLabelRequired);
     void setWarningText(int pos, const QString &warning);
     void clearLineEdit();
-signals:
+Q_SIGNALS:
     void triggered(QString label);
     void lineEditChanged(QString);
 
-private slots:
+private Q_SLOTS:
     void returnPressed();
 
 protected:

@@ -45,7 +45,7 @@ public:
     void add(const QString &id, KisGeneratorSP item);
     KisFilterConfiguration* cloneConfiguration(KisFilterConfiguration* kfc);
 
-signals:
+Q_SIGNALS:
 
     void generatorAdded(QString id);
 

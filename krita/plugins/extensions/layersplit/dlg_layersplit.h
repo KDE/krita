@@ -47,7 +47,7 @@ public:
     bool disregardOpacity() const;
     int fuzziness() const;
 
-private slots:
+private Q_SLOTS:
 
     void applyClicked();
 

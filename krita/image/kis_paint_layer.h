@@ -138,7 +138,7 @@ public:
      */
     void setAlphaLocked(bool lock);
 
-public slots:
+public Q_SLOTS:
 
     // KisIndirectPaintingSupport
     KisLayer* layer() {

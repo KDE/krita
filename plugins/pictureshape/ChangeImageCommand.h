@@ -38,7 +38,7 @@ public:
     /// revert the actions done in redo
     virtual void undo();
 
-signals:
+Q_SIGNALS:
     void sigExecuted();
 
 private:

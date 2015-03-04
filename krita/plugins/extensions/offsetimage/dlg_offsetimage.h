@@ -48,7 +48,7 @@ public:
     int offsetY() const { return m_offsetY;}
 
 
-private slots:
+private Q_SLOTS:
     void okClicked();
     void slotOffsetXChanged(int);
     void slotOffsetYChanged(int);

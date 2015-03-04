@@ -62,7 +62,7 @@ public:
     virtual void unsetCanvas();
 
 
-protected slots:
+protected Q_SLOTS:
     /**
          * Activates the shape creation tool when a shape is selected.
          */

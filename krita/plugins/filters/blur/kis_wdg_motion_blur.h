@@ -36,7 +36,7 @@ public:
     }
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
-public slots:
+public Q_SLOTS:
     void angleSliderChanged(int);
     void angleDialChanged(int);
 private:

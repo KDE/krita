@@ -53,11 +53,11 @@ public:
     /// Returns true if a template in this group was the last one selected
     bool isSelected();
 
-signals:
+Q_SIGNALS:
     /// Emitted when the always use checkbox is selected
     void alwaysUseChanged(KisTemplatesPane* sender, const QString& alwaysUse);
 
-protected slots:
+protected Q_SLOTS:
     void selectionChanged(const QModelIndex& index);
 
     void openFile();

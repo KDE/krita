@@ -76,7 +76,7 @@ public:
      */
     QStandardItemModel *sectionsModel();
 
-public slots:
+public Q_SLOTS:
     /**
      * Call this to recalc all sections information
      */

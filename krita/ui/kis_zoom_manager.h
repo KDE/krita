@@ -61,7 +61,7 @@ public:
 
     QWidget *zoomActionWidget() const;
 
-public slots:
+public Q_SLOTS:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
     void slotScrollAreaSizeChanged();

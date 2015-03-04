@@ -47,10 +47,10 @@ public:
     void notifyDataChange(FormulaCommand* command, bool undo);
     void setFormulaElement ( FormulaElement* element);
     
-signals:
+Q_SIGNALS:
     void dataChanged(FormulaCommand* element, bool undo);
     
-public slots:
+public Q_SLOTS:
     ///only for debugging
     void writeElementTree();
 

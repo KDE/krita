@@ -61,7 +61,7 @@ class TestLoadingBase : public QObject
 public:
     TestLoadingBase();
 
-protected slots:
+protected Q_SLOTS:
     virtual void initTestCase();
 
 protected:

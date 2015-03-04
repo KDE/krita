@@ -69,7 +69,7 @@ protected:
 
     void paintEvent(QPaintEvent *e);
 
-private slots:
+private Q_SLOTS:
 
     void startFade();
     void removeMessage();

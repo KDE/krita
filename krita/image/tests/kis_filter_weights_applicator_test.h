@@ -24,7 +24,7 @@
 class KisFilterWeightsApplicatorTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testSpan_Scale_2_0_Aligned();
     void testSpan_Scale_2_0_Shift_0_5();
     void testSpan_Scale_2_0_Shift_0_75();

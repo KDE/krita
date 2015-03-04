@@ -42,10 +42,10 @@ class KRITAIMAGE_EXPORT KisThreadSafeSignalCompressor : public QObject
 public:
     KisThreadSafeSignalCompressor(int delay, KisSignalCompressor::Mode mode);
 
-public slots:
+public Q_SLOTS:
     void start();
 
-signals:
+Q_SIGNALS:
     void timeout();
     void internalRequestSignal();
 

@@ -64,7 +64,7 @@ public:
     /** Return the current element. */
     KoXmlElement currentElement() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
     * Return the element tag-name filter that will be applied on reading.
@@ -177,7 +177,7 @@ public slots:
     */
     QString text() const;
 
-signals:
+Q_SIGNALS:
 
     /**
     * This signal got emitted after start() was called for each
@@ -228,7 +228,7 @@ public:
     /** Destructor. */
     virtual ~KoScriptingOdfManifestReader() {}
 
-public slots:
+public Q_SLOTS:
     /** Returns the number of file-entries the manifest has. */
     int count() const {
         return m_entries.count();
@@ -272,7 +272,7 @@ public:
     KoScriptingOdfStylesReader(KoScriptingOdfStore *store, const KoXmlDocument &doc);
     /** Destructor. */
     virtual ~KoScriptingOdfStylesReader() {}
-public slots:
+public Q_SLOTS:
     //QString style(const QString &styleName);
 };
 
@@ -287,7 +287,7 @@ public:
     KoScriptingOdfContentReader(KoScriptingOdfStore *store, const KoXmlDocument &doc);
     /** Destructor. */
     virtual ~KoScriptingOdfContentReader() {}
-public slots:
+public Q_SLOTS:
     //QStringList headers(const QString &filter);
     //QStringList lists(const QString &filter);
     //QStringList images(const QString &filter);
@@ -337,7 +337,7 @@ public:
     //KoStore* readStore() const;
     //QIODevice* readDevice() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
     * Returns true if there exists a file with the defined name
@@ -425,7 +425,7 @@ public slots:
     //void setFilter(const QString &filter) {}
     //void start() {}
 
-signals:
+Q_SIGNALS:
 
     //void onElement();
     //void onHeader();

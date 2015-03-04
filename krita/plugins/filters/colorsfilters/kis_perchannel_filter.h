@@ -103,7 +103,7 @@ public:
     virtual void setConfiguration(const KisPropertiesConfiguration* config);
     virtual KisPropertiesConfiguration * configuration() const;
 
-private slots:
+private Q_SLOTS:
     virtual void setActiveChannel(int ch);
 
 private:

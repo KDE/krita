@@ -161,7 +161,7 @@ public:
     /// \internal
     KoToolProxyPrivate *priv();
 
-signals:
+Q_SIGNALS:
     /**
      * A tool can have a selection that is copy-able, this signal is emitted when that status changes.
      * @param hasSelection is true when the tool holds selected data.

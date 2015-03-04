@@ -57,7 +57,7 @@ public:
 
 
 
-private slots:
+private Q_SLOTS:
 
     void changePage(const QModelIndex&);
     void lockProperties(const QModelIndex& index);

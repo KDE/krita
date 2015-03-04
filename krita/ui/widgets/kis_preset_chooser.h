@@ -61,13 +61,13 @@ public:
 
     void setPresetFilter(const QString& paintOpId);
 
-signals:
+Q_SIGNALS:
     void resourceSelected(KoResource * resource);
 
-public slots:
+public Q_SLOTS:
     void updateViewSettings();
 
-private slots:
+private Q_SLOTS:
     void notifyConfigChanged();
 
 protected:

@@ -63,7 +63,7 @@ public:
 
     virtual QString quickHelp() const;
 
-private slots:
+private Q_SLOTS:
     void updateStroke();
     void setUseSensors(bool value);
     void setShowOutline(bool value);

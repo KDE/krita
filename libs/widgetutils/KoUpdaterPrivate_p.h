@@ -82,7 +82,7 @@ public:
         return m_points;
     }
 
-public slots:
+public Q_SLOTS:
 
     /// Cancel comes from KoUpdater
     void cancel();
@@ -94,7 +94,7 @@ public slots:
     /// progress comes from KoUpdater
     void setProgress( int percent );
 
-signals:
+Q_SIGNALS:
 
     /// Emitted whenever the progress changed
     void sigUpdated();

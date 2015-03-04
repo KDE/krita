@@ -171,7 +171,7 @@ public: // KisCanvas2 methods
 
     void setCursor(const QCursor &cursor);
 
-signals:
+Q_SIGNALS:
     void imageChanged(KisImageWSP image);
 
     void sigCanvasCacheUpdated();
@@ -182,7 +182,7 @@ signals:
     // emitted whenever the canvas widget thinks sketch should update
     void updateCanvasRequested(const QRect &rc);
 
-public slots:
+public Q_SLOTS:
 
     /// Update the entire canvas area
     void updateCanvas();
@@ -195,7 +195,7 @@ public slots:
 
     void channelSelectionChanged();
 
-private slots:
+private Q_SLOTS:
 
     /// The image projection has changed, now start an update
     /// of the canvas representation.

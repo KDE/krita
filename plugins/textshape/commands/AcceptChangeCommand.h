@@ -38,7 +38,7 @@ public:
     virtual void redo();
     virtual void undo();
 
-signals:
+Q_SIGNALS:
     void acceptRejectChange();
 
 private:

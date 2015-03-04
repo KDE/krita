@@ -101,7 +101,7 @@ public:
     explicit KoCanvasResourceManager(QObject *parent = 0);
     virtual ~KoCanvasResourceManager();
 
-public slots:
+public Q_SLOTS:
     /**
      * Set a resource of any type.
      * @param key the integer key
@@ -234,7 +234,7 @@ public:
      */
     void clearResource(int key);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted every time a resource is set that is either
      * new or different from the previous set value.

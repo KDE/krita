@@ -36,7 +36,7 @@ public:
     virtual qreal value(const KisPaintInformation&);
     virtual void reset();
     virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
-public slots:
+public Q_SLOTS:
     virtual void setPeriodic(bool periodic);
     virtual void setLength(int length);
 

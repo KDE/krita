@@ -78,7 +78,7 @@ public:
 
     void normalize();
 
-signals:
+Q_SIGNALS:
     void sigValuesChanged();
     void sigLockValuesChanged();
 

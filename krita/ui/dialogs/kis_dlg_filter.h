@@ -41,7 +41,7 @@ public:
 
     void setFilter(KisFilterSP f);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotOnAccept();
     void slotOnReject();

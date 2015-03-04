@@ -47,11 +47,11 @@ public:
     KoCopyController(KoCanvasBase *canvas, QAction *copyAction);
     virtual ~KoCopyController();
 
-signals:
+Q_SIGNALS:
     /// emitted when the user pressed copy and the current tool had no selection.
     void copyRequested();
 
-public slots:
+public Q_SLOTS:
     /**
      * Notify whether the application has a selection.
      * The copy-action will only be enabled when either the current tool or the application has a selection.

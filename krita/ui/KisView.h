@@ -201,7 +201,7 @@ public:
     /// the global selection.
     KisSelectionSP selection();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())
@@ -217,7 +217,7 @@ public slots:
 
     bool queryClose();
 
-signals:
+Q_SIGNALS:
     // From KisImage
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void sigProfileChanged(const KoColorProfile *  profile);
@@ -237,7 +237,7 @@ protected:
      */
     QString newObjectName();
 
-public slots:
+public Q_SLOTS:
     void slotLoadingFinished();
     void slotSavingFinished();
     void slotImageResolutionChanged();

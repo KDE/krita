@@ -279,11 +279,11 @@ public:
 
     KexiDB::RecordData* createItem() const;
 
-public slots:
+public Q_SLOTS:
     //! @internal The same as QObject::deleteLater() but also sets smart pointer m_cursor to 0 to avoid crashes...
     void deleteLater();
 
-signals:
+Q_SIGNALS:
     void destroying();
 
     /*! Emitted before change of the single, currently edited cell.

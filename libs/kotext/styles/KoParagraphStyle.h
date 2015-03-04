@@ -720,7 +720,7 @@ public:
     bool isApplied() const;
 
 
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &newName);
     void styleApplied(const KoParagraphStyle*) const;
 

@@ -42,7 +42,7 @@ public:
 
     void setView(QPointer<KisView> imageView);
 
-private slots:
+private Q_SLOTS:
     void updateAction();
 
 private:

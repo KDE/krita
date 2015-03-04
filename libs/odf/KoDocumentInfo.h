@@ -221,7 +221,7 @@ private:
     /** The original meta:generator of the document */
     QString m_generator;
 
-signals:
+Q_SIGNALS:
     void infoUpdated(const QString &info, const QString &data);
 };
 

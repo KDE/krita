@@ -45,7 +45,7 @@ public:
     bool drawCanvas() const;
     void setDrawCanvas(bool drawCanvas);
 
-signals:
+Q_SIGNALS:
     void canvasWidgetChanged();
     void drawCanvasChanged();
 

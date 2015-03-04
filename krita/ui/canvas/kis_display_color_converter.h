@@ -89,7 +89,7 @@ public:
     KisDisplayFilter* displayFilter() const;
     const KoColorProfile* monitorProfile() const;
 
-signals:
+Q_SIGNALS:
     void displayConfigurationChanged();
 
 private:

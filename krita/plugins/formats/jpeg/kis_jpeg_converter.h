@@ -93,7 +93,7 @@ public:
     /** Retrieve the constructed image
     */
     KisImageWSP image();
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     KisImageBuilder_Result decode(const KUrl& uri);

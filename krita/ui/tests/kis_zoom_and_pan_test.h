@@ -27,7 +27,7 @@ class ZoomAndPanTester;
 class KisZoomAndPanTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testZoom100ChangingWidgetSize();
     void testZoomOnBorderZoomLevels();
 

@@ -59,7 +59,7 @@ public:
     virtual void tagCategoryAdded(const QString& tag) =0;
     virtual void tagCategoryRemoved(const QString& tag) =0;
 
-private slots:
+private Q_SLOTS:
     virtual void tagBoxEntryWasModified() =0;
     virtual void tagBoxEntryWasAdded(const QString& tag) =0;
     virtual void tagBoxEntryWasRemoved(const QString& tag) =0;

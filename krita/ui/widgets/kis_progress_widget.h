@@ -59,12 +59,12 @@ public:
     void detachUpdater(KoProgressUpdater* updater);
     void attachUpdater(KoProgressUpdater* updater);
 
-public slots:
+public Q_SLOTS:
 
     void cancel();
     void correctVisibility(int progressValue);
 
-signals:
+Q_SIGNALS:
     void sigCancellationRequested();
 
 private:

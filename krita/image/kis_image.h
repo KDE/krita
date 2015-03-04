@@ -517,7 +517,7 @@ public:
     void stopIsolatedMode();
     KisNodeSP isolatedModeRoot() const;
 
-signals:
+Q_SIGNALS:
 
     /**
      *  Emitted whenever an action has caused the image to be
@@ -651,7 +651,7 @@ signals:
      */
     void sigNodeCollapsedChanged();
 
-public slots:
+public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();
 
     void barrierLock();

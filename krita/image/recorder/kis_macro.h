@@ -60,7 +60,7 @@ public: // serialization functions
     virtual void fromXML(const QDomElement&, const KisRecordedActionLoadContext* loadContext);
     virtual void toXML(QDomDocument& doc, QDomElement& e, KisRecordedActionSaveContext* saveContext) const;
     const QList<KisRecordedAction*>& actions() const;
-public slots:
+public Q_SLOTS:
     /**
      * add a single action, and make a clone of it.
      * @param before if non null, the action will be added before that action,

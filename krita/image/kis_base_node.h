@@ -415,7 +415,7 @@ protected:
     virtual void baseNodeChangedCallback() {
     }
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted when the visibility of the layer is changed with \ref setVisible.

@@ -73,7 +73,7 @@ public:
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
+private Q_SLOTS:
 
     void setCurrentFilter(const KoID&);
 

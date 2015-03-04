@@ -100,7 +100,7 @@ public:
     bool allowGrow() const;
 
 
-signals:
+Q_SIGNALS:
     void cropTypeSelectableChanged();
     void cropTypeChanged(int value);
     void decorationChanged(int value);
@@ -119,7 +119,7 @@ signals:
     void canGrowChanged(bool value);
     void isCenteredChanged(bool value);
 
-public slots:
+public Q_SLOTS:
 
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();

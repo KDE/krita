@@ -44,20 +44,20 @@ public:
 
     void setInitialUsedStyles(QVector<int> list);
 
-public slots:
+public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat);
     void setCurrentBlockFormat(const QTextBlockFormat &format);
     void slotCharacterStyleApplied(const KoCharacterStyle *style);
 
-private slots:
+private Q_SLOTS:
     void fontFamilyActivated(int index);
     void fontSizeActivated(int index);
     void styleSelected(int index);
     void styleSelected(QModelIndex &index);
     void slotShowStyleManager(int index);
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
     void characterStyleSelected(KoCharacterStyle *);
     void newStyleRequested(QString name);

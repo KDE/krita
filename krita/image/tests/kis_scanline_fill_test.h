@@ -28,7 +28,7 @@ class KisFillInterval;
 class KisScanlineFillTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testSimpleFill();
 
     void testFillBackwardCollisionOnTheLeft();

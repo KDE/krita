@@ -39,13 +39,13 @@ public:
     virtual QString header();
     virtual KIcon icon();
 
-public slots:
+public Q_SLOTS:
     void savePreferences() const;
     void loadPreferences();
     void loadDefaultPreferences();
     void hsxchange();
 
-signals:
+Q_SIGNALS:
     void settingsChanged() const;
     void hsxchanged(int);
 
@@ -58,9 +58,9 @@ private:
 
 class KisColorSelectorSettingsUpdateRepeater : public QObject {
     Q_OBJECT
-signals:
+Q_SIGNALS:
     void settingsUpdated();
-public slots:
+public Q_SLOTS:
     void updateSettings() {
         emit settingsUpdated();
     }

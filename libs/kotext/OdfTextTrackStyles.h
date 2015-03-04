@@ -59,7 +59,7 @@ private:
     /// Destructor, called when the parent is deleted.
     ~OdfTextTrackStyles();
 
-private slots:
+private Q_SLOTS:
     void beginEdit();
     void endEdit();
     void recordStyleChange(int id, const KoParagraphStyle *origStyle, const KoParagraphStyle *newStyle);

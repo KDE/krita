@@ -54,9 +54,9 @@ public:
     bool outlineVisibility();
     /*uncache all assistants*/
     void uncache();
-signals:
+Q_SIGNALS:
     void assistantChanged();
-public slots:
+public Q_SLOTS:
     void toggleAssistantVisible();
     void toggleOutlineVisible();
 protected:

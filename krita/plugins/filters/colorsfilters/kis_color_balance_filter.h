@@ -71,7 +71,7 @@ public:
     Ui_Form * m_page;
     QString m_id;
 
-public slots:
+public Q_SLOTS:
     void slotShadowsClear();
     void slotMidtonesClear();
     void slotHighlightsClear();

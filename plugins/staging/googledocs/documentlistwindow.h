@@ -36,10 +36,10 @@ public:
     ~DocumentListWindow();
     QString currentDocument();
 
-public slots:
+public Q_SLOTS:
     void hideDialog();
 
-private slots:
+private Q_SLOTS:
     void getClickedDocument(const QModelIndex & index);
     void fetchDocument();
 

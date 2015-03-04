@@ -38,7 +38,7 @@ class TestProxyModel : public QObject
 public:
     TestProxyModel();
 
-private slots:
+private Q_SLOTS:
     void init();
 
     void testWithoutLabels();

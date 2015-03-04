@@ -37,7 +37,7 @@ public:
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
 
-private slots:
+private Q_SLOTS:
     void horizontalRadiusChanged(qreal);
     void verticalRadiusChanged(qreal);
     void aspectLockChanged(bool);

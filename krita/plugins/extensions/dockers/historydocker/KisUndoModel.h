@@ -90,11 +90,11 @@ public:
     void setCanvas(KisCanvas2* canvas);
     bool checkMergedCommand(int index);
 
-public slots:
+public Q_SLOTS:
     void setStack(KUndo2QStack *stack);
     void addImage(int idx);
 
-private slots:
+private Q_SLOTS:
     void stackChanged();
     void stackDestroyed(QObject *obj);
     void setStackCurrentIndex(const QModelIndex &index);

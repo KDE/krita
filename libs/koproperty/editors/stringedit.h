@@ -41,13 +41,13 @@ public:
 
     QString value() const;
 
-signals:
+Q_SIGNALS:
     void commitData( QWidget * editor );
 
-public slots:
+public Q_SLOTS:
     void setValue(const QString& value);
 
-private slots:
+private Q_SLOTS:
     void slotTextChanged( const QString & text );
 
 private:

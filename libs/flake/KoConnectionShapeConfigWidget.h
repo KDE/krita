@@ -42,10 +42,10 @@ public:
     /// reimplemented
     virtual KUndo2Command *createCommand();
 
-signals:
+Q_SIGNALS:
     void connectionTypeChanged(int type);
 
-public slots:
+public Q_SLOTS:
     void setConnectionType(int type);
 
 private:

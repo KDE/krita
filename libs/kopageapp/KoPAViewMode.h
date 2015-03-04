@@ -136,7 +136,7 @@ public:
     void setName(const QString &name);
     QString name() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * @brief Update the view when a new shape is added to the document

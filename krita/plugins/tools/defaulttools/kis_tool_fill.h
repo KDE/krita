@@ -50,7 +50,7 @@ public:
 
     virtual QWidget * createOptionWidget();
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void slotSetUseFastMode(bool);
     void slotSetThreshold(int);

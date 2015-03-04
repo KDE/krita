@@ -37,7 +37,7 @@ private:
 
     QPointF m_pos;
 
-private slots:
+private Q_SLOTS:
     void copyPasteMultiplePages();
     void copyPasteSinglePage();
     void copyPasteSingleMasterPage();

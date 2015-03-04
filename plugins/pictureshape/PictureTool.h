@@ -53,7 +53,7 @@ protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
 
-private slots:
+private Q_SLOTS:
     void colorModeChanged(int cmbBoxIndex);
     void changeUrlPressed();
     void cropRegionChanged(const QRectF& rect, bool undoPrev);

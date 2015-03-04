@@ -69,7 +69,7 @@ public:
     virtual void setConfiguration(const KisPropertiesConfiguration* config);
     Ui_WdgHSVAdjustment * m_page;
 
-private slots:
+private Q_SLOTS:
 
     void switchType(int index);
     void switchColorize(bool toggle);

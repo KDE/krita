@@ -122,7 +122,7 @@ public:
     double minChannelValue(KoChannelInfo *);
     double maxChannelValue(KoChannelInfo *);
 
-signals:
+Q_SIGNALS:
 
     void nextStep();
 

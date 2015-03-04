@@ -31,6 +31,7 @@ class KoRdfPrefixMapping;
 class KoRdfSemanticTreeWidgetItem;
 class KoTextEditor;
 
+
 namespace Soprano
 {
 }

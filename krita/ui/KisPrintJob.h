@@ -82,7 +82,7 @@ public:
      */
      bool canPrint();
 
-public slots:
+public Q_SLOTS:
     /**
      * This is called every time the job should be executed.
      * When called the document should be printed a new painter using the printer

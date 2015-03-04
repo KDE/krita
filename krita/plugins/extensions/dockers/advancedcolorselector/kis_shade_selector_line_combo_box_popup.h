@@ -37,7 +37,7 @@ public:
     KisShadeSelectorLineComboBoxPopup(QWidget* parent);
     void setConfiguration(const QString &string);
 
-private slots:
+private Q_SLOTS:
     void activateItem(QWidget *widget);
 
 private:

@@ -55,7 +55,7 @@ public:
     qint32 xOffset();
     qint32 yOffset();
 
-private slots:
+private Q_SLOTS:
     void slotAspectChanged(bool keep);
     void slotAnchorButtonClicked(int id);
 

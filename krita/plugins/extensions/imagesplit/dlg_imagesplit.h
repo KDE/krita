@@ -46,7 +46,7 @@ public:
     int verticalLines();
     int cmbIndex;
     QString suffix();
-private slots:
+private Q_SLOTS:
 
     void applyClicked();
     void lineEditEnable();

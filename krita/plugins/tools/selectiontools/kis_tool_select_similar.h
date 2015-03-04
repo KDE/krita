@@ -37,7 +37,7 @@ public:
     QWidget* createOptionWidget();
     void paint(QPainter&, const KoViewConverter &) {}
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void slotSetFuzziness(int);
 

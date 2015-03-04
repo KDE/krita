@@ -24,7 +24,7 @@
 class KisKraSaveXmlVisitorTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     // XXX: Also test roundtripping of metadata

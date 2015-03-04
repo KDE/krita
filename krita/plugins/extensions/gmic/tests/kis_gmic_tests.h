@@ -54,7 +54,7 @@ private:
     QString m_filterDefinitionsXmlFilePath;
     KisGmicBlacklister * m_blacklister;
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

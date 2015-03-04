@@ -43,13 +43,13 @@ public:
     bool alreadyAuthenticated() { return loggedin; }
     void showDocumentListWindow(bool visible);
 
-signals:
+Q_SIGNALS:
     void receivedDocument(QString path);
     void userAuthenticated(bool success, QString error);
     void progressUpdate(const QString &msg);
     void showingDocumentList();
 
-private slots:
+private Q_SLOTS:
     void handleNetworkData(QNetworkReply *networkReply);
 
 private:

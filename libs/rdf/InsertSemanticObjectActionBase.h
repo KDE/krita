@@ -34,7 +34,7 @@ public:
                                    const QString &name);
     virtual ~InsertSemanticObjectActionBase();
 
-private slots:
+private Q_SLOTS:
     virtual void activated();
 
 protected:

@@ -52,7 +52,7 @@ private:
     void finishAxesSetup();
     void updateCanvas();
 
-private slots:
+private Q_SLOTS:
     void activateAxesPointModeSetup();
     void slotSetHandsCount(int count);
     void slotSetAxesAngle(qreal angle);

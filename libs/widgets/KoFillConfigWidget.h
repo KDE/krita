@@ -55,7 +55,7 @@ public:
     /// Returns the first selected shape of the resource
     virtual KoShape *currentShape();
 
-private slots:
+private Q_SLOTS:
     void styleButtonPressed(int buttonId);
 
     void noColorSelected();

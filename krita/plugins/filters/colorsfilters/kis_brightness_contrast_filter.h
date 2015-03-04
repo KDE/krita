@@ -109,7 +109,7 @@ public:
     WdgBrightnessContrast * m_page;
     void setView(KisViewManager *view);
 
-public slots:
+public Q_SLOTS:
     void slotDrawLine(const KoColor &color);
 };
 

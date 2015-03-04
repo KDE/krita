@@ -58,7 +58,7 @@ public:
 
     bool acceptsClicks() const;
 
-signals:
+Q_SIGNALS:
     void requestCanvasUpdate();
 
 protected:

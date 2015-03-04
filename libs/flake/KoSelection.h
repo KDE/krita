@@ -135,7 +135,7 @@ public:
     /// Updates the size and position of the selection
     void updateSizeAndPosition();
 
-signals:
+Q_SIGNALS:
     /// emitted when the selection is changed
     void selectionChanged();
 

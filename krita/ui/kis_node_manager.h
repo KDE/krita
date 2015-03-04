@@ -51,7 +51,7 @@ public:
     
     void setView(QPointer<KisView>imageView);
 
-signals:
+Q_SIGNALS:
 
     /// emitted whenever a node is selected.
     void sigNodeActivated(KisNodeSP node);
@@ -102,7 +102,7 @@ public:
     void setSelectedNodes(QList<KisNodeSP> nodes);
     QList<KisNodeSP> selectedNodes();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Explicitly activates \p node

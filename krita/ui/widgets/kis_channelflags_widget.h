@@ -58,7 +58,7 @@ public:
      */
     QBitArray channelFlags() const;
 
-signals:
+Q_SIGNALS:
 
     void channelSelectionChanced();
 

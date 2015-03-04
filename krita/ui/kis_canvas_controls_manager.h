@@ -40,7 +40,7 @@ public:
     void setup(KisActionManager *actionManager);
     void setView(QPointer<KisView>imageView);
 
-private slots:
+private Q_SLOTS:
     void makeColorLighter();
     void makeColorDarker();
 

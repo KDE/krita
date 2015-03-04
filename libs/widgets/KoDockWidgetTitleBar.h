@@ -46,7 +46,7 @@ public:
 
     void updateIcons();
 
-public slots:
+public Q_SLOTS:
     void setCollapsed(bool collapsed);
     void setLocked(bool locked);
     void setCollapsable(bool collapsable);

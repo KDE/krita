@@ -66,7 +66,7 @@ public:
 
     using TestingBaseMapper::testingGetItems;
 
-protected slots:
+protected Q_SLOTS:
     void slotRowChanged(int row) {
         rowChangedIndices.append(row);
     }

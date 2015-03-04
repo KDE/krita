@@ -43,7 +43,7 @@ public:
      */
     KoColorSet *activeColorSet();
 
-private slots:
+private Q_SLOTS:
     void setActiveColorSet(int index);
     void setTextLabel(KoColorPatch *patch);
     void addColor();

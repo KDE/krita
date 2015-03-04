@@ -38,7 +38,7 @@ private:
     /// Clean up after a test.
     void cleanupTest();
 
-private slots:
+private Q_SLOTS:
     /// Common initialization for all tests.
     void init();
     /// Test very basic layout functionality.

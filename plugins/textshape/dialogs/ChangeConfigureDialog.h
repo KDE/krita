@@ -65,7 +65,7 @@ class ChangeConfigureDialog:public QDialog
         void updatePreviewText();
         void colorSelect(ChangeType type);
 
-    private slots:
+    private Q_SLOTS:
         void insertionColorSelect();
         void deletionColorSelect();
         void formatChangeColorSelect();

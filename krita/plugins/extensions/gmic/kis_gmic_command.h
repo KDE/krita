@@ -46,7 +46,7 @@ public:
     /* @return true if gmic failed in redo () */
     bool isSuccessfullyDone();
 
-signals:
+Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
 private:

@@ -32,7 +32,7 @@ class KRITAUI_EXPORT __CategoriesSignalsBase : public QObject
 {
     Q_OBJECT
 
-signals:
+Q_SIGNALS:
     void rowChanged(int row);
     void beginInsertRow(int row);
     void endInsertRow();

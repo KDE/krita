@@ -24,7 +24,7 @@
 class KisBSplinesTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void test1D();
     void testEmpty1D();
 

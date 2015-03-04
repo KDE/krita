@@ -36,7 +36,7 @@ public:
     /// Sets the filter effect to be edited by the config widget
     virtual bool editFilterEffect(KoFilterEffect *filterEffect) = 0;
 
-signals:
+Q_SIGNALS:
     /// Is emitted when the filter effect has changed
     void filterChanged();
 };

@@ -34,7 +34,7 @@ public:
 protected:
     KisColorSelectorBase* createPopup() const;
 
-public slots:
+public Q_SLOTS:
     void addColorToHistory(const KoColor& color);
 
 private:

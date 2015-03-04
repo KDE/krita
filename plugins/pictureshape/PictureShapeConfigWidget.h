@@ -54,7 +54,7 @@ class LoadWaiter : public QObject
 public:
     explicit LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
 
-public slots:
+public Q_SLOTS:
     void setImageData(KJob *job);
 
 private:

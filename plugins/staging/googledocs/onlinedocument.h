@@ -37,7 +37,7 @@ public:
     OnlineDocument(QObject *parent, const QVariantList &);
     virtual ~OnlineDocument();
 
-private slots:
+private Q_SLOTS:
     void slotOnlineDocument();
     void receivedOnlineDocument(QString path);
 

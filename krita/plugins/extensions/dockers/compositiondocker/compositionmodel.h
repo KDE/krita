@@ -40,7 +40,7 @@ public:
     KisLayerComposition* compositionFromIndex(const QModelIndex& index);
     void setCompositions(QList<KisLayerComposition*> compositions);
     
-// public slots:
+// public Q_SLOTS:
 //     void clear();
 private:
     QList<KisLayerComposition*> m_compositions;

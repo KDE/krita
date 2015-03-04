@@ -117,7 +117,7 @@ protected:
     friend class ShapeLayerContainerModel;
     KoViewConverter* converter() const;
 
-signals:
+Q_SIGNALS:
     /**
      * These signals are forwarded from the local shape manager
      * This is done because we switch KoShapeManager and therefore
@@ -129,7 +129,7 @@ signals:
     void selectionChanged();
     void currentLayerChanged(const KoShapeLayer *layer);
 
-signals:
+Q_SIGNALS:
     /**
      * A signal + slot to synchronize UI and image
      * threads. Image thread emits the signal, UI
@@ -137,7 +137,7 @@ signals:
      */
     void sigMoveShapes(const QPointF &diff);
 
-private slots:
+private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
 
 private:

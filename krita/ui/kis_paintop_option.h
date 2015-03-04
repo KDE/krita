@@ -92,10 +92,10 @@ protected:
         Q_UNUSED(setting);
     }
 
-protected slots:
+protected Q_SLOTS:
     void emitSettingChanged();
 
-signals:
+Q_SIGNALS:
 
     /**
      * emit this whenever a setting has changed. It will update the preview

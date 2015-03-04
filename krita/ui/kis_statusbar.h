@@ -46,7 +46,7 @@ public:
 
     KisProgressWidget *progress();
 
-public slots:
+public Q_SLOTS:
 
     void documentMousePositionChanged(const QPointF &p);
     void imageSizeChanged();
@@ -56,7 +56,7 @@ public slots:
     void updateStatusBarProfileLabel();
     void updateSelectionToolTip();
 
-private slots:
+private Q_SLOTS:
     void updateSelectionIcon();
 
 private:

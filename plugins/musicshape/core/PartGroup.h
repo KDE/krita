@@ -96,7 +96,7 @@ public:
      * XXX MusicXML has Mensurstrich as third option... perhaps nice to add later, and do I want that? :)
      */
     bool commonBarLines() const;
-public slots:
+public Q_SLOTS:
     /**
      * Sets the index of the first part in this group. The index should be >= 0 and < sheet().partCount().
      *
@@ -136,7 +136,7 @@ public slots:
      * @param commonBarLines true if the group should have common bar-lines
      */
     void setCommonBarLines(bool commonBarLines);
-signals:
+Q_SIGNALS:
     void firstPartChanged(int index);
     void lastPartChanged(int index);
     void nameChanged(const QString& name);

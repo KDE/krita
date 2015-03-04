@@ -431,7 +431,7 @@ public:
     QVector<int> usedCharacterStyles() const;
     QVector<int> usedParagraphStyles() const;
 
-signals:
+Q_SIGNALS:
     void styleAdded(KoParagraphStyle*);
     void styleAdded(KoCharacterStyle*);
     void styleAdded(KoListStyle*);
@@ -475,7 +475,7 @@ signals:
     /// It's emitted when someone calls alteredStyle on a character style
     void styleHasChanged(int, const KoCharacterStyle*, const KoCharacterStyle*);
 
-public slots:
+public Q_SLOTS:
     /**
      * Slot that should be called whenever a style is changed. This will update
      * all documents with the style.

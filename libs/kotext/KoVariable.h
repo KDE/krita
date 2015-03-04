@@ -100,7 +100,7 @@ private:
     void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
                const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
 
-private slots:
+private Q_SLOTS:
     void documentDestroyed();
 
 private:

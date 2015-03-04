@@ -43,7 +43,7 @@ class NetworkAccessManager : public QNetworkAccessManager
 public:
     NetworkAccessManager(QObject *parent = 0);
 
-public slots:
+public Q_SLOTS:
     void getUrl(const QUrl &url);
 
 protected:

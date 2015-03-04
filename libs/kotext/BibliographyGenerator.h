@@ -33,7 +33,7 @@ public:
 
     static QMap<QString, BibliographyEntryTemplate> defaultBibliographyEntryTemplates();
 
-public slots:
+public Q_SLOTS:
     void generate();
 
 private:

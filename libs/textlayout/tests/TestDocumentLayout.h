@@ -35,7 +35,7 @@ class TestDocumentLayout : public QObject
 public:
     TestDocumentLayout() {}
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     /**

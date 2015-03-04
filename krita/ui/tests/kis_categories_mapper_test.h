@@ -24,7 +24,7 @@
 class KisCategoriesMapperTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testAddRemoveCategories();
     void testAddRemoveEntries();
     void testRemoveNonEmptyCategories();

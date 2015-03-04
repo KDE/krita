@@ -44,7 +44,7 @@ public:
     virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 
-private slots:
+private Q_SLOTS:
 
     void slotUpdatePreview();
 private:

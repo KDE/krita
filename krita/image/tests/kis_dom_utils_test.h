@@ -24,7 +24,7 @@
 class KisDomUtilsTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
 
     void testC2C();
     void testG2G();

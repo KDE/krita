@@ -41,7 +41,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent* event);
     virtual void paint(QPainter& painter, const KoViewConverter& converter);
     virtual QWidget* createOptionWidget();
-public slots:
+public Q_SLOTS:
     void textEdited();
 private:
     void setMathML(const QString& mathml, const QString& mode);

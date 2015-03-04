@@ -47,7 +47,7 @@ public:
 
     QSize sizeHint() const;
 
-signals:
+Q_SIGNALS:
     /// Emitted when a resource was selected
     void iconSizeChanged();
 

@@ -90,7 +90,7 @@ public:
      * Returns the priority of this staff element with regard to order in which it should be sorted.
      */
     virtual int priority() const;
-public slots:
+public Q_SLOTS:
     /**
      * Changes the shape of the clef.
      *
@@ -111,7 +111,7 @@ public slots:
      * @param octaveChange the new octave change for this clef
      */
     void setOctaveChange(int octaveChange);
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted whenever the shape of the clef changes.
      */

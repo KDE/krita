@@ -27,7 +27,7 @@
 class TestStyles : public QObject
 {
     Q_OBJECT
-private slots: // tests
+private Q_SLOTS: // tests
     void testStyleInheritance();
     void testChangeParent();
     void testTabsStorage();

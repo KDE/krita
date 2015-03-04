@@ -51,11 +51,11 @@ public:
     void showFilterGallery(bool visible);
     bool isFilterGalleryVisible() const;
     KisFilterSP currentFilter() const;
-protected slots:
+protected Q_SLOTS:
     void slotBookmarkedFilterConfigurationSelected(int);
     void setFilterIndex(const QModelIndex&);
     void editConfigurations();
-signals:
+Q_SIGNALS:
     void configurationChanged();
 private:
     struct Private;

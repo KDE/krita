@@ -10,7 +10,7 @@ class TestTableCellStyle : public QObject
 public:
     TestTableCellStyle() {}
 
-private slots:
+private Q_SLOTS:
     void testPen();
     void testPadding();
     void testSpacing();

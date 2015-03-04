@@ -24,7 +24,7 @@
 class KisTransformMaskTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testSafeTransform();
     void testMaskOnPaintLayer();
     void testMaskOnCloneLayer();

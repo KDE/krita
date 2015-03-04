@@ -147,18 +147,18 @@ protected:
 
     const KoCompositeOp* compositeOp();
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
-private slots:
+private Q_SLOTS:
 
     void slotPopupQuickHelp();
 
     void increaseBrushSize();
     void decreaseBrushSize();
 
-protected slots:
+protected Q_SLOTS:
     virtual void updateTabletPressureSamples();
 
 
@@ -191,7 +191,7 @@ private:
     bool m_isOutlineEnabled;
     std::vector<int> m_standardBrushSizes;
 
-signals:
+Q_SIGNALS:
     void sigPaintingFinished();
 };
 

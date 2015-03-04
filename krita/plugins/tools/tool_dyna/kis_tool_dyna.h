@@ -91,7 +91,7 @@ public:
 protected:
     virtual void initStroke(KoPointerEvent *event);
 
-private slots:
+private Q_SLOTS:
 
     void slotSetDynaWidth(double width);
     void slotSetMass(qreal mass);

@@ -47,7 +47,7 @@ public:
 protected:
     virtual void setReadOnlyInternal(bool readOnly);
 
-protected slots:
+protected Q_SLOTS:
     void  showEditor();
 
 private:

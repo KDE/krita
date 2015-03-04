@@ -81,13 +81,13 @@ public:
 
     QString serverType() const;
 
-signals:
+Q_SIGNALS:
     /// XXX: not sure if this is the best place for these
     void tagBoxEntryModified();
     void tagBoxEntryAdded(const QString& tag);
     void tagBoxEntryRemoved(const QString& tag);
 
-private slots:
+private Q_SLOTS:
     void resourceAdded(KoResource *resource);
     void resourceRemoved(KoResource *resource);
     void resourceChanged(KoResource *resource);

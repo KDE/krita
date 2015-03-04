@@ -57,7 +57,7 @@ private:
     void updateArea();
     QRectF dragBoundingRect();
 
-private slots:
+private Q_SLOTS:
     virtual void undoSelection();
 
 private:

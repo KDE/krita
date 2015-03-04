@@ -43,7 +43,7 @@ class KoDocumentSectionModel;
 class KOMAIN_EXPORT KoDocumentSectionView: public QTreeView
 {
     Q_OBJECT
-signals:
+Q_SIGNALS:
     /**
      * Emitted whenever the user clicks with the secondary mouse
      * button on an item. It is up to the application to design the
@@ -135,12 +135,12 @@ protected:
      */
     int cursorPageIndex() const;
 
-protected slots:
+protected Q_SLOTS:
     virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
-private slots:
+private Q_SLOTS:
     void slotActionToggled(bool on, const QPersistentModelIndex &index, int property);
 
 private:

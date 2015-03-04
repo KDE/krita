@@ -73,7 +73,7 @@ public:
     void connectBackwardVoid(QObject *sender, const char *signal,
                              QObject *receiver, const char *method);
 
-private slots:
+private Q_SLOTS:
     void forwardSlotDouble(double value);
     void backwardSlotDouble(double value);
 
@@ -86,7 +86,7 @@ private slots:
     void forwardSlotVoid();
     void backwardSlotVoid();
 
-signals:
+Q_SIGNALS:
     void forwardSignalDouble(double value);
     void backwardSignalDouble(double value);
 

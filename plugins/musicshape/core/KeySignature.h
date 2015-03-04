@@ -64,7 +64,7 @@ public:
     
     int cancel() const;
     int cancel(int pitch) const;
-public slots:
+public Q_SLOTS:
     /**
      * Sets the number of accidentals in this key signature. Use positive values for sharps and negative values for
      * flats.
@@ -74,7 +74,7 @@ public slots:
     void setAccidentals(int accidentals);
     
     void setCancel(int cancel);
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitten when the number of accidentals change.
      */

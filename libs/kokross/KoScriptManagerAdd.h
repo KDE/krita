@@ -67,7 +67,7 @@ public:
     explicit KoScriptManagerAddTypeWidget(KoScriptManagerAddWizard *wizard);
     virtual ~KoScriptManagerAddTypeWidget();
 
-public slots:
+public Q_SLOTS:
     void slotUpdate();
 
 private:
@@ -88,7 +88,7 @@ public:
     /// \return the currently selected file.
     QString selectedFile() const;
 
-public slots:
+public Q_SLOTS:
     void slotUpdate();
     void slotFileHighlighted(const QString &file);
 
@@ -108,7 +108,7 @@ class KoScriptManagerAddScriptWidget : public QWidget
 public:
     explicit KoScriptManagerAddScriptWidget(KoScriptManagerAddWizard *wizard);
     virtual ~KoScriptManagerAddScriptWidget();
-public slots:
+public Q_SLOTS:
     void slotUpdate();
     //bool back();
     //bool next();
@@ -135,7 +135,7 @@ public:
 
     QString uniqueName() const;
 
-public slots:
+public Q_SLOTS:
     void slotUpdate();
     bool accept();
 
@@ -157,7 +157,7 @@ public:
     explicit KoScriptManagerAddWizard(QWidget* parent, Kross::ActionCollection* collection = 0);
     virtual ~KoScriptManagerAddWizard();
 
-public slots:
+public Q_SLOTS:
     /// Show the modal wizard dialog.
     virtual int exec();
     /// Called when the user clicks the Back button.

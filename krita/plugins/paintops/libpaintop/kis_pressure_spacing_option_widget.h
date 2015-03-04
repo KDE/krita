@@ -31,7 +31,7 @@ class PAINTOP_EXPORT KisPressureSpacingOptionWidget : public KisCurveOptionWidge
 public:
     KisPressureSpacingOptionWidget();
 
-private slots:
+private Q_SLOTS:
     void setIsotropicSpacing(int isotropic);
 };
 

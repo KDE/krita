@@ -38,10 +38,10 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
-public slots:
+public Q_SLOTS:
     void slotLayerActivated(KisLayerSP layer);
     void slotColorSpaceChanged(const KoColorSpace *colorSpace);
-signals:
+Q_SIGNALS:
     void channelFlagsChanged();
 private:
     KisLayerWSP m_currentLayer;

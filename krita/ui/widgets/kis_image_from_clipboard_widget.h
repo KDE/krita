@@ -41,7 +41,7 @@ public:
     KisImageFromClipboard(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
     virtual ~KisImageFromClipboard();
 
-private slots:
+private Q_SLOTS:
     void createImage();
     void clipboardDataChanged();
     

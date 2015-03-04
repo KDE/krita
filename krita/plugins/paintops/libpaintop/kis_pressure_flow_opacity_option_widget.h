@@ -35,7 +35,7 @@ public:
 
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
+private Q_SLOTS:
     void slotSliderValueChanged();
 
 private:

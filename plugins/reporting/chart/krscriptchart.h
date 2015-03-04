@@ -38,7 +38,7 @@ public:
     explicit Chart(KoReportItemChart *);
 
     ~Chart();
-public slots:
+public Q_SLOTS:
 
 
     /**

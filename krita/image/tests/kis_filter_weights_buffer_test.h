@@ -24,7 +24,7 @@
 class KisFilterWeightsBufferTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testTriangle();
     void testHermite();
     void testBicubic();

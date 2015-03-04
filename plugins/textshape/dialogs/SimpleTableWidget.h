@@ -37,13 +37,13 @@ class SimpleTableWidget : public QWidget
 public:
     explicit SimpleTableWidget(TextTool *tool, QWidget *parent = 0);
 
-public slots:
+public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
     void emitTableBorderDataUpdated(int i=0);
     void restartPainting();
     void setBorderColor(const KoColor &);
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
     void tableBorderDataUpdated(const KoBorder::BorderData &);
 

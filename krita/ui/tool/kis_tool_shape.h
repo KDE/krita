@@ -58,7 +58,7 @@ public:
     virtual int flags() const;
     WdgGeometryOptions *m_shapeOptionsWidget;
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void outlineSettingChanged(int value);
     virtual void fillSettingChanged(int value);

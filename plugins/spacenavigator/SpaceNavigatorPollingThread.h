@@ -33,7 +33,7 @@ public:
     /// Stops the thread
     void stop();
 
-signals:
+Q_SIGNALS:
     void moveEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons );
     void buttonEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons, Qt::MouseButton, int type );
 

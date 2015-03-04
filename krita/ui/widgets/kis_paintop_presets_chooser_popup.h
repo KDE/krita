@@ -37,12 +37,12 @@ public:
     
     void showButtons(bool show);
     void updateViewSettings();
-public slots:
+public Q_SLOTS:
     void canvasResourceChanged( KoResource * resource, KisPaintOpPresetSP  preset  );
-signals:
+Q_SIGNALS:
     void resourceSelected( KoResource * resource);
     
-private slots:
+private Q_SLOTS:
     void slotThumbnailMode();
     void slotDetailMode();
     virtual void paintEvent(QPaintEvent* );

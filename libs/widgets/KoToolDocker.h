@@ -48,7 +48,7 @@ public:
 
 protected:
     virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
-public slots:
+public Q_SLOTS:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
      */

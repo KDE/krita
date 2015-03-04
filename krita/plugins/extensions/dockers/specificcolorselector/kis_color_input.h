@@ -38,7 +38,7 @@ public:
 protected:
     void init();
     virtual QWidget* createInput() = 0;
-signals:
+Q_SIGNALS:
     void updated();
 protected:
     const KoChannelInfo* m_channelInfo;
@@ -54,7 +54,7 @@ public:
     KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
 protected:
     virtual QWidget* createInput();
-public slots:
+public Q_SLOTS:
     void setValue(int);
     void update();
 private:
@@ -69,7 +69,7 @@ public:
     KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
 protected:
     virtual QWidget* createInput();
-public slots:
+public Q_SLOTS:
     void setValue(double);
     void sliderChanged(int);
     void update();
@@ -86,7 +86,7 @@ public:
     KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
 protected:
     virtual QWidget* createInput();
-public slots:
+public Q_SLOTS:
     void setValue();
     void update();
 private:

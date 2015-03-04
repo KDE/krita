@@ -28,11 +28,9 @@ class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 class QTouchEvent;
-class QTabletEvent;
 
 class KisStrokeShortcut;
 class KisTouchShortcut;
-class KisAbstractInputAction;
 
 /**
  * The class that manages connections between shortcuts and actions.

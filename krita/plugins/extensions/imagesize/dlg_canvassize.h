@@ -24,7 +24,6 @@
 #include <kdialog.h>
 #include <kicon.h>
 
-class KisFilterStrategy;
 
 #include "ui_wdg_canvassize.h"
 

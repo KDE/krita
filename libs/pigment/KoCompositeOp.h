@@ -29,7 +29,6 @@
 
 class KoColorSpace;
 
-class KoID;
 class KoColorSpace;
 
 /**

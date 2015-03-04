@@ -38,13 +38,10 @@ struct KoPageLayout;
 class KoCanvasResourceManager;
 
 class KisDocument;
-class KisPart;
 class KisView;
 class KisPrintJob;
 class KoDockFactoryBase;
-class KRecentFilesAction;
 class QDockWidget;
-class KisViewManager;
 class KisView;
 
 

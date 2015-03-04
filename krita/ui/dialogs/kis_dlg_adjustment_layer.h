@@ -23,11 +23,8 @@
 #include <QLabel>
 
 class KisFilter;
-class QListWidgetItem;
 class QLabel;
 class KisFilterConfiguration;
-class QGroupBox;
-class KisConfigWidget;
 class KisNodeFilterInterface;
 class KisViewManager;
 #include "kis_types.h"

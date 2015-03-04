@@ -37,7 +37,6 @@
 class KisAction;
 class QPoint;
 
-class KisPaintOpPreset;
 
 class KisCanvas2;
 class KisCanvasResourceProvider;

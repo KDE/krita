@@ -27,7 +27,6 @@ class QTabletEvent;
 class QTouchEvent;
 class KisToolProxy;
 class KisCanvas2;
-class KisInputAction;
 /**
  * \brief Central object to manage canvas input.
  *

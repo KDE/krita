@@ -3,7 +3,6 @@
 
 #include <QWidget>
 
-class QWheelEvent;
 class QPaintEvent;
 
 class KisFilterPreviewWidget : public QWidget

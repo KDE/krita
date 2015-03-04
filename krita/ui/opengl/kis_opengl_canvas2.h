@@ -33,7 +33,6 @@
 #include "krita_export.h"
 
 class QWidget;
-class QGLFramebufferObject;
 class QPaintEvent;
 class KisCanvas2;
 

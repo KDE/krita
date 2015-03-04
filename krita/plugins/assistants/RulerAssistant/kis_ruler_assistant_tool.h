@@ -25,9 +25,7 @@
 #include <KoIcon.h>
 
 
-class RulerDecoration;
 class KisCanvas2;
-class ConstraintSolver;
 
 class KisRulerAssistantTool : public KisTool
 {

@@ -25,8 +25,6 @@
 
 class KisDoubleSliderSpinBox;
 class KisCurveOptionWidget;
-class QStackedWidget;
-class QButtonGroup;
 
 class PAINTOP_EXPORT KisFlowOpacityOptionWidget: public KisCurveOptionWidget
 {

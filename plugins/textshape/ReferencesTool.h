@@ -33,7 +33,6 @@ class KoInlineNote;
 class KoTextEditor;
 class KoBibliographyInfo;
 class KoTableOfContentsGeneratorInfo;
-class QPainter;
 class SimpleLinksWidget;
 class LabeledWidget;
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc

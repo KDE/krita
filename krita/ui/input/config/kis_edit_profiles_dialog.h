@@ -22,7 +22,6 @@
 
 #include <kdialog.h>
 
-class QListWidgetItem;
 /**
  * \brief A dialog that provides facilities to edit all the available profiles.
  *

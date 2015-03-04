@@ -23,7 +23,6 @@
 
 #include <kis_config_widget.h>
 
-class KisFilter;
 class Ui_WdgMotionBlur;
 
 class KisWdgMotionBlur : public KisConfigWidget

@@ -25,10 +25,7 @@
 
 #include <QObject>
 
-class QTextDocument;
-class KoTextEditor;
 class KoDocumentRdf;
-class QString;
 
 class TestKoDocumentRdf : public QObject
 {

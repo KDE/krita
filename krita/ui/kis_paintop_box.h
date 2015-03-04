@@ -40,7 +40,6 @@
 
 
 class QToolButton;
-class QPushButton;
 class QString;
 class QHBoxLayout;
 

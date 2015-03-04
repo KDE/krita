@@ -30,8 +30,6 @@
 class KisActionManager;
 class KisAction;
 class KAction;
-class KToggleAction;
-class KActionCollection;
 class KoViewConverter;
 
 class KisViewManager;

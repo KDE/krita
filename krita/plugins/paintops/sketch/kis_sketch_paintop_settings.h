@@ -35,11 +35,7 @@
 #endif
 #include <kis_brush_based_paintop_settings.h>
 
-class QWidget;
-class QString;
 
-class QDomElement;
-class QDomDocument;
 
 
 class KisSketchPaintOpSettings : public KisBrushBasedPaintOpSettings

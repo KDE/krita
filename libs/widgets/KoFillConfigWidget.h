@@ -27,8 +27,6 @@
 #include <QSharedPointer>
 
 class KoCanvasBase;
-class QColor;
-class KoResource;
 class KoShapeBackground;
 class KoShape;
 

@@ -27,7 +27,6 @@
 #include <QModelIndex>
 
 class QAbstractItemView;
-class QItemSelection;
 class QToolButton;
 class QHBoxLayout;
 class QRect;

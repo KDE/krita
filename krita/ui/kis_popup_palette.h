@@ -25,7 +25,6 @@
 #include <KoColorDisplayRendererInterface.h>
 
 
-class KisFavoriteBrushData;
 class KisFavoriteResourceManager;
 class QWidget;
 class KoColor;

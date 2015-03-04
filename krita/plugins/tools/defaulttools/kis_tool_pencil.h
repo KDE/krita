@@ -27,7 +27,6 @@
 #include "kis_delegated_tool.h"
 #include <KoIcon.h>
 
-class KisSelectionOptions;
 class KoCanvasBase;
 class KisToolPencil;
 

@@ -27,7 +27,6 @@ class QVariant;
 
 namespace KisMetaData
 {
-class Schema;
 
 struct Rational {
     explicit Rational(qint32 n = 0, qint32 d = 1) : numerator(n), denominator(d) {}

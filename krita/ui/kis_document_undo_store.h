@@ -22,7 +22,6 @@
 #include "kis_undo_store.h"
 
 class KisDocument;
-class KUndo2Stack;
 
 class KRITAUI_EXPORT KisDocumentUndoStore : public KisUndoStore
 {

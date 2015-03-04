@@ -30,7 +30,6 @@
 #include <QDomDocument>
 
 class QIODevice;
-class QTextDecoder;
 
 #ifdef KOXML_USE_QDOM
 

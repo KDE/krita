@@ -25,7 +25,6 @@
 
 class KoStyleThumbnailer;
 
-class KoParagraphStyle;
 class KoCharacterStyle;
 
 class QImage;

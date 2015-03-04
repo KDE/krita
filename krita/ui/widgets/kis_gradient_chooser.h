@@ -23,7 +23,6 @@
 #include <QFrame>
 
 class KoSegmentGradient;
-class KisAutogradientResource;
 class KisViewManager;
 class QLabel;
 class QPushButton;

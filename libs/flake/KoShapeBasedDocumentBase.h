@@ -28,7 +28,6 @@
 #include <QList>
 
 class KoShape;
-class QString;
 class KoShapeBasedDocumentBasePrivate;
 class KoDocumentResourceManager;
 class KUndo2Command;

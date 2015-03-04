@@ -24,10 +24,8 @@
 #include "empty_nodes_test.h"
 
 class KisDocument;
-class KisPart;
 class KisNameServer;
 class KisShapeController;
-class KisNodeDummy;
 class KisNodeModel;
 
 

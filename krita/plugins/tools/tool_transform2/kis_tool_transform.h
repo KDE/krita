@@ -48,9 +48,7 @@
 #include "transform_transaction_properties.h"
 
 
-class KoID;
 
-class KisFilterStrategy;
 class KisCanvas2;
 
 class QTouchEvent;

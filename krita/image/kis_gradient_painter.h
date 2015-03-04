@@ -28,7 +28,6 @@
 
 #include <krita_export.h>
 
-class KoAbstractGradient;
 
 /**
  *  XXX: Docs!

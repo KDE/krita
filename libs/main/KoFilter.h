@@ -26,7 +26,6 @@ Boston, MA 02110-1301, USA.
 #include <QPointer>
 
 #include "komain_export.h"
-class QIODevice;
 class KoFilterChain;
 class KoUpdater;
 

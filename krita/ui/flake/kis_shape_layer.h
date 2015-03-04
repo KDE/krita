@@ -27,11 +27,8 @@
 #include <krita_export.h>
 
 class QRect;
-class QPainter;
 class QIcon;
 class QRect;
-class QDomDocument;
-class QDomElement;
 class QString;
 class KoShapeManager;
 class KoStore;

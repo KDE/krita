@@ -23,11 +23,7 @@
 #include <QString>
 
 class KisFilter;
-class QListWidgetItem;
-class QLabel;
 class KisFilterConfiguration;
-class QGroupBox;
-class KisConfigWidget;
 class KisViewManager;
 
 #include "ui_wdgdlggeneratorlayer.h"

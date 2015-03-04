@@ -25,7 +25,6 @@
 
 namespace KisMetaData
 {
-class Store;
 }
 
 /**

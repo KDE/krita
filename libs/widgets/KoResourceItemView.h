@@ -25,7 +25,6 @@
 #include <KoIconToolTip.h>
 
 class QEvent;
-class KoResourceModel;
 class QModelIndex;
 
 /// The resource view

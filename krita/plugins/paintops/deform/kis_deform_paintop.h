@@ -30,7 +30,6 @@
 
 #include "kis_deform_paintop_settings.h"
 
-class QPointF;
 class KisPainter;
 class KisBrushSizeProperties;
 

@@ -23,12 +23,9 @@
 class KoChannelInfo;
 class KoColor;
 class QWidget;
-class KNumInput;
 class QSpinBox;
 class KDoubleNumInput;
 class KoColorSlider;
-class QLabel;
-class QHBoxLayout;
 class QLineEdit;
 #include "KoColorDisplayRendererInterface.h"
 

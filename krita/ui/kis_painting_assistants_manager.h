@@ -27,7 +27,6 @@
 #include "kis_action.h"
 
 class KisViewManager;
-class KActionCollection;
 class KisPaintingAssistantsDecoration;
 
 

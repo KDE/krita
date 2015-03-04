@@ -26,10 +26,6 @@
 #include <kis_types.h>
 
 class KisGmicSmallApplicator;
-class KoProgressUpdater;
-class QTimer;
-class QSize;
-class QRect;
 class KisGmicApplicator;
 class KisGmicWidget;
 class KisGmicProgressManager;

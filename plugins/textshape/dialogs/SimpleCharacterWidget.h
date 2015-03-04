@@ -30,7 +30,6 @@
 class TextTool;
 class KoStyleManager;
 class KoCharacterStyle;
-class KoParagraphStyle;
 class KoStyleThumbnailer;
 class DockerStylesComboModel;
 class StylesDelegate;

@@ -29,7 +29,6 @@
 
 class QDomDocument;
 class QDomElement;
-class KisPaintOp;
 class KisDistanceInformation;
 
 /**

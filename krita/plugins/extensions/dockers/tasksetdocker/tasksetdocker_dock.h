@@ -28,8 +28,6 @@
 
 class KoResourceLoaderThread;
 class TasksetModel;
-class QListView;
-class QThread;
 class KisCanvas2;
 
 class TasksetDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgTasksetDocker {

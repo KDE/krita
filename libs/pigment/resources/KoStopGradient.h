@@ -26,7 +26,6 @@
 #include "KoResource.h"
 #include <pigment_export.h>
 
-class QFile;
 
 typedef QPair<qreal, KoColor> KoGradientStop;
 

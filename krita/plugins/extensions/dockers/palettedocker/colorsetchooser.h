@@ -27,7 +27,6 @@ class QSpinBox;
 class KoColorSet;
 class KLineEdit;
 class KoResourceItemChooser;
-class KisViewManager;
 class KoResource;
 
 class ColorSetChooser : public QWidget

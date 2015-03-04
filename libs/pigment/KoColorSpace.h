@@ -38,7 +38,6 @@ class QDomElement;
 class KoChannelInfo;
 class KoColorProfile;
 class KoColorTransformation;
-class KoColorConversionTransformationFactory;
 class QBitArray;
 
 enum Deletability {

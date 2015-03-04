@@ -25,7 +25,6 @@ class KLineEdit;
 class KisFilter;
 class KisFilterConfiguration;
 class KisConfigWidget;
-class KisAdjustmentLayer;
 class KisNodeFilterInterface;
 class KisViewManager;
 

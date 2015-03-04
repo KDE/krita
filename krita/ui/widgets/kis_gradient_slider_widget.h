@@ -26,7 +26,6 @@
 
 class KAction;
 class KMenu;
-class KisAutogradientResource;
 class KoGradientSegment;
 class KoSegmentGradient;
 

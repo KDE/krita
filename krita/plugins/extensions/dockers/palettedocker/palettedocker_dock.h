@@ -34,7 +34,6 @@ class KisCanvasResourceProvider;
 class KisWorkspaceResource;
 class ColorSetChooser;
 class PaletteModel;
-class KisCanvas2;
 class Ui_WdgPaletteDock;
 
 class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet> {

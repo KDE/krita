@@ -23,7 +23,6 @@
 
 #include <KoInlineObjectFactoryBase.h>
 
-class KoVariable;
 
 class InfoVariableFactory : public KoInlineObjectFactoryBase
 {

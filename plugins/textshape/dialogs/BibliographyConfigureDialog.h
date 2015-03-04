@@ -29,7 +29,6 @@
 
 #include "KoOdfBibliographyConfiguration.h"
 
-class KoInlineCite;
 
 class BibliographyConfigureDialog : public QDialog
 {

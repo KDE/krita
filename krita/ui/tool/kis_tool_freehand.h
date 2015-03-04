@@ -32,7 +32,6 @@
 class KoPointerEvent;
 class KoCanvasBase;
 
-class KisPainter;
 
 
 class KisPaintingInformationBuilder;

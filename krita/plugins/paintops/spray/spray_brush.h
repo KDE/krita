@@ -34,11 +34,9 @@
 
 #include <QImage>
 #include <kis_brush.h>
-class QRect;
 
 class KisPaintInformation;
 class KisBrush;
-class KisBrushOption;
 
 class SprayBrush
 {

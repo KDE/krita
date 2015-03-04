@@ -30,8 +30,6 @@
 #include "krita_export.h"
 #include "kis_dynamic_sensor.h"
 
-class KisCurveWidget;
-class Ui_WdgCurveOption;
 class KisDynamicSensor;
 
 /**

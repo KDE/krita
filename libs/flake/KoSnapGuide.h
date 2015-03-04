@@ -33,7 +33,6 @@ class KoCanvasBase;
 class QPainter;
 class QPointF;
 class QRectF;
-class QLineF;
 
 /**
  * This class is the place where all the snapping (i.e. snap to grid) is handled.

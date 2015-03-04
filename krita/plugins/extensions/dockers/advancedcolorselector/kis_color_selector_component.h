@@ -24,9 +24,7 @@
 
 class KoColorSpace;
 
-class QMouseEvent;
 class QPainter;
-class QResizeEvent;
 
 
 class KisColorSelectorComponent : public QObject

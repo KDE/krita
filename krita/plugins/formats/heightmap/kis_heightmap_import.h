@@ -24,7 +24,6 @@
 
 #include <KisImportExportFilter.h>
 
-class KisDocument;
 
 class KisHeightMapImport : public KisImportExportFilter
 {

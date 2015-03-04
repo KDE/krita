@@ -24,8 +24,6 @@
 #include <QTextBlock>
 
 
-class TextTool;
-class KoStyleManager;
 class KoInlineCite;
 
 class CitationInsertionDialog : public QDialog

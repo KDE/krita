@@ -27,7 +27,6 @@
 
 class KisViewManager;
 class KisActionManager;
-class KActionCollection;
 class KisView;
 
 class KRITAUI_EXPORT KisCanvasControlsManager: public QObject

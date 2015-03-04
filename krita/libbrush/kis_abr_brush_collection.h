@@ -33,7 +33,6 @@
 #include "kis_paint_information.h"
 
 class QString;
-class QPoint;
 class QIODevice;
 
 class KisAbrBrush;

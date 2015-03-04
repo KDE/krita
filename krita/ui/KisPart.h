@@ -34,14 +34,11 @@
 
 #include <KisMainWindow.h>
 
-class KJob;
 namespace KIO {
-  class Job;
 }
 
 class KisDocument;
 class KisView;
-class KisOpenPane;
 class QGraphicsItem;
 class KisDocument;
 

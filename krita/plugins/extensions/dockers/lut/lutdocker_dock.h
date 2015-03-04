@@ -39,11 +39,6 @@ namespace OCIO = OCIO_NAMESPACE;
 
 
 class KisCanvas2;
-class KisDoubleWidget;
-class KoZoomAdapter;
-class SqueezedComboBox;
-class QCheckBox;
-class QToolButton;
 class BlackWhitePointChooser;
 
 #include "ocio_display_filter.h"

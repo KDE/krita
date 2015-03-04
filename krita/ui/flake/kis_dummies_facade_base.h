@@ -25,7 +25,6 @@
 #include "krita_export.h"
 
 class KisNodeDummy;
-class KisNodeDummiesGraph;
 
 /**
  * Keeps track of the node stack and manages local (UI-wide) representation

@@ -26,11 +26,8 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 
-class QPainter;
-class KoViewConverter;
 class KoStyleManager;
 class QTextDocument;
-class QTextLayout;
 
 #define ROUNDING 0.126
 

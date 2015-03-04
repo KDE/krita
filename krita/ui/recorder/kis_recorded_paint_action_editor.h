@@ -29,7 +29,6 @@ class KisPaintOpSettingsWidget;
 class KisRecordedPaintAction;
 class Ui_WdgPaintActionEditor;
 class KoResource;
-class KisNodeQueryPathEditor;
 
 /**
  * This is the editor for all \ref KisRecordedPaintAction

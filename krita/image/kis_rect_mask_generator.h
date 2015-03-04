@@ -21,8 +21,6 @@
 
 #include "krita_export.h"
 
-class QDomElement;
-class QDomDocument;
 
 #include "kis_mask_generator.h"
 

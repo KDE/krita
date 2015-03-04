@@ -29,7 +29,6 @@
 #include <kis_types.h>
 #include "krita_export.h"
 
-class KisPart;
 class KisDocument;
 class KisMainWindow;
 class KisPrintJob;
@@ -43,7 +42,6 @@ class KisCoordinatesConverter;
 class KisInputManager;
 
 class KoZoomController;
-class KoZoomManager;
 class KoZoomController;
 struct KoPageLayout;
 class KoCanvasResourceManager;
@@ -54,7 +52,6 @@ class KAction;
 class KActionCollection;
 
 // Qt classes
-class QToolBar;
 class QDragEnterEvent;
 class QDropEvent;
 class QPrintDialog;

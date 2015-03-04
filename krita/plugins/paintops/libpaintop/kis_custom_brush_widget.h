@@ -32,7 +32,6 @@ const QString TEMPORARY_FILENAME = "/tmp/temporaryKritaBrush.gbr";
 const QString TEMPORARY_BRUSH_NAME = "Temporary custom brush";
 const double DEFAULT_SPACING = 0.25;
 
-class KisGbrBrush;
 
 class KoResource;
 

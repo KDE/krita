@@ -26,7 +26,6 @@
 
 #include <krita_export.h>
 
-class KActionCollection;
 class KisView;
 
 /**

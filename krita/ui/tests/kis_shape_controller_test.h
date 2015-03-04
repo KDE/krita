@@ -22,7 +22,6 @@
 #include "kis_dummies_facade_base_test.h"
 
 class KisDocument;
-class KisPart;
 class KisNameServer;
 class KisShapeController;
 

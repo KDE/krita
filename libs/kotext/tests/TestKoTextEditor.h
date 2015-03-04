@@ -22,12 +22,9 @@
 
 #include <QObject>
 
-class QTextDocument;
 class KoTextEditor;
 class KoSection;
 class KoSectionEnd;
-class KoDocumentRdf;
-class QString;
 
 class TestKoTextEditor : public QObject
 {

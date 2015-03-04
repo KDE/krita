@@ -35,7 +35,6 @@ const QString TEMPORARY_CLIPBOARD_BRUSH_FILENAME = "/tmp/temporaryClipboardBrush
 const QString TEMPORARY_CLIPBOARD_BRUSH_NAME = "Temporary clipboard brush";
 const double DEFAULT_CLIPBOARD_BRUSH_SPACING = 0.25;
 
-class KisGbrBrush;
 class KisClipboard;
 class KoResource;
 

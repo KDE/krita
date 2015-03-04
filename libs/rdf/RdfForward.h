@@ -34,9 +34,6 @@ class KoSemanticStylesheet;
 
 namespace Soprano
 {
-    class Model;
-    class Statement;
-    class Node;
 }
 
 typedef QExplicitlySharedDataPointer<KoRdfBasicSemanticItem> hKoRdfBasicSemanticItem;

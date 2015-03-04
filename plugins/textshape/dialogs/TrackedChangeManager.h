@@ -28,7 +28,6 @@
 class TrackedChangeModel;
 
 class QModelIndex;
-class QTreeView;
 
 class TrackedChangeManager : public QWidget
 {

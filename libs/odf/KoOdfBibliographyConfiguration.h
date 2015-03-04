@@ -26,7 +26,6 @@
 #include "KoXmlReader.h"
 #include "koodf_export.h"
 
-class KoBibliographyInfo;
 class KoXmlWriter;
 
 typedef QPair<QString, Qt::SortOrder> SortKeyPair;

@@ -21,7 +21,6 @@
 #include <QObject>
 #include <QVariant>
 
-class KisView;
 
 class RulerAssistantToolPlugin : public QObject
 {

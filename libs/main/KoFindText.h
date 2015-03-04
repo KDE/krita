@@ -31,7 +31,6 @@
 
 class QTextDocument;
 class QTextCharFormat;
-class KoCanvasBase;
 class KoShape;
 /**
  * \brief KoFindBase implementation for searching within text shapes.

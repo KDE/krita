@@ -28,8 +28,6 @@
 
 class KisGmicUpdater;
 class QCloseEvent;
-class KisGmicInputOutputWidget;
-class QPushButton;
 
 class KisGmicWidget : public QWidget, public Ui::WdgGmic
 {

@@ -26,7 +26,6 @@
 #include "KisView.h"
 
 class KisViewManager;
-class KToggleAction;
 class KActionCollection;
 class KisMirrorAxis;
 

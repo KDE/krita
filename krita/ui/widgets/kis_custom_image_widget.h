@@ -27,7 +27,6 @@
 
 class KisDocument;
 class KisDocument;
-class KoID;
 
 enum CustomImageWidgetType { CUSTOM_DOCUMENT, NEW_IMG_FROM_CB };
 

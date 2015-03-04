@@ -23,7 +23,6 @@
 #include <kis_types.h>
 #include <kis_layer_composition.h>
 
-class QAction;
 class CompositionModel : public QAbstractTableModel
 {
     Q_OBJECT

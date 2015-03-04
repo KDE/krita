@@ -27,12 +27,10 @@
 #include <KoXmlReaderForward.h>
 
 
-class QIODevice;
 class KoView;
 class KoOdfReadStore;
 class QPainter;
 class QWidget;
-class KoShapeLoadingContext;
 
 class KoFormulaShape;
 

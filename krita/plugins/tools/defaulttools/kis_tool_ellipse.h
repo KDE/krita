@@ -31,7 +31,6 @@
 #include <KoIcon.h>
 
 
-class QPainter;
 
 class KoCanvasBase;
 

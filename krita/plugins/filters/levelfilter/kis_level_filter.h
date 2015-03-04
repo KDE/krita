@@ -28,7 +28,6 @@
 
 class WdgLevel;
 class QWidget;
-class KisColorAdjustment;
 class KisHistogram;
 
 

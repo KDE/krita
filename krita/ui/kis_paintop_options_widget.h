@@ -22,11 +22,8 @@
 #include <krita_export.h>
 #include <kis_paintop_settings_widget.h>
 
-class QString;
 class KisPaintOpOption;
-class KisPaintOpPreset;
 class KisPropertiesConfiguration;
-class QListWidgetItem;
 class KisPaintOpSettingsWidget;
 
 /**

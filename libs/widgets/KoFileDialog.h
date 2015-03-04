@@ -28,7 +28,6 @@
 #include <QStringList>
 #include <QList>
 
-class KUrl;
 
 /**
  * Wrapper around QFileDialog providing native file dialogs

@@ -35,7 +35,6 @@ extern "C" {
 #include "kis_types.h"
 #include "kis_annotation.h"
 class KisDocument;
-class KisExifInfo;
 
 namespace KisMetaData
 {

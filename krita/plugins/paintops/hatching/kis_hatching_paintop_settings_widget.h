@@ -26,13 +26,6 @@
 #include "ui_wdghatchingoptions.h"
 #include "ui_wdghatchingpreferences.h"
 
-class KisPaintActionTypeOption;
-class KisHatchingOptions;
-class KisHatchingPreferences;
-class KisPressureOpacityOption;
-class KisHatchingPressureCrosshatchingOption;
-class KisHatchingPressureSeparationOption;
-class KisHatchingPressureThicknessOption;
 
 class KisHatchingPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {

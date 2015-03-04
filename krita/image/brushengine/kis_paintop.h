@@ -32,8 +32,6 @@
 
 class QPointF;
 class KoColorSpace;
-class KoInputDevice;
-class KoPointerEvent;
 
 class KisPainter;
 class KisPaintInformation;

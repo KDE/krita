@@ -27,7 +27,6 @@
 
 class KoColorProfile;
 class KoColorConversionTransformationFactory;
-class QBitArray;
 
 /**
  * This class is used to create color spaces.

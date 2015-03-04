@@ -34,7 +34,6 @@ class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 
 class QString;
-class QPoint;
 class QIODevice;
 
 class BRUSH_EXPORT KisGbrBrush : public KisBrush

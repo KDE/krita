@@ -25,10 +25,6 @@
 const int INVALID_OUTLINE_LEVEL = 0;
 
 class KoXmlWriter;
-class BibliographyGenerator;
-class ToCGenerator;
-class KoBibliographyInfo;
-class KoTableOfContentsGeneratorInfo;
 
 class KOTEXT_EXPORT IndexEntry
 {

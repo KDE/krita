@@ -21,7 +21,6 @@
 
 #include <plugin.h>
 
-class GoogleDocumentService;
 class LoginWindow;
 
 class OnlineDocument : public KoParts::Plugin

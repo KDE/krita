@@ -24,7 +24,6 @@
 #include <KoToolBase.h>
 
 class KoFormulaShape;
-class BasicElement;
 class FormulaEditor;
 class FormulaCommand;
 class QSignalMapper;

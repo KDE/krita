@@ -24,8 +24,6 @@
 #include <QIcon>
 #include <QFrame>
 
-class QGridLayout;
-class QHBoxLayout;
 class QToolButton;
 class QLabel;
 class QButtonGroup;

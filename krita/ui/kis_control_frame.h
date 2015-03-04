@@ -55,7 +55,7 @@ public:
         return m_paintopBox;
     }
 
-private slots:
+private Q_SLOTS:
 
     void slotSetPattern(KoPattern * pattern);
     void slotSetGradient(KoAbstractGradient * gradient);

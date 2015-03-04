@@ -45,7 +45,7 @@ public:
 class KisNodeGraphListenerTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
 
     void testUpdateOfListener();
     void testRecursiveUpdateOfListener();

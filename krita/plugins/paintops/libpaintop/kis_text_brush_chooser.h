@@ -37,11 +37,11 @@ public:
 
     void setBrush(KisBrushSP brush);
 
-private slots:
+private Q_SLOTS:
     void rebuildTextBrush();
     void getFont();
 
-signals:
+Q_SIGNALS:
     void sigBrushChanged();
 
 private:

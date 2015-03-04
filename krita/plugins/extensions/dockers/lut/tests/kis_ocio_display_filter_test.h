@@ -19,12 +19,12 @@
 #ifndef __KIS_OCIO_DISPLAY_FILTER_TEST_H
 #define __KIS_OCIO_DISPLAY_FILTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisOcioDisplayFilterTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void test();
 };
 

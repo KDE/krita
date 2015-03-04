@@ -50,7 +50,7 @@ public:
     qint32 angleX();
     qint32 angleY();
 
-private slots:
+private Q_SLOTS:
 
     void okClicked();
 

@@ -35,7 +35,7 @@ public:
     explicit SimpleFootEndNotesWidget(TextTool *tool,QWidget *parent = 0);
     Ui::SimpleFootEndNotesWidget widget;
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
 
 private:

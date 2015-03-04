@@ -36,7 +36,7 @@ public:
     //int m_model;
 protected:
     void paintEvent(QPaintEvent *e);
-public slots:
+public Q_SLOTS:
     void setColorSpace(const KoColorSpace* colorSpace);
     void setConfiguration(KisColorSelector::Configuration);
     void setList(int model);

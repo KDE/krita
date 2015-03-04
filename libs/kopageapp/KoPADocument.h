@@ -222,11 +222,11 @@ public:
 
     void emitUpdate(KoPAPageBase *page) {emit update(page);}
 
-public slots:
+public Q_SLOTS:
     /// reimplemented
     virtual void initEmpty();
 
-signals:
+Q_SIGNALS:
     void shapeAdded(KoShape* shape);
     void shapeRemoved(KoShape* shape);
     void pageAdded(KoPAPageBase* page);

@@ -45,7 +45,7 @@ public:
     KisImportCatcher(const KUrl & url, KisViewManager* view, const QString &layerType);
     ~KisImportCatcher();
 
-private slots:
+private Q_SLOTS:
     void slotLoadingFinished();
 
 private:

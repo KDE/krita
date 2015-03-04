@@ -156,7 +156,7 @@ private:
      */
     QTextCursor* cursor();
 
-public slots:
+public Q_SLOTS:
 
     /// This adds the \ref command to the calligra undo stack.
     ///
@@ -494,7 +494,7 @@ public slots:
     const QTextList *currentList () const;
     const QTextTable *currentTable () const;
 
-signals:
+Q_SIGNALS:
     void cursorPositionChanged();
     void textFormatChanged();
     void characterStyleApplied(KoCharacterStyle *style);

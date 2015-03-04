@@ -34,10 +34,10 @@ public:
     AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent);
     virtual ~AutocorrectConfig();
 
-public slots:
+public Q_SLOTS:
     void applyConfig();
 
-private slots:
+private Q_SLOTS:
     /* tab 2 */
     void enableSingleQuotes(int state);
     void enableDoubleQuotes(int state);

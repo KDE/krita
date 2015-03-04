@@ -36,7 +36,7 @@ private:
     KoColor m_color;
     QVector<QPointF> m_points;
     
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     

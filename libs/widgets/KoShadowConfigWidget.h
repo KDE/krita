@@ -59,11 +59,11 @@ public:
     /// Returns if shadow is visible
     bool shadowVisible() const;
 
-public slots:
+public Q_SLOTS:
     void setUnit( const KoUnit &unit );
     void setCanvas(KoCanvasBase *canvas);
 
-private slots:
+private Q_SLOTS:
     void visibilityChanged();
     void applyChanges();
     void selectionChanged();

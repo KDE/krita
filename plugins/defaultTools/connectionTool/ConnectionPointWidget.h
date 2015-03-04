@@ -32,7 +32,7 @@ class ConnectionPointWidget : public QWidget
 public:
     explicit ConnectionPointWidget(ConnectionTool *tool, QWidget *parent = 0);
 
-private slots:
+private Q_SLOTS:
     void toggleEditModeCheckbox(bool checked);
 
 private:

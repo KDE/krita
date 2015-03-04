@@ -49,7 +49,7 @@ public:
      */
     void setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer);
 
-private slots:
+private Q_SLOTS:
     void slotDisplayConfigurationChanged();
 
 private:

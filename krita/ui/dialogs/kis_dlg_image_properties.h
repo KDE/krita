@@ -50,7 +50,7 @@ public:
 
     const KoColorSpace * colorSpace();
 
-private slots:
+private Q_SLOTS:
 
     void setAnnotation(const QString& type);
     void setCurrentColor();

@@ -39,7 +39,7 @@ public:
     explicit FormattingPreview(QWidget* parent = 0);
     ~FormattingPreview();
 
-public slots:
+public Q_SLOTS:
     ///Character properties
     void setCharacterStyle(const KoCharacterStyle *style);
     void setParagraphStyle(const KoParagraphStyle *style);

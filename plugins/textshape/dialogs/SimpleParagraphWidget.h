@@ -47,20 +47,20 @@ public:
 
     void setInitialUsedStyles(QVector<int> list);
 
-public slots:
+public Q_SLOTS:
     void setCurrentBlock(const QTextBlock &block);
     void setCurrentFormat(const QTextBlockFormat& format);
     void setStyleManager(KoStyleManager *sm);
     void slotShowStyleManager(int index);
     void slotParagraphStyleApplied(const KoParagraphStyle *style);
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
     void paragraphStyleSelected(KoParagraphStyle *);
     void newStyleRequested(QString name);
     void showStyleManager(int styleId);
 
-private slots:
+private Q_SLOTS:
     void listStyleChanged(int id);
     void styleSelected(int index);
     void styleSelected(QModelIndex &index);

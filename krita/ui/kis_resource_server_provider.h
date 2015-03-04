@@ -59,7 +59,7 @@ public:
     KoResourceServer<KisWorkspaceResource>* workspaceServer(bool block = true);
 
     void brushBlacklistCleanup();
-signals:
+Q_SIGNALS:
     void notifyBrushBlacklistCleanup();
     
 private:

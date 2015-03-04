@@ -29,7 +29,7 @@ public:
     ClonesArray(QObject *parent, const QVariantList &);
     virtual ~ClonesArray();
 
-private slots:
+private Q_SLOTS:
     void slotCreateClonesArray();
 };
 

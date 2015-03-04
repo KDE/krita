@@ -59,7 +59,7 @@ private:
     void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void removeNodeImpl(KisNodeSP node);
 
-signals:
+Q_SIGNALS:
     /**
      * These three signals are forwarded from the local shape manager of
      * KisShapeLayer. This is done because we switch KoShapeManager and

@@ -719,7 +719,7 @@ public:
     /** Clear the selected pixels from the paint device */
     void clearSelection(KisSelectionSP selection);
 
-signals:
+Q_SIGNALS:
 
     void profileChanged(const KoColorProfile *  profile);
     void colorSpaceChanged(const KoColorSpace *colorspace);

@@ -106,7 +106,7 @@ protected:
     // Current application object.
     static KisApplication *KoApp;
 
-public slots:
+public Q_SLOTS:
 
     void remoteArguments(const QByteArray &message, QObject*socket);
     void fileOpenRequested(const QString & url);

@@ -19,12 +19,12 @@
 #ifndef __KIS_NODE_MANAGER_TEST_H
 #define __KIS_NODE_MANAGER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisNodeManagerTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testRotatePaintNode();
     void testShearPaintNode();
     void testScalePaintNode();

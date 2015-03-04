@@ -38,7 +38,7 @@ private:
 
     void testOverflow(KisAbstractCompression *compression);
 
-private slots:
+private Q_SLOTS:
     void testLzfRoundTrip();
     void testLzfOverflow();
 

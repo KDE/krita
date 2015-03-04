@@ -34,10 +34,10 @@ public:
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
-public slots:
+public Q_SLOTS:
     void setCurrentColor(const KoColor& );
     void canvasResourceChanged(int, const QVariant&);
-private slots:
+private Q_SLOTS:
     void popupColorChanged(int i);
     void colorSliderChanged(int i);
     void targetColorChanged(int);

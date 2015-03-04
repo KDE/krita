@@ -27,10 +27,10 @@ class KRITAUI_EXPORT KisRectangleConstraintWidget : public QWidget, public Ui::W
 public:
     KisRectangleConstraintWidget(QWidget *parentWidget, KisToolRectangleBase *tool);
     
-signals:
+Q_SIGNALS:
   void constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height);
   
-protected slots:
+protected Q_SLOTS:
   void rectangleChanged(const QRectF &rect);
   void inputsChanged();
   

@@ -100,7 +100,7 @@ private:
 
     KisSignalCompressor *m_colorChangeCompressor;
 
-signals:
+Q_SIGNALS:
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
     void sigChangefGColor(const KoColor&);
@@ -113,7 +113,7 @@ signals:
     void sigEnableChangeFGColor(bool);
     void sigTriggerTimer();
 
-private slots:
+private Q_SLOTS:
     void slotExternalFgColorChanged(const KoColor &color);
     void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }

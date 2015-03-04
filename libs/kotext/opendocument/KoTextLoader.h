@@ -101,7 +101,7 @@ public:
     */
     void loadBody(const KoXmlElement &element, QTextCursor &cursor, LoadBodyMode pasteMode = LoadMode);
 
-signals:
+Q_SIGNALS:
 
     /**
     * This signal is emitted during loading with a percentage within 1-100 range

@@ -70,7 +70,7 @@ public:
 
     qreal effectiveZoom() const;
 
-public slots:
+public Q_SLOTS:
 
   /**
    * Sets the zoom. If zoom not yet on the list of zoom values, it will be inserted
@@ -135,12 +135,12 @@ public slots:
      */
     qreal prevZoomLevel() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void triggered( const QString& text );
     void sliderValueChanged(int value);
 
-signals:
+Q_SIGNALS:
 
   /**
    * Signal zoomChanged is triggered when user changes the zoom value, either by

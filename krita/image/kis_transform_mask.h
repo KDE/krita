@@ -73,10 +73,10 @@ public:
     void setX(qint32 x);
     void setY(qint32 y);
 
-private slots:
+private Q_SLOTS:
     void slotDelayedStaticUpdate();
 
-signals:
+Q_SIGNALS:
     void initiateDelayedStaticUpdate() const;
 
 private:

@@ -77,10 +77,10 @@ public:
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
 
-public slots:
+public Q_SLOTS:
     void documentResourceChanged(int key, const QVariant & res);
 
-signals:
+Q_SIGNALS:
     void typeChanged(int types);
     void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
 protected:
@@ -93,7 +93,7 @@ private:
     void updateOptionsWidget();
     PathSegment* segmentAtPoint(const QPointF &point);
 
-private slots:
+private Q_SLOTS:
     void pointTypeChanged(QAction *type);
     void insertPoints();
     void removePoints();

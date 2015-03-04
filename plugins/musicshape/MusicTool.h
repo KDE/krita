@@ -47,8 +47,8 @@ protected:
    */
     virtual QWidget * createOptionWidget();
 
-protected slots:
-signals:
+protected Q_SLOTS:
+Q_SIGNALS:
     void shapeChanged(MusicShape* shape);
 private:
    MusicShape *m_musicshape;

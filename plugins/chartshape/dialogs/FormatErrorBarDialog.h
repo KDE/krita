@@ -35,7 +35,7 @@ public:
     ~FormatErrorBarDialog();
     Ui::FormatErrorBarDialog widget;
 
-private slots:
+private Q_SLOTS:
     void errorIndicatorChanged();
     void errorTypeChanged(int currIndex);
     void setSameErrorValueForBoth(bool isChecked);

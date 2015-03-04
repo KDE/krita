@@ -153,7 +153,7 @@ protected:
     void connectSignals();
     void processQueues();
 
-private slots:
+private Q_SLOTS:
     void continueUpdate(const QRect &rect);
     void doSomeUsefulWork();
     void spareThreadAppeared();

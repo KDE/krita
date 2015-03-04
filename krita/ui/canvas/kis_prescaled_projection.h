@@ -65,7 +65,7 @@ public:
 
     void setCoordinatesConverter(KisCoordinatesConverter *coordinatesConverter);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Retrieves image's data from KisImage object and updates

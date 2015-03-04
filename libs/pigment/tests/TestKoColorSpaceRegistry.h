@@ -27,7 +27,7 @@ class TestColorSpaceRegistry : public QObject
     Q_OBJECT
 public:
     TestColorSpaceRegistry();
-private slots:
+private Q_SLOTS:
     void testLab16();
     void testRgb8();
     void testRgb16();

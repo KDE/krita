@@ -39,13 +39,13 @@ public:
     explicit KisColorSelectorNgDockerWidget(QWidget *parent = 0);
     void setCanvas(KisCanvas2* canvas);
     void unsetCanvas();
-public slots:
+public Q_SLOTS:
     void openSettings();
 
-signals:
+Q_SIGNALS:
     void settingsChanged();
 
-protected slots:
+protected Q_SLOTS:
     void updateLayout();
     void reactOnLayerChange();
 

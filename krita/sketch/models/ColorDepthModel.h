@@ -20,7 +20,7 @@
 #ifndef COLORDEPTHMODEL_H
 #define COLORDEPTHMODEL_H
 
-#include <QtCore/QAbstractListModel>
+#include <QAbstractListModel>
 
 class ColorDepthModel : public QAbstractListModel
 {

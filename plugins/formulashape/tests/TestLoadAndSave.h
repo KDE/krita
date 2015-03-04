@@ -25,7 +25,7 @@
 class TestLoadAndSave : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     // Token Elements
     void identifierElement_data();
     void identifierElement();

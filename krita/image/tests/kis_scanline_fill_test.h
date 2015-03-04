@@ -19,7 +19,7 @@
 #ifndef __KIS_SCANLINE_FILL_TEST_H
 #define __KIS_SCANLINE_FILL_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class QColor;
 class KisFillInterval;
@@ -28,7 +28,7 @@ class KisFillInterval;
 class KisScanlineFillTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testSimpleFill();
 
     void testFillBackwardCollisionOnTheLeft();

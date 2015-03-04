@@ -30,7 +30,7 @@ class KisUpdateSchedulerTest : public QObject
 private:
     KisImageSP buildTestingImage();
 
-private slots:
+private Q_SLOTS:
     void testMerge();
     void benchmarkOverlappedMerge();
     void testLocking();

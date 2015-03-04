@@ -35,7 +35,7 @@ public:
 
     ~Barcode();
 
-public slots:
+public Q_SLOTS:
 
 
     /**

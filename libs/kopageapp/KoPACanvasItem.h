@@ -53,11 +53,11 @@ public:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     void updateSize();
 
-public slots:
+public Q_SLOTS:
 
     void slotSetDocumentOffset(const QPoint &offset) { setDocumentOffset(offset); }
 
-signals:
+Q_SIGNALS:
 
     void documentSize(const QSize &size);
 

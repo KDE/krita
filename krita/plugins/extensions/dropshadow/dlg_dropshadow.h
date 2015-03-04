@@ -61,7 +61,7 @@ public:
     quint8 getShadowOpacity();
     QColor getShadowColor();
     bool allowResizingChecked();
-private slots:
+private Q_SLOTS:
     void okClicked();
 
 private:

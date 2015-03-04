@@ -50,7 +50,7 @@ public:
         return !info.isHoveringMode() ? rand() / (qreal)RAND_MAX : 1.0;
     }
 
-public slots:
+public Q_SLOTS:
     void setRotationModeEnabled(int state);
 
 private:

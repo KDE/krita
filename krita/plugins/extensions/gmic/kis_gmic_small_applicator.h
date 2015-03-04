@@ -45,7 +45,7 @@ public:
     float getProgress() const;
     KisPaintDeviceSP preview();
 
-signals:
+Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
     void previewReady();
 

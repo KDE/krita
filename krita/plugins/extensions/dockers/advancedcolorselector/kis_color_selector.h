@@ -95,11 +95,11 @@ public:
     Configuration configuration() const;
     void setColor(const KoColor &color);
 
-public slots:
+public Q_SLOTS:
     void reset();
     void updateSettings();
 
-signals:
+Q_SIGNALS:
     void settingsButtonClicked();
 
 protected:

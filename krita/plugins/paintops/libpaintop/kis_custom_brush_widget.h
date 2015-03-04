@@ -58,13 +58,13 @@ public:
 protected:
     virtual void showEvent(QShowEvent *);
 
-private slots:
+private Q_SLOTS:
     void slotAddPredefined();
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
     void slotSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
 
-signals:
+Q_SIGNALS:
 
     void sigBrushChanged();
 

@@ -30,17 +30,17 @@ public:
     QString toString() const;
     void fromString(const QString& stri);
 
-public slots:
+public Q_SLOTS:
     void updateSettings();
     void setLineCount(int count);
 
-signals:
+Q_SIGNALS:
     void setGradient(bool);
     void setPatches(bool);
     void setPatchCount(int count);
     void setLineHeight(int height);
 
-signals:
+Q_SIGNALS:
     void lineCountChanged(int newLineCount);
 
 private:

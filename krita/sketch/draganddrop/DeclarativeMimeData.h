@@ -91,7 +91,7 @@ public:
     void setHtml(const QString &html);
     */
 
-signals:
+Q_SIGNALS:
     void textChanged();        //FIXME not being used
     void htmlChanged();        //FIXME not being used
     void urlChanged();

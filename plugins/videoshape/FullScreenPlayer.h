@@ -48,7 +48,7 @@ public:
     /// destructor
     virtual ~FullScreenPlayer();
 
-protected slots:
+protected Q_SLOTS:
     void play();
     void pause();
     void stop();

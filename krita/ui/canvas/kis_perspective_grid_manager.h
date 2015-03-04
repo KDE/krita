@@ -52,7 +52,7 @@ public:
     void stopEdition();
 
     void setView(QPointer<KisView> imageView);
-public slots:
+public Q_SLOTS:
     void updateGUI();
     /**
      * Call this to remove all the perspective subgrids.

@@ -61,7 +61,7 @@ public:
      */
     KisImageWSP image();
     vKisNodeSP activeNodes();
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     KisImageWSP m_image;

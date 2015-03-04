@@ -34,9 +34,9 @@ class PartsWidget : public QWidget {
 public:
     explicit PartsWidget(MusicTool *tool, QWidget *parent = 0);
 
-public slots:
+public Q_SLOTS:
     void setShape(MusicShape* shape);
-private slots:
+private Q_SLOTS:
     void partDoubleClicked(const QModelIndex & index);
     void selectionChanged(const QModelIndex& current, const QModelIndex& prev);
     void addPart();

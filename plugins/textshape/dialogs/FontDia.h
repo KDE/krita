@@ -36,7 +36,7 @@ class FontDia : public KDialog
 public:
     explicit FontDia(KoTextEditor *cursor, QWidget* parent = 0);
 
-protected slots:
+protected Q_SLOTS:
     void styleChanged(bool state = true);
 
     void slotReset();

@@ -38,7 +38,7 @@ private:
     int m_startX;
     int m_startY;
     
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     

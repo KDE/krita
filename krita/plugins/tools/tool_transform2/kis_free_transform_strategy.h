@@ -54,7 +54,7 @@ public:
     void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     bool endPrimaryAction();
 
-signals:
+Q_SIGNALS:
     void requestCanvasUpdate();
     void requestResetRotationCenterButtons();
     void requestShowImageTooBig(bool value);

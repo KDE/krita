@@ -41,7 +41,7 @@ public:
     GoogleDocumentService * googleService() {  return gdoc; }
     void showProgressIndicator(bool visible);
 
-private slots:
+private Q_SLOTS:
     void loginService();
     void serviceSelected(int index);
     void authenticated(bool success, QString errorString);

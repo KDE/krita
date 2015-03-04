@@ -52,7 +52,7 @@ private:
 
     QRect getTextRect();
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 

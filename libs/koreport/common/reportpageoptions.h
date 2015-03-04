@@ -65,7 +65,7 @@ public:
     void setLabelType(const QString &);
     const QString & getLabelType();
 
-signals:
+Q_SIGNALS:
     void pageOptionsChanged();
 
 private:

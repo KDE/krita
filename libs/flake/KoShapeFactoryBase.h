@@ -315,7 +315,7 @@ private:
 
     void getDeferredPlugin();
 
-private slots:
+private Q_SLOTS:
 
     /// called whenever a document KoDocumentResourceManager is deleted
     void pruneDocumentResourceManager(QObject *);

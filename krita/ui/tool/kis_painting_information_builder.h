@@ -47,7 +47,7 @@ public:
     KisPaintInformation hover(const QPointF &imagePoint,
                               const KoPointerEvent *event);
 
-protected slots:
+protected Q_SLOTS:
     void updateSettings();
 
 protected:

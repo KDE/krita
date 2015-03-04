@@ -34,10 +34,10 @@ public:
 
     void start();
 
-signals:
+Q_SIGNALS:
     void updated();
 
-private slots:
+private Q_SLOTS:
     void finishedDownload(QNetworkReply *);
     void reportProgress(qint64 arrived,qint64 total);
     void slotError(QNetworkReply::NetworkError error);

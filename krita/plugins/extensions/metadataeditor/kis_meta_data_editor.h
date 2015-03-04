@@ -32,7 +32,7 @@ class KisMetaDataEditor : public KPageDialog
 public:
     KisMetaDataEditor(QWidget* parent, KisMetaData::Store* store);
     ~KisMetaDataEditor();
-public slots:
+public Q_SLOTS:
     virtual void accept();
 private:
     Private* const d;

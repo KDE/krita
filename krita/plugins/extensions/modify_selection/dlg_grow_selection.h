@@ -34,7 +34,7 @@ public:
 
     virtual void getConfiguration(KisOperationConfiguration* config);
 
-private slots:
+private Q_SLOTS:
     void slotGrowValueChanged(int value);
     void slotGrowValueChanged(double value);
     void slotUnitChanged(int index);

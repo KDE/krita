@@ -235,7 +235,7 @@ public:
     int staffSystemCount();
     
     void updateAccidentals();
-signals:
+Q_SIGNALS:
     void partAdded(int index, MusicCore::Part* part);
     void partRemoved(int index, MusicCore::Part* part);
 private:

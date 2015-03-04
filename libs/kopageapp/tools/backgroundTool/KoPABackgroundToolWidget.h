@@ -33,10 +33,10 @@ public:
     explicit KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent = 0 );
     virtual ~KoPABackgroundToolWidget();
 
-public slots:
+public Q_SLOTS:
     void slotActivePageChanged();
 
-private slots:
+private Q_SLOTS:
     void setBackgroundImage();
     void useMasterBackground(bool doUse);
     void displayMasterShapes(bool doDisplay);

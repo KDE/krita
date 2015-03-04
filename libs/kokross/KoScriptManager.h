@@ -56,7 +56,7 @@ public:
     //bool isModified() const;
 
 #if 0
-public slots:
+public Q_SLOTS:
 
     /**
     * Run the selected script.
@@ -83,7 +83,7 @@ public slots:
     */
     void slotRemove();
 
-private slots:
+private Q_SLOTS:
     /// The selected item changed.
     void slotSelectionChanged();
     /// The data changed.
@@ -102,7 +102,7 @@ public:
     explicit KoScriptManagerDialog();
     virtual ~KoScriptManagerDialog();
 
-private slots:
+private Q_SLOTS:
     void slotAccepted();
 
 private:

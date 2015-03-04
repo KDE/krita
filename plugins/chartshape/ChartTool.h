@@ -62,7 +62,7 @@ public:
     /// reimplemented from superclass
     virtual QWidget *createOptionWidget();
 
-private slots:
+private Q_SLOTS:
     void setChartType(ChartType type, ChartSubtype subtype);
     void setChartSubType(ChartSubtype subtype);
     void setThreeDMode(bool threeD);

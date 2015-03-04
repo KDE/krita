@@ -31,9 +31,9 @@ public:
     QString observerName() { return "PresetDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
-public slots:
+public Q_SLOTS:
     void canvasResourceChanged(int key, const QVariant& v);
-private slots:
+private Q_SLOTS:
 private:
     KisCanvas2* m_canvas;
     KisPaintOpPresetsChooserPopup* m_presetChooser;

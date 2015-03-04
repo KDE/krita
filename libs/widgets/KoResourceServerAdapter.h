@@ -68,7 +68,7 @@ public:
     virtual void setSortingEnabled(bool value) = 0;
     virtual bool sortingEnabled() const = 0;
 
-signals:
+Q_SIGNALS:
     void resourceAdded(KoResource*);
     void removingResource(KoResource*);
     void resourceChanged(KoResource*);

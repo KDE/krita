@@ -39,12 +39,12 @@ class KisRecordedPaintActionEditor : public QWidget
 public:
     KisRecordedPaintActionEditor(QWidget* parent, KisRecordedAction* action);
     ~KisRecordedPaintActionEditor();
-private slots:
+private Q_SLOTS:
     void configurationUpdated();
     void paintOpChanged(int index);
     void resourceSelected(KoResource* resource);
     void nodeQueryPathChanged();
-signals:
+Q_SIGNALS:
     void actionEdited();
 private:
     void setPaintOpPreset();

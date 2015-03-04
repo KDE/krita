@@ -56,11 +56,11 @@ public:
 
     static KisColorManager *instance();
 
-signals:
+Q_SIGNALS:
 
     void changed(const QString device);
 
-public slots:
+public Q_SLOTS:
 
 private:
 

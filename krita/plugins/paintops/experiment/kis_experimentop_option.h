@@ -44,7 +44,7 @@ public:
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
+private Q_SLOTS:
     void enableSpeed(qreal value);
     void enableSmooth(qreal value);
     void enableDisplacement(qreal value);

@@ -59,7 +59,7 @@ public:
     bool getToColor();
 
 
-private slots:
+private Q_SLOTS:
 
     void slotSetColorSpaceLabel();
     void okClicked();

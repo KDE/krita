@@ -44,7 +44,7 @@ public:
     void testTabs();
 
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     /// make sure empty paragraphs are initialized properly

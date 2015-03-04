@@ -61,7 +61,7 @@ public:
     virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
     virtual QString itemDataSource() const;
 
-private slots:
+private Q_SLOTS:
     void loadFinished(bool);
 
 private:

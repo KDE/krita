@@ -7,7 +7,7 @@
 class PriorityQueue_test : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testQueue();
 };
 

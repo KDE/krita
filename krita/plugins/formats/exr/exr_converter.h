@@ -63,7 +63,7 @@ public:
     KisImageWSP image();
 private:
     KisImageBuilder_Result decode(const KUrl& uri);
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     struct Private;

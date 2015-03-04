@@ -57,7 +57,7 @@ public:
      */
     void setPopupWidgetWidth(int w);
 
-public slots:
+public Q_SLOTS:
 
     void showPopupWidget();
 

@@ -42,7 +42,7 @@ public:
     virtual void undo();
     virtual void redo();
 
-signals:
+Q_SIGNALS:
     void toggledShowChange(bool on);
 
 private:

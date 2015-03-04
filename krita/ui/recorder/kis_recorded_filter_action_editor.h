@@ -33,10 +33,10 @@ class KisRecordedFilterActionEditor : public QWidget
 public:
     KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action);
     ~KisRecordedFilterActionEditor();
-private slots:
+private Q_SLOTS:
     void configurationUpdated();
     void nodeQueryPathChanged();
-signals:
+Q_SIGNALS:
     void actionEdited();
 private:
     KisRecordedFilterAction* m_action;

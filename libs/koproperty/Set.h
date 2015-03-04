@@ -282,7 +282,7 @@ protected:
     /*! Helper for Private class. */
     void addRelatedProperty(Property *p1, Property *p2) const;
 
-signals:
+Q_SIGNALS:
     /*! Emitted when the value of the property is changed.*/
     void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
@@ -332,7 +332,7 @@ public:
     /*! Intersects with other Set.*/
     virtual void intersect(const KoProperty::Set& set);
 
-protected slots:
+protected Q_SLOTS:
     void intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop);
     void intersectedReset(KoProperty::Set& set, KoProperty::Property& prop);
 

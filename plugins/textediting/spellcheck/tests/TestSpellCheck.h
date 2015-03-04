@@ -10,7 +10,7 @@ class TestSpellCheck : public QObject
 public:
     TestSpellCheck() {}
 
-private slots:
+private Q_SLOTS:
     void testFetchMoreText();
     void testFetchMoreText2();
 };

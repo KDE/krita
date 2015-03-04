@@ -46,7 +46,7 @@ public:
 
     virtual void keyPressEvent(QKeyEvent* event);
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
 protected:

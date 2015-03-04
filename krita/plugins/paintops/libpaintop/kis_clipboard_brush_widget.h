@@ -56,7 +56,7 @@ public:
     virtual ~KisClipboardBrushWidget();
     KisBrushSP brush();
 
-private slots:
+private Q_SLOTS:
     void slotUseBrushClicked();
     void slotSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
@@ -65,7 +65,7 @@ private slots:
 protected:
     void showEvent(QShowEvent *);
 
-signals:
+Q_SIGNALS:
     void sigBrushChanged();
 
 private:

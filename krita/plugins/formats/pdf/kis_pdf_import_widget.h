@@ -40,7 +40,7 @@ public:
     inline QList<int>  pages() {
         return m_pages;
     }
-private slots:
+private Q_SLOTS:
     void selectAllPages(bool v);
     void selectFirstPage(bool v);
     void selectSelectionOfPages(bool v);

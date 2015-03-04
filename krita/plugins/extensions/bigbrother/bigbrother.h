@@ -34,7 +34,7 @@ public:
     BigBrotherPlugin(QObject *parent, const QVariantList &);
     virtual ~BigBrotherPlugin();
 
-private slots:
+private Q_SLOTS:
 
     void slotOpenPlay();
     void slotOpenEdit();

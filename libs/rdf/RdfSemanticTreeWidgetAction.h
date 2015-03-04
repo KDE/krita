@@ -35,7 +35,7 @@ public:
     RdfSemanticTreeWidgetAction(QWidget *parent, KoCanvasBase *canvas, const QString &name);
     virtual ~RdfSemanticTreeWidgetAction();
 
-public slots:
+public Q_SLOTS:
     virtual void activated();
 
 protected:

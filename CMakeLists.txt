@@ -197,11 +197,6 @@ if(WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif(WIN32)
 
-add_definitions(
-    -DQT_USE_FAST_CONCATENATION
-    -DQT_USE_FAST_OPERATOR_PLUS
-)
-
 # would need more code changes before 4.8.0, e.g. with qPrintable()
 if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
     # enable QStringBuilder enhancement

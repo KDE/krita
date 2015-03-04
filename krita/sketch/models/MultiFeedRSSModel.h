@@ -33,9 +33,9 @@
 #ifndef MULTIFEEDRSSMODEL_H
 #define MULTIFEEDRSSMODEL_H
 
-#include <QtCore/QAbstractListModel>
-#include <QtCore/QStringList>
-#include <QtCore/QDateTime>
+#include <QAbstractListModel>
+#include <QStringList>
+#include <QDateTime>
 
 QT_BEGIN_NAMESPACE
 class QThread;
@@ -85,7 +85,7 @@ public:
         return m_articleCount;
     }
 
-public slots:
+public Q_SLOTS:
     void setArticleCount(int arg) {
         if (m_articleCount != arg) {
             m_articleCount = arg;
@@ -93,10 +93,10 @@ public slots:
         }
     }
 
-signals:
+Q_SIGNALS:
     void articleCountChanged(int arg);
 
-private slots:
+private Q_SLOTS:
     void appendFeedData(QNetworkReply *reply);
 
 private:

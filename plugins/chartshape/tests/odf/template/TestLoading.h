@@ -32,7 +32,7 @@ class TestLoading : public TestLoadingBase
 public:
     TestLoading();
 
-private slots:
+private Q_SLOTS:
 	/// Tests title, subtitle and footer
     void testLabels();
     void testInternalTable();

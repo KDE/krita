@@ -59,11 +59,11 @@ public:
     /// returns true, if this component wants to grab the mouse (normaly true, if containsPoint returns true)
     bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
 
-public slots:
+public Q_SLOTS:
     /// set hue, saturation, value or/and lightness
     /// unused parameters should be set to -1
     void setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma);
-signals:
+Q_SIGNALS:
     /// request for repaint, for instance, if the hue changes.
     void update();
     /// -1, if unaffected

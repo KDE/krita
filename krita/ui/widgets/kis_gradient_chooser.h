@@ -62,11 +62,11 @@ public:
 
     void setCurrentItem(int row, int column);
 
-signals:
+Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected(KoResource * resource);
 
-private slots:
+private Q_SLOTS:
     virtual void update(KoResource * resource);
     void addGradient();
     void editGradient();

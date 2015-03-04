@@ -25,7 +25,7 @@
 class TestSegmentTypeCommand : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void changeToCurve();
     void changeToLine();
 };

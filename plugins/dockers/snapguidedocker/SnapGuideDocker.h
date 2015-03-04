@@ -42,7 +42,7 @@ public:
     SnapGuideDocker();
     virtual ~SnapGuideDocker();
     QString observerName() { return "SnapGuideDocker"; }
-private slots:
+private Q_SLOTS:
     void locationChanged(Qt::DockWidgetArea area);
 
 private:

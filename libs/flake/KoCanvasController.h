@@ -348,7 +348,7 @@ public:
     // Convenience method to retrieve the canvas controller for who needs to use QPointer
     KoCanvasController *canvasController() const { return m_canvasController; }
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when a previously added canvas is about to be removed.
      * @param canvasController this object
@@ -415,7 +415,7 @@ signals:
      */
     void zoomRelative(const qreal factor, const QPointF &stillPoint);
 
-public slots:
+public Q_SLOTS:
     /**
      * Call this slot whenever the size of your document in view coordinates (pixels)
      * changes, for instance when zooming.

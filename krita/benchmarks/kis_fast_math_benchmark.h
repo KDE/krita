@@ -23,7 +23,7 @@
 
 class KisFastMathBenchmark : public QObject {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void benchmarkFastAtan2();
     void benchmarkLibCAtan2();
 };

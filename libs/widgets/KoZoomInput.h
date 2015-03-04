@@ -33,7 +33,7 @@ class KoZoomInput : public QStackedWidget
 
         virtual bool eventFilter(QObject* watched, QEvent* event);
 
-    signals:
+    Q_SIGNALS:
         void zoomLevelChanged(const QString& level);
 
     protected:

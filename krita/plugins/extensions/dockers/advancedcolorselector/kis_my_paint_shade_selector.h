@@ -43,7 +43,7 @@ public:
 public:
     void setColor(const KoColor &color);
 
-protected slots:
+protected Q_SLOTS:
     void canvasResourceChanged(int key, const QVariant& v);
 
 protected:

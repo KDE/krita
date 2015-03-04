@@ -62,7 +62,7 @@ private:
         inline void benchmarkLine(QString presetFileName);
         inline void benchmarkCircle(QString presetFileName);
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

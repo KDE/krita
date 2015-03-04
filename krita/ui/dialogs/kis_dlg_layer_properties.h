@@ -71,7 +71,7 @@ private:
      */
     QBitArray getChannelFlags() const;
 
-protected slots:
+protected Q_SLOTS:
     void slotNameChanged(const QString &);
     void applyNewProperties();
     void cleanPreviewChanges();

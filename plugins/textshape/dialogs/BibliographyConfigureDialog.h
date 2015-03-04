@@ -37,7 +37,7 @@ class BibliographyConfigureDialog : public QDialog
 public:
     explicit BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent = 0);
 
-public slots:
+public Q_SLOTS:
     void addSortKey();
     void save(QAbstractButton *);
     void sortMethodChanged(bool);

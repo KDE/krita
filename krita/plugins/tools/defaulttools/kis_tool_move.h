@@ -47,7 +47,7 @@ public:
     KisToolMove(KoCanvasBase * canvas);
     virtual ~KisToolMove();
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
@@ -93,7 +93,7 @@ private:
     void cancelStroke();
     QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
 
-private slots:
+private Q_SLOTS:
     void endStroke();
 
 private:

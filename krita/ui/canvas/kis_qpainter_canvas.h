@@ -79,7 +79,7 @@ protected: // KisCanvasWidgetBase
 
     virtual bool callFocusNextPrevChild(bool next);
 
-private slots:
+private Q_SLOTS:
     void slotConfigChanged();
 
 private:

@@ -45,17 +45,17 @@ public:
 
 //    virtual void setProperty(const Property *prop);
     
-signals:
+Q_SIGNALS:
     void commitData(QWidget* editor);
 
-public slots:
+public Q_SLOTS:
     void setValue(const QVariant& value);
 
 //todo?    virtual bool eventFilter(QObject *o, QEvent *e);
 /*    QLineEdit * lineEdit() const {
         return KIntSpinBox::lineEdit();
     }*/
-protected slots:
+protected Q_SLOTS:
     void slotValueChanged(int value);
 
 private:
@@ -80,13 +80,13 @@ public:
 
     double value() const;
 
-signals:
+Q_SIGNALS:
     void commitData(QWidget* editor);
 
-public slots:
+public Q_SLOTS:
     void setValue(double value);
 
-protected slots:
+protected Q_SLOTS:
     void slotValueChanged(double value);
 
 protected:

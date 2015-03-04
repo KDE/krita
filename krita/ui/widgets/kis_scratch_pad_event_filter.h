@@ -34,7 +34,7 @@ public:
     KisScratchPadEventFilter(QWidget *parent);
     void setWidgetToDocumentTransform(const QTransform &transform);
 
-signals:
+Q_SIGNALS:
     void mousePressSignal(KoPointerEvent *event);
     void mouseReleaseSignal(KoPointerEvent *event);
     void mouseMoveSignal(KoPointerEvent *event);

@@ -50,7 +50,7 @@ public:
 private:
     KConfigGroup configGroup;
 
-private slots:
+private Q_SLOTS:
     void slotActivateTextTool();
     void styleIndexChanged(int index);
     void textTypeIndexChanged(int index);

@@ -42,7 +42,7 @@ private:
 
     void benchmarkCOWImpl();
 
-private slots:
+private Q_SLOTS:
     void testUndoingNewTiles();
     void testPurgedAndEmptyTransactions();
     void testUnversionedBitBlt();

@@ -10,7 +10,7 @@ class TestChangeListCommand : public QObject
 public:
     TestChangeListCommand() {}
 
-private slots:
+private Q_SLOTS:
     void addList();
     void addListWithLevel2();
     void removeList();

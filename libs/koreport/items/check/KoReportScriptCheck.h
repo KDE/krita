@@ -33,7 +33,7 @@ namespace Scripting
 
             ~Check();
 
-        public slots:
+        public Q_SLOTS:
             bool value();
             void setValue(bool val = true);
 

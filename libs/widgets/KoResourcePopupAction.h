@@ -49,14 +49,14 @@ public:
     QSharedPointer<KoShapeBackground> currentBackground() const;
     void setCurrentBackground(QSharedPointer<KoShapeBackground> background);
 
-signals:
+Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected(QSharedPointer<KoShapeBackground>  background);
 
-public slots:
+public Q_SLOTS:
     void updateIcon();
 
-private slots:
+private Q_SLOTS:
     void indexChanged(const QModelIndex &modelIndex);
 
 private:

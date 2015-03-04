@@ -164,7 +164,7 @@ protected:
 
     QRect cropChangeRectBySelection(const QRect &rect) const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * gets this layer. Overriddes function in

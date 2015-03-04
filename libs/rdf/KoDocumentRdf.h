@@ -422,7 +422,7 @@ public:
      */
     void dumpModel(const QString &msg, QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when a new semanticItem is created so that dockers can
      * update themselves accordingly. It is expected that when

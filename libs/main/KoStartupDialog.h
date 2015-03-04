@@ -32,9 +32,9 @@ class KoStartupDialog : public QDialog
 public:
     explicit KoStartupDialog(QWidget *parent = 0);
     
-signals:
+Q_SIGNALS:
     
-public slots:
+public Q_SLOTS:
     
 };
 

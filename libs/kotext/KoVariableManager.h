@@ -116,7 +116,7 @@ public:
      */
     void saveOdf(KoXmlWriter *bodyWriter);
 
-signals:
+Q_SIGNALS:
 	void valueChanged();
 
 private:

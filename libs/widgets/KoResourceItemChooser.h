@@ -114,14 +114,14 @@ public:
 
     virtual bool eventFilter(QObject* object, QEvent* event);
 
-signals:
+Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
     void splitterMoved();
-public slots:
+public Q_SLOTS:
     void slotButtonClicked( int button );
 
-private slots:
+private Q_SLOTS:
     void activated ( const QModelIndex & index );
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);

@@ -37,11 +37,11 @@ public:
     int value() const;
     int saturation() const;
     QColor color() const;
-public slots:
+public Q_SLOTS:
     void setHue(int h);
     void setHSV(int h, int s, int v);
     void setQColor(const QColor&);
-signals:
+Q_SIGNALS:
     void colorChanged(const QColor&);
 private:
     void tellColorChanged();

@@ -45,10 +45,10 @@ public:
     void setVisible(bool b);
     void setCurrentLanguage(const QString &language);
 
-signals:
+Q_SIGNALS:
     void clearHighlightingForWord(int startPosition);
 
-private slots:
+private Q_SLOTS:
     void createSuggestionsMenu();
     void replaceWord(const QString &suggestion);
     void ignoreWord();

@@ -61,7 +61,7 @@ public:
      */
     void paint(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
-public slots:
+public Q_SLOTS:
     /**
      * Set if the decoration is visible or not.
      */

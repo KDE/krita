@@ -9,7 +9,7 @@ class TestKoLcmsColorProfile : public QObject
     // commented out since I don't know when...
     void testChromaticitiesFromProfile();
     void testProfileCreationFromChromaticities();
-private slots:
+private Q_SLOTS:
     void testConversion();
 };
 

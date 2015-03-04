@@ -43,7 +43,7 @@ public:
     void setView(QPointer<KisView>imageView);
     void setup(KisActionManager *actionManager);
 
-public slots:
+public Q_SLOTS:
 
     void slotImportLayerFromFile();
     void slotImportLayerAsTransparencyMask();

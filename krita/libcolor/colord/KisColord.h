@@ -57,12 +57,12 @@ public:
     const QString deviceName(const QString &id) const;
     QByteArray deviceProfile(const QString &id, int profile);
 
-signals:
+Q_SIGNALS:
     void changed();
     void changed(const QString& device);
 
 
-private slots:
+private Q_SLOTS:
 
     void serviceOwnerChanged(const QString &serviceName, const QString &oldOwner, const QString &newOwner);
 

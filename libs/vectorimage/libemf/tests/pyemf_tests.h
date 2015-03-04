@@ -23,7 +23,7 @@
 class PyEmfTests: public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void test1();
     void testArcChordPie();
     void testDeleteObject();

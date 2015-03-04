@@ -52,7 +52,7 @@ public:
     KisFilterConfiguration * configuration();
 
 
-private slots:
+private Q_SLOTS:
 
     void slotGeneratorActivated(int);
 

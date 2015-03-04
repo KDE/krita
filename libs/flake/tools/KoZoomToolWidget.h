@@ -35,7 +35,7 @@ public:
 protected:
     bool eventFilter(QObject *object, QEvent *event);
 
-private slots:
+private Q_SLOTS:
     void changeZoomMode();
 
 private:

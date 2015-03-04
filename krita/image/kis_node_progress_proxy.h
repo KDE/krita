@@ -54,7 +54,7 @@ public:
      * @return the current percentage (return -1 if no progress)
      */
     int percentage() const;
-signals:
+Q_SIGNALS:
     /**
      * Emitted when the percentage of the proxy is changed.
      * @param _percentage is the progress value in percent

@@ -31,7 +31,7 @@ public:
     KisDropshadowPlugin(QObject *parent, const QVariantList &);
     virtual ~KisDropshadowPlugin();
 
-private slots:
+private Q_SLOTS:
 
     void slotDropshadow();
 };

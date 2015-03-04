@@ -70,7 +70,7 @@ public:
      */
     void setBlockUpdates(bool block);
 
-signals:
+Q_SIGNALS:
 
     void sigSetFGColor(const KoColor& c);
     void sigSetBGColor(const KoColor& c);
@@ -90,7 +90,7 @@ signals:
 
     void hidePalettes();
 
-public slots:
+public Q_SLOTS:
 
     void slotChangeActivePaintop(int);
 
@@ -104,7 +104,7 @@ public slots:
 
     void slotSetBGColor(const KoColor c);
 
-private slots:
+private Q_SLOTS:
     void updateFavoritePresets();
 
 private:

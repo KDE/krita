@@ -50,7 +50,7 @@ protected:
     virtual void paintEvent(QPaintEvent *e); ///< reimplemented from QFrame
     virtual QSize sizeHint() const; ///< reimplemented from QFrame
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted when the mouse is released.

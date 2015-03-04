@@ -39,7 +39,7 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
     
-private slots:
+private Q_SLOTS:
     void actionTriggered(QAction* action);
     void activated (const QModelIndex& index);
     void recordClicked();

@@ -63,10 +63,10 @@ public:
     void setMimeTypeFilters(const QStringList &filterList,
                             QString defaultFilter = QString());
 
-public slots:
+public Q_SLOTS:
     void slotSelectFile();
 
-signals:
+Q_SIGNALS:
     void textChanged(const QString &fileName);
     void urlSelected(const KUrl &url);
 

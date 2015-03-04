@@ -136,7 +136,7 @@ public:
      */
     bool hasOutput() const;
 
-private slots:
+private Q_SLOTS:
 
     void update();
     void updateUi();

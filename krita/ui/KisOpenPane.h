@@ -64,18 +64,18 @@ public:
     void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
 
 
-protected slots:
+protected Q_SLOTS:
     void updateSelectedWidget();
     void itemClicked(QTreeWidgetItem* item);
 
     /// Saves the splitter sizes for KisDetailsPaneBase based panes
     void saveSplitterSizes(KisDetailsPane* sender, const QList<int>& sizes);
 
-private slots:
+private Q_SLOTS:
     /// when clicked "Open Existing Document" button
     void openFileDialog();
     
-signals:
+Q_SIGNALS:
     void openExistingFile(const KUrl&);
     void openTemplate(const KUrl&);
 

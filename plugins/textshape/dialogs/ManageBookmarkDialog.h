@@ -34,13 +34,13 @@ public:
     QString bookmarkName() const;
     int bookmarkRow() const;
 
-signals:
+Q_SIGNALS:
     void bookmarkSelectionChanged(int currentRow);
     void bookmarkNameChanged(const QString &oldName, const QString &newName);
     void bookmarkItemDeleted(const QString &deletedName);
     void bookmarkItemDoubleClicked(QListWidgetItem *item);
 
-private slots:
+private Q_SLOTS:
     void selectionChanged(int currentRow);
     void slotBookmarkRename();
     void slotBookmarkDelete();
@@ -59,11 +59,11 @@ public:
     explicit ManageBookmarkDialog(QList<QString> nameList, KoTextEditor *editor, QWidget *parent = 0);
     QString selectedBookmarkName();
 
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &oldName, const QString &newName);
     void bookmarkDeleted(const QString &deletedName);
 
-private slots:
+private Q_SLOTS:
     void selectionChanged(int currentRow);
     void bookmarkDoubleClicked(QListWidgetItem *item);
 

@@ -61,7 +61,7 @@ public:
         m_canvas = 0; // Intentionally not disabled if there's no canvas
     }
     
-private slots:
+private Q_SLOTS:
     void slotItemDoubleClicked(const QModelIndex& index);
     void slotBackButtonClicked();
     void slotUpButtonClicked();

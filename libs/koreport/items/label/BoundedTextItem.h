@@ -56,7 +56,7 @@ private:
     
     int m_backgroundOpacity;
     
-signals:
+Q_SIGNALS:
     void exitEditMode();
 
 };

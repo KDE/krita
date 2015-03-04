@@ -56,7 +56,7 @@ public: // KoResourceServerObserver
     virtual void syncTagAddition(const QString&) {}
     virtual void syncTagRemoval(const QString&) {}
 
-private slots:
+private Q_SLOTS:
     void addColorForeground();
     void addColor();
     void removeColor();

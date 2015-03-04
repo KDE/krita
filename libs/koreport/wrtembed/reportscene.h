@@ -57,7 +57,7 @@ protected:
     virtual void focusOutEvent(QFocusEvent * focusEvent);
     virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * contextMenuEvent);
 
-signals:
+Q_SIGNALS:
     void clicked();
     void lostFocus();
 

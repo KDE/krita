@@ -24,7 +24,7 @@
 class KisSelectionManagerTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testFillForegroundWithoutSelection();
     void testFillForegroundWithSelection();
     void testFillBackgroundWithSelection();

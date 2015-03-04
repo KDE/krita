@@ -23,12 +23,6 @@
 #include <QExplicitlySharedDataPointer>
 
 class KoDocumentRdf;
-class KoDocumentRdfEditWidget;
-class KoTextInlineRdf;
-class KoRdfPrefixMapping;
-class KoRdfSemanticTreeWidgetItem;
-class KoTextEditor;
-class KoRdfBasicSemanticItem;
 class KoRdfSemanticItem;
 class KoSemanticStylesheet;
 class KoDocumentRdfEditWidget;
@@ -36,13 +30,17 @@ class KoTextInlineRdf;
 class KoRdfPrefixMapping;
 class KoRdfSemanticTreeWidgetItem;
 class KoTextEditor;
+class KoRdfBasicSemanticItem;
 
 namespace Soprano
 {
+    class Model;
+    class Statement;
+    class Node;
 }
 
-typedef QExplicitlySharedDataPointer<KoRdfBasicSemanticItem> hKoRdfBasicSemanticItem;
 typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
 typedef QExplicitlySharedDataPointer<KoSemanticStylesheet> hKoSemanticStylesheet;
+typedef QExplicitlySharedDataPointer<KoRdfBasicSemanticItem> hKoRdfBasicSemanticItem;
 
 #endif

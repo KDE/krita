@@ -262,7 +262,7 @@ public:
     static bool isNumberingStyle(int style);
 
     static int bulletCharacter(int style);
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &newName);
     void styleChanged(int level);
 

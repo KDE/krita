@@ -40,16 +40,16 @@ public:
 
     QVariant value() const;
 
-signals:
+Q_SIGNALS:
     void commitData(QWidget* editor);
 
-public slots:
+public Q_SLOTS:
     void setValue(const QVariant& value);
 
 protected:
     virtual void paintEvent(QPaintEvent* event);
 
-protected slots:
+protected Q_SLOTS:
     void onTimeChanged();
 };
 

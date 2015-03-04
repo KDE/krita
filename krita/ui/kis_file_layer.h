@@ -66,7 +66,7 @@ public:
     KUndo2Command* crop(const QRect & rect);
     KUndo2Command* transform(const QTransform &transform);
 
-public slots:
+public Q_SLOTS:
     void slotLoadingFinished(KisImageSP importedImage);
 
 private:

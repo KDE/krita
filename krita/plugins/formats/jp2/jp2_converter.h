@@ -74,7 +74,7 @@ public:
     KisImageWSP getImage();
 private:
     KisImageBuilder_Result decode(const KUrl& uri);
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     int getFileFormat(const KUrl& uri) const;

@@ -36,7 +36,7 @@ class KRITAIMAGE_EXPORT KisMacroPlayer : public QThread {
 public:
     KisMacroPlayer(KisMacro* _macro, const KisPlayInfo& info, KoUpdater * updater = 0, QObject* _parent = 0);
     virtual ~KisMacroPlayer();
-public slots:
+public Q_SLOTS:
     void pause();
     void resume();
 protected:

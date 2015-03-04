@@ -36,10 +36,10 @@ public:
     ColorSetChooser(QWidget* parent = 0);
     virtual ~ColorSetChooser();
 
-signals:
+Q_SIGNALS:
     void paletteSelected(KoColorSet* colorSet);
 
-private slots:
+private Q_SLOTS:
     void resourceSelected(KoResource* resource);
     void slotSave();
 

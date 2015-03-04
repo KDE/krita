@@ -25,7 +25,7 @@
 class TestShapeContainer : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     // tests
     void testModel();
     void testSetParent();

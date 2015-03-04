@@ -25,7 +25,7 @@
 class TestShapePainting : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
 
     void testPaintShape();
     void testPaintHiddenShape();

@@ -41,7 +41,7 @@ public:
     virtual QString observerName() { return "KoToolBoxDocker"; }
 
 
-protected slots:
+protected Q_SLOTS:
     void updateToolBoxOrientation(Qt::DockWidgetArea area);
     void updateFloating(bool);
 

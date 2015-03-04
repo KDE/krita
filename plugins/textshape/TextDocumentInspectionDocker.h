@@ -42,7 +42,7 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
-private slots:
+private Q_SLOTS:
     void onShapeSelectionChanged();
 
 private:

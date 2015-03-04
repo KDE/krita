@@ -60,7 +60,7 @@ public:
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotNameChanged(const QString &);
     void slotConfigChanged();

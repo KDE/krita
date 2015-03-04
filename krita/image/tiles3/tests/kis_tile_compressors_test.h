@@ -31,7 +31,7 @@ private:
     void doLowLevelRoundTripIncompressible(KisAbstractTileCompressor *compressor);
 
 
-private slots:
+private Q_SLOTS:
     void testRoundTripLegacy();
     void testLowLevelRoundTripLegacy();
 

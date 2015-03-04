@@ -62,7 +62,7 @@ public:
     void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
     bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
 
-signals:
+Q_SIGNALS:
     void requestCanvasUpdate();
     void requestUpdateOptionWidget();
     void requestCursorOutlineUpdate(const QPointF &imagePoint);

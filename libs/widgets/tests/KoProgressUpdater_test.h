@@ -27,11 +27,11 @@ class KoProgressUpdaterTest : public QObject
 {
     Q_OBJECT
 
-public slots:
+public Q_SLOTS:
 
     void jobDone(ThreadWeaver::Job* );
     
-private slots:
+private Q_SLOTS:
 
     void testCreation();
     void testSimpleProgress();

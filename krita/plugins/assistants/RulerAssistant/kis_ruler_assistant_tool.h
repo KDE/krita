@@ -61,11 +61,11 @@ private:
     bool mouseNear(const QPointF& mousep, const QPointF& point);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
-private slots:
+private Q_SLOTS:
     void removeAllAssistants();
     void saveAssistants();
     void loadAssistants();

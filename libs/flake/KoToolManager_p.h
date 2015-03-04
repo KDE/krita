@@ -130,11 +130,11 @@ public:
     /// wrapper around KoToolFactoryBase::shortcut()
     KShortcut shortcut() const;
 
-signals:
+Q_SIGNALS:
     /// emitted when one of the generated buttons was pressed.
     void toolActivated(ToolHelper *tool);
 
-private slots:
+private Q_SLOTS:
     void buttonPressed();
 
 private:
@@ -150,10 +150,10 @@ class Connector : public QObject
 public:
     explicit Connector(KoShapeManager *parent);
 
-public slots:
+public Q_SLOTS:
     void selectionChanged();
 
-signals:
+Q_SIGNALS:
     void selectionChanged(QList<KoShape*> shape);
 
 private:
@@ -169,7 +169,7 @@ public:
     ToolAction(KoToolManager* toolManager, QString id, QString name, QObject *parent);
     virtual ~ToolAction();
 
-private slots:
+private Q_SLOTS:
     void actionTriggered();
 
 private:

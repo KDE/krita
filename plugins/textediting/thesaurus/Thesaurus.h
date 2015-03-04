@@ -55,7 +55,7 @@ public:
 
      void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
-private slots:
+private Q_SLOTS:
     void process();
     void dialogClosed();
 

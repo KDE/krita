@@ -34,7 +34,11 @@ class KoTextEditor;
 
 namespace Soprano
 {
+    class Model;
+    class Statement;
+    class Node;
 }
+
 typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
 typedef QExplicitlySharedDataPointer<KoSemanticStylesheet> hKoSemanticStylesheet;
 

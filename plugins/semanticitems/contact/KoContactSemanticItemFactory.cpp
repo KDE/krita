@@ -46,7 +46,7 @@ QString KoContactSemanticItemFactory::classDisplayName() const
     return i18nc("displayname of the semantic item type Contact", "Contact");
 }
 
-void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     const QString sparqlQuery = QLatin1String(
         "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
@@ -70,7 +70,7 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem>
     // lastKnownObjects is used to perform a sematic set diff
     // at return time d->foafObjects will have any new objects and
     // ones that are no longer available will be removed.
-    QList<hKoRdfSemanticItem> oldSemanticItems = semanticItems;
+    QList<hKoRdfBasicSemanticItem> oldSemanticItems = semanticItems;
 
     // uniqfilter is needed because soprano is not honouring
     // the DISTINCT sparql keyword
@@ -83,7 +83,7 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem>
         }
         uniqfilter += name;
 
-        hKoRdfSemanticItem newSemanticItem(new KoRdfFoaF(0, rdf, it));
+        hKoRdfBasicSemanticItem newSemanticItem(new KoRdfFoaF(0, rdf, it));
 
         const QString newItemLs = newSemanticItem->linkingSubject().toString();
         foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
@@ -99,7 +99,7 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem>
         }
     }
 
-    foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+    foreach (hKoRdfBasicSemanticItem semItem, oldSemanticItems) {
         semanticItems.removeAll(semItem);
     }
 
@@ -116,9 +116,9 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem>
 #endif
 }
 
-hKoRdfSemanticItem KoContactSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem KoContactSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
 {
-    return hKoRdfSemanticItem(new KoRdfFoaF(parent, rdf));
+    return hKoRdfBasicSemanticItem(new KoRdfFoaF(parent, rdf));
 
 }
 
@@ -127,7 +127,7 @@ bool KoContactSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMime
     return mimeData->hasFormat(QLatin1String("text/x-vcard"));
 }
 
-hKoRdfSemanticItem KoContactSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
+hKoRdfBasicSemanticItem KoContactSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
                                                                    KoCanvasBase *host,
                                                                    const KoDocumentRdf *rdf,
                                                                    QObject *parent) const
@@ -136,4 +136,9 @@ hKoRdfSemanticItem KoContactSemanticItemFactory::createSemanticItemFromMimeData(
     hKoRdfSemanticItem semanticItem = hKoRdfSemanticItem(new KoRdfFoaF(parent, rdf));
     semanticItem->importFromData(ba, rdf, host);
     return semanticItem;
+}
+
+bool KoContactSemanticItemFactory::isBasic() const
+{
+    return false;
 }

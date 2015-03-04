@@ -73,7 +73,7 @@ bool KoTextRdfCore::createAndSaveManifest(QSharedPointer<Soprano::Model> docmode
         QString sparqlQuery;
         QTextStream queryss(&sparqlQuery);
         queryss << ""
-            << "prefix pkg:  <http://docs.oasis-open.org/opendocument/meta/package/common#> \n"
+            << "prefix pkg:  <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
             << ""
             << "select ?s ?p ?o \n"
             << "where { \n"
@@ -88,7 +88,7 @@ bool KoTextRdfCore::createAndSaveManifest(QSharedPointer<Soprano::Model> docmode
         while (it.next()) {
             Soprano::Node pred = it.binding("p");
             Soprano::Node obj  = it.binding("o");
-            if (pred.toString() == "http://docs.oasis-open.org/opendocument/meta/package/common#idref") {
+            if (pred.toString() == "http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref") {
                 kDebug(30015) << "changing idref, oldID:" << oldID << " newID:" << newID;
                 obj = Node::createLiteralNode(newID);
             }

@@ -134,9 +134,13 @@ void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, QSharedPointer<Soprano
             //kDebug(30015) << "expanding lists... new.sz:" << model->statementCount();
         }
 
-        const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems(semanticClass, model);
+        const QList<hKoRdfSemanticItem> semanticItems = KoRdfSemanticItem::fromList(rdf->semanticItems(semanticClass, model));
         foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
             KoRdfSemanticTreeWidgetItem *item = semanticItem->createQTreeWidgetItem(treeWidgetItem);
+            if (!item) { //FIXME: add this cuz rdf info dialog is crashing. I don't want to implement QTreeWidgetItem for AuthorSection
+                continue;
+            }
+
             if (selectedItems.contains(item->semanticItem()->name())) {
                 item->setSelected(true);
             }
@@ -147,7 +151,7 @@ void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, QSharedPointer<Soprano
 
 void KoRdfSemanticTree::update(KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model)
 {
-    d->update (rdf,model);
+    d->update(rdf,model);
 }
 
 

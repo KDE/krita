@@ -22,13 +22,15 @@
 #ifndef KORDFSEMANTICITEMFACTORYBASE_H
 #define KORDFSEMANTICITEMFACTORYBASE_H
 
-#include "kordf_export.h"
-#include "KoRdfSemanticItem.h"
+#include <kordf_export.h>
+
+// Calligra
+#include <KoRdfSemanticItem.h>
+
 // Qt
 #include <QString>
 
 class QMimeData;
-
 
 /**
  * A factory for semantic item objects. There should be one for each semantic item class to
@@ -64,12 +66,12 @@ public: // API to be implemented
      */
     virtual QString classDisplayName() const = 0;
 
-    virtual void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m) = 0;
+    virtual void updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m) = 0;
 
     /**
      * Create a new instance of a semantic item.
      */
-    virtual hKoRdfSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent) = 0;
+    virtual hKoRdfBasicSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent) = 0;
 
     /**
      * Returns if a semantic item could be principially created from the passed mimeData.
@@ -80,8 +82,10 @@ public: // API to be implemented
     /**
      * Create a new instance of a semantic item from the passed mimeData. Returns 0 if that fails.
      */
-    virtual hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase *host,
-                                                              const KoDocumentRdf *rdf, QObject *parent = 0) const = 0;
+    virtual hKoRdfBasicSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase *host,
+                                                                   const KoDocumentRdf *rdf, QObject *parent = 0) const = 0;
+
+    virtual bool isBasic() const = 0;
 private:
     class Private;
     Private * const d;

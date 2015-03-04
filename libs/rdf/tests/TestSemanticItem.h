@@ -43,7 +43,7 @@ public:
     const QString PREDBASE;
 
     TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf = 0)
-        : KoRdfSemanticItem(const_cast<KoDocumentRdf*>(rdf), parent)
+        : KoRdfSemanticItem(parent, const_cast<KoDocumentRdf*>(rdf))
         , PREDBASE("http://calligra.org/testrdf/")
         , m_uri(QUuid::createUuid().toString())
     {
@@ -60,7 +60,7 @@ public:
     }
 
     TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
-        : KoRdfSemanticItem(const_cast<KoDocumentRdf*>(rdf), it, parent)
+        : KoRdfSemanticItem(parent, const_cast<KoDocumentRdf*>(rdf), it)
     {
         m_uri = it.binding("object").toString();
         Q_ASSERT(!m_uri.isNull());

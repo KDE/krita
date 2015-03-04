@@ -106,7 +106,7 @@ static void addLocations(QList<hKoRdfSemanticItem> &ret, const KoDocumentRdf *rd
 }
 
 
-void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     QList<hKoRdfSemanticItem> currentKoRdfLocations;
     addLocations(currentKoRdfLocations, rdf, m, false,
@@ -149,11 +149,11 @@ void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem
     // Creating a list of locations each time similifies the query and discovery process
     // at the expense of this little mess to merge the new and old with explicit pointer
     // and object lifetime handling
-    QList<hKoRdfSemanticItem> removeSet;
-    foreach (hKoRdfSemanticItem oldItem, semanticItems) {
+    QList<hKoRdfBasicSemanticItem> removeSet;
+    foreach (hKoRdfBasicSemanticItem oldItem, semanticItems) {
         const QString oldItemLs = oldItem->linkingSubject().toString();
         bool found = false;
-        foreach (hKoRdfSemanticItem newItem, currentKoRdfLocations) {
+        foreach (hKoRdfBasicSemanticItem newItem, currentKoRdfLocations) {
             if (oldItemLs == newItem->linkingSubject().toString()) {
                 found = true;
                 break;
@@ -164,14 +164,14 @@ void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem
         }
     }
 
-    foreach (hKoRdfSemanticItem item, removeSet) {
+    foreach (hKoRdfBasicSemanticItem item, removeSet) {
         semanticItems.removeAll(item);
     }
 
-    foreach (hKoRdfSemanticItem newItem, currentKoRdfLocations) {
+    foreach (hKoRdfBasicSemanticItem newItem, currentKoRdfLocations) {
         const QString newItemLs = newItem->linkingSubject().toString();
         bool found = false;
-        foreach (hKoRdfSemanticItem oldItem, semanticItems) {
+        foreach (hKoRdfBasicSemanticItem oldItem, semanticItems) {
             if (newItemLs == oldItem->linkingSubject().toString()) {
                 found = true;
                 break;
@@ -183,9 +183,9 @@ void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem
     }
 }
 
-hKoRdfSemanticItem KoLocationSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem KoLocationSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
 {
-    return hKoRdfSemanticItem(new KoRdfLocation(parent, rdf));
+    return hKoRdfBasicSemanticItem(new KoRdfLocation(parent, rdf));
 }
 
 bool KoLocationSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeData* mimeData) const
@@ -194,11 +194,16 @@ bool KoLocationSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMim
     return false;
 }
 
-hKoRdfSemanticItem KoLocationSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host, const KoDocumentRdf* rdf, QObject* parent) const
+hKoRdfBasicSemanticItem KoLocationSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host, const KoDocumentRdf* rdf, QObject* parent) const
 {
     Q_UNUSED(mimeData);
     Q_UNUSED(host);
     Q_UNUSED(rdf);
     Q_UNUSED(parent);
     return hKoRdfSemanticItem(0);
+}
+
+bool KoLocationSemanticItemFactory::isBasic() const
+{
+    return false;
 }

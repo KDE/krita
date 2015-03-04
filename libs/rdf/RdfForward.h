@@ -28,6 +28,7 @@ class KoTextInlineRdf;
 class KoRdfPrefixMapping;
 class KoRdfSemanticTreeWidgetItem;
 class KoTextEditor;
+class KoRdfBasicSemanticItem;
 class KoRdfSemanticItem;
 class KoSemanticStylesheet;
 
@@ -37,6 +38,8 @@ namespace Soprano
     class Statement;
     class Node;
 }
+
+typedef QExplicitlySharedDataPointer<KoRdfBasicSemanticItem> hKoRdfBasicSemanticItem;
 typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
 typedef QExplicitlySharedDataPointer<KoSemanticStylesheet> hKoSemanticStylesheet;
 

@@ -49,7 +49,7 @@ class KoRdfLocation : public KoRdfSemanticItem
 
 public:
     explicit KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf = 0);
-    KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, bool isGeo84);
+    KoRdfLocation(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it, bool isGeo84);
     virtual ~KoRdfLocation();
 
     // inherited and reimplemented...

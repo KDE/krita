@@ -242,6 +242,10 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
     QGridLayout *styleSheetsGridLayout = d->m_ui->m_styleSheetsGridLayout;
     int row = 0;
     foreach (const QString &semanticItemName, KoRdfSemanticItemRegistry::instance()->classNames()) {
+        if (KoRdfSemanticItemRegistry::instance()->isBasic(semanticItemName)) {
+            continue;
+        }
+
         QLabel *semanticItemLabel =
             new QLabel(KoRdfSemanticItemRegistry::instance()->classDisplayName(semanticItemName));
         styleSheetsGridLayout->addWidget(semanticItemLabel, row, 0, Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
@@ -279,8 +283,8 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
             this, SLOT(showSemanticViewContextMenu(const QPoint &)));
     connect(d->m_ui->m_sparqlExecute, SIGNAL(clicked()), this, SLOT(sparqlExecute()));
 
-    connect(docRdf, SIGNAL(semanticObjectUpdated(hKoRdfSemanticItem)),
-            this, SLOT(semanticObjectUpdated(hKoRdfSemanticItem)));
+    connect(docRdf, SIGNAL(semanticObjectUpdated(hKoRdfBasicSemanticItem)),
+            this, SLOT(semanticObjectUpdated(hKoRdfBasicSemanticItem)));
 }
 
 KoDocumentRdfEditWidget::~KoDocumentRdfEditWidget()
@@ -352,7 +356,7 @@ QString KoDocumentRdfEditWidget::iconName() const
     return koIconName("text-rdf");
 }
 
-void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfSemanticItem item)
+void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfBasicSemanticItem item)
 {
     Q_UNUSED(item);
     kDebug(30015) << "updating the sem item list view";
@@ -489,7 +493,6 @@ hKoSemanticStylesheet KoDocumentRdfEditWidget::stylesheetFromComboBox(QComboBox 
     return ret;
 }
 
-
 void KoDocumentRdfEditWidget::applyStylesheetFromComboBox(QComboBox *comboBox) const
 {
     KoDocumentRdf *rdf = d->m_rdf;
@@ -503,7 +506,7 @@ void KoDocumentRdfEditWidget::applyStylesheetFromComboBox(QComboBox *comboBox) c
     }
 
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
-    const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems(semanticItemClass);
+    const QList<hKoRdfSemanticItem> semanticItems = KoRdfSemanticItem::fromList(rdf->semanticItems(semanticItemClass));
     foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
         rdf->insertReflow(reflowCol, semanticItem, ss);
     }

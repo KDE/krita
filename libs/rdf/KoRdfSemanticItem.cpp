@@ -18,170 +18,51 @@
 */
 
 #include "KoRdfSemanticItem.h"
-#include "KoDocumentRdf.h"
 
-#include <KoInlineObject.h>
-#include <KoTextInlineRdf.h>
-#include <KoTextRdfCore.h>
+//Calligra
 #include <KoCanvasBase.h>
-#include <KoText.h>
-#include <KoTextEditor.h>
-#include <KoTextMeta.h>
-#include <KoTextDocument.h>
 #include <KoCanvasResourceManager.h>
+#include <KoChangeTrackerDisabledRAII.h>
+#include <KoDocumentRdf.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoText.h>
+#include <KoTextInlineRdf.h>
+#include <KoTextMeta.h>
+#include <KoTextRdfCore.h>
 
-#include <kdatetime.h>
+//KDE
+#include <KDebug>
 
-#include <kdebug.h>
+//QT
 #include <QUuid>
-
-#include "KoChangeTrackerDisabledRAII.h"
+#include <QWidget>
 
 using namespace Soprano;
 
-KoRdfSemanticItem::KoRdfSemanticItem(const KoDocumentRdf *rdf, QObject *parent)
-        : QObject(parent)
-        , m_rdf(rdf)
-{
-}
-
-
 KoRdfSemanticItem::KoRdfSemanticItem(QObject *parent)
-        : QObject(parent)
-        , m_rdf(0)
+    : KoRdfBasicSemanticItem(parent)
 {
 }
 
-KoRdfSemanticItem::KoRdfSemanticItem(const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it, QObject *parent)
-    : QObject(parent)
-    , m_rdf(rdf)
+KoRdfSemanticItem::KoRdfSemanticItem(QObject *parent, const KoDocumentRdf *rdf)
+    : KoRdfBasicSemanticItem(parent, rdf)
 {
-    m_context = it.binding("graph");
-    kDebug(30015) << "KoRdfSemanticItem() context:" << m_context.toString();
+}
+
+KoRdfSemanticItem::KoRdfSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
+    : KoRdfBasicSemanticItem(parent, rdf, it)
+{
 }
 
 KoRdfSemanticItem::~KoRdfSemanticItem()
 {
 }
 
-const KoDocumentRdf *KoRdfSemanticItem::documentRdf() const
-{
-    return m_rdf;
-}
-
-
-QStringList KoRdfSemanticItem::xmlIdList() const
-{
-    QStringList ret;
-
-    Soprano::Node linksubj = linkingSubject();
-    StatementIterator it = documentRdf()->model()->listStatements(
-                               linksubj,
-                               Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
-                               Node(),
-                               documentRdf()->manifestRdfNode());
-    QList<Statement> allStatements = it.allElements();
-    foreach (const Soprano::Statement &s, allStatements) {
-        QString xmlid = s.object().toString();
-        ret << xmlid;
-    }
-    return ret;
-}
-
 KoRdfSemanticTreeWidgetItem *KoRdfSemanticItem::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
     Q_UNUSED(parent);
     return 0;
-}
-
-void KoRdfSemanticItem::updateTriple_remove(const Soprano::LiteralValue &toModify,
-        const QString &predString,
-        const Soprano::Node &explicitLinkingSubject)
-{
-    QSharedPointer<Soprano::Model> m = documentRdf()->model();
-    Node pred = Node::createResourceNode(QUrl(predString));
-    m->removeStatement(explicitLinkingSubject,pred, Node::createLiteralNode(toModify));
-    kDebug(30015) << "Rdf.del subj:" << explicitLinkingSubject;
-    kDebug(30015) << "Rdf.del pred:" << pred;
-    kDebug(30015) << "Rdf.del  obj:" << Node::createLiteralNode(toModify);
-    kDebug(30015) << "Rdf.del  ctx:" << context();
-    //
-    // Typeless remove, I found that if a object literal did not
-    // stipulate its type in the input Rdf, just using
-    // removeStatement() above might not pick it up. So the below code
-    // looks through all statements with subj+pred and checks typeless
-    // string identity of the object() and removes it if strings match.
-    //
-    StatementIterator it = m->listStatements(explicitLinkingSubject, pred, Node());
-    QList<Statement> removeList;
-    QList<Statement> allStatements = it.allElements();
-    foreach (const Soprano::Statement &s, allStatements) {
-        kDebug(30015) << "typeless remove,  s:" << s.object().toString();
-        kDebug(30015) << "typeless remove, tm:" << Node::createLiteralNode(toModify).toString();
-
-        if (s.object().toString() == Node::createLiteralNode(toModify).toString()) {
-            removeList << s;
-        }
-        //
-        // Sometimes the object value is serialized as 51.47026 or
-        // 5.1470260000e+01. There are also slight rounding errors
-        // which are introduced that complicate comparisons.
-        //
-        if (toModify.isDouble()) {
-            removeList << s;
-        }
-    }
-    m->removeStatements(removeList);
-}
-
-void KoRdfSemanticItem::updateTriple_add(const Soprano::LiteralValue &toModify,
-                                       const QString &predString,
-                                       const Soprano::Node &explicitLinkingSubject)
-{
-    QSharedPointer<Soprano::Model> m = documentRdf()->model();
-    Node pred = Node::createResourceNode(QUrl(predString));
-
-    kDebug(30015) << "Rdf.add subj:" << explicitLinkingSubject;
-    kDebug(30015) << "Rdf.add pred:" << pred;
-    kDebug(30015) << "Rdf.add  obj:" << Node::createLiteralNode(toModify);
-    kDebug(30015) << "Rdf.add  ctx:" << context();
-    m->addStatement(explicitLinkingSubject, pred, Node::createLiteralNode(toModify), context());
-}
-
-
-void KoRdfSemanticItem::updateTriple(QString &toModify, const QString &newValue, const QString &predString)
-{
-    kDebug(30015) << "tomod:" << toModify << " newV:" << newValue << " pred:" << predString;
-    updateTriple_remove(toModify, predString, linkingSubject());
-    toModify = newValue;
-    updateTriple_add(toModify, predString, linkingSubject());
-}
-
-void KoRdfSemanticItem::updateTriple(KDateTime &toModify, const KDateTime &newValue, const QString &predString)
-{
-    updateTriple_remove(Soprano::LiteralValue(toModify.dateTime()),
-                        predString, linkingSubject());
-    toModify = newValue;
-    updateTriple_add(Soprano::LiteralValue(toModify.dateTime()),
-                     predString, linkingSubject());
-}
-
-void KoRdfSemanticItem::updateTriple(double &toModify,
-                                   double newValue,
-                                   const QString &predString,
-                                   const Soprano::Node &explicitLinkingSubject)
-{
-    updateTriple_remove(Soprano::LiteralValue(toModify), predString, explicitLinkingSubject);
-    toModify = newValue;
-    updateTriple_add(Soprano::LiteralValue(toModify), predString, explicitLinkingSubject);
-}
-
-void KoRdfSemanticItem::setRdfType(const QString &t)
-{
-    QSharedPointer<Soprano::Model> m = documentRdf()->model();
-    Q_ASSERT(m);
-    Node pred = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
-    m->addStatement(linkingSubject(), pred, Node::createResourceNode(t), context());
 }
 
 void KoRdfSemanticItem::importFromDataComplete(const QByteArray &ba, const KoDocumentRdf *rdf, KoCanvasBase *host)
@@ -202,19 +83,6 @@ void KoRdfSemanticItem::importFromDataComplete(const QByteArray &ba, const KoDoc
     if (rdf) {
         rdf->emitSemanticObjectAdded(hKoRdfSemanticItem(this));
     }
-}
-
-Soprano::Node KoRdfSemanticItem::linkingSubject() const
-{
-    return Node::createEmptyNode();
-}
-
-Soprano::Node KoRdfSemanticItem::context() const
-{
-    if (m_context.isValid()) {
-        return m_context;
-    }
-    return documentRdf()->manifestRdfNode();
 }
 
 void KoRdfSemanticItem::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
@@ -260,7 +128,7 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
     if (documentRdf()) {
         Soprano::Statement st(
             linkingSubject(),
-            Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
+            Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
             Node::createLiteralNode(newID),
             documentRdf()->manifestRdfNode());
         documentRdf()->model()->addStatement(st);
@@ -300,12 +168,10 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
 
 }
 
-
 QList<hKoSemanticStylesheet> KoRdfSemanticItem::userStylesheets() const
 {
     return documentRdf()->userStyleSheetList(className());
 }
-
 
 hKoSemanticStylesheet KoRdfSemanticItem::findStylesheetByUuid(const QString &id) const
 {
@@ -382,7 +248,7 @@ void KoRdfSemanticItem::defaultStylesheet(hKoSemanticStylesheet ss)
     QString uuid = ss->uuid();
     QString name = ss->name();
     QString semanticClass = metaObject()->className();
-    
+
     m->removeAllStatements(
         Statement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
                   Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet")),
@@ -519,12 +385,14 @@ void KoRdfSemanticItem::saveUserStylesheets(QSharedPointer<Soprano::Model> model
     KoTextRdfCore::saveList(model, ListHeadSubject, dataBNodeList, context);
 }
 
-Soprano::Node KoRdfSemanticItem::createNewUUIDNode() const
+QList<hKoRdfSemanticItem> KoRdfSemanticItem::fromList(const QList< hKoRdfBasicSemanticItem > &lst)
 {
-    QString uuid = QUuid::createUuid().toString();
-    uuid.remove('{');
-    uuid.remove('}');
-    QString nodestr = "http://calligra.org/uuidnode/" + uuid;
-    return Node::createResourceNode(nodestr);
+    QList<hKoRdfSemanticItem> res;
+    foreach (const hKoRdfBasicSemanticItem &l, lst) {
+        KoRdfSemanticItem *newl = dynamic_cast<KoRdfSemanticItem *>(l.data());
+        if (newl) {
+            res << hKoRdfSemanticItem(newl);
+        }
+    }
+    return res;
 }
-

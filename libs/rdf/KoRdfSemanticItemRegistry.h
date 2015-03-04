@@ -23,9 +23,10 @@
 #define KORDFSEMANTICITEMREGISTRY_H
 
 #include "kordf_export.h"
+
+// Calligra
 #include "KoRdfSemanticItem.h"
 #include "KoRdfSemanticItemFactoryBase.h"
-// Calligra
 #include <KoGenericRegistry.h>
 
 class KoCanvasBase;
@@ -65,13 +66,13 @@ public:
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
-    hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
+    hKoRdfBasicSemanticItem createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
 
     /**
      * Create a SemanticItem subclass from the passed mimeData.
      * TODO: support that mimedata could be used for different semantic item classes
      */
-    hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
+    hKoRdfBasicSemanticItem createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
 
     /**
      * Returns if a semantic item could be principially created from the passed mimeData.
@@ -79,9 +80,13 @@ public:
      */
     bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
 
-    void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *docRdf,
-                             const QString &className,
-                             QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
+    void updateSemanticItems(
+        QList<hKoRdfBasicSemanticItem> &semanticItems,
+        const KoDocumentRdf *docRdf,
+        const QString &className,
+        QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
+
+    bool isBasic(const QString &className);
 
 private:
     KoRdfSemanticItemRegistry();

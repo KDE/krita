@@ -13,6 +13,7 @@ set(kordf_LIB_SRCS
     KoSopranoTableModel.cpp
     KoRdfPrefixMapping.cpp
     KoSemanticStylesheet.cpp
+    KoRdfBasicSemanticItem.cpp
     KoRdfSemanticItem.cpp
     KoRdfSemanticItemFactoryBase.cpp
     KoRdfSemanticItemRegistry.cpp
@@ -54,6 +55,7 @@ install( FILES
     KoDocumentRdf.h
     KoDocumentRdfEditWidget.h
     KoRdfPrefixMapping.h
+    KoRdfBasicSemanticItem.h
     KoRdfSemanticItem.h
     KoRdfSemanticItemFactoryBase.h
     KoRdfSemanticItemRegistry.h

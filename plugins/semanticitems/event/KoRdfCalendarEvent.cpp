@@ -19,7 +19,6 @@
 
 #include "KoRdfCalendarEvent.h"
 #include "KoDocumentRdf.h"
-#include "KoRdfSemanticItem_p.h"
 #include "KoTextRdfCore.h"
 #include "KoRdfCalendarEventTreeWidgetItem.h"
 #include <QUuid>
@@ -41,8 +40,8 @@
 
 using namespace Soprano;
 
-KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *m_rdf)
-    : KoRdfSemanticItem(m_rdf, parent)
+KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *rdf)
+    : KoRdfSemanticItem(parent, rdf)
 {
     m_startTimespec = KSystemTimeZones::local();
     m_endTimespec = KSystemTimeZones::local();
@@ -116,7 +115,7 @@ static KTimeZone toKTimeZone(Soprano::Node n)
 }
 
 KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
-    : KoRdfSemanticItem(rdf, it, parent)
+    : KoRdfSemanticItem(parent, rdf, it)
 {
     m_location = KoTextRdfCore::optionalBindingAsString(it, "location");
     m_summary = KoTextRdfCore::optionalBindingAsString(it, "summary");

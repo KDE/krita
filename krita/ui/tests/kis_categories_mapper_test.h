@@ -19,7 +19,7 @@
 #ifndef __KIS_CATEGORIES_MAPPER_TEST_H
 #define __KIS_CATEGORIES_MAPPER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisCategoriesMapperTest : public QObject
 {

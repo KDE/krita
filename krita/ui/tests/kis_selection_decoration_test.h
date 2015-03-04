@@ -19,7 +19,7 @@
 #ifndef __KIS_SELECTION_DECORATION_TEST_H
 #define __KIS_SELECTION_DECORATION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisSelectionDecorationTest : public QObject
 {

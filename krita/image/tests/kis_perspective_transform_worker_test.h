@@ -19,7 +19,7 @@
 #ifndef __KIS_PERSPECTIVE_TRANSFORM_WORKER_TEST_H
 #define __KIS_PERSPECTIVE_TRANSFORM_WORKER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPerspectiveTransformWorkerTest : public QObject
 {

@@ -33,9 +33,9 @@
 #ifndef MULTIFEEDRSSMODEL_H
 #define MULTIFEEDRSSMODEL_H
 
-#include <QtCore/QAbstractListModel>
-#include <QtCore/QStringList>
-#include <QtCore/QDateTime>
+#include <QAbstractListModel>
+#include <QStringList>
+#include <QDateTime>
 
 QT_BEGIN_NAMESPACE
 class QThread;

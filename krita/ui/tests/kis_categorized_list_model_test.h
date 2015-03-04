@@ -19,7 +19,7 @@
 #ifndef __KIS_CATEGORIZED_LIST_MODEL_TEST_H
 #define __KIS_CATEGORIZED_LIST_MODEL_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisCategorizedListModelTest : public QObject
 {

@@ -20,7 +20,7 @@
 #ifndef COMPOSITEOPMODEL_H
 #define COMPOSITEOPMODEL_H
 
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
 #include <kis_types.h>
 
 class KoCanvasController;

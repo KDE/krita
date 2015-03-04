@@ -19,7 +19,7 @@
 #ifndef __KIS_TRANSFORM_MASK_TEST_H
 #define __KIS_TRANSFORM_MASK_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisTransformMaskTest : public QObject
 {

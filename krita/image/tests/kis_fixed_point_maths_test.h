@@ -19,7 +19,7 @@
 #ifndef __KIS_FIXED_POINT_MATHS_TEST_H
 #define __KIS_FIXED_POINT_MATHS_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisFixedPointMathsTest : public QObject
 {

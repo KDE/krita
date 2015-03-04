@@ -19,7 +19,7 @@
 #ifndef __KIS_DOM_UTILS_TEST_H
 #define __KIS_DOM_UTILS_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisDomUtilsTest : public QObject
 {

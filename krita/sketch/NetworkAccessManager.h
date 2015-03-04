@@ -30,7 +30,7 @@
 **
 **************************************************************************/
 
-#include <QtNetwork/QNetworkAccessManager>
+#include <QNetworkAccessManager>
 
 QT_FORWARD_DECLARE_CLASS(QUrl)
 

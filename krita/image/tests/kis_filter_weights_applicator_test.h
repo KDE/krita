@@ -19,7 +19,7 @@
 #ifndef __KIS_FILTER_WEIGHTS_APPLICATOR_TEST_H
 #define __KIS_FILTER_WEIGHTS_APPLICATOR_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisFilterWeightsApplicatorTest : public QObject
 {

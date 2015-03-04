@@ -19,7 +19,7 @@
 #ifndef __KIS_UNSHARP_MASK_TEST_H
 #define __KIS_UNSHARP_MASK_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisUnsharpMaskTest : public QObject
 {

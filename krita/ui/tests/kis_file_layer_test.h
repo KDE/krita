@@ -19,7 +19,7 @@
 #ifndef __KIS_FILE_LAYER_TEST_H
 #define __KIS_FILE_LAYER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisFileLayerTest : public QObject
 {

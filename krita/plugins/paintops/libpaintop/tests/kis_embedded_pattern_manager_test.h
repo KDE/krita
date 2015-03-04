@@ -19,7 +19,7 @@
 #ifndef __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H
 #define __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisEmbeddedPatternManagerTest : public QObject
 {

@@ -19,7 +19,7 @@
 #ifndef __KIS_FILL_INTERVAL_TEST_H
 #define __KIS_FILL_INTERVAL_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisFillIntervalTest : public QObject
 {

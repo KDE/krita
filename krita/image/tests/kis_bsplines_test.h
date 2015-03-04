@@ -19,7 +19,7 @@
 #ifndef __KIS_BSPLINES_TEST_H
 #define __KIS_BSPLINES_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisBSplinesTest : public QObject
 {

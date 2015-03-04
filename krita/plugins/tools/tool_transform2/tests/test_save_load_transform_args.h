@@ -19,7 +19,7 @@
 #ifndef __TEST_SAVE_LOAD_TRANSFORM_ARGS_H
 #define __TEST_SAVE_LOAD_TRANSFORM_ARGS_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestSaveLoadTransformArgs : public QObject
 {

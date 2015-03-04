@@ -19,7 +19,7 @@
 #ifndef LAYERCOMPOSITEDETAILS_H
 #define LAYERCOMPOSITEDETAILS_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 
 class LayerCompositeDetails : public QObject

@@ -616,7 +616,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
 #      set(SHOULD_BUILD_MYPRODUCT FALSE)
-#    endif (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+#    endif ()
 #
 # 4. Wrap everything belonging to the product with the build flag of the product.
 #    Ideally this is done around subdirectory inclusions, results in easier code.
@@ -624,7 +624,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (SHOULD_BUILD_MYPRODUCT)
 #      add_subdirectory(myproduct)
-#    endif (SHOULD_BUILD_MYPRODUCT)
+#    endif ()
 #
 # 5. Tag the product as STAGING, if it is not yet ready for release, but already
 #    integrated in the master branch, e.g.
@@ -662,7 +662,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
 #      set(SHOULD_BUILD_MYFEATURE FALSE)
-#    endif (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+#    endif ()
 #
 # 4. Wrap everything belonging to the feature with the build flag of the feature.
 #    Ideally this is done around subdirectory inclusions, results in easier code.
@@ -670,7 +670,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (SHOULD_BUILD_MYFEATURE)
 #      add_subdirectory(myproduct)
-#    endif (SHOULD_BUILD_MYFEATURE)
+#    endif ()
 #
 # 5. Tag the feature as STAGING, if it is not yet ready for release, but already
 #    integrated in the master branch, e.g.

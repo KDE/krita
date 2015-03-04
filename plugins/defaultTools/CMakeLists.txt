@@ -12,7 +12,7 @@ add_subdirectory(pics)
 
 ########### Flake Plugin library ###############
 
-SET ( defaulttools_SRCS
+set ( defaulttools_SRCS
     Plugin.cpp
     defaulttool/DefaultTool.cpp
     defaulttool/DefaultToolFactory.cpp

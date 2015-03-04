@@ -4,9 +4,9 @@
 # warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
-else (CMAKE_COMPILER_IS_GNUCXX)
+else ()
     add_definitions(${KDE4_ENABLE_EXCEPTIONS} )
-endif (CMAKE_COMPILER_IS_GNUCXX)
+endif ()
 
 include_directories(
 
@@ -25,7 +25,7 @@ add_subdirectory( tests )
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
-endif (APPLE)
+endif ()
 
 set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
@@ -328,7 +328,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         )
-endif(WIN32)
+endif()
 
 if(UNIX)
     set(kritaui_LIB_SRCS
@@ -342,15 +342,15 @@ if(UNIX)
             ${kritaui_LIB_SRCS}
             input/wintab/kis_tablet_support_x11.cpp
             )
-    endif(NOT APPLE)
-endif(UNIX)
+    endif()
+endif()
 
 if (APPLE)
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
             MacSupport.mm
         )
-endif (APPLE)
+endif ()
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
@@ -358,7 +358,7 @@ if(WIN32)
     #kde4_add_ui_files(
     #    input/wintab/kis_screen_size_choice_dialog.ui
     #)
-endif(WIN32)
+endif()
 
 
 
@@ -420,13 +420,13 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_Xinput_LIB})
 if(APPLE)
     target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
-endif (APPLE)
+endif ()
 
 if(GHNS)
     target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
-else(GHNS)
+else()
     target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
-endif (GHNS)
+endif ()
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
@@ -434,14 +434,14 @@ if(HAVE_OPENGL)
     # activate workaround for the VSync disable
     if(NOT WIN32)
       target_link_libraries(kritaui ${CMAKE_DL_LIBS})
-    endif(NOT WIN32)
+    endif()
 
     set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};${QT_QTOPENGL_LIBRARY}")
     if(HAVE_GLEW)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
-    endif(HAVE_GLEW)
+    endif()
 
-endif(HAVE_OPENGL)
+endif()
 
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush ${GL_INTERFACE_LIBRARIES} )
 
@@ -454,7 +454,7 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)
-endif (APPLE)
+endif ()
 
 install( FILES
     canvas/kis_canvas2.h

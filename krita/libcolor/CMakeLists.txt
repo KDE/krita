@@ -2,9 +2,9 @@ if (UNIX AND NOT APPLE)
     add_subdirectory(colord)
     set(kritacolor_LIB_SRCS kis_color_manager_linux.cpp)
     set(kritacolor_EXTRA_LIBRARIES kritacolord)
-else (UNIX AND NOT APPLE)
+else ()
     set(kritacolor_LIB_SRCS kis_color_manager_dummy.cpp)
-endif (UNIX AND NOT APPLE) 
+endif () 
 
 kde4_add_library(kritacolor SHARED ${kritacolor_LIB_SRCS} )
 

@@ -7,7 +7,7 @@ include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${BASICFLAKES_INCLUDES})
 
 ########### Basicflakes plugin library ###############
 
-SET ( basicflakesplugin_SRCS
+set ( basicflakesplugin_SRCS
     Plugin.cpp
     KoCreatePathToolFactory.cpp
     KoPencilToolFactory.cpp

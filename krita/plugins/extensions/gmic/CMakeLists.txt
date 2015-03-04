@@ -6,7 +6,7 @@ include_directories(src)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 set(gmic_sources_SRCS
   src/gmic.cpp
@@ -34,28 +34,28 @@ endif()
 find_package(OpenMP)
 if(OPENMP_FOUND)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-endif(OPENMP_FOUND)
+endif()
 
 #FFTW
 if(FFTW3_FOUND)
     add_definitions(-Dcimg_use_fftw3 )
     add_definitions(-Dcimg_use_fftw3_singlethread )
     include_directories(${FFTW3_INCLUDE_DIR})
-endif(FFTW3_FOUND)
+endif()
 
 # PNG
 if (PNG_FOUND)
     add_definitions(${PNG_DEFINITIONS})
     add_definitions(-Dcimg_use_png)
     include_directories(${PNG_INCLUDE_DIR})
-endif(PNG_FOUND)
+endif()
 
 # ZLIB
 find_package( ZLIB REQUIRED )
 if ( ZLIB_FOUND )
     add_definitions(-Dcimg_use_zlib)
     include_directories( ${ZLIB_INCLUDE_DIRS} )
-endif( ZLIB_FOUND )
+endif()
 
 
 # CURL
@@ -63,7 +63,7 @@ find_package(CURL)
 if (CURL_FOUND)
     add_definitions(-Dcimg_use_curl)
     include_directories( ${CURL_INCLUDE_DIRS} )
-endif(CURL_FOUND)
+endif()
 
 # X11
 if(X11_FOUND)
@@ -73,9 +73,9 @@ elseif (WIN32 AND MSVC)
     # CMake for MSVC automatically links and finds headers for gdi32
     add_definitions(-Dcimg_display=2)
     add_definitions(-Dcimg_appname="gmic")
-else(X11_FOUND)
+else()
     add_definitions(-Dcimg_display=0)
-endif(X11_FOUND)
+endif()
 
 
 # Extra for Krita
@@ -87,22 +87,22 @@ kde4_add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})
 
 if(FFTW3_FOUND)
   target_link_libraries(gmic ${FFTW3_LIBRARIES})
-endif(FFTW3_FOUND)
+endif()
 
 if (X11_FOUND)
     target_link_libraries(gmic ${X11_LIBRARIES})
-endif(X11_FOUND)
+endif()
 
 if(CURL_FOUND)
     target_link_libraries(gmic ${CURL_LIBRARIES})
-endif(CURL_FOUND)
+endif()
 
 target_link_libraries(gmic ${ZLIB_LIBRARIES})
 target_link_libraries(gmic ${PNG_LIBRARIES})
 
 if(Threads_FOUND)
     target_link_libraries(gmic ${CMAKE_THREAD_LIBS_INIT})
-endif(Threads_FOUND)
+endif()
 
 
 ##

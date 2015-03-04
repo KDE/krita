@@ -3,8 +3,8 @@ if (WIN32)
 
     if (ENABLE_GEMINI_STARTUP_MAGIC)
         add_definitions(-DGEMINI_ENABLE_STARTUP_MAGIC)
-    endif (ENABLE_GEMINI_STARTUP_MAGIC)
-endif (WIN32)
+    endif ()
+endif ()
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
@@ -22,9 +22,9 @@ set(kritagemini_SRCS
 
 if (WIN32)
     set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.rc)
-else (WIN32)
+else ()
     kde4_add_app_icon(kritagemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritagemini.png")
-endif (WIN32)
+endif ()
 
 # Krita Gemini application
 # =============================================================================

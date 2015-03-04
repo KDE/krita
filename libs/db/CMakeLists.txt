@@ -6,7 +6,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-sign-compare)
     add_definitions(-Wno-unused-function)
     add_definitions(-Wno-unused-parameter)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+endif ()
 
 option(CALLIGRADB_DEBUG_GUI "Debugging GUI for CalligraDB" OFF)
 
@@ -23,7 +23,7 @@ include_directories(
 
 add_subdirectory( drivers )
 
-ADD_DEFINITIONS( 
+add_definitions( 
 -D__KEXIDB__= 
 -DYYERROR_VERBOSE=1
 )
@@ -32,10 +32,10 @@ ADD_DEFINITIONS(
 # as described at http://public.kitware.com/pipermail/cmake/2002-September/003028.html
 
 # Create target for the parser
-ADD_CUSTOM_TARGET(parser echo "Creating parser/lexer files")
+add_custom_target(parser echo "Creating parser/lexer files")
 
 # Create custom command for flex/lex (note the outputs)
-ADD_CUSTOM_COMMAND(
+add_custom_command(
 COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/parser/generate_parser_code.sh
 TARGET parser
 OUTPUTS ${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlparser.h
@@ -44,10 +44,10 @@ OUTPUTS ${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlparser.h
         ${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlscanner.cpp)
 
 # mark files as generated
-SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlparser.h GENERATED)
-SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlparser.cpp GENERATED)
-SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlscanner.h GENERATED)
-SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlscanner.cpp GENERATED)
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlparser.h GENERATED)
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlparser.cpp GENERATED)
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlscanner.h GENERATED)
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/parser/sqlscanner.cpp GENERATED)
 
 set(calligradbparser_STAT_SRCS
    parser/sqlscanner.cpp 
@@ -103,7 +103,7 @@ set_target_properties(calligradb PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSI
 if(MSVC)
    # avoid LNK1169 errors
    set_target_properties(calligradb PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
-endif(MSVC)
+endif()
 
 install(TARGETS calligradb ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -116,6 +116,6 @@ if(FALSE) # TODO: install when we move to independent place
     relationship.h parser/parser.h parser/sqlparser.h transaction.h preparedstatement.h
     RecordData.h utils.h
     calligradb_export.h calligradb_global.h DESTINATION ${INCLUDE_INSTALL_DIR}/calligradb COMPONENT Devel)
-endif(FALSE)
+endif()
 
 add_subdirectory( tests )

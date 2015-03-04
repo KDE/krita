@@ -21,7 +21,7 @@ if (KDEPIMLIBS_FOUND)
       ${KDEPIMLIBS_KABC_LIBS}
       ${KDEPIMLIBS_AKONADI_LIBS}
    )
-endif (KDEPIMLIBS_FOUND)
+endif ()
 
 target_link_libraries(calligra_semanticitem_contact ${KDE4_KDECORE_LIBS}  ${KORDF_LIBS})
 

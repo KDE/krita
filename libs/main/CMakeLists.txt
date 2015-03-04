@@ -4,7 +4,7 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
-endif (APPLE)
+endif ()
 
 include_directories( ${KOMAIN_INCLUDES})
 
@@ -12,7 +12,7 @@ include_directories( ${KOMAIN_INCLUDES})
 
 if( QCA2_FOUND )
    add_definitions( -DQCA2 )
-endif( QCA2_FOUND )
+endif()
 
 set(komain_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
@@ -74,13 +74,13 @@ if( QT_QTDBUS_FOUND )
         KoViewAdaptor.cpp
         KoPartAdaptor.cpp
     )
-endif( QT_QTDBUS_FOUND )
+endif()
 
 if (APPLE)
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         MacSupport.mm
     )
-endif (APPLE)
+endif ()
 
 kde4_add_ui_files( komain_LIB_SRCS
    config/KoConfigAuthorPage.ui
@@ -99,11 +99,11 @@ if( KActivities_FOUND )
     include_directories(${KACTIVITIES_INCLUDES})
     target_link_libraries(komain ${KACTIVITIES_LIBRARY})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
-endif( KActivities_FOUND )
+endif()
 
 if (APPLE)
     target_link_libraries(komain ${FOUNDATION_LIBRARY})
-endif (APPLE)
+endif ()
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets )
 
@@ -119,7 +119,7 @@ install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
-endif (APPLE)
+endif ()
 
 # For now, don't install the header files because of the conflict with the komvc
 # library.
@@ -158,6 +158,6 @@ if( QT_QTDBUS_FOUND )
         KoApplicationAdaptor.h
         KoViewAdaptor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
-endif( QT_QTDBUS_FOUND )
-endif(FALSE)
+endif()
+endif()
 

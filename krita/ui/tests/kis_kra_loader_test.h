@@ -29,6 +29,7 @@ private slots:
 
     void testLoading();
     void testObligeSingleChild();
+    void testObligeSingleChildNonTranspPixel();
 };
 
 #endif

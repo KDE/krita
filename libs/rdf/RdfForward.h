@@ -31,6 +31,11 @@ class KoTextEditor;
 class KoRdfBasicSemanticItem;
 class KoRdfSemanticItem;
 class KoSemanticStylesheet;
+class KoDocumentRdfEditWidget;
+class KoTextInlineRdf;
+class KoRdfPrefixMapping;
+class KoRdfSemanticTreeWidgetItem;
+class KoTextEditor;
 
 namespace Soprano
 {

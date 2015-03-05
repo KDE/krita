@@ -48,7 +48,7 @@
       </layout>
      </item>
      <item row="2" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout1">
        <item>
         <widget class="QLabel" name="searchLbl">
          <property name="text">

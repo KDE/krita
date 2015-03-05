@@ -54,6 +54,9 @@ KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id)
     if (id.id() == PressureId.id()) {
         return new KisDynamicSensorPressure();
     }
+    else if (id.id() == PressureInId.id()) {
+        return new KisDynamicSensorPressureIn();
+    }
     else if (id.id() == XTiltId.id()) {
         return new KisDynamicSensorXTilt();
     }
@@ -121,6 +124,7 @@ QList<KoID> KisDynamicSensor::sensorsIds()
     QList<KoID> ids;
 
     ids << PressureId
+        << PressureInId
         << XTiltId
         << YTiltId
         << TiltDirectionId

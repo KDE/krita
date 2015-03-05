@@ -57,6 +57,26 @@ public:
     }
 };
 
+class KisDynamicSensorPressureIn : public KisDynamicSensor
+{
+public:
+    KisDynamicSensorPressureIn();
+    virtual ~KisDynamicSensorPressureIn() { }
+    virtual qreal value(const KisPaintInformation& info) {
+        if(!info.isHoveringMode()) {
+            if(info.pressure() > lastPressure) {
+                lastPressure = info.pressure();
+            }
+            return lastPressure;
+        }
+
+        lastPressure = 0.0;
+        return 0.0;
+    }
+private:
+    qreal lastPressure;
+};
+
 class KisDynamicSensorXTilt : public KisDynamicSensor
 {
 public:

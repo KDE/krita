@@ -45,6 +45,7 @@ const KoID TimeId("time", ki18n("Time")); ///< generate a number that increase w
 const KoID DrawingAngleId("drawingangle", ki18n("Drawing angle")); ///< number depending on the angle
 const KoID RotationId("rotation", ki18n("Rotation")); ///< rotation coming from the device
 const KoID PressureId("pressure", ki18n("Pressure")); ///< number depending on the pressure
+const KoID PressureInId("pressurein", ki18n("PressureIn")); ///< number depending on the pressure
 const KoID XTiltId("xtilt", ki18n("X-Tilt")); ///< number depending on X-tilt
 const KoID YTiltId("ytilt", ki18n("Y-Tilt")); ///< number depending on Y-tilt
 

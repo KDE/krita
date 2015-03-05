@@ -60,6 +60,12 @@ KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(Pressure
     setMaximumLabel(i18n("High"));
 }
 
+KisDynamicSensorPressureIn::KisDynamicSensorPressureIn() : KisDynamicSensor(PressureInId), lastPressure(0.0)
+{
+    setMinimumLabel(i18n("Low"));
+    setMaximumLabel(i18n("High"));
+}
+
 KisDynamicSensorXTilt::KisDynamicSensorXTilt() : KisDynamicSensor(XTiltId)
 {
     setMinimumLabel(i18n("-30°"));

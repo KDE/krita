@@ -313,21 +313,19 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
 
                     KUndo2Command* paint() {
                         KisSelectionSP cutSelection = m_sel;
-                        QRect originalRect = cutSelection->selectedExactRect();
-                        static const int preciseSelectionThreshold = 16;
-
                         // Shrinking the cutting area was previously used
                         // for getting seamless cut-paste. Now we use makeSharpClip
                         // instead.
+                        // QRect originalRect = cutSelection->selectedExactRect();
+                        // static const int preciseSelectionThreshold = 16;
                         //
                         // if (originalRect.width() > preciseSelectionThreshold ||
                         //     originalRect.height() > preciseSelectionThreshold) {
-
                         //     cutSelection = new KisSelection(*m_sel);
                         //     delete cutSelection->flatten();
-
+                        //
                         //     KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
-
+                        //
                         //     QRect processingRect = filter->changeRect(originalRect);
                         //     filter->process(cutSelection->pixelSelection(), processingRect);
                         // }

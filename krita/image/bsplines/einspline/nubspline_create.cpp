@@ -252,10 +252,10 @@ create_NUBspline_1d_s (NUgrid* x_grid, BCtype_s xBC, float *data)
 
   // Next, create the basis
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
-  // M is the number of data points
-  int M; 
-  if (xBC.lCode == PERIODIC) M = x_grid->num_points - 1;
-  else                       M = x_grid->num_points;
+  // M is the number of data points (but is unused)
+//  int M;
+//  if (xBC.lCode == PERIODIC) M = x_grid->num_points - 1;
+//  else                       M = x_grid->num_points;
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve  
@@ -279,9 +279,11 @@ create_NUBspline_2d_s (NUgrid* x_grid, NUgrid* y_grid,
   // Next, create the bases
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
   spline->y_basis = create_NUBasis (y_grid, yBC.lCode==PERIODIC);
-  int Mx, My, Nx, Ny;
-  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
-  else                       Mx = x_grid->num_points;
+  // set but unused
+  //int Mx,
+  int My, Nx, Ny;
+//  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
+//  else                       Mx = x_grid->num_points;
   if (yBC.lCode == PERIODIC) My = y_grid->num_points - 1;
   else                       My = y_grid->num_points;
 
@@ -330,9 +332,11 @@ create_NUBspline_3d_s (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
   spline->y_basis = create_NUBasis (y_grid, yBC.lCode==PERIODIC);
   spline->z_basis = create_NUBasis (z_grid, zBC.lCode==PERIODIC);
-  int Mx, My, Mz, Nx, Ny, Nz;
-  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
-  else                       Mx = x_grid->num_points;
+  // set but unused
+  // int Mx,
+  int My, Mz, Nx, Ny, Nz;
+//  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
+//  else                       Mx = x_grid->num_points;
   if (yBC.lCode == PERIODIC) My = y_grid->num_points - 1;
   else                       My = y_grid->num_points;
   if (zBC.lCode == PERIODIC) Mz = z_grid->num_points - 1;
@@ -588,10 +592,10 @@ create_NUBspline_1d_d (NUgrid* x_grid, BCtype_d xBC, double *data)
 
   // Next, create the basis
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
-  // M is the number of data points
-  int M; 
-  if (xBC.lCode == PERIODIC) M = x_grid->num_points - 1;
-  else                       M = x_grid->num_points;
+  // M is the number of data points (set but unused)
+//  int M;
+//  if (xBC.lCode == PERIODIC) M = x_grid->num_points - 1;
+//  else                       M = x_grid->num_points;
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve
@@ -616,9 +620,10 @@ create_NUBspline_2d_d (NUgrid* x_grid, NUgrid* y_grid,
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
   spline->y_basis = create_NUBasis (y_grid, yBC.lCode==PERIODIC);
 
-  int Mx, My, Nx, Ny;
-  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
-  else                       Mx = x_grid->num_points;
+  // int Mx, (set but unused)
+  int My, Nx, Ny;
+//  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
+//  else                       Mx = x_grid->num_points;
   if (yBC.lCode == PERIODIC) My = y_grid->num_points - 1;
   else                       My = y_grid->num_points;
 
@@ -668,9 +673,11 @@ create_NUBspline_3d_d (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->y_basis = create_NUBasis (y_grid, yBC.lCode==PERIODIC);
   spline->z_basis = create_NUBasis (z_grid, zBC.lCode==PERIODIC);
 
-  int Mx, My, Mz, Nx, Ny, Nz;
-  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
-  else                       Mx = x_grid->num_points;
+  // set but unused
+  //int Mx,
+  int My, Mz, Nx, Ny, Nz;
+//  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
+//  else                       Mx = x_grid->num_points;
   if (yBC.lCode == PERIODIC) My = y_grid->num_points - 1;
   else                       My = y_grid->num_points;
   if (zBC.lCode == PERIODIC) Mz = z_grid->num_points - 1;
@@ -758,9 +765,9 @@ create_NUBspline_1d_c (NUgrid* x_grid, BCtype_c xBC, complex_float *data)
   // Next, create the basis
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
   // M is the number of data points
-  int M; 
-  if (xBC.lCode == PERIODIC) M = x_grid->num_points - 1;
-  else                       M = x_grid->num_points;
+//  int M;
+//  if (xBC.lCode == PERIODIC) M = x_grid->num_points - 1;
+//  else                       M = x_grid->num_points;
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve  
@@ -784,9 +791,10 @@ create_NUBspline_2d_c (NUgrid* x_grid, NUgrid* y_grid,
   // Next, create the bases
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
   spline->y_basis = create_NUBasis (y_grid, yBC.lCode==PERIODIC);
-  int Mx, My, Nx, Ny;
-  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
-  else                       Mx = x_grid->num_points;
+//  int Mx,
+  int My, Nx, Ny;
+//  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
+//  else                       Mx = x_grid->num_points;
   if (yBC.lCode == PERIODIC) My = y_grid->num_points - 1;
   else                       My = y_grid->num_points;
 
@@ -835,9 +843,10 @@ create_NUBspline_3d_c (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
   spline->y_basis = create_NUBasis (y_grid, yBC.lCode==PERIODIC);
   spline->z_basis = create_NUBasis (z_grid, zBC.lCode==PERIODIC);
-  int Mx, My, Mz, Nx, Ny, Nz;
-  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
-  else                       Mx = x_grid->num_points;
+//  int Mx,
+  int My, Mz, Nx, Ny, Nz;
+//  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
+//  else                       Mx = x_grid->num_points;
   if (yBC.lCode == PERIODIC) My = y_grid->num_points - 1;
   else                       My = y_grid->num_points;
   if (zBC.lCode == PERIODIC) Mz = z_grid->num_points - 1;
@@ -925,9 +934,9 @@ create_NUBspline_1d_z (NUgrid* x_grid, BCtype_z xBC, complex_double *data)
   // Next, create the basis
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
   // M is the number of data points
-  int M; 
-  if (xBC.lCode == PERIODIC) M = x_grid->num_points - 1;
-  else                       M = x_grid->num_points;
+//  int M;
+//  if (xBC.lCode == PERIODIC) M = x_grid->num_points - 1;
+//  else                       M = x_grid->num_points;
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve  
@@ -951,9 +960,10 @@ create_NUBspline_2d_z (NUgrid* x_grid, NUgrid* y_grid,
   // Next, create the bases
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
   spline->y_basis = create_NUBasis (y_grid, yBC.lCode==PERIODIC);
-  int Mx, My, Nx, Ny;
-  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
-  else                       Mx = x_grid->num_points;
+//  int Mx,
+  int My, Nx, Ny;
+//  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
+//  else                       Mx = x_grid->num_points;
   if (yBC.lCode == PERIODIC) My = y_grid->num_points - 1;
   else                       My = y_grid->num_points;
 
@@ -1005,9 +1015,10 @@ create_NUBspline_3d_z (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_basis = create_NUBasis (x_grid, xBC.lCode==PERIODIC);
   spline->y_basis = create_NUBasis (y_grid, yBC.lCode==PERIODIC);
   spline->z_basis = create_NUBasis (z_grid, zBC.lCode==PERIODIC);
-  int Mx, My, Mz, Nx, Ny, Nz;
-  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
-  else                       Mx = x_grid->num_points;
+//  int Mx,
+  int My, Mz, Nx, Ny, Nz;
+//  if (xBC.lCode == PERIODIC) Mx = x_grid->num_points - 1;
+//  else                       Mx = x_grid->num_points;
   if (yBC.lCode == PERIODIC) My = y_grid->num_points - 1;
   else                       My = y_grid->num_points;
   if (zBC.lCode == PERIODIC) Mz = z_grid->num_points - 1;
@@ -1083,6 +1094,16 @@ destroy_NUBspline(Bspline *spline)
     destroy_NUBasis (((NUBspline_3d*)spline)->y_basis);
     destroy_NUBasis (((NUBspline_3d*)spline)->z_basis);
     break;
+  case U1D:
+  case U2D:
+  case MULTI_U1D:
+  case MULTI_U2D:
+  case MULTI_U3D:
+  case MULTI_NU1D:
+  case MULTI_NU2D:
+  case MULTI_NU3D:
+  default:
+      ;
   }
   delete spline;
 }

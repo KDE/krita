@@ -1136,15 +1136,16 @@ create_multi_UBspline_1d_z (Ugrid x_grid, BCtype_z xBC, int num_splines)
 void
 set_multi_UBspline_1d_z (multi_UBspline_1d_z* spline, int num, complex_double *data)
 {
-  int Mx = spline->x_grid.num;
-  int Nx;
+//  int Mx = spline->x_grid.num;
+// Set but not used
+//  int Nx;
 
   complex_double *coefs = spline->coefs + num;
 
-  if (spline->xBC.lCode == PERIODIC || spline->xBC.lCode == ANTIPERIODIC)   
-    Nx = Mx+3;
-  else                                 
-    Nx = Mx+2;
+//  if (spline->xBC.lCode == PERIODIC || spline->xBC.lCode == ANTIPERIODIC)
+//    Nx = Mx+3;
+//  else
+//    Nx = Mx+2;
 
   BCtype_d xBC_r, xBC_i;
   xBC_r.lCode = spline->xBC.lCode;  xBC_r.rCode = spline->xBC.rCode;
@@ -1167,15 +1168,15 @@ void
 set_multi_UBspline_1d_z_BC (multi_UBspline_1d_z *spline, int num, 
 			    complex_double *data, BCtype_z xBC)
 {
-  int Mx = spline->x_grid.num;
-  int Nx;
+//  int Mx = spline->x_grid.num;
+//  int Nx;
 
   complex_double *coefs = spline->coefs + num;
 
-  if (xBC.lCode == PERIODIC || xBC.lCode == ANTIPERIODIC)   
-    Nx = Mx+3;
-  else                                 
-    Nx = Mx+2;
+//  if (xBC.lCode == PERIODIC || xBC.lCode == ANTIPERIODIC)
+//    Nx = Mx+3;
+//  else
+//    Nx = Mx+2;
 
   BCtype_d xBC_r, xBC_i;
   xBC_r.lCode = xBC.lCode;  xBC_r.rCode = xBC.rCode;
@@ -1426,8 +1427,8 @@ set_multi_UBspline_3d_z (multi_UBspline_3d_z* spline, int num, complex_double *d
 
   complex_double *coefs = spline->coefs + num;
 
-
-  int N = spline->num_splines;
+// unused variable
+//  int N = spline->num_splines;
   int zs = spline->z_stride;
   // First, solve in the X-direction 
   for (int iy=0; iy<My; iy++) 

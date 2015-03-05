@@ -1516,13 +1516,13 @@ create_UBspline_1d_z (Ugrid x_grid, BCtype_z xBC, complex_double *data)
 void
 recompute_UBspline_1d_z (UBspline_1d_z* spline, complex_double *data)
 {
-  int M = spline->x_grid.num;
-  int N;
+//  int M = spline->x_grid.num;
+//  int N;
 
-  if (spline->xBC.lCode == PERIODIC || spline->xBC.lCode == ANTIPERIODIC)   
-    N = M+3;
-  else                                 
-    N = M+2;
+//  if (spline->xBC.lCode == PERIODIC || spline->xBC.lCode == ANTIPERIODIC)
+//    N = M+3;
+//  else
+//    N = M+2;
 
   BCtype_d xBC_r, xBC_i;
   xBC_r.lCode = spline->xBC.lCode;  xBC_r.rCode = spline->xBC.rCode;

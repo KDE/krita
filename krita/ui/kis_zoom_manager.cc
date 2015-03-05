@@ -86,7 +86,10 @@ KisZoomManager::~KisZoomManager()
 {
     KisConfig cfg;
     cfg.setShowRulers(m_horizontalRuler->isVisible());
-    delete m_zoomActionWidget;
+
+    if (m_zoomActionWidget && !m_zoomActionWidget->parent()) {
+        delete m_zoomActionWidget;
+    }
 }
 
 void KisZoomManager::setup(KActionCollection * actionCollection)

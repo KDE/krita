@@ -83,7 +83,7 @@ private:
     KoRuler * m_horizontalRuler;
     KoRuler * m_verticalRuler;
     KoZoomAction * m_zoomAction;
-    QWidget * m_zoomActionWidget;
+    QPointer<QWidget> m_zoomActionWidget;
     QPoint m_rulersOffset;
 };
 

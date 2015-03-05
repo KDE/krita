@@ -53,6 +53,9 @@ KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id)
     if (id.id() == PressureId.id()) {
         return new KisDynamicSensorPressure();
     }
+    else if (id.id() == PressureInId.id()) {
+        return new KisDynamicSensorPressureIn();
+    }
     else if (id.id() == XTiltId.id()) {
         return new KisDynamicSensorXTilt();
     }
@@ -100,6 +103,9 @@ DynamicSensorType KisDynamicSensor::id2Type(const KoID &id)
 {
     if (id.id() == PressureId.id()) {
         return PRESSURE;
+    }
+    else if (id.id() == PressureInId.id()) {
+        return PRESSURE_IN;
     }
     else if (id.id() == XTiltId.id()) {
         return XTILT;
@@ -174,6 +180,8 @@ KisDynamicSensorSP KisDynamicSensor::type2Sensor(DynamicSensorType sensorType)
         return new KisDynamicSensorPerspective();
     case TANGENTIAL_PRESSURE:
         return new KisDynamicSensorTangentialPressure();
+    case PRESSURE_IN:
+        return new KisDynamicSensorPressureIn();
     default:
         return 0;
     }
@@ -209,6 +217,7 @@ QString KisDynamicSensor::minimumLabel(DynamicSensorType sensorType)
     case PERSPECTIVE:
         return i18n("Far");
     case TANGENTIAL_PRESSURE:
+    case PRESSURE_IN:
         return i18n("Low");
     default:
         return i18n("0.0");
@@ -254,6 +263,7 @@ QString KisDynamicSensor::maximumLabel(DynamicSensorType sensorType, int max)
     case PERSPECTIVE:
         return i18n("Near");
     case TANGENTIAL_PRESSURE:
+    case PRESSURE_IN:        
         return i18n("High");
     default:
         return i18n("1.0");
@@ -284,6 +294,7 @@ QList<KoID> KisDynamicSensor::sensorsIds()
     QList<KoID> ids;
 
     ids << PressureId
+        << PressureInId
         << XTiltId
         << YTiltId
         << TiltDirectionId
@@ -306,6 +317,7 @@ QList<DynamicSensorType> KisDynamicSensor::sensorsTypes()
     QList<DynamicSensorType> sensorTypes;
     sensorTypes
             << PRESSURE
+            << PRESSURE_IN
             << XTILT
             << YTILT
             << TILT_DIRECTION
@@ -353,6 +365,8 @@ QString KisDynamicSensor::id(DynamicSensorType sensorType)
         return "perspective";
     case TANGENTIAL_PRESSURE:
         return "tangentialpressure";
+    case PRESSURE_IN:
+        return "pressurein";
     case SENSORS_LIST:
         return "sensorslist";
     default:

@@ -2,20 +2,22 @@
 # CMake for gmic
 ##
 
-include_directories(src)
+set(GMIC_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/gmic")
+
+include_directories(${GMIC_SOURCE_DIR})
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
 endif()
 
 set(gmic_sources_SRCS
-  src/gmic.cpp
+  ${GMIC_SOURCE_DIR}/gmic.cpp
 )
 
 set(gmic_headers_SRCS
-  src/CImg.h
-  src/gmic_def.h
-  src/gmic.h
+  ${GMIC_SOURCE_DIR}/CImg.h
+  ${GMIC_SOURCE_DIR}/gmic_def.h
+  ${GMIC_SOURCE_DIR}/gmic.h
 )
 
 # Mandatory flags
@@ -157,7 +159,7 @@ install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( FILES  src/gmic_def.gmic gmic_def.gmic.blacklist DESTINATION ${GMIC_INSTALL_DIR} )
+install( FILES  ${GMIC_SOURCE_DIR}/gmic_def.gmic gmic_def.gmic.blacklist DESTINATION ${GMIC_INSTALL_DIR} )
 
 # tests, currently broken on OSX due to fftw linking problem
 if(NOT APPLE)

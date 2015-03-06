@@ -1079,7 +1079,7 @@ create_NUBspline_3d_z (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
 void
 destroy_NUBspline(Bspline *spline)
 {
- delete[] (spline->coefs);
+    free(spline->coefs);
   switch (spline->sp_code) {
   case NU1D:
     destroy_NUBasis (((NUBspline_1d*)spline)->x_basis);

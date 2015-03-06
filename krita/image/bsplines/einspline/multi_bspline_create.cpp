@@ -1480,6 +1480,6 @@ set_multi_UBspline_3d_z (multi_UBspline_3d_z* spline, int num, complex_double *d
 void
 destroy_multi_UBspline (Bspline *spline)
 {
-  delete[] spline->coefs;
+  free(spline->coefs);
   delete spline;
 }

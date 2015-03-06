@@ -160,6 +160,20 @@ QPointF ensureInRect(QPointF pt, const QRectF &bounds)
     return ensureInRectImpl(pt, bounds);
 }
 
+QRect ensureRectNotSmaller(QRect rc, const QSize &size)
+{
+    if (rc.width() < size.width() ||
+        rc.height() < size.height()) {
+
+        int width = qMax(rc.width(), size.width());
+        int height = qMax(rc.height(), size.height());
+
+        rc = QRect(rc.topLeft(), QSize(width, height));
+    }
+
+    return rc;
+}
+
 bool intersectLineRect(QLineF &line, const QRect rect)
 {
     QPointF pt1 = QPointF(), pt2 = QPointF();

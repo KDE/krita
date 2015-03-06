@@ -1847,7 +1847,7 @@ recompute_UBspline_3d_z (UBspline_3d_z* spline, complex_double *data)
 void
 destroy_UBspline (Bspline *spline)
 {
-  delete[] spline->coefs;
+  free(spline->coefs);
   delete spline;
 }
 

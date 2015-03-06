@@ -155,7 +155,14 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
 
-find_package(KF5 REQUIRED COMPONENTS CoreAddons)
+find_package(KF5 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
+                                     GuiAddons I18n ItemModels ItemViews
+                                     WidgetsAddons ThreadWeaver
+                                     Completion IconThemes Parts
+                                     XmlGui Kross KDELibs4Support
+
+)
+
 find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Xml Script Svg Test)
 find_package(Qt5 5.2.0 COMPONENTS WebKit DBus)
 
@@ -173,7 +180,8 @@ if (GHNS)
         set(GHNS FALSE)
     endif()
 
-    macro_optional_find_package(LibAttica)
+    find_package(Attica)
+    find_package(NewStuff)
     macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
 
     if (NOT LIBATTICA_FOUND)

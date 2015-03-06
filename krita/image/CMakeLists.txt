@@ -39,8 +39,9 @@ option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in 
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata
-                     
+include_directories(
+    ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    3rdparty
 )
 
 if(FFTW3_FOUND)
@@ -268,12 +269,12 @@ set(kritaimage_LIB_SRCS
 )
 
 set(einspline_SRCS
-   bsplines/einspline/bspline_create.cpp
-   bsplines/einspline/bspline_data.cpp
-   bsplines/einspline/multi_bspline_create.cpp
-   bsplines/einspline/nubasis.cpp
-   bsplines/einspline/nubspline_create.cpp
-   bsplines/einspline/nugrid.cpp
+   3rdparty/einspline/bspline_create.cpp
+   3rdparty/einspline/bspline_data.cpp
+   3rdparty/einspline/multi_bspline_create.cpp
+   3rdparty/einspline/nubasis.cpp
+   3rdparty/einspline/nubspline_create.cpp
+   3rdparty/einspline/nugrid.cpp
 )
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})

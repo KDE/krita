@@ -10,14 +10,14 @@ set(kritamodifyselection_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritamodifyselection_PART_SRCS
+ki18n_wrap_ui(kritamodifyselection_PART_SRCS
     wdg_grow_selection.ui
     wdg_shrink_selection.ui
     wdg_border_selection.ui
     wdg_feather_selection.ui
     )
 
-kde4_add_plugin(kritamodifyselection ${kritamodifyselection_PART_SRCS})
+add_library(kritamodifyselection MODULE ${kritamodifyselection_PART_SRCS})
 
 
 

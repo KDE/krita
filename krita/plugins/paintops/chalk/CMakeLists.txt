@@ -7,9 +7,9 @@ set(kritachalkpaintop_PART_SRCS
     chalk_brush.cpp	
     )
 
-kde4_add_ui_files(kritachalkpaintop_PART_SRCS wdgchalkoptions.ui )
+ki18n_wrap_ui(kritachalkpaintop_PART_SRCS wdgchalkoptions.ui )
 
-kde4_add_plugin(kritachalkpaintop ${kritachalkpaintop_PART_SRCS})
+add_library(kritachalkpaintop MODULE ${kritachalkpaintop_PART_SRCS})
 
 
 target_link_libraries(kritachalkpaintop kritalibpaintop)

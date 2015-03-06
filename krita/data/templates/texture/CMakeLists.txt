@@ -1,4 +1,4 @@
-kde4_install_icons(${DATA_INSTALL_DIR}/krita/icons )
+ecm_install_icons(${DATA_INSTALL_DIR}/krita/icons )
 install( FILES  
 
 Texture1024x10248bitsrgb.kra

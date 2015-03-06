@@ -8,9 +8,9 @@ set(kritagridpaintop_PART_SRCS
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritagridpaintop_PART_SRCS wdggridoptions.ui wdggridbrushshapeoptions.ui )
+ki18n_wrap_ui(kritagridpaintop_PART_SRCS wdggridoptions.ui wdggridbrushshapeoptions.ui )
 
-kde4_add_plugin(kritagridpaintop ${kritagridpaintop_PART_SRCS})
+add_library(kritagridpaintop MODULE ${kritagridpaintop_PART_SRCS})
 
 
 target_link_libraries(kritagridpaintop kritalibpaintop)

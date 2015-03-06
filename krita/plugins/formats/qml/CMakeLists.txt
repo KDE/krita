@@ -6,7 +6,7 @@ set(kritaqmlexport_PART_SRCS
     qml_export.cc
     )
 
-kde4_add_plugin(kritaqmlexport ${kritaqmlexport_PART_SRCS})
+add_library(kritaqmlexport MODULE ${kritaqmlexport_PART_SRCS})
 
 target_link_libraries(kritaqmlexport kritaui )
 

@@ -12,4 +12,4 @@ set(kis_tiff_test_SRCS kis_tiff_test.cpp )
 
 kde4_add_unit_test(kis_tiff_test TESTNAME krita-plugins-formats-tiff_test ${kis_tiff_test_SRCS})
 
-target_link_libraries(kis_tiff_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(kis_tiff_test  ${KDE4_KDEUI_LIBS} kritaui Qt5::Test)

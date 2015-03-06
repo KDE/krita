@@ -31,13 +31,13 @@ set(pathshapes_PART_SRCS
     PathShapesPlugin.cpp
 )
 
-kde4_add_ui_files(pathshapes_PART_SRCS
+ki18n_wrap_ui(pathshapes_PART_SRCS
     star/StarShapeConfigWidget.ui
     rectangle/RectangleShapeConfigWidget.ui
     ellipse/EllipseShapeConfigWidget.ui
     spiral/SpiralShapeConfigWidget.ui
 )
-kde4_add_plugin(calligra_shape_paths ${pathshapes_PART_SRCS})
+add_library(calligra_shape_paths MODULE ${pathshapes_PART_SRCS})
 
 target_link_libraries(calligra_shape_paths flake kowidgets)
 

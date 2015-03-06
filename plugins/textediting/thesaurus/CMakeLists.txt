@@ -12,7 +12,7 @@ set(thesaurustool_SRCS
 )
 
 
-kde4_add_plugin(calligra_textediting_thesaurus ${thesaurustool_SRCS})
+add_library(calligra_textediting_thesaurus MODULE ${thesaurustool_SRCS})
 
 target_link_libraries(calligra_textediting_thesaurus kotext)
 

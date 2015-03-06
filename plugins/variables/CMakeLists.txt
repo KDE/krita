@@ -24,11 +24,11 @@ set(textvariables_SRCS
 )
 
 
-kde4_add_ui_files( textvariables_SRCS
+ki18n_wrap_ui( textvariables_SRCS
     FixedDateFormat.ui
 )
 
-kde4_add_plugin(calligra_textinlineobject_variables ${textvariables_SRCS})
+add_library(calligra_textinlineobject_variables MODULE ${textvariables_SRCS})
 
 target_link_libraries(calligra_textinlineobject_variables kotext kotextlayout)
 

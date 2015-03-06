@@ -7,13 +7,13 @@ set(calligra_semanticitem_authorsection_LIB_SRCS
     CAuSectionRdf.cpp
 )
 
-kde4_add_ui_files( calligra_semanticitem_authorsection_LIB_SRCS
+ki18n_wrap_ui( calligra_semanticitem_authorsection_LIB_SRCS
    CAuSectionRdfEditWidget.ui
 )
 
-kde4_add_plugin(calligra_semanticitem_authorsection ${calligra_semanticitem_authorsection_LIB_SRCS})
+add_library(calligra_semanticitem_authorsection MODULE ${calligra_semanticitem_authorsection_LIB_SRCS})
 
-target_link_libraries(calligra_semanticitem_authorsection ${KDE4_KDECORE_LIBS}  ${KORDF_LIBS})
+target_link_libraries(calligra_semanticitem_authorsection   ${KORDF_LIBS})
 
 
 install(TARGETS calligra_semanticitem_authorsection  DESTINATION ${PLUGIN_INSTALL_DIR})

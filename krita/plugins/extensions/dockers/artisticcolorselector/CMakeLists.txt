@@ -6,8 +6,8 @@ set(kritaartisticcolorselector_PART_SRCS
     kis_color_selector.cpp
 )
 
-kde4_add_ui_files(kritaartisticcolorselector_PART_SRCS forms/wdgArtisticColorSelector.ui forms/wdgColorPreferencesPopup.ui)
-kde4_add_plugin(kritaartisticcolorselector ${kritaartisticcolorselector_PART_SRCS})
+ki18n_wrap_ui(kritaartisticcolorselector_PART_SRCS forms/wdgArtisticColorSelector.ui forms/wdgColorPreferencesPopup.ui)
+add_library(kritaartisticcolorselector MODULE ${kritaartisticcolorselector_PART_SRCS})
 
 target_link_libraries(kritaartisticcolorselector kritaui)
 

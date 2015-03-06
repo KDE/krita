@@ -1,7 +1,7 @@
 set(kritaseparatechannels_PART_SRCS kis_channel_separator.cc dlg_separate.cc kis_separate_channels_plugin.cc )
 
-kde4_add_ui_files(kritaseparatechannels_PART_SRCS wdg_separations.ui )
-kde4_add_plugin(kritaseparatechannels ${kritaseparatechannels_PART_SRCS})
+ki18n_wrap_ui(kritaseparatechannels_PART_SRCS wdg_separations.ui )
+add_library(kritaseparatechannels MODULE ${kritaseparatechannels_PART_SRCS})
 
 target_link_libraries(kritaseparatechannels kritaui)
 

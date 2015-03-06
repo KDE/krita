@@ -10,16 +10,16 @@ set(koreport_webplugin_LIB_SRCS
     KoReportWebPlugin.cpp
 )
 
-kde4_add_plugin(koreport_webplugin ${koreport_webplugin_LIB_SRCS})
+add_library(koreport_webplugin MODULE ${koreport_webplugin_LIB_SRCS})
 
 set (QT_USE_QTWEBKIT TRUE)
 
 target_link_libraries(koreport_webplugin
     ${KOREPORT_LIBS}
     ${KOPROPERTY_LIBS}
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    
+    Qt5::Core
+    Qt5::Gui
     ${QT_QTWEBKIT_LIBRARY}
 )
 
@@ -27,4 +27,4 @@ target_link_libraries(koreport_webplugin
 
 install(TARGETS koreport_webplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  koreport_webplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-kde4_install_icons(${DATA_INSTALL_DIR}/calligra/icons)
+ecm_install_icons(${DATA_INSTALL_DIR}/calligra/icons)

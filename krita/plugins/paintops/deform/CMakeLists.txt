@@ -7,9 +7,9 @@ set(kritadeformpaintop_PART_SRCS
     kis_deform_paintop_settings_widget.cpp
     )
 
-kde4_add_ui_files(kritadeformpaintop_PART_SRCS wdgdeformoptions.ui )
+ki18n_wrap_ui(kritadeformpaintop_PART_SRCS wdgdeformoptions.ui )
 
-kde4_add_plugin(kritadeformpaintop ${kritadeformpaintop_PART_SRCS})
+add_library(kritadeformpaintop MODULE ${kritadeformpaintop_PART_SRCS})
 
 target_link_libraries(kritadeformpaintop kritaui kritalibpaintop)
 

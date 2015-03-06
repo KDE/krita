@@ -27,5 +27,5 @@ set( musicwidgettest_SRCS
     ../MusicStyle.cpp
 )
 
-kde4_add_executable(musicwidgettest TEST ${musicwidgettest_SRCS})
-target_link_libraries(musicwidgettest ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
+add_executable(musicwidgettest TEST ${musicwidgettest_SRCS})
+target_link_libraries(musicwidgettest Qt5::Gui Qt5::Core)

@@ -8,4 +8,4 @@ set(kis_jpeg_test_SRCS kis_jpeg_test.cpp )
 
 kde4_add_unit_test(kis_jpeg_test TESTNAME krita-plugin-format-jpeg_test ${kis_jpeg_test_SRCS})
 
-target_link_libraries(kis_jpeg_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(kis_jpeg_test  ${KDE4_KDEUI_LIBS} kritaui Qt5::Test)

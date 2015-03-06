@@ -1,11 +1,11 @@
 
 set(KRITA_PALETTEDOCKER_PART_SRCS colorsetchooser.cpp palettemodel.cpp palettedocker.cpp palettedocker_dock.cpp )
 
-kde4_add_ui_files(KRITA_PALETTEDOCKER_PART_SRCS
+ki18n_wrap_ui(KRITA_PALETTEDOCKER_PART_SRCS
     wdgpalettedock.ui
 )
 
-kde4_add_plugin(kritapalettedocker ${KRITA_PALETTEDOCKER_PART_SRCS})
+add_library(kritapalettedocker MODULE ${KRITA_PALETTEDOCKER_PART_SRCS})
 
 target_link_libraries(kritapalettedocker kritaui)
 

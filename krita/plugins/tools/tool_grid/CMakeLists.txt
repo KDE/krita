@@ -5,7 +5,7 @@ set(kritatoolgrid_PART_SRCS
     kis_tool_grid.cc
     )
 
-kde4_add_plugin(kritatoolgrid ${kritatoolgrid_PART_SRCS})
+add_library(kritatoolgrid MODULE ${kritatoolgrid_PART_SRCS})
 
 
 

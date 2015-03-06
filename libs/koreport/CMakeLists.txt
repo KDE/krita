@@ -107,9 +107,9 @@ set(koreport_LIB_SRCS
     items/text/KoReportTextPlugin.cpp
     )
 
-kde4_add_ui_files(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembed/sectioneditor.ui )
+ki18n_wrap_ui(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembed/sectioneditor.ui )
 
-kde4_add_library(koreport SHARED ${koreport_LIB_SRCS})
+add_library(koreport SHARED ${koreport_LIB_SRCS})
 
 target_link_libraries(koreport
   ${KOPROPERTY_LIBS}

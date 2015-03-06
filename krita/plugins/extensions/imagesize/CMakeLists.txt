@@ -8,13 +8,13 @@ set(kritaimagesize_PART_SRCS
     kcanvaspreview.cc
     )
 
-kde4_add_ui_files(kritaimagesize_PART_SRCS
+ki18n_wrap_ui(kritaimagesize_PART_SRCS
     wdg_imagesize.ui
     wdg_canvassize.ui
     wdg_layersize.ui
     )
 
-kde4_add_plugin(kritaimagesize ${kritaimagesize_PART_SRCS})
+add_library(kritaimagesize MODULE ${kritaimagesize_PART_SRCS})
 
 
 

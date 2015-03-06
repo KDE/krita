@@ -10,7 +10,7 @@ set(kritacolorsmudgepaintop_PART_SRCS
     kis_smudge_radius_option_widget.cpp
 )
 
-kde4_add_plugin(kritacolorsmudgepaintop ${kritacolorsmudgepaintop_PART_SRCS})
+add_library(kritacolorsmudgepaintop MODULE ${kritacolorsmudgepaintop_PART_SRCS})
 
 
 target_link_libraries(kritacolorsmudgepaintop kritalibpaintop)

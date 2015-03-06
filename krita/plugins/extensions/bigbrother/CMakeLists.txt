@@ -5,10 +5,10 @@ set(kritabigbrother_PART_SRCS
         actionseditor/kis_actions_editor_dialog.cpp
         actionseditor/kis_macro_model.cpp )
 
-kde4_add_ui_files(kritabigbrother_PART_SRCS
+ki18n_wrap_ui(kritabigbrother_PART_SRCS
         actionseditor/wdgactionseditor.ui )
 
-kde4_add_plugin(kritabigbrother ${kritabigbrother_PART_SRCS})
+add_library(kritabigbrother MODULE ${kritabigbrother_PART_SRCS})
 
 target_link_libraries(kritabigbrother kritaui)
 

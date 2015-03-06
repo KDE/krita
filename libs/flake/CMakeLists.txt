@@ -210,14 +210,14 @@ set(flake_SRCS
     svg/SvgShapeFactory.cpp
 )
 
-kde4_add_ui_files(flake_SRCS
+ki18n_wrap_ui(flake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
     SnapGuideConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 
-kde4_add_library(flake SHARED ${flake_SRCS})
+add_library(flake SHARED ${flake_SRCS})
 
 target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf)
@@ -225,7 +225,7 @@ target_link_libraries(flake kundo2)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
 
 if(HAVE_OPENGL)
-    target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
+    target_link_libraries(flake ${OPENGL_LIBRARIES} Qt5::OpenGL)
 endif()
 
 set_target_properties(flake PROPERTIES

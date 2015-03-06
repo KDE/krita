@@ -56,7 +56,7 @@ set( kformula_LIB_SRCS
    elements/UnknownElement.cpp
 )
 
-kde4_add_library(kformula SHARED ${kformula_LIB_SRCS})
+add_library(kformula SHARED ${kformula_LIB_SRCS})
 
 target_link_libraries(kformula komain)
 target_link_libraries(kformula LINK_INTERFACE_LIBRARIES komain)
@@ -101,11 +101,11 @@ set (formulashape_PART_SRCS
 )
 endif ()
 
-kde4_add_ui_files( formulashape_PART_SRCS
+ki18n_wrap_ui( formulashape_PART_SRCS
     FormulaToolWidget.ui
 )
 
-kde4_add_plugin(calligra_shape_formular ${formulashape_PART_SRCS})
+add_library(calligra_shape_formular MODULE ${formulashape_PART_SRCS})
 
 target_link_libraries(calligra_shape_formular kformula ${M2MML_TOOL_LIBRARIES})
 

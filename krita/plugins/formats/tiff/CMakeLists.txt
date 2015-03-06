@@ -16,7 +16,7 @@ set(kritatiffimport_PART_SRCS
     )
 
 
-kde4_add_plugin(kritatiffimport ${kritatiffimport_PART_SRCS})
+add_library(kritatiffimport MODULE ${kritatiffimport_PART_SRCS})
 
 
 
@@ -33,9 +33,9 @@ set(kritatiffexport_PART_SRCS
     kis_dlg_options_tiff.cpp
     )
 
-kde4_add_ui_files(kritatiffexport_PART_SRCS kis_wdg_options_tiff.ui )
+ki18n_wrap_ui(kritatiffexport_PART_SRCS kis_wdg_options_tiff.ui )
 
-kde4_add_plugin(kritatiffexport ${kritatiffexport_PART_SRCS})
+add_library(kritatiffexport MODULE ${kritatiffexport_PART_SRCS})
 
 
 

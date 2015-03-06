@@ -11,7 +11,7 @@ set(spellcheck_SRCS
     SpellCheckMenu.cpp
 )
 
-kde4_add_plugin(calligra_textediting_spellcheck ${spellcheck_SRCS})
+add_library(calligra_textediting_spellcheck MODULE ${spellcheck_SRCS})
 
 target_link_libraries(calligra_textediting_spellcheck kotext kotextlayout)
 

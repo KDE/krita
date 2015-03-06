@@ -1,7 +1,7 @@
 
 set(KRITA_CHANNELDOCKER_PART_SRCS channelmodel.cpp channeldocker.cpp channeldocker_dock.cpp )
 
-kde4_add_plugin(kritachanneldocker ${KRITA_CHANNELDOCKER_PART_SRCS})
+add_library(kritachanneldocker MODULE ${KRITA_CHANNELDOCKER_PART_SRCS})
 
 target_link_libraries(kritachanneldocker kritaui)
 

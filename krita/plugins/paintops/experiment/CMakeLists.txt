@@ -6,9 +6,9 @@ set(kritaexperimentpaintop_PART_SRCS
     kis_experiment_paintop_settings_widget.cpp
     )
 
-kde4_add_ui_files(kritaexperimentpaintop_PART_SRCS wdgexperimentoptions.ui )
+ki18n_wrap_ui(kritaexperimentpaintop_PART_SRCS wdgexperimentoptions.ui )
 
-kde4_add_plugin(kritaexperimentpaintop ${kritaexperimentpaintop_PART_SRCS})
+add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_PART_SRCS})
 
 
 target_link_libraries(kritaexperimentpaintop kritalibpaintop)

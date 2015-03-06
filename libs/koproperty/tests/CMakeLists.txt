@@ -4,7 +4,7 @@ if(KDE4_BUILD_TESTS)
 
   set(propertytest_SRCS main.cpp test.cpp )
   
-  kde4_add_executable(propertytest NOGUI ${propertytest_SRCS})
+  add_executable(propertytest NOGUI ${propertytest_SRCS})
   
   target_link_libraries(propertytest  ${KDE4_KDEUI_LIBS} koproperty )
 

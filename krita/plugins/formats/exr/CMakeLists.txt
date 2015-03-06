@@ -15,7 +15,7 @@ set(kritaexrimport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritaexrimport ${kritaexrimport_PART_SRCS})
+add_library(kritaexrimport MODULE ${kritaexrimport_PART_SRCS})
 
 
 
@@ -30,9 +30,9 @@ set(kritaexrexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_ui_files(kritaexrexport_PART_SRCS exr_export_widget.ui )
+ki18n_wrap_ui(kritaexrexport_PART_SRCS exr_export_widget.ui )
 
-kde4_add_plugin(kritaexrexport ${kritaexrexport_PART_SRCS})
+add_library(kritaexrexport MODULE ${kritaexrexport_PART_SRCS})
 
 
 target_link_libraries(kritaexrexport kritaui ${OPENEXR_LIBRARIES} )

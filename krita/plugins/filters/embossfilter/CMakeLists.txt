@@ -2,7 +2,7 @@
 set(kritaembossfilter_PART_SRCS kis_emboss_filter_plugin.cpp kis_emboss_filter.cpp )
 
 
-kde4_add_plugin(kritaembossfilter ${kritaembossfilter_PART_SRCS})
+add_library(kritaembossfilter MODULE ${kritaembossfilter_PART_SRCS})
 
 
 

@@ -9,13 +9,13 @@ set(pivottables_SRCS
    pivotoptions.cpp
    pivotplugin.cpp)
 
-kde4_add_ui_files(pivottables_SRCS
+ki18n_wrap_ui(pivottables_SRCS
    pivot.ui
    pivotfilters.ui
    pivotmain.ui
    pivotoptions.ui)
 
-kde4_add_plugin(sheetspivottables ${pivottables_SRCS})
+add_library(sheetspivottables MODULE ${pivottables_SRCS})
 
 target_link_libraries(sheetspivottables calligrasheetscommon)
 

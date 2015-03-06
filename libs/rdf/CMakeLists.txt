@@ -29,12 +29,12 @@ set(kordf_LIB_SRCS
     InsertSemanticObjectReferenceAction.cpp
 )
 
-kde4_add_ui_files( kordf_LIB_SRCS
+ki18n_wrap_ui( kordf_LIB_SRCS
    KoDocumentRdfEditWidget.ui
    KoSemanticStylesheetsEditor.ui
 )
 
-kde4_add_library(kordf SHARED ${kordf_LIB_SRCS})
+add_library(kordf SHARED ${kordf_LIB_SRCS})
 
 target_link_libraries(kordf ${extra_libs} komain )
 target_link_libraries(kordf ${SOPRANO_LIBRARIES})

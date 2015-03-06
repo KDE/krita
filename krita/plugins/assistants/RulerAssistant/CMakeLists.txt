@@ -13,9 +13,9 @@ set(kritarulerassistanttool_PART_SRCS
     kis_ruler_assistant_tool.cc
     )
 
-kde4_add_ui_files(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )
+ki18n_wrap_ui(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )
 
-kde4_add_plugin(kritarulerassistanttool ${kritarulerassistanttool_PART_SRCS})
+add_library(kritarulerassistanttool MODULE ${kritarulerassistanttool_PART_SRCS})
 
 target_link_libraries(kritarulerassistanttool kritaui flake  ${KDE4_KDEUI_LIBS} )
 

@@ -6,7 +6,7 @@ set(kritatoolpolyline_PART_SRCS
     )
 
 
-kde4_add_plugin(kritatoolpolyline ${kritatoolpolyline_PART_SRCS})
+add_library(kritatoolpolyline MODULE ${kritatoolpolyline_PART_SRCS})
 
 
 

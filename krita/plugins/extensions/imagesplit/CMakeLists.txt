@@ -4,11 +4,11 @@ set(kritaimagesplit_PART_SRCS
     wdg_imagesplit.cpp
     )
 
-kde4_add_ui_files(kritaimagesplit_PART_SRCS
+ki18n_wrap_ui(kritaimagesplit_PART_SRCS
     wdg_imagesplit.ui
     )
 
-kde4_add_plugin(kritaimagesplit ${kritaimagesplit_PART_SRCS})
+add_library(kritaimagesplit MODULE ${kritaimagesplit_PART_SRCS})
 
 target_link_libraries(kritaimagesplit kritaui)
 

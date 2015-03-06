@@ -11,7 +11,7 @@ set(kritaselectiontools_PART_SRCS
     kis_tool_select_similar.cc
 )
 
-kde4_add_plugin(kritaselectiontools ${kritaselectiontools_PART_SRCS})
+add_library(kritaselectiontools MODULE ${kritaselectiontools_PART_SRCS})
 
 target_link_libraries(kritaselectiontools kritaui basicflakes)
 

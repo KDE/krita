@@ -4,7 +4,7 @@ set(kritaconvolutionfilters_PART_SRCS
    kis_convolution_filter.cpp )
 
 
-kde4_add_plugin(kritaconvolutionfilters ${kritaconvolutionfilters_PART_SRCS})
+add_library(kritaconvolutionfilters MODULE ${kritaconvolutionfilters_PART_SRCS})
 
 
 

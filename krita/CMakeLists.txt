@@ -153,7 +153,7 @@ endif()
 
 kde4_add_app_icon(krita_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
 
-kde4_add_executable(krita ${krita_SRCS})
+add_executable(krita ${krita_SRCS})
 target_link_libraries(krita kritaui ${BREAKPAD_LIBS})
 
 if (Q_WS_MAC)

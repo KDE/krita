@@ -11,7 +11,7 @@ set( extensions_plugin_PART_SRCS
     kis_desaturate_adjustment.cpp
 )
 
-kde4_add_plugin( krita_colorspaces_extensions ${extensions_plugin_PART_SRCS} )
+add_library(krita_colorspaces_extensions MODULE ${extensions_plugin_PART_SRCS} )
 
 target_link_libraries(krita_colorspaces_extensions pigmentcms ${OPENEXR_LIBRARIES})
 

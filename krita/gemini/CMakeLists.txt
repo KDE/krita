@@ -29,10 +29,10 @@ endif ()
 # Krita Gemini application
 # =============================================================================
 
-kde4_add_executable(kritagemini ${kritagemini_SRCS})
+add_executable(kritagemini ${kritagemini_SRCS})
 
 target_link_libraries(kritagemini
-    ${QT_QTDECLARATIVE_LIBRARY}
+    Qt5::Declarative
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
     ${QT_LIBRARIES}

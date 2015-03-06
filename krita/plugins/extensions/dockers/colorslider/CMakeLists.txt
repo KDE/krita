@@ -8,9 +8,9 @@ set(kritacolorslider_PART_SRCS
 
 )
 
-# kde4_add_ui_files(kritaspecificcolorselector_PART_SRCS myuifile.ui )
+# ki18n_wrap_ui(kritaspecificcolorselector_PART_SRCS myuifile.ui )
 
-kde4_add_plugin(kritacolorslider ${kritacolorslider_PART_SRCS})
+add_library(kritacolorslider MODULE ${kritacolorslider_PART_SRCS})
 
 target_link_libraries(kritacolorslider kritaui ${OPENEXR_LIBRARIES})
 

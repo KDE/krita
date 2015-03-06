@@ -5,5 +5,5 @@ include_directories( ${CMAKE_SOURCE_DIR}/libs/widgetutils )
 
 set(kopropertiestest_SRCS KoPropertiesTest.cpp )
 kde4_add_unit_test(KoPropertiesTest TESTNAME libs-widgetutils-KoPropertiesTest ${kopropertiestest_SRCS})
-target_link_libraries(KoPropertiesTest  ${KDE4_KDEUI_LIBS} kowidgetutils ${QT_QTTEST_LIBRARY})
+target_link_libraries(KoPropertiesTest  ${KDE4_KDEUI_LIBS} kowidgetutils Qt5::Test)
 

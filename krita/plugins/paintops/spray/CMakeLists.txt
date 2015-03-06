@@ -10,9 +10,9 @@ set(kritaspraypaintop_PART_SRCS
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )
+ki18n_wrap_ui(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )
 
-kde4_add_plugin(kritaspraypaintop ${kritaspraypaintop_PART_SRCS})
+add_library(kritaspraypaintop MODULE ${kritaspraypaintop_PART_SRCS})
 
 
 target_link_libraries(kritaspraypaintop kritalibpaintop)

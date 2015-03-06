@@ -110,14 +110,14 @@ endif ()
 # Krita Sketch library with shared things needed in both plugin and application
 # =============================================================================
 
-kde4_add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
+add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
 set_target_properties(kritasketchlib
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} DEFINE_SYMBOL MAKE_KRITA_SKETCH_LIB
 )
 
 
 target_link_libraries(kritasketchlib
-    ${QT_QTDECLARATIVE_LIBRARY}
+    Qt5::Declarative
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
     ${QT_LIBRARIES}
@@ -136,10 +136,10 @@ install(TARGETS kritasketchlib ${INSTALL_TARGETS_DEFAULT_ARGS})
 # Krita Sketch application
 # =============================================================================
 
-kde4_add_executable(kritasketch ${kritasketch_SRCS})
+add_executable(kritasketch ${kritasketch_SRCS})
 
 target_link_libraries(kritasketch
-    ${QT_QTDECLARATIVE_LIBRARY}
+    Qt5::Declarative
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
     ${QT_LIBRARIES}
@@ -160,7 +160,7 @@ install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_D
 automoc4_add_library(kritasketchplugin MODULE ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
 
 target_link_libraries(kritasketchplugin
-    ${QT_QTDECLARATIVE_LIBRARY}
+    Qt5::Declarative
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
     ${QT_LIBRARIES}

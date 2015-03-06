@@ -108,15 +108,15 @@ set(kdchart_LIB_SRCS
     Ternary/TernaryPoint.cpp
 )
 
-qt4_wrap_ui(kdchart_LIB_SRCS
+qt5_wrap_ui(kdchart_LIB_SRCS
     KDChartDatasetSelector.ui
 )
 
 qt_wrap_cpp(calligrakdchart kdchart_LIB_SRCS KDChartEnums.h)
 
-kde4_add_library(calligrakdchart SHARED ${kdchart_LIB_SRCS})
+add_library(calligrakdchart SHARED ${kdchart_LIB_SRCS})
 
-target_link_libraries(calligrakdchart  ${QT_QTSVG_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY} ${ZLIB_LIBRARY} )
+target_link_libraries(calligrakdchart  Qt5::Svg Qt5::Xml Qt5::Gui Qt5::Core ${ZLIB_LIBRARY} )
 
 set_target_properties(calligrakdchart PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligrakdchart  ${INSTALL_TARGETS_DEFAULT_ARGS})

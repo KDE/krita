@@ -2,7 +2,7 @@ set(kritalayergroupswitcher_PART_SRCS
     layergroupswitcher.cpp
 )
 
-kde4_add_plugin(kritalayergroupswitcher ${kritalayergroupswitcher_PART_SRCS})
+add_library(kritalayergroupswitcher MODULE ${kritalayergroupswitcher_PART_SRCS})
 
 target_link_libraries(kritalayergroupswitcher kritaui)
 

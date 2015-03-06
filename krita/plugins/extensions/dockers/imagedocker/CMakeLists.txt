@@ -6,9 +6,9 @@ set(kritaimagedocker_PART_SRCS
     image_view.cpp
 )
 
-kde4_add_ui_files(kritaimagedocker_PART_SRCS forms/wdgimagedocker.ui forms/wdgImageViewPopup.ui)
+ki18n_wrap_ui(kritaimagedocker_PART_SRCS forms/wdgimagedocker.ui forms/wdgImageViewPopup.ui)
 
-kde4_add_plugin(kritaimagedocker ${kritaimagedocker_PART_SRCS})
+add_library(kritaimagedocker MODULE ${kritaimagedocker_PART_SRCS})
 target_link_libraries(kritaimagedocker kritaui)
 
 install(TARGETS kritaimagedocker DESTINATION ${PLUGIN_INSTALL_DIR})

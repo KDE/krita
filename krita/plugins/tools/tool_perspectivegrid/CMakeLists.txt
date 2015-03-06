@@ -5,7 +5,7 @@ set(kritatoolperspectivegrid_PART_SRCS
     kis_tool_perspectivegrid.cc
     )
 
-kde4_add_plugin(kritatoolperspectivegrid ${kritatoolperspectivegrid_PART_SRCS})
+add_library(kritatoolperspectivegrid MODULE ${kritatoolperspectivegrid_PART_SRCS})
 
 
 

@@ -55,11 +55,11 @@ set( kopageapp_LIB_SRCS
      tools/backgroundTool/KoPABackgroundToolWidget.cpp
 )
 
-kde4_add_ui_files(kopageapp_LIB_SRCS
+ki18n_wrap_ui(kopageapp_LIB_SRCS
     tools/backgroundTool/BackgroundToolWidget.ui
 )
 
-kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
+add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
 target_link_libraries(kopageapp komain kotextlayout)
 target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain)

@@ -87,7 +87,7 @@ endif ()
 
 
 
-kde4_add_plugin(kolcmsengine ${lcmsengine_SRCS})
+add_library(kolcmsengine MODULE ${lcmsengine_SRCS})
 
 target_link_libraries(kolcmsengine pigmentcms ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
 install(TARGETS kolcmsengine DESTINATION ${PLUGIN_INSTALL_DIR})

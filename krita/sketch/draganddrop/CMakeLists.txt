@@ -17,8 +17,8 @@ include_directories(
 qt4_automoc(${declarativedragdrop_SRCS})
 
 
-kde4_add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
-target_link_libraries(draganddropplugin ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
+add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
+target_link_libraries(draganddropplugin Qt5::Core Qt5::Gui Qt5::Declarative)
 
 install(TARGETS draganddropplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/draganddrop)
 

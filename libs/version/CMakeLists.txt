@@ -10,11 +10,11 @@ set(koversion_LIB_SRCS
     calligraversion.cpp
 )
 
-kde4_add_library(koversion SHARED ${koversion_LIB_SRCS})
+add_library(koversion SHARED ${koversion_LIB_SRCS})
 
-target_link_libraries(koversion ${QT_QTCORE_LIBRARY} )
+target_link_libraries(koversion Qt5::Core )
 
-target_link_libraries(koversion LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} )
+target_link_libraries(koversion LINK_INTERFACE_LIBRARIES Qt5::Core )
 
 set_target_properties(koversion PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

@@ -4,11 +4,11 @@ set(kritapatterngenerator_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritapatterngenerator_PART_SRCS
+ki18n_wrap_ui(kritapatterngenerator_PART_SRCS
     wdgpatternoptions.ui
     )
 
-kde4_add_plugin(kritapatterngenerator ${kritapatterngenerator_PART_SRCS})
+add_library(kritapatterngenerator MODULE ${kritapatterngenerator_PART_SRCS})
 
 
 target_link_libraries(kritapatterngenerator kritaui)

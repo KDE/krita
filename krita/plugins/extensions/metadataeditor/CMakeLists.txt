@@ -2,9 +2,9 @@ include_directories(${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
 set(kritametadataeditor_PART_SRCS metadataeditor.cc kis_entry_editor.cc kis_meta_data_editor.cc kis_meta_data_model.cpp )
 
-# kde4_add_ui_files(kritametadataeditor_PART_SRCS myuifile.ui )
+# ki18n_wrap_ui(kritametadataeditor_PART_SRCS myuifile.ui )
 
-kde4_add_plugin(kritametadataeditor ${kritametadataeditor_PART_SRCS})
+add_library(kritametadataeditor MODULE ${kritametadataeditor_PART_SRCS})
 
 target_link_libraries(kritametadataeditor kritaui ${QT_QTUITOOLS_LIBRARY} )
 

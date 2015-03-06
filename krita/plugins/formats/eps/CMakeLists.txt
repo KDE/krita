@@ -12,7 +12,7 @@ set(kritaepsimport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritaepsimport ${kritaepsimport_PART_SRCS})
+add_library(kritaepsimport MODULE ${kritaepsimport_PART_SRCS})
 
 target_link_libraries(kritaepsimport kritaui eps ${EXIV2_LIBRARIES} )
 
@@ -25,9 +25,9 @@ set(kritaepsexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_ui_files(kritaepsexport_PART_SRCS kis_wdg_options_eps.ui )
+ki18n_wrap_ui(kritaepsexport_PART_SRCS kis_wdg_options_eps.ui )
 
-kde4_add_plugin(kritaepsexport ${kritaepsexport_PART_SRCS})
+add_library(kritaepsexport MODULE ${kritaepsexport_PART_SRCS})
 
 target_link_libraries(kritaepsexport kritaui eps ${EXIV2_LIBRARIES} )
 

@@ -131,7 +131,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
     )
 endif()
 
-kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
+add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 target_link_libraries(kotext flake)
 if( SHOULD_BUILD_FEATURE_RDF )

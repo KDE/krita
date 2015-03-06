@@ -5,7 +5,7 @@ set(kritatooldyna_PART_SRCS
     )
 
 
-kde4_add_plugin(kritatooldyna ${kritatooldyna_PART_SRCS})
+add_library(kritatooldyna MODULE ${kritatooldyna_PART_SRCS})
 
 
 target_link_libraries(kritatooldyna kritaui)

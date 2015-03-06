@@ -30,10 +30,10 @@ set( kdgantt_LIB_SRCS
     kdgantttimescalezoomdialog.cpp
 )
 
-kde4_add_library(calligrakdgantt SHARED ${kdgantt_LIB_SRCS})
+add_library(calligrakdgantt SHARED ${kdgantt_LIB_SRCS})
 
-target_link_libraries(calligrakdgantt ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
-target_link_libraries(calligrakdgantt LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
+target_link_libraries(calligrakdgantt  Qt5::Gui Qt5::Core)
+target_link_libraries(calligrakdgantt LINK_INTERFACE_LIBRARIES  Qt5::Gui Qt5::Core)
 
 set_target_properties(calligrakdgantt PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION}

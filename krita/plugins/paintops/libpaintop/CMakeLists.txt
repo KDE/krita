@@ -60,7 +60,7 @@ set(kritalibpaintop_LIB_SRCS
     sensors/kis_dynamic_sensor_fuzzy.cpp
 )
 
-kde4_add_ui_files(kritalibpaintop_LIB_SRCS
+ki18n_wrap_ui(kritalibpaintop_LIB_SRCS
     forms/wdgautobrush.ui
     forms/wdgBrushSizeOptions.ui
     forms/wdgcurveoption.ui
@@ -81,7 +81,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
 
 )
 
-kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )
+add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )
 
 target_link_libraries(kritalibpaintop kritaui kritalibbrush kowidgetutils)
 target_link_libraries(kritalibpaintop LINK_INTERFACE_LIBRARIES kritaui kritalibbrush)

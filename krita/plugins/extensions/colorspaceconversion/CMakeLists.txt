@@ -2,9 +2,9 @@
 set(kritacolorspaceconversion_PART_SRCS colorspaceconversion.cc dlg_colorspaceconversion.cc )
 
 
-kde4_add_ui_files(kritacolorspaceconversion_PART_SRCS wdgconvertcolorspace.ui )
+ki18n_wrap_ui(kritacolorspaceconversion_PART_SRCS wdgconvertcolorspace.ui )
 
-kde4_add_plugin(kritacolorspaceconversion ${kritacolorspaceconversion_PART_SRCS})
+add_library(kritacolorspaceconversion MODULE ${kritacolorspaceconversion_PART_SRCS})
 
 
 

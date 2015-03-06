@@ -2,7 +2,7 @@
 
 set(kritaposterize_PART_SRCS posterize.cpp )
 
-kde4_add_plugin(kritaposterize ${kritaposterize_PART_SRCS})
+add_library(kritaposterize MODULE ${kritaposterize_PART_SRCS})
 
 
 

@@ -9,9 +9,9 @@ set(kundo2_LIB_SRCS
 
 )
 
-kde4_add_library(kundo2 SHARED ${kundo2_LIB_SRCS})
+add_library(kundo2 SHARED ${kundo2_LIB_SRCS})
 
-target_link_libraries(kundo2 ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS})
+target_link_libraries(kundo2 Qt5::Core Qt5::Gui  ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kundo2 PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

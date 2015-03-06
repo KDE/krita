@@ -355,14 +355,14 @@ endif ()
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 if(WIN32)
-    #kde4_add_ui_files(
+    #ki18n_wrap_ui(
     #    input/wintab/kis_screen_size_choice_dialog.ui
     #)
 endif()
 
 
 
-kde4_add_ui_files(kritaui_LIB_SRCS
+ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
@@ -413,9 +413,9 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 	forms/wdg_url_requester.ui
 )
 
-kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
+add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
+target_link_libraries(kritaui Qt5::Declarative
                               ${X11_X11_LIB}
                               ${X11_Xinput_LIB})
 if(APPLE)
@@ -423,20 +423,20 @@ if(APPLE)
 endif ()
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} KF5::NewStuff)
 else()
     target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif ()
 
 if(HAVE_OPENGL)
-    target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
+    target_link_libraries(kritaui ${OPENGL_LIBRARIES} Qt5::OpenGL ${OPENEXR_LIBRARIES})
 
     # activate workaround for the VSync disable
     if(NOT WIN32)
       target_link_libraries(kritaui ${CMAKE_DL_LIBS})
     endif()
 
-    set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};${QT_QTOPENGL_LIBRARY}")
+    set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};Qt5::OpenGL")
     if(HAVE_GLEW)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
     endif()

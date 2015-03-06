@@ -7,9 +7,9 @@ set(kritatooltext_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritatooltext_PART_SRCS wdgtextoptions.ui)
+ki18n_wrap_ui(kritatooltext_PART_SRCS wdgtextoptions.ui)
 
-kde4_add_plugin(kritatooltext ${kritatooltext_PART_SRCS})
+add_library(kritatooltext MODULE ${kritatooltext_PART_SRCS})
 
 
 

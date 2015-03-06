@@ -16,9 +16,9 @@ set(kritadefaultpaintops_PART_SRCS
 	duplicate/kis_duplicateop_option.cpp
     )
 
-kde4_add_ui_files(kritadefaultpaintops_PART_SRCS duplicate/wdgduplicateop.ui )
+ki18n_wrap_ui(kritadefaultpaintops_PART_SRCS duplicate/wdgduplicateop.ui )
 
-kde4_add_plugin(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
+add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_PART_SRCS})
 
 
 

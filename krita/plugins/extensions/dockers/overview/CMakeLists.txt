@@ -1,6 +1,6 @@
 set(KRITA_OVERVIEWDOCKER_PART_SRCS overviewdocker.cpp overviewdocker_dock.cpp overviewwidget.cc )
 
-kde4_add_plugin(kritaoverviewdocker ${KRITA_OVERVIEWDOCKER_PART_SRCS})
+add_library(kritaoverviewdocker MODULE ${KRITA_OVERVIEWDOCKER_PART_SRCS})
 
 target_link_libraries(kritaoverviewdocker kritaui)
 

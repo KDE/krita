@@ -2,9 +2,9 @@ set(kritabmpexport_PART_SRCS
     kis_bmp_export.cpp
     )
 
-kde4_add_ui_files(kritabmpexport_PART_SRCS )
+ki18n_wrap_ui(kritabmpexport_PART_SRCS )
 
-kde4_add_plugin(kritabmpexport ${kritabmpexport_PART_SRCS})
+add_library(kritabmpexport MODULE ${kritabmpexport_PART_SRCS})
 
 target_link_libraries(kritabmpexport kritaui)
 
@@ -15,9 +15,9 @@ set(kritabmpimport_PART_SRCS
     kis_bmp_import.cpp
     )
 
-kde4_add_ui_files(kritabmpimport_PART_SRCS )
+ki18n_wrap_ui(kritabmpimport_PART_SRCS )
 
-kde4_add_plugin(kritabmpimport ${kritabmpimport_PART_SRCS})
+add_library(kritabmpimport MODULE ${kritabmpimport_PART_SRCS})
 
 target_link_libraries(kritabmpimport kritaui)
 

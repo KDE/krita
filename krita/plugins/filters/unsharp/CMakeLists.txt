@@ -6,11 +6,11 @@ set(kritaunsharpfilter_PART_SRCS
     kis_unsharp_filter.cpp
     )
 
-kde4_add_ui_files(kritaunsharpfilter_PART_SRCS
+ki18n_wrap_ui(kritaunsharpfilter_PART_SRCS
     wdgunsharp.ui
     )
 
-kde4_add_plugin(kritaunsharpfilter ${kritaunsharpfilter_PART_SRCS})
+add_library(kritaunsharpfilter MODULE ${kritaunsharpfilter_PART_SRCS})
 
 
 

@@ -8,4 +8,4 @@ set(kis_xcf_test_SRCS kis_xcf_test.cpp )
 
 kde4_add_unit_test(kis_xcf_test TESTNAME krita-plugin-format-xcf_test ${kis_xcf_test_SRCS})
 
-target_link_libraries(kis_xcf_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(kis_xcf_test  ${KDE4_KDEUI_LIBS} kritaui Qt5::Test)

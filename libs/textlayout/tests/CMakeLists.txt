@@ -13,7 +13,7 @@ set(TestDocumentLayout_test_SRCS
  MockRootAreaProvider.cpp
 )
 kde4_add_unit_test(TestDocumentLayout TESTNAME libs-textlayout-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
-target_link_libraries(TestDocumentLayout kotext kotextlayout ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestDocumentLayout kotext kotextlayout Qt5::Test)
 
 ########### next target ###############
 
@@ -22,7 +22,7 @@ set(TestBlockLayout_test_SRCS
  MockRootAreaProvider.cpp
 )
 kde4_add_unit_test(TestBlockLayout TESTNAME libs-textlayout-TestBlockLayout  ${TestBlockLayout_test_SRCS})
-target_link_libraries(TestBlockLayout kotext kotextlayout ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestBlockLayout kotext kotextlayout Qt5::Test)
 
 ########### next target ###############
 
@@ -31,10 +31,10 @@ set(TestTableLayout_test_SRCS
  MockRootAreaProvider.cpp
 )
 kde4_add_unit_test(TestTableLayout TESTNAME libs-textlayout-TestTableLayout  ${TestTableLayout_test_SRCS})
-target_link_libraries(TestTableLayout kotext kotextlayout ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestTableLayout kotext kotextlayout Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoTableColumnAndRowStyleManager_test_SRCS TestKoTableColumnAndRowStyleManager.cpp)
 kde4_add_unit_test(TestKoTableColumnAndRowStyleManager TESTNAME libs-textlayout-KoTableColumnAndRowStyleManager ${TestKoTableColumnAndRowStyleManager_test_SRCS})
-target_link_libraries(TestKoTableColumnAndRowStyleManager kotext  ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestKoTableColumnAndRowStyleManager kotext  Qt5::Test)

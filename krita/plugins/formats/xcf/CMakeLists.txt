@@ -16,7 +16,7 @@ set(kritaxcfimport_PART_SRCS
     table.c
     )
 
-kde4_add_plugin(kritaxcfimport ${kritaxcfimport_PART_SRCS})
+add_library(kritaxcfimport MODULE ${kritaxcfimport_PART_SRCS})
 
 target_link_libraries(kritaxcfimport kritaui )
 

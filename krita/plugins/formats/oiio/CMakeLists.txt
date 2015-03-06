@@ -2,9 +2,9 @@ set(kritaoiioexport_PART_SRCS
     kis_oiio_export.cpp
     )
 
-kde4_add_ui_files(kritaoiioexport_PART_SRCS )
+ki18n_wrap_ui(kritaoiioexport_PART_SRCS )
 
-kde4_add_plugin(kritaoiioexport ${kritaoiioexport_PART_SRCS})
+add_library(kritaoiioexport MODULE ${kritaoiioexport_PART_SRCS})
 
 target_link_libraries(kritaoiioexport kritaui ${OIIO_LIBRARIES})
 
@@ -17,9 +17,9 @@ set(kritaoiioimport_PART_SRCS
     kis_oiio_import.cpp
     )
 
-kde4_add_ui_files(kritaoiioimport_PART_SRCS )
+ki18n_wrap_ui(kritaoiioimport_PART_SRCS )
 
-kde4_add_plugin(kritaoiioimport ${kritaoiioimport_PART_SRCS})
+add_library(kritaoiioimport MODULE ${kritaoiioimport_PART_SRCS})
 
 target_link_libraries(kritaoiioimport kritaui ${OIIO_LIBRARIES})
 

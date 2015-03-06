@@ -6,11 +6,11 @@ set(kritanoisefilter_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritanoisefilter_PART_SRCS
+ki18n_wrap_ui(kritanoisefilter_PART_SRCS
     wdgnoiseoptions.ui
     )
 
-kde4_add_plugin(kritanoisefilter ${kritanoisefilter_PART_SRCS})
+add_library(kritanoisefilter MODULE ${kritanoisefilter_PART_SRCS})
 
 
 

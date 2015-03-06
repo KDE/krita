@@ -4,11 +4,11 @@ set(kritalayersplit_PART_SRCS
     wdg_layersplit.cpp
     )
 
-kde4_add_ui_files(kritalayersplit_PART_SRCS
+ki18n_wrap_ui(kritalayersplit_PART_SRCS
     wdg_layersplit.ui
     )
 
-kde4_add_plugin(kritalayersplit ${kritalayersplit_PART_SRCS})
+add_library(kritalayersplit MODULE ${kritalayersplit_PART_SRCS})
 
 target_link_libraries(kritalayersplit kritaui)
 

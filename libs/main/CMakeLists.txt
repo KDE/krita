@@ -82,12 +82,12 @@ if (APPLE)
     )
 endif ()
 
-kde4_add_ui_files( komain_LIB_SRCS
+ki18n_wrap_ui( komain_LIB_SRCS
    config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
-kde4_add_library(komain SHARED ${komain_LIB_SRCS})
+add_library(komain SHARED ${komain_LIB_SRCS})
 
 target_link_libraries(komain ${extra_libs}
     ${KDE4_KFILE_LIBRARY}

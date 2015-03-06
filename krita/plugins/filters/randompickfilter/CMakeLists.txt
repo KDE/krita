@@ -6,11 +6,11 @@ set(kritarandompickfilter_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritarandompickfilter_PART_SRCS
+ki18n_wrap_ui(kritarandompickfilter_PART_SRCS
     wdgrandompickoptions.ui
     )
 
-kde4_add_plugin(kritarandompickfilter ${kritarandompickfilter_PART_SRCS})
+add_library(kritarandompickfilter MODULE ${kritarandompickfilter_PART_SRCS})
 
 
 

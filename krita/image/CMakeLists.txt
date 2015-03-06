@@ -276,7 +276,7 @@ set(einspline_SRCS
    bsplines/einspline/nugrid.cpp
 )
 
-kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
+add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
 target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} koodf pigmentcms kundo2 kowidgetutils)
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koodf pigmentcms kundo2 kowidgetutils)

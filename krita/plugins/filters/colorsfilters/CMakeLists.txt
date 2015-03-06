@@ -9,7 +9,7 @@ set(kritacolorsfilters_PART_SRCS
     kis_desaturate_filter.cpp
     )
 
-kde4_add_ui_files(kritacolorsfilters_PART_SRCS
+ki18n_wrap_ui(kritacolorsfilters_PART_SRCS
     wdg_perchannel.ui
     wdg_color_balance.ui
     wdg_brightness_contrast.ui
@@ -17,7 +17,7 @@ kde4_add_ui_files(kritacolorsfilters_PART_SRCS
     wdg_desaturate.ui
 )
 
-kde4_add_plugin(kritacolorsfilters ${kritacolorsfilters_PART_SRCS})
+add_library(kritacolorsfilters MODULE ${kritacolorsfilters_PART_SRCS})
 
 
 

@@ -22,9 +22,9 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_pencil.cc
     )
 
-kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
+ki18n_wrap_ui(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
 
-kde4_add_plugin(kritadefaulttools ${kritadefaulttools_PART_SRCS})
+add_library(kritadefaulttools MODULE ${kritadefaulttools_PART_SRCS})
 
 target_link_libraries(kritadefaulttools kritaui basicflakes)
 target_link_libraries(kritadefaulttools ${Boost_SYSTEM_LIBRARY})

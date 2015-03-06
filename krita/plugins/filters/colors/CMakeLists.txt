@@ -8,11 +8,11 @@ set(kritaextensioncolorsfilters_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritaextensioncolorsfilters_PART_SRCS
+ki18n_wrap_ui(kritaextensioncolorsfilters_PART_SRCS
     wdgcolortoalphabase.ui
     )
 
-kde4_add_plugin(kritaextensioncolorsfilters ${kritaextensioncolorsfilters_PART_SRCS})
+add_library(kritaextensioncolorsfilters MODULE ${kritaextensioncolorsfilters_PART_SRCS})
 
 
 

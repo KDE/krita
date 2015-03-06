@@ -20,7 +20,7 @@ set(kritalibbrush_LIB_SRCS
     kis_text_brush_factory.cpp
 )
 
-kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
+add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
 
 if (WIN32)
     target_link_libraries(kritalibbrush kritaimage kowidgets ${WIN32_PLATFORM_NET_LIBS})

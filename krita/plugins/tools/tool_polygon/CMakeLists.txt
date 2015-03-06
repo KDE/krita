@@ -6,7 +6,7 @@ set(kritatoolpolygon_PART_SRCS
     )
 
 
-kde4_add_plugin(kritatoolpolygon ${kritatoolpolygon_PART_SRCS})
+add_library(kritatoolpolygon MODULE ${kritatoolpolygon_PART_SRCS})
 
 
 

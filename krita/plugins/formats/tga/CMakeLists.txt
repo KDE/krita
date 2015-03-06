@@ -2,9 +2,9 @@ set(kritatgaexport_PART_SRCS
     kis_tga_export.cpp
     )
 
-kde4_add_ui_files(kritatgaexport_PART_SRCS )
+ki18n_wrap_ui(kritatgaexport_PART_SRCS )
 
-kde4_add_plugin(kritatgaexport ${kritatgaexport_PART_SRCS})
+add_library(kritatgaexport MODULE ${kritatgaexport_PART_SRCS})
 
 target_link_libraries(kritatgaexport kritaui)
 
@@ -15,9 +15,9 @@ set(kritatgaimport_PART_SRCS
     kis_tga_import.cpp
     )
 
-kde4_add_ui_files(kritatgaimport_PART_SRCS )
+ki18n_wrap_ui(kritatgaimport_PART_SRCS )
 
-kde4_add_plugin(kritatgaimport ${kritatgaimport_PART_SRCS})
+add_library(kritatgaimport MODULE ${kritatgaimport_PART_SRCS})
 
 target_link_libraries(kritatgaimport kritaui)
 

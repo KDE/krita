@@ -7,9 +7,9 @@ set(kritaparticlepaintop_PART_SRCS
     particle_brush.cpp
     )
 
-kde4_add_ui_files(kritaparticlepaintop_PART_SRCS wdgparticleoptions.ui )
+ki18n_wrap_ui(kritaparticlepaintop_PART_SRCS wdgparticleoptions.ui )
 
-kde4_add_plugin(kritaparticlepaintop ${kritaparticlepaintop_PART_SRCS})
+add_library(kritaparticlepaintop MODULE ${kritaparticlepaintop_PART_SRCS})
 
 
 target_link_libraries(kritaparticlepaintop kritalibpaintop)

@@ -10,9 +10,9 @@ endif()
 set(krita_raw_import_PART_SRCS kis_raw_import.cpp )
 
 
-kde4_add_ui_files(krita_raw_import_PART_SRCS wdgrawimport.ui )
+ki18n_wrap_ui(krita_raw_import_PART_SRCS wdgrawimport.ui )
 
-kde4_add_plugin(krita_raw_import ${krita_raw_import_PART_SRCS})
+add_library(krita_raw_import MODULE ${krita_raw_import_PART_SRCS})
 
 add_definitions( ${KDCRAW_DEFINITIONS} )
 include_directories( ${KDCRAW_INCLUDE_DIR} )

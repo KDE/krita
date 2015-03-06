@@ -3,11 +3,11 @@ set(kritalevelfilter_PART_SRCS
     kis_level_filter.cpp
     )
 
-kde4_add_ui_files(kritalevelfilter_PART_SRCS
+ki18n_wrap_ui(kritalevelfilter_PART_SRCS
     wdg_level.ui
     )
 
-kde4_add_plugin(kritalevelfilter ${kritalevelfilter_PART_SRCS})
+add_library(kritalevelfilter MODULE ${kritalevelfilter_PART_SRCS})
 
 
 

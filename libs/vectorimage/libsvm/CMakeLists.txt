@@ -11,9 +11,9 @@ set(libsvm_LIB_SRCS
      #SvmStructs.cpp
 )
 
-#kde4_add_library(libsvm SHARED ${libsvm_LIB_SRCS})
+#add_library(libsvm SHARED ${libsvm_LIB_SRCS})
 
-#target_link_libraries(libsvm  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} )
+#target_link_libraries(libsvm   Qt5::Gui )
 
 #set_target_properties(libsvm PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

@@ -1,9 +1,9 @@
 
 set(KRITA_smallCOLORSELECTOR_PART_SRCS smallcolorselector.cc smallcolorselector_dock.cc kis_small_color_widget.cc )
 
-# kde4_add_ui_files(kritasmallcolorselector_PART_SRCS myuifile.ui )
+# ki18n_wrap_ui(kritasmallcolorselector_PART_SRCS myuifile.ui )
 
-kde4_add_plugin(kritasmallcolorselector ${KRITA_smallCOLORSELECTOR_PART_SRCS})
+add_library(kritasmallcolorselector MODULE ${KRITA_smallCOLORSELECTOR_PART_SRCS})
 
 target_link_libraries(kritasmallcolorselector kritaui)
 

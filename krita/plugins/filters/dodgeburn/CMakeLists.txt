@@ -2,11 +2,11 @@
 
 set(kritadodgeburn_PART_SRCS DodgeBurnPlugin.cpp DodgeBurn.cpp )
 
-kde4_add_ui_files(kritadodgeburn_PART_SRCS
+ki18n_wrap_ui(kritadodgeburn_PART_SRCS
     DodgeBurnConfigurationBaseWidget.ui
     )
 
-kde4_add_plugin(kritadodgeburn ${kritadodgeburn_PART_SRCS})
+add_library(kritadodgeburn MODULE ${kritadodgeburn_PART_SRCS})
 
 target_link_libraries(kritadodgeburn kritaui)
 

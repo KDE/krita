@@ -11,9 +11,9 @@ set(kritahatchingpaintop_PART_SRCS
     hatching_brush.cpp
     )
 
-kde4_add_ui_files(kritahatchingpaintop_PART_SRCS wdghatchingpreferences.ui wdghatchingoptions.ui)
+ki18n_wrap_ui(kritahatchingpaintop_PART_SRCS wdghatchingpreferences.ui wdghatchingoptions.ui)
 
-kde4_add_plugin(kritahatchingpaintop ${kritahatchingpaintop_PART_SRCS})
+add_library(kritahatchingpaintop MODULE ${kritahatchingpaintop_PART_SRCS})
 
 
 target_link_libraries(kritahatchingpaintop kritalibpaintop)

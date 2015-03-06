@@ -2,9 +2,9 @@
 set(kritadropshadow_PART_SRCS kis_dropshadow.cc dlg_dropshadow.cc kis_dropshadow_plugin.cc )
 
 
-kde4_add_ui_files(kritadropshadow_PART_SRCS wdg_dropshadow.ui )
+ki18n_wrap_ui(kritadropshadow_PART_SRCS wdg_dropshadow.ui )
 
-kde4_add_plugin(kritadropshadow ${kritadropshadow_PART_SRCS})
+add_library(kritadropshadow MODULE ${kritadropshadow_PART_SRCS})
 
 
 

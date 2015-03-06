@@ -6,11 +6,11 @@ set(kritawavefilter_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritawavefilter_PART_SRCS
+ki18n_wrap_ui(kritawavefilter_PART_SRCS
     wdgwaveoptions.ui
     )
 
-kde4_add_plugin(kritawavefilter ${kritawavefilter_PART_SRCS})
+add_library(kritawavefilter MODULE ${kritawavefilter_PART_SRCS})
 
 
 

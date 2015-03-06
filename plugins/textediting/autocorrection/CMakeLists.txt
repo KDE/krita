@@ -11,11 +11,11 @@ set(autocorrect_SRCS
     AutocorrectConfigDialog.cpp
 )
 
-kde4_add_ui_files( autocorrect_SRCS
+ki18n_wrap_ui( autocorrect_SRCS
     AutocorrectConfig.ui
 )
 
-kde4_add_plugin(calligra_textediting_autocorrect ${autocorrect_SRCS})
+add_library(calligra_textediting_autocorrect MODULE ${autocorrect_SRCS})
 
 target_link_libraries(calligra_textediting_autocorrect kowidgets)
 

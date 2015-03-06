@@ -6,11 +6,11 @@ set(kritafastcolortransferfilter_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritafastcolortransferfilter_PART_SRCS
+ki18n_wrap_ui(kritafastcolortransferfilter_PART_SRCS
     wdgfastcolortransfer.ui
     )
 
-kde4_add_plugin(kritafastcolortransferfilter ${kritafastcolortransferfilter_PART_SRCS})
+add_library(kritafastcolortransferfilter MODULE ${kritafastcolortransferfilter_PART_SRCS})
 
 
 

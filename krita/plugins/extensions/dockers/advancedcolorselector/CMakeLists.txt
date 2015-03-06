@@ -27,11 +27,11 @@ kis_color_selector_combo_box.cpp
 kis_color_selector_base_proxy.cpp
 )
 
-kde4_add_ui_files(KRITA_COLORSELECTORNG_PART_SRCS
+ki18n_wrap_ui(KRITA_COLORSELECTORNG_PART_SRCS
     wdg_color_selector_settings.ui
 )
 
-kde4_add_plugin(kritacolorselectorng ${KRITA_COLORSELECTORNG_PART_SRCS})
+add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_PART_SRCS})
 
 target_link_libraries(kritacolorselectorng kritaui)
 

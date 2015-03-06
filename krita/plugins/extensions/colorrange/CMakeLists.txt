@@ -2,9 +2,9 @@
 set(kritacolorrange_PART_SRCS colorrange.cc dlg_colorrange.cc )
 
 
-kde4_add_ui_files(kritacolorrange_PART_SRCS wdg_colorrange.ui )
+ki18n_wrap_ui(kritacolorrange_PART_SRCS wdg_colorrange.ui )
 
-kde4_add_plugin(kritacolorrange ${kritacolorrange_PART_SRCS})
+add_library(kritacolorrange MODULE ${kritacolorrange_PART_SRCS})
 
 
 

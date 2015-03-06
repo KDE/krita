@@ -5,7 +5,7 @@ set(kritaodgimport_PART_SRCS
     kis_odg_import.cc
     )
 
-kde4_add_plugin(kritaodgimport ${kritaodgimport_PART_SRCS})
+add_library(kritaodgimport MODULE ${kritaodgimport_PART_SRCS})
 
 include_directories(${PNG_INCLUDE_DIR})
 

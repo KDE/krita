@@ -55,11 +55,11 @@ set(koodf_LIB_SRCS
     writeodf/helpers.cpp
 )
 
-kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
+add_library(koodf SHARED ${koodf_LIB_SRCS})
 add_dependencies(koodf writeodf.h-target)
 
-target_link_libraries(koodf ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
+target_link_libraries(koodf KF5::KIOWidgets Qt5::Xml)
+target_link_libraries(koodf LINK_INTERFACE_LIBRARIES KF5::KIOWidgets)
 if( QCA2_FOUND )
     target_link_libraries(koodf ${QCA2_LIBRARIES})
 endif()

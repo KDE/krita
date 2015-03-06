@@ -6,7 +6,7 @@ include_directories( ${KOMAIN_INCLUDES} ${KOTEXT_INCLUDES} )
 ########### next target ###############
 
 set(onlinedocs_RCCS onlineservices.qrc)
-qt4_add_resources(onlinedocs_RCC_SRCS ${onlinedocs_RCCS})
+qt5_add_resources(onlinedocs_RCC_SRCS ${onlinedocs_RCCS})
 
 set(calligragoogledocs_PART_SRCS
     onlinedocument.cpp
@@ -19,11 +19,11 @@ set(calligragoogledocs_PART_SRCS
     ${onlinedocs_RCC_SRCS}
 )
 
-kde4_add_ui_files( calligragoogledocs_PART_SRCS
+ki18n_wrap_ui( calligragoogledocs_PART_SRCS
    authenticationdialog.ui
    documentlist.ui
 )
-kde4_add_plugin(calligragoogledocs ${calligragoogledocs_PART_SRCS})
+add_library(calligragoogledocs MODULE ${calligragoogledocs_PART_SRCS})
 
 target_link_libraries(calligragoogledocs ${QT_LIBRARIES} komain )
 

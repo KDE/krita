@@ -7,7 +7,7 @@ set(kopabackgroundtool_PART_SRCS
 )
 
 
-kde4_add_plugin(kopabackgroundtool ${kopabackgroundtool_PART_SRCS})
+add_library(kopabackgroundtool MODULE ${kopabackgroundtool_PART_SRCS})
 
 target_link_libraries(
     kopabackgroundtool
@@ -27,4 +27,4 @@ install(FILES
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
+ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )

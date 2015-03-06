@@ -21,7 +21,7 @@ set(calligradockers_SRCS
     Plugin.cpp
 )
 
-kde4_add_plugin(calligra_docker_defaults ${calligradockers_SRCS})
+add_library(calligra_docker_defaults MODULE ${calligradockers_SRCS})
 
 target_link_libraries(calligra_docker_defaults kowidgets)
 

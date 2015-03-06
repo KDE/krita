@@ -91,12 +91,12 @@ set(calligradb_LIB_SRCS
    validator.cpp
 )
 
-kde4_add_library(calligradb SHARED ${calligradb_LIB_SRCS})
-target_link_libraries(calligradb koplugin ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
-  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${ICU_I18N_LIBRARY})
+add_library(calligradb SHARED ${calligradb_LIB_SRCS})
+target_link_libraries(calligradb koplugin Qt5::Core Qt5::Gui
+   ${KDE4_KDEUI_LIBS} KF5::KIOWidgets ${ICU_I18N_LIBRARY})
 
-target_link_libraries(calligradb LINK_INTERFACE_LIBRARIES koplugin ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
-                                 ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(calligradb LINK_INTERFACE_LIBRARIES koplugin Qt5::Core Qt5::Gui
+                                  ${KDE4_KDEUI_LIBS} KF5::KIOWidgets)
 
 set_target_properties(calligradb PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

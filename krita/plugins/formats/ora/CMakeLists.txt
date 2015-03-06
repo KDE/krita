@@ -10,7 +10,7 @@ set(kritaoraimport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritaoraimport ${kritaoraimport_PART_SRCS})
+add_library(kritaoraimport MODULE ${kritaoraimport_PART_SRCS})
 
 target_link_libraries(kritaoraimport kritaui )
 
@@ -23,7 +23,7 @@ set(kritaoraexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritaoraexport ${kritaoraexport_PART_SRCS})
+add_library(kritaoraexport MODULE ${kritaoraexport_PART_SRCS})
 
 
 target_link_libraries(kritaoraexport kritaui )

@@ -4,11 +4,11 @@ set(kritacolorgenerator_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritacolorgenerator_PART_SRCS
+ki18n_wrap_ui(kritacolorgenerator_PART_SRCS
     wdgcoloroptions.ui
     )
 
-kde4_add_plugin(kritacolorgenerator ${kritacolorgenerator_PART_SRCS})
+add_library(kritacolorgenerator MODULE ${kritacolorgenerator_PART_SRCS})
 
 
 target_link_libraries(kritacolorgenerator kritaui)

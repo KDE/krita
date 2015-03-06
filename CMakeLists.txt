@@ -1,6 +1,6 @@
 project(calligra)
 
-cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 cmake_policy(SET CMP0002 OLD)
 #cmake_policy CMP0017 was introduced in version 2.8.4
@@ -46,7 +46,11 @@ endif()
 set(GENERIC_CALLIGRA_LIB_VERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+                      "${CMAKE_SOURCE_DIR}/cmake/modules")
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/transitional")
+
+message("Module path:" ${CMAKE_MODULE_PATH})
 
 # fetch git revision for the current build
 
@@ -142,30 +146,27 @@ calligra_set_productset(${PRODUCTSET})
 ## Look for KDE and Qt ##
 #########################
 ########################
-set(KDE_MIN_VERSION "4.3.0")
-find_package(KDE4 4.3.0 REQUIRED)
 
-find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
+find_package(ECM 0.0.11 REQUIRED CONFIG)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+include(FeatureSummary)
+
+find_package(KF5 REQUIRED COMPONENTS CoreAddons)
+find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Xml Script Svg Test)
+find_package(Qt5 5.2.0 COMPONENTS WebKit DBus)
 
 if (USEOPENGL)
-    find_package(Qt4 4.6.0 REQUIRED QtOpenGL)
+    find_package(Qt5 5.2.0 REQUIRED OpenGL)
 endif ()
 
-
-include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
-
-if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
-    if (NOT IHAVEPATCHEDQT)
-        set(SHOULD_BUILD_PART_WORDS FALSE)
-        set(SHOULD_BUILD_PART_STAGE FALSE)
-        set(SHOULD_BUILD_PLUGIN_TEXTSHAPE FALSE)
-        set(SHOULD_BUILD_PLUGIN_TEXTEDITING FALSE)
-        message(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
-    endif ()
-endif ()
+include (ECMInstallIcons)
 
 if (GHNS)
     if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
@@ -824,9 +825,6 @@ endif()
 if (NOT QT_MAC_USE_COCOA)
     set(NOT_COCOA TRUE)
 endif()
-if (${QTVERSION} VERSION_GREATER 4.7.0)
-    set(QT_GREATER_470 TRUE)
-endif()
 
 calligra_drop_product_on_bad_condition( LIB_KOMSOOXML
     SHARED_MIME_INFO_FOUND "SharedMimeInfo not found (needed to install mimetypes)"
@@ -850,7 +848,6 @@ calligra_drop_product_on_bad_condition( APP_KRITA
 )
 
 calligra_drop_product_on_bad_condition( APP_ACTIVE
-    QT_GREATER_470 "Qt version <= 4.7.0"
     QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
     KDECLARATIVE_FOUND "KDeclarative not found"
 )

@@ -2,7 +2,7 @@
 set(kritaoilpaintfilter_PART_SRCS kis_oilpaint_filter_plugin.cpp kis_oilpaint_filter.cpp )
 
 
-kde4_add_plugin(kritaoilpaintfilter ${kritaoilpaintfilter_PART_SRCS})
+add_library(kritaoilpaintfilter MODULE ${kritaoilpaintfilter_PART_SRCS})
 
 
 

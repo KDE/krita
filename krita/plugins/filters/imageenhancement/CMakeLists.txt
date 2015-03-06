@@ -7,7 +7,7 @@ set(kritaimageenhancement_PART_SRCS
     kis_wavelet_noise_reduction.cpp
     )
 
-kde4_add_plugin(kritaimageenhancement ${kritaimageenhancement_PART_SRCS})
+add_library(kritaimageenhancement MODULE ${kritaimageenhancement_PART_SRCS})
 
 
 

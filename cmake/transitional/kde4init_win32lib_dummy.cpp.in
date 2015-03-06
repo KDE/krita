@@ -1,0 +1,5 @@
+/* dummy file, used by KDE4_ADD_KDEINIT_EXECUTABLE() under Windows, 
+ * so that the created static library is not completely empty */
+
+extern "C" int kdeinit_${_KDEINIT4_TARGET_NAME_}_dummy(void) { return 42; }
+

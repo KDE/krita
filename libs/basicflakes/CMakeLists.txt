@@ -11,11 +11,11 @@ set(basicflakes_LIB_SRCS
     tools/KoPencilTool.cpp
 )
 
-kde4_add_ui_files( basicflakes_LIB_SRCS
+ki18n_wrap_ui( basicflakes_LIB_SRCS
 )
 
 
-kde4_add_library(basicflakes SHARED ${basicflakes_LIB_SRCS})
+add_library(basicflakes SHARED ${basicflakes_LIB_SRCS})
 
 target_link_libraries(basicflakes kowidgets flake pigmentcms)
 

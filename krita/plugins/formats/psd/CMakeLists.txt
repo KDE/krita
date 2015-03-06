@@ -25,7 +25,7 @@ set(kritapsdimport_PART_SRCS
     ${LIB_PSD_SRCS}
 )
 
-kde4_add_plugin(kritapsdimport ${kritapsdimport_PART_SRCS})
+add_library(kritapsdimport MODULE ${kritapsdimport_PART_SRCS})
 if (WIN32)
 	target_link_libraries(kritapsdimport kritaui ${WIN32_PLATFORM_NET_LIBS})
 else ()
@@ -42,7 +42,7 @@ set(kritapsdexport_PART_SRCS
     ${LIB_PSD_SRCS}
 )
 
-kde4_add_plugin(kritapsdexport ${kritapsdexport_PART_SRCS})
+add_library(kritapsdexport MODULE ${kritapsdexport_PART_SRCS})
 
 if (WIN32)
     target_link_libraries(kritapsdexport kritaui ${WIN32_PLATFORM_NET_LIBS})

@@ -23,9 +23,9 @@ set(kritatooltransform_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
+ki18n_wrap_ui(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
 
-kde4_add_plugin(kritatooltransform ${kritatooltransform_PART_SRCS})
+add_library(kritatooltransform MODULE ${kritatooltransform_PART_SRCS})
 
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Transform Tool will not be able to scale the image with handles. Please install GSL library.")

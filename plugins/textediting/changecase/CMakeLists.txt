@@ -8,7 +8,7 @@ set(changecase_SRCS
     ChangecaseFactory.cpp
 )
 
-kde4_add_plugin(calligra_textediting_changecase ${changecase_SRCS})
+add_library(calligra_textediting_changecase MODULE ${changecase_SRCS})
 
 target_link_libraries(calligra_textediting_changecase kotext)
 

@@ -12,7 +12,7 @@ include_directories(
 set(keximigrate_spreadsheet_PART_SRCS spreadsheetmigrate.cpp )
 
 
-kde4_add_plugin(keximigrate_spreadsheet ${keximigrate_spreadsheet_PART_SRCS})
+add_library(keximigrate_spreadsheet MODULE ${keximigrate_spreadsheet_PART_SRCS})
 
 
 

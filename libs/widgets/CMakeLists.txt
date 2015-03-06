@@ -85,7 +85,7 @@ set(kowidgets_LIB_SRCS
     KoGlobal.cpp
 )
 
-kde4_add_ui_files( kowidgets_LIB_SRCS
+ki18n_wrap_ui( kowidgets_LIB_SRCS
     KoCsvImportDialog.ui
     koDocumentInfoAboutWidget.ui
     koDocumentInfoAuthorWidget.ui
@@ -95,10 +95,10 @@ kde4_add_ui_files( kowidgets_LIB_SRCS
 )
 
 
-kde4_add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
+add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 
 if(GHNS)
-    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils KF5::NewStuff)
 else()
     target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
 endif ()
@@ -162,9 +162,9 @@ set(filedialogtester_SRCS
     KoFileDialogTester.cpp
     main.cpp
 )
-kde4_add_ui_files(filedialogtester_SRCS
+ki18n_wrap_ui(filedialogtester_SRCS
     KoFileDialogTester.ui
 )
 
-kde4_add_executable(filedialogtester ${filedialogtester_SRCS})
+add_executable(filedialogtester ${filedialogtester_SRCS})
 target_link_libraries(filedialogtester kowidgets)

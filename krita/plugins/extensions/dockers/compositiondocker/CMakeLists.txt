@@ -1,10 +1,10 @@
 
 set(KRITA_COMPOSITIONDOCKER_PART_SRCS compositionmodel.cpp compositiondocker.cpp compositiondocker_dock.cpp )
 
-kde4_add_ui_files(KRITA_COMPOSITIONDOCKER_PART_SRCS
+ki18n_wrap_ui(KRITA_COMPOSITIONDOCKER_PART_SRCS
     wdgcompositiondocker.ui
 )
-kde4_add_plugin(kritacompositiondocker ${KRITA_COMPOSITIONDOCKER_PART_SRCS})
+add_library(kritacompositiondocker MODULE ${KRITA_COMPOSITIONDOCKER_PART_SRCS})
 
 target_link_libraries(kritacompositiondocker ${KDE4_KFILE_LIBRARY} kritaui)
 

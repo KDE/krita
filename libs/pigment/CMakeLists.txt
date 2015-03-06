@@ -122,19 +122,19 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-kde4_add_library(pigmentcms SHARED ${pigmentcms_SRCS})
+add_library(pigmentcms SHARED ${pigmentcms_SRCS})
 
 target_link_libraries(
     pigmentcms
     koplugin
     ${EXTRA_LIBRARIES}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    Qt5::Gui
+    Qt5::Xml
     ${WIN32_PLATFORM_NET_LIBS}
     )
 
 target_link_libraries(
-    pigmentcms LINK_INTERFACE_LIBRARIES koplugin ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${EXTRA_LIBRARIES}
+    pigmentcms LINK_INTERFACE_LIBRARIES koplugin Qt5::Xml Qt5::Gui ${EXTRA_LIBRARIES}
 )
 
 set_target_properties(pigmentcms PROPERTIES

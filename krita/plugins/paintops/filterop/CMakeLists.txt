@@ -6,7 +6,7 @@ set(kritafilterop_PART_SRCS
     )
 
 
-kde4_add_plugin(kritafilterop ${kritafilterop_PART_SRCS})
+add_library(kritafilterop MODULE ${kritafilterop_PART_SRCS})
 
 target_link_libraries(kritafilterop kritalibpaintop)
 

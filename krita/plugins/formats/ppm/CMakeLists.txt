@@ -6,7 +6,7 @@ set(kritappmimport_PART_SRCS
     kis_ppm_import.cpp
     )
 
-kde4_add_plugin(kritappmimport ${kritappmimport_PART_SRCS})
+add_library(kritappmimport MODULE ${kritappmimport_PART_SRCS})
 
 target_link_libraries(kritappmimport kritaui )
 
@@ -18,9 +18,9 @@ set(kritappmexport_PART_SRCS
     kis_ppm_export.cpp
     )
 
-kde4_add_ui_files(kritappmexport_PART_SRCS kis_wdg_options_ppm.ui )
+ki18n_wrap_ui(kritappmexport_PART_SRCS kis_wdg_options_ppm.ui )
 
-kde4_add_plugin(kritappmexport ${kritappmexport_PART_SRCS})
+add_library(kritappmexport MODULE ${kritappmexport_PART_SRCS})
 
 target_link_libraries(kritappmexport kritaui  )
 

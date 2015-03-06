@@ -11,7 +11,7 @@ set(kritahistorydocker_PART_SRCS
     KisUndoModel.cpp
 )
 
-kde4_add_plugin(kritahistorydocker ${kritahistorydocker_PART_SRCS})
+add_library(kritahistorydocker MODULE ${kritahistorydocker_PART_SRCS})
 
 target_link_libraries(kritahistorydocker kritaimage kritaui)
 

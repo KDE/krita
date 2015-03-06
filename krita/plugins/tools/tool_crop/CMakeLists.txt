@@ -8,9 +8,9 @@ set(kritatoolcrop_PART_SRCS
     )
 
 
-kde4_add_ui_files(kritatoolcrop_PART_SRCS wdg_tool_crop.ui)
+ki18n_wrap_ui(kritatoolcrop_PART_SRCS wdg_tool_crop.ui)
 
-kde4_add_plugin(kritatoolcrop ${kritatoolcrop_PART_SRCS})
+add_library(kritatoolcrop MODULE ${kritatoolcrop_PART_SRCS})
 
 
 

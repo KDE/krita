@@ -8,9 +8,9 @@
 set(kritarotateimage_PART_SRCS rotateimage.cc dlg_rotateimage.cc )
 
 
-kde4_add_ui_files(kritarotateimage_PART_SRCS wdg_rotateimage.ui )
+ki18n_wrap_ui(kritarotateimage_PART_SRCS wdg_rotateimage.ui )
 
-kde4_add_plugin(kritarotateimage ${kritarotateimage_PART_SRCS})
+add_library(kritarotateimage MODULE ${kritarotateimage_PART_SRCS})
 
 
 

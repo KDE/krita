@@ -21,7 +21,7 @@ set( emf_demo_bin_SRCS
 qt4_automoc( ${emf_demo_bin_SRCS} )
 add_executable( emf_demo ${emf_demo_bin_SRCS} )
 
-#TARGET_LINK_LIBRARIES( emf_demo libemf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY}  )
-target_link_libraries( emf_demo ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY}  )
+#TARGET_LINK_LIBRARIES( emf_demo libemf Qt5::Gui Qt5::Test  )
+target_link_libraries( emf_demo Qt5::Gui Qt5::Test  )
 
 

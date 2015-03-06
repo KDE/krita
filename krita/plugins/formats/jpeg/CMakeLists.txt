@@ -18,7 +18,7 @@ set(kritajpegimport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritajpegimport ${kritajpegimport_PART_SRCS})
+add_library(kritajpegimport MODULE ${kritajpegimport_PART_SRCS})
 
 if(LCMS2_FOUND)
     target_link_libraries(kritajpegimport kritaui jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
@@ -35,9 +35,9 @@ set(kritajpegexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_ui_files(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
+ki18n_wrap_ui(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
 
-kde4_add_plugin(kritajpegexport ${kritajpegexport_PART_SRCS})
+add_library(kritajpegexport MODULE ${kritajpegexport_PART_SRCS})
 
 if(LCMS2_FOUND)
     target_link_libraries(kritajpegexport kritaui jpeg ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )

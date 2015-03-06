@@ -13,10 +13,10 @@ set ( basicflakesplugin_SRCS
     KoPencilToolFactory.cpp
 )
 
-kde4_add_ui_files(basicflakesplugin_SRCS
+ki18n_wrap_ui(basicflakesplugin_SRCS
 )
 
-kde4_add_plugin(calligra_tool_basicflakes ${basicflakesplugin_SRCS})
+add_library(calligra_tool_basicflakes MODULE ${basicflakesplugin_SRCS})
 target_link_libraries(calligra_tool_basicflakes flake basicflakes)
 install(TARGETS calligra_tool_basicflakes DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -24,4 +24,4 @@ install(TARGETS calligra_tool_basicflakes DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES calligra_tool_basicflakes.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
-#kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+#ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

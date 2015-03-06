@@ -64,7 +64,7 @@ calligra_define_product(LIB_KDGANTT "libkdgantt" UNPORTED)
 calligra_define_product(LIB_KDCHART "libkdchart" UNPORTED)
 
 # building tools
-calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp" UNPORTED)
+calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp")
 
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage" UNPORTED)

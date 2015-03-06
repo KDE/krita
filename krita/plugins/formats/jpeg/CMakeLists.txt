@@ -1,5 +1,9 @@
 add_subdirectory(tests)
 
+set(ICCJPEG_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lcms")
+
+include_directories(${ICCJPEG_SOURCE_DIR})
+
 if(LCMS2_FOUND)
     include_directories( ${LCMS2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
 else()
@@ -10,7 +14,7 @@ set(libkritaconverter_LIB_SRCS
     kis_jpeg_converter.cc
     kis_jpeg_source.cpp
     kis_jpeg_destination.cpp
-    iccjpeg.c
+    ${ICCJPEG_SOURCE_DIR}/iccjpeg.c
     )
 
 set(kritajpegimport_PART_SRCS

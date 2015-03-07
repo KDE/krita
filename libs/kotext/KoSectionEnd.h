@@ -22,6 +22,8 @@
 
 #include "kotext_export.h"
 
+#include <QMetaType>
+#include <QList>
 #include <QString>
 #include <QScopedPointer>
 
@@ -49,5 +51,8 @@ private:
     Q_DISABLE_COPY(KoSectionEnd)
     Q_DECLARE_PRIVATE(KoSectionEnd)
 };
+
+Q_DECLARE_METATYPE(KoSectionEnd *)
+Q_DECLARE_METATYPE(QList<KoSectionEnd *>)
 
 #endif // KOSECTIONEND_H

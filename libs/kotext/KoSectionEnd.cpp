@@ -53,7 +53,7 @@ QString KoSectionEnd::name() const
     return d->section->name();
 }
 
-KoSection* KoSectionEnd::correspondingSection() const
+KoSection *KoSectionEnd::correspondingSection() const
 {
     Q_D(const KoSectionEnd);
     return d->section;

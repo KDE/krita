@@ -40,7 +40,6 @@ public:
     explicit KoSectionPrivate(const QTextDocument *_document)
         : manager(KoTextDocument(_document).sectionManager())
         , sectionStyle(0)
-        , modelItem(0)
     {
         Q_ASSERT(manager);
         name = manager->possibleNewName();
@@ -62,7 +61,6 @@ public:
     QScopedPointer<KoSectionEnd> sectionEnd; //< pointer to the corresponding section end
     int level; //< level of the section in document, root sections have 0 level
     QPair<int, int> bounds; //< start and end position of section in QDocument
-    QStandardItem *modelItem;
 };
 
 KoSection::KoSection(const QTextCursor &cursor)
@@ -107,8 +105,8 @@ bool KoSection::setName(const QString &name)
     }
 
     if (d->manager->isValidNewName(name)) {
-        d->manager->sectionRenamed(d->name, name);
         d->name = name;
+        d->manager->invalidate();
         return true;
     }
     return false;
@@ -189,16 +187,4 @@ void KoSection::setLevel(int level)
 {
     Q_D(KoSection);
     d->level = level;
-}
-
-QStandardItem *KoSection::modelItem()
-{
-    Q_D(KoSection);
-    return d->modelItem;
-}
-
-void KoSection::setModelItem(QStandardItem *item)
-{
-    Q_D(KoSection);
-    d->modelItem = item;
 }

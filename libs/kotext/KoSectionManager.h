@@ -22,23 +22,13 @@
 #include <QTextDocument>
 #include <QMetaType>
 #include <QStandardItemModel>
+#include <QSet>
 
 #include <kotext_export.h>
 
 class KoSection;
+class KoSectionManagerPrivate;
 
-class KoSectionManagerPrivate
-{
-public:
-    explicit KoSectionManagerPrivate(QTextDocument *_doc);
-    ~KoSectionManagerPrivate();
-
-    QTextDocument *doc;
-    bool valid; //< is current section info is valid
-    QHash<QString, KoSection *> sectionNames; //< stores name -> pointer reference
-    int sectionCount; //< how many sections is registered
-    QScopedPointer<QStandardItemModel> model;
-};
 /**
  * Used to handle all the sections in the document
  *
@@ -54,6 +44,7 @@ class KOTEXT_EXPORT KoSectionManager
 {
 public:
     explicit KoSectionManager(QTextDocument* doc);
+    ~KoSectionManager();
 
     /**
      * Returns pointer to the deepest KoSection that covers @p pos
@@ -64,33 +55,28 @@ public:
     /**
      * Returns name for the new section
      */
-    QString possibleNewName() const;
+    QString possibleNewName();
 
     /**
      * Returns if this name is possible.
      */
-    bool isValidNewName(const QString &name) const;
-
-    /**
-     * Returns tree model of sections to use in views
-     */
-    QStandardItemModel *sectionsModel();
+    bool isValidNewName(const QString &name);
 
 public Q_SLOTS:
     /**
      * Call this to recalc all sections information
+     * @param needModel place @c true to it if you need model to use in GUI and @c false otherwise
+     * @return pointer to QStandardItemModel, build according to s*ection tree
+     *         with a pointers to KoSection at Qt::UserRole + 1 and section name
+     *         for display role.
+     *         NOTE: it is not updated further by KoSectionManager
      */
-    void update();
+    QStandardItemModel *update(bool needModel = false);
 
     /**
-     * Call this to notify manager that info in it is invalidated.
+     * Call this to notify manager that info in it has invalidated.
      */
     void invalidate();
-
-    /**
-     * Call this to notify that some section changed its name
-     */
-    void sectionRenamed(const QString &oldName, const QString &name);
 
     /**
      * Call this to register new section in manager
@@ -103,7 +89,7 @@ public Q_SLOTS:
     void unregisterSection(KoSection *section);
 
 protected:
-    const QScopedPointer<KoSectionManagerPrivate> d_ptr;
+    KoSectionManagerPrivate * const d_ptr;
 
 private:
     Q_DISABLE_COPY(KoSectionManager)

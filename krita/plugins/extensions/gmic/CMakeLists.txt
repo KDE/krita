@@ -10,6 +10,17 @@ if(NOT MSVC)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
 endif()
 
+# turn off O2 and Ob1 or Ob2 for g'mic
+if (MSVC)
+    # RelWithDebInfo
+    string(REPLACE "/O2" "/Oi /Ot /Oy /Gs /GF /Gy"  CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+    string(REPLACE "/Ob1" "/Ob0" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+
+    #Release
+    string(REPLACE "/O2" "/Oi /Ot /Oy /Gs /GF /Gy"  CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+    string(REPLACE "/Ob2" "/Ob0" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+endif()
+
 set(gmic_sources_SRCS
   ${GMIC_SOURCE_DIR}/gmic.cpp
 )

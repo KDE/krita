@@ -21,6 +21,7 @@
 #include "kis_wdg_pattern.h"
 
 #include <QLayout>
+#include <QLabel>
 
 #include <KoColor.h>
 #include <KoResourceServer.h>
@@ -36,6 +37,7 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
 {
     m_widget = new Ui_WdgPatternOptions();
     m_widget->setupUi(this);
+    m_widget->lblPattern->setVisible(false);
     m_widget->lblColor->setVisible(false);
     m_widget->bnColor->setVisible(false);
 }

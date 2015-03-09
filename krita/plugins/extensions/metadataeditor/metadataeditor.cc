@@ -20,7 +20,6 @@
 #include <stdlib.h>
 
 #include <QDialog>
-#include <QUiLoader>
 #include <QVBoxLayout>
 
 #include <kis_debug.h>

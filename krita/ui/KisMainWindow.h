@@ -139,6 +139,13 @@ public:
 
     int viewCount() const;
 
+    /**
+     * A wrapper around restoreState
+     * @param state the saved state
+     * @return TRUE on success
+     */
+    bool restoreWorkspace(const QByteArray &state);
+
 Q_SIGNALS:
 
     /**

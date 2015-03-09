@@ -29,7 +29,6 @@
 
 class QString;
 class KisPaintOpPreset;
-class KisPropertiesConfiguration;
 class KisCanvasResourceProvider;
 class KoResource;
 
@@ -48,12 +47,6 @@ public:
     ~KisPaintOpPresetsPopup();
 
     void setPaintOpSettingsWidget(QWidget * widget);
-
-    /**
-     * changes the "save to preset" button text to "override preset"
-     * and highlites the preset name lineedit
-     */
-    void changeSavePresetButtonText(bool change);
 
     /**
      * @return the name entered in the preset name lineedit
@@ -77,8 +70,6 @@ public:
 
     bool detached() const;
 
-    void setReloadEnabled(bool value);
-
     void updateViewSettings();
 
 protected:
@@ -86,17 +77,16 @@ protected:
     void hideEvent(QHideEvent *);
     void showEvent(QShowEvent *);
 
-public slots:
+public Q_SLOTS:
+    void slotWatchPresetNameLineEdit();
     void switchDetached(bool show = true);
     void hideScratchPad();
     void showScratchPad();
     void resourceSelected(KoResource* resource);
-    void slotDirtyPresetToggled(bool value);
-    
-signals:
+
+Q_SIGNALS:
     void savePresetClicked();
     void defaultPresetClicked();
-    void presetNameLineEditChanged(const QString& presetName);
     void paintopActivated(const QString& presetName);
     void signalResourceSelected(KoResource* resource);
     void reloadPresetClicked();
@@ -105,8 +95,7 @@ signals:
     
     void sizeChanged();
 
-private slots:
-    void slotCheckPresetValidity();
+private Q_SLOTS:
     void slotSwitchPresetStrip(bool visible);
     void slotSwitchScratchpad(bool visible);
 

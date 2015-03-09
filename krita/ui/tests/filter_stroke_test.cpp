@@ -35,6 +35,7 @@ public:
         : StrokeTester(QString("filter_") + filterName, QSize(500, 500), ""),
           m_filterName(filterName)
     {
+        setBaseFuzziness(5);
     }
 
 protected:

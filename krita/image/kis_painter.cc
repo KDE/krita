@@ -75,6 +75,10 @@
 #endif
 
 struct KisPainter::Private {
+    Private(KisPainter *_q) : q(_q) {}
+
+    KisPainter *q;
+
     KisPaintDeviceSP            device;
     KisSelectionSP              selection;
     KisTransaction*             transaction;
@@ -119,16 +123,18 @@ struct KisPainter::Private {
                              qint32 *srcHeight,
                              qint32 *dstX,
                              qint32 *dstY);
+
+    void fillPainterPathImpl(const QPainterPath& path, const QRect &requestedRect);
 };
 
 KisPainter::KisPainter()
-        : d(new Private)
+    : d(new Private(this))
 {
     init();
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device)
-        : d(new Private)
+    : d(new Private(this))
 {
     init();
     Q_ASSERT(device);
@@ -136,7 +142,7 @@ KisPainter::KisPainter(KisPaintDeviceSP device)
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device, KisSelectionSP selection)
-        : d(new Private)
+    : d(new Private(this))
 {
     init();
     Q_ASSERT(device);
@@ -1191,8 +1197,41 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
 
 void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requestedRect)
 {
-    FillStyle fillStyle = d->fillStyle;
+    if (d->mirrorHorizontaly || d->mirrorVerticaly) {
+        QTransform C1 = QTransform::fromTranslate(-d->axesCenter.x(), -d->axesCenter.y());
+        QTransform C2 = QTransform::fromTranslate(d->axesCenter.x(), d->axesCenter.y());
 
+        QTransform t;
+        QPainterPath newPath;
+        QRect newRect;
+
+        if (d->mirrorHorizontaly) {
+            t = C1 * QTransform::fromScale(-1,1) * C2;
+            newPath = t.map(path);
+            newRect = t.mapRect(requestedRect);
+            d->fillPainterPathImpl(newPath, newRect);
+        }
+
+        if (d->mirrorVerticaly) {
+            t = C1 * QTransform::fromScale(1,-1) * C2;
+            newPath = t.map(path);
+            newRect = t.mapRect(requestedRect);
+            d->fillPainterPathImpl(newPath, newRect);
+        }
+
+        if (d->mirrorHorizontaly && d->mirrorVerticaly) {
+            t = C1 * QTransform::fromScale(-1,-1) * C2;
+            newPath = t.map(path);
+            newRect = t.mapRect(requestedRect);
+            d->fillPainterPathImpl(newPath, newRect);
+        }
+    }
+
+    d->fillPainterPathImpl(path, requestedRect);
+}
+
+void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QRect &requestedRect)
+{
     if (fillStyle == FillStyleNone) {
         return;
     }
@@ -1200,14 +1239,14 @@ void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requeste
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
-    if (!d->fillPainter) {
-        d->polygon = d->device->createCompositionSourceDevice();
-        d->fillPainter = new KisFillPainter(d->polygon);
+    if (!fillPainter) {
+        polygon = device->createCompositionSourceDevice();
+        fillPainter = new KisFillPainter(polygon);
     } else {
-        d->polygon->clear();
+        polygon->clear();
     }
 
-    Q_CHECK_PTR(d->polygon);
+    Q_CHECK_PTR(polygon);
 
     QRectF boundingRect = path.boundingRect();
     QRect fillRect = boundingRect.toAlignedRect();
@@ -1228,53 +1267,53 @@ void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requeste
         // Currently unsupported, fall through
         warnImage << "Unknown or unsupported fill style in fillPolygon\n";
     case FillStyleForegroundColor:
-        d->fillPainter->fillRect(fillRect, paintColor(), OPACITY_OPAQUE_U8);
+        fillPainter->fillRect(fillRect, q->paintColor(), OPACITY_OPAQUE_U8);
         break;
     case FillStyleBackgroundColor:
-        d->fillPainter->fillRect(fillRect, backgroundColor(), OPACITY_OPAQUE_U8);
+        fillPainter->fillRect(fillRect, q->backgroundColor(), OPACITY_OPAQUE_U8);
         break;
     case FillStylePattern:
-        Q_ASSERT(d->pattern != 0);
-        if (d->pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
-            d->fillPainter->fillRect(fillRect, d->pattern);
+        Q_ASSERT(pattern != 0);
+        if (pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
+            fillPainter->fillRect(fillRect, pattern);
         }
         break;
     case FillStyleGenerator:
-        Q_ASSERT(d->generator != 0);
-        if (d->generator) { // if the user hasn't got any generators, we shouldn't crash...
-            d->fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());
+        Q_ASSERT(generator != 0);
+        if (generator) { // if the user hasn't got any generators, we shouldn't crash...
+            fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), q->generator());
         }
         break;
     }
 
-    if (d->polygonMaskImage.isNull() || (d->maskPainter == 0)) {
-        d->polygonMaskImage = QImage(d->maskImageWidth, d->maskImageHeight, QImage::Format_ARGB32_Premultiplied);
-        d->maskPainter = new QPainter(&d->polygonMaskImage);
-        d->maskPainter->setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
+    if (polygonMaskImage.isNull() || (maskPainter == 0)) {
+        polygonMaskImage = QImage(maskImageWidth, maskImageHeight, QImage::Format_ARGB32_Premultiplied);
+        maskPainter = new QPainter(&polygonMaskImage);
+        maskPainter->setRenderHint(QPainter::Antialiasing, q->antiAliasPolygonFill());
     }
 
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
     const QColor black(Qt::black);
     const QBrush brush(Qt::white);
-    for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += d->maskImageWidth) {
-        for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += d->maskImageHeight) {
+    for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += maskImageWidth) {
+        for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += maskImageHeight) {
 
-            d->polygonMaskImage.fill(black.rgb());
-            d->maskPainter->translate(-x, -y);
-            d->maskPainter->fillPath(path, brush);
-            d->maskPainter->translate(x, y);
+            polygonMaskImage.fill(black.rgb());
+            maskPainter->translate(-x, -y);
+            maskPainter->fillPath(path, brush);
+            maskPainter->translate(x, y);
 
-            qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, d->maskImageWidth);
-            qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, d->maskImageHeight);
+            qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, maskImageWidth);
+            qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, maskImageHeight);
 
-            KisHLineIteratorSP lineIt = d->polygon->createHLineIteratorNG(x, y, rectWidth);
+            KisHLineIteratorSP lineIt = polygon->createHLineIteratorNG(x, y, rectWidth);
 
             quint8 tmp;
             for (int row = y; row < y + rectHeight; row++) {
-                QRgb* line = reinterpret_cast<QRgb*>(d->polygonMaskImage.scanLine(row - y));
+                QRgb* line = reinterpret_cast<QRgb*>(polygonMaskImage.scanLine(row - y));
                 do {
                     tmp = qRed(line[lineIt->x() - x]);
-                    d->polygon->colorSpace()->applyAlphaU8Mask(lineIt->rawData(), &tmp, 1);
+                    polygon->colorSpace()->applyAlphaU8Mask(lineIt->rawData(), &tmp, 1);
                 } while (lineIt->nextPixel());
                 lineIt->nextRow();
             }
@@ -1283,7 +1322,7 @@ void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requeste
     }
 
     QRect bltRect = !requestedRect.isEmpty() ? requestedRect : fillRect;
-    bitBlt(bltRect.x(), bltRect.y(), d->polygon, bltRect.x(), bltRect.y(), bltRect.width(), bltRect.height());
+    q->bitBlt(bltRect.x(), bltRect.y(), polygon, bltRect.x(), bltRect.y(), bltRect.width(), bltRect.height());
 }
 
 void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
@@ -2456,10 +2495,10 @@ const KoAbstractGradient* KisPainter::gradient() const
     return d->gradient;
 }
 
-void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisImageWSP image)
+void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisNodeSP node, KisImageSP image)
 {
     d->paintOpPreset = preset;
-    KisPaintOp *paintop = KisPaintOpRegistry::instance()->paintOp(preset, this, image);
+    KisPaintOp *paintop = KisPaintOpRegistry::instance()->paintOp(preset, this, node, image);
     Q_ASSERT(paintop);
     if (paintop) {
         delete d->paintOp;

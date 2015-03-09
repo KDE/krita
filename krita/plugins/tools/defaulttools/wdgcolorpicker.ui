@@ -60,11 +60,14 @@
      </item>
      <item>
       <widget class="QSpinBox" name="radius">
+       <property name="suffix">
+        <string>px</string>
+       </property>
        <property name="minimum">
         <number>1</number>
        </property>
        <property name="maximum">
-        <number>9</number>
+        <number>900</number>
        </property>
       </widget>
      </item>

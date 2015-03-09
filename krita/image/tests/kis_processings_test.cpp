@@ -54,12 +54,23 @@ public:
         applicator.end();
         image->waitForDone();
 
+        /**
+         * NOTE: after a change in KisLayer::changeRect(), which now
+         * crops change rect for layers with COMPOSITE_COPY
+         * composition, the clone layer will have some ghost pixels
+         * outside main projection rect. That is ok, because these
+         * pixels will never be painted due to a Filter Layer above,
+         * which crops the change rect.
+         */
         QVERIFY(checkLayers(image, testname));
 
         undoStore->undo();
         image->waitForDone();
 
-        QVERIFY(checkLayersInitial(image));
+        if (!checkLayersInitial(image)) {
+            qWarning() << "NOTE: undo is not completely identical to the original image. Falling back to projection comparison";
+            QVERIFY(checkLayersInitialRootOnly(image));
+        }
     }
 };
 

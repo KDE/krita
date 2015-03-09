@@ -42,7 +42,7 @@ class AcceptRejectChangeDialog:public QDialog
     private:
         Ui::AcceptRejectChangeDialog ui;
 
-    private slots:
+    private Q_SLOTS:
         void changeAccepted();
         void changeRejected();
         void dialogCancelled();

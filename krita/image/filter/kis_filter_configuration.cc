@@ -39,6 +39,10 @@ struct KisFilterConfiguration::Private {
     QBitArray channelFlags;
     KisCubicCurve curve;
     QList< KisCubicCurve > curves;
+
+#ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
+    QAtomicInt sanityUsageCounter;
+#endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER */
 };
 
 KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version)
@@ -153,3 +157,17 @@ void KisFilterConfiguration::setChannelFlags(QBitArray channelFlags)
 {
     d->channelFlags = channelFlags;
 }
+
+#ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
+
+int KisFilterConfiguration::sanityRefUsageCounter()
+{
+    return d->sanityUsageCounter.ref();
+}
+
+int KisFilterConfiguration::sanityDerefUsageCounter()
+{
+    return d->sanityUsageCounter.deref();
+}
+
+#endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER */

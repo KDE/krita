@@ -26,11 +26,8 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 
-class QPainter;
-class KoViewConverter;
 class KoStyleManager;
 class QTextDocument;
-class QTextLayout;
 
 #define ROUNDING 0.126
 
@@ -47,7 +44,7 @@ public:
     void testTabs();
 
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     /// make sure empty paragraphs are initialized properly

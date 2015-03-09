@@ -28,7 +28,7 @@ class TestKoUnit : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testSimpleConstructor();
     void testConstructor_data();
     void testConstructor();

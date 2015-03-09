@@ -152,6 +152,7 @@ void KoReportDesignerItemCheck::buildXML(QDomDocument & doc, QDomElement & paren
     addPropertyAsAttribute(&entity, m_controlSource);
     entity.setAttribute("fo:foreground-color", m_foregroundColor->value().toString());
     addPropertyAsAttribute(&entity, m_checkStyle);
+    addPropertyAsAttribute(&entity, m_staticValue);
 
     // bounding rect
     buildXMLRect(doc, entity, &m_pos, &m_size);

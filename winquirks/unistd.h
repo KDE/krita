@@ -120,8 +120,12 @@ typedef int mode_t;
 typedef unsigned int gid_t;
 typedef unsigned int uid_t;
 
-#ifndef pid_t
-typedef int pid_t;
+#if defined(__MINGW64__) && defined(_WIN64)
+/* MINGW_EXTENSION */
+typedef long long int pid_t;
+/* "long long int" is an alternative to __int64 */
+#else
+typedef           int pid_t;
 #endif
 
 
@@ -159,15 +163,14 @@ static int readlink(const char *__path, char *__buf, int __buflen)
 
 #ifdef __cplusplus
 extern "C" {
-#endif
 
 #if 0
 int setenv(const char *name, const char *value, int overwrite);
 int unsetenv (const char *name);
 #endif
-#ifdef __cplusplus
+
 }
-#endif
+#endif  /* __cplusplus */
 
 
 static int sleep(unsigned int sec) {

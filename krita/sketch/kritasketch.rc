@@ -43,8 +43,8 @@
   <Action name="mirror_canvas"/>
   <Action name="wrap_around_mode"/>
   <Separator/>
-  <Action name="view_newview"/>    
-  <Separator/>      
+  <Action name="view_newview"/>
+  <Separator/>
   <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
@@ -153,7 +153,7 @@
 	<Action name="other_filters"/>
 </Menu>
 
-<Menu name="Tools"><text>&amp;Tools</text>
+<Menu name="tools"><text>&amp;Tools</text>
 </Menu>
 
 <Menu name="settings"><text>Settings</text>

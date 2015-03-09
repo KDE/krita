@@ -70,6 +70,8 @@ KisLiquifyTransformWorker::KisLiquifyTransformWorker(const QRect &srcBounds,
                                                      int pixelPrecision)
     : m_d(new Private(srcBounds, progress, pixelPrecision))
 {
+    KIS_ASSERT_RECOVER_RETURN(!srcBounds.isEmpty());
+
     // TODO: implement 'progress' stuff
     m_d->preparePoints();
 }
@@ -151,6 +153,21 @@ void KisLiquifyTransformWorker::Private::preparePoints()
 
     originalPoints = pointsOp.m_points;
     transformedPoints = pointsOp.m_points;
+}
+
+void KisLiquifyTransformWorker::translate(const QPointF &offset)
+{
+    QVector<QPointF>::iterator it = m_d->transformedPoints.begin();
+    QVector<QPointF>::iterator end = m_d->transformedPoints.end();
+
+    QVector<QPointF>::iterator refIt = m_d->originalPoints.begin();
+    KIS_ASSERT_RECOVER_RETURN(m_d->originalPoints.size() ==
+                              m_d->transformedPoints.size());
+
+    for (; it != end; ++it, ++refIt) {
+        *it += offset;
+        *refIt += offset;
+    }
 }
 
 void KisLiquifyTransformWorker::undoPoints(const QPointF &base,

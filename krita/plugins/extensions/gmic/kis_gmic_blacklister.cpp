@@ -23,11 +23,14 @@
 
 #include <QFile>
 #include <QQueue>
+#include <QStack>
+#include <QDir>
 #include <QDomDocument>
 #include <qdom.h>
 #include <QTextDocument>
 
 #include <Component.h>
+#include "Command.h"
 
 KisGmicBlacklister::KisGmicBlacklister(const QString& filePath):m_fileName(filePath)
 {
@@ -82,7 +85,6 @@ bool KisGmicBlacklister::parseBlacklist()
 
     return true;
 }
-
 
 void KisGmicBlacklister::dump()
 {
@@ -143,7 +145,7 @@ Component* KisGmicBlacklister::findFilter(const Component* rootNode, const QStri
             }
             else
             {
-                // dbgPlugins << cmd->name() << "is different from " << filterName;
+                //qDebug() << c->name() << "is different from " << filterName;
             }
         }
         else
@@ -156,3 +158,138 @@ Component* KisGmicBlacklister::findFilter(const Component* rootNode, const QStri
     }
     return result;
 }
+
+QList<Command*> KisGmicBlacklister::findFilterByParamName(const Component* rootNode, const QString& paramName, const QString& paramType)
+{
+    QList<Command*> commands;
+    ComponentIterator it(rootNode);
+    while (it.hasNext())
+    {
+        Component * component = const_cast<Component *>( it.next() );
+        if (component->childCount() == 0)
+        {
+            Command * cmd = static_cast<Command *>(component);
+            if (cmd->hasParameterName(paramName, paramType))
+            {
+                commands.append(cmd);
+            }
+        }
+    }
+
+    return commands;
+}
+
+QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component* rootNode)
+{
+    ComponentIterator it(rootNode);
+
+    QDomDocument doc;
+    doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+    QDomElement root = doc.createElement("filters");
+    doc.appendChild(root);
+
+    while (it.hasNext())
+    {
+        Component * component = const_cast<Component *>( it.next() );
+        if (component->childCount() == 0)
+        {
+            QStack<QString> pathStack;
+            Component * parent = component->parent();
+            while (parent != 0)
+            {
+                pathStack.push( toPlainText(parent->name()) );
+                parent = parent->parent();
+            }
+
+            QStringList categoryPath;
+            while (!pathStack.isEmpty())
+            {
+                categoryPath.push_back(pathStack.pop());
+            }
+
+            QDomElement parentElem = root;
+            for (int i = 0; i < categoryPath.size(); i++)
+            {
+                // add categories if needed
+                bool alreadyExists = false;
+                QString categoryName = toPlainText(categoryPath.at(i));
+                QDomNodeList elems = parentElem.elementsByTagName("category");
+                for (int i = 0; i < elems.size(); i++)
+                {
+                    QDomElement categoryElem = elems.at(i).toElement();
+
+                    QDomAttr attr = categoryElem.attributeNode("name");
+                    if (attr.value() == categoryName)
+                    {
+                        parentElem = categoryElem;
+                        alreadyExists = true;
+                        break;
+                    }
+                }
+
+                if (!alreadyExists)
+                {
+                    QDomElement newCategory = doc.createElement("category");
+                    newCategory.setAttribute("name", categoryName);
+                    parentElem.appendChild(newCategory);
+                    parentElem = newCategory;
+                }
+            }
+
+            KisGmicFilterSetting settings;
+            Command * cmd = static_cast<Command *>(component);
+            cmd->writeConfiguration(&settings);
+
+            QString filterCommand = settings.gmicCommand();
+            filterCommand = filterCommand.replace(QDir::homePath(), QLatin1String("[[:home:]]"));
+            QString filterName = toPlainText(component->name());
+
+            QDomElement filterElem = doc.createElement("filter");
+            filterElem.setAttribute("name", filterName);
+
+            QDomCDATASection cdata = doc.createCDATASection(filterCommand);
+            QDomElement cmdElem = doc.createElement("gmicCommand");
+            cmdElem.appendChild(cdata);
+
+            filterElem.appendChild(cmdElem);
+
+            parentElem.appendChild(filterElem);
+        }
+    }
+
+    return doc;
+}
+
+// *** ComponentIterator *** TODO: move to own file or to Component
+ComponentIterator::ComponentIterator(const Component* c)
+{
+    if (c)
+    {
+        m_queue.enqueue(c);
+    }
+}
+
+bool ComponentIterator::hasNext() const
+{
+    return !m_queue.isEmpty();
+}
+
+const Component* ComponentIterator::next()
+{
+    if (hasNext())
+    {
+        const Component* c = m_queue.dequeue();
+        for (int i=0; i < c->childCount(); i++)
+        {
+            m_queue.enqueue(c->child(i));
+        }
+        return c;
+    }
+    return 0;
+}
+
+ComponentIterator::~ComponentIterator()
+{
+    m_queue.clear();
+}
+

@@ -56,21 +56,28 @@ public:
     }
 
     virtual bool isChecked() const;
+    virtual void setChecked(bool checked);
+
+    void setLocked(bool value);
+    bool isLocked () const;
 
     /**
      * Reimplement this to use the image in the option widget
      */
     virtual void setImage(KisImageWSP image);
 
+    virtual void setNode(KisNodeWSP node);
 
+    void startReadOptionSetting(const KisPropertiesConfiguration* setting);
+    void startWriteOptionSetting(KisPropertiesConfiguration* setting) const;
 
-public slots:
-
-    virtual void setChecked(bool checked);
-
-    void setConfigurationPage(QWidget * page);
     QWidget* configurationPage() const;
 
+
+protected:
+    void setConfigurationPage(QWidget * page);
+
+protected:
     /**
      * Re-implement this to save the configuration to the paint configuration.
      */
@@ -84,10 +91,11 @@ public slots:
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting) {
         Q_UNUSED(setting);
     }
-    void setLocked(bool value);
-    bool isLocked () const;
 
-signals:
+protected Q_SLOTS:
+    void emitSettingChanged();
+
+Q_SIGNALS:
 
     /**
      * emit this whenever a setting has changed. It will update the preview

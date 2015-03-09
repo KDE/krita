@@ -20,8 +20,8 @@
 #ifndef THEME_H
 #define THEME_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariantMap>
+#include <QObject>
+#include <QVariantMap>
 
 #include "krita_sketch_export.h"
 

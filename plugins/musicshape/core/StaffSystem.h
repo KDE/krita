@@ -46,10 +46,10 @@ public:
     QList<Clef*> clefs() const;
     Clef* clef(Staff* staff) const;
     void setClefs(QList<Clef*> clefs);
-public slots:
+public Q_SLOTS:
     void setTop(qreal top);
     void setFirstBar(int bar);
-signals:
+Q_SIGNALS:
     void topChanged(qreal top);
     void firstBarChanged(int bar);
 private:

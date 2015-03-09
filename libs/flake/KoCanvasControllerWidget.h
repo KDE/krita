@@ -27,7 +27,7 @@
 #include "flake_export.h"
 
 #include <QAbstractScrollArea>
-
+#include <QPointer>
 #include "KoCanvasController.h"
 
 class KoShape;
@@ -63,8 +63,7 @@ public:
     /**
      * Activate this canvascontroller
      */
-    void activate();
-
+    virtual void activate();
 
     virtual void setDrawShadow(bool drawShadow);
 
@@ -98,7 +97,7 @@ public:
      *
      * @param widgets the map of widgets
      */
-    void setToolOptionWidgets(const QList<QWidget *> &widgets);
+    void setToolOptionWidgets(const QList<QPointer<QWidget> > &widgets);
 
     virtual void zoomIn(const QPoint &center);
 
@@ -149,14 +148,14 @@ public:
     class Private;
     KoCanvasControllerWidget::Private *priv();
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QList<QWidget *> &widgets);
+    void toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &widgets);
 
-private slots:
+private Q_SLOTS:
 
     /// Called by the horizontal scrollbar when its value changes
     void updateCanvasOffsetX();

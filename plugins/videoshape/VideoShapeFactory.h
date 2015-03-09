@@ -23,7 +23,6 @@
 #include <KoShapeFactoryBase.h>
 
 class KoShape;
-class VideoShapeConfigWidget;
 
 class VideoShapeFactory : public KoShapeFactoryBase
 {

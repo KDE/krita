@@ -2,14 +2,14 @@
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2014 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -27,7 +27,7 @@
 #include <KoZoomController.h>
 
 #include <kis_canvas2.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_signal_compressor.h>
@@ -57,13 +57,12 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
-    connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
-    
-    connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
-            this, SLOT(update()));
-    m_compressor->start();
+    if (m_canvas) {
+        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
+        connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
+        m_compressor->start();
+    }
 }
 
 QSize OverviewWidget::calculatePreviewSize()
@@ -183,9 +182,9 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
     float delta = event->delta();
     
     if (delta > 0) {
-        m_canvas->view()->zoomController()->zoomAction()->zoomIn();
+        m_canvas->viewManager()->zoomController()->zoomAction()->zoomIn();
     } else {
-        m_canvas->view()->zoomController()->zoomAction()->zoomOut();
+        m_canvas->viewManager()->zoomController()->zoomAction()->zoomOut();
     }
 }
 

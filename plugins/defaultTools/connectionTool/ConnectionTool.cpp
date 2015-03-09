@@ -790,9 +790,9 @@ void ConnectionTool::updateStatusText()
     }
 }
 
-QList<QWidget *> ConnectionTool::createOptionWidgets()
+QList<QPointer<QWidget> > ConnectionTool::createOptionWidgets()
 {
-    QList<QWidget *> list;
+    QList<QPointer<QWidget> > list;
 
     m_connectionShapeWidgets.clear();
 

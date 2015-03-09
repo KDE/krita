@@ -74,7 +74,7 @@
    <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="KoDocumentSectionView" name="listLayers" native="true">
+      <widget class="KisDocumentSectionView" name="listLayers" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -364,9 +364,9 @@
    <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KoDocumentSectionView</class>
+   <class>KisDocumentSectionView</class>
    <extends></extends>
-   <header location="global">KoDocumentSectionView.h</header>
+   <header location="global">KisDocumentSectionView.h</header>
   </customwidget>
   <customwidget>
    <class>KisToolButton</class>

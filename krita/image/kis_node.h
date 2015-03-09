@@ -274,26 +274,6 @@ protected:
     KisBaseNodeSP parentCallback() const;
     void notifyParentVisibilityChanged(bool value);
     void baseNodeChangedCallback();
-
-    /**
-     * Re-implement this method if your node type has to do something
-     * before it is removed.
-     */
-    virtual void prepareForRemoval() {}
-
-    /**
-     * Re-implement this method if your node type has to do something
-     * before being added to the stack.
-     */
-    virtual void prepareForAddition() {}
-
-    /**
-     * Re-implement this method if your node type has to do something
-     * right after being added to the stack.
-     */
-    virtual void initAfterAddition() {}
-
-
 private:
 
     friend class KisNodeFacade;
@@ -335,5 +315,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(KisNodeSP)
+
+Q_DECLARE_METATYPE(KisNodeWSP)
 
 #endif

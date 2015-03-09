@@ -40,6 +40,7 @@ KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
     createProperties();
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
+    m_itemValue->setValue(element.toElement().attribute("report:value"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
@@ -112,6 +113,8 @@ void KoReportItemText::createProperties()
 
     //_query = new KoProperty::Property ( "Query", QStringList(), QStringList(), "Data Source", "Query" );
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
+    
+    m_itemValue = new KoProperty::Property("value", QString(), i18n("Value"), i18n("Value used if not bound to a field"));
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
@@ -138,6 +141,7 @@ void KoReportItemText::createProperties()
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
+    m_set->addProperty(m_itemValue);
     m_set->addProperty(m_horizontalAlignment);
     m_set->addProperty(m_verticalAlignment);
     m_set->addProperty(m_font);
@@ -202,10 +206,14 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
 
     QString cs = itemDataSource();
 
-    if (cs.left(1) == "$") { //Everything past $ is treated as a string
-        qstrValue = cs.mid(1);
+    if (!cs.isEmpty()) {
+        if (cs.left(1) == "$") { //Everything past $ is treated as a string
+            qstrValue = cs.mid(1);
+        } else {
+            qstrValue = data.toString();
+        }
     } else {
-        qstrValue = data.toString();
+        qstrValue = m_itemValue->value().toString();
     }
 
     QPointF pos = m_pos.toScene();
@@ -215,7 +223,6 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
     QRectF trf(pos, size);
     qreal intStretch = trf.top() - offset.y();
 
-    //kDebug() << qstrValue;
     if (qstrValue.length()) {
         QRectF rect = trf;
 
@@ -243,7 +250,9 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
                 pos = idx + 1;
                 if (separator == '\n') {
                     QString line = qstrValue.left(idx);
+
                     qstrValue.remove(0, idx + 1);
+
                     pos = 0;
 
                     rect.setTop(intBaseTop + (intLineCounter * intRectHeight));

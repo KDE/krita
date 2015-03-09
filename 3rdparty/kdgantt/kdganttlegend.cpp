@@ -134,7 +134,7 @@ StyleOptionGanttItem Legend::getStyleOption( const QModelIndex& index ) const
 
 /*! Draws the legend item at \a index and all of it's children recursively
  *  at \a pos onto \a painter.
- *  Reimplement this if you want to draw items in an user defined way.
+ *  Reimplement this if you want to draw items in a user defined way.
  *  \returns the rectangle drawn.
  */
 QRect Legend::drawItem( QPainter* painter, const QModelIndex& index, const QPoint& pos ) const

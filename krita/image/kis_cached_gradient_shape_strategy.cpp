@@ -27,6 +27,7 @@
 #include <boost/bind.hpp>
 
 #include "kis_algebra_2d.h"
+#include "kis_debug.h"
 
 
 using namespace KisBSplines;
@@ -47,6 +48,8 @@ KisCachedGradientShapeStrategy::KisCachedGradientShapeStrategy(const QRect &rc,
     : KisGradientShapeStrategy(),
       m_d(new Private())
 {
+    KIS_ASSERT_RECOVER_NOOP(rc.width() >= 3 && rc.height() >= 3);
+
     m_d->rc = rc;
     m_d->xStep = xStep;
     m_d->yStep = yStep;
@@ -59,6 +62,21 @@ KisCachedGradientShapeStrategy::KisCachedGradientShapeStrategy(const QRect &rc,
 
     int numSamplesX = std::ceil(qreal(rc.width()) / xStep);
     int numSamplesY = std::ceil(qreal(rc.height()) / yStep);
+
+    if (numSamplesX < 2 || numSamplesY < 2) {
+        qWarning();
+        qWarning() << "############";
+        qWarning() << "WARNING: KisCachedGradientShapeStrategy numSamplesX/Y is too small!"  << ppVar(numSamplesX) << ppVar(numSamplesY);
+        qWarning() << "WARNING:" << ppVar(rc) << ppVar(xStep) << ppVar(yStep);
+        qWarning() << "WARNING:" << ppVar(numSamplesX) << ppVar(numSamplesY);
+
+        numSamplesX = qMax(numSamplesX, 2);
+        numSamplesY = qMax(numSamplesY, 2);
+
+        qWarning() << "WARNING: adjusting:" << ppVar(numSamplesX) << ppVar(numSamplesY);
+        qWarning() << "############";
+        qWarning();
+    }
 
     m_d->spline.reset(new KisBSpline2D(xStart, xEnd, numSamplesX, Natural,
                                        yStart, yEnd, numSamplesY, Natural));

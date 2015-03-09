@@ -22,9 +22,6 @@
 #include <kis_paintop_options_widget.h>
 
 class KisSprayOpOption;
-class KisSprayShapeOption;
-class KisSprayShapeDynamicsOption;
-class KisColorOption;
 
 class KisSprayPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {

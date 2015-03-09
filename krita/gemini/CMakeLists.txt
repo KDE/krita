@@ -3,8 +3,8 @@ if (WIN32)
 
     if (ENABLE_GEMINI_STARTUP_MAGIC)
         add_definitions(-DGEMINI_ENABLE_STARTUP_MAGIC)
-    endif (ENABLE_GEMINI_STARTUP_MAGIC)
-endif (WIN32)
+    endif ()
+endif ()
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
@@ -22,9 +22,9 @@ set(kritagemini_SRCS
 
 if (WIN32)
     set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.rc)
-else (WIN32)
+else ()
     kde4_add_app_icon(kritagemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritagemini.png")
-endif (WIN32)
+endif ()
 
 # Krita Gemini application
 # =============================================================================
@@ -42,7 +42,7 @@ target_link_libraries(kritagemini
 )
 
 install(TARGETS   kritagemini ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS  kritagemini.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install(PROGRAMS  kritagemini.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES     kritageminirc kritageminipanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     kritagemini.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritagemini)
 install(FILES     kritagemini.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritagemini)

@@ -79,7 +79,7 @@ public:
     static QString prettyTime(const QDateTime &theTime);
     static DocumentType typeForFile(const QString &file);
 
-public slots:
+public Q_SLOTS:
     void addDocument(const DocumentListModel::DocumentInfo &info);
     void setFilter(DocumentType newFilter);
 

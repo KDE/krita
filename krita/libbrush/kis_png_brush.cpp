@@ -49,7 +49,11 @@ bool KisPngBrush::load()
 
 bool KisPngBrush::loadFromDevice(QIODevice *dev)
 {
-    QImageReader reader(dev, "PNG");
+    // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
+    // fails with "libpng error: IDAT: CRC error"
+    QByteArray data = dev->readAll();
+    QBuffer buf(&data);
+    QImageReader reader(&buf, "PNG");
 
     if (!reader.canRead()) {
       setValid(false);
@@ -69,6 +73,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     }
 
     QImage image = reader.read();
+
     if (image.isNull()) {
       kWarning() << "Could not read brush" << filename() << ". Error:" << reader.errorString();
       setValid(false);

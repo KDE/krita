@@ -24,7 +24,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <kis_image.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_action.h>
 
 #include "dlg_clonesarray.h"
@@ -33,7 +33,7 @@ K_PLUGIN_FACTORY(ClonesArrayFactory, registerPlugin<ClonesArray>();)
 K_EXPORT_PLUGIN(ClonesArrayFactory("krita"))
 
 ClonesArray::ClonesArray(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/clonesarray.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action = new KisAction(i18n("Clones &Array..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
@@ -52,7 +52,7 @@ void ClonesArray::slotCreateClonesArray()
     KisImageWSP image = m_view->image();
     Q_ASSERT(image); Q_UNUSED(image);
 
-    DlgClonesArray *dialog = new DlgClonesArray(m_view, m_view);
+    DlgClonesArray *dialog = new DlgClonesArray(m_view, m_view->mainWindow());
     Q_CHECK_PTR(dialog);
 
     if (dialog->exec() == QDialog::Accepted) {

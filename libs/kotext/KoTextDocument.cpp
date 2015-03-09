@@ -35,6 +35,7 @@
 #include "KoText.h"
 #include "KoTextEditor.h"
 #include "styles/KoStyleManager.h"
+#include "OdfTextTrackStyles.h"
 #include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoList.h"
@@ -114,8 +115,10 @@ void KoTextDocument::setStyleManager(KoStyleManager *sm)
     QVariant v;
     v.setValue(sm);
     m_document->addResource(KoTextDocument::StyleManager, StyleManagerURL, v);
-    if (sm)
-        sm->add(m_document);
+    if (sm) {
+        OdfTextTrackStyles *cf = OdfTextTrackStyles::instance(sm);
+        cf->registerDocument(m_document);
+    }
 }
 
 void KoTextDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
@@ -206,9 +209,6 @@ void KoTextDocument::setUndoStack(KUndo2Stack *undoStack)
     QVariant v;
     v.setValue<void*>(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
-    if (styleManager()) {
-        styleManager()->setUndoStack(undoStack);
-    }
 }
 
 KUndo2Stack *KoTextDocument::undoStack() const

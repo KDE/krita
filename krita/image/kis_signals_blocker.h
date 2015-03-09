@@ -19,6 +19,8 @@
 #ifndef __KIS_SIGNALS_BLOCKER_H
 #define __KIS_SIGNALS_BLOCKER_H
 
+#include <QVector>
+
 /**
  * Block QObject's signals in a safe and sane way.
  *
@@ -37,22 +39,59 @@
 class KisSignalsBlocker
 {
 public:
-    KisSignalsBlocker(QObject *object)
-        : m_object(object)
+    /**
+     * Six should be enough for all usage cases! (c)
+     */
+    KisSignalsBlocker(QObject *o1,
+                      QObject *o2,
+                      QObject *o3 = 0,
+                      QObject *o4 = 0,
+                      QObject *o5 = 0,
+                      QObject *o6 = 0)
     {
-        m_object->blockSignals(true);
+        if (o1) addObject(o1);
+        if (o2) addObject(o2);
+        if (o3) addObject(o3);
+        if (o4) addObject(o4);
+        if (o5) addObject(o5);
+        if (o6) addObject(o6);
+
+        blockObjects();
+    }
+
+    KisSignalsBlocker(QObject *object)
+    {
+        addObject(object);
+        blockObjects();
     }
 
     ~KisSignalsBlocker()
     {
-        m_object->blockSignals(false);
+        QVector<QObject*>::iterator it = m_objects.end();
+        QVector<QObject*>::iterator begin = m_objects.begin();
+
+        while (it != begin) {
+            --it;
+            (*it)->blockSignals(false);
+        }
     }
 
 private:
-    Q_DISABLE_COPY(KisSignalsBlocker);
+    void blockObjects() {
+        foreach (QObject *object, m_objects) {
+            object->blockSignals(true);
+        }
+    }
+
+    inline void addObject(QObject *object) {
+        m_objects.append(object);
+    }
 
 private:
-    QObject *m_object;
+    Q_DISABLE_COPY(KisSignalsBlocker)
+
+private:
+    QVector<QObject*> m_objects;
 };
 
 #endif /* __KIS_SIGNALS_BLOCKER_H */

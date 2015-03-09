@@ -49,7 +49,7 @@ void KoReportDesignerItemImage::init(QGraphicsScene *scene, KoReportDesigner *d)
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
-	    
+
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
 }

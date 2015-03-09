@@ -28,7 +28,6 @@ class QPointF;
 class QPainter;
 class KisCoordinatesConverter;
 class ToolTransformArgs;
-class QTransform;
 class TransformTransactionProperties;
 class QCursor;
 class QImage;
@@ -59,7 +58,7 @@ public:
 
     bool acceptsClicks() const;
 
-signals:
+Q_SIGNALS:
     void requestCanvasUpdate();
 
 protected:
@@ -85,7 +84,7 @@ protected:
                                              const QPointF &srcOffset,
                                              QPointF *dstOffset);
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> m_d;
 };
 

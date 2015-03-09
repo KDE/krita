@@ -25,9 +25,6 @@
 #include <QStyleOptionProgressBar>
 #include <krita_export.h>
 
-class QLineEdit;
-class QDoubleValidator;
-class QTimer;
 class KisAbstractSliderSpinBoxPrivate;
 class KisSliderSpinBoxPrivate;
 class KisDoubleSliderSpinBoxPrivate;
@@ -77,7 +74,7 @@ protected:
     virtual QString valueString() const = 0;
     virtual void setInternalValue(int value) = 0;
 
-protected slots:
+protected Q_SLOTS:
     void contextMenuEvent(QContextMenuEvent * event);
     void editLostFocus();
 protected:
@@ -115,7 +112,7 @@ public:
 protected:
     virtual QString valueString() const;
     virtual void setInternalValue(int value);
-signals:
+Q_SIGNALS:
     void valueChanged(int value);
 };
 
@@ -143,7 +140,7 @@ public:
 protected:
     virtual QString valueString() const;
     virtual void setInternalValue(int value);
-signals:
+Q_SIGNALS:
     void valueChanged(qreal value);
 };
 

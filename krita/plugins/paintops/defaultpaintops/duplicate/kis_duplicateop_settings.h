@@ -54,15 +54,8 @@ public:
     KisPaintOpSettingsSP clone() const;
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
-    // hijack the setNode of the KisPaintopSettings class. We want to be able to
-    // switch nodes to duplicated onto a new layer without starting to clone from
-    // the new layer; only if the user ctrl-shift-clicks, we start cloning from the
-    // currently selected layer.
-    virtual void setNode(KisNodeSP node);
-
 public:
 
-    KisNodeSP m_activeNode;
     QPointF m_offset;
     bool m_isOffsetNotUptodate;
     QPointF m_position; // Give the position of the last alt-click

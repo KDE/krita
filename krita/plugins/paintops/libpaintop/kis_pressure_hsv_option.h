@@ -26,7 +26,6 @@
 #include <KoColor.h>
 
 class KoColorTransformation;
-class KisColorSource;
 
 /**
  * The pressure opacity option defines a curve that is used to

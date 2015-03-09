@@ -1,4 +1,4 @@
-/*
+    /*
  *  dlg_colorspaceconversion.h -- part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
@@ -55,7 +55,7 @@ public:
 
     QButtonGroup m_intentButtonGroup;
 
-public slots:
+public Q_SLOTS:
     void selectionChanged(bool);
     void okClicked();
 };

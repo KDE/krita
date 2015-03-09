@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -19,6 +19,7 @@
 
 #include <KoIcon.h>
 
+#include <QApplication>
 #include <QDir>
 #include <QPainter>
 #include <QHash>
@@ -26,49 +27,35 @@
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
 #include <QMutexLocker>
+#include <QDebug>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ------------- ImageLoader ---------------------------------------------------------- //
+
+ImageLoader::ImageLoader(float size)
+    : m_size(size)
+    , m_run(true)
+{
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopExecution()));
+}
 
 void ImageLoader::run()
 {
     typedef QHash<ImageItem*,Data>::iterator Iterator;
     
-    QImageReader reader;
-
-#ifdef Q_OS_WIN
-    for(Iterator data=m_data.begin(); data!=m_data.end() && m_run; ++data) {
-        data->image = QImage(data->path).scaled(m_size, m_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        data->isLoaded = true;
-        emit sigItemContentChanged(data.key());
-    }
-#else
-    for(Iterator data=m_data.begin(); data!=m_data.end() && m_run; ++data) {
-        reader.setFileName(data->path);
-        qreal w = m_size;
-        qreal h = m_size;
-        
-
-        if (reader.supportsOption(QImageIOHandler::Size)) {
-            QSizeF imgSize = reader.size();
-            
-            if(imgSize.width() > imgSize.height()) {
-                qreal div = m_size / imgSize.width();
-                h = imgSize.height() * div;
-            }
-            else {
-                qreal div = m_size / imgSize.height();
-                w = imgSize.width() * div;
-            }
+    for (Iterator data = m_data.begin(); data != m_data.end() && m_run; ++data) {
+        QImage img = QImage(data->path);
+        if (!img.isNull()) {
+            data->image = img.scaled(m_size, m_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-
-        
-        reader.setScaledSize(QSize(w,h));
-        data->image    = reader.read();
         data->isLoaded = true;
         emit sigItemContentChanged(data.key());
     }
-#endif
+}
+
+void ImageLoader::stopExecution()
+{
+    m_run = false;
 }
 
 
@@ -80,10 +67,10 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     Q_UNUSED(option);
     Q_UNUSED(widget);
     
-    if(m_loader->isImageLoaded(this)) {
+    if (m_loader->isImageLoaded(this)) {
         QImage  image = m_loader->getImage(this);
         
-        if(!image.isNull()) {
+        if (!image.isNull()) {
             QPointF offset((m_size-image.width()) / 2.0, (m_size-image.height()) / 2.0);
             painter->drawImage(offset, image);
         }
@@ -101,8 +88,7 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
         painter->drawPixmap(rect, img, img.rect());
     }
     
-    if(isSelected())
-    {
+    if (isSelected()) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
         painter->setOpacity(0.50);
         painter->fillRect(boundingRect().toRect(), palette().color(QPalette::Active, QPalette::Highlight));
@@ -140,14 +126,14 @@ bool ImageStripScene::setCurrentDirectory(const QString& path)
     QDir         directory(path);
     QImageReader reader;
     
-    if(directory.exists()) {
+    if (directory.exists()) {
         clear();
         
-        if(m_loader) {
+        if (m_loader) {
             m_loader->disconnect(this);
             m_loader->stopExecution();
             
-            if(!m_loader->wait(500)) {
+            if (!m_loader->wait(500)) {
                 m_loader->terminate();
                 m_loader->wait();
             }
@@ -162,10 +148,17 @@ bool ImageStripScene::setCurrentDirectory(const QString& path)
         QStringList            files  = directory.entryList(QDir::Files);
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout();
         
-        for(QStringList::iterator name=files.begin(); name!=files.end(); ++name) {
+        for (QStringList::iterator name=files.begin(); name!=files.end(); ++name) {
             QString path = directory.absoluteFilePath(*name);
+            QString fileExtension = QFileInfo(path).suffix();
+
+            if (!fileExtension.compare("DNG", Qt::CaseInsensitive)) {
+                qWarning() << "WARNING: Qt is known to crash when trying to open a DNG file. Skip it";
+                continue;
+            }
+
             reader.setFileName(path);
-            
+
             if(reader.canRead()) {
                 ImageItem* item = new ImageItem(m_imgSize, path, m_loader);
                 m_loader->addPath(item, path);
@@ -198,6 +191,7 @@ void ImageStripScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
     ImageItem* item = static_cast<ImageItem*>(itemAt(event->scenePos()));
     
-    if(item)
+    if (item)
         emit sigImageActivated(item->path());
 }
+

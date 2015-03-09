@@ -28,7 +28,6 @@
 #include <krita_export.h>
 #include "kis_node_filter_interface.h"
 
-class KisNodeVisitor;
 class KisFilterConfiguration;
 
 /**
@@ -74,7 +73,6 @@ public:
                                   const QRect& rect) const;
 
     // From KisNode
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     /**
@@ -164,7 +162,9 @@ public:
 protected:
     void initSelection();
 
-public slots:
+    QRect cropChangeRectBySelection(const QRect &rect) const;
+
+public Q_SLOTS:
 
     /**
      * gets this layer. Overriddes function in

@@ -40,10 +40,10 @@ public:
     // save widget state to style
     void save(KoParagraphStyle *style);
 
-signals:
+Q_SIGNALS:
     void parStyleChanged();
 
-private slots:
+private Q_SLOTS:
     void lineSpacingChanged(int);
     void spacingValueChanged();
     void spacingPercentChanged();

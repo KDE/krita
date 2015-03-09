@@ -24,14 +24,10 @@
 #include "kis_canvas_widget_base.h"
 #include "kis_prescaled_projection.h"
 
-class QMouseEvent;
 class QImage;
 class QPaintEvent;
-class QPoint;
-class QRect;
 class QPainter;
 class KisCanvas2;
-class KoToolProxy;
 
 /**
  *
@@ -83,7 +79,7 @@ protected: // KisCanvasWidgetBase
 
     virtual bool callFocusNextPrevChild(bool next);
 
-private slots:
+private Q_SLOTS:
     void slotConfigChanged();
 
 private:

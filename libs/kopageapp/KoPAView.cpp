@@ -319,8 +319,8 @@ void KoPAView::initGUI(KoPAFlags flags)
         if (mw) {
             KoToolBoxFactory toolBoxFactory;
             mw->createDockWidget( &toolBoxFactory );
-            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-            mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
+            mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QPointer<QWidget> > &) ));
         }
     }
 
@@ -427,6 +427,10 @@ void KoPAView::initActions()
     d->actionConfigure = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", d->actionConfigure);
     connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
+    // not sure why this isn't done through KStandardAction, but since it isn't
+    // we ought to set the MenuRole manually so the item ends up in the appropriate
+    // menu on OS X:
+    d->actionConfigure->setMenuRole(QAction::PreferencesRole);
 
     d->find = new KoFind( this, d->canvas->resourceManager(), actionCollection() );
     connect( d->find, SIGNAL( findDocumentSetNext( QTextDocument * ) ),

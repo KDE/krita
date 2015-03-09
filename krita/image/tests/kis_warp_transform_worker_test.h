@@ -19,12 +19,12 @@
 #ifndef __KIS_WARP_TRANSFORM_WORKER_TEST_H
 #define __KIS_WARP_TRANSFORM_WORKER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisWarpTransformWorkerTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void test();
     void testQImage();
     void testForwardInterpolator();

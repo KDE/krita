@@ -190,12 +190,26 @@ bool KisKraSaveVisitor::visit(KisFilterMask *mask)
 
 bool KisKraSaveVisitor::visit(KisTransformMask *mask)
 {
-    /**
-     * Transform Masks have no selection or a paint device, so there is no
-     * binary data to save
-     */
-    KIS_ASSERT_RECOVER_NOOP(!mask->selection() && !mask->paintDevice());
-    saveTransformMaskParams(mask);
+    QDomDocument doc("transform_params");
+
+    QDomElement root = doc.createElement("transform_params");
+
+    QDomElement main = doc.createElement("main");
+    main.setAttribute("id", mask->transformParams()->id());
+
+    QDomElement data = doc.createElement("data");
+    mask->transformParams()->toXML(&data);
+
+    doc.appendChild(root);
+    root.appendChild(main);
+    root.appendChild(data);
+
+    QString location = getLocation(mask, DOT_TRANSFORMCONFIG);
+    if (m_store->open(location)) {
+        QByteArray a = doc.toByteArray();
+        m_store->write(a, a.size());
+        m_store->close();
+    }
 
     return true;
 }
@@ -335,30 +349,6 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
         }
     }
     return false;
-}
-
-void KisKraSaveVisitor::saveTransformMaskParams(KisTransformMask *mask)
-{
-    QDomDocument doc("transform_params");
-
-    QDomElement root = doc.createElement("transform_params");
-
-    QDomElement main = doc.createElement("main");
-    main.setAttribute("id", mask->transformParams()->id());
-
-    QDomElement data = doc.createElement("data");
-    mask->transformParams()->toXML(&data);
-
-    doc.appendChild(root);
-    root.appendChild(main);
-    root.appendChild(data);
-
-    QString location = getLocation(mask, DOT_TRANSFORMCONFIG);
-    if (m_store->open(location)) {
-        QByteArray a = doc.toByteArray();
-        m_store->write(a, a.size());
-        m_store->close();
-    }
 }
 
 bool KisKraSaveVisitor::saveMetaData(KisNode* node)

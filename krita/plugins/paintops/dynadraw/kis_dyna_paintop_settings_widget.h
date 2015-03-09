@@ -21,8 +21,6 @@
 
 #include <kis_paintop_options_widget.h>
 
-class KisPaintActionTypeOption;
-class KisDynaOpOption;
 
 class KisDynaPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {

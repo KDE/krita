@@ -18,9 +18,9 @@
 */
 
 #include "connection.h"
+#include "connection_p.h"
 
 #include "error.h"
-#include "connection_p.h"
 #include "connectiondata.h"
 #include "driver.h"
 #include "driver_p.h"
@@ -1188,12 +1188,12 @@ bool Connection::insertRecord(FieldList& fields, const QList<QVariant>& values)
     return res;
 }
 
-bool Connection::executeSQL(const QString& statement)
+bool Connection::executeSQL(const QString& sql)
 {
-    m_sql = statement; //remember for error handling
+    m_sql = sql; //remember for error handling
     if (!drv_executeSQL(m_sql)) {
         m_errMsg.clear(); //clear as this could be most probably just "Unknown error" string.
-        m_errorSql = statement;
+        m_errorSql = sql;
         setError(this, ERR_SQL_EXECUTION_ERROR, i18n("Error while executing SQL statement."));
         return false;
     }
@@ -2367,11 +2367,11 @@ bool Connection::drv_setAutoCommit(bool /*on*/)
     return true;
 }
 
-Cursor* Connection::executeQuery(const QString& statement, uint cursor_options)
+Cursor* Connection::executeQuery(const QString& sql, uint cursor_options)
 {
-    if (statement.isEmpty())
+    if (sql.isEmpty())
         return 0;
-    Cursor *c = prepareQuery(statement, cursor_options);
+    Cursor *c = prepareQuery(sql, cursor_options);
     if (!c)
         return 0;
     if (!c->open()) {//err - kill that
@@ -2542,16 +2542,34 @@ bool Connection::storeObjectSchemaData(SchemaData &sdata, bool newObject)
                .arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())));
 }
 
-tristate Connection::querySingleRecordInternal(RecordData &data, const QString* sql, QuerySchema* query,
-        bool addLimitTo1)
+Cursor* Connection::executeQueryInternal(const QString &sql, QuerySchema* query,
+                                         const QList<QVariant>* params)
+{
+    Q_ASSERT(!sql.isEmpty() || query);
+    clearError();
+    if (!sql.isEmpty()) {
+        return executeQuery(sql);
+    }
+    if (!query) {
+        return 0;
+    }
+    if (params) {
+        return executeQuery(*query, *params);
+    }
+    return executeQuery(*query);
+}
+
+tristate Connection::querySingleRecordInternal(RecordData &data, const QString* sql,
+                                               QuerySchema* query,
+                                               const QList<QVariant>* params,
+                                               bool addLimitTo1)
 {
     Q_ASSERT(sql || query);
-//! @todo does not work with non-SQL data sources
-    if (sql)
-        m_sql = m_driver->addLimitTo1(*sql, addLimitTo1);
-    KexiDB::Cursor *cursor;
-    if (!(cursor = sql ? executeQuery(m_sql) : executeQuery(*query))) {
-        KexiDBWarn << "!executeQuery() " << m_sql;
+    //! @todo does not work with non-SQL data sources
+    KexiDB::Cursor *cursor = executeQueryInternal(
+                sql ? m_driver->addLimitTo1(*sql, addLimitTo1) : QString(), query, params);
+    if (!cursor) {
+        KexiDBWarn << "!querySingleRecordInternal() " << m_sql;
         return false;
     }
     if (!cursor->moveFirst()
@@ -2569,12 +2587,18 @@ tristate Connection::querySingleRecordInternal(RecordData &data, const QString* 
 
 tristate Connection::querySingleRecord(const QString& sql, RecordData &data, bool addLimitTo1)
 {
-    return querySingleRecordInternal(data, &sql, 0, addLimitTo1);
+    return querySingleRecordInternal(data, &sql, 0, 0, addLimitTo1);
 }
 
 tristate Connection::querySingleRecord(QuerySchema& query, RecordData &data, bool addLimitTo1)
 {
-    return querySingleRecordInternal(data, 0, &query, addLimitTo1);
+    return querySingleRecordInternal(data, 0, &query, 0, addLimitTo1);
+}
+
+tristate Connection::querySingleRecord(QuerySchema& query, RecordData &data,
+                                       const QList<QVariant>& params, bool addLimitTo1)
+{
+    return querySingleRecordInternal(data, 0, &query, &params, addLimitTo1);
 }
 
 bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
@@ -2586,12 +2610,16 @@ bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
     return true;
 }
 
-tristate Connection::querySingleString(const QString& sql, QString &value, uint column, bool addLimitTo1)
+tristate Connection::querySingleStringInternal(const QString *sql, QString &value,
+                                               QuerySchema* query, const QList<QVariant>* params,
+                                               uint column, bool addLimitTo1)
 {
-    KexiDB::Cursor *cursor;
-    m_sql = m_driver->addLimitTo1(sql, addLimitTo1);
-    if (!(cursor = executeQuery(m_sql))) {
-        KexiDBWarn << "!executeQuery()" << m_sql;
+    Q_ASSERT(sql || query);
+    //! @todo does not work with non-SQL data sources
+    KexiDB::Cursor *cursor = executeQueryInternal(
+                sql ? m_driver->addLimitTo1(*sql, addLimitTo1) : QString(), query, params);
+    if (!cursor) {
+        KexiDBWarn << "!querySingleStringInternal()" << m_sql;
         return false;
     }
     if (!cursor->moveFirst() || cursor->eof())
@@ -2608,25 +2636,65 @@ tristate Connection::querySingleString(const QString& sql, QString &value, uint 
     value = cursor->value(column).toString();
     return deleteCursor(cursor);
 }
-
-tristate Connection::querySingleNumber(const QString& sql, int &number, uint column, bool addLimitTo1)
+tristate Connection::querySingleString(const QString& sql, QString &value, uint column,
+                                       bool addLimitTo1)
 {
-    static QString str;
-    static bool ok;
-    const tristate result = querySingleString(sql, str, column, addLimitTo1);
+    return querySingleStringInternal(&sql, value, 0, 0, column, addLimitTo1);
+}
+
+tristate Connection::querySingleString(QuerySchema& query, QString &value, uint column,
+                                       bool addLimitTo1)
+{
+    return querySingleStringInternal(0, value, &query, 0, column, addLimitTo1);
+}
+
+tristate Connection::querySingleString(QuerySchema& query, QString &value,
+                                       const QList<QVariant>& params, uint column,
+                                       bool addLimitTo1)
+{
+    return querySingleStringInternal(0, value, &query, &params, column, addLimitTo1);
+}
+
+tristate Connection::querySingleNumberInternal(const QString *sql, int &number,
+                                       QuerySchema* query, const QList<QVariant>* params,
+                                       uint column, bool addLimitTo1)
+{
+    QString str;
+    const tristate result = querySingleStringInternal(sql, str, query, params, column,
+                                                      addLimitTo1);
     if (result != true)
         return result;
+    bool ok;
     number = str.toInt(&ok);
     return ok;
 }
 
-bool Connection::queryStringList(const QString& sql, QStringList& list, uint column)
+tristate Connection::querySingleNumber(const QString& sql, int &number, uint column,
+                                       bool addLimitTo1)
 {
-    KexiDB::Cursor *cursor;
-    clearError();
-    m_sql = sql;
-    if (!(cursor = executeQuery(m_sql))) {
-        KexiDBWarn << "!executeQuery() " << m_sql;
+    return querySingleNumberInternal(&sql, number, 0, 0, column, addLimitTo1);
+}
+
+tristate Connection::querySingleNumber(QuerySchema& query, int &number, uint column,
+                                       bool addLimitTo1)
+{
+    return querySingleNumberInternal(0, number, &query, 0, column, addLimitTo1);
+}
+
+tristate Connection::querySingleNumber(QuerySchema& query, int &number,
+                                       const QList<QVariant>& params, uint column,
+                                       bool addLimitTo1)
+{
+    return querySingleNumberInternal(0, number, &query, &params, column, addLimitTo1);
+}
+
+bool Connection::queryStringListInternal(const QString *sql, QStringList& list,
+                                         QuerySchema* query, const QList<QVariant>* params,
+                                         uint column)
+{
+    KexiDB::Cursor *cursor = executeQueryInternal(sql ? *sql : QString(), query, params);
+    if (!cursor) {
+        KexiDBWarn << "!queryStringListInternal() " << m_sql;
         return false;
     }
     cursor->moveFirst();
@@ -2649,6 +2717,22 @@ bool Connection::queryStringList(const QString& sql, QStringList& list, uint col
         }
     }
     return deleteCursor(cursor);
+}
+
+bool Connection::queryStringList(const QString& sql, QStringList& list, uint column)
+{
+    return queryStringListInternal(&sql, list, 0, 0, column);
+}
+
+bool Connection::queryStringList(QuerySchema& query, QStringList& list, uint column)
+{
+    return queryStringListInternal(0, list, &query, 0, column);
+}
+
+bool Connection::queryStringList(QuerySchema& query, QStringList& list,
+                                 const QList<QVariant>& params, uint column)
+{
+    return queryStringListInternal(0, list, &query, &params, column);
 }
 
 bool Connection::resultExists(const QString& sql, bool &success, bool addLimitTo1)

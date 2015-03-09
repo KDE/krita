@@ -25,8 +25,8 @@
 #include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
 #include <KoIcon.h>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 
 /**
@@ -47,7 +47,7 @@ public:
 
     void beginPrimaryAction(KoPointerEvent *event);
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void slotSetFuzziness(int);
     virtual void slotSetSizemod(int);

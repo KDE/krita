@@ -34,8 +34,7 @@ extern "C" {
 
 #include "kis_types.h"
 #include "kis_annotation.h"
-class KisDoc2;
-class KisExifInfo;
+class KisDocument;
 
 namespace KisMetaData
 {
@@ -86,7 +85,7 @@ class KisJPEGConverter : public QObject
 {
     Q_OBJECT
 public:
-    KisJPEGConverter(KisDoc2 *doc);
+    KisJPEGConverter(KisDocument *doc);
     virtual ~KisJPEGConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -94,13 +93,13 @@ public:
     /** Retrieve the constructed image
     */
     KisImageWSP image();
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     KisImageBuilder_Result decode(const KUrl& uri);
 private:
     KisImageWSP m_image;
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     bool m_stop;
     KIO::TransferJob *m_job;
 };

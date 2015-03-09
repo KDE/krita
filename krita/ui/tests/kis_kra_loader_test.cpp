@@ -20,24 +20,34 @@
 
 #include <qtest_kde.h>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "testutil.h"
+#include "KisPart.h"
+
+#include <filter/kis_filter_registry.h>
+#include <generator/kis_generator_registry.h>
+
+
+void KisKraLoaderTest::initTestCase()
+{
+    KisFilterRegistry::instance();
+    KisGeneratorRegistry::instance();
+}
 
 void KisKraLoaderTest::testLoading()
 {
-    KisDoc2 doc;
-
-    doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
-    KisImageWSP image = doc.image();
+    KisDocument *doc = KisPart::instance()->createDocument();
+    doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+    KisImageWSP image = doc->image();
     image->lock();
     QCOMPARE(image->nlayers(), 12);
-    QCOMPARE(doc.documentInfo()->aboutInfo("title"), QString("test image for loading"));
+    QCOMPARE(doc->documentInfo()->aboutInfo("title"), QString("test image for loading"));
     QCOMPARE(image->height(), 753);
     QCOMPARE(image->width(), 1000);
     QCOMPARE(image->colorSpace()->id(), KoColorSpaceRegistry::instance()->rgb8()->id());
@@ -53,17 +63,21 @@ void KisKraLoaderTest::testLoading()
     QVERIFY(node->inherits("KisGroupLayer"));
     QCOMPARE((int) node->childCount(), 2);
 
+    delete doc;
 }
 
-
-
-void KisKraLoaderTest::testObligeSingleChild()
+void testObligeSingleChildImpl(bool transpDefaultPixel)
 {
-    QString fileName = TestUtil::fetchDataFileLazy("single_layer_no_channel_flags.kra");
 
-    KisDoc2 doc;
-    doc.loadNativeFormat(fileName);
-    KisImageWSP image = doc.image();
+    QString id = !transpDefaultPixel ?
+        "single_layer_no_channel_flags_nontransp_def_pixel.kra" :
+        "single_layer_no_channel_flags_transp_def_pixel.kra";
+
+    QString fileName = TestUtil::fetchDataFileLazy(id);
+
+    KisDocument *doc = KisPart::instance()->createDocument();
+    doc->loadNativeFormat(fileName);
+    KisImageWSP image = doc->image();
 
     QVERIFY(image);
     QCOMPARE(image->nlayers(), 2);
@@ -74,7 +88,24 @@ void KisKraLoaderTest::testObligeSingleChild()
     QVERIFY(child);
 
     QCOMPARE(root->original(), root->projection());
-    QCOMPARE(root->original(), child->projection());
+
+    if (transpDefaultPixel) {
+        QCOMPARE(root->original(), child->projection());
+    } else {
+        QVERIFY(root->original() != child->projection());
+    }
+
+    delete doc;
+}
+
+void KisKraLoaderTest::testObligeSingleChild()
+{
+    testObligeSingleChildImpl(true);
+}
+
+void KisKraLoaderTest::testObligeSingleChildNonTranspPixel()
+{
+    testObligeSingleChildImpl(false);
 }
 
 

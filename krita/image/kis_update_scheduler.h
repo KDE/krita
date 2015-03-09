@@ -121,6 +121,7 @@ public:
     void unblockUpdates();
 
     void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
+    void updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect);
     void fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
@@ -152,7 +153,7 @@ protected:
     void connectSignals();
     void processQueues();
 
-private slots:
+private Q_SLOTS:
     void continueUpdate(const QRect &rect);
     void doSomeUsefulWork();
     void spareThreadAppeared();

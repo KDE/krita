@@ -31,7 +31,7 @@
 #include "kis_config_notifier.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include "kis_node.h"
 
@@ -43,21 +43,24 @@
 
 struct KisDisplayColorConverter::Private
 {
-    Private(KisDisplayColorConverter *_q, KisCanvas2 *_parentCanvas)
+    Private(KisDisplayColorConverter *_q, KoCanvasResourceManager *_resourceManager)
         : q(_q),
-          parentCanvas(_parentCanvas),
+          resourceManager(_resourceManager),
           nodeColorSpace(0),
           paintingColorSpace(0),
           monitorColorSpace(0),
           monitorProfile(0),
+          renderingIntent(KoColorConversionTransformation::InternalRenderingIntent),
+          conversionFlags(KoColorConversionTransformation::InternalConversionFlags),
+          displayFilter(0),
           intermediateColorSpace(0),
-          displayRenderer(new DisplayRenderer(_q, _parentCanvas))
+          displayRenderer(new DisplayRenderer(_q, _resourceManager))
     {
     }
 
     KisDisplayColorConverter * const q;
 
-    KisCanvas2 *parentCanvas;
+    KoCanvasResourceManager *resourceManager;
 
     const KoColorSpace *nodeColorSpace;
     const KoColorSpace *paintingColorSpace;
@@ -68,7 +71,7 @@ struct KisDisplayColorConverter::Private
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
 
-    KisDisplayFilterSP displayFilter;
+    KisDisplayFilter *displayFilter;
     const KoColorSpace *intermediateColorSpace;
 
     KoColor intermediateFgColor;
@@ -95,9 +98,9 @@ struct KisDisplayColorConverter::Private
 
     class DisplayRenderer : public KoColorDisplayRendererInterface {
     public:
-        DisplayRenderer(KisDisplayColorConverter *parent, KisCanvas2 *parentCanvas)
+        DisplayRenderer(KisDisplayColorConverter *parent, KoCanvasResourceManager *resourceManager)
             : m_parent(parent),
-              m_parentCanvas(parentCanvas)
+              m_resourceManager(resourceManager)
         {
             parent->connect(parent, SIGNAL(displayConfigurationChanged()),
                             this, SIGNAL(displayConfigurationChanged()));
@@ -119,16 +122,17 @@ struct KisDisplayColorConverter::Private
             m_parent->getHsv(srcColor, h, s, v, a);
         }
 
-        qreal minVisibleFloatValue() const {
-            return 0.0;
+        virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const {
+            return chaninfo->getUIMin();
         }
 
-        qreal maxVisibleFloatValue() const {
-            qreal maxValue = 1.0;
+        virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const {
+            qreal maxValue = chaninfo->getUIMax();
 
-            if (m_parentCanvas) {
-                qreal exposure = m_parentCanvas->resourceManager()->resource(KisCanvasResourceProvider::HdrExposure).value<qreal>();
-                maxValue = std::pow(2.0, -exposure);
+            if (m_resourceManager) {
+                qreal exposure = m_resourceManager->resource(KisCanvasResourceProvider::HdrExposure).value<qreal>();
+                // not sure if *= is what we want
+                maxValue *= std::pow(2.0, -exposure);
             }
 
             return maxValue;
@@ -136,18 +140,18 @@ struct KisDisplayColorConverter::Private
 
     private:
         KisDisplayColorConverter *m_parent;
-        KisCanvas2 *m_parentCanvas;
+        KoCanvasResourceManager *m_resourceManager;
     };
 
     QScopedPointer<KoColorDisplayRendererInterface> displayRenderer;
 };
 
-KisDisplayColorConverter::KisDisplayColorConverter(KisCanvas2 *parentCanvas)
-    : QObject(parentCanvas),
-      m_d(new Private(this, parentCanvas))
+KisDisplayColorConverter::KisDisplayColorConverter(KoCanvasResourceManager *resourceManager, QObject *parent)
+    : QObject(parent),
+      m_d(new Private(this, resourceManager))
 {
 
-    connect(m_d->parentCanvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+    connect(m_d->resourceManager, SIGNAL(canvasResourceChanged(int, const QVariant&)),
             SLOT(slotCanvasResourceChanged(int, const QVariant&)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(selectPaintingColorSpace()));
@@ -155,17 +159,20 @@ KisDisplayColorConverter::KisDisplayColorConverter(KisCanvas2 *parentCanvas)
 
     m_d->setCurrentNode(0);
     setMonitorProfile(0);
-    setDisplayFilter(KisDisplayFilterSP());
+    setDisplayFilter(0);
 }
 
 KisDisplayColorConverter::KisDisplayColorConverter()
     : m_d(new Private(this, 0))
 {
+    setDisplayFilter(0);
+    delete m_d->displayFilter;
+
     m_d->paintingColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     m_d->setCurrentNode(0);
     setMonitorProfile(0);
-    setDisplayFilter(KisDisplayFilterSP());
+
 }
 
 KisDisplayColorConverter::~KisDisplayColorConverter()
@@ -201,7 +208,7 @@ void KisDisplayColorConverter::Private::updateIntermediateFgColor(const KoColor 
 void KisDisplayColorConverter::Private::slotCanvasResourceChanged(int key, const QVariant &v)
 {
     if (key == KisCanvasResourceProvider::CurrentKritaNode) {
-        KisNodeSP currentNode = v.value<KisNodeSP>();
+        KisNodeSP currentNode = v.value<KisNodeWSP>();
         setCurrentNode(currentNode);
     } else if (useOcio() && key == KoCanvasResourceManager::ForegroundColor) {
         updateIntermediateFgColor(v.value<KoColor>());
@@ -283,7 +290,7 @@ void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorPr
     emit displayConfigurationChanged();
 }
 
-void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilterSP displayFilter)
+void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     if (m_d->displayFilter && displayFilter &&
         displayFilter->lockCurrentColorVisualRepresentation()) {
@@ -291,7 +298,7 @@ void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilterSP displayFilter
         KoColor color(m_d->intermediateFgColor);
         displayFilter->approximateInverseTransformation(color.data(), 1);
         color.convertTo(m_d->paintingColorSpace);
-        m_d->parentCanvas->resourceManager()->setForegroundColor(color);
+        m_d->resourceManager->setForegroundColor(color);
     }
 
     m_d->displayFilter = displayFilter;
@@ -309,7 +316,7 @@ void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilterSP displayFilter
         }
 
         m_d->updateIntermediateFgColor(
-            m_d->parentCanvas->resourceManager()->foregroundColor());
+            m_d->resourceManager->foregroundColor());
     }
 
 
@@ -343,7 +350,7 @@ KisDisplayColorConverter::conversionFlags()
     return conversionFlags;
 }
 
-KisDisplayFilterSP KisDisplayColorConverter::displayFilter() const
+KisDisplayFilter *KisDisplayColorConverter::displayFilter() const
 {
     return m_d->displayFilter;
 }

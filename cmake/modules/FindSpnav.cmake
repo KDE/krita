@@ -1,6 +1,6 @@
-FIND_PATH(SPNAV_INCLUDE_DIR spnav.h )
+find_path(SPNAV_INCLUDE_DIR spnav.h )
 
-FIND_LIBRARY(SPNAV_LIBRARY NAMES spnav ) 
+find_library(SPNAV_LIBRARY NAMES spnav ) 
 
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(Spnav DEFAULT_MSG SPNAV_INCLUDE_DIR SPNAV_LIBRARY )
+find_package_handle_standard_args(Spnav DEFAULT_MSG SPNAV_INCLUDE_DIR SPNAV_LIBRARY )

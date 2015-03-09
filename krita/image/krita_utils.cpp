@@ -128,7 +128,7 @@ namespace KritaUtils
         QRect totalRect = path.boundingRect().toAlignedRect();
 
         // adjust the rect for antialiasing to work
-        totalRect.adjusted(-1,-1,1,1);
+        totalRect = totalRect.adjusted(-1,-1,1,1);
 
         const int step = 64;
         const int right = totalRect.x() + totalRect.width();
@@ -265,6 +265,55 @@ namespace KritaUtils
         }
 
         return newPath;
+    }
+
+    QList<QPainterPath> splitDisjointPaths(const QPainterPath &path)
+    {
+        QList<QPainterPath> resultList;
+        QList<QPolygonF> inputPolygons = path.toSubpathPolygons();
+
+        foreach (const QPolygonF &poly, inputPolygons) {
+            QPainterPath testPath;
+            testPath.addPolygon(poly);
+
+            if (resultList.isEmpty()) {
+                resultList.append(testPath);
+                continue;
+            }
+
+            QList<QPainterPath>::iterator it = resultList.begin();
+            QList<QPainterPath>::iterator end = resultList.end();
+            QList<QPainterPath>::iterator savedIt = end;
+
+            bool wasMerged = false;
+
+            while (it != end) {
+                bool skipIncrement = false;
+
+                if (it->intersects(testPath)) {
+                    if (savedIt == end) {
+                        it->addPath(testPath);
+                        savedIt = it;
+                    } else {
+                        savedIt->addPath(*it);
+                        it = resultList.erase(it);
+                        skipIncrement = true;
+                    }
+
+                    wasMerged = true;
+                }
+
+                if (!skipIncrement) {
+                    ++it;
+                }
+            }
+
+            if (!wasMerged) {
+                resultList.append(testPath);
+            }
+        }
+
+        return resultList;
     }
 
 }

@@ -22,7 +22,7 @@
 
 #include <QBitArray>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoDocumentInfo.h>
 #include <KoShapeContainer.h>
 #include <KoPathShape.h>
@@ -30,7 +30,7 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
@@ -49,10 +49,19 @@
 
 #include "kis_transform_mask_params_interface.h"
 
+#include <filter/kis_filter_registry.h>
+#include <generator/kis_generator_registry.h>
+
+void KisKraSaverTest::initTestCase()
+{
+    KisFilterRegistry::instance();
+    KisGeneratorRegistry::instance();
+}
+
 
 void KisKraSaverTest::testRoundTrip()
 {
-    KisDoc2* doc = createCompleteDocument();
+    KisDocument* doc = createCompleteDocument();
     KoColor bgColor(Qt::red, doc->image()->colorSpace());
     doc->image()->setDefaultProjectionColor(bgColor);
     doc->saveNativeFormat("roundtriptest.kra");
@@ -60,21 +69,20 @@ void KisKraSaverTest::testRoundTrip()
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    KisDoc2 doc2;
+    KisDocument *doc2 = KisPart::instance()->createDocument();
 
-    doc2.loadNativeFormat("roundtriptest.kra");
+    doc2->loadNativeFormat("roundtriptest.kra");
 
     KisCountVisitor cv2(list, KoProperties());
-    doc2.image()->rootLayer()->accept(cv2);
+    doc2->image()->rootLayer()->accept(cv2);
     QCOMPARE(cv1.count(), cv2.count());
 
     // check whether the BG color is saved correctly
-    QCOMPARE(doc2.image()->defaultProjectionColor(), bgColor);
-
+    QCOMPARE(doc2->image()->defaultProjectionColor(), bgColor);
 
     // test round trip of a transform mask
     KisNodeSP tnode =
-        TestUtil::findNode(doc2.image()->rootLayer(), "testTransformMask");
+        TestUtil::findNode(doc2->image()->rootLayer(), "testTransformMask");
     QVERIFY(tnode);
     KisTransformMask *tmask = dynamic_cast<KisTransformMask*>(tnode.data());
     QVERIFY(tmask);
@@ -82,22 +90,103 @@ void KisKraSaverTest::testRoundTrip()
     QVERIFY(params);
     QTransform t = params->testingGetTransform();
     QCOMPARE(t, createTestingTransform());
+
+
+    delete doc2;
+    delete doc;
+
+
+
 }
 
 void KisKraSaverTest::testSaveEmpty()
 {
-    KisDoc2* doc = createEmptyDocument();
+    KisDocument* doc = createEmptyDocument();
     doc->saveNativeFormat("emptytest.kra");
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    KisDoc2 doc2;
-    doc2.loadNativeFormat("emptytest.kra");
+    KisDocument *doc2 = KisPart::instance()->createDocument();
+    doc2->loadNativeFormat("emptytest.kra");
 
     KisCountVisitor cv2(list, KoProperties());
-    doc2.image()->rootLayer()->accept(cv2);
+    doc2->image()->rootLayer()->accept(cv2);
     QCOMPARE(cv1.count(), cv2.count());
+
+    delete doc2;
+    delete doc;
 }
+
+#include <filter/kis_filter_configuration.h>
+#include "generator/kis_generator_registry.h"
+#include <generator/kis_generator.h>
+
+void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfiguration *config)
+{
+    TestUtil::ExternalImageChecker chk(testName, "fill_layer");
+
+    QRect refRect(0,0,512,512);
+    TestUtil::MaskParent p(refRect);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    doc->setCurrentImage(p.image);
+    doc->documentInfo()->setAboutInfo("title", p.image->objectName());
+
+    KisSelectionSP selection;
+    KisGeneratorLayerSP glayer = new KisGeneratorLayer(p.image, "glayer", config, selection);
+
+    p.image->addNode(glayer, p.image->root(), KisNodeSP());
+    glayer->setDirty();
+
+    p.image->waitForDone();
+    chk.checkImage(p.image, "00_initial_layer_update");
+
+    doc->saveNativeFormat("roundtrip_fill_layer_test.kra");
+
+
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
+    doc2->loadNativeFormat("roundtrip_fill_layer_test.kra");
+
+    doc2->image()->waitForDone();
+    chk.checkImage(doc2->image(), "01_fill_layer_round_trip");
+
+    QVERIFY(chk.testPassed());
+}
+
+void KisKraSaverTest::testRoundTripFillLayerColor()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("color");
+    Q_ASSERT(generator);
+
+    // warning: we pass null paint device to the default constructed value
+    KisFilterConfiguration *config = generator->factoryConfiguration(0);
+    Q_ASSERT(config);
+
+    QVariant v;
+    v.setValue(KoColor(Qt::red, cs));
+    config->setProperty("color", v);
+
+    testRoundTripFillLayerImpl("fill_layer_color", config);
+}
+
+void KisKraSaverTest::testRoundTripFillLayerPattern()
+{
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("pattern");
+    Q_ASSERT(generator);
+
+    // warning: we pass null paint device to the default constructed value
+    KisFilterConfiguration *config = generator->factoryConfiguration(0);
+    Q_ASSERT(config);
+
+    QVariant v;
+    v.setValue(QString("11_drawed_furry.png"));
+    config->setProperty("pattern", v);
+
+    testRoundTripFillLayerImpl("fill_layer_pattern", config);
+}
+
 QTEST_KDEMAIN(KisKraSaverTest, GUI)
 #include "kis_kra_saver_test.moc"

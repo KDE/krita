@@ -36,7 +36,6 @@
 #include <QFile>
 #include <QApplication>
 
-#include <kmessagebox.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
 
@@ -48,7 +47,7 @@
 #include <KoColor.h>
 
 #include <kis_painter.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
 #include <kis_layer.h>
@@ -76,7 +75,6 @@ int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
         return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
     }
 
-//    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
     return -1;
 
 }
@@ -256,7 +254,7 @@ void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, i
 }
 }
 
-KisPNGConverter::KisPNGConverter(KisDoc2 *doc)
+KisPNGConverter::KisPNGConverter(KisDocument *doc)
 {
 //     Q_ASSERT(doc);
 //     Q_ASSERT(adapter);
@@ -448,6 +446,10 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Initialize the special
     png_set_read_fn(png_ptr, iod, _read_fn);
 
+#if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
+   png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
+#endif
+
     // read all PNG info up to image data
     png_read_info(png_ptr, info_ptr);
 
@@ -560,7 +562,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     double coeff = quint8_MAX / (double)(pow((double)2, color_nb_bits) - 1);
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
-    KisTransaction(layer -> paintDevice());
 
     // Read comments/texts...
     png_text* text_ptr;
@@ -754,6 +755,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
             result = (KisImageBuilder_RESULT_NOT_EXIST);
         }
 
+        delete fp;
         KIO::NetAccess::removeTempFile(tmpFile);
     }
 
@@ -786,6 +788,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP i
 
 KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
+
+
     if (!iodevice->open(QIODevice::WriteOnly)) {
         dbgFile << "Failed to open PNG File for writing";
         return (KisImageBuilder_RESULT_FAILURE);
@@ -822,6 +826,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     if (!png_ptr) {
         return (KisImageBuilder_RESULT_FAILURE);
     }
+
+#if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
+   png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
+#endif
+
 
 #ifdef PNG_READ_CHECK_FOR_INVALID_INDEX_SUPPORTED
     png_set_check_for_invalid_index(png_ptr, 0);
@@ -921,7 +930,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
 
-    bool sRGB = device->colorSpace()->profile()->name().toLower().contains("srgb");
+    bool sRGB = device->colorSpace()->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
     if (!options.saveSRGBProfile && sRGB) {
         png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
     }

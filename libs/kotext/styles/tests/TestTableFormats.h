@@ -10,7 +10,7 @@ class TestTableFormats : public QObject
 public:
     TestTableFormats() {}
 
-private slots:
+private Q_SLOTS:
     void testTableColumnFormat();
     void testTableRowFormat();
 };

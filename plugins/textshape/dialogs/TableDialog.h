@@ -34,7 +34,7 @@ public:
     int columns();
     int rows();
 
-signals:
+Q_SIGNALS:
 
 
 private:

@@ -16,31 +16,37 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "HistoryDock.h"
 #include <KoDocumentResourceManager.h>
 #include <kis_config.h>
-HistoryDock::HistoryDock() : QDockWidget(), historyCanvas(0) {
-    undoView = new KisUndoView(this);
-    setWidget(undoView);
 
-
+HistoryDock::HistoryDock()
+    : QDockWidget()
+    , m_historyCanvas(0)
+{
+    m_undoView = new KisUndoView(this);
+    setWidget(m_undoView);
     setWindowTitle(i18n("Undo History"));
 }
 
 void HistoryDock::setCanvas(KoCanvasBase *canvas) {
 
+    setEnabled(canvas != 0);
+
     KisCanvas2* myCanvas = dynamic_cast<KisCanvas2*>( canvas );
+    if (myCanvas) {
+        KUndo2Stack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
 
-    KUndo2Stack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
+        m_undoView->setStack(undoStack);
+        KisConfig cfg;
+        m_undoView->stack()->setUseCumulativeUndoRedo(cfg.useCumulativeUndoRedo());
+        m_undoView->stack()->setTimeT1(cfg.stackT1());
+        m_undoView->stack()->setTimeT2(cfg.stackT2());
+        m_undoView->stack()->setStrokesN(cfg.stackN());
+    }
+    m_undoView->setCanvas( myCanvas );
 
-    undoView->setStack(undoStack);
-    KisConfig cfg;
-    undoView->stack()->setUseCumulativeUndoRedo(cfg.useCumulativeUndoRedo());
-    undoView->stack()->setTimeT1(cfg.stackT1());
-    undoView->stack()->setTimeT2(cfg.stackT2());
-    undoView->stack()->setStrokesN(cfg.stackN());
-
-    undoView->setCanvas( myCanvas );
 }
 
 #include <HistoryDock.moc>

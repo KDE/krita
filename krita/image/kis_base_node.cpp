@@ -30,7 +30,7 @@ struct KisBaseNode::Private
     QString compositeOp;
     KoProperties properties;
     bool systemLocked;
-    KoDocumentSectionModel::Property hack_visible; //HACK
+    KisDocumentSectionModel::Property hack_visible; //HACK
     QUuid id;
     bool collapsed;
 };
@@ -133,15 +133,15 @@ void KisBaseNode::setCompositeOp(const QString& compositeOp)
     baseNodeChangedCallback();
 }
 
-KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l;
-    l << KoDocumentSectionModel::Property(i18n("Visible"), koIcon("visible"), koIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
-    l << KoDocumentSectionModel::Property(i18n("Locked"), koIcon("locked"), koIcon("unlocked"), userLocked());
+    KisDocumentSectionModel::PropertyList l;
+    l << KisDocumentSectionModel::Property(i18n("Visible"), koIcon("visible"), koIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
+    l << KisDocumentSectionModel::Property(i18n("Locked"), koIcon("locked"), koIcon("unlocked"), userLocked());
     return l;
 }
 
-void KisBaseNode::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
+void KisBaseNode::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
 {
     setVisible(properties.at(0).state.toBool());
     m_d->hack_visible = properties.at(0);
@@ -235,14 +235,20 @@ void KisBaseNode::setSystemLocked(bool locked, bool update)
     }
 }
 
-bool KisBaseNode::isEditable() const
+bool KisBaseNode::isEditable(bool checkVisibility) const
 {
-    bool editable = (m_d->properties.boolProperty("visible", true) && !userLocked() && !systemLocked());
+    bool editable = true;
+    if (checkVisibility) {
+        editable = (m_d->properties.boolProperty("visible", true) && !userLocked() && !systemLocked());
+    }
+    else {
+        editable = (!userLocked() && !systemLocked());
+    }
 
     if (editable) {
         KisBaseNodeSP parentNode = parentCallback();
         if (parentNode && parentNode != this) {
-            editable = parentNode->isEditable();
+            editable = parentNode->isEditable(checkVisibility);
         }
     }
     return editable;

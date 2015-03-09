@@ -34,13 +34,16 @@
 #include <kpluginfactory.h>
 #include <kmimetype.h>
 
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoUpdater.h>
 #include <KoFileDialog.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoChannelInfo.h>
+#include <KoColorModelStandardIds.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
-
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
@@ -49,17 +52,13 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include "kis_iterator_ng.h"
-
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-#include <kis_view2.h>
+#include <KisPart.h>
+#include <KisViewManager.h>
 #include <kis_paint_device.h>
-#include <KoChannelInfo.h>
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
-#include <KoColorModelStandardIds.h>
 
-KisChannelSeparator::KisChannelSeparator(KisView2 * view)
+KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
         : m_view(view)
 {
 }
@@ -234,10 +233,10 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 adapter.addNode(l.data(), image->rootLayer(), 0);
             }
             else {
-                KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "OpenDocument");
+                KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-                dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+                dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
                 KUrl url = dialog.url();
 
                 if (url.isEmpty())
@@ -251,15 +250,17 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();
 
-                KisDoc2 d;
-                d.prepareForImport();
+                KisDocument *d = KisPart::instance()->createDocument();
+                d->prepareForImport();
 
-                KisImageWSP dst = KisImageWSP(new KisImage(d.createUndoStore(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
-                d.setCurrentImage(dst);
+                KisImageWSP dst = KisImageWSP(new KisImage(d->createUndoStore(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
+                d->setCurrentImage(dst);
                 dst->addNode(l->clone().data(), dst->rootLayer());
 
-                d.setOutputMimeType(mimefilter.toLatin1());
-                d.exportDocument(url);
+                d->setOutputMimeType(mimefilter.toLatin1());
+                d->exportDocument(url);
+
+                delete d;
 
             }
 

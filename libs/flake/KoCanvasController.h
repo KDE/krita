@@ -27,12 +27,14 @@
 #include "flake_export.h"
 #include <QObject>
 
+#include <QSize>
+#include <QPoint>
+#include <QPointF>
+
 class KActionCollection;
 class QRect;
 class QRectF;
-class QPoint;
-class QPointF;
-class QSize;
+
 
 class KoShape;
 class KoCanvasBase;
@@ -346,7 +348,7 @@ public:
     // Convenience method to retrieve the canvas controller for who needs to use QPointer
     KoCanvasController *canvasController() const { return m_canvasController; }
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when a previously added canvas is about to be removed.
      * @param canvasController this object
@@ -413,7 +415,7 @@ signals:
      */
     void zoomRelative(const qreal factor, const QPointF &stillPoint);
 
-public slots:
+public Q_SLOTS:
     /**
      * Call this slot whenever the size of your document in view coordinates (pixels)
      * changes, for instance when zooming.
@@ -425,6 +427,45 @@ public slots:
 
 private:
     KoCanvasController *m_canvasController;
+};
+
+class FLAKE_EXPORT  KoDummyCanvasController : public KoCanvasController {
+
+public:
+
+    explicit KoDummyCanvasController(KActionCollection* actionCollection)
+        : KoCanvasController(actionCollection)
+    {}
+
+    virtual ~KoDummyCanvasController()
+    {}
+
+
+    virtual void scrollContentsBy(int /*dx*/, int /*dy*/) {}
+    virtual QSize viewportSize() const { return QSize(); }
+    virtual void setDrawShadow(bool /*drawShadow*/) {}
+    virtual void setCanvas(KoCanvasBase */*canvas*/) {}
+    virtual KoCanvasBase *canvas() const {return 0;}
+    virtual int visibleHeight() const {return 0;}
+    virtual int visibleWidth() const {return 0;}
+    virtual int canvasOffsetX() const {return 0;}
+    virtual int canvasOffsetY() const {return 0;}
+    virtual void ensureVisible(const QRectF &/*rect*/, bool /*smooth */ = false) {}
+    virtual void ensureVisible(KoShape */*shape*/) {}
+    virtual void zoomIn(const QPoint &/*center*/) {}
+    virtual void zoomOut(const QPoint &/*center*/) {}
+    virtual void zoomBy(const QPoint &/*center*/, qreal /*zoom*/) {}
+    virtual void zoomTo(const QRect &/*rect*/) {}
+    virtual void recenterPreferred() {}
+    virtual void setPreferredCenter(const QPointF &/*viewPoint*/) {}
+    virtual QPointF preferredCenter() const {return QPointF();}
+    virtual void pan(const QPoint &/*distance*/) {}
+    virtual QPoint scrollBarValue() const {return QPoint();}
+    virtual void setScrollBarValue(const QPoint &/*value*/) {}
+    virtual void updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/) {}
+    virtual void setZoomWithWheel(bool /*zoom*/) {}
+    virtual void setVastScrolling(qreal /*factor*/) {}
+
 };
 
 #endif

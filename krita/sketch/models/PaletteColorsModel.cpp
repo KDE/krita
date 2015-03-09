@@ -17,7 +17,7 @@
  */
 
 #include "PaletteColorsModel.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 
 #include <KoColorSet.h>
@@ -30,7 +30,7 @@ public:
     {}
 
     KoColorSet* colorSet;
-    KisView2* view;
+    KisViewManager* view;
 };
 
 PaletteColorsModel::PaletteColorsModel(QObject *parent)
@@ -120,7 +120,7 @@ QObject* PaletteColorsModel::view() const
 
 void PaletteColorsModel::setView(QObject* newView)
 {
-    d->view = qobject_cast<KisView2*>( newView );
+    d->view = qobject_cast<KisViewManager*>( newView );
     emit viewChanged();
 }
 

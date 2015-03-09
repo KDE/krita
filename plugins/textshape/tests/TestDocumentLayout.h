@@ -30,11 +30,8 @@
 #include <KoTextDocumentLayout.h>
 #include <KoShape.h>
 
-class QPainter;
-class KoViewConverter;
 class KoStyleManager;
 class QTextDocument;
-class QTextLayout;
 
 #define ROUNDING 0.126
 
@@ -44,7 +41,7 @@ class TestDocumentLayout : public QObject
 public:
     TestDocumentLayout() {}
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     /// make sure empty paragraphs are initialized properly

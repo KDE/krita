@@ -72,9 +72,10 @@ void KisRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 void KisRectangleMaskGenerator::setSoftness(qreal softness)
 {
     KisMaskGenerator::setSoftness(softness);
+    qreal safeSoftnessCoeff = qreal(1.0) / qMax(qreal(0.01), softness);
 
-    d->transformedFadeX = d->xfadecoeff * softness;
-    d->transformedFadeY = d->yfadecoeff * softness;
+    d->transformedFadeX = d->xfadecoeff * safeSoftnessCoeff;
+    d->transformedFadeY = d->yfadecoeff * safeSoftnessCoeff;
 }
 
 KisRectangleMaskGenerator::~KisRectangleMaskGenerator()

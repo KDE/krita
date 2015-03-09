@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -21,13 +21,14 @@
 #include <qendian.h>
 #include <QDataStream>
 #include <QApplication>
+#include <QMessageBox>
 
 #include <kpluginfactory.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
-#include <KoFilterChain.h>
-#include <KoFilterManager.h>
+#include <KisFilterChain.h>
+#include <KisImportExportManager.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -35,7 +36,7 @@
 #include <kdialog.h>
 
 #include <kis_debug.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
@@ -48,7 +49,7 @@
 K_PLUGIN_FACTORY(KisHeightMapExportFactory, registerPlugin<KisHeightMapExport>();)
 K_EXPORT_PLUGIN(KisHeightMapExportFactory("krita"))
 
-KisHeightMapExport::KisHeightMapExport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisHeightMapExport::KisHeightMapExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -56,32 +57,32 @@ KisHeightMapExport::~KisHeightMapExport()
 {
 }
 
-KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "HeightMap export! From:" << from << ", To:" << to;
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
-    KisDoc2 *inputDoc = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *inputDoc = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
     if (!inputDoc)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     KisImageWSP image = inputDoc->image();
     Q_CHECK_PTR(image);
 
     if (inputDoc->image()->width() != inputDoc->image()->height()) {
         inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not square"));
-        return KoFilter::WrongFormat;
+        return KisImportExportFilter::WrongFormat;
     }
 
     if (inputDoc->image()->colorSpace()->colorModelId() != GrayAColorModelID) {
         inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not grayscale"));
-        return KoFilter::WrongFormat;
+        return KisImportExportFilter::WrongFormat;
     }
 
     KDialog* kdb = new KDialog(0);
@@ -113,7 +114,7 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
-            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+            return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
     else {
@@ -135,9 +136,9 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
     if (to == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
 
         downscale = (QMessageBox::question(0,
-                                                i18n("Downscale Image"),
-                                                i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
-                                                QMessageBox::Yes | QMessageBox::No)
+                                           i18nc("@title:window", "Downscale Image"),
+                                           i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
+                                           QMessageBox::Yes | QMessageBox::No)
                           == QMessageBox::Yes);
     }
 
@@ -166,5 +167,5 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
     }
 
     f.close();
-    return KoFilter::OK;
+    return KisImportExportFilter::OK;
 }

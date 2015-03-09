@@ -58,12 +58,10 @@
 
 #define CHECK_MODE_SANITY_OR_RETURN(_mode) if (mode() != _mode) { WARN_WRONG_MODE(mode()); return; }
 
-class KActionCollection;
 class KoCanvasBase;
 class KoPattern;
 class KoAbstractGradient;
 class KisFilterConfiguration;
-class KisPainter;
 class QPainter;
 class QPainterPath;
 class QPolygonF;
@@ -202,7 +200,7 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
     virtual void canvasResourceChanged(int key, const QVariant & res);
@@ -308,7 +306,7 @@ protected:
     virtual ToolMode mode() const;
 
 
-protected slots:
+protected Q_SLOTS:
     /**
      * Called whenever the configuration settings change.
      */
@@ -339,7 +337,7 @@ protected slots:
      */
     virtual void requestStrokeEnd();
 
-private slots:
+private Q_SLOTS:
     void slotToggleFgBg();
     void slotResetFgBg();
 

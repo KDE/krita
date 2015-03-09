@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
- * Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
+ * Copyright (C) 2011-2015 by Radoslaw Wicik (radoslaw@wicik.pl)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,6 @@
 
 void KoReportDesignerItemMaps::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
-    myDebug() << "\e[35m======\e[0m";
     if (scene)
         scene->addItem(this);
 
@@ -101,25 +100,9 @@ void KoReportDesignerItemMaps::paint(QPainter* painter, const QStyleOptionGraphi
     //Draw a border so user knows the object edge
     painter->setPen(QPen(QColor(224, 224, 224)));
     painter->drawRect(rect());
-//     if (isInline()) {
-//         //QImage t_img = _image;
-//         QImage t_img = m_staticImage->value().value<QPixmap>().toImage();
-//         if (mode() == "stretch") {
-//             t_img = t_img.scaled(rect().width(), rect().height(), Qt::KeepAspectRatio);
-//         }
-//         painter->drawImage(rect().left(), rect().top(), t_img, 0, 0, rect().width(), rect().height());
-//     } else {
-//         painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "image"));
-//     }
-    //painter->setBrush(QBrush(QColor(0xce, 0x00, 0xef, 0xaa)));
-    //painter->drawRoundedRect(rect(),30,30);
-    //painter->drawRect(rect());
-    //painter->fillRect(rect(),);
-    
     painter->setPen(Qt::black);
     painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "map"));
     
-
     drawHandles(painter);
 
     // restore an values before we started just in case
@@ -134,18 +117,13 @@ void KoReportDesignerItemMaps::buildXML(QDomDocument & doc, QDomElement & parent
     // properties
     addPropertyAsAttribute(&entity, m_name);
     addPropertyAsAttribute(&entity, m_controlSource);
+    addPropertyAsAttribute(&entity, m_latitudeProperty);
+    addPropertyAsAttribute(&entity, m_longitudeProperty);
+    addPropertyAsAttribute(&entity, m_zoomProperty);
+    addPropertyAsAttribute(&entity, m_themeProperty);
     //addPropertyAsAttribute(&entity, m_resizeMode);
     entity.setAttribute("report:z-index", zValue());
     buildXMLRect(doc, entity, &m_pos, &m_size);
-
-
-//     if (isInline()) {
-//         QDomElement map = doc.createElement("report:inline-image-data");
-//         map.appendChild(doc.createTextNode(inlineImageData()));
-//         entity.appendChild(map);
-//     } else {
-//         addPropertyAsAttribute(&entity, m_controlSource);
-//     }
 
     parent.appendChild(entity);
 }
@@ -168,7 +146,6 @@ void KoReportDesignerItemMaps::slotPropertyChanged(KoProperty::Set &s, KoPropert
 
 void KoReportDesignerItemMaps::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    myDebug() << "\e[35m======\e[0m";
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     KoReportDesignerItemRectBase::mousePressEvent(event);
 }

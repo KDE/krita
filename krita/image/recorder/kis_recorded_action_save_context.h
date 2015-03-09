@@ -23,7 +23,6 @@
 
 class KoAbstractGradient;
 class KoPattern;
-class QString;
 
 class KRITAIMAGE_EXPORT KisRecordedActionSaveContext {
     public:

@@ -34,7 +34,7 @@ public:
 
     ~Field();
 
-public slots:
+public Q_SLOTS:
     /**Returns the source (column) that the field gets its data from*/
     QString source();
     /**Sets the source (column) for the field*/

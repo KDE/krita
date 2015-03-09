@@ -34,7 +34,7 @@
 #include "kis_node.h"
 #include "kis_node_filter_interface.h"
 #include <kis_config.h>
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
@@ -42,8 +42,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              KisPaintDeviceSP paintDevice,
                                              const QString &layerName,
                                              const QString &caption,
-                                             KisView2 *view)
-    : KDialog(view)
+                                             KisViewManager *view, QWidget *parent)
+    : KDialog(parent)
     , m_node(node)
     , m_nodeFilterInterface(nfi)
     , m_currentFilter(0)
@@ -67,7 +67,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
     connect(wdgFilterNodeCreation.layerName, SIGNAL(textChanged(QString)), SLOT(slotNameChanged(QString)));
 
-    enableButtonOk(true);
+    slotConfigChanged();
 }
 
 KisDlgAdjustmentLayer::~KisDlgAdjustmentLayer()
@@ -85,6 +85,9 @@ void KisDlgAdjustmentLayer::slotNameChanged(const QString &text)
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
 {
     KisFilterConfiguration* config = wdgFilterNodeCreation.filterSelector->configuration();
+
+    Q_ASSERT(config);
+
     return config;
 }
 
@@ -96,6 +99,7 @@ QString KisDlgAdjustmentLayer::layerName() const
 void KisDlgAdjustmentLayer::slotConfigChanged()
 {
     m_currentFilter = filterConfiguration();
+
     enableButtonOk(m_currentFilter);
 
     if (m_currentFilter) {

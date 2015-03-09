@@ -38,11 +38,13 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 
-
+#include <KoStore.h>
 
 struct KisPaintOpPreset::Private {
     Private()
-        : settings(0) {
+        : settings(0),
+          dirtyPreset(false)
+    {
     }
 
     KisPaintOpSettingsSP settings;
@@ -55,7 +57,6 @@ KisPaintOpPreset::KisPaintOpPreset()
     : KoResource(QString())
     , m_d(new Private)
 {
-    m_d->dirtyPreset = false;
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
@@ -84,6 +85,7 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
     preset->setName(name());
     preset->settings()->setPreset(KisPaintOpPresetWSP(preset));
 
+    Q_ASSERT(preset->valid());
 
     return preset;
 }
@@ -113,7 +115,8 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", "").isEmpty());
 
-    bool saveDirtyPreset = isPresetDirty();
+    DirtyStateSaver dirtyStateSaver(this);
+
     if (settings) {
         m_d->settings = settings->clone();
         m_d->settings->setPreset(KisPaintOpPresetWSP(this));
@@ -121,8 +124,6 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
         m_d->settings = 0;
         m_d->settings->setPreset(0);
     }
-    setPresetDirty(saveDirtyPreset);
-
     setValid(m_d->settings);
 }
 
@@ -143,18 +144,49 @@ bool KisPaintOpPreset::load()
         return false;
     }
 
-    QFile file(filename());
+    QIODevice *dev = 0;
+    QByteArray ba;
 
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
+    if (filename().startsWith("bundle://")) {
+        qDebug() << "bundle";
+        QString bn = filename().mid(9);
+        QString fn = bn.mid(bn.indexOf(":") + 1);
+        bn = bn.left(bn.indexOf(":"));
+
+        QScopedPointer<KoStore> resourceStore(KoStore::createStore(bn, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+        if (!resourceStore || resourceStore->bad()) {
+            qWarning() << "Could not open store on bundle" << bn;
+            return false;
+        }
+
+        if (resourceStore->isOpen()) resourceStore->close();
+
+        if (!resourceStore->open(fn)) {
+            qWarning() << "Could not open preset" << fn << "in bundle" << bn;
+            return false;
+        }
+
+        ba = resourceStore->device()->readAll();
+        dev = new QBuffer(&ba);
+
+        qDebug() << "Going to load" << fn << "size" << ba.size();
+
+        resourceStore->close();
+    }
+    else {
+        dev = new QFile(filename());
+
+        if (dev->size() == 0) return false;
+        if (!dev->open(QIODevice::ReadOnly)) {
+            warnKrita << "Can't open file " << filename();
+            delete dev;
+            return false;
+        }
     }
 
-    bool res = loadFromDevice(&file);
-
-
-    this->setPresetDirty(false);
+    bool res = loadFromDevice(dev);
+    setValid(res);
+    setPresetDirty(false);
     return res;
 
 }

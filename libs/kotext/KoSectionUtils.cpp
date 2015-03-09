@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,8 +18,7 @@
  */
 
 #include <KoSectionUtils.h>
-#include <KoSection.h>
-#include <KoSectionEnd.h>
+#include <KoParagraphStyle.h>
 
 bool KoSectionUtils::getNextBlock(QTextCursor &cur)
 {
@@ -38,12 +37,40 @@ bool KoSectionUtils::getNextBlock(QTextCursor &cur)
     return true;
 }
 
-QString KoSectionUtils::sectionStartName(const QVariant &q)
+void KoSectionUtils::setSectionStartings(QTextBlockFormat &fmt, QList<KoSection *> &list)
 {
-    return static_cast<KoSection *>(q.value<void *>())->name();
+    if (list.empty()) {
+        fmt.clearProperty(KoParagraphStyle::SectionStartings);
+    } else {
+        fmt.setProperty(KoParagraphStyle::SectionStartings,
+            QVariant::fromValue< QList<KoSection *> >(list));
+    }
 }
 
-QString KoSectionUtils::sectionEndName(const QVariant &q)
+void KoSectionUtils::setSectionEndings(QTextBlockFormat &fmt, QList<KoSectionEnd *> &list)
 {
-    return static_cast<KoSectionEnd *>(q.value<void *>())->name();
+    if (list.empty()) {
+        fmt.clearProperty(KoParagraphStyle::SectionEndings);
+    } else {
+        fmt.setProperty(KoParagraphStyle::SectionEndings,
+            QVariant::fromValue< QList<KoSectionEnd *> >(list));
+    }
+}
+
+QList<KoSection *> KoSectionUtils::sectionStartings(const QTextBlockFormat &fmt)
+{
+    if (!fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
+        return QList<KoSection *>();
+    } else {
+        return fmt.property(KoParagraphStyle::SectionStartings).value< QList<KoSection *> >();
+    }
+}
+
+QList<KoSectionEnd *> KoSectionUtils::sectionEndings(const QTextBlockFormat &fmt)
+{
+    if (!fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+        return QList<KoSectionEnd *>();
+    } else {
+        return fmt.property(KoParagraphStyle::SectionEndings).value< QList<KoSectionEnd *> >();
+    }
 }

@@ -70,7 +70,7 @@ public:
 
     qreal effectiveZoom() const;
 
-public slots:
+public Q_SLOTS:
 
   /**
    * Sets the zoom. If zoom not yet on the list of zoom values, it will be inserted
@@ -135,12 +135,12 @@ public slots:
      */
     qreal prevZoomLevel() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void triggered( const QString& text );
     void sliderValueChanged(int value);
 
-signals:
+Q_SIGNALS:
 
   /**
    * Signal zoomChanged is triggered when user changes the zoom value, either by
@@ -172,6 +172,49 @@ signals:
     void zoomLevelsChanged(QStringList values);
     void currentZoomLevelChanged(QString valueString);
     void sliderChanged(int value);
+
+public:
+    /**
+     * Return the minimum zoom possible for documents.
+     *
+     * \return The minimum zoom possible.
+     */
+    qreal minimumZoom();
+    /**
+     * Return the maximum zoom possible for documents.
+     *
+     * \return The maximum zoom possible.
+     */
+    qreal maximumZoom();
+    /**
+     * Clamp the zoom value so that mimimumZoom <= zoom <= maximumZoom.
+     *
+     * \param zoom The value to clamp.
+     *
+     * \return minimumZoom if zoom < minimumZoom, maximumZoom if zoom >
+     * maximumZoom, zoom if otherwise.
+     */
+    qreal clampZoom(qreal zoom);
+
+    /**
+     * Set the minimum zoom possible for documents.
+     *
+     * Note that after calling this, any existing KoZoomAction instances
+     * should be recreated.
+     *
+     * \param zoom The minimum zoom to use.
+     */
+    void setMinimumZoom(qreal zoom);
+    /**
+     * Set the maximum zoom possible for documents.
+     *
+     * Note that after calling this, any existing KoZoomAction instances
+     * should be recreated.
+     *
+     * \param zoom The maximum zoom to use.
+     */
+    void setMaximumZoom(qreal zoom);
+
 protected:
     /// Regenerates the action's items
     void regenerateItems( const qreal zoom, bool asCurrent = false );

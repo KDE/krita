@@ -44,7 +44,7 @@ public:
     void add(const QString &id, KisFilterSP item);
 
     KisFilterConfiguration* cloneConfiguration(KisFilterConfiguration*);
-signals:
+Q_SIGNALS:
 
     void filterAdded(QString id);
 

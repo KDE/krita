@@ -1,3 +1,4 @@
+add_subdirectory(tests)
 include_directories( ${OCIO_INCLUDE_DIR})
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
@@ -17,13 +18,13 @@ target_link_libraries(kritalutdocker kritaui ${OCIO_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritalutdocker ${_LIBRARIES})
-endif(HAVE_OPENGL)
+endif()
 
 if(HAVE_OPENGL)
     if(HAVE_GLEW)
         target_link_libraries(kritalutdocker ${GLEW_LIBRARIES})
-    endif(HAVE_GLEW)
-endif(HAVE_OPENGL)
+    endif()
+endif()
 
 
 install(TARGETS kritalutdocker  DESTINATION ${PLUGIN_INSTALL_DIR})

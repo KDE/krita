@@ -27,8 +27,8 @@
 #include "kis_text_tool_option_widget.h"
 #include <KoIcon.h>
 
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class KisToolText : public KisToolRectangleBase
 {
@@ -38,18 +38,19 @@ public:
     KisToolText(KoCanvasBase * canvas);
     virtual ~KisToolText();
 
+
     virtual void beginPrimaryAction(KoPointerEvent *event);
     virtual void continuePrimaryAction(KoPointerEvent *event);
     virtual void endPrimaryAction(KoPointerEvent *event);
 
-    virtual QList< QWidget* > createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     virtual KisPainter::FillStyle fillStyle();
 
 private:
     KConfigGroup configGroup;
 
-private slots:
+private Q_SLOTS:
     void slotActivateTextTool();
     void styleIndexChanged(int index);
     void textTypeIndexChanged(int index);

@@ -97,16 +97,6 @@ void KisSavedCommand::setTimedID(int timedID)
     m_command->setTimedID(timedID);
 }
 
-void KisSavedCommand::undoMergedCommands()
-{
-  m_command->undoMergedCommands();
-}
-
-void KisSavedCommand::redoMergedCommands()
-{
-    m_command->redoMergedCommands();
-}
-
 bool KisSavedCommand::timedMergeWith(KUndo2Command *other)
 {
     return m_command->timedMergeWith(other);

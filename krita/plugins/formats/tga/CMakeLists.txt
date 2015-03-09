@@ -24,4 +24,4 @@ target_link_libraries(kritatgaimport kritaui)
 install(TARGETS kritatgaimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  krita_tga_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( PROGRAMS  krita_tga.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS  krita_tga.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

@@ -27,7 +27,6 @@
 #include <QTransform>
 #include <QList>
 
-class KoCanvasBase;
 class KoToolBase;
 class KoShape;
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>203</width>
-    <height>146</height>
+    <height>157</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,16 @@
      <layout class="QVBoxLayout">
       <item>
        <layout class="QHBoxLayout" name="offsetRowX" stretch="0,1">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -37,6 +46,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="offsetXspinBox">
+          <property name="suffix">
+           <string> px</string>
+          </property>
           <property name="maximum">
            <number>999999999</number>
           </property>
@@ -58,6 +70,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="offsetYspinBox">
+          <property name="suffix">
+           <string> px</string>
+          </property>
           <property name="maximum">
            <number>999999999</number>
           </property>
@@ -88,6 +103,12 @@
      </property>
      <property name="sizeType">
       <enum>QSizePolicy::Minimum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
      </property>
     </spacer>
    </item>

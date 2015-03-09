@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -37,11 +37,11 @@ public:
     int value() const;
     int saturation() const;
     QColor color() const;
-public slots:
+public Q_SLOTS:
     void setHue(int h);
     void setHSV(int h, int s, int v);
     void setQColor(const QColor&);
-signals:
+Q_SIGNALS:
     void colorChanged(const QColor&);
 private:
     void tellColorChanged();

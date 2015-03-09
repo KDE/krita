@@ -143,20 +143,20 @@ void KisPaintLayer::setImage(KisImageWSP image)
     KisLayer::setImage(image);
 }
 
-KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     
     // XXX: get right icons
-    l << KoDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
-    l << KoDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
+    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
     
     return l;
 }
 
-void KisPaintLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
+void KisPaintLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
 {
-    foreach (const KoDocumentSectionModel::Property &property, properties) {
+    foreach (const KisDocumentSectionModel::Property &property, properties) {
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }

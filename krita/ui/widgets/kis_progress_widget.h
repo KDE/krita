@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisProgressWidget : public QWidget, public KisProgressInter
     Q_OBJECT
 
 public:
-    KisProgressWidget(QWidget* parent);
+    KisProgressWidget(QWidget* parent = 0);
     virtual ~KisProgressWidget();
 
 public:
@@ -59,12 +59,12 @@ public:
     void detachUpdater(KoProgressUpdater* updater);
     void attachUpdater(KoProgressUpdater* updater);
 
-public slots:
+public Q_SLOTS:
 
     void cancel();
     void correctVisibility(int progressValue);
 
-signals:
+Q_SIGNALS:
     void sigCancellationRequested();
 
 private:

@@ -21,6 +21,8 @@
 #include "kis_selection_based_layer.h"
 #include <krita_export.h>
 
+#include <QScopedPointer>
+
 class KisFilterConfiguration;
 
 /**
@@ -57,7 +59,7 @@ public:
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     QIcon icon() const;
-    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     /**
      * re-run the generator. This happens over the bounds
@@ -65,11 +67,23 @@ public:
      */
     void update();
 
-public slots:
+    using KisSelectionBasedLayer::setDirty;
+    void setDirty(const QRect & rect);
+    void setX(qint32 x);
+    void setY(qint32 y);
+
+private Q_SLOTS:
+    void slotDelayedStaticUpdate();
+
+public:
     // KisIndirectPaintingSupport
     KisLayer* layer() {
         return this;
     }
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif

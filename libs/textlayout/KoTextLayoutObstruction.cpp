@@ -125,7 +125,7 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
         borderHalfWidth = qMax(qMax(insets.left, insets.top),qMax(insets.right, insets.bottom));
     }
 
-    if (shape->shadow()) {
+    if (shape->shadow() && shape->shadow()->isVisible()) {
         QTransform transform = shape->absoluteTransformation(0);
         bb = transform.mapRect(bb);
         KoInsets insets;

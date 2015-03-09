@@ -130,7 +130,7 @@ public:
         return m_changeRect;
     }
 
-signals:
+Q_SIGNALS:
     void sigContinueUpdate(const QRect& rc);
     void sigDoSomeUsefulWork();
     void sigJobFinished();

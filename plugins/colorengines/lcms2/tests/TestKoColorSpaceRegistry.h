@@ -6,7 +6,7 @@
 class TestKoColorSpaceRegistry : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testConstruction();
     void testRgbU8();
     void testRgbU16();

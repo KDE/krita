@@ -25,9 +25,9 @@ set(kritapsdimport_PART_SRCS
 kde4_add_plugin(kritapsdimport ${kritapsdimport_PART_SRCS})
 if (WIN32)
 	target_link_libraries(kritapsdimport kritaui libkispsd ${WIN32_PLATFORM_NET_LIBS})
-else (WIN32)
+else ()
 	target_link_libraries(kritapsdimport kritaui libkispsd )
-endif (WIN32)
+endif ()
 
 install(TARGETS kritapsdimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -43,12 +43,12 @@ kde4_add_plugin(kritapsdexport ${kritapsdexport_PART_SRCS})
 
 if (WIN32)
     target_link_libraries(kritapsdexport kritaui ${WIN32_PLATFORM_NET_LIBS})
-else (WIN32)	
+else ()	
     target_link_libraries(kritapsdexport kritaui )
-endif (WIN32)	
+endif ()	
 install(TARGETS kritapsdexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES krita_psd_import.desktop 
                krita_psd_export.desktop  
 DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( PROGRAMS  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

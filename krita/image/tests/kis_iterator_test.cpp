@@ -141,7 +141,7 @@ void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
     KisHLineConstIteratorSP cit = dev.createHLineConstIteratorNG(0, 0, 128);
     do {} while (cit->nextPixel());
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
-    QCOMPARE(dev.exactBounds(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.exactBounds(), QRect(QPoint(0, 0), QPoint(-1, -1)));
 
     {
 
@@ -208,7 +208,7 @@ void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
     KisVLineConstIteratorSP cit = dev.createVLineConstIteratorNG(0, 0, 128);
     do {} while (cit->nextPixel());
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
-    QCOMPARE(dev.exactBounds(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.exactBounds(), QRect(QPoint(0, 0), QPoint(-1, -1)));
 
     {
         KisVLineIteratorSP it = dev.createVLineIteratorNG(0, 0, 128);

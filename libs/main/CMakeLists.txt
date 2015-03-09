@@ -1,16 +1,10 @@
 add_subdirectory( tests )
 
-# generate calligraversion.h
-configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h)
-
-# generate calligragitversion.h
-configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h)
-
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
-endif (APPLE)
+endif ()
 
 include_directories( ${KOMAIN_INCLUDES})
 
@@ -18,7 +12,7 @@ include_directories( ${KOMAIN_INCLUDES})
 
 if( QCA2_FOUND )
    add_definitions( -DQCA2 )
-endif( QCA2_FOUND )
+endif()
 
 set(komain_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
@@ -26,23 +20,11 @@ set(komain_LIB_SRCS
     KoDockerManager.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
-    KoDocumentInfo.cpp
-    KoDocumentInfoDlg.cpp
-    KoDocumentInfoPropsPage.cpp
-    KoGlobal.cpp
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
-    KoModeBox.cpp
-    KoModeBoxDocker.cpp
-    KoModeBoxFactory.cpp
-    KoToolBox.cpp
-    KoToolBoxDocker.cpp
-    KoToolBoxFactory.cpp
-    KoToolDocker_p.cpp
     KoVersionDialog.cpp
     KoView.cpp
-    calligraversion.cpp
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp
@@ -84,7 +66,6 @@ set(komain_LIB_SRCS
 
     KoPart.cpp
 
-    thememanager.cpp
 )
 
 if( QT_QTDBUS_FOUND )
@@ -93,17 +74,15 @@ if( QT_QTDBUS_FOUND )
         KoViewAdaptor.cpp
         KoPartAdaptor.cpp
     )
-endif( QT_QTDBUS_FOUND )
+endif()
 
 if (APPLE)
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         MacSupport.mm
     )
-endif (APPLE)
+endif ()
 
 kde4_add_ui_files( komain_LIB_SRCS
-   koDocumentInfoAboutWidget.ui
-   koDocumentInfoAuthorWidget.ui
    config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
@@ -120,11 +99,11 @@ if( KActivities_FOUND )
     include_directories(${KACTIVITIES_INCLUDES})
     target_link_libraries(komain ${KACTIVITIES_LIBRARY})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
-endif( KActivities_FOUND )
+endif()
 
 if (APPLE)
     target_link_libraries(komain ${FOUNDATION_LIBRARY})
-endif (APPLE)
+endif ()
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets )
 
@@ -140,13 +119,15 @@ install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
-endif (APPLE)
+endif ()
 
+# For now, don't install the header files because of the conflict with the komvc
+# library.
+if (FALSE)
 install( FILES
     KoApplication.h
     KoDocument.h
     KoDocumentEntry.h
-    KoDocumentInfo.h
     KoDocumentSectionModel.h
     KoFilter.h
     KoFilterChain.h
@@ -161,17 +142,13 @@ install( FILES
     KoFindMatch.h
     KoFindOption.h
     KoFindOptionSet.h
-    KoGlobal.h
     KoMainWindow.h
     KoPageWidgetItem.h
     MacSupport.h
-    KoModeBoxFactory.h
     KoPart.h
     KoPrintJob.h
     KoVersionDialog.h
     KoView.h
-    ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h
-    ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h
     KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
@@ -181,4 +158,6 @@ if( QT_QTDBUS_FOUND )
         KoApplicationAdaptor.h
         KoViewAdaptor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
-endif( QT_QTDBUS_FOUND )
+endif()
+endif()
+

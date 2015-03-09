@@ -26,6 +26,8 @@
 #include "kis_dynamic_sensor.h"
 #include "kis_global.h"
 #include "kis_curve_option.h"
+#include "kis_signals_blocker.h"
+
 
 inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
 {
@@ -52,7 +54,7 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, bool hid
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 
     connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SIGNAL(sigSettingChanged()));
+    connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateSensorCurveLabels(KisDynamicSensorSP )));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateCurve(KisDynamicSensorSP )));
     connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
@@ -90,17 +92,9 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
 
     m_curveOption->readOptionSetting(setting);
 
-    m_curveOptionWidget->checkBoxUseCurve->blockSignals(true);
     m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
-    m_curveOptionWidget->checkBoxUseCurve->blockSignals(false);
-
-    m_curveOptionWidget->slider->blockSignals(true);
     m_curveOptionWidget->slider->setValue(m_curveOption->value());
-    m_curveOptionWidget->slider->blockSignals(false);
-
-    m_curveOptionWidget->checkBoxUseSameCurve->blockSignals(true);
     m_curveOptionWidget->checkBoxUseSameCurve->setChecked(m_curveOption->isSameCurveUsed());
-    m_curveOptionWidget->checkBoxUseSameCurve->blockSignals(false);
 
     disableWidgets(!m_curveOption->isCurveUsed());
 
@@ -138,7 +132,7 @@ QWidget* KisCurveOptionWidget::curveWidget()
 void KisCurveOptionWidget::transferCurve()
 {
     m_curveOptionWidget->sensorSelector->setCurrentCurve(m_curveOptionWidget->curveWidget->curve(), m_curveOptionWidget->checkBoxUseSameCurve->isChecked());
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
@@ -163,7 +157,7 @@ void KisCurveOptionWidget::updateValues()
     m_curveOption->setValue(m_curveOptionWidget->slider->value());
     m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());
     disableWidgets(!m_curveOptionWidget->checkBoxUseCurve->isChecked());
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 void KisCurveOptionWidget::disableWidgets(bool disable)

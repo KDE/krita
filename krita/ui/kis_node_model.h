@@ -18,7 +18,7 @@
 #ifndef KIS_NODE_MODEL
 #define KIS_NODE_MODEL
 
-#include <KoDocumentSectionModel.h>
+#include <KisDocumentSectionModel.h>
 #include "krita_export.h"
 #include <kis_types.h>
 
@@ -36,7 +36,7 @@ class KisShapeController;
  * The node model shows an inverse view on the layer tree: we want the
  * first layer to show up at the bottom.
  */
-class KRITAUI_EXPORT KisNodeModel : public KoDocumentSectionModel
+class KRITAUI_EXPORT KisNodeModel : public KisDocumentSectionModel
 {
 
     Q_OBJECT
@@ -52,7 +52,7 @@ public: // from QAbstractItemModel
 
     bool showGlobalSelection() const;
 
-public slots:
+public Q_SLOTS:
     void setShowGlobalSelection(bool value);
 
 public:
@@ -70,7 +70,7 @@ public:
     Qt::DropActions supportedDragActions() const;
     Qt::DropActions supportedDropActions() const;
 
-signals:
+Q_SIGNALS:
 
     void nodeActivated(KisNodeSP);
     void toggleIsolateActiveNode();
@@ -78,7 +78,7 @@ signals:
     void requestAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void requestMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
-private slots:
+private Q_SLOTS:
     void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType);
     void slotEndInsertDummy(KisNodeDummy *dummy);
     void slotBeginRemoveDummy(KisNodeDummy *dummy);

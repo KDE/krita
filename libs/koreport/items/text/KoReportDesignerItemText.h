@@ -48,8 +48,8 @@ protected:
 private:
     QRect getTextRect() const;
     void init(QGraphicsScene*, KoReportDesigner*);
-
-private slots:
+    
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 

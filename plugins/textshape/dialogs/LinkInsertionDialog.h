@@ -36,10 +36,10 @@ public :
     explicit LinkInsertionDialog(KoTextEditor *editor, QWidget *parent = 0);
     virtual ~LinkInsertionDialog();
 
-private slots:
+private Q_SLOTS:
     void insertLink();
 
-public slots:
+public Q_SLOTS:
 
     void fetchTitleFromURL();
     void replyFinished();

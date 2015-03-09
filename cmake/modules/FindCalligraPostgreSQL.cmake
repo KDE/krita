@@ -83,7 +83,7 @@ set(PostgreSQL_ROOT_DIR_MESSAGE "Set the PostgreSQL_ROOT system variable to wher
 
 
 set(PostgreSQL_KNOWN_VERSIONS ${PostgreSQL_ADDITIONAL_VERSIONS}
-    "9.3" "9.2" "9.1" "9.0" "8.4" "8.3" "8.2" "8.1" "8.0")
+    "9.5" "9.4" "9.3" "9.2" "9.1" "9.0" "8.4" "8.3" "8.2" "8.1" "8.0")
 
 # Define additional search paths for root directories.
 foreach (suffix ${PostgreSQL_KNOWN_VERSIONS} )
@@ -112,7 +112,7 @@ find_path(PostgreSQL_INCLUDE_DIR
     postgresql
     include
   # Help the user find it if we cannot.
-  DOC "The ${PostgreSQL_INCLUDE_DIR_MESSAGE}"
+  DOC "${PostgreSQL_INCLUDE_DIR_MESSAGE}"
 )
 
 find_path(PostgreSQL_TYPE_INCLUDE_DIR
@@ -126,7 +126,7 @@ find_path(PostgreSQL_TYPE_INCLUDE_DIR
     postgresql/server
     include/server
   # Help the user find it if we cannot.
-  DOC "The ${PostgreSQL_INCLUDE_DIR_MESSAGE}"
+  DOC "${PostgreSQL_INCLUDE_DIR_MESSAGE}"
 )
 
 # The PostgreSQL library.
@@ -144,6 +144,8 @@ find_library( PostgreSQL_LIBRARY
    ${PostgreSQL_ROOT_DIRECTORIES}
  PATH_SUFFIXES
    lib
+ # Help the user find it if we cannot.
+ DOC "${PostgreSQL_LIBRARY_DIR_MESSAGE}"
 )
 get_filename_component(PostgreSQL_LIBRARY_DIR ${PostgreSQL_LIBRARY} PATH)
 

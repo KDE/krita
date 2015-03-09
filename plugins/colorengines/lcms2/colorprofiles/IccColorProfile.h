@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,6 +21,7 @@
 #define _KO_ICC_COLOR_PROFILE_H_
 
 #include "KoColorProfile.h"
+#include "KoChannelInfo.h"
 
 class LcmsColorProfileContainer;
 
@@ -47,7 +48,7 @@ public:
         void setRawData(const QByteArray &);
     private:
         struct Private;
-        Private* const d;
+        QScopedPointer<Private> const d;
     };
     /**
      * This class should be used to wrap the ICC profile
@@ -66,7 +67,6 @@ public:
         virtual bool isSuitableForPrinting() const = 0;
         virtual bool isSuitableForDisplay() const = 0;
     };
-public:
 public:
 
     explicit IccColorProfile(const QString &fileName = QString());
@@ -89,15 +89,26 @@ public:
     virtual bool isSuitableForDisplay() const;
     virtual bool operator==(const KoColorProfile&) const;
     virtual QString type() const { return "icc"; }
+
+    /**
+     * Returns the set of min/maxes for each channel in this profile.
+     * These (sometimes approximate) min and maxes are suitable
+     * for UI building.
+     * Furthermore, then only apply to the floating point uses of this profile,
+     * and not the integer variants.
+     */
+    const QVector<KoChannelInfo::DoubleRange> & GetFloatUIMinMax(void) const;
+
 protected:
     void setRawData(const QByteArray& rawData);
 public:
     LcmsColorProfileContainer* asLcms() const;
 protected:
     virtual bool init();
+    void CalculateFloatUIMinMax(void);
 private:
     struct Private;
-    Private* const d;
+    QScopedPointer<Private> d;
 };
 
 #endif

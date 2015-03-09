@@ -44,6 +44,9 @@ public:
     QString label;
     QString category;
     QWidget * configurationPage;
+
+    bool updatesBlocked;
+    bool isWritingSettings;
 };
 
 KisPaintOpOption::KisPaintOpOption(const QString & label, const QString& category, bool checked)
@@ -55,12 +58,37 @@ KisPaintOpOption::KisPaintOpOption(const QString & label, const QString& categor
     m_d->label = label;
     m_d->category = category;
     m_d->configurationPage = 0;
+    m_d->updatesBlocked = false;
+    m_d->isWritingSettings = false;
 
 }
 
 KisPaintOpOption::~KisPaintOpOption()
 {
     delete m_d;
+}
+
+void KisPaintOpOption::emitSettingChanged()
+{
+    KIS_ASSERT_RECOVER_RETURN(!m_d->isWritingSettings);
+
+    if (!m_d->updatesBlocked) {
+        emit sigSettingChanged();
+    }
+}
+
+void KisPaintOpOption::startReadOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    m_d->updatesBlocked = true;
+    readOptionSetting(setting);
+    m_d->updatesBlocked = false;
+}
+
+void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    m_d->isWritingSettings = true;
+    writeOptionSetting(setting);
+    m_d->isWritingSettings = false;
 }
 
 QString KisPaintOpOption::label() const
@@ -81,12 +109,17 @@ bool KisPaintOpOption::isChecked() const
 void KisPaintOpOption::setChecked(bool checked)
 {
     m_d->checked = checked;
-    emit sigSettingChanged();
+    emitSettingChanged();
 }
 
 void KisPaintOpOption::setImage(KisImageWSP image)
 {
     Q_UNUSED(image);
+}
+
+void KisPaintOpOption::setNode(KisNodeWSP node)
+{
+    Q_UNUSED(node);
 }
 
 void KisPaintOpOption::setConfigurationPage(QWidget * page)

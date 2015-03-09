@@ -44,12 +44,12 @@
 #include <kis_debug.h>
 #include <kmenu.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 
 #include <KoIcon.h>
-#include <KoDocumentSectionView.h>
+#include <KisDocumentSectionView.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
+#include <KisDocument.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -64,23 +64,25 @@
 #include "kis_action_manager.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
 #include "canvas/kis_canvas2.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_shape_controller.h"
 #include "kis_selection_mask.h"
 #include "kis_config.h"
-
+#include "KisView.h"
 
 #include "ui_wdglayerbox.h"
 
 class ButtonAction : public KisAction
 {
 public:
-    ButtonAction(QAbstractButton* button, const KIcon& icon, const QString& text, QObject* parent) : KisAction(icon, text, parent) , m_button(button)
+    ButtonAction(QAbstractButton* button, const KIcon& icon, const QString& text, QObject* parent)
+        : KisAction(icon, text, parent)
+        , m_button(button)
     {
         connect(m_button, SIGNAL(clicked()), this, SLOT(trigger()));
     }
@@ -98,10 +100,10 @@ private:
     QAbstractButton* m_button;
 };
 
-inline void KisLayerBox::connectActionToButton(QAbstractButton *button, const QString &id)
+inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id)
 {
-    Q_ASSERT(m_canvas);
-    KisAction *action = m_canvas->view()->actionManager()->actionByName(id);
+    Q_ASSERT(view);
+    KisAction *action = view->actionManager()->actionByName(id);
 
     connect(button, SIGNAL(clicked()), action, SLOT(trigger()));
     connect(action, SIGNAL(sigEnableSlaves(bool)), button, SLOT(setEnabled(bool)));
@@ -110,7 +112,7 @@ inline void KisLayerBox::connectActionToButton(QAbstractButton *button, const QS
 inline void KisLayerBox::addActionToMenu(QMenu *menu, const QString &id)
 {
     Q_ASSERT(m_canvas);
-    menu->addAction(m_canvas->view()->actionManager()->actionByName(id));
+    menu->addAction(m_canvas->viewManager()->actionManager()->actionByName(id));
 }
 
 KisLayerBox::KisLayerBox()
@@ -122,7 +124,7 @@ KisLayerBox::KisLayerBox()
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
-    m_delayTimer.setSingleShot(true);
+    m_opacityDelayTimer.setSingleShot(true);
 
     m_wdgLayerBox->setupUi(mainWidget);
 
@@ -224,13 +226,13 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->doubleOpacity->setSuffix("%");
 
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
-    connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
+    connect(&m_opacityDelayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
     m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
     m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_selectOpaque->setObjectName(""); // no name to avoid addition to the action collection
+    m_selectOpaque->setObjectName("select_opaque");
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
     m_actions.append(m_selectOpaque);
 
@@ -271,7 +273,7 @@ KisLayerBox::~KisLayerBox()
 }
 
 
-void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, KoDocumentSectionView *sectionView)
+void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, KisDocumentSectionView *sectionView)
 {
     if (!root) return;
     if (nodeModel.isNull()) return;
@@ -295,9 +297,24 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, Ko
     sectionView->blockSignals(false);
 }
 
+void KisLayerBox::setMainWindow(KisViewManager* kisview)
+{
+    m_nodeManager = kisview->nodeManager();
+
+
+    foreach(KisAction *action, m_actions) {
+        kisview->actionManager()->
+            addAction(action->objectName(),
+                      action);
+    }
+
+    connectActionToButton(kisview, m_wdgLayerBox->bnAdd, "add_new_paint_layer");
+    connectActionToButton(kisview, m_wdgLayerBox->bnDuplicate, "duplicatelayer");
+}
+
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
-
+    setEnabled(canvas != 0);
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_nodeModel->setDummiesFacade(0, 0, 0);
@@ -311,11 +328,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
     if (m_canvas) {
-        m_image = m_canvas->view()->image();
+        m_image = m_canvas->image();
 
-        m_nodeManager = m_canvas->view()->nodeManager();
+        connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(updateThumbnail()));
 
-        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(m_canvas->view()->document()->shapeController());
+        KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
+        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
         KisDummiesFacadeBase *kritaDummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
         m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController);
 
@@ -323,7 +341,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));
 
         // cold start
-        setCurrentNode(m_nodeManager->activeNode());
+        if (m_nodeManager) {
+            setCurrentNode(m_nodeManager->activeNode());
+        }
+        else {
+            setCurrentNode(m_canvas->imageView()->currentNode());
+        }
 
         // Connection KisNodeManager -> KisLayerBox
         connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
@@ -346,16 +369,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollToBottom();
 
-        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
-        foreach(KisAction *action, m_actions) {
-            m_canvas->view()->actionManager()->
-                addAction(action->objectName(),
-                          action,
-                          actionCollection);
-        }
 
-        connectActionToButton(m_wdgLayerBox->bnAdd, "add_new_paint_layer");
-        connectActionToButton(m_wdgLayerBox->bnDuplicate, "duplicatelayer");
 
         addActionToMenu(m_newLayerMenu, "add_new_paint_layer");
         addActionToMenu(m_newLayerMenu, "add_new_group_layer");
@@ -376,19 +390,18 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
 void KisLayerBox::unsetCanvas()
 {
+    setEnabled(false);
     if (m_canvas) {
-        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
-        foreach(KisAction *action, m_actions) {
-            m_canvas->view()->actionManager()->takeAction(action, actionCollection);
-        }
         m_newLayerMenu->clear();
     }
     setCanvas(0);
+    m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
 }
 
 void KisLayerBox::notifyImageDeleted()
 {
     setCanvas(0);
+    m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
 }
 
 void KisLayerBox::updateUI()
@@ -398,14 +411,14 @@ void KisLayerBox::updateUI()
 
     KisNodeSP activeNode = m_nodeManager->activeNode();
 
-    m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable() && (activeNode->nextSibling()
+    m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->nextSibling()
                                        || (activeNode->parent() && activeNode->parent() != m_image->root())));
-    m_wdgLayerBox->bnLower->setEnabled(activeNode && activeNode->isEditable() && (activeNode->prevSibling()
+    m_wdgLayerBox->bnLower->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->prevSibling()
                                        || (activeNode->parent() && activeNode->parent() != m_image->root())));
 
-    m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable());
+    m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable(false));
 
-    m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable());
+    m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable(false));
 
     if (activeNode) {
         if (m_nodeManager->activePaintDevice()) {
@@ -482,6 +495,8 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(m_removeAction);
 
         addActionToMenu(&menu, "duplicatelayer");
+        addActionToMenu(&menu, "flatten_image");
+        addActionToMenu(&menu, "flatten_layer");
 
         // TODO: missing icon "edit-merge"
         QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
@@ -520,17 +535,17 @@ void KisLayerBox::slotMergeLayer()
 
 void KisLayerBox::slotMinimalView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KoDocumentSectionView::MinimalMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KisDocumentSectionView::MinimalMode);
 }
 
 void KisLayerBox::slotDetailedView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KoDocumentSectionView::DetailedMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KisDocumentSectionView::DetailedMode);
 }
 
 void KisLayerBox::slotThumbnailView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KisDocumentSectionView::ThumbnailMode);
 }
 
 void KisLayerBox::slotRmClicked()
@@ -640,7 +655,7 @@ void KisLayerBox::slotOpacityChanged()
 void KisLayerBox::slotOpacitySliderMoved(qreal opacity)
 {
     m_newOpacity = opacity;
-    m_delayTimer.start(200);
+    m_opacityDelayTimer.start(200);
 }
 
 void KisLayerBox::slotCollapsed(const QModelIndex &index)
@@ -662,7 +677,7 @@ void KisLayerBox::slotExpanded(const QModelIndex &index)
 void KisLayerBox::slotSelectOpaque()
 {
     if (!m_canvas) return;
-    QAction *action = m_canvas->view()->actionManager()->actionByName("selectopaque");
+    QAction *action = m_canvas->viewManager()->actionManager()->actionByName("selectopaque");
     if (action) {
         action->trigger();
     }
@@ -760,6 +775,11 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
 
     m_nodeManager->setSelectedNodes(selectedNodes);
     updateUI();
+}
+
+void KisLayerBox::updateThumbnail()
+{
+    m_wdgLayerBox->listLayers->updateNode(m_wdgLayerBox->listLayers->currentIndex());
 }
 
 #include "kis_layer_box.moc"

@@ -33,6 +33,8 @@
 #include <kis_undo_adapter.h>
 #include "kis_node_graph_listener.h"
 #include "kis_iterator_ng.h"
+#include "kis_image.h"
+
 
 #ifndef FILES_DATA_DIR
 #define FILES_DATA_DIR "."
@@ -55,7 +57,7 @@ inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
 
     KisNodeSP child = root->firstChild();
     while (child) {
-        if(root = findNode(child, name)) return root;
+        if((root = findNode(child, name))) return root;
         child = child->nextSibling();
     }
 
@@ -294,14 +296,15 @@ inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPain
 #ifdef FILES_OUTPUT_DIR
 
 inline bool checkQImageImpl(bool externalTest,
-                            const QImage &image, const QString &testName,
+                            const QImage &srcImage, const QString &testName,
                             const QString &prefix, const QString &name,
                             int fuzzy, int fuzzyAlpha, int maxNumFailingPixels)
 {
+    QImage image = srcImage.convertToFormat(QImage::Format_ARGB32);
+
     if (fuzzyAlpha == -1) {
         fuzzyAlpha = fuzzy;
     }
-
 
     QString filename(prefix + "_" + name + ".png");
     QString dumpName(prefix + "_" + name + "_expected.png");
@@ -385,6 +388,45 @@ inline bool checkQImageExternal(const QImage &image, const QString &testName,
                            prefix, name,
                            fuzzy, fuzzyAlpha, maxNumFailingPixels);
 }
+
+struct ExternalImageChecker
+{
+    ExternalImageChecker(const QString &prefix, const QString &testName)
+        : m_prefix(prefix),
+          m_testName(testName),
+          m_success(true)
+        {
+        }
+
+    bool testPassed() const {
+        return m_success;
+    }
+
+    inline bool checkDevice(KisPaintDeviceSP device, KisImageSP image, const QString &caseName) {
+        bool result =
+            checkQImageExternal(device->convertToQImage(0, image->bounds()),
+                                m_testName,
+                                m_prefix,
+                                caseName, 1, 1, 100);
+
+        m_success &= result;
+        return result;
+    }
+
+    inline bool checkImage(KisImageSP image, const QString &testName) {
+        bool result = checkDevice(image->projection(), image, testName);
+
+        m_success &= result;
+        return result;
+    }
+
+private:
+    QString m_prefix;
+    QString m_testName;
+
+    bool m_success;
+};
+
 
 #endif
 

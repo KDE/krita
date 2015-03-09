@@ -32,7 +32,6 @@ class BasicElement;
 class QString;
 class QPainter;
 class QPointF;
-class QRectF;
 
 enum CursorDirection {
     MoveRight,

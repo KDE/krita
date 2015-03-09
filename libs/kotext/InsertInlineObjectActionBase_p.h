@@ -35,7 +35,7 @@ public:
     InsertInlineObjectActionBase(KoCanvasBase *canvas, const QString &name);
     virtual ~InsertInlineObjectActionBase();
 
-private slots:
+private Q_SLOTS:
     void activated();
 
 protected:

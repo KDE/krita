@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOODTFRAMESREPORTDOCUMENT_H
-#define KOODTFRAMESREPORTDOCUMENT_H
+#ifndef KOODTFRAMEREPORTDOCUMENT_H
+#define KOODTFRAMEREPORTDOCUMENT_H
 
 #include "reportpageoptions.h"
 
@@ -37,11 +37,11 @@ class KoGenStyles;
 
 class OROSection;
 
-class KoOdtFramesReportDocument
+class KoOdtFrameReportDocument
 {
 public:
-    KoOdtFramesReportDocument();
-    ~KoOdtFramesReportDocument();
+    KoOdtFrameReportDocument();
+    ~KoOdtFrameReportDocument();
 
     void startTable(OROSection *section);
     void addPrimitive(KoOdtFrameReportPrimitive *data);

@@ -251,7 +251,7 @@ void OcioDisplayFilter::updateProcessor()
          * created before the openGL canvas. This might happen when
          * switching from QPainter to openGL canvas for the first time.
          */
-        KisOpenGL::initialMakeContextCurrent();
+        KisOpenGL::makeSharedContextCurrent();
     }
 
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();

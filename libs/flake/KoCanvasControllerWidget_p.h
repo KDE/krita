@@ -57,7 +57,6 @@ public:
     Private(KoCanvasControllerWidget *qq)
         : q(qq)
         , canvas(0)
-        , lastActivatedCanvas(0)
         , ignoreScrollSignals(false)
         , zoomWithWheel(false)
         , vastScrollingFactor(0)
@@ -77,7 +76,6 @@ public:
 
     KoCanvasControllerWidget *q;
     KoCanvasBase *canvas;
-    KoCanvasBase *lastActivatedCanvas;
     Viewport *viewportWidget;
     bool ignoreScrollSignals;
     bool zoomWithWheel;

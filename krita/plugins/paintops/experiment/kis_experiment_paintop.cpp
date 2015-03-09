@@ -32,10 +32,12 @@
 #include <krita_utils.h>
 
 
-KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
+    Q_UNUSED(node);
+
     m_firstRun = true;
 
     m_experimentOption.readOptionSetting(settings);

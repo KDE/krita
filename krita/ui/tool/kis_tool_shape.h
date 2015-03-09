@@ -21,8 +21,8 @@
 
 
 #include <krita_export.h>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include "kis_tool_paint.h"
 #include "kis_painter.h"
@@ -33,7 +33,6 @@
 class KoCanvasBase;
 class KoPathShape;
 
-class QGridLayout;
 
 class WdgGeometryOptions : public QWidget, public Ui::WdgGeometryOptions
 {
@@ -59,7 +58,7 @@ public:
     virtual int flags() const;
     WdgGeometryOptions *m_shapeOptionsWidget;
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void outlineSettingChanged(int value);
     virtual void fillSettingChanged(int value);

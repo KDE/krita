@@ -52,7 +52,7 @@ public:
     /// @return a list of QString containing all bookmark names
     QList<QString> bookmarkNameList() const;
 
-public slots:
+public Q_SLOTS:
     /**
      * Insert a new bookmark to this manager. The name of the bookmark
      * will be set to @param name, no matter what name has been set on

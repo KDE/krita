@@ -33,7 +33,6 @@
 #include "krita_export.h"
 
 class QWidget;
-class QGLFramebufferObject;
 class QPaintEvent;
 class KisCanvas2;
 
@@ -56,7 +55,7 @@ public:
 
     virtual ~KisOpenGLCanvas2();
 
-    void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    void setDisplayFilter(KisDisplayFilter* displayFilter);
     void setWrapAroundViewingMode(bool value);
 
 public: // QWidget
@@ -75,7 +74,7 @@ public:
 
 
 
-private slots:
+private Q_SLOTS:
     void slotConfigChanged();
 
 
@@ -93,6 +92,9 @@ public:
 
 protected: // KisCanvasWidgetBase
     virtual bool callFocusNextPrevChild(bool next);
+
+private:
+    void reportShaderLinkFailedAndExit(bool result, const QString &context, const QString &log);
 
 private:
 

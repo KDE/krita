@@ -38,7 +38,7 @@ class KRITAUI_EXPORT KisInputProfileManager : public QObject
 public:
     KisInputProfileManager(QObject *parent = 0);
     ~KisInputProfileManager();
-    Q_DISABLE_COPY(KisInputProfileManager);
+    Q_DISABLE_COPY(KisInputProfileManager)
 
     /**
      * Retrieve a profile by name.

@@ -459,7 +459,7 @@ void kis_x11_init_tablet()
     }
 }
 
-void fetchWacomToolId(qint64 &serialId, QTabletDeviceData *tablet)
+void fetchWacomToolId(qint64 &serialId, qint64 &deviceId, QTabletDeviceData *tablet)
 {
     XDevice *dev = static_cast<XDevice*>(tablet->device);
     Atom prop = None, type;
@@ -483,7 +483,8 @@ void fetchWacomToolId(qint64 &serialId, QTabletDeviceData *tablet)
     }
 
     long *l = (long*)data;
-    serialId = l[3];
+    serialId = l[3]; // serial id of the stylus in proximity
+    deviceId = l[4]; // device if of the stylus in proximity
 }
 
 static Qt::MouseButtons translateMouseButtons(int s)
@@ -504,6 +505,55 @@ static Qt::MouseButton translateMouseButton(int b)
         b == Button2 ? Qt::MidButton :
         b == Button3 ? Qt::RightButton :
         Qt::LeftButton /* fallback */;
+}
+
+QTabletEvent::TabletDevice parseWacomDeviceId(quint32 deviceId)
+{
+    enum {
+        CSR_TYPE_SPECIFIC_MASK = 0x0F06,
+        CSR_TYPE_SPECIFIC_STYLUS_BITS = 0x0802,
+        CSR_TYPE_SPECIFIC_AIRBRUSH_BITS = 0x0902,
+        CSR_TYPE_SPECIFIC_4DMOUSE_BITS = 0x0004,
+        CSR_TYPE_SPECIFIC_LENSCURSOR_BITS = 0x0006,
+        CSR_TYPE_SPECIFIC_ROTATIONSTYLUS_BITS = 0x0804
+    };
+
+    QTabletEvent::TabletDevice device;
+
+    if ((((deviceId & 0x0006) == 0x0002) &&
+         ((deviceId & CSR_TYPE_SPECIFIC_MASK) != CSR_TYPE_SPECIFIC_AIRBRUSH_BITS)) || // Bamboo
+        deviceId == 0x4020) { // Surface Pro 2 tablet device
+
+        device = QTabletEvent::Stylus;
+    } else {
+        switch (deviceId & CSR_TYPE_SPECIFIC_MASK) {
+        case CSR_TYPE_SPECIFIC_STYLUS_BITS:
+            device = QTabletEvent::Stylus;
+            break;
+        case CSR_TYPE_SPECIFIC_AIRBRUSH_BITS:
+            device = QTabletEvent::Airbrush;
+            break;
+        case CSR_TYPE_SPECIFIC_4DMOUSE_BITS:
+            device = QTabletEvent::FourDMouse;
+            break;
+        case CSR_TYPE_SPECIFIC_LENSCURSOR_BITS:
+            device = QTabletEvent::Puck;
+            break;
+        case CSR_TYPE_SPECIFIC_ROTATIONSTYLUS_BITS:
+            device = QTabletEvent::RotationStylus;
+            break;
+        default:
+            if (deviceId != 0) {
+                qWarning() << "Unrecognized stylus device found! Falling back to usual \'Stylus\' definition";
+                qWarning() << ppVar(deviceId);
+                qWarning() << ppVar((deviceId & CSR_TYPE_SPECIFIC_MASK));
+            }
+
+            device = QTabletEvent::Stylus;
+        }
+    }
+
+    return device;
 }
 
 bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *defaultWidget)
@@ -567,7 +617,8 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
                "but we don't handle it here, so this is a bug");
     }
 
-    qint64 uid = 0;
+    qint64 wacomSerialId = 0;
+    qint64 wacomDeviceId = 0;
 #if defined (Q_OS_IRIX)
 #else
     // We've been passed in data for a tablet device that handles this type
@@ -597,7 +648,11 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
      */
     if (tablet->isTouchWacomTablet) return false;
 
-    fetchWacomToolId(uid, tablet);
+    fetchWacomToolId(wacomSerialId, wacomDeviceId, tablet);
+
+    if (wacomDeviceId && deviceType == QTabletEvent::Stylus) {
+        deviceType = parseWacomDeviceId(wacomDeviceId);
+    }
 
     QRect screenArea = qApp->desktop()->rect();
 
@@ -627,13 +682,17 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     xTilt = tablet->savedAxesData.xTilt();
     yTilt = tablet->savedAxesData.yTilt();
 
-    rotation = std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
-                         (tablet->maxRotation - tablet->minRotation) + 0.5, 1.0) * 360.0;
 
     if (deviceType == QTabletEvent::Airbrush) {
-        tangentialPressure = rotation;
-        rotation = 0.;
+        tangentialPressure =
+            std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+                      (tablet->maxRotation - tablet->minRotation) , 2.0);
+    } else {
+        rotation =
+            std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+                      (tablet->maxRotation - tablet->minRotation) + 0.5, 1.0) * 360.0;
     }
+
 #endif
 
     if (tablet->widgetToGetPress) {
@@ -666,7 +725,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     KisTabletEvent e(t, curr, global, hiRes,
                      deviceType, pointerType,
                      qreal(pressure / qreal(tablet->maxPressure - tablet->minPressure)),
-                     xTilt, yTilt, tangentialPressure, rotation, z, modifiers, uid,
+                     xTilt, yTilt, tangentialPressure, rotation, z, modifiers, wacomSerialId,
                      qtbutton, qtbuttons);
 
     e.ignore();

@@ -23,7 +23,7 @@
 #include <QUuid>
 #include <QString>
 
-#include "KoDocumentSectionModel.h"
+#include "KisDocumentSectionModel.h"
 
 #include "kis_shared.h"
 #include "kis_paint_device.h"
@@ -187,12 +187,12 @@ public:
      * KisLayer defines  opacity = 2, compositeOp = 3
      * KisMask defines active = 2 (KisMask does not inherit kislayer)
      */
-    virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    virtual KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     /**
      * Change the section model properties.
      */
-    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
+    virtual void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
 
     /**
      * Return all the properties of this layer as a KoProperties-based
@@ -318,11 +318,12 @@ public:
     virtual void setSystemLocked(bool l, bool update = true);
 
     /**
-     * @return true if the node can be edited: if it's visible and neither locked
-     *         by the user nor by the system.
-     *         It's equivalent to ( visible() and not userLocked() and not systemLocked() ).
+     * @return true if the node can be edited:
+     *
+     * if checkVisibility is true, then the node is only editable if it is visible and not locked.
+     * if checkVisibility is false, then the node is editable if it's not locked.
      */
-    bool isEditable() const;
+    bool isEditable(bool checkVisibility = true) const;
 
     /**
      * @return true if the node is editable and has a paintDevice()
@@ -414,7 +415,7 @@ protected:
     virtual void baseNodeChangedCallback() {
     }
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted when the visibility of the layer is changed with \ref setVisible.

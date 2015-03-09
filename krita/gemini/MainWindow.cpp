@@ -33,7 +33,6 @@
 #include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
-#include <QMessageBox>
 #include <QToolButton>
 #include <QFileInfo>
 #include <QGLWidget>
@@ -42,20 +41,20 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>
 #include <kdialog.h>
 
 #include <KoCanvasBase.h>
-#include <KoMainWindow.h>
+#include <KisMainWindow.h>
 #include <KoGlobal.h>
 #include <KoDocumentInfo.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 #include <KoFileDialog.h>
-#include <KoDocumentEntry.h>
-#include <KoFilterManager.h>
+#include <KisDocumentEntry.h>
+#include <KisImportExportManager.h>
 #include <KoToolManager.h>
 #include <KoIcon.h>
 
@@ -68,15 +67,14 @@
 #include <KoPattern.h>
 #include <kis_config.h>
 #include <kis_factory2.h>
-#include <kis_doc2.h>
-#include <kis_view2.h>
+#include <KisDocument.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_canvas_controller.h>
 
 #include "sketch/SketchDeclarativeView.h"
 #include "sketch/RecentFileManager.h"
 #include "sketch/DocumentManager.h"
-#include "sketch/KisSketchPart.h"
 #include "sketch/QmlGlobalEngine.h"
 #include "sketch/Settings.h"
 
@@ -123,15 +121,15 @@ public:
     MainWindow* q;
     bool allowClose;
     SketchDeclarativeView* sketchView;
-    KoMainWindow* desktopView;
+    KisMainWindow* desktopView;
     QObject* currentView;
     enumCursorStyle desktopCursorStyle;
 
     bool slateMode;
     bool docked;
     QString currentSketchPage;
-    KisView2* sketchKisView;
-    KisView2* desktopKisView;
+    KisViewManager* sketchKisView;
+    KisViewManager* desktopKisView;
     DesktopViewProxy* desktopViewProxy;
 
     bool forceFullScreen;
@@ -175,7 +173,7 @@ public:
 
         Q_ASSERT(QFile::exists(mainqml));
         if (!QFile::exists(mainqml)) {
-            QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
+            QMessageBox::warning(0, i18nc("@title:window", "Krita: No QML Found"), i18n("%1 doesn't exist.", mainqml));
         }
         QFileInfo fi(mainqml);
 
@@ -212,7 +210,7 @@ public:
             group.writeEntry("Theme", "Krita-dark");
         }
 
-        desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
+        desktopView = new KisMainWindow(KIS_MIME_TYPE, KisFactory::componentData());
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);
@@ -292,7 +290,7 @@ void MainWindow::resetWindowTitle()
         fileName = i18n("Untitled");
 
     KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
-    KisDoc2* document = DocumentManager::instance()->document();
+    KisDocument* document = DocumentManager::instance()->document();
     if (document && document->isModified() ) {
         flags |= KDialog::ModifiedCaption;
     }
@@ -323,12 +321,12 @@ void MainWindow::switchToSketch()
     }
 
     d->syncObject = new ViewModeSynchronisationObject;
-    KisView2* view = 0;
+    KisViewManager* view = 0;
 
     KisConfig cfg;
     if (d->desktopView && centralWidget() == d->desktopView) {
         d->desktopCursorStyle = cfg.cursorStyle();
-        view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
 
         //Notify the view we are switching away from that we are about to switch away from it
         //giving it the possibility to set up the synchronisation object.
@@ -366,7 +364,7 @@ void MainWindow::sketchChange()
             return;
         }
         qApp->processEvents();
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        KisViewManager* view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, d->syncObject);
@@ -391,9 +389,9 @@ void MainWindow::switchToDesktop(bool justLoaded)
 
     ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
 
-    KisView2* view = 0;
+    KisViewManager* view = 0;
     if (d->desktopView) {
-        view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
     }
 
     //Notify the view we are switching away from that we are about to switch away from it
@@ -436,7 +434,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
     if (d->desktopView && centralWidget() == d->desktopView) {
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        KisViewManager* view = qobject_cast<KisViewManager*>(d->desktopView->rootView());
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
         view->canvasControllerWidget()->setFocus();
@@ -472,7 +470,7 @@ void MainWindow::documentChanged()
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
-    d->desktopKisView = qobject_cast<KisView2*>(d->desktopView->rootView());
+    d->desktopKisView = qobject_cast<KisViewManager*>(d->desktopView->rootView());
     d->desktopKisView->setQtMainWindow(d->desktopView);
 
     // Define new actions here
@@ -550,9 +548,9 @@ QString MainWindow::openImage()
     dialog.setCaption(i18n("Open Document"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
 
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType("application/x-krita");
+    KisDocumentEntry entry = KisDocumentEntry::queryByMimeType("application/x-krita");
     KService::Ptr service = entry.service();
-    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
 
     dialog.setHideNameFilterDetailsOption();
     return dialog.url();
@@ -599,7 +597,7 @@ void MainWindow::setSketchKisView(QObject* newView)
     }
     if (d->sketchKisView != newView)
     {
-        d->sketchKisView = qobject_cast<KisView2*>(newView);
+        d->sketchKisView = qobject_cast<KisViewManager*>(newView);
         if(d->sketchKisView) {
             d->sketchView->addActions(d->sketchKisView->actions());
             d->sketchKisView->setQtMainWindow(this);
@@ -653,14 +651,13 @@ bool MainWindow::Private::queryClose()
         if (name.isEmpty())
             name = i18n("Untitled");
 
-        int res = KMessageBox::warningYesNoCancel(q,
+        int res = QMessageBox::warning(q,
+                                        i18nc("@title:window", "Krita"),
                   i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                  QString(),
-                  KStandardGuiItem::save(),
-                  KStandardGuiItem::discard());
+                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
         switch (res) {
-        case KMessageBox::Yes : {
+        case QMessageBox::Yes : {
             if (DocumentManager::instance()->isTemporaryFile()) {
                 if(!desktopViewProxy->fileSaveAs())
                     return false;
@@ -670,11 +667,11 @@ bool MainWindow::Private::queryClose()
             }
             break;
         }
-        case KMessageBox::No :
+        case QMessageBox::No :
             DocumentManager::instance()->document()->removeAutoSaveFiles();
             DocumentManager::instance()->document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
-        default : // case KMessageBox::Cancel :
+        default : // case QMessageBox::Cancel :
             return false;
         }
     }

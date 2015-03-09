@@ -36,7 +36,6 @@ class KoGenStyles;
 class KoStyleStack;
 
 class KoOdfStylesReader;
-class KoOdfLoadingContext;
 
 namespace KoOdfGraphicStyles
 {

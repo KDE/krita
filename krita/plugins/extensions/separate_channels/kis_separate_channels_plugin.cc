@@ -30,7 +30,7 @@
 #include <KoUpdater.h>
 #include <KoColorSpace.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_types.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -47,9 +47,10 @@ K_PLUGIN_FACTORY(KisSeparateChannelsPluginFactory, registerPlugin<KisSeparateCha
 K_EXPORT_PLUGIN(KisSeparateChannelsPluginFactory("krita"))
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/imageseparate.rc")
+    : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Separate Image..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("separate", action);
     connect(action, SIGNAL(triggered(bool)), SLOT(slotSeparate()));
 }
@@ -70,7 +71,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (!dev) return;
 
     DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->name(),
-            image->colorSpace()->name(), m_view, "Separate");
+                                                image->colorSpace()->name(), m_view->mainWindow(), "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));

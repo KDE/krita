@@ -25,13 +25,12 @@
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
-#include <QMessageBox>
 #include <QSplashScreen>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kcomponentdata.h>
+
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include "data/splash/splash_screen.xpm"
@@ -70,7 +69,7 @@ int main( int argc, char** argv )
                          version.toLatin1(),
                          ki18n("Krita Gemini: Painting at Home and on the Go for Artists"),
                          KAboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Krita team and KO GmbH.\n").subs(CALLIGRA_YEAR),
+                         ki18n("(c) 1999-%1 The Krita team.\n").subs(CALLIGRA_YEAR),
                          KLocalizedString(),
                          "http://www.kritastudio.com",
                          "submit@bugs.kde.org");
@@ -106,7 +105,6 @@ int main( int argc, char** argv )
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
-    //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
     if (!env.contains("KDEHOME") ) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }

@@ -103,6 +103,9 @@ bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer)
 
 bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
 {
+
+    if (*m_dstColorSpace == *layer->colorSpace()) return true;
+
     if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
         layer->setChannelFlags(m_emptyChannelFlags);
         KisPaintLayer *paintLayer = 0;

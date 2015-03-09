@@ -30,8 +30,6 @@
 #include "kis_paint_information.h"
 
 
-class KoPointerEvent;
-class KoViewConverter;
 class KisPaintOpSettingsWidget;
 
 /**
@@ -81,12 +79,6 @@ public:
      * store everything as properties.
      */
     virtual KisPaintOpSettingsSP clone() const;
-
-    /**
-     * Override this function if your paintop is interested in which
-     * node is currently active.
-     */
-    virtual void setNode(KisNodeSP node);
 
     /**
      * @return the node the paintop is working on.
@@ -167,6 +159,36 @@ public:
      * @return The width and the height of the brush mask/dab in pixels
      */
     virtual QSizeF paintOpSize() const;
+
+    /**
+     * Set paintop opacity directly in the properties
+     */
+    void setPaintOpOpacity(qreal value);
+
+    /**
+     * Set paintop flow directly in the properties
+     */
+    void setPaintOpFlow(qreal value);
+
+    /**
+     * Set paintop composite mode directly in the properties
+     */
+    void setPaintOpCompositeOp(const QString &value);
+
+    /**
+     * @return opacity saved in the properties
+     */
+    qreal paintOpOpacity() const;
+
+    /**
+     * @return flow saved in the properties
+     */
+    qreal paintOpFlow() const;
+
+    /**
+     * @return composite mode saved in the properties
+     */
+    QString paintOpCompositeOp() const;
 
     void setPreset(KisPaintOpPresetWSP preset);
 

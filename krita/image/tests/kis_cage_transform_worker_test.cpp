@@ -96,7 +96,7 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
             QPainter gc(&image);
             gc.drawImage(QPoint(), srcImage);
 
-            image.convertToFormat(QImage::Format_ARGB32);
+            image = image.convertToFormat(QImage::Format_ARGB32);
 
             KisCageTransformWorker qimageWorker(image,
                                                 srcQImageOffset,

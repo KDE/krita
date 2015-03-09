@@ -34,7 +34,7 @@
 SvgShapeFactory::SvgShapeFactory()
     : KoShapeFactoryBase(SVGSHAPEFACTORYID, i18n("Embedded svg shape"))
 {
-    setLoadingPriority(10);
+    setLoadingPriority(4);
     setXmlElementNames(QString(KoXmlNS::draw), QStringList("image"));
     // hide from add shapes docker as the shape is not able to be dragged onto 
     // the canvas as createDefaultShape returns 0.

@@ -47,7 +47,7 @@ public:
 
     void setPresetFilter(const QString& paintOpId);
 
-private slots:
+private Q_SLOTS:
     /// Scrolls the strip's item view to the left
     void on_leftScrollBtn_pressed();
     

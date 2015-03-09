@@ -334,7 +334,7 @@ bool PsdAdditionalLayerInfoBlock::read(QIODevice *io)
 
 }
 
-bool PsdAdditionalLayerInfoBlock::write(QIODevice *io, KisNodeSP node)
+bool PsdAdditionalLayerInfoBlock::write(QIODevice */*io*/, KisNodeSP /*node*/)
 {
     return true;
 }

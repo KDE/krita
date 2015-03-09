@@ -4,7 +4,7 @@
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KOREPORT_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
+endif()
 
 add_subdirectory(pics)
 add_subdirectory(tests)
@@ -113,9 +113,9 @@ kde4_add_library(koreport SHARED ${koreport_LIB_SRCS})
 
 target_link_libraries(koreport
   ${KOPROPERTY_LIBS}
-  ${CALLIGRADB_LIBS}
+  ${CALLIGRADB_LIBS} # ONLY FOR KexiPluginLoader, TODO: remove
   ${KDE4_KROSSCORE_LIBS}
-  kowidgets)
+)
 
 target_link_libraries(koreport LINK_INTERFACE_LIBRARIES
   ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} kowidgets)

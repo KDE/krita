@@ -44,10 +44,10 @@ public:
         , defaultDirectory(defaultDir_)
         , filterList(QStringList())
         , defaultFilter(QString())
-        , fileDialog(0)
         , mimeType(0)
         , useStaticForNative(false)
         , hideDetails(false)
+        , swapExtensionOrder(false)
     {
         // Force the native file dialogs on Windows. Except for KDE, the native file dialogs are only possible
         // using the static methods. The Qt documentation is wrong here, if it means what it says " By default,
@@ -71,6 +71,7 @@ public:
             useStaticForNative = true;
             QClipboard *cb = QApplication::clipboard();
             cb->blockSignals(true);
+            swapExtensionOrder = true;
         }
 
 #endif
@@ -92,10 +93,11 @@ public:
     QString defaultDirectory;
     QStringList filterList;
     QString defaultFilter;
-    QFileDialog *fileDialog;
+    QScopedPointer<QFileDialog> fileDialog;
     KMimeType::Ptr mimeType;
     bool useStaticForNative;
     bool hideDetails;
+    bool swapExtensionOrder;
 };
 
 KoFileDialog::KoFileDialog(QWidget *parent,
@@ -107,7 +109,6 @@ KoFileDialog::KoFileDialog(QWidget *parent,
 
 KoFileDialog::~KoFileDialog()
 {
-    delete d->fileDialog;
     delete d;
 }
 
@@ -142,9 +143,8 @@ void KoFileDialog::setNameFilter(const QString &filter)
 {
     d->filterList.clear();
     if (d->type == KoFileDialog::SaveFile) {
-        QStringList *mimeList = new QStringList();
-        d->filterList << splitNameFilter(filter, mimeList);
-        delete mimeList;
+        QStringList mimeList;
+        d->filterList << splitNameFilter(filter, &mimeList);
         d->defaultFilter = d->filterList.first();
     }
     else {
@@ -158,16 +158,14 @@ void KoFileDialog::setNameFilters(const QStringList &filterList,
     d->filterList.clear();
 
     if (d->type == KoFileDialog::SaveFile) {
-        QStringList *mimeList = new QStringList();
+        QStringList mimeList;
         foreach(const QString &filter, filterList) {
-            d->filterList << splitNameFilter(filter, mimeList);
+            d->filterList << splitNameFilter(filter, &mimeList);
         }
-        delete mimeList;
 
         if (!defaultFilter.isEmpty()) {
-            QStringList *mimeList = new QStringList();
-            QStringList defaultFilters = splitNameFilter(defaultFilter, mimeList);
-            delete mimeList;
+            mimeList.clear();
+            QStringList defaultFilters = splitNameFilter(defaultFilter, &mimeList);
             if (defaultFilters.size() > 0) {
                 defaultFilter = defaultFilters.first();
             }
@@ -221,11 +219,7 @@ QString KoFileDialog::selectedMimeType() const
 
 void KoFileDialog::createFileDialog()
 {
-    if (d->fileDialog) {
-        delete d->fileDialog;
-    }
-
-    d->fileDialog = new QFileDialog(d->parent, d->caption, d->defaultDirectory);
+    d->fileDialog.reset( new QFileDialog(d->parent, d->caption, d->defaultDirectory) );
 
     if (d->type == SaveFile) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -268,7 +262,7 @@ void KoFileDialog::createFileDialog()
         d->fileDialog->setOption(QFileDialog::HideNameFilterDetails);
     }
 
-    connect(d->fileDialog, SIGNAL(filterSelected(QString)), this, SLOT(filterSelected(QString)));
+    connect(d->fileDialog.data(), SIGNAL(filterSelected(QString)), this, SLOT(filterSelected(QString)));
 }
 
 QString KoFileDialog::url()
@@ -436,32 +430,41 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
 
     QStringList ret;
     if (withAllSupportedEntry) {
-        ret << QString(i18n("All supported formats") + " ( ");
+        ret << QString();
     }
 
     for (QStringList::ConstIterator
          it = mimeList.begin(); it != mimeList.end(); ++it) {
-        KMimeType::Ptr mimeType = KMimeType::mimeType( *it );
-        if(!mimeType)
+        KMimeType::Ptr mimeType = KMimeType::mimeType(*it);
+        if (!mimeType) {
             continue;
+        }
         if (!mimeSeen.contains(mimeType->name())) {
-            QString oneFilter(mimeType->comment() + " ( ");
+            QString oneFilter;
             QStringList patterns = mimeType->patterns();
             QStringList::ConstIterator jt;
             for (jt = patterns.begin(); jt != patterns.end(); ++jt) {
-                oneFilter.append(*jt + " ");
-                if (withAllSupportedEntry) {
-                    ret[0].append(*jt + " ");
+                if (d->swapExtensionOrder) {
+                    oneFilter.prepend(*jt + " ");
+                    if (withAllSupportedEntry) {
+                        ret[0].prepend(*jt + " ");
+                    }
+                }
+                else {
+                    oneFilter.append(*jt + " ");
+                    if (withAllSupportedEntry) {
+                        ret[0].append(*jt + " ");
+                    }
                 }
             }
-            oneFilter.append(")");
+            oneFilter = mimeType->comment() + " ( " + oneFilter + ")";
             ret << oneFilter;
             mimeSeen << mimeType->name();
         }
     }
 
     if (withAllSupportedEntry) {
-        ret[0].append(")");
+        ret[0] = i18n("All supported formats") + " ( " + ret[0] + (")");
     }
     return ret;
 }

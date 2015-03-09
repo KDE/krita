@@ -26,7 +26,7 @@
 
 #include "KisSketchView.h"
 
-KisSelectionExtras::KisSelectionExtras(KisView2 *view)
+KisSelectionExtras::KisSelectionExtras(KisViewManager *view)
     : m_view(view)
 {
 }

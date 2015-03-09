@@ -23,7 +23,6 @@
 #include <QStyledItemDelegate>
 
 class KoStyleManager;
-class KoStyleThumbnailer;
 
 class TableOfContentsEntryDelegate: public QStyledItemDelegate
 {

@@ -61,7 +61,7 @@ struct KisFilterSelectorWidget::Private {
     KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
     KisFiltersModel* filtersModel;
     QGridLayout *widgetLayout;
-    KisView2 *view;
+    KisViewManager *view;
 };
 
 KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Private)
@@ -104,7 +104,7 @@ KisFilterSelectorWidget::~KisFilterSelectorWidget()
     delete d;
 }
 
-void KisFilterSelectorWidget::setView(KisView2 *view)
+void KisFilterSelectorWidget::setView(KisViewManager *view)
 {
     d->view = view;
 }
@@ -125,6 +125,11 @@ void KisFilterSelectorWidget::setPaintDevice(bool showAll, KisPaintDeviceSP _pai
 
     KisConfig cfg;
     QModelIndex idx = d->filtersModel->indexForFilter(cfg.readEntry<QString>("FilterSelector/LastUsedFilter", "levels"));
+
+    if (!idx.isValid()) {
+        idx = d->filtersModel->indexForFilter("levels");
+    }
+
     if (isFilterGalleryVisible()) {
         d->uiFilterSelector.filtersSelector->activateFilter(idx);
     }
@@ -202,6 +207,8 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
 
 void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
 {
+    if (!idx.isValid()) return;
+
     Q_ASSERT(d->filtersModel);
     KisFilter* filter = const_cast<KisFilter*>(d->filtersModel->indexToFilter(idx));
     if (filter) {

@@ -39,7 +39,7 @@ public:
     TextMode mode();
     
     KisPainter::FillStyle style();
-private slots:
+private Q_SLOTS:
     void modeChanged(int mode);
 
 };

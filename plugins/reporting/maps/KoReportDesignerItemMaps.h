@@ -47,7 +47,7 @@ protected:
 private:
     void init(QGraphicsScene*, KoReportDesigner*);
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 
 };

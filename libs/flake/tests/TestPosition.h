@@ -31,7 +31,7 @@ class TestPosition : public QObject
 public:
     TestPosition();
 
-private slots:
+private Q_SLOTS:
     void init(); // will be called before each testfunction is executed.
     void cleanup();  // will be called after each testfunction is executed.
 

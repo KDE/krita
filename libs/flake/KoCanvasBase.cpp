@@ -34,6 +34,7 @@ class KoCanvasBase::Private
 public:
     Private() : shapeController(0),
         resourceManager(0),
+        isResourceManagerShared(false),
         controller(0),
         snapGuide(0)
     {
@@ -41,19 +42,25 @@ public:
 
     ~Private() {
         delete shapeController;
-        delete resourceManager;
+        if (!isResourceManagerShared) {
+            delete resourceManager;
+        }
         delete snapGuide;
     }
     KoShapeController *shapeController;
     KoCanvasResourceManager *resourceManager;
+    bool isResourceManagerShared;
     KoCanvasController *controller;
     KoSnapGuide *snapGuide;
 };
 
-KoCanvasBase::KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument)
+KoCanvasBase::KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument, KoCanvasResourceManager *sharedResourceManager)
         : d(new Private())
 {
-    d->resourceManager = new KoCanvasResourceManager();
+    d->resourceManager = sharedResourceManager ?
+        sharedResourceManager : new KoCanvasResourceManager();
+    d->isResourceManagerShared = sharedResourceManager;
+
     d->shapeController = new KoShapeController(this, shapeBasedDocument);
     d->snapGuide = new KoSnapGuide(this);
 }
@@ -75,10 +82,10 @@ KoShapeController *KoCanvasBase::shapeController() const
 
 void KoCanvasBase::disconnectCanvasObserver(QObject *object)
 {
-    shapeManager()->selection()->disconnect(object);
-    resourceManager()->disconnect(object);
-    shapeManager()->disconnect(object);
-    toolProxy()->disconnect(object);
+    if (shapeManager()) shapeManager()->selection()->disconnect(object);
+    if (resourceManager()) resourceManager()->disconnect(object);
+    if (shapeManager()) shapeManager()->disconnect(object);
+    if (toolProxy()) toolProxy()->disconnect(object);
 }
 
 

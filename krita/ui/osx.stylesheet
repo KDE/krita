@@ -1,0 +1,17 @@
+QToolButton:checked
+{
+    background-color: rgb(192,192,192);
+}
+
+QToolButton
+{
+    background-color: transparent;
+}
+
+QToolButton:hover
+{
+    border: 1px;
+    border-radius: 2px;
+    border-color: rgb(0,128,224);
+    border-style: outset;
+}

@@ -26,17 +26,14 @@
 
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 
 class KisDoubleSliderSpinBox;
 class QCheckBox;
-class QComboBox;
 class QGridLayout;
-class QSlider;
 
-class QDoubleSpinBox;
 
 class KoCanvasBase;
 
@@ -94,7 +91,7 @@ public:
 protected:
     virtual void initStroke(KoPointerEvent *event);
 
-private slots:
+private Q_SLOTS:
 
     void slotSetDynaWidth(double width);
     void slotSetMass(qreal mass);

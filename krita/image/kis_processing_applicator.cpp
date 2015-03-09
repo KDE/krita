@@ -31,7 +31,7 @@ class DisableUIUpdatesCommand : public KUndo2Command
 {
 public:
     DisableUIUpdatesCommand(KisImageWSP image,
-                          bool finalUpdate)
+                            bool finalUpdate)
         : m_image(image),
           m_finalUpdate(finalUpdate)
     {
@@ -188,8 +188,8 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
       m_finalSignalsEmitted(false)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
-        new KisStrokeStrategyUndoCommandBased(name, false,
-                                              m_image->postExecutionUndoAdapter());
+            new KisStrokeStrategyUndoCommandBased(name, false,
+                                                  m_image->postExecutionUndoAdapter());
 
     if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
         strategy->setSupportsWrapAroundMode(true);
@@ -255,11 +255,10 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
     KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
 
     m_image->addJob(m_strokeId,
-                    new KisStrokeStrategyUndoCommandBased::
-                    Data(KUndo2CommandSP(command),
-                         false,
-                         sequentiality,
-                         exclusivity));
+                    new KisStrokeStrategyUndoCommandBased::Data(KUndo2CommandSP(command),
+                                                                false,
+                                                                sequentiality,
+                                                                exclusivity));
 }
 
 void KisProcessingApplicator::explicitlyEmitFinalSignals()

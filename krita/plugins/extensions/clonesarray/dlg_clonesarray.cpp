@@ -23,7 +23,7 @@
 #include <KoColorSpaceConstants.h>
 
 #include <kis_debug.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_image.h>
 #include <kis_processing_applicator.h>
 #include <commands/kis_image_commands.h>
@@ -32,7 +32,7 @@
 #include <kis_clone_layer.h>
 
 
-DlgClonesArray::DlgClonesArray(KisView2 *view, QWidget *parent)
+DlgClonesArray::DlgClonesArray(KisViewManager *view, QWidget *parent)
     :   KDialog(parent),
         m_view(view),
         m_applicator(0),

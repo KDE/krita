@@ -1,12 +1,12 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License,
+ *  the Free Software Foundation; either version 2.1 of the License,
  *  or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
@@ -48,7 +48,7 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         // please use realColor() instead!
         KDE_DEPRECATED QColor color() const;
 
-    public slots:
+    public Q_SLOTS:
         void setHue(int h);
         void setValue(int v);
         void setSaturation(int s);
@@ -58,10 +58,10 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         KDE_DEPRECATED void setQColor(const QColor& );
 
         void setRealColor(const KoColor& );
-    signals:
+    Q_SIGNALS:
         void colorChanged(const QColor& );
         void realColorChanged(const KoColor& );
-    private slots:
+    private Q_SLOTS:
         void configurationChanged();
     private:
         void tellColorChanged();

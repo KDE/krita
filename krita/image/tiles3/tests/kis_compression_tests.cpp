@@ -228,6 +228,8 @@ void KisCompressionTests::benchmarkMemCpy()
     QBENCHMARK {
         memcpy(output, image.bits(), srcSize);
     }
+
+    delete[] output;
 }
 
 void KisCompressionTests::benchmarkCompressionLzf()

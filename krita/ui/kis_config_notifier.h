@@ -41,7 +41,7 @@ public:
      */
     void notifyConfigChanged(void);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted whenever notifyConfigChanged() is called.
      */

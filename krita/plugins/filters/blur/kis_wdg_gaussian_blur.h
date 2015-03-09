@@ -23,7 +23,6 @@
 
 #include <kis_config_widget.h>
 
-class KisFilter;
 class Ui_WdgGaussianBlur;
 
 class KisWdgGaussianBlur : public KisConfigWidget
@@ -38,7 +37,7 @@ public:
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
 
-private slots:
+private Q_SLOTS:
     void horizontalRadiusChanged(qreal);
     void verticalRadiusChanged(qreal);
     void aspectLockChanged(bool);

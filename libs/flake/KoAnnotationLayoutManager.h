@@ -53,7 +53,7 @@ public:
     // Return true if shape is in annotaion shapes list.
     bool isAnnotationShape(KoShape *shape);
 
-public slots:
+public Q_SLOTS:
     /// register the position of an annotation shape.
     void registerAnnotationRefPosition(KoShape *annotationShape, const QPointF& refPosition);
 
@@ -62,6 +62,9 @@ public slots:
 
     /// Update layout annotation shapes. Called when shape size changed.
     void updateLayout(KoShape *shape);
+
+Q_SIGNALS:
+    void hasAnnotationsChanged(bool hasAnnotations);
 
 private:
     /// layout annotation shapes

@@ -40,7 +40,7 @@ KoOdtFrameReportRenderer::~KoOdtFrameReportRenderer()
 bool KoOdtFrameReportRenderer::render(const KoReportRendererContext& context, ORODocument* document, int /*page*/)
 {
     int uid = 1;
-    KoOdtFramesReportDocument doc;
+    KoOdtFrameReportDocument doc;
     doc.setPageOptions(document->pageOptions());
     for (int page = 0; page < document->pages(); page++) {
         OROPage *p = document->page(page);

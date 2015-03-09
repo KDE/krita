@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>214</width>
+    <width>222</width>
     <height>230</height>
    </rect>
   </property>
@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -54,7 +63,7 @@
             <string>Horizontal Position</string>
            </property>
            <property name="suffix">
-            <string>px</string>
+            <string> px</string>
            </property>
            <property name="maximum">
             <number>30000</number>
@@ -80,7 +89,7 @@
             <string>Vertical Position</string>
            </property>
            <property name="suffix">
-            <string>px</string>
+            <string> px</string>
            </property>
            <property name="maximum">
             <number>30000</number>
@@ -158,7 +167,7 @@
           <string>Width</string>
          </property>
          <property name="suffix">
-          <string>px</string>
+          <string> px</string>
          </property>
          <property name="maximum">
           <number>30000</number>
@@ -181,7 +190,7 @@
           <string>Height</string>
          </property>
          <property name="suffix">
-          <string>px</string>
+          <string> px</string>
          </property>
          <property name="maximum">
           <number>30000</number>
@@ -189,7 +198,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="KDoubleNumInput" name="doubleRatio">
+        <widget class="KDoubleNumInput" name="doubleRatio" native="true">
          <property name="toolTip">
           <string>Ratio</string>
          </property>
@@ -214,7 +223,16 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_3">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item row="0" column="1">

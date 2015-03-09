@@ -21,8 +21,8 @@
 #include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
 #include <KoIcon.h>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 /**
  * Tool to select colors by pointing at a color on the image.
@@ -37,7 +37,7 @@ public:
     QWidget* createOptionWidget();
     void paint(QPainter&, const KoViewConverter &) {}
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void slotSetFuzziness(int);
 

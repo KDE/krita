@@ -45,7 +45,7 @@ public:
     explicit KoPartAdaptor(KoPart* doc);
     ~KoPartAdaptor();
 
-public slots: // METHODS
+public Q_SLOTS: // METHODS
     /**
      * Returns the URL for this document (empty, real URL, or internal one)
      */
@@ -125,7 +125,7 @@ public slots: // METHODS
     Q_SCRIPTABLE void setDocumentInfoSubject(const QString & text);
     Q_SCRIPTABLE void setDocumentInfoAuthorPosition(const QString & text);
 
-signals:
+Q_SIGNALS:
     
     
 public:

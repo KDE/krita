@@ -192,9 +192,9 @@ KoPathTool::~KoPathTool()
     delete m_currentStrategy;
 }
 
-QList<QWidget *>  KoPathTool::createOptionWidgets()
+QList<QPointer<QWidget> >  KoPathTool::createOptionWidgets()
 {
-    QList<QWidget *> list;
+    QList<QPointer<QWidget> > list;
 
     PathToolOptionWidget * toolOptions = new PathToolOptionWidget(this);
     connect(this, SIGNAL(typeChanged(int)), toolOptions, SLOT(setSelectionType(int)));

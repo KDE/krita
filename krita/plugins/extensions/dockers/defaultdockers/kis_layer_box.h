@@ -33,11 +33,11 @@
 
 #include <KoColorSpace.h>
 #include <KoDockFactoryBase.h>
-#include <KoCanvasObserverBase.h>
 
 #include <kis_types.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
+#include "kis_mainwindow_observer.h"
 
 class QModelIndex;
 
@@ -55,7 +55,7 @@ class Ui_WdgLayerBox;
  * A widget that visualized the layer structure.
  *
  */
-class KisLayerBox : public QDockWidget, public KoCanvasObserverBase
+class KisLayerBox : public QDockWidget, public KisMainwindowObserver
 {
 
     Q_OBJECT
@@ -64,11 +64,12 @@ public:
 
     KisLayerBox();
     virtual ~KisLayerBox();
-
-    /// reimplemented from KoCanvasObserverBase
+    QString observerName() { return "KisLayerBox"; }
+    /// reimplemented from KisMainwindowObserver
+    virtual void setMainWindow(KisViewManager* kisview);
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
-private slots:
+private Q_SLOTS:
 
     void notifyImageDeleted();
 
@@ -109,8 +110,10 @@ private slots:
 
     void selectionChanged(const QModelIndexList selection);
 
+    void updateThumbnail();
+
 private:
-    inline void connectActionToButton(QAbstractButton *button, const QString &id);
+    inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
@@ -123,7 +126,7 @@ private:
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;
     Ui_WdgLayerBox* m_wdgLayerBox;
-    QTimer m_delayTimer;
+    QTimer m_opacityDelayTimer;
     int m_newOpacity;
 
     QVector<KisAction*> m_actions;

@@ -47,7 +47,7 @@ private:
     void mapParameterWidget(Parameter * parameter, QWidget * widget);
 
 
-private slots:
+private Q_SLOTS:
     void setIntValue(int value);
     void setFloatValue(qreal value);
     void setBoolValue(bool value);

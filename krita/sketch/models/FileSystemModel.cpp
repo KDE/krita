@@ -21,8 +21,8 @@
 
 
 #include "FileSystemModel.h"
-#include <KDE/KDirLister>
-#include <KDE/KDirModel>
+#include <kdirlister.h>
+#include <kdirmodel.h>
 
 class FileSystemModel::Private
 {

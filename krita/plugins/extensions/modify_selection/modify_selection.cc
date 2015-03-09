@@ -37,7 +37,7 @@ K_PLUGIN_FACTORY(ModifySelectionFactory, registerPlugin<ModifySelection>();)
 K_EXPORT_PLUGIN(ModifySelectionFactory("krita"))
 
 ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/modify_selection.rc")
+        : KisViewPlugin(parent)
 {
     KisAction* action  = new KisAction(i18n("Grow Selection..."), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);

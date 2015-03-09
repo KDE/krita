@@ -25,7 +25,6 @@
 #include <cfloat>
 #include <stack>
 
-#include <QMessageBox>
 #include <QFontInfo>
 #include <QFontMetrics>
 #include <QPen>

@@ -47,7 +47,13 @@ class KoZoomAction::Private
 {
 public:
 
-    Private() {}
+    Private(KoZoomAction *_parent)
+        : parent(_parent)
+        , minimumZoomValue(-1)
+        , maximumZoomValue(-1)
+    {}
+
+    KoZoomAction *parent;
 
     KoZoomMode::Modes zoomModes;
     QList<qreal> sliderLookup;
@@ -58,6 +64,9 @@ public:
 
     QList<qreal> generateSliderZoomLevels() const;
     QList<qreal> filterMenuZoomLevels(const QList<qreal> &zoomLevels) const;
+
+    qreal minimumZoomValue;
+    qreal maximumZoomValue;
 };
 
 QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
@@ -75,14 +84,14 @@ QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
     zoomLevels << 1.0;
 
     for (qreal zoom = zoomLevels.first() / defaultZoomStep;
-         zoom > KoZoomMode::minimumZoom();
+         zoom > parent->minimumZoom();
          zoom /= defaultZoomStep) {
 
         zoomLevels.prepend(zoom);
     }
 
     for (qreal zoom = zoomLevels.last() * defaultZoomStep;
-         zoom < KoZoomMode::maximumZoom();
+         zoom < parent->maximumZoom();
          zoom *= defaultZoomStep) {
 
         zoomLevels.append(zoom);
@@ -104,9 +113,9 @@ QList<qreal> KoZoomAction::Private::filterMenuZoomLevels(const QList<qreal> &zoo
     return filteredZoomLevels;
 }
 
-KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
+KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
     : KSelectAction(text, parent)
-    , d(new Private)
+    , d(new Private(this))
 {
     d->zoomModes = zoomModes;
     d->specialButtons = 0;
@@ -132,18 +141,18 @@ qreal KoZoomAction::effectiveZoom() const
     return d->effectiveZoom;
 }
 
-void KoZoomAction::setZoom( qreal zoom )
+void KoZoomAction::setZoom(qreal zoom)
 {
     setEffectiveZoom(zoom);
-    regenerateItems( d->effectiveZoom, true );
+    regenerateItems(d->effectiveZoom, true);
 }
 
-void KoZoomAction::triggered( const QString& text )
+void KoZoomAction::triggered(const QString& text)
 {
     QString zoomString = text;
     zoomString = zoomString.remove( '&' );
 
-    KoZoomMode::Mode mode = KoZoomMode::toMode( zoomString );
+    KoZoomMode::Mode mode = KoZoomMode::toMode(zoomString);
     int zoom = 0;
 
     if( mode == KoZoomMode::ZOOM_CONSTANT ) {
@@ -219,7 +228,7 @@ void KoZoomAction::sliderValueChanged(int value)
 {
     setZoom(d->sliderLookup[value]);
 
-    emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, d->sliderLookup[value] );
+    emit zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->sliderLookup[value]);
 }
 
 qreal KoZoomAction::nextZoomLevel() const
@@ -247,7 +256,7 @@ void KoZoomAction::zoomIn()
 
     if (zoom > d->effectiveZoom) {
         setZoom(zoom);
-        emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
+        emit zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
     }
 }
 
@@ -257,16 +266,12 @@ void KoZoomAction::zoomOut()
 
     if (zoom < d->effectiveZoom) {
         setZoom(zoom);
-        emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
+        emit zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
     }
 }
 
 QWidget * KoZoomAction::createWidget(QWidget *parent)
 {
-    // create the custom widget only if we add the action to the status bar
-    if (!qobject_cast<QStatusBar*>(parent))
-        return KSelectAction::createWidget(parent);
-
     KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->specialButtons, d->sliderLookup.size() - 1);
     connect(this, SIGNAL(zoomLevelsChanged(QStringList)), zoomWidget, SLOT(setZoomLevels(QStringList)));
     connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));
@@ -287,12 +292,12 @@ void KoZoomAction::setEffectiveZoom(qreal zoom)
     if(d->effectiveZoom == zoom)
         return;
 
-    zoom = KoZoomMode::clampZoom(zoom);
+    zoom = clampZoom(zoom);
     d->effectiveZoom = zoom;
     syncSliderWithZoom();
 }
 
-void KoZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
+void KoZoomAction::setSelectedZoomMode(KoZoomMode::Mode mode)
 {
     QString modeString(KoZoomMode::toString(mode));
     setCurrentAction(modeString);
@@ -318,5 +323,48 @@ void KoZoomAction::syncSliderWithZoom()
     
     emit sliderChanged(i);
 }
+
+qreal KoZoomAction::minimumZoom()
+{
+    if (d->minimumZoomValue < 0) {
+        return KoZoomMode::minimumZoom();
+    }
+    return d->minimumZoomValue;
+}
+
+qreal KoZoomAction::maximumZoom()
+{
+    if (d->maximumZoomValue < 0) {
+        return KoZoomMode::maximumZoom();
+    }
+    return d->maximumZoomValue;
+}
+
+qreal KoZoomAction::clampZoom(qreal zoom)
+{
+    return qMin(maximumZoom(), qMax(minimumZoom(), zoom));
+}
+
+void KoZoomAction::setMinimumZoom(qreal zoom)
+{
+    Q_ASSERT(zoom > 0.0f);
+    KoZoomMode::setMinimumZoom(zoom);
+    d->minimumZoomValue = zoom;
+    d->generateSliderZoomLevels();
+    d->sliderLookup = d->generateSliderZoomLevels();
+    regenerateItems(d->effectiveZoom, true);
+    syncSliderWithZoom();
+}
+
+void KoZoomAction::setMaximumZoom(qreal zoom)
+{
+    Q_ASSERT(zoom > 0.0f);
+    KoZoomMode::setMaximumZoom(zoom);
+    d->maximumZoomValue = zoom;
+    d->sliderLookup = d->generateSliderZoomLevels();
+    regenerateItems(d->effectiveZoom, true);
+    syncSliderWithZoom();
+}
+
 
 #include <KoZoomAction.moc>

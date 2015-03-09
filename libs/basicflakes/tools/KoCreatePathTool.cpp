@@ -412,11 +412,11 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     }
 }
 
-QList<QWidget *> KoCreatePathTool::createOptionWidgets()
+QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
 {
     Q_D(KoCreatePathTool);
 
-    QList<QWidget *> list;
+    QList<QPointer<QWidget> > list;
 
     QWidget *angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constraints");

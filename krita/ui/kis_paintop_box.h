@@ -26,6 +26,7 @@
 #include <QWidget>
 #include <QList>
 
+
 #include <KoID.h>
 #include <KoInputDevice.h>
 
@@ -37,8 +38,8 @@
 #include "kis_locked_properties.h"
 #include "kis_config.h"
 
+
 class QToolButton;
-class QPushButton;
 class QString;
 class QHBoxLayout;
 
@@ -46,17 +47,17 @@ class KoColorSpace;
 class KoResource;
 class KoCanvasController;
 
-class KisView2;
+class KisViewManager;
 class KisCanvasResourceProvider;
 class KisPopupButton;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
-class KisPaintOpListWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
 class KisLockedProperties;
+class KisAction;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -100,32 +101,37 @@ class KisPaintopBox : public QWidget
 
 public:
 
-    KisPaintopBox(KisView2* view, QWidget* parent, const char* name);
+    KisPaintopBox(KisViewManager* view, QWidget* parent, const char* name);
     ~KisPaintopBox();
 
-public slots:
+    void restoreResource(KoResource* resource);
+
+public Q_SLOTS:
 
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
-    void slotCurrentNodeChanged(KisNodeSP node);
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
+
+    KisFavoriteResourceManager *favoriteResourcesManager() { return m_favoriteResourceManager; }
 
 private:
 
     KoID currentPaintop();
+
     void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset = 0);
+    void setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset);
+
     QPixmap paintopPixmap(const KoID& paintop);
     KoID defaultPaintOp();
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
     KisPaintOpPresetSP activePreset(const KoID& paintOp);
     void updateCompositeOp(QString compositeOpID, bool localUpdate = false);
-    void updatePaintops(const KoColorSpace* colorSpace);
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
 
-private slots:
+private Q_SLOTS:
 
     void slotSaveActivePreset();
     void slotUpdatePreset();
@@ -134,7 +140,6 @@ private slots:
     void slotToggleEraseMode(bool checked);
     void slotSetCompositeMode(int index);
     void slotSetPaintop(const QString& paintOpId);
-    void slotWatchPresetNameLineEdit(const QString& text);
     void slotHorizontalMirrorChanged(bool value);
     void slotVerticalMirrorChanged(bool value);
     void slotSlider1Changed();
@@ -155,8 +160,8 @@ private slots:
     void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
     void slotDropLockedOption(KisPropertiesConfiguration* p);
     void slotDirtyPresetToggled(bool);
-    void slotEraserBrushSizeToggled(bool);
-
+    void slotEraserBrushSizeToggled(bool);    
+    void slotUpdateSelectionIcon();
 
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
@@ -173,7 +178,7 @@ private:
     QToolButton*                         vMirrorButton;
     KisPaintOpPresetsPopup*              m_presetsPopup;
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
-    KisView2*                            m_view;
+    KisViewManager*                      m_viewManager;
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
@@ -183,13 +188,13 @@ private:
 
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
-    KisNodeSP           m_previousNode;
-
-    QPalette palette;
-    QPalette palette_highlight;
+    KisNodeWSP          m_previousNode;
 
     int normalBrushSize; // when toggling between eraser mode
     int eraserBrushSize;
+
+    KisAction* m_hMirrorAction;
+    KisAction* m_vMirrorAction;
 
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {

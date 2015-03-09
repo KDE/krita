@@ -26,7 +26,6 @@
 
 
 class QImage;
-class QPointF;
 class QTransform;
 class QPainter;
 class QCursor;

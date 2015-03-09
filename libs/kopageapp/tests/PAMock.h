@@ -26,7 +26,6 @@
 #include <KoOdf.h> 
 #include <QGraphicsItem>
 
-class KoView;
 
 class MockDocument : public KoPADocument
 {

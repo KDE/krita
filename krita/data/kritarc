@@ -2,7 +2,6 @@ favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,
 SpecificColorSelector/ShowColorSpaceSelector=false
 
 [krita]
-WantExportConfirmation=false
 cursorStyleDef=3
 
 [TemplateChooserDialog]
@@ -13,7 +12,7 @@ LastReturnType=Custom Document
 [Undo]
 UndoLimit=0
 
-[KoDockerManager]
+[KisDockerManager]
 StatusOfTheseToolDockers=KisRulerAssistantTool Option Widget,KisToolTransform option widget,KritaSelected/KisToolColorPicker option widget,KritaShape/KisToolBrushoption widget,KritaShape/KisToolLine,KritaShape/KisToolMeasure option widget,KritaShape/KisToolRectangle
 
 [krita]

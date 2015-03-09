@@ -31,8 +31,8 @@
 #include <kglobal.h>
 #include <ktemporaryfile.h>
 
-#include "kis_doc2.h"
-#include "kis_view2.h"
+#include "KisDocument.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -41,7 +41,7 @@
 #include "kis_resource_server_provider.h"
 #include "kis_paint_layer.h"
 
-KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view)
+KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view)
     : KisWdgCustomPattern(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
@@ -51,7 +51,7 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 
     preview->setScaledContents(true);
 
-    KoResourceServer<KoPattern>* rServer = KoResourceServerProvider::instance()->patternServer();
+    KoResourceServer<KoPattern>* rServer = KoResourceServerProvider::instance()->patternServer(false);
     m_rServerAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(rServer));
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));

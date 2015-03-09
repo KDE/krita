@@ -41,8 +41,8 @@ public:
     /// Creates the stroke docker
     SnapGuideDocker();
     virtual ~SnapGuideDocker();
-
-private slots:
+    QString observerName() { return "SnapGuideDocker"; }
+private Q_SLOTS:
     void locationChanged(Qt::DockWidgetArea area);
 
 private:

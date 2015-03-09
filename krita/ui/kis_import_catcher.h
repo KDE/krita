@@ -23,8 +23,7 @@
 
 #include <kis_types.h>
 
-class KisView2;
-class KisDoc2;
+class KisViewManager;
 class KUrl;
 
 /**
@@ -43,10 +42,10 @@ class KisImportCatcher : QObject
 
 public:
 
-    KisImportCatcher(const KUrl & url, KisView2* view, const QString &layerType);
+    KisImportCatcher(const KUrl & url, KisViewManager* view, const QString &layerType);
     ~KisImportCatcher();
 
-private slots:
+private Q_SLOTS:
     void slotLoadingFinished();
 
 private:

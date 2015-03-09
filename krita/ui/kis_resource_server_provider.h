@@ -54,15 +54,15 @@ public:
 
     static KisResourceServerProvider* instance();
 
-    KisPaintOpPresetResourceServer* paintOpPresetServer();
-    KoResourceServer<KisWorkspaceResource>* workspaceServer();
-    KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer();
+    KisPaintOpPresetResourceServer* paintOpPresetServer(bool block = true);
+    KoResourceServer<KisWorkspaceResource>* workspaceServer(bool block = true);
+    KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer(bool block = true);
 
     void brushBlacklistCleanup();
 
-signals:
+Q_SIGNALS:
     void notifyBrushBlacklistCleanup();
-    
+
 private:
 
     KisResourceServerProvider();

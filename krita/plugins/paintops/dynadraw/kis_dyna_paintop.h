@@ -27,7 +27,6 @@
 
 #include "kis_dyna_paintop_settings.h"
 
-class QPointF;
 class KisPainter;
 
 class KisDynaPaintOp : public KisPaintOp
@@ -35,7 +34,7 @@ class KisDynaPaintOp : public KisPaintOp
 
 public:
 
-    KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisDynaPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

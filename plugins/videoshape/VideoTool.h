@@ -43,7 +43,7 @@ class VideoTool : public KoToolBase
 protected:
     QWidget *createOptionWidget();
 
-private slots:
+private Q_SLOTS:
     void changeUrlPressed();
     void play();
 

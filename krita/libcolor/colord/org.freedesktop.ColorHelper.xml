@@ -1,0 +1,258 @@
+<!DOCTYPE node PUBLIC
+"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <interface name='org.freedesktop.ColorHelper'>
+    <doc:doc>
+      <doc:description>
+        <doc:para>
+          The interface used for general calibration queries not related
+          to specific device types, for example displays.
+        </doc:para>
+      </doc:description>
+    </doc:doc>
+
+    <!--***********************************************************-->
+    <property name='DaemonVersion' type='s' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The daemon version.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+  </interface>
+
+  <interface name='org.freedesktop.ColorHelper.Display'>
+    <doc:doc>
+      <doc:description>
+        <doc:para>
+          The interface used for calibrating displays.
+        </doc:para>
+      </doc:description>
+    </doc:doc>
+
+    <!--***********************************************************-->
+    <property name='Progress' type='u' access='read'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The percentage complete of the calibration.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <!--***********************************************************-->
+    <method name='Start'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Starts the calibration.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='s' name='device_id' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The device ID, e.g. <doc:tt>xrandr-LVDS1</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='profile_id' direction='in'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The profile ID, e.g. <doc:tt>sensor-colorhug</doc:tt>.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='a{sv}' name='options' direction='in'>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="QVariantMap"/>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              Optional parameters that will influence the calibration.
+              Known keys are:
+              <doc:tt>Quality</doc:tt> : (u) The calibration quality, where 0 is low, 1 is medium and
+              2 is high.
+              <doc:tt>Whitepoint</doc:tt> : (u) The target whitepoint in Kelvin, or 0 or native.
+              <doc:tt>Title</doc:tt> : (s) The profile title, e.g. <doc:tt>Lenovo T61</doc:tt>.
+              <doc:tt>DeviceKind</doc:tt> : (u) The CdSensorCap for the display.
+              <doc:tt>Brightness</doc:tt> : (u) The display brightness.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='Cancel'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Cancel the calibration that is in progress.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!--***********************************************************-->
+    <method name='Resume'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Resume the calibration that is in progress.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+    </method>
+
+    <!-- ************************************************************ -->
+    <signal name='Finished'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            The calibration process has been completed.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='u' name='error_code' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              An error code, or 0 for no error. The error code is
+              specified in CdMainError.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='a{sv}' name='details' direction='out'>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In1" value="QVariantMap"/>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              Extra data from the calibration that may be useful to
+              client software.
+              Known keys are:
+              <doc:tt>ProfileId</doc:tt> : (s) The ID of the profile.
+              <doc:tt>ProfilePath</doc:tt> : (s) The object path of the profile.
+              <doc:tt>ErrorDetails</doc:tt>: (s) Any untranslated error detail string.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!-- ************************************************************ -->
+    <signal name='UpdateSample'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Emitted when the controller should update the RGB patch on
+            the screen. The controller has 100ms to update the display.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='d' name='red' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The red value from 0.0 to 1.0
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='d' name='green' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The red value from 0.0 to 1.0
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='d' name='blue' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The red value from 0.0 to 1.0
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!-- ************************************************************ -->
+    <signal name='UpdateGamma'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Emitted when the controller should update the gamma ramps
+            for the screen.
+            The controller has 50ms to update the display.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='a(ddd)' name='gamma' direction='out'>
+      <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="CdGamaList"/>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The red, green and blue ramps, which should be
+              interpolated to match the display gamma size.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+    <!-- ************************************************************ -->
+    <signal name='InteractionRequired'>
+      <doc:doc>
+        <doc:description>
+          <doc:para>
+            Emitted when the user needs to do something.
+          </doc:para>
+        </doc:description>
+      </doc:doc>
+      <arg type='u' name='code' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              The interaction code, where:
+              0 = attach to screen
+              1 = move to calibration mode.
+              2 = move to surface mode.
+              3 = shut the laptop lid.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='message' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              Any debugging message for the interaction.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+      <arg type='s' name='image' direction='out'>
+        <doc:doc>
+          <doc:summary>
+            <doc:para>
+              An image to show what interaction is required, or '' for
+              no image available.
+            </doc:para>
+          </doc:summary>
+        </doc:doc>
+      </arg>
+    </signal>
+
+  </interface>
+</node>

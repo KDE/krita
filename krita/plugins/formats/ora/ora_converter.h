@@ -1,11 +1,11 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
@@ -25,7 +25,7 @@
 #include <kio/job.h>
 
 #include "kis_types.h"
-class KisDoc2;
+class KisDocument;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -51,7 +51,7 @@ class OraConverter : public QObject
 {
     Q_OBJECT
 public:
-    OraConverter(KisDoc2 *doc);
+    OraConverter(KisDocument *doc);
     virtual ~OraConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -61,11 +61,11 @@ public:
      */
     KisImageWSP image();
     vKisNodeSP activeNodes();
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     KisImageWSP m_image;
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     vKisNodeSP m_activeNodes;
     bool m_stop;
     KIO::TransferJob *m_job;

@@ -35,6 +35,7 @@
 #include "KoColorSet.h"
 #include <KoChannelInfo.h>
 #include <KoMixColorsOp.h>
+#include <kis_cross_device_color_picker.h>
 
 #include <KoColor.h>
 
@@ -45,14 +46,14 @@
 KisSmudgeRadiusOption::KisSmudgeRadiusOption(const QString& name, const QString& label, bool checked, const QString& category):
     KisRateOption(name, label, checked, category)
 {
-    setValueRange(0.0,3.0);
+    setValueRange(0.0,300.0);
 
 }
 
 void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scale, qreal posx, qreal posy,KisPaintDeviceSP dev) const
 {
     double sliderValue = computeValue(info);
-    int smudgeRadius = (sliderValue * scale);
+    int smudgeRadius = ((sliderValue * scale)*0.5)/100.0;//scale is diameter?
 
 
     KoColor color = painter.paintColor();
@@ -80,6 +81,8 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
         int k = 0;
         int j = 0;
         KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
+        KisCrossDeviceColorPickerInt colorPicker(painter.device(), color);
+        colorPicker.pickColor(posx, posy, color.data());
 
         for (int y = 0; y <= smudgeRadius; y = y + loop_increment) {
             for (int x = 0; x <= smudgeRadius; x = x + loop_increment) {
@@ -97,10 +100,10 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
                             x = x*(-1);
                         }
                         accessor->moveTo(posx + x, posy + y);
-                        memcpy(pixels[1], accessor->oldRawData(), pixelSize);
+                        memcpy(pixels[1], accessor->rawDataConst(), pixelSize);
                         if(i == 0)
                         {
-                            memcpy(pixels[0],accessor->oldRawData(),pixelSize);
+                            memcpy(pixels[0],accessor->rawDataConst(),pixelSize);
                         }
                         if (x == 0 && y == 0) {
                             // Because the sum of the weights must be 255,
@@ -108,13 +111,14 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
                             // to sum to 255 in total
                             // It's -(counts -1), because we'll add the center one implicitly
                             // through that calculation
-                            weights[1] = (255 - (i + 1) * (255 /(i+2)));
+                            weights[1] = (255 - ((i + 1) * (255 /(i+2) )) );
                         } else {
                             weights[1] = 255 /(i+2);
                         }
 
 
                         i++;
+                        if (i>smudgeRadius){i=0;}
                         weights[0] = 255 - weights[1];
                         const quint8** cpixels = const_cast<const quint8**>(pixels);
                         cs->mixColorsOp()->mixColors(cpixels, weights,2, data);
@@ -132,8 +136,8 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
         KoColor color = KoColor(pixels[0],cs);
         painter.setPaintColor(color);
 
-        for (i = 0; i < 2; i++){
-            delete[] pixels[i];
+        for (int l = 0; l < 2; l++){
+            delete[] pixels[l];
         }
        // delete[] pixels;
         delete[] data;

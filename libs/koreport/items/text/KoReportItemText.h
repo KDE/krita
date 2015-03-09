@@ -37,7 +37,7 @@ class KoReportItemText : public KoReportItemBase
 {
 public:
     KoReportItemText();
-    KoReportItemText(QDomNode & element);
+    explicit KoReportItemText(QDomNode & element);
     virtual ~KoReportItemText();
 
     virtual QString typeName() const;
@@ -57,6 +57,8 @@ protected:
     KoProperty::Property* m_lineColor;
     KoProperty::Property* m_lineWeight;
     KoProperty::Property* m_lineStyle;
+    KoProperty::Property* m_itemValue;
+
 
     qreal m_bottomPadding;
 

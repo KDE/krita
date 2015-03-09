@@ -50,17 +50,17 @@ public:
 
     KoCharacterStyle *style() const;
 
-public slots:
+public Q_SLOTS:
     void save(KoCharacterStyle *style = 0);
 
     void switchToGeneralTab();
 
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &name);
     void styleAltered(const KoCharacterStyle *style); // when saving
     void styleChanged(); /// when user modifying
 
-private slots:
+private Q_SLOTS:
     void setPreviewCharacterStyle();
 
 protected:

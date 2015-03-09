@@ -56,7 +56,7 @@ public:
      */
     void cancel();
 
-public slots:
+public Q_SLOTS:
     /**
      * Update your progress. Progress is always from 0 to 100.
      * The global progress shown to the user is determined by the total
@@ -88,7 +88,7 @@ public: // KoProgressProxy implementation
     void setRange( int minimum, int maximum );
     void setFormat( const QString & format );
 
-signals:
+Q_SIGNALS:
 
     /// emitted whenever the subtask has called cancel on us
     void sigCancel();
@@ -108,7 +108,7 @@ public:
     int min;
     int max;
 
-private slots:
+private Q_SLOTS:
 
     void interrupt();
 

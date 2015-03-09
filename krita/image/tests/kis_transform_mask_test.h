@@ -19,17 +19,21 @@
 #ifndef __KIS_TRANSFORM_MASK_TEST_H
 #define __KIS_TRANSFORM_MASK_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisTransformMaskTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testSafeTransform();
     void testMaskOnPaintLayer();
     void testMaskOnCloneLayer();
+    void testMaskOnCloneLayerWithOffset();
     void testSafeTransformUnity();
     void testSafeTransformSingleVanishingPoint();
+
+    void testMultipleMasks();
+    void testMaskWithOffset();
 };
 
 #endif /* __KIS_TRANSFORM_MASK_TEST_H */

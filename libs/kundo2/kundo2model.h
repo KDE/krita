@@ -56,6 +56,8 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+#ifndef K_UNDO_2_MODEL
+#define K_UNDO_2_MODEL
 #include <QAbstractItemModel>
 
 #include "kundo2stack.h"
@@ -86,10 +88,10 @@ public:
     void setCleanIcon(const QIcon &icon);
     QIcon cleanIcon() const;
 
-public slots:
+public Q_SLOTS:
     void setStack(KUndo2QStack *stack);
 
-private slots:
+private Q_SLOTS:
     void stackChanged();
     void stackDestroyed(QObject *obj);
     void setStackCurrentIndex(const QModelIndex &index);
@@ -100,3 +102,4 @@ private:
     QString m_emty_label;
     QIcon m_clean_icon;
 };
+#endif

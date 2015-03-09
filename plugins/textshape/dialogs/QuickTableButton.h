@@ -32,7 +32,7 @@ public:
     void emitCreate(int rows, int columns);
     void addAction(QAction *action);
 
-signals:
+Q_SIGNALS:
     void create(int rows, int columns);
 
 private:

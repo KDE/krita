@@ -41,9 +41,9 @@ public:
     ~KisTreeViewPopup();
     void setModel(QAbstractItemModel* model);
     void setCurrentFilterId(const QString& id);
-signals:
+Q_SIGNALS:
     void currentItemChanged(const QModelIndex &);
-public slots:
+public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &);
 protected:
     virtual void resizeEvent(QResizeEvent * event);

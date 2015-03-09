@@ -31,7 +31,7 @@
 #include <krita_export.h>
 
 
-class KisDoc2;
+class KisDocument;
 
 
 namespace KisMetaData
@@ -98,10 +98,10 @@ class KRITAUI_EXPORT KisPNGConverter : public QObject
 public:
     /**
      * Initialize the converter.
-     * @param doc the KisDoc2 related to the image, can be null if you don't have a KisDoc2
+     * @param doc the KisDocument related to the image, can be null if you don't have a KisDocument
      * @param adapter the undo adapter to be used by the image, can be null if you don't want to use an undo adapter
      */
-    KisPNGConverter(KisDoc2 *doc);
+    KisPNGConverter(KisDocument *doc);
     virtual ~KisPNGConverter();
 public:
     /**
@@ -131,14 +131,14 @@ public:
      * Retrieve the constructed image
      */
     KisImageWSP image();
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     void progress(png_structp png_ptr, png_uint_32 row_number, int pass);
 private:
     png_uint_32 m_max_row;
     KisImageWSP m_image;
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     bool m_stop;
 };
 

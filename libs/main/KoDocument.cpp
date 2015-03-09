@@ -21,17 +21,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoDocument.h"
+
 #include "KoMainWindow.h" // XXX: remove
 #include <kmessagebox.h> // XXX: remove
 #include <KNotification> // XXX: remove
 
-#include "KoDocument.h"
 #include "KoPart.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
 #include "KoFileDialog.h"
 #include "KoDocumentInfo.h"
-#include "KoMainWindow.h"
 #include "KoView.h"
 
 #include "KoOdfStylesReader.h"
@@ -964,7 +964,10 @@ bool KoDocument::saveNativeFormatCalligra(KoStore *store)
         return false;
     }
     if (store->open("documentinfo.xml")) {
-        QDomDocument doc = d->docInfo->save();
+        QDomDocument doc = KoDocument::createDomDocument("document-info"
+                           /*DTD name*/, "document-info" /*tag name*/, "1.1");
+
+        doc = d->docInfo->save(doc);
         KoStoreDevice dev(store);
 
         QByteArray s = doc.toByteArray(); // this is already Utf8!
@@ -2420,7 +2423,12 @@ void KoDocument::setupOpenFileSubProgress() {}
 
 KoDocumentInfoDlg *KoDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
 {
-    return new KoDocumentInfoDlg(parent, docInfo);
+    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+    KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(parent);
+    if (mainwin) {
+        connect(dlg, SIGNAL(saveRequested()), mainwin, SLOT(slotFileSave()));
+    }
+    return dlg;
 }
 
 bool KoDocument::isReadWrite() const

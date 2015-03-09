@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaimagesize" version="6">
+<MenuBar>
+    <Menu name="Layer"><text>&amp;Layer</text>
+	<Action name="layersplit"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

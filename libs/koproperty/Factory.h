@@ -140,9 +140,9 @@ class KOPROPERTY_EXPORT Label : public QLabel
 public:
     Label(QWidget *parent, const ValueDisplayInterface *iface);
     QVariant value() const;
-signals:
+Q_SIGNALS:
     void commitData( QWidget * editor );
-public slots:
+public Q_SLOTS:
     void setValue(const QVariant& value);
 
 protected:

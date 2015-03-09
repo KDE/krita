@@ -20,9 +20,14 @@
 #define __KIS_DELEGATED_TOOL_H
 
 #include <KoPointerEvent.h>
+#include <KoShape.h>
+
+#include <QPointer>
+
+#include "kis_delegated_tool_policies.h"
 
 
-template <class BaseClass, class DelegateTool>
+template <class BaseClass, class DelegateTool, class ActivationPolicy = NoopActivationPolicy>
     class KisDelegatedTool : public BaseClass
 {
 public:
@@ -42,6 +47,7 @@ public:
     {
         BaseClass::activate(toolActivation, shapes);
         m_localTool->activate(toolActivation, shapes);
+        ActivationPolicy::onActivate(BaseClass::canvas());
     }
 
     void deactivate()
@@ -107,9 +113,9 @@ public:
         m_localTool->paint(painter, converter);
     }
 
-    QList<QWidget *> createOptionWidgets()
+    QList<QPointer<QWidget> > createOptionWidgets()
     {
-        QList<QWidget *> list = BaseClass::createOptionWidgets();
+        QList<QPointer<QWidget> > list = BaseClass::createOptionWidgets();
         list.append(m_localTool->createOptionWidgets());
         return list;
     }

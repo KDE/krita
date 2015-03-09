@@ -33,7 +33,7 @@ public:
     KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons specialButtons, int maxZoom);
     ~KoZoomWidget();
 
-signals:
+Q_SIGNALS:
    /**
     * Signal sliderValueChanged is triggered when the user moves the slider
     * @param value value of the slider
@@ -65,7 +65,7 @@ signals:
      */
     void zoomedToAll();
     
-public slots:
+public Q_SLOTS:
     void setZoomLevels(QStringList values);
     void setCurrentZoomLevel(QString valueString);
     void setSliderValue(int value);

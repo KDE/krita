@@ -7,7 +7,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
-
+if (NOT WIN32)
 include(LibFindMacros)
 libfind_pkg_check_modules(FFTW3_PKGCONF fftw3>=3.2)
 
@@ -28,4 +28,25 @@ libfind_process(FFTW3)
 
 if(FFTW3_FOUND)
     message(STATUS "FFTW Found Version: " ${FFTW_VERSION})
+endif()
+
+else()
+
+find_path(FFTW3_INCLUDE_DIR
+    NAMES fftw3.h
+)
+
+find_path(FFTW3_LIBRARY_DIR
+	NAMES libfftw3f-3.lib
+)
+
+set (FFTW3_LIBRARIES ${FFTW3_LIBRARY_DIR}/lib/libfftw3f-3.lib 
+                     ${FFTW3_LIBRARY_DIR}/lib/libfftw3l-3.lib 
+                     ${FFTW3_LIBRARY_DIR}/lib/libfftw3-3.lib )
+
+if(FFTW3_INCLUDE_DIR AND FFTW3_LIBRARY_DIR)
+	set (FFTW3_FOUND true)
+	message(STATUS "Correctly found FFTW3")
+endif()
+
 endif()

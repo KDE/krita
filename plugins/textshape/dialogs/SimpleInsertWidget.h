@@ -34,10 +34,10 @@ class SimpleInsertWidget : public QWidget
 public:
     explicit SimpleInsertWidget(TextTool *tool, QWidget *parent = 0);
 
-public slots:
+public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
     void insertTableQuick(int, int);
 

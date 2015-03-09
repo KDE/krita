@@ -21,7 +21,7 @@
 #ifndef KOEMBEDDEDDOCUMENTSAVER_H
 #define KOEMBEDDEDDOCUMENTSAVER_H
 
-#include "KoOdfDocument.h"
+#include "KoDocumentBase.h"
 #include "koodf_export.h"
 
 #include <QString>
@@ -50,9 +50,9 @@ public:
      * Adds the object specific attributes to the tag, but does NOT
      * write the content of the embedded document. Saving of the
      * embedded documents themselves is done in @ref save. This
-     * function should be called from within KoOdfDocument::saveOdf.
+     * function should be called from within KoDocumentBase::saveOdf.
      */
-    void embedDocument(KoXmlWriter &writer, KoOdfDocument *doc);
+    void embedDocument(KoXmlWriter &writer, KoDocumentBase *doc);
 
     /**
      * Adds the object specific attributes to the tag, and queues the
@@ -88,11 +88,11 @@ public:
     /**
      * Save all embedded documents to the store.
      */
-    bool saveEmbeddedDocuments(KoOdfDocument::SavingContext &documentContext);
+    bool saveEmbeddedDocuments(KoDocumentBase::SavingContext &documentContext);
 
 private:
     class Private;
-    Private *d;
+    Private * const d;
     Q_DISABLE_COPY(KoEmbeddedDocumentSaver)
 };
 

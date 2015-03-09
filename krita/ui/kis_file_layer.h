@@ -18,16 +18,17 @@
 #ifndef KIS_FILE_LAYER_H
 #define KIS_FILE_LAYER_H
 
+#include "krita_export.h"
+
 #include "kis_external_layer_iface.h"
 #include "kis_safe_document_loader.h"
 
-class KisPart2;
 
 
 /**
  * @brief The KisFileLayer class loads a particular file as a layer into the layer stack.
  */
-class KisFileLayer : public KisExternalLayer
+class KRITAUI_EXPORT KisFileLayer : public KisExternalLayer
 {
     Q_OBJECT
 public:
@@ -48,7 +49,7 @@ public:
 
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
-    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     void setFileName(const QString &basePath, const QString &filename);
     QString fileName() const;
@@ -65,8 +66,8 @@ public:
     KUndo2Command* crop(const QRect & rect);
     KUndo2Command* transform(const QTransform &transform);
 
-public slots:
-    void slotLoadingFinished();
+public Q_SLOTS:
+    void slotLoadingFinished(KisImageSP importedImage);
 
 private:
     QString m_basePath;

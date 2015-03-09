@@ -25,7 +25,7 @@ class KisCoordinatesConverterTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testConversion();
     void testImageCropping();
     void testTransformations();

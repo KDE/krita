@@ -36,7 +36,7 @@ public:
 
     KoUndoStackAction(KUndo2Stack* stack, Type type);
 
-private slots:
+private Q_SLOTS:
     void slotUndoTextChanged(const QString& text);
 
 private:

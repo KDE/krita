@@ -22,7 +22,7 @@
 #define _KIS_CHANNEL_SEPARATOR_H_
 
 class KoUpdater;
-class KisView2;
+class KisViewManager;
 
 enum enumSepAlphaOptions {
     COPY_ALPHA_TO_SEPARATIONS = 0,
@@ -47,14 +47,14 @@ class KisChannelSeparator
 
 public:
 
-    KisChannelSeparator(KisView2 * view);
+    KisChannelSeparator(KisViewManager * view);
     virtual ~KisChannelSeparator() {}
 
     void separate(KoUpdater * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor);
 
 private:
 
-    KisView2 * m_view;
+    KisViewManager * m_view;
 
 };
 

@@ -79,7 +79,7 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
     
     setFrame(false);
-/*    QList<QWidget*> children( findChildren<QWidget*>() );
+/*    QList<QPointer<QWidget> > children( findChildren<QWidget*>() );
     foreach (QWidget* w, children) {
         kDebug() << w->objectName() << w->metaObject()->className();
         w->setStyleSheet(QString());

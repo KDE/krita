@@ -21,6 +21,7 @@
 #define KOMARKER_H
 
 #include <QMetaType>
+#include <QSharedData>
 
 #include "flake_export.h"
 
@@ -30,7 +31,7 @@ class KoShapeSavingContext;
 class QString;
 class QPainterPath;
 
-class  FLAKE_EXPORT KoMarker
+class  FLAKE_EXPORT KoMarker : public QSharedData
 {
 public:
     KoMarker();

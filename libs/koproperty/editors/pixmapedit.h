@@ -44,16 +44,16 @@ public:
 
     QVariant value() const;
 
-public slots:
+public Q_SLOTS:
     void setValue(const QVariant &value);
 
-signals:
+Q_SIGNALS:
     void commitData( QWidget * editor );
 
 protected:
     virtual bool eventFilter(QObject *o, QEvent *ev);
 
-protected slots:
+protected Q_SLOTS:
     /*! Helper used by selectPixmap(). Can be also used by subclassess.
      Selected path will be stored in "lastVisitedImagePath" config entry within "Recent Dirs"
      config group of application's settings. This entry can be later reused when file dialogs

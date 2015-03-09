@@ -25,7 +25,6 @@
 #include "krita_export.h"
 
 class KisNodeDummy;
-class KisNodeDummiesGraph;
 
 /**
  * Keeps track of the node stack and manages local (UI-wide) representation
@@ -56,7 +55,7 @@ protected:
     virtual void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis) = 0;
     virtual void removeNodeImpl(KisNodeSP node) = 0;
 
-signals:
+Q_SIGNALS:
 
     void sigContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void sigContinueRemoveNode(KisNodeSP node);
@@ -81,7 +80,7 @@ signals:
      */
     void sigActivateNode(KisNodeSP node);
 
-private slots:
+private Q_SLOTS:
     void slotLayersChanged();
     void slotNodeChanged(KisNodeSP node);
 

@@ -35,7 +35,7 @@
 #include <kis_png_converter.h>
 #include <kis_selection.h>
 
-#include "kis_doc2.h"
+#include "KisDocument.h"
 
 #include "kis_open_raster_load_context.h"
 

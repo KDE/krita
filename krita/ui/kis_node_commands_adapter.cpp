@@ -29,9 +29,9 @@
 #include "commands/kis_image_node_to_bottom_command.h"
 #include "commands/kis_image_node_to_top_command.h"
 #include "commands/kis_node_commands.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
-KisNodeCommandsAdapter::KisNodeCommandsAdapter(KisView2 * view)
+KisNodeCommandsAdapter::KisNodeCommandsAdapter(KisViewManager * view)
         : QObject(view)
         , m_view(view)
 {

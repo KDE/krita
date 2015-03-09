@@ -174,7 +174,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         if (line.at(index) != closingdelimiter)
         {
             lastTokenEnclosed = false;
-            dbgPlugins << "Enclosing delimiter not found, trying again" << line.at(index);
+            //dbgPlugins << "Enclosing delimiter not found, trying again" << line.at(index);
             break;
         }
         else
@@ -222,7 +222,7 @@ bool Command::processParameter(const QStringList& block)
     if (!lastTokenEnclosed)
     {
         // we need more lines of command parameters
-        dbgPlugins << "ParameterLine not enclosed";
+        //dbgPlugins << "ParameterLine not enclosed";
         return false;
     }
 
@@ -289,6 +289,14 @@ bool Command::processParameter(const QStringList& block)
         {
             parameter = new FileParameter(paramName, showPreviewOnChange);
         }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::CONST_P]))
+        {
+            parameter = new ConstParameter(paramName, showPreviewOnChange);
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::BUTTON_P]))
+        {
+            parameter = new ButtonParameter(paramName, showPreviewOnChange);
+        }
         else
         {
             unhandledParameters++;
@@ -335,7 +343,7 @@ void Command::print(int level)
     }
 }
 
-Component* Command::child(int index)
+Component* Command::child(int index) const
 {
     Q_UNUSED(index);
     return 0;
@@ -479,5 +487,51 @@ void Command::setParameter(const QString& name, const QString& value)
             m_parameters[i]->setValue(value);
         }
     }
+}
 
+QString Command::parameter(const QString &name) const
+{
+    for (int i = 0; i < m_parameters.size(); i++)
+    {
+        if (m_parameters.at(i)->name() == name)
+        {
+            return m_parameters.at(i)->value();
+        }
+    }
+
+    return QString();
+}
+
+bool Command::hasParameterName(const QString& paramName, const QString& paramType)
+{
+    Parameter::ParameterType type = Parameter::INVALID_P;
+    if (!paramType.isEmpty())
+    {
+        type = Parameter::nameToType(paramType);
+    }
+
+    for (int i = 0; i < m_parameters.size(); i++)
+    {
+        Parameter * currentParameter = m_parameters.at(i);
+        if (currentParameter->name() == paramName)
+        {
+            // if not empty, we check type also
+            if (!paramType.isEmpty())
+            {
+                if (currentParameter->m_type == type)
+                {
+                    return true;
+                }
+                else
+                {
+                    qDebug() << "Ignoring type " << currentParameter->m_type;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }

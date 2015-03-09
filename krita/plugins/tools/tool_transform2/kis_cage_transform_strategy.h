@@ -28,9 +28,7 @@ class QPointF;
 class QPainter;
 class KisCoordinatesConverter;
 class ToolTransformArgs;
-class QTransform;
 class TransformTransactionProperties;
-class QCursor;
 class QImage;
 
 
@@ -57,7 +55,7 @@ protected:
                                      QPointF *dstOffset);
 
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> m_d;
 };
 

@@ -26,7 +26,7 @@
 
 #include <kis_canvas2.h>
 #include <kis_image.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_node_manager.h>
 #include <kis_cursor.h>
 
@@ -95,7 +95,7 @@ void KisSelectLayerAction::inputEvent(QEvent *event)
         KisNodeSP node = KisToolUtils::findNode(inputManager()->canvas()->image()->root(), pos, false);
 
         if (node) {
-            inputManager()->canvas()->view()->nodeManager()->slotNonUiActivatedNode(node);
+            inputManager()->canvas()->viewManager()->nodeManager()->slotNonUiActivatedNode(node);
         }
     }
 }

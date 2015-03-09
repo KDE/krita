@@ -110,7 +110,7 @@ void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
 
             KisPainter painter(tmpSel);
             painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-            painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
+            painter.setPaintOpPreset(currentPaintOpPreset(), currentNode(), currentImage());
             painter.setAntiAliasPolygonFill(selectionOptionWidget()->antiAliasSelection());
             painter.setFillStyle(KisPainter::FillStyleForegroundColor);
             painter.setStrokeStyle(KisPainter::StrokeStyleNone);

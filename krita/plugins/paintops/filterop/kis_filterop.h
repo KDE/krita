@@ -37,7 +37,7 @@ class KisFilterOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisFilterOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

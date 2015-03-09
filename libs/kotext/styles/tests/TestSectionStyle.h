@@ -28,7 +28,7 @@ class TestSectionStyle : public QObject
 public:
     TestSectionStyle() {}
 
-private slots:
+private Q_SLOTS:
     void testSectionStyle();
 
 };

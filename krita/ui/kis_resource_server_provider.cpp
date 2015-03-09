@@ -47,6 +47,11 @@ typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintO
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
 
+inline bool isRunningInKrita() {
+    return qApp->applicationName().contains(QLatin1String("krita"), Qt::CaseInsensitive);
+}
+
+
 KisResourceServerProvider::KisResourceServerProvider()
 {
     KisBrushServer *brushServer = KisBrushServer::instance();
@@ -57,14 +62,14 @@ KisResourceServerProvider::KisResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
 
     KGlobal::mainComponent().dirs()->addResourceType("psd_layer_style_collections", "data", "krita/asl");
-    
+
     m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp");
     if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {
         QDir().mkpath(m_paintOpPresetServer->saveLocation());
     }
     m_paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     m_paintOpPresetThread->start();
-    if (!qApp->applicationName().toLower().contains("krita")) {
+    if (!isRunningInKrita()) {
         m_paintOpPresetThread->barrier();
     }
 
@@ -74,7 +79,7 @@ KisResourceServerProvider::KisResourceServerProvider()
     }
     m_workspaceThread = new KoResourceLoaderThread(m_workspaceServer);
     m_workspaceThread->start();
-    if (!qApp->applicationName().toLower().contains("krita")) {
+    if (!isRunningInKrita()) {
         m_workspaceThread->barrier();
     }
 
@@ -85,7 +90,7 @@ KisResourceServerProvider::KisResourceServerProvider()
 
     m_layerStyleCollectionThread = new KoResourceLoaderThread(m_layerStyleCollectionServer);
     m_layerStyleCollectionThread->start();
-    if (!qApp->applicationName().toLower().contains("krita")) {
+    if (!isRunningInKrita()) {
         m_layerStyleCollectionThread->barrier();
     }
 
@@ -113,21 +118,22 @@ KisResourceServerProvider* KisResourceServerProvider::instance()
 }
 
 
-KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer()
+KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer(bool block)
 {
-    m_paintOpPresetThread->barrier();
+    if (block) m_paintOpPresetThread->barrier();
     return m_paintOpPresetServer;
 }
 
-KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer()
+KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer(bool block)
 {
-    m_workspaceThread->barrier();
+
+    if (block) m_workspaceThread->barrier();
     return m_workspaceServer;
 }
 
-KoResourceServer<KisPSDLayerStyleCollectionResource> *KisResourceServerProvider::layerStyleCollectionServer()
+KoResourceServer<KisPSDLayerStyleCollectionResource> *KisResourceServerProvider::layerStyleCollectionServer(bool block)
 {
-    m_layerStyleCollectionThread->barrier();
+    if (block) m_layerStyleCollectionThread->barrier();
     return m_layerStyleCollectionServer;
 }
 

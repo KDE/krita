@@ -540,19 +540,20 @@ void KisGradientPainter::setGradientShape(enumGradientShape shape)
     m_d->shape = shape;
 }
 
-KisGradientShapeStrategy* createPolygonShapeStrategy(const QPolygonF &polygon)
+KisGradientShapeStrategy* createPolygonShapeStrategy(const QPainterPath &path, const QRect &boundingRect)
 {
     // TODO: implement UI for exponent option
     const qreal exponent = 2.0;
     KisGradientShapeStrategy *strategy =
-        new KisPolygonalGradientShapeStrategy(polygon, exponent);
+        new KisPolygonalGradientShapeStrategy(path, exponent);
 
-    const QRect selectionRect = polygon.boundingRect().toAlignedRect();
+    KIS_ASSERT_RECOVER_NOOP(boundingRect.width() >= 3 &&
+                            boundingRect.height() >= 3);
 
     const qreal step =
-        qMin(8.0, KritaUtils::maxDimensionPortion(selectionRect, 0.01, 3.0));
+        qMin(qreal(8.0), KritaUtils::maxDimensionPortion(boundingRect, 0.01, 2));
 
-    return new KisCachedGradientShapeStrategy(selectionRect, step, step, strategy);
+    return new KisCachedGradientShapeStrategy(boundingRect, step, step, strategy);
 }
 
 /**
@@ -562,7 +563,7 @@ void KisGradientPainter::precalculateShape()
 {
     if (!m_d->processRegions.isEmpty()) return;
 
-    QList<QPolygonF> polygons;
+    QPainterPath path;
 
     if (selection()) {
         if (!selection()->outlineCacheValid()) {
@@ -572,15 +573,22 @@ void KisGradientPainter::precalculateShape()
         KIS_ASSERT_RECOVER_RETURN(selection()->outlineCacheValid());
         KIS_ASSERT_RECOVER_RETURN(!selection()->outlineCache().isEmpty());
 
-        QPainterPath path = selection()->outlineCache();
-        polygons = path.toFillPolygons();
+        path = selection()->outlineCache();
     } else {
-        polygons << QPolygonF(QRectF(device()->defaultBounds()->bounds()));
+        path.addRect(device()->defaultBounds()->bounds());
     }
 
-    foreach (const QPolygonF &poly, polygons) {
-        Private::ProcessRegion r(toQShared(createPolygonShapeStrategy(poly)),
-                                 poly.boundingRect().toAlignedRect());
+    QList<QPainterPath> splitPaths = KritaUtils::splitDisjointPaths(path);
+
+    foreach (const QPainterPath &subpath, splitPaths) {
+        QRect boundingRect = subpath.boundingRect().toAlignedRect();
+
+        if (boundingRect.width() < 3 || boundingRect.height() < 3) {
+            boundingRect = kisGrowRect(boundingRect, 2);
+        }
+
+        Private::ProcessRegion r(toQShared(createPolygonShapeStrategy(subpath, boundingRect)),
+                                 boundingRect);
         m_d->processRegions << r;
     }
 }
@@ -607,8 +615,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }
 
     QSharedPointer<KisGradientShapeStrategy> shapeStrategy;
-
-    precalculateShape();
 
     switch (m_d->shape) {
     case GradientShapeLinear: {
@@ -654,6 +660,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         break;
     }
     case GradientShapePolygonal:
+        precalculateShape();
         repeat = GradientRepeatNone;
         break;
     }

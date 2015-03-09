@@ -18,7 +18,7 @@
  */
 #include "PageThumbnailProvider.h"
 
-#include <QtCore/QHash>
+#include <QHash>
 
 class PageThumbnailProvider::Private
 {

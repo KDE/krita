@@ -35,14 +35,14 @@ public:
 public:
     KisToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
 
-    void forwardMouseHoverEvent(QMouseEvent *mouseEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround);
+    void forwardMouseHoverEvent(QMouseEvent *mouseEvent, QTabletEvent *lastTabletEvent);
 
     /**
      * Forwards the event to the active tool and returns true if the
      * event 'was not ignored'.  That is by default the event is
      * considered accepted, but the tool can explicitly ignore it.
      */
-    bool forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround);
+    bool forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent);
     bool primaryActionSupportsHiResEvents() const;
 
     void setActiveTool(KoToolBase *tool);
@@ -52,7 +52,7 @@ public:
 
 private:
     KoPointerEvent convertEventToPointerEvent(QEvent *event, const QPointF &docPoint, bool *result);
-    QPointF tabletToDocument(const QPointF &globalPos, const QPoint &canvasOriginWorkaround);
+    QPointF tabletToDocument(const QPointF &globalPos);
     void forwardToTool(ActionState state, KisTool::ToolAction action, QEvent *event, const QPointF &docPoint);
 
 protected:

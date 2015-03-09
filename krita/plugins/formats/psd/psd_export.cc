@@ -21,13 +21,13 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
-#include <KoFilterManager.h>
-#include <KoFilterChain.h>
+#include <KisImportExportManager.h>
+#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
@@ -63,7 +63,7 @@ bool checkHomogenity(KisNodeSP root, const KoColorSpace* cs)
     return res;
 }
 
-psdExport::psdExport(QObject *parent, const QVariantList &) : KoFilter(parent)
+psdExport::psdExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -71,43 +71,45 @@ psdExport::~psdExport()
 {
 }
 
-KoFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile <<"PSD export! From:" << from <<", To:" << to <<"";
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
-    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
     if (!input)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
 
     if (input->image()->width() > 30000 || input->image()->height() > 30000) {
         if (!m_chain->manager()->getBatchMode()) {
-            KMessageBox::error(0, i18n("Unable to save to the Photoshop format.\n"
-                                       "The Photoshop format only supports images that are smaller than 30000x3000 pixels."),
-                               "Photoshop Export Error");
+            QMessageBox::critical(0,
+                                  i18nc("@title:window", "Photoshop Export Error"),
+                                  i18n("Unable to save to the Photoshop format.\n"
+                                       "The Photoshop format only supports images that are smaller than 30000x3000 pixels."));
         }
-        return KoFilter::InvalidFormat;
+        return KisImportExportFilter::InvalidFormat;
     }
 
 
     if (!checkHomogenity(input->image()->rootLayer(), input->image()->colorSpace())) {
         if (!m_chain->manager()->getBatchMode()) {
-            KMessageBox::error(0, i18n("Unable to save to the Photoshop format.\n"
-                                       "The Photoshop format only supports images where all layers have the same colorspace as the image."),
-                               "Photoshop Export Error");
+            QMessageBox::critical(0,
+                                  i18nc("@title:window", "Photoshop Export Error"),
+                                  i18n("Unable to save to the Photoshop format.\n"
+                                       "The Photoshop format only supports images where all layers have the same colorspace as the image."));
         }
-        return KoFilter::InvalidFormat;
+        return KisImportExportFilter::InvalidFormat;
     }
 
     qApp->processEvents(); // For vector layers to be updated
     input->image()->waitForDone();
 
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
@@ -117,10 +119,10 @@ KoFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByt
 
     if ((res = kpc.buildFile(url)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     }
     dbgFile <<" Result =" << res;
-    return KoFilter::InternalError;
+    return KisImportExportFilter::InternalError;
 }
 
 #include <psd_export.moc>

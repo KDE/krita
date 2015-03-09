@@ -89,7 +89,7 @@ public:
     QSet<QString> getTwoUpperLetterExceptions() const;
     QHash<QString, QString> getAutocorrectEntries() const;
 
-private slots:
+private Q_SLOTS:
     void configureAutocorrect();
 
 private:

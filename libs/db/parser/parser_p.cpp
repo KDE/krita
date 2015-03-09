@@ -86,25 +86,23 @@ void yyerror(const char *str)
     parser->setOperation(Parser::OP_Error);
 
     const bool otherError = (qstrnicmp(str, "other error", 11) == 0);
-
+    const bool syntaxError = qstrnicmp(str, "syntax error", 12) == 0;
     if ((parser->error().type().isEmpty()
-            && (str == 0 || strlen(str) == 0
-                || qstrnicmp(str, "syntax error", 12) == 0 || qstrnicmp(str, "parse error", 11) == 0))
+            && (str == 0 || strlen(str) == 0 || syntaxError))
             || otherError)
     {
         KexiDBDbg << parser->statement();
         QString ptrline(current, QLatin1Char(' '));
 
         ptrline += "^";
-
         KexiDBDbg << ptrline;
 
+#if 0
         //lexer may add error messages
         QString lexerErr = parser->error().error();
 
         QString errtypestr(str);
         if (lexerErr.isEmpty()) {
-#if 0
             if (errtypestr.startsWith("parse error, unexpected ")) {
                 //something like "parse error, unexpected IDENTIFIER, expecting ',' or ')'"
                 QString e = errtypestr.mid(24);
@@ -130,23 +128,30 @@ void yyerror(const char *str)
 //  lexerErr futureI18n("identifier was expected");
 
             } else
-#endif
                 if (errtypestr.startsWith("parse error, expecting `IDENTIFIER'"))
                     lexerErr = i18n("identifier was expected");
         }
+#endif
+
+        //! @todo exact invalid expression can be selected in the editor, based on ParseInfo data
 
         if (!otherError) {
-            if (!lexerErr.isEmpty())
-                lexerErr.prepend(": ");
-
-            if (KexiDB::isKexiSQLKeyword(ctoken))
-                parser->setError(ParserError(i18n("Syntax Error"),
-                                             i18n("\"%1\" is a reserved keyword.", QString(ctoken)) + lexerErr,
+            const bool isKexiSQLKeyword = KexiDB::isKexiSQLKeyword(ctoken);
+            if (isKexiSQLKeyword || syntaxError) {
+                if (isKexiSQLKeyword) {
+                    parser->setError(ParserError(i18n("Syntax Error"),
+                                                 i18n("\"%1\" is a reserved keyword.", QString(ctoken)),
+                                                 ctoken, current));
+                } else {
+                    parser->setError(ParserError(i18n("Syntax Error"),
+                                                 i18n("Syntax error."),
+                                                 ctoken, current));
+                }
+            } else {
+                parser->setError(ParserError(i18n("Error"),
+                                             i18n("Error near \"%1\".", QString(ctoken)),
                                              ctoken, current));
-            else
-                parser->setError(ParserError(i18n("Syntax Error"),
-                                             i18n("Syntax Error near \"%1\".", QString(ctoken)) + lexerErr,
-                                             ctoken, current));
+            }
         }
     }
 }

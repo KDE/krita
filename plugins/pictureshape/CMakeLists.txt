@@ -2,7 +2,7 @@ include_directories( ${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
-SET (pictureshape_LIB_SRCS
+set (pictureshape_LIB_SRCS
     PictureShape.cpp
     PictureShapeFactory.cpp
     PictureTool.cpp

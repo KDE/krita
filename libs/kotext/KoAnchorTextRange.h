@@ -79,7 +79,7 @@ public:
     void saveOdf(KoShapeSavingContext &context, int position, KoTextRange::TagType tagType) const;
 
 private:
-    KoAnchorTextRangePrivate *d_ptr;
+    KoAnchorTextRangePrivate * const d_ptr;
     Q_DECLARE_PRIVATE(KoAnchorTextRange)
 };
 

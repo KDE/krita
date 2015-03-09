@@ -134,10 +134,20 @@ void KoUnitDoubleSpinBox::privateValueChanged() {
 
 void KoUnitDoubleSpinBox::setUnit( KoUnit unit )
 {
+    if (unit == d->unit) return;
+
     double oldvalue = d->unit.fromUserValue( QDoubleSpinBox::value() );
     QDoubleSpinBox::setMinimum( unit.toUserValue( d->lowerInPoints ) );
     QDoubleSpinBox::setMaximum( unit.toUserValue( d->upperInPoints ) );
-    QDoubleSpinBox::setSingleStep( unit.toUserValue( d->stepInPoints ) );
+
+    qreal step = unit.toUserValue( d->stepInPoints );
+
+    if (unit.type() == KoUnit::Pixel) {
+        // limit the pixel step by 1.0
+        step = qMax(qreal(1.0), step);
+    }
+
+    QDoubleSpinBox::setSingleStep( step );
     d->unit = unit;
     QDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
     setSuffix(unit.symbol().prepend(QLatin1Char(' ')));

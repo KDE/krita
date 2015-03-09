@@ -380,9 +380,9 @@ void GuidesTool::canvasResourceChanged(int key, const QVariant &res)
     }
 }
 
-QList<QWidget*> GuidesTool::createOptionWidgets()
+QList<QPointer<QWidget> > GuidesTool::createOptionWidgets()
 {
-    QList< QWidget* > optionwidgets;
+    QList<QPointer<QWidget> > optionwidgets;
     m_options = new GuidesToolOptionWidget();
     m_options->setWindowTitle(i18n("Guides Editor"));
     connect(m_options, SIGNAL(guideLineSelected(Qt::Orientation,int)),

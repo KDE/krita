@@ -31,7 +31,7 @@
 #include <kis_annotation.h>
 #include <kis_types.h>
 #include <kis_paint_layer.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
@@ -47,7 +47,7 @@
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
 
-PSDLoader::PSDLoader(KisDoc2 *doc)
+PSDLoader::PSDLoader(KisDocument *doc)
 {
     m_image = 0;
     m_doc = doc;
@@ -143,7 +143,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDImageResourceSection::RESN_INFO]->resource);
         if (resInfo) {
             m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
-            // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
+            // let's skip the unit for now; we can only set that on the KisDocument, and krita doesn't use it.
             delete resourceSection.resources.take(PSDImageResourceSection::RESN_INFO);
         }
     }

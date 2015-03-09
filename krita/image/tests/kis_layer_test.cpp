@@ -62,10 +62,11 @@ void KisLayerTest::testCreation()
 
     QBitArray channels(4);
     channels.fill(true);
+    channels.setBit(1, false);
     layer->setChannelFlags(channels);
     QVERIFY(layer->channelFlags().count() == 4);
     QCOMPARE(layer->channelFlags().at(0), true);
-    QCOMPARE(layer->channelFlags().at(1), true);
+    QCOMPARE(layer->channelFlags().at(1), false);
     QCOMPARE(layer->channelFlags().at(2), true);
     QCOMPARE(layer->channelFlags().at(3), true);
 

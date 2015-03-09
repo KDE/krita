@@ -149,9 +149,13 @@ void KisCloneLayer::setDirtyOriginal(const QRect &rect)
      */
     if (!visible(true)) return;
 
-    QRect localRect = rect;
-    localRect.translate(m_d->x, m_d->y);
-    KisLayer::setDirty(localRect);
+    /**
+     *  HINT: this method is present for historical reasons only.
+     *        Long time ago the updates were calculated in
+     *        "copyOriginalToProjection" coordinate system. Now
+     *        everything is done in "original()" space.
+     */
+    KisLayer::setDirty(rect);
 }
 
 void KisCloneLayer::notifyParentVisibilityChanged(bool value)
@@ -202,18 +206,16 @@ void KisCloneLayer::setY(qint32 y)
 QRect KisCloneLayer::extent() const
 {
     QRect rect = original()->extent();
-    if(m_d->x || m_d->y) {
-        rect.translate(m_d->x, m_d->y);
-    }
+
+    // HINT: no offset now. See a comment in setDirtyOriginal()
     return rect | projection()->extent();
 }
 
 QRect KisCloneLayer::exactBounds() const
 {
     QRect rect = original()->exactBounds();
-    if(m_d->x || m_d->y) {
-        rect.translate(m_d->x, m_d->y);
-    }
+
+    // HINT: no offset now. See a comment in setDirtyOriginal()
     return rect | projection()->exactBounds();
 }
 
@@ -235,6 +237,11 @@ QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
     }
 
     return resultRect;
+}
+
+QRect KisCloneLayer::outgoingChangeRect(const QRect &rect) const
+{
+    return rect.translated(m_d->x, m_d->y);
 }
 
 bool KisCloneLayer::accept(KisNodeVisitor & v)
@@ -291,11 +298,11 @@ QIcon KisCloneLayer::icon() const
     return koIcon("edit-copy");
 }
 
-KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     if (m_d->copyFrom)
-        l << KoDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
+        l << KisDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
     return l;
 }
 

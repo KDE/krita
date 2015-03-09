@@ -57,7 +57,7 @@ public:
     , center(center)
     {}
 
-    KoMarker *marker;
+    QExplicitlySharedDataPointer<KoMarker> marker;
     qreal baseWidth;
     MarkerPosition position;
     bool center;
@@ -80,7 +80,7 @@ KoMarkerData::KoMarkerData()
 }
 
 KoMarkerData::KoMarkerData(const KoMarkerData &other)
-: d(new Private(other.d->marker, other.d->baseWidth, other.d->position, other.d->center))
+: d(new Private(other.d->marker.data(), other.d->baseWidth, other.d->position, other.d->center))
 {
 }
 
@@ -92,12 +92,12 @@ KoMarkerData::~KoMarkerData()
 
 KoMarker *KoMarkerData::marker() const
 {
-    return d->marker;
+    return d->marker.data();
 }
 
 void KoMarkerData::setMarker(KoMarker *marker)
 {
-    d->marker = marker;
+    d->marker = QExplicitlySharedDataPointer<KoMarker>(marker);
 }
 
 qreal KoMarkerData::width(qreal penWidth) const

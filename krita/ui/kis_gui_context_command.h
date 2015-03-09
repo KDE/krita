@@ -40,7 +40,7 @@ public:
     void undo();
     void redo();
 
-signals:
+Q_SIGNALS:
     void sigExecuteCommand(KUndo2Command *command, bool undo);
 
 private:

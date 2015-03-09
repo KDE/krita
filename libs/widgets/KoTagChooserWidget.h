@@ -49,7 +49,7 @@ public:
     void clear();
     void setUndeletionCandidate(const QString &tag);
 
-signals:
+Q_SIGNALS:
     void newTagRequested(const QString &tagname);
     void tagDeletionRequested(const QString &tagname);
     void tagRenamingRequested(const QString &oldTagname, const QString &newTagname);
@@ -58,7 +58,7 @@ signals:
     void popupMenuAboutToShow();
     void tagChosen(const QString &tag);
 
-private slots:
+private Q_SLOTS:
     void tagRenamingRequested(const QString &newName);
     void tagOptionsContextMenuAboutToShow();
     void contextDeleteCurrentTag();

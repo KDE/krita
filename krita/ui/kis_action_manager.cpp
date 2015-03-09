@@ -19,30 +19,42 @@
 #include "kis_action_manager.h"
 
 #include <QList>
+#include <kstandarddirs.h>
 #include <kactioncollection.h>
 
+#include "KisPart.h"
 #include "kis_action.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection_manager.h"
 #include "operations/kis_operation_ui_factory.h"
 #include "operations/kis_operation_registry.h"
 #include "operations/kis_operation.h"
 #include "kis_layer.h"
+#include "KisDocument.h"
+
+
+
 
 class KisActionManager::Private {
 
 public:
-    Private() {}
+    Private()
+        : viewManager(0)
+    {}
 
-    KisView2* view;
+    KisViewManager* viewManager;
     QList<KisAction*> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
     KisOperationRegistry operationRegistry;
+
 };
 
-KisActionManager::KisActionManager(KisView2* view) : d(new Private)
+KisActionManager::KisActionManager(KisViewManager* viewManager)
+    : d(new Private)
 {
-    d->view = view;
+    d->viewManager = viewManager;
+
+
 }
 
 KisActionManager::~KisActionManager()
@@ -50,24 +62,32 @@ KisActionManager::~KisActionManager()
     delete d;
 }
 
-void KisActionManager::addAction(const QString& name, KisAction* action, KActionCollection* actionCollection)
+void KisActionManager::setView(QPointer<KisView> imageView)
 {
-    if (!name.isEmpty()) {
-        actionCollection->addAction(name, action);
-        action->setObjectName(name);
-    }
+    Q_UNUSED(imageView);
+}
 
+void KisActionManager::addAction(const QString& name, KisAction* action)
+{
+    Q_ASSERT(!name.isEmpty());
+    Q_ASSERT(action);
+    Q_ASSERT(d->viewManager);
+    Q_ASSERT(d->viewManager->actionCollection());
+
+    d->viewManager->actionCollection()->addAction(name, action);
+    action->setObjectName(name);
+    action->setParent(d->viewManager->actionCollection());
     d->actions.append(action);
     action->setActionManager(this);
 }
 
-void KisActionManager::takeAction(KisAction* action, KActionCollection *actionCollection)
+void KisActionManager::takeAction(KisAction* action)
 {
     d->actions.removeOne(action);
 
     if (!action->objectName().isEmpty()) {
-        KIS_ASSERT_RECOVER_RETURN(actionCollection);
-        actionCollection->takeAction(action);
+        KIS_ASSERT_RECOVER_RETURN(d->viewManager->actionCollection());
+        d->viewManager->actionCollection()->takeAction(action);
     }
 }
 
@@ -83,63 +103,118 @@ KisAction *KisActionManager::actionByName(const QString &name) const
 
 void KisActionManager::updateGUI()
 {
-    KisNodeSP node = d->view->activeNode();
-    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
-
     //TODO other flags
     KisAction::ActivationFlags flags;
-    if (d->view->activeDevice()) {
-        flags |= KisAction::ACTIVE_DEVICE;
+
+    KisImageWSP image;
+    KisNodeSP node;
+    KisLayerSP layer;
+    KisPaintDeviceSP device;
+    KisDocument* document = 0;
+    KisSelectionManager* selectionManager = 0;
+    KisAction::ActivationConditions conditions = KisAction::NO_CONDITION;
+
+    if (d->viewManager) {
+
+        // if there are no views, that means no document is open.
+        // we cannot have nodes (selections), devices, or documents without a view
+        if ( d->viewManager->viewCount() > 0 )
+        {
+            image = d->viewManager->image();
+            flags |= KisAction::ACTIVE_IMAGE;
+
+            node = d->viewManager->activeNode();
+            device = d->viewManager->activeDevice();
+            document = d->viewManager->document();
+            selectionManager = d->viewManager->selectionManager();
+
+            if (d->viewManager->viewCount() > 1) {
+                flags |= KisAction::MULTIPLE_IMAGES;
+            }
+
+            if (document && document->isModified()) {
+                flags |= KisAction::CURRENT_IMAGE_MODIFIED;
+            }
+
+            if (device) {
+                flags |= KisAction::ACTIVE_DEVICE;
+            }
+        }
+
     }
-    if (node) {
+
+
+    // is there a selection/mask?
+    // you have to have at least one view(document) open for this to be true
+    if (node)
+    {
+
+        // if a node exists, we know there is an active layer as well
         flags |= KisAction::ACTIVE_NODE;
+
+        layer = dynamic_cast<KisLayer*>(node.data());
+        flags |= KisAction::ACTIVE_LAYER;
+
         if (node->inherits("KisTransparencyMask")) {
             flags |= KisAction::ACTIVE_TRANSPARENCY_MASK;
         }
-    }
-    if (layer) {
-        flags |= KisAction::ACTIVE_LAYER;
-        if (layer->inherits("KisShapeLayer")) {
+
+
+        if (layer && layer->inherits("KisShapeLayer")) {
             flags |= KisAction::ACTIVE_SHAPE_LAYER;
         }
-    }
-    KisSelectionManager* selectionManager = d->view->selectionManager();
-    if (selectionManager->havePixelsSelected()) {
-        flags |= KisAction::PIXELS_SELECTED;
-    }
-    if (selectionManager->haveShapesSelected()) {
-        flags |= KisAction::SHAPES_SELECTED;
-    }
-    if (selectionManager->havePixelSelectionWithPixels()) {
-        flags |= KisAction::PIXEL_SELECTION_WITH_PIXELS;
-    }
-    if (selectionManager->havePixelsInClipboard()) {
-        flags |= KisAction::PIXELS_IN_CLIPBOARD;
-    }
-    if (selectionManager->haveShapesInClipboard()) {
-        flags |= KisAction::SHAPES_IN_CLIPBOARD;
+
+        if (selectionManager)
+        {
+            if (selectionManager->havePixelsSelected()) {
+                flags |= KisAction::PIXELS_SELECTED;
+            }
+
+            if (selectionManager->haveShapesSelected()) {
+                flags |= KisAction::SHAPES_SELECTED;
+            }
+
+            if (selectionManager->havePixelSelectionWithPixels()) {
+                flags |= KisAction::PIXEL_SELECTION_WITH_PIXELS;
+            }
+
+            if (selectionManager->havePixelsInClipboard()) {
+                flags |= KisAction::PIXELS_IN_CLIPBOARD;
+            }
+
+            if (selectionManager->haveShapesInClipboard()) {
+                flags |= KisAction::SHAPES_IN_CLIPBOARD;
+            }
+        }
+
+        if (node->isEditable(false)) {
+            conditions |= KisAction::ACTIVE_NODE_EDITABLE;
+        }
+
+        if (node->hasEditablePaintDevice()) {
+            conditions |= KisAction::ACTIVE_NODE_EDITABLE_PAINT_DEVICE;
+        }
+
+        if (d->viewManager->selectionEditable()) {
+            conditions |= KisAction::SELECTION_EDITABLE;
+        }
     }
 
-    KisAction::ActivationConditions conditions = KisAction::NO_CONDITION;
-    if (node && node->isEditable()) {
-        conditions |= KisAction::ACTIVE_NODE_EDITABLE;
-    }
-    if (node && node->hasEditablePaintDevice()) {
-        conditions |= KisAction::ACTIVE_NODE_EDITABLE_PAINT_DEVICE;
-    }
-    if (d->view->selectionEditable()) {
-        conditions |= KisAction::SELECTION_EDITABLE;
-    }
 
+
+    // loop through all actions in action manager and determine what should be enabled
     foreach(KisAction* action, d->actions) {
         bool enable;
+
         if (action->activationFlags() == KisAction::NONE) {
             enable = true;
-        } else {
-            enable = action->activationFlags() & flags;
         }
-        enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
+        else {
+            enable = action->activationFlags() & flags; // combine action flags with updateGUI flags
+        }
 
+        enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
+        
         if (node && enable) {
             foreach (const QString &type, action->excludedNodeTypes()) {
                 if (node->inherits(type.toLatin1())) {
@@ -151,6 +226,37 @@ void KisActionManager::updateGUI()
 
         action->setActionEnabled(enable);
     }
+}
+
+KisAction *KisActionManager::createStandardAction(KStandardAction::StandardAction actionType, const QObject *receiver, const char *member)
+{
+    KAction *standardAction = KStandardAction::create(actionType, receiver, member, 0);
+    KisAction *action = new KisAction(KIcon(standardAction->icon()), standardAction->text());
+    action->setShortcut(standardAction->shortcut(KAction::DefaultShortcut), KAction::DefaultShortcut);
+    action->setShortcut(standardAction->shortcut(KAction::ActiveShortcut), KAction::ActiveShortcut);
+    action->setCheckable(standardAction->isCheckable());
+    if (action->isCheckable()) {
+        action->setChecked(standardAction->isChecked());
+    }
+    action->setMenuRole(standardAction->menuRole());
+    action->setText(standardAction->text());
+    action->setToolTip(standardAction->toolTip());
+
+    if (receiver && member) {
+        if (actionType == KStandardAction::OpenRecent) {
+            QObject::connect(action, SIGNAL(urlSelected(KUrl)), receiver, member);
+        }
+        else if (actionType == KStandardAction::ConfigureToolbars) {
+            QObject::connect(action, SIGNAL(triggered(bool)), receiver, member, Qt::QueuedConnection);
+        }
+        else {
+            QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
+        }
+    }
+
+    addAction(standardAction->objectName(), action);
+    delete standardAction;
+    return action;
 }
 
 void KisActionManager::registerOperationUIFactory(KisOperationUIFactory* factory)
@@ -169,7 +275,7 @@ void KisActionManager::runOperation(const QString& id)
 
     KisOperationUIFactory* uiFactory = d->uiRegistry.get(id);
     if (uiFactory) {
-        bool gotConfig = uiFactory->fetchConfiguration(d->view, config);
+        bool gotConfig = uiFactory->fetchConfiguration(d->viewManager, config);
         if (!gotConfig) {
             return;
         }
@@ -182,7 +288,7 @@ void KisActionManager::runOperationFromConfiguration(KisOperationConfiguration* 
     KisOperation* operation = d->operationRegistry.get(config->id());
     Q_ASSERT(operation);
     if (operation) {
-        operation->runFromXML(d->view, *config);
+        operation->runFromXML(d->viewManager, *config);
     }
     delete config;
 }
@@ -198,6 +304,15 @@ void KisActionManager::dumpActionFlags()
             out << "-------- " << action->text() << " --------\n";
             out << "Action will activate on: \n";
 
+            if (flags & KisAction::ACTIVE_IMAGE) {
+                out << "    Active image\n";
+            }
+            if (flags & KisAction::MULTIPLE_IMAGES) {
+                out << "    More than one image open\n";
+            }
+            if (flags & KisAction::CURRENT_IMAGE_MODIFIED) {
+                out << "    Active image modified\n";
+            }
             if (flags & KisAction::ACTIVE_DEVICE) {
                 out << "    Active device\n";
             }

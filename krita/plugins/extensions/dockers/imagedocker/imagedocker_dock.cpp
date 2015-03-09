@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -300,6 +300,8 @@ void ImageDockerDock::dropEvent(QDropEvent *event)
 
 void ImageDockerDock::setCanvas(KoCanvasBase* canvas)
 {
+    // Intentionally not disabled if there's no canvas
+
     // "Every connection you make emits a signal, so duplicate connections emit two signals"
     if(m_canvas)
         m_canvas->disconnectCanvasObserver(this);
@@ -513,9 +515,9 @@ void ImageDockerDock::slotZoomChanged(int zoom)
 
 void ImageDockerDock::slotColorSelected(const QColor& color)
 {
-    m_canvas->resourceManager()->setForegroundColor(
-        KoColor(color, KoColorSpaceRegistry::instance()->rgb8())
-    );
+    if (m_canvas) {
+        m_canvas->resourceManager()->setForegroundColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
+    }
 }
 
 void ImageDockerDock::slotViewModeChanged(int viewMode, qreal scale)

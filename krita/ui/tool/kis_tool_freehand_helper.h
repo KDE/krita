@@ -36,7 +36,6 @@ class KisRecordingAdapter;
 class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
-class KisPainter;
 
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
@@ -57,9 +56,12 @@ public:
     void setSmoothness(KisSmoothingOptionsSP smoothingOptions);
     KisSmoothingOptionsSP smoothingOptions() const;
 
+    bool isRunning() const;
+
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,
                    KisImageWSP image,
+                   KisNodeSP currentNode,
                    KisStrokesFacade *strokesFacade,
                    KisPostExecutionUndoAdapter *undoAdapter,
                    KisNodeSP overrideNode = 0,
@@ -73,7 +75,7 @@ public:
                                 const KisPaintOpSettings *globalSettings,
                                 KisPaintOpSettings::OutlineMode mode) const;
 
-signals:
+Q_SIGNALS:
     /**
      * The signal is emitted when the outline should be updated
      * explicitly by the tool. Used by Stabilizer option, because it
@@ -89,6 +91,7 @@ protected:
     void initPaintImpl(const KisPaintInformation &previousPaintInformation,
                        KoCanvasResourceManager *resourceManager,
                        KisImageWSP image,
+                       KisNodeSP node,
                        KisStrokesFacade *strokesFacade,
                        KisPostExecutionUndoAdapter *undoAdapter,
                        KisNodeSP overrideNode = 0,
@@ -149,7 +152,7 @@ private:
     void stabilizerStart(KisPaintInformation firstPaintInfo);
     void stabilizerEnd();
 
-private slots:
+private Q_SLOTS:
 
     void finishStroke();
     void doAirbrushing();

@@ -23,7 +23,6 @@
 #include "kis_types.h"
 
 class KisUpdatesFacade;
-class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 
 

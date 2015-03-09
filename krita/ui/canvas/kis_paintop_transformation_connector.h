@@ -21,23 +21,22 @@
 
 #include <QObject>
 
-class KisView2;
-
+class KisCanvas2;
 
 class KisPaintopTransformationConnector : public QObject
 {
     Q_OBJECT
 public:
-    KisPaintopTransformationConnector(KisView2 *view, QObject *parent);
+    KisPaintopTransformationConnector(KisCanvas2 *canvas, QObject *parent);
 
 public:
     void notifyTransformationChanged();
 
-public slots:
+public Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant &resource);
 
 private:
-    KisView2 *m_view;
+    KisCanvas2 *m_canvas;
 };
 
 #endif /* __KIS_PAINTOP_TRANSFORMATION_CONNECTOR_H */

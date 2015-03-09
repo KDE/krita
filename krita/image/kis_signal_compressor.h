@@ -38,15 +38,16 @@ public:
 public:
     KisSignalCompressor(int delay, Mode mode, QObject *parent = 0);
     bool isActive() const;
+    void setDelay(int delay);
 
-public slots:
+public Q_SLOTS:
     void start();
     void stop();
 
-private slots:
+private Q_SLOTS:
     void slotTimerExpired();
 
-signals:
+Q_SIGNALS:
     void timeout();
 
 private:

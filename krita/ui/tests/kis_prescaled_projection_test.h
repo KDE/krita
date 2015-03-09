@@ -39,7 +39,7 @@ private:
      */
     bool testProjectionScenario(KisPrescaledProjection & projection, KoZoomHandler * viewConverter, const QString & name);
 
-private slots:
+private Q_SLOTS:
 
     void testCreation();
 

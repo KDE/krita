@@ -342,15 +342,16 @@ calligra_define_productset(ACTIVE "Full Calligra Active"
         FILEMANAGER_PROPERTIES
         FILEMANAGER_THUMBNAIL
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
         PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         PLUGIN_VIDEOSHAPE
         # filters
@@ -365,18 +366,19 @@ calligra_define_productset(AUTHOR "Full Author (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
-        PLUGIN_VECTORSHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
         PLUGIN_SEMANTICITEMS
+        PLUGIN_VARIABLES
+        PLUGIN_VECTORSHAPE
         # filters
         FILTERS_WORDS
 )
@@ -385,18 +387,21 @@ calligra_define_productset(BRAINDUMP "Full Braindump (for Desktop)"
         APP_BRAINDUMP
     OPTIONAL
         # plugins
-        PLUGIN_MUSICSHAPE
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_TEXTEDITING
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
+        PLUGIN_FORMULASHAPE
+        PLUGIN_MUSICSHAPE
+        PLUGIN_PATHSHAPES
         PLUGIN_PICTURESHAPE
         PLUGIN_PLUGINSHAPE
-        PLUGIN_FORMULASHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_THREEDSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
+        PLUGIN_VIDEOSHAPE
 )
 calligra_define_productset(FLOW "Full Flow (for Desktop)"
     REQUIRES
@@ -405,16 +410,17 @@ calligra_define_productset(FLOW "Full Flow (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         # filters
         FILTERS_FLOW
@@ -426,16 +432,17 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         # filters
         FILTERS_KARBON
@@ -457,15 +464,15 @@ calligra_define_productset(KRITA "Full Krita"
         FILEMANAGER_THUMBNAIL
         FILEMANAGER_QUICKPRINT
         # plugins
-        PLUGIN_COLORENGINES
-        PLUGIN_SPACENAVIGATOR
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_TEXTEDITING
+        PLUGIN_COLORENGINES
         PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_PATHSHAPES
         PLUGIN_PICTURESHAPE
+        PLUGIN_TEXTEDITING
         PLUGIN_TEXTSHAPE
+        PLUGIN_SPACENAVIGATOR
         PLUGIN_VECTORSHAPE
 )
 calligra_define_productset(PLAN "Full Plan (for Desktop)"
@@ -484,18 +491,19 @@ calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
         # feature
         FEATURE_SCRIPTING
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
-        PLUGIN_VECTORSHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
         PLUGIN_SHEETS_PIVOTTABLES
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
+        PLUGIN_VECTORSHAPE
         # filters
         FILTERS_SHEETS
 )
@@ -506,16 +514,17 @@ calligra_define_productset(STAGE "Full Stage (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         PLUGIN_VIDEOSHAPE
         # filters
@@ -528,18 +537,19 @@ calligra_define_productset(WORDS "Full Words (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
-        PLUGIN_VECTORSHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
         PLUGIN_SEMANTICITEMS
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
+        PLUGIN_VECTORSHAPE
         # filters
         FILTERS_WORDS
 )
@@ -548,20 +558,20 @@ calligra_define_productset(GEMINI "Calligra for 2:1 devices"
         APP_GEMINI
     OPTIONAL
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_TEXTEDITING
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
-        PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
-        PLUGIN_FORMULASHAPE
-        PLUGIN_VIDEOSHAPE
-        PLUGIN_VECTORSHAPE
         PLUGIN_CALLIGRAGEMINI_GIT
+        PLUGIN_CHARTSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
+        PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
+        PLUGIN_VECTORSHAPE
+        PLUGIN_VIDEOSHAPE
         # filters
         FILTERS_WORDS
         FILTERS_STAGE
@@ -606,7 +616,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
 #      set(SHOULD_BUILD_MYPRODUCT FALSE)
-#    endif (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+#    endif ()
 #
 # 4. Wrap everything belonging to the product with the build flag of the product.
 #    Ideally this is done around subdirectory inclusions, results in easier code.
@@ -614,7 +624,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (SHOULD_BUILD_MYPRODUCT)
 #      add_subdirectory(myproduct)
-#    endif (SHOULD_BUILD_MYPRODUCT)
+#    endif ()
 #
 # 5. Tag the product as STAGING, if it is not yet ready for release, but already
 #    integrated in the master branch, e.g.
@@ -652,7 +662,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
 #      set(SHOULD_BUILD_MYFEATURE FALSE)
-#    endif (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+#    endif ()
 #
 # 4. Wrap everything belonging to the feature with the build flag of the feature.
 #    Ideally this is done around subdirectory inclusions, results in easier code.
@@ -660,7 +670,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (SHOULD_BUILD_MYFEATURE)
 #      add_subdirectory(myproduct)
-#    endif (SHOULD_BUILD_MYFEATURE)
+#    endif ()
 #
 # 5. Tag the feature as STAGING, if it is not yet ready for release, but already
 #    integrated in the master branch, e.g.

@@ -1,12 +1,12 @@
-INCLUDE_DIRECTORIES(
+include_directories(
 	${ENHMETAFILE_SOURCE_DIR}/demo/
 	${CMAKE_CURRENT_BINARY_DIR}
 	${QT_INCLUDES}
 )
 
-LINK_DIRECTORIES(${ENHMETAFILE_BINARY_DIR})
+link_directories(${ENHMETAFILE_BINARY_DIR})
 
-SET( emf_demo_bin_SRCS
+set( emf_demo_bin_SRCS
     emf_demo.cpp
     EmfViewer.cpp
 
@@ -18,10 +18,10 @@ SET( emf_demo_bin_SRCS
     ../EmfOutputPainterStrategy.cpp
 )  
 
-QT4_AUTOMOC( ${emf_demo_bin_SRCS} )
-ADD_EXECUTABLE( emf_demo ${emf_demo_bin_SRCS} )
+qt4_automoc( ${emf_demo_bin_SRCS} )
+add_executable( emf_demo ${emf_demo_bin_SRCS} )
 
 #TARGET_LINK_LIBRARIES( emf_demo libemf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY}  )
-TARGET_LINK_LIBRARIES( emf_demo ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY}  )
+target_link_libraries( emf_demo ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY}  )
 
 

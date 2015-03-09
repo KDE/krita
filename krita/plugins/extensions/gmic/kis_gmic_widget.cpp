@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (c) 2013-2015 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,12 +23,14 @@
 #include <QCloseEvent>
 #include <QLineEdit>
 #include <QApplication>
-#include <kis_debug.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
+
+#include <KoIcon.h>
 
 #include <QMetaType>
 #include <klocalizedstring.h>
 
+#include <kis_debug.h>
 #include <kis_html_delegate.h>
 
 #include <kis_gmic_filter_settings.h>
@@ -42,11 +44,18 @@
 static const QString maximizeStr = i18n("Maximize");
 static const QString selectFilterStr = i18n("Select a filter...");
 
-KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl): m_filterModel(filters),m_updateUrl(updateUrl)
+KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl)
+    : m_filterModel(filters)
+    ,m_updateUrl(updateUrl)
 {
     dbgPlugins << "Constructor:" << this;
 
     setupUi(this);
+
+    m_filterOptions = new QWidget(this);
+    m_filterScrollArea->setWidget(m_filterOptions);
+    m_filterOptions->show();
+
     createMainLayout();
     setAttribute(Qt::WA_DeleteOnClose, true);
 
@@ -90,6 +99,9 @@ void KisGmicWidget::createMainLayout()
         updateBtn->setEnabled(false);
     }
 
+    expandCollapseBtn->setIcon(koIcon("zoom-in"));
+    connect(expandCollapseBtn, SIGNAL(clicked()), this, SLOT(slotExpandCollapse()));
+
     connect(updateBtn, SIGNAL(clicked(bool)), this, SLOT(startUpdate()));
     connect(searchBox, SIGNAL(textChanged(QString)), proxyModel, SLOT(setFilterFixedString(QString)));
 
@@ -100,11 +112,6 @@ void KisGmicWidget::createMainLayout()
     connect(controlButtonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked(bool)), this, SLOT(slotApplyClicked()));
     connect(controlButtonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked(bool)), this, SLOT(slotCancelClicked()));
     connect(controlButtonBox->button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotResetClicked()));
-
-    int indexOfFilterOptions = m_filterConfigLayout->indexOf(m_filterOptions);
-    Q_ASSERT(indexOfFilterOptions != -1);
-    int rowSpan = 0, colSpan = 0;
-    m_filterConfigLayout->getItemPosition(indexOfFilterOptions, &m_filterOptionsRow, &m_filterOptionsColumn, &rowSpan, &colSpan);
 
     switchOptionsWidgetFor(new QLabel(selectFilterStr));
 }
@@ -164,11 +171,10 @@ void KisGmicWidget::slotSelectedFilterChanged(const QItemSelection & /*newSelect
 
 void KisGmicWidget::slotCancelClicked()
 {
-    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
+    if (m_onCanvasPreviewRequested)
     {
         emit sigCancelOnCanvasPreview();
     }
-
     close();
 }
 
@@ -192,7 +198,9 @@ void KisGmicWidget::slotOkClicked()
         }
     }
 
-    close();
+
+    emit sigRequestFinishAndClose();
+    hide();
 }
 
  void KisGmicWidget::closeEvent(QCloseEvent *event)
@@ -261,7 +269,7 @@ void KisGmicWidget::finishUpdate()
     QString msg = i18nc("@info",
                         "Update filters done. "
                         "Restart G'MIC dialog to finish updating! ");
-    KMessageBox::information(this, msg, i18nc("@title:window", "Updated"));
+    QMessageBox::information(this, i18nc("@title:window", "Updated"), msg);
 }
 
 void KisGmicWidget::slotPreviewChanged(bool enabling)
@@ -394,14 +402,13 @@ void KisGmicWidget::requestComputePreview()
 
 void KisGmicWidget::switchOptionsWidgetFor(QWidget* widget)
 {
-    m_filterConfigLayout->removeWidget(m_filterOptions);
+    m_filterOptions = m_filterScrollArea->takeWidget();
     delete m_filterOptions;
 
     m_filterOptions = widget;
 
-    m_filterConfigLayout->addWidget(m_filterOptions, m_filterOptionsRow, m_filterOptionsColumn);
-    m_filterConfigLayout->update();
-
+    m_filterScrollArea->setWidget(m_filterOptions);
+    m_filterOptions->show();
 }
 
 KisFilterPreviewWidget * KisGmicWidget::previewWidget()
@@ -411,5 +418,21 @@ KisFilterPreviewWidget * KisGmicWidget::previewWidget()
 
 void KisGmicWidget::slotNotImplemented()
 {
-    KMessageBox::sorry(this, i18n("Sorry, support not implemented yet."), i18n("Krita"));
+    QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Sorry, support not implemented yet."));
+}
+
+void KisGmicWidget::slotExpandCollapse()
+{
+    const QString &iconName = expandCollapseBtn->icon().name();
+    if (iconName == "zoom-in")
+    {
+        m_filterTree->expandAll();
+        expandCollapseBtn->setIcon(koIcon("zoom-out"));
+
+    }
+    else if (iconName == "zoom-out")
+    {
+        m_filterTree->collapseAll();
+        expandCollapseBtn->setIcon(koIcon("zoom-in"));
+    }
 }

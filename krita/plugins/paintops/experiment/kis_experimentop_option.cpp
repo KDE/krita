@@ -33,7 +33,7 @@ public:
         speed->setSingleStep(1.0);
 
         smoothThreshold->setRange(0.0, 100.0, 0);
-        smoothThreshold->setSuffix(i18n("px"));
+        smoothThreshold->setSuffix(i18n(" px"));
         smoothThreshold->setValue(20.0);
         smoothThreshold->setSingleStep(1.0);
 
@@ -50,19 +50,19 @@ KisExperimentOpOption::KisExperimentOpOption()
     m_checkable = false;
     m_options = new KisExperimentOpOptionsWidget();
 
-    connect(m_options->displaceCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->speedCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->speed, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->smoothCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->smoothThreshold, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->displaceCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->speedCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->speed, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->smoothCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->smoothThreshold, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
 
     connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SLOT(enableDisplacement(qreal)));
     connect(m_options->speed, SIGNAL(valueChanged(qreal)), SLOT(enableSpeed(qreal)));
     connect(m_options->smoothThreshold, SIGNAL(valueChanged(qreal)), SLOT(enableSmooth(qreal)));
 
-    connect(m_options->windingFillCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->hardEdgeCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->windingFillCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->hardEdgeCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     setConfigurationPage(m_options);
 }
 

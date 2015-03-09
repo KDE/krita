@@ -185,7 +185,7 @@ void KoShapeGroupCommand::undo()
                     bound = shape->boundingRect();
                     boundingRectInitialized = true;
                 } else
-                    bound = bound.unite(shape->boundingRect());
+                    bound = bound.united(shape->boundingRect());
             }
             // the group has changed position and so have the group child shapes
             // -> we need compensate the group position change
@@ -210,7 +210,7 @@ QRectF KoShapeGroupCommandPrivate::containerBoundingRect()
 
     foreach(KoShape *shape, shapes) {
         if (boundingRectInitialized)
-            bound = bound.unite(shape->boundingRect());
+            bound = bound.united(shape->boundingRect());
         else {
             bound = shape->boundingRect();
             boundingRectInitialized = true;

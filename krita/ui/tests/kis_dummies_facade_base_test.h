@@ -37,12 +37,12 @@ protected:
     virtual KisDummiesFacadeBase* dummiesFacadeFactory() = 0;
     virtual void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade) = 0;
 
-private slots:
+private Q_SLOTS:
     void slotNodeActivated(KisNodeSP node);
     void slotEndInsertDummy(KisNodeDummy *dummy);
     void slotBeginRemoveDummy(KisNodeDummy *dummy);
 
-private slots:
+private Q_SLOTS:
     void init();
     void cleanup();
 

@@ -26,7 +26,7 @@ class KisStrokeTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testRegularStroke();
     void testCancelStrokeCase1();
     void testCancelStrokeCase2and3();

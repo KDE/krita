@@ -18,7 +18,7 @@
 
 #include "kis_operation.h"
 #include "kis_processing_applicator.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 
 KisOperation::KisOperation(const QString &id)
@@ -35,7 +35,7 @@ QString KisOperation::id() const
     return m_id;
 }
 
-void KisOperation::runFromXML(KisView2 *view, const KisOperationConfiguration &config)
+void KisOperation::runFromXML(KisViewManager *view, const KisOperationConfiguration &config)
 {
     Q_UNUSED(view);
     Q_UNUSED(config);
@@ -43,7 +43,7 @@ void KisOperation::runFromXML(KisView2 *view, const KisOperationConfiguration &c
     qFatal("Not implemented yet");
 }
 
-KisProcessingApplicator* KisOperation::beginAction(KisView2 *view, const KUndo2MagicString &actionName) {
+KisProcessingApplicator* KisOperation::beginAction(KisViewManager *view, const KUndo2MagicString &actionName) {
     KisImageSP image = view->image();
     Q_ASSERT(image);
 

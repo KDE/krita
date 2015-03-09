@@ -28,7 +28,6 @@ class KisInputConfigurationPageItem;
 }
 
 class KisActionShortcutsModel;
-class QModelIndex;
 class KisAbstractInputAction;
 /**
  * \brief A collapsible widget displaying an action, its description and associated shortcuts.

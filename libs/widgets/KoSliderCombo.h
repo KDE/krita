@@ -102,7 +102,7 @@ public:
     virtual QSize minimumSizeHint() const; ///< reimplemented from QComboBox
     virtual QSize sizeHint() const; ///< reimplemented from QComboBox
 
-public slots:
+public Q_SLOTS:
 
      /**
      * Sets the value.
@@ -111,7 +111,7 @@ public slots:
      */
     void setValue(qreal value);
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted every time the value changes (by calling setValue() or

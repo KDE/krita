@@ -215,9 +215,9 @@ void ReferencesTool::deactivate()
     canvas()->canvasWidget()->setFocus();
 }
 
-QList<QWidget*> ReferencesTool::createOptionWidgets()
+QList<QPointer<QWidget> > ReferencesTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     m_stocw = new SimpleTableOfContentsWidget(this, 0);
 
     m_sfenw = new SimpleFootEndNotesWidget(this, 0);

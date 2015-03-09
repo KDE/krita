@@ -25,7 +25,6 @@
 #include "kis_particle_paintop_settings.h"
 #include "particle_brush.h"
 
-class QPointF;
 class KisPainter;
 class KisPaintInformation;
 
@@ -34,7 +33,7 @@ class KisParticlePaintOp : public KisPaintOp
 
 public:
 
-    KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisParticlePaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

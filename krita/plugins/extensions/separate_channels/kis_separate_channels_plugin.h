@@ -31,7 +31,7 @@ public:
     KisSeparateChannelsPlugin(QObject *parent, const QVariantList &);
     virtual ~KisSeparateChannelsPlugin();
 
-private slots:
+private Q_SLOTS:
 
     void slotSeparate();
 };

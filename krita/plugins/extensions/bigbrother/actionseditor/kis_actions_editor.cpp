@@ -31,7 +31,7 @@
 
 #include <KoIcon.h>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <QMenu>
 #include <QSignalMapper>
@@ -104,15 +104,16 @@ void KisActionsEditor::slotCreateAction(const QString& _id)
         if(d.exec() == KDialog::Accepted)
         {
             action = creator->createAction();
-            if(!action)
-            {
-                KMessageBox::error(this, i18n("Failed to create an action."));
+            if(!action) {
+                QMessageBox::critical(this, i18nc("@title:window", "Krita"), i18n("Failed to create an action."));
                 return;
             }
-        } else {
+        }
+        else {
             return;
         }
-    } else {
+    }
+    else {
         action = f->createAction();
     }
     Q_ASSERT(action);

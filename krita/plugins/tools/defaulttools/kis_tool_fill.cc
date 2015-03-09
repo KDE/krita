@@ -43,7 +43,7 @@
 #include <kis_selection.h>
 #include <kis_system_locker.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <canvas/kis_canvas2.h>
 #include <widgets/kis_cmb_composite.h>
 #include <widgets/kis_slider_spin_box.h>
@@ -130,7 +130,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                                        kundo2_i18n("Flood Fill"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
     KisProcessingVisitorSP visitor =
         new FillProcessingVisitor(m_startPos,
@@ -177,14 +177,14 @@ QWidget* KisToolFill::createOptionWidget()
     m_sizemodWidget->setObjectName("sizemod");
     m_sizemodWidget->setRange(-40, 40);
     m_sizemodWidget->setSingleStep(1);
-    m_sizemodWidget->setSuffix("px");
+    m_sizemodWidget->setSuffix(" px");
 
     QLabel *lbl_feather = new QLabel(i18n("Feathering radius: "), widget);
     m_featherWidget = new KisSliderSpinBox(widget);
     m_featherWidget->setObjectName("feather");
     m_featherWidget->setRange(0, 40);
     m_featherWidget->setSingleStep(1);   
-    m_featherWidget->setSuffix("px");
+    m_featherWidget->setSuffix(" px");
 
     QLabel *lbl_usePattern = new QLabel(i18n("Use pattern:"), widget);
     m_checkUsePattern = new QCheckBox(QString(), widget);

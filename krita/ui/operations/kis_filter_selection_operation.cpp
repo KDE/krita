@@ -20,7 +20,7 @@
 
 #include "kis_filter_selection_operation.h"
 #include <kis_transaction_based_command.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_stroke_job_strategy.h>
 #include <kis_selection_filters.h>
 #include <kis_pixel_selection.h>
@@ -29,7 +29,7 @@
 #include <kis_transaction.h>
 #include <kis_selection_manager.h>
 
-void KisFilterSelectionOperation::runFilter(KisSelectionFilter* filter, KisView2* view, const KisOperationConfiguration& config)
+void KisFilterSelectionOperation::runFilter(KisSelectionFilter* filter, KisViewManager* view, const KisOperationConfiguration& config)
 {
     KisSelectionSP selection = view->selection();
     if (!selection) return;

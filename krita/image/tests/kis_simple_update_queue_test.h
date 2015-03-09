@@ -29,7 +29,7 @@ class KisSimpleUpdateQueueTest : public QObject
 private:
     void testSplit(bool useFullRefresh);
 
-private slots:
+private Q_SLOTS:
     void testJobProcessing();
     void testSplitUpdate();
     void testSplitFullRefresh();

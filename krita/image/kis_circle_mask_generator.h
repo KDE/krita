@@ -23,8 +23,6 @@
 
 #include "kis_mask_generator.h"
 
-class QDomElement;
-class QDomDocument;
 
 /**
  * Create, serialize and deserialize an elliptical 8-bit mask.

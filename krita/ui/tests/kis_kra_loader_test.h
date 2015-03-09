@@ -24,10 +24,12 @@
 class KisKraLoaderTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
+     void initTestCase();
 
     void testLoading();
     void testObligeSingleChild();
+    void testObligeSingleChildNonTranspPixel();
 };
 
 #endif

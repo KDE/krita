@@ -2,14 +2,14 @@
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -26,12 +26,14 @@
 #include <QTransform>
 
 #include "kis_coordinates_converter.h"
+#include "kis_algebra_2d.h"
 
 #include <math.h>
 #include <limits>
 
-PerspectiveAssistant::PerspectiveAssistant()
-        : KisPaintingAssistant("perspective", i18n("Perspective assistant"))
+PerspectiveAssistant::PerspectiveAssistant(QObject *parent)
+        : KisAbstractPerspectiveGrid(parent)
+        , KisPaintingAssistant("perspective", i18n("Perspective assistant"))
 {
 }
 
@@ -195,10 +197,11 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         //find vanishing point, find mouse, draw line between both.
         QPainterPath path2;
         QPointF intersection(0, 0);//this is the position of the vanishing point.
-        QPointF delta(0,0);//this is the difference between the vanishing point and the mouse-position//
         QPointF mousePos(0,0);
-        QPointF endPoint(0,0);//this is the final point that the line is being extended to, we seek it just outside the view port//
-    
+        QLineF snapLine;
+        QRect viewport= gc.viewport();
+        QRect bounds;
+        
         if (canvas){
             //simplest, cheapest way to get the mouse-position//
             mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
@@ -209,30 +212,38 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             dbgFile<<"canvas does not exist, you may have passed arguments incorrectly:"<<canvas;
         }
         //figure out if point is in the perspective grid//
+        QPointF intersectTransformed(0, 0); //dummy for holding transformed intersection so the code is more readable.
+
         if (poly.containsPoint(initialTransform.inverted().map(mousePos), Qt::OddEvenFill)==true){
             if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-                path2.moveTo(initialTransform.map(intersection));
-                path2.lineTo(mousePos);
-                delta= mousePos-initialTransform.map(intersection);
-                //qDebug()<<delta;
-                endPoint=mousePos+delta;
-                do {
-                    endPoint=endPoint+delta;
+                intersectTransformed = initialTransform.map(intersection); 
+                snapLine = QLineF(intersectTransformed, mousePos);
+                KisAlgebra2D::intersectLineRect(snapLine, viewport);
+                bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
+                QPainterPath path;
+                if (bounds.contains(intersectTransformed.toPoint())){
+                    path2.moveTo(intersectTransformed);
+                    path2.lineTo(snapLine.p1());
                 }
-                while (gc.viewport().contains(endPoint.toPoint(), false)==true);
-
-                path2.lineTo(endPoint);
+                else {
+                    path2.moveTo(snapLine.p1());
+                    path2.lineTo(snapLine.p2());
+                }
             }
             if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-                path2.moveTo(initialTransform.map(intersection));
-                path2.lineTo(mousePos);
-                delta= mousePos-initialTransform.map(intersection);
-                endPoint=mousePos+delta;
-                do {
-                    endPoint=endPoint+delta;
+                intersectTransformed = initialTransform.map(intersection); 
+                snapLine = QLineF(intersectTransformed, mousePos);
+                KisAlgebra2D::intersectLineRect(snapLine, viewport);
+                bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
+                QPainterPath path;
+                if (bounds.contains(intersectTransformed.toPoint())){
+                    path2.moveTo(intersectTransformed);
+                    path2.lineTo(snapLine.p1());
                 }
-                while (gc.viewport().contains(endPoint.toPoint(), false)==true);
-                path2.lineTo(endPoint);
+                else {
+                    path2.moveTo(snapLine.p1());
+                    path2.lineTo(snapLine.p2());
+                }
             }
             drawPreview(gc, path2);
         }

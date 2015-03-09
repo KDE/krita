@@ -30,7 +30,7 @@ class KisSwappedDataStoreTest : public QObject
 private:
     void processTileData(qint32 column, KisTileData *td, KisSwappedDataStore &store);
 
-private slots:
+private Q_SLOTS:
     void testRoundTrip();
     void testRandomAccess();
 

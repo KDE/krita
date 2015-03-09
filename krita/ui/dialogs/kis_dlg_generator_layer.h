@@ -23,12 +23,8 @@
 #include <QString>
 
 class KisFilter;
-class QListWidgetItem;
-class QLabel;
 class KisFilterConfiguration;
-class QGroupBox;
-class KisConfigWidget;
-class KisView2;
+class KisViewManager;
 
 #include "ui_wdgdlggeneratorlayer.h"
 #include <generator/kis_generator.h>
@@ -48,13 +44,13 @@ public:
      * @param name the proposed name for this layer
      * @param parent the widget parent of this dialog
      */
-    KisDlgGeneratorLayer(const QString & name, KisView2 *parent);
+    KisDlgGeneratorLayer(const QString & name, KisViewManager *view, QWidget *parent);
 
     void setConfiguration(const KisFilterConfiguration * config);
     KisFilterConfiguration * configuration() const;
     QString layerName() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotNameChanged(const QString &);
 

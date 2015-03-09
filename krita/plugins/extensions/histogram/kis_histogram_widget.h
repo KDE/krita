@@ -47,7 +47,7 @@ public:
 
     void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
 
-private slots:
+private Q_SLOTS:
     void setActiveChannel(int channel);
     void slotTypeSwitched(int id);
     void slotZoomIn();

@@ -24,8 +24,8 @@
 #include <QSignalMapper>
 #include "kis_liquify_properties.h"
 
-#include "KoMainWindow.h"
-#include "kis_view2.h"
+#include "KisMainWindow.h"
+#include "KisViewManager.h"
 
 
 template<typename T> inline T sign(T x) {
@@ -52,6 +52,13 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Init Filter  combo
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     cmbFilter->setCurrent("Bicubic");
+    cmbFilter->setToolTip(i18nc("@info:tooltip",
+                                "<para>Select filtering mode:\n"
+                                "<list>"
+                                "<item><interface>Bilinear</interface> for areas with uniform color to avoid artifacts</item>"
+                                "<item><interface>Bicubic</interface> for smoother results</item>"
+                                "<item><interface>Lanczos3</interface> for sharp results. May produce aerials.</item>"
+                                "</list></para>"));
     connect(cmbFilter, SIGNAL(activated(const KoID &)),
             this, SLOT(slotFilterChanged(const KoID &)));
 
@@ -254,18 +261,10 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
 
-
-
-
-
-
-    connect(liquifySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
-    connect(liquifyAmountSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
-    connect(liquifySpacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
-    connect(liquifySizePressureBox, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
-    connect(liquifyAmountPressureBox, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
-    connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
-    connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(notifyEditingFinished()));
+    // Liquify
+    //
+    // liquify brush options do not affect the image directly and are not
+    // saved to undo, so we don't emit notifyEditingFinished() for them
 
     // Connect Apply/Reset buttons
     connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
@@ -282,7 +281,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     tooBigLabelWidget->hide();
 
-    connect(canvas->view()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()));
+    connect(canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
     slotUpdateIcons();
 }
 
@@ -343,7 +342,7 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
     liquifySizeSlider->setValue(props->size());
     liquifyAmountSlider->setValue(props->amount());
     liquifyFlowSlider->setValue(props->flow());
-    buidupModeComboBox->setCurrentIndex(!useWashMode);
+    buidupModeComboBox->setCurrentIndex(useWashMode);
 
     liquifySpacingSlider->setValue(props->spacing());
     liquifySizePressureBox->setChecked(props->sizeHasPressure());
@@ -435,7 +434,7 @@ void KisToolTransformConfigWidget::liquifyBuildUpChanged(int value)
     KisLiquifyProperties *props =
         config->liquifyProperties();
 
-    props->setUseWashMode(!value); // 0 == build up mode / 1 == wash mode
+    props->setUseWashMode(value); // 0 == build up mode / 1 == wash mode
 
     notifyConfigChanged();
 
@@ -552,7 +551,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         warpButton->setChecked(true);
 
         if (config.defaultPoints()) {
-            densityBox->setValue(config.numPoints());
+            densityBox->setValue(std::sqrt(config.numPoints()));
         }
 
         cmbWarpType->setCurrentIndex((int)config.warpType());

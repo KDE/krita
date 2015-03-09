@@ -150,7 +150,7 @@ void ReportSection::initFromXML(QDomNode & section)
 
     qreal h = KoUnit::parseValue(section.toElement().attribute("svg:height", "2.0cm"));
     m_sectionData->m_height->setValue(h);
-    
+
     h  = POINT_TO_INCH(h) * KoDpi::dpiY();
     //kDebug() << "Section Height: " << h;
     m_scene->setSceneRect(0, 0, m_scene->width(), h);
@@ -196,7 +196,7 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
     Q_UNUSED(set)
 
     KoUnit unit = m_reportDesigner->pageUnit();
-    
+
     m_sectionData->m_height->setOption("unit", unit.symbol());
 
     //update items position with unit
@@ -217,7 +217,7 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
 
     m_reportDesigner->adjustSize();
     m_reportDesigner->repaint();
-    
+
     slotResizeBarDragged(0);
 }
 
@@ -231,12 +231,12 @@ void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property
 {
     Q_UNUSED(s)
     //kDebug() << p.name();
-    
+
     //Handle Background Color
     if (p.name() == "background-color") {
         m_scene->setBackgroundBrush(p.value().value<QColor>());
     }
-    
+
     if (p.name() == "height") {
 	m_scene->setSceneRect(0, 0, m_scene->width(), POINT_TO_INCH(p.value().toDouble()) * KoDpi::dpiY());
 	slotResizeBarDragged(0);
@@ -260,6 +260,22 @@ void ReportSection::unsetSectionCursor()
     if (m_sceneView)
         m_sceneView->unsetCursor();
 }
+
+QGraphicsItemList ReportSection::items() const
+{
+    QGraphicsItemList items;
+
+    if (m_scene) {
+        foreach (QGraphicsItem *itm, m_scene->items()) {
+            if (itm->parentItem() == 0) {
+                items << itm;
+            }
+        }
+    }
+
+    return items;
+}
+
 
 //
 // class ReportResizeBar

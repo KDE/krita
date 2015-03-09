@@ -39,7 +39,7 @@ class TestCellRegion : public QObject
 public:
     TestCellRegion();
 
-private slots:
+private Q_SLOTS:
     void init();
     void testToStringSingleTable();
     void testSkippedTableEntry();

@@ -23,7 +23,6 @@
 
 #include <kis_config_widget.h>
 
-class KisFilter;
 class Ui_WdgMotionBlur;
 
 class KisWdgMotionBlur : public KisConfigWidget
@@ -37,7 +36,7 @@ public:
     }
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
-public slots:
+public Q_SLOTS:
     void angleSliderChanged(int);
     void angleDialChanged(int);
 private:

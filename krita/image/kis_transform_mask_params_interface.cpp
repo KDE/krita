@@ -30,6 +30,9 @@ KisTransformMaskParamsInterface::~KisTransformMaskParamsInterface()
 #include <QDomElement>
 #include "kis_dom_utils.h"
 #include "kis_node.h"
+#include "kis_painter.h"
+#include "KoCompositeOpRegistry.h"
+
 
 
 struct KisDumbTransformMaskParams::Private
@@ -80,8 +83,21 @@ bool KisDumbTransformMaskParams::isHidden() const
 void KisDumbTransformMaskParams::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const
 {
     Q_UNUSED(node);
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
+
+    QRect rc = src->exactBounds();
+    QPoint dstTopLeft = rc.topLeft();
+
+    QTransform t = finalAffineTransform();
+    if (t.isTranslating()) {
+        dstTopLeft = t.map(dstTopLeft);
+    } else if (!t.isIdentity()) {
+        qWarning() << "KisDumbTransformMaskParams::transformDevice does not support this kind of transformation";
+        qWarning() << ppVar(t);
+    }
+
+    KisPainter gc(dst);
+    gc.setCompositeOp(COMPOSITE_COPY);
+    gc.bitBlt(dstTopLeft, src, rc);
 }
 
 QString KisDumbTransformMaskParams::id() const
@@ -115,6 +131,11 @@ KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::fromXML(const QDom
 
     return KisTransformMaskParamsInterfaceSP(
         new KisDumbTransformMaskParams(transform));
+}
+
+void KisDumbTransformMaskParams::translate(const QPointF &offset)
+{
+    m_d->transform *= QTransform::fromTranslate(offset.x(), offset.y());
 }
 
 QTransform KisDumbTransformMaskParams::testingGetTransform() const

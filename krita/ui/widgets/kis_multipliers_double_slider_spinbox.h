@@ -48,7 +48,7 @@ public:
     ///Set the value, don't use setValue()
     void setValue(qreal value);
     void setExponentRatio(qreal dbl);
-signals:
+Q_SIGNALS:
     void valueChanged(qreal value);
     
 private:

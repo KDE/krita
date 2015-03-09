@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QToolButton>
 #include <QGridLayout>
+#include <QLabel>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -41,6 +42,7 @@
 class KoTagChooserWidget::Private
 {
 public:
+    QLabel* tagLabel;
     KComboBox* comboBox;
     KoTagToolButton* tagToolButton;
     QList<QString> readOnlyTags;
@@ -50,15 +52,21 @@ public:
 KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
 , d(new Private())
 {
+    d->tagLabel = new QLabel(i18n("Tag:"));
+    d->tagLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
     d->comboBox = new KComboBox(this);
     d->comboBox->setInsertPolicy(KComboBox::InsertAlphabetically);
+    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
+
 
     QGridLayout* comboLayout = new QGridLayout(this);
 
-    comboLayout->addWidget(d->comboBox, 0, 0);
+    comboLayout->addWidget(d->tagLabel,0, 0);
+    comboLayout->addWidget(d->comboBox, 0, 1);
 
     d->tagToolButton = new KoTagToolButton(this);
-    comboLayout->addWidget(d->tagToolButton, 0, 1);
+    comboLayout->addWidget(d->tagToolButton, 0, 2);
 
     comboLayout->setSpacing(0);
     comboLayout->setMargin(0);

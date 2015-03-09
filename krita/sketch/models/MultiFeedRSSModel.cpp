@@ -32,14 +32,14 @@
 
 #include "MultiFeedRSSModel.h"
 
-#include <QtCore/QTimer>
-#include <QtCore/QThread>
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QLocale>
+#include <QTimer>
+#include <QThread>
+#include <QXmlStreamReader>
+#include <QCoreApplication>
+#include <QLocale>
 
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include <NetworkAccessManager.h>
 
 namespace Welcome {

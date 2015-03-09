@@ -42,7 +42,7 @@ public:
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
+private Q_SLOTS:
     void slotCompositeOpChanged(const QModelIndex& index);
     void slotEraserToggled(bool toggled);
 

@@ -2,7 +2,7 @@ project(calligradockers)
 
 include_directories(${KDE4_INCLUDE_DIR}
      ${FLAKE_INCLUDES}
-     ${KOMAIN_INCLUDES}
+     ${KOWIDGETS_INCLUDES}     
 )
 
 set(calligradockers_SRCS
@@ -21,16 +21,9 @@ set(calligradockers_SRCS
     Plugin.cpp
 )
 
-set(calligradockers_SRCS ${calligradockers_SRCS}
-    colordocker/ColorDocker.h
-    colordocker/ColorDockerFactory.h
-    colordocker/ColorDocker.cpp
-    colordocker/ColorDockerFactory.cpp
-)
-
 kde4_add_plugin(calligra_docker_defaults ${calligradockers_SRCS})
 
-target_link_libraries(calligra_docker_defaults komain pigmentcms kowidgets)
+target_link_libraries(calligra_docker_defaults kowidgets)
 
 install(TARGETS calligra_docker_defaults DESTINATION ${PLUGIN_INSTALL_DIR})
 

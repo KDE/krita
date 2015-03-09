@@ -28,6 +28,7 @@
 #include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
+#include <KisView.h>
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
@@ -53,9 +54,9 @@ void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
     DelegatedSelectPathTool::mousePressEvent(event);
 }
 
-QList<QWidget *> KisToolSelectPath::createOptionWidgets()
+QList<QPointer<QWidget> > KisToolSelectPath::createOptionWidgets()
 {
-    QList<QWidget*> widgetsList =
+    QList<QPointer<QWidget> > widgetsList =
         DelegatedSelectPathTool::createOptionWidgets();
     selectionOptionWidget()->disableAntiAliasSelectionOption();
     return widgetsList;
@@ -82,9 +83,6 @@ void __KisToolSelectPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &p
 
 void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 {
-    KisNodeSP currentNode =
-        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-
     pathShape->normalize();
     pathShape->close();
 

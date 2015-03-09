@@ -35,7 +35,7 @@
 
 #include <KoUpdater.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_debug.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -56,6 +56,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::category
 {
     setSupportsPainting(true);
     setSupportsThreading(false);
+    setSupportsAdjustmentLayers(false);
 }
 
 void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,

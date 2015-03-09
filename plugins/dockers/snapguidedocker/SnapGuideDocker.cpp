@@ -60,6 +60,8 @@ SnapGuideDocker::~SnapGuideDocker()
 
 void SnapGuideDocker::setCanvas(KoCanvasBase *canvas)
 {
+    setEnabled(canvas != 0);
+
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
     }
@@ -74,6 +76,7 @@ void SnapGuideDocker::setCanvas(KoCanvasBase *canvas)
 
 void SnapGuideDocker::unsetCanvas()
 {
+    setEnabled(false);
     setWidget(0);
     d->canvas = 0;
 }

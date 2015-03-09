@@ -22,7 +22,6 @@
 #include <QObject>
 #include "kis_types.h"
 
-class KisDoc2;
 
 
 class KisSafeDocumentLoader : public QObject
@@ -33,17 +32,16 @@ public:
     ~KisSafeDocumentLoader();
 
 public:
-    KisImageWSP image() const;
     void setPath(const QString &path);
     void reloadImage();
 
-private slots:
+private Q_SLOTS:
     void fileChanged();
     void fileChangedCompressed(bool sync = false);
     void delayedLoadStart();
 
-signals:
-    void loadingFinished();
+Q_SIGNALS:
+    void loadingFinished(KisImageSP image);
 
 private:
     struct Private;

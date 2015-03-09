@@ -36,9 +36,9 @@ public:
      * Generate a node query path based on the state of the widgets
      */
     KisNodeQueryPath nodeQueryPath() const;
-signals:
+Q_SIGNALS:
     void nodeQueryPathChanged();
-private slots:
+private Q_SLOTS:
     void currentLayerEnabled(bool v);
     void customPathEnabled(bool v);
     void slotPopupQuickHelp();

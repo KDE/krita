@@ -107,9 +107,9 @@ public:
     virtual KisBrightnessContrastFilterConfiguration * configuration() const;
     virtual void setConfiguration(const KisPropertiesConfiguration* config);
     WdgBrightnessContrast * m_page;
-    void setView(KisView2 *view);
+    void setView(KisViewManager *view);
 
-public slots:
+public Q_SLOTS:
     void slotDrawLine(const KoColor &color);
 };
 

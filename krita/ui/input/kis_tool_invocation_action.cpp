@@ -97,12 +97,10 @@ bool KisToolInvocationAction::canIgnoreModifiers() const
 void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
     if (shortcut == ActivateShortcut || shortcut == LineToolShortcut) {
-        QPoint workaround = inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
         d->active =
             inputManager()->toolProxy()->forwardEvent(
                 KisToolProxy::BEGIN, KisTool::Primary, event, event,
-                inputManager()->lastTabletEvent(),
-                workaround);
+                inputManager()->lastTabletEvent());
     } else if (shortcut == ConfirmShortcut) {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
@@ -129,11 +127,9 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
-        QPoint workaround = inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
         inputManager()->toolProxy()->
             forwardEvent(KisToolProxy::END, KisTool::Primary, event, event,
-                         inputManager()->lastTabletEvent(),
-                         workaround);
+                         inputManager()->lastTabletEvent());
 
         d->active = false;
     }
@@ -145,11 +141,10 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 {
     if (!d->active) return;
 
-    QPoint workaround = inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
 
     inputManager()->toolProxy()->
         forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event,
-                     inputManager()->lastTabletEvent(), workaround);
+                     inputManager()->lastTabletEvent());
 }
 
 void KisToolInvocationAction::processUnhandledEvent(QEvent* event)

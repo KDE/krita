@@ -41,7 +41,7 @@ public:
     __CategorizedListModelBase(QObject *parent);
     virtual ~__CategorizedListModelBase();
 
-private slots:
+private Q_SLOTS:
 
     void slotRowChanged(int row) {
         QModelIndex changedIndex(index(row));

@@ -193,10 +193,10 @@ public:
      */
     void saveOdf(KoXmlWriter *writer, KoShapeSavingContext &context) const;
 
-public slots:
+public Q_SLOTS:
     void onStyleChanged(int key);
 
-signals:
+Q_SIGNALS:
     void styleChanged(int key);
 
 private:

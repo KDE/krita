@@ -25,7 +25,7 @@
 #include <kio/job.h>
 
 #include "kis_types.h"
-class KisDoc2;
+class KisDocument;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -53,7 +53,7 @@ class PSDSaver : public QObject {
 
 public:
 
-    PSDSaver(KisDoc2 *doc);
+    PSDSaver(KisDocument *doc);
     virtual ~PSDSaver();
 
 public:
@@ -62,14 +62,14 @@ public:
 
     KisImageWSP image();
 
-public slots:
+public Q_SLOTS:
 
     virtual void cancel();
 
 private:
 
     KisImageWSP m_image;
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     bool m_stop;
     KIO::TransferJob *m_job;
 };

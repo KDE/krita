@@ -302,7 +302,7 @@ protected:
      You may also want to change options in DriverBehaviour *beh member.
      See drivers/mySQL/mysqldriver.cpp for usage example.
      */
-    Driver(QObject *parent, const QVariantList &args = QVariantList());
+    explicit Driver(QObject *parent, const QVariantList &args = QVariantList());
 
     /*! For reimplementation: creates and returns connection object
      with additional structures specific for a given driver.

@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -26,7 +26,7 @@
 #include <KoCanvasBase.h>
 
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_paintop_box.h"
 #include "kis_paintop_presets_chooser_popup.h"
 #include "kis_canvas_resource_provider.h"
@@ -45,17 +45,19 @@ PresetDockerDock::PresetDockerDock( )
 
 void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
 {
+    setEnabled(canvas != 0);
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_presetChooser->disconnect(m_canvas->view()->paintOpBox());
+        m_presetChooser->disconnect(m_canvas->viewManager()->paintOpBox());
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    Q_ASSERT(m_canvas);
-    if (!m_canvas) return;
+
+    if (!m_canvas || !m_canvas->viewManager() || !m_canvas->resourceManager()) return;
 
     connect(m_presetChooser, SIGNAL(resourceSelected(KoResource*)),
-            m_canvas->view()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
+            m_canvas->viewManager()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
     connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
             this, SLOT(canvasResourceChanged(int,QVariant)));
 }

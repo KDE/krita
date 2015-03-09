@@ -26,7 +26,7 @@
 #include <kis_annotation.h>
 #include <kis_types.h>
 #include <kis_paint_layer.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
@@ -82,7 +82,7 @@ QPair<psd_color_mode, quint16> colormodelid_to_psd_colormode(const QString &colo
 
 
 
-PSDSaver::PSDSaver(KisDoc2 *doc)
+PSDSaver::PSDSaver(KisDocument *doc)
 {
     m_doc = doc;
     m_image  = doc->image();

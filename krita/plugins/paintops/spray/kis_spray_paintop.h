@@ -29,7 +29,6 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 
-class QPointF;
 class KisPainter;
 
 
@@ -38,7 +37,7 @@ class KisSprayPaintOp : public KisPaintOp
 
 public:
 
-    KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisSprayPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
@@ -59,6 +58,7 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
+    KisNodeSP m_node;
 };
 
 #endif // KIS_SPRAY_PAINTOP_H_

@@ -25,10 +25,10 @@
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
 #include <kstatusbar.h>
+#include <ktoggleaction.h>
 #include <kis_debug.h>
 
-#include <KoStandardAction.h>
-#include <KoView.h>
+#include <KisView.h>
 #include <KoZoomAction.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
@@ -38,8 +38,9 @@
 #include <KoUnit.h>
 #include <KoDpi.h>
 
-#include "kis_doc2.h"
-#include "kis_view2.h"
+#include "KisDocument.h"
+#include "KisViewManager.h"
+#include "KisView.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_image.h"
@@ -69,7 +70,7 @@ private:
 };
 
 
-KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
+KisZoomManager::KisZoomManager(QPointer<KisView> view, KoZoomHandler * zoomHandler,
                                KoCanvasController * canvasController)
         : m_view(view)
         , m_zoomHandler(zoomHandler)
@@ -78,60 +79,43 @@ KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
         , m_verticalRuler(0)
         , m_zoomAction(0)
         , m_zoomActionWidget(0)
-        , m_100pct(0)
-        , m_showGuidesAction(0)
 {
 }
 
 KisZoomManager::~KisZoomManager()
 {
-    m_view->removeStatusBarItem(m_zoomActionWidget);
     KisConfig cfg;
-    cfg.setShowRulers(m_showRulersAction->isChecked());
+    cfg.setShowRulers(m_horizontalRuler->isVisible());
+
+    if (m_zoomActionWidget && !m_zoomActionWidget->parent()) {
+        delete m_zoomActionWidget;
+    }
 }
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
-    QSize imageSize = m_view->image()->size();
-    qreal minDimension = qMin(imageSize.width(), imageSize.height());
-    qreal minZoom = qMin(100.0 / minDimension, 0.1);
 
-    KoZoomMode::setMinimumZoom(minZoom);
-    KoZoomMode::setMaximumZoom(90.0);
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    connect(image, SIGNAL(sigSizeChanged(const QPointF &, const QPointF &)), this, SLOT(setMinMaxZoom()));
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
 
-    KisConfig cfg;
     m_zoomController = new KisZoomController(m_canvasController, converter, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
     m_zoomHandler->setZoom(1.0);
 
-
-    KisImageWSP image = m_view->image();
     m_zoomController->setPageSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()));
     m_zoomController->setDocumentSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()), true);
 
     m_zoomAction = m_zoomController->zoomAction();
-    actionCollection->addAction("zoom", m_zoomAction);
-    m_zoomActionWidget = m_zoomAction->createWidget(m_view->KoView::statusBar());
-    m_view->addStatusBarItem(m_zoomActionWidget, 0, true);
 
-    m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
-    actionCollection->addAction("view_ruler", m_showRulersAction);
-    m_showRulersAction->setWhatsThis(i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
-                                          "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers.</p>"));
-    connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
+    setMinMaxZoom();
 
-    m_showGuidesAction = KoStandardAction::showGuides(this, SLOT(showGuides()), this);
-    actionCollection->addAction(KoStandardAction::name(KoStandardAction::ShowGuides), m_showGuidesAction);
-    m_showGuidesAction->setChecked(m_view->document()->guidesData().showGuideLines());
+    m_zoomActionWidget = m_zoomAction->createWidget(0);
 
-
-    m_100pct = new KAction(i18n("Reset zoom"), this);
-    actionCollection->addAction("zoom_to_100pct", m_100pct);
-    m_100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
-    connect(m_100pct, SIGNAL(triggered()), SLOT(zoomTo100()));
 
     // Put the canvascontroller in a layout so it resizes with us
     QGridLayout * layout = new QGridLayout(m_view);
@@ -139,21 +123,17 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     layout->setMargin(0);
     m_view->setLayout(layout);
 
-    bool show = cfg.showRulers();
-
     m_view->document()->setUnit(KoUnit(KoUnit::Pixel));
 
     m_horizontalRuler = new KoRuler(m_view, Qt::Horizontal, m_zoomHandler);
     m_horizontalRuler->setShowMousePosition(true);
-    m_horizontalRuler->setVisible(show);
     m_horizontalRuler->createGuideToolConnection(m_view->canvasBase());
 
     new KoRulerController(m_horizontalRuler, m_canvasController->canvas()->resourceManager());
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
-    m_verticalRuler->setVisible(show);
     m_verticalRuler->createGuideToolConnection(m_view->canvasBase());
-    m_showRulersAction->setChecked(show);
+
 
     QList<QAction*> unitActions = m_view->createChangeUnitActions(true);
     m_horizontalRuler->setPopupActionList(unitActions);
@@ -183,6 +163,9 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
     applyRulersUnit(m_view->document()->unit());
 
+    KisConfig cfg;
+    toggleShowRulers(cfg.showRulers());
+
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
@@ -205,6 +188,20 @@ void KisZoomManager::applyRulersUnit(const KoUnit &baseUnit)
     m_verticalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->yRes()));
 }
 
+void KisZoomManager::setMinMaxZoom()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    QSize imageSize = image->size();
+    qreal minDimension = qMin(imageSize.width(), imageSize.height());
+    qreal minZoom = qMin(100.0 / minDimension, 0.1);
+
+    m_zoomAction->setMinimumZoom(minZoom);
+    m_zoomAction->setMaximumZoom(90.0);
+
+}
+
 void KisZoomManager::updateGUI()
 {
     QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
@@ -213,25 +210,30 @@ void KisZoomManager::updateGUI()
     m_horizontalRuler->setRulerLength(documentSize.width());
     m_verticalRuler->setRulerLength(documentSize.height());
 
-    KIS_ASSERT_RECOVER_NOOP(m_horizontalRuler->unit() == m_verticalRuler->unit());
     applyRulersUnit(m_horizontalRuler->unit());
+}
+
+QWidget *KisZoomManager::zoomActionWidget() const
+{
+    return m_zoomActionWidget;
 }
 
 void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 {
     Q_UNUSED(mode);
     Q_UNUSED(zoom);
-
     m_view->canvasBase()->notifyZoomChanged();
 
     qreal humanZoom = zoom * 100.0;
 
-    m_view->
-        showFloatingMessage(
-            i18nc("floating message about zoom", "Zoom: %1 \%",
-                  KritaUtils::prettyFormatReal(humanZoom)),
-            QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
-
+// XXX: KOMVC -- this is very irritating in MDI mode
+    if (m_view->viewManager()) {
+        m_view->viewManager()->
+                showFloatingMessage(
+                    i18nc("floating message about zoom", "Zoom: %1 \%",
+                          KritaUtils::prettyFormatReal(humanZoom)),
+                    QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
+    }
     qreal scaleX, scaleY;
     m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
 
@@ -280,10 +282,10 @@ void KisZoomManager::zoomTo100()
     m_view->canvasBase()->notifyZoomChanged();
 }
 
-void KisZoomManager::showGuides()
+void KisZoomManager::showGuides(bool toggle)
 {
-    m_view->document()->guidesData().setShowGuideLines(m_showGuidesAction->isChecked());
-    m_view->canvas()->update();
+    m_view->document()->guidesData().setShowGuideLines(toggle);
+    m_view->canvasBase()->canvasWidget()->update();
 }
 
 

@@ -25,8 +25,8 @@
 
 #include "kis_tool_paint.h"
 
-#include <KConfig>
-#include <KConfigGroup>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <QScopedPointer>
 #include "kis_global.h"
 #include "kis_types.h"
@@ -35,12 +35,9 @@
 #include "kis_signal_compressor.h"
 #include <KoIcon.h>
 
-class KisPainter;
 class QPoint;
 class KoCanvasBase;
-class KisRecordedPolyLinePaintAction;
 class QCheckBox;
-class QPushButton;
 class KisPaintingInformationBuilder;
 class KisToolLineHelper;
 
@@ -53,6 +50,9 @@ public:
     KisToolLine(KoCanvasBase * canvas);
     virtual ~KisToolLine();
 
+    void requestStrokeCancellation();
+    void requestStrokeEnd();
+
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
@@ -63,7 +63,7 @@ public:
 
     virtual QString quickHelp() const;
 
-private slots:
+private Q_SLOTS:
     void updateStroke();
     void setUseSensors(bool value);
     void setShowOutline(bool value);
@@ -74,12 +74,18 @@ private:
     void updatePreview();
     virtual QWidget* createOptionWidget();
 
+    void endStroke();
+    void cancelStroke();
+
 private:
     bool m_showOutline;
 
     QPointF m_startPoint;
     QPointF m_endPoint;
     QPointF m_lastUpdatedPoint;
+
+    bool m_strokeIsRunning;
+
 
     QCheckBox *m_chkUseSensors;
     QCheckBox *m_chkShowOutline;

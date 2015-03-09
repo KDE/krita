@@ -78,7 +78,7 @@ public:
     @param widget QWidget parent
     @param element Report structure XML element
     */
-    KoReportDesigner(QWidget *, QDomElement);
+    KoReportDesigner(QWidget *, const QDomElement &data);
 
     /**
     @brief Desctructor
@@ -286,7 +286,7 @@ public:
     */
     QPointF getReleasePoint() const;
 
-public slots:
+public Q_SLOTS:
 
     void slotEditDelete();
     void slotEditCut();
@@ -366,7 +366,7 @@ private:
     void setSectionCursor(const QCursor&);
     void unsetSectionCursor();
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);
 
     /**
@@ -374,7 +374,7 @@ private slots:
     */
     void slotPageButton_Pressed();
 
-signals:
+Q_SIGNALS:
     void pagePropertyChanged(KoProperty::Set &s);
     void propertySetChanged();
     void dirty();

@@ -74,7 +74,6 @@ private:
     bool saveAnnotations(KisLayer* layer);
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* node);
-    void saveTransformMaskParams(KisTransformMask *mask);
     bool saveMetaData(KisNode* node);
     QString getLocation(KisNode* node, const QString& suffix = QString());
 

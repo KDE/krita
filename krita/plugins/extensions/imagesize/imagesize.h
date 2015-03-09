@@ -31,7 +31,7 @@ public:
     ImageSize(QObject *parent, const QVariantList &);
     virtual ~ImageSize();
 
-private slots:
+private Q_SLOTS:
 
     void slotImageSize();
     void slotCanvasSize();

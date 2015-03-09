@@ -25,10 +25,38 @@
 #include "filter/kis_filter_configuration.h"
 #include "generator/kis_generator_registry.h"
 
+#ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
+
+#define SANITY_ACQUIRE_FILTER(filter)                           \
+    do {                                                        \
+        if ((filter)) {                                         \
+            (filter)->sanityRefUsageCounter();                  \
+        }                                                       \
+    } while (0)
+
+#define SANITY_RELEASE_FILTER(filter)                           \
+    do {                                                        \
+        if (m_filter && m_filter->sanityDerefUsageCounter()) {  \
+            qWarning();                                                 \
+            qWarning() << "WARNING: filter configuration has more than one user! Krita will probably crash soon!"; \
+            qWarning() << "WARNING:" << ppVar(this);                    \
+            qWarning() << "WARNING:" << ppVar(filter.data());           \
+            qWarning();                                                 \
+        }                                                               \
+    } while (0)
+
+#else /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER */
+
+#define SANITY_ACQUIRE_FILTER(filter)
+#define SANITY_RELEASE_FILTER(filter)
+
+#endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER*/
+
 KisNodeFilterInterface::KisNodeFilterInterface(KisFilterConfiguration *filterConfig, bool useGeneratorRegistry)
     : m_filter(filterConfig),
       m_useGeneratorRegistry(useGeneratorRegistry)
 {
+    SANITY_ACQUIRE_FILTER(m_filter);
 }
 
 KisNodeFilterInterface::KisNodeFilterInterface(const KisNodeFilterInterface &rhs)
@@ -39,10 +67,13 @@ KisNodeFilterInterface::KisNodeFilterInterface(const KisNodeFilterInterface &rhs
     } else {
         m_filter = KisSafeFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(rhs.m_filter.data()));
     }
+
+    SANITY_ACQUIRE_FILTER(m_filter);
 }
 
 KisNodeFilterInterface::~KisNodeFilterInterface()
 {
+    SANITY_RELEASE_FILTER(m_filter);
 }
 
 KisSafeFilterConfigurationSP KisNodeFilterInterface::filter() const
@@ -52,6 +83,10 @@ KisSafeFilterConfigurationSP KisNodeFilterInterface::filter() const
 
 void KisNodeFilterInterface::setFilter(KisFilterConfiguration *filterConfig)
 {
+    SANITY_RELEASE_FILTER(m_filter);
+
     Q_ASSERT(filterConfig);
     m_filter = KisSafeFilterConfigurationSP(filterConfig);
+
+    SANITY_ACQUIRE_FILTER(m_filter);
 }

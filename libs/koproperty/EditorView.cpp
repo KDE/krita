@@ -47,11 +47,11 @@ using namespace KoProperty;
 class EditorViewStyle : public KexiUtils::StyleProxy
 {
 public:
-    EditorViewStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
+    explicit EditorViewStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
     {
     }
 
-    virtual void drawPrimitive(PrimitiveElement elem, const QStyleOption* option, 
+    virtual void drawPrimitive(PrimitiveElement elem, const QStyleOption* option,
         QPainter* painter, const QWidget* widget) const
     {
 /*        if (elem == PE_PanelLineEdit) {
@@ -59,12 +59,12 @@ public:
             if (panel) {
                 QStyleOptionFrame alteredOption(*panel);
                 alteredOption.lineWidth = 0;
-                KexiUtils::StyleProxy::drawPrimitive(elem, &alteredOption, 
+                KexiUtils::StyleProxy::drawPrimitive(elem, &alteredOption,
                     painter, widget);
                 return;
             }
         }*/
-        KexiUtils::StyleProxy::drawPrimitive(elem, option, 
+        KexiUtils::StyleProxy::drawPrimitive(elem, option,
             painter, widget);
     }
 };
@@ -81,13 +81,13 @@ static bool computeAutoSync(Property *property, bool defaultAutoSync)
 class ItemDelegate : public QItemDelegate
 {
 public:
-    ItemDelegate(QWidget *parent);
+    explicit ItemDelegate(QWidget *parent);
     virtual ~ItemDelegate();
-    virtual void paint(QPainter *painter, 
+    virtual void paint(QPainter *painter,
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem &option,
         const QModelIndex &index) const;
-    virtual QWidget * createEditor(QWidget *parent, 
+    virtual QWidget * createEditor(QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     mutable QPointer<QWidget> m_currentEditor;
 };
@@ -101,9 +101,9 @@ ItemDelegate::~ItemDelegate()
 {
 }
 
-static int getIconSize(int rowHeight)
+static int getIconSize(int fontPixelSize)
 {
-    return rowHeight * 2 / 3;
+    return fontPixelSize * 0.85;
 }
 
 static int typeForProperty( Property* prop )
@@ -114,7 +114,7 @@ static int typeForProperty( Property* prop )
         return prop->type();
 }
 
-void ItemDelegate::paint(QPainter *painter, 
+void ItemDelegate::paint(QPainter *painter,
                          const QStyleOptionViewItem &option,
                          const QModelIndex &index) const
 {
@@ -141,7 +141,7 @@ void ItemDelegate::paint(QPainter *painter,
     }
     const int x2 = alteredOption.rect.right();
     const int y2 = alteredOption.rect.bottom();
-    const int iconSize = getIconSize( alteredOption.rect.height() );
+    const int iconSize = getIconSize( alteredOption.font.pixelSize() );
     if (modified) {
         alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 1 );
     }
@@ -161,24 +161,24 @@ void ItemDelegate::paint(QPainter *painter,
         int y1 = alteredOption.rect.top();
         QLinearGradient grad(x2 - iconSize * 2, y1, x2 - iconSize / 2, y1);
         QColor color(
-            alteredOption.palette.color( 
+            alteredOption.palette.color(
                 (alteredOption.state & QStyle::State_Selected) ? QPalette::Highlight : QPalette::Base ));
         color.setAlpha(0);
         grad.setColorAt(0.0, color);
         color.setAlpha(255);
         grad.setColorAt(0.5, color);
         QBrush gradBrush(grad);
-        painter->fillRect(x2 - iconSize * 2, y1, 
+        painter->fillRect(x2 - iconSize * 2, y1,
             iconSize * 2, y2 - y1 + 1, gradBrush);
         QPixmap revertIcon(koIcon("edit-undo").pixmap(iconSize, iconSize));
-        revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0, 
+        revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0,
             alteredOption.palette.color(
                 (alteredOption.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text ), false);
-        painter->drawPixmap( x2 - iconSize - 2, 
+        painter->drawPixmap( x2 - iconSize - 2,
             y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
     }
 
-    QColor gridLineColor( dynamic_cast<EditorView*>(painter->device()) ? 
+    QColor gridLineColor( dynamic_cast<EditorView*>(painter->device()) ?
         dynamic_cast<EditorView*>(painter->device())->gridLineColor()
         : EditorView::defaultGridLineColor() );
     QPen pen(gridLineColor);
@@ -195,7 +195,7 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option,
     return QItemDelegate::sizeHint(option, index) + QSize(0, 2);
 }
 
-QWidget * ItemDelegate::createEditor(QWidget * parent, 
+QWidget * ItemDelegate::createEditor(QWidget * parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     if (!index.isValid())
@@ -258,7 +258,7 @@ EditorView::EditorView(QWidget* parent)
     setAnimated(false);
     setAllColumnsShowFocus(true);
     header()->setMovable(false);
-    
+
     setEditTriggers(
           QAbstractItemView::CurrentChanged
         | QAbstractItemView::DoubleClicked
@@ -284,7 +284,7 @@ void EditorView::changeSet(Set *set, const QByteArray& propertyToSelect, SetOpti
     changeSetInternal(set, options, propertyToSelect);
 }
 
-void EditorView::changeSetInternal(Set *set, SetOptions options, 
+void EditorView::changeSetInternal(Set *set, SetOptions options,
     const QByteArray& propertyToSelect)
 {
 //! @todo port??
@@ -324,7 +324,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
             //TODO This crashes when changing the interpreter type in the script plugin
             //if (property->isNull())
             //    kDebug() << "WTF? a NULL property?";
-            //else        
+            //else
                 //d->set->setPreviousSelection(property->name());
 #endif
         }
@@ -442,7 +442,7 @@ QRect EditorView::revertButtonArea( const QModelIndex& index ) const
     QVariant modifiedVariant( d->model->data(index, EditorDataModel::PropertyModifiedRole) );
     if (!modifiedVariant.isValid() || !modifiedVariant.toBool())
         return QRect();
-    const int iconSize = getIconSize( rowHeight( index ) );
+    const int iconSize = getIconSize( fontInfo().pixelSize() );
     int x2 = columnWidth(0);
     int x1 = x2 - iconSize - 2;
     QRect r(visualRect(index));
@@ -554,15 +554,29 @@ void EditorView::slotPropertyChanged(Set& set, Property& property)
     const QModelIndex parentIndex( d->model->indexForPropertyName(realProperty->name()) );
     if (parentIndex.isValid()) {
         QModelIndex index = findChildItem(property, parentIndex);
-        if (index.isValid()) {
-            update(index);
-        }
-        index = d->model->indexForColumn(index, 1);
-        if (index.isValid()) {
-            update(index);
-        }
+        updateSubtree(index);
     }
     d->slotPropertyChangedEnabled = true;
+}
+
+void EditorView::updateSubtree(const QModelIndex &index)
+{
+    if (!index.isValid()) {
+        return;
+    }
+    update(index);
+    QModelIndex valueIndex = d->model->indexForColumn(index, 1);
+    if (valueIndex.isValid()) {
+        update(valueIndex);
+    }
+    Property *property = static_cast<Property*>(index.internalPointer());
+    if (property->children()) {
+        int row = 0;
+        foreach (Property* p, *property->children()) {
+            updateSubtree(d->model->createIndex(row, 0, p));
+            ++row;
+        }
+    }
 }
 
 void EditorView::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)

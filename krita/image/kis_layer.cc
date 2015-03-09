@@ -41,6 +41,7 @@
 #include "kis_selection_mask.h"
 #include "kis_meta_data_store.h"
 #include "kis_selection.h"
+#include "kis_paint_layer.h"
 
 #include "kis_clone_layer.h"
 
@@ -186,16 +187,16 @@ void KisLayer::setLayerStyle(KisPSDLayerStyle *layerStyle)
     m_d->layerStyle = layerStyle;
 }
 
-KoDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
+    KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
+    l << KisDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
     if (compositeOp())
-        l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
+        l << KisDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
     return l;
 }
 
-void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
+void KisLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
 {
     KisBaseNode::setSectionModelProperties(properties);
 }
@@ -264,6 +265,71 @@ void KisLayer::setImage(KisImageWSP image)
         if (layer)
             layer->setImage(image);
     }
+}
+
+KisLayerSP KisLayer::createMergedLayer(KisLayerSP prevLayer)
+{
+    KisImageWSP my_image = image();
+
+    QRect layerProjectionExtent = this->projection()->extent();
+    QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
+    bool alphaDisabled = this->alphaChannelDisabled();
+    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
+
+    KisPaintDeviceSP mergedDevice;
+
+    if (this->compositeOpId() != prevLayer->compositeOpId() || prevLayer->opacity() != OPACITY_OPAQUE_U8) {
+
+        mergedDevice = new KisPaintDevice(this->colorSpace(), "merged");
+        KisPainter gc(mergedDevice);
+
+        //Copy the pixels of previous layer with their actual alpha value
+        prevLayer->disableAlphaChannel(false);
+
+        gc.setChannelFlags(prevLayer->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
+        gc.setOpacity(prevLayer->opacity());
+
+        gc.bitBlt(prevLayerProjectionExtent.topLeft(), prevLayer->projection(), prevLayerProjectionExtent);
+
+        //Restore the previous prevLayer disableAlpha status for correct undo/redo
+        prevLayer->disableAlphaChannel(prevAlphaDisabled);
+
+        //Paint the pixels of the current layer, using their actual alpha value
+        if (alphaDisabled == prevAlphaDisabled) {
+            this->disableAlphaChannel(false);
+        }
+        gc.setChannelFlags(this->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(this->compositeOpId()));
+        gc.setOpacity(this->opacity());
+
+        gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
+
+        //Restore the layer disableAlpha status for correct undo/redo
+        this->disableAlphaChannel(alphaDisabled);
+    }
+    else {
+        //Copy prevLayer
+        my_image->lock();
+        mergedDevice = new KisPaintDevice(*prevLayer->projection());
+        my_image->unlock();
+
+        //Paint layer on the copy
+        KisPainter gc(mergedDevice);
+        if (alphaDisabled == prevAlphaDisabled) {
+            this->disableAlphaChannel(false);
+        }
+        gc.setChannelFlags(this->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(this->compositeOpId()));
+        gc.setOpacity(this->opacity());
+
+        gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
+
+        //Restore the layer disableAlpha status for correct undo/redo
+        this->disableAlphaChannel(alphaDisabled);
+    }
+
+    return new KisPaintLayer(my_image, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
 }
 
 void KisLayer::registerClone(KisCloneLayerWSP clone)
@@ -407,10 +473,33 @@ QRect KisLayer::masksNeedRect(const QList<KisEffectMaskSP> &masks,
     return needRect;
 }
 
+KisNode::PositionToFilthy calculatePositionToFilthy(KisNodeSP nodeInQuestion,
+                                           KisNodeSP filthy,
+                                           KisNodeSP parent)
+{
+    if (parent == filthy || parent != filthy->parent()) {
+        return KisNode::N_ABOVE_FILTHY;
+    }
+
+    if (nodeInQuestion == filthy) {
+        return KisNode::N_FILTHY;
+    }
+
+    KisNodeSP node = nodeInQuestion->prevSibling();
+    while (node) {
+        if (node == filthy) {
+            return KisNode::N_ABOVE_FILTHY;
+        }
+        node = node->prevSibling();
+    }
+
+    return KisNode::N_BELOW_FILTHY;
+}
+
 QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                            const KisPaintDeviceSP destination,
                            const QRect &requestedRect,
-                           PositionToFilthy pos,
+                           KisNodeSP filthyNode,
                            KisNodeSP lastNode) const
 {
     Q_ASSERT(source);
@@ -460,7 +549,8 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                 const QRect maskNeedRect =
                     applyRects.isEmpty() ? needRect : applyRects.top();
 
-                mask->apply(destination, maskApplyRect, maskNeedRect, pos);
+                PositionToFilthy maskPosition = calculatePositionToFilthy(mask, filthyNode, const_cast<KisLayer*>(this));
+                mask->apply(destination, maskApplyRect, maskNeedRect, maskPosition);
             }
             Q_ASSERT(applyRects.isEmpty());
         } else {
@@ -478,7 +568,8 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
             QRect maskNeedRect = needRect;
 
             foreach(const KisEffectMaskSP& mask, masks) {
-                mask->apply(tempDevice, maskApplyRect, maskNeedRect, pos);
+                PositionToFilthy maskPosition = calculatePositionToFilthy(mask, filthyNode, const_cast<KisLayer*>(this));
+                mask->apply(tempDevice, maskApplyRect, maskNeedRect, maskPosition);
 
                 if (!applyRects.isEmpty()) {
                     maskNeedRect = maskApplyRect;
@@ -496,7 +587,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
     return changeRect;
 }
 
-QRect KisLayer::updateProjection(const QRect& rect, PositionToFilthy pos)
+QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
 {
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
@@ -513,18 +604,29 @@ QRect KisLayer::updateProjection(const QRect& rect, PositionToFilthy pos)
                 m_d->safeProjection.getDeviceLazy(originalDevice);
 
             updatedRect = applyMasks(originalDevice, projection,
-                                     updatedRect, pos, 0);
+                                     updatedRect, filthyNode, 0);
         }
     }
 
     return updatedRect;
 }
 
-void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect, PositionToFilthy pos)
+QRect KisLayer::partialChangeRect(KisNodeSP lastNode, const QRect& rect)
 {
     bool changeRectVaries = false;
-    QRect changeRect = masksChangeRect(effectMasks(lastNode), rect,
-                                       changeRectVaries);
+    QRect changeRect = outgoingChangeRect(rect);
+    changeRect = masksChangeRect(effectMasks(lastNode), changeRect,
+                                 changeRectVaries);
+
+    return changeRect;
+}
+
+/**
+ * \p rect is a dirty rect in layer's original() coordinates!
+ */
+void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect)
+{
+    QRect changeRect = partialChangeRect(lastNode, rect);
 
     KisPaintDeviceSP originalDevice = original();
 
@@ -532,7 +634,7 @@ void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP la
 
     if (!changeRect.isEmpty()) {
         applyMasks(originalDevice, projection,
-                   changeRect, pos, lastNode);
+                   changeRect, this, lastNode);
     }
 }
 
@@ -562,13 +664,33 @@ KisPaintDeviceSP KisLayer::projection() const
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect changeRect = rect;
+    changeRect = incomingChangeRect(changeRect);
 
     if(pos == KisNode::N_FILTHY) {
         bool changeRectVaries;
-        changeRect = masksChangeRect(effectMasks(), rect, changeRectVaries);
+        changeRect = outgoingChangeRect(changeRect);
+        changeRect = masksChangeRect(effectMasks(), changeRect, changeRectVaries);
+    }
+
+    // TODO: string comparizon: optimize!
+    if (pos != KisNode::N_FILTHY &&
+        pos != KisNode::N_FILTHY_PROJECTION &&
+        compositeOpId() != COMPOSITE_COPY) {
+
+        changeRect |= rect;
     }
 
     return changeRect;
+}
+
+QRect KisLayer::incomingChangeRect(const QRect &rect) const
+{
+    return rect;
+}
+
+QRect KisLayer::outgoingChangeRect(const QRect &rect) const
+{
+    return rect;
 }
 
 QImage KisLayer::createThumbnail(qint32 w, qint32 h)

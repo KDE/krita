@@ -9,9 +9,11 @@ set(koreport_barcodeplugin_LIB_SRCS
     KoReportDesignerItemBarcode.cpp
     krscriptbarcode.cpp
     3of9.cpp
+    i2of5.cpp
     code128.cpp
     codeean.cpp
     ext3of9.cpp
+    i2of5paint.cpp
     3of9paint.cpp
     ext3of9paint.cpp
     codeeanpaint.cpp

@@ -22,22 +22,21 @@
 #include <QList>
 
 #include <kis_image.h>
-
-#include "kis_doc2.h"
+#
+#include "KisDocument.h"
 
 #include <krita_export.h>
 
 class KisActionManager;
 class KisAction;
 class KAction;
-class KToggleAction;
-class KActionCollection;
 class KoViewConverter;
 
-class KisView2;
+class KisViewManager;
 class KisDoc;
 class KisClipboard;
 class KisNodeCommandsAdapter;
+class KisView;
 
 class KisSelectionFilter;
 class KisSelectionDecoration;
@@ -54,10 +53,12 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject
     Q_PROPERTY(bool havePixelsSelected READ havePixelsSelected NOTIFY currentSelectionChanged);
 public:
 
-    KisSelectionManager(KisView2 * view, KisDoc2 * doc);
+    KisSelectionManager(KisViewManager * view);
     virtual ~KisSelectionManager();
 
-    void setup(KActionCollection * collection, KisActionManager* actionManager);
+    void setup(KisActionManager* actionManager);
+
+    void setView(QPointer<KisView>imageView);
 
 public:
     /**
@@ -67,7 +68,7 @@ public:
 
     bool showSelectionAsMask() const;
 
-public slots:
+public Q_SLOTS:
 
     void updateGUI();
     void selectionChanged();
@@ -100,7 +101,7 @@ public slots:
 
     void slotToggleSelectionDecoration();
 
-signals:
+Q_SIGNALS:
     void currentSelectionChanged();
     void signalUpdateGUI();
     void displaySelectionChanged();
@@ -114,10 +115,6 @@ public:
     /// Checks if the current selection is editabl and has some pixels selected in the pixel selection
     bool havePixelSelectionWithPixels();
 
-//    Q_INVOKABLE void grow(qint32 xradius, qint32 yradius);
-//    Q_INVOKABLE void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
-//    Q_INVOKABLE void border(qint32 xradius, qint32 yradius);
-//    Q_INVOKABLE void feather(qint32 radius);
     // the following functions are needed for the siox tool
     // they might be also useful on its own
     void erode();
@@ -132,35 +129,32 @@ private:
     void copyFromDevice(KisPaintDeviceSP device);
     void applySelectionFilter(KisSelectionFilter *filter);
 
-    KisView2 * m_view;
-    KisDoc2 * m_doc;
-
+    KisViewManager * m_view;
+    KisDocument * m_doc;
+    QPointer<KisView>m_imageView;
     KisClipboard * m_clipboard;
 
     KisNodeCommandsAdapter* m_adapter;
 
-    KAction *m_copy;
+    KisAction *m_copy;
     KisAction *m_copyMerged;
-    KAction *m_cut;
-    KAction *m_paste;
-    KAction *m_pasteAt;
-    KAction *m_pasteNew;
+    KisAction *m_cut;
+    KisAction *m_paste;
+    KisAction *m_pasteAt;
+    KisAction *m_pasteNew;
     KisAction *m_cutToNewLayer;
-    KAction *m_selectAll;
-    KAction *m_deselect;
-    KAction *m_clear;
-    KAction *m_reselect;
+    KisAction *m_selectAll;
+    KisAction *m_deselect;
+    KisAction *m_clear;
+    KisAction *m_reselect;
     KisAction *m_invert;
     KisAction *m_copyToNewLayer;
-//     KAction *m_load;
-//     KAction *m_save;
     KisAction *m_fillForegroundColor;
     KisAction *m_fillBackgroundColor;
     KisAction *m_fillPattern;
     KisAction *m_imageResizeToSelection;
     KisAction *m_strokeShapes;
-    KToggleAction *m_toggleDisplaySelection;
-
+    KisAction *m_toggleDisplaySelection;
     KisAction *m_toggleSelectionOverlayMode;
 
     QList<QAction*> m_pluginActions;

@@ -64,7 +64,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     action->setActionGroup(actionGroup);
 
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true,true);
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true, true);
 
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
     QToolButton *viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
@@ -123,6 +123,7 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource ,
     }
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
 }
+
 void KisPaintOpPresetsChooserPopup::updateViewSettings()
 {
    m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();

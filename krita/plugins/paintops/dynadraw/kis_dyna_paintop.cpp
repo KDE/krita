@@ -40,9 +40,11 @@
 
 #include "filter.h"
 
-KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
+    Q_UNUSED(node);
+
     if (image) {
         m_dynaBrush.setCanvasSize(image->width(), image->height());
     }

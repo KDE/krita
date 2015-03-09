@@ -46,13 +46,6 @@
 ** If you have questions regarding the use of this file, please contact
 ** Nokia at qt-info@nokia.com.
 **
-**
-**
-**
-**
-**
-**
-**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
@@ -66,7 +59,7 @@
 #include <kundo2command.h>
 #include "kis_types.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 
@@ -97,11 +90,11 @@ public:
     void setCanvas(KisCanvas2* canvas);
     bool checkMergedCommand(int index);
 
-public slots:
+public Q_SLOTS:
     void setStack(KUndo2QStack *stack);
     void addImage(int idx);
 
-private slots:
+private Q_SLOTS:
     void stackChanged();
     void stackDestroyed(QObject *obj);
     void setStackCurrentIndex(const QModelIndex &index);
@@ -113,6 +106,6 @@ private:
     QString m_empty_label;
     QIcon m_clean_icon;
     KisCanvas2* m_canvas;
-    QMap<const KUndo2Command*, QImage> imageMap;
+    QMap<const KUndo2Command*, QImage> m_imageMap;
 };
 #endif

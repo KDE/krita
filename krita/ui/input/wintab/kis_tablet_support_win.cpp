@@ -29,7 +29,10 @@
 #include <math.h>
 #define Q_PI M_PI
 
+#include <input/kis_extended_modifiers_mapper.h>
 #include <input/kis_tablet_debugger.h>
+
+#include "kis_screen_size_choice_dialog.h"
 
 /**
  * A set of definitions to form a structure of a WinTab packet.  This
@@ -243,10 +246,39 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     tdd.minZ = int(lc.lcOutOrgZ);
     tdd.maxZ = int(qAbs(lc.lcOutExtZ)) + int(lc.lcOutOrgZ);
 
-    tdd.sysOrgX = int(lc.lcSysOrgX);
-    tdd.sysOrgY = int(lc.lcSysOrgY);
-    tdd.sysExtX = int(lc.lcSysExtX);
-    tdd.sysExtY = int(lc.lcSysExtY);
+
+    QRect qtDesktopRect = QApplication::desktop()->geometry();
+    QRect wintabDesktopRect(lc.lcSysOrgX, lc.lcSysOrgY,
+                            lc.lcSysExtX, lc.lcSysExtY);
+
+    qDebug() << ppVar(qtDesktopRect);
+    qDebug() << ppVar(wintabDesktopRect);
+
+    QRect desktopRect = wintabDesktopRect;
+
+    {
+        KisScreenSizeChoiceDialog dlg(0,
+                                      qtDesktopRect,
+                                      wintabDesktopRect);
+
+        KisExtendedModifiersMapper mapper;
+        KisExtendedModifiersMapper::ExtendedModifiers modifiers =
+            mapper.queryExtendedModifiers();
+
+        if (modifiers.contains(Qt::Key_Shift) ||
+            (!dlg.canUseDefaultSettings() &&
+             qtDesktopRect != wintabDesktopRect)) {
+
+            dlg.exec();
+        }
+
+        desktopRect = dlg.screenRect();
+    }
+
+    tdd.sysOrgX = desktopRect.x();
+    tdd.sysOrgY = desktopRect.y();
+    tdd.sysExtX = desktopRect.width();
+    tdd.sysExtY = desktopRect.height();
 
     if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
         qDebug() << "# Axes configuration";
@@ -392,6 +424,12 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                      << "Dsk:"  << QRect(currentTabletPointer.sysOrgX, currentTabletPointer.sysOrgY, currentTabletPointer.sysExtX,  currentTabletPointer.sysExtY)
                      << "Raw:" << ptNew.x << ptNew.y
                      << "Scaled:" << hiResGlobal;
+
+            qDebug() << "WinTab (BN):"
+                     << "old:" << btnOld
+                     << "new:" << btnNew
+                     << "diff:" << (btnOld ^ btnNew)
+                     << (buttonPressed ? "P" : buttonReleased ? "R" : ".");
         }
 
 
@@ -615,6 +653,15 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
                     currentTabletPointer.buttonsMap[0x1] = logicalButtons[0];
                     currentTabletPointer.buttonsMap[0x2] = logicalButtons[1];
                     currentTabletPointer.buttonsMap[0x4] = logicalButtons[2];
+
+                    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+                        qDebug() << "--------------------------";
+                        qDebug() << "--- Tablet buttons map ---";
+                        for (int i = 0; i < 32; i++) {
+                            qDebug() << "( 1 <<" << i << ")" << "->" << logicalButtons[i];
+                        }
+                        qDebug() << "--------------------------";
+                    }
                 }
             }
         break;

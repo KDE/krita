@@ -57,6 +57,7 @@
 **
 ****************************************************************************/
 #include "KisUndoModel.h"
+#include <klocale.h>
 
 KisUndoModel::KisUndoModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -66,7 +67,7 @@ KisUndoModel::KisUndoModel(QObject *parent)
     m_canvas = 0;
     m_sel_model = new QItemSelectionModel(this, this);
     connect(m_sel_model, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(setStackCurrentIndex(QModelIndex)));
-    m_empty_label = tr("<empty>");
+    m_empty_label = i18n("<empty>");
 }
 
 QItemSelectionModel *KisUndoModel::selectionModel() const
@@ -186,9 +187,11 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
     if (m_stack == 0){
         return QVariant();
     }
+
     if (index.column() != 0){
         return QVariant();
     }
+
     if (index.row() < 0 || index.row() > m_stack->count()){
         return QVariant();
     }
@@ -199,10 +202,13 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
         }
         KUndo2Command* currentCommand = const_cast<KUndo2Command*>(m_stack->command(index.row() - 1));
         return currentCommand->isMerged()?m_stack->text(index.row() - 1)+"(Merged)":m_stack->text(index.row() - 1);
-    } else if (role == Qt::DecorationRole) {
-        if (!index.row()) {
+    }
+    else if (role == Qt::DecorationRole) {
+        if (index.row() > 0) {
             const KUndo2Command* currentCommand = m_stack->command(index.row() - 1);
-            return imageMap[currentCommand];
+            if (m_imageMap.contains(currentCommand)) {
+                return m_imageMap[currentCommand];
+            }
         }
     }
     return QVariant();
@@ -230,35 +236,39 @@ QIcon KisUndoModel::cleanIcon() const
     return m_clean_icon;
 }
 
-void KisUndoModel::setCanvas(KisCanvas2 *canvas) {
+void KisUndoModel::setCanvas(KisCanvas2 *canvas)
+{
     m_canvas = canvas;
 }
 
-void KisUndoModel::addImage(int idx) {
-    if(m_stack == 0 || m_stack->count() == 0) {
+void KisUndoModel::addImage(int idx)
+{
+
+    if (m_stack == 0 || m_stack->count() == 0) {
         return;
     }
 
     const KUndo2Command* currentCommand = m_stack->command(idx-1);
-    if( m_stack->count() == idx && !imageMap.contains(currentCommand)) {
-        KisImageWSP historyImage = m_canvas->view()->image();
+    if (m_stack->count() == idx && !m_imageMap.contains(currentCommand)) {
+        KisImageWSP historyImage = m_canvas->viewManager()->image();
         KisPaintDeviceSP paintDevice = historyImage->projection();
         QImage image = paintDevice->createThumbnail(32, 32,
                                                     KoColorConversionTransformation::InternalRenderingIntent,
                                                     KoColorConversionTransformation::InternalConversionFlags);
-        imageMap[currentCommand] = image;
+        m_imageMap[currentCommand] = image;
     }
+
     QList<const KUndo2Command*> list;
 
-    for(int i = 0; i < m_stack->count(); ++i) {
+    for (int i = 0; i < m_stack->count(); ++i) {
         list << m_stack->command(i);
     }
 
-    for(QMap<const KUndo2Command*, QImage>:: iterator it = imageMap.begin(); it != imageMap.end();)
-    {
-        if(!list.contains(it.key())) {
-            it = imageMap.erase(it);
-        } else {
+    for (QMap<const KUndo2Command*, QImage>:: iterator it = m_imageMap.begin(); it != m_imageMap.end();) {
+        if (!list.contains(it.key())) {
+            it = m_imageMap.erase(it);
+        }
+        else {
             ++it;
         }
     }

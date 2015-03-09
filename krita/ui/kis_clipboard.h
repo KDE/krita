@@ -69,12 +69,12 @@ public:
 
     QSize clipSize() const;
 
-signals:
+Q_SIGNALS:
 
     void clipCreated();
 
 
-private slots:
+private Q_SLOTS:
 
     void clipboardDataChanged();
 
@@ -88,7 +88,7 @@ private:
 
     bool m_pushedClipboard;
 
-signals:
+Q_SIGNALS:
     void clipChanged();
 };
 

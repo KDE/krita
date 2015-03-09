@@ -25,16 +25,16 @@
 
 #include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <KoColorSpace.h>
-#include <KoFilterChain.h>
-#include <KoFilterManager.h>
+#include <KisFilterChain.h>
+#include <KisImportExportManager.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
 #include <kis_paint_device.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
@@ -49,7 +49,7 @@
 K_PLUGIN_FACTORY(KisPNGExportFactory, registerPlugin<KisPNGExport>();)
 K_EXPORT_PLUGIN(KisPNGExportFactory("calligrafilters"))
 
-KisPNGExport::KisPNGExport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisPNGExport::KisPNGExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -69,22 +69,22 @@ bool hasVisibleWidgets()
     return false;
 }
 
-KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "Png export! From:" << from << ", To:" << to << "";
 
 
-    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
     if (!input)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
 
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
 
     KDialog* kdb = new KDialog(0);
@@ -109,9 +109,9 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
             !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
         if (!m_chain->manager()->getBatchMode()) {
-            KMessageBox::error(0, i18n("Cannot export images in this colorspace or channel depth to PNG"), i18n("Krita PNG Export"));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("Cannot export images in this colorspace or channel depth to PNG"));
         }
-        return KoFilter::UsageError;
+        return KisImportExportFilter::UsageError;
     }
 
 
@@ -129,7 +129,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
     if (qApp->applicationName() != "qttest") {
 
-        bool sRGB = cs->profile()->name().toLower().contains("srgb");
+        bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
 
         KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
 
@@ -177,7 +177,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         if (hasVisibleWidgets()) {
             if (!m_chain->manager()->getBatchMode()) {
                 if (kdb->exec() == QDialog::Rejected) {
-                    return KoFilter::OK; // FIXME Cancel doesn't exist :(
+                    return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
                 }
             }
         }
@@ -243,11 +243,11 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     if ((res = kpc.buildFile(url, image, l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         delete eI;
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     }
     delete eI;
     dbgFile << " Result =" << res;
-    return KoFilter::InternalError;
+    return KisImportExportFilter::InternalError;
 }
 
 #include "kis_png_export.moc"

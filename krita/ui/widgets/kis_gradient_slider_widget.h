@@ -26,7 +26,6 @@
 
 class KAction;
 class KMenu;
-class KisAutogradientResource;
 class KoGradientSegment;
 class KoSegmentGradient;
 
@@ -44,7 +43,7 @@ public:
         return m_selectedSegment;
     }
 
-signals:
+Q_SIGNALS:
     void sigSelectedSegment(KoGradientSegment*);
     void sigChangedSegment(KoGradientSegment*);
 
@@ -54,7 +53,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent * e);
     virtual void contextMenuEvent(QContextMenuEvent * e);
 
-private slots:
+private Q_SLOTS:
     void slotSplitSegment();
     void slotDuplicateSegment();
     void slotMirrorSegment();

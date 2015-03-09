@@ -56,7 +56,7 @@ QVariant KisPaintOpListModel::data(const QModelIndex& idx, int role) const
 void KisPaintOpListModel::fill(const QList<KisPaintOpFactory*>& list)
 {
     foreach (KisPaintOpFactory *factory, list) {
-        QString fileName = KisFactory2::componentData().dirs()->findResource("kis_images", factory->pixmap());
+        QString fileName = KisFactory::componentData().dirs()->findResource("kis_images", factory->pixmap());
         QPixmap pixmap(fileName);
 
         if(pixmap.isNull()){

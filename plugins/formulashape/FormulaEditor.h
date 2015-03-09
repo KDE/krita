@@ -32,8 +32,6 @@
 class BasicElement;
 class QString;
 class QPainter;
-class QPointF;
-class QRectF;
 
 /**
  * @short The Class responsible for manipulating a formula

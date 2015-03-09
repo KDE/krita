@@ -105,7 +105,7 @@ QPainterPath BasicElement::selectionRegion(const int pos1, const int pos2) const
 	QRectF r1(l1.p1(),l2.p2());
 	QRectF r2(l2.p1(),l1.p2());
 	QPainterPath temp;
-	temp.addRect(r1.unite(r2));
+	temp.addRect(r1.united(r2));
 	return temp;
 }
 

@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,9 +28,14 @@
 LabF32ColorSpace::LabF32ColorSpace (const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoLabF32Traits>(colorSpaceId(), name, TYPE_LabA_FLT, cmsSigLabData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Lightness"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(100, 100, 100)));
-    addChannel(new KoChannelInfo(i18n("a*"),        1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(150, 150, 150)));
-    addChannel(new KoChannelInfo(i18n("b*"),        2 * sizeof(float), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(200, 200, 200)));
+    const IccColorProfile* icc_p = dynamic_cast<const IccColorProfile*>(p);
+    Q_ASSERT(icc_p);
+    QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->GetFloatUIMinMax());
+    Q_ASSERT(uiRanges.size() == 3);
+
+    addChannel(new KoChannelInfo(i18n("Lightness"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(100, 100, 100), uiRanges[0]));
+    addChannel(new KoChannelInfo(i18n("a*"),        1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(150, 150, 150), uiRanges[1]));
+    addChannel(new KoChannelInfo(i18n("b*"),        2 * sizeof(float), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(200, 200, 200), uiRanges[2]));
     addChannel(new KoChannelInfo(i18n("Alpha"),     3 * sizeof(float), 3, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, sizeof(float)));
 
     init();

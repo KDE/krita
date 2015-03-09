@@ -62,7 +62,7 @@ public:
     /**
      * XXX
      */
-    void setNode(KisNodeSP node);
+    void setNode(KisNodeWSP node);
 
     /**
      * XXX
@@ -73,7 +73,7 @@ public:
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
+private Q_SLOTS:
 
     void setCurrentFilter(const KoID&);
 

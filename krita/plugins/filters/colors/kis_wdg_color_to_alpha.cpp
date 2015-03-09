@@ -26,7 +26,7 @@
 #include <KoColor.h>
 #include <KoToolManager.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -60,7 +60,7 @@ KisWdgColorToAlpha::~KisWdgColorToAlpha()
     delete m_widget;
 }
 
-void KisWdgColorToAlpha::setView(KisView2 *view)
+void KisWdgColorToAlpha::setView(KisViewManager *view)
 {
     m_view = view;
 }

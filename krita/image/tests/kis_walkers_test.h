@@ -233,7 +233,7 @@ class KisWalkersTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testUsualVisiting();
     void testVisitingWithTopmostMask();
     void testMergeVisiting();
@@ -243,6 +243,7 @@ private slots:
     void testFullRefreshVisiting();
     void testCachedVisiting();
     void testMasksVisiting();
+    void testMasksVisitingNoFilthy();
     void testMasksOverlapping();
     void testRectsChecksum();
     void testGraphStructureChecksum();

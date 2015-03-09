@@ -220,6 +220,12 @@ Qt::ItemFlags KisActionShortcutsModel::flags(const QModelIndex &index) const
     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
 }
 
+bool KisActionShortcutsModel::canRemoveRow(int row) const
+{
+    KisShortcutConfiguration* config = d->shortcuts.at(row);
+    return !(d->action->isShortcutRequired(config->mode()) && d->shortcutModeCount(config->mode()) < 2);
+}
+
 bool KisActionShortcutsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid() || role != Qt::EditRole) {

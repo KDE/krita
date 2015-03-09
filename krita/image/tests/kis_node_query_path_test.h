@@ -28,7 +28,7 @@ class KisNodeQueryPathTest : public QObject
     Q_OBJECT
 public:
     KisNodeQueryPathTest();
-private slots:
+private Q_SLOTS:
 
     void testCurrentLayerFromRelativeString();
     void testCurrentLayerFromAbsoluteString();

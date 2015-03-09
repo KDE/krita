@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KoRgbU8ColorSpaceTester.h"
+
 #include "KoColorModelStandardIds.h"
 
 #include <qtest_kde.h>
@@ -31,9 +33,6 @@
 #include <KoCompositeOpRegistry.h>
 
 
-#include "KoRgbU8ColorSpaceTester.h"
-
-
 #define NUM_CHANNELS 4
 
 #define RED_CHANNEL 0
@@ -42,7 +41,7 @@
 #define ALPHA_CHANNEL 3
 #include <KoColorProfile.h>
 
-void KoRgbColorSpaceTester::testBasics()
+void KoRgbU8ColorSpaceTester::testBasics()
 {
 }
 
@@ -51,7 +50,7 @@ void KoRgbColorSpaceTester::testBasics()
 #define PIXEL_BLUE 2
 #define PIXEL_ALPHA 3
 
-void KoRgbColorSpaceTester::testMixColors()
+void KoRgbU8ColorSpaceTester::testMixColors()
 {
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KoMixColorsOp * mixOp = cs->mixColorsOp();
@@ -145,7 +144,7 @@ void KoRgbColorSpaceTester::testMixColors()
     QVERIFY((int)outputPixel[PIXEL_ALPHA] == 165);
 }
 
-void KoRgbColorSpaceTester::testCompositeOps()
+void KoRgbU8ColorSpaceTester::testCompositeOps()
 {
     // Just COMPOSITE_COPY for now
 
@@ -208,7 +207,7 @@ void KoRgbColorSpaceTester::testCompositeOps()
     }
 }
 
-void KoRgbColorSpaceTester::testCompositeOpsWithChannelFlags()
+void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
 {
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     QList<KoCompositeOp*> ops = cs->compositeOps();
@@ -266,6 +265,6 @@ void KoRgbColorSpaceTester::testCompositeOpsWithChannelFlags()
     }
 }
 
-QTEST_KDEMAIN(KoRgbColorSpaceTester, NoGUI)
+QTEST_KDEMAIN(KoRgbU8ColorSpaceTester, NoGUI)
 #include <KoRgbU8ColorSpaceTester.moc>
 

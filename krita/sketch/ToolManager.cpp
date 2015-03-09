@@ -18,7 +18,7 @@
 
 
 #include "ToolManager.h"
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <kis_tool.h>
 
@@ -37,7 +37,7 @@ public:
     };
 
     KoToolManager* toolManager;
-    KisView2* view;
+    KisViewManager* view;
     KisTool* currentTool;
 };
 
@@ -61,15 +61,14 @@ QObject* ToolManager::view() const
 
 void ToolManager::setView(QObject* newView)
 {
-    d->view = qobject_cast<KisView2*>( newView );
+    d->view = qobject_cast<KisViewManager*>( newView );
     slotToolChanged(0, 0);
     emit viewChanged();
 }
 
 void ToolManager::requestToolChange(QString toolID)
 {
-    if (d->view)
-    {
+    if (d->view) {
         d->toolManager->switchToolRequested(toolID);
     }
 }
@@ -84,8 +83,9 @@ void ToolManager::slotToolChanged(KoCanvasController* canvas, int toolId)
     Q_UNUSED(canvas);
     Q_UNUSED(toolId);
 
-    if (!d->view)
-        return;
+    if (!d->view) return;
+    if (!d->view->canvasBase()) return;
+
 
     QString  id   = KoToolManager::instance()->activeToolId();
     d->currentTool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(d->view->canvasBase(), id));

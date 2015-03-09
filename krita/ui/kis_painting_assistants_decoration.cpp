@@ -32,16 +32,16 @@
 
 struct KisPaintingAssistantsDecoration::Private {
     QList<KisPaintingAssistant*> assistants;
-    KToggleAction* toggleAssistant;
-    KToggleAction* togglePreview;
     bool assistantVisible;
     bool outlineVisible;
 };
 
-KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(KisView2* parent) :
+KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
         KisCanvasDecoration("paintingAssistantsDecoration", parent),
         d(new Private)
 {
+    setAssistantVisible(true);
+    setOutlineVisible(true);
 }
 
 KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
@@ -54,14 +54,14 @@ void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistant* assista
 {
     if (d->assistants.contains(assistant)) return;
     d->assistants.push_back(assistant);
-    updateAction();
+    emit assistantChanged();
 }
 
 void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistant* assistant)
 {
     delete assistant;
     d->assistants.removeAll(assistant);
-    updateAction();
+    emit assistantChanged();
 }
 
 void KisPaintingAssistantsDecoration::removeAll()
@@ -70,7 +70,7 @@ void KisPaintingAssistantsDecoration::removeAll()
         delete assistant;
     }
     d->assistants.clear();
-    updateAction();
+    emit assistantChanged();
 }
 
 QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
@@ -108,25 +108,6 @@ void KisPaintingAssistantsDecoration::endStroke()
     }
 }
 
-void KisPaintingAssistantsDecoration::setup(KActionCollection * collection)
-{
-
-    d->toggleAssistant = new KToggleAction(i18n("Show Painting Assistants"), this);
-    d->togglePreview = new KToggleAction(i18n("Show Assistant Previews"), this);
-    collection->addAction("view_toggle_painting_assistants", d->toggleAssistant);
-    collection->addAction("view_toggle_assistant_previews", d->togglePreview);
-    if (QMetaObject::invokeMethod(this, "toggleAssistantVisible")){
-        connect(d->toggleAssistant, SIGNAL(triggered()), this, SLOT(toggleAssistantVisible()));
-        connect(d->togglePreview, SIGNAL(triggered()), this, SLOT(toggleOutlineVisible()));
-    }
-    else {
-        connect(d->toggleAssistant, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
-    }
-    setAssistantVisible(true);
-    setOutlineVisible(true);
-    updateAction();
-}
-
 void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
 {   
     if (!canvas) {
@@ -161,14 +142,6 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 QList<KisPaintingAssistant*> KisPaintingAssistantsDecoration::assistants()
 {
     return d->assistants;
-}
-
-void KisPaintingAssistantsDecoration::updateAction()
-{
-    d->toggleAssistant->setEnabled(!d->assistants.isEmpty());
-    d->togglePreview->setEnabled(!d->assistants.isEmpty());
-    d->toggleAssistant->setChecked(assistantVisibility());
-    d->togglePreview->setChecked(outlineVisibility());
 }
 
 void KisPaintingAssistantsDecoration::setAssistantVisible(bool set)

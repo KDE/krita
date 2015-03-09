@@ -28,7 +28,6 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
-#include "kis_node.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -41,11 +40,33 @@
 #include<kis_types.h>
 
 struct KisPaintOpSettings::Private {
-    KisNodeWSP node;
+    Private() : disableDirtyNotifications(false) {}
+
     QPointer<KisPaintOpSettingsWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;
 
+
+    bool disableDirtyNotifications;
+
+    class DirtyNotificationsLocker {
+    public:
+        DirtyNotificationsLocker(KisPaintOpSettings::Private *d)
+            : m_d(d),
+              m_oldNotificationsState(d->disableDirtyNotifications)
+        {
+            m_d->disableDirtyNotifications = true;
+        }
+
+        ~DirtyNotificationsLocker() {
+            m_d->disableDirtyNotifications = m_oldNotificationsState;
+        }
+
+    private:
+        KisPaintOpSettings::Private *m_d;
+        bool m_oldNotificationsState;
+        Q_DISABLE_COPY(DirtyNotificationsLocker)
+    };
 };
 
 
@@ -124,16 +145,6 @@ void KisPaintOpSettings::activate()
 {
 }
 
-void KisPaintOpSettings::setNode(KisNodeSP node)
-{
-    d->node = node;
-}
-
-KisNodeSP KisPaintOpSettings::node() const
-{
-    return d->node;
-}
-
 void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
 {
     if (!d->settingsWidget.isNull()) {
@@ -151,6 +162,35 @@ QSizeF KisPaintOpSettings::paintOpSize() const
     return QSizeF(1.0, 1.0);
 }
 
+void KisPaintOpSettings::setPaintOpOpacity(qreal value)
+{
+    setProperty("OpacityValue", value);
+}
+
+void KisPaintOpSettings::setPaintOpFlow(qreal value)
+{
+    setProperty("FlowValue", value);
+}
+
+void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
+{
+    setProperty("CompositeOp", value);
+}
+
+qreal KisPaintOpSettings::paintOpOpacity() const
+{
+    return getDouble("OpacityValue", 1.0);
+}
+
+qreal KisPaintOpSettings::paintOpFlow() const
+{
+    return getDouble("FlowValue", 1.0);
+}
+
+QString KisPaintOpSettings::paintOpCompositeOp() const
+{
+    return getString("CompositeOp", COMPOSITE_OVER);
+}
 
 QString KisPaintOpSettings::modelName() const
 {
@@ -211,32 +251,29 @@ QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal
 
 void KisPaintOpSettings::setCanvasRotation(qreal angle)
 {
+    Private::DirtyNotificationsLocker locker(d.data());
+
     setProperty("runtimeCanvasRotation", angle);
     setPropertyNotSaved("runtimeCanvasRotation");
-    if (this->preset()) {
-        this->preset()->setPresetDirty(false);
-    }
 }
 
 void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored)
 {
+    Private::DirtyNotificationsLocker locker(d.data());
+
     setProperty("runtimeCanvasMirroredX", xAxisMirrored);
     setPropertyNotSaved("runtimeCanvasMirroredX");
 
     setProperty("runtimeCanvasMirroredY", yAxisMirrored);
     setPropertyNotSaved("runtimeCanvasMirroredY");
-
-    if (this->preset()) {
-        this->preset()->setPresetDirty(false);
-    }
 }
 
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
-    if (value != KisPropertiesConfiguration::getProperty(name)) {
-        if (this->preset()) {
-            this->preset()->setPresetDirty(true);
-        }
+    if (value != KisPropertiesConfiguration::getProperty(name) &&
+        !d->disableDirtyNotifications && this->preset()) {
+
+        this->preset()->setPresetDirty(true);
     }
 
     KisPropertiesConfiguration::setProperty(name, value);

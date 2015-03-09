@@ -70,15 +70,15 @@ public:
     /// reimplemented from superclass
     virtual void deleteSelection();
 
-signals:
+Q_SIGNALS:
     void connectionPointEnabled(bool enabled);
     void sendConnectionType(int type);
     void sendConnectionPointEditState(bool enabled);
 
-public slots:
+public Q_SLOTS:
     void toggleConnectionPointEditMode(int state);
 
-private slots:
+private Q_SLOTS:
     void horizontalAlignChanged();
     void verticalAlignChanged();
     void relativeAlignChanged();
@@ -88,7 +88,7 @@ private slots:
 
 private:
     /// reimplemented from superclass
-    virtual QList<QWidget *>  createOptionWidgets();
+    virtual QList<QPointer<QWidget> >  createOptionWidgets();
 
     /**
      * @brief Return the square of the absolute distance between p1 and p2

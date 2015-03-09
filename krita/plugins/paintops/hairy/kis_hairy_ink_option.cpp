@@ -54,16 +54,16 @@ KisHairyInkOption::KisHairyInkOption()
     m_options->inkDepletionSlider->setSuffix("%");
 
 
-    connect(m_options->inkAmountSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->saturationCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->opacityCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->useWeightCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->pressureSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->bristleLengthSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->bristleInkAmountSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->inkDepletionSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->inkCurve, SIGNAL(modified()), SIGNAL(sigSettingChanged()));
-    connect(m_options->soakInkCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->inkAmountSpinBox, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->saturationCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->opacityCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->useWeightCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->pressureSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->bristleLengthSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->bristleInkAmountSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->inkDepletionSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->inkCurve, SIGNAL(modified()), SLOT(emitSettingChanged()));
+    connect(m_options->soakInkCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }

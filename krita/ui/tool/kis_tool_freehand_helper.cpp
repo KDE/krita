@@ -151,7 +151,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
 
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KoCanvasResourceManager *resourceManager,
-                                      KisImageWSP image,
+                                      KisImageWSP image, KisNodeSP currentNode,
                                       KisStrokesFacade *strokesFacade,
                                       KisPostExecutionUndoAdapter *undoAdapter,
                                       KisNodeSP overrideNode,
@@ -163,15 +163,22 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     initPaintImpl(pi,
                   resourceManager,
                   image,
+                  currentNode,
                   strokesFacade,
                   undoAdapter,
                   overrideNode,
                   bounds);
 }
 
+bool KisToolFreehandHelper::isRunning() const
+{
+    return m_d->strokeId;
+}
+
 void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPaintInformation,
                                           KoCanvasResourceManager *resourceManager,
                                           KisImageWSP image,
+                                          KisNodeSP currentNode,
                                           KisStrokesFacade *strokesFacade,
                                           KisPostExecutionUndoAdapter *undoAdapter,
                                           KisNodeSP overrideNode,
@@ -195,6 +202,7 @@ void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPai
                    m_d->previousPaintInformation.currentTime());
 
     m_d->resources = new KisResourcesSnapshot(image,
+                                              currentNode,
                                               undoAdapter,
                                               resourceManager,
                                               bounds);
@@ -448,10 +456,10 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
             m_d->haveTangent = true;
             m_d->previousTangent =
                 (info.pos() - m_d->previousPaintInformation.pos()) /
-                qMax(1.0, info.currentTime() - m_d->previousPaintInformation.currentTime());
+                qMax(qreal(1.0), info.currentTime() - m_d->previousPaintInformation.currentTime());
         } else {
             QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
-                qMax(1.0, info.currentTime() - m_d->olderPaintInformation.currentTime());
+                qMax(qreal(1.0), info.currentTime() - m_d->olderPaintInformation.currentTime());
 
             paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
                                m_d->previousTangent, newTangent);

@@ -26,13 +26,13 @@
 #include <kdialog.h>
 #include <kpluginfactory.h>
 
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
@@ -47,7 +47,7 @@ class KisExternalLayer;
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<exrExport>();)
 K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
-exrExport::exrExport(QObject *parent, const QVariantList &) : KoFilter(parent)
+exrExport::exrExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -55,16 +55,16 @@ exrExport::~exrExport()
 {
 }
 
-KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "EXR export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
-    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *input = m_chain->inputDocument();
     if (!input)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
@@ -86,7 +86,7 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     if (!m_chain->manager()->getBatchMode() ) {
         QApplication::restoreOverrideCursor();
         if (dialog.exec() == QDialog::Rejected) {
-            return KoFilter::UserCancelled;
+            return KisImportExportFilter::UserCancelled;
         }
     }
     else {
@@ -98,7 +98,7 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     KisConfig().setExportConfiguration("EXR", cfg);
 
     QString filename = m_chain->outputFile();
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
@@ -128,32 +128,32 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     switch (res) {
     case KisImageBuilder_RESULT_INVALID_ARG:
         input->setErrorMessage(i18n("This layer cannot be saved to EXR."));
-        return KoFilter::WrongFormat;
+        return KisImportExportFilter::WrongFormat;
 
     case KisImageBuilder_RESULT_EMPTY:
         input->setErrorMessage(i18n("The layer does not have an image associated with it."));
-        return KoFilter::WrongFormat;
+        return KisImportExportFilter::WrongFormat;
 
     case KisImageBuilder_RESULT_NO_URI:
         input->setErrorMessage(i18n("The filename is empty."));
-        return KoFilter::CreationError;
+        return KisImportExportFilter::CreationError;
 
     case KisImageBuilder_RESULT_NOT_LOCAL:
         input->setErrorMessage(i18n("EXR images cannot be saved remotely."));
-        return KoFilter::InternalError;
+        return KisImportExportFilter::InternalError;
 
     case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
         input->setErrorMessage(i18n("Colorspace not supported: EXR images must be 16 or 32 bits floating point RGB."));
-        return KoFilter::WrongFormat;
+        return KisImportExportFilter::WrongFormat;
 
     case KisImageBuilder_RESULT_OK:
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     default:
         break;
     }
 
     input->setErrorMessage(i18n("Internal Error"));
-    return KoFilter::InternalError;
+    return KisImportExportFilter::InternalError;
 
 }
 

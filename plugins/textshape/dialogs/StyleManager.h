@@ -48,13 +48,13 @@ public:
     //Check that the new name of style is unique or not
     bool checkUniqueStyleName();
 
-public slots:
+public Q_SLOTS:
     void save();
     void setParagraphStyle(KoParagraphStyle *style);
     void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
     bool unappliedStyleChanges();
 
-private slots:
+private Q_SLOTS:
     void slotParagraphStyleSelected(QModelIndex index);
     void slotCharacterStyleSelected(QModelIndex index);
     void addParagraphStyle(KoParagraphStyle*);

@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -100,17 +100,22 @@ DigitalMixerDock::DigitalMixerDock( )
 
 void DigitalMixerDock::setCanvas(KoCanvasBase * canvas)
 {
+    setEnabled(canvas != 0);
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
     }
 
     m_canvas = canvas;
-    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            this, SLOT(canvasResourceChanged(int, const QVariant&)));
 
-    m_tellCanvas=false;
-    setCurrentColor(m_canvas->resourceManager()->foregroundColor());
-    m_tellCanvas=true;
+    if (m_canvas) {
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                this, SLOT(canvasResourceChanged(int, const QVariant&)));
+
+        m_tellCanvas=false;
+        setCurrentColor(m_canvas->resourceManager()->foregroundColor());
+        m_tellCanvas=true;
+    }
 }
 
 void DigitalMixerDock::popupColorChanged(int i)

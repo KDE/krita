@@ -25,7 +25,6 @@
 #include "flake_export.h"
 #include "KoParameterChangeStrategy.h"
 
-class KoCanvasBase;
 class KoConnectionShape;
 class QPointF;
 class KoPathConnectionPointStrategyPrivate;

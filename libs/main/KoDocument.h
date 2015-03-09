@@ -35,12 +35,11 @@
 #include "KoGridData.h"
 #include "KoGuidesData.h"
 #include <KoXmlReader.h>
-#include <KoOdfDocument.h>
+#include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
 #include <klocale.h>
 
-class KisSketchPart;
 class KUndo2Command;
 class KoPart;
 class KoStore;
@@ -69,7 +68,7 @@ public:
  *
  *  @short The %Calligra document class
  */
-class KOMAIN_EXPORT KoDocument : public QObject, public KoOdfDocument
+class KOMAIN_EXPORT KoDocument : public QObject, public KoDocumentBase
 {
     Q_OBJECT
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
@@ -161,14 +160,6 @@ public:
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KoDocument without a filter, in *addition* to the main one
     virtual QStringList extraNativeMimeTypes() const = 0;
-
-    /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
-    enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
-        SaveAsDirectoryStore = 2,
-        SaveAsFlatXML = 4,
-        SaveEncrypted = 8
-                        // bitfield! next value is 16
-    };
 
     /**
      * Return the set of SupportedSpecialFormats that the application wants to
@@ -599,7 +590,7 @@ public:
      */
     void setProfileReferenceTime(const QTime& referenceTime);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Adds a command to the undo stack and executes it by calling the redo() function.
@@ -618,7 +609,7 @@ public slots:
      */
     virtual void endMacro();
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted when the unit is changed by setUnit().
@@ -656,7 +647,6 @@ signals:
 protected:
 
     friend class KoPart;
-    friend class KisSketchPart;
 
     /**
      * Generate a name for the document.
@@ -748,17 +738,17 @@ public:
 
     virtual bool saveAs( const KUrl &url );
 
-public slots:
+public Q_SLOTS:
 
     virtual bool save();
     bool waitSaveComplete();
 
-signals:
+Q_SIGNALS:
 
     void completed();
     void canceled(const QString &);
 
-private slots:
+private Q_SLOTS:
 
     void slotAutoSave();
 

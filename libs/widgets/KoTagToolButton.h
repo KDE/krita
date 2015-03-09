@@ -38,7 +38,7 @@ private:
     void readOnlyMode(bool activate);
     void setUndeletionCandidate(const QString &deletedTagName);
 
-signals:
+Q_SIGNALS:
     void newTagRequested(const QString &tagname);
     void renamingOfCurrentTagRequested(const QString &tagname);
     void deletionOfCurrentTagRequested();
@@ -46,7 +46,7 @@ signals:
     void purgingOfTagUndeleteListRequested();
     void popupMenuAboutToShow();
 
-private slots:
+private Q_SLOTS:
     void onTagUndeleteClicked();
 
 private:

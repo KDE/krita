@@ -40,8 +40,10 @@
 #include <QTimer>
 #include <QWeakPointer>
 #include <QRectF>
+#include <QPointer>
 
-class TextEditingPluginContainer;
+#include <TextEditingPluginContainer.h>
+
 class InsertCharacter;
 class KoChangeTracker;
 class KoCharacterStyle;
@@ -49,7 +51,6 @@ class KoColor;
 class KoColorPopupAction;
 class KoParagraphStyle;
 class KoStyleManager;
-class KoTextEditingPlugin;
 class KoTextEditor;
 class UndoTextCommand;
 
@@ -128,7 +129,7 @@ public:
     /// reimplemented from superclass
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
@@ -157,7 +158,7 @@ protected:
 
     KoTextEditor *textEditor() { return m_textEditor.data(); }
 
-public slots:
+public Q_SLOTS:
     /// Insert comment to document.
      void insertAnnotation();
     /// start the textedit-plugin.
@@ -165,7 +166,7 @@ public slots:
     /// reimplemented from KoToolBase
     virtual void canvasResourceChanged(int key, const QVariant &res);
 
-signals:
+Q_SIGNALS:
     /// emitted every time a different styleManager is set.
     void styleManagerChanged(KoStyleManager *manager);
     /// emitted every time a caret move leads to a different character format being under the caret
@@ -175,7 +176,7 @@ signals:
     /// emitted every time a caret move leads to a different paragraph format being under the caret
     void blockChanged(const QTextBlock &block);
 
-private slots:
+private Q_SLOTS:
     /// inserts new paragraph and includes it into the new section
     void insertNewSection();
     /// configures params of the current section
@@ -318,7 +319,7 @@ private:
     void repaintSelection();
     KoPointedAt hitTest(const QPointF & point) const;
     void updateStyleManager();
-    void updateSelectedShape(const QPointF &point);
+    void updateSelectedShape(const QPointF &point, bool noDocumentChange);
     void updateSelectionHandler();
     void editingPluginEvents();
     void finishedWord();
@@ -328,6 +329,8 @@ private:
     void useTableBorderCursor();
 
     QMimeData *generateMimeData() const;
+
+    TextEditingPluginContainer *textEditingPluginContainer();
 
 private:
     friend class UndoTextCommand;
@@ -381,7 +384,7 @@ private:
 
     InsertCharacter *m_specialCharacterDocker;
 
-    TextEditingPluginContainer *m_textEditingPlugins;
+    QPointer<TextEditingPluginContainer> m_textEditingPlugins;
 
     bool m_textTyping;
     bool m_textDeleting;

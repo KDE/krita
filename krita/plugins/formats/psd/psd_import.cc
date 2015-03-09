@@ -19,9 +19,9 @@
 
 #include <kpluginfactory.h>
 
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 
 #include "psd_loader.h"
@@ -29,7 +29,7 @@
 K_PLUGIN_FACTORY(ImportFactory, registerPlugin<psdImport>();)
 K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
-        psdImport::psdImport(QObject *parent, const QVariantList &) : KoFilter(parent)
+        psdImport::psdImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -37,17 +37,17 @@ psdImport::~psdImport()
 {
 }
 
-KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArray& to)
 {
     dbgFile <<"Importing using PSDImport!";
 
     if (to != "application/x-krita")
-        return KoFilter::BadMimeType;
+        return KisImportExportFilter::BadMimeType;
 
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
+    KisDocument * doc = m_chain->outputDocument();
 
     if (!doc)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
     QString filename = m_chain->inputFile();
 
@@ -58,7 +58,7 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
         KUrl url(filename);
 
         if (url.isEmpty())
-            return KoFilter::FileNotFound;
+            return KisImportExportFilter::FileNotFound;
 
         PSDLoader ib(doc);
 
@@ -66,27 +66,27 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
 
         switch (result) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
-            return KoFilter::NotImplemented;
+            return KisImportExportFilter::NotImplemented;
         case KisImageBuilder_RESULT_INVALID_ARG:
-            return KoFilter::BadMimeType;
+            return KisImportExportFilter::BadMimeType;
         case KisImageBuilder_RESULT_NO_URI:
         case KisImageBuilder_RESULT_NOT_EXIST:
         case KisImageBuilder_RESULT_NOT_LOCAL:
-            return KoFilter::FileNotFound;
+            return KisImportExportFilter::FileNotFound;
         case KisImageBuilder_RESULT_BAD_FETCH:
         case KisImageBuilder_RESULT_EMPTY:
-            return KoFilter::ParsingError;
+            return KisImportExportFilter::ParsingError;
         case KisImageBuilder_RESULT_FAILURE:
-            return KoFilter::InternalError;
+            return KisImportExportFilter::InternalError;
         case KisImageBuilder_RESULT_OK:
             doc -> setCurrentImage( ib.image());
-            return KoFilter::OK;
+            return KisImportExportFilter::OK;
         default:
-            return KoFilter::StorageCreationError;
+            return KisImportExportFilter::StorageCreationError;
             //dbgFile << "Result was: " << result;
         }
     }
-    return KoFilter::StorageCreationError;
+    return KisImportExportFilter::StorageCreationError;
 }
 
 #include <psd_import.moc>

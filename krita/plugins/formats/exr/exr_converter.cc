@@ -32,7 +32,7 @@
 
 #include <QApplication>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <kio/netaccess.h>
 
@@ -42,7 +42,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -125,7 +125,7 @@ struct exrConverter::Private {
                 showNotifications(false) {}
 
     KisImageSP image;
-    KisDoc2 *doc;
+    KisDocument *doc;
 
     bool warnedAboutChangedAlpha;
     bool showNotifications;
@@ -149,7 +149,7 @@ struct exrConverter::Private {
     QString fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>& informationObjects);
 };
 
-exrConverter::exrConverter(KisDoc2 *doc, bool showNotifications)
+exrConverter::exrConverter(KisDocument *doc, bool showNotifications)
     : m_d(new Private)
 {
     m_d->doc = doc;
@@ -324,7 +324,7 @@ void exrConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
                       alphaNoiseThreshold<channel_type>());
 
             if (this->showNotifications) {
-                KMessageBox::information(0, msg, i18nc("@title:window", "EXR image will be modified"), "dontNotifyEXRChangedAgain");
+                QMessageBox::information(0, i18nc("@title:window", "EXR image will be modified"), msg);
             } else {
                 qWarning() << "WARNING:" << msg;
             }
@@ -1185,7 +1185,7 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
               "<para><warning>these layers will NOT be saved to the final EXR file</warning></para>", layersList);
 
     if (this->showNotifications) {
-        KMessageBox::information(0, msg, i18nc("@title:window", "Layers will be lost"), "dontNotifyEXRDropsLayers");
+        QMessageBox::information(0, i18nc("@title:window", "Layers will be lost"), msg);
     } else {
         qWarning() << "WARNING:" << msg;
     }

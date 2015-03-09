@@ -19,6 +19,8 @@
 #include <klocale.h>
 
 #include <QImage>
+#include <QFile>
+
 
 #include "ui_wdgsprayshapeoptions.h"
 
@@ -69,15 +71,15 @@ KisSprayShapeOption::KisSprayShapeOption()
 
 void KisSprayShapeOption::setupBrushPreviewSignals()
 {
-    connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
 
-    connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->widthSpin, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->heightSpin, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->widthSpin, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->heightSpin, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
 
-    connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->imageUrl, SIGNAL(textChanged(QString)), SIGNAL(sigSettingChanged()));
+    connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->imageUrl, SIGNAL(textChanged(QString)), SLOT(emitSettingChanged()));
 }
 
 
@@ -113,7 +115,7 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
     m_options->aspectButton->setKeepAspectRatio(setting->getBool(SPRAYSHAPE_USE_ASPECT, false));
     m_options->widthSpin->setValue(setting->getInt(SPRAYSHAPE_WIDTH));
     m_options->heightSpin->setValue(setting->getInt(SPRAYSHAPE_HEIGHT));
-    m_options->imageUrl->setText(setting->getString(SPRAYSHAPE_IMAGE_URL));
+    m_options->imageUrl->setUrl(setting->getString(SPRAYSHAPE_IMAGE_URL));
 }
 
 

@@ -29,7 +29,7 @@
 
 class KoColor;
 class KoColorProfile;
-class KisCanvas2;
+class KoCanvasResourceManager;
 
 
 /**
@@ -49,7 +49,7 @@ class KRITAUI_EXPORT KisDisplayColorConverter : public QObject
     Q_OBJECT
 
 public:
-    KisDisplayColorConverter(KisCanvas2 *parentCanvas);
+    KisDisplayColorConverter(KoCanvasResourceManager *resourceManager, QObject *parent);
     virtual ~KisDisplayColorConverter();
 
     static KisDisplayColorConverter* dumbConverterInstance();
@@ -58,7 +58,7 @@ public:
 
     const KoColorSpace* paintingColorSpace() const;
     void setMonitorProfile(const KoColorProfile *monitorProfile);
-    void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     QColor toQColor(const KoColor &c) const;
     KoColor approximateFromRenderedQColor(const QColor &c) const;
@@ -86,10 +86,10 @@ public:
     static KoColorConversionTransformation::Intent renderingIntent();
     static KoColorConversionTransformation::ConversionFlags conversionFlags();
 
-    KisDisplayFilterSP displayFilter() const;
+    KisDisplayFilter* displayFilter() const;
     const KoColorProfile* monitorProfile() const;
 
-signals:
+Q_SIGNALS:
     void displayConfigurationChanged();
 
 private:

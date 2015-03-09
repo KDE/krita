@@ -36,13 +36,13 @@ public:
     explicit SimpleLinksWidget(ReferencesTool *tool, QWidget *parent = 0);
     virtual ~SimpleLinksWidget();
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
 
-public slots:
+public Q_SLOTS:
     void preparePopUpMenu();
 
-private slots:
+private Q_SLOTS:
     void manageBookmarks();
 
 private:

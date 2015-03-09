@@ -33,7 +33,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
@@ -74,6 +74,7 @@ KisSobelFilter::KisSobelFilter() : KisFilter(id(), categoryEdgeDetection(), i18n
 {
     setSupportsPainting(false);
     setSupportsThreading(false); // TODO Sobel doesn't support threading on image with height > 512
+    setSupportsAdjustmentLayers(false);
 }
 
 

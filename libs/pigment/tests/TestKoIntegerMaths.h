@@ -25,7 +25,7 @@ class TestKoIntegerMaths : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 
     void UINT8Tests();
     void UINT16Tests();

@@ -25,7 +25,6 @@
 #include "kis_image.h"
 #include "krita_export.h"
 
-class QImage;
 template<class factory> class KisConvolutionWorker;
 
 

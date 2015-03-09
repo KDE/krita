@@ -30,18 +30,22 @@ class KRITAUI_EXPORT KisAction : public KAction
     Q_OBJECT
 public:
     enum ActivationFlag {
-        NONE = 0,
-        ACTIVE_NODE = 0x1,
-        ACTIVE_DEVICE = 0x2,
-        ACTIVE_LAYER = 0x4,
-        ACTIVE_TRANSPARENCY_MASK = 0x8,
-        ACTIVE_SHAPE_LAYER = 0x10,
-        PIXELS_SELECTED = 0x20,
-        SHAPES_SELECTED = 0x40,
-        PIXEL_SELECTION_WITH_PIXELS = 0x80,
-        PIXELS_IN_CLIPBOARD = 0x100,
-        SHAPES_IN_CLIPBOARD = 0x200,
-        NEVER_ACTIVATE = 0x400
+        NONE                        = 0x0000, ///< Always activate
+        ACTIVE_IMAGE                = 0x0001, ///< Activate if there is at least one image
+        MULTIPLE_IMAGES             = 0x0002, ///< Activate if there is more than one image open
+        CURRENT_IMAGE_MODIFIED      = 0x0004, ///< Activate if the current image is modified
+        ACTIVE_NODE                 = 0x0008, ///< Activate if there's an active node (layer or mask)
+        ACTIVE_DEVICE               = 0x0010, ///< Activate if the active node has a paint device, i.e. there are pixels to be modified
+        ACTIVE_LAYER                = 0x0020, ///< Activate if the current node is a layer (vector or pixel)
+        ACTIVE_TRANSPARENCY_MASK    = 0x0040, ///< Activate if the current node is a transparency mask
+        ACTIVE_SHAPE_LAYER          = 0x0080, ///< Activate if the current node is a vector layer
+        PIXELS_SELECTED             = 0x0100, ///< Activate if there is an active pixel selection
+        SHAPES_SELECTED             = 0x0200, ///< Activate if there is an active vector selection
+        PIXEL_SELECTION_WITH_PIXELS = 0x0400, ///< ???
+        PIXELS_IN_CLIPBOARD         = 0x0800, ///< Activate if the clipboard contains pixels
+        SHAPES_IN_CLIPBOARD         = 0x1000, ///< Activate if the clipboard contains vector data
+        NEVER_ACTIVATE              = 0x2000, ///<
+
     };
     Q_DECLARE_FLAGS(ActivationFlags, ActivationFlag)
 
@@ -53,9 +57,9 @@ public:
     };
     Q_DECLARE_FLAGS(ActivationConditions, ActivationCondition)
     
-    explicit KisAction(QObject* parent);
-    KisAction(const QString& text, QObject* parent);
-    KisAction(const KIcon& icon, const QString& text, QObject* parent);
+    explicit KisAction(QObject* parent = 0);
+    KisAction(const QString& text, QObject* parent = 0);
+    KisAction(const KIcon& icon, const QString& text, QObject* parent = 0);
     virtual ~KisAction();
 
     void setActivationFlags(ActivationFlags flags);
@@ -70,23 +74,27 @@ public:
     virtual void setActionEnabled(bool enabled);
 
    /**
-    * Set the action manager. Only used by KisActionManager
-    */
-    void setActionManager(KisActionManager* actionManager);
-
-   /**
     * Set operation id. This will used to run an operation in the KisActionManager
     */
     void setOperationID(const QString& id);
 
-signals:
+Q_SIGNALS:
     void sigEnableSlaves(bool value);
 
-private slots:
+private Q_SLOTS:
     void slotTriggered();
     void slotChanged();
 
 private:
+
+    friend class KisActionManager;
+
+    /**
+     * Set the action manager. Only used by KisActionManager
+     */
+     void setActionManager(KisActionManager* actionManager);
+
+
     class Private;
     Private* const d;
 };

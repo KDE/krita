@@ -25,11 +25,11 @@
 #include <KoColorDisplayRendererInterface.h>
 
 
-class KisFavoriteBrushData;
 class KisFavoriteResourceManager;
 class QWidget;
 class KoColor;
 class KoTriangleColorSelector;
+class KisSignalCompressor;
 
 class KisPopupPalette : public QWidget
 {
@@ -95,10 +95,12 @@ private:
     KoTriangleColorSelector* m_triangleColorSelector;
 
     QTimer* m_timer;
-    QTimer* m_colorChangeTimer;
+
     const KoColorDisplayRendererInterface *m_displayRenderer;
 
-signals:
+    KisSignalCompressor *m_colorChangeCompressor;
+
+Q_SIGNALS:
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
     void sigChangefGColor(const KoColor&);
@@ -111,10 +113,9 @@ signals:
     void sigEnableChangeFGColor(bool);
     void sigTriggerTimer();
 
-private slots:
-
-    void slotChangefGColor(const KoColor& newColor);
-    void slotColorChangeTimeout();
+private Q_SLOTS:
+    void slotExternalFgColorChanged(const KoColor &color);
+    void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
     void slotTriggerTimer();
     void slotEnableChangeFGColor();

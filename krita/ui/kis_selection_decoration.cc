@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2008 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection.h"
 #include "kis_image.h"
 #include "flake/kis_shape_selection.h"
@@ -36,12 +36,13 @@
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
 #include "krita_utils.h"
+#include "KisView.h"
 
 static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
 static const unsigned int ANT_ADVANCE_WIDTH = ANT_LENGTH + ANT_SPACE;
 
-KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
+KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)
     : KisCanvasDecoration("selection", view),
       m_signalCompressor(500 /*ms*/, KisSignalCompressor::FIRST_INACTIVE),
       m_offset(0),
@@ -101,7 +102,9 @@ void KisSelectionDecoration::selectionChanged()
                 m_thumbnailImage = selection->thumbnailImage();
                 m_thumbnailImageTransform = selection->thumbnailImageTransform();
             }
-            view()->canvasBase()->updateCanvas();
+            if (view() && view()->canvasBase()) {
+                view()->canvasBase()->updateCanvas();
+            }
 
         } else {
             m_signalCompressor.start();

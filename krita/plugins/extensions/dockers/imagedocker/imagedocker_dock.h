@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -55,10 +55,13 @@ class ImageDockerDock: public QDockWidget, public KoCanvasObserverBase
 public:
     ImageDockerDock();
     virtual ~ImageDockerDock();
+    QString observerName() { return "ImageDockerDock"; }
     virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas() {
+        m_canvas = 0; // Intentionally not disabled if there's no canvas
+    }
     
-private slots:
+private Q_SLOTS:
     void slotItemDoubleClicked(const QModelIndex& index);
     void slotBackButtonClicked();
     void slotUpButtonClicked();

@@ -23,13 +23,10 @@
 #include <QLabel>
 
 class KisFilter;
-class QListWidgetItem;
 class QLabel;
 class KisFilterConfiguration;
-class QGroupBox;
-class KisConfigWidget;
 class KisNodeFilterInterface;
-class KisView2;
+class KisViewManager;
 #include "kis_types.h"
 #include "ui_wdgfilternodecreation.h"
 
@@ -57,12 +54,13 @@ public:
                           KisPaintDeviceSP paintDevice,
                           const QString & layerName,
                           const QString & caption,
-                          KisView2 *view);
+                          KisViewManager *view,
+                          QWidget *parent = 0);
     ~KisDlgAdjustmentLayer();
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotNameChanged(const QString &);
     void slotConfigChanged();

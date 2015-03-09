@@ -177,7 +177,7 @@ public:
      */
     virtual void guiActivateEvent(bool activated);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())
@@ -203,7 +203,7 @@ protected:
      */
     QString newObjectName();
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void changeAuthorProfile(const QString &profileName);
 

@@ -37,7 +37,6 @@ class VideoData;
 class VideoThumbnailer;
 #endif
 
-class QImage;
 
 class VideoShape : public KoShape, public KoFrameShape
 {
@@ -69,10 +68,10 @@ public:
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-private slots:
+private Q_SLOTS:
     void updateThumbnail();
 
-signals:
+Q_SIGNALS:
     void createThumbnail(VideoData *videoData, const QSize &size);
 
 private:

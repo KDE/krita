@@ -174,7 +174,7 @@ K_GLOBAL_STATIC(CursorListData, s_cursorListData)
 class CursorIconProvider : public ComboBox::Options::IconProviderInterface
 {
 public:
-    CursorIconProvider(QWidget* parent) : m_parent(parent) {}
+    explicit CursorIconProvider(QWidget* parent) : m_parent(parent) {}
     virtual QIcon icon(int index) const
     {
           return s_cursorListData->pixmapForIndex(index, m_parent->palette());

@@ -124,7 +124,7 @@ public:
    */
     void setAspectMode(bool status);
 
-public slots:
+public Q_SLOTS:
     /**
     * Set the size of the current page in document coordinates which allows zoom modes that use the pageSize
     * to update.
@@ -162,7 +162,7 @@ public slots:
     */
     QSizeF documentSize() const;
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted whenever either the zoommode or the zoom level is changed by the user.
      * the application can use the emitted data for persistency purposes.

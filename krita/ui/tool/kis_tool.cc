@@ -45,7 +45,7 @@
 #include <KoSelection.h>
 #include <KoAbstractGradient.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_selection.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -70,6 +70,7 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include <kis_selection_mask.h>
 #include "kis_resources_snapshot.h"
+#include <KisView.h>
 
 
 struct KisTool::Private {
@@ -94,7 +95,6 @@ struct KisTool::Private {
     KoAbstractGradient* currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KisNodeSP currentNode;
     float currentExposure;
     KisFilterConfiguration* currentGenerator;
     QWidget* optionWidget;
@@ -175,10 +175,9 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
 
     KisPaintOpPresetSP preset = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (preset && preset->settings()) {
-        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
+        preset->settings()->activate();
     }
 
-    d->currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
@@ -225,7 +224,6 @@ void KisTool::requestStrokeEnd()
 
 void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
-
     switch (key) {
     case(KoCanvasResourceManager::ForegroundColor):
         d->currentFgColor = v.value<KoColor>();
@@ -244,9 +242,6 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::CurrentGeneratorConfiguration):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
-        break;
-    case(KisCanvasResourceProvider::CurrentKritaNode):
-        d->currentNode = (v.value<KisNodeSP>());
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
         emit statusTextChanged(v.value<KisPaintOpPresetSP>()->name());
@@ -414,7 +409,8 @@ KisPaintOpPresetSP KisTool::currentPaintOpPreset()
 
 KisNodeSP KisTool::currentNode()
 {
-    return d->currentNode;
+    KisNodeSP node = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    return node;
 }
 
 KoColor KisTool::currentFgColor()
@@ -544,7 +540,7 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 void KisTool::deleteSelection()
 {
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
     KisSelectionSP selection = resources->activeSelection();
     KisNodeSP node = resources->currentNode();
@@ -738,7 +734,7 @@ bool KisTool::nodeEditable()
         } else {
             message = i18n("Group not editable.");
         }
-        kiscanvas->view()->showFloatingMessage(message, koIcon("object-locked"));
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
     }
     return node->isEditable();
 }
@@ -746,12 +742,12 @@ bool KisTool::nodeEditable()
 bool KisTool::selectionEditable()
 {
     KisCanvas2 * kisCanvas = static_cast<KisCanvas2*>(canvas());
-    KisView2 * view = kisCanvas->view();
+    KisViewManager * view = kisCanvas->viewManager();
 
     bool editable = view->selectionEditable();
     if (!editable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        kiscanvas->view()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
+        kiscanvas->viewManager()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
     }
     return editable;
 }

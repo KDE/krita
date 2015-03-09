@@ -41,7 +41,7 @@
 KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
                                          KisNodeFilterInterface* nfi,
                                          KisPaintDeviceSP paintDevice,
-                                         KisView2 *view,
+                                         KisViewManager *view,
                                          KisFilterConfiguration *configuration,
                                          const QString & layerName,
                                          const QString & caption,

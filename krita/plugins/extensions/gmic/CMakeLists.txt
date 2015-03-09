@@ -1,63 +1,122 @@
 ##
-# Compile gmic as static library
+# CMake for gmic
 ##
 
+set(GMIC_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/gmic")
+
+include_directories(${GMIC_SOURCE_DIR})
+
+if(NOT MSVC)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
+endif()
+
+# turn off O2 and Ob1 or Ob2 for g'mic
+if (MSVC)
+    # RelWithDebInfo
+    string(REPLACE "/O2" "/Oi /Ot /Oy /Gs /GF /Gy"  CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+    string(REPLACE "/Ob1" "/Ob0" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+
+    #Release
+    string(REPLACE "/O2" "/Oi /Ot /Oy /Gs /GF /Gy"  CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+    string(REPLACE "/Ob2" "/Ob0" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+endif()
+
 set(gmic_sources_SRCS
-gmic.cpp
+  ${GMIC_SOURCE_DIR}/gmic.cpp
 )
 
 set(gmic_headers_SRCS
-CImg.h
-gmic_def.h
-gmic.h
+  ${GMIC_SOURCE_DIR}/CImg.h
+  ${GMIC_SOURCE_DIR}/gmic_def.h
+  ${GMIC_SOURCE_DIR}/gmic.h
 )
 
-if(APPLE)
-    add_definitions(-D_APPLE)
-endif()
-add_definitions(-Dgmic_build )
-add_definitions(-Dgmic_float_only )
-add_definitions(-Dcimg_use_zlib)
-
-add_definitions(-Dcimg_display=0 )
-add_definitions(-fexceptions )
-# TODO: this only for debug
-
-find_package( ZLIB REQUIRED )
-if ( ZLIB_FOUND )
-    include_directories( ${ZLIB_INCLUDE_DIRS} )
-endif( ZLIB_FOUND )
-
+# Mandatory flags
+add_definitions(-Dgmic_build)
+add_definitions(-Dgmic_float_only)
 add_definitions(-Dcimg_use_vt100 )
 
+# PARALLEL
+find_package(Threads)
+if (Threads_FOUND)
+    add_definitions(-Dgmic_is_parallel)
+    add_definitions(-Dcimg_use_rng)
+endif()
+
+#OpenMP
+find_package(OpenMP)
+if(OPENMP_FOUND)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
+
+#FFTW
 if(FFTW3_FOUND)
     add_definitions(-Dcimg_use_fftw3 )
     add_definitions(-Dcimg_use_fftw3_singlethread )
-endif(FFTW3_FOUND)
+    include_directories(${FFTW3_INCLUDE_DIR})
+endif()
+
+# PNG
+if (PNG_FOUND)
+    add_definitions(${PNG_DEFINITIONS})
+    add_definitions(-Dcimg_use_png)
+    include_directories(${PNG_INCLUDE_DIR})
+endif()
+
+# ZLIB
+find_package( ZLIB REQUIRED )
+if ( ZLIB_FOUND )
+    add_definitions(-Dcimg_use_zlib)
+    include_directories( ${ZLIB_INCLUDE_DIRS} )
+endif()
 
 
-# fPIC is somehow needed to be able to link static library into shared object
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+# CURL
+find_package(CURL)
+if (CURL_FOUND)
+    add_definitions(-Dcimg_use_curl)
+    include_directories( ${CURL_INCLUDE_DIRS} )
+endif()
 
-add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})
+# X11
+if(X11_FOUND)
+    add_definitions(-Dcimg_display=1)
+    add_definitions(-Dcimg_appname="gmic")
+elseif (WIN32 AND MSVC)
+    # CMake for MSVC automatically links and finds headers for gdi32
+    add_definitions(-Dcimg_display=2)
+    add_definitions(-Dcimg_appname="gmic")
+else()
+    add_definitions(-Dcimg_display=0)
+endif()
+
+
+# Extra for Krita
+if(APPLE)
+    add_definitions(-D_APPLE)
+endif()
+
+kde4_add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})
 
 if(FFTW3_FOUND)
   target_link_libraries(gmic ${FFTW3_LIBRARIES})
-endif(FFTW3_FOUND)
+endif()
+
+if (X11_FOUND)
+    target_link_libraries(gmic ${X11_LIBRARIES})
+endif()
+
+if(CURL_FOUND)
+    target_link_libraries(gmic ${CURL_LIBRARIES})
+endif()
 
 target_link_libraries(gmic ${ZLIB_LIBRARIES})
+target_link_libraries(gmic ${PNG_LIBRARIES})
 
-if (WIN32)
-    target_link_libraries(gmic)
-else (WIN32)
-    target_link_libraries(gmic pthread)
-endif (WIN32)
+if(Threads_FOUND)
+    target_link_libraries(gmic ${CMAKE_THREAD_LIBS_INIT})
+endif()
 
-set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
-install(FILES
-    gmic_def.gmic
-    gmic_def.gmic.blacklist
-DESTINATION ${GMIC_INSTALL_DIR} )
 
 ##
 # compile Krita plug-in and link static library in
@@ -90,25 +149,28 @@ set(kritagmic_PART_SRCS
     kis_gmic_command.cpp
     kis_gmic_synchronize_layers_command.cpp
     kis_import_gmic_processing_visitor.cpp
+    kis_gmic_progress_manager.cpp
+    kis_gmic_small_applicator.cpp
     kis_gmic_plugin.cpp ${kritagmic_shared_PART_SRCS}
 )
-
-set(gmicparser_PART_SRCS main.cpp ${kritagmic_shared_PART_SRCS})
-
 kde4_add_plugin(kritagmic ${kritagmic_PART_SRCS})
-
 target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY} ${ZLIB_LIBRARIES})
 
+# gmicparser for debugging purposes
+
+set(gmicparser_PART_SRCS gmicparser.cpp ${kritagmic_shared_PART_SRCS})
 kde4_add_executable(gmicparser ${gmicparser_PART_SRCS})
 target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} kritaui gmic ${ZLIB_LIBRARIES})
+
+########### install files ###############
+set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
 
 install(TARGETS kritagmic  DESTINATION ${PLUGIN_INSTALL_DIR})
 install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-########### install files ###############
-
 install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES  ${GMIC_SOURCE_DIR}/gmic_def.gmic gmic_def.gmic.blacklist DESTINATION ${GMIC_INSTALL_DIR} )
 
 # tests, currently broken on OSX due to fftw linking problem
 if(NOT APPLE)

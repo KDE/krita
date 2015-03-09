@@ -49,15 +49,15 @@ public:
     void setTextDirection(KoText::Direction direction);
     KoText::Direction textDirection() const;
 
-signals:
+Q_SIGNALS:
     void layoutChanged(const KoPageLayout &layout);
     void unitChanged(const KoUnit &unit);
 
-public slots:
+public Q_SLOTS:
     void setPageLayout(const KoPageLayout &layout);
     void setTextAreaAvailable(bool available);
 
-private slots:
+private Q_SLOTS:
     void sizeChanged(int row);
     void unitChanged(int row);
     void facingPagesChanged();

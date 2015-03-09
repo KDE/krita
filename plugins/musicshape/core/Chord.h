@@ -157,7 +157,7 @@ public:
     Chord* beamEnd(int index);
     BeamType beamType(int index) const;
     void setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type = BeamFlag);
-public slots:
+public Q_SLOTS:
     /**
      * Changes the duration of the chord.
      *
@@ -171,7 +171,7 @@ public slots:
      * @param dots the new number of dots
      */
     void setDots(int dots);
-signals:    
+Q_SIGNALS:    
     /**
      * This signal is emitted when the duration of this chord changes.
      */

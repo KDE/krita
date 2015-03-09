@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2008 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -25,11 +25,13 @@
 #include <kis_signal_compressor.h>
 #include "canvas/kis_canvas_decoration.h"
 
+class KisView;
+
 class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration
 {
     Q_OBJECT
 public:
-    KisSelectionDecoration(KisView2* view);
+    KisSelectionDecoration(QPointer<KisView> view);
     ~KisSelectionDecoration();
 
     enum Mode {
@@ -44,10 +46,10 @@ public:
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
-private slots:
+private Q_SLOTS:
     void slotStartUpdateSelection();
 
-public slots:
+public Q_SLOTS:
     void selectionChanged();
     void antsAttackEvent();
 private:

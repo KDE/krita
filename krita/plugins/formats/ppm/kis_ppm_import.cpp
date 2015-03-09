@@ -1,15 +1,15 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -29,10 +29,10 @@
 #include <kio/netaccess.h>
 
 #include <KoColorSpaceRegistry.h>
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 
 #include <kis_debug.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
@@ -47,7 +47,7 @@
 K_PLUGIN_FACTORY(PPMImportFactory, registerPlugin<KisPPMImport>();)
 K_EXPORT_PLUGIN(PPMImportFactory("krita"))
 
-KisPPMImport::KisPPMImport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisPPMImport::KisPPMImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -55,23 +55,23 @@ KisPPMImport::~KisPPMImport()
 {
 }
 
-KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const QByteArray& to)
 {
     Q_UNUSED(from);
     dbgFile << "Importing using PPMImport!";
 
     if (to != "application/x-krita")
-        return KoFilter::BadMimeType;
+        return KisImportExportFilter::BadMimeType;
 
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
+    KisDocument * doc = m_chain->outputDocument();
 
     if (!doc)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain -> inputFile();
+    QString filename = m_chain->inputFile();
 
     if (filename.isEmpty()) {
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
     }
 
     KUrl url(filename);
@@ -79,16 +79,16 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
 
     dbgFile << "Import: " << url;
     if (url.isEmpty())
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
 
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
         dbgFile << "Inexistant file";
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
     }
 
     // We're not set up to handle asynchronous loading at the moment.
     QString tmpFile;
-    KoFilter::ConversionStatus result;
+    KisImportExportFilter::ConversionStatus result;
     if (KIO::NetAccess::download(url, tmpFile, QApplication::activeWindow())) {
         KUrl uriTF(tmpFile);
 
@@ -98,14 +98,14 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
             doc->prepareForImport();
             result = loadFromDevice(fp, doc);
         } else {
-            result = KoFilter::CreationError;
+            result = KisImportExportFilter::CreationError;
         }
 
         KIO::NetAccess::removeTempFile(tmpFile);
         return result;
     }
     dbgFile << "Download failed";
-    return KoFilter::CreationError;
+    return KisImportExportFilter::CreationError;
 }
 
 int readNumber(QIODevice* device)
@@ -209,17 +209,17 @@ private:
     int m_lineWidth;
 };
 
-KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDoc2* doc)
+KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDocument* doc)
 {
     dbgFile << "Start decoding file";
     device->open(QIODevice::ReadOnly);
     if (!device->isOpen()) {
-        return KoFilter::CreationError;
+        return KisImportExportFilter::CreationError;
     }
 
     QByteArray array = device->read(2);
 
-    if (array.size() < 2) return KoFilter::CreationError;
+    if (array.size() < 2) return KisImportExportFilter::CreationError;
 
     // Read the type of the ppm file
     enum { Puk, P1, P2, P3, P4, P5, P6 } fileType = Puk; // Puk => unknown
@@ -252,7 +252,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
 
     Q_ASSERT(channels != -1);
     char c; device->getChar(&c);
-    if (!isspace(c)) return KoFilter::CreationError; // Invalid file, it should have a separator now
+    if (!isspace(c)) return KisImportExportFilter::CreationError; // Invalid file, it should have a separator now
 
     // Read width
     int width = readNumber(device);
@@ -286,7 +286,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         }
     } else {
         dbgFile << "Unknown colorspace";
-        return KoFilter::CreationError;
+        return KisImportExportFilter::CreationError;
     }
 
     KisImageSP image = new KisImage(doc->createUndoStore(), width, height, colorSpace, "built image");
@@ -302,7 +302,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     for (int v = 0; v < height; ++v) {
         KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, v, width);
         ppmFlow->nextRow();
-        if (!ppmFlow->valid()) return KoFilter::CreationError;
+        if (!ppmFlow->valid()) return KisImportExportFilter::CreationError;
         if (maxval <= 255) {
             if (channels == 3) {
                 do {
@@ -346,5 +346,5 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     image->addNode(layer.data(), image->rootLayer().data());
 
     doc->setCurrentImage(image);
-    return KoFilter::OK;
+    return KisImportExportFilter::OK;
 }

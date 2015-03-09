@@ -174,6 +174,11 @@ void KisTextBrush::setText(const QString& txt)
     m_text = txt;
 }
 
+QString KisTextBrush::text(void) const
+{
+    return m_text;
+}
+
 void KisTextBrush::setFont(const QFont& font)
 {
     m_font = font;

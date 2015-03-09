@@ -48,6 +48,7 @@
 #include <kis_clone_layer.h>
 #include <kis_filter_mask.h>
 #include <kis_transform_mask.h>
+#include <kis_transform_mask_params_interface.h>
 #include "kis_transform_mask_params_factory_registry.h"
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
@@ -177,14 +178,6 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
 bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 {
-//     if (!loadPaintDevice(layer->paintDevice(), getLocation(layer))) {
-//         return false;
-//     }
-//
-//     if (!loadProfile(layer->paintDevice(), getLocation(layer, DOT_ICC))) {
-//         return false;
-//     }
-
     if (!loadMetaData(layer)) {
         return false;
     }
@@ -193,7 +186,6 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
     result = loadSelection(getLocation(layer), layer->internalSelection());
 
     result = loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
-
     layer->update();
 
     result = visitAll(layer);
@@ -404,7 +396,10 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
     KisMetaData::IOBackend* backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
 
     if (!backend || !backend->supportLoading()) {
-        dbgFile << "Backend " << backend->id() << " does not support loading.";
+        if (backend)
+            dbgFile << "Backend " << backend->id() << " does not support loading.";
+        else
+            dbgFile << "Could not load the XMP backenda t all";
         return true;
     }
 

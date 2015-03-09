@@ -43,7 +43,7 @@ public:
     void setRange(int minimum, int maximum);
     void setFormat(const QString &format);
 
-signals:
+Q_SIGNALS:
 
     void done();
 };

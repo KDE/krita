@@ -24,6 +24,8 @@
 
 #include "ui_wdg_gmic_input_output.h"
 
+class QStringListModel;
+
 /**
  * creates GUI for Input/Output configuration
  */
@@ -43,13 +45,13 @@ public:
 
     KisFilterPreviewWidget * previewWidget();
 
-signals:
+Q_SIGNALS:
     void sigConfigurationChanged();
 
 private:
     void createMainLayout();
 
-private slots:
+private Q_SLOTS:
     void setIntputMode(int index);
     void setOutputMode(int index);
     void setPreviewMode(int index);
@@ -60,6 +62,11 @@ private:
     OutputMode m_outputMode;
     OutputPreviewMode m_previewMode;
     PreviewSize m_previewSize;
+
+    QStringListModel *m_inputModel;
+    QStringListModel *m_outputModel;
+    QStringListModel *m_previewModeModel;
+    QStringListModel *m_previewSizeModel;
 
 };
 

@@ -39,7 +39,7 @@ public:
 
     void apply();
 
-public slots:
+public Q_SLOTS:
     void slotDefault();
     void slotUnitChanged(const KoUnit &unit);
     void spinBoxHSpacingChanged(qreal);

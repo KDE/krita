@@ -73,7 +73,7 @@ struct KisResourcesSnapshot::Private {
     qreal effectiveZoom;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private())
 {
     m_d->image = image;
@@ -87,7 +87,6 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     m_d->currentPattern = static_cast<KoPattern*>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void*>());
     m_d->currentGradient = static_cast<KoAbstractGradient*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<void*>());
-
     m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
@@ -110,7 +109,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
     m_d->opacity = quint8(normOpacity * OPACITY_OPAQUE_U8);
 
     m_d->compositeOpId = resourceManager->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString();
-    setCurrentNode(resourceManager->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>());
+    setCurrentNode(currentNode);
 
     /**
      * Fill and Stroke styles are not a part of the resource manager
@@ -154,7 +153,7 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
      * The paintOp should be initialized the last, because it may
      * ask the painter for some options while initialization
      */
-    painter->setPaintOpPreset(m_d->currentPaintOpPreset, m_d->image);
+    painter->setPaintOpPreset(m_d->currentPaintOpPreset, m_d->currentNode, m_d->image);
 }
 
 void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)

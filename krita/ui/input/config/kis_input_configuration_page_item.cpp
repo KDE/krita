@@ -82,5 +82,9 @@ void KisInputConfigurationPageItem::setExpanded(bool expand)
 
 void KisInputConfigurationPageItem::deleteShortcut()
 {
-    m_shortcutsModel->removeRow(ui->shortcutsView->selectionModel()->currentIndex().row(), QModelIndex());
+    int row = ui->shortcutsView->selectionModel()->currentIndex().row();
+
+    if (m_shortcutsModel->canRemoveRow(row)) {
+        m_shortcutsModel->removeRow(row, QModelIndex());
+    }
 }

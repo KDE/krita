@@ -14,6 +14,6 @@ set(KoReportTest_SRCS KoReportTest.cpp)
 
 kde4_add_unit_test(KoReportTest TESTNAME KoReportTest  ${KoReportTest_SRCS})
 
-target_link_libraries(KoReportTest koreport ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(KoReportTest ${KOREPORT_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########## next target ###############

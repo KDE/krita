@@ -20,27 +20,27 @@
 #ifndef KIS_VIEW_PLUGIN_H
 #define KIS_VIEW_PLUGIN_H
 
-#include <kxmlguiclient.h>
 #include <krita_export.h>
 #include "operations/kis_operation_ui_factory.h"
 
 class KisOperation;
 class KisAction;
-class KisView2;
+class KisViewManager;
 
 /**
  *  KisViewPlugin is the base for plugins which add actions to the view
  */
-class KRITAUI_EXPORT KisViewPlugin : public QObject, public KXMLGUIClient
+class KRITAUI_EXPORT KisViewPlugin : public QObject
 {
     Q_OBJECT
 public:
-    KisViewPlugin(QObject* parent = 0, const QString& rcFile = QString());
+    KisViewPlugin(QObject* parent = 0);
+    virtual ~KisViewPlugin();
 
 protected:
     /**
     *  adds an action to UI and action manager
-    *  @param name name of the action in the rc file
+    *  @param name name of the action in the krita.rc file
     *  @param action the action that should be added
     */
     void addAction(const QString& name, KisAction* action);
@@ -49,7 +49,7 @@ protected:
 
     void addOperation(KisOperation* operation);
     
-    KisView2* m_view;
+    KisViewManager* m_view;
 };
 
 #endif // KIS_VIEW_PLUGIN_H

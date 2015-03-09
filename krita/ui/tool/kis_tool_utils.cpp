@@ -23,14 +23,22 @@
 
 namespace KisToolUtils {
 
-    KoColor pick(KisPaintDeviceSP dev, const QPoint& pos)
+    bool pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color)
     {
         KIS_ASSERT(dev);
         KoColor pickedColor;
         dev->pixel(pos.x(), pos.y(), &pickedColor);
         pickedColor.convertTo(dev->compositionSourceColorSpace());
-        pickedColor.setOpacity(OPACITY_OPAQUE_U8);
-        return pickedColor;
+
+        bool validColorPicked =
+            pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8;
+
+        if (validColorPicked) {
+            pickedColor.setOpacity(OPACITY_OPAQUE_U8);
+            *color = pickedColor;
+        }
+
+        return validColorPicked;
     }
 
     KisNodeSP findNode(KisNodeSP node, const QPoint &point, bool wholeGroup, bool editableOnly)

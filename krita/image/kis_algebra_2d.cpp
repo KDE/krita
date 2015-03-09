@@ -160,4 +160,63 @@ QPointF ensureInRect(QPointF pt, const QRectF &bounds)
     return ensureInRectImpl(pt, bounds);
 }
 
+QRect ensureRectNotSmaller(QRect rc, const QSize &size)
+{
+    if (rc.width() < size.width() ||
+        rc.height() < size.height()) {
+
+        int width = qMax(rc.width(), size.width());
+        int height = qMax(rc.height(), size.height());
+
+        rc = QRect(rc.topLeft(), QSize(width, height));
+    }
+
+    return rc;
+}
+
+bool intersectLineRect(QLineF &line, const QRect rect)
+{
+    QPointF pt1 = QPointF(), pt2 = QPointF();
+    QPointF tmp;
+
+    if (line.intersect(QLineF(rect.topLeft(), rect.topRight()), &tmp) != QLineF::NoIntersection) {
+        if (tmp.x() >= rect.left() && tmp.x() <= rect.right()) {
+            pt1 = tmp;
+        }
+    }
+
+    if (line.intersect(QLineF(rect.topRight(), rect.bottomRight()), &tmp) != QLineF::NoIntersection) {
+        if (tmp.y() >= rect.top() && tmp.y() <= rect.bottom()) {
+            if (pt1.isNull()) pt1 = tmp;
+            else pt2 = tmp;
+        }
+    }
+    if (line.intersect(QLineF(rect.bottomRight(), rect.bottomLeft()), &tmp) != QLineF::NoIntersection) {
+        if (tmp.x() >= rect.left() && tmp.x() <= rect.right()) {
+            if (pt1.isNull()) pt1 = tmp;
+            else pt2 = tmp;
+        }
+    }
+    if (line.intersect(QLineF(rect.bottomLeft(), rect.topLeft()), &tmp) != QLineF::NoIntersection) {
+        if (tmp.y() >= rect.top() && tmp.y() <= rect.bottom()) {
+            if (pt1.isNull()) pt1 = tmp;
+            else pt2 = tmp;
+        }
+    }
+
+    if (pt1.isNull() || pt2.isNull()) return false;
+
+    // Attempt to retain polarity of end points
+    if ((line.x1() < line.x2()) != (pt1.x() > pt2.x()) || (line.y1() < line.y2()) != (pt1.y() > pt2.y())) {
+        tmp = pt1;
+        pt1 = pt2;
+        pt2 = tmp;
+    }
+
+    line.setP1(pt1);
+    line.setP2(pt2);
+
+    return true;
+}
+
 }

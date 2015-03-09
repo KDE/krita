@@ -28,10 +28,8 @@ class QPointF;
 class QPainter;
 class KisCoordinatesConverter;
 class ToolTransformArgs;
-class QTransform;
 class TransformTransactionProperties;
 class QCursor;
-class QImage;
 
 
 class KisLiquifyTransformStrategy : public KisTransformStrategyBase
@@ -64,13 +62,13 @@ public:
     void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
     bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
 
-signals:
+Q_SIGNALS:
     void requestCanvasUpdate();
     void requestUpdateOptionWidget();
     void requestCursorOutlineUpdate(const QPointF &imagePoint);
 
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> m_d;
 };
 

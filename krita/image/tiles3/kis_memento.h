@@ -31,7 +31,6 @@
 #include "kis_memento_manager.h"
 
 class KisTile;
-class KisTiledDataManager;
 
 class KisMemento;
 typedef KisSharedPtr<KisMemento> KisMementoSP;

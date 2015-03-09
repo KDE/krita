@@ -32,7 +32,7 @@
 
 #include "FontFamilyAction.h"
 
-#include <QtGui/QToolBar>
+#include <QToolBar>
 
 #include <kdebug.h>
 #include <kicon.h>

@@ -28,12 +28,12 @@
 #include <kpluginfactory.h>
 
 #include <KoColorSpace.h>
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_transaction.h>
 #include <kis_paint_device.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_node.h>
@@ -43,7 +43,7 @@
 K_PLUGIN_FACTORY(KisBMPImportFactory, registerPlugin<KisBMPImport>();)
 K_EXPORT_PLUGIN(KisBMPImportFactory("calligrafilters"))
 
-KisBMPImport::KisBMPImport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisBMPImport::KisBMPImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -51,19 +51,19 @@ KisBMPImport::~KisBMPImport()
 {
 }
 
-KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "BMP import! From:" << from << ", To:" << to << 0;
 
     if (to != "application/x-krita")
-        return KoFilter::BadMimeType;
+        return KisImportExportFilter::BadMimeType;
 
-        KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
+        KisDocument * doc = m_chain->outputDocument();
 
     if (!doc)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain -> inputFile();
+    QString filename = m_chain->inputFile();
 
     doc->prepareForImport();
 
@@ -71,10 +71,10 @@ KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const Q
         KUrl url(filename);
 
         if (url.isEmpty())
-            return KoFilter::FileNotFound;
+            return KisImportExportFilter::FileNotFound;
 
         if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
-            return KoFilter::FileNotFound;
+            return KisImportExportFilter::FileNotFound;
         }
 
 
@@ -89,9 +89,9 @@ KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const Q
         image->addNode(layer.data(), image->rootLayer().data());
 
         doc->setCurrentImage(image);
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     }
-    return KoFilter::StorageCreationError;
+    return KisImportExportFilter::StorageCreationError;
 
 }
 

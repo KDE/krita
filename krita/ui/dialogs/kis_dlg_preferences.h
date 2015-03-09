@@ -37,7 +37,6 @@
 #include "ui_wdgfullscreensettings.h"
 
 class KoID;
-class KoConfigAuthorPage;
 class KisInputConfigurationPage;
 
 /**
@@ -70,7 +69,12 @@ public:
     void setDefault();
     int undoStackSize();
     bool showOutlineWhilePainting();
+    int mdiMode();
     int favoritePresets();
+    bool showCanvasMessages();
+private Q_SLOTS:
+    void getBackgroundImage();
+    void clearBackgroundImage();
 
 };
 
@@ -94,7 +98,7 @@ public:
 
     ColorSettingsTab(QWidget *parent = 0, const char  *name = 0);
 
-private slots:
+private Q_SLOTS:
 
     void refillMonitorProfiles(const KoID & s);
     void refillPrintProfiles(const KoID & s);
@@ -105,6 +109,8 @@ public:
     void setDefault();
     WdgColorSettings  *m_page;
     QButtonGroup m_pasteBehaviourGroup;
+    QList<QLabel*> m_monitorProfileLabels;
+    QList<SqueezedComboBox*> m_monitorProfileWidgets;
 };
 
 //=======================
@@ -186,7 +192,7 @@ public:
 
 public:
     void setDefault();
-protected slots:
+protected Q_SLOTS:
     void slotUseOpenGLToggled(bool isChecked);
 
 public:
@@ -216,7 +222,7 @@ public:
     GridSettingsTab(QWidget *parent);
 public:
     void setDefault();
-private slots:
+private Q_SLOTS:
     void linkSpacingToggled(bool);
     void spinBoxHSpacingChanged(int);
     void spinBoxVSpacingChanged(int);
@@ -282,10 +288,9 @@ protected:
     GridSettingsTab *m_gridSettings;
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
-    KoConfigAuthorPage *m_authorSettings;
     KisInputConfigurationPage *m_inputConfiguration;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotDefault();
 

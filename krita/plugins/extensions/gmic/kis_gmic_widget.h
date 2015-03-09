@@ -28,8 +28,6 @@
 
 class KisGmicUpdater;
 class QCloseEvent;
-class KisGmicInputOutputWidget;
-class QPushButton;
 
 class KisGmicWidget : public QWidget, public Ui::WdgGmic
 {
@@ -45,15 +43,16 @@ public:
     void createMainLayout();
     virtual void closeEvent(QCloseEvent* );
 
-signals:
+Q_SIGNALS:
     void sigFilterCurrentImage(KisGmicFilterSetting * setting); //TODO:const
     void sigPreviewFilterCommand(KisGmicFilterSetting * setting); //TODO:const
     void sigAcceptOnCanvasPreview();
     void sigCancelOnCanvasPreview();
     void sigPreviewActiveLayer();
     void sigClose();
+    void sigRequestFinishAndClose();
 
-private slots:
+private Q_SLOTS:
     void slotSelectedFilterChanged(const QItemSelection & newSelection, const QItemSelection & oldSelection);
     // buttons
     void slotApplyClicked();
@@ -61,6 +60,8 @@ private slots:
     void slotCancelClicked();
     void slotResetClicked();
     void slotMaximizeClicked();
+
+    void slotExpandCollapse();
 
     // internet updates slots
     void startUpdate();
@@ -83,11 +84,14 @@ private:
     KisGmicFilterModel * m_filterModel;
     KisGmicUpdater * m_updater;
 
+    QWidget *m_filterOptions;
+
     QString m_updateUrl;
 
     int m_filterOptionsRow;
     int m_filterOptionsColumn;
 
+    // flag which says if the image was filtered at least once
     bool m_filterApplied;
     bool m_onCanvasPreviewActivated;
     bool m_onCanvasPreviewRequested;

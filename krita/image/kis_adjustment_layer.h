@@ -88,10 +88,10 @@ public:
      * name is it is a filter. Overrides sectionModelProperties
      * in KisLayer, and KisLayer overrides
      * sectionModelProperties in KisBaseNode.
-     * @return KoDocumentSectionModel::PropertyList returns a list
+     * @return KisDocumentSectionModel::PropertyList returns a list
      * of the properties
      */
-    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
 public:
 
@@ -100,12 +100,12 @@ public:
      */
     void setFilter(KisFilterConfiguration *filterConfig);
 
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+    QRect incomingChangeRect(const QRect &rect) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     void setChannelFlags(const QBitArray & channelFlags);
     
-public slots:
+public Q_SLOTS:
     /**
      * gets this AdjustmentLayer. Overrides function in
      * KisIndirectPaintingSupport

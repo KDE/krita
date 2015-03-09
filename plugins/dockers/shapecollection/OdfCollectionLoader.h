@@ -30,7 +30,6 @@ class KoOdfLoadingContext;
 class KoShapeLoadingContext;
 class QTimer;
 class KoShape;
-class KoFilterManager;
 
 class KUrl;
 
@@ -51,7 +50,7 @@ class OdfCollectionLoader : public QObject
         void loadNativeFile(const QString& path);
         QString findMimeTypeByUrl(const KUrl& url);
 
-    protected slots:
+    protected Q_SLOTS:
         void loadShape();
 
     private:
@@ -65,9 +64,8 @@ class OdfCollectionLoader : public QObject
         QList<KoShape*> m_shapeList;
         QString m_path;
         QStringList m_fileList;
-        KoFilterManager* m_filterManager;
 
-    signals:
+    Q_SIGNALS:
         /**
          * Emitted when the loading failed
          * @param reason Reason the loading failed.

@@ -39,10 +39,6 @@ public:
     virtual QSize minimumSizeHint() const; ///< reimplemented from QWidget
     virtual QSize sizeHint() const;  ///< reimplemented from QWidget
 
-    void setCollapsed(bool collapsed);
-    void setLocked(bool locked);
-    void setCollapsable(bool collapsable);
-
     enum TextVisibilityMode {TextCanBeInvisible, FullTextAlwaysVisible};
     /// Define whether the minimal width should ensure that the full text is visible.
     /// textVisibilityMode is FullTextAlwaysVisible by default
@@ -50,13 +46,17 @@ public:
 
     void updateIcons();
 
+public Q_SLOTS:
+    void setCollapsed(bool collapsed);
+    void setLocked(bool locked);
+    void setCollapsable(bool collapsable);
+
 protected:
     virtual void paintEvent(QPaintEvent* event); ///< reimplemented from QWidget
     virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
 private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
     Q_PRIVATE_SLOT(d, void toggleCollapsed())
-    Q_PRIVATE_SLOT(d, void toggleLocked())
     Q_PRIVATE_SLOT(d, void topLevelChanged(bool topLevel))
     Q_PRIVATE_SLOT(d, void featuresChanged(QDockWidget::DockWidgetFeatures))
 

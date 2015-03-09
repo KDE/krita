@@ -19,13 +19,14 @@
 #include <kis_properties_configuration.h>
 
 //
-#include <kurlrequester.h>
+#include "widgets/kis_url_requester.h"
 #include <kdeversion.h>
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 
-#include <kfiledialog.h> // For kurlrequester...
+#include <KoFileDialog.h>
+#include <kfiledialog.h> // For kisurlrequester...
 
 KisGmicSettingsWidget::KisGmicSettingsWidget(Command * command)
     :   KisConfigWidget(0, 0, 250),
@@ -293,11 +294,11 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
             case Parameter::FOLDER_P:
             {
                 FolderParameter * folderParam = static_cast<FolderParameter *>(p);
-                KUrlRequester * urlRequester(0);
+                KisUrlRequester * urlRequester(0);
                 if (role == CreateRole)
                 {
-                    urlRequester = new KUrlRequester;
-                    urlRequester->fileDialog()->setMode(KFile::Directory);
+                    urlRequester = new KisUrlRequester;
+                    urlRequester->setMode(KoFileDialog::OpenDirectory);
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(folderParam, urlRequester);
@@ -311,12 +312,12 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 }
                 else if (role == LoadRole)
                 {
-                    urlRequester = qobject_cast<KUrlRequester *>(widget(folderParam));
+                    urlRequester = qobject_cast<KisUrlRequester *>(widget(folderParam));
                 }
 
                 if (urlRequester)
                 {
-                    urlRequester->setUrl(KUrl(folderParam->m_folderPath));
+                    urlRequester->setUrl(KUrl(folderParam->toUiValue()));
                 }
                 else
                 {
@@ -327,11 +328,12 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
             case Parameter::FILE_P:
             {
                 FileParameter * fileParam = static_cast<FileParameter *>(p);
-                KUrlRequester * urlRequester(0);
+                KisUrlRequester * urlRequester(0);
                 if (role == CreateRole)
                 {
-                    urlRequester = new KUrlRequester;
-                    urlRequester->fileDialog()->setMode(KFile::File);
+                    urlRequester = new KisUrlRequester;
+                    urlRequester->setMode(KoFileDialog::OpenFile);
+                    urlRequester->setMimeTypeFilters(QStringList(i18n("All Files")));
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(fileParam, urlRequester);
@@ -345,12 +347,12 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 }
                 else if (role == LoadRole)
                 {
-                    urlRequester = qobject_cast<KUrlRequester *>(widget(fileParam));
+                    urlRequester = qobject_cast<KisUrlRequester *>(widget(fileParam));
                 }
 
                 if (urlRequester)
                 {
-                    urlRequester->setUrl(KUrl(fileParam->m_filePath));
+                    urlRequester->setUrl(KUrl(fileParam->toUiValue()));
                 }
                 else
                 {
@@ -374,7 +376,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                     if (role == CreateRole)
                     {
                         lineEdit = new QLineEdit;
-                        lineEdit->setText(textParam->m_value);
+                        lineEdit->setText(textParam->toUiValue());
 
                         m_widgetToParameterIndexMapper[lineEdit] = i;
                         mapParameterWidget(textParam, lineEdit);
@@ -394,7 +396,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                     if (lineEdit)
                     {
-                        lineEdit->setText(textParam->m_value);
+                        lineEdit->setText(textParam->toUiValue());
                     }
                     else
                     {
@@ -409,7 +411,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                     if (role == CreateRole)
                     {
                         multiLineEdit = new QTextEdit;
-                        multiLineEdit->setText(textParam->m_value);
+                        multiLineEdit->setText(textParam->toUiValue());
 
                         m_widgetToParameterIndexMapper[multiLineEdit] = i;
                         mapParameterWidget(textParam, multiLineEdit);
@@ -431,7 +433,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                     if (multiLineEdit)
                     {
-                        multiLineEdit->setText(textParam->m_value);
+                        multiLineEdit->setText(textParam->toUiValue());
                     }
                     else
                     {
@@ -574,7 +576,7 @@ void KisGmicSettingsWidget::setTextValue()
         }
     }
 
-    textParam->m_value = result;
+    textParam->fromUiValue(result);
 }
 
 
@@ -626,8 +628,8 @@ void KisGmicSettingsWidget::setFolderPathValue(const KUrl& kurl)
         return;
     }
 
-    FolderParameter * folderParam = static_cast<FolderParameter  *>(p);
-    folderParam->m_folderPath = kurl.path();
+    FolderParameter * folderParam = static_cast<FolderParameter *>(p);
+    folderParam->fromUiValue(kurl.path());
 }
 
 void KisGmicSettingsWidget::setFilePathValue(const KUrl& kurl)
@@ -644,7 +646,7 @@ void KisGmicSettingsWidget::setFilePathValue(const KUrl& kurl)
     }
 
     FileParameter * fileParam = static_cast<FileParameter *>(p);
-    fileParam->m_filePath = kurl.path();
+    fileParam->fromUiValue(kurl.path());
 }
 
 void KisGmicSettingsWidget::mapParameterWidget(Parameter* parameter, QWidget* widget)

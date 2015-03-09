@@ -97,6 +97,8 @@ public:
      */
     KisInputProfile *profile() const;
 
+    bool canRemoveRow(int row) const;
+
 public Q_SLOTS:
     /**
      * Set the action used as data constraint for this model.

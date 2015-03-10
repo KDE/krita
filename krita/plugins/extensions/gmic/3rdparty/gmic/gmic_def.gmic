@@ -114,10 +114,11 @@
 #   equal to the number of parameters for the current filter.
 #
 #   A G'MIC command can also specify the blending mode, the opacity and the position of each of the output image
-#   (i.e. layer in the plug-in). To do so, set the image name to something like 'mode(grainmerge),opacity(50),pos(30,50)'.
+#   (i.e. layer in the plug-in). To do so, set the image name to something like 'mode(grainmerge),opacity(50),pos(30,50),name(name)'.
 #     - Blending mode name should be the same as the argument of the '-blend' command.
 #     - Opacity is a float number in [0,100].
 #     - X and Y positions are integers.
+#     - 'name' is the layer name.
 #
 #*** Specific rules for 'gmicol' (G'MIC web service) :
 #
@@ -138,6 +139,11 @@ cli_noarg :
   -if {@{!,u}>0} -e[] "[gmic] Running in demo mode." -v - -demo , -e[] ""
   -else -e[] "\n"
   -endif -v -
+
+# This command is called each time the cli interface 'gmic' starts.
+# Overload it in your local user command file if necessary.
+cli_start :
+
 
 #@gmic debug : (+)
 #@gmic : Activate debug mode.
@@ -1050,11 +1056,6 @@ _help_paragraph_man :
 _help_footer_man :
   -_help_footer_ascii $"*"
 
-# start
-# This command is called each time the cli interface 'gmic' starts.
-# Overload it in your local user command file if necessary.
-start :
-
 # use_vt100
 # This command defines some global variables used to output colored text on VT100 terminals.
 use_vt100 :
@@ -1361,7 +1362,7 @@ _display_graph : -check "${1=640}>32 && ${2=480}>32" -skip ${3=1},${4=0},${5=0},
     0 -t[-1] "$9",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
     0 -t[-1] "$10",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
 
-  -nm $nm,1 -endl -done -c 0,255 -v +
+  -nm $nm -endl -done -c 0,255 -v +
 
 #@gmic dh : eq. to '-display_histogram'.
 dh :
@@ -1393,7 +1394,7 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
       -rm[-2] -+ 255
       -if $6 100%,100% -axes[-1] $m,$M,$vM,0,13,1,255 --dilate[-1] 3 -r[-2] [-3] -j[-3] [-2],0,0,0,0,1,[-1],255 -rm[-2,-1] -endif
     -endl -done
-    -a z -nm $nm,1
+    -a z -nm $nm
   -endl -done -v +
 
 #@gmic display_parametric : _width>0,_height>0,_outline_opacity,_vertex_radius>=0,_is_antialiased={ 0 | 1 },_is_decorated={ 0 | 1 },_xlabel,_ylabel
@@ -1460,7 +1461,7 @@ display_parametric : -check "${1=512}>0 && ${2=$1}>0 && ${4=0}>=0" -skip ${3=3},
       0 -t[-1] "$7",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
       0 -t[-1] "$8",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
     -endif
-    -nm[-1] $nm,1
+    -nm[-1] $nm
   -endl -done -v +
 
 #@gmic dp : eq. to '-display_polar'.
@@ -1539,7 +1540,7 @@ _display_polar : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=1},${4=200},${5=$4
     0 -t[-1] "$9",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
     0 -t[-1] "$10",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
 
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic drgba : eq. to '-display_rgba'.
 drgba :
@@ -3310,7 +3311,7 @@ update_server : -skip ${1=@.},${2=1}
   -v + -e[] "\n> Force filters to move, if necessary." -v -
   -repeat @# ind=$> -repeat $_nbm -if {@{$ind,n}'=='${_to_move$>}}
    -v + -e[] "  "$ind". Move '"@{$ind,n}"' to '"${_move_to$>}"'." -v -
-   -name[$ind] ${_move_to$>}/@{$ind,b}
+   -nm[$ind] ${_move_to$>}/@{$ind,b}
   -endif -done -done
 
   # Sort filter code by lexicographical order.
@@ -3364,7 +3365,7 @@ update_server : -skip ${1=@.},${2=1}
           balise="i"
         -done -rm
       -endl -endif
-      -if {narg($command)} name=@{0,n} -i[0] ({'$command'}) -y[0] -a y -nm $name
+      -if {narg($command)} nm=@{0,n} -i[0] ({'$command'}) -y[0] -a y -nm $nm
       -endif
 
       path=$npath
@@ -3503,117 +3504,119 @@ update_tutorial_html :
   -use_vt100
 
   # Init list of pages to retrieve.
-  -add_page /,1700,index,_index
-  -add_page basics,4000
+  # -add_page /,1700,index,_index
+  # -add_page basics,4000
 
-  -add_page beginners-cookbook,1000
-  -add_page beginners-cookbook/cauldron,3500
-  -add_page beginners-cookbook/dyidiffusion,1000
-  -add_page beginners-cookbook/dyidiffusion/graduated-blurs,3800
-  -add_page beginners-cookbook/dyidiffusion/variations-on-a-theme,3800
-  -add_page beginners-cookbook/dyidiffusion/eigenvalues-and-eigenvectors,2300
-  -add_page beginners-cookbook/dyidiffusion/directional-blurring,3500
-  -add_page beginners-cookbook/dyidiffusion/tensors-for-the-tonsorially-challenged,8500
-  -add_page beginners-cookbook/dyidiffusion/eigen-thingys,4800
-  -add_page beginners-cookbook/dyidiffusion/fake-depth-of-field,7600
-  -add_page beginners-cookbook/fingerpainting,12000
-  -add_page beginners-cookbook/ramps,1200
-  -add_page beginners-cookbook/ramps/applying-a-curve,600
-  -add_page beginners-cookbook/ramps/blurring,600
-  -add_page beginners-cookbook/ramps/general-ramps,2500
-  -add_page beginners-cookbook/ramps/input-and-fill,1200
-  -add_page beginners-cookbook/ramps/one-dimensional-functions,800
-  -add_page beginners-cookbook/ramps/remapping-space,2200
-  -add_page beginners-cookbook/ramps/resizing,600
-  -add_page beginners-cookbook/ramps/warp,800
-  -add_page beginners-cookbook/road-systems,2500
-  -add_page beginners-cookbook/stained-glass,4000
-  -add_page beginners-cookbook/spectral-art,1500
-  -add_page beginners-cookbook/spectral-art/the-spatial-and-the-spectral,2000
-  -add_page beginners-cookbook/spectral-art/the-spectral-course,2000
-  -add_page beginners-cookbook/spectral-art/the-spectral-domain,2000
-  -add_page beginners-cookbook/spectral-art/the-complex-number-field,3300
-  -add_page beginners-cookbook/spectral-art/painting-with-waves-part-one,2200
-  -add_page beginners-cookbook/spectral-art/painting-with-waves-part-two,2200
-  -add_page beginners-cookbook/spectral-art/a-revised-map,1500
-  -add_page beginners-cookbook/spectral-art/intermezzo-spectral-editing,1500
-  -add_page beginners-cookbook/spectral-art/a-wave-painting-workflow,2000
-  -add_page beginners-cookbook/spectral-art/tiletex,5000
-  -add_page beginners-cookbook/spectral-art/coefficient-values,3000
-  -add_page beginners-cookbook/spectral-art/coefficient-values-part-two,4500
-  -add_page beginners-cookbook/spectral-art/coefficient-values-part-three,2500
-  -add_page beginners-cookbook/spectral-art/cheat-sheet,9000
-  -add_page beginners-cookbook/spectral-art/appendix,2500
+  # -add_page beginners-cookbook,1000
+  # -add_page beginners-cookbook/cauldron,3500
+  # -add_page beginners-cookbook/dyidiffusion,1000
+  # -add_page beginners-cookbook/dyidiffusion/graduated-blurs,3800
+  # -add_page beginners-cookbook/dyidiffusion/variations-on-a-theme,3800
+  # -add_page beginners-cookbook/dyidiffusion/eigenvalues-and-eigenvectors,2300
+  # -add_page beginners-cookbook/dyidiffusion/directional-blurring,3500
+  # -add_page beginners-cookbook/dyidiffusion/tensors-for-the-tonsorially-challenged,8500
+  # -add_page beginners-cookbook/dyidiffusion/eigen-thingys,4800
+  # -add_page beginners-cookbook/dyidiffusion/fake-depth-of-field,7600
+  # -add_page beginners-cookbook/fingerpainting,12000
+  # -add_page beginners-cookbook/ramps,1200
+  # -add_page beginners-cookbook/ramps/applying-a-curve,600
+  # -add_page beginners-cookbook/ramps/blurring,600
+  # -add_page beginners-cookbook/ramps/general-ramps,2500
+  # -add_page beginners-cookbook/ramps/input-and-fill,1200
+  # -add_page beginners-cookbook/ramps/one-dimensional-functions,800
+  # -add_page beginners-cookbook/ramps/remapping-space,2200
+  # -add_page beginners-cookbook/ramps/resizing,600
+  # -add_page beginners-cookbook/ramps/warp,800
+  # -add_page beginners-cookbook/road-systems,2500
+  # -add_page beginners-cookbook/stained-glass,4000
+  # -add_page beginners-cookbook/spectral-art,1500
+  # -add_page beginners-cookbook/spectral-art/the-spatial-and-the-spectral,2000
+  # -add_page beginners-cookbook/spectral-art/the-spectral-course,2000
+  # -add_page beginners-cookbook/spectral-art/the-spectral-domain,2000
+  # -add_page beginners-cookbook/spectral-art/the-complex-number-field,3300
+  # -add_page beginners-cookbook/spectral-art/painting-with-waves-part-one,2200
+  # -add_page beginners-cookbook/spectral-art/painting-with-waves-part-two,2200
+  # -add_page beginners-cookbook/spectral-art/a-revised-map,1500
+  # -add_page beginners-cookbook/spectral-art/intermezzo-spectral-editing,1500
+  # -add_page beginners-cookbook/spectral-art/a-wave-painting-workflow,2000
+  # -add_page beginners-cookbook/spectral-art/tiletex,5000
+  # -add_page beginners-cookbook/spectral-art/coefficient-values,3000
+  # -add_page beginners-cookbook/spectral-art/coefficient-values-part-two,4500
+  # -add_page beginners-cookbook/spectral-art/coefficient-values-part-three,2500
+  # -add_page beginners-cookbook/spectral-art/cheat-sheet,9000
+  # -add_page beginners-cookbook/spectral-art/appendix,2500
 
-  -add_page command-decorations,3500
-  -add_page images,2000
-  -add_page images/conjuring-images,1000
-  -add_page images/images-as-datasets,3500
-  -add_page images/images-have-edges,1200
-  -add_page command-guide,5500
+  # -add_page command-decorations,3500
+  # -add_page images,2000
+  # -add_page images/conjuring-images,1000
+  # -add_page images/images-as-datasets,3500
+  # -add_page images/images-have-edges,1200
+  # -add_page command-guide,5500
 
-  -add_page command-guide/color-manipulation/-compose_channels,1000,,,commands-colors-manipulation
-  -add_page command-guide/color-manipulation/-direction2rgb,1000,,,commands-colors-manipulation
-  -add_page command-guide/color-manipulation/-gradient2rgb,1000,,,commands-colors-manipulation
-  -add_page command-guide/color-manipulation/-mix_rgb,4000,,,commands-colors-manipulation
-  -add_page command-guide/color-manipulation/-select_color,3000,,,commands-colors-manipulation
+  # -add_page command-guide/color-manipulation/-compose_channels,1000,,,commands-colors-manipulation
+  # -add_page command-guide/color-manipulation/-direction2rgb,1000,,,commands-colors-manipulation
+  # -add_page command-guide/color-manipulation/-gradient2rgb,1000,,,commands-colors-manipulation
+  # -add_page command-guide/color-manipulation/-mix_rgb,4000,,,commands-colors-manipulation
+  # -add_page command-guide/color-manipulation/-select_color,3000,,,commands-colors-manipulation
 
-  -add_page command-guide/feature-extraction/-distance,9500,,,commands-features-extraction
-  -add_page command-guide/feature-extraction/-area,2000,,,commands-features-extraction
-  -add_page command-guide/feature-extraction/-label,1300,,,commands-features-extraction
+  # -add_page command-guide/feature-extraction/-distance,9500,,,commands-features-extraction
+  # -add_page command-guide/feature-extraction/-area,2000,,,commands-features-extraction
+  # -add_page command-guide/feature-extraction/-label,1300,,,commands-features-extraction
 
-  -add_page command-guide/filtering/-bandpass,5000,,,commands-filtering
-  -add_page command-guide/filtering/-blur,2000,,,commands-filtering
-  -add_page command-guide/filtering/-blur_angular,700,,,commands-filtering
-  -add_page command-guide/filtering/-blur_linear,700,,,commands-filtering
-  -add_page command-guide/filtering/-blur_radial,700,,,commands-filtering
-  -add_page command-guide/filtering/-blur_selective,3500,,,commands-filtering
-  -add_page command-guide/filtering/-blur_x,700,,,commands-filtering
-  -add_page command-guide/filtering/-blur_xy,700,,,commands-filtering
-  -add_page command-guide/filtering/-blur_xyz,700,,,commands-filtering
-  -add_page command-guide/filtering/-blur_y,700,,,commands-filtering
-  -add_page command-guide/filtering/-blur_z,2500,,,commands-filtering
-  -add_page command-guide/filtering/-convolve,3500,,,commands-filtering
-  -add_page command-guide/filtering/-deriche,1500,,,commands-filtering
-  -add_page command-guide/filtering/-diffusiontensors,7200,,,commands-filtering
-  -add_page command-guide/filtering/-fft,6300,,,commands-filtering
-  -add_page command-guide/filtering/-gradient,3000,,,commands-filtering
-  -add_page command-guide/filtering/-gradient_norm,1300,,,commands-filtering
-  -add_page command-guide/filtering/-gradient_orientation,3300,,,commands-filtering
-  -add_page command-guide/filtering/-haar,2000,,,commands-filtering
-  -add_page command-guide/filtering/-smooth,4300,,,commands-filtering
-  -add_page command-guide/filtering/-structuretensors,3300,,,commands-filtering
+  # -add_page command-guide/filtering/-bandpass,5000,,,commands-filtering
+  # -add_page command-guide/filtering/-blur,2000,,,commands-filtering
+  # -add_page command-guide/filtering/-blur_angular,700,,,commands-filtering
+  # -add_page command-guide/filtering/-blur_linear,700,,,commands-filtering
+  # -add_page command-guide/filtering/-blur_radial,700,,,commands-filtering
+  # -add_page command-guide/filtering/-blur_selective,3500,,,commands-filtering
+  # -add_page command-guide/filtering/-blur_x,700,,,commands-filtering
+  # -add_page command-guide/filtering/-blur_xy,700,,,commands-filtering
+  # -add_page command-guide/filtering/-blur_xyz,700,,,commands-filtering
+  # -add_page command-guide/filtering/-blur_y,700,,,commands-filtering
+  # -add_page command-guide/filtering/-blur_z,2500,,,commands-filtering
+  # -add_page command-guide/filtering/-convolve,3500,,,commands-filtering
+  # -add_page command-guide/filtering/-dct-and-idct,1500,,,commands-filtering
+  # -add_page command-guide/filtering/-deriche,1500,,,commands-filtering
+  # -add_page command-guide/filtering/-diffusiontensors,7200,,,commands-filtering
+  # -add_page command-guide/filtering/-fft,6300,,,commands-filtering
+  # -add_page command-guide/filtering/-gradient,3000,,,commands-filtering
+  # -add_page command-guide/filtering/-gradient_norm,1300,,,commands-filtering
+  # -add_page command-guide/filtering/-gradient_orientation,3300,,,commands-filtering
+  # -add_page command-guide/filtering/-haar,2000,,,commands-filtering
+  # -add_page command-guide/filtering/-smooth,4300,,,commands-filtering
+  # -add_page command-guide/filtering/-structuretensors,3300,,,commands-filtering
 
-  -add_page command-guide/geometry-manipulation/-warp,5000,,,commands-geometry-manipulation
+  # -add_page command-guide/geometry-manipulation/-warp,5000,,,commands-geometry-manipulation
 
-  -add_page command-guide/image-drawing/-gaussian,2000,,,commands-image-drawing
-  -add_page command-guide/image-drawing/-plasma,4500,,,commands-image-drawing
-  -add_page command-guide/image-drawing/-turbulence,5500,,,commands-image-drawing
+  # -add_page command-guide/image-drawing/-gaussian,2000,,,commands-image-drawing
+  # -add_page command-guide/image-drawing/-plasma,4500,,,commands-image-drawing
+  # -add_page command-guide/image-drawing/-turbulence,5500,,,commands-image-drawing
 
-  -add_page command-guide/inputs-outputs/-display,2000,,,commands-inputs-outputs
-  -add_page command-guide/inputs-outputs/-display_tensors,1500,,,commands-inputs-outputs
-  -add_page command-guide/inputs-outputs/-input,7500,,,commands-inputs-outputs
-  -add_page command-guide/inputs-outputs/-shared,2000,,,commands-inputs-outputs
+  # -add_page command-guide/inputs-outputs/-display,2000,,,commands-inputs-outputs
+  # -add_page command-guide/inputs-outputs/-display_tensors,1500,,,commands-inputs-outputs
+  # -add_page command-guide/inputs-outputs/-input,7500,,,commands-inputs-outputs
+  # -add_page command-guide/inputs-outputs/-shared,2000,,,commands-inputs-outputs
 
-  -add_page command-guide/matrix-computation/-eigen,2000,,,commands-matrix-computation
+  # -add_page command-guide/matrix-computation/-eigen,2000,,,commands-matrix-computation
 
-  -add_page command-guide/program-control/-local,3500,,,commands-program-control
-  -add_page command-guide/program-control/-do,6500,,,commands-program-control
-  -add_page command-guide/program-control/-if,3500,,,commands-program-control
-  -add_page command-guide/program-control/-repeat,2000,,,commands-program-control
+  # -add_page command-guide/program-control/-local,3500,,,commands-program-control
+  # -add_page command-guide/program-control/-do,6500,,,commands-program-control
+  # -add_page command-guide/program-control/-if,3500,,,commands-program-control
+  # -add_page command-guide/program-control/-repeat,2000,,,commands-program-control
 
-  -add_page command-guide/values-manipulation/-eigen2tensor,5500,,,commands-values-manipulation
-  -add_page command-guide/values-manipulation/-norm,700,,,commands-values-manipulation
-  -add_page command-guide/values-manipulation/-normalize,1700,,,commands-values-manipulation
-  -add_page command-guide/values-manipulation/-orientation,5000,,,commands-values-manipulation
-  -add_page command-guide/values-manipulation/-threshold,1500,,,commands-values-manipulation
+  # -add_page command-guide/values-manipulation/-eigen2tensor,5500,,,commands-values-manipulation
+  # -add_page command-guide/values-manipulation/-norm,700,,,commands-values-manipulation
+  # -add_page command-guide/values-manipulation/-normalize,1700,,,commands-values-manipulation
+  # -add_page command-guide/values-manipulation/-orientation,5000,,,commands-values-manipulation
+  # -add_page command-guide/values-manipulation/-threshold,1500,,,commands-values-manipulation
 
-  -add_page technical-notes/trigometric-and-inverse-trigometric-commands,2500
-  -add_page technical-notes/wavelet-analysis-and-synthesis-in-gmic,5000
-  -add_page gimp-filters,1500
-  -add_page gimp-filters/blur-by-color-filter,22500
-  -add_page gimp-filters/the-fingerpainting-filter,2200
-  -add_page gimp-filters/the-hairlock-filter,8500
+  # -add_page technical-notes/trigometric-and-inverse-trigometric-commands,2500
+  # -add_page technical-notes/wavelet-analysis-and-synthesis-in-gmic,5000
+  # -add_page gimp-filters,1500
+  # -add_page gimp-filters/blur-by-color-filter,22500
+  -add_page gimp-filters/hedcut-filter,2000
+  # -add_page gimp-filters/the-fingerpainting-filter,2200
+  # -add_page gimp-filters/the-hairlock-filter,8500
 
   # Prepare folder structure.
   -v + -e[] "\n  * Prepare folder structure." -v -
@@ -3915,11 +3918,9 @@ _update_tutorial_html :
 
 #@gmic nm : eq. to '-name'. : (+)
 
-#@gmic name : name,_is_modified={ 0 | 1 } : (+)
+#@gmic name : "name" : (+)
 #@gmic : Set name of selected images.
 #@gmic : (eq. to '-nm').
-#@gmic : Argument 'is_modified' tells about the modified state of selected images.
-#@gmic : Default value: 'is_modified=0'.
 #@gmic : $ image.jpg -name image -blur[image] 2
 
 #@gmic nms : eq. to '-names'.
@@ -4359,7 +4360,7 @@ balance_gamma : -skip ${1=128}
 complex2polar :
   -e[^-1] "Compute complex to polar transforms of image$?."
   -v - -repeat {int(@#/2)} -l[{2*$>},{2*$>+1}]
-    -r[1] [0],3 --atan2[1] [0] -nm[-1] @{1,n},1 -sqr[-3,-2] -+[-3,-2] -sqrt[-2]
+    -r[1] [0],3 --atan2[1] [0] -nm[-1] @{1,n} -sqr[-3,-2] -+[-3,-2] -sqrt[-2]
   -endl -done -v +
 
 #@gmic compress_rle : _is_binary_data={ 0 | 1 },_maximum_sequence_length>=0
@@ -4385,7 +4386,7 @@ compress_rle : -skip ${1=0} -check "isint(${2=0}) && $2>=0"
     -else # Encode for arbitrary data.
       -*[-1] -1 -rv -a x -y -discard -1 -f '>if(i(0,y-1)<0&&i==0&&i(0,y+1)<0,-1,i)' -discard -1
     -endif
-    -i[0] ($header) -a y -nm $nm,1
+    -i[0] ($header) -a y -nm $nm
   -endl -done -v +
 
 #@gmic cumulate : { x | y | z | c }..{ x | y | z | c } : (no arg) : (+)
@@ -4433,7 +4434,7 @@ eigen2tensor :
       (1^0^0^1^0^1) -r[-1] [-3] -*[-1] [-4] -rm[-6--4] -+[-3--1]
     -else -error[0--3] "Command '-eigen2tensor': Invalid image ["{@#-$>-1}"] : Dimensions "{w}","{h}","{d}","{s}" does not represent a field of 2d or 3d eigenvectors."
     -endif
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic endian : _datatype : (+)
 #@gmic : Reverse data endianness of selected images, eventually considering the pixel being of the specified datatype.
@@ -4542,7 +4543,7 @@ mix_channels :
   -e[^-1] "Apply matrix $1 to channels of image$?."
   -v - -repeat @# -l[$>] nm=@{0,n}
     whd={w},{h},{d} -r {w*h*d},{s},1,1,-1 -i[0] ${^0} -** -r $whd,{h},-1
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic negative
 #@gmic : Compute negative of selected images.
@@ -4778,7 +4779,7 @@ unrepeat :
     -y x ({@{0,-1}+1}) -a x -r 100%,2
     -f[-1] '>if(y==0,i,if(i(x,0)==i(x+1,0),-1,x))'
     -z 0,{w-2} -s y,2 -discard[1] -1 -map[1] [0]
-    -rm[0] -nm $nm,1
+    -rm[0] -nm $nm
   -endl -done -v +
 
 #@gmic vector2tensor
@@ -5061,7 +5062,7 @@ direction2rgb :
     -*[-1] {180/pi} -%[-1] 360 100%,100%,1,1,1 -mv[-3] @#
     -if {im!=iM} -n[-1] 0,1 -else -f[-1] 1 -endif
     -a c -hsv2rgb
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic ditheredbw
 #@gmic : Create dithered B&W version of selected images.
@@ -5089,7 +5090,7 @@ _fill_color :
   -e[0--3] "Fill image"$_gmic_s" with color (${^0})."
   -v - -repeat @# -l[$>]
     -repeat {s} -sh[0] $>,$> -f[-1] {arg(1+$>,${^0})} -done -k[0]
-  -nm @{-1,n},1 -endl -done -v +
+  -nm @{-1,n} -endl -done -v +
 
 #@gmic gradient2rgb : _is_orientation={ 0 | 1 }
 #@gmic : Compute RGB representation of 2d gradient of selected images.
@@ -5451,7 +5452,7 @@ remove_opacity :
     -if {s==2} -channels 0
     -elif {s==4} -channels 0,2
     -endif
-  -nm @{-1,n},1 -endl -done -v +
+  -nm @{-1,n} -endl -done -v +
 
 #@gmic select_color : tolerance[%]>=0,col1,..,colN
 #@gmic : Select pixels with specified color in selected images.
@@ -5811,7 +5812,7 @@ elevate : -check "${1=64}>0" -skip ${2=1},${3=1}
       -r[-1] 100%,100%,1,[-2] -if $3 -*[-1] [0] -endif
       -j[-2] [-1],0,0,$> -rm[-1]
     -done
-  -rm[0,1] -nm $nm,1 -endl -done -v +
+  -rm[0,1] -nm $nm -endl -done -v +
 
 #@gmic expand_x : size_x>=0,_boundary={ 0=dirichlet | 1=neumann | 2=periodic }
 #@gmic : Expand selected images along the x-axis.
@@ -6540,7 +6541,7 @@ blur_selective : -check "${1=5}>=0 && ${2=0.5}>=0 && isint(${3=5}) && $3>0"
   -v - -repeat @# -l[$>] nm=@{0,n}
     --gradient_norm -+[-1] 1 -^[-1] {-max(0.01,$2)} -quantize[-1] {$3+1},0,1 -min[-1] {$3-1} -r[-1] [-2] -/[-1] 100
     -repeat $3 --==[-1] {$>/100} -*[-1] [-3] -+[-2,-1] -b[-2] {$1/($3+1)} -done
-  -rm[-2] -nm $nm,1 -endl -done -v +
+  -rm[-2] -nm $nm -endl -done -v +
 
 #@gmic blur_x : amplitude[%]>=0,_boundary={ 0=dirichlet | 1=neumann }
 #@gmic : Blur selected images along the x-axis.
@@ -6677,6 +6678,7 @@ curvature :
 #@gmic : optionally along the specified axes only.
 #@gmic : Default values: (no arg)
 #@gmic : $ image.jpg --dct --idct[-1] -abs[-2] -+[-2] 1 -log[-2]
+#@gmic : $$ _dct-and-idct
 dct : -skip ${1=0}
   -v - ({'"$1"'})
   is_axes={im>={'x'}&&iM<={'z'}}
@@ -6733,7 +6735,7 @@ deblur : -check "${2=10}>=0 && ${3=20}>=0 && ${4=0.7}>=0" -skip ${5=1}
       -+[-2,-1]                                           # Update image.
       -done
     -rm[-2]
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic deblur_goldmeinel : sigma>=0, _nb_iter>=0, _acceleration>=0, _kernel_type={ 0=quasi-gaussian (faster) | 1=gaussian }.
 #@gmic : Deblur selected images using Gold-Meinel algorithm
@@ -6825,7 +6827,7 @@ denoise_haar : -check "${1=1.4}>=0 && isint(${2=0}) && $2>=0 && isint(${3=10}) &
       -+[-2,-1]
     -done
     -rm[0] -/ $3 -r $w,$h,$d,100%,0
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic deriche : std_variation>=0[%],order={ 0 | 1 | 2 },axis={ x | y | z | c },_boundary : (+)
 #@gmic : Apply Deriche recursive filter on selected images, along specified axis and with
@@ -7134,6 +7136,7 @@ heat_flow : -skip ${1=10},${2=30},${3=0}
 #@gmic : Compute the inverse discrete cosine transform of selected images,
 #@gmic : optionally along the specified axes only.
 #@gmic : Default values: (no arg)
+#@gmic : $$ _dct-and-idct
 idct : -skip ${1=0}
   -v - ({'"$1"'})
   is_axes={im>={'x'}&&iM<={'z'}}
@@ -7332,7 +7335,7 @@ lic : -skip ${1=30},${2=1}
      -channels 0,1 -/ {max(abs(@{-1,m}),abs(@{-1,M}))} -vector2tensor
      100%,100%,100%,$2 -rand[-1] 0,255 -smooth[-1] [-2],$1 -rm[-2]
      -equalize
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic map_tones : _threshold>=0,_gamma>=0,_smoothness>=0,nb_iter>=0
 #@gmic : Apply tone mapping operator on selected images, based on Poisson equation.
@@ -7411,7 +7414,7 @@ nlmeans_core: -check @{-is_image_arg\ $1}" && "@{-is_image_arg\ $2}" && $3>0 && 
     # [0] original, [1] weights, [2] scaling [3] sum(weights * patch), [4] sum(weights), [5] max(weights)
     100%,100%,100%,@{0,s},0 100%,100%,100%,@{1,s},0 100%,100%,100%,@{1,s},0
     -if {@{0,d}==1}
-      -repeat {2*$4+1} j={$>-$4-1} -repeat {2*$4+1} i={$>-$4-1}
+      -repeat {2*$4+1} j={$>-$4} -repeat {2*$4+1} i={$>-$4}
         -if {$i!=0||$j!=0}
           # Compute shifted images [6] and weight [7]
           --shift[0,1] $i,$j,0,0,2 --[7] [1]
@@ -7421,7 +7424,7 @@ nlmeans_core: -check @{-is_image_arg\ $1}" && "@{-is_image_arg\ $2}" && $3>0 && 
         -endif
       -done -done
     -else
-      -repeat {2*$4+1} k={$>-$4-1} -repeat {2*$4+1} j={$>-$4-1} -repeat {2*$4+1} i={$>-$4-1}
+      -repeat {2*$4+1} k={$>-$4} -repeat {2*$4+1} j={$>-$4} -repeat {2*$4+1} i={$>-$4}
         -if {$i!=0||$j!=0||$k!=0}
           # Compute shifted images [6] and weight [7]
           --shift[0,1] $i,$j,0,0,2 --[7] [1]
@@ -7642,7 +7645,7 @@ solidify :
       -j[-1] [-3],0,0,0,0,1,[-2]
     -while {im<0}
     -k[-1]
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic solidify_linear : _sigma>=1,_dsigma>=1,0<=_precision<=1
 #@gmic : Replace transparent regions of a RGBA image by linearly interpolated color.
@@ -7799,7 +7802,7 @@ unsharp_octave : -check "${1=4}>0 && ${3=2}>=0" -skip ${2=1},${4=0}
     --f 0 weight=0 -repeat $1
       --unsharp[0] {$2*2^-@{<,-1}},$3,$4 -*[-1] {2^-$>} weight={$weight+2^-$>} -+[1,-1]
     -done -rm[0] -/ $weight
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic vanvliet : std_variation>=0[%],order={ 0 | 1 | 2 | 3 },axis={ x | y | z | c },_boundary : (+)
 #@gmic : Apply Vanvliet recursive filter on selected images, along specified axis and with
@@ -8045,7 +8048,7 @@ histogram_pointwise : -skip ${2=0%},${3=100%}
     3,100%,1,1,1 1,100%,1,1,-1 -y[-5,-3,-2] -a[-5--1] y
     {$w*$h*$d},$nb_levels -j3d[-1] [-2],0,0,0,1,0,0,0 -rm[-2]
     -r $w,$h,$d,$nb_levels,-1
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic hough : _width>0,_height>0,gradient_norm_voting={ 0 | 1 }
 #@gmic : Compute hough transform (theta,rho) of selected images.
@@ -8061,7 +8064,7 @@ hough : -check "${1=512}>0 && ${2=$1}>0" -skip ${3=1}
     -*[-1] {$2/$rhomax} -*[-2] {0.5*$1/pi}
     -y[-3--1] x {w} -mv[-4] @# -if {!$3} -f[-1] 1 -endif
     -a y -pointcloud 1 -r $1,$2,1,1,0
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic ifftpolar
 #@gmic : Compute inverse fourier transform of selected images, from centered magnitude/phase images.
@@ -8146,7 +8149,7 @@ minimal_path : -check "$1>=0 && $2>=0 && $3>=0" -skip ${7=0}
       ($x;$y;$z)
     -while $p
     -rm[0,-1] -a x
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic mse : : (+)
 #@gmic : Compute MSE (Mean-Squared Error) matrix between selected images.
@@ -8217,7 +8220,7 @@ pointcloud : -check "${1=0}<3" -skip ${2=0},${3=0},${4=0}
 
     # Draw corresponding point cloud.
     $dx,{$dy*$dz},1,$spectrum -j3d[-1] [-2],0,0,0,1,0,0,0 -rm[-2] -r[-1] $dx,$dy,$dz,100%,-1
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic psnr : _max_value : (+)
 #@gmic : Compute PSNR (Peak Signal-to-Noise Ratio) matrix between selected images.
@@ -8468,7 +8471,7 @@ gaussian : -skip ${1=3},${2=$1},${3=0}
     w={w} h={h} ds={d},{s} -rm
     $w,$h,1,1,'X=x-{($w-1)/2};Y=y-{($h-1)/2};$A*X*X+2*$B*X*Y+$C*Y*Y'
     -* -1 -exp -r $w,$h,$ds
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic graph : [function_image],_plot_type,_vertex_type,_ymin,_ymax,_opacity,_pattern,_color1,.. : 'formula',_resolution>=0,_plot_type,_vertex_type,_xmin,xmax,_ymin,_ymax,_opacity,_pattern,_color1,.. : (+)
 #@gmic : Draw specified function graph on selected images.
@@ -9023,7 +9026,7 @@ truchet : -check "isint(${1=32}) && $1>0 && ${2=3}>=0" -skip ${3=1}
     {round($w/$1,1,1)},{round($h/$1,1,1)} -rand[-1] 0,1 ->=[-1] 50% -r[-1] {w*$1},{h*$1} -*[-1] $1
     -channels[-1] 0,1 (0,{$1-1}) -r[-1] $1,$1,1,1,3 --transpose[-1] -a[-2,-1] c -r[-1] [-2],0,2 -+[-2,-1]
     -warp[-2] [-1] -rm[-1] ->= 50% -r $w,$h,1,1,0 -r 100%,100%,1,$s
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic turbulence : _radius>0,_octaves={1,2,3...,12},_alpha>0,_difference={-10,10},_mode={0,1,2,3}
 #@gmic : Render fractal noise or turbulence on selected images.
@@ -9050,7 +9053,7 @@ turbulence : -check "${1=32}>0 && ${2=6}>0" -skip ${3=3},${4=0},${5=0}
     -n[-1] 0,255
     -rm[-2]
     -if {$4} -*[-1] $4 -mv[-2] 2 -- -n[-1] 0,255 -endif
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic yinyang
 #@gmic : Draw a yin-yang symbol on selected images.
@@ -9093,8 +9096,8 @@ yinyang :
 #@gmic : $ (0,1,0;0,0,1;1,0,0) --invert
 
 #@gmic solve : [image] : (+)
-#@gmic : Solve linear system AX = B for selected B-vectors and specified A-matrix.
-#@gmic : If the system is under- or over-determined, least square solution is returned.
+#@gmic : Solve linear system AX = B for selected B-matrices and specified A-matrix.
+#@gmic : If the system is under- or over-determined, the least square solution is returned.
 #@gmic : $ (0,1,0;1,0,0;0,0,1) (1;2;3) --solve[-1] [-2]
 
 #@gmic svd : (+)
@@ -9567,7 +9570,7 @@ extrude3d : -check "${1=16}>0 && ${2=1024}>0 && ${3=0.5%}>=0"
     fact={$1/max(w/$wr,h/$hr)}
     -b $3,0 -r $wr,$hr,1,1,2 -expand_xyz 1,0
     -isosurface3d 50% -*3d 1,1,$fact -rv3d
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic f3d : eq. to '-focale3d'. : (+)
 
@@ -9589,7 +9592,7 @@ gaussians3d : -check "${1=32}>0" -skip ${2=0.3}
     $1,$1 -gaussian[-1] 35%,35%,0 -c[-1] 30%,100% -n[-1] 0,$2 -y[-1] -a[-2,-1] y  # First opacity is generated.
     -if {$nbv>1} 4,{$nbv-1},1,1,-128,0,0,0 -y[-2,-1] -a[-2,-1] y -endif           # Other ones are shared copies of the first one.
     -a y
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic gmic3d
 #@gmic : Input a 3d G'MIC logo.
@@ -9729,7 +9732,7 @@ imagecube3d :
     -y[-1]
     (-128;0;0;0;-128;0;0;0;-128;0;0;0;-128;0;0;0;-128;0;0;0;1;1;1;1;1;1)  # Other faces and opacities.
     -a y
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic imageplane3d
 #@gmic : Generate 3d mapped planes from selected images.
@@ -9748,7 +9751,7 @@ imageplane3d :
     -y[-1]
     (1)  # Opacity.
     -a y
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic imagepyramid3d
 #@gmic : Generate 3d mapped pyramides from selected images.
@@ -9773,7 +9776,7 @@ imagepyramid3d :
     -y[-1]
     (-128;0;0;0;-128;0;0;0;-128;0;0;0;-128;0;0;0;1;1;1;1;1)  # Other faces and opacities.
     -a y
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic imagerubik3d : _xy_tiles>=1,0<=xy_shift<=100,0<=z_shift<=100
 #@gmic : Generate 3d mapped rubik's cubes from selected images.
@@ -9808,7 +9811,7 @@ imagerubik3d : -check "${1=3}>=1 && ${2=5}>=0 && $2<=100 && ${3=5}>=0 && $3<=100
     --r3d[-1] 0,1,0,-90 --r3d[-1] 0,1,0,-90 --r3d[-1] 0,1,0,-90  # Generate the 5 other sides.
     --r3d[-1] 0,0,1,-90 --r3d[-1] 0,0,1,180
     -+3d
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic imagesphere3d : _resolution1>=3,_resolution2>=3
 #@gmic : Generate 3d mapped sphere from selected images.
@@ -9845,7 +9848,7 @@ imagesphere3d : -check "${1=32}>=3 && ${2=16}>=3"
 
     # Define sphere textures, opacities and generate object.
     -mv[-4] @# -i[-2] (-128;{w};{h};3) -y[-1] 1,{4*($nbp-1)},1,1,-128,0,0,0 1,$nbp,1,1,1 -a y
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic isoline3d : isovalue[%] : 'formula',value,_x0,_y0,_x1,_y1,_size_x>0[%],_size_y>0[%] : (+)
 #@gmic : Extract 3d isolines with specified value from selected images or from specified formula.
@@ -10071,7 +10074,7 @@ pca_patch3d : -check "isint(${1=7}) && $1>0 && isint(${2=1000}) && $2>0 && isint
     1,$3,1,1,1                                             # Opacities.
     -y -a[-6--1] y                                         # Merge as a 3d object.
 
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic plane3d : _size_x,_size_y,_nb_subdivisions_x>0,_nb_subdisivions_y>0
 #@gmic : Input 3d plane at (0,0,0), with specified geometry.
@@ -10114,7 +10117,7 @@ pointcloud3d :
       -endif
       -endl -done
     -+3d
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic pose3d : p1,..,p12
 #@gmic : Apply 3d pose matrix to selected 3d objects.
@@ -10346,7 +10349,7 @@ snapshot3d : -check "${2=1}>=0" -skip ${1=512},${3=""}
     -else # RGB rendering.
       -j3d[1] [0],50%,50%,0,1
     -endif
-   -nm[1] @{-2,n},1 -rm[0]
+   -nm[1] @{-2,n} -rm[0]
   -endl -done -rm[-1] -v +
 
 #@gmic sl3d : eq. to '-specl3d'. : (+)
@@ -10450,7 +10453,7 @@ sprite3d :
     -else -/[-1] 255 -i[-2] (-128;{w};{h};{s}) -y[-1]
     -endif
     -a y
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic sprites3d
 #@gmic : Convert selected 3d objects as sprites clouds, where the specified 2d sprite is the last selected image.
@@ -10943,7 +10946,7 @@ array_random : -skip ${2=$1},${3=$1},${4=$2}
     -split_tiles $1,$2
     -repeat $3 -repeat $4 [{?($1*$2-1)}] -done -done
     -rm[0-{$1*$2-1}] -append_tiles $3,$4
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic frame : eq. to '-frame_xy'.
 frame : -skip ${2=$1}>=0,${3=255},${4=$3},${5=$4},${6=255}
@@ -10960,7 +10963,7 @@ frame_blur : -skip ${1=10},${2=30},${3=0},${4=1},${5=3%}
     100%,100%,1,1,"-(abs(x/w-0.5)^$1 + abs(y/h-0.5)^$1)^(1/$1)" ->=[-1] $2%
     -if $4 -distance[-1] 1 -n[-1] 0,1 -*[-1] -1 -+[-1] 1 -^[-1] {1/$4} -endif
     -b[-1] $3 --b[-2] $5 -mv[-1] -3 -blend_fade[0,1] [-1] -rm[-1]
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic frame_cube : _depth>=0,_centering_x,_centering_y,_left_side={0=normal | 1=mirror-x | 2=mirror-y | 3=mirror-xy},_right_side,_lower_side,_upper_side
 #@gmic : Insert 3d frames in selected images.
@@ -10988,7 +10991,7 @@ frame_cube : -check "${1=1}>=0" -skip ${2=0},${3=0},${4=0},${5=0},${6=0},${7=0}
       -j3d[-1] [-2],50%,50%,0,1,2,0,0 -rm[-2]
       -r $w,$h,1,100%,2
     -endif
-  -nm $nm,1 -endl -done
+  -nm $nm -endl -done
   -v +
 
 _frame_cube :
@@ -11092,7 +11095,7 @@ frame_round : -skip ${1=10},${2=10},${3=0},${4=0},${5=255},${6=$5},${7=$6},${8=2
     100%,100%,1,1,"-(abs(x/w-0.5)^$1 + abs(y/h-0.5)^$1)^(1/$1)" ->=[-1] $2%
     -if $4 -distance[-1] 1 -n[-1] 0,1 -*[-1] -1 -+[-1] 1 -^[-1] {1/$4} -endif
     -b[-1] $3 -i[-3] 100%,100%,1,4 -fc[-3] $5,$6,$7,$8 -blend_fade[0,1] [-1] -rm[-1]
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic frame_x : size_x[%],_col1,...,_colN
 #@gmic : Insert colored frame along the x-axis in selected images.
@@ -11132,12 +11135,12 @@ frame_y : -skip ${2=255},${3=$2},${4=$3},${5=255}
 
 _frame :
   -v - -repeat @# -l[$>]
-    name=@{0,n}
+    nm=@{0,n}
     w={round($1*if(@{-is_percent\ $1},w,1))}
     h={round($2*if(@{-is_percent\ $2},h,1))}
     d={round($3*if(@{-is_percent\ $3},d,1))}
     {w+2*$w},{h+2*$h},{d+2*$d},100% -fc[1] ${4--1}
-    -j[1] [0],$w,$h,$d -rm[0] -nm $name
+    -j[1] [0],$w,$h,$d -rm[0] -nm $nm
   -endl -done -v +
 
 #@gmic img2ascii : _charset,_analysis_scale>0,_analysis_smoothness[%]>=0,_synthesis_scale>0,_output_ascii_filename
@@ -11255,7 +11258,7 @@ linearize_tiles : -check "$1>0 && ${2=$1}>0"
       $wh,1,1,@{-1,0}"*x + "@{-1,1}"*y + "@{-1,2} -rm[-2]
     -endl -done
     -repeat {int(@#/$s)} -a[-$s--1] c -mv[-1] 0 -done -append_tiles $1,$2
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic map_sprites : _nb_sprites>=1,_allow_rotation={ 0=none | 1=90 deg. | 2=180 deg. }
 #@gmic : Map set of sprites (defined as the 'nb_sprites' latest images of the selection) to other selected images,
@@ -11331,7 +11334,7 @@ quadratize_tiles : -check "$1>0 && ${2=$1}>0"
       $wh,1,1,@{-1,0}"*x^2 + "@{-1,1}"*y^2 + "@{-1,2}"*x*y +"@{-1,3}"*x + "@{-1,4}"*y + "@{-1,5} -rm[-2]
     -endl -done
     -repeat {int(@#/$s)} -a[-$s--1] c -mv[-1] 0 -done -append_tiles $1,$2
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic rotate_tiles : angle,_M>0,N>0
 #@gmic : Apply MxN tiled-rotation effect on selected images.
@@ -11369,7 +11372,7 @@ taquin : -check "isint($1) && $1>0 & isint(${2=$1}) && $2>0" -skip ${3=0},${4=50
    -repeat @# -mv[$>] {?(@#)} -done
    -if {$3==1} -f[0] 0 -elif {$3==2} -f[-1] 0 -endif
    -append_tiles $1,$2
- -nm $nm,1 -endl -done -v +
+ -nm $nm -endl -done -v +
 
 #@gmic tunnel : _level>=0,_factor>0,_centering_x,_centering_y,_opacity,_angle
 #@gmic : Apply tunnel effect on selected images.
@@ -11569,6 +11572,7 @@ drawing : -skip ${1=200}
 drop_shadow : -check "${3=5}>=0 && ${4=0}>=0 && $4<=1" -skip ${1=20},${2=$1},${5=1}
   -e[^-1] "Drop shadow behind image$?, with offsets ($1,$2), smoothness $3 and curvature $4."
   -v - -to_a -repeat @# -l[$>]
+    nm=@{0,n}
     dx={if(@{-is_percent\ $1},w*$1,$1)}
     dy={if(@{-is_percent\ $2},h*$2,$2)}
     sigma={if(@{-is_percent\ $3},max(w,h)*$3,$3)}
@@ -11585,6 +11589,7 @@ drop_shadow : -check "${3=5}>=0 && ${4=0}>=0 && $4<=1" -skip ${1=20},${2=$1},${5
     -r[-1] 100%,100%,1,2,0,0,0,0,0,1 -mv[-1] 0 -blend alpha
     --channels[-1] 100% ->=[-1] 1 -* -autocrop 0
     -if {!$5} $w,$h,1,$s -j[-1] [-2],{arg(1,$coords)},{arg(2,$coords)} -rm[-2] -endif
+    -nm $nm
   -endl -done -v +
 
 #@gmic ellipsionism : _R>0[%],_r>0[%],_smoothness>=0[%],_opacity,_outline>0,_density>0
@@ -11632,7 +11637,7 @@ fire_edges : -check "${1=0.7}>=0 && ${2=0.25}>=0 && $2<=1 && ${3=0.5}>=0 && ${4=
       -correlate[0] [2]
       -if {$>>=$6" && "($>-$6)%($7+1)==0} [0] -endif
     -done -rm[0-2]
-  -nm $nm,1 -endl -done
+  -nm $nm -endl -done
   (0,255,255,255,255^0,0,255,255,255^0,0,0,128,255) -r[-1] 256,1,1,3,3
   -map[^-1] [-1] -rm[-1] -v +
 
@@ -11648,7 +11653,7 @@ fractalize : -check "${1=0.8}>=0 && $1<=1"
   delta=0.1
   c0r=0.317
   c0i=0.03
-  -repeat @# -l[$>]
+  -repeat @# -l[$>] nm=@{0,n}
     -luminance -equalize 256 -b 0.25% -n 0,255
     100%,100%
     dx={$delta*w/max(w,h)}
@@ -11665,7 +11670,7 @@ fractalize : -check "${1=0.8}>=0 && $1<=1"
     -i[2,3] [0]
     s={0.1*(1-$1)}
     -parallel "-register_nonrigid[1] [0],"$s",5","-register_nonrigid[3] [2],"$s",5","-register_nonrigid[5] [4],"$s",5"
-    -rm[0,2,4] -a c
+    -rm[0,2,4] -a c -nm $nm
   -endl -done -v +
 
 #@gmic glow : _amplitude>=0
@@ -11709,7 +11714,7 @@ hardsketchbw : -skip ${1=300},${2=50},${3=0.1},${4=20},${5=0}
       -g xy -rv -*[-2] -1 -a c
       -if $4 --norm ->=[-1] $4% -* -endif
       100%,100%,1,1,255 -quiver[-1] [-2],{max(1,10-$2/6)},$1,0,$3 -rm[-2]
-    -nm $nm,1 -endl -done
+    -nm $nm -endl -done
 
   -else # Slower version.
     -repeat @# -l[$>] nm=@{0,n}
@@ -11728,7 +11733,7 @@ hardsketchbw : -skip ${1=300},${2=50},${3=0.1},${4=20},${5=0}
       1,{h},1,1,2 1,{h},1,1,2*y --+[-1] 1 -a[-3--1] x
       3,{h} 1,{h},1,1,$3 -y[-6--1] -a[-6--1] y
       $w,$h,1,1,255 -j3d[-1] [-2],0,0,0,1,1,0,0 -rm[-2]
-    -nm $nm,1 -endl -done
+    -nm $nm -endl -done
   -endif -v +
 
 #@gmic hearts : _density>=0
@@ -11785,7 +11790,7 @@ houghsketchbw : -check "${1=8}>=0 && ${2=5}>=0 && ${3=80}>=0 && $3<=100 && ${4=0
 
     # Render on a white image.
     $w,$h,1,1,255 -j3d[-1] [-2],0,0,0,1,1,0,0 -rm[-2]
-  -nm $nm,1 -endl -done -v +
+  -nm $nm -endl -done -v +
 
 #@gmic lightrays : 100<=_density<=0,_center_x[%],_center_y[%],_ray_length>=0,_ray_attenuation>=0
 #@gmic : Generate ray lights from the edges of selected images.
@@ -11991,7 +11996,7 @@ sketchbw :
 
   -repeat {@#-1}
     -/[-1] {max(iM,im)} -s[-1] c        # Normalize and split tensor coefficients.
-    100%,100%,1,1,255 -nm[-1] @{-4,n},1 # Create rendering B&W image.
+    100%,100%,1,1,255 -nm[-1] @{-4,n}   # Create rendering B&W image.
 
     -if {$w!=w||$h!=h}               # Create set of random coordinates, if necessary.
       -rm[0] {$8*w*h/($1*sqrt($4))}
@@ -12095,7 +12100,7 @@ warhol : -skip ${1=3},${2=$1},${3=2},${4=20}
     -norm -b $3 -r $r0%,$r0%,1,100%,2 -quantize 6 -n 0,5 -round 1
     -repeat $1 -repeat $2
       (0,1,2,3,4,5) -n[-1] 32,224 6,1,1,2,128 -noise[-1] $4,0 -c[-1] 0,255 -a[-2,-1] c -ycbcr2rgb[-1] --map[0] [-1] -rm[-2]
-    -done -done -append_tiles[^0] $1,$2 -nm[1] @{0,n},1 -rm[0]
+    -done -done -append_tiles[^0] $1,$2 -nm[1] @{0,n} -rm[0]
   -endl -done -v +
 
 #@gmic weave : _density>=0,0<=_thickness<=100,0<=_shadow<=100,_shading>=0,_fibers_amplitude>=0,_fibers_smoothness>=0,_angle,-1<=_x_curvature<=1,-1<=_y_curvature<=1
@@ -13433,7 +13438,7 @@ pink_wshed : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=0},${3=0}
 #@gmic : Display an alert box and wait for user's choice.
 #@gmic : If a single image is in the selection, it is used as an icon for the alert box.
 #@gmic : Default values: 'title=[G'MIC Alert]' and 'message=This is an alert box.'.
-alert : -skip "${1=[G\47MIC Alert]},${2=This is an alert box.},${3=OK}"
+alert : -skip "${1=[G"{`39`}"MIC Alert]},${2=This is an alert box.},${3=OK}"
   -if {@#==1}
     -e[0--3] "Display alert box, with image$?, title '$1', message '$2' and buttons '${3--1}'."
   -else
@@ -13763,7 +13768,7 @@ filename : -skip "${1=default}"
   -v -
   -if {$#==1} -u "$1"
   -else
-  (${2--1}) -name[-1] "$1" -u @{-1,f}@{-1,b}
+  (${2--1}) -nm[-1] "$1" -u @{-1,f}@{-1,b}
   -repeat {w}
     -u @{}_{int(i/100000)%10}{int(i/10000)%10}{int(i/1000)%10}{int(i/100)%10}{int(i/10)%10}{i%10}
     -shift[-1] -1
@@ -14283,7 +14288,7 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={@|-4} selected=-1 -f3d 400
 
   # Start main loop.
-  -w[0] -1,-1,0,0,50%,50%,"[G\47MIC] Demo menu"
+  -w[0] -1,-1,0,0,50%,50%,"[G"{`39`}"MIC] Demo menu"
   -do
 
     # Set 3d coordinates for object.
@@ -14382,7 +14387,7 @@ x_2048 :
   -sprite3d[3--1]
 
   # Run game.
-  -w[1] 100%,100%,0,"[G\47MIC] 2048" insert_new=1
+  -w[1] 100%,100%,0,"[G"{`39`}"MIC] 2048" insert_new=1
   -repeat 2 -_x_2048_setrandom -done
   -do
 
@@ -14503,7 +14508,7 @@ x_blobs :
 
   # Create background image [0].
   -l[] (0;0^0;128^0;255) -r[-1] 350,350,1,3,3 -flower[-1] 30,8,0,0,50%,50%,1 -water[-1] 20
-  -w {w},{h},0,0,"[G\47MIC] Blobs editor"
+  -w {w},{h},0,0,"[G"{`39`}"MIC] Blobs editor"
 
   # Start event loop.
   moving=-1
@@ -14581,7 +14586,7 @@ x_bouncing :
     -ball[] {round(?(32,80))},@{-RGB}
     t$>={?(200)} x$>=@{0,?(10,w-10)} h$>={?(150,300)} vx$>={if(?<0.5,1,-1)*?(1,8)}
   -done
-  -mv[0] @# -w[-1] -1,-1,0,"[G\47MIC] Bouncing balls"
+  -mv[0] @# -w[-1] -1,-1,0,"[G"{`39`}"MIC] Bouncing balls"
   (0;0.7;1) -r[-1] @{-2,w},70,1,1,3
 
   -do
@@ -14684,8 +14689,8 @@ x_color_curves : -skip ${1=rgb}
   -uncommand xcc_goto,xcc_backto,xcc_info -v +
 
 _x_color_curves :
-  name=@{0,n} title=@{0,b} -if {narg(@{0,x})} title=$title.@{0,x} -endif ({'$title'}) -discard[-1] {'~'} title=@{-1,t} -rm[-1]
-  --drgba[-1] -w[-1] 100%,100%,0,"[G\47MIC] Image: "$title -rm[-1]
+  title=@{0,b} -if {narg({'@{0,x}'})} title=$title.@{0,x} -endif ({'$title'}) -discard[-1] {'~'} title=@{-1,t} -rm[-1]
+  --drgba[-1] -w[-1] 100%,100%,0,"[G"{`39`}"MIC] Image: "$title -rm[-1]
   -xcc_goto[-1] [-1]
 
   oC0= oC1= oC2= oC3= oC4= viewmode=0
@@ -15101,7 +15106,7 @@ x_fire : -skip "${1=G\47MIC}"
   -v -
 
   # Init image data.
-  -i[0] 100,32 -w[0] 450,200,0,"[G\47MIC] Fire effect"
+  -i[0] 100,32 -w[0] 450,200,0,"[G"{`39`}"MIC] Fire effect"
   -i[1] (0,255,255,255,255^0,0,255,255,255^0,0,0,128,255) -r[1] 256,1,1,3,3
   -i[2] (0,0,0;0,0,0;1,1,1;0,1,0) -*[2] 0.21
   -text3d "$1",33,3,1
@@ -15142,10 +15147,10 @@ x_fireworks :
 -----------------------------------------"
   -v - -l[]
   time=0
-  (0;64^0;32^128;0) -r 256,128,1,3,3            # [-2] = Background (color gradient).
-  [-1]                                          # [-1] = Rendered image.
-  -w[-1] {1.5*w},{1.5*h},0,"[G\47MIC] Fireworks"  # Display window.
-  -do                                           # Start animation loop.
+  (0;64^0;32^128;0) -r 256,128,1,3,3              # [-2] = Background (color gradient).
+  [-1]                                            # [-1] = Rendered image.
+  -w[-1] {1.5*w},{1.5*h},0,"[G"{`39`}"MIC] Fireworks"  # Display window.
+  -do                                             # Start animation loop.
     time={$time-1}
     -if {@#==2\ ||\ $time<0} # Insert new rocket.
       -i[0] ({?(w)},\        # X-position
@@ -15206,7 +15211,7 @@ x_fisheye :
   -torus3d 20,6 -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} --r3d[-1] 1,0,0,90
   -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} -+3d[-1] 15 -+3d[-2,-1] -db3d 0 -c3d[-1]
   R=30
-  -w[-2] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G\47MIC] Fish-eye effect"
+  -w[-2] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G"{`39`}"MIC] Fish-eye effect"
   -do
     -wait 40
     -if {@{!,b}==1} R={min(80,$R+8)} -endif
@@ -15256,18 +15261,18 @@ x_fourier :
     -n[-1] 0,255 -shift[-1] 50%,50%,0,0,2 -to_colormode[-1] @{-2,s}
     -nm[-1] logmag
 
-    -w[0,-1] -1,-1,0,"[G\47MIC] Fourier filtering"
+    --r2dy[-1] 128 -frame[-1] 1,1,0 -nm[-1] thumb
+    -w[0,-2] -1,-1,0,"[G"{`39`}"MIC] Fourier filtering"
 
+    -l
     -if {!narg($first_time)}
-      -parallel 0,"--l[-1] -r2dy 128 -frame 1,1,0 \
-        -alert \"[G\47MIC Fourier filtering]\",\
-           \"The G\47MIC Fourier filtering demo illustrates the effect\n\
-           of bandpass frequency filtering on an image. Use your mouse\n\
-           buttons to select low and high bounds for the frequencies\n\
-           displayed on the Fourier representation of the image\n\
-           (right image).\",\
-           \"OK\" \
-        -rm -endl"
+      -parallel 0,"-alert[thumb] \"[G"{`39`}"MIC Fourier filtering]\",\
+            \"The G\47MIC Fourier filtering demo illustrates the effect\n\
+            of bandpass frequency filtering on an image. Use your mouse\n\
+            buttons to select low and high bounds for the frequencies\n\
+            displayed on the Fourier representation of the image\n\
+            (right image).\",\
+            \"OK\""
       first_time=0
     -endif
 
@@ -15277,7 +15282,7 @@ x_fourier :
       -if $need_update # If image must be updated.
 
         # Generated filtering mask.
-        -i[mask] 100%,100%
+        -i[mask] [logmag],[logmag]
         r={sqrt(w^2+h^2)*$freqmax/200} -ellipse[mask] 50%,50%,$r,$r,0,1,1
         r={max(0,sqrt(w^2+h^2)*$freqmin/200-1)} -if $r -ellipse[mask] 50%,50%,$r,$r,0,1,0 -endif
 
@@ -15287,7 +15292,7 @@ x_fourier :
         # Compute filtered fourier representation.
         -shift[mask] -50%,-50%,0,0,2
         --*[real,imag] [mask]
-        -rm[-4]
+        -rm[mask]
 
         # Compute filtered image by inverse fourier.
         -ifft[-2,-1] -rm[-1] -n[-1] 0,255
@@ -15319,8 +15324,10 @@ x_fourier :
       -if {(@{!,CTRLLEFT}" || "@{!,CTRLRIGHT})" && "@{!,R}} -w[] {2*@{0,w}},@{0,h} need_update=1 -endif         # Reset window size.
 
     -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
-    -rm[-3--1]  # Clean images.
-  -endl -done -w 0 -rm -v +
+    -w 0
+    -endl
+    -rm[^0] # Clean images and window.
+  -endl -done -rm -v +
 
 #@gmic x_histogram
 #@gmic : Launch the histogram demo.
@@ -15389,7 +15396,7 @@ x_histogram :
     -j[-2] [-1],5,317 -rm[-1]
 
     # Display rendering.
-    -w[-1] {w},{h},0,"[G\47MIC] Histogram demo" -rm[-1]
+    -w[-1] {w},{h},0,"[G"{`39`}"MIC] Histogram demo" -rm[-1]
     -wait
 
     # Manage user interactions.
@@ -15439,10 +15446,9 @@ x_hough :
 
   -repeat @# -l[$>]
     -r[-1] @{-fitscreen\ {w},{h}},1,100%,3  # Resize to fit screen if necessary.
-
     -if {!narg($first_time)}
       -parallel 0,"--l[0] -r2dy 128 -frame 1,1,0 \
-        -alert \"[G\47MIC Hough Transform]\",\
+        -alert \"[G"{`39`}"MIC Hough Transform]\",\
            \"The G\47MIC Hough transform demo illustrates the application\n\
            of the Hough transform to detect lines in an image. Use your\n\
            mouse buttons to explore the transform image and see how\n\
@@ -15454,7 +15460,7 @@ x_hough :
 
     rhomax={sqrt(w^2+h^2)/2}
     --b[-1] 1.5 -hough[-1] 512,400 -b[-1] 0.5 -+[-1] 1 -log[-1] -n[-1] 0,255
-    -w[-2] -1,-1,0,"[G\47MIC] Image" -w1[-1] -1,-1,0,"[G\47MIC] Hough transform"
+    -w[-2] -1,-1,0,"[G"{`39`}"MIC] Image" -w1[-1] -1,-1,0,"[G"{`39`}"MIC] Hough transform"
 
     -do
       -wait
@@ -15550,7 +15556,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
       -r[-3--1] [balls] [balls] -*[-2,-1] -a[-3--1] c -hsv2rgb[-1]
       --compose_channels[-1] + ->[-1] 0 -dilate[-1] 3
       -j[visu] [back] -j[visu] [-2],0,0,0,0,1,[-1] -rm[-2,-1]
-      -if {!$shapescorey} -w[visu] @{back,w},@{back,h},0,"[G\47MIC] Jawbreaker (score : "$score")" -endif
+      -if {!$shapescorey} -w[visu] @{back,w},@{back,h},0,"[G"{`39`}"MIC] Jawbreaker (score : "$score")" -endif
       render_board=0
     -endif
 
@@ -15558,7 +15564,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
     -if $shapescorey
       --t[visu] "+"$shapescore,@{!,x},{@{!,y}-64+$shapescorey},32,{($shapescorey-1)/31},255
       shapescorey={max(0,$shapescorey-1)}
-      -w[-1] @{back,w},@{back,h},0,"[G\47MIC] Jawbreaker (score : "$score")" -rm[-1] -wait 25
+      -w[-1] @{back,w},@{back,h},0,"[G"{`39`}"MIC] Jawbreaker (score : "$score")" -rm[-1] -wait 25
     -else -wait -endif
 
     # Check for the end of the game.
@@ -15621,7 +15627,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
 
   # Game over.
   -if {@!" && "!@{!,ESC}}
-    -w[] @{visu,w},@{visu,h},0,"[G\47MIC] Jawbreaker (final score : "$score")"
+    -w[] @{visu,w},@{visu,h},0,"[G"{`39`}"MIC] Jawbreaker (final score : "$score")"
     -i[gameover] 260,85 -t[-1] "Game Over!",3,0,53,1,1 -t[-1] "Score : "$score,23,53,32,1,1
     --dilate[-1] 5 -nm[-1] "mgameover" -*[-2] 255 -r[-2] 100%,100%,1,3
     -repeat 25
@@ -15677,7 +15683,7 @@ x_life :
   score=0                                                       # Current score.
   bestscore=0                                                   # Best score.
   stock=500                                                     # Remaining cells.
-  -w[0] 400,400,0,"[G\47MIC] The game of life"                    # Initialize display window.
+  -w[0] 400,400,0,"[G"{`39`}"MIC] The game of life"                    # Initialize display window.
   -cursor[0] 0
 
   # Start user-event loop.
@@ -15760,7 +15766,7 @@ x_light :
   -sh[-2] 0,50%,0,2 -*[-1] 120 -rm[-1]
   25%,25%,1,1 -rand[-1] -20,20 -smooth[-1] 10,0,1,1,4 -r[-1] [-2],3 -b[-1] 3 -n[-1] -60,60
   -+[-2,-1] -g[-1] xy -a[-2,-1] c -n[-1] -150,150
-  -w[] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G\47MIC] Light effect"  # Init display window.
+  -w[] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G"{`39`}"MIC] Light effect"  # Init display window.
   -cursor[0] 0
 
   # Create a large light image.
@@ -15816,8 +15822,8 @@ x_mandelbrot : -skip ${1=0},${2=0.317},${3=0.03}
   -do
     siz={min(@{!,w},@{!,h})}                                                                      # Desired window dimension.
     $siz,$siz -mandelbrot[-1] @0,256,$1,{if($1,$2,0)},{if($1,$3,0)} -map[-1] [1]                  # Render fractal.
-    -if $1 -w[-1] $siz,$siz,0,"[G\47MIC] Julia set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}"), c0=($2,$3)" # Display on window.
-    -else -w[-1] $siz,$siz,0,"[G\47MIC] Mandelbrot set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}")" -endif
+    -if $1 -w[-1] $siz,$siz,0,"[G"{`39`}"MIC] Julia set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}"), c0=($2,$3)" # Display on window.
+    -else -w[-1] $siz,$siz,0,"[G"{`39`}"MIC] Mandelbrot set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}")" -endif
     w={w} h={h} -round[-1] -select[-1] 2                                                          # Get the user selection.
 
     -if {@{-1,0}>0}                                                                               # If valid selection found.
@@ -15867,7 +15873,7 @@ x_metaballs3d :
   72,72,72 M=8 mode=5
   s0=Dots s1=Wireframe s2=Flat s3=Flat-shaded s4=Gouraud-shaded s5=Phong-shaded
   -repeat $M fx$>={g*1.5} fy$>={g*1.5} fz$>={g*1.5} -done
-  -w[0] -1,-1,0,"[G\47MIC] 3d metaballs"
+  -w[0] -1,-1,0,"[G"{`39`}"MIC] 3d metaballs"
   -do
     -repeat $M
       x$>={w/2+0.5*(w-@{2,w}-4)*cos(${fx$>}*@|)}
@@ -15964,7 +15970,7 @@ x_minesweeper : -check "${1=20}>=8 && $1<=30 && ${2=$1}>=8 && $2<=30"
         -negative[-1] -j[canvas] [-1],0,3 -rm[-1]
         -wait 50
         x={int((@{!,x}-24)/24)} y={int((@{!,y}-24)/24)} b=@{!,b}
-        -w[canvas] {w},{h},0,"[G\47MIC] Minesweeper"
+        -w[canvas] {w},{h},0,"[G"{`39`}"MIC] Minesweeper"
       -while {@!" && "!@{!,ESC}" && "!@{!,Q}" && "!$b}
     -endif
 
@@ -16004,11 +16010,11 @@ x_minimal_path :
   -if {!@#} -testimage2d 400 -endif
   -n 0,200 -round 1
   -repeat @# -l[$>]
-    -w[0] -1,-1,0,"[G\47MIC] Select starting point P0"
+    -w[0] -1,-1,0,"[G"{`39`}"MIC] Select starting point P0"
 
     -if {!narg($first_time)}
       -parallel 0,"--l[0] -r2dy 128 -frame 1,1,0 \
-        -alert \"[G\47MIC Minimal path]\",\
+        -alert \"[G"{`39`}"MIC Minimal path]\",\
            \"The G\47MIC minimal path demo illustrates how minimal paths\n\
            can be computed in images to detect and track edge points.\n\
            Use your mouse to select desired starting and ending points,\n\
@@ -16026,7 +16032,7 @@ x_minimal_path :
     -if {min($P0)>=0}
       p=1
       -do
-        -w[0] -1,-1,0,"[G\47MIC] Select ending point P"$p
+        -w[0] -1,-1,0,"[G"{`39`}"MIC] Select ending point P"$p
         --select[0] 0
         -if {@{!,S}}
           -rm[-1]
@@ -16047,8 +16053,8 @@ x_minimal_path :
         -endif
       -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
     -endif
-    -rm[1]
-  -endl -done -w 0 -v +
+    -rm[1] -w 0
+  -endl -done -v +
 
 #@gmic x_pacman
 #@gmic : Launch pacman game.
@@ -16134,7 +16140,7 @@ x_pacman :
     -t[-1] "Lives :",10,0,23,1,255 -t[-1] "Score :",{w-140},0,23,1,255
     -if $lives --r[pacman_2] 12,12,1,4,2 -r[-1] {100*$lives}%,100%,1,4,0,2 -j[-2] [-1],90,7 -rm[-1] -endif
     -nm[-1] visu
-    -w[visu] -1,-1,0,"[G\47MIC] Pacman" -cursor[0] 0
+    -w[visu] -1,-1,0,"[G"{`39`}"MIC] Pacman" -cursor[0] 0
     0 -t[-1] "Level "$level,0,0,53,1,1 -autocrop[-1] 0 -expand_xy[-1] 4,0 (0,255^0,255^0,0) --map[-2] [-1] -rm[-2] -dilate[-2] 8
     -nm[-1] level_N -nm[-2] levelm_N
 
@@ -16512,7 +16518,7 @@ x_plasma :
   M={w}
 
   # Start animation loop.
-  -w[] {1.5*@{0,w}},{1.5*@{0,h}},0,"[G\47MIC] Plasma effect"
+  -w[] {1.5*@{0,w}},{1.5*@{0,h}},0,"[G"{`39`}"MIC] Plasma effect"
   t=0 tt={-1.5*@{0,w}}
   -do
     tic=@|
@@ -16591,7 +16597,7 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
   -rectangle[-1] 310,5,{w-6},305,1,1
   -rectangle[-1] 5,310,{w-6},360,1,2
   300,300,1,1,'(y<<11)+(x<<2)+3' -j[-2] [-1],5,5 -rm[-1]
-  -a[-2,-1] c  -nm[-1] visu
+  -a[-2,-1] c -nm[-1] visu
 
   # Start k-means iterations.
   dithering=0 clustering=0 pause=1 s0=off s1=on
@@ -16624,7 +16630,7 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
       -rm[-2,-1] -nm[-1] visu_centroids -j[visu] [visu_centroids],5,310
     -endif
     -l[visu]
-    -w -1,-1,0,"[G\47MIC] RGB quantization"
+    -w -1,-1,0,"[G"{`39`}"MIC] RGB quantization"
     -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
     -endl
 
@@ -16735,7 +16741,7 @@ x_reflection3d :
 
   # Start animation loop.
   xb=0 xl=0 anim=0
-  -w[] 256,256,0,"[G\47MIC] 3d reflection"
+  -w[] 256,256,0,"[G"{`39`}"MIC] 3d reflection"
   -do
 
     tic=@|
@@ -16789,7 +16795,7 @@ x_rubber3d :
   256,256,64,3
   {w},{h},1,3,'if(c==0,x,if(c==1,y,y*@{1,d}/h))'
   {w},{h},1,3
-  -w[] {w},{h},0,"[G\47MIC] 3d rubber object"
+  -w[] {w},{h},0,"[G"{`39`}"MIC] 3d rubber object"
   frame=0
   -do
     {w},{h},1,3 -fc[-1] 16,32,32 -j3d[-1] [0],50%,50%,0,1,3,0,0 -j[1] [-1],0,0,$frame -rm[-1]
@@ -17162,7 +17168,7 @@ x_select_color : -skip ${1=xsc_variable}
 
 #@gmic x_select_function1d : _variable_name,_background_curve_R,_background_curve_G,_background_curve_B
 #@gmic : Open an interactive window, where the user can defined its own 1d function.
-#@gmic : If an image is selected, it is used to display additional informations :
+#@gmic : If an image is selected, it is used to display additional information :
 #@gmic :   - The first row defines the values of a background curve displayed on the window (e.g. an histogram).
 #@gmic :   - The 2nd, 3rd and 4th rows define the R,G,B color components displayed beside the X and Y axes.
 #@gmic : Argument 'variable_name' specifies the variable that contains the selected function keypoints at any time.
@@ -17393,7 +17399,7 @@ x_shadebobs :
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -------------------------------------------------"
-  -v - -rm t=100 -w 512,512,0,"[G\47MIC] Shade bobs"
+  -v - -rm t=100 -w 512,512,0,"[G"{`39`}"MIC] Shade bobs"
 
   # Start animation loop.
   -do
@@ -17446,7 +17452,7 @@ x_spline :
 
   # Init display and variables.
   -v -
-  -if @# -a x -n 0,255 -to_rgb -else (0;0^0;128^0;0) -r[-1] 512,512,1,3,3 -name[-1] "[G\47MIC] Spline Editor" -endif
+  -if @# -a x -n 0,255 -to_rgb -else (0;0^0;128^0;0) -r[-1] 512,512,1,3,3 -nm[-1] "[G"{`39`}"MIC] Spline Editor" -endif
   -w[0] @{0,w},@{0,h},0,0,-1,-1,@{-1,n} -r[0] @{!,w},@{!,h},1,3,1
   -i[1] 1        # Point coordinates
   roundness=0.5  # Curve roundness
@@ -17628,7 +17634,7 @@ x_tetris :
 
     --shift[background] 0,{-13*@|*1.04^$score},0,0,2
     -j[-1] [curr_render],0,0,0,0,1,[curr_render_mask],255
-    -w[-1] {2*w},{2*h},0,"[G\47MIC] Tetris" -rm[-1] -cursor[0] 0
+    -w[-1] {2*w},{2*h},0,"[G"{`39`}"MIC] Tetris" -rm[-1] -cursor[0] 0
 
     # Manage user interactions.
     -if @{!,SPACE} fall_mode=1 -endif
@@ -17689,7 +17695,7 @@ x_tictactoe :
 
     # Select position by the user.
     -do                                                                       # Enter event loop.
-      -w[] {w},{h},0,"[G\47MIC] "$message -wait                                 # Wait for events and force window size if necessary.
+      -w[] {w},{h},0,"[G"{`39`}"MIC] "$message -wait                                 # Wait for events and force window size if necessary.
       -if {!@!" || "@{!,ESC}" || "@{!,Q}} -w[] 0 -rm -v + -return -endif        # Quit properly if window has been closed.
       -if {@{!,b}&1" && "@{!,x}>20" && "@{!,y}>20" && "@{!,x}<400" && "@{!,y}<400} # If mouse button has been pressed on the board area.
         tmp3={int((@{!,x}-15)/130)}                                                # Get x-coord of the selected position (0,1 or 2).
@@ -17789,7 +17795,7 @@ x_waves :
     --mirror y --mirror x -+ -n 0,255
   -endl -else -k[0] -r[0] 100,100,1,3,2 -endif
   -i[0] (20;80;0^20;80;0^20;80;0) -r[0] 400,300,1,3,3 -water[0] 100,2
-  -w[0] @{0,w},@{0,h},0,"[G\47MIC] Image waves"
+  -w[0] @{0,w},@{0,h},0,"[G"{`39`}"MIC] Image waves"
   w={w} -elevation3d[-1] 0 -rv3d[-1]
   -sh[-1] 8,{7+3*i[6]},0,0 -r[-1] 3,{h/3},1,1,-1
   (0,1,0;1,0,1;0,1,0) -/[-1] 2
@@ -17841,7 +17847,7 @@ x_whirl : -check ${1=0.2}>=0
 ----\n
 --------------------------------------------------"
   -v -
-  5,5,1,3 256,256,1,3 [-1] -w[-1] 384,384,0,"[G\47MIC] Fractal whirls"
+  5,5,1,3 256,256,1,3 [-1] -w[-1] 384,384,0,"[G"{`39`}"MIC] Fractal whirls"
   tangle=0 tzoom=0 xc={(w-@{-3,w})/2} yc={(h-@{-3,h})/2}
   -do
     -rand[-3] 0,255 -j[-2] [-3],$xc,$yc,0,0
@@ -17870,6 +17876,22 @@ gimp_filter_sources :
 # Function used for filters based on parallelization with spatial splitting.
 gimp_parallel_overlap :
   -apply_parallel_overlap "$1",$3,{if($2,2^($2-1),0)}
+
+# Return name of a gimp layer.
+gimp_layer_name :
+  -u @{"-_gimp_merge_layers[0] name,(unnamed)"}
+
+# Return blending mode of a gimp layer.
+gimp_layer_mode :
+  -u @{"-_gimp_merge_layers[0] mode,alpha"}
+
+# Return opacity of a gimp layer.
+gimp_layer_opacity :
+  -u @{"-_gimp_merge_layers[0] opacity,100"}
+
+# Return positions of a gimp layer.
+gimp_layer_pos :
+  -u @{"-_gimp_merge_layers[0] pos,0,0"}
 
 # Flatten list of input layers according to their blending modes, opacities and positions,
 # set in each layer name by the GIMP plug-in.
@@ -17997,13 +18019,13 @@ gimp_autocrop_layers :
 # #@gimp : note = note{"A <b>new version</b> of the G'MIC plug-in for GIMP is available!
 # #@gimp : You are strongly encouraged to download and install this updated version, by clicking on one of the following urls :"}
 # #@gimp : note = note{"\n<span foreground="purple"><u>Windows version :</u></span>"}
+# #@gimp : url = link{"Download G'MIC plug-in for Windows (64 bits)","http://downloads.sourceforge.net/gmic/windows/gmic_gimp_win64.exe"}
 # #@gimp : url = link{"Download G'MIC plug-in for Windows (32 bits)","http://downloads.sourceforge.net/gmic/windows/gmic_gimp_win32.exe"}
-# #@gimp : url = link{"Download G'MIC plug-in for Windows (64 bits)","http://downloads.sourceforge.net/gmic/windows/gmic_gimp_win64.zip"}
 # #@gimp : note = note{"<b>Installation </b>: unzip the archive files and copy them into folder\n
 # #@gimp :              <i>C:\\Program Files\\GIMP\\lib\\gimp\\2.0\\plug-ins\</i>"}
 # #@gimp : note = note{"\n<span foreground="purple"><u>Linux version :</u></span>"}
-# #@gimp : url = link{"Download plug-in for Linux (32 bits)","http://downloads.sourceforge.net/gmic/linux/gmic_gimp_linux32.zip"}
 # #@gimp : url = link{"Download plug-in for Linux (64 bits)","http://downloads.sourceforge.net/gmic/linux/gmic_gimp_linux64.zip"}
+# #@gimp : url = link{"Download plug-in for Linux (32 bits)","http://downloads.sourceforge.net/gmic/linux/gmic_gimp_linux32.zip"}
 # #@gimp : note = note{"<b>Installation </b>: unzip the archive files and copy them in folder\n
 # #@gimp :              <i>/usr/lib/gimp/2.0/plug-ins/</i>"}
 # #@gimp : note = note{"\nNote that there will be no updated filters anymore for your current plug-in version.
@@ -18195,6 +18217,7 @@ gimp_logo_ca :
 #@gimp : <b> -</b> <i>Karsten Rodenacker</i> <small>(packaging &amp; code)</small>
 #@gimp : <b> -</b> <i>Dani Sard&#224;</i> <small>(translation)</small>
 #@gimp : <b> -</b> <i>Yuri Shemanin</i> <small>(debugging)</small>
+#@gimp : <b> -</b> <i>Silvio Grosso</i> <small>(debugging)</small>
 #@gimp : <b> -</b> <i>Stepanekos</i> <small>(translation)</small>
 #@gimp : <b> -</b> <i>Thorsten "otto" Stettin</i> <small>(packaging)</small>
 #@gimp : <b> -</b> <i>Lukas Tvrdy</i> <small>(Krita integration)</small>
@@ -18228,6 +18251,7 @@ gimp_logo_ca :
 #@gimp : sep = separator()
 #@gimp : note = link(0,"[1] G'MIC reference documentation","http://gmic.eu/reference.shtml")
 #@gimp : note = link(0,"[2] G'MIC scripting tutorial","http://gmic.eu/tutorial/index.shtml")
+#@gimp : note = link(0,"[3] G'MIC filter template","http://gmic.eu/template.gmic")
 
 #@gimp Filter sources : _none_, gimp_display_filter_sources
 #@gimp : note = note{"Here is displayed the filter sources currently enabled in your plug-in.
@@ -18352,9 +18376,9 @@ _heart80x73 :
 #@gimp : link = link("Mahvelous Mahvin","http://www.mahvin.com/")
 gimp_gmicky :
   -rm
-  -if {$1==0} -gmicky
-  -elif {$1==1} -gmicky_wilber
-  -else -roddy
+  -if {$1==0} -gmicky -nm name(Gmicky)
+  -elif {$1==1} -gmicky_wilber -nm "name(Gmicky & Wilber)"
+  -else -roddy -nm name(Roddy)
   -endif
 
 gimp_gmicky_preview :
@@ -18620,6 +18644,7 @@ _dice5 : -_dice3 -ellipse[-1] 25%,50%,5.2%,5.2%,0,1,255 -ellipse[-1] 75%,50%,5.2
 gimp_extract_objects :
   -if $6 min_area=$6% -else min_area=6 -endif
   -repeat @# -l[$<] -to_rgba
+    nm=@{0,n}
     w={w} h={h}
     x={$1%*(w-1)}
     y={$2%*(h-1)}
@@ -18637,6 +18662,7 @@ gimp_extract_objects :
       -repeat {w} -nm[$>] pos({i($>,0)},{i($>,1)}) -done -rm[-1]
     -endif
     $w,$h,1,4 -fc[-1] $color
+    -nm $nm
   -endl -done
 
 gimp_extract_objects_preview :
@@ -18749,6 +18775,7 @@ gimp_ministeck_preview :
 #@gimp : Angle variations = float(0,0,180)
 #@gimp : sep = separator()
 #@gimp : Cycle layers = int(0,-255,255)
+#@gimp : Revert layer order = bool()
 #@gimp : Output as = _choice("Single layer","Multiple layers")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Instructions:</b>\n
@@ -18769,9 +18796,9 @@ gimp_montage : -skip "${2=A}"
   -if {!@#} -return -endif
   code0=X code1="$2" code2=H code3=V code4=A code5=B
   -if {$3==1&&$4<0.5} -r {max(10,$4*200)}%,{max(10,$4*200)}%,1,100%,2 -endif
-  -to_rgba -if {$13%@#} -mv[{$13%@#}--1] 0 -endif
+  -to_rgba -if $14 -rv -endif -if {$13%@#} -mv[{$13%@#}--1] 0 -endif
   -if {$11||$12} -repeat @# -rotate[$>] {$11+?(-$12,$12)},1,0 -done -endif
-  -montage ${code$1},{if($3==0,$4,2+max(0,$4-0.5))},$14,\
+  -montage ${code$1},{if($3==0,$4,2+max(0,$4-0.5))},$15,\
     "-if {$""7%2} -mirror x -endif -if {$""8%2} -mirror y -endif "\
     "-rotate {90*$""6} "\
     "-if {$5||$6} "\
@@ -18779,7 +18806,8 @@ gimp_montage : -skip "${2=A}"
     "-frame $6,$6,${7-10} "\
     "-r {w+2*$5},{h+2*$5},1,100%,0,0,0.5,0.5 "\
     "-else -r $""4,$""5,1,100%,2 -endif "
-  -if $14 -gimp_autocrop_layers -endif
+  -if $15 -gimp_autocrop_layers -endif
+  -nm pos(0,0),name(Montage)
 
 gimp_montage_preview : -skip "${2=A}"
   -if {!@#} -return -endif
@@ -18787,7 +18815,7 @@ gimp_montage_preview : -skip "${2=A}"
   -if {$3==1&&$4<0.5} -r {max(10,$4*200)}%,{max(10,$4*200)}%,1,100%,2 -endif
   -drgba
   code0=X code1="$2" code2=H code3=V code4=A code5=B
-  -to_rgba -if {$13%@#} -mv[{$13%@#}--1] 0 -endif
+  -to_rgba -if $14 -rv -endif -if {$13%@#} -mv[{$13%@#}--1] 0 -endif
   -if {$11||$12} -repeat @# -rotate[$>] {$11+?(-$12,$12)},1,0 -done -endif
   -montage ${code$1},{if($3==0,$4,2+max(0,$4-0.5))},0,\
     "-if {$""7%2} -mirror x -endif -if {$""8%2} -mirror y -endif "\
@@ -19158,6 +19186,7 @@ gimp_kuwahara_preview :
 #@gimp : note = link("Filter Explained here","http://www.gimpchat.com/viewtopic.php?f=10&t=2624")
 gimp_lylejk_painting :
   -repeat @# -l[$>]
+    nm=@{0,n}
     --l -repeat $1 -b 0.75 -unsharp 0.75,10.49 -c 0,255 -mv[-1] 0 -done -endl
     -smooth[-1] 300,0.26,1,0,7
     [-1] -rv[-3--1]
@@ -19165,6 +19194,7 @@ gimp_lylejk_painting :
     -blend[-2,-1] grainmerge,1
     -gimp_kuwahara[-1] $2,$3,0,0
     -texturize_canvas[-1] $4,4
+    -nm $nm
   -endl -done
 
 gimp_lylejk_painting_preview :
@@ -19614,13 +19644,13 @@ gimp_colorize_comics_preview :
 #@gimp : - Keys <b>CTRL+R</b> resets window size.\n
 #@gimp : - Keys <b>ESC</b>, <b>Q</b> or <b>ENTER</b> exit the interactive window.
 #@gimp : </small>"}
-#@gimp : sep = separator(), note = note("<small>You can find more informations on how to use this filter here :</small>")
+#@gimp : sep = separator(), note = note("<small>You can find more information on how to use this filter here :</small>")
 #@gimp : link = link("David Revoy's G'MIC Colorization Page","http://www.davidrevoy.com/article240/gmic-line-art-colorization")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/09/2014</i>.</small>")
 gimp_colorize_interactive :
   N=@#
   resolution={arg(1+$3,512,1024,2048,0)}
-  -nm "[G\47MIC] Colorize"
+  -nm "[G"{`39`}"MIC] Colorize"
   -if {$8==-1" || "$7!=w" || "$8!=h} _gimp_control_points= -else _gimp_control_points=${9--1} -endif
   -l[] 0 -nm[-1] "$4" ext=@{-1,x} -rm -if {$ext'=='gpl} -input_gpl "$4" -endif -onfail -rm -endl
   -l[] 0 -nm[-1] "$5" ext=@{-1,x} -rm -if {$ext'=='gpl} -input_gpl "$5" -endif -onfail -rm -endl
@@ -20701,16 +20731,18 @@ gimp_apply_Labcurve_preview :
 #@gimp Decompose channels : gimp_decompose_channels, gimp_decompose_channels_preview
 #@gimp : Color basis = choice(7,"RGB","HSV","HSL","HSI","YUV","YCbCr","XYZ","Lab","Lch","CMY","CMYK")
 #@gimp : Action = choice("Decompose","Recompose")
-#@gimp : Use multiple layers = bool(0)
+#@gimp : Output multiple layers = bool(0)
 #@gimp : Include opacity layer = bool(1)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_decompose_channels :
   -if {!$2} # Decompose
     -if $4 -to_rgba -else -to_rgb -endif
     -repeat @# -l[-1]
+      nm=@{0,n}
       -split_opacity -_gimp_decompose_channels$1[0]
       -s[0] c -if {!$3} -a x -endif
       nb=@#
+      -nm $nm
     -endl -mv[-$nb--1] 0 -done
   -else # Recompose
     -channels 0 nbc={3+($1==10)} nb={$nbc+$4}
@@ -21264,22 +21296,24 @@ gimp_edge_offsets_preview :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>09/29/2014</i>.</small>")
 gimp_extract_foreground :
-  -nm "[G'MIC] Interactive foreground extraction"
   -if {!@#} -return -endif
   resolution={arg(1+$3,512,1024,2048,0)}
   -repeat @# -l[$<]
+    nm=@{-gimp_layer_name}
+    -nm "[G"{`39`}"MIC] Interactive foreground extraction"
     -if {$7==-1||$5!=w||$6!=h} _gimp_control_points= -else _gimp_control_points=${7--1} -endif
     status=@{-x_segment\ $resolution}
     -sh 3,3 -b[-1] $1% -if {$2>0} -dilate[-1] {1+2*$2} -elif {$2<0} -erode[-1] {1-2*$2} -endif
     -rm[-1]
     -if {$3==1} -sh 3,3 -max[-1] 1 -rm[-1]
-    -elif {$3==2} -s c,-3 -r[-1] 100%,100%,1,4 -rv
+    -elif {$3==2} -s c,-3 -r[-1] 100%,100%,1,4 -rv -nm[0] name(Mask) -nm[1] name($nm)
     -elif {$3==3}
       [-1]
       -sh[-2] 0,2 --channels[-3] 3,3 ->=[-1] 3 -*[-2,-1] -rm[-1]
       -sh[-1] 0,2 --channels[-2] 3,3 -<=[-1] {255-3} -*[-2,-1] -rm[-1]
       -sh[-1] 3,3 -*[-1] -1 -+[-1] 255 -rm[-1]
       -gimp_autocrop_layers
+      -nm[1] name($nm" [background]")
     -endif
   -endl -done
   -if {narg($status)>=4} -u \{$1\}\{$2\}\{$3\}\{$4\}\{{w},{h}\}\{$status\} -else -u "" -endif
@@ -22424,9 +22458,12 @@ gimp_split_details_alpha_preview :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>01/22/2015</i>.</small>")
 gimp_split_details_layers :
   -repeat @# -l[$>]
+    nm=@{-gimp_layer_name}
+    pos=@{-gimp_layer_pos}
     -split_details $1,$2,$3
     -+[^0] 128 -c[^0] 0,255
-    -nm[^0] "mode(grainmerge)"
+    -repeat {@#-1} -nm[{1+$>}] "mode(grainmerge), name"($nm" [freq ""#"{1+$>}"]), pos("$pos")" -done
+    -nm[0] "name"($nm" [base]), pos("$pos")"
     -rv
   -endl -done
 
@@ -23144,8 +23181,9 @@ gimp_droste_preview :
   -ellipse $7%,$8%,3,3,0,1,0,255,255,255 -ellipse $7%,$8%,3,3,0,1,0xFFFFFFFF,0,0,0,255
 
 #@gimp Frame [blur] : gimp_frame_blur, gimp_frame_blur(1)
-#@gimp : Horizontal size = float(30,0,100)
-#@gimp : Vertical size = float(30,0,100)
+#@gimp : Horizontal size (%) = float(30,0,100)
+#@gimp : Vertical size (%) = float(30,0,100)
+#@gimp : sep = separator()
 #@gimp : Crop = float(0,0,100)
 #@gimp : Blur = float(5,0,10)
 #@gimp : Roundness = float(0,0,1)
@@ -23205,17 +23243,20 @@ gimp_frame_blur :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;, Angelo Lama</i>.      Latest update: <i>01/29/2012</i>.</small>")
 
 #@gimp Frame [fuzzy] : gimp_frame_fuzzy, gimp_frame_fuzzy(0)
-#@gimp : Width = float(10,0,100)
-#@gimp : Height = float(10,0,100)
+#@gimp : Horizontal size (%) = float(5,0,100)
+#@gimp : Vertical size (%) = float(5,0,100)
 #@gimp : Fuzzyness = float(10,0,40)
 #@gimp : Smoothness = float(1,0,5)
 #@gimp : Color = color(255,255,255,255)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
 gimp_frame_fuzzy :
-  -frame_fuzzy $1%,$2%,${3-8}
+  -repeat @# -l[$>]
+    sx={$1%*max(w,h)/2} sy={$2%*max(w,h)/2}
+    -frame_fuzzy $sx,$sy,${3-7}
+  -endl -done
 
 #@gimp Frame [painting] : gimp_frame_painting, gimp_frame_painting_preview(1)
-#@gimp : Size = float(10,0,100)
+#@gimp : Size (%) = float(10,0,100)
 #@gimp : Contrast = float(0.4,0,1)
 #@gimp : Smoothness = float(6,0,30)
 #@gimp : Color = color(225,200,120)
@@ -23256,13 +23297,13 @@ gimp_frame_pattern_preview :
 
 #@gimp Frame [regular] : gimp_frame, gimp_frame(1)
 #@gimp : note = note("<b>Crop parameters :</b>")
-#@gimp : X-start = int(0,0,100)
-#@gimp : X-end = int(100,0,100)
-#@gimp : Y-start = int(0,0,100)
-#@gimp : Y-end = int(100,0,100)
+#@gimp : X-start (%) = int(0,0,100)
+#@gimp : X-end (%) = int(100,0,100)
+#@gimp : Y-start (%) = int(0,0,100)
+#@gimp : Y-end (%) = int(100,0,100)
 #@gimp : sep = separator(), note = note("<b>Frame parameters :</b>")
-#@gimp : Width = int(10,0,100)
-#@gimp : Height = int(10,0,100)
+#@gimp : Width (%) = int(10,0,100)
+#@gimp : Height (%) = int(10,0,100)
 #@gimp : Color = color(0,0,0,255)
 #@gimp : Outline size = int(1,0,100)
 #@gimp : Outline color = color(255,255,255,255)
@@ -23271,12 +23312,13 @@ gimp_frame :
  -to_rgba -repeat @#
    -z[-1] $1%,$3%,$2%,$4%
    -frame[-1] $11,$11,${12-15}
-   -frame[-1] $5%,$6%,${7-10}
+    sx={$5%*max(w,h)} sy={$6%*max(w,h)}
+   -frame[-1] $sx,$sy,${7-10}
  -mv[-1] 0 -done
 
 #@gimp Frame [round] : gimp_frame_round, gimp_frame_round(1)
 #@gimp : Sharpness = float(6,0.1,40)
-#@gimp : Size = float(20,0,100)
+#@gimp : Size (%) = float(20,0,100)
 #@gimp : Smoothness = float(0.1,0,15)
 #@gimp : Shade = float(0,0,1)
 #@gimp : Color = color(255,255,255,255)
@@ -23332,6 +23374,57 @@ gimp_vignette :
     -to_rgba -split_opacity
     -=[-1] 0 -vignette[-1] ${1-3} -a c --fc ${4-7} -rv -blend alpha
   -endl -done
+
+#@gimp _<b>Frequencies</b>
+#--------------------------
+
+#@gimp Bandpass : gimp_bandpass, gimp_bandpass_preview(0)
+#@gimp : Low frequency = float(0,0,100)
+#@gimp : High frequency = float(100,0,100)
+#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
+#@gimp : Value action = choice(2,"None","Cut","Normalize")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
+gimp_bandpass :
+  -repeat @# -l[$>] -split_opacity -l[0]
+    -ac "-bandpass $1%,$2%",$3,$4
+  -endl -a c -endl -done
+
+gimp_bandpass_preview :
+  -gimp_split_preview "-gimp_bandpass $*",$-1
+
+#@gimp Fourier analysis : gimp_display_fft, gimp_display_fft(1)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
+gimp_display_fft :
+  -to_rgb -display_fft
+
+#@gimp Fourier transform : gimp_fourier, gimp_fourier_preview(1)
+#@gimp : Transform = choice(0,"Direct","Inverse")
+#@gimp : Discard transparency = bool(1)
+#@gimp : link = link("Click here for a video tutorial","http://www.youtube.com/watch?v=3137dDa6P4s")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/11/2014</i>.</small>")
+gimp_fourier : -skip ${2=0}
+  -if $2 -remove_opacity -endif
+  -if $1 -repeat @# -l
+      -fft82float -c 0,255
+      -onfail -error "Image ["$>"] does not seem to be a FFT transform."
+    -endl -done
+  -else -float2fft8 -endif
+
+gimp_fourier_preview :
+  -if $2 -remove_opacity -endif
+  -if $1 -gimp_no_preview 0
+  -else -dfft
+  -endif
+
+#@gimp Fourier watermark : gimp_watermark_fourier, _none_
+#@gimp : Text = text{"(c) G'MIC"}
+#@gimp : Size = int(53,13,128)
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Note: </b> To make the watermark visible afterwards, use the 'Fourier Analysis' filter. </small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
+gimp_watermark_fourier :
+  -watermark_fourier "$1",$2 -c 0,255
 
 #@gimp _<b>Layers</b>
 #---------------------
@@ -24942,6 +25035,7 @@ gimp_render3d : -skip ${14=1}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>02/10/2014</i>.</small>")
 gimp_blocks3d :
   -repeat @# -l[$>]
+    nm=@{"-gimp_layer_name"}
     W={w} H={h} M={max(w,h)}
     -if {w>h} -r2dx $1 -else -r2dy $1 -endif
     w={w} h={h} m={max(w,h)}
@@ -24973,7 +25067,7 @@ gimp_blocks3d :
 
     -replace_color 0,0,-1,-1,-1,0,0,0,0,0
     -if $16 -r 50%,50%,1,4,2 -endif
-    -c 0,255
+    -c 0,255 -nm name($nm)
   -endl -done
 
 #@gimp 3d colored object : gimp_coloredobject3d, gimp_coloredobject3d_preview(1)
@@ -25222,7 +25316,7 @@ _gimp_random3d4 : ($1) -/[-1] 3 -torus3d $1,@-1 -rm[-2]
 #@gimp : Color = color(255,0,255)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>11/27/2013</i>.</small>")
 gimp_ball :
-  -ball $1,${5-7},${2-4} -mv[-1] 0
+  -ball $1,${5-7},${2-4} -mv[-1] 0 -nm[0] "name(Ball)"
 
 gimp_ball_preview :
   -gimp_ball $*
@@ -26356,57 +26450,6 @@ gimp_animate_glow :
 gimp_animate_glow_preview :
   -gimp_animate_preview glow,"$5",\
                              "$6"
-
-#@gimp _<b>Spectral filters</b>
-#------------------------------
-
-#@gimp Bandpass : gimp_bandpass, gimp_bandpass_preview(0)
-#@gimp : Low frequency = float(0,0,100)
-#@gimp : High frequency = float(100,0,100)
-#@gimp : sep = separator(), Channel(s) = choice("All","RGBA [all]","RGB [all]","RGB [red]","RGB [green]","RGB [blue]","RGBA [alpha]","YCbCr [luminance]","YCbCr [blue-red chrominances]","YCbCr [blue chrominance]","YCbCr [red chrominance]","YCbCr [green chrominance]","Lab [lightness]","Lab [ab-chrominances]","Lab [a-chrominance]","Lab [b-chrominance]","Lch [ch-chrominances]","Lch [c-chrominance]","Lch [h-chrominance]","HSV [hue]","HSV [saturation]","HSV [value]","HSI [intensity]","HSL [lightness]","CMYK [cyan]","CMYK [magenta]","CMYK [yellow]","CMYK [key]")
-#@gimp : Value action = choice(2,"None","Cut","Normalize")
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_bandpass :
-  -repeat @# -l[$>] -split_opacity -l[0]
-    -ac "-bandpass $1%,$2%",$3,$4
-  -endl -a c -endl -done
-
-gimp_bandpass_preview :
-  -gimp_split_preview "-gimp_bandpass $*",$-1
-
-#@gimp Fourier analysis : gimp_display_fft, gimp_display_fft(1)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_display_fft :
-  -to_rgb -display_fft
-
-#@gimp Fourier transform : gimp_fourier, gimp_fourier_preview(1)
-#@gimp : Transform = choice(0,"Direct","Inverse")
-#@gimp : Discard transparency = bool(1)
-#@gimp : link = link("Click here for a video tutorial","http://www.youtube.com/watch?v=3137dDa6P4s")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>08/11/2014</i>.</small>")
-gimp_fourier : -skip ${2=0}
-  -if $2 -remove_opacity -endif
-  -if $1 -repeat @# -l
-      -fft82float -c 0,255
-      -onfail -error "Image ["$>"] does not seem to be a FFT transform."
-    -endl -done
-  -else -float2fft8 -endif
-
-gimp_fourier_preview :
-  -if $2 -remove_opacity -endif
-  -if $1 -gimp_no_preview 0
-  -else -dfft
-  -endif
-
-#@gimp Fourier watermark : gimp_watermark_fourier, _none_
-#@gimp : Text = text{"(c) G'MIC"}
-#@gimp : Size = int(53,13,128)
-#@gimp : sep = separator()
-#@gimp : note = note("<small><b>Note: </b> To make the watermark visible afterwards, use the 'Fourier Analysis' filter. </small>")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>12/29/2010</i>.</small>")
-gimp_watermark_fourier :
-  -watermark_fourier "$1",$2 -c 0,255
 
 #@gimp _<b>Various</b>
 #----------------------

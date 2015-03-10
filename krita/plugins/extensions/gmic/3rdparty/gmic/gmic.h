@@ -58,15 +58,16 @@
 #ifndef cimg_verbosity
 #define cimg_verbosity 1
 #endif // #ifndef cimg_verbosity
+#ifdef _MSC_VER
+#pragma comment(linker,"/STACK:6291456")
+#pragma inline_depth(2)
+#endif // #ifdef _MSC_VER
 
 #ifdef gmic_build
 #define cimg_plugin "gmic.cpp"
 #include "./CImg.h"
 #if cimg_OS==2
 #include <process.h>
-#ifdef _MSC_VER
-#pragma comment(linker,"/STACK:6291456")
-#endif // #ifdef _MSC_VER
 #elif cimg_OS==1
 #include <cerrno>
 #include <sys/resource.h>

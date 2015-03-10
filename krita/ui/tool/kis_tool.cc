@@ -112,7 +112,6 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     , d(new Private)
 {
     d->cursor = cursor;
-    m_outlinePaintMode = XOR_MODE;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 
@@ -136,14 +135,13 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     setMode(HOVER_MODE);
 
     QStringList qtVersion = QString(qVersion()).split('.');
-    int versionNumber = qtVersion.at(0).toInt()*10000
-            + qtVersion.at(1).toInt()*100
-            + qtVersion.at(2).toInt();
-    if (versionNumber>=40603) {
-        d->useGLToolOutlineWorkaround = false;
+    int major = qtVersion.at(0).toInt();
+    int minor = qtVersion.at(1).toInt();
+    if (major == 4 and minor <= 6) {
+        d->useGLToolOutlineWorkaround = true;
     }
     else {
-        d->useGLToolOutlineWorkaround = true;
+        d->useGLToolOutlineWorkaround = false;
     }
 }
 
@@ -591,7 +589,6 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
 #ifdef HAVE_OPENGL
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
-    // the workaround option is enabled for Qt 4.6 < 4.6.3... Only relevant on CentOS.
     if (canvasWidget && !d->useGLToolOutlineWorkaround)  {
         painter->beginNativePainting();
 
@@ -653,26 +650,30 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 
         painter->endNativePainting();
     }
-    else
+    else if (canvasWidget && d->useGLToolOutlineWorkaround) {
+#else
+    if (d->useGLToolOutlineWorkaround) {
 #endif // HAVE_OPENGL
-        if (m_outlinePaintMode == XOR_MODE) {
+        // the workaround option is enabled for Qt 4.6 < 4.6.3... Only relevant on CentOS.
+
+            painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+            QPen pen = painter->pen();
+            pen.setStyle(Qt::SolidLine);
+            pen.setWidth(1);
+            pen.setColor(QColor(255, 255, 255));
+            painter->setPen(pen);
+            painter->drawPath(path);
+
+            pen.setStyle(Qt::DotLine);
+            pen.setWidth(1);
+            pen.setColor(QColor(0, 0, 0));
+            painter->setPen(pen);
+            painter->drawPath(path);
+    }
+    else {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
-    }
-    else /* if (m_outlinePaintMode==BW_MODE)*/
-    {
-        QPen pen = painter->pen();
-        pen.setWidth(3);
-        pen.setColor(QColor(0, 0, 0, 100));
-        painter->setPen(pen);
-        painter->drawPath(path);
-        pen.setWidth(1);
-        pen.setColor(Qt::white);
-        painter->setPen(pen);
-        painter->drawPath(path);
-
-
     }
 }
 

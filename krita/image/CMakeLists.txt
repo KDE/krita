@@ -176,6 +176,9 @@ set(kritaimage_LIB_SRCS
    kis_acyclic_signal_connector.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
+   kis_abstract_projection_plane.cpp
+   kis_layer_projection_plane.cpp
+   kis_mask_projection_plane.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp

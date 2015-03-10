@@ -38,6 +38,8 @@
 #include "kis_safe_read_list.h"
 typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 
+#include "kis_abstract_projection_plane.h"
+
 
 /**
  *The link between KisProjection ans KisImageUpdater
@@ -213,6 +215,15 @@ QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
     return rect;
+}
+
+KisAbstractProjectionPlane* KisNode::projectionPlane() const
+{
+    KIS_ASSERT_RECOVER_NOOP(0 && "KisNode::projectionPlane() is not defined!");
+    static QScopedPointer<KisAbstractProjectionPlane> plane(
+        new KisDumbProjectionPlane());
+
+    return plane.data();
 }
 
 bool KisNode::accept(KisNodeVisitor &v)

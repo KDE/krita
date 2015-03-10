@@ -46,6 +46,8 @@
 #include "kis_clone_layer.h"
 
 #include "kis_psd_layer_style.h"
+#include "kis_layer_projection_plane.h"
+
 
 class KisSafeProjection {
 public:
@@ -114,6 +116,8 @@ struct KisLayer::Private
     KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
     KisPSDLayerStyle* layerStyle;
+
+    QScopedPointer<KisLayerProjectionPlane> projectionPlane;
 };
 
 
@@ -126,6 +130,7 @@ KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
     m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
     m_d->layerStyle = 0;
+    m_d->projectionPlane.reset(new KisLayerProjectionPlane(this));
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -142,6 +147,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
             m_d->layerStyle = 0;
         }
         setName(rhs.name());
+        m_d->projectionPlane.reset(new KisLayerProjectionPlane(this));
     }
 }
 
@@ -652,6 +658,10 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     gc.bitBlt(rect.topLeft(), original, rect);
 }
 
+KisAbstractProjectionPlane* KisLayer::projectionPlane() const
+{
+    return m_d->projectionPlane.data();
+}
 
 KisPaintDeviceSP KisLayer::projection() const
 {

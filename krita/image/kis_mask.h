@@ -131,6 +131,8 @@ public:
      */
     KisPaintDeviceSP projection() const;
 
+    KisAbstractProjectionPlane* projectionPlane() const;
+
     /**
      * Change the selection to the specified selection object. The
      * selection is deep copied.
@@ -184,6 +186,9 @@ protected:
                                KisPaintDeviceSP &dst,
                                const QRect & rc,
                                PositionToFilthy maskPos) const;
+
+private:
+    friend class KisMaskProjectionPlane;
 
 private:
 

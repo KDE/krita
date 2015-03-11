@@ -749,9 +749,9 @@ eval_UBspline_3d_s_vgh (UBspline_3d_s * restrict spline,
   float ux = x*spline->x_grid.delta_inv;
   float uy = y*spline->y_grid.delta_inv;
   float uz = z*spline->z_grid.delta_inv;
-  ux = fmin (ux, (float)(spline->x_grid.num)-1.0e-5);
-  uy = fmin (uy, (float)(spline->y_grid.num)-1.0e-5);
-  uz = fmin (uz, (float)(spline->z_grid.num)-1.0e-5);
+  ux = fmin (ux, (float)((spline->x_grid.num)-1.0e-5));
+  uy = fmin (uy, (float)((spline->y_grid.num)-1.0e-5));
+  uz = fmin (uz, (float)((spline->z_grid.num)-1.0e-5));
   float ipartx, iparty, ipartz, tx, ty, tz;
   tx = modff (ux, &ipartx);  int ix = (int) ipartx;
   ty = modff (uy, &iparty);  int iy = (int) iparty;

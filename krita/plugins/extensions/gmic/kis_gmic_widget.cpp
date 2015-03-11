@@ -423,6 +423,7 @@ void KisGmicWidget::slotNotImplemented()
 
 void KisGmicWidget::slotExpandCollapse()
 {
+#if QT_VERSION >= 0x040700
     const QString &iconName = expandCollapseBtn->icon().name();
     if (iconName == "zoom-in")
     {
@@ -435,4 +436,5 @@ void KisGmicWidget::slotExpandCollapse()
         m_filterTree->collapseAll();
         expandCollapseBtn->setIcon(koIcon("zoom-in"));
     }
+#endif
 }

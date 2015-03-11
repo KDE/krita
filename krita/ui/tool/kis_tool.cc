@@ -137,7 +137,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     QStringList qtVersion = QString(qVersion()).split('.');
     int major = qtVersion.at(0).toInt();
     int minor = qtVersion.at(1).toInt();
-    if (major == 4 and minor <= 6) {
+    if (major == 4 && minor <= 6) {
         d->useGLToolOutlineWorkaround = true;
     }
     else {

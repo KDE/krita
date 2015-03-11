@@ -26,7 +26,7 @@
 #include "filter/kis_filter_registry.h"
 #include "testutil.h"
 
-#include "kis_layer_style_filter.h"
+#include "../kis_layer_style_filter.h"
 
 struct TestConfig {
     TestConfig()

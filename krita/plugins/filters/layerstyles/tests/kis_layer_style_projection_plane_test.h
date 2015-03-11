@@ -16,16 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LAYER_STYLES_PROJECTION_PLANE_TEST_H
-#define __KIS_LAYER_STYLES_PROJECTION_PLANE_TEST_H
+#ifndef __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H
+#define __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H
 
 #include <QtTest/QtTest>
 
-class KisLayerStylesProjectionPlaneTest : public QObject
+class KisLayerStyleProjectionPlaneTest : public QObject
 {
     Q_OBJECT
 private slots:
     void test();
 };
 
-#endif /* __KIS_LAYER_STYLES_PROJECTION_PLANE_TEST_H */
+#endif /* __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H */

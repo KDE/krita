@@ -42,7 +42,7 @@ class KisPainter;
  *    transformations for the layer, e.g. Layer Styles and
  *    Pass-through mode.
  */
-class KisAbstractProjectionPlane
+class KRITAIMAGE_EXPORT  KisAbstractProjectionPlane
 {
 public:
     KisAbstractProjectionPlane();

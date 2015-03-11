@@ -3,6 +3,9 @@ add_subdirectory( tests )
 set(kritalayerstylesfilter_PART_SRCS
     layerstyles.cpp
     kis_ls_drop_shadow_filter.cpp
+    kis_layer_style_filter.cpp
+    kis_layer_style_filter_projection_plane.cpp
+    kis_layer_style_projection_plane.cpp
     )
 
 # kde4_add_ui_files(kritalayerstylesfilter_PART_SRCS

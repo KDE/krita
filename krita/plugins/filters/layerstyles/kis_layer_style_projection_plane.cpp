@@ -16,13 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_layer_styles_projection_plane.h"
+#include "kis_layer_style_projection_plane.h"
 
 #include "filter/kis_filter_configuration.h"
 #include "kis_layer_style_filter_projection_plane.h"
 
 
-struct KisLayerStylesProjectionPlane::Private
+struct KisLayerStyleProjectionPlane::Private
 {
     KisAbstractProjectionPlane *sourceProjectionPlane;
 
@@ -31,7 +31,7 @@ struct KisLayerStylesProjectionPlane::Private
 
 };
 
-KisLayerStylesProjectionPlane::KisLayerStylesProjectionPlane(KisLayerSP sourceLayer)
+KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayerSP sourceLayer)
     : m_d(new Private)
 {
     m_d->sourceProjectionPlane = sourceLayer->projectionPlane();
@@ -55,16 +55,21 @@ KisLayerStylesProjectionPlane::KisLayerStylesProjectionPlane(KisLayerSP sourceLa
     m_d->stylesBefore << toQShared(dropShadow);
 }
 
-KisLayerStylesProjectionPlane::~KisLayerStylesProjectionPlane()
+KisLayerStyleProjectionPlane::~KisLayerStyleProjectionPlane()
 {
 }
 
-QRect KisLayerStylesProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
+KisAbstractProjectionPlane* KisLayerStyleProjectionPlane::factoryObject(KisLayerSP sourceLayer)
+{
+    return new KisLayerStyleProjectionPlane(sourceLayer);
+}
+
+QRect KisLayerStyleProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
 {
     return m_d->sourceProjectionPlane->recalculate(rect, filthyNode);
 }
 
-void KisLayerStylesProjectionPlane::apply(KisPainter *painter, const QRect &rect)
+void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 {
     foreach (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
         plane->apply(painter, rect);
@@ -77,12 +82,12 @@ void KisLayerStylesProjectionPlane::apply(KisPainter *painter, const QRect &rect
     }
 }
 
-QRect KisLayerStylesProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
+QRect KisLayerStyleProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     return m_d->sourceProjectionPlane->needRect(rect, pos);
 }
 
-QRect KisLayerStylesProjectionPlane::changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
+QRect KisLayerStyleProjectionPlane::changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     QRect layerChangeRect = m_d->sourceProjectionPlane->changeRect(rect, pos);
     QRect changeRect = layerChangeRect;
@@ -98,7 +103,7 @@ QRect KisLayerStylesProjectionPlane::changeRect(const QRect &rect, KisLayer::Pos
     return changeRect;
 }
 
-QRect KisLayerStylesProjectionPlane::accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
+QRect KisLayerStyleProjectionPlane::accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     QRect accessRect = m_d->sourceProjectionPlane->accessRect(rect, pos);
 

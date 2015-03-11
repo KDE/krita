@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_layer_styles_projection_plane_test.h"
+#include "kis_layer_style_projection_plane_test.h"
 
 #include <qtest_kde.h>
 
@@ -33,10 +33,10 @@
 #include "kis_pixel_selection.h"
 
 
-#include "kis_layer_styles_projection_plane.h"
+#include "../kis_layer_style_projection_plane.h"
 
 
-void KisLayerStylesProjectionPlaneTest::test()
+void KisLayerStyleProjectionPlaneTest::test()
 {
     const QRect imageRect(0, 0, 200, 200);
     const QRect rFillRect(10, 10, 100, 100);
@@ -50,7 +50,7 @@ void KisLayerStylesProjectionPlaneTest::test()
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
     image->addNode(layer);
 
-    KisLayerStylesProjectionPlane plane(layer);
+    KisLayerStyleProjectionPlane plane(layer);
 
     KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "00L_initial", "dd");
 
@@ -114,4 +114,4 @@ void KisLayerStylesProjectionPlaneTest::test()
 
 }
 
-QTEST_KDEMAIN(KisLayerStylesProjectionPlaneTest, GUI)
+QTEST_KDEMAIN(KisLayerStyleProjectionPlaneTest, GUI)

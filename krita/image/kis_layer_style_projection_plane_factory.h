@@ -16,33 +16,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LAYER_STYLES_PROJECTION_PLANE_H
-#define __KIS_LAYER_STYLES_PROJECTION_PLANE_H
+#ifndef __KIS_LAYER_STYLE_PROJECTION_PLANE_FACTORY_H
+#define __KIS_LAYER_STYLE_PROJECTION_PLANE_FACTORY_H
 
-#include "kis_abstract_projection_plane.h"
+class KisAbstractProjectionPlane;
+
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
 
 #include <QScopedPointer>
-
+#include "krita_export.h"
 #include "kis_types.h"
 
 
-
-class KRITAIMAGE_EXPORT KisLayerStylesProjectionPlane : public KisAbstractProjectionPlane
+class KRITAIMAGE_EXPORT KisLayerStyleProjectionPlaneFactory
 {
 public:
-    KisLayerStylesProjectionPlane(KisLayerSP sourceLayer);
-    ~KisLayerStylesProjectionPlane();
+    typedef boost::function<KisAbstractProjectionPlane* (KisLayerSP)> Factory;
 
-    QRect recalculate(const QRect& rect, KisNodeSP filthyNode);
-    void apply(KisPainter *painter, const QRect &rect);
+public:
+    KisLayerStyleProjectionPlaneFactory();
+    ~KisLayerStyleProjectionPlaneFactory();
 
-    QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
-    QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
-    QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
+    void setFactory(Factory factory);
+    KisAbstractProjectionPlane *create(KisLayerSP layer) const;
+
+    static KisLayerStyleProjectionPlaneFactory* instance();
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_LAYER_STYLES_PROJECTION_PLANE_H */
+#endif /* __KIS_LAYER_STYLE_PROJECTION_PLANE_FACTORY_H */

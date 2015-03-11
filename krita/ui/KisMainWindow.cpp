@@ -1167,6 +1167,25 @@ int KisMainWindow::viewCount() const
     return d->mdiArea->subWindowList().size();
 }
 
+bool KisMainWindow::restoreWorkspace(const QByteArray &state)
+{
+    QByteArray oldState = saveState();
+
+    // needed because otherwise the layout isn't correctly restored in some situations
+    foreach(QDockWidget *docker, dockWidgets()) {
+        docker->hide();
+    }
+
+    bool success = QMainWindow::restoreState(state);
+
+    if (!success) {
+        QMainWindow::restoreState(oldState);
+        return false;
+    }
+
+    return success;
+}
+
 void KisMainWindow::slotDocumentInfo()
 {
     if (!d->activeView->document())
@@ -2130,7 +2149,7 @@ void KisMainWindow::initializeGeometry()
             setGeometry(geometry().x(), geometry().y(), w, h);
         }
     }
-    restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
+    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
 }
 
 void KisMainWindow::showDockerTitleBars(bool show)

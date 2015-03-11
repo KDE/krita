@@ -5,6 +5,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-function)
 endif ()
 
+set(ITEXTOMML_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/itexToMML")
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
@@ -96,8 +97,8 @@ set (formulashape_PART_SRCS
    ${formulashape_PART_SRCS}
    KoM2MMLForumulaTool.cpp
    # itexToMML files
-   itexToMML/lex.yy.c
-   itexToMML/y.tab.c
+   ${ITEXTOMML_SOURCE_DIR}/lex.yy.c
+   ${ITEXTOMML_SOURCE_DIR}/y.tab.c
 )
 endif ()
 

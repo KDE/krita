@@ -2,20 +2,33 @@
 # CMake for gmic
 ##
 
-include_directories(src)
+set(GMIC_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/gmic")
 
-if(CMAKE_COMPILER_IS_GNUCXX)
+include_directories(${GMIC_SOURCE_DIR})
+
+if(NOT MSVC)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
 endif()
 
+# turn off O2 and Ob1 or Ob2 for g'mic
+if (MSVC)
+    # RelWithDebInfo
+    string(REPLACE "/O2" "/Oi /Ot /Oy /Gs /GF /Gy"  CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+    string(REPLACE "/Ob1" "/Ob0" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+
+    #Release
+    string(REPLACE "/O2" "/Oi /Ot /Oy /Gs /GF /Gy"  CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+    string(REPLACE "/Ob2" "/Ob0" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+endif()
+
 set(gmic_sources_SRCS
-  src/gmic.cpp
+  ${GMIC_SOURCE_DIR}/gmic.cpp
 )
 
 set(gmic_headers_SRCS
-  src/CImg.h
-  src/gmic_def.h
-  src/gmic.h
+  ${GMIC_SOURCE_DIR}/CImg.h
+  ${GMIC_SOURCE_DIR}/gmic_def.h
+  ${GMIC_SOURCE_DIR}/gmic.h
 )
 
 # Mandatory flags
@@ -26,6 +39,7 @@ add_definitions(-Dcimg_use_vt100 )
 # PARALLEL
 find_package(Threads)
 if (Threads_FOUND)
+    message("G'Mic: using pthreads")
     add_definitions(-Dgmic_is_parallel)
     add_definitions(-Dcimg_use_rng)
 endif()
@@ -33,11 +47,13 @@ endif()
 #OpenMP
 find_package(OpenMP)
 if(OPENMP_FOUND)
+    message("G'Mic: using OpenMP")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
 #FFTW
 if(FFTW3_FOUND)
+    message("G'Mic: using FFTW3")
     add_definitions(-Dcimg_use_fftw3 )
     add_definitions(-Dcimg_use_fftw3_singlethread )
     include_directories(${FFTW3_INCLUDE_DIR})
@@ -61,6 +77,7 @@ endif()
 # CURL
 find_package(CURL)
 if (CURL_FOUND)
+    message("G'Mic: using Curl")
     add_definitions(-Dcimg_use_curl)
     include_directories( ${CURL_INCLUDE_DIRS} )
 endif()
@@ -157,7 +174,7 @@ install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( FILES  src/gmic_def.gmic gmic_def.gmic.blacklist DESTINATION ${GMIC_INSTALL_DIR} )
+install( FILES  ${GMIC_SOURCE_DIR}/gmic_def.gmic gmic_def.gmic.blacklist DESTINATION ${GMIC_INSTALL_DIR} )
 
 # tests, currently broken on OSX due to fftw linking problem
 if(NOT APPLE)

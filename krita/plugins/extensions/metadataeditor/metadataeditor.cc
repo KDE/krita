@@ -20,7 +20,6 @@
 #include <stdlib.h>
 
 #include <QDialog>
-#include <QUiLoader>
 #include <QVBoxLayout>
 
 #include <kis_debug.h>
@@ -56,13 +55,6 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("EditLayerMetaData", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
-
-    QStringList runtimeVersion = QString(qVersion()).split('.');
-    QStringList compileVersion = QString(QT_VERSION_STR).split('.');
-
-    if (runtimeVersion[1] != compileVersion[1]) {
-        action->setActivationFlags(KisAction::NEVER_ACTIVATE);
-    }
 }
 
 metadataeditorPlugin::~metadataeditorPlugin()

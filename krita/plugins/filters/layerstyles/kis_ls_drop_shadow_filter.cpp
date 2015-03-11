@@ -50,6 +50,7 @@ KisLsDropShadowFilter::KisLsDropShadowFilter() : KisLayerStyleFilter(id(), categ
 
 KisConfigWidget * KisLsDropShadowFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
+    Q_UNUSED(parent);
     return 0;
 }
 
@@ -276,6 +277,12 @@ struct ShadowRectsData
 
         spreadNeedRect = spread_size ?
             growRectFromRadius(blurNeedRect, spread_size) : blurNeedRect;
+
+        // qDebug() << ppVar(dstRect);
+        // qDebug() << ppVar(srcRect);
+        // qDebug() << ppVar(noiseNeedRect);
+        // qDebug() << ppVar(blurNeedRect);
+        // qDebug() << ppVar(spreadNeedRect);
     }
 
     inline QRect finalNeedRect() const {

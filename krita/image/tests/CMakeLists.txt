@@ -619,3 +619,9 @@ target_link_libraries(KisPSDLayerStyleTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_Q
 set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
 kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
 target_link_libraries(KisDomUtilsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_layer_styles_projection_plane_test_SRCS kis_layer_styles_projection_plane_test.cpp )
+kde4_add_unit_test(KisLayerStylesProjectionPlaneTest TESTNAME krita-image-LayerStylesProjectionPlane-Test ${kis_layer_styles_projection_plane_test_SRCS})
+target_link_libraries(KisLayerStylesProjectionPlaneTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

@@ -16,22 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LAYER_STYLE_FILTER_H
-#define __KIS_LAYER_STYLE_FILTER_H
+#ifndef __KIS_LAYER_STYLES_PROJECTION_PLANE_TEST_H
+#define __KIS_LAYER_STYLES_PROJECTION_PLANE_TEST_H
 
-#include "filter/kis_filter.h"
+#include <QtTest/QtTest>
 
-class KDE_EXPORT KisLayerStyleFilter : public KisFilter
+class KisLayerStylesProjectionPlaneTest : public QObject
 {
-public:
-    KisLayerStyleFilter(const KoID &id, const KoID &category, const QString &entry);
-    virtual ~KisLayerStyleFilter();
-
-    virtual void processDirectly(KisPaintDeviceSP src,
-                                 KisPaintDeviceSP dst,
-                                 const QRect &applyRect,
-                                 const KisFilterConfiguration *config,
-                                 KoUpdater* progressUpdater = 0) const = 0;
+    Q_OBJECT
+private slots:
+    void test();
 };
 
-#endif /* __KIS_LAYER_STYLE_FILTER_H */
+#endif /* __KIS_LAYER_STYLES_PROJECTION_PLANE_TEST_H */

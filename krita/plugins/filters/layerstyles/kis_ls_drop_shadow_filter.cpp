@@ -40,11 +40,12 @@
 #include "kis_random_accessor_ng.h"
 
 
-KisLsDropShadowFilter::KisLsDropShadowFilter() : KisFilter(id(), categoryEnhance(), i18n("Drop Shadow (style)..."))
+KisLsDropShadowFilter::KisLsDropShadowFilter() : KisLayerStyleFilter(id(), categoryEnhance(), i18n("Drop Shadow (style)..."))
 {
     setSupportsPainting(false);
-    setSupportsAdjustmentLayers(true);
+    setSupportsAdjustmentLayers(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setSupportsThreading(false);
 }
 
 KisConfigWidget * KisLsDropShadowFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
@@ -67,11 +68,8 @@ KisFilterConfiguration* KisLsDropShadowFilter::factoryConfiguration(const KisPai
 }
 
 template <bool edgeHidden>
-void findEdge(KisPixelSelectionSP selection)
+void findEdge(KisPixelSelectionSP selection, const QRect &applyRect)
 {
-
-    QRect applyRect = selection->selectedExactRect();
-
     KisSequentialIterator dstIt(selection, applyRect);
     do {
         quint8 *pixelPtr = dstIt.rawData();
@@ -85,6 +83,7 @@ void findEdge(KisPixelSelectionSP selection)
 
 template <bool edgeHidden>
 void applyContourCorrection(KisPixelSelectionSP selection,
+                            const QRect &applyRect,
                             const quint8 *lookup_table,
                             bool antiAliased)
 {
@@ -128,8 +127,6 @@ void applyContourCorrection(KisPixelSelectionSP selection,
         }
     }
 
-    QRect applyRect = selection->selectedExactRect();
-
     KisSequentialIterator dstIt(selection, applyRect);
     do {
         quint8 *pixelPtr = dstIt.rawData();
@@ -165,21 +162,25 @@ KisPixelSelectionSP generateRandomSelection(const QRect &rc)
     return selection;
 }
 
+#define NOISE_NEED_BORDER 8
+
 void applyNoise(KisPixelSelectionSP selection,
+                const QRect &applyRect,
                 int noise,
                 const psd_layer_effects_context *context,
                 KoUpdater* progressUpdater)
 {
-    QRect applyRect = selection->selectedExactRect();
-
     Q_UNUSED(context);
     Q_UNUSED(progressUpdater);
-    KisPixelSelectionSP randomSelection = generateRandomSelection(applyRect);
+
+    const QRect overlayRect = kisGrowRect(applyRect, NOISE_NEED_BORDER);
+
+    KisPixelSelectionSP randomSelection = generateRandomSelection(overlayRect);
     KisPixelSelectionSP randomOverlay = new KisPixelSelection();
 
-    KisSequentialConstIterator noiseIt(randomSelection, applyRect);
-    KisSequentialConstIterator srcIt(selection, applyRect);
-    KisRandomAccessorSP dstIt = randomOverlay->createRandomAccessorNG(applyRect.x(), applyRect.y());
+    KisSequentialConstIterator noiseIt(randomSelection, overlayRect);
+    KisSequentialConstIterator srcIt(selection, overlayRect);
+    KisRandomAccessorSP dstIt = randomOverlay->createRandomAccessorNG(overlayRect.x(), overlayRect.y());
 
     do {
         int itX = noiseIt.x();
@@ -209,14 +210,17 @@ void applyNoise(KisPixelSelectionSP selection,
     gc.bitBlt(applyRect.topLeft(), randomOverlay, applyRect);
 }
 
+inline QRect growRectFromRadius(const QRect &rc, int radius)
+{
+    int halfSize = KisGaussianKernel::kernelSizeFromRadius(radius) / 2;
+    return rc.adjusted(-halfSize, -halfSize, halfSize, halfSize);
+}
+
 void applyGaussian(KisPixelSelectionSP selection,
+                   const QRect &applyRect,
                    qreal radius,
                    KoUpdater* progressUpdater)
 {
-    int halfSize = KisGaussianKernel::kernelSizeFromRadius(radius) / 2;
-    QRect applyRect = selection->selectedExactRect();
-    applyRect.adjust(-halfSize, -halfSize, halfSize, halfSize);
-
     KisGaussianKernel::applyGaussian(selection, applyRect,
                                      radius, radius,
                                      QBitArray(), progressUpdater);
@@ -242,30 +246,70 @@ KisSelectionSP selectionFromAlphaChannel(KisPaintDeviceSP device,
     return baseSelection;
 }
 
-/**
- * TODO:
- *
- * 1) Make it apply inside requested filtered rectangle only.  It also
- *    includes avoiding calls to exactBounds() and selectedExactRect()
- *    from everywhere.
- *
- * 2) Add an option for context->keep_original, so that the filter
- *    could be either applied separately or using layer ltyles
- *    framework
- *
- * 3) Move util functions into a separate compilation unit.
- */
+struct ShadowRectsData
+{
+    enum Direction {
+        NEED_RECT,
+        CHANGE_RECT
+    };
 
-void applyDropShadow(KisPaintDeviceSP device,
+    ShadowRectsData(const QRect &applyRect,
+                    const psd_layer_effects_context *context,
+                    const psd_layer_effects_drop_shadow *drop_shadow,
+                    Direction direction)
+    {
+        spread_size = (drop_shadow->spread * drop_shadow->size + 50) / 100;
+        blur_size = drop_shadow->size - spread_size;
+        offset = drop_shadow->calculateOffset(context);
+
+        // need rect calculation in reverse order
+        dstRect = applyRect;
+
+        const int directionCoeff = direction == NEED_RECT ? -1 : 1;
+        srcRect = dstRect.translated(directionCoeff * offset);
+
+        noiseNeedRect = drop_shadow->noise > 0 ?
+            kisGrowRect(srcRect, NOISE_NEED_BORDER) : srcRect;
+
+        blurNeedRect = blur_size ?
+            growRectFromRadius(noiseNeedRect, blur_size) : noiseNeedRect;
+
+        spreadNeedRect = spread_size ?
+            growRectFromRadius(blurNeedRect, spread_size) : blurNeedRect;
+    }
+
+    inline QRect finalNeedRect() const {
+        return spreadNeedRect;
+    }
+
+    inline QRect finalChangeRect() const {
+        return spreadNeedRect;
+    }
+
+    qint32 spread_size;
+    qint32 blur_size;
+    QPoint offset;
+
+    QRect srcRect;
+    QRect dstRect;
+    QRect noiseNeedRect;
+    QRect blurNeedRect;
+    QRect spreadNeedRect;
+};
+
+void applyDropShadow(KisPaintDeviceSP srcDevice,
+                     KisPaintDeviceSP dstDevice,
+                     const QRect &applyRect,
                      const psd_layer_effects_context *context,
                      const psd_layer_effects_drop_shadow *drop_shadow,
                      KoUpdater* progressUpdater)
 {
-    const QRect srcRect = device->exactBounds();
-    if (srcRect.isEmpty()) return;
+    if (applyRect.isEmpty()) return;
+
+    ShadowRectsData d(applyRect, context, drop_shadow, ShadowRectsData::NEED_RECT);
 
     KisSelectionSP baseSelection =
-        selectionFromAlphaChannel(device, srcRect);
+        selectionFromAlphaChannel(srcDevice, d.spreadNeedRect);
 
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
@@ -282,15 +326,13 @@ void applyDropShadow(KisPaintDeviceSP device,
     /**
      * Spread and blur the selection
      */
-    qint32 spread_size = (drop_shadow->spread * drop_shadow->size + 50) / 100;
-    qint32 blur_size = drop_shadow->size - spread_size;
-    if(spread_size) {
-        applyGaussian(selection, spread_size, progressUpdater);
-        findEdge<true>(selection);
+    if (d.spread_size) {
+        applyGaussian(selection, d.blurNeedRect, d.spread_size, progressUpdater);
+        findEdge<true>(selection, d.blurNeedRect);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("1_selection_spread.png");
-    if(blur_size) {
-        applyGaussian(selection, blur_size, progressUpdater);
+    if (d.blur_size) {
+        applyGaussian(selection, d.noiseNeedRect, d.blur_size, progressUpdater);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("2_selection_blur.png");
 
@@ -298,6 +340,7 @@ void applyDropShadow(KisPaintDeviceSP device,
      * Contour correction
      */
     applyContourCorrection<true>(selection,
+                                 d.noiseNeedRect,
                                  drop_shadow->contour_lookup_table,
                                  drop_shadow->anti_aliased);
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("3_selection_contour.png");
@@ -307,6 +350,7 @@ void applyDropShadow(KisPaintDeviceSP device,
      */
     if (drop_shadow->noise > 0) {
         applyNoise(selection,
+                   d.srcRect,
                    drop_shadow->noise,
                    context,
                    progressUpdater);
@@ -319,28 +363,31 @@ void applyDropShadow(KisPaintDeviceSP device,
     if (drop_shadow->knocks_out) {
         KIS_ASSERT_RECOVER_RETURN(knockOutSelection);
 
-        QRect knockOutRect = knockOutSelection->selectedExactRect();
         KisPainter gc(selection);
         gc.setCompositeOp(COMPOSITE_ERASE);
-        gc.bitBlt(knockOutRect.topLeft(), knockOutSelection, knockOutRect);
+        gc.bitBlt(d.srcRect.topLeft(), knockOutSelection, d.srcRect);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_selection_knockout.png");
 
-    const QPoint offset = drop_shadow->calculateOffset(context);
-    const KoColor shadowColor(drop_shadow->color, device->colorSpace());
+    const KoColor shadowColor(drop_shadow->color, srcDevice->colorSpace());
 
-    selection->setX(offset.x());
-    selection->setY(offset.y());
+    selection->setX(d.offset.x());
+    selection->setY(d.offset.y());
 
 
-    // TODO: add keep_original switch here
-
-    KisPaintDeviceSP tempDevice = new KisPaintDevice(*device);
-    device->clear();
+    KisPaintDeviceSP tempDevice;
+    if (srcDevice == dstDevice) {
+        if (context->keep_original) {
+            tempDevice = new KisPaintDevice(*srcDevice);
+        }
+        srcDevice->clear(d.srcRect);
+    } else {
+        tempDevice = srcDevice;
+    }
 
     {
-        QRect shadowRect(selection->selectedExactRect());
-        KisFillPainter gc(device);
+        QRect shadowRect(d.dstRect);
+        KisFillPainter gc(dstDevice);
 
         // TODO: should apply somewhere in the stack!
         const QString compositeOp = drop_shadow->blend_mode;
@@ -353,18 +400,27 @@ void applyDropShadow(KisPaintDeviceSP device,
         gc.end();
     }
 
-    //device->convertToQImage(0, QRect(0,0,300,300)).save("6_device_shadow.png");
+    //dstDevice->convertToQImage(0, QRect(0,0,300,300)).save("6_device_shadow.png");
 
-    {
-        KisPainter gc(device);
-        gc.bitBlt(srcRect.topLeft(), tempDevice, srcRect);
+    if (context->keep_original) {
+        KisPainter gc(dstDevice);
+        gc.bitBlt(d.dstRect.topLeft(), tempDevice, d.dstRect);
     }
 }
 
 void KisLsDropShadowFilter::processImpl(KisPaintDeviceSP device,
-                                       const QRect& applyRect,
-                                       const KisFilterConfiguration* config,
-                                       KoUpdater* progressUpdater) const
+                                        const QRect &applyRect,
+                                        const KisFilterConfiguration *config,
+                                        KoUpdater *progressUpdater) const
+{
+    processDirectly(device, device, applyRect, config, progressUpdater);
+}
+
+void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
+                                            KisPaintDeviceSP dst,
+                                            const QRect &applyRect,
+                                            const KisFilterConfiguration *config,
+                                            KoUpdater* progressUpdater) const
 {
     KIS_ASSERT_RECOVER_RETURN(config);
 
@@ -374,8 +430,7 @@ void KisLsDropShadowFilter::processImpl(KisPaintDeviceSP device,
     psd_layer_effects_context context;
     KisPSD::configToContext(config, &context);
 
-    applyDropShadow(device, &context, &dropShadow, progressUpdater);
-
+    applyDropShadow(src, dst, applyRect, &context, &dropShadow, progressUpdater);
 
     // Just a reference on how to restore progress reporting
 #if 0
@@ -408,14 +463,9 @@ QRect KisLsDropShadowFilter::neededRect(const QRect & rect, const KisFilterConfi
     psd_layer_effects_drop_shadow dropShadow;
     KisPSD::configToDropShadow(config, &dropShadow);
 
-    const QPoint offset = dropShadow.calculateOffset(&context);
+    ShadowRectsData d(rect, &context, &dropShadow, ShadowRectsData::NEED_RECT);
 
-    QRect dstRect = rect;
-    dstRect.adjust(dropShadow.size, dropShadow.size,
-                   -dropShadow.size, -dropShadow.size);
-    dstRect.translate(-offset);
-
-    return rect | dstRect;
+    return rect | d.finalNeedRect();
 }
 
 QRect KisLsDropShadowFilter::changedRect(const QRect & rect, const KisFilterConfiguration* config) const
@@ -426,12 +476,8 @@ QRect KisLsDropShadowFilter::changedRect(const QRect & rect, const KisFilterConf
     psd_layer_effects_drop_shadow dropShadow;
     KisPSD::configToDropShadow(config, &dropShadow);
 
-    const QPoint offset = dropShadow.calculateOffset(&context);
+    ShadowRectsData d(rect, &context, &dropShadow, ShadowRectsData::CHANGE_RECT);
 
-    QRect dstRect = rect;
-    dstRect.adjust(-dropShadow.size, -dropShadow.size,
-                   dropShadow.size, dropShadow.size);
-    dstRect.translate(offset);
-
-    return context.keep_original ? dstRect : rect | dstRect;
+    return context.keep_original ?
+        d.finalChangeRect() : rect | d.finalChangeRect();
 }

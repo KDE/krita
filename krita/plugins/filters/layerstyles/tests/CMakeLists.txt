@@ -7,4 +7,4 @@ macro_add_unittest_definitions()
 
 set(kis_layer_styles_test_SRCS kis_layer_styles_test.cpp )
 kde4_add_unit_test(KisLayerStylesTest TESTNAME krita-ui-kis_layer_styles_test  ${kis_layer_styles_test_SRCS})
-target_link_libraries(KisLayerStylesTest  ${KDE4_KDEUI_LIBS}  komain kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisLayerStylesTest  ${KDE4_KDEUI_LIBS}  komain kritaui kritalayerstylesfilter ${QT_QTTEST_LIBRARY})

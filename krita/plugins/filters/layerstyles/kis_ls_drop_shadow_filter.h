@@ -19,9 +19,10 @@
 #ifndef KIS_LS_DROP_SHADOW_FILTER_H
 #define KIS_LS_DROP_SHADOW_FILTER_H
 
-#include "filter/kis_filter.h"
+#include "kis_layer_style_filter.h"
 
-class KisLsDropShadowFilter : public KisFilter
+
+class KisLsDropShadowFilter : public KisLayerStyleFilter
 {
 public:
 
@@ -32,6 +33,12 @@ public:
                      const KisFilterConfiguration* config,
                      KoUpdater* progressUpdater
                      ) const;
+
+    void processDirectly(KisPaintDeviceSP src,
+                         KisPaintDeviceSP dst,
+                         const QRect &applyRect,
+                         const KisFilterConfiguration *config,
+                         KoUpdater* progressUpdater) const;
 
     static inline KoID id() {
         return KoID("lsdropshadow", i18n("Drop Shadow (style)"));

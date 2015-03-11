@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LAYER_STYLES_TEST_H
-#define __KIS_LAYER_STYLES_TEST_H
+#include "kis_layer_style_filter.h"
 
-#include <QtTest/QtTest>
 
-class KisLayerStylesTest : public QObject
+KisLayerStyleFilter::KisLayerStyleFilter(const KoID &id, const KoID &category, const QString &entry)
+    : KisFilter(id, category, entry)
 {
-    Q_OBJECT
-private slots:
-    void testLayerStylesFull();
-    void testLayerStylesPartial();
-    void testLayerStylesPartialVary();
+}
 
-    void testLayerStylesRects();
-};
-
-#endif /* __KIS_LAYER_STYLES_TEST_H */
+KisLayerStyleFilter::~KisLayerStyleFilter()
+{
+}

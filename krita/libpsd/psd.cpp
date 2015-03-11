@@ -204,8 +204,8 @@ QPoint psd_layer_effects_drop_shadow::calculateOffset(const psd_layer_effects_co
     qint32 angle = this->use_global_light ?
         context->global_angle : this->angle;
 
-    qint32 distance_x = -qRound(this->distance * cos(kisDegreesToRadians(angle)));
-    qint32 distance_y =  qRound(this->distance * sin(kisDegreesToRadians(angle)));
+    qint32 distance_x = -qRound(this->distance * cos(kisDegreesToRadians(qreal(angle))));
+    qint32 distance_y =  qRound(this->distance * sin(kisDegreesToRadians(qreal(angle))));
 
     return QPoint(distance_x, distance_y);
 }

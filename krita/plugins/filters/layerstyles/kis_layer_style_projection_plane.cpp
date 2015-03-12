@@ -55,7 +55,7 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer
 
 void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyle *style)
 {
-    m_d->sourceProjectionPlane = sourceLayer->projectionPlane();
+    m_d->sourceProjectionPlane = sourceLayer->internalProjectionPlane();
 
     KisLayerStyleFilterProjectionPlane *dropShadow =
         new KisLayerStyleFilterProjectionPlane(sourceLayer);

@@ -44,6 +44,11 @@ public:
 
     QString name() const;
 
+    /**
+     * \return true if all the styles are disabled
+     */
+    bool isEmpty() const;
+
     const psd_layer_effects_context* context() const;
     const psd_layer_effects_drop_shadow* drop_shadow() const;
 

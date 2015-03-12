@@ -90,6 +90,11 @@ void KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
     // XXX copy all the contents of KisPSDLayerStyle::Private
 }
 
+bool KisPSDLayerStyle::isEmpty() const
+{
+    return !d->drop_shadow.effect_enable;
+}
+
 QString KisPSDLayerStyle::name() const
 {
     return d->name;

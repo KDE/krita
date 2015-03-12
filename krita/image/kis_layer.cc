@@ -191,8 +191,10 @@ void KisLayer::setLayerStyle(KisPSDLayerStyle *layerStyle)
 {
     if (layerStyle) {
         m_d->layerStyle.reset(layerStyle);
-        m_d->layerStyleProjectionPlane.reset(
-            KisLayerStyleProjectionPlaneFactory::instance()->create(this));
+
+        KisAbstractProjectionPlane *plane = !layerStyle->isEmpty() ?
+            KisLayerStyleProjectionPlaneFactory::instance()->create(this) : 0;
+        m_d->layerStyleProjectionPlane.reset(plane);
     } else {
         m_d->layerStyleProjectionPlane.reset();
         m_d->layerStyle.reset();
@@ -668,6 +670,11 @@ KisAbstractProjectionPlane* KisLayer::projectionPlane() const
 {
     return m_d->layerStyleProjectionPlane ?
         m_d->layerStyleProjectionPlane.data() : m_d->projectionPlane.data();
+}
+
+KisAbstractProjectionPlane* KisLayer::internalProjectionPlane() const
+{
+    return m_d->projectionPlane.data();
 }
 
 KisPaintDeviceSP KisLayer::projection() const

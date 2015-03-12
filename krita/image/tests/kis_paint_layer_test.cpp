@@ -134,6 +134,7 @@ void KisPaintLayerTest::testLayerStyles()
     KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "00L_initial", "dd");
 
     KisPSDLayerStyle *style = new KisPSDLayerStyle();
+    style->drop_shadow()->noise = 30;
 
     layer->setLayerStyle(style);
 

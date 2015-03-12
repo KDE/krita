@@ -41,19 +41,15 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayerSP sourceLaye
     KisLayerStyleFilterProjectionPlane *dropShadow =
         new KisLayerStyleFilterProjectionPlane(sourceLayer);
 
-    static KisPSDLayerStyle style;
 
-    style.drop_shadow()->distance = 20;
-    style.context()->global_angle = 135;
-    style.drop_shadow()->spread = 50;
-    style.drop_shadow()->size = 10;
-    style.drop_shadow()->noise = 30;
-    style.drop_shadow()->knocks_out = false;
-    style.drop_shadow()->opacity = 50;
-    style.context()->keep_original = false;
+    KisPSDLayerStyle *style = sourceLayer->layerStyle();
 
-    dropShadow->setStyle(new KisLsDropShadowFilter(), &style);
+    KIS_ASSERT_RECOVER(style) {
+            static KisPSDLayerStyle failsafeStyle;
+            style = &failsafeStyle;
+    }
 
+    dropShadow->setStyle(new KisLsDropShadowFilter(), style);
     m_d->stylesBefore << toQShared(dropShadow);
 }
 

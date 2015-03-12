@@ -47,6 +47,7 @@
 
 #include "kis_psd_layer_style.h"
 #include "kis_layer_projection_plane.h"
+#include "kis_layer_style_projection_plane_factory.h"
 
 
 class KisSafeProjection {
@@ -115,7 +116,9 @@ struct KisLayer::Private
     KisMetaData::Store* metaDataStore;
     KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
-    KisPSDLayerStyle* layerStyle;
+
+    QScopedPointer<KisPSDLayerStyle> layerStyle;
+    QScopedPointer<KisAbstractProjectionPlane> layerStyleProjectionPlane;
 
     QScopedPointer<KisLayerProjectionPlane> projectionPlane;
 };
@@ -129,7 +132,6 @@ KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
     setOpacity(opacity);
     m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
-    m_d->layerStyle = 0;
     m_d->projectionPlane.reset(new KisLayerProjectionPlane(this));
 }
 
@@ -140,12 +142,11 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
+
         if (rhs.m_d->layerStyle) {
-            m_d->layerStyle = new KisPSDLayerStyle(*rhs.m_d->layerStyle);
+            setLayerStyle(new KisPSDLayerStyle(*rhs.m_d->layerStyle));
         }
-        else {
-            m_d->layerStyle = 0;
-        }
+
         setName(rhs.name());
         m_d->projectionPlane.reset(new KisLayerProjectionPlane(this));
     }
@@ -153,7 +154,6 @@ KisLayer::KisLayer(const KisLayer& rhs)
 
 KisLayer::~KisLayer()
 {
-    delete m_d->layerStyle;
     delete m_d->metaDataStore;
     delete m_d;
 }
@@ -184,13 +184,19 @@ const KoCompositeOp * KisLayer::compositeOp() const
 
 KisPSDLayerStyle *KisLayer::layerStyle() const
 {
-    return m_d->layerStyle;
+    return m_d->layerStyle.data();
 }
 
 void KisLayer::setLayerStyle(KisPSDLayerStyle *layerStyle)
 {
-    delete m_d->layerStyle;
-    m_d->layerStyle = layerStyle;
+    if (layerStyle) {
+        m_d->layerStyle.reset(layerStyle);
+        m_d->layerStyleProjectionPlane.reset(
+            KisLayerStyleProjectionPlaneFactory::instance()->create(this));
+    } else {
+        m_d->layerStyleProjectionPlane.reset();
+        m_d->layerStyle.reset();
+    }
 }
 
 KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
@@ -660,7 +666,8 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
 KisAbstractProjectionPlane* KisLayer::projectionPlane() const
 {
-    return m_d->projectionPlane.data();
+    return m_d->layerStyleProjectionPlane ?
+        m_d->layerStyleProjectionPlane.data() : m_d->projectionPlane.data();
 }
 
 KisPaintDeviceSP KisLayer::projection() const

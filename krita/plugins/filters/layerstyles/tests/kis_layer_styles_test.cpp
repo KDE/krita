@@ -21,12 +21,15 @@
 #include <qtest_kde.h>
 
 #include "kis_transaction.h"
-#include "filter/kis_filter.h"
-#include "filter/kis_filter_configuration.h"
-#include "filter/kis_filter_registry.h"
 #include "testutil.h"
 
+#include <KoColor.h>
+
+
 #include "../kis_layer_style_filter.h"
+#include "../kis_ls_drop_shadow_filter.h"
+#include "kis_psd_layer_style.h"
+
 
 struct TestConfig {
     TestConfig()
@@ -49,15 +52,16 @@ struct TestConfig {
     int opacity;
     bool keep_original;
 
-    void writeProperties(KisFilterConfiguration *kfc) const {
-        kfc->setProperty("drop_shadow/distance", distance);
-        kfc->setProperty("context/global_angle", angle);
-        kfc->setProperty("drop_shadow/spread", spread);
-        kfc->setProperty("drop_shadow/size", size);
-        kfc->setProperty("drop_shadow/noise", noise);
-        kfc->setProperty("drop_shadow/knocks_out", knocks_out);
-        kfc->setProperty("drop_shadow/opacity", opacity);
-        kfc->setProperty("context/keep_original", keep_original);
+    void writeProperties(KisPSDLayerStyle *style) const {
+        style->context()->global_angle = angle;
+        style->context()->keep_original = keep_original;
+
+        style->drop_shadow()->distance = distance;
+        style->drop_shadow()->spread = spread;
+        style->drop_shadow()->size = size;
+        style->drop_shadow()->noise = noise;
+        style->drop_shadow()->knocks_out = knocks_out;
+        style->drop_shadow()->opacity = opacity;
     }
 
     QString genTestname(const QString &prefix) const {
@@ -93,20 +97,14 @@ void testDropShadowImpl(const TestConfig &config,
         dst = new KisPaintDevice(cs);
     }
 
-    KisFilterSP f = KisFilterRegistry::instance()->value("lsdropshadow");
-    Q_ASSERT(f);
-
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
-    Q_ASSERT(kfc);
-
-    config.writeProperties(kfc);
+    KisLsDropShadowFilter lsFilter;
+    KisPSDLayerStyle style;
+    config.writeProperties(&style);
 
     KisTransaction t(dst);
 
-    KisLayerStyleFilter *lsFilter = dynamic_cast<KisLayerStyleFilter*>(f.data());
-
     foreach (const QRect &rc, applyRects) {
-        lsFilter->processDirectly(dev, dst, rc, kfc);
+        lsFilter.processDirectly(dev, dst, rc, &style);
     }
 
     t.end();
@@ -212,27 +210,23 @@ void testDropShadowNeedChangeRects(int distance,
                                    const QRect &needRect,
                                    const QRect &changeRect)
 {
-    KisFilterSP f = KisFilterRegistry::instance()->value("lsdropshadow");
-    Q_ASSERT(f);
+    TestConfig c;
+    c.distance = distance;
+    c.spread = spread;
+    c.size = size;
+    c.noise = noise;
+    c.angle = 90;
+    c.knocks_out = false;
+    c.opacity = 50;
 
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
-    Q_ASSERT(kfc);
 
-    kfc->setProperty("drop_shadow/angle", 0); // not used
-    kfc->setProperty("drop_shadow/distance", distance);
-    kfc->setProperty("context/global_angle", 90);
-    kfc->setProperty("drop_shadow/spread", spread);
-    kfc->setProperty("drop_shadow/size", size);
-    kfc->setProperty("drop_shadow/noise", noise);
-    kfc->setProperty("drop_shadow/knocks_out", false);
-    kfc->setProperty("drop_shadow/opacity", 50);
+    KisLsDropShadowFilter lsFilter;
+    KisPSDLayerStyle style;
+    c.writeProperties(&style);
 
-    kfc->setProperty("context/keep_original", false);
 
-    KisLayerStyleFilter *lsFilter = dynamic_cast<KisLayerStyleFilter*>(f.data());
-
-    QCOMPARE(lsFilter->neededRect(applyRect, kfc), needRect);
-    QCOMPARE(lsFilter->changedRect(applyRect, kfc), changeRect);
+    QCOMPARE(lsFilter.neededRect(applyRect, &style), needRect);
+    QCOMPARE(lsFilter.changedRect(applyRect, &style), changeRect);
 }
 
 void KisLayerStylesTest::testLayerStylesRects()

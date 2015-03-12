@@ -18,12 +18,25 @@
 
 #include "kis_layer_style_filter.h"
 
+#include <KoID.h>
 
-KisLayerStyleFilter::KisLayerStyleFilter(const KoID &id, const KoID &category, const QString &entry)
-    : KisFilter(id, category, entry)
+
+struct KisLayerStyleFilter::Private
 {
+    KoID id;
+};
+
+KisLayerStyleFilter::KisLayerStyleFilter(const KoID &id)
+    : m_d(new Private)
+{
+    m_d->id = id;
 }
 
 KisLayerStyleFilter::~KisLayerStyleFilter()
 {
+}
+
+QString KisLayerStyleFilter::id() const
+{
+    return m_d->id.id();
 }

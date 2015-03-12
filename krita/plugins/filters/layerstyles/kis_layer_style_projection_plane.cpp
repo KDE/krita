@@ -18,8 +18,10 @@
 
 #include "kis_layer_style_projection_plane.h"
 
-#include "filter/kis_filter_configuration.h"
 #include "kis_layer_style_filter_projection_plane.h"
+#include "kis_psd_layer_style.h"
+
+#include "kis_ls_drop_shadow_filter.h"
 
 
 struct KisLayerStyleProjectionPlane::Private
@@ -39,18 +41,18 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayerSP sourceLaye
     KisLayerStyleFilterProjectionPlane *dropShadow =
         new KisLayerStyleFilterProjectionPlane(sourceLayer);
 
-    KisFilterConfiguration* kfc = new KisFilterConfiguration("lsdropshadow", 1);
+    static KisPSDLayerStyle style;
 
-    kfc->setProperty("drop_shadow/distance", 20);
-    kfc->setProperty("context/global_angle", 135);
-    kfc->setProperty("drop_shadow/spread", 50);
-    kfc->setProperty("drop_shadow/size", 10);
-    kfc->setProperty("drop_shadow/noise", 30);
-    kfc->setProperty("drop_shadow/knocks_out", false);
-    kfc->setProperty("drop_shadow/opacity", 50);
-    kfc->setProperty("context/keep_original", false);
+    style.drop_shadow()->distance = 20;
+    style.context()->global_angle = 135;
+    style.drop_shadow()->spread = 50;
+    style.drop_shadow()->size = 10;
+    style.drop_shadow()->noise = 30;
+    style.drop_shadow()->knocks_out = false;
+    style.drop_shadow()->opacity = 50;
+    style.context()->keep_original = false;
 
-    dropShadow->setFilter(toQShared(kfc));
+    dropShadow->setStyle(new KisLsDropShadowFilter(), &style);
 
     m_d->stylesBefore << toQShared(dropShadow);
 }

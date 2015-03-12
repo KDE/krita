@@ -44,6 +44,12 @@ public:
 
     QString name() const;
 
+    const psd_layer_effects_context* context() const;
+    const psd_layer_effects_drop_shadow* drop_shadow() const;
+
+    psd_layer_effects_context* context();
+    psd_layer_effects_drop_shadow* drop_shadow();
+
     /**
      * Save given styles to the ASL style format. All patterns references in the
      * contained styles will also be saved.

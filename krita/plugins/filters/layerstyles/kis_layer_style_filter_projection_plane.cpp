@@ -28,9 +28,10 @@
 
 struct KisLayerStyleFilterProjectionPlane::Private
 {
-    KisLayerStyleFilterSP filter;
-    KisSafeFilterConfigurationSP filterConfig;
     KisLayerSP sourceLayer;
+
+    QScopedPointer<KisLayerStyleFilter> filter;
+    const KisPSDLayerStyle *style;
 };
 
 KisLayerStyleFilterProjectionPlane::
@@ -44,15 +45,10 @@ KisLayerStyleFilterProjectionPlane::~KisLayerStyleFilterProjectionPlane()
 {
 }
 
-void KisLayerStyleFilterProjectionPlane::setFilter(KisSafeFilterConfigurationSP filterConfig)
+void KisLayerStyleFilterProjectionPlane::setStyle(KisLayerStyleFilter *filter, const KisPSDLayerStyle *style)
 {
-    m_d->filterConfig = filterConfig;
-
-    KisFilterSP f = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
-    KIS_ASSERT_RECOVER_RETURN(f);
-
-    m_d->filter = dynamic_cast<KisLayerStyleFilter*>(f.data());
-    KIS_ASSERT_RECOVER_RETURN(m_d->filter);
+    m_d->filter.reset(filter);
+    m_d->style = style;
 }
 
 QRect KisLayerStyleFilterProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
@@ -74,8 +70,7 @@ void KisLayerStyleFilterProjectionPlane::apply(KisPainter *painter, const QRect 
     m_d->filter->processDirectly(m_d->sourceLayer->projection(),
                                  painter->device(),
                                  rect,
-                                 m_d->filterConfig.data(),
-                                 0 /* fix progress updater */);
+                                 m_d->style);
 }
 
 
@@ -87,7 +82,7 @@ QRect KisLayerStyleFilterProjectionPlane::needRect(const QRect &rect, KisLayer::
     }
 
     KIS_ASSERT_RECOVER_NOOP(pos == KisLayer::N_ABOVE_FILTHY);
-    return m_d->filter->neededRect(rect, m_d->filterConfig.data());
+    return m_d->filter->neededRect(rect, m_d->style);
 }
 
 QRect KisLayerStyleFilterProjectionPlane::changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
@@ -98,7 +93,7 @@ QRect KisLayerStyleFilterProjectionPlane::changeRect(const QRect &rect, KisLayer
     }
 
     KIS_ASSERT_RECOVER_NOOP(pos == KisLayer::N_ABOVE_FILTHY);
-    return m_d->filter->changedRect(rect, m_d->filterConfig.data());
+    return m_d->filter->changedRect(rect, m_d->style);
 }
 
 QRect KisLayerStyleFilterProjectionPlane::accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const

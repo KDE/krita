@@ -19,11 +19,6 @@
 #include "layerstyles.h"
 #include <kpluginfactory.h>
 
-// FIXME: remove
-#include "kis_ls_drop_shadow_filter.h"
-#include "filter/kis_filter_registry.h"
-
-
 #include "kis_layer_style_projection_plane.h"
 #include "kis_layer_style_projection_plane_factory.h"
 
@@ -35,10 +30,6 @@ LayerStylesPlugin::LayerStylesPlugin(QObject *parent, const QVariantList &)
 {
     KisLayerStyleProjectionPlaneFactory::Factory f(KisLayerStyleProjectionPlane::factoryObject);
     KisLayerStyleProjectionPlaneFactory::instance()->setFactory(f);
-
-    // FIXME: remove
-    KisFilterRegistry::instance()->add(new KisLsDropShadowFilter());
-
 }
 
 LayerStylesPlugin::~LayerStylesPlugin()

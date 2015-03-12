@@ -22,33 +22,19 @@
 #include "kis_layer_style_filter.h"
 
 
-class KisLsDropShadowFilter : public KisLayerStyleFilter
+class KDE_EXPORT KisLsDropShadowFilter : public KisLayerStyleFilter
 {
 public:
 
     KisLsDropShadowFilter();
 
-    void processImpl(KisPaintDeviceSP device,
-                     const QRect& applyRect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
-
     void processDirectly(KisPaintDeviceSP src,
                          KisPaintDeviceSP dst,
                          const QRect &applyRect,
-                         const KisFilterConfiguration *config,
-                         KoUpdater* progressUpdater) const;
+                         const KisPSDLayerStyle *config) const;
 
-    static inline KoID id() {
-        return KoID("lsdropshadow", i18n("Drop Shadow (style)"));
-    }
-
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-
-    QRect neededRect(const QRect & rect, const KisFilterConfiguration* config) const;
-    QRect changedRect(const QRect & rect, const KisFilterConfiguration* config) const;
+    QRect neededRect(const QRect & rect, const KisPSDLayerStyle *config) const;
+    QRect changedRect(const QRect & rect, const KisPSDLayerStyle *config) const;
 
 };
 

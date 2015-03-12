@@ -37,6 +37,7 @@ struct KisPSDLayerStyle::Private
     quint16 version;
     quint8 effects_count; // Effects count: may be 6 (for the 6 effects in Photoshop 5 and 6) or 7 (for Photoshop 7.0)
     bool visible; // common state info, visible: always true
+    psd_layer_effects_context context;
     psd_layer_effects_drop_shadow drop_shadow;
     psd_layer_effects_inner_shadow inner_shadow;
     psd_layer_effects_outer_glow outer_glow;
@@ -92,6 +93,26 @@ void KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
 QString KisPSDLayerStyle::name() const
 {
     return d->name;
+}
+
+const psd_layer_effects_context* KisPSDLayerStyle::context() const
+{
+    return &d->context;
+}
+
+const psd_layer_effects_drop_shadow* KisPSDLayerStyle::drop_shadow() const
+{
+    return &d->drop_shadow;
+}
+
+psd_layer_effects_context* KisPSDLayerStyle::context()
+{
+    return &d->context;
+}
+
+psd_layer_effects_drop_shadow* KisPSDLayerStyle::drop_shadow()
+{
+    return &d->drop_shadow;
 }
 
 bool KisPSDLayerStyle::writeASL(QIODevice *io, QVector<KisPSDLayerStyle *> )

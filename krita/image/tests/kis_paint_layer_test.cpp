@@ -133,7 +133,7 @@ void KisPaintLayerTest::testLayerStyles()
     image->waitForDone();
     KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "00L_initial", "dd");
 
-    KisPSDLayerStyle *style = new KisPSDLayerStyle();
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
     style->drop_shadow()->noise = 30;
     style->drop_shadow()->effect_enable = true;
 

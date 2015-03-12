@@ -918,7 +918,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg)
 {
     QRect oldDirtyRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
-    layer->setLayerStyle(new KisPSDLayerStyle(*dlg->style()));
+    layer->setLayerStyle(dlg->style()->clone());
     QRect newDirtyRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
 
     layer->setDirty(newDirtyRect | oldDirtyRect);
@@ -932,12 +932,12 @@ void KisLayerManager::layerStyle()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisPSDLayerStyle *style = 0;
+    KisPSDLayerStyleSP style;
     if (layer->layerStyle()) {
-        style = new KisPSDLayerStyle(*layer->layerStyle());
+        style = layer->layerStyle()->clone();
     }
     else {
-        style = new KisPSDLayerStyle();
+        style = toQShared(new KisPSDLayerStyle());
     }
 
     KisDlgLayerStyle dlg(style);
@@ -949,9 +949,6 @@ void KisLayerManager::layerStyle()
     if (dlg.exec() == QDialog::Accepted) {
         // TODO: undo information
     }
-
-    delete style;
-
 }
 
 #include "kis_layer_manager.moc"

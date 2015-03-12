@@ -32,7 +32,7 @@ public:
     KisLayerStyleFilterProjectionPlane(KisLayer *sourceLayer);
     ~KisLayerStyleFilterProjectionPlane();
 
-    void setStyle(KisLayerStyleFilter *filter, const KisPSDLayerStyle *style);
+    void setStyle(KisLayerStyleFilter *filter, KisPSDLayerStyleSP style);
 
     QRect recalculate(const QRect& rect, KisNodeSP filthyNode);
     void apply(KisPainter *painter, const QRect &rect);

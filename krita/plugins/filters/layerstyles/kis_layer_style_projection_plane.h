@@ -46,9 +46,9 @@ public:
 
 private:
     friend class KisLayerStyleProjectionPlaneTest;
-    KisLayerStyleProjectionPlane(KisLayer *sourceLayer, KisPSDLayerStyle *style);
+    KisLayerStyleProjectionPlane(KisLayer *sourceLayer, KisPSDLayerStyleSP style);
 
-    void init(KisLayer *sourceLayer, KisPSDLayerStyle *layerStyle);
+    void init(KisLayer *sourceLayer, KisPSDLayerStyleSP layerStyle);
 
 private:
     struct Private;

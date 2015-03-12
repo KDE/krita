@@ -80,8 +80,8 @@ public:
     /// returns the layer's composite op for the colorspace of the layer's parent.
     const KoCompositeOp * compositeOp() const;
 
-    KisPSDLayerStyle *layerStyle() const;
-    void setLayerStyle(KisPSDLayerStyle *layerStyle);
+    KisPSDLayerStyleSP layerStyle() const;
+    void setLayerStyle(KisPSDLayerStyleSP layerStyle);
 
     /**
      * \see a comment in KisNode::projectionPlane()

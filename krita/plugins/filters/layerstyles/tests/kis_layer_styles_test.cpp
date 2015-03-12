@@ -52,7 +52,7 @@ struct TestConfig {
     int opacity;
     bool keep_original;
 
-    void writeProperties(KisPSDLayerStyle *style) const {
+    void writeProperties(KisPSDLayerStyleSP style) const {
         style->context()->global_angle = angle;
         style->context()->keep_original = keep_original;
 
@@ -99,13 +99,13 @@ void testDropShadowImpl(const TestConfig &config,
     }
 
     KisLsDropShadowFilter lsFilter;
-    KisPSDLayerStyle style;
-    config.writeProperties(&style);
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    config.writeProperties(style);
 
     KisTransaction t(dst);
 
     foreach (const QRect &rc, applyRects) {
-        lsFilter.processDirectly(dev, dst, rc, &style);
+        lsFilter.processDirectly(dev, dst, rc, style);
     }
 
     t.end();
@@ -222,12 +222,12 @@ void testDropShadowNeedChangeRects(int distance,
 
 
     KisLsDropShadowFilter lsFilter;
-    KisPSDLayerStyle style;
-    c.writeProperties(&style);
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    c.writeProperties(style);
 
 
-    QCOMPARE(lsFilter.neededRect(applyRect, &style), needRect);
-    QCOMPARE(lsFilter.changedRect(applyRect, &style), changeRect);
+    QCOMPARE(lsFilter.neededRect(applyRect, style), needRect);
+    QCOMPARE(lsFilter.changedRect(applyRect, style), changeRect);
 }
 
 void KisLayerStylesTest::testLayerStylesRects()

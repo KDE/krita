@@ -24,6 +24,9 @@
 
 #include <klocale.h>
 
+#include "kis_global.h"
+
+
 struct KisPSDLayerStyle::Private
 {
     Private()
@@ -114,6 +117,11 @@ KisPSDLayerStyle KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
         *d = *rhs.d;
     }
     return *this;
+}
+
+KisPSDLayerStyleSP KisPSDLayerStyle::clone() const
+{
+    return toQShared(new KisPSDLayerStyle(*this));
 }
 
 bool KisPSDLayerStyle::isEmpty() const

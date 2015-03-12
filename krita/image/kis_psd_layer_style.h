@@ -24,7 +24,8 @@ class QIODevice;
 
 #include <psd.h>
 
-#include <krita_export.h>
+#include "kis_types.h"
+#include "krita_export.h"
 
 /**
  * @brief The KisPSDLayerStyle class implements loading, saving and applying
@@ -41,6 +42,8 @@ public:
     virtual ~KisPSDLayerStyle();
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
     KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs);
+
+    KisPSDLayerStyleSP clone() const;
 
     QString name() const;
 
@@ -72,7 +75,6 @@ public:
 
     /// Load this style object
     bool read(QIODevice *io);
-
 
     psd_layer_effects_drop_shadow & dropShadow() const;
     void setDropShadow(const psd_layer_effects_drop_shadow &dropShadow);

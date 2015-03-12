@@ -38,10 +38,10 @@
 
 
 
-KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent)
+KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *parent)
     : KDialog(parent)
     , m_layerStyle(layerStyle)
-    , m_initialLayerStyle(new KisPSDLayerStyle(*layerStyle))
+    , m_initialLayerStyle(layerStyle->clone())
 {
     setCaption(i18n("Layer Styles"));
     setButtons(Ok | Cancel);
@@ -50,7 +50,6 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent
     m_configChangedCompressor =
         new KisSignalCompressor(1000, KisSignalCompressor::POSTPONE, this);
     connect(m_configChangedCompressor, SIGNAL(timeout()), SIGNAL(configChanged()));
-
 
 
     QWidget *page = new QWidget(this);
@@ -121,7 +120,7 @@ void KisDlgLayerStyle::slotNotifyOnAccept()
 
 void KisDlgLayerStyle::slotNotifyOnReject()
 {
-    setStyle(m_initialLayerStyle.data());
+    setStyle(m_initialLayerStyle);
 
     m_configChangedCompressor->stop();
     emit configChanged();
@@ -135,14 +134,14 @@ void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *pre
     wdgLayerStyles.stylesStack->setCurrentIndex(wdgLayerStyles.lstStyleSelector->row(current));
 }
 
-void KisDlgLayerStyle::setStyle(KisPSDLayerStyle *style)
+void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 {
     QListWidgetItem *item = wdgLayerStyles.lstStyleSelector->item(2);
     item->setCheckState(style->dropShadow().effect_enable ? Qt::Checked : Qt::Unchecked);
     m_dropShadow->setDropShadow(style->dropShadow());
 }
 
-KisPSDLayerStyle *KisDlgLayerStyle::style() const
+KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 {
     psd_layer_effects_drop_shadow ds = m_dropShadow->dropShadow();
     ds.effect_enable = (wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);

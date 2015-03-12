@@ -20,7 +20,7 @@
 
 #include <kdialog.h>
 
-#include <QScopedPointer>
+#include "kis_types.h"
 
 #include <psd.h>
 
@@ -166,7 +166,7 @@ class KisDlgLayerStyle : public KDialog
 {
     Q_OBJECT
 public:
-    explicit KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent = 0);
+    explicit KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *parent = 0);
     ~KisDlgLayerStyle();
 
 signals:
@@ -179,14 +179,13 @@ public slots:
     void slotNotifyOnReject();
 
     // Sets all the widgets to the contents of the given style
-    void setStyle(KisPSDLayerStyle *style);
-
-    KisPSDLayerStyle *style() const;
+    void setStyle(KisPSDLayerStyleSP style);
+    KisPSDLayerStyleSP style() const;
 
 private:
 
-    KisPSDLayerStyle *m_layerStyle;
-    QScopedPointer<KisPSDLayerStyle> m_initialLayerStyle;
+    KisPSDLayerStyleSP m_layerStyle;
+    KisPSDLayerStyleSP m_initialLayerStyle;
 
     Ui::WdgStylesDialog wdgLayerStyles;
 

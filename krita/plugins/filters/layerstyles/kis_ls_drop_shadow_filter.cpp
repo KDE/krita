@@ -389,7 +389,7 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
 void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
                                             KisPaintDeviceSP dst,
                                             const QRect &applyRect,
-                                            const KisPSDLayerStyle *style) const
+                                            KisPSDLayerStyleSP style) const
 {
     KIS_ASSERT_RECOVER_RETURN(style);
     if (!style->drop_shadow()->effect_enable) return;
@@ -398,7 +398,7 @@ void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
     applyDropShadow(src, dst, applyRect, style->context(), style->drop_shadow());
 }
 
-QRect KisLsDropShadowFilter::neededRect(const QRect &rect, const KisPSDLayerStyle *style) const
+QRect KisLsDropShadowFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const
 {
     if (!style->drop_shadow()->effect_enable) return rect;
 
@@ -406,7 +406,7 @@ QRect KisLsDropShadowFilter::neededRect(const QRect &rect, const KisPSDLayerStyl
     return rect | d.finalNeedRect();
 }
 
-QRect KisLsDropShadowFilter::changedRect(const QRect &rect, const KisPSDLayerStyle *style) const
+QRect KisLsDropShadowFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style) const
 {
     if (!style->drop_shadow()->effect_enable) return rect;
 

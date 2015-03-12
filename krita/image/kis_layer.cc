@@ -117,7 +117,7 @@ struct KisLayer::Private
     KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
 
-    QScopedPointer<KisPSDLayerStyle> layerStyle;
+    KisPSDLayerStyleSP layerStyle;
     QScopedPointer<KisAbstractProjectionPlane> layerStyleProjectionPlane;
 
     QScopedPointer<KisLayerProjectionPlane> projectionPlane;
@@ -144,7 +144,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
 
         if (rhs.m_d->layerStyle) {
-            setLayerStyle(new KisPSDLayerStyle(*rhs.m_d->layerStyle));
+            setLayerStyle(rhs.m_d->layerStyle->clone());
         }
 
         setName(rhs.name());
@@ -182,22 +182,22 @@ const KoCompositeOp * KisLayer::compositeOp() const
     return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
 }
 
-KisPSDLayerStyle *KisLayer::layerStyle() const
+KisPSDLayerStyleSP KisLayer::layerStyle() const
 {
-    return m_d->layerStyle.data();
+    return m_d->layerStyle;
 }
 
-void KisLayer::setLayerStyle(KisPSDLayerStyle *layerStyle)
+void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
 {
     if (layerStyle) {
-        m_d->layerStyle.reset(layerStyle);
+        m_d->layerStyle = layerStyle;
 
         KisAbstractProjectionPlane *plane = !layerStyle->isEmpty() ?
             KisLayerStyleProjectionPlaneFactory::instance()->create(this) : 0;
         m_d->layerStyleProjectionPlane.reset(plane);
     } else {
         m_d->layerStyleProjectionPlane.reset();
-        m_d->layerStyle.reset();
+        m_d->layerStyle.clear();
     }
 }
 

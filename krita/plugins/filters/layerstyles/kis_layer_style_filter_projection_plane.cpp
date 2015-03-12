@@ -31,7 +31,7 @@ struct KisLayerStyleFilterProjectionPlane::Private
     KisLayer *sourceLayer;
 
     QScopedPointer<KisLayerStyleFilter> filter;
-    const KisPSDLayerStyle *style;
+    KisPSDLayerStyleSP style;
 };
 
 KisLayerStyleFilterProjectionPlane::
@@ -45,7 +45,7 @@ KisLayerStyleFilterProjectionPlane::~KisLayerStyleFilterProjectionPlane()
 {
 }
 
-void KisLayerStyleFilterProjectionPlane::setStyle(KisLayerStyleFilter *filter, const KisPSDLayerStyle *style)
+void KisLayerStyleFilterProjectionPlane::setStyle(KisLayerStyleFilter *filter, KisPSDLayerStyleSP style)
 {
     m_d->filter.reset(filter);
     m_d->style = style;

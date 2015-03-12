@@ -50,7 +50,7 @@ void KisLayerStyleProjectionPlaneTest::test()
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
     image->addNode(layer);
 
-    KisPSDLayerStyle *style = new KisPSDLayerStyle();
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
     style->drop_shadow()->noise = 30;
     style->drop_shadow()->effect_enable = true;
 

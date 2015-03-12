@@ -36,24 +36,23 @@ struct KisLayerStyleProjectionPlane::Private
 KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer)
     : m_d(new Private)
 {
-    KisPSDLayerStyle *style = sourceLayer->layerStyle();
+    KisPSDLayerStyleSP style = sourceLayer->layerStyle();
 
     KIS_ASSERT_RECOVER(style) {
-        static KisPSDLayerStyle failsafeStyle;
-        style = &failsafeStyle;
+        style = toQShared(new KisPSDLayerStyle());
     }
 
     init(sourceLayer, style);
 }
 
 // for testing purposes only!
-KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer, KisPSDLayerStyle *layerStyle)
+KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer, KisPSDLayerStyleSP layerStyle)
     : m_d(new Private)
 {
     init(sourceLayer, layerStyle);
 }
 
-void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyle *style)
+void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleSP style)
 {
     m_d->sourceProjectionPlane = sourceLayer->internalProjectionPlane();
 

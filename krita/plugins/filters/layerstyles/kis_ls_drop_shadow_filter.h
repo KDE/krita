@@ -31,10 +31,10 @@ public:
     void processDirectly(KisPaintDeviceSP src,
                          KisPaintDeviceSP dst,
                          const QRect &applyRect,
-                         const KisPSDLayerStyle *config) const;
+                         KisPSDLayerStyleSP style) const;
 
-    QRect neededRect(const QRect & rect, const KisPSDLayerStyle *config) const;
-    QRect changedRect(const QRect & rect, const KisPSDLayerStyle *config) const;
+    QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style) const;
+    QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;
 
 };
 

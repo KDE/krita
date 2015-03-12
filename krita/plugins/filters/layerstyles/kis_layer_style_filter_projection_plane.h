@@ -29,7 +29,7 @@
 class KisLayerStyleFilterProjectionPlane : public KisAbstractProjectionPlane
 {
 public:
-    KisLayerStyleFilterProjectionPlane(KisLayerSP sourceLayer);
+    KisLayerStyleFilterProjectionPlane(KisLayer *sourceLayer);
     ~KisLayerStyleFilterProjectionPlane();
 
     void setStyle(KisLayerStyleFilter *filter, const KisPSDLayerStyle *style);

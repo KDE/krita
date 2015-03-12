@@ -30,7 +30,7 @@
 class KRITAIMAGE_EXPORT KisLayerStyleProjectionPlane : public KisAbstractProjectionPlane
 {
 public:
-    KisLayerStyleProjectionPlane(KisLayerSP sourceLayer);
+    KisLayerStyleProjectionPlane(KisLayer *sourceLayer);
     ~KisLayerStyleProjectionPlane();
 
     QRect recalculate(const QRect& rect, KisNodeSP filthyNode);
@@ -42,13 +42,13 @@ public:
 
 
     // a method for registering on KisLayerStyleProjectionPlaneFactory
-    static KisAbstractProjectionPlane* factoryObject(KisLayerSP sourceLayer);
+    static KisAbstractProjectionPlane* factoryObject(KisLayer *sourceLayer);
 
 private:
     friend class KisLayerStyleProjectionPlaneTest;
-    KisLayerStyleProjectionPlane(KisLayerSP sourceLayer, KisPSDLayerStyle *style);
+    KisLayerStyleProjectionPlane(KisLayer *sourceLayer, KisPSDLayerStyle *style);
 
-    void init(KisLayerSP sourceLayer, KisPSDLayerStyle *layerStyle);
+    void init(KisLayer *sourceLayer, KisPSDLayerStyle *layerStyle);
 
 private:
     struct Private;

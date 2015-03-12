@@ -33,7 +33,7 @@ struct KisLayerStyleProjectionPlane::Private
 
 };
 
-KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayerSP sourceLayer)
+KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer)
     : m_d(new Private)
 {
     KisPSDLayerStyle *style = sourceLayer->layerStyle();
@@ -47,13 +47,13 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayerSP sourceLaye
 }
 
 // for testing purposes only!
-KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayerSP sourceLayer, KisPSDLayerStyle *layerStyle)
+KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer, KisPSDLayerStyle *layerStyle)
     : m_d(new Private)
 {
     init(sourceLayer, layerStyle);
 }
 
-void KisLayerStyleProjectionPlane::init(KisLayerSP sourceLayer, KisPSDLayerStyle *style)
+void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyle *style)
 {
     m_d->sourceProjectionPlane = sourceLayer->projectionPlane();
 
@@ -68,7 +68,7 @@ KisLayerStyleProjectionPlane::~KisLayerStyleProjectionPlane()
 {
 }
 
-KisAbstractProjectionPlane* KisLayerStyleProjectionPlane::factoryObject(KisLayerSP sourceLayer)
+KisAbstractProjectionPlane* KisLayerStyleProjectionPlane::factoryObject(KisLayer *sourceLayer)
 {
     return new KisLayerStyleProjectionPlane(sourceLayer);
 }

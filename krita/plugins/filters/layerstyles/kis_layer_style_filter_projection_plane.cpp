@@ -28,14 +28,14 @@
 
 struct KisLayerStyleFilterProjectionPlane::Private
 {
-    KisLayerSP sourceLayer;
+    KisLayer *sourceLayer;
 
     QScopedPointer<KisLayerStyleFilter> filter;
     const KisPSDLayerStyle *style;
 };
 
 KisLayerStyleFilterProjectionPlane::
-KisLayerStyleFilterProjectionPlane(KisLayerSP sourceLayer)
+KisLayerStyleFilterProjectionPlane(KisLayer *sourceLayer)
     : m_d(new Private)
 {
     m_d->sourceLayer = sourceLayer;

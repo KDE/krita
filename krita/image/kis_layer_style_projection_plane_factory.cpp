@@ -43,7 +43,7 @@ void KisLayerStyleProjectionPlaneFactory::setFactory(Factory factory)
     m_d->factory = factory;
 }
 
-KisAbstractProjectionPlane *KisLayerStyleProjectionPlaneFactory::create(KisLayerSP layer) const
+KisAbstractProjectionPlane *KisLayerStyleProjectionPlaneFactory::create(KisLayer *layer) const
 {
     return m_d->factory(layer);
 }

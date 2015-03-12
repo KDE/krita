@@ -20,6 +20,8 @@
 
 #include <kdialog.h>
 
+#include <QScopedPointer>
+
 #include <psd.h>
 
 #include "ui_wdglayerstyles.h"
@@ -40,6 +42,7 @@
 
 class QListWidgetItem;
 class KisPSDLayerStyle;
+class KisSignalCompressor;
 
 class BevelAndEmboss : public QWidget {
 public:
@@ -72,10 +75,19 @@ private:
 
 
 class DropShadow : public QWidget {
+    Q_OBJECT
 public:
     DropShadow(QWidget *parent);
     void setDropShadow(const psd_layer_effects_drop_shadow &dropShadow);
     psd_layer_effects_drop_shadow dropShadow() const;
+
+private Q_SLOTS:
+    void slotDialAngleChanged(int value);
+    void slotIntAngleChanged(int value);
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgDropShadow ui;
 
@@ -155,11 +167,16 @@ class KisDlgLayerStyle : public KDialog
     Q_OBJECT
 public:
     explicit KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent = 0);
+    ~KisDlgLayerStyle();
 
 signals:
+    void configChanged();
 
 public slots:
     void changePage(QListWidgetItem *, QListWidgetItem*);
+
+    void slotNotifyOnAccept();
+    void slotNotifyOnReject();
 
     // Sets all the widgets to the contents of the given style
     void setStyle(KisPSDLayerStyle *style);
@@ -169,6 +186,7 @@ public slots:
 private:
 
     KisPSDLayerStyle *m_layerStyle;
+    QScopedPointer<KisPSDLayerStyle> m_initialLayerStyle;
 
     Ui::WdgStylesDialog wdgLayerStyles;
 
@@ -187,6 +205,7 @@ private:
     StylesSelector *m_stylesSelector;
     Texture *m_texture;
 
+    KisSignalCompressor *m_configChangedCompressor;
 
 };
 

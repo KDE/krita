@@ -33,17 +33,31 @@
 #include "kis_psd_layer_style_resource.h"
 #include "kis_psd_layer_style.h"
 
+#include "kis_signals_blocker.h"
+#include "kis_signal_compressor.h"
+
+
+
 KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent)
     : KDialog(parent)
     , m_layerStyle(layerStyle)
+    , m_initialLayerStyle(new KisPSDLayerStyle(*layerStyle))
 {
     setCaption(i18n("Layer Styles"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
+    m_configChangedCompressor =
+        new KisSignalCompressor(1000, KisSignalCompressor::POSTPONE, this);
+    connect(m_configChangedCompressor, SIGNAL(timeout()), SIGNAL(configChanged()));
+
+
+
     QWidget *page = new QWidget(this);
     wdgLayerStyles.setupUi(page);
     setMainWidget(page);
+
+    connect(wdgLayerStyles.lstStyleSelector, SIGNAL(itemChanged(QListWidgetItem*)), m_configChangedCompressor, SLOT(start()));
 
     m_stylesSelector = new StylesSelector(this);
     connect(m_stylesSelector, SIGNAL(styleSelected(KisPSDLayerStyle*)), SLOT(setStyle(KisPSDLayerStyle*)));
@@ -51,8 +65,11 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent
 
     m_blendingOptions = new BlendingOptions(this);
     wdgLayerStyles.stylesStack->addWidget(m_blendingOptions);
+
     m_dropShadow = new DropShadow(this);
     wdgLayerStyles.stylesStack->addWidget(m_dropShadow);
+    connect(m_dropShadow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_innerShadow = new InnerShadow(this);
     wdgLayerStyles.stylesStack->addWidget(m_innerShadow);
     m_outerGlow = new OuterGlow(this);
@@ -85,6 +102,29 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyle *layerStyle, QWidget *parent
              this, SLOT(changePage(QListWidgetItem*,QListWidgetItem*)));
 
     setStyle(layerStyle);
+
+    connect(this, SIGNAL(accepted()), SLOT(slotNotifyOnAccept()));
+    connect(this, SIGNAL(rejected()), SLOT(slotNotifyOnReject()));
+}
+
+KisDlgLayerStyle::~KisDlgLayerStyle()
+{
+}
+
+void KisDlgLayerStyle::slotNotifyOnAccept()
+{
+    if (m_configChangedCompressor->isActive()) {
+        m_configChangedCompressor->stop();
+        emit configChanged();
+    }
+}
+
+void KisDlgLayerStyle::slotNotifyOnReject()
+{
+    setStyle(m_initialLayerStyle.data());
+
+    m_configChangedCompressor->stop();
+    emit configChanged();
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -145,40 +185,102 @@ DropShadow::DropShadow(QWidget *parent)
     ui.setupUi(this);
 
     ui.doubleOpacity->setRange(0, 100, 0);
-    ui.doubleOpacity->setSuffix("%");
+    ui.doubleOpacity->setSuffix(" %");
 
+    ui.intDistance->setRange(0, 300);
+    ui.intDistance->setSuffix(" px");
+
+    ui.intSpread->setRange(0, 100);
+    ui.intSpread->setSuffix(" %");
+
+    ui.intSize->setRange(0, 100);
+    ui.intSize->setSuffix(" px");
+
+    ui.intNoise->setRange(0, 100);
+    ui.intNoise->setSuffix(" px");
+
+    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
+    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
+    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.dialAngle, SLOT(setDisabled(bool)));
+    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.intAngle, SLOT(setDisabled(bool)));
+
+    // FIXME: predefined curves
+    ui.cmbContour->addItem("NOT IMPLEMENTED");
+
+
+    // connect everything to configChanged() signal
+    connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.doubleOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+
+    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+
+    connect(ui.intDistance, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intSpread, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    connect(ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.intNoise, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    connect(ui.chkLayerKnocksOutDropShadow, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+}
+
+void DropShadow::slotDialAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.intAngle);
+    ui.intAngle->setValue(value);
+}
+
+void DropShadow::slotIntAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.dialAngle);
+    ui.dialAngle->setValue(value);
 }
 
 void DropShadow::setDropShadow(const psd_layer_effects_drop_shadow &dropShadow)
 {
-    ui.chkLayerKnocksOutDropShadow->setChecked(dropShadow.knocks_out);
-    //ui.cmbContour;
-    ui.chkAntiAliased->setChecked(dropShadow.anti_aliased);
-    ui.intNoise->setValue(dropShadow.noise);
     ui.cmbCompositeOp->selectCompositeOp(KoID(dropShadow.blend_mode));
     ui.doubleOpacity->setValue(dropShadow.opacity);
+
     ui.dialAngle->setValue(dropShadow.angle);
     ui.intAngle->setValue(dropShadow.angle);
     ui.chkUseGlobalLight->setChecked(dropShadow.use_global_light);
+
     ui.intDistance->setValue(dropShadow.distance);
     ui.intSpread->setValue(dropShadow.spread);
     ui.intSize->setValue(dropShadow.size);
+
+    // FIXME: curve editing
+    // ui.cmbContour;
+    ui.chkAntiAliased->setChecked(dropShadow.anti_aliased);
+
+    ui.intNoise->setValue(dropShadow.noise);
+    ui.chkLayerKnocksOutDropShadow->setChecked(dropShadow.knocks_out);
 }
 
 psd_layer_effects_drop_shadow DropShadow::dropShadow() const
 {
     psd_layer_effects_drop_shadow ds;
-    ds.knocks_out = ui.chkLayerKnocksOutDropShadow->isChecked();
-    // ui.cmbContour;
-    ds.anti_aliased = ui.chkAntiAliased->isChecked();
-    ds.noise = ui.intNoise->value();
+
+
     ds.blend_mode = ui.cmbCompositeOp->selectedCompositeOp().id();
     ds.opacity = ui.doubleOpacity->value();
+
     ds.angle = ui.dialAngle->value();
     ds.use_global_light = ui.chkUseGlobalLight->isChecked();
+
     ds.distance = ui.intDistance->value();
     ds.spread = ui.intSpread->value();
     ds.size = ui.intSize->value();
+
+    // FIXME: curve editing
+    // ui.cmbContour;
+    ds.anti_aliased = ui.chkAntiAliased->isChecked();
+    ds.noise = ui.intNoise->value();
+
+    ds.knocks_out = ui.chkLayerKnocksOutDropShadow->isChecked();
 
     return ds;
 }

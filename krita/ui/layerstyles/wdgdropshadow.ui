@@ -46,7 +46,14 @@
          <item row="0" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QComboBox" name="cmbContour"/>
+            <widget class="QComboBox" name="cmbContour">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="chkAntiAliased">
@@ -72,6 +79,12 @@
          </item>
          <item row="1" column="1">
           <widget class="KisSliderSpinBox" name="intNoise" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="toolTip">
             <string>Add noise to shadow</string>
            </property>
@@ -98,6 +111,12 @@
          </item>
          <item row="0" column="1">
           <widget class="KisCompositeOpComboBox" name="cmbCompositeOp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="toolTip">
             <string>Set the blend mode for the layer</string>
            </property>
@@ -193,7 +212,14 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="KisSliderSpinBox" name="intDistance" native="true"/>
+          <widget class="KisSliderSpinBox" name="intDistance" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="label_3">
@@ -206,7 +232,14 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="KisSliderSpinBox" name="intSpread" native="true"/>
+          <widget class="KisSliderSpinBox" name="intSpread" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_4">
@@ -219,7 +252,14 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="KisSliderSpinBox" name="intSize" native="true"/>
+          <widget class="KisSliderSpinBox" name="intSize" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -261,22 +301,5 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>dialAngle</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>intAngle</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>149</x>
-     <y>136</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>194</x>
-     <y>139</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

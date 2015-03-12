@@ -32,8 +32,48 @@ struct KisPSDLayerStyle::Private
         , visible(false)
     {}
 
-    QString name;
+    Private(const Private &rhs)
+        : name(rhs.name),
+          version(rhs.version),
+          effects_count(rhs.effects_count),
+          visible(rhs.visible),
+          context(rhs.context),
+          drop_shadow(rhs.drop_shadow),
+          inner_shadow(rhs.inner_shadow),
+          outer_glow(rhs.outer_glow),
+          inner_glow(rhs.inner_glow),
+          bevel_emboss(rhs.bevel_emboss),
+          satin(rhs.satin),
+          color_overlay(rhs.color_overlay),
+          gradient_overlay(rhs.gradient_overlay),
+          pattern_overlay(rhs.pattern_overlay),
+          stroke(rhs.stroke)
+    {}
 
+    Private operator=(const Private &rhs)
+    {
+        if (this != &rhs) {
+            name = rhs.name;
+            version = rhs.version;
+            effects_count = rhs.effects_count;
+            visible = rhs.visible;
+            context = rhs.context;
+            drop_shadow = rhs.drop_shadow;
+            inner_shadow = rhs.inner_shadow;
+            outer_glow = rhs.outer_glow;
+            inner_glow = rhs.inner_glow;
+            bevel_emboss = rhs.bevel_emboss;
+            satin = rhs.satin;
+            color_overlay = rhs.color_overlay;
+            gradient_overlay = rhs.gradient_overlay;
+            pattern_overlay = rhs.pattern_overlay;
+            stroke = rhs.stroke;
+        }
+
+        return *this;
+    }
+
+    QString name;
     quint16 version;
     quint8 effects_count; // Effects count: may be 6 (for the 6 effects in Photoshop 5 and 6) or 7 (for Photoshop 7.0)
     bool visible; // common state info, visible: always true
@@ -48,19 +88,6 @@ struct KisPSDLayerStyle::Private
     psd_layer_effects_gradient_overlay gradient_overlay;
     psd_layer_effects_pattern_overlay pattern_overlay;
     psd_layer_effects_stroke stroke;
-
-    QVector<bool> fill;
-    QVector<bool> valid;
-    QVector<QString> blend_mode;
-    QVector<quint8> opacity;
-    QVector<QColor> *image_data;
-    QVector<qint32> left;
-    QVector<qint32> top;
-    QVector<qint32> right;
-    QVector<qint32> bottom;
-    QVector<qint32> width;
-    QVector<qint32> height;
-
 };
 
 KisPSDLayerStyle::KisPSDLayerStyle()
@@ -77,17 +104,16 @@ KisPSDLayerStyle::~KisPSDLayerStyle()
 }
 
 KisPSDLayerStyle::KisPSDLayerStyle(const KisPSDLayerStyle &rhs)
-    : d(new Private())
+    : d(new Private(*rhs.d))
 {
-    d->name = rhs.d->name;
-    d->version = rhs.d->version;
-    d->visible = rhs.d->visible;
-    d->drop_shadow = rhs.d->drop_shadow;
- }
+}
 
-void KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
+KisPSDLayerStyle KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
 {
-    // XXX copy all the contents of KisPSDLayerStyle::Private
+    if (this != &rhs) {
+        *d = *rhs.d;
+    }
+    return *this;
 }
 
 bool KisPSDLayerStyle::isEmpty() const

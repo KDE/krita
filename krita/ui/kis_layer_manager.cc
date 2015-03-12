@@ -98,6 +98,8 @@
 #include "kis_action_manager.h"
 #include "KisPart.h"
 
+#include "kis_signal_compressor_with_param.h"
+#include "kis_abstract_projection_plane.h"
 
 
 class KisSaveGroupVisitor : public KisNodeVisitor
@@ -913,6 +915,15 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
 }
 
+void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg)
+{
+    QRect oldDirtyRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
+    layer->setLayerStyle(new KisPSDLayerStyle(*dlg->style()));
+    QRect newDirtyRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
+
+    layer->setDirty(newDirtyRect | oldDirtyRect);
+}
+
 void KisLayerManager::layerStyle()
 {
     KisImageWSP image = m_view->image();
@@ -930,8 +941,13 @@ void KisLayerManager::layerStyle()
     }
 
     KisDlgLayerStyle dlg(style);
+
+    boost::function<void ()> updateCall(boost::bind(updateLayerStyles, layer, &dlg));
+    SignalToFunctionProxy proxy(updateCall);
+    connect(&dlg, SIGNAL(configChanged()), &proxy, SLOT(start()));
+
     if (dlg.exec() == QDialog::Accepted) {
-        layer->setLayerStyle(new KisPSDLayerStyle(*dlg.style()));
+        // TODO: undo information
     }
 
     delete style;

@@ -40,7 +40,7 @@ public:
     explicit KisPSDLayerStyle();
     virtual ~KisPSDLayerStyle();
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
-    void operator=(const KisPSDLayerStyle& rhs);
+    KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs);
 
     QString name() const;
 

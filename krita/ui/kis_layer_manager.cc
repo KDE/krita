@@ -100,6 +100,9 @@
 
 #include "kis_signal_compressor_with_param.h"
 #include "kis_abstract_projection_plane.h"
+#include "commands_new/kis_set_layer_style_command.h"
+#include "kis_post_execution_undo_adapter.h"
+
 
 
 class KisSaveGroupVisitor : public KisNodeVisitor
@@ -917,11 +920,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
 void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg)
 {
-    QRect oldDirtyRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
-    layer->setLayerStyle(dlg->style()->clone());
-    QRect newDirtyRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
-
-    layer->setDirty(newDirtyRect | oldDirtyRect);
+    KisSetLayerStyleCommand::updateLayerStyle(layer, dlg->style()->clone());
 }
 
 void KisLayerManager::layerStyle()
@@ -932,22 +931,27 @@ void KisLayerManager::layerStyle()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisPSDLayerStyleSP style;
+    KisPSDLayerStyleSP oldStyle;
     if (layer->layerStyle()) {
-        style = layer->layerStyle()->clone();
+        oldStyle = layer->layerStyle()->clone();
     }
     else {
-        style = toQShared(new KisPSDLayerStyle());
+        oldStyle = toQShared(new KisPSDLayerStyle());
     }
 
-    KisDlgLayerStyle dlg(style);
+    KisDlgLayerStyle dlg(oldStyle->clone());
 
     boost::function<void ()> updateCall(boost::bind(updateLayerStyles, layer, &dlg));
     SignalToFunctionProxy proxy(updateCall);
     connect(&dlg, SIGNAL(configChanged()), &proxy, SLOT(start()));
 
     if (dlg.exec() == QDialog::Accepted) {
-        // TODO: undo information
+        KisPSDLayerStyleSP newStyle = dlg.style();
+
+        KUndo2CommandSP command = toQShared(
+            new KisSetLayerStyleCommand(layer, oldStyle, newStyle));
+
+        image->postExecutionUndoAdapter()->addCommand(command);
     }
 }
 

@@ -45,6 +45,12 @@ public:
     static KisAbstractProjectionPlane* factoryObject(KisLayerSP sourceLayer);
 
 private:
+    friend class KisLayerStyleProjectionPlaneTest;
+    KisLayerStyleProjectionPlane(KisLayerSP sourceLayer, KisPSDLayerStyle *style);
+
+    void init(KisLayerSP sourceLayer, KisPSDLayerStyle *layerStyle);
+
+private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };

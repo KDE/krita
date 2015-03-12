@@ -392,20 +392,25 @@ void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
                                             const KisPSDLayerStyle *style) const
 {
     KIS_ASSERT_RECOVER_RETURN(style);
+    if (!style->drop_shadow()->effect_enable) return;
+
+
     applyDropShadow(src, dst, applyRect, style->context(), style->drop_shadow());
 }
 
-QRect KisLsDropShadowFilter::neededRect(const QRect & rect, const KisPSDLayerStyle *style) const
+QRect KisLsDropShadowFilter::neededRect(const QRect &rect, const KisPSDLayerStyle *style) const
 {
-    ShadowRectsData d(rect, style->context(), style->drop_shadow(), ShadowRectsData::NEED_RECT);
+    if (!style->drop_shadow()->effect_enable) return rect;
 
+    ShadowRectsData d(rect, style->context(), style->drop_shadow(), ShadowRectsData::NEED_RECT);
     return rect | d.finalNeedRect();
 }
 
-QRect KisLsDropShadowFilter::changedRect(const QRect & rect, const KisPSDLayerStyle *style) const
+QRect KisLsDropShadowFilter::changedRect(const QRect &rect, const KisPSDLayerStyle *style) const
 {
-    ShadowRectsData d(rect, style->context(), style->drop_shadow(), ShadowRectsData::CHANGE_RECT);
+    if (!style->drop_shadow()->effect_enable) return rect;
 
+    ShadowRectsData d(rect, style->context(), style->drop_shadow(), ShadowRectsData::CHANGE_RECT);
     return style->context()->keep_original ?
         d.finalChangeRect() : rect | d.finalChangeRect();
 }

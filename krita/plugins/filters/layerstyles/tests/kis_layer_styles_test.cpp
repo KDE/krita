@@ -56,6 +56,7 @@ struct TestConfig {
         style->context()->global_angle = angle;
         style->context()->keep_original = keep_original;
 
+        style->drop_shadow()->effect_enable = true;
         style->drop_shadow()->distance = distance;
         style->drop_shadow()->spread = spread;
         style->drop_shadow()->size = size;

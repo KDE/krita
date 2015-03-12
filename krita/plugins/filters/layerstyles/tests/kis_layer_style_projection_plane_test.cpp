@@ -32,8 +32,8 @@
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 
-
 #include "../kis_layer_style_projection_plane.h"
+#include "kis_psd_layer_style.h"
 
 
 void KisLayerStyleProjectionPlaneTest::test()
@@ -50,7 +50,11 @@ void KisLayerStyleProjectionPlaneTest::test()
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
     image->addNode(layer);
 
-    KisLayerStyleProjectionPlane plane(layer);
+    KisPSDLayerStyle *style = new KisPSDLayerStyle();
+    style->drop_shadow()->noise = 30;
+    style->drop_shadow()->effect_enable = true;
+
+    KisLayerStyleProjectionPlane plane(layer, style);
 
     KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "00L_initial", "dd");
 

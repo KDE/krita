@@ -36,18 +36,29 @@ struct KisLayerStyleProjectionPlane::Private
 KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayerSP sourceLayer)
     : m_d(new Private)
 {
+    KisPSDLayerStyle *style = sourceLayer->layerStyle();
+
+    KIS_ASSERT_RECOVER(style) {
+        static KisPSDLayerStyle failsafeStyle;
+        style = &failsafeStyle;
+    }
+
+    init(sourceLayer, style);
+}
+
+// for testing purposes only!
+KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayerSP sourceLayer, KisPSDLayerStyle *layerStyle)
+    : m_d(new Private)
+{
+    init(sourceLayer, layerStyle);
+}
+
+void KisLayerStyleProjectionPlane::init(KisLayerSP sourceLayer, KisPSDLayerStyle *style)
+{
     m_d->sourceProjectionPlane = sourceLayer->projectionPlane();
 
     KisLayerStyleFilterProjectionPlane *dropShadow =
         new KisLayerStyleFilterProjectionPlane(sourceLayer);
-
-
-    KisPSDLayerStyle *style = sourceLayer->layerStyle();
-
-    KIS_ASSERT_RECOVER(style) {
-            static KisPSDLayerStyle failsafeStyle;
-            style = &failsafeStyle;
-    }
 
     dropShadow->setStyle(new KisLsDropShadowFilter(), style);
     m_d->stylesBefore << toQShared(dropShadow);

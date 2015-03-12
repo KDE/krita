@@ -135,6 +135,7 @@ void KisPaintLayerTest::testLayerStyles()
 
     KisPSDLayerStyle *style = new KisPSDLayerStyle();
     style->drop_shadow()->noise = 30;
+    style->drop_shadow()->effect_enable = true;
 
     layer->setLayerStyle(style);
 

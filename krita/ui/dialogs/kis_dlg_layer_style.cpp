@@ -150,6 +150,57 @@ KisPSDLayerStyleSP KisDlgLayerStyle::style() const
     return m_layerStyle;
 }
 
+/********************************************************************/
+/***** Styles Selector **********************************************/
+/********************************************************************/
+
+StylesSelector::StylesSelector(QWidget *parent)
+    : QWidget(parent)
+{
+    ui.setupUi(this);
+
+    connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
+    connect(ui.listStyles, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectStyle(QListWidgetItem*,QListWidgetItem*)));
+    foreach(KoResource *res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
+        ui.cmbStyleCollections->addItem(res->name());
+    }
+}
+
+class StyleItem : public QListWidgetItem {
+public:
+    StyleItem(KisPSDLayerStyleSP style, const QString &name)
+        : QListWidgetItem(name)
+        , m_style(style)
+    {
+    }
+    KisPSDLayerStyleSP m_style;
+};
+
+void StylesSelector::loadStyles(const QString &name)
+{
+    ui.listStyles->clear();
+    KoResource *res = KisResourceServerProvider::instance()->layerStyleCollectionServer()->resourceByName(name);
+    KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(res);
+    if (collection) {
+        foreach(KisPSDLayerStyleSP style, collection->layerStyles()) {
+            // XXX: also use the preview image, when we have one
+            ui.listStyles->addItem(new StyleItem(style, style->name()));
+        }
+    }
+}
+
+void StylesSelector::selectStyle(QListWidgetItem */*previous*/, QListWidgetItem* current)
+{
+    StyleItem *item = dynamic_cast<StyleItem*>(current);
+    if (item) {
+        emit styleSelected(item->m_style);
+    }
+}
+
+/********************************************************************/
+/***** Bevel and Emboss *********************************************/
+/********************************************************************/
+
 BevelAndEmboss::BevelAndEmboss(QWidget *parent)
     : QWidget(parent)
 {
@@ -177,6 +228,9 @@ Contour::Contour(QWidget *parent)
     ui.setupUi(this);
 }
 
+/********************************************************************/
+/***** Drop Shadow **************************************************/
+/********************************************************************/
 
 DropShadow::DropShadow(QWidget *parent)
     : QWidget(parent)
@@ -284,6 +338,9 @@ psd_layer_effects_drop_shadow DropShadow::dropShadow() const
     return ds;
 }
 
+/********************************************************************/
+/***** Gradient Overlay *********************************************/
+/********************************************************************/
 
 GradientOverlay::GradientOverlay(QWidget *parent)
     : QWidget(parent)
@@ -324,49 +381,6 @@ Stroke::Stroke(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
-}
-
-StylesSelector::StylesSelector(QWidget *parent)
-    : QWidget(parent)
-{
-    ui.setupUi(this);
-
-    connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
-    connect(ui.listStyles, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectStyle(QListWidgetItem*,QListWidgetItem*)));
-    foreach(KoResource *res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
-        ui.cmbStyleCollections->addItem(res->name());
-    }
-}
-
-class StyleItem : public QListWidgetItem {
-public:
-    StyleItem(KisPSDLayerStyleSP style, const QString &name)
-        : QListWidgetItem(name)
-        , m_style(style)
-    {
-    }
-    KisPSDLayerStyleSP m_style;
-};
-
-void StylesSelector::loadStyles(const QString &name)
-{
-    ui.listStyles->clear();
-    KoResource *res = KisResourceServerProvider::instance()->layerStyleCollectionServer()->resourceByName(name);
-    KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(res);
-    if (collection) {
-        foreach(KisPSDLayerStyleSP style, collection->layerStyles()) {
-            // XXX: also use the preview image, when we have one
-            ui.listStyles->addItem(new StyleItem(style, style->name()));
-        }
-    }
-}
-
-void StylesSelector::selectStyle(QListWidgetItem */*previous*/, QListWidgetItem* current)
-{
-    StyleItem *item = dynamic_cast<StyleItem*>(current);
-    if (item) {
-        emit styleSelected(item->m_style);
-    }
 }
 
 Texture::Texture(QWidget *parent)

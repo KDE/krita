@@ -118,9 +118,9 @@ struct KisLayer::Private
     KisCloneLayersList clonesList;
 
     KisPSDLayerStyleSP layerStyle;
-    QScopedPointer<KisAbstractProjectionPlane> layerStyleProjectionPlane;
+    KisAbstractProjectionPlaneSP layerStyleProjectionPlane;
 
-    QScopedPointer<KisLayerProjectionPlane> projectionPlane;
+    KisAbstractProjectionPlaneSP projectionPlane;
 };
 
 
@@ -132,7 +132,7 @@ KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
     setOpacity(opacity);
     m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
-    m_d->projectionPlane.reset(new KisLayerProjectionPlane(this));
+    m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -148,7 +148,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
         }
 
         setName(rhs.name());
-        m_d->projectionPlane.reset(new KisLayerProjectionPlane(this));
+        m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
     }
 }
 
@@ -192,11 +192,13 @@ void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
     if (layerStyle) {
         m_d->layerStyle = layerStyle;
 
-        KisAbstractProjectionPlane *plane = !layerStyle->isEmpty() ?
-            KisLayerStyleProjectionPlaneFactory::instance()->create(this) : 0;
-        m_d->layerStyleProjectionPlane.reset(plane);
+        KisAbstractProjectionPlaneSP plane = !layerStyle->isEmpty() ?
+            KisLayerStyleProjectionPlaneFactory::instance()->create(this) :
+            KisAbstractProjectionPlaneSP(0);
+
+        m_d->layerStyleProjectionPlane = plane;
     } else {
-        m_d->layerStyleProjectionPlane.reset();
+        m_d->layerStyleProjectionPlane.clear();
         m_d->layerStyle.clear();
     }
 }
@@ -666,15 +668,15 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     gc.bitBlt(rect.topLeft(), original, rect);
 }
 
-KisAbstractProjectionPlane* KisLayer::projectionPlane() const
+KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const
 {
     return m_d->layerStyleProjectionPlane ?
-        m_d->layerStyleProjectionPlane.data() : m_d->projectionPlane.data();
+        m_d->layerStyleProjectionPlane : m_d->projectionPlane;
 }
 
-KisAbstractProjectionPlane* KisLayer::internalProjectionPlane() const
+KisAbstractProjectionPlaneSP KisLayer::internalProjectionPlane() const
 {
-    return m_d->projectionPlane.data();
+    return m_d->projectionPlane;
 }
 
 KisPaintDeviceSP KisLayer::projection() const

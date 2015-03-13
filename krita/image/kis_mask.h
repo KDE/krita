@@ -131,7 +131,7 @@ public:
      */
     KisPaintDeviceSP projection() const;
 
-    KisAbstractProjectionPlane* projectionPlane() const;
+    KisAbstractProjectionPlaneSP projectionPlane() const;
 
     /**
      * Change the selection to the specified selection object. The

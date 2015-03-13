@@ -137,7 +137,7 @@ public:
      * latter one about the total composition, including layer styles,
      * pass-through blending and etc.
      */
-    virtual KisAbstractProjectionPlane* projectionPlane() const;
+    virtual KisAbstractProjectionPlaneSP projectionPlane() const;
 
 protected:
 

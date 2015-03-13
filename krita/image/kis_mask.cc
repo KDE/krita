@@ -63,7 +63,7 @@ struct KisMask::Private {
      */
     QScopedPointer<QPoint> deferredSelectionOffset;
 
-    QScopedPointer<KisMaskProjectionPlane> projectionPlane;
+    KisAbstractProjectionPlaneSP projectionPlane;
 
     void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };
@@ -197,9 +197,9 @@ KisPaintDeviceSP KisMask::projection() const
     return paintDevice();
 }
 
-KisAbstractProjectionPlane* KisMask::projectionPlane() const
+KisAbstractProjectionPlaneSP KisMask::projectionPlane() const
 {
-    return m_d->projectionPlane.data();
+    return m_d->projectionPlane;
 }
 
 void KisMask::setSelection(KisSelectionSP selection)

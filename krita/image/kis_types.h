@@ -231,6 +231,7 @@ typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
 
 class KisAbstractProjectionPlane;
 typedef QSharedPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneSP;
+typedef QWeakPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneWSP;
 
 class KisPSDLayerStyle;
 typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;

@@ -32,14 +32,14 @@ class KisAbstractProjectionPlane;
 class KRITAIMAGE_EXPORT KisLayerStyleProjectionPlaneFactory
 {
 public:
-    typedef boost::function<KisAbstractProjectionPlane* (KisLayer *)> Factory;
+    typedef boost::function<KisAbstractProjectionPlaneSP (KisLayer *)> Factory;
 
 public:
     KisLayerStyleProjectionPlaneFactory();
     ~KisLayerStyleProjectionPlaneFactory();
 
     void setFactory(Factory factory);
-    KisAbstractProjectionPlane *create(KisLayer *layer) const;
+    KisAbstractProjectionPlaneSP create(KisLayer *layer) const;
 
     static KisLayerStyleProjectionPlaneFactory* instance();
 

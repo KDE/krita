@@ -59,7 +59,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
     connect(wdgLayerStyles.lstStyleSelector, SIGNAL(itemChanged(QListWidgetItem*)), m_configChangedCompressor, SLOT(start()));
 
     m_stylesSelector = new StylesSelector(this);
-    connect(m_stylesSelector, SIGNAL(styleSelected(KisPSDLayerStyle*)), SLOT(setStyle(KisPSDLayerStyle*)));
+    connect(m_stylesSelector, SIGNAL(styleSelected(KisPSDLayerStyleSP)), SLOT(setStyle(KisPSDLayerStyleSP)));
     wdgLayerStyles.stylesStack->addWidget(m_stylesSelector);
 
     m_blendingOptions = new BlendingOptions(this);
@@ -340,12 +340,12 @@ StylesSelector::StylesSelector(QWidget *parent)
 
 class StyleItem : public QListWidgetItem {
 public:
-    StyleItem(KisPSDLayerStyle *style, const QString &name)
+    StyleItem(KisPSDLayerStyleSP style, const QString &name)
         : QListWidgetItem(name)
         , m_style(style)
     {
     }
-    KisPSDLayerStyle *m_style;
+    KisPSDLayerStyleSP m_style;
 };
 
 void StylesSelector::loadStyles(const QString &name)
@@ -354,7 +354,7 @@ void StylesSelector::loadStyles(const QString &name)
     KoResource *res = KisResourceServerProvider::instance()->layerStyleCollectionServer()->resourceByName(name);
     KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(res);
     if (collection) {
-        foreach(KisPSDLayerStyle *style, collection->layerStyles()) {
+        foreach(KisPSDLayerStyleSP style, collection->layerStyles()) {
             // XXX: also use the preview image, when we have one
             ui.listStyles->addItem(new StyleItem(style, style->name()));
         }

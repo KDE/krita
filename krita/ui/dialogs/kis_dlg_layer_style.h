@@ -150,7 +150,7 @@ private slots:
     void loadStyles(const QString &name);
     void selectStyle(QListWidgetItem *previous, QListWidgetItem* current);
 signals:
-    void styleSelected(KisPSDLayerStyle *style);
+    void styleSelected(KisPSDLayerStyleSP style);
 private:
     Ui::WdgStylesSelector ui;
 };

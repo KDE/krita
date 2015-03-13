@@ -38,6 +38,9 @@ class KRITAIMAGE_EXPORT KisPSDLayerStyle
 {
 
 public:
+    typedef QVector<KisPSDLayerStyleSP> StylesVector;
+
+public:
     explicit KisPSDLayerStyle();
     virtual ~KisPSDLayerStyle();
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
@@ -62,13 +65,13 @@ public:
      * Save given styles to the ASL style format. All patterns references in the
      * contained styles will also be saved.
      */
-    static bool writeASL(QIODevice *io, QVector<KisPSDLayerStyle *> styles);
+    static bool writeASL(QIODevice *io, StylesVector styles);
 
     /**
      * Load all style objects in the ASL style format. All patterns contained in the
      * asl file will be added to the global pattern server.
      */
-    static QVector<KisPSDLayerStyle *> readASL(QIODevice *io);
+    static StylesVector readASL(QIODevice *io);
 
     /// Save this style object
     bool write(QIODevice *io) const;

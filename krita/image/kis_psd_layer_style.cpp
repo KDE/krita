@@ -154,14 +154,14 @@ psd_layer_effects_drop_shadow* KisPSDLayerStyle::drop_shadow()
     return &d->drop_shadow;
 }
 
-bool KisPSDLayerStyle::writeASL(QIODevice *io, QVector<KisPSDLayerStyle *> )
+bool KisPSDLayerStyle::writeASL(QIODevice *io, StylesVector )
 {
     return false;
 }
 
-QVector<KisPSDLayerStyle *> KisPSDLayerStyle::readASL(QIODevice *io)
+KisPSDLayerStyle::StylesVector KisPSDLayerStyle::readASL(QIODevice *io)
 {
-    return QVector<KisPSDLayerStyle*>();
+    return StylesVector();
 }
 
 bool KisPSDLayerStyle::write(QIODevice *io) const

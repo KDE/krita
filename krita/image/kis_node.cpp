@@ -217,13 +217,13 @@ QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
-KisAbstractProjectionPlane* KisNode::projectionPlane() const
+KisAbstractProjectionPlaneSP KisNode::projectionPlane() const
 {
     KIS_ASSERT_RECOVER_NOOP(0 && "KisNode::projectionPlane() is not defined!");
-    static QScopedPointer<KisAbstractProjectionPlane> plane(
-        new KisDumbProjectionPlane());
+    static KisAbstractProjectionPlaneSP plane = 
+        toQShared(new KisDumbProjectionPlane());
 
-    return plane.data();
+    return plane;
 }
 
 bool KisNode::accept(KisNodeVisitor &v)

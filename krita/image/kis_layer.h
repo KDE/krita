@@ -86,14 +86,14 @@ public:
     /**
      * \see a comment in KisNode::projectionPlane()
      */
-    virtual KisAbstractProjectionPlane* projectionPlane() const;
+    virtual KisAbstractProjectionPlaneSP projectionPlane() const;
 
     /**
      * The projection plane representing the layer itself without any
      * styles or anything else. It is used by the layer styles projection
      * plane to stack up the planes.
      */
-    virtual KisAbstractProjectionPlane* internalProjectionPlane() const;
+    virtual KisAbstractProjectionPlaneSP internalProjectionPlane() const;
 
     QRect partialChangeRect(KisNodeSP lastNode, const QRect& rect);
     void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect);

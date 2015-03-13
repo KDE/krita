@@ -36,7 +36,6 @@ KisPSDLayerStyleCollectionResource::KisPSDLayerStyleCollectionResource(const QSt
 
 KisPSDLayerStyleCollectionResource::~KisPSDLayerStyleCollectionResource()
 {
-    qDeleteAll(m_layerStyles);
     m_layerStyles.clear();
 }
 
@@ -81,7 +80,8 @@ QString KisPSDLayerStyleCollectionResource::defaultFileExtension() const
     return QString(".asl");
 }
 
-QVector<KisPSDLayerStyle *> KisPSDLayerStyleCollectionResource::layerStyles() const
+KisPSDLayerStyleCollectionResource::StylesVector
+KisPSDLayerStyleCollectionResource::layerStyles() const
 {
     return m_layerStyles;
 }

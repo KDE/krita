@@ -42,7 +42,7 @@ public:
 
 
     // a method for registering on KisLayerStyleProjectionPlaneFactory
-    static KisAbstractProjectionPlane* factoryObject(KisLayer *sourceLayer);
+    static KisAbstractProjectionPlaneSP factoryObject(KisLayer *sourceLayer);
 
 private:
     friend class KisLayerStyleProjectionPlaneTest;

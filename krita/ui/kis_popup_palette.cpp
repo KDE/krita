@@ -523,7 +523,7 @@ QPainterPath KisPopupPalette::pathFromPresetIndex(int index)
     int ringSize = brushOuterRadius - colorOuterRadius - 6;
     QRect innerRect = outerRect.adjusted(ringSize, ringSize, -ringSize, -ringSize);
 
-    qreal angleLength = 360 / numSlots();
+    qreal angleLength = 360.0 / numSlots();
     qreal angle = index * angleLength;
 
     QPainterPath path;

@@ -32,7 +32,6 @@
 #include "ui_wdgdropshadow.h"
 #include "ui_WdgGradientOverlay.h"
 #include "ui_wdgInnerGlow.h"
-#include "ui_wdgInnerShadow.h"
 #include "ui_wdgOuterGlow.h"
 #include "ui_WdgPatternOverlay.h"
 #include "ui_WdgSatin.h"
@@ -76,10 +75,17 @@ private:
 
 class DropShadow : public QWidget {
     Q_OBJECT
+
 public:
-    DropShadow(QWidget *parent);
-    void setDropShadow(const psd_layer_effects_drop_shadow &dropShadow);
-    psd_layer_effects_drop_shadow dropShadow() const;
+    enum Mode {
+        DropShadowMode,
+        InnerShadowMode
+    };
+
+public:
+    DropShadow(Mode mode, QWidget *parent);
+    void setDropShadow(const psd_layer_effects_shadow_base *dropShadow);
+    void fetchDropShadow(psd_layer_effects_shadow_base *ds) const;
 
 private Q_SLOTS:
     void slotDialAngleChanged(int value);
@@ -90,7 +96,7 @@ Q_SIGNALS:
 
 private:
     Ui::WdgDropShadow ui;
-
+    Mode m_mode;
 };
 
 class GradientOverlay : public QWidget {
@@ -105,13 +111,6 @@ public:
     InnerGlow(QWidget *parent);
 private:
     Ui::WdgInnerGlow ui;
-};
-
-class InnerShadow : public QWidget {
-public:
-    InnerShadow(QWidget *parent);
-private:
-    Ui::WdgInnerShadow ui;
 };
 
 class OuterGlow : public QWidget {
@@ -196,7 +195,7 @@ private:
     DropShadow *m_dropShadow;
     GradientOverlay *m_gradientOverlay;
     InnerGlow *m_innerGlow;
-    InnerShadow *m_innerShadow;
+    DropShadow *m_innerShadow;
     OuterGlow *m_outerGlow;
     PatternOverlay *m_patternOverlay;
     Satin *m_satin;

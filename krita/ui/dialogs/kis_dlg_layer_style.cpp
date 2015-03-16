@@ -65,12 +65,15 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
     m_blendingOptions = new BlendingOptions(this);
     wdgLayerStyles.stylesStack->addWidget(m_blendingOptions);
 
-    m_dropShadow = new DropShadow(this);
+    m_dropShadow = new DropShadow(DropShadow::DropShadowMode, this);
     wdgLayerStyles.stylesStack->addWidget(m_dropShadow);
     connect(m_dropShadow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
-    m_innerShadow = new InnerShadow(this);
+    m_innerShadow = new DropShadow(DropShadow::InnerShadowMode, this);
     wdgLayerStyles.stylesStack->addWidget(m_innerShadow);
+    connect(m_innerShadow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
+
     m_outerGlow = new OuterGlow(this);
     wdgLayerStyles.stylesStack->addWidget(m_outerGlow);
     m_innerGlow = new InnerGlow(this);
@@ -136,16 +139,24 @@ void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *pre
 
 void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 {
-    QListWidgetItem *item = wdgLayerStyles.lstStyleSelector->item(2);
+    QListWidgetItem *item;
+    item = wdgLayerStyles.lstStyleSelector->item(2);
     item->setCheckState(style->drop_shadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
-    m_dropShadow->setDropShadow(*style->drop_shadow());
+
+    item = wdgLayerStyles.lstStyleSelector->item(3);
+    item->setCheckState(style->inner_shadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+    m_dropShadow->setDropShadow(style->drop_shadow());
+    m_innerShadow->setDropShadow(style->inner_shadow());
 }
 
 KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 {
-    psd_layer_effects_drop_shadow ds = m_dropShadow->dropShadow();
-    ds.setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
-    *m_layerStyle->drop_shadow() = ds;
+    m_layerStyle->drop_shadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
+    m_layerStyle->inner_shadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(3)->checkState() == Qt::Checked);
+
+    m_dropShadow->fetchDropShadow(m_layerStyle->drop_shadow());
+    m_innerShadow->fetchDropShadow(m_layerStyle->inner_shadow());
 
     return m_layerStyle;
 }
@@ -232,8 +243,9 @@ Contour::Contour(QWidget *parent)
 /***** Drop Shadow **************************************************/
 /********************************************************************/
 
-DropShadow::DropShadow(QWidget *parent)
-    : QWidget(parent)
+DropShadow::DropShadow(Mode mode, QWidget *parent)
+    : QWidget(parent),
+      m_mode(mode)
 {
     ui.setupUi(this);
 
@@ -278,6 +290,12 @@ DropShadow::DropShadow(QWidget *parent)
     connect(ui.intNoise, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     connect(ui.chkLayerKnocksOutDropShadow, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+
+    if (m_mode == InnerShadowMode) {
+        ui.chkLayerKnocksOutDropShadow->setVisible(false);
+        ui.grpMain->setTitle(i18n("Inner Shadow"));
+        ui.lblSpread->setText(i18n("Choke"));
+    }
 }
 
 void DropShadow::slotDialAngleChanged(int value)
@@ -292,50 +310,50 @@ void DropShadow::slotIntAngleChanged(int value)
     ui.dialAngle->setValue(value);
 }
 
-void DropShadow::setDropShadow(const psd_layer_effects_drop_shadow &dropShadow)
+void DropShadow::setDropShadow(const psd_layer_effects_shadow_base *dropShadow)
 {
-    ui.cmbCompositeOp->selectCompositeOp(KoID(dropShadow.blendMode()));
-    ui.doubleOpacity->setValue(dropShadow.opacity());
+    ui.cmbCompositeOp->selectCompositeOp(KoID(dropShadow->blendMode()));
+    ui.doubleOpacity->setValue(dropShadow->opacity());
 
-    ui.dialAngle->setValue(dropShadow.angle());
-    ui.intAngle->setValue(dropShadow.angle());
-    ui.chkUseGlobalLight->setChecked(dropShadow.useGlobalLight());
+    ui.dialAngle->setValue(dropShadow->angle());
+    ui.intAngle->setValue(dropShadow->angle());
+    ui.chkUseGlobalLight->setChecked(dropShadow->useGlobalLight());
 
-    ui.intDistance->setValue(dropShadow.distance());
-    ui.intSpread->setValue(dropShadow.spread());
-    ui.intSize->setValue(dropShadow.size());
+    ui.intDistance->setValue(dropShadow->distance());
+    ui.intSpread->setValue(dropShadow->spread());
+    ui.intSize->setValue(dropShadow->size());
 
     // FIXME: curve editing
     // ui.cmbContour;
-    ui.chkAntiAliased->setChecked(dropShadow.antiAliased());
+    ui.chkAntiAliased->setChecked(dropShadow->antiAliased());
 
-    ui.intNoise->setValue(dropShadow.noise());
-    ui.chkLayerKnocksOutDropShadow->setChecked(dropShadow.knocksOut());
+    ui.intNoise->setValue(dropShadow->noise());
+
+    if (m_mode == DropShadowMode) {
+        ui.chkLayerKnocksOutDropShadow->setChecked(dropShadow->knocksOut());
+    }
 }
 
-psd_layer_effects_drop_shadow DropShadow::dropShadow() const
+void DropShadow::fetchDropShadow(psd_layer_effects_shadow_base *ds) const
 {
-    psd_layer_effects_drop_shadow ds;
+    ds->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    ds->setOpacity(ui.doubleOpacity->value());
 
+    ds->setAngle(ui.dialAngle->value());
+    ds->setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
 
-    ds.setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
-    ds.setOpacity(ui.doubleOpacity->value());
-
-    ds.setAngle(ui.dialAngle->value());
-    ds.setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
-
-    ds.setDistance(ui.intDistance->value());
-    ds.setSpread(ui.intSpread->value());
-    ds.setSize(ui.intSize->value());
+    ds->setDistance(ui.intDistance->value());
+    ds->setSpread(ui.intSpread->value());
+    ds->setSize(ui.intSize->value());
 
     // FIXME: curve editing
     // ui.cmbContour;
-    ds.setAntiAliased(ui.chkAntiAliased->isChecked());
-    ds.setNoise(ui.intNoise->value());
+    ds->setAntiAliased(ui.chkAntiAliased->isChecked());
+    ds->setNoise(ui.intNoise->value());
 
-    ds.setKnocksOut(ui.chkLayerKnocksOutDropShadow->isChecked());
-
-    return ds;
+    if (m_mode == DropShadowMode) {
+        ds->setKnocksOut(ui.chkLayerKnocksOutDropShadow->isChecked());
+    }
 }
 
 /********************************************************************/
@@ -354,14 +372,6 @@ InnerGlow::InnerGlow(QWidget *parent)
 {
     ui.setupUi(this);
 }
-
-
-InnerShadow::InnerShadow(QWidget *parent)
-    : QWidget(parent)
-{
-    ui.setupUi(this);
-}
-
 
 PatternOverlay::PatternOverlay(QWidget *parent)
     : QWidget(parent)

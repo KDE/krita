@@ -137,14 +137,14 @@ void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *pre
 void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 {
     QListWidgetItem *item = wdgLayerStyles.lstStyleSelector->item(2);
-    item->setCheckState(style->drop_shadow()->effect_enable ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(style->drop_shadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
     m_dropShadow->setDropShadow(*style->drop_shadow());
 }
 
 KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 {
     psd_layer_effects_drop_shadow ds = m_dropShadow->dropShadow();
-    ds.effect_enable = (wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
+    ds.setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
     *m_layerStyle->drop_shadow() = ds;
 
     return m_layerStyle;
@@ -294,23 +294,23 @@ void DropShadow::slotIntAngleChanged(int value)
 
 void DropShadow::setDropShadow(const psd_layer_effects_drop_shadow &dropShadow)
 {
-    ui.cmbCompositeOp->selectCompositeOp(KoID(dropShadow.blend_mode));
-    ui.doubleOpacity->setValue(dropShadow.opacity);
+    ui.cmbCompositeOp->selectCompositeOp(KoID(dropShadow.blendMode()));
+    ui.doubleOpacity->setValue(dropShadow.opacity());
 
-    ui.dialAngle->setValue(dropShadow.angle);
-    ui.intAngle->setValue(dropShadow.angle);
-    ui.chkUseGlobalLight->setChecked(dropShadow.use_global_light);
+    ui.dialAngle->setValue(dropShadow.angle());
+    ui.intAngle->setValue(dropShadow.angle());
+    ui.chkUseGlobalLight->setChecked(dropShadow.useGlobalLight());
 
-    ui.intDistance->setValue(dropShadow.distance);
-    ui.intSpread->setValue(dropShadow.spread);
-    ui.intSize->setValue(dropShadow.size);
+    ui.intDistance->setValue(dropShadow.distance());
+    ui.intSpread->setValue(dropShadow.spread());
+    ui.intSize->setValue(dropShadow.size());
 
     // FIXME: curve editing
     // ui.cmbContour;
-    ui.chkAntiAliased->setChecked(dropShadow.anti_aliased);
+    ui.chkAntiAliased->setChecked(dropShadow.antiAliased());
 
-    ui.intNoise->setValue(dropShadow.noise);
-    ui.chkLayerKnocksOutDropShadow->setChecked(dropShadow.knocks_out);
+    ui.intNoise->setValue(dropShadow.noise());
+    ui.chkLayerKnocksOutDropShadow->setChecked(dropShadow.knocksOut());
 }
 
 psd_layer_effects_drop_shadow DropShadow::dropShadow() const
@@ -318,22 +318,22 @@ psd_layer_effects_drop_shadow DropShadow::dropShadow() const
     psd_layer_effects_drop_shadow ds;
 
 
-    ds.blend_mode = ui.cmbCompositeOp->selectedCompositeOp().id();
-    ds.opacity = ui.doubleOpacity->value();
+    ds.setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    ds.setOpacity(ui.doubleOpacity->value());
 
-    ds.angle = ui.dialAngle->value();
-    ds.use_global_light = ui.chkUseGlobalLight->isChecked();
+    ds.setAngle(ui.dialAngle->value());
+    ds.setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
 
-    ds.distance = ui.intDistance->value();
-    ds.spread = ui.intSpread->value();
-    ds.size = ui.intSize->value();
+    ds.setDistance(ui.intDistance->value());
+    ds.setSpread(ui.intSpread->value());
+    ds.setSize(ui.intSize->value());
 
     // FIXME: curve editing
     // ui.cmbContour;
-    ds.anti_aliased = ui.chkAntiAliased->isChecked();
-    ds.noise = ui.intNoise->value();
+    ds.setAntiAliased(ui.chkAntiAliased->isChecked());
+    ds.setNoise(ui.intNoise->value());
 
-    ds.knocks_out = ui.chkLayerKnocksOutDropShadow->isChecked();
+    ds.setKnocksOut(ui.chkLayerKnocksOutDropShadow->isChecked());
 
     return ds;
 }

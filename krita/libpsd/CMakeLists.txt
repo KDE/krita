@@ -3,7 +3,6 @@ set(libkispsd_LIB_SRCS
     psd.cpp
     compression.cpp
     psd_pattern.cpp
-    kis_psd_struct_converters.cpp
 )
 
 kde4_add_library(libkispsd SHARED ${libkispsd_LIB_SRCS} )

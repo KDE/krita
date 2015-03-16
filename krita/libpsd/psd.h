@@ -31,6 +31,10 @@
 
 #include "libkispsd_export.h"
 
+#include "kis_debug.h"
+
+
+
 const int MAX_CHANNELS = 56;
 
 typedef qint32  Fixed;                  /* Represents a fixed point implied decimal */
@@ -225,85 +229,185 @@ struct psd_layer_effects_context {
 #define PSD_LOOKUP_TABLE_SIZE 256
 
 // dsdw, isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
-struct LIBKISPSD_EXPORT psd_layer_effects_drop_shadow {
-
-    psd_layer_effects_drop_shadow()
-        : effect_enable(false)
-        , blend_mode(COMPOSITE_MULT)
-        , color(Qt::black)
-        , native_color(Qt::black)
-        , opacity(75)
-        , angle(120)
-        , use_global_light(true)
-        , distance(21)
-        , spread(0)
-        , size(21)
-        , anti_aliased(0)
-        , noise(0)
-        , knocks_out(false)
+class LIBKISPSD_EXPORT psd_layer_effects_shadow_base {
+public:
+    psd_layer_effects_shadow_base()
+        : m_effectEnabled(false)
+        , m_blendMode(COMPOSITE_MULT)
+        , m_color(Qt::black)
+        , m_nativeColor(Qt::black)
+        , m_opacity(75)
+        , m_angle(120)
+        , m_useGlobalLight(true)
+        , m_distance(21)
+        , m_spread(0)
+        , m_size(21)
+        , m_antiAliased(0)
+        , m_noise(0)
+        , m_knocksOut(false)
     {
         for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
-            contour_lookup_table[i] = i;
+            m_contourLookupTable[i] = i;
         }
+    }
+
+    virtual ~psd_layer_effects_shadow_base() {
     }
 
     QPoint calculateOffset(const psd_layer_effects_context *context) const;
 
-    bool effect_enable; // Effect enabled
 
-    QString blend_mode; // already in Krita format!
-    QColor color;
-    QColor native_color;
-    quint8 opacity; // Opacity as a percent (0...100)
-    qint32 angle; // Angle in degrees
-    bool use_global_light; // Use this angle in all of the layer effects
-    qint32 distance; // Distance in pixels
-    qint32 spread; // Intensity as a percent
-    qint32 size; // Blur value in pixels
+    bool effectEnabled() const {
+        return m_effectEnabled;
+    }
+    void setEffectEnabled(bool value) {
+        m_effectEnabled = value;
+    }
 
-    quint8 contour_lookup_table[PSD_LOOKUP_TABLE_SIZE];
-    bool anti_aliased;
-    qint32 noise;
-    bool knocks_out;
+    QString blendMode() const {
+        return m_blendMode;
+    }
+    void setBlendMode(QString value) {
+        m_blendMode = value;
+    }
+
+    QColor color() const {
+        return m_color;
+    }
+    void setColor(QColor value) {
+        m_color = value;
+    }
+
+    QColor nativeColor() const {
+        return m_nativeColor;
+    }
+    void setNativeColor(QColor value) {
+        m_nativeColor = value;
+    }
+
+    quint8 opacity() const {
+        return m_opacity;
+    }
+    void setOpacity(quint8 value) {
+        m_opacity = value;
+    }
+
+    qint32 angle() const {
+        return m_angle;
+    }
+    void setAngle(qint32 value) {
+        m_angle = value;
+    }
+
+    bool useGlobalLight() const {
+        return m_useGlobalLight;
+    }
+    void setUseGlobalLight(bool value) {
+        m_useGlobalLight = value;
+    }
+
+    qint32 distance() const {
+        return m_distance;
+    }
+    void setDistance(qint32 value) {
+        m_distance = value;
+    }
+
+    qint32 spread() const {
+        return m_spread;
+    }
+    void setSpread(qint32 value) {
+        m_spread = value;
+    }
+
+    qint32 size() const {
+        return m_size;
+    }
+    void setSize(qint32 value) {
+        m_size = value;
+    }
+
+    const quint8* contourLookupTable() const {
+        return m_contourLookupTable;
+    }
+    void setContourLookupTable(quint8* value) {
+        memcpy(m_contourLookupTable, value, PSD_LOOKUP_TABLE_SIZE * sizeof(quint8));
+    }
+
+    bool antiAliased() const {
+        return m_antiAliased;
+    }
+    void setAntiAliased(bool value) {
+        m_antiAliased = value;
+    }
+
+    qint32 noise() const {
+        return m_noise;
+    }
+    void setNoise(qint32 value) {
+        m_noise = value;
+    }
+
+    bool knocksOut() const {
+        return m_knocksOut;
+    }
+    virtual void setKnocksOut(bool value) {
+        m_knocksOut = value;
+    }
+
+    virtual bool invertsSelection() const {
+        return false;
+    }
+
+    virtual bool edgeHidden() const {
+        return true;
+    }
+
+private:
+
+    bool m_effectEnabled; // Effect enabled
+
+    QString m_blendMode; // already in Krita format!
+    QColor m_color;
+    QColor m_nativeColor;
+    quint8 m_opacity; // Opacity as a percent (0...100)
+    qint32 m_angle; // Angle in degrees
+    bool m_useGlobalLight; // Use this angle in all of the layer effects
+    qint32 m_distance; // Distance in pixels
+    qint32 m_spread; // Intensity as a percent
+    qint32 m_size; // Blur value in pixels
+
+    quint8 m_contourLookupTable[PSD_LOOKUP_TABLE_SIZE];
+    bool m_antiAliased;
+    qint32 m_noise;
+    bool m_knocksOut;
+};
+
+class LIBKISPSD_EXPORT psd_layer_effects_drop_shadow : public psd_layer_effects_shadow_base
+{
 };
 
 // isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
-struct LIBKISPSD_EXPORT psd_layer_effects_inner_shadow
+class LIBKISPSD_EXPORT psd_layer_effects_inner_shadow : public psd_layer_effects_shadow_base
 {
-    psd_layer_effects_inner_shadow()
-        : effect_enable(false)
-        , blend_mode(COMPOSITE_MULT)
-        , color(Qt::black)
-        , native_color(Qt::black)
-        , opacity(75)
-        , angle(120)
-        , use_global_light(true)
-        , distance(21)
-        , choke(0)
-        , size(21)
-        , anti_aliased(0)
-        , noise(0)
-    {
-        for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
-            contour_lookup_table[i] = i;
-        }
+public:
+    psd_layer_effects_inner_shadow() {
+        psd_layer_effects_shadow_base::setKnocksOut(true);
     }
 
-    bool effect_enable; // Effect enabled
+    bool invertsSelection() const {
+        return true;
+    }
 
-    QString blend_mode; // Blend mode: 4 bytes for signature and 4 bytes for key
-    QColor color;
-    QColor native_color;
-    quint8 opacity; // Opacity as a percent
-    qint32 angle; // Angle in degrees
-    bool use_global_light; // Use this angle in all of the layer effects
-    qint32 distance; // Distance in pixels
-    qint32 choke; // Intensity as a percent
-    qint32 size; // Blur value in pixels
+    bool edgeHidden() const {
+        return false;
+    }
 
-    quint8 contour_lookup_table[256];
-    bool anti_aliased;
-    qint32 noise;
+private:
+    void setKnocksOut(bool value) {
+        Q_UNUSED(value);
+        KIS_ASSERT_RECOVER_NOOP(0 && "Inner Shadow has a static configuration of knocksOut() and cannot be changed");
+    }
 };
 
 // oglw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_25738

@@ -23,7 +23,7 @@
 
 #include "kis_layer_style_filter.h"
 
-class KisShadowPropertiesAdapter;
+class psd_layer_effects_shadow_base;
 
 
 class KDE_EXPORT KisLsDropShadowFilter : public KisLayerStyleFilter
@@ -41,7 +41,7 @@ public:
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;
 
 private:
-    QSharedPointer<KisShadowPropertiesAdapter> createAdapter(KisPSDLayerStyleSP style) const;
+    const psd_layer_effects_shadow_base* getShadowStruct(KisPSDLayerStyleSP style) const;
 
 private:
     const bool m_isDropShadow;

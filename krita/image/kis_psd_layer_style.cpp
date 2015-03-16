@@ -126,7 +126,8 @@ KisPSDLayerStyleSP KisPSDLayerStyle::clone() const
 
 bool KisPSDLayerStyle::isEmpty() const
 {
-    return !d->drop_shadow.effect_enable;
+    return !d->drop_shadow.effectEnabled() &&
+        !d->inner_shadow.effectEnabled();
 }
 
 QString KisPSDLayerStyle::name() const
@@ -166,6 +167,7 @@ psd_layer_effects_inner_shadow* KisPSDLayerStyle::inner_shadow()
 
 bool KisPSDLayerStyle::writeASL(QIODevice *io, StylesVector )
 {
+    Q_UNUSED(io);
     return false;
 }
 

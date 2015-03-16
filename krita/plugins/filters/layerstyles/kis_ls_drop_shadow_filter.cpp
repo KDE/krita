@@ -25,7 +25,6 @@
 #include <KoUpdater.h>
 
 #include "psd.h"
-#include "kis_psd_struct_converters.h"
 
 #include "kis_convolution_kernel.h"
 #include "kis_convolution_painter.h"
@@ -44,82 +43,6 @@ KisLsDropShadowFilter::KisLsDropShadowFilter(bool isDropShadow)
     , m_isDropShadow(isDropShadow)
 {
 }
-
-struct KisShadowPropertiesAdapter {
-
-    KisShadowPropertiesAdapter(const psd_layer_effects_drop_shadow &shadow)
-        : effect_enable(shadow.effect_enable)
-        , blend_mode(shadow.blend_mode)
-        , color(shadow.color)
-        , native_color(shadow.native_color)
-        , opacity(shadow.opacity)
-        , angle(shadow.angle)
-        , use_global_light(shadow.use_global_light)
-        , distance(shadow.distance)
-        , spread(shadow.spread)
-        , size(shadow.size)
-        , anti_aliased(shadow.anti_aliased)
-        , noise(shadow.noise)
-        , knocks_out(shadow.knocks_out)
-        , inverts_selection(false)
-        , edge_hidden(true)
-        {
-            for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
-                contour_lookup_table[i] = shadow.contour_lookup_table[i];
-            }
-        }
-
-    KisShadowPropertiesAdapter(const psd_layer_effects_inner_shadow &shadow)
-        : effect_enable(shadow.effect_enable)
-        , blend_mode(shadow.blend_mode)
-        , color(shadow.color)
-        , native_color(shadow.native_color)
-        , opacity(shadow.opacity)
-        , angle(shadow.angle)
-        , use_global_light(shadow.use_global_light)
-        , distance(shadow.distance)
-        , spread(shadow.choke)
-        , size(shadow.size)
-        , anti_aliased(shadow.anti_aliased)
-        , noise(shadow.noise)
-        , knocks_out(true)
-        , inverts_selection(true)
-        , edge_hidden(false)
-        {
-            for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
-                contour_lookup_table[i] = shadow.contour_lookup_table[i];
-            }
-        }
-
-    QPoint calculateOffset(const psd_layer_effects_context *context) const {
-        qint32 angle = this->use_global_light ?
-            context->global_angle : this->angle;
-
-        qint32 distance_x = -qRound(this->distance * cos(kisDegreesToRadians(qreal(angle))));
-        qint32 distance_y =  qRound(this->distance * sin(kisDegreesToRadians(qreal(angle))));
-
-        return QPoint(distance_x, distance_y);
-    }
-
-    bool effect_enable; // Effect enabled
-
-    QString blend_mode; // already in Krita format!
-    QColor color;
-    QColor native_color;
-    quint8 opacity; // Opacity as a percent (0...100)
-    qint32 angle; // Angle in degrees
-    bool use_global_light; // Use this angle in all of the layer effects
-    qint32 distance; // Distance in pixels
-    qint32 spread; // Intensity as a percent
-    qint32 size; // Blur value in pixels
-
-    quint8 contour_lookup_table[PSD_LOOKUP_TABLE_SIZE];
-    bool anti_aliased;
-    qint32 noise;
-    bool knocks_out;
-    bool inverts_selection;
-    bool edge_hidden;
-};
 
 void findEdge(KisPixelSelectionSP selection, const QRect &applyRect, const bool edgeHidden)
 {
@@ -314,12 +237,12 @@ struct ShadowRectsData
 
     ShadowRectsData(const QRect &applyRect,
                     const psd_layer_effects_context *context,
-                    const KisShadowPropertiesAdapter *shadow_adapter,
+                    const psd_layer_effects_shadow_base *shadow,
                     Direction direction)
     {
-        spread_size = (shadow_adapter->spread * shadow_adapter->size + 50) / 100;
-        blur_size = shadow_adapter->size - spread_size;
-        offset = shadow_adapter->calculateOffset(context);
+        spread_size = (shadow->spread() * shadow->size() + 50) / 100;
+        blur_size = shadow->size() - spread_size;
+        offset = shadow->calculateOffset(context);
 
         // need rect calculation in reverse order
         dstRect = applyRect;
@@ -327,7 +250,7 @@ struct ShadowRectsData
         const int directionCoeff = direction == NEED_RECT ? -1 : 1;
         srcRect = dstRect.translated(directionCoeff * offset);
 
-        noiseNeedRect = shadow_adapter->noise > 0 ?
+        noiseNeedRect = shadow->noise() > 0 ?
             kisGrowRect(srcRect, NOISE_NEED_BORDER) : srcRect;
 
         blurNeedRect = blur_size ?
@@ -368,11 +291,11 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
                      KisPaintDeviceSP dstDevice,
                      const QRect &applyRect,
                      const psd_layer_effects_context *context,
-                     const KisShadowPropertiesAdapter *shadow_adapter)
+                     const psd_layer_effects_shadow_base *shadow)
 {
     if (applyRect.isEmpty()) return;
 
-    ShadowRectsData d(applyRect, context, shadow_adapter, ShadowRectsData::NEED_RECT);
+    ShadowRectsData d(applyRect, context, shadow, ShadowRectsData::NEED_RECT);
 
     KisSelectionSP baseSelection =
         selectionFromAlphaChannel(srcDevice, d.spreadNeedRect);
@@ -381,7 +304,7 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
 
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("0_selection_initial.png");
 
-    if (shadow_adapter->inverts_selection) {
+    if (shadow->invertsSelection()) {
         selection->invert();
     }
 
@@ -389,7 +312,7 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
      * Copy selection which will be erased from the original later
      */
     KisPixelSelectionSP knockOutSelection;
-    if (shadow_adapter->knocks_out) {
+    if (shadow->knocksOut()) {
         knockOutSelection = new KisPixelSelection(*selection);
     }
 
@@ -401,7 +324,7 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
 
         // TODO: find out why in libpsd we pass false here. If we do so,
         //       the result is fully black, which is not expected
-        findEdge(selection, d.blurNeedRect, true /*shadow_adapter->edge_hidden*/);
+        findEdge(selection, d.blurNeedRect, true /*shadow->edgeHidden()*/);
     }
 
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("1_selection_spread.png");
@@ -416,19 +339,19 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
      */
     applyContourCorrection(selection,
                            d.noiseNeedRect,
-                           shadow_adapter->contour_lookup_table,
-                           shadow_adapter->anti_aliased,
-                           shadow_adapter->edge_hidden);
+                           shadow->contourLookupTable(),
+                           shadow->antiAliased(),
+                           shadow->edgeHidden());
 
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("3_selection_contour.png");
 
     /**
      * Noise
      */
-    if (shadow_adapter->noise > 0) {
+    if (shadow->noise() > 0) {
         applyNoise(selection,
                    d.srcRect,
-                   shadow_adapter->noise,
+                   shadow->noise(),
                    context);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("4_selection_noise.png");
@@ -439,10 +362,10 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     /**
      * Knock-out original outline of the device from the resulting shade
      */
-    if (shadow_adapter->knocks_out) {
+    if (shadow->knocksOut()) {
         KIS_ASSERT_RECOVER_RETURN(knockOutSelection);
 
-        QRect knockOutRect = !shadow_adapter->inverts_selection ?
+        QRect knockOutRect = !shadow->invertsSelection() ?
             d.srcRect : d.spreadNeedRect;
 
         knockOutRect &= d.dstRect;
@@ -453,7 +376,7 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_selection_knockout.png");
 
-    const KoColor shadowColor(shadow_adapter->color, srcDevice->colorSpace());
+    const KoColor shadowColor(shadow->color(), srcDevice->colorSpace());
 
     KisPaintDeviceSP tempDevice;
     if (srcDevice == dstDevice) {
@@ -469,8 +392,8 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
         QRect shadowRect(d.dstRect);
         KisFillPainter gc(dstDevice);
 
-        const QString compositeOp = shadow_adapter->blend_mode;
-        const quint8 opacityU8 = 255.0 / 100.0 * shadow_adapter->opacity;
+        const QString compositeOp = shadow->blendMode();
+        const quint8 opacityU8 = 255.0 / 100.0 * shadow->opacity();
         gc.setCompositeOp(compositeOp);
         gc.setOpacity(opacityU8);
 
@@ -487,18 +410,12 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     }
 }
 
-QSharedPointer<KisShadowPropertiesAdapter>
-KisLsDropShadowFilter::createAdapter(KisPSDLayerStyleSP style) const
+const psd_layer_effects_shadow_base*
+KisLsDropShadowFilter::getShadowStruct(KisPSDLayerStyleSP style) const
 {
-    QSharedPointer<KisShadowPropertiesAdapter> shadowAdapter;
-
-    if (m_isDropShadow) {
-        shadowAdapter = toQShared(new KisShadowPropertiesAdapter(*style->drop_shadow()));
-    } else {
-        shadowAdapter = toQShared(new KisShadowPropertiesAdapter(*style->inner_shadow()));
-    }
-
-    return shadowAdapter;
+    return m_isDropShadow ?
+        static_cast<const psd_layer_effects_shadow_base*>(style->drop_shadow()) :
+        static_cast<const psd_layer_effects_shadow_base*>(style->inner_shadow());
 }
 
 void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
@@ -507,27 +424,28 @@ void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
                                             KisPSDLayerStyleSP style) const
 {
     KIS_ASSERT_RECOVER_RETURN(style);
-    QSharedPointer<KisShadowPropertiesAdapter> shadowAdapter = createAdapter(style);
-    if (!shadowAdapter->effect_enable) return;
 
-    applyDropShadow(src, dst, applyRect, style->context(), shadowAdapter.data());
+    const psd_layer_effects_shadow_base *shadowStruct = getShadowStruct(style);
+    if (!shadowStruct->effectEnabled()) return;
+
+    applyDropShadow(src, dst, applyRect, style->context(), shadowStruct);
 }
 
 QRect KisLsDropShadowFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const
 {
-    QSharedPointer<KisShadowPropertiesAdapter> shadowAdapter = createAdapter(style);
-    if (!shadowAdapter->effect_enable) return rect;
+    const psd_layer_effects_shadow_base *shadowStruct = getShadowStruct(style);
+    if (!shadowStruct->effectEnabled()) return rect;
 
-    ShadowRectsData d(rect, style->context(), shadowAdapter.data(), ShadowRectsData::NEED_RECT);
+    ShadowRectsData d(rect, style->context(), shadowStruct, ShadowRectsData::NEED_RECT);
     return rect | d.finalNeedRect();
 }
 
 QRect KisLsDropShadowFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style) const
 {
-    QSharedPointer<KisShadowPropertiesAdapter> shadowAdapter = createAdapter(style);
-    if (!shadowAdapter->effect_enable) return rect;
+    const psd_layer_effects_shadow_base *shadowStruct = getShadowStruct(style);
+    if (!shadowStruct->effectEnabled()) return rect;
 
-    ShadowRectsData d(rect, style->context(), shadowAdapter.data(), ShadowRectsData::CHANGE_RECT);
+    ShadowRectsData d(rect, style->context(), shadowStruct, ShadowRectsData::CHANGE_RECT);
     return style->context()->keep_original ?
         d.finalChangeRect() : rect | d.finalChangeRect();
 }

@@ -199,13 +199,13 @@ QString composite_op_to_psd_blendmode(const QString& compositeop)
 
 }
 
-QPoint psd_layer_effects_drop_shadow::calculateOffset(const psd_layer_effects_context *context) const
+QPoint psd_layer_effects_shadow_base::calculateOffset(const psd_layer_effects_context *context) const
 {
-    qint32 angle = this->use_global_light ?
-        context->global_angle : this->angle;
+    qint32 angle = this->m_useGlobalLight ?
+        context->global_angle : this->m_angle;
 
-    qint32 distance_x = -qRound(this->distance * cos(kisDegreesToRadians(qreal(angle))));
-    qint32 distance_y =  qRound(this->distance * sin(kisDegreesToRadians(qreal(angle))));
+    qint32 distanceX = -qRound(this->m_distance * cos(kisDegreesToRadians(qreal(angle))));
+    qint32 distanceY =  qRound(this->m_distance * sin(kisDegreesToRadians(qreal(angle))));
 
-    return QPoint(distance_x, distance_y);
+    return QPoint(distanceX, distanceY);
 }

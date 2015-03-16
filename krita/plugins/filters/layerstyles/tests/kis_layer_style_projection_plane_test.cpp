@@ -51,8 +51,18 @@ void KisLayerStyleProjectionPlaneTest::test()
     image->addNode(layer);
 
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->drop_shadow()->size = 15;
+    style->drop_shadow()->distance = 5;
+    style->drop_shadow()->opacity = 70;
     style->drop_shadow()->noise = 30;
     style->drop_shadow()->effect_enable = true;
+
+    style->inner_shadow()->size = 15;
+    style->inner_shadow()->choke = 10;
+    style->inner_shadow()->distance = 5;
+    style->inner_shadow()->opacity = 70;
+    style->inner_shadow()->noise = 10;
+    style->inner_shadow()->effect_enable = true;
 
     KisLayerStyleProjectionPlane plane(layer.data(), style);
 

@@ -57,9 +57,11 @@ public:
 
     const psd_layer_effects_context* context() const;
     const psd_layer_effects_drop_shadow* drop_shadow() const;
+    const psd_layer_effects_inner_shadow* inner_shadow() const;
 
     psd_layer_effects_context* context();
     psd_layer_effects_drop_shadow* drop_shadow();
+    psd_layer_effects_inner_shadow* inner_shadow();
 
     /**
      * Save given styles to the ASL style format. All patterns references in the
@@ -78,9 +80,6 @@ public:
 
     /// Load this style object
     bool read(QIODevice *io);
-
-    psd_layer_effects_drop_shadow & dropShadow() const;
-    void setDropShadow(const psd_layer_effects_drop_shadow &dropShadow);
 
 private:
     struct Private;

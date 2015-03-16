@@ -56,11 +56,19 @@ void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleS
 {
     m_d->sourceProjectionPlane = sourceLayer->internalProjectionPlane();
 
-    KisLayerStyleFilterProjectionPlane *dropShadow =
-        new KisLayerStyleFilterProjectionPlane(sourceLayer);
+    {
+        KisLayerStyleFilterProjectionPlane *dropShadow =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        dropShadow->setStyle(new KisLsDropShadowFilter(true), style);
+        m_d->stylesBefore << toQShared(dropShadow);
+    }
 
-    dropShadow->setStyle(new KisLsDropShadowFilter(), style);
-    m_d->stylesBefore << toQShared(dropShadow);
+    {
+        KisLayerStyleFilterProjectionPlane *innerShadow =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        innerShadow->setStyle(new KisLsDropShadowFilter(false), style);
+        m_d->stylesAfter << toQShared(innerShadow);
+    }
 }
 
 KisLayerStyleProjectionPlane::~KisLayerStyleProjectionPlane()

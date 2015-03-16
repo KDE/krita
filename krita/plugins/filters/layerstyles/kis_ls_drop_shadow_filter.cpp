@@ -39,30 +39,115 @@
 #include "kis_psd_layer_style.h"
 
 
-KisLsDropShadowFilter::KisLsDropShadowFilter()
+KisLsDropShadowFilter::KisLsDropShadowFilter(bool isDropShadow)
     : KisLayerStyleFilter(KoID("lsdropshadow", i18n("Drop Shadow (style)")))
+    , m_isDropShadow(isDropShadow)
 {
 }
 
-template <bool edgeHidden>
-void findEdge(KisPixelSelectionSP selection, const QRect &applyRect)
+struct KisShadowPropertiesAdapter {
+
+    KisShadowPropertiesAdapter(const psd_layer_effects_drop_shadow &shadow)
+        : effect_enable(shadow.effect_enable)
+        , blend_mode(shadow.blend_mode)
+        , color(shadow.color)
+        , native_color(shadow.native_color)
+        , opacity(shadow.opacity)
+        , angle(shadow.angle)
+        , use_global_light(shadow.use_global_light)
+        , distance(shadow.distance)
+        , spread(shadow.spread)
+        , size(shadow.size)
+        , anti_aliased(shadow.anti_aliased)
+        , noise(shadow.noise)
+        , knocks_out(shadow.knocks_out)
+        , inverts_selection(false)
+        , edge_hidden(true)
+        {
+            for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
+                contour_lookup_table[i] = shadow.contour_lookup_table[i];
+            }
+        }
+
+    KisShadowPropertiesAdapter(const psd_layer_effects_inner_shadow &shadow)
+        : effect_enable(shadow.effect_enable)
+        , blend_mode(shadow.blend_mode)
+        , color(shadow.color)
+        , native_color(shadow.native_color)
+        , opacity(shadow.opacity)
+        , angle(shadow.angle)
+        , use_global_light(shadow.use_global_light)
+        , distance(shadow.distance)
+        , spread(shadow.choke)
+        , size(shadow.size)
+        , anti_aliased(shadow.anti_aliased)
+        , noise(shadow.noise)
+        , knocks_out(true)
+        , inverts_selection(true)
+        , edge_hidden(false)
+        {
+            for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
+                contour_lookup_table[i] = shadow.contour_lookup_table[i];
+            }
+        }
+
+    QPoint calculateOffset(const psd_layer_effects_context *context) const {
+        qint32 angle = this->use_global_light ?
+            context->global_angle : this->angle;
+
+        qint32 distance_x = -qRound(this->distance * cos(kisDegreesToRadians(qreal(angle))));
+        qint32 distance_y =  qRound(this->distance * sin(kisDegreesToRadians(qreal(angle))));
+
+        return QPoint(distance_x, distance_y);
+    }
+
+    bool effect_enable; // Effect enabled
+
+    QString blend_mode; // already in Krita format!
+    QColor color;
+    QColor native_color;
+    quint8 opacity; // Opacity as a percent (0...100)
+    qint32 angle; // Angle in degrees
+    bool use_global_light; // Use this angle in all of the layer effects
+    qint32 distance; // Distance in pixels
+    qint32 spread; // Intensity as a percent
+    qint32 size; // Blur value in pixels
+
+    quint8 contour_lookup_table[PSD_LOOKUP_TABLE_SIZE];
+    bool anti_aliased;
+    qint32 noise;
+    bool knocks_out;
+    bool inverts_selection;
+    bool edge_hidden;
+};
+
+void findEdge(KisPixelSelectionSP selection, const QRect &applyRect, const bool edgeHidden)
 {
     KisSequentialIterator dstIt(selection, applyRect);
-    do {
-        quint8 *pixelPtr = dstIt.rawData();
 
-        *pixelPtr =
-            (edgeHidden && *pixelPtr < 24) ?
-            *pixelPtr * 10 : 0xFF;
+    if (edgeHidden) {
+        do {
+            quint8 *pixelPtr = dstIt.rawData();
 
-    } while(dstIt.nextPixel());
+            *pixelPtr =
+                (*pixelPtr < 24) ?
+                *pixelPtr * 10 : 0xFF;
+
+        } while(dstIt.nextPixel());
+    } else {
+        do {
+            quint8 *pixelPtr = dstIt.rawData();
+            *pixelPtr = 0xFF;
+
+        } while(dstIt.nextPixel());
+    }
 }
 
-template <bool edgeHidden>
 void applyContourCorrection(KisPixelSelectionSP selection,
                             const QRect &applyRect,
                             const quint8 *lookup_table,
-                            bool antiAliased)
+                            bool antiAliased,
+                            bool edgeHidden)
 {
     quint8 contour[PSD_LOOKUP_TABLE_SIZE] = {
         0x00, 0x0b, 0x16, 0x21, 0x2c, 0x37, 0x42, 0x4d, 0x58, 0x63, 0x6e, 0x79, 0x84, 0x8f, 0x9a, 0xa5,
@@ -205,7 +290,7 @@ KisSelectionSP selectionFromAlphaChannel(KisPaintDeviceSP device,
 {
     const KoColorSpace *cs = device->colorSpace();
 
-    KisSelectionSP baseSelection = new KisSelection();
+    KisSelectionSP baseSelection = new KisSelection(new KisSelectionEmptyBounds(0));
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
     KisSequentialConstIterator srcIt(device, srcRect);
@@ -229,12 +314,12 @@ struct ShadowRectsData
 
     ShadowRectsData(const QRect &applyRect,
                     const psd_layer_effects_context *context,
-                    const psd_layer_effects_drop_shadow *drop_shadow,
+                    const KisShadowPropertiesAdapter *shadow_adapter,
                     Direction direction)
     {
-        spread_size = (drop_shadow->spread * drop_shadow->size + 50) / 100;
-        blur_size = drop_shadow->size - spread_size;
-        offset = drop_shadow->calculateOffset(context);
+        spread_size = (shadow_adapter->spread * shadow_adapter->size + 50) / 100;
+        blur_size = shadow_adapter->size - spread_size;
+        offset = shadow_adapter->calculateOffset(context);
 
         // need rect calculation in reverse order
         dstRect = applyRect;
@@ -242,7 +327,7 @@ struct ShadowRectsData
         const int directionCoeff = direction == NEED_RECT ? -1 : 1;
         srcRect = dstRect.translated(directionCoeff * offset);
 
-        noiseNeedRect = drop_shadow->noise > 0 ?
+        noiseNeedRect = shadow_adapter->noise > 0 ?
             kisGrowRect(srcRect, NOISE_NEED_BORDER) : srcRect;
 
         blurNeedRect = blur_size ?
@@ -263,6 +348,7 @@ struct ShadowRectsData
     }
 
     inline QRect finalChangeRect() const {
+        // TODO: is it correct?
         return spreadNeedRect;
     }
 
@@ -277,15 +363,16 @@ struct ShadowRectsData
     QRect spreadNeedRect;
 };
 
+
 void applyDropShadow(KisPaintDeviceSP srcDevice,
                      KisPaintDeviceSP dstDevice,
                      const QRect &applyRect,
                      const psd_layer_effects_context *context,
-                     const psd_layer_effects_drop_shadow *drop_shadow)
+                     const KisShadowPropertiesAdapter *shadow_adapter)
 {
     if (applyRect.isEmpty()) return;
 
-    ShadowRectsData d(applyRect, context, drop_shadow, ShadowRectsData::NEED_RECT);
+    ShadowRectsData d(applyRect, context, shadow_adapter, ShadowRectsData::NEED_RECT);
 
     KisSelectionSP baseSelection =
         selectionFromAlphaChannel(srcDevice, d.spreadNeedRect);
@@ -294,11 +381,15 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
 
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("0_selection_initial.png");
 
+    if (shadow_adapter->inverts_selection) {
+        selection->invert();
+    }
+
     /**
      * Copy selection which will be erased from the original later
      */
     KisPixelSelectionSP knockOutSelection;
-    if (drop_shadow->knocks_out) {
+    if (shadow_adapter->knocks_out) {
         knockOutSelection = new KisPixelSelection(*selection);
     }
 
@@ -307,9 +398,14 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
      */
     if (d.spread_size) {
         applyGaussian(selection, d.blurNeedRect, d.spread_size);
-        findEdge<true>(selection, d.blurNeedRect);
+
+        // TODO: find out why in libpsd we pass false here. If we do so,
+        //       the result is fully black, which is not expected
+        findEdge(selection, d.blurNeedRect, true /*shadow_adapter->edge_hidden*/);
     }
+
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("1_selection_spread.png");
+
     if (d.blur_size) {
         applyGaussian(selection, d.noiseNeedRect, d.blur_size);
     }
@@ -318,40 +414,46 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     /**
      * Contour correction
      */
-    applyContourCorrection<true>(selection,
-                                 d.noiseNeedRect,
-                                 drop_shadow->contour_lookup_table,
-                                 drop_shadow->anti_aliased);
+    applyContourCorrection(selection,
+                           d.noiseNeedRect,
+                           shadow_adapter->contour_lookup_table,
+                           shadow_adapter->anti_aliased,
+                           shadow_adapter->edge_hidden);
+
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("3_selection_contour.png");
 
     /**
      * Noise
      */
-    if (drop_shadow->noise > 0) {
+    if (shadow_adapter->noise > 0) {
         applyNoise(selection,
                    d.srcRect,
-                   drop_shadow->noise,
+                   shadow_adapter->noise,
                    context);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("4_selection_noise.png");
 
-    /**
-     * Knock-out original outline of the device from the resulting shade
-     */
-    if (drop_shadow->knocks_out) {
-        KIS_ASSERT_RECOVER_RETURN(knockOutSelection);
-
-        KisPainter gc(selection);
-        gc.setCompositeOp(COMPOSITE_ERASE);
-        gc.bitBlt(d.srcRect.topLeft(), knockOutSelection, d.srcRect);
-    }
-    //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_selection_knockout.png");
-
-    const KoColor shadowColor(drop_shadow->color, srcDevice->colorSpace());
-
     selection->setX(d.offset.x());
     selection->setY(d.offset.y());
 
+    /**
+     * Knock-out original outline of the device from the resulting shade
+     */
+    if (shadow_adapter->knocks_out) {
+        KIS_ASSERT_RECOVER_RETURN(knockOutSelection);
+
+        QRect knockOutRect = !shadow_adapter->inverts_selection ?
+            d.srcRect : d.spreadNeedRect;
+
+        knockOutRect &= d.dstRect;
+
+        KisPainter gc(selection);
+        gc.setCompositeOp(COMPOSITE_ERASE);
+        gc.bitBlt(knockOutRect.topLeft(), knockOutSelection, knockOutRect);
+    }
+    //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_selection_knockout.png");
+
+    const KoColor shadowColor(shadow_adapter->color, srcDevice->colorSpace());
 
     KisPaintDeviceSP tempDevice;
     if (srcDevice == dstDevice) {
@@ -367,9 +469,8 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
         QRect shadowRect(d.dstRect);
         KisFillPainter gc(dstDevice);
 
-        // TODO: should apply somewhere in the stack!
-        const QString compositeOp = drop_shadow->blend_mode;
-        const quint8 opacityU8 = 255.0 / 100.0 * drop_shadow->opacity;
+        const QString compositeOp = shadow_adapter->blend_mode;
+        const quint8 opacityU8 = 255.0 / 100.0 * shadow_adapter->opacity;
         gc.setCompositeOp(compositeOp);
         gc.setOpacity(opacityU8);
 
@@ -386,31 +487,47 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     }
 }
 
+QSharedPointer<KisShadowPropertiesAdapter>
+KisLsDropShadowFilter::createAdapter(KisPSDLayerStyleSP style) const
+{
+    QSharedPointer<KisShadowPropertiesAdapter> shadowAdapter;
+
+    if (m_isDropShadow) {
+        shadowAdapter = toQShared(new KisShadowPropertiesAdapter(*style->drop_shadow()));
+    } else {
+        shadowAdapter = toQShared(new KisShadowPropertiesAdapter(*style->inner_shadow()));
+    }
+
+    return shadowAdapter;
+}
+
 void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
                                             KisPaintDeviceSP dst,
                                             const QRect &applyRect,
                                             KisPSDLayerStyleSP style) const
 {
     KIS_ASSERT_RECOVER_RETURN(style);
-    if (!style->drop_shadow()->effect_enable) return;
+    QSharedPointer<KisShadowPropertiesAdapter> shadowAdapter = createAdapter(style);
+    if (!shadowAdapter->effect_enable) return;
 
-
-    applyDropShadow(src, dst, applyRect, style->context(), style->drop_shadow());
+    applyDropShadow(src, dst, applyRect, style->context(), shadowAdapter.data());
 }
 
 QRect KisLsDropShadowFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const
 {
-    if (!style->drop_shadow()->effect_enable) return rect;
+    QSharedPointer<KisShadowPropertiesAdapter> shadowAdapter = createAdapter(style);
+    if (!shadowAdapter->effect_enable) return rect;
 
-    ShadowRectsData d(rect, style->context(), style->drop_shadow(), ShadowRectsData::NEED_RECT);
+    ShadowRectsData d(rect, style->context(), shadowAdapter.data(), ShadowRectsData::NEED_RECT);
     return rect | d.finalNeedRect();
 }
 
 QRect KisLsDropShadowFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style) const
 {
-    if (!style->drop_shadow()->effect_enable) return rect;
+    QSharedPointer<KisShadowPropertiesAdapter> shadowAdapter = createAdapter(style);
+    if (!shadowAdapter->effect_enable) return rect;
 
-    ShadowRectsData d(rect, style->context(), style->drop_shadow(), ShadowRectsData::CHANGE_RECT);
+    ShadowRectsData d(rect, style->context(), shadowAdapter.data(), ShadowRectsData::CHANGE_RECT);
     return style->context()->keep_original ?
         d.finalChangeRect() : rect | d.finalChangeRect();
 }

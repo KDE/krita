@@ -144,6 +144,11 @@ const psd_layer_effects_drop_shadow* KisPSDLayerStyle::drop_shadow() const
     return &d->drop_shadow;
 }
 
+const psd_layer_effects_inner_shadow* KisPSDLayerStyle::inner_shadow() const
+{
+    return &d->inner_shadow;
+}
+
 psd_layer_effects_context* KisPSDLayerStyle::context()
 {
     return &d->context;
@@ -152,6 +157,11 @@ psd_layer_effects_context* KisPSDLayerStyle::context()
 psd_layer_effects_drop_shadow* KisPSDLayerStyle::drop_shadow()
 {
     return &d->drop_shadow;
+}
+
+psd_layer_effects_inner_shadow* KisPSDLayerStyle::inner_shadow()
+{
+    return &d->inner_shadow;
 }
 
 bool KisPSDLayerStyle::writeASL(QIODevice *io, StylesVector )
@@ -172,14 +182,4 @@ bool KisPSDLayerStyle::write(QIODevice *io) const
 bool KisPSDLayerStyle::read(QIODevice *io)
 {
     return false;
-}
-
-psd_layer_effects_drop_shadow &KisPSDLayerStyle::dropShadow() const
-{
-    return d->drop_shadow;
-}
-
-void KisPSDLayerStyle::setDropShadow(const psd_layer_effects_drop_shadow &dropShadow)
-{
-    d->drop_shadow = dropShadow;
 }

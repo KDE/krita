@@ -137,15 +137,15 @@ void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *pre
 void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 {
     QListWidgetItem *item = wdgLayerStyles.lstStyleSelector->item(2);
-    item->setCheckState(style->dropShadow().effect_enable ? Qt::Checked : Qt::Unchecked);
-    m_dropShadow->setDropShadow(style->dropShadow());
+    item->setCheckState(style->drop_shadow()->effect_enable ? Qt::Checked : Qt::Unchecked);
+    m_dropShadow->setDropShadow(*style->drop_shadow());
 }
 
 KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 {
     psd_layer_effects_drop_shadow ds = m_dropShadow->dropShadow();
     ds.effect_enable = (wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
-    m_layerStyle->setDropShadow(ds);
+    *m_layerStyle->drop_shadow() = ds;
 
     return m_layerStyle;
 }

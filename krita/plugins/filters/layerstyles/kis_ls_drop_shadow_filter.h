@@ -19,14 +19,18 @@
 #ifndef KIS_LS_DROP_SHADOW_FILTER_H
 #define KIS_LS_DROP_SHADOW_FILTER_H
 
+#include <QSharedPointer>
+
 #include "kis_layer_style_filter.h"
+
+class KisShadowPropertiesAdapter;
 
 
 class KDE_EXPORT KisLsDropShadowFilter : public KisLayerStyleFilter
 {
 public:
 
-    KisLsDropShadowFilter();
+    KisLsDropShadowFilter(bool isDropShadow = true);
 
     void processDirectly(KisPaintDeviceSP src,
                          KisPaintDeviceSP dst,
@@ -35,6 +39,12 @@ public:
 
     QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style) const;
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;
+
+private:
+    QSharedPointer<KisShadowPropertiesAdapter> createAdapter(KisPSDLayerStyleSP style) const;
+
+private:
+    const bool m_isDropShadow;
 
 };
 

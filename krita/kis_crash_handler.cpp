@@ -135,7 +135,7 @@ static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpI
 
     if (CreateProcessW(NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
         CloseHandle( pi.hProcess );
-        ( pi.hThread );
+        CloseHandle( pi.hThread );
         TerminateProcess(GetCurrentProcess(), 1);
     }
 
@@ -152,7 +152,7 @@ static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpI
     abort();
 #endif
     return true;
-#endif	
+#endif
 }
 
 // Copied from Qt's QString class because of weird linking errors
@@ -201,7 +201,7 @@ KisCrashHandler::KisCrashHandler()
     exceptionHandler = new google_breakpad::ExceptionHandler(tempPath.toStdString(), 0,
                                                              startCrashReporter, 0,
                                                              true);
-#endif	
+#endif
     Q_CHECK_PTR(exceptionHandler);
 }
 

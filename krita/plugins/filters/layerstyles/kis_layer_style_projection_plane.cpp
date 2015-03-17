@@ -59,15 +59,29 @@ void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleS
     {
         KisLayerStyleFilterProjectionPlane *dropShadow =
             new KisLayerStyleFilterProjectionPlane(sourceLayer);
-        dropShadow->setStyle(new KisLsDropShadowFilter(true), style);
+        dropShadow->setStyle(new KisLsDropShadowFilter(KisLsDropShadowFilter::DropShadow), style);
         m_d->stylesBefore << toQShared(dropShadow);
     }
 
     {
         KisLayerStyleFilterProjectionPlane *innerShadow =
             new KisLayerStyleFilterProjectionPlane(sourceLayer);
-        innerShadow->setStyle(new KisLsDropShadowFilter(false), style);
+        innerShadow->setStyle(new KisLsDropShadowFilter(KisLsDropShadowFilter::InnerShadow), style);
         m_d->stylesAfter << toQShared(innerShadow);
+    }
+
+    {
+        KisLayerStyleFilterProjectionPlane *outerGlow =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        outerGlow->setStyle(new KisLsDropShadowFilter(KisLsDropShadowFilter::OuterGlow), style);
+        m_d->stylesAfter << toQShared(outerGlow);
+    }
+
+    {
+        KisLayerStyleFilterProjectionPlane *innerGlow =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        innerGlow->setStyle(new KisLsDropShadowFilter(KisLsDropShadowFilter::InnerGlow), style);
+        m_d->stylesAfter << toQShared(innerGlow);
     }
 }
 

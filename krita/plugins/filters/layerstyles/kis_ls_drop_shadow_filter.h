@@ -30,7 +30,14 @@ class KDE_EXPORT KisLsDropShadowFilter : public KisLayerStyleFilter
 {
 public:
 
-    KisLsDropShadowFilter(bool isDropShadow = true);
+    enum Mode {
+        DropShadow,
+        InnerShadow,
+        OuterGlow,
+        InnerGlow
+    };
+
+    KisLsDropShadowFilter(Mode mode = DropShadow);
 
     void processDirectly(KisPaintDeviceSP src,
                          KisPaintDeviceSP dst,
@@ -44,8 +51,7 @@ private:
     const psd_layer_effects_shadow_base* getShadowStruct(KisPSDLayerStyleSP style) const;
 
 private:
-    const bool m_isDropShadow;
-
+    const Mode m_mode;
 };
 
 #endif

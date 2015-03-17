@@ -228,11 +228,15 @@ struct psd_layer_effects_context {
 
 #define PSD_LOOKUP_TABLE_SIZE 256
 
+class KoAbstractGradient;
+
 // dsdw, isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
 class LIBKISPSD_EXPORT psd_layer_effects_shadow_base {
 public:
     psd_layer_effects_shadow_base()
-        : m_effectEnabled(false)
+        : m_invertsSelection(false)
+        , m_edgeHidden(true)
+        , m_effectEnabled(false)
         , m_blendMode(COMPOSITE_MULT)
         , m_color(Qt::black)
         , m_nativeColor(Qt::black)
@@ -245,6 +249,11 @@ public:
         , m_antiAliased(0)
         , m_noise(0)
         , m_knocksOut(false)
+        , m_fillType(psd_fill_solid_color)
+        , m_technique(psd_technique_softer)
+        , m_range(100)
+        , m_jitter(0)
+        , m_gradient(0)
     {
         for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
             m_contourLookupTable[i] = i;
@@ -256,112 +265,184 @@ public:
 
     QPoint calculateOffset(const psd_layer_effects_context *context) const;
 
+    void setEffectEnabled(bool value) {
+        m_effectEnabled = value;
+    }
 
     bool effectEnabled() const {
         return m_effectEnabled;
-    }
-    void setEffectEnabled(bool value) {
-        m_effectEnabled = value;
     }
 
     QString blendMode() const {
         return m_blendMode;
     }
-    void setBlendMode(QString value) {
-        m_blendMode = value;
-    }
 
     QColor color() const {
         return m_color;
-    }
-    void setColor(QColor value) {
-        m_color = value;
     }
 
     QColor nativeColor() const {
         return m_nativeColor;
     }
-    void setNativeColor(QColor value) {
-        m_nativeColor = value;
-    }
 
     quint8 opacity() const {
         return m_opacity;
-    }
-    void setOpacity(quint8 value) {
-        m_opacity = value;
     }
 
     qint32 angle() const {
         return m_angle;
     }
-    void setAngle(qint32 value) {
-        m_angle = value;
-    }
 
     bool useGlobalLight() const {
         return m_useGlobalLight;
-    }
-    void setUseGlobalLight(bool value) {
-        m_useGlobalLight = value;
     }
 
     qint32 distance() const {
         return m_distance;
     }
-    void setDistance(qint32 value) {
-        m_distance = value;
-    }
 
     qint32 spread() const {
         return m_spread;
-    }
-    void setSpread(qint32 value) {
-        m_spread = value;
     }
 
     qint32 size() const {
         return m_size;
     }
-    void setSize(qint32 value) {
-        m_size = value;
-    }
 
     const quint8* contourLookupTable() const {
         return m_contourLookupTable;
-    }
-    void setContourLookupTable(quint8* value) {
-        memcpy(m_contourLookupTable, value, PSD_LOOKUP_TABLE_SIZE * sizeof(quint8));
     }
 
     bool antiAliased() const {
         return m_antiAliased;
     }
-    void setAntiAliased(bool value) {
-        m_antiAliased = value;
-    }
 
     qint32 noise() const {
         return m_noise;
-    }
-    void setNoise(qint32 value) {
-        m_noise = value;
     }
 
     bool knocksOut() const {
         return m_knocksOut;
     }
-    virtual void setKnocksOut(bool value) {
+
+    bool invertsSelection() const {
+        return m_invertsSelection;
+    }
+
+    bool edgeHidden() const {
+        return m_edgeHidden;
+    }
+
+    psd_fill_type fillType() const {
+        return m_fillType;
+    }
+
+    psd_technique_type technique() const {
+        return m_technique;
+    }
+
+    qint32 range() const {
+        return m_range;
+    }
+
+    qint32 jitter() const {
+        return m_jitter;
+    }
+
+    KoAbstractGradient* gradient() const {
+        return m_gradient;
+    }
+
+protected:
+    /**
+     * All the setters are protected by default.  Should be made
+     * public by descendants manually when needed.
+     */
+
+    void setBlendMode(QString value) {
+        m_blendMode = value;
+    }
+
+    void setColor(QColor value) {
+        m_color = value;
+    }
+
+    void setNativeColor(QColor value) {
+        m_nativeColor = value;
+    }
+
+    void setOpacity(quint8 value) {
+        m_opacity = value;
+    }
+
+    void setAngle(qint32 value) {
+        m_angle = value;
+    }
+
+    void setUseGlobalLight(bool value) {
+        m_useGlobalLight = value;
+    }
+
+    void setDistance(qint32 value) {
+        m_distance = value;
+    }
+
+    void setSpread(qint32 value) {
+        m_spread = value;
+    }
+
+    void setSize(qint32 value) {
+        m_size = value;
+    }
+
+    void setContourLookupTable(quint8* value) {
+        memcpy(m_contourLookupTable, value, PSD_LOOKUP_TABLE_SIZE * sizeof(quint8));
+    }
+
+    void setAntiAliased(bool value) {
+        m_antiAliased = value;
+    }
+
+    void setNoise(qint32 value) {
+        m_noise = value;
+    }
+
+    void setKnocksOut(bool value) {
         m_knocksOut = value;
     }
 
-    virtual bool invertsSelection() const {
-        return false;
+    void setInvertsSelection(bool value) {
+        m_invertsSelection = value;
     }
 
-    virtual bool edgeHidden() const {
-        return true;
+    void setEdgeHidden(bool value) {
+        m_edgeHidden = value;
     }
+
+    void setFillType(psd_fill_type value) {
+        m_fillType = value;
+    }
+
+    void setTechnique(psd_technique_type value) {
+        m_technique = value;
+    }
+
+    void setRange(qint32 value) {
+        m_range = value;
+    }
+
+    void setJitter(qint32 value) {
+        m_jitter = value;
+    }
+
+    void setGradient(KoAbstractGradient* value) {
+        m_gradient = value;
+    }
+
+private:
+    // internal
+    bool m_invertsSelection;
+    bool m_edgeHidden;
 
 private:
 
@@ -381,78 +462,87 @@ private:
     bool m_antiAliased;
     qint32 m_noise;
     bool m_knocksOut;
+
+    // for Outer/Inner Glow
+    psd_fill_type m_fillType;
+    psd_technique_type m_technique;
+    qint32 m_range;
+    qint32 m_jitter;
+    KoAbstractGradient *m_gradient;
 };
 
-class LIBKISPSD_EXPORT psd_layer_effects_drop_shadow : public psd_layer_effects_shadow_base
+class LIBKISPSD_EXPORT psd_layer_effects_shadow_common : public psd_layer_effects_shadow_base
 {
+public:
+    using psd_layer_effects_shadow_base::setBlendMode;
+    using psd_layer_effects_shadow_base::setColor;
+    using psd_layer_effects_shadow_base::setOpacity;
+    using psd_layer_effects_shadow_base::setAngle;
+    using psd_layer_effects_shadow_base::setUseGlobalLight;
+    using psd_layer_effects_shadow_base::setDistance;
+    using psd_layer_effects_shadow_base::setSpread;
+    using psd_layer_effects_shadow_base::setSize;
+    using psd_layer_effects_shadow_base::setContourLookupTable;
+    using psd_layer_effects_shadow_base::setAntiAliased;
+    using psd_layer_effects_shadow_base::setNoise;
+};
+
+class LIBKISPSD_EXPORT psd_layer_effects_drop_shadow : public psd_layer_effects_shadow_common
+{
+public:
+    using psd_layer_effects_shadow_base::setKnocksOut;
 };
 
 // isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
-class LIBKISPSD_EXPORT psd_layer_effects_inner_shadow : public psd_layer_effects_shadow_base
+class LIBKISPSD_EXPORT psd_layer_effects_inner_shadow : public psd_layer_effects_shadow_common
 {
 public:
     psd_layer_effects_inner_shadow() {
-        psd_layer_effects_shadow_base::setKnocksOut(true);
+        setKnocksOut(true);
+        setInvertsSelection(true);
+        setEdgeHidden(false);
+    }
+};
+
+class LIBKISPSD_EXPORT psd_layer_effects_glow_common : public psd_layer_effects_shadow_base
+{
+public:
+    psd_layer_effects_glow_common() {
+        setKnocksOut(true);
+        setDistance(0);
+        setBlendMode(COMPOSITE_LINEAR_DODGE);
     }
 
-    bool invertsSelection() const {
-        return true;
-    }
+    using psd_layer_effects_shadow_base::setBlendMode;
+    using psd_layer_effects_shadow_base::setColor;
+    using psd_layer_effects_shadow_base::setOpacity;
 
-    bool edgeHidden() const {
-        return false;
-    }
+    using psd_layer_effects_shadow_base::setSpread;
+    using psd_layer_effects_shadow_base::setSize;
+    using psd_layer_effects_shadow_base::setContourLookupTable;
+    using psd_layer_effects_shadow_base::setAntiAliased;
+    using psd_layer_effects_shadow_base::setNoise;
 
-private:
-    void setKnocksOut(bool value) {
-        Q_UNUSED(value);
-        KIS_ASSERT_RECOVER_NOOP(0 && "Inner Shadow has a static configuration of knocksOut() and cannot be changed");
-    }
+    using psd_layer_effects_shadow_base::setFillType;
+    using psd_layer_effects_shadow_base::setTechnique;
+    using psd_layer_effects_shadow_base::setRange;
+    using psd_layer_effects_shadow_base::setJitter;
+    using psd_layer_effects_shadow_base::setGradient;
 };
 
 // oglw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_25738
-struct psd_layer_effects_outer_glow {
-    bool effect_enable; // Effect enabled
-
-    QString blend_mode; // Blend mode: 4 bytes for signature and 4 bytes for key
-    quint8 opacity; // Opacity as a percent
-    qint32 noise;
-    psd_fill_type fill_type;
-    QColor color;
-    QColor native_color;
-    psd_gradient_color gradient_color;
-
-    psd_technique_type technique;
-    qint32 spread;
-    qint32 size;
-
-    quint8 contour_lookup_table[256];
-    bool anti_aliased;
-    qint32 range;
-    qint32 jitter;
+class LIBKISPSD_EXPORT psd_layer_effects_outer_glow : public psd_layer_effects_glow_common
+{
 };
 
 // iglw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_27692
-struct psd_layer_effects_inner_glow {
-    bool effect_enable; // Effect enabled
-
-    QString blend_mode; // Blend mode: 4 bytes for signature and 4 bytes for key
-    quint8 opacity; // Opacity as a percent
-    qint32 noise;
-    psd_fill_type fill_type;
-    QColor color;
-    QColor native_color;
-    psd_gradient_color gradient_color;
-
-    psd_technique_type technique;
-    psd_glow_source source;
-    qint32 choke;
-    qint32 size;
-
-    quint8 contour_lookup_table[256];
-    bool anti_aliased;
-    qint32 range;
-    qint32 jitter;
+class LIBKISPSD_EXPORT psd_layer_effects_inner_glow : public psd_layer_effects_glow_common
+{
+public:
+    psd_layer_effects_inner_glow() {
+        setInvertsSelection(true);
+        setEdgeHidden(false);
+    }
 };
 
 struct psd_pattern_info {

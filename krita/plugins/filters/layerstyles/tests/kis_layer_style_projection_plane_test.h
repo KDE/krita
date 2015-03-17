@@ -21,11 +21,22 @@
 
 #include <QtTest/QtTest>
 
+#include "kis_types.h"
+
+
 class KisLayerStyleProjectionPlaneTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void test();
+    void testShadow();
+    void testGlow();
+    void testGlowGradient();
+    void testGlowGradientJitter();
+
+    void testGlowInnerGradient();
+
+private:
+    void test(KisPSDLayerStyleSP style, const QString testName);
 };
 
 #endif /* __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H */

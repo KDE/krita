@@ -141,22 +141,22 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 {
     QListWidgetItem *item;
     item = wdgLayerStyles.lstStyleSelector->item(2);
-    item->setCheckState(style->drop_shadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(style->dropShadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(3);
-    item->setCheckState(style->inner_shadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item->setCheckState(style->innerShadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
-    m_dropShadow->setDropShadow(style->drop_shadow());
-    m_innerShadow->setDropShadow(style->inner_shadow());
+    m_dropShadow->setShadow(style->dropShadow());
+    m_innerShadow->setShadow(style->innerShadow());
 }
 
 KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 {
-    m_layerStyle->drop_shadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
-    m_layerStyle->inner_shadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(3)->checkState() == Qt::Checked);
+    m_layerStyle->dropShadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
+    m_layerStyle->innerShadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(3)->checkState() == Qt::Checked);
 
-    m_dropShadow->fetchDropShadow(m_layerStyle->drop_shadow());
-    m_innerShadow->fetchDropShadow(m_layerStyle->inner_shadow());
+    m_dropShadow->fetchShadow(m_layerStyle->dropShadow());
+    m_innerShadow->fetchShadow(m_layerStyle->innerShadow());
 
     return m_layerStyle;
 }
@@ -310,49 +310,55 @@ void DropShadow::slotIntAngleChanged(int value)
     ui.dialAngle->setValue(value);
 }
 
-void DropShadow::setDropShadow(const psd_layer_effects_shadow_base *dropShadow)
+void DropShadow::setShadow(const psd_layer_effects_shadow_common *shadow)
 {
-    ui.cmbCompositeOp->selectCompositeOp(KoID(dropShadow->blendMode()));
-    ui.doubleOpacity->setValue(dropShadow->opacity());
+    ui.cmbCompositeOp->selectCompositeOp(KoID(shadow->blendMode()));
+    ui.doubleOpacity->setValue(shadow->opacity());
 
-    ui.dialAngle->setValue(dropShadow->angle());
-    ui.intAngle->setValue(dropShadow->angle());
-    ui.chkUseGlobalLight->setChecked(dropShadow->useGlobalLight());
+    ui.dialAngle->setValue(shadow->angle());
+    ui.intAngle->setValue(shadow->angle());
+    ui.chkUseGlobalLight->setChecked(shadow->useGlobalLight());
 
-    ui.intDistance->setValue(dropShadow->distance());
-    ui.intSpread->setValue(dropShadow->spread());
-    ui.intSize->setValue(dropShadow->size());
+    ui.intDistance->setValue(shadow->distance());
+    ui.intSpread->setValue(shadow->spread());
+    ui.intSize->setValue(shadow->size());
 
     // FIXME: curve editing
     // ui.cmbContour;
-    ui.chkAntiAliased->setChecked(dropShadow->antiAliased());
+    ui.chkAntiAliased->setChecked(shadow->antiAliased());
 
-    ui.intNoise->setValue(dropShadow->noise());
+    ui.intNoise->setValue(shadow->noise());
 
     if (m_mode == DropShadowMode) {
-        ui.chkLayerKnocksOutDropShadow->setChecked(dropShadow->knocksOut());
+        const psd_layer_effects_drop_shadow *realDropShadow = dynamic_cast<const psd_layer_effects_drop_shadow*>(shadow);
+        KIS_ASSERT_RECOVER_NOOP(realDropShadow);
+
+        ui.chkLayerKnocksOutDropShadow->setChecked(shadow->knocksOut());
     }
 }
 
-void DropShadow::fetchDropShadow(psd_layer_effects_shadow_base *ds) const
+void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
 {
-    ds->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
-    ds->setOpacity(ui.doubleOpacity->value());
+    shadow->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    shadow->setOpacity(ui.doubleOpacity->value());
 
-    ds->setAngle(ui.dialAngle->value());
-    ds->setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
+    shadow->setAngle(ui.dialAngle->value());
+    shadow->setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
 
-    ds->setDistance(ui.intDistance->value());
-    ds->setSpread(ui.intSpread->value());
-    ds->setSize(ui.intSize->value());
+    shadow->setDistance(ui.intDistance->value());
+    shadow->setSpread(ui.intSpread->value());
+    shadow->setSize(ui.intSize->value());
 
     // FIXME: curve editing
     // ui.cmbContour;
-    ds->setAntiAliased(ui.chkAntiAliased->isChecked());
-    ds->setNoise(ui.intNoise->value());
+    shadow->setAntiAliased(ui.chkAntiAliased->isChecked());
+    shadow->setNoise(ui.intNoise->value());
 
     if (m_mode == DropShadowMode) {
-        ds->setKnocksOut(ui.chkLayerKnocksOutDropShadow->isChecked());
+        psd_layer_effects_drop_shadow *realDropShadow = dynamic_cast<psd_layer_effects_drop_shadow*>(shadow);
+        KIS_ASSERT_RECOVER_NOOP(realDropShadow);
+
+        realDropShadow->setKnocksOut(ui.chkLayerKnocksOutDropShadow->isChecked());
     }
 }
 

@@ -56,13 +56,13 @@ struct TestConfig {
         style->context()->global_angle = angle;
         style->context()->keep_original = keep_original;
 
-        style->drop_shadow()->setEffectEnabled(true);
-        style->drop_shadow()->setDistance(distance);
-        style->drop_shadow()->setSpread(spread);
-        style->drop_shadow()->setSize(size);
-        style->drop_shadow()->setNoise(noise);
-        style->drop_shadow()->setKnocksOut(knocks_out);
-        style->drop_shadow()->setOpacity(opacity);
+        style->dropShadow()->setEffectEnabled(true);
+        style->dropShadow()->setDistance(distance);
+        style->dropShadow()->setSpread(spread);
+        style->dropShadow()->setSize(size);
+        style->dropShadow()->setNoise(noise);
+        style->dropShadow()->setKnocksOut(knocks_out);
+        style->dropShadow()->setOpacity(opacity);
     }
 
     QString genTestname(const QString &prefix) const {

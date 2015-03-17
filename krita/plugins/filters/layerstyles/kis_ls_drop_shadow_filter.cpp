@@ -23,6 +23,7 @@
 #include <QBitArray>
 
 #include <KoUpdater.h>
+#include <KoAbstractGradient.h>
 
 #include "psd.h"
 
@@ -38,9 +39,9 @@
 #include "kis_psd_layer_style.h"
 
 
-KisLsDropShadowFilter::KisLsDropShadowFilter(bool isDropShadow)
+KisLsDropShadowFilter::KisLsDropShadowFilter(Mode mode)
     : KisLayerStyleFilter(KoID("lsdropshadow", i18n("Drop Shadow (style)")))
-    , m_isDropShadow(isDropShadow)
+    , m_mode(mode)
 {
 }
 
@@ -64,6 +65,24 @@ void findEdge(KisPixelSelectionSP selection, const QRect &applyRect, const bool 
 
         } while(dstIt.nextPixel());
     }
+}
+
+void adjustRange(KisPixelSelectionSP selection, const QRect &applyRect, const int range)
+{
+    KIS_ASSERT_RECOVER_RETURN(range >= 1 && range <= 100);
+
+    quint8 rangeTable[256];
+    for(int i = 0; i < 256; i ++) {
+        quint8 value = i * 100 / range;
+        rangeTable[i] = qMin(value, quint8(255));
+    }
+
+    KisSequentialIterator dstIt(selection, applyRect);
+
+    do {
+        quint8 *pixelPtr = dstIt.rawData();
+        *pixelPtr = rangeTable[*pixelPtr];
+    } while(dstIt.nextPixel());
 }
 
 void applyContourCorrection(KisPixelSelectionSP selection,
@@ -228,6 +247,125 @@ KisSelectionSP selectionFromAlphaChannel(KisPaintDeviceSP device,
     return baseSelection;
 }
 
+void getGradientTable(const KoAbstractGradient *gradient,
+                      QVector<KoColor> *table,
+                      const KoColorSpace *colorSpace)
+{
+    KIS_ASSERT_RECOVER_RETURN(table->size() == 256);
+
+    for (int i = 0; i < 256; i++) {
+        gradient->colorAt(((*table)[i]), qreal(i) / 255.0);
+        (*table)[i].convertTo(colorSpace);
+    }
+}
+
+struct LinearGradientIndex
+{
+    int popOneIndex(int selectionAlpha) {
+        return 255 - selectionAlpha;
+    }
+
+    bool nextPixel() {
+        return true;
+    }
+};
+
+struct JitterGradientIndex
+{
+    JitterGradientIndex(const QRect &applyRect, int jitter)
+        : randomSelection(generateRandomSelection(applyRect)),
+          noiseIt(randomSelection, applyRect),
+          m_jitterCoeff(jitter * 255 / 100)
+    {
+    }
+
+    int popOneIndex(int selectionAlpha) {
+        int gradientIndex = 255 - selectionAlpha;
+        gradientIndex += m_jitterCoeff * *noiseIt.rawDataConst() >> 8;
+        gradientIndex &= 0xFF;
+
+        if (selectionAlpha != 0 && selectionAlpha != 255) {
+            qDebug() << ppVar(255 - selectionAlpha) << ppVar(gradientIndex);
+        }
+
+        return gradientIndex;
+    }
+
+    bool nextPixel() {
+        return noiseIt.nextPixel();
+    }
+
+private:
+    KisPixelSelectionSP randomSelection;
+    KisSequentialConstIterator noiseIt;
+    int m_jitterCoeff;
+};
+
+template <class IndexFetcher>
+void applyGradientImpl(KisPaintDeviceSP device,
+                       KisPixelSelectionSP selection,
+                       const QRect &applyRect,
+                       const QVector<KoColor> &table,
+                       bool edgeHidden,
+                       IndexFetcher &indexFetcher)
+{
+    KIS_ASSERT_RECOVER_RETURN(
+        *table.first().colorSpace() == *device->colorSpace());
+
+    const KoColorSpace *cs = device->colorSpace();
+    const int pixelSize = cs->pixelSize();
+
+    KisSequentialConstIterator selIt(selection, applyRect);
+    KisSequentialIterator dstIt(device, applyRect);
+
+    if (edgeHidden) {
+
+        do {
+            quint8 selAlpha = *selIt.rawDataConst();
+            int gradientIndex = indexFetcher.popOneIndex(selAlpha);
+            const KoColor &color = table[gradientIndex];
+            quint8 tableAlpha = color.opacityU8();
+
+            memcpy(dstIt.rawData(), color.data(), pixelSize);
+
+            if (selAlpha < 24 && tableAlpha == 255) {
+                tableAlpha = int(selAlpha) * 10 * tableAlpha >> 8;
+                cs->setOpacity(dstIt.rawData(), tableAlpha, 1);
+            }
+
+        } while(selIt.nextPixel() &&
+                dstIt.nextPixel() &&
+                indexFetcher.nextPixel());
+
+    } else {
+
+        do {
+            int gradientIndex = indexFetcher.popOneIndex(*selIt.rawDataConst());
+            const KoColor &color = table[gradientIndex];
+            memcpy(dstIt.rawData(), color.data(), pixelSize);
+        } while(selIt.nextPixel() &&
+                dstIt.nextPixel() &&
+                indexFetcher.nextPixel());
+
+    }
+}
+
+void applyGradient(KisPaintDeviceSP device,
+                   KisPixelSelectionSP selection,
+                   const QRect &applyRect,
+                   const QVector<KoColor> &table,
+                   bool edgeHidden,
+                   int jitter)
+{
+    if (!jitter) {
+        LinearGradientIndex fetcher;
+        applyGradientImpl(device, selection, applyRect, table, edgeHidden, fetcher);
+    } else {
+        JitterGradientIndex fetcher(applyRect, jitter);
+        applyGradientImpl(device, selection, applyRect, table, edgeHidden, fetcher);
+    }
+}
+
 struct ShadowRectsData
 {
     enum Direction {
@@ -286,6 +424,7 @@ struct ShadowRectsData
     QRect spreadNeedRect;
 };
 
+#define FULL_PERCENT_RANGE 100
 
 void applyDropShadow(KisPaintDeviceSP srcDevice,
                      KisPaintDeviceSP dstDevice,
@@ -316,6 +455,10 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
         knockOutSelection = new KisPixelSelection(*selection);
     }
 
+    if (shadow->technique() == psd_technique_precise) {
+        findEdge(selection, d.blurNeedRect, true);
+    }
+
     /**
      * Spread and blur the selection
      */
@@ -333,6 +476,10 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
         applyGaussian(selection, d.noiseNeedRect, d.blur_size);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("2_selection_blur.png");
+
+    if (shadow->range() != FULL_PERCENT_RANGE) {
+        adjustRange(selection, d.noiseNeedRect, shadow->range());
+    }
 
     /**
      * Contour correction
@@ -356,8 +503,10 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("4_selection_noise.png");
 
-    selection->setX(d.offset.x());
-    selection->setY(d.offset.y());
+    if (!d.offset.isNull()) {
+        selection->setX(d.offset.x());
+        selection->setY(d.offset.y());
+    }
 
     /**
      * Knock-out original outline of the device from the resulting shade
@@ -388,17 +537,38 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
         tempDevice = srcDevice;
     }
 
-    {
+    if (shadow->fillType() == psd_fill_solid_color) {
         QRect shadowRect(d.dstRect);
-        KisFillPainter gc(dstDevice);
-
         const QString compositeOp = shadow->blendMode();
         const quint8 opacityU8 = 255.0 / 100.0 * shadow->opacity();
+
+        KisFillPainter gc(dstDevice);
         gc.setCompositeOp(compositeOp);
         gc.setOpacity(opacityU8);
 
         gc.setSelection(baseSelection);
         gc.fillSelection(shadowRect, shadowColor);
+        gc.end();
+    } else if (shadow->fillType() == psd_fill_gradient) {
+        QRect shadowRect(d.dstRect);
+        const QString compositeOp = shadow->blendMode();
+        const quint8 opacityU8 = 255.0 / 100.0 * shadow->opacity();
+
+        KisPaintDeviceSP overlayDevice =
+            new KisPaintDevice(dstDevice->colorSpace());
+
+        QVector<KoColor> table(256);
+        getGradientTable(shadow->gradient(), &table, dstDevice->colorSpace());
+
+        applyGradient(overlayDevice, selection,
+                      shadowRect, table,
+                      true, shadow->jitter());
+
+        KisPainter gc(dstDevice);
+        gc.setCompositeOp(compositeOp);
+        gc.setOpacity(opacityU8);
+
+        gc.bitBlt(shadowRect.topLeft(), overlayDevice, shadowRect);
         gc.end();
     }
 
@@ -413,9 +583,19 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
 const psd_layer_effects_shadow_base*
 KisLsDropShadowFilter::getShadowStruct(KisPSDLayerStyleSP style) const
 {
-    return m_isDropShadow ?
-        static_cast<const psd_layer_effects_shadow_base*>(style->drop_shadow()) :
-        static_cast<const psd_layer_effects_shadow_base*>(style->inner_shadow());
+    const psd_layer_effects_shadow_base *config;
+
+    if (m_mode == DropShadow) {
+        config = style->dropShadow();
+    } else if (m_mode == InnerShadow) {
+        config = style->innerShadow();
+    } else if (m_mode == OuterGlow) {
+        config = style->outerGlow();
+    } else if (m_mode == InnerGlow) {
+        config = style->innerGlow();
+    }
+
+    return config;
 }
 
 void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,

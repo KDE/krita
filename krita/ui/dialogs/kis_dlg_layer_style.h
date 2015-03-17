@@ -84,8 +84,8 @@ public:
 
 public:
     DropShadow(Mode mode, QWidget *parent);
-    void setDropShadow(const psd_layer_effects_shadow_base *dropShadow);
-    void fetchDropShadow(psd_layer_effects_shadow_base *ds) const;
+    void setShadow(const psd_layer_effects_shadow_common *shadow);
+    void fetchShadow(psd_layer_effects_shadow_common *shadow) const;
 
 private Q_SLOTS:
     void slotDialAngleChanged(int value);

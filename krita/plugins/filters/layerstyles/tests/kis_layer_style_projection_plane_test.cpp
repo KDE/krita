@@ -36,7 +36,7 @@
 #include "kis_psd_layer_style.h"
 
 
-void KisLayerStyleProjectionPlaneTest::test()
+void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QString testName)
 {
     const QRect imageRect(0, 0, 200, 200);
     const QRect rFillRect(10, 10, 100, 100);
@@ -50,27 +50,13 @@ void KisLayerStyleProjectionPlaneTest::test()
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
     image->addNode(layer);
 
-    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
-    style->drop_shadow()->setSize(15);
-    style->drop_shadow()->setDistance(5);
-    style->drop_shadow()->setOpacity(70);
-    style->drop_shadow()->setNoise(30);
-    style->drop_shadow()->setEffectEnabled(true);
-
-    style->inner_shadow()->setSize(15);
-    style->inner_shadow()->setSpread(10);
-    style->inner_shadow()->setDistance(5);
-    style->inner_shadow()->setOpacity(70);
-    style->inner_shadow()->setNoise(10);
-    style->inner_shadow()->setEffectEnabled(true);
-
     KisLayerStyleProjectionPlane plane(layer.data(), style);
 
-    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "00L_initial", "dd");
+    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "00L_initial", testName);
 
     layer->paintDevice()->fill(rFillRect, KoColor(Qt::red, cs));
 
-    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "01L_fill", "dd");
+    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "01L_fill", testName);
 
     KisPaintDeviceSP projection = new KisPaintDevice(cs);
 
@@ -80,13 +66,15 @@ void KisLayerStyleProjectionPlaneTest::test()
 
         plane.recalculate(changeRect, layer);
 
-        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "02L_recalculate_fill", "dd");
+        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "02L_recalculate_fill", testName);
 
         KisPainter painter(projection);
         plane.apply(&painter, changeRect);
 
-        KIS_DUMP_DEVICE_2(projection, imageRect, "03P_apply_on_fill", "dd");
+        KIS_DUMP_DEVICE_2(projection, imageRect, "03P_apply_on_fill", testName);
     }
+
+    return;
 
     KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
 
@@ -95,11 +83,11 @@ void KisLayerStyleProjectionPlaneTest::test()
     transparencyMask->setSelection(selection);
     image->addNode(transparencyMask, layer);
 
-    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "04L_mask_added", "dd");
+    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "04L_mask_added", testName);
 
     plane.recalculate(imageRect, layer);
 
-    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "05L_mask_added_recalculated", "dd");
+    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "05L_mask_added_recalculated", testName);
 
     {
         projection->clear();
@@ -107,7 +95,7 @@ void KisLayerStyleProjectionPlaneTest::test()
         KisPainter painter(projection);
         plane.apply(&painter, imageRect);
 
-        KIS_DUMP_DEVICE_2(projection, imageRect, "06P_apply_on_mask", "dd");
+        KIS_DUMP_DEVICE_2(projection, imageRect, "06P_apply_on_mask", testName);
     }
 
     selection->pixelSelection()->select(partialSelectionRect, OPACITY_OPAQUE_U8);
@@ -118,14 +106,120 @@ void KisLayerStyleProjectionPlaneTest::test()
 
         plane.recalculate(changeRect, layer);
 
-        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "07L_recalculate_partial", "dd");
+        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "07L_recalculate_partial", testName);
 
         KisPainter painter(projection);
         plane.apply(&painter, changeRect);
 
-        KIS_DUMP_DEVICE_2(projection, imageRect, "08P_apply_partial", "dd");
+        KIS_DUMP_DEVICE_2(projection, imageRect, "08P_apply_partial", testName);
     }
+}
 
+void KisLayerStyleProjectionPlaneTest::testShadow()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->dropShadow()->setSize(15);
+    style->dropShadow()->setDistance(15);
+    style->dropShadow()->setOpacity(70);
+    style->dropShadow()->setNoise(30);
+    style->dropShadow()->setEffectEnabled(true);
+
+    style->innerShadow()->setSize(10);
+    style->innerShadow()->setSpread(10);
+    style->innerShadow()->setDistance(5);
+    style->innerShadow()->setOpacity(70);
+    style->innerShadow()->setNoise(30);
+    style->innerShadow()->setEffectEnabled(true);
+
+    test(style, "shadow");
+}
+
+void KisLayerStyleProjectionPlaneTest::testGlow()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->outerGlow()->setSize(15);
+    style->outerGlow()->setSpread(10);
+    style->outerGlow()->setOpacity(70);
+    style->outerGlow()->setNoise(30);
+    style->outerGlow()->setEffectEnabled(true);
+    style->outerGlow()->setColor(Qt::green);
+
+    test(style, "glow_outer");
+}
+
+#include "KoStopGradient.h"
+
+void KisLayerStyleProjectionPlaneTest::testGlowGradient()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->outerGlow()->setSize(15);
+    style->outerGlow()->setSpread(10);
+    style->outerGlow()->setOpacity(70);
+    style->outerGlow()->setNoise(10);
+    style->outerGlow()->setEffectEnabled(true);
+    style->outerGlow()->setColor(Qt::green);
+
+    QLinearGradient testGradient;
+    testGradient.setColorAt(0.0, Qt::white);
+    testGradient.setColorAt(0.5, Qt::green);
+    testGradient.setColorAt(1.0, Qt::black);
+    testGradient.setSpread(QGradient::ReflectSpread);
+    QScopedPointer<KoStopGradient> gradient(
+        KoStopGradient::fromQGradient(&testGradient));
+
+    style->outerGlow()->setGradient(gradient.data());
+    style->outerGlow()->setFillType(psd_fill_gradient);
+
+    test(style, "glow_outer_grad");
+}
+
+void KisLayerStyleProjectionPlaneTest::testGlowGradientJitter()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->outerGlow()->setSize(15);
+    style->outerGlow()->setSpread(10);
+    style->outerGlow()->setOpacity(70);
+    style->outerGlow()->setNoise(0);
+    style->outerGlow()->setEffectEnabled(true);
+    style->outerGlow()->setColor(Qt::green);
+
+    QLinearGradient testGradient;
+    testGradient.setColorAt(0.0, Qt::white);
+    testGradient.setColorAt(0.5, Qt::green);
+    testGradient.setColorAt(1.0, Qt::black);
+    testGradient.setSpread(QGradient::ReflectSpread);
+    QScopedPointer<KoStopGradient> gradient(
+        KoStopGradient::fromQGradient(&testGradient));
+
+    style->outerGlow()->setGradient(gradient.data());
+    style->outerGlow()->setFillType(psd_fill_gradient);
+    style->outerGlow()->setJitter(20);
+
+    test(style, "glow_outer_grad_jit");
+}
+
+void KisLayerStyleProjectionPlaneTest::testGlowInnerGradient()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->innerGlow()->setSize(15);
+    style->innerGlow()->setSpread(10);
+    style->innerGlow()->setOpacity(80);
+    style->innerGlow()->setNoise(10);
+    style->innerGlow()->setEffectEnabled(true);
+    style->innerGlow()->setColor(Qt::white);
+
+    QLinearGradient testGradient;
+    testGradient.setColorAt(0.0, Qt::white);
+    testGradient.setColorAt(0.5, Qt::green);
+    testGradient.setColorAt(1.0, Qt::black);
+    testGradient.setSpread(QGradient::ReflectSpread);
+    QScopedPointer<KoStopGradient> gradient(
+        KoStopGradient::fromQGradient(&testGradient));
+
+    style->innerGlow()->setGradient(gradient.data());
+    style->innerGlow()->setFillType(psd_fill_gradient);
+
+    test(style, "glow_inner_grad");
 }
 
 QTEST_KDEMAIN(KisLayerStyleProjectionPlaneTest, GUI)

@@ -56,12 +56,16 @@ public:
     bool isEmpty() const;
 
     const psd_layer_effects_context* context() const;
-    const psd_layer_effects_drop_shadow* drop_shadow() const;
-    const psd_layer_effects_inner_shadow* inner_shadow() const;
+    const psd_layer_effects_drop_shadow* dropShadow() const;
+    const psd_layer_effects_inner_shadow* innerShadow() const;
+    const psd_layer_effects_outer_glow* outerGlow() const;
+    const psd_layer_effects_inner_glow* innerGlow() const;
 
     psd_layer_effects_context* context();
-    psd_layer_effects_drop_shadow* drop_shadow();
-    psd_layer_effects_inner_shadow* inner_shadow();
+    psd_layer_effects_drop_shadow* dropShadow();
+    psd_layer_effects_inner_shadow* innerShadow();
+    psd_layer_effects_outer_glow* outerGlow();
+    psd_layer_effects_inner_glow* innerGlow();
 
     /**
      * Save given styles to the ASL style format. All patterns references in the

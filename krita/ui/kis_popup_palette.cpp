@@ -394,6 +394,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     QPainterPath pathBrush(drawDonutPathFull(width() / 2, height() / 2, brushInnerRadius, brushOuterRadius));
     QPainterPath pathColor(drawDonutPathFull(width() / 2, height() / 2, colorInnerRadius, colorOuterRadius));
 
+    setToolTip("");
     setHoveredPreset(-1);
     setHoveredColor(-1);
 
@@ -402,6 +403,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
         int pos = calculatePresetIndex(point, m_resourceManager->numFavoritePresets());
 
         if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()) {
+            setToolTip(m_resourceManager->favoritePresetList().at(pos).data()->name());
             setHoveredPreset(pos);
         }
     } else if (pathColor.contains(point)) {

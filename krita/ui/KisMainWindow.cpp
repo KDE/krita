@@ -2106,7 +2106,6 @@ void KisMainWindow::initializeGeometry()
             QRect desk = QApplication::desktop()->availableGeometry(scnum);
             // if the desktop is virtual then use virtual screen size
             if (QApplication::desktop()->isVirtualDesktop()) {
-                desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
                 desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
             }
 

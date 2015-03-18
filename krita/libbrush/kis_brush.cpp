@@ -267,7 +267,7 @@ void KisBrush::setBrushTipImage(const QImage& image)
     d->brushTipImage = image;
 
     if (!image.isNull()) {
-        if (image.width() > 128 && image.width() > 128) {
+        if (image.width() > 128 || image.height() > 128) {
             KoResource::setImage(image.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         }
         else {

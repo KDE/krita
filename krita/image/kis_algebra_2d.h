@@ -231,10 +231,10 @@ QPainterPath KRITAIMAGE_EXPORT smallArrow();
  */
 QRect KRITAIMAGE_EXPORT blowRect(const QRect &rect, qreal coeff);
 
-QPoint ensureInRect(QPoint pt, const QRect &bounds);
-QPointF ensureInRect(QPointF pt, const QRectF &bounds);
+QPoint KRITAIMAGE_EXPORT ensureInRect(QPoint pt, const QRect &bounds);
+QPointF KRITAIMAGE_EXPORT ensureInRect(QPointF pt, const QRectF &bounds);
 
-
+QRect KRITAIMAGE_EXPORT ensureRectNotSmaller(QRect rc, const QSize &size);
 
 /**
  * Attempt to intersect a line to the area of the a rectangle.

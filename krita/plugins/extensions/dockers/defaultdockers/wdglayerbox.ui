@@ -123,12 +123,6 @@
        <property name="toolTip">
         <string>Duplicate layer or mask</string>
        </property>
-       <property name="statusTip">
-        <string>Duplicate layer or mask</string>
-       </property>
-       <property name="whatsThis">
-        <string>Duplicate the currently selected layer or mask</string>
-       </property>
        <property name="text">
         <string>...</string>
        </property>

@@ -28,8 +28,8 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     if (USE_BREAKPAD)
         include_directories(${CMAKE_SOURCE_DIR}/3rdparty/google-breakpad/src)
     endif ()
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:16777216") # for g'mic...
-    set(CMAKE_CXX_STACK_SIZE "999999999")
+#    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:16777216") # for g'mic...
+#    set(CMAKE_CXX_STACK_SIZE "999999999")
 endif()
 
 macro_optional_find_package(FFTW3)

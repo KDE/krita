@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
 
    Based on nexp.cpp : Parser module of Python-like language
    (C) 2001 Jarosław Staniek, MIMUW (www.mimuw.edu.pl)
@@ -52,6 +52,8 @@ CALLIGRADB_EXPORT QString KexiDB::exprClassName(int c)
         return "Aggregation";
     else if (c == KexiDBExpr_TableList)
         return "TableList";
+    else if (c == KexiDBExpr_ArgumentList)
+        return "ArgumentList";
     else if (c == KexiDBExpr_QueryParameter)
         return "QueryParameter";
 
@@ -76,6 +78,31 @@ BaseExpr::~BaseExpr()
 Field::Type BaseExpr::type()
 {
     return Field::InvalidType;
+}
+
+bool BaseExpr::isTextType()
+{
+    return Field::isTextType(type());
+}
+
+bool BaseExpr::isIntegerType()
+{
+    return Field::isIntegerType(type());
+}
+
+bool BaseExpr::isNumericType()
+{
+    return Field::isNumericType(type());
+}
+
+bool BaseExpr::isFPNumericType()
+{
+    return Field::isFPNumericType(type());
+}
+
+bool BaseExpr::isDateTimeType()
+{
+    return Field::isDateTimeType(type());
 }
 
 QString BaseExpr::debugString()
@@ -180,6 +207,28 @@ Field::Type NArgExpr::type()
     return BaseExpr::type();
 }
 
+bool NArgExpr::containsInvalidArgument()
+{
+    foreach (BaseExpr* e, list) {
+        Field::Type type = e->type();
+        if (type == Field::InvalidType) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool NArgExpr::containsNullArgument()
+{
+    foreach (BaseExpr* e, list) {
+        Field::Type type = e->type();
+        if (type == Field::Null) {
+            return true;
+        }
+    }
+    return false;
+}
+
 QString NArgExpr::debugString()
 {
     QString s = QString("NArgExpr(")
@@ -254,7 +303,7 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
     case KEXIDB_TOKEN_BETWEEN_AND:
     case KEXIDB_TOKEN_NOT_BETWEEN_AND: {
         if (list.count() != 3) {
-            parseInfo.errMsg = i18n("Three arguments required");
+            parseInfo.errMsg = i18n("Incorrect number of arguments");
             parseInfo.errDescr = i18nc("@info BETWEEN..AND error", "%1 operator requires exactly three arguments.", "BETWEEN...AND");
             return false;
         }
@@ -285,9 +334,14 @@ QString NArgExpr::tokenToString()
     switch (m_token) {
     case KEXIDB_TOKEN_BETWEEN_AND: return "BETWEEN_AND";
     case KEXIDB_TOKEN_NOT_BETWEEN_AND: return "NOT_BETWEEN_AND";
-    default:;
+    default: {
+        const QString s = BaseExpr::tokenToString();
+        if (!s.isEmpty()) {
+            return QString("'%1'").arg(s);
+        }
     }
-    return QString("{INVALID_N_ARG_OPERATOR#%1} ").arg(m_token);
+    }
+    return QString("{INVALID_N_ARG_OPERATOR#%1}").arg(m_token);
 }
 
 //=========================================
@@ -914,15 +968,17 @@ K_GLOBAL_STATIC(BuiltInAggregates, _builtInAggregates)
 
 //=========================================
 
-FunctionExpr::FunctionExpr(const QString& _name, NArgExpr* args_)
+FunctionExpr::FunctionExpr(const QString& name_, NArgExpr* args_)
         : BaseExpr(0/*undefined*/)
-        , name(_name)
+        , name(name_.toUpper())
         , args(args_)
 {
-    if (isBuiltInAggregate(name.toLatin1()))
+    if (_builtInAggregates->contains(name.toLatin1())) {
         m_cl = KexiDBExpr_Aggregation;
-    else
+    }
+    else {
         m_cl = KexiDBExpr_Function;
+    }
     if (args)
         args->setParent(this);
 }
@@ -968,16 +1024,87 @@ void FunctionExpr::getQueryParameters(QuerySchemaParameterList& params)
 
 Field::Type FunctionExpr::type()
 {
-    //TODO
+    if (name == "SUBSTR") {
+        if (args->containsNullArgument()) {
+            return Field::Null;
+        }
+        return Field::Text;
+    }
+    //! @todo
     return Field::InvalidType;
 }
 
 bool FunctionExpr::validate(ParseInfo& parseInfo)
 {
-    if (!BaseExpr::validate(parseInfo))
+    if (!BaseExpr::validate(parseInfo)) {
         return false;
+    }
+    if (args->token() != ',') { // arguments required: NArgExpr with token ','
+        return false;
+    }
+    if (!args->validate(parseInfo)) {
+        return false;
+    }
+    if (name == "SUBSTR") {
+        /* From https://www.sqlite.org/lang_corefunc.html:
+        [1] substr(X,Y,Z)
+        The substr(X,Y,Z) function returns a substring of input string X that begins
+        with the Y-th character and which is Z characters long. If Z is omitted then
 
-    return args ? args->validate(parseInfo) : true;
+        [2] substr(X,Y)
+        substr(X,Y) returns all characters through the end of the string X beginning with
+        the Y-th. The left-most character of X is number 1. If Y is negative then the
+        first character of the substring is found by counting from the right rather than
+        the left. If Z is negative then the abs(Z) characters preceding the Y-th
+        character are returned. If X is a string then characters indices refer to actual
+        UTF-8 characters. If X is a BLOB then the indices refer to bytes. */
+        if (args->containsInvalidArgument()) {
+            return false;
+        }
+        const int count = args->args();
+        if (count != 2 && count != 3) {
+            parseInfo.errMsg = i18n("Incorrect number of arguments");
+            parseInfo.errDescr = i18nc("@info Number of arguments error", "%1() function requires 2 or 3 arguments.", name);
+            return false;
+        }
+        BaseExpr *textExpr = args->arg(0);
+        if (!textExpr->isTextType() && textExpr->type() != Field::Null) {
+            parseInfo.errMsg = i18n("Incorrect type of argument");
+            parseInfo.errDescr = i18nc("@info Type error", "%1() function's first argument should be of type \"%2\". "
+                                                           "Specified argument is of type \"%3\".",
+                                       name,
+                                       Field::typeName(Field::Text),
+                                       Field::typeName(textExpr->type()));
+            return false;
+        }
+        BaseExpr *startExpr = args->arg(1);
+        if (!startExpr->isIntegerType() && startExpr->type() != Field::Null) {
+            parseInfo.errMsg = i18n("Incorrect type of argument");
+            parseInfo.errDescr = i18nc("@info Type error", "%1() function's second argument should be of type \"%2\". "
+                                                           "Specified argument is of type \"%3\".",
+                                       name,
+                                       Field::typeName(Field::Integer),
+                                       Field::typeName(startExpr->type()));
+            return false;
+        }
+        BaseExpr *lengthExpr = 0;
+        if (count == 3) {
+            lengthExpr = args->arg(2);
+            if (!lengthExpr->isIntegerType() && lengthExpr->type() != Field::Null) {
+                parseInfo.errMsg = i18n("Incorrect type of argument");
+                parseInfo.errDescr = i18nc("@info Type error", "%1() function's third argument should be of type \"%2\". "
+                                                               "Specified argument is of type \"%3\".",
+                                           name,
+                                           Field::typeName(Field::Integer),
+                                           Field::typeName(lengthExpr->type()));
+                return false;
+            }
+        }
+    }
+    else {
+        return false;
+    }
+    return true;
 }
 
 bool FunctionExpr::isBuiltInAggregate(const QByteArray& fname)

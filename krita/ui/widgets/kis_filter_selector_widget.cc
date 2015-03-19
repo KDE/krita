@@ -22,6 +22,9 @@
 
 #include <QHeaderView>
 #include <QTreeView>
+#include <QLabel>
+#include <QComboBox>
+#include <QPushButton>
 
 #include "ui_wdgfilterselector.h"
 
@@ -86,13 +89,6 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     connect(d->uiFilterSelector.comboBoxPresets, SIGNAL(activated(int)),
             SLOT(slotBookmarkedFilterConfigurationSelected(int)));
     connect(d->uiFilterSelector.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
-
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 0, 0, 1, 2);
-    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 2, 1);
-
-
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -141,19 +137,18 @@ void KisFilterSelectorWidget::showFilterGallery(bool visible)
     QList<int> sizes;
     int currentCentralWidgetWidth = d->currentCentralWidget ? d->currentCentralWidget->width() : 0;
     if (visible) {
-        d->uiFilterSelector.filtersSelector->setMidLineWidth(200);
+        d->uiFilterSelector.filtersSelector->setMidLineWidth(150);
         sizes << d->uiFilterSelector.filtersSelector->sizeHint().width() << currentCentralWidgetWidth;
 
     } else {
         d->uiFilterSelector.filtersSelector->setMidLineWidth(0);
         sizes << 0 << currentCentralWidgetWidth;
     }
-    d->uiFilterSelector.splitter->setSizes(sizes);
 }
 
 bool KisFilterSelectorWidget::isFilterGalleryVisible() const
 {
-    return d->uiFilterSelector.splitter->sizes()[0] > 0;
+    return true;
 }
 
 KisFilterSP KisFilterSelectorWidget::currentFilter() const
@@ -180,10 +175,17 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice);
 
     if (!widget) { // No widget, so display a label instead
+        d->uiFilterSelector.comboBoxPresets->setEnabled(false);
+        d->uiFilterSelector.pushButtonEditPressets->setEnabled(false);
+
         d->currentFilterConfigurationWidget = 0;
-        d->currentCentralWidget = new QLabel(i18n("No configuration option."),
+        d->currentCentralWidget = new QLabel(i18n("No configuration options"),
                                              d->uiFilterSelector.centralWidgetHolder);
+        qobject_cast<QLabel*>(d->currentCentralWidget)->setAlignment(Qt::AlignCenter);
     } else {
+        d->uiFilterSelector.comboBoxPresets->setEnabled(true);
+        d->uiFilterSelector.pushButtonEditPressets->setEnabled(true);
+
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
         d->currentFilterConfigurationWidget->setView(d->view);

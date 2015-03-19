@@ -242,9 +242,23 @@ public:
                 }
             } else { // m_endBlockNum != -1 in this case. We're pushing all new section info to the end block.
                 QTextBlockFormat fmt = cur->document()->findBlockByNumber(m_endBlockNum).blockFormat();
+                QList<KoSection *> allStartings = KoSectionUtils::sectionStartings(fmt);
                 fmt.clearProperty(KoParagraphStyle::SectionStartings);
 
-                closeList << KoSectionUtils::sectionEndings(fmt);
+                QList<KoSectionEnd *> pairedEndings;
+                QList<KoSectionEnd *> unpairedEndings;
+
+                foreach (KoSectionEnd *se, KoSectionUtils::sectionEndings(fmt)) {
+                    KoSection *sec = se->correspondingSection();
+
+                    if (allStartings.contains(sec)) {
+                        pairedEndings << se;
+                    } else {
+                        unpairedEndings << se;
+                    }
+                }
+
+                closeList = pairedEndings + closeList + unpairedEndings;
 
                 KoSectionUtils::setSectionStartings(fmt, openList);
                 KoSectionUtils::setSectionEndings(fmt, closeList);

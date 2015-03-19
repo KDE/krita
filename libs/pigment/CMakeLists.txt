@@ -2,10 +2,10 @@ project(pigmentcms)
 
 # we have to repeat platform specifics from top-level
 if (WIN32)
-include_directories(${CMAKE_SOURCE_DIR}/winquirks)
-add_definitions(-D_USE_MATH_DEFINES)
-add_definitions(-DNOMINMAX)
-set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
+    include_directories(${CMAKE_SOURCE_DIR}/winquirks)
+    add_definitions(-D_USE_MATH_DEFINES)
+    add_definitions(-DNOMINMAX)
+    set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif ()
 
 include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} ${Boost_INCLUDE_DIR})

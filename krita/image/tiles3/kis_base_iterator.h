@@ -32,8 +32,8 @@ protected:
         m_pixelSize = m_dataManager->pixelSize();
         m_writable = _writable;
     }
-    qint32 m_pixelSize;        // bytes per pixel
     KisTiledDataManager *m_dataManager;
+    qint32 m_pixelSize;        // bytes per pixel
     bool m_writable;
     inline void lockTile(KisTileSP &tile) {
         if (m_writable)

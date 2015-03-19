@@ -591,10 +591,12 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
 
     if (toolData == m_tabletToolMap.end()) {
-        KisPaintOpPresetSP preset =
+        if (m_resourceProvider->currentPreset()) {
+            KisPaintOpPresetSP preset =
                 m_resourceProvider->currentPreset()->clone();
-        m_resourceProvider->setPaintOpPreset(preset);
-        setCurrentPaintop(preset->paintOp(), preset);
+            m_resourceProvider->setPaintOpPreset(preset);
+            setCurrentPaintop(preset->paintOp(), preset);
+        }
     } else {
         setCurrentPaintop(toolData->paintOpID, toolData->preset);
     }

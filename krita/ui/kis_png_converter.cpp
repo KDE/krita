@@ -1123,7 +1123,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
                             palette[i].green == d[1] &&
                             palette[i].blue == d[0]) {
                         break;
-                    } while (it->nextPixel());
+                    }
                 }
                 writestream.setNextValue(i);
             } while (it->nextPixel());

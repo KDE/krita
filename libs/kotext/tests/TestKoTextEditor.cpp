@@ -688,8 +688,8 @@ void TestKoTextEditor::testDeleteSectionHandling()
      *  [ 0$     0           0
      *  [ 1$     4           1
      *  [ 2$     8           2
-     *  |2 ]$     12          3
-     *  |1 ]$     16          4
+     *  2 ]$     12          3
+     *  1 ]$     16          4
      *  [ 3$     20          5
      *  3 ]$     24          6
      *  [ 4$     28          7

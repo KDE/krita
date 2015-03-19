@@ -151,7 +151,6 @@ public:
         QRegion prepareRegion(srcRect);
         prepareRegion -= m_cropRect;
 
-        QStack<QRect> applyRects;
 
         /**
          * If a clone has complicated masks, we should prepare additional

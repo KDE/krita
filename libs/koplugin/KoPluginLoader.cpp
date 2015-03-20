@@ -26,9 +26,8 @@
 #include <QStringList>
 
 #include <QDebug>
-#include <kglobal.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfig>
+#include <KConfigGroup>
 
 class KoPluginLoader::Private
 {
@@ -70,7 +69,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
         kDebug(30003) << "Loading" << serviceType << "with checking the config";
-        KConfigGroup configGroup = KGlobal::config()->group(config.group);
+        KSharedConfigPtr configGroup = KSharedConfig::openConfig(config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
 
@@ -134,7 +133,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     if (configChanged && config.whiteList && config.blacklist && config.group) {
-        KConfigGroup configGroup = KGlobal::config()->group(config.group);
+        KSharedConfigPtr configGroup = KSharedConfig::openConfig(config.group);
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
     }

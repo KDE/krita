@@ -6,6 +6,7 @@ set(koplugin_LIB_SRCS
 )
 
 add_library(koplugin SHARED ${koplugin_LIB_SRCS})
+generate_export_header(koplugin BASE_NAME koplugin)
 
 target_link_libraries(koplugin koversion )
 target_link_libraries(koplugin LINK_INTERFACE_LIBRARIES koversion )

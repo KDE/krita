@@ -21,11 +21,10 @@
 #include <QProcess>
 #include <QTemporaryFile>
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kdebug.h>
-
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorConversionSystem.h"
@@ -34,16 +33,17 @@
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("CCSGraph",
-                         0,
+    K4AboutData aboutData("CCSGraph",
+                         "CCSGraph",
                          ki18n("CCSGraph"),
                          "1.0",
                          ki18n("Output the graph of color conversion of pigment's Color Conversion"),
-                         KAboutData::License_LGPL,
+                         K4AboutData::License_LGPL,
                          ki18n("(c) 2007 Cyrille Berger"),
                          KLocalizedString(),
                          "www.calligra.org",
                          "submit@bugs.kde.org");
+
     KCmdLineArgs::init(argc, argv, &aboutData);
     // Initialize the list of options
     KCmdLineOptions options;

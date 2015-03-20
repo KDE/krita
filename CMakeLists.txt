@@ -175,8 +175,9 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      Emoticons ConfigWidgets KDELibs4Support
 )
 
+
 find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Xml Script Svg Test)
-find_package(Qt5 5.2.0 COMPONENTS WebKit DBus QtDeclarative)
+find_package(Qt5 5.2.0 COMPONENTS WebKit DBus Declarative)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5Webkit_FOUND})
@@ -186,9 +187,6 @@ if (USEOPENGL)
     find_package(Qt5 5.2.0 REQUIRED OpenGL)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 endif ()
-
-
-
 
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
@@ -690,7 +688,7 @@ include(MacroCalligraBuildTest)
 #          any other include directory
 
 # for config.h and <toplevel/foo.h> includes (if any?)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
 
 set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version 

@@ -166,13 +166,13 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
 
-find_package(KF5 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
+find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      GuiAddons I18n ItemModels ItemViews
-#                                     WidgetsAddons ThreadWeaver
-#                                     Completion IconThemes 
-#                                     Parts
-#                                     XmlGui Kross KDELibs4Support
-
+                                     WidgetsAddons ThreadWeaver
+                                     Completion IconThemes 
+                                     Parts
+                                     XmlGui Kross 
+                                     Emoticons ConfigWidgets KDELibs4Support
 )
 
 find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Xml Script Svg Test)

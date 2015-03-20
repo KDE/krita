@@ -2,6 +2,7 @@
 set(koplugin_LIB_SRCS
 	KoPluginLoader.cpp
     KoServiceLocator.cpp
+	KoJsonTrader.cpp
 )
 
 add_library(koplugin SHARED ${koplugin_LIB_SRCS})

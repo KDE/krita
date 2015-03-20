@@ -25,6 +25,7 @@
 #include <QScopedPointer>
 
 class KisPSDLayerStyle;
+class KisLayerStyleFilterEnvironment;
 
 
 class KDE_EXPORT KisLayerStyleFilter : public KisShared
@@ -41,7 +42,8 @@ public:
     virtual void processDirectly(KisPaintDeviceSP src,
                                  KisPaintDeviceSP dst,
                                  const QRect &applyRect,
-                                 KisPSDLayerStyleSP style) const = 0;
+                                 KisPSDLayerStyleSP style,
+                                 KisLayerStyleFilterEnvironment *env) const = 0;
 
     /**
      * Some filters need pixels outside the current processing rect to compute the new

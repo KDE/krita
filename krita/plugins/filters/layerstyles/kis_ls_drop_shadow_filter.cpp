@@ -254,8 +254,10 @@ KisLsDropShadowFilter::getShadowStruct(KisPSDLayerStyleSP style) const
 void KisLsDropShadowFilter::processDirectly(KisPaintDeviceSP src,
                                             KisPaintDeviceSP dst,
                                             const QRect &applyRect,
-                                            KisPSDLayerStyleSP style) const
+                                            KisPSDLayerStyleSP style,
+                                            KisLayerStyleFilterEnvironment *env) const
 {
+    Q_UNUSED(env);
     KIS_ASSERT_RECOVER_RETURN(style);
 
     const psd_layer_effects_shadow_base *shadowStruct = getShadowStruct(style);

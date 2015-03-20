@@ -16,20 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_LS_SATIN_FILTER_H
-#define KIS_LS_SATIN_FILTER_H
+#ifndef KIS_LS_OVERLAY_FILTER_H
+#define KIS_LS_OVERLAY_FILTER_H
 
 #include <QSharedPointer>
 
 #include "kis_layer_style_filter.h"
 
 class psd_layer_effects_shadow_base;
+class psd_layer_effects_context;
 
 
-class KDE_EXPORT KisLsSatinFilter : public KisLayerStyleFilter
+class KDE_EXPORT KisLsOverlayFilter : public KisLayerStyleFilter
 {
 public:
-    KisLsSatinFilter();
+    enum Mode {
+        Color,
+        Gradient,
+        Pattern
+    };
+
+public:
+    KisLsOverlayFilter(Mode mode);
 
     void processDirectly(KisPaintDeviceSP src,
                          KisPaintDeviceSP dst,
@@ -39,6 +47,19 @@ public:
 
     QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style) const;
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;
+
+private:
+    const psd_layer_effects_shadow_base* getOverlayStruct(KisPSDLayerStyleSP style) const;
+
+    void applyOverlay(KisPaintDeviceSP srcDevice,
+                      KisPaintDeviceSP dstDevice,
+                      const QRect &applyRect,
+                      const psd_layer_effects_shadow_base *config,
+                      KisPSDLayerStyleSP style,
+                      KisLayerStyleFilterEnvironment *env) const;
+
+private:
+    Mode m_mode;
 };
 
 #endif

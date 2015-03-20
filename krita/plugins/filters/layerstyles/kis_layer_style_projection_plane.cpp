@@ -23,6 +23,7 @@
 
 #include "kis_ls_drop_shadow_filter.h"
 #include "kis_ls_satin_filter.h"
+#include "kis_ls_overlay_filter.h"
 
 
 struct KisLayerStyleProjectionPlane::Private
@@ -90,6 +91,27 @@ void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleS
             new KisLayerStyleFilterProjectionPlane(sourceLayer);
         satin->setStyle(new KisLsSatinFilter(), style);
         m_d->stylesAfter << toQShared(satin);
+    }
+
+    {
+        KisLayerStyleFilterProjectionPlane *colorOverlay =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        colorOverlay->setStyle(new KisLsOverlayFilter(KisLsOverlayFilter::Color), style);
+        m_d->stylesAfter << toQShared(colorOverlay);
+    }
+
+    {
+        KisLayerStyleFilterProjectionPlane *gradientOverlay =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        gradientOverlay->setStyle(new KisLsOverlayFilter(KisLsOverlayFilter::Gradient), style);
+        m_d->stylesAfter << toQShared(gradientOverlay);
+    }
+
+    {
+        KisLayerStyleFilterProjectionPlane *patternOverlay =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        patternOverlay->setStyle(new KisLsOverlayFilter(KisLsOverlayFilter::Pattern), style);
+        m_d->stylesAfter << toQShared(patternOverlay);
     }
 }
 

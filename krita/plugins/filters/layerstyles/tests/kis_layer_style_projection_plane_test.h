@@ -35,6 +35,9 @@ private slots:
     void testGlowInnerGradient();
 
     void testSatin();
+    void testColorOverlay();
+    void testGradientOverlay();
+    void testPatternOverlay();
 
 private:
     void test(KisPSDLayerStyleSP style, const QString testName);

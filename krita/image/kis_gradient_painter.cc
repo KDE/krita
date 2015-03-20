@@ -603,11 +603,26 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        qint32 width,
                                        qint32 height)
 {
+    return paintGradient(gradientVectorStart,
+                         gradientVectorEnd,
+                         repeat,
+                         antiAliasThreshold,
+                         reverseGradient,
+                         QRect(startx, starty, width, height));
+}
+
+bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
+                                       const QPointF& gradientVectorEnd,
+                                       enumGradientRepeat repeat,
+                                       double antiAliasThreshold,
+                                       bool reverseGradient,
+                                       const QRect &applyRect)
+{
     Q_UNUSED(antiAliasThreshold);
 
     if (!gradient()) return false;
 
-    QRect requestedRect(startx, starty, width, height);
+    QRect requestedRect = applyRect;
 
     //If the device has a selection only iterate over that selection united with our area of interest
     if (selection()) {

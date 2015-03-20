@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,29 +16,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_LS_SATIN_FILTER_H
-#define KIS_LS_SATIN_FILTER_H
+#include "kis_layer_style_filter_environment.h"
 
-#include <QSharedPointer>
-
-#include "kis_layer_style_filter.h"
-
-class psd_layer_effects_shadow_base;
+#include "kis_layer.h"
 
 
-class KDE_EXPORT KisLsSatinFilter : public KisLayerStyleFilter
+struct KisLayerStyleFilterEnvironment::Private
 {
-public:
-    KisLsSatinFilter();
-
-    void processDirectly(KisPaintDeviceSP src,
-                         KisPaintDeviceSP dst,
-                         const QRect &applyRect,
-                         KisPSDLayerStyleSP style,
-                         KisLayerStyleFilterEnvironment *env) const;
-
-    QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style) const;
-    QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;
+    KisLayer *sourceLayer;
 };
 
-#endif
+
+KisLayerStyleFilterEnvironment::KisLayerStyleFilterEnvironment(KisLayer *sourceLayer)
+    : m_d(new Private)
+{
+    m_d->sourceLayer = sourceLayer;
+}
+
+KisLayerStyleFilterEnvironment::~KisLayerStyleFilterEnvironment()
+{
+}
+
+QRect KisLayerStyleFilterEnvironment::layerBounds() const
+{
+    return m_d->sourceLayer ? m_d->sourceLayer->projection()->exactBounds() : QRect();
+}
+
+QRect KisLayerStyleFilterEnvironment::defaultBounds() const
+{
+    return m_d->sourceLayer ?
+        m_d->sourceLayer->original()->defaultBounds()->bounds() : QRect();
+}
+

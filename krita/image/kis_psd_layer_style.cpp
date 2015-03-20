@@ -165,6 +165,21 @@ const psd_layer_effects_satin* KisPSDLayerStyle::satin() const
     return &d->satin;
 }
 
+const psd_layer_effects_color_overlay* KisPSDLayerStyle::colorOverlay() const
+{
+    return &d->color_overlay;
+}
+
+const psd_layer_effects_gradient_overlay* KisPSDLayerStyle::gradientOverlay() const
+{
+    return &d->gradient_overlay;
+}
+
+const psd_layer_effects_pattern_overlay* KisPSDLayerStyle::patternOverlay() const
+{
+    return &d->pattern_overlay;
+}
+
 psd_layer_effects_context* KisPSDLayerStyle::context()
 {
     return &d->context;
@@ -193,6 +208,21 @@ psd_layer_effects_inner_glow* KisPSDLayerStyle::innerGlow()
 psd_layer_effects_satin* KisPSDLayerStyle::satin()
 {
     return &d->satin;
+}
+
+psd_layer_effects_color_overlay* KisPSDLayerStyle::colorOverlay()
+{
+    return &d->color_overlay;
+}
+
+psd_layer_effects_gradient_overlay* KisPSDLayerStyle::gradientOverlay()
+{
+    return &d->gradient_overlay;
+}
+
+psd_layer_effects_pattern_overlay* KisPSDLayerStyle::patternOverlay()
+{
+    return &d->pattern_overlay;
 }
 
 bool KisPSDLayerStyle::writeASL(QIODevice *io, StylesVector )

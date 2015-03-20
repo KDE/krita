@@ -27,6 +27,7 @@ class QIODevice;
 #include "kis_types.h"
 #include "krita_export.h"
 
+
 /**
  * @brief The KisPSDLayerStyle class implements loading, saving and applying
  * the PSD layer effects.
@@ -61,6 +62,9 @@ public:
     const psd_layer_effects_outer_glow* outerGlow() const;
     const psd_layer_effects_inner_glow* innerGlow() const;
     const psd_layer_effects_satin* satin() const;
+    const psd_layer_effects_color_overlay* colorOverlay() const;
+    const psd_layer_effects_gradient_overlay* gradientOverlay() const;
+    const psd_layer_effects_pattern_overlay* patternOverlay() const;
 
     psd_layer_effects_context* context();
     psd_layer_effects_drop_shadow* dropShadow();
@@ -68,6 +72,9 @@ public:
     psd_layer_effects_outer_glow* outerGlow();
     psd_layer_effects_inner_glow* innerGlow();
     psd_layer_effects_satin* satin();
+    psd_layer_effects_color_overlay* colorOverlay();
+    psd_layer_effects_gradient_overlay* gradientOverlay();
+    psd_layer_effects_pattern_overlay* patternOverlay();
 
     /**
      * Save given styles to the ASL style format. All patterns references in the

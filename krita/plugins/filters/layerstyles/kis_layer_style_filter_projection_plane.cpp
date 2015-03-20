@@ -22,6 +22,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_layer_style_filter.h"
+#include "kis_layer_style_filter_environment.h"
 
 #include "kis_painter.h"
 
@@ -32,6 +33,7 @@ struct KisLayerStyleFilterProjectionPlane::Private
 
     QScopedPointer<KisLayerStyleFilter> filter;
     KisPSDLayerStyleSP style;
+    QScopedPointer<KisLayerStyleFilterEnvironment> environment;
 };
 
 KisLayerStyleFilterProjectionPlane::
@@ -39,6 +41,7 @@ KisLayerStyleFilterProjectionPlane(KisLayer *sourceLayer)
     : m_d(new Private)
 {
     m_d->sourceLayer = sourceLayer;
+    m_d->environment.reset(new KisLayerStyleFilterEnvironment(sourceLayer));
 }
 
 KisLayerStyleFilterProjectionPlane::~KisLayerStyleFilterProjectionPlane()
@@ -70,7 +73,8 @@ void KisLayerStyleFilterProjectionPlane::apply(KisPainter *painter, const QRect 
     m_d->filter->processDirectly(m_d->sourceLayer->projection(),
                                  painter->device(),
                                  rect,
-                                 m_d->style);
+                                 m_d->style,
+                                 m_d->environment.data());
 }
 
 

@@ -20,9 +20,14 @@
 
 #include <qtest_kde.h>
 
+#include "testutil.h"
+
+
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoPattern.h>
+
 
 #include "kis_transparency_mask.h"
 #include "kis_paint_layer.h"
@@ -236,6 +241,61 @@ void KisLayerStyleProjectionPlaneTest::testSatin()
     style->satin()->setBlendMode(COMPOSITE_LINEAR_DODGE);
 
     test(style, "satin");
+}
+
+void KisLayerStyleProjectionPlaneTest::testColorOverlay()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->colorOverlay()->setOpacity(80);
+    style->colorOverlay()->setEffectEnabled(true);
+    style->colorOverlay()->setColor(Qt::white);
+    style->colorOverlay()->setBlendMode(COMPOSITE_LINEAR_DODGE);
+
+    test(style, "color_overlay");
+}
+
+void KisLayerStyleProjectionPlaneTest::testGradientOverlay()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->gradientOverlay()->setAngle(90);
+    style->gradientOverlay()->setOpacity(80);
+    style->gradientOverlay()->setEffectEnabled(true);
+    style->gradientOverlay()->setBlendMode(COMPOSITE_LINEAR_DODGE);
+    style->gradientOverlay()->setAlignWithLayer(true);
+    style->gradientOverlay()->setScale(100);
+    style->gradientOverlay()->setStyle(psd_gradient_style_diamond);
+
+    QLinearGradient testGradient;
+    testGradient.setColorAt(0.0, Qt::white);
+    testGradient.setColorAt(0.5, Qt::green);
+    testGradient.setColorAt(1.0, Qt::black);
+    testGradient.setSpread(QGradient::ReflectSpread);
+    QScopedPointer<KoStopGradient> gradient(
+        KoStopGradient::fromQGradient(&testGradient));
+
+    style->gradientOverlay()->setGradient(gradient.data());
+
+    test(style, "grad_overlay");
+}
+
+void KisLayerStyleProjectionPlaneTest::testPatternOverlay()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->patternOverlay()->setOpacity(80);
+    style->patternOverlay()->setEffectEnabled(true);
+    style->patternOverlay()->setBlendMode(COMPOSITE_LINEAR_DODGE);
+    style->patternOverlay()->setScale(100);
+
+    style->patternOverlay()->setLinkWithLayer(false);
+
+    QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
+
+    KoPattern pattern(fileName);
+    QVERIFY(pattern.load());
+
+    style->patternOverlay()->setPattern(&pattern);
+
+    test(style, "pat_overlay");
 }
 
 QTEST_KDEMAIN(KisLayerStyleProjectionPlaneTest, GUI)

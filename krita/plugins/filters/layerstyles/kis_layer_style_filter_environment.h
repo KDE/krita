@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,29 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_LS_SATIN_FILTER_H
-#define KIS_LS_SATIN_FILTER_H
+#ifndef __KIS_LAYER_STYLE_FILTER_ENVIRONMENT_H
+#define __KIS_LAYER_STYLE_FILTER_ENVIRONMENT_H
 
-#include <QSharedPointer>
+#include <QScopedPointer>
+#include <QRect>
 
-#include "kis_layer_style_filter.h"
-
-class psd_layer_effects_shadow_base;
+#include <krita_export.h>
 
 
-class KDE_EXPORT KisLsSatinFilter : public KisLayerStyleFilter
+class KisLayer;
+
+
+class KDE_EXPORT KisLayerStyleFilterEnvironment
 {
 public:
-    KisLsSatinFilter();
+    KisLayerStyleFilterEnvironment(KisLayer *sourceLayer);
+    ~KisLayerStyleFilterEnvironment();
 
-    void processDirectly(KisPaintDeviceSP src,
-                         KisPaintDeviceSP dst,
-                         const QRect &applyRect,
-                         KisPSDLayerStyleSP style,
-                         KisLayerStyleFilterEnvironment *env) const;
+    QRect layerBounds() const;
+    QRect defaultBounds() const;
 
-    QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style) const;
-    QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif
+#endif /* __KIS_LAYER_STYLE_FILTER_ENVIRONMENT_H */

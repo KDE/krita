@@ -33,6 +33,7 @@
 
 #include "kis_debug.h"
 
+class KoPattern;
 
 
 const int MAX_CHANNELS = 56;
@@ -548,6 +549,7 @@ public:
 struct psd_layer_effects_satin : public psd_layer_effects_shadow_base
 {
     psd_layer_effects_satin() {
+        setInvert(false);
         setUseGlobalLight(false);
         setDistance(8);
         setSize(7);
@@ -629,42 +631,144 @@ struct psd_layer_effects_bevel_emboss {
 };
 
 // sofi: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_70055
-struct psd_layer_effects_color_overlay {
-    // Effects layer, solid fill (added in Photoshop 7.0)
-    bool effect_enable; // Effect enabled
+struct psd_layer_effects_color_overlay : public psd_layer_effects_shadow_base
+{
+    psd_layer_effects_color_overlay() {
+        setColor(Qt::white);
+    }
 
-    QString blend_mode; // Key for blend mode
-    QColor color;
-    quint8 opacity; // Opacity as a percent
-    QColor native_color;
+    using psd_layer_effects_shadow_base::setBlendMode;
+    using psd_layer_effects_shadow_base::setOpacity;
+
+    using psd_layer_effects_shadow_base::setColor;
 };
 
-struct psd_layer_effects_gradient_overlay {
-    bool effect_enable; // Effect enabled
+struct psd_layer_effects_gradient_overlay : public psd_layer_effects_shadow_base
+{
+    psd_layer_effects_gradient_overlay()
+        : m_reverse(false),
+          m_alignWithLayer(true),
+          m_scale(100),
+          m_style(psd_gradient_style_linear),
+          m_gradientXOffset(0),
+          m_gradientYOffset(0)
+    {
+        setAngle(90);
+    }
 
-    QString blend_mode; // Blend mode: 4 bytes for signature and 4 bytes for key
-    quint8 opacity; // Opacity as a percent
-    psd_gradient_color gradient_color;
-    bool reverse;
-    psd_gradient_style style;
-    bool align_width_layer;
-    qint32 angle; // Angle in degrees
-    qint32 scale;
-    qint32 horz_offset;
-    qint32 vert_offset;
+    using psd_layer_effects_shadow_base::setBlendMode;
+    using psd_layer_effects_shadow_base::setOpacity;
+
+    using psd_layer_effects_shadow_base::setGradient;
+    using psd_layer_effects_shadow_base::setAngle;
+
+    bool reverse() const {
+        return m_reverse;
+    }
+    void setReverse(bool value) {
+        m_reverse = value;
+    }
+
+    bool alignWithLayer() const {
+        return m_alignWithLayer;
+    }
+    void setAlignWithLayer(bool value) {
+        m_alignWithLayer = value;
+    }
+
+    int scale() const {
+        return m_scale;
+    }
+    void setScale(int value) {
+        m_scale = value;
+    }
+
+    psd_gradient_style style() const {
+        return m_style;
+    }
+    void setStyle(psd_gradient_style value) {
+        m_style = value;
+    }
+
+    int gradientXOffset() const {
+        return m_gradientXOffset;
+    }
+    void setGradientXOffset(int value) {
+        m_gradientXOffset = value;
+    }
+
+    int gradientYOffset() const {
+        return m_gradientYOffset;
+    }
+    void setGradientYOffset(int value) {
+        m_gradientYOffset = value;
+    }
+
+private:
+    bool m_reverse;
+    bool m_alignWithLayer;
+    int m_scale;
+    psd_gradient_style m_style;
+    int m_gradientXOffset; // 0..100%
+    int m_gradientYOffset; // 0..100%
 };
 
-struct psd_layer_effects_pattern_overlay {
-    bool effect_enable; // Effect enabled
+struct psd_layer_effects_pattern_overlay : public psd_layer_effects_shadow_base
+{
+    psd_layer_effects_pattern_overlay()
+        : m_scale(100),
+          m_linkWithLayer(true),
+          m_pattern(0),
+          m_horizontalPhase(0),
+          m_verticalPhase(0)
+    {
+    }
 
-    QString blend_mode; // Blend mode: 4 bytes for signature and 4 bytes for key
-    QColor color;
-    quint8 opacity; // Opacity as a percent
-    qint32 scale;
-    bool link_with_layer;
-    psd_pattern_info pattern_info;
-    qint32 horz_phase;
-    qint32 vert_phase;
+    using psd_layer_effects_shadow_base::setBlendMode;
+    using psd_layer_effects_shadow_base::setOpacity;
+
+    int scale() const {
+        return m_scale;
+    }
+    void setScale(int value) {
+        m_scale = value;
+    }
+
+    bool linkWithLayer() const {
+        return m_linkWithLayer;
+    }
+    void setLinkWithLayer(bool value) {
+        m_linkWithLayer = value;
+    }
+
+    KoPattern* pattern() const {
+        return m_pattern;
+    }
+    void setPattern(KoPattern *value) {
+        m_pattern = value;
+    }
+
+    int horizontalPhase() const {
+        return m_horizontalPhase;
+    }
+    void setHorizontalPhase(int value) {
+        m_horizontalPhase = value;
+    }
+
+    int verticalPhase() const {
+        return m_verticalPhase;
+    }
+    void setVerticalPhase(int value) {
+        m_verticalPhase = value;
+    }
+
+private:
+    int m_scale;
+    bool m_linkWithLayer;
+    KoPattern *m_pattern;
+
+    int m_horizontalPhase;
+    int m_verticalPhase;
 };
 
 

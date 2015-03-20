@@ -42,7 +42,8 @@ public:
     void processDirectly(KisPaintDeviceSP src,
                          KisPaintDeviceSP dst,
                          const QRect &applyRect,
-                         KisPSDLayerStyleSP style) const;
+                         KisPSDLayerStyleSP style,
+                         KisLayerStyleFilterEnvironment *env) const;
 
     QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style) const;
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;

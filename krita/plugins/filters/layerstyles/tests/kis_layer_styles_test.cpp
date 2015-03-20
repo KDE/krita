@@ -27,6 +27,7 @@
 
 
 #include "../kis_layer_style_filter.h"
+#include "../kis_layer_style_filter_environment.h"
 #include "../kis_ls_drop_shadow_filter.h"
 #include "kis_psd_layer_style.h"
 
@@ -104,8 +105,10 @@ void testDropShadowImpl(const TestConfig &config,
 
     KisTransaction t(dst);
 
+    KisLayerStyleFilterEnvironment env(0);
+
     foreach (const QRect &rc, applyRects) {
-        lsFilter.processDirectly(dev, dst, rc, style);
+        lsFilter.processDirectly(dev, dst, rc, style, &env);
     }
 
     t.end();

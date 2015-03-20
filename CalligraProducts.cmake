@@ -73,7 +73,7 @@ calligra_define_product(LIB_CALLIGRADB "libcalligradb" UNPORTED)
 calligra_define_product(LIB_KOREPORT "libkoreport" UNPORTED  REQUIRES LIB_KOPROPERTY LIB_CALLIGRADB)
 
 # calligra libs
-calligra_define_product(LIB_CALLIGRA "Calligra core libs" UNPORTED  REQUIRES BUILDTOOL_RNG2CPP)
+calligra_define_product(LIB_CALLIGRA "Calligra core libs" REQUIRES BUILDTOOL_RNG2CPP)
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(LIB_KOODF2 "libkoodf2" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(LIB_KOODFREADER "libkoodfreader" UNPORTED  REQUIRES LIB_KOODF2 LIB_CALLIGRA)

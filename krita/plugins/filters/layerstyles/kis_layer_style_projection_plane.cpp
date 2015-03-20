@@ -22,6 +22,7 @@
 #include "kis_psd_layer_style.h"
 
 #include "kis_ls_drop_shadow_filter.h"
+#include "kis_ls_satin_filter.h"
 
 
 struct KisLayerStyleProjectionPlane::Private
@@ -82,6 +83,13 @@ void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleS
             new KisLayerStyleFilterProjectionPlane(sourceLayer);
         innerGlow->setStyle(new KisLsDropShadowFilter(KisLsDropShadowFilter::InnerGlow), style);
         m_d->stylesAfter << toQShared(innerGlow);
+    }
+
+    {
+        KisLayerStyleFilterProjectionPlane *satin =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        satin->setStyle(new KisLsSatinFilter(), style);
+        m_d->stylesAfter << toQShared(satin);
     }
 }
 

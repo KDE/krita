@@ -160,6 +160,11 @@ const psd_layer_effects_inner_glow* KisPSDLayerStyle::innerGlow() const
     return &d->inner_glow;
 }
 
+const psd_layer_effects_satin* KisPSDLayerStyle::satin() const
+{
+    return &d->satin;
+}
+
 psd_layer_effects_context* KisPSDLayerStyle::context()
 {
     return &d->context;
@@ -183,6 +188,11 @@ psd_layer_effects_outer_glow* KisPSDLayerStyle::outerGlow()
 psd_layer_effects_inner_glow* KisPSDLayerStyle::innerGlow()
 {
     return &d->inner_glow;
+}
+
+psd_layer_effects_satin* KisPSDLayerStyle::satin()
+{
+    return &d->satin;
 }
 
 bool KisPSDLayerStyle::writeASL(QIODevice *io, StylesVector )

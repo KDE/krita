@@ -545,6 +545,43 @@ public:
     }
 };
 
+struct psd_layer_effects_satin : public psd_layer_effects_shadow_base
+{
+    psd_layer_effects_satin() {
+        setUseGlobalLight(false);
+        setDistance(8);
+        setSize(7);
+        setSpread(0);
+        setKnocksOut(true);
+        setEdgeHidden(false);
+        setBlendMode(COMPOSITE_LINEAR_BURN);
+    }
+
+    using psd_layer_effects_shadow_base::setBlendMode;
+    using psd_layer_effects_shadow_base::setColor;
+    using psd_layer_effects_shadow_base::setOpacity;
+
+    // NOTE: no global light setting explicitly!
+    using psd_layer_effects_shadow_base::setAngle;
+    using psd_layer_effects_shadow_base::setDistance;
+
+    using psd_layer_effects_shadow_base::setSize;
+
+    using psd_layer_effects_shadow_base::setContourLookupTable;
+    using psd_layer_effects_shadow_base::setAntiAliased;
+
+    bool invert() const {
+        return m_invert;
+    }
+
+    void setInvert(bool value) {
+        m_invert = value;
+    }
+
+private:
+    bool m_invert;
+};
+
 struct psd_pattern_info {
     qint32 name_length;
     quint16 * name;
@@ -589,20 +626,6 @@ struct psd_layer_effects_bevel_emboss {
     bool texture_link;
     qint32 texture_horz_phase;
     qint32 texture_vert_phase;
-};
-
-struct psd_layer_effects_satin {
-    bool effect_enable; // Effect enabled
-
-    QString blend_mode; // Blend mode: 4 bytes for signature and 4 bytes for key
-    QColor color;
-    quint8 opacity; // Opacity as a percent
-    qint32 angle; // Angle in degrees
-    qint32 distance;
-    qint32 size;
-    quint8 contour_lookup_table[256];
-    bool anti_aliased;
-    bool invert;
 };
 
 // sofi: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_70055

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H
-#define __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H
+#ifndef KIS_LS_SATIN_FILTER_H
+#define KIS_LS_SATIN_FILTER_H
 
-#include <QtTest/QtTest>
+#include <QSharedPointer>
 
-#include "kis_types.h"
+#include "kis_layer_style_filter.h"
+
+class psd_layer_effects_shadow_base;
 
 
-class KisLayerStyleProjectionPlaneTest : public QObject
+class KDE_EXPORT KisLsSatinFilter : public KisLayerStyleFilter
 {
-    Q_OBJECT
-private slots:
-    void testShadow();
-    void testGlow();
-    void testGlowGradient();
-    void testGlowGradientJitter();
-    void testGlowInnerGradient();
+public:
+    KisLsSatinFilter();
 
-    void testSatin();
+    void processDirectly(KisPaintDeviceSP src,
+                         KisPaintDeviceSP dst,
+                         const QRect &applyRect,
+                         KisPSDLayerStyleSP style) const;
 
-private:
-    void test(KisPSDLayerStyleSP style, const QString testName);
+    QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style) const;
+    QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;
 };
 
-#endif /* __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H */
+#endif

@@ -74,7 +74,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
         KIS_DUMP_DEVICE_2(projection, imageRect, "03P_apply_on_fill", testName);
     }
 
-    return;
+    //return;
 
     KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
 
@@ -220,6 +220,22 @@ void KisLayerStyleProjectionPlaneTest::testGlowInnerGradient()
     style->innerGlow()->setFillType(psd_fill_gradient);
 
     test(style, "glow_inner_grad");
+}
+
+#include <KoCompositeOpRegistry.h>
+
+
+void KisLayerStyleProjectionPlaneTest::testSatin()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->satin()->setSize(15);
+    style->satin()->setOpacity(80);
+    style->satin()->setAngle(180);
+    style->satin()->setEffectEnabled(true);
+    style->satin()->setColor(Qt::white);
+    style->satin()->setBlendMode(COMPOSITE_LINEAR_DODGE);
+
+    test(style, "satin");
 }
 
 QTEST_KDEMAIN(KisLayerStyleProjectionPlaneTest, GUI)

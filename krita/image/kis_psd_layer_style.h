@@ -60,12 +60,14 @@ public:
     const psd_layer_effects_inner_shadow* innerShadow() const;
     const psd_layer_effects_outer_glow* outerGlow() const;
     const psd_layer_effects_inner_glow* innerGlow() const;
+    const psd_layer_effects_satin* satin() const;
 
     psd_layer_effects_context* context();
     psd_layer_effects_drop_shadow* dropShadow();
     psd_layer_effects_inner_shadow* innerShadow();
     psd_layer_effects_outer_glow* outerGlow();
     psd_layer_effects_inner_glow* innerGlow();
+    psd_layer_effects_satin* satin();
 
     /**
      * Save given styles to the ASL style format. All patterns references in the

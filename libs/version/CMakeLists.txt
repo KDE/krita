@@ -10,6 +10,7 @@ set(koversion_LIB_SRCS
 )
 
 add_library(koversion SHARED ${koversion_LIB_SRCS})
+generate_export_header(koversion BASE_NAME koversion)
 
 target_link_libraries(koversion Qt5::Core )
 
@@ -23,5 +24,5 @@ install(TARGETS koversion ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h
     ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h
-    koversion_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/koversion_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

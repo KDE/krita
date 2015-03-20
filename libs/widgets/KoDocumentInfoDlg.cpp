@@ -138,7 +138,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->authorUi->setupUi(authordlg);
     page = new KPageWidgetItem(authordlg, i18n("Author"));
     page->setHeader(i18n("Last saved by"));
-7    page->setIcon(koIcon("user-identity"));
+    page->setIcon(koIcon("user-identity"));
     addPage(page);
     d->pages.append(page);
 

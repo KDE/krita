@@ -20,7 +20,7 @@
 
 #include "KoJsonTrader.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QList>
 #include <QPluginLoader>
@@ -90,7 +90,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                 break;
             }
         }
-        kDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
+        //qDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
 
     }
 
@@ -103,7 +103,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
             if (json.isEmpty()) {
-                kDebug() << dirIter.filePath() << "has no json!";
+                //qDebug() << dirIter.filePath() << "has no json!";
             }
             if (!json.isEmpty()) {
                 if (! json.value("X-KDE-ServiceTypes").toArray().contains(QJsonValue(servicetype))) {

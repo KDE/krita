@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KGlobal>
 
 class KoPluginLoader::Private
 {

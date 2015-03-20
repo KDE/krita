@@ -9,25 +9,33 @@ add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 ########### next target ###############
 
 set(zoomhandler_test_SRCS zoomhandler_test.cpp )
-kde4_add_unit_test(zoomhandler_test TESTNAME libs-widgets-zoomhandler_test  ${zoomhandler_test_SRCS})
+add_executable(zoomhandler_testNAME libs-widgets-zoomhandler_test  ${zoomhandler_test_SRCS})
+add_test(zoomhandler_test zoomhandler_test)
+ecm_mark_as_test(zoomhandler_test)
 target_link_libraries(zoomhandler_test kowidgets Qt5::Test)
 
 ########### next target ###############
 
 set(zoomcontroller_test_SRCS zoomcontroller_test.cpp )
-kde4_add_unit_test(zoomcontroller_test TESTNAME libs-widgets-zoomcontroller_test  ${zoomcontroller_test_SRCS})
+add_executable(zoomcontroller_testNAME libs-widgets-zoomcontroller_test  ${zoomcontroller_test_SRCS})
+add_test(zoomcontroller_test zoomcontroller_test)
+ecm_mark_as_test(zoomcontroller_test)
 target_link_libraries(zoomcontroller_test  kowidgets Qt5::Test)
 
 ########### next target ###############
 
 set(KoResourceTaggingTest_SRCS KoResourceTaggingTest.cpp )
-kde4_add_unit_test(KoResourceTaggingTest TESTNAME libs-widgets-KoResourceTaggingTest  ${KoResourceTaggingTest_SRCS})
+add_executable(KoResourceTaggingTestNAME libs-widgets-KoResourceTaggingTest  ${KoResourceTaggingTest_SRCS})
+add_test(KoResourceTaggingTest KoResourceTaggingTest)
+ecm_mark_as_test(KoResourceTaggingTest)
 target_link_libraries(KoResourceTaggingTest  kowidgets Qt5::Test)
 
 ########### next target ###############
 
 set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
-kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-widgets-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
-target_link_libraries(KoProgressUpdaterTest kowidgets Qt5::Test ${KDE4_THREADWEAVER_LIBRARIES})
+add_executable(KoProgressUpdaterTestNAME libs-widgets-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
+add_test(KoProgressUpdaterTest KoProgressUpdaterTest)
+ecm_mark_as_test(KoProgressUpdaterTest)
+target_link_libraries(KoProgressUpdaterTest kowidgets Qt5::Test KF5::ThreadWeaver)
 
 ########### end ###############

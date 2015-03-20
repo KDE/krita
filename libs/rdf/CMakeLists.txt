@@ -1,6 +1,6 @@
 add_subdirectory( tests )
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 include_directories( ${KORDF_INCLUDES})
 

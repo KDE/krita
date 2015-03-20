@@ -2,7 +2,7 @@ project(autocorrection)
 
 add_subdirectory( data )
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOWIDGETS_INCLUDES} )
+include_directories(   ${KOTEXT_INCLUDES} ${KOWIDGETS_INCLUDES} )
 
 set(autocorrect_SRCS
     AutocorrectPlugin.cpp

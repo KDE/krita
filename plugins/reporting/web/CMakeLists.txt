@@ -20,7 +20,7 @@ target_link_libraries(koreport_webplugin
     
     Qt5::Core
     Qt5::Gui
-    ${QT_QTWEBKIT_LIBRARY}
+    Qt5::WebKitWidgets
 )
 
 ########### install files ###############

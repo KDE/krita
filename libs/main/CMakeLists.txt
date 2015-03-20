@@ -1,6 +1,6 @@
 add_subdirectory( tests )
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)

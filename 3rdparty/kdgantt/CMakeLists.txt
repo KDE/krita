@@ -1,6 +1,6 @@
 include_directories(
-    ${QT_INCLUDES}
-    ${KDE4_INCLUDES}
+    
+    
     ${KDGANTT_INCLUDES}
 )
 

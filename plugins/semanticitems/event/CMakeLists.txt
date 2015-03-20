@@ -18,8 +18,8 @@ if (KDEPIMLIBS_FOUND)
    include_directories(${KDEPIMLIBS_INCLUDE_DIR})
    add_definitions(-DKDEPIMLIBS_FOUND)
    target_link_libraries(calligra_semanticitem_event
-      ${KDEPIMLIBS_KCALCORE_LIBS}
-      ${KDEPIMLIBS_AKONADI_LIBS}
+      KF5::CalendarCore
+      KF5::AkonadiCore
    )
 endif ()
 

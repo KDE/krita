@@ -10,6 +10,8 @@ macro_add_unittest_definitions()
 ########### next target ###############
 set(kis_tiff_test_SRCS kis_tiff_test.cpp )
 
-kde4_add_unit_test(kis_tiff_test TESTNAME krita-plugins-formats-tiff_test ${kis_tiff_test_SRCS})
+add_executable(kis_tiff_testNAME krita-plugins-formats-tiff_test ${kis_tiff_test_SRCS})
+add_test(kis_tiff_test kis_tiff_test)
+ecm_mark_as_test(kis_tiff_test)
 
-target_link_libraries(kis_tiff_test  ${KDE4_KDEUI_LIBS} kritaui Qt5::Test)
+target_link_libraries(kis_tiff_test   kritaui Qt5::Test)

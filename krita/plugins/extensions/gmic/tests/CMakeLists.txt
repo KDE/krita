@@ -24,7 +24,9 @@ set(kritagmic_parser_PART_SRCS
 ########### next target ###############
 
 set(kis_gmic_tests_SRCS kis_gmic_tests.cpp ${kritagmic_parser_PART_SRCS})
-kde4_add_unit_test(KisGmicTests TESTNAME krita-plugins-extensions-gmic-GmicTests ${kis_gmic_tests_SRCS})
+add_executable(KisGmicTestsNAME krita-plugins-extensions-gmic-GmicTests ${kis_gmic_tests_SRCS})
+add_test(KisGmicTests KisGmicTests)
+ecm_mark_as_test(KisGmicTests)
 target_link_libraries(KisGmicTests gmic kritaimage Qt5::Test Qt5::Xml)
 
 

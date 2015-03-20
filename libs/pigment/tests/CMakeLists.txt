@@ -13,99 +13,123 @@ endif()
 
 set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
 
-kde4_add_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpaceRegistry ${TestKoColorSpaceRegistry_test_SRCS})
+add_executable(TestKoColorSpaceRegistryNAME libs-pigment-TestKoColorSpaceRegistry ${TestKoColorSpaceRegistry_test_SRCS})
+add_test(TestKoColorSpaceRegistry TestKoColorSpaceRegistry)
+ecm_mark_as_test(TestKoColorSpaceRegistry)
 
-target_link_libraries(TestKoColorSpaceRegistry  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestKoColorSpaceRegistry   pigmentcms Qt5::Test)
 
 ########### next target ###############
 
 set(TestColorConversion_test_SRCS TestColorConversion.cpp )
 
-kde4_add_unit_test(TestColorConversion TESTNAME libs-pigment-TestColorConversion  ${TestColorConversion_test_SRCS})
+add_executable(TestColorConversionNAME libs-pigment-TestColorConversion  ${TestColorConversion_test_SRCS})
+add_test(TestColorConversion TestColorConversion)
+ecm_mark_as_test(TestColorConversion)
 
-target_link_libraries(TestColorConversion  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestColorConversion   pigmentcms Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoColorSpaceAbstract_test_SRCS TestKoColorSpaceAbstract.cpp )
 
-kde4_add_unit_test(TestKoColorSpaceAbstract TESTNAME libs-pigment-TestKoColorSpaceAbstract  ${TestKoColorSpaceAbstract_test_SRCS})
+add_executable(TestKoColorSpaceAbstractNAME libs-pigment-TestKoColorSpaceAbstract  ${TestKoColorSpaceAbstract_test_SRCS})
+add_test(TestKoColorSpaceAbstract TestKoColorSpaceAbstract)
+ecm_mark_as_test(TestKoColorSpaceAbstract)
 
-target_link_libraries(TestKoColorSpaceAbstract  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestKoColorSpaceAbstract   pigmentcms Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoColorSpaceMaths_test_SRCS TestKoColorSpaceMaths.cpp)
 
-kde4_add_unit_test(TestKoColorSpaceMaths TESTNAME libs-pigment-TestKoColorSpaceMaths ${TestKoColorSpaceMaths_test_SRCS})
+add_executable(TestKoColorSpaceMathsNAME libs-pigment-TestKoColorSpaceMaths ${TestKoColorSpaceMaths_test_SRCS})
+add_test(TestKoColorSpaceMaths TestKoColorSpaceMaths)
+ecm_mark_as_test(TestKoColorSpaceMaths)
 
-target_link_libraries(TestKoColorSpaceMaths  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestKoColorSpaceMaths   pigmentcms Qt5::Test)
 
 ########### next target ###############
 set(CCSGraph_GRAPH CCSGraph.cpp)
 add_executable(CCSGraph ${CCSGraph_GRAPH})
-target_link_libraries(CCSGraph  ${KDE4_KDEUI_LIBS} pigmentcms )
+target_link_libraries(CCSGraph   pigmentcms )
 
 ########### next target ###############
 
 set(TestColorConversionSystem_test_SRCS TestColorConversionSystem.cpp )
 
-kde4_add_unit_test(TestColorConversionSystem TESTNAME libs-pigment-TestColorConversionSystem ${TestColorConversionSystem_test_SRCS})
+add_executable(TestColorConversionSystemNAME libs-pigment-TestColorConversionSystem ${TestColorConversionSystem_test_SRCS})
+add_test(TestColorConversionSystem TestColorConversionSystem)
+ecm_mark_as_test(TestColorConversionSystem)
 
-target_link_libraries(TestColorConversionSystem  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestColorConversionSystem   pigmentcms Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoColor_test_SRCS TestKoColor.cpp )
 
-kde4_add_unit_test(TestKoColor TESTNAME libs-pigment-TestKoColor ${TestKoColor_test_SRCS})
+add_executable(TestKoColorNAME libs-pigment-TestKoColor ${TestKoColor_test_SRCS})
+add_test(TestKoColor TestKoColor)
+ecm_mark_as_test(TestKoColor)
 
-target_link_libraries(TestKoColor  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Xml Qt5::Test)
+target_link_libraries(TestKoColor   pigmentcms Qt5::Xml Qt5::Test)
 
 
 ########### next target ###############
 
 set(TestKoIntegerMaths_test_SRCS TestKoIntegerMaths.cpp )
-kde4_add_unit_test(TestKoIntegerMaths TESTNAME libs-pigment-TestKoIntegerMaths ${TestKoIntegerMaths_test_SRCS})
-target_link_libraries(TestKoIntegerMaths  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+add_executable(TestKoIntegerMathsNAME libs-pigment-TestKoIntegerMaths ${TestKoIntegerMaths_test_SRCS})
+add_test(TestKoIntegerMaths TestKoIntegerMaths)
+ecm_mark_as_test(TestKoIntegerMaths)
+target_link_libraries(TestKoIntegerMaths   pigmentcms Qt5::Test)
 
 ########### next target ###############
 
 set(TestConvolutionOpImpl_test_SRCS TestConvolutionOpImpl.cpp )
 
-kde4_add_unit_test(TestConvolutionOpImpl TESTNAME libs-pigment-TestConvolutionOpImpl ${TestConvolutionOpImpl_test_SRCS})
+add_executable(TestConvolutionOpImplNAME libs-pigment-TestConvolutionOpImpl ${TestConvolutionOpImpl_test_SRCS})
+add_test(TestConvolutionOpImpl TestConvolutionOpImpl)
+ecm_mark_as_test(TestConvolutionOpImpl)
 
-target_link_libraries(TestConvolutionOpImpl  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestConvolutionOpImpl   pigmentcms Qt5::Test)
 
 
 ########### next target ###############
 
 set(TestKoRgbU8ColorSpaceTester_test_SRCS KoRgbU8ColorSpaceTester.cpp )
 
-kde4_add_unit_test(TestKoRgbU8ColorSpaceTester TESTNAME libs-pigment-TestKoRgbU8ColorSpaceTester ${TestKoRgbU8ColorSpaceTester_test_SRCS})
+add_executable(TestKoRgbU8ColorSpaceTesterNAME libs-pigment-TestKoRgbU8ColorSpaceTester ${TestKoRgbU8ColorSpaceTester_test_SRCS})
+add_test(TestKoRgbU8ColorSpaceTester TestKoRgbU8ColorSpaceTester)
+ecm_mark_as_test(TestKoRgbU8ColorSpaceTester)
 
-target_link_libraries(TestKoRgbU8ColorSpaceTester  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestKoRgbU8ColorSpaceTester   pigmentcms Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoColorSpaceSanity_test_SRCS TestKoColorSpaceSanity.cpp )
 
-kde4_add_unit_test(TestKoColorSpaceSanity TESTNAME libs-pigment-TestKoColorSpaceSanity ${TestKoColorSpaceSanity_test_SRCS})
+add_executable(TestKoColorSpaceSanityNAME libs-pigment-TestKoColorSpaceSanity ${TestKoColorSpaceSanity_test_SRCS})
+add_test(TestKoColorSpaceSanity TestKoColorSpaceSanity)
+ecm_mark_as_test(TestKoColorSpaceSanity)
 
-target_link_libraries(TestKoColorSpaceSanity  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestKoColorSpaceSanity   pigmentcms Qt5::Test)
 
 ########### next target ###############
 
 set(TestFallBackColorTransformation_test_SRCS TestFallBackColorTransformation.cpp )
 
-kde4_add_unit_test(TestFallBackColorTransformation TESTNAME libs-pigment-TestFallBackColorTransformation ${TestFallBackColorTransformation_test_SRCS})
+add_executable(TestFallBackColorTransformationNAME libs-pigment-TestFallBackColorTransformation ${TestFallBackColorTransformation_test_SRCS})
+add_test(TestFallBackColorTransformation TestFallBackColorTransformation)
+ecm_mark_as_test(TestFallBackColorTransformation)
 
-target_link_libraries(TestFallBackColorTransformation  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestFallBackColorTransformation   pigmentcms Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoChannelInfo_test_SRCS TestKoChannelInfo.cpp )
 
-kde4_add_unit_test(TestKoChannelInfo TESTNAME libs-pigment-TestKoChannelInfo ${TestKoChannelInfo_test_SRCS})
+add_executable(TestKoChannelInfoNAME libs-pigment-TestKoChannelInfo ${TestKoChannelInfo_test_SRCS})
+add_test(TestKoChannelInfo TestKoChannelInfo)
+ecm_mark_as_test(TestKoChannelInfo)
 
-target_link_libraries(TestKoChannelInfo  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestKoChannelInfo   pigmentcms Qt5::Test)

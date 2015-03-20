@@ -18,7 +18,7 @@ add_definitions( ${KDCRAW_DEFINITIONS} )
 include_directories( ${KDCRAW_INCLUDE_DIR} )
 
 
-target_link_libraries(krita_raw_import kritaui  ${KDCRAW_LIBRARIES})
+target_link_libraries(krita_raw_import kritaui  KF5::KDcraw)
 
 install(TARGETS krita_raw_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 

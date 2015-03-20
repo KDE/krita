@@ -13,7 +13,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${FLAKE_INCLUDES}
     ${KOREPORT_INCLUDES}
-    ${QT_INCLUDES}
+    
 )
 
 #build a shared library
@@ -114,11 +114,11 @@ add_library(koreport SHARED ${koreport_LIB_SRCS})
 target_link_libraries(koreport
   ${KOPROPERTY_LIBS}
   ${CALLIGRADB_LIBS} # ONLY FOR KexiPluginLoader, TODO: remove
-  ${KDE4_KROSSCORE_LIBS}
+  KF5::KrossCore
 )
 
 target_link_libraries(koreport LINK_INTERFACE_LIBRARIES
-  ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} kowidgets)
+  ${KOPROPERTY_LIBS} KF5::KrossCore kowidgets)
 
 set_target_properties(koreport PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS koreport  ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -29,24 +29,30 @@ endif()
 
 set(TestKoLcmsColorProfile_test_SRCS TestKoLcmsColorProfile.cpp )
 
-kde4_add_unit_test(TestKoLcmsColorProfile TESTNAME libs-pigment-TestKoLcmsColorProfile  ${TestKoLcmsColorProfile_test_SRCS})
+add_executable(TestKoLcmsColorProfileNAME libs-pigment-TestKoLcmsColorProfile  ${TestKoLcmsColorProfile_test_SRCS})
+add_test(TestKoLcmsColorProfile TestKoLcmsColorProfile)
+ecm_mark_as_test(TestKoLcmsColorProfile)
 
-target_link_libraries(TestKoLcmsColorProfile  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test  ${LCMS2_LIBRARIES} kolcmsengine )
+target_link_libraries(TestKoLcmsColorProfile   pigmentcms Qt5::Test  ${LCMS2_LIBRARIES} kolcmsengine )
 
 ########### next target ###############
 
 set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
 
-kde4_add_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
+add_executable(TestKoColorSpaceRegistryNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
+add_test(TestKoColorSpaceRegistry TestKoColorSpaceRegistry)
+ecm_mark_as_test(TestKoColorSpaceRegistry)
 
-target_link_libraries(TestKoColorSpaceRegistry  ${KDE4_KDEUI_LIBS} pigmentcms ${LCMS2_LIBRARIES} Qt5::Test)
+target_link_libraries(TestKoColorSpaceRegistry   pigmentcms ${LCMS2_LIBRARIES} Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoCompositeOps_test_SRCS TestKoCompositeOps.cpp )
 
-kde4_add_unit_test(TestKoCompositeOps TESTNAME libs-pigment-TestKoCompositeOps ${TestKoCompositeOps_test_SRCS})
+add_executable(TestKoCompositeOpsNAME libs-pigment-TestKoCompositeOps ${TestKoCompositeOps_test_SRCS})
+add_test(TestKoCompositeOps TestKoCompositeOps)
+ecm_mark_as_test(TestKoCompositeOps)
 
-target_link_libraries(TestKoCompositeOps  ${KDE4_KDEUI_LIBS} pigmentcms Qt5::Test)
+target_link_libraries(TestKoCompositeOps   pigmentcms Qt5::Test)
 
 

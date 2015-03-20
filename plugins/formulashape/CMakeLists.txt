@@ -9,7 +9,7 @@ set(ITEXTOMML_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/itexToMML")
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
-                     ${QT_INCLUDES}
+                     
                      ${KOMAIN_INCLUDES}
 )
 

@@ -1,10 +1,14 @@
 ########### next target ###############
 
 set(kis_sensors_test_SRCS kis_sensors_test.cpp )
-kde4_add_unit_test(KisSensorsTest TESTNAME krita-paintop-SensorsTest ${kis_sensors_test_SRCS})
-target_link_libraries(KisSensorsTest  ${KDE4_KDEUI_LIBS} kritaimage kritalibpaintop Qt5::Test)
+add_executable(KisSensorsTestNAME krita-paintop-SensorsTest ${kis_sensors_test_SRCS})
+add_test(KisSensorsTest KisSensorsTest)
+ecm_mark_as_test(KisSensorsTest)
+target_link_libraries(KisSensorsTest   kritaimage kritalibpaintop Qt5::Test)
 
 set(kis_embedded_pattern_manager_test_SRCS kis_embedded_pattern_manager_test.cpp )
-kde4_add_unit_test(KisEmbeddedPatternManagerTest TESTNAME krita-paintop-EmbeddedPatternManagerTest ${kis_embedded_pattern_manager_test_SRCS})
-target_link_libraries(KisEmbeddedPatternManagerTest  ${KDE4_KDEUI_LIBS} kritaimage kritalibpaintop Qt5::Test)
+add_executable(KisEmbeddedPatternManagerTestNAME krita-paintop-EmbeddedPatternManagerTest ${kis_embedded_pattern_manager_test_SRCS})
+add_test(KisEmbeddedPatternManagerTest KisEmbeddedPatternManagerTest)
+ecm_mark_as_test(KisEmbeddedPatternManagerTest)
+target_link_libraries(KisEmbeddedPatternManagerTest   kritaimage kritalibpaintop Qt5::Test)
 

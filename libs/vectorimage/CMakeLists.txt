@@ -1,4 +1,4 @@
-include_directories( ${VECTORIMAGE_INCLUDES} ${KDE4_INCLUDES} )
+include_directories( ${VECTORIMAGE_INCLUDES}  )
 
 set(vectorimage_LIB_SRCS    
     libemf/EmfRecords.cpp

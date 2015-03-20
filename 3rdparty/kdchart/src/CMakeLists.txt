@@ -2,7 +2,7 @@
 
 ## KDE4 includes needed for kdemacros.h
 include_directories(
-        ${KDE4_INCLUDES}
+        
 	${CMAKE_CURRENT_SOURCE_DIR}/../include 
 	${CMAKE_CURRENT_SOURCE_DIR}/../kdablibfakes/include 
 )

@@ -12,7 +12,9 @@ set(TestDocumentLayout_test_SRCS
  TestDocumentLayout.cpp
  MockRootAreaProvider.cpp
 )
-kde4_add_unit_test(TestDocumentLayout TESTNAME libs-textlayout-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
+add_executable(TestDocumentLayoutNAME libs-textlayout-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
+add_test(TestDocumentLayout TestDocumentLayout)
+ecm_mark_as_test(TestDocumentLayout)
 target_link_libraries(TestDocumentLayout kotext kotextlayout Qt5::Test)
 
 ########### next target ###############
@@ -21,7 +23,9 @@ set(TestBlockLayout_test_SRCS
  TestBlockLayout.cpp
  MockRootAreaProvider.cpp
 )
-kde4_add_unit_test(TestBlockLayout TESTNAME libs-textlayout-TestBlockLayout  ${TestBlockLayout_test_SRCS})
+add_executable(TestBlockLayoutNAME libs-textlayout-TestBlockLayout  ${TestBlockLayout_test_SRCS})
+add_test(TestBlockLayout TestBlockLayout)
+ecm_mark_as_test(TestBlockLayout)
 target_link_libraries(TestBlockLayout kotext kotextlayout Qt5::Test)
 
 ########### next target ###############
@@ -30,11 +34,15 @@ set(TestTableLayout_test_SRCS
  TestTableLayout.cpp
  MockRootAreaProvider.cpp
 )
-kde4_add_unit_test(TestTableLayout TESTNAME libs-textlayout-TestTableLayout  ${TestTableLayout_test_SRCS})
+add_executable(TestTableLayoutNAME libs-textlayout-TestTableLayout  ${TestTableLayout_test_SRCS})
+add_test(TestTableLayout TestTableLayout)
+ecm_mark_as_test(TestTableLayout)
 target_link_libraries(TestTableLayout kotext kotextlayout Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoTableColumnAndRowStyleManager_test_SRCS TestKoTableColumnAndRowStyleManager.cpp)
-kde4_add_unit_test(TestKoTableColumnAndRowStyleManager TESTNAME libs-textlayout-KoTableColumnAndRowStyleManager ${TestKoTableColumnAndRowStyleManager_test_SRCS})
+add_executable(TestKoTableColumnAndRowStyleManagerNAME libs-textlayout-KoTableColumnAndRowStyleManager ${TestKoTableColumnAndRowStyleManager_test_SRCS})
+add_test(TestKoTableColumnAndRowStyleManager TestKoTableColumnAndRowStyleManager)
+ecm_mark_as_test(TestKoTableColumnAndRowStyleManager)
 target_link_libraries(TestKoTableColumnAndRowStyleManager kotext  Qt5::Test)

@@ -17,7 +17,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs
     ${CMAKE_CURRENT_SOURCE_DIR}/parser
     ${KOPLUGIN_INCLUDES}
-    ${KDE4_INCLUDES}
+    
     ${ICU_INCLUDE_DIRS}
 )
 
@@ -93,10 +93,10 @@ set(calligradb_LIB_SRCS
 
 add_library(calligradb SHARED ${calligradb_LIB_SRCS})
 target_link_libraries(calligradb koplugin Qt5::Core Qt5::Gui
-   ${KDE4_KDEUI_LIBS} KF5::KIOWidgets ${ICU_I18N_LIBRARY})
+    KF5::KIOWidgets ${ICU_I18N_LIBRARY})
 
 target_link_libraries(calligradb LINK_INTERFACE_LIBRARIES koplugin Qt5::Core Qt5::Gui
-                                  ${KDE4_KDEUI_LIBS} KF5::KIOWidgets)
+                                   KF5::KIOWidgets)
 
 set_target_properties(calligradb PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

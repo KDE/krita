@@ -4,6 +4,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/libs/widgetutils )
 ########### next target ###############
 
 set(kopropertiestest_SRCS KoPropertiesTest.cpp )
-kde4_add_unit_test(KoPropertiesTest TESTNAME libs-widgetutils-KoPropertiesTest ${kopropertiestest_SRCS})
-target_link_libraries(KoPropertiesTest  ${KDE4_KDEUI_LIBS} kowidgetutils Qt5::Test)
+add_executable(KoPropertiesTestNAME libs-widgetutils-KoPropertiesTest ${kopropertiestest_SRCS})
+add_test(KoPropertiesTest KoPropertiesTest)
+ecm_mark_as_test(KoPropertiesTest)
+target_link_libraries(KoPropertiesTest   kowidgetutils Qt5::Test)
 

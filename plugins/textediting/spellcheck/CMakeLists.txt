@@ -1,7 +1,7 @@
 project(spellcheck)
 add_subdirectory( tests )
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${FLAKE_INCLUDES} )
+include_directories(   ${TEXTLAYOUT_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(spellcheck_SRCS
     SpellCheckPlugin.cpp

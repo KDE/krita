@@ -23,7 +23,8 @@ set(kritagemini_SRCS
 if (WIN32)
     set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.rc)
 else ()
-    kde4_add_app_icon(kritagemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritagemini.png")
+    file(GLOB ICONS_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritagemini.png")
+    ecm_add_app_icon(kritagemini_SRCS ICONS ${ICONS_SRCS})
 endif ()
 
 # Krita Gemini application
@@ -33,8 +34,8 @@ add_executable(kritagemini ${kritagemini_SRCS})
 
 target_link_libraries(kritagemini
     Qt5::Declarative
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Gui
+    Qt5::Core
     ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}
     kritaui

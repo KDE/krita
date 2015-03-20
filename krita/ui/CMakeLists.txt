@@ -5,7 +5,7 @@
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
 else ()
-    add_definitions(${KDE4_ENABLE_EXCEPTIONS} )
+    kde_enable_exceptions()
 endif ()
 
 include_directories(
@@ -352,7 +352,7 @@ if (APPLE)
         )
 endif ()
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 if(WIN32)
     #ki18n_wrap_ui(

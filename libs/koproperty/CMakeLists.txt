@@ -44,8 +44,8 @@ set(koproperty_LIB_SRCS
 )
 
 add_library(koproperty SHARED ${koproperty_LIB_SRCS})
-target_link_libraries(koproperty ${KDE4_KDEUI_LIBS} KF5::KIOWidgets kowidgets)
-target_link_libraries(koproperty LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} KF5::KIOWidgets kowidgets)
+target_link_libraries(koproperty  KF5::KIOWidgets kowidgets)
+target_link_libraries(koproperty LINK_INTERFACE_LIBRARIES  KF5::KIOWidgets kowidgets)
 
 set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})
 install(TARGETS koproperty ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -1,6 +1,6 @@
 project(krita)
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 # To avoid the confusion of an endless stream of Eigen warnings.
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
@@ -151,7 +151,8 @@ if(WIN32 AND USE_BREAKPAD)
     set(BREAKPAD_LIBS breakpad)
 endif()
 
-kde4_add_app_icon(krita_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+ecm_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(krita ${krita_SRCS})
 target_link_libraries(krita kritaui ${BREAKPAD_LIBS})

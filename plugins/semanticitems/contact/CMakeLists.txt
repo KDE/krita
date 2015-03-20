@@ -18,8 +18,8 @@ if (KDEPIMLIBS_FOUND)
    include_directories(${KDEPIMLIBS_INCLUDE_DIR})
    add_definitions(-DKDEPIMLIBS_FOUND)
    target_link_libraries(calligra_semanticitem_contact
-      ${KDEPIMLIBS_KABC_LIBS}
-      ${KDEPIMLIBS_AKONADI_LIBS}
+      KF5::Contacts
+      KF5::AkonadiCore
    )
 endif ()
 

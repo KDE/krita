@@ -1,7 +1,7 @@
 include_directories(
 	${ENHMETAFILE_SOURCE_DIR}/demo/
 	${CMAKE_CURRENT_BINARY_DIR}
-	${QT_INCLUDES}
+	
 )
 
 link_directories(${ENHMETAFILE_BINARY_DIR})

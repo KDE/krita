@@ -6,5 +6,7 @@ macro_add_unittest_definitions()
 ########### next target ###############
 
 set(kis_unsharp_mask_test_SRCS kis_unsharp_mask_test.cpp )
-kde4_add_unit_test(KisUnsharpMaskTest TESTNAME krita-ui-kis_unsharp_mask_test  ${kis_unsharp_mask_test_SRCS})
-target_link_libraries(KisUnsharpMaskTest  ${KDE4_KDEUI_LIBS} kritaui Qt5::Test)
+add_executable(KisUnsharpMaskTestNAME krita-ui-kis_unsharp_mask_test  ${kis_unsharp_mask_test_SRCS})
+add_test(KisUnsharpMaskTest KisUnsharpMaskTest)
+ecm_mark_as_test(KisUnsharpMaskTest)
+target_link_libraries(KisUnsharpMaskTest   kritaui Qt5::Test)

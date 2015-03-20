@@ -23,7 +23,9 @@ set(SheetTest_test_SRCS
     ../Chord.cpp
 )
 
-kde4_add_unit_test(SheetTest TESTNAME shapes-musicshape-SheetTest ${SheetTest_test_SRCS})
+add_executable(SheetTestNAME shapes-musicshape-SheetTest ${SheetTest_test_SRCS})
+add_test(SheetTest SheetTest)
+ecm_mark_as_test(SheetTest)
 target_link_libraries(SheetTest Qt5::Core Qt5::Test)
 
 
@@ -49,7 +51,9 @@ set(VoiceBarTest_test_SRCS
     ../Chord.cpp
 )
 
-kde4_add_unit_test(VoiceBarTest TESTNAME shapes-musicshape-VoiceBarTest ${VoiceBarTest_test_SRCS})
+add_executable(VoiceBarTestNAME shapes-musicshape-VoiceBarTest ${VoiceBarTest_test_SRCS})
+add_test(VoiceBarTest VoiceBarTest)
+ecm_mark_as_test(VoiceBarTest)
 target_link_libraries(VoiceBarTest Qt5::Core Qt5::Test)
 
 ########### next target ###############
@@ -75,7 +79,9 @@ set(MusicXmlWriterTest_test_SRCS
     ../TimeSignature.cpp
 )
 
-kde4_add_unit_test(MusicXmlWriterTest TESTNAME shapes-musicshape-MusicXmlWriterTest ${MusicXmlWriterTest_test_SRCS})
+add_executable(MusicXmlWriterTestNAME shapes-musicshape-MusicXmlWriterTest ${MusicXmlWriterTest_test_SRCS})
+add_test(MusicXmlWriterTest MusicXmlWriterTest)
+ecm_mark_as_test(MusicXmlWriterTest)
 target_link_libraries(MusicXmlWriterTest Qt5::Test koodf)
 
 

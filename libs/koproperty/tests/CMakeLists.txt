@@ -6,6 +6,6 @@ if(KDE4_BUILD_TESTS)
   
   add_executable(propertytest NOGUI ${propertytest_SRCS})
   
-  target_link_libraries(propertytest  ${KDE4_KDEUI_LIBS} koproperty )
+  target_link_libraries(propertytest   koproperty )
 
 endif()

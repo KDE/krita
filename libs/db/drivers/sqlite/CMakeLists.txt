@@ -1,6 +1,6 @@
 
 
-include_directories( ${SQLITE_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
+include_directories( ${SQLITE_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb   )
 
 add_definitions( -D__KEXIDB__= )
 
@@ -17,7 +17,7 @@ set(kexidb_sqlite3driver_PART_SRCS
    sqlitealter.cpp
 )
 
-kde4_add_plugin(kexidb_sqlite3driver ${kexidb_sqlite3driver_PART_SRCS})
+add_library(kexidb_sqlite3driver MODULE ${kexidb_sqlite3driver_PART_SRCS})
 
 target_link_libraries(kexidb_sqlite3driver ${SQLITE_LIBRARIES} ${CALLIGRADB_LIBS})
 

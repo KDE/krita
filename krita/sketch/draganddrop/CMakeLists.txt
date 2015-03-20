@@ -11,7 +11,7 @@ set(declarativedragdrop_SRCS
 include_directories(
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
+        
 )
 
 qt4_automoc(${declarativedragdrop_SRCS})

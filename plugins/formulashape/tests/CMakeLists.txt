@@ -4,25 +4,33 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 ########### AttributeManager Test ###############
 
  set( TestAttributeManager_SRCS TestAttributeManager.cpp )
- kde4_add_unit_test( TestAttributeManager TESTNAME kformula-AttributeManager  ${TestAttributeManager_SRCS} )
+ add_executable( TestAttributeManagerNAME kformula-AttributeManager  ${TestAttributeManager_SRCS} )
+add_test(TestAttributeManager TestAttributeManager)
+ecm_mark_as_test(TestAttributeManager)
  target_link_libraries( TestAttributeManager kformula Qt5::Test )
 
 ########### Load Test ###############
 
 set(TestLoad_SRCS TestLoad.cpp)
-kde4_add_unit_test(TestLoad TESTNAME kformula-Load  ${TestLoad_SRCS})
+add_executable(TestLoadNAME kformula-Load  ${TestLoad_SRCS})
+add_test(TestLoad TestLoad)
+ecm_mark_as_test(TestLoad)
 target_link_libraries(TestLoad kformula Qt5::Test)
 
 ########### Load and Save Test ###############
 
 set(TestLoadAndSave_SRCS TestLoadAndSave.cpp)
-kde4_add_unit_test(TestLoadAndSave TESTNAME kformula-LoadAndSave  ${TestLoadAndSave_SRCS})
+add_executable(TestLoadAndSaveNAME kformula-LoadAndSave  ${TestLoadAndSave_SRCS})
+add_test(TestLoadAndSave TestLoadAndSave)
+ecm_mark_as_test(TestLoadAndSave)
 target_link_libraries(TestLoadAndSave kformula Qt5::Test)
 
 ########### Layout Test ###############
 
 #set(TestLayout_SRCS TestLayout.cpp)
-#kde4_add_unit_test(TestLayout TESTNAME kformula-Layout  ${TestLayout_SRCS})
+#add_executable(TestLayoutNAME kformula-Layout  ${TestLayout_SRCS})
+add_test(TestLayout TestLayout)
+ecm_mark_as_test(TestLayout)
 #target_link_libraries(TestLayout kformula Qt5::Test)
 
 ########### Cursor Test ###############
@@ -48,5 +56,7 @@ ki18n_wrap_ui( TestCursor_SRCS
     ../FormulaToolWidget.ui
 )
 
-kde4_add_unit_test(TestCursor TESTNAME kformula-Cursor  ${TestCursor_SRCS})
+add_executable(TestCursorNAME kformula-Cursor  ${TestCursor_SRCS})
+add_test(TestCursor TestCursor)
+ecm_mark_as_test(TestCursor)
 target_link_libraries(TestCursor kformula Qt5::Test)

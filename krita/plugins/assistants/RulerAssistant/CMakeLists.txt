@@ -17,7 +17,7 @@ ki18n_wrap_ui(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )
 
 add_library(kritarulerassistanttool MODULE ${kritarulerassistanttool_PART_SRCS})
 
-target_link_libraries(kritarulerassistanttool kritaui flake  ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kritarulerassistanttool kritaui flake   )
 
 install(TARGETS kritarulerassistanttool  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -1,6 +1,6 @@
 project(flake)
 
-include_directories(${FLAKE_INCLUDES} ${QT_INCLUDES})
+include_directories(${FLAKE_INCLUDES} )
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FLAKE_TEST_EXPORT macro do something
@@ -219,7 +219,7 @@ ki18n_wrap_ui(flake_SRCS
 
 add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
+target_link_libraries(flake  pigmentcms kowidgetutils koodf)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf)
 target_link_libraries(flake kundo2)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)

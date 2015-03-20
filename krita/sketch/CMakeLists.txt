@@ -104,7 +104,8 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 if (WIN32)
     set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
 else ()
-    kde4_add_app_icon(kritasketch_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
+    file(GLOB ICONS_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
+    ecm_add_app_icon(kritasketch_SRCS ICONS ${ICONS_SRCS})
 endif ()
 
 # Krita Sketch library with shared things needed in both plugin and application
@@ -118,8 +119,8 @@ set_target_properties(kritasketchlib
 
 target_link_libraries(kritasketchlib
     Qt5::Declarative
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Gui
+    Qt5::Core
     ${QT_LIBRARIES}
     kritaui
     kowidgets
@@ -140,8 +141,8 @@ add_executable(kritasketch ${kritasketch_SRCS})
 
 target_link_libraries(kritasketch
     Qt5::Declarative
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Gui
+    Qt5::Core
     ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}
     kritaui
@@ -161,8 +162,8 @@ automoc4_add_library(kritasketchplugin MODULE ${kritasketchplugin_SRCS} ${kritas
 
 target_link_libraries(kritasketchplugin
     Qt5::Declarative
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
+    Qt5::Gui
+    Qt5::Core
     ${QT_LIBRARIES}
     kritaui
     kowidgets

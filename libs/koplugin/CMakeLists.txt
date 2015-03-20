@@ -1,4 +1,3 @@
-include_directories( ${KDE4_INCLUDES} )
 
 set(koplugin_LIB_SRCS
 	KoPluginLoader.cpp
@@ -7,8 +6,8 @@ set(koplugin_LIB_SRCS
 
 add_library(koplugin SHARED ${koplugin_LIB_SRCS})
 
-target_link_libraries(koplugin koversion ${KDE4_KDEUI_LIBS})
-target_link_libraries(koplugin LINK_INTERFACE_LIBRARIES koversion ${KDE4_KDEUI_LIBS})
+target_link_libraries(koplugin koversion )
+target_link_libraries(koplugin LINK_INTERFACE_LIBRARIES koversion )
 
 set_target_properties(koplugin PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

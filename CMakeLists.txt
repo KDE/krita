@@ -697,7 +697,7 @@ set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
                    ${KOVERSION_INCLUDES} 
-                   ${KDE4_INCLUDES})
+                   )
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
@@ -706,8 +706,8 @@ set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
                    ${Boost_INCLUDE_DIRS}
-                   ${QT_INCLUDES}
-                   ${KDE4_INCLUDES})
+                   
+                   )
 
 # flake depends on koodf and pigment
 set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
@@ -752,13 +752,13 @@ set(BASICFLAKES_INCLUDES ${FLAKE_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
-set(KOWIDGETS_INCLUDES ${KDE4_INCLUDES}
+set(KOWIDGETS_INCLUDES 
                     ${BASICFLAKES_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/widgetutils)
 
 # komain depends on kotext & flake
-set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
+set(KOMAIN_INCLUDES 
                     ${KOWIDGETS_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/main

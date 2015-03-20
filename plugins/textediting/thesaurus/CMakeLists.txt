@@ -1,7 +1,7 @@
 
 
 
-include_directories( ${KDE4_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories(  ${KOTEXT_INCLUDES} )
 
 ########### next target ###############
 

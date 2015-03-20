@@ -1,8 +1,8 @@
 project(textvariables)
 
 include_directories(
-    ${KDE4_INCLUDE_DIR}
-    ${QT_INCLUDES}
+    
+    
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
 )

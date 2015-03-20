@@ -1,6 +1,6 @@
 project(changecase)
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories(   ${KOTEXT_INCLUDES} )
 
 set(changecase_SRCS
     ChangecasePlugin.cpp

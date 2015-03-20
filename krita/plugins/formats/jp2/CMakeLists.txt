@@ -10,7 +10,7 @@ set(kritajp2import_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritajp2import ${kritajp2import_PART_SRCS})
+add_library(kritajp2import MODULE ${kritajp2import_PART_SRCS})
 
 
 
@@ -27,7 +27,7 @@ set(kritajp2export_PART_SRCS
 
 ki18n_wrap_ui(kritajp2export_PART_SRCS kis_wdg_options_jp2.ui )
 
-kde4_add_plugin(kritajp2export ${kritajp2export_PART_SRCS})
+add_library(kritajp2export MODULE ${kritajp2export_PART_SRCS})
 
 
 target_link_libraries(kritajp2export kritaui ${OPENJPEG_LIBRARIES} )

@@ -1,3 +1,5 @@
 set( TestLoading_SRCS TestLoading.cpp ../TestLoadingBase.cpp ../../../ChartDocument.cpp )
-kde4_add_unit_test( TestLoading TESTNAME kchart-TestLoading-default-calligra-chart ${TestLoading_SRCS} )
+add_executable( TestLoadingNAME kchart-TestLoading-default-calligra-chart ${TestLoading_SRCS} )
+add_test(TestLoading TestLoading)
+ecm_mark_as_test(TestLoading)
 target_link_libraries( TestLoading  Qt5::Test chartshapecore flake koodf komain )

@@ -4,7 +4,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${FLAKE_INCLUDES}
     ${KOREPORT_INCLUDES}
-    ${QT_INCLUDES}
+    
 )
 
 
@@ -12,8 +12,10 @@ include_directories(
 
 set(KoReportTest_SRCS KoReportTest.cpp)
 
-kde4_add_unit_test(KoReportTest TESTNAME KoReportTest  ${KoReportTest_SRCS})
+add_executable(KoReportTestNAME KoReportTest  ${KoReportTest_SRCS})
+add_test(KoReportTest KoReportTest)
+ecm_mark_as_test(KoReportTest)
 
-target_link_libraries(KoReportTest ${KOREPORT_LIBS} ${KDE4_KDEUI_LIBS} Qt5::Test)
+target_link_libraries(KoReportTest ${KOREPORT_LIBS}  Qt5::Test)
 
 ########## next target ###############

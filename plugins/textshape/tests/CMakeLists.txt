@@ -25,7 +25,9 @@ set(TestDocumentLayout_test_SRCS
     ../InlineAnchorStrategy.cpp
 )
 
-kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
+add_executable(TestDocumentLayoutNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
+add_test(TestDocumentLayout TestDocumentLayout)
+ecm_mark_as_test(TestDocumentLayout)
 
 target_link_libraries(TestDocumentLayout ${EXTRA_LIBS}  Qt5::Test)
 
@@ -93,7 +95,9 @@ set(TestChangeListCommand_test_SRCS
 )
 
 
-kde4_add_unit_test(TestChangeListCommand TESTNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
+add_executable(TestChangeListCommandNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
+add_test(TestChangeListCommand TestChangeListCommand)
+ecm_mark_as_test(TestChangeListCommand)
 target_link_libraries(TestChangeListCommand ${EXTRA_LIBS}  Qt5::Test)
 
 ########### next target ###############
@@ -103,7 +107,9 @@ set(TestChangesDatabase_test_SRCS
     ../TextChanges.cpp
     ../TextChange.cpp
 )
-kde4_add_unit_test(TestChangesDatabase TESTNAME shapes-text-TestChangesDatabase ${TestChangesDatabase_test_SRCS})
+add_executable(TestChangesDatabaseNAME shapes-text-TestChangesDatabase ${TestChangesDatabase_test_SRCS})
+add_test(TestChangesDatabase TestChangesDatabase)
+ecm_mark_as_test(TestChangesDatabase)
 target_link_libraries(TestChangesDatabase Qt5::Core Qt5::Test)
 
 ########### next target ###############
@@ -123,7 +129,9 @@ target_link_libraries(TestChangesDatabase Qt5::Core Qt5::Test)
 #    ../FloatingAnchorStrategy.cpp
 #    ../InlineAnchorStrategy.cpp
 #)
-#kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
+#add_executable(TestStylesModelNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
+add_test(TestStylesModel TestStylesModel)
+ecm_mark_as_test(TestStylesModel)
 #target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS}  Qt5::Test)
 
 ########### next target ###############
@@ -142,7 +150,9 @@ set(TestTableLayout_test_SRCS
     ../FloatingAnchorStrategy.cpp
     ../InlineAnchorStrategy.cpp
 )
-kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
+add_executable(TestTableLayoutNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
+add_test(TestTableLayout TestTableLayout)
+ecm_mark_as_test(TestTableLayout)
 target_link_libraries(TestTableLayout kotext  Qt5::Test)
 
 ########### next target ###############
@@ -161,7 +171,9 @@ set(TestSections_test_SRCS
     ../FloatingAnchorStrategy.cpp
     ../InlineAnchorStrategy.cpp
 )
-kde4_add_unit_test(TestSections TESTNAME shapes-text-TestSections ${TestSections_test_SRCS})
+add_executable(TestSectionsNAME shapes-text-TestSections ${TestSections_test_SRCS})
+add_test(TestSections TestSections)
+ecm_mark_as_test(TestSections)
 target_link_libraries(TestSections kotext ${EXTRA_LIBS} Qt5::Test)
 
 ########### next target ###############
@@ -231,7 +243,9 @@ set(TestTextTool_test_SRCS
     ../FloatingAnchorStrategy.cpp
     ../InlineAnchorStrategy.cpp
 )
-kde4_add_unit_test(TestTextTool TESTNAME shapes-text-TestTextTool ${TestTextTool_test_SRCS})
+add_executable(TestTextToolNAME shapes-text-TestTextTool ${TestTextTool_test_SRCS})
+add_test(TestTextTool TestTextTool)
+ecm_mark_as_test(TestTextTool)
 target_link_libraries(TestTextTool  ${EXTRA_LIBS} Qt5::Test)
 
 ########### next target ###############
@@ -302,6 +316,8 @@ set(TestChangeTrackedDelete_test_SRCS
     ../FloatingAnchorStrategy.cpp
     ../InlineAnchorStrategy.cpp
 )
-kde4_add_unit_test(TestChangeTrackedDelete TESTNAME shapes-text-TestChangeTrackedDelete ${TestChangeTrackedDelete_test_SRCS})
+add_executable(TestChangeTrackedDeleteNAME shapes-text-TestChangeTrackedDelete ${TestChangeTrackedDelete_test_SRCS})
+add_test(TestChangeTrackedDelete TestChangeTrackedDelete)
+ecm_mark_as_test(TestChangeTrackedDelete)
 target_link_libraries(TestChangeTrackedDelete ${EXTRA_LIBS}  kotext Qt5::Test)
 

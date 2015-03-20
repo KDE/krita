@@ -1,6 +1,6 @@
 project(calligradockers)
 
-include_directories(${KDE4_INCLUDE_DIR}
+include_directories(
      ${FLAKE_INCLUDES}
      ${KOWIDGETS_INCLUDES}     
 )

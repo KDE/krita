@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 include_directories( ${OCIO_INCLUDE_DIR})
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 set(KRITA_LUTDOCKER_PART_SRCS
   lutdocker.cpp

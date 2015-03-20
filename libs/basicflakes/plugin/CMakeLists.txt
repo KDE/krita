@@ -1,6 +1,6 @@
 project( basicflakesplugin )
 
-include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${BASICFLAKES_INCLUDES})
+include_directories( ${FLAKE_INCLUDES}  ${BASICFLAKES_INCLUDES})
 
 #add_subdirectory(pics)
 

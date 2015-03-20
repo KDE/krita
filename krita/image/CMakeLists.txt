@@ -2,7 +2,7 @@ add_subdirectory( tests )
 
 ########### next target ###############
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 # Chose a tiles backend
 # 1 - image/tiles
@@ -279,7 +279,7 @@ set(einspline_SRCS
 
 add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage  koodf pigmentcms kundo2 kowidgetutils)
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koodf pigmentcms kundo2 kowidgetutils)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})

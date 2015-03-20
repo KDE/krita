@@ -9,7 +9,9 @@ set(TestSpellCheck_SRCS
     ../BgSpellCheck.cpp
 )
 
-kde4_add_unit_test(TestSpellCheck TESTNAME textedit-TestSpellCheck ${TestSpellCheck_SRCS})
+add_executable(TestSpellCheckNAME textedit-TestSpellCheck ${TestSpellCheck_SRCS})
+add_test(TestSpellCheck TestSpellCheck)
+ecm_mark_as_test(TestSpellCheck)
 
 target_link_libraries(TestSpellCheck kotext Qt5::Test)
 

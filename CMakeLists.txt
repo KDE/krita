@@ -184,7 +184,7 @@ if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 
-find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Script Svg Test)
+find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Script Svg Test Concurrent)
 find_package(Qt5 5.2.0 COMPONENTS WebKit DBus Declarative)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})

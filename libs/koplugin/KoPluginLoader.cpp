@@ -69,7 +69,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
-        kDebug(30003) << "Loading" << serviceType << "with checking the config";
+        qDebug() << "Loading" << serviceType << "with checking the config";
         KSharedConfigPtr configGroup = KSharedConfig::openConfig(config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
@@ -126,10 +126,10 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             const QString pluginName = json.value("X-KDE-PluginInfo-Name").toString();
             whiteList << pluginName;
-            kDebug(30003) << "Loaded plugin" << loader->fileName();
+            qDebug() << "Loaded plugin" << loader->fileName();
             delete plugin;
         } else {
-            kWarning(30003) << "Loading plugin" << loader->fileName() << "failed, " << loader->errorString();
+            qWarning() << "Loading plugin" << loader->fileName() << "failed, " << loader->errorString();
         }
     }
 

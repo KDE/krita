@@ -157,18 +157,27 @@ include(FeatureSummary)
 
 find_package(KF5 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      GuiAddons I18n ItemModels ItemViews
-                                     WidgetsAddons ThreadWeaver
-                                     Completion IconThemes Parts
-                                     XmlGui Kross KDELibs4Support
+#                                     WidgetsAddons ThreadWeaver
+#                                     Completion IconThemes 
+#                                     Parts
+#                                     XmlGui Kross KDELibs4Support
 
 )
 
 find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Xml Script Svg Test)
-find_package(Qt5 5.2.0 COMPONENTS WebKit DBus)
+find_package(Qt5 5.2.0 COMPONENTS WebKit DBus QtDeclarative)
+
+set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
+set(QT_QTWEBKIT_FOUND ${Qt5Webkit_FOUND})
+set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 
 if (USEOPENGL)
     find_package(Qt5 5.2.0 REQUIRED OpenGL)
+    set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 endif ()
+
+
+
 
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)

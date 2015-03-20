@@ -4,34 +4,26 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 ########### AttributeManager Test ###############
 
  set( TestAttributeManager_SRCS TestAttributeManager.cpp )
- add_executable( TestAttributeManagerNAME kformula-AttributeManager  ${TestAttributeManager_SRCS} )
-add_test(TestAttributeManager TestAttributeManager)
-ecm_mark_as_test(TestAttributeManager)
- target_link_libraries( TestAttributeManager kformula Qt5::Test )
+ kde4_add_unit_test( TestAttributeManager TESTNAME kformula-AttributeManager  ${TestAttributeManager_SRCS} )
+ target_link_libraries( TestAttributeManager kformula ${QT_QTTEST_LIBRARY} )
 
 ########### Load Test ###############
 
 set(TestLoad_SRCS TestLoad.cpp)
-add_executable(TestLoadNAME kformula-Load  ${TestLoad_SRCS})
-add_test(TestLoad TestLoad)
-ecm_mark_as_test(TestLoad)
-target_link_libraries(TestLoad kformula Qt5::Test)
+kde4_add_unit_test(TestLoad TESTNAME kformula-Load  ${TestLoad_SRCS})
+target_link_libraries(TestLoad kformula ${QT_QTTEST_LIBRARY})
 
 ########### Load and Save Test ###############
 
 set(TestLoadAndSave_SRCS TestLoadAndSave.cpp)
-add_executable(TestLoadAndSaveNAME kformula-LoadAndSave  ${TestLoadAndSave_SRCS})
-add_test(TestLoadAndSave TestLoadAndSave)
-ecm_mark_as_test(TestLoadAndSave)
-target_link_libraries(TestLoadAndSave kformula Qt5::Test)
+kde4_add_unit_test(TestLoadAndSave TESTNAME kformula-LoadAndSave  ${TestLoadAndSave_SRCS})
+target_link_libraries(TestLoadAndSave kformula ${QT_QTTEST_LIBRARY})
 
 ########### Layout Test ###############
 
 #set(TestLayout_SRCS TestLayout.cpp)
-#add_executable(TestLayoutNAME kformula-Layout  ${TestLayout_SRCS})
-add_test(TestLayout TestLayout)
-ecm_mark_as_test(TestLayout)
-#target_link_libraries(TestLayout kformula Qt5::Test)
+#kde4_add_unit_test(TestLayout TESTNAME kformula-Layout  ${TestLayout_SRCS})
+#target_link_libraries(TestLayout kformula ${QT_QTTEST_LIBRARY})
 
 ########### Cursor Test ###############
 
@@ -52,11 +44,9 @@ set(TestCursor_SRCS
     ../FormulaCursor.cpp)
 endif()
 
-ki18n_wrap_ui( TestCursor_SRCS
+kde4_add_ui_files( TestCursor_SRCS
     ../FormulaToolWidget.ui
 )
 
-add_executable(TestCursorNAME kformula-Cursor  ${TestCursor_SRCS})
-add_test(TestCursor TestCursor)
-ecm_mark_as_test(TestCursor)
-target_link_libraries(TestCursor kformula Qt5::Test)
+kde4_add_unit_test(TestCursor TESTNAME kformula-Cursor  ${TestCursor_SRCS})
+target_link_libraries(TestCursor kformula ${QT_QTTEST_LIBRARY})

@@ -6,8 +6,6 @@ macro_add_unittest_definitions()
 ########### next target ###############
 set(kis_jpeg_test_SRCS kis_jpeg_test.cpp )
 
-add_executable(kis_jpeg_testNAME krita-plugin-format-jpeg_test ${kis_jpeg_test_SRCS})
-add_test(kis_jpeg_test kis_jpeg_test)
-ecm_mark_as_test(kis_jpeg_test)
+kde4_add_unit_test(kis_jpeg_test TESTNAME krita-plugin-format-jpeg_test ${kis_jpeg_test_SRCS})
 
-target_link_libraries(kis_jpeg_test   kritaui Qt5::Test)
+target_link_libraries(kis_jpeg_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})

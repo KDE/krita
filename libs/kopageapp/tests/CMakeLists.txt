@@ -5,40 +5,32 @@ include_directories( ${KOPAGEAPP_INCLUDES} )
 
 set(TestPAPageInsertCommand_test_SRCS TestPAPageInsertCommand.cpp )
 
-add_executable(TestPAPageInsertCommandNAME libs-kopageapp-TestPAPageInsertCommand ${TestPAPageInsertCommand_test_SRCS})
-add_test(TestPAPageInsertCommand TestPAPageInsertCommand)
-ecm_mark_as_test(TestPAPageInsertCommand)
+kde4_add_unit_test(TestPAPageInsertCommand TESTNAME libs-kopageapp-TestPAPageInsertCommand ${TestPAPageInsertCommand_test_SRCS})
 
-target_link_libraries(TestPAPageInsertCommand   kopageapp Qt5::Test)
+target_link_libraries(TestPAPageInsertCommand   kopageapp ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestPAPageDeleteCommand_test_SRCS TestPAPageDeleteCommand.cpp )
 
-add_executable(TestPAPageDeleteCommandNAME libs-kopageapp-TestPAPageDeleteCommand ${TestPAPageDeleteCommand_test_SRCS})
-add_test(TestPAPageDeleteCommand TestPAPageDeleteCommand)
-ecm_mark_as_test(TestPAPageDeleteCommand)
+kde4_add_unit_test(TestPAPageDeleteCommand TESTNAME libs-kopageapp-TestPAPageDeleteCommand ${TestPAPageDeleteCommand_test_SRCS})
 
-target_link_libraries(TestPAPageDeleteCommand   kopageapp Qt5::Test)
+target_link_libraries(TestPAPageDeleteCommand   kopageapp ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestPAPageMoveCommand_test_SRCS TestPAPageMoveCommand.cpp )
 
-add_executable(TestPAPageMoveCommandNAME libs-kopageapp-TestPAPageMoveCommand ${TestPAPageMoveCommand_test_SRCS})
-add_test(TestPAPageMoveCommand TestPAPageMoveCommand)
-ecm_mark_as_test(TestPAPageMoveCommand)
+kde4_add_unit_test(TestPAPageMoveCommand TESTNAME libs-kopageapp-TestPAPageMoveCommand ${TestPAPageMoveCommand_test_SRCS})
 
-target_link_libraries(TestPAPageMoveCommand   kopageapp Qt5::Test)
+target_link_libraries(TestPAPageMoveCommand   kopageapp ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestPACopyPastePage_test_SRCS TestPACopyPastePage.cpp )
 
-add_executable(TestPACopyPastePageNAME libs-kopageapp-TestPACopyPastePage ${TestPACopyPastePage_test_SRCS})
-add_test(TestPACopyPastePage TestPACopyPastePage)
-ecm_mark_as_test(TestPACopyPastePage)
+kde4_add_unit_test(TestPACopyPastePage TESTNAME libs-kopageapp-TestPACopyPastePage ${TestPACopyPastePage_test_SRCS})
 
-target_link_libraries(TestPACopyPastePage   kopageapp Qt5::Test)
+target_link_libraries(TestPACopyPastePage   kopageapp ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############

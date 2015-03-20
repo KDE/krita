@@ -22,6 +22,7 @@
 #define KOJSONTRADER_H
 
 #include <QList>
+#include <QString>
 #include "koplugin_export.h"
 
 class QPluginLoader;

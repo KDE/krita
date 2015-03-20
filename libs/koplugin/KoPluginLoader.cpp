@@ -24,11 +24,14 @@
 
 #include <QString>
 #include <QStringList>
-
+#include <QJsonObject>
+#include <QPluginLoader>
 #include <QDebug>
+
 #include <KConfig>
 #include <KConfigGroup>
 #include <KGlobal>
+#include <KPluginFactory>
 
 class KoPluginLoader::Private
 {
@@ -70,7 +73,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
         qDebug() << "Loading" << serviceType << "with checking the config";
-        KSharedConfigPtr configGroup = KSharedConfig::openConfig(config.group);
+        KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
 
@@ -84,7 +87,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             const QString pluginName = json.value("X-KDE-PluginInfo-Name").toString();
             if (pluginName.isEmpty()) {
-                kWarning(30003) << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
+                qWarning() << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
             }
             if (whiteList.contains(pluginName)) {
@@ -134,7 +137,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     if (configChanged && config.whiteList && config.blacklist && config.group) {
-        KSharedConfigPtr configGroup = KSharedConfig::openConfig(config.group);
+        KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
     }

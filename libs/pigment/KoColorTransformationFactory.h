@@ -20,6 +20,8 @@
 #ifndef _KO_COLOR_TRANSFORMATION_FACTORY_H_
 #define _KO_COLOR_TRANSFORMATION_FACTORY_H_
 
+#include <QHash>
+#include <QVariant>
 #include <QList>
 #include <QPair>
 #include <QString>

@@ -161,10 +161,6 @@ namespace KisLsUtils
                 gradientIndex += m_jitterCoeff * *noiseIt.rawDataConst() >> 8;
                 gradientIndex &= 0xFF;
 
-                if (selectionAlpha != 0 && selectionAlpha != 255) {
-                    qDebug() << ppVar(255 - selectionAlpha) << ppVar(gradientIndex);
-                }
-
                 return gradientIndex;
             }
 

@@ -89,7 +89,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     , m_brushChooser(0)
     , m_viewManager(view)
     , m_previousNode(0)
-    , m_currTabletToolID(KoToolManager::instance()->currentInputDevice())
+    , m_currTabletToolID(KoInputDevice::invalid())
     , m_presetsEnabled(true)
     , m_blockUpdate(false)
     , m_dirtyPresetsEnabled(false)
@@ -357,10 +357,22 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
 
+    slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 }
 
 KisPaintopBox::~KisPaintopBox()
 {
+    KisConfig cfg;
+    QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
+    while (iter.hasNext()) {
+        iter.next();
+        if ((iter.key().pointer) == QTabletEvent::Eraser) {
+            cfg.writeEntry(QString("LastEraser_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
+        }
+        else {
+            cfg.writeEntry(QString("LastPreset_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
+        }
+    }
     // Do not delete the widget, since it it is global to the application, not owned by the view
     m_presetsPopup->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
@@ -591,13 +603,21 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
 
     if (toolData == m_tabletToolMap.end()) {
-        if (m_resourceProvider->currentPreset()) {
-            KisPaintOpPresetSP preset =
-                m_resourceProvider->currentPreset()->clone();
-            m_resourceProvider->setPaintOpPreset(preset);
-            setCurrentPaintop(preset->paintOp(), preset);
+        KisConfig cfg;
+        KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        KisPaintOpPresetSP preset;
+        if (inputDevice.pointer() == QTabletEvent::Eraser) {
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), "Eraser_circle"));
         }
-    } else {
+        else {
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), "Basic_tip_default"));
+        }
+        if (!preset) {
+            preset = rserver->resourceByName("Basic_tip_default");
+        }
+        setCurrentPaintop(preset->paintOp(), preset);
+    }
+    else {
         setCurrentPaintop(toolData->paintOpID, toolData->preset);
     }
 

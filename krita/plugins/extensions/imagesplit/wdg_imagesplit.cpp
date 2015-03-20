@@ -32,7 +32,7 @@
 #include "kis_config.h"
 
 WdgImagesplit::WdgImagesplit(QWidget* parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

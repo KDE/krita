@@ -90,6 +90,10 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
         result = shapeLayer->saveLayer(m_store);
         m_store->popDirectory();
     }
+    else if (KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer)) {
+        Q_UNUSED(fileLayer); // We don't save data for file layers, but we still want to save the masks.
+        result = true;
+    }
     return result && visitAllInverse(layer);
 }
 

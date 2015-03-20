@@ -402,9 +402,7 @@ QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
     QImage cursorImage;
 
     cursorImage.load(filename);
-    Q_ASSERT(!cursorImage.isNull());
-    Q_ASSERT(cursorImage.hasAlphaChannel());
-
+\
 #ifdef Q_WS_WIN
     // cursor width must be multiple of 16 on Windows
     int bitmapWidth = qCeil(cursorImage.width() / 16.0) * 16; 

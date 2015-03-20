@@ -413,7 +413,10 @@ void KisGmicWidget::switchOptionsWidgetFor(QWidget* widget)
 
 KisFilterPreviewWidget * KisGmicWidget::previewWidget()
 {
-    return m_inputOutputOptions->previewWidget();
+    if (m_inputOutputOptions) {
+        return m_inputOutputOptions->previewWidget();
+    }
+    return 0;
 }
 
 void KisGmicWidget::slotNotImplemented()

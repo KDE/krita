@@ -87,7 +87,7 @@ public:
         QStringList fileNames;
 
         foreach (const QString &extension, extensionList) {
-            fileNames += KGlobal::mainComponent().dirs()->findAllResources(type().toLatin1(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+            fileNames += KGlobal::dirs()->findAllResources(type().toLatin1(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
         }
         return fileNames;
@@ -339,7 +339,7 @@ public:
 
     /// Returns path where to save user defined and imported resources to
     virtual QString saveLocation() {
-        return KGlobal::mainComponent().dirs()->saveLocation(type().toLatin1());
+        return KGlobal::dirs()->saveLocation(type().toLatin1());
     }
 
     /**

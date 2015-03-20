@@ -99,7 +99,7 @@ QStringList KoGlobal::_listOfLanguages()
 
 void KoGlobal::createListOfLanguages()
 {
-    KConfig config("all_languages", KConfig::NoGlobals, "locale");
+    KConfig config("all_languages", KConfig::NoGlobals);
     // Note that we could also use KLocale::allLanguagesTwoAlpha
 
     QMap<QString, bool> seenLanguages;

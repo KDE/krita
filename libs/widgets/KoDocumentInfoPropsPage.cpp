@@ -20,11 +20,13 @@
 
 #include "KoDocumentInfoPropsPage.h"
 
+#include <QIcon>
+
 #include "KoOdfReadStore.h"
 #include "KoStore.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-
+#include <kurl.h>
 #include <kdebug.h>
 
 class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate

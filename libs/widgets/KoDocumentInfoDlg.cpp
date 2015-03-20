@@ -36,6 +36,8 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kmainwindow.h>
+#include <kdialog.h>
+#include <kurl.h>
 
 #include <QLabel>
 #include <QLineEdit>
@@ -89,11 +91,12 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
 {
     d->info = docInfo;
 
-    setCaption(i18n("Document Information"));
-    setInitialSize(QSize(500, 500));
+// TODO: KF5 port to QDialog
+    setWindowTitle(i18n("Document Information"));
+//    setInitialSize(QSize(500, 500));
     setFaceType(KPageDialog::List);
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
+//    setButtons(KDialog::Ok | KDialog::Cancel);
+//    setDefaultButton(KDialog::Ok);
 
     d->aboutUi = new Ui::KoDocumentInfoAboutWidget();
     QWidget *infodlg = new QWidget();
@@ -135,7 +138,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->authorUi->setupUi(authordlg);
     page = new KPageWidgetItem(authordlg, i18n("Author"));
     page->setHeader(i18n("Last saved by"));
-    page->setIcon(koIcon("user-identity"));
+7    page->setIcon(koIcon("user-identity"));
     addPage(page);
     d->pages.append(page);
 
@@ -155,22 +158,23 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
 
 void KoDocumentInfoDlg::slotButtonClicked(int button)
 {
-    emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
-    switch (button) {
-    case Ok:
-        foreach(KPageWidgetItem* item, d->pages) {
-            KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
-            if (page) {
-                if (page->shouldDialogCloseBeVetoed()) {
-                    return;
-                }
-            }
-        }
-        slotApply();
-        accept();
-        return;
-    }
-    KPageDialog::slotButtonClicked(button);
+// TODO: KF5 port to QDialog
+//    emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
+//    switch (button) {
+//    case Ok:
+//        foreach(KPageWidgetItem* item, d->pages) {
+//            KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+//            if (page) {
+//                if (page->shouldDialogCloseBeVetoed()) {
+//                    return;
+//                }
+//            }
+//        }
+//        slotApply();
+//        accept();
+//        return;
+//    }
+//    KPageDialog::slotButtonClicked(button);
 }
 
 bool KoDocumentInfoDlg::isDocumentSaved()

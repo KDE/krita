@@ -235,4 +235,6 @@ void KoColorSetWidget::resizeEvent(QResizeEvent *event)
     QFrame::resizeEvent(event);
 }
 
-#include <KoColorSetWidget.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoColorSetWidget.cpp"
+

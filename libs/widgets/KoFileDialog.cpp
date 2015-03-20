@@ -24,6 +24,7 @@
 #include <QImageReader>
 #include <QClipboard>
 
+#include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kmimetype.h>
 #include <klocale.h>

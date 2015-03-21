@@ -22,7 +22,6 @@
 #include "KoOdfLoadingContext.h"
 
 // KDE
-#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 
@@ -35,6 +34,8 @@
 #include <KoOdfManifestEntry.h>
 #include "KoStyleStack.h"
 
+// Qt
+#include <QStandardPaths>
 
 
 class KoOdfLoadingContext::Private
@@ -79,7 +80,9 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
     (void)oasisStore.loadAndParse("tar:/META-INF/manifest.xml", d->manifestDoc, dummy);
 
     if (componentData.isValid()) {
-        QString fileName( KStandardDirs::locate( "styles", "defaultstyles.xml", componentData ) );
+        const QString fileName =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   componentData.componentName()+"/styles/defaultstyles.xml");
         if ( ! fileName.isEmpty() ) {
             QFile file( fileName );
             QString errorMessage;

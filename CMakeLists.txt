@@ -12,6 +12,9 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
     cmake_policy(SET CMP0022 OLD)
 endif()
 
+# reduce cmake warnings from KDE4Macros.cmake
+cmake_policy(SET CMP0026 OLD)
+
  ######################
 #######################
 ## Constants defines ##

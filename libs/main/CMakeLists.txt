@@ -95,10 +95,9 @@ target_link_libraries(komain ${extra_libs}
     kotextlayout
 )
 
-if( KActivities_FOUND )
-    include_directories(${KACTIVITIES_INCLUDES})
-    target_link_libraries(komain ${KACTIVITIES_LIBRARY})
-    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
+if( KF5_Activities_FOUND )
+    target_link_libraries(komain KF5::Activities)
+    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  KF5::Activities)
 endif()
 
 if (APPLE)

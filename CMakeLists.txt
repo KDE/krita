@@ -176,8 +176,12 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      Parts
                                      XmlGui Kross Wallet
                                      Emoticons ConfigWidgets KDELibs4Support
+    OPTIONAL_COMPONENTS
+        Activities
 )
-
+if(KF5_Activities_FOUND)
+    set(HAVE_KACTIVITIES TRUE)
+endif()
 
 find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Script Svg Test)
 find_package(Qt5 5.2.0 COMPONENTS WebKit DBus Declarative)
@@ -495,15 +499,6 @@ if(NOT WIN32 AND NOT APPLE)
   set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
 else()
   set(REQUIRED_Xinput_FOUND TRUE)
-endif()
-
-##
-## Test for KActivities
-##
-macro_optional_find_package(KActivities 6.1.0)
-macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" FALSE "" "Required for Activities integration.")
-if(KActivities_FOUND)
-    set(HAVE_KACTIVITIES TRUE)
 endif()
 
 #Set the build of TextShape changetraker

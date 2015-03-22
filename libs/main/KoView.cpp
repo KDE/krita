@@ -434,7 +434,3 @@ void KoView::guiActivateEvent(bool activated)
 {
     Q_UNUSED(activated);
 }
-
-
-#include <KoView_p.moc>
-#include <KoView.moc>

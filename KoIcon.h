@@ -65,7 +65,6 @@
 
 /// Use this function to load an icon that fits the current color theme
 inline KIcon themedIcon(const QString &name, bool fast = false) {
-    KIcon icon;
     bool useAdjustedIcons = true;
     if(!fast) {
         KIconLoader iconLoader;
@@ -78,12 +77,9 @@ inline KIcon themedIcon(const QString &name, bool fast = false) {
         QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
 
         QString realName = prefix + name;
-        icon = koIcon(realName.toLatin1());
-    } else {
-        icon = koIcon(name.toLatin1());
+        return KIcon(realName);
     }
-
-    return icon;
+    return KIcon(name);
 }
 
 #endif

@@ -338,6 +338,12 @@ macro_optional_find_package(KGantt 2.6.0)
 macro_log_feature(KGantt_FOUND "KGantt" "Library for creating Gantt diagrams (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Plan")
 
 ##
+## Test for KChart
+##
+macro_optional_find_package(KChart 2.6.0)
+macro_log_feature(KChart_FOUND "KChart" "Library for creating business charts (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Chart shape and Plan")
+
+##
 ## Test for eigen3
 ##
 macro_optional_find_package(Eigen3)
@@ -820,16 +826,6 @@ set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate 
                         ${CMAKE_BINARY_DIR}/libs/db)
 
 #############################################
-####          3rd party libraries        ####
-#############################################
-
-set(KDCHART_INCLUDES
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdchart/include
-)
-set(KDCHART_LIBS calligrakdchart)
-
-
-#############################################
 ####           filter libraries          ####
 #############################################
 
@@ -895,6 +891,10 @@ calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
     OKULAR_FOUND "Okular devel not found"
+)
+
+calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
+    KChart_FOUND "KChart devel not found"
 )
 
 calligra_drop_product_on_bad_condition( FILTER_KEY_TO_ODP
@@ -963,6 +963,7 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 
 calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
+    KChart_FOUND "KChart devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT

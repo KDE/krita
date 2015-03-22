@@ -59,9 +59,6 @@
 # TODO: some products have multiple optional requirements, but need at least one.
 # See APP_CONVERTER, FILEMANAGER_*
 
-# 3rd-party libs
-calligra_define_product(LIB_KDCHART "libkdchart" UNPORTED)
-
 # building tools
 calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp")
 
@@ -101,7 +98,7 @@ calligra_define_product(APP_KARBON "Karbon app (for Desktop)" UNPORTED  REQUIRES
 calligra_define_product(APP_KRITA "Krita app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_KEXI "Kexi app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_CALLIGRADB)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
-calligra_define_product(APP_PLAN "Plan app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_KDCHART)
+calligra_define_product(APP_PLAN "Plan app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOREPORT)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_GEMINI "The Calligra Gemini application" UNPORTED  REQUIRES PART_QTQUICK)
 # TODO: this needs to be split up by app products
@@ -127,13 +124,13 @@ calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION "Import from ODS plugin
 calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VARIABLES "Text variables plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KDCHART)
+calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_FORMULASHAPE "Formula shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)
-calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport" UNPORTED  REQUIRES LIB_KOREPORT LIB_KDCHART)
+calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport" UNPORTED  REQUIRES LIB_KOREPORT)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins" UNPORTED  REQUIRES FEATURE_RDF LIB_CALLIGRA)
 calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini" UNPORTED)
 

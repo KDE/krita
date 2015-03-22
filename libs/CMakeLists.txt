@@ -10,7 +10,7 @@ if (SHOULD_BUILD_LIB_CALLIGRA)
 #    add_subdirectory( basicflakes )
     add_subdirectory( pigment )
 #    add_subdirectory( main )
-#    add_subdirectory( kundo2 )
+   add_subdirectory( kundo2 )
 endif ()
 
 if (SHOULD_BUILD_FEATURE_SCRIPTING)

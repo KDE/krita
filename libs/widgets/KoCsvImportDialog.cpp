@@ -58,6 +58,7 @@ public:
     int         endCol;
     QChar       textQuote;
     QString     delimiter;
+    QString     commentSymbol;
     bool        ignoreDuplicates;
     QByteArray  data;
     QTextCodec* codec;
@@ -87,6 +88,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     d->endCol = -1;
     d->textQuote = QChar('"');
     d->delimiter = QString(',');
+    d->commentSymbol = QString('#');
     d->ignoreDuplicates = false;
     d->codec = QTextCodec::codecForName("UTF-8");
 

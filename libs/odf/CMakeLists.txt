@@ -5,8 +5,7 @@ include_directories( ${KOODF_INCLUDES} )
 
 ########### libkoodf ###############
 
-if( QCA2_FOUND )
-    include_directories( ${QCA2_INCLUDE_DIR} )
+if( Qca-qt5_FOUND )
     add_definitions( -DQCA2 )
 endif()
 
@@ -60,8 +59,8 @@ add_dependencies(koodf writeodf.h-target)
 
 target_link_libraries(koodf KF5::Archive KF5::Wallet KF5::KIOWidgets KF5::KDELibs4Support Qt5::Xml)
 target_link_libraries(koodf LINK_INTERFACE_LIBRARIES KF5::KIOWidgets KF5::KDELibs4Support Qt5::Xml)
-if( QCA2_FOUND )
-    target_link_libraries(koodf ${QCA2_LIBRARIES})
+if( Qca-qt5_FOUND )
+    target_link_libraries(koodf qca-qt5)
 endif()
 
 set_target_properties(koodf PROPERTIES

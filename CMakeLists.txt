@@ -340,8 +340,8 @@ macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra"
 ##
 ## Test for QCA2
 ##
-macro_optional_find_package(QCA2)
-macro_log_feature(QCA2_FOUND "QCA" "Qt Cryptographic Architecture" "http://delta.affinix.com/qca" FALSE "2.0" "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)")
+macro_optional_find_package(Qca-qt5 2.1.0)
+macro_log_feature(Qca-qt5_FOUND "QCA" "Qt Cryptographic Architecture" "http:/download.kde.org/stable/qca-qt5" FALSE "2.0" "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)")
 
 ##
 ## Test for exiv2

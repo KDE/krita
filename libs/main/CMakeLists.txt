@@ -10,7 +10,7 @@ include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
-if( QCA2_FOUND )
+if( Qca-qt5_FOUND )
    add_definitions( -DQCA2 )
 endif()
 

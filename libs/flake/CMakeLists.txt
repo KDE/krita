@@ -219,7 +219,7 @@ ki18n_wrap_ui(flake_SRCS
 
 add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake  pigmentcms kowidgetutils koodf)
+target_link_libraries(flake  pigmentcms kowidgetutils koodf Qt5::Svg)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf)
 target_link_libraries(flake kundo2)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)

@@ -800,15 +800,6 @@ set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
-# koreport
-set(KOREPORT_INCLUDES
-    ${CMAKE_SOURCE_DIR}/libs/
-    ${CMAKE_SOURCE_DIR}/libs/koreport
-    ${CMAKE_SOURCE_DIR}/libs/koreport/common
-    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed)
-set(KOREPORT_LIBS koreport)
-
 # calligradb
 set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
 set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives

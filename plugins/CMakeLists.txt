@@ -76,11 +76,6 @@ if (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
     add_subdirectory( videoshape )
 endif ()
 
-# only build the reporting plugins if building koreport
-if(SHOULD_BUILD_PLUGIN_REPORTING)
-    add_subdirectory( reporting )
-endif()
-
 if(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
     add_subdirectory( semanticitems )
 endif()

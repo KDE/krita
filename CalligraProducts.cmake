@@ -65,7 +65,6 @@ calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp")
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
 calligra_define_product(LIB_CALLIGRADB "libcalligradb" UNPORTED)
-calligra_define_product(LIB_KOREPORT "libkoreport" UNPORTED  REQUIRES LIB_CALLIGRADB)
 
 # calligra libs
 calligra_define_product(LIB_CALLIGRA "Calligra core libs" REQUIRES BUILDTOOL_RNG2CPP)
@@ -95,9 +94,9 @@ calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" UNPORTED  REQUIRES
 calligra_define_product(APP_AUTHOR "Author app (for Desktop)" UNPORTED  REQUIRES PART_WORDS)
 calligra_define_product(APP_KARBON "Karbon app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_KRITA "Krita app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(APP_KEXI "Kexi app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_CALLIGRADB)
+calligra_define_product(APP_KEXI "Kexi app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_CALLIGRADB)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
-calligra_define_product(APP_PLAN "Plan app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOREPORT)
+calligra_define_product(APP_PLAN "Plan app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_GEMINI "The Calligra Gemini application" UNPORTED  REQUIRES PART_QTQUICK)
 # TODO: this needs to be split up by app products
@@ -129,7 +128,6 @@ calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin" UNPORTED  REQUI
 calligra_define_product(PLUGIN_FORMULASHAPE "Formula shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)
-calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport" UNPORTED  REQUIRES LIB_KOREPORT)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins" UNPORTED  REQUIRES FEATURE_RDF LIB_CALLIGRA)
 calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini" UNPORTED)
 
@@ -448,7 +446,6 @@ calligra_define_productset(KEXI "Full Kexi (for Desktop)"
     OPTIONAL
         FEATURE_SCRIPTING
         PLUGIN_KEXI_SPREADSHEETMIGRATION
-        PLUGIN_REPORTING
 )
 calligra_define_productset(KRITA "Full Krita"
     REQUIRES

@@ -252,6 +252,9 @@ void KisStroke::prepend(KisStrokeJobStrategy *strategy,
         return;
     }
 
+    // LOG_MERGE_FIXME:
+    Q_UNUSED(levelOfDetail);
+
     m_jobsQueue.prepend(new KisStrokeJob(strategy, data, worksOnLevelOfDetail(), isCancellable));
 }
 

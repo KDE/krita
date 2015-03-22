@@ -52,6 +52,7 @@ bool KisStrokeJobData::isExclusive() const
 
 KisStrokeJobData* KisStrokeJobData::createLodClone(int levelOfDetail)
 {
+    Q_UNUSED(levelOfDetail);
     return 0;
 }
 

@@ -49,7 +49,7 @@ public:
     }
 
 protected:
-
+    using utils::StrokeTester::initImage;
     void initImage(KisImageWSP image, KisNodeSP activeNode) {
         Q_UNUSED(activeNode);
 
@@ -123,7 +123,7 @@ protected:
 
         QScopedPointer<KisStrokeJobData> data(
             new FreehandStrokeStrategy::Data(resources->currentNode(),
-                                             m_painterInfo, pi1, pi2));
+                                             0, pi1, pi2));
 
         image->addJob(strokeId(), m_useLod ? data->createLodClone(1) : data.take());
     }

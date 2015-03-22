@@ -56,6 +56,8 @@ public:
         case KisSimpleStrokeStrategy::JOB_RESUME:
             m_parentStroke->resumeStrokeCallback();
             break;
+        default:
+            break;
         }
     }
 

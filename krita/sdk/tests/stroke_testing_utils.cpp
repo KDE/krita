@@ -270,7 +270,7 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 
         initImage(image, resources->currentNode(), i);
 
-        KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, painter, image);
+        KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, image);
         m_strokeId = image->startStroke(stroke);
         addPaintingJobs(image, resources, painter, i);
 
@@ -285,7 +285,7 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
         currentNode = resources->currentNode();
     }
 
-    beforeCheckingResult(image, resources->currentNode());
+    beforeCheckingResult(image, currentNode);
 
     QImage resultImage;
     if(needQImage) {

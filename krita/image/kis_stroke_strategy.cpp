@@ -104,6 +104,7 @@ KisStrokeJobData* KisStrokeStrategy::createResumeData()
 
 KisStrokeStrategy* KisStrokeStrategy::createLodClone(int levelOfDetail)
 {
+    Q_UNUSED(levelOfDetail);
     return 0;
 }
 

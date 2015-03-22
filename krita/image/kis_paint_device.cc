@@ -72,6 +72,7 @@ public:
     PaintDeviceCache(const PaintDeviceCache &rhs)
         : m_paintDevice(rhs.m_paintDevice),
           m_exactBoundsCache(rhs.m_paintDevice),
+          m_nonDefaultPixelAreaCache(rhs.m_paintDevice),
           m_regionCache(rhs.m_paintDevice)
     {
     }
@@ -752,7 +753,7 @@ QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
         Impl::CheckNonDefault compareOp(pixelSize(), defaultPixel());
         rc = Impl::calculateExactBoundsImpl(this, rc, compareOp);
     } else {
-        Impl::CheckFullyTransparent compareOp(m_d->colorSpace);
+        Impl::CheckFullyTransparent compareOp(m_d->colorSpace());
         rc = Impl::calculateExactBoundsImpl(this, rc, compareOp);
     }
 

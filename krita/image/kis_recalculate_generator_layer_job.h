@@ -30,6 +30,7 @@ public:
 
     bool overrides(const KisSpontaneousJob *otherJob);
     void run();
+    int levelOfDetail() const;
 
 private:
     KisGeneratorLayerSP m_layer;

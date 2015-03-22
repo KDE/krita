@@ -19,6 +19,8 @@
 
 #include "KoMarkerSharedLoadingData.h"
 
+#include <QString>
+
 class KoMarkerSharedLoadingData::Private
 {
 public:

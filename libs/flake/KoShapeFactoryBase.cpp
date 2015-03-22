@@ -250,7 +250,7 @@ void KoShapeFactoryBase::getDeferredPlugin()
     const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Deferred");
     Q_ASSERT(offers.size() > 0);
 
-    foreach(KSharedPtr<KService> service, offers) {
+    foreach(KService::Ptr service, offers) {
         KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
         if (plugin && plugin->deferredPluginName() == d->deferredPluginName) {
             d->deferredFactory = plugin;

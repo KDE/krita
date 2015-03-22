@@ -64,9 +64,8 @@ calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp")
 
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
-calligra_define_product(LIB_KOPROPERTY "libkoproperty" UNPORTED)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb" UNPORTED)
-calligra_define_product(LIB_KOREPORT "libkoreport" UNPORTED  REQUIRES LIB_KOPROPERTY LIB_CALLIGRADB)
+calligra_define_product(LIB_KOREPORT "libkoreport" UNPORTED  REQUIRES LIB_CALLIGRADB)
 
 # calligra libs
 calligra_define_product(LIB_CALLIGRA "Calligra core libs" REQUIRES BUILDTOOL_RNG2CPP)

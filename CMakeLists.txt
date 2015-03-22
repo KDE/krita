@@ -800,12 +800,6 @@ set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
-# koproperty
-set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
-                        ${CMAKE_SOURCE_DIR}/libs
-                        ${CMAKE_SOURCE_DIR}/libs/widgets)
-set(KOPROPERTY_LIBS koproperty)
-
 # koreport
 set(KOREPORT_INCLUDES
     ${CMAKE_SOURCE_DIR}/libs/

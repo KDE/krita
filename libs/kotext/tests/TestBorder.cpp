@@ -22,6 +22,8 @@
 #include "styles/KoParagraphStyle.h"
 #include "KoTextBlockBorderData.h"
 
+#include <QTest>
+
 void TestBorder::testBorder()
 {
     KoParagraphStyle style;

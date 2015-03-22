@@ -23,7 +23,6 @@
 
 class KisSerializableConfiguration;
 class KisSerializableConfigurationFactory;
-class KoID;
 class QString;
 class KLocalizedString;
 
@@ -32,8 +31,8 @@ class KLocalizedString;
 class KRITAIMAGE_EXPORT KisBookmarkedConfigurationManager
 {
 public:
-    static const char* ConfigDefault;
-    static const char* ConfigLastUsed;
+    static const char ConfigDefault[];
+    static const char ConfigLastUsed[];
 public:
     /**
      * @param configEntryGroup name of the configuration entry with the

@@ -24,6 +24,7 @@
 #include <KoShapeShadow.h>
 #include <KoShapeGroup.h>
 #include <KoClipPath.h>
+#include <KoInsets.h>
 
 #include <QTransform>
 #include <QPainterPath>
@@ -65,7 +66,7 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     }
 }
 
-KoTextLayoutObstruction::KoTextLayoutObstruction(QRectF rect, bool rtl)
+KoTextLayoutObstruction::KoTextLayoutObstruction(const QRectF &rect, bool rtl)
     : m_side(None),
     m_polygon(QPolygonF()),
     m_line(QRectF()),
@@ -124,7 +125,7 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
         borderHalfWidth = qMax(qMax(insets.left, insets.top),qMax(insets.right, insets.bottom));
     }
 
-    if (shape->shadow()) {
+    if (shape->shadow() && shape->shadow()->isVisible()) {
         QTransform transform = shape->absoluteTransformation(0);
         bb = transform.mapRect(bb);
         KoInsets insets;

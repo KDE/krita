@@ -36,6 +36,7 @@ public:
 
     void repaintLine(KoCanvasResourceManager *resourceManager,
                      KisImageWSP image,
+                     KisNodeSP node,
                      KisStrokesFacade *strokesFacade,
                      KisPostExecutionUndoAdapter *undoAdapter);
 
@@ -43,8 +44,9 @@ public:
     void addPoint(KoPointerEvent *event, const QPointF &overridePos = QPointF());
     void translatePoints(const QPointF &offset);
     void end();
+    void cancel();
 
-
+    using KisToolFreehandHelper::isRunning;
 
 private:
     struct Private;

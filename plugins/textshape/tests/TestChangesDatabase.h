@@ -10,7 +10,7 @@ class TestChangesDatabase : public QObject
 public:
     TestChangesDatabase() {}
 
-private slots:
+private Q_SLOTS:
     void testInsert();
     void testRemove();
     void testSplit();

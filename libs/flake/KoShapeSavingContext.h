@@ -25,10 +25,8 @@
 
 #include "flake_export.h"
 
-#include <QImage>
-#include <QTransform>
-#include <QTextBlockUserData>
 #include <KoElementReference.h>
+#include <QMap>
 
 class KoShape;
 class KoXmlWriter;
@@ -41,6 +39,9 @@ class KoShapeLayer;
 class KoStore;
 class KoSharedSavingData;
 class KoShapeSavingContextPrivate;
+
+class QImage;
+class QTransform;
 
 /**
  * The set of data for the ODF file format used during saving of a shape.
@@ -152,7 +153,7 @@ public:
      * @param referent the object we are referring to
      * @param prefix a prefix for the xml:id string
      * @param counter if counter is true, shapesavingcontext will use a counter to create the xml:id
-     * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementrefence will be invalid.
+     * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementreference will be invalid.
      */
     KoElementReference xmlid(const void *referent, const QString& prefix = QString(), KoElementReference::GenerationOption counter = KoElementReference::UUID);
 
@@ -282,7 +283,7 @@ public:
     QTransform shapeOffset(const KoShape *shape) const;
 
 private:
-    KoShapeSavingContextPrivate *d;
+    KoShapeSavingContextPrivate * const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoShapeSavingContext::ShapeSavingOptions)

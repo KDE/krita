@@ -45,7 +45,7 @@ public:
 protected:
     virtual void setReadOnlyInternal(bool readOnly);
 
-protected slots:
+protected Q_SLOTS:
     void  selectChar();
     void  slotValueChanged(const QString &text);
 

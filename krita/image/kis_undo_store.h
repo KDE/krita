@@ -35,7 +35,7 @@ class KUndo2MagicString;
  * Split the functionality of KisUndoAdapter into two classes:
  * KisUndoStore and KisUndoAdapter. The former one works as an
  * interface to an external storage of the undo information:
- * undo stack, KoDocument, /dev/null. The latter one defines the
+ * undo stack, KisDocument, /dev/null. The latter one defines the
  * behavior of the system when someone wants to add a command. There
  * are three variants:
  *    1) KisSurrogateUndoAdapter -- saves commands directly to the
@@ -52,7 +52,7 @@ class KUndo2MagicString;
  *
  * The ownership on the KisUndoStore (that substituted KisUndoAdapter
  * in the document's code) now belongs to the image. It means that
- * KisDoc2::createUndoStore() is just a factory method, the document
+ * KisDocument::createUndoStore() is just a factory method, the document
  * doesn't store the undo store itself.
  */
 class KRITAIMAGE_EXPORT KisUndoStore

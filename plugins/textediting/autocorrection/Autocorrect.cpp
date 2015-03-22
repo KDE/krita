@@ -31,8 +31,6 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-#include <KoGlobal.h>
-
 Autocorrect::Autocorrect()
 {
     /* setup actions for this plugin */
@@ -45,7 +43,7 @@ Autocorrect::Autocorrect()
     m_enabled->setChecked(true);
     addAction("enable_autocorrection", m_enabled);
 
-    m_singleSpaces = true;
+    m_singleSpaces = false;
     m_uppercaseFirstCharOfSentence = false;
     m_fixTwoUppercaseChars = false;
     m_autoFormatURLs = false;
@@ -532,7 +530,7 @@ void Autocorrect::advancedAutocorrect()
     }
 
     if (m_autocorrectEntries.contains(actualWord)) {
-        int pos = m_word.toLower().indexOf(trimmedWord);
+        int pos = m_word.indexOf(trimmedWord, Qt::CaseInsensitive);
         QString replacement = m_autocorrectEntries.value(actualWord);
         // Keep capitalized words capitalized.
         // (Necessary to make sure the first letters match???)
@@ -678,7 +676,8 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
 
 void Autocorrect::readConfig()
 {
-    KConfigGroup interface = KoGlobal::calligraConfig()->group("Autocorrect");
+    KConfig cfg("calligrarc");
+    KConfigGroup interface = cfg.group("Autocorrect");
 
     m_enabled->setChecked(interface.readEntry("enabled", m_enabled->isChecked()));
     m_uppercaseFirstCharOfSentence = interface.readEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
@@ -704,7 +703,8 @@ void Autocorrect::readConfig()
 
 void Autocorrect::writeConfig()
 {
-    KConfigGroup interface = KoGlobal::calligraConfig()->group("Autocorrect");
+    KConfig cfg("calligrarc");
+    KConfigGroup interface = cfg.group("Autocorrect");
     interface.writeEntry("enabled", m_enabled->isChecked());
     interface.writeEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
     interface.writeEntry("FixTwoUppercaseChars", m_fixTwoUppercaseChars);

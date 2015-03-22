@@ -119,7 +119,8 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
 {
     lockTemporaryTarget();
 
-    m_d->selection->updateProjection();
+    m_d->selection->updateProjection(rect);
+
     KisSelectionSP tempSelection = m_d->selection;
     KisPainter gc(projection);
 
@@ -148,15 +149,11 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
     unlockTemporaryTarget();
 }
 
-QRect KisSelectionBasedLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
+QRect KisSelectionBasedLayer::cropChangeRectBySelection(const QRect &rect) const
 {
-    Q_UNUSED(pos);
-    /**
-     * Warn: we won't call KisNode's copy of changeRect as it's dummy
-     */
     return m_d->selection ?
-           rect & m_d->selection->selectedRect() :
-           rect;
+        rect & m_d->selection->selectedRect() :
+        rect;
 }
 
 QRect KisSelectionBasedLayer::needRect(const QRect &rect, PositionToFilthy pos) const
@@ -216,7 +213,6 @@ void KisSelectionBasedLayer::setX(qint32 x)
 {
     if (m_d->selection) {
         m_d->selection->setX(x);
-        resetCache();
     }
 }
 
@@ -224,7 +220,6 @@ void KisSelectionBasedLayer::setY(qint32 y)
 {
     if (m_d->selection) {
         m_d->selection->setY(y);
-        resetCache();
     }
 }
 

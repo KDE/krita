@@ -127,6 +127,7 @@ KisStrokeShortcut* createStrokeShortcut(KisAbstractInputAction *action,
 void KisInputManagerTest::testKeyEvents()
 {
     KisShortcutMatcher m;
+    m.enterEvent();
 
     TestingAction *a = new TestingAction();
 
@@ -266,11 +267,14 @@ void KisInputManagerTest::testKeyEvents()
     QCOMPARE(a->m_beginNonNull, false);
     QCOMPARE(a->m_endNonNull, false);
     a->reset();
+
+    m.leaveEvent();
 }
 
 void KisInputManagerTest::testReleaseUnnecessaryModifiers()
 {
     KisShortcutMatcher m;
+    m.enterEvent();
 
     TestingAction *a = new TestingAction();
 
@@ -311,11 +315,14 @@ void KisInputManagerTest::testReleaseUnnecessaryModifiers()
     QCOMPARE(a->m_beginIndex, -1);
     QCOMPARE(a->m_ended, true);
     a->reset();
+
+    m.leaveEvent();
 }
 
 void KisInputManagerTest::testMouseMoves()
 {
     KisShortcutMatcher m;
+    m.enterEvent();
 
     TestingAction *a = new TestingAction();
 
@@ -366,6 +373,22 @@ void KisInputManagerTest::testMouseMoves()
     QCOMPARE(a->m_beginIndex, -1);
     QCOMPARE(a->m_ended, true);
     a->reset();
+
+    m.leaveEvent();
+}
+
+#include "../input/wintab/kis_incremental_average.h"
+
+void KisInputManagerTest::testIncrementalAverage()
+{
+    KisIncrementalAverage avg(3);
+
+    QCOMPARE(avg.pushThrough(10), 10);
+    QCOMPARE(avg.pushThrough(20), 13);
+    QCOMPARE(avg.pushThrough(30), 20);
+    QCOMPARE(avg.pushThrough(30), 26);
+    QCOMPARE(avg.pushThrough(30), 30);
+
 }
 
 QTEST_KDEMAIN(KisInputManagerTest, GUI)

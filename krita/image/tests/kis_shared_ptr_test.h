@@ -25,7 +25,7 @@ class KisSharedPtrTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 
     void testRefTwoSharedPointersOneInstance();
     void testCopy();
@@ -34,7 +34,10 @@ private slots:
     void testClear();
     void testWeakSP();
     void testBoolOnInvalidWeakPointer();
-
+    void testInvalidWeakSPAssignToSP();
+    void testInvalidWeakSPToSPCopy();
+    void testWeakSPAssignToWeakSP();
+    void testWeakSPToWeakSPCopy();
 };
 
 #endif

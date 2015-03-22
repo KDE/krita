@@ -95,7 +95,7 @@ public:
 
     ItemData changeItemData(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-public slots:
+public Q_SLOTS:
     void setupModel();
 
 private:

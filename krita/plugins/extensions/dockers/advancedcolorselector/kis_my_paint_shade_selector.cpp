@@ -5,14 +5,14 @@
  *
  *  This class is based on "lib/colorchanger.hpp" from MyPaint (mypaint.intilinux.com)
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -80,7 +80,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 
 	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 	QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
-			
+
     int size = qMin(width(), height());
     int s_radius = size/2.6;
 
@@ -156,7 +156,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 					if(shadeMyPaintType=="HSV"){color = converter()->fromHsvF(fh, fs, fv);}
 					else if(shadeMyPaintType=="HSL"){color = converter()->fromHslF(fh, fs, fv);}	
 					else if(shadeMyPaintType=="HSI"){color = converter()->fromHsiF(fh, fs, fv);}	
-					else if(shadeMyPaintType=="HSY"){color = converter()->fromHsyF(fh, fs, fv);}
+					else if(shadeMyPaintType=="HSY"){color = converter()->fromHsyF(fh, fs, fv, R, G, B);}
 					else{qDebug()<<"MyPaint Color selector don't work right.";
 					color = converter()->fromHsvF(fh, fs, fv);}
 //qDebug()<<color->toQcolor();
@@ -253,11 +253,17 @@ void KisMyPaintShadeSelector::setColor(const KoColor &color) {
 
 	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 	QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
+
+    R = cfg.readEntry("lumaR", 0.2126);
+    G = cfg.readEntry("lumaG", 0.7152);
+    B = cfg.readEntry("lumaB", 0.0722);
+
 	if(shadeMyPaintType=="HSV"){this->converter()->getHsvF(color, &m_colorH, &m_colorS, &m_colorV);}
 	if(shadeMyPaintType=="HSL"){this->converter()->getHslF(color, &m_colorH, &m_colorS, &m_colorV);}	
 	if(shadeMyPaintType=="HSI"){this->converter()->getHsiF(color, &m_colorH, &m_colorS, &m_colorV);}	
-	if(shadeMyPaintType=="HSY"){this->converter()->getHsyF(color, &m_colorH, &m_colorS, &m_colorV);}
+	if(shadeMyPaintType=="HSY"){this->converter()->getHsyF(color, &m_colorH, &m_colorS, &m_colorV, R, G, B);}
     m_lastRealColor = color;
+    this->updateColorPreview(color);
 
     m_updateTimer->start();
 }

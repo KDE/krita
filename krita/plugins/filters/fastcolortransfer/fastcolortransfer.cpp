@@ -27,7 +27,6 @@
 #include <kundo2command.h>
 
 #include <KoColorSpaceRegistry.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <filter/kis_filter_registry.h>

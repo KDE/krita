@@ -20,16 +20,14 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
-#include <kdialog.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
-#include <KoFilterManager.h>
-#include <KoFilterChain.h>
+#include <KisImportExportManager.h>
+#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
@@ -42,7 +40,30 @@ class KisExternalLayer;
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<psdExport>();)
 K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
-psdExport::psdExport(QObject *parent, const QVariantList &) : KoFilter(parent)
+bool checkHomogenity(KisNodeSP root, const KoColorSpace* cs)
+{
+    bool res = true;
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        if (child->childCount() > 0) {
+            res = checkHomogenity(child, cs);
+            if (res == false) {
+                break;
+            }
+        }
+        KisLayer *layer = dynamic_cast<KisLayer*>(child.data());
+        if (layer) {
+            if (layer->colorSpace() != cs) {
+                res = false;
+                break;
+            }
+        }
+        child = child->nextSibling();
+    }
+    return res;
+}
+
+psdExport::psdExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -50,35 +71,45 @@ psdExport::~psdExport()
 {
 }
 
-KoFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile <<"PSD export! From:" << from <<", To:" << to <<"";
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
-    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
     if (!input)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
 
     if (input->image()->width() > 30000 || input->image()->height() > 30000) {
         if (!m_chain->manager()->getBatchMode()) {
-            KMessageBox::error(0, i18n("Unable to save to the Photoshop format.\n"
-                                       "The Photoshop format only supports images that are smaller than 30000x3000 pixels."),
-                               "Photoshop Export Error");
+            QMessageBox::critical(0,
+                                  i18nc("@title:window", "Photoshop Export Error"),
+                                  i18n("Unable to save to the Photoshop format.\n"
+                                       "The Photoshop format only supports images that are smaller than 30000x3000 pixels."));
         }
-        return KoFilter::InvalidFormat;
+        return KisImportExportFilter::InvalidFormat;
     }
 
 
+    if (!checkHomogenity(input->image()->rootLayer(), input->image()->colorSpace())) {
+        if (!m_chain->manager()->getBatchMode()) {
+            QMessageBox::critical(0,
+                                  i18nc("@title:window", "Photoshop Export Error"),
+                                  i18n("Unable to save to the Photoshop format.\n"
+                                       "The Photoshop format only supports images where all layers have the same colorspace as the image."));
+        }
+        return KisImportExportFilter::InvalidFormat;
+    }
 
     qApp->processEvents(); // For vector layers to be updated
     input->image()->waitForDone();
 
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
@@ -88,10 +119,10 @@ KoFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByt
 
     if ((res = kpc.buildFile(url)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     }
     dbgFile <<" Result =" << res;
-    return KoFilter::InternalError;
+    return KisImportExportFilter::InternalError;
 }
 
 #include <psd_export.moc>

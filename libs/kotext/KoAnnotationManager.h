@@ -51,7 +51,7 @@ public:
     /// @return a list of QString containing all annotation names
     QList<QString> annotationNameList() const;
 
-public slots:
+public Q_SLOTS:
     /**
      * Insert a new annotation to this manager. The name of the annotation
      * will be set to @param name, no matter what name has been set on

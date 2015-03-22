@@ -46,7 +46,7 @@ class ModelObserver : public QObject
 public:
     ModelObserver(QAbstractItemModel *source);
 
-private slots:
+private Q_SLOTS:
     void slotRowsInserted(const QModelIndex & parent, int start, int end);
     void slotColumnsInserted(const QModelIndex & parent, int start, int end);
     void slotRowsRemoved(const QModelIndex & parent, int start, int end);

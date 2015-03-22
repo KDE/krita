@@ -27,6 +27,9 @@ class KisWeakSharedPtr;
 template<class T>
 class KisSharedPtr;
 
+template<class T> class QSharedPointer;
+template<class T> class QWeakPointer;
+
 template <class T>
 uint qHash(KisSharedPtr<T> ptr) {
     return qHash(ptr.data());
@@ -36,8 +39,6 @@ template <class T>
 uint qHash(KisWeakSharedPtr<T> ptr) {
     return qHash(ptr.data());
 }
-
-#include "kis_shared_ptr_vector.h"
 
 /**
  * Define lots of shared pointer versions of Krita classes.
@@ -53,9 +54,8 @@ typedef KisWeakSharedPtr<KisImage> KisImageWSP;
 class KisPaintDevice;
 typedef KisSharedPtr<KisPaintDevice> KisPaintDeviceSP;
 typedef KisWeakSharedPtr<KisPaintDevice> KisPaintDeviceWSP;
-typedef KisSharedPtrVector<KisPaintDevice> vKisPaintDeviceSP;
+typedef QVector<KisPaintDeviceSP> vKisPaintDeviceSP;
 typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
-typedef vKisPaintDeviceSP::const_iterator vKisPaintDeviceSP_cit;
 
 class KisFixedPaintDevice;
 typedef KisSharedPtr<KisFixedPaintDevice> KisFixedPaintDeviceSP;
@@ -67,7 +67,7 @@ typedef KisWeakSharedPtr<KisMask> KisMaskWSP;
 class KisNode;
 typedef KisSharedPtr<KisNode> KisNodeSP;
 typedef KisWeakSharedPtr<KisNode> KisNodeWSP;
-typedef KisSharedPtrVector<KisNode> vKisNodeSP;
+typedef QVector<KisNodeSP> vKisNodeSP;
 typedef vKisNodeSP::iterator vKisNodeSP_it;
 typedef vKisNodeSP::const_iterator vKisNodeSP_cit;
 
@@ -82,6 +82,14 @@ typedef KisWeakSharedPtr<KisEffectMask> KisEffectMaskWSP;
 class KisFilterMask;
 typedef KisSharedPtr<KisFilterMask> KisFilterMaskSP;
 typedef KisWeakSharedPtr<KisFilterMask> KisFilterMaskWSP;
+
+class KisTransformMask;
+typedef KisSharedPtr<KisTransformMask> KisTransformMaskSP;
+typedef KisWeakSharedPtr<KisTransformMask> KisTransformMaskWSP;
+
+class KisTransformMaskParamsInterface;
+typedef QSharedPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceSP;
+typedef QWeakPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceWSP;
 
 class KisTransparencyMask;
 typedef KisSharedPtr<KisTransparencyMask> KisTransparencyMaskSP;
@@ -143,7 +151,7 @@ typedef KisSharedPtr<KisConvolutionKernel> KisConvolutionKernelSP;
 
 class KisAnnotation;
 typedef KisSharedPtr<KisAnnotation> KisAnnotationSP;
-typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;
+typedef QVector<KisAnnotationSP> vKisAnnotationSP;
 typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
 typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
@@ -187,6 +195,7 @@ typedef QVector<QPointF> vQPointF;
 
 class KisPaintOpPreset;
 typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
+typedef KisWeakSharedPtr<KisPaintOpPreset> KisPaintOpPresetWSP;
 
 class KisPaintOpSettings;
 typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
@@ -204,9 +213,6 @@ typedef QPointer<KoUpdater> KoUpdaterPtr;
 class KisProcessingVisitor;
 typedef KisSharedPtr<KisProcessingVisitor> KisProcessingVisitorSP;
 
-template<class T> class QSharedPointer;
-template<class T> class QWeakPointer;
-
 class KUndo2Command;
 typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;
 
@@ -219,9 +225,6 @@ typedef KisStrokeWSP KisStrokeId;
 
 class KisFilterConfiguration;
 typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
-
-class KisDisplayFilter;
-typedef QSharedPointer<KisDisplayFilter> KisDisplayFilterSP;
 
 class KisProjectionUpdatesFilter;
 typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;

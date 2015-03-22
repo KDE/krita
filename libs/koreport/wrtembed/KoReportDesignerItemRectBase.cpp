@@ -30,7 +30,6 @@
 #include <krsize.h>
 #include "reportscene.h"
 
-
 KoReportDesignerItemRectBase::KoReportDesignerItemRectBase(KoReportDesigner *r)
         : QGraphicsRectItem(), KoReportDesignerItemBase(r)
 {
@@ -40,7 +39,6 @@ KoReportDesignerItemRectBase::KoReportDesignerItemRectBase(KoReportDesigner *r)
     m_ppos = 0;
     m_psize = 0;
     m_grabAction = 0;
-
     setAcceptsHoverEvents(true);
 
 #if QT_VERSION >= 0x040600
@@ -50,8 +48,9 @@ KoReportDesignerItemRectBase::KoReportDesignerItemRectBase(KoReportDesigner *r)
 #endif
 }
 
-void KoReportDesignerItemRectBase::init(KRPos* p, KRSize* s, KoProperty::Set* se)
+void KoReportDesignerItemRectBase::init(KRPos* p, KRSize* s, KoProperty::Set* se, KoReportDesigner *d)
 {
+    Q_UNUSED(d);
     m_ppos = p;
     m_psize = s;
     m_pset = se;
@@ -314,7 +313,7 @@ void KoReportDesignerItemRectBase::propertyChanged(const KoProperty::Set &s, con
     if (p.name() == "Position") {
         m_ppos->setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
     } else if (p.name() == "Size") {
-        m_psize->setUnitSize(p.value().toSizeF(), KRPos::DontUpdateProperty);
+        m_psize->setUnitSize(p.value().toSizeF(), KRSize::DontUpdateProperty);
     }
 
     setSceneRect(m_ppos->toScene(), m_psize->toScene(), DontUpdateProperty);
@@ -325,3 +324,65 @@ void KoReportDesignerItemRectBase::move(const QPointF& /*m*/)
 //! TODO
 }
 
+QPointF KoReportDesignerItemRectBase::properPressPoint(const KoReportDesigner &d) const
+{
+    const QPointF pressPoint = d.getPressPoint();
+    const QPointF releasePoint = d.getReleasePoint();
+    if (releasePoint.x() < pressPoint.x() && releasePoint.y() < pressPoint.y()) {
+        return releasePoint;
+    }
+    if (releasePoint.x() < pressPoint.x() && releasePoint.y() > pressPoint.y()) {
+        return QPointF(releasePoint.x(), pressPoint.y());
+    }
+    if (releasePoint.x() > pressPoint.x() && releasePoint.y() < pressPoint.y()) {
+        return QPointF(pressPoint.x(), releasePoint.y());
+    }
+    return QPointF(pressPoint);
+}
+
+QRectF KoReportDesignerItemRectBase::properRect(const KoReportDesigner &d, qreal minWidth, qreal minHeight) const
+{
+    QPointF tempPressPoint = properPressPoint(d);
+    qreal currentPressX = tempPressPoint.x();
+    qreal currentPressY = tempPressPoint.y();
+    const qreal width = qMax(d.countSelectionWidth(), minWidth);
+    const qreal height = qMax(d.countSelectionHeight(), minHeight);
+
+    qreal tempReleasePointX = tempPressPoint.x() + width;
+    qreal tempReleasePointY = tempPressPoint.y() + height;
+
+    if (tempReleasePointX > scene()->width()) {
+        int offsetWidth = tempReleasePointX - scene()->width();
+        currentPressX = tempPressPoint.x() - offsetWidth;
+    }
+    if (tempReleasePointY > scene()->height()) {
+        int offsetHeight = tempReleasePointY - scene()->height();
+        currentPressY = tempPressPoint.y() - offsetHeight;
+    }
+    return (QRectF(QPointF(currentPressX, currentPressY), QSizeF(width, height)));
+}
+
+void KoReportDesignerItemRectBase::enterInlineEditingMode()
+{
+}
+
+void KoReportDesignerItemRectBase::exitInlineEditingMode()
+{
+}
+
+void KoReportDesignerItemBase::updateRenderText(const QString &itemDataSource, const QString &itemStaticValue, const QString &itemType)
+{
+    if (itemDataSource.isEmpty()) {
+        if (itemType.isEmpty()) {
+            m_renderText = itemStaticValue;
+        } else {
+            m_renderText = dataSourceAndObjectTypeName(itemStaticValue, itemType);
+        }
+    } else {
+        if (itemType.isEmpty()) {
+            m_renderText = itemDataSource;
+        } else {
+            m_renderText = dataSourceAndObjectTypeName(itemDataSource, itemType);
+        }
+    }  
+}

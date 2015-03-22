@@ -28,7 +28,7 @@
 
 #include "krita_export.h"
 
-#include "KoDocumentSectionModel.h"
+#include "KisDocumentSectionModel.h"
 
 #include "kis_types.h"
 #include "kis_node.h"
@@ -36,10 +36,8 @@
 template <class T>
 class QStack;
 
-class QIcon;
 class QBitArray;
 class KisCloneLayer;
-class KisNodeVisitor;
 
 namespace KisMetaData
 {
@@ -83,7 +81,10 @@ public:
      * Ask the layer to assemble its data & apply all the effect masks
      * to it.
      */
-    virtual QRect updateProjection(const QRect& rect);
+    QRect updateProjection(const QRect& rect, KisNodeSP filthyNode);
+
+    QRect partialChangeRect(KisNodeSP lastNode, const QRect& rect);
+    void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect);
 
     virtual bool needProjection() const;
 
@@ -115,8 +116,8 @@ public:
      */
     virtual KisSelectionSP selection() const;
 
-    virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
-    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
+    virtual KisDocumentSectionModel::PropertyList sectionModelProperties() const;
+    virtual void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
 
     /**
      * set/unset the channel flag for the alpha channel of this layer
@@ -166,6 +167,19 @@ public:
      * Set the image this layer belongs to.
      */
     virtual void setImage(KisImageWSP image);
+
+    /**
+     * Create and return a layer that is the result of merging
+     * this with layer.
+     *
+     * This method is designed to be called only within KisImage::mergeLayerDown().
+     *
+     * Decendands override this to create specific merged types when possible.
+     * The KisLayer one creates a KisPaintLayerSP via a bitBlt, and can work on all layer types.
+     *
+     * Decendants that perform there own version do NOT call KisLayer::createMergedLayer
+     */
+    virtual KisLayerSP createMergedLayer(KisLayerSP prevLayer);
 
     /**
      * Clones should be informed about updates of the original
@@ -230,7 +244,7 @@ public:
     /**
      * @return the list of effect masks
      */
-    QList<KisEffectMaskSP> effectMasks() const;
+    QList<KisEffectMaskSP> effectMasks(KisNodeSP lastNode = 0) const;
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
@@ -245,6 +259,54 @@ public:
     KisMetaData::Store* metaData();
 
 protected:
+
+    /**
+     * For KisLayer classes change rect transformation consists of two
+     * parts: incoming and outgoing.
+     *
+     * 1) incomingChangeRect(rect) chande rect transformation
+     *    performed by the transformations done basing on global
+     *    projection. It is performed in KisAsyncMerger +
+     *    KisUpdateOriginalVisitor classes. It happens before data
+     *    coming to KisLayer::original() therefore it is
+     *    'incoming'. See KisAdjustmentLayer for example of usage.
+     *
+     * 2) outgoingChangeRect(rect) change rect transformation that
+     *    happens in KisLayer::copyOriginalToProjection(). It applies
+     *    *only* when the layer is 'filthy', that is was the cause of
+     *    the merge process. See KisCloneLayer for example of usage.
+     *
+     * The flow of changed areas can be illustrated in the
+     * following way:
+     *
+     * 1. Current projection of size R1 is stored in KisAsyncMerger::m_currentProjection
+     *      |
+     *      | <-- KisUpdateOriginalVisitor writes data into layer's original() device.
+     *      |     The changed area on KisLayer::original() is
+     *      |     R2 = KisLayer::incomingChangeRect(R1)
+     *      |
+     * 2. KisLayer::original() / changed rect: R2
+     *      |
+     *      | <-- KisLayer::updateProjection() starts composing a layer
+     *      |     It calls KisLayer::copyOriginalToProjection() which copies some area
+     *      |     to a temporaty device. The temporary device now stores
+     *      |     R3 = KisLayer::outgoingChangeRect(R2)
+     *      |
+     * 3. Temporary device / changed rect: R3
+     *      |
+     *      | <-- KisLayer::updateProjection() continues composing a layer. It merges a mask.
+     *      |     R4 = KisMask::changeRect(R3)
+     *      |
+     * 4. KisLayer::original() / changed rect: R4
+     *
+     * So in the end rect R4 will be passed up to the next layers in the stack.
+     */
+    virtual QRect incomingChangeRect(const QRect &rect) const;
+
+    /**
+     * \see incomingChangeRect()
+     */
+    virtual QRect outgoingChangeRect(const QRect &rect) const;
 
     /**
      * @param rectVariesFlag (out param) a flag, showing whether
@@ -275,7 +337,8 @@ protected:
 
     QRect applyMasks(const KisPaintDeviceSP source,
                      const KisPaintDeviceSP destination,
-                     const QRect &requestedRect) const;
+                     const QRect &requestedRect,
+                     KisNodeSP filthyNode, KisNodeSP lastNode) const;
 
 private:
     struct Private;

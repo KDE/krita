@@ -64,6 +64,7 @@ public:
     PaintDeviceCache(KisPaintDevice *paintDevice)
         : m_paintDevice(paintDevice),
           m_exactBoundsCache(paintDevice),
+          m_nonDefaultPixelAreaCache(paintDevice),
           m_regionCache(paintDevice)
     {
     }
@@ -82,11 +83,16 @@ public:
     void invalidate() {
         m_thumbnailsValid = false;
         m_exactBoundsCache.invalidate();
+        m_nonDefaultPixelAreaCache.invalidate();
         m_regionCache.invalidate();
     }
 
     QRect exactBounds() {
         return m_exactBoundsCache.getValue();
+    }
+
+    QRect nonDefaultPixelArea() {
+        return m_nonDefaultPixelAreaCache.getValue();
     }
 
     QRegion region() {
@@ -133,7 +139,17 @@ private:
         ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
         QRect calculateNewValue() const {
-            return m_paintDevice->calculateExactBounds();
+            return m_paintDevice->calculateExactBounds(false);
+        }
+    private:
+        KisPaintDevice *m_paintDevice;
+    };
+
+    struct NonDefaultPixelCache : KisLockFreeCache<QRect> {
+        NonDefaultPixelCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
+
+        QRect calculateNewValue() const {
+            return m_paintDevice->calculateExactBounds(true);
         }
     private:
         KisPaintDevice *m_paintDevice;
@@ -150,6 +166,7 @@ private:
     };
 
     ExactBoundsCache m_exactBoundsCache;
+    NonDefaultPixelCache m_nonDefaultPixelAreaCache;
     RegionCache m_regionCache;
 
     bool m_thumbnailsValid;
@@ -575,45 +592,73 @@ QRegion KisPaintDevice::region() const
     return m_d->currentStrategy()->region();
 }
 
+QRect KisPaintDevice::nonDefaultPixelArea() const
+{
+    return m_d->cache()->nonDefaultPixelArea();
+}
+
 QRect KisPaintDevice::exactBounds() const
 {
     return m_d->cache()->exactBounds();
 }
 
-QRect KisPaintDevice::calculateExactBounds() const
-{
-    const KoColorSpace *colorSpace = m_d->colorSpace();
-    quint8 defaultOpacity = colorSpace->opacityU8(defaultPixel());
-    if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
-        /**
-         * We will not calculate exact bounds for the device,
-         * that is knows to be at least not smaller than image.
-         * It isn't worth it.
-         */
+namespace Impl {
 
-        return extent();
+struct CheckFullyTransparent
+{
+    CheckFullyTransparent(const KoColorSpace *colorSpace)
+        : m_colorSpace(colorSpace)
+    {
     }
 
+    bool isPixelEmpty(const quint8 *pixelData) {
+        return m_colorSpace->opacityU8(pixelData) == OPACITY_TRANSPARENT_U8;
+    }
+
+private:
+    const KoColorSpace *m_colorSpace;
+};
+
+struct CheckNonDefault
+{
+    CheckNonDefault(int pixelSize, const quint8 *defaultPixel)
+        : m_pixelSize(pixelSize),
+          m_defaultPixel(defaultPixel)
+    {
+    }
+
+    bool isPixelEmpty(const quint8 *pixelData) {
+        return memcmp(m_defaultPixel, pixelData, m_pixelSize) == 0;
+    }
+
+private:
+    int m_pixelSize;
+    const quint8 *m_defaultPixel;
+};
+
+template <class ComparePixelOp>
+QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startRect, ComparePixelOp compareOp)
+{
     // Solution n°2
     qint32  x, y, w, h, boundX2, boundY2, boundW2, boundH2;
-    QRect rc = extent();
 
-    x = boundX2 = rc.x();
-    y = boundY2 = rc.y();
-    w = boundW2 = rc.width();
-    h = boundH2 = rc.height();
+
+    x = boundX2 = startRect.x();
+    y = boundY2 = startRect.y();
+    w = boundW2 = startRect.width();
+    h = boundH2 = startRect.height();
 
     // XXX: a small optimization is possible by using H/V line iterators in the first
     //      and third cases, at the cost of making the code a bit more complex
 
-    KisRandomConstAccessorSP accessor = createRandomConstAccessorNG(x, y);
+    KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG(x, y);
 
     bool found = false;
     {
         for (qint32 y2 = y; y2 < y + h ; ++y2) {
             for (qint32 x2 = x; x2 < x + w || found; ++ x2) {
                 accessor->moveTo(x2, y2);
-                if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
+                if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
                     boundY2 = y2;
                     found = true;
                     break;
@@ -623,12 +668,21 @@ QRect KisPaintDevice::calculateExactBounds() const
         }
     }
 
+    /**
+     * If the first pass hasn't found any opaque pixel, there is no
+     * reason to check that 3 more times. They will not appear in the
+     * meantime. Just return an empty bounding rect.
+     */
+    if (!found) {
+        return QRect();
+    }
+
     found = false;
 
     for (qint32 y2 = y + h - 1; y2 >= y ; --y2) {
         for (qint32 x2 = x + w - 1; x2 >= x || found; --x2) {
             accessor->moveTo(x2, y2);
-            if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
+            if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
                 boundH2 = y2 - boundY2 + 1;
                 found = true;
                 break;
@@ -642,7 +696,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 x2 = x; x2 < x + w ; ++x2) {
             for (qint32 y2 = y; y2 < y + h || found; ++y2) {
                 accessor->moveTo(x2, y2);
-                if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
+                if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
                     boundX2 = x2;
                     found = true;
                     break;
@@ -660,7 +714,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 x2 = x + w - 1; x2 >= x; --x2) {
             for (qint32 y2 = y + h -1; y2 >= y || found; --y2) {
                 accessor->moveTo(x2, y2);
-                if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
+                if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
                     boundW2 = x2 - boundX2 + 1;
                     found = true;
                     break;
@@ -671,6 +725,38 @@ QRect KisPaintDevice::calculateExactBounds() const
     }
 
     return QRect(boundX2, boundY2, boundW2, boundH2);
+}
+
+}
+
+QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
+{
+    QRect rc = extent();
+
+    quint8 defaultOpacity = m_d->colorSpace()->opacityU8(defaultPixel());
+    if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
+        if (!nonDefaultOnly) {
+            /**
+             * We will not calculate exact bounds for the device,
+             * that is knows to be at least not smaller than image.
+             * It isn't worth it.
+             */
+
+            return rc;
+        } else {
+            rc = region().boundingRect();
+        }
+    }
+
+    if (nonDefaultOnly) {
+        Impl::CheckNonDefault compareOp(pixelSize(), defaultPixel());
+        rc = Impl::calculateExactBoundsImpl(this, rc, compareOp);
+    } else {
+        Impl::CheckFullyTransparent compareOp(m_d->colorSpace);
+        rc = Impl::calculateExactBoundsImpl(this, rc, compareOp);
+    }
+
+    return rc;
 }
 
 
@@ -892,6 +978,16 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, KoColor
     h = rc.height();
 
     return convertToQImage(dstProfile, x1, y1, w, h, renderingIntent, conversionFlags);
+}
+
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile,
+                                       const QRect &rc,
+                                       KoColorConversionTransformation::Intent renderingIntent,
+                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const
+{
+    return convertToQImage(dstProfile,
+                           rc.x(), rc.y(), rc.width(), rc.height(),
+                           renderingIntent, conversionFlags);
 }
 
 QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const

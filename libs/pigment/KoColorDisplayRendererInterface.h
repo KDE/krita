@@ -1,19 +1,20 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifndef __KO_COLOR_DISPLAY_RENDERER_INTERFACE_H
@@ -24,6 +25,8 @@
 #include <QSharedPointer>
 
 #include "KoColor.h"
+
+class KoChannelInfo;
 
 /**
  * A special interface class provided by pigment to let widgets render
@@ -67,25 +70,21 @@ public:
     /**
      * \return the minimum value of a floating point channel that can
      *         be seen on screen
-     *
-     * TODO: what about Lab? (DK)
      */
-    virtual qreal minVisibleFloatValue() const = 0;
+    virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const = 0;
 
     /**
      * \return the maximum value of a floating point channel that can
      *         be seen on screen. In normal situation it is 1.0. When
      *         the user changes exposure the value varies.
-     *
-     * TODO: what about Lab? (DK)
      */
-    virtual qreal maxVisibleFloatValue() const = 0;
+    virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const = 0;
 
-signals:
+Q_SIGNALS:
     void displayConfigurationChanged();
 
 private:
-    Q_DISABLE_COPY(KoColorDisplayRendererInterface);
+    Q_DISABLE_COPY(KoColorDisplayRendererInterface)
 };
 
 /**
@@ -101,8 +100,8 @@ public:
     KoColor fromHsv(int h, int s, int v, int a = 255) const;
     void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
 
-    qreal minVisibleFloatValue() const;
-    qreal maxVisibleFloatValue() const;
+    virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const;
+    virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const;
 
     static KoColorDisplayRendererInterface* instance();
 };

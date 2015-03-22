@@ -135,6 +135,7 @@ PageStack {
                         width: parent.width;
                         height: paintedHeight;
 
+                        textFormat: Text.RichText;
                         elide: Text.ElideNone;
                         wrapMode: Text.WordWrap;
                         horizontalAlignment: Text.AlignJustify;

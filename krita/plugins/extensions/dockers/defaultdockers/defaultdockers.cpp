@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -17,7 +17,7 @@
 
 #include "defaultdockers.h"
 
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 
 #include <KoDockFactoryBase.h>
@@ -25,7 +25,6 @@
 #include "kis_debug.h"
 
 #include "kis_layer_box.h"
-#include "kis_palette_docker.h"
 
 K_PLUGIN_FACTORY(KritaDefaultDockersPluginFactory, registerPlugin<KritaDefaultDockersPlugin>();)
 K_EXPORT_PLUGIN(KritaDefaultDockersPluginFactory("krita"))
@@ -34,7 +33,6 @@ KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QVar
         : QObject(parent)
 {
     KoDockRegistry::instance()->add(new KisLayerBoxFactory());
-//     KoDockRegistry::instance()->add(new KisPaletteDockerFactory());
 }
 
 KritaDefaultDockersPlugin::~KritaDefaultDockersPlugin()

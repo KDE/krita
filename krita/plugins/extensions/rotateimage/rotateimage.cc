@@ -29,7 +29,7 @@
 #include <kundo2magicstring.h>
 #include <kis_image.h>
 #include <kis_types.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_image_manager.h>
 #include <kis_node_manager.h>
 #include <kis_canvas_resource_provider.h>
@@ -42,29 +42,36 @@ K_PLUGIN_FACTORY(RotateImageFactory, registerPlugin<RotateImage>();)
 K_EXPORT_PLUGIN(RotateImageFactory("krita"))
 
 RotateImage::RotateImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/rotateimage.rc")
+        : KisViewPlugin(parent)
 {
+
     KisAction *action  = new KisAction(i18n("&Rotate Image..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("rotateimage", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage()));
 
-    action  = new KisAction(koIcon("object-rotate-right"), i18nc("rotate image 90 degrees to the right", "Rotate Image 90° to the Right"), this);
+    action  = new KisAction(koIcon("object-rotate-right"), i18nc("rotate image 90 degrees Clockwise", "Rotate Image 90° Clockwise"), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("rotateImageCW90", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage90()));
 
     action  = new KisAction(i18nc("rotate image 180 degrees to the right", "Rotate Image 180°"), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("rotateImage180", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage180()));
 
-    action  = new KisAction(koIcon("object-rotate-left"), i18nc("rotate image 90 degrees to the left", "Rotate Image 90° to the Left"), this);
+    action  = new KisAction(koIcon("object-rotate-left"), i18nc("rotate image 90 degrees Counter-Clockwise", "Rotate Image 90° Counter-Clockwise"), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("rotateImageCCW90", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));
 
     action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Image Horizontally"), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("mirrorImageHorizontal", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotMirrorImageHorizontal()));
 
     action  = new KisAction(koIcon("object-flip-vertical"), i18n("Mirror Image Vertically"), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("mirrorImageVertical", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotMirrorImageVertical()));
 
@@ -103,7 +110,7 @@ void RotateImage::slotRotateImage()
 
     if (!image) return;
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateImage");
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateImage");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Image"));
@@ -150,7 +157,7 @@ void RotateImage::slotRotateLayer()
 
     if (!image) return;
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateLayer");
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateLayer");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Layer"));

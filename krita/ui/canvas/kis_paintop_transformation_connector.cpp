@@ -19,18 +19,17 @@
 #include "kis_paintop_transformation_connector.h"
 
 #include "kis_canvas_resource_provider.h"
-#include "kis_view2.h"
 #include "kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 
 
-KisPaintopTransformationConnector::KisPaintopTransformationConnector(KisView2 *view, QObject *parent)
+KisPaintopTransformationConnector::KisPaintopTransformationConnector(KisCanvas2 *canvas, QObject *parent)
     : QObject(parent),
-      m_view(view)
+      m_canvas(canvas)
 {
-    connect(m_view->canvasBase()->resourceManager(),
+    connect(m_canvas->resourceManager(),
             SIGNAL(canvasResourceChanged(int, const QVariant&)),
             SLOT(slotCanvasResourceChanged(int, const QVariant&)));
 }
@@ -38,11 +37,11 @@ KisPaintopTransformationConnector::KisPaintopTransformationConnector(KisView2 *v
 void KisPaintopTransformationConnector::notifyTransformationChanged()
 {
     KisPaintOpPresetSP preset =
-        m_view->canvasBase()->resourceManager()->
+        m_canvas->resourceManager()->
         resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
     if (preset) {
-        const KisCoordinatesConverter *converter = m_view->canvasBase()->coordinatesConverter();
+        const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
         preset->settings()->setCanvasRotation(converter->rotationAngle());
         preset->settings()->setCanvasMirroring(converter->xAxisMirrored(),
                                                converter->yAxisMirrored());

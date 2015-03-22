@@ -724,7 +724,6 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     if (!dstColorSpace) return;
-    if (*m_d->colorSpace == *dstColorSpace) return;
 
     const KoColorSpace *srcColorSpace = m_d->colorSpace;
 
@@ -959,67 +958,14 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     refreshHiddenArea(layer, bounds());
     refreshHiddenArea(prevLayer, bounds());
 
-    QRect layerProjectionExtent = layer->projection()->extent();
+    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
+    QRect layerProjectionExtent = this->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
 
-    bool alphaDisabled = layer->alphaChannelDisabled();
-    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
-    KisPaintDeviceSP mergedDevice;
-
-    if (layer->compositeOpId() != prevLayer->compositeOpId() || prevLayer->opacity() != OPACITY_OPAQUE_U8) {
-
-        mergedDevice = new KisPaintDevice(layer->colorSpace(), "merged");
-        KisPainter gc(mergedDevice);
-
-        //Copy the pixels of previous layer with their actual alpha value
-        prevLayer->disableAlphaChannel(false);
-
-        gc.setChannelFlags(prevLayer->channelFlags());
-        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
-        gc.setOpacity(prevLayer->opacity());
-
-        gc.bitBlt(prevLayerProjectionExtent.topLeft(), prevLayer->projection(), prevLayerProjectionExtent);
-
-        //Restore the previous prevLayer disableAlpha status for correct undo/redo
-        prevLayer->disableAlphaChannel(prevAlphaDisabled);
-
-        //Paint the pixels of the current layer, using their actual alpha value
-        if (alphaDisabled == prevAlphaDisabled) {
-            layer->disableAlphaChannel(false);
-        }
-        gc.setChannelFlags(layer->channelFlags());
-        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
-        gc.setOpacity(layer->opacity());
-
-        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
-
-        //Restore the layer disableAlpha status for correct undo/redo
-        layer->disableAlphaChannel(alphaDisabled);
-    }
-    else {
-        //Copy prevLayer
-        lock();
-        mergedDevice = new KisPaintDevice(*prevLayer->projection());
-        unlock();
-
-        //Paint layer on the copy
-        KisPainter gc(mergedDevice);
-        if (alphaDisabled == prevAlphaDisabled) {
-            layer->disableAlphaChannel(false);
-        }
-        gc.setChannelFlags(layer->channelFlags());
-        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
-        gc.setOpacity(layer->opacity());
-
-        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
-
-        //Restore the layer disableAlpha status for correct undo/redo
-        layer->disableAlphaChannel(alphaDisabled);
-    }
-
-
-    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
+    // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
+    KisLayerSP mergedLayer = layer->createMergedLayer(prevLayer);
     Q_CHECK_PTR(mergedLayer);
+
     mergedLayer->setCompositeOp(COMPOSITE_OVER);
     mergedLayer->setChannelFlags(layer->channelFlags());
     mergedLayer->disableAlphaChannel(prevAlphaDisabled);
@@ -1109,19 +1055,6 @@ void KisImage::setModified()
     m_d->signalRouter->emitNotification(ModifiedSignal);
 }
 
-void KisImage::renderToPainter(qint32 srcX,
-                               qint32 srcY,
-                               qint32 dstX,
-                               qint32 dstY,
-                               qint32 width,
-                               qint32 height,
-                               QPainter &painter,
-                               const KoColorProfile *  monitorProfile)
-{
-    QImage image = convertToQImage(srcX, srcY, width, height, monitorProfile);
-    painter.drawImage(dstX, dstY, image, 0, 0, width, height);
-}
-
 QImage KisImage::convertToQImage(QRect imageRect,
                                  const KoColorProfile * profile)
 {
@@ -1145,27 +1078,7 @@ QImage KisImage::convertToQImage(qint32 x,
                                         KoColorConversionTransformation::InternalRenderingIntent,
                                         KoColorConversionTransformation::InternalConversionFlags);
 
-    if (!image.isNull()) {
-#ifdef WORDS_BIGENDIAN
-        uchar * data = image.bits();
-        for (int i = 0; i < w * h; ++i) {
-            uchar r, g, b, a;
-            a = data[0];
-            b = data[1];
-            g = data[2];
-            r = data[3];
-            data[0] = r;
-            data[1] = g;
-            data[2] = b;
-            data[3] = a;
-            data += 4;
-        }
-#endif
-
-        return image;
-    }
-
-    return QImage();
+    return image;
 }
 
 
@@ -1228,22 +1141,6 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
 
         delete [] scaledImageData;
 
-#ifdef WORDS_BIGENDIAN
-        uchar * data = image.bits();
-        for (int i = 0; i < image.width() * image.height(); ++i) {
-            uchar r, g, b, a;
-            a = data[0];
-            b = data[1];
-            g = data[2];
-            r = data[3];
-            data[0] = r;
-            data[1] = g;
-            data[2] = b;
-            data[3] = a;
-            data += 4;
-        }
-#endif
-
         return image;
     }
     catch (std::bad_alloc) {
@@ -1291,13 +1188,10 @@ KisActionRecorder* KisImage::actionRecorder() const
     return m_d->recorder;
 }
 
-void KisImage::setDefaultProjectionColor(KoColor color)
+void KisImage::setDefaultProjectionColor(const KoColor &color)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->rootLayer);
-
-    KisPaintDeviceSP original = m_d->rootLayer->original();
-    color.convertTo(original->colorSpace());
-    original->setDefaultPixel(color.data());
+    m_d->rootLayer->setDefaultProjectionColor(color);
 }
 
 KoColor KisImage::defaultProjectionColor() const
@@ -1306,9 +1200,7 @@ KoColor KisImage::defaultProjectionColor() const
         return KoColor(Qt::transparent, m_d->colorSpace);
     }
 
-    KisPaintDeviceSP original = m_d->rootLayer->original();
-    KoColor color(original->defaultPixel(), original->colorSpace());
-    return color;
+    return m_d->rootLayer->defaultProjectionColor();
 }
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
@@ -1557,6 +1449,15 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
+void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
+{
+    KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
+
+    if (m_d->scheduler) {
+        m_d->scheduler->updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
+    }
+}
+
 void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
     if (m_d->scheduler) {
@@ -1683,7 +1584,7 @@ void KisImage::removeComposition(KisLayerComposition* composition)
     delete composition;
 }
 
-bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
+bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)
 {
     KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(root.data());
     if (mask &&
@@ -1696,7 +1597,7 @@ bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
     KisNodeSP node = root->firstChild();
 
     while (node) {
-        if (checkMasksNeedConersion(node, bounds)) {
+        if (checkMasksNeedConversion(node, bounds)) {
             return true;
         }
 
@@ -1711,7 +1612,7 @@ void KisImage::setWrapAroundModePermitted(bool value)
     m_d->wrapAroundModePermitted = value;
 
     if (m_d->wrapAroundModePermitted &&
-        checkMasksNeedConersion(root(), bounds())) {
+        checkMasksNeedConversion(root(), bounds())) {
 
         KisProcessingApplicator applicator(this, root(),
                                            KisProcessingApplicator::RECURSIVE,

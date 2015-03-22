@@ -1,5 +1,5 @@
 /* XPM */
-static const char * sizever_cursor_xpm[] = {
+static const char * const sizever_cursor_xpm[] = {
 "32 32 2 1",
 " 	c None",
 ".	c #000000",

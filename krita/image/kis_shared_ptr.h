@@ -24,9 +24,7 @@
 
 #include <kis_debug.h>
 
-#ifndef NDEBUG
 #include "kis_memory_leak_tracker.h"
-#endif
 
 template<class T>
 class KisWeakSharedPtr;
@@ -112,7 +110,8 @@ public:
     }
 
     inline KisSharedPtr<T>& operator= (const KisSharedPtr& o) {
-        attach(o.d); return *this;
+        attach(o.d);
+        return *this;
     }
     inline const KisSharedPtr<T>& operator= (const KisSharedPtr& o) const {
         attach(o.d);
@@ -132,7 +131,8 @@ public:
     }
 
     inline KisSharedPtr<T>& operator= (T* p) {
-        attach(p); return *this;
+        attach(p);
+        return *this;
     }
 
     inline operator const T*() const {
@@ -168,17 +168,21 @@ public:
     }
 
     inline const T& operator*() const {
-        Q_ASSERT(d); return *d;
+        Q_ASSERT(d);
+        return *d;
     }
     inline T& operator*() {
-        Q_ASSERT(d); return *d;
+        Q_ASSERT(d);
+        return *d;
     }
 
     inline const T* operator->() const {
-        Q_ASSERT(d); return d;
+        Q_ASSERT(d);
+        return d;
     }
     inline T* operator->() {
-        Q_ASSERT(d); return d;
+        Q_ASSERT(d);
+        return d;
     }
 
     /**
@@ -190,13 +194,14 @@ public:
 private:
     inline static void ref(const KisSharedPtr<T>* sp, T* t)
     {
-#ifdef NDEBUG
+#ifndef HAVE_MEMORY_LEAK_TRACKER
         Q_UNUSED(sp);
 #else
         KisMemoryLeakTracker::instance()->reference(t, sp);
 #endif
-        if (t)
+        if (t) {
             t->ref();
+        }
     }
     inline void ref() const
     {
@@ -204,13 +209,12 @@ private:
     }
     inline static bool deref(const KisSharedPtr<T>* sp, T* t)
     {
-#ifdef NDEBUG
+#ifndef HAVE_MEMORY_LEAK_TRACKER
         Q_UNUSED(sp);
 #else
         KisMemoryLeakTracker::instance()->dereference(t, sp);
 #endif
-        if (t && !t->deref())
-        {
+        if (t && !t->deref()) {
             delete t;
             return false;
         }
@@ -220,8 +224,7 @@ private:
     {
         bool v = deref(this, d);
 #ifndef NDEBUG
-        if (!v)
-        {
+        if (!v) {
             d = 0;
         }
 #else
@@ -266,14 +269,21 @@ public:
      * @param o the pointer to copy
      */
     inline KisWeakSharedPtr<T>(const KisWeakSharedPtr<T>& o) {
-        load(o.d);
+        if (o.isConsistent()) {
+            load(o.d);
+        }
+        else {
+            d = 0;
+            weakReference = 0;
+        }
     }
 
     inline KisWeakSharedPtr<T>& operator= (const KisWeakSharedPtr& o) {
-        attach(o.d); return *this;
+        attach(o);
+        return *this;
     }
     inline const KisWeakSharedPtr<T>& operator= (const KisWeakSharedPtr& o) const {
-        attach(o.d);
+        attach(o);
         return *this;
     }
     inline bool operator== (const T* p) const {
@@ -397,7 +407,7 @@ public:
      *         and false if the data has been deleted or is null
      */
     inline bool isValid() const {
-        Q_ASSERT(!d || (d && weakReference));
+        Q_ASSERT(!d || weakReference);
 
         return d && weakReference && isOdd((int)*weakReference);
     }
@@ -408,15 +418,15 @@ private:
     }
 
     inline bool isConsistent() const {
-        Q_ASSERT(!d || (d && weakReference));
+        Q_ASSERT(!d || weakReference);
 
-        return !d || (d && weakReference && isOdd((int)*weakReference));
+        return !d || (weakReference && isOdd((int)*weakReference));
     }
 
     void load(T* newValue) {
         d = newValue;
 
-        if(d) {
+        if (d) {
             weakReference = d->sharedWeakReference();
             weakReference->fetchAndAddOrdered(WEAK_REF);
         }
@@ -429,6 +439,17 @@ private:
     inline void attach(T* newValue) {
         detach();
         load(newValue);
+    }
+
+    inline void attach(const KisWeakSharedPtr& o) {
+        detach();
+        if (o.isConsistent()) {
+            load(o.d);
+        }
+        else {
+            d = 0;
+            weakReference = 0;
+        }
     }
 
     // see note in kis_shared.cc
@@ -455,13 +476,18 @@ template <class T>
 Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T>& o)
         : d(o.d)
 {
-    ref();
+    if (o.isValid()) {
+        ref();
 
-    /**
-     * Thread safety:
-     * Is the object we have just referenced still valid?
-     */
-    Q_ASSERT(o.isConsistent());
+        /**
+         * Thread safety:
+         * Is the object we have just referenced still valid?
+         */
+        Q_ASSERT(o.isConsistent());
+    }
+    else {
+        d = 0;
+    }
 }
 
 

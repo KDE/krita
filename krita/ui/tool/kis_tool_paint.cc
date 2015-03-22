@@ -44,7 +44,6 @@
 
 #include <KoIcon.h>
 #include <KoShape.h>
-#include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColorSpace.h>
 #include <KoPointerEvent.h>
@@ -57,7 +56,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <kis_cubic_curve.h>
 
@@ -116,8 +115,10 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("increase_brush_size", dynamic_cast<KAction*>(collection->action("increase_brush_size")));
     addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
 
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
-    connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
+    if (kiscanvas && kiscanvas->viewManager()) {
+        connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
+    }
 }
 
 
@@ -136,7 +137,7 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
     switch(key){
     case(KisCanvasResourceProvider::Opacity):
-        slotSetOpacity(v.toDouble());
+        setOpacity(v.toDouble());
         break;
     default: //nothing
         break;
@@ -304,8 +305,10 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
 
     QPoint imagePoint = image()->documentToIntPixel(documentPixel);
 
-    canvas()->resourceManager()->
-        setResource(resource, KisToolUtils::pick(device, imagePoint));
+    KoColor color;
+    if (KisToolUtils::pick(device, imagePoint, &color)) {
+        canvas()->resourceManager()->setResource(resource, color);
+    }
 
     return true;
 }
@@ -438,7 +441,7 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 }
 
 
-void KisToolPaint::slotSetOpacity(qreal opacity)
+void KisToolPaint::setOpacity(qreal opacity)
 {
     m_opacity = quint8(opacity * OPACITY_OPAQUE_U8);
 }

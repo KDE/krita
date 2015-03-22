@@ -29,6 +29,7 @@
 #include <krita_export.h>
 
 class KoStore;
+class KoShapeManager;
 class KisShapeSelectionCanvas;
 class KisShapeSelectionModel;
 class KisImageViewConverter;

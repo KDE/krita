@@ -21,7 +21,7 @@
 #ifndef AUTORESIZECOMMAND_H
 #define AUTORESIZECOMMAND_H
 
-#include <kundo2qstack.h>
+#include <kundo2command.h>
 #include <QPointer>
 #include <TextTool.h>
 #include <KoTextDocumentLayout.h>

@@ -57,7 +57,9 @@ void KisShapeSelectionModel::requestUpdate(const QRect &updateRect)
 
 void KisShapeSelectionModel::startUpdateJob()
 {
-    m_image->addSpontaneousJob(new KisUpdateSelectionJob(m_parentSelection, m_updateRect));
+    if (m_image.isValid()) {
+        m_image->addSpontaneousJob(new KisUpdateSelectionJob(m_parentSelection, m_updateRect));
+    }
     m_updateRect = QRect();
 }
 
@@ -74,9 +76,11 @@ void KisShapeSelectionModel::add(KoShape *child)
     m_shapeSelection->shapeManager()->addShape(child);
 
     QRect updateRect = child->boundingRect().toAlignedRect();
-    QTransform matrix;
-    matrix.scale(m_image->xRes(), m_image->yRes());
-    updateRect = matrix.mapRect(updateRect);
+    if (m_image.isValid()) {
+        QTransform matrix;
+        matrix.scale(m_image->xRes(), m_image->yRes());
+        updateRect = matrix.mapRect(updateRect);
+    }
 
     if (m_shapeMap.count() == 1) {
         // The shape is the first one, so the shape selection just got created
@@ -98,12 +102,13 @@ void KisShapeSelectionModel::remove(KoShape *child)
     if (m_shapeSelection) {
         m_shapeSelection->shapeManager()->remove(child);
     }
-
-    QTransform matrix;
-    matrix.scale(m_image->xRes(), m_image->yRes());
-    updateRect = matrix.mapRect(updateRect);
-    if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
-        requestUpdate(updateRect);
+    if (m_image.isValid()) {
+        QTransform matrix;
+        matrix.scale(m_image->xRes(), m_image->yRes());
+        updateRect = matrix.mapRect(updateRect);
+        if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
+            requestUpdate(updateRect);
+        }
     }
 }
 
@@ -160,12 +165,14 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
     if (type == KoShape::ParentChanged) return;
 
     QRectF changedRect = m_shapeMap[child];
-    changedRect = changedRect.unite(child->boundingRect());
+    changedRect = changedRect.united(child->boundingRect());
     m_shapeMap[child] = child->boundingRect();
 
-    QTransform matrix;
-    matrix.scale(m_image->xRes(), m_image->yRes());
-    changedRect = matrix.mapRect(changedRect);
+    if (m_image.isValid()) {
+        QTransform matrix;
+        matrix.scale(m_image->xRes(), m_image->yRes());
+        changedRect = matrix.mapRect(changedRect);
+    }
 
     requestUpdate(changedRect.toAlignedRect());
 }

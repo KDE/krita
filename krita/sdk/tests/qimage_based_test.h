@@ -27,7 +27,7 @@
 
 #include <KoShapeContainer.h>
 #include <KoShapeRegistry.h>
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_shape_layer.h"
 
 #include "kis_undo_stores.h"
@@ -135,12 +135,9 @@ protected:
         image->undoAdapter()->addCommand(cmd);
     }
 
-    void addShapeLayer(KisDoc2 *doc, KisImageSP image) {
-        KoShapeContainer *parentContainer =
-            dynamic_cast<KoShapeContainer*>(doc->shapeForNode(image->root()));
+    void addShapeLayer(KisDocument *doc, KisImageSP image) {
 
-        Q_ASSERT(parentContainer);
-        KisShapeLayerSP shapeLayer = new KisShapeLayer(parentContainer, doc->shapeController(), image.data(), "shape", OPACITY_OPAQUE_U8);
+        KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image.data(), "shape", OPACITY_OPAQUE_U8);
         image->addNode(shapeLayer);
 
         KoShapeFactoryBase *f1 = KoShapeRegistry::instance()->get("StarShape");
@@ -164,15 +161,21 @@ protected:
         return checkLayers(image, prefix + prefix2, baseFuzzyness);
     }
 
+    bool checkLayersInitialRootOnly(KisImageWSP image, int baseFuzzyness = 0) {
+        QString prefix = "initial_with_selection";
+        QString prefix2 = findNode(image->root(), "shape") ? "_with_shape" : "";
+        return checkLayers(image, prefix + prefix2, baseFuzzyness, false);
+    }
+
     /**
      * Checks the content of image's layers against the set of
      * QImages stored in @p prefix subfolder
      */
-    bool checkLayers(KisImageWSP image, const QString &prefix, int baseFuzzyness = 0) {
+    bool checkLayers(KisImageWSP image, const QString &prefix, int baseFuzzyness = 0, bool recursive = true) {
         QVector<QImage> images;
         QVector<QString> names;
 
-        fillNamesImages(image->root(), image->bounds(), images, names);
+        fillNamesImages(image->root(), image->bounds(), images, names, recursive);
 
         bool valid = true;
 
@@ -270,7 +273,8 @@ private:
 
     void fillNamesImages(KisNodeSP node, const QRect &rc,
                          QVector<QImage> &images,
-                         QVector<QString> &names) {
+                         QVector<QString> &names,
+                         bool recursive = true) {
 
         while (node) {
             if(node->paintDevice()) {
@@ -294,7 +298,9 @@ private:
                                               rc.width(), rc.height()));
             }
 
-            fillNamesImages(node->firstChild(), rc, images, names);
+            if (recursive) {
+                fillNamesImages(node->firstChild(), rc, images, names);
+            }
             node = node->nextSibling();
         }
     }

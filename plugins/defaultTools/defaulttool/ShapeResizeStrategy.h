@@ -25,8 +25,8 @@
 
 #include <QPointF>
 #include <QList>
+#include <QTransform>
 
-class KoCanvasBase;
 class KoToolBase;
 class KoShape;
 

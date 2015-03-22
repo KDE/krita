@@ -22,18 +22,16 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "kis_transform_strategy_base.h"
+#include "kis_simplified_action_policy_strategy.h"
 
 class QPointF;
 class QPainter;
 class KisCoordinatesConverter;
 class ToolTransformArgs;
-class QTransform;
 class TransformTransactionProperties;
 class QCursor;
-class QImage;
 
-class KisFreeTransformStrategy : public KisTransformStrategyBase
+class KisFreeTransformStrategy : public KisSimplifiedActionPolicyStrategy
 {
     Q_OBJECT
 public:
@@ -47,17 +45,22 @@ public:
     QCursor getCurrentCursor() const;
 
     void externalConfigChanged();
+
+    using KisTransformStrategyBase::beginPrimaryAction;
+    using KisTransformStrategyBase::continuePrimaryAction;
+    using KisTransformStrategyBase::endPrimaryAction;
+
     bool beginPrimaryAction(const QPointF &pt);
     void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     bool endPrimaryAction();
 
-signals:
+Q_SIGNALS:
     void requestCanvasUpdate();
     void requestResetRotationCenterButtons();
     void requestShowImageTooBig(bool value);
 
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> m_d;
 };
 

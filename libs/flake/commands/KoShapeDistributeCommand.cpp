@@ -20,6 +20,8 @@
 
 #include "KoShapeDistributeCommand.h"
 
+#include "commands/KoShapeMoveCommand.h"
+#include "KoShape.h"
 #include <QMap>
 
 #include <klocale.h>

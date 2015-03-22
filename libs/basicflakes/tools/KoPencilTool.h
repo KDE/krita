@@ -21,7 +21,6 @@
 #define _KOPENCILTOOL_H_
 
 #include <KoToolBase.h>
-#include <QRectF>
 
 class KoPathShape;
 class KoShapeStroke;
@@ -49,7 +48,7 @@ public:
     void deactivate();
 
 protected:
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /**
      * Add path shape to document.
@@ -62,7 +61,7 @@ protected:
     void setFittingError(qreal fittingError);
     qreal getFittingError();
 
-private slots:
+private Q_SLOTS:
     void selectMode(int mode);
     void setOptimize(int state);
     void setDelta(double delta);

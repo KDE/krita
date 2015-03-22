@@ -1,4 +1,4 @@
-include_directories(${KOTEXT_INCLUDES}
+include_directories(${KOMAIN_INCLUDES}
                     ${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 
@@ -67,6 +67,8 @@ set(kotext_LIB_SRCS
     KoTextMeta.cpp
     KoTextTableTemplate.cpp
 
+    OdfTextTrackStyles.cpp
+
     ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
     KoBibliographyInfo.cpp
@@ -78,7 +80,6 @@ set(kotext_LIB_SRCS
     styles/KoStyleManager.cpp
     styles/KoListStyle.cpp
     styles/KoListLevelProperties.cpp
-    styles/ChangeFollower.cpp
     styles/KoTableStyle.cpp
     styles/KoTableColumnStyle.cpp
     styles/KoTableRowStyle.cpp
@@ -128,23 +129,23 @@ if( SHOULD_BUILD_FEATURE_RDF )
     set(kotext_LIB_SRCS ${kotext_LIB_SRCS}
         KoTextRdfCore.cpp
     )
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 target_link_libraries(kotext flake)
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})
-endif( SHOULD_BUILD_FEATURE_RDF )
+endif()
 target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake)
 
 if( FONTCONFIG_FOUND )
     target_link_libraries(kotext ${FONTCONFIG_LIBRARIES})
-endif( FONTCONFIG_FOUND )
+endif()
 
 if( FREETYPE_FOUND )
     target_link_libraries(kotext ${FREETYPE_LIBRARIES})
-endif( FREETYPE_FOUND )
+endif()
 
 
 set_target_properties(kotext PROPERTIES

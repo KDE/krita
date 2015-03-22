@@ -22,11 +22,14 @@
 #include "KoReportPluginManagerPrivate.h"
 #include "KoReportPluginInfo.h"
 
+#include <db/pluginloader.h>
+
 #include <kicon.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kiconloader.h>
 #include <ktoggleaction.h>
+
+#include <KoServiceLocator.h>
 
 //Include the static items
 #include "../items/label/KoReportLabelPlugin.h"
@@ -112,33 +115,20 @@ KoReportPluginManagerPrivate::KoReportPluginManagerPrivate()
 void KoReportPluginManagerPrivate::loadPlugins()
 {
     //kDebug() << "Load all plugins";
-    KService::List offers = KServiceTypeTrader::self()->query("KoReport/ItemPlugin");
+    const KService::List offers = KoServiceLocator::instance()->entries("KoReport/ItemPlugin");
+    foreach(KService::Ptr service, offers) {
+        //! @todo check version
+        //! @todo add pluginNameProperty
+        KexiPluginLoader loader(service, "");
 
-    KService::List::const_iterator iter;
-    for(iter = offers.constBegin(); iter < offers.constEnd(); ++iter)
-    {
-       QString error;
-       KService::Ptr service = *iter;
-
-        KPluginFactory *factory = KPluginLoader(service->library()).factory();
-
-        if (!factory)
-        {
+        KoReportPluginInterface *plugin = loader.createPlugin<KoReportPluginInterface>(this);
+        if (!plugin) {
             kWarning() << "KPluginFactory could not load the plugin:" << service->library();
             continue;
         }
-
-       KoReportPluginInterface *plugin = factory->create<KoReportPluginInterface>(this);
-
-       if (plugin) {
-           //kDebug() << "Load plugin:" << service->name();
-           plugin->info()->setPriority(plugin->info()->priority() + 10); //Ensure plugins always have a higher prioroty than built-in types
-           m_plugins.insert(plugin->info()->className(), plugin);
-       } else {
-           kWarning() << error;
-       }
+        plugin->info()->setPriority(plugin->info()->priority() + 10); //Ensure plugins always have a higher prioroty than built-in types
+        m_plugins.insert(plugin->info()->className(), plugin);
     }
-
 }
 
 KoReportPluginManagerPrivate::~KoReportPluginManagerPrivate()

@@ -25,7 +25,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QBuffer>
-#include <kcodecs.h>
 #include <QDomDocument>
 #include <QPainter>
 #include <kdebug.h>
@@ -40,17 +39,17 @@
 //
 // contructors/deconstructors
 
-void KoReportDesignerItemImage::init(QGraphicsScene * scene)
+void KoReportDesignerItemImage::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     //kDebug();
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
-	    
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
+
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
 }
@@ -58,17 +57,17 @@ void KoReportDesignerItemImage::init(QGraphicsScene * scene)
 KoReportDesignerItemImage::KoReportDesignerItemImage(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     //kDebug();
-    init(scene);
-    m_size.setSceneSize(QSizeF(100, 100));
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("image"));
+    init(scene, rw);
+    setSceneRect(properRect(*rw, KOREPORT_ITEM_RECT_DEFAULT_WIDTH, KOREPORT_ITEM_RECT_DEFAULT_WIDTH));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemImage::KoReportDesignerItemImage(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
         : KoReportItemImage(element), KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
+    init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
@@ -107,7 +106,7 @@ void KoReportDesignerItemImage::paint(QPainter* painter, const QStyleOptionGraph
     }
 
     //Draw a border so user knows the object edge
-    painter->setPen(QPen(QColor(224, 224, 224)));
+    painter->setPen(QPen(Qt::lightGray));
     painter->drawRect(rect());
 
 
@@ -119,7 +118,7 @@ void KoReportDesignerItemImage::paint(QPainter* painter, const QStyleOptionGraph
 
 void KoReportDesignerItemImage::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("report:image");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

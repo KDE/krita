@@ -17,14 +17,17 @@
  *    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  * Boston, MA 02110-1301, USA.
  * */
+
+#include "KoResourceItemChooserContextMenu.h"
+
 #include <QDebug>
 #include <QLabel>
 #include <QGridLayout>
 
 #include <KoIcon.h>
 #include <klocale.h>
+#include <klineedit.h>
 
-#include "KoResourceItemChooserContextMenu.h"
 #include "KoResource.h"
 
 KoLineEditAction::KoLineEditAction(QObject* parent)

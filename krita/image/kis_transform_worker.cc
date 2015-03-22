@@ -27,7 +27,6 @@
 
 #include <QTransform>
 
-#include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
@@ -233,6 +232,11 @@ void swapValues(T *a, T *b) {
 
 bool KisTransformWorker::run()
 {
+    return runPartial(m_dev->exactBounds());
+}
+
+bool KisTransformWorker::runPartial(const QRect &processRect)
+{
     /* Check for nonsense and let the user know, this helps debugging.
     Otherwise the program will crash at a later point, in a very obscure way, probably by division by zero */
     Q_ASSERT_X(m_xscale != 0, "KisTransformer::run() validation step", "xscale == 0");
@@ -240,7 +244,7 @@ bool KisTransformWorker::run()
     // Fallback safety line in case Krita is compiled without ASSERTS
     if (m_xscale == 0 || m_yscale == 0) return false;
 
-    m_boundRect = m_dev->exactBounds();
+    m_boundRect = processRect;
 
     if (m_boundRect.isNull()) {
         if (!m_progressUpdater.isNull()) {

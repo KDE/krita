@@ -28,8 +28,6 @@
 
 class QString;
 class QIcon;
-class QDomDocument;
-class QDomElement;
 class KUndo2Command;
 
 /**

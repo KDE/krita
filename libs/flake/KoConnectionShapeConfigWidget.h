@@ -20,10 +20,11 @@
 #ifndef KOCONNECTIONSHAPECONFIGWIDGET_H
 #define KOCONNECTIONSHAPECONFIGWIDGET_H
 
-#include "KoConnectionShape.h"
 #include "ui_KoConnectionShapeConfigWidget.h"
 
 #include <KoShapeConfigWidgetBase.h>
+
+class KoConnectionShape;
 
 class KoConnectionShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -41,10 +42,10 @@ public:
     /// reimplemented
     virtual KUndo2Command *createCommand();
 
-signals:
+Q_SIGNALS:
     void connectionTypeChanged(int type);
 
-public slots:
+public Q_SLOTS:
     void setConnectionType(int type);
 
 private:

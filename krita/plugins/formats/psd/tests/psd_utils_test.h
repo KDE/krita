@@ -24,7 +24,7 @@
 class PSDUtilsTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
 
     void test_psdwrite_quint8();
     void test_psdwrite_quint16();

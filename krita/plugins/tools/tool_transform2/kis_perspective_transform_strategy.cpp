@@ -23,8 +23,6 @@
 #include <QMatrix4x4>
 #include <QVector2D>
 
-#include <kstandarddirs.h>
-
 #include <Eigen/Dense>
 
 #include "kis_coordinates_converter.h"
@@ -114,7 +112,8 @@ struct KisPerspectiveTransformStrategy::Private
 KisPerspectiveTransformStrategy::KisPerspectiveTransformStrategy(const KisCoordinatesConverter *converter,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : m_d(new Private(this, converter, currentArgs, transaction))
+    : KisSimplifiedActionPolicyStrategy(converter),
+      m_d(new Private(this, converter, currentArgs, transaction))
 {
 }
 
@@ -154,30 +153,32 @@ void KisPerspectiveTransformStrategy::setTransformFunction(const QPointF &mouseP
     Q_UNUSED(perspectiveModifierActive);
 
     QPolygonF transformedPolygon = m_d->transform.map(QPolygonF(m_d->transaction.originalRect()));
-    m_d->function =
-        transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : NONE;
+    StrokeFunction defaultFunction = transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : NONE;
+    KisTransformUtils::HandleChooser<StrokeFunction>
+        handleChooser(mousePos, defaultFunction);
 
     qreal handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
-    qreal handleRadiusSq = pow2(handleRadius);
 
-    if (!m_d->transformedHandles.xVanishing.isNull() &&
-        kisSquareDistance(mousePos, m_d->transformedHandles.xVanishing) <= handleRadiusSq) {
-
-        m_d->function = DRAG_X_VANISHING_POINT;
+    if (!m_d->transformedHandles.xVanishing.isNull()) {
+        handleChooser.addFunction(m_d->transformedHandles.xVanishing,
+                                  handleRadius, DRAG_X_VANISHING_POINT);
     }
 
-    if (!m_d->transformedHandles.yVanishing.isNull() &&
-        kisSquareDistance(mousePos, m_d->transformedHandles.yVanishing) <= handleRadiusSq) {
-        m_d->function = DRAG_Y_VANISHING_POINT;
+    if (!m_d->transformedHandles.yVanishing.isNull()) {
+        handleChooser.addFunction(m_d->transformedHandles.yVanishing,
+                                  handleRadius, DRAG_Y_VANISHING_POINT);
     }
 
     m_d->currentDraggingCornerPoint = -1;
     for (int i = 0; i < m_d->dstCornerPoints.size(); i++) {
-        if (kisSquareDistance(mousePos, m_d->dstCornerPoints[i]) <= handleRadiusSq) {
+        if (handleChooser.addFunction(m_d->dstCornerPoints[i],
+                                      handleRadius, DRAG_HANDLE)) {
+
             m_d->currentDraggingCornerPoint = i;
-            m_d->function = DRAG_HANDLE;
         }
     }
+
+    m_d->function = handleChooser.function();
 }
 
 QCursor KisPerspectiveTransformStrategy::getCurrentCursor() const
@@ -205,18 +206,17 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
 {
     gc.save();
 
-    gc.setOpacity(0.9);
+    gc.setOpacity(m_d->transaction.basePreviewOpacity());
     gc.setTransform(m_d->paintingTransform, true);
     gc.drawImage(m_d->paintingOffset, originalImage());
 
     gc.restore();
 
     // Draw Handles
-
-    qreal handlesExtraScale = KisTransformUtils::scaleFromAffineMatrix(m_d->handlesTransform);
-
-    qreal d = KisTransformUtils::handleVisualRadius / handlesExtraScale;
-    QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
+    QRectF handleRect =
+        KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
+                                      m_d->handlesTransform,
+                                      m_d->transaction.originalRect());
 
     QPainterPath handles;
 
@@ -231,17 +231,31 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     handles.addRect(handleRect.translated(m_d->transaction.originalBottomLeft()));
     handles.addRect(handleRect.translated(m_d->transaction.originalBottomRight()));
 
+
     gc.save();
-    gc.setTransform(m_d->handlesTransform, true);
+
+    /**
+     * WARNING: we cannot install a transform to paint the handles here!
+     *
+     * There is a bug in Qt that prevents painting of cosmetic-pen
+     * brushes in openGL mode when a TxProject matrix is active on
+     * a QPainter. So just convert it manually.
+     *
+     * https://bugreports.qt-project.org/browse/QTBUG-42658
+     */
+
+    //gc.setTransform(m_d->handlesTransform, true); <-- don't do like this!
+
+    QPainterPath mappedHandles = m_d->handlesTransform.map(handles);
 
     QPen pen[2];
-    pen[0].setWidth(1 / handlesExtraScale);
-    pen[1].setWidth(2 / handlesExtraScale);
+    pen[0].setWidth(1);
+    pen[1].setWidth(2);
     pen[1].setColor(Qt::lightGray);
 
     for (int i = 1; i >= 0; --i) {
         gc.setPen(pen[i]);
-        gc.drawPath(handles);
+        gc.drawPath(mappedHandles);
     }
 
     gc.restore();

@@ -42,13 +42,17 @@ RectComposedProperty::RectComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("x",
-        QVariant(), i18n("X"), i18n("X"), Int, property);
+        QVariant(), i18nc("Property: X coordinate", "X"),
+        i18nc("Property: X coordinate", "X Coordinate"), Int, property);
     (void)new Property("y",
-        QVariant(), i18n("Y"), i18n("Y"), Int, property);
+        QVariant(), i18nc("Property: Y coordinate", "Y"),
+        i18nc("Property: Y coordinate", "Y Coordinate"), Int, property);
     (void)new Property("width",
-        QVariant(), i18n("Width"), i18n("Width"), UInt, property);
+        QVariant(), i18nc("Property: width of rectangle", "Width"),
+        i18nc("Property: width of rectangle", "Width"), UInt, property);
     (void)new Property("height",
-        QVariant(), i18n("Height"), i18n("Height"), UInt, property);
+        QVariant(), i18nc("Property: height of rectangle", "Height"),
+        i18nc("Property: height of rectangle", "Height"), UInt, property);
 }
 
 void RectComposedProperty::setValue(Property *property,

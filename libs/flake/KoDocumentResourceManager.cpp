@@ -194,14 +194,14 @@ void KoDocumentResourceManager::setImageCollection(KoImageCollection *ic)
     setResource(ImageCollection, variant);
 }
 
-KoOdfDocument *KoDocumentResourceManager::odfDocument() const
+KoDocumentBase *KoDocumentResourceManager::odfDocument() const
 {
     if (!hasResource(OdfDocument))
         return 0;
-    return static_cast<KoOdfDocument*>(resource(OdfDocument).value<void*>());
+    return static_cast<KoDocumentBase*>(resource(OdfDocument).value<void*>());
 }
 
-void KoDocumentResourceManager::setOdfDocument(KoOdfDocument *currentDocument)
+void KoDocumentResourceManager::setOdfDocument(KoDocumentBase *currentDocument)
 {
     QVariant variant;
     variant.setValue<void*>(currentDocument);

@@ -41,10 +41,12 @@
 
 #include <KoColorSpaceRegistry.h>
 
-KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_image(image)
 {
+    Q_UNUSED(node);
+
     m_settings = new KisHatchingPaintOpSettings();
     settings->initializeTwin(m_settings);
 
@@ -175,7 +177,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 
-    return effectiveSpacing(sw, sh);
+    return effectiveSpacing(scale, 0.0);
 }
 
 double KisHatchingPaintOp::spinAngle(double spin)

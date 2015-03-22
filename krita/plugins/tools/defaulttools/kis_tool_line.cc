@@ -37,6 +37,8 @@
 #include <kis_cursor.h>
 #include <kis_paintop_registry.h>
 #include "kis_figure_painting_tool_helper.h"
+#include "kis_canvas2.h"
+
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
@@ -47,17 +49,23 @@
 
 #define ENABLE_RECORDING
 
+const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+    return kritaCanvas->coordinatesConverter();
+}
+
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
     : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
       m_showOutline(false),
-      m_infoBuilder(new KisToolPaintingInformationBuilder(this)),
+      m_strokeIsRunning(false),
+      m_infoBuilder(new KisConverterPaintingInformationBuilder(getCoordinatesConverter(canvas))),
       m_helper(new KisToolLineHelper(m_infoBuilder.data(), kundo2_i18n("Draw Line"))),
       m_strokeUpdateCompressor(500, KisSignalCompressor::FIRST_ACTIVE),
       m_longStrokeUpdateCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
 {
     setObjectName("tool_line");
-    currentImage() = 0;
 
     setSupportOutline(true);
 
@@ -74,19 +82,53 @@ int KisToolLine::flags() const
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
 }
 
+
+void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+{
+   KisToolPaint::activate(activation, shapes);
+   configGroup = KGlobal::config()->group(toolId());
+}
+
 QWidget* KisToolLine::createOptionWidget()
 {
     QWidget* widget = KisToolPaint::createOptionWidget();
 
     m_chkUseSensors = new QCheckBox(i18n("Use sensors"));
-    m_chkUseSensors->setChecked(true);
     addOptionWidgetOption(m_chkUseSensors);
 
     m_chkShowOutline = new QCheckBox(i18n("Preview"));
-    m_chkShowOutline->setChecked(m_showOutline);
     addOptionWidgetOption(m_chkShowOutline);
 
+    // hook up connections for value changing
+    connect(m_chkUseSensors, SIGNAL(clicked(bool)), this, SLOT(setUseSensors(bool)) );
+    connect(m_chkShowOutline, SIGNAL(clicked(bool)), this, SLOT(setShowOutline(bool)) );
+
+
+    // read values in from configuration
+    m_chkUseSensors->setChecked(configGroup.readEntry("useSensors", true));
+    m_chkShowOutline->setChecked(configGroup.readEntry("showOutline", false));
+
     return widget;
+}
+
+void KisToolLine::setUseSensors(bool value)
+{
+    configGroup.writeEntry("useSensors", value);
+}
+
+void KisToolLine::setShowOutline(bool value)
+{
+    configGroup.writeEntry("showOutline", value);
+}
+
+void KisToolLine::requestStrokeCancellation()
+{
+    cancelStroke();
+}
+
+void KisToolLine::requestStrokeEnd()
+{
+    endStroke();
 }
 
 void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
@@ -117,12 +159,15 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
     m_startPoint = convertToPixelCoord(event);
     m_endPoint = m_startPoint;
     m_lastUpdatedPoint = m_startPoint;
+
+    m_strokeIsRunning = true;
 }
 
 void KisToolLine::updateStroke()
 {
     m_helper->repaintLine(canvas()->resourceManager(),
                           image(),
+                          currentNode(),
                           image().data(),
                           image()->postExecutionUndoAdapter());
 }
@@ -130,6 +175,7 @@ void KisToolLine::updateStroke()
 void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+    if (!m_strokeIsRunning) return;
 
     // First ensure the old temp line is deleted
     updatePreview();
@@ -169,11 +215,18 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 
     updatePreview();
 
-    if (m_startPoint == m_endPoint)
-        return;
+    endStroke();
+}
 
+void KisToolLine::endStroke()
+{
     NodePaintAbility nodeAbility = nodePaintAbility();
-    if (nodeAbility == NONE) {
+
+    if (!m_strokeIsRunning ||
+        (nodeAbility == PAINT && !m_helper->isRunning())||
+        m_startPoint == m_endPoint ||
+        nodeAbility == NONE) {
+
         return;
     }
 
@@ -197,6 +250,21 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
         KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
         canvas()->addCommand(cmd);
     }
+
+    m_strokeIsRunning = false;
+    m_endPoint = m_startPoint;
+}
+
+void KisToolLine::cancelStroke()
+{
+    if (!m_strokeIsRunning) return;
+    if (m_startPoint == m_endPoint) return;
+
+    m_helper->cancel();
+
+
+    m_strokeIsRunning = false;
+    m_endPoint = m_startPoint;
 }
 
 QPointF KisToolLine::straightLine(QPointF point)

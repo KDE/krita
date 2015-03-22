@@ -60,7 +60,7 @@ public:
     Ui_WdgGenerators uiWdgGenerators;
     KisPaintDeviceSP dev;
     QGridLayout *widgetLayout;
-    KisView2 *view;
+    KisViewManager *view;
 };
 
 KisWdgGenerator::KisWdgGenerator(QWidget * parent)
@@ -75,7 +75,7 @@ KisWdgGenerator::~KisWdgGenerator()
   delete d;
 }
 
-void KisWdgGenerator::initialize(KisView2 *view)
+void KisWdgGenerator::initialize(KisViewManager *view)
 {
     d->view = view;
     d->uiWdgGenerators.setupUi(this);

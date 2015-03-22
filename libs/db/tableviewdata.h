@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Michał Poteralski <michalpoteralskikde@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,17 +78,17 @@ public:
     bool preloadAllRows();
 
     /*! Sets sorting for \a column. If \a column is -1, sorting is disabled. */
-    void setSorting(int column, bool ascending = true);
+    void setSorting(int column, Qt::SortOrder OrderByColumn = Qt::AscendingOrder);
 
     /*! \return the column number by which the data is sorted,
-     or -1 if sorting is disabled. In this case sortingOrder() will return 0.
+     or -1 if sorting is disabled.
      Initial sorted column number for data after instantiating object is -1. */
-    int sortedColumn() const;
+    int sortColumn() const;
 
-    /*! \return 1 if ascending sort order is set, -1 id descending sort order is set,
-     or 0 if no sorting is set. This is independent of whether data is sorted now.
-     Initial sorting for data after instantiating object is 0. */
-    int sortingOrder() const;
+    /*! \return sorting order is set. This is independent of whether data is sorted now.
+     sortColumn() should be checked first to see if sorting for any column is enabled
+     (by default it is not). */
+    Qt::SortOrder sortOrder() const;
 
     //! Sorts this data using previously set order.
     void sort();
@@ -96,8 +97,12 @@ public:
      Warning: \a col will be owned by this object, and deleted on its destruction. */
     void addColumn(TableViewColumn* col);
 
-    int globalColumnID(int visibleID) const;
-    int visibleColumnID(int globalID) const;
+    //! @return Index of visible column @a visibleIndex on global list.
+    int globalIndexOfVisibleColumn(int visibleIndex) const;
+
+    //! @return Index on list of visible columns for column @a globalIndex
+    //!         or -1 if column at @a globalIndex is not visible.
+    int visibleColumnIndex(int globalIndex) const;
 
     /*! \return true if this db-aware data set. */
     /*! @todo virtual? */
@@ -109,18 +114,23 @@ public:
 
     Cursor* cursor() const;
 
-    inline uint columnsCount() const {
-        return m_columns.count();
-    }
+    /*! \return number of all columns */
+    uint columnCount() const;
 
-    inline TableViewColumn* column(uint c) {
-        return m_columns.value(c);
-    }
+    /*! \return number of visible columns */
+    uint visibleColumnCount() const;
 
-    /*! \return columns information */
-    inline TableViewColumn::List* columns() {
-        return &m_columns;
-    }
+    /*! \return column at index @a index (visible or not) */
+    TableViewColumn* column(uint index);
+
+    /*! \return visible column at index @a index */
+    TableViewColumn* visibleColumn(uint index);
+
+    /*! \return list of all columns */
+    TableViewColumn::List* columns();
+
+    /*! \return list of visible columns */
+    TableViewColumn::List* visibleColumns();
 
     /*! \return true if data is not editable. Can be set using setReadOnly()
      but it's still true if database cursor returned by cursor()
@@ -163,19 +173,13 @@ public:
                                 QVariant *visibleValueForLookupField = 0);
 
     /*! Added for convenience. Like above but \a newval is passed by value. */
-    inline bool updateRowEditBuffer(KexiDB::RecordData *record, int colnum, TableViewColumn* col,
-                                    QVariant newval, bool allowSignals = true) {
-        QVariant newv(newval);
-        return updateRowEditBufferRef(record, colnum, col, newv, allowSignals);
-    }
+    bool updateRowEditBuffer(KexiDB::RecordData *record, int colnum, TableViewColumn* col,
+                             QVariant newval, bool allowSignals = true);
 
     /*! Added for convenience. Like above but it's assumed that \a record record's columns are ordered
      like in table view, not like in form view. Don't use this with form views. */
-    inline bool updateRowEditBuffer(KexiDB::RecordData *record, int colnum,
-                                    QVariant newval, bool allowSignals = true) {
-        TableViewColumn* col = m_columns.value(colnum);
-        return col ? updateRowEditBufferRef(record, colnum, col, newval, allowSignals) : false;
-    }
+    bool updateRowEditBuffer(KexiDB::RecordData *record, int colnum,
+                             QVariant newval, bool allowSignals = true);
 
     //! \return row edit buffer for currently edited record. Can be 0 or empty.
     KexiDB::RowEditBuffer* rowEditBuffer() const;
@@ -273,15 +277,13 @@ public:
      so every KexiDB::RecordData's length is expanded by one. */
     bool containsROWIDInfo() const;
 
-    inline KexiDB::RecordData* createItem() const {
-        return new KexiDB::RecordData(m_itemSize);
-    }
+    KexiDB::RecordData* createItem() const;
 
-public slots:
+public Q_SLOTS:
     //! @internal The same as QObject::deleteLater() but also sets smart pointer m_cursor to 0 to avoid crashes...
     void deleteLater();
 
-signals:
+Q_SIGNALS:
     void destroying();
 
     /*! Emitted before change of the single, currently edited cell.
@@ -325,6 +327,10 @@ signals:
 
     void rowRepaintRequested(KexiDB::RecordData&);
 
+protected:
+    //! Used by TableViewColumn::setVisible()
+    void columnVisibilityChanged(const TableViewColumn &column);
+
 private:
     void init();
     void init(
@@ -334,14 +340,7 @@ private:
     //! @internal for saveRowChanges() and saveNewRow()
     bool saveRow(KexiDB::RecordData& record, bool insert, bool repaint);
 
-    //! Number of physical columns
-    int m_itemSize;
-
-    /*! Columns information */
-    TableViewColumn::List m_columns;
-
-    //! Temporary, used in compare functions like cmpInt(), cmpString()
-    //! to avoid memory allocations.
+    friend class KexiDB::TableViewColumn;
 
     class Private;
     Private * const d;

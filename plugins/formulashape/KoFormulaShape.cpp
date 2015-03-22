@@ -26,7 +26,6 @@
 #include <kurl.h>
 
 #include <KoStore.h>
-#include <KoOdfReadStore.h>
 #include <KoDocumentEntry.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
@@ -152,7 +151,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
 
     QString tmpURL;
     if ( url[0] == '#' )
-        url = url.mid( 1 );
+        url.remove( 0, 1 );
 
 #define INTERNAL_PROTOCOL "intern"
 #define STORE_PROTOCOL "tar"

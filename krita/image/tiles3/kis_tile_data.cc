@@ -170,9 +170,10 @@ void KisTileData::releaseInternalPools()
         (void)system(command);
 #endif /* DEBUG_POOL_RELEASE */
 
-    } else {
-        qWarning() << "WARNING: trying to purge pool memory while there are used tiles present!";
-        qWarning() << "         The memory will *NOT* be returned to the system, though it will";
-        qWarning() << "         be reused by Krita internally. Please report to developers!";
     }
+//    else {
+//        qWarning() << "WARNING: trying to purge pool memory while there are used tiles present!";
+//        qWarning() << "         The memory will *NOT* be returned to the system, though it will";
+//        qWarning() << "         be reused by Krita internally. Please report to developers!";
+//    }
 }

@@ -42,21 +42,21 @@ public:
 
     virtual QSize sizeHint() const;
 
-public slots:
+public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
     void paragraphStyleSelected(KoParagraphStyle *paragraphStyle, bool canDelete);
     void characterStyleSelected(KoCharacterStyle *characterStyle, bool canDelete);
 
-private slots:
+private Q_SLOTS:
     void applyParagraphStyle();
     void applyCharacterStyle();
 
-signals:
+Q_SIGNALS:
     void paragraphStyleSelected(KoParagraphStyle *style);
     void characterStyleSelected(KoCharacterStyle *style);
 

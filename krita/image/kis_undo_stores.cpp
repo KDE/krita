@@ -18,7 +18,7 @@
 
 #include "kis_undo_stores.h"
 
-#include "KoDocument.h"
+#include "KisDocument.h"
 #include <kundo2stack.h>
 
 

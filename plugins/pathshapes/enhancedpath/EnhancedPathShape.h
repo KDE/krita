@@ -27,6 +27,7 @@
 #include <QList>
 #include <QMap>
 #include <QRectF>
+#include <QStringList>
 
 #define EnhancedPathShapeId "EnhancedPathShape"
 

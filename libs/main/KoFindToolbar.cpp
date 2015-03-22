@@ -27,7 +27,6 @@
 #include <QDebug>
 
 #include <klocalizedstring.h>
-#include <klineedit.h>
 #include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
 #include <kaction.h>
@@ -150,7 +149,10 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     setLayout(layout);
 
     ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(activateSearch()));
-    ac->addAction(KStandardAction::Replace, "edit_replace", this, SLOT(activateReplace()));
+    QAction *replaceAction = new QAction(i18n("Replace"), this);
+    ac->addAction("edit_replace", replaceAction);
+    replaceAction->setShortcut(Qt::CTRL + Qt::Key_H);
+    connect(replaceAction, SIGNAL(triggered()), this, SLOT(activateReplace()));
 
     KAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->nextButton, SIGNAL(clicked(bool)));
     connect(finder, SIGNAL(hasMatchesChanged(bool)), findNextAction, SLOT(setEnabled(bool)));

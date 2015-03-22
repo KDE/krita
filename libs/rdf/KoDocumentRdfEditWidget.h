@@ -72,7 +72,7 @@ public:
     QString name() const;
     QString iconName() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Create a new triple in the model and UI in the Triples page.
@@ -110,7 +110,7 @@ public slots:
      */
     void sparqlExecute();
 
-private slots:
+private Q_SLOTS:
 
     /**
      * This methods set the default stylesheet to the

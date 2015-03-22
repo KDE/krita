@@ -19,7 +19,7 @@
 
 #include "CompositeOpModel.h"
 #include <kis_composite_ops_model.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_tool.h>
 #include <kis_canvas2.h>
@@ -33,6 +33,7 @@
 #include <kis_paintop_settings_widget.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
+#include <KoToolManager.h>
 
 class CompositeOpModel::Private
 {
@@ -53,7 +54,7 @@ public:
 
     CompositeOpModel* q;
     KisCompositeOpListModel* model;
-    KisView2* view;
+    KisViewManager* view;
     QString currentCompositeOpID;
     QString prevCompositeOpID;
     bool eraserMode;
@@ -183,16 +184,20 @@ void CompositeOpModel::setView(QObject* newView)
     if (d->view)
     {
         d->view->canvasBase()->disconnect(this);
-        d->view->canvasBase()->inputManager()->disconnect(this);
+        d->view->canvasBase()->globalInputManager()->disconnect(this);
         d->view->nodeManager()->disconnect(this);
     }
-    d->view = qobject_cast<KisView2*>( newView );
+    d->view = qobject_cast<KisViewManager*>( newView );
     if (d->view)
     {
-        connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(resourceChanged(int, const QVariant&)));
-        connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
-                this, SLOT(currentNodeChanged(KisLayerSP)));
+        if (d->view->canvasBase() && d->view->canvasBase()->resourceManager()) {
+            connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                    this, SLOT(resourceChanged(int, const QVariant&)));
+        }
+        if (d->view->nodeManager()) {
+            connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
+                    this, SLOT(currentNodeChanged(KisLayerSP)));
+        }
         slotToolChanged(0, 0);
     }
     emit viewChanged();
@@ -341,42 +346,36 @@ void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
     Q_UNUSED(canvas);
     Q_UNUSED(toolId);
 
-    if (!d->view)
-        return;
+    if (!d->view) return;
+    if (!d->view->canvasBase()) return;
 
     QString  id   = KoToolManager::instance()->activeToolId();
     KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(d->view->canvasBase(), id));
 
-    if (tool)
-    {
+    if (tool) {
         int flags = tool->flags();
 
-        if (flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP)
-        {
+        if (flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP) {
             //setWidgetState(ENABLE_COMPOSITEOP|ENABLE_OPACITY);
             d->opacityEnabled = true;
         }
-        else
-        {
+        else {
             //setWidgetState(DISABLE_COMPOSITEOP|DISABLE_OPACITY);
             d->opacityEnabled = false;
         }
 
-        if (flags & KisTool::FLAG_USES_CUSTOM_PRESET)
-        {
+        if (flags & KisTool::FLAG_USES_CUSTOM_PRESET) {
             d->flowEnabled = true;
             d->sizeEnabled = true;
             d->presetsEnabled = true;
         }
-        else
-        {
+        else {
             d->flowEnabled = false;
             d->sizeEnabled = false;
             d->presetsEnabled = false;
         }
     }
-    else
-    {
+    else {
         d->opacityEnabled = false;
         d->flowEnabled = false;
         d->sizeEnabled = false;
@@ -388,9 +387,9 @@ void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
 
 void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
 {
-    if (d->view)
-    {
-        if(key == KisCanvasResourceProvider::MirrorHorizontal) {
+    if (d->view && d->view->canvasBase() && d->view->canvasBase()->resourceManager() && d->view->resourceProvider()) {
+
+        if (key == KisCanvasResourceProvider::MirrorHorizontal) {
             emit mirrorHorizontallyChanged();
             return;
         }
@@ -400,39 +399,40 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
         }
 
         KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-        if (preset && d->currentPreset.data() != preset.data())
-        {
+
+        if (preset && d->currentPreset.data() != preset.data()) {
             d->currentPreset = preset;
-            if (!d->settingsWidgets.contains(preset.data()))
-            {
+            if (!d->settingsWidgets.contains(preset.data())) {
                 d->settingsWidgets[preset.data()] = KisPaintOpRegistry::instance()->get(preset->paintOp().id())->createSettingsWidget(0);
                 d->settingsWidgets[preset.data()]->setImage(d->view->image());
                 d->settingsWidgets[preset.data()]->setConfiguration(preset->settings());
             }
-            if (d->settingsWidgets[preset.data()])
+
+            if (d->settingsWidgets[preset.data()]) {
                 preset->settings()->setOptionsWidget(d->settingsWidgets[preset.data()]);
+            }
+
             d->size = preset->settings()->paintOpSize().width();
             emit sizeChanged();
-            if (preset->settings()->hasProperty("OpacityValue"))
-            {
+
+            if (preset->settings()->hasProperty("OpacityValue"))  {
                 d->opacityEnabled = true;
                 d->opacity = preset->settings()->getProperty("OpacityValue").toReal();
             }
-            else
-            {
+            else {
                 d->opacityEnabled = false;
                 d->opacity = 1;
             }
+
             d->view->resourceProvider()->setOpacity(d->opacity);
             emit opacityChanged();
             emit opacityEnabledChanged();
-            if (preset->settings()->hasProperty("FlowValue"))
-            {
+
+            if (preset->settings()->hasProperty("FlowValue")) {
                 d->flowEnabled = true;
                 d->flow = preset->settings()->getProperty("FlowValue").toReal();
             }
-            else
-            {
+            else {
                 d->flowEnabled = false;
                 d->flow = 1;
             }
@@ -440,15 +440,16 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
             emit flowEnabledChanged();
 
             QString compositeOp = preset->settings()->getString("CompositeOp");
+
             // This is a little odd, but the logic here is that the opposite of an eraser is a normal composite op (so we just select over, aka normal)
             // This means that you can switch your eraser over to being a painting tool by turning off the eraser again.
-            if (compositeOp == COMPOSITE_ERASE)
-            {
+            if (compositeOp == COMPOSITE_ERASE) {
                 d->currentCompositeOpID = COMPOSITE_OVER;
                 d->eraserMode = true;
             }
-            else
+            else {
                 d->eraserMode = false;
+            }
             emit eraserModeChanged();
             d->updateCompositeOp(compositeOp);
         }
@@ -458,8 +459,7 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
 void CompositeOpModel::currentNodeChanged(KisLayerSP newNode)
 {
     Q_UNUSED(newNode);
-    if (d->eraserMode)
-    {
+    if (d->eraserMode) {
         d->eraserMode = false;
         d->updateCompositeOp(d->prevCompositeOpID);
         emit eraserModeChanged();

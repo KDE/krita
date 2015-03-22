@@ -31,20 +31,17 @@
 #include <QMetaType>
 #include <QVector>
 
-class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
 class KoListStyle;
 class KoTableStyle;
 class KoTableColumnStyle;
+    /// This signal is to allow listener to make an undo command out of it
 class KoTableRowStyle;
 class KoTableCellStyle;
 class KoSectionStyle;
-class ChangeFollower;
 class KoShapeSavingContext;
 class KoTextShapeData;
-class KUndo2Stack;
-class ChangeStylesMacroCommand;
 class KoTextTableTemplate;
 class KoOdfBibliographyConfiguration;
 
@@ -68,16 +65,6 @@ public:
     virtual ~KoStyleManager();
 
     /**
-     * This explicitly set the undo stack used for storing undo commands
-     *
-     * Please note that adding documents \ref add(QTextDocument *document)
-     * extracts the undo stack from those documents,
-     * which can override what you set here. This method is mostly for cases
-     * where you use the style manager, but don't have qtextdocuments.
-     */
-    void setUndoStack(KUndo2Stack *undoStack);
-
-    /**
      * Mark the beginning of a sequence of style changes, additions, and deletions
      *
      * Important: This method must be called even if only working on a single style.
@@ -90,8 +77,8 @@ public:
      * Mark the end of a sequence of style changes, additions, and deletions.
      *
      * Manipulation to the styles happen immidiately, but calling this method
-     * will put a command on the stack for undo, plus it changes all the "listening"
-     * qtextdocuments to reflect the style changes.
+     * will allow applications to put a command on the stack for undo, and for qtextdocments
+     * to reflect the style changes.
      *
      * Important: This method must be called even if only working on a single style.
      *
@@ -194,17 +181,6 @@ public:
      * Remove a section style.
      */
     void remove(KoSectionStyle *style);
-
-    /**
-     * Add a document for which the styles will be applied.
-     * Whenever a style is changed (signified by a alteredStyle() call) all
-     * registered documents will be updated to reflect that change.
-     */
-    void add(QTextDocument *document);
-    /**
-     * Remove a previously registered document.
-     */
-    void remove(QTextDocument *document);
 
     /**
      * Return a characterStyle by its id.
@@ -433,16 +409,16 @@ public:
     QList<KoSectionStyle*> sectionStyles() const;
 
     /// returns the default style for the ToC entries for the specified outline level
-    KoParagraphStyle *defaultTableOfContentsEntryStyle(int outlineLevel);
+    KoParagraphStyle *defaultTableOfContentsEntryStyle(int outlineLevel) const;
 
     /// returns the default style for the ToC title
-    KoParagraphStyle *defaultTableOfcontentsTitleStyle();
+    KoParagraphStyle *defaultTableOfcontentsTitleStyle() const;
 
     /// returns the default style for the Bibliography entries for the specified bibliography type
     KoParagraphStyle *defaultBibliographyEntryStyle(const QString &bibType);
 
     /// returns the default style for the Bibliography title
-    KoParagraphStyle *defaultBibliographyTitleStyle();
+    KoParagraphStyle *defaultBibliographyTitleStyle() const;
 
     /// adds a paragraph style to unused paragraph style list
     void addUnusedStyle(KoParagraphStyle *style);
@@ -450,12 +426,12 @@ public:
     /// moves a style from the unused list to the used list i.e paragStyles list
     void moveToUsedStyles(int id);
 
-    KoParagraphStyle *unusedStyle(int id);
+    KoParagraphStyle *unusedStyle(int id) const;
 
     QVector<int> usedCharacterStyles() const;
     QVector<int> usedParagraphStyles() const;
 
-signals:
+Q_SIGNALS:
     void styleAdded(KoParagraphStyle*);
     void styleAdded(KoCharacterStyle*);
     void styleAdded(KoListStyle*);
@@ -472,12 +448,34 @@ signals:
     void styleRemoved(KoTableRowStyle*);
     void styleRemoved(KoTableCellStyle*);
     void styleRemoved(KoSectionStyle*);
-    void styleAltered(KoParagraphStyle*);
-    void styleAltered(KoCharacterStyle*);
+
+    /// This signal is emitted whenever the style has been applied to a qtextdocument
+    /// This allows listeners to know which styles are in use
     void styleApplied(const KoCharacterStyle*);
+
+    /// This signal is emitted whenever the style has been applied to a qtextdocument
+    /// This allows listeners to know which styles are in use
     void styleApplied(const KoParagraphStyle*);
 
-public slots:
+    /// This signal is to allow listener to start an undo command
+    void editHasBegun();
+
+    /// This signal is to allow listener to end an undo command, and add it to the undo stack
+    void editHasEnded();
+
+    /// This signal is to allow listener to record into an undo command and apply to text
+    /// It's emitted when someone calls alteredStyle (not paragraph or character)
+    void styleHasChanged(int);
+
+    /// This signal is to allow listener to record into an undo command and apply to text
+    /// It's emitted when someone calls alteredStyle on a paragraph style
+    void styleHasChanged(int, const KoParagraphStyle*, const KoParagraphStyle*);
+
+    /// This signal is to allow listener to record into an undo command and apply to text
+    /// It's emitted when someone calls alteredStyle on a character style
+    void styleHasChanged(int, const KoCharacterStyle*, const KoCharacterStyle*);
+
+public Q_SLOTS:
     /**
      * Slot that should be called whenever a style is changed. This will update
      * all documents with the style.
@@ -537,10 +535,6 @@ public slots:
     void slotAppliedStyle(const KoParagraphStyle*);
 
 private:
-    friend class ChangeFollower;
-    friend class ChangeStylesMacroCommand;
-    void remove(ChangeFollower *cf);
-
     friend class KoTextSharedLoadingData;
     void addAutomaticListStyle(KoListStyle *listStyle);
     friend class KoTextShapeData;

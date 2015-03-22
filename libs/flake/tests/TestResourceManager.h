@@ -17,17 +17,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTCANVASRESOURCEPROVIDER_H
-#define TESTCANVASRESOURCEPROVIDER_H
+#ifndef TESTRESOURCEMANAGER_H
+#define TESTRESOURCEMANAGER_H
 
 #include <qtest_kde.h>
 
 class TestResourceManager : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void koShapeResource();
     void testUnitChanged();
 };
 
-#endif // TESTCANVASRESOURCEPROVIDER_H
+#endif // TESTRESOURCEMANAGER_H

@@ -29,7 +29,6 @@
 
 class KoInlineTextObjectManager;
 class KoTextRangeManager;
-class KoTextDocumentLayout;
 
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"
 

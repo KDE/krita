@@ -144,7 +144,7 @@ public:
                 m_columnOffset = 0;
                 m_columnsLeft = m_numConseqPixels = m_policy.m_iter->nConseqPixels();
                 m_policy.updatePointersCache();
-            } if (!result && m_rowsLeft > 0) {
+            } else if (m_rowsLeft > 0) {
                 m_rowsLeft--;
                 m_policy.m_iter->nextRow();
                 m_columnOffset = 0;
@@ -180,7 +180,7 @@ public:
     }
 
 private:
-    Q_DISABLE_COPY(KisSequentialIteratorBase);
+    Q_DISABLE_COPY(KisSequentialIteratorBase)
     IteratorPolicy m_policy;
     const int m_pixelSize;
     int m_rowsLeft;

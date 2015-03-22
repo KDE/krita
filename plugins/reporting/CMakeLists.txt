@@ -1,13 +1,13 @@
 add_subdirectory(barcode)
 
-if(BUILD_chartshape AND NOT WIN32)
+if(NOT WIN32)
   add_subdirectory(chart)
-endif(BUILD_chartshape AND NOT WIN32)
+endif()
 
 if(MARBLE_FOUND)
   add_subdirectory(maps)
-endif(MARBLE_FOUND)
+endif()
 
 if(QT_QTWEBKIT_FOUND)
   add_subdirectory(web)
-endif(QT_QTWEBKIT_FOUND)
+endif()

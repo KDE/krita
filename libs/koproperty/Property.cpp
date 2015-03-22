@@ -37,7 +37,7 @@ class PropertyPrivate
 {
 public:
     PropertyPrivate()
-            : caption(0), listData(0), changed(false), storable(true),
+            : type(0), caption(0), listData(0), changed(false), storable(true),
             readOnly(false), visible(true),
             autosync(-1), composed(0), useComposedProperty(true),
             sets(0), parent(0), children(0), relatedProperties(0)
@@ -360,9 +360,9 @@ void Property::setValue(const QVariant &value, bool rememberOldValue, bool useCo
     }
     else if (t == QVariant::Double) {
         const double factor = 1.0 / option("step", KOPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
-        kDebug()
-            << "double compared:" << currentValue.toDouble() << value.toDouble() 
-            << ":" << static_cast<qlonglong>(currentValue.toDouble() * factor) << static_cast<qlonglong>(value.toDouble() * factor);
+        //kDebug()
+        //    << "double compared:" << currentValue.toDouble() << value.toDouble() 
+        //    << ":" << static_cast<qlonglong>(currentValue.toDouble() * factor) << static_cast<qlonglong>(value.toDouble() * factor);
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
     } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         ch = false;
@@ -668,7 +668,7 @@ Property::addSet(Set *set)
         d->set = set;
         return;
     }
-    if ((Set*)d->set == set || d->sets->contains(set))
+    if (d->set == set || d->sets->contains(set))
         return;
     if (!d->sets) {
         d->sets = new QList< QPointer<Set> >;

@@ -26,7 +26,6 @@
 #include "tool_transform_args.h"
 #include <kis_processing_visitor.h>
 
-class KisUndoAdapter;
 
 
 class KisPostExecutionUndoAdapter;
@@ -74,6 +73,8 @@ public:
     ~TransformStrokeStrategy();
 
     KisPaintDeviceSP previewDevice() const;
+    KisSelectionSP realSelection() const;
+
 
     void doStrokeCallback(KisStrokeJobData *data);
 
@@ -106,6 +107,7 @@ private:
     QHash<KisPaintDevice*, KisPaintDeviceSP> m_devicesCacheHash;
 
     KisPaintDeviceSP m_previewDevice;
+    KisTransformMaskSP writeToTransformMask;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

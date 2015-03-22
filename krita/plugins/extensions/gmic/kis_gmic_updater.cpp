@@ -22,7 +22,6 @@
 #include <QFile>
 #include <QNetworkRequest>
 #include <qsslerror.h>
-#include <QDebug>
 #include <QTimer>
 #include <kis_debug.h>
 
@@ -76,23 +75,6 @@ void KisGmicUpdater::finishedDownload(QNetworkReply*reply)
 
     QString path = KGlobal::mainComponent().dirs()->saveLocation("gmic_definitions");
     QString fileName = reply->url().path().split("/").last();;
-
-    /* TODO: optimize based on ETag, do not redownload if not necessery
-     * also try to check Content-Type but so far cimgz report wrongly plain text
-    if (reply->hasRawHeader("Content-Type"))
-    {
-        QString contentType = reply->rawHeader("Content-Type");
-    }
-
-    int i = 0;
-    foreach (const QByteArray &array, reply->rawHeaderList())
-    {
-        ++i;
-        qDebug() << i << " " << QString(array);
-    }
-
-    */
-
 
     QByteArray data = reply->readAll();
 

@@ -20,18 +20,15 @@
  */
 
 #include "KoCreatePathTool.h"
+#include "KoCreatePathTool_p.h"
 
-#include "KoShapeController.h"
 #include "KoPointerEvent.h"
 #include "KoPathShape.h"
-#include "KoShapeStroke.h"
 #include "KoSelection.h"
-#include "commands/KoPathPointMergeCommand.h"
-#include "KoCanvasResourceManager.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
-#include "KoStrokeConfigWidget.h"
 #include "KoShapeStroke.h"
+#include <KoColor.h>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -40,8 +37,6 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QCheckBox>
-
-#include "KoCreatePathTool_p.h"
 
 
 KoCreatePathTool::KoCreatePathTool(KoCanvasBase *canvas)
@@ -417,11 +412,11 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     }
 }
 
-QList<QWidget *> KoCreatePathTool::createOptionWidgets()
+QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
 {
     Q_D(KoCreatePathTool);
 
-    QList<QWidget *> list;
+    QList<QPointer<QWidget> > list;
 
     QWidget *angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constraints");

@@ -92,15 +92,15 @@ protected:
     int positionInDocument() const;
 
     /// reimplemented
-    void resize(const QTextDocument *document, QTextInlineObject object,
+    void resize(const QTextDocument *document, QTextInlineObject &object,
                 int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
 private:
     void updatePosition(const QTextDocument *document,
                         int posInDocument, const QTextCharFormat &format);
     void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-               const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+               const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
 
-private slots:
+private Q_SLOTS:
     void documentDestroyed();
 
 private:

@@ -20,6 +20,7 @@
 #define KIS_SHAPE_SELECTION_MODEL_H
 
 #include <QObject>
+#include <QRect>
 #include "KoShapeContainerModel.h"
 #include "kis_types.h"
 #include "kis_signal_compressor.h"
@@ -55,7 +56,7 @@ public:
     bool isChildLocked(const KoShape *child) const;
     void setShapeSelection(KisShapeSelection* selection);
 
-private slots:
+private Q_SLOTS:
     void requestUpdate(const QRect &updateRect);
     void startUpdateJob();
 

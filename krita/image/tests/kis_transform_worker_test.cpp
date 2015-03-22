@@ -634,18 +634,26 @@ void KisTransformWorkerTest::testMatrices()
 }
 
 
-void testRotationImpl(qreal angle, QString filePrefix)
+void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = false, const QString &filterId = "Box")
 {
     TestUtil::TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, 0);
 
-    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+    QImage image;
+
+    if (!useUniformColor) {
+        image = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+        dev->convertFromQImage(image, 0);
+    } else {
+        dev->fill(QRect(120, 130, 374, 217), KoColor(QColor(150, 180, 230), cs));
+    }
+
+    KisFilterStrategy * filter = KisFilterStrategyRegistry::instance()->value(filterId);
+    Q_ASSERT(filter);
 
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
@@ -682,6 +690,9 @@ void KisTransformWorkerTest::testRotation()
     testRotationImpl(2*M_PI/3, "rotation_120");
     testRotationImpl(7*M_PI/6, "rotation_210");
     testRotationImpl(5*M_PI/3, "rotation_300");
+    testRotationImpl(M_PI/6, "rotation_30_uniform_blin", true, "Bilinear");
+    testRotationImpl(M_PI/6, "rotation_30_uniform_bcub", true, "Bicubic");
+    testRotationImpl(M_PI/6, "rotation_30_uniform_lanc", true, "Lanczos3");
 }
 
 void KisTransformWorkerTest::testRotationSpecialCases()
@@ -949,6 +960,38 @@ void KisTransformWorkerTest::generateTestImages()
             generateTestImage(name, 1.0,0.0,0.5,filter);
         }
     }
+}
+
+#include "kis_perspectivetransform_worker.h"
+
+
+void KisTransformWorkerTest::testPartialProcessing()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(TestUtil::fetchDataFileLazy("test_transform_quality.png"));
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, 0);
+
+    KisTransaction t(dev);
+
+    QTransform transform = QTransform::fromScale(2.0, 1.1);
+    transform.shear(1.1, 0);
+    transform.rotateRadians(M_PI / 18);
+
+    KisPerspectiveTransformWorker tw(0, transform, updater);
+    tw.runPartialDst(dev, dev, QRect(1200, 1200, 150, 150));
+    tw.runPartialDst(dev, dev, QRect(1350, 1200, 150, 150));
+    tw.runPartialDst(dev, dev, QRect(1200, 1350, 150, 150));
+    tw.runPartialDst(dev, dev, QRect(1350, 1350, 150, 150));
+
+    t.end();
+
+    QImage result = dev->convertToQImage(0);
+    TestUtil::checkQImage(result, "transform_test", "partial", "single");
 }
 
 QTEST_KDEMAIN(KisTransformWorkerTest, GUI)

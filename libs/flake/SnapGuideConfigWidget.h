@@ -34,7 +34,7 @@ public:
     explicit SnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *parent = 0);
     ~SnapGuideConfigWidget();
 
-private slots:
+private Q_SLOTS:
     void snappingEnabled(bool isEnabled);
     void strategyChanged();
     void distanceChanged(int distance);

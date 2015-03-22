@@ -18,16 +18,18 @@
 
 #include "deform_paintop_plugin.h"
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
+
 #include <kis_debug.h>
 #include <kpluginfactory.h>
+
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_paintop_registry.h>
 
 #include "kis_deform_paintop.h"
-#include "kis_deform_paintop_factory.h"
 #include "kis_global.h"
+#include "kis_simple_paintop_factory.h"
+#include "kis_deform_paintop_settings_widget.h"
 
 K_PLUGIN_FACTORY(DeformPaintOpPluginFactory, registerPlugin<DeformPaintOpPlugin>();)
 K_EXPORT_PLUGIN(DeformPaintOpPluginFactory("krita"))
@@ -37,8 +39,7 @@ DeformPaintOpPlugin::DeformPaintOpPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisDeformPaintOpFactory);
-
+    r->add(new KisSimplePaintOpFactory<KisDeformPaintOp, KisDeformPaintOpSettings, KisDeformPaintOpSettingsWidget>("deformbrush", i18n("Deform"), KisPaintOpFactory::categoryStable(), "krita-deform.png", QString(), QStringList(COMPOSITE_COPY), 16));
 }
 
 DeformPaintOpPlugin::~DeformPaintOpPlugin()

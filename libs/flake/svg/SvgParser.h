@@ -28,19 +28,15 @@
 #include "SvgFilterHelper.h"
 #include "SvgClipPathHelper.h"
 #include "SvgLoadingContext.h"
-#include "SvgGraphicContext.h"
 #include "SvgStyleParser.h"
 
 #include <KoXmlReader.h>
 
-#include <QGradient>
 #include <QMap>
 
 class KoShape;
-class KoShapeContainer;
 class KoShapeGroup;
 class KoDocumentResourceManager;
-class SvgTextHelper;
 
 class FLAKE_EXPORT SvgParser
 {

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    Contains code from KConfigGroupPrivate from kconfiggroup.cpp (kdelibs 4)
@@ -24,6 +24,8 @@
 */
 
 #include "utils.h"
+#include "utils_p.h"
+
 #include "cursor.h"
 #include "drivermanager.h"
 #include "lookupfieldschema.h"
@@ -32,7 +34,6 @@
 
 #include <QMap>
 #include <QHash>
-#include <QThread>
 #include <QDomDocument>
 #include <QBuffer>
 #include <QPixmap>
@@ -45,15 +46,12 @@
 #include <QFileInfo>
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kstandarddirs.h>
 
 #include <memory>
-
-#include "utils_p.h"
 
 using namespace KexiDB;
 
@@ -351,8 +349,8 @@ Connection* TableOrQuerySchema::connection() const
 ConnectionTestThread::ConnectionTestThread(ConnectionTestDialog* dlg, const KexiDB::ConnectionData& connData)
         : m_dlg(dlg), m_connData(connData)
 {
-    connect(this, SIGNAL(error(const QString&,const QString&)),
-            dlg, SLOT(error(const QString&,const QString&)), Qt::QueuedConnection);
+    connect(this, SIGNAL(error(QString,QString)),
+            dlg, SLOT(error(QString,QString)), Qt::QueuedConnection);
 
     // try to load driver now because it's not supported in different thread
     KexiDB::DriverManager manager;
@@ -404,7 +402,7 @@ ConnectionTestDialog::ConnectionTestDialog(QWidget* parent,
         KexiDB::MessageHandler& msgHandler)
         : KProgressDialog(parent,
                           i18n("Test Connection"),
-                          i18n("<qt>Testing connection to <b>%1</b> database server...</qt>",
+                          i18n("Testing connection to <resource>%1</resource> database server...",
                                data.serverInfoString(true))
                          )
         , m_thread(new ConnectionTestThread(this, data))
@@ -524,7 +522,7 @@ int KexiDB::rowCount(const KexiDB::TableSchema& tableSchema)
 {
 //! @todo does not work with non-SQL data sources
     if (!tableSchema.connection()) {
-        KexiDBWarn << "KexiDB::rowsCount(const KexiDB::TableSchema&): no tableSchema.connection() !";
+        KexiDBWarn << "no tableSchema.connection() !";
         return -1;
     }
     int count = -1; //will be changed only on success of querySingleNumber()
@@ -536,28 +534,28 @@ int KexiDB::rowCount(const KexiDB::TableSchema& tableSchema)
     return count;
 }
 
-int KexiDB::rowCount(KexiDB::QuerySchema& querySchema)
+int KexiDB::rowCount(KexiDB::QuerySchema& querySchema, const QList<QVariant>& params)
 {
 //! @todo does not work with non-SQL data sources
     if (!querySchema.connection()) {
-        KexiDBWarn << "KexiDB::rowsCount(const KexiDB::QuerySchema&): no querySchema.connection() !";
+        KexiDBWarn << "no querySchema.connection() !";
         return -1;
     }
     int count = -1; //will be changed only on success of querySingleNumber()
-    querySchema.connection()->querySingleNumber(
+    tristate result = querySchema.connection()->querySingleNumber(
         QString::fromLatin1("SELECT COUNT(*) FROM (")
-        + querySchema.connection()->selectStatement(querySchema) + ") AS kexidb__subquery",
+        + querySchema.connection()->selectStatement(querySchema, params) + ") AS kexidb__subquery",
         count
     );
-    return count;
+    return true == result ? count : -1;
 }
 
-int KexiDB::rowCount(KexiDB::TableOrQuerySchema& tableOrQuery)
+int KexiDB::rowCount(KexiDB::TableOrQuerySchema& tableOrQuery, const QList<QVariant>& params)
 {
     if (tableOrQuery.table())
         return rowCount(*tableOrQuery.table());
     if (tableOrQuery.query())
-        return rowCount(*tableOrQuery.query());
+        return rowCount(*tableOrQuery.query(), params);
     return -1;
 }
 
@@ -1522,18 +1520,6 @@ QString KexiDB::defaultFileBasedDriverMimeType()
     return QString::fromLatin1("application/x-kexiproject-sqlite3");
 }
 
-QString KexiDB::defaultFileBasedDriverIconName()
-{
-    KMimeType::Ptr mimeType(KMimeType::mimeType(
-                                KexiDB::defaultFileBasedDriverMimeType()));
-    if (mimeType.isNull()) {
-        KexiDBWarn << QString("'%1' mimetype not installed!")
-        .arg(KexiDB::defaultFileBasedDriverMimeType());
-        return QString();
-    }
-    return mimeType->iconName();
-}
-
 QString KexiDB::defaultFileBasedDriverName()
 {
     DriverManager dm;
@@ -1550,7 +1536,7 @@ public:
     ~Private() {
         delete set;
     }
-    const char** array;
+    const char* const * array;
     QSet<QByteArray> *set;
 };
 
@@ -1559,7 +1545,7 @@ StaticSetOfStrings::StaticSetOfStrings()
 {
 }
 
-StaticSetOfStrings::StaticSetOfStrings(const char* array[])
+StaticSetOfStrings::StaticSetOfStrings(const char* const array[])
         : d(new Private)
 {
     setStrings(array);
@@ -1570,7 +1556,7 @@ StaticSetOfStrings::~StaticSetOfStrings()
     delete d;
 }
 
-void StaticSetOfStrings::setStrings(const char* array[])
+void StaticSetOfStrings::setStrings(const char* const array[])
 {
     delete d->set;
     d->set = 0;
@@ -1586,7 +1572,7 @@ bool StaticSetOfStrings::contains(const QByteArray& string) const
 {
     if (!d->set) {
         d->set = new QSet<QByteArray>();
-        for (const char ** p = d->array;*p;p++) {
+        for (const char * const * p = d->array;*p;p++) {
             d->set->insert(QByteArray::fromRawData(*p, qstrlen(*p)));
         }
     }

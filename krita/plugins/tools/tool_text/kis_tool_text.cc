@@ -37,7 +37,7 @@
 KisToolText::KisToolText(KoCanvasBase * canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
-    setObjectName("tool_text");
+    setObjectName("tool_text");  
 }
 
 KisToolText::~KisToolText()
@@ -126,7 +126,7 @@ void KisToolText::finishRect(const QRectF &rect)
     }
 }
 
-QList< QWidget* > KisToolText::createOptionWidgets()
+QList<QPointer<QWidget> > KisToolText::createOptionWidgets()
 {
     m_optionsWidget = new KisTextToolOptionWidget();
     // See https://bugs.kde.org/show_bug.cgi?id=316896
@@ -135,8 +135,15 @@ QList< QWidget* > KisToolText::createOptionWidgets()
     specialSpacer->setFixedSize(0, 0);
     m_optionsWidget->layout()->addWidget(specialSpacer);
 
-    QList< QWidget* > widgets;
+    QList<QPointer<QWidget> > widgets;
     widgets.append(m_optionsWidget);
+
+    // when widget changes properties from UI, make sure we are notified
+    connect(m_optionsWidget->cmbStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(styleIndexChanged(int)));
+    connect(m_optionsWidget->m_buttonGroup, SIGNAL(buttonPressed(int)), this, SLOT(textTypeIndexChanged(int)));
+
+    configGroup = KGlobal::config()->group(toolId());
+
     return widgets;
 }
 
@@ -147,11 +154,27 @@ KisPainter::FillStyle KisToolText::fillStyle()
     return m_optionsWidget->style();
 }
 
+void KisToolText::textTypeIndexChanged(int index)
+{
+    configGroup.writeEntry("textType", index);
+}
+
+
+void KisToolText::styleIndexChanged(int index)
+{
+    configGroup.writeEntry("styleType", index);
+}
+
 void KisToolText::slotActivateTextTool()
 {
     KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());
     QString tool = KoToolManager::instance()->preferredToolForSelection(kiscanvas->shapeManager()->selection()->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
+
+    //load config settings
+    textTypeIndexChanged(configGroup.readEntry("textType", 0));
+    styleIndexChanged(configGroup.readEntry("styleType", 0));
+
 }
 
 

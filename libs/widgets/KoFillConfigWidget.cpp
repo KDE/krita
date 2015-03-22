@@ -38,7 +38,6 @@
 #include "KoResourceServerProvider.h"
 #include "KoResourceServerAdapter.h"
 #include "KoResourceSelector.h"
-#include <KoCanvasController.h>
 #include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -453,7 +452,9 @@ void KoFillConfigWidget::shapeChanged()
         return;
     }
 
+    d->colorAction->blockSignals(true);
     updateWidget(shape);
+    d->colorAction->blockSignals(false);
 }
 
 

@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -44,11 +44,11 @@ class ImageLoader: public QThread
         QAtomicInt isLoaded;
     };
     
-signals:
+Q_SIGNALS:
     void sigItemContentChanged(ImageItem* item);
     
 public:
-    ImageLoader(float size): m_size(size), m_run(true) { }
+    ImageLoader(float size);
     
     void addPath(ImageItem* item, const QString& path) {
         m_data[item] = Data(path);
@@ -61,13 +61,13 @@ public:
     QImage getImage(ImageItem* item) const {
         return m_data[item].image;
     }
-    
-    void stopExecution() {
-        m_run = false;
-    }
-    
+
     virtual void run();
-    
+
+public Q_SLOTS:
+
+    void stopExecution();
+
 private:
     float                     m_size;
     QHash<ImageItem*,Data> m_data;
@@ -103,13 +103,13 @@ public:
     ~ImageStripScene();
     bool setCurrentDirectory(const QString& path);
     
-signals:
+Q_SIGNALS:
     void sigImageActivated(const QString& path);
     
 private:
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
     
-private slots:
+private Q_SLOTS:
     void slotItemContentChanged(ImageItem* item);
     
 private:

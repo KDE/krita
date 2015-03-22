@@ -112,11 +112,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <includes>
-  <include location="local" >knuminput.h</include>
-  <include location="local" >kcolorbutton.h</include>
-  <include location="local" >kpushbutton.h</include>
- </includes>
  <resources>
  </resources>
  <connections/>

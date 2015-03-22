@@ -34,11 +34,7 @@
 #endif
 #endif
 
-class QWidget;
-class QString;
 
-class QDomElement;
-class QDomDocument;
 
 
 class KisChalkPaintOpSettings : public KisPaintOpSettings

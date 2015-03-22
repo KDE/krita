@@ -34,8 +34,8 @@
 #include <kis_gradient_painter.h>
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
-
-class KDoubleNumInput;
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 
 class QLabel;
@@ -62,13 +62,14 @@ public:
 
     QWidget* createOptionWidget();
 
-public slots:
+public Q_SLOTS:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void slotSetShape(int);
     void slotSetRepeat(int);
     void slotSetReverse(bool);
     void slotSetAntiAliasThreshold(qreal);
 
-private slots:
+private Q_SLOTS:
 
     void areaDone(const QRect & rc) {
         currentNode()->setDirty(rc); // Starts computing the projection for the area we've done.
@@ -97,6 +98,7 @@ private:
     KComboBox *m_cmbRepeat;
     QLabel *m_lbAntiAliasThreshold;
     KisDoubleSliderSpinBox *m_slAntiAliasThreshold;
+    KConfigGroup m_configGroup;
 
 };
 

@@ -32,7 +32,6 @@
 #include "KoTableRowStyle.h"
 #include "KoTableCellStyle.h"
 #include "KoSectionStyle.h"
-#include "ChangeFollower.h"
 #include "commands/ChangeStylesMacroCommand.h"
 #include "KoTextDocument.h"
 #include "KoTextTableTemplate.h"
@@ -47,7 +46,10 @@
 
 #include <kundo2stack.h>
 
+#include <QTimer>
 #include <QUrl>
+#include <QPixmap>
+#include <QMap>
 #include <QBuffer>
 #include <kdebug.h>
 #include <klocale.h>
@@ -61,8 +63,6 @@ public:
         , defaultListStyle(0)
         , defaultOutlineStyle(0)
         , outlineStyle(0)
-        , undoStack(0)
-        , changeCommand(0)
     {
     }
 
@@ -83,8 +83,6 @@ public:
     QHash<int, KoSectionStyle *> sectionStyles;
     QHash<int, KoParagraphStyle *> unusedParagraphStyles;
     QHash<int, KoTextTableTemplate *> tableTemplates;
-    QList<ChangeFollower *> documentUpdaterProxies;
-
 
     KoCharacterStyle *defaultCharacterStyle;
     KoParagraphStyle *defaultParagraphStyle;
@@ -96,8 +94,6 @@ public:
     KoOdfNotesConfiguration *footNotesConfiguration;
     KoOdfNotesConfiguration *endNotesConfiguration;
     KoOdfBibliographyConfiguration *bibliographyConfiguration;
-    KUndo2Stack *undoStack;
-    ChangeStylesMacroCommand *changeCommand;
 
     QVector<int> m_usedCharacterStyles;
     QVector<int> m_usedParagraphStyles;
@@ -163,11 +159,6 @@ KoStyleManager::KoStyleManager(QObject *parent)
 KoStyleManager::~KoStyleManager()
 {
     delete d;
-}
-
-void KoStyleManager::setUndoStack(KUndo2Stack *undoStack)
-{
-    d->undoStack = undoStack;
 }
 
 void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
@@ -580,7 +571,7 @@ void KoStyleManager::setBibliographyConfiguration(KoOdfBibliographyConfiguration
 
 void KoStyleManager::remove(KoCharacterStyle *style)
 {
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -590,7 +581,7 @@ void KoStyleManager::remove(KoCharacterStyle *style)
 
 void KoStyleManager::remove(KoParagraphStyle *style)
 {
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -600,7 +591,7 @@ void KoStyleManager::remove(KoParagraphStyle *style)
 
 void KoStyleManager::remove(KoListStyle *style)
 {
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -610,7 +601,7 @@ void KoStyleManager::remove(KoListStyle *style)
 
 void KoStyleManager::remove(KoTableStyle *style)
 {
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -620,7 +611,7 @@ void KoStyleManager::remove(KoTableStyle *style)
 
 void KoStyleManager::remove(KoTableColumnStyle *style)
 {
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -630,7 +621,7 @@ void KoStyleManager::remove(KoTableColumnStyle *style)
 
 void KoStyleManager::remove(KoTableRowStyle *style)
 {
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -640,7 +631,7 @@ void KoStyleManager::remove(KoTableRowStyle *style)
 
 void KoStyleManager::remove(KoTableCellStyle *style)
 {
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -650,7 +641,7 @@ void KoStyleManager::remove(KoTableCellStyle *style)
 
 void KoStyleManager::remove(KoSectionStyle *style)
 {
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -658,15 +649,10 @@ void KoStyleManager::remove(KoSectionStyle *style)
         emit styleRemoved(style);
 }
 
-void KoStyleManager::remove(ChangeFollower *cf)
-{
-    d->documentUpdaterProxies.removeAll(cf);
-}
-
 void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
 {
     Q_ASSERT(newStyle);
-    if (!newStyle || !d->changeCommand) {
+    if (!newStyle) {
         return;
     }
 
@@ -675,13 +661,8 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    d->changeCommand->changedStyle(id);
-
     KoParagraphStyle *style = paragraphStyle(id);
-    if (style != newStyle) {
-        d->changeCommand->origStyle(style->clone());
-        d->changeCommand->changedStyle(newStyle->clone());
-    }
+    emit styleHasChanged(id, style, newStyle);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     foreach(const KoParagraphStyle *ps, d->paragStyles) {
@@ -693,7 +674,7 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
 void KoStyleManager::alteredStyle(const KoCharacterStyle *newStyle)
 {
     Q_ASSERT(newStyle);
-    if (!newStyle || !d->changeCommand) {
+    if (!newStyle) {
         return;
     }
 
@@ -702,13 +683,8 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *newStyle)
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    d->changeCommand->changedStyle(id);
-
     KoCharacterStyle *style = characterStyle(id);
-    if (style != newStyle) {
-        d->changeCommand->origStyle(style->clone());
-        d->changeCommand->changedStyle(newStyle->clone());
-    }
+    emit styleHasChanged(id, style, newStyle);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     foreach(const KoCharacterStyle *cs, d->charStyles) {
@@ -720,7 +696,7 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *newStyle)
 void KoStyleManager::alteredStyle(const KoListStyle *style)
 {
     Q_ASSERT(style);
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -729,13 +705,13 @@ void KoStyleManager::alteredStyle(const KoListStyle *style)
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    d->changeCommand->changedStyle(id);
+    emit styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableStyle *style)
 {
     Q_ASSERT(style);
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -744,13 +720,13 @@ void KoStyleManager::alteredStyle(const KoTableStyle *style)
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    d->changeCommand->changedStyle(id);
+    emit styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableColumnStyle *style)
 {
     Q_ASSERT(style);
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -759,13 +735,13 @@ void KoStyleManager::alteredStyle(const KoTableColumnStyle *style)
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    d->changeCommand->changedStyle(id);
+    emit styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableRowStyle *style)
 {
     Q_ASSERT(style);
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -774,13 +750,13 @@ void KoStyleManager::alteredStyle(const KoTableRowStyle *style)
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    d->changeCommand->changedStyle(id);
+    emit styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableCellStyle *style)
 {
     Q_ASSERT(style);
-    if (!style || !d->changeCommand) {
+    if (!style) {
         return;
     }
 
@@ -789,7 +765,7 @@ void KoStyleManager::alteredStyle(const KoTableCellStyle *style)
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    d->changeCommand->changedStyle(id);
+    emit styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoSectionStyle *style)
@@ -800,45 +776,18 @@ void KoStyleManager::alteredStyle(const KoSectionStyle *style)
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    d->changeCommand->changedStyle(id);
+    emit styleHasChanged(id);
 }
+
 
 void KoStyleManager::beginEdit()
 {
-    d->changeCommand = new ChangeStylesMacroCommand(d->documentUpdaterProxies, this);
+    emit editHasBegun();
 }
 
 void KoStyleManager::endEdit()
 {
-    Q_ASSERT (d->changeCommand);
-    if (d->undoStack) {
-        d->undoStack->push(d->changeCommand);
-    }
-    d->changeCommand = 0;
-}
-
-void KoStyleManager::add(QTextDocument *document)
-{
-    if (!d->undoStack) {
-        d->undoStack = KoTextDocument(document).undoStack();
-    }
-    foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
-        if (cf->document() == document) {
-            return; // already present.
-        }
-    }
-    ChangeFollower *cf = new ChangeFollower(document, this);
-    d->documentUpdaterProxies.append(cf);
-}
-
-void KoStyleManager::remove(QTextDocument *document)
-{
-    foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
-        if (cf->document() == document) {
-            d->documentUpdaterProxies.removeAll(cf);
-            return;
-        }
-    }
+    emit editHasEnded();
 }
 
 KoCharacterStyle *KoStyleManager::characterStyle(int id) const
@@ -1091,13 +1040,13 @@ QList<KoSectionStyle*> KoStyleManager::sectionStyles() const
     return d->sectionStyles.values();
 }
 
-KoParagraphStyle *KoStyleManager::defaultTableOfContentsEntryStyle(int outlineLevel)
+KoParagraphStyle *KoStyleManager::defaultTableOfContentsEntryStyle(int outlineLevel) const
 {
     KoParagraphStyle *style = paragraphStyle(d->defaultToCEntriesStyleId.at(outlineLevel - 1));
     return style;
 }
 
-KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle()
+KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle() const
 {
     return defaultParagraphStyle();
 }
@@ -1109,7 +1058,7 @@ KoParagraphStyle *KoStyleManager::defaultBibliographyEntryStyle(const QString &b
     return style;
 }
 
-KoParagraphStyle *KoStyleManager::defaultBibliographyTitleStyle()
+KoParagraphStyle *KoStyleManager::defaultBibliographyTitleStyle() const
 {
     KoParagraphStyle *style = new KoParagraphStyle();
     style->setName("Bibliography Heading");
@@ -1161,7 +1110,7 @@ void KoStyleManager::moveToUsedStyles(int id)
     emit styleAdded(style);
 }
 
-KoParagraphStyle *KoStyleManager::unusedStyle(int id)
+KoParagraphStyle *KoStyleManager::unusedStyle(int id) const
 {
     return d->unusedParagraphStyles.value(id);
 }

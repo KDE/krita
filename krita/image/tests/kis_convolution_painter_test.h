@@ -36,7 +36,7 @@ private:
     void testGaussianSmall(bool useFftw);
     void testGaussianDetails(bool useFftw);
 
-private slots:
+private Q_SLOTS:
 
     void testIdentityConvolution();
     void testSymmConvolution();

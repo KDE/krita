@@ -145,12 +145,12 @@ CALLIGRADB_EXPORT void getHTMLErrorMesage(Object* obj, QString& msg);
 /*! This methods works like above, but works on \a result's  members instead. */
 CALLIGRADB_EXPORT void getHTMLErrorMesage(Object* obj, ResultInfo *result);
 
-/*! Function useful for building WHERE parts of sql statements.
-Constructs an sql string like "fielname = value" for specific \a drv driver,
+/*! Function useful for building WHERE parts of SQL statements.
+Constructs an SQL string like "fielname = value" for specific \a drv driver,
  field type \a t, \a fieldName and \a value. If \a value is null, "fieldname is NULL"
  string is returned. */
 inline CALLIGRADB_EXPORT QString sqlWhere(Driver *drv, Field::Type t,
-                                       const QString &fieldName, const QVariant &value)
+                                          const QString &fieldName, const QVariant &value)
 {
     if (value.isNull())
         return fieldName + " is NULL";
@@ -245,12 +245,12 @@ protected:
     QuerySchema* m_query;
 };
 
-//! @todo perhaps use quint64 here?
-/*! \return number of rows that can be retrieved after executing \a sql statement
+/*! \return number of rows that can be retrieved after executing a raw SQL statement \a sql
  within a connection \a conn. The statement should be of type SELECT.
  For SQL data sources it does not fetch any records, only "COUNT(*)"
  SQL aggregation is used at the backed.
  -1 is returned if error occurred. */
+//! @todo perhaps use quint64 here?
 int rowCount(Connection &conn, const QString& sql);
 
 //! @todo perhaps use quint64 here?
@@ -262,13 +262,20 @@ int rowCount(Connection &conn, const QString& sql);
  -1 is returned if error occurred. */
 CALLIGRADB_EXPORT int rowCount(const TableSchema& tableSchema);
 
+/*! Like rowCount(const TableSchema&) but operates on a query schema.
+ \a params are optional values of parameters that will be inserted into places marked
+ with [] before execution of the query. */
 //! @todo perhaps use quint64 here?
-/*! Like above but operates on a query schema. */
-CALLIGRADB_EXPORT int rowCount(QuerySchema& querySchema);
+CALLIGRADB_EXPORT int rowCount(QuerySchema& querySchema,
+                               const QList<QVariant>& params = QList<QVariant>());
 
+/*! Like int rowCount(QuerySchema& querySchema, const QList<QVariant>& params = QList<QVariant>())
+ but operates on a table or query schema variant.
+ \a params are optional values of parameters that will be inserted into places marked
+ with [] before execution of the query. */
 //! @todo perhaps use quint64 here?
-/*! Like above but operates on a table or query schema variant. */
-CALLIGRADB_EXPORT int rowCount(TableOrQuerySchema& tableOrQuery);
+CALLIGRADB_EXPORT int rowCount(TableOrQuerySchema& tableOrQuery,
+                               const QList<QVariant>& params = QList<QVariant>());
 
 /*! \return a number of columns that can be retrieved from table or query schema.
  In case of query, expanded fields are counted. Can return -1 if \a tableOrQuery
@@ -523,11 +530,6 @@ inline QVariant cstringToVariant(const char* data, KexiDB::Field* f, int length 
  (typically something like "application/x-kexiproject-sqlite") */
 CALLIGRADB_EXPORT QString defaultFileBasedDriverMimeType();
 
-/*! \return icon name for default file-based driver
- (typically icon for something like "application/x-kexiproject-sqlite").
- @see KexiDB::defaultFileBasedDriverMimeType() */
-CALLIGRADB_EXPORT QString defaultFileBasedDriverIconName();
-
 /*! \return default file-based driver name (currently, "sqlite3"). */
 CALLIGRADB_EXPORT QString defaultFileBasedDriverName();
 
@@ -536,9 +538,9 @@ class CALLIGRADB_EXPORT StaticSetOfStrings
 {
 public:
     StaticSetOfStrings();
-    explicit StaticSetOfStrings(const char* array[]);
+    explicit StaticSetOfStrings(const char* const array[]);
     ~StaticSetOfStrings();
-    void setStrings(const char* array[]);
+    void setStrings(const char* const array[]);
     bool isEmpty() const;
 
     //! @return true if @a string can be found within set, comparison is case sensitive
@@ -620,5 +622,11 @@ T iifNotEmpty(const T& string, const QByteArray& stringIfEmpty)
 }
 
 } // namespace KexiDB
+
+//! Macros to use in drivers to avoid redundant translations.
+#define kexidb_i18n i18n
+#define kexidb_i18nc i18nc
+#define kexidb_i18np i18np
+#define kexidb_i18ncp i18ncp
 
 #endif

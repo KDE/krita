@@ -4,7 +4,7 @@ add_subdirectory( tests )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-# Chose a tiles backend 
+# Chose a tiles backend
 # 1 - image/tiles
 # 3 - image/tiles3
 
@@ -33,29 +33,31 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_tile_data_swapper.cpp
 )
 add_subdirectory( tiles3 )
-endif(USE_TILESYSTEM EQUAL 3)
+endif()
 
 option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in release build)" OFF)
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata
-                     ${KOMAIN_INCLUDES}
+include_directories(
+    ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    3rdparty
 )
 
 if(FFTW3_FOUND)
   include_directories(${FFTW3_INCLUDE_DIRS})
-endif(FFTW3_FOUND)
+endif()
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
   ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
-else(HAVE_VC)
+else()
   set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
-endif(HAVE_VC)
+endif()
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_debug.cpp
    kis_assert.cpp
    kis_distance_information.cpp
    kis_painter.cc
@@ -66,6 +68,9 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_preset.cpp
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
+   brushengine/kis_locked_properties.cc
+   brushengine/kis_locked_properties_proxy.cpp
+   brushengine/kis_locked_properties_server.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_command.cpp
@@ -132,7 +137,16 @@ set(kritaimage_LIB_SRCS
    kis_fill_painter.cc
    kis_filter_mask.cpp
    kis_filter_strategy.cc
+   kis_transform_mask.cpp
+   kis_transform_mask_params_interface.cpp
+   kis_recalculate_transform_mask_job.cpp
+   kis_recalculate_generator_layer_job.cpp
+   kis_transform_mask_params_factory_registry.cpp
+   kis_safe_transform.cpp
    kis_gradient_painter.cc
+   kis_gradient_shape_strategy.cpp
+   kis_cached_gradient_shape_strategy.cpp
+   kis_polygonal_gradient_shape_strategy.cpp
    kis_iterator_ng.cpp
    kis_async_merger.cpp
    kis_merge_walker.cc
@@ -162,6 +176,7 @@ set(kritaimage_LIB_SRCS
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp
    kis_thread_safe_signal_compressor.cpp
+   kis_acyclic_signal_connector.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_mask.cc
@@ -201,7 +216,15 @@ set(kritaimage_LIB_SRCS
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
+   bsplines/kis_bspline_1d.cpp
+   bsplines/kis_bspline_2d.cpp
+   bsplines/kis_nu_bspline_2d.cpp
    kis_warptransform_worker.cc
+   kis_cage_transform_worker.cpp
+   kis_liquify_transform_worker.cpp
+   kis_green_coordinates_math.cpp
+   kis_algebra_2d.cpp
+   kis_dom_utils.cpp
    kis_transparency_mask.cc
    kis_undo_store.cpp
    kis_undo_stores.cpp
@@ -248,11 +271,19 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_shape_paint_action.cpp
 )
 
+set(einspline_SRCS
+   3rdparty/einspline/bspline_create.cpp
+   3rdparty/einspline/bspline_data.cpp
+   3rdparty/einspline/multi_bspline_create.cpp
+   3rdparty/einspline/nubasis.cpp
+   3rdparty/einspline/nubspline_create.cpp
+   3rdparty/einspline/nugrid.cpp
+)
 
-kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
+kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} koodf pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koodf pigmentcms kundo2 kowidgetutils)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
 message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})
@@ -261,15 +292,21 @@ message("DEBUG_BOOST_SYSTEM_LIBRARY = " ${Boost_SYSTEM_LIBRARY})
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
-endif(OPENEXR_FOUND)
+endif()
 
 if(FFTW3_FOUND)
   target_link_libraries(kritaimage  ${FFTW3_LIBRARIES})
-endif(FFTW3_FOUND)
+endif()
 
 if(HAVE_VC)
   target_link_libraries(kritaimage  ${Vc_LIBRARIES})
-endif(HAVE_VC)
+endif()
+
+if (NOT GSL_FOUND)
+  message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Shaped Gradients might be non-normalized! Please install GSL library.")
+else ()
+  target_link_libraries(kritaimage ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+endif ()
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -285,12 +322,12 @@ install( FILES
     metadata/schemas/xmp.schema
     metadata/schemas/xmpmm.schema
     metadata/schemas/xmprights.schema
-    
+
     DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
     kis_base_node.h
     kis_base_processor.h
     kis_config_widget.h
@@ -321,11 +358,13 @@ install( FILES
     kis_selection.h
     kis_shared.h
     kis_shared_ptr.h
-    kis_shared_ptr_vector.h
     kis_transaction.h
     kis_types.h
     krita_export.h
     filter/kis_filter_configuration.h
     generator/kis_generator.h
     generator/kis_generator_registry.h
+    brushengine/kis_locked_properties.h
+    brushengine/kis_locked_properties_proxy.h
+    brushengine/kis_locked_properties_server.h  
     DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

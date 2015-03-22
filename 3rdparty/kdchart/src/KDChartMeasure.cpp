@@ -24,7 +24,7 @@
 
 #include <QWidget>
 
-#include <QtXml/QDomDocumentFragment>
+#include <QDomDocumentFragment>
 #include <KDChartAbstractArea.h>
 #include <KDChartCartesianCoordinatePlane.h>
 #include <KDChartTextAttributes.h>

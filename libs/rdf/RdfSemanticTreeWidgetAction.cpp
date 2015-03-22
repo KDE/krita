@@ -19,7 +19,6 @@
 
 #include "RdfSemanticTreeWidgetAction.h"
 
-#include <KoTextEditor.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoCanvasBase.h>

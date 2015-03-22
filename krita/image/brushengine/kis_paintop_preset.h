@@ -26,11 +26,13 @@
 #include "kis_shared.h"
 #include "krita_export.h"
 
-class QImage;
 
 /**
  * A KisPaintOpPreset contains a particular set of settings
  * associated with a paintop, like brush, paintopsettings.
+ * A new property in this class is to make it dirty. That means the
+ * user can now temporarily save any tweaks in the Preset throughout
+ * the session. The Dirty Preset setting/unsetting is handled by KisPaintOpPresetSettings
  */
 class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource, public KisShared
 {
@@ -42,7 +44,7 @@ public:
 
     ~KisPaintOpPreset();
 
-    KisPaintOpPreset* clone() const;
+    KisPaintOpPresetSP clone() const;
 
     /// set the id of the paintop plugin
     void setPaintOp(const KoID & paintOp);
@@ -52,9 +54,11 @@ public:
 
     /// replace the current settings object with the specified settings
     void setSettings(KisPaintOpSettingsSP settings);
+    void setOriginalSettings(KisPaintOpSettingsSP originalSettings);
 
     /// return the settings that define this paintop preset
     KisPaintOpSettingsSP settings() const;
+    KisPaintOpSettingsSP originalSettings() const;
 
     bool load();
     bool loadFromDevice(QIODevice *dev);
@@ -65,7 +69,7 @@ public:
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
     void fromXML(const QDomElement& elt);
-    
+
     bool removable() const {
         return true;
     }
@@ -73,6 +77,31 @@ public:
     QString defaultFileExtension() const {
         return ".kpp";
     }
+    void setPresetDirty(bool value);
+
+    bool isPresetDirty() const;
+
+    /**
+     * Never use manual save/restore calls to
+     * isPresetDirty()/setPresetDirty()! They will lead to
+     * hard-to-tack-down bugs when the dirty state will not be
+     * restored on jumps like 'return', 'break' or exception.
+     */
+    class DirtyStateSaver {
+    public:
+        DirtyStateSaver(KisPaintOpPreset *preset)
+            : m_preset(preset), m_isDirty(preset->isPresetDirty())
+        {
+        }
+
+        ~DirtyStateSaver() {
+            m_preset->setPresetDirty(m_isDirty);
+        }
+
+    private:
+        KisPaintOpPreset *m_preset;
+        bool m_isDirty;
+    };
 
 protected:
 

@@ -5,7 +5,7 @@ include_directories(
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KOPAGEAPP_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
+endif()
 
 
 add_subdirectory(tests)

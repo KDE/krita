@@ -21,7 +21,7 @@
 
 #include <kis_types.h>
 
-class KisDoc2;
+class KisDocument;
 class QDomElement;
 class QDomDocument;
 class KoStore;
@@ -32,7 +32,7 @@ class KisKraSaver
 {
 public:
 
-    KisKraSaver(KisDoc2* document);
+    KisKraSaver(KisDocument* document);
 
     ~KisKraSaver();
 

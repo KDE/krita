@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,10 +28,15 @@
 CmykF32ColorSpace::CmykF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoCmykF32Traits>(colorSpaceId(), name,  TYPE_CMYKA_FLT, cmsSigCmykData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::cyan));
-    addChannel(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::magenta));
-    addChannel(new KoChannelInfo(i18n("Yellow"), 2 * sizeof(float), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::yellow));
-    addChannel(new KoChannelInfo(i18n("Black"), 3 * sizeof(float), 3, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::black));
+    const IccColorProfile* icc_p = dynamic_cast<const IccColorProfile*>(p);
+    Q_ASSERT(icc_p);
+    QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->GetFloatUIMinMax());
+    Q_ASSERT(uiRanges.size() == 4);
+
+    addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::cyan, uiRanges[0]));
+    addChannel(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::magenta, uiRanges[1]));
+    addChannel(new KoChannelInfo(i18n("Yellow"), 2 * sizeof(float), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::yellow, uiRanges[2]));
+    addChannel(new KoChannelInfo(i18n("Black"), 3 * sizeof(float), 3, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::black, uiRanges[3]));
     addChannel(new KoChannelInfo(i18n("Alpha"), 4 * sizeof(float), 4, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, sizeof(float)));
 
     init();

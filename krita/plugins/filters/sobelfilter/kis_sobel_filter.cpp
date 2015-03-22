@@ -30,13 +30,10 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
@@ -44,7 +41,6 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
@@ -78,6 +74,7 @@ KisSobelFilter::KisSobelFilter() : KisFilter(id(), categoryEdgeDetection(), i18n
 {
     setSupportsPainting(false);
     setSupportsThreading(false); // TODO Sobel doesn't support threading on image with height > 512
+    setSupportsAdjustmentLayers(false);
 }
 
 

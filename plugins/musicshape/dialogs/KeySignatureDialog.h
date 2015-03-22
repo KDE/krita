@@ -42,7 +42,7 @@ public:
     
     int startBar();
     int endBar();
-private slots:
+private Q_SLOTS:
     void accidentalsChanged(int accidentals);
 private:
     Ui::KeySignatureDialog widget;

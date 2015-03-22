@@ -70,7 +70,7 @@ void ToCGenerator::setBlock(const QTextBlock &block)
     m_document = m_documentLayout->document();
 }
 
-QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoTextRangeManager *textRangeManager)
+QString ToCGenerator::fetchBookmarkRef(const QTextBlock &block, KoTextRangeManager *textRangeManager)
 {
     QHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.document(), block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
 
@@ -186,7 +186,7 @@ static bool compareTab(const QVariant &tab1, const QVariant &tab2)
 }
 
 
-void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlock block, int &blockId)
+void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlock &block, int &blockId)
 {
     KoStyleManager *styleManager = KoTextDocument(m_document).styleManager();
 

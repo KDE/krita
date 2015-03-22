@@ -26,7 +26,11 @@
 #include "kis_buffer_stream.h"
 
 
-KisTIFFYCbCrReaderTarget8Bit::KisTIFFYCbCrReaderTarget8Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_hsub(hsub), m_vsub(vsub), m_position(position)
+KisTIFFYCbCrReaderTarget8Bit::KisTIFFYCbCrReaderTarget8Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses,
+                                                           int8 alphapos, uint8 sourceDepth, uint16 sampleformat, uint8 nbcolorssamples, uint8 extrasamplescount,
+                                                           KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub,
+                                                           KisTIFFYCbCr::Position position)
+    : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sampleformat, nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_hsub(hsub), m_vsub(vsub), m_position(position)
 {
     // Initialize the buffer
     m_imageWidth = width;
@@ -91,7 +95,11 @@ void KisTIFFYCbCrReaderTarget8Bit::finalize()
     }
 }
 
-KisTIFFYCbCrReaderTarget16Bit::KisTIFFYCbCrReaderTarget16Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_hsub(hsub), m_vsub(vsub), m_position(position)
+KisTIFFYCbCrReaderTarget16Bit::KisTIFFYCbCrReaderTarget16Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses,
+                                                             int8 alphapos, uint8 sourceDepth, uint16 sampleformat, uint8 nbcolorssamples, uint8 extrasamplescount,
+                                                             KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub,
+                                                             KisTIFFYCbCr::Position position)
+    : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  sampleformat, nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_hsub(hsub), m_vsub(vsub), m_position(position)
 {
     // Initialize the buffer
     m_imageWidth = width;

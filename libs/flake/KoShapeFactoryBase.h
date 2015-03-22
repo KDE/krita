@@ -36,7 +36,6 @@ class KoProperties;
 class KoShapeConfigFactoryBase;
 class KoShapeConfigWidgetBase;
 class KoShapeLoadingContext;
-class KoDataCenterBase;
 class KoDocumentResourceManager;
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
@@ -316,7 +315,7 @@ private:
 
     void getDeferredPlugin();
 
-private slots:
+private Q_SLOTS:
 
     /// called whenever a document KoDocumentResourceManager is deleted
     void pruneDocumentResourceManager(QObject *);

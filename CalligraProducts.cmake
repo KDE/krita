@@ -24,16 +24,18 @@
 # the needed internal build-time requirements. Any other product or feature
 # listed as requirement must have been defined before.
 
-# A "productset" is a selection of products which should be build together. The
-# products can be either essential or optional to the set. If essential
-# (NEEDED), the whole productset will not be build if a product is missing
-# another internal or external dependency. If optional (WANTED), the rest of the
-# set will still be build in that case.
-# The products to include in a set can be listed directly or indirectly: they
-# can be named themselves, or another productset can be included in a set, whose
-# products will then be part of the first set as well.
-# Products and productsets can be listed as dependencies in multiple product
-# sets. As with dependencies for products, they must have been defined before.
+# A "productset" is a selection of products and features which should be build
+# together. The products and features can be either essential or optional to the
+# set. If essential (REQUIRES), the whole productset will not be build if a
+# product or feature is missing another internal or external dependency. If
+# optional (OPTIONAL), the rest of the set will still be build in that case.
+# The products and features to include in a set can be listed directly or
+# indirectly: they can be named explicitely, but also by including other
+# productsets in a set, whose products and features will then be part of the
+# first set as well.
+# Products, features and productsets can be listed as dependencies in multiple
+# product sets. As with dependencies for products or features, they must have
+# been defined before.
 
 # Products, features and product sets are in the same namespace, so a given
 # identifier can be only used either for a product or for a feature or for a
@@ -67,8 +69,8 @@ calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp")
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
 calligra_define_product(LIB_KOPROPERTY "libkoproperty")
-calligra_define_product(LIB_KOREPORT "libkoreport"  REQUIRES LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb")
+calligra_define_product(LIB_KOREPORT "libkoreport"  REQUIRES LIB_KOPROPERTY LIB_CALLIGRADB)
 
 # calligra libs
 calligra_define_product(LIB_CALLIGRA "Calligra core libs"  REQUIRES BUILDTOOL_RNG2CPP)
@@ -89,6 +91,7 @@ calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLI
 calligra_define_product(PART_WORDS "Words engine"  REQUIRES LIB_CALLIGRA PLUGIN_TEXTSHAPE)
 calligra_define_product(PART_STAGE "Stage engine"  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
 calligra_define_product(PART_SHEETS "Sheets engine"  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components" REQUIRES PART_WORDS PART_STAGE)# SHEETS_PART)
 
 # apps
 calligra_define_product(APP_WORDS "Words app (for Desktop)"  REQUIRES PART_WORDS)
@@ -101,6 +104,7 @@ calligra_define_product(APP_KEXI "Kexi app (for Desktop)"  REQUIRES LIB_CALLIGRA
 calligra_define_product(APP_FLOW "Flow app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  REQUIRES LIB_CALLIGRA)
+calligra_define_product(APP_GEMINI "The Calligra Gemini application" REQUIRES PART_QTQUICK)
 # TODO: this needs to be split up by app products
 calligra_define_product(DOC "Calligra Documentations")
 
@@ -132,6 +136,7 @@ calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligr
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport"  REQUIRES LIB_KOREPORT LIB_KDCHART)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins"  REQUIRES FEATURE_RDF LIB_CALLIGRA)
+calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini")
 
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  REQUIRES LIB_CALLIGRA)
@@ -178,6 +183,7 @@ calligra_define_product(FILTER_RTF_TO_ODT "RTF to ODT filter"  REQUIRES LIB_CALL
 calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter"  REQUIRES LIB_KOVECTORIMAGE LIB_CALLIGRA)
 calligra_define_product(FILTER_ODT_TO_HTML "ODT HTML export filter"  REQUIRES LIB_KOVECTORIMAGE LIB_CALLIGRA)
+calligra_define_product(FILTER_ODT_TO_WIKI "ODT Wiki export filter"  REQUIRES LIB_KOODFREADER LIB_KOODF2 LIB_CALLIGRA)
 
 # Plan filters
 calligra_define_product(FILTER_MPXJ_IMPORT "MS Project import filter"  REQUIRES APP_PLAN)
@@ -203,6 +209,7 @@ calligra_define_product(OKULAR_GENERATOR_PPT "Plugin for Okular extended with su
 calligra_define_product(OKULAR_GENERATOR_PPTX "Plugin for Okular extended with support for PPTX"  REQUIRES OKULAR_GENERATOR_ODP FILTER_PPTX_TO_ODP)
 calligra_define_product(OKULAR_GENERATOR_DOC "Plugin for Okular extended with support for DOC" REQUIRES OKULAR_GENERATOR_ODT FILTER_DOC_TO_ODT)
 calligra_define_product(OKULAR_GENERATOR_DOCX "Plugin for Okular extended with support for DOCX" REQUIRES OKULAR_GENERATOR_ODT FILTER_DOCX_TO_ODT)
+calligra_define_product(OKULAR_GENERATOR_WORDPERFECT "Plugin for Okular extended with support for WORDPERFECT" REQUIRES OKULAR_GENERATOR_ODT FILTER_WORDPERFECT_TO_ODT)
 
 # developer utils
 calligra_define_product(APP_DEVTOOLS "Tools for developers")
@@ -284,6 +291,7 @@ calligra_define_productset(FILTERS_WORDS_EXPORT "All Words export filters"
         FILTER_ODT_TO_EPUB2
         FILTER_ODT_TO_HTML
         FILTER_ODT_TO_DOCX
+        FILTER_ODT_TO_WIKI
 )
 calligra_define_productset(FILTERS_WORDS "All Words filters"
     OPTIONAL
@@ -334,15 +342,16 @@ calligra_define_productset(ACTIVE "Full Calligra Active"
         FILEMANAGER_PROPERTIES
         FILEMANAGER_THUMBNAIL
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
         PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         PLUGIN_VIDEOSHAPE
         # filters
@@ -357,18 +366,19 @@ calligra_define_productset(AUTHOR "Full Author (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
-        PLUGIN_VECTORSHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
         PLUGIN_SEMANTICITEMS
+        PLUGIN_VARIABLES
+        PLUGIN_VECTORSHAPE
         # filters
         FILTERS_WORDS
 )
@@ -377,18 +387,21 @@ calligra_define_productset(BRAINDUMP "Full Braindump (for Desktop)"
         APP_BRAINDUMP
     OPTIONAL
         # plugins
-        PLUGIN_MUSICSHAPE
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_TEXTEDITING
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
+        PLUGIN_FORMULASHAPE
+        PLUGIN_MUSICSHAPE
+        PLUGIN_PATHSHAPES
         PLUGIN_PICTURESHAPE
         PLUGIN_PLUGINSHAPE
-        PLUGIN_FORMULASHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_THREEDSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
+        PLUGIN_VIDEOSHAPE
 )
 calligra_define_productset(FLOW "Full Flow (for Desktop)"
     REQUIRES
@@ -397,16 +410,17 @@ calligra_define_productset(FLOW "Full Flow (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         # filters
         FILTERS_FLOW
@@ -418,16 +432,17 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         # filters
         FILTERS_KARBON
@@ -449,15 +464,15 @@ calligra_define_productset(KRITA "Full Krita"
         FILEMANAGER_THUMBNAIL
         FILEMANAGER_QUICKPRINT
         # plugins
-        PLUGIN_COLORENGINES
-        PLUGIN_SPACENAVIGATOR
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_TEXTEDITING
+        PLUGIN_COLORENGINES
         PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_PATHSHAPES
         PLUGIN_PICTURESHAPE
+        PLUGIN_TEXTEDITING
         PLUGIN_TEXTSHAPE
+        PLUGIN_SPACENAVIGATOR
         PLUGIN_VECTORSHAPE
 )
 calligra_define_productset(PLAN "Full Plan (for Desktop)"
@@ -476,18 +491,19 @@ calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
         # feature
         FEATURE_SCRIPTING
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
-        PLUGIN_VECTORSHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
         PLUGIN_SHEETS_PIVOTTABLES
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
+        PLUGIN_VECTORSHAPE
         # filters
         FILTERS_SHEETS
 )
@@ -498,16 +514,17 @@ calligra_define_productset(STAGE "Full Stage (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         PLUGIN_VIDEOSHAPE
         # filters
@@ -520,20 +537,44 @@ calligra_define_productset(WORDS "Full Words (for Desktop)"
         # extras
         FILEMANAGER
         # plugins
-        PLUGIN_DEFAULTTOOLS
         PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
         PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
         PLUGIN_FORMULASHAPE
-        PLUGIN_VECTORSHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
         PLUGIN_SEMANTICITEMS
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
+        PLUGIN_VECTORSHAPE
         # filters
         FILTERS_WORDS
+)
+calligra_define_productset(GEMINI "Calligra for 2:1 devices"
+    REQUIRES
+        APP_GEMINI
+    OPTIONAL
+        # plugins
+        PLUGIN_ARTISTICTEXTSHAPE
+        PLUGIN_CALLIGRAGEMINI_GIT
+        PLUGIN_CHARTSHAPE
+        PLUGIN_DEFAULTTOOLS
+        PLUGIN_DOCKERS
+        PLUGIN_FORMULASHAPE
+        PLUGIN_PATHSHAPES
+        PLUGIN_PICTURESHAPE
+        PLUGIN_PLUGINSHAPE
+        PLUGIN_TEXTEDITING
+        PLUGIN_TEXTSHAPE
+        PLUGIN_VARIABLES
+        PLUGIN_VECTORSHAPE
+        PLUGIN_VIDEOSHAPE
+        # filters
+        FILTERS_WORDS
+        FILTERS_STAGE
 )
 
 # okular support
@@ -545,6 +586,7 @@ calligra_define_productset(OKULAR "Okular generators"
         OKULAR_GENERATOR_ODT
         OKULAR_GENERATOR_DOC
         OKULAR_GENERATOR_DOCX
+        OKULAR_GENERATOR_WORDPERFECT
 )
 
 
@@ -574,7 +616,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
 #      set(SHOULD_BUILD_MYPRODUCT FALSE)
-#    endif (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+#    endif ()
 #
 # 4. Wrap everything belonging to the product with the build flag of the product.
 #    Ideally this is done around subdirectory inclusions, results in easier code.
@@ -582,7 +624,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (SHOULD_BUILD_MYPRODUCT)
 #      add_subdirectory(myproduct)
-#    endif (SHOULD_BUILD_MYPRODUCT)
+#    endif ()
 #
 # 5. Tag the product as STAGING, if it is not yet ready for release, but already
 #    integrated in the master branch, e.g.
@@ -620,7 +662,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
 #      set(SHOULD_BUILD_MYFEATURE FALSE)
-#    endif (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+#    endif ()
 #
 # 4. Wrap everything belonging to the feature with the build flag of the feature.
 #    Ideally this is done around subdirectory inclusions, results in easier code.
@@ -628,7 +670,7 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 #    if (SHOULD_BUILD_MYFEATURE)
 #      add_subdirectory(myproduct)
-#    endif (SHOULD_BUILD_MYFEATURE)
+#    endif ()
 #
 # 5. Tag the feature as STAGING, if it is not yet ready for release, but already
 #    integrated in the master branch, e.g.
@@ -641,6 +683,14 @@ calligra_define_productset(OKULAR "Okular generators"
 #
 # How to add another productset?
 # ==============================
+#
+# There are two possible places to put a productset definition. The first is to
+# add it to this file, which should be done for more generic sets that are
+# useful for many people. The second is a file of its own, in the directory
+# "cmake/productsets", which should be done for more special ones or for those
+# which should not be added to the repository.
+# The file must be named with the name of the productset in lowercase and have
+# the extension ".cmake".
 #
 # 1. Define the productset by a call of calligra_define_productset,
 #    e.g.
@@ -662,16 +712,9 @@ calligra_define_productset(OKULAR "Okular generators"
 # 3. Add the productset to all product sets which have this product set as
 #     REQUIRED or OPTIONAL dependency.
 #
-# The definition could be added to this file, which should be done for more
-# generic sets. Or it can be put into a file of its own, in the directory
-# cmake/productsets, which should be done for more special ones or for those
-# which should not be added to the repository.
-# The file must be named with the name of the productset in lowercase and have
-# the extension ".cmake".
-#
-# Example:
+# Example for a file-based productset definition:
 # You want a productset "MYWORDS". For that you add a file named
-# "mywords.cmake" into the directory cmake/productsets, with the content:
+# "mywords.cmake" into the directory "cmake/productsets", with the content:
 # --- 8< ---
 # calligra_define_productset(MYWORDS "My Words"
 #     REQUIRES

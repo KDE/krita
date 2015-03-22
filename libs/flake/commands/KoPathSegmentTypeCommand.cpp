@@ -19,6 +19,8 @@
  */
 
 #include "KoPathSegmentTypeCommand.h"
+
+#include <KoPathSegment.h>
 #include <klocale.h>
 
 KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const KoPathPointData & pointData, SegmentType segmentType, KUndo2Command *parent)

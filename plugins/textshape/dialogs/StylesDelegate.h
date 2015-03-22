@@ -41,7 +41,7 @@ public:
                             const QStyleOptionViewItem &option, const QModelIndex &index);
     void setEditButtonEnable(bool enable);
 
-signals:
+Q_SIGNALS:
     void styleManagerButtonClicked(QModelIndex index);
     void deleteStyleButtonClicked(QModelIndex index);
     void needsUpdate(QModelIndex index);

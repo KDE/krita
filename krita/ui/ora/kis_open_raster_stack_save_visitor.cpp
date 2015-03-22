@@ -23,7 +23,6 @@
 #include <QDomElement>
 #include <QImage>
 
-#include <KoStore.h>
 #include <KoCompositeOpRegistry.h>
 
 #include "kis_adjustment_layer.h"

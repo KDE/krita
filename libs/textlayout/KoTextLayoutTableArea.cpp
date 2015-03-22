@@ -638,10 +638,14 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
              * This cell ends vertically in this row, and hence should
              * contribute to the row height.
              */
+            bool ignoreMisFittingCell = false;
             KoTableCellStyle cellStyle = d->effectiveCellStyle(cell);
             anyCellTried = true;
 
             qreal maxBottom = maximumAllowedBottom();
+
+            qreal requiredRowHeight = cellStyle.bottomPadding() + cellStyle.bottomPadding();
+
             if (rowHasExactHeight) {
                 maxBottom = qMin(d->rowPositions[row] + rowHeight, maxBottom);
             }
@@ -652,12 +656,19 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             if (d->collapsing) {
                 areaTop += topBorderWidth;
                 maxBottom -= bottomBorderWidth;
+                requiredRowHeight += bottomBorderWidth + topBorderWidth;
             } else {
                 areaTop += cellStyle.topBorderWidth();
                 maxBottom -= cellStyle.bottomBorderWidth();
+                requiredRowHeight += cellStyle.bottomBorderWidth() + cellStyle.topBorderWidth();
             }
 
-            if (maxBottom < areaTop) {
+            if (rowHasExactHeight && (rowHeight < requiredRowHeight))
+            {
+                ignoreMisFittingCell = true;
+            }
+
+            if (maxBottom < areaTop && !ignoreMisFittingCell) {
                 d->rowPositions[row+1] = d->rowPositions[row];
                 nukeRow(cursor);
                 if (cursor->row > d->startOfArea->row) {
@@ -688,7 +699,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             bool cellFully = cellArea->layout(cellCursor);
             allCellsFullyDone = allCellsFullyDone && (cellFully || rowHasExactHeight);
 
-            noCellsFitted = noCellsFitted && (cellArea->top() >= cellArea->bottom());
+            noCellsFitted = noCellsFitted && (cellArea->top() >= cellArea->bottom()) && !ignoreMisFittingCell;
 
             if (!rowHasExactHeight) {
                 /*

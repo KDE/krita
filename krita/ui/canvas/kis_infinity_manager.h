@@ -23,6 +23,7 @@
 #include <QPainterPath>
 #include <QCursor>
 
+class KisView;
 
 static const QString INFINITY_DECORATION_ID = "infinity-decorations";
 
@@ -31,13 +32,13 @@ class KRITAUI_EXPORT KisInfinityManager : public KisCanvasDecoration
 Q_OBJECT
 
 public:
-KisInfinityManager(KisView2 *view, KisCanvas2 *canvas);
+KisInfinityManager(QPointer<KisView>view, KisCanvas2 *canvas);
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
     bool eventFilter(QObject *obj, QEvent *event);
 
-public slots:
+public Q_SLOTS:
     void imagePositionChanged();
 
 private:
@@ -60,6 +61,8 @@ private:
     QVector<QTransform> m_handleTransform;
 
     QVector<QRect> m_sideRects;
+
+    KisCanvas2 *m_canvas;
 };
 
 #endif /* __KIS_INFINITY_MANAGER_H */

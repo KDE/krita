@@ -18,8 +18,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef TESTDOCUMENTAYOUT_H
-#define TESTDOCUMENTAYOUT_H
+#ifndef TESTDOCUMENTLAYOUT_H
+#define TESTDOCUMENTLAYOUT_H
 
 #include <QObject>
 #include <QPainter>
@@ -35,7 +35,7 @@ class TestDocumentLayout : public QObject
 public:
     TestDocumentLayout() {}
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     /**

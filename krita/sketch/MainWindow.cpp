@@ -34,9 +34,9 @@
 #include <QGLWidget>
 #include <QTimer>
 
-#include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
+#include <kdialog.h>
 #include <kdebug.h>
 
 #include "filter/kis_filter.h"
@@ -44,11 +44,12 @@
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include <KoZoomController.h>
+#include <KoIcon.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <kis_canvas_controller.h>
 #include "kis_config.h"
-#include <kis_doc2.h>
+#include <KisDocument.h>
 
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
@@ -62,7 +63,7 @@ public:
     Private(MainWindow* qq)
         : q(qq)
         , allowClose(true)
-        , sketchKisView(0)
+        , viewManager(0)
 	{
         centerer = new QTimer(q);
         centerer->setInterval(10);
@@ -71,18 +72,18 @@ public:
 	}
 	MainWindow* q;
     bool allowClose;
-    KisView2* sketchKisView;
+    KisViewManager* viewManager;
     QString currentSketchPage;
 	QTimer *centerer;
 };
 
-MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
-    : QMainWindow( parent, flags ), d( new Private(this) )
+MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags)
+    : QMainWindow(parent, flags ), d( new Private(this))
 {
-    qApp->setActiveWindow( this );
+    qApp->setActiveWindow(this);
 
     setWindowTitle(i18n("Krita Sketch"));
-    setWindowIcon(KIcon("kritasketch"));
+    setWindowIcon(koIcon("kritasketch"));
 
     // Load filters and other plugins in the gui thread
     Q_UNUSED(KisFilterRegistry::instance());
@@ -121,12 +122,12 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
 #else
     view->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
-    QString mainqml = KGlobal::dirs()->findResource("pics", "kritasketch.qml");
+    QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
 #endif
 
     Q_ASSERT(QFile::exists(mainqml));
     if (!QFile::exists(mainqml)) {
-        QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
+        QMessageBox::warning(0, i18nc("@title:window", "No QML found"), mainqml + " doesn't exist.");
     }
     QFileInfo fi(mainqml);
 
@@ -148,7 +149,14 @@ void MainWindow::resetWindowTitle()
     QString fileName = url.fileName();
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Sketch")));
+
+    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KisDocument* document = DocumentManager::instance()->document();
+    if (document && document->isModified() ) {
+        flags |= KDialog::ModifiedCaption;
+    }
+
+    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 bool MainWindow::allowClose() const
@@ -173,29 +181,29 @@ void MainWindow::setCurrentSketchPage(QString newPage)
 }
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
-	if (d->sketchKisView) {
+    if (d->viewManager) {
         qApp->processEvents();
-        d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        d->viewManager->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         qApp->processEvents();
-        QPoint center = d->sketchKisView->rect().center();
-        d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        QPoint center = d->viewManager->canvas()->rect().center();
+        static_cast<KoCanvasControllerWidget*>(d->viewManager->canvasBase()->canvasController())->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
     }
 }
 
 QObject* MainWindow::sketchKisView() const
 {
-    return d->sketchKisView;
+    return d->viewManager;
 }
 
 void MainWindow::setSketchKisView(QObject* newView)
 {
-    if (d->sketchKisView)
-        d->sketchKisView->disconnect(this);
-    if (d->sketchKisView != newView)
+    if (d->viewManager)
+        d->viewManager->disconnect(this);
+    if (d->viewManager != newView)
     {
-        d->sketchKisView = qobject_cast<KisView2*>(newView);
-        connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+        d->viewManager = qobject_cast<KisViewManager*>(newView);
+        connect(d->viewManager, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
         d->centerer->start();
         emit sketchKisViewChanged();
     }

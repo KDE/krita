@@ -20,7 +20,7 @@
 
 #include <KoResourceServerAdapter.h>
 #include <ui/kis_resource_server_provider.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_canvas2.h>
 #include <kis_paintop_box.h>
@@ -36,12 +36,12 @@ public:
     Private()
         : view(0)
     {
-        rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();;
     }
 
-    KoResourceServer<KisPaintOpPreset> * rserver;
+    KisPaintOpPresetResourceServer * rserver;
     QString currentPreset;
-    KisView2* view;
+    KisViewManager* view;
 
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp)
     {
@@ -67,11 +67,11 @@ public:
 
         // handle the settings and expose it through a a simple QObject property
         //m_optionWidget->setConfiguration(preset->settings());
-
+#if 0
         preset->settings()->setNode(view->resourceProvider()->currentNode());
-
+#endif
         KisPaintOpFactory* paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
-        QString            pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
+        QString            pixFilename = KisFactory::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
 
         view->resourceProvider()->setPaintOpPreset(preset);
     }
@@ -153,9 +153,8 @@ QObject* PresetModel::view() const
 
 void PresetModel::setView(QObject* newView)
 {
-    d->view = qobject_cast<KisView2*>( newView );
-    if (d->view)
-    {
+    d->view = qobject_cast<KisViewManager*>( newView );
+    if (d->view && d->view->canvasBase()) {
         connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
     }
@@ -177,7 +176,7 @@ void PresetModel::setCurrentPreset(QString presetName)
 int PresetModel::nameToIndex(QString presetName) const
 {
     int index = 0;
-    QList<KisPaintOpPreset*> resources = d->rserver->resources();
+    QList<KisPaintOpPresetSP> resources = d->rserver->resources();
     for(int i = 0; i < resources.count(); ++i)
     {
         if (resources.at(i)->name() == presetName || resources.at(i)->name().replace(QLatin1String("_"), QLatin1String(" ")) == presetName)
@@ -194,10 +193,10 @@ void PresetModel::activatePreset(int index)
     if ( !d->view )
         return;
 
-    QList<KisPaintOpPreset*> resources = d->rserver->resources();
+    QList<KisPaintOpPresetSP> resources = d->rserver->resources();
     if (index >= 0 && index < resources.count())  {
-        KisPaintOpPreset* preset = resources.at( index );
-        d->setCurrentPaintop(preset->paintOp(), preset->clone());
+        KisPaintOpPresetSP preset = resources.at( index );
+        d->setCurrentPaintop(preset->paintOp(), preset);
     }
 }
 

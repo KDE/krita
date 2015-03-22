@@ -34,7 +34,7 @@ class TestLoading : public TestLoadingBase
 public:
     TestLoading();
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void testInternalTable();
     void testDataSets();

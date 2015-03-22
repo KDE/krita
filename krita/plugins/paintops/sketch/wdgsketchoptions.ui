@@ -45,36 +45,12 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KDoubleNumInput" name="lineWidthSPBox">
+       <widget class="KisDoubleSliderSpinBox" name="lineWidthSPBox" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="minimum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>100.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="suffix">
-         <string> px</string>
-        </property>
-        <property name="decimals">
-         <number>0</number>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-        <property name="exponentRatio">
-         <double>1.500000000000000</double>
         </property>
        </widget>
       </item>
@@ -89,26 +65,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KDoubleNumInput" name="offsetSPBox">
-        <property name="value">
-         <double>30.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>200.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="decimals">
-         <number>0</number>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="KisDoubleSliderSpinBox" name="offsetSPBox" native="true" />
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
@@ -121,30 +78,12 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KDoubleNumInput" name="densitySPBox">
+       <widget class="KisDoubleSliderSpinBox" name="densitySPBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="value">
-         <double>50.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>100.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="decimals">
-         <number>0</number>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -237,6 +176,12 @@
    <class>KDoubleNumInput</class>
    <extends>QWidget</extends>
    <header>knuminput.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

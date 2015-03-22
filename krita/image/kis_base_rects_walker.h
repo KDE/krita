@@ -32,6 +32,7 @@ class KRITAIMAGE_EXPORT KisBaseRectsWalker : public KisShared
 public:
     enum UpdateType {
         UPDATE,
+        UPDATE_NO_FILTHY,
         FULL_REFRESH,
         UNSUPPORTED
     };
@@ -58,7 +59,20 @@ public:
     };
 
     #define GRAPH_POSITION_MASK     0x07
-    #define POSITION_TO_FILTHY_MASK 0xF8
+
+    static inline KisNode::PositionToFilthy convertPositionToFilthy(NodePosition position) {
+        static const int positionToFilthyMask =
+            N_ABOVE_FILTHY |
+            N_FILTHY_PROJECTION |
+            N_FILTHY |
+            N_BELOW_FILTHY;
+
+        qint32 positionToFilthy = position & N_EXTRA ? N_FILTHY : position & positionToFilthyMask;
+        // We do not use N_FILTHY_ORIGINAL yet, so...
+        Q_ASSERT(positionToFilthy);
+
+        return static_cast<KisNode::PositionToFilthy>(positionToFilthy);
+    }
 
     struct CloneNotification {
         CloneNotification() {}
@@ -202,13 +216,6 @@ protected:
     virtual void startTrip(KisNodeSP startWith) = 0;
 
 protected:
-    static inline KisNode::PositionToFilthy getPositionToFilthy(qint32 position) {
-        qint32 positionToFilthy = position & POSITION_TO_FILTHY_MASK;
-        // We do not use N_FILTHY_ORIGINAL yet, so...
-        Q_ASSERT(!(positionToFilthy & N_FILTHY_ORIGINAL));
-
-        return static_cast<KisNode::PositionToFilthy>(positionToFilthy);
-    }
 
     static inline qint32 getGraphPosition(qint32 position) {
         return position & GRAPH_POSITION_MASK;
@@ -283,7 +290,7 @@ protected:
         if(!isLayer(node)) return;
 
         QRect currentChangeRect = node->changeRect(m_resultChangeRect,
-                                                   getPositionToFilthy(position));
+                                                   convertPositionToFilthy(position));
         currentChangeRect = cropThisRect(currentChangeRect);
 
         if(!m_changeRectVaries)
@@ -292,7 +299,7 @@ protected:
         m_resultChangeRect = currentChangeRect;
 
         m_resultUncroppedChangeRect = node->changeRect(m_resultUncroppedChangeRect,
-                                                       getPositionToFilthy(position));
+                                                       convertPositionToFilthy(position));
         registerCloneNotification(node, position);
     }
 
@@ -333,10 +340,10 @@ protected:
             //else /* Why push empty rect? */;
 
             m_resultAccessRect |= node->accessRect(m_lastNeedRect,
-                                                   getPositionToFilthy(position));
+                                                   convertPositionToFilthy(position));
 
             m_lastNeedRect = node->needRect(m_lastNeedRect,
-                                            getPositionToFilthy(position));
+                                            convertPositionToFilthy(position));
             m_lastNeedRect = cropThisRect(m_lastNeedRect);
             m_childNeedRect = m_lastNeedRect;
         }
@@ -345,10 +352,10 @@ protected:
                 pushJob(node, position, m_lastNeedRect);
 
                 m_resultAccessRect |= node->accessRect(m_lastNeedRect,
-                                                       getPositionToFilthy(position));
+                                                       convertPositionToFilthy(position));
 
                 m_lastNeedRect = node->needRect(m_lastNeedRect,
-                                                getPositionToFilthy(position));
+                                                convertPositionToFilthy(position));
                 m_lastNeedRect = cropThisRect(m_lastNeedRect);
             }
         }

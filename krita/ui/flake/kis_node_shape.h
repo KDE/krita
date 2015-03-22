@@ -52,7 +52,7 @@ public:
     void saveOdf(KoShapeSavingContext & context) const;
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 
-private slots:
+private Q_SLOTS:
     void setNodeVisible(bool);
     void editabilityChanged();
 

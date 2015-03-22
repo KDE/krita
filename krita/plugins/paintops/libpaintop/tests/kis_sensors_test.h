@@ -29,7 +29,7 @@ class KisSensorsTest : public QObject
     Q_OBJECT
 public:
     KisSensorsTest();
-private slots:
+private Q_SLOTS:
 
     void testDrawingAngle();
 private:

@@ -93,7 +93,7 @@ public:
         //optimumDimensions(m_fftWidth, m_fftHeight);
 
         m_fftLength = m_fftHeight * (m_fftWidth / 2 + 1);
-        m_extraMem = m_fftWidth % 2 ? 1 : 2;
+        m_extraMem = (m_fftWidth % 2) ? 1 : 2;
 
         // create and fill kernel
         m_kernelFFT = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);

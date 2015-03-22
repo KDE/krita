@@ -20,22 +20,17 @@
 #ifndef KOPADOCUMENT_H
 #define KOPADOCUMENT_H
 
-#include <QObject>
-
 #include <KoOdf.h>
 #include <KoDocument.h>
 #include <KoShapeBasedDocumentBase.h>
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
-class KoShapeSavingContext;
-class KoPAPart;
 class KoPAPage;
 class KoPAPageBase;
 class KoPAMasterPage;
 class KoPALoadingContext;
 class KoPASavingContext;
-class KoXmlWriter;
 
 class KoInlineTextObjectManager;
 
@@ -227,11 +222,11 @@ public:
 
     void emitUpdate(KoPAPageBase *page) {emit update(page);}
 
-public slots:
+public Q_SLOTS:
     /// reimplemented
     virtual void initEmpty();
 
-signals:
+Q_SIGNALS:
     void shapeAdded(KoShape* shape);
     void shapeRemoved(KoShape* shape);
     void pageAdded(KoPAPageBase* page);

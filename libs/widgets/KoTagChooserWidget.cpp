@@ -23,6 +23,8 @@
  *    Boston, MA 02110-1301, USA.
  */
 
+#include "KoTagChooserWidget.h"
+
 #include <QDebug>
 #include <QToolButton>
 #include <QGridLayout>
@@ -35,7 +37,6 @@
 #include "KoResourceItemChooserContextMenu.h"
 
 #include "KoTagToolButton.h"
-#include "KoTagChooserWidget.h"
 
 class KoTagChooserWidget::Private
 {
@@ -50,7 +51,10 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
 , d(new Private())
 {
     d->comboBox = new KComboBox(this);
+    d->comboBox->setToolTip(i18n("Tag"));
     d->comboBox->setInsertPolicy(KComboBox::InsertAlphabetically);
+    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
+
 
     QGridLayout* comboLayout = new QGridLayout(this);
 

@@ -23,11 +23,11 @@
 
 #include "flake_export.h"
 
-#include <QRectF>
 #include <kundo2command.h>
 #include <QList>
 
 class KoShape;
+class QRectF;
 
 /// The undo / redo command for aligning shapes
 class FLAKE_EXPORT KoShapeAlignCommand : public KUndo2Command

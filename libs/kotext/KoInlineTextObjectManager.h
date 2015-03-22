@@ -161,10 +161,10 @@ public:
     QList<KoInlineCite*> citationsSortedByPosition(bool duplicatesEnabled = true,
                                                            QTextBlock block = QTextBlock()) const;
 
-public slots:
+public Q_SLOTS:
     void documentInformationUpdated(const QString &info, const QString &data);
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted whenever a propery is set and it turns out to be changed.
      */

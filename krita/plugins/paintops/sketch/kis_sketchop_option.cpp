@@ -31,18 +31,40 @@ public:
 KisSketchOpOption::KisSketchOpOption()
     : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::generalCategory(), false)
 {
+
+
+
     m_checkable = false;
     m_options = new KisSketchOpOptionsWidget();
-    connect(m_options->offsetSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->lineWidthSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->densitySPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->simpleModeCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->connectionCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->magnetifyCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomRGBCHbox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomOpacityCHbox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->distanceDensityCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->distanceOpacityCHbox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+
+
+    // initialize slider values
+    m_options->lineWidthSPBox->setRange(1.0, 100.0, 0);
+    m_options->lineWidthSPBox->setValue(1.0);
+    m_options->lineWidthSPBox->setSuffix(" px");
+    m_options->lineWidthSPBox->setExponentRatio(1.5);
+
+
+    m_options->offsetSPBox->setRange(0.0, 200.0, 0);
+    m_options->offsetSPBox->setValue(30.0);
+    m_options->offsetSPBox->setSuffix("%");
+
+    m_options->densitySPBox->setRange(0.0, 100.0, 0);
+    m_options->densitySPBox->setValue(50.0);
+    m_options->densitySPBox->setSuffix("%");
+
+
+    connect(m_options->offsetSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->lineWidthSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->densitySPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->simpleModeCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->connectionCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->magnetifyCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->randomRGBCHbox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->randomOpacityCHbox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->distanceDensityCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->distanceOpacityCHbox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+
 
     setConfigurationPage(m_options);
 }

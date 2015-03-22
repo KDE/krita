@@ -20,9 +20,8 @@
 #ifndef KISEDITPROFILESDIALOG_H
 #define KISEDITPROFILESDIALOG_H
 
-#include <KDialog>
+#include <kdialog.h>
 
-class QListWidgetItem;
 /**
  * \brief A dialog that provides facilities to edit all the available profiles.
  *

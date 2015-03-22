@@ -77,7 +77,7 @@ public:
                                   const QRect& rect) const;
 
     QIcon icon() const;
-    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     qint32 x() const;
     qint32 y() const;
@@ -116,9 +116,11 @@ public:
      */
     void setDirtyOriginal(const QRect &rect);
 
+    QRect needRectOnSourceForMasks(const QRect &rc) const;
+
 protected:
     void notifyParentVisibilityChanged(bool value);
-
+    QRect outgoingChangeRect(const QRect &rect) const;
 private:
 
     struct Private;

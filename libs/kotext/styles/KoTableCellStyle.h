@@ -38,7 +38,6 @@ class QTextTableCell;
 class QRectF;
 class KoStyleStack;
 class KoGenStyle;
-class KoGenStyles;
 class KoParagraphStyle;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
@@ -302,7 +301,7 @@ public:
      * @param color the color of the border line(s).
      */
     void setEdge(KoBorder::BorderSide side, KoBorder::BorderStyle style,
-                 qreal totalWidth, QColor color);
+                 qreal totalWidth, const QColor &color);
 
     /**
      * Set the properties of a double border.
@@ -340,7 +339,7 @@ public:
 
     KoBorder::BorderData getEdge(KoBorder::BorderSide side) const;
     KoBorder::BorderStyle getBorderStyle(KoBorder::BorderSide side) const;
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &newName);
 
 protected:

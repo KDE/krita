@@ -56,13 +56,12 @@ public:
 
     KisFilterMask(const KisFilterMask& rhs);
 
-    bool allowAsChild(KisNodeSP) const;
-
     void setFilter(KisFilterConfiguration *filterConfig);
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
-                       const QRect & rc) const;
+                       const QRect & rc,
+                       PositionToFilthy maskPos) const;
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;

@@ -29,7 +29,6 @@
 
 class KisPaintDevice;
 class KisFilterStrategy;
-class KisSelection;
 class QTransform;
 
 class KRITAIMAGE_EXPORT KisTransformWorker
@@ -91,6 +90,7 @@ public:
 
     // returns false if interrupted
     bool run();
+    bool runPartial(const QRect &processRect);
 
     /**
      * Returns a matrix of the transformation executed by the worker.

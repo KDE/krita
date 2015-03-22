@@ -275,9 +275,9 @@ void KoPencilTool::finish(bool closePath)
     addPathShape(path, closePath);
 }
 
-QList<QWidget *> KoPencilTool::createOptionWidgets()
+QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     QWidget *optionWidget = new QWidget();
     QVBoxLayout * layout = new QVBoxLayout(optionWidget);
 

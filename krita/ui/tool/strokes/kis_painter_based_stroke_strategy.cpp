@@ -57,12 +57,13 @@ KisPainterBasedStrokeStrategy::PainterInfo::~PainterInfo()
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
-                                                             QVector<PainterInfo*> painterInfos)
+                                                             QVector<PainterInfo*> painterInfos,bool useMergeID)
     : KisSimpleStrokeStrategy(id, name),
       m_resources(resources),
       m_painterInfos(painterInfos),
       m_transaction(0),
-      m_undoEnabled(true)
+      m_undoEnabled(true),
+      m_useMergeID(useMergeID)
 {
     init();
 }
@@ -70,12 +71,13 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
-                                                             PainterInfo *painterInfo)
+                                                             PainterInfo *painterInfo,bool useMergeID)
     : KisSimpleStrokeStrategy(id, name),
       m_resources(resources),
       m_painterInfos(QVector<PainterInfo*>() <<  painterInfo),
       m_transaction(0),
-      m_undoEnabled(true)
+      m_undoEnabled(true),
+      m_useMergeID(useMergeID)
 {
     init();
 }
@@ -183,8 +185,14 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             hasIndirectPainting = false;
         }
     }
+    if(m_useMergeID){
+        m_transaction = new KisTransaction(name(), targetDevice,0,timedID(this->id()));
+    }
+    else{
+        m_transaction = new KisTransaction(name(), targetDevice);
+    }
 
-    m_transaction = new KisTransaction(name(), targetDevice);
+
 
     initPainters(targetDevice, selection, hasIndirectPainting, indirectPaintingCompositeOp());
 
@@ -224,10 +232,16 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     if(layer && indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();
         m_transaction->end();
-
-        indirect->mergeToLayer(layer,
-                               undoAdapter,
-                               transactionText);
+        if(m_useMergeID){
+            indirect->mergeToLayer(layer,
+                                   undoAdapter,
+                                   transactionText,timedID(this->id()));
+        }
+        else{
+            indirect->mergeToLayer(layer,
+                                   undoAdapter,
+                                   transactionText);
+        }
     }
     else {
         m_transaction->commit(undoAdapter);

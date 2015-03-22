@@ -113,7 +113,7 @@ KoGenStyle::~KoGenStyle()
  * The order of this list is important; e.g. a graphic-properties must
  * precede a text-properties always. See the Relax NG to check the order.
  */
-static KoGenStyle::PropertyType s_propertyTypes[] = {
+static const KoGenStyle::PropertyType s_propertyTypes[] = {
     KoGenStyle::DefaultType,
     KoGenStyle::SectionType,
     KoGenStyle::RubyType,

@@ -46,9 +46,8 @@ public:
 
     bool checkSizeTooSmall(qreal scale);
 
-    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight) const;
-    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
-    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight, qreal extraScale, bool isotropicSpacing) const;
+    KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation) const;
+    KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
 
     ///Reimplemented, false if brush is 0
     virtual bool canPaint() const;
@@ -57,6 +56,9 @@ public:
     typedef int needs_preinitialization;
     static void preinitializeOpStatically(const KisPaintOpSettingsSP settings);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
+private:
+    KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation) const;
 
 protected: // XXX: make private!
 

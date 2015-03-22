@@ -5,7 +5,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,7 +27,6 @@
 
 class KoColorProfile;
 class KoColorConversionTransformationFactory;
-class QBitArray;
 
 /**
  * This class is used to create color spaces.
@@ -49,7 +48,7 @@ public:
     virtual QString name() const = 0;
 
     /**
-     * @return true if the color space should be shown in an User Interface, or false
+     * @return true if the color space should be shown in a User Interface, or false
      *         other wise.
      */
     virtual bool userVisible() const = 0;
@@ -108,9 +107,17 @@ public:
 
     /**
      * Create a color profile from a memory array, if possible, otherwise return 0.
+     * This will replace the existing profile with the name in the KoColorSpaceRegistry
+     *
+     * This will call the decendant's createColorProfile()
      */
     const KoColorProfile* colorProfile(const QByteArray& rawData) const;
 
+    /**
+     * Create or reuse the existing colorspace for the given profile.
+     *
+     * This will call the decendant's createColorSpace
+     */
     const KoColorSpace *grabColorSpace(const KoColorProfile *profile);
 
 protected:

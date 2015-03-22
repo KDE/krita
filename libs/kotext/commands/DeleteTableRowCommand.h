@@ -32,7 +32,7 @@ class DeleteTableRowCommand : public KUndo2Command
 {
 public:
 
-    DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, int changeId = 0, KUndo2Command *parent = 0);
+    DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent = 0);
 
     virtual void undo();
     virtual void redo();
@@ -43,7 +43,6 @@ private:
     QTextTable *m_table;
     int m_selectionRow;
     int m_selectionRowSpan;
-    int m_changeId;
     QList<KoTableRowStyle> m_deletedStyles;
 };
 

@@ -45,7 +45,9 @@
 #if defined(Q_OS_WIN)
 #define SHARED_LIB_EXTENSION ".dll"
 #elif defined(Q_OS_MAC)
-#define SHARED_LIB_EXTENSION ".dylib"
+// #define SHARED_LIB_EXTENSION ".dylib"
+// shared libraries indeed have a dylib extension on OS X, but most KDE apps use .so for plugins
+#define SHARED_LIB_EXTENSION ".so"
 #else
 #define SHARED_LIB_EXTENSION ".so"
 #endif
@@ -240,13 +242,13 @@ bool SQLiteConnection::drv_useDatabaseInternal(bool *cancelled,
         //opened as read only, ask
         if (KMessageBox::Continue !=
                 askQuestion(
-                    i18n("Do you want to open file \"%1\" as read-only?",
+                    futureI18n("Do you want to open file \"%1\" as read-only?",
                          QDir::convertSeparators(data()->fileName()))
                     + "\n\n"
-                    + i18n("The file is probably already open on this or another computer.") + " "
-                    + i18n("Could not gain exclusive access for writing the file."),
+                    + futureI18n("The file is probably already open on this or another computer.") + " "
+                    + futureI18n("Could not gain exclusive write access for the file."),
                     KMessageBox::WarningContinueCancel, KMessageBox::Continue,
-                    KGuiItem(i18n("Open As Read-Only"), koIconName("document-open")), KStandardGuiItem::cancel(),
+                    KGuiItem(futureI18n("Open As Read-Only"), koIconName("document-open")), KStandardGuiItem::cancel(),
                     "askBeforeOpeningFileReadOnly", KMessageBox::Notify, msgHandler)) {
             clearError();
             if (!drv_closeDatabase())
@@ -260,12 +262,12 @@ bool SQLiteConnection::drv_useDatabaseInternal(bool *cancelled,
     if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_READWRITE) {
         setError(ERR_ACCESS_RIGHTS,
                  i18n("The file is probably already open on this or another computer.") + "\n\n"
-                 + i18n("Could not gain exclusive access for reading and writing the file.") + " "
+                 + i18n("Could not gain exclusive read and write access for the file.") + " "
                  + i18n("Check the file's permissions and whether it is already opened and locked by another application."));
     } else if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_WRITE) {
         setError(ERR_ACCESS_RIGHTS,
                  i18n("The file is probably already open on this or another computer.") + "\n\n"
-                 + i18n("Could not gain exclusive access for writing the file.") + " "
+                 + i18n("Could not gain exclusive write access for the file.") + " "
                  + i18n("Check the file's permissions and whether it is already opened and locked by another application."));
     }
     */
@@ -285,7 +287,7 @@ bool SQLiteConnection::drv_closeDatabase()
     }
     if (SQLITE_BUSY == res) {
 #if 0 //this is ANNOYING, needs fixing (by closing cursors or waiting)
-        setError(ERR_CLOSE_FAILED, i18n("Could not close busy database."));
+        setError(ERR_CLOSE_FAILED, futureI18n("Could not close busy database."));
 #else
         return true;
 #endif

@@ -20,11 +20,11 @@
 #include "LayerThumbProvider.h"
 #include <PropertyContainer.h>
 #include <kis_node_model.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <kis_node_manager.h>
 #include <kis_dummies_facade_base.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_composite_ops_model.h>
 #include <kis_node.h>
 #include <kis_image.h>
@@ -91,7 +91,7 @@ public:
     QHash<const KisNode*, LayerModelMetaInfo> layerMeta;
     KisNodeModel* nodeModel;
     bool aboutToRemoveRoots;
-    KisView2* view;
+    KisViewManager* view;
     KisCanvas2* canvas;
     QPointer<KisNodeManager> nodeManager;
     KisImageWSP image;
@@ -248,7 +248,7 @@ QObject* LayerModel::view() const
 
 void LayerModel::setView(QObject *newView)
 {
-    KisView2* view = qobject_cast<KisView2*>(newView);
+    KisViewManager* view = qobject_cast<KisViewManager*>(newView);
     // This has to happen very early, and we will be filling it back up again soon anyway...
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this);
@@ -277,11 +277,11 @@ void LayerModel::setView(QObject *newView)
     d->declarativeEngine->addImageProvider(QString("layerthumb%1").arg(d->thumbProvider->layerID()), d->thumbProvider);
 
     if (d->canvas) {
-        d->image = d->canvas->view()->image();
-        d->nodeManager = d->canvas->view()->nodeManager();
+        d->image = d->canvas->imageView()->image();
+        d->nodeManager = d->canvas->viewManager()->nodeManager();
 
-        KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(d->canvas->view()->document()->shapeController());
-        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(d->canvas->view()->document()->shapeController());
+        KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(d->canvas->imageView()->document()->shapeController());
+        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(d->canvas->imageView()->document()->shapeController());
         d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image, shapeController);
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
@@ -538,7 +538,7 @@ void LayerModel::moveRight()
 
 void LayerModel::clear()
 {
-    d->canvas->view()->selectionManager()->clear();
+    d->canvas->viewManager()->selectionManager()->clear();
 }
 
 void LayerModel::clone()
@@ -572,12 +572,12 @@ void LayerModel::setOpacity(int index, float newOpacity)
 void LayerModel::setVisible(int index, bool newVisible)
 {
     if (index > -1 && index < d->layers.count()) {
-        KoDocumentSectionModel::PropertyList props = d->layers[index]->sectionModelProperties();
-        KoDocumentSectionModel::Property prop = props[0];
+        KisDocumentSectionModel::PropertyList props = d->layers[index]->sectionModelProperties();
+        KisDocumentSectionModel::Property prop = props[0];
         if(props[0].state == newVisible)
             return;
-        props[0] = KoDocumentSectionModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
-        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KoDocumentSectionModel::PropertyList>(props), KoDocumentSectionModel::PropertiesRole );
+        props[0] = KisDocumentSectionModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
+        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisDocumentSectionModel::PropertyList>(props), KisDocumentSectionModel::PropertiesRole );
         d->layers[index]->setDirty(d->layers[index]->extent());
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);
@@ -985,7 +985,7 @@ QObject* LayerModel::activeFilterConfig() const
     PropertyContainer* config = new PropertyContainer(filterId, 0);
     QMap<QString, QVariant>::const_iterator i;
     for(i = props.constBegin(); i != props.constEnd(); ++i) {
-        config->setProperty(i.key().toAscii(), i.value());
+        config->setProperty(i.key().toLatin1(), i.value());
         //qDebug() << "Getting active config..." << i.key() << i.value();
     }
     return config;
@@ -1004,7 +1004,7 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
     QMap<QString, QVariant>::const_iterator i;
     for(i = realConfig->getProperties().constBegin(); i != realConfig->getProperties().constEnd(); ++i)
     {
-        realConfig->setProperty(QString(i.key()), config->property(i.key().toAscii()));
+        realConfig->setProperty(i.key(), config->property(i.key().toLatin1()));
         //qDebug() << "Creating config..." << i.key() << i.value();
     }
 // The following code causes sporadic crashes, and disabling causes leaks. So, leaks it must be, for now.

@@ -29,16 +29,17 @@
 #include <kpluginfactory.h>
 #include <kmimetype.h>
 
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoFileDialog.h>
-#include <KoDocument.h>
+#include <KisDocument.h>
 
+#include <KisPart.h>
 #include <kis_debug.h>
 #include <kis_types.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_image.h>
 #include <kis_action.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_paint_device.h>
@@ -49,9 +50,10 @@ K_PLUGIN_FACTORY(ImagesplitFactory, registerPlugin<Imagesplit>();)
 K_EXPORT_PLUGIN(ImagesplitFactory("krita"))
 
 Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/imagesplit.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Image Split "), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("imagesplit", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImagesplit()));
 }
@@ -64,12 +66,12 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 {
     KisImageWSP image = m_view->image();
 
-    KisDoc2 d;
-    d.prepareForImport();
+    KisDocument *d = KisPart::instance()->createDocument();
+    d->prepareForImport();
 
-    KisImageWSP dst = new KisImage(d.createUndoStore(), imgSize.width(),imgSize.height(), image->colorSpace(), image->objectName());
+    KisImageWSP dst = new KisImage(d->createUndoStore(), imgSize.width(),imgSize.height(), image->colorSpace(), image->objectName());
     dst->setResolution(image->xRes(), image->yRes());
-    d.setCurrentImage(dst);
+    d->setCurrentImage(dst);
 
     KisPaintLayer* paintLayer = new KisPaintLayer(dst,dst->nextLayerName(), 255);
     KisPainter gc(paintLayer->paintDevice());
@@ -77,8 +79,10 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 
     dst->addNode(paintLayer, KisNodeSP(0));
     dst->refreshGraph();
-    d.setOutputMimeType(mimeType.toLatin1());
-    d.exportDocument(url);
+    d->setOutputMimeType(mimeType.toLatin1());
+    d->exportDocument(url);
+
+    delete d;
 }
 
 void Imagesplit::slotImagesplit()
@@ -88,7 +92,7 @@ void Imagesplit::slotImagesplit()
     QString suffix = strList.at(0);
 
     // Getting all mime types and converting them into names which are displayed at combo box
-    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
     QStringList listFileType;
     foreach(const QString &tempStr, listMimeFilter) {
         KMimeType::Ptr type = KMimeType::mimeType( tempStr );
@@ -131,7 +135,7 @@ void Imagesplit::slotImagesplit()
             for(int i=0;i<(numVerticalLines+1);i++) {
                 for(int j=0;j<(numHorizontalLines+1);j++)
                 {
-                    KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "OpenDocument");
+                    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                     dialog.setCaption(i18n("Save Image on Split"));
                     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
                     dialog.setMimeTypeFilters(listMimeFilter);

@@ -1,9 +1,11 @@
+include_directories(
+    ${FLAKE_INCLUDES}
+)
+
 add_subdirectory( fonts )
 add_subdirectory( pics )
 add_subdirectory( core )
 add_subdirectory( tests)
-
-include_directories(  )
 
 ########### Flake Plugin library ###############
 
@@ -29,7 +31,7 @@ set( musiccore_SRCS
     core/MusicXmlReader.cpp
 )
 
-SET (musicshape_LIB_SRCS
+set (musicshape_LIB_SRCS
     MusicShape.cpp
     MusicShapeFactory.cpp
     MusicTool.cpp

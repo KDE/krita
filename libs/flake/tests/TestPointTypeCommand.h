@@ -24,7 +24,7 @@
 class TestPointTypeCommand : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void redoUndoSymmetric();
     void redoUndoSmooth();
     void redoUndoCorner();

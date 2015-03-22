@@ -6,23 +6,23 @@
 #  XBase_LIBRARIES - Link these to use XBase
 
 
-IF (XBase_INCLUDE_DIR AND XBase_LIBRARIES )
+if (XBase_INCLUDE_DIR AND XBase_LIBRARIES )
 
 	# Already in cache
 	SET(XBASE_FOUND TRUE)
 
-ELSE (XBase_INCLUDE_DIR AND XBase_LIBRARIES)
+else ()
 
-       FIND_PATH(XBase_INCLUDE_DIR NAMES xbase.h
+       find_path(XBase_INCLUDE_DIR NAMES xbase.h
         PATHS /usr/include/xbase /usr/local/include/xbase
        )
 
-       FIND_LIBRARY(XBase_LIBRARIES NAMES xbase )
+       find_library(XBase_LIBRARIES NAMES xbase )
 
        include(FindPackageHandleStandardArgs)
-       FIND_PACKAGE_HANDLE_STANDARD_ARGS(XBase DEFAULT_MSG XBase_INCLUDE_DIR XBase_LIBRARIES )
+       find_package_handle_standard_args(XBase DEFAULT_MSG XBase_INCLUDE_DIR XBase_LIBRARIES )
 
-       MARK_AS_ADVANCED(XBase_INCLUDE_DIR XBase_LIBRARIES)
+       mark_as_advanced(XBase_INCLUDE_DIR XBase_LIBRARIES)
 
-ENDIF (XBase_INCLUDE_DIR AND XBase_LIBRARIES )
+endif ()
 

@@ -21,12 +21,13 @@
 
 #include <limits.h>
 
-#include <kglobal.h>
 #include <calligraversion.h>
 
 #include <KoConfig.h>
 #include "kis_assert.h"
 
+#include <QPoint>
+#include <QPointF>
 
 #define KRITA_VERSION CALLIGRA_VERSION
 
@@ -116,7 +117,7 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
 }
 
 template<typename T>
-inline T pow2(T x) {
+inline T pow2(const T& x) {
     return x * x;
 }
 
@@ -153,9 +154,9 @@ inline qreal kisDistanceToLine(const QPointF &m, const QLineF &line)
     qreal distance = 0;
 
     if (qFuzzyCompare(p1.x(), p2.x())) {
-        distance = qAbs(p1.y() - p2.y());
+        distance = qAbs(m.x() - p2.x());
     } else if (qFuzzyCompare(p1.y(), p2.y())) {
-        distance = qAbs(p1.x() - p2.x());
+        distance = qAbs(m.y() - p2.y());
     } else {
         qreal A = 1;
         qreal B = - (p1.x() - p2.x()) / (p1.y() - p2.y());
@@ -174,6 +175,36 @@ inline QPointF kisProjectOnVector(const QPointF &base, const QPointF &v)
     qreal coeff = prod / lengthSq;
 
     return coeff * base;
+}
+
+#include <QRect>
+
+inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
+{
+    if(rc.right() > bounds.right()) {
+        rc.translate(bounds.right() - rc.right(), 0);
+    }
+
+    if(rc.left() < bounds.left()) {
+        rc.translate(bounds.left() - rc.left(), 0);
+    }
+
+    if(rc.bottom() > bounds.bottom()) {
+        rc.translate(0, bounds.bottom() - rc.bottom());
+    }
+
+    if(rc.top() < bounds.top()) {
+        rc.translate(0, bounds.top() - rc.top());
+    }
+
+    return rc;
+}
+
+#include <QSharedPointer>
+
+template <class T>
+inline QSharedPointer<T> toQShared(T* ptr) {
+    return QSharedPointer<T>(ptr);
 }
 
 #endif // KISGLOBAL_H_

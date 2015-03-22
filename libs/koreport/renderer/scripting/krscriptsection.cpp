@@ -65,7 +65,7 @@ QString Section::name()
 
 QObject* Section::objectByNumber(int i)
 {
-    if (m_section->m_objects[i]->typeName() == "report:line") {
+    if (m_section->m_objects[i]->typeName() == "line") {
                 return new Scripting::Line(dynamic_cast<KoReportItemLine*>(m_section->m_objects[i]));
     }
     else {

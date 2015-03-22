@@ -21,7 +21,6 @@
 #define PICTURESHAPECONFIGWIDGET_H
 
 #include <KoShapeConfigWidgetBase.h>
-#include <kurl.h>
 #include <QWidget>
 
 class PictureShape;
@@ -55,7 +54,7 @@ class LoadWaiter : public QObject
 public:
     explicit LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
 
-public slots:
+public Q_SLOTS:
     void setImageData(KJob *job);
 
 private:

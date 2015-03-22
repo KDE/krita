@@ -35,9 +35,13 @@ public:
         : StrokeTester(QString("filter_") + filterName, QSize(500, 500), ""),
           m_filterName(filterName)
     {
+        setBaseFuzziness(5);
     }
 
 protected:
+    using utils::StrokeTester::initImage;
+    using utils::StrokeTester::addPaintingJobs;
+
     void initImage(KisImageWSP image, KisNodeSP activeNode) {
         QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
         activeNode->original()->convertFromQImage(src, 0);

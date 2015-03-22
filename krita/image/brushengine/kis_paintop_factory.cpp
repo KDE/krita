@@ -38,24 +38,6 @@ void KisPaintOpFactory::preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP 
 }
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-void KisPaintOpFactory::setUserVisible(PaintopVisibility visibility)
-{
-    m_visibility = visibility;
-}
-
-bool KisPaintOpFactory::userVisible(const KoColorSpace * cs) const
-{
-    if (m_visibility == AUTO) {
-        return cs && cs->id() != "WET";
-    }
-    else if (m_visibility == NEVER) {
-        return false;
-    }
-    return true;
-}
-
-
-
 QString KisPaintOpFactory::pixmap()
 {
     return "";

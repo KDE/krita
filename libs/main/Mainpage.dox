@@ -1,7 +1,7 @@
 /**
- * \mainpage Calligra Core library called: 'main'
+ * \mainpage Calligra Core library called: 'KoMain'
  * 
- * The "main" library provides the basic model-view implementation for
+ * The "KoMain" library provides the basic model-view implementation for
  * Calligra applications. It is not the base library for all Calligra libraries,
  * but the base library for applications.
  *
@@ -121,3 +121,6 @@ this might be accomplished using the "split view" feature. KoView[s]
 of the same document can be in separate KoMainWindow[s].
 
  */
+
+// DOXYGEN_SET_PROJECT_NAME = KoMain
+// DOXYGEN_SET_IGNORE_PREFIX = Ko K

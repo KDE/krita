@@ -1,4 +1,4 @@
 #! /bin/sh
 source ../../calligra_xgettext.sh
 
-calligra_xgettext *.cpp > $podir/CommentShape.pot
+calligra_xgettext calligra_shape_comment.pot *.cpp

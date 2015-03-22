@@ -61,14 +61,14 @@ bool KoReportScreenRenderer::render(const KoReportRendererContext& context, OROD
             context.painter->save();
             //Background
 
+            context.painter->setBackgroundMode(Qt::TransparentMode);
+            
             QColor bg = tb->textStyle().backgroundColor;
-            bg.setAlpha((tb->textStyle().backgroundOpacity / 100) * 255);
+            bg.setAlphaF(0.01 * tb->textStyle().backgroundOpacity);
 
-            context.painter->setBackground(bg);
             context.painter->fillRect(rc, bg);
 
             //Text
-            context.painter->setBackgroundMode(Qt::TransparentMode);
             context.painter->setFont(tb->textStyle().font);
             context.painter->setPen(tb->textStyle().foregroundColor);
             context.painter->drawText(rc.adjusted(2, 2, 0, 0), tb->flags(), tb->text());
@@ -157,7 +157,7 @@ bool KoReportScreenRenderer::render(const KoReportRendererContext& context, OROD
             context.painter->setPen(chk->foregroundColor());
 
             if (chk->lineStyle().style == Qt::NoPen || chk->lineStyle().weight <= 0) {
-                context.painter->setPen(QPen(QColor(224, 224, 224)));
+                context.painter->setPen(QPen(Qt::lightGray));
             } else {
                 context.painter->setPen(QPen(chk->lineStyle().lineColor, chk->lineStyle().weight, chk->lineStyle().style));
             }

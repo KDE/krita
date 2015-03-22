@@ -33,7 +33,7 @@ public:
     void setCounterType(KoListStyle::Style type);
     virtual QString textFromValue(int value) const;
 
-public slots:
+public Q_SLOTS:
     void setLetterSynchronization(bool on) {
         m_letterSynchronization = on;
     }

@@ -20,10 +20,11 @@
 #ifndef KOVIEWCONVERTER_H
 #define KOVIEWCONVERTER_H
 
-#include <QPointF>
-#include <QRectF>
-
 #include "flake_export.h"
+
+class QPointF;
+class QRectF;
+class QSizeF;
 
 /**
  * The interface for view conversions.

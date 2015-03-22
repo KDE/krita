@@ -48,21 +48,21 @@ KisDynaOpOption::KisDynaOpOption()
     connect(m_options->fixedAngleChBox, SIGNAL(toggled(bool)), m_options->angleSlider, SLOT(setEnabled(bool)));
 
     // preset
-    connect(m_options->circleRBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->polygonRBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->wireRBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->linesRBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->initWidthSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->massSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->dragSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->angleSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->widthRangeSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->diameterDSSB, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->lineCountSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->lineSpacingSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->LineCBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->twoCBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->fixedAngleChBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->circleRBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->polygonRBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->wireRBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->linesRBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->initWidthSPBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
+    connect(m_options->massSPBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
+    connect(m_options->dragSPBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
+    connect(m_options->angleSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->widthRangeSPBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
+    connect(m_options->diameterDSSB, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->lineCountSPBox, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
+    connect(m_options->lineSpacingSPBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
+    connect(m_options->LineCBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->twoCBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->fixedAngleChBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }

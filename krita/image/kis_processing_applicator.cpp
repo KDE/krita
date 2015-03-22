@@ -31,7 +31,7 @@ class DisableUIUpdatesCommand : public KUndo2Command
 {
 public:
     DisableUIUpdatesCommand(KisImageWSP image,
-                          bool finalUpdate)
+                            bool finalUpdate)
         : m_image(image),
           m_finalUpdate(finalUpdate)
     {
@@ -184,11 +184,12 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
     : m_image(image),
       m_node(node),
       m_flags(flags),
-      m_emitSignals(emitSignals)
+      m_emitSignals(emitSignals),
+      m_finalSignalsEmitted(false)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
-        new KisStrokeStrategyUndoCommandBased(name, false,
-                                              m_image->postExecutionUndoAdapter());
+            new KisStrokeStrategyUndoCommandBased(name, false,
+                                                  m_image->postExecutionUndoAdapter());
 
     if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
         strategy->setSupportsWrapAroundMode(true);
@@ -247,16 +248,23 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
                                            KisStrokeJobData::Sequentiality sequentiality,
                                            KisStrokeJobData::Exclusivity exclusivity)
 {
+    /*
+     * One should not add commands after the final signals have been
+     * emitted, only end or cancel the stroke
+     */
+    KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
+
     m_image->addJob(m_strokeId,
-                    new KisStrokeStrategyUndoCommandBased::
-                    Data(KUndo2CommandSP(command),
-                         false,
-                         sequentiality,
-                         exclusivity));
+                    new KisStrokeStrategyUndoCommandBased::Data(KUndo2CommandSP(command),
+                                                                false,
+                                                                sequentiality,
+                                                                exclusivity));
 }
 
-void KisProcessingApplicator::end()
+void KisProcessingApplicator::explicitlyEmitFinalSignals()
 {
+    KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
+
     if (m_node) {
         applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
     }
@@ -268,6 +276,17 @@ void KisProcessingApplicator::end()
     if(!m_emitSignals.isEmpty()) {
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, true), KisStrokeJobData::BARRIER);
     }
+
+    // simple consistency check
+    m_finalSignalsEmitted = true;
+}
+
+void KisProcessingApplicator::end()
+{
+    if (!m_finalSignalsEmitted) {
+        explicitlyEmitFinalSignals();
+    }
+
     m_image->endStroke(m_strokeId);
 }
 

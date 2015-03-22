@@ -32,10 +32,9 @@
 
 #include "FontFamilyAction.h"
 
-#include <QtGui/QToolBar>
+#include <QToolBar>
 
 #include <kdebug.h>
-#include <kfontdialog.h>
 #include <kicon.h>
 #include <klocale.h>
 #include <kfontchooser.h>
@@ -117,9 +116,10 @@ QString KoFontFamilyAction::font() const
 QWidget* KoFontFamilyAction::createWidget(QWidget* parent)
 {
     kDebug(129) << "KoFontFamilyAction::createWidget()";
-#ifdef __GNUC__
-#warning FIXME: items need to be converted
-#endif
+// silence unclear warning from original kfontaction.acpp
+// #ifdef __GNUC__
+// #warning FIXME: items need to be converted
+// #endif
     // This is the visual element on the screen.  This method overrides
     // the KSelectAction one, preventing KSelectAction from creating its
     // regular KComboBox.

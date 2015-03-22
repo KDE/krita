@@ -21,10 +21,11 @@
 #ifndef KOPATHSHAPEFACTORY_H
 #define KOPATHSHAPEFACTORY_H
 
-#include "KoShape.h"
 #include "KoShapeFactoryBase.h"
 
 #include "KoXmlReader.h"
+
+class KoShape;
 
 /// Factory for path shapes.
 class FLAKE_TEST_EXPORT KoPathShapeFactory : public KoShapeFactoryBase

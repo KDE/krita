@@ -85,7 +85,7 @@ public:
      * priority of an element is, it is sorted more to the left in a group of element with equal start time.
      */    
     virtual int priority() const = 0;
-public slots:
+public Q_SLOTS:
     /**
      * Sets the x position of this musical element.
      */
@@ -100,7 +100,7 @@ public slots:
      * Sets the start time of this musical element.
      */
     void setStartTime(int startTime);
-protected slots:
+protected Q_SLOTS:
     /**
      * Sets the width of this musical element.
      *
@@ -114,7 +114,7 @@ protected slots:
      * @param height the new height of this musical element
      */
     void setHeight(qreal height);
-signals:
+Q_SIGNALS:
     void xChanged(qreal x);
     void yChanged(qreal y);
     void startTimeChanged(int startTime);

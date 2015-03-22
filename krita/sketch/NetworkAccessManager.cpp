@@ -32,9 +32,9 @@
 
 #include "NetworkAccessManager.h"
 
-#include <QtCore/QLocale>
-#include <QtCore/QUrl>
-#include <QtNetwork/QNetworkReply>
+#include <QLocale>
+#include <QUrl>
+#include <QNetworkReply>
 
 #ifdef Q_OS_UNIX
 #include <sys/utsname.h>

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
- * Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
+ * Copyright (C) 2011-2015 by Radoslaw Wicik (radoslaw@wicik.pl)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,128 +18,50 @@
 #include "KoReportItemMaps.h"
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 #include <QBuffer>
 #include <kcodecs.h>
 #include <renderobjects.h>
-#include <marble/MarbleWidget.h>
-#include <marble/MarbleModel.h>
-#include <QImage>
 #include <QPixmap>
 #include <sys/socket.h>
 #include <QLabel>
 #include <QStringList>
 
+
+
+
 #define myDebug() if (0) kDebug(44021)
 
+
 KoReportItemMaps::KoReportItemMaps(QDomNode & element)
+    : m_longtitude(0)
+    , m_latitude(0)
+    , m_zoom(0)
+    , m_pageId(0)
+    , m_sectionId(0)
+    , m_oroPicture(0)
 {
-    myDebug() << "======" << this;
     createProperties();
-    QDomNodeList nl = element.childNodes();
-    QString n;
-    QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
-    //m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
     Z = element.toElement().attribute("report:z-index").toDouble();
+    m_latitudeProperty->setValue(element.toElement().attribute("report:latitude").toDouble());
+    m_longitudeProperty->setValue(element.toElement().attribute("report:longitude").toDouble());
+    m_zoomProperty->setValue(element.toElement().attribute("report:zoom").toInt());
+    QString themeId(element.toElement().attribute("report:theme"));
+    themeId = themeId.isEmpty() ? m_themeManager.mapThemeIds()[0] : themeId;
+    m_themeProperty->setValue(themeId);
 
     parseReportRect(element.toElement(), &m_pos, &m_size);
-    myDebug() << "====== childgren:";
-    for (int i = 0; i < nl.count(); i++) {
-        node = nl.item(i);
-        n = node.nodeName();
-
-//         if (n == "report:Maps-data") {
-// 
-//             setInlineImageData(node.firstChild().nodeValue().toLatin1());
-//         } else {
-            kDebug() << "====== while parsing image element encountered unknow element: " << n;
-//         }
-    }
-    m_mapImage = QImage(m_size.toScene().toSize(), QImage::Format_ARGB32);
-    m_mapImage.fill(QColor(200, 150, 5).rgb());
-}
-
-Marble::MarbleWidget* KoReportItemMaps::initMarble()
-{
-    Marble::MarbleWidget* marble = new Marble::MarbleWidget();
-    //marble->setMapThemeId("earth/srtm/srtm.dgml");
-    
-    marble->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
-    
-    marble->centerOn(20.81,52.12, false);
-    marble->zoomView(2100);
-    marble->setShowOverviewMap(false);
-    marble->setFixedSize(m_size.toScene().toSize());
-    return marble;
 }
 
 
 KoReportItemMaps::~KoReportItemMaps()
 {
-    myDebug() << "DIE:" << this << m_marbles.count();
-    QMap<QString, Marble::MarbleWidget*>::iterator i = m_marbles.begin();
-    while(i != m_marbles.end()){
-        delete i.value();
-        i++;
-    }
     delete m_set;
 }
-
-// bool KoReportItemMaps::isInline() const
-// {
-//     return !(inlineImageData().isEmpty());
-// }
-
-// QByteArray KoReportItemMaps::inlineImageData() const
-// {
-//     QPixmap pixmap = m_staticImage->value().value<QPixmap>();
-//     QByteArray ba;
-//     QBuffer buffer(&ba);
-//     buffer.open(QIODevice::ReadWrite);
-//     pixmap.save(&buffer, "PNG");   // writes pixmap into ba in PNG format,
-//     //TODO should i remember the format used, or save as PNG as its lossless?
-// 
-//     QByteArray imageEncoded(KCodecs::base64Encode(buffer.buffer(), true));
-//     return imageEncoded;
-// }
-
-// void KoReportItemMaps::setInlineImageData(QByteArray dat, const QString &fn)
-// {
-//     //oryginal image function
-//     if (!fn.isEmpty()) {
-//         QPixmap pix(fn);
-//         if (!pix.isNull())
-//             m_staticImage->setValue(pix);
-//         else {
-//             QPixmap blank(1, 1);
-//             blank.fill();
-//             m_staticImage->setValue(blank);
-//         }
-//     } else {
-//         const QByteArray binaryStream(KCodecs::base64Decode(dat));
-//         const QPixmap pix(QPixmap::fromImage(QImage::fromData(binaryStream), Qt::ColorOnly));
-//         m_staticImage->setValue(pix);
-//     }
-// 
-// }
-
-// QString KoReportItemMaps::mode() const
-// {
-//     return m_resizeMode->value().toString();
-// }
-
-// void KoReportItemMaps::setMode(const QString &m)
-// {
-//     if (mode() != m) {
-//         m_resizeMode->setValue(m);
-//     }
-// }
 
 void KoReportItemMaps::createProperties()
 {
@@ -147,17 +69,33 @@ void KoReportItemMaps::createProperties()
 
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
-    //QStringList keys, strings;
-    //keys << "clip" << "stretch";
-    //strings << i18n("Clip") << i18n("Stretch");
-    //m_resizeMode = new KoProperty::Property("resize-mode", keys, strings, "clip", i18n("Resize Mode"));
+    m_latitudeProperty = new KoProperty::Property("latitude", 0.0, i18n("Latitude"), i18n("Latitude") );
+    m_latitudeProperty->setOption("min", -90);
+    m_latitudeProperty->setOption("max", 90);
+    m_latitudeProperty->setOption("unit", "°");
 
-    //m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18n("Static Image"));
+    m_longitudeProperty = new KoProperty::Property("longitude", 0.0, i18n("longitude"), i18n("longitude") );
+    m_longitudeProperty->setOption("min", -180);
+    m_longitudeProperty->setOption("max", 180);
+    m_longitudeProperty->setOption("unit", "°");
+
+    m_zoomProperty     = new KoProperty::Property("zoom", 1000, i18n("Zoom"), i18n("Zoom") );
+
+    QStringList mapThemIds(m_themeManager.mapThemeIds());
+    m_themeProperty = new KoProperty::Property("theme",
+                                                    mapThemIds,
+                                                    mapThemIds,
+                                                    mapThemIds[1]);
+    if (!mapThemIds.isEmpty()) {
+        m_themeProperty->setValue(mapThemIds[0], false);
+    }
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
-    //m_set->addProperty(m_resizeMode);
-    //m_set->addProperty(m_staticImage);
+    m_set->addProperty(m_latitudeProperty);
+    m_set->addProperty(m_longitudeProperty);
+    m_set->addProperty(m_zoomProperty);
+    m_set->addProperty(m_themeProperty);
 }
 
 
@@ -168,13 +106,12 @@ void KoReportItemMaps::setColumn(const QString &c)
 
 QString KoReportItemMaps::itemDataSource() const
 {
-    kDebug() << m_controlSource->value().toString();
     return m_controlSource->value().toString();
 }
 
 QString KoReportItemMaps::typeName() const
 {
-    return "report:maps";
+    return "maps";
 }
 
 int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
@@ -182,72 +119,75 @@ int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const
 {
     Q_UNUSED(script)
     
-    myDebug() << this << "data:" << data;
-    QString dataKey = data.toString();
-    QStringList dataList = dataKey.split(QLatin1Char(';'));
-    //myDebug() << "splited:" << dataList;
-    Marble::MarbleWidget* marble;
-    
-    if(m_marbles.count(dataKey)==0){ //no such marble yet
-        marble = initMarble();
-        m_marbles.insert(dataKey, marble);
-        connect(marble->model(), SIGNAL(modelChanged()), this, SLOT(requestRedraw()));
-        if(dataList.count()==3){
-            marble->setCenterLatitude(dataList[0].toDouble());
-            marble->setCenterLongitude(dataList[1].toDouble());
-            marble->zoomView(dataList[2].toInt());
-        }
-    }else{
-        marble = m_marbles[dataKey];
+    deserializeData(data);
+    m_pageId = page;
+    m_sectionId = section;
+    m_offset = offset;
+
+
+    m_oroPicture = new OROPicture();
+    m_oroPicture->setPosition(m_pos.toScene() + m_offset);
+    m_oroPicture->setSize(m_size.toScene());
+
+    if (m_pageId) {
+        m_pageId->addPrimitive(m_oroPicture);
     }
 
-    marble->render(&m_mapImage);
-    
-    OROImage * id = new OROImage();
-    id->setImage(m_mapImage);
-    id->setScaled(false);
-
-    id->setPosition(m_pos.toScene() + offset);
-    id->setSize(m_size.toScene());
-    OroIds oroIds;
-    if (page) {
-        page->addPrimitive(id);
-        oroIds.pageId = id;
-        myDebug() << "page:id=" <<id;
-    }
-    
-    if (section) {
-        OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
+    if (m_sectionId) {
+        OROPicture *i2 = dynamic_cast<OROPicture*>(m_oroPicture->clone());
         i2->setPosition(m_pos.toPoint());
-        section->addPrimitive(i2);
-        oroIds.sectionId = i2;
-        myDebug() << "section:id=" << i2;
     }
-    
-    if (!page) {
-        delete id;
-        oroIds.pageId=0;
-    }
-    oroIds.marbleWidget = marble;
-    m_marbleImgs[marble->model()]=oroIds;
-    
+
+    m_mapRenderer.renderJob(this);
+
     return 0; //Item doesn't stretch the section height
 }
 
-void KoReportItemMaps::requestRedraw()
+void KoReportItemMaps::deserializeData(const QVariant& serialized)
 {
-    myDebug() << sender();
-    QImage tmpImg(m_mapImage);
-    Marble::MarbleModel* marbleModel = dynamic_cast<Marble::MarbleModel*>(sender());
-    OroIds *oroIds = &m_marbleImgs[marbleModel];
-    oroIds->marbleWidget->render(&tmpImg);
-    if(oroIds->pageId)
-        oroIds->pageId->setImage(tmpImg);
-    if(oroIds->sectionId)
-        oroIds->sectionId->setImage(tmpImg);
-    myDebug() << "pageId sectionId marbleWidget";
-    myDebug() << oroIds->pageId << oroIds->sectionId << oroIds->marbleWidget;
+    QStringList dataList = serialized.toString().split(QLatin1Char(';'));
+    if (dataList.size() == 3) {
+        m_latitude = dataList[0].toDouble();
+        m_longtitude = dataList[1].toDouble();
+        m_zoom = dataList[2].toInt();
+    } else {
+        m_latitude = m_latitudeProperty->value().toReal();
+        m_longtitude = m_longitudeProperty->value().toReal();
+        m_zoom = m_zoomProperty->value().toInt();
+    }
 }
 
+void KoReportItemMaps::renderFinished()
+{
+    emit finishedRendering();
+}
 
+OROPicture* KoReportItemMaps::oroImage()
+{
+    return m_oroPicture;
+}
 
+qreal KoReportItemMaps::longtitude() const
+{
+    return m_longtitude;
+}
+
+qreal KoReportItemMaps::latitude() const
+{
+    return m_latitude;
+}
+
+int KoReportItemMaps::zoom() const
+{
+    return m_zoom;
+}
+
+QSize KoReportItemMaps::size() const
+{
+    return m_size.toScene().toSize();
+}
+
+QString KoReportItemMaps::themeId() const
+{
+    return m_themeProperty->value().toString();
+}

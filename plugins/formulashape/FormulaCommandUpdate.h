@@ -23,7 +23,6 @@
 
 class FormulaCommand;
 class KoFormulaShape;
-class FormulaData;
 
 /**
  *

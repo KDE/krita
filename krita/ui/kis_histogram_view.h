@@ -88,7 +88,7 @@ public:
 
     void setColor(bool set);
 
-public slots:
+public Q_SLOTS:
 
     void setActiveChannel(int channel);
 
@@ -96,7 +96,7 @@ public slots:
 
     void updateHistogram();
 
-signals:
+Q_SIGNALS:
 
     void rightClicked(const QPoint& pos);
 

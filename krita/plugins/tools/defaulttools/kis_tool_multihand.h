@@ -37,7 +37,6 @@ class KisToolMultihand : public KisToolBrush
 public:
     KisToolMultihand(KoCanvasBase *canvas);
     ~KisToolMultihand();
-
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
@@ -53,7 +52,7 @@ private:
     void finishAxesSetup();
     void updateCanvas();
 
-private slots:
+private Q_SLOTS:
     void activateAxesPointModeSetup();
     void slotSetHandsCount(int count);
     void slotSetAxesAngle(qreal angle);

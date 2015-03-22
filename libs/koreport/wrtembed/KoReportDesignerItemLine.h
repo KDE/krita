@@ -17,9 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef __REPORTENTITYLINE_H__
-#define __REPORTENTITYLINE_H__
+#ifndef __KOREPORTDESIGNERITEMLINE_H__
+#define __KOREPORTDESIGNERITEMLINE_H__
 
 #include <QGraphicsLineItem>
 #include <koproperty/Property.h>
@@ -37,6 +36,7 @@ class KoReportDesignerItemLine : public KoReportItemLine, public QGraphicsLineIt
     Q_OBJECT
 public:
     KoReportDesignerItemLine(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
+    KoReportDesignerItemLine(KoReportDesigner * d, QGraphicsScene * scene, const QPointF &startPos, const QPointF &endPos);
     KoReportDesignerItemLine(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);
 
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
@@ -46,6 +46,7 @@ public:
     void setLineScene(QLineF);
     
     virtual void move(const QPointF&);
+
 private:
     KoReportDesigner* m_rd;
     void init(QGraphicsScene*, KoReportDesigner *);
@@ -60,7 +61,7 @@ protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 

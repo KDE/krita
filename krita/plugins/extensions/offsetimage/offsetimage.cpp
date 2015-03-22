@@ -26,7 +26,7 @@
 #include <KoIcon.h>
 #include <kis_image.h>
 #include <kis_types.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_image_manager.h>
 #include <kis_node_manager.h>
 #include <kis_canvas_resource_provider.h>
@@ -43,9 +43,10 @@ K_PLUGIN_FACTORY(OffsetImageFactory, registerPlugin<OffsetImage>();)
 K_EXPORT_PLUGIN(OffsetImageFactory("krita"))
 
 OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/offsetimage.rc")
+        : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Offset Image..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("offsetimage", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotOffsetImage()));
 
@@ -67,7 +68,7 @@ void OffsetImage::slotOffsetImage()
     KisImageWSP image = m_view->image();
     if (image) {
 
-        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view, "OffsetImage", offsetWrapRect().size());
+        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetImage", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
         KUndo2MagicString actionName = kundo2_i18n("Offset Image");
@@ -91,7 +92,7 @@ void OffsetImage::slotOffsetLayer()
     KisImageWSP image = m_view->image();
     if (image) {
 
-    DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view, "OffsetLayer", offsetWrapRect().size());
+    DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetLayer", offsetWrapRect().size());
     Q_CHECK_PTR(dlgOffsetImage);
 
     KUndo2MagicString actionName = kundo2_i18n("Offset Layer");

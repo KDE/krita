@@ -19,7 +19,7 @@
 #ifndef KRITA_SKETCH_PROGRESSPROXY_H
 #define KRITA_SKETCH_PROGRESSPROXY_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <KoProgressProxy.h>
 
 #include "krita_sketch_export.h"

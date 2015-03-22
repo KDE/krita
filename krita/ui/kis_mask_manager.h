@@ -19,14 +19,17 @@
 #define KIS_MASK_MANAGER
 
 #include <QObject>
+#include <QPointer>
 
 #include "kis_types.h"
+#include "KisView.h"
 
-class KisView2;
+class KisViewManager;
 class KActionCollection;
+class KisAction;
 class KAction;
-class KToggleAction;
 class KisNodeCommandsAdapter;
+class KisActionManager;
 
 #include "kis_mask.h"
 
@@ -41,14 +44,15 @@ class KisMaskManager : public QObject
 public:
 
 
-    KisMaskManager(KisView2 * view);
+    KisMaskManager(KisViewManager * view);
     ~KisMaskManager() {}
+    void setView(QPointer<KisView>view);
 
 private:
     
     friend class KisNodeManager;
     
-    void setup(KActionCollection * actionCollection);
+    void setup(KActionCollection * actionCollection, KisActionManager *actionManager);
 
     void updateGUI();
     
@@ -116,17 +120,15 @@ private:
     void activateMask(KisMaskSP mask);
 
     void adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bool avoidActiveNode, KisNodeSP &parent, KisNodeSP &above);
-    void createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString &macroName, const QString &nodeType, const QString &nodeName);
+    void createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString &macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection, bool avoidActiveNode);
 
-    void createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
-    void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet = false);
-    void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
+    void createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
+    void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool avoidActiveNode);
+    void createTransformMask(KisNodeSP activeNode);
+    void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
 
-    KisView2 * m_view;
-
-    KisMaskSP m_activeMask;
-    KAction *m_maskToSelection;
-    KAction *m_maskToLayer;
+    KisViewManager * m_view;
+    QPointer<KisView>m_imageView;
     KisNodeCommandsAdapter* m_commandsAdapter;
 
 };

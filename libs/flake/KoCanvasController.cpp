@@ -19,6 +19,7 @@
  */
 
 #include "KoCanvasController.h"
+#include "KoToolManager.h"
 
 #include <QSize>
 #include <QPoint>
@@ -52,6 +53,7 @@ KoCanvasController::KoCanvasController(KActionCollection* actionCollection)
 
 KoCanvasController::~KoCanvasController()
 {
+    KoToolManager::instance()->removeCanvasController(this);
     delete d;
     delete proxyObject;
 }
@@ -90,6 +92,11 @@ int KoCanvasController::margin() const
 KoCanvasController::CanvasMode KoCanvasController::canvasMode() const
 {
     return d->canvasMode;
+}
+
+KoCanvasBase* KoCanvasController::canvas() const
+{
+    return 0;
 }
 
 void KoCanvasController::setDocumentSize(const QSize &sz)

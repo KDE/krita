@@ -29,24 +29,20 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-DeleteTableColumnCommand::DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, int changeId,
-                                             KUndo2Command *parent) :
-    KUndo2Command (parent)
+DeleteTableColumnCommand::DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent)
+    : KUndo2Command (parent)
     ,m_first(true)
     ,m_textEditor(te)
     ,m_table(t)
-    ,m_changeId(changeId)
 {
     setText(kundo2_i18n("Delete Column"));
 }
 
 void DeleteTableColumnCommand::undo()
 {
-    if (!m_changeId) {
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
-        for (int i = 0; i < m_selectionColumnSpan; ++i) {
-            carsManager.insertColumns(m_selectionColumn + i, 1, m_deletedStyles.at(i));
-        }
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
+    for (int i = 0; i < m_selectionColumnSpan; ++i) {
+        carsManager.insertColumns(m_selectionColumn + i, 1, m_deletedStyles.at(i));
     }
 
     KUndo2Command::undo();
@@ -56,9 +52,7 @@ void DeleteTableColumnCommand::redo()
 {
     KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     if (!m_first) {
-        if (!m_changeId) {
-            carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
-        }
+        carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
         KUndo2Command::redo();
     } else {
         m_first = false;
@@ -71,20 +65,12 @@ void DeleteTableColumnCommand::redo()
             m_selectionColumn = cell.column();
             m_selectionColumnSpan = 1;
         }
-        
-        if (!m_changeId) {
-            m_table->removeColumns(m_selectionColumn, m_selectionColumnSpan);
 
-            for (int i = m_selectionColumn; i < m_selectionColumn + m_selectionColumnSpan; ++i) {
-                m_deletedStyles.append(carsManager.columnStyle(i));
-            }
-            carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
-        } else {
-            for (int i=0; i < m_table->rows(); i++) {
-                QTextTableCellFormat cellFormat = m_table->cellAt(i, m_selectionColumn).format().toTableCellFormat();
-                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, m_changeId);
-                m_table->cellAt(i, m_selectionColumn).setFormat(cellFormat);
-            }    
+        m_table->removeColumns(m_selectionColumn, m_selectionColumnSpan);
+
+        for (int i = m_selectionColumn; i < m_selectionColumn + m_selectionColumnSpan; ++i) {
+            m_deletedStyles.append(carsManager.columnStyle(i));
         }
+        carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
     }
 }

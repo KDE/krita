@@ -125,7 +125,7 @@ public:
     }
 
     ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
-        HashKeyType key = *reinterpret_cast<quint32*>(pixelPtr);
+        HashKeyType key = *reinterpret_cast<HashKeyType*>(pixelPtr);
 
         quint8 result;
 

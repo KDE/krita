@@ -2,7 +2,7 @@ include_directories( ${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
-SET (threedshape_LIB_SRCS
+set (threedshape_LIB_SRCS
     ThreedShapePlugin.cpp
     ThreedShapeFactory.cpp
     #ThreedToolFactory.cpp
@@ -18,8 +18,6 @@ SET (threedshape_LIB_SRCS
 kde4_add_plugin(calligra_shape_threed ${threedshape_LIB_SRCS})
 
 target_link_libraries(calligra_shape_threed flake    ${KDE4_KFILE_LIBRARY})
-#target_link_libraries(calligra_shape_threed komain flake    ${KDE4_KFILE_LIBRARY}
-#)
 install(TARGETS calligra_shape_threed DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

@@ -24,20 +24,16 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class KAction;
-class QAction;
-class KToggleAction;
 class KActionCollection;
 
 class KoCompositeOp;
 class KoColorSpace;
 class KUndo2MagicString;
 
-class KisDoc2;
 class KisFilterStrategy;
-class KisView2;
-class KisFilterConfiguration;
+class KisViewManager;
 class KisActionManager;
+class KisView;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -50,11 +46,12 @@ class KRITAUI_EXPORT KisNodeManager : public QObject
 
 public:
 
-    KisNodeManager(KisView2 * view,  KisDoc2 * doc);
+    KisNodeManager(KisViewManager * view);
     ~KisNodeManager();
-
     
-signals:
+    void setView(QPointer<KisView>imageView);
+
+Q_SIGNALS:
 
     /// emitted whenever a node is selected.
     void sigNodeActivated(KisNodeSP node);
@@ -105,7 +102,7 @@ public:
     void setSelectedNodes(QList<KisNodeSP> nodes);
     QList<KisNodeSP> selectedNodes();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Explicitly activates \p node
@@ -152,7 +149,7 @@ public slots:
     void slotTryFinishIsolatedMode();
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    void createNode(const QString& nodeType, bool quiet = false);
+    void createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);
     void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
@@ -200,6 +197,10 @@ public slots:
     // merges the active layer with the layer below it.
     void mergeLayerDown();
 
+    void slotSplitAlphaIntoMask();
+    void slotSplitAlphaWrite();
+    void slotSplitAlphaSaveMerged();
+
 public:
 
     
@@ -213,7 +214,7 @@ private:
      * to the integer range 0...255
      */
     qint32 convertOpacityToInt(qreal opacity);
-    void removeSelectedNodes(QList<KisNodeSP> selectedNodes, bool removeActive = true);
+    void removeSelectedNodes(QList<KisNodeSP> selectedNodes);
     void removeSingleNode(KisNodeSP node);
 
     struct Private;

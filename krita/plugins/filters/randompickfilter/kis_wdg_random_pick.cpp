@@ -23,8 +23,6 @@
 
 #include <QLayout>
 
-#include <knuminput.h>
-
 #include <filter/kis_filter_configuration.h>
 
 #include "ui_wdgrandompickoptions.h"

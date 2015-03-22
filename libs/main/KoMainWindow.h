@@ -24,7 +24,6 @@
 #include "komain_export.h"
 
 #include <kxmlguiwindow.h>
-#include <kurl.h>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
@@ -41,6 +40,7 @@ struct KoPageLayout;
 
 // Calligra class but not in main module
 class KoDockerManager;
+class KUrl;
 
 /**
  * @brief Main window for a Calligra application
@@ -168,7 +168,7 @@ public:
      */
     KoDockerManager * dockerManager() const;
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted if the document has been saved successfully.
      */
@@ -191,7 +191,7 @@ signals:
     /// This signal is emitted when the shortcut key configuration has changed
     void keyBindingsChanged();
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Slot for eMailing the document using KMail
@@ -387,7 +387,7 @@ private:
 
     KRecentFilesAction *recentAction() const;
 
-private slots:
+private Q_SLOTS:
     /**
      * Save the list of recent files.
      */
@@ -426,7 +426,7 @@ private:
      */
     virtual void setActivePart(KoPart *part, QWidget *widget);
 
-private slots:
+private Q_SLOTS:
 
     /**
      * @internal

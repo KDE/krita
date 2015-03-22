@@ -24,9 +24,8 @@
 #include "kis_node_progress_proxy.h"
 #include "kis_node_visitor.h"
 #include "kis_image.h"
+#include "commands_new/kis_node_move_command2.h"
 
-#include <KoProgressUpdater.h>
-#include <KoProgressProxy.h>
 
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
@@ -41,7 +40,7 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
      */
     m_image = new KisPaintDevice(image->colorSpace());
 
-    connect(&m_loader, SIGNAL(loadingFinished()), SLOT(slotLoadingFinished()));
+    connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
     m_loader.setPath(path());
     m_loader.reloadImage();
 }
@@ -59,7 +58,7 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 
     m_scalingMethod = rhs.m_scalingMethod;
 
-    connect(&m_loader, SIGNAL(loadingFinished()), SLOT(slotLoadingFinished()));
+    connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
     m_loader.setPath(path());
     m_loader.reloadImage();
 }
@@ -84,10 +83,10 @@ KisPaintDeviceSP KisFileLayer::paintDevice() const
     return 0;
 }
 
-KoDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("File"), m_filename);
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    l << KisDocumentSectionModel::Property(i18n("File"), m_filename);
     return l;
 }
 
@@ -120,10 +119,14 @@ KisFileLayer::ScalingMethod KisFileLayer::scalingMethod() const
     return m_scalingMethod;
 }
 
-void KisFileLayer::slotLoadingFinished()
+void KisFileLayer::slotLoadingFinished(KisImageSP importedImage)
 {
-    KisImageWSP importedImage = m_loader.image();
-    m_image = importedImage->projection();
+    qint32 oldX = x();
+    qint32 oldY = y();
+
+    m_image->makeCloneFrom(importedImage->projection(), importedImage->projection()->extent());
+    m_image->setDefaultBounds(new KisDefaultBounds(image()));
+
     if (m_scalingMethod == ToImagePPI && (image()->xRes() != importedImage->xRes()
                                           || image()->yRes() != importedImage->yRes())) {
         qreal xscale = image()->xRes() / importedImage->xRes();
@@ -140,6 +143,9 @@ void KisFileLayer::slotLoadingFinished()
         KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
     }
+
+    m_image->setX(oldX);
+    m_image->setY(oldY);
 
     setDirty();
 }
@@ -164,10 +170,12 @@ void KisFileLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAda
     return visitor.visit(this, undoAdapter);
 }
 
-KUndo2Command* KisFileLayer::crop(const QRect & /*rect*/)
+KUndo2Command* KisFileLayer::crop(const QRect & rect)
 {
-    qWarning() << "WARNING: File Layer does not support cropping!" << name();
-    return 0;
+    QPoint oldPos(x(), y());
+    QPoint newPos = oldPos - rect.topLeft();
+
+    return new KisNodeMoveCommand2(this, oldPos, newPos);
 }
 
 KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)

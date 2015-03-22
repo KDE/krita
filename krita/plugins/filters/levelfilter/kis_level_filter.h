@@ -28,7 +28,6 @@
 
 class WdgLevel;
 class QWidget;
-class KisColorAdjustment;
 class KisHistogram;
 
 
@@ -68,7 +67,7 @@ public:
     void setConfiguration(const KisPropertiesConfiguration* config);
     Ui::WdgLevel m_page;
 
-protected slots:
+protected Q_SLOTS:
     void slotDrawHistogram(bool logarithmic = false);
 
     void slotModifyInBlackLimit(int);
@@ -76,8 +75,10 @@ protected slots:
     void slotModifyOutBlackLimit(int);
     void slotModifyOutWhiteLimit(int);
 
+    void slotAutoLevel(void);
+
 protected:
-    KisHistogram *histogram;
+    QScopedPointer<KisHistogram> m_histogram;
     bool m_histlog;
 };
 

@@ -29,7 +29,7 @@
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "kis_selection_tool_helper.h"
@@ -44,7 +44,7 @@ K_PLUGIN_FACTORY(ColorRangeFactory, registerPlugin<ColorRange>();)
 K_EXPORT_PLUGIN(ColorRangeFactory("krita"))
 
 ColorRange::ColorRange(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/colorrange.rc")
+        : KisViewPlugin(parent)
 {
     KisAction* action = new KisAction(i18n("Select from Color Range..."), this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -65,7 +65,7 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    DlgColorRange *dlgColorRange = new DlgColorRange(m_view, m_view);
+    DlgColorRange *dlgColorRange = new DlgColorRange(m_view, m_view->mainWindow());
     Q_CHECK_PTR(dlgColorRange);
 
     dlgColorRange->exec();
@@ -75,6 +75,8 @@ void ColorRange::selectOpaque()
 {
     KisCanvas2 *canvas = m_view->canvasBase();
     KisPaintDeviceSP device = m_view->activeNode()->projection();
+    if (!device) device = m_view->activeNode()->paintDevice();
+    if (!device) device = m_view->activeNode()->original();
     KIS_ASSERT_RECOVER_RETURN(canvas && device);
 
     QRect rc = device->exactBounds();

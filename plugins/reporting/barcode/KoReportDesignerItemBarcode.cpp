@@ -37,33 +37,35 @@
 // class ReportEntityBarcode
 //
 
-void KoReportDesignerItemBarcode::init(QGraphicsScene * scene)
+void KoReportDesignerItemBarcode::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     if (scene)
         scene->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
     setMaxLength(5);
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
     setZValue(Z);
+    
+    updateRenderText(m_itemValue->value().toString().isEmpty() ?  m_format->value().toString() : QString(), m_itemValue->value().toString(), QString());
+
 }
 // methods (constructors)
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
-    m_size.setSceneSize(QSizeF(m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY));
-    setSceneRect(m_pos.toScene(), m_size.toScene());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("barcode"));
+    Q_UNUSED(pos);
+    init(scene, rw);
+    setSceneRect(properRect(*rw, m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
         : KoReportItemBarcode(element), KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
+    init(scene, rw);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
@@ -97,27 +99,28 @@ void KoReportDesignerItemBarcode::paint(QPainter* painter, const QStyleOptionGra
 
     painter->setBackground(Qt::white);
 
-
     //Draw a border so user knows the object edge
     painter->setPen(QPen(QColor(224, 224, 224)));
     painter->drawRect(rect());
 
     drawHandles(painter);
 
-    if (m_format->value().toString() == "3of9")
-        render3of9(rect().toRect(), "3of9", alignment(), painter);
+    if (m_format->value().toString() == "i2of5")
+        renderI2of5(rect().toRect(), m_renderText, alignment(), painter);
+    else if (m_format->value().toString() == "3of9")
+        render3of9(rect().toRect(), m_renderText, alignment(), painter);
     else if (m_format->value().toString() == "3of9+")
-        renderExtended3of9(rect().toRect(), "3of9+", alignment(), painter);
+        renderExtended3of9(rect().toRect(), m_renderText, alignment(), painter);
     else if (m_format->value().toString() == "128")
-        renderCode128(rect().toRect(), "128", alignment(), painter);
+        renderCode128(rect().toRect(), m_renderText, alignment(), painter);
     else if (m_format->value().toString() == "upc-a")
-        renderCodeUPCA(rect().toRect(), "123456789012", alignment(), painter);
+        renderCodeUPCA(rect().toRect(), m_renderText, alignment(), painter);
     else if (m_format->value().toString() == "upc-e")
-        renderCodeUPCE(rect().toRect(), "12345678", alignment(), painter);
+        renderCodeUPCE(rect().toRect(), m_renderText, alignment(), painter);
     else if (m_format->value().toString() == "ean13")
-        renderCodeEAN13(rect().toRect(), "123456789012", alignment(), painter);
+        renderCodeEAN13(rect().toRect(), m_renderText, alignment(), painter);
     else if (m_format->value().toString() == "ean8")
-        renderCodeEAN8(rect().toRect(), "1234567", alignment(), painter);
+        renderCodeEAN8(rect().toRect(), m_renderText, alignment(), painter);
 
     painter->setPen(Qt::black);
     painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "barcode"));
@@ -129,7 +132,7 @@ void KoReportDesignerItemBarcode::paint(QPainter* painter, const QStyleOptionGra
 void KoReportDesignerItemBarcode::buildXML(QDomDocument & doc, QDomElement & parent)
 {
     //kdDebug() << "ReportEntityField::buildXML()");
-    QDomElement entity = doc.createElement("report:barcode");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);
@@ -138,6 +141,7 @@ void KoReportDesignerItemBarcode::buildXML(QDomDocument & doc, QDomElement & par
     addPropertyAsAttribute(&entity, m_format);
     addPropertyAsAttribute(&entity, m_maxLength);
     entity.setAttribute("report:z-index", zValue());
+    addPropertyAsAttribute(&entity, m_itemValue);
 
     // bounding rect
     buildXMLRect(doc, entity, &m_pos, &m_size);
@@ -155,6 +159,8 @@ void KoReportDesignerItemBarcode::slotPropertyChanged(KoProperty::Set &s, KoProp
             m_oldName = p.value().toString();
         }
     }
+    
+    updateRenderText(m_itemValue->value().toString().isEmpty() ?  m_format->value().toString() : QString(), m_itemValue->value().toString(), QString());
 
     KoReportDesignerItemRectBase::propertyChanged(s, p);
     if (m_reportDesigner) m_reportDesigner->setModified(true);

@@ -21,18 +21,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoDocument.h"
+
 #include "KoMainWindow.h" // XXX: remove
 #include <kmessagebox.h> // XXX: remove
 #include <KNotification> // XXX: remove
 
-#include "KoDocument.h"
 #include "KoPart.h"
-#include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
 #include "KoFileDialog.h"
 #include "KoDocumentInfo.h"
-#include "KoMainWindow.h"
 #include "KoView.h"
 
 #include "KoOdfStylesReader.h"
@@ -55,15 +54,8 @@
 #include <klocale.h>
 #include <ksavefile.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
-#include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
-#include <kfileitem.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
-#include <kfileitem.h>
-#include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
 
@@ -551,8 +543,10 @@ bool KoDocument::saveFile()
 
     // The output format is set by koMainWindow, and by openFile
     QByteArray outputMimeType = d->outputMimeType;
-    if (outputMimeType.isEmpty())
+    if (outputMimeType.isEmpty()) {
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
+        kDebug(30003) << "Empty output mime type, saving to" << outputMimeType;
+    }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -797,7 +791,6 @@ bool KoDocument::isModified() const
 bool KoDocument::saveNativeFormat(const QString & file)
 {
     d->lastErrorMessage.clear();
-    //kDebug(30003) <<"Saving to store";
 
     KoStore::Backend backend = KoStore::Auto;
     if (d->specialOutputFlag == SaveAsDirectoryStore) {
@@ -971,7 +964,10 @@ bool KoDocument::saveNativeFormatCalligra(KoStore *store)
         return false;
     }
     if (store->open("documentinfo.xml")) {
-        QDomDocument doc = d->docInfo->save();
+        QDomDocument doc = KoDocument::createDomDocument("document-info"
+                           /*DTD name*/, "document-info" /*tag name*/, "1.1");
+
+        doc = d->docInfo->save(doc);
         KoStoreDevice dev(store);
 
         QByteArray s = doc.toByteArray(); // this is already Utf8!
@@ -1016,6 +1012,11 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
     if (!url.isLocalFile()) return mimeType;
 
     if (url.toLocalFile().endsWith(".flipbook")) return "application/x-krita-flipbook";
+
+    if(url.toLocalFile().endsWith(".kranimseq")) return "application/x-kranim-sequence";
+
+    if (url.toLocalFile().endsWith(".kranim")) return "application/x-krita-animation";
+
     if (url.toLocalFile().endsWith(".kpp")) return "image/png";
 
     QStringList imageMimeTypes;
@@ -1273,7 +1274,7 @@ bool KoDocument::openUrl(const KUrl & _url)
 // It seems that people have started to save .docx files as .doc and
 // similar for xls and ppt.  So let's make a small replacement table
 // here and see if we can open the files anyway.
-static struct MimetypeReplacement {
+static const struct MimetypeReplacement {
     const char *typeFromName;         // If the mime type from the name is this...
     const char *typeFromContents;     // ...and findByFileContents() reports this type...
     const char *useThisType;          // ...then use this type for real.
@@ -1419,7 +1420,7 @@ bool KoDocument::openFile()
     // a small hardcoded table for those cases.  Check if this is
     // applicable here.
     for (uint i = 0; i < sizeof(replacementMimetypes) / sizeof(struct MimetypeReplacement); ++i) {
-        struct MimetypeReplacement *replacement = &replacementMimetypes[i];
+        const MimetypeReplacement *replacement = &replacementMimetypes[i];
 
         if (typeName == replacement->typeFromName) {
             //kDebug(30003) << "found potential replacement target:" << typeName;
@@ -2422,7 +2423,12 @@ void KoDocument::setupOpenFileSubProgress() {}
 
 KoDocumentInfoDlg *KoDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
 {
-    return new KoDocumentInfoDlg(parent, docInfo);
+    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+    KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(parent);
+    if (mainwin) {
+        connect(dlg, SIGNAL(saveRequested()), mainwin, SLOT(slotFileSave()));
+    }
+    return dlg;
 }
 
 bool KoDocument::isReadWrite() const
@@ -2483,9 +2489,6 @@ bool KoDocument::saveAs( const KUrl & kurl )
     return result;
 }
 
-
-
-
 bool KoDocument::save()
 {
     d->m_saveOk = false;
@@ -2504,7 +2507,7 @@ bool KoDocument::save()
     d->document->setUrl(url());
 
     // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
-    // reimplement saveFile shold now subclass KoPart.
+    // reimplement saveFile should now subclass KoPart.
     bool ok = d->document->saveFile();
 
     if (progressProxy) {

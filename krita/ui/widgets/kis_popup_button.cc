@@ -156,14 +156,10 @@ void KisPopupButton::adjustPosition()
         popupRect.translate(screenRect.right() - popupRect.right(), 0);
     if (popupRect.left() < screenRect.left())
         popupRect.translate(screenRect.left() - popupRect.left(), 0);
-
-    // The preset popup never should be shown over the toolbar, but other popups need
-    // to be able to be moved up. BUG: https://bugs.kde.org/show_bug.cgi?id=327977,
-    // see also commit 275758d4d0aaf398941295a4bf7ae9755bed2cb0
-    if(!presetPopup) {
-        if (popupRect.bottom() > screenRect.bottom())
-            popupRect.translate(0, -m_d->frame->height());
-    }
+    if (popupRect.bottom() > screenRect.bottom())
+        popupRect.translate(0, -m_d->frame->height());
+    if (popupRect.top() < screenRect.top())
+        popupRect.moveTo(0,0);
 
     m_d->frame->setGeometry(popupRect);
 }

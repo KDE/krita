@@ -19,6 +19,7 @@ hi16-palette_library.png
 icon-kritasketch-256.png
 landscape.png
 linked.png
+linked2.png
 local_selection_active.png
 local_selection_inactive.png
 locked.png
@@ -31,9 +32,9 @@ paintop_settings_01.png
 paintop_settings_02.png
 paintop_settings_disabled.png
 portrait.png
-properties.png
 ratio_icon.png
 removefromfolder.png
+reload_preset.png
 selection_add.png
 selection_exclude.png
 selection_intersect.png
@@ -44,8 +45,6 @@ select_shape.png
 shade.png
 shear_horizontal.png
 shear_vertical.png
-symmetry-horyzontal.png
-symmetry-vertical.png
 tablet.png
 tool_screenshot.png
 transparency-disabled.png
@@ -65,6 +64,11 @@ white64-krita.png
 width_icon.png
 width.png
 workspace-chooser.png
+onionA.png
+onionB.png
+mirrorAxis-HorizontalMove.png
+mirrorAxis-VerticalMove.png
+
 
 dark_select.png
 dark_pattern.png
@@ -81,6 +85,10 @@ dark_properties.png
 dark_selection-mode_ants.png
 dark_selection-mode_invisible.png
 dark_selection-mode_mask.png
+dark_symmetry-horizontal.png
+dark_symmetry-vertical.png
+dark_krita_tool_editpath.png
+
 
 light_select.png
 light_pattern.png
@@ -97,7 +105,39 @@ light_properties.png
 light_selection-mode_ants.png
 light_selection-mode_invisible.png
 light_selection-mode_mask.png
-    DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+light_symmetry-vertical.png
+light_symmetry-horizontal.png
+light_krita_tool_editpath.png
+
+
+
+tool_transform/dark_transform_icons_cage.png
+tool_transform/dark_transform_icons_liquify_erase.png
+tool_transform/dark_transform_icons_liquify_main.png
+tool_transform/dark_transform_icons_liquify_move.png
+tool_transform/dark_transform_icons_liquify_offset.png
+tool_transform/dark_transform_icons_liquify_resize.png
+tool_transform/dark_transform_icons_liquify_rotate.png
+tool_transform/dark_transform_icons_liquify_rotateCCW.png
+tool_transform/dark_transform_icons_main.png
+tool_transform/dark_transform_icons_perspective.png
+tool_transform/dark_transform_icons_warp.png
+tool_transform/dark_transform_icons_penPressure.png
+
+tool_transform/light_transform_icons_cage.png
+tool_transform/light_transform_icons_liquify_erase.png
+tool_transform/light_transform_icons_liquify_main.png
+tool_transform/light_transform_icons_liquify_move.png
+tool_transform/light_transform_icons_liquify_offset.png
+tool_transform/light_transform_icons_liquify_resize.png
+tool_transform/light_transform_icons_liquify_rotate.png
+tool_transform/light_transform_icons_liquify_rotateCCW.png
+tool_transform/light_transform_icons_main.png
+tool_transform/light_transform_icons_perspective.png
+tool_transform/light_transform_icons_warp.png
+tool_transform/light_transform_icons_penPressure.png
+
+DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 add_subdirectory(app)
 

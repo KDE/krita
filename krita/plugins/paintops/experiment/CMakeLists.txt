@@ -2,12 +2,11 @@ set(kritaexperimentpaintop_PART_SRCS
     experiment_paintop_plugin.cpp
     kis_experiment_paintop.cpp
     kis_experimentop_option.cpp
-    kis_experiment_shape_option.cpp
     kis_experiment_paintop_settings.cpp
     kis_experiment_paintop_settings_widget.cpp
     )
 
-kde4_add_ui_files(kritaexperimentpaintop_PART_SRCS wdgexperimentoptions.ui wdgexperimentshapeoptions.ui )
+kde4_add_ui_files(kritaexperimentpaintop_PART_SRCS wdgexperimentoptions.ui )
 
 kde4_add_plugin(kritaexperimentpaintop ${kritaexperimentpaintop_PART_SRCS})
 

@@ -38,7 +38,7 @@ private:
     void checkPerformance();
 
 
-private slots:
+private Q_SLOTS:
 
     void testSimpleBlt();
     void testSelectionBltSelectionIrregular(); // Irregular selection

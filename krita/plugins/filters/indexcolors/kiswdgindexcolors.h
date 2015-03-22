@@ -24,10 +24,10 @@
 #define KISWDGINDEXCOLORS_H
 
 #include <kis_config_widget.h>
-#include <kcolorbutton.h>
 #include <QSpinBox>
 
 class QCheckBox;
+class KColorButton;
 namespace Ui
 {
 class KisWdgIndexColors;
@@ -42,7 +42,7 @@ public:
     virtual void setConfiguration(const KisPropertiesConfiguration* config);
     void setup(QStringList shadesLabels, int ramps);
 
-private slots:
+private Q_SLOTS:
     void slotColorLimitChanged(int value);
 
 private:

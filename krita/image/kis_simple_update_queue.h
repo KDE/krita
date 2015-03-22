@@ -40,6 +40,7 @@ public:
     void processQueue(KisUpdaterContext &updaterContext);
 
     void addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    void addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
     void addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 

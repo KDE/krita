@@ -23,7 +23,8 @@
 #include "komain_export.h"
 
 #include <QObject>
-
+#include <QPointer>
+\
 class KoMainWindow;
 
 /**
@@ -43,11 +44,11 @@ public:
     /// sets the visibility of the tab and lock icons
     void setIcons(bool enabled);
 
-public slots:
+public Q_SLOTS:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QList<QWidget *> & optionWidgetList);
+    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
 
 
 private:

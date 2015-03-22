@@ -22,8 +22,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QFile>
 #include <kurl.h>
-#include <kmimetype.h>
-#include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <QStack>
 #include "KoFilterManager.h"

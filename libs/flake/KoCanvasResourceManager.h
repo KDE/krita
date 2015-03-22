@@ -22,20 +22,16 @@
 #define KO_CANVASRESOURCEMANAGER_H
 
 #include <QObject>
-#include <QList>
-#include <QVariant>
-#include <QSizeF>
 
 #include "flake_export.h"
 
-#include <KoColor.h>
-#include <KoUnit.h>
-
 class KoShape;
 class KoShapeStroke;
-class KUndo2Stack;
-class KoImageCollection;
-class KoOdfDocument;
+class KoColor;
+class KoUnit;
+
+class QVariant;
+class QSizeF;
 
 /**
  * The KoCanvasResourceManager contains a set of per-canvas
@@ -105,7 +101,7 @@ public:
     explicit KoCanvasResourceManager(QObject *parent = 0);
     virtual ~KoCanvasResourceManager();
 
-public slots:
+public Q_SLOTS:
     /**
      * Set a resource of any type.
      * @param key the integer key
@@ -238,11 +234,7 @@ public:
      */
     void clearResource(int key);
 
-    KUndo2Stack *undoStack() const;
-    void setUndoStack(KUndo2Stack *undoStack);
-
-
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted every time a resource is set that is either
      * new or different from the previous set value.

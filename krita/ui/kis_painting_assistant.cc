@@ -25,6 +25,8 @@
 #include "kis_debug.h"
 #include <kis_canvas2.h>
 
+#include <KoStore.h>
+
 #include <kglobal.h>
 #include <QPen>
 #include <QPainter>
@@ -123,6 +125,8 @@ void KisPaintingAssistantHandle::uncache()
 struct KisPaintingAssistant::Private {
     QString id;
     QString name;
+    bool snapping;
+    bool outlineVisible;
     QList<KisPaintingAssistantHandleSP> handles,sideHandles;
     QPixmapCache::Key cached;
     QRect cachedRect; // relative to boundingRect().topLeft()
@@ -141,16 +145,58 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
 {
     d->id = id;
     d->name = name;
+    d->snapping=true;
+    d->outlineVisible=true;
 }
 
-void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path)
+bool KisPaintingAssistant::snapping() const
 {
+    return d->snapping;
+}
+
+void KisPaintingAssistant::setSnapping(bool set)
+{
+    d->snapping=set;
+}
+
+bool KisPaintingAssistant::outline() const
+{
+    return d->outlineVisible;
+}
+
+void KisPaintingAssistant::setOutline(bool set)
+{
+    d->outlineVisible=set;
+}
+
+void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool drawActive)
+{
+    int alpha=100;
+    if (drawActive==false) {
+        alpha=20;
+        }
     painter.save();
-    QPen pen_a(QColor(0, 0, 0, 100), 2);
+    QPen pen_a(QColor(0, 0, 0, alpha), 2);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);
-    QPen pen_b(Qt::white, 0.9);
+    QPen pen_b(QColor(255, 255, 255, alpha), 0.9);
+    pen_b.setCosmetic(true);
+    painter.setPen(pen_b);
+    painter.drawPath(path);
+    painter.restore();
+}
+
+void KisPaintingAssistant::drawPreview(QPainter& painter, const QPainterPath &path)
+{
+    painter.save();
+    QPen pen_a(QColor(0, 0, 0, 50), 1);
+    pen_a.setStyle(Qt::SolidLine);
+    pen_a.setCosmetic(true);
+    painter.setPen(pen_a);
+    painter.drawPath(path);
+    QPen pen_b(QColor(255, 255, 255, 50), 1);
+    pen_b.setStyle(Qt::DotLine);
     pen_b.setCosmetic(true);
     painter.setPen(pen_b);
     painter.drawPath(path);
@@ -214,14 +260,15 @@ void KisPaintingAssistant::addSideHandle(KisPaintingAssistantHandleSP handle)
     handle.data()->setType('S');
 }
 
-void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache,KisCanvas2* canvas)
+void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache,KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     Q_UNUSED(updateRect);
     Q_UNUSED(canvas);
+    Q_UNUSED(previewVisible);
     findHandleLocation();
     if (!useCache) {
         gc.save();
-        drawCache(gc, converter);
+        drawCache(gc, converter, assistantVisible);
         gc.restore();
         return;
     }
@@ -246,7 +293,7 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         QPainter painter(&cached);
         painter.setRenderHint(QPainter::Antialiasing);
         painter.setWindow(cacheRect);
-        drawCache(painter, converter);
+        drawCache(painter, converter, assistantVisible);
         painter.end();
         d->cachedTransform = transform;
         d->cachedRect = cacheRect.translated(-widgetBound.topLeft());
@@ -345,6 +392,24 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         QDomElement assistantElement = doc.createElement("assistant");
         assistantElement.setAttribute("type", "perspective");
         assistantElement.setAttribute("filename", QString("perspective%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "vanishing point"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "vanishing point");
+        assistantElement.setAttribute("filename", QString("vanishing point%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "infinite ruler"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "infinite ruler");
+        assistantElement.setAttribute("filename", QString("infinite ruler%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "parallel ruler"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "parallel ruler");
+        assistantElement.setAttribute("filename", QString("parallel ruler%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
     else if (d->id == "ruler"){

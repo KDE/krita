@@ -36,7 +36,7 @@ private:
     void randomAccessor(const KoColorSpace * cs);
 
 
-private slots:
+private Q_SLOTS:
 
     void runBenchmark();
 };

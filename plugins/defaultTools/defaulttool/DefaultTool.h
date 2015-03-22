@@ -88,10 +88,10 @@ public:
      */
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
-private slots:
+private Q_SLOTS:
     void selectionAlignHorizontalLeft();
     void selectionAlignHorizontalCenter();
     void selectionAlignHorizontalRight();
@@ -122,7 +122,7 @@ public: // Events
     virtual void customMoveEvent( KoPointerEvent * event );
 
 protected:
-    QList<QWidget *> createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets();
 
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 

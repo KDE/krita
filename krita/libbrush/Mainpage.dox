@@ -111,3 +111,4 @@ independent brush plugins or use libbrush from other places, like some filters,
 we need to move the widgets in here.
 
 */
+// DOXYGEN_SET_IGNORE_PREFIX = Kis Ko K

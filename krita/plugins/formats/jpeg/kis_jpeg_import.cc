@@ -21,19 +21,19 @@
 
 #include <kpluginfactory.h>
 
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 #include "kis_jpeg_converter.h"
 
 K_PLUGIN_FACTORY(JPEGImportFactory, registerPlugin<KisJPEGImport>();)
 K_EXPORT_PLUGIN(JPEGImportFactory("calligrafilters"))
 
-KisJPEGImport::KisJPEGImport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisJPEGImport::KisJPEGImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -41,19 +41,19 @@ KisJPEGImport::~KisJPEGImport()
 {
 }
 
-KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByteArray& to)
 {
     dbgFile << "Importing using JPEGImport!";
 
     if (to != "application/x-krita")
-        return KoFilter::BadMimeType;
+        return KisImportExportFilter::BadMimeType;
 
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
+    KisDocument * doc = m_chain->outputDocument();
 
     if (!doc)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain -> inputFile();
+    QString filename = m_chain->inputFile();
 
     doc->prepareForImport();
 
@@ -62,7 +62,7 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByte
         KUrl url(filename);
 
         if (url.isEmpty())
-            return KoFilter::FileNotFound;
+            return KisImportExportFilter::FileNotFound;
 
         KisJPEGConverter ib(doc);
 
@@ -72,32 +72,32 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByte
         switch (ib.buildImage(url)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
         case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-            return KoFilter::NotImplemented;
+            return KisImportExportFilter::NotImplemented;
             break;
         case KisImageBuilder_RESULT_INVALID_ARG:
-            return KoFilter::BadMimeType;
+            return KisImportExportFilter::BadMimeType;
             break;
         case KisImageBuilder_RESULT_NO_URI:
         case KisImageBuilder_RESULT_NOT_LOCAL:
-            return KoFilter::FileNotFound;
+            return KisImportExportFilter::FileNotFound;
             break;
         case KisImageBuilder_RESULT_BAD_FETCH:
         case KisImageBuilder_RESULT_EMPTY:
-            return KoFilter::ParsingError;
+            return KisImportExportFilter::ParsingError;
             break;
         case KisImageBuilder_RESULT_FAILURE:
-            return KoFilter::InternalError;
+            return KisImportExportFilter::InternalError;
             break;
         case KisImageBuilder_RESULT_OK:
             doc->setCurrentImage(ib.image());
-            return KoFilter::OK;
+            return KisImportExportFilter::OK;
         default:
             break;
         }
 
 
     }
-    return KoFilter::StorageCreationError;
+    return KisImportExportFilter::StorageCreationError;
 }
 
 #include <kis_jpeg_import.moc>

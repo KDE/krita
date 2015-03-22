@@ -46,6 +46,8 @@ ChalkBrush::ChalkBrush(const ChalkProperties* properties, KoColorTransformation*
         m_transfo->setParameter(m_transfo->parameterId("h"), 0.0);
         m_saturationId = m_transfo->parameterId("s"); // cache for later usage
         m_transfo->setParameter(m_transfo->parameterId("v"), 0.0);
+	m_transfo->setParameter(3, 1);//sets the type to hsv.
+	m_transfo->setParameter(4, false);//sets the colorize to none.
     }
     else {
         m_saturationId = -1;
@@ -80,7 +82,7 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
 
         if (m_properties->useSaturation) {
             if (m_transfo) {
-                m_transfo->setParameter(m_saturationId, 1.0 + result);
+                m_transfo->setParameter(m_saturationId, 1.0f + result);
                 m_transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
             }
 

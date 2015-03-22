@@ -149,7 +149,7 @@ Q_SIGNALS:
     void activeAChannelLockedChanged();
     void activeFilterConfigChanged();
 
-private slots:
+private Q_SLOTS:
     void source_rowsAboutToBeInserted(QModelIndex, int, int);
     void source_rowsAboutToBeRemoved(QModelIndex, int, int);
     void source_rowsInserted(QModelIndex, int, int);

@@ -23,16 +23,11 @@
 #ifndef KOSHAPE_H
 #define KOSHAPE_H
 
-#include "KoInsets.h"
 #include "KoFlake.h"
 #include "KoConnectionPoint.h"
 
 #include <QSharedPointer>
-#include <QTransform>
-#include <QVector>
 #include <QSet>
-#include <QMap>
-#include <QBrush>
 #include <QMetaType>
 
 #include <KoXmlReaderForward.h>
@@ -45,19 +40,16 @@
 class QPainter;
 class QRectF;
 class QPainterPath;
+class QTransform;
 
 class KoShapeContainer;
 class KoShapeStrokeModel;
-class KoShapeManager;
 class KoShapeUserData;
 class KoViewConverter;
 class KoShapeApplicationData;
 class KoShapeSavingContext;
-class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
-class KoShapeBasedDocumentBase;
-class KoDataCenterBase;
 class KoShapeShadow;
 class KoEventAction;
 class KoShapePrivate;
@@ -67,6 +59,7 @@ class KoClipPath;
 class KoShapePaintingContext;
 class KoShapeAnchor;
 class KoBorder;
+struct KoInsets;
 
 
 /**
@@ -490,6 +483,20 @@ public:
     KoShapeAnchor *anchor() const;
 
     /**
+     * Set the minimum height of the shape.
+     * Currently it's not respected but only for informational purpose
+     * @param minimumShapeHeight the minimum height of the frame.
+     */
+    void setMinimumHeight(qreal height);
+
+    /**
+     * Return the minimum height of the shape.
+     * @return the minimum height of the shape. Default is 0.0.
+     */
+    qreal minimumHeight() const;
+
+
+    /**
      * Set the background of the shape.
      * A shape background can be a plain color, a gradient, a pattern, be fully transparent
      * or have a complex fill.
@@ -812,7 +819,7 @@ public:
      * @param newPosition the new absolute center of the shape.
      * @param anchor The place on the (unaltered) shape that you set the position of.
      */
-    void setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor = KoFlake::CenteredPosition);
+    void setAbsolutePosition(const QPointF &newPosition, KoFlake::Position anchor = KoFlake::CenteredPosition);
 
     /**
      * Set a data object on the shape to be used by an application.
@@ -1093,7 +1100,7 @@ public:
      * Set hyperlink for this shape.
      * @param hyperLink name.
      */
-    void setHyperLink (QString & hyperLink);
+    void setHyperLink(const QString &hyperLink);
 
     /**
      * \internal

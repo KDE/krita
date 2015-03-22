@@ -19,13 +19,15 @@
 #define KIS_IMAGE_MANAGER
 
 #include <QObject>
+#include <QPointer>
 
 #include <kurl.h>
 #include <krita_export.h>
 
-class KisView2;
-class KActionCollection;
+class KisViewManager;
 class KisFilterStrategy;
+class KisActionManager;
+class KisView;
 
 class KRITAUI_EXPORT KisImageManager : public QObject
 {
@@ -35,14 +37,18 @@ class KRITAUI_EXPORT KisImageManager : public QObject
 public:
 
 
-    KisImageManager(KisView2 * view);
+    KisImageManager(KisViewManager * view);
     ~KisImageManager() {}
 
-    void setup(KActionCollection * actionCollection);
+    void setView(QPointer<KisView>imageView);
+    void setup(KisActionManager *actionManager);
 
-public slots:
+public Q_SLOTS:
 
     void slotImportLayerFromFile();
+    void slotImportLayerAsTransparencyMask();
+    void slotImportLayerAsFilterMask();
+    void slotImportLayerAsSelectionMask();
 
     /**
      * Import an image as a layer. If there is more than
@@ -52,7 +58,7 @@ public slots:
      * @param url the url to the image file
      * @return the number of layers added
      */
-    qint32 importImage(const KUrl& url = KUrl(), bool importAsLayer = true);
+    qint32 importImage(const KUrl& url, const QString &layerType = "KisPaintLayer");
 
     void resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset);
     void scaleCurrentImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
@@ -60,9 +66,10 @@ public slots:
     void rotateCurrentImage(double radians);
     void shearCurrentImage(double angleX, double angleY);
     void slotImageProperties();
+    void slotImageColor();
 
 private:
-    KisView2 * m_view;
+    KisViewManager * m_view;
 };
 
 #endif // KIS_IMAGE_MANAGER

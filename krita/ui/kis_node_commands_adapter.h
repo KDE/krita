@@ -19,7 +19,7 @@
 #ifndef KIS_NODE_COMMANDS_ADAPTER_H
 #define KIS_NODE_COMMANDS_ADAPTER_H
 
-class KisView2;
+class KisViewManager;
 class KoCompositeOp;
 class KUndo2MagicString;
 
@@ -37,10 +37,11 @@ class KRITAUI_EXPORT KisNodeCommandsAdapter : public QObject
     Q_OBJECT
 
 public:
-    KisNodeCommandsAdapter(KisView2 * view);
+    KisNodeCommandsAdapter(KisViewManager * view);
     virtual ~KisNodeCommandsAdapter();
 public:
     void beginMacro(const KUndo2MagicString& macroName);
+    void addExtraCommand(KUndo2Command *command);
     void endMacro();
     void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void addNode(KisNodeSP node, KisNodeSP parent, quint32 index);
@@ -56,7 +57,7 @@ public:
 
     void undoLastCommand();
 private:
-    KisView2* m_view;
+    KisViewManager* m_view;
 };
 
 #endif // KIS_NODE_COMMANDS_ADAPTER_H

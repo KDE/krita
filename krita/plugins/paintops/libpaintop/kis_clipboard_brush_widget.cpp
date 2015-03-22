@@ -28,8 +28,6 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-#include <KoProperties.h>
-
 #include <kis_debug.h>
 #include "kis_image.h"
 #include "kis_clipboard.h"
@@ -43,9 +41,8 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     setWindowTitle(caption);
     preview->setScaledContents(true);
     preview->setFixedSize(preview->size());
-    spacingSlider->setRange(0.0, 10.0, 2);
-    spacingSlider->setExponentRatio(3.0);
-    spacingSlider->setValue(0.25);
+    preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
+
 
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
@@ -56,9 +53,11 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     m_clipboard = KisClipboard::instance();
 
     connect(m_clipboard, SIGNAL(clipChanged()), this, SLOT(slotUseBrushClicked()));
-    connect(spacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotUpdateSpacing(qreal)));
     connect(colorAsmask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
     connect(saveBrush, SIGNAL(clicked()), this, SLOT(slotSaveBrush()));
+
+    spacingWidget->setSpacing(true, 1.0);
+    connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 }
 
 KisClipboardBrushWidget::~KisClipboardBrushWidget()
@@ -72,8 +71,8 @@ KisBrushSP KisClipboardBrushWidget::brush()
 
 void KisClipboardBrushWidget::slotUseBrushClicked()
 {
-
-    if (m_clipboard->hasClip()) {
+    // do nothing if it's hidden otherwise it can break the active brush is something is copied
+    if (m_clipboard->hasClip() && !isHidden()) {
 
         if (m_brush) {
             bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(m_brush.data());
@@ -89,7 +88,8 @@ void KisClipboardBrushWidget::slotUseBrushClicked()
 
             m_brush = new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
 
-            m_brush->setSpacing(spacingSlider->value());
+            m_brush->setSpacing(spacingWidget->spacing());
+            m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
             m_brush->setFilename(TEMPORARY_CLIPBOARD_BRUSH_FILENAME);
             m_brush->setName(TEMPORARY_CLIPBOARD_BRUSH_NAME);
             m_brush->setValid(true);
@@ -102,14 +102,15 @@ void KisClipboardBrushWidget::slotUseBrushClicked()
         }
     }
     else {
-        preview->setText("No clip.");
+        preview->setText(i18n("Nothing copied\n to Clipboard"));
     }
 }
 
-void KisClipboardBrushWidget::slotUpdateSpacing(qreal val)
+void KisClipboardBrushWidget::slotSpacingChanged()
 {
     if (m_brush) {
-        m_brush->setSpacing(val);
+        m_brush->setSpacing(spacingWidget->spacing());
+        m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     }
     emit sigBrushChanged();
 }

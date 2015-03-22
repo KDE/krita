@@ -22,6 +22,7 @@
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
+#include "KoPathSegment.h"
 
 void TestPathShape::close()
 {

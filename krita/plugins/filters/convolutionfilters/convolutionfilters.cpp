@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 #include <klocale.h>
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 
 #include <kis_convolution_kernel.h>
@@ -33,7 +33,6 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
-#include <KoProgressUpdater.h>
 
 #include <Eigen/Core>
 

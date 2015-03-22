@@ -31,6 +31,7 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
+#include "kis_group_layer.h"
 
 #include "testutil.h"
 
@@ -122,16 +123,27 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
     return manager;
 }
 
-
 utils::StrokeTester::StrokeTester(const QString &name, const QSize &imageSize, const QString &presetFilename)
     : m_name(name),
       m_imageSize(imageSize),
-      m_presetFilename(presetFilename)
+      m_presetFilename(presetFilename),
+      m_numIterations(1),
+      m_baseFuzziness(1)
 {
 }
 
 utils::StrokeTester::~StrokeTester()
 {
+}
+
+void utils::StrokeTester::setNumIterations(int value)
+{
+    m_numIterations = value;
+}
+
+void utils::StrokeTester::setBaseFuzziness(int value)
+{
+    m_baseFuzziness = value;
 }
 
 void utils::StrokeTester::test()
@@ -182,7 +194,7 @@ void utils::StrokeTester::testOneStroke(bool cancelled,
     refImage.load(referenceFile(testName));
 
     QPoint temp;
-    if(!TestUtil::compareQImages(temp, refImage, resultImage, 1, 1)) {
+    if(!TestUtil::compareQImages(temp, refImage, resultImage, m_baseFuzziness, m_baseFuzziness)) {
         refImage.save(dumpReferenceFile(testName));
         resultImage.save(resultFile(testName));
 
@@ -239,32 +251,39 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 {
     KisImageSP image = utils::createImage(0, m_imageSize);
     KoCanvasResourceManager *manager = utils::createResourceManager(image, 0, m_presetFilename);
+    KisNodeSP currentNode;
 
-    KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image,
+    for (int i = 0; i < m_numIterations; i++) {
+        modifyResourceManager(manager, image, i);
+        KisPainter *painter = new KisPainter();
+        KisResourcesSnapshotSP resources =
+            new KisResourcesSnapshot(image,
+                                 image->rootLayer()->firstChild(),
                                  image->postExecutionUndoAdapter(),
                                  manager);
 
-    if(externalLayer) {
-        KisNodeSP externalNode = new KisPaintLayer(0, "extlyr", OPACITY_OPAQUE_U8, image->colorSpace());
-        resources->setCurrentNode(externalNode);
-        Q_ASSERT(resources->currentNode() == externalNode);
+        if(externalLayer) {
+            KisNodeSP externalNode = new KisPaintLayer(0, "extlyr", OPACITY_OPAQUE_U8, image->colorSpace());
+            resources->setCurrentNode(externalNode);
+            Q_ASSERT(resources->currentNode() == externalNode);
+        }
+
+        initImage(image, resources->currentNode(), i);
+
+        KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, painter, image);
+        m_strokeId = image->startStroke(stroke);
+        addPaintingJobs(image, resources, painter, i);
+
+        if(!cancelled) {
+            image->endStroke(m_strokeId);
+        }
+        else {
+            image->cancelStroke(m_strokeId);
+        }
+
+        image->waitForDone();
+        currentNode = resources->currentNode();
     }
-
-    initImage(image, resources->currentNode());
-
-    KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, image);
-    m_strokeId = image->startStroke(stroke);
-    addPaintingJobs(image, resources);
-
-    if(!cancelled) {
-        image->endStroke(m_strokeId);
-    }
-    else {
-        image->cancelStroke(m_strokeId);
-    }
-
-    image->waitForDone();
 
     beforeCheckingResult(image, resources->currentNode());
 
@@ -272,7 +291,7 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
     if(needQImage) {
         KisPaintDeviceSP device = testUpdates ?
             image->projection() :
-            resources->currentNode()->paintDevice();
+            currentNode->paintDevice();
 
         resultImage = device->convertToQImage(0, 0, 0, image->width(), image->height());
     }
@@ -282,10 +301,47 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
     return resultImage;
 }
 
+void utils::StrokeTester::modifyResourceManager(KoCanvasResourceManager *manager,
+                                                KisImageWSP image, int iteration)
+{
+    Q_UNUSED(iteration);
+    modifyResourceManager(manager, image);
+}
+
+void utils::StrokeTester::modifyResourceManager(KoCanvasResourceManager *manager,
+                                                KisImageWSP image)
+{
+    Q_UNUSED(manager);
+    Q_UNUSED(image);
+}
+
+void utils::StrokeTester::initImage(KisImageWSP image, KisNodeSP activeNode, int iteration)
+{
+    Q_UNUSED(iteration);
+    initImage(image, activeNode);
+}
+
 void utils::StrokeTester::initImage(KisImageWSP image, KisNodeSP activeNode)
 {
     Q_UNUSED(image);
     Q_UNUSED(activeNode);
+}
+
+void utils::StrokeTester::addPaintingJobs(KisImageWSP image,
+                                          KisResourcesSnapshotSP resources,
+                                          KisPainter *painter, int iteration)
+{
+    Q_UNUSED(iteration);
+    addPaintingJobs(image, resources, painter);
+}
+
+void utils::StrokeTester::addPaintingJobs(KisImageWSP image,
+                                          KisResourcesSnapshotSP resources,
+                                          KisPainter *painter)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(resources);
+    Q_UNUSED(painter);
 }
 
 void utils::StrokeTester::beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode)

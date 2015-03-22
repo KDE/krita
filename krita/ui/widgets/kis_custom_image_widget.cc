@@ -28,14 +28,12 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
-#include <kundo2command.h>
 #include <QFile>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 #include <QSpacerItem>
 
-#include <kmessagebox.h>
-#include <kcolorcombo.h>
+#include <QMessageBox>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -44,7 +42,6 @@
 
 #include <KoIcon.h>
 #include <KoCompositeOp.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
@@ -59,19 +56,19 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_config.h>
 
+#include "kis_config.h"
+#include "KisPart.h"
 #include "kis_clipboard.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
     : WdgNewImage(parent)
 {
     setObjectName("KisCustomImageWidget");
-    m_doc = doc;
 
     txtName->setText(imageName);
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
@@ -94,6 +91,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     grpClipboard->hide();
 
+    sliderOpacity->setRange(0, 100, 0);
+    sliderOpacity->setValue(100);
+    sliderOpacity->setSuffix("%");
+
     connect(cmbPredefined, SIGNAL(activated(int)), SLOT(predefinedClicked(int)));
     connect(doubleResolution, SIGNAL(valueChanged(double)),
             this, SLOT(resolutionChanged(double)));
@@ -109,8 +110,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     createButton->setDefault(true);
 
     bnPortrait->setIcon(koIcon("portrait"));
-    connect(bnPortrait, SIGNAL(clicked()), SLOT(switchWidthHeight()));
-    connect(bnLandscape, SIGNAL(clicked()), SLOT(switchWidthHeight()));
+    connect(bnPortrait, SIGNAL(clicked()), SLOT(setPortrait()));
+    connect(bnLandscape, SIGNAL(clicked()), SLOT(setLandscape()));
     bnLandscape->setIcon(koIcon("landscape"));
 
     connect(doubleWidth, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
@@ -131,7 +132,17 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
 
     KisConfig cfg;
     intNumLayers->setValue(cfg.numDefaultLayers());
-
+    cmbColor->setColor(cfg.defaultBackgroundColor());
+    setBackgroundOpacity(cfg.defaultBackgroundOpacity());
+    
+    KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle();
+    
+    if (bgStyle == KisConfig::LAYER) {
+      radioBackgroundAsLayer->setChecked(true);
+    } else {
+      radioBackgroundAsProjection->setChecked(true);
+    }
+    
     fillPredefined();
     switchPortraitLandscape();
 }
@@ -208,13 +219,15 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
-    if (createNewImage()) {
-        emit documentSelected();
+    KisDocument *doc = createNewImage();
+    if (doc) {
+        emit documentSelected(doc);
     }
 }
 
-bool KisCustomImageWidget::createNewImage()
+KisDocument* KisCustomImageWidget::createNewImage()
 {
+
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
 
     if (cs->colorModelId() == RGBAColorModelID &&
@@ -228,63 +241,48 @@ bool KisCustomImageWidget::createNewImage()
             profile->info().contains("scRGB")) {
 
             int result =
-                KMessageBox::warningContinueCancel(this,
-                                                   "Linear gamma RGB color spaces are not supposed to be used "
-                                                   "in 8-bit integer modes. It is suggested to use 16-bit integer "
-                                                   "or any floating point colorspace for linear profiles.\n\n"
-                                                   "Press \"Continue\" to create a 8-bit integer linear RGB color space "
-                                                   "or \"Cancel\" to return to the settings dialog.",
-                                                   "Linear RGB + 8bit integer");
+                QMessageBox::warning(this,
+                                     i18nc("@title:window", "Krita"),
+                                     i18n("Linear gamma RGB color spaces are not supposed to be used "
+                                          "in 8-bit integer modes. It is suggested to use 16-bit integer "
+                                          "or any floating point colorspace for linear profiles.\n\n"
+                                          "Press \"Continue\" to create a 8-bit integer linear RGB color space "
+                                          "or \"Cancel\" to return to the settings dialog."),
+                                     QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
 
-            if (result == KMessageBox::Cancel) {
+            if (result == QMessageBox::Cancel) {
                 qDebug() << "Model RGB8" << "NOT SUPPORTED";
                 qDebug() << ppVar(cs->name());
                 qDebug() << ppVar(cs->profile()->name());
                 qDebug() << ppVar(cs->profile()->info());
-                return false;
+                return 0;
             }
         }
     }
-
-    QColor qc = cmbColor->color();
+    KisDocument *doc = static_cast<KisDocument*>(KisPart::instance()->createDocument());
 
     qint32 width, height;
     double resolution;
-    resolution =  doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
+    resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
     width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
     height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
 
+    QColor qc = cmbColor->color();
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
-    m_doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution);
 
-    KisImageWSP image = m_doc->image();
-    if (image && image->root() && image->root()->firstChild()) {
-        KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
-        if (layer) {
-            layer->setOpacity(OPACITY_OPAQUE_U8);
-        }
-        // Hack: with a semi-transparent background color, the projection isn't composited right if we just set the default pixel
-        if (layer && backgroundOpacity() < OPACITY_OPAQUE_U8) {
-            KisFillPainter painter;
-            painter.begin(layer->paintDevice());
-            painter.fillRect(0, 0, width, height, bgColor, backgroundOpacity());
+    bool backgroundAsLayer = radioBackgroundAsLayer->isChecked();
 
-        }
-
-        layer->setDirty(QRect(0, 0, width, height));
-        for(int i = 1; i < intNumLayers->value(); ++i) {
-            KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
-            image->addNode(layer, image->root(), i);
-            layer->setDirty(QRect(0, 0, width, height));
-        }
-    }
+    doc->newImage(txtName->text(), width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), txtDescription->toPlainText(), resolution);
 
     KisConfig cfg;
     cfg.setNumDefaultLayers(intNumLayers->value());
+    cfg.setDefaultBackgroundOpacity(backgroundOpacity());
+    cfg.setDefaultBackgroundColor(cmbColor->color());
+    cfg.setDefaultBackgroundStyle(backgroundAsLayer ? KisConfig::LAYER : KisConfig::PROJECTION);
 
-    return true;
+    return doc;
 }
 
 void KisCustomImageWidget::setNumberOfLayers(int layers)
@@ -300,6 +298,10 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
         return 0;
 
     return (opacity * 255) / 100;
+}
+
+void KisCustomImageWidget::setBackgroundOpacity(quint8 value) {
+  sliderOpacity->setValue((value * 100) / 255);
 }
 
 void KisCustomImageWidget::clipboardDataChanged()
@@ -363,11 +365,15 @@ void KisCustomImageWidget::predefinedClicked(int index)
 
     KisPropertiesConfiguration *predefined = m_predefined[index - 1];
     txtPredefinedName->setText(predefined->getString("name"));
-    doubleWidth->setValue(predefined->getDouble("width"));
-    doubleHeight->setValue(predefined->getDouble("height"));
     doubleResolution->setValue(predefined->getDouble("resolution"));
     cmbWidthUnit->setCurrentIndex(predefined->getInt("x-unit"));
     cmbHeightUnit->setCurrentIndex(predefined->getInt("y-unit"));
+
+    widthUnitChanged(cmbWidthUnit->currentIndex());
+    heightUnitChanged(cmbHeightUnit->currentIndex());
+
+    doubleWidth->setValue(predefined->getDouble("width"));
+    doubleHeight->setValue(predefined->getDouble("height"));
 
 }
 
@@ -419,6 +425,20 @@ void KisCustomImageWidget::saveAsPredefined()
 
 }
 
+void KisCustomImageWidget::setLandscape()
+{
+    if (doubleWidth->value() < doubleHeight->value()) {
+        switchWidthHeight();
+    }
+}
+
+void KisCustomImageWidget::setPortrait()
+{
+    if (doubleWidth->value() > doubleHeight->value()) {
+        switchWidthHeight();
+    }
+}
+
 void KisCustomImageWidget::switchWidthHeight()
 {
     double width = doubleWidth->value();
@@ -438,6 +458,10 @@ void KisCustomImageWidget::switchWidthHeight()
     doubleWidth->blockSignals(false);
     cmbWidthUnit->blockSignals(false);
     cmbHeightUnit->blockSignals(false);
+    switchPortraitLandscape();
+
+    widthChanged(doubleWidth->value());
+    heightChanged(doubleHeight->value());
 }
 
 void KisCustomImageWidget::switchPortraitLandscape()

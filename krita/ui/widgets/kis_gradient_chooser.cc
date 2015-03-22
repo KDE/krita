@@ -33,7 +33,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoIcon.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_global.h"
 #include "kis_autogradient.h"
 #include "kis_canvas_resource_provider.h"
@@ -56,7 +56,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     setObjectName(name);
     m_lbName = new QLabel();
 
-    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
+    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     QString knsrcFile = "kritagradients.knsrc";

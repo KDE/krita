@@ -23,8 +23,7 @@
 
 #ifndef QT_NO_DBUS
 
-#include <QObject>
-#include <QtDBus>
+#include <QDBusAbstractAdaptor>
 #include "komain_export.h"
 template<class T> class QList;
 template<class Key, class Value> class QMap;
@@ -44,7 +43,7 @@ public:
     explicit KoApplicationAdaptor(KoApplication *parent);
     virtual ~KoApplicationAdaptor();
 
-public slots: // METHODS
+public Q_SLOTS: // METHODS
 //    /**
 //     * Creates a new document for the given native mimetype
 //     * Use it to create a main window and to load an existing file, if any
@@ -70,7 +69,7 @@ public slots: // METHODS
      */
     Q_SCRIPTABLE QStringList getWindows();
 
-signals:
+Q_SIGNALS:
     /**
      * emitted when a new document is opened.
      */

@@ -30,9 +30,9 @@ class SimpleEntryWidget : public QWidget {
 public:
     explicit SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent = 0);
     void setVoiceListEnabled(bool enabled);
-signals:
+Q_SIGNALS:
     void voiceChanged(int voice);
-private slots:
+private Q_SLOTS:
 private:
     Ui::SimpleEntryWidget widget;
     SimpleEntryTool *m_tool;

@@ -56,6 +56,8 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+#ifndef K_UNDO_2_MODEL
+#define K_UNDO_2_MODEL
 #include <QAbstractItemModel>
 
 #include "kundo2stack.h"
@@ -71,7 +73,7 @@ public:
     KUndo2QStack *stack() const;
 
     virtual QModelIndex index(int row, int column,
-    const QModelIndex &parent = QModelIndex()) const;
+                              const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex &child) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -86,10 +88,10 @@ public:
     void setCleanIcon(const QIcon &icon);
     QIcon cleanIcon() const;
 
-public slots:
+public Q_SLOTS:
     void setStack(KUndo2QStack *stack);
 
-private slots:
+private Q_SLOTS:
     void stackChanged();
     void stackDestroyed(QObject *obj);
     void setStackCurrentIndex(const QModelIndex &index);
@@ -100,3 +102,4 @@ private:
     QString m_emty_label;
     QIcon m_clean_icon;
 };
+#endif

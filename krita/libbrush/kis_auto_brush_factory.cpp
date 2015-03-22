@@ -50,7 +50,18 @@ KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinit
         spacing = c.toDouble(brushDefinition.attribute("spacing"));
     }
 
+    bool useAutoSpacing = brushDefinition.attribute("useAutoSpacing", "0").toInt(&result);
+    if (!result) {
+        useAutoSpacing = c.toInt(brushDefinition.attribute("useAutoSpacing"));
+    }
+
+    qreal autoSpacingCoeff = brushDefinition.attribute("autoSpacingCoeff", "1.0").toDouble(&result);
+    if (!result) {
+        autoSpacingCoeff = c.toDouble(brushDefinition.attribute("autoSpacingCoeff"));
+    }
+
     KisBrushSP brush = new KisAutoBrush(mask, angle, randomness, density);
     brush->setSpacing(spacing);
+    brush->setAutoSpacing(useAutoSpacing, autoSpacingCoeff);
     return brush;
 }

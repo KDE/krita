@@ -22,7 +22,6 @@
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <kis_mask_generator.h>
@@ -93,7 +92,7 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
     const KoColorSpace* cs = device->colorSpace();
 
     // Compute the blur mask
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize + 1, 1, windowsize, windowsize, 2);
+    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize + 1, 1, windowsize, windowsize, 2, true);
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
     delete kas;

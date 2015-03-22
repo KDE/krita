@@ -28,12 +28,12 @@
 class QImage;
 class QPoint;
 class QRect;
-class QRectF;
 class QSize;
 class QPainter;
 
 class KoColorProfile;
 class KisCoordinatesConverter;
+class KisDisplayFilter;
 
 #include <kis_types.h>
 #include "kis_ui_types.h"
@@ -65,7 +65,7 @@ public:
 
     void setCoordinatesConverter(KisCoordinatesConverter *coordinatesConverter);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Retrieves image's data from KisImage object and updates
@@ -116,7 +116,7 @@ public slots:
 
     void setChannelFlags(const QBitArray &channelFlags);
 
-    void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Called whenever the zoom level changes or another chunk of the

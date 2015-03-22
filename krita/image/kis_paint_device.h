@@ -42,15 +42,11 @@ class QString;
 class QColor;
 class QIODevice;
 
-class KoStore;
 class KoColor;
 class KoColorSpace;
 class KoColorProfile;
 
-class KisHLineIteratorNG;
-class KisRandomSubAccessorPixel;
 class KisDataManager;
-class KisSelectionComponent;
 class KisPaintDeviceWriter;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
@@ -197,7 +193,26 @@ public:
      * </ul>
      * \see calculateExactBounds()
      */
-    virtual QRect exactBounds() const;
+    QRect exactBounds() const;
+
+    /**
+     * Retuns exact rectangle of the paint device that contains
+     * non-default pixels. For paint devices with fully transparent
+     * default pixel is equivalent to exactBounds().
+     *
+     * nonDefaultPixelArea() follows these rules:
+     *
+     * <ul>
+     * <li>if default pixel is transparent, then exact bounds
+     *     of actual pixel data are returned. The same as exactBounds()
+     * <li>if default pixel is not transparent, then calculates the
+     *     rectangle of non-default pixels. May be smaller or greater
+     *     than image bounds
+     * </ul>
+     * \see calculateExactBounds()
+     */
+    QRect nonDefaultPixelArea() const;
+
 
     /**
      * Returns a rough approximation of region covered by device.
@@ -446,6 +461,14 @@ public:
                                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
 
     /**
+     * Overridden method for convenience
+     */
+    QImage convertToQImage(const KoColorProfile *dstProfile,
+                           const QRect &rc,
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
+
+    /**
      * Create an RGBA QImage from a rectangle in the paint device. The
      * rectangle is defined by the parent image's bounds.
      *
@@ -464,7 +487,6 @@ public:
      *
      * @param maxw: maximum width
      * @param maxh: maximum height
-     * @param selection: if present, only the selected pixels will be added to the thumbnail. May be 0
      * @param rect: only this rect will be used for the thumbnail
      *
      */
@@ -697,7 +719,7 @@ public:
     /** Clear the selected pixels from the paint device */
     void clearSelection(KisSelectionSP selection);
 
-signals:
+Q_SIGNALS:
 
     void profileChanged(const KoColorProfile *  profile);
     void colorSpaceChanged(const KoColorSpace *colorspace);
@@ -711,9 +733,9 @@ public:
      * because it does a linear scanline search. So the complexity
      * is n*n at worst.
      *
-     * \see exactBounds()
+     * \see exactBounds(), nonDefaultPixelArea()
      */
-    QRect calculateExactBounds() const;
+    QRect calculateExactBounds(bool nonDefaultOnly) const;
 
 public:
     struct MemoryReleaseObject : public QObject

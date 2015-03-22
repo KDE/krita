@@ -25,6 +25,8 @@
 #include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
 #include <KoIcon.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 
 /**
@@ -45,7 +47,8 @@ public:
 
     void beginPrimaryAction(KoPointerEvent *event);
 
-public slots:
+public Q_SLOTS:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void slotSetFuzziness(int);
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
@@ -56,6 +59,7 @@ private:
     int  m_sizemod;
     int  m_feather;
     bool m_limitToCurrentLayer;
+    KConfigGroup m_configGroup;
 };
 
 class KisToolSelectContiguousFactory : public KoToolFactoryBase

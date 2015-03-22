@@ -144,7 +144,7 @@ public:
     void requestRepaint() const;
     void layoutPlanes();
     
-public slots:
+public Q_SLOTS:
     void setGapBetweenBars(int percent);
     void setGapBetweenSets(int percent);
     void setPieAngleOffset(qreal angle);

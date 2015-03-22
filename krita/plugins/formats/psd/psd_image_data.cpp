@@ -46,10 +46,15 @@ PSDImageData::~PSDImageData() {
 }
 
 bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
+
+
+
     psdread(io, &m_compression);
     quint64 start = io->pos();
     m_channelSize = m_header->channelDepth/8;
     m_channelDataLength = m_header->height * m_header->width * m_channelSize;
+
+    dbgFile << "Reading Image Data Block: compression" << m_compression << "channelsize" << m_channelSize << "number of channels" << m_header->nChannels;
 
     switch (m_compression) {
 
@@ -302,7 +307,7 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
             channelLengthPos +=2;
             io->seek(channelStartPos);
 
-            if (!io->write(compressed) == compressed.size()) {
+            if (io->write(compressed) != compressed.size()) {
                 error = "Could not write image data";
                 return false;
             }

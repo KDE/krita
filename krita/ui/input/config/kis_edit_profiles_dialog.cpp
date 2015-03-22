@@ -22,7 +22,7 @@
 #include <QPushButton>
 #include <QStringListModel>
 #include <KLocalizedString>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include "KoIcon.h"
 #include "input/kis_input_profile_manager.h"
@@ -92,7 +92,11 @@ void KisEditProfilesDialog::renameButtonClicked()
 
 void KisEditProfilesDialog::resetButtonClicked()
 {
-    if(KMessageBox::questionYesNo(this, i18n("You will lose all changes to any input profiles. Do you wish to continue?"), i18n("Reset All Profiles")) == KMessageBox::Yes) {
+    if(QMessageBox::question(this,
+                             i18nc("@title:window", "Reset All Profiles"),
+                             i18n("You will lose all changes to any input profiles. Do you wish to continue?"),
+                             QMessageBox::Yes | QMessageBox::No,
+                             QMessageBox::Yes) == QMessageBox::Yes) {
         KisInputProfileManager::instance()->resetAll();
     }
 }

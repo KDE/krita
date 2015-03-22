@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -24,7 +24,7 @@
 
 #include "kis_paint_information.h"
 
-KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(3 * 1000), m_periodic(true)
+KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0), m_length(3 * 1000), m_periodic(true), m_lastTime(0)
 {
     setMinimumLabel(i18n("0 s"));
     setLength(3);
@@ -32,17 +32,26 @@ KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(
 
 qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
 {
-    m_time += pi.currentTime() - m_lastTime;
-    m_lastTime = pi.currentTime();
+    qreal curtime = pi.currentTime();
+
+    if (curtime >= m_lastTime) {
+        m_time += curtime - m_lastTime;
+    } else {
+        // safely handle the situation when currentTime() < m_lastTime
+        m_time = 0;
+    }
+
+    m_lastTime = curtime;
+
     if (m_time > m_length) {
         if (m_periodic) {
-            m_time = (int)fmod((float)m_time, (float)m_length);
+            m_time = m_time % m_length;
         }
         else {
             m_time = m_length;
         }
     }
-    return 1.0 - m_time / float(m_length);
+    return 1.0 - m_time / qreal(m_length);
 }
 
 void KisDynamicSensorTime::reset()

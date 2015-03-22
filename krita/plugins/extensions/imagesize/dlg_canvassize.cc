@@ -26,6 +26,8 @@
 #include <KoSizeGroup.h>
 #include <klocalizedstring.h>
 
+#include <kis_config.h>
+
 // used to extend KoUnit in comboboxes
 static const QString percentStr(i18n("Percent (%)"));
 
@@ -41,7 +43,7 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
         , m_xOffset(0)
         , m_yOffset(0)
 {
-    setCaption(i18n("Canvas Size"));
+    setCaption(i18n("Resize Canvas"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
@@ -81,8 +83,12 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     m_page->canvasPreview->setCanvasSize(m_originalWidth, m_originalHeight);
     m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
 
-    m_page->aspectRatioBtn->setKeepAspectRatio(true);
-    m_page->aspectRatioCkb->setChecked(true);
+    KisConfig cfg;
+
+    m_page->aspectRatioBtn->setKeepAspectRatio(cfg.readEntry("CanvasSize/KeepAspectRatio", false));
+    m_page->constrainProportionsCkb->setChecked(cfg.readEntry("CanvasSize/ConstrainProportions", false));
+    m_keepAspect = cfg.readEntry("CanvasSize/KeepAspectRatio", false);
+
 
     m_group = new QButtonGroup(m_page);
     m_group->addButton(m_page->topLeft, NORTH_WEST);
@@ -141,7 +147,7 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     connect(m_page->xOffUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotXOffsetUnitChanged(int)));
     connect(m_page->yOffUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotYOffsetUnitChanged(int)));
 
-    connect(m_page->aspectRatioCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
+    connect(m_page->constrainProportionsCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
     connect(m_page->aspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
     connect(m_page->aspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
 
@@ -152,6 +158,10 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
 
 DlgCanvasSize::~DlgCanvasSize()
 {
+    KisConfig cfg;
+    cfg.writeEntry<bool>("CanvasSize/KeepAspectRatio", m_page->aspectRatioBtn->keepAspectRatio());
+    cfg.writeEntry<bool>("CanvasSize/ConstrainProportions", m_page->constrainProportionsCkb->isChecked());
+
     delete m_page;
 }
 
@@ -178,13 +188,13 @@ qint32 DlgCanvasSize::yOffset()
 void DlgCanvasSize::slotAspectChanged(bool keep)
 {
     m_page->aspectRatioBtn->blockSignals(true);
-    m_page->aspectRatioCkb->blockSignals(true);
+    m_page->constrainProportionsCkb->blockSignals(true);
 
     m_page->aspectRatioBtn->setKeepAspectRatio(keep);
-    m_page->aspectRatioCkb->setChecked(keep);
+    m_page->constrainProportionsCkb->setChecked(keep);
 
     m_page->aspectRatioBtn->blockSignals(false);
-    m_page->aspectRatioCkb->blockSignals(false);
+    m_page->constrainProportionsCkb->blockSignals(false);
 
     m_keepAspect = keep;
 

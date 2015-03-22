@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef RTREETESTAPP_H
+#define RTREETESTAPP_H
 
 #define CALLIGRA_RTREE_DEBUG
 
@@ -67,7 +67,7 @@ public:
     void select(QRectF & rect);
     void remove(QRectF & rect);
 
-public slots:
+public Q_SLOTS:
     void selectInsertTool();
     void selectSelectTool();
     void selectRemoveTool();
@@ -111,7 +111,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 
-private slots:
+private Q_SLOTS:
     void about();
 
 private:

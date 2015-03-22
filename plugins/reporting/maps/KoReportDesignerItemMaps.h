@@ -45,9 +45,9 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
 private:
-    void init(QGraphicsScene*);
+    void init(QGraphicsScene*, KoReportDesigner*);
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 
 };

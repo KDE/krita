@@ -39,7 +39,7 @@ QImage createQImageFromMask(const KisMaskGenerator& generator)
 
 void KisMaskGeneratorTest::testCircleSerialisation()
 {
-    KisCircleMaskGenerator cmg(10.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, 4);
+    KisCircleMaskGenerator cmg(10.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, 4, false);
     QDomDocument doc = QDomDocument("cmg");
     QDomElement root = doc.createElement("cmg");
     doc.appendChild(root);
@@ -60,8 +60,8 @@ void KisMaskGeneratorTest::testSquareSerialisation()
 {
 
     // check consistency
-    KisRectangleMaskGenerator cmg_1(5, 5, 5, 5, 5);
-    KisRectangleMaskGenerator cmg_2(5, 5, 5, 5, 5);
+    KisRectangleMaskGenerator cmg_1(5, 5, 5, 5, 5, false);
+    KisRectangleMaskGenerator cmg_2(5, 5, 5, 5, 5, false);
     for (int i = 0; i < 10; ++i) {
         for (int j = 0; j < 10; ++j) {
             QVERIFY(cmg_1.valueAt(i, j) == cmg_2.valueAt(i, j));
@@ -71,7 +71,7 @@ void KisMaskGeneratorTest::testSquareSerialisation()
     KisRectangleMaskGenerator cmg(10.0 * rand() / RAND_MAX,
                                   rand() / float(RAND_MAX),
                                   rand() / float(RAND_MAX),
-                                  rand() / float(RAND_MAX), 4);
+                                  rand() / float(RAND_MAX), 4, false);
     QDomDocument doc = QDomDocument("cmg");
     QDomElement root = doc.createElement("cmg");
     doc.appendChild(root);

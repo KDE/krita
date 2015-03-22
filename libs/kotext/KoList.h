@@ -84,11 +84,11 @@ public:
     /// Update the stored QTextList pointer for the given block
     void updateStoredList(const QTextBlock &block);
 
-    KoList *listContinuedFrom();
+    KoList *listContinuedFrom() const;
     void setListContinuedFrom(KoList *list);
 
 private:
-    KoListPrivate *d;
+    KoListPrivate * const d;
 
     Q_PRIVATE_SLOT(d, void styleChanged(int))
 };

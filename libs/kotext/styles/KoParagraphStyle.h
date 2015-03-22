@@ -711,7 +711,7 @@ public:
      */
     bool hasDefaults() const;
 
-    KoList *list();
+    KoList *list() const;
 
     void applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const;
 
@@ -720,7 +720,7 @@ public:
     bool isApplied() const;
 
 
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &newName);
     void styleApplied(const KoParagraphStyle*) const;
 

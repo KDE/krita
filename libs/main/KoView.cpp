@@ -31,6 +31,7 @@
 
 #ifndef QT_NO_DBUS
 #include "KoViewAdaptor.h"
+#include <QDBusConnection>
 #endif
 
 #include "KoDockFactoryBase.h"
@@ -43,20 +44,17 @@
 #include <KoIcon.h>
 
 #include <kactioncollection.h>
-#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
-#include <ktemporaryfile.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
 
 #include <QDockWidget>
-#include <QToolBar>
 #include <QApplication>
 #include <QList>
 #include <QDropEvent>
@@ -364,7 +362,19 @@ void KoView::changeAuthorProfile(const QString &profileName)
 
 KoMainWindow * KoView::mainWindow() const
 {
-    return dynamic_cast<KoMainWindow *>(window());
+    // It is possible (when embedded inside a Gemini window) that you have a KoMainWindow which
+    // is not the top level window. The code below ensures you can still get access to it, even
+    // in that case.
+    KoMainWindow* mw = dynamic_cast<KoMainWindow *>(window());
+    QWidget* parent = parentWidget();
+    while (!mw) {
+        mw = dynamic_cast<KoMainWindow*>(parent);
+        parent = parent->parentWidget();
+        if (!parent) {
+            break;
+        }
+    }
+    return mw;
 }
 
 KStatusBar * KoView::statusBar() const

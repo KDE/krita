@@ -20,8 +20,6 @@
 #ifndef KOSHAPEREORDERCOMMAND_H
 #define KOSHAPEREORDERCOMMAND_H
 
-#include "KoSelection.h"
-
 #include "flake_export.h"
 
 #include <kundo2command.h>
@@ -71,7 +69,7 @@ public:
     void undo();
 
 private:
-    KoShapeReorderCommandPrivate *d;
+    KoShapeReorderCommandPrivate * const d;
 };
 
 #endif

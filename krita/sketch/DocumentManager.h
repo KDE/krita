@@ -20,21 +20,20 @@
 #define DOCUMENTMANAGER_H
 
 #include <QObject>
-#include <QtCore/QVariantMap>
+#include <QVariantMap>
 
 #include "krita_sketch_export.h"
 
 class RecentFileManager;
 class Settings;
 class ProgressProxy;
-class KisDoc2;
-class KisSketchPart;
+class KisDocument;
+
 class KRITA_SKETCH_EXPORT DocumentManager : public QObject
 {
     Q_OBJECT
 public:
-    KisDoc2* document() const;
-    KisSketchPart* part();
+    KisDocument* document() const;
     ProgressProxy* progressProxy() const;
     Settings* settingsManager() const;
     void setSettingsManager(Settings* newManager);

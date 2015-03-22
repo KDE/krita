@@ -20,6 +20,8 @@
  */
 #include "KoText.h"
 
+#include <KoUnit.h>
+
 #include <klocale.h>
 
 using namespace KoText;

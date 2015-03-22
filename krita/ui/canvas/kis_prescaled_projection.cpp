@@ -227,7 +227,7 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 
     QRect rawViewRect =
         m_d->coordinatesConverter->
-        imageToViewport(ppInfo->dirtyImageRect).toAlignedRect();
+        imageToViewport(ppInfo->dirtyImageRectVar).toAlignedRect();
 
     fillInUpdateInformation(rawViewRect, ppInfo);
 
@@ -271,7 +271,7 @@ void KisPrescaledProjection::setChannelFlags(const QBitArray &channelFlags)
     m_d->projectionBackend->setChannelFlags(channelFlags);
 }
 
-void KisPrescaledProjection::setDisplayFilter(KisDisplayFilterSP displayFilter)
+void KisPrescaledProjection::setDisplayFilter(KisDisplayFilter* displayFilter)
 {
     m_d->projectionBackend->setDisplayFilter(displayFilter);
 }
@@ -317,7 +317,7 @@ KisPPUpdateInfoSP KisPrescaledProjection::getInitialUpdateInformation(const QRec
      */
 
     KisPPUpdateInfoSP info = new KisPPUpdateInfo();
-    info->dirtyImageRect = dirtyImageRect;
+    info->dirtyImageRectVar = dirtyImageRect;
 
     return info;
 }
@@ -369,7 +369,7 @@ void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
     dbgRender << ppVar(info->scaleX) << ppVar(info->scaleY);
     dbgRender << ppVar(info->borderWidth) << ppVar(info->renderHints);
     dbgRender << ppVar(info->transfer);
-    dbgRender << ppVar(info->dirtyImageRect);
+    dbgRender << ppVar(info->dirtyImageRectVar);
     dbgRender << "Not aligned rect of the canvas (raw):\t" << croppedViewRect;
     dbgRender << "Update rect in KisImage's pixels:\t" << info->imageRect;
     dbgRender << "Update rect in canvas' pixels:\t" << info->viewportRect;

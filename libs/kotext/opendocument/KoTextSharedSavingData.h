@@ -47,18 +47,20 @@ public:
 
     void setGenChanges(KoGenChanges &changes);
 
-    KoGenChanges& genChanges();
+    KoGenChanges& genChanges() const;
 
-    void addRdfIdMapping(QString oldid, QString newid);
-    QMap<QString, QString> getRdfIdMapping();
+    void addRdfIdMapping(const QString &oldid, const QString &newid);
+    QMap<QString, QString> getRdfIdMapping() const;
 
     /**
      * The Rdf Model ownership is not taken, you must still delete it,
      * and you need to ensure that it lives longer than this object
      * unless you reset the model to 0.
      */
+#ifdef SHOULD_BUILD_RDF
     void setRdfModel(QSharedPointer<Soprano::Model> m);
     QSharedPointer<Soprano::Model> rdfModel() const;
+#endif
 
     /**
      * Stores the name that written to the file for the style
@@ -74,18 +76,18 @@ public:
      * @param styleId the id of the style in KoStyleManager
      * @return the saved name of the style
      */
-    QString styleName(int styleId);
+    QString styleName(int styleId) const;
 
     /**
      * @brief styleNames List of all names of the styles that are saved
      * @return All the names of styles that are saved in the style manager
      */
-    QList<QString> styleNames();
+    QList<QString> styleNames() const;
 
 private:
 
     class Private;
-    Private * const d;
+    QScopedPointer<Private> d;
 };
 
 #endif // KOTEXTSHAREDSAVINGDATA_H

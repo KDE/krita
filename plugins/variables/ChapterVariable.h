@@ -47,7 +47,7 @@ private Q_SLOTS:
     void levelChanged(int level);
 
 private:
-    void resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
 
     enum FormatTypes {
         ChapterName,

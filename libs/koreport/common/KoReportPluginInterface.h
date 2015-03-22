@@ -21,14 +21,13 @@
 #ifndef KOREPORTPLUGININTERFACE_H
 #define KOREPORTPLUGININTERFACE_H
 
-#include <QObject>
+#include <db/pluginloader.h>
+
 #include <KoReportDesigner.h>
 #include <QGraphicsScene>
 #include <klocalizedstring.h>
-#include "koreport_export.h"
 #include <kpluginfactory.h>
 
-class KService;
 class KoReportPluginInfo;
 
 class KOREPORT_EXPORT KoReportPluginInterface : public QObject
@@ -53,11 +52,8 @@ class KOREPORT_EXPORT KoReportPluginInterface : public QObject
 };
 
 //! Implementation of driver's static version information and plugin entry point.
-
-    
+//! @todo better versioning
 #define K_EXPORT_KOREPORT_ITEMPLUGIN( class_name, internal_name ) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
-    K_EXPORT_PLUGIN(factory("koreport_" # internal_name)) \
-    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(0, 0, 1))
+    KEXI_EXPORT_PLUGIN( "koreport", class_name, internal_name, 0, 0, 1 )
 
 #endif // KOREPORTPLUGININTERFACE_H

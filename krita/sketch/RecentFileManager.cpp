@@ -26,7 +26,6 @@
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 // Much of this is a gui-less clone of KRecentFilesAction, so the format of
 // storing recent files is compatible.

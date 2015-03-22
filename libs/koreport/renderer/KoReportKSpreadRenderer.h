@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef KRKSPREADRENDERER_H
-#define KRKSPREADRENDERER_H
+#ifndef KOREPORTKSPREADRENDERER_H
+#define KOREPORTKSPREADRENDERER_H
 
 #include "KoReportRendererBase.h"
 

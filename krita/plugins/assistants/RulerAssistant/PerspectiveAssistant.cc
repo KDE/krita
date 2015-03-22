@@ -2,14 +2,14 @@
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -18,7 +18,7 @@
 
 #include "PerspectiveAssistant.h"
 
-#include <kdebug.h>
+#include "kis_debug.h"
 #include <klocale.h>
 
 #include <QPainter>
@@ -26,12 +26,14 @@
 #include <QTransform>
 
 #include "kis_coordinates_converter.h"
+#include "kis_algebra_2d.h"
 
 #include <math.h>
 #include <limits>
 
-PerspectiveAssistant::PerspectiveAssistant()
-        : KisPaintingAssistant("perspective", i18n("Perspective assistant"))
+PerspectiveAssistant::PerspectiveAssistant(QObject *parent)
+        : KisAbstractPerspectiveGrid(parent)
+        , KisPaintingAssistant("perspective", i18n("Perspective assistant"))
 {
 }
 
@@ -172,14 +174,15 @@ inline QPainterPath drawX(const QPointF& pt)
     return path;
 }
 
-void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2 *canvas)
+void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     gc.save();
     gc.resetTransform();
     QTransform initialTransform = converter->documentToWidgetTransform();
+    //QTransform reverseTransform = converter->widgetToDocument();
     QPolygonF poly;
     QTransform transform; // unused, but computed for caching purposes
-    if (getTransform(poly, transform)) {
+    if (getTransform(poly, transform) && assistantVisible==true) {
         // draw vanishing points
         QPointF intersection(0, 0);
         if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
@@ -189,12 +192,73 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             drawPath(gc, drawX(initialTransform.map(intersection)));
         }
     }
+
+    if (outline()==true && getTransform(poly, transform) && previewVisible==true){
+        //find vanishing point, find mouse, draw line between both.
+        QPainterPath path2;
+        QPointF intersection(0, 0);//this is the position of the vanishing point.
+        QPointF mousePos(0,0);
+        QLineF snapLine;
+        QRect viewport= gc.viewport();
+        QRect bounds;
+        
+        if (canvas){
+            //simplest, cheapest way to get the mouse-position//
+            mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+        }
+        else {
+            //...of course, you need to have access to a canvas-widget for that.//
+            mousePos = QCursor::pos();//this'll give an offset//
+            dbgFile<<"canvas does not exist, you may have passed arguments incorrectly:"<<canvas;
+        }
+        //figure out if point is in the perspective grid//
+        QPointF intersectTransformed(0, 0); //dummy for holding transformed intersection so the code is more readable.
+
+        if (poly.containsPoint(initialTransform.inverted().map(mousePos), Qt::OddEvenFill)==true){
+            if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
+                intersectTransformed = initialTransform.map(intersection); 
+                snapLine = QLineF(intersectTransformed, mousePos);
+                KisAlgebra2D::intersectLineRect(snapLine, viewport);
+                bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
+                QPainterPath path;
+                if (bounds.contains(intersectTransformed.toPoint())){
+                    path2.moveTo(intersectTransformed);
+                    path2.lineTo(snapLine.p1());
+                }
+                else {
+                    path2.moveTo(snapLine.p1());
+                    path2.lineTo(snapLine.p2());
+                }
+            }
+            if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
+                intersectTransformed = initialTransform.map(intersection); 
+                snapLine = QLineF(intersectTransformed, mousePos);
+                KisAlgebra2D::intersectLineRect(snapLine, viewport);
+                bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
+                QPainterPath path;
+                if (bounds.contains(intersectTransformed.toPoint())){
+                    path2.moveTo(intersectTransformed);
+                    path2.lineTo(snapLine.p1());
+                }
+                else {
+                    path2.moveTo(snapLine.p1());
+                    path2.lineTo(snapLine.p2());
+                }
+            }
+            drawPreview(gc, path2);
+        }
+    }
+
     gc.restore();
-    KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached,canvas);
+
+    KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached,canvas, assistantVisible, previewVisible);
 }
 
-void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)
+void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
+    if (assistantVisible==false) {
+        return;
+    }
     gc.setTransform(converter->documentToWidgetTransform());
     QPolygonF poly;
     QTransform transform;
@@ -207,7 +271,7 @@ void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter
         } else {
             QPainterPath path;
             path.addPolygon(poly);
-            drawPath(gc, path);
+            drawPath(gc, path, snapping());
         }
     } else {
         gc.setPen(QColor(0, 0, 0, 125));
@@ -223,8 +287,9 @@ void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter
             path.moveTo(QPointF(x * 0.125, 0.0));
             path.lineTo(QPointF(x * 0.125, 1.0));
         }
-        drawPath(gc, path);
+        drawPath(gc, path, snapping());
     }
+    
 }
 
 QPointF PerspectiveAssistant::buttonPosition() const

@@ -23,7 +23,6 @@
 
 #include "KoPAPage.h"
 #include "KoPADocument.h"
-#include "KoPAView.h"
 
 KoPAChangeMasterPageCommand::KoPAChangeMasterPageCommand( KoPADocument *document, KoPAPage * page, KoPAMasterPage * masterPage )
 : m_document( document )

@@ -36,7 +36,7 @@ public:
     {
     }
 
-public slots:
+public Q_SLOTS:
     void start() {
         m_function();
     }

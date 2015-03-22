@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -25,19 +25,19 @@
 class KoColorPopupAction;
 class KoColorSlider;
 class KoColorPatch;
-class KisView2;
 
 class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     DigitalMixerDock( );
+    QString observerName() { return "DigitalMixerDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
-public slots:
+    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
+public Q_SLOTS:
     void setCurrentColor(const KoColor& );
     void canvasResourceChanged(int, const QVariant&);
-private slots:
+private Q_SLOTS:
     void popupColorChanged(int i);
     void colorSliderChanged(int i);
     void targetColorChanged(int);

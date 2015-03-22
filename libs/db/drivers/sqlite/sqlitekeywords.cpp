@@ -27,7 +27,7 @@
 #include <sqlitedriver.h>
 
 namespace KexiDB {
-  const char* SQLiteDriver::keywords[] = {
+  const char* const SQLiteDriver::keywords[] = {
 		"ABORT",
 		"ACTION",
 		"ADD",

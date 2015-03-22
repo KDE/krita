@@ -3,12 +3,14 @@ project(calligra)
 cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
 
 cmake_policy(SET CMP0002 OLD)
-
 #cmake_policy CMP0017 was introduced in version 2.8.4
 if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
     cmake_policy(SET CMP0017 NEW)
 endif()
 
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.12)
+    cmake_policy(SET CMP0022 OLD)
+endif()
 
  ######################
 #######################
@@ -18,14 +20,14 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9 Pre-Alpha")
+set(CALLIGRA_VERSION_STRING "2.9.1")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
+set(CALLIGRA_VERSION_RELEASE 1)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+#set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
-set(CALLIGRA_YEAR 2014) # update every year
+set(CALLIGRA_YEAR 2015) # update every year
 
 if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
     set(CALLIGRA_STABLE 1) # do not edit
@@ -68,10 +70,10 @@ if(NOT DEFINED RELEASE_BUILD)
     list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
     if (INDEX EQUAL -1)
         set(RELEASE_BUILD FALSE)
-    else(INDEX EQUAL -1)
+    else()
         set(RELEASE_BUILD TRUE)
-    endif(INDEX EQUAL -1)
-endif(NOT DEFINED RELEASE_BUILD)
+    endif()
+endif()
 message(STATUS "Release build: ${RELEASE_BUILD}")
 
  ############
@@ -83,11 +85,11 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
 if (WIN32)
     option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
-endif (WIN32)
+endif ()
 option(GHNS "support Get Hot New Stuff" OFF)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
-option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
+
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
 
 # TODO: remove option and migration code below before 3.0 release
@@ -120,17 +122,17 @@ set(PRODUCTSET_DEFAULT "ALL")
 if (CREATIVEONLY)
     set(WARN_ABOUT_CREATIVEONLY TRUE)
     set(PRODUCTSET_DEFAULT "CREATIVE")
-endif (CREATIVEONLY)
+endif ()
 
 if(NOT PRODUCTSET)
     set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Set of products/features to build" FORCE)
-endif(NOT PRODUCTSET)
+endif()
 
 if (RELEASE_BUILD)
     set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
-else (RELEASE_BUILD)
+else ()
     set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
-endif (RELEASE_BUILD)
+endif ()
 
 # finally choose products/features to build
 calligra_set_productset(${PRODUCTSET})
@@ -143,15 +145,11 @@ calligra_set_productset(${PRODUCTSET})
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
-if (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus Qt3Support)
-else (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
-endif (QT3SUPPORT)
+find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
 
 if (USEOPENGL)
     find_package(Qt4 4.6.0 REQUIRED QtOpenGL)
-endif (USEOPENGL)
+endif ()
 
 
 include (KDE4Defaults)
@@ -165,31 +163,31 @@ if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
         set(SHOULD_BUILD_PART_STAGE FALSE)
         set(SHOULD_BUILD_PLUGIN_TEXTSHAPE FALSE)
         set(SHOULD_BUILD_PLUGIN_TEXTEDITING FALSE)
-        MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
-    endif (NOT IHAVEPATCHEDQT)
-endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
+        message(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
+    endif ()
+endif ()
 
 if (GHNS)
     if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
         set(GHNS FALSE)
-    endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
+    endif()
 
     macro_optional_find_package(LibAttica)
     macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
 
     if (NOT LIBATTICA_FOUND)
         set(GHNS FALSE)
-    else (NOT LIBATTICA_FOUND)
-        MESSAGE(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
-    endif (NOT LIBATTICA_FOUND)
-endif (GHNS)
+    else ()
+        message(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
+    endif ()
+endif ()
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
+endif()
 
 # overcome some platform incompatibilities
 if(WIN32)
@@ -197,12 +195,7 @@ if(WIN32)
     add_definitions(-D_USE_MATH_DEFINES)
     add_definitions(-DNOMINMAX)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
-endif(WIN32)
-
-add_definitions(
-    -DQT_USE_FAST_CONCATENATION
-    -DQT_USE_FAST_OPERATOR_PLUS
-)
+endif()
 
 # would need more code changes before 4.8.0, e.g. with qPrintable()
 if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
@@ -211,7 +204,7 @@ if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
         -DQT_USE_FAST_CONCATENATION
         -DQT_USE_FAST_OPERATOR_PLUS
     )
-endif(NOT ${QTVERSION} VERSION_LESS 4.8.0)
+endif()
 
 
  ###########################
@@ -226,17 +219,17 @@ find_package(PNG REQUIRED)
 if (APPLE)
     # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
     include_directories(${PNG_INCLUDE_DIR})
-endif(APPLE)
+endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
 if (NOT Boost_FOUND)
-    MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
-endif (NOT Boost_FOUND)
+    message(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
+endif ()
 
 if (APPLE)
    find_package(Carbon REQUIRED)
-endif (APPLE)
+endif ()
 
  ###########################
 ############################
@@ -248,7 +241,7 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.8.5)
+set(SQLITE_RECOMMENDED_VERSION 3.8.7)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
 macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
@@ -284,14 +277,14 @@ if (USEOPENGL)
         if(QT_QTOPENGL_FOUND)
             message(STATUS "Found Qt OpenGL support")
             set(HAVE_OPENGL 1)
-        else(QT_QTOPENGL_FOUND)
+        else()
             message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
-        endif(QT_QTOPENGL_FOUND)
-    else(OPENGL_FOUND)
+        endif()
+    else()
         message(STATUS "Did NOT find OpenGL libraries")
-    endif(OPENGL_FOUND)
-    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
-endif(USEOPENGL)
+    endif()
+    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by Gemini, parts of Krita and optionally by flake")
+endif()
 
 ##
 ## Test for GNU Scientific Library
@@ -334,38 +327,42 @@ macro_optional_find_package(Soprano)
 macro_log_feature(Soprano_FOUND "Soprano" "KDE4 RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
 if(NOT Soprano_FOUND)
     set(SOPRANO_INCLUDE_DIR "")
-endif(NOT Soprano_FOUND)
+endif()
 
 
 ##
 ## Test for marble
 ##
-macro_optional_find_package(Marble)
-macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required by RDF, Kexi Forms and Reports to show locations on a map")
+set(MARBLE_MIN_VERSION "0.19.2")
+macro_optional_find_package(CalligraMarble)
 if(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE FALSE)
     set(MARBLE_INCLUDE_DIR "")
-else(NOT MARBLE_FOUND)
+else()
     set(CAN_USE_MARBLE TRUE)
-endif(NOT MARBLE_FOUND)
+endif()
 if( MARBLE_FOUND )
-    add_definitions( -DCAN_USE_MARBLE )
-    ##
-    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
-    ## with commit ea177ca. This is for compatibility with older versions.
-    ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
-    if( MARBLECONTROLBOX_H )
-    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
-        if( SETMARBLEWIDGET )
-            add_definitions(-DHAVE_SETMARBLEWIDGET)
-        endif( SETMARBLEWIDGET)
-    else( MARBLECONTROLBOX_H )
-        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
-    endif( MARBLECONTROLBOX_H )
-endif( MARBLE_FOUND )
-
+    if(${MARBLE_VERSION} VERSION_LESS ${MARBLE_MIN_VERSION} )
+        set(MARBLE_FOUND FALSE)
+    else()
+        add_definitions( -DCAN_USE_MARBLE )
+        ##
+        ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+        ## with commit ea177ca. This is for compatibility with older versions.
+        ##
+        find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
+        if( MARBLECONTROLBOX_H )
+        file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+        string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+            if( SETMARBLEWIDGET )
+                add_definitions(-DHAVE_SETMARBLEWIDGET)
+            endif()
+        else()
+            message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
+        endif()
+    endif()
+endif()
+macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 ##
 ## Test for lcms
 ##
@@ -374,10 +371,10 @@ macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.
 if(LCMS2_FOUND)
     if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
         set(HAVE_LCMS24 TRUE)
-    endif(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
+    endif()
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
-endif(LCMS2_FOUND)
+endif()
 
 ##
 ## Test for Vc
@@ -395,58 +392,58 @@ configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 if(HAVE_VC)
     message(STATUS "Vc found!")
 
-    SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
     include (VcMacros)
 
     #Handle Vc master
     if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
         message(STATUS "Vc version is greater than 0.7, enabling AVX2 support")
 
-        if(Vc_COMPILER_IS_GCC)
+        if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
             AddCompilerFlag("-std=c++11" _ok)
             if(NOT _ok)
                 AddCompilerFlag("-std=c++0x" _ok)
             endif()
-        endif(Vc_COMPILER_IS_GCC)
+        endif()
 
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
             vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
-        else(PACKAGERS_BUILD)
+        else()
             set(${_objs} ${_src})
-        endif(PACKAGERS_BUILD)
+        endif()
         endmacro()
 
         macro(ko_compile_for_all_implementations _objs _src)
         if(PACKAGERS_BUILD)
             vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
-        else(PACKAGERS_BUILD)
+        else()
             set(${_objs} ${_src})
-        endif(PACKAGERS_BUILD)
+        endif()
         endmacro()
     else()
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
             vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
-        else(PACKAGERS_BUILD)
+        else()
             set(${_objs} ${_src})
-        endif(PACKAGERS_BUILD)
+        endif()
         endmacro()
 
         macro(ko_compile_for_all_implementations _objs _src)
         if(PACKAGERS_BUILD)
             vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
-        else(PACKAGERS_BUILD)
+        else()
             set(${_objs} ${_src})
-        endif(PACKAGERS_BUILD)
+        endif()
         endmacro()
     endif()
 
     if (NOT PACKAGERS_BUILD)
       # Optimize the whole Calligra for current architecture
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
-    endif (NOT PACKAGERS_BUILD)
-endif(HAVE_VC)
+    endif ()
+endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
 ##
@@ -454,9 +451,9 @@ set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 ##
 if(NOT WIN32 AND NOT APPLE)
   set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
-else(NOT WIN32 AND NOT APPLE)
+else()
   set(REQUIRED_Xinput_FOUND TRUE)
-endif(NOT WIN32 AND NOT APPLE)
+endif()
 
 ##
 ## Test for KActivities
@@ -465,7 +462,7 @@ macro_optional_find_package(KActivities 6.1.0)
 macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" FALSE "" "Required for Activities integration.")
 if(KActivities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
-endif(KActivities_FOUND)
+endif()
 
 #Set the build of TextShape changetraker
 
@@ -486,9 +483,9 @@ if(WIN32)
                         ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
-else(WIN32)
+else()
     set (KDE4_ICON_DIR  ${CMAKE_INSTALL_PREFIX}/share/icons)
-endif(WIN32)
+endif()
 
 ##
 ## Test for Fontconfig
@@ -511,9 +508,9 @@ endif()
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     set(FONTCONFIG_INCLUDE_DIR "")
     set(FREETYPE_INCLUDE_DIRS "")
-else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+else()
     add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
-endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+endif()
 
 ##
 ## Test for Qt Webkit
@@ -521,7 +518,7 @@ endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
 macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.nokia.com" FALSE "" "Required for the web shape, web Kexi widget and web report element")
 if(QT_QTWEBKIT_FOUND)
     add_definitions( -DCAN_USE_QTWEBKIT )
-endif(QT_QTWEBKIT_FOUND)
+endif()
 
 ##
 ## Test for KDeclarative
@@ -532,7 +529,7 @@ macro_optional_find_package(KDeclarative)
 ## Test endianess
 ##
 include (TestBigEndian)
-TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
+test_big_endian(CMAKE_WORDS_BIGENDIAN)
 
 ##
 ## Test SharedMimeInfo
@@ -630,10 +627,16 @@ if(POPPLER_FOUND)
     HINTS ${POPPLER_INCLUDE_DIR} )
     if(POPPLER_XPDF_HEADERS)
         set(POPPLER_XPDF_HEADERS_FOUND TRUE)
-    endif(POPPLER_XPDF_HEADERS)
+    endif()
     macro_log_feature( POPPLER_XPDF_HEADERS_FOUND "poppler-qt4-xpdf-headers" "XPDF headers in the Poppler Qt4 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter")
-endif(POPPLER_FOUND)
+endif()
 
+
+##
+## Test for libgit2 and Libqgit2
+##
+macro_optional_find_package(Libgit2)
+macro_optional_find_package(Libqgit2)
 
 ##
 ## Generate a file for prefix information
@@ -660,6 +663,13 @@ include(MacroCalligraBuildTest)
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
+
+set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version 
+                       ${CMAKE_BINARY_DIR}/libs/version 
+)
+
+include_directories(${KOVERSION_INCLUDES})
+
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
@@ -668,15 +678,16 @@ set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
+                   ${KOVERSION_INCLUDES} 
                    ${KDE4_INCLUDES})
-
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
+                   ${KOVERSION_INCLUDES} 
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
-                   ${Boost_INCLUDE_DIRS} 
+                   ${Boost_INCLUDE_DIRS}
                    ${QT_INCLUDES}
                    ${KDE4_INCLUDES})
 
@@ -707,23 +718,31 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
                    ${SOPRANO_INCLUDE_DIR}
                    ${FLAKE_INCLUDES}
-                   ${KOODF_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/main)
+                   ${KOODF_INCLUDES})
 
 # TextLayout depends on kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/textlayout)
 
+# Widgets depends on flake
+set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/widgetutils
+                   ${CMAKE_SOURCE_DIR}/libs/widgets)
+
 # BasicFlakes depends on flake, widgets
-set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES}
+set(BASICFLAKES_INCLUDES ${FLAKE_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
+set(KOWIDGETS_INCLUDES ${KDE4_INCLUDES}
+                    ${BASICFLAKES_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/libs/widgets
+                    ${CMAKE_SOURCE_DIR}/libs/widgetutils)
+
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
+                    ${KOWIDGETS_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_BINARY_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
@@ -735,7 +754,7 @@ set(KORDF_LIBS kordf)
 
 if(SHOULD_BUILD_FEATURE_SCRIPTING)
   set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)
-endif(SHOULD_BUILD_FEATURE_SCRIPTING)
+endif()
 
 # kopageapp
 set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
@@ -841,10 +860,6 @@ calligra_drop_product_on_bad_condition( LIB_CALLIGRADB
     HAVE_SQLITE "sqlite devel not found"
 )
 
-calligra_drop_product_on_bad_condition( APP_KEXI
-    QT3SUPPORT "Qt3Support not found"
-)
-
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
     OKULAR_FOUND "Okular devel not found"
 )
@@ -917,6 +932,21 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
 )
 
+calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
+    LIBGIT2_FOUND  "libgit2 devel not found"
+    LIBQGIT2_FOUND "libqgit2 devel not found"
+)
+
+calligra_drop_product_on_bad_condition( PART_QTQUICK
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
+)
+
+calligra_drop_product_on_bad_condition( APP_GEMINI
+    USEOPENGL "USEOPENGL set to FALSE"
+    QT_QTOPENGL_FOUND "Qt OpenGL not found"
+)
+
 #############################################
 ####  Backward compatibility BUILD_x=off ####
 #############################################
@@ -955,7 +985,7 @@ calligra_drop_unbuildable_products()
 
 if(SHOULD_BUILD_FEATURE_RDF)
    add_definitions( -DSHOULD_BUILD_RDF )
-endif(SHOULD_BUILD_FEATURE_RDF)
+endif()
 
 
  ###################
@@ -968,39 +998,47 @@ add_subdirectory(words)
 
 if (SHOULD_BUILD_APP_FLOW)
     add_subdirectory(flow)
-endif (SHOULD_BUILD_APP_FLOW)
+endif ()
 
 add_subdirectory(stage)
 
 if(SHOULD_BUILD_APP_KEXI)
     add_subdirectory(kexi)
-endif(SHOULD_BUILD_APP_KEXI)
+endif()
 
 if(SHOULD_BUILD_APP_PLAN)
     add_subdirectory(plan)
-endif(SHOULD_BUILD_APP_PLAN)
+endif()
 
 add_subdirectory(sheets)
 
 if(SHOULD_BUILD_APP_KRITA)
   add_subdirectory(krita)
-endif(SHOULD_BUILD_APP_KRITA)
+endif()
 
 if(SHOULD_BUILD_APP_KARBON)
   add_subdirectory(karbon)
-endif(SHOULD_BUILD_APP_KARBON)
+endif()
 
 if(SHOULD_BUILD_APP_BRAINDUMP)
   add_subdirectory(braindump)
-endif(SHOULD_BUILD_APP_BRAINDUMP)
+endif()
 
 if(SHOULD_BUILD_APP_ACTIVE)
   add_subdirectory(active)
-endif(SHOULD_BUILD_APP_ACTIVE)
+endif()
 
 if(SHOULD_BUILD_DOC)
     add_subdirectory(doc)
-endif(SHOULD_BUILD_DOC)
+endif()
+
+if(SHOULD_BUILD_PART_QTQUICK)
+    add_subdirectory(qtquick)
+endif()
+
+if(SHOULD_BUILD_GEMINI)
+    add_subdirectory(gemini)
+endif()
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
@@ -1029,4 +1067,4 @@ install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${INCLUDE_INS
 if (WARN_ABOUT_CREATIVEONLY)
     message(STATUS "WARNING:\n   You are using a deprecated build flag,\n   switch from \"-DCREATIVEONLY=ON\" to \"-DPRODUCTSET=CREATIVE\"\n   and remove the line \"CREATIVEONLY:BOOL=ON\" from CMakeCache.txt")
     message(STATUS "-------------------------------------------------------------------" )
-endif (WARN_ABOUT_CREATIVEONLY)
+endif ()

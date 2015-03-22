@@ -21,7 +21,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_config_widget.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_filter_manager.h>
 
 class FiltersModel::Private
@@ -30,7 +30,7 @@ public:
     Private()
         : view(0)
     {};
-    KisView2* view;
+    KisViewManager* view;
     QList<KisFilterSP> filters;
     QList<KisSafeFilterConfigurationSP> configurations;
 };
@@ -119,6 +119,8 @@ KisFilter* FiltersModel::filter(int index)
 
 void FiltersModel::addFilter(KisFilterSP filter)
 {
+    if (!d->view || !d->view->activeNode()) return;
+
     if (!filter.isNull())
     {
         int newRow = d->filters.count();
@@ -129,13 +131,15 @@ void FiltersModel::addFilter(KisFilterSP filter)
         // Windows. This can be removed once that bug has been alleviated at some later
         // point in time, but for now it has no side effects, as this filter's default
         // config is fine anyway.
-        if(filter->showConfigurationWidget() && filter->id() != QLatin1String("colortransfer")) {
+        if (filter->showConfigurationWidget() && filter->id() != QLatin1String("colortransfer")) {
             KisConfigWidget* wdg = filter->createConfigurationWidget(0, d->view->activeNode()->original());
             wdg->deleteLater();
             d->configurations << KisSafeFilterConfigurationSP(static_cast<KisFilterConfiguration*>(wdg->configuration()));
+
         }
-        else
+        else {
             d->configurations << KisSafeFilterConfigurationSP(filter->defaultConfiguration(d->view->activeNode()->original()));
+        }
         endInsertRows();
     }
 }
@@ -147,7 +151,7 @@ QObject* FiltersModel::view() const
 
 void FiltersModel::setView(QObject* newView)
 {
-    d->view = qobject_cast<KisView2*>( newView );
+    d->view = qobject_cast<KisViewManager*>( newView );
     emit viewChanged();
 }
 
@@ -173,7 +177,7 @@ QObject* FiltersModel::configuration(int index)
     QMap<QString, QVariant>::const_iterator i;
     for(i = props.constBegin(); i != props.constEnd(); ++i)
     {
-        config->setProperty(i.key().toAscii(), i.value());
+        config->setProperty(i.key().toLatin1(), i.value());
     }
     config->setCurve(d->configurations[index]->curve());
     config->setCurves(d->configurations[index]->curves());

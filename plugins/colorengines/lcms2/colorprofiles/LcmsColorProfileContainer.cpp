@@ -28,7 +28,6 @@
 #include <cmath>
 
 #include "DebugPigment.h"
-#include "KoChromaticities.h"
 
 class LcmsColorProfileContainer::Private
 {
@@ -85,61 +84,6 @@ IccColorProfile* LcmsColorProfileContainer::createFromLcmsProfile(const cmsHPROF
     return iccprofile;
 }
 
-#define lcmsToPigmentViceVersaStructureCopy(dst, src  ) \
-    dst .x = src .x; \
-    dst .y = src .y; \
-    dst .Y = src .Y;
-
-QByteArray LcmsColorProfileContainer::createFromChromacities(const KoRGBChromaticities& _chromacities, qreal gamma, QString _profileName)
-{
-    cmsCIExyYTRIPLE primaries;
-    cmsCIExyY whitePoint;
-    lcmsToPigmentViceVersaStructureCopy(primaries.Red, _chromacities.primaries.Red);
-    lcmsToPigmentViceVersaStructureCopy(primaries.Green, _chromacities.primaries.Green);
-    lcmsToPigmentViceVersaStructureCopy(primaries.Blue, _chromacities.primaries.Blue);
-    lcmsToPigmentViceVersaStructureCopy(whitePoint, _chromacities.whitePoint);
-    cmsToneCurve* gammaTable = cmsBuildGamma(0, gamma);
-
-    const int numTransferFunctions = 3;
-    cmsToneCurve* transferFunctions[numTransferFunctions];
-
-    for (int i = 0; i < numTransferFunctions; ++i) {
-        transferFunctions[i] = gammaTable;
-    }
-
-    cmsHPROFILE profile = cmsCreateRGBProfile(&whitePoint, &primaries,
-                                              transferFunctions);
-    QString name = _profileName;
-
-    if (name.isEmpty()) {
-        name = QString("lcms virtual RGB profile - R(%1, %2) G(%3, %4) B(%5, %6) W(%7, %8) gamma %9")
-                .arg(primaries.Red.x)
-                .arg(primaries.Red.y)
-                .arg(primaries.Green.x)
-                .arg(primaries.Green.y)
-                .arg(primaries.Blue.x)
-                .arg(primaries.Blue.y)
-                .arg(whitePoint.x)
-                .arg(whitePoint.y)
-                .arg(gamma);
-    }
-
-    // icSigProfileDescriptionTag is the compulsory tag and is the profile name
-    // displayed by other applications.
-    cmsWriteTag(profile, cmsSigProfileDescriptionTag, name.toLatin1().constData());
-
-    cmsWriteTag(profile, cmsSigDeviceModelDescTag, name.toLatin1().constData());
-
-    // Clear the default manufacturer's tag that is set to "(lcms internal)"
-    QByteArray ba("");
-    cmsWriteTag(profile, cmsSigDeviceMfgDescTag, ba.data());
-
-    cmsFreeToneCurve(gammaTable);
-    QByteArray profileArray = lcmsProfileToByteArray(profile);
-    cmsCloseProfile(profile);
-    return profileArray;
-}
-
 LcmsColorProfileContainer::~LcmsColorProfileContainer()
 {
     cmsCloseProfile(d->profile);
@@ -166,13 +110,17 @@ bool LcmsColorProfileContainer::init()
         d->deviceClass = cmsGetDeviceClass(d->profile);
         cmsGetProfileInfo(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->name = QString::fromWCharArray(buffer);
-        d->valid = true;
+
         cmsGetProfileInfo(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->productDescription = QString::fromWCharArray(buffer);
 
         cmsGetProfileInfo(d->profile, cmsInfoManufacturer, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->manufacturer = QString::fromWCharArray(buffer);
         
+        cmsProfileClassSignature profile_class;
+        profile_class = cmsGetDeviceClass(d->profile);
+        d->valid = (profile_class != cmsSigNamedColorClass);
+
         // Check if the profile can convert (something->this)
         d->suitableForOutput = cmsIsMatrixShaper(d->profile)
                 || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
@@ -185,7 +133,8 @@ bool LcmsColorProfileContainer::init()
                    << "\n\tValid:" << d->valid
                    << "\n\tName:" << d->name
                    << "\n\tManufacturer:" << d->manufacturer
-                   << "\n\tSuitable for output:" << d->suitableForOutput;
+                   << "\n\tSuitable for output:" << d->suitableForOutput
+                   << "\n\tClass" << QString::number(profile_class, 0, 16);
 
         return true;
     }
@@ -237,72 +186,8 @@ QString LcmsColorProfileContainer::name() const
 {
     return d->name;
 }
+
 QString LcmsColorProfileContainer::info() const
 {
     return d->productDescription;
-}
-
-static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, qreal red, qreal green, qreal blue)
-{
-    cmsHPROFILE XYZProfile = cmsCreateXYZProfile();
-
-    const cmsUInt32Number inputFormat = TYPE_RGB_DBL;
-    const cmsUInt32Number outputFormat = TYPE_XYZ_DBL;
-    const cmsUInt32Number transformFlags = cmsFLAGS_LOWRESPRECALC;
-
-    cmsHTRANSFORM transform = cmsCreateTransform(RGBProfile, inputFormat, XYZProfile, outputFormat,
-                                                 INTENT_ABSOLUTE_COLORIMETRIC, transformFlags);
-
-    struct XYZPixel {
-        qreal X;
-        qreal Y;
-        qreal Z;
-    };
-    struct RGBPixel {
-        qreal red;
-        qreal green;
-        qreal blue;
-    };
-
-    XYZPixel xyzPixel;
-    RGBPixel rgbPixel;
-
-    rgbPixel.red = red;
-    rgbPixel.green = green;
-    rgbPixel.blue = blue;
-
-    const unsigned int numPixelsToTransform = 1;
-
-    cmsDoTransform(transform, &rgbPixel, &xyzPixel, numPixelsToTransform);
-
-    cmsCIEXYZ xyzPixelXYZ;
-
-    xyzPixelXYZ.X = xyzPixel.X;
-    xyzPixelXYZ.Y = xyzPixel.Y;
-    xyzPixelXYZ.Z = xyzPixel.Z;
-
-    cmsCIExyY xyzPixelxyY;
-
-    cmsXYZ2xyY(&xyzPixelxyY, &xyzPixelXYZ);
-
-    cmsDeleteTransform(transform);
-    cmsCloseProfile(XYZProfile);
-    KoCIExyY res;
-    lcmsToPigmentViceVersaStructureCopy(res, xyzPixelxyY);
-
-    return res;
-}
-
-KoRGBChromaticities* LcmsColorProfileContainer::chromaticitiesFromProfile() const
-{
-    if (cmsGetColorSpace(d->profile) != cmsSigRgbData) return 0;
-
-    KoRGBChromaticities* chromaticities = new KoRGBChromaticities();
-
-    chromaticities->primaries.Red = RGB2xyY(d->profile, 1.0f, 0.0f, 0.0f);
-    chromaticities->primaries.Green = RGB2xyY(d->profile, 0.0f, 1.0f, 0.0f);
-    chromaticities->primaries.Blue = RGB2xyY(d->profile, 0.0f, 0.0f, 1.0f);
-    chromaticities->whitePoint = RGB2xyY(d->profile, 1.0f, 1.0f, 1.0f);
-
-    return chromaticities;
 }

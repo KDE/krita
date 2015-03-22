@@ -17,13 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "sqlitedriver.h"
+
 #include <db/connection.h>
 #include <db/drivermanager.h>
 #include <db/driver_p.h>
 #include <db/utils.h>
+#include <db/pluginloader.h>
 
 #include "sqlite3.h"
-#include "sqlitedriver.h"
 #include "sqliteconnection.h"
 #include "sqliteconnection_p.h"
 #include "sqliteadmin.h"
@@ -32,7 +34,7 @@
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(SQLiteDriver, "sqlite3")
+K_EXPORT_KEXIDB_DRIVER(SQLiteDriver, sqlite3)
 
 //! driver specific private data
 //! @internal
@@ -100,7 +102,7 @@ SQLiteDriver::drv_createConnection(ConnectionData &conn_data)
 
 bool SQLiteDriver::isSystemObjectName(const QString& n) const
 {
-    return Driver::isSystemObjectName(n) || n.toLower().startsWith("sqlite_");
+    return Driver::isSystemObjectName(n) || n.startsWith(QLatin1String("sqlite_"), Qt::CaseInsensitive);
 }
 
 bool SQLiteDriver::drv_isSystemFieldName(const QString& n) const

@@ -21,14 +21,12 @@
 
 #include <QtTest>
 
-class KisDoc2Test : public QObject
+class KisDocumentTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testOpenImageTwiceInSameDoc();
-    void testActiveNodes();
-
 };
 
 #endif /* KIS_DOC2_TEST_H */

@@ -32,6 +32,7 @@
 #include <flake/kis_shape_layer.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoSelection.h>
+#include <KoUnit.h>
 
 #include <kis_debug.h>
 
@@ -114,7 +115,7 @@ void KisShapeLayerCanvas::repaint()
 
     if (r.isEmpty()) return;
 
-    r.intersect(m_parentLayer->image()->bounds());
+    r = r.intersected(m_parentLayer->image()->bounds());
     QImage image(r.width(), r.height(), QImage::Format_ARGB32);
     image.fill(0);
     QPainter p(&image);

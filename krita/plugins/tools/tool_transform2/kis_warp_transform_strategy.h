@@ -22,19 +22,18 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "kis_transform_strategy_base.h"
+#include "kis_simplified_action_policy_strategy.h"
 
 class QPointF;
 class QPainter;
 class KisCoordinatesConverter;
 class ToolTransformArgs;
-class QTransform;
 class TransformTransactionProperties;
 class QCursor;
 class QImage;
 
 
-class KisWarpTransformStrategy : public KisTransformStrategyBase
+class KisWarpTransformStrategy : public KisSimplifiedActionPolicyStrategy
 {
     Q_OBJECT
 public:
@@ -48,15 +47,44 @@ public:
     QCursor getCurrentCursor() const;
 
     void externalConfigChanged();
+
+    using KisTransformStrategyBase::beginPrimaryAction;
+    using KisTransformStrategyBase::continuePrimaryAction;
+    using KisTransformStrategyBase::endPrimaryAction;
+
     bool beginPrimaryAction(const QPointF &pt);
     void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     bool endPrimaryAction();
 
-signals:
+    bool acceptsClicks() const;
+
+Q_SIGNALS:
     void requestCanvasUpdate();
 
+protected:
+    // default is true
+    void setClipOriginalPointsPosition(bool value);
+
+    // default is false
+    void setCloseOnStartPointClick(bool value);
+
+    void overrideDrawingItems(bool drawConnectionLines,
+                              bool drawOrigPoints,
+                              bool drawTransfPoints);
+
+    virtual void drawConnectionLines(QPainter &gc,
+                                     const QVector<QPointF> &origPoints,
+                                     const QVector<QPointF> &transfPoints,
+                                     bool isEditingPoints);
+
+    virtual QImage calculateTransformedImage(ToolTransformArgs &currentArgs,
+                                             const QImage &srcImage,
+                                             const QVector<QPointF> &origPoints,
+                                             const QVector<QPointF> &transfPoints,
+                                             const QPointF &srcOffset,
+                                             QPointF *dstOffset);
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> m_d;
 };
 

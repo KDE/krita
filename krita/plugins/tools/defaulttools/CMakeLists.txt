@@ -1,6 +1,6 @@
 if (NOT WIN32 AND NOT APPLE)
     add_subdirectory(tests)
-endif (NOT WIN32 AND NOT APPLE)
+endif ()
 
 set(kritadefaulttools_PART_SRCS
     default_tools.cc
@@ -27,6 +27,7 @@ kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
 kde4_add_plugin(kritadefaulttools ${kritadefaulttools_PART_SRCS})
 
 target_link_libraries(kritadefaulttools kritaui basicflakes)
+target_link_libraries(kritadefaulttools ${Boost_SYSTEM_LIBRARY})
 
 install(TARGETS kritadefaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -41,7 +42,6 @@ install( FILES
     krita_tool_line.png
     krita_tool_rectangle.png
     krita_tool_ellipse.png
-    krita_tool_freehand.png
     krita_tool_freehandvector.png
     krita_tool_multihand.png
     krita_tool_measure.png
@@ -83,3 +83,7 @@ install( FILES
 
 install( FILES  kritadefaulttools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
+install( FILES
+    KisToolPath.action
+    KisToolPencil.action
+DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

@@ -37,4 +37,4 @@ install(TARGETS kritaepsexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krita_eps_import.desktop krita_eps_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( PROGRAMS  krita_eps.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( PROGRAMS  krita_eps.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

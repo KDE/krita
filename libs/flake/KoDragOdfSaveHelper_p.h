@@ -20,6 +20,8 @@
 #ifndef KODRAGODFSAVEHELPER_P_H
 #define KODRAGODFSAVEHELPER_P_H
 
+#include <KoShapeSavingContext.h>
+
 class KoDragOdfSaveHelperPrivate
 {
 public:

@@ -76,17 +76,18 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
 
     selectCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp());
 
-    //    Cycle through blending modes
-    //    Shift + + (plus) or – (minus)
-    KAction *action = new KAction(i18n("Next Blending Mode"), this);
-    action->setShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_Plus));
-    connect(action, SIGNAL(triggered()), SLOT(slotNextBlendingMode()));
-    m_actions << action;
+    KAction *action = 0;
+//    //    Cycle through blending modes
+//    //    Shift + + (plus) or – (minus)
+//    KAction *action = new KAction(i18n("Next Blending Mode"), this);
+//    action->setShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_Plus));
+//    connect(action, SIGNAL(triggered()), SLOT(slotNextBlendingMode()));
+//    m_actions << action;
 
-    action = new KAction(i18n("Previous Blending Mode"), this);
-    action->setShortcut(QKeySequence(Qt::SHIFT + Qt::ALT +  Qt::Key_Minus));
-    connect(action, SIGNAL(triggered()), SLOT(slotPreviousBlendingMode()));
-    m_actions << action;
+//    action = new KAction(i18n("Previous Blending Mode"), this);
+//    action->setShortcut(QKeySequence(Qt::SHIFT + Qt::ALT +  Qt::Key_Minus));
+//    connect(action, SIGNAL(triggered()), SLOT(slotPreviousBlendingMode()));
+//    m_actions << action;
 
     //    Normal
     //    Shift + Alt + N
@@ -328,7 +329,7 @@ void KisCompositeOpComboBox::hidePopup()
 
 void KisCompositeOpComboBox::slotNextBlendingMode()
 {
-    if (currentIndex() < m_model->rowCount()) {
+    if (currentIndex() < count()) {
         setCurrentIndex(currentIndex() + 1);
     }
 }

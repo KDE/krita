@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Offset Image Plugin
-Name[bs]=Dodatak za pomak slik
+Name[bs]=Dodatak za pomak slike
 Name[ca]=Connector de desplaçament de les imatges
 Name[ca@valencia]=Connector de desplaçament de les imatges
 Name[cs]=Modul pro posun obrázku
@@ -10,6 +10,7 @@ Name[el]=Πρόσθετο mετατόπισης εικόνας
 Name[en_GB]=Offset Image Plugin
 Name[es]=Complemento de desplazamiento de la imagen
 Name[et]=Pildinihke plugin
+Name[fi]=Kuvan siirtoliitännäinen
 Name[fr]=Module de décalage d'images
 Name[gl]=Complemento de desprazamento de imaxes
 Name[it]=Estensione di scostamento delle immagini

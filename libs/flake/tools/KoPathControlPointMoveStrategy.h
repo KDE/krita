@@ -26,7 +26,6 @@
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 
-class KoCanvasBase;
 class KoPathTool;
 
 /**

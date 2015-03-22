@@ -22,7 +22,7 @@
 #include <QTest>
 #include <QBitArray>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoShapeContainer.h>
@@ -34,7 +34,8 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
+#include "KisPart.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
@@ -49,6 +50,8 @@
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "kis_default_bounds.h"
+#include "kis_transform_mask_params_interface.h"
+
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
@@ -80,12 +83,15 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
     return vectorSelection;
 }
 
+QTransform createTestingTransform() {
+    return QTransform(1,2,3,4,5,6,7,8,9);
+}
 
-KisDoc2* createCompleteDocument()
+KisDocument* createCompleteDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
-    KisDoc2 *doc = new KisDoc2();
+    KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
@@ -124,10 +130,12 @@ KisDoc2* createCompleteDocument()
     KisFilterConfiguration* kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     Q_ASSERT(kfc);
     KisAdjustmentLayerSP adjustmentLayer1 = new KisAdjustmentLayer(image, "adjustmentLayer1", kfc, pixelSelection);
+    kfc = 0; // kfc cannot be shared!
 
     KisSelectionSP vectorSelection = createVectorSelection(paintLayer2->paintDevice(), image);
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     KisAdjustmentLayerSP adjustmentLayer2 = new KisAdjustmentLayer(image, "adjustmentLayer2", kfc, vectorSelection);
+    kfc = 0; // kfc cannot be shared!
 
     image->addNode(paintLayer1);
     image->addNode(group1);
@@ -136,8 +144,8 @@ KisDoc2* createCompleteDocument()
     image->addNode(cloneLayer1, group2);
     image->addNode(adjustmentLayer1, group2);
 
-    KoShapeContainer * parentContainer =
-        dynamic_cast<KoShapeContainer*>(doc->shapeForNode(group1));
+//    KoShapeContainer * parentContainer =
+//        dynamic_cast<KoShapeContainer*>(doc->shapeForNode(group1));
 
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
@@ -147,20 +155,28 @@ KisDoc2* createCompleteDocument()
     path->lineTo(QPointF(10, 10) + QPointF(0, 100));
     path->close();
     path->normalize();
-    KisShapeLayerSP shapeLayer = new KisShapeLayer(parentContainer, doc->shapeController(), image, "shapeLayer1", 75);
+    KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image, "shapeLayer1", 75);
     shapeLayer->addShape(path);
     image->addNode(shapeLayer, group1);
     image->addNode(adjustmentLayer2, group1);
 
     KisFilterMaskSP filterMask1 = new KisFilterMask();
     filterMask1->setName("filterMask1");
+
+    kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     filterMask1->setFilter(kfc);
+    kfc = 0; // kfc cannot be shared!
+
     filterMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(filterMask1, paintLayer1);
 
     KisFilterMaskSP filterMask2 = new KisFilterMask();
     filterMask2->setName("filterMask2");
+
+    kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     filterMask2->setFilter(kfc);
+    kfc = 0; // kfc cannot be shared!
+
     filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image));
     image->addNode(filterMask2, paintLayer2);
 
@@ -184,14 +200,21 @@ KisDoc2* createCompleteDocument()
     selectionMask2->setSelection(createPixelSelection(paintLayer2->paintDevice()));
     image->addNode(selectionMask2, paintLayer2);
 
+    KisTransformMaskSP transformMask = new KisTransformMask();
+    transformMask->setName("testTransformMask");
+    transformMask->setTransformParams(KisTransformMaskParamsInterfaceSP(
+                                          new KisDumbTransformMaskParams(createTestingTransform())));
+
+    image->addNode(transformMask, paintLayer2);
+
     return doc;
 }
 
-KisDoc2* createEmptyDocument()
+KisDocument *createEmptyDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
-    KisDoc2 *doc = new KisDoc2();
+    KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());

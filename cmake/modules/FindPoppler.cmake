@@ -16,7 +16,7 @@ if(POPPLER_INCLUDE_DIR AND POPPLER_LIBRARY)
   # in cache already
   set(POPPLER_FOUND TRUE)
 
-else(POPPLER_INCLUDE_DIR AND POPPLER_LIBRARY)
+else()
 
 if(NOT WIN32)
 # use pkg-config to get the directories and then use these values
@@ -25,11 +25,11 @@ if(NOT WIN32)
   pkg_check_modules(_pc_poppler poppler-qt4)
   if(_pc_poppler_FOUND AND _pc_poppler_VERSION VERSION_GREATER 0.5.3)
     set(POPPLER_FOUND TRUE)
-  endif(_pc_poppler_FOUND AND _pc_poppler_VERSION VERSION_GREATER 0.5.3)
-else(NOT WIN32)
+  endif()
+else()
   # assume so, for now
   set(POPPLER_FOUND TRUE)
-endif(NOT WIN32)
+endif()
 
 if(POPPLER_FOUND)
   # set it back as false
@@ -54,11 +54,11 @@ if(POPPLER_FOUND)
   if(POPPLER_LIBRARY AND POPPLER_INCLUDE_DIR AND POPPLER_INCLUDE_DIR_core)
     list(APPEND POPPLER_INCLUDE_DIR "${POPPLER_INCLUDE_DIR_core}")
     set(POPPLER_FOUND TRUE)
-  endif(POPPLER_LIBRARY AND POPPLER_INCLUDE_DIR AND POPPLER_INCLUDE_DIR_core)
-endif(POPPLER_FOUND)
+  endif()
+endif()
 
 if (POPPLER_FOUND)
-  INCLUDE(CheckCXXSourceCompiles)
+  include(CheckCXXSourceCompiles)
 
   # check whether we're using poppler 0.6
   set(CMAKE_REQUIRED_INCLUDES ${POPPLER_INCLUDE_DIR} ${QT_INCLUDE_DIR})
@@ -100,18 +100,18 @@ int main()
     set(popplerVersionMessage "0.8")
   elseif (HAVE_POPPLER_0_6)
     set(popplerVersionMessage "0.6")
-  else (HAVE_POPPLER_0_12_1)
+  else ()
     set(popplerVersionMessage "0.5.4")
-  endif (HAVE_POPPLER_0_12_1)
+  endif ()
   if (NOT Poppler_FIND_QUIETLY)
     message(STATUS "Found Poppler-Qt4: ${POPPLER_LIBRARY}, (>= ${popplerVersionMessage})")
-  endif (NOT Poppler_FIND_QUIETLY)
-else (POPPLER_FOUND)
+  endif ()
+else ()
   if (Poppler_FIND_REQUIRED)
     message(FATAL_ERROR "Could NOT find Poppler-Qt4")
-  endif (Poppler_FIND_REQUIRED)
+  endif ()
   message(STATUS "Could not find OPTIONAL package Poppler-Qt4")
-endif (POPPLER_FOUND)
+endif ()
 
 # ensure that they are cached
 set(POPPLER_INCLUDE_DIR ${POPPLER_INCLUDE_DIR} CACHE INTERNAL "The Poppler-Qt4 include path")
@@ -120,4 +120,4 @@ set(HAVE_POPPLER_0_6 ${HAVE_POPPLER_0_6} CACHE INTERNAL "Whether the version of 
 set(HAVE_POPPLER_0_8 ${HAVE_POPPLER_0_8} CACHE INTERNAL "Whether the version of Poppler-Qt4 is >= 0.8")
 set(HAVE_POPPLER_0_12_1 ${HAVE_POPPLER_0_12_1} CACHE INTERNAL "Whether the version of Poppler-Qt4 is >= 0.12.1")
 
-endif(POPPLER_INCLUDE_DIR AND POPPLER_LIBRARY)
+endif()

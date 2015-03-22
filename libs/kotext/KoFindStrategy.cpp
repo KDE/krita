@@ -48,7 +48,7 @@ KoFindStrategy::~KoFindStrategy()
         delete m_dialog;
 }
 
-KFindDialog *KoFindStrategy::dialog()
+KFindDialog *KoFindStrategy::dialog() const
 {
     return m_dialog;
 }

@@ -26,7 +26,6 @@
 #include "kis_experiment_paintop_settings.h"
 #include "kis_experimentop_option.h"
 
-class KisFixedPainter;
 class QPointF;
 class KisPainter;
 
@@ -35,7 +34,7 @@ class KisExperimentPaintOp : public KisPaintOp
 
 public:
 
-    KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisExperimentPaintOp();
 
     void paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance);

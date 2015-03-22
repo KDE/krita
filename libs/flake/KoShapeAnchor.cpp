@@ -33,6 +33,7 @@
 #include <KoUnit.h>
 
 #include <QRectF>
+#include <QTransform>
 #include <kdebug.h>
 
 #include <KoGenChanges.h>

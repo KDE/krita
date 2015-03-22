@@ -23,6 +23,7 @@
 #include <kis_types.h>
 #include <krita_export.h>
 #include <kis_properties_configuration.h>
+#include <kis_locked_properties_proxy.h>
 
 class QWidget;
 class QString;
@@ -55,19 +56,28 @@ public:
     }
 
     virtual bool isChecked() const;
+    virtual void setChecked(bool checked);
+
+    void setLocked(bool value);
+    bool isLocked () const;
 
     /**
      * Reimplement this to use the image in the option widget
      */
     virtual void setImage(KisImageWSP image);
 
-public slots:
+    virtual void setNode(KisNodeWSP node);
 
-    virtual void setChecked(bool checked);
+    void startReadOptionSetting(const KisPropertiesConfiguration* setting);
+    void startWriteOptionSetting(KisPropertiesConfiguration* setting) const;
 
-    void setConfigurationPage(QWidget * page);
     QWidget* configurationPage() const;
 
+
+protected:
+    void setConfigurationPage(QWidget * page);
+
+protected:
     /**
      * Re-implement this to save the configuration to the paint configuration.
      */
@@ -82,7 +92,10 @@ public slots:
         Q_UNUSED(setting);
     }
 
-signals:
+protected Q_SLOTS:
+    void emitSettingChanged();
+
+Q_SIGNALS:
 
     /**
      * emit this whenever a setting has changed. It will update the preview
@@ -92,6 +105,8 @@ signals:
 protected:
 
     bool m_checkable;
+    bool m_locked;
+
 
 private:
 

@@ -40,7 +40,9 @@ public:
     bool downButtonDown;
     int factor;
     int fastSliderStep;
-    int slowSliderStep;
+    qreal slowFactor;
+    qreal shiftPercent;
+    bool shiftMode;
     QString suffix;
     qreal exponentRatio;
     int value;
@@ -80,14 +82,15 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->factor = 1.0;
     d->singleStep = 1;
     d->fastSliderStep = 5;
-    d->slowSliderStep = 1.0;
+    d->slowFactor = 0.1;
+    d->shiftMode = false;
 
     setExponentRatio(1.0);
 
     //Set sane defaults
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    
+
     //dummy needed to fix a bug in the polyester theme
     d->dummySpinBox = new QSpinBox(this);
     d->dummySpinBox->hide();
@@ -205,7 +208,16 @@ void KisAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
 void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
 {
     Q_D(KisAbstractSliderSpinBox);
-    QStyleOptionSpinBox spinOpts = spinBoxOptions();
+
+    if( e->modifiers() & Qt::ShiftModifier ) {
+        if( !d->shiftMode ) {
+            d->shiftPercent = pow( qreal(d->value - d->minimum)/qreal(d->maximum - d->minimum), 1/qreal(d->exponentRatio) );
+            d->shiftMode = true;
+        }
+    } else {
+        d->shiftMode = false;
+    }
+
     //Respect emulated mouse grab.
     if (e->buttons() & Qt::LeftButton &&
             !(d->downButtonDown || d->upButtonDown)) {
@@ -226,11 +238,14 @@ void KisAbstractSliderSpinBox::keyPressEvent(QKeyEvent* e)
     case Qt::Key_Left:
         setInternalValue(d->value - d->singleStep);
         break;
-    case Qt::Key_Enter: //Line edit isn't "accepting" key strokes..
+    case Qt::Key_Shift:
+        d->shiftPercent = pow( qreal(d->value - d->minimum)/qreal(d->maximum - d->minimum), 1/qreal(d->exponentRatio) );
+        d->shiftMode = true;
+        break;
+    case Qt::Key_Enter: //Line edit isn't "accepting" key strokes...
     case Qt::Key_Return:
     case Qt::Key_Escape:
     case Qt::Key_Control:
-    case Qt::Key_Shift:
     case Qt::Key_Alt:
     case Qt::Key_AltGr:
     case Qt::Key_Super_L:
@@ -396,8 +411,11 @@ int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) 
     //Adjust for magic number in style code (margins)
     QRect correctedProgRect = progressRect(spinOpts).adjusted(2, 2, -2, -2);
 
+    //Compute the distance of the progress bar, in pixel
     qreal leftDbl = correctedProgRect.left();
     qreal xDbl = x - leftDbl;
+
+    //Compute the ration of the progress bar used, linearly (ignoring the exponent)
     qreal rightDbl = correctedProgRect.right();
     qreal minDbl = d->minimum;
     qreal maxDbl = d->maximum;
@@ -405,12 +423,22 @@ int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) 
     qreal dValues = (maxDbl - minDbl);
     qreal percent = (xDbl / (rightDbl - leftDbl));
 
-    qreal realvalue = ((dValues * pow(percent, d->exponentRatio)) + minDbl);
-
-    if( modifiers & Qt::ControlModifier ) {
-        realvalue = floor( (realvalue+d->fastSliderStep/2) / d->fastSliderStep ) * d->fastSliderStep;
+    //If SHIFT is pressed, movement should be slowed.
+    if( modifiers & Qt::ShiftModifier ) {
+        percent = d->shiftPercent + ( percent - d->shiftPercent ) * d->slowFactor;
     }
 
+    //Final value
+    qreal realvalue = ((dValues * pow(percent, d->exponentRatio)) + minDbl);
+    //If key CTRL is pressed, round to the closest step.
+    if( modifiers & Qt::ControlModifier ) {
+        qreal fstep = d->fastSliderStep;
+        if( modifiers & Qt::ShiftModifier ) {
+            fstep*=d->slowFactor;
+        }
+        realvalue = floor( (realvalue+fstep/2) / fstep ) * fstep;
+    }
+    //Return the value
     return int(realvalue);
 }
 
@@ -611,7 +639,7 @@ qreal KisDoubleSliderSpinBox::value()
 void KisDoubleSliderSpinBox::setValue(qreal value)
 {
     Q_D(KisAbstractSliderSpinBox);
-    setInternalValue(d->value = value * d->factor);
+    setInternalValue(d->value = qRound(value * d->factor));
     update();
 }
 

@@ -31,9 +31,10 @@
 class TestBrushOp : public TestUtil::QImageBasedTest
 {
 public:
-    TestBrushOp(const QString &presetFileName)
+    TestBrushOp(const QString &presetFileName, const QString &prefix = "simple")
         : QImageBasedTest("brushop") {
         m_presetFileName = presetFileName;
+        m_prefix = prefix;
     }
 
     virtual ~TestBrushOp() {}
@@ -126,16 +127,18 @@ public:
 
 
         QString testName =
-            QString("simple_cmY_%1_cmX_%2_cR_%3_dmX_%4_dmY_%5_dR_%6")
+            QString("%7_cmY_%1_cmX_%2_cR_%3_dmX_%4_dmY_%5_dR_%6")
             .arg(mirrorY)
             .arg(mirrorX)
             .arg(rotation)
             .arg(mirrorDabX)
             .arg(mirrorDabY)
-            .arg(std::fmod(360.0 - dabRotation, 360.0));
+            .arg(std::fmod(360.0 - dabRotation, 360.0))
+            .arg(m_prefix);
 
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
+                                     paint1,
                                      image->postExecutionUndoAdapter(),
                                      manager.data());
 
@@ -154,6 +157,7 @@ public:
     }
 
     QString m_presetFileName;
+    QString m_prefix;
 };
 
 class TestBrushOpLines : public TestBrushOp
@@ -179,6 +183,31 @@ public:
     }
 };
 
+class TestBrushOpPressureLines : public TestBrushOp
+{
+public:
+    TestBrushOpPressureLines(const QString &presetFileName, const QString &prefix)
+        : TestBrushOp(presetFileName, prefix) {
+    }
+
+    void doPaint(KisPainter &gc) {
+
+        QVector<KisPaintInformation> vector;
+
+        vector << KisPaintInformation(QPointF(0, 0), 0.2);
+        vector << KisPaintInformation(QPointF(200, 50), 1.0);
+        vector << KisPaintInformation(QPointF(100, 250), 0.0);
+        vector << KisPaintInformation(QPointF(200, 150), 1.0);
+        vector << KisPaintInformation(QPointF(100, 350), 1.0);
+
+        KisDistanceInformation dist;
+
+        for (int i = 1; i < vector.size(); i++) {
+            gc.paintLine(vector[i - 1], vector[i], &dist);
+        }
+    }
+};
+
 
 void KisBrushOpTest::testRotationMirroring()
 {
@@ -189,6 +218,20 @@ void KisBrushOpTest::testRotationMirroring()
 void KisBrushOpTest::testRotationMirroringDrawingAngle()
 {
     TestBrushOpLines t("LR_drawing_angle.kpp");
+    t.test();
+}
+
+void KisBrushOpTest::testMagicSeven()
+{
+    /**
+     * A special preset that forces Qt to bug:
+     *     mask size: 56
+     *     brush size: 7
+     *     therefore scale is: 0.125
+     *     which causes QTransform work as a pure Translate in the mipmap
+     */
+
+    TestBrushOpPressureLines t("magic_seven.kpp", "magicseven");
     t.test();
 }
 

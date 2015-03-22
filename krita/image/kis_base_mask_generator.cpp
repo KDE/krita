@@ -34,7 +34,7 @@
 #include "kis_brush_mask_applicator_factories.h"
 
 
-KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, Type type, const KoID& id) : d(new Private), m_id(id)
+KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id) : d(new Private), m_id(id)
 {
     d->diameter = diameter;
     d->ratio = ratio;
@@ -45,6 +45,9 @@ KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal 
     d->cachedSpikesAngle = M_PI / d->spikes;
     d->type = type;
     d->defaultMaskProcessor = 0;
+    d->antialiasEdges = antialiasEdges;
+    d->scaleX = 1.0;
+    d->scaleY = 1.0;
     init();
 }
 
@@ -90,6 +93,8 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("hfade", QString::number(horizontalFade()));
     e.setAttribute("vfade", QString::number(verticalFade()));
     e.setAttribute("spikes", d->spikes);
+    e.setAttribute("type", d->type == CIRCLE ? "circle" : "rect");
+    e.setAttribute("antialiasEdges", d->antialiasEdges);
     e.setAttribute("id", id());
 }
 
@@ -127,12 +132,13 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
     int spikes = elt.attribute("spikes", "2").toInt();
     QString typeShape = elt.attribute("type", "circle");
     QString id = elt.attribute("id", DefaultId.id());
+    bool antialiasEdges = elt.attribute("antialiasEdges", "0").toInt();
 
     if (id == DefaultId.id()) {
         if (typeShape == "circle") {
-            return new KisCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
+            return new KisCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes, antialiasEdges);
         } else {
-            return new KisRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
+            return new KisRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes, antialiasEdges);
         }
     }
 
@@ -141,22 +147,22 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
         curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
 
         if (typeShape == "circle") {
-            return new KisCurveCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve);
+            return new KisCurveCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve, antialiasEdges);
         } else {
-            return new KisCurveRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve);
+            return new KisCurveRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve, antialiasEdges);
         }
     }
 
     if (id == GaussId.id()) {
         if (typeShape == "circle") {
-            return new KisGaussCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
+            return new KisGaussCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes, antialiasEdges);
         } else {
-            return new KisGaussRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
+            return new KisGaussRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes, antialiasEdges);
         }
     }
 
     // if unknown
-    return new KisCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
+    return new KisCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes, true);
 }
 
 qreal KisMaskGenerator::width() const
@@ -170,6 +176,21 @@ qreal KisMaskGenerator::height() const
         return d->diameter * d->ratio;
     }
     return d->diameter;
+}
+
+qreal KisMaskGenerator::effectiveSrcWidth() const
+{
+    return d->diameter * d->scaleX;
+}
+
+qreal KisMaskGenerator::effectiveSrcHeight() const
+{
+    /**
+     * This height is related to the source of the brush mask, so we
+     * don't take spikes into account, they will be generated from
+     * this data.
+     */
+    return d->diameter * d->ratio * d->scaleX;
 }
 
 qreal KisMaskGenerator::diameter() const
@@ -229,4 +250,15 @@ QString KisMaskGenerator::curveString() const
 void KisMaskGenerator::setCurveString(const QString& curveString)
 {
     d->curveString = curveString;
+}
+
+bool KisMaskGenerator::antialiasEdges() const
+{
+    return d->antialiasEdges;
+}
+
+void KisMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    d->scaleX = scaleX;
+    d->scaleY = scaleY;
 }

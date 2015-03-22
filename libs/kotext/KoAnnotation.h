@@ -76,11 +76,11 @@ public:
      * method gives a correct, unique, name
      */
     static QString createUniqueAnnotationName(const KoAnnotationManager* kam,
-                                              QString annotationName, bool isEndMarker);
+                                              const QString &annotationName, bool isEndMarker);
 
     void setAnnotationShape(KoShape *shape);
 
-    KoShape *annotationShape();
+    KoShape *annotationShape() const;
 
 private:
 

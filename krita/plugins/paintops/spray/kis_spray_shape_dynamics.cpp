@@ -35,6 +35,7 @@ KisSprayShapeDynamicsOption::KisSprayShapeDynamicsOption()
     m_checkable = true;
     m_options = new KisShapeDynamicsOptionsWidget();
 
+
     // UI signals
     connect(m_options->fixedRotation, SIGNAL(toggled(bool)), m_options->fixedAngleBox, SLOT(setEnabled(bool)));
     connect(m_options->randomRotation, SIGNAL(toggled(bool)), m_options->randomAngleWeight, SLOT(setEnabled(bool)));
@@ -48,15 +49,32 @@ KisSprayShapeDynamicsOption::KisSprayShapeDynamicsOption()
 
 void KisSprayShapeDynamicsOption::setupBrushPreviewSignals()
 {
-    connect(m_options->randomSizeCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->fixedRotation, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->fixedAngleBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomRotation, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomAngleWeight, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->followCursor, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->followCursorWeight, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->drawingAngle, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->drawingAngleWeight, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+     // initialize sliders
+
+
+    m_options->drawingAngleWeight->setRange(0.0, 1.0, 2);
+    m_options->drawingAngleWeight->setDisabled(true);
+
+    m_options->followCursorWeight->setRange(0.0, 1.0, 2);
+    m_options->followCursorWeight->setDisabled(true);
+
+    m_options->randomAngleWeight->setRange(0.0, 1.0, 2);
+    m_options->randomAngleWeight->setDisabled(true);
+
+    m_options->fixedAngleBox->setRange(0, 360, 0);
+    m_options->fixedAngleBox->setValue(30);
+    m_options->fixedAngleBox->setSuffix(QChar(Qt::Key_degree));
+    m_options->fixedAngleBox->setDisabled(true);
+
+    connect(m_options->randomSizeCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->fixedRotation, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->fixedAngleBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->randomRotation, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->randomAngleWeight, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->followCursor, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->followCursorWeight, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->drawingAngle, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->drawingAngleWeight, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
 }
 
 
@@ -85,6 +103,7 @@ void KisSprayShapeDynamicsOption::readOptionSetting(const KisPropertiesConfigura
 {
     // backward compatibility with 2.2
     if (settings->getString(SHAPE_DYNAMICS_VERSION, "2.2") == "2.2") {
+        setChecked(true);
         m_options->randomSizeCHBox->setChecked(settings->getBool(SPRAYSHAPE_RANDOM_SIZE));
         m_options->fixedRotation->setChecked(settings->getBool(SPRAYSHAPE_FIXED_ROTATION));
         m_options->fixedAngleBox->setValue(settings->getDouble(SPRAYSHAPE_FIXED_ANGEL));
@@ -94,7 +113,6 @@ void KisSprayShapeDynamicsOption::readOptionSetting(const KisPropertiesConfigura
         m_options->drawingAngleWeight->setValue(settings->getDouble(SPRAYSHAPE_DRAWING_ANGLE_WEIGHT));
         m_options->randomRotation->setChecked(settings->getBool(SPRAYSHAPE_RANDOM_ROTATION));
         m_options->randomAngleWeight->setValue(settings->getDouble(SPRAYSHAPE_RANDOM_ROTATION_WEIGHT));
-        setChecked(true);
     }
     else {
         setChecked(settings->getBool(SHAPE_DYNAMICS_ENABLED));

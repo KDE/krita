@@ -32,11 +32,16 @@
 
 struct KisRectangleMaskGenerator::Private {
     double m_c;
-    double m_halfWidth, m_halfHeight;
+    qreal xcoeff;
+    qreal ycoeff;
+    qreal xfadecoeff;
+    qreal yfadecoeff;
+    qreal transformedFadeX;
+    qreal transformedFadeY;
 };
 
-KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE, DefaultId), d(new Private)
+KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
+    : KisMaskGenerator(radius, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, DefaultId), d(new Private)
 {
     if (KisMaskGenerator::d->fv == 0 && KisMaskGenerator::d->fh == 0) {
         d->m_c = 0;
@@ -49,8 +54,28 @@ KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, 
 #endif
 
     }
-    d->m_halfWidth = KisMaskGenerator::d->diameter * 0.5;
-    d->m_halfHeight = d->m_halfWidth * KisMaskGenerator::d->ratio;
+
+    setScale(1.0, 1.0);
+}
+
+void KisRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    d->xcoeff = 2.0 / effectiveSrcWidth();
+    d->ycoeff = 2.0 / effectiveSrcHeight();
+    d->xfadecoeff = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * effectiveSrcWidth()));
+    d->yfadecoeff = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * effectiveSrcHeight()));
+    setSoftness(this->softness());
+}
+
+void KisRectangleMaskGenerator::setSoftness(qreal softness)
+{
+    KisMaskGenerator::setSoftness(softness);
+    qreal safeSoftnessCoeff = qreal(1.0) / qMax(qreal(0.01), softness);
+
+    d->transformedFadeX = d->xfadecoeff * safeSoftnessCoeff;
+    d->transformedFadeY = d->yfadecoeff * safeSoftnessCoeff;
 }
 
 KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
@@ -60,16 +85,16 @@ KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
 
 bool KisRectangleMaskGenerator::shouldSupersample() const
 {
-    return width() < 10 || height() < 10;
+    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
 }
 
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
     if (KisMaskGenerator::d->empty) return 255;
-    
+
     double xr = qAbs(x /*- m_xcenter*/);
     double yr = qAbs(y /*- m_ycenter*/);
-    
+
     if (KisMaskGenerator::d->spikes > 2) {
         double angle = (KisFastMath::atan2(yr, xr));
 
@@ -84,35 +109,30 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
         }
     }
 
-    if(xr > d->m_halfWidth || xr < -d->m_halfWidth || yr > d->m_halfHeight || yr < -d->m_halfHeight) return 255;
-    xr /= width();
-    yr /= height();
+    xr = qAbs(xr);
+    yr = qAbs(yr);
 
-    qreal fhTransformed = KisMaskGenerator::d->fh * softness();
-    qreal fvTransformed = KisMaskGenerator::d->fv * softness();
+    qreal nxr = xr * d->xcoeff;
+    qreal nyr = yr * d->ycoeff;
 
-    if( xr > fhTransformed )
-    {
-        if( yr > xr )
-        {
-            return (uchar)(255 *(yr - fvTransformed) / (0.5 - fvTransformed));
-        } else {
-            return (uchar)(255 *(xr - fhTransformed) / (0.5 - fhTransformed));
-        }
-    } else if( yr > fvTransformed )
-    {
-        return (uchar)(255 *(yr - fvTransformed) / (0.5 - fvTransformed));
-    } else if(xr < fhTransformed && yr < fvTransformed )
-    {
-        return 0;
-    } else {
-        return 255;
+    if (nxr > 1.0 || nyr > 1.0) return 255;
+
+    if (KisMaskGenerator::d->antialiasEdges) {
+        xr += 1.0;
+        yr += 1.0;
     }
-}
 
-void KisRectangleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
-{
-    KisMaskGenerator::toXML(d, e);
-    e.setAttribute("type", "rect");
+    qreal fxr = xr * d->transformedFadeX;
+    qreal fyr = yr * d->transformedFadeY;
+
+    if (fxr > 1.0 && (fxr > fyr || fyr < 1.0)) {
+        return 255 * nxr * (fxr - 1.0) / (fxr - nxr);
+    }
+
+    if (fyr > 1.0 && (fyr > fxr || fxr < 1.0)) {
+        return 255 * nyr * (fyr - 1.0) / (fyr - nyr);
+    }
+
+    return 0;
 }
 

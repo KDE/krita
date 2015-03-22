@@ -42,9 +42,11 @@ PointComposedProperty::PointComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("x",
-        QVariant(), i18n("X"), i18n("X"), Int, property);
+        QVariant(), i18nc("Property: X coordinate", "X"),
+        i18nc("Property: X coordinate", "X Coordinate"), Int, property);
     (void)new Property("y",
-        QVariant(), i18n("Y"), i18n("Y"), Int, property);
+        QVariant(), i18nc("Property: Y coordinate", "Y"),
+        i18nc("Property: Y coordinate", "Y Coordinate"), Int, property);
 }
 
 void PointComposedProperty::setValue(Property *property,

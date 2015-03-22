@@ -34,6 +34,9 @@
 #include "kis_clone_info.h"
 #include "kis_paint_layer.h"
 
+#include <QStack>
+#include <kis_effect_mask.h>
+
 
 struct KisCloneLayer::Private
 {
@@ -146,15 +149,41 @@ void KisCloneLayer::setDirtyOriginal(const QRect &rect)
      */
     if (!visible(true)) return;
 
-    QRect localRect = rect;
-    localRect.translate(m_d->x, m_d->y);
-    KisLayer::setDirty(localRect);
+    /**
+     *  HINT: this method is present for historical reasons only.
+     *        Long time ago the updates were calculated in
+     *        "copyOriginalToProjection" coordinate system. Now
+     *        everything is done in "original()" space.
+     */
+    KisLayer::setDirty(rect);
 }
 
 void KisCloneLayer::notifyParentVisibilityChanged(bool value)
 {
     KisLayer::setDirty(image()->bounds());
     KisLayer::notifyParentVisibilityChanged(value);
+}
+
+QRect KisCloneLayer::needRectOnSourceForMasks(const QRect &rc) const
+{
+    QStack<QRect> applyRects_unused;
+    bool rectVariesFlag;
+
+    QList<KisEffectMaskSP> effectMasks = this->effectMasks();
+    if (effectMasks.isEmpty()) return QRect();
+
+    QRect needRect = this->masksNeedRect(effectMasks,
+                                         rc,
+                                         applyRects_unused,
+                                         rectVariesFlag);
+
+    if (needRect.isEmpty() ||
+        (!rectVariesFlag && needRect == rc)) {
+
+        return QRect();
+    }
+
+    return needRect;
 }
 
 qint32 KisCloneLayer::x() const
@@ -177,18 +206,16 @@ void KisCloneLayer::setY(qint32 y)
 QRect KisCloneLayer::extent() const
 {
     QRect rect = original()->extent();
-    if(m_d->x || m_d->y) {
-        rect.translate(m_d->x, m_d->y);
-    }
+
+    // HINT: no offset now. See a comment in setDirtyOriginal()
     return rect | projection()->extent();
 }
 
 QRect KisCloneLayer::exactBounds() const
 {
     QRect rect = original()->exactBounds();
-    if(m_d->x || m_d->y) {
-        rect.translate(m_d->x, m_d->y);
-    }
+
+    // HINT: no offset now. See a comment in setDirtyOriginal()
     return rect | projection()->exactBounds();
 }
 
@@ -196,11 +223,25 @@ QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect resultRect = rect;
 
-    if(pos & (N_FILTHY_PROJECTION | N_FILTHY) && (m_d->x || m_d->y)) {
-        resultRect |= rect.translated(-m_d->x, -m_d->y);
+    if(pos & (N_FILTHY_PROJECTION | N_FILTHY)) {
+        if (m_d->x || m_d->y) {
+            resultRect |= rect.translated(-m_d->x, -m_d->y);
+        }
+
+        /**
+         * KisUpdateOriginalVisitor will try to recalculate some area
+         * on the clone's source, so this extra rectangle should also
+         * be taken into account
+         */
+        resultRect |= needRectOnSourceForMasks(rect);
     }
 
     return resultRect;
+}
+
+QRect KisCloneLayer::outgoingChangeRect(const QRect &rect) const
+{
+    return rect.translated(m_d->x, m_d->y);
 }
 
 bool KisCloneLayer::accept(KisNodeVisitor & v)
@@ -257,11 +298,11 @@ QIcon KisCloneLayer::icon() const
     return koIcon("edit-copy");
 }
 
-KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     if (m_d->copyFrom)
-        l << KoDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
+        l << KisDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
     return l;
 }
 

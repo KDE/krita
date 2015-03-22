@@ -31,10 +31,6 @@
 #include <KoDocumentRdfBase.h>
 #include <KoXmlReaderForward.h>
 #include <KoDataCenterBase.h>
-// KDE
-#include <kconfig.h>
-#include <kaction.h>
-#include <kdatetime.h>
 // Soprano
 #include <Soprano/Soprano>
 // Qt
@@ -55,6 +51,7 @@ class KoTextEditor;
 
 class KoDocumentRdfPrivate;
 
+class KAction;
 
 /**
  * @short The central access point for the Rdf metadata of an ODF document.
@@ -425,7 +422,7 @@ public:
      */
     void dumpModel(const QString &msg, QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when a new semanticItem is created so that dockers can
      * update themselves accordingly. It is expected that when

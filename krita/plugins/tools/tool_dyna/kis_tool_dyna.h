@@ -26,14 +26,14 @@
 
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+
 
 class KisDoubleSliderSpinBox;
 class QCheckBox;
-class QComboBox;
 class QGridLayout;
-class QSlider;
 
-class QDoubleSpinBox;
 
 class KoCanvasBase;
 
@@ -84,13 +84,14 @@ public:
     virtual ~KisToolDyna();
 
     QWidget * createOptionWidget();
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
 
 protected:
     virtual void initStroke(KoPointerEvent *event);
 
-private slots:
+private Q_SLOTS:
 
     void slotSetDynaWidth(double width);
     void slotSetMass(qreal mass);
@@ -119,6 +120,7 @@ private:
     qreal m_surfaceHeight;
 
     // settings variables
+    KConfigGroup m_configGroup;
     qreal m_width;
     qreal m_curmass;
     qreal m_curdrag;
@@ -126,6 +128,7 @@ private:
     qreal m_xangle;
     qreal m_yangle;
     qreal m_widthRange;
+
 
     // methods
     qreal flerp(qreal f0, qreal f1, qreal p) {

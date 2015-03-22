@@ -22,7 +22,7 @@
 
 #include "ui_kis_wdg_options_png.h"
 
-#include <KoFilter.h>
+#include <KisImportExportFilter.h>
 
 class KisWdgOptionsPNG : public QWidget, public Ui::KisWdgOptionsPNG
 {
@@ -32,18 +32,18 @@ public:
     KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) {
         setupUi(this);
     }
-private slots:
+private Q_SLOTS:
     void on_alpha_toggled(bool checked);
 };
 
-class KisPNGExport : public KoFilter
+class KisPNGExport : public KisImportExportFilter
 {
     Q_OBJECT
 public:
     KisPNGExport(QObject *parent, const QVariantList &);
     virtual ~KisPNGExport();
 public:
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

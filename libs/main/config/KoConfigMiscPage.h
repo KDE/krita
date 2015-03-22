@@ -40,10 +40,10 @@ public:
 
     void apply();
 
-signals:
+Q_SIGNALS:
     void unitChanged(const KoUnit &unit);
 
-public slots:
+public Q_SLOTS:
     void slotDefault();
     void slotUnitChanged(int);
 

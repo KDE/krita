@@ -28,7 +28,6 @@
 #include "kis_curve_paintop_settings_widget.h"
 
 class KoColorSpace;
-class CurveProperties;
 class Pen
 {
 public:

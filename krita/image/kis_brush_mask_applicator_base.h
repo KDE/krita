@@ -31,8 +31,6 @@ struct MaskProcessingData {
                        qreal _density,
                        double _centerX,
                        double _centerY,
-                       double _invScaleX,
-                       double _invScaleY,
                        double _angle)
         {
             device = _device;
@@ -41,8 +39,6 @@ struct MaskProcessingData {
             density = _density;
             centerX = _centerX;
             centerY = _centerY;
-            invScaleX = _invScaleX;
-            invScaleY = _invScaleY;
             cosa = cos(_angle);
             sina = sin(_angle);
             pixelSize = colorSpace->pixelSize();
@@ -56,8 +52,6 @@ struct MaskProcessingData {
     qreal density;
     double centerX;
     double centerY;
-    double invScaleX;
-    double invScaleY;
 
     double cosa;
     double sina;

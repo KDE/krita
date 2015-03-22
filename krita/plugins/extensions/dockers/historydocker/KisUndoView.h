@@ -61,6 +61,11 @@
 
 #include <QListView>
 #include <QString>
+#include <QAction>
+#include <QMenu>
+#include <kis_types.h>
+#include <klocale.h>
+#include <KoIcon.h>
 #include "kis_canvas2.h"
 
 #ifndef QT_NO_UNDOVIEW
@@ -94,12 +99,18 @@ public:
 
     void setCleanIcon(const QIcon &icon);
     QIcon cleanIcon() const;
+    
+    void mousePressEvent(QMouseEvent *event);
 
     //my new imba function
     void setCanvas(KisCanvas2* canvas);
 
 public Q_SLOTS:
     void setStack(KUndo2QStack *stack);
+    void toggleCumulativeUndoRedo();
+    void setStackT1(double value);
+    void setStackT2(double value);
+    void setStackN(int value);
 #ifndef QT_NO_UNDOGROUP
     void setGroup(KUndo2Group *group);
 #endif

@@ -22,15 +22,11 @@
 
 #include <QPoint>
 
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <knuminput.h>
-#include <kstandarddirs.h>
 
 #include <KoColor.h>
-#include <KoProgressUpdater.h>
 #include <KoResourceServer.h>
 #include <KoPattern.h>
 #include <KoResourceServerProvider.h>
@@ -113,7 +109,7 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
 //    gc.setPaintColor(c);
     gc.setProgress(progressUpdater);
     gc.setChannelFlags(config->channelFlags());
-    gc.setOpacity(100);
+    gc.setOpacity(OPACITY_OPAQUE_U8);
     gc.setSelection(dstInfo.selection());
     gc.setWidth(size.width());
     gc.setHeight(size.height());

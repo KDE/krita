@@ -24,7 +24,7 @@
 class KoReportTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void pageOptions();
     void lineItem();
     void rectItem();

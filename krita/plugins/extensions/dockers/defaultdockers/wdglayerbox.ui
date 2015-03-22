@@ -6,14 +6,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>292</width>
+    <width>301</width>
     <height>492</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="hbox2">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -62,10 +71,10 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="KoDocumentSectionView" name="listLayers" native="true">
+      <widget class="KisDocumentSectionView" name="listLayers" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -76,7 +85,7 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
+   <item row="6" column="0">
     <layout class="QHBoxLayout" name="hbox1">
      <property name="topMargin">
       <number>0</number>
@@ -113,12 +122,6 @@
        </property>
        <property name="toolTip">
         <string>Duplicate layer or mask</string>
-       </property>
-       <property name="statusTip">
-        <string>Duplicate layer or mask</string>
-       </property>
-       <property name="whatsThis">
-        <string>Duplicate the currently selected layer or mask</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -302,27 +305,44 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="opacityLayout" stretch="0,0">
+     <property name="topMargin">
+      <number>0</number>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>10</width>
-       <height>15</height>
-      </size>
+     <property name="bottomMargin">
+      <number>0</number>
      </property>
-     <property name="toolTip">
-      <string>Layer Opacity</string>
-     </property>
-     <property name="whatsThis">
-      <string>Adjust the transparency of the layer</string>
-     </property>
-    </widget>
+     <item>
+      <widget class="QLabel" name="opacityLabel">
+       <property name="text">
+        <string>Opacity:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>10</width>
+         <height>15</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Layer Opacity</string>
+       </property>
+       <property name="whatsThis">
+        <string>Adjust the transparency of the layer</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -338,9 +358,9 @@
    <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KoDocumentSectionView</class>
+   <class>KisDocumentSectionView</class>
    <extends></extends>
-   <header location="global">KoDocumentSectionView.h</header>
+   <header location="global">KisDocumentSectionView.h</header>
   </customwidget>
   <customwidget>
    <class>KisToolButton</class>

@@ -7,7 +7,6 @@
 #include <KoTextDocument.h>
 #include <QTextDocument>
 #include <QTextCursor>
-#include <kaction.h>
 #include <KoTextDocumentLayout.h>
 #include <KoDeleteChangeMarker.h>
 #include <QTextDocumentFragment>

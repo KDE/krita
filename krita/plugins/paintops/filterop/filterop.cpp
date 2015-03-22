@@ -18,8 +18,7 @@
 
 #include "filterop.h"
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
+
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 

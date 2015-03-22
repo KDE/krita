@@ -40,15 +40,46 @@ KisBrushSizeOption::KisBrushSizeOption()
     m_checkable = false;
     m_options = new KisBrushSizeOptionsWidget();
 
-    connect(m_options->diameter, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->scale, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->aspectBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->spacing, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->rotationBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->densityBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMove, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMove, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+
+    // init slider values
+    m_options->diameter->setRange(1.0, 1000, 0);
+    m_options->diameter->setValue(20);
+    m_options->diameter->setExponentRatio(3.0);
+    m_options->diameter->setSuffix(" px");
+
+    m_options->aspectBox->setRange(0.01, 2.0, 2);
+    m_options->aspectBox->setValue(1.0);
+    m_options->aspectBox->setExponentRatio(1.0);
+
+
+    m_options->scale->setRange(0.01, 10.0, 2);
+    m_options->scale->setValue(1.0);
+
+    m_options->spacing->setRange(0.01, 5.0, 2);
+    m_options->spacing->setValue(0.3);
+
+
+    m_options->rotationBox->setRange(0.0, 360.0, 0);
+    m_options->rotationBox->setValue(0.0);
+    m_options->rotationBox->setSuffix(QChar(Qt::Key_degree));
+
+
+    m_options->densityBox->setRange(0.0, 100.0, 0);
+    m_options->densityBox->setValue(100);
+    m_options->densityBox->setSuffix("%");
+
+
+    m_options->jitterMove->setRange(0.0, 5.0, 2);
+    m_options->jitterMove->setValue(0.0);
+
+    connect(m_options->diameter, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->scale, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->aspectBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->spacing, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->rotationBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->densityBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->jitterMove, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMove, SLOT(setEnabled(bool)));
     setConfigurationPage(m_options);

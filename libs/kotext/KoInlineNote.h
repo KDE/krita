@@ -91,18 +91,18 @@ public:
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);
 
-    int getPosInDocument();
+    int getPosInDocument() const;
 
 protected:
     /// reimplemented
     virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented
-    virtual void resize(const QTextDocument *document, QTextInlineObject object,
+    virtual void resize(const QTextDocument *document, QTextInlineObject &object,
                         int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
     /// reimplemented
     virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format);
 
 private:
     friend class InsertNoteCommand;

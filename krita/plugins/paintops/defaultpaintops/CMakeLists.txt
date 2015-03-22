@@ -11,7 +11,6 @@ set(kritadefaultpaintops_PART_SRCS
 	brush/kis_brushop.cpp
 	brush/kis_brushop_settings_widget.cpp
 	duplicate/kis_duplicateop.cpp
-	duplicate/kis_duplicateop_factory.cpp
 	duplicate/kis_duplicateop_settings.cpp
 	duplicate/kis_duplicateop_settings_widget.cpp
 	duplicate/kis_duplicateop_option.cpp

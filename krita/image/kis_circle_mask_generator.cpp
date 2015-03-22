@@ -39,17 +39,27 @@
 #include "kis_brush_mask_applicator_factories.h"
 
 
-KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, CIRCLE, DefaultId), d(new Private)
+KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, DefaultId), d(new Private)
 {
-    d->xcoef = 2.0 / width();
-    d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
-    d->xfadecoef = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * width()));
-    d->yfadecoef = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * KisMaskGenerator::d->ratio * width()));
-    d->transformedFadeX = d->xfadecoef * softness();
-    d->transformedFadeY = d->yfadecoef * softness();
+    setScale(1.0, 1.0);
+
+    // store the variable locally to allow vector implementation read it easily
+    d->copyOfAntialiasEdges = antialiasEdges;
 
     d->applicator = createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this);
+}
+
+void KisCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    d->xcoef = 2.0 / effectiveSrcWidth();
+    d->ycoef = 2.0 / effectiveSrcHeight();
+    d->xfadecoef = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * effectiveSrcWidth()));
+    d->yfadecoef = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * effectiveSrcHeight()));
+    d->transformedFadeX = d->xfadecoef * softness();
+    d->transformedFadeY = d->yfadecoef * softness();
 }
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()
@@ -60,7 +70,7 @@ KisCircleMaskGenerator::~KisCircleMaskGenerator()
 
 bool KisCircleMaskGenerator::shouldSupersample() const
 {
-    return width() < 10 || KisMaskGenerator::d->ratio * width() < 10;
+    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
 }
 
 bool KisCircleMaskGenerator::shouldVectorize() const
@@ -93,51 +103,27 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
         }
     }
 
-    double n = norme(xr * d->xcoef, yr * d->ycoef);
+    qreal n = norme(xr * d->xcoef, yr * d->ycoef);
+    if (n > 1.0) return 255;
 
-    if (n > 1) {
-        return 255;
-    } else {
-        double normeFade = norme(xr * d->transformedFadeX, yr * d->transformedFadeY);
-        if (normeFade > 1) {
-            // xle stands for x-coordinate limit exterior
-            // yle stands for y-coordinate limit exterior
-            // we are computing the coordinate on the external ellipse in order to compute
-            // the fade value
-            // xle = xr / sqrt(norme(xr * d->xcoef, yr * d->ycoef))
-            // yle = yr / sqrt(norme(xr * d->xcoef, yr * d->ycoef))
-
-            // On the internal limit of the fade area, normeFade is equal to 1
-
-            // normeFadeLimitE = norme(xle * transformedFadeX, yle * transformedFadeY)
-            // return (uchar)(255 *(normeFade - 1) / (normeFadeLimitE - 1));
-            return (uchar)(255 * n * (normeFade - 1) / (normeFade - n));
-            // if n == 0, the conversion of NaN to uchar will correctly result in zero
-        } else {
-            n = 1 - n;
-            if( width() < 2 || height() < 2 || n > d->xcoef * 0.5 || n > d->ycoef * 0.5)
-            {
-              return 0;
-            } else {
-              return 255 *  ( 1 - 4 * n * n  / (d->xcoef * d->ycoef) );
-            }
-        }
+    // we add +1.0 to ensure correct antialising on the border
+    if (KisMaskGenerator::d->antialiasEdges) {
+        xr = qAbs(xr) + 1.0;
+        yr = qAbs(yr) + 1.0;
     }
-}
 
-void KisCircleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
-{
-    KisMaskGenerator::toXML(d, e);
-    e.setAttribute("type", "circle");
+    qreal nf = norme(xr * d->transformedFadeX,
+                     yr * d->transformedFadeY);
+
+    if (nf < 1.0) return 0;
+    return 255 * n * (nf - 1.0) / (nf - n);
 }
 
 void KisCircleMaskGenerator::setSoftness(qreal softness)
 {
-    if (softness == 0){
-        KisMaskGenerator::setSoftness(1.0);
-    }else{
-        KisMaskGenerator::setSoftness(1.0 / softness);
-    }
-    d->transformedFadeX = d->xfadecoef * this->softness();
-    d->transformedFadeY = d->yfadecoef * this->softness();
+    KisMaskGenerator::setSoftness(softness);
+    qreal safeSoftnessCoeff = qreal(1.0) / qMax(qreal(0.01), softness);
+
+    d->transformedFadeX = d->xfadecoef * safeSoftnessCoeff;
+    d->transformedFadeY = d->yfadecoef * safeSoftnessCoeff;
 }

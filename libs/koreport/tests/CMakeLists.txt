@@ -1,12 +1,10 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-include_directories( ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/
-    ${CMAKE_SOURCE_DIR}/libs/koreport
-    ${CMAKE_SOURCE_DIR}/libs/koreport/common
-    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
-    ${CMAKE_SOURCE_DIR}/libs/koproperty
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${FLAKE_INCLUDES}
+    ${KOREPORT_INCLUDES}
+    ${QT_INCLUDES}
 )
 
 
@@ -16,6 +14,6 @@ set(KoReportTest_SRCS KoReportTest.cpp)
 
 kde4_add_unit_test(KoReportTest TESTNAME KoReportTest  ${KoReportTest_SRCS})
 
-target_link_libraries(KoReportTest koreport ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(KoReportTest ${KOREPORT_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########## next target ###############

@@ -20,11 +20,10 @@
 #ifndef KODOCKFACTORY_H
 #define KODOCKFACTORY_H
 
-#include <QString>
-
 #include "flake_export.h"
 
 class QDockWidget;
+class QString;
 
 /**
  * Base class for factories used to create new dock widgets.

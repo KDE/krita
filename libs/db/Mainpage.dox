@@ -1,0 +1,10 @@
+/**
+    \mainpage CalligraDB
+
+    %CalligraDB is a database connectivity and creation library. Its origins are in Kexi so it is
+    internally called KexiDB.
+
+    - Development wiki: https://community.kde.org/Kexi/KexiDB
+ */
+// DOXYGEN_SET_PROJECT_NAME = CalligraDB
+EXCLUDE=tests parser/sqlscanner.cpp parser/sqlparser.h parser/sqlparser.cpp drivers/sqlite/icu

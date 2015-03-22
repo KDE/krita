@@ -20,7 +20,7 @@
 
 #include "selection_tools.h"
 #include <klocale.h>
-#include <kcomponentdata.h>
+
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
@@ -36,8 +36,6 @@
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_path.h"
 #include "kis_tool_select_similar.h"
-#include "kis_tool_select_brush.h"
-//#include "kis_tool_select_magnetic.h"
 
 K_PLUGIN_FACTORY(SelectionToolsFactory, registerPlugin<SelectionTools>();)
 K_EXPORT_PLUGIN(SelectionToolsFactory("krita"))
@@ -55,8 +53,6 @@ SelectionTools::SelectionTools(QObject *parent, const QVariantList &)
     r->add(new KisToolSelectContiguousFactory(QStringList()));
     r->add(new KisToolSelectPathFactory(QStringList()));
     r->add(new KisToolSelectSimilarFactory(QStringList()));
-    r->add(new KisToolSelectBrushFactory(QStringList()));
-//    r->add(new KisToolSelectMagneticFactory(QStringList()));
 }
 
 SelectionTools::~SelectionTools()

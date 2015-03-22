@@ -18,6 +18,7 @@
 
 #include "kis_qimage_pyramid.h"
 
+#include <limits>
 #include <QPainter>
 #include <kis_debug.h>
 
@@ -99,20 +100,27 @@ inline QRect roundRect(const QRectF &rc)
 {
     /**
      * This is an analog of toAlignedRect() with the only difference
-     * that it rounds corner values instead of doing floor/ceil.
+     * that it ensures the rect position will never be below zero.
      *
      * Warning: be *very* careful with using bottom()/right() values
      *          of a pure QRect (we don't use it here for the dangers
      *          it can lead to).
      */
 
-    int left = qRound(rc.left());
-    int right = qRound(rc.right());
+    QRectF rect(rc);
 
-    int top = qRound(rc.top());
-    int bottom = qRound(rc.bottom());
+    KIS_ASSERT_RECOVER_NOOP(rect.x() > -1e-6);
+    KIS_ASSERT_RECOVER_NOOP(rect.y() > -1e-6);
 
-    return QRect(left, top, right - left, bottom - top);
+    if (rect.x() < 0.0) {
+        rect.setLeft(0.0);
+    }
+
+    if (rect.y() < 0.0) {
+        rect.setTop(0.0);
+    }
+
+    return rect.toAlignedRect();
 }
 
 QTransform baseBrushTransform(qreal scaleX, qreal scaleY,
@@ -152,6 +160,8 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                                        qreal baseScale, const QSize &baseSize,
                                        QTransform *outputTransform, QSize *outputSize)
 {
+    Q_UNUSED(baseScale);
+
     QRectF originalBounds = QRectF(QPointF(), originalSize);
     QTransform originalTransform =
         baseBrushTransform(scale, scale,
@@ -159,10 +169,14 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                            subPixelX, subPixelY,
                            originalBounds);
 
-    qreal scaleX = scale / baseScale;
-    qreal scaleY = scale / baseScale;
+    qreal realBaseScaleX = qreal(baseSize.width()) / originalSize.width();
+    qreal realBaseScaleY = qreal(baseSize.height()) / originalSize.height();
+
+    qreal scaleX = scale / realBaseScaleX;
+    qreal scaleY = scale / realBaseScaleY;
 
     QRectF baseBounds = QRectF(QPointF(), baseSize);
+
     QTransform transform =
         baseBrushTransform(scaleX, scaleY,
                            rotation,
@@ -170,25 +184,16 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                            baseBounds);
 
     QRect expectedDstRect = roundRect(originalTransform.mapRect(originalBounds));
-    QRectF realRect = transform.mapRect(baseBounds);
-
-    scaleX *= qreal(expectedDstRect.width()) / realRect.width();
-    scaleY *= qreal(expectedDstRect.height()) / realRect.height();
-
-    transform = baseBrushTransform(scaleX, scaleY,
-                                   rotation,
-                                   subPixelX, subPixelY,
-                                   baseBounds);
-
+#if 0 // Only enable when debugging; users shouldn't see this warning
     {
         QRect testingRect = roundRect(transform.mapRect(baseBounds));
-        if (testingRect.size() != expectedDstRect.size()) {
+        if (testingRect != expectedDstRect) {
             qWarning() << "WARNING: expected and real dab rects do not coincide!";
-            qWarning() << "         expected rect:" << expectedDstRect.size();
-            qWarning() << "         real rect:    " << testingRect.size();
+            qWarning() << "         expected rect:" << expectedDstRect;
+            qWarning() << "         real rect:    " << testingRect;
         }
     }
-
+#endif
     KIS_ASSERT_RECOVER_NOOP(expectedDstRect.x() >= 0);
     KIS_ASSERT_RECOVER_NOOP(expectedDstRect.y() >= 0);
 
@@ -216,6 +221,18 @@ QSize KisQImagePyramid::imageSize(const QSize &originalSize,
                     &transform, &dstSize);
 
     return dstSize;
+}
+
+QSizeF KisQImagePyramid::characteristicSize(const QSize &originalSize,
+                                            qreal scale, qreal rotation)
+{
+    QRectF originalRect(QPointF(), originalSize);
+    QTransform transform = baseBrushTransform(scale, scale,
+                                              rotation,
+                                              0.0, 0.0,
+                                              originalRect);
+
+    return transform.mapRect(originalRect).size();
 }
 
 void KisQImagePyramid::appendPyramidLevel(const QImage &image)
@@ -265,6 +282,21 @@ QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
 
     QImage dstImage(dstSize, QImage::Format_ARGB32);
     dstImage.fill(0);
+
+
+    /**
+     * QPainter has one more bug: when a QTransform is TxTranslate, it
+     * does wrong sampling (probably, Nearest Neighbour) even though
+     * we tell it directly that we need SmoothPixmapTransform.
+     *
+     * So here is a workaround: we set a negligible scale to convince
+     * Qt we use a non-only-translating transform.
+     */
+    while (transform.type() == QTransform::TxTranslate) {
+        const qreal scale = transform.m11();
+        const qreal fakeScale = scale - 10 * std::numeric_limits<qreal>::epsilon();
+        transform *= QTransform::fromScale(fakeScale, fakeScale);
+    }
 
     QPainter gc(&dstImage);
     gc.setTransform(

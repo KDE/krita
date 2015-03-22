@@ -36,7 +36,6 @@
 #include <kis_debug.h>
 
 #include <KoColorProfile.h>
-#include <KoShapeManager.h>
 #include "kis_coordinates_converter.h"
 #include <KoZoomHandler.h>
 #include <KoToolManager.h>
@@ -45,12 +44,12 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_prescaled_projection.h"
 #include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_selection_manager.h"
 #include "kis_selection.h"
 #include "kis_perspective_grid_manager.h"

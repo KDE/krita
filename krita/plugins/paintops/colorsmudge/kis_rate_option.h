@@ -25,7 +25,6 @@
 #include <kis_paint_information.h>
 #include <kis_types.h>
 
-class KisPropertiesConfiguration;
 class KisPainter;
 
 class KisRateOption: public KisCurveOption

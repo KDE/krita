@@ -10,7 +10,7 @@
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    version 2.1 of the License, or (at your option) any later version.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -70,7 +70,7 @@ public:
 
     virtual ~KoResourceServerBase() {}
 
-    virtual int resoureCount() const = 0;
+    virtual int resourceCount() const = 0;
     virtual void loadResources(QStringList filenames) = 0;
     virtual QStringList blackListedFiles() const = 0;
     QString type() const { return m_type; }
@@ -115,7 +115,9 @@ protected:
  * can be observed with a KoResourceServerObserver
  *
  * The \p Policy template parameter defines the way how the lifetime
+
  * of a resource is handled.  There are to predefined policies:
+
  *
  *   o PointerStroragePolicy --- usual pointers with ownership over
  *                               the resource.
@@ -134,7 +136,6 @@ class KoResourceServer : public KoResourceServerBase
 public:
     typedef typename Policy::PointerType PointerType;
     typedef KoResourceServerObserver<T, Policy> ObserverType;
-public:
     KoResourceServer(const QString& type, const QString& extensions)
         : KoResourceServerBase(type, extensions)
     {
@@ -161,7 +162,7 @@ public:
 
     }
 
-    int resoureCount() const {
+    int resourceCount() const {
         return m_resources.size();
     }
 
@@ -217,6 +218,10 @@ public:
         m_resources = sortedResources();
         m_tagStore->loadTags();
 
+        foreach(ObserverType* observer, m_observers) {
+            observer->syncTaggedResourceView();
+        }
+
         kDebug(30009) << "done loading  resources for type " << type();
     }
 
@@ -227,6 +232,7 @@ public:
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
         }
+
         if (save) {
             QFileInfo fileInfo(resource->filename());
 
@@ -268,7 +274,23 @@ public:
 
         return true;
     }
-
+    
+    /*Removes a given resource from the blacklist.
+     */
+    bool removeFromBlacklist(PointerType resource) {
+        if (m_blackListFileNames.contains(resource->filename())) {
+            m_blackListFileNames.removeAll(resource->filename());
+            writeBlackListFile();
+            }
+            else{
+                kWarning(30009)<<"Doesn't contain filename";
+                return false;
+            }
+        
+        
+        //then return true//
+        return true;
+    }
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(PointerType resource){
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
@@ -286,7 +308,9 @@ public:
     }
 
     /// Remove a resource from the resourceserver and blacklist it
+
     bool removeResourceAndBlacklist(PointerType resource) {
+
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
@@ -337,7 +361,9 @@ public:
         if (!resource->valid()) {
             kWarning(30009) << "Import failed! Resource is not valid";
             Policy::deleteResource(resource);
+
             return false;
+
         }
 
         if (fileCreation) {
@@ -355,7 +381,8 @@ public:
             resource->setFilename(fileInfo.filePath());
         }
 
-        if (!addResource(resource)) {
+
+        if(!addResource(resource)) {
             Policy::deleteResource(resource);
         }
 
@@ -392,6 +419,7 @@ public:
             if(notifyLoadedResources) {
                 foreach(PointerType resource, m_resourcesByFilename) {
                     observer->resourceAdded(resource);
+
                 }
             }
         }
@@ -470,11 +498,13 @@ public:
         return m_tagStore->tagNamesList();
     }
 
+    // don't use these method directly since it doesn't update views!
     void addTag( KoResource* resource,const QString& tag)
     {
         m_tagStore->addTag(resource,tag);
     }
 
+    // don't use these method directly since it doesn't update views!
     void delTag( KoResource* resource,const QString& tag)
     {
         m_tagStore->delTag(resource,tag);
@@ -531,8 +561,6 @@ public:
 
     virtual PointerType createResource( const QString & filename ) { return new T(filename); }
 
-protected:
-
     /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
     virtual QList<PointerType> sortedResources()
     {
@@ -542,6 +570,8 @@ protected:
         }
         return sortedNames.values();
     }
+
+protected:
 
     void notifyResourceAdded(PointerType resource)
     {
@@ -617,7 +647,7 @@ protected:
         doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
         root = doc.createElement("resourceFilesList");
         doc.appendChild(root);
-
+        
         foreach(QString filename, m_blackListFileNames) {
             QDomElement fileEl = doc.createElement("file");
             QDomElement nameEl = doc.createElement("name");
@@ -626,6 +656,8 @@ protected:
             fileEl.appendChild(nameEl);
             root.appendChild(fileEl);
         }
+        
+        
 
         QTextStream metastream(&f);
         metastream << doc.toByteArray();

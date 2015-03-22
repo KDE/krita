@@ -25,7 +25,7 @@
 namespace KexiMigration
 {
 
-K_EXPORT_KEXIMIGRATE_DRIVER(SpreadsheetMigrate, "spreadsheet")
+K_EXPORT_KEXIMIGRATE_DRIVER(SpreadsheetMigrate, spreadsheet)
 
 //! a KoPart used to fill required part in spreadsheet Doc object
 class MockPart : public KoPart
@@ -47,6 +47,7 @@ SpreadsheetMigrate::SpreadsheetMigrate(QObject *parent, const QVariantList &args
 {
   m_CurSheet = 0;
   m_KSDoc = 0;
+  m_Row = 0;
 }
 
 SpreadsheetMigrate::~SpreadsheetMigrate()
@@ -132,7 +133,7 @@ bool SpreadsheetMigrate::drv_readTableSchema(const QString& originalName, KexiDB
       forever {
           fieldName = fieldBaseName;
           if (fieldNameAdd > 0) {
-              fieldName.append("_" + QString::number(fieldNameAdd));
+              fieldName.append(QLatin1Char('_') + QString::number(fieldNameAdd));
           }
           if (!tableSchema.field(fieldName)) {
               break;

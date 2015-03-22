@@ -30,7 +30,7 @@ typedef enum {
 
 
 class QColor;
-class KisView2;
+class KisViewManager;
 class KoUpdater;
 
 class KisDropshadow : public QObject
@@ -40,7 +40,7 @@ class KisDropshadow : public QObject
 
 public:
 
-    KisDropshadow(KisView2 * view);
+    KisDropshadow(KisViewManager * view);
     virtual ~KisDropshadow() {}
 
     void dropshadow(KoUpdater * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, const QColor & color, quint8 opacity, bool allowResize);
@@ -59,7 +59,7 @@ private:
     void separate_alpha(quint8 *buf, qint32 width, qint32 bytes);
 
 private:
-    KisView2 * m_view;
+    KisViewManager * m_view;
 
 };
 

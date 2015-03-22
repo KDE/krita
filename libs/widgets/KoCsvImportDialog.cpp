@@ -313,7 +313,7 @@ void KoCsvImportDialog::Private::fillTable()
     QChar x;
     QString field;
 
-    qApp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     for (row = 0; row < dialog->m_sheet->rowCount(); ++row) {
         for (column = 0; column < dialog->m_sheet->columnCount(); ++column) {
@@ -569,7 +569,7 @@ void KoCsvImportDialog::Private::fillTable()
     dialog->m_rowEnd->setValue(endRow == -1 ? row : endRow);
     dialog->m_colEnd->setValue(endCol == -1 ? maxColumn : endCol);
 
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 }
 
 KoCsvImportDialog::DataType KoCsvImportDialog::dataType(int col) const

@@ -18,6 +18,7 @@
 
 #include "kis_exr_test.h"
 
+#include <kmimetype.h>
 
 #include <QTest>
 #include <QCoreApplication>
@@ -40,17 +41,17 @@ void KisExrTest::testRoundTrip()
 {
     QString inputFileName(TestUtil::fetchDataFileLazy("CandleGlass.exr"));
 
-    KisDoc2 doc1;
+    KisDocument *doc1 = KisPart::instance()->createDocument();
 
-    KoFilterManager manager(&doc1);
+    KisImportExportManager manager(doc1);
     manager.setBatchMode(true);
 
-    KoFilter::ConversionStatus status;
+    KisImportExportFilter::ConversionStatus status;
     QString s = manager.importDocument(inputFileName, QString(),
                                        status);
 
-    QCOMPARE(status, KoFilter::OK);
-    QVERIFY(doc1.image());
+    QCOMPARE(status, KisImportExportFilter::OK);
+    QVERIFY(doc1->image());
 
 
     KTemporaryFile savedFile;
@@ -71,26 +72,31 @@ void KisExrTest::testRoundTrip()
     QVERIFY(QFileInfo(savedFileName).exists());
 
     {
-        KisDoc2 doc2;
+        KisDocument *doc2 = KisPart::instance()->createDocument();
 
-        KoFilterManager manager(&doc2);
+        KisImportExportManager manager(doc2);
         manager.setBatchMode(true);
 
         s = manager.importDocument(savedFileName, QString(), status);
 
-        QCOMPARE(status, KoFilter::OK);
-        QVERIFY(doc2.image());
+        QCOMPARE(status, KisImportExportFilter::OK);
+        QVERIFY(doc2->image());
 
         QVERIFY(TestUtil::comparePaintDevicesClever<half>(
-                    doc1.image()->root()->firstChild()->paintDevice(),
-                    doc2.image()->root()->firstChild()->paintDevice(),
+                    doc1->image()->root()->firstChild()->paintDevice(),
+                    doc2->image()->root()->firstChild()->paintDevice(),
                     0.01 /* meaningless alpha */));
+
+        delete doc2;
     }
 
     savedFile.close();
+
+    delete doc1;
 
 }
 
 QTEST_KDEMAIN(KisExrTest, GUI)
 
 #include "kis_exr_test.moc"
+

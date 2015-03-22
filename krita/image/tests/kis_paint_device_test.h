@@ -25,7 +25,7 @@ class KisPaintDeviceTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 
     void testCreation();
     void testStore();
@@ -50,6 +50,7 @@ private slots:
     void testOpacity();
     void testExactBoundsWeirdNullAlphaCase();
     void benchmarkExactBoundsNullDefaultPixel();
+    void testNonDefaultPixelArea();
 
     void testReadBytesWrapAround();
     void testWrappedRandomAccessor();

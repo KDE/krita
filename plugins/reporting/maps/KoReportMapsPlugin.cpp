@@ -37,7 +37,7 @@ KoReportMapsPlugin::KoReportMapsPlugin(QObject *parent, const QVariantList &args
     
     myDebug() << "\e[35m======\e[0m";
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setClassName("report:maps");
+    info->setClassName("maps");
     info->setIcon(koIcon("report_map_element"));
     info->setName(i18n("Map"));
     info->setPriority(40);

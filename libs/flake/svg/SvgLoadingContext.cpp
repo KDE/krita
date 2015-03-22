@@ -29,7 +29,6 @@
 
 #include <QStack>
 #include <QFileInfo>
-#include <QDir>
 
 class SvgLoadingContext::Private
 {

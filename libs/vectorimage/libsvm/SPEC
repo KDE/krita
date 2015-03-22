@@ -13,13 +13,13 @@ This file describes the format of a StarView Metafile, SVM, the vector
 file format that is used by Star Office, OpenOffice.org, and
 LibreOffice to create object replacement images.
 
-As far as we know, there is no formal specification of this format.
-This documentation has been created by reading the source code of
+As far as we know, there is no formal specification of this format.  This
+documentation has therefore been created by reading the source code of
 LibreOffice.
 
-The format of this document is modeled after the documentations of
-Windows MetaFile ([MS-WMF].pdf) and the Extended MetaFile
-([MS-EMF].pdf) from Microsoft.
+The structure of this document is modeled after the documentations of Windows
+MetaFile ([MS-WMF].pdf) and the Extended MetaFile ([MS-EMF].pdf) from
+Microsoft.
 
 
 1.1 Glossary

@@ -465,6 +465,13 @@ void KisPixelSelection::recalculateThumbnailImage(const QColor &maskColor)
     QRect rc = selectedExactRect();
     const int maxPreviewSize = 2000;
 
+    if (rc.isEmpty()) {
+        m_d->thumbnailImageTransform = QTransform();
+        m_d->thumbnailImage = QImage();
+        return;
+    }
+
+
     if (rc.width() > maxPreviewSize ||
         rc.height() > maxPreviewSize) {
 

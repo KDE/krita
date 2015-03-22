@@ -26,6 +26,11 @@
 #include <QPrinter>
 #include <renderobjects.h>
 
+KoReportItemText::KoReportItemText()
+{
+    createProperties();
+}
+
 KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
 {
     QDomNodeList nl = element.childNodes();
@@ -35,6 +40,7 @@ KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
     createProperties();
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
+    m_itemValue->setValue(element.toElement().attribute("report:value"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
@@ -107,6 +113,8 @@ void KoReportItemText::createProperties()
 
     //_query = new KoProperty::Property ( "Query", QStringList(), QStringList(), "Data Source", "Query" );
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
+    
+    m_itemValue = new KoProperty::Property("value", QString(), i18n("Value"), i18n("Value used if not bound to a field"));
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
@@ -121,18 +129,19 @@ void KoReportItemText::createProperties()
     m_font = new KoProperty::Property("Font", KGlobalSettings::generalFont(), "Font", i18n("Font"));
 
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, i18n("Background Color"));
-    m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, i18n("Foreground Color"));
+    m_foregroundColor = new KoProperty::Property("foreground-color", QPalette().color(QPalette::Foreground), i18n("Foreground Color"));
 
     m_lineWeight = new KoProperty::Property("line-weight", 1, i18n("Line Weight"));
     m_lineColor = new KoProperty::Property("line-color", Qt::black, i18n("Line Color"));
     m_lineStyle = new KoProperty::Property("line-style", Qt::NoPen, i18n("Line Style"), i18n("Line Style"), KoProperty::LineStyle);
-    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, i18n("Opacity"));
+    m_backgroundOpacity = new KoProperty::Property("background-opacity", QVariant(0), i18n("Background Opacity"));
     m_backgroundOpacity->setOption("max", 100);
     m_backgroundOpacity->setOption("min", 0);
     m_backgroundOpacity->setOption("unit", "%");
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
+    m_set->addProperty(m_itemValue);
     m_set->addProperty(m_horizontalAlignment);
     m_set->addProperty(m_verticalAlignment);
     m_set->addProperty(m_font);
@@ -184,7 +193,7 @@ KRLineStyleData KoReportItemText::lineStyle()
 // RTTI
 QString KoReportItemText::typeName() const
 {
-    return "report:text";
+    return "text";
 }
 
 int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
@@ -197,10 +206,14 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
 
     QString cs = itemDataSource();
 
-    if (cs.left(1) == "$") { //Everything past $ is treated as a string
-        qstrValue = cs.mid(1);
+    if (!cs.isEmpty()) {
+        if (cs.left(1) == "$") { //Everything past $ is treated as a string
+            qstrValue = cs.mid(1);
+        } else {
+            qstrValue = data.toString();
+        }
     } else {
-        qstrValue = data.toString();
+        qstrValue = m_itemValue->value().toString();
     }
 
     QPointF pos = m_pos.toScene();
@@ -208,28 +221,25 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
     pos += offset;
 
     QRectF trf(pos, size);
+    qreal intStretch = trf.top() - offset.y();
 
-    int     intLineCounter  = 0;
-    qreal   intStretch      = trf.top() - offset.y();
-    qreal   intBaseTop      = trf.top();
-    qreal   intRectHeight   = trf.height();
-
-    //kDebug() << qstrValue;
     if (qstrValue.length()) {
         QRectF rect = trf;
 
         int pos = 0;
-        int idx;
         QChar separator;
         QRegExp re("\\s");
         QPrinter prnt(QPrinter::HighResolution);
         QFontMetrics fm(font(), &prnt);
 
         // int   intRectWidth    = (int)(trf.width() * prnt.resolution()) - 10;
-        int   intRectWidth    = (int)((m_size.toPoint().width() / 72) * prnt.resolution());
+        int     intRectWidth    = (int)((m_size.toPoint().width() / 72) * prnt.resolution());
+        int     intLineCounter  = 0;
+        qreal   intBaseTop      = trf.top();
+        qreal   intRectHeight   = trf.height();
 
         while (qstrValue.length()) {
-            idx = re.indexIn(qstrValue, pos);
+            int idx = re.indexIn(qstrValue, pos);
             if (idx == -1) {
                 idx = qstrValue.length();
                 separator = QChar('\n');
@@ -240,7 +250,9 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
                 pos = idx + 1;
                 if (separator == '\n') {
                     QString line = qstrValue.left(idx);
-                    qstrValue = qstrValue.mid(idx + 1, qstrValue.length());
+
+                    qstrValue.remove(0, idx + 1);
+
                     pos = 0;
 
                     rect.setTop(intBaseTop + (intLineCounter * intRectHeight));
@@ -274,7 +286,7 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
                 }
             } else {
                 QString line = qstrValue.left(pos - 1);
-                qstrValue = qstrValue.mid(pos, qstrValue.length());
+                qstrValue.remove(0, pos);
                 pos = 0;
 
                 rect.setTop(intBaseTop + (intLineCounter * intRectHeight));

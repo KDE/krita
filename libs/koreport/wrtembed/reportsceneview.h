@@ -32,10 +32,11 @@ public:
 
     KoReportDesigner * designer();
     virtual QSize sizeHint() const;
-public slots:
+public Q_SLOTS:
     void resizeContents(QSize);
 
 protected:
+    void mousePressEvent(QMouseEvent * e);
     void mouseReleaseEvent(QMouseEvent * e);
 
 private:

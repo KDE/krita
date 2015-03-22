@@ -123,7 +123,7 @@ public:
     QString delimiter() const;
     void setDelimiter(const QString& delimit);
 
-protected slots:
+protected Q_SLOTS:
     void returnPressed();
     void formatChanged(const QString&);
     void delimiterClicked(int id);

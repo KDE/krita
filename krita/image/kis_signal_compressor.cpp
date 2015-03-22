@@ -33,6 +33,11 @@ KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, QObject *parent)
     connect(m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
 }
 
+void KisSignalCompressor::setDelay(int delay)
+{
+    m_timer->setInterval(delay);
+}
+
 void KisSignalCompressor::start()
 {
     switch (m_mode) {

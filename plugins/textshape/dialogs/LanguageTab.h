@@ -36,7 +36,7 @@ public:
     void setDisplay(KoCharacterStyle *style);
     void save(KoCharacterStyle *style) const;
 
-signals:
+Q_SIGNALS:
     void languageChanged();
 
 private:

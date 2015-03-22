@@ -19,9 +19,6 @@
 
 #include "kis_hsv_adjustment_filter.h"
 
-
-#include <KoProgressUpdater.h>
-
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -76,10 +73,19 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConf
     m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);
 
+    m_page->hue->setRange(-180, 180, 0);
+    m_page->hue->setValue(0);
+
+    m_page->saturation->setRange(-100, 100, 0);
+    m_page->saturation->setValue(0);
+
+    m_page->value->setRange(-100, 100, 0);
+    m_page->value->setValue(0);
+
     connect(m_page->cmbType, SIGNAL(activated(int)), SLOT(switchType(int)));
-    connect(m_page->hue, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->value, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->saturation, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->hue, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->value, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->saturation, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->chkColorize, SIGNAL(toggled(bool)), SLOT(switchColorize(bool)));
 }
 
@@ -106,7 +112,6 @@ void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * con
     m_page->saturation->setValue(config->getInt("s", 0));
     m_page->value->setValue(config->getInt("v", 0));
     m_page->chkColorize->setChecked(config->getBool("colorize", false));
-
     switchType(m_page->cmbType->currentIndex());
 }
 
@@ -131,7 +136,9 @@ void KisHSVConfigWidget::switchColorize(bool toggle)
         m_page->hue->setMaximum(360);
         m_page->saturation->setMinimum(0);
         m_page->saturation->setMaximum(100);
-        m_page->saturation->setValue(50);
+        if (m_page->saturation->value() < m_page->saturation->minimum() || m_page->saturation->value() > m_page->saturation->maximum()) {
+            m_page->saturation->setValue(50);
+        }
         switchType(1);
     }
     else {

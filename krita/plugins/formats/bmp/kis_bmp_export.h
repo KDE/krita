@@ -22,16 +22,16 @@
 
 #include <QVariant>
 
-#include <KoFilter.h>
+#include <KisImportExportFilter.h>
 
-class KisBMPExport : public KoFilter
+class KisBMPExport : public KisImportExportFilter
 {
     Q_OBJECT
 public:
     KisBMPExport(QObject *parent, const QVariantList &);
     virtual ~KisBMPExport();
 public:
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

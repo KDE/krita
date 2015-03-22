@@ -34,7 +34,6 @@ TextEditingPluginContainer::TextEditingPluginContainer(QObject * parent)
             kWarning(32500) << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->id() << ")";
             continue;
         }
-        QString factoryId = factory->id();
         KoTextEditingPlugin *plugin = factory->create();
         if (plugin) {
             m_textEditingPlugins.insert(factory->id(), plugin);
@@ -45,6 +44,7 @@ TextEditingPluginContainer::TextEditingPluginContainer(QObject * parent)
 TextEditingPluginContainer::~TextEditingPluginContainer()
 {
     qDeleteAll(m_textEditingPlugins);
+    m_textEditingPlugins.clear();
 }
 
 KoTextEditingPlugin *TextEditingPluginContainer::spellcheck() const

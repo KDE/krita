@@ -31,7 +31,7 @@
 #include "kis_selection.h"
 #include "kis_paint_device.h"
 #include "canvas/kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 
 KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
 {

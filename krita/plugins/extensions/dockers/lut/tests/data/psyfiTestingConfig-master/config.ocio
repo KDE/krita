@@ -1,0 +1,83 @@
+ocio_profile_version: 1
+
+search_path: luts
+strictparsing: true
+luma: [0.2126, 0.7152, 0.0722]
+
+roles:
+  reference: RotatedTesting
+
+  # Internal scene linear space
+  scene_linear: RotatedTesting
+
+  # Default color space for byte image
+  default_byte: RotatedTesting
+
+  # Default color space for float images
+  default_float: RotatedTesting
+
+  # Default color space sequencer is working in
+  default_sequencer: sRGB
+
+  # Color spaces for color picking and exture painting (not internally supported yet)
+  color_picking: Raw
+  texture_paint: Raw
+
+displays:
+  sRGB:
+    - !<View> {name: Default, colorspace: sRGB}
+
+  None:
+    - !<View> {name: Raw, colorspace: Raw}
+
+active_displays: [sRGB, None]
+active_views: [Default, Raw]
+
+colorspaces:
+  - !<ColorSpace>
+    name: RotatedTesting
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      Reference space for testing color management with rotated primaries.
+    isdata: false
+    allocation: lg2
+    allocationvars: [-15, 6]
+
+  - !<ColorSpace>
+    name: Raw
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    isdata: true
+    allocation: uniform
+
+#        - !<ColorSpaceTransform> {src: Linear, dst: lg10}
+
+
+  - !<ColorSpace>
+    name: sRGB
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      Standard RGB Display Space
+    isdata: false
+    allocation: uniform
+    allocationvars: [-0.125, 4.875]
+    to_reference: !<GroupTransform>
+        children:
+            - !<FileTransform> {src: srgb.spi1d, interpolation: linear}
+            - !<FileTransform> {src: rotated.spimtx, interpolation: linear}
+
+  - !<ColorSpace>
+    name: Non-Color
+    family: ""
+    equalitygroup:
+    bitdepth: 32f
+    description: |
+        Color space used for images which contains non-color data (i,e, normal maps)
+    isdata: true
+    allocation: uniform
+    allocationvars: [0, 1]

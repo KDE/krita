@@ -24,10 +24,19 @@
 class KisGradientPainterTest : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
 
-    void testCreation();
+    void testSimplifyPath();
 
+    void testShapedGradientPainterRect();
+    void testShapedGradientPainterRectPierced();
+    void testShapedGradientPainterNonRegular();
+    void testShapedGradientPainterNonRegularPierced();
+
+    void testFindShapedExtremums();
+    void testSplitDisjointPaths();
+
+    void testCachedStrategy();
 };
 
 #endif

@@ -32,7 +32,7 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
-class KisDoc2;
+class KisDocument;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -69,7 +69,7 @@ class KisTIFFConverter : public QObject
 {
     Q_OBJECT
 public:
-    KisTIFFConverter(KisDoc2 *doc);
+    KisTIFFConverter(KisDocument *doc);
     virtual ~KisTIFFConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -77,14 +77,14 @@ public:
     /** Retrieve the constructed image
     */
     KisImageWSP image();
-public slots:
+public Q_SLOTS:
     virtual void cancel();
 private:
     KisImageBuilder_Result decode(const KUrl& uri);
     KisImageBuilder_Result readTIFFDirectory(TIFF* image);
 private:
     KisImageWSP m_image;
-    KisDoc2 *m_doc;
+    KisDocument *m_doc;
     bool m_stop;
     KIO::TransferJob *m_job;
 };

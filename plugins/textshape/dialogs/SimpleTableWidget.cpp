@@ -23,6 +23,7 @@
 #include <KoTextLayoutCellHelper.h>
 #include <KoZoomHandler.h>
 #include <KoColorPopupAction.h>
+#include <KoColor.h>
 #include <KoIcon.h>
 
 #include <kaction.h>
@@ -47,10 +48,8 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     widget.mergeCells->setDefaultAction(tool->action("merge_tablecells"));
     widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
 
-     KAction *action = new KAction(koIcon("borderpainter"), "activate_borderpainter", this);
-    action->setToolTip(i18n("Select a border style and paint that style onto a table"));
-    connect(action, SIGNAL(activated()), this, SLOT(restartPainting()));
-    widget.border->setDefaultAction(action);
+    connect(tool->action("activate_borderpainter"), SIGNAL(activated()), this, SLOT(restartPainting()));
+    widget.border->setDefaultAction(tool->action("activate_borderpainter"));
 
     widget.border->setNumColumns(9);
 

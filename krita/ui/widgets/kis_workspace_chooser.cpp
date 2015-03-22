@@ -28,13 +28,14 @@
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
-#include <KoMainWindow.h>
+#include <KoDockWidgetTitleBar.h>
+#include <KisMainWindow.h>
 #include <KoResource.h>
 
 #include "KoPattern.h"
 #include "kis_resource_server_provider.h"
 #include "kis_workspace_resource.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include <QGridLayout>
 #include <klineedit.h>
 #include <kis_canvas_resource_provider.h>
@@ -54,18 +55,20 @@ public:
 
 void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
-    if (! index.isValid())
+    if (!index.isValid())
         return;
 
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(index.internalPointer());
 
+    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Active : QPalette::Disabled;
+    QPalette::ColorRole cr = (option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
+    painter->setPen(option.palette.color(cg, cr));
+
     if (option.state & QStyle::State_Selected) {
-        painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
-        painter->setBrush(option.palette.highlightedText());
     }
     else {
-        painter->setBrush(option.palette.text());
+        painter->fillRect(option.rect, option.palette.base());
     }
 
 
@@ -73,9 +76,9 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
 
 }
 
-KisWorkspaceChooser::KisWorkspaceChooser(KisView2 * view, QWidget* parent): QWidget(parent), m_view(view)
+KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent): QWidget(parent), m_view(view)
 {
-    KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
+    KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
@@ -144,6 +147,26 @@ void KisWorkspaceChooser::resourceSelected(KoResource* resource)
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
-    m_view->qtMainWindow()->restoreState(workspace->dockerState());
+
+    QMap<QDockWidget *, bool> dockWidgetMap;
+    foreach(QDockWidget *docker, m_view->mainWindow()->dockWidgets()) {
+        dockWidgetMap[docker] = docker->property("Locked").toBool();
+    }
+
+    KisMainWindow *mainWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
+    mainWindow->restoreWorkspace(workspace->dockerState());
     m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
+
+    foreach(QDockWidget *docker, dockWidgetMap.keys()) {
+        if (docker->isVisible()) {
+            docker->setProperty("Locked", dockWidgetMap[docker]);
+            docker->updateGeometry();
+        }
+        else {
+            docker->setProperty("Locked", false); // Unlock invisible dockers
+            docker->toggleViewAction()->setEnabled(true);
+        }
+
+    }
+
 }

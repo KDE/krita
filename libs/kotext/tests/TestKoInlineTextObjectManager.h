@@ -66,14 +66,14 @@ public:
         m_position = posInDocument;
     }
 
-    virtual void resize(const QTextDocument */*document*/, QTextInlineObject /*object*/,
+    virtual void resize(const QTextDocument */*document*/, QTextInlineObject &/*object*/,
                         int /*posInDocument*/, const QTextCharFormat &/*format*/, QPaintDevice */*pd*/)
     {
         // dummy impl
     }
 
     virtual void paint(QPainter &/*painter*/, QPaintDevice */*pd*/, const QTextDocument */*document*/,
-                       const QRectF &/*rect*/, QTextInlineObject /*object*/, int /*posInDocument*/, const QTextCharFormat &/*format*/)
+                       const QRectF &/*rect*/, const QTextInlineObject &/*object*/, int /*posInDocument*/, const QTextCharFormat &/*format*/)
     {
         // dummy impl
     }
@@ -92,7 +92,7 @@ class TestKoInlineTextObjectManager : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 
     void testCreation();
     void testInsertInlineObject();

@@ -1,15 +1,15 @@
 /*
  *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -20,7 +20,6 @@
 
 #include <QDomDocument>
 #include <QFile>
-#include <QUiLoader>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -54,6 +53,10 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
 
     QStringList files = KGlobal::dirs()->findAllResources("data", "kritaplugins/metadataeditor/*.rc");
 
+    QMap<QString, QWidget*> widgets;
+    widgets["dublincore.ui"] = new WdgDublinCore(this);
+    widgets["exif.ui"] = new WdgExif(this);
+
     foreach(const QString & file, files) {
 
         QFile xmlFile(file);
@@ -75,16 +78,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         const QString iconName = rootElement.attribute("icon");
         if (uiFileName == "") continue;
 
-        // Read the ui file
-        QUiLoader loader;
-        QFile uiFile(KStandardDirs::locate("data", "kritaplugins/metadataeditor/" + uiFileName));
-        uiFile.open(QFile::ReadOnly);
-        QWidget *widget = dynamic_cast<QWidget*>(loader.load(&uiFile, this));
-        if (widget == 0) {
-            dbgPlugins << "Failed to load ui file" << uiFileName;
-            continue;
-        }
-        uiFile.close();
+        QWidget *widget = widgets[uiFileName];
 
         QDomNodeList list = rootElement.childNodes();
         const int size = list.size();

@@ -11,5 +11,5 @@ RCFILES=`find . -name \*.rc                                                   \
 $EXTRACTRC $RCFILES >> rc.cpp
 perl extracti18n.pl > i18ndata
 # ignore sdk/templates since it contains templates for use a future plugins, none of the strings there will ever be seen by any user
-calligra_xgettext i18ndata rc.cpp `find . -name \*.cc -o -name \*.h  -o -name \*.cpp | grep -v '/tests/' | grep -v './sdk/templates'` ui/kis_aboutdata.h > $podir/krita.pot
-rm -f i18ndata
+calligra_xgettext krita.pot i18ndata rc.cpp `find . -name \*.cc -o -name \*.h  -o -name \*.cpp | grep -v '/tests/' | grep -v './sdk/templates'` ui/kis_aboutdata.h
+rm -f i18ndata rc.cpp

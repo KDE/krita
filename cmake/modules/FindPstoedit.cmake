@@ -6,29 +6,29 @@
 #  PSTOEDIT_VERSION - the version string, like "3.45"
 #  PSTOEDIT_SVG_PLUGIN_FOUND - svg output plugin found
 
-FIND_PROGRAM(PSTOEDIT_EXECUTABLE NAMES pstoedit)
+find_program(PSTOEDIT_EXECUTABLE NAMES pstoedit)
 
-INCLUDE(MacroEnsureVersion)
+include(MacroEnsureVersion)
 
-IF(PSTOEDIT_EXECUTABLE)
-    SET(PSTOEDIT_FOUND TRUE)
+if(PSTOEDIT_EXECUTABLE)
+    set(PSTOEDIT_FOUND TRUE)
 
-    EXECUTE_PROCESS(COMMAND ${PSTOEDIT_EXECUTABLE} -help
+    execute_process(COMMAND ${PSTOEDIT_EXECUTABLE} -help
         ERROR_VARIABLE _PSTOEDIT_VERSION OUTPUT_VARIABLE _PSTOEDIT_PLUGINS
     )
     string (REGEX MATCH "[0-9]\\.[0-9]+" PSTOEDIT_VERSION "${_PSTOEDIT_VERSION}")
     string (REGEX MATCH "plot-svg" PSTOEDIT_SVG_PLUGIN "${_PSTOEDIT_PLUGINS}")
     string (COMPARE EQUAL "plot-svg" "${PSTOEDIT_SVG_PLUGIN}" PSTOEDIT_SVG_PLUGIN_FOUND )
-ENDIF(PSTOEDIT_EXECUTABLE)
+endif()
 
-IF(PSTOEDIT_FOUND AND PSTOEDIT_SVG_PLUGIN_FOUND )
-  IF(NOT Pstoedit_FIND_QUIETLY)
-    MESSAGE(STATUS "Found pstoedit version ${PSTOEDIT_VERSION}: ${PSTOEDIT_EXECUTABLE}")
-    MESSAGE(STATUS "Found pstoedit svg-plugin: ${PSTOEDIT_SVG_PLUGIN}")
-  ENDIF(NOT Pstoedit_FIND_QUIETLY)
-ELSE(PSTOEDIT_FOUND AND PSTOEDIT_SVG_PLUGIN_FOUND)
-  IF(Pstoedit_FIND_REQUIRED)
-    MESSAGE(FATAL_ERROR "Could not find pstoedit or the svg output plugin")
-  ENDIF(Pstoedit_FIND_REQUIRED)
-ENDIF(PSTOEDIT_FOUND AND PSTOEDIT_SVG_PLUGIN_FOUND)
+if(PSTOEDIT_FOUND AND PSTOEDIT_SVG_PLUGIN_FOUND )
+  if(NOT Pstoedit_FIND_QUIETLY)
+    message(STATUS "Found pstoedit version ${PSTOEDIT_VERSION}: ${PSTOEDIT_EXECUTABLE}")
+    message(STATUS "Found pstoedit svg-plugin: ${PSTOEDIT_SVG_PLUGIN}")
+  endif()
+else()
+  if(Pstoedit_FIND_REQUIRED)
+    message(FATAL_ERROR "Could not find pstoedit or the svg output plugin")
+  endif()
+endif()
 

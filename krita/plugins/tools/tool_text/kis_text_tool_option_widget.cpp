@@ -29,6 +29,7 @@ KisTextToolOptionWidget::KisTextToolOptionWidget(QWidget* parent): QWidget(paren
     m_buttonGroup->setId(buttonArtistic, 0);
     m_buttonGroup->addButton(buttonMultiline);
     m_buttonGroup->setId(buttonMultiline, 1);
+
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(modeChanged(int)));
 }
 
@@ -41,6 +42,8 @@ KisPainter::FillStyle KisTextToolOptionWidget::style()
 {
     return static_cast<KisPainter::FillStyle>(cmbStyle->currentIndex() + 1);
 }
+
+
 
 void KisTextToolOptionWidget::modeChanged(int mode)
 {

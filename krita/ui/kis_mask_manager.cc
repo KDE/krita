@@ -18,24 +18,22 @@
 
 #include "kis_mask_manager.h"
 
-
-#include <kstandardaction.h>
-#include <kaction.h>
-#include <ktoggleaction.h>
 #include <kactioncollection.h>
 
+#include <KoProperties.h>
 
 #include <kis_transaction.h>
 #include <filter/kis_filter_configuration.h>
 #include <commands/kis_node_commands.h>
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
-#include "kis_doc2.h"
-#include "kis_view2.h"
+#include "KisDocument.h"
+#include "KisViewManager.h"
 #include <kis_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_group_layer.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
 #include <kis_effect_mask.h>
@@ -52,45 +50,56 @@
 #include "kis_node_commands_adapter.h"
 #include "commands/kis_selection_commands.h"
 #include "kis_iterator_ng.h"
+#include "KisView.h"
 
-KisMaskManager::KisMaskManager(KisView2 * view)
-        : m_view(view)
-        , m_activeMask(0)
-        , m_maskToSelection(0)
-        , m_maskToLayer(0)
-        , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
+KisMaskManager::KisMaskManager(KisViewManager * view)
+    : m_view(view)
+    , m_imageView(0)
+    , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
 }
 
-void KisMaskManager::setup(KActionCollection * actionCollection)
+void KisMaskManager::setView(QPointer<KisView>imageView)
+{
+    m_imageView = imageView;
+}
+
+void KisMaskManager::setup(KActionCollection *actionCollection, KisActionManager *actionManager)
 {
     Q_UNUSED(actionCollection);
+    Q_UNUSED(actionManager);
 }
 
 void KisMaskManager::updateGUI()
 {
     // XXX: enable/disable menu items according to whether there's a mask selected currently
     // XXX: disable the selection mask item if there's already a selection mask
+    // YYY: doesn't KisAction do that already?
 }
 
 KisMaskSP KisMaskManager::activeMask()
 {
-    return m_activeMask;
+    if (m_imageView) {
+        return m_imageView->currentMask();
+    }
+    return 0;
 }
 
 KisPaintDeviceSP KisMaskManager::activeDevice()
 {
     // XXX: we may also need to have a possibility of getting the vector
     // part of selection here
-
-    KisSelectionSP selection;
-    return m_activeMask && (selection = m_activeMask->selection()) ?
-           selection->pixelSelection() : 0;
+    if (m_imageView) {
+        KisSelectionSP selection;
+        KisMaskSP mask = m_imageView->currentMask();
+        return mask && (selection = mask->selection()) ? selection->pixelSelection() : 0;
+    }
+    return 0;
 }
 
 void KisMaskManager::activateMask(KisMaskSP mask)
 {
-    m_activeMask = mask;
+    Q_UNUSED(mask);
 }
 
 void KisMaskManager::masksUpdated()
@@ -143,21 +152,23 @@ void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bo
     }
 }
 
-void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName)
+void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection, bool avoidActiveNode)
 {
     m_commandsAdapter->beginMacro(macroName);
 
     KisNodeSP parent;
     KisNodeSP above;
-    adjustMaskPosition(mask, activeNode, !!copyFrom, parent, above);
+    adjustMaskPosition(mask, activeNode, avoidActiveNode, parent, above);
 
     KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent.data());
     Q_ASSERT(parentLayer);
 
-    if (copyFrom) {
-        mask->initSelection(copyFrom, parentLayer);
-    } else {
-        mask->initSelection(m_view->selection(), parentLayer);
+    if (!suppressSelection) {
+        if (copyFrom) {
+            mask->initSelection(copyFrom, parentLayer);
+        } else {
+            mask->initSelection(m_view->selection(), parentLayer);
+        }
     }
 
     //counting number of KisSelectionMask
@@ -171,23 +182,23 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     masksUpdated();
 }
 
-void KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom)
+void KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode)
 {
     KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
-    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"));
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"), false, avoidActiveNode);
     mask->setActive(true);
 }
 
-void KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom)
+void KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode)
 {
     KisMaskSP mask = new KisTransparencyMask();
-    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"));
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"), false, avoidActiveNode);
 }
 
-void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet)
+void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool avoidActiveNode)
 {
     KisFilterMaskSP mask = new KisFilterMask();
-    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"));
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"), false, avoidActiveNode);
 
     /**
      * FIXME: We'll use layer's original for creation of a thumbnail.
@@ -224,14 +235,20 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     }
 }
 
+void KisMaskManager::createTransformMask(KisNodeSP activeNode)
+{
+    KisTransformMaskSP mask = new KisTransformMask();
+    createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Transform Mask"), "KisTransformMask", i18n("Transform Mask"), true, false);
+}
+
 void KisMaskManager::duplicateMask()
 {
-    if (!m_activeMask) return;
+    if (!activeMask()) return;
     if (!m_view->image()) return;
 
-    KisMaskSP newMask = dynamic_cast<KisMask*>(m_activeMask->clone().data());
-    newMask->setName(i18n("Duplication of ") + m_activeMask->name());
-    m_commandsAdapter->addNode(newMask, m_activeMask->parent(), m_activeMask);
+    KisMaskSP newMask = dynamic_cast<KisMask*>(activeMask()->clone().data());
+    newMask->setName(i18n("Duplication of ") + activeMask()->name());
+    m_commandsAdapter->addNode(newMask, activeMask()->parent(), activeMask());
 
     KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(newMask.data());
     if (selectionMask) {
@@ -242,18 +259,18 @@ void KisMaskManager::duplicateMask()
 
 void KisMaskManager::removeMask()
 {
-    if (!m_activeMask) return;
+    if (!activeMask()) return;
     if (!m_view->image()) return;
-    m_commandsAdapter->removeNode(m_activeMask);
+    m_commandsAdapter->removeNode(activeMask());
     masksUpdated();
 }
 
 void KisMaskManager::maskProperties()
 {
-    if (!m_activeMask) return;
+    if (!activeMask()) return;
 
-    if (m_activeMask->inherits("KisFilterMask")) {
-        KisFilterMask *mask = static_cast<KisFilterMask*>(m_activeMask.data());
+    if (activeMask()->inherits("KisFilterMask")) {
+        KisFilterMask *mask = static_cast<KisFilterMask*>(activeMask().data());
 
         KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
         if (! layer)
@@ -265,7 +282,7 @@ void KisMaskManager::maskProperties()
             return;
         }
 
-        KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Filter Mask Properties"), m_view, "dlgeffectmaskprops");
+        KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Filter Mask Properties"), m_view->mainWindow(), "dlgeffectmaskprops");
 
         KisSafeFilterConfigurationSP configBefore(mask->filter());
         Q_ASSERT(configBefore);
@@ -312,30 +329,30 @@ void KisMaskManager::maskProperties()
 
 void KisMaskManager::raiseMask()
 {
-    if (!m_activeMask) return;
+    if (!activeMask()) return;
     if (!m_view->image()) return;
-    m_commandsAdapter->raise(m_activeMask);
+    m_commandsAdapter->raise(activeMask());
 }
 
 void KisMaskManager::lowerMask()
 {
-    if (!m_activeMask) return;
+    if (!activeMask()) return;
     if (!m_view->image()) return;
-    m_commandsAdapter->lower(m_activeMask);
+    m_commandsAdapter->lower(activeMask());
 }
 
 void KisMaskManager::maskToTop()
 {
-    if (!m_activeMask) return;
+    if (!activeMask()) return;
     if (!m_view->image()) return;
-    m_commandsAdapter->toTop(m_activeMask);
+    m_commandsAdapter->toTop(activeMask());
 }
 
 void KisMaskManager::maskToBottom()
 {
-    if (!m_activeMask) return;
+    if (!activeMask()) return;
     if (!m_view->image()) return;
-    m_commandsAdapter->toBottom(m_activeMask);
+    m_commandsAdapter->toBottom(activeMask());
 }
 
 #include "kis_mask_manager.moc"

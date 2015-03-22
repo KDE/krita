@@ -41,7 +41,7 @@ private:
     void repeatHLineIter(const KoColorSpace * cs);
     void repeatVLineIter(const KoColorSpace * cs);
 
-private slots:
+private Q_SLOTS:
 
     void vLineIter();
     void writeBytes();

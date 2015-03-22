@@ -24,8 +24,6 @@
 #include <QTextBlock>
 
 
-class TextTool;
-class KoStyleManager;
 class KoInlineCite;
 
 class CitationInsertionDialog : public QDialog
@@ -36,7 +34,7 @@ public:
     KoInlineCite *toCite();                 //returns cite with values filled in form
     void fillValuesFrom(KoInlineCite *cite);        //fills form with values in cite
 
-public slots:
+public Q_SLOTS:
     void insert();
     void selectionChangedFromExistingCites();
 

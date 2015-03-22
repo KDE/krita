@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CALLIGRA_PAGE_PREVIEW_WIDGET
-#define CALLIGRA_PAGE_PREVIEW_WIDGET
+#ifndef KO_PAGE_PREVIEW_WIDGET
+#define KO_PAGE_PREVIEW_WIDGET
 
 #include "kowidgets_export.h"
 
@@ -39,7 +39,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
 
-public slots:
+public Q_SLOTS:
     void setPageLayout(const KoPageLayout &layout);
     void setColumns(const KoColumns &columns);
 

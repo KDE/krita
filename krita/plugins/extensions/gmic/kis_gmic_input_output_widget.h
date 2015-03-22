@@ -22,33 +22,51 @@
 #include <QHash>
 #include "kis_gmic_filter_settings.h"
 
+#include "ui_wdg_gmic_input_output.h"
+
+class QStringListModel;
+
 /**
  * creates GUI for Input/Output configuration
  */
-class KisGmicInputOutputWidget : public QWidget
+class KisGmicInputOutputWidget : public QWidget, public Ui::WdgGmicInputOutput
 {
     Q_OBJECT
 
 public:
-    KisGmicInputOutputWidget();
+    KisGmicInputOutputWidget(QWidget * parent);
     ~KisGmicInputOutputWidget();
 
     InputLayerMode inputMode() const { return m_inputMode; };
     OutputMode outputMode() const { return m_outputMode; };
 
-signals:
+    OutputPreviewMode previewMode() const { return m_previewMode; };
+    PreviewSize previewSize() const { return m_previewSize; };
+
+    KisFilterPreviewWidget * previewWidget();
+
+Q_SIGNALS:
     void sigConfigurationChanged();
 
 private:
     void createMainLayout();
 
-private slots:
+private Q_SLOTS:
     void setIntputMode(int index);
     void setOutputMode(int index);
+    void setPreviewMode(int index);
+    void setPreviewSize(int index);
 
 private:
     InputLayerMode m_inputMode;
     OutputMode m_outputMode;
+    OutputPreviewMode m_previewMode;
+    PreviewSize m_previewSize;
+
+    QStringListModel *m_inputModel;
+    QStringListModel *m_outputModel;
+    QStringListModel *m_previewModeModel;
+    QStringListModel *m_previewSizeModel;
 
 };
 

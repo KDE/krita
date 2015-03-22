@@ -1,4 +1,4 @@
-add_subdirectory( test )
+add_subdirectory( tests )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
@@ -92,4 +92,4 @@ if(FALSE) # TODO: install when we move to independent place
     editors/timeedit.h
     editors/urledit.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors COMPONENT Devel)
-endif(FALSE)
+endif()

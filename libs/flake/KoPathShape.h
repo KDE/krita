@@ -26,15 +26,14 @@
 #include "flake_export.h"
 
 #include <QMetaType>
-#include <QMap>
+#include <QTransform>
 
 #include "KoTosContainer.h"
-#include "KoPathSegment.h"
 #include "KoMarkerData.h"
 
 #define KoPathShapeId "KoPathShape"
 
-class KoPathShape;
+class KoPathSegment;
 class KoPathPoint;
 class KoPathShapePrivate;
 class KoMarker;

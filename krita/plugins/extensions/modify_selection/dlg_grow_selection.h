@@ -24,17 +24,17 @@
 #include "ui_wdg_grow_selection.h"
 #include <operations/kis_operation_ui_widget.h>
 
-class KisView2;
+class KisViewManager;
 class WdgGrowSelection : public KisOperationUIWidget, public Ui::WdgGrowSelection
 {
     Q_OBJECT
 
 public:
-    WdgGrowSelection(QWidget *parent, KisView2* view);
+    WdgGrowSelection(QWidget *parent, KisViewManager* view);
 
     virtual void getConfiguration(KisOperationConfiguration* config);
 
-private slots:
+private Q_SLOTS:
     void slotGrowValueChanged(int value);
     void slotGrowValueChanged(double value);
     void slotUnitChanged(int index);

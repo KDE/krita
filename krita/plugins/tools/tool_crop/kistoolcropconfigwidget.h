@@ -43,22 +43,9 @@ Q_SIGNALS:
     void decorationChanged(int newDecoration);
     void allowGrowChanged(bool newForce);
     void growCenterChanged(bool newForce);
-    
+
 public Q_SLOTS:
-    void cropTypeChanged();
     void cropTypeSelectableChanged();
-    void cropXChanged();
-    void cropYChanged();
-    void cropWidthChanged();
-    void forceWidthChanged();
-    void cropHeightChanged();
-    void forceHeightChanged();
-    void ratioChanged();
-    void forceRatioChanged();
-    void decorationChanged();
-    void cropChanged(bool updateRatio);
-    void allowGrowChanged();
-    void growCenterChanged();
 
 private:
     KisToolCrop* m_cropTool;

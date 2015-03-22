@@ -27,13 +27,14 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
-#include <KoProgressUpdater.h>
 #include <KoProgressProxy.h>
 #include <kis_paint_device.h>
 #include <kis_node.h>
 #include <kis_undo_adapter.h>
 #include "kis_node_graph_listener.h"
 #include "kis_iterator_ng.h"
+#include "kis_image.h"
+
 
 #ifndef FILES_DATA_DIR
 #define FILES_DATA_DIR "."
@@ -56,31 +57,58 @@ inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
 
     KisNodeSP child = root->firstChild();
     while (child) {
-        if(root = findNode(child, name)) return root;
+        if((root = findNode(child, name))) return root;
         child = child->nextSibling();
     }
 
     return 0;
 }
 
-inline QString fetchDataFileLazy(const QString relativeFileName)
-{
-    QString filename  =
-        QString(FILES_DATA_DIR) +
-        QDir::separator() +
-        relativeFileName;
+#include <QProcessEnvironment>
 
-    if (QFileInfo(filename).exists()) {
-        return filename;
+inline QString fetchExternalDataFileName(const QString relativeFileName)
+{
+    static QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    static QString unittestsDataDirPath = "KRITA_UNITTESTS_DATA_DIR";
+
+    QString path;
+    if (!env.contains(unittestsDataDirPath)) {
+        qWarning() << "Environment variable" << unittestsDataDirPath << "is not set";
+        return QString();
+    } else {
+        path = env.value(unittestsDataDirPath, "");
     }
 
-    filename  =
-        QString(FILES_DEFAULT_DATA_DIR) +
+    QString filename  =
+        path +
         QDir::separator() +
         relativeFileName;
 
-    if (QFileInfo(filename).exists()) {
-        return filename;
+    return filename;
+}
+
+inline QString fetchDataFileLazy(const QString relativeFileName, bool externalTest = false)
+{
+    if (externalTest) {
+        return fetchExternalDataFileName(relativeFileName);
+    } else {
+        QString filename  =
+            QString(FILES_DATA_DIR) +
+            QDir::separator() +
+            relativeFileName;
+
+        if (QFileInfo(filename).exists()) {
+            return filename;
+        }
+
+        filename  =
+            QString(FILES_DEFAULT_DATA_DIR) +
+            QDir::separator() +
+            relativeFileName;
+
+        if (QFileInfo(filename).exists()) {
+            return filename;
+        }
     }
 
     return QString();
@@ -135,7 +163,7 @@ private:
 };
 
 
-inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0)
+inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0)
 {
     //     QTime t;
     //     t.start();
@@ -152,6 +180,8 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
         qDebug() << "Images have different sizes" << image1.size() << image2.size();
         return false;
     }
+
+    int numFailingPixels = 0;
 
     for (int y = 0; y < h1; ++y) {
         const QRgb * const firstLine = reinterpret_cast<const QRgb *>(image2.scanLine(y));
@@ -170,11 +200,19 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
                 if (!bothTransparent && (!same || !sameAlpha)) {
                     pt.setX(x);
                     pt.setY(y);
+                    numFailingPixels++;
+
                     qDebug() << " Different at" << pt
                              << "source" << qRed(a) << qGreen(a) << qBlue(a) << qAlpha(a)
                              << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b)
-                             << "fuzzy" << fuzzy;
-                    return false;
+                             << "fuzzy" << fuzzy
+                             << "fuzzyAlpha" << fuzzyAlpha
+                             << "(" << numFailingPixels << "of" << maxNumFailingPixels << "allowed )";
+
+
+                    if (numFailingPixels > maxNumFailingPixels) {
+                        return false;
+                    }
                 }
             }
         }
@@ -257,43 +295,138 @@ inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPain
 
 #ifdef FILES_OUTPUT_DIR
 
-inline bool checkQImage(const QImage &image, const QString &testName,
-                        const QString &prefix, const QString &name,
-                        int fuzzy = 0)
+inline bool checkQImageImpl(bool externalTest,
+                            const QImage &srcImage, const QString &testName,
+                            const QString &prefix, const QString &name,
+                            int fuzzy, int fuzzyAlpha, int maxNumFailingPixels)
 {
-    Q_UNUSED(fuzzy);
+    QImage image = srcImage.convertToFormat(QImage::Format_ARGB32);
+
+    if (fuzzyAlpha == -1) {
+        fuzzyAlpha = fuzzy;
+    }
+
     QString filename(prefix + "_" + name + ".png");
     QString dumpName(prefix + "_" + name + "_expected.png");
 
-    QString fullPath = fetchDataFileLazy(testName + QDir::separator() +
-                                         prefix + QDir::separator() + filename);
+    const QString standardPath =
+        testName + QDir::separator() +
+        prefix + QDir::separator() + filename;
 
-    if (fullPath.isEmpty()) {
+    QString fullPath = fetchDataFileLazy(standardPath, externalTest);
+
+    if (fullPath.isEmpty() || !QFileInfo(fullPath).exists()) {
         // Try without the testname subdirectory
         fullPath = fetchDataFileLazy(prefix + QDir::separator() +
-                                     filename);
+                                     filename,
+                                     externalTest);
     }
 
-    if (fullPath.isEmpty()) {
+    if (fullPath.isEmpty() || !QFileInfo(fullPath).exists()) {
         // Try without the prefix subdirectory
         fullPath = fetchDataFileLazy(testName + QDir::separator() +
-                                     filename);
+                                     filename,
+                                     externalTest);
     }
+
+    bool canSkipExternalTest = fullPath.isEmpty() && externalTest;
 
     QImage ref(fullPath);
 
     bool valid = true;
     QPoint t;
-    if(!compareQImages(t, image, ref)) {
-        qDebug() << "--- Wrong image:" << name;
-        valid = false;
+    if(!compareQImages(t, image, ref, fuzzy, fuzzyAlpha, maxNumFailingPixels)) {
+        bool saveStandardResults = true;
 
-        image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
-        ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + dumpName);
+        if (canSkipExternalTest) {
+            static QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+            static QString writeUnittestsVar = "KRITA_WRITE_UNITTESTS";
+
+            int writeUnittests = env.value(writeUnittestsVar, "0").toInt();
+            if (writeUnittests) {
+                QString path = fetchExternalDataFileName(standardPath);
+
+                QFileInfo pathInfo(path);
+                QDir directory;
+                directory.mkpath(pathInfo.path());
+
+                qDebug() << "--- Saving reference image:" << name << path;
+                image.save(path);
+                saveStandardResults = false;
+
+            } else {
+                qDebug() << "--- External image not found. Skipping..." << name;
+            }
+        } else {
+            qDebug() << "--- Wrong image:" << name;
+            valid = false;
+        }
+
+        if (saveStandardResults) {
+            image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
+            ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + dumpName);
+        }
     }
 
     return valid;
 }
+
+inline bool checkQImage(const QImage &image, const QString &testName,
+                        const QString &prefix, const QString &name,
+                        int fuzzy = 0, int fuzzyAlpha = -1, int maxNumFailingPixels = 0)
+{
+    return checkQImageImpl(false, image, testName,
+                           prefix, name,
+                           fuzzy, fuzzyAlpha, maxNumFailingPixels);
+}
+
+inline bool checkQImageExternal(const QImage &image, const QString &testName,
+                                const QString &prefix, const QString &name,
+                                int fuzzy = 0, int fuzzyAlpha = -1, int maxNumFailingPixels = 0)
+{
+    return checkQImageImpl(true, image, testName,
+                           prefix, name,
+                           fuzzy, fuzzyAlpha, maxNumFailingPixels);
+}
+
+struct ExternalImageChecker
+{
+    ExternalImageChecker(const QString &prefix, const QString &testName)
+        : m_prefix(prefix),
+          m_testName(testName),
+          m_success(true)
+        {
+        }
+
+    bool testPassed() const {
+        return m_success;
+    }
+
+    inline bool checkDevice(KisPaintDeviceSP device, KisImageSP image, const QString &caseName) {
+        bool result =
+            checkQImageExternal(device->convertToQImage(0, image->bounds()),
+                                m_testName,
+                                m_prefix,
+                                caseName, 1, 1, 100);
+
+        m_success &= result;
+        return result;
+    }
+
+    inline bool checkImage(KisImageSP image, const QString &testName) {
+        bool result = checkDevice(image->projection(), image, testName);
+
+        m_success &= result;
+        return result;
+    }
+
+private:
+    QString m_prefix;
+    QString m_testName;
+
+    bool m_success;
+};
+
 
 #endif
 
@@ -402,8 +535,8 @@ namespace TestUtil {
 
 struct MaskParent
 {
-    MaskParent()
-        : imageRect(0,0,512,512) {
+    MaskParent(const QRect &_imageRect = QRect(0,0,512,512))
+        : imageRect(_imageRect) {
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
         layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);

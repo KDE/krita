@@ -1,8 +1,8 @@
 project( vectorshape)
 
-include_directories(${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${VECTORIMAGE_INCLUDES})
+include_directories(${FLAKE_INCLUDES} ${VECTORIMAGE_INCLUDES})
 
-SET ( VectorShape_SRCS
+set ( VectorShape_SRCS
     VectorShapePlugin.cpp
     VectorShape.cpp
     VectorShapeConfigWidget.cpp
@@ -31,7 +31,7 @@ install( FILES calligra_shape_vector.desktop DESTINATION ${SERVICES_INSTALL_DIR}
 if (SHARED_MIME_INFO_FOUND)
     install(FILES calligra_svm.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
     update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
-endif (SHARED_MIME_INFO_FOUND)
+endif ()
 
 ########### subdirectories ###############
 

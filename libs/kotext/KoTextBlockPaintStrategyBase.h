@@ -36,11 +36,11 @@ public:
     KoTextBlockPaintStrategyBase();
     virtual ~KoTextBlockPaintStrategyBase();
     /// returns a background for the block, the default implementation returns the defaultBackground
-    virtual QBrush background(const QBrush &defaultBackground);
+    virtual QBrush background(const QBrush &defaultBackground) const;
     /// A strategy implementing this class can apply its settings by modifying the \a painter
     virtual void applyStrategy(QPainter *painter);
     /// Returns true if the block should be painted at all or false when it should be skipped
-    virtual bool isVisible();
+    virtual bool isVisible() const;
 };
 
 #endif

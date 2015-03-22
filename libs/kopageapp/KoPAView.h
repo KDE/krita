@@ -27,13 +27,8 @@
 #include "kopageapp_export.h"
 
 #include <KoView.h>
-#include <KoZoomHandler.h>
-#include <KoPart.h>
+#include <KoZoomMode.h>
 
-#include <QObject>
-
-class KoCanvasController;
-class KoFind;
 class KoPart;
 class KoPACanvasBase;
 class KoPADocument;
@@ -42,15 +37,11 @@ class KoPAViewMode;
 class KoPADocumentStructureDocker;
 class KoRuler;
 class KoShapeManager;
-class KoZoomAction;
 class KoZoomController;
-class KToggleAction;
 class KUrl;
+class KAction;
 
-class QDragEnterEvent;
-class QDropEvent;
 class QTextDocument;
-class QLabel;
 class QTabBar;
 class KoCopyController;
 class KoCutController;
@@ -197,7 +188,7 @@ public:
     /// hides any custom central widget and shows the standard widget.
     void restoreCentralWidget();
 
-signals:
+Q_SIGNALS:
     /// emitted when select All action is triggered and the view is not visible
     void selectAllRequested();
     /// emitted when deselect All action is triggered and the view is not visible
@@ -218,7 +209,7 @@ protected:
 
     void hideCustomCentralWidget();
 
-public slots:
+public Q_SLOTS:
 
     /// Copy Page
     void copyPage();
@@ -229,7 +220,7 @@ public slots:
     /// Make sure the canvas size matches the content
     void updateCanvasSize(bool forceUpdate = false);
 
-protected slots:
+protected Q_SLOTS:
 
     void viewSnapToGrid(bool snap);
     void viewGuides(bool show);

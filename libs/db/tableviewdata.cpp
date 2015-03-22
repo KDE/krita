@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Michał Poteralski <michalpoteralskikde@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +30,7 @@
 #include "cursor.h"
 #include "utils.h"
 #include "error.h"
+#include <unicode/coll.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -38,11 +40,42 @@
 
 using namespace KexiDB;
 
-unsigned short charTable[] = {
+const unsigned short charTable[] = {
 #include "chartable.txt"
 };
 
 //-------------------------------
+
+class CollatorInstance
+{
+public:
+    CollatorInstance() {
+        UErrorCode status = U_ZERO_ERROR;
+        m_collator = Collator::createInstance(status);
+        if (U_FAILURE(status)) {
+            kWarning() << "Could not create instance of collator: " << status;
+            m_collator = NULL;
+        }
+
+        // enable normalization by default
+        m_collator->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
+        if (U_FAILURE(status))
+            kWarning() << "Could not set collator attribute: " << status;
+    }
+
+    Collator* getCollator() {
+        return m_collator;
+    }
+
+    ~CollatorInstance() {
+        delete m_collator;
+    }
+
+private:
+    Collator *m_collator;
+};
+
+K_GLOBAL_STATIC(CollatorInstance, _collator)
 
 //! @internal A functor used in qSort() in order to sort by a given column
 class LessThanFunctor
@@ -50,7 +83,7 @@ class LessThanFunctor
 private:
     bool m_ascendingOrder;
     QVariant m_leftTmp, m_rightTmp;
-    int m_sortedColumn;
+    int m_sortColumn;
 
     bool (*m_lessThanFunction)(const QVariant&, const QVariant&);
 
@@ -103,13 +136,11 @@ private:
             return false;
         }
 
-        unsigned short au;
-        unsigned short bu;
         int len = qMin(as.length(), bs.length());
 
         forever {
-            au = a->unicode();
-            bu = b->unicode();
+            unsigned short au = a->unicode();
+            unsigned short bu = b->unicode();
             au = (au <= 0x17e ? charTable[au] : 0xffff);
             bu = (bu <= 0x17e ? charTable[bu] : 0xffff);
 
@@ -125,6 +156,13 @@ private:
         return false;
     }
 
+    static  bool cmpStringWithCollator(const QVariant& left, const QVariant& right) {
+        const QString &as = left.toString();
+        const QString &bs = right.toString();
+        return (Collator::LESS == _collator->getCollator()->compare((const UChar *)as.constData(), as.size(),
+                (const UChar *)bs.constData(), bs.size())) ? true : false;
+    }
+
     //! Compare function for BLOB data (QByteArray). Uses size as the weight.
     static bool cmpBLOB(const QVariant& left, const QVariant& right) {
         return left.toByteArray().size() < right.toByteArray().size();
@@ -133,7 +171,7 @@ private:
 public:
     LessThanFunctor()
             : m_ascendingOrder(true)
-            , m_sortedColumn(-1)
+            , m_sortColumn(-1)
             , m_lessThanFunction(0)
     {
     }
@@ -162,16 +200,21 @@ public:
         else if (t == Field::BLOB)
             //! @todo allow users to define BLOB sorting function?
             m_lessThanFunction = &cmpBLOB;
-        else
-            m_lessThanFunction = &cmpString; //anything else
+        else { // anything else
+            // check if CollatorInstance is not destroyed and has valid collator
+            if (!_collator.isDestroyed() && _collator->getCollator())
+                m_lessThanFunction = &cmpStringWithCollator;
+            else
+                m_lessThanFunction = &cmpString;
+        }
     }
 
     void setAscendingOrder(bool ascending) {
         m_ascendingOrder = ascending;
     }
 
-    void setSortedColumn(int column) {
-        m_sortedColumn = column;
+    void setSortColumn(int column) {
+        m_sortColumn = column;
     }
 
 #define _IIF(a,b) ((a) ? (b) : !(b))
@@ -179,9 +222,9 @@ public:
     //! Main comparison operator that takes column number, type and order into account
     bool operator()(RecordData* record1, RecordData* record2) {
         // compare NULLs : NULL is smaller than everything
-        if ((m_leftTmp = record1->at(m_sortedColumn)).isNull())
-            return _IIF(m_ascendingOrder, !record2->at(m_sortedColumn).isNull());
-        if ((m_rightTmp = record2->at(m_sortedColumn)).isNull())
+        if ((m_leftTmp = record1->at(m_sortColumn)).isNull())
+            return _IIF(m_ascendingOrder, !record2->at(m_sortColumn).isNull());
+        if ((m_rightTmp = record2->at(m_sortColumn)).isNull())
             return !m_ascendingOrder;
 
         return _IIF(m_ascendingOrder, m_lessThanFunction(m_leftTmp, m_rightTmp));
@@ -195,18 +238,14 @@ class TableViewData::Private
 {
 public:
     Private()
-            : sortedColumn(0)
-            , realSortedColumn(0)
+            : sortColumn(0)
+            , realSortColumn(0)
+            , sortOrder(Qt::AscendingOrder)
             , type(1)
             , pRowEditBuffer(0)
-            , visibleColumnsCount(0)
-            , visibleColumnsIDs(100)
-            , globalColumnsIDs(100)
             , readOnly(false)
             , insertingEnabled(true)
             , containsROWIDInfo(false)
-            , ascendingOrder(false)
-            , descendingOrder(false)
             , autoIncrementedColumn(-2) {
     }
 
@@ -214,12 +253,24 @@ public:
         delete pRowEditBuffer;
     }
 
+    //! Number of physical columns
+    int itemSize;
+
+    /*! Columns information */
+    TableViewColumn::List columns;
+
+    /*! Visible columns information */
+    TableViewColumn::List visibleColumns;
+
     //! (logical) sorted column number, set by setSorting()
-    //! can differ from realSortedColumn if there's lookup column used
-    int sortedColumn;
+    //! can differ from realSortColumn if there's lookup column used
+    int sortColumn;
 
     //! real sorted column number, set by setSorting(), used by cmp*() methods
-    int realSortedColumn;
+    int realSortColumn;
+
+    //! Specifies sorting order
+    Qt::SortOrder sortOrder;
 
     LessThanFunctor lessThanFunctor;
 
@@ -231,9 +282,8 @@ public:
 
     ResultInfo result;
 
-    uint visibleColumnsCount;
-
-    QVector<int> visibleColumnsIDs, globalColumnsIDs;
+    QList<int> visibleColumnsIDs;
+    QList<int> globalColumnsIDs;
 
     bool readOnly;
 
@@ -245,12 +295,6 @@ public:
 
     //! @see TableViewData::containsROWIDInfo()
     bool containsROWIDInfo;
-
-    //! true if ascending sort order is set
-    bool ascendingOrder;
-
-    //! true if descending sort order is set
-    bool descendingOrder;
 
     int autoIncrementedColumn;
 };
@@ -278,9 +322,9 @@ TableViewData::TableViewData(Cursor *c)
         const QuerySchema::FieldsExpandedOptions fieldsExpandedOptions
         = d->containsROWIDInfo ? QuerySchema::WithInternalFieldsAndRowID
           : QuerySchema::WithInternalFields;
-        m_itemSize = d->cursor->query()->fieldsExpanded(fieldsExpandedOptions).count();
+        d->itemSize = d->cursor->query()->fieldsExpanded(fieldsExpandedOptions).count();
     } else
-        m_itemSize = m_columns.count() + (d->containsROWIDInfo ? 1 : 0);
+        d->itemSize = d->columns.count() + (d->containsROWIDInfo ? 1 : 0);
 
     // Allocate TableViewColumn objects for each visible query column
     const QueryColumnInfo::Vector fields = d->cursor->query()->fieldsExpanded();
@@ -327,7 +371,7 @@ TableViewData::~TableViewData()
 {
     emit destroying();
     clearInternal(false /* !processEvents */);
-    qDeleteAll(m_columns);
+    qDeleteAll(d->columns);
     delete d;
 }
 
@@ -359,7 +403,7 @@ void TableViewData::init(
 
 void TableViewData::init()
 {
-    m_itemSize = 0;
+    d->itemSize = 0;
 }
 
 void TableViewData::deleteLater()
@@ -370,34 +414,87 @@ void TableViewData::deleteLater()
 
 void TableViewData::addColumn(TableViewColumn* col)
 {
-    m_columns.append(col);
+    d->columns.append(col);
     col->setData(this);
-    if (d->globalColumnsIDs.size() < (int)m_columns.count()) {//sanity
-        d->globalColumnsIDs.resize(d->globalColumnsIDs.size()*2);
-    }
     if (col->isVisible()) {
-        d->visibleColumnsCount++;
-        if ((uint)d->visibleColumnsIDs.size() < d->visibleColumnsCount) {//sanity
-            d->visibleColumnsIDs.resize(d->visibleColumnsIDs.size()*2);
-        }
-        d->visibleColumnsIDs[ m_columns.count()-1 ] = d->visibleColumnsCount - 1;
-        d->globalColumnsIDs[ d->visibleColumnsCount-1 ] = m_columns.count() - 1;
+        d->visibleColumns.append(col);
+        d->visibleColumnsIDs.append(d->visibleColumns.count() - 1);
+        d->globalColumnsIDs.append(d->columns.count() - 1);
     } else {
-        d->visibleColumnsIDs[ m_columns.count()-1 ] = -1;
+        d->visibleColumnsIDs.append(-1);
     }
     d->autoIncrementedColumn = -2; //clear cache;
     if (!d->cursor || !d->cursor->query())
-        m_itemSize = m_columns.count() + (d->containsROWIDInfo ? 1 : 0);
+        d->itemSize = d->columns.count() + (d->containsROWIDInfo ? 1 : 0);
 }
 
-int TableViewData::globalColumnID(int visibleID) const
+void TableViewData::columnVisibilityChanged(const TableViewColumn &column)
 {
-    return d->globalColumnsIDs.value(visibleID, -1);
+    if (column.isVisible()) { // column made visible
+        int indexInGlobal = d->columns.indexOf(const_cast<TableViewColumn*>(&column));
+        // find previous column that is visible
+        int prevIndexInGlobal = indexInGlobal - 1;
+        while (prevIndexInGlobal >= 0 && d->visibleColumnsIDs[prevIndexInGlobal] == -1) {
+            prevIndexInGlobal--;
+        }
+        int indexInVisible = prevIndexInGlobal + 1;
+        // update
+        d->visibleColumns.insert(indexInVisible, const_cast<TableViewColumn*>(&column));
+        d->visibleColumnsIDs[indexInGlobal] = indexInVisible;
+        d->globalColumnsIDs.insert(indexInVisible, indexInGlobal);
+        for (int i = indexInGlobal + 1; i < d->columns.count(); i++) { // increment ids of the rest
+            if (d->visibleColumnsIDs[i] >= 0) {
+                d->visibleColumnsIDs[i]++;
+            }
+        }
+    }
+    else { // column made invisible
+        int indexInVisible = d->visibleColumns.indexOf(const_cast<TableViewColumn*>(&column));
+        d->visibleColumns.removeAt(indexInVisible);
+        int indexInGlobal = globalIndexOfVisibleColumn(indexInVisible);
+        d->visibleColumnsIDs[indexInGlobal] = -1;
+        d->globalColumnsIDs.removeAt(indexInVisible);
+    }
 }
 
-int TableViewData::visibleColumnID(int globalID) const
+int TableViewData::globalIndexOfVisibleColumn(int visibleIndex) const
 {
-    return d->visibleColumnsIDs.value(globalID, -1);
+    return d->globalColumnsIDs.value(visibleIndex, -1);
+}
+
+int TableViewData::visibleColumnIndex(int globalIndex) const
+{
+    return d->visibleColumnsIDs.value(globalIndex, -1);
+}
+
+uint TableViewData::columnCount() const
+{
+    return d->columns.count();
+}
+
+uint TableViewData::visibleColumnCount() const
+{
+    return d->visibleColumns.count();
+}
+
+TableViewColumn::List* TableViewData::columns()
+{
+    return &d->columns;
+}
+
+TableViewColumn::List* TableViewData::visibleColumns()
+{
+    return &d->visibleColumns;
+}
+
+TableViewColumn* TableViewData::column(uint index)
+{
+    return d->columns.value(index);
+}
+
+TableViewColumn* TableViewData::visibleColumn(uint index)
+{
+    return d->visibleColumns.value(index);
 }
 
 bool TableViewData::isDBAware() const
@@ -430,6 +527,11 @@ bool TableViewData::containsROWIDInfo() const
     return d->containsROWIDInfo;
 }
 
+KexiDB::RecordData* TableViewData::createItem() const
+{
+    return new KexiDB::RecordData(d->itemSize);
+}
+
 QString TableViewData::dbTableName() const
 {
     if (d->cursor && d->cursor->query() && d->cursor->query()->masterTable())
@@ -437,46 +539,44 @@ QString TableViewData::dbTableName() const
     return QString();
 }
 
-void TableViewData::setSorting(int column, bool ascending)
+void TableViewData::setSorting(int column, Qt::SortOrder order)
 {
-    if (column >= 0 && column < (int)m_columns.count()) {
-        d->ascendingOrder = ascending;
-        d->descendingOrder = !ascending;
-    } else {
-        d->ascendingOrder = false;
-        d->descendingOrder = false;
-        d->sortedColumn = -1;
-        d->realSortedColumn = -1;
+    d->sortOrder = order;
+    if (column < 0 || column >= d->columns.count()) {
+        d->sortColumn = -1;
+        d->realSortColumn = -1;
         return;
     }
     // find proper column information for sorting (lookup column points to alternate column with visible data)
-    const TableViewColumn *tvcol = m_columns.at(column);
+    const TableViewColumn *tvcol = d->columns.at(column);
     QueryColumnInfo* visibleLookupColumnInfo = tvcol->visibleLookupColumnInfo();
     const Field *field = visibleLookupColumnInfo ? visibleLookupColumnInfo->field : tvcol->field();
-    d->sortedColumn = column;
-    d->realSortedColumn = tvcol->columnInfo()->indexForVisibleLookupValue() != -1
-                          ? tvcol->columnInfo()->indexForVisibleLookupValue() : d->sortedColumn;
+    d->sortColumn = column;
+    d->realSortColumn = tvcol->columnInfo()->indexForVisibleLookupValue() != -1
+                          ? tvcol->columnInfo()->indexForVisibleLookupValue() : d->sortColumn;
 
     // setup compare functor
     d->lessThanFunctor.setColumnType(*field);
-    d->lessThanFunctor.setAscendingOrder(ascending);
-    d->lessThanFunctor.setSortedColumn(column);
+    d->lessThanFunctor.setAscendingOrder(d->sortOrder == Qt::AscendingOrder);
+    d->lessThanFunctor.setSortColumn(column);
 }
 
-int TableViewData::sortedColumn() const
+int TableViewData::sortColumn() const
 {
-    return d->sortedColumn;
+    return d->sortColumn;
 }
 
-int TableViewData::sortingOrder() const
+Qt::SortOrder TableViewData::sortOrder() const
 {
-    return d->ascendingOrder ? 1 : (d->descendingOrder ? -1 : 0);
+    return d->sortOrder;
 }
 
 void TableViewData::sort()
 {
-    if (0 != sortingOrder())
-        qSort(begin(), end(), d->lessThanFunctor);
+    if (d->sortColumn < 0 || d->sortColumn >= d->columns.count()) {
+        return;
+    }
+    qSort(begin(), end(), d->lessThanFunctor);
 }
 
 void TableViewData::setReadOnly(bool set)
@@ -550,6 +650,20 @@ bool TableViewData::updateRowEditBufferRef(RecordData *record,
     return true;
 }
 
+bool TableViewData::updateRowEditBuffer(KexiDB::RecordData *record, int colnum, TableViewColumn* col,
+                                        QVariant newval, bool allowSignals)
+{
+    QVariant newv(newval);
+    return updateRowEditBufferRef(record, colnum, col, newv, allowSignals);
+}
+
+bool TableViewData::updateRowEditBuffer(KexiDB::RecordData *record, int colnum,
+                                QVariant newval, bool allowSignals)
+{
+    TableViewColumn* col = d->columns.value(colnum);
+    return col ? updateRowEditBufferRef(record, colnum, col, newval, allowSignals) : false;
+}
+
 //get a new value (if present in the buffer), or the old one, otherwise
 //(taken here for optimization)
 #define GET_VALUE if (!pval) { \
@@ -568,12 +682,12 @@ bool TableViewData::saveRow(RecordData& record, bool insert, bool repaint)
 
     //check constraints:
     //-check if every NOT NULL and NOT EMPTY field is filled
-    TableViewColumn::ListIterator it_f(m_columns.constBegin());
+    TableViewColumn::ListIterator it_f(d->columns.constBegin());
     RecordData::ConstIterator it_r = record.constBegin();
     int col = 0;
     const QVariant *pval = 0;
     QVariant val;
-    for (;it_f != m_columns.constEnd() && it_r != record.constEnd();++it_f, ++it_r, col++) {
+    for (;it_f != d->columns.constEnd() && it_r != record.constEnd();++it_f, ++it_r, col++) {
         Field *f = (*it_f)->field();
         if (f->isNotNull()) {
             GET_VALUE;
@@ -632,7 +746,7 @@ bool TableViewData::saveRow(RecordData& record, bool insert, bool repaint)
         RowEditBuffer::SimpleMap b = d->pRowEditBuffer->simpleBuffer();
         for (RowEditBuffer::SimpleMap::ConstIterator it = b.constBegin();it != b.constEnd();++it) {
             uint i = -1;
-            foreach(TableViewColumn *col, m_columns) {
+            foreach(TableViewColumn *col, d->columns) {
                 i++;
                 if (col->field()->name() == it.key()) {
                     kDebug() << col->field()->name() << ": " << record.at(i).toString()
@@ -774,7 +888,7 @@ int TableViewData::autoIncrementedColumn()
     if (d->autoIncrementedColumn == -2) {
         //find such a column
         d->autoIncrementedColumn = -1;
-        foreach(TableViewColumn *col, m_columns) {
+        foreach(TableViewColumn *col, d->columns) {
             d->autoIncrementedColumn++;
             if (col->field()->isAutoIncrement())
                 break;

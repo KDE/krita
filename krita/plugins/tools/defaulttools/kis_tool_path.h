@@ -47,7 +47,9 @@ private:
     KisToolPath* const m_parentTool;
 };
 
-typedef KisDelegatedTool<KisToolShape, __KisToolPathLocalTool> DelegatedPathTool;
+typedef KisDelegatedTool<KisToolShape,
+                         __KisToolPathLocalTool,
+                         DeselectShapesActivationPolicy> DelegatedPathTool;
 
 class KisToolPath : public DelegatedPathTool
 {
@@ -57,7 +59,7 @@ public:
     KisToolPath(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent *event);
 
-    virtual QList< QWidget* > createOptionWidgets();
+    virtual QList< QPointer<QWidget> > createOptionWidgets();
 
 protected:
     void requestStrokeCancellation();

@@ -46,6 +46,7 @@ public:
     virtual void approximateForwardTransformation(quint8 *pixels, quint32 numPixels) = 0;
     virtual bool useInternalColorManagement() const = 0;
     virtual KisExposureGammaCorrectionInterface *correctionInterface() const = 0;
+    virtual bool lockCurrentColorVisualRepresentation() const = 0;
 };
 
 

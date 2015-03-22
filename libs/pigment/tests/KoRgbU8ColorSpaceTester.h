@@ -17,16 +17,16 @@
  */
 
 
-#ifndef KO_STRATEGY_COLORSPACE_RGB_TESTER_H
-#define KO_STRATEGY_COLORSPACE_RGB_TESTER_H
+#ifndef KORGBCOLORSPACETESTER_H
+#define KORGBCOLORSPACETESTER_H
 
 #include <QtTest>
 
-class KoRgbColorSpaceTester : public QObject
+class KoRgbU8ColorSpaceTester : public QObject
 {
     Q_OBJECT
     void testCompositeOps();
-private slots:
+private Q_SLOTS:
     void testBasics();
     void testMixColors();
     void testCompositeOpsWithChannelFlags();

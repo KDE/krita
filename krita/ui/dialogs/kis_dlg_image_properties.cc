@@ -29,9 +29,7 @@
 #include <QTextEdit>
 
 #include <klocale.h>
-#include <kcolorcombo.h>
 
-#include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpace.h>
 #include "KoColorProfile.h"
 #include "KoColor.h"
@@ -125,7 +123,7 @@ void KisDlgImageProperties::setAnnotation(const QString &type)
         m_page->lblDescription->clear();
         m_page->txtAnnotation->clear();
         m_page->lblDescription->setText(annotation->description());
-        m_page->txtAnnotation->appendPlainText(QString::fromUtf8(annotation->annotation()));
+        m_page->txtAnnotation->appendPlainText(annotation->displayText());
     }
     else {
         m_page->lblDescription->clear();

@@ -23,13 +23,10 @@
 #include <QMap>
 #include <QString>
 
-#include <kio/job.h>
-
 #include "KoResource.h"
 #include "kis_gbr_brush.h"
 #include "kis_global.h"
 
-class QImage;
 
 /**
  * Velocity won't be supported, atm Tilt isn't either,

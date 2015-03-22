@@ -24,7 +24,6 @@
 #include <QtTest>
 #include <QBuffer>
 
-#include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
 #include "BasicElement.h"

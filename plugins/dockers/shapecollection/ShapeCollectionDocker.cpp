@@ -35,7 +35,6 @@
 #include <KoIcon.h>
 
 #include <klocale.h>
-#include <kcombobox.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
@@ -219,6 +218,16 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
 
     // Load the default shapes and add them to the combobox
     loadDefaultShapes();
+}
+
+void ShapeCollectionDocker::setCanvas(KoCanvasBase *canvas)
+{
+    setEnabled(canvas != 0);
+}
+
+void ShapeCollectionDocker::unsetCanvas()
+{
+    setEnabled(false);
 }
 
 void ShapeCollectionDocker::loadDefaultShapes()

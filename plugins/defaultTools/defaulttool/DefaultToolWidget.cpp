@@ -242,6 +242,9 @@ void DefaultToolWidget::setUnit( const KoUnit &unit )
     widthSpinBox->setUnit( unit );
     heightSpinBox->setUnit( unit );
     m_blockSignals = false;
+
+    updatePosition();
+    updateSize();
 }
 
 void DefaultToolWidget::resourceChanged( int key, const QVariant & res )

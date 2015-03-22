@@ -38,8 +38,6 @@ class KoColorSpace;
 
 class KisPaintInformation;
 class KisBoundary;
-class KisQImageSP;
-class KisScaledBrush;
 
 enum enumBrushType {
     INVALID,
@@ -73,7 +71,6 @@ typedef KisSharedPtr<KisBrush> KisBrushSP;
 class BRUSH_EXPORT KisBrush : public KoResource, public KisShared
 {
 
-    class ScaledBrush;
 
 public:
     class ColoringInformation
@@ -159,6 +156,12 @@ public:
      */
     double spacing() const;
 
+    void setAutoSpacing(bool active, qreal coeff);
+
+    bool autoSpacingActive() const;
+    qreal autoSpacingCoeff() const;
+
+
     /**
      * @return the width (for scale == 1.0)
      */
@@ -178,6 +181,17 @@ public:
      * @return the height of the mask for the given scale and angle
      */
     virtual qint32 maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
+
+    /**
+     * @return the logical size of the brush, that is the size measured
+     *         in floating point value.
+     *
+     *         This value should not be used for calculating future dab sizes
+     *         because it doesn't take any rounding into account. The only use
+     *         of this metric is calculation of brush-size derivatives like
+     *         hotspots and spacing.
+     */
+     QSizeF characteristicSize(double scaleX, double scaleY, double rotation) const;
 
     /**
      * @return the angle of the mask adding the given angle

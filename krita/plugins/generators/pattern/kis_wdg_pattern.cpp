@@ -21,8 +21,7 @@
 #include "kis_wdg_pattern.h"
 
 #include <QLayout>
-
-#include <knuminput.h>
+#include <QLabel>
 
 #include <KoColor.h>
 #include <KoResourceServer.h>
@@ -38,6 +37,7 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
 {
     m_widget = new Ui_WdgPatternOptions();
     m_widget->setupUi(this);
+    m_widget->lblPattern->setVisible(false);
     m_widget->lblColor->setVisible(false);
     m_widget->bnColor->setVisible(false);
 }
@@ -55,7 +55,6 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfiguration* config)
     if (pattern) {
        widget()->patternChooser->setCurrentPattern(pattern);
     }
-//    widget()->bnColor->setColor(config->getColor("color").toQColor());
 
 }
 
@@ -65,11 +64,6 @@ KisPropertiesConfiguration* KisWdgPattern::configuration() const
     QVariant v;
     v.setValue(widget()->patternChooser->currentResource()->name());
     config->setProperty("pattern", v);
-
-//    KoColor c;
-//    c.fromQColor(this->widget()->bnColor->color());
-//    v.setValue(c);
-//    config->setProperty("color", v);
 
     return config;
 }

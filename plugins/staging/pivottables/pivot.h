@@ -44,7 +44,7 @@ namespace Calligra{
       Pivot(QWidget* parent,Selection* selection);
       ~Pivot();
 
-    private slots:
+    private Q_SLOTS:
       void slotUser2Clicked();
 
     private:

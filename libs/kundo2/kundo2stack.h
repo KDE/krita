@@ -1,3 +1,21 @@
+/*
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *
+ *  This library is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; either version 2.1 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 /****************************************************************************
 **
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
@@ -46,6 +64,9 @@
 #include <QString>
 #include <QList>
 #include <QAction>
+#include <QTime>
+#include <QVector>
+
 
 #include "kundo2_export.h"
 
@@ -61,6 +82,7 @@ class KActionCollection;
 class KUNDO2_EXPORT KUndo2Command
 {
     KUndo2CommandPrivate *d;
+    int timedID;
 
 public:
     explicit KUndo2Command(KUndo2Command *parent = 0);
@@ -75,18 +97,38 @@ public:
     void setText(const KUndo2MagicString &text);
 
     virtual int id() const;
+    virtual int timedId();
+    virtual void setTimedID(int timedID);
     virtual bool mergeWith(const KUndo2Command *other);
+    virtual bool timedMergeWith(KUndo2Command *other);
 
     int childCount() const;
     const KUndo2Command *child(int index) const;
 
     bool hasParent();
+    virtual void setTime();
+    virtual QTime time();
+    virtual void setEndTime();
+    virtual QTime endTime();
+
+    virtual QVector<KUndo2Command*> mergeCommandsVector();
+    virtual bool isMerged();
+    virtual void undoMergedCommands();
+    virtual void redoMergedCommands();
+
+
 
 private:
     Q_DISABLE_COPY(KUndo2Command)
     friend class KUndo2QStack;
 
+
     bool m_hasParent;
+    int m_timedID;
+
+    QTime m_timeOfCreation;
+    QTime m_endOfCommand;
+    QVector<KUndo2Command*> m_mergeCommandsVector;
 };
 
 #endif // QT_NO_UNDOCOMMAND
@@ -134,6 +176,16 @@ public:
 
     const KUndo2Command *command(int index) const;
 
+    void setUseCumulativeUndoRedo(bool value);
+    bool useCumulativeUndoRedo();
+    void setTimeT1(double value);
+    double timeT1();
+    void setTimeT2(double value);
+    double timeT2();
+    int strokesN();
+    void setStrokesN(int value);
+
+
 public Q_SLOTS:
     void setClean();
     virtual void setIndex(int idx);
@@ -157,6 +209,12 @@ private:
     int m_clean_index;
     KUndo2Group *m_group;
     int m_undo_limit;
+    bool m_useCumulativeUndoRedo;
+    double m_timeT1;
+    double m_timeT2;
+    int m_strokesN;
+    int m_lastMergedSetCount;
+    int m_lastMergedIndex;
 
     // also from QUndoStackPrivate
     void setIndex(int idx, bool clean);

@@ -177,25 +177,29 @@ void KisPaintDeviceTest::testClear()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    QVERIFY(dev->extent() == QRect(2147483647, 2147483647, 0, 0));
-    QVERIFY(dev->exactBounds() == QRect(2147483647, 2147483647, 0, 0));
+    QVERIFY(!dev->extent().isValid());
+    QVERIFY(!dev->exactBounds().isValid());
 
     dev->clear();
 
-    QVERIFY(dev->extent() == QRect(2147483647, 2147483647, 0, 0));
-    QVERIFY(dev->exactBounds() == QRect(2147483647, 2147483647, 0, 0));
+    QVERIFY(!dev->extent().isValid());
+    QVERIFY(!dev->exactBounds().isValid());
+
+    QRect fillRect1(50, 100, 150, 100);
+    dev->fill(fillRect1, KoColor(Qt::red, cs));
+
+    QCOMPARE(dev->extent(), QRect(0, 64, 256, 192));
+    QCOMPARE(dev->exactBounds(), fillRect1);
 
     dev->clear(QRect(100, 100, 100, 100));
 
-    // XXX: This is strange!
-    QVERIFY(dev->extent() == QRect(64, 64, 192, 192));
-    QVERIFY(dev->exactBounds() == QRect(64, 64, 192, 192));
+    QCOMPARE(dev->extent(), QRect(0, 64, 256, 192));
+    QCOMPARE(dev->exactBounds(), QRect(50, 100, 50, 100));
 
     dev->clear();
 
-    QVERIFY(dev->extent() == QRect(2147483647, 2147483647, 0, 0));
-    QVERIFY(dev->exactBounds() == QRect(2147483647, 2147483647, 0, 0));
-
+    QVERIFY(!dev->extent().isValid());
+    QVERIFY(!dev->exactBounds().isValid());
 }
 
 void KisPaintDeviceTest::testCrop()
@@ -744,6 +748,40 @@ void KisPaintDeviceTest::benchmarkExactBoundsNullDefaultPixel()
     QCOMPARE(measuredRect, fillRect);
 }
 
+void KisPaintDeviceTest::testNonDefaultPixelArea()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QVERIFY(dev->exactBounds().isEmpty());
+    QVERIFY(dev->nonDefaultPixelArea().isEmpty());
+
+    KoColor defPixel(Qt::red, cs);
+    dev->setDefaultPixel(defPixel.data());
+
+    QCOMPARE(dev->exactBounds(), KisDefaultBounds::infiniteRect);
+    QVERIFY(dev->nonDefaultPixelArea().isEmpty());
+
+    QRect fillRect(10,11,18,14);
+
+    dev->fill(fillRect, KoColor(Qt::white, cs));
+
+    QCOMPARE(dev->exactBounds(), KisDefaultBounds::infiniteRect);
+    QCOMPARE(dev->nonDefaultPixelArea(), fillRect);
+
+
+    // non-default pixel variant should also handle weird pixels
+
+    const quint8 weirdPixelData[4] = {0,10,0,0};
+    KoColor weirdColor(weirdPixelData, cs);
+    dev->setPixel(100,100,weirdColor);
+
+    // such weird pixels should not change our opinion about
+    // device's size
+    QCOMPARE(dev->exactBounds(), KisDefaultBounds::infiniteRect);
+    QCOMPARE(dev->nonDefaultPixelArea(), fillRect | QRect(100,100,1,1));
+}
+
 KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
 {
     struct TestingDefaultBounds : public KisDefaultBoundsBase {
@@ -1183,7 +1221,7 @@ void testWrappedLineIteratorReadMoreThanBounds(QString testName)
     QImage result = dst->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QImage ref = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
 
-    QVERIFY(TestUtil::checkQImage(result, "paint_device_test", "wrapped_iterators_huge", testName));
+    QVERIFY(TestUtil::checkQImage(result, "paint_device_test", "wrapped_iterators_huge", testName, 1));
 }
 
 void KisPaintDeviceTest::testWrappedHLineIteratorReadMoreThanBounds()

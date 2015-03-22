@@ -33,7 +33,7 @@
 #include "KoPABackgroundTool.h"
 #include <KoPageApp.h>
 #include <KoPAPage.h>
-#include <KoPAView.h>
+#include <KoPAViewBase.h>
 #include <KoPADocument.h>
 #include "commands/KoPADisplayMasterBackgroundCommand.h"
 #include "commands/KoPADisplayMasterShapesCommand.h"

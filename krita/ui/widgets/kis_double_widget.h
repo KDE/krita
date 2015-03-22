@@ -52,15 +52,15 @@ public:
     void setTracking(bool tracking);
     bool hasTracking() const;
 
-signals:
+Q_SIGNALS:
     void valueChanged(double);
     void sliderPressed();
     void sliderReleased();
 
-public slots:
+public Q_SLOTS:
     void setValue(double value);
 
-protected slots:
+protected Q_SLOTS:
     void setSliderValue(double);
     void sliderValueChanged(int);
 

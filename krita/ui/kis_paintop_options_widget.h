@@ -22,11 +22,9 @@
 #include <krita_export.h>
 #include <kis_paintop_settings_widget.h>
 
-class QString;
 class KisPaintOpOption;
-class KisPaintOpPreset;
 class KisPropertiesConfiguration;
-class QListWidgetItem;
+class KisPaintOpSettingsWidget;
 
 /**
  * A common widget for enabling/disabling and determining
@@ -54,14 +52,24 @@ public:
     ///Reimplemented, sets image on option widgets
     virtual void setImage(KisImageWSP image);
 
-private slots:
+    ///Reimplemented, sets node on option widgets
+    virtual void setNode(KisNodeWSP node);
+
+
+
+private Q_SLOTS:
 
     void changePage(const QModelIndex&);
+    void lockProperties(const QModelIndex& index);
+    void slotLockPropertiesDrop();
+    void slotLockPropertiesSave();
+    void slotEntryChecked(const QModelIndex &index);
 
 private:
     
     struct Private;
     Private* const m_d;
+    bool m_saveLockedOption;
 
 };
 

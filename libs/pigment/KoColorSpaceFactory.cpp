@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -92,7 +92,9 @@ const KoColorSpace *KoColorSpaceFactory::grabColorSpace(const KoColorProfile * p
     KoColorSpace* cs = 0;
     if (!d->availableColorspaces.contains(profile->name())) {
         cs = createColorSpace(profile);
-        d->availableColorspaces[profile->name()] = cs;
+        if (cs) {
+            d->availableColorspaces[profile->name()] = cs;
+        }
     } else {
         cs = d->availableColorspaces[profile->name()];
     }

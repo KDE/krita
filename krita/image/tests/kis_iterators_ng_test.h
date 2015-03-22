@@ -39,7 +39,7 @@ private:
     void hLineIter(const KoColorSpace * cs);
     void randomAccessor(const KoColorSpace * cs);
 
-private slots:
+private Q_SLOTS:
     void justCreation();
     void vLineIter();
     void writeBytes();

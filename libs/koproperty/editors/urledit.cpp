@@ -25,7 +25,6 @@
 #include <QHBoxLayout>
 
 #include <kurlrequester.h>
-#include <klineedit.h>
 
 #include "Property.h"
 

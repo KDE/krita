@@ -36,34 +36,36 @@
 //
 // methods (constructors)
 
-void KoReportDesignerItemText::init(QGraphicsScene * scene)
+void KoReportDesignerItemText::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     //setFlags(ItemIsSelectable | ItemIsMovable);
     if (scene)
         scene->addItem(this);
 
-    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
+    
+    updateRenderText(m_controlSource->value().toString(), m_itemValue->value().toString(), "textarea");
 }
 
 KoReportDesignerItemText::KoReportDesignerItemText(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
-    setSceneRect(getTextRect());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("text"));
+    Q_UNUSED(pos);
+    init(scene, rw);
+    setSceneRect(properRect(*rw, getTextRect().width(), getTextRect().height()));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemText::KoReportDesignerItemText(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KoReportItemText(element), KoReportDesignerItemRectBase(d)
 {
-    init(s);
+    init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
@@ -82,9 +84,9 @@ KoReportDesignerItemText::~KoReportDesignerItemText
 ()
 {}
 
-QRect KoReportDesignerItemText::getTextRect()
+QRect KoReportDesignerItemText::getTextRect() const
 {
-    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "textarea"));
+    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), m_renderText);
 }
 
 void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -97,24 +99,23 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
     QPen  p = painter->pen();
 
     painter->setFont(font());
+    painter->setBackgroundMode(Qt::TransparentMode);
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+    bg.setAlphaF(m_backgroundOpacity->value().toReal()*0.01);
 
-    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
-    painter->fillRect(rect(),  m_backgroundColor->value().value<QColor>());
-    painter->drawText(rect(), textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "textarea"));
+    painter->fillRect(rect(),  bg);
+    painter->drawText(rect(), textFlags(), m_renderText);
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
-        painter->setPen(QPen(QColor(224, 224, 224)));
+        painter->setPen(QPen(Qt::lightGray));
     } else {
         painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }
     painter->drawRect(rect());
 
-    painter->setBackgroundMode(Qt::TransparentMode);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     drawHandles(painter);
@@ -127,7 +128,7 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
 void KoReportDesignerItemText::buildXML(QDomDocument & doc, QDomElement & parent)
 {
     //kdDebug() << "ReportEntityText::buildXML()");
-    QDomElement entity = doc.createElement("report:text");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);
@@ -136,6 +137,7 @@ void KoReportDesignerItemText::buildXML(QDomDocument & doc, QDomElement & parent
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
     entity.setAttribute("report:bottom-padding", m_bottomPadding);
     entity.setAttribute("report:z-index", zValue());
+    addPropertyAsAttribute(&entity, m_itemValue);
 
     // bounding rect
     buildXMLRect(doc, entity, &m_pos, &m_size);
@@ -163,7 +165,7 @@ void KoReportDesignerItemText::slotPropertyChanged(KoProperty::Set &s, KoPropert
     if (p.name() == "Position") {
         m_pos.setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
     } else if (p.name() == "Size") {
-        m_size.setUnitSize(p.value().toSizeF(), KRPos::DontUpdateProperty);
+        m_size.setUnitSize(p.value().toSizeF(), KRSize::DontUpdateProperty);
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
@@ -178,4 +180,6 @@ void KoReportDesignerItemText::slotPropertyChanged(KoProperty::Set &s, KoPropert
         m_reportDesigner->setModified(true);
     if (scene())
         scene()->update();
+    
+    updateRenderText(m_controlSource->value().toString(), m_itemValue->value().toString(), "textarea");
 }

@@ -23,7 +23,6 @@
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
-#include <kurl.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -38,7 +37,7 @@
 using namespace Calligra::Sheets;
 
  K_PLUGIN_FACTORY(PivotPluginFactory, registerPlugin<PivotPlugin>();)
- K_EXPORT_PLUGIN(PivotPluginFactory("sheetspivottables_plugin"))
+ K_EXPORT_PLUGIN(PivotPluginFactory("sheetspivottables"))
 
 PivotPlugin::PivotPlugin(QObject *parent, const QVariantList &)
  : QObject(parent)

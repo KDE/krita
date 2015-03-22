@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Resource Manager
+Name[bs]=Menadžer resursa
 Name[ca]=Gestor de recursos
 Name[cs]=Správce zdrojů
+Name[da]=Håndtering af ressourcer
 Name[de]=Ressourcenverwaltung
 Name[en_GB]=Resource Manager
 Name[es]=Gestor de recursos
@@ -9,6 +11,7 @@ Name[fr]=Manager de ressources
 Name[ia]=Gerente de Ressources
 Name[it]=Gestore delle risorse
 Name[ja]=リソースマネージャ
+Name[nb]=Ressursbehandler
 Name[nl]=Beheerder van hulpbronnen
 Name[pl]=Zarządca zasobów
 Name[pt]=Gestor de Recursos

@@ -128,9 +128,25 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
     if (jobAdded) return true;
 
     if (!m_spontaneousJobsList.isEmpty()) {
-        KisSpontaneousJob *job = m_spontaneousJobsList.takeFirst();
-        updaterContext.addSpontaneousJob(job);
-        jobAdded = true;
+        /**
+         * WARNING: Please note that this still doesn't guarantee that
+         * the spontaneous jobs are exclusive, since updates and/or
+         * strokes can be added after them. The only thing it
+         * guarantees that two spontaneous jobs will not be executed
+         * in parallel.
+         *
+         * Right now it works as it is. Probably will need to be fixed
+         * in the future.
+         */
+        qint32 numMergeJobs;
+        qint32 numStrokeJobs;
+        updaterContext.getJobsSnapshot(numMergeJobs, numStrokeJobs);
+
+        if (!numMergeJobs && !numStrokeJobs) {
+            KisSpontaneousJob *job = m_spontaneousJobsList.takeFirst();
+            updaterContext.addSpontaneousJob(job);
+            jobAdded = true;
+        }
     }
 
     return jobAdded;
@@ -139,6 +155,11 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 void KisSimpleUpdateQueue::addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)
 {
     addJob(node, rc, cropRect, KisBaseRectsWalker::UPDATE);
+}
+
+void KisSimpleUpdateQueue::addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)
+{
+    addJob(node, rc, cropRect, KisBaseRectsWalker::UPDATE_NO_FILTHY);
 }
 
 void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)
@@ -157,11 +178,14 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QRect& rc,
 
     KisBaseRectsWalkerSP walker;
 
-    if(type == KisBaseRectsWalker::UPDATE) {
-        walker = new KisMergeWalker(cropRect);
+    if (type == KisBaseRectsWalker::UPDATE) {
+        walker = new KisMergeWalker(cropRect, KisMergeWalker::DEFAULT);
     }
-    else /* if(type == KisBaseRectsWalker::FULL_REFRESH) */ {
+    else if (type == KisBaseRectsWalker::FULL_REFRESH)  {
         walker = new KisFullRefreshWalker(cropRect);
+    }
+    else if (type == KisBaseRectsWalker::UPDATE_NO_FILTHY) {
+        walker = new KisMergeWalker(cropRect, KisMergeWalker::NO_FILTHY);
     }
     /* else if(type == KisBaseRectsWalker::UNSUPPORTED) qFatal(); */
 

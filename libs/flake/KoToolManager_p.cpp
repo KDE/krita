@@ -21,6 +21,7 @@
 
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoToolBase.h>
 #include <KoToolFactoryBase.h>
 #include <QToolButton>
 #include <kicon.h>
@@ -37,6 +38,7 @@ ToolHelper::ToolHelper(KoToolFactoryBase *tool)
 QToolButton* ToolHelper::createButton()
 {
     QToolButton *but = new QToolButton();
+    but->setObjectName(m_toolFactory->id());
     but->setIcon(KIcon(m_toolFactory->iconName()));
     but->setToolTip(m_toolFactory->toolTip());
     connect(but, SIGNAL(clicked()), this, SLOT(buttonPressed()));

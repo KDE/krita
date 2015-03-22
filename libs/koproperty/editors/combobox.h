@@ -52,7 +52,7 @@ public:
         bool extraValueAllowed : 1;
     };
 
-//    ComboBox(const Property* property, QWidget *parent = 0);
+//    explicit ComboBox(const Property* property, QWidget *parent = 0);
     ComboBox(const Property::ListData& listData, const Options& options, 
              QWidget *parent = 0);
 
@@ -63,13 +63,13 @@ public:
 //    virtual void setProperty(const Property *property);
     void setListData(const Property::ListData & listData);
 
-signals:
+Q_SIGNALS:
     void commitData( QWidget * editor );
 
-public slots:
+public Q_SLOTS:
     virtual void setValue(const QVariant &value);
 
-protected slots:
+protected Q_SLOTS:
     void slotValueChanged(int value);
 
 protected:

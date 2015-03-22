@@ -155,9 +155,8 @@ void ReportSectionDetail::insertGroupSection(int idx, ReportSectionDetailGroup *
 int ReportSectionDetail::indexOfGroupSection(const QString & column) const
 {
     // find the item by its name
-    ReportSectionDetailGroup * rsd = 0;
     for (uint i = 0; i < (uint)groupList.count(); i++) {
-        rsd = groupList.at(i);
+        ReportSectionDetailGroup * rsd = groupList.at(i);
         if (column == rsd->column()) return i;
     }
     return -1;

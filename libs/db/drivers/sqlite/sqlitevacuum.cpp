@@ -17,8 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <db/utils.h>
 #include "sqlitevacuum.h"
+
+#include <db/utils.h>
 
 #include <kstandarddirs.h>
 #include <kprogressdialog.h>
@@ -125,10 +126,10 @@ tristate SQLiteVacuum::run()
         m_result = false;
         return m_result;
     }
-    
-    m_dlg = new KProgressDialog(0, i18n("Compacting database"),
-                                "<qt>" + i18n("Compacting database \"%1\"...",
-                                              "<nobr>" + QDir::convertSeparators(fi.fileName()) + "</nobr>")
+
+    m_dlg = new KProgressDialog(0, i18nc("@title:window", "Compacting Database"),
+                                   i18nc("@info", "Compacting database <resource>%1</resource>...",
+                                         QDir::convertSeparators(fi.fileName()))
                                );
     m_dlg->adjustSize();
     m_dlg->resize(300, m_dlg->height());
@@ -197,7 +198,7 @@ void SQLiteVacuum::dumpProcessFinished(int exitCode, QProcess::ExitStatus exitSt
     QFileInfo fi(m_filePath);
     const uint origSize = fi.size();
 
-    if (0 != KDE::rename(m_tmpFilePath, fi.absoluteFilePath())) {
+    if (!QFile::rename(m_tmpFilePath, fi.absoluteFilePath())) {
         kWarning() << "Rename" << m_tmpFilePath << "to" << fi.absoluteFilePath() << "failed.";
         m_result = false;
     }
@@ -205,7 +206,9 @@ void SQLiteVacuum::dumpProcessFinished(int exitCode, QProcess::ExitStatus exitSt
     if (m_result == true) {
         const uint newSize = fi.size();
         const uint decrease = 100 - 100 * newSize / origSize;
-        KMessageBox::information(0, i18n("The database has been compacted. Current size decreased by %1% to %2.", decrease, KIO::convertSize(newSize)));
+        KMessageBox::information(0,
+            i18nc("@info", "The database has been compacted. Current size decreased by %1% to %2.",
+                 decrease, KIO::convertSize(newSize)));
     }
 }
 

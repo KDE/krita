@@ -26,6 +26,8 @@
 #include <kis_canvas2.h>
 #include "kis_input_manager.h"
 
+#include <math.h>
+
 class KisRotateCanvasAction::Private
 {
 public:

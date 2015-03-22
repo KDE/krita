@@ -40,7 +40,7 @@ class KOPAGEAPP_EXPORT KoPAPageThumbnailModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit KoPAPageThumbnailModel(QList<KoPAPageBase *> pages, QObject *parent = 0);
+    explicit KoPAPageThumbnailModel(const QList<KoPAPageBase *> &pages, QObject *parent = 0);
     ~KoPAPageThumbnailModel();
 
     // from QAbstractItemModel

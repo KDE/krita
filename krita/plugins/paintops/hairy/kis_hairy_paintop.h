@@ -31,7 +31,6 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 
-class QPointF;
 class KisPainter;
 class KisBrushBasedPaintOpSettings;
 
@@ -39,7 +38,7 @@ class KisHairyPaintOp : public KisPaintOp
 {
 
 public:
-    KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);

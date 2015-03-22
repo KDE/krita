@@ -53,7 +53,7 @@ public:
     void setBrushSize(qreal dxPixels, qreal dyPixels);
     QSizeF brushSize() const;
 
-private slots:
+private Q_SLOTS:
     void paramChanged();
     void setStackedWidget(int);
     void spinBoxHorizontalChanged(qreal);
@@ -63,11 +63,12 @@ private slots:
     void spinBoxRandomnessChanged(qreal);
     void spinBoxRadiusChanged(qreal);
     void spinBoxSpikesChanged(int);
-    void spinBoxSpacingChanged(qreal);
     void spinBoxAngleChanged(int);
     void spinBoxDensityChanged(qreal);
 
-signals:
+    void slotSpacingChanged();
+
+Q_SIGNALS:
 
     void sigBrushChanged();
 

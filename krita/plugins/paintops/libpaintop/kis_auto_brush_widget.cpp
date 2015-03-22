@@ -34,6 +34,7 @@
 #include <kis_mask_generator.h>
 #include <kis_slider_spin_box.h>
 
+
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
 #include <kis_cubic_curve.h>
 
@@ -48,11 +49,11 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
-    inputRadius->setRange(0.0, 10.0, 2);
-    inputRadius->addMultiplier(10.0);
-    inputRadius->addMultiplier(100.0);
+    inputRadius->setRange(0, 1000, 2);
     inputRadius->setExponentRatio(3.0);
-    inputRadius->setValue(5.0);
+    inputRadius->setSingleStep(1);
+    inputRadius->setValue(5);
+    inputRadius->setSuffix(" px");
     connect(inputRadius, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxRadiusChanged(qreal)));
 
     inputRatio->setRange(0.0, 1.0, 2);
@@ -83,10 +84,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputAngle->setValue(0);
     connect(inputAngle, SIGNAL(valueChanged(int)), this, SLOT(spinBoxAngleChanged(int)));
 
-    inputSpacing->setRange(0.0, 10.0, 2);
-    inputSpacing->setSingleStep(0.1);
-    inputSpacing->setValue(0.1);
-    connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxSpacingChanged(qreal)));
+    connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
     density->setRange(0, 100, 0);
     density->setSingleStep(1);
@@ -114,6 +112,8 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     brushPreview->setIconSize(QSize(100, 100));
 
+    connect(btnAntialiasing, SIGNAL(toggled(bool)), SLOT(paramChanged()));
+
     paramChanged();
 
 }
@@ -133,34 +133,37 @@ void KisAutoBrushWidget::paramChanged()
 {
     KisMaskGenerator* kas;
 
+    bool antialiasEdges = btnAntialiasing->isChecked();
+
     if (comboBoxMaskType->currentIndex() == 2) { // gaussian brush
         if (comboBoxShape->currentIndex() == 0) {
-            kas = new KisGaussCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+            kas = new KisGaussCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), antialiasEdges);
         }
         else {
-            kas = new KisGaussRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+            kas = new KisGaussRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), antialiasEdges);
         }
     }
     else if (comboBoxMaskType->currentIndex() == 1) { // soft brush
         if (comboBoxShape->currentIndex() == 0) {
-            kas = new KisCurveCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve());
+            kas = new KisCurveCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve(), antialiasEdges);
         }
         else {
-            kas = new KisCurveRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve());
+            kas = new KisCurveRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve(), antialiasEdges);
         }
     }
     else {// default == 0 or any other
         if (comboBoxShape->currentIndex() == 0) { // use index compare instead of comparing a translatable string
-            kas = new KisCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+            kas = new KisCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), antialiasEdges);
         }
         else {
-            kas = new KisRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+            kas = new KisRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), antialiasEdges);
         }
     }
     Q_CHECK_PTR(kas);
 
     m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0);
-    m_autoBrush->setSpacing(inputSpacing->value());
+    m_autoBrush->setSpacing(spacingWidget->spacing());
+    m_autoBrush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush = m_autoBrush->image();
 
     QImage pi(m_brush);
@@ -261,19 +264,16 @@ void KisAutoBrushWidget::spinBoxAngleChanged(int a)
     paramChanged();
 }
 
-void KisAutoBrushWidget::spinBoxSpacingChanged(qreal a)
-{
-    inputSpacing->blockSignals(true);
-    inputSpacing->setValue(a);
-    inputSpacing->blockSignals(false);
-    paramChanged();
-}
-
 void KisAutoBrushWidget::spinBoxDensityChanged(qreal a)
 {
     density->blockSignals(true);
     density->setValue(a);
     density->blockSignals(false);
+    paramChanged();
+}
+
+void KisAutoBrushWidget::slotSpacingChanged()
+{
     paramChanged();
 }
 
@@ -308,21 +308,15 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 
     comboBoxMaskType->setCurrentIndex(comboBoxMaskType->findText(aBrush->maskGenerator()->name()));
 
-
     inputRadius->setValue(aBrush->maskGenerator()->diameter());
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
-
-    inputVFade->blockSignals(true);
-    inputHFade->blockSignals(true);
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
     inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
-    inputVFade->blockSignals(false);
-    inputHFade->blockSignals(false);
-
     inputAngle->setValue(aBrush->angle() * 180 / M_PI);
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
-    inputSpacing->setValue(aBrush->spacing());
-    inputSpacing->setExponentRatio(3.0);
+    spacingWidget->setSpacing(aBrush->autoSpacingActive(),
+                              aBrush->autoSpacingActive() ?
+                              aBrush->autoSpacingCoeff() : aBrush->spacing());
     inputRandomness->setValue(aBrush->randomness() * 100);
     density->setValue(aBrush->density() * 100);
 
@@ -331,6 +325,8 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
         curve.fromString(aBrush->maskGenerator()->curveString());
         softnessCurve->setCurve(curve);
     }
+
+    btnAntialiasing->setChecked(aBrush->maskGenerator()->antialiasEdges());
 }
 
 

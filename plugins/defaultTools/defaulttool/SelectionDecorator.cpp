@@ -38,6 +38,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 , m_shearHandles(shearHandles)
 , m_arrows(arrows)
 , m_handleRadius( 3 )
+, m_lineWidth( 1 )
 {
     if(s_rotateCursor == 0) {
         s_rotateCursor->load(KStandardDirs::locate("lib", "flake/rotate.png"));
@@ -50,6 +51,7 @@ void SelectionDecorator::setSelection(KoSelection *selection) {
 
 void SelectionDecorator::setHandleRadius( int radius ) {
     m_handleRadius = radius;
+    m_lineWidth = qMax(1, (int)(radius / 2));
 }
 
 void SelectionDecorator::setHotPosition( KoFlake::Position hotPosition )
@@ -70,7 +72,12 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // save the original painter transformation
     QTransform painterMatrix = painter.worldTransform();
 
-    painter.setPen( Qt::green );
+    QPen pen;
+    //Use the #00adf5 color with 50% opacity
+    pen.setColor(QColor(0, 173, 245, 127));
+    pen.setWidth(m_lineWidth);
+    pen.setJoinStyle(Qt::RoundJoin);
+    painter.setPen( pen );
     bool editable=false;
     foreach (KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
         // apply the shape transformation on top of the old painter transformation
@@ -115,8 +122,8 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     painter.setTransform(QTransform());
     painter.setRenderHint( QPainter::Antialiasing, false );
 
-    painter.setPen(Qt::black);
-    painter.setBrush(Qt::yellow);
+    painter.setPen(pen);
+    painter.setBrush(pen.color());
 
     QPolygonF outline = painterMatrix.map( handleArea );
 

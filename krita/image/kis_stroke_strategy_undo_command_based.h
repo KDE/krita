@@ -28,7 +28,6 @@
 #include "commands_new/kis_saved_commands.h"
 
 
-class QString;
 
 class KisStrokeJob;
 class KisPostExecutionUndoAdapter;

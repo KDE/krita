@@ -24,6 +24,7 @@
 
 #include <KoChannelInfo.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include "kis_paint_device.h"
@@ -150,6 +151,16 @@ public:
         QRegion prepareRegion(srcRect);
         prepareRegion -= m_cropRect;
 
+
+        /**
+         * If a clone has complicated masks, we should prepare additional
+         * source area to ensure the rect is prepared.
+         */
+        QRect needRectOnSource = layer->needRectOnSourceForMasks(srcRect);
+        if (!needRectOnSource.isEmpty()) {
+            prepareRegion += needRectOnSource;
+        }
+
         foreach(const QRect &rect, prepareRegion.rects()) {
             walker.collectRects(srcLayer, rect);
             merger.startMerge(walker, false);
@@ -162,6 +173,9 @@ public:
         return true;
     }
     bool visit(KisFilterMask*) {
+        return true;
+    }
+    bool visit(KisTransformMask*) {
         return true;
     }
     bool visit(KisTransparencyMask*) {
@@ -208,7 +222,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
                                                      m_currentProjection,
                                                      walker.cropRect());
             currentNode->accept(originalVisitor);
-            currentNode->updateProjection(applyRect);
+            currentNode->updateProjection(applyRect, currentNode);
 
             continue;
         }
@@ -224,18 +238,18 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         if(item.m_position & KisMergeWalker::N_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentNode, applyRect);
             currentNode->accept(originalVisitor);
-            currentNode->updateProjection(applyRect);
+            currentNode->updateProjection(applyRect, walker.startNode());
         }
         else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentNode, applyRect);
             if(dependOnLowerNodes(currentNode)) {
                 currentNode->accept(originalVisitor);
-                currentNode->updateProjection(applyRect);
+                currentNode->updateProjection(applyRect, currentNode);
             }
         }
         else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentNode, applyRect);
-            currentNode->updateProjection(applyRect);
+            currentNode->updateProjection(applyRect, walker.startNode());
         }
         else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
             DEBUG_NODE_ACTION("Updating", "N_BELOW_FILTHY", currentNode, applyRect);

@@ -22,12 +22,11 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoTableCellStyle.h"
+#include "KoTableCellStyle_p.h"
 
 #include <KoXmlReaderForward.h>
 
 #include <KoGenStyle.h>
-#include "Styles_p.h"
-#include "KoTableCellStyle_p.h"
 #include <KoShapeLoadingContext.h>
 #include <KoOdfGraphicStyles.h>
 #include "KoParagraphStyle.h"
@@ -872,7 +871,7 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
 }
 
 void KoTableCellStyle::setEdge(KoBorder::BorderSide side, KoBorder::BorderStyle style,
-                               qreal width, QColor color)
+                               qreal width, const QColor &color)
 {
     KoBorder::BorderData edge;
     qreal innerWidth = 0;

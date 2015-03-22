@@ -108,7 +108,7 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
                                                            PRESSURE_DEFAULT,
                                                            event->xTilt(), event->yTilt(),
                                                            event->rotation(),
-                                                           0.0,
+                                                           event->tangentialPressure(),
                                                            perspective);
     } else {
         return KisPaintInformation::createHoveringModeInfo(imagePoint);
@@ -120,23 +120,21 @@ qreal KisPaintingInformationBuilder::pressureToCurve(qreal pressure)
     return m_pressureSamples.at(qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION));
 }
 
-
 /***********************************************************************/
-/*           KisToolPaintingInformationBuilder                        */
+/*           KisConverterPaintingInformationBuilder                        */
 /***********************************************************************/
 
-#include "kis_tool.h"
+#include "kis_coordinates_converter.h"
 
-KisToolPaintingInformationBuilder::KisToolPaintingInformationBuilder(KisTool *tool)
-    : m_tool(tool)
+KisConverterPaintingInformationBuilder::KisConverterPaintingInformationBuilder(const KisCoordinatesConverter *converter)
+    : m_converter(converter)
 {
 }
 
-QPointF KisToolPaintingInformationBuilder::documentToImage(const QPointF &point)
+QPointF KisConverterPaintingInformationBuilder::documentToImage(const QPointF &point)
 {
-    return m_tool->convertToPixelCoord(point);
+    return m_converter->documentToImage(point);
 }
-
 
 /***********************************************************************/
 /*           KisToolFreehandPaintingInformationBuilder                        */
@@ -145,9 +143,13 @@ QPointF KisToolPaintingInformationBuilder::documentToImage(const QPointF &point)
 #include "kis_tool_freehand.h"
 
 KisToolFreehandPaintingInformationBuilder::KisToolFreehandPaintingInformationBuilder(KisToolFreehand *tool)
-    : KisToolPaintingInformationBuilder(tool),
-      m_tool(tool)
+    : m_tool(tool)
 {
+}
+
+QPointF KisToolFreehandPaintingInformationBuilder::documentToImage(const QPointF &point)
+{
+    return m_tool->convertToPixelCoord(point);
 }
 
 QPointF KisToolFreehandPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &startPoint)

@@ -38,7 +38,7 @@ public:
 
     ~Line();
 
-public slots:
+public Q_SLOTS:
     /**
      * Return the start position of the line
      * @return start position

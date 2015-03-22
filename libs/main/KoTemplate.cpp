@@ -24,24 +24,20 @@
 #include <QPixmap>
 #include <QPrinter>
 
-#include <kdesktopfile.h>
-#include <kconfig.h>
 #include <kdebug.h>
 
 #include <kcomponentdata.h>
-#include <ksavefile.h>
-#include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kio/netaccess.h>
 #include <klocale.h>
-#include <kconfiggroup.h>
 #include <stdlib.h>
 
 
 KoTemplate::KoTemplate(const QString &name, const QString &description, const QString &file,
                        const QString &picture, const QString &fileName, const QString &_measureSystem,
+                       const QString &color, const QString &swatch, const QString &variantName, bool wide,
                        bool hidden, bool touched) :
         m_name(name), m_descr(description), m_file(file), m_picture(picture), m_fileName(fileName),
+        m_color(color), m_swatch(swatch), m_variantName(variantName), m_wide(wide),
         m_hidden(hidden), m_touched(touched), m_cached(false), m_measureSystem(_measureSystem)
 {
 }

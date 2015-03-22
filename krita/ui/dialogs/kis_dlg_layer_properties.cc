@@ -29,10 +29,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-#include <klineedit.h>
 #include <klocale.h>
-#include <kpushbutton.h>
-#include <knuminput.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -42,8 +39,8 @@
 #include "QTimer"
 #include "commands/kis_layer_commands.h"
 #include "kis_layer.h"
-#include "kis_view2.h"
-#include "kis_doc2.h"
+#include "KisViewManager.h"
+#include "KisDocument.h"
 #include "kis_cursor.h"
 #include <kis_debug.h>
 #include <kis_global.h>
@@ -64,15 +61,19 @@ struct KisDlgLayerProperties::Private
     const KoCompositeOp *compositeOp;
     QBitArray channelFlags;
     quint8 opacity;
+    KisLayerSP layer;
+    KisViewManager *view;
+    KisDocument *doc;
+    WdgLayerProperties *page;
+    KisChannelFlagsWidget *channelFlagsWidget;
+    QTimer previewTimer;
 };
 
-KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, KisDoc2 *doc, QWidget *parent, const char *name, Qt::WFlags f)
-                      : KDialog(parent)
-                      , m_layer(layer)
-                      , m_view(view)
-                      , m_doc(doc)
-                      , d(new Private())
+KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *view, KisDocument *doc, QWidget *parent, const char *name, Qt::WFlags f)
+    : KDialog(parent)
+    , d(new Private())
 {
+
     Q_UNUSED(f);
     setCaption(i18n("Layer Properties"));
     setButtons(Ok | Cancel);
@@ -80,8 +81,10 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, K
     setModal(false);
 
     setObjectName(name);
-    m_page = new WdgLayerProperties(this);
-
+    d->page = new WdgLayerProperties(this);
+    d->layer = layer;
+    d->view = view;
+    d->doc = doc;
     d->deviceName = layer->name();
     d->colorSpace = layer->colorSpace();
     d->compositeOp = layer->compositeOp();
@@ -90,114 +93,123 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, K
 
     quint8 sliderOpacity = int((d->opacity * 100.0) / 255 + 0.5);
 
-    setMainWidget(m_page);
+    setMainWidget(d->page);
 
-    m_page->editName->setText(d->deviceName);
-    m_page->editName->setFocus();
-    connect(m_page->editName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
+    d->page->editName->setText(d->deviceName);
+    d->page->editName->setFocus();
+    connect(d->page->editName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
-    m_page->lblColorSpace->setText(d->colorSpace->name());
+    d->page->lblColorSpace->setText(d->colorSpace->name());
 
     if (const KoColorProfile* profile = d->colorSpace->profile()) {
-        m_page->lblProfile->setText(profile->name());
+        d->page->lblProfile->setText(profile->name());
     }
 
-    m_page->intOpacity->setRange(0, 100);
-    m_page->intOpacity->setValue(sliderOpacity);
+    d->page->intOpacity->setRange(0, 100);
+    d->page->intOpacity->setValue(sliderOpacity);
+    d->page->intOpacity->setSuffix("%");
+    connect(d->page->intOpacity, SIGNAL(valueChanged(int)), SLOT(kickTimer()));
 
-    m_page->cmbComposite->setEnabled(d->compositeOp);
-    if(d->compositeOp) {
-        m_page->cmbComposite->validate(d->colorSpace);
-        m_page->cmbComposite->selectCompositeOp(KoID(d->compositeOp->id()));
+    d->page->cmbComposite->setEnabled(d->compositeOp);
+    connect(d->page->cmbComposite, SIGNAL(currentIndexChanged(int)), SLOT(kickTimer()));
+
+    if (d->compositeOp) {
+        d->page->cmbComposite->validate(d->colorSpace);
+        d->page->cmbComposite->selectCompositeOp(KoID(d->compositeOp->id()));
     }
 
-    slotNameChanged(m_page->editName->text());
+    slotNameChanged(d->page->editName->text());
 
     QVBoxLayout * vbox = new QVBoxLayout;
-    m_channelFlags = new KisChannelFlagsWidget(d->colorSpace);
-    vbox->addWidget(m_channelFlags);
+    d->channelFlagsWidget = new KisChannelFlagsWidget(d->colorSpace);
+    connect(d->channelFlagsWidget, SIGNAL(channelSelectionChanced()), SLOT(kickTimer()));
+
+    vbox->addWidget(d->channelFlagsWidget);
     vbox->addStretch(1);
-    m_page->grpActiveChannels->setLayout(vbox);
+    d->page->grpActiveChannels->setLayout(vbox);
 
-    m_channelFlags->setChannelFlags(d->channelFlags);
+    d->channelFlagsWidget->setChannelFlags(d->channelFlags);
 
-    setMinimumSize(m_page->sizeHint());
+    setMinimumSize(d->page->sizeHint());
 
-    QTimer* ticker = new QTimer;
-    ticker->start(200);
-    connect(ticker, SIGNAL(timeout()), SLOT(updatePreview()));
+    connect(&d->previewTimer, SIGNAL(timeout()), SLOT(updatePreview()));
 }
 
 KisDlgLayerProperties::~KisDlgLayerProperties()
 {
     if (result() == QDialog::Accepted) {
         applyNewProperties();
-    } else { // QDialog::Rejected
+    }
+    else { // QDialog::Rejected
         cleanPreviewChanges();
-        m_doc->setModified(true);
-        m_layer->setDirty();
+        d->doc->setModified(true);
+        d->layer->setDirty();
     }
 
     delete d;
 }
 
-bool KisDlgLayerProperties::haveChanges() const
-{
-    return m_layer->name() !=  getName()
-        || m_layer->opacity() !=  getOpacity()
-        || m_layer->channelFlags() !=  getChannelFlags()
-        || (d->compositeOp && m_layer->compositeOp() &&
-            m_layer->compositeOp()->id()!= getCompositeOp());
-
-}
-
-
 void KisDlgLayerProperties::updatePreview()
 {
-    if (!m_layer) return;
+    if (!d->layer) return;
 
-    if(m_page->checkBoxPreview->isChecked()) {
-        if (haveChanges()) {
-            m_layer->setOpacity(getOpacity());
-            m_layer->setCompositeOp(getCompositeOp());
-            m_layer->setName(getName());
-            m_layer->setChannelFlags(getChannelFlags());
-            m_doc->setModified(true);
-        }
-        m_layer->setDirty();
+    if (d->page->checkBoxPreview->isChecked()) {
+        d->layer->setOpacity(getOpacity());
+        d->layer->setCompositeOp(getCompositeOp());
+        d->layer->setName(getName());
+        d->layer->setChannelFlags(getChannelFlags());
+        d->doc->setModified(true);
+        d->layer->setDirty();
     }
 }
 
+
+bool KisDlgLayerProperties::haveChanges() const
+{
+    return d->layer->name() !=  getName()
+        || d->layer->opacity() !=  getOpacity()
+        || d->layer->channelFlags() !=  getChannelFlags()
+        || (d->compositeOp && d->layer->compositeOp() &&
+            d->layer->compositeOp()->id()!= getCompositeOp());
+
+}
+
+
 void KisDlgLayerProperties::applyNewProperties()
 {
-    if (!m_layer) return;
+    if (!d->layer) return;
 
     cleanPreviewChanges();
 
     if (haveChanges()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        KUndo2Command *change = new KisLayerPropsCommand(m_layer,
-                                            m_layer->opacity(),       getOpacity(),
-                                            m_layer->compositeOpId(), getCompositeOp(),
-                                            m_layer->name(),          getName(),
-                                            m_layer->channelFlags(),  getChannelFlags(),
-                                            true);
-        m_view->undoAdapter()->addCommand(change);
+        KUndo2Command *change = new KisLayerPropsCommand(d->layer,
+                                                         d->layer->opacity(),       getOpacity(),
+                                                         d->layer->compositeOpId(), getCompositeOp(),
+                                                         d->layer->name(),          getName(),
+                                                         d->layer->channelFlags(),  getChannelFlags(),
+                                                         true);
+        d->view->undoAdapter()->addCommand(change);
         QApplication::restoreOverrideCursor();
-        m_doc->setModified(true);
-        m_layer->setDirty();
+        d->doc->setModified(true);
+        d->layer->setDirty();
     }
 }
 
 void KisDlgLayerProperties::cleanPreviewChanges()
 {
-    m_layer->setOpacity(d->opacity);
-    m_layer->setName(d->deviceName);
-    m_layer->setChannelFlags(d->channelFlags);
+    d->layer->setOpacity(d->opacity);
+    d->layer->setName(d->deviceName);
+    d->layer->setChannelFlags(d->channelFlags);
 
-    if(d->compositeOp) {
-        m_layer->setCompositeOp(d->compositeOp->id());
+    if (d->compositeOp) {
+        d->layer->setCompositeOp(d->compositeOp->id());
     }
+}
+
+void KisDlgLayerProperties::kickTimer()
+{
+    d->previewTimer.start(200);
 }
 
 void KisDlgLayerProperties::slotNameChanged(const QString &_text)
@@ -207,30 +219,29 @@ void KisDlgLayerProperties::slotNameChanged(const QString &_text)
 
 QString KisDlgLayerProperties::getName() const
 {
-    return m_page->editName->text();
+    return d->page->editName->text();
 }
 
 int KisDlgLayerProperties::getOpacity() const
 {
-    qint32 opacity = m_page->intOpacity->value();
-
-    if (!opacity)
-        return 0;
-
-    opacity = int((opacity * 255.0) / 100 + 0.5);
-    if (opacity > 255)
+    qint32 opacity = d->page->intOpacity->value();
+    if (opacity > 0 ) {
+        opacity = int((opacity * 255.0) / 100 + 0.5);
+    }
+    if (opacity > 255) {
         opacity = 255;
+    }
     return opacity;
 }
 
 QString KisDlgLayerProperties::getCompositeOp() const
 {
-    return m_page->cmbComposite->selectedCompositeOp().id();
+    return d->page->cmbComposite->selectedCompositeOp().id();
 }
 
 QBitArray KisDlgLayerProperties::getChannelFlags() const
 {
-    QBitArray flags = m_channelFlags->channelFlags();
+    QBitArray flags = d->channelFlagsWidget->channelFlags();
     for (int i = 0; i < flags.size(); ++i) {
         dbgUI << "Received flag from channelFlags widget, flag " << i << " is " << flags.testBit(i);
     }

@@ -365,7 +365,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QCheckBox" name="aspectRatioCkb">
+    <widget class="QCheckBox" name="constrainProportionsCkb">
      <property name="toolTip">
       <string>Constrain aspect ratio</string>
      </property>
@@ -429,7 +429,7 @@
   <tabstop>printHeightUnit</tabstop>
   <tabstop>printResolution</tabstop>
   <tabstop>printResolutionUnit</tabstop>
-  <tabstop>aspectRatioCkb</tabstop>
+  <tabstop>constrainProportionsCkb</tabstop>
   <tabstop>adjustPrintSizeSeparatelyCkb</tabstop>
  </tabstops>
  <resources/>

@@ -44,7 +44,7 @@ class KisToolMeasureOptionsWidget : public QWidget
 public:
     KisToolMeasureOptionsWidget(QWidget* parent, double resolution);
 
-public slots:
+public Q_SLOTS:
     void slotSetDistance(double distance);
     void slotSetAngle(double angle);
     void slotUnitChanged(int index);
@@ -76,7 +76,7 @@ public:
 
     QWidget * createOptionWidget();
 
-signals:
+Q_SIGNALS:
     void sigDistanceChanged(double distance);
     void sigAngleChanged(double angle);
 

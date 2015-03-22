@@ -36,7 +36,6 @@
 #include <QScrollArea>
 
 #include <kglobal.h>
-#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -181,7 +180,8 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     setLayout(d->mainLayout);
 
     KoColorSet *colorSet = new KoColorSet();
-    setColorSet(colorSet);
+    d->colorSet = colorSet;
+    d->fillColors();
 }
 
 KoColorSetWidget::~KoColorSetWidget()

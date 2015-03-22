@@ -372,13 +372,6 @@ double KisCurveOption::computeValue(const KisPaintInformation& info) const
 
 QList<KisDynamicSensorSP> KisCurveOption::sensors()
 {
-    QList<KisDynamicSensorSP> sensorList;
-    foreach(KisDynamicSensorSP sensor, m_sensorMap.values()) {
-        if (sensor->isActive()) {
-            sensorList << sensor;
-        }
-    }
-
     //qDebug() << "ID" << name() << "has" <<  m_sensorMap.count() << "Sensors of which" << sensorList.count() << "are active.";
     return m_sensorMap.values();
 }

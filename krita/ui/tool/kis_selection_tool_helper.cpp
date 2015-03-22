@@ -23,13 +23,12 @@
 
 #include <KoShapeController.h>
 #include <KoPathShape.h>
-#include <KoShapeManager.h>
 
 #include "kis_pixel_selection.h"
 #include "kis_shape_selection.h"
 #include "kis_image.h"
 #include "canvas/kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection_manager.h"
 #include "kis_transaction.h"
 #include "commands/kis_selection_commands.h"
@@ -45,7 +44,7 @@ KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, const KUndo2M
         : m_canvas(canvas)
         , m_name(name)
 {
-    m_image = m_canvas->view()->image();
+    m_image = m_canvas->viewManager()->image();
 }
 
 KisSelectionToolHelper::~KisSelectionToolHelper()
@@ -53,8 +52,8 @@ KisSelectionToolHelper::~KisSelectionToolHelper()
 }
 
 struct LazyInitGlobalSelection : public KisTransactionBasedCommand {
-    LazyInitGlobalSelection(KisView2 *view) : m_view(view) {}
-    KisView2 *m_view;
+    LazyInitGlobalSelection(KisViewManager *view) : m_view(view) {}
+    KisViewManager *m_view;
 
     KUndo2Command* paint() {
         return !m_view->selection() ?
@@ -64,9 +63,10 @@ struct LazyInitGlobalSelection : public KisTransactionBasedCommand {
 
 void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action)
 {
-    KisView2* view = m_canvas->view();
-    if (selection->selectedRect().isEmpty()) {
-        m_canvas->view()->selectionManager()->deselect();
+    KisViewManager* view = m_canvas->viewManager();
+
+    if (selection->selectedExactRect().isEmpty()) {
+        m_canvas->viewManager()->selectionManager()->deselect();
         return;
     }
 
@@ -79,12 +79,12 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     applicator.applyCommand(new LazyInitGlobalSelection(view));
 
     struct ApplyToPixelSelection : public KisTransactionBasedCommand {
-        ApplyToPixelSelection(KisView2 *view,
+        ApplyToPixelSelection(KisViewManager *view,
                               KisPixelSelectionSP selection,
                               SelectionAction action) : m_view(view),
                                                         m_selection(selection),
                                                         m_action(action) {}
-        KisView2 *m_view;
+        KisViewManager *m_view;
         KisPixelSelectionSP m_selection;
         SelectionAction m_action;
 
@@ -129,7 +129,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
 
 void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
 {
-    KisView2* view = m_canvas->view();
+    KisViewManager* view = m_canvas->viewManager();
 
     if (view->image()->wrapAroundModePermitted()) {
         view->showFloatingMessage(
@@ -148,8 +148,8 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
     applicator.applyCommand(new LazyInitGlobalSelection(view));
 
     struct ClearPixelSelection : public KisTransactionBasedCommand {
-        ClearPixelSelection(KisView2 *view) : m_view(view) {}
-        KisView2 *m_view;
+        ClearPixelSelection(KisViewManager *view) : m_view(view) {}
+        KisViewManager *m_view;
 
         KUndo2Command* paint() {
 
@@ -165,9 +165,9 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
     applicator.applyCommand(new ClearPixelSelection(view));
 
     struct AddSelectionShape : public KisTransactionBasedCommand {
-        AddSelectionShape(KisView2 *view, KoShape* shape) : m_view(view),
+        AddSelectionShape(KisViewManager *view, KoShape* shape) : m_view(view),
                                                             m_shape(shape) {}
-        KisView2 *m_view;
+        KisViewManager *m_view;
         KoShape* m_shape;
 
         KUndo2Command* paint() {
@@ -192,7 +192,7 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
 
 void KisSelectionToolHelper::cropRectIfNeeded(QRect *rect)
 {
-    KisImageWSP image = m_canvas->view()->image();
+    KisImageWSP image = m_canvas->viewManager()->image();
 
     if (!image->wrapAroundModePermitted()) {
         *rect &= image->bounds();
@@ -201,7 +201,7 @@ void KisSelectionToolHelper::cropRectIfNeeded(QRect *rect)
 
 void KisSelectionToolHelper::cropPathIfNeeded(QPainterPath *path)
 {
-    KisImageWSP image = m_canvas->view()->image();
+    KisImageWSP image = m_canvas->viewManager()->image();
 
     if (!image->wrapAroundModePermitted()) {
         QPainterPath cropPath;

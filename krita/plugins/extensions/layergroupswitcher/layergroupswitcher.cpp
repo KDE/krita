@@ -31,7 +31,7 @@
 #include <kis_node_manager.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 #include "kis_action.h"
 
@@ -39,7 +39,7 @@ K_PLUGIN_FACTORY(LayerGroupSwitcherFactory, registerPlugin<LayerGroupSwitcher>()
 K_EXPORT_PLUGIN(LayerGroupSwitcherFactory("krita"))
 
 LayerGroupSwitcher::LayerGroupSwitcher(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent, "")
+    : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Move into previous group"), this);
     addAction("LayerGroupSwitcher/previous", action);

@@ -26,18 +26,19 @@
 
 #include <krita_export.h>
 
+class KisPerspectiveGridDecoration;
 class KAction;
 class KActionCollection;
 class KToggleAction;
-class KisView2;
+class KisViewManager;
 
-class KRITAUI_EXPORT KisPerspectiveGridManager : public KisCanvasDecoration
+class KRITAUI_EXPORT KisPerspectiveGridManager : public QObject
 {
     Q_OBJECT
 public:
     /** Create a perspective manager for this view
      */
-    KisPerspectiveGridManager(KisView2 * parent);
+    KisPerspectiveGridManager(KisViewManager * parent);
     ~KisPerspectiveGridManager();
     void setup(KActionCollection * collection);
     /**
@@ -49,28 +50,20 @@ public:
      * grid if necesserary
      */
     void stopEdition();
-public slots:
+
+    void setView(QPointer<KisView> imageView);
+public Q_SLOTS:
     void updateGUI();
     /**
      * Call this to remove all the perspective subgrids.
      */
     void clearPerspectiveGrid();
-protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas = 0);
 
 private:
-    class LineWrapper;
-    struct SubdivisionLinesInfo;
+    KisPerspectiveGridDecoration* decoration();
 
-    SubdivisionLinesInfo getSubdivisionsInfo(const LineWrapper &l0,
-                                             const LineWrapper &l1,
-                                             const QPointF &focusPoint,
-                                             int numSubdivisions);
-
-    void drawSubdivisions(QPainter& gc, const SubdivisionLinesInfo &info);
-
-private:
-    KisView2* m_view;
+    
+    QPointer<KisView> m_imageView;
     KToggleAction* m_toggleGrid;
     KAction* m_gridClear;
 };

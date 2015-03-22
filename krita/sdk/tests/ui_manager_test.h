@@ -28,11 +28,13 @@
 #include "kis_filter_strategy.h"
 #include "kis_selection_manager.h"
 #include "kis_node_manager.h"
-#include "kis_view2.h"
-#include <KoDocument.h>
-#include <KoPart.h>
+#include "KisViewManager.h"
+#include "KisView.h"
+#include "KisPart.h"
+#include <KisDocument.h>
+#include <KisPart.h>
 #include <kis_action_manager.h>
-#include "KoMainWindow.h"
+#include "KisMainWindow.h"
 #include "kis_selection_mask.h"
 
 namespace TestUtil
@@ -47,17 +49,18 @@ public:
         undoStore = new KisSurrogateUndoStore();
         image = createImage(undoStore);
 
-        doc = new KisDoc2();
+        part = KisPart::instance();
+        doc = qobject_cast<KisDocument*>(part->createDocument());
         doc->setCurrentImage(image);
 
         if(useSelection) addGlobalSelection(image);
         if(useShapeLayer) addShapeLayer(doc, image);
         image->initialRefreshGraph();
 
-        QVERIFY(checkLayersInitial());
 
-        mainWindow = new KoMainWindow(KIS_MIME_TYPE, doc->documentPart()->componentData());
-        view = new KisView2(doc->documentPart(), doc, mainWindow);
+        mainWindow = new KisMainWindow();
+        imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
+        view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 
         KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
@@ -66,6 +69,7 @@ public:
 
         KoColor fgColor(Qt::black, image->colorSpace());
         KoColor bgColor(Qt::white, image->colorSpace());
+        view->resourceProvider()->blockSignals(true);
         view->resourceProvider()->setBGColor(bgColor);
         view->resourceProvider()->setFGColor(fgColor);
         view->resourceProvider()->setOpacity(1.0);
@@ -73,9 +77,18 @@ public:
         KisNodeSP paint1 = findNode(image->root(), "paint1");
         Q_ASSERT(paint1);
 
-        view->nodeManager()->slotNonUiActivatedNode(paint1);
+        imageView->setViewManager(view);
+        view->setCurrentView(imageView);
+
+        view->nodeManager()->slotUiActivatedNode(paint1);
+
         selectionManager = view->selectionManager();
+        Q_ASSERT(selectionManager);
         actionManager = view->actionManager();
+        Q_ASSERT(actionManager);
+
+        QVERIFY(checkLayersInitial());
+
     }
 
     ~UiManagerTest() {
@@ -156,9 +169,11 @@ public:
     KisSurrogateUndoStore *undoStore;
 
 protected:
-    KisView2 *view;
-    KisDoc2 *doc;
-    KoMainWindow *mainWindow;
+    KisView *imageView;
+    KisViewManager *view;
+    KisDocument *doc;
+    KisPart *part;
+    KisMainWindow *mainWindow;
 };
 
 }

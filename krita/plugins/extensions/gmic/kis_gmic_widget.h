@@ -20,15 +20,16 @@
 
 #include <QTreeView>
 #include <QGridLayout>
+#include <QCheckBox>
 #include "kis_gmic_filter_model.h"
 #include "kis_gmic_filter_settings.h"
 
+#include "ui_wdg_gmic.h"
+
 class KisGmicUpdater;
 class QCloseEvent;
-class KisGmicInputOutputWidget;
-class QPushButton;
 
-class KisGmicWidget : public QWidget
+class KisGmicWidget : public QWidget, public Ui::WdgGmic
 {
     Q_OBJECT
 
@@ -37,37 +38,63 @@ public:
     KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl = QString());
     ~KisGmicWidget();
 
+    KisFilterPreviewWidget * previewWidget();
+
     void createMainLayout();
     virtual void closeEvent(QCloseEvent* );
 
-signals:
-    void sigApplyCommand(KisGmicFilterSetting * setting);
+Q_SIGNALS:
+    void sigFilterCurrentImage(KisGmicFilterSetting * setting); //TODO:const
+    void sigPreviewFilterCommand(KisGmicFilterSetting * setting); //TODO:const
+    void sigAcceptOnCanvasPreview();
+    void sigCancelOnCanvasPreview();
+    void sigPreviewActiveLayer();
     void sigClose();
+    void sigRequestFinishAndClose();
 
-private slots:
-    void selectionChangedSlot(const QItemSelection & newSelection, const QItemSelection & oldSelection);
-    void applyFilterSlot();
-    void resetFilterSlot();
-    void okFilterSlot();
-    void maximizeSlot();
-    void cancelFilterSlot();
+private Q_SLOTS:
+    void slotSelectedFilterChanged(const QItemSelection & newSelection, const QItemSelection & oldSelection);
+    // buttons
+    void slotApplyClicked();
+    void slotOkClicked();
+    void slotCancelClicked();
+    void slotResetClicked();
+    void slotMaximizeClicked();
+
+    void slotExpandCollapse();
+
+    // internet updates slots
     void startUpdate();
     void finishUpdate();
 
+    // preview
+    void slotPreviewChanged(bool enabling);
+    void slotPreviewSizeChanged();
+    void slotConfigurationChanged();
+    void slotNotImplemented();
+
 private:
-    QGridLayout * m_filterConfigLayout;
+    KisGmicFilterSetting * currentFilterSettings();
+    void requestComputePreview();
+    void switchOptionsWidgetFor(QWidget * widget);
 
-    QTreeView * m_filterTree;
-    QWidget * m_filterOptions;
-    KisGmicInputOutputWidget * m_inputOutputOptions;
 
+
+private:
     KisGmicFilterModel * m_filterModel;
     KisGmicUpdater * m_updater;
+
+    QWidget *m_filterOptions;
 
     QString m_updateUrl;
 
     int m_filterOptionsRow;
     int m_filterOptionsColumn;
+
+    // flag which says if the image was filtered at least once
+    bool m_filterApplied;
+    bool m_onCanvasPreviewActivated;
+    bool m_onCanvasPreviewRequested;
 };
 
 #endif

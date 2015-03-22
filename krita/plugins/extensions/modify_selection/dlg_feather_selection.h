@@ -24,17 +24,17 @@
 #include "ui_wdg_feather_selection.h"
 #include <operations/kis_operation_ui_widget.h>
 
-class KisView2;
+class KisViewManager;
 class WdgFeatherSelection : public KisOperationUIWidget, public Ui::WdgFeatherSelection
 {
     Q_OBJECT
 
 public:
-    WdgFeatherSelection(QWidget *parent, KisView2 *view);
+    WdgFeatherSelection(QWidget *parent, KisViewManager *view);
 
     virtual void getConfiguration(KisOperationConfiguration* config);
 
-private slots:
+private Q_SLOTS:
     void slotRadiusChanged(int radius);
     void slotRadiusChanged(double radius);
     void slotUnitChanged(int index);

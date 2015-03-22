@@ -29,7 +29,7 @@
 class KisImageSignalRouterTest : public QObject, public TestUtil::EmptyNodesTest
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void init();
     void cleanup();
 

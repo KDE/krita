@@ -22,7 +22,6 @@
 #include "kis_update_info.h"
 
 class KoColorProfile;
-class UpdateInformation;
 class KisImagePatch;
 class KisDisplayFilter;
 
@@ -47,7 +46,7 @@ public:
     virtual void setImageSize(qint32 w, qint32 h) = 0;
     virtual void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) = 0;
     virtual void setChannelFlags(const QBitArray &channelFlags) = 0;
-    virtual void setDisplayFilter(KisDisplayFilterSP displayFilter) = 0;
+    virtual void setDisplayFilter(KisDisplayFilter* displayFilter) = 0;
 
     /**
      * Updates the cache of the backend by reading from

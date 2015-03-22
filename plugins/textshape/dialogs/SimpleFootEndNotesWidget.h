@@ -27,8 +27,6 @@
 #include <KoInlineNote.h>
 
 class TextTool;
-class ReferencesTool;
-class KoStyleManager;
 
 class SimpleFootEndNotesWidget : public QWidget
 {
@@ -37,7 +35,7 @@ public:
     explicit SimpleFootEndNotesWidget(TextTool *tool,QWidget *parent = 0);
     Ui::SimpleFootEndNotesWidget widget;
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
 
 private:

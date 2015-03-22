@@ -21,7 +21,7 @@
 #ifdef HAVE_OPENGL
 #include <QGLWidget>
 
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -72,13 +72,15 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
+    , m_tilesDestinationColorSpace(0)
+    , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_allChannelsSelected(true)
     , m_useOcio(false)
 {
     Q_ASSERT(renderingIntent < 4);
 
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
 
     getTextureSize(&m_texturesInfo);
 
@@ -115,7 +117,7 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
 
     if (imageCanShareTextures()) {
         ImageTexturesMap::iterator it = imageTexturesMap.find(image);
@@ -150,7 +152,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 {
     KisConfig cfg;
 
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
 
     destroyImageTextureTiles();
     updateTextureFormat();
@@ -187,7 +189,8 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
 {
     if(m_textureTiles.isEmpty()) return;
 
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
+
     foreach(KisTextureTile *tile, m_textureTiles) {
         delete tile;
     }
@@ -262,6 +265,8 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
             }
         }
     }
+
+    info->assignDirtyImageRect(rect);
     return info;
 }
 
@@ -270,7 +275,8 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if(!glInfo) return;
 
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
+
     KIS_OPENGL_CLEAR_ERROR();
 
     KisTextureTileUpdateInfoSP tileInfo;
@@ -286,7 +292,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
 void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 {
-    KisOpenGL::makeContextCurrent();
+    KisOpenGL::makeSharedContextCurrent();
 
     glBindTexture(GL_TEXTURE_2D, m_checkerTexture);
 
@@ -400,10 +406,11 @@ bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
 
 void KisOpenGLImageTextures::updateTextureFormat()
 {
+    if (!m_image) return;
+
     m_texturesInfo.internalFormat = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
     m_texturesInfo.format = GL_BGRA;
-#ifdef HAVE_GLEW
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
     KoID colorDepthId = m_image->colorSpace()->colorDepthId();
@@ -413,6 +420,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     dbgUI << "Choosing texture format:";
 
+#ifdef HAVE_GLEW
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {
 
@@ -477,18 +485,17 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (!m_internalColorManagementActive &&
         colorModelId != destinationColorModelId) {
 
-        KMessageBox::information(0,
-                                 "It was requested to disable final color "
-                                 "conversion for a image that has non-RGB "
-                                 "color space. This is a bug in Krita. "
-                                 "Please report us how you managed to get "
-                                 "this message.\n\n"
-                                 "Right now the internal color conversion "
-                                 "into the monitor profile will be activated. "
-                                 "Please take it into account if you use OCIO "
-                                 "or activated it for some other reason.",
-                                 "Internal color management was activated",
-                                 "messagebox_InternalColorManagementWasActivated");
+        QMessageBox::critical(0,
+                              i18nc("@title:window", "Internal color management was activated"),
+                              i18n("It was requested to disable final color "
+                                   "conversion for a image that has non-RGB "
+                                   "color space. This is a bug in Krita. "
+                                      "Please report us how you managed to get "
+                                      "this message.\n\n"
+                                      "Right now the internal color conversion "
+                                      "into the monitor profile will be activated. "
+                                      "Please take it into account if you use OCIO "
+                                      "or activated it for some other reason."));
 
         qWarning() << "WARNING: Internal color management was forcely enabled";
         qWarning() << ppVar(m_image->colorSpace());

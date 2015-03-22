@@ -30,6 +30,7 @@
 
 #include <QStringList>
 #include <QColor>
+#include <QGradientStops>
 
 class SvgStyleParser::Private
 {

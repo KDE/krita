@@ -21,13 +21,11 @@
 #define SVGUTIL_H
 
 #include "flake_export.h"
-#include <QPointF>
-#include <QSizeF>
-#include <QTransform>
+#include <QRectF>
 
 class QString;
-class QRectF;
 class SvgGraphicsContext;
+class QTransform;
 
 class FLAKE_EXPORT SvgUtil
 {

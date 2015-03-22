@@ -31,8 +31,13 @@
 GrayF32ColorSpace::GrayF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoGrayF32Traits>(colorSpaceId(), name,  TYPE_GRAYA_FLT, cmsSigGrayData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Gray"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32));
-    addChannel(new KoChannelInfo(i18n("Alpha"), 1 * sizeof(float), 1, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32));
+    const IccColorProfile* icc_p = dynamic_cast<const IccColorProfile*>(p);
+    Q_ASSERT(icc_p);
+    QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->GetFloatUIMinMax());
+    Q_ASSERT(uiRanges.size() == 1);
+
+    addChannel(new KoChannelInfo(i18n("Gray"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::gray, uiRanges[0]));
+    addChannel(new KoChannelInfo(i18n("Alpha"), 1 * sizeof(float), 1, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, sizeof(float)));
 
     init();
 

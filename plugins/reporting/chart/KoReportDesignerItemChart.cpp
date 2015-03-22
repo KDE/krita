@@ -32,18 +32,17 @@
 #include <koproperty/Set.h>
 #include <koproperty/EditorView.h>
 
-void KoReportDesignerItemChart::init(QGraphicsScene* scene, KoReportDesigner *designer)
+void KoReportDesignerItemChart::init(QGraphicsScene* scene, KoReportDesigner *d)
 {
-    m_reportDesigner = designer;
     setPos(0, 0);
 
     if (scene)
         scene->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
     setZValue(Z);
 
     connect(m_reportDesigner, SIGNAL(reportDataChanged()), this, SLOT(slotReportDataChanged()));
@@ -52,11 +51,10 @@ void KoReportDesignerItemChart::init(QGraphicsScene* scene, KoReportDesigner *de
 KoReportDesignerItemChart::KoReportDesignerItemChart(KoReportDesigner * rd, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rd)
 {
+    Q_UNUSED(pos);
     init(scene, rd);
-    m_size.setSceneSize(QSizeF(m_dpiX, m_dpiY));
-    setSceneRect(m_pos.toScene(), m_size.toScene());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("chart"));
+    setSceneRect(properRect(*rd, m_dpiX, m_dpiY));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemChart::KoReportDesignerItemChart(QDomNode & element, KoReportDesigner * rd, QGraphicsScene* scene) :
@@ -118,7 +116,7 @@ KoReportDesignerItemChart* KoReportDesignerItemChart::clone()
 
 void KoReportDesignerItemChart::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("report:chart");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);

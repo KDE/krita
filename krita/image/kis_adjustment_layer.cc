@@ -64,7 +64,7 @@ void KisAdjustmentLayer::setFilter(KisFilterConfiguration *filterConfig)
     KisSelectionBasedLayer::setFilter(filterConfig);
 }
 
-QRect KisAdjustmentLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
+QRect KisAdjustmentLayer::incomingChangeRect(const QRect &rect) const
 {
     KisSafeFilterConfigurationSP filterConfig = filter();
 
@@ -77,12 +77,12 @@ QRect KisAdjustmentLayer::changeRect(const QRect &rect, PositionToFilthy pos) co
 
     /**
      * We can't paint outside a selection, that is why we call
-     * KisSelectionBasedLayer::changeRect to crop actual change
-     * area in the end
+     * KisSelectionBasedLayer::cropChangeRectBySelection to crop
+     * actual change area in the end
      */
-    filteredRect = KisSelectionBasedLayer::changeRect(filteredRect, pos);
+    filteredRect = cropChangeRectBySelection(filteredRect);
 
-    return rect | filteredRect;
+    return filteredRect;
 }
 
 QRect KisAdjustmentLayer::needRect(const QRect& rect, PositionToFilthy pos) const
@@ -119,12 +119,12 @@ QIcon KisAdjustmentLayer::icon() const
     return koIcon("view-filter");
 }
 
-KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const
+KisDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const
 {
     KisSafeFilterConfigurationSP filterConfig = filter();
-    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     if (filterConfig)
-        l << KoDocumentSectionModel::Property(i18nc("property of a filter layer, noun", "Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
+        l << KisDocumentSectionModel::Property(i18nc("property of a filter layer, noun", "Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
     return l;
 }
 

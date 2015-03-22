@@ -24,8 +24,10 @@
 #include "driver.h"
 #include "driver_p.h"
 #include "error.h"
+#include "pluginloader.h"
 
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kservice.h>
@@ -96,10 +98,8 @@ bool DriverManagerInternal::lookupDrivers()
 
     lookupDriversNeeded = false;
     clearError();
-    KService::List tlist = KServiceTypeTrader::self()->query("Kexi/DBDriver");
-    KService::List::ConstIterator it(tlist.constBegin());
-    for (; it != tlist.constEnd(); ++it) {
-        KService::Ptr ptr = (*it);
+    const KService::List tlist = KoServiceLocator::instance()->entries("Kexi/DBDriver");
+    foreach(KService::Ptr ptr, tlist) {
         if (!ptr->property("Library").toString().startsWith("kexidb_")) {
             KexiDBWarn << "X-KDE-Library == " << ptr->property("Library").toString()
                 << ": no \"kexidb_\" prefix -- skipped to avoid potential conflicts!";
@@ -202,31 +202,18 @@ Driver* DriverManagerInternal::driver(const QString& name)
     }
 
     KService::Ptr ptr = m_services_lcase.value(name.toLower());
-    QString srv_name = ptr->property("X-Kexi-DriverName").toString();
-
-    KexiDBDbg << "library:" << ptr->library();
-
-/*  drv = KService::createInstance<KexiDB::Driver>(ptr,
-            this,
-            QStringList(),
-            &m_serverResultNum);*/
-    KPluginLoader loader(ptr->library());
-    const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
-    const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
-    if (!KexiDB::version().matches(foundMajor, foundMinor)) {
+    KexiPluginLoader loader(ptr, "X-Kexi-DriverName");
+    if (!KexiDB::version().matches(loader.majorVersion(), loader.minorVersion())) {
         setError(ERR_INCOMPAT_DRIVER_VERSION,
                  i18n(
                      "Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
                      name,
-                     QString("%1.%2").arg(foundMajor).arg(foundMinor),
+                     QString("%1.%2").arg(loader.majorVersion()).arg(loader.minorVersion()),
                      QString("%1.%2").arg(KexiDB::version().major).arg(KexiDB::version().minor)));
         return 0;
     }
 
-    KPluginFactory *factory = loader.factory();
-    if (factory)
-        drv = factory->create<Driver>(this);
-
+    drv = loader.createPlugin<Driver>(this);
     if (!drv) {
         setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".", name));
         //if (m_componentLoadingErrors.isEmpty()) {//fill errtable on demand
@@ -242,7 +229,6 @@ Driver* DriverManagerInternal::driver(const QString& name)
     KexiDBDbg << "loading succeed:" << name;
 // KexiDBDbg << "drv="<<(long)drv;
 
-    drv->setObjectName(srv_name);
     drv->d->service = ptr.data(); //store info
     drv->d->fileDBDriverMimeType = ptr->property("X-Kexi-FileDBDriverMime").toString();
     drv->d->initInternalProperties();
@@ -252,6 +238,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
         delete drv;
         return 0;
     }
+    KGlobal::locale()->insertCatalog("kexi" + name.toLower() + "driver");
     m_drivers.insert(name.toLower(), drv); //cache it
     return drv;
 }
@@ -371,7 +358,7 @@ KService::Ptr DriverManager::serviceInfo(const QString &name)
     KService::Ptr ptr = d_int->m_services_lcase.value(name.toLower());
     if (ptr)
         return ptr;
-    setError(ERR_DRIVERMANAGER, i18n("No such driver service: \"%1\".", name));
+    setError(ERR_DRIVERMANAGER, i18n("Could not find service <resource>%1</resource>.", name));
     return KService::Ptr();
 }
 

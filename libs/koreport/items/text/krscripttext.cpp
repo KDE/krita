@@ -45,13 +45,15 @@ void Text::setSource(const QString& s)
 
 int Text::horizontalAlignment()
 {
-    QString a = m_text->m_horizontalAlignment->value().toString();
+    const QString a = m_text->m_horizontalAlignment->value().toString().toLower();
 
-    if (a.toLower() == "left") {
+    if (a == "left") {
         return -1;
-    } else if (a.toLower() == "center") {
+    }
+    if (a == "center") {
         return 0;
-    } else if (a.toLower() == "right") {
+    }
+    if (a == "right") {
         return 1;
     }
     return -1;
@@ -76,13 +78,15 @@ void Text::setHorizonalAlignment(int a)
 
 int Text::verticalAlignment()
 {
-    QString a = m_text->m_horizontalAlignment->value().toString();
+    const QString a = m_text->m_horizontalAlignment->value().toString().toLower();
 
-    if (a.toLower() == "top") {
+    if (a == "top") {
         return -1;
-    } else if (a.toLower() == "middle") {
+    }
+    if (a == "middle") {
         return 0;
-    } else if (a.toLower() == "bottom") {
+    }
+    if (a == "bottom") {
         return 1;
     }
     return -1;

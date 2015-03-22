@@ -22,6 +22,8 @@
 #ifndef KOTABLECELLSTYLE_P_H
 #define KOTABLECELLSTYLE_P_H
 
+#include "Styles_p.h"
+
 class KoTableCellStylePrivate
 {
 public:

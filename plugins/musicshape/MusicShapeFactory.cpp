@@ -24,7 +24,6 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <KoIcon.h>
-#include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
@@ -36,7 +35,7 @@
 #include "MusicShapeFactory.h"
 
 K_PLUGIN_FACTORY(MusicShapePluginFactory, registerPlugin<MusicShapePlugin>();)
-K_EXPORT_PLUGIN(MusicShapePluginFactory( "MusicShape" ))
+K_EXPORT_PLUGIN(MusicShapePluginFactory( "calligra_shape_music" ))
 
 MusicShapePlugin::MusicShapePlugin( QObject *,  const QVariantList& )
 {

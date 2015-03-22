@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -29,7 +29,7 @@
 #include <canvas/kis_canvas2.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 
 KisToolGrid::KisToolGrid(KoCanvasBase * canvas)
@@ -48,9 +48,10 @@ void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     KisTool::activate(toolActivation, shapes);
     m_canvas->updateCanvas();
 
-    if (!m_canvas->view()->gridManager()->visible()) {
-        m_canvas->view()->showFloatingMessage( "The grid is not visible. Press Return to show it.",
-                                              KIcon(koIconNameCStr("krita_tool_grid")));
+    KisCanvasDecoration* decoration = m_canvas->decoration("grid");
+    if (decoration && !decoration->visible()) {
+        m_canvas->viewManager()->showFloatingMessage(i18n("The grid is not visible. Press Return to show the grid."),
+                                              koIcon("krita_tool_grid"));
     }
 }
 
@@ -164,8 +165,11 @@ void KisToolGrid::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolGrid::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Return) {
-        m_canvas->view()->gridManager()->setVisible(true);
-        m_canvas->view()->gridManager()->checkVisibilityAction(true);
+        KisCanvasDecoration* decoration = m_canvas->decoration("grid");
+        if (decoration) {
+            decoration->setVisible(true);
+        }
+        m_canvas->viewManager()->gridManager()->checkVisibilityAction(true);
     }
     KoToolBase::keyPressEvent(event);
 }

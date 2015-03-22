@@ -51,6 +51,7 @@ public:
 
 // the child classes should access the filter with the filter() method
 private:
+    KisNodeFilterInterface& operator=(const KisNodeFilterInterface &other);
 
     KisSafeFilterConfigurationSP m_filter;
     bool m_useGeneratorRegistry;

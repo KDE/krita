@@ -10,3 +10,6 @@
  * the array of bytes as a pixel according to the pixel format defined by each
  * color space.
  */
+
+// DOXYGEN_SET_PROJECT_NAME = Pigment
+// DOXYGEN_SET_IGNORE_PREFIX = Ko K

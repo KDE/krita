@@ -31,11 +31,12 @@
 #include <QTimer>
 #include <QRegExp>
 
-#include <kapplication.h>
 #include <kwindowsystem.h>
 
 #include <KoIcon.h>
 #include <kis_debug.h>
+#include "kis_global.h"
+
 
 /* Code copied from kshadowengine.cpp
  *
@@ -214,8 +215,13 @@ QRect KisFloatingMessage::determineMetrics( const int M )
         rect.setWidth( widthIncludingImage );
     }
 
-    // expand in all directions by M
-    rect.adjust( -M, -M, M, M );
+    // expand in all directions by 2*M
+    //
+    // take care with this rect, because it must be *bigger*
+    // than the rect we paint the message in
+    rect = kisGrowRect(rect, 2 * M);
+
+
 
     const QSize newSize = rect.size();
     QRect screen = QApplication::desktop()->screenGeometry(parentWidget());
@@ -224,7 +230,7 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
     if (parentWidget() && m_showOverParent) {
         screen = parentWidget()->geometry();
-        screen.setTopLeft(parentWidget()->mapToGlobal(QPoint(MARGIN, MARGIN)));
+        screen.setTopLeft(parentWidget()->mapToGlobal(QPoint(MARGIN, MARGIN + 50)));
         newPos = screen.topLeft();
     }
     else {

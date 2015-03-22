@@ -24,6 +24,7 @@
 #include <QMenu>
 
 #include <KoShapeManager.h>
+#include <KoToolManager.h>
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
@@ -35,7 +36,7 @@
 #include "kis_canvas_decoration.h"
 #include "../kis_config.h"
 #include "kis_canvas2.h"
-#include "../kis_view2.h"
+#include "../KisViewManager.h"
 #include "../kis_selection_manager.h"
 
 struct KisCanvasWidgetBase::Private
@@ -75,7 +76,9 @@ KisCanvasWidgetBase::~KisCanvasWidgetBase()
 void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const
 {
     gc.save();
-
+    if (!m_d->canvas) {
+        dbgFile<<"canvas doesn't exist, in canvas widget base!";
+    }
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
     gc.setRenderHint(QPainter::Antialiasing);
@@ -96,7 +99,6 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     // Paint the shapes (other than the layers)
     m_d->canvas->globalShapeManager()->paint(gc, *m_d->viewConverter, false);
-
 
     // draw green selection outlines around text shapes that are edited, so the user sees where they end
     gc.save();
@@ -142,9 +144,9 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     }
 
     // then paint the guides
-    m_d->canvas->view()->document()->guidesData().paintGuides(gc,
-                                                              *m_d->viewConverter,
-                                                              updateWidgetRect);
+    m_d->canvas->viewManager()->document()->guidesData().paintGuides(gc,
+                                                                     *m_d->viewConverter,
+                                                                     updateWidgetRect);
 
     gc.restore();
 }
@@ -225,7 +227,7 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy() const
     return m_d->toolProxy;
 }
 
-void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilterSP /*displayFilter*/)
+void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilter */*displayFilter*/)
 {
 }
 

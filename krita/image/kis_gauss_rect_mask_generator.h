@@ -24,8 +24,6 @@
 
 #include "kis_mask_generator.h"
 
-class QDomElement;
-class QDomDocument;
 
 /**
  * This mask generator uses a Gaussian-blurred rectangle
@@ -35,13 +33,12 @@ class KRITAIMAGE_EXPORT KisGaussRectangleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes);
+    KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
     virtual ~KisGaussRectangleMaskGenerator();
 
     virtual quint8 valueAt(qreal x, qreal y) const;
+    void setScale(qreal scaleX, qreal scaleY);
 
-    virtual void toXML(QDomDocument& , QDomElement&) const;
-    
 private:
 
     qreal norme(qreal a, qreal b) const {

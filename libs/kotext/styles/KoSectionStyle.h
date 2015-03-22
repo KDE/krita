@@ -203,7 +203,7 @@ public:
      */
     QVariant value(int key) const;
 
-signals:
+Q_SIGNALS:
     void nameChanged(const QString &newName);
 
 private:

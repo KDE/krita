@@ -39,10 +39,11 @@
 
 #include "particle_brush.h"
 
-KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
+    Q_UNUSED(node);
 
     m_properties.particleCount = settings->getInt(PARTICLE_COUNT);
     m_properties.iterations = settings->getInt(PARTICLE_ITERATIONS);

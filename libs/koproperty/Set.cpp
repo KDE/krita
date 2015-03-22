@@ -36,7 +36,7 @@ namespace KoProperty
 class SetPrivate
 {
 public:
-    SetPrivate(KoProperty::Set *set) :
+    explicit SetPrivate(KoProperty::Set *set) :
             q(set),
             readOnly(false),
             informAboutClearing(0),
@@ -648,21 +648,21 @@ void Set::addRelatedProperty(Property *p1, Property *p2) const
 Buffer::Buffer()
         : Set(false)
 {
-    connect(this, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(intersectedChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(this, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(intersectedChanged(KoProperty::Set&,KoProperty::Property&)));
 
-    connect(this, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(intersectedReset(KoProperty::Set&, KoProperty::Property&)));
+    connect(this, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(intersectedReset(KoProperty::Set&,KoProperty::Property&)));
 }
 
 Buffer::Buffer(const Set& set)
         : Set(false)
 {
-    connect(this, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(intersectedChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(this, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(intersectedChanged(KoProperty::Set&,KoProperty::Property&)));
 
-    connect(this, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(intersectedReset(KoProperty::Set&, KoProperty::Property&)));
+    connect(this, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(intersectedReset(KoProperty::Set&,KoProperty::Property&)));
 
     init(set);
 }

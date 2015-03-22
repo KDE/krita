@@ -30,8 +30,6 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kstandarddirs.h>
-#include <klineedit.h>
 
 #include <KoIcon.h>
 #include <KoResourceItemChooser.h>
@@ -45,12 +43,15 @@
 #include "kis_global.h"
 #include "kis_slider_spin_box.h"
 #include "kis_config.h"
+#include "kis_config_notifier.h"
+
+
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
 {
 public:
-    KisPresetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent), m_showText(false) {}
+    KisPresetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent), m_showText(false), m_useDirtyPresets(false) {}
     virtual ~KisPresetDelegate() {}
     /// reimplemented
     virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
@@ -63,8 +64,13 @@ public:
         m_showText = showText;
     }
 
+    void setUseDirtyPresets(bool value) {
+        m_useDirtyPresets = value;
+    }
+
 private:
     bool m_showText;
+    bool m_useDirtyPresets;
 };
 
 void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
@@ -94,6 +100,11 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
+    if (m_useDirtyPresets && preset->isPresetDirty()) {
+        const KIcon icon = koIcon(koIconName("addlayer"));
+        QPixmap pixmap = icon.pixmap(QSize(15,15));
+        painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
+    }
 
     if (!preset->settings() || !preset->settings()->isValid()) {
         const KIcon icon(koIconName("broken-preset"));
@@ -107,26 +118,32 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     painter->restore();
 }
 
-class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
+class KisPresetProxyAdapter : public KisPaintOpPresetResourceServerAdapter
 {
 
 public:
-    KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
-        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer)
+    KisPresetProxyAdapter(KisPaintOpPresetResourceServer* resourceServer)
+        : KisPaintOpPresetResourceServerAdapter(resourceServer)
     {
+        setSortingEnabled(true);
     }
     virtual ~KisPresetProxyAdapter() {}
 
     virtual QList< KoResource* > resources() {
 
+        QList<KoResource*> serverResources =
+            KisPaintOpPresetResourceServerAdapter::resources();
+
         if (m_paintopID.isEmpty()) {
-            return KoResourceServerAdapter<KisPaintOpPreset>::resources();
+            return serverResources;
         }
-        QList<KisPaintOpPreset*> serverResources = resourceServer()->resources();
+
         QList<KoResource*> resources;
-        foreach( KisPaintOpPreset* preset, serverResources ) {
+        foreach (KoResource *resource, serverResources) {
+            KisPaintOpPreset *preset = static_cast<KisPaintOpPreset*>(resource);
+
             if( preset->paintOp().id() == m_paintopID) {
-                resources.append( preset );
+                resources.append(preset);
             }
         }
         return resources;
@@ -155,7 +172,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     setObjectName(name);
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
 
     m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
 
@@ -174,20 +191,14 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
             this, SIGNAL(resourceSelected(KoResource*)));
 
     m_mode = THUMBNAIL;
-    updateViewSettings();
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
+            SLOT(notifyConfigChanged()));
+    notifyConfigChanged();
 }
 
 KisPresetChooser::~KisPresetChooser()
 {
-}
-
-void KisPresetChooser::filterPaletteFavorites(const QStringList& filteredNames)
-{
-    m_adapter->setFilterIncludes(filteredNames);
-    m_adapter->enableResourceFiltering(true);
-    m_adapter->updateServer();
-
-    updateViewSettings();
 }
 
 void KisPresetChooser::showButtons(bool show)
@@ -204,6 +215,13 @@ void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
 void KisPresetChooser::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
+    updateViewSettings();
+}
+
+void KisPresetChooser::notifyConfigChanged()
+{
+    KisConfig cfg;
+    m_delegate->setUseDirtyPresets(cfg.useDirtyPresets());
     updateViewSettings();
 }
 
@@ -232,9 +250,9 @@ KoResource* KisPresetChooser::currentResource()
     return m_chooser->currentResource();
 }
 
-void KisPresetChooser::showTaggingBar( bool showSearchBar, bool showOpBar )
+void KisPresetChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 {
-    m_chooser->showTaggingBar(showSearchBar,showOpBar);
+    m_chooser->showTaggingBar(showSearchBar, showOpBar);
 }
 
 KoResourceItemChooser *KisPresetChooser::itemChooser()

@@ -30,7 +30,7 @@
 #include <KoCanvasBase.h>
 #include "kis_types.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 
@@ -39,13 +39,12 @@ class HistoryDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     HistoryDock();
-
+    QString observerName() { return "HistoryDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { historyCanvas = 0; }
+    virtual void unsetCanvas() { m_historyCanvas = 0; setEnabled(false);}
 private:
-    KisUndoView* undoView;
-
-    KoCanvasBase* historyCanvas;
+    KisUndoView* m_undoView;
+    KoCanvasBase* m_historyCanvas;
 };
 
 

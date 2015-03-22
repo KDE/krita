@@ -54,6 +54,7 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     setWindowTitle(caption);
     preview->setScaledContents(true);
     preview->setFixedSize(preview->size());
+    preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
@@ -65,7 +66,10 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
-    connect(spacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotUpdateSpacing(qreal)));
+
+    spacingWidget->setSpacing(true, 1.0);
+    connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
+
     slotUpdateCurrentBrush();
 }
 
@@ -103,10 +107,11 @@ void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
     emit sigBrushChanged();
 }
 
-void KisCustomBrushWidget::slotUpdateSpacing(qreal spacing)
+void KisCustomBrushWidget::slotSpacingChanged()
 {
     if (m_brush) {
-        m_brush->setSpacing(spacing);
+        m_brush->setSpacing(spacingWidget->spacing());
+        m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     }
     emit sigBrushChanged();
 }
@@ -252,7 +257,8 @@ void KisCustomBrushWidget::createBrush()
     }
 
     static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(colorAsMask->isChecked());
-    m_brush->setSpacing(spacingSlider->value());
+    m_brush->setSpacing(spacingWidget->spacing());
+    m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush->setFilename(TEMPORARY_FILENAME);
     m_brush->setName(TEMPORARY_BRUSH_NAME);
     m_brush->setValid(true);

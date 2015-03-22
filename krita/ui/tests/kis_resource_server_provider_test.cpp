@@ -23,7 +23,11 @@
 
 void KisResourceServerProviderTest::testFetchResource()
 {
-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    // init KDE threads
+    KGlobal::locale();
+
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    Q_UNUSED(rserver);
     // get a known preset by name
     // modify it
     // get it a second time

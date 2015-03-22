@@ -28,7 +28,7 @@ class TestShapeReorderCommand : public QObject
 public:
     TestShapeReorderCommand();
     ~TestShapeReorderCommand();
-private slots:
+private Q_SLOTS:
     void testZIndexSorting();
     void testRunThroughSorting();
     void testParentChildSorting();

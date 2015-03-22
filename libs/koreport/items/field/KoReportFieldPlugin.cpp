@@ -30,7 +30,7 @@ KoReportFieldPlugin::KoReportFieldPlugin(QObject *parent, const QVariantList &ar
     Q_UNUSED(args)
     
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setClassName("report:field");
+    info->setClassName("field");
     info->setIcon(koIcon("edit-rename"));
     info->setName(i18n("Field"));
     info->setPriority(2);

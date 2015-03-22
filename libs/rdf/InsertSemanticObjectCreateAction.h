@@ -29,7 +29,7 @@ public:
     InsertSemanticObjectCreateAction(KoCanvasBase *canvas, KoDocumentRdf *rdf, const QString &name);
     virtual ~InsertSemanticObjectCreateAction();
 
-private slots:
+private Q_SLOTS:
     virtual void activated();
 
 private:

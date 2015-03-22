@@ -22,20 +22,19 @@
 #define KO_DOCUMENTRESOURCEMANAGER_H
 
 #include <QObject>
-#include <QList>
-#include <QVariant>
-#include <QSizeF>
 
 #include "flake_export.h"
-
-#include <KoColor.h>
-#include <KoUnit.h>
 
 class KoShape;
 class KUndo2Stack;
 class KoImageCollection;
-class KoOdfDocument;
+class KoDocumentBase;
 class KoShapeController;
+class KoColor;
+class KoUnit;
+
+class QVariant;
+class QSizeF;
 
 /**
  * The KoResourceManager contains a set of per-canvas <i>or</i> per-document
@@ -73,7 +72,7 @@ public:
 enum DocumentResource {
     UndoStack,              ///< The document-wide undo stack (KUndo2Stack)
     ImageCollection,        ///< The KoImageCollection for the document
-    OdfDocument,            ///< The document this canvas shows (KoOdfDocument)
+    OdfDocument,            ///< The document this canvas shows (KoDocumentBase)
     PasteOffset,            ///< Application wide paste offset
     PasteAtCursor,          ///< Application wide paste at cursor setting
     HandleRadius,           ///< The handle radius used for drawing handles of any kind
@@ -243,13 +242,13 @@ enum DocumentResource {
     KoImageCollection *imageCollection() const;
     void setImageCollection(KoImageCollection *ic);
 
-    KoOdfDocument *odfDocument() const;
-    void setOdfDocument(KoOdfDocument *currentDocument);
+    KoDocumentBase *odfDocument() const;
+    void setOdfDocument(KoDocumentBase *currentDocument);
 
     KoShapeController *shapeController() const;
     void setShapeController(KoShapeController *shapeController);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted every time a resource is set that is either
      * new or different from the previous set value.

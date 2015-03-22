@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __REPORTENTITYFIELD_H__
-#define __REPORTENTITYFIELD_H__
+#ifndef __KOREPORTDESIGNERITEMFIELD_H__
+#define __KOREPORTDESIGNERITEMFIELD_H__
 
 #include <QGraphicsRectItem>
 #include <koproperty/Property.h>
@@ -38,7 +38,6 @@ public:
     //Used when loading from file
     KoReportDesignerItemField(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);
     virtual ~KoReportDesignerItemField();
-
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
@@ -48,10 +47,10 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
 private:
-    void init(QGraphicsScene*);
-    QRect getTextRect();
+    void init(QGraphicsScene*, KoReportDesigner * d);
+    QRect getTextRect() const;
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 

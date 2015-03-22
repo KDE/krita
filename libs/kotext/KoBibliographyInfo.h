@@ -55,7 +55,7 @@ public:
     QMap<QString, BibliographyEntryTemplate> m_entryTemplate;
 
 private:
-    int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
+    int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, const QString &styleName);
     BibliographyGeneratorInterface *m_generator;
 };
 

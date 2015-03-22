@@ -62,6 +62,10 @@ class KOREPORT_EXPORT KoReportDesigner : public QWidget
 {
     Q_OBJECT
 public:
+    qreal m_pressX;
+    qreal m_pressY;
+    qreal m_releaseX;
+    qreal m_releaseY;
 
     /**
     @brief Constructor that create a blank designer
@@ -74,7 +78,7 @@ public:
     @param widget QWidget parent
     @param element Report structure XML element
     */
-    KoReportDesigner(QWidget *, QDomElement);
+    KoReportDesigner(QWidget *, const QDomElement &data);
 
     /**
     @brief Desctructor
@@ -214,6 +218,8 @@ public:
     */
     void sectionMouseReleaseEvent(ReportSceneView *, QMouseEvent * e);
 
+    void sectionMousePressEvent(ReportSceneView *, QMouseEvent * e);
+
     /**
     @brief Sets the property set for the currently selected item
     @param set Property set of item
@@ -250,8 +256,37 @@ public:
     @return list of actions */
     static QList<QAction*> actions(QActionGroup* group);
 
-    
-public slots:
+    /**
+    @return X position of mouse when mouse press occurs
+    */
+    qreal getSelectionPressX() const;
+
+    /**
+    @return Y position of mouse when mouse press occurs
+    */
+    qreal getSelectionPressY() const;
+
+    /**
+    @return difference between X position of mouse release and press
+    */
+    qreal countSelectionWidth() const;
+
+    /**
+    @return difference between Y position of mouse release and press
+    */
+    qreal countSelectionHeight() const;
+
+    /**
+    @return point that contains X,Y coordinates of mouse press
+    */
+    QPointF getPressPoint() const;
+
+    /**
+    @return point that contains X,Y coordinates of mouse press
+    */
+    QPointF getReleasePoint() const;
+
+public Q_SLOTS:
 
     void slotEditDelete();
     void slotEditCut();
@@ -331,7 +366,7 @@ private:
     void setSectionCursor(const QCursor&);
     void unsetSectionCursor();
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);
 
     /**
@@ -339,7 +374,7 @@ private slots:
     */
     void slotPageButton_Pressed();
 
-signals:
+Q_SIGNALS:
     void pagePropertyChanged(KoProperty::Set &s);
     void propertySetChanged();
     void dirty();

@@ -56,6 +56,18 @@ public:
                       KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
                       KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
 
+    /**
+     * This method emits all the final update signals of the stroke
+     * without actually ending the stroke. This can be used for
+     * long-running strokes which are kept open to implement preview
+     * of the actions.
+     *
+     * WARNING: you cannot add new commands/processings after the
+     * final signals has been emitted. You should either call end() or
+     * cancel().
+     */
+    void explicitlyEmitFinalSignals();
+
     void end();
     void cancel();
 
@@ -71,6 +83,7 @@ private:
     ProcessingFlags m_flags;
     KisImageSignalVector m_emitSignals;
     KisStrokeId m_strokeId;
+    bool m_finalSignalsEmitted;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisProcessingApplicator::ProcessingFlags)

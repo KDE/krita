@@ -26,13 +26,10 @@
 #include <QList>
 
 class KoChangeTracker;
-class KoDeleteChangeMarker;
 class KoTextEditor;
 class KoCanvasBase;
 
 class QTextDocument;
-class QTextDocumentFragment;
-class QTextCursor;
 
 class ShowChangesCommand : public QObject, public KoTextCommandBase
 {
@@ -45,7 +42,7 @@ public:
     virtual void undo();
     virtual void redo();
 
-signals:
+Q_SIGNALS:
     void toggledShowChange(bool on);
 
 private:

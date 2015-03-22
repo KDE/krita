@@ -18,8 +18,7 @@
  */
 
 #include "SvgShape.h"
-#include "SvgSavingContext.h"
-#include "SvgStyleWriter.h"
+
 
 SvgShape::~SvgShape()
 {

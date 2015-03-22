@@ -19,6 +19,7 @@
 #define KIS_SHAPE_LAYER_CANVAS_H
 
 #include <QMutex>
+#include <QRegion>
 #include <KoCanvasBase.h>
 
 #include <kis_types.h>
@@ -63,9 +64,9 @@ public:
     virtual void updateInputMethodInfo() {}
     virtual void setCursor(const QCursor &) {}
 
-private slots:
+private Q_SLOTS:
     void repaint();
-signals:
+Q_SIGNALS:
     void forwardRepaint();
 private:
 

@@ -33,11 +33,11 @@ class ArtisticTextShapeConfigWidget : public QWidget
 public:
     explicit ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool);
 
-public slots:
+public Q_SLOTS:
     /// updates the widget form the current artistic text shape
     void updateWidget();
 
-signals:
+Q_SIGNALS:
     /// Triggered whenever the font familiy has changed
     void fontFamilyChanged(const QFont&);
 

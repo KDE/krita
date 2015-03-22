@@ -32,7 +32,7 @@ class DeleteTableColumnCommand : public KUndo2Command
 {
 public:
 
-    DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, int changeId = 0, KUndo2Command *parent = 0);
+    DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent = 0);
 
     virtual void undo();
     virtual void redo();

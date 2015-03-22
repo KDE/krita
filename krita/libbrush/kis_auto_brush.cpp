@@ -68,10 +68,15 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
     setBrushType(MASK);
     setWidth(qMax(qreal(1.0), d->shape->width()));
     setHeight(qMax(qreal(1.0), d->shape->height()));
+
     QImage image = createBrushPreview();
-    setImage(image);
     setBrushTipImage(image);
+
+    // Set angle here so brush tip image is generated unrotated
     setAngle(angle);
+
+    image = createBrushPreview();
+    setImage(image);
 }
 
 KisAutoBrush::~KisAutoBrush()
@@ -217,12 +222,10 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         }
     }
 
-    double invScaleX = 1.0 / scaleX;
-    double invScaleY = 1.0 / scaleY;
-
     double centerX = hotSpot.x() - 0.5 + subPixelX;
     double centerY = hotSpot.y() - 0.5 + subPixelY;
 
+    d->shape->setScale(scaleX, scaleY);
     d->shape->setSoftness(softnessFactor);
 
     if (coloringInformation) {
@@ -246,7 +249,6 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
 
     MaskProcessingData data(dst, cs, d->randomness, d->density,
                             centerX, centerY,
-                            invScaleX, invScaleY,
                             angle);
 
     KisBrushMaskApplicatorBase *applicator = d->shape->applicator();
@@ -277,6 +279,8 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.appendChild(shapeElt);
     e.setAttribute("type", "auto_brush");
     e.setAttribute("spacing", QString::number(spacing()));
+    e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
+    e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
     e.setAttribute("angle", QString::number(KisBrush::angle()));
     e.setAttribute("randomness", QString::number(d->randomness));
     e.setAttribute("density", QString::number(d->density));
@@ -290,7 +294,7 @@ QImage KisAutoBrush::createBrushPreview()
     int width = maskWidth(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
     int height = maskHeight(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
 
-    KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, 0, 0);
+    KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, angle(), 0, 0);
 
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     fdev->setRect(QRect(0, 0, width, height));

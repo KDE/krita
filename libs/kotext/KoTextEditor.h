@@ -156,7 +156,7 @@ private:
      */
     QTextCursor* cursor();
 
-public slots:
+public Q_SLOTS:
 
     /// This adds the \ref command to the calligra undo stack.
     ///
@@ -265,7 +265,7 @@ public slots:
     /// Add an annotation at the current cursor location or the current selection.
     KoAnnotation *addAnnotation(KoShape *annotationShape);
 
-    KoTextRangeManager *textRangeManager();
+    KoTextRangeManager *textRangeManager() const;
 
     /**
      * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
@@ -462,7 +462,7 @@ public slots:
 
     void newSection();
 
-    void renameSection(KoSection *section, QString newName);
+    void renameSection(KoSection *section, const QString &newName);
 
     void newLine();
 
@@ -494,7 +494,7 @@ public slots:
     const QTextList *currentList () const;
     const QTextTable *currentTable () const;
 
-signals:
+Q_SIGNALS:
     void cursorPositionChanged();
     void textFormatChanged();
     void characterStyleApplied(KoCharacterStyle *style);

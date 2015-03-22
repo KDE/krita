@@ -50,7 +50,7 @@ public:
 #ifdef CAN_USE_MARBLE
    void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
 
-private slots:
+private Q_SLOTS:
     void mouseMoveGeoPosition();
 #endif
 

@@ -145,6 +145,9 @@ void OutputPainterStrategy::init( const Header *header )
     printPainterTransform("after fitting into shape");
 #endif
 
+    // Save the scale so that we can use it when setting lineWidth.
+    m_outputScale = (scaleX + scaleY) / 2;
+
     // Calculate translation if we should center the EMF in the
     // area and keep the aspect ratio.
 #if 0 // Should apparently be upper left.  See bug 265868
@@ -598,7 +601,7 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
         kDebug(33100) << "unexpected cap style, using SquareCap" << (penStyle & PS_ENDCAP_FLAT);
         pen.setCapStyle( Qt::SquareCap );
     }
-    pen.setWidth( x );
+    pen.setWidthF(x * m_outputScale);
 
     m_objectTable.insert( ihPen,  pen );
 }

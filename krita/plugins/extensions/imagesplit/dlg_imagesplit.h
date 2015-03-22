@@ -27,7 +27,7 @@
 
 #include "wdg_imagesplit.h"
 
-class KisView2;
+class KisViewManager;
 /**
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
@@ -39,14 +39,14 @@ class DlgImagesplit: public KDialog
 
 public:
 
-    DlgImagesplit(KisView2* view,QString suffix,QStringList listMimeType);
+    DlgImagesplit(KisViewManager* view,QString suffix,QStringList listMimeType);
     ~DlgImagesplit();
     bool autoSave();
     int horizontalLines();
     int verticalLines();
     int cmbIndex;
     QString suffix();
-private slots:
+private Q_SLOTS:
 
     void applyClicked();
     void lineEditEnable();

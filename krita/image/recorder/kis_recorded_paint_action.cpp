@@ -75,7 +75,7 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
 {
     if (paintOpPreset)
     {
-        d->paintOpPreset = paintOpPreset->clone();
+        d->paintOpPreset = paintOpPreset;
     }
     d->opacity = 1.0;
     d->paintIncremental = true;
@@ -287,17 +287,16 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
 
     painter->setPaintColor(d->foregroundColor);
     painter->setBackgroundColor(d->backgroundColor);
-    if (d->paintOpPreset)
-    {
-        d->paintOpPreset->settings()->setNode(node);
-        painter->setPaintOpPreset(d->paintOpPreset, info.image());
-    }
 
     painter->setStrokeStyle(d->strokeStyle);
     painter->setFillStyle(d->fillStyle);
     painter->setPattern(d->pattern);
     painter->setGradient(d->gradient);
     painter->setGenerator(d->generator);
+
+    if (d->paintOpPreset) {
+        painter->setPaintOpPreset(d->paintOpPreset, node, info.image());
+    }
 
     playPaint(info, painter);
 
@@ -319,9 +318,6 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
         node->setDirty(painter->takeDirtyRegion());
     }
     delete painter;
-
-    if (d->paintOpPreset)
-        d->paintOpPreset->settings()->setNode(0);
 
     transaction.commit(info.undoAdapter());
 }

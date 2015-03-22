@@ -32,6 +32,7 @@ typedef QList<QGraphicsItem*> QGraphicsItemList;
 class KoReportDesigner;
 class QGraphicsSceneContextMenuEvent;
 class QGraphicsSceneMouseEvent;
+class KoReportDesignerItemRectBase;
 
 class ReportScene : public QGraphicsScene
 {
@@ -56,13 +57,14 @@ protected:
     virtual void focusOutEvent(QFocusEvent * focusEvent);
     virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * contextMenuEvent);
 
-signals:
+Q_SIGNALS:
     void clicked();
     void lostFocus();
 
 private:
     qreal lowestZValue();
     qreal highestZValue();
+    void exitInlineEditingModeInItems(KoReportDesignerItemRectBase *rectUnderCursor);
 
     KoReportDesigner * m_rd;
 

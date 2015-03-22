@@ -23,6 +23,7 @@
 #include "KoTosContainer.h"
 
 #include <kdebug.h>
+#include <QSizeF>
 
 KoTosContainerModel::KoTosContainerModel()
 : m_textShape(0)

@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KOCOMPOSITEO_COPY_CHANNEL_H_
-#define _KOCOMPOSITEO_COPY_CHANNEL_H_
+#ifndef _KOCOMPOSITEOP_COPY_CHANNEL_H_
+#define _KOCOMPOSITEOP_COPY_CHANNEL_H_
 
 #include "KoCompositeOpBase.h"
 
@@ -63,4 +63,4 @@ public:
     }
 };
 
-#endif // _KOCOMPOSITEO_COPY_CHANNEL_H_
+#endif // _KOCOMPOSITEOP_COPY_CHANNEL_H_

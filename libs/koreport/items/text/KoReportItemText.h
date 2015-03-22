@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef KRTEXTDATA_H
-#define KRTEXTDATA_H
+#ifndef KOREPORTITEMTEXT_H
+#define KOREPORTITEMTEXT_H
+
 #include <KoReportItemBase.h>
 #include <QRect>
 #include <QPainter>
@@ -35,10 +36,8 @@ class Text;
 class KoReportItemText : public KoReportItemBase
 {
 public:
-    KoReportItemText() {
-        createProperties();
-    };
-    KoReportItemText(QDomNode & element);
+    KoReportItemText();
+    explicit KoReportItemText(QDomNode & element);
     virtual ~KoReportItemText();
 
     virtual QString typeName() const;
@@ -58,6 +57,8 @@ protected:
     KoProperty::Property* m_lineColor;
     KoProperty::Property* m_lineWeight;
     KoProperty::Property* m_lineStyle;
+    KoProperty::Property* m_itemValue;
+
 
     qreal m_bottomPadding;
 

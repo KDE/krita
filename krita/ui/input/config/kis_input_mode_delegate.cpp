@@ -20,8 +20,8 @@
 #include "kis_input_mode_delegate.h"
 #include "../kis_abstract_input_action.h"
 
-#include <KComboBox>
-#include <KLocalizedString>
+#include <kcombobox.h>
+#include <klocalizedstring.h>
 
 class KisInputModeDelegate::Private
 {

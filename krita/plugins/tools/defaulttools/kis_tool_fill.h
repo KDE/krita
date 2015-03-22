@@ -25,13 +25,13 @@
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
 #include <QPoint>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
-class KisPainter;
-class KisFillPainter;
+
+
 class QWidget;
-class QLabel;
 class QCheckBox;
-class QComboBox;
 class KisSliderSpinBox;
 class KoCanvasBase;
 
@@ -50,7 +50,8 @@ public:
 
     virtual QWidget * createOptionWidget();
 
-public slots:
+public Q_SLOTS:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void slotSetUseFastMode(bool);
     void slotSetThreshold(int);
     void slotSetUsePattern(bool);
@@ -58,6 +59,8 @@ public slots:
     void slotSetFillSelection(bool);
     void slotSetSizemod(int);
     void slotSetFeather(int);
+
+
 
 private:
     void updateGUI();
@@ -78,6 +81,8 @@ private:
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkSampleMerged;
     QCheckBox *m_checkFillSelection;
+
+    KConfigGroup m_configGroup;
 };
 
 

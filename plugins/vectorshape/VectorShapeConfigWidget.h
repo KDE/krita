@@ -22,7 +22,6 @@
 #define VECTORSHAPECONFIGWIDGET_H
 
 #include <KoShapeConfigWidgetBase.h>
-#include <kurl.h>
 #include <QWidget>
 
 class VectorShape;
@@ -56,7 +55,7 @@ class LoadWaiter : public QObject
 public:
     explicit LoadWaiter(VectorShape *shape) : m_vectorShape(shape) { }
 
-public slots:
+public Q_SLOTS:
     void setImageData(KJob *job);
 
 private:

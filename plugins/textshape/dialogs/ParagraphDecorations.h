@@ -36,10 +36,10 @@ public:
     void setDisplay(KoParagraphStyle *style);
     void save(KoParagraphStyle *style) const;
 
-signals:
+Q_SIGNALS:
     void parStyleChanged();
 
-private slots:
+private Q_SLOTS:
     void clearBackgroundColor();
     void slotBackgroundColorChanged();
 

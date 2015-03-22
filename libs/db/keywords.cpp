@@ -28,7 +28,7 @@
 #include <driver_p.h>
 
 namespace KexiDB {
-  const char* DriverPrivate::kexiSQLKeywords[] = {
+  const char* const DriverPrivate::kexiSQLKeywords[] = {
 		"AND",
 		"AS",
 		"ASC",

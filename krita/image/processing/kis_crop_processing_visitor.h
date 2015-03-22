@@ -32,6 +32,14 @@ private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
 
+public:
+
+    void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter);
+    using KisSimpleProcessingVisitor::visit;
+
+private:
+    void moveNodeImpl(KisNode *node, KisUndoAdapter *undoAdapter);
+
 private:
     QRect m_rect;
     bool m_cropLayers;

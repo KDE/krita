@@ -17,7 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoAnnotationLayoutManager.h"
+
+#include <KoViewConverter.h>
+#include <KoShapeManager.h>
+#include <KoCanvasBase.h>
 #include <KoShape.h>
+#include <QWidget>
 #include <QList>
 #include <QHash>
 #include <QMap>
@@ -128,7 +133,7 @@ bool KoAnnotationLayoutManager::isAnnotationShape(KoShape *shape)
     return false;
 }
 
-void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotationShape, QPointF pos)
+void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotationShape, const QPointF &pos)
 {
     QList< QPair < QPointF, KoShape * > >::iterator it = d->annotationShapePositions.begin();
     bool yPositionChanged = false;
@@ -142,6 +147,9 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
             break;
         }
         ++it;
+    }
+    if (d->annotationShapePositions.isEmpty()) {
+        emit hasAnnotationsChanged(true);
     }
     d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
     layoutAnnotationShapes();
@@ -161,6 +169,9 @@ void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape)
         ++it;
     }
     layoutAnnotationShapes();
+    if (d->annotationShapePositions.isEmpty()) {
+        emit hasAnnotationsChanged(false);
+    }
     //Should update canvas.
     d->canvas->canvasWidget()->update();
 }

@@ -22,6 +22,9 @@
 #include "kis_debug.h"
 #include <QtCore/qmath.h>
 #include <QVector2D>
+#include <QTransform>
+#include "kis_algebra_2d.h"
+
 
 
 struct KisDistanceInformation::Private {
@@ -31,7 +34,7 @@ struct KisDistanceInformation::Private {
     QPointF distance;
     KisSpacingInformation spacing;
     QPointF lastPosition;
-    int lastTime;
+    qreal lastTime;
     bool lastDabInfoValid;
 
     KisPaintInformation lastPaintInformation;
@@ -45,7 +48,7 @@ KisDistanceInformation::KisDistanceInformation()
 }
 
 KisDistanceInformation::KisDistanceInformation(const QPointF &lastPosition,
-                                               int lastTime)
+                                               qreal lastTime)
     : m_d(new Private)
 {
     m_d->lastPosition = lastPosition;
@@ -86,7 +89,7 @@ QPointF KisDistanceInformation::lastPosition() const
     return m_d->lastPosition;
 }
 
-int KisDistanceInformation::lastTime() const
+qreal KisDistanceInformation::lastTime() const
 {
     return m_d->lastTime;
 }
@@ -167,8 +170,21 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
     qreal x = m_d->distance.x();
     qreal y = m_d->distance.y();
 
-    qreal dx = qAbs(end.x() - start.x());
-    qreal dy = qAbs(end.y() - start.y());
+    static const qreal eps = 2e-3; // < 0.2 deg
+    const qreal currentRotation = m_d->spacing.rotation();
+
+    QPointF diff = end - start;
+
+    if (currentRotation > eps) {
+        QTransform rot;
+        // since the ellipse is symmetrical, the sign
+        // of rotation doesn't matter
+        rot.rotateRadians(currentRotation);
+        diff = rot.map(diff);
+    }
+
+    qreal dx = qAbs(diff.x());
+    qreal dy = qAbs(diff.y());
 
     qreal alpha = pow2(dx * a_rev) + pow2(dy * b_rev);
     qreal beta = x * dx * a_rev * a_rev + y * dy * b_rev * b_rev;
@@ -185,8 +201,7 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
             t = k;
             m_d->distance = QPointF();
         } else {
-            QPointF diff = end - start;
-            m_d->distance += QPointF(qAbs(diff.x()), qAbs(diff.y()));
+            m_d->distance += KisAlgebra2D::abs(diff);
         }
     } else {
         qWarning() << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";

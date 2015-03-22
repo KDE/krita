@@ -19,8 +19,8 @@
 #define KIS_ZOOM_MANAGER
 
 #include <QObject>
+#include <QPointer>
 
-#include <kstandardaction.h>
 #include <klocale.h>
 
 #include <KoZoomMode.h>
@@ -28,8 +28,9 @@
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
 
+#include "KisView.h"
+
 class KoZoomHandler;
-class KisView2;
 class KAction;
 class KoZoomAction;
 class KoRuler;
@@ -49,16 +50,18 @@ class KisZoomManager : public QObject
 
 public:
 
-    KisZoomManager(KisView2 * view, KoZoomHandler*, KoCanvasController *);
+    KisZoomManager(QPointer<KisView> view, KoZoomHandler*, KoCanvasController *);
     ~KisZoomManager();
 
     void setup(KActionCollection * actionCollection);
     void updateGUI();
-    KoZoomController * zoomController() {
+    KoZoomController * zoomController() const {
         return m_zoomController;
     }
 
-private slots:
+    QWidget *zoomActionWidget() const;
+
+public Q_SLOTS:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
     void slotScrollAreaSizeChanged();
@@ -67,25 +70,23 @@ private slots:
     void changeAspectMode(bool aspectMode);
     void pageOffsetChanged();
     void zoomTo100();
-    void showGuides();
+    void showGuides(bool toggle);
     void applyRulersUnit(const KoUnit &baseUnit);
+    void setMinMaxZoom();
 
 private:
     void nofityLevelOfDetailChange(qreal zoom);
 
 private:
 
-    KisView2 * m_view;
+    QPointer<KisView> m_view;
     KoZoomHandler * m_zoomHandler;
     KoCanvasController *m_canvasController;
     KoZoomController *m_zoomController;
     KoRuler * m_horizontalRuler;
     KoRuler * m_verticalRuler;
-    QAction *m_showRulersAction;
     KoZoomAction * m_zoomAction;
-    QWidget * m_zoomActionWidget;
-    KAction *m_100pct;
-    QAction * m_showGuidesAction;
+    QPointer<QWidget> m_zoomActionWidget;
     QPoint m_rulersOffset;
 };
 

@@ -1,10 +1,10 @@
-#include <qtest_kde.h>
-
 #include "TestFallBackColorTransformation.h"
 
 #include "KoColorTransformation.h"
 #include <KoFallBackColorTransformation.h>
 #include <KoColorSpaceRegistry.h>
+
+#include <qtest_kde.h>
 
 struct KoDummyColorTransformation : public KoColorTransformation
 {

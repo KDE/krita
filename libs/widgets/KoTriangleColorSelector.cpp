@@ -1,12 +1,12 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License,
+ *  the Free Software Foundation; either version 2.1 of the License,
  *  or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
@@ -101,6 +101,7 @@ KoTriangleColorSelector::KoTriangleColorSelector(const KoColorDisplayRendererInt
       d(new Private(this, displayRenderer))
 {
     d->init();
+    connect(displayRenderer, SIGNAL(displayConfigurationChanged()), this, SLOT(configurationChanged()));
 }
 
 KoTriangleColorSelector::~KoTriangleColorSelector()
@@ -127,6 +128,7 @@ void KoTriangleColorSelector::updateTriangleCircleParameters()
 
 void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
 {
+
     if( d->invalidTriangle )
     {
       generateTriangle();
@@ -141,7 +143,10 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
     p.drawPixmap( -pos, d->wheelPixmap );
     // Draw the triangle
     p.save();
+
     p.rotate( hue() + 150 );
+
+
     p.drawPixmap( -pos , d->trianglePixmap );
     // Draw selectors
     p.restore();
@@ -176,6 +181,9 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
     p.end();
 }
 
+
+// make sure to always use get/set functions when managing HSV properties( don't call directly like d->hue)
+// these  settings get updated A LOT when the color picker is being used. You might get unexpected results
 int KoTriangleColorSelector::hue() const
 {
     return d->hue;
@@ -183,6 +191,12 @@ int KoTriangleColorSelector::hue() const
 
 void KoTriangleColorSelector::setHue(int h)
 {
+    // setRealColor() will give you -1 when saturation is 0
+    // ignore setting hue in this instance. otherwise it will mess up the hue ring
+    if (h == -1)
+        return;
+
+
     h = qBound(0, h, 359);
     d->hue = h;
     tellColorChanged();
@@ -220,26 +234,31 @@ void KoTriangleColorSelector::setSaturation(int s)
 
 void KoTriangleColorSelector::setHSV(int h, int s, int v)
 {
-    h = qBound(0, h, 360);
-    s = qBound(0, s, 255);
-    v = qBound(0, v, 255);
-    d->invalidTriangle = (d->hue != h);
-    d->hue = h;
-    d->value = v;
-    d->saturation = s;
-    tellColorChanged();
-    d->updateTimer.start();
+    d->invalidTriangle = (hue() != h);
+    setHue(h);
+    setValue(v);
+    setSaturation(s);
 }
 
 KoColor KoTriangleColorSelector::realColor() const
 {
-    return d->displayRenderer->fromHsv(d->hue, d->saturation, d->value);
+    return d->displayRenderer->fromHsv(hue(), saturation(), value());
 }
 
 void KoTriangleColorSelector::setRealColor(const KoColor & color)
 {
+    if ( realColor() == color)
+        return;
+
+    //displayrenderer->getHsv is what sets the foreground color in the application
     if(d->updateAllowed) {
-        d->displayRenderer->getHsv(color, &d->hue, &d->saturation, &d->value);
+        int hueRef = hue();
+        int saturationRef = saturation();
+        int valueRef = value();
+
+        d->displayRenderer->getHsv(color, &hueRef, &saturationRef, &valueRef);
+        setHSV(hueRef, saturationRef, valueRef);
+
         d->invalidTriangle = true;
         d->updateTimer.start();
     }
@@ -416,11 +435,19 @@ void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
             qreal sat = ( x1 / ls_ + 0.5) ;
             if((sat >= 0.0 && sat <= 1.0) || d->handle == ValueSaturationHandle)
             {
-                setHSV( d->hue, sat * 255, ynormalize * 255);
+                setHSV( hue(), sat * 255, ynormalize * 255);
             }
         }
         d->updateTimer.start();
     }
 }
+
+void KoTriangleColorSelector::configurationChanged()
+{
+    generateWheel();
+    d->invalidTriangle = true;
+    update();
+}
+
 
 #include <KoTriangleColorSelector.moc>

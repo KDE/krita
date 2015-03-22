@@ -27,10 +27,15 @@
 
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
+#include <kshortcut.h>
+
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class QCheckBox;
 class QComboBox;
-class QGridLayout;
+
+class KActionCollection;
 
 class KoCanvasBase;
 class KisSliderSpinBox;
@@ -58,9 +63,6 @@ public:
 
     QWidget * createOptionWidget();
 
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
-    void deactivate();
-
     int smoothnessQuality() const;
     qreal smoothnessFactor() const;
     bool smoothPressure() const;
@@ -73,10 +75,15 @@ public:
     bool finishStabilizedCurve() const;
     bool stabilizeSensors() const;
 
-protected slots:
+protected:
+    KConfigGroup m_configGroup;
+
+protected Q_SLOTS:
     virtual void resetCursorStyle();
 
-public slots:
+public Q_SLOTS:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void deactivate();
     void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
@@ -154,4 +161,3 @@ public:
 
 
 #endif // KIS_TOOL_BRUSH_H_
-

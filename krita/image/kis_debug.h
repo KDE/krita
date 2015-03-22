@@ -92,4 +92,28 @@
 #    define Q_ASSERT(cond) if(!(cond)) { kError() << kBacktrace(); qt_assert(#cond,__FILE__,__LINE__); } qt_noop()
 #  endif
 
+
+#include "krita_export.h"
+#include "kis_types.h"
+class QRect;
+class QString;
+
+void KRITAIMAGE_EXPORT kis_debug_save_device_incremental(KisPaintDeviceSP device,
+                                                         int i,
+                                                         const QRect &rc,
+                                                         const QString &suffix, const QString &prefix);
+
+#define KIS_DUMP_DEVICE_1(device, rc, suffix)                           \
+    do {                                                                \
+        static int i = -1; i++;                                         \
+        kis_debug_save_device_incremental((device), i, (rc), (suffix), QString()); \
+    } while(0)
+
+#define KIS_DUMP_DEVICE_2(device, rc, suffix, prefix)                   \
+    do {                                                                \
+        static int i = -1; i++;                                         \
+        kis_debug_save_device_incremental((device), i, (rc), (suffix), (prefix)); \
+    } while(0)
+
+
 #include "kis_assert.h"

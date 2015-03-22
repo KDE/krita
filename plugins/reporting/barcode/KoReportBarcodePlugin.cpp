@@ -31,7 +31,7 @@ K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportBarcodePlugin, barcodeplugin)
 KoReportBarcodePlugin::KoReportBarcodePlugin(QObject *parent, const QVariantList &/*args */) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setClassName("report:barcode");
+    info->setClassName("barcode");
     info->setIcon(koIcon("report_barcode_element"));
     info->setName(i18n("Barcode"));
     info->setPriority(50);

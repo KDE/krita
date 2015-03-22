@@ -26,9 +26,13 @@
 #include <kis_tool.h>
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
+#include <kshortcut.h>
 #include <QWidget>
 #include <QGroupBox>
 #include <QRadioButton>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+
 
 class KoCanvasBase;
 class MoveToolOptionsWidget;
@@ -43,6 +47,8 @@ public:
     KisToolMove(KoCanvasBase * canvas);
     virtual ~KisToolMove();
 
+public Q_SLOTS:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
 public Q_SLOTS:
@@ -87,7 +93,7 @@ private:
     void cancelStroke();
     QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
 
-private slots:
+private Q_SLOTS:
     void endStroke();
 
 private:
@@ -102,6 +108,7 @@ private:
     MoveToolMode m_moveToolMode;
     bool m_moveInProgress;
     KisNodeSP m_currentlyProcessingNode;
+    KConfigGroup configGroup;
 };
 
 

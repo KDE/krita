@@ -18,5 +18,5 @@ kde4_add_executable(kohyphentest RUN_UNINSTALLED ${kohyphentest_SRCS})
 
 target_link_libraries(kohyphentest kotext )
 
-endif(KDE4_BUILD_TESTS)
+endif()
 

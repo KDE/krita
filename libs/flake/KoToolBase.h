@@ -17,15 +17,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOTOOL_H
-#define KOTOOL_H
+#ifndef KOTOOLBASE_H
+#define KOTOOLBASE_H
 
-#include <QString>
-#include <QList>
 #include <QObject>
-#include <QCursor>
-#include <QStringList>
-#include <QRectF>
+#include <QPointer>
+#include <QSet>
+#include <QList>
+#include <QHash>
 
 #include "flake_export.h"
 
@@ -41,7 +40,12 @@ class KAction;
 class QAction;
 class QKeyEvent;
 class QWidget;
+class QCursor;
 class QPainter;
+class QString;
+class QStringList;
+class QRectF;
+class QPointF;
 class QInputMethodEvent;
 class QDragMoveEvent;
 class QDragLeaveEvent;
@@ -110,7 +114,7 @@ public:
      *
      * @see m_optionWidgets
      */
-    QList<QWidget *> optionWidgets();
+    QList<QPointer<QWidget> > optionWidgets();
 
     /**
      * Retrieves the entire collection of actions for the tool.
@@ -333,7 +337,7 @@ public:
       */
     bool isInTextMode() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * This method is called when this tool instance is activated.
@@ -384,7 +388,7 @@ public slots:
      */
     void setStatusText(const QString &statusText);
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted when this tool wants itself to be replaced by another tool.
@@ -441,7 +445,7 @@ protected:
      * Sets the option widget to 0 by default.
      */
     virtual QWidget *createOptionWidget();
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /**
      * Add an action under the given name to the collection.
@@ -499,6 +503,7 @@ protected:
     KoToolBase(KoToolBasePrivate &dd);
 
     KoToolBasePrivate *d_ptr;
+
 
 private:
     KoToolBase();

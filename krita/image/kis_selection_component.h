@@ -25,7 +25,6 @@
 class QRect;
 class KUndo2Command;
 class KisSelection;
-class KisPixelSelection;
 
 #include "kis_types.h"
 

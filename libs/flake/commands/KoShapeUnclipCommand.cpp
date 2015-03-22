@@ -24,12 +24,9 @@
 #include "KoPathShape.h"
 #include "KoShapeBasedDocumentBase.h"
 #include "KoShapeRegistry.h"
-#include "KoCanvasController.h"
-#include "KoToolManager.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeOdfSaveHelper.h"
 #include "KoDrag.h"
-#include "KoCanvasBase.h"
 #include <KoOdfPaste.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>

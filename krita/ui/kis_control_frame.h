@@ -29,19 +29,14 @@
 
 class QWidget;
 class QTabWidget;
-class QTableWidgetItem;
-class QPushButton;
-
-class KToolBar;
 
 class KoAbstractGradient;
 class KisGradientChooser;
-class KoPatternChooser;
+class KisPatternChooser;
 class KisPaintopBox;
-class KisView2;
+class KisViewManager;
 class KisIconWidget;
 class KoPattern;
-class KXmlGuiWindow;
 
 /**
  *   Control Frame - status display with access to
@@ -53,27 +48,27 @@ class KisControlFrame : public QObject
 
 public:
 
-    KisControlFrame(KisView2 * view,  const char *name = 0);
+    KisControlFrame(KisViewManager *view, QWidget *parent = 0, const char *name = 0);
     virtual ~KisControlFrame() {}
 
     KisPaintopBox* paintopBox() {
         return m_paintopBox;
     }
 
-private slots:
+private Q_SLOTS:
 
     void slotSetPattern(KoPattern * pattern);
     void slotSetGradient(KoAbstractGradient * gradient);
 
 private:
 
-    void createPatternsChooser(KisView2 * view);
-    void createGradientsChooser(KisView2 * view);
+    void createPatternsChooser(KisViewManager * view);
+    void createGradientsChooser(KisViewManager * view);
 
 private:
 
     QFont m_font;
-    KisView2 * m_view;
+    KisViewManager * m_viewManager;
 
     QTabWidget * m_gradientTab;
     QTabWidget * m_patternsTab;
@@ -85,7 +80,7 @@ private:
     QWidget *m_gradientChooserPopup;
 
     KisGradientChooser *m_gradientChooser;
-    KoPatternChooser *m_patternChooser;
+    KisPatternChooser *m_patternChooser;
 
     KisPaintopBox *m_paintopBox;
 

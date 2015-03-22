@@ -21,6 +21,8 @@
 #include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
 #include <KoIcon.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 /**
  * Tool to select colors by pointing at a color on the image.
@@ -28,15 +30,20 @@
 class KisToolSelectSimilar : public KisToolSelectBase
 {
     Q_OBJECT
+
 public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
     void beginPrimaryAction(KoPointerEvent *event);
     QWidget* createOptionWidget();
     void paint(QPainter&, const KoViewConverter &) {}
-public slots:
+
+public Q_SLOTS:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void slotSetFuzziness(int);
+
 private:
     int m_fuzziness;
+    KConfigGroup m_configGroup;
 };
 
 class KisToolSelectSimilarFactory : public KoToolFactoryBase

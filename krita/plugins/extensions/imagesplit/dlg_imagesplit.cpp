@@ -24,12 +24,12 @@
 #include <klocale.h>
 #include <kis_debug.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
 
-DlgImagesplit::DlgImagesplit(KisView2* view,QString suffix,QStringList listMimeFilter)
-        : KDialog(view)
+DlgImagesplit::DlgImagesplit(KisViewManager* view,QString suffix,QStringList listMimeFilter)
+        : KDialog(view->mainWindow())
 {
 
     m_page = new WdgImagesplit(this);

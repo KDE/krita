@@ -41,21 +41,26 @@ public:
 
     QString error;
 
-    quint64 layerMaskBlockSize;
+    // http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_21849
+    quint64 layerMaskBlockSize; // Length of the layer and mask information section
 
-    // layer info
-    bool    hasTransparency; // if nLayers is < 0, then the image has transparency, and the
-                             // first alpha channel we find. Of course, Krita _always_ has transparency,
-                             // (Except for grayscale, but we don't use the non-alpha grayscale colorspaces.)
+    // layer info: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000
+    bool hasTransparency;
+
     quint64 layerInfoSize;
-    qint16  nLayers;
+    qint16  nLayers; // If layer count is a negative number, its absolute value is the number of layers and the first alpha channel contains the transparency data for the merged result.
     QVector<PSDLayerRecord*> layers;
 
-    // mask info
-    quint16 overlayColorSpace;
-    quint16 colorComponents[4];
-    quint16 opacity;
-    quint8  kind;
+    // mask info: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_17115
+    struct GlobalLayerMaskInfo {
+        quint16 overlayColorSpace;  // Overlay color space (undocumented).
+        quint16 colorComponents[4]; // 4 * 2 byte color components
+        quint16 opacity; // Opacity. 0 = transparent, 100 = opaque.
+        quint8  kind; // Kind. 0 = Color selected--i.e. inverted; 1 = Color protected;128 = use value stored per layer. This value is preferred. The others are for backward compatibility with beta versions.
+    };
+    GlobalLayerMaskInfo globalLayerMaskInfo;
+
+
 
 private:
 

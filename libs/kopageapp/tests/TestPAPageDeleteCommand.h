@@ -25,7 +25,7 @@
 class TestPAPageDeleteCommand : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void redoUndo();
     void redoUndoMaster();
     void redoUndoMultiple();

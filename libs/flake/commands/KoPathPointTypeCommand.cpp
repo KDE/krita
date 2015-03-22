@@ -19,6 +19,8 @@
  */
 
 #include "KoPathPointTypeCommand.h"
+
+#include <KoPathSegment.h>
 #include <klocale.h>
 #include <math.h>
 

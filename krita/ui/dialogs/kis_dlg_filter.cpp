@@ -25,7 +25,7 @@
 #include <kis_filter_mask.h>
 #include <kis_node.h>
 #include <kis_layer.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_config.h>
 
 #include "kis_selection.h"
@@ -46,12 +46,12 @@ struct KisDlgFilter::Private {
     Ui_FilterDialog uiFilterDialog;
     KisNodeSP node;
     int resizeCount;
-    KisView2 *view;
+    KisViewManager *view;
     KisFilterManager *filterManager;
 };
 
-KisDlgFilter::KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager) :
-        QDialog(view),
+KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManager *filterManager, QWidget *parent) :
+        QDialog(parent),
         d(new Private)
 {
     setModal(false);

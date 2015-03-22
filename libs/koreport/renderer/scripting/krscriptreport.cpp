@@ -60,7 +60,7 @@ QObject* Report::objectByName(const QString &n)
     foreach(KoReportItemBase *o, obs) {
         if (o->entityName() == n) {
                     
-            if (o->typeName() == "report:line") {
+            if (o->typeName() == "line") {
                         return new Scripting::Line(dynamic_cast<KoReportItemLine*>(o));
             }
             else {

@@ -33,6 +33,7 @@
 
 #include "kis_transparency_mask.h"
 #include "kis_filter_mask.h"
+#include "kis_transform_mask.h"
 #include "kis_selection_mask.h"
 
 #include "kis_external_layer_iface.h"
@@ -41,6 +42,8 @@
 #include "kis_undo_adapter.h"
 #include "kis_transform_worker.h"
 #include "commands_new/kis_node_move_command2.h"
+
+#include "kis_do_something_command.h"
 
 
 KisTransformProcessingVisitor::
@@ -75,15 +78,20 @@ void KisTransformProcessingVisitor::visit(KisPaintLayer *layer, KisUndoAdapter *
 
 void KisTransformProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    Q_UNUSED(undoAdapter);
-    layer->resetCache();
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, false));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, true));
     transformClones(layer, undoAdapter);
+
 }
 
 void KisTransformProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
 {
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer*>(layer, false));
     transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
-    layer->resetCache();
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer*>(layer, true));
+
     transformClones(layer, undoAdapter);
 }
 
@@ -104,8 +112,11 @@ void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapte
 
 void KisTransformProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
 {
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer*>(layer, false));
     transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
-    layer->update();
+    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer*>(layer, true));
+
     transformClones(layer, undoAdapter);
 }
 
@@ -117,6 +128,14 @@ void KisTransformProcessingVisitor::visit(KisCloneLayer *layer, KisUndoAdapter *
 void KisTransformProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)
 {
     transformSelection(mask->selection(), undoAdapter, ProgressHelper(mask));
+}
+
+void KisTransformProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter)
+{
+    Q_UNUSED(mask);
+    Q_UNUSED(undoAdapter);
+
+    qWarning() << "WARNING: transformation of the transform mask is not implemented";
 }
 
 void KisTransformProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)

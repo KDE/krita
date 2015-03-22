@@ -9,7 +9,7 @@ ShowCustomDocumentWidgetByDefault=true
 [Undo]
 UndoLimit=0
 
-[KoDockerManager]
+[KisDockerManager]
 StatusOfTheseToolDockers=KisRulerAssistantTool Option Widget,KisToolTransform option widget,KritaSelected/KisToolColorPicker option widget,KritaShape/KisToolBrushoption widget,KritaShape/KisToolLine,KritaShape/KisToolMeasure option widget,KritaShape/KisToolRectangle
 
 [krita]
@@ -157,7 +157,7 @@ FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,
 ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape,commentshape,stateshape,webshape
 TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
 TextInlinePluginsDisabled=textvariables,kprvariables
-ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
+ToolPluginsDisabled=paragraphtool
 ToolsBlacklist=CreatePathTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
 
 [favoriteList]

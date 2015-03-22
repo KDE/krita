@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __REPORTENTITYTEXT_H__
-#define __REPORTENTITYTEXT_H__
+#ifndef __KOREPORTDESIGNERITEMTEXT_H__
+#define __KOREPORTDESIGNERITEMTEXT_H__
 
 #include <KoReportDesignerItemRectBase.h>
 #include <koproperty/Property.h>
@@ -46,10 +46,10 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
 private:
-    QRect getTextRect();
-    void init(QGraphicsScene*);
-
-private slots:
+    QRect getTextRect() const;
+    void init(QGraphicsScene*, KoReportDesigner*);
+    
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 

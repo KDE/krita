@@ -66,9 +66,9 @@ void KoInlineObject::setManager(KoInlineTextObjectManager *manager)
     d->manager = manager;
 }
 
-KoInlineTextObjectManager *KoInlineObject::manager()
+KoInlineTextObjectManager *KoInlineObject::manager() const
 {
-    Q_D(KoInlineObject);
+    Q_D(const KoInlineObject);
     return d->manager;
 }
 

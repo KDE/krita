@@ -6,7 +6,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,14 +22,10 @@
 #ifndef KOLCMSCOLORSPACE_H_
 #define KOLCMSCOLORSPACE_H_
 
-#include <kconfig.h>
-#include <kglobal.h>
-
 #include <colorprofiles/LcmsColorProfileContainer.h>
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 
-class qDebug;
 
 class KoLcmsInfo
 {
@@ -347,10 +343,11 @@ public:
         cmsLabEncoded2Float(&labF1, (cmsUInt16Number *)lab1);
         cmsLabEncoded2Float(&labF2, (cmsUInt16Number *)lab2);
         qreal diff = cmsDeltaE(&labF1, &labF2);
-        if (diff > 255)
+
+        if (diff > 255.0)
             return 255;
         else
-            return qint8(diff);
+            return quint8(diff);
     }
 
     virtual quint8 differenceA(const quint8* src1, const quint8* src2) const {
@@ -385,10 +382,10 @@ public:
 
         qreal diff = pow(dL * dL + da * da + db * db + dAlpha * dAlpha, 0.5);
 
-        if (diff > 255)
+        if (diff > 255.0)
             return 255;
         else
-            return qint8(diff);
+            return quint8(diff);
     }
 
 private:
@@ -414,6 +411,9 @@ private:
     Private * const d;
 };
 
+/**
+ * Base class for all LCMS based ColorSpace factories.
+ */
 class LcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo
 {
 public:

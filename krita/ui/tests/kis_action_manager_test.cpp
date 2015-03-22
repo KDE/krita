@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
@@ -20,92 +21,115 @@
 #include "kis_action_manager_test.h"
 #include <kdebug.h>
 
-#include <KoPart.h>
-#include <KoMainWindow.h>
-#include <kis_doc2.h>
-#include <kis_part2.h>
-#include <kis_view2.h>
+#include <KisPart.h>
+#include <KisMainWindow.h>
+#include <KisDocument.h>
+#include <KisPart.h>
+#include <KisView.h>
 #include <util.h>
 #include <kis_action.h>
 #include <kis_action_manager.h>
+#include <KisViewManager.h>
+
+#include "kis_node_manager.h"
+
 
 void KisActionManagerTest::testUpdateGUI()
 {
-    KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
-    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
-    doc->documentPart()->addView(view, doc);
+    KisDocument* doc = createEmptyDocument();
+    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
+    QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
+    KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
+    KisPart::instance()->addView(view, doc);
+    mainWindow->showView(view);
+
+    view->setViewManager(viewManager);
+    viewManager->setCurrentView(view);
 
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    view->actionManager()->addAction("dummy", action, view->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action);
 
     KisAction* action2 = new KisAction("dummy", this);
     action2->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
-    view->actionManager()->addAction("dummy", action2, view->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action2);
     
-    view->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(!action->isEnabled());
     QVERIFY(!action2->isEnabled());
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(doc->image(), "paintlayer1", OPACITY_OPAQUE_U8);
     doc->image()->addNode(paintLayer1);
 
-    view->actionManager()->updateGUI();
+    viewManager->nodeManager()->slotUiActivatedNode(paintLayer1);
+
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(action->isEnabled());
     QVERIFY(!action2->isEnabled());
 }
 
 void KisActionManagerTest::testCondition()
 {
-    KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow =  doc->documentPart()->createMainWindow();
-    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
-    doc->documentPart()->addView(view, doc);
+    KisDocument* doc = createEmptyDocument();
+    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
+    QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
+    KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
+    KisPart::instance()->addView(view, doc);
+    mainWindow->showView(view);
+
+    view->setViewManager(viewManager);
+    viewManager->setCurrentView(view);
 
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    view->actionManager()->addAction("dummy", action, view->actionCollection());
+    view->viewManager()->actionManager()->addAction("dummy", action);
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(doc->image(), "paintlayer1", OPACITY_OPAQUE_U8);
     doc->image()->addNode(paintLayer1);
 
-    view->actionManager()->updateGUI();
+    viewManager->nodeManager()->slotUiActivatedNode(paintLayer1);
+
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(action->isEnabled());
 
     // visible
-    paintLayer1->setVisible(false);
-    view->actionManager()->updateGUI();
-    QVERIFY(!action->isEnabled());
+//     paintLayer1->setVisible(false);
+//     view->viewManager()->actionManager()->updateGUI();
+//     QVERIFY(!action->isEnabled());
 
     paintLayer1->setVisible(true);
-    view->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(action->isEnabled());
 
     // locked
     paintLayer1->setUserLocked(true);
-    view->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(!action->isEnabled());
 
     paintLayer1->setUserLocked(false);
-    view->actionManager()->updateGUI();
+    view->viewManager()->actionManager()->updateGUI();
     QVERIFY(action->isEnabled());
 }
 
 void KisActionManagerTest::testTakeAction()
 {
-    KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow =  doc->documentPart()->createMainWindow();
-    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
-    doc->documentPart()->addView(view, doc);
+    KisDocument* doc = createEmptyDocument();
+    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
+    QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
+    KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
+    KisPart::instance()->addView(view, doc);
+    mainWindow->showView(view);
+
+    view->setViewManager(viewManager);
+    viewManager->setCurrentView(view);
 
     KisAction* action = new KisAction("dummy", this);
-    view->actionManager()->addAction("dummy", action, view->actionCollection());
-    QVERIFY(view->actionManager()->actionByName("dummy") != 0);
+    view->viewManager()->actionManager()->addAction("dummy", action);
+    QVERIFY(view->viewManager()->actionManager()->actionByName("dummy") != 0);
 
-    view->actionManager()->takeAction(action, view->actionCollection());
-    QVERIFY(view->actionManager()->actionByName("dummy") == 0);
+    view->viewManager()->actionManager()->takeAction(action);
+    QVERIFY(view->viewManager()->actionManager()->actionByName("dummy") == 0);
 }
 
 

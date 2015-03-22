@@ -27,6 +27,7 @@
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
+#include "kis_transform_mask.h"
 
 
 KisCropProcessingVisitor::KisCropProcessingVisitor(const QRect &rect, bool cropLayers, bool moveLayers)
@@ -43,6 +44,16 @@ void KisCropProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUn
     undoAdapter->addCommand(command);
 }
 
+void KisCropProcessingVisitor::moveNodeImpl(KisNode *node, KisUndoAdapter *undoAdapter)
+{
+    if (m_moveLayers) {
+        QPoint oldPos(node->x(), node->y());
+        QPoint newPos(node->x() - m_rect.x(), node->y() - m_rect.y());
+        KUndo2Command *command = new KisNodeMoveCommand2(node, oldPos, newPos);
+        undoAdapter->addCommand(command);
+    }
+}
+
 void KisCropProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     /**
@@ -56,10 +67,11 @@ void KisCropProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAd
         transaction.commit(undoAdapter);
     }
 
-    if (m_moveLayers) {
-        QPoint oldPos(node->x(), node->y());
-        QPoint newPos(node->x() - m_rect.x(), node->y() - m_rect.y());
-        KUndo2Command *command = new KisNodeMoveCommand2(node, oldPos, newPos);
-        undoAdapter->addCommand(command);
-    }
+    moveNodeImpl(node, undoAdapter);
+}
+
+void KisCropProcessingVisitor::visit(KisTransformMask *node, KisUndoAdapter *undoAdapter)
+{
+    moveNodeImpl(node, undoAdapter);
+    KisSimpleProcessingVisitor::visit(node, undoAdapter);
 }

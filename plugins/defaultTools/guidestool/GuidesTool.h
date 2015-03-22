@@ -61,15 +61,15 @@ public:
     /// Sets up tool state to edit the specified guide line
     void editGuideLine(Qt::Orientation orientation, int index);
 
-public slots:
+public Q_SLOTS:
     /// Sets up tool state to create a new guide line and activates the tool
     void createGuideLine(Qt::Orientation orientation, qreal position);
 
 protected:
     /// reimplemented form KoToolBase
-    virtual QList<QWidget*> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
-private slots:
+private Q_SLOTS:
     void updateGuidePosition(qreal position);
     void guideLineSelected(Qt::Orientation orientation, int index);
     void guideLinesChanged(Qt::Orientation orientation);

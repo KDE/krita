@@ -27,6 +27,7 @@
 #include <KoCanvasBase.h>
 #include <klocale.h>
 #include <limits>
+#include <math.h>
 
 KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy(KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam)
 : KoInteractionStrategy(tool)

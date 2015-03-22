@@ -43,9 +43,11 @@ PointFComposedProperty::PointFComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("x",
-        QVariant(), i18n("X"), i18n("X"), Double, property);
+        QVariant(), i18nc("Property: X coordinate", "X"),
+        i18nc("Property: X coordinate", "X Coordinate"), Double, property);
     (void)new Property("y",
-        QVariant(), i18n("Y"), i18n("Y"), Double, property);
+        QVariant(), i18nc("Property: Y coordinate", "Y"),
+        i18nc("Property: Y coordinate", "Y Coordinate"), Double, property);
 }
 
 void PointFComposedProperty::setValue(Property *property,

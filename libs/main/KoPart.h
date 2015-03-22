@@ -25,19 +25,12 @@
 
 #include <QList>
 
-#include <kservice.h>
 #include <kcomponentdata.h>
 #include <kurl.h>
-#include <kxmlguiclient.h>
 
 #include "komain_export.h"
 
 #include <KoMainWindow.h>
-
-class KJob;
-namespace KIO {
-  class Job;
-}
 
 class KoDocument;
 class KoView;
@@ -127,7 +120,7 @@ public:
 
     KoMainWindow *currentMainwindow() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * This slot loads an existing file and deletes the start up widget.
@@ -135,7 +128,7 @@ public slots:
      */
     virtual void openExistingFile(const KUrl& url);
 
-protected slots:
+protected Q_SLOTS:
 
     /**
      * This slot loads a template and deletes the start up widget.
@@ -143,7 +136,7 @@ protected slots:
      */
     virtual void openTemplate(const KUrl& url);
 
-private slots:
+private Q_SLOTS:
 
     void startCustomDocument();
 

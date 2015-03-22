@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOODTFRAMESREPORTDOCUMENT_H
-#define KOODTFRAMESREPORTDOCUMENT_H
+#ifndef KOODTFRAMEREPORTDOCUMENT_H
+#define KOODTFRAMEREPORTDOCUMENT_H
 
 #include "reportpageoptions.h"
 
@@ -37,11 +37,11 @@ class KoGenStyles;
 
 class OROSection;
 
-class KoOdtFramesReportDocument
+class KoOdtFrameReportDocument
 {
 public:
-    KoOdtFramesReportDocument();
-    ~KoOdtFramesReportDocument();
+    KoOdtFrameReportDocument();
+    ~KoOdtFrameReportDocument();
 
     void startTable(OROSection *section);
     void addPrimitive(KoOdtFrameReportPrimitive *data);
@@ -53,10 +53,8 @@ private:
     bool createContent(KoOdfWriteStore* odfStore, KoGenStyles &coll);
     void createPages(KoXmlWriter* bodyWriter, KoGenStyles &coll);
 
-    KoStore *m_store;
     KoXmlWriter* manifestWriter;
     ReportPageOptions m_pageOptions;
-    KoStoreDevice *m_stylesDevice;
 
     QMap<int, QList<KoOdtFrameReportPrimitive*> > m_pagemap;
 };

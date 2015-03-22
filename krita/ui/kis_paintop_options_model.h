@@ -54,6 +54,7 @@ public:
     void addPaintOpOption(KisPaintOpOption* option, int widgetIndex);
     QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
+    void signalDataChanged(const QModelIndex& index);
 };
 
 #endif // _KIS_PAINTOP_OPTION_LIST_MODEL_H_

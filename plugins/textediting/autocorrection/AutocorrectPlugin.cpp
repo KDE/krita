@@ -26,7 +26,7 @@
 #include <KoTextEditingRegistry.h>
 
 K_PLUGIN_FACTORY( AutocorrectPluginFactory, registerPlugin<AutocorrectPlugin>(); )
-K_EXPORT_PLUGIN( AutocorrectPluginFactory("AutocorrectPlugin") )
+K_EXPORT_PLUGIN( AutocorrectPluginFactory("calligra_textediting_autocorrect") )
 
 AutocorrectPlugin::AutocorrectPlugin( QObject *parent, const QVariantList& )
     : QObject(parent)

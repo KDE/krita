@@ -20,6 +20,7 @@
 
 #include "KoShapeMoveCommand.h"
 
+#include <KoShape.h>
 #include <klocale.h>
 
 class KoShapeMoveCommand::Private

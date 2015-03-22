@@ -21,12 +21,11 @@
 #ifndef SVGGRADIENTHELPER_H
 #define SVGGRADIENTHELPER_H
 
-#include <QGradient>
-#include <QConicalGradient>
-#include <QLinearGradient>
-#include <QRadialGradient>
-
 #include <kdebug.h>
+
+#include <QTransform>
+
+class QGradient;
 
 class SvgGradientHelper
 {

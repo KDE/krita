@@ -32,7 +32,6 @@ const QString TEMPORARY_FILENAME = "/tmp/temporaryKritaBrush.gbr";
 const QString TEMPORARY_BRUSH_NAME = "Temporary custom brush";
 const double DEFAULT_SPACING = 0.25;
 
-class KisGbrBrush;
 
 class KoResource;
 
@@ -43,9 +42,6 @@ class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
 public:
     KisWdgCustomBrush(QWidget *parent) : QWidget(parent) {
         setupUi(this);
-        spacingSlider->setRange(0.0, 10.0, 2);
-        spacingSlider->setExponentRatio(3.0);
-        spacingSlider->setValue(DEFAULT_SPACING);
     }
 };
 
@@ -62,13 +58,13 @@ public:
 protected:
     virtual void showEvent(QShowEvent *);
 
-private slots:
+private Q_SLOTS:
     void slotAddPredefined();
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
-    void slotUpdateSpacing(qreal spacing);
+    void slotSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
 
-signals:
+Q_SIGNALS:
 
     void sigBrushChanged();
 

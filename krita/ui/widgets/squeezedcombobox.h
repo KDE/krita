@@ -87,14 +87,14 @@ public:
      *                to be added to the combobox
      * @param index the position in the widget.
      */
-    void insertSqueezedItem(const QString& newItem, int index);
+    void insertSqueezedItem(const QString& newItem, int index, QVariant userData = QVariant());
 
     /**
      * Append an item.
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
      */
-    void addSqueezedItem(const QString& newItem);
+    void addSqueezedItem(const QString& newItem, QVariant userData = QVariant());
 
     /**
      * Set the current item to the one matching the given text.
@@ -115,7 +115,7 @@ public:
      */
     virtual QSize sizeHint() const;
 
-private slots:
+private Q_SLOTS:
     void slotTimeOut();
     void slotUpdateToolTip(int index);
 

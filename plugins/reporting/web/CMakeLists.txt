@@ -15,15 +15,12 @@ kde4_add_plugin(koreport_webplugin ${koreport_webplugin_LIB_SRCS})
 set (QT_USE_QTWEBKIT TRUE)
 
 target_link_libraries(koreport_webplugin
-    ${KDE4_KDECORE_LIBS}
     ${KOREPORT_LIBS}
     ${KOPROPERTY_LIBS}
     ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTWEBKIT_LIBRARY}
-    ${QT_QTXML_LIBRARY}
 )
 
 ########### install files ###############

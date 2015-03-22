@@ -5,7 +5,7 @@ include_directories(${FLAKE_INCLUDES} ${QT_INCLUDES})
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FLAKE_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
+endif()
 
 add_subdirectory(styles)
 add_subdirectory(tests)
@@ -27,6 +27,7 @@ set(flake_SRCS
     KoInsets.cpp
     KoPasteController.cpp
     KoGuidesData.cpp
+    KoGridData.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
     KoPathSegment.cpp
@@ -225,7 +226,7 @@ target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
 
 if(HAVE_OPENGL)
     target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
-endif(HAVE_OPENGL)
+endif()
 
 set_target_properties(flake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -266,6 +267,7 @@ install(
     KoFlake.h
     KoFrameShape.h
     KoGuidesData.h
+    KoGridData.h
     KoImageCollection.h
     KoImageData.h
     KoInputDevice.h

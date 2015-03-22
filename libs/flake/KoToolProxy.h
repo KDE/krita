@@ -21,11 +21,10 @@
 #ifndef _KO_TOOL_PROXY_H_
 #define _KO_TOOL_PROXY_H_
 
-#include <KoViewConverter.h>
-#include <KoToolManager.h>
 #include "flake_export.h"
 
-#include <QPainter>
+#include <QObject>
+#include <QHash>
 
 class KAction;
 class QAction;
@@ -33,15 +32,18 @@ class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 class QTabletEvent;
-class KoToolBase;
 class KoCanvasBase;
-class KoCanvasController;
+class KoViewConverter;
+class KoToolBase;
 class KoToolProxyPrivate;
 class QInputMethodEvent;
 class KoPointerEvent;
 class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
+class QTouchEvent;
+class QPainter;
+class QPointF;
 
 /**
  * Tool proxy object which allows an application to address the current tool.
@@ -159,7 +161,7 @@ public:
     /// \internal
     KoToolProxyPrivate *priv();
 
-signals:
+Q_SIGNALS:
     /**
      * A tool can have a selection that is copy-able, this signal is emitted when that status changes.
      * @param hasSelection is true when the tool holds selected data.

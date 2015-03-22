@@ -22,7 +22,6 @@
 #include <krita_export.h>
 #include <KoID.h>
 
-class QWidget;
 class KisRecordedAction;
 class KisRecordedActionCreatorFactory;
 

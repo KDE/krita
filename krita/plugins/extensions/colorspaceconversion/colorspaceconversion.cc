@@ -41,7 +41,7 @@
 #include <kis_types.h>
 #include <kis_colorspace_convert_visitor.h>
 
-#include <kis_view2.h>
+#include <KisViewManager.h>
 #include <kis_paint_device.h>
 #include <kis_action.h>
 #include <kis_group_layer.h>
@@ -53,9 +53,10 @@ K_EXPORT_PLUGIN(ColorSpaceConversionFactory("krita"))
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/colorspaceconversion.rc")
-{
+        : KisViewPlugin(parent)
+{      
     KisAction *action  = new KisAction(i18n("&Convert Image Color Space..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("imagecolorspaceconversion", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));
 
@@ -77,7 +78,7 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
     if (!image) return;
 
 
-    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
+    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view->mainWindow(), "ColorSpaceConversion");
     bool allowLCMSOptimization = KisConfig().allowLCMSOptimization();
     dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->setChecked(allowLCMSOptimization);
     Q_CHECK_PTR(dlgColorSpaceConversion);
@@ -108,7 +109,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
+    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view->mainWindow(), "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + layer->colorSpace()->name());

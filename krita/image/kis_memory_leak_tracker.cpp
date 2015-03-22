@@ -1,15 +1,15 @@
 /*
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -23,21 +23,9 @@
 #include <kglobal.h>
 #include "kis_debug.h"
 
-#include "config-memory-leak-tracker.h"
-
 // Those defines are used to ignore classes that are often leaked due to a KisPaintDevice leak
 #define IGNORE_MEMENTO_ITEM
 #define IGNORE_TILE
-
-// Only linux support the memory leak tracker
-#ifndef Q_OS_LINUX
-#undef HAVE_MEMORY_LEAK_TRACKER
-#endif
-
-// Disable the memory leak tracker on release build
-#ifdef NDEBUG
-#undef HAVE_MEMORY_LEAK_TRACKER
-#endif
 
 // Common function
 KisMemoryLeakTracker* KisMemoryLeakTracker::instance()
@@ -140,7 +128,10 @@ KisMemoryLeakTracker::~KisMemoryLeakTracker()
 
 void KisMemoryLeakTracker::reference(const void* what, const void* bywho, const char* whatName)
 {
+    if(what == 0x0) return;
+
     QMutexLocker l(&d->m);
+
     if (whatName == 0 || ( strcmp(whatName, "PK13KisSharedData") != 0
 #ifdef IGNORE_MEMENTO_ITEM
                            && strcmp(whatName, "PK14KisMementoItem") != 0

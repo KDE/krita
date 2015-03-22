@@ -37,9 +37,7 @@
 
 class KoImageData;
 class KoImageCollection;
-class KJob;
 class PictureShape;
-class KoPathShape;
 class KoClipPath;
 
 namespace _Private
@@ -56,7 +54,7 @@ namespace _Private
         explicit PictureShapeProxy(PictureShape *p):
             m_pictureShape(p) { }
 
-    public slots:
+    public Q_SLOTS:
         void setImage(const QString& key, const QImage& image);
 
     private:
@@ -75,7 +73,7 @@ namespace _Private
         PixmapScaler(PictureShape *pictureShape, const QSize &pixmapSize);
         virtual void run();
 
-    signals:
+    Q_SIGNALS:
         void finished(const QString &, const QImage &);
 
     private:

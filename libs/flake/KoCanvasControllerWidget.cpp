@@ -34,15 +34,14 @@
 #include "KoCanvasSupervisor.h"
 #include "KoToolManager_p.h"
 
-#include <ksharedconfig.h>
 #include <kdebug.h>
-#include <kconfiggroup.h>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
 #include <QEvent>
 #include <QDockWidget>
 #include <QTimer>
+#include <QPointer>
 
 #include <KoConfig.h>
 
@@ -50,6 +49,7 @@
 #include <QGLWidget>
 #endif
 
+#include <math.h>
 
 void KoCanvasControllerWidget::Private::setDocumentOffset()
 {
@@ -145,6 +145,8 @@ void KoCanvasControllerWidget::Private::emitPointerPositionChangedSignals(QEvent
 }
 
 
+#include <QTime>
+
 void KoCanvasControllerWidget::Private::activate()
 {
     QWidget *parent = q;
@@ -155,18 +157,13 @@ void KoCanvasControllerWidget::Private::activate()
     if (!observerProvider) {
         return;
     }
-    // Only notify the canvasobservers that the canvas has changed if it has,
-    // indeed, been changed. Doesn't excuse the canvasdockers from properly
-    // disconnecting
-    if (q->canvas() != lastActivatedCanvas) {
-        foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
-            KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
-            if (observer) {
-                observer->setObservedCanvas(q->canvas());
-            }
+    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
+        if (observer) {
+            observer->setObservedCanvas(q->canvas());
         }
-        lastActivatedCanvas = q->canvas();
     }
+
 }
 
 void KoCanvasControllerWidget::Private::unsetCanvas()
@@ -474,7 +471,7 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     zoomBy(viewRect.center(), scale);
 }
 
-void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QWidget *>&widgetMap)
+void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QPointer<QWidget> >&widgetMap)
 {
     emit toolOptionWidgetsChanged(widgetMap);
 }

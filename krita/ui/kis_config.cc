@@ -20,24 +20,17 @@
 
 #include <limits.h>
 
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <fixx11h.h>
-#include <QX11Info>
-#endif
-
-
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QMutex>
 #include <QFont>
 #include <QThread>
 #include <QStringList>
 
-#include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kconfig.h>
 
-#include <KoDocument.h>
+#include <KisDocument.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -51,6 +44,7 @@
 
 #include <config-ocio.h>
 
+#include <kis_color_manager.h>
 
 namespace
 {
@@ -116,6 +110,45 @@ void KisConfig::setUndoStackLimit(int limit) const
 {
     m_cfg.writeEntry("undoStackLimit", limit);
 }
+bool KisConfig::useCumulativeUndoRedo()
+{
+    return m_cfg.readEntry("useCumulativeUndoRedo",false);
+}
+
+void KisConfig::setCumulativeUndoRedo(bool value)
+{
+    m_cfg.writeEntry("useCumulativeUndoRedo", value);
+}
+
+double KisConfig::stackT1()
+{
+     return m_cfg.readEntry("stackT1",5);
+}
+
+void KisConfig::setStackT1(int T1)
+{
+    m_cfg.writeEntry("stackT1", T1);
+}
+
+double KisConfig::stackT2()
+{
+     return m_cfg.readEntry("stackT2",1);
+}
+
+void KisConfig::setStackT2(int T2)
+{
+    m_cfg.writeEntry("stackT2", T2);
+}
+
+int KisConfig::stackN()
+{
+    return m_cfg.readEntry("stackN",5);
+}
+
+void KisConfig::setStackN(int N)
+{
+     m_cfg.writeEntry("stackN", N);
+}
 
 qint32 KisConfig::defImageWidth() const
 {
@@ -177,6 +210,56 @@ void KisConfig::defImageResolution(double res) const
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }
 
+bool KisConfig::defAutoFrameBreakEnabled() const
+{
+    return m_cfg.readEntry("autoFrameBreakEnabled", false);
+}
+
+void KisConfig::defAutoFrameBreakEnabled(bool state) const
+{
+    m_cfg.writeEntry("autoFrameBreakEnabled", state);
+}
+
+bool KisConfig::defOnionSkinningEnabled() const
+{
+    return m_cfg.readEntry("onionSkinningEnabled", false);
+}
+
+void KisConfig::defOnionSkinningEnabled(bool state) const
+{
+    m_cfg.writeEntry("onionSkinningEnabled", state);
+}
+
+int KisConfig::defFps() const
+{
+    return m_cfg.readEntry("fps", 12);
+}
+
+void KisConfig::defFps(int value) const
+{
+    m_cfg.writeEntry("fps", value);
+}
+
+int KisConfig::defLocalPlaybackRange() const
+{
+    return m_cfg.readEntry("localPlaybackRange", 15);
+}
+
+void KisConfig::defLocalPlaybackRange(int value) const
+{
+    m_cfg.writeEntry("localPlaybackRange", value);
+}
+
+bool KisConfig::defLoopingEnabled() const
+{
+    return m_cfg.readEntry("loopingEnabled", true);
+}
+
+void KisConfig::defLoopingEnabled(bool state) const
+{
+    m_cfg.writeEntry("loopingEnabled", state);
+}
+
 enumCursorStyle KisConfig::cursorStyle() const
 {
     return (enumCursorStyle) m_cfg.readEntry("cursorStyleDef", int(DEFAULT_CURSOR_STYLE));
@@ -192,68 +275,96 @@ void KisConfig::setCursorStyle(enumCursorStyle style) const
     m_cfg.writeEntry("cursorStyleDef", (int)style);
 }
 
-QString KisConfig::monitorProfile() const
+bool KisConfig::useDirtyPresets() const
 {
-    QString profile = m_cfg.readEntry("monitorProfile", "");
+   return m_cfg.readEntry("useDirtyPresets",false);
+}
+void KisConfig::setUseDirtyPresets(bool value)
+{
+    m_cfg.writeEntry("useDirtyPresets",value);
+    KisConfigNotifier::instance()->notifyConfigChanged();
+}
+
+bool KisConfig::useEraserBrushSize() const
+{
+   return m_cfg.readEntry("useEraserBrushSize",false);
+}
+
+void KisConfig::setUseEraserBrushSize(bool value)
+{
+    m_cfg.writeEntry("useEraserBrushSize",value);
+    KisConfigNotifier::instance()->notifyConfigChanged();
+}
+
+QColor KisConfig::getMDIBackgroundColor() const
+{
+    QColor col(200, 200, 200);
+    return m_cfg.readEntry("mdiBackgroundColor", col);
+}
+
+void KisConfig::setMDIBackgroundColor(const QColor &v) const
+{
+    m_cfg.writeEntry("mdiBackgroundColor", v);
+}
+
+QString KisConfig::getMDIBackgroundImage() const
+{
+    return m_cfg.readEntry("mdiBackgroundImage", "");
+}
+
+void KisConfig::setMDIBackgroundImage(const QString &filename) const
+{
+    m_cfg.writeEntry("mdiBackgroundImage", filename);
+}
+
+QString KisConfig::monitorProfile(int screen) const
+{
+    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "");
     //qDebug() << "KisConfig::monitorProfile()" << profile;
     return profile;
 }
 
-void KisConfig::setMonitorProfile(const QString & monitorProfile, bool override) const
+QString KisConfig::monitorForScreen(int screen, const QString &defaultMonitor) const
+{
+    return m_cfg.readEntry(QString("monitor_for_screen_%1").arg(screen), defaultMonitor);
+}
+
+void KisConfig::setMonitorForScreen(int screen, const QString& monitor)
+{
+    m_cfg.writeEntry(QString("monitor_for_screen_%1").arg(screen), monitor);
+}
+
+void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bool override) const
 {
     m_cfg.writeEntry("monitorProfile/OverrideX11", override);
-    m_cfg.writeEntry("monitorProfile", monitorProfile);
+    m_cfg.writeEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), monitorProfile);
 }
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
-#ifdef Q_WS_X11
+    KisConfig cfg;
+    QString monitorId = cfg.monitorForScreen(screen, "");
+    if (monitorId.isEmpty()) {
+        return 0;
+    }
 
-    Atom type;
-    int format;
-    unsigned long nitems;
-    unsigned long bytes_after;
-    quint8 * str;
+    QByteArray bytes = KisColorManager::instance()->displayProfile(monitorId);
 
-    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
-
-    if (XGetWindowProperty(QX11Info::display(),
-                           QX11Info::appRootWindow(screen),
-                           icc_atom,
-                           0,
-                           INT_MAX,
-                           False,
-                           XA_CARDINAL,
-                           &type,
-                           &format,
-                           &nitems,
-                           &bytes_after,
-                           (unsigned char **) &str) == Success
-       ) {
-        QByteArray bytes(nitems, '\0');
-        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
-        // XXX: this assumes the screen is 8 bits -- which might not be true
+    if (bytes.length() > 0) {
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
         //qDebug() << "KisConfig::getScreenProfile for screen" << screen << profile->name();
         return profile;
     }
     else {
+        //qDebug() << "Could not get a system monitor profile";
         return 0;
     }
-#else
-    Q_UNUSED(screen)
-    return 0;
-
-#endif
 }
 
 const KoColorProfile *KisConfig::displayProfile(int screen) const
 {
-    // first try to get the screen profile set by the X11 _ICC_PROFILE atom (compatible with colord,
-    // but colord can set the atom to none, in which case we cannot create a suitable profile)
-
     // if the user plays with the settings, they can override the display profile, in which case
-    // we don't want the X11 atom setting.
+    // we don't want the system setting.
     bool override = m_cfg.readEntry("monitorProfile/OverrideX11", false);
     //qDebug() << "KisConfig::displayProfile(). Override X11:" << override;
     const KoColorProfile *profile = 0;
@@ -264,13 +375,18 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
 
     // if it fails. check the configuration
     if (!profile || !profile->isSuitableForDisplay()) {
-        //qDebug() << "\tGoing to get the monitor profile";
-        QString monitorProfileName = monitorProfile();
+        //ebug() << "\tGoing to get the monitor profile";
+        QString monitorProfileName = monitorProfile(screen);
         //qDebug() << "\t\tmonitorProfileName:" << monitorProfileName;
         if (!monitorProfileName.isEmpty()) {
             profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
         }
-        //qDebug() << "\t\tsuitable for display6" << profile->isSuitableForDisplay();
+        if (profile) {
+            //qDebug() << "\t\tsuitable for display6" << profile->isSuitableForDisplay();
+        }
+        else {
+            //qDebug() << "\t\tstill no profile";
+        }
     }
     // if we still don't have a profile, or the profile isn't suitable for display,
     // we need to get a last-resort profile. the built-in sRGB is a good choice then.
@@ -279,7 +395,12 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
         profile = KoColorSpaceRegistry::instance()->profileByName("sRGB Built-in");
     }
 
-    //qDebug() << "\tKisConfig::displayProfile for screen" << screen << "is" << profile->name();
+    if (profile) {
+        //qDebug() << "\tKisConfig::displayProfile for screen" << screen << "is" << profile->name();
+    }
+    else {
+        //qDebug() << "\tCOuldn't get a display profile at all";
+    }
 
     return profile;
 }
@@ -378,15 +499,14 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 
 bool KisConfig::useOpenGL() const
 {
-    if (qApp->applicationName() == "krita" ) {
-        qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+    if (qApp->applicationName() == "krita" || qApp->applicationName() == "kritaanimation") {
+        //qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
-        return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS"));
+        return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
     }
     else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
         return true; // for sketch and gemini
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -445,6 +565,11 @@ void KisConfig::setDisableVSync(bool disableVSync)
 bool KisConfig::showAdvancedOpenGLSettings() const
 {
     return m_cfg.readEntry("showAdvancedOpenGLSettings", false);
+}
+
+bool KisConfig::forceOpenGLFenceWorkaround() const
+{
+    return m_cfg.readEntry("forceOpenGLFenceWorkaround", false);
 }
 
 int KisConfig::numMipmapLevels() const
@@ -737,7 +862,7 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
 
 int KisConfig::autoSaveInterval()  const
 {
-    return m_cfg.readEntry("AutoSaveInterval", KoDocument::defaultAutoSave());
+    return m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave());
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const
@@ -988,6 +1113,17 @@ void KisConfig::setUseOcio(bool useOCIO) const
     m_cfg.writeEntry("Krita/Ocio/UseOcio", useOCIO);
 }
 
+int KisConfig::favoritePresets() const
+{
+    return m_cfg.readEntry("favoritePresets", 10);
+}
+
+void KisConfig::setFavoritePresets(const int value)
+{
+    m_cfg.writeEntry("favoritePresets", value);
+}
+
+
 KisConfig::OcioColorManagementMode
 KisConfig::ocioColorManagementMode() const
 {
@@ -1017,6 +1153,26 @@ QString KisConfig::ocioLutPath() const
 void KisConfig::setOcioLutPath(const QString &path) const
 {
     m_cfg.writeEntry("Krita/Ocio/OcioLutPath", path);
+}
+
+int KisConfig::ocioLutEdgeSize() const
+{
+    return m_cfg.readEntry("Krita/Ocio/LutEdgeSize", 64);
+}
+
+void KisConfig::setOcioLutEdgeSize(int value)
+{
+    m_cfg.writeEntry("Krita/Ocio/LutEdgeSize", value);
+}
+
+bool KisConfig::ocioLockColorVisualRepresentation() const
+{
+    return m_cfg.readEntry("Krita/Ocio/OcioLockColorVisualRepresentation", false);
+}
+
+void KisConfig::setOcioLockColorVisualRepresentation(bool value)
+{
+    m_cfg.writeEntry("Krita/Ocio/OcioLockColorVisualRepresentation", value);
 }
 
 QString KisConfig::defaultPalette() const
@@ -1097,6 +1253,16 @@ void KisConfig::setShowSingleChannelAsColor(bool asColor)
     m_cfg.writeEntry("showSingleChannelAsColor", asColor);
 }
 
+bool KisConfig::hidePopups() const
+{
+    return m_cfg.readEntry("hidePopups", false);
+}
+
+void KisConfig::setHidePopups(bool hidepopups)
+{
+    m_cfg.writeEntry("hidePopups", hidepopups);
+}
+
 int KisConfig::numDefaultLayers() const
 {
     return m_cfg.readEntry("NumberOfLayersForNewImage", 2);
@@ -1105,6 +1271,36 @@ int KisConfig::numDefaultLayers() const
 void KisConfig::setNumDefaultLayers(int num)
 {
     m_cfg.writeEntry("NumberOfLayersForNewImage", num);
+}
+
+quint8 KisConfig::defaultBackgroundOpacity() const
+{
+  return m_cfg.readEntry("BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8);
+}
+
+void KisConfig::setDefaultBackgroundOpacity(quint8 value)
+{
+  m_cfg.writeEntry("BackgroundOpacityForNewImage", (int)value);
+}
+
+QColor KisConfig::defaultBackgroundColor() const
+{
+  return m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)); 
+}
+
+void KisConfig::setDefaultBackgroundColor(QColor value) 
+{
+  m_cfg.writeEntry("BackgroundColorForNewImage", value);
+}
+
+KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle() const
+{
+  return (KisConfig::BackgroundStyle)m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER);
+}
+
+void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)
+{
+  m_cfg.writeEntry("BackgroundStyleForNewImage", (int)value);
 }
 
 int KisConfig::lineSmoothingType() const
@@ -1205,6 +1401,55 @@ int KisConfig::paletteDockerPaletteViewSectionSize() const
 void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
 {
     m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
+}
+
+int KisConfig::tabletEventsDelay() const
+{
+    return m_cfg.readEntry("tabletEventsDelay", 10);
+}
+
+void KisConfig::setTabletEventsDelay(int value)
+{
+    m_cfg.writeEntry("tabletEventsDelay", value);
+}
+
+bool KisConfig::testingAcceptCompressedTabletEvents() const
+{
+    return m_cfg.readEntry("testingAcceptCompressedTabletEvents", false);
+}
+
+void KisConfig::setTestingAcceptCompressedTabletEvents(bool value)
+{
+    m_cfg.writeEntry("testingAcceptCompressedTabletEvents", value);
+}
+
+bool KisConfig::testingCompressBrushEvents() const
+{
+    return m_cfg.readEntry("testingCompressBrushEvents", false);
+}
+
+void KisConfig::setTestingCompressBrushEvents(bool value)
+{
+    m_cfg.writeEntry("testingCompressBrushEvents", value);
+}
+
+bool KisConfig::useVerboseOpenGLDebugOutput() const
+{
+    return m_cfg.readEntry("useVerboseOpenGLDebugOutput", false);
+}
+
+int KisConfig::workaroundX11SmoothPressureSteps() const
+{
+    return m_cfg.readEntry("workaroundX11SmoothPressureSteps", 0);
+}
+
+bool KisConfig::showCanvasMessages() const
+{
+    return m_cfg.readEntry("showOnCanvasMessages", true);
+}
+void KisConfig::setShowCanvasMessages(bool show)
+{
+    m_cfg.writeEntry("showOnCanvasMessages", show);
 }
 
 const KoColorSpace* KisConfig::customColorSelectorColorSpace() const

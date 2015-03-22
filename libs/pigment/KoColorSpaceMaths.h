@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -188,7 +188,6 @@ inline int float2int(float val)
 }
 
 #else
-#include <cmath>
 
 inline int float2int(float x)
 {
@@ -278,6 +277,14 @@ public:
 
     inline static dst_compositetype clamp(dst_compositetype val) {
         return qBound<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::min, val, KoColorSpaceMathsTraits<_Tdst>::max);
+    }
+
+    /**
+     * Clamps the composite type on higher border only. That is a fast path
+     * for scale-only transformations
+     */
+    inline static _Tdst clampAfterScale(dst_compositetype val) {
+        return qMin<dst_compositetype>(val, KoColorSpaceMathsTraits<_Tdst>::max);
     }
 };
 

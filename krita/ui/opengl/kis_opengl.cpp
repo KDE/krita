@@ -25,6 +25,9 @@
 #include <QDir>
 #include <QFile>
 #include <QDesktopServices>
+#include <QMessageBox>
+
+#include <klocale.h>
 
 #include <kis_debug.h>
 #include <kis_config.h>
@@ -32,6 +35,7 @@
 namespace
 {
     QGLWidget *SharedContextWidget = 0;
+    bool NeedsFenceWorkaround = false;
 }
 
 void KisOpenGL::createContext()
@@ -84,7 +88,9 @@ void KisOpenGL::createContext()
 
     if (!((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) ||
           (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0))) {
-        qWarning() << "Cannot use OpenGL: we need at least OpenGL 2.0 or ES 2.0.";
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Cannot use OpenGL: Krita needs at least OpenGL 2.0 or ES 2.0."));
+        KisConfig cfg;
+        cfg.setUseOpenGL(false);
         return;
     }
 
@@ -122,29 +128,45 @@ void KisOpenGL::createContext()
 #endif
 
 #ifdef Q_OS_WIN
-    QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
-    f.open(QFile::WriteOnly);
-    QString vendor((const char*)glGetString(GL_VENDOR));
-    f.write(vendor.toLatin1());
-    f.write(", ");
+    {
+        QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
+        f.open(QFile::WriteOnly);
+        QString vendor((const char*)glGetString(GL_VENDOR));
+        f.write(vendor.toLatin1());
+        f.write(", ");
+        QString renderer((const char*)glGetString(GL_RENDERER));
+        f.write(renderer.toLatin1());
+        f.write(", ");
+        QString version((const char*)glGetString(GL_VERSION));
+        f.write(version.toLatin1());
+    }
+#endif
+
+    // Check if we have a bugged driver that needs fence workaround
     QString renderer((const char*)glGetString(GL_RENDERER));
-    f.write(renderer.toLatin1());
-    f.write(", ");
-    QString version((const char*)glGetString(GL_VERSION));
-    f.write(version.toLatin1());
+
+    bool isOnX11 = false;
+#ifdef Q_WS_X11
+    isOnX11 = true;
 #endif
+
+    if ((isOnX11 && renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
+        NeedsFenceWorkaround = true;
+    }
 }
 
-void KisOpenGL::initialMakeContextCurrent()
+void KisOpenGL::makeSharedContextCurrent()
 {
-    sharedContextWidget()->makeCurrent();
+    if (sharedContextWidget()->context() != QGLContext::currentContext()) {
+        sharedContextWidget()->makeCurrent();
+    }
 }
 
-void KisOpenGL::makeContextCurrent()
+void KisOpenGL::makeContextCurrent(QGLWidget *widget)
 {
-#ifdef Q_OS_WIN
-    sharedContextWidget()->makeCurrent();
-#endif
+    if (widget->context() != QGLContext::currentContext()) {
+        widget->makeCurrent();
+    }
 }
 
 QGLWidget *KisOpenGL::sharedContextWidget()
@@ -184,6 +206,11 @@ void KisOpenGL::clearError()
 bool KisOpenGL::supportsGLSL13()
 {
     return QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_0;
+}
+
+bool KisOpenGL::needsFenceWorkaround()
+{
+    return NeedsFenceWorkaround;
 }
 
 #endif // HAVE_OPENGL

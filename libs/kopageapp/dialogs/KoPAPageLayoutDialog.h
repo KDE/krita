@@ -23,7 +23,6 @@
 #include "KoPageLayoutDialog.h"
 
 class KoPADocument;
-class KoPAPageThumbnailModel;
 struct KoPageLayout;
 
 class KoPAPageLayoutDialog : public KoPageLayoutDialog

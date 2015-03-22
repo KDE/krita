@@ -22,14 +22,14 @@
 
 #include <QObject>
 
-class KisView2;
+class KisViewManager;
 
 // This class prvides some extra kisselectionmanager stuff that in krita prober is in plugins
 class KisSelectionExtras : public QObject
 {
     Q_OBJECT
 public:
-    KisSelectionExtras(KisView2 *view);
+    KisSelectionExtras(KisViewManager *view);
     virtual ~KisSelectionExtras();
 
     Q_INVOKABLE void grow(qint32 xradius, qint32 yradius);
@@ -38,7 +38,7 @@ public:
     Q_INVOKABLE void feather(qint32 radius);
 
 private:
-    KisView2 *m_view;
+    KisViewManager *m_view;
 };
 
 #endif // KISSELECTIONEXTRAS_H

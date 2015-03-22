@@ -27,8 +27,8 @@
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
-#include "kis_view2.h"
-#include "input/kis_input_manager.h"
+#include "KisViewManager.h"
+#include "KisView.h"
 #include "input/kis_tablet_event.h"
 #include "krita_utils.h"
 
@@ -40,12 +40,10 @@ struct KisCanvasController::Private {
     {
     }
 
-    KisView2 *view;
+    QPointer<KisView>view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
     KisPaintopTransformationConnector *paintOpTransformationConnector;
-
-    KisInputManager *globalEventFilter;
 
     void emitPointerPositionChangedSignals(QEvent *event);
     void updateDocumentSizeAfterTransform();
@@ -85,7 +83,7 @@ void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 }
 
 
-KisCanvasController::KisCanvasController(KisView2 *parent, KActionCollection * actionCollection)
+KisCanvasController::KisCanvasController(QPointer<KisView>parent, KActionCollection * actionCollection)
     : KoCanvasControllerWidget(actionCollection, parent),
       m_d(new Private(this))
 {
@@ -94,10 +92,6 @@ KisCanvasController::KisCanvasController(KisView2 *parent, KActionCollection * a
 
 KisCanvasController::~KisCanvasController()
 {
-    if (m_d->globalEventFilter) {
-        m_d->globalEventFilter->setupAsEventFilter(0);
-    }
-
     delete m_d;
 }
 
@@ -106,22 +100,23 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(kritaCanvas);
 
-    m_d->globalEventFilter = kritaCanvas->inputManager();
-
     m_d->coordinatesConverter =
         const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
     KoCanvasControllerWidget::setCanvas(canvas);
 
     m_d->paintOpTransformationConnector =
-        new KisPaintopTransformationConnector(m_d->view, this);
+        new KisPaintopTransformationConnector(kritaCanvas, this);
+
 }
 
 void KisCanvasController::changeCanvasWidget(QWidget *widget)
 {
-    KIS_ASSERT_RECOVER_RETURN(m_d->globalEventFilter);
-
-    m_d->globalEventFilter->setupAsEventFilter(widget);
     KoCanvasControllerWidget::changeCanvasWidget(widget);
+}
+
+void KisCanvasController::activate()
+{
+    KoCanvasControllerWidget::activate();
 }
 
 void KisCanvasController::keyPressEvent(QKeyEvent *event)
@@ -158,7 +153,7 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
 {
     bool isXMirrored = coordinatesConverter->xAxisMirrored();
 
-    view->
+    view->viewManager()->
         showFloatingMessage(
             i18nc("floating message about mirroring",
                   "Horizontal mirroring: %1 ", isXMirrored ? i18n("ON") : i18n("OFF")),
@@ -178,7 +173,8 @@ void KisCanvasController::Private::showRotationValueOnCanvas()
 {
     qreal rotationAngle = coordinatesConverter->rotationAngle();
 
-    view->
+
+    view->viewManager()->
         showFloatingMessage(
             i18nc("floating message about rotation", "Rotation: %1° ",
                   KritaUtils::prettyFormatReal(rotationAngle)),
@@ -219,8 +215,8 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
     Q_ASSERT(kritaCanvas);
 
     if (!canvas()->canvasIsOpenGL() && value) {
-        m_d->view->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
-                                            "To visualize wrap-around mode, enable OpenGL."), QIcon());
+        m_d->view->viewManager()->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
+                                                          "To visualize wrap-around mode, enable OpenGL."), QIcon());
     }
 
     kritaCanvas->setWrapAroundViewingMode(value);

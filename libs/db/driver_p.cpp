@@ -18,9 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "driver_p.h"
+
 #include <kdebug.h>
 #include <klocale.h>
-#include "driver_p.h"
 
 using namespace KexiDB;
 
@@ -52,15 +53,15 @@ void DriverPrivate::initInternalProperties()
 #if 0
     QString str;
     if (features & Driver::SingleTransactions)
-        str = i18n("Single transactions");
+        str = futureI18n("Single transactions support");
     else if (features & Driver::MultipleTransactions)
-        str = i18n("Multiple transactions");
+        str = futureI18n("Multiple transactions support");
     else if (features & Driver::NestedTransactions)
-        str = i18n("Nested transactions");
+        str = futureI18n("Nested transactions support");
     else if (features & Driver::IgnoreTransactions)
-        str = i18n("Ignored");
+        str = futureI18n("Ignored");
     else
-        str = i18n("None");
+        str = futureI18n("None");
 #endif
 // properties["transaction_support"] = features & Driver::TransactionsMask;
 // propertyCaptions["transaction_support"] = i18n("Transaction support");

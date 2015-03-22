@@ -47,13 +47,14 @@ public:
     void contextMenuRequested(KoResource* currentResource, QPoint pos);
     KoTagFilterWidget* tagFilterWidget();
     KoTagChooserWidget* tagChooserWidget();
-private slots:
+private Q_SLOTS:
     void undeleteTag(const QString& tagToUndelete);
     void purgeTagUndeleteList();
     void contextCreateNewTag(KoResource* resource, const QString& tag);
     void contextCreateNewTag(const QString& tag);
     void syncTagBoxEntryRemoval(const QString& tag);
     void syncTagBoxEntryAddition(const QString& tag);
+    void syncTagBoxEntries();
     void tagSaveButtonPressed();
     void contextRemoveTagFromResource(KoResource* resource, const QString& tag);
     void contextAddTagToResource(KoResource* resource, const QString& tag);

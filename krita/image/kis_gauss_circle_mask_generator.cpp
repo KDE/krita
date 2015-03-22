@@ -29,6 +29,7 @@
 
 #include "kis_base_mask_generator.h"
 #include "kis_gauss_circle_mask_generator.h"
+#include "kis_antialiasing_fade_maker.h"
 
 #define M_SQRT_2 1.41421356237309504880
 
@@ -39,26 +40,50 @@
 #endif
 
 
-struct KisGaussCircleMaskGenerator::Private {
+struct KisGaussCircleMaskGenerator::Private
+{
+    Private(bool enableAntialiasing)
+        : fadeMaker(*this, enableAntialiasing)
+    {
+    }
+
     qreal ycoef;
+    qreal fade;
     qreal center, distfactor, alphafactor;
+    KisAntialiasingFadeMaker1D<Private> fadeMaker;
+
+    inline quint8 value(qreal dist) const;
 };
 
-KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, CIRCLE, GaussId), d(new Private)
+KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, GaussId), d(new Private(antialiasEdges))
 {
     d->ycoef = 1.0 / KisMaskGenerator::d->ratio;
-    qreal fade = 1.0 - (fh + fv) / 2.0;
-    if (fade == 0.0) fade = 1e-6;
-    else if (fade == 1.0) fade = 1.0 - 1e-6; // would become undefined for fade == 0 or 1
-    d->center = (2.5 * (6761.0*fade-10000.0))/(M_SQRT_2*6761.0*fade);
+    d->fade = 1.0 - (fh + fv) / 2.0;
+    if (d->fade == 0.0) d->fade = 1e-6;
+    else if (d->fade == 1.0) d->fade = 1.0 - 1e-6; // would become undefined for fade == 0 or 1
+    d->center = (2.5 * (6761.0*d->fade-10000.0))/(M_SQRT_2*6761.0*d->fade);
     d->alphafactor = 255.0 / (2.0 * erf(d->center));
-    d->distfactor = M_SQRT_2 * 12500.0 / (6761.0 * fade * diameter / 2.0);
+}
+
+void KisGaussCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
+{
+    KisMaskGenerator::setScale(scaleX, scaleY);
+
+    d->distfactor = M_SQRT_2 * 12500.0 / (6761.0 * d->fade * effectiveSrcWidth() / 2.0);
+    d->fadeMaker.setRadius(0.5 * effectiveSrcWidth());
 }
 
 KisGaussCircleMaskGenerator::~KisGaussCircleMaskGenerator()
 {
     delete d;
+}
+
+inline quint8 KisGaussCircleMaskGenerator::Private::value(qreal dist) const
+{
+    dist *= distfactor;
+    quint8 ret = alphafactor * (erf(dist + center) - erf(dist - center));
+    return (quint8) 255 - ret;
 }
 
 quint8 KisGaussCircleMaskGenerator::valueAt(qreal x, qreal y) const
@@ -79,13 +104,11 @@ quint8 KisGaussCircleMaskGenerator::valueAt(qreal x, qreal y) const
     }
 
     qreal dist = sqrt(norme(xr, yr * d->ycoef));
-    dist *= d->distfactor;
-    quint8 ret = d->alphafactor * (erf(dist + d->center) - erf(dist - d->center));
-    return (quint8) 255 - ret;
-}
 
-void KisGaussCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
-{
-    KisMaskGenerator::toXML(doc, e);
-    e.setAttribute("type", "circle");
+    quint8 value;
+    if (d->fadeMaker.needFade(dist, &value)) {
+        return value;
+    }
+
+    return d->value(dist);
 }

@@ -29,6 +29,7 @@ class KisTextToolOptionWidget : public QWidget, public Ui_WdgTextOptions
     Q_OBJECT
 public:
     KisTextToolOptionWidget(QWidget* parent = 0);
+    QButtonGroup* m_buttonGroup;
 
     enum TextMode{
         MODE_ARTISTIC,
@@ -38,10 +39,9 @@ public:
     TextMode mode();
     
     KisPainter::FillStyle style();
-private slots:
+private Q_SLOTS:
     void modeChanged(int mode);
-private:
-    QButtonGroup* m_buttonGroup;
+
 };
 
 #endif // KIS_TEXT_TOOL_OPTION_WIDGET_H

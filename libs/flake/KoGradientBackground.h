@@ -24,8 +24,8 @@
 #include "flake_export.h"
 
 #include <QTransform>
-#include <QGradient>
 
+class QGradient;
 class KoGradientBackgroundPrivate;
 
 /// A gradient shape background
@@ -71,7 +71,7 @@ public:
 
 private:
     Q_DECLARE_PRIVATE(KoGradientBackground)
-    Q_DISABLE_COPY(KoGradientBackground);
+    Q_DISABLE_COPY(KoGradientBackground)
 };
 
 #endif // KOGRADIENTBACKGROUND_H

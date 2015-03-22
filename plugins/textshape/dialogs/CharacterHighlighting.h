@@ -43,7 +43,7 @@ public:
     QStringList capitalizationList();
     QStringList fontLayoutPositionList();
 
-signals:
+Q_SIGNALS:
     void underlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
     void strikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
     void capitalizationChanged(QFont::Capitalization);
@@ -53,7 +53,7 @@ signals:
     void charStyleChanged();
 
 
-private slots:
+private Q_SLOTS:
     void underlineTypeChanged(int item);
     void underlineStyleChanged(int item);
     void underlineColorChanged(QColor color);

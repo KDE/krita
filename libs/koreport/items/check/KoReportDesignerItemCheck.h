@@ -16,14 +16,17 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REPORTENTITYCHECK_H
-#define REPORTENTITYCHECK_H
+#ifndef KOREPORTDESIGNERITEMCHECK_H
+#define KOREPORTDESIGNERITEMCHECK_H
 
 #include <KoReportDesignerItemRectBase.h>
 #include <QGraphicsRectItem>
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include "KoReportItemCheck.h"
+
+const int KOREPORT_ITEM_CHECK_DEFAULT_WIDTH = 15;
+const int KOREPORT_ITEM_CHECK_DEFAULT_HEIGHT = 15;
 
 class KoReportDesignerItemCheck : public KoReportItemCheck, public KoReportDesignerItemRectBase
 {
@@ -39,14 +42,15 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
     virtual KoReportDesignerItemCheck* clone();
-private:
-    void init(QGraphicsScene*);
 
-private slots:
+private:
+    void init(QGraphicsScene*, KoReportDesigner*);
+
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 };
 
-#endif // REPORTENTITYCHECK_H
+#endif // KOREPORTDESIGNERITEMCHECK_H

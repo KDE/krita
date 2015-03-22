@@ -8,13 +8,14 @@ include_directories( ${KOODF_INCLUDES} )
 if( QCA2_FOUND )
     include_directories( ${QCA2_INCLUDE_DIR} )
     add_definitions( -DQCA2 )
-endif( QCA2_FOUND )
+endif()
 
 set(koodf_LIB_SRCS
     KoOdf.cpp
     KoXmlNS.cpp
     KoOdfManifestEntry.cpp
     KoDom.cpp
+    KoDocumentInfo.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
     KoFontFace.cpp
@@ -29,7 +30,7 @@ set(koodf_LIB_SRCS
     KoOdfGraphicStyles.cpp
     KoGenChange.cpp
     KoGenChanges.cpp
-    KoOdfDocument.cpp
+    KoDocumentBase.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
     Ko3dScene.cpp
@@ -61,7 +62,7 @@ target_link_libraries(koodf ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
 target_link_libraries(koodf LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
 if( QCA2_FOUND )
     target_link_libraries(koodf ${QCA2_LIBRARIES})
-endif( QCA2_FOUND )
+endif()
 
 set_target_properties(koodf PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -91,7 +92,7 @@ install( FILES
     KoOdfWriteStore.h
     KoStyleStack.h
     KoOdfGraphicStyles.h
-    KoOdfDocument.h
+    KoDocumentBase.h
     KoGenChange.h
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h

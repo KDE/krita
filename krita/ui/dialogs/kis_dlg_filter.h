@@ -25,8 +25,7 @@
 #include <kis_types.h>
 
 class KisFilter;
-class KisFilterConfiguration;
-class KisView2;
+class KisViewManager;
 class KisFilterManager;
 
 class KisDlgFilter : public QDialog
@@ -36,13 +35,13 @@ class KisDlgFilter : public QDialog
 
 public:
 
-    KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager);
+    KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManager *filterManager, QWidget *parent = 0);
 
     ~KisDlgFilter();
 
     void setFilter(KisFilterSP f);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotOnAccept();
     void slotOnReject();

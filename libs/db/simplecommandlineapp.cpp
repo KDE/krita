@@ -82,7 +82,7 @@ SimpleCommandLineApp::SimpleCommandLineApp(
     allOptions.add("u");
     allOptions.add("user <name>", ki18n("Database user name"));
     allOptions.add("p");
-    allOptions.add("password", ki18n("Prompt for password"));
+    allOptions.add("password", ki18n("Prompts for password"));
     allOptions.add("h");
     allOptions.add("host <name>", ki18n("Host (server) name"));
     allOptions.add("port <number>", ki18n("Server's port number"));

@@ -81,6 +81,7 @@ void DeleteAnchorsCommand::redo()
     if (rangeManager) {
         foreach (KoAnchorTextRange *anchorRange, m_anchorRanges) {
             rangeManager->remove(anchorRange);
+            m_document->markContentsDirty(anchorRange->position(), 0);
         }
     }
 }
@@ -99,6 +100,7 @@ void DeleteAnchorsCommand::undo()
     if (rangeManager) {
         foreach (KoAnchorTextRange *anchorRange, m_anchorRanges) {
             rangeManager->insert(anchorRange);
+            m_document->markContentsDirty(anchorRange->position(), 0);
         }
     }
     m_deleteAnchors = false;

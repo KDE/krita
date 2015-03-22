@@ -47,12 +47,10 @@
 
 // KDE
 #include <klocale.h>
-#include <kaction.h>
 
 // Calligra
 #include <KoIcon.h>
 #include <KoUnit.h>
-#include <KoShapeStroke.h>
 #include <KoLineStyleSelector.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoMarkerSelector.h>
@@ -388,8 +386,23 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
     blockChildSignals(true);
 
-    d->lineWidth->setUnit(unit);
-    d->capNJoinMenu->miterLimit->setUnit(unit);
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    KoShape * shape = selection->firstSelectedShape();
+
+    /**
+     * KoStrokeShape knows nothing about the transformations applied
+     * to the shape, which doesn't prevent the shape to apply them and
+     * display the stroke differently. So just take that into account
+     * and show the user correct values using the multiplier in KoUnit.
+     */
+    KoUnit newUnit(unit);
+    if (shape) {
+        newUnit.adjustByPixelTransform(shape->absoluteTransformation(0));
+    }
+
+    d->lineWidth->setUnit(newUnit);
+    d->capNJoinMenu->miterLimit->setUnit(newUnit);
 
     blockChildSignals(false);
 }
@@ -402,6 +415,7 @@ void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
 
 void KoStrokeConfigWidget::blockChildSignals(bool block)
 {
+    d->colorAction->blockSignals(block);
     d->lineWidth->blockSignals(block);
     d->capNJoinMenu->capGroup->blockSignals(block);
     d->capNJoinMenu->joinGroup->blockSignals(block);
@@ -493,6 +507,10 @@ void KoStrokeConfigWidget::endMarkerChanged()
 
 void KoStrokeConfigWidget::selectionChanged()
 {
+    // see a comment in setUnit()
+    setUnit(d->canvas->unit());
+
+
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();
@@ -512,6 +530,8 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
 {
     if (canvas) {
         connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
+                this, SLOT(selectionChanged()));
+        connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 this, SLOT(selectionChanged()));
         connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(canvasResourceChanged(int, const QVariant &)));

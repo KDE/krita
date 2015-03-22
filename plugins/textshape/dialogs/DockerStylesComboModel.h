@@ -49,9 +49,9 @@ public:
 
     void setInitialUsedStyles(QVector<int> usedStyles);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
     void styleApplied(const KoCharacterStyle *style);
 
 protected:

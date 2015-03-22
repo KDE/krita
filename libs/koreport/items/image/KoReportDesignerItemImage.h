@@ -17,8 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __REPORTENTITYIMAGE_H__
-#define __REPORTENTITYIMAGE_H__
+#ifndef __KOREPORTDESIGNERITEMIMAGE_H__
+#define __KOREPORTDESIGNERITEMIMAGE_H__
 
 #include <KoReportDesignerItemRectBase.h>
 #include <QImage>
@@ -45,9 +45,9 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
 private:
-    void init(QGraphicsScene*);
+    void init(QGraphicsScene*, KoReportDesigner*);;
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 
 };

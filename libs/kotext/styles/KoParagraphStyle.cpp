@@ -2359,7 +2359,7 @@ bool KoParagraphStyle::hasDefaults() const
     return false;
 }
 
-KoList *KoParagraphStyle::list()
+KoList *KoParagraphStyle::list() const
 {
     return d->list;
 }

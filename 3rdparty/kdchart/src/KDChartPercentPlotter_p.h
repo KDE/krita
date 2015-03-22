@@ -21,7 +21,7 @@
 **********************************************************************/
 
 #ifndef KDCHARTPERCENTPLOTTER_P_H
-#define KDCHARTPRECENTPLOTTER_P_H
+#define KDCHARTPERCENTPLOTTER_P_H
 
 #include "KDChartPlotter_p.h"
 

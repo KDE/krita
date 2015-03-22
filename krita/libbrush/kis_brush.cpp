@@ -107,6 +107,8 @@ struct KisBrush::Private {
         , hasColor(false)
         , brushType(INVALID)
         , brushPyramid(0)
+        , autoSpacingActive(false)
+        , autoSpacingCoeff(1.0)
     {}
 
     ~Private() {
@@ -127,6 +129,9 @@ struct KisBrush::Private {
     mutable KisQImagePyramid *brushPyramid;
 
     QImage brushTipImage;
+
+    bool autoSpacingActive;
+    qreal autoSpacingCoeff;
 };
 
 KisBrush::KisBrush()
@@ -155,6 +160,8 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->hasColor = rhs.d->hasColor;
     d->angle = rhs.d->angle;
     d->scale = rhs.d->scale;
+    d->autoSpacingActive = rhs.d->autoSpacingActive;
+    d->autoSpacingCoeff = rhs.d->autoSpacingCoeff;
     setFilename(rhs.filename());
     clearBrushPyramid();
     // don't copy the boundary, it will be regenerated -- see bug 291910
@@ -214,10 +221,12 @@ void KisBrush::setHotSpot(QPointF pt)
 
 QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const
 {
-    Q_UNUSED(scaleY);
+    Q_UNUSED(info);
 
-    double w = maskWidth(scaleX, rotation, 0.0, 0.0, info);
-    double h = maskHeight(scaleX, rotation, 0.0, 0.0, info);
+    QSizeF metric = characteristicSize(scaleX, scaleY, rotation);
+
+    qreal w = metric.width();
+    qreal h = metric.height();
 
     // The smallest brush we can produce is a single pixel.
     if (w < 1) {
@@ -258,7 +267,7 @@ void KisBrush::setBrushTipImage(const QImage& image)
     d->brushTipImage = image;
 
     if (!image.isNull()) {
-        if (image.width() > 128 && image.width() > 128) {
+        if (image.width() > 128 || image.height() > 128) {
             KoResource::setImage(image.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         }
         else {
@@ -286,13 +295,15 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
     e.setAttribute("type", type);
     e.setAttribute("filename", shortFilename());
     e.setAttribute("spacing", QString::number(spacing()));
+    e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
+    e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
     e.setAttribute("angle", QString::number(angle()));
     e.setAttribute("scale", QString::number(scale()));
 }
 
 QByteArray KisBrush::generateMD5() const
 {
-    if (!filename().isNull() && QFileInfo(filename()).exists()) {
+    if (!filename().isNull() && !filename().startsWith("bundle://") && QFileInfo(filename()).exists()) {
         QFile f(filename());
         f.open(QFile::ReadOnly);
         QCryptographicHash md5(QCryptographicHash::Md5);
@@ -314,6 +325,17 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element)
         brush->setScale(brush->scale() * 2.0);
     }
     return brush;
+}
+
+QSizeF KisBrush::characteristicSize(double scaleX, double scaleY, double rotation) const
+{
+    Q_UNUSED(scaleY);
+
+    qreal angle = normalizeAngle(rotation + d->angle);
+    qreal scale = scaleX * d->scale;
+
+    return KisQImagePyramid::characteristicSize(QSize(width(), height()),
+                                                scale, angle);
 }
 
 qint32 KisBrush::maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
@@ -378,6 +400,22 @@ void KisBrush::setSpacing(double s)
 double KisBrush::spacing() const
 {
     return d->spacing;
+}
+
+void KisBrush::setAutoSpacing(bool active, qreal coeff)
+{
+    d->autoSpacingCoeff = coeff;
+    d->autoSpacingActive = active;
+}
+
+bool KisBrush::autoSpacingActive() const
+{
+    return d->autoSpacingActive;
+}
+
+qreal KisBrush::autoSpacingCoeff() const
+{
+    return d->autoSpacingCoeff;
 }
 
 void KisBrush::notifyCachedDabPainted()
@@ -510,7 +548,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         }
     }
 
-    delete alphaArray;
+    delete[] alphaArray;
 }
 
 KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,

@@ -186,25 +186,13 @@ KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const
 
 namespace
 {
-const char* const ROOTPART = "root";
-const char* const MAINNAME = "maindoc.xml";
+const char ROOTPART[] = "root";
+const char MAINNAME[] = "maindoc.xml";
 }
 
-KoStore::KoStore(bool writeMimetype)
-    : d_ptr(new KoStorePrivate(this))
-{
-    d_ptr->writeMimetype = writeMimetype;
-}
-
-bool KoStore::init(Mode mode)
-{
-    Q_D(KoStore);
-    d->isOpen = false;
-    d->mode = mode;
-    d->stream = 0;
-    d->finalized = false;
-    return true;
-}
+KoStore::KoStore(Mode mode, bool writeMimetype)
+    : d_ptr(new KoStorePrivate(this, mode, writeMimetype))
+{}
 
 KoStore::~KoStore()
 {
@@ -383,7 +371,7 @@ bool KoStore::enterDirectory(const QString &directory)
 
     while ((pos = tmp.indexOf('/')) != -1 &&
             (success = d->enterDirectoryInternal(tmp.left(pos))))
-        tmp = tmp.mid(pos + 1);
+        tmp.remove(0, pos + 1);
 
     if (success && !tmp.isEmpty())
         return d->enterDirectoryInternal(tmp);

@@ -29,7 +29,7 @@
 
 class KoColor;
 class KoColorProfile;
-class KisCanvas2;
+class KoCanvasResourceManager;
 
 
 /**
@@ -49,7 +49,7 @@ class KRITAUI_EXPORT KisDisplayColorConverter : public QObject
     Q_OBJECT
 
 public:
-    KisDisplayColorConverter(KisCanvas2 *parentCanvas);
+    KisDisplayColorConverter(KoCanvasResourceManager *resourceManager, QObject *parent);
     virtual ~KisDisplayColorConverter();
 
     static KisDisplayColorConverter* dumbConverterInstance();
@@ -58,7 +58,7 @@ public:
 
     const KoColorSpace* paintingColorSpace() const;
     void setMonitorProfile(const KoColorProfile *monitorProfile);
-    void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     QColor toQColor(const KoColor &c) const;
     KoColor approximateFromRenderedQColor(const QColor &c) const;
@@ -75,21 +75,21 @@ public:
     KoColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
     KoColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
 	KoColor fromHsiF(qreal h, qreal s, qreal i);
-    KoColor fromHsyF(qreal h, qreal s, qreal y);
+    KoColor fromHsyF(qreal h, qreal s, qreal y, qreal R=0.2126, qreal G=0.7152, qreal B=0.0722);
 
     void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
     void getHsvF(const KoColor &srcColor, qreal *h, qreal *s, qreal *v, qreal *a = 0);
     void getHslF(const KoColor &srcColor, qreal *h, qreal *s, qreal *l, qreal *a = 0);
 	void getHsiF(const KoColor &srcColor, qreal *h, qreal *s, qreal *i);
-    void getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y);
+    void getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y, qreal R=0.2126, qreal G=0.7152, qreal B=0.0722);
 
     static KoColorConversionTransformation::Intent renderingIntent();
     static KoColorConversionTransformation::ConversionFlags conversionFlags();
 
-    KisDisplayFilterSP displayFilter() const;
+    KisDisplayFilter* displayFilter() const;
     const KoColorProfile* monitorProfile() const;
 
-signals:
+Q_SIGNALS:
     void displayConfigurationChanged();
 
 private:

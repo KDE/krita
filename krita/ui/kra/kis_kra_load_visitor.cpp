@@ -47,13 +47,35 @@
 #include <kis_pixel_selection.h>
 #include <kis_clone_layer.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
+#include <kis_transform_mask_params_interface.h>
+#include "kis_transform_mask_params_factory_registry.h"
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
 #include "kis_shape_selection.h"
-
-
+#include "kis_dom_utils.h"
 
 using namespace KRA;
+
+QString expandEncodedDirectory(const QString& _intern)
+{
+    QString intern = _intern;
+
+    QString result;
+    int pos;
+    while ((pos = intern.indexOf('/')) != -1) {
+        if (QChar(intern.at(0)).isDigit())
+            result += "part";
+        result += intern.left(pos + 1);   // copy numbers (or "pictures") + "/"
+        intern = intern.mid(pos + 1);   // remove the dir we just processed
+    }
+
+    if (!intern.isEmpty() && QChar(intern.at(0)).isDigit())
+        result += "part";
+    result += intern;
+    return result;
+}
+
 
 KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
                                      KoStore *store,
@@ -67,6 +89,14 @@ KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
     m_image = image;
     m_store = store;
     m_name = name;
+    m_store->pushDirectory();
+    if (!m_store->enterDirectory(m_name)) {
+        dbgFile << "Could not enter directory" << m_name << ", probably an old-style file with 'part' added.";
+        m_name = expandEncodedDirectory(m_name);
+    }
+    else {
+        m_store->popDirectory();
+    }
     m_syntaxVersion = syntaxVersion;
 }
 
@@ -173,14 +203,6 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
 bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 {
-//     if (!loadPaintDevice(layer->paintDevice(), getLocation(layer))) {
-//         return false;
-//     }
-//
-//     if (!loadProfile(layer->paintDevice(), getLocation(layer, DOT_ICC))) {
-//         return false;
-//     }
-
     if (!loadMetaData(layer)) {
         return false;
     }
@@ -189,7 +211,6 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
     result = loadSelection(getLocation(layer), layer->internalSelection());
 
     result = loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
-
     layer->update();
 
     result = visitAll(layer);
@@ -242,6 +263,55 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
     result = loadSelection(getLocation(mask), mask->selection());
     result = loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
     return result;
+}
+
+bool KisKraLoadVisitor::visit(KisTransformMask *mask)
+{
+    QString location = getLocation(mask, DOT_TRANSFORMCONFIG);
+    if (m_store->hasFile(location)) {
+        QByteArray data;
+        m_store->open(location);
+        data = m_store->read(m_store->size());
+        m_store->close();
+        if (!data.isEmpty()) {
+            QDomDocument doc;
+            doc.setContent(data);
+
+            QDomElement rootElement = doc.documentElement();
+
+            QDomElement main;
+
+            if (!KisDomUtils::findOnlyElement(rootElement, "main", &main/*, &m_errorMessages*/)) {
+                return false;
+            }
+
+            QString id = main.attribute("id", "not-valid");
+
+            if (id == "not-valid") {
+                m_errorMessages << i18n("Could not load \"id\" of the transform mask");
+                return false;
+            }
+
+            QDomElement data;
+
+            if (!KisDomUtils::findOnlyElement(rootElement, "data", &data, &m_errorMessages)) {
+                return false;
+            }
+
+            KisTransformMaskParamsInterfaceSP params =
+                KisTransformMaskParamsFactoryRegistry::instance()->createParams(id, data);
+
+            if (!params) {
+                m_errorMessages << i18n("Could not create transform mask params");
+                return false;
+            }
+
+            mask->setTransformParams(params);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
@@ -351,7 +421,10 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
     KisMetaData::IOBackend* backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
 
     if (!backend || !backend->supportLoading()) {
-        dbgFile << "Backend " << backend->id() << " does not support loading.";
+        if (backend)
+            dbgFile << "Backend " << backend->id() << " does not support loading.";
+        else
+            dbgFile << "Could not load the XMP backenda t all";
         return true;
     }
 

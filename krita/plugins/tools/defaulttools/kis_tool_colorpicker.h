@@ -29,6 +29,7 @@
 #include "kis_tool.h"
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
+#include <kshortcut.h>
 class KoResource;
 class KoColorSet;
 
@@ -85,7 +86,7 @@ protected:
     void activate(ToolActivation activation, const QSet<KoShape*> &);
     void deactivate();
 
-public slots:
+public Q_SLOTS:
     void setToForeground(bool newValue);
     void slotSetUpdateColor(bool);
     void slotSetNormaliseValues(bool);

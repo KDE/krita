@@ -33,6 +33,7 @@
 #include "KoGenStyle.h"
 
 #include <QTextCursor>
+#include <QTextDocument>
 
 KoTosContainerPrivate::KoTosContainerPrivate(KoShapeContainer *q)
     : KoShapeContainerPrivate(q)

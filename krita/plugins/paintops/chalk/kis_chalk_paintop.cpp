@@ -37,10 +37,11 @@
 
 #include <kis_pressure_opacity_option.h>
 
-KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
+    Q_UNUSED(node);
     m_opacityOption.readOptionSetting(settings);
     m_opacityOption.resetAllSensors();
 

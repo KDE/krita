@@ -32,7 +32,7 @@ using namespace KoProperty;
 class EditorDataModel::Private
 {
 public:
-    Private(Set *_set, Set::Order _order = Set::InsertionOrder) : set(_set), order(_order)
+    explicit Private(Set *_set, Set::Order _order = Set::InsertionOrder) : set(_set), order(_order)
     {
     }
     Set *set;

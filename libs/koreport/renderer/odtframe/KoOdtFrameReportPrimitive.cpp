@@ -30,6 +30,7 @@
 
 KoOdtFrameReportPrimitive::KoOdtFrameReportPrimitive(OROPrimitive *primitive)
     : m_primitive(primitive)
+    , m_uid(0)
 {
 }
 

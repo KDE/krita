@@ -32,8 +32,8 @@
 #include <QToolButton>
 
 #include <klocale.h>
-#include <kcombobox.h>
 
+#include <KisMainWindow.h>
 #include <KoFileDialog.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -41,8 +41,9 @@
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
-#include <kis_view2.h>
-#include <kis_doc2.h>
+#include "KoIcon.h"
+#include <KisViewManager.h>
+#include <KisDocument.h>
 #include <kis_config.h>
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
@@ -54,6 +55,7 @@
 #include "krita_utils.h"
 
 #include "ocio_display_filter.h"
+#include "black_white_point_chooser.h"
 
 
 OCIO::ConstConfigRcPtr defaultRawProfile()
@@ -148,6 +150,14 @@ LutDockerDock::LutDockerDock()
     connect(m_gammaDoubleWidget, SIGNAL(sliderPressed()), SLOT(gammaSliderPressed()));
     connect(m_gammaDoubleWidget, SIGNAL(sliderReleased()), SLOT(gammaSliderReleased()));
 
+    m_bwPointChooser = new BlackWhitePointChooser(this);
+
+    connect(m_bwPointChooser, SIGNAL(sigBlackPointChanged(qreal)), SLOT(updateDisplaySettings()));
+    connect(m_bwPointChooser, SIGNAL(sigWhitePointChanged(qreal)), SLOT(updateDisplaySettings()));
+
+    connect(m_btnConvertCurrentColor, SIGNAL(toggled(bool)), SLOT(updateDisplaySettings()));
+    connect(m_btmShowBWConfiguration, SIGNAL(clicked()), SLOT(slotShowBWConfiguration()));
+    slotUpdateIcons();
 
     connect(m_cmbInputColorSpace, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbDisplayDevice, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
@@ -158,7 +168,7 @@ LutDockerDock::LutDockerDock()
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetOcioConfiguration()));
 
-    m_displayFilter = OcioDisplayFilterSP(new OcioDisplayFilter(this));
+    m_displayFilter = 0;
 
     resetOcioConfiguration();
 }
@@ -169,14 +179,52 @@ LutDockerDock::~LutDockerDock()
 
 void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnect(this);
+        m_displayFilter = 0;
+    }
+
+    setEnabled(_canvas != 0);
+
     if (KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(_canvas)) {
         m_canvas = canvas;
         if (m_canvas) {
+            if (!m_canvas->displayFilter()) {
+                m_displayFilter = new OcioDisplayFilter(this);
+                resetOcioConfiguration();
+                updateDisplaySettings();
+            }
+            else {
+                m_displayFilter = dynamic_cast<OcioDisplayFilter*>(m_canvas->displayFilter());
+                Q_ASSERT(m_displayFilter);
+                m_ocioConfig = m_displayFilter->config;
+                KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
+                m_exposureDoubleWidget->setValue(m_displayFilter->exposure);
+                KisSignalsBlocker gammaBlocker(m_gammaDoubleWidget);
+                m_gammaDoubleWidget->setValue(m_displayFilter->gamma);
+                KisSignalsBlocker componentsBlocker(m_cmbComponents);
+                m_cmbComponents->setCurrentIndex((int)m_displayFilter->swizzle);
+                KisSignalsBlocker bwBlocker(m_bwPointChooser);
+                m_bwPointChooser->setBlackPoint(m_displayFilter->blackPoint);
+                m_bwPointChooser->setWhitePoint(m_displayFilter->whitePoint);
+            }
+
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
-            canvas->setDisplayFilter(m_displayFilter);
+            connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
+
         }
     }
-    resetOcioConfiguration();
+}
+
+void LutDockerDock::slotUpdateIcons()
+{
+    m_btnConvertCurrentColor->setIcon(themedIcon("krita_tool_freehand"));
+    m_btmShowBWConfiguration->setIcon(themedIcon("properties"));
+}
+
+void LutDockerDock::slotShowBWConfiguration()
+{
+    m_bwPointChooser->showPopup(m_btmShowBWConfiguration->mapToGlobal(QPoint()));
 }
 
 bool LutDockerDock::canChangeExposureAndGamma() const
@@ -186,6 +234,7 @@ bool LutDockerDock::canChangeExposureAndGamma() const
 
 qreal LutDockerDock::currentExposure() const
 {
+    if (!m_displayFilter) return 0.0;
     return canChangeExposureAndGamma() ? m_displayFilter->exposure : 0.0;
 }
 
@@ -197,6 +246,7 @@ void LutDockerDock::setCurrentExposure(qreal value)
 
 qreal LutDockerDock::currentGamma() const
 {
+    if (!m_displayFilter) return 1.0;
     return canChangeExposureAndGamma() ? m_displayFilter->gamma : 1.0;
 }
 
@@ -211,7 +261,7 @@ void LutDockerDock::setCurrentExposureImpl(qreal value)
     m_exposureDoubleWidget->setValue(value);
     if (!m_canvas) return;
 
-    m_canvas->view()->showFloatingMessage(
+    m_canvas->viewManager()->showFloatingMessage(
         i18nc("floating message about exposure", "Exposure: %1",
               KritaUtils::prettyFormatReal(m_exposureDoubleWidget->value())),
         QIcon(), 500, KisFloatingMessage::Low);
@@ -222,7 +272,7 @@ void LutDockerDock::setCurrentGammaImpl(qreal value)
     m_gammaDoubleWidget->setValue(value);
     if (!m_canvas) return;
 
-    m_canvas->view()->showFloatingMessage(
+    m_canvas->viewManager()->showFloatingMessage(
         i18nc("floating message about gamma", "Gamma: %1",
               KritaUtils::prettyFormatReal(m_gammaDoubleWidget->value())),
         QIcon(), 500, KisFloatingMessage::Low);
@@ -238,7 +288,7 @@ void LutDockerDock::slotImageColorSpaceChanged()
 void LutDockerDock::exposureValueChanged(double exposure)
 {
     if (m_canvas && !m_draggingSlider) {
-        m_canvas->view()->resourceProvider()->setHDRExposure(exposure);
+        m_canvas->viewManager()->resourceProvider()->setHDRExposure(exposure);
         updateDisplaySettings();
     }
 }
@@ -258,7 +308,7 @@ void LutDockerDock::exposureSliderReleased()
 void LutDockerDock::gammaValueChanged(double gamma)
 {
     if (m_canvas && !m_draggingSlider) {
-        m_canvas->view()->resourceProvider()->setHDRGamma(gamma);
+        m_canvas->viewManager()->resourceProvider()->setHDRGamma(gamma);
         updateDisplaySettings();
     }
 }
@@ -276,15 +326,17 @@ void LutDockerDock::gammaSliderReleased()
 
 void LutDockerDock::enableControls()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_canvas);
+    bool canDoExternalColorCorrection = false;
 
-    KisImageSP image = m_canvas->view()->image();
-
-    bool canDoExternalColorCorrection =
-        image->colorSpace()->colorModelId() == RGBAColorModelID;
+    if (m_canvas) {
+        KisImageSP image = m_canvas->viewManager()->image();
+        canDoExternalColorCorrection =
+            image->colorSpace()->colorModelId() == RGBAColorModelID;
+    }
 
     if (!canDoExternalColorCorrection) {
         KisSignalsBlocker colorManagementBlocker(m_colorManagement);
+        Q_UNUSED(colorManagementBlocker);
         m_colorManagement->setCurrentIndex((int) KisConfig::INTERNAL);
     }
 
@@ -310,7 +362,9 @@ void LutDockerDock::enableControls()
 
 void LutDockerDock::updateDisplaySettings()
 {
-    if (!m_canvas || !m_canvas->view() || !m_canvas->view()->image()) return;
+    if (!m_canvas || !m_canvas->viewManager() || !m_canvas->viewManager()->image()) {
+        return;
+    }
 
     enableControls();
     writeControls();
@@ -324,14 +378,19 @@ void LutDockerDock::updateDisplaySettings()
         m_displayFilter->exposure = m_exposureDoubleWidget->value();
         m_displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
 
+        m_displayFilter->blackPoint = m_bwPointChooser->blackPoint();
+        m_displayFilter->whitePoint = m_bwPointChooser->whitePoint();
+
         m_displayFilter->forceInternalColorManagement =
             m_colorManagement->currentIndex() == (int)KisConfig::INTERNAL;
+
+        m_displayFilter->setLockCurrentColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
 
         m_displayFilter->updateProcessor();
         m_canvas->setDisplayFilter(m_displayFilter);
     }
     else {
-        m_canvas->setDisplayFilter(KisDisplayFilterSP());
+        m_canvas->setDisplayFilter(0);
     }
     m_canvas->updateCanvas();
 }
@@ -342,6 +401,7 @@ void LutDockerDock::writeControls()
 
     cfg.setUseOcio(m_chkUseOcio->isChecked());
     cfg.setOcioColorManagementMode((KisConfig::OcioColorManagementMode) m_colorManagement->currentIndex());
+    cfg.setOcioLockColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
 }
 
 void LutDockerDock::slotColorManagementModeChanged()
@@ -413,16 +473,16 @@ void LutDockerDock::refillControls()
 
     { // Exposure
         KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
-        m_exposureDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRExposure());
+        m_exposureDoubleWidget->setValue(m_canvas->viewManager()->resourceProvider()->HDRExposure());
     }
 
     { // Gamma
         KisSignalsBlocker gammaBlocker(m_gammaDoubleWidget);
-        m_gammaDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRGamma());
+        m_gammaDoubleWidget->setValue(m_canvas->viewManager()->resourceProvider()->HDRGamma());
     }
 
     { // Components
-        const KoColorSpace *cs = m_canvas->view()->image()->colorSpace();
+        const KoColorSpace *cs = m_canvas->viewManager()->image()->colorSpace();
 
         KisSignalsBlocker componentsBlocker(m_cmbComponents);
         m_cmbComponents->clear();
@@ -453,6 +513,12 @@ void LutDockerDock::refillControls()
         for (int i = 0; i < numDisplays; ++i) {
             m_cmbDisplayDevice->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getDisplay(i)));
         }
+    }
+
+    { // Lock Current Color
+        KisSignalsBlocker locker(m_btnConvertCurrentColor);
+        KisConfig cfg;
+        m_btnConvertCurrentColor->setChecked(cfg.ocioLockColorVisualRepresentation());
     }
 
     refillViewCombobox();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
+  <dict>
     <key>CFBundleDevelopmentRegion</key>
     <string>English</string>
     <key>CFBundleExecutable</key>
@@ -34,24 +34,28 @@
     <string>${MACOSX_BUNDLE_COPYRIGHT}</string>
     <key>CFBundleDocumentTypes</key>
     <array>
-        <dict>
-            <key>CFBundleTypeExtensions</key>
-            <array>
-                <string>kra</string>
-                <string>KRA</string>
+      <dict>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>kra</string>
+          <string>KRA</string>
+        </array>
+        <key>CFBundleTypeMIMETypes</key>
+        <array>
+          <string>application/x-krita</string>
+        </array>
+        <key>CFBundleTypeOSTypes</key>
+        <array>
             </array>
-            <key>CFBundleTypeMIMETypes</key>
-            <array>
-                <string>application/x-krita</string>
-            </array>
-            <key>CFBundleTypeOSTypes</key>
-            <array>
-            </array>
-            <key>CFBundleTypeName</key>
-            <string>Krita File</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-        </dict>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>kra</string>
+        </array>
+        <key>CFBundleTypeName</key>
+        <string>Krita File</string>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+      </dict>
     </array>
-</dict>
+  </dict>
 </plist>

@@ -23,14 +23,15 @@
 #include "flake_export.h"
 
 #include "KoShapeUserData.h"
-#include "KoInsets.h"
-#include <QTextDocument>
 
 class KoTextShapeDataBasePrivate;
 class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoGenStyle;
+struct KoInsets;
+
+class QTextDocument;
 
 /**
  * \internal

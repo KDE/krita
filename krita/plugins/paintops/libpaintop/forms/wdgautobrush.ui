@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>252</height>
+    <width>429</width>
+    <height>279</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -17,11 +17,23 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
     <layout class="QVBoxLayout">
+     <property name="spacing">
+      <number>8</number>
+     </property>
      <item>
       <widget class="QToolButton" name="brushPreview">
        <property name="sizePolicy">
@@ -42,7 +54,33 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="label_9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Mask Type:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QComboBox" name="comboBoxMaskType"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_10">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Shape:</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QComboBox" name="comboBoxShape">
@@ -59,6 +97,16 @@
          <string>Square</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="btnAntialiasing">
+       <property name="toolTip">
+        <string>The border of the brush will be smoothed to avoid aliasing</string>
+       </property>
+       <property name="text">
+        <string>Anti-alias</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -79,8 +127,44 @@
      </item>
     </layout>
    </item>
+   <item row="1" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>17</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="1">
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
+     <item row="0" column="1" colspan="2">
+      <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Angle:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
@@ -88,16 +172,6 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" colspan="2">
-      <widget class="KisMultipliersDoubleSliderSpinBox" name="inputRadius" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -201,10 +275,20 @@
        </widget>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_3">
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_randomness">
        <property name="text">
-        <string>Angle:</string>
+        <string>Randomness:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Spikes:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -221,28 +305,11 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Spikes:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="1" colspan="2">
       <widget class="KisSliderSpinBox" name="inputSpikes" native="true"/>
      </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_randomness">
-       <property name="text">
-        <string>Randomness:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
+     <item row="6" column="1" colspan="2">
+      <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
      </item>
      <item row="5" column="1" colspan="2">
       <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true"/>
@@ -257,11 +324,11 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
+     <item row="7" column="1" colspan="2">
+      <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
      </item>
      <item row="7" column="0">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="label_11">
        <property name="text">
         <string>Spacing:</string>
        </property>
@@ -270,26 +337,7 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true"/>
-     </item>
     </layout>
-   </item>
-   <item row="1" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>17</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>
@@ -319,9 +367,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisMultipliersDoubleSliderSpinBox</class>
+   <class>KisSpacingSelectionWidget</class>
    <extends>QWidget</extends>
-   <header>kis_multipliers_double_slider_spinbox.h</header>
+   <header>kis_spacing_selection_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

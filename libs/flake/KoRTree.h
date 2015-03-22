@@ -358,7 +358,7 @@ template <typename T>
 void KoRTree<T>::insertHelper(const QRectF& bb, const T& data, int id)
 {
     QRectF nbb(bb.normalized());
-    // This has to be done as it is not possible to use QRectF::unite() with a isNull()
+    // This has to be done as it is not possible to use QRectF::united() with a isNull()
     if (nbb.isNull()) {
         nbb.setWidth(0.0001);
         nbb.setHeight(0.0001);
@@ -586,7 +586,7 @@ QPair<int, int> KoRTree<T>::pickSeeds(Node *node)
             if (i != j) {
                 QRectF bb1(node->childBoundingBox(i));
                 QRectF bb2(node->childBoundingBox(j));
-                QRectF comp(node->childBoundingBox(i).unite(node->childBoundingBox(j)));
+                QRectF comp(node->childBoundingBox(i).united(node->childBoundingBox(j)));
                 qreal area = comp.width() * comp.height() - bb1.width() * bb1.height() - bb2.width() * bb2.height();
                 //qDebug() << " ps" << i << j << area;
                 if (area > max) {
@@ -609,8 +609,8 @@ QPair<int, int> KoRTree<T>::pickNext(Node * node, QVector<bool> & marker, Node *
     int group = 0;
     for (int i = 0; i < m_capacity + 1; ++i) {
         if (marker[i] == false) {
-            QRectF bb1 = group1->boundingBox().unite(node->childBoundingBox(i));
-            QRectF bb2 = group2->boundingBox().unite(node->childBoundingBox(i));
+            QRectF bb1 = group1->boundingBox().united(node->childBoundingBox(i));
+            QRectF bb2 = group2->boundingBox().united(node->childBoundingBox(i));
             qreal d1 = bb1.width() * bb1.height() - group1->boundingBox().width() * group1->boundingBox().height();
             qreal d2 = bb2.width() * bb2.height() - group2->boundingBox().width() * group2->boundingBox().height();
             qreal diff = qAbs(d1 - d2);
@@ -754,7 +754,7 @@ void KoRTree<T>::Node::updateBoundingBox()
 {
     m_boundingBox = QRectF();
     for (int i = 0; i < m_counter; ++i) {
-        m_boundingBox = m_boundingBox.unite(m_childBoundingBox[i]);
+        m_boundingBox = m_boundingBox.united(m_childBoundingBox[i]);
     }
 }
 
@@ -807,7 +807,7 @@ void KoRTree<T>::NonLeafNode::insert(const QRectF& bb, Node * data)
     data->setPlace(this->m_counter);
     data->setParent(this);
     this->m_childBoundingBox[this->m_counter] = bb;
-    this->m_boundingBox = this->m_boundingBox.unite(bb);
+    this->m_boundingBox = this->m_boundingBox.united(bb);
     //qDebug() << "NonLeafNode::insert" << this->nodeId() << data->nodeId();
     ++this->m_counter;
 }
@@ -898,7 +898,7 @@ typename KoRTree<T>::Node * KoRTree<T>::NonLeafNode::getLeastEnlargement(const Q
     //qDebug() << "NonLeafNode::getLeastEnlargement";
     QVarLengthArray<qreal> area(this->m_counter);
     for (int i = 0; i < this->m_counter; ++i) {
-        QSizeF big(this->m_childBoundingBox[i].unite(bb).size());
+        QSizeF big(this->m_childBoundingBox[i].united(bb).size());
         area[i] = big.width() * big.height() - this->m_childBoundingBox[i].width() * this->m_childBoundingBox[i].height();
     }
 
@@ -962,7 +962,7 @@ void KoRTree<T>::LeafNode::insert(const QRectF& bb, const T& data, int id)
     m_data[this->m_counter] = data;
     m_dataIds[this->m_counter] = id;
     this->m_childBoundingBox[this->m_counter] = bb;
-    this->m_boundingBox = this->m_boundingBox.unite(bb);
+    this->m_boundingBox = this->m_boundingBox.united(bb);
     ++this->m_counter;
 }
 

@@ -24,6 +24,7 @@
 #include <QTextStream>
 #include <QDir>
 
+#include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
@@ -33,6 +34,7 @@
 #include <kis_adjustment_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -219,6 +221,19 @@ bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
     saveMask(el, FILTER_MASK, mask);
     el.setAttribute(FILTER_NAME, mask->filter()->name());
     el.setAttribute(FILTER_VERSION, mask->filter()->version());
+
+    m_elem.appendChild(el);
+
+    m_count++;
+    return true;
+}
+
+bool KisSaveXmlVisitor::visit(KisTransformMask *mask)
+{
+    Q_ASSERT(mask);
+
+    QDomElement el = m_doc.createElement(MASK);
+    saveMask(el, TRANSFORM_MASK, mask);
 
     m_elem.appendChild(el);
 

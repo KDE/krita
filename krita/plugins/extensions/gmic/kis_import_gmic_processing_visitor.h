@@ -39,6 +39,11 @@ public:
                                    const KisSelectionSP selection
                                   );
 
+
+    static void gmicImageToPaintDevice(gmic_image<float>& srcGmicImage,
+                                       KisPaintDeviceSP dstPaintDevice, KisSelectionSP selection = 0, const QRect &dstRect = QRect());
+
+
 protected:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);

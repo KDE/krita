@@ -35,6 +35,7 @@
 
 
 class KoShape;
+class KAction;
 
 namespace KDChart
 {
@@ -70,7 +71,7 @@ public:
 
     void updateMarkers();
 
-public slots:
+public Q_SLOTS:
     void chartTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);
     void update();
@@ -125,7 +126,7 @@ public slots:
     void ui_axisEditFontButtonClicked();
     void ui_axisLabelsFontChanged();
 
-signals:
+Q_SIGNALS:
     void chartTypeChanged(ChartType type, ChartSubtype subType);
     void chartSubTypeChanged(ChartSubtype subType);
     void dataSetChartTypeChanged(DataSet *dataSet, ChartType type);

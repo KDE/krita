@@ -26,6 +26,11 @@
 class OROPage;
 
 //
+// i2of5
+//
+void renderI2of5(OROPage *, const QRectF &, const QString &, int align);
+
+//
 // 3of9
 //
 void render3of9(OROPage *, const QRectF &, const QString &, int align);

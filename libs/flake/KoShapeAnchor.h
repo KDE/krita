@@ -23,14 +23,13 @@
 
 #include "flake_export.h"
 
-#include <QPointF>
-#include <KoXmlReaderForward.h>
-
 class KoShape;
+class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoShapeAnchorPrivate;
 class QTextDocument;
+class QPointF;
 
 
 /**
@@ -255,7 +254,7 @@ public:
 
 private:
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

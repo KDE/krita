@@ -42,6 +42,9 @@
 #include "kis_brush_server.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "widgets/kis_multipliers_double_slider_spinbox.h"
+#include "kis_spacing_selection_widget.h"
+#include "kis_signals_blocker.h"
+
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
@@ -98,26 +101,28 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     setObjectName(name);
 
     m_lbSize = new QLabel(i18n("Size:"), this);
-    m_slSize = new KisMultipliersDoubleSliderSpinBox(this);
-    m_slSize->setRange(0.0, 10.0, 2);
-    m_slSize->setValue(5.0);
-    m_slSize->addMultiplier(10);
-    m_slSize->addMultiplier(100);
+    m_slSize = new KisDoubleSliderSpinBox(this);
+    m_slSize->setRange(0, 1000, 2);
+    m_slSize->setValue(5);
+    m_slSize->setExponentRatio(3.0);
+    m_slSize->setSuffix(" px");
+
+
+    m_slSize->setExponentRatio(3.0);
     QObject::connect(m_slSize, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
 
     m_lbRotation = new QLabel(i18n("Rotation:"), this);
     m_slRotation = new KisDoubleSliderSpinBox(this);
-    m_slRotation->setRange(0.0, 360, 2);
-    m_slRotation->setValue(0.0);
+    m_slRotation->setRange(0, 360, 0);
+    m_slRotation->setValue(0);
+    m_slRotation->setSuffix(QChar(Qt::Key_degree));
     QObject::connect(m_slRotation, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
     m_lbSpacing = new QLabel(i18n("Spacing:"), this);
-    m_slSpacing = new KisDoubleSliderSpinBox(this);
-    m_slSpacing->setRange(0.02, 10, 2);
-    m_slSpacing->setValue(0.1);
-    m_slSpacing->setExponentRatio(3.0);
-    QObject::connect(m_slSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSpacing(qreal)));
+    m_slSpacing = new KisSpacingSelectionWidget(this);
+    m_slSpacing->setSpacing(true, 1.0);
+    connect(m_slSpacing, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
     m_chkColorMask = new QCheckBox(i18n("Use color as mask"), this);
     QObject::connect(m_chkColorMask, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
@@ -217,11 +222,12 @@ void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
     }
 }
 
-void KisBrushChooser::slotSetItemSpacing(qreal spacingValue)
+void KisBrushChooser::slotSpacingChanged()
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
-        brush->setSpacing(spacingValue);
+        brush->setSpacing(m_slSpacing->spacing());
+        brush->setAutoSpacing(m_slSpacing->autoSpacingActive(), m_slSpacing->autoSpacingCoeff());
         slotActivatedBrush(brush);
 
         emit sigBrushChanged();
@@ -244,24 +250,19 @@ void KisBrushChooser::update(KoResource * resource)
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
     if (brush) {
-        blockSignals(true);
         QString text = QString("%1 (%2 x %3)")
                        .arg(i18n(brush->name().toUtf8().data()))
                        .arg(brush->width())
                        .arg(brush->height());
 
         m_lbName->setText(text);
-        m_slSpacing->blockSignals(true);
-        m_slSpacing->setValue(brush->spacing());
-        m_slSpacing->blockSignals(false);
 
-        m_slRotation->blockSignals(true);
+        m_slSpacing->setSpacing(brush->autoSpacingActive(),
+                                brush->autoSpacingActive() ?
+                                brush->autoSpacingCoeff() : brush->spacing());
+
         m_slRotation->setValue(brush->angle() * 180 / M_PI);
-        m_slRotation->blockSignals(false);
-
-        m_slSize->blockSignals(true);
         m_slSize->setValue(brush->width() * brush->scale());
-        m_slSize->blockSignals(false);
 
         // useColorAsMask support is only in gimp brush so far
         KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(resource);
@@ -269,7 +270,6 @@ void KisBrushChooser::update(KoResource * resource)
             m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
         }
         m_chkColorMask->setEnabled(brush->hasColor() && gimpBrush);
-        blockSignals(false);
 
         slotActivatedBrush(brush);
         emit sigBrushChanged();
@@ -278,13 +278,18 @@ void KisBrushChooser::update(KoResource * resource)
 
 void KisBrushChooser::slotActivatedBrush(KoResource * resource)
 {
-    if (m_brush) {
-        m_brush->clearBrushPyramid();
-    }
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
-    if (brush) {
+
+    if (m_brush != brush) {
+        if (m_brush) {
+            m_brush->clearBrushPyramid();
+        }
+
         m_brush = brush;
-        m_brush->prepareBrushPyramid();
+
+        if (m_brush) {
+            m_brush->prepareBrushPyramid();
+        }
     }
 }
 

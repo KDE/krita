@@ -23,11 +23,22 @@
 #include "kotextlayout_export.h"
 
 #include <QList>
+#include <QString>
 
 class KoTextLayoutRootArea;
 class KoTextDocumentLayout;
 class KoTextLayoutObstruction;
 class QRectF;
+
+/**
+ * Represents the contract that a root area requested by the layout system
+ * has to respect. For simple layout situations (like a single text shape),
+ * it's fine to ignore the contract since pages do not exist.
+ */
+struct RootAreaConstraint {
+    QString masterPageName;
+    int visiblePageNumber;
+};
 
 /**
  * When laying out text we need an area where upon the text will be placed.
@@ -40,8 +51,15 @@ public:
     explicit KoTextLayoutRootAreaProvider();
     virtual ~KoTextLayoutRootAreaProvider();
 
-    /// Provides an new root area
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout) = 0;
+    /**
+     * Provides a new root area for the layout
+     *
+     * @param documentLayout the current document layouter
+     * @param constraints the rules the new area has to respect (page style, visible page number...)
+     * @param requestedPosition the position of the new area in the text flow
+     * @param isNewArea will contain a boolean to tell whether this is a new area or a recycled one
+     */
+    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea) = 0;
 
     /// Release all root areas that are after the "afterThis" root area
     /// If afterThis == 0 all should be released
@@ -62,7 +80,6 @@ public:
 
     /// Return a list of obstructions intersecting root area
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea) = 0;
-
 };
 
 #endif

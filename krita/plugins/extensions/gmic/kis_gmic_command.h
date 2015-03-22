@@ -22,26 +22,45 @@
 
 #include <QSharedPointer>
 
-#include <gmic.h>
-
 #include <kundo2command.h>
+#include <kis_node.h>
 #include "kis_types.h"
+
+#include <gmic.h>
 
 class QString;
 
-class KisGmicCommand : public KUndo2Command
+class KisGmicCommand : public QObject, public KUndo2Command
 {
+    Q_OBJECT
 public:
     KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, const char * customCommands = 0);
+    virtual ~KisGmicCommand();
 
     void undo();
     void redo();
+
+    float * progressPtr();
+    bool * cancelPtr();
+
+    /* @return true if gmic failed in redo () */
+    bool isSuccessfullyDone();
+
+Q_SIGNALS:
+    void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
+
+private:
+    static QString gmicDimensionString(const gmic_image<float>& img);
 
 private:
     QString m_gmicCommandString;
     QSharedPointer<gmic_list<float> > m_images;
     const char * m_customCommands;
     bool m_firstRedo;
+
+    float * const m_progress;
+    bool * const m_cancel; // cancels gmic command execution
+    bool m_isSuccessfullyDone;
 };
 
 #endif /* __KIS_GMIC_COMMAND_H */

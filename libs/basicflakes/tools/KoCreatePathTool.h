@@ -28,7 +28,6 @@
 #include <QList>
 
 class KoPathShape;
-class KoPathPoint;
 class KoShapeStroke;
 
 class KoCreatePathToolPrivate;
@@ -63,7 +62,7 @@ public:
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
 
-public slots:
+public Q_SLOTS:
     /// reimplemented
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented
@@ -90,7 +89,7 @@ protected:
     void cancelPath();
 
     /// reimplemented
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
     KoShapeStroke *createStroke();

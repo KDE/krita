@@ -48,9 +48,9 @@ public:
         return KisNodeSP(new KisTransparencyMask(*this));
     }
 
-    bool allowAsChild(KisNodeSP) const;
     QRect decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst,
-                       const QRect & rc) const;
+                       const QRect & rc,
+                       PositionToFilthy maskPos) const;
     QIcon icon() const;
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);

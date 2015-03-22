@@ -35,9 +35,6 @@
        </item>
        <item>
         <widget class="KLineEdit" name="sectionNameLineEdit">
-         <property name="placeholderText">
-          <string>Enter section name here</string>
-         </property>
         </widget>
        </item>
       </layout>

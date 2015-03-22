@@ -51,6 +51,19 @@ public:
     int undoStackLimit() const;
     void setUndoStackLimit(int limit) const;
 
+    bool useCumulativeUndoRedo();
+    void setCumulativeUndoRedo(bool value);
+
+    double stackT1();
+    void setStackT1(int T1);
+
+    double stackT2();
+    void setStackT2(int T2);
+
+    int stackN();
+    void setStackN(int N);
+
+
     qint32 defImageWidth() const;
     void defImageWidth(qint32 width) const;
 
@@ -59,6 +72,21 @@ public:
 
     double defImageResolution() const;
     void defImageResolution(double res) const;
+
+    bool defAutoFrameBreakEnabled() const;
+    void defAutoFrameBreakEnabled(bool state) const;
+
+    bool defOnionSkinningEnabled() const;
+    void defOnionSkinningEnabled(bool state) const;
+
+    int defFps() const;
+    void defFps(int value) const;
+
+    int defLocalPlaybackRange() const;
+    void defLocalPlaybackRange(int value) const;
+
+    bool defLoopingEnabled() const;
+    void defLoopingEnabled(bool state) const;
 
     /**
      * @return the id of the default color model used for creating new images.
@@ -91,10 +119,17 @@ public:
     enumCursorStyle getDefaultCursorStyle() const;
     void setCursorStyle(enumCursorStyle style) const;
 
-    QString monitorProfile() const;
-    void setMonitorProfile(const QString & monitorProfile, bool override) const;
-    static const KoColorProfile* getScreenProfile(int screen = -1);
-    const KoColorProfile *displayProfile(int screen = -1) const;
+    /// get the profile the user has selected for the given screen
+    QString monitorProfile(int screen) const;
+    void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;
+
+    QString monitorForScreen(int screen, const QString &defaultMonitor) const;
+    void setMonitorForScreen(int screen, const QString& monitor);
+
+    /// Get the actual profile to be used for the given screen, which is
+    /// either the screen profile set by the color management system or
+    /// the custom monitor profile set by the user, depending on the configuration
+    const KoColorProfile *displayProfile(int screen) const;
 
     QString workingColorSpace() const;
     void setWorkingColorSpace(const QString & workingColorSpace) const;
@@ -139,6 +174,8 @@ public:
     void setDisableVSync(bool disableVSync);
 
     bool showAdvancedOpenGLSettings() const;
+
+    bool forceOpenGLFenceWorkaround() const;
 
     int numMipmapLevels() const;
     int openGLTextureSize() const;
@@ -296,6 +333,9 @@ public:
     bool useOcio() const;
     void setUseOcio(bool useOCIO) const;
 
+    int favoritePresets() const;
+    void setFavoritePresets(const int value);
+
 
     enum OcioColorManagementMode {
         INTERNAL = 0,
@@ -311,6 +351,12 @@ public:
 
     QString ocioLutPath() const;
     void setOcioLutPath(const QString &path) const;
+
+    int ocioLutEdgeSize() const;
+    void setOcioLutEdgeSize(int value);
+
+    bool ocioLockColorVisualRepresentation() const;
+    void setOcioLockColorVisualRepresentation(bool value);
 
     bool useSystemMonitorProfile() const;
     void setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const;
@@ -333,9 +379,26 @@ public:
     bool showSingleChannelAsColor() const;
     void setShowSingleChannelAsColor(bool asColor);
 
+    bool hidePopups() const;
+    void setHidePopups(bool hidepopups);
+
     int numDefaultLayers() const;
     void setNumDefaultLayers(int num);
 
+    quint8 defaultBackgroundOpacity() const;
+    void setDefaultBackgroundOpacity(quint8 value);
+
+    QColor defaultBackgroundColor() const;
+    void setDefaultBackgroundColor(QColor value);
+
+    enum BackgroundStyle {
+        LAYER = 0,
+        PROJECTION = 1
+    };
+
+    BackgroundStyle defaultBackgroundStyle() const;
+    void setDefaultBackgroundStyle(BackgroundStyle value);
+    
     int lineSmoothingType() const;
     void setLineSmoothingType(int value);
 
@@ -366,9 +429,36 @@ public:
     int paletteDockerPaletteViewSectionSize() const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;
 
+    int tabletEventsDelay() const;
+    void setTabletEventsDelay(int value);
+
+    bool testingAcceptCompressedTabletEvents() const;
+    void setTestingAcceptCompressedTabletEvents(bool value);
+
+    bool testingCompressBrushEvents() const;
+    void setTestingCompressBrushEvents(bool value);
+
     const KoColorSpace* customColorSelectorColorSpace() const;
     void setCustomColorSelectorColorSpace(const KoColorSpace *cs);
 
+    bool useDirtyPresets() const;
+    void setUseDirtyPresets(bool value);
+
+    bool useEraserBrushSize() const;
+    void setUseEraserBrushSize(bool value);    
+
+    QColor getMDIBackgroundColor() const;
+    void setMDIBackgroundColor(const QColor & v) const;
+
+    QString getMDIBackgroundImage() const;
+    void setMDIBackgroundImage(const QString & fileName) const;
+
+    bool useVerboseOpenGLDebugOutput() const;
+
+    int workaroundX11SmoothPressureSteps() const;
+
+    bool showCanvasMessages() const;
+    void setShowCanvasMessages(bool show);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {
@@ -393,6 +483,9 @@ public:
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&) const;
+
+    /// get the profile the color managment system has stored for the given screen
+    static const KoColorProfile* getScreenProfile(int screen);
 
 private:
     mutable KConfigGroup m_cfg;

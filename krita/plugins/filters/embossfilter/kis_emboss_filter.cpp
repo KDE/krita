@@ -32,14 +32,10 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 
 #include "KoIntegerMaths.h"
-#include "KoProgressUpdater.h"
 #include <KoUpdater.h>
 
 #include <kis_random_accessor_ng.h>
@@ -59,6 +55,7 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Em
     setSupportsPainting(false);
     setColorSpaceIndependence(TO_RGBA8);
     setSupportsThreading(false);
+    setSupportsAdjustmentLayers(false);
 }
 
 KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDeviceSP) const

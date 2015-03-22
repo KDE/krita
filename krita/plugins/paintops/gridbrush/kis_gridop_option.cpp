@@ -35,14 +35,41 @@ KisGridOpOption::KisGridOpOption()
     m_checkable = false;
     m_options = new KisGridOpOptionsWidget();
 
-    connect(m_options->gridWidthSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->gridHeightSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->divisionLevelSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->divisionPressureCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->scaleDSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->vertBorderDSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->horizBorderDSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterBorderCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    // initialize slider values
+    m_options->gridWidthSPBox->setRange(1, 999, 0);
+    m_options->gridWidthSPBox->setValue(25);
+    m_options->gridWidthSPBox->setSuffix(" px");
+    m_options->gridWidthSPBox->setExponentRatio(3.0);
+
+
+    m_options->gridHeightSPBox->setRange(1, 999, 0);
+    m_options->gridHeightSPBox->setValue(25);
+    m_options->gridHeightSPBox->setSuffix(" px");
+    m_options->gridHeightSPBox->setExponentRatio(3.0);
+
+    m_options->divisionLevelSPBox->setRange(0, 25, 0);
+    m_options->divisionLevelSPBox->setValue(2);
+
+    m_options->scaleDSPBox->setRange(0.1, 10.0, 2);
+    m_options->scaleDSPBox->setValue(1.0);
+    m_options->scaleDSPBox->setExponentRatio(3.0);
+
+    m_options->vertBorderDSPBox->setRange(0, 100, 2);
+    m_options->vertBorderDSPBox->setValue(0.0);
+
+
+    m_options->horizBorderDSPBox->setRange(0, 100, 2);
+    m_options->vertBorderDSPBox->setValue(0.0);
+
+
+    connect(m_options->gridWidthSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->gridHeightSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->divisionLevelSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->divisionPressureCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->scaleDSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->vertBorderDSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->horizBorderDSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->jitterBorderCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }

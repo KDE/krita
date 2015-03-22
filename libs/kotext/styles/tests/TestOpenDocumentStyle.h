@@ -67,7 +67,7 @@ class TestOpenDocumentStyle : public QObject
         template<class T>
         bool basicTestFunction(KoGenStyle::Type family, const QString &familyName, Attribute *attribute, const QString &value);
 
-    private slots:
+    private Q_SLOTS:
         void initTestCase();
         void testTableColumnStyle();
         void testTableColumnStyle_data();

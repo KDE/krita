@@ -25,8 +25,7 @@
 #ifndef QT_NO_DBUS
 
 #include <QMap>
-#include <QObject>
-#include <QtDBus>
+#include <QDBusAbstractAdaptor>
 
 class QString;
 class QStringList;
@@ -44,7 +43,7 @@ public:
 
     virtual ~KoViewAdaptor();
 
-public slots: // METHODS
+public Q_SLOTS: // METHODS
     Q_SCRIPTABLE QStringList/*DCOPCStringList*/ actions();
 
 protected:

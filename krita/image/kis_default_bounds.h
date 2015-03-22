@@ -42,6 +42,7 @@ public:
     int currentLevelOfDetail() const;
 
 protected:
+    friend class KisPaintDeviceTest;
     static const QRect infiniteRect;
 
 private:

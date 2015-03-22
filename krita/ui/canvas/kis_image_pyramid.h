@@ -41,7 +41,7 @@ public:
     void setImageSize(qint32 w, qint32 h);
     void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
     void setChannelFlags(const QBitArray &channelFlags);
-    void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    void setDisplayFilter(KisDisplayFilter* displayFilter);
     void updateCache(const QRect &dirtyImageRect);
     void recalculateCache(KisPPUpdateInfoSP info);
 
@@ -109,7 +109,7 @@ private:
     QImage convertToQImageFast(KisPaintDeviceSP paintDevice,
                                const QRect& unscaledRect);
 
-private slots:
+private Q_SLOTS:
 
     void configChanged();
 
@@ -121,7 +121,7 @@ private:
     const KoColorProfile* m_monitorProfile;
     const KoColorSpace* m_monitorColorSpace;
 
-    KisDisplayFilterSP m_displayFilter;
+    KisDisplayFilter* m_displayFilter;
 
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;

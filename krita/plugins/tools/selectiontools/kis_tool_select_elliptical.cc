@@ -30,7 +30,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_shape_tool_helper.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_selection_manager.h"
 #include "kis_system_locker.h"
 
@@ -64,7 +64,7 @@ void KisToolSelectElliptical::finishRect(const QRectF &rect)
     // If the user just clicks on the canvas deselect
     if (rect.isEmpty()) {
         // Queueing this action to ensure we avoid a race condition when unlocking the node system
-        QTimer::singleShot(0, kisCanvas->view()->selectionManager(), SLOT(deselect()));
+        QTimer::singleShot(0, kisCanvas->viewManager()->selectionManager(), SLOT(deselect()));
         return;
     }
 
@@ -75,7 +75,7 @@ void KisToolSelectElliptical::finishRect(const QRectF &rect)
 
         KisPainter painter(tmpSel);
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-        painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
+        painter.setPaintOpPreset(currentPaintOpPreset(), currentNode(), currentImage());
         painter.setAntiAliasPolygonFill(m_widgetHelper.optionWidget()->antiAliasSelection());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);

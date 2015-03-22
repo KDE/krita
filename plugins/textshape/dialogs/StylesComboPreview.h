@@ -45,7 +45,7 @@ public:
 
     void setPreview(QImage image);
 
-signals:
+Q_SIGNALS:
     void resized();
     void newStyleRequested(QString name);
     void clicked();
@@ -57,7 +57,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *event);
 
-private slots:
+private Q_SLOTS:
     void addNewStyle();
 
 private:

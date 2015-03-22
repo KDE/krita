@@ -22,22 +22,23 @@
 #include <QFileSystemWatcher>
 #include <QApplication>
 
-#include "kis_doc2.h"
+#include <kurl.h>
+
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_signal_compressor.h"
-
+#include "KisPart.h"
 
 struct KisSafeDocumentLoader::Private
 {
     Private()
-        : doc(new KisDoc2()),
-          fileChangedSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE),
+        : fileChangedSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE),
           isLoading(false),
           fileChangedFlag(false)
     {
     }
 
-    QScopedPointer<KisDoc2> doc;
+    QScopedPointer<KisDocument>  doc;
     QFileSystemWatcher fileWatcher;
     KisSignalCompressor fileChangedSignalCompressor;
     QTimer delayedLoadTimer;
@@ -75,11 +76,6 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
 KisSafeDocumentLoader::~KisSafeDocumentLoader()
 {
     delete m_d;
-}
-
-KisImageWSP KisSafeDocumentLoader::image() const
-{
-    return m_d->doc->image();
 }
 
 void KisSafeDocumentLoader::setPath(const QString &path)
@@ -148,6 +144,7 @@ void KisSafeDocumentLoader::delayedLoadStart()
         originalInfo.lastModified() == m_d->initialFileTimeStamp &&
         tempInfo.size() == m_d->initialFileSize) {
 
+        m_d->doc.reset(KisPart::instance()->createDocument());
         successfullyLoaded = m_d->doc->openUrl(m_d->temporaryPath);
     } else {
         qDebug() << "File was modified externally. Restarting.";
@@ -166,8 +163,10 @@ void KisSafeDocumentLoader::delayedLoadStart()
         // Restart the attempt
         m_d->fileChangedSignalCompressor.start();
     } else {
-        emit loadingFinished();
+        emit loadingFinished(m_d->doc->image());
     }
+
+    m_d->doc.reset();
 }
 
 

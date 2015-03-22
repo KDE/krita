@@ -88,7 +88,7 @@ public:
      * Return the type of a user defined variable. If the variable does not exist or
      * is not a user defined variable then an empty string is returned.
      */
-    QString userType(const QString &name);
+    QString userType(const QString &name) const;
 
     /**
      * Create a new variable that can be inserted into the document using
@@ -116,7 +116,7 @@ public:
      */
     void saveOdf(KoXmlWriter *bodyWriter);
 
-signals:
+Q_SIGNALS:
 	void valueChanged();
 
 private:

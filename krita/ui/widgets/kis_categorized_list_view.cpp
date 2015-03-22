@@ -19,6 +19,13 @@
 #include "kis_categorized_list_view.h"
 #include "kis_categorized_list_model.h"
 #include <QMouseEvent>
+#include <QMenu>
+#include <QAction>
+#include <QShowEvent>
+#include <kconfig.h>
+#include <kglobalsettings.h>
+#include <klocale.h>
+#include <KoIcon.h>
 
 
 KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):
@@ -80,10 +87,8 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 {
     if (m_useCheckBoxHack) {
         QModelIndex index = QListView::indexAt(event->pos());
-
         if (index.isValid() && (event->pos().x() < 25) && (model()->flags(index) & Qt::ItemIsUserCheckable)) {
             QListView::mousePressEvent(event);
-
             QMouseEvent releaseEvent(QEvent::MouseButtonRelease,
                                      event->pos(),
                                      event->globalPos(),
@@ -92,16 +97,45 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
                                      event->modifiers());
 
             QListView::mouseReleaseEvent(&releaseEvent);
-
             emit sigEntryChecked(index);
             return;
         }
+
     }
 
     QListView::mousePressEvent(event);
+
+    if(event->button() == Qt::RightButton){
+        QModelIndex index = QListView::indexAt(event->pos());
+        QMenu menu(this);
+        if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()) {
+
+            bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
+
+            QIcon icon = locked ? koIcon("locked") : koIcon("unlocked");
+
+            QAction* action1 = menu.addAction(icon, locked ? i18n("Unlock (restore settings from preset)") : i18n("Lock"));
+
+            connect(action1, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuDropSettingsTriggered()));
+
+            if (locked){
+                QAction* action2 = menu.addAction(icon, i18n("Unlock (keep current settings)"));
+                connect(action2, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuSaveSettingsTriggered()));
+            }
+            menu.exec(event->globalPos());
+        }
+    }
 }
 
 void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)
 {
     QListView::mouseReleaseEvent(event);
+
+    QModelIndex index = QListView::indexAt(event->pos());
+    if(index.data(__CategorizedListModelBase::isToggledRole).toBool() && index.isValid()){
+        emit sigEntryChecked(index);
+    }
 }
+
+
+

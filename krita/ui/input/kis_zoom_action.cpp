@@ -28,7 +28,7 @@
 #include <kis_canvas2.h>
 #include <kis_canvas_controller.h>
 #include "kis_cursor.h"
-#include "kis_view2.h"
+#include "KisViewManager.h"
 #include "kis_input_manager.h"
 #include "kis_config.h"
 
@@ -71,7 +71,7 @@ QPointF KisZoomAction::Private::centerPoint(QTouchEvent* event)
 
 void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
 {
-    KoZoomAction *zoomAction = q->inputManager()->canvas()->view()->zoomController()->zoomAction();
+    KoZoomAction *zoomAction = q->inputManager()->canvas()->viewManager()->zoomController()->zoomAction();
 
     if (event) {
         QPoint pos;
@@ -173,13 +173,13 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
             d->zoomTo(false, event);
             break;
         case ZoomResetShortcut:
-            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
             break;
         case ZoomToPageShortcut:
-            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
             break;
         case ZoomToWidthShortcut:
-            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
+            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
             break;
     }
 }
@@ -205,7 +205,7 @@ void KisZoomAction::inputEvent( QEvent* event )
             float delta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
             
             if(qAbs(delta) > 0.1f) {
-                qreal zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
+                qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
                 Q_UNUSED(zoom);
                 static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), delta);
                 d->lastDistance = dist;
@@ -238,8 +238,8 @@ void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
         else {
             coeff = 1.0 + qreal(diff.y()) / stepCont;
         }
-        float zoom = coeff * inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
-        inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+        float zoom = coeff * inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
+        inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
     } else if (d->mode == DiscreteZoomModeShortcut) {
         d->distance += diff.y();
         bool zoomIn = d->distance > 0;

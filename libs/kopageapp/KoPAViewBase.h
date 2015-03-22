@@ -25,9 +25,7 @@
 class KoPACanvasBase;
 class KoViewConverter;
 class KoPAPageBase;
-class KoZoomHandler;
 class KoPADocument;
-class KoRuler;
 class KoZoomHandler;
 class KoZoomController;
 
@@ -128,7 +126,7 @@ public:
 
     void emitActivePageChanged() { emit activePageChanged(); }
 
-public slots:
+public Q_SLOTS:
 
     /// Set the active page and updates the UI
     void updateActivePage( KoPAPageBase * page ) { m_view->viewMode()->updateActivePage(page); }
@@ -141,7 +139,7 @@ public slots:
 
     void editPaste() { m_view->editPaste(); }
 
-signals:
+Q_SIGNALS:
 
     /// Emitted every time the active page is changed
     void activePageChanged();

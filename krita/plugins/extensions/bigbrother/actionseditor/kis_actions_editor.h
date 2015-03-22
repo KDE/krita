@@ -41,7 +41,7 @@ public:
     KisActionsEditor(QWidget* parent);
     ~KisActionsEditor();
     void setMacro(KisMacro*);
-private slots:
+private Q_SLOTS:
     void slotCreateAction(const QString& _id);
     void slotActionActivated(const QModelIndex&);
     void slotBtnDelete();

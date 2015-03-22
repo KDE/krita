@@ -27,7 +27,6 @@
 #include <Parameter.h>
 #include <Command.h>
 #include <Category.h>
-#include "kis_gmic_widget.h"
 
 
 KisGmicParser::KisGmicParser(const QStringList& filePaths):m_filePaths(filePaths)
@@ -101,6 +100,7 @@ Component* KisGmicParser::createFilterTree()
             {
                 if (isCategory(line))
                 {
+                    //dbgPlugins << "category:" << line;
                     command = 0;
                     QString categoryName = parseCategoryName(line);
 
@@ -152,7 +152,7 @@ Component* KisGmicParser::createFilterTree()
                 }
                 else if (isCommand(line))
                 {
-                    // dbgPlugins << "command" << line;
+                    //dbgPlugins << "command: " << line;
                     command = new Command();
                     command->processCommandName(line);
 
@@ -197,13 +197,14 @@ Component* KisGmicParser::createFilterTree()
                             }
                             else if (lines > 1)
                             {
-                                dbgPlugins << "At " << lineNum << " lines: " << lines << " multiline: " << block;
+                                // dbgPlugins << "At " << lineNum << " lines: " << lines << " multiline: " << block;
                             }
                         }
                     }
                     else
                     {
-                        dbgPlugins << "No command for given parameter, invalid gmic definition file";
+                        dbgPlugins << "No command for given parameter, invalid gmic definition line: " << line;
+
                     }
                 }
                 else if (line.startsWith(GIMP_COMMENT+"_"))
@@ -212,7 +213,7 @@ Component* KisGmicParser::createFilterTree()
                 }
                 else
                 {
-                    dbgPlugins << "IGNORING:" << line;
+                    dbgPlugins << "Ignoring line :" << line;
                 }
             }
         }

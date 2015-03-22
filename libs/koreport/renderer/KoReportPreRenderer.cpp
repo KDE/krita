@@ -21,7 +21,6 @@
 #include "renderobjects.h"
 #include "KoReportData.h"
 
-#include <kdeversion.h>
 #include <QFontMetrics>
 #include <labelsizeinfo.h>
 #include <KoPageFormat.h>
@@ -205,11 +204,10 @@ void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detai
         if (m_kodata/* && !curs->eof()*/) {
             QStringList keys;
             QStringList keyValues;
-            bool status = false;
             QList<int> shownGroups;
             ORDetailGroupSectionData * grp = 0;
 
-            status = m_kodata->moveFirst();
+            bool status = m_kodata->moveFirst();
             m_recordCount = m_kodata->recordCount();
 
             //kDebug() << "Record Count:" << m_recordCount;
@@ -426,11 +424,11 @@ void KoReportPreRendererPrivate::initEngine()
 {
     m_scriptHandler = new KRScriptHandler(m_kodata, m_reportData);
 
-    connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), m_scriptHandler, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
+    connect(this, SIGNAL(enteredGroup(QString,QVariant)), m_scriptHandler, SLOT(slotEnteredGroup(QString,QVariant)));
 
-    connect(this, SIGNAL(exitedGroup(const QString&, const QVariant&)), m_scriptHandler, SLOT(slotExitedGroup(const QString&, const QVariant&)));
+    connect(this, SIGNAL(exitedGroup(QString,QVariant)), m_scriptHandler, SLOT(slotExitedGroup(QString,QVariant)));
 
-    connect(this, SIGNAL(renderingSection(KRSectionData*, OROPage*, QPointF)), m_scriptHandler, SLOT(slotEnteredSection(KRSectionData*, OROPage*, QPointF)));
+    connect(this, SIGNAL(renderingSection(KRSectionData*,OROPage*,QPointF)), m_scriptHandler, SLOT(slotEnteredSection(KRSectionData*,OROPage*,QPointF)));
 }
 
 void KoReportPreRendererPrivate::asyncItemsFinished()
@@ -542,7 +540,7 @@ ORODocument* KoReportPreRenderer::generate()
 
             //!TODO This is a hack
             if (i.key() == "field")
-                QObject::connect(d->m_scriptHandler, SIGNAL(groupChanged(const QString&)), i.value(), SLOT(setWhere(const QString&)));
+                QObject::connect(d->m_scriptHandler, SIGNAL(groupChanged(QString)), i.value(), SLOT(setWhere(QString)));
         }
     }
 
@@ -552,9 +550,6 @@ ORODocument* KoReportPreRenderer::generate()
     d->createNewPage();
     if (!label.isNull()) {
 // Label Print Run
-        int row = 0;
-        int col = 0;
-
         // remember the initial margin setting as we will be modifying
         // the value and restoring it as we move around
         qreal margin = d->m_leftMargin;
@@ -585,6 +580,8 @@ ORODocument* KoReportPreRenderer::generate()
 
             if (mydata && mydata->recordCount() > 0) { /* && !((query = orqThis->getQuery())->eof()))*/
                 mydata->moveFirst();
+                int row = 0;
+                int col = 0;
                 do {
                     tmp = d->m_yOffset; // store the value as renderSection changes it
                     d->renderSection(*(detailData->m_detailSection));
@@ -663,11 +660,11 @@ bool KoReportPreRenderer::setDom(const QDomElement &docReport)
         delete d->m_reportData;
         d->m_valid = false;
 
-	if (docReport.tagName() != "report:content") {
-		kDebug() << "report schema is invalid";
-		return false;
-	}
-	
+        if (docReport.tagName() != "report:content") {
+            kWarning() << "report schema is invalid";
+            return false;
+        }
+
         d->m_reportData = new KoReportReportData(docReport, this);
         d->m_valid = d->m_reportData->isValid();
     }

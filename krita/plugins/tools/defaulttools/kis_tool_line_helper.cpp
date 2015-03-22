@@ -58,7 +58,7 @@ void KisToolLineHelper::setUseSensors(bool value)
 }
 
 void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
-                                    KisImageWSP image,
+                                    KisImageWSP image, KisNodeSP node,
                                     KisStrokesFacade *strokesFacade,
                                     KisPostExecutionUndoAdapter *undoAdapter)
 {
@@ -70,7 +70,7 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
     QVector<KisPaintInformation>::const_iterator it = m_d->linePoints.constBegin();
     QVector<KisPaintInformation>::const_iterator end = m_d->linePoints.constEnd();
 
-    initPaintImpl(*it, resourceManager, image, strokesFacade, undoAdapter);
+    initPaintImpl(*it, resourceManager, image, node, strokesFacade, undoAdapter);
     ++it;
 
     while (it != end) {
@@ -145,9 +145,18 @@ void KisToolLineHelper::translatePoints(const QPointF &offset)
 void KisToolLineHelper::end()
 {
     if (!m_d->enabled) return;
+    KIS_ASSERT_RECOVER_RETURN(isRunning());
 
     endPaint();
     m_d->linePoints.clear();
 }
 
 
+void KisToolLineHelper::cancel()
+{
+    if (!m_d->enabled) return;
+    KIS_ASSERT_RECOVER_RETURN(isRunning());
+
+    cancelPaint();
+    m_d->linePoints.clear();
+}

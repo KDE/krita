@@ -32,16 +32,12 @@
 #include <QVector>
 
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kpluginfactory.h>
-#include <knuminput.h>
 
-#include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
 #include <kis_debug.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_image.h>

@@ -35,11 +35,8 @@ struct KoPageLayout;
 
 // KDE classes
 class KStatusBar;
-class KXmlGuiWindow;
-class KAction;
 
 // Qt classes
-class QToolBar;
 class QDragEnterEvent;
 class QDropEvent;
 class QPrintDialog;
@@ -180,7 +177,7 @@ public:
      */
     virtual void guiActivateEvent(bool activated);
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())
@@ -206,7 +203,7 @@ protected:
      */
     QString newObjectName();
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void changeAuthorProfile(const QString &profileName);
 

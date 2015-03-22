@@ -24,8 +24,6 @@
 
 #include "kis_mask_generator.h"
 
-class QDomElement;
-class QDomDocument;
 
 /**
  * This mask generator uses a Gaussian-blurred circle
@@ -35,13 +33,13 @@ class KRITAIMAGE_EXPORT KisGaussCircleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes);
+    KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
     virtual ~KisGaussCircleMaskGenerator();
 
     virtual quint8 valueAt(qreal x, qreal y) const;
 
-    virtual void toXML(QDomDocument& , QDomElement&) const;
-    
+    void setScale(qreal scaleX, qreal scaleY);
+
 private:
 
     qreal norme(qreal a, qreal b) const {

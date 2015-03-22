@@ -2,6 +2,7 @@
  * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,6 +30,7 @@
 #include <krsectiondata.h>
 #include <QGraphicsScene>
 
+#include "koreport_export.h"
 #include "reportscene.h"
 
 typedef QList<QGraphicsItem*> QGraphicsItemList;
@@ -52,7 +54,7 @@ class ReportSectionTitle;
 //     This class is the base to all Report Section's visual representation.
 // It contains the basic data and interface that all the sections need to work.
 //
-class ReportSection : public QWidget
+class KOREPORT_EXPORT ReportSection : public QWidget
 {
     Q_OBJECT
 public:
@@ -64,17 +66,23 @@ public:
     void initFromXML(QDomNode & section);
     virtual QSize sizeHint() const;
 
-    const QGraphicsItemList items() {
-        return m_scene->items();
-    };
+    /**
+     * @brief Return the items in the section
+     * Only return top-level items ... ie, items with no parent item
+     * because child items are not full report-items, they are implementation
+     * details of a report item and do not need to be counted individually
+     *
+     * @return QGraphicsItemList
+     */
+    QGraphicsItemList items() const;
 
     void setSectionCursor(const QCursor&);
     void unsetSectionCursor();
-    
-protected slots:
+
+protected Q_SLOTS:
     void slotResizeBarDragged(int delta);
 
-private slots:
+private Q_SLOTS:
     void slotPageOptionsChanged(KoProperty::Set &);
     void slotSceneClicked();
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
@@ -99,7 +107,7 @@ class ReportResizeBar : public QFrame
 public:
     explicit ReportResizeBar(QWidget * parent = 0, Qt::WFlags f = 0);
 
-signals:
+Q_SIGNALS:
     void barDragged(int delta);
 
 protected:
@@ -113,8 +121,12 @@ public:
     explicit ReportSectionTitle(QWidget *parent = 0);
     ~ReportSectionTitle();
 
+Q_SIGNALS:
+    void clicked();
+
 protected:
     virtual void paintEvent(QPaintEvent* event);
+    virtual void mousePressEvent(QMouseEvent *event);
 };
 
 #endif

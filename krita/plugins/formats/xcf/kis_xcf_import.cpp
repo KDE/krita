@@ -1,15 +1,15 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -28,16 +28,15 @@
 #include <kpluginfactory.h>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoFilterChain.h>
+#include <KisFilterChain.h>
 
 #include <kis_debug.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -65,7 +64,7 @@ extern "C" {
 K_PLUGIN_FACTORY(XCFImportFactory, registerPlugin<KisXCFImport>();)
 K_EXPORT_PLUGIN(XCFImportFactory("calligrafilters"))
 
-KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
+KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -73,23 +72,23 @@ KisXCFImport::~KisXCFImport()
 {
 }
 
-KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const QByteArray& to)
 {
     Q_UNUSED(from);
     dbgFile << "Importing using XCFImport!";
 
     if (to != "application/x-krita")
-        return KoFilter::BadMimeType;
+        return KisImportExportFilter::BadMimeType;
 
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
+    KisDocument * doc = m_chain->outputDocument();
 
     if (!doc)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain -> inputFile();
+    QString filename = m_chain->inputFile();
 
     if (filename.isEmpty()) {
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
     }
 
     KUrl url(filename);
@@ -97,16 +96,16 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
 
     dbgFile << "Import: " << url;
     if (url.isEmpty())
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
 
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
         dbgFile << "Inexistant file";
-        return KoFilter::FileNotFound;
+        return KisImportExportFilter::FileNotFound;
     }
 
     // We're not set up to handle asynchronous loading at the moment.
     QString tmpFile;
-    KoFilter::ConversionStatus result;
+    KisImportExportFilter::ConversionStatus result;
     if (KIO::NetAccess::download(url, tmpFile, QApplication::activeWindow())) {
         KUrl uriTF(tmpFile);
 
@@ -116,14 +115,14 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
             doc->prepareForImport();
             result = loadFromDevice(fp, doc);
         } else {
-            result = KoFilter::CreationError;
+            result = KisImportExportFilter::CreationError;
         }
 
         KIO::NetAccess::removeTempFile(tmpFile);
         return result;
     }
     dbgFile << "Download failed";
-    return KoFilter::DownloadFailed;
+    return KisImportExportFilter::DownloadFailed;
 }
 
 QString layerModeG2K(GimpLayerModeEffects mode)
@@ -184,7 +183,7 @@ QString layerModeG2K(GimpLayerModeEffects mode)
     return COMPOSITE_OVER;
 }
 
-KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDoc2* doc)
+KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDocument* doc)
 {
     dbgFile << "Start decoding file";
     // Read the file into memory
@@ -315,5 +314,5 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
     }
 
     doc->setCurrentImage(image);
-    return KoFilter::OK;
+    return KisImportExportFilter::OK;
 }

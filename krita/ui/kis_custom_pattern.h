@@ -28,7 +28,7 @@
 
 class KoPattern;
 class KoResource;
-class KisView2;
+class KisViewManager;
 
 class KisWdgCustomPattern : public QWidget, public Ui::KisWdgCustomPattern
 {
@@ -44,21 +44,21 @@ class KisCustomPattern : public KisWdgCustomPattern
 {
     Q_OBJECT
 public:
-    KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view);
+    KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view);
     virtual ~KisCustomPattern();
 
-signals:
+Q_SIGNALS:
     void activatedResource(KoResource *);
     void addPattern(KoPattern*);
 
-private slots:
+private Q_SLOTS:
     void slotAddPredefined();
     void slotUsePattern();
     void slotUpdateCurrentPattern();
 
 private:
     void createPattern();
-    KisView2* m_view;
+    KisViewManager* m_view;
     KoPattern* m_pattern;
     QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
 };

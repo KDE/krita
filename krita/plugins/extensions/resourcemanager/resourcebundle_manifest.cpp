@@ -120,10 +120,10 @@ bool ResourceBundleManifest::load(QIODevice *device)
         QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
 
         QStringList tagList;
-        KoXmlNode tagNode = n.firstChild();
+        KoXmlNode tagNode = n.firstChildElement().firstChildElement();
         while (!tagNode.isNull()) {
-            if (tagNode.isText()) {
-                tagList.append(tagNode.toText().data());
+            if (tagNode.firstChild().isText()) {
+                tagList.append(tagNode.firstChild().toText().data());
             }
             tagNode = tagNode.nextSibling();
         }
@@ -131,7 +131,7 @@ bool ResourceBundleManifest::load(QIODevice *device)
         // Only if fullPath is valid, should we store this entry.
         // If not, we don't bother to find out exactly what is wrong, we just skip it.
         if (!fullPath.isNull() && !mediaType.isEmpty() && !md5sum.isEmpty()) {
-            addResource(mediaType, fullPath, tagList, QByteArray::fromHex(md5sum.toAscii()));
+            addResource(mediaType, fullPath, tagList, QByteArray::fromHex(md5sum.toLatin1()));
         }
     }
 

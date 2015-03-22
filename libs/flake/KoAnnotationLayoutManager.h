@@ -22,13 +22,12 @@
 #include "flake_export.h"
 
 #include <QObject>
-#include <QPointF>
-#include <KoViewConverter.h>
-#include <KoShapeManager.h>
-#include <KoCanvasBase.h>
-#include <KoCanvasController.h>
+
+class KoShapeManager;
+class KoCanvasBase;
 
 class QPainter;
+class QPointF;
 
 class KoShape;
 
@@ -41,7 +40,7 @@ public:
     //Connection point of lines from shape to this point and from this point to refText psoition.
     static const qreal connectionPointLines;
 
-    KoAnnotationLayoutManager(QObject *parent = 0);
+    explicit KoAnnotationLayoutManager(QObject *parent = 0);
     virtual ~KoAnnotationLayoutManager();
 
     void setShapeManager(KoShapeManager *shapeManager);
@@ -54,15 +53,18 @@ public:
     // Return true if shape is in annotaion shapes list.
     bool isAnnotationShape(KoShape *shape);
 
-public slots:
+public Q_SLOTS:
     /// register the position of an annotation shape.
-    void registerAnnotationRefPosition(KoShape *annotationShape, QPointF refPosition);
+    void registerAnnotationRefPosition(KoShape *annotationShape, const QPointF& refPosition);
 
     /// Remove annotation shape.
     void removeAnnotationShape(KoShape *annotationShape);
 
     /// Update layout annotation shapes. Called when shape size changed.
     void updateLayout(KoShape *shape);
+
+Q_SIGNALS:
+    void hasAnnotationsChanged(bool hasAnnotations);
 
 private:
     /// layout annotation shapes

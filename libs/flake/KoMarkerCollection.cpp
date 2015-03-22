@@ -33,10 +33,9 @@ class KoMarkerCollection::Private
 public:
     ~Private()
     {
-        qDeleteAll(markers);
     }
 
-    QList<KoMarker *> markers;
+    QList<QExplicitlySharedDataPointer<KoMarker> > markers;
 };
 
 KoMarkerCollection::KoMarkerCollection(QObject *parent)
@@ -44,7 +43,7 @@ KoMarkerCollection::KoMarkerCollection(QObject *parent)
 , d(new Private)
 {
     // Add no marker so the user can remove a marker from the line.
-    d->markers.append(0);
+    d->markers.append(QExplicitlySharedDataPointer<KoMarker>(0));
     // Add default markers
     loadDefaultMarkers();
 }
@@ -115,22 +114,26 @@ void KoMarkerCollection::loadOdfMarkers(const QHash<QString, KoXmlElement*> &mar
     }
 }
 
-QList<KoMarker*> KoMarkerCollection::markers() const
+QList<KoMarker*> KoMarkerCollection::markers()
 {
-    return d->markers;
+    QList<KoMarker*> markerList;
+    foreach (const QExplicitlySharedDataPointer<KoMarker>& m, d->markers){
+        markerList.append(m.data());
+    }
+    return markerList;
 }
 
 KoMarker * KoMarkerCollection::addMarker(KoMarker *marker)
 {
-    foreach (KoMarker *m, d->markers) {
-        if (marker == m) {
+    foreach (const QExplicitlySharedDataPointer<KoMarker>& m, d->markers) {
+        if (marker == m.data()) {
             return marker;
         }
         if (m && *marker == *m) {
             kDebug(30006) << "marker is the same as other";
-            return m;
+            return m.data();
         }
     }
-    d->markers.append(marker);
+    d->markers.append(QExplicitlySharedDataPointer<KoMarker>(marker));
     return marker;
 }

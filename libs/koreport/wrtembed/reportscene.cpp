@@ -40,6 +40,7 @@ ReportScene::ReportScene(qreal w, qreal h, KoReportDesigner *rd)
         : QGraphicsScene(0, 0, w, h, rd)
 {
     m_rd = rd;
+    m_minorSteps = 0;
 
     if (m_unit.type() != m_rd->pageUnit().type()) {
         m_unit = m_rd->pageUnit();
@@ -90,7 +91,7 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
         m_pixelIncrementY = (m_majorY / m_minorSteps);
 
         QPen pen = painter->pen();
-        painter->setPen(QColor(212, 212, 212));
+        painter->setPen(Qt::lightGray);
 
         //kDebug() << "dpix" << KoDpi::dpiX() << "dpiy" << KoDpi::dpiY() << "mayorx:" << majorx << "majory" << majory << "pix:" << pixel_incrementx << "piy:" << pixel_incrementy;
 
@@ -134,7 +135,16 @@ void ReportScene::mousePressEvent(QGraphicsSceneMouseEvent * e)
         clearSelection();
 
     //This will be caught by the section to display its properties, if an item is under the cursor then they will display their properties
-    emit clicked();
+    QGraphicsItem* itemUnderCursor = itemAt(e->scenePos());
+    if (!itemUnderCursor) {
+        emit clicked();
+    }
+    
+    KoReportDesignerItemRectBase *rectUnderCursor = qgraphicsitem_cast< KoReportDesignerItemRectBase* >(itemUnderCursor);
+    if (itemUnderCursor && !rectUnderCursor) {
+        rectUnderCursor = qgraphicsitem_cast< KoReportDesignerItemRectBase* >(itemUnderCursor->parentItem());
+    }
+    exitInlineEditingModeInItems(rectUnderCursor);
 
     QGraphicsScene::mousePressEvent(e);
 }
@@ -179,6 +189,8 @@ QPointF ReportScene::gridPoint(const QPointF& p)
 
 void ReportScene::focusOutEvent(QFocusEvent * focusEvent)
 {
+    exitInlineEditingModeInItems(0);
+    
     emit lostFocus();
     QGraphicsScene::focusOutEvent(focusEvent);
 }
@@ -210,7 +222,6 @@ qreal ReportScene::highestZValue()
         if (zz > z) {
             z = zz;
         }
-
     }
     return z;
 }
@@ -240,11 +251,18 @@ QGraphicsItemList ReportScene::itemsOrdered()
     for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); ++it) {
         for (QGraphicsItemList::iterator rit = r.begin(); rit != r.end(); ++rit) {
 
-
         }
-
     }
 
-
     return r;
+}
+
+void ReportScene::exitInlineEditingModeInItems(KoReportDesignerItemRectBase *rectUnderCursor)
+{
+    foreach(QGraphicsItem *it, items()) {
+        KoReportDesignerItemRectBase *itm = qgraphicsitem_cast< KoReportDesignerItemRectBase* >(it);
+        if (itm && itm != rectUnderCursor) {
+            itm->exitInlineEditingMode();
+        }
+    }
 }

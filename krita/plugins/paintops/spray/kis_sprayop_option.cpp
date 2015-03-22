@@ -26,10 +26,6 @@ public:
     KisSprayOpOptionsWidget(QWidget *parent = 0)
         : QWidget(parent) {
         setupUi(this);
-        // this allows to setup the component still in designer and it is needed for showing slider
-        spacingSpin->setRange(spacingSpin->minimum(), spacingSpin->maximum(), 0.25, spacingSpin->showSlider());
-        scaleSpin->setRange(scaleSpin->minimum(), scaleSpin->maximum(), 0.25, spacingSpin->showSlider());
-
     }
 };
 
@@ -38,18 +34,50 @@ KisSprayOpOption::KisSprayOpOption()
 {
     m_checkable = false;
     m_options = new KisSprayOpOptionsWidget();
-    connect(m_options->diameterSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->coverageSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMovementSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->spacingSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->scaleSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->particlesSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->countRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->gaussianBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->aspectSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->rotationSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+
+    m_options->diameterSpinBox->setRange(1, 1000, 0);
+    m_options->diameterSpinBox->setValue(100);
+    m_options->diameterSpinBox->setExponentRatio(1.5);
+    m_options->diameterSpinBox->setSuffix(" px");
+
+    m_options->aspectSPBox->setRange(0.0, 2.0, 2);
+    m_options->aspectSPBox->setValue(1.0);
+
+    m_options->rotationSPBox->setRange(0.0, 360.0, 0);
+    m_options->rotationSPBox->setValue(0.0);
+    m_options->rotationSPBox->setSuffix(QChar(Qt::Key_degree));
+
+    m_options->scaleSpin->setRange(0.0, 10.0, 2);
+    m_options->scaleSpin->setValue(1.0);
+
+    m_options->spacingSpin->setRange(0.0, 5.0, 2);
+    m_options->spacingSpin->setValue(0.5);
+
+    m_options->coverageSpin->setRange(0.0, 100.0, 1);
+    m_options->coverageSpin->setValue(0.1);
+    m_options->coverageSpin->setSuffix("%");
+
+
+    m_options->particlesSpinBox->setRange(1.0, 1000.0, 0);
+    m_options->particlesSpinBox->setValue(12);
+    m_options->particlesSpinBox->setExponentRatio(3.0);
+
+    m_options->jitterMovementSpin->setRange(0.0,5.0, 1);
+    m_options->jitterMovementSpin->setValue(1.0);
+
+
+    connect(m_options->diameterSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->coverageSpin, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->jitterMovementSpin, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->spacingSpin, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->scaleSpin, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->particlesSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->countRadioButton, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->gaussianBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->aspectSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->rotationSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     connect(m_options->countRadioButton, SIGNAL(toggled(bool)), m_options->particlesSpinBox, SLOT(setEnabled(bool)));
     connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), m_options->coverageSpin, SLOT(setEnabled(bool)));

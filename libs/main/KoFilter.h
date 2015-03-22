@@ -26,7 +26,6 @@ Boston, MA 02110-1301, USA.
 #include <QPointer>
 
 #include "komain_export.h"
-class QIODevice;
 class KoFilterChain;
 class KoUpdater;
 
@@ -97,7 +96,7 @@ public:
      */
     void setUpdater(const QPointer<KoUpdater>& updater);
 
-signals:
+Q_SIGNALS:
     /**
      * Emit this signal with a value in the range of 1...100 to have some
      * progress feedback for the user in the statusbar of the application.
@@ -127,7 +126,7 @@ private:
     class Private;
     Private *const d;
 
-private slots:
+private Q_SLOTS:
     void slotProgress(int value);
 };
 

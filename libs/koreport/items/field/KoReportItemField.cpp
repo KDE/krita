@@ -25,9 +25,9 @@
 
 #include "renderer/scripting/krscripthandler.h"
 
-KoReportItemField::~KoReportItemField()
+KoReportItemField::KoReportItemField()
 {
-    delete m_set;
+    createProperties();
 }
 
 KoReportItemField::KoReportItemField(QDomNode & element)
@@ -39,6 +39,7 @@ KoReportItemField::KoReportItemField(QDomNode & element)
 
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
+    m_itemValue->setValue(element.toElement().attribute("report:value"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
@@ -74,6 +75,11 @@ KoReportItemField::KoReportItemField(QDomNode & element)
     }
 }
 
+KoReportItemField::~KoReportItemField()
+{
+    delete m_set;
+}
+
 void KoReportItemField::createProperties()
 {
     m_set = new KoProperty::Set(0, "Field");
@@ -81,8 +87,9 @@ void KoReportItemField::createProperties()
     QStringList keys, strings;
 
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
-
     m_controlSource->setOption("extraValueAllowed", "true");
+    
+    m_itemValue = new KoProperty::Property("value", QString(), i18n("Value"), i18n("Value used if not bound to a field"));
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
@@ -96,10 +103,11 @@ void KoReportItemField::createProperties()
 
     m_font = new KoProperty::Property("Font", KGlobalSettings::generalFont(), "Font", i18n("Font"));
 
+    
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, i18n("Background Color"));
-    m_foregroundColor = new KoProperty::Property("foregroud-color", Qt::black, i18n("Foreground Color"));
+    m_foregroundColor = new KoProperty::Property("foreground-color", QPalette().color(QPalette::Foreground), i18n("Foreground Color"));
 
-    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, i18n("Opacity"));
+    m_backgroundOpacity = new KoProperty::Property("background-opacity", QVariant(0), i18n("Background Opacity"));
     m_backgroundOpacity->setOption("max", 100);
     m_backgroundOpacity->setOption("min", 0);
     m_backgroundOpacity->setOption("unit", "%");
@@ -113,14 +121,15 @@ void KoReportItemField::createProperties()
     
 #if 0 //Field Totals
     //TODO I do not think we need these
-    m_trackTotal = new KoProperty::Property("TrackTotal", QVariant(false), i18n("Track Total"));
-    m_trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", QVariant(false), i18n("Track Builtin Format"));
-    _useSubTotal = new KoProperty::Property("UseSubTotal", QVariant(false), i18n("Use Sub Total"_);
-    _trackTotalFormat = new KoProperty::Property("TrackTotalFormat", QString(), i18n("Track Total Format"));
+    m_trackTotal = new KoProperty::Property("TrackTotal", QVariant(false), futureI18n("Track Total"));
+    m_trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", QVariant(false), futureI18n("Track Builtin Format"));
+    _useSubTotal = new KoProperty::Property("UseSubTotal", QVariant(false), futureI18n("Use Sub Total"_);
+    _trackTotalFormat = new KoProperty::Property("TrackTotalFormat", QString(), futureI18n("Track Total Format"));
 #endif
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
+    m_set->addProperty(m_itemValue);
     m_set->addProperty(m_horizontalAlignment);
     m_set->addProperty(m_verticalAlignment);
     m_set->addProperty(m_font);
@@ -200,7 +209,7 @@ KRLineStyleData KoReportItemField::lineStyle()
 // RTTI
 QString KoReportItemField::typeName() const
 {
-    return "report:field";
+    return "field";
 }
 
 int KoReportItemField::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
@@ -219,18 +228,22 @@ int KoReportItemField::renderSimpleData(OROPage *page, OROSection *section, cons
     QString str;
     
     QString ids = itemDataSource();
-    if (ids.left(1) == "=" && script) { //Everything after = is treated as code
-        if (!ids.contains("PageTotal()")) {
-            QVariant v = script->evaluate(ids.mid(1));
-            str = v.toString();
-        } else {
+    if (!ids.isEmpty()) {
+        if (ids.left(1) == "=" && script) { //Everything after = is treated as code
+            if (!ids.contains("PageTotal()")) {
+                QVariant v = script->evaluate(ids.mid(1));
+                str = v.toString();
+            } else {
+                str = ids.mid(1);
+                tb->setRequiresPostProcessing();
+            }
+        } else if (ids.left(1) == "$") { //Everything past $ is treated as a string
             str = ids.mid(1);
-            tb->setRequiresPostProcessing();
+        } else {
+            str = data.toString();
         }
-    } else if (ids.left(1) == "$") { //Everything past $ is treated as a string
-        str = ids.mid(1);
     } else {
-        str = data.toString();
+            str = m_itemValue->value().toString();
     }
 
     tb->setText(str);

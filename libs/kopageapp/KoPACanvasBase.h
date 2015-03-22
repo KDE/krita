@@ -20,14 +20,15 @@
 #ifndef KOPACANVASBASE_H
 #define KOPACANVASBASE_H
 
-#include <QWidget>
-#include <QList>
 #include <KoCanvasBase.h>
 
 #include "kopageapp_export.h"
 
 class KoPAViewBase;
 class KoPADocument;
+
+class QRect;
+class QPainter;
 
 /// Widget that shows a KoPAPage
 class KOPAGEAPP_EXPORT KoPACanvasBase : public KoCanvasBase

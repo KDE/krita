@@ -54,6 +54,10 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
     double spacing = brushDefinition.attribute("spacing", "0.25").toDouble();
     brush->setSpacing(spacing);
 
+    bool useAutoSpacing = brushDefinition.attribute("useAutoSpacing", "0").toInt();
+    qreal autoSpacingCoeff = brushDefinition.attribute("autoSpacingCoeff", "1.0").toDouble();
+    brush->setAutoSpacing(useAutoSpacing, autoSpacingCoeff);
+
     double angle = brushDefinition.attribute("angle", "0.0").toDouble();
     brush->setAngle(angle);
 

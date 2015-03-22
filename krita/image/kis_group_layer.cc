@@ -23,6 +23,8 @@
 #include <KoIcon.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
+#include <KoColor.h>
+
 
 #include "kis_types.h"
 #include "kis_node_visitor.h"
@@ -133,6 +135,27 @@ void KisGroupLayer::setImage(KisImageWSP image)
     KisLayer::setImage(image);
 }
 
+KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
+{
+    KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer*>(prevLayer.data());
+
+    if (prevGroup) {
+        KisSharedPtr<KisGroupLayer> merged(new KisGroupLayer(*prevGroup));
+
+        KisNodeSP child, cloned;
+
+        for (child = firstChild(); child; child = child->nextSibling()) {
+            cloned = child->clone();
+            image()->addNode(cloned, merged);
+        }
+
+        image()->refreshGraphAsync(merged);
+
+        return merged;
+    } else
+        return KisLayer::createMergedLayer(prevLayer);
+}
+
 void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 {
     if (!colorSpace)
@@ -153,9 +176,10 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         dev->setY(m_d->y);
         quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
 
-        colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
-                                    KoColorConversionTransformation::InternalRenderingIntent,
-                                    KoColorConversionTransformation::InternalConversionFlags);
+        m_d->paintDevice->colorSpace()->
+            convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
+                            KoColorConversionTransformation::InternalRenderingIntent,
+                            KoColorConversionTransformation::InternalConversionFlags);
         dev->setDefaultPixel(defaultPixel);
         delete[] defaultPixel;
         m_d->paintDevice = dev;
@@ -215,8 +239,28 @@ KisPaintDeviceSP KisGroupLayer::original() const
      * Try to use children's paintDevice if it's the only
      * one in stack and meets some conditions
      */
-    KisPaintDeviceSP childOriginal = tryObligeChild();
-    return childOriginal ? childOriginal : m_d->paintDevice;
+    KisPaintDeviceSP realOriginal = tryObligeChild();
+
+    if (!realOriginal) {
+        if (!childCount() && !m_d->paintDevice->extent().isEmpty()) {
+            m_d->paintDevice->clear();
+        }
+        realOriginal = m_d->paintDevice;
+    }
+
+    return realOriginal;
+}
+
+void KisGroupLayer::setDefaultProjectionColor(KoColor color)
+{
+    color.convertTo(m_d->paintDevice->colorSpace());
+    m_d->paintDevice->setDefaultPixel(color.data());
+}
+
+KoColor KisGroupLayer::defaultProjectionColor() const
+{
+    KoColor color(m_d->paintDevice->defaultPixel(), m_d->paintDevice->colorSpace());
+    return color;
 }
 
 bool KisGroupLayer::accept(KisNodeVisitor &v)

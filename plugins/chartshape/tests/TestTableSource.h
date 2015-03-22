@@ -39,7 +39,7 @@ class TestTableSource : public QObject
 public:
     TestTableSource();
 
-private slots:
+private Q_SLOTS:
     void init();
     void testAdding();
     void testRenaming();

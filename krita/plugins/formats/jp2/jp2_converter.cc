@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -21,21 +21,20 @@
 #include <openjpeg.h>
 
 #include <QFileInfo>
+#include <QApplication>
 
-#include <kapplication.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceConstants.h>
-#include <KoFilterManager.h>
+#include <KisImportExportManager.h>
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
@@ -43,7 +42,7 @@
 #include <kis_transaction.h>
 #include "kis_iterator_ng.h"
 
-jp2Converter::jp2Converter(KisDoc2 *doc)
+jp2Converter::jp2Converter(KisDocument *doc)
 {
     m_doc = doc;
     m_job = 0;
@@ -341,7 +340,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         channelorder[1] = KoBgrU16Traits::green_pos;
         channelorder[2] = KoBgrU16Traits::blue_pos;
     } else {
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -352,7 +351,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
 //     } else if (layer->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
 //         bitdepth = 16;
     } else {
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -426,6 +425,11 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     }
     }
 
+    if (!cinfo) {
+        // Could not create compression info object
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
     // Setup an event manager
     opj_event_mgr_t event_mgr;    /* event manager */
     memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
@@ -441,6 +445,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     opj_setup_encoder(cinfo, &parameters, image);
 
     opj_cio_t* cio = opj_cio_open((opj_common_ptr) cinfo, 0, 0);
+
 
     /* encode the image */
     if (!opj_encode(cinfo, cio, image, parameters.index)) {

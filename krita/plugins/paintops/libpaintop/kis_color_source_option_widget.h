@@ -35,7 +35,7 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-private slots:
+private Q_SLOTS:
     void sourceChanged();
 private:
     struct Private;

@@ -237,14 +237,7 @@ Page {
                 baseLoadingDialog.visible = true;
                 Settings.currentFile = file;
             } else {
-                if(Krita.Window.slateMode) {
-                    pageStack.push(openImagePage);
-                } else {
-                    var path = Krita.Window.openImage();
-                    if(path !== "") {
-                        openImage(path);
-                    }
-                }
+                pageStack.push(openImagePage);
             }
         }
     }

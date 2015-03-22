@@ -81,6 +81,12 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
 {
 }
 
+void KisToolSelectSimilar::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+{
+    KisTool::activate(toolActivation, shapes);
+    m_configGroup = KGlobal::config()->group(toolId());
+}
+
 void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 {
     KisPaintDeviceSP dev;
@@ -126,6 +132,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 {
     m_fuzziness = fuzziness;
+    m_configGroup.writeEntry("fuzziness", fuzziness);
 }
 
 QWidget* KisToolSelectSimilar::createOptionWidget()
@@ -143,13 +150,15 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     input->setObjectName("fuzziness");
     input->setRange(0, 200);
     input->setSingleStep(10);
-    input->setValue(m_fuzziness);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
     QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     l->insertLayout(1, fl);
+
+    // load setting from config
+    input->setValue(m_configGroup.readEntry("fuzziness", 20));
 
     return selectionWidget;
 }

@@ -46,6 +46,7 @@ class QColor;
 class QString;
 class QFont;
 
+class KoCanvasBase;
 class KoDocumentResourceManager;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
@@ -232,7 +233,7 @@ public:
     /// the document resource manager we got on construction
     KoDocumentResourceManager *resourceManager() const;
 
-signals:
+Q_SIGNALS:
     void chartTypeChanged(ChartType);
     void updateConfigWidget() const;
 

@@ -16,17 +16,16 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <qtest_kde.h>
-
 #include "KoProgressUpdater_test.h"
 
 #include "KoProgressUpdater.h"
 #include "KoUpdater.h"
 #include <QThread>
 
-#include <QThread>
 #include <threadweaver/ThreadWeaver.h>
 #include <threadweaver/Job.h>
+
+#include <qtest_kde.h>
 
 class TestWeaverJob : public ThreadWeaver::Job
 {

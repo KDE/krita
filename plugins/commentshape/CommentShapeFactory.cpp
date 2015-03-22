@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include <KoXmlNS.h>
 #include <KoDocumentResourceManager.h>
-#include <KoOdfDocument.h>
+#include <KoDocumentBase.h>
 #include <KoShapeLoadingContext.h>
 
 CommentShapeFactory::CommentShapeFactory()

@@ -22,7 +22,6 @@
 #define KO_UPDATERPRIVATE__P_H
 
 #include "KoProgressUpdater.h"
-#include "KoProgressProxy.h"
 
 #include <QTime>
 
@@ -83,7 +82,7 @@ public:
         return m_points;
     }
 
-public slots:
+public Q_SLOTS:
 
     /// Cancel comes from KoUpdater
     void cancel();
@@ -95,7 +94,7 @@ public slots:
     /// progress comes from KoUpdater
     void setProgress( int percent );
 
-signals:
+Q_SIGNALS:
 
     /// Emitted whenever the progress changed
     void sigUpdated();

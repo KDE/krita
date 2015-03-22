@@ -5,8 +5,8 @@ include_directories( ${KOMAIN_INCLUDES} ${KOTEXT_INCLUDES} )
 
 ########### next target ###############
 
-SET(onlinedocs_RCCS onlineservices.qrc)
-QT4_ADD_RESOURCES(onlinedocs_RCC_SRCS ${onlinedocs_RCCS})
+set(onlinedocs_RCCS onlineservices.qrc)
+qt4_add_resources(onlinedocs_RCC_SRCS ${onlinedocs_RCCS})
 
 set(calligragoogledocs_PART_SRCS
     onlinedocument.cpp

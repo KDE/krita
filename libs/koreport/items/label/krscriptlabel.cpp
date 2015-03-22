@@ -41,13 +41,15 @@ void Label::setCaption(const QString& c)
 
 int Label::horizontalAlignment()
 {
-    QString a = m_label->m_horizontalAlignment->value().toString();
+    const QString a = m_label->m_horizontalAlignment->value().toString().toLower();
 
-    if (a.toLower() == "left") {
+    if (a == QLatin1String("left")) {
         return -1;
-    } else if (a.toLower() == "center") {
+    }
+    if (a == QLatin1String("center")) {
         return 0;
-    } else if (a.toLower() == "right") {
+    }
+    if (a == QLatin1String("right")) {
         return 1;
     }
     return -1;
@@ -72,13 +74,15 @@ void Label::setHorizonalAlignment(int a)
 
 int Label::verticalAlignment()
 {
-    QString a = m_label->m_horizontalAlignment->value().toString();
+    const QString a = m_label->m_horizontalAlignment->value().toString().toLower();
 
-    if (a.toLower() == "top") {
+    if (a == QLatin1String("top")) {
         return -1;
-    } else if (a.toLower() == "middle") {
+    }
+    if (a == QLatin1String("middle")) {
         return 0;
-    } else if (a.toLower() == "bottom") {
+    }
+    if (a == QLatin1String("bottom")) {
         return 1;
     }
     return -1;

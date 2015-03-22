@@ -22,11 +22,15 @@
 #include <QObject>
 #include <QScopedPointer>
 
+#include "kis_tool.h"
+
+
 class QImage;
-class QPointF;
 class QTransform;
 class QPainter;
 class QCursor;
+class KoPointerEvent;
+class QPainterPath;
 
 
 class KisTransformStrategyBase : public QObject
@@ -42,14 +46,25 @@ public:
 
 public:
 
-    virtual void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive) = 0;
+    virtual bool acceptsClicks() const;
+
     virtual void paint(QPainter &gc) = 0;
     virtual QCursor getCurrentCursor() const = 0;
+    virtual QPainterPath getCursorOutline() const;
 
     virtual void externalConfigChanged() = 0;
-    virtual bool beginPrimaryAction(const QPointF &pt) = 0;
-    virtual void continuePrimaryAction(const QPointF &pt, bool specialModifierActve) = 0;
-    virtual bool endPrimaryAction() = 0;
+
+    virtual bool beginPrimaryAction(KoPointerEvent *event) = 0;
+    virtual void continuePrimaryAction(KoPointerEvent *event) = 0;
+    virtual bool endPrimaryAction(KoPointerEvent *event) = 0;
+    virtual void hoverActionCommon(KoPointerEvent *event) = 0;
+
+    virtual void activateAlternateAction(KisTool::AlternateAction action);
+    virtual void deactivateAlternateAction(KisTool::AlternateAction action);
+
+    virtual bool beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
+    virtual void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
+    virtual bool endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action);
 
 private:
     struct Private;

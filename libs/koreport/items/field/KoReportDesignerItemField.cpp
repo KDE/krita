@@ -33,33 +33,35 @@
 // class ReportEntityField
 //
 
-void KoReportDesignerItemField::init(QGraphicsScene * scene)
+void KoReportDesignerItemField::init(QGraphicsScene * scene, KoReportDesigner * d)
 {
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
     
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
+    
+    updateRenderText(m_controlSource->value().toString(), m_itemValue->value().toString(), "field");
 }
 
 // methods (constructors)
 KoReportDesignerItemField::KoReportDesignerItemField(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-    init(scene);
-    setSceneRect(getTextRect());
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("field"));
+    Q_UNUSED(pos);
+    init(scene, rw);
+    setSceneRect(properRect(*rw, getTextRect().width(), getTextRect().height()));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemField::KoReportDesignerItemField(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KoReportItemField(element), KoReportDesignerItemRectBase(d)
 {
-    init(s);
+    init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
@@ -77,9 +79,9 @@ KoReportDesignerItemField* KoReportDesignerItemField::clone()
 KoReportDesignerItemField::~KoReportDesignerItemField()
 {}
 
-QRect KoReportDesignerItemField::getTextRect()
+QRect KoReportDesignerItemField::getTextRect() const
 {
-    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "field"));
+    return QFontMetrics(font()).boundingRect(x(), y(), 0, 0, textFlags(), m_renderText);
 }
 
 
@@ -92,28 +94,28 @@ void KoReportDesignerItemField::paint(QPainter* painter, const QStyleOptionGraph
     // store any values we plan on changing so we can restore them
     QFont f = painter->font();
     QPen  p = painter->pen();
+    
 
     painter->setFont(font());
+    painter->setBackgroundMode(Qt::TransparentMode);
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+    bg.setAlphaF(m_backgroundOpacity->value().toReal() *0.01);
 
-    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(QGraphicsRectItem::rect(), bg);
-    painter->drawText(rect(), textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "field"));
+    painter->drawText(rect(), textFlags(), m_renderText);
 
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
-        painter->setPen(QPen(QColor(224, 224, 224)));
+        painter->setPen(QPen(Qt::lightGray));
     } else {
         painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }
 
     painter->drawRect(rect());
 
-    painter->setBackgroundMode(Qt::TransparentMode);
 
     drawHandles(painter);
 
@@ -124,7 +126,7 @@ void KoReportDesignerItemField::paint(QPainter* painter, const QStyleOptionGraph
 
 void KoReportDesignerItemField::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("report:field");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     // properties
     addPropertyAsAttribute(&entity, m_name);
@@ -133,6 +135,8 @@ void KoReportDesignerItemField::buildXML(QDomDocument & doc, QDomElement & paren
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
     addPropertyAsAttribute(&entity, m_wordWrap);
     addPropertyAsAttribute(&entity, m_canGrow);
+    addPropertyAsAttribute(&entity, m_itemValue);
+    
     entity.setAttribute("report:z-index", zValue());
 
     // bounding rect
@@ -171,7 +175,9 @@ void KoReportDesignerItemField::slotPropertyChanged(KoProperty::Set &s, KoProper
         } else {
             m_oldName = p.value().toString();
         }
-    }
+    } 
+    
+    updateRenderText(m_controlSource->value().toString(), m_itemValue->value().toString(), "field");
 
     KoReportDesignerItemRectBase::propertyChanged(s, p);
     if (m_reportDesigner)m_reportDesigner->setModified(true);
@@ -182,3 +188,5 @@ void KoReportDesignerItemField::mousePressEvent(QGraphicsSceneMouseEvent * event
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     KoReportDesignerItemRectBase::mousePressEvent(event);
 }
+
+

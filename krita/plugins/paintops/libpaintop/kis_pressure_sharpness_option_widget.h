@@ -23,7 +23,6 @@
 #include "kis_curve_option_widget.h"
 
 class KisSliderSpinBox;
-class KisDoubleSliderSpinBox;
 
 
 class PAINTOP_EXPORT KisPressureSharpnessOptionWidget : public KisCurveOptionWidget
@@ -33,7 +32,7 @@ class PAINTOP_EXPORT KisPressureSharpnessOptionWidget : public KisCurveOptionWid
 public:
     KisPressureSharpnessOptionWidget();
 
-private slots:
+private Q_SLOTS:
     void setThreshold(int threshold);
 
 private:

@@ -2,7 +2,7 @@ project(kritafilters)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 4)
   add_definitions( -DCPU_32_BITS )
-endif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+endif()
 
 macro_optional_find_package(PNG)
 macro_log_feature(PNG_FOUND "png" "Official PNG reference library" "http://www.libpng.org/pub/png/libpng.html" FALSE "" "Required by the Krita PNG filter")
@@ -24,31 +24,31 @@ macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image co
 
 if(KDCRAW_FOUND)
     add_subdirectory( raw )
-endif(KDCRAW_FOUND)
+endif()
 
 if(JPEG_FOUND AND HAVE_LCMS2)
 	add_subdirectory(jpeg)
-endif(JPEG_FOUND AND HAVE_LCMS2)
+endif()
 
 if(TIFF_FOUND)
 	add_subdirectory(tiff)
-endif(TIFF_FOUND)
+endif()
 
 if(PNG_FOUND)
     add_subdirectory(png)
-endif(PNG_FOUND)
+endif()
 
 if(OPENEXR_FOUND)
     add_subdirectory(exr)
-endif(OPENEXR_FOUND)
+endif()
 
 if(POPPLER_FOUND)
     add_subdirectory(pdf)
-endif(POPPLER_FOUND)
+endif()
 
 if(OPENJPEG_FOUND)
     add_subdirectory(jp2)
-endif(OPENJPEG_FOUND)
+endif()
 
 add_subdirectory(bmp)
 add_subdirectory(ora)
@@ -56,11 +56,10 @@ add_subdirectory(ppm)
 add_subdirectory(xcf)
 add_subdirectory(psd)
 add_subdirectory(odg)
-add_subdirectory(flipbook)
 add_subdirectory(qml)
 add_subdirectory(tga)
 add_subdirectory(heightmap)
 
 #if(OIIO_FOUND)
 #    add_subdirectory(oiio)
-#endif(OIIO_FOUND)
+#endif()

@@ -24,8 +24,9 @@
 
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
+#include <KisPart.h>
 
 void KisProjectionBenchmark::initTestCase()
 {
@@ -40,19 +41,20 @@ void KisProjectionBenchmark::cleanupTestCase()
 void KisProjectionBenchmark::benchmarkProjection()
 {
     QBENCHMARK{
-        KisDoc2 doc;
-        doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
-        doc.image()->refreshGraph();
-        doc.saveNativeFormat(QString(FILES_OUTPUT_DIR) + QDir::separator() + "save_test.kra");
+        KisDocument *doc = KisPart::instance()->createDocument();
+        doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+        doc->image()->refreshGraph();
+        doc->saveNativeFormat(QString(FILES_OUTPUT_DIR) + QDir::separator() + "save_test.kra");
+        delete doc;
     }
 }
 
 void KisProjectionBenchmark::benchmarkLoading()
 {
     QBENCHMARK{
-        KisDoc2 doc;
-
-        doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+        KisDocument *doc2 = KisPart::instance()->createDocument();
+        doc2->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+        delete doc2;
     }
 }
 

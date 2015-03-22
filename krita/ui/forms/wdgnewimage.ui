@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>682</width>
-    <height>496</height>
+    <height>530</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -373,10 +373,64 @@
       <string>Contents</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
+      <item row="2" column="0">
+       <widget class="QLabel" name="lblOpacity">
+        <property name="text">
+         <string>Image Background &amp;Opacity:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>sliderOpacity</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QFrame" name="opacityPanel">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <layout class="QHBoxLayout">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="KisDoubleSliderSpinBox" name="sliderOpacity" native="true"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lblDescription">
+        <property name="text">
+         <string>&amp;Description:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+        </property>
+        <property name="buddy">
+         <cstring>txtDescription</cstring>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Layers:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
        <widget class="QLabel" name="lblColor">
         <property name="text">
-         <string>C&amp;anvas color:</string>
+         <string>&amp;Image Background Color:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -387,7 +441,41 @@
        </widget>
       </item>
       <item row="0" column="1">
+       <widget class="KIntNumInput" name="intNumLayers">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>2</number>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>200</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
        <widget class="KColorButton" name="cmbColor">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Reset the image background color in the Image Properties dialog</string>
+        </property>
         <property name="color">
          <color>
           <red>255</red>
@@ -404,111 +492,42 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_4">
+      <item row="4" column="1">
+       <widget class="QTextEdit" name="txtDescription"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lblBackgroundStyle">
         <property name="text">
-         <string>Number of layers:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="KIntNumInput" name="intNumLayers">
-        <property name="value">
-         <number>2</number>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>200</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lblOpacity">
-        <property name="text">
-         <string>&amp;Opacity:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>sliderOpacity</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QFrame" name="opacityPanel">
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <layout class="QHBoxLayout">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="textLabel1">
-           <property name="text">
-            <string>Transparent</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="sliderOpacity">
-           <property name="toolTip">
-            <string>Opacity of the background color</string>
-           </property>
-           <property name="whatsThis">
-            <string>Opacity of the background color.</string>
-           </property>
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="pageStep">
-            <number>10</number>
-           </property>
-           <property name="value">
-            <number>100</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="tickInterval">
-            <number>20</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="textLabel2">
-           <property name="text">
-            <string>Opaque</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lblDescription">
-        <property name="text">
-         <string>&amp;Description:</string>
+         <string>Background:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
         </property>
-        <property name="buddy">
-         <cstring>txtDescription</cstring>
-        </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="3">
-       <widget class="QTextEdit" name="txtDescription"/>
+      <item row="3" column="1">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QRadioButton" name="radioBackgroundAsLayer">
+          <property name="text">
+           <string>As first layer</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">grpBackgroundStyle</string>
+          </attribute>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioBackgroundAsProjection">
+          <property name="text">
+           <string>As canvas color</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">grpBackgroundStyle</string>
+          </attribute>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
      <zorder>lblColor</zorder>
@@ -517,11 +536,9 @@
      <zorder>lblDescription</zorder>
      <zorder>txtDescription</zorder>
      <zorder>cmbColor</zorder>
-     <zorder>textLabel2</zorder>
-     <zorder>sliderOpacity</zorder>
-     <zorder>textLabel1</zorder>
-     <zorder>intNumLayers</zorder>
      <zorder>label_4</zorder>
+     <zorder>intNumLayers</zorder>
+     <zorder>lblBackgroundStyle</zorder>
     </widget>
    </item>
    <item>
@@ -580,6 +597,12 @@
    <header>widgets/kis_color_space_selector.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>createButton</tabstop>
@@ -597,10 +620,14 @@
   <tabstop>bnSaveAsPredefined</tabstop>
   <tabstop>clipPreview</tabstop>
   <tabstop>cmbColor</tabstop>
-  <tabstop>intNumLayers</tabstop>
   <tabstop>sliderOpacity</tabstop>
+  <tabstop>radioBackgroundAsLayer</tabstop>
+  <tabstop>radioBackgroundAsProjection</tabstop>
   <tabstop>txtDescription</tabstop>
  </tabstops>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="grpBackgroundStyle"/>
+ </buttongroups>
 </ui>

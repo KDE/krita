@@ -23,8 +23,6 @@
 
 #include <kundo2command.h>
 #include <QList>
-#include "KoPathShape.h"
-#include "KoPathPoint.h"
 
 #include "flake_export.h"
 
@@ -54,7 +52,7 @@ public:
     /// revert the actions done in redo
     void undo();
 private:
-    KoParameterToPathCommandPrivate *d;
+    KoParameterToPathCommandPrivate * const d;
 };
 
 #endif // KOPARAMETERTOPATHCOMMAND_H

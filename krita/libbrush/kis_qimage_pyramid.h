@@ -34,6 +34,9 @@ public:
                            qreal scale, qreal rotation,
                            qreal subPixelX, qreal subPixelY);
 
+    static QSizeF characteristicSize(const QSize &originalSize,
+                                     qreal scale, qreal rotation);
+
     QImage createImage(qreal scale, qreal rotation,
                        qreal subPixelX, qreal subPixelY);
 

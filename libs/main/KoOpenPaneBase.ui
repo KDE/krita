@@ -57,7 +57,7 @@
        <item>
         <widget class="QPushButton" name="m_openExistingButton">
          <property name="text">
-          <string>PushButton</string>
+          <string>Open Existing Document</string>
          </property>
         </widget>
        </item>

@@ -24,14 +24,12 @@
 #include "KoDockerManager.h"
 #include "KoDockFactoryBase.h"
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <ktoolbar.h>
 
-#include "KoToolDocker_p.h"
+#include "KoToolDocker.h"
 
 #include "KoView.h"
 #include "KoMainWindow.h"

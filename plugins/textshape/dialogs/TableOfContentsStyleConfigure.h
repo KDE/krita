@@ -45,7 +45,7 @@ public:
     ~TableOfContentsStyleConfigure();
     void initializeUi(KoTableOfContentsGeneratorInfo *info);
 
-public slots:
+public Q_SLOTS:
     void save();
     void discardChanges();
 

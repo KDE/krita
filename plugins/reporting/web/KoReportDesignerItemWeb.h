@@ -21,7 +21,6 @@
 #ifndef KOREPORTDESIGNERITEMWEB_H
 #define KOREPORTDESIGNERITEMWEB_H
 
-#include <KoViewConverter.h>
 #include <KoReportDesignerItemRectBase.h>
 #include "KoReportItemWeb.h"
 
@@ -50,7 +49,7 @@ protected:
 private:
     void init(QGraphicsScene *, KoReportDesigner *r);
 
-private slots:
+private Q_SLOTS:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 

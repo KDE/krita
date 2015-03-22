@@ -38,7 +38,7 @@
 
 #include <krita_export.h>
 
-class KoDocument;
+class KisDocument;
 class KoColorSpace;
 class KoColor;
 
@@ -50,7 +50,6 @@ class KisImageSignalRouter;
 class KisPostExecutionUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
-class KoUpdater;
 class KisPerspectiveGrid;
 class KisLayerComposition;
 class KisSpontaneousJob;
@@ -95,19 +94,6 @@ public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc);
 
 public:
-
-    /**
-     * Paint the specified rect onto the painter, adjusting the colors
-     * using the given profile.
-     */
-    void renderToPainter(qint32 srcX,
-                         qint32 srcY,
-                         qint32 dstX,
-                         qint32 dstY,
-                         qint32 width,
-                         qint32 height,
-                         QPainter &painter,
-                         const KoColorProfile *profile);
 
     /**
      * Render the projection onto a QImage.
@@ -272,7 +258,7 @@ public:
     /**
      * Replace current undo store with the new one. The old store
      * will be deleted.
-     * This method is used by KisDoc2 for dropping all the commands
+     * This method is used by KisDocument for dropping all the commands
      * during file loading.
      */
     void setUndoStore(KisUndoStore *undoStore);
@@ -434,7 +420,7 @@ public:
      * Sets the default color of the root layer projection. All the layers
      * will be merged on top of this very color
      */
-    void setDefaultProjectionColor(KoColor color);
+    void setDefaultProjectionColor(const KoColor &color);
 
     /**
      * \see setDefaultProjectionColor()
@@ -548,7 +534,7 @@ public:
     void stopIsolatedMode();
     KisNodeSP isolatedModeRoot() const;
 
-signals:
+Q_SIGNALS:
 
     /**
      *  Emitted whenever an action has caused the image to be
@@ -682,7 +668,7 @@ signals:
      */
     void sigNodeCollapsedChanged();
 
-public slots:
+public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();
 
     void barrierLock();
@@ -756,6 +742,17 @@ public slots:
     void refreshGraph(KisNodeSP root = 0);
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void initialRefreshGraph();
+
+    /**
+     * Initiate a stack regeneration skipping the recalculation of the
+     * filthy node's projection.
+     *
+     * Works exactly as pseudoFilthy->setDirty() with the only
+     * exception that pseudoFilthy::updateProjection() will not be
+     * called. That is used by KisRecalculateTransformMaskJob to avoid
+     * cyclic dependencies.
+     */
+    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect);
 
     /**
      * Adds a spontaneous job to the updates queue.

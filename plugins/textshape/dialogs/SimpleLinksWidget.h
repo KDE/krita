@@ -33,20 +33,21 @@ class SimpleLinksWidget : public QWidget
 {
     Q_OBJECT
 public:
-    SimpleLinksWidget(ReferencesTool *tool, QWidget *parent = 0);
+    explicit SimpleLinksWidget(ReferencesTool *tool, QWidget *parent = 0);
     virtual ~SimpleLinksWidget();
 
-signals:
+Q_SIGNALS:
     void doneWithFocus();
 
-public slots:
+public Q_SLOTS:
     void preparePopUpMenu();
 
-private slots:
+private Q_SLOTS:
     void manageBookmarks();
 
 private:
     Ui::SimpleLinksWidget widget;
     ReferencesTool *m_referenceTool;
 };
+
 #endif

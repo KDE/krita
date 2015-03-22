@@ -29,6 +29,7 @@ KRDetailSectionData::KRDetailSectionData(QObject *parent)
 {
     m_pageBreak = BreakNone;
     m_detailSection = 0;
+    m_valid = true;
 }
 
 KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource, KoReportReportData *report)

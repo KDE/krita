@@ -23,14 +23,9 @@
 #include <QPoint>
 
 #include <kis_debug.h>
-#include <kcomponentdata.h>
+
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <knuminput.h>
-#include <kstandarddirs.h>
-
-#include <KoProgressUpdater.h>
 
 #include <kis_fill_painter.h>
 #include <kis_image.h>

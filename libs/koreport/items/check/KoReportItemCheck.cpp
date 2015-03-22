@@ -25,7 +25,12 @@
 #include <renderobjects.h>
 #include "renderer/scripting/krscripthandler.h"
 
-KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
+KoReportItemCheck::KoReportItemCheck()
+{
+    createProperties();
+}
+
+KoReportItemCheck::KoReportItemCheck(QDomNode &element)
 {
     createProperties();
     QDomNodeList nl = element.childNodes();
@@ -35,8 +40,9 @@ KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
-    m_foregroundColor->setValue(element.toElement().attribute("fo:foreground-color"));
+    m_foregroundColor->setValue(QColor(element.toElement().attribute("fo:foreground-color")));
     m_checkStyle->setValue(element.toElement().attribute("report:check-style"));
+    m_staticValue->setValue(QVariant(element.toElement().attribute("report:value")).toBool());
 
     parseReportRect(element.toElement(), &m_pos, &m_size);
 
@@ -75,15 +81,17 @@ void KoReportItemCheck::createProperties()
 
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
     m_controlSource->setOption("extraValueAllowed", "true");
-
-    m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, i18n("Foreground Color"));
+    
+    m_foregroundColor = new KoProperty::Property("foreground-color", QPalette().color(QPalette::Foreground), i18n("Foreground Color"));
 
     m_lineWeight = new KoProperty::Property("line-weight", 1, i18n("Line Weight"));
     m_lineColor = new KoProperty::Property("line-color", Qt::black, i18n("Line Color"));
     m_lineStyle = new KoProperty::Property("line-style", Qt::SolidLine, i18n("Line Style"), i18n("Line Style"), KoProperty::LineStyle);
-
+    m_staticValue = new KoProperty::Property("value", QVariant(false), i18n("Value"), i18n("Value used if not bound to a field"));
+    
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
+    m_set->addProperty(m_staticValue);
     m_set->addProperty(m_checkStyle);
     m_set->addProperty(m_foregroundColor);
     m_set->addProperty(m_lineWeight);
@@ -108,7 +116,7 @@ QString KoReportItemCheck::itemDataSource() const
 // RTTI
 QString KoReportItemCheck::typeName() const
 {
-    return "report:check";
+    return "check";
 }
 
 int KoReportItemCheck::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
@@ -138,7 +146,7 @@ int KoReportItemCheck::renderSimpleData(OROPage *page, OROSection *section, cons
         str = str.toLower();
 
         //kDebug() << "Check Value:" << str;
-        if (str == "t" || str == "true" || str == "1")
+        if (str == "t" || str == "y" || str == "true" || str == "1")
             v = true;
 
     } else {
@@ -166,10 +174,10 @@ int KoReportItemCheck::renderSimpleData(OROPage *page, OROSection *section, cons
 
 bool KoReportItemCheck::value()
 {
-    return m_value;
+    return m_staticValue->value().toBool();
 }
 
 void KoReportItemCheck::setValue(bool v)
 {
-    m_value = v;
+    m_staticValue->setValue(v);
 }

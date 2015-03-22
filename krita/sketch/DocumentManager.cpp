@@ -17,17 +17,16 @@
  */
 
 #include "DocumentManager.h"
-#include "KisSketchPart.h"
 #include "ProgressProxy.h"
 #include "Settings.h"
 #include "RecentFileManager.h"
 #include <libs/pigment/KoColor.h>
-
+#include <KisPart.h>
 #include <kmimetype.h>
 
 #include <KoColorSpaceRegistry.h>
 
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 
 class DocumentManager::Private
@@ -36,7 +35,6 @@ public:
     Private()
         : proxy(0)
         , document(0)
-        , part(0)
         , settingsManager(0)
         , recentFileManager(0)
         , newDocWidth(0)
@@ -47,8 +45,7 @@ public:
     { }
 
     ProgressProxy* proxy;
-    QPointer<KisDoc2> document;
-    QPointer<KisSketchPart> part;
+    QPointer<KisDocument> document;
     Settings* settingsManager;
     RecentFileManager* recentFileManager;
 
@@ -62,16 +59,9 @@ public:
 
 DocumentManager *DocumentManager::sm_instance = 0;
 
-KisDoc2* DocumentManager::document() const
+KisDocument* DocumentManager::document() const
 {
     return d->document;
-}
-
-KisSketchPart* DocumentManager::part()
-{
-    if (!d->part)
-        d->part = new KisSketchPart(this);
-    return d->part;
 }
 
 ProgressProxy* DocumentManager::progressProxy() const
@@ -119,12 +109,12 @@ void DocumentManager::newDocument(const QVariantMap& options)
 
 void DocumentManager::delayedNewDocument()
 {
-    d->document = new KisDoc2(part());
+    d->document = KisPart::instance()->createDocument();
     d->document->setProgressProxy(d->proxy);
     if (qAppName().contains("sketch")) {
         d->document->setSaveInBatchMode(true);
     }
-    part()->setDocument(d->document);
+    KisPart::instance()->addDocument(d->document);
 
     if(d->newDocOptions.isEmpty())
     {
@@ -195,12 +185,12 @@ void DocumentManager::openDocument(const QString& document, bool import)
 
 void DocumentManager::delayedOpenDocument()
 {
-    d->document = new KisDoc2(part());
+    d->document = KisPart::instance()->createDocument();
     d->document->setProgressProxy(d->proxy);
     if (qAppName().contains("sketch")) {
         d->document->setSaveInBatchMode(true);
     }
-    part()->setDocument(d->document);
+    KisPart::instance()->addDocument(d->document);
 
     d->document->setModified(false);
     if (d->importingDocument)
@@ -238,7 +228,7 @@ bool DocumentManager::save()
 
 void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 {
-    d->document->setOutputMimeType(mimetype.toAscii());
+    d->document->setOutputMimeType(mimetype.toLatin1());
     d->saveAsFilename = filename;
     // Yes. This is a massive hack. Basically, we need to wait a little while, to ensure
     // the save call happens late enough for a variety of UI things to happen first.

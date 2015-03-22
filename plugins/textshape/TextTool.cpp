@@ -50,6 +50,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoColor.h>
 #include <KoColorBackground.h>
 #include <KoColorPopupAction.h>
 #include <KoTextDocumentLayout.h>
@@ -77,7 +78,6 @@
 #include <kdebug.h>
 #include <krun.h>
 #include <kstandardshortcut.h>
-#include <kfontchooser.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
@@ -103,7 +103,6 @@
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"
 #include "KoShapeBasedDocumentBase.h"
 #include <KoAnnotation.h>
-#include <KoGlobal.h>
 #include <KoShapeRegistry.h>
 #include <kuser.h>
 
@@ -168,16 +167,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
     createActions();
 
     m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceManager::Unit);
-    m_textEditingPlugins = canvas->resourceManager()->
-        resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
-    if (m_textEditingPlugins == 0) {
-        m_textEditingPlugins = new TextEditingPluginContainer(canvas->resourceManager());
-        QVariant variant;
-        variant.setValue(m_textEditingPlugins);
-        canvas->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
-    }
 
-    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
+    foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
         connect(plugin, SIGNAL(startMacro(const QString &)),
                 this, SLOT(startMacro(const QString &)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
@@ -267,21 +258,22 @@ void TextTool::createActions()
 
     m_actionAlignRight  = new KAction(koIcon("format-justify-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight);
-    m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
+    m_actionAlignRight->setShortcut(Qt::CTRL + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
     connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
 
     m_actionAlignCenter  = new KAction(koIcon("format-justify-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter);
-    m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
+    m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::Key_E);
     m_actionAlignCenter->setCheckable(true);
+
     alignmentGroup->addAction(m_actionAlignCenter);
     connect(m_actionAlignCenter, SIGNAL(triggered(bool)), this, SLOT(alignCenter()));
 
     m_actionAlignBlock  = new KAction(koIcon("format-justify-fill"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock);
-    m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
+    m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::Key_J);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
@@ -464,19 +456,23 @@ void TextTool::createActions()
         action  = new KAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
         addAction("split_tablecells", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
+
+        action = new KAction(koIcon("borderpainter"), "", this);
+        action->setToolTip(i18n("Select a border style and paint that style onto a table"));
+        addAction("activate_borderpainter", action);
     }
 
     action = new KAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
     action->setToolTip(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc."));
-    action->setWhatsThis(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed.</p>"));
+    action->setWhatsThis(i18n("<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</p><p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.</p><p>If no text is selected, the paragraph where the cursor is located will be changed.</p>"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
 
     action = new KAction(i18n("Style Manager..."), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
     action->setToolTip(i18n("Change attributes of styles"));
-    action->setWhatsThis(i18n("Change font and paragraph attributes of styles.<p>Multiple styles can be changed using the dialog box."));
+    action->setWhatsThis(i18n("<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can be changed using the dialog box.</p>"));
     addAction("format_stylist", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
@@ -837,7 +833,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.restore();
 }
 
-void TextTool::updateSelectedShape(const QPointF &point)
+void TextTool::updateSelectedShape(const QPointF &point, bool noDocumentChange)
 {
     QRectF area(point, QSizeF(1, 1));
     if (m_textEditor.data()->hasSelection())
@@ -854,6 +850,17 @@ void TextTool::updateSelectedShape(const QPointF &point)
         TextShape *textShape = dynamic_cast<TextShape*>(shape);
         if (textShape) {
             if (textShape != m_textShape) {
+                if (static_cast<KoTextShapeData*>(textShape->userData())->document() != m_textShapeData->document()) {
+                    //we should only change to another document if allowed
+                    if (noDocumentChange) {
+                        return;
+                    }
+
+                    // if we change to another textdocument we need to remove selection in old document
+                    // or it would continue to be painted etc
+
+                    m_textEditor.data()->setPosition(m_textEditor.data()->position());
+                }
                 m_textShape = textShape;
 
                 setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
@@ -896,11 +903,9 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
-    repaintSelection(); //needed to delete any possible text selection i other text docs
+    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
 
-    m_textEditor.data()->setPosition(m_textEditor.data()->position());
-
-    updateSelectedShape(event->point);
+    updateSelectedShape(event->point, shiftPressed);
 
     KoSelection *selection = canvas()->shapeManager()->selection();
     if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
@@ -908,7 +913,6 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         selection->select(m_textShape);
     }
 
-    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
     KoPointedAt pointedAt = hitTest(event->point);
     m_tableDraggedOnce = false;
     m_clickWithinSelection = false;
@@ -918,7 +922,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         if ((event->button() == Qt::LeftButton) && !shiftPressed && m_textEditor.data()->hasSelection() && m_textEditor.data()->isWithinSelection(pointedAt.position)) {
             m_clickWithinSelection = true;
             m_draggingOrigin = event->pos(); //we store the pixel pos
-        } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection())) {
+        } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection() && m_textEditor.data()->isWithinSelection(pointedAt.position))) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
             useCursor(Qt::IBeamCursor);
         }
@@ -932,7 +936,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     } else {
         if (event->button() == Qt::RightButton) {
             m_tablePenMode = false;
-            KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
+            KoTextEditingPlugin *plugin = textEditingPluginContainer()->spellcheck();
             if (plugin)
                 plugin->setCurrentCursorPosition(m_textShapeData->document(), -1);
 
@@ -981,7 +985,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 
     //activate context-menu for spelling-suggestions
     if (event->button() == Qt::RightButton) {
-        KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
+        KoTextEditingPlugin *plugin = textEditingPluginContainer()->spellcheck();
         if (plugin)
             plugin->setCurrentCursorPosition(m_textShapeData->document(), m_textEditor.data()->position());
 
@@ -1089,7 +1093,34 @@ QMimeData *TextTool::generateMimeData() const
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
     drag.setData("text/plain", fragment.toPlainText().toUtf8());
 
-    return drag.mimeData();
+    return drag.takeMimeData();
+}
+
+TextEditingPluginContainer *TextTool::textEditingPluginContainer()
+{
+    m_textEditingPlugins = canvas()->resourceManager()->
+        resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
+
+    if (m_textEditingPlugins == 0) {
+        m_textEditingPlugins = new TextEditingPluginContainer(canvas()->resourceManager());
+        QVariant variant;
+        variant.setValue(m_textEditingPlugins.data());
+        canvas()->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
+
+        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
+            connect(plugin, SIGNAL(startMacro(const QString &)),
+                    this, SLOT(startMacro(const QString &)));
+            connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+            QHash<QString, KAction*> actions = plugin->actions();
+            QHash<QString, KAction*>::iterator i = actions.begin();
+            while (i != actions.end()) {
+                addAction(i.key(), i.value());
+                ++i;
+            }
+        }
+
+    }
+    return m_textEditingPlugins;
 }
 
 void TextTool::copy() const
@@ -1304,7 +1335,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     m_editTipPos = event->globalPos();
 
     if (event->buttons()) {
-        updateSelectedShape(event->point);
+        updateSelectedShape(event->point, true);
     }
 
     m_editTipTimer.stop();
@@ -1929,6 +1960,7 @@ void TextTool::updateActions()
         action("delete_tablecolumn")->setEnabled(hasTable && notInAnnotation);
         action("merge_tablecells")->setEnabled(hasTable && notInAnnotation);
         action("split_tablecells")->setEnabled(hasTable && notInAnnotation);
+        action("activate_borderpainter")->setEnabled(hasTable && notInAnnotation);
     }
     action("insert_annotation")->setEnabled(notInAnnotation);
 
@@ -2118,9 +2150,9 @@ KoToolSelection* TextTool::selection()
     return m_toolSelection;
 }
 
-QList<QWidget *> TextTool::createOptionWidgets()
+QList<QPointer<QWidget> > TextTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     if (m_textEditor.data()) {
@@ -2471,7 +2503,7 @@ void TextTool::splitTableCells()
 
 void TextTool::useTableBorderCursor()
 {
-    static unsigned char data[] = {
+    static const unsigned char data[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x68, 0x00,
         0x00, 0x00, 0xf4, 0x00, 0x00, 0x00, 0xfa, 0x00, 0x00, 0x00, 0xfd, 0x00,
         0x00, 0x80, 0x7e, 0x00, 0x00, 0x40, 0x3f, 0x00, 0x00, 0xa0, 0x1f, 0x00,
@@ -2601,7 +2633,7 @@ void TextTool::showStyleManager(int styleId)
 
 void TextTool::startTextEditingPlugin(const QString &pluginId)
 {
-    KoTextEditingPlugin *plugin = m_textEditingPlugins->plugin(pluginId);
+    KoTextEditingPlugin *plugin = textEditingPluginContainer()->plugin(pluginId);
     if (plugin) {
         if (m_textEditor.data()->hasSelection()) {
             plugin->checkSection(m_textShapeData->document(), m_textEditor.data()->selectionStart(), m_textEditor.data()->selectionEnd());
@@ -2755,23 +2787,30 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
-    if (m_textShapeData)
-        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
+    if (m_textShapeData && textEditingPluginContainer()) {
+        foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
             plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
+        }
+    }
 }
 
 void TextTool::finishedParagraph()
 {
-    if (m_textShapeData)
-        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
+    if (m_textShapeData && textEditingPluginContainer()) {
+        foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
             plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
+        }
+    }
 }
 
 void TextTool::startingSimpleEdit()
 {
-    if (m_textShapeData)
-        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
+    if (m_textShapeData && textEditingPluginContainer()) {
+        foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
             plugin->startingSimpleEdit(m_textShapeData->document(), m_prevCursorPosition);
+        }
+    }
+
 }
 
 void TextTool::setTextColor(const KoColor &color)
@@ -3011,9 +3050,9 @@ void TextTool::insertAnnotation()
     textEditor()->addAnnotation(shape);
 
     // Set annotation creator.
-    KConfig *config = KoGlobal::calligraConfig();
-    config->reparseConfiguration();
-    KConfigGroup authorGroup(config, "Author");
+    KConfig cfg("calligrarc");
+    cfg.reparseConfiguration();
+    KConfigGroup authorGroup(&cfg, "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
     KGlobal::config()->reparseConfiguration();
     KConfigGroup appAuthorGroup(KGlobal::config(), "Author");

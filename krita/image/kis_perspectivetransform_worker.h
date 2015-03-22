@@ -4,14 +4,14 @@
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -30,11 +30,8 @@
 #include <KoUpdater.h>
 
 
-class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker : public QObject
+class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker
 {
-
-    Q_OBJECT
-
 public:
     KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress);
     KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QTransform &transform, KoUpdaterPtr progress);
@@ -42,16 +39,30 @@ public:
     ~KisPerspectiveTransformWorker();
 
     void run();
+    void runPartialDst(KisPaintDeviceSP srcDev,
+                       KisPaintDeviceSP dstDev,
+                       const QRect &dstRect);
+
+    void setForwardTransform(const QTransform &transform);
+
+    QTransform forwardTransform() const;
+    QTransform backwardTransform() const;
 
 private:
     void init(const QTransform &transform);
+
+    void fillParams(const QRectF &srcRect,
+                    const QRect &dstBaseClipRect,
+                    QRegion *dstRegion,
+                    QPolygonF *dstClipPolygon);
 
 private:
     KisPaintDeviceSP m_dev;
     KoUpdaterPtr m_progressUpdater;
     QRegion m_dstRegion;
     QRectF m_srcRect;
-    QTransform m_newTransform;
+    QTransform m_backwardTransform;
+    QTransform m_forwardTransform;
     bool m_isIdentity;
 };
 

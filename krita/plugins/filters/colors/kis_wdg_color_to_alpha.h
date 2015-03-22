@@ -24,7 +24,6 @@
 #include <kis_config_widget.h>
 
 class KoColor;
-class KisFilter;
 class Ui_WdgColorToAlphaBase;
 
 
@@ -38,7 +37,7 @@ public:
         return m_widget;
     }
 
-    void setView(KisView2 *view);
+    void setView(KisViewManager *view);
 
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
@@ -48,14 +47,14 @@ protected:
     void hideEvent(QHideEvent *);
     void showEvent(QShowEvent *);
 
-private slots:
+private Q_SLOTS:
     void slotFgColorChanged(const KoColor &color);
     void slotColorSelectorChanged(const QColor &color);
     void slotCustomColorSelected(const QColor &color);
 
 private:
     Ui_WdgColorToAlphaBase* m_widget;
-    KisView2 *m_view;
+    KisViewManager *m_view;
 };
 
 #endif

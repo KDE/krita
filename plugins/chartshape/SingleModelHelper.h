@@ -37,7 +37,7 @@ class SingleModelHelper : public QObject
 public:
     SingleModelHelper(Table *table, ChartProxyModel *proxyModel);
 
-private slots:
+private Q_SLOTS:
     void slotModelStructureChanged();
 
 private:

@@ -36,9 +36,7 @@ class QTextBlock;
 class TableOfContentsStyleConfigure;
 class TableOfContentsEntryModel;
 class TableOfContentsEntryDelegate;
-class TextShape;
 class KoTableOfContentsGeneratorInfo;
-class KoStyleManager;
 class KoTextEditor;
 
 class TableOfContentsConfigure : public QDialog
@@ -51,13 +49,13 @@ public:
     ~TableOfContentsConfigure();
     KoTableOfContentsGeneratorInfo *currentToCData();
 
-public slots:
+public Q_SLOTS:
     void setDisplay();
     void save();
     void cleanUp();
     void updatePreview();
 
-private slots:
+private Q_SLOTS:
     void showStyleConfiguration();
     void titleTextChanged(const QString &text );
     void useOutline(int state);

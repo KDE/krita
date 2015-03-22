@@ -49,7 +49,7 @@ class FontEditRequester : public QWidget
     Q_OBJECT
     Q_PROPERTY(QFont value READ value WRITE setValue USER true)
 public:
-    FontEditRequester(QWidget* parent)
+    explicit FontEditRequester(QWidget* parent)
             : QWidget(parent)
             , m_paletteChangedEnabled(true)
     {

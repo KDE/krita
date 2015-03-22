@@ -32,15 +32,15 @@
 // class ReportEntityCheck
 //
 
-void KoReportDesignerItemCheck::init(QGraphicsScene * scene)
+void KoReportDesignerItemCheck::init(QGraphicsScene *scene, KoReportDesigner *d)
 {
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
 
-    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
 }
@@ -49,17 +49,16 @@ void KoReportDesignerItemCheck::init(QGraphicsScene * scene)
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(d)
 {
-    init(scene);
-    setSceneRect(QPointF(0, 0), QSizeF(15, 15)); //default size
-    m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("check"));
-
+    Q_UNUSED(pos);
+    init(scene, d);
+    setSceneRect(properRect(*d, KOREPORT_ITEM_CHECK_DEFAULT_WIDTH, KOREPORT_ITEM_CHECK_DEFAULT_HEIGHT));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KoReportItemCheck(element), KoReportDesignerItemRectBase(d)
 {
-    init(s);
+    init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
@@ -93,7 +92,7 @@ void KoReportDesignerItemCheck::paint(QPainter* painter, const QStyleOptionGraph
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
-        painter->setPen(QPen(QColor(224, 224, 224)));
+        painter->setPen(QPen(Qt::lightGray));
     } else {
         painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }
@@ -146,13 +145,14 @@ void KoReportDesignerItemCheck::paint(QPainter* painter, const QStyleOptionGraph
 void KoReportDesignerItemCheck::buildXML(QDomDocument & doc, QDomElement & parent)
 {
     //kDebug();
-    QDomElement entity = doc.createElement("report:check");
+    QDomElement entity = doc.createElement(QLatin1String("report:") + typeName());
 
     //properties
     addPropertyAsAttribute(&entity, m_name);
     addPropertyAsAttribute(&entity, m_controlSource);
     entity.setAttribute("fo:foreground-color", m_foregroundColor->value().toString());
     addPropertyAsAttribute(&entity, m_checkStyle);
+    addPropertyAsAttribute(&entity, m_staticValue);
 
     // bounding rect
     buildXMLRect(doc, entity, &m_pos, &m_size);

@@ -35,6 +35,7 @@
 #include "KoText.h"
 #include "KoTextEditor.h"
 #include "styles/KoStyleManager.h"
+#include "OdfTextTrackStyles.h"
 #include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoList.h"
@@ -103,7 +104,7 @@ void KoTextDocument::setTextEditor (KoTextEditor* textEditor)
     m_document->addResource(KoTextDocument::TextEditor, TextEditorURL, v);
 }
 
-KoTextEditor* KoTextDocument::textEditor()
+KoTextEditor* KoTextDocument::textEditor() const
 {
     QVariant resource = m_document->resource(KoTextDocument::TextEditor, TextEditorURL);
     return resource.value<KoTextEditor *>();
@@ -114,8 +115,10 @@ void KoTextDocument::setStyleManager(KoStyleManager *sm)
     QVariant v;
     v.setValue(sm);
     m_document->addResource(KoTextDocument::StyleManager, StyleManagerURL, v);
-    if (sm)
-        sm->add(m_document);
+    if (sm) {
+        OdfTextTrackStyles *cf = OdfTextTrackStyles::instance(sm);
+        cf->registerDocument(m_document);
+    }
 }
 
 void KoTextDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
@@ -206,9 +209,6 @@ void KoTextDocument::setUndoStack(KUndo2Stack *undoStack)
     QVariant v;
     v.setValue<void*>(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
-    if (styleManager()) {
-        styleManager()->setUndoStack(undoStack);
-    }
 }
 
 KUndo2Stack *KoTextDocument::undoStack() const
@@ -380,7 +380,7 @@ QTextCharFormat KoTextDocument::frameCharFormat() const
         return QTextCharFormat();
 }
 
-void KoTextDocument::setFrameCharFormat(QTextCharFormat format)
+void KoTextDocument::setFrameCharFormat(const QTextCharFormat &format)
 {
     m_document->addResource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl, QVariant::fromValue(format));
 }
@@ -394,7 +394,7 @@ QTextBlockFormat KoTextDocument::frameBlockFormat() const
         return QTextBlockFormat();
 }
 
-void KoTextDocument::setFrameBlockFormat(QTextBlockFormat format)
+void KoTextDocument::setFrameBlockFormat(const QTextBlockFormat &format)
 {
     m_document->addResource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl, QVariant::fromValue(format));
 }

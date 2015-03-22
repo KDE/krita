@@ -26,20 +26,11 @@
 
 class QColor;
 class QImage;
-class QSize;
-class QContextMenuEvent;
-class QKeyEvent;
-class QMouseEvent;
-class QPointF;
-class QTabletEvent;
-class QWheelEvent;
 class QInputMethodEvent;
 class QVariant;
 
-class KoViewConverter;
 class KisCoordinatesConverter;
 class KisDisplayFilter;
-class KisInputManager;
 
 #include "krita_export.h"
 
@@ -56,7 +47,7 @@ public: // KisAbstractCanvasWidget
 
 
     /// set the specified display filter on the canvas
-    virtual void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    virtual void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Draw the specified decorations on the view.

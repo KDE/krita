@@ -19,18 +19,17 @@
 
 #include "KoPAViewModeNormal.h"
 
-#include <QEvent>
 #include <QKeyEvent>
 #include <QPainter>
 
 #include <KoToolProxy.h>
 #include <KoShapeManager.h>
 #include <KoShapePaintingContext.h>
-#include "KoPACanvas.h"
+#include "KoPACanvasBase.h"
 #include "KoPADocument.h"
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
-#include "KoPAView.h"
+#include "KoPAViewBase.h"
 #include "commands/KoPAChangePageLayoutCommand.h"
 
 KoPAViewModeNormal::KoPAViewModeNormal( KoPAViewBase * view, KoPACanvasBase * canvas )

@@ -36,6 +36,7 @@ protected:
 public:
     KisFigurePaintingToolHelper(const KUndo2MagicString &name,
                                 KisImageWSP image,
+                                KisNodeSP currentNode,
                                 KoCanvasResourceManager *resourceManager,
                                 KisPainter::StrokeStyle strokeStyle,
                                 KisPainter::FillStyle fillStyle);

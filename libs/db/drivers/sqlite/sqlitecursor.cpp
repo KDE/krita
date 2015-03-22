@@ -50,7 +50,7 @@ static bool sqliteStringToBool(const QString& s)
 class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 {
 public:
-    SQLiteCursorData(Connection* conn)
+    explicit SQLiteCursorData(Connection* conn)
             :
             SQLiteConnectionInternal(conn)
 //   : curr_cols(0)

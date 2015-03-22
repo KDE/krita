@@ -22,11 +22,8 @@
 
 #include "flake_export.h"
 
-#include <KoPathSegment.h>
-#include <QPointF>
 #include <QList>
-#include <QRectF>
-#include <QPainterPath>
+#include <Qt>
 
 class KoSnapStrategy;
 class KoShape;
@@ -34,7 +31,8 @@ class KoPathPoint;
 class KoViewConverter;
 class KoCanvasBase;
 class QPainter;
-class KoCanvasBase;
+class QPointF;
+class QRectF;
 
 /**
  * This class is the place where all the snapping (i.e. snap to grid) is handled.

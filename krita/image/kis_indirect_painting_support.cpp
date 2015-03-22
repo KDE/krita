@@ -117,20 +117,20 @@ void KisIndirectPaintingSupport::setupTemporaryPainter(KisPainter *painter) cons
     painter->setSelection(d->selection);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText)
+void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
 {
-    mergeToLayerImpl(layer, undoAdapter, transactionText);
+    mergeToLayerImpl(layer, undoAdapter, transactionText,timedID);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText)
+void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
 {
-    mergeToLayerImpl(layer, undoAdapter, transactionText);
+    mergeToLayerImpl(layer, undoAdapter, transactionText,timedID);
 }
 
 template<class UndoAdapter>
-void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
+void KisIndirectPaintingSupport::mergeToLayerImpl(KisNodeSP layer,
                                                   UndoAdapter *undoAdapter,
-                                                  const KUndo2MagicString &transactionText)
+                                                  const KUndo2MagicString &transactionText,int timedID)
 {
     /**
      * We do not apply selection here, because it has already
@@ -145,7 +145,7 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
      * Scratchpad may not have an undo adapter
      */
     if(undoAdapter) {
-        gc.beginTransaction(transactionText);
+        gc.beginTransaction(transactionText,timedID);
     }
     foreach (const QRect &rc, d->temporaryTarget->region().rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);

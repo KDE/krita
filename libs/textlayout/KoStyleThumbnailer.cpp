@@ -81,7 +81,7 @@ KoStyleThumbnailer::~KoStyleThumbnailer()
     delete d;
 }
 
-QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool recreateThumbnail, KoStyleThumbnailerFlags flags)
+QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, const QSize &_size, bool recreateThumbnail, KoStyleThumbnailerFlags flags)
 {
     if ((flags & UseStyleNameText)  && (!style || style->name().isNull())) {
         return QImage();
@@ -89,9 +89,8 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
         return QImage();
     }
 
-    if (!size.isValid() || size.isNull()) {
-        size = d->defaultSize;
-    }
+    const QSize &size = (!_size.isValid() || _size.isNull()) ? d->defaultSize : _size;
+
     QString imageKey = "p_" + QString::number(reinterpret_cast<unsigned long>(style)) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
 
     if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
@@ -136,7 +135,7 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
     return res;
 }
 
-QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle, QSize size, bool recreateThumbnail, KoStyleThumbnailerFlags flags)
+QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle, const QSize &_size, bool recreateThumbnail, KoStyleThumbnailerFlags flags)
 {
     if ((flags & UseStyleNameText)  && (!characterStyle || characterStyle->name().isNull())) {
         return QImage();
@@ -147,9 +146,8 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
         return QImage();
     }
 
-    if (!size.isValid() || size.isNull()) {
-        size = d->defaultSize;
-    }
+    const QSize &size = (!_size.isValid() || _size.isNull()) ? d->defaultSize : _size;
+
     QString imageKey = "c_" + QString::number(reinterpret_cast<unsigned long>(characterStyle)) + "_"
                      + "p_" + QString::number(reinterpret_cast<unsigned long>(paragraphStyle)) + "_"
                      + QString::number(size.width()) + "_" + QString::number(size.height());
@@ -196,12 +194,12 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
     return res;
 }
 
-void KoStyleThumbnailer::setThumbnailSize(QSize size)
+void KoStyleThumbnailer::setThumbnailSize(const QSize &size)
 {
     d->defaultSize = size;
 }
 
-void KoStyleThumbnailer::layoutThumbnail(QSize size, QImage *im, KoStyleThumbnailerFlags flags)
+void KoStyleThumbnailer::layoutThumbnail(const QSize &size, QImage *im, KoStyleThumbnailerFlags flags)
 {
     QPainter p(im);
     d->documentLayout->removeRootArea();

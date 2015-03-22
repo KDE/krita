@@ -25,12 +25,11 @@
 #include "flake_export.h"
 
 #include <kundo2command.h>
-#include <QPointF>
 
-#include "KoPathShape.h"
 #include "KoPathPointData.h"
 
 class KoPathPointMoveCommandPrivate;
+class QPointF;
 
 /// The undo / redo command for path point moving.
 class FLAKE_EXPORT KoPathPointMoveCommand : public KUndo2Command
@@ -60,7 +59,7 @@ public:
     void undo();
 
 private:
-    KoPathPointMoveCommandPrivate *d;
+    KoPathPointMoveCommandPrivate * const d;
 };
 
 #endif // KOPATHPOINTMOVECOMMAND_H

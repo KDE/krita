@@ -22,11 +22,16 @@
 #define KIS_ABSTRACT_PERSPECTIVE_GRID_H
 
 #include <QPointF>
+#include <QObject>
 
-class KisAbstractPerspectiveGrid
+#include "krita_export.h"
+
+class KRITAUI_EXPORT KisAbstractPerspectiveGrid : public QObject
 {
+    Q_OBJECT
 public:
 
+    KisAbstractPerspectiveGrid(QObject * parent = 0);
 
     virtual ~KisAbstractPerspectiveGrid() {}
 

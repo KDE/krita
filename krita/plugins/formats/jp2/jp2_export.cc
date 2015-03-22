@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -20,18 +20,18 @@
 
 #include <QCheckBox>
 #include <QSlider>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
 
 #include <KoColorSpaceConstants.h>
-#include <KoFilterChain.h>
-#include <KoFilterManager.h>
+#include <KisFilterChain.h>
+#include <KisImportExportManager.h>
 
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <kis_doc2.h>
+#include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
@@ -46,7 +46,7 @@ class KisExternalLayer;
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<jp2Export>();)
 K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
-jp2Export::jp2Export(QObject *parent, const QVariantList &) : KoFilter(parent)
+jp2Export::jp2Export(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -54,23 +54,23 @@ jp2Export::~jp2Export()
 {
 }
 
-KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "JP2 export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
-        return KoFilter::NotImplemented;
+        return KisImportExportFilter::NotImplemented;
 
-    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
     if (!input)
-        return KoFilter::NoDocumentCreated;
+        return KisImportExportFilter::NoDocumentCreated;
 
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     KDialog* kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("JPEG 2000 Export Options"));
@@ -88,11 +88,11 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
     
     kdb->setMainWidget(wdg);
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
-            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+            return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
     else {
@@ -124,10 +124,10 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
     if ((res = kpc.buildFile(url, l, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
-        return KoFilter::OK;
+        return KisImportExportFilter::OK;
     }
     dbgFile << " Result =" << res;
-    return KoFilter::InternalError;
+    return KisImportExportFilter::InternalError;
 }
 
 #include <jp2_export.moc>

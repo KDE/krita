@@ -62,7 +62,7 @@ public:
     void setSelection(int startBar, int endBar, MusicCore::Staff* startStaff, MusicCore::Staff* endStaff);
 protected:
     virtual QWidget * createOptionWidget();
-protected slots:
+protected Q_SLOTS:
     void activeActionChanged(QAction* action);
     void voiceChanged(int voice);
     void addBars();

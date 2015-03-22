@@ -2,14 +2,14 @@
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -178,29 +178,12 @@ QWidget* KisFloatColorInput::createInput()
 
 void KisFloatColorInput::sliderChanged(int i)
 {
-    const qreal minVisibleFloatValue = m_displayRenderer->minVisibleFloatValue();
-    const qreal maxVisibleFloatValue = m_displayRenderer->maxVisibleFloatValue();
-    const qreal floatRange = maxVisibleFloatValue - minVisibleFloatValue;
-
-    m_dblNumInput->setValue(minVisibleFloatValue + (i / 255.0) * floatRange);
+    const qreal floatRange = m_maxValue - m_minValue;
+    m_dblNumInput->setValue(m_minValue + (i / 255.0) * floatRange);
 }
 
 void KisFloatColorInput::update()
 {
-    const qreal minVisibleFloatValue = m_displayRenderer->minVisibleFloatValue();
-    const qreal maxVisibleFloatValue = m_displayRenderer->maxVisibleFloatValue();
-    const qreal floatRange = maxVisibleFloatValue - minVisibleFloatValue;
-
-    m_dblNumInput->setMinimum(minVisibleFloatValue);
-    m_dblNumInput->setMaximum(maxVisibleFloatValue);
-
-    // ensure at least 3 significant digits are always shown
-    int newPrecision = 2 + qMax(0.0, std::ceil(-std::log10(maxVisibleFloatValue)));
-    if (newPrecision != m_dblNumInput->decimals()) {
-        m_dblNumInput->setDecimals(newPrecision);
-        m_dblNumInput->updateGeometry();
-    }
-
     KoColor min = *m_color;
     KoColor max = *m_color;
     quint8* data = m_color->data() + m_channelInfo->pos();
@@ -208,27 +191,45 @@ void KisFloatColorInput::update()
     quint8* dataMax = max.data() + m_channelInfo->pos();
 
     qreal value = 1.0;
+    m_minValue = m_displayRenderer->minVisibleFloatValue(m_channelInfo);
+    m_maxValue = m_displayRenderer->maxVisibleFloatValue(m_channelInfo);
 
     switch (m_channelInfo->channelValueType()) {
 #ifdef HAVE_OPENEXR
     case KoChannelInfo::FLOAT16:
         value = *(reinterpret_cast<half*>(data));
-        *(reinterpret_cast<half*>(dataMin)) = minVisibleFloatValue;
-        *(reinterpret_cast<half*>(dataMax)) = maxVisibleFloatValue;
+        m_minValue = qMin(value, m_minValue);
+        m_maxValue = qMax(value, m_maxValue);
+        *(reinterpret_cast<half*>(dataMin)) = m_minValue;
+        *(reinterpret_cast<half*>(dataMax)) = m_maxValue;
         break;
 #endif
     case KoChannelInfo::FLOAT32:
         value = *(reinterpret_cast<float*>(data));
-        *(reinterpret_cast<float*>(dataMin)) = minVisibleFloatValue;
-        *(reinterpret_cast<float*>(dataMax)) = maxVisibleFloatValue;
+        m_minValue = qMin(value, m_minValue);
+        m_maxValue = qMax(value, m_maxValue);
+        *(reinterpret_cast<float*>(dataMin)) = m_minValue;
+        *(reinterpret_cast<float*>(dataMax)) = m_maxValue;
         break;
     default:
         Q_ASSERT(false);
     }
+
+    m_dblNumInput->setMinimum(m_minValue);
+    m_dblNumInput->setMaximum(m_maxValue);
+
+    // ensure at least 3 significant digits are always shown
+    int newPrecision = 2 + qMax(qreal(0.0), std::ceil(-std::log10(m_maxValue)));
+    if (newPrecision != m_dblNumInput->decimals()) {
+        m_dblNumInput->setDecimals(newPrecision);
+        m_dblNumInput->updateGeometry();
+    }
+
     m_colorSlider->setColors(min, max);
 
+    const qreal floatRange = m_maxValue - m_minValue;
     m_dblNumInput->setValue(value);
-    m_colorSlider->setValue((value - minVisibleFloatValue) / floatRange * 255);
+    m_colorSlider->setValue((value - m_minValue) / floatRange * 255);
 }
 
 KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : KisColorInput(parent, 0, color, displayRenderer)

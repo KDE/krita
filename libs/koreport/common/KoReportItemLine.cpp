@@ -22,8 +22,12 @@
 #include <koproperty/Set.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 #include <renderobjects.h>
+
+KoReportItemLine::KoReportItemLine()
+{
+    createProperties();
+}
 
 KoReportItemLine::KoReportItemLine(QDomNode & element)
 {
@@ -60,6 +64,10 @@ KoReportItemLine::KoReportItemLine(QDomNode & element)
     }
 }
 
+KoReportItemLine::~KoReportItemLine()
+{
+    delete m_set;
+}
 
 void KoReportItemLine::createProperties()
 {

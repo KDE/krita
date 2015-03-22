@@ -92,7 +92,7 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
     KoColor backgroundColor() const;
 
     /**
-     * Returns if a dialog with a KoUniColorChooser will be popped up when clicking
+     * Returns if a dialog with a color chooser will be popped up when clicking
      * If false then you could/should connect to the pleasePopDialog signal
      * and pop your own dialog. Just set the current color afterwards.
      */
@@ -104,7 +104,7 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      */
     virtual QSize sizeHint() const;
 
-  public slots:
+  public Q_SLOTS:
     /**
      * Sets the foreground color.
      */
@@ -116,13 +116,13 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
     void setBackgroundColor( const KoColor &color );
 
     /**
-     * Sets if a dialog with a KoUniColorChooser should be popped up when clicking
+     * Sets if a dialog with a color chooser should be popped up when clicking
      * If you set this to false then you could connect to the pleasePopDialog signal
      * and pop your own dialog. Just set the current color afterwards.
      */
     void setPopDialog( bool popDialog );
 
-  signals:
+  Q_SIGNALS:
     /**
      * Emitted when the foreground color is changed.
      */

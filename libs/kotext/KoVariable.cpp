@@ -85,7 +85,7 @@ void KoVariable::updatePosition(const QTextDocument *document, int posInDocument
     variableMoved(d->document, posInDocument);
 }
 
-void KoVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void KoVariable::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_D(KoVariable);
     Q_UNUSED(document);
@@ -112,7 +112,7 @@ void KoVariable::resize(const QTextDocument *document, QTextInlineObject object,
     }
 }
 
-void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format)
 {
     Q_D(KoVariable);
     Q_UNUSED(document);

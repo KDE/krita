@@ -24,8 +24,6 @@
 #ifndef KOPOINTEREVENT_H
 #define KOPOINTEREVENT_H
 
-#include <QInputEvent>
-
 #include <QTouchEvent>
 
 class QTabletEvent;

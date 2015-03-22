@@ -94,7 +94,7 @@ static KTimeZone toKTimeZone(Soprano::Node n)
         idx = dt.lastIndexOf('/', idx - 1);
     }
     if (idx > 0) {
-        dt = dt.mid(idx + 1);
+        dt.remove(0, idx + 1);
     }
     KTimeZone kt = KSystemTimeZones::zone(dt);
     kDebug(30015) << "input:" << n.dataType().toString()

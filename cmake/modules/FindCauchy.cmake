@@ -9,23 +9,23 @@
 # Copyright (c) 2011, Cyrille Berger <cberger@cberger.net>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
-FIND_PATH(CAUCHY_INCLUDE_DIR m2mml.h
+find_path(CAUCHY_INCLUDE_DIR m2mml.h
 /usr/local/include
 /usr/include
 )
 
-FIND_LIBRARY(M2MML_LIBRARY
+find_library(M2MML_LIBRARY
   NAMES m2mml
   PATHS /usr/lib /usr/local/lib )
 
-IF (CAUCHY_INCLUDE_DIR)
-  SET(CAUCHY_FOUND "YES")
-ELSE ()
-  SET(CAUCHY_FOUND "NO")
-ENDIF ()
+if (CAUCHY_INCLUDE_DIR)
+  set(CAUCHY_FOUND "YES")
+else ()
+  set(CAUCHY_FOUND "NO")
+endif ()
 
-IF(CAUCHY_FOUND AND M2MML_LIBRARY)
-  SET(M2MML_FOUND "YES")
-ELSE ()
-  SET(M2MML_FOUND "NO")
-ENDIF ()
+if(CAUCHY_FOUND AND M2MML_LIBRARY)
+  set(M2MML_FOUND "YES")
+else ()
+  set(M2MML_FOUND "NO")
+endif ()

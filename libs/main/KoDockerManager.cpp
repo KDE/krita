@@ -27,10 +27,9 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <ktoolbar.h>
 #include <kglobalsettings.h>
 
-#include "KoToolDocker_p.h"
+#include "KoToolDocker.h"
 
 #include "KoView.h"
 #include "KoMainWindow.h"
@@ -71,7 +70,7 @@ KoDockerManager::~KoDockerManager()
     delete d;
 }
 
-void KoDockerManager::newOptionWidgets(const QList<QWidget *> &optionWidgetList)
+void KoDockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
 

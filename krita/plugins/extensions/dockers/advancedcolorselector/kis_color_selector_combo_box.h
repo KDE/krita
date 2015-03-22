@@ -21,7 +21,6 @@
 #include <QComboBox>
 #include "kis_color_selector.h"
 
-class KisCanvas2;
 class KisColorSelectorComboBoxPrivate;
 class KoColorSpace;
 
@@ -34,11 +33,13 @@ public:
     void hidePopup();
     void showPopup();
     KisColorSelector::Configuration configuration() const;
+    //int m_model;
 protected:
     void paintEvent(QPaintEvent *e);
-public slots:
+public Q_SLOTS:
     void setColorSpace(const KoColorSpace* colorSpace);
     void setConfiguration(KisColorSelector::Configuration);
+    void setList(int model);
 private:
     KisColorSelectorComboBoxPrivate* m_private;
     KisColorSelector::Configuration m_configuration;

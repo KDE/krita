@@ -16,25 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <gmic.h>
-
 #include <kis_gmic_applicator.h>
 #include <kis_image_signal_router.h>
 #include <kis_processing_applicator.h>
-#include "kis_export_gmic_processing_visitor.h"
-#include "kis_gmic_synchronize_layers_command.h"
+
+
 #include "kis_gmic_command.h"
 #include "kis_import_gmic_processing_visitor.h"
 #include "kis_image.h"
 #include <kis_selection.h>
+#include <KoUpdater.h>
 
-KisGmicApplicator::KisGmicApplicator()
+#include <gmic.h>
+#include "kis_gmic_synchronize_layers_command.h"
+#include "kis_export_gmic_processing_visitor.h"
+
+KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorStrokeEnded(false),m_progress(0),m_cancel(0)
 {
 }
 
-
 KisGmicApplicator::~KisGmicApplicator()
 {
+    dbgPlugins << "Destructor: " << m_applicator;
+    delete m_applicator;
 }
 
 void KisGmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands)
@@ -47,15 +51,21 @@ void KisGmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const K
     m_customCommands = customCommands;
 }
 
-void KisGmicApplicator::run()
+
+void KisGmicApplicator::preview()
 {
+    // cancel previous preview if there is one
+    dbgPlugins << "Request for preview, cancelling any previous possible on-canvas preview";
+    cancel();
+
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
-    KisProcessingApplicator applicator(m_image, m_node,
-                                       KisProcessingApplicator::RECURSIVE,
-                                       emitSignals, m_actionName);
+    m_applicator = new KisProcessingApplicator(m_image, m_node,
+            KisProcessingApplicator::RECURSIVE,
+            emitSignals, m_actionName);
 
+    dbgPlugins << "Creating applicator " << m_applicator;
 
     QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
     gmicLayers->assign(m_kritaNodes->size());
@@ -71,21 +81,84 @@ void KisGmicApplicator::run()
     {
         layerSize = QRect(0,0,m_image->width(), m_image->height());
     }
-    KisProcessingVisitorSP visitor;
 
     // convert krita layers to gmic layers
-    visitor = new KisExportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize);
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    KisProcessingVisitorSP exportVisitor = new KisExportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize);
+    m_applicator->applyVisitor(exportVisitor, KisStrokeJobData::CONCURRENT);
 
     // apply gmic filters to provided layers
     const char * customCommands = m_customCommands.isNull() ? 0 : m_customCommands.constData();
-    applicator.applyCommand(new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands));
+    KisGmicCommand * gmicCommand = new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands);
+    connect(gmicCommand, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool,int,QString)));
+
+    m_progress = gmicCommand->progressPtr();
+    m_cancel = gmicCommand->cancelPtr();
+    m_applicator->applyCommand(gmicCommand);
 
     // synchronize layer count
-    applicator.applyCommand(new KisGmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    m_applicator->applyCommand(new KisGmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image, layerSize, selection), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
-    // would sleep(3) help here?
-    visitor = new KisImportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize, selection);
-    applicator.applyVisitor(visitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
-    applicator.end();
+    KisProcessingVisitorSP  importVisitor = new KisImportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize, selection);
+    m_applicator->applyVisitor(importVisitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
+    m_applicator->explicitlyEmitFinalSignals();
+}
+
+void KisGmicApplicator::cancel()
+{
+    if (m_cancel)
+    {
+        dbgPlugins << "Cancel gmic script";
+        *m_cancel = true;
+    }
+
+    if (m_applicator)
+    {
+
+        if (!m_applicatorStrokeEnded)
+        {
+            dbgPlugins << "Cancelling applicator: Yes!";
+            m_applicator->cancel();
+        }
+        else
+        {
+            dbgPlugins << "Cancelling applicator: No! Reason: Already finished!";
+        }
+
+
+        dbgPlugins << "deleting applicator: " << m_applicator;
+        delete m_applicator;
+        m_applicator = 0;
+
+
+        m_applicatorStrokeEnded = false;
+        dbgPlugins << ppVar(m_applicatorStrokeEnded);
+
+    }
+    else
+    {
+        dbgPlugins << "Cancelling applicator: No! Reason: Null applicator!";
+    }
+
+
+}
+
+void KisGmicApplicator::finish()
+{
+    dbgPlugins << "aplicator " << m_applicator << " finished";
+    if (m_applicator)
+    {
+        m_applicator->end();
+        m_applicatorStrokeEnded = true;
+    }
+    dbgPlugins << ppVar(m_applicatorStrokeEnded);
+}
+
+float KisGmicApplicator::getProgress() const
+{
+    if (m_progress)
+    {
+        return *m_progress;
+    }
+
+    return -2.0f;
 }

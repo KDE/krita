@@ -29,15 +29,15 @@ if(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
 
   # and the executables are in the cache too, if they were found.
 
-else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
+else()
 
-  SET(HAVE_MAGICK 0)
+  set(HAVE_MAGICK 0)
 
   if (WIN32)
 
     # Try to find the ImageMagick binary path.
 
-    FIND_PATH(IMAGEMAGICK_BINARY_PATH mogrify.exe
+    find_path(IMAGEMAGICK_BINARY_PATH mogrify.exe
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\ImageMagick\\Current;BinPath]
       DOC "Path to the ImageMagick binary directory where all executable should be found."
     )
@@ -46,46 +46,46 @@ else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
     # env var to search for convert.exe, otherwise it is going to pick
     # Window's own convert.exe, and you may say good-bye to your disk.
 
-    FIND_PROGRAM(IMAGEMAGICK_CONVERT_EXECUTABLE
+    find_program(IMAGEMAGICK_CONVERT_EXECUTABLE
       NAMES convert
       PATHS ${IMAGEMAGICK_BINARY_PATH}
       NO_SYSTEM_PATH
       DOC "Path to ImageMagick's convert executable. WARNING: note that this tool, named convert.exe, conflicts with Microsoft Window's own convert.exe, which is used to convert FAT partitions to NTFS format ! Therefore, be extra-careful and make sure the right convert.exe has been picked."
     )
 
-  ELSE (WIN32)
+  else ()
 
-    SET (IMAGEMAGICK_BINARY_PATH "")
+    set (IMAGEMAGICK_BINARY_PATH "")
 
-    FIND_PROGRAM(IMAGEMAGICK_CONVERT_EXECUTABLE
+    find_program(IMAGEMAGICK_CONVERT_EXECUTABLE
       NAMES convert
       PATHS ${IMAGEMAGICK_BINARY_PATH}
       DOC "Path to ImageMagick's convert executable."
     )
 
-  ENDIF (WIN32)
+  endif ()
 
   # Find mogrify, import, montage, composite
 
-  FIND_PROGRAM(IMAGEMAGICK_MOGRIFY_EXECUTABLE
+  find_program(IMAGEMAGICK_MOGRIFY_EXECUTABLE
     NAMES mogrify
     PATHS ${IMAGEMAGICK_BINARY_PATH}
     DOC "Path to ImageMagick's mogrify executable."
   )
 
-  FIND_PROGRAM(IMAGEMAGICK_IMPORT_EXECUTABLE
+  find_program(IMAGEMAGICK_IMPORT_EXECUTABLE
     NAMES import
     PATHS ${IMAGEMAGICK_BINARY_PATH}
     DOC "Path to ImageMagick's import executable."
   )
 
-  FIND_PROGRAM(IMAGEMAGICK_MONTAGE_EXECUTABLE
+  find_program(IMAGEMAGICK_MONTAGE_EXECUTABLE
     NAMES montage
     PATHS ${IMAGEMAGICK_BINARY_PATH}
     DOC "Path to ImageMagick's montage executable."
   )
 
-  FIND_PROGRAM(IMAGEMAGICK_COMPOSITE_EXECUTABLE
+  find_program(IMAGEMAGICK_COMPOSITE_EXECUTABLE
     NAMES composite
     PATHS ${IMAGEMAGICK_BINARY_PATH}
     DOC "Path to ImageMagick's composite executable."
@@ -102,11 +102,11 @@ else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
 
   if(MAGICK_CONFIG_EXECUTABLE)
      if(NOT WIN32)
-       INCLUDE(FindPkgConfig)
+       include(FindPkgConfig)
        pkg_check_modules(IMAGEMAGICK ImageMagick)
      else()
 	exec_program(${MAGICK_CONFIG_EXECUTABLE} ARGS --version OUTPUT_VARIABLE IMAGEMAGICK_VERSION)
-     endif(NOT WIN32)
+     endif()
 
      find_path(IMAGEMAGICK_INCLUDE_DIR magick/api.h
         /opt/local/include
@@ -120,23 +120,23 @@ else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
 
      if(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
         set(IMAGEMAGICK_FOUND TRUE)
-     endif(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
-  endif(MAGICK_CONFIG_EXECUTABLE)
+     endif()
+  endif()
 
   if(IMAGEMAGICK_FOUND)
      set(HAVE_MAGICK 1)
      if(NOT ImageMagick_FIND_QUIETLY)
         message(STATUS "Found Image Magick version ${IMAGEMAGICK_VERSION}: ${IMAGEMAGICK_LIBRARIES}")
-     endif(NOT ImageMagick_FIND_QUIETLY)
-  else(IMAGEMAGICK_FOUND)
+     endif()
+  else()
      if(NOT ImageMagick_FIND_QUIETLY)
         if(ImageMagick_FIND_REQUIRED)
            message(FATAL_ERROR "Required package Image Magick NOT found")
-        else(ImageMagick_FIND_REQUIRED)
+        else()
            message(STATUS "Image Magick NOT found")
-        endif(ImageMagick_FIND_REQUIRED)
-     endif(NOT ImageMagick_FIND_QUIETLY)
-  endif(IMAGEMAGICK_FOUND)
+        endif()
+     endif()
+  endif()
 
   mark_as_advanced(
     IMAGEMAGICK_BINARY_PATH
@@ -153,4 +153,4 @@ else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
     IMAGEMAGICK_PATCH_VERSION
   )
 
-endif(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
+endif()

@@ -2,92 +2,88 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   # avoid "cannot open file 'LIBC.lib'" error
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
-endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+endif()
 
-
-include_directories(
-    ${KOMAIN_INCLUDES}
-)
 
 if (SHOULD_BUILD_PLUGIN_COLORENGINES)
     add_subdirectory( colorengines )
-endif (SHOULD_BUILD_PLUGIN_COLORENGINES)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_MUSICSHAPE)
     add_subdirectory( musicshape )
-endif (SHOULD_BUILD_PLUGIN_MUSICSHAPE)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_SPACENAVIGATOR)
     macro_optional_find_package(Spnav)
     macro_log_feature(SPNAV_FOUND "Spnav" "3Dconnexion device driver and SDK" "http://spacenav.sourceforge.net/" FALSE "" "Required by SpaceNavigator 3D mouse plugin") 
-    IF (SPNAV_FOUND)
+    if (SPNAV_FOUND)
         add_subdirectory( spacenavigator )
-    ENDIF (SPNAV_FOUND)
-endif (SHOULD_BUILD_PLUGIN_SPACENAVIGATOR)
+    endif ()
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_ARTISTICTEXTSHAPE)
     add_subdirectory( artistictextshape )
-endif (SHOULD_BUILD_PLUGIN_ARTISTICTEXTSHAPE)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_DOCKERS)
     add_subdirectory( dockers )
-endif (SHOULD_BUILD_PLUGIN_DOCKERS)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_TEXTEDITING)
     add_subdirectory( textediting )
-endif(SHOULD_BUILD_PLUGIN_TEXTEDITING)
+endif()
 
 add_subdirectory( kexi )
 
 if (SHOULD_BUILD_PLUGIN_DEFAULTTOOLS)
     add_subdirectory( defaultTools )
-endif (SHOULD_BUILD_PLUGIN_DEFAULTTOOLS)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_PATHSHAPES)
     add_subdirectory( pathshapes )
-endif (SHOULD_BUILD_PLUGIN_PATHSHAPES)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_VARIABLES)
     add_subdirectory( variables )
-endif (SHOULD_BUILD_PLUGIN_VARIABLES)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_CHARTSHAPE)
     add_subdirectory( chartshape )
-endif (SHOULD_BUILD_PLUGIN_CHARTSHAPE)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_PICTURESHAPE)
     add_subdirectory( pictureshape )
-endif (SHOULD_BUILD_PLUGIN_PICTURESHAPE)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_TEXTSHAPE)
     add_subdirectory( textshape )
-endif(SHOULD_BUILD_PLUGIN_TEXTSHAPE)
+endif()
 
 if (SHOULD_BUILD_PLUGIN_PLUGINSHAPE)
     add_subdirectory( pluginshape )
-endif (SHOULD_BUILD_PLUGIN_PLUGINSHAPE)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_FORMULASHAPE)
     add_subdirectory( formulashape )
-endif (SHOULD_BUILD_PLUGIN_FORMULASHAPE)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_VECTORSHAPE)
     # ??? old comment: as the vector shape depends on filters subdir (not really intuitive) lets allow disabling
     add_subdirectory( vectorshape )
-endif (SHOULD_BUILD_PLUGIN_VECTORSHAPE)
+endif ()
 
 if (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
     add_subdirectory( videoshape )
-endif (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
+endif ()
 
 # only build the reporting plugins if building koreport
 if(SHOULD_BUILD_PLUGIN_REPORTING)
     add_subdirectory( reporting )
-endif(SHOULD_BUILD_PLUGIN_REPORTING)
+endif()
 
 if(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
     add_subdirectory( semanticitems )
-endif(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
+endif()
 
 #add_subdirectory( videoshape )
 #add_subdirectory( commentshape )

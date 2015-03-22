@@ -65,7 +65,7 @@ namespace KexiDB
 class QuerySchemaPrivate
 {
 public:
-    QuerySchemaPrivate(QuerySchema* q, QuerySchemaPrivate* copy = 0)
+    explicit QuerySchemaPrivate(QuerySchema* q, QuerySchemaPrivate* copy = 0)
             : query(q)
             , masterTable(0)
             , fakeRowIDField(0)
@@ -264,7 +264,7 @@ protected:
                 //missing
                 do { //find 1st unused
                     colNum++;
-                    columnAlias = (i18nc("short for 'expression' word, e.g. 'expr' (only latin letters, please)", "expr")
+                    columnAlias = (i18nc("short for 'expression' word, e.g. 'expr' (only latin letters, please, no '.')", "expr")
                                    .toLatin1() + QByteArray::number(colNum));
                 } while (-1 != tablePositionForAlias(columnAlias));
 
@@ -943,7 +943,7 @@ QString QuerySchema::debugString() const
                             + " -> " + alias + "\n");
         }
     }
-    dbg += QString("-TABLE ALIASES:\n" + aliases);
+    dbg += QString("\n-TABLE ALIASES:\n" + aliases);
     QString where = d->whereExpr ? d->whereExpr->debugString() : QString();
     if (!where.isEmpty())
         dbg += (QString("\n-WHERE EXPRESSION:\n") + where);

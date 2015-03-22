@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>452</width>
-    <height>385</height>
+    <width>432</width>
+    <height>338</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,8 +34,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="KisDoubleSliderSpinBox" name="lineWidthSlider" native="true">
-    </widget>
+    <widget class="KisDoubleSliderSpinBox" name="lineWidthSlider" native="true"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label">
@@ -48,8 +47,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="KisDoubleSliderSpinBox" name="historySizeSlider" native="true">
-    </widget>
+    <widget class="KisDoubleSliderSpinBox" name="historySizeSlider" native="true"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
@@ -62,8 +60,7 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="KisDoubleSliderSpinBox" name="curvesOpacitySlider" native="true">
-    </widget>
+    <widget class="KisDoubleSliderSpinBox" name="curvesOpacitySlider" native="true"/>
    </item>
    <item row="3" column="0" colspan="2">
     <widget class="QCheckBox" name="connectionCHBox">

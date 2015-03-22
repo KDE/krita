@@ -26,19 +26,16 @@
 #include "SvgParser.h"
 #include "SvgUtil.h"
 #include "SvgShape.h"
-
+#include "SvgGraphicContext.h"
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
-#include <KoShapeLayer.h>
-#include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
 #include <KoPathShape.h>
 #include <KoDocumentResourceManager.h>
 #include <KoPathShapeLoader.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
-#include <KoImageData.h>
 #include <KoImageCollection.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>

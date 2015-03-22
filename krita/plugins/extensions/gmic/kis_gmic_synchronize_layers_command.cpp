@@ -17,19 +17,31 @@
  */
 
 #include <kis_gmic_synchronize_layers_command.h>
+#include "kis_import_gmic_processing_visitor.h"
 #include <kis_paint_layer.h>
 #include <kis_image.h>
+#include <kis_selection.h>
+#include <kis_types.h>
 #include <KoColorSpaceConstants.h>
 
-KisGmicSynchronizeLayersCommand::KisGmicSynchronizeLayersCommand(KisNodeListSP nodes, QSharedPointer< cimg_library::CImgList< float > > images, KisImageWSP image)
+#include <commands/kis_image_layer_add_command.h>
+
+KisGmicSynchronizeLayersCommand::KisGmicSynchronizeLayersCommand(KisNodeListSP nodes, QSharedPointer< cimg_library::CImgList< float > > images, KisImageWSP image, const QRect &dstRect, KisSelectionSP selection)
     :   KUndo2Command(),
         m_nodes(nodes),
         m_images(images),
         m_image(image),
+        m_dstRect(dstRect),
+        m_selection(selection),
         m_firstRedo(true)
 {
-
 }
+
+KisGmicSynchronizeLayersCommand::~KisGmicSynchronizeLayersCommand()
+{
+    qDeleteAll(m_imageCommands);
+}
+
 
 void KisGmicSynchronizeLayersCommand::redo()
 {
@@ -38,18 +50,39 @@ void KisGmicSynchronizeLayersCommand::redo()
         // if gmic produces more layers
         if (m_nodes->size() < int(m_images->_width))
         {
-            for (unsigned int i = m_nodes->size(); i < m_images->_width; i++)
+
+            if (m_image)
             {
-                KisPaintDevice * device = new KisPaintDevice(m_image->colorSpace());
-                KisLayerSP paintLayer = new KisPaintLayer(m_image, "New layer from gmic filter", OPACITY_OPAQUE_U8, device);
-                m_nodes->append(paintLayer);
-                m_image->addNode(paintLayer, m_nodes->at(0)->parent());
 
-                dbgPlugins << "Added new layer";
+                int nodesCount = m_nodes->size();
+                for (unsigned int i = nodesCount; i < m_images->_width; i++)
+                {
+
+                    KisPaintDevice * device = new KisPaintDevice(m_image->colorSpace());
+                    KisLayerSP paintLayer = new KisPaintLayer(m_image, "New layer from gmic filter", OPACITY_OPAQUE_U8, device);
+                    KisImportGmicProcessingVisitor::gmicImageToPaintDevice(m_images->_data[i], device);
+
+                    KisNodeSP aboveThis = m_nodes->last();
+                    KisNodeSP parent = m_nodes->at(0)->parent();
+
+                    dbgPlugins << "Adding paint layer " << (i - nodesCount + 1) << " to parent " << parent->name();
+                    KisImageLayerAddCommand * addLayerCmd = new KisImageLayerAddCommand(m_image, paintLayer, parent, aboveThis, false, true);
+                    addLayerCmd->redo();
+                    m_imageCommands.append(addLayerCmd);
+                    m_nodes->append(paintLayer);
+
+                }
             }
-
-            // would sleep(5) here help?
-
+            else // small preview
+            {
+                Q_ASSERT(m_nodes->size() > 0);
+                for (unsigned int i = m_nodes->size(); i < m_images->_width; i++)
+                {
+                    KisPaintDevice * device = new KisPaintDevice(m_nodes->at(0)->colorSpace());
+                    KisLayerSP paintLayer = new KisPaintLayer(0, "New layer from gmic filter", OPACITY_OPAQUE_U8, device);
+                    m_nodes->append(paintLayer);
+                }
+            }
         } // if gmic produces less layers, we are going to drop some
         else if (m_nodes->size() > int(m_images->_width))
         {
@@ -58,13 +91,15 @@ void KisGmicSynchronizeLayersCommand::redo()
     }
     else
     {
-        // really?
-        // KUndo2Command::undo();
-        dbgPlugins << "Undo needed?";
+        dbgPlugins << "Redo again needed?";
     }
 }
 
 void KisGmicSynchronizeLayersCommand::undo()
 {
-    // do nothing?
+    KisImageCommand * cmd;
+    foreach(cmd, m_imageCommands)
+    {
+        cmd->undo();
+    }
 }

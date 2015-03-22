@@ -34,7 +34,7 @@ class KRITAIMAGE_EXPORT KisPaintOpSettingsWidget : public KisConfigWidget
 public:
 
     KisPaintOpSettingsWidget(QWidget * parent = 0, Qt::WFlags f = 0)
-            : KisConfigWidget(parent, f, 10) {
+        : KisConfigWidget(parent, f, 10) {
     }
 
     virtual ~KisPaintOpSettingsWidget() {
@@ -48,6 +48,10 @@ public:
 
     virtual void setImage(KisImageWSP image) {
         m_image = image;
+    }
+
+    virtual void setNode(KisNodeWSP node) {
+        m_node = node;
     }
 
     /**
@@ -68,7 +72,7 @@ public:
     /**
      * This is true for all of the paintop widget except for the Custom brush tab in the Brush tip dialog
      */
-    virtual bool presetIsValid(){
+    virtual bool presetIsValid() {
         return true;
     }
 
@@ -77,15 +81,13 @@ public:
      * Example is duplicate paintop. In this case simple canvas like scratchbox does not work.
      * Every paintop supports the scratchbox by default, override and return false if paintop does not.
      */
-    virtual bool supportScratchBox(){
+    virtual bool supportScratchBox() {
         return true;
     }
 
 protected:
-
-
     KisImageWSP m_image;
-
+    KisNodeWSP m_node;
 };
 
 #endif

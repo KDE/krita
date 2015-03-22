@@ -31,11 +31,10 @@
 #include <QByteArray>
 #include <QSet>
 
-#include <kpluginfactory.h>
-
 #include "connection.h"
 #include "admin.h"
 #include "utils.h"
+#include "pluginloader.h"
 
 class KService;
 
@@ -221,7 +220,7 @@ public:
     front-end, even if they are not recognised by the backend to provide
     UI consistency and to allow DB migration without changing the queries.
     */
-    static const char* kexiSQLKeywords[];
+    static const char* const kexiSQLKeywords[];
 
 protected:
     /*! Used by driver manager to initialize properties taken using internal
@@ -247,8 +246,6 @@ public:
 
 //! Implementation of driver's static version information and plugin entry point.
 #define K_EXPORT_KEXIDB_DRIVER( class_name, internal_name ) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
-    K_EXPORT_PLUGIN(factory("kexidb_" # internal_name)) \
-    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KEXIDB_VERSION_MAJOR, KEXIDB_VERSION_MINOR, 0))
+    KEXI_EXPORT_PLUGIN( "kexidb", class_name, internal_name, KEXIDB_VERSION_MAJOR, KEXIDB_VERSION_MINOR, 0 )
 
 #endif

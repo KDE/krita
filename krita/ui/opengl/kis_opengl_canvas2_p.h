@@ -286,7 +286,7 @@ namespace VSyncWorkaround {
 }
 #endif // defined Q_OS_LINUX
 
-#include <QtOpenGL/QGLFormat>
+#include <QGLFormat>
 namespace Sync {
     //For checking sync status
     enum SyncStatus {
@@ -341,7 +341,7 @@ namespace Sync {
             k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSync");
         }
 #endif
-        if (k_glFenceSync == 0 || k_glGetSynciv == 0 || k_glGetSynciv == 0) {
+        if (k_glFenceSync == 0 || k_glGetSynciv == 0 || k_glDeleteSync == 0) {
             qWarning("Could not find sync functions, disabling sync notification.");
         }
     }
@@ -349,7 +349,11 @@ namespace Sync {
     //Get a fence sync object from OpenGL
     GLsync getSync() {
         if(k_glFenceSync) {
-            return k_glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+            GLsync sync = k_glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+            if (KisOpenGL::needsFenceWorkaround()) {
+                glClientWaitSync(sync, 0, 1);
+            }
+            return sync;
         }
         return 0;
     }

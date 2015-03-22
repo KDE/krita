@@ -42,7 +42,6 @@
 #include <KoOdfWorkaround.h>
 
 #include <KoImageData.h>
-#include <KoStore.h>
 #include <KoUnit.h>
 
 #include <kdebug.h>

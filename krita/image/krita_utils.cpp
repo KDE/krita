@@ -27,6 +27,9 @@
 #include <QPen>
 
 #include "kis_image_config.h"
+#include "kis_debug.h"
+
+
 
 
 namespace KritaUtils
@@ -125,7 +128,7 @@ namespace KritaUtils
         QRect totalRect = path.boundingRect().toAlignedRect();
 
         // adjust the rect for antialiasing to work
-        totalRect.adjusted(-1,-1,1,1);
+        totalRect = totalRect.adjusted(-1,-1,1,1);
 
         const int step = 64;
         const int right = totalRect.x() + totalRect.width();
@@ -173,6 +176,144 @@ namespace KritaUtils
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
     {
         return QString("%1").arg(value, 6, 'f', 1);
+    }
+
+    qreal KRITAIMAGE_EXPORT maxDimensionPortion(const QRectF &bounds, qreal portion, qreal minValue)
+    {
+        qreal maxDimension = qMax(bounds.width(), bounds.height());
+        return qMax(portion * maxDimension, minValue);
+    }
+
+    bool tryMergePoints(QPainterPath &path,
+                        const QPointF &startPoint,
+                        const QPointF &endPoint,
+                        qreal &distance,
+                        qreal distanceThreshold,
+                        bool lastSegment)
+    {
+        qreal length = (endPoint - startPoint).manhattanLength();
+
+        if (lastSegment || length > distanceThreshold) {
+            if (lastSegment) {
+                qreal wrappedLength =
+                    (endPoint - QPointF(path.elementAt(0))).manhattanLength();
+
+                if (length < distanceThreshold ||
+                    wrappedLength < distanceThreshold) {
+
+                    return true;
+                }
+            }
+
+            distance = 0;
+            return false;
+        }
+
+        distance += length;
+
+        if (distance > distanceThreshold) {
+            path.lineTo(endPoint);
+            distance = 0;
+        }
+
+        return true;
+    }
+
+    QPainterPath trySimplifyPath(const QPainterPath &path, qreal lengthThreshold)
+    {
+        QPainterPath newPath;
+        QPointF startPoint;
+        qreal distance = 0;
+
+        int count = path.elementCount();
+        for (int i = 0; i < count; i++) {
+            QPainterPath::Element e = path.elementAt(i);
+            QPointF endPoint = QPointF(e.x, e.y);
+
+            switch (e.type) {
+            case QPainterPath::MoveToElement:
+                newPath.moveTo(endPoint);
+                break;
+            case QPainterPath::LineToElement:
+                if (!tryMergePoints(newPath, startPoint, endPoint,
+                                    distance, lengthThreshold, i == count - 1)) {
+
+                    newPath.lineTo(endPoint);
+                }
+                break;
+            case QPainterPath::CurveToElement: {
+                Q_ASSERT(i + 2 < count);
+
+                if (!tryMergePoints(newPath, startPoint, endPoint,
+                                    distance, lengthThreshold, i == count - 1)) {
+
+                    e = path.elementAt(i + 1);
+                    Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                    QPointF ctrl1 = QPointF(e.x, e.y);
+                    e = path.elementAt(i + 2);
+                    Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                    QPointF ctrl2 = QPointF(e.x, e.y);
+                    newPath.cubicTo(ctrl1, ctrl2, endPoint);
+                }
+
+                i += 2;
+            }
+            default:
+                ;
+            }
+            startPoint = endPoint;
+        }
+
+        return newPath;
+    }
+
+    QList<QPainterPath> splitDisjointPaths(const QPainterPath &path)
+    {
+        QList<QPainterPath> resultList;
+        QList<QPolygonF> inputPolygons = path.toSubpathPolygons();
+
+        foreach (const QPolygonF &poly, inputPolygons) {
+            QPainterPath testPath;
+            testPath.addPolygon(poly);
+
+            if (resultList.isEmpty()) {
+                resultList.append(testPath);
+                continue;
+            }
+
+            QList<QPainterPath>::iterator it = resultList.begin();
+            QList<QPainterPath>::iterator end = resultList.end();
+            QList<QPainterPath>::iterator savedIt = end;
+
+            bool wasMerged = false;
+
+            while (it != end) {
+                bool skipIncrement = false;
+
+                if (it->intersects(testPath)) {
+                    if (savedIt == end) {
+                        it->addPath(testPath);
+                        savedIt = it;
+                    } else {
+                        savedIt->addPath(*it);
+                        it = resultList.erase(it);
+                        skipIncrement = true;
+                    }
+
+                    wasMerged = true;
+                }
+
+                if (!skipIncrement) {
+                    ++it;
+                }
+            }
+
+            if (!wasMerged) {
+                resultList.append(testPath);
+            }
+        }
+
+        return resultList;
     }
 
 }

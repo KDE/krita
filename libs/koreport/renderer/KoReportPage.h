@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef KEXIREPORTPAGE_H
-#define KEXIREPORTPAGE_H
+#ifndef KOREPORTPAGE_H
+#define KOREPORTPAGE_H
 
 #include <KoReportRendererBase.h>
 #include <QGraphicsRectItem>
@@ -41,12 +41,12 @@ public:
 
     void renderPage(int page);
 
-public slots:
+public Q_SLOTS:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     
     void pageUpdated(int pageNo);
 
-private slots:
+private Q_SLOTS:
     void renderCurrentPage();
     
 private:

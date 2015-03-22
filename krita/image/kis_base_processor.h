@@ -36,8 +36,6 @@
 
 class QWidget;
 
-class KoUpdater;
-
 class KisBookmarkedConfigurationManager;
 class KisFilterConfiguration;
 class KisConfigWidget;

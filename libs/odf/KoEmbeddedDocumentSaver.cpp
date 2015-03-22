@@ -31,7 +31,7 @@
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
 
-#include "KoOdfDocument.h"
+#include "KoDocumentBase.h"
 #include <KoOdfManifestEntry.h>
 
 
@@ -52,7 +52,7 @@ public:
     QHash<QString, int> prefixes; // Used in getFilename();
 
     // These will be saved when saveEmbeddedDocuments() is called.
-    QList<KoOdfDocument*> documents; // Embedded documents
+    QList<KoDocumentBase*> documents; // Embedded documents
     QList<FileEntry*> files;    // Embedded files.
     QList<KoOdfManifestEntry*> manifestEntries;
 };
@@ -84,7 +84,7 @@ QString KoEmbeddedDocumentSaver::getFilename(const QString &prefix)
     return prefix + QString("%1").arg(index);
 }
 
-void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoOdfDocument * doc)
+void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoDocumentBase * doc)
 {
     Q_ASSERT(doc);
     d->documents.append(doc);
@@ -174,12 +174,12 @@ void KoEmbeddedDocumentSaver::saveManifestEntry(const QString &fullPath, const Q
 }
 
 
-bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext & documentContext)
+bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContext & documentContext)
 {
     KoStore *store = documentContext.odfStore.store();
 
     // Write embedded documents.
-    foreach(KoOdfDocument *doc, d->documents) {
+    foreach(KoDocumentBase *doc, d->documents) {
         QString path;
         if (doc->isStoredExtern()) {
             kDebug(30003) << " external (don't save) url:" << doc->url().url();

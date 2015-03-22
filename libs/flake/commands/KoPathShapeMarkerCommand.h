@@ -23,12 +23,11 @@
 
 #include "flake_export.h"
 
-#include "KoPathShape.h"
 #include "KoMarkerData.h"
 #include <kundo2command.h>
 #include <QList>
 
-
+class KoPathShape;
 class KoMarker;
 
 /// The undo / redo command for setting the shape marker

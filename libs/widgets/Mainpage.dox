@@ -1,0 +1,8 @@
+/**
+ * \mainpage
+ *
+ * KoWidgets is a library which contains common widgets for Calligra.
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = KoWidgets
+// DOXYGEN_SET_IGNORE_PREFIX = Ko K

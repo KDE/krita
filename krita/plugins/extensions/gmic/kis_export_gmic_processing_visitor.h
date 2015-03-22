@@ -20,14 +20,14 @@
 #ifndef __KIS_EXPORT_GMIC_PROCESSING_VISITOR_H
 #define __KIS_EXPORT_GMIC_PROCESSING_VISITOR_H
 
-#include <gmic.h>
-
 #include <QSharedPointer>
 #include <QList>
 
 #include <processing/kis_simple_processing_visitor.h>
 #include <kis_types.h>
 #include <kis_node.h>
+
+#include <gmic.h>
 
 class KisNode;
 class KisUndoAdapter;

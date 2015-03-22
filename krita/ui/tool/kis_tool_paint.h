@@ -57,7 +57,6 @@ class KoCompositeOp;
 
 class KoCanvasBase;
 
-class KisSliderSpinBox;
 
 // wacom
 const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;
@@ -148,19 +147,18 @@ protected:
 
     const KoCompositeOp* compositeOp();
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
-private slots:
+private Q_SLOTS:
 
     void slotPopupQuickHelp();
-    void slotSetOpacity(qreal opacity);
 
     void increaseBrushSize();
     void decreaseBrushSize();
 
-protected slots:
+protected Q_SLOTS:
     virtual void updateTabletPressureSamples();
 
 
@@ -175,6 +173,7 @@ protected:
 
 private:
     QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
+    void setOpacity(qreal opacity);
 
 private:
 
@@ -192,7 +191,7 @@ private:
     bool m_isOutlineEnabled;
     std::vector<int> m_standardBrushSizes;
 
-signals:
+Q_SIGNALS:
     void sigPaintingFinished();
 };
 

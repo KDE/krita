@@ -33,7 +33,7 @@ public:
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-private slots:
+private Q_SLOTS:
     void horizontalMirrorChanged(bool mirror);
     void verticalMirrorChanged(bool mirror);
 

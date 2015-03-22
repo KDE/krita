@@ -22,6 +22,7 @@
 #include "KoSnapGuide.h"
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
+#include <KoPathSegment.h>
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 #include <KoGuidesData.h>

@@ -37,7 +37,7 @@ public:
     explicit Image(KoReportItemImage *);
 
     ~Image();
-public slots:
+public Q_SLOTS:
 
 
     /**

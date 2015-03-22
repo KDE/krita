@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QDesktopWidget>
 #include <QMimeData>
 #include <QObject>
 #include <QImage>
@@ -28,7 +29,6 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kmessagebox.h>
 
 #include "KoColorSpace.h"
 #include "KoStore.h"
@@ -146,7 +146,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     // We also create a QImage so we can interchange with other applications
     QImage qimage;
     KisConfig cfg;
-    const KoColorProfile *monitorProfile = cfg.displayProfile();
+    const KoColorProfile *monitorProfile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
     qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     if (!qimage.isNull() && mimeData) {
         mimeData->setImageData(qimage);
@@ -254,13 +254,25 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
 
         if (behaviour == PASTE_ASK && showPopup) {
             // Ask user each time.
-            behaviour = QMessageBox::question(0, i18n("Pasting data from simple source"), i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"), i18n("As &Web"), i18n("As on &Monitor"));
+            QMessageBox mb(qApp->activeWindow());
+            mb.setWindowTitle(i18nc("@title:window", "Pasting data from simple source"));
+            mb.setText(i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"));
+            mb.addButton(i18n("As &Web"), QMessageBox::AcceptRole);
+            mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
+            mb.addButton(i18n("Cancel"), QMessageBox::RejectRole);
+
+            behaviour = mb.exec();
+
+            if (behaviour > 1) {
+                return 0;
+            }
+
         }
 
         const KoColorSpace * cs;
         const KoColorProfile *profile = 0;
         if (behaviour == PASTE_ASSUME_MONITOR)
-            profile = cfg.displayProfile();
+            profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
 
         cs = KoColorSpaceRegistry::instance()->rgb8(profile);
         if (!cs) {

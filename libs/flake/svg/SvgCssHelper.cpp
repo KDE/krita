@@ -21,7 +21,6 @@
 #include <KoXmlReader.h>
 #include <kdebug.h>
 #include <QPair>
-#include <QStack>
 
 /// Token types used for tokenizing complex selectors
 enum CssTokenType {

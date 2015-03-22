@@ -21,7 +21,6 @@
 
 
 #include "kis_shared_ptr.h"
-#include "kis_shared_ptr_vector.h"
 #include "kis_shared.h"
 
 class TestClassWatcher
@@ -53,7 +52,7 @@ public:
 
 typedef KisSharedPtr<TestClass> TestClassSP;
 typedef KisWeakSharedPtr<TestClass> TestClassWSP;
-typedef KisSharedPtrVector<TestClass> vTestClassSP;
+typedef QVector<TestClass> vTestClassSP;
 typedef vTestClassSP::iterator vTestClassSP_it;
 typedef vTestClassSP::const_iterator vTestClassSP_cit;
 
@@ -186,6 +185,86 @@ void KisSharedPtrTest::testBoolOnInvalidWeakPointer()
     QCOMPARE(result1, QString("good"));
     QCOMPARE(result2, QString("good"));
     QCOMPARE(result3, QString("good"));
+}
+
+void KisSharedPtrTest::testInvalidWeakSPAssignToSP()
+{
+    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClass *instance = new TestClass(tcw);
+
+    TestClassWSP instanceWSP(instance);
+    {
+        TestClassSP sp(instance);
+    }
+
+    // instanceWSP should be invalid but we should be able to assign it
+    // to a new shared pointer
+    TestClassSP instanceSP = instanceWSP;
+
+    // Since the weak pointer was invalid, the shared pointer should be null
+    QVERIFY(!instanceSP);
+}
+
+void KisSharedPtrTest::testInvalidWeakSPToSPCopy()
+{
+    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClass *instance = new TestClass(tcw);
+
+    TestClassWSP instanceWSP(instance);
+    {
+        TestClassSP sp(instance);
+    }
+
+    // Same as above but we test the copy constructor
+    TestClassSP instanceSP(instanceWSP);
+
+    QVERIFY(!instanceSP);
+}
+
+void KisSharedPtrTest::testWeakSPAssignToWeakSP()
+{
+    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClass *instance = new TestClass(tcw);
+
+    TestClassWSP instanceWSP(instance);
+
+    TestClassWSP newValidInstanceWSP = instanceWSP;
+
+    // The assignment should give us a valid weak pointer
+    QVERIFY(newValidInstanceWSP.isValid());
+
+    {
+        TestClassSP sp(instance);
+    }
+
+    // instanceWSP should be invalid but we should be able to assign it
+    // to a new weak shared pointer
+    TestClassWSP newInvalidInstanceWSP = instanceWSP;
+
+    // Since instanceWSP was invalid, the newInstanceWSP should be invalid
+    QVERIFY(!newInvalidInstanceWSP.isValid());
+}
+
+void KisSharedPtrTest::testWeakSPToWeakSPCopy()
+{
+    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClass *instance = new TestClass(tcw);
+
+    TestClassWSP instanceWSP(instance);
+
+    // Same as above but we test the copy constructor
+    TestClassWSP newValidInstanceWSP(instanceWSP);
+
+    QVERIFY(newValidInstanceWSP.isValid());
+
+    {
+        TestClassSP sp(instance);
+    }
+
+    // Same as above but we test the copy constructor
+    TestClassWSP newInvalidInstanceWSP(instanceWSP);
+
+    QVERIFY(!newInvalidInstanceWSP.isValid());
 }
 
 

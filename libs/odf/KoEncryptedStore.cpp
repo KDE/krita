@@ -64,14 +64,19 @@ struct KoEncryptedStore_EncryptionData {
 // TODO: Discuss autosaving and password/leakage-problem (currently: hardcoded no autosave)
 namespace
 {
-const char* MANIFEST_FILE = "META-INF/manifest.xml";
-const char* META_FILE = "meta.xml";
-const char* THUMBNAIL_FILE = "Thumbnails/thumbnail.png";
+const char MANIFEST_FILE[] = "META-INF/manifest.xml";
+const char META_FILE[] = "meta.xml";
+const char THUMBNAIL_FILE[] = "Thumbnails/thumbnail.png";
 }
 
 KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode,
                                    const QByteArray & appIdentification, bool writeMimetype)
-        : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString(filename)), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
+  : KoStore(mode, writeMimetype)
+  , m_filename(filename)
+  , m_tempFile(0)
+  , m_bPasswordUsed(false)
+  , m_bPasswordDeclined(false)
+  , m_currentDir(0)
 {
     Q_D(KoStore);
 
@@ -79,27 +84,34 @@ KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode,
     d->good = true;
     d->localFileName = filename;
 
-    d->writeMimetype = writeMimetype;
-    init(mode, appIdentification);
+    init(appIdentification);
 }
 
 KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
                                    bool writeMimetype)
-        : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString()), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
+    : KoStore(mode, writeMimetype)
+    , m_tempFile(0)
+    , m_bPasswordUsed(false)
+    , m_bPasswordDeclined(false)
+    , m_currentDir(0)
 {
     Q_D(KoStore);
 
     m_pZip = new KZip(dev);
     d->good = true;
 
-    d->writeMimetype = writeMimetype;
-    init(mode, appIdentification);
+    init(appIdentification);
 }
 
 KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename,
                                    Mode mode,
                                    const QByteArray & appIdentification, bool writeMimetype)
-        : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString(url.url())), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
+    : KoStore(mode, writeMimetype)
+    , m_filename(url.url())
+    , m_tempFile(0)
+    , m_bPasswordUsed(false)
+    , m_bPasswordDeclined(false)
+    , m_currentDir(0)
 {
     Q_D(KoStore);
 
@@ -122,33 +134,26 @@ KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QStri
     }
     d->url = url;
 
-    d->writeMimetype = writeMimetype;
-    init(mode, appIdentification);
+    init(appIdentification);
 }
 
-bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
+void KoEncryptedStore::init(const QByteArray & appIdentification)
 {
     Q_D(KoStore);
     bool checksumErrorShown = false;
     bool unreadableErrorShown = false;
-    if (!KoStore::init(mode) || !d->good) {
-        // This Store is already bad
-        d->good = false;
-        return false;
-    }
-    d->mode = mode;
-    if (mode == Write) {
+    if (d->mode == Write) {
         d->good = KoEncryptionChecker::isEncryptionSupported();
         if (d->good) {
             if (!m_pZip->open(QIODevice::WriteOnly)) {
                 d->good = false;
-                return false;
+                return;
             }
             m_pZip->setExtraField(KZip::NoExtraField);
             // Write identification
             if (d->writeMimetype) {
                 m_pZip->setCompression(KZip::NoCompression);
-                (void)m_pZip->writeFile("mimetype", "", "",
+                (void)m_pZip->writeFile(QLatin1String("mimetype"), QString(), QString(),
                                         appIdentification.data(), appIdentification.length());
             }
             // FIXME: Hmm, seems to be a bug here since this is
@@ -160,26 +165,27 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
         d->good = m_pZip->open(QIODevice::ReadOnly);
         d->good &= m_pZip->directory() != 0;
         if (!d->good) {
-            return false;
+            return;
         }
 
         // Read the manifest-file, so we can get the data we'll need to decrypt the other files in the store
         const KArchiveEntry* manifestArchiveEntry = m_pZip->directory()->entry(MANIFEST_FILE);
         if (!manifestArchiveEntry || !manifestArchiveEntry->isFile()) {
             // No manifest file? OK, *I* won't complain
-            return true;
+            return;
         }
         QIODevice *dev = (static_cast< const KArchiveFile* >(manifestArchiveEntry))->createDevice();
 
         KoXmlDocument xmldoc;
         bool namespaceProcessing = true; // for the manifest ignore the namespace (bug #260515)
         if (!xmldoc.setContent(dev, namespaceProcessing) || xmldoc.documentElement().localName() != "manifest" || xmldoc.documentElement().namespaceURI() != KoXmlNS::manifest) {
-            KMessage::message(KMessage::Warning, i18n("The manifest file seems to be corrupted. The document could not be opened."));
+            //KMessage::message(KMessage::Warning, i18n("The manifest file seems to be corrupted. The document could not be opened."));
+            /// FIXME this message is not something we actually want to not mention, but it makes thumbnails noisy at times, so... let's not
             dev->close();
             delete dev;
             m_pZip->close();
             d->good = false;
-            return false;
+            return;
         }
         KoXmlElement xmlroot = xmldoc.documentElement();
         if (xmlroot.hasChildNodes()) {
@@ -308,7 +314,6 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
             KMessage::message(KMessage::Error, i18n("QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can not be opened."));
         }
     }
-    return d->good;
 }
 
 bool KoEncryptedStore::doFinalize()
@@ -433,7 +438,8 @@ bool KoEncryptedStore::doFinalize()
             }
             m_manifestBuffer = document.toByteArray();
             m_pZip->setCompression(KZip::DeflateCompression);
-            if (!m_pZip->writeFile(MANIFEST_FILE, "", "", m_manifestBuffer.data(), m_manifestBuffer.size())) {
+            if (!m_pZip->writeFile(QLatin1String(MANIFEST_FILE), QString(), QString(),
+                                   m_manifestBuffer.constData(), m_manifestBuffer.size())) {
                 KMessage::message(KMessage::Error, i18n("The manifest file cannot be written. The document will remain unreadable. Please try and save the document again to prevent losing your work."));
                 m_pZip->close();
                 return false;

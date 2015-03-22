@@ -28,7 +28,6 @@
 class TrackedChangeModel;
 
 class QModelIndex;
-class QTreeView;
 
 class TrackedChangeManager : public QWidget
 {
@@ -41,10 +40,10 @@ public:
 
     void selectItem(QModelIndex newIndex);
 
-signals:
+Q_SIGNALS:
     void currentChanged(QModelIndex newIndex);
 
-private slots:
+private Q_SLOTS:
     void currentChanged(QModelIndex newIndex, QModelIndex previousIndex);
 
 private:

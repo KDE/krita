@@ -27,7 +27,7 @@
     <rect>
      <x>10</x>
      <y>4</y>
-     <width>186</width>
+     <width>361</width>
      <height>244</height>
     </rect>
    </property>
@@ -43,17 +43,7 @@
      </widget>
     </item>
     <item row="0" column="1" colspan="2">
-     <widget class="QSpinBox" name="gridWidthSPBox">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>999</number>
-      </property>
-      <property name="value">
-       <number>25</number>
-      </property>
-     </widget>
+     <widget class="KisDoubleSliderSpinBox" name="gridWidthSPBox" native="true"/>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label_2">
@@ -66,17 +56,7 @@
      </widget>
     </item>
     <item row="1" column="1" colspan="2">
-     <widget class="QSpinBox" name="gridHeightSPBox">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>999</number>
-      </property>
-      <property name="value">
-       <number>25</number>
-      </property>
-     </widget>
+     <widget class="KisDoubleSliderSpinBox" name="gridHeightSPBox" native="true"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_3">
@@ -89,17 +69,7 @@
      </widget>
     </item>
     <item row="2" column="1" colspan="2">
-     <widget class="QSpinBox" name="divisionLevelSPBox">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>999</number>
-      </property>
-      <property name="value">
-       <number>2</number>
-      </property>
-     </widget>
+     <widget class="KisDoubleSliderSpinBox" name="divisionLevelSPBox" native="true" />
     </item>
     <item row="3" column="0" colspan="3">
      <widget class="QCheckBox" name="divisionPressureCHBox">
@@ -119,20 +89,7 @@
      </widget>
     </item>
     <item row="4" column="1" colspan="2">
-     <widget class="QDoubleSpinBox" name="scaleDSPBox">
-      <property name="decimals">
-       <number>1</number>
-      </property>
-      <property name="minimum">
-       <double>0.100000000000000</double>
-      </property>
-      <property name="maximum">
-       <double>1000.000000000000000</double>
-      </property>
-      <property name="value">
-       <double>1.000000000000000</double>
-      </property>
-     </widget>
+     <widget class="KisDoubleSliderSpinBox" name="scaleDSPBox" native="true"/>
     </item>
     <item row="5" column="0" colspan="2">
      <widget class="QLabel" name="label_4">
@@ -145,11 +102,7 @@
      </widget>
     </item>
     <item row="5" column="2">
-     <widget class="QDoubleSpinBox" name="vertBorderDSPBox">
-      <property name="decimals">
-       <number>1</number>
-      </property>
-     </widget>
+     <widget class="KisDoubleSliderSpinBox" name="vertBorderDSPBox" native="true" />
     </item>
     <item row="6" column="0" colspan="2">
      <widget class="QLabel" name="label_5">
@@ -162,11 +115,7 @@
      </widget>
     </item>
     <item row="6" column="2">
-     <widget class="QDoubleSpinBox" name="horizBorderDSPBox">
-      <property name="decimals">
-       <number>1</number>
-      </property>
-     </widget>
+     <widget class="KisDoubleSliderSpinBox" name="horizBorderDSPBox" />
     </item>
     <item row="7" column="0" colspan="2">
      <widget class="QCheckBox" name="jitterBorderCHBox">
@@ -178,6 +127,14 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

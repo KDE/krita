@@ -44,12 +44,12 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
 
-signals:
+Q_SIGNALS:
     void pixmapGenerated();
-public slots:
+public Q_SLOTS:
     void updatePreview(KoTableOfContentsGeneratorInfo *info);
 
-private slots:
+private Q_SLOTS:
     void finishedPreviewLayout();
 
 private:

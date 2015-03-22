@@ -23,8 +23,6 @@
 
 #include "kis_mask_generator.h"
 
-class QDomElement;
-class QDomDocument;
 
 /**
  * Create, serialize and deserialize an elliptical 8-bit mask.
@@ -34,9 +32,9 @@ class KRITAIMAGE_EXPORT KisCircleMaskGenerator : public KisMaskGenerator
 public:
     struct FastRowProcessor;
 public:
-    KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes);
+    KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
     virtual ~KisCircleMaskGenerator();
-    
+
     virtual quint8 valueAt(qreal x, qreal y) const;
 
     virtual bool shouldSupersample() const;
@@ -45,9 +43,8 @@ public:
 
     KisBrushMaskApplicatorBase* applicator();
 
-    virtual void toXML(QDomDocument& , QDomElement&) const;
-    
     virtual void setSoftness(qreal softness);
+    virtual void setScale(qreal scaleX, qreal scaleY);
 
 private:
 

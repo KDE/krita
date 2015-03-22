@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,8 +26,9 @@
 #include "kis_layer.h"
 #include "kis_shape_layer.h"
 #include "kis_paint_layer.h"
-#include "kis_doc2.h"
+#include "KisDocument.h"
 #include "kis_shape_controller.h"
+#include "KisPart.h"
 
 #include <KoProperties.h>
 #include <KoStore.h>
@@ -41,6 +42,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QTemporaryFile>
+#include <QDesktopWidget>
 
 KisMimeData::KisMimeData(QList<KisNodeSP> nodes)
     : QMimeData()
@@ -68,9 +70,9 @@ QStringList KisMimeData::formats () const
     return f;
 }
 
-KisDoc2 *createDocument(QList<KisNodeSP> nodes)
+KisDocument *createDocument(QList<KisNodeSP> nodes)
 {
-    KisDoc2 *doc = new KisDoc2();
+    KisDocument *doc = KisPart::instance()->createDocument();
     QRect rc;
     foreach(KisNodeSP node, nodes) {
         rc |= node->exactBounds();
@@ -95,7 +97,7 @@ QByteArray serializeToByteArray(QList<KisNodeSP> nodes)
     KoStore *store = KoStore::createStore(&buffer, KoStore::Write);
     Q_ASSERT(!store->bad());
     
-    KisDoc2 *doc = createDocument(nodes);
+    KisDocument *doc = createDocument(nodes);
     doc->saveNativeFormatCalligra(store);
     delete doc;
 
@@ -109,11 +111,11 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg;
 
-        KisDoc2 *doc = createDocument(m_nodes);
+        KisDocument *doc = createDocument(m_nodes);
         doc->image()->refreshGraph();
         doc->image()->waitForDone();
 
-        return doc->image()->projection()->convertToQImage(cfg.displayProfile(),
+        return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
                                                            KoColorConversionTransformation::InternalRenderingIntent,
                                                            KoColorConversionTransformation::InternalConversionFlags);
     }
@@ -175,10 +177,7 @@ void KisMimeData::initializeExternalNode(KisNodeSP &node,
     }
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
     if (shapeLayer) {
-        KoShapeContainer * parentContainer =
-                dynamic_cast<KoShapeContainer*>(shapeController->shapeForNode(image->root()));
-
-        KisShapeLayer *shapeLayer2 = new KisShapeLayer(parentContainer, shapeController, image, node->name(), node->opacity());
+        KisShapeLayer *shapeLayer2 = new KisShapeLayer(shapeController, image, node->name(), node->opacity());
         QList<KoShape *> shapes = shapeLayer->shapes();
         shapeLayer->removeAllShapes();
         foreach(KoShape *shape, shapes) {
@@ -251,34 +250,36 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
     if (data->hasFormat("application/x-krita-node")) {
         QByteArray ba = data->data("application/x-krita-node");
 
-        KisDoc2 tempDoc;
-        bool result = tempDoc.loadNativeFormatFromStore(ba);
+        KisDocument *tempDoc = KisPart::instance()->createDocument();
+        bool result = tempDoc->loadNativeFormatFromByteArray(ba);
 
         if (result) {
-            KisImageWSP tempImage = tempDoc.image();
+            KisImageWSP tempImage = tempDoc->image();
             foreach(KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 nodes << node;
                 tempImage->removeNode(node);
                 initializeExternalNode(node, image, shapeController);
             }
         }
+        delete tempDoc;
     }
 
     if (nodes.isEmpty() && data->hasFormat("application/x-krita-node-url")) {
         QByteArray ba = data->data("application/x-krita-node-url");
         QString localFile = QUrl::fromEncoded(ba).toLocalFile();
 
-        KisDoc2 tempDoc;
-        bool result = tempDoc.loadNativeFormat(localFile);
+        KisDocument *tempDoc = KisPart::instance()->createDocument();
+        bool result = tempDoc->loadNativeFormat(localFile);
 
         if (result) {
-            KisImageWSP tempImage = tempDoc.image();
+            KisImageWSP tempImage = tempDoc->image();
             foreach(KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 nodes << node;
                 tempImage->removeNode(node);
                 initializeExternalNode(node, image, shapeController);
             }
         }
+        delete tempDoc;
 
         QFile::remove(localFile);
     }

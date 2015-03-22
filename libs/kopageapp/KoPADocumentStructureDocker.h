@@ -33,7 +33,6 @@ class KoPADocument;
 class KoPADocumentModel;
 class KoPAPageBase;
 class KoViewItemContextBar;
-class QModelIndex;
 class QAction;
 class QButtonGroup;
 
@@ -72,18 +71,18 @@ protected:
     /// This is the context menu for the slide show in the KoPADocumentStructure docker
     void contextMenuEvent(QContextMenuEvent* event);
 
-signals:
+Q_SIGNALS:
     void pageChanged(KoPAPageBase *page);
 
     /// This signal will be emitted after the model for this docker has been reset
     void dockerReset();
 
-public slots:
+public Q_SLOTS:
     void updateView();
 
     void selectPages(int start, int count);
 
-private slots:
+private Q_SLOTS:
     void slotButtonClicked(int buttonId);
     void addLayer();
     void addPage();

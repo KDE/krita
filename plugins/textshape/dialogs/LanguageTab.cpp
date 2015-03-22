@@ -23,8 +23,6 @@
 #include <KoCharacterStyle.h>
 #include <KoIcon.h>
 
-#include <kcombobox.h>
-
 #include <QSet>
 #include <QStringList>
 

@@ -27,7 +27,6 @@
 #include "kis_delegated_tool.h"
 #include <KoIcon.h>
 
-class KisSelectionOptions;
 class KoCanvasBase;
 class KisToolPencil;
 
@@ -44,7 +43,9 @@ private:
     KisToolPencil* const m_parentTool;
 };
 
-typedef KisDelegatedTool<KisToolShape, __KisToolPencilLocalTool> DelegatedPencilTool;
+typedef KisDelegatedTool<KisToolShape,
+                         __KisToolPencilLocalTool,
+                         DeselectShapesActivationPolicy> DelegatedPencilTool;
 
 class KisToolPencil : public DelegatedPencilTool
 {

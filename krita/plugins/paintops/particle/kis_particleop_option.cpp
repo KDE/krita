@@ -38,12 +38,32 @@ KisParticleOpOption::KisParticleOpOption()
     m_checkable = false;
     m_options = new KisParticleOpOptionsWidget();
 
-    connect(m_options->particleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->itersSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->gravSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->weightSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->dxSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->dySPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    m_options->gravSPBox->setRange(-1.0, 1.0, 3);
+    m_options->gravSPBox->setValue(0.989);
+
+    m_options->dySPBox->setRange(-10.0, 10.0, 2);
+    m_options->dySPBox->setValue(0.3);
+
+    m_options->dxSPBox->setRange(-10.0, 10.0, 2);
+    m_options->dxSPBox->setValue(0.3);
+
+    m_options->weightSPBox->setRange(0.01, 1.0, 2);
+    m_options->weightSPBox->setValue(0.2);
+
+    m_options->particleSpinBox->setRange(1.0, 500.0, 0);
+    m_options->particleSpinBox->setValue(50);
+    m_options->particleSpinBox->setExponentRatio(3.0);
+
+    m_options->itersSPBox->setRange(1, 200, 0);
+    m_options->itersSPBox->setValue(10);
+
+
+    connect(m_options->particleSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->itersSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->gravSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->weightSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->dxSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->dySPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }
@@ -95,10 +115,10 @@ void KisParticleOpOption::writeOptionSetting(KisPropertiesConfiguration* setting
 void KisParticleOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
 
-    m_options->particleSpinBox->setValue(setting->getInt(PARTICLE_COUNT));
-    m_options->itersSPBox->setValue(setting->getInt(PARTICLE_ITERATIONS));
-    m_options->gravSPBox->setValue(setting->getDouble(PARTICLE_GRAVITY));
-    m_options->weightSPBox->setValue(setting->getDouble(PARTICLE_WEIGHT));
-    m_options->dxSPBox->setValue(setting->getDouble(PARTICLE_SCALE_X));
-    m_options->dySPBox->setValue(setting->getDouble(PARTICLE_SCALE_Y));
+    m_options->particleSpinBox->setValue((qreal)setting->getInt(PARTICLE_COUNT));
+    m_options->itersSPBox->setValue((qreal)setting->getInt(PARTICLE_ITERATIONS));
+    m_options->gravSPBox->setValue((qreal)setting->getDouble(PARTICLE_GRAVITY));
+    m_options->weightSPBox->setValue((qreal)setting->getDouble(PARTICLE_WEIGHT));
+    m_options->dxSPBox->setValue((qreal)setting->getDouble(PARTICLE_SCALE_X));
+    m_options->dySPBox->setValue((qreal)setting->getDouble(PARTICLE_SCALE_Y));
 }

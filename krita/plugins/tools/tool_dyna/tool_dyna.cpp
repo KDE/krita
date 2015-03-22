@@ -26,9 +26,7 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
+
 #include <kis_debug.h>
 #include <kis_paint_device.h>
 #include <kpluginfactory.h>

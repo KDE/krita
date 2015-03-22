@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -25,11 +25,7 @@
 #include <KoIcon.h>
 
 
-class RulerDecoration;
 class KisCanvas2;
-class ConstraintSolver;
-
-class KJob;
 
 class KisRulerAssistantTool : public KisTool
 {
@@ -58,14 +54,18 @@ public:
 private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistant *assistant);
+    void snappingOn(KisPaintingAssistant* assistant);
+    void snappingOff(KisPaintingAssistant* assistant);
+    void outlineOn(KisPaintingAssistant* assistant);
+    void outlineOff(KisPaintingAssistant* assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
 
-public slots:
+public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
-private slots:
+private Q_SLOTS:
     void removeAllAssistants();
     void saveAssistants();
     void loadAssistants();

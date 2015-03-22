@@ -18,6 +18,8 @@
 #ifndef KIS_GRADIENT_PAINTER_H_
 #define KIS_GRADIENT_PAINTER_H_
 
+#include <QScopedPointer>
+
 #include <KoColor.h>
 
 #include "kis_global.h"
@@ -26,7 +28,6 @@
 
 #include <krita_export.h>
 
-class KoAbstractGradient;
 
 /**
  *  XXX: Docs!
@@ -40,13 +41,16 @@ public:
     KisGradientPainter(KisPaintDeviceSP device);
     KisGradientPainter(KisPaintDeviceSP device, KisSelectionSP selection);
 
+    ~KisGradientPainter();
+
     enum enumGradientShape {
         GradientShapeLinear,
         GradientShapeBiLinear,
         GradientShapeRadial,
         GradientShapeSquare,
         GradientShapeConical,
-        GradientShapeConicalSymetric
+        GradientShapeConicalSymetric,
+        GradientShapePolygonal
     };
 
     enum enumGradientRepeat {
@@ -55,33 +59,15 @@ public:
         GradientRepeatAlternate
     };
 
-    class Configuration
-    {
+    void setGradientShape(enumGradientShape shape);
 
-    public:
-        const KoAbstractGradient* gradient;
-
-        KoColor fgColor;
-        quint8 opacity;
-        const KoCompositeOp* compositeOp;
-        KisTransaction* transaction;
-
-        QPointF vectorStart;
-        QPointF vectorEnd;
-
-        KisGradientPainter::enumGradientShape shape;
-        KisGradientPainter::enumGradientRepeat repeat;
-
-        double antiAliasThreshold;
-        bool reverse;
-    };
+    void precalculateShape();
 
     /**
      * Paint a gradient in the rect between startx, starty, width and height.
      */
     bool paintGradient(const QPointF& gradientVectorStart,
                        const QPointF& gradientVectorEnd,
-                       enumGradientShape shape,
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,
@@ -90,5 +76,8 @@ public:
                        qint32 width,
                        qint32 height);
 
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 #endif //KIS_GRADIENT_PAINTER_H_

@@ -47,14 +47,9 @@ KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
     m_opacitySlider->setRange(0.0, 1.0, 2);
     m_opacitySlider->setValue(1.0);
 
-    m_flowSlider    = ui.flowSlider;
-    m_flowSlider->setRange(0.0, 1.0, 2);
-    m_flowSlider->setValue(1.0);
-
     setConfigurationPage(widget);
 
     connect(m_opacitySlider, SIGNAL(valueChanged(qreal)), SLOT(slotSliderValueChanged()));
-    connect(m_flowSlider   , SIGNAL(valueChanged(qreal)), SLOT(slotSliderValueChanged()));
 }
 
 void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -65,16 +60,11 @@ void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfigurat
     m_opacitySlider->blockSignals(true);
     m_opacitySlider->setValue(option->getStaticOpacity());
     m_opacitySlider->blockSignals(false);
-
-    m_flowSlider->blockSignals(true);
-    m_flowSlider->setValue(option->getFlow());
-    m_flowSlider->blockSignals(false);
 }
 
 void KisFlowOpacityOptionWidget::slotSliderValueChanged()
 {
     KisFlowOpacityOption* option = static_cast<KisFlowOpacityOption*>(curveOption());
     option->setOpacity(m_opacitySlider->value());
-    option->setFlow(m_flowSlider->value());
-    emit sigSettingChanged();
+    emitSettingChanged();
 }

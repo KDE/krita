@@ -31,49 +31,43 @@
 
 #include <kio/netaccess.h>
 
-KoTarStore::KoTarStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification,
+KoTarStore::KoTarStore(const QString & _filename, Mode mode, const QByteArray & appIdentification,
                        bool writeMimetype)
+ : KoStore(mode, writeMimetype)
 {
     kDebug(30002) << "KoTarStore Constructor filename =" << _filename
-    << " mode = " << int(_mode) << endl;
+    << " mode = " << int(mode) << endl;
     Q_D(KoStore);
 
     d->localFileName = _filename;
 
     m_pTar = new KTar(_filename, "application/x-gzip");
 
-    d->writeMimetype = writeMimetype;
-    d->good = init(_mode);   // open the targz file and init some vars
-    kDebug(30002) << "appIdentification :" << appIdentification;
-    if (d->good && _mode == Write)
-        m_pTar->setOrigFileName(completeMagic(appIdentification));
+    init(appIdentification);   // open the targz file and init some vars
 }
 
 KoTarStore::KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
                        bool writeMimetype)
+ : KoStore(mode, writeMimetype)
 {
-    Q_D(KoStore);
     m_pTar = new KTar(dev);
 
-    d->writeMimetype = writeMimetype;
-    d->good = init(mode);
-
-    if (d->good && mode == Write)
-        m_pTar->setOrigFileName(completeMagic(appIdentification));
+    init(appIdentification);
 }
 
-KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode,
+KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode mode,
                        const QByteArray & appIdentification, bool writeMimetype)
+ : KoStore(mode, writeMimetype)
 {
     kDebug(30002) << "KoTarStore Constructor url=" << _url.pathOrUrl()
     << " filename = " << _filename
-    << " mode = " << int(_mode) << endl;
+    << " mode = " << int(mode) << endl;
     Q_D(KoStore);
 
     d->url = _url;
     d->window = window;
 
-    if (_mode == KoStore::Read) {
+    if (mode == KoStore::Read) {
         d->fileMode = KoStorePrivate::RemoteRead;
         d->localFileName = _filename;
 
@@ -84,11 +78,7 @@ KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filen
 
     m_pTar = new KTar(d->localFileName, "application/x-gzip");
 
-    d->writeMimetype = writeMimetype;
-    d->good = init(_mode);   // open the targz file and init some vars
-
-    if (d->good && _mode == Write)
-        m_pTar->setOrigFileName(completeMagic(appIdentification));
+    init(appIdentification);   // open the targz file and init some vars
 }
 
 KoTarStore::~KoTarStore()
@@ -119,15 +109,21 @@ QByteArray KoTarStore::completeMagic(const QByteArray& appMimetype)
     return res;
 }
 
-bool KoTarStore::init(Mode _mode)
+void KoTarStore::init(const QByteArray &appIdentification)
 {
-    KoStore::init(_mode);
+    Q_D(KoStore);
     m_currentDir = 0;
-    bool good = m_pTar->open(_mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly);
+    d->good = m_pTar->open(d->mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly);
 
-    if (good && _mode == Read)
-        good = m_pTar->directory() != 0;
-    return good;
+    if (!d->good)
+        return;
+
+    if (d->mode == Write) {
+        kDebug(30002) << "appIdentification :" << appIdentification;
+        m_pTar->setOrigFileName(completeMagic(appIdentification));
+    } else {
+        d->good = m_pTar->directory() != 0;
+    }
 }
 
 bool KoTarStore::doFinalize()

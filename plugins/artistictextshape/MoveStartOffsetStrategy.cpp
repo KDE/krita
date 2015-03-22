@@ -21,6 +21,7 @@
 #include "ChangeTextOffsetCommand.h"
 #include "ArtisticTextShape.h"
 #include <KoPathShape.h>
+#include <KoPathSegment.h>
 #include <KoToolBase.h>
 #include <math.h>
 

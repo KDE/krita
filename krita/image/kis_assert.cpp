@@ -28,7 +28,7 @@
  * TODO: Add automatic saving of the documents
  *
  * Requirements:
- * 1) Should save all open KisDoc2 objects
+ * 1) Should save all open KisDocument objects
  * 2) Should *not* overwrite original document since the saving
  *    process may fail.
  * 3) Should *not* overwrite any autosaved documents since the saving
@@ -57,11 +57,16 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
     bool disableAssertMsg =
         QProcessEnvironment::systemEnvironment().value("KRITA_NO_ASSERT_MSG", "0").toInt();
 
+    // disable message box if the assert happened in non-gui thread :(
+    if (QThread::currentThread() != QCoreApplication::instance()->thread()) {
+        disableAssertMsg = true;
+    }
+
     QMessageBox::StandardButton button = QMessageBox::Abort;
 
     if (!disableAssertMsg) {
         button =
-            QMessageBox::critical(0, i18n("Krita Internal Error"),
+            QMessageBox::critical(0, i18nc("@title:window", "Krita: Internal Error"),
                                   longMessage,
                                   QMessageBox::Ignore | QMessageBox::Abort,
                                   QMessageBox::Ignore);

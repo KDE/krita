@@ -51,33 +51,12 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KDoubleNumInput" name="diameter">
+      <widget class="KisDoubleSliderSpinBox" name="diameter" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="value">
-        <double>20.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1000.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="decimals">
-        <number>0</number>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
-       <property name="exponentRatio">
-        <double>1.500000000000000</double>
        </property>
       </widget>
      </item>
@@ -104,33 +83,12 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="KDoubleNumInput" name="scale">
+      <widget class="KisDoubleSliderSpinBox" name="scale" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>0.010000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>10.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="decimals">
-        <number>2</number>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
-       <property name="exponentRatio">
-        <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -157,36 +115,12 @@
       </widget>
      </item>
      <item row="5" column="1">
-      <widget class="KDoubleNumInput" name="spacing">
+      <widget class="KisDoubleSliderSpinBox" name="spacing" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="value">
-        <double>0.300000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>0.010000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>5.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="suffix">
-        <string/>
-       </property>
-       <property name="decimals">
-        <number>2</number>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
-       <property name="exponentRatio">
-        <double>2.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -213,33 +147,12 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KDoubleNumInput" name="aspectBox">
+      <widget class="KisDoubleSliderSpinBox" name="aspectBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>0.010000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>2.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="decimals">
-        <number>2</number>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
-       <property name="exponentRatio">
-        <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -269,7 +182,7 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="KDoubleNumInput" name="rotationBox">
+      <widget class="KisDoubleSliderSpinBox" name="rotationBox" native="true">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -278,30 +191,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="value">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>360.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="suffix">
-        <string>°</string>
-       </property>
-       <property name="decimals">
-        <number>0</number>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
-       <property name="exponentRatio">
-        <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -351,36 +240,12 @@
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="KDoubleNumInput" name="densityBox">
+      <widget class="KisDoubleSliderSpinBox" name="densityBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="value">
-        <double>100.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>100.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="suffix">
-        <string>%</string>
-       </property>
-       <property name="decimals">
-        <number>0</number>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
-       <property name="exponentRatio">
-        <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -424,7 +289,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KDoubleNumInput" name="jitterMove">
+      <widget class="KisDoubleSliderSpinBox" name="jitterMove" native="true">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -433,22 +298,7 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>5.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.500000000000000</double>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
+       </property>   
       </widget>
      </item>
     </layout>
@@ -456,6 +306,14 @@
   </layout>
  </widget>
  <customwidgets>
+
+  <customwidget>
+    <class>KisDoubleSliderSpinBox</class>
+    <extends>QWidget</extends>
+    <header>kis_slider_spin_box.h</header>
+    <container>1</container>
+  </customwidget>
+
   <customwidget>
    <class>KDoubleNumInput</class>
    <extends>QWidget</extends>

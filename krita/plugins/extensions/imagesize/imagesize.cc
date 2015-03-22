@@ -28,7 +28,7 @@
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view2.h>
+#include <KisViewManager.h>
 
 #include <kis_image_manager.h>
 #include <kis_node_manager.h>
@@ -46,17 +46,19 @@ K_PLUGIN_FACTORY(ImageSizeFactory, registerPlugin<ImageSize>();)
 K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
 
 ImageSize::ImageSize(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/imagesize.rc")
+        : KisViewPlugin(parent)
 {
-    KisAction *action  = new KisAction(i18n("Scale To New Size..."), this);
+    KisAction *action  = new KisAction(i18n("Scale Image To New Size..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("imagesize", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
-    action = new KisAction(i18n("Size Canvas..."), this);
+    action = new KisAction(i18n("Resize Canvas..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     addAction("canvassize", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
 
-    action = new KisAction(i18n("Scale &Layer..."), this);
+    action = new KisAction(i18n("Scale &Layer to new Size..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("layersize", action);
@@ -80,7 +82,7 @@ void ImageSize::slotImageSize()
 
     if (!image) return;
 
-    DlgImageSize * dlgImageSize = new DlgImageSize(m_view, image->width(), image->height(), image->yRes());
+    DlgImageSize * dlgImageSize = new DlgImageSize(m_view->mainWindow(), image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgImageSize);
     dlgImageSize->setObjectName("ImageSize");
 
@@ -101,7 +103,7 @@ void ImageSize::slotCanvasSize()
 
     if (!image) return;
 
-    DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(m_view, image->width(), image->height(), image->yRes());
+    DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(m_view->mainWindow(), image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgCanvasSize);
 
     if (dlgCanvasSize->exec() == QDialog::Accepted) {
@@ -125,9 +127,9 @@ void ImageSize::slotLayerSize()
     Q_ASSERT(dev);
     QRect rc = dev->exactBounds();
 
-    DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view, "LayerSize", rc.width(), rc.height(), image->yRes());
+    DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view->mainWindow(), "LayerSize", rc.width(), rc.height(), image->yRes());
     Q_CHECK_PTR(dlgLayerSize);
-    dlgLayerSize->setCaption(i18n("Layer Size"));
+    dlgLayerSize->setCaption(i18n("Resize Layer"));
 
     if (dlgLayerSize->exec() == QDialog::Accepted) {
         qint32 w = dlgLayerSize->width();
@@ -154,8 +156,8 @@ void ImageSize::slotSelectionScale()
 
     KIS_ASSERT_RECOVER_RETURN(selectionMask);
 
-    QRect rc = selectionMask->selection()->selectedRect();
-    DlgLayerSize * dlgSize = new DlgLayerSize(m_view, "SelectionScale", rc.width(), rc.height(), image->yRes());
+    QRect rc = selectionMask->selection()->selectedExactRect();
+    DlgLayerSize * dlgSize = new DlgLayerSize(m_view->mainWindow(), "SelectionScale", rc.width(), rc.height(), image->yRes());
     dlgSize->setCaption(i18n("Scale Selection"));
 
     if (dlgSize->exec() == QDialog::Accepted) {

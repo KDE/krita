@@ -41,7 +41,7 @@ Cursor::Cursor(Connection* conn, const QString& statement, uint options)
         , m_options(options)
 {
 #ifdef CALLIGRADB_DEBUG_GUI
-    KexiDB::debugGUI(QString("Create cursor: ") + statement);
+    KexiDB::debugGUI(QString("Create cursor for raw SQL: ") + statement);
 #endif
     init();
 }
@@ -53,7 +53,9 @@ Cursor::Cursor(Connection* conn, QuerySchema& query, uint options)
         , m_options(options)
 {
 #ifdef CALLIGRADB_DEBUG_GUI
-    KexiDB::debugGUI(QString("Create cursor for query \"%1\": ").arg(query.name()) + query.debugString());
+    KexiDB::debugGUI(QString("Create cursor for query \"%1\":\n")
+                     .arg(KexiDB::iifNotEmpty(query.name(), "<unnamed>"))
+                     + query.debugString());
 #endif
     init();
 }
@@ -105,10 +107,12 @@ void Cursor::init()
 Cursor::~Cursor()
 {
 #ifdef CALLIGRADB_DEBUG_GUI
+#if 0 // too many details
     if (m_query)
         KexiDB::debugGUI(QString("~ Delete cursor for query"));
     else
         KexiDB::debugGUI(QString("~ Delete cursor: ") + m_rawStatement);
+#endif
 #endif
     /* if (!m_query)
         KexiDBDbg << "Cursor::~Cursor() '" << m_rawStatement.toLatin1() << "'";
@@ -152,6 +156,10 @@ bool Cursor::open()
             setError(ERR_SQL_EXECUTION_ERROR, i18n("Query statement is empty."));
             return false;
         }
+#ifdef CALLIGRADB_DEBUG_GUI
+        KexiDB::debugGUI(QString("SQL for query \"%1\": ")
+                         .arg(KexiDB::iifNotEmpty(m_query->name(), "<unnamed>")) + m_conn->m_sql);
+#endif
     }
     m_sql = m_conn->m_sql;
     m_opened = drv_open();
@@ -554,5 +562,9 @@ void Cursor::setQueryParameters(const QList<QVariant>& params)
     else
         *m_queryParameters = params;
 }
+
+#if 0 // extra messages
+I18N_NOOP("No connection for cursor open operation specified.")
+#endif
 
 #include "cursor.moc"

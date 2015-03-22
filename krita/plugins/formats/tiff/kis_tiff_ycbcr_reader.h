@@ -37,7 +37,10 @@ public:
      * @param hsub horizontal subsampling of Cb and Cr
      * @param hsub vertical subsampling of Cb and Cr
      */
-    KisTIFFYCbCrReaderTarget8Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position);
+    KisTIFFYCbCrReaderTarget8Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses,
+                                 int8 alphapos, uint8 sourceDepth, uint16 sampleformat, uint8 nbcolorssamples, uint8 extrasamplescount,
+                                 KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub,
+                                 KisTIFFYCbCr::Position position);
     ~KisTIFFYCbCrReaderTarget8Bit();
     virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream);
     virtual void finalize();
@@ -59,7 +62,10 @@ public:
      * @param hsub horizontal subsampling of Cb and Cr
      * @param hsub vertical subsampling of Cb and Cr
      */
-    KisTIFFYCbCrReaderTarget16Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position);
+    KisTIFFYCbCrReaderTarget16Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses,
+                                  int8 alphapos, uint8 sourceDepth, uint16 sampleformat, uint8 nbcolorssamples, uint8 extrasamplescount,
+                                  KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub,
+                                  KisTIFFYCbCr::Position position);
     ~KisTIFFYCbCrReaderTarget16Bit();
     virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream);
     virtual void finalize();

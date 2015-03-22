@@ -1,14 +1,14 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
+ *  the Free Software Foundation; version 2.1 of the License.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -27,25 +27,25 @@ class KoColorDisplayRendererInterface;
 class QVBoxLayout;
 class KisColorInput;
 class KisColorSpaceSelector;
-class QTimer;
 class QCheckBox;
+class KisSignalCompressor;
 
 class KisSpecificColorSelectorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisSpecificColorSelectorWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget* parent);
+    KisSpecificColorSelectorWidget(QWidget* parent);
     ~KisSpecificColorSelectorWidget();
-
     bool customColorSpaceUsed();
-public slots:
+public Q_SLOTS:
+    void setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer);
     void setColorSpace(const KoColorSpace*);
     void setColor(const KoColor&);
-private slots:
+private Q_SLOTS:
     void update();
     void updateTimeout();
     void setCustomColorSpace(const KoColorSpace *);
-signals:
+Q_SIGNALS:
     void colorChanged(const KoColor&);
     void updated();
 private:
@@ -54,11 +54,12 @@ private:
     QVBoxLayout *m_layout;
     KoColor m_color;
     bool m_updateAllowed;
-    QTimer* m_delayTimer;
+    KisSignalCompressor *m_updateCompressor;
     KisColorSpaceSelector *m_colorspaceSelector;
     bool m_customColorSpaceSelected;
     QCheckBox *m_chkShowColorSpaceSelector;
     KoColorDisplayRendererInterface *m_displayRenderer;
+    KoColorDisplayRendererInterface *m_fallbackRenderer;
 };
 
 #endif

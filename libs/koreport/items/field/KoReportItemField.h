@@ -15,8 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef KRFIELDDATA_H
-#define KRFIELDDATA_H
+
+#ifndef KOREPORTITEMFIELD_H
+#define KOREPORTITEMFIELD_H
+
 #include <KoReportItemBase.h>
 #include <QRect>
 #include <QDomDocument>
@@ -34,10 +36,8 @@ class Field;
 class KoReportItemField : public KoReportItemBase
 {
 public:
-    KoReportItemField() {
-        createProperties();
-    };
-    KoReportItemField(QDomNode & element);
+    KoReportItemField();
+    explicit KoReportItemField(QDomNode & element);
     virtual ~KoReportItemField();
 
     virtual QString typeName() const;
@@ -63,6 +63,7 @@ protected:
     KoProperty::Property* m_lineStyle;
     KoProperty::Property* m_wordWrap;
     KoProperty::Property* m_canGrow;
+    KoProperty::Property* m_itemValue;
     
     //bool builtinFormat;
     //QString format;

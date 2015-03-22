@@ -60,7 +60,6 @@
 # See APP_CONVERTER, FILEMANAGER_*
 
 # 3rd-party libs
-calligra_define_product(LIB_KDGANTT "libkdgantt" UNPORTED)
 calligra_define_product(LIB_KDCHART "libkdchart" UNPORTED)
 
 # building tools
@@ -102,7 +101,7 @@ calligra_define_product(APP_KARBON "Karbon app (for Desktop)" UNPORTED  REQUIRES
 calligra_define_product(APP_KRITA "Krita app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_KEXI "Kexi app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_CALLIGRADB)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
-calligra_define_product(APP_PLAN "Plan app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
+calligra_define_product(APP_PLAN "Plan app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_KDCHART)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_GEMINI "The Calligra Gemini application" UNPORTED  REQUIRES PART_QTQUICK)
 # TODO: this needs to be split up by app products

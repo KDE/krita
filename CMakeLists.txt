@@ -332,6 +332,12 @@ macro_optional_find_package(KdepimLibs 4.6.0)
 macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by Plan and the KDE address book integration (available as a module in KDE)")
 
 ##
+## Test for KGantt
+##
+macro_optional_find_package(KGantt 2.6.0)
+macro_log_feature(KGantt_FOUND "KGantt" "Library for creating Gantt diagrams (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Plan")
+
+##
 ## Test for eigen3
 ##
 macro_optional_find_package(Eigen3)
@@ -817,10 +823,6 @@ set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate 
 ####          3rd party libraries        ####
 #############################################
 
-set(KDGANTT_INCLUDES
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
-)
-
 set(KDCHART_INCLUDES
     ${CMAKE_SOURCE_DIR}/3rdparty/kdchart/include
 )
@@ -957,6 +959,10 @@ calligra_drop_product_on_bad_condition( FILTER_MPXJ_IMPORT
 
 calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
+)
+
+calligra_drop_product_on_bad_condition( APP_PLAN
+    KGantt_FOUND "KGantt devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT

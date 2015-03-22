@@ -245,4 +245,5 @@ void KoList::setListContinuedFrom(KoList *list)
     d->listToBeContinuedFrom = list;
 }
 
-#include <KoList.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoList.cpp"

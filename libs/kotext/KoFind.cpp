@@ -45,4 +45,5 @@ KoFind::~KoFind()
     delete d;
 }
 
-#include <KoFind.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoFind.cpp"

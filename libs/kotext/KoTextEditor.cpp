@@ -1655,4 +1655,5 @@ const QTextTable *KoTextEditor::currentTable () const
     return d->caret.currentTable();
 }
 
-#include <KoTextEditor.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoTextEditor.cpp"

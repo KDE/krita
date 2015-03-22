@@ -27,7 +27,7 @@ set(vectorimage_LIB_SRCS
 
 add_library(kovectorimage SHARED ${vectorimage_LIB_SRCS})
 
-target_link_libraries(kovectorimage  Qt5::Gui)
+target_link_libraries(kovectorimage  KF5::KDELibs4Support Qt5::Gui Qt5::PrintSupport)
 target_link_libraries(kovectorimage LINK_INTERFACE_LIBRARIES )
 
 set_target_properties(kovectorimage PROPERTIES

@@ -176,7 +176,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
 )
 
 
-find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Widgets Xml Script Svg Test)
+find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Script Svg Test)
 find_package(Qt5 5.2.0 COMPONENTS WebKit DBus Declarative)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})

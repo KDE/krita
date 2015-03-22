@@ -169,10 +169,12 @@ void KoToolProxy::touchEvent(QTouchEvent *event)
     QPointF point;
     QList<KoTouchPoint> touchPoints;
 
+    bool isPrimary = true;
     foreach(QTouchEvent::TouchPoint p, event->touchPoints()) {
         QPointF docPoint = widgetToDocument(p.screenPos());
-        if (p.isPrimary()) {
+        if (isPrimary) {
             point = docPoint;
+            isPrimary = false;
         }
         KoTouchPoint touchPoint;
         touchPoint.touchPoint = p;

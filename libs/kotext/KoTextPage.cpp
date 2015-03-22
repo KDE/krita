@@ -19,6 +19,8 @@
 
 #include "KoTextPage.h"
 
+#include <QString>
+
 KoTextPage::KoTextPage()
 {
 }

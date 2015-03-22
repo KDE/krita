@@ -27,6 +27,7 @@
 // Qt
 #include <QPair>
 #include <QMetaType>
+#include <QObject>
 
 class KoXmlWriter;
 class KoShapeSavingContext;

@@ -26,6 +26,7 @@
 #include <KoXmlReader.h>
 #include <KoPluginLoader.h>
 
+#include <kglobal.h>
 #include <kdebug.h>
 
 class KoInlineObjectRegistry::Private

@@ -21,8 +21,10 @@
 #define KOTEXTWRITER_P_H
 
 #include <QMap>
+#include <QHash>
 #include <QStack>
 #include <QPair>
+#include <QString>
 
 #include <KoTextWriter.h>
 #include <KoXmlReaderForward.h>

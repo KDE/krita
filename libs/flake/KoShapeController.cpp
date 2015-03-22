@@ -67,7 +67,7 @@ public:
 
                 // show config dialog.
                 KPageDialog *dialog = new KPageDialog(canvas->canvasWidget());
-                dialog->setCaption(i18n("%1 Options", factory->name()));
+                dialog->setWindowTitle(i18n("%1 Options", factory->name()));
 
                 int pageCount = 0;
                 QList<KoShapeConfigFactoryBase*> panels = factory->panelFactories();

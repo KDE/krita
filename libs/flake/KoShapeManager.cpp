@@ -587,4 +587,5 @@ KoCanvasBase *KoShapeManager::canvas()
     return d->canvas;
 }
 
-#include <KoShapeManager.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoShapeManager.cpp"

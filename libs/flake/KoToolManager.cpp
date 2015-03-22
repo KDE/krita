@@ -1047,4 +1047,5 @@ KoToolManager::Private *KoToolManager::priv()
     return d;
 }
 
-#include <KoToolManager.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoToolManager.cpp"

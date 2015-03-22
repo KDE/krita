@@ -340,4 +340,5 @@ bool KoSelection::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
     return true;
 }
 
-#include <KoSelection.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoSelection.cpp"

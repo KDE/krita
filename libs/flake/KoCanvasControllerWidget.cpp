@@ -620,4 +620,5 @@ KoCanvasControllerWidget::Private *KoCanvasControllerWidget::priv()
     return d;
 }
 
-#include <KoCanvasControllerWidget.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoCanvasControllerWidget.cpp"

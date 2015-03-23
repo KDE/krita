@@ -39,6 +39,8 @@ private slots:
     void testGradientOverlay();
     void testPatternOverlay();
 
+    void testStroke();
+
 private:
     void test(KisPSDLayerStyleSP style, const QString testName);
 };

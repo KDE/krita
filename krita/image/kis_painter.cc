@@ -1327,6 +1327,11 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
 
 void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
 {
+    drawPainterPath(path, pen, QRect());
+}
+
+void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen, const QRect &requestedRect)
+{
     // we are drawing mask, it has to be white
     // color of the path is given by paintColor()
     Q_ASSERT(pen.color() == Qt::white);
@@ -1341,12 +1346,7 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     Q_CHECK_PTR(d->polygon);
 
     QRectF boundingRect = path.boundingRect();
-    QRect fillRect;
-
-    fillRect.setLeft((qint32)floor(boundingRect.left()));
-    fillRect.setRight((qint32)ceil(boundingRect.right()));
-    fillRect.setTop((qint32)floor(boundingRect.top()));
-    fillRect.setBottom((qint32)ceil(boundingRect.bottom()));
+    QRect fillRect = boundingRect.toAlignedRect();
 
     // take width of the pen into account
     int penWidth = qRound(pen.widthF());
@@ -1354,6 +1354,10 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
 
     // Expand the rectangle to allow for anti-aliasing.
     fillRect.adjust(-1, -1, 1, 1);
+
+    if (!requestedRect.isNull()) {
+        fillRect &= requestedRect;
+    }
 
     d->fillPainter->fillRect(fillRect, paintColor(), OPACITY_OPAQUE_U8);
 

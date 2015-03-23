@@ -20,6 +20,8 @@
 
 #include <KoAbstractGradient.h>
 #include <KoColorSpace.h>
+#include <KoPattern.h>
+
 
 #include "psd.h"
 
@@ -33,6 +35,9 @@
 #include "kis_gaussian_kernel.h"
 
 #include "kis_fill_painter.h"
+#include "kis_gradient_painter.h"
+#include "kis_layer_style_filter_environment.h"
+
 
 
 namespace KisLsUtils
@@ -354,6 +359,151 @@ namespace KisLsUtils
         KisPainter gc(selection);
         gc.setCompositeOp(COMPOSITE_ERASE);
         gc.bitBlt(knockOutRect.topLeft(), knockOutSelection, knockOutRect);
+    }
+
+    void fillOverlayDevice(KisPaintDeviceSP fillDevice,
+                           const QRect &applyRect,
+                           const psd_layer_effects_overlay_base *config,
+                           KisLayerStyleFilterEnvironment *env)
+    {
+        if (config->fillType() == psd_fill_solid_color) {
+            KoColor color(config->color(), fillDevice->colorSpace());
+            fillDevice->setDefaultPixel(color.data());
+
+        } else if (config->fillType() == psd_fill_pattern) {
+            if (config->scale() != 100) {
+                qWarning() << "KisLsOverlayFilter::applyOverlay(): Pattern scaling is NOT implemented!";
+            }
+
+            QSize psize(config->pattern()->width(), config->pattern()->height());
+
+            QPoint patternOffset(qreal(psize.width()) * config->horizontalPhase() / 100,
+                                 qreal(psize.height()) * config->horizontalPhase() / 100);
+
+            const QRect boundsRect = config->alignWithLayer() ?
+                env->layerBounds() : env->defaultBounds();
+
+            patternOffset += boundsRect.topLeft();
+
+            patternOffset.rx() %= psize.width();
+            patternOffset.ry() %= psize.height();
+
+            QRect fillRect = applyRect | applyRect.translated(patternOffset);
+
+            KisFillPainter gc(fillDevice);
+            gc.fillRect(fillRect.x(), fillRect.y(),
+                        fillRect.width(), fillRect.height(), config->pattern());
+            gc.end();
+
+            fillDevice->setX(-patternOffset.x());
+            fillDevice->setY(-patternOffset.y());
+
+        } else if (config->fillType() == psd_fill_gradient) {
+            const QRect boundsRect = config->alignWithLayer() ?
+                env->layerBounds() : env->defaultBounds();
+
+            QPoint center = boundsRect.center();
+            center += QPoint(boundsRect.width() * config->gradientXOffset() / 100,
+                             boundsRect.height() * config->gradientYOffset() / 100);
+
+            int width = (boundsRect.width() * config->scale() + 100) / 200;
+            int height = (boundsRect.height() * config->scale() + 100) / 200;
+
+            /* copy paste from libpsd */
+
+            int angle = config->angle();
+            int corner_angle = (int)(atan((qreal)boundsRect.height() / boundsRect.width()) * 180 / M_PI + 0.5);
+            int sign_x = 1;
+            int sign_y = 1;
+
+
+            if(angle < 0) {
+                angle += 360;
+            }
+
+            if (angle >= 90 && angle < 180) {
+                angle = 180 - angle;
+                sign_x = -1;
+            } else if (angle >= 180 && angle < 270) {
+                angle = angle - 180;
+                sign_x = -1;
+                sign_y = -1;
+            } else if (angle >= 270 && angle <= 360) {
+                angle = 360 - angle;
+                sign_y = -1;
+            }
+
+            int radius_x = 0;
+            int radius_y = 0;
+
+            if (angle <= corner_angle) {
+                radius_x = width;
+                radius_y = (int)(radius_x * tan(kisDegreesToRadians(qreal(angle))) + 0.5);
+            } else {
+                radius_y = height;
+                radius_x = (int)(radius_y / tan(kisDegreesToRadians(qreal(angle))) + 0.5);
+            }
+
+            int radius_corner = (int)(std::sqrt((qreal)(radius_x * radius_x + radius_y * radius_y)) + 0.5);
+
+            /* end of copy paste from libpsd */
+
+            KisGradientPainter gc(fillDevice);
+            gc.setGradient(config->gradient());
+            QPointF gradStart;
+            QPointF gradEnd;
+            KisGradientPainter::enumGradientRepeat repeat =
+                KisGradientPainter::GradientRepeatNone;
+
+            QPoint rectangularOffset(sign_x * radius_x, -sign_y * radius_y);
+
+
+            switch(config->style())
+            {
+            case psd_gradient_style_linear:
+                gc.setGradientShape(KisGradientPainter::GradientShapeLinear);
+                repeat = KisGradientPainter::GradientRepeatNone;
+                gradStart = center - rectangularOffset;
+                gradEnd = center + rectangularOffset;
+                break;
+
+            case psd_gradient_style_radial:
+                gc.setGradientShape(KisGradientPainter::GradientShapeRadial);
+                repeat = KisGradientPainter::GradientRepeatNone;
+                gradStart = center;
+                gradEnd = center + QPointF(radius_corner, 0);
+                break;
+
+            case psd_gradient_style_angle:
+                gc.setGradientShape(KisGradientPainter::GradientShapeConical);
+                repeat = KisGradientPainter::GradientRepeatNone;
+                gradStart = center;
+                gradEnd = center + rectangularOffset;
+                break;
+
+            case psd_gradient_style_reflected:
+                gc.setGradientShape(KisGradientPainter::GradientShapeLinear);
+                repeat = KisGradientPainter::GradientRepeatAlternate;
+                gradStart = center - rectangularOffset;
+                gradEnd = center;
+                break;
+
+            case psd_gradient_style_diamond:
+                gc.setGradientShape(KisGradientPainter::GradientShapeBiLinear);
+                repeat = KisGradientPainter::GradientRepeatNone;
+                gradStart = center - rectangularOffset;
+                gradEnd = center + rectangularOffset;
+                break;
+            default:
+                qFatal("Gradient Overlay: unknown switch case!");
+                break;
+            }
+
+            gc.paintGradient(gradStart, gradEnd,
+                             repeat, 0.0,
+                             config->reverse(),
+                             applyRect);
+        }
     }
 
     void applyFinalSelection(KisSelectionSP baseSelection,

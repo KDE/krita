@@ -24,6 +24,8 @@
 
 class psd_layer_effects_context;
 class psd_layer_effects_shadow_base;
+class psd_layer_effects_overlay_base;
+class KisLayerStyleFilterEnvironment;
 
 
 namespace KisLsUtils
@@ -56,6 +58,11 @@ namespace KisLsUtils
                            const QRect &dstRect,
                            const QRect &totalNeedRect,
                            const bool knockOutInverted);
+
+    void fillOverlayDevice(KisPaintDeviceSP fillDevice,
+                           const QRect &applyRect,
+                           const psd_layer_effects_overlay_base *config,
+                           KisLayerStyleFilterEnvironment *env);
 
     void applyFinalSelection(KisSelectionSP baseSelection,
                              KisPaintDeviceSP srcDevice,

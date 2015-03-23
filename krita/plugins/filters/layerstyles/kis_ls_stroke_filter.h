@@ -16,28 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_LS_OVERLAY_FILTER_H
-#define KIS_LS_OVERLAY_FILTER_H
+#ifndef KIS_LS_STROKE_FILTER_H
+#define KIS_LS_STROKE_FILTER_H
 
 #include <QSharedPointer>
 
 #include "kis_layer_style_filter.h"
 
-class psd_layer_effects_overlay_base;
+class psd_layer_effects_stroke;
 class psd_layer_effects_context;
 
 
-class KDE_EXPORT KisLsOverlayFilter : public KisLayerStyleFilter
+class KDE_EXPORT KisLsStrokeFilter : public KisLayerStyleFilter
 {
 public:
-    enum Mode {
-        Color,
-        Gradient,
-        Pattern
-    };
-
-public:
-    KisLsOverlayFilter(Mode mode);
+    KisLsStrokeFilter();
 
     void processDirectly(KisPaintDeviceSP src,
                          KisPaintDeviceSP dst,
@@ -49,16 +42,11 @@ public:
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style) const;
 
 private:
-    const psd_layer_effects_overlay_base* getOverlayStruct(KisPSDLayerStyleSP style) const;
-
-    void applyOverlay(KisPaintDeviceSP srcDevice,
-                      KisPaintDeviceSP dstDevice,
-                      const QRect &applyRect,
-                      const psd_layer_effects_overlay_base *config,
-                      KisLayerStyleFilterEnvironment *env) const;
-
-private:
-    Mode m_mode;
+    void applyStroke(KisPaintDeviceSP srcDevice,
+                     KisPaintDeviceSP dstDevice,
+                     const QRect &applyRect,
+                     const psd_layer_effects_stroke *config,
+                     KisLayerStyleFilterEnvironment *env) const;
 };
 
 #endif

@@ -65,6 +65,7 @@ public:
     const psd_layer_effects_color_overlay* colorOverlay() const;
     const psd_layer_effects_gradient_overlay* gradientOverlay() const;
     const psd_layer_effects_pattern_overlay* patternOverlay() const;
+    const psd_layer_effects_stroke* stroke() const;
 
     psd_layer_effects_context* context();
     psd_layer_effects_drop_shadow* dropShadow();
@@ -75,6 +76,7 @@ public:
     psd_layer_effects_color_overlay* colorOverlay();
     psd_layer_effects_gradient_overlay* gradientOverlay();
     psd_layer_effects_pattern_overlay* patternOverlay();
+    psd_layer_effects_stroke* stroke();
 
     /**
      * Save given styles to the ASL style format. All patterns references in the

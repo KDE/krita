@@ -180,6 +180,11 @@ const psd_layer_effects_pattern_overlay* KisPSDLayerStyle::patternOverlay() cons
     return &d->pattern_overlay;
 }
 
+const psd_layer_effects_stroke* KisPSDLayerStyle::stroke() const
+{
+    return &d->stroke;
+}
+
 psd_layer_effects_context* KisPSDLayerStyle::context()
 {
     return &d->context;
@@ -223,6 +228,11 @@ psd_layer_effects_gradient_overlay* KisPSDLayerStyle::gradientOverlay()
 psd_layer_effects_pattern_overlay* KisPSDLayerStyle::patternOverlay()
 {
     return &d->pattern_overlay;
+}
+
+psd_layer_effects_stroke* KisPSDLayerStyle::stroke()
+{
+    return &d->stroke;
 }
 
 bool KisPSDLayerStyle::writeASL(QIODevice *io, StylesVector )

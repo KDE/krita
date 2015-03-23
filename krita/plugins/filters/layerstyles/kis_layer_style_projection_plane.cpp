@@ -24,6 +24,7 @@
 #include "kis_ls_drop_shadow_filter.h"
 #include "kis_ls_satin_filter.h"
 #include "kis_ls_overlay_filter.h"
+#include "kis_ls_stroke_filter.h"
 
 
 struct KisLayerStyleProjectionPlane::Private
@@ -112,6 +113,13 @@ void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleS
             new KisLayerStyleFilterProjectionPlane(sourceLayer);
         patternOverlay->setStyle(new KisLsOverlayFilter(KisLsOverlayFilter::Pattern), style);
         m_d->stylesAfter << toQShared(patternOverlay);
+    }
+
+    {
+        KisLayerStyleFilterProjectionPlane *stroke =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        stroke->setStyle(new KisLsStrokeFilter(), style);
+        m_d->stylesAfter << toQShared(stroke);
     }
 }
 

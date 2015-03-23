@@ -19,6 +19,10 @@
 #include "kis_layer_style_filter_environment.h"
 
 #include "kis_layer.h"
+#include "kis_ls_utils.h"
+
+#include "kis_selection.h"
+#include "kis_pixel_selection.h"
 
 
 struct KisLayerStyleFilterEnvironment::Private
@@ -48,3 +52,18 @@ QRect KisLayerStyleFilterEnvironment::defaultBounds() const
         m_d->sourceLayer->original()->defaultBounds()->bounds() : QRect();
 }
 
+QPainterPath KisLayerStyleFilterEnvironment::layerOutlineCache() const
+{
+    // TODO: make it really cachable!
+
+    KisPaintDeviceSP srcDevice = m_d->sourceLayer->projection();
+
+    KisSelectionSP baseSelection =
+        KisLsUtils::selectionFromAlphaChannel(srcDevice, srcDevice->exactBounds());
+    KisPixelSelectionSP selection = baseSelection->pixelSelection();
+
+    // needs no 'invalidate' call
+    selection->recalculateOutlineCache();
+
+    return selection->outlineCache();
+}

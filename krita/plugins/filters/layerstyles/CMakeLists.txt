@@ -4,6 +4,7 @@ set(kritalayerstylesfilter_PART_SRCS
     layerstyles.cpp
     kis_ls_drop_shadow_filter.cpp
     kis_ls_satin_filter.cpp
+    kis_ls_stroke_filter.cpp
     kis_ls_overlay_filter.cpp
     kis_ls_utils.cpp
     kis_layer_style_filter.cpp

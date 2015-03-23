@@ -26,6 +26,7 @@
 
 
 class KisLayer;
+class QPainterPath;
 
 
 class KDE_EXPORT KisLayerStyleFilterEnvironment
@@ -36,6 +37,8 @@ public:
 
     QRect layerBounds() const;
     QRect defaultBounds() const;
+
+    QPainterPath layerOutlineCache() const;
 
 private:
     struct Private;

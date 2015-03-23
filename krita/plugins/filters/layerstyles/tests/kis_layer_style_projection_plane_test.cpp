@@ -59,7 +59,13 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
     KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "00L_initial", testName);
 
-    layer->paintDevice()->fill(rFillRect, KoColor(Qt::red, cs));
+    //layer->paintDevice()->fill(rFillRect, KoColor(Qt::red, cs));
+    {
+        KisPainter gc(layer->paintDevice());
+        gc.setPaintColor(KoColor(Qt::red, cs));
+        gc.setFillStyle(KisPainter::FillStyleForegroundColor);
+        gc.paintEllipse(rFillRect);
+    }
 
     KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "01L_fill", testName);
 
@@ -286,7 +292,7 @@ void KisLayerStyleProjectionPlaneTest::testPatternOverlay()
     style->patternOverlay()->setBlendMode(COMPOSITE_LINEAR_DODGE);
     style->patternOverlay()->setScale(100);
 
-    style->patternOverlay()->setLinkWithLayer(false);
+    style->patternOverlay()->setAlignWithLayer(false);
 
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
 
@@ -296,6 +302,52 @@ void KisLayerStyleProjectionPlaneTest::testPatternOverlay()
     style->patternOverlay()->setPattern(&pattern);
 
     test(style, "pat_overlay");
+}
+
+void KisLayerStyleProjectionPlaneTest::testStroke()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->stroke()->setColor(Qt::blue);
+    style->stroke()->setOpacity(80);
+    style->stroke()->setEffectEnabled(true);
+    style->stroke()->setBlendMode(COMPOSITE_OVER);
+
+    style->stroke()->setSize(3);
+    style->stroke()->setPosition(psd_stroke_center);
+
+    test(style, "stroke_col_ctr");
+
+    style->stroke()->setPosition(psd_stroke_outside);
+
+    test(style, "stroke_col_out");
+
+    style->stroke()->setPosition(psd_stroke_inside);
+
+    test(style, "stroke_col_in");
+
+
+    QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
+    KoPattern pattern(fileName);
+    QVERIFY(pattern.load());
+    style->stroke()->setPattern(&pattern);
+    style->stroke()->setFillType(psd_fill_pattern);
+
+    test(style, "stroke_pat");
+
+
+    QLinearGradient testGradient;
+    testGradient.setColorAt(0.0, Qt::white);
+    testGradient.setColorAt(0.5, Qt::green);
+    testGradient.setColorAt(1.0, Qt::black);
+    testGradient.setSpread(QGradient::ReflectSpread);
+    QScopedPointer<KoStopGradient> gradient(
+        KoStopGradient::fromQGradient(&testGradient));
+
+    style->stroke()->setGradient(gradient.data());
+    style->stroke()->setFillType(psd_fill_gradient);
+
+    test(style, "stroke_grad");
+
 }
 
 QTEST_KDEMAIN(KisLayerStyleProjectionPlaneTest, GUI)

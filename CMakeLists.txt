@@ -271,26 +271,6 @@ endif ()
 ############################
 ###########################
 
-##
-## Test for sqlite
-##
-set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.8.7)
-set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
-macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
-macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
-macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
-                  "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
-                  "Required by Calligra's default database handler for Kexi and bibliography in Words.")
-
-##
-## Test for ICU
-##
-macro_optional_find_package(ICU)
-macro_bool_to_01(ICU_FOUND HAVE_ICU)
-macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
-                  "http://icu-project.org" FALSE ""
-                  "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
 ## Check for OpenEXR
@@ -800,11 +780,6 @@ set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
-# calligradb
-set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
-                        ${CMAKE_BINARY_DIR}/libs/db)
-
 #############################################
 ####           filter libraries          ####
 #############################################
@@ -857,12 +832,6 @@ calligra_drop_product_on_bad_condition( APP_KRITA
 calligra_drop_product_on_bad_condition( APP_ACTIVE
     QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
     KDECLARATIVE_FOUND "KDeclarative not found"
-)
-
-# TODO: remove when Predicate lib arrives
-calligra_drop_product_on_bad_condition( LIB_CALLIGRADB
-    HAVE_ICU "ICU devel not found"
-    HAVE_SQLITE "sqlite devel not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP

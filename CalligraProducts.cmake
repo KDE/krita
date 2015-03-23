@@ -64,7 +64,6 @@ calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp")
 
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
-calligra_define_product(LIB_CALLIGRADB "libcalligradb" UNPORTED)
 
 # calligra libs
 calligra_define_product(LIB_CALLIGRA "Calligra core libs" REQUIRES BUILDTOOL_RNG2CPP)
@@ -94,7 +93,7 @@ calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" UNPORTED  REQUIRES
 calligra_define_product(APP_AUTHOR "Author app (for Desktop)" UNPORTED  REQUIRES PART_WORDS)
 calligra_define_product(APP_KARBON "Karbon app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_KRITA "Krita app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(APP_KEXI "Kexi app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_CALLIGRADB)
+calligra_define_product(APP_KEXI "Kexi app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA)

@@ -18,10 +18,10 @@ add_library(keximigrate_spreadsheet MODULE ${keximigrate_spreadsheet_PART_SRCS})
 
 target_link_libraries(keximigrate_spreadsheet
     keximigrate
-    kexidb
     kexiutils
-    ${CALLIGRADB_LIBS}
     calligrasheetscommon
+
+    Predicate
 )
 
 install(TARGETS keximigrate_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -71,9 +71,9 @@ calligra_define_product(LIB_KOREPORT "libkoreport" UNPORTED  REQUIRES LIB_KOPROP
 # calligra libs
 calligra_define_product(LIB_CALLIGRA "Calligra core libs" REQUIRES BUILDTOOL_RNG2CPP)
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents" UNPORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(LIB_KOODF2 "libkoodf2" PORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(LIB_KOODFREADER "libkoodfreader" PORTED  REQUIRES LIB_KOODF2 LIB_CALLIGRA)
-calligra_define_product(LIB_MSO "libmso" PORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(LIB_KOODF2 "libkoodf2"  REQUIRES LIB_CALLIGRA)
+calligra_define_product(LIB_KOODFREADER "libkoodfreader"  REQUIRES LIB_KOODF2 LIB_CALLIGRA)
+calligra_define_product(LIB_MSO "libmso"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(LIB_KOMSOOXML "libkomsooxml" UNPORTED  REQUIRES LIB_KOODF2 LIB_CALLIGRA)
 
 # features

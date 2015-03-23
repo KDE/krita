@@ -179,7 +179,7 @@ find_package(Qt5 5.2.0 REQUIRED COMPONENTS Core Gui Widgets Xml PrintSupport Scr
 find_package(Qt5 5.2.0 COMPONENTS WebKit DBus Declarative)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
-set(QT_QTWEBKIT_FOUND ${Qt5Webkit_FOUND})
+set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 
 if (USEOPENGL)
@@ -544,7 +544,7 @@ endif()
 ##
 ## Test for Qt Webkit
 ##
-macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.nokia.com" FALSE "" "Required for the web shape, web Kexi widget and web report element")
+macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for the web shape, web Kexi widget and web report element")
 if(QT_QTWEBKIT_FOUND)
     add_definitions( -DCAN_USE_QTWEBKIT )
 endif()

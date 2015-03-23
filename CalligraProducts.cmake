@@ -102,7 +102,7 @@ calligra_define_product(APP_GEMINI "The Calligra Gemini application" UNPORTED  R
 calligra_define_product(DOC "Calligra Documentations" UNPORTED)
 
 # extras
-calligra_define_product(APP_CONVERTER "Format converter for commandline" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(APP_CONVERTER "Format converter for commandline" REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILEMANAGER_PROPERTIES "Plugin for the KDE file properties dialog" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILEMANAGER_THUMBNAIL "Plugins for KDE filesystem thumbnailing" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILEMANAGER_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action" UNPORTED)

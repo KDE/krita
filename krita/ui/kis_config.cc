@@ -298,7 +298,7 @@ void KisConfig::setUseEraserBrushSize(bool value)
 
 QColor KisConfig::getMDIBackgroundColor() const
 {
-    QColor col(200, 200, 200);
+    QColor col(77, 77, 77);
     return m_cfg.readEntry("mdiBackgroundColor", col);
 }
 

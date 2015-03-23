@@ -71,7 +71,7 @@ calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  REQUIRES LIB_CA
 calligra_define_product(LIB_KOODF2 "libkoodf2"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(LIB_KOODFREADER "libkoodfreader"  REQUIRES LIB_KOODF2 LIB_CALLIGRA)
 calligra_define_product(LIB_MSO "libmso"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(LIB_KOMSOOXML "libkomsooxml" UNPORTED  REQUIRES LIB_KOODF2 LIB_CALLIGRA)
+calligra_define_product(LIB_KOMSOOXML "libkomsooxml" REQUIRES LIB_KOODF2 LIB_CALLIGRA)
 
 # features
 calligra_define_feature(FEATURE_SCRIPTING "Scripting feature" UNPORTED) # TODO

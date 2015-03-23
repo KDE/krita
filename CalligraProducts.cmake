@@ -170,7 +170,7 @@ calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter" U
 calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_APPLIXWORD_TO_ODT "Applixword to ODT filter" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_ASCII_TO_WORDS "Words ASCII import filter" UNPORTED  REQUIRES PART_WORDS LIB_KOODF2)
-calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter" UNPORTED  REQUIRES LIB_KOODFREADER LIB_CALLIGRA)
+calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter" REQUIRES LIB_KOODFREADER LIB_CALLIGRA)
 calligra_define_product(FILTER_RTF_TO_ODT "RTF to ODT filter" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter" UNPORTED  REQUIRES LIB_KOVECTORIMAGE LIB_CALLIGRA)

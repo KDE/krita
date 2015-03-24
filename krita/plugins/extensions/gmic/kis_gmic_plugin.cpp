@@ -373,7 +373,10 @@ void KisGmicPlugin::createViewportPreview(KisNodeListSP layers, KisGmicFilterSet
     dbgPlugins << "created m_smallApplicator " << m_smallApplicator << " and locking image!";
     m_view->image()->lock();
     QRect canvasRect = m_view->image()->bounds();
-    QSize previewSize = m_gmicWidget->previewWidget()->size();
+    QSize previewSize;
+    if (m_gmicWidget && m_gmicWidget->previewWidget()) {
+        previewSize = m_gmicWidget->previewWidget()->size();
+    }
 
     m_smallApplicator->setProperties(canvasRect,previewSize, layers, setting, m_gmicCustomCommands);
     connect(m_smallApplicator , SIGNAL(gmicFinished(bool,int,QString)), this, SLOT(slotGmicFinished(bool,int,QString)));

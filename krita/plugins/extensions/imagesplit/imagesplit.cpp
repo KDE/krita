@@ -93,14 +93,20 @@ void Imagesplit::slotImagesplit()
 
     // Getting all mime types and converting them into names which are displayed at combo box
     QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
+    QStringList filteredMimeTypes;
     QStringList listFileType;
     foreach(const QString & tempStr, listMimeFilter) {
         KMimeType::Ptr type = KMimeType::mimeType(tempStr);
+        qDebug() << tempStr << type;
         if (type) {
             listFileType.append(type->comment());
+            filteredMimeTypes.append(tempStr);
         }
     }
 
+    listMimeFilter = filteredMimeTypes;
+
+    Q_ASSERT(listMimeFilter.size() == listFileType.size());
 
     DlgImagesplit * dlgImagesplit = new DlgImagesplit(m_view, suffix, listFileType);
     dlgImagesplit->setObjectName("Imagesplit");
@@ -119,8 +125,7 @@ void Imagesplit::slotImagesplit()
 
         if (dlgImagesplit->autoSave()) {
             for (int i = 0, k = 1; i < (numVerticalLines + 1); i++) {
-                for (int j = 0; j < (numHorizontalLines + 1); j++, k++)
-                {
+                for (int j = 0; j < (numHorizontalLines + 1); j++, k++) {
                     KMimeType::Ptr mimeTypeSelected = KMimeType::mimeType(listMimeFilter.at(dlgImagesplit->cmbIndex));
                     KUrl url(QDir::homePath());
                     QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + mimeTypeSelected->mainExtension();
@@ -133,8 +138,7 @@ void Imagesplit::slotImagesplit()
         else {
 
             for (int i = 0; i < (numVerticalLines + 1); i++) {
-                for (int j = 0; j < (numHorizontalLines + 1); j++)
-                {
+                for (int j = 0; j < (numHorizontalLines + 1); j++) {
                     KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                     dialog.setCaption(i18n("Save Image on Split"));
                     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));

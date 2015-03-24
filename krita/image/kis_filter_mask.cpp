@@ -82,7 +82,6 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
                "during merge, as it breaks reentrancy");
 
     if (!filterConfig) {
-        warnKrita << "No filter configuration present";
         return QRect();
     }
 

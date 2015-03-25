@@ -31,7 +31,7 @@ class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
     Q_OBJECT
 
 public:
-    KisKeyframeChannel(const QString& name, const QString& displayName, KisKeyframeSequence *sequence=0);
+    KisKeyframeChannel(const QString& name, const QString& displayName, KisKeyframeSequence *sequence);
     ~KisKeyframeChannel();
 
     QString name() const;
@@ -48,7 +48,12 @@ public:
     QList<KisKeyframe*> keyframes() const;
 
 signals:
-    void sigChanged();
+    void sigKeyframeAboutToBeAdded(KisKeyframe *keyframe);
+    void sigKeyframeAdded(KisKeyframe *keyframe);
+    void sigKeyframeAboutToBeRemoved(KisKeyframe *keyframe);
+    void sigKeyframeRemoved(KisKeyframe *keyframe);
+    void sigKeyframeAboutToBeMoved(KisKeyframe *keyframe, int toTime);
+    void sigKeyframeMoved(KisKeyframe *keyframe);
 
 private:
 

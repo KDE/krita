@@ -40,8 +40,13 @@ public:
     int positionToTime(int x) const;
     bool isWithingView(int x) const;
 
+    void setModel(QAbstractItemModel *model);
+
 protected:
     bool viewportEvent(QEvent *e);
+
+private slots:
+    void rowsChanged();
 
 private:
     KeyframeChannelDelegate *m_channelDelegate;

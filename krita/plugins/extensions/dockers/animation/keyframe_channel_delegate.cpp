@@ -37,10 +37,10 @@ void KeyframeChannelDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 
     painter->save();
 
-    int count = index.model()->columnCount(index);
+    int count = index.model()->rowCount(index);
 
     for (int i=0; i<count; i++) {
-        QModelIndex keyframe = index.child(0, i);
+        QModelIndex keyframe = index.child(i, 0);
         paintKeyframe(painter, styleOpt, keyframe, selection->isSelected(keyframe));
     }
 

@@ -95,7 +95,9 @@ void KisPaintLayer::init(KisMultiPaintDeviceSP paintDevice, const QBitArray &pai
     m_d->paintChannelFlags = paintChannelFlags;
 
     m_d->contentChannel = keyframes()->createChannel("content", "Content");
-    connect(m_d->contentChannel, SIGNAL(sigChanged()), this, SLOT(keyframesChanged()));
+    connect(m_d->contentChannel, SIGNAL(sigKeyframeAdded(KisKeyframe*)), this, SLOT(keyframesChanged()));
+    connect(m_d->contentChannel, SIGNAL(sigKeyframeRemoved(KisKeyframe*)), this, SLOT(keyframesChanged()));
+    connect(m_d->contentChannel, SIGNAL(sigKeyframeMoved(KisKeyframe*)), this, SLOT(keyframesChanged()));
 }
 
 KisPaintLayer::~KisPaintLayer()

@@ -56,18 +56,23 @@ void KisKeyframeChannel::setKeyframe(int time, const QVariant &value)
     deleteKeyframe(time);
 
     KisKeyframe *keyframe = new KisKeyframe(this, time, value);
-    m_d->keys.insert(time, keyframe);
 
-    emit sigChanged();
+    emit sigKeyframeAboutToBeAdded(keyframe);
+    m_d->keys.insert(time, keyframe);
+    emit sigKeyframeAdded(keyframe);
 }
 
 void KisKeyframeChannel::deleteKeyframe(int time)
 {
     KisKeyframe *keyframe = m_d->keys.value(time);
-    if (keyframe) delete keyframe;
+    if (!keyframe) return;
+
+    emit sigKeyframeAboutToBeRemoved(keyframe);
+
+    delete keyframe;
     m_d->keys.remove(time);
 
-    emit sigChanged();
+    emit sigKeyframeRemoved(keyframe);
 }
 
 bool KisKeyframeChannel::hasKeyframeAt(int time)
@@ -79,11 +84,14 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframe *keyframe, int time)
 {
     if (m_d->keys.contains(time)) return false;
 
+    emit sigKeyframeAboutToBeMoved(keyframe, time);
     m_d->keys.remove(keyframe->time());
-    keyframe->setTime(time);
-    m_d->keys.insert(keyframe->time(), keyframe);
 
-    emit sigChanged();
+    keyframe->setTime(time);
+
+    m_d->keys.insert(keyframe->time(), keyframe);
+    emit sigKeyframeMoved(keyframe);
+
     return true;
 }
 

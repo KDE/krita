@@ -36,7 +36,7 @@ void KisKeyframingTest::testChannels()
 }
 void KisKeyframingTest::testKeyframes()
 {
-    KisKeyframeChannel *channel = new KisKeyframeChannel("", "");
+    KisKeyframeChannel *channel = new KisKeyframeChannel("", "", 0);
 
     QVERIFY(channel->getValueAt(10).isNull());
 

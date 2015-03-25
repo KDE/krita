@@ -94,6 +94,7 @@ private slots:
 
 protected:
     KisModelIndexConverterBase *indexConverter() const;
+    KisDummiesFacadeBase *dummiesFacade() const;
 
 private:
     friend class KisModelIndexConverter;

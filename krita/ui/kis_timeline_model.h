@@ -52,6 +52,9 @@ public:
         TimeRole = Qt::UserRole + 1,
     };
 
+public: // KisNodeModel
+    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController);
+
 public: // QAbstractItemModel
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
@@ -62,9 +65,25 @@ public: // QAbstractItemModel
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+private slots:
+    void slotEndInsertDummy(KisNodeDummy *dummy);
+    void slotBeginRemoveDummy(KisNodeDummy *dummy);
+
+    void slotKeyframeAboutToBeAdded(KisKeyframe *keyframe);
+    void slotKeyframeAdded(KisKeyframe *keyframe);
+    void slotKeyframeAboutToBeRemoved(KisKeyframe *keyframe);
+    void slotKeyframeRemoved(KisKeyframe *keyframe);
+    void slotKeyframeAboutToBeMoved(KisKeyframe *keyframe, int toTime);
+    void slotKeyframeMoved(KisKeyframe *keyframe);
+
 private:
     struct Private;
     Private * const m_d;
+
+    QModelIndex getChannelIndex(KisKeyframeChannel *channel, int column) const;
+    void connectAllChannels(KisNodeDummy *nodeDummy, bool needConnect);
+    void connectChannels(KisKeyframeSequence *seq, bool needConnect);
+    int getInsertionPointByTime(KisKeyframeChannel *channel, int time);
 };
 
 #endif

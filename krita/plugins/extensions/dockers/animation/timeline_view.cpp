@@ -44,10 +44,10 @@ QModelIndex TimelineView::indexAt(const QPoint &point) const
     if (cell.column() == 0) return cell;
     if (!cell.isValid()) return QModelIndex();
 
-    int column = getKeyframeAt(cell, point.x());
-    if (column < 0) return QModelIndex();
+    int row = getKeyframeAt(cell, point.x());
+    if (row < 0) return QModelIndex();
 
-    return cell.child(0, column);
+    return cell.child(row, 0);
 }
 
 void TimelineView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)
@@ -121,7 +121,6 @@ bool TimelineView::viewportEvent(QEvent *e)
     return QTreeView::viewportEvent(e);
 }
 
-
 int TimelineView::getKeyframeAt(const QModelIndex &channelIndex, int x) const
 {
     return findKeyframe(channelIndex, x, true);
@@ -137,14 +136,14 @@ void TimelineView::selectKeyframesBetween(const QModelIndex &channelIndex, int f
     if (getTime(channelIndex, first) < positionToTime(fromX)) first++;
 
     for (int i=first; i <= last; i++) {
-        selection->select(channelIndex.child(0, i), command);
+        selection->select(channelIndex.child(i, 0), command);
     }
 }
 
 int TimelineView::findKeyframe(const QModelIndex &channelIndex, int x, bool exact) const
 {
     int min = 0;
-    int max = channelIndex.model()->columnCount(channelIndex) - 1;
+    int max = channelIndex.model()->rowCount(channelIndex) - 1;
 
     while (max >= min) {
         int i = (max + min) / 2;
@@ -166,7 +165,7 @@ int TimelineView::findKeyframe(const QModelIndex &channelIndex, int x, bool exac
 
 int TimelineView::getTime(const QModelIndex &channelIndex, int index) const
 {
-    return channelIndex.child(0, index).data(KisTimelineModel::TimeRole).toInt();
+    return channelIndex.child(index, 0).data(KisTimelineModel::TimeRole).toInt();
 }
 
 int TimelineView::timeToPosition(int time) const
@@ -182,6 +181,21 @@ int TimelineView::positionToTime(int x) const
 bool TimelineView::isWithingView(int x) const
 {
     return x >= columnViewportPosition(1) && x < viewport()->width();
+}
+
+void TimelineView::setModel(QAbstractItemModel *newModel)
+{
+    disconnect(model(), 0, this, 0);
+
+    QTreeView::setModel(newModel);
+
+    connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsChanged()));
+    // Note: QTreeView already handles deletions, so we don't need to connect those
+}
+
+void TimelineView::rowsChanged()
+{
+    viewport()->update();
 }
 
 bool TimelineView::isDragging()

@@ -310,10 +310,28 @@ macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
 ##
-## Test for kdepimlibs
+## Test for KF5CalendarCore
 ##
-macro_optional_find_package(KdepimLibs 4.6.0)
-macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by Plan and the KDE address book integration (available as a module in KDE)")
+find_package(KF5CalendarCore CONFIG)
+macro_log_feature(KF5CalendarCore_FOUND "KF5CalendarCore" "KDE Calendar Library" "http://www.kde.org/" FALSE "" "Required by Plan Ical export and optionally used by semantic item Event")
+
+##
+## Test for KF5Contacts
+##
+find_package(KF5Contacts CONFIG)
+macro_log_feature(KF5Contacts_FOUND "KF5Contacts" "KDE Address book Library" "http://www.kde.org/" FALSE "" "Optionally used by semantic item Contact")
+
+##
+## Test for KF5AkonadiContact
+##
+find_package(KF5AkonadiContact CONFIG)
+macro_log_feature(KF5AkonadiContact_FOUND "KF5AkonadiContact" "Library for Accessing Contacts stored in Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by Plan")
+
+##
+## Test for KF5AkonadiCore
+##
+find_package(KF5Akonadi CONFIG)
+macro_log_feature(KF5Akonadi_FOUND "KF5Akonadi" "Library for general Access to Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by semantic items Event and Contact")
 
 ##
 ## Test for KGantt

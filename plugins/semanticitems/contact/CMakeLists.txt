@@ -14,8 +14,7 @@ ki18n_wrap_ui( calligra_semanticitem_contact_LIB_SRCS
 
 add_library(calligra_semanticitem_contact MODULE ${calligra_semanticitem_contact_LIB_SRCS})
 
-if (KDEPIMLIBS_FOUND)
-   include_directories(${KDEPIMLIBS_INCLUDE_DIR})
+if (KF5Contacts_FOUND AND KF5Akonadi_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
    target_link_libraries(calligra_semanticitem_contact
       KF5::Contacts

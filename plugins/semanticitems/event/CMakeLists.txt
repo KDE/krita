@@ -14,8 +14,7 @@ ki18n_wrap_ui( calligra_semanticitem_event_LIB_SRCS
 
 add_library(calligra_semanticitem_event MODULE ${calligra_semanticitem_event_LIB_SRCS})
 
-if (KDEPIMLIBS_FOUND)
-   include_directories(${KDEPIMLIBS_INCLUDE_DIR})
+if (KF5CalendarCore_FOUND AND KF5Akonadi_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
    target_link_libraries(calligra_semanticitem_event
       KF5::CalendarCore

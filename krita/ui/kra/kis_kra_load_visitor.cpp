@@ -336,27 +336,29 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
     if (device->inherits("KisMultiPaintDevice")) {
         KisMultiPaintDevice *dev = qobject_cast<KisMultiPaintDevice*>(device.data());
 
-        QList<int> contexts;
-        m_store->open(location + ".frames");
-        while (!m_store->device()->atEnd()) {
-            QByteArray line = m_store->device()->readLine();
-            int id = QString(line).toInt();
-            contexts.append(id);
-        }
-        m_store->close();
+        if (m_store->open(location + ".frames")) {
+            QList<int> contexts;
 
-        for (int i = 0; i < contexts.count(); i++) {
-            int id = contexts[i];
-            m_store->open(location + ".f" + QString::number(id));
-
-            if (!dev->readContext(id, m_store->device())) {
-                m_errorMessages << i18n("Could not read frame: %1 at %2.", id, location);
-                dev->disconnect();
-                m_store->close();
-                return false;
+            while (!m_store->device()->atEnd()) {
+                QByteArray line = m_store->device()->readLine();
+                int id = QString(line).toInt();
+                contexts.append(id);
             }
-
             m_store->close();
+
+            for (int i = 0; i < contexts.count(); i++) {
+                int id = contexts[i];
+                m_store->open(location + ".f" + QString::number(id));
+
+                if (!dev->readContext(id, m_store->device())) {
+                    m_errorMessages << i18n("Could not read frame: %1 at %2.", id, location);
+                    dev->disconnect();
+                    m_store->close();
+                    return false;
+                }
+
+                m_store->close();
+            }
         }
     }
 

@@ -48,6 +48,7 @@ void ImageLoader::run()
         if (!img.isNull()) {
             data->image = img.scaled(m_size, m_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
+        //qDebug() << "Loaded" << data->path;
         data->isLoaded = true;
         emit sigItemContentChanged(data.key());
     }
@@ -122,6 +123,7 @@ ImageStripScene::~ImageStripScene()
 
 bool ImageStripScene::setCurrentDirectory(const QString& path)
 {
+    m_path = path;
     QMutexLocker locker(&m_mutex);
     QDir         directory(path);
     QImageReader reader;

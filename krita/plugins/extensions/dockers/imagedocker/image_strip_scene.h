@@ -102,7 +102,7 @@ public:
     ImageStripScene();
     ~ImageStripScene();
     bool setCurrentDirectory(const QString& path);
-    
+    QString currentPath() { return m_path; }
 Q_SIGNALS:
     void sigImageActivated(const QString& path);
     
@@ -117,6 +117,7 @@ private:
     quint32 m_numItems;
     ImageLoader* m_loader;
     QMutex m_mutex;
+    QString m_path;
 };
 
 #endif // H_IMAGE_STRIP_SCENE_H_

@@ -183,7 +183,7 @@ ImageDockerDock::ImageDockerDock():
     m_popupUi      = new PopupWidgetUI();
     m_zoomButtons  = new QButtonGroup();
     m_imgListModel = new ImageListModel();
-    m_thumbModel   = new ImageStripScene();
+    m_imageStripScene   = new ImageStripScene();
     m_model        = new QFileSystemModel();
     m_proxyModel   = new ImageFilter();
     m_proxyModel->setSourceModel(m_model);
@@ -195,7 +195,7 @@ ImageDockerDock::ImageDockerDock():
     m_ui->bnImgPrev->setIcon(koIcon("go-previous"));
     m_ui->bnImgNext->setIcon(koIcon("go-next"));
     m_ui->bnImgClose->setIcon(koIcon("window-close"));
-    m_ui->thumbView->setScene(m_thumbModel);
+    m_ui->thumbView->setScene(m_imageStripScene);
     m_ui->treeView->setModel(m_proxyModel);
     m_ui->cmbImg->setModel(m_imgListModel);
     m_ui->bnPopup->setIcon(koIcon("zoom-original"));
@@ -225,13 +225,12 @@ ImageDockerDock::ImageDockerDock():
 
     m_model->setRootPath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     m_ui->treeView->setRootIndex(m_proxyModel->mapFromSource(m_model->index(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation))));
-    updatePath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
 
     connect(m_ui->treeView           , SIGNAL(doubleClicked(const QModelIndex&))      , SLOT(slotItemDoubleClicked(const QModelIndex&)));
     connect(m_ui->bnBack             , SIGNAL(clicked(bool))                          , SLOT(slotBackButtonClicked()));
     connect(m_ui->bnHome             , SIGNAL(clicked(bool))                          , SLOT(slotHomeButtonClicked()));
     connect(m_ui->bnUp               , SIGNAL(clicked(bool))                          , SLOT(slotUpButtonClicked()));
-    connect(m_thumbModel             , SIGNAL(sigImageActivated(const QString&))      , SLOT(slotOpenImage(QString)));
+    connect(m_imageStripScene             , SIGNAL(sigImageActivated(const QString&))      , SLOT(slotOpenImage(QString)));
     connect(m_ui->bnImgNext          , SIGNAL(clicked(bool))                          , SLOT(slotNextImage()));
     connect(m_ui->bnImgPrev          , SIGNAL(clicked(bool))                          , SLOT(slotPrevImage()));
     connect(m_ui->bnImgClose         , SIGNAL(clicked(bool))                          , SLOT(slotCloseCurrentImage()));
@@ -251,7 +250,7 @@ ImageDockerDock::~ImageDockerDock()
 {
     delete m_proxyModel;
     delete m_model;
-    delete m_thumbModel;
+    delete m_imageStripScene;
     delete m_imgListModel;
     delete m_zoomButtons;
 
@@ -298,6 +297,13 @@ void ImageDockerDock::dropEvent(QDropEvent *event)
     }
 }
 
+void ImageDockerDock::showEvent(QShowEvent *)
+{
+    if (m_imageStripScene->currentPath().isNull()) {
+        updatePath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    }
+}
+
 void ImageDockerDock::setCanvas(KoCanvasBase* canvas)
 {
     // Intentionally not disabled if there's no canvas
@@ -317,7 +323,7 @@ void ImageDockerDock::addCurrentPathToHistory()
 void ImageDockerDock::updatePath(const QString& path)
 {
     m_ui->bnBack->setDisabled(m_history.empty());
-    m_thumbModel->setCurrentDirectory(path);
+    m_imageStripScene->setCurrentDirectory(path);
 }
 
 qint64 ImageDockerDock::generateImageID() const

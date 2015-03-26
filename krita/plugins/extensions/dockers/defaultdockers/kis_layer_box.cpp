@@ -367,9 +367,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
         m_wdgLayerBox->listLayers->expandAll();
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
-        m_wdgLayerBox->listLayers->scrollToBottom();
-
-
+        m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());
 
         addActionToMenu(m_newLayerMenu, "add_new_paint_layer");
         addActionToMenu(m_newLayerMenu, "add_new_group_layer");

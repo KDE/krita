@@ -82,6 +82,7 @@ public:
     /// assignment
     KoInputDevice & operator=(const KoInputDevice &);
 
+    static KoInputDevice invalid();   ///< invalid input device
     static KoInputDevice mouse();     ///< Standard mouse
     static KoInputDevice stylus();    ///< Wacom style/pen
     static KoInputDevice eraser();    ///< Wacom eraser

@@ -350,7 +350,14 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
         }
     }
     else {
+        KisConfig cfg;
         refillMonitorProfiles(KoID("RGBA", ""));
+
+        for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+            if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
+                m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
+            }
+        }
     }
 }
 
@@ -390,6 +397,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
     foreach (const KoColorProfile *profile, profileList) {
+//        qDebug() << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
         if (profile->isSuitableForDisplay()) {
             for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
                 m_monitorProfileWidgets[i]->addSqueezedItem(profile->name());

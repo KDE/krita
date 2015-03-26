@@ -36,7 +36,7 @@ public:
 private Q_SLOTS:
 
     void slotImagesplit();
-    void saveAsImage(QRect ,QString, KUrl);
+    void saveAsImage(QRect , QString, KUrl);
 };
 
 #endif // IMAGESPLIT_H

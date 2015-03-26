@@ -33,7 +33,7 @@ public:
     explicit KisCmbGradient(QWidget *parent = 0);
 
     void setGradient(KoAbstractGradient *gradient);
-    KoAbstractGradient *abstractGradient() const;
+    KoAbstractGradient *gradient() const;
 
 Q_SIGNALS:
 

@@ -31,7 +31,7 @@ void KisCmbGradient::setGradient(KoAbstractGradient *gradient)
 
 }
 
-KoAbstractGradient *KisCmbGradient::abstractGradient() const
+KoAbstractGradient *KisCmbGradient::gradient() const
 {
     return 0;
 }

@@ -178,6 +178,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
                                      Emoticons ConfigWidgets KDELibs4Support
     OPTIONAL_COMPONENTS
         Activities
+        Declarative
 )
 if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
@@ -556,11 +557,6 @@ if(QT_QTWEBKIT_FOUND)
 endif()
 
 ##
-## Test for KDeclarative
-##
-macro_optional_find_package(KDeclarative)
-
-##
 ## Test endianess
 ##
 include (TestBigEndian)
@@ -849,7 +845,7 @@ calligra_drop_product_on_bad_condition( APP_KRITA
 
 calligra_drop_product_on_bad_condition( APP_ACTIVE
     QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
-    KDECLARATIVE_FOUND "KDeclarative not found"
+    KF5DECLARATIVE_FOUND "KF5Declarative not found"
 )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP

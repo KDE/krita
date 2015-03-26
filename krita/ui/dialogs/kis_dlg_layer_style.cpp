@@ -480,17 +480,64 @@ GradientOverlay::GradientOverlay(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
+    ui.intOpacity->setRange(0, 100);
+    ui.intOpacity->setSuffix(" %");
+
+    ui.intScale->setRange(0, 100);
+    ui.intScale->setSuffix(" %");
+
+    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
+    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
+
+    connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+    connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 }
 
 void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overlay *gradient)
 {
-
+    ui.cmbCompositeOp->selectCompositeOp(KoID(gradient->blendMode()));
+    ui.intOpacity->setValue(gradient->opacity());
+    ui.cmbGradient->setGradient(gradient->gradient());
+    ui.chkReverse->setChecked(gradient->antiAliased());
+    ui.cmbStyle->setCurrentIndex((int)gradient->style());
+    ui.chkAlignWithLayer->setCheckable(gradient->alignWithLayer());
+    ui.dialAngle->setValue(gradient->angle());
+    ui.intAngle->setValue(gradient->angle());
+    ui.intScale->setValue(gradient->scale());
 }
 
 void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *gradient) const
 {
-
+    gradient->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    gradient->setOpacity(ui.intOpacity->value());
+    gradient->setGradient(ui.cmbGradient->gradient());
+    gradient->setReverse(ui.chkReverse->isChecked());
+    gradient->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
+    gradient->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
+    gradient->setAngle(ui.dialAngle->value());
+    gradient->setScale(ui.intScale->value());
 }
+
+void GradientOverlay::slotDialAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.intAngle);
+    ui.intAngle->setValue(value);
+}
+
+void GradientOverlay::slotIntAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.dialAngle);
+    ui.dialAngle->setValue(value);
+}
+
 
 
 InnerGlow::InnerGlow(QWidget *parent)

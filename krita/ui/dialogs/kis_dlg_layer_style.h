@@ -130,6 +130,10 @@ public:
     void setGradientOverlay(const psd_layer_effects_gradient_overlay *gradient);
     void fetchGradientOverlay(psd_layer_effects_gradient_overlay *gradient) const;
 
+private Q_SLOTS:
+    void slotDialAngleChanged(int value);
+    void slotIntAngleChanged(int value);
+
 Q_SIGNALS:
     void configChanged();
 

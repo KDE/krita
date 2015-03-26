@@ -650,16 +650,36 @@ PatternOverlay::PatternOverlay(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
+    ui.intOpacity->setRange(0, 100);
+    ui.intOpacity->setSuffix(" %");
+
+    ui.intScale->setRange(0, 100);
+    ui.intScale->setSuffix(" %");
+
+    connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
+    connect(ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 }
 
 void PatternOverlay::setPatternOverlay(const psd_layer_effects_pattern_overlay *pattern)
 {
-
+    ui.cmbCompositeOp->selectCompositeOp(KoID(pattern->blendMode()));
+    ui.intOpacity->setValue(pattern->opacity());
+    ui.patternChooser->setCurrentPattern(pattern->pattern());
+    ui.chkLinkWithLayer->setChecked(pattern->alignWithLayer());
+    ui.intScale->setValue(pattern->noise());
 }
 
 void PatternOverlay::fetchPatternOverlay(psd_layer_effects_pattern_overlay *pattern) const
 {
-
+    pattern->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    pattern->setOpacity(ui.intOpacity->value());
+    pattern->setPattern((KoPattern*)ui.patternChooser->currentResource());
+    pattern->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
+    pattern->setScale(ui.intScale->value());
 }
 
 /********************************************************************/

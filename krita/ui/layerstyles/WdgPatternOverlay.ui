@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>403</height>
+    <height>461</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,12 +52,12 @@
             <string>&amp;Opacity</string>
            </property>
            <property name="buddy">
-            <cstring>doubleOpacity</cstring>
+            <cstring>intOpacity</cstring>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
+          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -118,7 +118,7 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="0">
+         <item row="5" column="0">
           <widget class="QLabel" name="label_8">
            <property name="text">
             <string>S&amp;cale:</string>
@@ -128,10 +128,17 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="5" column="1">
           <widget class="KisSliderSpinBox" name="intScale" native="true">
            <property name="toolTip">
             <string>Set size of gradation</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QCheckBox" name="chkLinkWithLayer">
+           <property name="text">
+            <string>Li&amp;nk with layer</string>
            </property>
           </widget>
          </item>
@@ -161,11 +168,6 @@
    <class>KisCompositeOpComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">kis_cmb_composite.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>

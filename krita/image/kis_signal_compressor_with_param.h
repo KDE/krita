@@ -24,6 +24,9 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
+/**
+ * XXX: documentation?
+ */
 class KRITAIMAGE_EXPORT SignalToFunctionProxy : public QObject
 {
     Q_OBJECT

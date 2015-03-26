@@ -319,6 +319,11 @@ BlendingOptions::BlendingOptions(QWidget *parent)
 }
 
 
+/********************************************************************/
+/***** Color Overlay    *********************************************/
+/********************************************************************/
+
+
 ColorOverlay::ColorOverlay(QWidget *parent)
     : QWidget(parent)
 {
@@ -538,7 +543,9 @@ void GradientOverlay::slotIntAngleChanged(int value)
     ui.dialAngle->setValue(value);
 }
 
-
+/********************************************************************/
+/***** Innner Glow      *********************************************/
+/********************************************************************/
 
 InnerGlow::InnerGlow(QWidget *parent)
     : QWidget(parent)
@@ -634,6 +641,11 @@ void InnerGlow::fetchInnerGlow(psd_layer_effects_inner_glow *innerGlow) const
     innerGlow->setJitter(ui.intJitter->value());
 }
 
+/********************************************************************/
+/***** Pattern Overlay  *********************************************/
+/********************************************************************/
+
+
 PatternOverlay::PatternOverlay(QWidget *parent)
     : QWidget(parent)
 {
@@ -649,6 +661,10 @@ void PatternOverlay::fetchPatternOverlay(psd_layer_effects_pattern_overlay *patt
 {
 
 }
+
+/********************************************************************/
+/***** Satin            *********************************************/
+/********************************************************************/
 
 
 Satin::Satin(QWidget *parent)
@@ -731,6 +747,9 @@ void Satin::fetchSatin(psd_layer_effects_satin *satin) const
     satin->setInvert(ui.chkInvert->isChecked());
 }
 
+/********************************************************************/
+/***** Stroke           *********************************************/
+/********************************************************************/
 
 Stroke::Stroke(QWidget *parent)
     : QWidget(parent)
@@ -748,12 +767,20 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 
 }
 
+/********************************************************************/
+/***** Texture          *********************************************/
+/********************************************************************/
+
+
 Texture::Texture(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
 }
 
+/********************************************************************/
+/***** Outer Glow       *********************************************/
+/********************************************************************/
 
 OuterGlow::OuterGlow(QWidget *parent)
     : QWidget(parent)

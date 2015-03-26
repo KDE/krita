@@ -291,6 +291,26 @@ namespace KisLsUtils
         gc.bitBlt(applyRect.topLeft(), randomOverlay, applyRect);
     }
 
+    //const int FULL_PERCENT_RANGE = 100;
+
+    void adjustRange(KisPixelSelectionSP selection, const QRect &applyRect, const int range)
+    {
+        KIS_ASSERT_RECOVER_RETURN(range >= 1 && range <= 100);
+
+        quint8 rangeTable[256];
+        for(int i = 0; i < 256; i ++) {
+            quint8 value = i * 100 / range;
+            rangeTable[i] = qMin(value, quint8(255));
+        }
+
+        KisSequentialIterator dstIt(selection, applyRect);
+
+        do {
+            quint8 *pixelPtr = dstIt.rawData();
+            *pixelPtr = rangeTable[*pixelPtr];
+        } while(dstIt.nextPixel());
+    }
+
     void applyContourCorrection(KisPixelSelectionSP selection,
                                 const QRect &applyRect,
                                 const quint8 *lookup_table,
@@ -361,6 +381,43 @@ namespace KisLsUtils
         gc.bitBlt(knockOutRect.topLeft(), knockOutSelection, knockOutRect);
     }
 
+    void fillPattern(KisPaintDeviceSP fillDevice,
+                     const QRect &applyRect,
+                     KisLayerStyleFilterEnvironment *env,
+                     int scale,
+                     KoPattern *pattern,
+                     int horizontalPhase,
+                     int verticalPhase,
+                     bool alignWithLayer)
+    {
+        if (scale != 100) {
+            qWarning() << "KisLsOverlayFilter::applyOverlay(): Pattern scaling is NOT implemented!";
+        }
+
+        QSize psize(pattern->width(), pattern->height());
+
+        QPoint patternOffset(qreal(psize.width()) * horizontalPhase / 100,
+                             qreal(psize.height()) * verticalPhase / 100);
+
+        const QRect boundsRect = alignWithLayer ?
+            env->layerBounds() : env->defaultBounds();
+
+        patternOffset += boundsRect.topLeft();
+
+        patternOffset.rx() %= psize.width();
+        patternOffset.ry() %= psize.height();
+
+        QRect fillRect = applyRect | applyRect.translated(patternOffset);
+
+        KisFillPainter gc(fillDevice);
+        gc.fillRect(fillRect.x(), fillRect.y(),
+                    fillRect.width(), fillRect.height(), pattern);
+        gc.end();
+
+        fillDevice->setX(-patternOffset.x());
+        fillDevice->setY(-patternOffset.y());
+    }
+
     void fillOverlayDevice(KisPaintDeviceSP fillDevice,
                            const QRect &applyRect,
                            const psd_layer_effects_overlay_base *config,
@@ -371,33 +428,11 @@ namespace KisLsUtils
             fillDevice->setDefaultPixel(color.data());
 
         } else if (config->fillType() == psd_fill_pattern) {
-            if (config->scale() != 100) {
-                qWarning() << "KisLsOverlayFilter::applyOverlay(): Pattern scaling is NOT implemented!";
-            }
-
-            QSize psize(config->pattern()->width(), config->pattern()->height());
-
-            QPoint patternOffset(qreal(psize.width()) * config->horizontalPhase() / 100,
-                                 qreal(psize.height()) * config->horizontalPhase() / 100);
-
-            const QRect boundsRect = config->alignWithLayer() ?
-                env->layerBounds() : env->defaultBounds();
-
-            patternOffset += boundsRect.topLeft();
-
-            patternOffset.rx() %= psize.width();
-            patternOffset.ry() %= psize.height();
-
-            QRect fillRect = applyRect | applyRect.translated(patternOffset);
-
-            KisFillPainter gc(fillDevice);
-            gc.fillRect(fillRect.x(), fillRect.y(),
-                        fillRect.width(), fillRect.height(), config->pattern());
-            gc.end();
-
-            fillDevice->setX(-patternOffset.x());
-            fillDevice->setY(-patternOffset.y());
-
+            fillPattern(fillDevice, applyRect, env,
+                        config->scale(), config->pattern(),
+                        config->horizontalPhase(),
+                        config->verticalPhase(),
+                        config->alignWithLayer());
         } else if (config->fillType() == psd_fill_gradient) {
             const QRect boundsRect = config->alignWithLayer() ?
                 env->layerBounds() : env->defaultBounds();

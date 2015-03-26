@@ -350,4 +350,76 @@ void KisLayerStyleProjectionPlaneTest::testStroke()
 
 }
 
+#include "../gimp_bump_map.h"
+
+void KisLayerStyleProjectionPlaneTest::testBumpmap()
+{
+    KisPixelSelectionSP device = new KisPixelSelection();
+
+    const int numCycles = 30;
+    const int step = 5;
+
+    QRect applyRect(200, 100, 100, 100);
+    QRect fillRect(210, 110, 80, 80);
+    quint8 selectedness = 256 - numCycles * step;
+
+
+    for (int i = 0; i < numCycles; i++) {
+        device->select(fillRect, selectedness);
+
+        fillRect = kisGrowRect(fillRect, -1);
+        selectedness += step;
+    }
+
+    KIS_DUMP_DEVICE_2(device, applyRect, "00_initial", "bumpmap");
+
+
+    bumpmap_vals_t bmvals;
+
+    bmvals.azimuth = 240;
+    bmvals.elevation = 30;
+    bmvals.depth = 50;
+    bmvals.ambient = 128;
+    bmvals.compensate = false;
+    bmvals.invert = false;
+    bmvals.type = 0;
+
+    bumpmap(device, applyRect, bmvals);
+
+    KIS_DUMP_DEVICE_2(device, applyRect, "01_bumpmapped", "bumpmap");
+
+}
+
+void KisLayerStyleProjectionPlaneTest::testBevel()
+{
+    KisPSDLayerStyleSP style(new KisPSDLayerStyle());
+    style->bevelEmboss()->setEffectEnabled(true);
+    style->bevelEmboss()->setStyle(psd_bevel_outer_bevel);
+    style->bevelEmboss()->setAngle(180);
+    style->bevelEmboss()->setAltitude(45);
+    style->bevelEmboss()->setDepth(100);
+    style->bevelEmboss()->setDirection(psd_direction_up);
+
+    style->bevelEmboss()->setHighlightBlendMode(COMPOSITE_OVER);
+    style->bevelEmboss()->setHighlightOpacity(100);
+
+    style->bevelEmboss()->setShadowBlendMode(COMPOSITE_OVER);
+    style->bevelEmboss()->setShadowOpacity(100);
+
+
+    QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
+    KoPattern pattern(fileName);
+    QVERIFY(pattern.load());
+
+    style->bevelEmboss()->setTexturePattern(&pattern);
+
+    style->bevelEmboss()->setTextureEnabled(true);
+    style->bevelEmboss()->setTextureDepth(-10);
+    style->bevelEmboss()->setTextureInvert(false);
+
+    style->bevelEmboss()->setSoften(0);
+
+
+    test(style, "bevel_emboss");
+}
 QTEST_KDEMAIN(KisLayerStyleProjectionPlaneTest, GUI)

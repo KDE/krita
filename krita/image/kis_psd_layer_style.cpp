@@ -185,6 +185,11 @@ const psd_layer_effects_stroke* KisPSDLayerStyle::stroke() const
     return &d->stroke;
 }
 
+const psd_layer_effects_bevel_emboss* KisPSDLayerStyle::bevelEmboss() const
+{
+    return &d->bevel_emboss;
+}
+
 psd_layer_effects_context* KisPSDLayerStyle::context()
 {
     return &d->context;
@@ -233,6 +238,11 @@ psd_layer_effects_pattern_overlay* KisPSDLayerStyle::patternOverlay()
 psd_layer_effects_stroke* KisPSDLayerStyle::stroke()
 {
     return &d->stroke;
+}
+
+psd_layer_effects_bevel_emboss* KisPSDLayerStyle::bevelEmboss()
+{
+    return &d->bevel_emboss;
 }
 
 bool KisPSDLayerStyle::writeASL(QIODevice *io, StylesVector )

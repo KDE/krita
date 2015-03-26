@@ -591,43 +591,262 @@ struct psd_pattern_info {
 };
 
 // bevl: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_31889
-struct psd_layer_effects_bevel_emboss {
-    bool effect_enable; // Effect enabled
+struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
+{
+    psd_layer_effects_bevel_emboss()
+        : m_style(psd_bevel_inner_bevel),
+          m_technique(psd_technique_softer),
+          m_depth(100),
+          m_direction(psd_direction_up),
+          m_soften(0),
 
-    psd_bevel_style style; // Bevel style
-    psd_technique_type technique;
-    qint32 depth;
-    psd_direction direction; // Up or down
-    qint32 size; // Strength. Depth in pixels
-    qint32 soften; // Blur value in pixels.
+          m_altitude(30),
 
-    qint32 angle; // Angle in degrees
-    bool use_global_light; // Use this angle in all of the layer effects
-    qint32 altitude;
-    quint8 gloss_contour_lookup_table[256];
-    bool gloss_anti_aliased;
-    QString highlight_blend_mode; // Highlight blend mode: 4 bytes for signature and 4 bytes for the key
-    QColor highlight_color;
-    QColor real_highlight_color;
-    quint8 highlight_opacity; // Hightlight opacity as a percent
-    QString shadow_blend_mode; // Shadow blend mode: 4 bytes for signature and 4 bytes for the key
-    QColor shadow_color;
-    QColor real_shadow_color;
-    quint8 shadow_opacity; // Shadow opacity as a percent
+          m_glossAntiAliased(false),
 
-    bool contour_enable;
-    quint8 contour_lookup_table[256];
-    bool contour_anti_aliased;
-    qint32 contour_range;
+          m_highlightBlendMode(COMPOSITE_SCREEN),
+          m_highlightColor(Qt::white),
+          m_highlightOpacity(75),
 
-    bool texture_enable;
-    psd_pattern_info texture_pattern_info;
-    qint32 texture_scale;
-    qint32 texture_depth;
-    bool texture_invert;
-    bool texture_link;
-    qint32 texture_horz_phase;
-    qint32 texture_vert_phase;
+          m_shadowBlendMode(COMPOSITE_MULT),
+          m_shadowColor(Qt::black),
+          m_shadowOpacity(75),
+
+          m_contourEnabled(false),
+          m_contourRange(100),
+
+          m_textureEnabled(false),
+          m_texturePattern(0),
+          m_textureScale(100),
+          m_textureDepth(100),
+          m_textureInvert(false),
+
+          m_textureAlignWithLayer(true),
+          m_textureHorizontalPhase(0),
+          m_textureVerticalPhase(0)
+    {
+        for(int i = 0; i < PSD_LOOKUP_TABLE_SIZE; ++i) {
+            m_glossContourLookupTable[i] = i;
+        }
+    }
+
+    using psd_layer_effects_shadow_base::setSize;
+
+    using psd_layer_effects_shadow_base::setAngle;
+    using psd_layer_effects_shadow_base::setUseGlobalLight;
+
+    using psd_layer_effects_shadow_base::setContourLookupTable;
+    using psd_layer_effects_shadow_base::setAntiAliased;
+
+    psd_bevel_style style() const {
+        return m_style;
+    }
+    void setStyle(psd_bevel_style value) {
+        m_style = value;
+    }
+
+    psd_technique_type technique() const {
+        return m_technique;
+    }
+    void setTechnique(psd_technique_type value) {
+        m_technique = value;
+    }
+
+    int depth() const {
+        return m_depth;
+    }
+    void setDepth(int value) {
+        m_depth = value;
+    }
+
+    psd_direction direction() const {
+        return m_direction;
+    }
+    void setDirection(psd_direction value) {
+        m_direction = value;
+    }
+
+    int soften() const {
+        return m_soften;
+    }
+    void setSoften(int value) {
+        m_soften = value;
+    }
+
+
+    int altitude() const {
+        return m_altitude;
+    }
+    void setAltitude(int value) {
+        m_altitude = value;
+    }
+
+
+    const quint8* glossContourLookupTable() const {
+        return m_glossContourLookupTable;
+    }
+
+    void setGlossContourLookupTable(quint8 *value) {
+        memcpy(m_glossContourLookupTable, value, PSD_LOOKUP_TABLE_SIZE * sizeof(quint8));
+    }
+
+    bool glossAntiAliased() const {
+        return m_glossAntiAliased;
+    }
+    void setGlossAntiAliased(bool value) {
+        m_glossAntiAliased = value;
+    }
+
+
+    QString highlightBlendMode() const {
+        return m_highlightBlendMode;
+    }
+    void setHighlightBlendMode(QString value) {
+        m_highlightBlendMode = value;
+    }
+
+    QColor highlightColor() const {
+        return m_highlightColor;
+    }
+    void setHighlightColor(QColor value) {
+        m_highlightColor = value;
+    }
+
+    quint8 highlightOpacity() const {
+        return m_highlightOpacity;
+    }
+    void setHighlightOpacity(quint8 value) {
+        m_highlightOpacity = value;
+    }
+
+
+    QString shadowBlendMode() const {
+        return m_shadowBlendMode;
+    }
+    void setShadowBlendMode(QString value) {
+        m_shadowBlendMode = value;
+    }
+
+    QColor shadowColor() const {
+        return m_shadowColor;
+    }
+    void setShadowColor(QColor value) {
+        m_shadowColor = value;
+    }
+
+    quint8 shadowOpacity() const {
+        return m_shadowOpacity;
+    }
+    void setShadowOpacity(quint8 value) {
+        m_shadowOpacity = value;
+    }
+
+
+    bool contourEnabled() const {
+        return m_contourEnabled;
+    }
+    void setContourEnabled(bool value) {
+        m_contourEnabled = value;
+    }
+
+    int contourRange() const {
+        return m_contourRange;
+    }
+    void setContourRange(int value) {
+        m_contourRange = value;
+    }
+
+
+    bool textureEnabled() const {
+        return m_textureEnabled;
+    }
+    void setTextureEnabled(bool value) {
+        m_textureEnabled = value;
+    }
+
+    KoPattern* texturePattern() const {
+        return m_texturePattern;
+    }
+    void setTexturePattern(KoPattern *value) {
+        m_texturePattern = value;
+    }
+
+    int textureScale() const {
+        return m_textureScale;
+    }
+    void setTextureScale(int value) {
+        m_textureScale = value;
+    }
+
+    int textureDepth() const {
+        return m_textureDepth;
+    }
+    void setTextureDepth(int value) {
+        m_textureDepth = value;
+    }
+
+    bool textureInvert() const {
+        return m_textureInvert;
+    }
+    void setTextureInvert(bool value) {
+        m_textureInvert = value;
+    }
+
+
+    bool textureAlignWithLayer() const {
+        return m_textureAlignWithLayer;
+    }
+    void setTextureAlignWithLayer(bool value) {
+        m_textureAlignWithLayer = value;
+    }
+
+    int textureHorizontalPhase() const {
+        return m_textureHorizontalPhase;
+    }
+    void setTextureHorizontalPhase(int value) {
+        m_textureHorizontalPhase = value;
+    }
+
+    int textureVerticalPhase() const {
+        return m_textureVerticalPhase;
+    }
+    void setTextureVerticalPhase(int value) {
+        m_textureVerticalPhase = value;
+    }
+
+
+private:
+    psd_bevel_style m_style;
+    psd_technique_type m_technique;
+    int m_depth;
+    psd_direction m_direction; // Up or down
+    int m_soften; // Blur value in pixels.
+
+    int m_altitude;
+
+    quint8 m_glossContourLookupTable[256];
+    bool m_glossAntiAliased;
+
+    QString m_highlightBlendMode; // already in Krita format
+    QColor m_highlightColor;
+    quint8 m_highlightOpacity; // Hightlight opacity as a percent
+
+    QString m_shadowBlendMode; // already in Krita format
+    QColor m_shadowColor;
+    quint8 m_shadowOpacity; // Shadow opacity as a percent
+
+    bool m_contourEnabled;
+    int m_contourRange;
+
+    bool m_textureEnabled;
+    KoPattern *m_texturePattern;
+    int m_textureScale;
+    int m_textureDepth;
+    bool m_textureInvert;
+
+    bool m_textureAlignWithLayer;
+    int m_textureHorizontalPhase; // 0..100%
+    int m_textureVerticalPhase; // 0..100%
 };
 
 struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base

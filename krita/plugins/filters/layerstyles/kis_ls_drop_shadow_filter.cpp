@@ -47,23 +47,6 @@ KisLsDropShadowFilter::KisLsDropShadowFilter(Mode mode)
 {
 }
 
-void adjustRange(KisPixelSelectionSP selection, const QRect &applyRect, const int range)
-{
-    KIS_ASSERT_RECOVER_RETURN(range >= 1 && range <= 100);
-
-    quint8 rangeTable[256];
-    for(int i = 0; i < 256; i ++) {
-        quint8 value = i * 100 / range;
-        rangeTable[i] = qMin(value, quint8(255));
-    }
-
-    KisSequentialIterator dstIt(selection, applyRect);
-
-    do {
-        quint8 *pixelPtr = dstIt.rawData();
-        *pixelPtr = rangeTable[*pixelPtr];
-    } while(dstIt.nextPixel());
-}
 
 struct ShadowRectsData
 {
@@ -123,8 +106,6 @@ struct ShadowRectsData
     QRect spreadNeedRect;
 };
 
-#define FULL_PERCENT_RANGE 100
-
 void applyDropShadow(KisPaintDeviceSP srcDevice,
                      KisPaintDeviceSP dstDevice,
                      const QRect &applyRect,
@@ -176,8 +157,8 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("2_selection_blur.png");
 
-    if (shadow->range() != FULL_PERCENT_RANGE) {
-        adjustRange(selection, d.noiseNeedRect, shadow->range());
+    if (shadow->range() != KisLsUtils::FULL_PERCENT_RANGE) {
+        KisLsUtils::adjustRange(selection, d.noiseNeedRect, shadow->range());
     }
 
     /**

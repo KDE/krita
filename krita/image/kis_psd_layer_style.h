@@ -66,6 +66,7 @@ public:
     const psd_layer_effects_gradient_overlay* gradientOverlay() const;
     const psd_layer_effects_pattern_overlay* patternOverlay() const;
     const psd_layer_effects_stroke* stroke() const;
+    const psd_layer_effects_bevel_emboss* bevelEmboss() const;
 
     psd_layer_effects_context* context();
     psd_layer_effects_drop_shadow* dropShadow();
@@ -77,6 +78,7 @@ public:
     psd_layer_effects_gradient_overlay* gradientOverlay();
     psd_layer_effects_pattern_overlay* patternOverlay();
     psd_layer_effects_stroke* stroke();
+    psd_layer_effects_bevel_emboss* bevelEmboss();
 
     /**
      * Save given styles to the ASL style format. All patterns references in the

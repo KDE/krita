@@ -25,6 +25,7 @@
 #include "kis_ls_satin_filter.h"
 #include "kis_ls_overlay_filter.h"
 #include "kis_ls_stroke_filter.h"
+#include "kis_ls_bevel_emboss_filter.h"
 
 
 struct KisLayerStyleProjectionPlane::Private
@@ -120,6 +121,13 @@ void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleS
             new KisLayerStyleFilterProjectionPlane(sourceLayer);
         stroke->setStyle(new KisLsStrokeFilter(), style);
         m_d->stylesAfter << toQShared(stroke);
+    }
+
+    {
+        KisLayerStyleFilterProjectionPlane *bevelEmboss =
+            new KisLayerStyleFilterProjectionPlane(sourceLayer);
+        bevelEmboss->setStyle(new KisLsBevelEmbossFilter(), style);
+        m_d->stylesAfter << toQShared(bevelEmboss);
     }
 }
 

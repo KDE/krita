@@ -26,6 +26,7 @@ class psd_layer_effects_context;
 class psd_layer_effects_shadow_base;
 class psd_layer_effects_overlay_base;
 class KisLayerStyleFilterEnvironment;
+class KoPattern;
 
 
 namespace KisLsUtils
@@ -38,6 +39,9 @@ namespace KisLsUtils
     void applyGaussian(KisPixelSelectionSP selection,
                        const QRect &applyRect,
                        qreal radius);
+
+    static const int FULL_PERCENT_RANGE = 100;
+    void adjustRange(KisPixelSelectionSP selection, const QRect &applyRect, const int range);
 
     void applyContourCorrection(KisPixelSelectionSP selection,
                                 const QRect &applyRect,
@@ -58,6 +62,15 @@ namespace KisLsUtils
                            const QRect &dstRect,
                            const QRect &totalNeedRect,
                            const bool knockOutInverted);
+
+    void fillPattern(KisPaintDeviceSP fillDevice,
+                     const QRect &applyRect,
+                     KisLayerStyleFilterEnvironment *env,
+                     int scale,
+                     KoPattern *pattern,
+                     int horizontalPhase,
+                     int verticalPhase,
+                     bool alignWithLayer);
 
     void fillOverlayDevice(KisPaintDeviceSP fillDevice,
                            const QRect &applyRect,

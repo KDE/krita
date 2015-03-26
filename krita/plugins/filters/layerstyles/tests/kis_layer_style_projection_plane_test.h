@@ -41,6 +41,10 @@ private slots:
 
     void testStroke();
 
+    void testBumpmap();
+
+    void testBevel();
+
 private:
     void test(KisPSDLayerStyleSP style, const QString testName);
 };

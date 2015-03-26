@@ -648,7 +648,7 @@ macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
 ## Test for qt-poppler
 ##
 macro_optional_find_package(Poppler)
-macro_log_feature( POPPLER_FOUND "poppler-qt4" "The Poppler Qt4 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter, Karbon PDF import filter and CSTester PDF feature")
+macro_log_feature( POPPLER_FOUND "Poppler-Qt5" "A PDF rendering library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter, Karbon PDF import filter and CSTester PDF feature")
 
 ## The Karbon pdf-importer needs the not-officially-supported XPDF Headers
 ## Installing these is off by default in poppler sources, so lets make
@@ -659,7 +659,7 @@ if(POPPLER_FOUND)
     if(POPPLER_XPDF_HEADERS)
         set(POPPLER_XPDF_HEADERS_FOUND TRUE)
     endif()
-    macro_log_feature( POPPLER_XPDF_HEADERS_FOUND "poppler-qt4-xpdf-headers" "XPDF headers in the Poppler Qt4 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter")
+    macro_log_feature( POPPLER_XPDF_HEADERS_FOUND "poppler-qt5-xpdf-headers" "XPDF headers in the Poppler Qt5 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter")
 endif()
 
 

@@ -187,6 +187,8 @@ set(kritaui_LIB_SRCS
     tool/strokes/kis_filter_stroke_strategy.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
+    widgets/kis_cmb_contour.cpp
+    widgets/kis_cmb_gradient.cpp
     widgets/kis_paintop_list_widget.cpp
     widgets/kis_cmb_idlist.cc
     widgets/kis_color_space_selector.cc

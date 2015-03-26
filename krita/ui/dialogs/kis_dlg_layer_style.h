@@ -44,30 +44,54 @@ class KisPSDLayerStyle;
 class KisSignalCompressor;
 
 class BevelAndEmboss : public QWidget {
+    Q_OBJECT
 public:
     BevelAndEmboss(QWidget *parent);
+    void setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelEmboss);
+    void fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelEmboss) const;
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgBevelAndEmboss ui;
 };
 
 class BlendingOptions : public QWidget {
+    Q_OBJECT
 public:
     BlendingOptions(QWidget *parent);
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgBlendingOptions ui;
 };
 
 
 class ColorOverlay : public QWidget {
+    Q_OBJECT
 public:
     ColorOverlay(QWidget *parent);
+    void setColorOverlay(const psd_layer_effects_color_overlay *colorOverlay);
+    void fetchColorOverlay(psd_layer_effects_color_overlay *colorOverlay) const;
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgColorOverlay ui;
 };
 
 class Contour : public QWidget {
+    Q_OBJECT
 public:
     Contour(QWidget *parent);
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgContour ui;
 };
@@ -100,43 +124,89 @@ private:
 };
 
 class GradientOverlay : public QWidget {
+    Q_OBJECT
 public:
     GradientOverlay(QWidget *parent);
+    void setGradientOverlay(const psd_layer_effects_gradient_overlay *gradient);
+    void fetchGradientOverlay(psd_layer_effects_gradient_overlay *gradient) const;
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgGradientOverlay ui;
 };
 
 class InnerGlow : public QWidget {
+    Q_OBJECT
 public:
     InnerGlow(QWidget *parent);
+    void setInnerGlow(const psd_layer_effects_inner_glow *innerGlow);
+    void fetchInnerGlow(psd_layer_effects_inner_glow *innerGlow) const;
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgInnerGlow ui;
 };
 
 class OuterGlow : public QWidget {
+    Q_OBJECT
 public:
     OuterGlow(QWidget *parent);
+    void setOuterGlow(const psd_layer_effects_outer_glow *outerGlow);
+    void fetchOuterGlow(psd_layer_effects_outer_glow *outerGlow) const;
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgOuterGlow ui;
 };
 
 class PatternOverlay : public QWidget {
+    Q_OBJECT
 public:
     PatternOverlay(QWidget *parent);
+    void setPatternOverlay(const psd_layer_effects_pattern_overlay *pattern);
+    void fetchPatternOverlay(psd_layer_effects_pattern_overlay *pattern) const;
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgPatternOverlay ui;
 };
 
 class Satin : public QWidget {
+    Q_OBJECT
 public:
     Satin(QWidget *parent);
+    void setSatin(const psd_layer_effects_satin *satin);
+    void fetchSatin(psd_layer_effects_satin *satin) const;
+
+private Q_SLOTS:
+    void slotDialAngleChanged(int value);
+    void slotIntAngleChanged(int value);
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgSatin ui;
 };
 
 class Stroke : public QWidget {
+    Q_OBJECT
 public:
     Stroke(QWidget *parent);
+    void setStroke(const psd_layer_effects_stroke *stroke);
+    void fetchStroke(psd_layer_effects_stroke *stroke) const;
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgStroke ui;
 };
@@ -155,8 +225,13 @@ private:
 };
 
 class Texture : public QWidget {
+    Q_OBJECT
 public:
     Texture(QWidget *parent);
+
+Q_SIGNALS:
+    void configChanged();
+
 private:
     Ui::WdgTexture ui;
 };
@@ -197,7 +272,7 @@ private:
     InnerGlow *m_innerGlow;
     DropShadow *m_innerShadow;
     OuterGlow *m_outerGlow;
-    PatternOverlay *m_patternOverlay;
+    PatternOverlay * m_patternOverlay;
     Satin *m_satin;
     Stroke *m_stroke;
     StylesSelector *m_stylesSelector;

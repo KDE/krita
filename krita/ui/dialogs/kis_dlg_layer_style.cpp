@@ -27,8 +27,11 @@
 #include <QCheckBox>
 #include <QSpinBox>
 
-#include "kis_config.h"
+#include <KoColorPopupButton.h>
 
+#include "kis_config.h"
+#include "kis_cmb_contour.h"
+#include "kis_cmb_gradient.h"
 #include "kis_resource_server_provider.h"
 #include "kis_psd_layer_style_resource.h"
 #include "kis_psd_layer_style.h"
@@ -51,7 +54,6 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
         new KisSignalCompressor(1000, KisSignalCompressor::POSTPONE, this);
     connect(m_configChangedCompressor, SIGNAL(timeout()), SIGNAL(configChanged()));
 
-
     QWidget *page = new QWidget(this);
     wdgLayerStyles.setupUi(page);
     setMainWidget(page);
@@ -73,27 +75,45 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
     wdgLayerStyles.stylesStack->addWidget(m_innerShadow);
     connect(m_innerShadow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
-
     m_outerGlow = new OuterGlow(this);
     wdgLayerStyles.stylesStack->addWidget(m_outerGlow);
+    connect(m_outerGlow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_innerGlow = new InnerGlow(this);
     wdgLayerStyles.stylesStack->addWidget(m_innerGlow);
+    connect(m_innerGlow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_bevelAndEmboss = new BevelAndEmboss(this);
     wdgLayerStyles.stylesStack->addWidget(m_bevelAndEmboss);
+    connect(m_bevelAndEmboss, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_contour = new Contour(this);
     wdgLayerStyles.stylesStack->addWidget(m_contour);
+    connect(m_contour, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_texture = new Texture(this);
     wdgLayerStyles.stylesStack->addWidget(m_texture);
+    connect(m_texture, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_satin = new Satin(this);
     wdgLayerStyles.stylesStack->addWidget(m_satin);
+    connect(m_satin, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_colorOverlay = new ColorOverlay(this);
     wdgLayerStyles.stylesStack->addWidget(m_colorOverlay);
+    connect(m_colorOverlay, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_gradientOverlay = new GradientOverlay(this);
     wdgLayerStyles.stylesStack->addWidget(m_gradientOverlay);
+    connect(m_gradientOverlay, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_patternOverlay = new PatternOverlay(this);
     wdgLayerStyles.stylesStack->addWidget(m_patternOverlay);
+    connect(m_patternOverlay, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
     m_stroke = new Stroke(this);
     wdgLayerStyles.stylesStack->addWidget(m_stroke);
+    connect(m_stroke, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
     KisConfig cfg;
     wdgLayerStyles.stylesStack->setCurrentIndex(cfg.readEntry("KisDlgLayerStyle::current", 1));
@@ -146,17 +166,79 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
     item = wdgLayerStyles.lstStyleSelector->item(3);
     item->setCheckState(style->innerShadow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
+    item = wdgLayerStyles.lstStyleSelector->item(4);
+    item->setCheckState(style->outerGlow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+    item = wdgLayerStyles.lstStyleSelector->item(5);
+    item->setCheckState(style->innerGlow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+//    item = wdgLayerStyles.lstStyleSelector->item(6);
+//    item->setCheckState(style->bevelAndEmboss()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+//    item = wdgLayerStyles.lstStyleSelector->item(7);
+//    item->setCheckState(style->contour()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+//    item = wdgLayerStyles.lstStyleSelector->item(8);
+//    item->setCheckState(style->texture()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+    item = wdgLayerStyles.lstStyleSelector->item(9);
+    item->setCheckState(style->satin()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+    item = wdgLayerStyles.lstStyleSelector->item(10);
+    item->setCheckState(style->colorOverlay()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+    item = wdgLayerStyles.lstStyleSelector->item(11);
+    item->setCheckState(style->gradientOverlay()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+    item = wdgLayerStyles.lstStyleSelector->item(12);
+    item->setCheckState(style->patternOverlay()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
+    item = wdgLayerStyles.lstStyleSelector->item(13);
+    item->setCheckState(style->stroke()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+
     m_dropShadow->setShadow(style->dropShadow());
     m_innerShadow->setShadow(style->innerShadow());
+    m_outerGlow->setOuterGlow(style->outerGlow());
+    m_innerGlow->setInnerGlow(style->innerGlow());
+//    m_bevelAndEmboss->setBevelAndEmboss(style->bevelAndEmboss());
+//    m_contour->setContour(style->contour());
+//    m_texture->setTexture(style->texture());
+    m_satin->setSatin(style->satin());
+    m_colorOverlay->setColorOverlay(style->colorOverlay());
+    m_gradientOverlay->setGradientOverlay(style->gradientOverlay());
+    m_patternOverlay->setPatternOverlay(style->patternOverlay());
+    m_stroke->setStroke(style->stroke());
+
 }
 
 KisPSDLayerStyleSP KisDlgLayerStyle::style() const
 {
     m_layerStyle->dropShadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(2)->checkState() == Qt::Checked);
     m_layerStyle->innerShadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(3)->checkState() == Qt::Checked);
+    m_layerStyle->outerGlow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(4)->checkState() == Qt::Checked);
+    m_layerStyle->innerGlow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(5)->checkState() == Qt::Checked);
+//    m_layerStyle->bevelAndEmboss()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(6)->checkState() == Qt::Checked);
+//    m_layerStyle->contour()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(7)->checkState() == Qt::Checked);
+//    m_layerStyle->texture()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(8)->checkState() == Qt::Checked);
+    m_layerStyle->satin()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(9)->checkState() == Qt::Checked);
+    m_layerStyle->colorOverlay()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(10)->checkState() == Qt::Checked);
+    m_layerStyle->gradientOverlay()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(11)->checkState() == Qt::Checked);
+    m_layerStyle->patternOverlay()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(12)->checkState() == Qt::Checked);
+    m_layerStyle->stroke()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(13)->checkState() == Qt::Checked);
+
 
     m_dropShadow->fetchShadow(m_layerStyle->dropShadow());
     m_innerShadow->fetchShadow(m_layerStyle->innerShadow());
+    m_outerGlow->fetchOuterGlow(m_layerStyle->outerGlow());
+    m_innerGlow->fetchInnerGlow(m_layerStyle->innerGlow());
+//    m_bevelAndEmboss->fetchBevelAndEmboss(m_layerStyle->bevelAndEmboss());
+//    m_contour->fetchContour(m_layerStyle->contour());
+//    m_texture->fetchTexture(m_layerStyle->texture());
+    m_satin->fetchSatin(m_layerStyle->satin());
+    m_colorOverlay->fetchColorOverlay(m_layerStyle->colorOverlay());
+    m_gradientOverlay->fetchGradientOverlay(m_layerStyle->gradientOverlay());
+    m_patternOverlay->fetchPatternOverlay(m_layerStyle->patternOverlay());
+    m_stroke->fetchStroke(m_layerStyle->stroke());
 
     return m_layerStyle;
 }
@@ -218,6 +300,16 @@ BevelAndEmboss::BevelAndEmboss(QWidget *parent)
     ui.setupUi(this);
 }
 
+void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelEmboss)
+{
+
+}
+
+void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelEmboss) const
+{
+
+}
+
 
 BlendingOptions::BlendingOptions(QWidget *parent)
     : QWidget(parent)
@@ -230,6 +322,16 @@ ColorOverlay::ColorOverlay(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+}
+
+void ColorOverlay::setColorOverlay(const psd_layer_effects_color_overlay *colorOverlay)
+{
+
+}
+
+void ColorOverlay::fetchColorOverlay(psd_layer_effects_color_overlay *colorOverlay) const
+{
+
 }
 
 
@@ -252,26 +354,22 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     ui.doubleOpacity->setRange(0, 100, 0);
     ui.doubleOpacity->setSuffix(" %");
 
-    ui.intDistance->setRange(0, 300);
+    ui.intDistance->setRange(0, 30000);
     ui.intDistance->setSuffix(" px");
 
     ui.intSpread->setRange(0, 100);
     ui.intSpread->setSuffix(" %");
 
-    ui.intSize->setRange(0, 100);
+    ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(" px");
 
     ui.intNoise->setRange(0, 100);
-    ui.intNoise->setSuffix(" px");
+    ui.intNoise->setSuffix(" %");
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
     connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.dialAngle, SLOT(setDisabled(bool)));
     connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.intAngle, SLOT(setDisabled(bool)));
-
-    // FIXME: predefined curves
-    ui.cmbContour->addItem("NOT IMPLEMENTED");
-
 
     // connect everything to configChanged() signal
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -372,11 +470,31 @@ GradientOverlay::GradientOverlay(QWidget *parent)
     ui.setupUi(this);
 }
 
+void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overlay *gradient)
+{
+
+}
+
+void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *gradient) const
+{
+
+}
+
 
 InnerGlow::InnerGlow(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+}
+
+void InnerGlow::setInnerGlow(const psd_layer_effects_inner_glow *innerGlow)
+{
+
+}
+
+void InnerGlow::fetchInnerGlow(psd_layer_effects_inner_glow *innerGlow) const
+{
+
 }
 
 PatternOverlay::PatternOverlay(QWidget *parent)
@@ -385,11 +503,95 @@ PatternOverlay::PatternOverlay(QWidget *parent)
     ui.setupUi(this);
 }
 
+void PatternOverlay::setPatternOverlay(const psd_layer_effects_pattern_overlay *pattern)
+{
+
+}
+
+void PatternOverlay::fetchPatternOverlay(psd_layer_effects_pattern_overlay *pattern) const
+{
+
+}
+
 
 Satin::Satin(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
+    ui.doubleOpacity->setRange(0, 100, 0);
+    ui.doubleOpacity->setSuffix(" %");
+
+    ui.intDistance->setRange(0, 250);
+    ui.intDistance->setSuffix(" px");
+
+    ui.intSize->setRange(0, 250);
+    ui.intSize->setSuffix(" px");
+
+    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
+    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
+
+    connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.doubleOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+
+    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intDistance, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    connect(ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.chkInvert, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+
+}
+
+void Satin::slotDialAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.intAngle);
+    ui.intAngle->setValue(value);
+}
+
+void Satin::slotIntAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.dialAngle);
+    ui.dialAngle->setValue(value);
+}
+
+void Satin::setSatin(const psd_layer_effects_satin *satin)
+{
+    ui.cmbCompositeOp->selectCompositeOp(KoID(satin->blendMode()));
+    ui.bnColor->setColor(satin->color());
+    ui.doubleOpacity->setValue(satin->opacity());
+
+    ui.dialAngle->setValue(satin->angle());
+    ui.intAngle->setValue(satin->angle());
+
+    ui.intDistance->setValue(satin->distance());
+    ui.intSize->setValue(satin->size());
+
+    // FIXME: Curve editing
+    //ui.cmbContour;
+
+    ui.chkAntiAliased->setChecked(satin->antiAliased());
+    ui.chkInvert->setChecked(satin->invert());
+
+}
+
+void Satin::fetchSatin(psd_layer_effects_satin *satin) const
+{
+    satin->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    satin->setOpacity(ui.doubleOpacity->value());
+    satin->setColor(ui.bnColor->color());
+
+    satin->setAngle(ui.dialAngle->value());
+
+    satin->setDistance(ui.intDistance->value());
+    satin->setSize(ui.intSize->value());
+
+    // FIXME: curve editing
+    // ui.cmbContour;
+    satin->setAntiAliased(ui.chkAntiAliased->isChecked());
+    satin->setInvert(ui.chkInvert->isChecked());
 }
 
 
@@ -397,6 +599,16 @@ Stroke::Stroke(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+}
+
+void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
+{
+
+}
+
+void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
+{
+
 }
 
 Texture::Texture(QWidget *parent)
@@ -410,4 +622,74 @@ OuterGlow::OuterGlow(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
+    ui.intOpacity->setRange(0, 100);
+    ui.intOpacity->setSuffix(" %");
+
+    ui.intNoise->setRange(0, 100);
+    ui.intNoise->setSuffix(" %");
+
+    ui.intSpread->setRange(0, 100);
+    ui.intSpread->setSuffix(" %");
+
+    ui.intSize->setRange(0, 250);
+    ui.intSize->setSuffix(" px");
+
+    ui.intRange->setRange(0, 100);
+    ui.intRange->setSuffix(" %");
+
+    ui.intJitter->setRange(0, 100);
+    ui.intJitter->setSuffix(" %");
+}
+
+void OuterGlow::setOuterGlow(const psd_layer_effects_outer_glow *outerGlow)
+{
+    ui.cmbCompositeOp->selectCompositeOp(KoID(outerGlow->blendMode()));
+    ui.intOpacity->setValue(outerGlow->opacity());
+    ui.intNoise->setValue(outerGlow->noise());
+
+    ui.radioColor->setChecked(outerGlow->fillType() == psd_fill_solid_color);
+    ui.bnColor->setColor(outerGlow->color());
+    ui.radioGradient->setChecked(outerGlow->fillType() == psd_fill_gradient);
+    ui.cmbGradient->setGradient(outerGlow->gradient());
+
+    ui.cmbTechnique->setCurrentIndex((int)outerGlow->technique());
+    ui.intSpread->setValue(outerGlow->spread());
+    ui.intSize->setValue(outerGlow->size());
+
+    // FIXME: Curve editing
+    //ui.cmbContour;
+
+    ui.chkAntiAliased->setChecked(outerGlow->antiAliased());
+    ui.intRange->setValue(outerGlow->range());
+    ui.intJitter->setValue(outerGlow->jitter());
+
+}
+
+void OuterGlow::fetchOuterGlow(psd_layer_effects_outer_glow *outerGlow) const
+{
+    outerGlow->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    outerGlow->setOpacity(ui.intOpacity->value());
+    outerGlow->setNoise(ui.intNoise->value());
+
+    if (ui.radioColor->isChecked()) {
+        outerGlow->setFillType(psd_fill_solid_color);
+    }
+    else {
+        outerGlow->setFillType(psd_fill_gradient);
+    }
+
+    outerGlow->setColor(ui.bnColor->color());
+    outerGlow->setGradient(ui.cmbGradient->gradient());
+
+    outerGlow->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
+    outerGlow->setSpread(ui.intSpread->value());
+    outerGlow->setSize(ui.intSize->value());
+
+    // FIXME: Curve editing
+    //ui.cmbContour;
+
+    outerGlow->setAntiAliased(ui.chkAntiAliased->isChecked());
+    outerGlow->setRange(ui.intRange->value());
+    outerGlow->setJitter(ui.intJitter->value());
 }

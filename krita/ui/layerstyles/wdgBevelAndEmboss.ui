@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>341</width>
+    <width>344</width>
     <height>496</height>
    </rect>
   </property>
@@ -281,7 +281,7 @@
             </widget>
            </item>
            <item>
-            <widget class="KoColorPopupButton" name="toolButton">
+            <widget class="KColorButton" name="toolButton">
              <property name="text">
               <string>...</string>
              </property>
@@ -295,7 +295,7 @@
             <string>&amp;Opacity:</string>
            </property>
            <property name="buddy">
-            <cstring>doubleOpacity</cstring>
+            <cstring>doubleOpacity_2</cstring>
            </property>
           </widget>
          </item>
@@ -338,7 +338,7 @@
             </widget>
            </item>
            <item>
-            <widget class="KoColorPopupButton" name="toolButton_2">
+            <widget class="KColorButton" name="toolButton_2">
              <property name="text">
               <string>...</string>
              </property>
@@ -352,12 +352,12 @@
             <string>&amp;Opacity:</string>
            </property>
            <property name="buddy">
-            <cstring>doubleOpacity</cstring>
+            <cstring>doubleOpacity_2</cstring>
            </property>
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
+          <widget class="KisDoubleSliderSpinBox" name="doubleOpacity_2" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -401,6 +401,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisCompositeOpComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">kis_cmb_composite.h</header>
@@ -409,17 +415,13 @@
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KoColorPopupButton</class>
-   <extends>QToolButton</extends>
-   <header location="global">KoColorPopupButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

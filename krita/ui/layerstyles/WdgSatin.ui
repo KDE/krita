@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>308</height>
+    <height>337</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,7 +46,7 @@
             </widget>
            </item>
            <item>
-            <widget class="KoColorPopupButton" name="toolButton">
+            <widget class="KColorButton" name="bnColor">
              <property name="text">
               <string>...</string>
              </property>
@@ -86,29 +86,8 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>Contour</string>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QComboBox" name="cmbContour"/>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="chkAntiAliased">
-             <property name="toolTip">
-              <string>Smooth the contour</string>
-             </property>
-             <property name="text">
-              <string>Anti-aliased</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <layout class="QHBoxLayout" name="horizontalLayout_2"/>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label">
@@ -181,10 +160,10 @@
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="QComboBox" name="cmbContour_2"/>
+          <widget class="KisCmbContour" name="cmbContour"/>
          </item>
          <item row="7" column="1">
-          <widget class="QCheckBox" name="chkAntiAliased_2">
+          <widget class="QCheckBox" name="chkAntiAliased">
            <property name="toolTip">
             <string>Smooth the contour</string>
            </property>
@@ -201,12 +180,11 @@
           </widget>
          </item>
         </layout>
-        <zorder>cmbContour_2</zorder>
-        <zorder>chkAntiAliased_2</zorder>
+        <zorder>cmbContour</zorder>
+        <zorder>chkAntiAliased</zorder>
         <zorder>doubleOpacity</zorder>
         <zorder>label_13</zorder>
         <zorder>label_14</zorder>
-        <zorder>label_5</zorder>
         <zorder>label_4</zorder>
         <zorder>intDistance</zorder>
         <zorder>intSize</zorder>
@@ -259,15 +237,20 @@
    <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KoColorPopupButton</class>
-   <extends>QToolButton</extends>
-   <header location="global">KoColorPopupButton.h</header>
+   <class>KisCmbContour</class>
+   <extends>QWidget</extends>
+   <header>kis_cmb_contour.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

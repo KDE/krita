@@ -36,7 +36,7 @@
          <item row="0" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QComboBox" name="cmbContour"/>
+            <widget class="KisCmbContour" name="cmbContour"/>
            </item>
            <item>
             <widget class="QCheckBox" name="chkAntiAliased">
@@ -81,6 +81,11 @@
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCmbContour</class>
+   <extends>QWidget</extends>
+   <header>kis_cmb_contour.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

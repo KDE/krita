@@ -137,7 +137,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="KoColorPopupButton" name="toolButton">
+              <widget class="KColorButton" name="toolButton">
                <property name="text">
                 <string>...</string>
                </property>
@@ -342,9 +342,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KoColorPopupButton</class>
-   <extends>QToolButton</extends>
-   <header location="global">KoColorPopupButton.h</header>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">kcolorbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KisPatternChooser</class>

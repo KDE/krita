@@ -49,7 +49,7 @@
             </widget>
            </item>
            <item>
-            <widget class="KoColorPopupButton" name="toolButton">
+            <widget class="KColorButton" name="toolButton">
              <property name="text">
               <string>...</string>
              </property>
@@ -122,9 +122,9 @@
    <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KoColorPopupButton</class>
-   <extends>QToolButton</extends>
-   <header location="global">KoColorPopupButton.h</header>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">kcolorbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

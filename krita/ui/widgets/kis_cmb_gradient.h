@@ -37,6 +37,8 @@ public:
 
 Q_SIGNALS:
 
+    void gradientChanged(KoAbstractGradient*);
+
 public Q_SLOTS:
 
 private:

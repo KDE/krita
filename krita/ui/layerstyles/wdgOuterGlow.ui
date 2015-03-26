@@ -164,12 +164,12 @@
           <widget class="QComboBox" name="cmbTechnique">
            <item>
             <property name="text">
-             <string>Precise</string>
+             <string>Softer</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Softer</string>
+             <string>Precise</string>
             </property>
            </item>
           </widget>
@@ -336,7 +336,6 @@
    <extends>QToolButton</extends>
    <header>kis_cmb_gradient.h</header>
   </customwidget>
-
  </customwidgets>
  <resources/>
  <connections/>

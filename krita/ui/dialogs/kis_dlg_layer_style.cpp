@@ -485,16 +485,94 @@ InnerGlow::InnerGlow(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
+    ui.intOpacity->setRange(0, 100);
+    ui.intOpacity->setSuffix(" %");
+
+    ui.intNoise->setRange(0, 100);
+    ui.intNoise->setSuffix(" %");
+
+    ui.intChoke->setRange(0, 100);
+    ui.intChoke->setSuffix(" %");
+
+    ui.intSize->setRange(0, 250);
+    ui.intSize->setSuffix(" px");
+
+    ui.intRange->setRange(0, 100);
+    ui.intRange->setSuffix(" %");
+
+    ui.intJitter->setRange(0, 100);
+    ui.intJitter->setSuffix(" %");
+
+    connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intNoise, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    connect(ui.radioColor, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.radioGradient, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+
+    connect(ui.cmbTechnique, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intChoke, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    connect(ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.intRange, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intJitter, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
 }
 
 void InnerGlow::setInnerGlow(const psd_layer_effects_inner_glow *innerGlow)
 {
+    ui.cmbCompositeOp->selectCompositeOp(KoID(innerGlow->blendMode()));
+    ui.intOpacity->setValue(innerGlow->opacity());
+    ui.intNoise->setValue(innerGlow->noise());
 
+    ui.radioColor->setChecked(innerGlow->fillType() == psd_fill_solid_color);
+    ui.bnColor->setColor(innerGlow->color());
+    ui.radioGradient->setChecked(innerGlow->fillType() == psd_fill_gradient);
+    ui.cmbGradient->setGradient(innerGlow->gradient());
+
+    ui.cmbTechnique->setCurrentIndex((int)innerGlow->technique());
+    ui.intChoke->setValue(innerGlow->spread());
+    ui.intSize->setValue(innerGlow->size());
+
+    // FIXME: Curve editing
+    //ui.cmbContour;
+
+    ui.chkAntiAliased->setChecked(innerGlow->antiAliased());
+    ui.intRange->setValue(innerGlow->range());
+    ui.intJitter->setValue(innerGlow->jitter());
 }
 
 void InnerGlow::fetchInnerGlow(psd_layer_effects_inner_glow *innerGlow) const
 {
+    innerGlow->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    innerGlow->setOpacity(ui.intOpacity->value());
+    innerGlow->setNoise(ui.intNoise->value());
 
+    if (ui.radioColor->isChecked()) {
+        innerGlow->setFillType(psd_fill_solid_color);
+    }
+    else {
+        innerGlow->setFillType(psd_fill_gradient);
+    }
+
+    innerGlow->setColor(ui.bnColor->color());
+    innerGlow->setGradient(ui.cmbGradient->gradient());
+
+    innerGlow->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
+    innerGlow->setSpread(ui.intChoke->value());
+    innerGlow->setSize(ui.intSize->value());
+
+    // FIXME: Curve editing
+    //ui.cmbContour;
+
+    innerGlow->setAntiAliased(ui.chkAntiAliased->isChecked());
+    innerGlow->setRange(ui.intRange->value());
+    innerGlow->setJitter(ui.intJitter->value());
 }
 
 PatternOverlay::PatternOverlay(QWidget *parent)
@@ -640,6 +718,25 @@ OuterGlow::OuterGlow(QWidget *parent)
 
     ui.intJitter->setRange(0, 100);
     ui.intJitter->setSuffix(" %");
+
+    connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intNoise, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    connect(ui.radioColor, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.radioGradient, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+
+    connect(ui.cmbTechnique, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intSpread, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    connect(ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.intRange, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intJitter, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
 }
 
 void OuterGlow::setOuterGlow(const psd_layer_effects_outer_glow *outerGlow)
@@ -663,7 +760,6 @@ void OuterGlow::setOuterGlow(const psd_layer_effects_outer_glow *outerGlow)
     ui.chkAntiAliased->setChecked(outerGlow->antiAliased());
     ui.intRange->setValue(outerGlow->range());
     ui.intJitter->setValue(outerGlow->jitter());
-
 }
 
 void OuterGlow::fetchOuterGlow(psd_layer_effects_outer_glow *outerGlow) const

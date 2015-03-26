@@ -38,6 +38,7 @@ public:
     void setImage(KisImageWSP image);
 
     void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *e);
 
 
@@ -45,6 +46,8 @@ private slots:
     void imageTimeChanged();
 
 private:
+    void scrub(QMouseEvent *e);
+
     QVBoxLayout *m_layout;
     TimelineView *m_timelineView;
     KisImageWSP m_image;

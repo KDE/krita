@@ -95,10 +95,21 @@ void TimelineWidget::setModel(QAbstractItemModel *model)
 
 void TimelineWidget::mousePressEvent(QMouseEvent *e)
 {
+    scrub(e);
+}
+
+void TimelineWidget::mouseMoveEvent(QMouseEvent *e)
+{
+    if (e->buttons() == Qt::LeftButton) {
+        scrub(e);
+    }
+}
+
+void TimelineWidget::scrub(QMouseEvent *e)
+{
     if (!m_image) return;
 
     int time = m_timelineView->positionToTime(e->pos().x());
-
     if (time >= 0) {
         m_image->seekToTime(time);
     }

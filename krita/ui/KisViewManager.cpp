@@ -1180,7 +1180,7 @@ void KisViewManager::updateIcons()
     QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
 
     QStringList whitelist;
-    whitelist << "ToolBox" << "KisLayerBox" << "AnimationDocker";
+    whitelist << "ToolBox" << "KisLayerBox";
 
     QStringList blacklistedIcons;
     blacklistedIcons << "editpath" << "artistictext-tool" << "view-choose";

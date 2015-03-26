@@ -23,20 +23,21 @@
 
 #include <QDockWidget>
 
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 #include "kis_action.h"
 
 
 class KisCanvas2;
 class Ui_WdgAnimation;
 
-class AnimationDocker : public QDockWidget, public KoCanvasObserverBase {
+class AnimationDocker : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
 public:
     AnimationDocker();
     QString observerName() { return "AnimationDocker"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
+    void setMainWindow(KisViewManager *kisview);
 
 private slots:
     void slotPreviousFrame();
@@ -46,6 +47,8 @@ private slots:
     void slotAddBlankFrame();
     void slotAddDuplicateFrame();
     void slotDeleteKeyframe();
+
+    void slotUpdateIcons();
 
 private:
 
@@ -59,6 +62,7 @@ private:
     KisAction *m_addBlankFrameAction;
     KisAction *m_addDuplicateFrameAction;
     KisAction *m_deleteKeyframeAction;
+
 };
 
 

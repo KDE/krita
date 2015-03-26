@@ -24,6 +24,7 @@
 #include <KoIcon.h>
 #include "KisViewManager.h"
 #include "kis_paint_layer.h"
+#include "kis_action_manager.h"
 
 #include "ui_wdg_animation.h"
 
@@ -39,40 +40,27 @@ AnimationDocker::AnimationDocker()
 
     m_previousFrameAction = new KisAction(i18n("Move to previous frame"), m_animationWidget->btnPreviousFrame);
     m_previousFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    m_previousFrameAction->setIcon(themedIcon("prevframe"));
     m_animationWidget->btnPreviousFrame->setDefaultAction(m_previousFrameAction);
 
     m_nextFrameAction = new KisAction(i18n("Move to next frame"), m_animationWidget->btnNextFrame);
     m_nextFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    m_nextFrameAction->setIcon(themedIcon("nextframe"));
     m_animationWidget->btnNextFrame->setDefaultAction(m_nextFrameAction);
 
     m_playPauseAction = new KisAction(i18n("Play / pause animation"), m_animationWidget->btnPlay);
     m_playPauseAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    m_playPauseAction->setIcon(themedIcon("playpause"));
     m_animationWidget->btnPlay->setDefaultAction(m_playPauseAction);
 
     m_addBlankFrameAction = new KisAction(i18n("Add blank frame"), m_animationWidget->btnAddKeyframe);
     m_addBlankFrameAction->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_addBlankFrameAction->setIcon(themedIcon("addblankframe"));
     m_animationWidget->btnAddKeyframe->setDefaultAction(m_addBlankFrameAction);
 
     m_addDuplicateFrameAction = new KisAction(i18n("Add duplicate frame"), m_animationWidget->btnAddDuplicateFrame);
     m_addDuplicateFrameAction->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_addDuplicateFrameAction->setIcon(themedIcon("addduplicateframe"));
     m_animationWidget->btnAddDuplicateFrame->setDefaultAction(m_addDuplicateFrameAction);
 
     m_deleteKeyframeAction = new KisAction(i18n("Delete keyframe"), m_animationWidget->btnDeleteKeyframe);
     m_deleteKeyframeAction->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_deleteKeyframeAction->setIcon(themedIcon("deletekeyframe"));
     m_animationWidget->btnDeleteKeyframe->setDefaultAction(m_deleteKeyframeAction);
-
-    m_animationWidget->btnPreviousFrame->setIconSize(QSize(22, 22));
-    m_animationWidget->btnPlay->setIconSize(QSize(22, 22));
-    m_animationWidget->btnNextFrame->setIconSize(QSize(22, 22));
-    m_animationWidget->btnAddKeyframe->setIconSize(QSize(22, 22));
-    m_animationWidget->btnAddDuplicateFrame->setIconSize(QSize(22, 22));
-    m_animationWidget->btnDeleteKeyframe->setIconSize(QSize(22, 22));
 
     connect(m_previousFrameAction, SIGNAL(triggered()), this, SLOT(slotPreviousFrame()));
     connect(m_nextFrameAction, SIGNAL(triggered()), this, SLOT(slotNextFrame()));
@@ -103,7 +91,19 @@ void AnimationDocker::unsetCanvas()
     setEnabled(false);
     m_canvas = 0;
 }
+void AnimationDocker::setMainWindow(KisViewManager *view)
+{
+    KisActionManager *actionManager = view->actionManager();
 
+    actionManager->addAction("previous_frame", m_previousFrameAction);
+    actionManager->addAction("next_frame", m_nextFrameAction);
+    actionManager->addAction("toggle_playback", m_playPauseAction);
+    actionManager->addAction("add_blank_frame", m_addBlankFrameAction);
+    actionManager->addAction("add_duplicate_frame", m_addDuplicateFrameAction);
+    actionManager->addAction("delete_keyframe", m_deleteKeyframeAction);
+
+    connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
+}
 void AnimationDocker::slotAddBlankFrame()
 {
     if (!m_canvas) return;
@@ -178,6 +178,23 @@ void AnimationDocker::slotPlayPause()
 
         m_canvas->startPlayback();
     }
+}
+
+void AnimationDocker::slotUpdateIcons()
+{
+    m_previousFrameAction->setIcon(themedIcon("prevframe"));
+    m_nextFrameAction->setIcon(themedIcon("nextframe"));
+    m_playPauseAction->setIcon(themedIcon("playpause"));
+    m_addBlankFrameAction->setIcon(themedIcon("addblankframe"));
+    m_addDuplicateFrameAction->setIcon(themedIcon("addduplicateframe"));
+    m_deleteKeyframeAction->setIcon(themedIcon("deletekeyframe"));
+
+    m_animationWidget->btnPreviousFrame->setIconSize(QSize(22, 22));
+    m_animationWidget->btnPlay->setIconSize(QSize(22, 22));
+    m_animationWidget->btnNextFrame->setIconSize(QSize(22, 22));
+    m_animationWidget->btnAddKeyframe->setIconSize(QSize(22, 22));
+    m_animationWidget->btnAddDuplicateFrame->setIconSize(QSize(22, 22));
+    m_animationWidget->btnDeleteKeyframe->setIconSize(QSize(22, 22));
 }
 
 #include "animation_docker.moc"

@@ -333,4 +333,10 @@
     <Action name="show_common_colors" icon="" text="Show common colors" whatsThis="" toolTip="Show common colors" iconText="Show common colors" shortcut="U" defaultShortcut="U" isCheckable="false" statusTip=""/>
     <Action name="toggle_assistant" icon="" text="Toggle Assistant" whatsThis="" toolTip="Toggle Assistant" iconText="ToggleAssistant" shortcut="Ctrl+Shift+L" defaultShortcut="Ctrl+Shift+L" isCheckable="true" statusTip=""/>
     <Action name="undo_polygon_selection" icon="" text="Undo Polygon Selection Points" whatsThis="" toolTip="Undo Polygon Selection Points" iconText="Undo Polygon Selection Points" shortcut="Shift+Z" defaultShortcut="Shift+Z" isCheckable="false" statusTip=""/>
+    <Action name="previous_frame" icon="" text="Move to previous frame" whatsThis="" toolTip="Move to previous frame" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="next_frame" icon="" text="Move to next frame" whatsThis="" toolTip="Move to next frame" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="toggle_playback" icon="" text="Play / pause animation" whatsThis="" toolTip="Play / pause animation" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="add_blank_frame" icon="" text="Add blank frame" whatsThis="" toolTip="Add blank frame" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="add_duplicate_frame" icon="" text="Add duplicate frame" whatsThis="" toolTip="Add duplicate frame" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="delete_keyframe" icon="" text="Delete keyframe" whatsThis="" toolTip="" iconText="Delete keyframe" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
 </Actions>

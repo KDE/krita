@@ -315,6 +315,7 @@ BlendingOptions::BlendingOptions(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
 }
 
 
@@ -322,16 +323,27 @@ ColorOverlay::ColorOverlay(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
+    ui.intOpacity->setRange(0, 100);
+    ui.intOpacity->setSuffix(" %");
+
+    connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
 }
 
 void ColorOverlay::setColorOverlay(const psd_layer_effects_color_overlay *colorOverlay)
 {
-
+    ui.cmbCompositeOp->selectCompositeOp(KoID(colorOverlay->blendMode()));
+    ui.intOpacity->setValue(colorOverlay->opacity());
+    ui.bnColor->setColor(colorOverlay->color());
 }
 
 void ColorOverlay::fetchColorOverlay(psd_layer_effects_color_overlay *colorOverlay) const
 {
-
+    colorOverlay->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    colorOverlay->setOpacity(ui.intOpacity->value());
+    colorOverlay->setColor(ui.bnColor->color());
 }
 
 

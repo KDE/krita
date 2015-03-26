@@ -52,7 +52,6 @@ class KisGradientChooser : public QFrame
     Q_OBJECT
 
 public:
-    // XXX: On library redesign, remove m_view parameter here, it's just a temporary hack for the autogradient dialog!
     KisGradientChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisGradientChooser();
 

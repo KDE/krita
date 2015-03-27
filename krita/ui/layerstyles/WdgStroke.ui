@@ -152,7 +152,7 @@
          <item>
           <widget class="QStackedWidget" name="fillStack">
            <property name="currentIndex">
-            <number>2</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="page_3">
             <layout class="QFormLayout" name="formLayout_2">
@@ -187,7 +187,14 @@
              <item row="0" column="1">
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="KisCmbGradient" name="cmbGradient"/>
+                <widget class="KisCmbGradient" name="cmbGradient">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QCheckBox" name="chkReverse">
@@ -211,7 +218,44 @@
              <item row="1" column="1">
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
-                <widget class="QComboBox" name="cmbStyle"/>
+                <widget class="QComboBox" name="cmbStyle">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Linear</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Radial</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Angle</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Reflected</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Diamond</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shape Burst</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item>
                 <widget class="QCheckBox" name="chkAlignWithLayer">
@@ -271,6 +315,12 @@
              </item>
              <item row="3" column="1">
               <widget class="KisSliderSpinBox" name="intScale" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="toolTip">
                 <string>Set size of gradation</string>
                </property>

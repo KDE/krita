@@ -1,6 +1,12 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
+ *   gimp_bump_map contains code taken from gimp-bumpmap.c, original copyright:
+ *
+ *   Copyright (C) 1997 Federico Mena Quintero <federico@nuclecu.unam.mx>
+ *   Copyright (C) 1997-2000 Jens Lautenbacher <jtl@gimp.org>
+ *   Copyright (C) 2000 Sven Neumann <sven@gimp.org>
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or

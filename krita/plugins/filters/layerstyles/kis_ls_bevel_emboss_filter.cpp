@@ -322,8 +322,8 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     bmvals.elevation = config->altitude();
     bmvals.depth = config->depth();
     bmvals.ambient = 0;
-    bmvals.compensate = false; // FIXME: originally was 'true', but it doesn't work
-    bmvals.invert = config->direction() == psd_direction_down; // FIXME: doesn't work
+    bmvals.compensate = true;
+    bmvals.invert = config->direction() == psd_direction_down;
     bmvals.type = 0;
 
     bumpmap(bumpmapSelection, totalNeedRect, bmvals);
@@ -346,7 +346,6 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
 
     if (config->textureEnabled() && config->textureInvert()) {
-        // TODO: probably also not correct
         bumpmapSelection->invert();
     }
 

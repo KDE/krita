@@ -53,23 +53,22 @@ void bumpmap_init_params (bumpmap_params_t *params, const bumpmap_vals_t &bmvals
 
 void
 bumpmap_row (const bumpmap_vals_t &bmvals,
-             const QRect &selectionRect,
-             const guchar     *src,
              guchar           *dest,
              gint              width,
-             gint              bpp,
-             gboolean          has_alpha,
              const guchar     *bm_row1,
              const guchar     *bm_row2,
              const guchar     *bm_row3,
-             gint              bm_width,
-             gint              bm_xofs,
-             gboolean          tiled,
-             gboolean          row_in_bumpmap,
              bumpmap_params_t *params);
 
 ////////////////////////////////////////////////////////////////////
 
+void convertRow(quint8 *data, int width, const quint8 *lut)
+{
+    for (int i = 0; i < width; i++) {
+        *data = lut[*data];
+        data++;
+    }
+}
 
 void bumpmap (KisPixelSelectionSP device,
               const QRect &selectionRect,
@@ -82,39 +81,34 @@ void bumpmap (KisPixelSelectionSP device,
     bumpmap_init_params (&params, bmvals);
 
     const int rowSize = selectionRect.width() * sizeof(quint8);
-    quint8 *srcRow = new quint8[rowSize];
-    quint8 *dstRow = new quint8[rowSize];
+    QScopedPointer<quint8> dstRow(new quint8[rowSize]);
 
-    quint8 *bmRow1 = new quint8[rowSize];
-    quint8 *bmRow2 = new quint8[rowSize];
-    quint8 *bmRow3 = new quint8[rowSize];
+    QScopedPointer<quint8> bmRow1(new quint8[rowSize]);
+    QScopedPointer<quint8> bmRow2(new quint8[rowSize]);
+    QScopedPointer<quint8> bmRow3(new quint8[rowSize]);
 
-    device->readBytes(bmRow1, selectionRect.left(), selectionRect.top() - 1, selectionRect.width(), 1);
-    device->readBytes(bmRow2, selectionRect.left(), selectionRect.top(), selectionRect.width(), 1);
-    device->readBytes(bmRow3, selectionRect.left(), selectionRect.top() + 1, selectionRect.width(), 1);
+    device->readBytes(bmRow1.data(), selectionRect.left(), selectionRect.top() - 1, selectionRect.width(), 1);
+    device->readBytes(bmRow2.data(), selectionRect.left(), selectionRect.top(), selectionRect.width(), 1);
+    device->readBytes(bmRow3.data(), selectionRect.left(), selectionRect.top() + 1, selectionRect.width(), 1);
+
+    convertRow(bmRow1.data(), selectionRect.width(), params.lut);
+    convertRow(bmRow2.data(), selectionRect.width(), params.lut);
+    convertRow(bmRow3.data(), selectionRect.width(), params.lut);
 
     for (int row = selectionRect.top();
          row < selectionRect.top() + selectionRect.height(); row++) {
 
-        device->readBytes(srcRow, selectionRect.left(), row, selectionRect.width(), 1);
-
-        bumpmap_row (bmvals, selectionRect,
-                     srcRow, dstRow,
-                     selectionRect.width(),
-                     1, false,
-                     bmRow1, bmRow2, bmRow3, selectionRect.width(), 0,
-                     false /* not tiled */,
-                     true /* row in bumpmap */,
+        bumpmap_row (bmvals, dstRow.data(), selectionRect.width(),
+                     bmRow1.data(), bmRow2.data(), bmRow3.data(),
                      &params);
 
-        device->writeBytes(dstRow, selectionRect.left(), row, selectionRect.width(), 1);
+        device->writeBytes(dstRow.data(), selectionRect.left(), row, selectionRect.width(), 1);
 
-        quint8 *tmp = bmRow1;
-        bmRow1 = bmRow2;
-        bmRow2 = bmRow3;
-        bmRow3 = tmp;
+        bmRow1.swap(bmRow2);
+        bmRow2.swap(bmRow3);
 
-        device->readBytes(bmRow3, selectionRect.left(), row + 1, selectionRect.width(), 1);
+        device->readBytes(bmRow3.data(), selectionRect.left(), row + 1, selectionRect.width(), 1);
+        convertRow(bmRow3.data(), selectionRect.width(), params.lut);
     }
 }
 
@@ -175,33 +169,15 @@ void bumpmap_init_params (bumpmap_params_t *params, const bumpmap_vals_t &bmvals
 
 void
 bumpmap_row (const bumpmap_vals_t &bmvals,
-             const QRect &selectionRect,
-             const guchar     *src,
              guchar           *dest,
              gint              width,
-             gint              bpp,
-             gboolean          has_alpha,
              const guchar     *bm_row1,
              const guchar     *bm_row2,
              const guchar     *bm_row3,
-             gint              bm_width,
-             gint              bm_xofs,
-             gboolean          tiled,
-             gboolean          row_in_bumpmap,
              bumpmap_params_t *params)
 {
-    KIS_ASSERT_RECOVER_RETURN(bm_xofs == 0);
-
     gint xofs1, xofs2;
-    gint x, k;
-    gint pbpp;
-    gint result;
-    gint tmp;
-
-    if (has_alpha)
-        pbpp = bpp - 1;
-    else
-        pbpp = bpp;
+    gint x;
 
     for (x = 0; x < width; x++) {
         gint xofs3;
@@ -239,17 +215,11 @@ bumpmap_row (const bumpmap_vals_t &bmvals,
         /* Paint */
 
         if (bmvals.compensate) {
-            for (k = pbpp; k; k--) {
-                result  = (*src++ * shade) / (params->compensation * 255);
-                *dest++ = MIN(255, result);
-            }
+            int result  = shade / params->compensation;
+            *dest++ = MIN(255, result);
         } else {
-            for (k = pbpp; k; k--)
-                *dest++ = *src++ * shade / 255;
+            *dest++ = shade;
         }
-
-        if (has_alpha)
-            *dest++ = *src++;
     }
 }
 

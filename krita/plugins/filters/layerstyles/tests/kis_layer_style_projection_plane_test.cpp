@@ -394,18 +394,18 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
 {
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
     style->bevelEmboss()->setEffectEnabled(true);
-    style->bevelEmboss()->setStyle(psd_bevel_outer_bevel);
-    style->bevelEmboss()->setAngle(180);
+
+    style->bevelEmboss()->setAngle(135);
     style->bevelEmboss()->setAltitude(45);
     style->bevelEmboss()->setDepth(100);
-    style->bevelEmboss()->setDirection(psd_direction_up);
 
+    style->bevelEmboss()->setHighlightColor(Qt::white);
     style->bevelEmboss()->setHighlightBlendMode(COMPOSITE_OVER);
     style->bevelEmboss()->setHighlightOpacity(100);
 
+    style->bevelEmboss()->setShadowColor(Qt::black);
     style->bevelEmboss()->setShadowBlendMode(COMPOSITE_OVER);
     style->bevelEmboss()->setShadowOpacity(100);
-
 
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
     KoPattern pattern(fileName);
@@ -417,9 +417,34 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
     style->bevelEmboss()->setTextureDepth(-10);
     style->bevelEmboss()->setTextureInvert(false);
 
+    style->bevelEmboss()->setStyle(psd_bevel_outer_bevel);
+    style->bevelEmboss()->setDirection(psd_direction_up);
     style->bevelEmboss()->setSoften(0);
+    test(style, "bevel_outer_up");
 
+    style->bevelEmboss()->setStyle(psd_bevel_outer_bevel);
+    style->bevelEmboss()->setDirection(psd_direction_down);
+    style->bevelEmboss()->setSoften(0);
+    test(style, "bevel_outer_down");
 
-    test(style, "bevel_emboss");
+    style->bevelEmboss()->setStyle(psd_bevel_emboss);
+    style->bevelEmboss()->setDirection(psd_direction_up);
+    style->bevelEmboss()->setSoften(0);
+    test(style, "bevel_emboss_up");
+
+    style->bevelEmboss()->setStyle(psd_bevel_pillow_emboss);
+    style->bevelEmboss()->setDirection(psd_direction_up);
+    style->bevelEmboss()->setSoften(0);
+    test(style, "bevel_pillow_up");
+
+    style->bevelEmboss()->setStyle(psd_bevel_pillow_emboss);
+    style->bevelEmboss()->setDirection(psd_direction_down);
+    style->bevelEmboss()->setSoften(0);
+    test(style, "bevel_pillow_down");
+
+    style->bevelEmboss()->setStyle(psd_bevel_pillow_emboss);
+    style->bevelEmboss()->setDirection(psd_direction_up);
+    style->bevelEmboss()->setSoften(3);
+    test(style, "bevel_pillow_up_soft");
 }
 QTEST_KDEMAIN(KisLayerStyleProjectionPlaneTest, GUI)

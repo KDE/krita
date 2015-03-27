@@ -42,7 +42,7 @@ void KisCmbGradient::setGradient(KoAbstractGradient *gradient)
 
 KoAbstractGradient *KisCmbGradient::gradient() const
 {
-    return 0;
+    return dynamic_cast<KoAbstractGradient*>(m_gradientChooser->currentResource());
 }
 
 void KisCmbGradient::gradientSelected(KoResource *resource)

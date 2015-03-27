@@ -534,6 +534,7 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     // connect everything to configChanged() signal
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -572,6 +573,7 @@ void DropShadow::setShadow(const psd_layer_effects_shadow_common *shadow)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(shadow->blendMode()));
     ui.intOpacity->setValue(shadow->opacity());
+    ui.bnColor->setColor(shadow->color());
 
     ui.dialAngle->setValue(shadow->angle());
     ui.intAngle->setValue(shadow->angle());
@@ -599,6 +601,7 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
 {
     shadow->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     shadow->setOpacity(ui.intOpacity->value());
+    shadow->setColor(ui.bnColor->color());
 
     shadow->setAngle(ui.dialAngle->value());
     shadow->setUseGlobalLight(ui.chkUseGlobalLight->isChecked());

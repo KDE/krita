@@ -91,7 +91,8 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
         KisSelectionSP knockOutSelection =
             KisLsUtils::selectionFromAlphaChannel(srcDevice, applyRect);
 
-        KisLsUtils::findEdge(knockOutSelection->pixelSelection(), applyRect, true);
+        // disabled intentionally, because it creates artifacts on smooth lines
+        // KisLsUtils::findEdge(knockOutSelection->pixelSelection(), applyRect, true);
 
         if (config->position() == psd_stroke_inside) {
             knockOutSelection->pixelSelection()->invert();

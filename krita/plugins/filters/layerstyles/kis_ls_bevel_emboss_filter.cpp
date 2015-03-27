@@ -52,29 +52,12 @@
 
 #include "gimp_bump_map.h"
 #include "kis_transaction.h"
-#include "kis_selection_filters.h"
+
 
 
 KisLsBevelEmbossFilter::KisLsBevelEmbossFilter()
     : KisLayerStyleFilter(KoID("lsstroke", i18n("Stroke (style)")))
 {
-}
-
-QRect growSelectionUniform(KisPixelSelectionSP selection, int growSize, const QRect &applyRect)
-{
-    QRect changeRect = applyRect;
-
-    if (growSize > 0) {
-        KisGrowSelectionFilter filter(growSize, growSize);
-        changeRect = filter.changeRect(applyRect);
-        filter.process(selection, applyRect);
-    } else if (growSize < 0) {
-        KisShrinkSelectionFilter filter(qAbs(growSize), qAbs(growSize), false);
-        changeRect = filter.changeRect(applyRect);
-        filter.process(selection, applyRect);
-    }
-
-    return changeRect;
 }
 
 void paintBevelSelection(KisPixelSelectionSP srcSelection,
@@ -104,7 +87,7 @@ void paintBevelSelection(KisPixelSelectionSP srcSelection,
 
         tmpSelection->makeCloneFromRough(srcSelection, srcSelection->selectedRect());
 
-        QRect changeRect = growSelectionUniform(tmpSelection, growSize, applyRect);
+        QRect changeRect = KisLsUtils::growSelectionUniform(tmpSelection, growSize, applyRect);
 
         gc.setSelection(tmpBaseSelection);
         gc.bitBlt(changeRect.topLeft(), fillDevice, changeRect);
@@ -320,9 +303,9 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     KisPixelSelectionSP limitingSelection = new KisPixelSelection(*selection);
     {
         QRect changeRectUnused =
-            growSelectionUniform(limitingSelection,
-                                 limitingGrowSize,
-                                 d.applyBevelRect);
+            KisLsUtils::growSelectionUniform(limitingSelection,
+                                             limitingGrowSize,
+                                             d.applyBevelRect);
         Q_UNUSED(changeRectUnused);
     }
 

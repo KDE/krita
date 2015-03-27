@@ -37,11 +37,28 @@
 #include "kis_fill_painter.h"
 #include "kis_gradient_painter.h"
 #include "kis_layer_style_filter_environment.h"
-
+#include "kis_selection_filters.h"
 
 
 namespace KisLsUtils
 {
+
+    QRect growSelectionUniform(KisPixelSelectionSP selection, int growSize, const QRect &applyRect)
+    {
+        QRect changeRect = applyRect;
+
+        if (growSize > 0) {
+            KisGrowSelectionFilter filter(growSize, growSize);
+            changeRect = filter.changeRect(applyRect);
+            filter.process(selection, applyRect);
+        } else if (growSize < 0) {
+            KisShrinkSelectionFilter filter(qAbs(growSize), qAbs(growSize), false);
+            changeRect = filter.changeRect(applyRect);
+            filter.process(selection, applyRect);
+        }
+
+        return changeRect;
+    }
 
     KisSelectionSP selectionFromAlphaChannel(KisPaintDeviceSP device,
                                              const QRect &srcRect)

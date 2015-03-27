@@ -31,6 +31,9 @@ class KoPattern;
 
 namespace KisLsUtils
 {
+
+    QRect growSelectionUniform(KisPixelSelectionSP selection, int growSize, const QRect &applyRect);
+
     KisSelectionSP selectionFromAlphaChannel(KisPaintDeviceSP device,
                                              const QRect &srcRect);
 

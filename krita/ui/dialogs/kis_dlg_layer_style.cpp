@@ -533,7 +533,7 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
 
     // connect everything to configChanged() signal
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intOpacity, SIGNAL(valuechanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -639,7 +639,7 @@ GradientOverlay::GradientOverlay(QWidget *parent)
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intOpacity, SIGNAL(valuechanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
     connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -849,7 +849,7 @@ Satin::Satin(QWidget *parent)
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
-    connect(ui.intOpacity, SIGNAL(valuechanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -935,7 +935,7 @@ Stroke::Stroke(QWidget *parent)
     connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbPosition, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intOpacity, SIGNAL(valuechanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     connect(ui.cmbFillType, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
 

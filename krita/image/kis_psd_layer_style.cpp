@@ -126,8 +126,16 @@ KisPSDLayerStyleSP KisPSDLayerStyle::clone() const
 
 bool KisPSDLayerStyle::isEmpty() const
 {
-    return !d->drop_shadow.effectEnabled() &&
-        !d->inner_shadow.effectEnabled();
+    return !(d->drop_shadow.effectEnabled() ||
+             d->inner_shadow.effectEnabled() ||
+             d->outer_glow.effectEnabled() ||
+             d->inner_glow.effectEnabled() ||
+             d->bevel_emboss.effectEnabled() ||
+             d->satin.effectEnabled() ||
+             d->color_overlay.effectEnabled() ||
+             d->gradient_overlay.effectEnabled() ||
+             d->pattern_overlay.effectEnabled() ||
+             d->stroke.effectEnabled());
 }
 
 QString KisPSDLayerStyle::name() const

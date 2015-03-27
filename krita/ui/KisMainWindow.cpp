@@ -305,7 +305,7 @@ KisMainWindow::KisMainWindow()
 
     actionCollection()->addAssociatedWidget(this);
 
-    initializeGeometry();
+    QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
     ToolDockerFactory toolDockerFactory;
     d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));

@@ -430,6 +430,7 @@ private:
 
     void createActions();
 
+private slots:
     void initializeGeometry();
 
 private:

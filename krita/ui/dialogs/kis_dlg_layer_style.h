@@ -64,8 +64,8 @@ class BevelAndEmboss : public QWidget {
     Q_OBJECT
 public:
     BevelAndEmboss(Contour *contour, Texture *texture, QWidget *parent);
-    void setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelEmboss);
-    void fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelEmboss) const;
+    void setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelAndEmboss);
+    void fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAndEmboss) const;
 
 private Q_SLOTS:
     void slotDialAngleChanged(int value);

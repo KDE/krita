@@ -294,16 +294,133 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
     , m_texture(texture)
 {
     ui.setupUi(this);
+
+    // Structure
+    ui.intDepth->setRange(0, 100);
+    ui.intDepth->setSuffix(" %");
+
+    ui.intSize->setRange(0, 250);
+    ui.intSize->setSuffix(" px");
+
+    ui.intSoften->setRange(0, 18);
+    ui.intSoften->setSuffix(" px");
+
+    connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.cmbTechnique, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intDepth, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.cmbDirection, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intSoften, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    // Shading
+    ui.intOpacity->setRange(0, 100);
+    ui.intOpacity->setSuffix(" %");
+
+    ui.intOpacity2->setRange(0, 100);
+    ui.intOpacity2->setSuffix(" %");
+
+    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
+    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
+    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.dialAngle, SLOT(setDisabled(bool)));
+    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), ui.intAngle, SLOT(setDisabled(bool)));
+
+    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.intAltitude, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.cmbHighlightMode, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.bnHighlightColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.cmbShadowMode, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.bnShadowColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.intOpacity2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));;
+
+    // Contour
+    m_contour->ui.intRange->setRange(0, 100);
+    m_contour->ui.intRange->setSuffix(" %");
+
+    connect(m_contour->ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(m_contour->ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(m_contour->ui.intRange, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    // Texture
+    m_texture->ui.intScale->setRange(0, 100);
+    m_texture->ui.intScale->setSuffix(" %");
+
+    m_texture->ui.intDepth->setRange(-1000, 1000);
+    m_texture->ui.intDepth->setSuffix(" %");
+
+    connect(m_texture->ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
+    connect(m_texture->ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(m_texture->ui.intDepth, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(m_texture->ui.chkInvert, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(m_texture->ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
 }
 
-void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelEmboss)
+void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelAndEmboss)
 {
+    ui.cmbStyle->setCurrentIndex((int)bevelAndEmboss->style());
+    ui.cmbTechnique->setCurrentIndex((int)bevelAndEmboss->technique());
+    ui.intDepth->setValue(bevelAndEmboss->depth());
+    ui.cmbDirection->setCurrentIndex((int)bevelAndEmboss->direction());
+    ui.intSize->setValue(bevelAndEmboss->size());
+    ui.intSoften->setValue(bevelAndEmboss->soften());
 
+    ui.dialAngle->setValue(bevelAndEmboss->angle());
+    ui.intAngle->setValue(bevelAndEmboss->angle());
+    ui.intAltitude->setValue(bevelAndEmboss->altitude());
+    // FIXME: curve editing
+    // ui.cmbContour;
+    ui.chkAntiAliased->setChecked(bevelAndEmboss->glossAntiAliased());
+    ui.cmbHighlightMode->selectCompositeOp(KoID(bevelAndEmboss->highlightBlendMode()));
+    ui.bnHighlightColor->setColor(bevelAndEmboss->highlightColor());
+    ui.intOpacity->setValue(bevelAndEmboss->highlightOpacity());
+    ui.cmbShadowMode->selectCompositeOp(KoID(bevelAndEmboss->shadowBlendMode()));
+    ui.bnShadowColor->setColor(bevelAndEmboss->shadowColor());
+    ui.intOpacity2->setValue(bevelAndEmboss->shadowOpacity());
+
+    // FIXME: curve editing
+    // m_contour->ui.cmbContour;
+    m_contour->ui.chkAntiAliased->setChecked(bevelAndEmboss->antiAliased());
+    m_contour->ui.intRange->setValue(bevelAndEmboss->contourRange());
+
+    m_texture->ui.patternChooser->setCurrentPattern(bevelAndEmboss->texturePattern());
+    m_texture->ui.intScale->setValue(bevelAndEmboss->textureScale());
+    m_texture->ui.intDepth->setValue(bevelAndEmboss->textureDepth());
+    m_texture->ui.chkInvert->setChecked(bevelAndEmboss->textureInvert());
+    m_texture->ui.chkLinkWithLayer->setChecked(bevelAndEmboss->textureAlignWithLayer());
 }
 
-void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelEmboss) const
+void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAndEmboss) const
 {
+    bevelAndEmboss->setStyle((psd_bevel_style)ui.cmbStyle->currentIndex());
+    bevelAndEmboss->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
+    bevelAndEmboss->setDepth(ui.intDepth->value());
+    bevelAndEmboss->setDepth((psd_direction)ui.cmbDirection->currentIndex());
+    bevelAndEmboss->setSize(ui.intSize->value());
+    bevelAndEmboss->setSoften(ui.intSoften->value());
 
+    bevelAndEmboss->setAngle(ui.dialAngle->value());
+    bevelAndEmboss->setAltitude(ui.intAltitude->value());
+    bevelAndEmboss->setGlossAntiAliased(ui.chkAntiAliased->isChecked());
+    bevelAndEmboss->setHighlightBlendMode(ui.cmbHighlightMode->selectedCompositeOp().id());
+    bevelAndEmboss->setHighlightColor(ui.bnHighlightColor->color());
+    bevelAndEmboss->setHighlightOpacity(ui.intOpacity->value());
+    bevelAndEmboss->setShadowBlendMode(ui.cmbShadowMode->selectedCompositeOp().id());
+    bevelAndEmboss->setShadowColor(ui.bnShadowColor->color());
+    bevelAndEmboss->setShadowOpacity(ui.intOpacity2->value());
+
+    // FIXME: curve editing
+    bevelAndEmboss->setAntiAliased(m_contour->ui.chkAntiAliased->isChecked());
+    bevelAndEmboss->setContourRange(m_contour->ui.intRange->value());
+
+    bevelAndEmboss->setTexturePattern((KoPattern*)m_texture->ui.patternChooser->currentResource());
+    bevelAndEmboss->setTextureScale(m_texture->ui.intScale->value());
+    bevelAndEmboss->setTextureDepth(m_texture->ui.intDepth->value());
+    bevelAndEmboss->setTextureInvert(m_texture->ui.chkInvert->isChecked());
+    bevelAndEmboss->setTextureAlignWithLayer(m_texture->ui.chkLinkWithLayer->isChecked());
 }
 
 void BevelAndEmboss::slotDialAngleChanged(int value)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>344</width>
-    <height>496</height>
+    <height>471</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -162,9 +162,9 @@
         <property name="title">
          <string>Shading</string>
         </property>
-        <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0" colspan="2">
-          <layout class="QGridLayout" name="gridLayout_2">
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0" colspan="3">
+          <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="0">
             <widget class="QLabel" name="label_7">
              <property name="text">
@@ -175,7 +175,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1" rowspan="3">
+           <item row="0" column="1" rowspan="2">
             <widget class="QDial" name="dialAngle">
              <property name="toolTip">
               <string>Set the angle of the light source</string>
@@ -218,45 +218,35 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_8">
-             <property name="text">
-              <string>Altitude:</string>
-             </property>
-             <property name="buddy">
-              <cstring>dialAngle</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QSpinBox" name="intAltitude">
-             <property name="minimum">
-              <number>-179</number>
-             </property>
-             <property name="maximum">
-              <number>180</number>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Gloss:</string>
+         <item row="1" column="2">
+          <widget class="QSpinBox" name="intAltitude">
+           <property name="minimum">
+            <number>-179</number>
            </property>
-           <property name="buddy">
-            <cstring>cmbGloss</cstring>
+           <property name="maximum">
+            <number>180</number>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item row="2" column="1">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>Gloss Contour:</string>
+           </property>
+           <property name="buddy">
+            <cstring>cmbContour</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QComboBox" name="cmbGloss"/>
+            <widget class="QComboBox" name="cmbContour"/>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox">
+            <widget class="QCheckBox" name="chkAntiAliased">
              <property name="text">
               <string>Anti-aliased</string>
              </property>
@@ -264,24 +254,27 @@
            </item>
           </layout>
          </item>
-         <item row="2" column="0">
+         <item row="3" column="0" colspan="2">
           <widget class="QLabel" name="label_10">
            <property name="text">
-            <string>Highlight Mode:</string>
+            <string>H&amp;ighlight Mode:</string>
+           </property>
+           <property name="buddy">
+            <cstring>cmbHighlightMode</cstring>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="3" column="2">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="KisCompositeOpComboBox" name="cmbCompositeOp">
+            <widget class="KisCompositeOpComboBox" name="cmbHighlightMode">
              <property name="toolTip">
               <string>Set the blend mode for the layer</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="KColorButton" name="toolButton">
+            <widget class="KColorButton" name="bnHighlightColor">
              <property name="text">
               <string>...</string>
              </property>
@@ -289,17 +282,20 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="0">
+         <item row="4" column="0" colspan="2">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>&amp;Opacity:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="buddy">
             <cstring>intOpacity</cstring>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="4" column="2">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -321,24 +317,17 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>Highlight Mode:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
+         <item row="5" column="2">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
-            <widget class="KisCompositeOpComboBox" name="cmbCompositeOp_3">
+            <widget class="KisCompositeOpComboBox" name="cmbShadowMode">
              <property name="toolTip">
               <string>Set the blend mode for the layer</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="KColorButton" name="toolButton_2">
+            <widget class="KColorButton" name="bnShadowColor">
              <property name="text">
               <string>...</string>
              </property>
@@ -346,17 +335,20 @@
            </item>
           </layout>
          </item>
-         <item row="5" column="0">
+         <item row="6" column="0" colspan="2">
           <widget class="QLabel" name="label_15">
            <property name="text">
             <string>&amp;Opacity:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="buddy">
             <cstring>intOpacity2</cstring>
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item row="6" column="2">
           <widget class="KisSliderSpinBox" name="intOpacity2" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -375,6 +367,29 @@
            </property>
            <property name="whatsThis">
             <string>Adjust the transparency of the layer</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Altitude:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>dialAngle</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0" colspan="2">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Sh&amp;adow Mode:</string>
+           </property>
+           <property name="buddy">
+            <cstring>cmbShadowMode</cstring>
            </property>
           </widget>
          </item>
@@ -410,12 +425,6 @@
    <class>KisCompositeOpComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">kis_cmb_composite.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>

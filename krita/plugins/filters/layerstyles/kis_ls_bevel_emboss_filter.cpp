@@ -1,6 +1,9 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
+ *  See LayerFX plugin for Gimp as a reference implementation of this style:
+ *  http://registry.gimp.org/node/186
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -196,6 +199,75 @@ void mapPixelValues(KisPixelSelectionSP dstSelection,
     } while(dstIt.nextPixel());
 }
 
+struct BevelEmbossRectCalculator
+{
+    BevelEmbossRectCalculator(const QRect &applyRect,
+                              const psd_layer_effects_bevel_emboss *config) {
+
+        shadowHighlightsFinalRect = applyRect;
+        applyGaussianRect = shadowHighlightsFinalRect;
+        applyGlossContourRect = KisLsUtils::growRectFromRadius(applyGaussianRect, config->soften());
+        applyBumpmapRect = applyGlossContourRect;
+        applyContourRect = applyBumpmapRect;
+        applyTextureRect = applyContourRect;
+        applyBevelRect = applyTextureRect;
+        initialFetchRect = kisGrowRect(applyBevelRect, 1);
+    }
+
+    QRect totalChangeRect(const QRect &applyRect, const psd_layer_effects_bevel_emboss *config) {
+        QRect changeRect = calcBevelChangeRect(applyRect, config);
+        changeRect = kisGrowRect(changeRect, 1); // bumpmap method
+        changeRect = KisLsUtils::growRectFromRadius(changeRect, config->soften());
+        return changeRect;
+    }
+
+    QRect totalNeedRect(const QRect &applyRect, const psd_layer_effects_bevel_emboss *config) {
+        QRect changeRect = applyRect;
+        changeRect = KisLsUtils::growRectFromRadius(changeRect, config->soften());
+        changeRect = kisGrowRect(changeRect, 1); // bumpmap method
+        return changeRect;
+    }
+
+    QRect initialFetchRect;
+    QRect applyBevelRect;
+    QRect applyTextureRect;
+    QRect applyContourRect;
+    QRect applyBumpmapRect;
+    QRect applyGlossContourRect;
+    QRect applyGaussianRect;
+    QRect shadowHighlightsFinalRect;
+
+private:
+    QRect calcBevelChangeRect(const QRect &applyRect, const psd_layer_effects_bevel_emboss *config) {
+        const int size = config->size();
+        int limitingGrowSize = 0;
+
+        switch (config->style()) {
+        case psd_bevel_outer_bevel:
+            limitingGrowSize = size;
+            break;
+        case psd_bevel_inner_bevel:
+            limitingGrowSize = 0;
+            break;
+        case psd_bevel_emboss: {
+            const int initialSize = std::ceil(qreal(size) / 2.0);
+            limitingGrowSize = initialSize;
+            break;
+        }
+        case psd_bevel_pillow_emboss: {
+            const int halfSizeC = std::ceil(qreal(size) / 2.0);
+            limitingGrowSize = halfSizeC;
+            break;
+        }
+        case psd_bevel_stroke_emboss:
+            qWarning() << "WARNING: Stroke Emboss style is not implemented yet!";
+            return applyRect;
+        }
+
+        return kisGrowRect(applyRect, limitingGrowSize);
+    }
+};
+
 void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
                                               KisPaintDeviceSP dstDevice,
                                               const QRect &applyRect,
@@ -204,9 +276,9 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 {
     if (applyRect.isEmpty()) return;
 
-    QRect totalNeedRect = applyRect;
+    BevelEmbossRectCalculator d(applyRect, config);
 
-    KisSelectionSP baseSelection = KisLsUtils::selectionFromAlphaChannel(srcDevice, totalNeedRect);
+    KisSelectionSP baseSelection = KisLsUtils::selectionFromAlphaChannel(srcDevice, d.initialFetchRect);
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("0_selection_initial.png");
@@ -218,16 +290,16 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
     switch (config->style()) {
     case psd_bevel_outer_bevel:
-        paintBevelSelection(selection, bumpmapSelection, applyRect, size, size, false);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, size, size, false);
         limitingGrowSize = size;
         break;
     case psd_bevel_inner_bevel:
-        paintBevelSelection(selection, bumpmapSelection, applyRect, size, 0, false);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, size, 0, false);
         limitingGrowSize = 0;
         break;
     case psd_bevel_emboss: {
         const int initialSize = std::ceil(qreal(size) / 2.0);
-        paintBevelSelection(selection, bumpmapSelection, applyRect, size, initialSize, false);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, size, initialSize, false);
         limitingGrowSize = initialSize;
         break;
     }
@@ -235,8 +307,8 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
         const int halfSizeF = std::floor(qreal(size) / 2.0);
         const int halfSizeC = std::ceil(qreal(size) / 2.0);
         // TODO: probably not correct!
-        paintBevelSelection(selection, bumpmapSelection, applyRect, halfSizeC, halfSizeC, false);
-        paintBevelSelection(selection, bumpmapSelection, applyRect, halfSizeF, 0, true);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, halfSizeC, halfSizeC, false);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, halfSizeF, 0, true);
         limitingGrowSize = halfSizeC;
         break;
     }
@@ -250,7 +322,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
         QRect changeRectUnused =
             growSelectionUniform(limitingSelection,
                                  limitingGrowSize,
-                                 totalNeedRect);
+                                 d.applyBevelRect);
         Q_UNUSED(changeRectUnused);
     }
 
@@ -259,7 +331,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     if (config->textureEnabled()) {
         KisPixelSelectionSP textureSelection = new KisPixelSelection(new KisSelectionEmptyBounds(0));
 
-        KisLsUtils::fillPattern(textureSelection, totalNeedRect, env,
+        KisLsUtils::fillPattern(textureSelection, d.applyTextureRect, env,
                                 config->textureScale(),
                                 config->texturePattern(),
                                 config->textureHorizontalPhase(),
@@ -268,9 +340,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
         int contrastadj = 0;
 
-
-        { // i'm not going to decrypt it, just copy :(
-
+        {
             using namespace std;
 
             int tex_depth = config->textureDepth();
@@ -292,12 +362,12 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
         }
 
         qreal contrast = qBound(-1.0, qreal(contrastadj) / 127.0, 1.0);
-        mapPixelValues(textureSelection, ContrastOp(contrast), totalNeedRect);
+        mapPixelValues(textureSelection, ContrastOp(contrast), d.applyTextureRect);
 
         {
             KisPainter gc(bumpmapSelection);
             gc.setCompositeOp(COMPOSITE_MULT);
-            gc.bitBlt(totalNeedRect.topLeft(), textureSelection, totalNeedRect);
+            gc.bitBlt(d.applyTextureRect.topLeft(), textureSelection, d.applyTextureRect);
             gc.end();
         }
     }
@@ -306,11 +376,11 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
     if (config->contourEnabled()) {
         if (config->range() != KisLsUtils::FULL_PERCENT_RANGE) {
-            KisLsUtils::adjustRange(bumpmapSelection, totalNeedRect, config->range());
+            KisLsUtils::adjustRange(bumpmapSelection, d.applyContourRect, config->range());
         }
 
         KisLsUtils::applyContourCorrection(bumpmapSelection,
-                                           totalNeedRect,
+                                           d.applyContourRect,
                                            config->contourLookupTable(),
                                            config->antiAliased(),
                                            true);
@@ -324,16 +394,16 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     bmvals.ambient = 0;
     bmvals.compensate = true;
     bmvals.invert = config->direction() == psd_direction_down;
-    bmvals.type = 0;
+    bmvals.type = LINEAR;
 
-    bumpmap(bumpmapSelection, totalNeedRect, bmvals);
+    bumpmap(bumpmapSelection, d.applyBumpmapRect, bmvals);
 
     //bumpmapSelection->convertToQImage(0, QRect(0,0,300,300)).save("3_selection_bumpmap.png");
 
     { // TODO: optimize!
 
         KisLsUtils::applyContourCorrection(bumpmapSelection,
-                                           totalNeedRect,
+                                           d.applyGlossContourRect,
                                            config->glossContourLookupTable(),
                                            config->glossAntiAliased(),
                                            true);
@@ -341,7 +411,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     }
 
     if (config->soften()) {
-        KisLsUtils::applyGaussian(bumpmapSelection, totalNeedRect, config->soften());
+        KisLsUtils::applyGaussian(bumpmapSelection, d.applyGaussianRect, config->soften());
     }
 
 
@@ -351,14 +421,15 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
     selection->clear();
     mapPixelValues(bumpmapSelection, selection,
-                   ShadowsFetchOp(), totalNeedRect);
+                   ShadowsFetchOp(), d.shadowHighlightsFinalRect);
     selection->applySelection(limitingSelection, SELECTION_INTERSECT);
 
+    //dstDevice->convertToQImage(0, QRect(0,0,300,300)).save("4_dst_before_apply.png");
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("4_shadows_sel.png");
 
     {
         const KoColor fillColor(config->shadowColor(), dstDevice->colorSpace());
-        const QRect &fillRect = totalNeedRect;
+        const QRect &fillRect = d.shadowHighlightsFinalRect;
         KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
         fillDevice->setDefaultPixel(fillColor.data());
         KisPainter gc(dstDevice);
@@ -372,13 +443,14 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
     selection->clear();
     mapPixelValues(bumpmapSelection, selection,
-                   HighlightsFetchOp(), totalNeedRect);
+                   HighlightsFetchOp(), d.shadowHighlightsFinalRect);
+    selection->applySelection(limitingSelection, SELECTION_INTERSECT);
 
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_highlights_sel.png");
 
     {
         const KoColor fillColor(config->highlightColor(), dstDevice->colorSpace());
-        const QRect &fillRect = totalNeedRect;
+        const QRect &fillRect = d.shadowHighlightsFinalRect;
         KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
         fillDevice->setDefaultPixel(fillColor.data());
         KisPainter gc(dstDevice);
@@ -407,12 +479,12 @@ void KisLsBevelEmbossFilter::processDirectly(KisPaintDeviceSP src,
 
 QRect KisLsBevelEmbossFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style) const
 {
-    Q_UNUSED(style);
-    return rect;
+    BevelEmbossRectCalculator d(rect, style->bevelAndEmboss());
+    return d.totalNeedRect(rect, style->bevelAndEmboss());
 }
 
 QRect KisLsBevelEmbossFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style) const
 {
-    const int borderSize = style->stroke()->size() + 1;
-    return kisGrowRect(rect, borderSize);
+    BevelEmbossRectCalculator d(rect, style->bevelAndEmboss());
+    return d.totalChangeRect(rect, style->bevelAndEmboss());
 }

@@ -113,6 +113,8 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
     {
         const QRect changeRect = plane.changeRect(partialSelectionRect, KisLayer::N_FILTHY);
+        projection->clear(changeRect);
+
         qDebug() << ppVar(rFillRect) << ppVar(changeRect);
 
         plane.recalculate(changeRect, layer);
@@ -421,6 +423,13 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
     style->bevelAndEmboss()->setDirection(psd_direction_up);
     style->bevelAndEmboss()->setSoften(0);
     test(style, "bevel_outer_up");
+
+    style->bevelAndEmboss()->setTextureInvert(true);
+    style->bevelAndEmboss()->setStyle(psd_bevel_outer_bevel);
+    style->bevelAndEmboss()->setDirection(psd_direction_up);
+    style->bevelAndEmboss()->setSoften(0);
+    test(style, "bevel_outer_up_invert_texture");
+    style->bevelAndEmboss()->setTextureInvert(false);
 
     style->bevelAndEmboss()->setStyle(psd_bevel_outer_bevel);
     style->bevelAndEmboss()->setDirection(psd_direction_down);

@@ -80,26 +80,29 @@ void bumpmap (KisPixelSelectionSP device,
     bumpmap_params_t  params;
     bumpmap_init_params (&params, bmvals);
 
-    const int rowSize = selectionRect.width() * sizeof(quint8);
-    QScopedPointer<quint8> dstRow(new quint8[rowSize]);
+    const QRect dataRect = kisGrowRect(selectionRect, 1);
 
-    QScopedPointer<quint8> bmRow1(new quint8[rowSize]);
-    QScopedPointer<quint8> bmRow2(new quint8[rowSize]);
-    QScopedPointer<quint8> bmRow3(new quint8[rowSize]);
+    const int dataRowSize = dataRect.width() * sizeof(quint8);
+    const int selectionRowSize = selectionRect.width() * sizeof(quint8);
+    QScopedArrayPointer<quint8> dstRow(new quint8[selectionRowSize]);
 
-    device->readBytes(bmRow1.data(), selectionRect.left(), selectionRect.top() - 1, selectionRect.width(), 1);
-    device->readBytes(bmRow2.data(), selectionRect.left(), selectionRect.top(), selectionRect.width(), 1);
-    device->readBytes(bmRow3.data(), selectionRect.left(), selectionRect.top() + 1, selectionRect.width(), 1);
+    QScopedArrayPointer<quint8> bmRow1(new quint8[dataRowSize]);
+    QScopedArrayPointer<quint8> bmRow2(new quint8[dataRowSize]);
+    QScopedArrayPointer<quint8> bmRow3(new quint8[dataRowSize]);
 
-    convertRow(bmRow1.data(), selectionRect.width(), params.lut);
-    convertRow(bmRow2.data(), selectionRect.width(), params.lut);
-    convertRow(bmRow3.data(), selectionRect.width(), params.lut);
+    device->readBytes(bmRow1.data(), dataRect.left(), dataRect.top(), dataRect.width(), 1);
+    device->readBytes(bmRow2.data(), dataRect.left(), dataRect.top() + 1, dataRect.width(), 1);
+    device->readBytes(bmRow3.data(), dataRect.left(), dataRect.top() + 2, dataRect.width(), 1);
+
+    convertRow(bmRow1.data(), dataRect.width(), params.lut);
+    convertRow(bmRow2.data(), dataRect.width(), params.lut);
+    convertRow(bmRow3.data(), dataRect.width(), params.lut);
 
     for (int row = selectionRect.top();
          row < selectionRect.top() + selectionRect.height(); row++) {
 
         bumpmap_row (bmvals, dstRow.data(), selectionRect.width(),
-                     bmRow1.data(), bmRow2.data(), bmRow3.data(),
+                     bmRow1.data() + 1, bmRow2.data() + 1, bmRow3.data() + 1,
                      &params);
 
         device->writeBytes(dstRow.data(), selectionRect.left(), row, selectionRect.width(), 1);
@@ -107,8 +110,8 @@ void bumpmap (KisPixelSelectionSP device,
         bmRow1.swap(bmRow2);
         bmRow2.swap(bmRow3);
 
-        device->readBytes(bmRow3.data(), selectionRect.left(), row + 1, selectionRect.width(), 1);
-        convertRow(bmRow3.data(), selectionRect.width(), params.lut);
+        device->readBytes(bmRow3.data(), dataRect.left(), row + 1, dataRect.width(), 1);
+        convertRow(bmRow3.data(), dataRect.width(), params.lut);
     }
 }
 

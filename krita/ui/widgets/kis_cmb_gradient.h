@@ -36,6 +36,11 @@ public:
     void setGradient(KoAbstractGradient *gradient);
     KoAbstractGradient *gradient() const;
 
+    QSize sizeHint() const;
+
+protected:
+    void resizeEvent(QResizeEvent *event);
+
 Q_SIGNALS:
 
     void gradientChanged(KoAbstractGradient*);

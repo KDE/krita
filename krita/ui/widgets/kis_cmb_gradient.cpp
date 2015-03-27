@@ -18,6 +18,9 @@
 #include "kis_cmb_gradient.h"
 
 #include <QPainter>
+#include <QResizeEvent>
+#include <QStyleOptionComboBox>
+#include <QApplication>
 
 #include <KoCheckerBoardPainter.h>
 #include <KoResource.h>
@@ -28,13 +31,13 @@ KisCmbGradient::KisCmbGradient(QWidget *parent)
     : KisPopupButton(parent)
     , m_gradientChooser(new KisGradientChooser(this))
 {
-
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)), SLOT(gradientSelected(KoResource*)));
     setPopupWidget(m_gradientChooser);
 }
 
 void KisCmbGradient::setGradient(KoAbstractGradient *gradient)
 {
+    m_gradientChooser->setCurrentResource(gradient);
 }
 
 KoAbstractGradient *KisCmbGradient::gradient() const
@@ -47,10 +50,29 @@ void KisCmbGradient::gradientSelected(KoResource *resource)
     KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
     if (!gradient) return;
 
-    emit gradientChanged(gradient);
-
-    QSize iconSize = size();
-    qDebug() << iconSize;
-    QImage pm = gradient->generatePreview(iconSize.width(), iconSize.height());
+    QImage pm = gradient->generatePreview(iconSize().width(), iconSize().height());
     setIcon(QIcon(QPixmap::fromImage(pm)));
+
+    emit gradientChanged(gradient);
+}
+
+QSize KisCmbGradient::sizeHint() const
+{
+    ensurePolished();
+    QFontMetrics fm = fontMetrics();
+
+    int maxW = 7 * fm.width(QChar('x')) + 18;
+    int maxH = qMax(fm.lineSpacing(), 14) + 2;
+
+    QStyleOptionComboBox options;
+    options.initFrom(this);
+
+    return style()->sizeFromContents(QStyle::CT_ComboBox, &options,
+                                     QSize(maxW, maxH), this).expandedTo(QApplication::globalStrut());
+}
+
+void KisCmbGradient::resizeEvent(QResizeEvent *event)
+{
+    setIconSize(QSize(event->size().width() - 30, event->size().height() - 4));
+    KisPopupButton::resizeEvent(event);
 }

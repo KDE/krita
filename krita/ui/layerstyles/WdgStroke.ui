@@ -74,12 +74,12 @@
             <string>&amp;Blend Mode:</string>
            </property>
            <property name="buddy">
-            <cstring>cmbBlendMode</cstring>
+            <cstring>cmbCompositeOp</cstring>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="KisCompositeOpComboBox" name="cmbBlendMode"/>
+          <widget class="KisCompositeOpComboBox" name="cmbCompositeOp"/>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_4">
@@ -125,7 +125,7 @@
          <item>
           <widget class="QStackedWidget" name="fillStack">
            <property name="currentIndex">
-            <number>0</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="page_3">
             <layout class="QFormLayout" name="formLayout_2">
@@ -137,7 +137,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="KColorButton" name="toolButton">
+              <widget class="KColorButton" name="bnColor">
                <property name="text">
                 <string>...</string>
                </property>
@@ -160,7 +160,7 @@
              <item row="0" column="1">
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QComboBox" name="cmbGradient"/>
+                <widget class="KisCmbGradient" name="cmbGradient"/>
                </item>
                <item>
                 <widget class="QCheckBox" name="chkReverse">
@@ -221,7 +221,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="intAngle_2">
+                <widget class="QSpinBox" name="intAngle">
                  <property name="minimum">
                   <number>-179</number>
                  </property>
@@ -331,26 +331,31 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisCompositeOpComboBox</class>
    <extends>QComboBox</extends>
-   <header location="global">kis_cmb_composite.h</header>
+   <header >kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header >kis_slider_spin_box.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header location="global">kcolorbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KisPatternChooser</class>
    <extends>QFrame</extends>
-   <header location="global">kis_pattern_chooser.h</header>
+   <header >kis_pattern_chooser.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCmbGradient</class>
+   <extends>QComboBox</extends>
+   <header >kis_cmb_gradient.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -368,8 +368,8 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
 {
     ui.setupUi(this);
 
-    ui.doubleOpacity->setRange(0, 100, 0);
-    ui.doubleOpacity->setSuffix(" %");
+    ui.intOpacity->setRange(0, 100);
+    ui.intOpacity->setSuffix(" %");
 
     ui.intDistance->setRange(0, 30000);
     ui.intDistance->setSuffix(" px");
@@ -390,7 +390,7 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
 
     // connect everything to configChanged() signal
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.doubleOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -428,7 +428,7 @@ void DropShadow::slotIntAngleChanged(int value)
 void DropShadow::setShadow(const psd_layer_effects_shadow_common *shadow)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(shadow->blendMode()));
-    ui.doubleOpacity->setValue(shadow->opacity());
+    ui.intOpacity->setValue(shadow->opacity());
 
     ui.dialAngle->setValue(shadow->angle());
     ui.intAngle->setValue(shadow->angle());
@@ -455,7 +455,7 @@ void DropShadow::setShadow(const psd_layer_effects_shadow_common *shadow)
 void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
 {
     shadow->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
-    shadow->setOpacity(ui.doubleOpacity->value());
+    shadow->setOpacity(ui.intOpacity->value());
 
     shadow->setAngle(ui.dialAngle->value());
     shadow->setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
@@ -670,7 +670,7 @@ void PatternOverlay::setPatternOverlay(const psd_layer_effects_pattern_overlay *
     ui.intOpacity->setValue(pattern->opacity());
     ui.patternChooser->setCurrentPattern(pattern->pattern());
     ui.chkLinkWithLayer->setChecked(pattern->alignWithLayer());
-    ui.intScale->setValue(pattern->noise());
+    ui.intScale->setValue(pattern->scale());
 }
 
 void PatternOverlay::fetchPatternOverlay(psd_layer_effects_pattern_overlay *pattern) const
@@ -692,8 +692,8 @@ Satin::Satin(QWidget *parent)
 {
     ui.setupUi(this);
 
-    ui.doubleOpacity->setRange(0, 100, 0);
-    ui.doubleOpacity->setSuffix(" %");
+    ui.intOpacity->setRange(0, 100);
+    ui.intOpacity->setSuffix(" %");
 
     ui.intDistance->setRange(0, 250);
     ui.intDistance->setSuffix(" px");
@@ -705,7 +705,8 @@ Satin::Satin(QWidget *parent)
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.doubleOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -734,7 +735,7 @@ void Satin::setSatin(const psd_layer_effects_satin *satin)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(satin->blendMode()));
     ui.bnColor->setColor(satin->color());
-    ui.doubleOpacity->setValue(satin->opacity());
+    ui.intOpacity->setValue(satin->opacity());
 
     ui.dialAngle->setValue(satin->angle());
     ui.intAngle->setValue(satin->angle());
@@ -753,7 +754,7 @@ void Satin::setSatin(const psd_layer_effects_satin *satin)
 void Satin::fetchSatin(psd_layer_effects_satin *satin) const
 {
     satin->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
-    satin->setOpacity(ui.doubleOpacity->value());
+    satin->setOpacity(ui.intOpacity->value());
     satin->setColor(ui.bnColor->color());
 
     satin->setAngle(ui.dialAngle->value());
@@ -775,16 +776,101 @@ Stroke::Stroke(QWidget *parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+
+    ui.intSize->setRange(0, 250);
+    ui.intSize->setSuffix(" px");
+
+    ui.intOpacity->setRange(0, 100);
+    ui.intOpacity->setSuffix(" %");
+
+    ui.intScale->setRange(0, 100);
+    ui.intScale->setSuffix(" %");
+
+    ui.intScale_2->setRange(0, 100);
+    ui.intScale_2->setSuffix(" %");
+
+    connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.cmbPosition, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+
+    connect(ui.cmbFillType, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+
+    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+    connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
+    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
+    connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+
+    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
+    connect(ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
+    connect(ui.intScale_2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 }
+
+void Stroke::slotDialAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.intAngle);
+    ui.intAngle->setValue(value);
+}
+
+void Stroke::slotIntAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.dialAngle);
+    ui.dialAngle->setValue(value);
+}
+
 
 void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
 {
+
+    ui.intSize->setValue(stroke->size());
+    ui.cmbPosition->setCurrentIndex((int)stroke->position());
+    ui.cmbCompositeOp->selectCompositeOp(KoID(stroke->blendMode()));
+    ui.intOpacity->setValue(stroke->opacity());
+
+    ui.cmbFillType->setCurrentIndex((int)stroke->fillType());
+
+    ui.bnColor->setColor(stroke->color());
+
+    ui.cmbGradient->setGradient(stroke->gradient());
+    ui.chkReverse->setChecked(stroke->antiAliased());
+    ui.cmbStyle->setCurrentIndex((int)stroke->style());
+    ui.chkAlignWithLayer->setCheckable(stroke->alignWithLayer());
+    ui.dialAngle->setValue(stroke->angle());
+    ui.intAngle->setValue(stroke->angle());
+    ui.intScale->setValue(stroke->scale());
+
+    ui.patternChooser->setCurrentPattern(stroke->pattern());
+    ui.chkLinkWithLayer->setChecked(stroke->alignWithLayer());
+    ui.intScale_2->setValue(stroke->scale());
 
 }
 
 void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 {
+    stroke->setSize(ui.intSize->value());
+    stroke->setPosition((psd_stroke_position)ui.cmbPosition->currentIndex());
+    stroke->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
+    stroke->setOpacity(ui.intOpacity->value());
 
+    stroke->setFillType((psd_fill_type)ui.cmbFillType->currentIndex());
+
+    stroke->setColor(ui.bnColor->color());
+
+    stroke->setGradient(ui.cmbGradient->gradient());
+    stroke->setReverse(ui.chkReverse->isChecked());
+    stroke->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
+    stroke->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
+    stroke->setAngle(ui.dialAngle->value());
+    stroke->setScale(ui.intScale->value());
+
+    stroke->setPattern((KoPattern*)ui.patternChooser->currentResource());
+    stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
+    stroke->setScale(ui.intScale->value());
 }
 
 /********************************************************************/

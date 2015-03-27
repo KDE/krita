@@ -208,6 +208,10 @@ public:
     void setStroke(const psd_layer_effects_stroke *stroke);
     void fetchStroke(psd_layer_effects_stroke *stroke) const;
 
+private Q_SLOTS:
+    void slotDialAngleChanged(int value);
+    void slotIntAngleChanged(int value);
+
 Q_SIGNALS:
     void configChanged();
 

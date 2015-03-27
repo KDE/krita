@@ -60,12 +60,12 @@
             <string>&amp;Opacity</string>
            </property>
            <property name="buddy">
-            <cstring>doubleOpacity</cstring>
+            <cstring>intOpacity</cstring>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
+          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -182,7 +182,7 @@
         </layout>
         <zorder>cmbContour</zorder>
         <zorder>chkAntiAliased</zorder>
-        <zorder>doubleOpacity</zorder>
+        <zorder>intOpacity</zorder>
         <zorder>label_13</zorder>
         <zorder>label_14</zorder>
         <zorder>label_4</zorder>
@@ -229,7 +229,7 @@
   <customwidget>
    <class>KisCompositeOpComboBox</class>
    <extends>QComboBox</extends>
-   <header location="global">kis_cmb_composite.h</header>
+   <header>kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
@@ -239,12 +239,12 @@
   <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
-   <header location="global">kcolorbutton.h</header>
+   <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

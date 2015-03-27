@@ -37,7 +37,14 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="KisSliderSpinBox" name="intSize" native="true"/>
+          <widget class="KisSliderSpinBox" name="intSize" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
@@ -51,6 +58,12 @@
          </item>
          <item row="1" column="1">
           <widget class="QComboBox" name="cmbPosition">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <item>
             <property name="text">
              <string>Outside</string>
@@ -79,7 +92,14 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="KisCompositeOpComboBox" name="cmbCompositeOp"/>
+          <widget class="KisCompositeOpComboBox" name="cmbCompositeOp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_4">
@@ -92,7 +112,14 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="KisSliderSpinBox" name="intOpacity" native="true"/>
+          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -334,28 +361,29 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisCompositeOpComboBox</class>
    <extends>QComboBox</extends>
-   <header >kis_cmb_composite.h</header>
+   <header location="global">kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header >kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisPatternChooser</class>
-   <extends>QFrame</extends>
-   <header >kis_pattern_chooser.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisCmbGradient</class>
-   <extends>QComboBox</extends>
-   <header >kis_cmb_gradient.h</header>
+   <extends>QToolButton</extends>
+   <header>kis_cmb_gradient.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisPatternChooser</class>
+   <extends>QFrame</extends>
+   <header location="global">kis_pattern_chooser.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

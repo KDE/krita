@@ -46,7 +46,7 @@
          <item row="0" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="KisCmbContour" name="cmbContour">
+            <widget class="KisCmbContour" name="cmbContour" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -80,7 +80,7 @@
          <item row="1" column="1">
           <widget class="KisSliderSpinBox" name="intNoise" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -112,7 +112,7 @@
          <item row="0" column="1">
           <widget class="KisCompositeOpComboBox" name="cmbCompositeOp">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -135,7 +135,7 @@
          <item row="1" column="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -214,7 +214,7 @@
          <item row="3" column="1">
           <widget class="KisSliderSpinBox" name="intDistance" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -234,7 +234,7 @@
          <item row="4" column="1">
           <widget class="KisSliderSpinBox" name="intSpread" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -254,7 +254,7 @@
          <item row="5" column="1">
           <widget class="KisSliderSpinBox" name="intSize" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -287,11 +287,6 @@
    <class>KisCompositeOpComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">kis_cmb_composite.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>

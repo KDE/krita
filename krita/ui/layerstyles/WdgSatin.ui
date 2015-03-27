@@ -40,6 +40,12 @@
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="KisCompositeOpComboBox" name="cmbCompositeOp">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="toolTip">
               <string>Set the blend mode for the layer</string>
              </property>
@@ -67,7 +73,7 @@
          <item row="1" column="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -137,7 +143,14 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="KisSliderSpinBox" name="intDistance" native="true"/>
+          <widget class="KisSliderSpinBox" name="intDistance" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_4">
@@ -150,7 +163,14 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="KisSliderSpinBox" name="intSize" native="true"/>
+          <widget class="KisSliderSpinBox" name="intSize" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="6" column="0">
           <widget class="QLabel" name="label_6">
@@ -160,7 +180,7 @@
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="KisCmbContour" name="cmbContour"/>
+          <widget class="KisCmbContour" name="cmbContour" native="true"/>
          </item>
          <item row="7" column="1">
           <widget class="QCheckBox" name="chkAntiAliased">
@@ -227,19 +247,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisCompositeOpComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kis_cmb_composite.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisCompositeOpComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>

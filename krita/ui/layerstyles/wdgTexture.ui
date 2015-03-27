@@ -78,6 +78,12 @@
          </item>
          <item row="1" column="1">
           <widget class="KisSliderSpinBox" name="intScale" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="toolTip">
             <string>Set size of gradation</string>
            </property>
@@ -95,6 +101,12 @@
          </item>
          <item row="2" column="1">
           <widget class="KisSliderSpinBox" name="intDepth" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="toolTip">
             <string>Set size of gradation</string>
            </property>
@@ -118,7 +130,6 @@
         <zorder>label_8</zorder>
         <zorder>label</zorder>
         <zorder>intScale</zorder>
-        <zorder>patternChooser</zorder>
         <zorder>label_10</zorder>
         <zorder>intDepth</zorder>
         <zorder>chkInvert</zorder>

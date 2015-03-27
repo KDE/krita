@@ -36,7 +36,7 @@
          <item row="0" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="KisCmbContour" name="cmbContour"/>
+            <widget class="KisCmbContour" name="cmbContour" native="true"/>
            </item>
            <item>
             <widget class="QCheckBox" name="chkAntiAliased">
@@ -62,6 +62,12 @@
          </item>
          <item row="1" column="1">
           <widget class="KisSliderSpinBox" name="intRange" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="toolTip">
             <string>Add noise to shadow</string>
            </property>

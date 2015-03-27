@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>344</width>
+    <width>354</width>
     <height>471</height>
    </rect>
   </property>
@@ -38,6 +38,12 @@
          </item>
          <item row="0" column="1">
           <widget class="QComboBox" name="cmbStyle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <item>
             <property name="text">
              <string>Outer Bevel</string>
@@ -77,6 +83,12 @@
          </item>
          <item row="1" column="1">
           <widget class="QComboBox" name="cmbTechnique">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <item>
             <property name="text">
              <string>Smooth</string>
@@ -105,7 +117,14 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="KisSliderSpinBox" name="intDepth" native="true"/>
+          <widget class="KisSliderSpinBox" name="intDepth" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_4">
@@ -116,6 +135,12 @@
          </item>
          <item row="3" column="1">
           <widget class="QComboBox" name="cmbDirection">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <item>
             <property name="text">
              <string>Up</string>
@@ -139,7 +164,14 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="KisSliderSpinBox" name="intSize" native="true"/>
+          <widget class="KisSliderSpinBox" name="intSize" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_6">
@@ -152,7 +184,14 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="KisSliderSpinBox" name="intSoften" native="true"/>
+          <widget class="KisSliderSpinBox" name="intSoften" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -298,7 +337,7 @@
          <item row="4" column="2">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -351,7 +390,7 @@
          <item row="6" column="2">
           <widget class="KisSliderSpinBox" name="intOpacity2" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>

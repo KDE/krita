@@ -88,8 +88,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
     m_bevelAndEmboss = new BevelAndEmboss(m_contour, m_texture, this);
 
     wdgLayerStyles.stylesStack->addWidget(m_bevelAndEmboss);
-    wdgLayerStyles.stylesStack->addWidget(m_texture);
     wdgLayerStyles.stylesStack->addWidget(m_contour);
+    wdgLayerStyles.stylesStack->addWidget(m_texture);
 
     connect(m_bevelAndEmboss, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 

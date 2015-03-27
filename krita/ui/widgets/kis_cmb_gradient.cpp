@@ -17,21 +17,40 @@
  */
 #include "kis_cmb_gradient.h"
 
+#include <QPainter>
+
+#include <KoCheckerBoardPainter.h>
+#include <KoResource.h>
+#include <KoAbstractGradient.h>
 #include "kis_gradient_chooser.h"
 
 KisCmbGradient::KisCmbGradient(QWidget *parent)
-    : KisIconWidget(parent, "KisCmbGradient")
-    , m_gradientChooser(0)
+    : KisPopupButton(parent)
+    , m_gradientChooser(new KisGradientChooser(this))
 {
 
+    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)), SLOT(gradientSelected(KoResource*)));
+    setPopupWidget(m_gradientChooser);
 }
 
 void KisCmbGradient::setGradient(KoAbstractGradient *gradient)
 {
-
 }
 
 KoAbstractGradient *KisCmbGradient::gradient() const
 {
     return 0;
+}
+
+void KisCmbGradient::gradientSelected(KoResource *resource)
+{
+    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
+    if (!gradient) return;
+
+    emit gradientChanged(gradient);
+
+    QSize iconSize = size();
+    qDebug() << iconSize;
+    QImage pm = gradient->generatePreview(iconSize.width(), iconSize.height());
+    setIcon(QIcon(QPixmap::fromImage(pm)));
 }

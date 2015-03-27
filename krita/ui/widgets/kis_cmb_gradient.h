@@ -18,15 +18,16 @@
 #ifndef KIS_CMB_GRADIENT_H
 #define KIS_CMB_GRADIENT_H
 
-#include <kis_iconwidget.h>
+#include <kis_popup_button.h>
 
+class KoResource;
 class KisGradientChooser;
 class KoAbstractGradient;
 
 /**
  * @brief The KisCmbGradient class allows the user to select a gradient.
  */
-class KisCmbGradient : public KisIconWidget
+class KisCmbGradient : public KisPopupButton
 {
     Q_OBJECT
 public:
@@ -39,7 +40,9 @@ Q_SIGNALS:
 
     void gradientChanged(KoAbstractGradient*);
 
-public Q_SLOTS:
+private Q_SLOTS:
+
+    void gradientSelected(KoResource *resource);
 
 private:
     KisGradientChooser *m_gradientChooser;

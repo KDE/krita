@@ -58,8 +58,11 @@ QPainterPath KisLayerStyleFilterEnvironment::layerOutlineCache() const
 
     KisPaintDeviceSP srcDevice = m_d->sourceLayer->projection();
 
+    QRect srcRect = srcDevice->exactBounds();
+    if (srcRect.isEmpty()) return QPainterPath();
+
     KisSelectionSP baseSelection =
-        KisLsUtils::selectionFromAlphaChannel(srcDevice, srcDevice->exactBounds());
+        KisLsUtils::selectionFromAlphaChannel(srcDevice, srcRect);
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
     // needs no 'invalidate' call

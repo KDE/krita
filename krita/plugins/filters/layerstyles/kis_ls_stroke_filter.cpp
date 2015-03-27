@@ -77,6 +77,7 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("0_selection_initial.png");
 
     QPainterPath strokePath = env->layerOutlineCache();
+    if (strokePath.isEmpty()) return;
 
     if (config->position() == psd_stroke_center) {
         paintPathOnSelection(selection, strokePath,

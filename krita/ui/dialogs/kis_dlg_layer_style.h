@@ -43,17 +43,40 @@ class QListWidgetItem;
 class KisPSDLayerStyle;
 class KisSignalCompressor;
 
+
+class Contour : public QWidget {
+    Q_OBJECT
+public:
+    Contour(QWidget *parent);
+    Ui::WdgContour ui;
+};
+
+
+class Texture : public QWidget {
+    Q_OBJECT
+public:
+    Texture(QWidget *parent);
+    Ui::WdgTexture ui;
+};
+
+
 class BevelAndEmboss : public QWidget {
     Q_OBJECT
 public:
-    BevelAndEmboss(QWidget *parent);
+    BevelAndEmboss(Contour *contour, Texture *texture, QWidget *parent);
     void setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelEmboss);
     void fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelEmboss) const;
+
+private Q_SLOTS:
+    void slotDialAngleChanged(int value);
+    void slotIntAngleChanged(int value);
 
 Q_SIGNALS:
     void configChanged();
 
 private:
+    Contour *m_contour;
+    Texture *m_texture;
     Ui::WdgBevelAndEmboss ui;
 };
 
@@ -61,7 +84,6 @@ class BlendingOptions : public QWidget {
     Q_OBJECT
 public:
     BlendingOptions(QWidget *parent);
-
 Q_SIGNALS:
     void configChanged();
 
@@ -82,18 +104,6 @@ Q_SIGNALS:
 
 private:
     Ui::WdgColorOverlay ui;
-};
-
-class Contour : public QWidget {
-    Q_OBJECT
-public:
-    Contour(QWidget *parent);
-
-Q_SIGNALS:
-    void configChanged();
-
-private:
-    Ui::WdgContour ui;
 };
 
 
@@ -230,18 +240,6 @@ signals:
     void styleSelected(KisPSDLayerStyleSP style);
 private:
     Ui::WdgStylesSelector ui;
-};
-
-class Texture : public QWidget {
-    Q_OBJECT
-public:
-    Texture(QWidget *parent);
-
-Q_SIGNALS:
-    void configChanged();
-
-private:
-    Ui::WdgTexture ui;
 };
 
 class KisDlgLayerStyle : public KDialog

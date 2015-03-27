@@ -83,17 +83,15 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
     wdgLayerStyles.stylesStack->addWidget(m_innerGlow);
     connect(m_innerGlow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
-    m_bevelAndEmboss = new BevelAndEmboss(this);
-    wdgLayerStyles.stylesStack->addWidget(m_bevelAndEmboss);
-    connect(m_bevelAndEmboss, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
-
     m_contour = new Contour(this);
     wdgLayerStyles.stylesStack->addWidget(m_contour);
-    connect(m_contour, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
     m_texture = new Texture(this);
     wdgLayerStyles.stylesStack->addWidget(m_texture);
-    connect(m_texture, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
+
+    m_bevelAndEmboss = new BevelAndEmboss(m_contour, m_texture, this);
+    wdgLayerStyles.stylesStack->addWidget(m_bevelAndEmboss);
+    connect(m_bevelAndEmboss, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
     m_satin = new Satin(this);
     wdgLayerStyles.stylesStack->addWidget(m_satin);
@@ -172,14 +170,14 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
     item = wdgLayerStyles.lstStyleSelector->item(5);
     item->setCheckState(style->innerGlow()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
-//    item = wdgLayerStyles.lstStyleSelector->item(6);
-//    item->setCheckState(style->bevelAndEmboss()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item = wdgLayerStyles.lstStyleSelector->item(6);
+    item->setCheckState(style->bevelAndEmboss()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
 
-//    item = wdgLayerStyles.lstStyleSelector->item(7);
-//    item->setCheckState(style->contour()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item = wdgLayerStyles.lstStyleSelector->item(7);
+    item->setCheckState(style->bevelAndEmboss()->contourEnabled() ? Qt::Checked : Qt::Unchecked);
 
-//    item = wdgLayerStyles.lstStyleSelector->item(8);
-//    item->setCheckState(style->texture()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
+    item = wdgLayerStyles.lstStyleSelector->item(8);
+    item->setCheckState(style->bevelAndEmboss()->textureEnabled() ? Qt::Checked : Qt::Unchecked);
 
     item = wdgLayerStyles.lstStyleSelector->item(9);
     item->setCheckState(style->satin()->effectEnabled() ? Qt::Checked : Qt::Unchecked);
@@ -200,9 +198,7 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
     m_innerShadow->setShadow(style->innerShadow());
     m_outerGlow->setOuterGlow(style->outerGlow());
     m_innerGlow->setInnerGlow(style->innerGlow());
-//    m_bevelAndEmboss->setBevelAndEmboss(style->bevelAndEmboss());
-//    m_contour->setContour(style->contour());
-//    m_texture->setTexture(style->texture());
+    m_bevelAndEmboss->setBevelAndEmboss(style->bevelAndEmboss());
     m_satin->setSatin(style->satin());
     m_colorOverlay->setColorOverlay(style->colorOverlay());
     m_gradientOverlay->setGradientOverlay(style->gradientOverlay());
@@ -217,9 +213,9 @@ KisPSDLayerStyleSP KisDlgLayerStyle::style() const
     m_layerStyle->innerShadow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(3)->checkState() == Qt::Checked);
     m_layerStyle->outerGlow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(4)->checkState() == Qt::Checked);
     m_layerStyle->innerGlow()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(5)->checkState() == Qt::Checked);
-//    m_layerStyle->bevelAndEmboss()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(6)->checkState() == Qt::Checked);
-//    m_layerStyle->contour()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(7)->checkState() == Qt::Checked);
-//    m_layerStyle->texture()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(8)->checkState() == Qt::Checked);
+    m_layerStyle->bevelAndEmboss()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(6)->checkState() == Qt::Checked);
+    m_layerStyle->bevelAndEmboss()->setContourEnabled(wdgLayerStyles.lstStyleSelector->item(7)->checkState() == Qt::Checked);
+    m_layerStyle->bevelAndEmboss()->setTextureEnabled(wdgLayerStyles.lstStyleSelector->item(8)->checkState() == Qt::Checked);
     m_layerStyle->satin()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(9)->checkState() == Qt::Checked);
     m_layerStyle->colorOverlay()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(10)->checkState() == Qt::Checked);
     m_layerStyle->gradientOverlay()->setEffectEnabled(wdgLayerStyles.lstStyleSelector->item(11)->checkState() == Qt::Checked);
@@ -231,9 +227,7 @@ KisPSDLayerStyleSP KisDlgLayerStyle::style() const
     m_innerShadow->fetchShadow(m_layerStyle->innerShadow());
     m_outerGlow->fetchOuterGlow(m_layerStyle->outerGlow());
     m_innerGlow->fetchInnerGlow(m_layerStyle->innerGlow());
-//    m_bevelAndEmboss->fetchBevelAndEmboss(m_layerStyle->bevelAndEmboss());
-//    m_contour->fetchContour(m_layerStyle->contour());
-//    m_texture->fetchTexture(m_layerStyle->texture());
+    m_bevelAndEmboss->fetchBevelAndEmboss(m_layerStyle->bevelAndEmboss());
     m_satin->fetchSatin(m_layerStyle->satin());
     m_colorOverlay->fetchColorOverlay(m_layerStyle->colorOverlay());
     m_gradientOverlay->fetchGradientOverlay(m_layerStyle->gradientOverlay());
@@ -294,8 +288,10 @@ void StylesSelector::selectStyle(QListWidgetItem */*previous*/, QListWidgetItem*
 /***** Bevel and Emboss *********************************************/
 /********************************************************************/
 
-BevelAndEmboss::BevelAndEmboss(QWidget *parent)
+BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *parent)
     : QWidget(parent)
+    , m_contour(contour)
+    , m_texture(texture)
 {
     ui.setupUi(this);
 }
@@ -308,6 +304,18 @@ void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bev
 void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelEmboss) const
 {
 
+}
+
+void BevelAndEmboss::slotDialAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.intAngle);
+    ui.intAngle->setValue(value);
+}
+
+void BevelAndEmboss::slotIntAngleChanged(int value)
+{
+    KisSignalsBlocker b(ui.dialAngle);
+    ui.dialAngle->setValue(value);
 }
 
 /********************************************************************/

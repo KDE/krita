@@ -399,7 +399,7 @@ void KisLsBevelEmbossFilter::processDirectly(KisPaintDeviceSP src,
     Q_UNUSED(env);
     KIS_ASSERT_RECOVER_RETURN(style);
 
-    const psd_layer_effects_bevel_emboss *config = style->bevelEmboss();
+    const psd_layer_effects_bevel_emboss *config = style->bevelAndEmboss();
     if (!config->effectEnabled()) return;
 
     applyBevelEmboss(src, dst, applyRect, config, env);

@@ -185,7 +185,7 @@ const psd_layer_effects_stroke* KisPSDLayerStyle::stroke() const
     return &d->stroke;
 }
 
-const psd_layer_effects_bevel_emboss* KisPSDLayerStyle::bevelEmboss() const
+const psd_layer_effects_bevel_emboss* KisPSDLayerStyle::bevelAndEmboss() const
 {
     return &d->bevel_emboss;
 }
@@ -240,7 +240,7 @@ psd_layer_effects_stroke* KisPSDLayerStyle::stroke()
     return &d->stroke;
 }
 
-psd_layer_effects_bevel_emboss* KisPSDLayerStyle::bevelEmboss()
+psd_layer_effects_bevel_emboss* KisPSDLayerStyle::bevelAndEmboss()
 {
     return &d->bevel_emboss;
 }

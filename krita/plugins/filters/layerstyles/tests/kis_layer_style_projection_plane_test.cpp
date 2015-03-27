@@ -393,58 +393,58 @@ void KisLayerStyleProjectionPlaneTest::testBumpmap()
 void KisLayerStyleProjectionPlaneTest::testBevel()
 {
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
-    style->bevelEmboss()->setEffectEnabled(true);
+    style->bevelAndEmboss()->setEffectEnabled(true);
 
-    style->bevelEmboss()->setAngle(135);
-    style->bevelEmboss()->setAltitude(45);
-    style->bevelEmboss()->setDepth(100);
+    style->bevelAndEmboss()->setAngle(135);
+    style->bevelAndEmboss()->setAltitude(45);
+    style->bevelAndEmboss()->setDepth(100);
 
-    style->bevelEmboss()->setHighlightColor(Qt::white);
-    style->bevelEmboss()->setHighlightBlendMode(COMPOSITE_OVER);
-    style->bevelEmboss()->setHighlightOpacity(100);
+    style->bevelAndEmboss()->setHighlightColor(Qt::white);
+    style->bevelAndEmboss()->setHighlightBlendMode(COMPOSITE_OVER);
+    style->bevelAndEmboss()->setHighlightOpacity(100);
 
-    style->bevelEmboss()->setShadowColor(Qt::black);
-    style->bevelEmboss()->setShadowBlendMode(COMPOSITE_OVER);
-    style->bevelEmboss()->setShadowOpacity(100);
+    style->bevelAndEmboss()->setShadowColor(Qt::black);
+    style->bevelAndEmboss()->setShadowBlendMode(COMPOSITE_OVER);
+    style->bevelAndEmboss()->setShadowOpacity(100);
 
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
     KoPattern pattern(fileName);
     QVERIFY(pattern.load());
 
-    style->bevelEmboss()->setTexturePattern(&pattern);
+    style->bevelAndEmboss()->setTexturePattern(&pattern);
 
-    style->bevelEmboss()->setTextureEnabled(true);
-    style->bevelEmboss()->setTextureDepth(-10);
-    style->bevelEmboss()->setTextureInvert(false);
+    style->bevelAndEmboss()->setTextureEnabled(true);
+    style->bevelAndEmboss()->setTextureDepth(-10);
+    style->bevelAndEmboss()->setTextureInvert(false);
 
-    style->bevelEmboss()->setStyle(psd_bevel_outer_bevel);
-    style->bevelEmboss()->setDirection(psd_direction_up);
-    style->bevelEmboss()->setSoften(0);
+    style->bevelAndEmboss()->setStyle(psd_bevel_outer_bevel);
+    style->bevelAndEmboss()->setDirection(psd_direction_up);
+    style->bevelAndEmboss()->setSoften(0);
     test(style, "bevel_outer_up");
 
-    style->bevelEmboss()->setStyle(psd_bevel_outer_bevel);
-    style->bevelEmboss()->setDirection(psd_direction_down);
-    style->bevelEmboss()->setSoften(0);
+    style->bevelAndEmboss()->setStyle(psd_bevel_outer_bevel);
+    style->bevelAndEmboss()->setDirection(psd_direction_down);
+    style->bevelAndEmboss()->setSoften(0);
     test(style, "bevel_outer_down");
 
-    style->bevelEmboss()->setStyle(psd_bevel_emboss);
-    style->bevelEmboss()->setDirection(psd_direction_up);
-    style->bevelEmboss()->setSoften(0);
+    style->bevelAndEmboss()->setStyle(psd_bevel_emboss);
+    style->bevelAndEmboss()->setDirection(psd_direction_up);
+    style->bevelAndEmboss()->setSoften(0);
     test(style, "bevel_emboss_up");
 
-    style->bevelEmboss()->setStyle(psd_bevel_pillow_emboss);
-    style->bevelEmboss()->setDirection(psd_direction_up);
-    style->bevelEmboss()->setSoften(0);
+    style->bevelAndEmboss()->setStyle(psd_bevel_pillow_emboss);
+    style->bevelAndEmboss()->setDirection(psd_direction_up);
+    style->bevelAndEmboss()->setSoften(0);
     test(style, "bevel_pillow_up");
 
-    style->bevelEmboss()->setStyle(psd_bevel_pillow_emboss);
-    style->bevelEmboss()->setDirection(psd_direction_down);
-    style->bevelEmboss()->setSoften(0);
+    style->bevelAndEmboss()->setStyle(psd_bevel_pillow_emboss);
+    style->bevelAndEmboss()->setDirection(psd_direction_down);
+    style->bevelAndEmboss()->setSoften(0);
     test(style, "bevel_pillow_down");
 
-    style->bevelEmboss()->setStyle(psd_bevel_pillow_emboss);
-    style->bevelEmboss()->setDirection(psd_direction_up);
-    style->bevelEmboss()->setSoften(3);
+    style->bevelAndEmboss()->setStyle(psd_bevel_pillow_emboss);
+    style->bevelAndEmboss()->setDirection(psd_direction_up);
+    style->bevelAndEmboss()->setSoften(3);
     test(style, "bevel_pillow_up_soft");
 }
 QTEST_KDEMAIN(KisLayerStyleProjectionPlaneTest, GUI)

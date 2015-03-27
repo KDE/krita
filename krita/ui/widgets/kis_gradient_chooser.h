@@ -57,7 +57,8 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource * currentResource();
+    KoResource *currentResource();
+    void setCurrentResource(KoResource *resource);
 
     void setCurrentItem(int row, int column);
 

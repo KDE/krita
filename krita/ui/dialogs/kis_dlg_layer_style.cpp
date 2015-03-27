@@ -310,6 +310,30 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelEm
 
 }
 
+/********************************************************************/
+/***** Texture          *********************************************/
+/********************************************************************/
+
+Texture::Texture(QWidget *parent)
+    : QWidget(parent)
+{
+    ui.setupUi(this);
+}
+
+/********************************************************************/
+/***** Contour          *********************************************/
+/********************************************************************/
+
+Contour::Contour(QWidget *parent)
+    : QWidget(parent)
+{
+    ui.setupUi(this);
+}
+
+
+/********************************************************************/
+/***** Blending Options *********************************************/
+/********************************************************************/
 
 BlendingOptions::BlendingOptions(QWidget *parent)
     : QWidget(parent)
@@ -352,12 +376,6 @@ void ColorOverlay::fetchColorOverlay(psd_layer_effects_color_overlay *colorOverl
 }
 
 
-Contour::Contour(QWidget *parent)
-    : QWidget(parent)
-{
-    ui.setupUi(this);
-}
-
 /********************************************************************/
 /***** Drop Shadow **************************************************/
 /********************************************************************/
@@ -390,7 +408,7 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
 
     // connect everything to configChanged() signal
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valuechanged(int)), SIGNAL(configChanged()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -496,7 +514,7 @@ GradientOverlay::GradientOverlay(QWidget *parent)
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valuechanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
     connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -706,7 +724,7 @@ Satin::Satin(QWidget *parent)
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
-    connect(ui.intOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valuechanged(int)), SIGNAL(configChanged()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -792,7 +810,7 @@ Stroke::Stroke(QWidget *parent)
     connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbPosition, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configChanged()));
+    connect(ui.intOpacity, SIGNAL(valuechanged(int)), SIGNAL(configChanged()));
 
     connect(ui.cmbFillType, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
 
@@ -871,17 +889,6 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
     stroke->setPattern((KoPattern*)ui.patternChooser->currentResource());
     stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
     stroke->setScale(ui.intScale->value());
-}
-
-/********************************************************************/
-/***** Texture          *********************************************/
-/********************************************************************/
-
-
-Texture::Texture(QWidget *parent)
-    : QWidget(parent)
-{
-    ui.setupUi(this);
 }
 
 /********************************************************************/

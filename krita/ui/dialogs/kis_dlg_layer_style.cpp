@@ -84,13 +84,13 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, QWidget *paren
     connect(m_innerGlow, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
     m_contour = new Contour(this);
+    m_texture = new Texture(this);
+    m_bevelAndEmboss = new BevelAndEmboss(m_contour, m_texture, this);
+
+    wdgLayerStyles.stylesStack->addWidget(m_bevelAndEmboss);
+    wdgLayerStyles.stylesStack->addWidget(m_texture);
     wdgLayerStyles.stylesStack->addWidget(m_contour);
 
-    m_texture = new Texture(this);
-    wdgLayerStyles.stylesStack->addWidget(m_texture);
-
-    m_bevelAndEmboss = new BevelAndEmboss(m_contour, m_texture, this);
-    wdgLayerStyles.stylesStack->addWidget(m_bevelAndEmboss);
     connect(m_bevelAndEmboss, SIGNAL(configChanged()), m_configChangedCompressor, SLOT(start()));
 
     m_satin = new Satin(this);

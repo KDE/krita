@@ -117,7 +117,6 @@ public:
 
 private Q_SLOTS:
     void slotTimeOut();
-    void slotUpdateToolTip(int index);
 
 private:
     void resizeEvent(QResizeEvent *);

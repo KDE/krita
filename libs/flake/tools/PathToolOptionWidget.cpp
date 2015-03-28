@@ -19,7 +19,7 @@
 
 #include "PathToolOptionWidget.h"
 #include "KoPathTool.h"
-#include <kaction.h>
+#include <QAction>
 
 PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     : QWidget(parent)

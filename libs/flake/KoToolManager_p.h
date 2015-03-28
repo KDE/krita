@@ -29,7 +29,7 @@
 
 #include "KoInputDevice.h"
 #include "KoToolManager.h"
-#include <kaction.h>
+#include <QAction>
 
 class KoToolFactoryBase;
 class KoShapeManager;
@@ -162,7 +162,7 @@ private:
 
 /// \internal
 /// Helper class to provide a action for tool shortcuts
-class ToolAction : public KAction
+class ToolAction : public QAction
 {
     Q_OBJECT
 public:

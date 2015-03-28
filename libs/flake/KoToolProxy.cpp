@@ -506,9 +506,9 @@ void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)
     controller = c;
 }
 
-QHash<QString, KAction*> KoToolProxy::actions() const
+QHash<QString, QAction *> KoToolProxy::actions() const
 {
-    return d->activeTool ? d->activeTool->actions() : QHash<QString, KAction*>();
+    return d->activeTool ? d->activeTool->actions() : QHash<QString, QAction *>();
 }
 
 bool KoToolProxy::hasSelection() const

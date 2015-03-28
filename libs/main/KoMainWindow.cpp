@@ -2002,7 +2002,7 @@ void KoMainWindow::createMainwindowGUI()
         d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), false, actionCollection() );
 
     QString f = xmlFile();
-    setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc", componentData() ) );
+    setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc"/*, componentData()*/ ) );
     if ( !f.isEmpty() )
         setXMLFile( f, true );
     else

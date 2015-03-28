@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -142,26 +142,24 @@ public:
     /*! Sets bound column number to \a column. @see boundColumn() */
     void setBoundColumn(int column);
 
-    /*! @return a list of visible column: a list of integers specifying a column that has
-     to be visible in the combo box (counted from 0).
+    /*! @return a list of visible column: a list of integers specifying indices (counted from 0)
+     of columns within the row source that are visible in the combo box.
      Empty list means unspecified value. */
     QList<uint> visibleColumns() const;
 
-    /*! Sets a list of visible columns to \a list.
-     Columns will be separated with a single space character when displayed. */
+    /*! Sets a list of visible columns to \a list. @see visibleColumns() */
     void setVisibleColumns(const QList<uint>& list);
 
     /*! A helper method.
-     If visibleColumns() contains one item, this item is returned (a typical case).
-     If visibleColumns() contains no item, -1 is returned.
-     If visibleColumns() multiple items, \a fieldsCount - 1 is returned. */
-    int visibleColumn(uint fieldsCount) const;
+     If index >= visibleColumns().count(), -1 is returned,
+     else \a index is returned. */
+    int visibleColumn(uint index) const;
 
     /*! @return a number of ordered integers specifying column widths;
      -1 means 'default width' for a given column. */
     QList<int> columnWidths() const;
 
-    /*! Sets column widths. @see columnWidths */
+    /*! Sets column widths. @see columnWidths() */
     void setColumnWidths(const QList<int>& widths);
 
     /*! @return true if column headers are visible in the associated

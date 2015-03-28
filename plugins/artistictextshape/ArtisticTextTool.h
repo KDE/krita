@@ -136,12 +136,12 @@ private:
     QPainterPath m_textCursorShape;     ///< our visual text cursor representation
     bool m_hoverHandle;
 
-    KAction * m_detachPath;
-    KAction * m_convertText;
-    KAction * m_fontBold;
-    KAction * m_fontItalic;
-    KAction * m_superScript;
-    KAction * m_subScript;
+    QAction * m_detachPath;
+    QAction * m_convertText;
+    QAction * m_fontBold;
+    QAction * m_fontItalic;
+    QAction * m_superScript;
+    QAction * m_subScript;
     QActionGroup * m_anchorGroup;
 
     int m_textCursor;

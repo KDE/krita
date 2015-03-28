@@ -246,7 +246,7 @@ public Q_SLOTS:
     void slotFilePrintPreview();
 
     KoPrintJob* exportToPdf(const QString &pdfFileName = QString());
-    KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
+    KoPrintJob* exportToPdf(const KoPageLayout &pageLayout, const QString &pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.

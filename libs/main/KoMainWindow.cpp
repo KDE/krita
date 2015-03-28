@@ -1452,10 +1452,14 @@ KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
     return exportToPdf(pageLayout, pdfFileName);
 }
 
-KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileName)
+KoPrintJob* KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QString &_pdfFileName)
 {
     if (!rootView())
         return 0;
+
+    KoPageLayout pageLayout = _pageLayout;
+    QString pdfFileName = _pdfFileName;
+
     if (pdfFileName.isEmpty()) {
         KConfigGroup group = KGlobal::config()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");

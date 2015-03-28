@@ -21,7 +21,7 @@
 #include "komain_export.h"
 
 class QObject;
-class KAction;
+class QAction;
 class KToggleAction;
 
 /**
@@ -43,7 +43,7 @@ namespace KoStandardAction
    * Creates an action corresponding to the
    * KoStandardAction::StandardAction enum.
    */
-  KOMAIN_EXPORT KAction* create(StandardAction id, const QObject *receiver, const char *slot, QObject *parent);
+  KOMAIN_EXPORT QAction* create(StandardAction id, const QObject *receiver, const char *slot, QObject *parent);
 
   /**
    * This will return the internal name of a given standard action.

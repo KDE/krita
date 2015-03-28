@@ -68,6 +68,7 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 #include <kmenubar.h>
 #include <kmimetype.h>
 
@@ -204,14 +205,14 @@ public:
     bool readOnly;
 
     KAction *showDocumentInfo;
-    KAction *saveAction;
-    KAction *saveActionAs;
-    KAction *printAction;
-    KAction *printActionPreview;
-    KAction *sendFileAction;
+    QAction *saveAction;
+    QAction *saveActionAs;
+    QAction *printAction;
+    QAction *printActionPreview;
+    QAction *sendFileAction;
     KAction *exportPdf;
-    KAction *closeFile;
-    KAction *reloadFile;
+    QAction *closeFile;
+    QAction *reloadFile;
     KAction *showFileVersions;
     KAction *importFile;
     KAction *exportFile;

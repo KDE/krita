@@ -27,6 +27,7 @@
 #include <kfilewidget.h>
 #include <kjob.h>
 #include <KIO/Job>
+#include <kurl.h>
 
 #include <QGridLayout>
 #include <QImageReader>

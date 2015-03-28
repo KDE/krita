@@ -49,15 +49,20 @@ public:
     void setView(KisViewManager *view);
     void setPaintDevice(bool showAll, KisPaintDeviceSP);
     KisFilterConfiguration* configuration();
-    void showFilterGallery(bool visible);
     bool isFilterGalleryVisible() const;
     KisFilterSP currentFilter() const;
+public Q_SLOTS:
+    void setVisible(bool visible);
+    void showFilterGallery(bool visible);
 protected Q_SLOTS:
     void slotBookmarkedFilterConfigurationSelected(int);
     void setFilterIndex(const QModelIndex&);
     void editConfigurations();
+    void update();
 Q_SIGNALS:
     void configurationChanged();
+    void sigFilterGalleryToggled(bool visible);
+    void sigSizeChanged();
 private:
     struct Private;
     Private* const d;

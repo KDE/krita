@@ -119,7 +119,7 @@ calligra_define_product(PLUGIN_DOCKERS "Default dockers plugin" UNPORTED  REQUIR
 calligra_define_product(PLUGIN_TEXTEDITING "Textediting plugins" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION "Import from ODS plugin for Kexi" UNPORTED  REQUIRES APP_KEXI PART_SHEETS)
 calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VARIABLES "Text variables plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)

@@ -298,7 +298,7 @@ void KisConfig::setUseEraserBrushSize(bool value)
 
 QColor KisConfig::getMDIBackgroundColor() const
 {
-    QColor col(200, 200, 200);
+    QColor col(77, 77, 77);
     return m_cfg.readEntry("mdiBackgroundColor", col);
 }
 
@@ -1025,6 +1025,16 @@ int KisConfig::hideDockersFullscreen() const
 void KisConfig::setHideDockersFullscreen(const int value) const
 {
     m_cfg.writeEntry("hideDockersFullScreen", value);
+}
+
+bool KisConfig::showDockerTitleBars() const
+{
+    return m_cfg.readEntry("showDockerTitleBars", true);
+}
+
+void KisConfig::setShowDockerTitleBars(const bool value) const
+{
+    m_cfg.writeEntry("showDockerTitleBars", value);
 }
 
 int KisConfig::hideMenuFullscreen() const

@@ -184,7 +184,7 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                            baseBounds);
 
     QRect expectedDstRect = roundRect(originalTransform.mapRect(originalBounds));
-
+#if 0 // Only enable when debugging; users shouldn't see this warning
     {
         QRect testingRect = roundRect(transform.mapRect(baseBounds));
         if (testingRect != expectedDstRect) {
@@ -193,7 +193,7 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
             qWarning() << "         real rect:    " << testingRect;
         }
     }
-
+#endif
     KIS_ASSERT_RECOVER_NOOP(expectedDstRect.x() >= 0);
     KIS_ASSERT_RECOVER_NOOP(expectedDstRect.y() >= 0);
 

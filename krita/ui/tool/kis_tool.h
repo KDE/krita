@@ -67,8 +67,6 @@ class QPainterPath;
 class QPolygonF;
 class KisRecordedPaintAction;
 
-enum PaintMode { XOR_MODE, BW_MODE };
-
 /// Definitions of the toolgroups of Krita
 static const QString TOOL_TYPE_SHAPE = "0 Krita/Shape";         // Geometric shapes like ellipses and lines
 static const QString TOOL_TYPE_FREEHAND = "1 Krita/Freehand";   // Freehand drawing tools
@@ -256,10 +254,6 @@ protected:
 
     virtual QWidget* createOptionWidget();
 
-    inline void setOutlineStyle(PaintMode mode) {
-        m_outlinePaintMode = mode;
-    }
-
 protected:
     KisImageWSP image() const;
     QCursor cursor() const;
@@ -342,7 +336,6 @@ private Q_SLOTS:
     void slotResetFgBg();
 
 private:
-    PaintMode m_outlinePaintMode;
     ToolMode m_mode;
 
     struct Private;

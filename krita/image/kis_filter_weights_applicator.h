@@ -218,10 +218,10 @@ public:
             rightSrcBorder = getRightSrcNeedBorder(dstStart, line, buffer);
         }
 
-        Q_ASSERT(dstStart < dstEnd);
-        Q_ASSERT(leftSrcBorder < rightSrcBorder);
-        Q_ASSERT(leftSrcBorder <= srcLine.start());
-        Q_ASSERT(srcLine.end() <= rightSrcBorder);
+        //Q_ASSERT(dstStart < dstEnd);
+        //Q_ASSERT(leftSrcBorder < rightSrcBorder);
+        //Q_ASSERT(leftSrcBorder <= srcLine.start());
+        //Q_ASSERT(srcLine.end() <= rightSrcBorder);
 
         int pixelSize = m_src->pixelSize();
         KoMixColorsOp *mixOp = m_src->colorSpace()->mixColorsOp();

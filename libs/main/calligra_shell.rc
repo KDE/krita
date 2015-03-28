@@ -33,6 +33,7 @@
   <DefineGroup name="settings_top"/>
   <Merge/>
 <!--  <ActionList name="toolbarlist"/> -->
+  <Action name="view_toggledockertitlebars"/>
   <Action name="settings_dockers_menu"/>
   <DefineGroup name="settings_show"/>
   <Separator/>

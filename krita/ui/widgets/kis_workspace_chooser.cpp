@@ -153,7 +153,8 @@ void KisWorkspaceChooser::resourceSelected(KoResource* resource)
         dockWidgetMap[docker] = docker->property("Locked").toBool();
     }
 
-    m_view->qtMainWindow()->restoreState(workspace->dockerState());
+    KisMainWindow *mainWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
+    mainWindow->restoreWorkspace(workspace->dockerState());
     m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
 
     foreach(QDockWidget *docker, dockWidgetMap.keys()) {

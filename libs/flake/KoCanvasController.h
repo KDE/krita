@@ -444,14 +444,14 @@ public:
     virtual void scrollContentsBy(int /*dx*/, int /*dy*/) {}
     virtual QSize viewportSize() const { return QSize(); }
     virtual void setDrawShadow(bool /*drawShadow*/) {}
-    virtual void setCanvas(KoCanvasBase */*canvas*/) {}
+    virtual void setCanvas(KoCanvasBase *canvas) {Q_UNUSED(canvas)}
     virtual KoCanvasBase *canvas() const {return 0;}
     virtual int visibleHeight() const {return 0;}
     virtual int visibleWidth() const {return 0;}
     virtual int canvasOffsetX() const {return 0;}
     virtual int canvasOffsetY() const {return 0;}
     virtual void ensureVisible(const QRectF &/*rect*/, bool /*smooth */ = false) {}
-    virtual void ensureVisible(KoShape */*shape*/) {}
+    virtual void ensureVisible(KoShape *shape) {Q_UNUSED(shape)}
     virtual void zoomIn(const QPoint &/*center*/) {}
     virtual void zoomOut(const QPoint &/*center*/) {}
     virtual void zoomBy(const QPoint &/*center*/, qreal /*zoom*/) {}

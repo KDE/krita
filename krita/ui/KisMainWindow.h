@@ -139,6 +139,13 @@ public:
 
     int viewCount() const;
 
+    /**
+     * A wrapper around restoreState
+     * @param state the saved state
+     * @return TRUE on success
+     */
+    bool restoreWorkspace(const QByteArray &state);
+
 Q_SIGNALS:
 
     /**
@@ -310,6 +317,11 @@ private Q_SLOTS:
     void viewFullscreen(bool fullScreen);
 
     /**
+     * Toggle docker titlebars on/off.
+     */
+    void showDockerTitleBars(bool show);
+
+    /**
      * Reload file
      */
     void slotReloadFile();
@@ -418,6 +430,7 @@ private:
 
     void createActions();
 
+private slots:
     void initializeGeometry();
 
 private:

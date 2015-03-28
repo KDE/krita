@@ -28,8 +28,8 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 
-DlgImagesplit::DlgImagesplit(KisViewManager* view,QString suffix,QStringList listMimeFilter)
-        : KDialog(view->mainWindow())
+DlgImagesplit::DlgImagesplit(KisViewManager* view, QString suffix, QStringList listMimeFilter)
+    : KDialog(view->mainWindow())
 {
 
     m_page = new WdgImagesplit(this);
@@ -38,19 +38,19 @@ DlgImagesplit::DlgImagesplit(KisViewManager* view,QString suffix,QStringList lis
     setButtons(Apply | Close);
     setDefaultButton(Apply);
 
-    connect(this, SIGNAL(applyClicked()),this, SLOT(applyClicked()));
+    connect(this, SIGNAL(applyClicked()), this, SLOT(applyClicked()));
 
     setMainWidget(m_page);
     m_page->lineEdit->setText(suffix);
-    m_page->setMinimumWidth (200);
+    m_page->setMinimumWidth(200);
     m_page->setMinimumHeight(160);
     resize(m_page->sizeHint());
     m_page->cmbFileType->clear();
     m_page->cmbFileType->addItems(listMimeFilter);
     m_page->cmbFileType->setCurrentIndex(0);
-    cmbIndex=0;
+    cmbIndex = 0;
 
-    connect(m_page->chkAutoSave,SIGNAL(stateChanged(int)),SLOT(lineEditEnable()));
+    connect(m_page->chkAutoSave, SIGNAL(stateChanged(int)), SLOT(lineEditEnable()));
     connect(m_page->cmbFileType, SIGNAL(activated(int)), this, SLOT(setMimeType(int)));
 }
 
@@ -60,7 +60,7 @@ DlgImagesplit::~DlgImagesplit()
 
 void DlgImagesplit::lineEditEnable()
 {
-    if(m_page->chkAutoSave->isChecked()) {
+    if (m_page->chkAutoSave->isChecked()) {
         m_page->lblSuffix->setEnabled(true);
         m_page->lineEdit->setEnabled(true);
         m_page->lblFileType->setEnabled(true);
@@ -79,7 +79,7 @@ void DlgImagesplit::lineEditEnable()
 bool DlgImagesplit::autoSave()
 {
     if (m_page->chkAutoSave->isChecked())
-       return true;
+        return true;
     else
         return false;
 }
@@ -91,7 +91,7 @@ int DlgImagesplit::horizontalLines()
 
 int DlgImagesplit::verticalLines()
 {
-  return m_page->intVerticalSplitLines->value();
+    return m_page->intVerticalSplitLines->value();
 }
 
 QString DlgImagesplit::suffix()
@@ -101,7 +101,7 @@ QString DlgImagesplit::suffix()
 
 void DlgImagesplit::setMimeType(int index)
 {
-    cmbIndex=index;
+    cmbIndex = index;
 }
 
 void DlgImagesplit::applyClicked()

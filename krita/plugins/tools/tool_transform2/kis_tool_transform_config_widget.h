@@ -136,6 +136,7 @@ private:
     QButtonGroup *m_rotationCenterButtons;
     int m_notificationsBlocked;
     int m_uiSlotsBlocked;
+    double m_scaleRatio;
     bool m_configChanged;
 };
 

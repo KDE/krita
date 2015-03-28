@@ -1186,6 +1186,11 @@ bool KisMainWindow::restoreWorkspace(const QByteArray &state)
     return success;
 }
 
+KisViewManager *KisMainWindow::viewManager() const
+{
+    return d->viewManager;
+}
+
 void KisMainWindow::slotDocumentInfo()
 {
     if (!d->activeView->document())

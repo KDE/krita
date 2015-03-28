@@ -115,7 +115,7 @@ calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  REQUIRES LIB_
 calligra_define_product(PLUGIN_MUSICSHAPE "Music shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_SPACENAVIGATOR "SpaceNavigator input plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "Artistic shape plugin" REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_DOCKERS "Default dockers plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_DOCKERS "Default dockers plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_TEXTEDITING "Textediting plugins" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION "Import from ODS plugin for Kexi" UNPORTED  REQUIRES APP_KEXI PART_SHEETS)
 calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin" REQUIRES LIB_CALLIGRA)

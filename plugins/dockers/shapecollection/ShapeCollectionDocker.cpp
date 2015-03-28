@@ -41,6 +41,7 @@
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
 
 #include <QGridLayout>
 #include <QListView>
@@ -198,7 +199,7 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     connect(m_closeCollectionButton, SIGNAL(clicked()),
             this, SLOT(removeCurrentCollection()));
 
-    if(! KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections").isEmpty())
+    if(! KGlobal::dirs()->resourceDirs("app_shape_collections").isEmpty())
     {
         buildAddCollectionMenu();
     }
@@ -401,7 +402,7 @@ bool ShapeCollectionDocker::addCollection(const QString& id, const QString& titl
 
 void ShapeCollectionDocker::buildAddCollectionMenu()
 {
-    QStringList dirs = KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections");
+    QStringList dirs = KGlobal::dirs()->resourceDirs("app_shape_collections");
     QMenu* menu = new QMenu(m_addCollectionButton);
     m_addCollectionButton->setMenu(menu);
 

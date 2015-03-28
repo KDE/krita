@@ -27,17 +27,19 @@
 #include <kservicetype.h>
 #include <kdebug.h>
 #include <KoServiceLocator.h>
-#include <QFile>
+#include <KoJsonTrader.h>
+
+#include <QPluginLoader>
 
 #include <limits.h> // UINT_MAX
 
 KoDocumentEntry::KoDocumentEntry()
-        : m_service(0)
+        : m_loader(0)
 {
 }
 
-KoDocumentEntry::KoDocumentEntry(const KService::Ptr& service)
-        : m_service(service)
+KoDocumentEntry::KoDocumentEntry(QPluginLoader *loader)
+        : m_loader(loader)
 {
 }
 
@@ -46,29 +48,29 @@ KoDocumentEntry::~KoDocumentEntry()
 }
 
 
-KService::Ptr KoDocumentEntry::service() const {
-    return m_service;
+QPluginLoader * KoDocumentEntry::loader() const {
+    return m_loader;
 }
 
 /**
  * @return TRUE if the service pointer is null
  */
 bool KoDocumentEntry::isEmpty() const {
-    return m_service.isNull();
+    return (m_loader == 0);
 }
 
 /**
  * @return name of the associated service
  */
 QString KoDocumentEntry::name() const {
-    return m_service->name();
+    return m_loader->fileName(); //FIXME should return servicename
 }
 
 /**
  *  Mimetypes (and other service types) which this document can handle.
  */
 QStringList KoDocumentEntry::mimeTypes() const {
-    return m_service->serviceTypes();
+    return QStringList();//FIXME m_loader->serviceTypes();
 }
 
 /**
@@ -80,13 +82,13 @@ bool KoDocumentEntry::supportsMimeType(const QString & _mimetype) const {
 
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
-    QString error;
-    KoPart* part = m_service->createInstance<KoPart>(0, QVariantList(), &error);
+    QObject *obj = m_loader->instance();
+    KPluginFactory *factory = qobject_cast<KPluginFactory *>(obj);
+    KoPart *part = factory->create<KoPart>(0, QVariantList());
 
     if (!part) {
-        kWarning(30003) << error;
         if (errorMsg)
-            *errorMsg = error;
+            *errorMsg = m_loader->errorString();
         return 0;
     }
 
@@ -105,7 +107,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
         if (vec.isEmpty()) {
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
-            if (KServiceType::serviceType(mimetype).isNull()) {
+            if (!KServiceType::serviceType(mimetype)) {
                 kError(30003) << "Unknown Calligra MimeType " << mimetype << "." << endl;
                 kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
             } else {
@@ -130,31 +132,10 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
     QList<KoDocumentEntry> lst;
 
     // Query the trader
-    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Part");
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", mimetype);
 
-    foreach(KService::Ptr offer, offers) {
-
-        QStringList nativeMimeTypes = offer->property("X-KDE-NativeMimeType", QVariant::StringList).toStringList();
-        QStringList extraNativeMimeTypes = offer->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        QStringList serviceTypes = offer->property("ServiceTypes", QVariant::StringList).toStringList();
-
-        if (nativeMimeTypes.contains(mimetype) || extraNativeMimeTypes.contains(mimetype) || serviceTypes.contains(mimetype)) {
-
-            if (offer->noDisplay())
-                continue;
-            KoDocumentEntry d(offer);
-            // Append converted offer
-            lst.append(d);
-
-            // And if it's the part that belongs to the current application it's our own, so break off
-            if (offer->desktopEntryName() == (qAppName().replace("calligra","") + "part")) {
-                lst.clear();
-                lst.append(d);
-                break;
-            }
-
-            // Next service
-        }
+    foreach(QPluginLoader *pluginLoader, offers) {
+        lst.append(KoDocumentEntry(pluginLoader));
     }
 
     if (lst.count() > 1 && !mimetype.isEmpty()) {

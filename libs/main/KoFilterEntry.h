@@ -21,13 +21,13 @@ Boston, MA 02110-1301, USA.
 #ifndef __ko_filter_entry_h__
 #define __ko_filter_entry_h__
 
-#include <kservice.h>
 #include <ksharedptr.h>
 #include <QList>
+#include <QStringList>
 #include "komain_export.h"
 
 class QObject;
-class QStringList;
+class QPluginLoader;
 class KoFilter;
 class KoFilterChain;
 /**
@@ -40,7 +40,7 @@ public:
     typedef KSharedPtr<KoFilterEntry> Ptr;
 
     //KoFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
-    explicit KoFilterEntry(const KService::Ptr& service);
+    explicit KoFilterEntry(QPluginLoader *loader);
     ~KoFilterEntry() { }
 
     KoFilter* createFilter(KoFilterChain* chain, QObject* parent = 0);
@@ -84,12 +84,12 @@ public:
      */
     static QList<KoFilterEntry::Ptr> query();
 
-    KService::Ptr service() const {
-        return m_service;
+    QPluginLoader *loader() const {
+        return m_loader;
     }
 
 private:
-    KService::Ptr m_service;
+    QPluginLoader *m_loader;
 };
 
 #endif

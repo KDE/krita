@@ -28,6 +28,7 @@
 class QStringList;
 class KoDocument;
 class KoPart;
+class QPluginLoader;
 
 /**
  *  Represents an available Calligra component
@@ -44,10 +45,10 @@ public:
     /**
      * Represents a valid entry
      */
-    explicit KoDocumentEntry(const KService::Ptr& service);
+    explicit KoDocumentEntry(QPluginLoader *loader);
     ~KoDocumentEntry();
 
-    KService::Ptr service() const;
+    QPluginLoader *loader() const;
 
     /**
      * @return TRUE if the service pointer is null
@@ -94,7 +95,7 @@ public:
     static KoDocumentEntry queryByMimeType(const QString & mimetype);
 
 private:
-    KService::Ptr m_service;
+    QPluginLoader *m_loader;
 };
 
 #endif

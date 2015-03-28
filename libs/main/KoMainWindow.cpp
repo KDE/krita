@@ -1182,7 +1182,8 @@ void KoMainWindow::saveWindowSettings()
 
         // Save window size into the config file of our componentData
         kDebug(30003) << "KoMainWindow::saveWindowSettings";
-        saveWindowSize(config->group("MainWindow"));
+        KConfigGroup mainWindowConfigGroup = config->group("MainWindow");
+        saveWindowSize(mainWindowConfigGroup);
         config->sync();
         d->windowSizeDirty = false;
     }
@@ -1551,8 +1552,11 @@ void KoMainWindow::slotConfigureKeys()
 
 void KoMainWindow::slotConfigureToolbars()
 {
-    if (rootDocument())
-        saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+    if (rootDocument()) {
+        KConfigGroup componentConfigGroup = KGlobal::config()->group(d->rootPart->componentData().componentName());
+        saveMainWindowSettings(componentConfigGroup);
+    }
+
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1561,7 +1565,8 @@ void KoMainWindow::slotConfigureToolbars()
 void KoMainWindow::slotNewToolbarConfig()
 {
     if (rootDocument()) {
-        applyMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+        KConfigGroup componentConfigGroup = KGlobal::config()->group(d->rootPart->componentData().componentName());
+        applyMainWindowSettings(componentConfigGroup);
     }
 
     KXMLGUIFactory *factory = guiFactory();
@@ -1585,8 +1590,10 @@ void KoMainWindow::slotToolbarToggled(bool toggle)
         else
             bar->hide();
 
-        if (rootDocument())
-            saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+        if (rootDocument()) {
+            KConfigGroup componentConfigGroup = KGlobal::config()->group(d->rootPart->componentData().componentName());
+            saveMainWindowSettings(componentConfigGroup);
+        }
     } else
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
 }

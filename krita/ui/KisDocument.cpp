@@ -1139,8 +1139,7 @@ QString KisDocument::autoSaveFile(const QString & path) const
     if (! mime) {
         qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
-    QString extension = mime->property("X-KDE-NativeExtension").toString();
-    if (extension.isEmpty()) extension = mime->mainExtension();
+    const QString extension = mime->mainExtension();
 
     if (path.isEmpty()) {
         // Never saved?

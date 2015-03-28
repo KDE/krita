@@ -563,10 +563,7 @@ int KisApplication::checkAutosaveFiles(KisMainWindow *mainWindow)
     if (!mime) {
         qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", KIS_MIME_TYPE);
     }
-    QString extension = mime->property("X-KDE-NativeExtension").toString();
-    if (extension.isEmpty()) {
-        extension = mime->mainExtension();
-    }
+    const QString extension = mime->mainExtension();
 
     QStringList filters;
     filters << QString(".%1-%2-%3-autosave%4").arg("krita").arg("*").arg("*").arg(extension);

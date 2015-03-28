@@ -160,7 +160,7 @@ public:
             // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
             KMimeType::Ptr mime = KMimeType::mimeType(rootDocument->outputMimeType());
             if (mime) {
-                QString extension = mime->property("X-KDE-NativeExtension").toString();
+                const QString extension = mime->mainExtension();
 
                 if (title.endsWith(extension))
                     title.chop(extension.length());
@@ -954,7 +954,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            QString ext = mime->property("X-KDE-NativeExtension").toString();
+            const QString ext = mime->mainExtension();
             if (!ext.isEmpty()) {
                 if (c < 0)
                     suggestedFilename += ext;

@@ -787,7 +787,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            QString ext = mime->property("X-KDE-NativeExtension").toString();
+            const QString ext = mime->mainExtension();
             if (!ext.isEmpty()) {
                 if (c < 0)
                     suggestedFilename += ext;

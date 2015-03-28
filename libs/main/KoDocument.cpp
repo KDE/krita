@@ -58,6 +58,7 @@
 #include <kio/job.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
+#include <kdeversion.h>
 
 #include <QtGlobal>
 #include <QBuffer>

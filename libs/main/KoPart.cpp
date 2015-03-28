@@ -39,6 +39,8 @@
 #include <kxmlguifactory.h>
 #include <kdesktopfile.h>
 #include <kmimetype.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
 
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>

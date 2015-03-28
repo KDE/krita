@@ -24,9 +24,10 @@
 #include <KoStyleManager.h>
 
 #include <klocale.h>
-#include <kstringhandler.h>
 
 #include <kdebug.h>
+
+#include <QCollator>
 
 DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
     StylesFilteredModelBase(parent),
@@ -116,6 +117,7 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
     } else {
         usedStyles = m_styleManager->usedParagraphStyles();
     }
+    QCollator collator;
     foreach(int i, usedStyles) {
         if (!m_usedStylesId.contains(i)) {
             QVector<int>::iterator begin = m_usedStyles.begin();
@@ -123,7 +125,7 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
             for ( ; begin != m_usedStyles.end(); ++begin) {
                 const int styleId = m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
                 if (styleId != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-                    if (KStringHandler::naturalCompare(compareStyle->name(), findStyle(styleId)->name()) < 0) {
+                    if (collator.compare(compareStyle->name(), findStyle(styleId)->name()) < 0) {
                         break;
                     }
                 }
@@ -144,11 +146,12 @@ void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
     if (m_usedStylesId.contains(style->styleId())) {
         return; // Style already among used styles.
     }
+    QCollator collator;
     QVector<int>::iterator begin = m_usedStyles.begin();
     for ( ; begin != m_usedStyles.end(); ++begin) {
         const int styleId = m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
         if (styleId != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-            if (KStringHandler::naturalCompare(style->name(), findStyle(styleId)->name()) < 0) {
+            if (collator.compare(style->name(), findStyle(styleId)->name()) < 0) {
                 break;
             }
         }
@@ -182,6 +185,7 @@ void DockerStylesComboModel::createMapping()
         }
     }
 
+    QCollator collator;
     for (int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
         QModelIndex index = m_sourceModel->index(i, 0, QModelIndex());
         int id = (int)index.internalId();
@@ -195,7 +199,7 @@ void DockerStylesComboModel::createMapping()
                 for ( ; begin != m_unusedStyles.end(); ++begin) {
                     const int styleId = m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
                     if (styleId == -1) {
-                        if (KStringHandler::naturalCompare(style->name(), findStyle(styleId)->name()) < 0) {
+                        if (collator.compare(style->name(), findStyle(styleId)->name()) < 0) {
                             break;
                         }
                     }

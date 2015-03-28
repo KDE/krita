@@ -29,8 +29,8 @@
 #include <QList>
 #include <QSharedPointer>
 #include <QSignalMapper>
+#include <QCollator>
 
-#include <kstringhandler.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -304,6 +304,7 @@ void StylesModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
 void StylesModel::addParagraphStyle(KoParagraphStyle *style)
 {
     Q_ASSERT(style);
+    QCollator collator;
     QList<int>::iterator begin = m_styleList.begin();
     int index = 0;
     for ( ; begin != m_styleList.end(); ++begin) {
@@ -312,7 +313,7 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
             s = m_draftParStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
-        if (KStringHandler::naturalCompare(style->name(),s->name()) < 0) {
+        if (collator.compare(style->name(),s->name()) < 0) {
             break;
         }
         ++index;
@@ -328,7 +329,7 @@ bool sortParagraphStyleByName(KoParagraphStyle *style1, KoParagraphStyle *style2
 {
     Q_ASSERT(style1);
     Q_ASSERT(style2);
-    return KStringHandler::naturalCompare(style1->name(), style2->name()) < 0;
+    return QCollator().compare(style1->name(), style2->name()) < 0;
 }
 
 void StylesModel::updateParagraphStyles()
@@ -357,6 +358,7 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
 {
     Q_ASSERT(style);
     // find the place where we need to insert the style
+    QCollator collator;
     QList<int>::iterator begin = m_styleList.begin();
     int index = 0;
     // the None style should also be the first one so only start after it
@@ -370,7 +372,7 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
             s = m_draftCharStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
-        if (KStringHandler::naturalCompare(style->name(),s->name()) < 0) {
+        if (collator.compare(style->name(),s->name()) < 0) {
             break;
         }
         ++index;
@@ -386,7 +388,7 @@ bool sortCharacterStyleByName(KoCharacterStyle *style1, KoCharacterStyle *style2
 {
     Q_ASSERT(style1);
     Q_ASSERT(style2);
-    return KStringHandler::naturalCompare(style1->name(), style2->name()) < 0;
+    return QCollator().compare(style1->name(), style2->name()) < 0;
 }
 
 void StylesModel::updateCharacterStyles()
@@ -439,6 +441,7 @@ void StylesModel::removeCharacterStyle(KoCharacterStyle *style)
 void StylesModel::updateName(int styleId)
 {
     // updating the name of a style can mean that the style needs to be moved inside the list to keep the sort order.
+    QCollator collator;
     int oldIndex = m_styleList.indexOf(styleId);
     if (oldIndex >= 0) {
         int newIndex = 0;
@@ -460,7 +463,7 @@ void StylesModel::updateName(int styleId)
                         s = m_draftParStyleList[*begin];
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
-                    if (KStringHandler::naturalCompare(paragStyle->name(), s->name()) < 0) {
+                    if (collator.compare(paragStyle->name(), s->name()) < 0) {
                         break;
                     }
                     ++newIndex;
@@ -497,7 +500,7 @@ void StylesModel::updateName(int styleId)
                         s = m_draftCharStyleList[*begin];
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
-                    if (KStringHandler::naturalCompare(characterStyle->name(), s->name()) < 0) {
+                    if (collator.compare(characterStyle->name(), s->name()) < 0) {
                         break;
                     }
                     ++newIndex;

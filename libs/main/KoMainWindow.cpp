@@ -71,6 +71,7 @@
 #include <kaction.h>
 #include <kmenubar.h>
 #include <kmimetype.h>
+#include <k4aboutdata.h>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -1999,7 +2000,7 @@ void KoMainWindow::newView()
 void KoMainWindow::createMainwindowGUI()
 {
     if ( isHelpMenuEnabled() && !d->m_helpMenu )
-        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), false, actionCollection() );
+        d->m_helpMenu = new KHelpMenu( this, *componentData().aboutData(), true );
 
     QString f = xmlFile();
     setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc"/*, componentData()*/ ) );

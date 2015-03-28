@@ -23,6 +23,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QPrinter>
+#include <QUrl>
 
 #include <kdesktopfile.h>
 #include <kconfig.h>
@@ -62,7 +63,9 @@ void KoTemplateTree::readTemplateTree()
 
 void KoTemplateTree::writeTemplateTree()
 {
-    QString localDir = m_componentData.dirs()->saveLocation(m_templateType);
+    // QT5TODO: find a way to both set type of template and allow customizing by component
+    QString localDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + m_componentData.componentName() + "/templates/";
+//     QString localDir = m_componentData.dirs()->saveLocation(m_templateType);
 
     foreach (KoTemplateGroup *group, m_groups) {
         //kDebug( 30003 ) <<"---------------------------------";
@@ -83,7 +86,7 @@ void KoTemplateTree::writeTemplateTree()
                 //kDebug( 30003 ) <<"hidden";
                 if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
                     //kDebug( 30003 ) <<"local only";
-                    KIO::NetAccess::del(group->dirs().first(), 0);
+                    KIO::NetAccess::del(QUrl::fromLocalFile(group->dirs().first()), 0);
                     //kDebug( 30003 ) <<"removing:" << group->dirs().first();
                 } else {
                     //kDebug( 30003 ) <<"global";
@@ -138,8 +141,9 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 
 void KoTemplateTree::readGroups()
 {
-
-    QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
+    // QT5TODO: find a way to both set type of template and allow customizing by component
+    QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, m_componentData.componentName() + "/templates/", QStandardPaths::LocateDirectory);
+//     QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
     foreach(const QString & dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);

@@ -35,6 +35,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QGroupBox>
+#include <QStandardPaths>
 
 #include <ktemporaryfile.h>
 #include <klineedit.h>
@@ -49,10 +50,11 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kurl.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kiconloader.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kcomponentdata.h>
@@ -281,7 +283,9 @@ void KoTemplateCreateDia::slotOk() {
     }
 
     // copy the tmp file and the picture the app provides
-    QString dir=d->m_tree->componentData().dirs()->saveLocation(d->m_tree->templateType());
+    // QT5TODO: find a way to both set type of template and allow customizing by component
+    QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + d->m_tree->componentData().componentName() + "/templates/";
+    // QString dir=d->m_tree->componentData().dirs()->saveLocation(d->m_tree->templateType());
     dir+=group->name();
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
@@ -440,7 +444,9 @@ void KoTemplateCreateDia::slotAddGroup() {
         KMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
-    QString dir=d->m_tree->componentData().dirs()->saveLocation(d->m_tree->templateType());
+    // QT5TODO: find a way to both set type of template and allow customizing by component
+    QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + d->m_tree->componentData().componentName() + "/templates/";
+//     QString dir=d->m_tree->componentData().dirs()->saveLocation(d->m_tree->templateType());
     dir+=name;
     KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);

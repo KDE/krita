@@ -44,6 +44,7 @@
 
 #include <KoIcon.h>
 
+#include <kglobal.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kinputdialog.h>

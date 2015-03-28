@@ -35,9 +35,10 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
 : KPageDialog(parent)
 {
     setFaceType(List);
-    setCaption(i18n("Configure"));
-    setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
-    setDefaultButton(KDialog::Ok);
+    setWindowTitle(i18n("Configure"));
+// QT5TODO: port to QDialog
+//     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
+//     setDefaultButton(KDialog::Ok);
 
     m_miscPage = new KoConfigMiscPage( parent->koDocument(), parent->kopaCanvas()->shapeController()->resourceManager() );
     KPageWidgetItem *item = addPage( m_miscPage, i18n( "Misc" ) );

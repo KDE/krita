@@ -82,10 +82,12 @@
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
+#include <kurl.h>
 
 
 class KoPAView::Private
@@ -108,7 +110,7 @@ public:
     KoCopyController *copyController;
     KoCutController *cutController;
 
-    KAction *editPaste;
+    QAction *editPaste;
     KAction *deleteSelectionAction;
 
     KToggleAction *actionViewSnapToGrid;
@@ -340,7 +342,7 @@ void KoPAView::initGUI(KoPAFlags flags)
 
 void KoPAView::initActions()
 {
-    KAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
+    QAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
     d->cutController = new KoCutController(kopaCanvas(), action);
     action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
     d->copyController = new KoCopyController(kopaCanvas(), action);
@@ -499,10 +501,10 @@ void KoPAView::importDocument()
     dialog->setObjectName( "file dialog" );
     dialog->setMode( KFile::File );
     if ( d->doc->pageType() == KoPageApp::Slide ) {
-        dialog->setCaption(i18n("Import Slideshow"));
+        dialog->setWindowTitle(i18n("Import Slideshow"));
     }
     else {
-        dialog->setCaption(i18n("Import Document"));
+        dialog->setWindowTitle(i18n("Import Document"));
     }
 
     // TODO make it possible to select also other supported types (than the default format) here.

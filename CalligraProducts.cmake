@@ -67,7 +67,7 @@ calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
 
 # calligra libs
 calligra_define_product(LIB_CALLIGRA "Calligra core libs" REQUIRES BUILDTOOL_RNG2CPP)
-calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(LIB_KOODF2 "libkoodf2"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(LIB_KOODFREADER "libkoodfreader"  REQUIRES LIB_KOODF2 LIB_CALLIGRA)
 calligra_define_product(LIB_MSO "libmso"  REQUIRES LIB_CALLIGRA)

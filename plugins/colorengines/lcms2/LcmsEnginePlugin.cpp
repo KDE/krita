@@ -97,14 +97,14 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     KoColorSpaceEngineRegistry::instance()->add(new IccColorSpaceEngine);
 
     // prepare a list of the ICC profiles
-    KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
-    KGlobal::mainComponent().dirs()->addResourceDir("icc_profiles", QDir::homePath() + QString("/.kde/share/apps/krita/profiles/"));
+    KGlobal::dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
+    KGlobal::dirs()->addResourceDir("icc_profiles", QDir::homePath() + QString("/.kde/share/apps/krita/profiles/"));
 
     QStringList profileFilenames;
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICM",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICC",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icc",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.ICM",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.ICC",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::dirs()->findAllResources("icc_profiles", "*.icc",  KStandardDirs::Recursive);
 
     // Load the profiles
     if (!profileFilenames.empty()) {

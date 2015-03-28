@@ -111,7 +111,7 @@ calligra_define_product(OKULAR_GENERATOR_ODP "Plugin for Okular adding support f
 calligra_define_product(OKULAR_GENERATOR_ODT "Plugin for Okular adding support for ODT" UNPORTED  REQUIRES PART_WORDS)
 
 # more plugins
-calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_MUSICSHAPE "Music shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_SPACENAVIGATOR "SpaceNavigator input plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "Artistic shape plugin" REQUIRES LIB_CALLIGRA)

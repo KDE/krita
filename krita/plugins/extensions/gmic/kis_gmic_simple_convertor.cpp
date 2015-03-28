@@ -527,6 +527,7 @@ void KisGmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, CImg< 
     }
 
     delete [] dstTile;
+    delete pixelToGmicPixelFormat;
 
 }
 

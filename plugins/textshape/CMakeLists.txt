@@ -172,6 +172,8 @@ ki18n_wrap_ui(textshape_SRCS
 
 add_library(calligra_shape_text MODULE ${textshape_SRCS})
 
+kcoreaddons_desktop_to_json(calligra_shape_text calligra_shape_text.desktop)
+
 target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets ${EXTRA_LIBS})
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
@@ -182,7 +184,6 @@ install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES calligra_shape_text.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 #ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 
 if(BUILD_TEXTDOCUMENT_INSPECTOR)

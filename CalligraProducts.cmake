@@ -78,7 +78,7 @@ calligra_define_feature(FEATURE_SCRIPTING "Scripting feature" UNPORTED) # TODO
 calligra_define_feature(FEATURE_RDF "RDF feature" UNPORTED)
 
 # plugins
-calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin" UNPORTED  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLIGRA)
 
 # parts
 calligra_define_product(PART_WORDS "Words engine" UNPORTED  REQUIRES LIB_CALLIGRA PLUGIN_TEXTSHAPE)

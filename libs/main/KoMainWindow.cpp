@@ -244,6 +244,7 @@ public:
     KActivities::ResourceInstance *activityResource;
 #endif
 
+    KComponentData componentData;
 
     KHelpMenu *m_helpMenu;
 
@@ -1797,6 +1798,16 @@ bool KoMainWindow::isExporting() const
 void KoMainWindow::setPartToOpen(KoPart *part)
 {
     d->partToOpen = part;
+}
+
+KComponentData KoMainWindow::componentData() const
+{
+    return d->componentData;
+}
+
+void KoMainWindow::setComponentData(const KComponentData &componentData)
+{
+    d->componentData = componentData;
 }
 
 QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)

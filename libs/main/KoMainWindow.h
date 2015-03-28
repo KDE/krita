@@ -34,6 +34,7 @@ class KoView;
 class KoPrintJob;
 class KoDockFactoryBase;
 class KRecentFilesAction;
+class KComponentData;
 class QDockWidget;
 
 struct KoPageLayout;
@@ -89,6 +90,9 @@ public:
      * (title in the about page) changes.
      */
     void updateCaption();
+
+    KComponentData componentData () const;
+    void setComponentData (const KComponentData &componentData);
 
     /**
      *  Retrieves the document that is displayed in the mainwindow.

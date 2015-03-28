@@ -277,4 +277,5 @@ void KoFindToolbar::Private::inputTimeout()
     find(searchLine->currentText());
 }
 
-#include "KoFindToolbar.moc"
+// have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoFindToolbar.cpp"

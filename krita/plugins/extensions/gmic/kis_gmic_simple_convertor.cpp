@@ -386,6 +386,9 @@ void KisGmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, K
         dataY += rowsToWork;
         rowsRemaining -= rowsToWork;
     }
+
+    delete [] convertedTile;
+
 }
 
 

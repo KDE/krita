@@ -388,6 +388,7 @@ void KisGmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, K
     }
 
     delete [] convertedTile;
+    delete gmicToDstPixelFormat;
 
 }
 

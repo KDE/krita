@@ -240,6 +240,8 @@ public:
     KisAction *toggleDockers;
     KisAction *toggleDockerTitleBars;
 
+    KisAction *expandingSpacers[2];
+
     KActionMenu *dockWidgetMenu;
     KActionMenu *windowMenu;
     KActionMenu *documentMenu;
@@ -2111,6 +2113,13 @@ void KisMainWindow::createActions()
     actionManager->addAction("file_close", d->close);
 
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
+
+    for (int i = 0; i < 2; i++) {
+        d->expandingSpacers[i] = new KisAction(i18n("Expanding Spacer"));
+        d->expandingSpacers[i]->setDefaultWidget(new QWidget(this));
+        d->expandingSpacers[i]->defaultWidget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        actionManager->addAction(QString("expanding_spacer_%1").arg(i), d->expandingSpacers[i]);
+    }
 }
 
 void KisMainWindow::initializeGeometry()

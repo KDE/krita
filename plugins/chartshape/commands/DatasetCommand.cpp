@@ -23,10 +23,10 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// KChart
+// KoChart
 #include "DataSet.h"
 
-using namespace KChart;
+using namespace KoChart;
 using namespace KDChart;
 
 

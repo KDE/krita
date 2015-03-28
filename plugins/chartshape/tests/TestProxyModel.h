@@ -24,12 +24,12 @@
 // Qt
 #include <QtTest>
 
-// KChart
+// KoChart
 #include "ChartProxyModel.h"
 #include "ChartTableModel.h"
 #include "TableSource.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 class TestProxyModel : public QObject
 {

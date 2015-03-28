@@ -90,7 +90,7 @@
 #include <KoOdfWorkaround.h>
 #include <KoTextDocument.h>
 
-// KChart
+// KoChart
 #include "Axis.h"
 #include "DataSet.h"
 #include "Legend.h"
@@ -112,7 +112,7 @@
 #define STORE_PROTOCOL "tar"
 #define INTERNAL_PROTOCOL "intern"
 
-namespace KChart {
+namespace KoChart {
 
 /// @see ChartShape::setEnableUserInteraction()
 static bool ENABLE_USER_INTERACTION = true;
@@ -1027,7 +1027,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
     // 1. Load the chart type.
     const QString chartClass = chartElement.attributeNS(KoXmlNS::chart, "class", QString());
-    KChart::ChartType chartType = KChart::BarChartType;
+    KoChart::ChartType chartType = KoChart::BarChartType;
     // Find out what charttype the chart class corresponds to.
     bool  knownType = false;
     for (int type = 0; type < (int)LastChartType; ++type) {
@@ -1354,4 +1354,4 @@ void ChartShape::setEnableUserInteraction(bool enable)
     ENABLE_USER_INTERACTION = enable;
 }
 
-} // Namespace KChart
+} // Namespace KoChart

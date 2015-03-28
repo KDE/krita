@@ -29,7 +29,7 @@ class QSizeF;
 class QRect;
 class QRectF;
 
-namespace KChart {
+namespace KoChart {
 
 class ScreenConversions
 {
@@ -48,6 +48,6 @@ public:
     static QSizeF scaleFromPxToPt(const QSize &size);
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_SCREEN_CONVERSIONS_H

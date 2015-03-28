@@ -24,7 +24,7 @@
 
 #include "ui_AxisScalingDialog.h"
 
-namespace KChart {
+namespace KoChart {
 
 class AxisScalingDialog : public QDialog, public Ui::AxisScalingDialog
 {
@@ -33,7 +33,7 @@ public:
     ~AxisScalingDialog();
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 
 #endif // KCHART_AXIS_SCALING_DIALOG_H

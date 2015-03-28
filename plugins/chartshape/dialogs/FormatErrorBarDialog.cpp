@@ -21,7 +21,7 @@
 
 #include "FormatErrorBarDialog.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 
 FormatErrorBarDialog::FormatErrorBarDialog(QWidget *parent)

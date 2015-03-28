@@ -23,14 +23,14 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// KChart
+// KoChart
 #include "Legend.h"
 
-using namespace KChart;
+using namespace KoChart;
 using namespace KDChart;
 
 
-LegendCommand::LegendCommand(KChart::Legend* legend)
+LegendCommand::LegendCommand(KoChart::Legend* legend)
     : m_legend(legend)
 {
     m_newFont = legend->font();

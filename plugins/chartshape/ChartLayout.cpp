@@ -22,13 +22,13 @@
 #include <QRectF>
 #include <QTransform>
 
-// KChart
+// KoChart
 #include "ChartLayout.h"
 
 // Calligra
 #include <KoShapeContainer.h>
 
-using namespace KChart;
+using namespace KoChart;
 
 
 // Static helper methods (defined at end of file)

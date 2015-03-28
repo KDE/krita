@@ -31,8 +31,8 @@
 #include <KoShapeContainer.h>
 #include <KoFrameShape.h>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 #include "KoChartInterface.h"
 
 
@@ -74,7 +74,7 @@ class KoTextShapeData;
 #define OdfLoadingHelperId "OdfLoadingHelperId"
 typedef KoTextShapeData TextLabelData;
 
-namespace KChart {
+namespace KoChart {
 
 class DataSet;
 class ChartProxyModel;
@@ -245,6 +245,6 @@ private:
     Private *const d;
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif

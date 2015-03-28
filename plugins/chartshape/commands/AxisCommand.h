@@ -23,8 +23,8 @@
 // Qt
 #include <kundo2command.h>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 
 
 #if 0
@@ -37,7 +37,7 @@ class Chart;
 #endif
 
 
-namespace KChart
+namespace KoChart
 {
 
 class Axis;
@@ -99,6 +99,6 @@ private:
     QFont m_newLabelsFont;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_AXIS_COMMAND

@@ -43,12 +43,12 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "ChartPart.h"
 
 
-namespace KChart {
+namespace KoChart {
 
 class ChartDocument::Private
 {
@@ -166,5 +166,5 @@ void ChartDocument::paintContent(QPainter &painter, const QRect &rect)
     Q_UNUSED(rect);
 }
 
-} // namespace KChart
+} // namespace KoChart
 

@@ -54,7 +54,7 @@
 #include <KDChartMarkerAttributes>
 #include <KDChartMeasure>
 
-// KChart
+// KoChart
 #include "ChartProxyModel.h"
 #include "PlotArea.h"
 #include "Legend.h"
@@ -73,7 +73,7 @@
 #include "ChartTableModel.h"
 #include "TableSource.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 
 class ChartConfigWidget::Private
@@ -229,8 +229,8 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     shape = 0;
     tableSource = 0;
 
-    type = KChart::LastChartType;
-    subtype = KChart::NoChartSubtype;
+    type = KoChart::LastChartType;
+    subtype = KoChart::NoChartSubtype;
     threeDMode = false;
 
     isExternalDataSource = false;
@@ -947,7 +947,7 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
     else if (action == d->dataSetBubbleChartAction)
         type = BubbleChartType;
 
-    // FIXME: Not supported by KChart yet:
+    // FIXME: Not supported by KoChart yet:
     //surface
     //gantt
 

@@ -29,7 +29,7 @@
 // KDE
 #include <kdebug.h>
 
-// KChart
+// KoChart
 #include "DataSet.h"
 #include "PlotArea.h"
 
@@ -38,7 +38,7 @@
 #include <KDChartPieAttributes>
 #include <KDChartDataValueAttributes>
 
-using namespace KChart;
+using namespace KoChart;
 
 class KDChartModel::Private {
 public:

@@ -21,7 +21,7 @@
 // Own
 #include "ChartToolFactory.h"
 
-// KChart
+// KoChart
 #include "ChartTool.h"
 #include "ChartShape.h"
 
@@ -33,7 +33,7 @@
 
 
 
-using namespace KChart;
+using namespace KoChart;
 
 
 ChartToolFactory::ChartToolFactory()

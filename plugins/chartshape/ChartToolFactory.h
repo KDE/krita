@@ -23,7 +23,7 @@
 
 #include <KoToolFactoryBase.h>
 
-namespace KChart
+namespace KoChart
 {
 
 class ChartToolFactory : public KoToolFactoryBase
@@ -35,7 +35,7 @@ public:
     KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 
 #endif

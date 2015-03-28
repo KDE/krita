@@ -28,14 +28,14 @@
 // Calligra
 #include <KoShapeContainerModel.h>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 
 
 class QSizeF;
 
 
-namespace KChart {
+namespace KoChart {
 
 /**
  * A generic chart-style layout with 10 possible positions:
@@ -200,6 +200,6 @@ private:
     QMap<KoShape*, LayoutData*> m_layoutItems;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_CHARTLAYOUT_H

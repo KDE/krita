@@ -27,7 +27,7 @@
 #include "DataSet.h"
 #include "CellRegion.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 
 TestKDChartModel::TestKDChartModel()

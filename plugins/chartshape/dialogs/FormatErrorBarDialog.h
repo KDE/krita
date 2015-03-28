@@ -25,7 +25,7 @@
 #include "ui_FormatErrorBarDialog.h"
 
 
-namespace KChart {
+namespace KoChart {
 
 class FormatErrorBarDialog : public QDialog, public Ui::FormatErrorBarDialog
 {
@@ -42,7 +42,7 @@ private Q_SLOTS:
     void setSameErrorValueForBoth(double value);
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 
 #endif // KCHART_FORMAT_ERRORBAR_DIALOG_H

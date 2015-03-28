@@ -23,8 +23,8 @@
 // Qt
 #include <kundo2command.h>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 //#include "ChartShape.h"
 
 
@@ -38,7 +38,7 @@ class Chart;
 #endif
 
 
-namespace KChart
+namespace KoChart
 {
 
 class ChartShape;
@@ -86,6 +86,6 @@ private:
     //KDChart::AbstractDiagram          *m_oldDiagram;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_CHART_TYPE_COMMAND

@@ -27,7 +27,7 @@
 // Interface
 #include <interfaces/KoChartModel.h>
 
-namespace KChart {
+namespace KoChart {
 
 class CellRegionStringValidator : public QValidator
 {

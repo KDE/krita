@@ -70,7 +70,7 @@
 #include <KDChartRingDiagram>
 #include <KDChartPolarDiagram>
 
-// KChart
+// KoChart
 #include "Legend.h"
 #include "Surface.h"
 #include "Axis.h"
@@ -79,7 +79,7 @@
 #include "ScreenConversions.h"
 #include "ChartLayout.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 const int MAX_PIXMAP_SIZE = 1000;
 

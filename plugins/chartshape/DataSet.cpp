@@ -46,7 +46,7 @@
 #include <KDChartMeasure>
 #include "KDChartModel.h"
 
-// KChart
+// KoChart
 #include "Axis.h"
 #include "PlotArea.h"
 #include "Surface.h"
@@ -66,7 +66,7 @@
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
-using namespace KChart;
+using namespace KoChart;
 
 const int numDefaultMarkerTypes = 15;
 
@@ -136,7 +136,7 @@ public:
     KDChart::MarkerAttributes defaultMarkerAttributes() const;
 
     // Returns an instance of DataValueAttributes with sane default values in
-    // relation to KChart
+    // relation to KoChart
     KDChart::DataValueAttributes defaultDataValueAttributes() const;
     /// Copies Private::dataValueAttributes to this section if it doesn't
     /// have its own DataValueAttributes copy yet.
@@ -288,11 +288,11 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() cons
     attr.setTextAttributes(textAttr);
     // Set positive value position
     KDChart::RelativePosition positivePosition = attr.positivePosition();
-    if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignCenter);
         positivePosition.setReferencePosition(KDChartEnums::PositionCenter);
     }
-    else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
         positivePosition.setReferencePosition(KDChartEnums::PositionNorth);
     }
@@ -306,11 +306,11 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() cons
 
     // Set negative value position
     KDChart::RelativePosition negativePosition = attr.negativePosition();
-    if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignCenter);
         negativePosition.setReferencePosition(KDChartEnums::PositionCenter);
     }
-    else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
         negativePosition.setReferencePosition(KDChartEnums::PositionSouth);
     }
@@ -578,11 +578,11 @@ void DataSet::Private::setAttributesAccordingToType()
 {
     KDChart::DataValueAttributes attr = dataValueAttributes;
     KDChart::RelativePosition positivePosition = attr.positivePosition();
-    if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignCenter);
         positivePosition.setReferencePosition(KDChartEnums::PositionCenter);
     }
-    else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
         positivePosition.setReferencePosition(KDChartEnums::PositionNorth);
     }
@@ -596,11 +596,11 @@ void DataSet::Private::setAttributesAccordingToType()
 
     // Set negative value position
     KDChart::RelativePosition negativePosition = attr.negativePosition();
-    if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignCenter);
         negativePosition.setReferencePosition(KDChartEnums::PositionCenter);
     }
-    else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
         negativePosition.setReferencePosition(KDChartEnums::PositionSouth);
     }
@@ -616,11 +616,11 @@ void DataSet::Private::setAttributesAccordingToType()
     for (int i = 0; i < sectionsDataValueAttributes.count(); ++i) {
         KDChart::DataValueAttributes attr = sectionsDataValueAttributes[i];
         KDChart::RelativePosition positivePosition = attr.positivePosition();
-        if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+        if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
             positivePosition.setAlignment(Qt::AlignCenter);
             positivePosition.setReferencePosition(KDChartEnums::PositionCenter);
         }
-        else if (chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+        else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
             positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
             positivePosition.setReferencePosition(KDChartEnums::PositionNorth);
         }
@@ -634,11 +634,11 @@ void DataSet::Private::setAttributesAccordingToType()
 
         // Set negative value position
         KDChart::RelativePosition negativePosition = attr.negativePosition();
-        if (chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype) {
+        if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
             negativePosition.setAlignment(Qt::AlignCenter);
             negativePosition.setReferencePosition(KDChartEnums::PositionCenter);
         }
-        else if (chartType == KChart::BarChartType && chartSubType == KChart::NormalChartSubtype) {
+        else if (chartType == KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
             negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
             negativePosition.setReferencePosition(KDChartEnums::PositionSouth);
         }
@@ -1527,7 +1527,7 @@ bool DataSet::loadOdf(const KoXmlElement &n,
 
     if (n.hasAttributeNS(KoXmlNS::chart, "class") && !ignoreCellRanges) {
         const QString chartClass = n.attributeNS(KoXmlNS::chart, "class", QString());
-        KChart::ChartType chartType = KChart::BarChartType;
+        KoChart::ChartType chartType = KoChart::BarChartType;
         for (int type = 0; type < (int)LastChartType; ++type) {
             if (chartClass == odfCharttype(type)) {
                 chartType = (ChartType)type;
@@ -1791,7 +1791,7 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     if (!chartClass.isEmpty())
         bodyWriter.addAttribute("chart:class", chartClass);
 
-    if (chartType() == KChart::CircleChartType || chartType() == KChart::RingChartType) {
+    if (chartType() == KoChart::CircleChartType || chartType() == KoChart::RingChartType) {
         for (int j=0; j<yDataRegion().cellCount(); ++j) {
             bodyWriter.startElement("chart:data-point");
 

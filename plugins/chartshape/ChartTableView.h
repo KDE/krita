@@ -23,7 +23,7 @@
 
 #include <QTableView>
 
-namespace KChart {
+namespace KoChart {
 
 class ChartTableView : public QTableView
 {

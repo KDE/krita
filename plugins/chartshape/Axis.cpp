@@ -68,7 +68,7 @@
 #include <KDChartBackgroundAttributes>
 #include <KDChartRulerAttributes>
 
-// KChart
+// KoChart
 #include "PlotArea.h"
 #include "KDChartModel.h"
 #include "DataSet.h"
@@ -80,7 +80,7 @@
 #include "OdfLoadingHelper.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 class Axis::Private
 {
@@ -199,7 +199,7 @@ public:
 class CartesianAxis : public KDChart::CartesianAxis
 {
 public:
-    CartesianAxis(KChart::Axis *_axis) : KDChart::CartesianAxis(), axis(_axis) {}
+    CartesianAxis(KoChart::Axis *_axis) : KDChart::CartesianAxis(), axis(_axis) {}
     virtual ~CartesianAxis() {}
     virtual const QString customizedLabel(const QString& label) const {
         if (KoOdfNumberStyles::NumericStyleFormat *n = axis->numericStyleFormat())
@@ -207,7 +207,7 @@ public:
         return label;
     }
 private:
-    KChart::Axis *axis;
+    KoChart::Axis *axis;
 };
 
 Axis::Private::Private(Axis *axis, AxisDimension dim)

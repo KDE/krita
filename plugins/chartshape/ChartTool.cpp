@@ -51,7 +51,7 @@
 #include <KDChartCartesianCoordinatePlane>
 #include <KDChartPosition>
 
-// KChart
+// KoChart
 #include "Surface.h"
 #include "PlotArea.h"
 #include "Axis.h"
@@ -67,7 +67,7 @@
 #include "commands/ChartTextShapeCommand.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 
 class ChartTool::Private

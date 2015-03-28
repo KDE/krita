@@ -29,7 +29,7 @@ class KoStyleStack;
 class KoOdfLoadingContext;
 class QSizeF;
 
-namespace KChart {
+namespace KoChart {
 
 
 /**

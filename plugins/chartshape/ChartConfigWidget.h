@@ -29,7 +29,7 @@
 
 // KDChart
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "ui_ChartConfigWidget.h"
 
@@ -43,7 +43,7 @@ namespace KDChart
     class CartesianAxis;
 }
 
-namespace KChart
+namespace KoChart
 {
 class ChartShape;
 
@@ -195,7 +195,7 @@ private:
     Private * const d;
 };
 
-}  // namespace KChart
+}  // namespace KoChart
 
 
 #endif // KCHART_CHART_TYPE_CONFIG_WIDGET

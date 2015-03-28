@@ -48,7 +48,7 @@
 #include "TableSource.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 K_PLUGIN_FACTORY(ChartShapePluginFactory, registerPlugin<ChartShapePlugin>();)
 K_EXPORT_PLUGIN(ChartShapePluginFactory("calligra_shape_chart"))

@@ -27,7 +27,7 @@
 #include "KoOdfStylesReader.h"
 #include "KoStyleStack.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 OdfLoadingHelper::OdfLoadingHelper()
     : tableSource(0)

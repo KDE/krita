@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchart_global.h"
+#include "kochart_global.h"
 
-namespace KChart {
+namespace KoChart {
 
 bool isPolar(ChartType type)
 {
@@ -79,4 +79,4 @@ int numDimensions(ChartType type)
     return dimensions;
 }
 
-} // namespace KChart
+} // namespace KoChart

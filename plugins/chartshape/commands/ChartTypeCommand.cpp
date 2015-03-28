@@ -32,11 +32,11 @@
 #include "KDChartPolarDiagram"
 #include "KDChartRingDiagram"
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "Legend.h"
 
-using namespace KChart;
+using namespace KoChart;
 using namespace KDChart;
 
 

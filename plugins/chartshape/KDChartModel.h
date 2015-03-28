@@ -28,11 +28,11 @@
 // Qt
 #include <QAbstractItemModel>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 
 
-namespace KChart {
+namespace KoChart {
 
 /**
  * Takes a list of DataSet's and compiles them into a
@@ -160,6 +160,6 @@ private:
     Private *const d;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_KDCHARTMODEL_H

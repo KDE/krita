@@ -22,7 +22,7 @@
 #ifndef KCHART_GLOBAL_H
 #define KCHART_GLOBAL_H
 
-namespace KChart
+namespace KoChart
 {
 
 // Chart types for OpenDocument
@@ -127,6 +127,6 @@ enum OdfMarkerStyle { MarkerSquare         = 0,
                       Marker4Pixels        = 18,
                       NoMarker             = 19 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif

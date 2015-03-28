@@ -42,12 +42,12 @@
 #include <KoOdfStylesReader.h>
 #include <KoShapeLoadingContext.h>
 
-// KChart
+// KoChart
 #include "CellRegion.h"
 #include "OdfLoadingHelper.h"
 
 
-namespace KChart {
+namespace KoChart {
 
 ChartTableModel::ChartTableModel(QObject *parent /* = 0 */)
     : QStandardItemModel(parent)

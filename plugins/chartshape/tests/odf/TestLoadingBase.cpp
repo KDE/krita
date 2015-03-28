@@ -34,7 +34,7 @@
 #include <KoOdfReadStore.h>
 #include <KoTextShapeDataBase.h>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "ChartProxyModel.h"
 #include "ChartDocument.h"
@@ -48,7 +48,7 @@
 #include <KDChartAbstractDiagram>
 #include <KDChartLegend>
 
-using namespace KChart;
+using namespace KoChart;
 
 TestLoadingBase::TestLoadingBase()
     : QObject()
@@ -206,7 +206,7 @@ TableSource *TestLoadingBase::tableSource()
 
 namespace QTest {
     template<>
-    char *toString(const KChart::CellRegion &region) {
+    char *toString(const KoChart::CellRegion &region) {
         return qstrdup(region.toString().toLatin1());
     }
 }

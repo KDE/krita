@@ -25,13 +25,13 @@
 // Calligra
 #include <KoToolBase.h>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 
 class QAction;
 
 
-namespace KChart
+namespace KoChart
 {
 
 
@@ -129,7 +129,7 @@ private:
     Private * const d;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 
 #endif // KCHART_CHARTTOOL_H

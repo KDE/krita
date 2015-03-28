@@ -25,7 +25,7 @@
 #include "ui_CellRegionDialog.h"
 
 
-namespace KChart {
+namespace KoChart {
 
 class CellRegionDialog : public QDialog, public Ui::CellRegionDialog
 {
@@ -34,7 +34,7 @@ public:
     ~CellRegionDialog();
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 
 #endif // KCHART_CELL_REGION_DIALOG_H

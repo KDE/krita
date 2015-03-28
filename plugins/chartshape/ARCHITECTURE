@@ -76,7 +76,7 @@ ChartTableView          A view of a table. Used in the data editor.
 Helper classes
 --------------
 
-kchart_global           Common definitions of enums and some
+kochart_global           Common definitions of enums and some
                         category functions
 CellRegionStringValidator Validates a cell region descriptor string
 ChartLayout             Manages the layout of the parts (plot area,

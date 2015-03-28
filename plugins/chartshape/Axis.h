@@ -26,14 +26,14 @@
 // Qt
 #include <QObject>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 
 namespace KoOdfNumberStyles {
     struct NumericStyleFormat;
 }
 
-namespace KChart {
+namespace KoChart {
 
 enum OdfGridClass {
     OdfMajorGrid,
@@ -154,6 +154,6 @@ private:
     Private *const d;
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif

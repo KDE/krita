@@ -29,7 +29,7 @@
 // Qt
 #include <QPen>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "CellRegion.h"
 
@@ -41,7 +41,7 @@ namespace KDChart {
 
 class KoShapeLoadingContext;
 
-namespace KChart {
+namespace KoChart {
 
 class KDChartModel;
 
@@ -247,7 +247,7 @@ private:
     Private *const d;
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif // KCHART_DATASET_H
 

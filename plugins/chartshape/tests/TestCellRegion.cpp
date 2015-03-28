@@ -27,7 +27,7 @@
 #include <QtTest>
 #include <QDebug>
 
-// KChart
+// KoChart
 #include "CellRegion.h"
 
 TestCellRegion::TestCellRegion()

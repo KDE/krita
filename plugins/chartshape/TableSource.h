@@ -25,14 +25,14 @@
 #include <QObject>
 #include <QAbstractItemModel>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 
 
 class QString;
 
 
-namespace KChart {
+namespace KoChart {
 
 class Table
 {
@@ -155,6 +155,6 @@ private:
     Private *const d;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_TABLESOURCE_H

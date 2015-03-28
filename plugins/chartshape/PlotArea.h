@@ -39,7 +39,7 @@ namespace KDChart {
 class Ko3dScene;
 
 
-namespace KChart {
+namespace KoChart {
 
 /**
  * @brief The PlotArea class is the central chart element. It plots the data and draws the axes.
@@ -179,7 +179,7 @@ private:
     Private *const d;
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif // KCHART_PLOTAREA_H
 

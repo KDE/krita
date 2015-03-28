@@ -25,7 +25,7 @@
 
 #include <QStandardItemModel>
 
-namespace KChart {
+namespace KoChart {
 
 class TestLoading : public TestLoadingBase
 {
@@ -45,6 +45,6 @@ private:
     QStandardItemModel m_sheet;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_TESTLOADING_H_ME07_PERCENTAGE_STACKED_BAR_CHART

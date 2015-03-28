@@ -26,11 +26,11 @@
 #include <KDChartEnums>
 #include <KDChartCartesianAxis>
 
-// KChart
-#include "kchart_global.h"
+// KoChart
+#include "kochart_global.h"
 
 
-namespace KChart
+namespace KoChart
 {
 
 extern KDChart::CartesianAxis::Position PositionToKDChartAxisPosition(Position position);
@@ -42,6 +42,6 @@ extern Position KDChartPositionValueToPosition(KDChartEnums::PositionValue posit
 extern Qt::Orientation LegendExpansionToQtOrientation(LegendExpansion expansion);
 extern LegendExpansion QtOrientationToLegendExpansion(Qt::Orientation orientation);
 
-} // Namespace KChart
+} // Namespace KoChart
 
 #endif

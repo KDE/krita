@@ -18,7 +18,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
 ########### Chart shape Plugin library ###############
 
 set (chartshape_LIB_SRCS
-    kchart_global.cpp
+    kochart_global.cpp
     KDChartConvertions.cpp
     Axis.cpp
     DataSet.cpp

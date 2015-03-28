@@ -26,7 +26,7 @@
 
 class KFontChooser;
 
-namespace KChart {
+namespace KoChart {
 
 class FontEditorDialog : public KDialog
 {
@@ -36,7 +36,7 @@ public:
     KFontChooser *fontChooser;
 };
 
-} // Namespace KChart
+} // Namespace KoChart
 
 
 #endif // KCHART_FONT_EDITOR_DIALOG_H

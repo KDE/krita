@@ -54,13 +54,13 @@
 #include <KDChartLegend>
 #include "KDChartConvertions.h"
 
-// Kchart
+// KoChart
 #include "PlotArea.h"
 #include "ScreenConversions.h"
 #include "ChartLayout.h"
 #include "OdfLoadingHelper.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 class Legend::Private {
 public:

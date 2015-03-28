@@ -27,7 +27,7 @@
 #include <KDChartCartesianAxis>
 
 
-namespace KChart {
+namespace KoChart {
 
 KDChart::CartesianAxis::Position PositionToKDChartAxisPosition(Position position)
 {
@@ -168,4 +168,4 @@ LegendExpansion QtOrientationToLegendExpansion(Qt::Orientation orientation)
     return HighLegendExpansion;
 }
 
-} // Namespace KChart
+} // Namespace KoChart

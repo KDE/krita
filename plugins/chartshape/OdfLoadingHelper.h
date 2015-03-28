@@ -30,13 +30,13 @@
 #include "KoSharedLoadingData.h"
 #include "KoXmlReader.h"
 
-// KChart
+// KoChart
 #include "TableSource.h"
 
 class KoStyleStack;
 class KoodfStylesReader;
 
-namespace KChart {
+namespace KoChart {
 
 class OdfLoadingHelper : public KoSharedLoadingData
 {
@@ -51,6 +51,6 @@ public:
     bool         categoryRegionSpecifiedInXAxis;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_ODF_LOADING_HELPER_H

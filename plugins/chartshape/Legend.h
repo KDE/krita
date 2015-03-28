@@ -28,11 +28,11 @@
 // Calligra
 #include <KoShape.h>
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 
 
-namespace KChart {
+namespace KoChart {
 
 class Legend : public QObject, public KoShape
 {

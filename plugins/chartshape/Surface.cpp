@@ -51,11 +51,11 @@
 #include <KDChartBackgroundAttributes>
 #include <KDChartFrameAttributes>
 
-// KChart
+// KoChart
 #include "PlotArea.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 class Surface::Private
 {

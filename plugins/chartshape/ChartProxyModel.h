@@ -25,7 +25,7 @@
 #define INTERNAL_TABLE_NAME "ChartTable"
 
 
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "CellRegion.h"
 
@@ -40,7 +40,7 @@ namespace KoChart
 #include <QAbstractTableModel>
 
 
-namespace KChart {
+namespace KoChart {
 
 /**
  * @brief The ChartProxyModel is a factory for the DataSet's and decorates the ChartTableModel.
@@ -220,6 +220,6 @@ private:
     Private *const d;
 };
 
-} // namespace KChart
+} // namespace KoChart
 
 #endif // KCHART_PROXYMODEL_H

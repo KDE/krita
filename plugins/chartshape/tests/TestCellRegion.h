@@ -27,11 +27,11 @@
 #include <QObject>
 #include <QStandardItemModel>
 
-// KChart
+// KoChart
 #include "CellRegion.h"
 #include "TableSource.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 class TestCellRegion : public QObject
 {

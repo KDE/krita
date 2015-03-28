@@ -87,7 +87,10 @@ ki18n_wrap_ui( komain_LIB_SRCS
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
-add_library(komain SHARED ${komain_LIB_SRCS})
+
+QT5_WRAP_CPP(komain_HEADERS_MOC KoDocumentSectionPropertyAction_p.h)
+
+add_library(komain SHARED ${komain_HEADERS_MOC}  ${komain_LIB_SRCS})
 
 target_link_libraries(komain ${extra_libs}
     ${KDE4_KFILE_LIBRARY}

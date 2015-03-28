@@ -25,6 +25,8 @@
 
 #include <kdeversion.h>
 #include <kcomponentdata.h>
+#include <kconfiggroup.h>
+#include <kurl.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 

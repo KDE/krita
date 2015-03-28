@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kuser.h>
 #include <kemailsettings.h>
+#include <kconfiggroup.h>
 
 #include <QLineEdit>
 #include <QStackedWidget>

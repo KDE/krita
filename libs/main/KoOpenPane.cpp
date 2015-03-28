@@ -34,7 +34,9 @@
 #include <QDesktopServices>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QMimeData>
 
+#include <kurl.h>
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>

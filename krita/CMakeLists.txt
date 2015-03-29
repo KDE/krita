@@ -152,7 +152,7 @@ if(WIN32 AND USE_BREAKPAD)
 endif()
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
-ecm_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
+kde4_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(krita ${krita_SRCS})
 target_link_libraries(krita kritaui ${BREAKPAD_LIBS})

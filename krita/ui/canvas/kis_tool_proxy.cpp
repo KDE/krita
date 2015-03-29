@@ -106,7 +106,9 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
     } else if (touchEvent) {
         if (state == END && touchEvent->type() != QEvent::TouchEnd) {
             //Fake a touch end if we are "upgrading" a single-touch gesture to a multi-touch gesture.
-            QTouchEvent fakeEvent(QEvent::TouchEnd, touchEvent->deviceType(), touchEvent->modifiers(), touchEvent->touchPointStates(), touchEvent->touchPoints());
+            QTouchEvent fakeEvent(QEvent::TouchEnd, touchEvent->device(),
+                                  touchEvent->modifiers(), touchEvent->touchPointStates(),
+                                  touchEvent->touchPoints());
             this->touchEvent(&fakeEvent);
         } else {
             this->touchEvent(touchEvent);

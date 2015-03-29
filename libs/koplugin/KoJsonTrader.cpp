@@ -104,10 +104,11 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
             if (json.isEmpty()) {
-                //qDebug() << dirIter.filePath() << "has no json!";
+                qDebug() << dirIter.filePath() << "has no json!";
             }
             if (!json.isEmpty()) {
-                if (! json.value("X-KDE-ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
+                QJsonObject pluginData = json.value("KPlugin").toObject();
+                if (pluginData.value("ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
                     continue;
                 }
 
